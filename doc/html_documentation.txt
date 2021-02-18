@@ -15,7 +15,7 @@ HOWTO document in this GRASS version?
    the module with the --html-description qualifier:
      g.module --html-description
 
-- see also this script:  tools/build_html_index.html
+- see also this script:  utils/build_html_index.html
 
 - The Programmers' manual can by created from the inline Doxygen comments with:
      make htmldocs (or)

@@ -372,7 +372,7 @@ class IClassCategoryManagerDialog(wx.Dialog):
 class CategoryListCtrl(ListCtrl,
                        listmix.ListCtrlAutoWidthMixin,
                        listmix.TextEditMixin):
-    """Widget for controling list of classes (categories).
+    """Widget for controlling list of classes (categories).
 
     CategoryListCtrl updates choice in mapwindow and removes raster map
     when deleting class (category).
@@ -582,7 +582,7 @@ class CategoryListCtrl(ListCtrl,
 
 
 def ContrastColor(color):
-    """Decides which value shoud have text to be contrast with backgroud color
+    """Decides which value shoud have text to be contrast with background color
         (bright bg -> black, dark bg -> white)
 
     .. todo::

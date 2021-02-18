@@ -27,7 +27,7 @@ except ImportError:
     havePILImage = False
 
 import grass.script as grass
-from core.gcmd import RunCommand
+from core.gcmd import RunCommand, GError
 
 
 class Rect2D(wx.Rect2D):
@@ -361,24 +361,14 @@ def projInfo():
     """Return region projection and map units information,
     taken from render.py
     """
+    proj_info = RunCommand(
+        'g.proj', flags='g', read=True, parse=grass.parse_key_val,
+    )
 
-    projinfo = dict()
-
-    ret = RunCommand('g.proj', read=True, flags='p')
-
-    if not ret:
-        return projinfo
-
-    for line in ret.splitlines():
-        if ':' in line:
-            key, val = line.split(':')
-            projinfo[key.strip()] = val.strip()
-        elif "XY location (unprojected)" in line:
-            projinfo['proj'] = 'xy'
-            projinfo['units'] = ''
-            break
-
-    return projinfo
+    return (
+        proj_info if proj_info.get('name') != 'xy_location_unprojected'
+        else {'proj': 'xy', 'units': ''}
+    )
 
 
 def GetMapBounds(filename, env, portrait=True):

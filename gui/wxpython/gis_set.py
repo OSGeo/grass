@@ -38,13 +38,10 @@ import wx.html
 import wx.lib.mixins.listctrl as listmix
 
 from grass.grassdb.checks import get_lockfile_if_present
+from grass.app import get_possible_database_path
 
 from core.gcmd import GError, RunCommand
 from core.utils import GetListOfLocations, GetListOfMapsets
-from startup.utils import (
-    get_possible_database_path,
-    create_database_directory,
-    create_startup_location_in_grassdb)
 from startup.guiutils import (SetSessionMapset,
                               create_mapset_interactively,
                               create_location_interactively,
@@ -516,16 +513,6 @@ class GRASSStartup(wx.Frame):
         if self.GetRCValue("LOCATION_NAME") != "<UNKNOWN>":
             return
         path = get_possible_database_path()
-
-        # If nothing found, try to create GRASS directory and copy startup loc
-        if path is None:
-            grassdb = create_database_directory()
-            location = "world_latlong_wgs84"
-            if create_startup_location_in_grassdb(grassdb,
-                                                  location):
-                self.SetLocation(grassdb, location, "PERMANENT")
-                self.ExitSuccessfully()
-
         if path:
             try:
                 self.tgisdbase.SetValue(path)

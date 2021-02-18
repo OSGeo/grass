@@ -575,7 +575,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos=(row, 1))
         gridSizer.AddGrowableCol(0)
         #
-        # appearence
+        # appearance
         #
         box = StaticBox(
             parent=panel,

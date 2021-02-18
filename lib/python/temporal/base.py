@@ -27,7 +27,7 @@ for details.
 from __future__ import print_function
 from datetime import datetime
 from .core import get_tgis_message_interface, get_tgis_dbmi_paramstyle, \
-    SQLDatabaseInterfaceConnection, init, get_current_mapset
+    SQLDatabaseInterfaceConnection
 
 ###############################################################################
 

@@ -7,9 +7,9 @@
 # PURPOSE:	Pack up a raster map, collect raster map elements => gzip
 # COPYRIGHT:	(C) 2004-2013 by the GRASS Development Team
 #
-#		This program is free software under the GNU General
-#		Public License (>=v2). Read the file COPYING that
-#		comes with GRASS for details.
+# 		This program is free software under the GNU General
+# 		Public License (>=v2). Read the file COPYING that
+# 		comes with GRASS for details.
 #
 #############################################################################
 
@@ -46,14 +46,14 @@ def cleanup():
 
 
 def main():
-    infile = options['input']
-    compression_off = flags['c']
+    infile = options["input"]
+    compression_off = flags["c"]
     mapset = None
-    if '@' in infile:
-        infile, mapset = infile.split('@')
+    if "@" in infile:
+        infile, mapset = infile.split("@")
 
-    if options['output']:
-        outfile_path, outfile_base = os.path.split(os.path.abspath(options['output']))
+    if options["output"]:
+        outfile_path, outfile_base = os.path.split(os.path.abspath(options["output"]))
     else:
         outfile_path, outfile_base = os.path.split(os.path.abspath(infile + ".pack"))
 
@@ -63,57 +63,67 @@ def main():
     tmp = grass.tempdir()
     tmp_dir = os.path.join(tmp, infile)
     os.mkdir(tmp_dir)
-    grass.debug('tmp_dir = %s' % tmp_dir)
+    grass.debug("tmp_dir = %s" % tmp_dir)
 
-    gfile = grass.find_file(name=infile, element='cell', mapset=mapset)
-    if not gfile['name']:
+    gfile = grass.find_file(name=infile, element="cell", mapset=mapset)
+    if not gfile["name"]:
         grass.fatal(_("Raster map <%s> not found") % infile)
 
     if os.path.exists(outfile):
-        if os.getenv('GRASS_OVERWRITE'):
-            grass.warning(_("Pack file <%s> already exists and will be overwritten") % outfile)
+        if os.getenv("GRASS_OVERWRITE"):
+            grass.warning(
+                _("Pack file <%s> already exists and will be overwritten") % outfile
+            )
             try_remove(outfile)
         else:
             grass.fatal(_("option <output>: <%s> exists.") % outfile)
 
-    grass.message(_("Packing <%s> to <%s>...") % (gfile['fullname'], outfile))
-    basedir = os.path.sep.join(os.path.normpath(gfile['file']).split(os.path.sep)[:-2])
+    grass.message(_("Packing <%s> to <%s>...") % (gfile["fullname"], outfile))
+    basedir = os.path.sep.join(os.path.normpath(gfile["file"]).split(os.path.sep)[:-2])
     olddir = os.getcwd()
 
     # copy elements
-    info = grass.parse_command('r.info', flags='e', map=infile)
+    info = grass.parse_command("r.info", flags="e", map=infile)
     vrt_files = {}
-    if info['maptype'] == 'virtual':
+    if info["maptype"] == "virtual":
         map_file = grass.find_file(
-            name=infile, element='cell_misc',
+            name=infile,
+            element="cell_misc",
         )
-        if map_file['file']:
-            vrt = os.path.join(map_file['file'], 'vrt')
+        if map_file["file"]:
+            vrt = os.path.join(map_file["file"], "vrt")
             if os.path.exists(vrt):
-                with open(vrt, 'r') as f:
+                with open(vrt, "r") as f:
                     for r in f.readlines():
-                        map, mapset = r.split('@')
+                        map, mapset = r.split("@")
                         map_basedir = os.path.sep.join(
-                            os.path.normpath(
-                                map_file['file'],
-                            ).split(os.path.sep)[:-2],
+                            os.path.normpath(map_file["file"],).split(
+                                os.path.sep
+                            )[:-2],
                         )
                         vrt_files[map] = map_basedir
 
     for element in [
-            'cats', 'cell', 'cellhd', 'cell_misc', 'colr', 'fcell',
-            'hist',
+        "cats",
+        "cell",
+        "cellhd",
+        "cell_misc",
+        "colr",
+        "fcell",
+        "hist",
     ]:
         path = os.path.join(basedir, element, infile)
         if os.path.exists(path):
-            grass.debug('copying %s' % path)
+            grass.debug("copying %s" % path)
             if os.path.isfile(path):
                 shutil.copyfile(
-                    path, os.path.join(tmp_dir, element),
+                    path,
+                    os.path.join(tmp_dir, element),
                 )
             else:
                 shutil.copytree(
-                    path, os.path.join(tmp_dir, element),
+                    path,
+                    os.path.join(tmp_dir, element),
                 )
 
         # Copy vrt files
@@ -127,11 +137,13 @@ def main():
                     grass.debug("copying vrt file {}".format(path))
                     if os.path.isfile(path):
                         shutil.copyfile(
-                            path, os.path.join(f_tmp_dir, element),
+                            path,
+                            os.path.join(f_tmp_dir, element),
                         )
                     else:
                         shutil.copytree(
-                            path, os.path.join(f_tmp_dir, element),
+                            path,
+                            os.path.join(f_tmp_dir, element),
                         )
 
     if not os.listdir(tmp_dir):
@@ -140,18 +152,19 @@ def main():
     # copy projection info
     # (would prefer to use g.proj*, but this way is 5.3 and 5.7 compat)
     gisenv = grass.gisenv()
-    for support in ['INFO', 'UNITS', 'EPSG']:
-        path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'],
-                            'PERMANENT', 'PROJ_' + support)
+    for support in ["INFO", "UNITS", "EPSG"]:
+        path = os.path.join(
+            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
+        )
         if os.path.exists(path):
-            shutil.copyfile(path, os.path.join(tmp_dir, 'PROJ_' + support))
+            shutil.copyfile(path, os.path.join(tmp_dir, "PROJ_" + support))
 
     # pack it all up
     os.chdir(tmp)
     if compression_off:
-        tar = tarfile.TarFile.open(name=outfile_base, mode='w:')
+        tar = tarfile.TarFile.open(name=outfile_base, mode="w:")
     else:
-        tar = tarfile.TarFile.open(name=outfile_base, mode='w:gz')
+        tar = tarfile.TarFile.open(name=outfile_base, mode="w:gz")
     tar.add(infile, recursive=True)
     if vrt_files:
         for f in vrt_files.keys():

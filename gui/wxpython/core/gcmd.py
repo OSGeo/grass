@@ -335,14 +335,6 @@ def recv_some(p, t=.1, e=1, tr=5, stderr=0):
     return ''.join(y)
 
 
-def send_all(p, data):
-    while len(data):
-        sent = p.send(data)
-        if sent is None:
-            raise Exception(message)
-        data = buffer(data, sent)
-
-
 class Command:
     """Run command in separate thread. Used for commands launched
     on the background.
@@ -511,8 +503,6 @@ class Command:
 
         for type, msg in self.__ProcessStdErr():
             if type == 'ERROR':
-                if _enc:
-                    return unicode(msg, _enc)
                 return msg
 
         return ''

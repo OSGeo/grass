@@ -5,8 +5,6 @@ ignore =
     E402, # module level import not at top of file
     E722, # do not use bare 'except'
     E741, # ambiguous variable name 'l'
-    F401, # 'grass.script.core.gisenv' imported but unused
-    F821, # undefined name '_'
     F841, # local variable 'center' is assigned to but never used
     E121, # continuation line under-indented for hanging indent
     E125, # continuation line with same indent as next logical line
@@ -30,6 +28,11 @@ ignore =
     W503, # line break before binary operator
     W504, # line break after binary operator
 
+# Ignores for Black compatibility
+# This is not to be removed unlike the ones in ignore.
+extend-ignore =
+    E203,  # whitespace before ':' (in a slice the colon acts like a binary operator)
+
 max-line-length = 88
 exclude =
     .git,
@@ -44,3 +47,5 @@ exclude =
     ctypes,
     pydispatch,
     testsuite,
+builtins =
+    _

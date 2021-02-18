@@ -85,6 +85,7 @@ potsdam "towgs84=590.5,69.5,411.6,-0.796,-0.052,-3.601,8.30" "Germany (West - No
 potsdam "towgs84=584.8,67.0,400.3,0.105,0.013,-2.378,10.29" "Germany (West - Middle - 50d20'N to 52d20'N)" "Accuracy <1m"
 potsdam "towgs84=597.1,71.4,412.1,0.894,0.068,-1.563,7.58" "Germany (West - South - 47d00N to 50d20'N)" "Accuracy <1m"
 potsdam "towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.70" "Germany (Whole Country)" "Accuracy 3m"
+rauenberg83 "towgs84=612.4,77.0,440.2,-0.054,0.057,-2.797,2.55" "Germany (Sachsen)" "Accuracy <1m"
 rd18    "towgs84=565.036,49.914,465.839,-0.4094,0.3597,-1.86854,-4.0772" "Netherlands" "Accuracy about 0.3m"
 bel72   "towgs84=-99.1,53.3,-112.5,0.419,-0.830,1.885,-1.00" "Belgium" "Accuracy about 0.3m"
 por73   "towgs84=-231.0,102.6,29.8,0.615,-0.198,0.881,1.79" "Portugal" " "

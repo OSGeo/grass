@@ -137,9 +137,13 @@ def is_projection_matching(OGRdatasource, layer):
     """Returns True if current location projection
     matches dataset projection, otherwise False"""
     try:
+<<<<<<< HEAD
         grass.run_command(
             "v.in.ogr", input=OGRdatasource, layer=layer, flags="j", quiet=True
         )
+=======
+        grass.run_command("v.in.ogr", input=OGRdatasource, flags="j", quiet=True)
+>>>>>>> upstream/master
         return True
     except CalledModuleError:
         return False
@@ -217,7 +221,11 @@ def main():
     vopts["snap"] = options["snap"]
 
     # try v.in.ogr directly
+<<<<<<< HEAD
     if flags["o"] or is_projection_matching(OGRdatasource, layers):
+=======
+    if flags["o"] or is_projection_matching(OGRdatasource):
+>>>>>>> upstream/master
         try:
             grass.run_command(
                 "v.in.ogr",

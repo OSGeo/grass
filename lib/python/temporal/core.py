@@ -35,7 +35,7 @@ import grass.script as gscript
 
 from .c_libraries_interface import *
 from grass.pygrass import messages
-from grass.script.utils import decode, encode
+from grass.script.utils import decode
 # Import all supported database backends
 # Ignore import errors since they are checked later
 try:

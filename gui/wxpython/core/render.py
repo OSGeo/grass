@@ -175,7 +175,7 @@ class Layer(object):
                         first = False
             else:
                 self.renderMgr.Render(self.cmd, env)
-        except GException:
+        except GException as e:
             sys.stderr.write(
                 _("Command '%s' failed\n") %
                 self.GetCmd(
@@ -783,7 +783,7 @@ class Map(object):
         :param gisrc: alternative gisrc (used eg. by georectifier)
         """
         Debug.msg(1, "Map.__init__(): gisrc=%s" % gisrc)
-        # region/extent settigns
+        # region/extent settings
         self.wind = dict()  # WIND settings (wind file)
         self.region = dict()  # region settings (g.region)
         self.width = 640    # map width
@@ -1270,7 +1270,7 @@ class Map(object):
         """Creates final image composite
 
         This function can conditionaly use high-level tools, which
-        should be avaliable in wxPython library
+        should be available in wxPython library
 
         :param force: force rendering
         :param windres: use region resolution (True) otherwise display
@@ -1643,5 +1643,5 @@ class Map(object):
         self.renderMgr.RenderOverlays(force)
 
     def AbortAllThreads(self):
-        """Abort all layers threads e. g. donwloading data"""
+        """Abort all layers threads e. g. downloading data"""
         self.renderMgr.Abort()

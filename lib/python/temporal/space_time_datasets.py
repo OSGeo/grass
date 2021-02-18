@@ -9,8 +9,6 @@ for details.
 :authors: Soeren Gebbert
 """
 import getpass
-from datetime import datetime
-from .core import get_current_mapset
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import Raster3DBase, RasterBase, VectorBase, STR3DSBase, STVDSBase, STRDSBase,\
@@ -23,7 +21,6 @@ from .temporal_extent import RasterAbsoluteTime, RasterRelativeTime, Raster3DAbs
     Raster3DRelativeTime, VectorAbsoluteTime, VectorRelativeTime, STRDSAbsoluteTime,\
     STRDSRelativeTime, STR3DSAbsoluteTime, STR3DSRelativeTime, STVDSAbsoluteTime, STVDSRelativeTime
 import grass.script.array as garray
-from .core import init
 
 
 ###############################################################################

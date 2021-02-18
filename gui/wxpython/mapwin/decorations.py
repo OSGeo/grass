@@ -270,7 +270,7 @@ class LegendController(OverlayController):
         self._cmd = ['d.legend', self._defaultAt]
 
     def SetCmd(self, cmd):
-        """Overriden method
+        """Overridden method
 
         Required for setting default or actual raster legend position.
         """

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <inttypes.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -445,7 +446,7 @@ int main(int argc, char **argv)
             fprintf(out, "rows=%d\n", cellhd.rows);
             fprintf(out, "cols=%d\n", cellhd.cols);
             
-            fprintf(out, "cells=%jd\n",
+            fprintf(out, "cells=%" PRId64 "\n",
                     (grass_int64)cellhd.rows * cellhd.cols);
             
 	    fprintf(out, "datatype=%s\n",
@@ -497,7 +498,7 @@ int main(int argc, char **argv)
 
 	    if (!gflag->answer) {
 		/* always report total number of cells */
-		fprintf(out, "cells=%jd\n",
+		fprintf(out, "cells=%" PRId64 "\n",
 			(grass_int64)cellhd.rows * cellhd.cols);
 	    }
 

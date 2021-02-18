@@ -71,7 +71,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
 	ctype = cvarr.ctype;
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Column type (%s) not supported (did you mean 'labelcolumn'?)"),
+	    G_fatal_error(_("Column type (%s) not supported (did you mean 'label_column'?)"),
 			  db_sqltype_name(ctype));
 
 	if (nrec < 0)

@@ -28,7 +28,7 @@ import wx.lib.scrolledpanel as scrolled
 import wx.lib.mixins.listctrl as listmix
 
 from core import globalvar
-from core.gcmd import GError
+from core.gcmd import GError, GMessage
 
 from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import StaticBox, Menu, ListCtrl
@@ -578,7 +578,7 @@ class CategoryListCtrl(ListCtrl,
         item = menu.Append(wx.ID_ANY, _("Set color"))
         self.Bind(wx.EVT_MENU, self.OnSetColor, item)
 
-        item = menu.Append(item_id, _("Change opacity level"))
+        item = menu.Append(wx.ID_ANY, _("Change opacity level"))
         self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
         if showed:

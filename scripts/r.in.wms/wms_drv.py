@@ -23,14 +23,19 @@ from time import sleep
 
 try:
     from osgeo import gdal
-    from osgeo import gdalconst
 except:
-    grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
+    grass.fatal(
+        _(
+            "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+        )
+    )
 
 import numpy as Numeric
+
 Numeric.arrayrange = Numeric.arange
 
 from math import pi, floor
+
 try:
     from urllib2 import HTTPError
     from httplib import HTTPException
@@ -51,7 +56,6 @@ from srs import Srs
 
 
 class WMSDrv(WMSBase):
-
     def _download(self):
         """!Downloads data from WMS server using own driver
 
@@ -65,33 +69,24 @@ class WMSDrv(WMSBase):
         else:
             self.params["url"] += "?"
 
-        if not self.params['capfile']:
+        if not self.params["capfile"]:
             self.cap_file = self._fetchCapabilities(self.params)
         else:
-            self.cap_file = self.params['capfile']
+            self.cap_file = self.params["capfile"]
 
         # initialize correct manager according to chosen OGC service
-        if self.params['driver'] == 'WMTS_GRASS':
+        if self.params["driver"] == "WMTS_GRASS":
             req_mgr = WMTSRequestMgr(
-                self.params,
-                self.bbox,
-                self.region,
-                self.proj_srs,
-                self.cap_file)
-        elif self.params['driver'] == 'WMS_GRASS':
+                self.params, self.bbox, self.region, self.proj_srs, self.cap_file
+            )
+        elif self.params["driver"] == "WMS_GRASS":
             req_mgr = WMSRequestMgr(
-                self.params,
-                self.bbox,
-                self.region,
-                self.tile_size,
-                self.proj_srs)
-        elif self.params['driver'] == 'OnEarth_GRASS':
+                self.params, self.bbox, self.region, self.tile_size, self.proj_srs
+            )
+        elif self.params["driver"] == "OnEarth_GRASS":
             req_mgr = OnEarthRequestMgr(
-                self.params,
-                self.bbox,
-                self.region,
-                self.proj_srs,
-                self.cap_file)
+                self.params, self.bbox, self.region, self.proj_srs, self.cap_file
+            )
 
         # get information about size in pixels and bounding box of raster, where
         # all tiles will be joined
@@ -122,23 +117,25 @@ class WMSDrv(WMSBase):
             grass.debug(query_url, 2)
             try:
                 wms_data = self._fetchDataFromServer(
-                    query_url, self.params['username'],
-                    self.params['password'])
+                    query_url, self.params["username"], self.params["password"]
+                )
             except (IOError, HTTPException) as e:
                 if isinstance(e, HTTPError) and e.code == 401:
                     grass.fatal(
-                        _("Authorization failed to '%s' when fetching data.\n%s") %
-                        (self.params['url'], str(e)))
+                        _("Authorization failed to '%s' when fetching data.\n%s")
+                        % (self.params["url"], str(e))
+                    )
                 else:
                     grass.fatal(
-                        _("Unable to fetch data from: '%s'\n%s") %
-                        (self.params['url'], str(e)))
+                        _("Unable to fetch data from: '%s'\n%s")
+                        % (self.params["url"], str(e))
+                    )
 
             temp_tile = self._tempfile()
 
             # download data into temporary file
             try:
-                temp_tile_opened = open(temp_tile, 'wb')
+                temp_tile_opened = open(temp_tile, "wb")
                 temp_tile_opened.write(wms_data.read())
             except IOError as e:
                 # some servers are not happy with many subsequent requests for tiles done immediately,
@@ -154,8 +151,11 @@ class WMSDrv(WMSBase):
                         sleep_time = 30
 
                     grass.warning(
-                        _("Server refused to send data for a tile.\nRequest will be repeated after %d s.") %
-                        sleep_time)
+                        _(
+                            "Server refused to send data for a tile.\nRequest will be repeated after %d s."
+                        )
+                        % sleep_time
+                    )
 
                     sleep(sleep_time)
                     continue
@@ -170,7 +170,7 @@ class WMSDrv(WMSBase):
             if tile_dataset_info is None:
                 # print error xml returned from server
                 try:
-                    error_xml_opened = open(temp_tile, 'rb')
+                    error_xml_opened = open(temp_tile, "rb")
                     err_str = error_xml_opened.read()
                 except IOError as e:
                     grass.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
@@ -184,9 +184,16 @@ class WMSDrv(WMSBase):
 
             temp_tile_pct2rgb = None
             if tile_dataset_info.RasterCount < 1:
-                grass.fatal(_("WMS server error: no band(s) received. Is server URL correct? <%s>") % server_url )
-            if tile_dataset_info.RasterCount == 1 and \
-               tile_dataset_info.GetRasterBand(1).GetRasterColorTable() is not None:
+                grass.fatal(
+                    _(
+                        "WMS server error: no band(s) received. Is server URL correct? <%s>"
+                    )
+                    % server_url
+                )
+            if (
+                tile_dataset_info.RasterCount == 1
+                and tile_dataset_info.GetRasterBand(1).GetRasterColorTable() is not None
+            ):
                 # expansion of color table into bands
                 temp_tile_pct2rgb = self._tempfile()
                 tile_dataset = self._pct2rgb(temp_tile, temp_tile_pct2rgb)
@@ -199,21 +206,41 @@ class WMSDrv(WMSBase):
 
                 driver = gdal.GetDriverByName(self.gdal_drv_format)
                 metadata = driver.GetMetadata()
-                if gdal.DCAP_CREATE not in metadata or \
-                        metadata[gdal.DCAP_CREATE] == 'NO':
-                    grass.fatal(_('Driver %s does not supports Create() method') % drv_format)
+                if (
+                    gdal.DCAP_CREATE not in metadata
+                    or metadata[gdal.DCAP_CREATE] == "NO"
+                ):
+                    grass.fatal(
+                        _("Driver %s does not supports Create() method")
+                        % self.gdal_drv_format
+                    )
                 self.temp_map_bands_num = tile_dataset.RasterCount
-                temp_map_dataset = driver.Create(temp_map, map_region['cols'], map_region['rows'],
-                                                 self.temp_map_bands_num,
-                                                 tile_dataset.GetRasterBand(1).DataType)
+                temp_map_dataset = driver.Create(
+                    temp_map,
+                    map_region["cols"],
+                    map_region["rows"],
+                    self.temp_map_bands_num,
+                    tile_dataset.GetRasterBand(1).DataType,
+                )
                 init = False
 
             # tile is written into temp_map
-            tile_to_temp_map = tile_dataset.ReadRaster(0, 0, tile_ref['sizeX'], tile_ref['sizeY'],
-                                                       tile_ref['sizeX'], tile_ref['sizeY'])
+            tile_to_temp_map = tile_dataset.ReadRaster(
+                0,
+                0,
+                tile_ref["sizeX"],
+                tile_ref["sizeY"],
+                tile_ref["sizeX"],
+                tile_ref["sizeY"],
+            )
 
-            temp_map_dataset.WriteRaster(tile_ref['t_cols_offset'], tile_ref['t_rows_offset'],
-                                         tile_ref['sizeX'], tile_ref['sizeY'], tile_to_temp_map)
+            temp_map_dataset.WriteRaster(
+                tile_ref["t_cols_offset"],
+                tile_ref["t_rows_offset"],
+                tile_ref["sizeX"],
+                tile_ref["sizeY"],
+                tile_to_temp_map,
+            )
 
             tile_dataset = None
             tile_dataset_info = None
@@ -223,22 +250,27 @@ class WMSDrv(WMSBase):
         if not temp_map:
             return temp_map
         # georeferencing and setting projection of temp_map
-        projection = grass.read_command('g.proj',
-                                        flags='wf',
-                                        epsg=GetEpsg(self.params['srs']))
-        projection = projection.rstrip('\n')
+        projection = grass.read_command(
+            "g.proj", flags="wf", epsg=GetEpsg(self.params["srs"])
+        )
+        projection = projection.rstrip("\n")
         temp_map_dataset.SetProjection(projection)
 
-        pixel_x_length = (map_region['maxx'] - map_region['minx']) / int(map_region['cols'])
-        pixel_y_length = (map_region['miny'] - map_region['maxy']) / int(map_region['rows'])
+        pixel_x_length = (map_region["maxx"] - map_region["minx"]) / int(
+            map_region["cols"]
+        )
+        pixel_y_length = (map_region["miny"] - map_region["maxy"]) / int(
+            map_region["rows"]
+        )
 
         geo_transform = [
-            map_region['minx'],
+            map_region["minx"],
             pixel_x_length,
             0.0,
-            map_region['maxy'],
+            map_region["maxy"],
             0.0,
-            pixel_y_length]
+            pixel_y_length,
+        ]
         temp_map_dataset.SetGeoTransform(geo_transform)
         temp_map_dataset = None
 
@@ -256,15 +288,17 @@ class WMSDrv(WMSBase):
         # open source file
         src_ds = gdal.Open(src_filename)
         if src_ds is None:
-            grass.fatal(_('Unable to open %s ' % src_filename))
+            grass.fatal(_("Unable to open %s " % src_filename))
 
         src_band = src_ds.GetRasterBand(band_number)
 
         # Build color table
-        lookup = [Numeric.arrayrange(256),
-                  Numeric.arrayrange(256),
-                  Numeric.arrayrange(256),
-                  Numeric.ones(256) * 255]
+        lookup = [
+            Numeric.arrayrange(256),
+            Numeric.arrayrange(256),
+            Numeric.arrayrange(256),
+            Numeric.ones(256) * 255,
+        ]
 
         ct = src_band.GetRasterColorTable()
         if ct is not None:
@@ -275,8 +309,9 @@ class WMSDrv(WMSBase):
 
         # create the working file
         gtiff_driver = gdal.GetDriverByName(self.gdal_drv_format)
-        tif_ds = gtiff_driver.Create(dst_filename,
-                                     src_ds.RasterXSize, src_ds.RasterYSize, out_bands)
+        tif_ds = gtiff_driver.Create(
+            dst_filename, src_ds.RasterXSize, src_ds.RasterYSize, out_bands
+        )
 
         # do the processing one scanline at a time
         for iY in range(src_ds.RasterYSize):
@@ -292,143 +327,170 @@ class WMSDrv(WMSBase):
 
 
 class BaseRequestMgr:
-    """!Base class for request managers.
-    """
+    """!Base class for request managers."""
 
     def _computeRequestData(self, bbox, tl_corner, tile_span, tile_size, mat_num_bbox):
-        """!Initialize data needed for iteration through tiles. Used by WMTS_GRASS and OnEarth_GRASS drivers.
-        """
+        """!Initialize data needed for iteration through tiles. Used by WMTS_GRASS and OnEarth_GRASS drivers."""
         epsilon = 1e-15
 
         # request data bbox specified in row and col number
         self.t_num_bbox = {}
 
-        self.t_num_bbox['min_col'] = int(
-            floor((bbox['minx'] - tl_corner['minx']) / tile_span['x'] + epsilon))
-        self.t_num_bbox['max_col'] = int(
-            floor((bbox['maxx'] - tl_corner['minx']) / tile_span['x'] - epsilon))
+        self.t_num_bbox["min_col"] = int(
+            floor((bbox["minx"] - tl_corner["minx"]) / tile_span["x"] + epsilon)
+        )
+        self.t_num_bbox["max_col"] = int(
+            floor((bbox["maxx"] - tl_corner["minx"]) / tile_span["x"] - epsilon)
+        )
 
-        self.t_num_bbox['min_row'] = int(
-            floor((tl_corner['maxy'] - bbox['maxy']) / tile_span['y'] + epsilon))
-        self.t_num_bbox['max_row'] = int(
-            floor((tl_corner['maxy'] - bbox['miny']) / tile_span['y'] - epsilon))
+        self.t_num_bbox["min_row"] = int(
+            floor((tl_corner["maxy"] - bbox["maxy"]) / tile_span["y"] + epsilon)
+        )
+        self.t_num_bbox["max_row"] = int(
+            floor((tl_corner["maxy"] - bbox["miny"]) / tile_span["y"] - epsilon)
+        )
 
         # Does required bbox intersects bbox of data available on server?
         self.intersects = False
-        for col in ['min_col', 'max_col']:
-            for row in ['min_row', 'max_row']:
-                if (self.t_num_bbox['min_row'] <= self.t_num_bbox[row] and self.t_num_bbox[row] <= mat_num_bbox['max_row']) and (
-                        self.t_num_bbox['min_col'] <= self.t_num_bbox[col] and self.t_num_bbox[col] <= mat_num_bbox['max_col']):
+        for col in ["min_col", "max_col"]:
+            for row in ["min_row", "max_row"]:
+                if (
+                    self.t_num_bbox["min_row"] <= self.t_num_bbox[row]
+                    and self.t_num_bbox[row] <= mat_num_bbox["max_row"]
+                ) and (
+                    self.t_num_bbox["min_col"] <= self.t_num_bbox[col]
+                    and self.t_num_bbox[col] <= mat_num_bbox["max_col"]
+                ):
                     self.intersects = True
 
         if not self.intersects:
-            grass.warning(_('Region is out of server data extend.'))
+            grass.warning(_("Region is out of server data extend."))
             self.map_region = None
             return
 
         # crop request bbox to server data bbox extend
-        if self.t_num_bbox['min_col'] < (mat_num_bbox['min_col']):
-            self.t_num_bbox['min_col'] = int(mat_num_bbox['min_col'])
+        if self.t_num_bbox["min_col"] < (mat_num_bbox["min_col"]):
+            self.t_num_bbox["min_col"] = int(mat_num_bbox["min_col"])
 
-        if self.t_num_bbox['max_col'] > (mat_num_bbox['max_col']):
-            self.t_num_bbox['max_col'] = int(mat_num_bbox['max_col'])
+        if self.t_num_bbox["max_col"] > (mat_num_bbox["max_col"]):
+            self.t_num_bbox["max_col"] = int(mat_num_bbox["max_col"])
 
-        if self.t_num_bbox['min_row'] < (mat_num_bbox['min_row']):
-            self.t_num_bbox['min_row'] = int(mat_num_bbox['min_row'])
+        if self.t_num_bbox["min_row"] < (mat_num_bbox["min_row"]):
+            self.t_num_bbox["min_row"] = int(mat_num_bbox["min_row"])
 
-        if self.t_num_bbox['max_row'] > (mat_num_bbox['max_row']):
-            self.t_num_bbox['max_row'] = int(mat_num_bbox['max_row'])
+        if self.t_num_bbox["max_row"] > (mat_num_bbox["max_row"]):
+            self.t_num_bbox["max_row"] = int(mat_num_bbox["max_row"])
 
         grass.debug(
-            't_num_bbox: min_col:%d max_col:%d min_row:%d max_row:%d' %
-            (self.t_num_bbox['min_col'],
-             self.t_num_bbox['max_col'],
-             self.t_num_bbox['min_row'],
-             self.t_num_bbox['max_row']),
-            3)
+            "t_num_bbox: min_col:%d max_col:%d min_row:%d max_row:%d"
+            % (
+                self.t_num_bbox["min_col"],
+                self.t_num_bbox["max_col"],
+                self.t_num_bbox["min_row"],
+                self.t_num_bbox["max_row"],
+            ),
+            3,
+        )
 
-        num_tiles = (self.t_num_bbox['max_col'] - self.t_num_bbox['min_col'] + 1) * (
-            self.t_num_bbox['max_row'] - self.t_num_bbox['min_row'] + 1)
+        num_tiles = (self.t_num_bbox["max_col"] - self.t_num_bbox["min_col"] + 1) * (
+            self.t_num_bbox["max_row"] - self.t_num_bbox["min_row"] + 1
+        )
         grass.message(
-            _('Fetching %d tiles with %d x %d pixel size per tile...') %
-            (num_tiles, tile_size['x'], tile_size['y']))
+            _("Fetching %d tiles with %d x %d pixel size per tile...")
+            % (num_tiles, tile_size["x"], tile_size["y"])
+        )
 
         # georeference of raster, where tiles will be merged
         self.map_region = {}
-        self.map_region['minx'] = self.t_num_bbox['min_col'] * tile_span['x'] + tl_corner['minx']
-        self.map_region['maxy'] = tl_corner['maxy'] - (self.t_num_bbox['min_row']) * tile_span['y']
+        self.map_region["minx"] = (
+            self.t_num_bbox["min_col"] * tile_span["x"] + tl_corner["minx"]
+        )
+        self.map_region["maxy"] = (
+            tl_corner["maxy"] - (self.t_num_bbox["min_row"]) * tile_span["y"]
+        )
 
-        self.map_region['maxx'] = (
-            self.t_num_bbox['max_col'] + 1) * tile_span['x'] + tl_corner['minx']
-        self.map_region['miny'] = tl_corner[
-            'maxy'] - (self.t_num_bbox['max_row'] + 1) * tile_span['y']
+        self.map_region["maxx"] = (self.t_num_bbox["max_col"] + 1) * tile_span[
+            "x"
+        ] + tl_corner["minx"]
+        self.map_region["miny"] = (
+            tl_corner["maxy"] - (self.t_num_bbox["max_row"] + 1) * tile_span["y"]
+        )
 
         # size of raster, where tiles will be merged
-        self.map_region['cols'] = int(tile_size['x'] *
-                                      (self.t_num_bbox['max_col'] - self.t_num_bbox['min_col'] + 1))
-        self.map_region['rows'] = int(tile_size['y'] *
-                                      (self.t_num_bbox['max_row'] - self.t_num_bbox['min_row'] + 1))
+        self.map_region["cols"] = int(
+            tile_size["x"]
+            * (self.t_num_bbox["max_col"] - self.t_num_bbox["min_col"] + 1)
+        )
+        self.map_region["rows"] = int(
+            tile_size["y"]
+            * (self.t_num_bbox["max_row"] - self.t_num_bbox["min_row"] + 1)
+        )
 
         # hold information about current column and row during iteration
-        self.i_col = self.t_num_bbox['min_col']
-        self.i_row = self.t_num_bbox['min_row']
+        self.i_col = self.t_num_bbox["min_col"]
+        self.i_row = self.t_num_bbox["min_row"]
 
         # bbox for first tile request
         self.query_bbox = {
-            'minx': tl_corner['minx'],
-            'maxy': tl_corner['maxy'],
-            'maxx': tl_corner['minx'] + tile_span['x'],
-            'miny': tl_corner['maxy'] - tile_span['y'],
+            "minx": tl_corner["minx"],
+            "maxy": tl_corner["maxy"],
+            "maxx": tl_corner["minx"] + tile_span["x"],
+            "miny": tl_corner["maxy"] - tile_span["y"],
         }
 
-        self.tile_ref = {
-            'sizeX': tile_size['x'],
-            'sizeY': tile_size['y']
-        }
+        self.tile_ref = {"sizeX": tile_size["x"], "sizeY": tile_size["y"]}
 
     def _isGeoProj(self, proj):
-        """!Is it geographic projection?
-        """
-        if (proj.find("+proj=latlong") != -1 or
-                proj.find("+proj=longlat") != -1):
+        """!Is it geographic projection?"""
+        if proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1:
 
             return True
         return False
 
 
 class WMSRequestMgr(BaseRequestMgr):
-
     def __init__(self, params, bbox, region, tile_size, proj_srs, cap_file=None):
-        """!Initialize data needed for iteration through tiles.
-        """
-        self.version = params['wms_version']
-        self.srs_param = params['srs']
+        """!Initialize data needed for iteration through tiles."""
+        self.version = params["wms_version"]
+        self.srs_param = params["srs"]
 
-        proj = params['proj_name'] + "=" + GetSRSParamVal(params['srs'])
-        self.url = params['url'] + ("SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&TRANSPARENT=%s" % (
-            params['wms_version'], params['layers'], tile_size['cols'], tile_size['rows'], params['styles'], params['transparent']))
+        proj = params["proj_name"] + "=" + GetSRSParamVal(params["srs"])
+        self.url = params["url"] + (
+            "SERVICE=WMS&REQUEST=GetMap&VERSION=%s&LAYERS=%s&WIDTH=%s&HEIGHT=%s&STYLES=%s&TRANSPARENT=%s"
+            % (
+                params["wms_version"],
+                params["layers"],
+                tile_size["cols"],
+                tile_size["rows"],
+                params["styles"],
+                params["transparent"],
+            )
+        )
 
-        if params['bgcolor']:
-            self.url += "&BGCOLOR=" + params['bgcolor']
+        if params["bgcolor"]:
+            self.url += "&BGCOLOR=" + params["bgcolor"]
 
-        self.url += "&" + proj + "&" + "FORMAT=" + params['format']
+        self.url += "&" + proj + "&" + "FORMAT=" + params["format"]
 
         self.bbox = bbox
         self.proj_srs = proj_srs
-        self.tile_rows = tile_size['rows']
-        self.tile_cols = tile_size['cols']
+        self.tile_rows = tile_size["rows"]
+        self.tile_cols = tile_size["cols"]
 
-        if params['urlparams'] != "":
-            self.url += "&" + params['urlparams']
+        if params["urlparams"] != "":
+            self.url += "&" + params["urlparams"]
 
-        cols = int(region['cols'])
-        rows = int(region['rows'])
+        cols = int(region["cols"])
+        rows = int(region["rows"])
 
         # computes parameters of tiles
         self.num_tiles_x = cols // self.tile_cols
         self.last_tile_x_size = cols % self.tile_cols
-        self.tile_length_x = float(
-            self.tile_cols) / float(cols) * (self.bbox['maxx'] - self.bbox['minx'])
+        self.tile_length_x = (
+            float(self.tile_cols)
+            / float(cols)
+            * (self.bbox["maxx"] - self.bbox["minx"])
+        )
 
         self.last_tile_x = False
         if self.last_tile_x_size != 0:
@@ -437,8 +499,11 @@ class WMSRequestMgr(BaseRequestMgr):
 
         self.num_tiles_y = rows // self.tile_rows
         self.last_tile_y_size = rows % self.tile_rows
-        self.tile_length_y = float(
-            self.tile_rows) / float(rows) * (self.bbox['maxy'] - self.bbox['miny'])
+        self.tile_length_y = (
+            float(self.tile_rows)
+            / float(rows)
+            * (self.bbox["maxy"] - self.bbox["miny"])
+        )
 
         self.last_tile_y = False
         if self.last_tile_y_size != 0:
@@ -446,61 +511,67 @@ class WMSRequestMgr(BaseRequestMgr):
             self.num_tiles_y = self.num_tiles_y + 1
 
         self.tile_bbox = dict(self.bbox)
-        self.tile_bbox['maxx'] = self.bbox['minx'] + self.tile_length_x
+        self.tile_bbox["maxx"] = self.bbox["minx"] + self.tile_length_x
 
         self.i_x = 0
         self.i_y = 0
 
         self.map_region = self.bbox
-        self.map_region['cols'] = cols
-        self.map_region['rows'] = rows
+        self.map_region["cols"] = cols
+        self.map_region["rows"] = rows
 
     def GetMapRegion(self):
-        """!Get size in pixels and bounding box of raster where all tiles will be merged.
-        """
+        """!Get size in pixels and bounding box of raster where all tiles will be merged."""
         return self.map_region
 
     def GetNextTile(self):
-        """!Get url for tile request from server and information for merging the tile with other tiles
-        """
+        """!Get url for tile request from server and information for merging the tile with other tiles"""
 
         tile_ref = {}
 
         if self.i_x >= self.num_tiles_x:
             return None
 
-        tile_ref['sizeX'] = self.tile_cols
+        tile_ref["sizeX"] = self.tile_cols
         if self.i_x == self.num_tiles_x - 1 and self.last_tile_x:
-            tile_ref['sizeX'] = self.last_tile_x_size
+            tile_ref["sizeX"] = self.last_tile_x_size
 
         # set bbox for tile (N, S)
         if self.i_y != 0:
-            self.tile_bbox['miny'] -= self.tile_length_y
-            self.tile_bbox['maxy'] -= self.tile_length_y
+            self.tile_bbox["miny"] -= self.tile_length_y
+            self.tile_bbox["maxy"] -= self.tile_length_y
         else:
-            self.tile_bbox['maxy'] = self.bbox['maxy']
-            self.tile_bbox['miny'] = self.bbox['maxy'] - self.tile_length_y
+            self.tile_bbox["maxy"] = self.bbox["maxy"]
+            self.tile_bbox["miny"] = self.bbox["maxy"] - self.tile_length_y
 
-        tile_ref['sizeY'] = self.tile_rows
+        tile_ref["sizeY"] = self.tile_rows
         if self.i_y == self.num_tiles_y - 1 and self.last_tile_y:
-            tile_ref['sizeY'] = self.last_tile_y_size
+            tile_ref["sizeY"] = self.last_tile_y_size
 
-        query_bbox = self._getQueryBbox(self.tile_bbox, self.proj_srs, self.srs_param, self.version)
-        query_url = self.url + "&" + "BBOX=%s,%s,%s,%s" % (
-            query_bbox['minx'],
-            query_bbox['miny'],
-            query_bbox['maxx'],
-            query_bbox['maxy'])
+        query_bbox = self._getQueryBbox(
+            self.tile_bbox, self.proj_srs, self.srs_param, self.version
+        )
+        query_url = (
+            self.url
+            + "&"
+            + "BBOX=%s,%s,%s,%s"
+            % (
+                query_bbox["minx"],
+                query_bbox["miny"],
+                query_bbox["maxx"],
+                query_bbox["maxy"],
+            )
+        )
 
-        tile_ref['t_cols_offset'] = int(self.tile_cols * self.i_x)
-        tile_ref['t_rows_offset'] = int(self.tile_rows * self.i_y)
+        tile_ref["t_cols_offset"] = int(self.tile_cols * self.i_x)
+        tile_ref["t_rows_offset"] = int(self.tile_rows * self.i_y)
 
         if self.i_y >= self.num_tiles_y - 1:
             self.i_y = 0
             self.i_x += 1
             # set bbox for next tile (E, W)
-            self.tile_bbox['maxx'] += self.tile_length_x
-            self.tile_bbox['minx'] += self.tile_length_x
+            self.tile_bbox["maxx"] += self.tile_length_x
+            self.tile_bbox["minx"] += self.tile_length_x
         else:
             self.i_y += 1
 
@@ -513,9 +584,9 @@ class WMSRequestMgr(BaseRequestMgr):
         projection is geographic, the bbox x and y are in most cases flipped.
         """
         # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
-        if srs_param in [84, 83] or version != '1.3.0':
+        if srs_param in [84, 83] or version != "1.3.0":
             return bbox
-        elif Srs(GetSRSParamVal(srs_param)).axisorder == 'yx':
+        elif Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
             return self._flipBbox(bbox)
 
         return bbox
@@ -532,19 +603,17 @@ class WMSRequestMgr(BaseRequestMgr):
 
         temp_bbox = dict(bbox)
         new_bbox = {}
-        new_bbox['maxy'] = temp_bbox['maxx']
-        new_bbox['miny'] = temp_bbox['minx']
-        new_bbox['maxx'] = temp_bbox['maxy']
-        new_bbox['minx'] = temp_bbox['miny']
+        new_bbox["maxy"] = temp_bbox["maxx"]
+        new_bbox["miny"] = temp_bbox["minx"]
+        new_bbox["maxx"] = temp_bbox["maxy"]
+        new_bbox["minx"] = temp_bbox["miny"]
 
         return new_bbox
 
 
 class WMTSRequestMgr(BaseRequestMgr):
-
     def __init__(self, params, bbox, region, proj_srs, cap_file=None):
-        """!Initializes data needed for iteration through tiles.
-        """
+        """!Initializes data needed for iteration through tiles."""
 
         self.proj_srs = proj_srs
         self.meters_per_unit = None
@@ -565,38 +634,39 @@ class WMTSRequestMgr(BaseRequestMgr):
 
         # get layer tile matrix sets with required projection
         # [[TileMatrixSet, TileMatrixSetLink], ....]
-        mat_sets = self._getMatSets(root, params['layers'], params['srs'])
+        mat_sets = self._getMatSets(root, params["layers"], params["srs"])
 
         # TODO: what if more tile matrix sets have required srs (returned more than 1)?
         mat_set = mat_sets[0][0]
         mat_set_link = mat_sets[0][1]
-        params['tile_matrix_set'] = mat_set.find(self.xml_ns.NsOws('Identifier')).text
+        params["tile_matrix_set"] = mat_set.find(self.xml_ns.NsOws("Identifier")).text
 
         # find tile matrix with resolution closest and smaller to wanted resolution
-        tile_mat = self._findTileMats(mat_set.findall(
-            self.xml_ns.NsWmts('TileMatrix')), region, bbox)
+        tile_mat = self._findTileMats(
+            mat_set.findall(self.xml_ns.NsWmts("TileMatrix")), region, bbox
+        )
 
         # get extend of data available on server expressed in max/min rows and cols of tile matrix
         mat_num_bbox = self._getMatSize(tile_mat, mat_set_link)
 
         # initialize data needed for iteration through tiles
-        self._computeRequestData(tile_mat, params, bbox, mat_num_bbox, self._getMatSetSrs(mat_set))
+        self._computeRequestData(
+            tile_mat, params, bbox, mat_num_bbox, self._getMatSetSrs(mat_set)
+        )
 
     def GetMapRegion(self):
-        """!Get size in pixels and bounding box of raster where all tiles will be merged.
-        """
+        """!Get size in pixels and bounding box of raster where all tiles will be merged."""
         return self.map_region
 
     def _getMatSets(self, root, layer_name, srs):
-        """!Get matrix sets which are available for chosen layer and have required EPSG.
-        """
+        """!Get matrix sets which are available for chosen layer and have required EPSG."""
 
-        contents = root.find(self.xml_ns.NsWmts('Contents'))
-        layers = contents.findall(self.xml_ns.NsWmts('Layer'))
+        contents = root.find(self.xml_ns.NsWmts("Contents"))
+        layers = contents.findall(self.xml_ns.NsWmts("Layer"))
 
         ch_layer = None
         for layer in layers:
-            layer_id = layer.find(self.xml_ns.NsOws('Identifier')).text
+            layer_id = layer.find(self.xml_ns.NsOws("Identifier")).text
             if layer_id == layer_name:
                 ch_layer = layer
                 break
@@ -604,15 +674,15 @@ class WMTSRequestMgr(BaseRequestMgr):
         if ch_layer is None:
             grass.fatal(_("Layer '%s' was not found in capabilities file") % layer_name)
 
-        mat_set_links = ch_layer.findall(self.xml_ns.NsWmts('TileMatrixSetLink'))
+        mat_set_links = ch_layer.findall(self.xml_ns.NsWmts("TileMatrixSetLink"))
 
         suitable_mat_sets = []
-        tileMatrixSets = contents.findall(self.xml_ns.NsWmts('TileMatrixSet'))
+        tileMatrixSets = contents.findall(self.xml_ns.NsWmts("TileMatrixSet"))
 
         for link in mat_set_links:
-            mat_set_link_id = link.find(self.xml_ns.NsWmts('TileMatrixSet')).text
+            mat_set_link_id = link.find(self.xml_ns.NsWmts("TileMatrixSet")).text
             for mat_set in tileMatrixSets:
-                mat_set_id = mat_set.find(self.xml_ns.NsOws('Identifier')).text
+                mat_set_id = mat_set.find(self.xml_ns.NsOws("Identifier")).text
                 if mat_set_id != mat_set_link_id:
                     continue
                 mat_set_srs = self._getMatSetSrs(mat_set)
@@ -621,30 +691,40 @@ class WMTSRequestMgr(BaseRequestMgr):
 
         if not suitable_mat_sets:
             grass.fatal(
-                _("Layer '%s' is not available with %s code.") %
-                (layer_name, "EPSG:" + str(srs)))
+                _("Layer '%s' is not available with %s code.")
+                % (layer_name, "EPSG:" + str(srs))
+            )
 
         return suitable_mat_sets  # [[TileMatrixSet, TileMatrixSetLink], ....]
 
     def _getMatSetSrs(self, mat_set):
 
-        return mat_set.find(self.xml_ns.NsOws('SupportedCRS')).text
+        return mat_set.find(self.xml_ns.NsOws("SupportedCRS")).text
 
     def _findTileMats(self, tile_mats, region, bbox):
-        """!Find best tile matrix set for requested resolution.
-        """
+        """!Find best tile matrix set for requested resolution."""
         scale_dens = []
 
-        scale_dens.append((bbox['maxy'] - bbox['miny']) / region['rows']
-                          * self._getMetersPerUnit() / self.pixel_size)
-        scale_dens.append((bbox['maxx'] - bbox['minx']) / region['cols']
-                          * self._getMetersPerUnit() / self.pixel_size)
+        scale_dens.append(
+            (bbox["maxy"] - bbox["miny"])
+            / region["rows"]
+            * self._getMetersPerUnit()
+            / self.pixel_size
+        )
+        scale_dens.append(
+            (bbox["maxx"] - bbox["minx"])
+            / region["cols"]
+            * self._getMetersPerUnit()
+            / self.pixel_size
+        )
 
         scale_den = min(scale_dens)
 
         first = True
         for t_mat in tile_mats:
-            mat_scale_den = float(t_mat.find(self.xml_ns.NsWmts('ScaleDenominator')).text)
+            mat_scale_den = float(
+                t_mat.find(self.xml_ns.NsWmts("ScaleDenominator")).text
+            )
             if first:
                 best_scale_den = mat_scale_den
                 best_t_mat = t_mat
@@ -653,36 +733,36 @@ class WMTSRequestMgr(BaseRequestMgr):
 
             best_diff = best_scale_den - scale_den
             mat_diff = mat_scale_den - scale_den
-            if (best_diff < mat_diff  and  mat_diff < 0) or \
-               (best_diff > mat_diff and best_diff > 0):
+            if (best_diff < mat_diff and mat_diff < 0) or (
+                best_diff > mat_diff and best_diff > 0
+            ):
                 best_t_mat = t_mat
                 best_scale_den = mat_scale_den
 
         return best_t_mat
 
     def _getMetersPerUnit(self):
-        """!Get coefficient which allows converting units of request projection into meters.
-        """
+        """!Get coefficient which allows converting units of request projection into meters."""
         if self.meters_per_unit:
             return self.meters_per_unit
 
         # for geographic projection
         if self._isGeoProj(self.proj_srs):
-            proj_params = self.proj_srs.split(' ')
+            proj_params = self.proj_srs.split(" ")
             for param in proj_params:
-                if '+a' in param:
-                    a = float(param.split('=')[1])
+                if "+a" in param:
+                    a = float(param.split("=")[1])
                     break
             equator_perim = 2 * pi * a
             # meters per degree on equator
             self.meters_per_unit = equator_perim / 360
 
         # other units
-        elif '+to_meter' in self.proj_srs:
-            proj_params = self.proj_srs.split(' ')
+        elif "+to_meter" in self.proj_srs:
+            proj_params = self.proj_srs.split(" ")
             for param in proj_params:
-                if '+to_meter' in param:
-                    self.meters_per_unit = 1 / float(param.split('=')[1])
+                if "+to_meter" in param:
+                    self.meters_per_unit = 1 / float(param.split("=")[1])
                     break
         # coordinate system in meters
         else:
@@ -691,95 +771,122 @@ class WMTSRequestMgr(BaseRequestMgr):
         return self.meters_per_unit
 
     def _getMatSize(self, tile_mat, mat_set_link):
-        """!Get rows and cols extend of data available on server for chosen layer and tile matrix.
-        """
+        """!Get rows and cols extend of data available on server for chosen layer and tile matrix."""
 
         # general tile matrix size
         mat_num_bbox = {}
-        mat_num_bbox['min_col'] = mat_num_bbox['min_row'] = 0
-        mat_num_bbox['max_col'] = int(tile_mat.find(self.xml_ns.NsWmts('MatrixWidth')).text) - 1
-        mat_num_bbox['max_row'] = int(tile_mat.find(self.xml_ns.NsWmts('MatrixHeight')).text) - 1
+        mat_num_bbox["min_col"] = mat_num_bbox["min_row"] = 0
+        mat_num_bbox["max_col"] = (
+            int(tile_mat.find(self.xml_ns.NsWmts("MatrixWidth")).text) - 1
+        )
+        mat_num_bbox["max_row"] = (
+            int(tile_mat.find(self.xml_ns.NsWmts("MatrixHeight")).text) - 1
+        )
 
         # get extend restriction in TileMatrixSetLink for the tile matrix, if exists
-        tile_mat_set_limits = mat_set_link.find((self.xml_ns.NsWmts('TileMatrixSetLimits')))
+        tile_mat_set_limits = mat_set_link.find(
+            (self.xml_ns.NsWmts("TileMatrixSetLimits"))
+        )
         if tile_mat_set_limits is None:
             return mat_num_bbox
 
-        tile_mat_id = tile_mat.find(self.xml_ns.NsOws('Identifier')).text
-        tile_mat_limits = tile_mat_set_limits.findall(self.xml_ns.NsWmts('TileMatrixLimits'))
+        tile_mat_id = tile_mat.find(self.xml_ns.NsOws("Identifier")).text
+        tile_mat_limits = tile_mat_set_limits.findall(
+            self.xml_ns.NsWmts("TileMatrixLimits")
+        )
 
         for limit in tile_mat_limits:
-            limit_tile_mat = limit.find(self.xml_ns.NsWmts('TileMatrix'))
+            limit_tile_mat = limit.find(self.xml_ns.NsWmts("TileMatrix"))
             limit_id = limit_tile_mat.text
 
             if limit_id == tile_mat_id:
-                for i in [['min_row', 'MinTileRow'], ['max_row', 'MaxTileRow'],
-                          ['min_col', 'MinTileCol'], ['max_col', 'MaxTileCol']]:
+                for i in [
+                    ["min_row", "MinTileRow"],
+                    ["max_row", "MaxTileRow"],
+                    ["min_col", "MinTileCol"],
+                    ["max_col", "MaxTileCol"],
+                ]:
                     i_tag = limit.find(self.xml_ns.NsWmts(i[1]))
 
                     mat_num_bbox[i[0]] = int(i_tag.text)
 
-                    if i[0] in ('max_row', 'max_col'):
+                    if i[0] in ("max_row", "max_col"):
                         mat_num_bbox[i[0]] = mat_num_bbox[i[0]] - 1
 
                 break
         return mat_num_bbox
 
     def _computeRequestData(self, tile_mat, params, bbox, mat_num_bbox, mat_set_srs):
-        """!Initialize data needed for iteration through tiles.
-        """
-        scale_den = float(tile_mat.find(self.xml_ns.NsWmts('ScaleDenominator')).text)
+        """!Initialize data needed for iteration through tiles."""
+        scale_den = float(tile_mat.find(self.xml_ns.NsWmts("ScaleDenominator")).text)
 
         pixel_span = scale_den * self.pixel_size / self._getMetersPerUnit()
 
-        tl_str = tile_mat.find(self.xml_ns.NsWmts('TopLeftCorner')).text.split(' ')
+        tl_str = tile_mat.find(self.xml_ns.NsWmts("TopLeftCorner")).text.split(" ")
 
         tl_corner = {}
-        tl_corner['minx'] = float(tl_str[0])
-        tl_corner['maxy'] = float(tl_str[1])
+        tl_corner["minx"] = float(tl_str[0])
+        tl_corner["maxy"] = float(tl_str[1])
 
         # TODO do it more generally WMS cap parser may use it in future(not needed now)???
-        s = Srs(mat_set_srs)  # NOTE not used params['srs'], it is just number, encoding needed
+        s = Srs(
+            mat_set_srs
+        )  # NOTE not used params['srs'], it is just number, encoding needed
         # TODO needs to be tested, tried only on
         # http://www.landesvermessung.sachsen.de/geoserver/gwc/service/wmts?:
-        if s.getcode() == 'EPSG:4326' and s.encoding in ('uri', 'urn'):
-            grass.warning('switch')
-            (tl_corner['minx'], tl_corner['maxy']) = (tl_corner['maxy'], tl_corner['minx'])
+        if s.getcode() == "EPSG:4326" and s.encoding in ("uri", "urn"):
+            grass.warning("switch")
+            (tl_corner["minx"], tl_corner["maxy"]) = (
+                tl_corner["maxy"],
+                tl_corner["minx"],
+            )
         else:
-            grass.warning('no switch')
+            grass.warning("no switch")
 
         tile_span = {}
         self.tile_size = {}
 
-        self.tile_size['x'] = int(tile_mat.find(self.xml_ns.NsWmts('TileWidth')).text)
-        tile_span['x'] = pixel_span * self.tile_size['x']
+        self.tile_size["x"] = int(tile_mat.find(self.xml_ns.NsWmts("TileWidth")).text)
+        tile_span["x"] = pixel_span * self.tile_size["x"]
 
-        self.tile_size['y'] = int(tile_mat.find(self.xml_ns.NsWmts('TileHeight')).text)
-        tile_span['y'] = pixel_span * self.tile_size['y']
+        self.tile_size["y"] = int(tile_mat.find(self.xml_ns.NsWmts("TileHeight")).text)
+        tile_span["y"] = pixel_span * self.tile_size["y"]
 
-        self.url = params['url'] + ("SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&"
-                                    "LAYER=%s&STYLE=%s&FORMAT=%s&TILEMATRIXSET=%s&TILEMATRIX=%s" %
-                                    (params['layers'], params['styles'], params['format'],
-                                     params['tile_matrix_set'], tile_mat.find(self.xml_ns.NsOws('Identifier')).text))
+        self.url = params["url"] + (
+            "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&"
+            "LAYER=%s&STYLE=%s&FORMAT=%s&TILEMATRIXSET=%s&TILEMATRIX=%s"
+            % (
+                params["layers"],
+                params["styles"],
+                params["format"],
+                params["tile_matrix_set"],
+                tile_mat.find(self.xml_ns.NsOws("Identifier")).text,
+            )
+        )
 
         BaseRequestMgr._computeRequestData(
-            self, bbox, tl_corner, tile_span, self.tile_size, mat_num_bbox)
+            self, bbox, tl_corner, tile_span, self.tile_size, mat_num_bbox
+        )
 
     def GetNextTile(self):
-        """!Get url for tile request from server and information for merging the tile with other tiles.
-        """
-        if not self.intersects or self.i_col > self.t_num_bbox['max_col']:
+        """!Get url for tile request from server and information for merging the tile with other tiles."""
+        if not self.intersects or self.i_col > self.t_num_bbox["max_col"]:
             return None
 
-        query_url = self.url + "&TILECOL=%i&TILEROW=%i" % (int(self.i_col), int(self.i_row))
+        query_url = self.url + "&TILECOL=%i&TILEROW=%i" % (
+            int(self.i_col),
+            int(self.i_row),
+        )
 
-        self.tile_ref['t_cols_offset'] = int(
-            self.tile_size['x'] * (self.i_col - self.t_num_bbox['min_col']))
-        self.tile_ref['t_rows_offset'] = int(
-            self.tile_size['y'] * (self.i_row - self.t_num_bbox['min_row']))
+        self.tile_ref["t_cols_offset"] = int(
+            self.tile_size["x"] * (self.i_col - self.t_num_bbox["min_col"])
+        )
+        self.tile_ref["t_rows_offset"] = int(
+            self.tile_size["y"] * (self.i_row - self.t_num_bbox["min_row"])
+        )
 
-        if self.i_row >= self.t_num_bbox['max_row']:
-            self.i_row = self.t_num_bbox['min_row']
+        if self.i_row >= self.t_num_bbox["max_row"]:
+            self.i_row = self.t_num_bbox["min_row"]
             self.i_col += 1
         else:
             self.i_row += 1
@@ -788,10 +895,8 @@ class WMTSRequestMgr(BaseRequestMgr):
 
 
 class OnEarthRequestMgr(BaseRequestMgr):
-
     def __init__(self, params, bbox, region, proj_srs, tile_service):
-        """!Initializes data needed for iteration through tiles.
-        """
+        """!Initializes data needed for iteration through tiles."""
         try:
             # checks all elements needed by this class,
             # invalid elements are removed
@@ -803,99 +908,101 @@ class OnEarthRequestMgr(BaseRequestMgr):
 
         # parse tile service file and get needed data for making tile requests
         url, self.tile_span, t_patt_bbox, self.tile_size = self._parseTileService(
-            root, bbox, region, params)
+            root, bbox, region, params
+        )
         self.url = url
-        self.url[0] = params['url'] + url[0]
+        self.url[0] = params["url"] + url[0]
         # initialize data needed for iteration through tiles
         self._computeRequestData(bbox, t_patt_bbox, self.tile_span, self.tile_size)
 
     def GetMapRegion(self):
-        """!Get size in pixels and bounding box of raster where all tiles will be merged.
-        """
+        """!Get size in pixels and bounding box of raster where all tiles will be merged."""
         return self.map_region
 
     def _parseTileService(self, root, bbox, region, params):
-        """!Get data from tile service file
-        """
-        tiled_patterns = root.find('TiledPatterns')
+        """!Get data from tile service file"""
+        tiled_patterns = root.find("TiledPatterns")
         tile_groups = self._getAllTiledGroup(tiled_patterns)
         if not tile_groups:
             grass.fatal(
-                _("Unable to parse tile service file. \n No tag '%s' was found.") %
-                'TiledGroup')
+                _("Unable to parse tile service file. \n No tag '%s' was found.")
+                % "TiledGroup"
+            )
 
         req_group = None
         for group in tile_groups:
-            name = group.find('Name')
-            if name.text == params['layers']:
+            name = group.find("Name")
+            if name.text == params["layers"]:
                 req_group = group
                 break
 
         if req_group is None:
-            grass.fatal(_("Tiled group '%s' was not found in tile service file") % params['layers'])
+            grass.fatal(
+                _("Tiled group '%s' was not found in tile service file")
+                % params["layers"]
+            )
 
-        group_t_patts = req_group.findall('TilePattern')
+        group_t_patts = req_group.findall("TilePattern")
         best_patt = self._parseTilePattern(group_t_patts, bbox, region)
 
-        urls = best_patt.text.split('\n')
-        if params['urlparams']:
-            url = self._insTimeToTilePatternUrl(params['urlparams'], urls)
+        urls = best_patt.text.split("\n")
+        if params["urlparams"]:
+            url = self._insTimeToTilePatternUrl(params["urlparams"], urls)
         else:
             url = urls[0]
             for u in urls:
-                if 'time=${' not in u:
+                if "time=${" not in u:
                     url = u
 
         url, t_bbox, width, height = self.cap_tree.gettilepatternurldata(url)
         tile_span = {}
-        tile_span['x'] = abs(t_bbox[0] - t_bbox[2])
-        tile_span['y'] = abs(t_bbox[1] - t_bbox[3])
+        tile_span["x"] = abs(t_bbox[0] - t_bbox[2])
+        tile_span["y"] = abs(t_bbox[1] - t_bbox[3])
 
-        tile_pattern_bbox = req_group.find('LatLonBoundingBox')
+        tile_pattern_bbox = req_group.find("LatLonBoundingBox")
 
         t_patt_bbox = {}
-        for s in ['minx', 'miny', 'maxx', 'maxy']:
+        for s in ["minx", "miny", "maxx", "maxy"]:
             t_patt_bbox[s] = float(tile_pattern_bbox.get(s))
 
         tile_size = {}
-        tile_size['x'] = width
-        tile_size['y'] = height
+        tile_size["x"] = width
+        tile_size["y"] = height
 
         return url, tile_span, t_patt_bbox, tile_size
 
     def _getAllTiledGroup(self, parent, tiled_groups=None):
-        """!Get all 'TileGroup' elements
-        """
+        """!Get all 'TileGroup' elements"""
         if not tiled_groups:
             tiled_groups = []
 
-        tiled_groups += parent.findall('TiledGroup')
-        new_groups = parent.findall('TiledGroups')
+        tiled_groups += parent.findall("TiledGroup")
+        new_groups = parent.findall("TiledGroups")
 
         for group in new_groups:
             self._getAllTiledGroup(group, tiled_groups)
         return tiled_groups
 
     def _parseTilePattern(self, group_t_patts, bbox, region):
-        """!Find best tile pattern for requested resolution.
-        """
+        """!Find best tile pattern for requested resolution."""
         res = {}
-        res['y'] = (bbox['maxy'] - bbox['miny']) / region['rows']
-        res['x'] = (bbox['maxx'] - bbox['minx']) / region['cols']
+        res["y"] = (bbox["maxy"] - bbox["miny"]) / region["rows"]
+        res["x"] = (bbox["maxx"] - bbox["minx"]) / region["cols"]
 
-        if res['x'] < res['y']:
-            comp_res = 'x'
+        if res["x"] < res["y"]:
+            comp_res = "x"
         else:
-            comp_res = 'y'
+            comp_res = "y"
 
         t_res = {}
         best_patt = None
         for pattern in group_t_patts:
-            url, t_bbox, width, height = self.cap_tree.gettilepatternurldata(pattern.text.split(
-                '\n')[0])
+            url, t_bbox, width, height = self.cap_tree.gettilepatternurldata(
+                pattern.text.split("\n")[0]
+            )
 
-            t_res['x'] = abs(t_bbox[0] - t_bbox[2]) / width
-            t_res['y'] = abs(t_bbox[1] - t_bbox[3]) / height
+            t_res["x"] = abs(t_bbox[0] - t_bbox[2]) / width
+            t_res["y"] = abs(t_bbox[1] - t_bbox[3]) / height
 
             if best_patt is None:
                 best_res = t_res[comp_res]
@@ -906,8 +1013,9 @@ class OnEarthRequestMgr(BaseRequestMgr):
             best_diff = best_res - res[comp_res]
             tile_diff = t_res[comp_res] - res[comp_res]
 
-            if (best_diff < tile_diff  and  tile_diff < 0) or \
-               (best_diff > tile_diff and best_diff > 0):
+            if (best_diff < tile_diff and tile_diff < 0) or (
+                best_diff > tile_diff and best_diff > 0
+            ):
 
                 best_res = t_res[comp_res]
                 best_patt = pattern
@@ -916,20 +1024,25 @@ class OnEarthRequestMgr(BaseRequestMgr):
 
     def _insTimeToTilePatternUrl(self, url_params, urls):
         """!Time can be variable in some urls in OnEarth TMS.
-            Insert requested time from 'urlparams' into the variable if any url of urls contains the variable.
+        Insert requested time from 'urlparams' into the variable if any url of urls contains the variable.
         """
         url = None
         not_sup_params = []
-        url_params_list = url_params.split('&')
+        url_params_list = url_params.split("&")
 
         for param in url_params_list:
             try:
-                k, v = param.split('=')
+                k, v = param.split("=")
             except ValueError:
-                grass.warning(_("Wrong form of parameter '%s' in '%s'. \n \
-                                 The parameter was ignored.") % (param, 'urlparams'))
+                grass.warning(
+                    _(
+                        "Wrong form of parameter '%s' in '%s'. \n \
+                                 The parameter was ignored."
+                    )
+                    % (param, "urlparams")
+                )
 
-            if k != 'time':
+            if k != "time":
                 not_sup_params.append(k)
                 continue
 
@@ -939,68 +1052,76 @@ class OnEarthRequestMgr(BaseRequestMgr):
                 if not url_p_idxs:
                     continue
 
-                url_p_value = url[url_p_idxs[0] + len(k + '='): url_p_idxs[1]]
+                url_p_value = url[url_p_idxs[0] + len(k + "=") : url_p_idxs[1]]
 
-                if url_p_value[:2] == '${'  and \
-                   url_p_value[len(url_p_value) - 1] == '}':
-                    url = url[:url_p_idxs[0]] + param + url[url_p_idxs[1]:]
+                if url_p_value[:2] == "${" and url_p_value[len(url_p_value) - 1] == "}":
+                    url = url[: url_p_idxs[0]] + param + url[url_p_idxs[1] :]
                     has_time_var = True
                     break
 
             if not has_time_var:
                 grass.warning(
-                    _("Parameter '%s' in '%s' is not variable in tile pattern url.") %
-                    (k, 'urlparams'))
+                    _("Parameter '%s' in '%s' is not variable in tile pattern url.")
+                    % (k, "urlparams")
+                )
 
         if not_sup_params:
             grass.warning(
-                _("%s driver supports only '%s' parameter in '%s'. Other parameters are ignored.") %
-                ('OnEarth GRASS', 'time', 'urlparams'))
+                _(
+                    "%s driver supports only '%s' parameter in '%s'. Other parameters are ignored."
+                )
+                % ("OnEarth GRASS", "time", "urlparams")
+            )
 
         return url
 
     def _computeRequestData(self, bbox, t_patt_bbox, tile_span, tile_size):
-        """!Initialize data needed for iteration through tiles.
-        """
+        """!Initialize data needed for iteration through tiles."""
         epsilon = 1e-15
         mat_num_bbox = {}
 
-        mat_num_bbox['min_row'] = mat_num_bbox['min_col'] = 0
-        mat_num_bbox['max_row'] = floor(
-            (t_patt_bbox['maxy'] - t_patt_bbox['miny']) / tile_span['y'] + epsilon)
-        mat_num_bbox['max_col'] = floor(
-            (t_patt_bbox['maxx'] - t_patt_bbox['minx']) / tile_span['x'] + epsilon)
+        mat_num_bbox["min_row"] = mat_num_bbox["min_col"] = 0
+        mat_num_bbox["max_row"] = floor(
+            (t_patt_bbox["maxy"] - t_patt_bbox["miny"]) / tile_span["y"] + epsilon
+        )
+        mat_num_bbox["max_col"] = floor(
+            (t_patt_bbox["maxx"] - t_patt_bbox["minx"]) / tile_span["x"] + epsilon
+        )
 
         BaseRequestMgr._computeRequestData(
-            self,
-            bbox,
-            t_patt_bbox,
-            self.tile_span,
-            self.tile_size,
-            mat_num_bbox)
+            self, bbox, t_patt_bbox, self.tile_span, self.tile_size, mat_num_bbox
+        )
 
     def GetNextTile(self):
-        """!Get url for tile request from server and information for merging the tile with other tiles
-        """
-        if self.i_col > self.t_num_bbox['max_col']:
+        """!Get url for tile request from server and information for merging the tile with other tiles"""
+        if self.i_col > self.t_num_bbox["max_col"]:
             return None
 
-        x_offset = self.tile_span['x'] * self.i_col
-        y_offset = self.tile_span['y'] * self.i_row
+        x_offset = self.tile_span["x"] * self.i_col
+        y_offset = self.tile_span["y"] * self.i_row
 
-        query_url = self.url[0] + "&" + "bbox=%s,%s,%s,%s" % (
-            float(self.query_bbox['minx'] + x_offset),
-            float(self.query_bbox['miny'] - y_offset),
-            float(self.query_bbox['maxx'] + x_offset),
-            float(self.query_bbox['maxy'] - y_offset)) + self.url[1]
+        query_url = (
+            self.url[0]
+            + "&"
+            + "bbox=%s,%s,%s,%s"
+            % (
+                float(self.query_bbox["minx"] + x_offset),
+                float(self.query_bbox["miny"] - y_offset),
+                float(self.query_bbox["maxx"] + x_offset),
+                float(self.query_bbox["maxy"] - y_offset),
+            )
+            + self.url[1]
+        )
 
-        self.tile_ref['t_cols_offset'] = int(
-            self.tile_size['y'] * (self.i_col - self.t_num_bbox['min_col']))
-        self.tile_ref['t_rows_offset'] = int(
-            self.tile_size['x'] * (self.i_row - self.t_num_bbox['min_row']))
+        self.tile_ref["t_cols_offset"] = int(
+            self.tile_size["y"] * (self.i_col - self.t_num_bbox["min_col"])
+        )
+        self.tile_ref["t_rows_offset"] = int(
+            self.tile_size["x"] * (self.i_row - self.t_num_bbox["min_row"])
+        )
 
-        if self.i_row >= self.t_num_bbox['max_row']:
-            self.i_row = self.t_num_bbox['min_row']
+        if self.i_row >= self.t_num_bbox["max_row"]:
+            self.i_row = self.t_num_bbox["min_row"]
             self.i_col += 1
         else:
             self.i_row += 1

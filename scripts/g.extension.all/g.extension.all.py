@@ -49,15 +49,15 @@ from grass.exceptions import CalledModuleError
 
 
 def get_extensions():
-    addon_base = os.getenv('GRASS_ADDON_BASE')
+    addon_base = os.getenv("GRASS_ADDON_BASE")
     if not addon_base:
         gscript.fatal(_("%s not defined") % "GRASS_ADDON_BASE")
-    fXML = os.path.join(addon_base, 'modules.xml')
+    fXML = os.path.join(addon_base, "modules.xml")
     if not os.path.exists(fXML):
         return []
 
     # read XML file
-    fo = open(fXML, 'r')
+    fo = open(fXML, "r")
     try:
         tree = etree.fromstring(fo.read())
     except Exception as e:
@@ -67,24 +67,22 @@ def get_extensions():
 
     fo.close()
 
-    libgis_rev = gscript.version()['libgis_revision']
+    libgis_rev = gscript.version()["libgis_revision"]
     ret = list()
-    for tnode in tree.findall('task'):
-        gnode = tnode.find('libgis')
-        if gnode is not None and \
-                gnode.get('revision', '') != libgis_rev:
-            ret.append(tnode.get('name'))
+    for tnode in tree.findall("task"):
+        gnode = tnode.find("libgis")
+        if gnode is not None and gnode.get("revision", "") != libgis_rev:
+            ret.append(tnode.get("name"))
 
     return ret
 
 
 def main():
-    remove = options['operation'] == 'remove'
-    if remove or flags['f']:
+    remove = options["operation"] == "remove"
+    if remove or flags["f"]:
         extensions = gscript.read_command(
-            'g.extension',
-            quiet=True,
-            flags='a').splitlines()
+            "g.extension", quiet=True, flags="a"
+        ).splitlines()
     else:
         extensions = get_extensions()
 
@@ -93,36 +91,40 @@ def main():
             gscript.info(_("No extension found. Nothing to remove."))
         else:
             gscript.info(
-                _("Nothing to rebuild. Rebuilding process can be forced with -f flag."))
+                _("Nothing to rebuild. Rebuilding process can be forced with -f flag.")
+            )
         return 0
 
-    if remove and not flags['f']:
+    if remove and not flags["f"]:
         gscript.message(_("List of extensions to be removed:"))
         print(os.linesep.join(extensions))
         gscript.message(
-            _("You must use the force flag (-f) to actually remove them. Exiting."))
+            _("You must use the force flag (-f) to actually remove them. Exiting.")
+        )
         return 0
 
     for ext in extensions:
-        gscript.message('-' * 60)
+        gscript.message("-" * 60)
         if remove:
             gscript.message(_("Removing extension <%s>...") % ext)
         else:
             gscript.message(_("Reinstalling extension <%s>...") % ext)
-        gscript.message('-' * 60)
+        gscript.message("-" * 60)
         if remove:
-            operation = 'remove'
-            operation_flags = 'f'
+            operation = "remove"
+            operation_flags = "f"
         else:
-            operation = 'add'
-            operation_flags = ''
+            operation = "add"
+            operation_flags = ""
         try:
-            gscript.run_command('g.extension', flags=operation_flags,
-                                extension=ext, operation=operation)
+            gscript.run_command(
+                "g.extension", flags=operation_flags, extension=ext, operation=operation
+            )
         except CalledModuleError:
             gscript.error(_("Unable to process extension:%s") % ext)
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = gscript.parser()

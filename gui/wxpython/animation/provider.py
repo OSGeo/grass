@@ -315,7 +315,7 @@ class BitmapProvider:
 
 
 class BitmapRenderer:
-    """Class which renderes 2D and 3D images to files."""
+    """Class which renders 2D and 3D images to files."""
 
     def __init__(self, mapFilesPool, tempDir,
                  imageWidth, imageHeight):
