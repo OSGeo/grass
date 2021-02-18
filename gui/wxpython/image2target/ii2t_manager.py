@@ -1233,7 +1233,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         # update key and GCP number
         for newkey in range(key, len(self.mapcoordlist)):
-            index = self.list.FindItemData(-1, newkey + 1)
+            index = self.list.FindItem(-1, newkey + 1)
             self.mapcoordlist[newkey][0] = newkey
             self.list.SetItem(index, 0, str(newkey))
             self.list.SetItemData(index, newkey)
@@ -2405,7 +2405,7 @@ class GCPList(ListCtrl,
 
     def OnColClick(self, event):
         """ListCtrl forgets selected item..."""
-        self.selected = self.FindItemData(-1, self.selectedkey)
+        self.selected = self.FindItem(-1, self.selectedkey)
         self.SetItemState(self.selected,
                           wx.LIST_STATE_SELECTED,
                           wx.LIST_STATE_SELECTED)
