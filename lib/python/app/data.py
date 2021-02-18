@@ -1,27 +1,24 @@
+"""Provides functions for the main GRASS GIS executable
+
+(C) 2020 by Vaclav Petras and the GRASS Development Team
+
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
+
+.. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
+.. sectionauthor:: Linda Kladivova <l.kladivova seznam cz>
+
+This is not a stable part of the API. Use at your own risk.
 """
-@package startup.utils
-
-@brief General GUI-independent utilities for GUI startup of GRASS GIS
-
-(C) 2017-2018 by Vaclav Petras the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
-
-@author Vaclav Petras <wenzeslaus gmail com>
-@author Linda Kladivova <l.kladivova@seznam.cz>
-
-This file should not use (import) anything from GUI code (wx or wxGUI).
-This can potentially be part of the Python library (i.e. it needs to
-solve the errors etc. in a general manner).
-"""
-
 
 import os
 import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
+
+from grass.grassdb.checks import is_location_valid
 
 
 def get_possible_database_path():
@@ -113,8 +110,11 @@ def _copy_startup_location(startup_location, location_in_grassdb):
     """
     # Copy source startup location into GRASS database
     try:
-        copytree(startup_location, location_in_grassdb,
-                 ignore=ignore_patterns('*.tmpl', 'Makefile*'))
+        copytree(
+            startup_location,
+            location_in_grassdb,
+            ignore=ignore_patterns("*.tmpl", "Makefile*"),
+        )
         return True
     except (IOError, OSError):
         pass
@@ -129,7 +129,6 @@ def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
     Returns False if there is no location to copy in the installation
     or copying failed.
     """
-
     # Find out if startup location exists
     startup_location = _get_startup_location_in_distribution()
     if not startup_location:
@@ -140,3 +139,20 @@ def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
     if _copy_startup_location(startup_location, location_in_grassdb):
         return True
     return False
+
+
+def ensure_demolocation():
+    """Ensure that demolocation exists
+
+    Creates both database directory and location if needed.
+
+    Returns the db, location name, and preferred mapset of the demolocation.
+    """
+    grassdb = get_possible_database_path()
+    # If nothing found, try to create GRASS directory and copy startup loc
+    if grassdb is None:
+        grassdb = create_database_directory()
+    location = "world_latlong_wgs84"
+    if not is_location_valid(grassdb, location):
+        create_startup_location_in_grassdb(grassdb, location)
+    return (grassdb, location, "PERMANENT")

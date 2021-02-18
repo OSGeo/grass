@@ -565,6 +565,17 @@ def write_gisrc(kv, filename, append=False):
     f.close()
 
 
+def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
+    if os.access(gisrc, os.R_OK):
+        kv = read_gisrc(gisrc)
+    else:
+        kv = {}
+    kv['GISDBASE'] = grassdb
+    kv['LOCATION_NAME'] = location
+    kv['MAPSET'] = mapset
+    write_gisrc(kv, gisrc)
+
+
 def read_gui(gisrc, default_gui):
     grass_gui = None
     # At this point the GRASS user interface variable has been set from the
@@ -1050,16 +1061,7 @@ def set_mapset(gisrc, arg=None, geofile=None, create_new=False,
                     s = readfile(os.path.join(gisdbase, location_name,
                                               "PERMANENT", "DEFAULT_WIND"))
                     writefile(os.path.join(path, "WIND"), s)
-
-        if os.access(gisrc, os.R_OK):
-            kv = read_gisrc(gisrc)
-        else:
-            kv = {}
-
-        kv['GISDBASE'] = gisdbase
-        kv['LOCATION_NAME'] = location_name
-        kv['MAPSET'] = mapset
-        write_gisrc(kv, gisrc)
+        set_mapset_to_gisrc(gisrc, gisdbase, location_name, mapset)
     else:
         fatal(_("GRASS GIS database directory, location and mapset"
                 " not set properly."
@@ -1661,6 +1663,7 @@ def start_gui(grass_gui):
     debug("GRASS GUI should be <%s>" % grass_gui)
     # Check for gui interface
     if grass_gui == "wxpython":
+        # TODO: report failures
         return Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
     return None
 
@@ -2368,18 +2371,36 @@ def main():
 
     # Parsing argument to get LOCATION
     if not params.mapset and not params.tmp_location:
+        # Mapset is not specified in command line arguments.
         last_mapset_usable = can_start_in_gisrc_mapset(
             gisrc=gisrc, ignore_lock=params.force_gislock_removal
         )
-        # Try interactive startup
-        # User selects LOCATION and MAPSET if not set
-        if not last_mapset_usable and not set_mapset_interactive(grass_gui):
-            # No GUI available, update gisrc file
-            fatal(_("<{0}> requested, but not available. Run GRASS in text "
-                    "mode (--text) or install missing package (usually "
-                    "'grass-gui').").format(grass_gui))
+        debug(f"last_mapset_usable: {last_mapset_usable}")
+        if not last_mapset_usable:
+            import grass.app as ga
+            from grass.grassdb.checks import can_start_in_mapset
+
+            # Try to use demolocation
+            grassdb, location, mapset = ga.ensure_demolocation()
+            demo_mapset_usable = can_start_in_mapset(
+                mapset_path=os.path.join(grassdb, location, mapset),
+                ignore_lock=params.force_gislock_removal
+            )
+            debug(f"demo_mapset_usable: {demo_mapset_usable}")
+            if demo_mapset_usable:
+                set_mapset_to_gisrc(
+                    gisrc=gisrc, grassdb=grassdb, location=location, mapset=mapset
+                )
+            else:
+                # Try interactive startup
+                # User selects LOCATION and MAPSET if not set
+                if not set_mapset_interactive(grass_gui):
+                    # No GUI available, update gisrc file
+                    fatal(_("<{0}> requested, but not available. Run GRASS in text "
+                            "mode (--text) or install missing package (usually "
+                            "'grass-gui').").format(grass_gui))
     else:
-        # Try non-interactive start up
+        # Mapset was specified in command line parameters.
         if params.tmp_location:
             # tmp loc requires other things to be set as well
             set_mapset(gisrc=gisrc, geofile=params.geofile,
