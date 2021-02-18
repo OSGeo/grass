@@ -23,7 +23,6 @@ from time import sleep
 
 try:
     from osgeo import gdal
-    from osgeo import gdalconst
 except:
     grass.fatal(_("Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"))
 
@@ -201,7 +200,7 @@ class WMSDrv(WMSBase):
                 metadata = driver.GetMetadata()
                 if gdal.DCAP_CREATE not in metadata or \
                         metadata[gdal.DCAP_CREATE] == 'NO':
-                    grass.fatal(_('Driver %s does not supports Create() method') % drv_format)
+                    grass.fatal(_('Driver %s does not supports Create() method') % self.gdal_drv_format)
                 self.temp_map_bands_num = tile_dataset.RasterCount
                 temp_map_dataset = driver.Create(temp_map, map_region['cols'], map_region['rows'],
                                                  self.temp_map_bands_num,

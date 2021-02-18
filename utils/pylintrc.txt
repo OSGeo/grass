@@ -10,7 +10,7 @@
 # This configuration should work for all Python library, Python scripts and
 # wxPython GUI.
 # Example for gui/wxpython:
-#   pylint --rcfile=../../tools/pylintrc.txt -f parseable -r n -i y lmgr/
+#   pylint --rcfile=../../utils/pylintrc.txt -f parseable -r n -i y lmgr/
 
 # A lot of errors need to be ignored now to avoid a large number of messages.
 # Files need to be fixed one by one (partially without this configuration).

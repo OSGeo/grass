@@ -13,7 +13,7 @@ import grass.script as grass
 
 from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
-from grass.pygrass.utils import get_mapset_vector, get_mapset_raster
+from grass.pygrass.utils import get_mapset_raster
 
 test_vector_name = "Region_test_vector"
 test_raster_name = "Region_test_raster"

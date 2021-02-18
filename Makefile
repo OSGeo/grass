@@ -26,7 +26,7 @@ DATE := $(shell date '+%d_%m_%Y')
 
 DIRS = \
 	demolocation \
-	tools \
+	utils \
 	include \
 	lib \
 	python \
