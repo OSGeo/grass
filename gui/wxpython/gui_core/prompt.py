@@ -313,7 +313,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # update also traced commands
         self.commands.append(cmd)
 
-        # keep command history to a managable size
+        # keep command history to a manageable size
         if len(self.cmdbuffer) > 200:
             del self.cmdbuffer[0]
         self.cmdindex = len(self.cmdbuffer)

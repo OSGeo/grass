@@ -78,7 +78,7 @@ class StatisticsData:
 
 
 class Statistics:
-    """Statistis conected to one class (category).
+    """Statistis connected to one class (category).
 
     It is Python counterpart of similar C structure.
     But it adds some attributes or features used in wxIClass.
@@ -183,7 +183,7 @@ class Statistics:
 
 
 class BandStatistics:
-    """Statistis conected to one band within class (category).
+    """Statistis connected to one band within class (category).
 
     :class:`Statistics`
     """

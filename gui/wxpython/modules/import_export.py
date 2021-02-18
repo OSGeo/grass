@@ -276,7 +276,7 @@ class ImportDialog(wx.Dialog):
         if not self.add.IsChecked() or returncode != 0:
             return
 
-        # TODO: if importing map creates more map the folowing does not work
+        # TODO: if importing map creates more map the following does not work
         # * do nothing if map does not exist or
         # * try to determine names using regexp or
         # * persuade import tools to report map names

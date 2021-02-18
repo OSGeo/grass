@@ -113,7 +113,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
    \param [out] intersec pointer to intersection region of regions A B 
    			   (relevant params of the region are: south, north, east, west)
 
-   \return  0 if interection exists
+   \return  0 if interaction exists
    \return -1 if regions does not intersect
  */
 static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
@@ -168,7 +168,7 @@ static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
    \param [out] B_bounds rows and cols numbers of B stored in 
                 south, north, east, west, which defines intersection of A and B
 
-   \return  0 if interection exists
+   \return  0 if interaction exists
    \return -1 if regions do not intersect
    \return -2 resolution of regions is not same 
  */

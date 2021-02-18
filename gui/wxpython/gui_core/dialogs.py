@@ -1284,7 +1284,7 @@ class GroupDialog(wx.Dialog):
                           read=True, flags='sg').splitlines()
 
     def ShowResult(self, group, returnCode, create):
-        """Show if operation was successfull."""
+        """Show if operation was successful."""
         group += '@' + grass.gisenv()['MAPSET']
         if returnCode is None:
             label = _("No changes to apply in group <%s>.") % group
@@ -1713,7 +1713,7 @@ class MapLayersDialogForGroups(MapLayersDialogBase):
         return [_('raster'), ]
 
     def _selectAll(self):
-        """Could be overriden"""
+        """Could be overridden"""
         return False
 
     def _fullyQualifiedNames(self):

@@ -58,7 +58,7 @@ class VDigitWindow(BufferedMapWindow):
         # Emitted when some info about digitizing is or will be availbale
         self.digitizingInfoAvailable = Signal('VDigitWindow.digitizingInfo')
         # Emitted when some info about digitizing is or will be availbale
-        # digitizingInfo signal is emmited only between digitizingInfoAvailable
+        # digitizingInfo signal is emitted only between digitizingInfoAvailable
         # and digitizingInfoUnavailable signals
         self.digitizingInfoUnavailable = Signal('VDigitWindow.digitizingInfo')
 
@@ -182,7 +182,7 @@ class VDigitWindow(BufferedMapWindow):
 
             self.UpdateMap(render=False)  # redraw map
 
-            # add new record into atribute table
+            # add new record into attribute table
             if UserSettings.Get(
                     group='vdigit', key="addRecord", subkey='enabled'):
                 # select attributes based on layer and category
@@ -979,7 +979,7 @@ class VDigitWindow(BufferedMapWindow):
                 self.redrawAll = True
                 self.Refresh()
 
-                # add new record into atribute table
+                # add new record into attribute table
                 if self._addRecord() and (line is True or (not line and nfeat > 0)):
                     posWindow = self.ClientToScreen(
                         (position[0] + self.dialogOffset, position[1] + self.dialogOffset))

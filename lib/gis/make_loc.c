@@ -172,7 +172,7 @@ int G_make_location_epsg(const char *location_name,
  * \param proj_epsg     EPSG code suitable to write to the PROJ_EPSG
  *                      file, or NULL.
  *
- * \param proj_wkt      WKT defintion suitable to write to the PROJ_WKT
+ * \param proj_wkt      WKT definition suitable to write to the PROJ_WKT
  *                      file, or NULL.
  *
  * \param proj_srid     Spatial reference ID suitable to write to the PROJ_SRID

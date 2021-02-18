@@ -51,7 +51,7 @@ a few more things to be done.
       <handler>OnExample</handler>
     </menuitem>
     
-6. Add folowing event handler to class GMFrame in ./gui/wxpython/lmgr/frame.py:
+6. Add following event handler to class GMFrame in ./gui/wxpython/lmgr/frame.py:
 
     def OnExample(self, event):
         """!Launch ExampleTool"""

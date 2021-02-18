@@ -1056,7 +1056,7 @@ class ItemListCtrl(ModelListCtrl):
         model.Normalize()
         self.Populate(model.GetItems(objType=ModelAction))
 
-        # re-selected originaly selected item
+        # re-selected originally selected item
         for item in itemsToSelect:
             self.SetItemState(
                 item,

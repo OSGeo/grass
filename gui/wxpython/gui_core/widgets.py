@@ -540,7 +540,7 @@ class StaticWrapText(GenStaticText):
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def DoGetBestSize(self):
-        """Overriden method which reports widget's best size."""
+        """Overridden method which reports widget's best size."""
         if not self.init:
             self.init = True
             self._updateLabel()

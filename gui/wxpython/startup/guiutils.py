@@ -392,7 +392,7 @@ def delete_mapsets_interactively(guiparent, mapsets):
     Exceptions during deletation are handled in get_reasons_mapsets_not_removable
     function.
 
-    Returns True if there was a change, i.e., all mapsets were successfuly
+    Returns True if there was a change, i.e., all mapsets were successfully
     deleted or at least one mapset was deleted.
     Returns False if one or more mapsets cannot be deleted (see reasons given
     by get_reasons_mapsets_not_removable function) or if an error was
@@ -477,7 +477,7 @@ def delete_locations_interactively(guiparent, locations):
     Exceptions during deletation are handled in get_reasons_locations_not_removable
     function.
 
-    Returns True if there was a change, i.e., all locations were successfuly
+    Returns True if there was a change, i.e., all locations were successfully
     deleted or at least one location was deleted.
     Returns False if one or more locations cannot be deleted (see reasons given
     by get_reasons_locations_not_removable function) or if an error was
@@ -666,7 +666,7 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
 def import_file(guiparent, filePath):
     """Tries to import file as vector or raster.
 
-    If successfull sets default region from imported map.
+    If successful sets default region from imported map.
     """
     RunCommand('db.connect', flags='c')
     mapName = os.path.splitext(os.path.basename(filePath))[0]

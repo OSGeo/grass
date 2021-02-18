@@ -1051,7 +1051,7 @@ class TplotFrame(wx.Frame):
         :param list vectors: a list of temporal vector dataset's name
         :param list coors: a list with x/y coordinates
         :param list cats: a list with incld. categories of vector
-        :param str attr:  name of atribute of vectror data
+        :param str attr:  name of attribute of vectror data
         """
         if not (rasters or vectors) or not (coors or cats):
             return

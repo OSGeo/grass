@@ -230,7 +230,7 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.Update()
 
     def _setUpMapWindow(self, mapWindow):
-        # TODO: almost the smae implementation as for MapFrameBase (only names differ)
+        # TODO: almost the same implementation as for MapFrameBase (only names differ)
         # enable or disable zoom history tool
         mapWindow.zoomHistoryAvailable.connect(
             lambda:

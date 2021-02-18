@@ -505,7 +505,7 @@ class TaskFrame(wx.Frame):
 
         guisizer = wx.BoxSizer(wx.VERTICAL)
 
-        # set apropriate output window
+        # set appropriate output window
         if self.parent:
             self.standalone = False
         else:

@@ -596,7 +596,7 @@ class VNETAnalyses:
 
         sqlFile_f.close()
 
-        # TODO imporve parser and run in thread
+        # TODO improve parser and run in thread
 
         ret, msg, err = RunCommand('db.execute',
                                    getErrorMsg=True,

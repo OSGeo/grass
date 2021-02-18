@@ -1,7 +1,7 @@
 """
 @package vnet.vnet_data
 
-@brief Vector network analysis classes for data managment.
+@brief Vector network analysis classes for data management.
 
 Classes:
  - vnet_data::VNETData

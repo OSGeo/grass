@@ -11,7 +11,7 @@ Classes:
               sampling region)
  - Keyboard (page to insert region areas from keyboard)
  - SamplingAreas (define sampling area)
- - SummaryPage (show choosen options)
+ - SummaryPage (show chosen options)
 
 (C) 2011 by the GRASS Development Team
 This program is free software under the GNU General Public License

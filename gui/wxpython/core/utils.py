@@ -632,7 +632,7 @@ def GetColorTables():
 
 
 def _getGDALFormats():
-    """Get dictionary of avaialble GDAL drivers"""
+    """Get dictionary of available GDAL drivers"""
     try:
         ret = grass.read_command('r.in.gdal',
                                  quiet=True,
@@ -644,7 +644,7 @@ def _getGDALFormats():
 
 
 def _getOGRFormats():
-    """Get dictionary of avaialble OGR drivers"""
+    """Get dictionary of available OGR drivers"""
     try:
         ret = grass.read_command('v.in.ogr',
                                  quiet=True,

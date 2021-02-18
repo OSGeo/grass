@@ -8,7 +8,7 @@ double solve(
 		double (*f) (double),	/* pointer to function to be solved */
 		double a,	/* minimum value of solution */
 		double b,	/* maximum value of solution */
-		double err,	/* accuarcy of solution */
+		double err,	/* accuracy of solution */
 		int *code	/* error code */
     )
 {

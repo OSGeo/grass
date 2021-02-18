@@ -214,7 +214,7 @@ class MapWindowBase(object):
         @depreciated This method is depreciated. Use Signals or drawing API
         instead. Signals do not cover all events but new Signals can be added
         when needed consider also adding generic signal. However, more
-        interesing and useful is higher level API to create objects, graphics etc.
+        interesting and useful is higher level API to create objects, graphics etc.
 
         Call event.Skip() in handler to allow default processing in MapWindow.
 

@@ -40,7 +40,7 @@ class MapFrameBase(wx.Frame):
     or override
     GetProperty(), SetProperty() and HasProperty() methods.
 
-    Several methods has to be overriden or
+    Several methods has to be overridden or
     \c NotImplementedError("MethodName") will be raised.
 
     If derived class enables and disables auto-rendering,
@@ -48,7 +48,7 @@ class MapFrameBase(wx.Frame):
 
     It is expected that derived class will call _setUpMapWindow().
 
-    Derived class can has one or more map windows (and map renderes)
+    Derived class can has one or more map windows (and map renders)
     but implementation of MapFrameBase expects that one window and
     one map will be current.
     Current instances of map window and map renderer should be returned
@@ -487,7 +487,7 @@ class DoubleMapFrame(MapFrameBase):
 
     .. todo:
         Use it in GCP manager (probably changes to both DoubleMapFrame
-        and GCP MapFrame will be neccessary).
+        and GCP MapFrame will be necessary).
     """
 
     def __init__(self, parent=None, id=wx.ID_ANY, title=None,

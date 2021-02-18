@@ -847,7 +847,7 @@ class DataCatalogTree(TreeView):
         return grassdbItem[0], locationItem[0], mapsetItem[0]
 
     def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
-        """Overriden method to return image for each item."""
+        """Overridden method to return image for each item."""
         node = self._model.GetNodeByIndex(index)
         try:
             return self._iconTypes.index(node.data['type'])
@@ -855,8 +855,8 @@ class DataCatalogTree(TreeView):
             return 0
 
     def OnGetItemTextColour(self, index):
-        """Overriden method to return colour for each item.
-           Used to distinquish lock and ownership on mapsets."""
+        """Overridden method to return colour for each item.
+           Used to distinguish lock and ownership on mapsets."""
         node = self._model.GetNodeByIndex(index)
         if node.data['type'] == 'mapset':
             if node.data['current']:
@@ -866,7 +866,7 @@ class DataCatalogTree(TreeView):
         return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
 
     def OnGetItemFont(self, index):
-        """Overriden method to return font for each item.
+        """Overridden method to return font for each item.
            Used to highlight current db/loc/mapset."""
         node = self._model.GetNodeByIndex(index)
         font = self.GetFont()

@@ -52,7 +52,7 @@ vectors. The geometry of GRASS vectors (coor file) is never loaded
 whole to the memory. OTOH the support structures (topology and spatial
 index) are loaded to memory on runtime. It should be possible to use
 files for topology and spatial index also on runtime and that way
-decrease the memory occupied by running module (practicaly to
+decrease the memory occupied by running module (practically to
 zero). The speed will decrease a bit but not significantly because
 files are usually cached by system.
 
@@ -97,7 +97,7 @@ Remove bounding box from support structures (?)
 The vector structures (P_line, P_area, P_isle) store bounding box in
 N,S,E,W,T,B (doubles). Especially in case of element type GV_POINT the
 bounding box occupies a lot of space (2-3 times more than the point
-itself). I am not sure if this is realy good idea, it is necesssary to
+itself). I am not sure if this is really good idea, it is necesssary to
 valutate also how often Vect_line_box() is called and the impact of
 the necessity to calculate always the box on the fly (when it is not
 stored in the structure) which can be time consuming for example for
@@ -174,7 +174,7 @@ RDBMS. I think that either everything must be stored in RDBMS
 that data are 'too distant' when RDBMS is used with geometry in file.
 
 I think that more work should be done on the drivers which are using
-embeded databases stored in files (SQLite,MySQL,DBF) with scope to
+embedded databases stored in files (SQLite,MySQL,DBF) with scope to
 reach similar functionality (functions, queries) which are in true
 RDBMS without penalty of communication with server. It should be also
 considered the possibility to change the default location of database
@@ -242,7 +242,7 @@ v.select.
 v.pack/v.unpack
 ---------------
 Write it. New modules to pack/unpack a vector to/from single file
-(probably tar). I am not sure about format. Originaly I was thinking
+(probably tar). I am not sure about format. Originally I was thinking
 about ASCII+DBF as it can be read also without GRASS but ASCII and DBF
 can lose precision and DBF has other limitations. It whould be
 probably better to use copy of 'coor' file and attributes written to

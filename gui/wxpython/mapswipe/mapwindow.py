@@ -78,7 +78,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
         self._RaiseMouseEvent(event, EVT_MY_MOTION)
 
     def GetClientSize(self):
-        """Overriden method which returns simulated window size.
+        """Overridden method which returns simulated window size.
         """
         if self._mode == 'swipe':
             return self.specialSize
@@ -86,7 +86,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
             return super(SwipeBufferedWindow, self).GetClientSize()
 
     def SetClientSize(self, size):
-        """Overriden method which sets simulated window size.
+        """Overridden method which sets simulated window size.
         """
         Debug.msg(3, "SwipeBufferedWindow.SetClientSize(): size = %s" % size)
         self.specialSize = size
@@ -181,7 +181,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
                                  'active': True}
 
     def MouseDraw(self, pdc=None, begin=None, end=None):
-        """Overriden method to recompute coordinates back to original values
+        """Overridden method to recompute coordinates back to original values
         so that e.g. drawing of zoom box is done properly"""
         Debug.msg(5, "SwipeBufferedWindow.MouseDraw()")
 

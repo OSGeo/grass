@@ -953,7 +953,7 @@ class SbCoordinates(SbTextItem):
         """Show the last map window coordinates.
 
         .. todo::
-            remove last EN call and use coordinates comming from signal
+            remove last EN call and use coordinates coming from signal
         """
         precision = int(UserSettings.Get(group='projection', key='format',
                                          subkey='precision'))

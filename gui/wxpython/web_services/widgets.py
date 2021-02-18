@@ -527,7 +527,7 @@ class WSPanel(wx.Panel):
         self.ws_cmdl = self.ws_drvs[self.ws]['cmd'] + conn_cmd
 
     def OnCapDownloadDone(self, event):
-        """Process donwloaded capabilities file and emits capParsed
+        """Process downloaded capabilities file and emits capParsed
         signal (see class constructor).
         """
         if event.pid != self.currentPid:

@@ -887,7 +887,7 @@ class VectorDBInfo:
         return self.layers[layer]['table']
 
     def GetDbSettings(self, layer):
-        """Get database settins
+        """Get database settings
 
         :param layer: layer number
 

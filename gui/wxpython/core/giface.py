@@ -39,7 +39,7 @@ class Notification:
 
 
 class Layer(object):
-    """Layer is generaly usable layer object.
+    """Layer is generally usable layer object.
 
     .. note::
         Currently without specifying the interface.
