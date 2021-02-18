@@ -566,7 +566,7 @@ class GRASSStartup(wx.Frame):
     def ImportFile(self, filePath):
         """Tries to import file as vector or raster.
 
-        If successfull sets default region from imported map.
+        If successful sets default region from imported map.
         """
         RunCommand('db.connect', flags='c')
         mapName = os.path.splitext(os.path.basename(filePath))[0]
