@@ -38,15 +38,15 @@ mcda (MC)
 
 class TestToolboxesMetadata(TestCase):
 
-    url = 'file://' + os.path.abspath('data')
+    url = "file://" + os.path.abspath("data")
 
     def test_listing(self):
         """List toolboxes and their content"""
-        module = SimpleModule('g.extension', flags='lt', url=self.url)
+        module = SimpleModule("g.extension", flags="lt", url=self.url)
         self.assertModule(module)
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(stdout, FULL_TOOLBOXES_OUTPUT)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

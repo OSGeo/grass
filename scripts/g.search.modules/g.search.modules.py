@@ -6,9 +6,9 @@
 # PURPOSE:	g.search.modules in grass modules using keywords
 # COPYRIGHT:	(C) 2015-2019 by the GRASS Development Team
 #
-#		This program is free software under the GNU General
-#		Public License (>=v2). Read the file COPYING that
-#		comes with GRASS for details.
+# 		This program is free software under the GNU General
+# 		Public License (>=v2). Read the file COPYING that
+# 		comes with GRASS for details.
 #
 #############################################################################
 
@@ -80,24 +80,24 @@ COLORIZE = False
 
 def main():
     global COLORIZE
-    AND = flags['a']
-    NOT = flags['n']
-    manpages = flags['m']
-    exact_keywords = flags['k']
+    AND = flags["a"]
+    NOT = flags["n"]
+    manpages = flags["m"]
+    exact_keywords = flags["k"]
     out_format = None
-    if flags['g']:
-        out_format = 'shell'
-    elif flags['j']:
-        out_format = 'json'
+    if flags["g"]:
+        out_format = "shell"
+    elif flags["j"]:
+        out_format = "json"
     else:
-        COLORIZE = flags['c']
+        COLORIZE = flags["c"]
 
     keywords = None
-    if options['keyword']:
+    if options["keyword"]:
         if exact_keywords:
-            keywords = options['keyword'].split(',')
+            keywords = options["keyword"].split(",")
         else:
-            keywords = options['keyword'].lower().split(',')
+            keywords = options["keyword"].lower().split(",")
     else:
         NOT = None
 
@@ -126,10 +126,10 @@ def print_results(data, out_format=None):
     if not out_format:
         _print_results(data)
 
-    elif out_format == 'shell':
+    elif out_format == "shell":
         _print_results_shell(data)
 
-    elif out_format == 'json':
+    elif out_format == "json":
         _print_results_json(data)
 
 
@@ -137,14 +137,15 @@ def _print_results_shell(data):
     """Print just the name attribute"""
 
     for item in data:
-        print(item['name'])
+        print(item["name"])
 
 
 def _print_results_json(data):
     """Print JSON output"""
 
     import json
-    print(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+
+    print(json.dumps(data, sort_keys=True, indent=4, separators=(",", ": ")))
 
 
 def _print_results(data):
@@ -152,11 +153,15 @@ def _print_results(data):
     import textwrap
 
     for item in data:
-        print('\n{0}'.format(colorize(item['name'], attrs=['bold'])))
-        for attr in item['attributes']:
-            out = '{0}: {1}'.format(attr, item['attributes'][attr])
-            out = textwrap.wrap(out, width=79, initial_indent=4 * ' ',
-                                subsequent_indent=4 * ' ' + len(attr) * ' ' + '  ')
+        print("\n{0}".format(colorize(item["name"], attrs=["bold"])))
+        for attr in item["attributes"]:
+            out = "{0}: {1}".format(attr, item["attributes"][attr])
+            out = textwrap.wrap(
+                out,
+                width=79,
+                initial_indent=4 * " ",
+                subsequent_indent=4 * " " + len(attr) * " " + "  ",
+            )
             for line in out:
                 print(line)
 
@@ -176,6 +181,7 @@ def colorize(text, attrs=None, pattern=None):
         except ImportError:
             grass.fatal(_("Cannot colorize, python-termcolor is not installed"))
     else:
+
         def colored(pattern, attrs):
             return pattern
 
@@ -185,8 +191,9 @@ def colorize(text, attrs=None, pattern=None):
         return colored(text, attrs=attrs)
 
 
-def _search_module(keywords=None, logical_and=False, invert=False, manpages=False,
-                   exact_keywords=False):
+def _search_module(
+    keywords=None, logical_and=False, invert=False, manpages=False, exact_keywords=False
+):
     """Search modules by given keywords
 
     :param list.<str> keywords: list of keywords
@@ -196,38 +203,38 @@ def _search_module(keywords=None, logical_and=False, invert=False, manpages=Fals
     """
 
     WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
-    filename = os.path.join(WXGUIDIR, 'xml', 'module_items.xml')
-    menudata_file = open(filename, 'r')
+    filename = os.path.join(WXGUIDIR, "xml", "module_items.xml")
+    menudata_file = open(filename, "r")
 
     menudata = etree.parse(menudata_file)
     menudata_file.close()
 
-    items = menudata.findall('module-item')
+    items = menudata.findall("module-item")
 
     # add installed addons to modules list
     if os.getenv("GRASS_ADDON_BASE"):
-        filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), 'modules.xml')
+        filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), "modules.xml")
         if os.path.isfile(filename_addons):
-            addon_menudata_file = open(filename_addons, 'r')
+            addon_menudata_file = open(filename_addons, "r")
             addon_menudata = etree.parse(addon_menudata_file)
             addon_menudata_file.close()
-            addon_items = addon_menudata.findall('task')
+            addon_items = addon_menudata.findall("task")
             items.extend(addon_items)
 
     # add system-wide installed addons to modules list
-    filename_addons_s = os.path.join(os.getenv("GISBASE"), 'modules.xml')
+    filename_addons_s = os.path.join(os.getenv("GISBASE"), "modules.xml")
     if os.path.isfile(filename_addons_s):
-        addon_menudata_file_s = open(filename_addons_s, 'r')
+        addon_menudata_file_s = open(filename_addons_s, "r")
         addon_menudata_s = etree.parse(addon_menudata_file_s)
         addon_menudata_file_s.close()
-        addon_items_s = addon_menudata_s.findall('task')
+        addon_items_s = addon_menudata_s.findall("task")
         items.extend(addon_items_s)
 
     found_modules = []
     for item in items:
-        name = item.attrib['name']
-        description = item.find('description').text
-        module_keywords = item.find('keywords').text
+        name = item.attrib["name"]
+        description = item.find("description").text
+        module_keywords = item.find("keywords").text
 
         if not keywords:
             # list all modules
@@ -244,8 +251,9 @@ def _search_module(keywords=None, logical_and=False, invert=False, manpages=Fals
                 if exact_keywords:
                     keyword_found = _exact_search(keyword, module_keywords)
                 else:
-                    keyword_found = _basic_search(keyword, name, description,
-                                                  module_keywords)
+                    keyword_found = _basic_search(
+                        keyword, name, description, module_keywords
+                    )
 
                 # meta-modules (i.sentinel, r.modis, ...) do not have descriptions
                 # and keywords, but they have a manpage
@@ -259,26 +267,28 @@ def _search_module(keywords=None, logical_and=False, invert=False, manpages=Fals
                     else:
                         found = [True]
 
-                    description = colorize(description,
-                                           attrs=['underline'],
-                                           pattern=keyword)
-                    module_keywords = colorize(module_keywords,
-                                               attrs=['underline'],
-                                               pattern=keyword)
+                    description = colorize(
+                        description, attrs=["underline"], pattern=keyword
+                    )
+                    module_keywords = colorize(
+                        module_keywords, attrs=["underline"], pattern=keyword
+                    )
 
         add = False not in found
         if invert:
             add = not add
         if add:
-            found_modules.append({
-                'name': name,
-                'attributes': {
-                    'keywords': module_keywords,
-                    'description': description
+            found_modules.append(
+                {
+                    "name": name,
+                    "attributes": {
+                        "keywords": module_keywords,
+                        "description": description,
+                    },
                 }
-            })
+            )
 
-    return sorted(found_modules, key=lambda k: k['name'])
+    return sorted(found_modules, key=lambda k: k["name"])
 
 
 def _basic_search(pattern, name, description, module_keywords):
@@ -287,10 +297,12 @@ def _basic_search(pattern, name, description, module_keywords):
     This lowercases the strings before searching in them, so the pattern
     string should be lowercased too.
     """
-    if (name and description and module_keywords):
-        if name.lower().find(pattern) > -1 or\
-           description.lower().find(pattern) > -1 or\
-           module_keywords.lower().find(pattern) > -1:
+    if name and description and module_keywords:
+        if (
+            name.lower().find(pattern) > -1
+            or description.lower().find(pattern) > -1
+            or module_keywords.lower().find(pattern) > -1
+        ):
             return True
         else:
             return False
@@ -304,7 +316,7 @@ def _exact_search(keyword, module_keywords):
     :param keyword: exact keyword to find in the list (not lowercased)
     :param module_keywords: comma separated list of keywords
     """
-    module_keywords = module_keywords.split(',')
+    module_keywords = module_keywords.split(",")
     for current in module_keywords:
         if keyword == current:
             return True
@@ -313,12 +325,13 @@ def _exact_search(keyword, module_keywords):
 
 def _manpage_search(pattern, name):
     try:
-        manpage = grass.read_command('g.manual', flags='m', entry=name)
+        manpage = grass.read_command("g.manual", flags="m", entry=name)
     except CalledModuleError:
         # in case man page is missing
         return False
 
     return manpage.lower().find(pattern) > -1
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

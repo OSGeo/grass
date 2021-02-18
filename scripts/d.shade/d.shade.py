@@ -47,15 +47,16 @@ from grass.exceptions import CalledModuleError
 def main():
     options, unused = gcore.parser()
 
-    drape_map = options['color']
-    relief_map = options['shade']
-    brighten = options['brighten']
+    drape_map = options["color"]
+    relief_map = options["shade"]
+    brighten = options["brighten"]
 
     try:
-        gcore.run_command('d.his', hue=drape_map, intensity=relief_map,
-                          brighten=brighten)
+        gcore.run_command(
+            "d.his", hue=drape_map, intensity=relief_map, brighten=brighten
+        )
     except CalledModuleError:
-        gcore.fatal(_("Module %s failed. Check the above error messages.") % 'd.his')
+        gcore.fatal(_("Module %s failed. Check the above error messages.") % "d.his")
 
 
 if __name__ == "__main__":

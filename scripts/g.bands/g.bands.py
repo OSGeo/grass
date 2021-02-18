@@ -47,22 +47,23 @@ import sys
 
 import grass.script as gs
 
+
 def main():
     from grass.bandref import BandReferenceReader, BandReferenceReaderError
 
     band = None
     kwargs = {}
-    if ',' in options['pattern']:
+    if "," in options["pattern"]:
         gs.fatal("Multiple values not supported")
-    if '_' in options['pattern']:
+    if "_" in options["pattern"]:
         # full band identifier specified
-        kwargs['shortcut'], kwargs['band'] = options['pattern'].split('_')
+        kwargs["shortcut"], kwargs["band"] = options["pattern"].split("_")
     else:
         # pattern
-        kwargs['shortcut'] = options['pattern']
-    kwargs['extended'] = flags['e']
+        kwargs["shortcut"] = options["pattern"]
+    kwargs["extended"] = flags["e"]
 
-    if options['operation'] == 'print':
+    if options["operation"] == "print":
         try:
             reader = BandReferenceReader()
             reader.print_info(**kwargs)
@@ -71,9 +72,8 @@ def main():
 
     return 0
 
+
 if __name__ == "__main__":
     options, flags = gs.parser()
 
-    sys.exit(
-        main()
-    )
+    sys.exit(main())
