@@ -14,35 +14,37 @@ from grass.script.core import run_command
 class TestDbUnivar(TestCase):
     """Test db.univar script"""
 
-    columnName = 'heights'
-    mapName = 'samples'
+    columnName = "heights"
+    mapName = "samples"
 
     @classmethod
     def setUpClass(cls):
         """Use temp region"""
         cls.use_temp_region()
-        cls.runModule('g.region', raster='elevation', flags='p')
+        cls.runModule("g.region", raster="elevation", flags="p")
 
     @classmethod
     def tearDownClass(cls):
         """Remove temporary region"""
-        cls.runModule('g.remove', flags='f', type='raster', name='elevation')
+        cls.runModule("g.remove", flags="f", type="raster", name="elevation")
         cls.del_temp_region()
 
-        run_command('v.db.droptable', map='samples', flags='f')
+        run_command("v.db.droptable", map="samples", flags="f")
 
     def test_calculate(self):
         """run db.univar"""
-        run_command('v.random', output=self.mapName, n=100, overwrite='True')
-        run_command('v.db.addtable', map=self.mapName,
-                    column="heights double precision")
-        run_command('v.what.rast', map=self.mapName, raster='elevation',
-                    column=self.columnName)
-        run_command('v.db.select', map=self.mapName)
+        run_command("v.random", output=self.mapName, n=100, overwrite="True")
+        run_command(
+            "v.db.addtable", map=self.mapName, column="heights double precision"
+        )
+        run_command(
+            "v.what.rast", map=self.mapName, raster="elevation", column=self.columnName
+        )
+        run_command("v.db.select", map=self.mapName)
 
-        module = SimpleModule('db.univar', table=self.mapName,
-                              column=self.columnName)
+        module = SimpleModule("db.univar", table=self.mapName, column=self.columnName)
         self.assertModule(module)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

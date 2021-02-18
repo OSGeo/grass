@@ -48,22 +48,22 @@ from grass.script.utils import encode
 
 
 def main():
-    table = options['table']
-    force = flags['f']
+    table = options["table"]
+    force = flags["f"]
 
-    if not options['driver'] or not options['database']:
+    if not options["driver"] or not options["database"]:
         # check if DB parameters are set, and if not set them.
-        grass.run_command('db.connect', flags='c', quiet=True)
+        grass.run_command("db.connect", flags="c", quiet=True)
 
     kv = grass.db_connection()
-    if options['database']:
-        database = options['database']
+    if options["database"]:
+        database = options["database"]
     else:
-        database = kv['database']
-    if options['driver']:
-        driver = options['driver']
+        database = kv["database"]
+    if options["driver"]:
+        driver = options["driver"]
     else:
-        driver = kv['driver']
+        driver = kv["driver"]
     # schema needed for PG?
 
     if force:
@@ -71,14 +71,15 @@ def main():
 
     # check if table exists
     if not grass.db_table_exist(table):
-        grass.warning(_("Table <%s> not found in database <%s>") %
-                       (table, database))
+        grass.warning(_("Table <%s> not found in database <%s>") % (table, database))
         sys.exit(0)
 
     # check if table is used somewhere (connected to vector map)
     used = grass.db.db_table_in_vector(table)
     if used:
-        grass.warning(_("Deleting table <%s> which is attached to following map(s):") % table)
+        grass.warning(
+            _("Deleting table <%s> which is attached to following map(s):") % table
+        )
         for vect in used:
             grass.warning("%s" % vect)
 
@@ -88,13 +89,13 @@ def main():
         grass.message(_("You must use the force flag to actually remove it. Exiting."))
         sys.exit(0)
 
-    p = grass.feed_command('db.execute', input='-', database=database,
-                           driver=driver)
+    p = grass.feed_command("db.execute", input="-", database=database, driver=driver)
     p.stdin.write(encode("DROP TABLE " + table))
     p.stdin.close()
     p.wait()
     if p.returncode != 0:
         grass.fatal(_("Cannot continue (problem deleting table)."))
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -23,11 +23,11 @@ import grass.script as gs
 
 def main():
     options, flags = gs.parser()
-    araster = options['araster']
-    braster = options['braster']
-    output = options['output']
+    araster = options["araster"]
+    braster = options["braster"]
+    output = options["output"]
 
-    gs.mapcalc('{r} = {a} + {b}'.format(r=output, a=araster, b=braster))
+    gs.mapcalc("{r} = {a} + {b}".format(r=output, a=araster, b=braster))
 
     return 0
 

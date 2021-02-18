@@ -43,17 +43,22 @@ from grass.exceptions import CalledModuleError
 def main():
     # delete vectors via reverse selection
     try:
-        grass.run_command('v.extract',
-                          flags='r',
-                          input=options['input'], layer=options['layer'],
-                          output=options['output'], where=options['where'])
+        grass.run_command(
+            "v.extract",
+            flags="r",
+            input=options["input"],
+            layer=options["layer"],
+            output=options["output"],
+            where=options["where"],
+        )
     except CalledModuleError:
         return 1
 
     # write cmd history:
-    grass.vector_history(map=options['output'])
+    grass.vector_history(map=options["output"])
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

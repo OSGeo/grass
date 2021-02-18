@@ -43,35 +43,45 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
-    map = options['map']
-    layer = options['layer']
-    columns = options['columns'].split(',')
+    map = options["map"]
+    layer = options["layer"]
+    columns = options["columns"].split(",")
 
-    mapset = grass.gisenv()['MAPSET']
+    mapset = grass.gisenv()["MAPSET"]
 
     # does map exist in CURRENT mapset?
-    if not grass.find_file(map, element='vector', mapset=mapset)['file']:
+    if not grass.find_file(map, element="vector", mapset=mapset)["file"]:
         grass.fatal(_("Vector map <%s> not found in current mapset") % map)
 
     f = grass.vector_layer_db(map, layer)
 
-    table = f['table']
-    keycol = f['key']
-    database = f['database']
-    driver = f['driver']
+    table = f["table"]
+    keycol = f["key"]
+    database = f["database"]
+    driver = f["driver"]
 
     if not table:
-        grass.fatal(_("There is no table connected to the input vector map. "
-                      "Unable to delete any column. Exiting."))
+        grass.fatal(
+            _(
+                "There is no table connected to the input vector map. "
+                "Unable to delete any column. Exiting."
+            )
+        )
 
     if keycol in columns:
-        grass.fatal(_("Unable to delete <%s> column as it is needed to keep table <%s> "
-                      "connected to the input vector map <%s>") %
-                    (keycol, table, map))
+        grass.fatal(
+            _(
+                "Unable to delete <%s> column as it is needed to keep table <%s> "
+                "connected to the input vector map <%s>"
+            )
+            % (keycol, table, map)
+        )
 
     for column in columns:
         if column not in grass.vector_columns(map, layer):
-            grass.warning(_("Column <%s> not found in table <%s>. Skipped") % (column, table))
+            grass.warning(
+                _("Column <%s> not found in table <%s>. Skipped") % (column, table)
+            )
             continue
 
         if driver == "sqlite":
@@ -79,7 +89,7 @@ def main():
             # http://www.sqlite.org/faq.html#q11
             colnames = []
             coltypes = []
-            for f in grass.db_describe(table, database=database, driver=driver)['cols']:
+            for f in grass.db_describe(table, database=database, driver=driver)["cols"]:
                 if f[0] == column:
                     continue
                 colnames.append(f[0])
@@ -102,21 +112,25 @@ def main():
                 "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
                 "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
                 "DROP TABLE ${table}_backup",
-                "COMMIT"
+                "COMMIT",
             ]
-            tmpl = string.Template(';\n'.join(cmds))
-            sql = tmpl.substitute(table=table, coldef=coltypes, colnames=colnames, keycol=keycol)
+            tmpl = string.Template(";\n".join(cmds))
+            sql = tmpl.substitute(
+                table=table, coldef=coltypes, colnames=colnames, keycol=keycol
+            )
         else:
             sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
 
         try:
-            grass.write_command('db.execute', input='-', database=database, driver=driver,
-                                stdin=sql)
+            grass.write_command(
+                "db.execute", input="-", database=database, driver=driver, stdin=sql
+            )
         except CalledModuleError:
             grass.fatal(_("Deleting column failed"))
 
     # write cmd history:
     grass.vector_history(map)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

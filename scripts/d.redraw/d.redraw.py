@@ -7,9 +7,9 @@
 # PURPOSE:	Redraws the content of currently selected monitor
 # COPYRIGHT:	(C) 2011-2015 by the GRASS Development Team
 #
-#		This program is free software under the GNU General
-#		Public License (>=v2). Read the file COPYING that
-#		comes with GRASS for details.
+# 		This program is free software under the GNU General
+# 		Public License (>=v2). Read the file COPYING that
+# 		comes with GRASS for details.
 #
 #############################################################################
 
@@ -28,27 +28,30 @@ from grass.script.utils import split
 
 
 def main():
-    mon = grass.gisenv().get('MONITOR', None)
+    mon = grass.gisenv().get("MONITOR", None)
     if not mon:
-        grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
+        grass.fatal(
+            _("No graphics device selected. Use d.mon to select graphics device.")
+        )
 
-    monCmd = grass.parse_command('d.mon', flags='g').get('cmd', None)
+    monCmd = grass.parse_command("d.mon", flags="g").get("cmd", None)
     if not monCmd or not os.path.isfile(monCmd):
         grass.fatal(_("Unable to open file '%s'") % monCmd)
 
     try:
-        fd = open(monCmd, 'r')
+        fd = open(monCmd, "r")
         cmdList = fd.readlines()
 
-        grass.run_command('d.erase')
+        grass.run_command("d.erase")
 
         for cmd in cmdList:
-            if cmd.startswith('#'):
+            if cmd.startswith("#"):
                 continue
             grass.call(split(cmd))
     except IOError as e:
-        grass.fatal(_("Unable to open file '%s' for reading. Details: %s") %
-                    (monCmd, e))
+        grass.fatal(
+            _("Unable to open file '%s' for reading. Details: %s") % (monCmd, e)
+        )
 
     fd.close()
 
@@ -57,10 +60,12 @@ def main():
         fd = open(monCmd, "w")
         fd.writelines(cmdList)
     except IOError as e:
-        grass.fatal(_("Unable to open file '%s' for writing. Details: %s") %
-                    (monCmd, e))
+        grass.fatal(
+            _("Unable to open file '%s' for writing. Details: %s") % (monCmd, e)
+        )
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -62,49 +62,65 @@ from grass.script import core as grass
 
 
 def start_browser(entry):
-    if browser and \
-       browser not in ('xdg-open', 'start') and \
-       not grass.find_program(browser):
+    if (
+        browser
+        and browser not in ("xdg-open", "start")
+        and not grass.find_program(browser)
+    ):
         grass.fatal(_("Browser '%s' not found") % browser)
 
-    if flags['o']:
-        major, minor, patch = grass.version()['version'].split('.')
-        url_path = 'https://grass.osgeo.org/grass%s%s/manuals/%s.html' % (major, minor, entry)
+    if flags["o"]:
+        major, minor, patch = grass.version()["version"].split(".")
+        url_path = "https://grass.osgeo.org/grass%s%s/manuals/%s.html" % (
+            major,
+            minor,
+            entry,
+        )
         if urlopen(url_path).getcode() != 200:
-            url_path = 'https://grass.osgeo.org/grass%s%s/manuals/addons/%s.html' % (
-                major, minor, entry)
+            url_path = "https://grass.osgeo.org/grass%s%s/manuals/addons/%s.html" % (
+                major,
+                minor,
+                entry,
+            )
     else:
-        path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
-        if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
-            path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'html', entry + '.html')
+        path = os.path.join(gisbase, "docs", "html", entry + ".html")
+        if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
+            path = os.path.join(
+                os.getenv("GRASS_ADDON_BASE"), "docs", "html", entry + ".html"
+            )
 
         if not os.path.exists(path):
             grass.fatal(_("No HTML manual page entry for '%s'") % entry)
 
-        url_path = 'file://' + path
+        url_path = "file://" + path
 
-    if browser and browser not in ('xdg-open', 'start'):
+    if browser and browser not in ("xdg-open", "start"):
         webbrowser.register(browser_name, None)
 
-    grass.verbose(_("Starting browser '%(browser)s' for manual"
-                    " entry '%(entry)s'...") %
-                  dict(browser=browser_name, entry=entry))
+    grass.verbose(
+        _("Starting browser '%(browser)s' for manual" " entry '%(entry)s'...")
+        % dict(browser=browser_name, entry=entry)
+    )
 
     try:
         webbrowser.open(url_path)
     except:
-        grass.fatal(_("Error starting browser '%(browser)s' for HTML file"
-                      " '%(path)s'") % dict(browser=browser, path=path))
+        grass.fatal(
+            _("Error starting browser '%(browser)s' for HTML file" " '%(path)s'")
+            % dict(browser=browser, path=path)
+        )
 
 
 def start_man(entry):
-    path = os.path.join(gisbase, 'docs', 'man', 'man1', entry + '.1')
-    if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
-        path = os.path.join(os.getenv('GRASS_ADDON_BASE'), 'docs', 'man', 'man1', entry + '.1')
+    path = os.path.join(gisbase, "docs", "man", "man1", entry + ".1")
+    if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
+        path = os.path.join(
+            os.getenv("GRASS_ADDON_BASE"), "docs", "man", "man1", entry + ".1"
+        )
 
-    for ext in ['', '.gz', '.bz2']:
+    for ext in ["", ".gz", ".bz2"]:
         if os.path.exists(path + ext):
-            os.execlp('man', 'man', path + ext)
+            os.execlp("man", "man", path + ext)
             grass.fatal(_("Error starting 'man' for '%s'") % path)
     grass.fatal(_("No manual page entry for '%s'") % entry)
 
@@ -112,30 +128,30 @@ def start_man(entry):
 def main():
     global gisbase, browser, browser_name
 
-    if flags['i'] and flags['t']:
-        grass.fatal(_("Flags -%c and -%c are mutually exclusive") % ('i', 't'))
+    if flags["i"] and flags["t"]:
+        grass.fatal(_("Flags -%c and -%c are mutually exclusive") % ("i", "t"))
 
     special = None
-    if flags['i']:
-        special = 'index'
-    elif flags['t']:
-        special = 'topics'
+    if flags["i"]:
+        special = "index"
+    elif flags["t"]:
+        special = "topics"
 
-    if flags['m']:
+    if flags["m"]:
         start = start_man
     else:
         start = start_browser
 
-    entry = options['entry']
-    gisbase = os.environ['GISBASE']
-    browser = os.getenv('GRASS_HTML_BROWSER', '')
+    entry = options["entry"]
+    gisbase = os.environ["GISBASE"]
+    browser = os.getenv("GRASS_HTML_BROWSER", "")
 
-    if sys.platform == 'darwin':
+    if sys.platform == "darwin":
         # hack for MacOSX
-        browser_name = os.getenv('GRASS_HTML_BROWSER_MACOSX', '..').split('.')[2]
-    elif sys.platform == 'cygwin':
+        browser_name = os.getenv("GRASS_HTML_BROWSER_MACOSX", "..").split(".")[2]
+    elif sys.platform == "cygwin":
         # hack for Cygwin
-        browser_name = basename(browser, 'exe')
+        browser_name = basename(browser, "exe")
     else:
         browser_name = basename(browser)
 
@@ -147,6 +163,7 @@ def main():
         start(entry)
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

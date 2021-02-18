@@ -196,7 +196,8 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms'))
+
+sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), "etc", "r.in.wms"))
 
 import grass.script as grass
 from grass.script.utils import decode
@@ -206,19 +207,18 @@ def GetRegionParams(opt_region):
 
     # set region
     if opt_region:
-        reg_spl = opt_region.strip().split('@', 1)
-        reg_mapset = '.'
+        reg_spl = opt_region.strip().split("@", 1)
+        reg_mapset = "."
         if len(reg_spl) > 1:
             reg_mapset = reg_spl[1]
 
-        if not grass.find_file(name=reg_spl[0], element='windows', mapset=reg_mapset)['name']:
+        if not grass.find_file(name=reg_spl[0], element="windows", mapset=reg_mapset)[
+            "name"
+        ]:
             grass.fatal(_("Region <%s> not found") % opt_region)
 
     if opt_region:
-        s = grass.read_command('g.region',
-                               quiet=True,
-                               flags='ug',
-                               region=opt_region)
+        s = grass.read_command("g.region", quiet=True, flags="ug", region=opt_region)
         region_params = grass.parse_key_val(decode(s), val_type=float)
     else:
         region_params = grass.region()
@@ -228,35 +228,44 @@ def GetRegionParams(opt_region):
 
 def main():
 
-    if 'GRASS' in options['driver']:
+    if "GRASS" in options["driver"]:
         grass.debug("Using GRASS driver")
         from wms_drv import WMSDrv
+
         wms = WMSDrv()
-    elif 'GDAL' in options['driver']:
+    elif "GDAL" in options["driver"]:
         grass.debug("Using GDAL WMS driver")
         from wms_gdal_drv import WMSGdalDrv
+
         wms = WMSGdalDrv()
 
-    if flags['c']:
+    if flags["c"]:
         wms.GetCapabilities(options)
     else:
         from wms_base import GRASSImporter
-        # set proxy
-        if options['proxy'] and options['proxy_user_pw']:
-            wms.setProxy(options['proxy'], options['proxy_user_pw'])
-        if options['proxy']:
-            wms.setProxy(options['proxy'])
-            if 'GRASS' in options['driver']:
-                grass.warning(_("The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."))
 
-        options['region'] = GetRegionParams(options['region'])
+        # set proxy
+        if options["proxy"] and options["proxy_user_pw"]:
+            wms.setProxy(options["proxy"], options["proxy_user_pw"])
+        if options["proxy"]:
+            wms.setProxy(options["proxy"])
+            if "GRASS" in options["driver"]:
+                grass.warning(
+                    _(
+                        "The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."
+                    )
+                )
+
+        options["region"] = GetRegionParams(options["region"])
         fetched_map = wms.GetMap(options, flags)
 
         grass.message(_("Importing raster map into GRASS..."))
         if not fetched_map:
-            grass.warning(_("Nothing to import.\nNo data has been downloaded from wms server."))
+            grass.warning(
+                _("Nothing to import.\nNo data has been downloaded from wms server.")
+            )
             return
-        importer = GRASSImporter(options['output'], (not flags['b']))
+        importer = GRASSImporter(options["output"], (not flags["b"]))
         importer.ImportMapIntoGRASS(fetched_map)
 
     return 0

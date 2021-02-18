@@ -42,9 +42,9 @@ import grass.script as grass
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    image = options['image']
-    percent = options['percent']
-    python = os.getenv('GRASS_PYTHON', 'python')
-    gisbase = os.environ['GISBASE']
+    image = options["image"]
+    percent = options["percent"]
+    python = os.getenv("GRASS_PYTHON", "python")
+    gisbase = os.environ["GISBASE"]
     script = os.path.join(gisbase, "etc", "wxpyimgview_gui.py")
     os.execlp(python, script, script, image, percent)

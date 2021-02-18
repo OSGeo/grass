@@ -7,9 +7,9 @@
 # PURPOSE:	Split a raster map into red, green and blue maps
 # COPYRIGHT:	(C) 2009 Glynn Clements and the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+# 		This program is free software under the GNU General Public
+# 		License (>=v2). Read the file COPYING that comes with GRASS
+# 		for details.
 #
 #############################################################################
 
@@ -46,30 +46,30 @@ import grass.script as gscript
 
 def main():
     options, unused = gscript.parser()
-    input = options['input']
-    red = options['red']
-    green = options['green']
-    blue = options['blue']
+    input = options["input"]
+    red = options["red"]
+    green = options["green"]
+    blue = options["blue"]
 
-    if not gscript.find_file(input)['file']:
+    if not gscript.find_file(input)["file"]:
         gscript.fatal(_("Raster map <%s> not found") % input)
 
     expressions = []
     maps = []
     if red:
-        expressions.append('%s = r#${input}' % red)
+        expressions.append("%s = r#${input}" % red)
         maps.append(red)
     if green:
-        expressions.append('%s = g#${input}' % green)
+        expressions.append("%s = g#${input}" % green)
         maps.append(green)
     if blue:
-        expressions.append('%s = b#${input}' % blue)
+        expressions.append("%s = b#${input}" % blue)
         maps.append(blue)
-    expr = ';'.join(expressions)
+    expr = ";".join(expressions)
     gscript.mapcalc(expr, input=input)
 
     for name in maps:
-        gscript.run_command('r.colors', map=name, color='grey255')
+        gscript.run_command("r.colors", map=name, color="grey255")
         gscript.raster_history(name)
 
 

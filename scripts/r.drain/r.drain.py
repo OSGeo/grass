@@ -119,18 +119,20 @@ def cleanup():
     """Delete temporary direction map."""
     if tmp_maps:
         try:
-            grass.run_command("g.remove", flags='f', quiet=True, type='raster', name=tmp_maps)
+            grass.run_command(
+                "g.remove", flags="f", quiet=True, type="raster", name=tmp_maps
+            )
         except:
             pass
 
 
 def main():
-    valmap = options['input']
-    dirmap = options['direction']
-    rpathmap = options['output']
-    vpathmap = options['drain']
-    start_coords = options['start_coordinates']
-    start_pnts = options['start_points']
+    valmap = options["input"]
+    dirmap = options["direction"]
+    rpathmap = options["output"]
+    vpathmap = options["drain"]
+    start_coords = options["start_coordinates"]
+    start_pnts = options["start_points"]
 
     global tmp_maps
     tmp_maps = False
@@ -141,35 +143,44 @@ def main():
         dirmap = "%s_tmp_%d" % (valmap, os.getpid())
         fill_map = "%s_fill_%d" % (valmap, os.getpid())
         area_map = "%s_area_%d" % (valmap, os.getpid())
-        tmp_maps = dirmap + ',' + fill_map + ',' + area_map
-        grass.run_command("r.fill.dir", input=valmap, output=fill_map, direction=dirmap, areas=area_map, flags='f', format='grass')
+        tmp_maps = dirmap + "," + fill_map + "," + area_map
+        grass.run_command(
+            "r.fill.dir",
+            input=valmap,
+            output=fill_map,
+            direction=dirmap,
+            areas=area_map,
+            flags="f",
+            format="grass",
+        )
 
     # create args for r.path
     kwargs = {}
-    kwargs['input'] = dirmap
-    if flags['c'] or flags['a']:
-        kwargs['values'] = valmap
-    kwargs['format'] = 'degree'
+    kwargs["input"] = dirmap
+    if flags["c"] or flags["a"]:
+        kwargs["values"] = valmap
+    kwargs["format"] = "degree"
     if start_coords:
-        kwargs['start_coordinates'] = start_coords
+        kwargs["start_coordinates"] = start_coords
     if start_pnts:
-        kwargs['start_points'] = start_pnts
+        kwargs["start_points"] = start_pnts
     if rpathmap:
-        kwargs['raster_path'] = rpathmap
+        kwargs["raster_path"] = rpathmap
     if vpathmap:
-        kwargs['vector_path'] = vpathmap
+        kwargs["vector_path"] = vpathmap
 
-    pathflags = ''
-    if flags['c']:
-        pathflags += 'c'
-    if flags['a']:
-        pathflags += 'a'
-    if flags['n']:
-        pathflags += 'n'
+    pathflags = ""
+    if flags["c"]:
+        pathflags += "c"
+    if flags["a"]:
+        pathflags += "a"
+    if flags["n"]:
+        pathflags += "n"
 
     grass.run_command("r.path", flags=pathflags, **kwargs)
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
