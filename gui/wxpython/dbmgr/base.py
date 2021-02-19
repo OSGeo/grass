@@ -2012,6 +2012,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnApplySqlStatement(self, event):
         """Apply simple/advanced sql statement"""
+        if not self.layerPage:
+            return
         keyColumn = -1  # index of key column
         listWin = self.FindWindowById(self.layerPage[self.selLayer]['data'])
         sql = None
