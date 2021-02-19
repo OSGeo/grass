@@ -3635,7 +3635,8 @@ class LayerBook(wx.Notebook):
                        layer=layer,
                        qlayer=layer,
                        option='cat',
-                       columns=key)
+                       columns=key,
+                       overwrite=True)
 
         if ret == 0:
             # update dialog (only for new layer)

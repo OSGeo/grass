@@ -61,7 +61,7 @@ class SbGoToGCP(SbItem):
         listCtrl = self.mapFrame.GetListCtrl()
 
         listCtrl.selectedkey = gcpNumber
-        listCtrl.selected = listCtrl.FindItemData(-1, gcpNumber)
+        listCtrl.selected = listCtrl.FindItem(-1, gcpNumber)
         listCtrl.render = False
         listCtrl.SetItemState(listCtrl.selected,
                               wx.LIST_STATE_SELECTED,

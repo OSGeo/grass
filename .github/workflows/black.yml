@@ -11,7 +11,9 @@ jobs:
     strategy:
       matrix:
         directory:
+          - lib/init
           - scripts
+          - utils
       fail-fast: false
 
     steps:
