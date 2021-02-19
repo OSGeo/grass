@@ -10,9 +10,9 @@
 #               Based on r.univar.sh by Markus Neteler
 # COPYRIGHT:	(C) 2005, 2007, 2008 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+# 		This program is free software under the GNU General Public
+# 		License (>=v2). Read the file COPYING that comes with GRASS
+# 		for details.
 #
 #############################################################################
 
@@ -63,25 +63,25 @@ import grass.script as gscript
 
 
 def cleanup():
-    for ext in ['', '.sort']:
+    for ext in ["", ".sort"]:
         gscript.try_remove(tmp + ext)
 
 
 def sortfile(infile, outfile):
-    inf = open(infile, 'r')
-    outf = open(outfile, 'w')
+    inf = open(infile, "r")
+    outf = open(outfile, "w")
 
-    if gscript.find_program('sort', '--help'):
-        gscript.run_command('sort', flags='n', stdin=inf, stdout=outf)
+    if gscript.find_program("sort", "--help"):
+        gscript.run_command("sort", flags="n", stdin=inf, stdout=outf)
     else:
         # FIXME: we need a large-file sorting function
         gscript.warning(_("'sort' not found: sorting in memory"))
         lines = inf.readlines()
         for i in range(len(lines)):
-            lines[i] = float(lines[i].rstrip('\r\n'))
+            lines[i] = float(lines[i].rstrip("\r\n"))
         lines.sort()
         for line in lines:
-            outf.write(str(line) + '\n')
+            outf.write(str(line) + "\n")
 
     inf.close()
     outf.close()
@@ -91,32 +91,33 @@ def main():
     global tmp
     tmp = gscript.tempfile()
 
-    extend = flags['e']
-    shellstyle = flags['g']
-    table = options['table']
-    column = options['column']
-    database = options['database']
-    driver = options['driver']
-    where = options['where']
-    perc = options['percentile']
+    extend = flags["e"]
+    shellstyle = flags["g"]
+    table = options["table"]
+    column = options["column"]
+    database = options["database"]
+    driver = options["driver"]
+    where = options["where"]
+    perc = options["percentile"]
 
-    perc = [float(p) for p in perc.split(',')]
+    perc = [float(p) for p in perc.split(",")]
 
     desc_table = gscript.db_describe(table, database=database, driver=driver)
     if not desc_table:
         gscript.fatal(_("Unable to describe table <%s>") % table)
     found = False
-    for cname, ctype, cwidth in desc_table['cols']:
+    for cname, ctype, cwidth in desc_table["cols"]:
         if cname == column:
             found = True
-            if ctype not in ('INTEGER', 'DOUBLE PRECISION'):
+            if ctype not in ("INTEGER", "DOUBLE PRECISION"):
                 gscript.fatal(_("Column <%s> is not numeric") % cname)
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
     if not shellstyle:
-        gscript.verbose(_("Calculation for column <%s> of table <%s>..."
-                          ) % (column, table))
+        gscript.verbose(
+            _("Calculation for column <%s> of table <%s>...") % (column, table)
+        )
         gscript.message(_("Reading column values..."))
 
     sql = "SELECT %s FROM %s" % (column, table)
@@ -129,15 +130,21 @@ def main():
     if not driver:
         driver = None
 
-    tmpf = open(tmp, 'w')
-    gscript.run_command('db.select', flags='c', table=table,
-                        database=database, driver=driver, sql=sql,
-                        stdout=tmpf)
+    tmpf = open(tmp, "w")
+    gscript.run_command(
+        "db.select",
+        flags="c",
+        table=table,
+        database=database,
+        driver=driver,
+        sql=sql,
+        stdout=tmpf,
+    )
     tmpf.close()
 
     # check if result is empty
     tmpf = open(tmp)
-    if tmpf.read(1) == '':
+    if tmpf.read(1) == "":
         gscript.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
 
@@ -154,7 +161,7 @@ def main():
 
     tmpf = open(tmp)
     for line in tmpf:
-        line = line.rstrip('\r\n')
+        line = line.rstrip("\r\n")
         if len(line) == 0:
             continue
         x = float(line)
@@ -175,18 +182,16 @@ def main():
         sys.stdout.write("Maximum: %.15g\n" % maxv)
         sys.stdout.write("Range: %.15g\n" % (maxv - minv))
         sys.stdout.write("Mean: %.15g\n" % (sum / N))
-        sys.stdout.write(
-            "Arithmetic mean of absolute values: %.15g\n" %
-            (sum3 / N))
+        sys.stdout.write("Arithmetic mean of absolute values: %.15g\n" % (sum3 / N))
         if not ((sum2 - sum * sum / N) / N) < 0:
             sys.stdout.write("Variance: %.15g\n" % ((sum2 - sum * sum / N) / N))
             sys.stdout.write(
-                "Standard deviation: %.15g\n" %
-                (math.sqrt((sum2 - sum * sum / N) / N)))
+                "Standard deviation: %.15g\n" % (math.sqrt((sum2 - sum * sum / N) / N))
+            )
             sys.stdout.write(
-                "Coefficient of variation: %.15g\n" %
-                ((math.sqrt((sum2 - sum * sum / N) / N)) /
-                 (math.sqrt(sum * sum) / N)))
+                "Coefficient of variation: %.15g\n"
+                % ((math.sqrt((sum2 - sum * sum / N) / N)) / (math.sqrt(sum * sum) / N))
+            )
         else:
             sys.stdout.write("Variance: 0\n")
             sys.stdout.write("Standard deviation: 0\n")
@@ -201,14 +206,11 @@ def main():
         sys.stdout.write("mean_abs=%.15g\n" % (sum3 / N))
         if not ((sum2 - sum * sum / N) / N) < 0:
             sys.stdout.write("variance=%.15g\n" % ((sum2 - sum * sum / N) / N))
+            sys.stdout.write("stddev=%.15g\n" % (math.sqrt((sum2 - sum * sum / N) / N)))
             sys.stdout.write(
-                "stddev=%.15g\n" %
-                (math.sqrt(
-                    (sum2 - sum * sum / N) / N)))
-            sys.stdout.write(
-                "coeff_var=%.15g\n" %
-                ((math.sqrt((sum2 - sum * sum / N) / N)) /
-                 (math.sqrt(sum * sum) / N)))
+                "coeff_var=%.15g\n"
+                % ((math.sqrt((sum2 - sum * sum / N) / N)) / (math.sqrt(sum * sum) / N))
+            )
         else:
             sys.stdout.write("variance=0\n")
             sys.stdout.write("stddev=0\n")
@@ -222,7 +224,7 @@ def main():
     sortfile(tmp, tmp + ".sort")
 
     odd = N % 2
-    eostr = ['even', 'odd'][odd]
+    eostr = ["even", "odd"][odd]
 
     q25pos = round(N * 0.25)
     if q25pos == 0:
@@ -246,7 +248,7 @@ def main():
     inf = open(tmp + ".sort")
     l = 1
     for line in inf:
-        line = line.rstrip('\r\n')
+        line = line.rstrip("\r\n")
         if len(line) == 0:
             continue
         if l == q25pos:
@@ -272,40 +274,31 @@ def main():
             if perc[i] == int(perc[i]):  # integer
                 if int(perc[i]) % 10 == 1 and int(perc[i]) != 11:
                     sys.stdout.write(
-                        "%dst Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%dst Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
                 elif int(perc[i]) % 10 == 2 and int(perc[i]) != 12:
                     sys.stdout.write(
-                        "%dnd Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%dnd Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
                 elif int(perc[i]) % 10 == 3 and int(perc[i]) != 13:
                     sys.stdout.write(
-                        "%drd Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%drd Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
                 else:
                     sys.stdout.write(
-                        "%dth Percentile: %.15g\n" %
-                        (int(
-                            perc[i]),
-                            pval[i]))
+                        "%dth Percentile: %.15g\n" % (int(perc[i]), pval[i])
+                    )
             else:
-                sys.stdout.write(
-                    "%.15g Percentile: %.15g\n" %
-                    (perc[i], pval[i]))
+                sys.stdout.write("%.15g Percentile: %.15g\n" % (perc[i], pval[i]))
     else:
         sys.stdout.write("first_quartile=%.15g\n" % q25)
         sys.stdout.write("median=%.15g\n" % q50)
         sys.stdout.write("third_quartile=%.15g\n" % q75)
         for i in range(len(perc)):
             percstr = "%.15g" % perc[i]
-            percstr = percstr.replace('.', '_')
+            percstr = percstr.replace(".", "_")
             sys.stdout.write("percentile_%s=%.15g\n" % (percstr, pval[i]))
+
 
 if __name__ == "__main__":
     options, flags = gscript.parser()
