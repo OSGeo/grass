@@ -29,6 +29,7 @@ def cleanup():
     if tmp_img:
         grass.try_remove(tmp_img)
 
+
 # def rotate(src, dst):
 #     grass.call(["convert", "-rotate", "90", src, dst])
 
@@ -40,21 +41,21 @@ def read_ppm(src):
     text = fh.read()
     fh.close()
     i = 0
-    j = text.find('\n', i)
-    if text[i:j] != 'P6':
+    j = text.find("\n", i)
+    if text[i:j] != "P6":
         raise IOError(text[i:j] + " != P6. Is the file PPM?")
     i = j + 1
-    j = text.find('\n', i)
+    j = text.find("\n", i)
     w, h = text[i:j].split()
     width = int(w)
     height = int(h)
     i = j + 1
-    j = text.find('\n', i)
+    j = text.find("\n", i)
     maxval = text[i:j]
     if int(maxval) != 255:
         raise IOError("Max value in image != 255")
     i = j + 1
-    return array.array('B', text[i:])
+    return array.array("B", text[i:])
 
 
 def write_ppm(dst, data):
@@ -67,7 +68,7 @@ def write_ppm(dst, data):
 
 
 def rotate_ppm(srcd):
-    dstd = array.array('B', len(srcd) * '\0')
+    dstd = array.array("B", len(srcd) * "\0")
     for y in range(height):
         for x in range(width):
             for c in range(3):
@@ -78,19 +79,19 @@ def rotate_ppm(srcd):
 
 
 def flip_ppm(srcd):
-    dstd = array.array('B', len(srcd) * '\0')
+    dstd = array.array("B", len(srcd) * "\0")
     stride = width * 3
     for y in range(height):
-        dy = (height - 1 - y)
-        dstd[dy * stride:(dy + 1) * stride] = srcd[y * stride:(y + 1) * stride]
+        dy = height - 1 - y
+        dstd[dy * stride : (dy + 1) * stride] = srcd[y * stride : (y + 1) * stride]
     return dstd
 
 
 def ppmtopng(dst, src):
-    if grass.find_program("g.ppmtopng", '--help'):
-        grass.run_command('g.ppmtopng', input=src, output=dst, quiet=True)
+    if grass.find_program("g.ppmtopng", "--help"):
+        grass.run_command("g.ppmtopng", input=src, output=dst, quiet=True)
     elif grass.find_program("pnmtopng"):
-        fh = open(dst, 'wb')
+        fh = open(dst, "wb")
         grass.call(["pnmtopng", src], stdout=fh)
         fh.close()
     elif grass.find_program("convert"):
@@ -107,7 +108,7 @@ def convert_and_rotate(src, dst, flip=False):
         ppm = flip_ppm(ppm)
     ppm = rotate_ppm(ppm)
     to_png = False
-    if dst.lower().endswith('.png'):
+    if dst.lower().endswith(".png"):
         to_png = True
     if to_png:
         tmp_img = grass.tempfile() + ".ppm"
@@ -120,7 +121,7 @@ def convert_and_rotate(src, dst, flip=False):
 
 
 def main():
-    os.environ['GRASS_OVERWRITE'] = '1'
+    os.environ["GRASS_OVERWRITE"] = "1"
 
     infile = sys.argv[1]
     outfile = sys.argv[2]
