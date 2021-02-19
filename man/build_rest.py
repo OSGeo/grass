@@ -22,13 +22,14 @@ exclude_mods = [
     "r.watershed.ram",
     "r.watershed.seg",
     "v.topo.check",
-    "helptext.html"]
+    "helptext.html",
+]
 
 # these modules don't use G_parser()
 
 desc_override = {
     "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
-    "r.li.daemon": "Support module for r.li landscape index calculations."
+    "r.li.daemon": "Support module for r.li landscape index calculations.",
 }
 
 ############################################################################
@@ -57,7 +58,8 @@ This reference manual details the use of modules distributed with
 Geographic Resources Analysis Support System (GRASS), an open source
 (`GNU GPLed <https://www.gnu.org/licenses/gpl.html>`_), image
 processing and geographic information system (GIS).
-""")
+"""
+)
 
 overview_tmpl = string.Template(
     r"""
@@ -158,9 +160,10 @@ Printing
     
         PostScript commands manual <postscript>
 
-""")
+"""
+)
 
-#TODO add copyright symbol
+# TODO add copyright symbol
 footer_tmpl = string.Template(
     r"""
 
@@ -168,10 +171,10 @@ footer_tmpl = string.Template(
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
  2003-2021 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
-""")
+"""
+)
 
-cmd1_tmpl = string.Template(
-    r"""*`$cmd.\* <${cmd}>` *""")
+cmd1_tmpl = string.Template(r"""*`$cmd.\* <${cmd}>` *""")
 
 cmd2_tmpl = string.Template(
     r"""
@@ -183,14 +186,15 @@ ${cmd}.* commands:
     :maxdepth: 1
     
 
-""")
+"""
+)
 
 desc1_tmpl = string.Template(
     r"""        ${basename} - ${desc} <${basename}>
-""")
+"""
+)
 
-sections = \
-    r"""
+sections = r"""
 
 +-----------------------------+-------------------------------+
 |`d.* <full_index.html#d>`_   | `display commands`            |
@@ -222,8 +226,9 @@ sections = \
 
 modclass_intro_tmpl = string.Template(
     r"""Go to :doc:`${modclass} introduction <${modclass_lower}intro>`
-""")
-#"
+"""
+)
+# "
 
 modclass_tmpl = string.Template(
     r"""Go :doc:`back to help overview<index>`
@@ -236,44 +241,50 @@ modclass_tmpl = string.Template(
     :maxdepth: 1
     
 
-""")
-#"
+"""
+)
+# "
 
 desc2_tmpl = string.Template(
     r"""        ${basename} - ${desc} <${basename}>
-""")
-#"
+"""
+)
+# "
 
 
-full_index_header = \
-    r"""Go :doc:`back to help overview<index>`
+full_index_header = r"""Go :doc:`back to help overview<index>`
 
 
 Full command index:
 ~~~~~~~~~~~~~~~~~~~~
 """
-#"
+# "
 
 
 message_tmpl = string.Template(
     r"""Generated HTML docs in ${rest_dir}/index.txt
 ----------------------------------------------------------------------
 Following modules are missing the 'modulename.txt' file in src code:
-""")
+"""
+)
+
 
 def check_for_desc_override(basename):
     return desc_override.get(basename)
 
+
 def read_file(name):
-    f = open(name, 'r')
+    f = open(name, "r")
     s = f.read()
     f.close()
     return s
 
+
 def write_file(name, contents):
-    f = open(name, 'w')
+    f = open(name, "w")
     f.write(contents)
     f.close()
+
 
 def try_mkdir(path):
     try:
@@ -281,9 +292,14 @@ def try_mkdir(path):
     except OSError as e:
         pass
 
+
 def replace_file(name):
     temp = name + ".tmp"
-    if os.path.exists(name) and os.path.exists(temp) and read_file(name) == read_file(temp):
+    if (
+        os.path.exists(name)
+        and os.path.exists(temp)
+        and read_file(name) == read_file(temp)
+    ):
         os.remove(temp)
     else:
         try:
@@ -292,32 +308,39 @@ def replace_file(name):
             pass
         os.rename(temp, name)
 
+
 def copy_file(src, dst):
     write_file(dst, read_file(src))
 
-def rest_files(cls = None):
+
+def rest_files(cls=None):
     for cmd in sorted(os.listdir(rest_dir)):
-        if cmd.endswith(".txt") and \
-           (cls in [None, '*'] or cmd.startswith(cls + ".")) and \
-           (cls != '*' or len(cmd.split('.')) >= 3) and \
-           cmd not in ["full_index.txt", "index.txt"] and \
-           cmd not in exclude_mods and \
-           not cmd.startswith("wxGUI."):
+        if (
+            cmd.endswith(".txt")
+            and (cls in [None, "*"] or cmd.startswith(cls + "."))
+            and (cls != "*" or len(cmd.split(".")) >= 3)
+            and cmd not in ["full_index.txt", "index.txt"]
+            and cmd not in exclude_mods
+            and not cmd.startswith("wxGUI.")
+        ):
             yield cmd
 
-def write_rest_header(f, title, ismain = False):
-    f.write(header2_tmpl.substitute(grass_version = grass_version))
+
+def write_rest_header(f, title, ismain=False):
+    f.write(header2_tmpl.substitute(grass_version=grass_version))
+
 
 def write_rest_cmd_overview(f):
     box_color = "#e1ecd0"
-    f.write(overview_tmpl.substitute(box_color = box_color))
+    f.write(overview_tmpl.substitute(box_color=box_color))
+
 
 def write_rest_footer(f, index_url):
-    f.write(footer_tmpl.substitute(grass_version = grass_version,
-                                   index_url = index_url))
+    f.write(footer_tmpl.substitute(grass_version=grass_version, index_url=index_url))
+
 
 def get_desc(cmd):
-    f = open(cmd, 'r')
+    f = open(cmd, "r")
     while True:
         line = f.readline()
         if not line:
@@ -332,7 +355,7 @@ def get_desc(cmd):
         if "SYNOPSIS" in line:
             break
         if "*" in line:
-            sp = line.split('-',1)
+            sp = line.split("-", 1)
             if len(sp) > 1:
                 return sp[1].strip()
             else:
@@ -340,11 +363,12 @@ def get_desc(cmd):
 
     return ""
 
+
 ############################################################################
 
-arch_dist_dir = os.environ['ARCH_DISTDIR']
+arch_dist_dir = os.environ["ARCH_DISTDIR"]
 rest_dir = os.path.join(arch_dist_dir, "docs", "rest")
-gisbase = os.environ['GISBASE']
+gisbase = os.environ["GISBASE"]
 ver = read_file(os.path.join(gisbase, "etc", "VERSIONNUMBER"))
 try:
     grass_version = ver.split()[0].strip()

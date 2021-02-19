@@ -18,11 +18,18 @@ import sys
 import os
 import fnmatch
 
-#from build_html import *
+# from build_html import *
 from build_html import (
-    default_year, header1_tmpl, grass_version,
-    modclass_intro_tmpl, to_title, html_files,
-    check_for_desc_override, get_desc, write_html_footer, replace_file,
+    default_year,
+    header1_tmpl,
+    grass_version,
+    modclass_intro_tmpl,
+    to_title,
+    html_files,
+    check_for_desc_override,
+    get_desc,
+    write_html_footer,
+    replace_file,
 )
 
 
@@ -95,9 +102,9 @@ def starts_with_module(string, module):
     # not solving:
     # module = module.replace('wxGUI.', 'g.gui.')
     # TODO: matches g.mapsets images for g.mapset and d.rast.num for d.rast
-    if string.startswith(module.replace('.', '_')):
+    if string.startswith(module.replace(".", "_")):
         return True
-    if string.startswith(module.replace('.', '')):
+    if string.startswith(module.replace(".", "")):
         return True
     if string.startswith(module):
         return True
@@ -115,68 +122,75 @@ def get_module_image(module, images):
     if not candidates:
         return None
     for image in candidates:
-        basename, unused = image.rsplit('.', 1)
-        if basename == module.replace('.', '_'):
+        basename, unused = image.rsplit(".", 1)
+        if basename == module.replace(".", "_"):
             return image
-        if basename == module.replace('.', ''):
+        if basename == module.replace(".", ""):
             return image
         if basename == module:
             return image
     return sorted(candidates, key=len)[0]
 
 
-def generate_page_for_category(short_family, module_family, imgs, year,
-                               skip_no_image=False):
+def generate_page_for_category(
+    short_family, module_family, imgs, year, skip_no_image=False
+):
     filename = module_family + "_graphical.html"
 
-    output = open(filename + ".tmp", 'w')
+    output = open(filename + ".tmp", "w")
 
-    output.write(header1_tmpl.substitute(
-        title="GRASS GIS %s Reference "
-              "Manual: Graphical index" % grass_version))
+    output.write(
+        header1_tmpl.substitute(
+            title="GRASS GIS %s Reference " "Manual: Graphical index" % grass_version
+        )
+    )
     output.write(header_graphical_index_tmpl)
 
-    if module_family.lower() not in ['general', 'postscript']:
-        if module_family == 'raster3d':
+    if module_family.lower() not in ["general", "postscript"]:
+        if module_family == "raster3d":
             # covert keyword to nice form
-            module_family = '3D raster'
-        output.write(modclass_intro_tmpl.substitute(
-            modclass=module_family, modclass_lower=module_family.lower()))
-    if module_family == 'wxGUI':
+            module_family = "3D raster"
+        output.write(
+            modclass_intro_tmpl.substitute(
+                modclass=module_family, modclass_lower=module_family.lower()
+            )
+        )
+    if module_family == "wxGUI":
         output.write("<h3>wxGUI components:</h3>")
-    elif module_family == 'guimodules':
+    elif module_family == "guimodules":
         output.write("<h3>g.gui.* modules:</h3>")
     else:
         output.write("<h3>{0} modules:</h3>".format(to_title(module_family)))
     output.write('<ul class="img-list">')
 
-    #for all modules:
+    # for all modules:
     for cmd in html_files(short_family, ignore_gui=False):
         basename = os.path.splitext(cmd)[0]
         desc = check_for_desc_override(basename)
         if desc is None:
             desc = get_desc(cmd)
         img = get_module_image(basename, imgs)
-        img_class = 'linkimg'
+        img_class = "linkimg"
         if skip_no_image and not img:
             continue
         elif not img:
-            img = 'grass_logo.png'
-            img_class = 'default-img'
-        if basename.startswith('wxGUI'):
-            basename = basename.replace('.', ' ')
+            img = "grass_logo.png"
+            img_class = "default-img"
+        if basename.startswith("wxGUI"):
+            basename = basename.replace(".", " ")
         output.write(
-            '<li>'
+            "<li>"
             '<a href="{html}">'
             '<img class="{img_class}" src="{img}">'
             '<span class="name">{name}</span> '
             '<span class="desc">{desc}</span>'
-            '</a>'
-            '</li>'
-            .format(html=cmd, img=img, name=basename,
-                    desc=desc, img_class=img_class))
+            "</a>"
+            "</li>".format(
+                html=cmd, img=img, name=basename, desc=desc, img_class=img_class
+            )
+        )
 
-    output.write('</ul>')
+    output.write("</ul>")
 
     write_html_footer(output, "index.html", year)
 
@@ -187,13 +201,14 @@ def generate_page_for_category(short_family, module_family, imgs, year,
 # TODO: dependencies in makefile for this have to be fixed
 # TODO: there is a potential overlap with other scripts (-> refactoring)
 
+
 def main():
     year = default_year
     html_dir = sys.argv[1]
     os.chdir(html_dir)
 
-    img_extensions = ['png', 'jpg', 'gif']
-    img_patterns = ['*.' + extension for extension in img_extensions]
+    img_extensions = ["png", "jpg", "gif"]
+    img_patterns = ["*." + extension for extension in img_extensions]
     imgs = []
     for filename in sorted(os.listdir(html_dir)):
         if file_matches(filename, img_patterns):
@@ -204,18 +219,18 @@ def main():
     # class has its meaning in Python, plus it is a synonym for category
     # TODO: what would be user friendly is unclear
     families = [
-        ('d', 'display'),
-        ('db', 'database'),
-        ('g', 'general'),
-        ('i', 'imagery'),
-        ('m', 'miscellaneous'),
-        ('ps', 'postscript'),
-        ('r', 'raster'),
-        ('r3', 'raster3d'),
-        ('t', 'temporal'),
-        ('v', 'vector'),
-        ('wxGUI', 'wxGUI'),
-        ('g.gui', 'guimodules'),
+        ("d", "display"),
+        ("db", "database"),
+        ("g", "general"),
+        ("i", "imagery"),
+        ("m", "miscellaneous"),
+        ("ps", "postscript"),
+        ("r", "raster"),
+        ("r3", "raster3d"),
+        ("t", "temporal"),
+        ("v", "vector"),
+        ("wxGUI", "wxGUI"),
+        ("g.gui", "guimodules"),
     ]
 
     # partial compatibility with build_class.py
@@ -228,9 +243,10 @@ def main():
             year = sys.argv[4]
 
     for short_family, module_family in families:
-        generate_page_for_category(short_family, module_family, imgs,
-                                   year=year, skip_no_image=False)
+        generate_page_for_category(
+            short_family, module_family, imgs, year=year, skip_no_image=False
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

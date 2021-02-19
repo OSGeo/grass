@@ -11,12 +11,14 @@ from build_html import *
 
 os.chdir(html_dir)
 
-sys.stdout.write(message_tmpl.substitute(html_dir = html_dir))
+sys.stdout.write(message_tmpl.substitute(html_dir=html_dir))
 
-for cmd in html_files('*'):
+for cmd in html_files("*"):
     if "DESCRIPTION" not in read_file(cmd):
         sys.stdout.write("%s\n" % cmd[:-5])
 
-sys.stdout.write(r"""
+sys.stdout.write(
+    r"""
 ----------------------------------------------------------------------
-""")
+"""
+)
