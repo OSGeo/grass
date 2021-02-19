@@ -67,7 +67,7 @@ WORDS_WHITE_LIST="$WORDS_WHITE_LIST,THRESHHOLD_BILEVEL,THRESHHOLD_HALFTONE,THRES
 # GRASS GIS
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,thru"
 
-MYPATH=`pwd`
+MYPATH=$(pwd)
 
 touch $MYPATH/fix_typos/typos_whitelist.txt
 python3 $MYPATH/fix_typos/codespell/codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \

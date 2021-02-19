@@ -49,14 +49,12 @@ if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
     exit 1
 fi
 
-
 g.message "Generating module synopsis (writing to \$GISBASE/etc/) ..."
 
 SYNOP="$GISBASE/etc/module_synopsis.txt"
 
-OLDDIR="`pwd`"
+OLDDIR="$(pwd)"
 cd "$GISBASE"
-
 
 ### generate menu hierarchy
 
@@ -96,7 +94,6 @@ find_menu_hierarchy()
 
   echo "$PLACEMENT"
 }
-
 
 ### execute the loop for all modules
 for DIR in bin scripts ; do
@@ -169,7 +166,6 @@ for MODULE in ps.map ; do
     fi
 done
 
-
 # these don't use the parser at all.
 cat << EOF >> "$TMP"
 g.parser: Full parser support for GRASS scripts.
@@ -195,11 +191,11 @@ cp "$SYNOP" "${TMP}.txt"
 g.message "Generating HTML (writing to \$GISBASE/docs/html/) ..."
 
 #### write header
-cat << EOF > "${TMP}.html"
+cat <<EOF >"${TMP}.html"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>`g.version | cut -f1 -d'('` Command list</title>
+<title>$(g.version | cut -f1 -d'(') Command list</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
@@ -217,8 +213,8 @@ cat << EOF > "${TMP}.html"
 -->
 
 <center>
-<H1>`g.version | cut -f1 -d'('` Command list</H1>
-<h3>`date "+%e %B %Y"`</h3>
+<H1>$(g.version | cut -f1 -d'(') Command list</H1>
+<h3>$(date "+%e %B %Y")</h3>
 </center>
 <BR><BR><BR>
 
@@ -367,9 +363,9 @@ cat << EOF > "${TMP}.tex"
 \begin{center}\includegraphics[%
   width=0.3\textwidth]{grasslogo_vector.pdf}\end{center}
 
-\begin{center}{\huge `g.version | cut -f1 -d'('` Command list}\end{center}{\huge \par}
+\begin{center}{\huge $(g.version | cut -f1 -d'(') Command list}\end{center}{\huge \par}
 
-\begin{center}{\large `date "+%e %B %Y"`}\end{center}{\large \par}
+\begin{center}{\large $(date "+%e %B %Y")}\end{center}{\large \par}
 \bigskip{}
 
 
@@ -456,7 +452,6 @@ EOF
 
 done
 
-
 #### save footer
 cat << EOF >> "${TMP}.tex"
 \end{lyxlist}
@@ -464,17 +459,14 @@ cat << EOF >> "${TMP}.tex"
 \end{document}
 EOF
 
-
 \mv "${TMP}.tex" "$GISBASE/etc/module_synopsis.tex"
 \rm -f "${TMP}.txt"
-
 
 ##### FIXME
 # post generation tidy-up
 # - sort order isn't ideal. try 'sort -n'??
 #     fix: *.univar.sh, r.surf.idw2, v.to.rast3, r.out.ppm3, others..
 #####
-
 
 g.message "Converting LaTeX to PDF (writing to \$GISBASE/docs/pdf/) ..."
 
