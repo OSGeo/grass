@@ -7,9 +7,9 @@
 # PURPOSE:	 Script for exporting content of monitor to raster map
 # COPYRIGHT: (C) 2014-2015 by the GRASS Development Team
 #
-#		This program is free software under the GNU General
-#		Public License (>=v2). Read the file COPYING that
-#		comes with GRASS for details.
+# 		This program is free software under the GNU General
+# 		Public License (>=v2). Read the file COPYING that
+# 		comes with GRASS for details.
 #
 #############################################################################
 
@@ -29,18 +29,20 @@ from grass.script import core as gcore
 def main():
     options, flags = gcore.parser()
     gisenv = gcore.gisenv()
-    if 'MONITOR' in gisenv:
-        cmd_file = gcore.parse_command('d.mon', flags='g')['cmd']
-        d_cmd = 'd.to.rast'
+    if "MONITOR" in gisenv:
+        cmd_file = gcore.parse_command("d.mon", flags="g")["cmd"]
+        d_cmd = "d.to.rast"
         for param, val in options.items():
             if val:
                 d_cmd += " {param}={val}".format(param=param, val=val)
         if gcore.overwrite():
-            d_cmd += ' --overwrite'
+            d_cmd += " --overwrite"
         with open(cmd_file, "a") as file_:
             file_.write(d_cmd)
     else:
-        gcore.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
+        gcore.fatal(
+            _("No graphics device selected. Use d.mon to select graphics device.")
+        )
 
 
 if __name__ == "__main__":

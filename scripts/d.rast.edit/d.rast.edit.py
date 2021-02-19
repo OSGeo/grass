@@ -80,6 +80,7 @@ import atexit
 import grass.script as grass
 
 from grass.script.setup import set_gui_path
+
 set_gui_path()
 
 try:
@@ -89,38 +90,38 @@ except ImportError:
     if __name__ == "__main__":
         if len(sys.argv) == 2:
             arg = sys.argv[1]
-            if arg[0:2] == '--' or arg in ["help", "-help"]:
+            if arg[0:2] == "--" or arg in ["help", "-help"]:
                 grass.parser()
     # Either we didn't call g.parser, or it returned
     # At this point, there's nothing to be done except re-raise the exception
     raise
 
 wind_keys = {
-    'north': ('n', float),
-    'south': ('s', float),
-    'east': ('e', float),
-    'west': ('w', float),
-    'nsres': ('nsres', float),
-    'ewres': ('ewres', float),
-    'rows': ('rows', int),
-    'cols': ('cols', int),
+    "north": ("n", float),
+    "south": ("s", float),
+    "east": ("e", float),
+    "west": ("w", float),
+    "nsres": ("nsres", float),
+    "ewres": ("ewres", float),
+    "rows": ("rows", int),
+    "cols": ("cols", int),
 }
 
-gray12_bits = b'\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88'
+gray12_bits = b"\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88\x00\x00\x22\x22\x00\x00\x88\x88"
 
 
 def run(cmd, **kwargs):
     grass.run_command(cmd, quiet=True, **kwargs)
 
+
 def wxGUI():
     class OverviewCanvas(wx.ScrolledWindow):
-
         def __init__(self, app, parent):
             wx.ScrolledWindow.__init__(self, parent)
             self.app = app
 
-            self.width = app.total['cols']
-            self.height = app.total['rows']
+            self.width = app.total["cols"]
+            self.height = app.total["rows"]
 
             self.SetVirtualSize((self.width, self.height))
             self.SetScrollRate(1, 1)
@@ -130,7 +131,7 @@ def wxGUI():
             self.Bind(wx.EVT_LEFT_UP, self.OnMouse)
             self.Bind(wx.EVT_PAINT, self.OnPaint)
 
-            run('r.out.ppm', input=app.inmap, output=app.tempfile)
+            run("r.out.ppm", input=app.inmap, output=app.tempfile)
 
             self.image = wx.Bitmap(wx.Image(app.tempfile))
             grass.try_remove(app.tempfile)
@@ -151,8 +152,8 @@ def wxGUI():
             dc.Blit(0, 0, self.width, self.height, src, 0, 0)
             src.SelectObjectAsSource(wx.NullBitmap)
 
-            dc.SetPen(wx.Pen('red', style=wx.LONG_DASH))
-            dc.SetBrush(wx.Brush('black', style=wx.TRANSPARENT))
+            dc.SetPen(wx.Pen("red", style=wx.LONG_DASH))
+            dc.SetBrush(wx.Brush("black", style=wx.TRANSPARENT))
             dc.DrawRectangle(x0, y0, dx, dy)
             dc.SetBrush(wx.NullBrush)
             dc.SetPen(wx.NullPen)
@@ -173,15 +174,9 @@ def wxGUI():
             self.app.force_window()
             self.Refresh()
 
-
     class OverviewWindow(wx.Frame):
-
         def __init__(self, app):
-            wx.Frame.__init__(
-                self,
-                None,
-                title="d.rast.edit overview (%s)" %
-                app.inmap)
+            wx.Frame.__init__(self, None, title="d.rast.edit overview (%s)" % app.inmap)
             self.app = app
 
             self.canvas = OverviewCanvas(app, parent=self)
@@ -191,9 +186,7 @@ def wxGUI():
         def OnClose(self, ev):
             self.app.finalize()
 
-
     class Canvas(wx.ScrolledWindow):
-
         def __init__(self, app, parent):
             wx.ScrolledWindow.__init__(self, parent)
             self.app = app
@@ -244,18 +237,18 @@ def wxGUI():
 
             val = self.app.values[r][c]
             if val is None:
-                fill = 'black'
+                fill = "black"
                 stipple = self.gray12
             else:
                 fill = self.app.get_color(val)
                 stipple = None
 
             if r == self.row and c == self.col:
-                outline = 'red'
+                outline = "red"
             elif self.app.changed[r][c]:
-                outline = 'white'
+                outline = "white"
             else:
-                outline = 'black'
+                outline = "black"
 
             dc.SetPen(wx.Pen(outline))
 
@@ -278,7 +271,7 @@ def wxGUI():
             if not self.app.angles:
                 return
 
-            if self.app.angles[r][c] == '*':
+            if self.app.angles[r][c] == "*":
                 return
 
             cx = (x0 + x1) / 2
@@ -298,9 +291,9 @@ def wxGUI():
 
             r, g, b, a = wx.Colour(fill).Get()
             if r + g + b > 384:
-                line = 'black'
+                line = "black"
             else:
-                line = 'white'
+                line = "white"
 
             dc.SetPen(wx.Pen(line))
             dc.DrawLine(x0, y0, x1, y1)
@@ -361,9 +354,7 @@ def wxGUI():
             (x, y) = self.CalcScrolledPosition(x, y)
             self.RefreshRect((x, y, self.size, self.size))
 
-
     class ColorPanel(Panel):
-
         def __init__(self, **kwargs):
             Panel.__init__(self, **kwargs)
             self.stipple = wx.Bitmap(bits=gray12_bits, width=16, height=16)
@@ -380,23 +371,21 @@ def wxGUI():
             if not dc:
                 dc = ClientDC(self)
 
-            brush = wx.Brush('black', style=wx.STIPPLE)
+            brush = wx.Brush("black", style=wx.STIPPLE)
             brush.SetStipple(self.stipple)
             dc.SetBackground(brush)
             dc.Clear()
             dc.SetBackground(wx.NullBrush)
 
         def SetNullBackgroundColour(self):
-            Panel.SetBackgroundColour(self, 'gray')
+            Panel.SetBackgroundColour(self, "gray")
             self.null_bg = True
 
         def SetBackgroundColour(self, color):
             Panel.SetBackgroundColour(self, color)
             self.null_bg = False
 
-
     class MainWindow(wx.Frame):
-
         def __init__(self, app):
             wx.Frame.__init__(self, None, title="d.rast.edit (%s)" % app.inmap)
             self.app = app
@@ -420,14 +409,14 @@ def wxGUI():
 
             tools = wx.BoxSizer(wx.HORIZONTAL)
 
-            l = wx.StaticText(parent=self, label='New Value:')
+            l = wx.StaticText(parent=self, label="New Value:")
             tools.Add(l, flag=wx.ALIGN_CENTER_VERTICAL)
             tools.AddSpacer(5)
 
             self.newval = wx.TextCtrl(parent=self, style=wx.TE_PROCESS_ENTER)
             tools.Add(self.newval, flag=wx.ALIGN_CENTER_VERTICAL)
 
-            l = wx.StaticText(parent=self, label='Color:')
+            l = wx.StaticText(parent=self, label="Color:")
             tools.Add(l, flag=wx.ALIGN_CENTER_VERTICAL)
             tools.AddSpacer(5)
 
@@ -456,30 +445,28 @@ def wxGUI():
 
         def OnReturn(self, ev):
             self.app.brush = self.newval.GetValue()
-            if self.app.brush != '*' and self.app.brush.strip('0123456789') != '':
-                self.app.brush = '*'
+            if self.app.brush != "*" and self.app.brush.strip("0123456789") != "":
+                self.app.brush = "*"
             self.brush_update()
 
         def update_status(self):
-            for i, key in enumerate(['row', 'col', 'x', 'y', 'value', 'aspect']):
+            for i, key in enumerate(["row", "col", "x", "y", "value", "aspect"]):
                 s = "%s%s: %s" % (key[0].upper(), key[1:], self.app.status[key])
                 self.status.SetStatusText(s, i)
 
         def clear_status(self):
             for key in self.status:
-                self.status[key] = ''
+                self.status[key] = ""
 
         def brush_update(self):
             self.newval.ChangeValue(self.app.brush)
-            if self.app.brush == '*':
+            if self.app.brush == "*":
                 self.color.SetNullBackgroundColour()
             else:
                 self.color.SetBackgroundColour(self.app.get_color(self.app.brush))
             self.color.Refresh()
 
-
     class Application(wx.App):
-
         def __init__(self, options):
             self.options = options
             wx.App.__init__(self)
@@ -487,31 +474,31 @@ def wxGUI():
         def initialize(self):
             grass.use_temp_region()
 
-            run('g.region', raster=self.inmap)
+            run("g.region", raster=self.inmap)
 
             reg = grass.region()
             for k, f in wind_keys.values():
                 self.total[k] = (f)(reg[k])
 
-            if self.cols > self.total['cols']:
-                self.cols = self.total['cols']
-            if self.rows > self.total['rows']:
-                self.rows = self.total['rows']
+            if self.cols > self.total["cols"]:
+                self.cols = self.total["cols"]
+            if self.rows > self.total["rows"]:
+                self.rows = self.total["rows"]
 
             tempbase = grass.tempfile()
             grass.try_remove(tempbase)
 
-            self.tempfile = tempbase + '.ppm'
-            self.tempmap = 'tmp.d.rast.edit'
+            self.tempfile = tempbase + ".ppm"
+            self.tempmap = "tmp.d.rast.edit"
 
             atexit.register(self.cleanup)
 
-            run('g.copy', raster=(self.inmap, self.outmap), overwrite=True)
-            run('r.colors', map=self.outmap, rast=self.inmap)
+            run("g.copy", raster=(self.inmap, self.outmap), overwrite=True)
+            run("r.colors", map=self.outmap, rast=self.inmap)
 
         def cleanup(self):
             grass.try_remove(self.tempfile)
-            run('g.remove', flags='f', type='raster', name=self.tempmap)
+            run("g.remove", flags="f", type="raster", name=self.tempmap)
 
         def finalize(self):
             self.save_map()
@@ -519,48 +506,46 @@ def wxGUI():
 
         def save_map(self):
             p = grass.feed_command(
-                'r.in.ascii',
-                input='-',
-                output=self.tempmap,
-                quiet=True,
-                overwrite=True)
+                "r.in.ascii", input="-", output=self.tempmap, quiet=True, overwrite=True
+            )
             outf = p.stdin
-            outf.write(grass.encode("north: %f\n" % self.wind['n']))
-            outf.write(grass.encode("south: %f\n" % self.wind['s']))
-            outf.write(grass.encode("east: %f\n" % self.wind['e']))
-            outf.write(grass.encode("west: %f\n" % self.wind['w']))
-            outf.write(grass.encode("rows: %d\n" % self.wind['rows']))
-            outf.write(grass.encode("cols: %d\n" % self.wind['cols']))
+            outf.write(grass.encode("north: %f\n" % self.wind["n"]))
+            outf.write(grass.encode("south: %f\n" % self.wind["s"]))
+            outf.write(grass.encode("east: %f\n" % self.wind["e"]))
+            outf.write(grass.encode("west: %f\n" % self.wind["w"]))
+            outf.write(grass.encode("rows: %d\n" % self.wind["rows"]))
+            outf.write(grass.encode("cols: %d\n" % self.wind["cols"]))
             outf.write(grass.encode("null: *\n"))
 
-            for row in range(self.wind['rows']):
-                for col in range(self.wind['cols']):
+            for row in range(self.wind["rows"]):
+                for col in range(self.wind["cols"]):
                     if col > 0:
                         outf.write(grass.encode(" "))
                     val = self.values[row][col]
                     if val and self.changed[row][col]:
                         outf.write(grass.encode("%s" % val))
                     else:
-                        outf.write(grass.encode('*'))
+                        outf.write(grass.encode("*"))
                 outf.write(grass.encode("\n"))
 
             outf.close()
             p.wait()
 
-            run('g.region', raster=self.inmap)
-            run('r.patch',
-                input=(self.tempmap,
-                       self.outmap),
+            run("g.region", raster=self.inmap)
+            run(
+                "r.patch",
+                input=(self.tempmap, self.outmap),
                 output=self.outmap,
-                overwrite=True)
-            run('r.colors', map=self.outmap, rast=self.inmap)
-            run('g.remove', flags='f', type='raster', name=self.tempmap)
+                overwrite=True,
+            )
+            run("r.colors", map=self.outmap, rast=self.inmap)
+            run("g.remove", flags="f", type="raster", name=self.tempmap)
 
         def read_header(self, infile):
             wind = {}
             for i in range(6):
-                line = grass.decode(infile.readline()).rstrip('\r\n')
-                f = line.split(':')
+                line = grass.decode(infile.readline()).rstrip("\r\n")
+                f = line.split(":")
                 key = f[0]
                 val = f[1].strip()
                 (k, f) = wind_keys[key]
@@ -569,15 +554,15 @@ def wxGUI():
 
         def read_data(self, infile):
             values = []
-            for row in range(self.wind['rows']):
-                line = grass.decode(infile.readline()).rstrip('\r\n')
+            for row in range(self.wind["rows"]):
+                line = grass.decode(infile.readline()).rstrip("\r\n")
                 values.append(line.split())
             return values
 
         def load_map(self):
-            run('g.region', **self.wind)
+            run("g.region", **self.wind)
 
-            p = grass.pipe_command('r.out.ascii', input=self.inmap, quiet=True)
+            p = grass.pipe_command("r.out.ascii", input=self.inmap, quiet=True)
             self.wind = self.read_header(p.stdout)
             self.values = self.read_data(p.stdout)
             self.changed = [[False for c in row] for row in self.values]
@@ -585,12 +570,12 @@ def wxGUI():
 
             self.clear_changes()
 
-            run('r.out.ppm', input=self.inmap, output=self.tempfile)
+            run("r.out.ppm", input=self.inmap, output=self.tempfile)
             colorimg = wx.Image(self.tempfile)
             grass.try_remove(self.tempfile)
 
-            for row in range(self.wind['rows']):
-                for col in range(self.wind['cols']):
+            for row in range(self.wind["rows"]):
+                for col in range(self.wind["cols"]):
                     val = self.values[row][col]
                     if val in self.colors:
                         continue
@@ -606,14 +591,14 @@ def wxGUI():
             if not self.aspect:
                 return
 
-            p = grass.pipe_command('r.out.ascii', input=self.aspect, quiet=True)
+            p = grass.pipe_command("r.out.ascii", input=self.aspect, quiet=True)
             self.read_header(p.stdout)
             self.angles = self.read_data(p.stdout)
             p.wait()
 
         def clear_changes(self):
-            for row in range(self.wind['rows']):
-                for col in range(self.wind['cols']):
+            for row in range(self.wind["rows"]):
+                for col in range(self.wind["cols"]):
                     self.changed[row][col] = 0
 
         def update_window(self):
@@ -622,12 +607,12 @@ def wxGUI():
             x1 = x0 + self.cols
             y1 = y0 + self.rows
 
-            self.wind['n'] = self.total['n'] - y0 * self.total['nsres']
-            self.wind['s'] = self.total['n'] - y1 * self.total['nsres']
-            self.wind['w'] = self.total['w'] + x0 * self.total['ewres']
-            self.wind['e'] = self.total['w'] + x1 * self.total['ewres']
-            self.wind['rows'] = self.rows
-            self.wind['cols'] = self.cols
+            self.wind["n"] = self.total["n"] - y0 * self.total["nsres"]
+            self.wind["s"] = self.total["n"] - y1 * self.total["nsres"]
+            self.wind["w"] = self.total["w"] + x0 * self.total["ewres"]
+            self.wind["e"] = self.total["w"] + x1 * self.total["ewres"]
+            self.wind["rows"] = self.rows
+            self.wind["cols"] = self.cols
 
         def change_window(self):
             wait = wx.BusyCursor()
@@ -641,30 +626,34 @@ def wxGUI():
         def force_window(self):
             if self.origin_x < 0:
                 self.origin_x = 0
-            if self.origin_x > self.total['cols'] - self.cols:
-                self.origin_x = self.total['cols'] - self.cols
+            if self.origin_x > self.total["cols"] - self.cols:
+                self.origin_x = self.total["cols"] - self.cols
             if self.origin_y < 0:
                 self.origin_y = 0
-            if self.origin_y > self.total['rows'] - self.rows:
-                self.origin_y = self.total['rows'] - self.rows
+            if self.origin_y > self.total["rows"] - self.rows:
+                self.origin_y = self.total["rows"] - self.rows
 
         def update_status(self, row, col):
-            self.status['row'] = row
-            self.status['col'] = col
-            self.status['x'] = self.wind[
-                'e'] + (col + 0.5) * (self.wind['e'] - self.wind['w']) / self.wind['cols']
-            self.status['y'] = self.wind[
-                'n'] - (row + 0.5) * (self.wind['n'] - self.wind['s']) / self.wind['rows']
-            self.status['value'] = self.values[row][col]
+            self.status["row"] = row
+            self.status["col"] = col
+            self.status["x"] = (
+                self.wind["e"]
+                + (col + 0.5) * (self.wind["e"] - self.wind["w"]) / self.wind["cols"]
+            )
+            self.status["y"] = (
+                self.wind["n"]
+                - (row + 0.5) * (self.wind["n"] - self.wind["s"]) / self.wind["rows"]
+            )
+            self.status["value"] = self.values[row][col]
             if self.angles:
-                self.status['aspect'] = self.angles[row][col]
+                self.status["aspect"] = self.angles[row][col]
 
-        def force_color(val):
-            run('g.region', rows=1, cols=1)
-            run('r.mapcalc', expression="%s = %d" % (self.tempmap, val))
-            run('r.colors', map=self.tempmap, rast=self.inmap)
-            run('r.out.ppm', input=self.tempmap, out=self.tempfile)
-            run('g.remove', flags='f', type='raster', name=self.tempmap)
+        def force_color(self, val):
+            run("g.region", rows=1, cols=1)
+            run("r.mapcalc", expression="%s = %d" % (self.tempmap, val))
+            run("r.colors", map=self.tempmap, rast=self.inmap)
+            run("r.out.ppm", input=self.tempmap, out=self.tempfile)
+            run("g.remove", flags="f", type="raster", name=self.tempmap)
 
             tempimg = wx.Image(self.tempfile)
             grass.try_remove(self.tempfile)
@@ -694,29 +683,29 @@ def wxGUI():
             self.overview.Show()
 
         def OnInit(self):
-            self.outmap = self.options['output']
-            self.inmap = self.options['input']
-            self.aspect = self.options['aspect']
-            self.width = int(self.options['width'])
-            self.height = int(self.options['height'])
-            self.size = int(self.options['size'])
-            self.rows = int(self.options['rows'])
-            self.cols = int(self.options['cols'])
+            self.outmap = self.options["output"]
+            self.inmap = self.options["input"]
+            self.aspect = self.options["aspect"]
+            self.width = int(self.options["width"])
+            self.height = int(self.options["height"])
+            self.size = int(self.options["size"])
+            self.rows = int(self.options["rows"])
+            self.cols = int(self.options["cols"])
 
             self.status = {
-                'row': '',
-                'col': '',
-                'x': '',
-                'y': '',
-                'value': '',
-                'aspect': ''
+                "row": "",
+                "col": "",
+                "x": "",
+                "y": "",
+                "value": "",
+                "aspect": "",
             }
 
             self.values = None
             self.changed = None
             self.angles = None
             self.colors = {}
-            self.brush = '*'
+            self.brush = "*"
             self.origin_x = 0
             self.origin_y = 0
             self.wind = {}

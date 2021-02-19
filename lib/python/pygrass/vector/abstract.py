@@ -10,9 +10,10 @@ import grass.lib.vector as libvect
 from grass.pygrass.vector.vector_type import MAPTYPE
 
 from grass.pygrass import utils
-from grass.pygrass.errors import GrassError, OpenError, must_be_open
+from grass.pygrass.errors import must_be_open
 from grass.pygrass.vector.table import DBlinks, Link
 from grass.pygrass.vector.find import PointFinder, BboxFinder, PolygonFinder
+from grass.exceptions import GrassError, OpenError
 
 test_vector_name = "abstract_doctest_map"
 

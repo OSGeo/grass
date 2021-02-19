@@ -8,6 +8,7 @@ import numpy as np
 # import GRASS modules
 #
 from grass.script import fatal
+from grass.exceptions import OpenError
 
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -18,7 +19,7 @@ libgis.G_gisinit('')
 #
 # import pygrass modules
 #
-from grass.pygrass.errors import OpenError, must_be_open
+from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
 

@@ -121,10 +121,10 @@ from grass.exceptions import CalledModuleError
 def bboxToPoints(bbox):
     """Make points that are the corners of a bounding box"""
     points = []
-    points.append((bbox['w'], bbox['s']))
-    points.append((bbox['w'], bbox['n']))
-    points.append((bbox['e'], bbox['n']))
-    points.append((bbox['e'], bbox['s']))
+    points.append((bbox["w"], bbox["s"]))
+    points.append((bbox["w"], bbox["n"]))
+    points.append((bbox["e"], bbox["n"]))
+    points.append((bbox["e"], bbox["s"]))
 
     return points
 
@@ -147,10 +147,10 @@ def pointsToBbox(points):
         if max_y < point[1]:
             max_y = point[1]
 
-    bbox['n'] = max_y
-    bbox['s'] = min_y
-    bbox['w'] = min_x
-    bbox['e'] = max_x
+    bbox["n"] = max_y
+    bbox["s"] = min_y
+    bbox["w"] = min_x
+    bbox["e"] = max_x
 
     return bbox
 
@@ -160,26 +160,28 @@ def project(file, source, dest):
     errors = 0
     points = []
     try:
-        ret = gcore.read_command('m.proj',
-                                 quiet=True,
-                                 flags='d',
-                                 proj_in=source['proj'],
-                                 proj_out=dest['proj'],
-                                 sep=';',
-                                 input=file)
+        ret = gcore.read_command(
+            "m.proj",
+            quiet=True,
+            flags="d",
+            proj_in=source["proj"],
+            proj_out=dest["proj"],
+            sep=";",
+            input=file,
+        )
         ret = decode(ret)
     except CalledModuleError:
-        gcore.fatal(cs2cs + ' failed')
+        gcore.fatal(cs2cs + " failed")
 
     if not ret:
-        gcore.fatal(cs2cs + ' failed')
+        gcore.fatal(cs2cs + " failed")
 
     for line in ret.splitlines():
         if "*" in line:
             errors += 1
         else:
-            p_x2, p_y2, p_z2 = list(map(float, line.split(';')))
-            points.append((p_x2 / dest['scale'], p_y2 / dest['scale']))
+            p_x2, p_y2, p_z2 = list(map(float, line.split(";")))
+            points.append((p_x2 / dest["scale"], p_y2 / dest["scale"]))
 
     return points, errors
 
@@ -190,8 +192,9 @@ def projectPoints(points, source, dest):
 
     input = tempfile.NamedTemporaryFile(mode="wt")
     for point in points:
-        input.file.write('%f;%f\n' % (point[0] * source['scale'],
-                                      point[1] * source['scale']))
+        input.file.write(
+            "%f;%f\n" % (point[0] * source["scale"], point[1] * source["scale"])
+        )
     input.file.flush()
 
     dest_points, errors = project(input.name, source, dest)
@@ -212,21 +215,23 @@ def sideLengths(points, xmetric, ymetric):
         sl_d = math.sqrt(sl_x * sl_x + sl_y * sl_y)
         ret.append(sl_d)
 
-    return {'x': (ret[1], ret[3]), 'y': (ret[0], ret[2])}
+    return {"x": (ret[1], ret[3]), "y": (ret[0], ret[2])}
 
 
 def bboxesIntersect(bbox_1, bbox_2):
     """Determine if two bounding boxes intersect"""
-    bi_a1 = (bbox_1['w'], bbox_1['s'])
-    bi_a2 = (bbox_1['e'], bbox_1['n'])
-    bi_b1 = (bbox_2['w'], bbox_2['s'])
-    bi_b2 = (bbox_2['e'], bbox_2['n'])
+    bi_a1 = (bbox_1["w"], bbox_1["s"])
+    bi_a2 = (bbox_1["e"], bbox_1["n"])
+    bi_b1 = (bbox_2["w"], bbox_2["s"])
+    bi_b2 = (bbox_2["e"], bbox_2["n"])
     cin = [False, False]
     for i in (0, 1):
-        if (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b1[i]) or \
-           (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b2[i]) or \
-           (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a1[i]) or \
-           (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a2[i]):
+        if (
+            (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b1[i])
+            or (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b2[i])
+            or (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a1[i])
+            or (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a2[i])
+        ):
             cin[i] = True
 
     if cin[0] and cin[1]:
@@ -237,93 +242,95 @@ def bboxesIntersect(bbox_1, bbox_2):
 
 def main():
     # Take into account those extra pixels we'll be a addin'
-    max_cols = int(options['maxcols']) - int(options['overlap'])
-    max_rows = int(options['maxrows']) - int(options['overlap'])
+    max_cols = int(options["maxcols"]) - int(options["overlap"])
+    max_rows = int(options["maxrows"]) - int(options["overlap"])
 
     if max_cols == 0:
-        gcore.fatal(_("It is not possible to set 'maxcols=%s' and "
-                      "'overlap=%s'. Please set maxcols>overlap" %
-                      (options['maxcols'], options['overlap'])))
+        gcore.fatal(
+            _(
+                "It is not possible to set 'maxcols=%s' and "
+                "'overlap=%s'. Please set maxcols>overlap"
+                % (options["maxcols"], options["overlap"])
+            )
+        )
     elif max_rows == 0:
-        gcore.fatal(_("It is not possible to set 'maxrows=%s' and "
-                      "'overlap=%s'. Please set maxrows>overlap" %
-                      (options['maxrows'], options['overlap'])))
+        gcore.fatal(
+            _(
+                "It is not possible to set 'maxrows=%s' and "
+                "'overlap=%s'. Please set maxrows>overlap"
+                % (options["maxrows"], options["overlap"])
+            )
+        )
     # destination projection
-    if not options['destproj']:
-        dest_proj = gcore.read_command('g.proj',
-                                       quiet=True,
-                                       flags='jf')
-        dest_proj = decode(dest_proj).rstrip('\n')
+    if not options["destproj"]:
+        dest_proj = gcore.read_command("g.proj", quiet=True, flags="jf")
+        dest_proj = decode(dest_proj).rstrip("\n")
         if not dest_proj:
-            gcore.fatal(_('g.proj failed'))
+            gcore.fatal(_("g.proj failed"))
     else:
-        dest_proj = options['destproj']
+        dest_proj = options["destproj"]
     gcore.debug("Getting destination projection -> '%s'" % dest_proj)
 
     # projection scale
-    if not options['destscale']:
-        ret = gcore.parse_command('g.proj',
-                                  quiet=True,
-                                  flags='j')
+    if not options["destscale"]:
+        ret = gcore.parse_command("g.proj", quiet=True, flags="j")
         if not ret:
-            gcore.fatal(_('g.proj failed'))
+            gcore.fatal(_("g.proj failed"))
 
-        if '+to_meter' in ret:
-            dest_scale = ret['+to_meter'].strip()
+        if "+to_meter" in ret:
+            dest_scale = ret["+to_meter"].strip()
         else:
-            gcore.warning(
-                _("Scale (%s) not found, assuming '1'") %
-                '+to_meter')
-            dest_scale = '1'
+            gcore.warning(_("Scale (%s) not found, assuming '1'") % "+to_meter")
+            dest_scale = "1"
     else:
-        dest_scale = options['destscale']
-    gcore.debug('Getting destination projection scale -> %s' % dest_scale)
+        dest_scale = options["destscale"]
+    gcore.debug("Getting destination projection scale -> %s" % dest_scale)
 
     # set up the projections
-    srs_source = {'proj': options['sourceproj'],
-                  'scale': float(options['sourcescale'])}
-    srs_dest = {'proj': dest_proj, 'scale': float(dest_scale)}
+    srs_source = {"proj": options["sourceproj"], "scale": float(options["sourcescale"])}
+    srs_dest = {"proj": dest_proj, "scale": float(dest_scale)}
 
-    if options['region']:
-        gcore.run_command('g.region',
-                          quiet=True,
-                          region=options['region'])
+    if options["region"]:
+        gcore.run_command("g.region", quiet=True, region=options["region"])
     dest_bbox = gcore.region()
-    gcore.debug('Getting destination region')
+    gcore.debug("Getting destination region")
 
     # output field separator
-    fs = separator(options['separator'])
+    fs = separator(options["separator"])
 
     # project the destination region into the source:
-    gcore.verbose('Projecting destination region into source...')
+    gcore.verbose("Projecting destination region into source...")
     dest_bbox_points = bboxToPoints(dest_bbox)
 
-    dest_bbox_source_points, errors_dest = projectPoints(dest_bbox_points,
-                                                         source=srs_dest,
-                                                         dest=srs_source)
+    dest_bbox_source_points, errors_dest = projectPoints(
+        dest_bbox_points, source=srs_dest, dest=srs_source
+    )
 
     if len(dest_bbox_source_points) == 0:
-        gcore.fatal(_("There are no tiles available. Probably the output "
-                      "projection system it is not compatible with the "
-                      "projection of the current location"))
+        gcore.fatal(
+            _(
+                "There are no tiles available. Probably the output "
+                "projection system it is not compatible with the "
+                "projection of the current location"
+            )
+        )
 
     source_bbox = pointsToBbox(dest_bbox_source_points)
 
-    gcore.verbose('Projecting source bounding box into destination...')
+    gcore.verbose("Projecting source bounding box into destination...")
 
     source_bbox_points = bboxToPoints(source_bbox)
 
-    source_bbox_dest_points, errors_source = projectPoints(source_bbox_points,
-                                                           source=srs_source,
-                                                           dest=srs_dest)
+    source_bbox_dest_points, errors_source = projectPoints(
+        source_bbox_points, source=srs_source, dest=srs_dest
+    )
 
-    x_metric = 1 / dest_bbox['ewres']
-    y_metric = 1 / dest_bbox['nsres']
+    x_metric = 1 / dest_bbox["ewres"]
+    y_metric = 1 / dest_bbox["nsres"]
 
-    gcore.verbose('Computing length of sides of source bounding box...')
+    gcore.verbose("Computing length of sides of source bounding box...")
 
-    source_bbox_dest_lengths = sideLengths(source_bbox_dest_points,
-                                           x_metric, y_metric)
+    source_bbox_dest_lengths = sideLengths(source_bbox_dest_points, x_metric, y_metric)
 
     # Find the skewedness of the two directions.
     # Define it to be greater than one
@@ -340,8 +347,8 @@ def main():
     # points later.
 
     bigger = []
-    bigger.append(max(source_bbox_dest_lengths['x']))
-    bigger.append(max(source_bbox_dest_lengths['y']))
+    bigger.append(max(source_bbox_dest_lengths["x"]))
+    bigger.append(max(source_bbox_dest_lengths["y"]))
     maxdim = (max_cols, max_rows)
 
     # Compute the number and size of tiles to use in each direction
@@ -350,7 +357,7 @@ def main():
     # I'm going to make the numbers all simpler and add this extra cell to
     # every tile.
 
-    gcore.message(_('Computing tiling...'))
+    gcore.message(_("Computing tiling..."))
     tiles = [-1, -1]
     tile_base_size = [-1, -1]
     tiles_extra_1 = [-1, -1]
@@ -369,65 +376,98 @@ def main():
             tile_size[i] = tile_base_size[i] + 1
         tileset_size[i] = int(tile_size[i] * tiles[i])
         # Add overlap to tiles (doesn't effect tileset_size
-        tile_size_overlap[i] = tile_size[i] + int(options['overlap'])
+        tile_size_overlap[i] = tile_size[i] + int(options["overlap"])
 
-    gcore.verbose("There will be %d by %d tiles each %d by %d cells" %
-                  (tiles[0], tiles[1], tile_size[0], tile_size[1]))
+    gcore.verbose(
+        "There will be %d by %d tiles each %d by %d cells"
+        % (tiles[0], tiles[1], tile_size[0], tile_size[1])
+    )
 
     ximax = tiles[0]
     yimax = tiles[1]
 
-    min_x = source_bbox['w']
-    min_y = source_bbox['s']
-    max_x = source_bbox['e']
-    max_y = source_bbox['n']
-    span_x = (max_x - min_x)
-    span_y = (max_y - min_y)
+    min_x = source_bbox["w"]
+    min_y = source_bbox["s"]
+    max_x = source_bbox["e"]
+    max_y = source_bbox["n"]
+    span_x = max_x - min_x
+    span_y = max_y - min_y
 
     xi = 0
-    tile_bbox = {'w': -1, 's': -1, 'e': -1, 'n': -1}
+    tile_bbox = {"w": -1, "s": -1, "e": -1, "n": -1}
 
     if errors_dest > 0:
-        gcore.warning(_("During computation %i tiles could not be created" %
-                        errors_dest))
+        gcore.warning(
+            _("During computation %i tiles could not be created" % errors_dest)
+        )
 
     while xi < ximax:
-        tile_bbox['w'] = float(
-            min_x) + (float(xi) * float(tile_size[0]) / float(tileset_size[0])) * float(span_x)
-        tile_bbox['e'] = float(min_x) + (float(xi + 1) * float(tile_size_overlap[0]
-                                                               ) / float(tileset_size[0])) * float(span_x)
+        tile_bbox["w"] = float(min_x) + (
+            float(xi) * float(tile_size[0]) / float(tileset_size[0])
+        ) * float(span_x)
+        tile_bbox["e"] = float(min_x) + (
+            float(xi + 1) * float(tile_size_overlap[0]) / float(tileset_size[0])
+        ) * float(span_x)
         yi = 0
         while yi < yimax:
-            tile_bbox['s'] = float(
-                min_y) + (float(yi) * float(tile_size[1]) / float(tileset_size[1])) * float(span_y)
-            tile_bbox['n'] = float(min_y) + (
-                float(yi + 1) * float(tile_size_overlap[1]) /
-                float(tileset_size[1])) * float(span_y)
+            tile_bbox["s"] = float(min_y) + (
+                float(yi) * float(tile_size[1]) / float(tileset_size[1])
+            ) * float(span_y)
+            tile_bbox["n"] = float(min_y) + (
+                float(yi + 1) * float(tile_size_overlap[1]) / float(tileset_size[1])
+            ) * float(span_y)
             tile_bbox_points = bboxToPoints(tile_bbox)
-            tile_dest_bbox_points, errors = projectPoints(tile_bbox_points,
-                                                          source=srs_source,
-                                                          dest=srs_dest)
+            tile_dest_bbox_points, errors = projectPoints(
+                tile_bbox_points, source=srs_source, dest=srs_dest
+            )
             tile_dest_bbox = pointsToBbox(tile_dest_bbox_points)
             if bboxesIntersect(tile_dest_bbox, dest_bbox):
-                if flags['w']:
-                    print("bbox=%s,%s,%s,%s&width=%s&height=%s" %
-                          (tile_bbox['w'], tile_bbox['s'], tile_bbox['e'],
-                           tile_bbox['n'], tile_size_overlap[0],
-                           tile_size_overlap[1]))
-                elif flags['g']:
-                    print("w=%s;s=%s;e=%s;n=%s;cols=%s;rows=%s" %
-                          (tile_bbox['w'], tile_bbox['s'], tile_bbox['e'],
-                           tile_bbox['n'], tile_size_overlap[0],
-                           tile_size_overlap[1]))
+                if flags["w"]:
+                    print(
+                        "bbox=%s,%s,%s,%s&width=%s&height=%s"
+                        % (
+                            tile_bbox["w"],
+                            tile_bbox["s"],
+                            tile_bbox["e"],
+                            tile_bbox["n"],
+                            tile_size_overlap[0],
+                            tile_size_overlap[1],
+                        )
+                    )
+                elif flags["g"]:
+                    print(
+                        "w=%s;s=%s;e=%s;n=%s;cols=%s;rows=%s"
+                        % (
+                            tile_bbox["w"],
+                            tile_bbox["s"],
+                            tile_bbox["e"],
+                            tile_bbox["n"],
+                            tile_size_overlap[0],
+                            tile_size_overlap[1],
+                        )
+                    )
                 else:
-                    print("%s%s%s%s%s%s%s%s%s%s%s" %
-                          (tile_bbox['w'], fs, tile_bbox['s'], fs,
-                           tile_bbox['e'], fs, tile_bbox['n'], fs,
-                           tile_size_overlap[0], fs, tile_size_overlap[1]))
+                    print(
+                        "%s%s%s%s%s%s%s%s%s%s%s"
+                        % (
+                            tile_bbox["w"],
+                            fs,
+                            tile_bbox["s"],
+                            fs,
+                            tile_bbox["e"],
+                            fs,
+                            tile_bbox["n"],
+                            fs,
+                            tile_size_overlap[0],
+                            fs,
+                            tile_size_overlap[1],
+                        )
+                    )
             yi += 1
         xi += 1
 
+
 if __name__ == "__main__":
-    cs2cs = 'cs2cs'
+    cs2cs = "cs2cs"
     options, flags = gcore.parser()
     sys.exit(main())

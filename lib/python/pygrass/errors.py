@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 
-from grass.exceptions import (FlagError, ParameterError, DBError,
-                              GrassError, OpenError)
+from grass.exceptions import GrassError
 
 from grass.pygrass.messages import get_msgr
 import grass.lib.gis as libgis

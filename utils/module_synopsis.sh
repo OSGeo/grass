@@ -14,7 +14,7 @@
 #############################################################################
 #
 # PDF output requires the Palatino font.
-# Run this script from the tools/ directory in the souce code.
+# Run this script from the utils/ directory in the source code.
 #   (TeX needs to be able to find grasslogo_vector.pdf)
 #
 
@@ -190,7 +190,7 @@ sort "$TMP" > "$SYNOP"
 cp "$SYNOP" "${TMP}.txt"
 
 ####### create HTML source #######
-# poor cousin to full_index.html from tools/build_html_index.sh
+# poor cousin to full_index.html from build_html_index.sh
 # todo $MODULE.html links
 g.message "Generating HTML (writing to \$GISBASE/docs/html/) ..."
 

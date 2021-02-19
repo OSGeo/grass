@@ -56,7 +56,7 @@ import os
 import sys
 import atexit
 
-from grass.script import run_command, message, parser
+from grass.script import parser
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
@@ -66,26 +66,32 @@ TMP = []
 def cleanup():
     for name in TMP:
         try:
-            grass.run_command('g.remove', flags='f',
-                              type='vector', name=name, quiet=True)
+            grass.run_command(
+                "g.remove", flags="f", type="vector", name=name, quiet=True
+            )
 
         except CalledModuleError as e:
-            grass.fatal(_("Deleting of temporary layer failed. "
-                          "Check above error messages and "
-                          "see following details:\n%s") % e)
+            grass.fatal(
+                _(
+                    "Deleting of temporary layer failed. "
+                    "Check above error messages and "
+                    "see following details:\n%s"
+                )
+                % e
+            )
 
 
 def section_message(msg):
-    grass.message('{delim}\n{msg}\n{delim}'.format(msg=msg, delim='-' * 80))
+    grass.message("{delim}\n{msg}\n{delim}".format(msg=msg, delim="-" * 80))
 
 
 def main():
-    input_map = opt['input']
-    clip_map = opt['clip']
-    output_map = opt['output']
+    input_map = opt["input"]
+    clip_map = opt["clip"]
+    output_map = opt["output"]
 
-    flag_dissolve = flg['d']
-    flag_region = flg['r']
+    flag_dissolve = flg["d"]
+    flag_region = flg["r"]
 
     # ======================================== #
     # ========== INPUT MAP TOPOLOGY ========== #
@@ -93,12 +99,12 @@ def main():
     vinfo = grass.vector_info_topo(input_map)
 
     # ==== only points ==== #
-    if (vinfo['points'] > 0 and vinfo['lines'] == 0 and vinfo['areas'] == 0):
+    if vinfo["points"] > 0 and vinfo["lines"] == 0 and vinfo["areas"] == 0:
 
         # ==================================== #
         # ========== CLIP BY REGION ========== #
         # ==================================== #
-        if (flag_region):
+        if flag_region:
             clip_by_region(input_map, output_map, clip_select)
 
         # ================================== #
@@ -112,20 +118,22 @@ def main():
     # ==== lines, areas, lines + areas ==== #
     # ==== points + areas, points + lines, points + areas + lines ==== #
     else:
-        if (vinfo['points'] > 0):
-            grass.warning("Input map contains multiple geometry, "
-                          "only lines and areas will be clipped.")
+        if vinfo["points"] > 0:
+            grass.warning(
+                "Input map contains multiple geometry, "
+                "only lines and areas will be clipped."
+            )
 
         # ==================================== #
         # ========== CLIP BY REGION ========== #
         # ==================================== #
-        if (flag_region):
+        if flag_region:
             clip_by_region(input_map, output_map, clip_overlay)
 
         # ===================================================== #
         # ========== CLIP WITHOUT DISSOLVED CLIP MAP ========== #
         # ===================================================== #
-        elif (flag_dissolve):
+        elif flag_dissolve:
             section_message("Clipping without dissolved clip map.")
             clip_overlay(input_map, clip_map, output_map)
 
@@ -136,12 +144,11 @@ def main():
             section_message("Default clipping with dissolved clip map.")
 
             # setup temporary map
-            temp_clip_map = '%s_%s' % ("temp", str(os.getpid()))
+            temp_clip_map = "%s_%s" % ("temp", str(os.getpid()))
             TMP.append(temp_clip_map)
 
             # dissolve clip_map
-            grass.run_command('v.dissolve', input=clip_map,
-                              output=temp_clip_map)
+            grass.run_command("v.dissolve", input=clip_map, output=temp_clip_map)
 
             # perform clipping
             clip_overlay(input_map, temp_clip_map, output_map)
@@ -150,7 +157,7 @@ def main():
     # ========== OUTPUT MAP TOPOLOGY========== #
     # ======================================== #
     vinfo = grass.vector_info_topo(output_map)
-    if vinfo['primitives'] == 0:
+    if vinfo["primitives"] == 0:
         grass.warning("Output map is empty.")
 
     return 0
@@ -162,11 +169,11 @@ def clip_by_region(input_map, output_map, clip_fn):
     section_message("Clipping by region.")
 
     # setup temporary map
-    temp_region_map = '%s_%s' % ("temp", str(os.getpid()))
+    temp_region_map = "%s_%s" % ("temp", str(os.getpid()))
     TMP.append(temp_region_map)
 
     # create a map covering current computational region
-    grass.run_command('v.in.region', output=temp_region_map)
+    grass.run_command("v.in.region", output=temp_region_map)
 
     # perform clipping
     clip_fn(input_map, temp_region_map, output_map)
@@ -174,23 +181,44 @@ def clip_by_region(input_map, output_map, clip_fn):
 
 def clip_overlay(input_data, clip_data, out_data):
     try:
-        grass.run_command('v.overlay', ainput=input_data, binput=clip_data,
-                          operator='and', output=out_data, olayer='0,1,0')
+        grass.run_command(
+            "v.overlay",
+            ainput=input_data,
+            binput=clip_data,
+            operator="and",
+            output=out_data,
+            olayer="0,1,0",
+        )
     except CalledModuleError as e:
-        grass.fatal(_("Clipping steps failed."
-                      " Check above error messages and"
-                      " see following details:\n%s") % e)
+        grass.fatal(
+            _(
+                "Clipping steps failed."
+                " Check above error messages and"
+                " see following details:\n%s"
+            )
+            % e
+        )
 
 
 def clip_select(input_data, clip_data, out_data):
     try:
-        grass.run_command('v.select', ainput=input_data, binput=clip_data,
-                          output=out_data, operator='overlap')
+        grass.run_command(
+            "v.select",
+            ainput=input_data,
+            binput=clip_data,
+            output=out_data,
+            operator="overlap",
+        )
 
     except CalledModuleError as e:
-        grass.fatal(_("Clipping steps failed."
-                      " Check above error messages and"
-                      " see following details:\n%s") % e)
+        grass.fatal(
+            _(
+                "Clipping steps failed."
+                " Check above error messages and"
+                " see following details:\n%s"
+            )
+            % e
+        )
 
 
 if __name__ == "__main__":
