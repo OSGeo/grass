@@ -12,9 +12,10 @@ jobs:
     strategy:
       matrix:
         directory:
-          - man
           - lib/init
+          - man
           - scripts
+          - utils
       fail-fast: false
 
     steps:
