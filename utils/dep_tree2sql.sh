@@ -37,7 +37,7 @@
 # You can then use simple queries such as:
 #
 # 	grass=> SELECT object FROM obj_imp WHERE symbol = 'I_get_target' ;
-# 	                               object                               
+# 	                               object
 # 	--------------------------------------------------------------------
 # 	 imagery/i.ortho.photo/photo.2image/OBJ.i686-pc-linux-gnu/target.o
 # 	 imagery/i.ortho.photo/photo.2target/OBJ.i686-pc-linux-gnu/target.o
@@ -51,7 +51,7 @@
 #
 # 	grass=> SELECT DISTINCT b.object FROM lib_exp a, obj_imp b
 # 	grass-> WHERE a.library = 'libgrass_form.6.1.cvs.so' AND a.symbol = b.symbol ;
-# 	                          object                           
+# 	                          object
 # 	-----------------------------------------------------------
 # 	 vector/v.digit/OBJ.i686-pc-linux-gnu/attr.o
 # 	 vector/v.digit/OBJ.i686-pc-linux-gnu/line.o
@@ -72,7 +72,7 @@
 # at the name) is to just sample it, e.g.:
 #
 # 	grass=> SELECT * FROM stlib_exp LIMIT 5 ;
-# 	      library      |   object   |    symbol     
+# 	      library      |   object   |    symbol
 # 	-------------------+------------+---------------
 # 	 libgrass_manage.a | add_elem.o | add_element
 # 	 libgrass_manage.a | ask.o      | ask_in_mapset
@@ -82,11 +82,10 @@
 # 	(5 rows)
 #
 
-
 tmpdir=/tmp/sql-grass
 dbname=grass
 
-if [ -n "$1" ] ; then
+if [ -n "$1" ]; then
 	builddir="$1"
 else
 	echo "Usage: del_tree2sql.sh <source directory>" >&2
@@ -282,7 +281,7 @@ EOF
 dropdb "$dbname"
 createdb "$dbname"
 
-psql -n -q -d "$dbname" << EOF
+psql -n -q -d "$dbname" <<EOF
 
 -- ----------------------------------------------------------------------
 
@@ -579,4 +578,3 @@ UPDATE nonansi_counts
 -- ----------------------------------------------------------------------
 
 EOF
-
