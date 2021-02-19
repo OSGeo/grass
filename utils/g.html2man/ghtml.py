@@ -14,7 +14,7 @@ try:
     import HTMLParser as base
 
     HTMLParseError = base.HTMLParseError
-except:
+except ImportError:
     # Python 3 import
     import html.parser as base
 

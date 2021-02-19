@@ -6,7 +6,7 @@ __all__ = ["Formatter"]
 
 try:
     version = os.environ["VERSION_NUMBER"]
-except:
+except KeyError:
     version = ""
 
 styles = {

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 # generates HTML man pages docs/html/<category>.html
-# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009, 2019
+# (C) 2003-2019 Markus Neteler and the GRASS Development Team
+# Authors:
+#   Markus Neteler
+#   Glynn Clements
 
 import sys
 import os
-import string
 
 from build_html import *
 
