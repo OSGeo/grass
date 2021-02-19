@@ -25,11 +25,13 @@ tmp_grad_rel = None
 
 def cleanup():
     if tmp_grad_rel:
-        grass.run_command('g.remove', flags='f', type='raster',
-                          name=tmp_grad_rel, quiet=True)
+        grass.run_command(
+            "g.remove", flags="f", type="raster", name=tmp_grad_rel, quiet=True
+        )
     if tmp_grad_abs:
-        grass.run_command('g.remove', flags='f', type='raster',
-                          name=tmp_grad_abs, quiet=True)
+        grass.run_command(
+            "g.remove", flags="f", type="raster", name=tmp_grad_abs, quiet=True
+        )
 
 
 def make_gradient(path):
@@ -47,8 +49,9 @@ def make_gradient(path):
             # skip empty lines
             continue
         records.append(line.split())
-    records = [record for record in records
-               if record[0] != 'nv' and record[0] != 'default']
+    records = [
+        record for record in records if record[0] != "nv" and record[0] != "default"
+    ]
     relative = False
     absolute = False
     for record in records:
@@ -66,7 +69,7 @@ def make_gradient(path):
             minval = float(records[0][0])
             # shift min up for floating point values so that
             # first color in color table is visible
-            if '.' in records[0][0]:
+            if "." in records[0][0]:
                 # assumes that 1% of min does not go to the next value
                 # and is still represented as float and does not make
                 # too much difference in color
@@ -74,24 +77,29 @@ def make_gradient(path):
                 minval += abs(minval / 100)
             maxval = float(records[-1][0])
             maxval = min(maxval, 2500000)
-        if os.path.basename(path) in ('ndvi', 'ndwi', 'ndwi2'):
+        if os.path.basename(path) in ("ndvi", "ndwi", "ndwi2"):
             minval = -1.0
             maxval = 1.0
-        if os.path.basename(path) == 'ndvi_MODIS':
+        if os.path.basename(path) == "ndvi_MODIS":
             minval = -10000.0
             maxval = 10000.0
-        if os.path.basename(path) == 'population_dens':
+        if os.path.basename(path) == "population_dens":
             maxval = 1000.0
-        if os.path.basename(path) == 'precipitation':
+        if os.path.basename(path) == "precipitation":
             maxval = 2000.0
-        if os.path.basename(path) in ('terrain', 'srtm', 'srtm_plus'):
+        if os.path.basename(path) in ("terrain", "srtm", "srtm_plus"):
             minval = -500.0
             maxval = 3000.0
         grad = tmp_grad_abs
-        grass.mapcalc("$grad = "
-                      " float($min) + (col() - 1) * "
-                      "  (float($max) - float($min)) / ncols()",
-                      grad=tmp_grad_abs, min=minval, max=maxval, quiet=True)
+        grass.mapcalc(
+            "$grad = "
+            " float($min) + (col() - 1) * "
+            "  (float($max) - float($min)) / ncols()",
+            grad=tmp_grad_abs,
+            min=minval,
+            max=maxval,
+            quiet=True,
+        )
     else:
         grad = tmp_grad_rel
 
@@ -100,14 +108,18 @@ def make_gradient(path):
 
 def make_image(output_dir, table, grad, height, width):
     outfile = os.path.join(output_dir, "colortables", "%s.png" % table)
-    os.environ['GRASS_RENDER_FILE'] = outfile
+    os.environ["GRASS_RENDER_FILE"] = outfile
 
     grass.run_command("r.colors", map=grad, color=table, quiet=True)
-    os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0, height, 2, width - 2)
+    os.environ["GRASS_RENDER_FRAME"] = "%f,%f,%f,%f" % (0, height, 2, width - 2)
     grass.run_command("d.rast", map=grad, quiet=True)
     if 1:
-        os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0, height, 0, width)
-        grass.write_command("d.graph", quiet=True, flags='m', stdin="""
+        os.environ["GRASS_RENDER_FRAME"] = "%f,%f,%f,%f" % (0, height, 0, width)
+        grass.write_command(
+            "d.graph",
+            quiet=True,
+            flags="m",
+            stdin="""
         width 1
         color {outcolor}
         polyline
@@ -123,9 +135,19 @@ def make_image(output_dir, table, grad, height, width):
         {x4} {y4}
         {x3} {y4}
         {x3} {y3}
-        """.format(x1=1, x2=width, y1=0, y2=height - 1,
-                   x3=2, x4=width - 1, y3=1, y4=height - 2,
-                   outcolor='white', incolor='black'))
+        """.format(
+                x1=1,
+                x2=width,
+                y1=0,
+                y2=height - 1,
+                x3=2,
+                x4=width - 1,
+                y3=1,
+                y4=height - 2,
+                outcolor="white",
+                incolor="black",
+            ),
+        )
 
 
 def main():
@@ -134,10 +156,10 @@ def main():
     height = 15
     width = 85
 
-    os.environ['GRASS_OVERWRITE'] = '1'
+    os.environ["GRASS_OVERWRITE"] = "1"
 
-    color_dir = os.path.join(os.environ['GISBASE'], "etc", "colors")
-    output_dir = os.path.join(os.environ['GISBASE'], "docs", "html")
+    color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
+    output_dir = os.path.join(os.environ["GISBASE"], "docs", "html")
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -146,40 +168,47 @@ def main():
     tmp_grad_abs = "tmp_grad_abs_%d" % pid
     tmp_grad_rel = "tmp_grad_rel_%d" % pid
 
-    os.environ['GRASS_RENDER_WIDTH'] = '%d' % width
-    os.environ['GRASS_RENDER_HEIGHT'] = '%d' % height
-    os.environ['GRASS_RENDER_TRUECOLOR'] = 'TRUE'
+    os.environ["GRASS_RENDER_WIDTH"] = "%d" % width
+    os.environ["GRASS_RENDER_HEIGHT"] = "%d" % height
+    os.environ["GRASS_RENDER_TRUECOLOR"] = "TRUE"
     # for multiple d commands (requires to delete/move image each time)
-    os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
-    os.environ['GRASS_RENDER_FILE_MAPPED'] = 'FALSE'
-    os.environ['GRASS_RENDER_TRANSPARENT'] = 'FALSE'
-    os.environ['GRASS_RENDER_BACKGROUNDCOLOR'] = 'ffffff'
-    os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+    os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
+    os.environ["GRASS_RENDER_FILE_MAPPED"] = "FALSE"
+    os.environ["GRASS_RENDER_TRANSPARENT"] = "FALSE"
+    os.environ["GRASS_RENDER_BACKGROUNDCOLOR"] = "ffffff"
+    os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
     # for one pixel wide lines
-    os.environ['GRASS_RENDER_ANTIALIAS'] = 'none'
+    os.environ["GRASS_RENDER_ANTIALIAS"] = "none"
 
-    for var in ['GRASS_RENDER_LINE_WIDTH']:
+    for var in ["GRASS_RENDER_LINE_WIDTH"]:
         if var in os.environ:
             del os.environ[var]
 
-    os.environ['GRASS_ANTIALIAS'] = 'none'
+    os.environ["GRASS_ANTIALIAS"] = "none"
 
     grass.use_temp_region()
-    grass.run_command('g.region', s=0, w=0, n=height, e=width,
-                      rows=height, cols=width, res=1, flags='a')
+    grass.run_command(
+        "g.region",
+        s=0,
+        w=0,
+        n=height,
+        e=width,
+        rows=height,
+        cols=width,
+        res=1,
+        flags="a",
+    )
 
     grass.mapcalc("$grad = float(col())", grad=tmp_grad_rel, quiet=True)
 
     for table in os.listdir(color_dir):
         path = os.path.join(color_dir, table)
         grad = make_gradient(path)
-        make_image(output_dir, table, grad,
-                   height=height, width=width)
+        make_image(output_dir, table, grad, height=height, width=width)
 
     grass.mapcalc("$grad = col()", grad=tmp_grad_abs, quiet=True)
-    for table in ['grey.eq', 'grey.log', 'random']:
-        make_image(output_dir, table, tmp_grad_abs,
-                   height=height, width=width)
+    for table in ["grey.eq", "grey.log", "random"]:
+        make_image(output_dir, table, tmp_grad_abs, height=height, width=width)
 
 
 if __name__ == "__main__":

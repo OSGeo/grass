@@ -84,7 +84,7 @@ find . -name '*.o'    | xargs rm
 find . -name '*.pyc'  | xargs rm
 find . -name 'OBJ.*'  | xargs rm -r
 find . -name '__pycache__' | xargs rm -r
-rm -f lib/python/ctypes/ctypesgencore/parser/lextab.py
+rm -f python/grass/ctypes/ctypesgencore/parser/lextab.py
 rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc \
   gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
 chmod -R a+r *
