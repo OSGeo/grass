@@ -595,7 +595,8 @@ class VirtualAttributeList(ListCtrl,
                    map=self.mapDBInfo.map,
                    layer=self.layer,
                    option=option,
-                   columns=self.GetColumn(self._col).GetText())
+                   columns=self.GetColumn(self._col).GetText(),
+                   overwrite=True)
 
         self.LoadData(self.layer)
 
