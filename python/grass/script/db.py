@@ -41,28 +41,28 @@ def db_describe(table, env=None, **args):
 
     :return: parsed module output
     """
-    if 'database' in args and args['database'] == '':
-        args.pop('database')
-    if 'driver' in args and args['driver'] == '':
-        args.pop('driver')
-    s = read_command('db.describe', flags='c', table=table, env=env, **args)
+    if "database" in args and args["database"] == "":
+        args.pop("database")
+    if "driver" in args and args["driver"] == "":
+        args.pop("driver")
+    s = read_command("db.describe", flags="c", table=table, env=env, **args)
     if not s:
         fatal(_("Unable to describe table <%s>") % table)
 
     cols = []
     result = {}
     for l in s.splitlines():
-        f = l.split(':')
+        f = l.split(":")
         key = f[0]
-        f[1] = f[1].lstrip(' ')
-        if key.startswith('Column '):
-            n = int(key.split(' ')[1])
+        f[1] = f[1].lstrip(" ")
+        if key.startswith("Column "):
+            n = int(key.split(" ")[1])
             cols.insert(n, f[1:])
-        elif key in ['ncols', 'nrows']:
+        elif key in ["ncols", "nrows"]:
             result[key] = int(f[1])
         else:
             result[key] = f[1:]
-    result['cols'] = cols
+    result["cols"] = cols
 
     return result
 
@@ -86,11 +86,18 @@ def db_table_exist(table, env=None, **args):
 
     :return: True for success, False otherwise
     """
-    nuldev = open(os.devnull, 'w+')
+    nuldev = open(os.devnull, "w+")
     ok = True
     try:
-        run_command('db.describe', flags='c', table=table,
-                    stdout=nuldev, stderr=nuldev, env=env, **args)
+        run_command(
+            "db.describe",
+            flags="c",
+            table=table,
+            stdout=nuldev,
+            stderr=nuldev,
+            env=env,
+            **args,
+        )
     except CalledModuleError:
         ok = False
     finally:
@@ -112,15 +119,15 @@ def db_connection(force=False, env=None):
     :return: parsed output of db.connect
     """
     try:
-        nuldev = open(os.devnull, 'w')
-        conn = parse_command('db.connect', flags='g', stderr=nuldev, env=env)
+        nuldev = open(os.devnull, "w")
+        conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
         nuldev.close()
     except CalledModuleError:
         conn = None
 
     if not conn and force:
-        run_command('db.connect', flags='c', env=env)
-        conn = parse_command('db.connect', flags='g', env=env)
+        run_command("db.connect", flags="c", env=env)
+        conn = parse_command("db.connect", flags="g", env=env)
 
     return conn
 
@@ -153,33 +160,36 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     """
     fname = tempfile(create=False, env=env)
     if sql:
-        args['sql'] = sql
+        args["sql"] = sql
     elif filename:
-        args['input'] = filename
+        args["input"] = filename
     elif table:
-        args['table'] = table
+        args["table"] = table
     else:
-        fatal(_("Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided") %
-              {'sql': 'sql', 'filename': 'filename', 'table': 'table'} )
+        fatal(
+            _(
+                "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+            )
+            % {"sql": "sql", "filename": "filename", "table": "table"}
+        )
 
-    if 'sep' not in args:
-        args['sep'] = '|'
+    if "sep" not in args:
+        args["sep"] = "|"
 
     try:
-        run_command('db.select', quiet=True, flags='c',
-                    output=fname, env=env, **args)
+        run_command("db.select", quiet=True, flags="c", output=fname, env=env, **args)
     except CalledModuleError:
         fatal(_("Fetching data failed"))
 
     ofile = open(fname)
-    result = [tuple(x.rstrip(os.linesep).split(args['sep'])) for x in ofile.readlines()]
+    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile.readlines()]
     ofile.close()
     try_remove(fname)
 
     return tuple(result)
 
 
-def db_table_in_vector(table, mapset='.', env=None):
+def db_table_in_vector(table, mapset=".", env=None):
     """Return the name of vector connected to the table.
     By default it check only in the current mapset, because the same table
     name could be used also in other mapset by other vector.
@@ -197,14 +207,15 @@ def db_table_in_vector(table, mapset='.', env=None):
     :param env: environment
     """
     from .vector import vector_db
-    nuldev = open(os.devnull, 'w')
+
+    nuldev = open(os.devnull, "w")
     used = []
-    vects = list_strings('vector', mapset=mapset, env=env)
+    vects = list_strings("vector", mapset=mapset, env=env)
     for vect in vects:
         for f in vector_db(vect, stderr=nuldev, env=env).values():
             if not f:
                 continue
-            if f['table'] == table:
+            if f["table"] == table:
                 used.append(vect)
                 break
     if len(used) > 0:
@@ -212,22 +223,24 @@ def db_table_in_vector(table, mapset='.', env=None):
     else:
         return None
 
+
 def db_begin_transaction(driver):
     """Begin transaction.
 
     :return: SQL command as string
     """
-    if driver in ('sqlite', 'pg'):
-        return 'BEGIN'
-    if driver == 'mysql':
-        return 'START TRANSACTION'
-    return ''
+    if driver in ("sqlite", "pg"):
+        return "BEGIN"
+    if driver == "mysql":
+        return "START TRANSACTION"
+    return ""
+
 
 def db_commit_transaction(driver):
     """Commit transaction.
 
     :return: SQL command as string
     """
-    if driver in ('sqlite', 'pg', 'mysql'):
-        return 'COMMIT'
-    return ''
+    if driver in ("sqlite", "pg", "mysql"):
+        return "COMMIT"
+    return ""

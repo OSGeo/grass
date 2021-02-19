@@ -28,21 +28,21 @@ import grass.script as gscript
 ###############################################################################
 
 
-def print_gridded_dataset_univar_statistics(type, input, output, where, extended,
-                                            no_header=False, fs="|",
-                                            rast_region=False):
+def print_gridded_dataset_univar_statistics(
+    type, input, output, where, extended, no_header=False, fs="|", rast_region=False
+):
     """Print univariate statistics for a space time raster or raster3d dataset
 
-       :param type: Must be "strds" or "str3ds"
-       :param input: The name of the space time dataset
-       :param output: Name of the optional output file, if None stdout is used
-       :param where: A temporal database where statement
-       :param extended: If True compute extended statistics
-       :param no_header: Suppress the printing of column names
-       :param fs: Field separator
-       :param rast_region: If set True ignore the current region settings
-              and use the raster map regions for univar statistical calculation.
-              Only available for strds.
+    :param type: Must be "strds" or "str3ds"
+    :param input: The name of the space time dataset
+    :param output: Name of the optional output file, if None stdout is used
+    :param where: A temporal database where statement
+    :param extended: If True compute extended statistics
+    :param no_header: Suppress the printing of column names
+    :param fs: Field separator
+    :param rast_region: If set True ignore the current region settings
+           and use the raster map regions for univar statistical calculation.
+           Only available for strds.
     """
 
     # We need a database interface
@@ -54,16 +54,16 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
     if output is not None:
         out_file = open(output, "w")
 
-    rows = sp.get_registered_maps(
-        "id,start_time,end_time", where, "start_time", dbif)
+    rows = sp.get_registered_maps("id,start_time,end_time", where, "start_time", dbif)
 
     if not rows:
         dbif.close()
         err = "Space time %(sp)s dataset <%(i)s> is empty"
         if where:
             err += " or where condition is wrong"
-        gscript.fatal(_(err) % {'sp': sp.get_new_map_instance(None).get_type(),
-                                'i': sp.get_id()})
+        gscript.fatal(
+            _(err) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
+        )
 
     if no_header is False:
         string = ""
@@ -101,11 +101,13 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
 
         if not stats:
             if type == "strds":
-                gscript.warning(_("Unable to get statistics for raster map "
-                                  "<%s>") % id)
+                gscript.warning(
+                    _("Unable to get statistics for raster map " "<%s>") % id
+                )
             elif type == "str3ds":
-                gscript.warning(_("Unable to get statistics for 3d raster map"
-                                  " <%s>") % id)
+                gscript.warning(
+                    _("Unable to get statistics for 3d raster map" " <%s>") % id
+                )
             continue
 
         string += str(id) + fs + str(start) + fs + str(end)
@@ -117,7 +119,9 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
         string += fs + str(int(stats["cells"]) - int(stats["null_cells"]))
         if extended is True:
             string += fs + str(stats["first_quartile"]) + fs + str(stats["median"])
-            string += fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
+            string += (
+                fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
+            )
 
         if output is None:
             print(string)
@@ -133,22 +137,22 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
 ###############################################################################
 
 
-def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, column,
-                                           where, extended, no_header=False,
-                                           fs="|"):
+def print_vector_dataset_univar_statistics(
+    input, output, twhere, layer, type, column, where, extended, no_header=False, fs="|"
+):
     """Print univariate statistics for a space time vector dataset
 
-       :param input: The name of the space time dataset
-       :param output: Name of the optional output file, if None stdout is used
-       :param twhere: A temporal database where statement
-       :param layer: The layer number used in case no layer is present
-              in the temporal dataset
-       :param type: options: point,line,boundary,centroid,area
-       :param column: The name of the attribute column
-       :param where: A temporal database where statement
-       :param extended: If True compute extended statistics
-       :param no_header: Suppress the printing of column names
-       :param fs: Field separator
+    :param input: The name of the space time dataset
+    :param output: Name of the optional output file, if None stdout is used
+    :param twhere: A temporal database where statement
+    :param layer: The layer number used in case no layer is present
+           in the temporal dataset
+    :param type: options: point,line,boundary,centroid,area
+    :param column: The name of the attribute column
+    :param where: A temporal database where statement
+    :param extended: If True compute extended statistics
+    :param no_header: Suppress the printing of column names
+    :param fs: Field separator
     """
 
     # We need a database interface
@@ -169,33 +173,73 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
 
     if sp.is_in_db(dbif) is False:
         dbif.close()
-        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
-                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
+        gscript.fatal(
+            _("Space time %(sp)s dataset <%(i)s> not found")
+            % {"sp": sp.get_new_map_instance(None).get_type(), "i": id}
+        )
 
     sp.select(dbif)
 
-    rows = sp.get_registered_maps("id,name,mapset,start_time,end_time,layer",
-                                  twhere, "start_time", dbif)
+    rows = sp.get_registered_maps(
+        "id,name,mapset,start_time,end_time,layer", twhere, "start_time", dbif
+    )
 
     if not rows:
         dbif.close()
-        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
-                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
+        gscript.fatal(
+            _("Space time %(sp)s dataset <%(i)s> is empty")
+            % {"sp": sp.get_new_map_instance(None).get_type(), "i": id}
+        )
 
     string = ""
     if no_header is False:
-        string += "id" + fs + "start" + fs + "end" + fs + "n" + \
-            fs + "nmissing" + fs + "nnull" + fs
+        string += (
+            "id"
+            + fs
+            + "start"
+            + fs
+            + "end"
+            + fs
+            + "n"
+            + fs
+            + "nmissing"
+            + fs
+            + "nnull"
+            + fs
+        )
         string += "min" + fs + "max" + fs + "range"
         if type == "point" or type == "centroid":
-            string += fs + "mean" + fs + "mean_abs" + fs + "population_stddev" +\
-                fs + "population_variance" + fs
-            string += "population_coeff_variation" + fs + \
-                "sample_stddev" + fs + "sample_variance" + fs
+            string += (
+                fs
+                + "mean"
+                + fs
+                + "mean_abs"
+                + fs
+                + "population_stddev"
+                + fs
+                + "population_variance"
+                + fs
+            )
+            string += (
+                "population_coeff_variation"
+                + fs
+                + "sample_stddev"
+                + fs
+                + "sample_variance"
+                + fs
+            )
             string += "kurtosis" + fs + "skewness"
             if extended is True:
-                string += fs + "first_quartile" + fs + "median" + fs + \
-                    "third_quartile" + fs + "percentile_90"
+                string += (
+                    fs
+                    + "first_quartile"
+                    + fs
+                    + "median"
+                    + fs
+                    + "third_quartile"
+                    + fs
+                    + "percentile_90"
+                )
 
         if output is None:
             print(string)
@@ -216,47 +260,80 @@ def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, c
         if not mylayer:
             mylayer = layer
 
-        stats = gscript.parse_command("v.univar", map=id, where=where,
-                                      column=column, layer=mylayer,
-                                      type=type, flags=flags)
+        stats = gscript.parse_command(
+            "v.univar",
+            map=id,
+            where=where,
+            column=column,
+            layer=mylayer,
+            type=type,
+            flags=flags,
+        )
 
         string = ""
 
         if not stats:
-            gscript.warning(_("Unable to get statistics for vector map <%s>")
-                            % id)
+            gscript.warning(_("Unable to get statistics for vector map <%s>") % id)
             continue
 
         string += str(id) + fs + str(start) + fs + str(end)
-        string += fs + str(stats["n"]) + fs + str(stats[
-            "nmissing"]) + fs + str(stats["nnull"])
+        string += (
+            fs
+            + str(stats["n"])
+            + fs
+            + str(stats["nmissing"])
+            + fs
+            + str(stats["nnull"])
+        )
         if "min" in stats:
-            string += fs + str(stats["min"]) + fs + str(
-                stats["max"]) + fs + str(stats["range"])
+            string += (
+                fs
+                + str(stats["min"])
+                + fs
+                + str(stats["max"])
+                + fs
+                + str(stats["range"])
+            )
         else:
             string += fs + fs + fs
 
         if type == "point" or type == "centroid":
             if "mean" in stats:
-                string += fs + str(stats["mean"]) + fs + \
-                    str(stats["mean_abs"]) + fs + \
-                    str(stats["population_stddev"]) + fs + \
-                    str(stats["population_variance"])
+                string += (
+                    fs
+                    + str(stats["mean"])
+                    + fs
+                    + str(stats["mean_abs"])
+                    + fs
+                    + str(stats["population_stddev"])
+                    + fs
+                    + str(stats["population_variance"])
+                )
 
-                string += fs + str(stats["population_coeff_variation"]) + \
-                    fs + str(stats["sample_stddev"]) + fs + \
-                    str(stats["sample_variance"])
+                string += (
+                    fs
+                    + str(stats["population_coeff_variation"])
+                    + fs
+                    + str(stats["sample_stddev"])
+                    + fs
+                    + str(stats["sample_variance"])
+                )
 
-                string += fs + str(stats["kurtosis"]) + fs + \
-                          str(stats["skewness"])
+                string += fs + str(stats["kurtosis"]) + fs + str(stats["skewness"])
             else:
                 string += fs + fs + fs + fs + fs + fs + fs + fs + fs
             if extended is True:
                 if "first_quartile" in stats:
-                    string += fs + str(stats["first_quartile"]) + fs + \
-                        str(stats["median"]) + fs + \
-                        str(stats["third_quartile"]) + fs + \
-                        str(stats["percentile_90"])
+                    string += (
+                        fs
+                        + str(stats["first_quartile"])
+                        + fs
+                        + str(stats["median"])
+                        + fs
+                        + str(stats["third_quartile"])
+                        + fs
+                        + str(stats["percentile_90"])
+                    )
                 else:
                     string += fs + fs + fs + fs
 

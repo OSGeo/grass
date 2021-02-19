@@ -14,46 +14,79 @@ from grass.gunittest.main import test
 
 
 class TestTemporalRasterAlgebraSpatialTopology(TestCase):
-
     @classmethod
     def setUpClass(cls):
-        """Initiate the temporal GIS and set the region
-        """
-        tgis.init(True) # Raise on error instead of exit(1)
+        """Initiate the temporal GIS and set the region"""
+        tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
         cls.runModule("g.region", n=30.0, s=0.0, e=30.0, w=0.0, t=1.0, b=0.0, res=10.0)
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="a1 = 1")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="b1 = 1")
 
-        cls.runModule("g.region", n=50.0, s=20.0, e=50.0, w=20.0, t=1.0, b=0.0, res=10.0)
+        cls.runModule(
+            "g.region", n=50.0, s=20.0, e=50.0, w=20.0, t=1.0, b=0.0, res=10.0
+        )
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="a2 = 2")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="b2 = 2")
 
-        cls.runModule("g.region", n=40.0, s=25.0, e=40.0, w=25.0, t=1.0, b=0.0, res=10.0)
+        cls.runModule(
+            "g.region", n=40.0, s=25.0, e=40.0, w=25.0, t=1.0, b=0.0, res=10.0
+        )
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="a3 = 3")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="b3 = 3")
 
-        cls.runModule("g.region", n=60.0, s=40.0, e=60.0, w=40.0, t=1.0, b=0.0, res=10.0)
+        cls.runModule(
+            "g.region", n=60.0, s=40.0, e=60.0, w=40.0, t=1.0, b=0.0, res=10.0
+        )
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="a4 = 4")
         cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="b4 = 4")
 
-        cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="singletmap = 100")
-        cls.runModule("r.mapcalc", overwrite=True, quiet=True, expression="singlemap = 1000")
+        cls.runModule(
+            "r.mapcalc", overwrite=True, quiet=True, expression="singletmap = 100"
+        )
+        cls.runModule(
+            "r.mapcalc", overwrite=True, quiet=True, expression="singlemap = 1000"
+        )
 
-        tgis.open_new_stds(name="A", type="strds", temporaltype="absolute",
-                           title="A", descr="A", semantic="field", overwrite=True)
+        tgis.open_new_stds(
+            name="A",
+            type="strds",
+            temporaltype="absolute",
+            title="A",
+            descr="A",
+            semantic="field",
+            overwrite=True,
+        )
 
-        tgis.open_new_stds(name="B", type="strds", temporaltype="absolute",
-                           title="B", descr="B", semantic="field", overwrite=True)
+        tgis.open_new_stds(
+            name="B",
+            type="strds",
+            temporaltype="absolute",
+            title="B",
+            descr="B",
+            semantic="field",
+            overwrite=True,
+        )
 
-        tgis.register_maps_in_space_time_dataset(type="raster", name="A", maps="a1,a2,a3,a4",
-                                                 start="2001-01-01", interval=False)
+        tgis.register_maps_in_space_time_dataset(
+            type="raster",
+            name="A",
+            maps="a1,a2,a3,a4",
+            start="2001-01-01",
+            interval=False,
+        )
 
-        tgis.register_maps_in_space_time_dataset(type="raster", name="B", maps="b1,b2,b3,b4",
-                                                 start="2001-01-01", interval=False)
+        tgis.register_maps_in_space_time_dataset(
+            type="raster",
+            name="B",
+            maps="b1,b2,b3,b4",
+            start="2001-01-01",
+            interval=False,
+        )
 
-        tgis.register_maps_in_space_time_dataset(type="raster", name=None, maps="singletmap",
-                                                 start="2001-01-01")
+        tgis.register_maps_in_space_time_dataset(
+            type="raster", name=None, maps="singletmap", start="2001-01-01"
+        )
 
     def tearDown(self):
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
@@ -61,8 +94,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region
-        """
+        """Remove the temporary region"""
         cls.runModule("t.remove", flags="rf", inputs="A,B", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
@@ -84,7 +116,9 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True)
-        ta.parse(expression="R = A {+,equal|equivalent,l} B", basename="r", overwrite=True)
+        ta.parse(
+            expression="R = A {+,equal|equivalent,l} B", basename="r", overwrite=True
+        )
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -143,7 +177,9 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         r3 = a4 + b2       # 6
 
         """
-        ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True, register_null=True)
+        ta = tgis.TemporalRasterAlgebraParser(
+            run=True, debug=True, spatial=True, register_null=True
+        )
         ta.parse(expression="R = A {+,equal|overlap,l} B", basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
@@ -202,7 +238,11 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True)
-        ta.parse(expression="R = A {+,equal|equivalent|contain,l} B", basename="r", overwrite=True)
+        ta.parse(
+            expression="R = A {+,equal|equivalent|contain,l} B",
+            basename="r",
+            overwrite=True,
+        )
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -232,8 +272,11 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
 
         """
         ta = tgis.TemporalRasterAlgebraParser(run=True, debug=True, spatial=True)
-        ta.parse(expression="R = if({equal|equivalent}, A > 0 {&&,equal|equivalent} B < 10, A {+,equal|equivalent,l} B)",
-                 basename="r", overwrite=True)
+        ta.parse(
+            expression="R = if({equal|equivalent}, A > 0 {&&,equal|equivalent} B < 10, A {+,equal|equivalent,l} B)",
+            basename="r",
+            overwrite=True,
+        )
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -247,5 +290,5 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.get_granularity(), None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

@@ -3,11 +3,7 @@ from grass.pydispatch.dispatcher import Any, Anonymous, liveReceivers, getAllRec
 from grass.pydispatch.robustapply import robustApply
 
 
-def sendRobust(
-    signal=Any,
-    sender=Anonymous,
-    *arguments, **named
-):
+def sendRobust(signal=Any, sender=Anonymous, *arguments, **named):
     """Send signal from sender to all connected receivers catching errors
 
     signal -- (hashable) signal value, see connect for details
@@ -45,11 +41,7 @@ def sendRobust(
     for receiver in liveReceivers(getAllReceivers(sender, signal)):
         try:
             response = robustApply(
-                receiver,
-                signal=signal,
-                sender=sender,
-                *arguments,
-                **named
+                receiver, signal=signal, sender=sender, *arguments, **named
             )
         except Exception as err:
             responses.append((receiver, err))

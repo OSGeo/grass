@@ -17,12 +17,14 @@ import grass.pygrass.modules as gmodules
 # and contains doctest's methods
 # the alternative is to copy 500 from doctest and change what is needed
 # (this might be necessary anyway because of the reports and stdout and stderr)
-doctest.DocFileCase = type('DocFileCase',
-                           (grass.gunittest.case.TestCase,),
-                           dict(doctest.DocFileCase.__dict__))
-doctest.SkipDocTestCase = type('SkipDocTestCase',
-                               (grass.gunittest.case.TestCase,),
-                               dict(doctest.SkipDocTestCase.__dict__))
+doctest.DocFileCase = type(
+    "DocFileCase", (grass.gunittest.case.TestCase,), dict(doctest.DocFileCase.__dict__)
+)
+doctest.SkipDocTestCase = type(
+    "SkipDocTestCase",
+    (grass.gunittest.case.TestCase,),
+    dict(doctest.SkipDocTestCase.__dict__),
+)
 
 
 def load_tests(loader, tests, ignore):
@@ -31,9 +33,9 @@ def load_tests(loader, tests, ignore):
     # for now it is the only place where it works
     grass.gunittest.utils.do_doctest_gettext_workaround()
 
-    #tests.addTests(doctest.DocTestSuite(gmodules.shortcuts))
+    # tests.addTests(doctest.DocTestSuite(gmodules.shortcuts))
     return tests
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     grass.gunittest.main.test()

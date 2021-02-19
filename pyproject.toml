@@ -1,0 +1,27 @@
+[tool.black]
+line-length = 88
+target-version = ['py36', 'py37', 'py38']
+include = '\.pyi?$'
+exclude = '''
+(
+    # exclude directories in the root of the project
+    /(
+          \.eggs
+        | \.git
+        | \.hg
+        | \.mypy_cache
+        | \.tox
+        | \.venv
+        | _build
+        | buck-out
+        | build
+        | bin\.
+        | dist\.
+    )/
+    | python/grass/ctypes
+    # Bug in Black related to tab escape prevents these from being formatted correctly.
+    # https://github.com/psf/black/issues/1970
+    | python/grass/imaging/images2gif.py
+    | python/grass/pygrass/raster/category.py
+)
+'''

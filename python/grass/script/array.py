@@ -122,6 +122,7 @@ from grass.exceptions import CalledModuleError
 
 ###############################################################################
 
+
 class _tempfile(object):
     def __init__(self, env=None):
         self.filename = gcore.tempfile(env=env)
@@ -129,7 +130,9 @@ class _tempfile(object):
     def __del__(self):
         try_remove(self.filename)
 
+
 ###############################################################################
+
 
 class array(numpy.memmap):
     def __new__(cls, mapname=None, null=None, dtype=numpy.double, env=None):
@@ -140,8 +143,8 @@ class array(numpy.memmap):
         :param env: environment
         """
         reg = gcore.region(env=env)
-        r = reg['rows']
-        c = reg['cols']
+        r = reg["rows"]
+        c = reg["cols"]
         shape = (r, c)
 
         tempfile = _tempfile(env)
@@ -149,18 +152,18 @@ class array(numpy.memmap):
             kind = numpy.dtype(dtype).kind
             size = numpy.dtype(dtype).itemsize
 
-            if kind == 'f':
-                flags = 'f'
-            elif kind in 'biu':
-                flags = 'i'
+            if kind == "f":
+                flags = "f"
+            elif kind in "biu":
+                flags = "i"
             else:
-                raise ValueError(_('Invalid kind <%s>') % kind)
+                raise ValueError(_("Invalid kind <%s>") % kind)
 
             if size not in [1, 2, 4, 8]:
-                raise ValueError(_('Invalid size <%d>') % size)
+                raise ValueError(_("Invalid size <%d>") % size)
 
             gcore.run_command(
-                'r.out.bin',
+                "r.out.bin",
                 flags=flags,
                 input=mapname,
                 output=tempfile.filename,
@@ -168,14 +171,12 @@ class array(numpy.memmap):
                 null=null,
                 quiet=True,
                 overwrite=True,
-                env=env)
+                env=env,
+            )
 
         self = numpy.memmap.__new__(
-            cls,
-            filename=tempfile.filename,
-            dtype=dtype,
-            mode='r+',
-            shape=shape)
+            cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
+        )
 
         self.tempfile = tempfile
         self.filename = tempfile.filename
@@ -195,32 +196,37 @@ class array(numpy.memmap):
         Instead reading the map after creating the array,
         pass the map name in the array constructor.
         """
-        if sys.platform == 'win32':
-            gcore.warning(_("grass.script.array.read is deprecated and does not"
-                            " work on MS Windows, pass raster name in the constructor"))
+        if sys.platform == "win32":
+            gcore.warning(
+                _(
+                    "grass.script.array.read is deprecated and does not"
+                    " work on MS Windows, pass raster name in the constructor"
+                )
+            )
         kind = self.dtype.kind
         size = self.dtype.itemsize
 
-        if kind == 'f':
-            flags = 'f'
-        elif kind in 'biu':
-            flags = 'i'
+        if kind == "f":
+            flags = "f"
+        elif kind in "biu":
+            flags = "i"
         else:
-            raise ValueError(_('Invalid kind <%s>') % kind)
+            raise ValueError(_("Invalid kind <%s>") % kind)
 
         if size not in [1, 2, 4, 8]:
-            raise ValueError(_('Invalid size <%d>') % size)
+            raise ValueError(_("Invalid size <%d>") % size)
 
         try:
             gcore.run_command(
-                'r.out.bin',
+                "r.out.bin",
                 flags=flags,
                 input=mapname,
                 output=self.filename,
                 bytes=size,
                 null=null,
                 quiet=True,
-                overwrite=True)
+                overwrite=True,
+            )
         except CalledModuleError:
             return 1
         else:
@@ -240,26 +246,26 @@ class array(numpy.memmap):
         kind = self.dtype.kind
         size = self.dtype.itemsize
 
-        if kind == 'f':
+        if kind == "f":
             if size == 4:
-                flags = 'f'
+                flags = "f"
             elif size == 8:
-                flags = 'd'
+                flags = "d"
             else:
-                raise ValueError(_('Invalid FP size <%d>') % size)
+                raise ValueError(_("Invalid FP size <%d>") % size)
             size = None
-        elif kind in 'biu':
+        elif kind in "biu":
             if size not in [1, 2, 4]:
-                raise ValueError(_('Invalid integer size <%d>') % size)
+                raise ValueError(_("Invalid integer size <%d>") % size)
             flags = None
         else:
-            raise ValueError(_('Invalid kind <%s>') % kind)
+            raise ValueError(_("Invalid kind <%s>") % kind)
 
         reg = gcore.region(env=self._env)
 
         try:
             gcore.run_command(
-                'r.in.bin',
+                "r.in.bin",
                 flags=flags,
                 input=self.filename,
                 output=mapname,
@@ -268,17 +274,19 @@ class array(numpy.memmap):
                 anull=null,
                 overwrite=overwrite,
                 quiet=quiet,
-                north=reg['n'],
-                south=reg['s'],
-                east=reg['e'],
-                west=reg['w'],
-                rows=reg['rows'],
-                cols=reg['cols'],
-                env=self._env)
+                north=reg["n"],
+                south=reg["s"],
+                east=reg["e"],
+                west=reg["w"],
+                rows=reg["rows"],
+                cols=reg["cols"],
+                env=self._env,
+            )
         except CalledModuleError:
             return 1
         else:
             return 0
+
 
 ###############################################################################
 
@@ -292,9 +300,9 @@ class array3d(numpy.memmap):
         :param env: environment
         """
         reg = gcore.region(True)
-        r = reg['rows3']
-        c = reg['cols3']
-        d = reg['depths']
+        r = reg["rows3"]
+        c = reg["cols3"]
+        d = reg["depths"]
         shape = (d, r, c)
 
         tempfile = _tempfile()
@@ -302,18 +310,18 @@ class array3d(numpy.memmap):
             kind = numpy.dtype(dtype).kind
             size = numpy.dtype(dtype).itemsize
 
-            if kind == 'f':
-                flags = None # default is double
-            elif kind in 'biu':
-                flags = 'i'
+            if kind == "f":
+                flags = None  # default is double
+            elif kind in "biu":
+                flags = "i"
             else:
-                raise ValueError(_('Invalid kind <%s>') % kind)
+                raise ValueError(_("Invalid kind <%s>") % kind)
 
             if size not in [1, 2, 4, 8]:
-                raise ValueError(_('Invalid size <%d>') % size)
+                raise ValueError(_("Invalid size <%d>") % size)
 
             gcore.run_command(
-                'r3.out.bin',
+                "r3.out.bin",
                 flags=flags,
                 input=mapname,
                 output=tempfile.filename,
@@ -321,14 +329,12 @@ class array3d(numpy.memmap):
                 null=null,
                 quiet=True,
                 overwrite=True,
-                env=env)
+                env=env,
+            )
 
         self = numpy.memmap.__new__(
-            cls,
-            filename=tempfile.filename,
-            dtype=dtype,
-            mode='r+',
-            shape=shape)
+            cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
+        )
 
         self.tempfile = tempfile
         self.filename = tempfile.filename
@@ -349,32 +355,37 @@ class array3d(numpy.memmap):
         Instead reading the map after creating the array,
         pass the map name in the array constructor.
         """
-        if sys.platform == 'win32':
-            gcore.warning(_("grass.script.array3d.read is deprecated and does not"
-                            " work on MS Windows, pass 3D raster name in the constructor"))
+        if sys.platform == "win32":
+            gcore.warning(
+                _(
+                    "grass.script.array3d.read is deprecated and does not"
+                    " work on MS Windows, pass 3D raster name in the constructor"
+                )
+            )
         kind = self.dtype.kind
         size = self.dtype.itemsize
 
-        if kind == 'f':
-            flags = None # default is double
-        elif kind in 'biu':
-            flags = 'i'
+        if kind == "f":
+            flags = None  # default is double
+        elif kind in "biu":
+            flags = "i"
         else:
-            raise ValueError(_('Invalid kind <%s>') % kind)
+            raise ValueError(_("Invalid kind <%s>") % kind)
 
         if size not in [1, 2, 4, 8]:
-            raise ValueError(_('Invalid size <%d>') % size)
+            raise ValueError(_("Invalid size <%d>") % size)
 
         try:
             gcore.run_command(
-                'r3.out.bin',
+                "r3.out.bin",
                 flags=flags,
                 input=mapname,
                 output=self.filename,
                 bytes=size,
                 null=null,
                 quiet=True,
-                overwrite=True)
+                overwrite=True,
+            )
         except CalledModuleError:
             return 1
         else:
@@ -394,21 +405,21 @@ class array3d(numpy.memmap):
         size = self.dtype.itemsize
         flags = None
 
-        if kind == 'f':
+        if kind == "f":
             if size != 4 and size != 8:
-                raise ValueError(_('Invalid FP size <%d>') % size)
-        elif kind in 'biu':
+                raise ValueError(_("Invalid FP size <%d>") % size)
+        elif kind in "biu":
             if size not in [1, 2, 4, 8]:
-                raise ValueError(_('Invalid integer size <%d>') % size)
-            flags = 'i'
+                raise ValueError(_("Invalid integer size <%d>") % size)
+            flags = "i"
         else:
-            raise ValueError(_('Invalid kind <%s>') % kind)
+            raise ValueError(_("Invalid kind <%s>") % kind)
 
         reg = gcore.region(True, env=self._env)
 
         try:
             gcore.run_command(
-                'r3.in.bin',
+                "r3.in.bin",
                 flags=flags,
                 input=self.filename,
                 output=mapname,
@@ -416,16 +427,17 @@ class array3d(numpy.memmap):
                 null=null,
                 overwrite=overwrite,
                 quiet=quiet,
-                north=reg['n'],
-                south=reg['s'],
-                top=reg['t'],
-                bottom=reg['b'],
-                east=reg['e'],
-                west=reg['w'],
-                depths=reg['depths'],
-                rows=reg['rows3'],
-                cols=reg['cols3'],
-                env=self._env)
+                north=reg["n"],
+                south=reg["s"],
+                top=reg["t"],
+                bottom=reg["b"],
+                east=reg["e"],
+                west=reg["w"],
+                depths=reg["depths"],
+                rows=reg["rows3"],
+                cols=reg["cols3"],
+                env=self._env,
+            )
 
         except CalledModuleError:
             return 1

@@ -20,7 +20,9 @@ else:
     from io import BytesIO as StringIO
 
 
-SKIP = ["g.parser", ]
+SKIP = [
+    "g.parser",
+]
 
 
 # taken from six
@@ -30,24 +32,27 @@ def with_metaclass(meta, *bases):
     # metaclass for one level of class instantiation that replaces itself with
     # the actual metaclass.
     class metaclass(meta):
-
         def __new__(cls, name, this_bases, d):
             return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
+
+    return type.__new__(metaclass, "temporary_class", (), {})
 
 
 class ModulesMeta(type):
     def __new__(mcs, name, bases, dict):
-
         def gen_test(cmd):
             def test(self):
                 Module(cmd)
+
             return test
 
-        cmds = [c for c in sorted(list(get_commands()[0]))
-                if c not in SKIP and not fnmatch(c, "g.gui.*")]
+        cmds = [
+            c
+            for c in sorted(list(get_commands()[0]))
+            if c not in SKIP and not fnmatch(c, "g.gui.*")
+        ]
         for cmd in cmds:
-            test_name = "test__%s" % cmd.replace('.', '_')
+            test_name = "test__%s" % cmd.replace(".", "_")
             dict[test_name] = gen_test(cmd)
         return type.__new__(mcs, name, bases, dict)
 
@@ -62,14 +67,14 @@ class TestModulesPickability(TestCase):
         import pickle
 
         out = StringIO()
-        pickle.dump(Module('r.sun'), out)
+        pickle.dump(Module("r.sun"), out)
         out.close()
 
 
 class TestModulesCheck(TestCase):
     def test_flags_with_suppress_required(self):
         """Test if flags with suppress required are handle correctly"""
-        gextension = Module('g.extension')
+        gextension = Module("g.extension")
         # check if raise an error if required parameter are missing
         with self.assertRaises(ParameterError):
             gextension.check()
@@ -79,5 +84,5 @@ class TestModulesCheck(TestCase):
         self.assertIsNone(gextension.check())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

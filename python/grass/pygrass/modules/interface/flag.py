@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 from grass.pygrass.modules.interface.docstring import docstring_property
 from grass.pygrass.modules.interface import read
 
@@ -28,13 +35,14 @@ class Flag(object):
     def __init__(self, xflag=None, diz=None):
         self.value = False
         diz = read.element2dict(xflag) if xflag is not None else diz
-        self.name = diz['name']
-        self.special = True if self.name in (
-            'verbose', 'overwrite', 'quiet', 'run') else False
-        self.description = diz.get('description', None)
-        self.default = diz.get('default', None)
-        self.guisection = diz.get('guisection', None)
-        self.suppress_required = True if 'suppress_required' in diz else False
+        self.name = diz["name"]
+        self.special = (
+            True if self.name in ("verbose", "overwrite", "quiet", "run") else False
+        )
+        self.description = diz.get("description", None)
+        self.default = diz.get("default", None)
+        self.guisection = diz.get("guisection", None)
+        self.suppress_required = True if "suppress_required" in diz else False
 
     def get_bash(self):
         """Return the BASH representation of a flag.
@@ -55,11 +63,11 @@ class Flag(object):
         """
         if self.value:
             if self.special:
-                return '--%s' % self.name[0]
+                return "--%s" % self.name[0]
             else:
-                return '-%s' % self.name
+                return "-%s" % self.name
         else:
-            return ''
+            return ""
 
     def get_python(self):
         """Return the python representation of a flag.
@@ -79,8 +87,8 @@ class Flag(object):
         'overwrite=True'
         """
         if self.value:
-            return '%s=True' % self.name if self.special else self.name
-        return ''
+            return "%s=True" % self.name if self.special else self.name
+        return ""
 
     def __str__(self):
         """Return the BASH representation of the flag."""
@@ -116,9 +124,9 @@ class Flag(object):
             None
 
         """
-        return read.DOC['flag'].format(name=self.name,
-                                       default=repr(self.default),
-                                       description=self.description,
-                                       supress=('suppress required'
-                                                if self.suppress_required
-                                                else ''))
+        return read.DOC["flag"].format(
+            name=self.name,
+            default=repr(self.default),
+            description=self.description,
+            supress=("suppress required" if self.suppress_required else ""),
+        )

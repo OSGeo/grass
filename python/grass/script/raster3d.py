@@ -44,30 +44,31 @@ def raster3d_info(map, env=None):
     """
 
     def float_or_null(s):
-        if s == 'NULL':
+        if s == "NULL":
             return None
         else:
             return float(s)
 
-    s = read_command('r3.info', flags='rg', map=map, env=env)
+    s = read_command("r3.info", flags="rg", map=map, env=env)
     kv = parse_key_val(s)
-    for k in ['min', 'max']:
+    for k in ["min", "max"]:
         kv[k] = float_or_null(kv[k])
-    for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
+    for k in ["north", "south", "east", "west", "top", "bottom"]:
         kv[k] = float(kv[k])
-    for k in ['nsres', 'ewres', 'tbres']:
+    for k in ["nsres", "ewres", "tbres"]:
         kv[k] = float_or_dms(kv[k])
-    for k in ['rows', 'cols', 'depths']:
+    for k in ["rows", "cols", "depths"]:
         kv[k] = int(kv[k])
-    for k in ['tilenumx', 'tilenumy', 'tilenumz']:
+    for k in ["tilenumx", "tilenumy", "tilenumz"]:
         kv[k] = int(kv[k])
-    for k in ['tiledimx', 'tiledimy', 'tiledimz']:
+    for k in ["tiledimx", "tiledimy", "tiledimz"]:
         kv[k] = int(kv[k])
     return kv
 
 
-def mapcalc3d(exp, quiet=False, verbose=False, overwrite=False,
-              seed=None, env=None, **kwargs):
+def mapcalc3d(
+    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+):
     """Interface to r3.mapcalc.
 
     :param str exp: expression
@@ -80,15 +81,24 @@ def mapcalc3d(exp, quiet=False, verbose=False, overwrite=False,
     :param kwargs:
     """
 
-    if seed == 'auto':
-        seed = hash((os.getpid(), time.time())) % (2**32)
+    if seed == "auto":
+        seed = hash((os.getpid(), time.time())) % (2 ** 32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
     try:
-        write_command('r3.mapcalc', file='-', stdin=e, env=env, seed=seed,
-                      quiet=quiet, verbose=verbose, overwrite=overwrite)
+        write_command(
+            "r3.mapcalc",
+            file="-",
+            stdin=e,
+            env=env,
+            seed=seed,
+            quiet=quiet,
+            verbose=verbose,
+            overwrite=overwrite,
+        )
     except CalledModuleError:
-        fatal(_("An error occurred while running r3.mapcalc"
-                " with expression: %s") % e)
+        fatal(
+            _("An error occurred while running r3.mapcalc" " with expression: %s") % e
+        )

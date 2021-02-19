@@ -12,9 +12,17 @@ dcont = """    <tr>
     </tr>"""
 
 
-def dict2html(dic, keys=None, border='',
-              kfmt='%s', kdec='', kfun=None,
-              vfmt='%s', vdec='', vfun=None):
+def dict2html(
+    dic,
+    keys=None,
+    border="",
+    kfmt="%s",
+    kdec="",
+    kfun=None,
+    vfmt="%s",
+    vdec="",
+    vfun=None,
+):
     """Return a html repr of a dictionary.
 
     :param dict dic: dictionary or object with `keys` and `items` methods
@@ -73,6 +81,7 @@ def dict2html(dic, keys=None, border='',
         </tr>
     </table>
     """
+
     def fun(x):
         return x
 
@@ -82,6 +91,13 @@ def dict2html(dic, keys=None, border='',
     vd = "<%s>%s</%s>" % (vdec, vfmt, vdec) if vdec else vfmt
     kfun = kfun if kfun else fun
     vfun = vfun if vfun else fun
-    content = [dcont.format(key=kd % kfun(k), value=vd % vfun(dic[k]))
-               for k in keys]
-    return '\n'.join([header, ] + content + ['</table>', ])
+    content = [dcont.format(key=kd % kfun(k), value=vd % vfun(dic[k])) for k in keys]
+    return "\n".join(
+        [
+            header,
+        ]
+        + content
+        + [
+            "</table>",
+        ]
+    )

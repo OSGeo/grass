@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 from os import listdir
 from os.path import join, isdir
 import shutil
@@ -19,21 +26,25 @@ from grass.pygrass.gis.region import Region
 test_vector_name = "Gis_test_vector"
 test_raster_name = "Gis_test_raster"
 
-libgis.G_gisinit('')
+libgis.G_gisinit("")
 
 
-ETYPE = {'raster': libgis.G_ELEMENT_RASTER,
-         'raster_3d': libgis.G_ELEMENT_RASTER3D,
-         'vector': libgis.G_ELEMENT_VECTOR,
-         'label': libgis.G_ELEMENT_LABEL,
-         'region': libgis.G_ELEMENT_REGION,
-         'group': libgis.G_ELEMENT_GROUP}
+ETYPE = {
+    "raster": libgis.G_ELEMENT_RASTER,
+    "raster_3d": libgis.G_ELEMENT_RASTER3D,
+    "vector": libgis.G_ELEMENT_VECTOR,
+    "label": libgis.G_ELEMENT_LABEL,
+    "region": libgis.G_ELEMENT_REGION,
+    "group": libgis.G_ELEMENT_GROUP,
+}
 
 
-CHECK_IS = {"GISBASE": libgis.G_is_gisbase,
-            "GISDBASE": lambda x: True,
-            "LOCATION_NAME": libgis.G_is_location,
-            "MAPSET": libgis.G_is_mapset}
+CHECK_IS = {
+    "GISBASE": libgis.G_is_gisbase,
+    "GISDBASE": lambda x: True,
+    "LOCATION_NAME": libgis.G_is_location,
+    "MAPSET": libgis.G_is_mapset,
+}
 
 
 def is_valid(value, path, type):
@@ -72,8 +83,9 @@ def _check_raise(value, path, type):
              if value is empty return environmental variable
     :rtype: str
     """
-    if value == '':
+    if value == "":
         from grass.pygrass.utils import getenv
+
         return getenv(type)
     if is_valid(value, path, type):
         return value
@@ -92,11 +104,11 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
     :param gisdbase: Name of the gisdbase
     :type gisdbase: str
     """
-    libgis.G_setenv('MAPSET', mapset)
+    libgis.G_setenv("MAPSET", mapset)
     if location:
-        libgis.G_setenv('LOCATION_NAME', location)
+        libgis.G_setenv("LOCATION_NAME", location)
     if gisdbase:
-        libgis.G_setenv('GISDBASE', gisdbase)
+        libgis.G_setenv("GISDBASE", gisdbase)
 
 
 def make_mapset(mapset, location=None, gisdbase=None):
@@ -128,23 +140,24 @@ class Gisdbase(object):
     ..
     """
 
-    def __init__(self, gisdbase=''):
+    def __init__(self, gisdbase=""):
         self.name = gisdbase
 
     def _get_name(self):
         return self._name
 
     def _set_name(self, name):
-        self._name = _check_raise(name, '', "GISDBASE")
+        self._name = _check_raise(name, "", "GISDBASE")
 
-    name = property(fget=_get_name, fset=_set_name,
-                    doc="Set or obtain the name of GISDBASE")
+    name = property(
+        fget=_get_name, fset=_set_name, doc="Set or obtain the name of GISDBASE"
+    )
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
-        return 'Gisdbase(%s)' % self.name
+        return "Gisdbase(%s)" % self.name
 
     def __getitem__(self, location):
         """Return a Location object. ::
@@ -161,7 +174,7 @@ class Gisdbase(object):
         if location in self.locations():
             return Location(location, self.name)
         else:
-            raise KeyError('Location: %s does not exist' % location)
+            raise KeyError("Location: %s does not exist" % location)
 
     def __iter__(self):
         for loc in self.locations():
@@ -181,8 +194,13 @@ class Gisdbase(object):
 
         ..
         """
-        return sorted([loc for loc in listdir(self.name)
-                       if libgis.G_is_location(encode(join(self.name, loc)))])
+        return sorted(
+            [
+                loc
+                for loc in listdir(self.name)
+                if libgis.G_is_location(encode(join(self.name, loc)))
+            ]
+        )
 
 
 class Location(object):
@@ -200,7 +218,7 @@ class Location(object):
     ..
     """
 
-    def __init__(self, location='', gisdbase=''):
+    def __init__(self, location="", gisdbase=""):
         self.gisdbase = gisdbase
         self.name = location
 
@@ -208,10 +226,11 @@ class Location(object):
         return self._gisdb
 
     def _set_gisdb(self, gisdb):
-        self._gisdb = _check_raise(gisdb, '', "GISDBASE")
+        self._gisdb = _check_raise(gisdb, "", "GISDBASE")
 
-    gisdbase = property(fget=_get_gisdb, fset=_set_gisdb,
-                        doc="Set or obtain the name of GISDBASE")
+    gisdbase = property(
+        fget=_get_gisdb, fset=_set_gisdb, doc="Set or obtain the name of GISDBASE"
+    )
 
     def _get_name(self):
         return self._name
@@ -219,19 +238,23 @@ class Location(object):
     def _set_name(self, name):
         self._name = _check_raise(name, self._gisdb, "LOCATION_NAME")
 
-    name = property(fget=_get_name, fset=_set_name,
-                    doc="Set or obtain the name of LOCATION")
+    name = property(
+        fget=_get_name, fset=_set_name, doc="Set or obtain the name of LOCATION"
+    )
 
     def __getitem__(self, mapset):
         if mapset in self.mapsets():
             return Mapset(mapset)
         else:
-            raise KeyError('Mapset: %s does not exist' % mapset)
+            raise KeyError("Mapset: %s does not exist" % mapset)
 
     def __iter__(self):
         lpath = self.path()
-        return (m for m in listdir(lpath)
-                if (isdir(join(lpath, m)) and is_valid(m, lpath, "MAPSET")))
+        return (
+            m
+            for m in listdir(lpath)
+            if (isdir(join(lpath, m)) and is_valid(m, lpath, "MAPSET"))
+        )
 
     def __len__(self):
         return len(self.mapsets())
@@ -240,7 +263,7 @@ class Location(object):
         return self.name
 
     def __repr__(self):
-        return 'Location(%r)' % self.name
+        return "Location(%r)" % self.name
 
     def mapsets(self, pattern=None, permissions=True):
         """Return a list of the available mapsets.
@@ -261,8 +284,11 @@ class Location(object):
         """
         mapsets = [mapset for mapset in self]
         if permissions:
-            mapsets = [mapset for mapset in mapsets
-                       if libgis.G_mapset_permissions(encode(mapset))]
+            mapsets = [
+                mapset
+                for mapset in mapsets
+                if libgis.G_mapset_permissions(encode(mapset))
+            ]
         if pattern:
             return fnmatch.filter(mapsets, pattern)
         return mapsets
@@ -290,7 +316,7 @@ class Mapset(object):
     ..
     """
 
-    def __init__(self, mapset='', location='', gisdbase=''):
+    def __init__(self, mapset="", location="", gisdbase=""):
         self.gisdbase = gisdbase
         self.location = location
         self.name = mapset
@@ -300,10 +326,11 @@ class Mapset(object):
         return self._gisdb
 
     def _set_gisdb(self, gisdb):
-        self._gisdb = _check_raise(gisdb, '', "GISDBASE")
+        self._gisdb = _check_raise(gisdb, "", "GISDBASE")
 
-    gisdbase = property(fget=_get_gisdb, fset=_set_gisdb,
-                        doc="Set or obtain the name of GISDBASE")
+    gisdbase = property(
+        fget=_get_gisdb, fset=_set_gisdb, doc="Set or obtain the name of GISDBASE"
+    )
 
     def _get_loc(self):
         return self._loc
@@ -311,8 +338,9 @@ class Mapset(object):
     def _set_loc(self, loc):
         self._loc = _check_raise(loc, self._gisdb, "LOCATION_NAME")
 
-    location = property(fget=_get_loc, fset=_set_loc,
-                        doc="Set or obtain the name of LOCATION")
+    location = property(
+        fget=_get_loc, fset=_set_loc, doc="Set or obtain the name of LOCATION"
+    )
 
     def _get_name(self):
         return self._name
@@ -320,14 +348,15 @@ class Mapset(object):
     def _set_name(self, name):
         self._name = _check_raise(name, join(self._gisdb, self._loc), "MAPSET")
 
-    name = property(fget=_get_name, fset=_set_name,
-                    doc="Set or obtain the name of MAPSET")
+    name = property(
+        fget=_get_name, fset=_set_name, doc="Set or obtain the name of MAPSET"
+    )
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
-        return 'Mapset(%r)' % self.name
+        return "Mapset(%r)" % self.name
 
     def glist(self, type, pattern=None):
         """Return a list of grass types like:
@@ -359,9 +388,8 @@ class Mapset(object):
         """
         if type not in ETYPE:
             str_err = "Type %s is not valid, valid types are: %s."
-            raise TypeError(str_err % (type, ', '.join(ETYPE.keys())))
-        clist = libgis.G_list(ETYPE[type], self.gisdbase,
-                              self.location, self.name)
+            raise TypeError(str_err % (type, ", ".join(ETYPE.keys())))
+        clist = libgis.G_list(ETYPE[type], self.gisdbase, self.location, self.name)
         elist = []
         for el in clist:
             el_name = ct.cast(el, ct.c_char_p).value
@@ -374,9 +402,11 @@ class Mapset(object):
 
     def is_current(self):
         """Check if the MAPSET is the working MAPSET"""
-        return (self.name == getenv('MAPSET') and
-                self.location == getenv('LOCATION_NAME') and
-                self.gisdbase == getenv('GISDBASE'))
+        return (
+            self.name == getenv("MAPSET")
+            and self.location == getenv("LOCATION_NAME")
+            and self.gisdbase == getenv("GISDBASE")
+        )
 
     def current(self):
         """Set the mapset as current"""
@@ -385,7 +415,7 @@ class Mapset(object):
     def delete(self):
         """Delete the mapset"""
         if self.is_current():
-            raise GrassError('The mapset is in use.')
+            raise GrassError("The mapset is in use.")
         shutil.rmtree(self.path())
 
     def path(self):
@@ -394,14 +424,13 @@ class Mapset(object):
 
 
 class VisibleMapset(object):
-    """VisibleMapset object
-    """
+    """VisibleMapset object"""
 
-    def __init__(self, mapset, location='', gisdbase=''):
+    def __init__(self, mapset, location="", gisdbase=""):
         self.mapset = mapset
         self.location = Location(location, gisdbase)
         self._list = []
-        self.spath = join(self.location.path(), self.mapset, 'SEARCH_PATH')
+        self.spath = join(self.location.path(), self.mapset, "SEARCH_PATH")
 
     def __repr__(self):
         return repr(self.read())
@@ -416,7 +445,9 @@ class VisibleMapset(object):
             lines = f.readlines()
             if lines:
                 return [decode(l.strip()) for l in lines]
-        lns = [u'PERMANENT', ]
+        lns = [
+            "PERMANENT",
+        ]
         self._write(lns)
         return lns
 
@@ -428,7 +459,7 @@ class VisibleMapset(object):
         """
         with open(self.spath, "wb+") as f:
             ms = [decode(m) for m in self.location.mapsets()]
-            f.write(b'\n'.join([encode(m) for m in mapsets if m in ms]))
+            f.write(b"\n".join([encode(m) for m in mapsets if m in ms]))
 
     def add(self, mapset):
         """Add a mapset to the search path
@@ -438,9 +469,9 @@ class VisibleMapset(object):
         """
         if mapset not in self.read() and mapset in self.location:
             with open(self.spath, "a+") as f:
-                f.write('\n%s' % mapset)
+                f.write("\n%s" % mapset)
         else:
-            raise TypeError('Mapset not found')
+            raise TypeError("Mapset not found")
 
     def remove(self, mapset):
         """Remove mapset to the search path
@@ -466,7 +497,7 @@ class VisibleMapset(object):
 
     def reset(self):
         """Reset to the original search path"""
-        final = [self.mapset, 'PERMANENT']
+        final = [self.mapset, "PERMANENT"]
         self._write(final)
 
 
@@ -477,18 +508,15 @@ if __name__ == "__main__":
 
     utils.create_test_vector_map(test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)
-    run_command("r.mapcalc", expression="%s = 1" % (test_raster_name),
-                overwrite=True)
+    run_command("r.mapcalc", expression="%s = 1" % (test_raster_name), overwrite=True)
     run_command("g.region", n=40, s=0, e=40, w=0, res=2)
 
     doctest.testmod()
 
     # Remove the generated vector map, if exist
-    mset = utils.get_mapset_vector(test_vector_name, mapset='')
+    mset = utils.get_mapset_vector(test_vector_name, mapset="")
     if mset:
-        run_command("g.remove", flags='f', type='vector',
-                    name=test_vector_name)
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+        run_command("g.remove", flags="f", type="vector", name=test_vector_name)
+    mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
-        run_command("g.remove", flags='f', type='raster',
-                    name=test_raster_name)
+        run_command("g.remove", flags="f", type="raster", name=test_raster_name)

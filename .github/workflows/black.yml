@@ -13,6 +13,7 @@ jobs:
         directory:
           - lib/init
           - man
+          - python
           - scripts
           - utils
       fail-fast: false
@@ -32,5 +33,4 @@ jobs:
 
       - name: Run Black
         run: |
-          cd ${{ matrix.directory }}
-          black --check --diff .
+          black --check --diff ${{ matrix.directory }}

@@ -17,8 +17,9 @@ class TestSuccessAndFailure(TestCase):
         self.assertTrue(False, msg="This failed in test_good_and_bad")
 
     def test_something_erroring(self):
-        raise RuntimeError('Some error which was raised')
+        raise RuntimeError("Some error which was raised")
         self.assertTrue(True, msg="This should not fail in test_good_and_bad")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

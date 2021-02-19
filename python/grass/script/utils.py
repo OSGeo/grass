@@ -47,9 +47,9 @@ def float_or_dms(s):
 
     :return: float value
     """
-    if s[-1] in ['E', 'W', 'N', 'S']:
+    if s[-1] in ["E", "W", "N", "S"]:
         s = s[:-1]
-    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(':')))
+    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(":")))
 
 
 def separator(sep):
@@ -93,11 +93,11 @@ def diff_files(filename_a, filename_b):
     :return: list of strings
     """
     import difflib
+
     differ = difflib.Differ()
-    fh_a = open(filename_a, 'r')
-    fh_b = open(filename_b, 'r')
-    result = list(differ.compare(fh_a.readlines(),
-                                 fh_b.readlines()))
+    fh_a = open(filename_a, "r")
+    fh_b = open(filename_b, "r")
+    result = list(differ.compare(fh_a.readlines(), fh_b.readlines()))
     return result
 
 
@@ -135,7 +135,7 @@ def basename(path, ext=None):
     name = os.path.basename(path)
     if not ext:
         return name
-    fs = name.rsplit('.', 1)
+    fs = name.rsplit(".", 1)
     if len(fs) > 1 and fs[1].lower() == ext:
         name = fs[0]
     return name
@@ -166,7 +166,7 @@ class KeyValue(dict):
 def _get_encoding():
     encoding = locale.getdefaultlocale()[1]
     if not encoding:
-        encoding = 'UTF-8'
+        encoding = "UTF-8"
     return encoding
 
 
@@ -244,9 +244,9 @@ def encode(string, encoding=None):
 
 def text_to_string(text, encoding=None):
     """Convert text to str. Useful when passing text into environments,
-       in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+    in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == '2':
+    if sys.version[0] == "2":
         # Python 2
         return encode(text, encoding=encoding)
     else:
@@ -254,7 +254,7 @@ def text_to_string(text, encoding=None):
         return decode(text, encoding=encoding)
 
 
-def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
+def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
@@ -284,7 +284,7 @@ def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
     if vsep:
         lines = s.split(vsep)
         try:
-            lines.remove('\n')
+            lines.remove("\n")
         except ValueError:
             pass
     else:
@@ -319,15 +319,15 @@ def get_num_suffix(number, max_number):
     >>> get_num_suffix(10, 10)
     '10'
     """
-    return '{number:0{width}d}'.format(width=len(str(max_number)),
-                                       number=number)
+    return "{number:0{width}d}".format(width=len(str(max_number)), number=number)
+
 
 def split(s):
     """!Platform specific shlex.split"""
     if sys.version_info >= (2, 6):
-        return shlex.split(s, posix = (sys.platform != "win32"))
+        return shlex.split(s, posix=(sys.platform != "win32"))
     elif sys.platform == "win32":
-        return shlex.split(s.replace('\\', r'\\'))
+        return shlex.split(s.replace("\\", r"\\"))
     else:
         return shlex.split(s)
 
@@ -343,16 +343,14 @@ def natural_sort(l):
 
 
 def naturally_sorted(l, key=None):
-    """Returns sorted list using natural sort
-    """
+    """Returns sorted list using natural sort"""
     copy_l = l[:]
     naturally_sort(copy_l, key)
     return copy_l
 
 
 def naturally_sort(l, key=None):
-    """Sorts lists using natural sort
-    """
+    """Sorts lists using natural sort"""
 
     def convert(text):
         return int(text) if text.isdigit() else text.lower()
@@ -362,49 +360,54 @@ def naturally_sort(l, key=None):
             sort_key = key(actual_key)
         else:
             sort_key = actual_key
-        return [convert(c) for c in re.split('([0-9]+)', sort_key)]
+        return [convert(c) for c in re.split("([0-9]+)", sort_key)]
 
     l.sort(key=alphanum_key)
 
 
 def get_lib_path(modname, libname=None):
-    """Return the path of the libname contained in the module.
-    """
+    """Return the path of the libname contained in the module."""
     from os.path import isdir, join, sep
     from os import getenv
 
-    if isdir(join(getenv('GISBASE'), 'etc', modname)):
-        path = join(os.getenv('GISBASE'), 'etc', modname)
-    elif getenv('GRASS_ADDON_BASE') and libname and \
-            isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname, libname)):
-        path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname)
-    elif getenv('GRASS_ADDON_BASE') and \
-            isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname)):
-        path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname)
-    elif getenv('GRASS_ADDON_BASE') and \
-            isdir(join(getenv('GRASS_ADDON_BASE'), modname, modname)):
-        path = join(os.getenv('GRASS_ADDON_BASE'), modname, modname)
+    if isdir(join(getenv("GISBASE"), "etc", modname)):
+        path = join(os.getenv("GISBASE"), "etc", modname)
+    elif (
+        getenv("GRASS_ADDON_BASE")
+        and libname
+        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname, libname))
+    ):
+        path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
+    elif getenv("GRASS_ADDON_BASE") and isdir(
+        join(getenv("GRASS_ADDON_BASE"), "etc", modname)
+    ):
+        path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
+    elif getenv("GRASS_ADDON_BASE") and isdir(
+        join(getenv("GRASS_ADDON_BASE"), modname, modname)
+    ):
+        path = join(os.getenv("GRASS_ADDON_BASE"), modname, modname)
     else:
         # used by g.extension compilation process
         cwd = os.getcwd()
         idx = cwd.find(modname)
         if idx < 0:
             return None
-        path = '{cwd}{sep}etc{sep}{modname}'.format(cwd=cwd[:idx+len(modname)],
-                                                    sep=sep,
-                                                    modname=modname)
+        path = "{cwd}{sep}etc{sep}{modname}".format(
+            cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+        )
         if libname:
-            path += '{pathsep}{cwd}{sep}etc{sep}{modname}{sep}{libname}'.format(
-                cwd=cwd[:idx+len(modname)],
+            path += "{pathsep}{cwd}{sep}etc{sep}{modname}{sep}{libname}".format(
+                cwd=cwd[: idx + len(modname)],
                 sep=sep,
-                modname=modname, libname=libname,
-                pathsep=os.pathsep
+                modname=modname,
+                libname=libname,
+                pathsep=os.pathsep,
             )
 
     return path
 
 
-def set_path(modulename, dirname=None, path='.'):
+def set_path(modulename, dirname=None, path="."):
     """Set sys.path looking in the the local directory GRASS directories.
 
     :param modulename: string with the name of the GRASS module
@@ -463,6 +466,7 @@ def set_path(modulename, dirname=None, path='.'):
 
     """
     import sys
+
     # TODO: why dirname is checked first - the logic should be revised
     pathlib = None
     if dirname:
@@ -476,10 +480,13 @@ def set_path(modulename, dirname=None, path='.'):
         path = get_lib_path(modulename, dirname)
         if path is None:
             pathname = os.path.join(modulename, dirname) if dirname else modulename
-            raise ImportError("Not able to find the path '%s' directory "
-                              "(current dir '%s')." % (pathname, os.getcwd()))
+            raise ImportError(
+                "Not able to find the path '%s' directory "
+                "(current dir '%s')." % (pathname, os.getcwd())
+            )
 
         sys.path.insert(0, path)
+
 
 def clock():
     """
@@ -487,7 +494,7 @@ def clock():
     Uses time.clock() for Py < 3.3, time.perf_counter() for Py >= 3.3.
     Should be used only as difference between the calls.
     """
-    if sys.version_info > (3,2):
+    if sys.version_info > (3, 2):
         return time.perf_counter()
     return time.clock()
 
@@ -603,9 +610,7 @@ def append_random(name, suffix_length=None, total_length=None):
             "Either suffix_length or total_length can be provided, not both"
         )
     if not suffix_length and not total_length:
-        raise ValueError(
-            "suffix_length or total_length has to be provided"
-        )
+        raise ValueError("suffix_length or total_length has to be provided")
     if total_length:
         # remove len of name and one underscore
         name_length = len(name)
@@ -614,14 +619,12 @@ def append_random(name, suffix_length=None, total_length=None):
             raise ValueError(
                 "No characters left for the suffix:"
                 " total_length <{total_length}> is too small"
-                " or name <{name}> ({name_length}) is too long".format(
-                    **locals()
-                )
+                " or name <{name}> ({name_length}) is too long".format(**locals())
             )
     # We don't do lower and upper case because that could cause conflicts in
     # contexts which are case-insensitive.
     # We use lowercase because that's what is in UUID4 hex string.
     allowed_chars = string.ascii_lowercase + string.digits
     # The following can be shorter with random.choices from Python 3.6.
-    suffix = ''.join(random.choice(allowed_chars) for _ in range(suffix_length))
+    suffix = "".join(random.choice(allowed_chars) for _ in range(suffix_length))
     return "{name}_{suffix}".format(**locals())

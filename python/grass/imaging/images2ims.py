@@ -80,19 +80,19 @@ def checkImages(images):
                 pass  # ok
             elif im.ndim == 3:
                 if im.shape[2] not in [3, 4]:
-                    raise ValueError('This array can not represent an image.')
+                    raise ValueError("This array can not represent an image.")
             else:
-                raise ValueError('This array can not represent an image.')
+                raise ValueError("This array can not represent an image.")
         else:
-            raise ValueError('Invalid image type: ' + str(type(im)))
+            raise ValueError("Invalid image type: " + str(type(im)))
 
     # Done
     return images2
 
 
 def _getFilenameParts(filename):
-    if '*' in filename:
-        return tuple(filename.split('*', 1))
+    if "*" in filename:
+        return tuple(filename.split("*", 1))
     else:
         return os.path.splitext(filename)
 
@@ -100,13 +100,13 @@ def _getFilenameParts(filename):
 def _getFilenameWithFormatter(filename, N):
 
     # Determine sequence number formatter
-    formatter = '%04i'
+    formatter = "%04i"
     if N < 10:
-        formatter = '%i'
+        formatter = "%i"
     elif N < 100:
-        formatter = '%02i'
+        formatter = "%02i"
     elif N < 1000:
-        formatter = '%03i'
+        formatter = "%03i"
 
     # Insert sequence number formatter
     part1, part2 = _getFilenameParts(filename)
@@ -115,11 +115,11 @@ def _getFilenameWithFormatter(filename, N):
 
 def _getSequenceNumber(filename, part1, part2):
     # Get string bit
-    seq = filename[len(part1):-len(part2)]
+    seq = filename[len(part1) : -len(part2)]
     # Get all numeric chars
-    seq2 = ''
+    seq2 = ""
     for c in seq:
-        if c in '0123456789':
+        if c in "0123456789":
             seq2 += c
         else:
             break
@@ -175,7 +175,7 @@ def writeIms(filename, images):
 
 
 def readIms(filename, asNumpy=True):
-    """ readIms(filename, asNumpy=True)
+    """readIms(filename, asNumpy=True)
 
     Read images from a series of images in a single directory. Returns a
     list of numpy arrays, or, if asNumpy is false, a list if PIL images.
@@ -198,7 +198,7 @@ def readIms(filename, asNumpy=True):
 
     # Check dir exists
     if not os.path.isdir(dirname):
-        raise IOError('Directory not found: '+str(dirname))
+        raise IOError("Directory not found: " + str(dirname))
 
     # Get two parts of the filename
     part1, part2 = _getFilenameParts(filename)
@@ -225,7 +225,7 @@ def readIms(filename, asNumpy=True):
         images = []
         for im in images2:
             # Make without palette
-            if im.mode == 'P':
+            if im.mode == "P":
                 im = im.convert()
             # Make numpy array
             a = np.asarray(im)

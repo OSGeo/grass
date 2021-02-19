@@ -44,21 +44,27 @@ class SimpleModule(Module):
     """
 
     def __init__(self, cmd, *args, **kargs):
-        for banned in ['stdout_', 'stderr_', 'finish_', 'run_']:
+        for banned in ["stdout_", "stderr_", "finish_", "run_"]:
             if banned in kargs:
-                raise ValueError('Do not set %s parameter'
-                                 ', it would be overriden' % banned)
-        kargs['stdout_'] = subprocess.PIPE
-        kargs['stderr_'] = subprocess.PIPE
-        kargs['finish_'] = True
-        kargs['run_'] = False
+                raise ValueError(
+                    "Do not set %s parameter" ", it would be overriden" % banned
+                )
+        kargs["stdout_"] = subprocess.PIPE
+        kargs["stderr_"] = subprocess.PIPE
+        kargs["finish_"] = True
+        kargs["run_"] = False
 
         Module.__init__(self, cmd, *args, **kargs)
 
 
-def call_module(module, stdin=None,
-                merge_stderr=False, capture_stdout=True, capture_stderr=True,
-                **kwargs):
+def call_module(
+    module,
+    stdin=None,
+    merge_stderr=False,
+    capture_stdout=True,
+    capture_stderr=True,
+    **kwargs,
+):
     r"""Run module with parameters given in `kwargs` and return its output.
 
     >>> print (call_module('g.region', flags='pg'))  # doctest: +ELLIPSIS
@@ -101,27 +107,27 @@ def call_module(module, stdin=None,
     do_doctest_gettext_workaround()
     # implementation inspired by subprocess.check_output() function
     if stdin:
-        if 'input' in kwargs and kwargs['input'] != '-':
+        if "input" in kwargs and kwargs["input"] != "-":
             raise ValueError(_("input='-' must be used when stdin is specified"))
         if stdin == subprocess.PIPE:
             raise ValueError(_("stdin must be string or buffer, not PIPE"))
-        kwargs['stdin'] = subprocess.PIPE  # to be able to send data to stdin
-    elif 'input' in kwargs and kwargs['input'] == '-':
+        kwargs["stdin"] = subprocess.PIPE  # to be able to send data to stdin
+    elif "input" in kwargs and kwargs["input"] == "-":
         raise ValueError(_("stdin must be used when input='-'"))
     if merge_stderr and not (capture_stdout and capture_stderr):
         raise ValueError(_("You cannot merge stdout and stderr and not capture them"))
-    if 'stdout' in kwargs:
+    if "stdout" in kwargs:
         raise TypeError(_("stdout argument not allowed, it could be overridden"))
-    if 'stderr' in kwargs:
+    if "stderr" in kwargs:
         raise TypeError(_("stderr argument not allowed, it could be overridden"))
 
     if capture_stdout:
-        kwargs['stdout'] = subprocess.PIPE
+        kwargs["stdout"] = subprocess.PIPE
     if capture_stderr:
         if merge_stderr:
-            kwargs['stderr'] = subprocess.STDOUT
+            kwargs["stderr"] = subprocess.STDOUT
         else:
-            kwargs['stderr'] = subprocess.PIPE
+            kwargs["stderr"] = subprocess.PIPE
     process = start_command(module, **kwargs)
     # input=None means no stdin (our default)
     # for no stdout, output is None which is out interface
