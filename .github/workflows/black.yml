@@ -12,6 +12,7 @@ jobs:
       matrix:
         directory:
           - lib/init
+          - man
           - scripts
           - utils
       fail-fast: false

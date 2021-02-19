@@ -12,7 +12,7 @@ from build_html import *
 os.chdir(html_dir)
 
 filename = "index.html"
-f = open(filename + ".tmp", 'w')
+f = open(filename + ".tmp", "w")
 
 year = None
 if len(sys.argv) > 1:
