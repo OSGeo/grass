@@ -692,9 +692,9 @@ EXCLUDE                = bin.@ARCH@ \
                          lib/gpde/test \
                          lib/linkm/test \
                          lib/raster3d/test \
-                         lib/python \
                          lib/vector/dglib/examples \
                          lib/vector/rtree/docs \
+                         python \
                          locale \
                          macosx \
                          man \

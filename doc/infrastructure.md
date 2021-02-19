@@ -284,9 +284,9 @@ Maintainer: Vaclav Petras
 * CI workflow with:
     * A build job which is not parallelized and is meant for clear & relatively fast check of compilation and building in general. (Duplicating what is running on Travis)
     * A test job which of course needs to build, but the main focus is to run tests, so the compilation is parallelized (depending on nproc) and thus potentially less readable. This runs the whole test suite. (You need to run it locally to see the actual error, but you can see which tests are failing.)
-* Static code analysis/Code quality check using Flake8 with separate tests for lib/python, gui/wxpython, scripts and temporal directories.
-    * lib/python uses configuration which ignores code in testsuite directories and ignores a lot of errors.
-    * The other directories use the default settings and the failure is ignored. (Neither is an ideal solution, but we can see and change it based on whatever is more advantageous for getting it fixed.)
+* Static code analysis/Code quality check using Flake8 with separate checks for python/grass, gui/wxpython, scripts and temporal directories.
+    * Configurations ignore different lists of Flake8 errors. The idea is to reduce that to minimum.
+    * Code in testsuite directories is also ignored for now, but should not be in the future.
 
 Helper files placed to .github/workflows
 

@@ -110,8 +110,8 @@ Example Bash script to run be used as a cron job
     
     # necessary hardcoded GRASS paths
     GRASSDIST_PYTHON="$GRASSDIST/etc/python"
-    GRASS_MULTI_RUNNER="$GRASSSRC/lib/python/gunittest/multirunner.py"
-    GRASS_MULTI_REPORTER="$GRASSSRC/lib/python/gunittest/multireport.py"
+    GRASS_MULTI_RUNNER="$GRASSSRC/python/grass/gunittest/multirunner.py"
+    GRASS_MULTI_REPORTER="$GRASSSRC/python/grass/gunittest/multireport.py"
 
     DATE_FLAGS="--utc +%Y-%m-%d-%H-%M"
     NOW=$(date $DATE_FLAGS)
