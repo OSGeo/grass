@@ -64,6 +64,7 @@ def do_doctest_gettext_workaround():
 
 _MAX_LENGTH = 80
 
+
 # taken from unittest.util (Python 2.7) since it is not part of API
 # but we need it for the same reason as it is used un unittest's TestCase
 def safe_repr(obj, short=False):

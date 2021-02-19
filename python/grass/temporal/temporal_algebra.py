@@ -515,14 +515,14 @@ class TemporalAlgebraLexer(object):
         # sample time interval in days and
         # fraction of days for absolute time,
         # and in relative units in case of relative time.
-        #'start_td'    : 'START_TD',     # The time difference between the start
+        # 'start_td'    : 'START_TD',     # The time difference between the start
         # time of the sample space time raster
         # dataset and the start time of the
         # current sample interval or instance.
         # The time is measured in days and
         # fraction of days for absolute time,
         # and in relative units in case of relative time.
-        #'end_td'      : 'END_TD',       # The time difference between the
+        # 'end_td'      : 'END_TD',       # The time difference between the
         # start time of the sample
         # space time raster dataset and the
         # end time of the current sample interval.

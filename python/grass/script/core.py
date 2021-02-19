@@ -37,6 +37,7 @@ from grass.exceptions import ScriptError, CalledModuleError
 if sys.version_info.major >= 3:
     unicode = str
 
+
 # subprocess wrapper that uses shell on Windows
 class Popen(subprocess.Popen):
     _builtin_exts = set([".com", ".exe", ".bat", ".cmd"])
@@ -243,6 +244,7 @@ def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
 if sys.version_info.major >= 3:
     # Use shutil.which in Python 3, not the custom implementation.
     shutil_which = shutil.which  # noqa: F811
+
 
 # Added because of scripts calling scripts on MS Windows.
 # Module name (here cmd) differs from the file name (does not have extension).
