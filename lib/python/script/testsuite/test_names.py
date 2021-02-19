@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 import platform
 
 from grass.gunittest.case import TestCase
@@ -20,7 +19,7 @@ class TestUnique(TestCase):
         self.assertIn(base_name, full_name)
         self.assertGreater(len(full_name), len(base_name))
         self.assertIn(str(os.getpid()), full_name)
-        self.assertIn(platform.node(), full_name)
+        self.assertIn(utils.legalize_vector_name(platform.node()), full_name)
         self.assertTrue(legal_name(full_name))
         # TODO: It should be also a valid vector name
         # but we don't have a function for that (same for all)

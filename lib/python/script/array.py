@@ -10,7 +10,6 @@ Usage:
 >>> # We create a temporary region that is only valid in this python session
 ... gs.use_temp_region()
 >>> gs.run_command("g.region", n=80, e=120, t=60, s=0, w=0, b=0, res=20, res3=20)
-0
 >>>
 >>> # Lets create a raster map numpy array
 ... # based at the current region settings
