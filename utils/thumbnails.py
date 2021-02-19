@@ -13,7 +13,6 @@
 #       for details.
 #
 
-import sys
 import os
 import atexit
 import grass.script as grass

@@ -16,8 +16,6 @@
 
 import os
 import sys
-import fnmatch
-import re
 
 from build_html import write_html_footer, grass_version, header1_tmpl
 
