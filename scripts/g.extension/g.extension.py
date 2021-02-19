@@ -2206,7 +2206,7 @@ def resolve_known_host_service(url, name, branch):
 
 
 # TODO: add also option to enforce the source type
-def resolve_source_code(url=None, name=None, branch=None):
+def resolve_source_code(url=None, name=None, branch=None, fork=False):
     """Return type and URL or path of the source code
 
     Local paths are not presented as URLs to be usable in standard functions.
@@ -2289,7 +2289,7 @@ def resolve_source_code(url=None, name=None, branch=None):
         # return 'official', trac_url
         return "official", git_url
 
-    if url and flags["o"]:
+    if url and fork:
         module_class = get_module_class_name(name)
 
         # note: 'trunk' is required to make URL usable for 'svn export' call
@@ -2425,7 +2425,9 @@ def main():
         # using dummy extension, we don't need any extension URL now,
         # but will work only as long as the function does not check
         # if the URL is actually valid or something
-        source, url = resolve_source_code(name="dummy", url=original_url, branch=branch)
+        source, url = resolve_source_code(
+            name="dummy", url=original_url, branch=branch, fork=flags["o"]
+        )
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
         list_available_extensions(xmlurl)
         return 0
@@ -2455,7 +2457,7 @@ def main():
             """
             get_addons_paths(gg_addons_base_dir=options["prefix"])
         source, url = resolve_source_code(
-            name=options["extension"], url=original_url, branch=branch
+            name=options["extension"], url=original_url, branch=branch, fork=flags["o"]
         )
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
         install_extension(source=source, url=url, xmlurl=xmlurl, branch=branch)
