@@ -23,7 +23,6 @@
 /****************************************************************************/
 
 static void prepare_region_from_maps(expression **, int, int);
-int columns;
 struct Cell_head current_region2;
 
 void setup_region(void)
