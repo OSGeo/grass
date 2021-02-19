@@ -253,7 +253,7 @@ def write_toc(data):
                 fd.write("%s</ul></li>\n" % (" " * indent))
                 in_h3 = False
 
-        text = text.replace(u"\xa0", u" ")
+        text = text.replace("\xa0", " ")
         fd.write(
             '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
             % (" " * indent, escape_href(text), text)

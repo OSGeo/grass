@@ -224,7 +224,7 @@ def main():
                 input=OGRdatasource,
                 flags=vflags,
                 overwrite=overwrite,
-                **vopts
+                **vopts,
             )
             grass.message(
                 _("Input <%s> successfully imported without reprojection")
@@ -281,7 +281,7 @@ def main():
             flags="i",
             quiet=True,
             overwrite=overwrite,
-            **vopts
+            **vopts,
         )
     except CalledModuleError:
         grass.fatal(

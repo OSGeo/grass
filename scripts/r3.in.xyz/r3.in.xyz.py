@@ -239,7 +239,7 @@ def main():
             x=x,
             y=y,
             z=z,
-            **addl_opts
+            **addl_opts,
         )
         sys.exit()
 
@@ -305,7 +305,7 @@ def main():
             percent=percent,
             type=data_type,
             zrange="%.15g,%.15g" % (zrange_min, zrange_max),
-            **addl_opts
+            **addl_opts,
         )
 
         grass.debug("i=%d, %%=%d  (workers=%d)" % (i, i % workers, workers))
