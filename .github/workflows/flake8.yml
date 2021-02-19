@@ -13,7 +13,7 @@ jobs:
       matrix:
         directory:
         - gui/wxpython
-        - lib/python
+        - python/grass
         - lib/init
         - scripts
         - temporal

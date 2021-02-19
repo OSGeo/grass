@@ -41,7 +41,6 @@ SUBDIRS = \
 	ogsf \
 	nviz \
 	temporal \
-	python \
 	iostream \
 	manage \
 	calc
