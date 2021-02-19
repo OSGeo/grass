@@ -6,17 +6,8 @@ on:
 
 jobs:
   run-black:
-    name: ${{ matrix.directory }}
+    name: Check
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        directory:
-          - lib/init
-          - man
-          - python
-          - scripts
-          - utils
-      fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
@@ -33,4 +24,4 @@ jobs:
 
       - name: Run Black
         run: |
-          black --check --diff ${{ matrix.directory }}
+          black --check --diff .

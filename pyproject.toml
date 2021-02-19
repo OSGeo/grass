@@ -23,5 +23,17 @@ exclude = '''
     # https://github.com/psf/black/issues/1970
     | python/grass/imaging/images2gif.py
     | python/grass/pygrass/raster/category.py
+    # Directories and files not yet under Black
+    | db
+    | doc
+    | general
+    | gui
+    | imagery
+    | lib/gis
+    | temporal
+    | raster
+    | vector
+    | docker/testdata/test_grass_session.py
+    | display/d.mon/render_cmd.py
 )
 '''
