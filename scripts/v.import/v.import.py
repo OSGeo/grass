@@ -133,11 +133,13 @@ def GDAL_COMPUTE_VERSION(maj, min, rev):
     return (maj) * 1000000 + (min) * 10000 + (rev) * 100
 
 
-def is_projection_matching(OGRdatasource):
+def is_projection_matching(OGRdatasource, layer):
     """Returns True if current location projection
     matches dataset projection, otherwise False"""
     try:
-        grass.run_command("v.in.ogr", input=OGRdatasource, flags="j", quiet=True)
+        grass.run_command(
+            "v.in.ogr", input=OGRdatasource, layer=layer, flags="j", quiet=True
+        )
         return True
     except CalledModuleError:
         return False
@@ -215,7 +217,7 @@ def main():
     vopts["snap"] = options["snap"]
 
     # try v.in.ogr directly
-    if flags["o"] or is_projection_matching(OGRdatasource):
+    if flags["o"] or is_projection_matching(OGRdatasource, layers):
         try:
             grass.run_command(
                 "v.in.ogr",
