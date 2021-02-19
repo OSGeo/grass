@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
 # generates docs/rest/index.txt
-# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009, Luca Delucchi 2012
+# (C) 2003-2012 Markus Neteler and the GRASS Development Team
+# Authors:
+#   Markus Neteler
+#   Glynn Clements
+#   Luca Delucchi
 
-import sys
 import os
-import string
 
 from build_rest import *
 

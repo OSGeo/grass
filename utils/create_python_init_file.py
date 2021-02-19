@@ -22,7 +22,7 @@ import glob
 
 def main(path):
     if not os.path.exists(path) or not os.path.isdir(path):
-        print >>sys.stderr, "'%s' is not a directory" % path
+        print("'{}' is not a directory".format(path), file=sys.stderr)
         return 1
 
     modules = []

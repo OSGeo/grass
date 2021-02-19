@@ -238,7 +238,6 @@ def main():
     if len(sys.argv) > 2:
         short_family = sys.argv[2]
         module_family = sys.argv[3]
-        classes = [(short_family, module_family)]
         if len(sys.argv) > 4:
             year = sys.argv[4]
 

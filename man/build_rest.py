@@ -3,17 +3,18 @@
 """
 Created on Thu Aug  9 14:04:12 2012
 
-@author: lucadelu
+@author: Luca Delucchi
+@author: Markus Neteler
+@author: Glynn Clements
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (c) 2003-2021 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (C) 2003-2021 by Luca Delucchi and the GRASS Development Team
 
-import sys
 import os
 import string
 
-## TODO: better fix this in include/Make/Rest.make, see bug RT #5361
+# TODO: better fix this in include/Make/Rest.make, see bug RT #5361
 
 # exclude following list of modules from help index:
 
@@ -82,7 +83,7 @@ Display/Graphical User Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toctree::
     :maxdepth: 1
-        
+
         wxGUI wxPython-based GUI frontend <wxGUI>
         Display commands manual <display>
         Display drivers <displaydrivers>
@@ -94,7 +95,7 @@ Raster and 3D raster processing
 
 .. toctree::
     :maxdepth: 1
-    
+
         Raster commands manual <raster>
         3D raster (voxel) commands manual <raster3D>
 
@@ -103,26 +104,24 @@ Image processing
 
 .. toctree::
     :maxdepth: 1
-    
+
          Imagery commands manual <imagery>
-         
-         
 
 Vector processing
 ~~~~~~~~~~~~~~~~~~
 
 .. toctree::
     :maxdepth: 1
-    
+
         Vector commands manual <vector>
         GRASS ASCII vector format specification <vectorascii>
-        
+
 Database
 ~~~~~~~~~
 
 .. toctree::
     :maxdepth: 1
-    
+
         SQL support in GRASS GIS <sql>
         Database commands manual <database>
 
@@ -131,7 +130,7 @@ General
 
 .. toctree::
     :maxdepth: 1
-    
+
         GRASS startup manual page <grass7>
         General commands manual <general>
 
@@ -140,7 +139,7 @@ Miscellaneous & Variables
 
 .. toctree::
     :maxdepth: 1
-    
+
         Miscellaneous commands manual <miscellaneous>
         GRASS variables and environment variables <variables>
 
@@ -149,7 +148,7 @@ Temporal processing
 
 .. toctree::
     :maxdepth: 1
-    
+
         Temporal commands manual <temporal>
 
 Printing
@@ -157,7 +156,7 @@ Printing
 
 .. toctree::
     :maxdepth: 1
-    
+
         PostScript commands manual <postscript>
 
 """
@@ -184,7 +183,6 @@ ${cmd}.* commands:
 
 .. toctree::
     :maxdepth: 1
-    
 
 """
 )
@@ -239,7 +237,6 @@ modclass_tmpl = string.Template(
 
 .. toctree::
     :maxdepth: 1
-    
 
 """
 )
@@ -289,7 +286,7 @@ def write_file(name, contents):
 def try_mkdir(path):
     try:
         os.mkdir(path)
-    except OSError as e:
+    except OSError:
         pass
 
 
@@ -304,7 +301,7 @@ def replace_file(name):
     else:
         try:
             os.remove(name)
-        except OSError as e:
+        except OSError:
             pass
         os.rename(temp, name)
 
@@ -364,7 +361,7 @@ def get_desc(cmd):
     return ""
 
 
-############################################################################
+# Define global variables
 
 arch_dist_dir = os.environ["ARCH_DISTDIR"]
 rest_dir = os.path.join(arch_dist_dir, "docs", "rest")
@@ -374,5 +371,3 @@ try:
     grass_version = ver.split()[0].strip()
 except IndexError:
     grass_version = ver.split().strip()
-
-############################################################################

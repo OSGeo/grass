@@ -27,12 +27,12 @@ import json
 try:
     # Python 2 import
     from HTMLParser import HTMLParser
-except:
+except ImportError:
     # Python 3 import
     from html.parser import HTMLParser
 try:
     import urlparse
-except:
+except ImportError:
     import urllib.parse as urlparse
 
 if sys.version_info[0] == 2:
@@ -110,7 +110,11 @@ header_pgm_desc = """<h2>NAME</h2>
 
 sourcecode = string.Template(
     """<h2>SOURCE CODE</h2>
-<p>Available at: <a href="${URL_SOURCE}">${PGM} source code</a> (<a href="${URL_LOG}">history</a>)</p>
+<p>
+  Available at:
+  <a href="${URL_SOURCE}">${PGM} source code</a>
+  (<a href="${URL_LOG}">history</a>)
+</p>
 """
 )
 
