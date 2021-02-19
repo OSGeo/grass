@@ -2,14 +2,17 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) 2003-2021 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (C) 2003-2021 Markus Neteler and the GRASS Development Team
+# Authors:
+#   Markus Neteler
+#   Glynn Clements
+#   Luca Delucchi
 
-import sys
 import os
 import string
 from datetime import datetime
 
-## TODO: better fix this in include/Make/Html.make, see bug RT #5361
+# TODO: better fix this in include/Make/Html.make, see bug RT #5361
 
 # exclude following list of modules from help index:
 
@@ -28,7 +31,7 @@ desc_override = {
     "r.li.daemon": "Support module for r.li landscape index calculations.",
 }
 
-############################################################################
+# File template pieces follow
 
 header1_tmpl = string.Template(
     r"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -198,7 +201,7 @@ overview_tmpl = string.Template(
 )
 # "
 
-footer_tmpl = string.Template(  ## TODO: https://trac.osgeo.org/grass/ticket/3987
+footer_tmpl = string.Template(  # TODO: https://trac.osgeo.org/grass/ticket/3987
     # r"""<a name="wxGUI"></a>
     # <h3>wxGUI: Graphical user interface</h3>
     # <table><tbody>
@@ -403,7 +406,7 @@ def write_file(name, contents):
 def try_mkdir(path):
     try:
         os.mkdir(path)
-    except OSError as e:
+    except OSError:
         pass
 
 
@@ -418,7 +421,7 @@ def replace_file(name):
     else:
         try:
             os.remove(name)
-        except OSError as e:
+        except OSError:
             pass
         os.rename(temp, name)
 
