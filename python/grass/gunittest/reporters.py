@@ -958,7 +958,13 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 
     def start_file_test(self, module):
         super(GrassTestFilesTextReporter, self).start_file_test(module)
-        self._stream.flush()  # to get previous lines to the report
+        self._stream.write(
+            "Running {name} ({directory})...\n".format(
+                directory=module.tested_dir, name=module.name
+            )
+        )
+        # get the above line and all previous ones to the report
+        self._stream.flush()
 
     def end_file_test(self, module, cwd, returncode, stdout, stderr,
                       test_summary):
@@ -967,6 +973,13 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             stdout=stdout, stderr=stderr)
 
         if returncode:
+            width = 72
+            self._stream.write(width * "=")
+            self._stream.write("\n")
+            with open(stderr) as text:
+                self._stream.write(text.read())
+            self._stream.write(width * "=")
+            self._stream.write("\n")
             self._stream.write(
                 '{m} from {d} failed'
                 .format(

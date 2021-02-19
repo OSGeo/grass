@@ -32,7 +32,7 @@ Yes, you should really read [INSTALL](INSTALL). In addition, there are detailed 
 
 ## Docker
 
-Build a docker image using the downloaded source code (run this in the directory 
+Build a docker image using the downloaded source code (run this in the directory
 containing the source code):
 
 ```

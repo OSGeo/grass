@@ -82,8 +82,8 @@ class DMonMap(Map):
         self.cmdfile = cmdfile
 
         # list of layers for rendering added from cmd file
-        # TODO temporary solution, layer managment by different tools in GRASS
-        # should be resovled
+        # TODO temporary solution, layer management by different tools in GRASS
+        # should be resolved
         self.ownedLayers = []
         self.oldOverlays = []
 
@@ -576,7 +576,7 @@ class MapApp(wx.App):
         # the check below disabled, it's too much invasive to call
         # g.gisenv in the watcher...
         # try:
-        # GISBASE and other system enviromental variables can not be used
+        # GISBASE and other system environmental variables can not be used
         # since the process inherited them from GRASS
         # raises exception when vaiable does not exists
         # grass.gisenv()['GISDBASE']
