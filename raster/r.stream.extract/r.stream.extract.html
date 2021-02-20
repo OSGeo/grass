@@ -30,8 +30,8 @@ accumulation value that will initiate a new stream. If Montgomery's
 method for channel initiation is used, the cell value of the
 accumulation input map is multiplied by <tt>(tan(local
 slope))<sup>mexp</sup></tt> and then compared
-to <b>threshold</b>. If <b>mexp</b> is given than the method of
-Montgomery and Foufoula-Georgiou (1993) to initiate a stream with this
+to <b>threshold</b>. If <b>mexp</b> is given, then the method of
+Montgomery and Foufoula-Georgiou (1993) is used to initiate a stream with this
 value. The cell value of the accumulation input map is multiplied
 by <tt>(tan(local slope))<sup>mexp</sup></tt> and then compared
 to <b>threshold</b>. If threshold is reached or exceeded, a new stream
@@ -75,9 +75,9 @@ started and traced downstream to its outlet point. As for
 calculated as the number of cells draining through a cell.
 
 <p>
-If <b>accumulation</b> is given than the accumulation values of the
+If <b>accumulation</b> is given, then the accumulation values of the
 provided <b>accumulation</b> map are used and not calculated from the
-input <b>elevation</b> map. In this case the <b>elevation</b> map must
+input <b>elevation</b> map. In this case, the <b>elevation</b> map must
 be exactly the same map used to calculate
 <b>accumulation</b>. If <b>accumulation</b> was calculated with
 <em><a href="r.terraflow.html">r.terraflow</a></em>, the filled
