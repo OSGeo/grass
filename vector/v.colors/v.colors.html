@@ -89,7 +89,8 @@ over RGB values stored in attribute table.
 <h3>Transfer raster colors to vector</h3>
 
 <div class="code"><pre>
-# create an example raster
+# create an example raster from census blocks (10m pixel resolution)
+g.region vector=censusblk_swwake res=10 -ap
 v.to.rast input=censusblk_swwake use=attr attribute_column=TOTAL_POP output=censusblk_swwake_total_pop
 r.colors -e map=censusblk_swwake_total_pop color=blues
 
