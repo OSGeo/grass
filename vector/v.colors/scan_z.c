@@ -8,9 +8,9 @@ void scan_z(struct Map_info *Map, int field,
             const char *style, const char *rules,
             const struct FPRange *range, struct Colors *colors)
 {
-    int ltype, line, cat, i;
+    int ltype, line, cat, i, found;
     int items_alloc;
-    double zmin, zmax;
+    double zmin = 0, zmax = 0;
     struct line_pnts *Points;
     struct line_cats *Cats;
     
@@ -29,7 +29,7 @@ void scan_z(struct Map_info *Map, int field,
     Vect_set_constraint_type(Map, GV_POINTS); /* points, centroids or kernels only) */
         
     G_message(_("Reading features..."));
-    line = i = 0;
+    line = i = found = 0;
     while(TRUE) {
 	ltype = Vect_read_next_line(Map, Points, Cats);
 	if (ltype == -1)
@@ -51,10 +51,11 @@ void scan_z(struct Map_info *Map, int field,
         cvarr.value[i].cat = cat;
         cvarr.value[i++].val.d = Points->z[0];
 
-	if (line == 1 || Points->z[0] < zmin)
+	if (!found || Points->z[0] < zmin)
 	    zmin = Points->z[0];
-	if (line == 1 || Points->z[0] > zmax)
+	if (!found || Points->z[0] > zmax)
 	    zmax = Points->z[0];
+	found = 1;
     }
     G_progress(1, 1);
     
@@ -62,13 +63,13 @@ void scan_z(struct Map_info *Map, int field,
     db_CatValArray_sort_by_value(&cvarr);
     
     if (range) {
-	if (range->min >= zmin && range->min <= zmax)
+	if (!found || (range->min >= zmin && range->min <= zmax))
 	    zmin = range->min;
 	else
 	    G_warning(_("Min value (%f) is out of range %f,%f"),
 		      range->min, zmin, zmax);
 	
-	if (range->max <= zmax && range->max >= zmin)
+	if (!found || (range->max <= zmax && range->max >= zmin))
 	    zmax = range->max;
 	else
 	    G_warning(_("Max value (%f) is out of range %f,%f"),

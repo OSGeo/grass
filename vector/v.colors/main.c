@@ -7,7 +7,7 @@
  *               
  * PURPOSE:      Manage color tables for vector maps
  *               
- * COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2011-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -243,8 +243,6 @@ int main(int argc, char *argv[])
 		      opt.rgbcol->key, flag.c->key);
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
-    if (is_from_stdin)
-        G_fatal_error(_("Reading rules from standard input is not implemented yet, please provide path to rules file instead."));
 
     mapset = G_find_vector(name, "");
     if (!mapset)
@@ -291,13 +289,7 @@ int main(int argc, char *argv[])
     }
 
     Rast_init_colors(&colors);
-    if (is_from_stdin) {
-        G_fatal_error(_("Reading color rules from standard input is currently not supported"));
-	/*
-        if (!read_color_rules(stdin, &colors, min, max, fp))
-            exit(EXIT_FAILURE);
-	*/
-    } else if (style || rules) {	
+    if (style || rules) {	
 	if (style && !G_find_color_rule(style))
 	    G_fatal_error(_("Color table <%s> not found"), style);
 	
