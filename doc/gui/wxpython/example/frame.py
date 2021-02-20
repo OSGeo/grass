@@ -21,7 +21,7 @@ import wx
 
 # this enables to run application standalone (> python example/frame.py )
 if __name__ == "__main__":
-    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+    sys.path.append(os.path.join(os.environ["GISBASE"], "etc", "gui", "wxpython"))
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
@@ -61,9 +61,16 @@ class ExampleMapFrame(SingleMapFrame):
     @see IClassMapFrame in iclass.frame
     """
 
-    def __init__(self, parent, giface, title=_("Example Tool"),
-                 toolbars=["MiscToolbar", "MapToolbar", "MainToolbar"],
-                 size=(800, 600), name='exampleWindow', **kwargs):
+    def __init__(
+        self,
+        parent,
+        giface,
+        title=_("Example Tool"),
+        toolbars=["MiscToolbar", "MapToolbar", "MainToolbar"],
+        size=(800, 600),
+        name="exampleWindow",
+        **kwargs
+    ):
         """!Map Frame constructor
 
         @param parent (no parent is expected)
@@ -71,8 +78,9 @@ class ExampleMapFrame(SingleMapFrame):
         @param toolbars list of active toolbars (default value represents all toolbars)
         @param size default size
         """
-        SingleMapFrame.__init__(self, parent=parent, title=title,
-                                name=name, Map=Map(), **kwargs)
+        SingleMapFrame.__init__(
+            self, parent=parent, title=title, name=name, Map=Map(), **kwargs
+        )
 
         # Place debug message where appropriate
         # and set debug level from 1 to 5 (higher to lower level functions).
@@ -85,7 +93,7 @@ class ExampleMapFrame(SingleMapFrame):
         #
         toolbarsCopy = toolbars[:]
         # workaround to have the same toolbar order on all platforms
-        if sys.platform == 'win32':
+        if sys.platform == "win32":
             toolbarsCopy.reverse()
 
         for toolbar in toolbarsCopy:
@@ -94,22 +102,25 @@ class ExampleMapFrame(SingleMapFrame):
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
         self.mapWindowProperties.autoRenderChanged.connect(
-            lambda value: self.OnRender(None) if value else None)
+            lambda value: self.OnRender(None) if value else None
+        )
         #
         # Add statusbar
         #
 
         # choose items in statusbar choice, which makes sense for your application
-        self.statusbarItems = [sb.SbCoordinates,
-                               sb.SbRegionExtent,
-                               sb.SbCompRegionExtent,
-                               sb.SbShowRegion,
-                               sb.SbAlignExtent,
-                               sb.SbResolution,
-                               sb.SbDisplayGeometry,
-                               sb.SbMapScale,
-                               sb.SbGoTo,
-                               sb.SbProjection]
+        self.statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+        ]
 
         # create statusbar and its manager
         statusbar = self.CreateStatusBar(number=4, style=0)
@@ -117,16 +128,25 @@ class ExampleMapFrame(SingleMapFrame):
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems,
-                                                       mapframe=self, statusbar=statusbar)
-        self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar=statusbar, position=2))
-        self.statusbarManager.AddStatusbarItem(sb.SbRender(self, statusbar=statusbar, position=3))
+        self.statusbarManager.AddStatusbarItemsByClass(
+            self.statusbarItems, mapframe=self, statusbar=statusbar
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3)
+        )
 
         self.statusbarManager.Update()
 
         # create map window
-        self.MapWindow = BufferedMapWindow(parent=self, Map=self.GetMap(),
-                                           properties=self.mapWindowProperties, giface=self)
+        self.MapWindow = BufferedMapWindow(
+            parent=self,
+            Map=self.GetMap(),
+            properties=self.mapWindowProperties,
+            giface=self,
+        )
         self._setUpMapWindow(self.MapWindow)
         self.MapWindow.InitZoomHistory()
 
@@ -179,17 +199,30 @@ class ExampleMapFrame(SingleMapFrame):
         """!Add mapwindow (and other widgets) to aui manager"""
         window = self.GetWindow()
         name = "mainWindow"
-        self._mgr.AddPane(window, wx.aui.AuiPaneInfo().
-                          Name(name).CentrePane().
-                          Dockable(False).CloseButton(False).DestroyOnClose(True).
-                          Layer(0))
+        self._mgr.AddPane(
+            window,
+            wx.aui.AuiPaneInfo()
+            .Name(name)
+            .CentrePane()
+            .Dockable(False)
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .Layer(0),
+        )
 
         window = self.info.GetControl()
         name = "infoText"
-        self._mgr.AddPane(window, wx.aui.AuiPaneInfo().
-                          Name(name).Caption(_("Raster Info")).MinSize((250, -1)).
-                          Dockable(True).CloseButton(False).
-                          Layer(0).Left())
+        self._mgr.AddPane(
+            window,
+            wx.aui.AuiPaneInfo()
+            .Name(name)
+            .Caption(_("Raster Info"))
+            .MinSize((250, -1))
+            .Dockable(True)
+            .CloseButton(False)
+            .Layer(0)
+            .Left(),
+        )
 
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
@@ -203,59 +236,87 @@ class ExampleMapFrame(SingleMapFrame):
         if name == "MapToolbar":
             self.toolbars[name] = ExampleMapToolbar(self, self._toolSwitcher)
 
-            self._mgr.AddPane(self.toolbars[name],
-                              wx.aui.AuiPaneInfo().
-                              Name(name).Caption(_("Map Toolbar")).
-                              ToolbarPane().Top().
-                              LeftDockable(False).RightDockable(False).
-                              BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(1).Row(1).
-                              BestSize((self.toolbars[name].GetBestSize())))
+            self._mgr.AddPane(
+                self.toolbars[name],
+                wx.aui.AuiPaneInfo()
+                .Name(name)
+                .Caption(_("Map Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(1)
+                .Row(1)
+                .BestSize((self.toolbars[name].GetBestSize())),
+            )
 
         if name == "MiscToolbar":
             self.toolbars[name] = ExampleMiscToolbar(self)
 
-            self._mgr.AddPane(self.toolbars[name],
-                              wx.aui.AuiPaneInfo().
-                              Name(name).Caption(_("Misc Toolbar")).
-                              ToolbarPane().Top().
-                              LeftDockable(False).RightDockable(False).
-                              BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(1).Row(1).
-                              BestSize((self.toolbars[name].GetBestSize())))
+            self._mgr.AddPane(
+                self.toolbars[name],
+                wx.aui.AuiPaneInfo()
+                .Name(name)
+                .Caption(_("Misc Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(1)
+                .Row(1)
+                .BestSize((self.toolbars[name].GetBestSize())),
+            )
 
         if name == "MainToolbar":
             self.toolbars[name] = ExampleMainToolbar(self)
 
-            self._mgr.AddPane(self.toolbars[name],
-                              wx.aui.AuiPaneInfo().
-                              Name(name).Caption(_("Main Toolbar")).
-                              ToolbarPane().Top().
-                              LeftDockable(False).RightDockable(False).
-                              BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(1).Row(1).
-                              BestSize((self.toolbars[name].GetBestSize())))
+            self._mgr.AddPane(
+                self.toolbars[name],
+                wx.aui.AuiPaneInfo()
+                .Name(name)
+                .Caption(_("Main Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(1)
+                .Row(1)
+                .BestSize((self.toolbars[name].GetBestSize())),
+            )
 
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
-        return self.toolbars['MapToolbar']
+        return self.toolbars["MapToolbar"]
 
     def OnHelp(self, event):
         """!Show help page"""
-        RunCommand('g.manual', entry='wxGUI.Example')
+        RunCommand("g.manual", entry="wxGUI.Example")
 
     def OnSelectRaster(self, event):
         """!Opens dialog to select raster map"""
         dlg = ExampleMapDialog(self)
 
         if dlg.ShowModal() == wx.ID_OK:
-            raster = gcore.find_file(name=dlg.GetRasterMap(), element='cell')
-            if raster['fullname']:
-                self.SetLayer(name=raster['fullname'])
+            raster = gcore.find_file(name=dlg.GetRasterMap(), element="cell")
+            if raster["fullname"]:
+                self.SetLayer(name=raster["fullname"])
             else:
                 # show user that the map name is incorrect
-                GError(parent=self,
-                       message=_("Raster map <{raster}> not found").format(raster=dlg.GetRasterMap()))
+                GError(
+                    parent=self,
+                    message=_("Raster map <{raster}> not found").format(
+                        raster=dlg.GetRasterMap()
+                    ),
+                )
 
         dlg.Destroy()
 
@@ -264,23 +325,32 @@ class ExampleMapFrame(SingleMapFrame):
 
         @param name layer (raster) name
         """
-        Debug.msg (3, "ExampleMapFrame.SetLayer(): name=%s" % name)
+        Debug.msg(3, "ExampleMapFrame.SetLayer(): name=%s" % name)
 
         # this simple application enables to keep only one raster
         self.GetMap().DeleteAllLayers()
-        cmdlist = ['d.rast', 'map=%s' % name]
+        cmdlist = ["d.rast", "map=%s" % name]
         # add layer to Map instance (core.render)
-        newLayer = self.GetMap().AddLayer(ltype='raster', command=cmdlist, active=True,
-                                          name=name, hidden=False, opacity=1.0,
-                                          render=True)
-        self.GetWindow().ZoomToMap(layers=[newLayer, ], render=True)
+        newLayer = self.GetMap().AddLayer(
+            ltype="raster",
+            command=cmdlist,
+            active=True,
+            name=name,
+            hidden=False,
+            opacity=1.0,
+            render=True,
+        )
+        self.GetWindow().ZoomToMap(
+            layers=[
+                newLayer,
+            ],
+            render=True,
+        )
         self.currentRaster = name
 
         # change comp. region to match new raster, so that the statistics
         # are computed for the entire raster
-        RunCommand('g.region',
-                   rast=self.currentRaster,
-                   parent=self)
+        RunCommand("g.region", rast=self.currentRaster, parent=self)
 
         self.UpdateStatistics()
 
@@ -290,10 +360,12 @@ class ExampleMapFrame(SingleMapFrame):
         @return statistic in form of dictionary
         """
         # RunCommand enables to run GRASS module
-        res = RunCommand('r.univar',  # module name
-                         flags='g',  # command flags
-                         map=self.currentRaster,  # module parameters
-                         read=True)  # get command output
+        res = RunCommand(
+            "r.univar",  # module name
+            flags="g",  # command flags
+            map=self.currentRaster,  # module parameters
+            read=True,
+        )  # get command output
 
         return gcore.parse_key_val(res, val_type=float)
 
@@ -313,10 +385,10 @@ class ExampleInfoTextManager:
     """
 
     def __init__(self, parent):
-        """!Creates wx.TextCtrl for displaying information.
-        """
-        self.textCtrl = wx.TextCtrl(parent, id=wx.ID_ANY,
-                                    style=wx.TE_MULTILINE | wx.TE_RICH2 | wx.TE_READONLY)
+        """!Creates wx.TextCtrl for displaying information."""
+        self.textCtrl = wx.TextCtrl(
+            parent, id=wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_RICH2 | wx.TE_READONLY
+        )
         self.textCtrl.SetInsertionPoint(0)
         self.font = self.textCtrl.GetFont()
 
