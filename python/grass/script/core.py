@@ -1159,7 +1159,8 @@ def compare_key_value_text_files(
     :param str filename_a: name of the first key-value text file
     :param str filenmae_b: name of the second key-value text file
     :param str sep: character that separates the keys and values, default is ":"
-    :param str val_sep: character that separates the values of a single key, default is ","
+    :param str val_sep: character that separates the values of a single key,
+                        default is ","
     :param double precision: precision with which the floating point values are compared
     :param bool proj: True if it has to check some information about projection system
     :param bool units: True if it has to check some information about units
@@ -1500,7 +1501,8 @@ def list_grouped(
     >>> list_grouped('vect', pattern='*roads*')['PERMANENT']
     ['railroads', 'roadsmajor']
 
-    :param str type: element type (raster, vector, raster_3d, region, ...) or list of elements
+    :param str type: element type (raster, vector, raster_3d, region, ...)
+                     or list of elements
     :param str pattern: pattern string
     :param str check_search_path: True to add mapsets for the search path
                                   with no found elements
@@ -1933,7 +1935,8 @@ def debug_level(force=False):
             _debug_level = 0
             sys.stderr.write(
                 _(
-                    "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
+                    "WARNING: Ignoring unsupported debug level (must be >=0 and <=5):"
+                    " {}\n"
                 ).format(e)
             )
 
