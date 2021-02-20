@@ -69,7 +69,7 @@ class ExampleMapFrame(SingleMapFrame):
         toolbars=["MiscToolbar", "MapToolbar", "MainToolbar"],
         size=(800, 600),
         name="exampleWindow",
-        **kwargs
+        **kwargs,
     ):
         """!Map Frame constructor
 
