@@ -68,102 +68,112 @@ class TestRandFunction(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', n=20, s=10, e=25, w=15, res=1)
+        cls.runModule("g.region", n=20, s=10, e=25, w=15, res=1)
 
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
         if cls.to_remove:
-            cls.runModule('g.remove', flags='f', type='raster',
-                name=','.join(cls.to_remove))
+            cls.runModule(
+                "g.remove", flags="f", type="raster", name=",".join(cls.to_remove)
+            )
 
     def rinfo_contains_number(self, raster, number):
         """Test that r.info standard output for raster contains a given number
 
         To be used in test methods for testing presence of a given number.
         """
-        rinfo = SimpleModule('r.info', map=raster)
+        rinfo = SimpleModule("r.info", map=raster)
         self.runModule(rinfo)
         self.assertIn(str(number), rinfo.outputs.stdout)
 
     def test_seed_not_required(self):
         """Test that seed is not required when rand() is not used"""
-        self.assertModule('r.mapcalc', expression='nonrand_cell = 200')
-        self.to_remove.append('nonrand_cell')
+        self.assertModule("r.mapcalc", expression="nonrand_cell = 200")
+        self.to_remove.append("nonrand_cell")
 
     def test_seed_required(self):
         """Test that seed is required when rand() is used
 
         This test can, and probably should, generate an error message.
         """
-        self.assertModuleFail('r.mapcalc', expression='rand_x = rand(1, 200)')
+        self.assertModuleFail("r.mapcalc", expression="rand_x = rand(1, 200)")
         # TODO: assert map not exists but it would be handy here
         # TODO: test that error message was generated
 
     def test_seed_cell(self):
         """Test given seed with CELL against reference map"""
         seed = 500
-        self.runModule('r.in.ascii', input='-', stdin=cell_seed_500,
-                       output='rand_cell_ref')
-        self.to_remove.append('rand_cell_ref')
-        self.assertModule('r.mapcalc', seed=seed,
-                          expression='rand_cell = rand(1, 200)')
-        self.to_remove.append('rand_cell')
+        self.runModule(
+            "r.in.ascii", input="-", stdin=cell_seed_500, output="rand_cell_ref"
+        )
+        self.to_remove.append("rand_cell_ref")
+        self.assertModule("r.mapcalc", seed=seed, expression="rand_cell = rand(1, 200)")
+        self.to_remove.append("rand_cell")
         # this assert is using r.mapcalc but we are testing different
         # functionality than used by assert
-        self.assertRastersNoDifference(actual='rand_cell',
-                                       reference='rand_cell_ref',
-                                       precision=0)
-        self.rinfo_contains_number('rand_cell', seed)
+        self.assertRastersNoDifference(
+            actual="rand_cell", reference="rand_cell_ref", precision=0
+        )
+        self.rinfo_contains_number("rand_cell", seed)
 
     def test_seed_dcell(self):
         """Test given seed with DCELL against reference map"""
         seed = 600
-        self.runModule('r.in.ascii', input='-', stdin=dcell_seed_600,
-                       output='rand_dcell_ref')
-        self.to_remove.append('rand_dcell_ref')
-        self.assertModule('r.mapcalc', seed=seed,
-                          expression='rand_dcell = rand(1.0, 200.0)')
-        self.to_remove.append('rand_dcell')
+        self.runModule(
+            "r.in.ascii", input="-", stdin=dcell_seed_600, output="rand_dcell_ref"
+        )
+        self.to_remove.append("rand_dcell_ref")
+        self.assertModule(
+            "r.mapcalc", seed=seed, expression="rand_dcell = rand(1.0, 200.0)"
+        )
+        self.to_remove.append("rand_dcell")
         # this assert is using r.mapcalc but we are testing different
         # functionality than used by assert
-        self.assertRastersNoDifference(actual='rand_dcell',
-                                       reference='rand_dcell_ref',
-                                       precision=0.00000000000001)
-        self.rinfo_contains_number('rand_dcell', seed)
+        self.assertRastersNoDifference(
+            actual="rand_dcell", reference="rand_dcell_ref", precision=0.00000000000001
+        )
+        self.rinfo_contains_number("rand_dcell", seed)
 
     def test_seed_fcell(self):
         """Test given seed with FCELL against reference map"""
         seed = 700
-        self.runModule('r.in.ascii', input='-', stdin=fcell_seed_700,
-                       output='rand_fcell_ref')
-        self.to_remove.append('rand_fcell_ref')
-        self.assertModule('r.mapcalc', seed=seed,
-                          expression='rand_fcell = rand(float(1), 200)')
-        self.to_remove.append('rand_fcell')
+        self.runModule(
+            "r.in.ascii", input="-", stdin=fcell_seed_700, output="rand_fcell_ref"
+        )
+        self.to_remove.append("rand_fcell_ref")
+        self.assertModule(
+            "r.mapcalc", seed=seed, expression="rand_fcell = rand(float(1), 200)"
+        )
+        self.to_remove.append("rand_fcell")
         # this assert is using r.mapcalc but we are testing different
         # functionality than used by assert
-        self.assertRastersNoDifference(actual='rand_fcell',
-                                       reference='rand_fcell_ref',
-                                       precision=0.000001)
-        self.rinfo_contains_number('rand_fcell', seed)
+        self.assertRastersNoDifference(
+            actual="rand_fcell", reference="rand_fcell_ref", precision=0.000001
+        )
+        self.rinfo_contains_number("rand_fcell", seed)
 
     def test_auto_seed(self):
         """Test that two runs with -s does not give same maps"""
-        self.assertModule('r.mapcalc', flags='s',
-                          expression='rand_auto_1 = rand(1., 2)')
-        self.to_remove.append('rand_auto_1')
-        self.assertModule('r.mapcalc', flags='s',
-                          expression='rand_auto_2 = rand(1., 2)')
-        self.to_remove.append('rand_auto_2')
+        self.assertModule(
+            "r.mapcalc", flags="s", expression="rand_auto_1 = rand(1., 2)"
+        )
+        self.to_remove.append("rand_auto_1")
+        self.assertModule(
+            "r.mapcalc", flags="s", expression="rand_auto_2 = rand(1., 2)"
+        )
+        self.to_remove.append("rand_auto_2")
         self.assertRastersDifference(
-            'rand_auto_1', 'rand_auto_2',
+            "rand_auto_1",
+            "rand_auto_2",
             statistics=dict(min=-1, max=1, mean=0),
-            precision=0.5)  # low precision, we have few cells
+            precision=0.5,
+        )  # low precision, we have few cells
 
 
 # TODO: add more expressions
 # TODO: add tests with prepared data
+
 
 class TestBasicOperations(TestCase):
 
@@ -173,59 +183,58 @@ class TestBasicOperations(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', n=20, s=10, e=25, w=15, res=1)
+        cls.runModule("g.region", n=20, s=10, e=25, w=15, res=1)
 
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
         if cls.to_remove:
-            cls.runModule('g.remove', flags='f', type='raster',
-                name=','.join(cls.to_remove), verbose=True)
+            cls.runModule(
+                "g.remove",
+                flags="f",
+                type="raster",
+                name=",".join(cls.to_remove),
+                verbose=True,
+            )
 
     def test_difference_of_the_same_map_double(self):
         """Test zero difference of map with itself"""
-        self.runModule('r.mapcalc', flags='s',
-                       expression='a = rand(1.0, 200)')
-        self.to_remove.append('a')
-        self.assertModule('r.mapcalc',
-            expression='diff_a_a = a - a')
-        self.to_remove.append('diff_a_a')
-        self.assertRasterMinMax('diff_a_a', refmin=0, refmax=0)
+        self.runModule("r.mapcalc", flags="s", expression="a = rand(1.0, 200)")
+        self.to_remove.append("a")
+        self.assertModule("r.mapcalc", expression="diff_a_a = a - a")
+        self.to_remove.append("diff_a_a")
+        self.assertRasterMinMax("diff_a_a", refmin=0, refmax=0)
 
     def test_difference_of_the_same_map_float(self):
         """Test zero difference of map with itself"""
-        self.runModule('r.mapcalc', flags='s',
-                       expression='af = rand(float(1), 200)')
-        self.to_remove.append('af')
-        self.assertModule('r.mapcalc',
-            expression='diff_af_af = af - af')
-        self.to_remove.append('diff_af_af')
-        self.assertRasterMinMax('diff_af_af', refmin=0, refmax=0)
+        self.runModule("r.mapcalc", flags="s", expression="af = rand(float(1), 200)")
+        self.to_remove.append("af")
+        self.assertModule("r.mapcalc", expression="diff_af_af = af - af")
+        self.to_remove.append("diff_af_af")
+        self.assertRasterMinMax("diff_af_af", refmin=0, refmax=0)
 
     def test_difference_of_the_same_map_int(self):
         """Test zero difference of map with itself"""
-        self.runModule('r.mapcalc', flags='s',
-                       expression='ai = rand(1, 200)')
-        self.to_remove.append('ai')
-        self.assertModule('r.mapcalc',
-            expression='diff_ai_ai = ai - ai')
-        self.to_remove.append('diff_ai_ai')
-        self.assertRasterMinMax('diff_ai_ai', refmin=0, refmax=0)
+        self.runModule("r.mapcalc", flags="s", expression="ai = rand(1, 200)")
+        self.to_remove.append("ai")
+        self.assertModule("r.mapcalc", expression="diff_ai_ai = ai - ai")
+        self.to_remove.append("diff_ai_ai")
+        self.assertRasterMinMax("diff_ai_ai", refmin=0, refmax=0)
 
     def test_difference_of_the_same_expression(self):
         """Test zero difference of two same expressions"""
-        self.assertModule('r.mapcalc',
-            expression='diff_e_e = 3 * x() * y() - 3 * x() * y()')
-        self.to_remove.append('diff_e_e')
-        self.assertRasterMinMax('diff_e_e', refmin=0, refmax=0)
+        self.assertModule(
+            "r.mapcalc", expression="diff_e_e = 3 * x() * y() - 3 * x() * y()"
+        )
+        self.to_remove.append("diff_e_e")
+        self.assertRasterMinMax("diff_e_e", refmin=0, refmax=0)
 
     def test_nrows_ncols_sum(self):
         """Test if sum of nrows and ncols matches one
         expected from current region settigs"""
-        self.assertModule('r.mapcalc',
-            expression='nrows_ncols_sum = nrows() + ncols()')
-        self.to_remove.append('nrows_ncols_sum')
-        self.assertRasterMinMax('nrows_ncols_sum', refmin=20, refmax=20)
+        self.assertModule("r.mapcalc", expression="nrows_ncols_sum = nrows() + ncols()")
+        self.to_remove.append("nrows_ncols_sum")
+        self.assertRasterMinMax("nrows_ncols_sum", refmin=20, refmax=20)
 
 
 class TestRegionOperations(TestCase):
@@ -236,12 +245,12 @@ class TestRegionOperations(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', n=30, s=15, e=30, w=15, res=5)
-        cls.runModule('r.mapcalc', expression="test_region_1 = 1", seed=1)
-        cls.runModule('g.region', n=25, s=10, e=25, w=10, res=5)
-        cls.runModule('r.mapcalc', expression="test_region_2 = 2", seed=1)
-        cls.runModule('g.region', n=20, s=5, e=20, w=5, res=1)
-        cls.runModule('r.mapcalc', expression="test_region_3 = 3", seed=1)
+        cls.runModule("g.region", n=30, s=15, e=30, w=15, res=5)
+        cls.runModule("r.mapcalc", expression="test_region_1 = 1", seed=1)
+        cls.runModule("g.region", n=25, s=10, e=25, w=10, res=5)
+        cls.runModule("r.mapcalc", expression="test_region_2 = 2", seed=1)
+        cls.runModule("g.region", n=20, s=5, e=20, w=5, res=1)
+        cls.runModule("r.mapcalc", expression="test_region_3 = 3", seed=1)
 
         cls.to_remove.append("test_region_1")
         cls.to_remove.append("test_region_2")
@@ -251,31 +260,72 @@ class TestRegionOperations(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
         if cls.to_remove:
-            cls.runModule('g.remove', flags='f', type='raster',
-                name=','.join(cls.to_remove), verbose=True)
+            cls.runModule(
+                "g.remove",
+                flags="f",
+                type="raster",
+                name=",".join(cls.to_remove),
+                verbose=True,
+            )
 
     def test_union(self):
         """Test the union region option"""
-        self.assertModule('r.mapcalc', region="union", seed=1,
-                          expression='test_region_4 = test_region_1 + test_region_2 + test_region_3')
-        self.to_remove.append('test_region_4')
+        self.assertModule(
+            "r.mapcalc",
+            region="union",
+            seed=1,
+            expression="test_region_4 = test_region_1 + test_region_2 + test_region_3",
+        )
+        self.to_remove.append("test_region_4")
 
-        self.assertModuleKeyValue('r.info', map='test_region_4', flags='gr',
-                                  reference=dict(min=6, max=6, cells=625, north=30,
-                                  south=5, west=5, east=30, nsres=1, ewres=1),
-                                  precision=0.01, sep='=')
+        self.assertModuleKeyValue(
+            "r.info",
+            map="test_region_4",
+            flags="gr",
+            reference=dict(
+                min=6,
+                max=6,
+                cells=625,
+                north=30,
+                south=5,
+                west=5,
+                east=30,
+                nsres=1,
+                ewres=1,
+            ),
+            precision=0.01,
+            sep="=",
+        )
 
     def test_intersect(self):
         """Test the intersect region option"""
-        self.assertModule('r.mapcalc', region="intersect", seed=1,
-                          expression='test_region_5 = test_region_1 + test_region_2 + test_region_3')
-        self.to_remove.append('test_region_5')
+        self.assertModule(
+            "r.mapcalc",
+            region="intersect",
+            seed=1,
+            expression="test_region_5 = test_region_1 + test_region_2 + test_region_3",
+        )
+        self.to_remove.append("test_region_5")
 
-        self.assertModuleKeyValue('r.info', map='test_region_5', flags='gr',
-                                  reference=dict(min=6, max=6, cells=25, north=20,
-                                  south=15, west=15, east=20, nsres=1, ewres=1),
-                                  precision=0.01, sep='=')
+        self.assertModuleKeyValue(
+            "r.info",
+            map="test_region_5",
+            flags="gr",
+            reference=dict(
+                min=6,
+                max=6,
+                cells=25,
+                north=20,
+                south=15,
+                west=15,
+                east=20,
+                nsres=1,
+                ewres=1,
+            ),
+            precision=0.01,
+            sep="=",
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

@@ -4,8 +4,8 @@
 """
 from grass.gunittest.case import TestCase
 
-class Raster3dLibraryTest(TestCase):
 
+class Raster3dLibraryTest(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.runModule("g.gisenv", set="OVERWRITE=1")
@@ -20,19 +20,80 @@ class Raster3dLibraryTest(TestCase):
 
     def test_large_tilesizes(self):
         """Test for different tile sizes"""
-        self.assertModule("test.raster3d.lib", unit="large", depths=91, rows=89, cols=87)
-        self.assertModule("test.raster3d.lib", unit="large", depths=91, rows=89, cols=87, tile_size=8)
-        self.assertModule("test.raster3d.lib", unit="large", depths=91, rows=89, cols=87, tile_size=512)
-        self.assertModule("test.raster3d.lib", unit="large", depths=91, rows=89, cols=87, tile_size=1024)
-        self.assertModule("test.raster3d.lib", unit="large", depths=91, rows=89, cols=87, tile_size=32768)
+        self.assertModule(
+            "test.raster3d.lib", unit="large", depths=91, rows=89, cols=87
+        )
+        self.assertModule(
+            "test.raster3d.lib", unit="large", depths=91, rows=89, cols=87, tile_size=8
+        )
+        self.assertModule(
+            "test.raster3d.lib",
+            unit="large",
+            depths=91,
+            rows=89,
+            cols=87,
+            tile_size=512,
+        )
+        self.assertModule(
+            "test.raster3d.lib",
+            unit="large",
+            depths=91,
+            rows=89,
+            cols=87,
+            tile_size=1024,
+        )
+        self.assertModule(
+            "test.raster3d.lib",
+            unit="large",
+            depths=91,
+            rows=89,
+            cols=87,
+            tile_size=32768,
+        )
 
         # Enable zlib compression
-        self.assertModule("test.raster3d.lib", flags="l", unit="large", depths=91, rows=89, cols=87)
-        self.assertModule("test.raster3d.lib", flags="l", unit="large", depths=91, rows=89, cols=87, tile_size=8)
-        self.assertModule("test.raster3d.lib", flags="l", unit="large", depths=91, rows=89, cols=87, tile_size=512)
-        self.assertModule("test.raster3d.lib", flags="l", unit="large", depths=91, rows=89, cols=87, tile_size=1024)
-        self.assertModule("test.raster3d.lib", flags="l", unit="large", depths=91, rows=89, cols=87, tile_size=32768)
+        self.assertModule(
+            "test.raster3d.lib", flags="l", unit="large", depths=91, rows=89, cols=87
+        )
+        self.assertModule(
+            "test.raster3d.lib",
+            flags="l",
+            unit="large",
+            depths=91,
+            rows=89,
+            cols=87,
+            tile_size=8,
+        )
+        self.assertModule(
+            "test.raster3d.lib",
+            flags="l",
+            unit="large",
+            depths=91,
+            rows=89,
+            cols=87,
+            tile_size=512,
+        )
+        self.assertModule(
+            "test.raster3d.lib",
+            flags="l",
+            unit="large",
+            depths=91,
+            rows=89,
+            cols=87,
+            tile_size=1024,
+        )
+        self.assertModule(
+            "test.raster3d.lib",
+            flags="l",
+            unit="large",
+            depths=91,
+            rows=89,
+            cols=87,
+            tile_size=32768,
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()

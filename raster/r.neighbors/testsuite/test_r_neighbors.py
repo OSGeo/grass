@@ -509,7 +509,8 @@ class TestNeighbors(TestCase):
         selection = "test_neighbors_selection"
         self.to_remove.append(selection)
         self.runModule(
-            "r.mapcalc", expression="{}=if(y()==15,1,null())".format(selection),
+            "r.mapcalc",
+            expression="{}=if(y()==15,1,null())".format(selection),
         )
         self.assertModule(
             "r.neighbors",
