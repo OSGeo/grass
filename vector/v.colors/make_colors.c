@@ -41,8 +41,10 @@ void make_colors(struct Colors *colors, const char *style, DCELL min, DCELL max,
 void load_colors(struct Colors *colors, const char *rules, DCELL min, DCELL max, int is_fp)
 {
     int ret;
-    
-    if (is_fp)
+
+    if (rules[0] == '-' && rules[1] == 0)
+	ret = Rast_read_color_rules(colors, min, max, Rast_read_color_rule, stdin);
+    else if (is_fp)
 	ret = Rast_load_fp_colors(colors, rules, (DCELL) min, (DCELL) max);
     else
 	ret = Rast_load_colors(colors, rules, (CELL) min, (CELL) max);

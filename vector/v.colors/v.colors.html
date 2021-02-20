@@ -65,7 +65,7 @@ instead of creating color table.
 v.colors map=soils_general layer=1 color=wave use=attr column=AREA rgb_column=GRASSRGB
 
 # See some GRASSRGB values:
-v.db.select map=soils_general where="cat < 4"
+v.db.select map=soils_general where="cat &lt; 4"
 cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
 1|1|0|164616.125|2|1|NC113|212:42:127
 2|2|0|30785.529297|3|2|NC096|212:42:127
@@ -85,6 +85,18 @@ assigned (check
 by <em><a href="v.colors.out.html">v.colors.out</a></em>) together
 with GRASSRGB attribute column. Also note that color table is preferred
 over RGB values stored in attribute table.
+
+<h3>Transfer raster colors to vector</h3>
+
+<div class="code"><pre>
+# create an example raster from census blocks (10m pixel resolution)
+g.region vector=censusblk_swwake res=10 -ap
+v.to.rast input=censusblk_swwake use=attr attribute_column=TOTAL_POP output=censusblk_swwake_total_pop
+r.colors -e map=censusblk_swwake_total_pop color=blues
+
+# transfer raster colors to vector using an attribute column
+r.colors.out map=censusblk_swwake_total_pop rules=- | v.colors map=censusblk_swwake use=attr column=TOTAL_POP rules=-
+</pre></div>
 
 <h3>Remove existing color table</h3>
 
