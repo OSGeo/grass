@@ -71,11 +71,14 @@ def main():
 
     if check is False:
         dbif.close()
-        grass.fatal(_("Unable to temporally shift the space time %s dataset <%s>") %
-                     (stds.get_new_map_instance(None).get_type(), id))
+        grass.fatal(
+            _("Unable to temporally shift the space time %s dataset <%s>")
+            % (stds.get_new_map_instance(None).get_type(), id)
+        )
 
     stds.update_command_string(dbif=dbif)
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

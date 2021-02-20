@@ -90,7 +90,7 @@ import grass.script as grass
 
 
 def main():
-    #lazy imports
+    # lazy imports
     import grass.temporal as tgis
 
     # Get the options
@@ -106,8 +106,10 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.list_maps_of_stds("stvds", input, columns, order, where, separator,
-                           method, header, outpath=output)
+    tgis.list_maps_of_stds(
+        "stvds", input, columns, order, where, separator, method, header, outpath=output
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
