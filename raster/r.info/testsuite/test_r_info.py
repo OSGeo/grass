@@ -10,8 +10,9 @@ Licence:    This program is free software under the GNU General Public
 """
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-class TestReport(TestCase):
 
+
+class TestReport(TestCase):
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
@@ -24,7 +25,7 @@ class TestReport(TestCase):
 
     def test_flagg(self):
         """Testing flag g with map geology_30m using simple module"""
-        output_str="""north=228500
+        output_str = """north=228500
         south=215000
         east=645000
         west=630000
@@ -35,24 +36,38 @@ class TestReport(TestCase):
         cells=2025000
         datatype=CELL
         ncats=43600"""
-        self.assertModuleKeyValue(module='r.info', map='lakes', flags='g', reference=output_str,
-                                  precision=2, sep="=")
+        self.assertModuleKeyValue(
+            module="r.info",
+            map="lakes",
+            flags="g",
+            reference=output_str,
+            precision=2,
+            sep="=",
+        )
 
     def test_flagr(self):
         """Testing flag r with map landcover_1m using simple module"""
-        output_str="""min=34300
+        output_str = """min=34300
         max=43600"""
-        self.assertModuleKeyValue(module='r.info', map='lakes', flags='r', reference=output_str,
-                                  precision=2, sep="=")
+        self.assertModuleKeyValue(
+            module="r.info",
+            map="lakes",
+            flags="r",
+            reference=output_str,
+            precision=2,
+            sep="=",
+        )
 
     def test_flage(self):
         """Testing flag e with map lsat7_2002_50"""
-        self.assertModule('r.info', map='lakes', flags='e')
+        self.assertModule("r.info", map="lakes", flags="e")
 
     def test_flagh(self):
         """Testing flag h with map zipcodes"""
-        self.assertModule('r.info', map='lakes', flags='h')
+        self.assertModule("r.info", map="lakes", flags="h")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()
