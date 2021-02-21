@@ -38,8 +38,8 @@ import wx
 # So we need to import it before any of the GUI code.
 import grass.script.core as gcore
 
-if __name__ == '__main__':
-    wxbase = os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython')
+if __name__ == "__main__":
+    wxbase = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
     if wxbase not in sys.path:
         sys.path.append(wxbase)
 
@@ -52,17 +52,19 @@ from example.frame import ExampleMapFrame
 
 def main():
     options, flags = gcore.parser()
-    if options['input']:
-        map_name = gcore.find_file(name=options['input'], element='cell')['fullname']
+    if options["input"]:
+        map_name = gcore.find_file(name=options["input"], element="cell")["fullname"]
         if not map_name:
-            gcore.fatal(_("Raster map <{raster}> not found").format(raster=options['input']))
+            gcore.fatal(
+                _("Raster map <{raster}> not found").format(raster=options["input"])
+            )
 
     # define display driver (avoid 'no graphics device selected' error at start up)
-    driver = UserSettings.Get(group='display', key='driver', subkey='type')
-    if driver == 'png':
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
+    driver = UserSettings.Get(group="display", key="driver", subkey="type")
+    if driver == "png":
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
     else:
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     # launch application
     app = wx.App()
@@ -72,12 +74,13 @@ def main():
     # show main frame
     giface = StandaloneGrassInterface()
     frame = ExampleMapFrame(parent=None, giface=giface)
-    if options['input']:
+    if options["input"]:
         giface.WriteLog(_("Loading raster map <{raster}>...").format(raster=map_name))
         frame.SetLayer(map_name)
 
     frame.Show()
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     GuiModuleMain(main)

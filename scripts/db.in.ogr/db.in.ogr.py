@@ -117,7 +117,7 @@ def main():
             output=output,
             layer=layer,
             quiet=True,
-            **vopts
+            **vopts,
         )
     except CalledModuleError:
         if db_table:
