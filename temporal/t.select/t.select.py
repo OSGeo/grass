@@ -57,11 +57,12 @@ import sys
 
 ############################################################################
 
+
 def main():
     # lazy imports
     import grass.temporal as tgis
 
-    expression = options['expression']
+    expression = options["expression"]
     spatial = flags["s"]
     dry_run = flags["d"]
     stdstype = options["type"]
@@ -72,14 +73,21 @@ def main():
         import ply.lex as lex  # noqa: F401
         import ply.yacc as yacc  # noqa: F401
     except ImportError:
-        grass.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."))
+        grass.fatal(
+            _(
+                "Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."
+            )
+        )
 
     tgis.init(True)
-    p = tgis.TemporalAlgebraParser(run=True, debug=False, spatial=spatial, dry_run=dry_run)
+    p = tgis.TemporalAlgebraParser(
+        run=True, debug=False, spatial=spatial, dry_run=dry_run
+    )
     pc = p.parse(expression, stdstype, overwrite=grass.overwrite())
 
     if dry_run is True:
         import pprint
+
         pprint.pprint(pc)
 
 

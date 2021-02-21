@@ -68,6 +68,7 @@ import grass.script as grass
 
 ############################################################################
 
+
 def main():
     # Get the options
     datasets = options["inputs"]
@@ -77,7 +78,11 @@ def main():
     force = flags["f"]
 
     if recursive and not force:
-        grass.fatal(_("The recursive flag works only in conjunction with the force flag: use -rf"))
+        grass.fatal(
+            _(
+                "The recursive flag works only in conjunction with the force flag: use -rf"
+            )
+        )
 
     if datasets and file:
         grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
@@ -114,7 +119,7 @@ def main():
     statement = ""
 
     # Create the pygrass Module object for g.remove
-    remove = pyg.Module("g.remove", quiet=True, flags='f', run_=False)
+    remove = pyg.Module("g.remove", quiet=True, flags="f", run_=False)
 
     for name in dataset_list:
         name = name.strip()
@@ -137,7 +142,7 @@ def main():
 
                 count += 1
                 # Delete every 100 maps
-                if count %100 == 0:
+                if count % 100 == 0:
                     dbif.execute_transaction(map_statement)
                     if type == "strds":
                         remove(type="raster", name=name_list, run_=True)
@@ -158,7 +163,12 @@ def main():
                 if type == "str3ds":
                     remove(type="raster_3d", name=name_list, run_=True)
         else:
-            grass.message(_("Note: registered maps themselves have not been removed, only the %s" % type))
+            grass.message(
+                _(
+                    "Note: registered maps themselves have not been removed, only the %s"
+                    % type
+                )
+            )
 
         statement += sp.delete(dbif=dbif, execute=False)
 
@@ -166,6 +176,7 @@ def main():
     dbif.execute_transaction(statement)
 
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

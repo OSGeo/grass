@@ -30,7 +30,6 @@ exclude = '''
     | gui
     | imagery
     | lib/gis
-    | temporal
     | raster
     | vector
     | docker/testdata/test_grass_session.py

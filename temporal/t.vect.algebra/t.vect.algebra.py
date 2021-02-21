@@ -55,12 +55,13 @@
 import grass.script
 import sys
 
+
 def main():
     # lazy imports
     import grass.temporal as tgis
 
-    expression = options['expression']
-    basename = options['basename']
+    expression = options["expression"]
+    basename = options["basename"]
     spatial = flags["s"]
     stdstype = "stvds"
 
@@ -70,11 +71,16 @@ def main():
         import ply.lex as lex  # noqa: F401
         import ply.yacc as yacc  # noqa: F401
     except ImportError:
-        grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."))
+        grass.script.fatal(
+            _(
+                "Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."
+            )
+        )
 
     tgis.init(True)
-    p = tgis.TemporalVectorAlgebraParser(run = True, debug=False, spatial = spatial)
+    p = tgis.TemporalVectorAlgebraParser(run=True, debug=False, spatial=spatial)
     p.parse(expression, basename, grass.script.overwrite())
+
 
 if __name__ == "__main__":
     options, flags = grass.script.parser()

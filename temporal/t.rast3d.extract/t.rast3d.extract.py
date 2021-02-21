@@ -100,8 +100,18 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.extract_dataset(input, output, "raster3d", where, expression,
-                         base, time_suffix, nprocs, register_null)
+    tgis.extract_dataset(
+        input,
+        output,
+        "raster3d",
+        where,
+        expression,
+        base,
+        time_suffix,
+        nprocs,
+        register_null,
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

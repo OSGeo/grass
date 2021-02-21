@@ -91,8 +91,8 @@ def main():
     # lazy imports
     import grass.temporal as tgis
 
-    expression = options['expression']
-    basename = options['basename']
+    expression = options["expression"]
+    basename = options["basename"]
     nprocs = options["nprocs"]
     time_suffix = options["suffix"]
     spatial = flags["s"]
@@ -106,27 +106,40 @@ def main():
         import ply.lex as lex  # noqa: F401
         import ply.yacc as yacc  # noqa: F401
     except ImportError:
-        grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules. "
-                             "You can use t.rast.mapcalc that provides a limited but useful alternative to "
-                             "t.rast.algebra without PLY requirement."))
+        grass.script.fatal(
+            _(
+                "Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules. "
+                "You can use t.rast.mapcalc that provides a limited but useful alternative to "
+                "t.rast.algebra without PLY requirement."
+            )
+        )
 
     tgis.init(True)
-    p = tgis.TemporalRasterAlgebraParser(run = True,
-                                         debug=False,
-                                         spatial=spatial,
-                                         nprocs=nprocs,
-                                         register_null=register_null,
-                                         dry_run=dry_run, time_suffix=time_suffix)
+    p = tgis.TemporalRasterAlgebraParser(
+        run=True,
+        debug=False,
+        spatial=spatial,
+        nprocs=nprocs,
+        register_null=register_null,
+        dry_run=dry_run,
+        time_suffix=time_suffix,
+    )
 
     if granularity:
-        if not p.setup_common_granularity(expression=expression, lexer = tgis.TemporalRasterAlgebraLexer()):
-            grass.script.fatal(_("Unable to process the expression in granularity algebra mode"))
+        if not p.setup_common_granularity(
+            expression=expression, lexer=tgis.TemporalRasterAlgebraLexer()
+        ):
+            grass.script.fatal(
+                _("Unable to process the expression in granularity algebra mode")
+            )
 
     pc = p.parse(expression, basename, grass.script.overwrite())
 
     if dry_run is True:
         import pprint
+
         pprint.pprint(pc)
+
 
 if __name__ == "__main__":
     options, flags = grass.script.parser()

@@ -118,21 +118,28 @@ def main():
     where = options["where"]
     _format = options["format"]
     _type = options["type"]
-    kws = {key: options[key]
-           for key in ('createopt', 'metaopt', 'nodata') if options[key]}
+    kws = {
+        key: options[key] for key in ("createopt", "metaopt", "nodata") if options[key]
+    }
 
     if _type and _format in ["pack", "AAIGrid"]:
-        grass.warning(_("Type options is not working with pack format, "
-                        "it will be skipped"))
+        grass.warning(
+            _("Type options is not working with pack format, " "it will be skipped")
+        )
         if kws:
-            grass.warning(_("Createopt, metaopt and nodata options are not "
-                            "working with pack and AAIGrid formats, "
-                            "they will be skipped"))
+            grass.warning(
+                _(
+                    "Createopt, metaopt and nodata options are not "
+                    "working with pack and AAIGrid formats, "
+                    "they will be skipped"
+                )
+            )
     # Make sure the temporal database exists
     tgis.init()
     # Export the space time raster dataset
-    tgis.export_stds(_input, output, compression, directory, where, _format,
-                     "strds", _type, **kws)
+    tgis.export_stds(
+        _input, output, compression, directory, where, _format, "strds", _type, **kws
+    )
 
 
 ############################################################################

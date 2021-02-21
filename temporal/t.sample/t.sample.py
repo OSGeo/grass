@@ -71,6 +71,7 @@ import grass.script as grass
 
 ############################################################################
 
+
 def main():
     # lazy imports
     import grass.temporal as tgis
@@ -88,9 +89,10 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.sample_stds_by_stds_topology(intype, samtype, inputs, sampler,
-                                      header, separator, method, spatial,
-                                      True)
+    tgis.sample_stds_by_stds_topology(
+        intype, samtype, inputs, sampler, header, separator, method, spatial, True
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

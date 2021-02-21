@@ -103,6 +103,7 @@ import grass.script as grass
 
 ############################################################################
 
+
 def main():
     # lazy imports
     import grass.temporal as tgis
@@ -136,17 +137,26 @@ def main():
         grass.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
         return
 
-    new_sp = tgis.check_new_stds(output, "strds", dbif=dbif,
-                                               overwrite=overwrite)
+    new_sp = tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
     # Configure the r.neighbor module
-    neighbor_module = pymod.Module("r.neighbors", input="dummy",
-                                   output="dummy", run_=False,
-                                   finish_=False, size=int(size),
-                                   method=method, overwrite=overwrite,
-                                   quiet=True)
+    neighbor_module = pymod.Module(
+        "r.neighbors",
+        input="dummy",
+        output="dummy",
+        run_=False,
+        finish_=False,
+        size=int(size),
+        method=method,
+        overwrite=overwrite,
+        quiet=True,
+    )
 
-    gregion_module = pymod.Module("g.region", raster="dummy", run_=False,
-                                   finish_=False,)
+    gregion_module = pymod.Module(
+        "g.region",
+        raster="dummy",
+        run_=False,
+        finish_=False,
+    )
 
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
@@ -158,19 +168,25 @@ def main():
     # run r.neighbors all selected maps
     for map in maps:
         count += 1
-        if sp.get_temporal_type() == 'absolute' and time_suffix == 'gran':
-            suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
-                                                      sp.get_granularity())
+        if sp.get_temporal_type() == "absolute" and time_suffix == "gran":
+            suffix = tgis.create_suffix_from_datetime(
+                map.temporal_extent.get_start_time(), sp.get_granularity()
+            )
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
-        elif sp.get_temporal_type() == 'absolute' and time_suffix == 'time':
+        elif sp.get_temporal_type() == "absolute" and time_suffix == "time":
             suffix = tgis.create_time_suffix(map)
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
         else:
             map_name = tgis.create_numeric_suffix(base, count, time_suffix)
 
-        new_map = tgis.open_new_map_dataset(map_name, None, type="raster",
-                                            temporal_extent=map.get_temporal_extent(),
-                                            overwrite=overwrite, dbif=dbif)
+        new_map = tgis.open_new_map_dataset(
+            map_name,
+            None,
+            type="raster",
+            temporal_extent=map.get_temporal_extent(),
+            overwrite=overwrite,
+            dbif=dbif,
+        )
         new_maps.append(new_map)
 
         mod = copy.deepcopy(neighbor_module)
@@ -195,7 +211,10 @@ def main():
     error = 0
     for proc in proc_list:
         if proc.popen.returncode != 0:
-            grass.error(_("Error running module: %\n    stderr: %s") %(proc.get_bash(), proc.outputs.stderr))
+            grass.error(
+                _("Error running module: %\n    stderr: %s")
+                % (proc.get_bash(), proc.outputs.stderr)
+            )
             error += 1
 
     if error > 0:
@@ -203,8 +222,9 @@ def main():
 
     # Open the new space time raster dataset
     ttype, stype, title, descr = sp.get_initial_values()
-    new_sp = tgis.open_new_stds(output, "strds", ttype, title,
-                                descr, stype, dbif, overwrite)
+    new_sp = tgis.open_new_stds(
+        output, "strds", ttype, title, descr, stype, dbif, overwrite
+    )
     num_maps = len(new_maps)
     # collect empty maps to remove them
     empty_maps = []
@@ -214,13 +234,12 @@ def main():
     for map in new_maps:
         count += 1
 
-        if count %10 == 0:
+        if count % 10 == 0:
             grass.percent(count, num_maps, 1)
 
         # Do not register empty maps
         map.load()
-        if map.metadata.get_min() is None and \
-            map.metadata.get_max() is None:
+        if map.metadata.get_min() is None and map.metadata.get_max() is None:
             if not register_null:
                 empty_maps.append(map)
                 continue
@@ -244,9 +263,10 @@ def main():
             else:
                 names += ",%s" % (map.get_name())
 
-        grass.run_command("g.remove", flags='f', type='raster', name=names, quiet=True)
+        grass.run_command("g.remove", flags="f", type="raster", name=names, quiet=True)
 
     dbif.close()
+
 
 ############################################################################
 

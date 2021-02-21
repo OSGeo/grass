@@ -115,8 +115,19 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.list_maps_of_stds("strds", input, columns, order, where, separator,
-                           method, header, granule, outpath=output)
+    tgis.list_maps_of_stds(
+        "strds",
+        input,
+        columns,
+        order,
+        where,
+        separator,
+        method,
+        header,
+        granule,
+        outpath=output,
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

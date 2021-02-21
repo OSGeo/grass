@@ -13,17 +13,15 @@ import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
-class TestAggregationRelative(TestCase):
 
+class TestAggregationRelative(TestCase):
     @classmethod
     def setUpClass(cls):
-        """Initiate the temporal GIS and set the region
-        """
+        """Initiate the temporal GIS and set the region"""
         os.putenv("GRASS_OVERWRITE", "1")
         tgis.init()
         cls.use_temp_region()
-        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0,
-                      t=50, res=10, res3=10)
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         cls.runModule("r.mapcalc", expression="a1 = 100", overwrite=True)
         cls.runModule("r.mapcalc", expression="a2 = 200", overwrite=True)
         cls.runModule("r.mapcalc", expression="a3 = 300", overwrite=True)
@@ -32,19 +30,31 @@ class TestAggregationRelative(TestCase):
         cls.runModule("r.mapcalc", expression="a6 = 600", overwrite=True)
         cls.runModule("r.mapcalc", expression="a7 = null()", overwrite=True)
 
-        cls.runModule("t.create", type="strds", temporaltype="relative",
-                                    output="A", title="A test",
-                                    description="A test", overwrite=True)
+        cls.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="relative",
+            output="A",
+            title="A test",
+            description="A test",
+            overwrite=True,
+        )
 
-        cls.runModule("t.register", flags="i", type="raster", input="A",
-                                     maps="a1,a2,a3,a4,a5,a6,a7",
-                                     start=0, unit="days", increment=3,
-                                     overwrite=True)
+        cls.runModule(
+            "t.register",
+            flags="i",
+            type="raster",
+            input="A",
+            maps="a1,a2,a3,a4,a5,a6,a7",
+            start=0,
+            unit="days",
+            increment=3,
+            overwrite=True,
+        )
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region
-        """
+        """Remove the temporary region"""
         cls.del_temp_region()
         cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
 
@@ -54,13 +64,20 @@ class TestAggregationRelative(TestCase):
 
     def test_1(self):
         """Simple test"""
-        self.assertModule("t.rast.aggregate", input="A", output="B",
-                          basename="b", granularity=6,
-                          method="average", file_limit=0,
-                          sampling=["overlaps","overlapped","contains"],
-                          nprocs=2, verbose=True)
+        self.assertModule(
+            "t.rast.aggregate",
+            input="A",
+            output="B",
+            basename="b",
+            granularity=6,
+            method="average",
+            file_limit=0,
+            sampling=["overlaps", "overlapped", "contains"],
+            nprocs=2,
+            verbose=True,
+        )
 
-        tinfo_string="""start_time='0'
+        tinfo_string = """start_time='0'
                         end_time='18'
                         unit=days
                         granularity=6
@@ -73,20 +90,28 @@ class TestAggregationRelative(TestCase):
                         max_max=550.0"""
 
         info = SimpleModule("t.info", flags="g", input="B")
-        #info.run()
-        #print info.outputs.stdout
-        self.assertModuleKeyValue(module=info, reference=tinfo_string,
-                                  precision=2, sep="=")
+        # info.run()
+        # print info.outputs.stdout
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
 
     def test_2(self):
         """Simple test register null maps"""
-        self.assertModule("t.rast.aggregate", input="A", output="B",
-                          basename="b", granularity=9,
-                          method="maximum",
-                          sampling=["contains"],
-                          nprocs=4, flags="n", verbose=True)
+        self.assertModule(
+            "t.rast.aggregate",
+            input="A",
+            output="B",
+            basename="b",
+            granularity=9,
+            method="maximum",
+            sampling=["contains"],
+            nprocs=4,
+            flags="n",
+            verbose=True,
+        )
 
-        tinfo_string="""semantic_type=mean
+        tinfo_string = """semantic_type=mean
                         start_time='0'
                         end_time='27'
                         unit=days
@@ -100,20 +125,27 @@ class TestAggregationRelative(TestCase):
                         max_max=600.0"""
 
         info = SimpleModule("t.info", flags="g", input="B")
-        #info.run()
-        #print info.outputs.stdout
-        self.assertModuleKeyValue(module=info, reference=tinfo_string,
-                                  precision=2, sep="=")
+        # info.run()
+        # print info.outputs.stdout
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
 
     def test_3(self):
         """Simple test"""
-        self.assertModule("t.rast.aggregate", input="A", output="B",
-                          basename="b", granularity=9,
-                          method="maximum",
-                          sampling=["contains"],
-                          nprocs=4, verbose=True)
+        self.assertModule(
+            "t.rast.aggregate",
+            input="A",
+            output="B",
+            basename="b",
+            granularity=9,
+            method="maximum",
+            sampling=["contains"],
+            nprocs=4,
+            verbose=True,
+        )
 
-        tinfo_string="""semantic_type=mean
+        tinfo_string = """semantic_type=mean
                         start_time='0'
                         end_time='18'
                         unit=days
@@ -127,20 +159,27 @@ class TestAggregationRelative(TestCase):
                         max_max=600.0"""
 
         info = SimpleModule("t.info", flags="g", input="B")
-        #info.run()
-        #print info.outputs.stdout
-        self.assertModuleKeyValue(module=info, reference=tinfo_string,
-                                  precision=2, sep="=")
+        # info.run()
+        # print info.outputs.stdout
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
 
     def test_4(self):
         """Simple test"""
-        self.assertModule("t.rast.aggregate", input="A", output="B",
-                          basename="b", granularity=21,
-                          method="average",
-                          sampling=["contains"],
-                          nprocs=4, verbose=True)
+        self.assertModule(
+            "t.rast.aggregate",
+            input="A",
+            output="B",
+            basename="b",
+            granularity=21,
+            method="average",
+            sampling=["contains"],
+            nprocs=4,
+            verbose=True,
+        )
 
-        tinfo_string="""semantic_type=mean
+        tinfo_string = """semantic_type=mean
                         start_time='0'
                         end_time='21'
                         unit=days
@@ -154,11 +193,14 @@ class TestAggregationRelative(TestCase):
                         max_max=350.0"""
 
         info = SimpleModule("t.info", flags="g", input="B")
-        #info.run()
-        #print info.outputs.stdout
-        self.assertModuleKeyValue(module=info, reference=tinfo_string,
-                                  precision=2, sep="=")
+        # info.run()
+        # print info.outputs.stdout
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()

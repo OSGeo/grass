@@ -62,6 +62,7 @@ def main():
     stds.update_command_string(dbif=dbif)
     dbif.close()
 
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()

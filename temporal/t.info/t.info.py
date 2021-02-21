@@ -66,9 +66,9 @@ def main():
 
     name = options["input"]
     type_ = options["type"]
-    shellstyle = flags['g']
-    system = flags['d']
-    history = flags['h']
+    shellstyle = flags["g"]
+    system = flags["d"]
+    history = flags["h"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -79,24 +79,26 @@ def main():
 
     if system and not shellstyle and not history:
         #      0123456789012345678901234567890
-        print(" +------------------- Temporal DBMI backend information ----------------------+")
+        print(
+            " +------------------- Temporal DBMI backend information ----------------------+"
+        )
         print(" | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__))
-        print(" | Temporal database string:... " + str(
-            tgis.get_tgis_database_string()))
-        print(" | SQL template path:.......... " + str(
-            tgis.get_sql_template_path()))
+        print(" | Temporal database string:... " + str(tgis.get_tgis_database_string()))
+        print(" | SQL template path:.......... " + str(tgis.get_sql_template_path()))
         if rows:
             for row in rows:
-                print(" | %s .......... %s" %(row[0], row[1]))
-        print(" +----------------------------------------------------------------------------+")
+                print(" | %s .......... %s" % (row[0], row[1]))
+        print(
+            " +----------------------------------------------------------------------------+"
+        )
         return
     elif system and not history:
-        print("dbmi_python_interface=\'" + str(dbif.get_dbmi().__name__) + "\'")
-        print("dbmi_string=\'" + str(tgis.get_tgis_database_string()) + "\'")
-        print("sql_template_path=\'" + str(tgis.get_sql_template_path()) + "\'")
+        print("dbmi_python_interface='" + str(dbif.get_dbmi().__name__) + "'")
+        print("dbmi_string='" + str(tgis.get_tgis_database_string()) + "'")
+        print("sql_template_path='" + str(tgis.get_sql_template_path()) + "'")
         if rows:
             for row in rows:
-                print("%s=\'%s\'" %(row[0], row[1]))
+                print("%s='%s'" % (row[0], row[1]))
         return
 
     if not system and not name:
@@ -122,6 +124,7 @@ def main():
         dataset.print_shell_info()
     else:
         dataset.print_info()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

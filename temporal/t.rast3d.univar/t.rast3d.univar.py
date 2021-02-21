@@ -84,7 +84,9 @@ def main():
         output = None
 
     tgis.print_gridded_dataset_univar_statistics(
-        "str3ds", input, output, where, extended, no_header, separator)
+        "str3ds", input, output, where, extended, no_header, separator
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

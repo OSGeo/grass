@@ -128,8 +128,7 @@ def main():
             if id is None:
                 id = null_map
 
-            grass.run_command("g.copy", raster="%s,%s" % (id, map_name),
-                              overwrite=True)
+            grass.run_command("g.copy", raster="%s,%s" % (id, map_name), overwrite=True)
             out_name = "%6.6i_%s.vtk" % (count, sp.base.get_name())
 
             mflags = ""
@@ -141,22 +140,33 @@ def main():
             # Export the raster map with r.out.vtk
             try:
                 if elevation:
-                    grass.run_command("r.out.vtk", flags=mflags, null=null,
-                                      input=map_name, elevation=elevation,
-                                      output=out_name,
-                                      overwrite=grass.overwrite())
+                    grass.run_command(
+                        "r.out.vtk",
+                        flags=mflags,
+                        null=null,
+                        input=map_name,
+                        elevation=elevation,
+                        output=out_name,
+                        overwrite=grass.overwrite(),
+                    )
                 else:
-                    grass.run_command("r.out.vtk", flags=mflags, null=null,
-                                      input=map_name, output=out_name,
-                                      overwrite=grass.overwrite())
+                    grass.run_command(
+                        "r.out.vtk",
+                        flags=mflags,
+                        null=null,
+                        input=map_name,
+                        output=out_name,
+                        overwrite=grass.overwrite(),
+                    )
             except CalledModuleError:
                 grass.fatal(_("Unable to export raster map <%s>" % map_name))
 
             count += 1
 
     if use_granularity:
-        grass.run_command("g.remove", flags='f', type='raster', name=null_map)
-    grass.run_command("g.remove", flags='f', type='raster', name=map_name)
+        grass.run_command("g.remove", flags="f", type="raster", name=null_map)
+    grass.run_command("g.remove", flags="f", type="raster", name=map_name)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

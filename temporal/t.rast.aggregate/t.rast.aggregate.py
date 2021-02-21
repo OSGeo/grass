@@ -116,6 +116,7 @@ import grass.script as gcore
 
 ############################################################################
 
+
 def main():
     # lazy imports
     import grass.temporal as tgis
@@ -143,7 +144,9 @@ def main():
 
     sp = tgis.open_old_stds(input, "strds", dbif)
 
-    map_list = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=dbif)
+    map_list = sp.get_registered_maps_as_objects(
+        where=where, order="start_time", dbif=dbif
+    )
 
     if not map_list:
         dbif.close()
@@ -163,7 +166,7 @@ def main():
 
     # In case no end time is available, then we use the start time of the last map layer
     if end_time is None:
-        end_time = map_list[- 1].temporal_extent.get_start_time()
+        end_time = map_list[-1].temporal_extent.get_start_time()
         has_end_time = False
 
     granularity_list = []
@@ -189,30 +192,53 @@ def main():
 
         granularity_list.append(granule)
 
-    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list, granularity=gran,
-                                                                       map_list=map_list,
-                                                                       topo_list=topo_list, basename=base, time_suffix=time_suffix,
-                                                                       offset=offset, method=method, nprocs=nprocs, spatial=None,
-                                                                       overwrite=gcore.overwrite(), file_limit=file_limit)
+    output_list = tgis.aggregate_by_topology(
+        granularity_list=granularity_list,
+        granularity=gran,
+        map_list=map_list,
+        topo_list=topo_list,
+        basename=base,
+        time_suffix=time_suffix,
+        offset=offset,
+        method=method,
+        nprocs=nprocs,
+        spatial=None,
+        overwrite=gcore.overwrite(),
+        file_limit=file_limit,
+    )
 
     if output_list:
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        output_strds = tgis.open_new_stds(output, "strds", temporal_type,
-                                                                 title, description, semantic_type,
-                                                                 dbif, gcore.overwrite())
+        output_strds = tgis.open_new_stds(
+            output,
+            "strds",
+            temporal_type,
+            title,
+            description,
+            semantic_type,
+            dbif,
+            gcore.overwrite(),
+        )
         if register_null:
-            register_null=False
+            register_null = False
         else:
-            register_null=True
+            register_null = True
 
-        tgis.register_map_object_list("rast", output_list, output_strds, register_null,
-                                                       sp.get_relative_time_unit(), dbif)
+        tgis.register_map_object_list(
+            "rast",
+            output_list,
+            output_strds,
+            register_null,
+            sp.get_relative_time_unit(),
+            dbif,
+        )
 
         # Update the raster metadata table entries with aggregation type
         output_strds.set_aggregation_type(method)
         output_strds.metadata.update(dbif)
 
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = gcore.parser()
