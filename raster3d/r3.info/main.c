@@ -482,7 +482,7 @@ int main(int argc, char *argv[])
 		fprintf(out, "description=");
 		fprintf(out, "\"%s\"\n", Rast_get_history(&hist, HIST_KEYWRD));
 		if (Rast_history_length(&hist)) {
-                    fprintf(out, "comments=\"", i);
+                    fprintf(out, "comments=\"");
 		    for (i = 0; i < Rast_history_length(&hist); i++)
 			fprintf(out, "%s", Rast_history_line(&hist, i));
                     fprintf(out, "\"\n");
