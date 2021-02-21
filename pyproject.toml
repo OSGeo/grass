@@ -29,7 +29,6 @@ exclude = '''
     | general
     | gui
     | imagery
-    | temporal
     | docker/testdata/test_grass_session.py
     | display/d.mon/render_cmd.py
 )
