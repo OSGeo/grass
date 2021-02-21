@@ -2,12 +2,12 @@
 /****************************************************************
  *
  * MODULE:       v.colors
- * 
+ *
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>,
- *		 Huidae Cho <grass4u gmail.com>
- *               
+ *               Huidae Cho <grass4u gmail.com>
+ *
  * PURPOSE:      Manage color tables for vector maps
- *               
+ *
  * COPYRIGHT:    (C) 2011-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct {
 	struct Flag *r, *w, *l, *d, *g, *a, *n, *c;
-    } flag; 
+    } flag;
 
     struct {
 	struct Option *map, *field, *colr, *rast, *volume, *rules,
@@ -44,14 +44,14 @@ int main(int argc, char *argv[])
     const char *mapset, *cmapset;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
     char *name;
-    
+
     struct Map_info Map;
     struct FPRange range;
     struct Colors colors, colors_tmp;
     /* struct Cell_stats statf; */
-    
+
     G_gisinit(argv[0]);
-    
+
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("color table"));
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	       _("use category values"),
 	       _("use z coordinate (3D points or centroids only)"));
     opt.use->answer = "cat";
-    
+
     opt.attrcol = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.attrcol->label = _("Name of column containing numeric data");
     opt.attrcol->description = _("Required for use=attr");
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     opt.rgbcol->key = "rgb_column";
     opt.rgbcol->label = _("Name of color column to populate RGB values");
     opt.rgbcol->description = _("If not given writes color table");
-    
+
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description = _("Remove existing color table");
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
     flag.c->key = 'c';
     flag.c->label = _("Convert color rules from RGB values to color table");
     flag.c->description = _("Option 'rgb_column' with valid RGB values required");
-	
+
     /* TODO ?
     flag.e = G_define_flag();
     flag.e->key = 'e';
@@ -205,12 +205,12 @@ int main(int argc, char *argv[])
         }
     }
     G_debug(1, "use=%d", use);
-    
+
     if (!name)
         G_fatal_error(_("No vector map specified"));
 
     if (use == USE_ATTR && !attrcolumn)
-        G_fatal_error(_("Option <%s> required"), opt.attrcol->key); 
+        G_fatal_error(_("Option <%s> required"), opt.attrcol->key);
     if (use != USE_ATTR && attrcolumn) {
         G_important_message(_("Option <%s> given, assuming <use=attr>..."), opt.attrcol->key);
         use = USE_ATTR;
@@ -225,12 +225,12 @@ int main(int argc, char *argv[])
         cmap = opt.rast->answer;
     if (opt.volume->answer)
         cmap = opt.volume->answer;
-    
+
     if (!cmap && !style && !rules && !remove && !convert)
         G_fatal_error(_("One of -%c, -%c or %s=, %s= or %s= "
-			"must be specified"), flag.r->key, flag.c->key, 
+			"must be specified"), flag.r->key, flag.c->key,
 		      opt.colr->key, opt.rast->key, opt.rules->key);
-    
+
     if (!!style + !!cmap + !!rules > 1)
         G_fatal_error(_("%s=, %s= and %s= are mutually exclusive"),
 			opt.colr->key, opt.rules->key, opt.rast->key);
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("-%c and -%c are mutually exclusive"),
 		      flag.g->key, flag.a->key);
 
-    if (flag.c->answer && !rgbcolumn) 
+    if (flag.c->answer && !rgbcolumn)
 	G_fatal_error(_("%s= required for -%c"),
 		      opt.rgbcol->key, flag.c->key);
 
@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
     mapset = G_find_vector(name, "");
     if (!mapset)
 	G_fatal_error(_("Vector map <%s> not found"), name);
-    
+
     stat = -1;
     if (remove) {
 	stat = Vect_remove_colors(name, mapset);
@@ -276,11 +276,11 @@ int main(int argc, char *argv[])
     Vect_set_error_handler_io(&Map, NULL);
     if (use == USE_Z && !Vect_is_3d(&Map))
         G_fatal_error(_("Vector map <%s> is not 3D"), Vect_get_full_name(&Map));
-    
+
     layer = Vect_get_field_number(&Map, opt.field->answer);
     if (layer < 1)
 	G_fatal_error(_("Layer <%s> not found"), opt.field->answer);
-    
+
     if (opt.range->answer) {
 	range.min = atof(opt.range->answers[0]);
 	range.max = atof(opt.range->answers[1]);
@@ -290,10 +290,10 @@ int main(int argc, char *argv[])
     }
 
     Rast_init_colors(&colors);
-    if (style || rules) {	
+    if (style || rules) {
 	if (style && !G_find_color_rule(style))
 	    G_fatal_error(_("Color table <%s> not found"), style);
-	
+
 	if (use == USE_CAT) {
 	    scan_cats(&Map, layer, style, rules,
 		      opt.range->answer ? &range : NULL,
@@ -358,25 +358,25 @@ int main(int argc, char *argv[])
     }
 
     G_important_message(_("Writing color rules..."));
-    
+
     if (style || rules || opt.rast->answer || opt.volume->answer) {
 	if (rgbcolumn)
 	    write_rgb_values(&Map, layer, rgbcolumn, &colors);
 	else
 	    Vect_write_colors(name, mapset, &colors);
     }
-    
+
     if (convert) {
 	/* convert RGB values to color tables */
 	rgb2colr(&Map, layer, rgbcolumn, &colors);
 	Vect_write_colors(name, mapset, &colors);
     }
     Vect_close(&Map);
-    
-    G_message(_("Color table for vector map <%s> set to '%s'"), 
-	      G_fully_qualified_name(name, mapset), 
+
+    G_message(_("Color table for vector map <%s> set to '%s'"),
+	      G_fully_qualified_name(name, mapset),
               is_from_stdin || convert ? "rules" : style ? style : rules ? rules :
               cmap);
-    
+
     exit(EXIT_SUCCESS);
 }
