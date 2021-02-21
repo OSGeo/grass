@@ -51,8 +51,9 @@ import grass.script as gs
 
 from grass.lib.gis import *
 
+
 def main():
-    G_gisinit('m.distance')
+    G_gisinit("m.distance")
 
     # calc distance
 
@@ -65,18 +66,18 @@ def main():
     # toast, so no way to check if option was given. So it hangs if
     # --q was the only option given and there is no data from stdin.
     coords = []
-    if flags['i']:
+    if flags["i"]:
         # read line by line from stdin
         while True:
             line = sys.stdin.readline().strip()
-            if not line: # EOF
+            if not line:  # EOF
                 break
             else:
-                coords.append(line.split(','))
+                coords.append(line.split(","))
     else:
         # read from coord= command line option
         p = None
-        for c in options['coord'].split(','):
+        for c in options["coord"].split(","):
             if not p:
                 p = [c]
             else:
@@ -117,7 +118,7 @@ def main():
             x[i] = float(coords[i][0])
             y[i] = float(coords[i][1])
 
-        segment_distance = G_distance(x[i-1], y[i-1], x[i], y[i])
+        segment_distance = G_distance(x[i - 1], y[i - 1], x[i], y[i])
         overall_distance += segment_distance
 
         print("segment %d distance is %.2f meters" % (i, segment_distance))
@@ -145,6 +146,7 @@ def main():
         gs.message("Location units are %s" % G_database_unit_name(True).lower())
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = gs.parser()

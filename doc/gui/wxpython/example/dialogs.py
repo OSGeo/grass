@@ -43,8 +43,9 @@ class ExampleMapDialog(SimpleDialog):
         SimpleDialog.__init__(self, parent, title)
 
         # here is the place to determine element type
-        self.element = gselect.Select(parent=self.panel, type='raster',
-                                      size=globalvar.DIALOG_GSELECT_SIZE)
+        self.element = gselect.Select(
+            parent=self.panel, type="raster", size=globalvar.DIALOG_GSELECT_SIZE
+        )
 
         self._layout()
 
@@ -52,11 +53,15 @@ class ExampleMapDialog(SimpleDialog):
 
     def _layout(self):
         """!Do layout"""
-        self.dataSizer.Add(item=wx.StaticText(parent=self.panel,
-                                              label=_("Name of raster map:")),
-                           proportion=0, flag=wx.ALL, border=1)
-        self.dataSizer.Add(self.element, proportion=0,
-                           flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(
+            item=wx.StaticText(parent=self.panel, label=_("Name of raster map:")),
+            proportion=0,
+            flag=wx.ALL,
+            border=1,
+        )
+        self.dataSizer.Add(
+            self.element, proportion=0, flag=wx.EXPAND | wx.ALL, border=1
+        )
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
