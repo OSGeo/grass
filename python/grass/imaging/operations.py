@@ -58,6 +58,7 @@ for details.
 try:
     import PIL
     from PIL import Image
+
     try:
         import PIL.ImageOps as ImageOps
     except ImportError:
@@ -83,8 +84,7 @@ def crop_image(input_file, output_file=None, format=None):
     cropped_image.save(output_file, format)
 
 
-def thumbnail_image(input_file, output_file=None, size=(200, 200),
-                    format=None):
+def thumbnail_image(input_file, output_file=None, size=(200, 200), format=None):
     """Create a thumbnail of an image
 
     The image aspect ratio is kept and its height and width are adjusted
@@ -104,8 +104,9 @@ def thumbnail_image(input_file, output_file=None, size=(200, 200),
     img.save(output_file, format)
 
 
-def change_rbg_to_transparent(input_file, output_file=None, color='white',
-                              alpha=0, format=None):
+def change_rbg_to_transparent(
+    input_file, output_file=None, color="white", alpha=0, format=None
+):
     """Make a specified RGB color in the image transparent
 
     The color is specified as a RGB tuple (triplet) or string 'white'
@@ -121,9 +122,9 @@ def change_rbg_to_transparent(input_file, output_file=None, color='white',
     """
     if PIL is None:
         raise RuntimeError(_("Install PIL or Pillow to use this function"))
-    if color == 'white':
+    if color == "white":
         rgb = (255, 255, 255)
-    elif color == 'black':
+    elif color == "black":
         rgb = (0, 0, 0)
     else:
         rgb = color  # pylint: disable=redefined-variable-type
@@ -154,22 +155,26 @@ def invert_image_colors(input_file, output_file=None, format=None):
     if PIL is None:
         raise RuntimeError(_("Install PIL or Pillow to use this function"))
     if ImageOps is None:
-        raise RuntimeError(_("Install a newer version of PIL or Pillow to"
-                             " use this function (missing ImageOps module)"))
+        raise RuntimeError(
+            _(
+                "Install a newer version of PIL or Pillow to"
+                " use this function (missing ImageOps module)"
+            )
+        )
     if not output_file:
         output_file = input_file
     original_img = Image.open(input_file)
     # according to documentation (3.0.x) the module can work only on RGB
     # so we need to specifically take care of transparency if present
-    if original_img.mode == 'RGBA':
+    if original_img.mode == "RGBA":
         # split into bands
         red1, green1, blue1, alpha = original_img.split()
-        rgb_img = Image.merge('RGB', (red1, green1, blue1))
+        rgb_img = Image.merge("RGB", (red1, green1, blue1))
         # invert RGB
         inverted_rgb_img = ImageOps.invert(rgb_img)
         # put back the original alpha
         red2, green2, blue2 = inverted_rgb_img.split()
-        new_image = Image.merge('RGBA', (red2, green2, blue2, alpha))
+        new_image = Image.merge("RGBA", (red2, green2, blue2, alpha))
     else:
         new_image = ImageOps.invert(original_img)
     new_image.save(output_file, format)

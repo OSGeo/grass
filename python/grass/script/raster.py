@@ -44,21 +44,26 @@ def raster_history(map, overwrite=False, env=None):
     :return: False on failure
 
     """
-    current_mapset = gisenv(env)['MAPSET']
-    if find_file(name=map, env=env)['mapset'] == current_mapset:
+    current_mapset = gisenv(env)["MAPSET"]
+    if find_file(name=map, env=env)["mapset"] == current_mapset:
         if overwrite is True:
             historyfile = tempfile(env=env)
-            f = open(historyfile, 'w')
-            f.write(os.environ['CMDLINE'])
+            f = open(historyfile, "w")
+            f.write(os.environ["CMDLINE"])
             f.close()
-            run_command('r.support', map=map, loadhistory=historyfile, env=env)
+            run_command("r.support", map=map, loadhistory=historyfile, env=env)
             try_remove(historyfile)
         else:
-            run_command('r.support', map=map, history=os.environ['CMDLINE'], env=env)
+            run_command("r.support", map=map, history=os.environ["CMDLINE"], env=env)
         return True
 
-    warning(_("Unable to write history for <%(map)s>. "
-              "Raster map <%(map)s> not found in current mapset." % {'map': map, 'map': map}))
+    warning(
+        _(
+            "Unable to write history for <%(map)s>. "
+            "Raster map <%(map)s> not found in current mapset."
+            % {"map": map, "map": map}
+        )
+    )
     return False
 
 
@@ -77,24 +82,25 @@ def raster_info(map, env=None):
     """
 
     def float_or_null(s):
-        if s == 'NULL':
+        if s == "NULL":
             return None
         else:
             return float(s)
 
-    s = read_command('r.info', flags='gre', map=map, env=env)
+    s = read_command("r.info", flags="gre", map=map, env=env)
     kv = parse_key_val(s)
-    for k in ['min', 'max']:
+    for k in ["min", "max"]:
         kv[k] = float_or_null(kv[k])
-    for k in ['north', 'south', 'east', 'west']:
+    for k in ["north", "south", "east", "west"]:
         kv[k] = float(kv[k])
-    for k in ['nsres', 'ewres']:
+    for k in ["nsres", "ewres"]:
         kv[k] = float_or_dms(kv[k])
     return kv
 
 
-def mapcalc(exp, quiet=False, verbose=False, overwrite=False,
-            seed=None, env=None, **kwargs):
+def mapcalc(
+    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+):
     """Interface to r.mapcalc.
 
     :param str exp: expression
@@ -107,22 +113,30 @@ def mapcalc(exp, quiet=False, verbose=False, overwrite=False,
     :param kwargs:
     """
 
-    if seed == 'auto':
-        seed = hash((os.getpid(), time.time())) % (2**32)
+    if seed == "auto":
+        seed = hash((os.getpid(), time.time())) % (2 ** 32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
     try:
-        write_command('r.mapcalc', file='-', stdin=e, env=env, seed=seed,
-                      quiet=quiet, verbose=verbose, overwrite=overwrite)
+        write_command(
+            "r.mapcalc",
+            file="-",
+            stdin=e,
+            env=env,
+            seed=seed,
+            quiet=quiet,
+            verbose=verbose,
+            overwrite=overwrite,
+        )
     except CalledModuleError:
-        fatal(_("An error occurred while running r.mapcalc"
-                " with expression: %s") % e)
+        fatal(_("An error occurred while running r.mapcalc" " with expression: %s") % e)
 
 
-def mapcalc_start(exp, quiet=False, verbose=False, overwrite=False,
-                  seed=None, env=None, **kwargs):
+def mapcalc_start(
+    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 
     >>> output = 'newele'
@@ -152,14 +166,21 @@ def mapcalc_start(exp, quiet=False, verbose=False, overwrite=False,
     :return: Popen object
     """
 
-    if seed == 'auto':
-        seed = hash((os.getpid(), time.time())) % (2**32)
+    if seed == "auto":
+        seed = hash((os.getpid(), time.time())) % (2 ** 32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    p = feed_command('r.mapcalc', file='-', env=env, seed=seed,
-                     quiet=quiet, verbose=verbose, overwrite=overwrite)
+    p = feed_command(
+        "r.mapcalc",
+        file="-",
+        env=env,
+        seed=seed,
+        quiet=quiet,
+        verbose=verbose,
+        overwrite=overwrite,
+    )
     p.stdin.write(encode(e))
     p.stdin.close()
     return p
@@ -183,22 +204,24 @@ def raster_what(map, coord, env=None, localized=False):
 
     coord_list = list()
     if isinstance(coord, tuple):
-        coord_list.append('%f,%f' % (coord[0], coord[1]))
+        coord_list.append("%f,%f" % (coord[0], coord[1]))
     else:
         for e, n in coord:
-            coord_list.append('%f,%f' % (e, n))
+            coord_list.append("%f,%f" % (e, n))
 
-    sep = '|'
+    sep = "|"
     # separator '|' not included in command
     # because | is causing problems on Windows
     # change separator?
-    ret = read_command('r.what',
-                       flags='rf',
-                       map=','.join(map_list),
-                       coordinates=','.join(coord_list),
-                       null=_("No data"),
-                       quiet=True,
-                       env=env)
+    ret = read_command(
+        "r.what",
+        flags="rf",
+        map=",".join(map_list),
+        coordinates=",".join(coord_list),
+        null=_("No data"),
+        quiet=True,
+        env=env,
+    )
     data = list()
     if not ret:
         return data
@@ -206,14 +229,14 @@ def raster_what(map, coord, env=None, localized=False):
     if localized:
         labels = (_("value"), _("label"), _("color"))
     else:
-        labels = ('value', 'label', 'color')
+        labels = ("value", "label", "color")
     for item in ret.splitlines():
         line = item.split(sep)[3:]
         for i, map_name in enumerate(map_list):
             tmp_dict = {}
             tmp_dict[map_name] = {}
             for j in range(len(labels)):
-                tmp_dict[map_name][labels[j]] = line[i*len(labels)+j]
+                tmp_dict[map_name][labels[j]] = line[i * len(labels) + j]
 
             data.append(tmp_dict)
 

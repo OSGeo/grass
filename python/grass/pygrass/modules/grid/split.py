@@ -4,8 +4,15 @@ Created on Tue Apr  2 19:00:15 2013
 
 @author: pietro
 """
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 from grass.pygrass.gis.region import Region
 from grass.pygrass.vector.basic import Bbox
 
@@ -30,10 +37,12 @@ def get_bbox(reg, row, col, width, height, overlap):
     south = reg.north - ((row + 1) * height + overlap) * reg.nsres
     east = reg.west + ((col + 1) * width + overlap) * reg.ewres
     west = reg.west + (col * width - overlap) * reg.ewres
-    return Bbox(north=north if north <= reg.north else reg.north,
-                south=south if south >= reg.south else reg.south,
-                east=east if east <= reg.east else reg.east,
-                west=west if west >= reg.west else reg.west,)
+    return Bbox(
+        north=north if north <= reg.north else reg.north,
+        south=south if south >= reg.south else reg.south,
+        east=east if east <= reg.east else reg.east,
+        west=west if west >= reg.west else reg.west,
+    )
 
 
 def split_region_tiles(region=None, width=100, height=100, overlap=0):
@@ -70,11 +79,11 @@ def split_region_tiles(region=None, width=100, height=100, overlap=0):
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
-    #print reg
+    # print reg
     for row in range(nrows):
         row_list = []
         for col in range(ncols):
-            #print 'c', c, 'r', r
+            # print 'c', c, 'r', r
             row_list.append(get_bbox(reg, row, col, width, height, overlap))
         box_list.append(row_list)
     return box_list
@@ -96,11 +105,11 @@ def get_overlap_region_tiles(region=None, width=100, height=100, overlap=0):
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
-    #print reg
+    # print reg
     for row in range(nrows):
         row_list = []
         for col in range(ncols):
-            #print 'c', c, 'r', r
+            # print 'c', c, 'r', r
             row_list.append(get_bbox(reg, row, col, width, height, -overlap))
         box_list.append(row_list)
     return box_list

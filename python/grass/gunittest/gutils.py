@@ -18,7 +18,8 @@ from .checkers import text_to_keyvalue
 
 def get_current_mapset():
     """Get curret mapset name as a string"""
-    return call_module('g.mapset', flags='p').strip()
+    return call_module("g.mapset", flags="p").strip()
+
 
 def is_map_in_mapset(name, type, mapset=None):
     """Check is map is present in the mapset (current mapset by default)
@@ -38,22 +39,28 @@ def is_map_in_mapset(name, type, mapset=None):
     # so anything accepted by g.findfile will work but this can change in the
     # future (the documentation is clear about what's legal)
     # supporting both short and full names
-    if type == 'rast' or  type == 'raster':
-        type = 'cell'
-    elif type == 'rast3d' or type == 'raster3d':
-        type = 'grid3'
-    elif type == 'vect':
-        type = 'vector'
+    if type == "rast" or type == "raster":
+        type = "cell"
+    elif type == "rast3d" or type == "raster3d":
+        type = "grid3"
+    elif type == "vect":
+        type = "vector"
     # g.findfile returns non-zero when file was not found
     # se we ignore return code and just focus on stdout
-    process = start_command('g.findfile', flags='n',
-                            element=type, file=name, mapset=mapset,
-                            stdout=PIPE, stderr=PIPE)
+    process = start_command(
+        "g.findfile",
+        flags="n",
+        element=type,
+        file=name,
+        mapset=mapset,
+        stdout=PIPE,
+        stderr=PIPE,
+    )
     output, errors = process.communicate()
-    info = text_to_keyvalue(decode(output), sep='=')
+    info = text_to_keyvalue(decode(output), sep="=")
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
-    if info['file']:
+    if info["file"]:
         return True
     else:
         return False

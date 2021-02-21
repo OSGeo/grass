@@ -6,11 +6,11 @@ import traceback
 import sys
 
 if sys.hexversion >= 0x3000000:
-    im_func = '__func__'
-    im_self = '__self__'
+    im_func = "__func__"
+    im_self = "__self__"
 else:
-    im_func = 'im_func'
-    im_self = 'im_self'
+    im_func = "im_func"
+    im_self = "im_self"
 
 
 def safeRef(target, onDelete=None):
@@ -28,15 +28,12 @@ def safeRef(target, onDelete=None):
         if getattr(target, im_self) is not None:
             # Turn a bound method into a BoundMethodWeakref instance.
             # Keep track of these instances for lookup by disconnect().
-            assert hasattr(target, im_func), """safeRef target %r has %s, """ \
-                                             """but no %s, don't know how """ \
-                                             """to create reference""" % (target,
-                                                                          im_self,
-                                                                          im_func)
-            reference = BoundMethodWeakref(
-                target=target,
-                onDelete=onDelete
+            assert hasattr(target, im_func), (
+                """safeRef target %r has %s, """
+                """but no %s, don't know how """
+                """to create reference""" % (target, im_self, im_func)
             )
+            reference = BoundMethodWeakref(target=target, onDelete=onDelete)
             return reference
     if onDelete is not None:
         return weakref.ref(target, onDelete)
@@ -77,6 +74,7 @@ class BoundMethodWeakref(object):
             same BoundMethodWeakref instance.
 
     """
+
     _allInstances = weakref.WeakValueDictionary()
 
     def __new__(cls, target, onDelete=None, *arguments, **named):
@@ -116,6 +114,7 @@ class BoundMethodWeakref(object):
             collected).  Should take a single argument,
             which will be passed a pointer to this object.
         """
+
         def remove(weak, self=self):
             """Set self.isDead to true when method or instance is destroyed"""
             methods = self.deletionMethods[:]
@@ -126,15 +125,18 @@ class BoundMethodWeakref(object):
                 pass
             for function in methods:
                 try:
-                    if hasattr(function, '__call__'):
+                    if hasattr(function, "__call__"):
                         function(self)
                 except Exception as e:
                     try:
                         traceback.print_exc()
                     except AttributeError:
-                        print('''Exception during saferef %s cleanup '''
-                              '''function %s: %s''' % (self, function, e),
-                              file=sys.stderr)
+                        print(
+                            """Exception during saferef %s cleanup """
+                            """function %s: %s""" % (self, function, e),
+                            file=sys.stderr,
+                        )
+
         self.deletionMethods = [onDelete]
         self.key = self.calculateKey(target)
         self.weakSelf = weakref.ref(getattr(target, im_self), remove)
@@ -149,6 +151,7 @@ class BoundMethodWeakref(object):
         target object and the target function respectively.
         """
         return (id(getattr(target, im_self)), id(getattr(target, im_func)))
+
     calculateKey = classmethod(calculateKey)
 
     def __str__(self):
@@ -158,6 +161,7 @@ class BoundMethodWeakref(object):
             self.selfName,
             self.funcName,
         )
+
     __repr__ = __str__
 
     def __nonzero__(self):

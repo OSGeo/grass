@@ -65,17 +65,18 @@ def is_location_valid(database, location):
 
 def is_mapset_current(database, location, mapset):
     genv = gisenv()
-    if (database == genv['GISDBASE'] and
-            location == genv['LOCATION_NAME'] and
-            mapset == genv['MAPSET']):
+    if (
+        database == genv["GISDBASE"]
+        and location == genv["LOCATION_NAME"]
+        and mapset == genv["MAPSET"]
+    ):
         return True
     return False
 
 
 def is_location_current(database, location):
     genv = gisenv()
-    if (database == genv['GISDBASE'] and
-            location == genv['LOCATION_NAME']):
+    if database == genv["GISDBASE"] and location == genv["LOCATION_NAME"]:
         return True
     return False
 
@@ -90,7 +91,7 @@ def is_current_user_mapset_owner(mapset_path):
         # Mapset just needs to be accessible for writing.
         return os.access(mapset_path, os.W_OK)
     # Mapset needs to be owned by user.
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         return True
     stat_info = os.stat(mapset_path)
     mapset_uid = stat_info.st_uid
@@ -105,7 +106,7 @@ def is_different_mapset_owner(mapset_path):
 def get_mapset_owner(mapset_path):
     """Returns mapset owner name or None if owner name unknown.
     On Windows it always returns None."""
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         return None
     try:
         path = Path(mapset_path)
@@ -115,7 +116,7 @@ def get_mapset_owner(mapset_path):
 
 
 def is_current_mapset_in_demolocation():
-    return gisenv()['LOCATION_NAME'] == "world_latlong_wgs84"
+    return gisenv()["LOCATION_NAME"] == "world_latlong_wgs84"
 
 
 def is_mapset_locked(mapset_path):
@@ -146,13 +147,14 @@ def get_mapset_lock_info(mapset_path):
     """
     info = {}
     lock_name = ".gislock"
-    info['lockpath'] = os.path.join(mapset_path, lock_name)
+    info["lockpath"] = os.path.join(mapset_path, lock_name)
     try:
-        info['owner'] = Path(info['lockpath']).owner()
+        info["owner"] = Path(info["lockpath"]).owner()
     except KeyError:
-        info['owner'] = None
-    info['timestamp'] = (datetime.datetime.fromtimestamp(
-        os.path.getmtime(info['lockpath']))).replace(microsecond=0)
+        info["owner"] = None
+    info["timestamp"] = (
+        datetime.datetime.fromtimestamp(os.path.getmtime(info["lockpath"]))
+    ).replace(microsecond=0)
     return info
 
 
@@ -338,18 +340,21 @@ def get_mapset_name_invalid_reason(database, location, mapset_name):
         message = _(
             "Name '{}' is not a valid name for location or mapset. "
             "Please use only ASCII characters excluding characters {} "
-            "and space.").format(mapset_name, '/"\'@,=*~')
+            "and space."
+        ).format(mapset_name, "/\"'@,=*~")
     # Check reserved mapset name
-    elif mapset_name.lower() == 'ogr':
+    elif mapset_name.lower() == "ogr":
         message = _(
             "Name '{}' is reserved for direct "
             "read access to OGR layers. Please use "
-            "another name for your mapset.").format(mapset_name)
+            "another name for your mapset."
+        ).format(mapset_name)
     # Check whether mapset exists
     elif mapset_exists(database, location, mapset_name):
         message = _(
             "Mapset  <{mapset}> already exists. Please consider using "
-            "another name for your mapset.").format(mapset=mapset_path)
+            "another name for your mapset."
+        ).format(mapset=mapset_path)
 
     return message
 
@@ -371,12 +376,14 @@ def get_location_name_invalid_reason(grassdb, location_name):
         message = _(
             "Name '{}' is not a valid name for location or mapset. "
             "Please use only ASCII characters excluding characters {} "
-            "and space.").format(location_name, '/"\'@,=*~')
+            "and space."
+        ).format(location_name, "/\"'@,=*~")
     # Check whether location exists
     elif location_exists(grassdb, location_name):
         message = _(
             "Location  <{location}> already exists. Please consider using "
-            "another name for your location.").format(location=location_path)
+            "another name for your location."
+        ).format(location=location_path)
 
     return message
 
@@ -386,8 +393,11 @@ def is_mapset_name_valid(database, location, mapset_name):
 
     Returns True if mapset name is valid, otherwise False.
     """
-    return gs.legal_name(mapset_name) and mapset_name.lower() != "ogr" and not \
-        mapset_exists(database, location, mapset_name)
+    return (
+        gs.legal_name(mapset_name)
+        and mapset_name.lower() != "ogr"
+        and not mapset_exists(database, location, mapset_name)
+    )
 
 
 def is_location_name_valid(database, location_name):
@@ -395,8 +405,7 @@ def is_location_name_valid(database, location_name):
 
     Returns True if location name is valid, otherwise False.
     """
-    return gs.legal_name(location_name) and not \
-        location_exists(database, location_name)
+    return gs.legal_name(location_name) and not location_exists(database, location_name)
 
 
 def get_reasons_mapsets_not_removable(mapsets, check_permanent):
@@ -410,8 +419,9 @@ def get_reasons_mapsets_not_removable(mapsets, check_permanent):
     """
     messages = []
     for grassdb, location, mapset in mapsets:
-        message = get_reason_mapset_not_removable(grassdb, location,
-                                                  mapset, check_permanent)
+        message = get_reason_mapset_not_removable(
+            grassdb, location, mapset, check_permanent
+        )
         if message:
             messages.append(message)
     return messages
@@ -431,19 +441,21 @@ def get_reason_mapset_not_removable(grassdb, location, mapset, check_permanent):
     # Check if mapset is permanent
     if check_permanent and mapset == "PERMANENT":
         message = _("Mapset <{mapset}> is required for a valid location.").format(
-            mapset=mapset_path)
+            mapset=mapset_path
+        )
     # Check if mapset is current
     elif is_mapset_current(grassdb, location, mapset):
         message = _("Mapset <{mapset}> is the current mapset.").format(
-            mapset=mapset_path)
+            mapset=mapset_path
+        )
     # Check whether mapset is in use
     elif is_mapset_locked(mapset_path):
-        message = _("Mapset <{mapset}> is in use.").format(
-            mapset=mapset_path)
+        message = _("Mapset <{mapset}> is in use.").format(mapset=mapset_path)
     # Check whether mapset is owned by different user
     elif is_different_mapset_owner(mapset_path):
         message = _("Mapset <{mapset}> is owned by a different user.").format(
-            mapset=mapset_path)
+            mapset=mapset_path
+        )
 
     return message
 
@@ -471,20 +483,22 @@ def get_reasons_location_not_removable(grassdb, location):
 
     # Check if location is current
     if is_location_current(grassdb, location):
-        messages.append(_("Location <{location}> is the current location.").format(
-            location=location_path))
+        messages.append(
+            _("Location <{location}> is the current location.").format(
+                location=location_path
+            )
+        )
         return messages
 
     # Find mapsets in particular location
-    tmp_gisrc_file, env = gs.create_environment(grassdb, location, 'PERMANENT')
-    env['GRASS_SKIP_MAPSET_OWNER_CHECK'] = '1'
+    tmp_gisrc_file, env = gs.create_environment(grassdb, location, "PERMANENT")
+    env["GRASS_SKIP_MAPSET_OWNER_CHECK"] = "1"
 
-    g_mapsets = gs.read_command(
-        'g.mapsets',
-        flags='l',
-        separator='comma',
-        quiet=True,
-        env=env).strip().split(',')
+    g_mapsets = (
+        gs.read_command("g.mapsets", flags="l", separator="comma", quiet=True, env=env)
+        .strip()
+        .split(",")
+    )
 
     # Append to the list of tuples
     mapsets = []
@@ -507,9 +521,12 @@ def get_reasons_grassdb_not_removable(grassdb):
     genv = gisenv()
 
     # Check if grassdb is current
-    if grassdb == genv['GISDBASE']:
-        messages.append(_("GRASS database <{grassdb}> is the current database.").format(
-            grassdb=grassdb))
+    if grassdb == genv["GISDBASE"]:
+        messages.append(
+            _("GRASS database <{grassdb}> is the current database.").format(
+                grassdb=grassdb
+            )
+        )
         return messages
 
     g_locations = get_list_of_locations(grassdb)
@@ -532,9 +549,9 @@ def get_list_of_locations(dbase):
     """
     locations = list()
     for location in glob.glob(os.path.join(dbase, "*")):
-        if os.path.join(
-                location, "PERMANENT") in glob.glob(
-                os.path.join(location, "*")):
+        if os.path.join(location, "PERMANENT") in glob.glob(
+            os.path.join(location, "*")
+        ):
             locations.append(os.path.basename(location))
 
     locations.sort(key=lambda x: x.lower())

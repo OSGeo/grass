@@ -50,8 +50,9 @@ exported_maps = {}
 ############################################################################
 
 
-def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_,
-                                type_, **kwargs):
+def _export_raster_maps_as_gdal(
+    rows, tar, list_file, new_cwd, fs, format_, type_, **kwargs
+):
     kwargs = {key: value for key, value in kwargs.items() if value is not None}
     for row in rows:
         name = row["name"]
@@ -80,24 +81,46 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_,
                         gdal_type = "UInt32"
                     else:
                         gdal_type = "Int32"
-                    gscript.run_command("r.out.gdal", flags="c", input=name,
-                                        output=out_name, nodata=nodata,
-                                        type=gdal_type, format="GTiff",
-                                        **kwargs)
+                    gscript.run_command(
+                        "r.out.gdal",
+                        flags="c",
+                        input=name,
+                        output=out_name,
+                        nodata=nodata,
+                        type=gdal_type,
+                        format="GTiff",
+                        **kwargs,
+                    )
                 elif type_:
-                    gscript.run_command("r.out.gdal", flags="cf", input=name,
-                                        output=out_name,
-                                        type=type_, format="GTiff", **kwargs)
+                    gscript.run_command(
+                        "r.out.gdal",
+                        flags="cf",
+                        input=name,
+                        output=out_name,
+                        type=type_,
+                        format="GTiff",
+                        **kwargs,
+                    )
                 else:
-                    gscript.run_command("r.out.gdal", flags="c",
-                                        input=name, output=out_name,
-                                        format="GTiff", **kwargs)
+                    gscript.run_command(
+                        "r.out.gdal",
+                        flags="c",
+                        input=name,
+                        output=out_name,
+                        format="GTiff",
+                        **kwargs,
+                    )
             elif format_ == "AAIGrid":
                 # Export the raster map with r.out.gdal as Arc/Info ASCII Grid
                 out_name = name + ".asc"
-                gscript.run_command("r.out.gdal", flags="c", input=name,
-                                    output=out_name, format="AAIGrid",
-                                    **kwargs)
+                gscript.run_command(
+                    "r.out.gdal",
+                    flags="c",
+                    input=name,
+                    output=out_name,
+                    format="AAIGrid",
+                    **kwargs,
+                )
 
         except CalledModuleError:
             shutil.rmtree(new_cwd)
@@ -113,10 +136,15 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_,
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gscript.fatal(_("Unable to export color rules for raster "
-                            "map <%s> r.out.gdal" % name))
+            gscript.fatal(
+                _(
+                    "Unable to export color rules for raster "
+                    "map <%s> r.out.gdal" % name
+                )
+            )
 
         tar.add(out_name)
+
 
 ############################################################################
 
@@ -137,10 +165,10 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gscript.fatal(_("Unable to export raster map <%s> with r.pack" %
-                          name))
+            gscript.fatal(_("Unable to export raster map <%s> with r.pack" % name))
 
         tar.add(name + ".pack")
+
 
 ############################################################################
 
@@ -160,16 +188,23 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         list_file.write(string)
         # Export the vector map with v.out.ogr
         try:
-            gscript.run_command("v.out.ogr", input=name, output=(name + ".xml"),
-                                layer=layer, format="GML")
+            gscript.run_command(
+                "v.out.ogr",
+                input=name,
+                output=(name + ".xml"),
+                layer=layer,
+                format="GML",
+            )
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gscript.fatal(_("Unable to export vector map <%s> as "
-                            "GML with v.out.ogr" % name))
+            gscript.fatal(
+                _("Unable to export vector map <%s> as " "GML with v.out.ogr" % name)
+            )
 
         tar.add(name + ".xml")
         tar.add(name + ".xsd")
+
 
 ############################################################################
 
@@ -189,15 +224,22 @@ def _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs):
         list_file.write(string)
         # Export the vector map with v.out.ogr
         try:
-            gscript.run_command("v.out.ogr", input=name, output=(name + ".gpkg"),
-                                layer=layer, format="GPKG")
+            gscript.run_command(
+                "v.out.ogr",
+                input=name,
+                output=(name + ".gpkg"),
+                layer=layer,
+                format="GPKG",
+            )
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gscript.fatal(_("Unable to export vector map <%s> as "
-                            "GPKG with v.out.ogr" % name))
+            gscript.fatal(
+                _("Unable to export vector map <%s> as " "GPKG with v.out.ogr" % name)
+            )
 
         tar.add(name + ".gpkg")
+
 
 ############################################################################
 
@@ -226,12 +268,12 @@ def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gscript.fatal(_("Unable to export vector map <%s> with v.pack" %
-                          name))
+            gscript.fatal(_("Unable to export vector map <%s> with v.pack" % name))
 
         tar.add(name + ".pack")
 
         exported_maps[name] = name
+
 
 ############################################################################
 
@@ -252,50 +294,59 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
         except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
-            gscript.fatal(_("Unable to export raster map <%s> with r3.pack" %
-                          name))
+            gscript.fatal(_("Unable to export raster map <%s> with r3.pack" % name))
 
         tar.add(name + ".pack")
+
 
 ############################################################################
 
 
-def export_stds(input, output, compression, directory, where, format_="pack",
-                type_="strds", datatype=None, **kwargs):
+def export_stds(
+    input,
+    output,
+    compression,
+    directory,
+    where,
+    format_="pack",
+    type_="strds",
+    datatype=None,
+    **kwargs,
+):
     """Export space time datasets as tar archive with optional compression
 
-        This method should be used to export space time datasets
-        of type raster and vector as tar archive that can be reimported
-        with the method import_stds().
+    This method should be used to export space time datasets
+    of type raster and vector as tar archive that can be reimported
+    with the method import_stds().
 
-        :param input: The name of the space time dataset to export
-        :param output: The name of the archive file
-        :param compression: The compression of the archive file:
+    :param input: The name of the space time dataset to export
+    :param output: The name of the archive file
+    :param compression: The compression of the archive file:
 
-              - "no"  no compression
-              - "gzip" GNU zip compression
-              - "bzip2" Bzip compression
+          - "no"  no compression
+          - "gzip" GNU zip compression
+          - "bzip2" Bzip compression
 
-        :param directory: The working directory used for extraction and packing
-        :param where: The temporal WHERE SQL statement to select a subset
-                      of maps from the space time dataset
-        :param format_: The export format:
+    :param directory: The working directory used for extraction and packing
+    :param where: The temporal WHERE SQL statement to select a subset
+                  of maps from the space time dataset
+    :param format_: The export format:
 
-              - "GTiff" Geotiff format, only for raster maps
-              - "AAIGrid" Arc/Info ASCII Grid format, only for raster maps
-              - "pack" The GRASS raster, 3D raster or vector Pack format,
-                       this is the default setting
-              - "GML" GML file export format, only for vector maps,
-                      v.out.ogr export option
-              - "GPKG" GPKG file export format, only for vector maps,
-                      v.out.ogr export option
+          - "GTiff" Geotiff format, only for raster maps
+          - "AAIGrid" Arc/Info ASCII Grid format, only for raster maps
+          - "pack" The GRASS raster, 3D raster or vector Pack format,
+                   this is the default setting
+          - "GML" GML file export format, only for vector maps,
+                  v.out.ogr export option
+          - "GPKG" GPKG file export format, only for vector maps,
+                  v.out.ogr export option
 
-        :param type_: The space time dataset type
+    :param type_: The space time dataset type
 
-              - "strds" Space time raster dataset
-              - "str3ds" Space time 3D raster dataset
-              - "stvds" Space time vector dataset
-        :param datatype: Force the output datatype for r.out.gdal
+          - "strds" Space time raster dataset
+          - "str3ds" Space time 3D raster dataset
+          - "stvds" Space time vector dataset
+    :param datatype: Force the output datatype for r.out.gdal
     """
 
     # Save current working directory path
@@ -332,8 +383,8 @@ def export_stds(input, output, compression, directory, where, format_="pack",
         if type_ == "strds":
             if format_ == "GTiff" or format_ == "AAIGrid":
                 _export_raster_maps_as_gdal(
-                    rows, tar, list_file, new_cwd, fs, format_, datatype,
-                    **kwargs)
+                    rows, tar, list_file, new_cwd, fs, format_, datatype, **kwargs
+                )
             else:
                 _export_raster_maps(rows, tar, list_file, new_cwd, fs)
         elif type_ == "stvds":
@@ -367,8 +418,7 @@ def export_stds(input, output, compression, directory, where, format_="pack",
     string += "%s=%s\n" % ("temporal_type", sp.get_temporal_type())
     string += "%s=%s\n" % ("semantic_type", sp.get_semantic_type())
     if sp.is_time_relative():
-        string += "%s=%s\n" % ("relative_time_unit",
-                               sp.get_relative_time_unit())
+        string += "%s=%s\n" % ("relative_time_unit", sp.get_relative_time_unit())
     # replace sp.metadata.get_number_of_maps() with len(rows)
     # sp.metadata.get_number_of_maps() doesn't  work with where option
     string += "%s=%s\n" % ("number_of_maps", len(rows))
@@ -387,14 +437,20 @@ def export_stds(input, output, compression, directory, where, format_="pack",
 
     read_file = open(read_file_name, "w")
     if type_ == "strds":
-        read_file.write("This space time raster dataset was exported with "
-                        "t.rast.export of GRASS GIS 7\n")
+        read_file.write(
+            "This space time raster dataset was exported with "
+            "t.rast.export of GRASS GIS 7\n"
+        )
     elif type_ == "stvds":
-        read_file.write("This space time vector dataset was exported with "
-                        "t.vect.export of GRASS GIS 7\n")
+        read_file.write(
+            "This space time vector dataset was exported with "
+            "t.vect.export of GRASS GIS 7\n"
+        )
     elif type_ == "str3ds":
-        read_file.write("This space time 3D raster dataset was exported "
-                        "with t.rast3d.export of GRASS GIS 7\n")
+        read_file.write(
+            "This space time 3D raster dataset was exported "
+            "with t.rast3d.export of GRASS GIS 7\n"
+        )
     read_file.write("\n")
     read_file.write("Files:\n")
     if type_ == "strds":
@@ -412,15 +468,21 @@ def export_stds(input, output, compression, directory, where, format_="pack",
             read_file.write("      *.pack  -- GRASS vector files packed with v.pack\n")
     elif type_ == "str3ds":
         read_file.write("      *.pack  -- GRASS 3D raster files packed with r3.pack\n")
-    read_file.write("%13s -- Projection information in PROJ.4 format\n" %
-                    (proj_file_name))
-    read_file.write("%13s -- GRASS GIS space time %s dataset information\n" %
-                    (init_file_name, sp.get_new_map_instance(None).get_type()))
-    read_file.write("%13s -- Time series file, lists all maps by name "
-                    "with interval\n" % (list_file_name))
-    read_file.write("                 time stamps in ISO-Format. Field separator is |\n")
-    read_file.write("%13s -- The output of t.info\n" %
-                    (metadata_file_name))
+    read_file.write(
+        "%13s -- Projection information in PROJ.4 format\n" % (proj_file_name)
+    )
+    read_file.write(
+        "%13s -- GRASS GIS space time %s dataset information\n"
+        % (init_file_name, sp.get_new_map_instance(None).get_type())
+    )
+    read_file.write(
+        "%13s -- Time series file, lists all maps by name "
+        "with interval\n" % (list_file_name)
+    )
+    read_file.write(
+        "                 time stamps in ISO-Format. Field separator is |\n"
+    )
+    read_file.write("%13s -- The output of t.info\n" % (metadata_file_name))
     read_file.write("%13s -- This file\n" % (read_file_name))
     read_file.close()
 

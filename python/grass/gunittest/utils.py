@@ -43,6 +43,7 @@ def do_doctest_gettext_workaround():
     dummy underscore function and one other function which creates the right
     environment to satisfy all. This is done by this function.
     """
+
     def new_displayhook(string):
         """A replacement for default `sys.displayhook`"""
         if string is not None:
@@ -63,6 +64,7 @@ def do_doctest_gettext_workaround():
 
 _MAX_LENGTH = 80
 
+
 # taken from unittest.util (Python 2.7) since it is not part of API
 # but we need it for the same reason as it is used un unittest's TestCase
 def safe_repr(obj, short=False):
@@ -72,4 +74,4 @@ def safe_repr(obj, short=False):
         result = object.__repr__(obj)
     if not short or len(result) < _MAX_LENGTH:
         return result
-    return result[:_MAX_LENGTH] + ' [truncated]...'
+    return result[:_MAX_LENGTH] + " [truncated]..."

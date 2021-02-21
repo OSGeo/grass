@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 import os
 import sys
 import multiprocessing as mltp
@@ -90,8 +97,8 @@ def copy_mapset(mapset, path):
     >>> shutil.rmtree(path)
 
     """
-    per_old = os.path.join(mapset.gisdbase, mapset.location, 'PERMANENT')
-    per_new = os.path.join(path, 'PERMANENT')
+    per_old = os.path.join(mapset.gisdbase, mapset.location, "PERMANENT")
+    per_new = os.path.join(path, "PERMANENT")
     map_old = mapset.path()
     map_new = os.path.join(path, mapset.name)
     if not os.path.isdir(per_new):
@@ -120,10 +127,11 @@ def read_gisrc(gisrc):
     ...                                      genv['GISDBASE']))
     True
     """
-    with open(gisrc, 'r') as gfile:
-        gis = dict([(k.strip(), v.strip())
-                    for k, v in [row.split(':', 1) for row in gfile]])
-    return gis['MAPSET'], gis['LOCATION_NAME'], gis['GISDBASE']
+    with open(gisrc, "r") as gfile:
+        gis = dict(
+            [(k.strip(), v.strip()) for k, v in [row.split(":", 1) for row in gfile]]
+        )
+    return gis["MAPSET"], gis["LOCATION_NAME"], gis["GISDBASE"]
 
 
 def get_mapset(gisrc_src, gisrc_dst):
@@ -171,32 +179,33 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     """
 
     def rmloc(r):
-        return r.split('@')[0] if '@' in r else r
+        return r.split("@")[0] if "@" in r else r
 
     env = os.environ.copy()
     # instantiate modules
-    get_grp = Module('i.group', flags='lg', stdout_=sub.PIPE, run_=False)
-    set_grp = Module('i.group')
+    get_grp = Module("i.group", flags="lg", stdout_=sub.PIPE, run_=False)
+    set_grp = Module("i.group")
     get_grp.run_ = True
 
     src = read_gisrc(gisrc_src)
     dst = read_gisrc(gisrc_dst)
     rm = True if src[2] != dst[2] else False
-    all_rasts = [r[0]
-                 for r in findmaps('raster', location=dst[1], gisdbase=dst[2])]
+    all_rasts = [r[0] for r in findmaps("raster", location=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
-        env['GISRC'] = gisrc_src
+        env["GISRC"] = gisrc_src
         get_grp(group=grp, env_=env)
         rasts = [r for r in get_grp.outputs.stdout.split()]
         # change gisdbase to dst
-        env['GISRC'] = gisrc_dst
+        env["GISRC"] = gisrc_dst
         rast2cp = [r for r in rasts if rmloc(r) not in all_rasts]
         if rast2cp:
             copy_rasters(rast2cp, gisrc_src, gisrc_dst, region=region)
-        set_grp(group=grp,
-                input=[rmloc(r) for r in rasts] if rast2cp or rm else rasts,
-                env_=env)
+        set_grp(
+            group=grp,
+            input=[rmloc(r) for r in rasts] if rast2cp or rm else rasts,
+            env_=env,
+        )
 
 
 def set_region(region, gisrc_src, gisrc_dst, env):
@@ -214,13 +223,15 @@ def set_region(region, gisrc_src, gisrc_dst, env):
     :type env:
     :returns: None
     """
-    reg_str = "g.region n=%(north)r s=%(south)r " \
-              "e=%(east)r w=%(west)r " \
-              "nsres=%(nsres)r ewres=%(ewres)r"
+    reg_str = (
+        "g.region n=%(north)r s=%(south)r "
+        "e=%(east)r w=%(west)r "
+        "nsres=%(nsres)r ewres=%(ewres)r"
+    )
     reg_cmd = reg_str % dict(region.items())
-    env['GISRC'] = gisrc_src
+    env["GISRC"] = gisrc_src
     sub.Popen(reg_cmd, shell=True, env=env)
-    env['GISRC'] = gisrc_dst
+    env["GISRC"] = gisrc_dst
     sub.Popen(reg_cmd, shell=True, env=env)
 
 
@@ -245,25 +256,25 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
         set_region(region, gisrc_src, gisrc_dst, env)
 
     path_dst = os.path.join(*read_gisrc(gisrc_dst)[::-1])
-    nam = "copy%d__%s" % (id(gisrc_dst), '%s')
+    nam = "copy%d__%s" % (id(gisrc_dst), "%s")
 
     # instantiate modules
-    mpclc = Module('r.mapcalc')
-    rpck = Module('r.pack')
-    rupck = Module('r.unpack')
-    remove = Module('g.remove')
+    mpclc = Module("r.mapcalc")
+    rpck = Module("r.pack")
+    rupck = Module("r.unpack")
+    remove = Module("g.remove")
 
     for rast in rasters:
-        rast_clean = rast.split('@')[0] if '@' in rast else rast
+        rast_clean = rast.split("@")[0] if "@" in rast else rast
         # change gisdbase to src
-        env['GISRC'] = gisrc_src
+        env["GISRC"] = gisrc_src
         name = nam % rast_clean
         mpclc(expression="%s=%s" % (name, rast), overwrite=True, env_=env)
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         rpck(input=name, output=file_dst, overwrite=True, env_=env)
-        remove(flags='f', type='raster', name=name, env_=env)
+        remove(flags="f", type="raster", name=name, env_=env)
         # change gisdbase to dst
-        env['GISRC'] = gisrc_dst
+        env["GISRC"] = gisrc_dst
         rupck(input=file_dst, output=rast_clean, overwrite=True, env_=env)
         os.remove(file_dst)
 
@@ -282,22 +293,22 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
     """
     env = os.environ.copy()
     path_dst = os.path.join(*read_gisrc(gisrc_dst))
-    nam = "copy%d__%s" % (id(gisrc_dst), '%s')
+    nam = "copy%d__%s" % (id(gisrc_dst), "%s")
 
     # instantiate modules
-    vpck = Module('v.pack')
-    vupck = Module('v.unpack')
-    remove = Module('g.remove')
+    vpck = Module("v.pack")
+    vupck = Module("v.unpack")
+    remove = Module("g.remove")
 
     for vect in vectors:
         # change gisdbase to src
-        env['GISRC'] = gisrc_src
+        env["GISRC"] = gisrc_src
         name = nam % vect
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         vpck(input=name, output=file_dst, overwrite=True, env_=env)
-        remove(flags='f', type='vector', name=name, env_=env)
+        remove(flags="f", type="vector", name=name, env_=env)
         # change gisdbase to dst
-        env['GISRC'] = gisrc_dst
+        env["GISRC"] = gisrc_dst
         vupck(input=file_dst, output=vect, overwrite=True, env_=env)
         os.remove(file_dst)
 
@@ -316,19 +327,33 @@ def get_cmd(cmdd):
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
     ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
-    cmd = [cmdd['name'], ]
-    cmd.extend(("%s=%s" % (k, v) for k, v in cmdd['inputs']
-                if not isinstance(v, list)))
-    cmd.extend(("%s=%s" % (k, ','.join(vals if isinstance(vals[0], str)
-                                       else [repr(v) for v in vals]))
-                for k, vals in cmdd['inputs']
-                if isinstance(vals, list)))
-    cmd.extend(("%s=%s" % (k, v) for k, v in cmdd['outputs']
-                if not isinstance(v, list)))
-    cmd.extend(("%s=%s" % (k, ','.join([repr(v) for v in vals]))
-                for k, vals in cmdd['outputs'] if isinstance(vals, list)))
-    cmd.extend(("-%s" % (flg) for flg in cmdd['flags'] if len(flg) == 1))
-    cmd.extend(("--%s" % (flg[0]) for flg in cmdd['flags'] if len(flg) > 1))
+    cmd = [
+        cmdd["name"],
+    ]
+    cmd.extend(("%s=%s" % (k, v) for k, v in cmdd["inputs"] if not isinstance(v, list)))
+    cmd.extend(
+        (
+            "%s=%s"
+            % (
+                k,
+                ",".join(vals if isinstance(vals[0], str) else [repr(v) for v in vals]),
+            )
+            for k, vals in cmdd["inputs"]
+            if isinstance(vals, list)
+        )
+    )
+    cmd.extend(
+        ("%s=%s" % (k, v) for k, v in cmdd["outputs"] if not isinstance(v, list))
+    )
+    cmd.extend(
+        (
+            "%s=%s" % (k, ",".join([repr(v) for v in vals]))
+            for k, vals in cmdd["outputs"]
+            if isinstance(vals, list)
+        )
+    )
+    cmd.extend(("-%s" % (flg) for flg in cmdd["flags"] if len(flg) == 1))
+    cmd.extend(("--%s" % (flg[0]) for flg in cmdd["flags"] if len(flg) > 1))
     return cmd
 
 
@@ -356,19 +381,21 @@ def cmd_exe(args):
     bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups = args
     src, dst = get_mapset(gisrc_src, gisrc_dst)
     env = os.environ.copy()
-    env['GISRC'] = gisrc_dst
-    shell = True if sys.platform == 'win32' else False
+    env["GISRC"] = gisrc_dst
+    shell = True if sys.platform == "win32" else False
     if mapnames:
-        inputs = dict(cmd['inputs'])
+        inputs = dict(cmd["inputs"])
         # reset the inputs to
         for key in mapnames:
             inputs[key] = mapnames[key]
-        cmd['inputs'] = inputs.items()
+        cmd["inputs"] = inputs.items()
         # set the region to the tile
-        sub.Popen(['g.region', 'raster=%s' % key], shell=shell, env=env).wait()
+        sub.Popen(["g.region", "raster=%s" % key], shell=shell, env=env).wait()
     else:
         # set the computational region
-        lcmd = ['g.region', ]
+        lcmd = [
+            "g.region",
+        ]
         lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.items()])
         sub.Popen(lcmd, shell=shell, env=env).wait()
     if groups:
@@ -410,11 +437,26 @@ class GridModule(object):
     >>> grd.run()
     """
 
-    def __init__(self, cmd, width=None, height=None, overlap=0, processes=None,
-                 split=False, debug=False, region=None, move=None, log=False,
-                 start_row=0, start_col=0, out_prefix='', mapset_prefix=None,
-                 *args, **kargs):
-        kargs['run_'] = False
+    def __init__(
+        self,
+        cmd,
+        width=None,
+        height=None,
+        overlap=0,
+        processes=None,
+        split=False,
+        debug=False,
+        region=None,
+        move=None,
+        log=False,
+        start_row=0,
+        start_col=0,
+        out_prefix="",
+        mapset_prefix=None,
+        *args,
+        **kargs,
+    ):
+        kargs["run_"] = False
         self.mset = Mapset()
         self.module = Module(cmd, *args, **kargs)
         self.width = width
@@ -427,31 +469,31 @@ class GridModule(object):
         self.out_prefix = out_prefix
         self.log = log
         self.move = move
-        self.gisrc_src = os.environ['GISRC']
+        self.gisrc_src = os.environ["GISRC"]
         self.n_mset, self.gisrc_dst = None, None
         if self.move:
             self.n_mset = copy_mapset(self.mset, self.move)
-            self.gisrc_dst = write_gisrc(self.n_mset.gisdbase,
-                                         self.n_mset.location,
-                                         self.n_mset.name)
-            rasters = [r for r in select(self.module.inputs, 'raster')]
+            self.gisrc_dst = write_gisrc(
+                self.n_mset.gisdbase, self.n_mset.location, self.n_mset.name
+            )
+            rasters = [r for r in select(self.module.inputs, "raster")]
             if rasters:
-                copy_rasters(rasters, self.gisrc_src, self.gisrc_dst,
-                             region=self.region)
-            vectors = [v for v in select(self.module.inputs, 'vector')]
+                copy_rasters(
+                    rasters, self.gisrc_src, self.gisrc_dst, region=self.region
+                )
+            vectors = [v for v in select(self.module.inputs, "vector")]
             if vectors:
                 copy_vectors(vectors, self.gisrc_src, self.gisrc_dst)
-            groups = [g for g in select(self.module.inputs, 'group')]
+            groups = [g for g in select(self.module.inputs, "group")]
             if groups:
-                copy_groups(groups, self.gisrc_src, self.gisrc_dst,
-                            region=self.region)
-        self.bboxes = split_region_tiles(region=region,
-                                         width=width, height=height,
-                                         overlap=overlap)
+                copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
+        self.bboxes = split_region_tiles(
+            region=region, width=width, height=height, overlap=overlap
+        )
         if mapset_prefix:
             self.msetstr = mapset_prefix + "_%03d_%03d"
         else:
-            self.msetstr = cmd.replace('.', '') + "_%03d_%03d"
+            self.msetstr = cmd.replace(".", "") + "_%03d_%03d"
         self.inlist = None
         if split:
             self.split()
@@ -473,7 +515,7 @@ class GridModule(object):
                 self.n_mset.current()
             location = Location()
 
-        mapsets = location.mapsets(self.msetstr.split('_')[0] + '_*')
+        mapsets = location.mapsets(self.msetstr.split("_")[0] + "_*")
         for mset in mapsets:
             Mapset(mset).delete()
         if self.n_mset and self.n_mset.is_current():
@@ -481,15 +523,18 @@ class GridModule(object):
 
     def split(self):
         """Split all the raster inputs using r.tile"""
-        rtile = Module('r.tile')
+        rtile = Module("r.tile")
         inlist = {}
-        for inm in select(self.module.inputs, 'raster'):
-            rtile(input=inm.value, output=inm.value,
-                  width=self.width, height=self.height,
-                  overlap=self.overlap)
-            patt = '%s-*' % inm.value
-            inlist[inm.value] = sorted(self.mset.glist(type='raster',
-                                                       pattern=patt))
+        for inm in select(self.module.inputs, "raster"):
+            rtile(
+                input=inm.value,
+                output=inm.value,
+                width=self.width,
+                height=self.height,
+                overlap=self.overlap,
+            )
+            patt = "%s-*" % inm.value
+            inlist[inm.value] = sorted(self.mset.glist(type="raster", pattern=patt))
         self.inlist = inlist
 
     def get_works(self):
@@ -501,7 +546,7 @@ class GridModule(object):
         else:
             ldst, gdst = self.mset.location, self.mset.gisdbase
         cmd = self.module.get_dict()
-        groups = [g for g in select(self.module.inputs, 'group')]
+        groups = [g for g in select(self.module.inputs, "group")]
         for row, box_row in enumerate(self.bboxes):
             for col, box in enumerate(box_row):
                 inms = None
@@ -510,29 +555,34 @@ class GridModule(object):
                     cols = len(box_row)
                     for key in self.inlist:
                         indx = row * cols + col
-                        inms[key] = "%s@%s" % (self.inlist[key][indx],
-                                               self.mset.name)
+                        inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
                 bbox = dict([(k[0], str(v)) for k, v in box.items()[:-2]])
-                bbox['nsres'] = '%f' % reg.nsres
-                bbox['ewres'] = '%f' % reg.ewres
-                new_mset = self.msetstr % (self.start_row + row,
-                                           self.start_col + col),
-                works.append((bbox, inms,
-                              self.gisrc_src,
-                              write_gisrc(gdst, ldst, new_mset),
-                              cmd, groups))
+                bbox["nsres"] = "%f" % reg.nsres
+                bbox["ewres"] = "%f" % reg.ewres
+                new_mset = (
+                    self.msetstr % (self.start_row + row, self.start_col + col),
+                )
+                works.append(
+                    (
+                        bbox,
+                        inms,
+                        self.gisrc_src,
+                        write_gisrc(gdst, ldst, new_mset),
+                        cmd,
+                        groups,
+                    )
+                )
         return works
 
     def define_mapset_inputs(self):
-        """Add the mapset information to the input maps
-        """
+        """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
             inm = self.module.inputs[inmap]
-            if inm.type in ('raster', 'vector') and inm.value:
-                if '@' not in inm.value:
+            if inm.type in ("raster", "vector") and inm.value:
+                if "@" not in inm.value:
                     mset = get_mapset_raster(inm.value)
-                    inm.value = inm.value + '@%s' % mset
+                    inm.value = inm.value + "@%s" % mset
 
     def run(self, patch=True, clean=True):
         """Run the GRASS command
@@ -559,14 +609,15 @@ class GridModule(object):
 
         if patch:
             if self.move:
-                os.environ['GISRC'] = self.gisrc_dst
+                os.environ["GISRC"] = self.gisrc_dst
                 self.n_mset.current()
                 self.patch()
-                os.environ['GISRC'] = self.gisrc_src
+                os.environ["GISRC"] = self.gisrc_src
                 self.mset.current()
                 # copy the outputs from dst => src
-                routputs = [self.out_prefix + o
-                            for o in select(self.module.outputs, 'raster')]
+                routputs = [
+                    self.out_prefix + o for o in select(self.module.outputs, "raster")
+                ]
                 copy_rasters(routputs, self.gisrc_dst, self.gisrc_src)
             else:
                 self.patch()
@@ -574,16 +625,16 @@ class GridModule(object):
         if self.log:
             # record in the temp directory
             from grass.lib.gis import G_tempfile
+
             tmp, dummy = os.path.split(G_tempfile())
             tmpdir = os.path.join(tmp, self.module.name)
             for k in self.module.outputs:
                 par = self.module.outputs[k]
-                if par.typedesc == 'raster' and par.value:
+                if par.typedesc == "raster" and par.value:
                     dirpath = os.path.join(tmpdir, par.name)
                     if not os.path.isdir(dirpath):
                         os.makedirs(dirpath)
-                    fil = open(os.path.join(dirpath,
-                                            self.out_prefix + par.value), 'w+')
+                    fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
         if clean:
@@ -595,7 +646,7 @@ class GridModule(object):
                 # rm temporary gis_rc
                 os.remove(self.gisrc_dst)
                 self.gisrc_dst = None
-                sht.rmtree(os.path.join(self.move, 'PERMANENT'))
+                sht.rmtree(os.path.join(self.move, "PERMANENT"))
                 sht.rmtree(os.path.join(self.move, self.mset.name))
 
     def patch(self):
@@ -607,22 +658,28 @@ class GridModule(object):
         noutputs = 0
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
-            if otm.typedesc == 'raster' and otm.value:
-                rpatch_map(otm.value,
-                           self.mset.name, self.msetstr, bboxes,
-                           self.module.flags.overwrite,
-                           self.start_row, self.start_col, self.out_prefix)
+            if otm.typedesc == "raster" and otm.value:
+                rpatch_map(
+                    otm.value,
+                    self.mset.name,
+                    self.msetstr,
+                    bboxes,
+                    self.module.flags.overwrite,
+                    self.start_row,
+                    self.start_col,
+                    self.out_prefix,
+                )
                 noutputs += 1
         if noutputs < 1:
-            msg = 'No raster output option defined for <{}>'.format(self.module.name)
-            if self.module.name == 'r.mapcalc':
-                msg += '. Use <{}.simple> instead'.format(self.module.name)
+            msg = "No raster output option defined for <{}>".format(self.module.name)
+            if self.module.name == "r.mapcalc":
+                msg += ". Use <{}.simple> instead".format(self.module.name)
             raise RuntimeError(msg)
 
     def rm_tiles(self):
         """Remove all the tiles."""
         # if split, remove tiles
         if self.inlist:
-            grm = Module('g.remove')
+            grm = Module("g.remove")
             for key in self.inlist:
-                grm(flags='f', type='raster', name=self.inlist[key])
+                grm(flags="f", type="raster", name=self.inlist[key])

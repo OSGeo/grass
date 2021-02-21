@@ -27,58 +27,72 @@ class Segment(object):
     def nseg(self):
         rows = self.rows()
         cols = self.cols()
-        return int(((rows + self.srows - 1) / self.srows) *
-                   ((cols + self.scols - 1) / self.scols))
+        return int(
+            ((rows + self.srows - 1) / self.srows)
+            * ((cols + self.scols - 1) / self.scols)
+        )
 
     def segments_in_mem(self):
         if self.maxmem > 0 and self.maxmem < 100:
             seg_in_mem = (self.maxmem * self.nseg()) / 100
         else:
-            seg_in_mem = 4 * (self.rows() / self.srows +
-                              self.cols() / self.scols + 2)
+            seg_in_mem = 4 * (self.rows() / self.srows + self.cols() / self.scols + 2)
         if seg_in_mem == 0:
             seg_in_mem = 1
         return seg_in_mem
 
     def open(self, mapobj):
-        """Open a segment it is necessary to pass a RasterSegment object.
-
-        """
-        self.val = RTYPE[mapobj.mtype]['grass def']()
-        size = ctypes.sizeof(RTYPE[mapobj.mtype]['ctypes'])
+        """Open a segment it is necessary to pass a RasterSegment object."""
+        self.val = RTYPE[mapobj.mtype]["grass def"]()
+        size = ctypes.sizeof(RTYPE[mapobj.mtype]["ctypes"])
         file_name = libgis.G_tempfile()
-        libseg.Segment_open(self.c_seg, file_name,
-                            self.rows(), self.cols(),
-                            self.srows, self.scols,
-                            size,
-                            self.nseg())
+        libseg.Segment_open(
+            self.c_seg,
+            file_name,
+            self.rows(),
+            self.cols(),
+            self.srows,
+            self.scols,
+            size,
+            self.nseg(),
+        )
         self.flush()
 
-    def format(self, mapobj, file_name='', fill=True):
+    def format(self, mapobj, file_name="", fill=True):
         """The segmentation routines require a disk file to be used for paging
         segments in and out of memory. This routine formats the file open for
         write on file descriptor fd for use as a segment file.
         """
-        if file_name == '':
+        if file_name == "":
             file_name = libgis.G_tempfile()
-        mapobj.temp_file = open(file_name, 'w')
-        size = ctypes.sizeof(RTYPE[mapobj.mtype]['ctypes'])
+        mapobj.temp_file = open(file_name, "w")
+        size = ctypes.sizeof(RTYPE[mapobj.mtype]["ctypes"])
         if fill:
-            libseg.Segment_format(mapobj.temp_file.fileno(), self.rows(),
-                                  self.cols(), self.srows, self.scols, size)
+            libseg.Segment_format(
+                mapobj.temp_file.fileno(),
+                self.rows(),
+                self.cols(),
+                self.srows,
+                self.scols,
+                size,
+            )
         else:
-            libseg.Segment_format_nofill(mapobj.temp_file.fileno(),
-                                         self.rows(), self.cols(),
-                                         self.srows, self.scols, size)
+            libseg.Segment_format_nofill(
+                mapobj.temp_file.fileno(),
+                self.rows(),
+                self.cols(),
+                self.srows,
+                self.scols,
+                size,
+            )
         # TODO: why should I close and then re-open it?
         mapobj.temp_file.close()
 
-    def init(self, mapobj, file_name=''):
-        if file_name == '':
+    def init(self, mapobj, file_name=""):
+        if file_name == "":
             file_name = mapobj.temp_file.name
-        mapobj.temp_file = open(file_name, 'w')
-        libseg.Segment_init(self.c_seg, mapobj.temp_file.fileno(),
-                            self.segments_in_mem)
+        mapobj.temp_file = open(file_name, "w")
+        libseg.Segment_init(self.c_seg, mapobj.temp_file.fileno(), self.segments_in_mem)
 
     def get_row(self, row_index, buf):
         """Return the row using, the `segment` method"""
@@ -90,23 +104,17 @@ class Segment(object):
         libseg.Segment_put_row(self.c_seg, buf.p, row_index)
 
     def get(self, row_index, col_index):
-        """Return the value of the map
-        """
-        libseg.Segment_get(self.c_seg,
-                           ctypes.byref(self.val), row_index, col_index)
+        """Return the value of the map"""
+        libseg.Segment_get(self.c_seg, ctypes.byref(self.val), row_index, col_index)
         return self.val.value
 
     def put(self, row_index, col_index):
-        """Write the value to the map
-        """
-        libseg.Segment_put(self.c_seg,
-                           ctypes.byref(self.val), row_index, col_index)
+        """Write the value to the map"""
+        libseg.Segment_put(self.c_seg, ctypes.byref(self.val), row_index, col_index)
 
     def get_seg_number(self, row_index, col_index):
-        """Return the segment number
-        """
-        return row_index / self.srows * self.cols / self.scols + \
-            col_index / self.scols
+        """Return the segment number"""
+        return row_index / self.srows * self.cols / self.scols + col_index / self.scols
 
     def flush(self):
         """Flush pending updates to disk.

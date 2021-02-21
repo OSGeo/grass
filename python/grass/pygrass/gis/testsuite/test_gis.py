@@ -10,7 +10,6 @@ from grass.pygrass.gis.region import Region
 
 
 class RegionTestCase(TestCase):
-
     def test_bounds(self):
         reg1 = Region()
         reg2 = Region()
@@ -21,5 +20,5 @@ class RegionTestCase(TestCase):
         reg2.north = north
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

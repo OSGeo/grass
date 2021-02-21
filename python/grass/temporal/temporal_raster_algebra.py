@@ -58,31 +58,50 @@ try:
 except:
     pass
 
-from .temporal_raster_base_algebra import TemporalRasterBaseAlgebraParser,\
-    TemporalRasterAlgebraLexer
+from .temporal_raster_base_algebra import (
+    TemporalRasterBaseAlgebraParser,
+    TemporalRasterAlgebraLexer,
+)
 import grass.pygrass.modules as pymod
 from .space_time_datasets import RasterDataset
 
 ###############################################################################
 
+
 class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
     """The temporal raster algebra class"""
 
-    def __init__(self, pid=None, run=False, debug=True, spatial=False,
-                 register_null=False, dry_run=False, nprocs=1, time_suffix=None):
+    def __init__(
+        self,
+        pid=None,
+        run=False,
+        debug=True,
+        spatial=False,
+        register_null=False,
+        dry_run=False,
+        nprocs=1,
+        time_suffix=None,
+    ):
 
-        TemporalRasterBaseAlgebraParser.__init__(self, pid=pid, run=run, debug=debug,
-                                                 spatial=spatial, register_null=register_null,
-                                                 dry_run=dry_run, nprocs=nprocs,
-                                                 time_suffix=time_suffix)
+        TemporalRasterBaseAlgebraParser.__init__(
+            self,
+            pid=pid,
+            run=run,
+            debug=debug,
+            spatial=spatial,
+            register_null=register_null,
+            dry_run=dry_run,
+            nprocs=nprocs,
+            time_suffix=time_suffix,
+        )
 
         if spatial is True:
-            self.m_mapcalc = pymod.Module('r.mapcalc', region="union", run_=False)
+            self.m_mapcalc = pymod.Module("r.mapcalc", region="union", run_=False)
         else:
-            self.m_mapcalc = pymod.Module('r.mapcalc')
-        self.m_mremove = pymod.Module('g.remove')
+            self.m_mapcalc = pymod.Module("r.mapcalc")
+        self.m_mremove = pymod.Module("g.remove")
 
-    def parse(self, expression, basename = None, overwrite=False):
+    def parse(self, expression, basename=None, overwrite=False):
         # Check for space time dataset type definitions from temporal algebra
         l = TemporalRasterAlgebraLexer()
         l.build()
@@ -157,7 +176,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
                     # Get neighbouring map and set temporal extent.
                     map_n = maplist[new_index]
                     # Generate an intermediate map for the result map list.
-                    map_new = self.generate_new_map(map_n, bool_op = 'and', copy = True)
+                    map_new = self.generate_new_map(map_n, bool_op="and", copy=True)
                     map_new.set_temporal_extent(map_i_t_extent)
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and len(t) == 5:
@@ -165,9 +184,17 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
                     elif "cmd_list" not in dir(map_new) and len(t) == 5:
                         cmdstring = "%s" % (map_n.get_id())
                     elif "cmd_list" in dir(map_new) and len(t) in (7, 9):
-                        cmdstring = "%s[%s,%s]" % (map_new.cmd_list, row_neigbour, col_neigbour)
+                        cmdstring = "%s[%s,%s]" % (
+                            map_new.cmd_list,
+                            row_neigbour,
+                            col_neigbour,
+                        )
                     elif "cmd_list" not in dir(map_new) and len(t) in (7, 9):
-                        cmdstring = "%s[%s,%s]" % (map_n.get_id(), row_neigbour, col_neigbour)
+                        cmdstring = "%s[%s,%s]" % (
+                            map_n.get_id(),
+                            row_neigbour,
+                            col_neigbour,
+                        )
                     # Set new command list for map.
                     map_new.cmd_list = cmdstring
                     # Append map with updated command list to result list.
@@ -175,8 +202,10 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 
             t[0] = resultlist
 
+
 ###############################################################################
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

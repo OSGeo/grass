@@ -22,9 +22,15 @@ from grass.exceptions import CalledModuleError
 from grass.script import shutil_which, text_to_string, encode, decode
 
 from .gmodules import call_module, SimpleModule
-from .checkers import (check_text_ellipsis,
-                       text_to_keyvalue, keyvalue_equals, diff_keyvalue,
-                       file_md5, text_file_md5, files_equal_md5)
+from .checkers import (
+    check_text_ellipsis,
+    text_to_keyvalue,
+    keyvalue_equals,
+    diff_keyvalue,
+    file_md5,
+    text_file_md5,
+    files_equal_md5,
+)
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
@@ -33,6 +39,7 @@ if pyversion == 2:
     from StringIO import StringIO
 else:
     from io import StringIO
+
     unicode = str
 
 
@@ -60,7 +67,7 @@ class TestCase(unittest.TestCase):
         # Python unittest doc is saying that strings use assertMultiLineEqual
         # but only unicode type is registered
         # TODO: report this as a bug? is this in Python 3.x?
-        self.addTypeEqualityFunc(str, 'assertMultiLineEqual')
+        self.addTypeEqualityFunc(str, "assertMultiLineEqual")
 
     def _formatMessage(self, msg, standardMsg):
         """Honor the longMessage attribute when generating failure messages.
@@ -84,9 +91,9 @@ class TestCase(unittest.TestCase):
         try:
             # don't switch to '{}' formatting in Python 2.X
             # it changes the way unicode input is handled
-            return '%s \n%s' % (msg, standardMsg)
+            return "%s \n%s" % (msg, standardMsg)
         except UnicodeDecodeError:
-            return '%s \n%s' % (safe_repr(msg), safe_repr(standardMsg))
+            return "%s \n%s" % (safe_repr(msg), safe_repr(standardMsg))
 
     @classmethod
     def use_temp_region(cls):
@@ -119,7 +126,7 @@ class TestCase(unittest.TestCase):
         # in parallel inside
         name = "tmp.%s" % (cls.__name__)
         call_module("g.region", save=name, overwrite=True)
-        os.environ['WIND_OVERRIDE'] = name
+        os.environ["WIND_OVERRIDE"] = name
         cls._temp_region = name
 
     @classmethod
@@ -129,18 +136,21 @@ class TestCase(unittest.TestCase):
         Unsets ``WIND_OVERRIDE`` and removes any region named by it.
         """
         assert cls._temp_region
-        name = os.environ.pop('WIND_OVERRIDE')
+        name = os.environ.pop("WIND_OVERRIDE")
         if name != cls._temp_region:
             # be strict about usage of region
-            raise RuntimeError("Inconsistent use of"
-                               " TestCase.use_temp_region, WIND_OVERRIDE"
-                               " or temporary region in general\n"
-                               "Region to which should be now deleted ({n})"
-                               " by TestCase class"
-                               "does not correspond to currently set"
-                               " WIND_OVERRIDE ({c})",
-                               n=cls._temp_region, c=name)
-        call_module("g.remove", quiet=True, flags='f', type='region', name=name)
+            raise RuntimeError(
+                "Inconsistent use of"
+                " TestCase.use_temp_region, WIND_OVERRIDE"
+                " or temporary region in general\n"
+                "Region to which should be now deleted ({n})"
+                " by TestCase class"
+                "does not correspond to currently set"
+                " WIND_OVERRIDE ({c})",
+                n=cls._temp_region,
+                c=name,
+            )
+        call_module("g.remove", quiet=True, flags="f", type="region", name=name)
         # TODO: we don't know if user calls this
         # so perhaps some decorator which would use with statemet
         # but we have zero chance of infuencing another test class
@@ -168,13 +178,14 @@ class TestCase(unittest.TestCase):
             If you need to test the actual newline characters, use the standard
             string comparison and functions such as ``find()``.
         """
-        if os.linesep != '\n':
+        if os.linesep != "\n":
             if os.linesep in first:
-                first = first.replace(os.linesep, '\n')
+                first = first.replace(os.linesep, "\n")
             if os.linesep in second:
-                second = second.replace(os.linesep, '\n')
+                second = second.replace(os.linesep, "\n")
         return super(TestCase, self).assertMultiLineEqual(
-            first=first, second=second, msg=msg)
+            first=first, second=second, msg=msg
+        )
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
@@ -186,17 +197,19 @@ class TestCase(unittest.TestCase):
         """
         # actual is in the system codec while the passed reference is in utf-8;
         # re-decode reference into the system codec for proper comparison
-        reference = decode(encode(reference, 'utf-8'))
-        self.assertTrue(isinstance(actual, (str, unicode)), (
-                        'actual argument is not a string'))
-        self.assertTrue(isinstance(reference, (str, unicode)), (
-                        'reference argument is not a string'))
-        if os.linesep != '\n' and os.linesep in actual:
-            actual = actual.replace(os.linesep, '\n')
+        reference = decode(encode(reference, "utf-8"))
+        self.assertTrue(
+            isinstance(actual, (str, unicode)), ("actual argument is not a string")
+        )
+        self.assertTrue(
+            isinstance(reference, (str, unicode)),
+            ("reference argument is not a string"),
+        )
+        if os.linesep != "\n" and os.linesep in actual:
+            actual = actual.replace(os.linesep, "\n")
         if not check_text_ellipsis(actual=actual, reference=reference):
             # TODO: add support for multiline (first line general, others with details)
-            standardMsg = '"%s" does not correspond with "%s"' % (actual,
-                                                                  reference)
+            standardMsg = '"%s" does not correspond with "%s"' % (actual, reference)
             self.fail(self._formatMessage(msg, standardMsg))
 
     # TODO: decide if precision is mandatory
@@ -204,8 +217,9 @@ class TestCase(unittest.TestCase):
     # TODO: auto-determine precision based on the map type
     # TODO: we can have also more general function without the subset reference
     # TODO: change name to Module
-    def assertModuleKeyValue(self, module, reference, sep,
-                             precision, msg=None, **parameters):
+    def assertModuleKeyValue(
+        self, module, reference, sep, precision, msg=None, **parameters
+    ):
         """Test that output of a module is the same as provided subset.
 
         ::
@@ -228,36 +242,46 @@ class TestCase(unittest.TestCase):
             reference = text_to_keyvalue(reference, sep=sep, skip_empty=True)
         module = _module_from_parameters(module, **parameters)
         self.runModule(module, expecting_stdout=True)
-        raster_univar = text_to_keyvalue(module.outputs.stdout,
-                                         sep=sep, skip_empty=True)
-        if not keyvalue_equals(dict_a=reference, dict_b=raster_univar,
-                               a_is_subset=True, precision=precision):
-            unused, missing, mismatch = diff_keyvalue(dict_a=reference,
-                                                      dict_b=raster_univar,
-                                                      a_is_subset=True,
-                                                      precision=precision)
+        raster_univar = text_to_keyvalue(
+            module.outputs.stdout, sep=sep, skip_empty=True
+        )
+        if not keyvalue_equals(
+            dict_a=reference,
+            dict_b=raster_univar,
+            a_is_subset=True,
+            precision=precision,
+        ):
+            unused, missing, mismatch = diff_keyvalue(
+                dict_a=reference,
+                dict_b=raster_univar,
+                a_is_subset=True,
+                precision=precision,
+            )
             # TODO: add region vs map extent and res check in case of error
             if missing:
-                raise ValueError("%s output does not contain"
-                                 " the following keys"
-                                 " provided in reference"
-                                 ": %s\n" % (module, ", ".join(missing)))
+                raise ValueError(
+                    "%s output does not contain"
+                    " the following keys"
+                    " provided in reference"
+                    ": %s\n" % (module, ", ".join(missing))
+                )
             if mismatch:
                 stdMsg = "%s difference:\n" % module
                 stdMsg += "mismatch values"
                 stdMsg += " (key, reference, actual): %s\n" % mismatch
-                stdMsg += 'command: %s %s' % (module, parameters)
+                stdMsg += "command: %s %s" % (module, parameters)
             else:
                 # we can probably remove this once we have more tests
                 # of keyvalue_equals and diff_keyvalue against each other
-                raise RuntimeError("keyvalue_equals() showed difference but"
-                                   " diff_keyvalue() did not. This can be"
-                                   " a bug in one of them or in the caller"
-                                   " (assertModuleKeyValue())")
+                raise RuntimeError(
+                    "keyvalue_equals() showed difference but"
+                    " diff_keyvalue() did not. This can be"
+                    " a bug in one of them or in the caller"
+                    " (assertModuleKeyValue())"
+                )
             self.fail(self._formatMessage(msg, stdMsg))
 
-    def assertRasterFitsUnivar(self, raster, reference,
-                               precision=None, msg=None):
+    def assertRasterFitsUnivar(self, raster, reference, precision=None, msg=None):
         r"""Test that raster map has the values obtained by r.univar module.
 
         The function does not require all values from r.univar.
@@ -273,15 +297,18 @@ class TestCase(unittest.TestCase):
         Does not -e (extended statistics) flag, use `assertModuleKeyValue()`
         for the full interface of arbitrary module.
         """
-        self.assertModuleKeyValue(module='r.univar',
-                                  map=raster,
-                                  separator='=',
-                                  flags='g',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=precision)
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=raster,
+            separator="=",
+            flags="g",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=precision,
+        )
 
-    def assertRasterFitsInfo(self, raster, reference,
-                             precision=None, msg=None):
+    def assertRasterFitsInfo(self, raster, reference, precision=None, msg=None):
         r"""Test that raster map has the values obtained by r.info module.
 
         The function does not require all values from r.info.
@@ -296,13 +323,17 @@ class TestCase(unittest.TestCase):
         This function supports values obtained -r (range) and
         -e (extended metadata) flags.
         """
-        self.assertModuleKeyValue(module='r.info',
-                                  map=raster, flags='gre',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=precision)
+        self.assertModuleKeyValue(
+            module="r.info",
+            map=raster,
+            flags="gre",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=precision,
+        )
 
-    def assertRaster3dFitsUnivar(self, raster, reference,
-                                 precision=None, msg=None):
+    def assertRaster3dFitsUnivar(self, raster, reference, precision=None, msg=None):
         r"""Test that 3D raster map has the values obtained by r3.univar module.
 
         The function does not require all values from r3.univar.
@@ -314,15 +345,18 @@ class TestCase(unittest.TestCase):
         use `assertModuleKeyValue()` for the full interface of arbitrary
         module.
         """
-        self.assertModuleKeyValue(module='r3.univar',
-                                  map=raster,
-                                  separator='=',
-                                  flags='g',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=precision)
+        self.assertModuleKeyValue(
+            module="r3.univar",
+            map=raster,
+            separator="=",
+            flags="g",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=precision,
+        )
 
-    def assertRaster3dFitsInfo(self, raster, reference,
-                               precision=None, msg=None):
+    def assertRaster3dFitsInfo(self, raster, reference, precision=None, msg=None):
         r"""Test that raster map has the values obtained by r3.info module.
 
         The function does not require all values from r3.info.
@@ -332,10 +366,15 @@ class TestCase(unittest.TestCase):
 
         This function supports values obtained by -g (info) and -r (range).
         """
-        self.assertModuleKeyValue(module='r3.info',
-                                  map=raster, flags='gr',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=precision)
+        self.assertModuleKeyValue(
+            module="r3.info",
+            map=raster,
+            flags="gr",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=precision,
+        )
 
     def assertVectorFitsTopoInfo(self, vector, reference, msg=None):
         r"""Test that raster map has the values obtained by ``v.info`` module.
@@ -358,13 +397,17 @@ class TestCase(unittest.TestCase):
 
         Use keyword arguments syntax for all function parameters.
         """
-        self.assertModuleKeyValue(module='v.info',
-                                  map=vector, flags='t',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=0)
+        self.assertModuleKeyValue(
+            module="v.info",
+            map=vector,
+            flags="t",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=0,
+        )
 
-    def assertVectorFitsRegionInfo(self, vector, reference,
-                                   precision, msg=None):
+    def assertVectorFitsRegionInfo(self, vector, reference, precision, msg=None):
         r"""Test that raster map has the values obtained by ``v.info`` module.
 
         This function uses ``-g`` flag of ``v.info`` module to get topology
@@ -373,10 +416,15 @@ class TestCase(unittest.TestCase):
 
         Use keyword arguments syntax for all function parameters.
         """
-        self.assertModuleKeyValue(module='v.info',
-                                  map=vector, flags='g',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=precision)
+        self.assertModuleKeyValue(
+            module="v.info",
+            map=vector,
+            flags="g",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=precision,
+        )
 
     def assertVectorFitsExtendedInfo(self, vector, reference, msg=None):
         r"""Test that raster map has the values obtained by ``v.info`` module.
@@ -394,32 +442,44 @@ class TestCase(unittest.TestCase):
 
         Use keyword arguments syntax for all function parameters.
         """
-        self.assertModuleKeyValue(module='v.info',
-                                  map=vector, flags='e',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=0)
+        self.assertModuleKeyValue(
+            module="v.info",
+            map=vector,
+            flags="e",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=0,
+        )
 
-    def assertVectorInfoEqualsVectorInfo(self, actual, reference, precision,
-                                         msg=None):
+    def assertVectorInfoEqualsVectorInfo(self, actual, reference, precision, msg=None):
         """Test that two vectors are equal according to ``v.info -tg``.
 
         This function does not test geometry itself just the region of the
         vector map and number of features.
         """
-        module = SimpleModule('v.info', flags='t', map=reference)
+        module = SimpleModule("v.info", flags="t", map=reference)
         self.runModule(module)
-        ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
-        module = SimpleModule('v.info', flags='g', map=reference)
+        ref_topo = text_to_keyvalue(module.outputs.stdout, sep="=")
+        module = SimpleModule("v.info", flags="g", map=reference)
         self.runModule(module)
-        ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
-        self.assertVectorFitsTopoInfo(vector=actual, reference=ref_topo,
-                                      msg=msg)
-        self.assertVectorFitsRegionInfo(vector=actual, reference=ref_info,
-                                        precision=precision, msg=msg)
+        ref_info = text_to_keyvalue(module.outputs.stdout, sep="=")
+        self.assertVectorFitsTopoInfo(vector=actual, reference=ref_topo, msg=msg)
+        self.assertVectorFitsRegionInfo(
+            vector=actual, reference=ref_info, precision=precision, msg=msg
+        )
 
-    def assertVectorFitsUnivar(self, map, column, reference, msg=None,
-                               layer=None, type=None, where=None,
-                               precision=None):
+    def assertVectorFitsUnivar(
+        self,
+        map,
+        column,
+        reference,
+        msg=None,
+        layer=None,
+        type=None,
+        where=None,
+        precision=None,
+    ):
         r"""Test that vector map has the values obtained by v.univar module.
 
         The function does not require all values from v.univar.
@@ -436,17 +496,21 @@ class TestCase(unittest.TestCase):
         flag and few other, use `assertModuleKeyValue` for the full interface
         of arbitrary module.
         """
-        parameters = dict(map=map, column=column, flags='g')
+        parameters = dict(map=map, column=column, flags="g")
         if layer:
             parameters.update(layer=layer)
         if type:
             parameters.update(type=type)
         if where:
             parameters.update(where=where)
-        self.assertModuleKeyValue(module='v.univar',
-                                  reference=reference, msg=msg, sep='=',
-                                  precision=precision,
-                                  **parameters)
+        self.assertModuleKeyValue(
+            module="v.univar",
+            reference=reference,
+            msg=msg,
+            sep="=",
+            precision=precision,
+            **parameters,
+        )
 
     # TODO: use precision?
     # TODO: write a test for this method with r.in.ascii
@@ -463,19 +527,25 @@ class TestCase(unittest.TestCase):
         To check that more statistics have certain values use
         `assertRasterFitsUnivar()` or `assertRasterFitsInfo()`
         """
-        stdout = call_module('r.info', map=map, flags='r')
-        actual = text_to_keyvalue(stdout, sep='=')
-        if refmin > actual['min']:
-            stdmsg = ('The actual minimum ({a}) is smaller than the reference'
-                      ' one ({r}) for raster map {m}'
-                      ' (with maximum {o})'.format(
-                          a=actual['min'], r=refmin, m=map, o=actual['max']))
+        stdout = call_module("r.info", map=map, flags="r")
+        actual = text_to_keyvalue(stdout, sep="=")
+        if refmin > actual["min"]:
+            stdmsg = (
+                "The actual minimum ({a}) is smaller than the reference"
+                " one ({r}) for raster map {m}"
+                " (with maximum {o})".format(
+                    a=actual["min"], r=refmin, m=map, o=actual["max"]
+                )
+            )
             self.fail(self._formatMessage(msg, stdmsg))
-        if refmax < actual['max']:
-            stdmsg = ('The actual maximum ({a}) is greater than the reference'
-                      ' one ({r}) for raster map {m}'
-                      ' (with minimum {o})'.format(
-                          a=actual['max'], r=refmax, m=map, o=actual['min']))
+        if refmax < actual["max"]:
+            stdmsg = (
+                "The actual maximum ({a}) is greater than the reference"
+                " one ({r}) for raster map {m}"
+                " (with minimum {o})".format(
+                    a=actual["max"], r=refmax, m=map, o=actual["min"]
+                )
+            )
             self.fail(self._formatMessage(msg, stdmsg))
 
     # TODO: use precision?
@@ -494,26 +564,37 @@ class TestCase(unittest.TestCase):
         To check that more statistics have certain values use
         `assertRaster3DFitsUnivar()` or `assertRaster3DFitsInfo()`
         """
-        stdout = call_module('r3.info', map=map, flags='r')
-        actual = text_to_keyvalue(stdout, sep='=')
-        if refmin > actual['min']:
-            stdmsg = ('The actual minimum ({a}) is smaller than the reference'
-                      ' one ({r}) for 3D raster map {m}'
-                      ' (with maximum {o})'.format(
-                          a=actual['min'], r=refmin, m=map, o=actual['max']))
+        stdout = call_module("r3.info", map=map, flags="r")
+        actual = text_to_keyvalue(stdout, sep="=")
+        if refmin > actual["min"]:
+            stdmsg = (
+                "The actual minimum ({a}) is smaller than the reference"
+                " one ({r}) for 3D raster map {m}"
+                " (with maximum {o})".format(
+                    a=actual["min"], r=refmin, m=map, o=actual["max"]
+                )
+            )
             self.fail(self._formatMessage(msg, stdmsg))
-        if refmax < actual['max']:
-            stdmsg = ('The actual maximum ({a}) is greater than the reference'
-                      ' one ({r}) for 3D raster map {m}'
-                      ' (with minimum {o})'.format(
-                          a=actual['max'], r=refmax, m=map, o=actual['min']))
+        if refmax < actual["max"]:
+            stdmsg = (
+                "The actual maximum ({a}) is greater than the reference"
+                " one ({r}) for 3D raster map {m}"
+                " (with minimum {o})".format(
+                    a=actual["max"], r=refmax, m=map, o=actual["min"]
+                )
+            )
             self.fail(self._formatMessage(msg, stdmsg))
 
     def _get_detailed_message_about_no_map(self, name, type):
-        msg = ("There is no map <{n}> of type <{t}>"
-               " in the current mapset".format(n=name, t=type))
-        related = call_module('g.list', type='raster,raster3d,vector',
-                              flags='imt', pattern='*' + name + '*')
+        msg = "There is no map <{n}> of type <{t}>" " in the current mapset".format(
+            n=name, t=type
+        )
+        related = call_module(
+            "g.list",
+            type="raster,raster3d,vector",
+            flags="imt",
+            pattern="*" + name + "*",
+        )
         if related:
             msg += "\nSee available maps:\n"
             msg += related
@@ -523,42 +604,43 @@ class TestCase(unittest.TestCase):
 
     def assertRasterExists(self, name, msg=None):
         """Checks if the raster map exists in current mapset"""
-        if not is_map_in_mapset(name, type='raster'):
-            stdmsg = self._get_detailed_message_about_no_map(name, 'raster')
+        if not is_map_in_mapset(name, type="raster"):
+            stdmsg = self._get_detailed_message_about_no_map(name, "raster")
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertRasterDoesNotExist(self, name, msg=None):
         """Checks if the raster map does not exist in current mapset"""
-        if is_map_in_mapset(name, type='raster'):
-            stdmsg = self._get_detailed_message_about_no_map(name, 'raster')
+        if is_map_in_mapset(name, type="raster"):
+            stdmsg = self._get_detailed_message_about_no_map(name, "raster")
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertRaster3dExists(self, name, msg=None):
         """Checks if the 3D raster map exists in current mapset"""
-        if not is_map_in_mapset(name, type='raster3d'):
-            stdmsg = self._get_detailed_message_about_no_map(name, 'raster3d')
+        if not is_map_in_mapset(name, type="raster3d"):
+            stdmsg = self._get_detailed_message_about_no_map(name, "raster3d")
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertRaster3dDoesNotExist(self, name, msg=None):
         """Checks if the 3D raster map does not exist in current mapset"""
-        if is_map_in_mapset(name, type='raster3d'):
-            stdmsg = self._get_detailed_message_about_no_map(name, 'raster3d')
+        if is_map_in_mapset(name, type="raster3d"):
+            stdmsg = self._get_detailed_message_about_no_map(name, "raster3d")
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertVectorExists(self, name, msg=None):
         """Checks if the vector map exists in current mapset"""
-        if not is_map_in_mapset(name, type='vector'):
-            stdmsg = self._get_detailed_message_about_no_map(name, 'vector')
+        if not is_map_in_mapset(name, type="vector"):
+            stdmsg = self._get_detailed_message_about_no_map(name, "vector")
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertVectorDoesNotExist(self, name, msg=None):
         """Checks if the vector map does not exist in current mapset"""
-        if is_map_in_mapset(name, type='vector'):
-            stdmsg = self._get_detailed_message_about_no_map(name, 'vector')
+        if is_map_in_mapset(name, type="vector"):
+            stdmsg = self._get_detailed_message_about_no_map(name, "vector")
             self.fail(self._formatMessage(msg, stdmsg))
 
-    def assertFileExists(self, filename, msg=None,
-                         skip_size_check=False, skip_access_check=False):
+    def assertFileExists(
+        self, filename, msg=None, skip_size_check=False, skip_access_check=False
+    ):
         """Test the existence of a file.
 
         .. note:
@@ -568,13 +650,13 @@ class TestCase(unittest.TestCase):
             wants to look at created files.
         """
         if not os.path.isfile(filename):
-            stdmsg = 'File %s does not exist' % filename
+            stdmsg = "File %s does not exist" % filename
             self.fail(self._formatMessage(msg, stdmsg))
         if not skip_size_check and not os.path.getsize(filename):
-            stdmsg = 'File %s is empty' % filename
+            stdmsg = "File %s is empty" % filename
             self.fail(self._formatMessage(msg, stdmsg))
         if not skip_access_check and not os.access(filename, os.R_OK):
-            stdmsg = 'File %s is not accessible for reading' % filename
+            stdmsg = "File %s is not accessible for reading" % filename
             self.fail(self._formatMessage(msg, stdmsg))
 
     def assertFileMd5(self, filename, md5, text=False, msg=None):
@@ -624,10 +706,13 @@ class TestCase(unittest.TestCase):
         else:
             actual = file_md5(filename)
         if not actual == md5:
-            standardMsg = ('File <{name}> does not have the right MD5 sum.\n'
-                           'Expected is <{expected}>,'
-                           ' actual is <{actual}>'.format(
-                               name=filename, expected=md5, actual=actual))
+            standardMsg = (
+                "File <{name}> does not have the right MD5 sum.\n"
+                "Expected is <{expected}>,"
+                " actual is <{actual}>".format(
+                    name=filename, expected=md5, actual=actual
+                )
+            )
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertFilesEqualMd5(self, filename, reference, msg=None):
@@ -640,8 +725,10 @@ class TestCase(unittest.TestCase):
         self.assertFileExists(filename, msg=msg)
         # nothing for ref, missing ref_filename is an error not a test failure
         if not files_equal_md5(filename, reference):
-            stdmsg = 'Files %s and %s don\'t have the same MD5 sums' % (filename,
-                                                                        reference)
+            stdmsg = "Files %s and %s don't have the same MD5 sums" % (
+                filename,
+                reference,
+            )
             self.fail(self._formatMessage(msg, stdmsg))
 
     def _get_unique_name(self, name):
@@ -658,11 +745,11 @@ class TestCase(unittest.TestCase):
         # TODO: possible improvement is to require some descriptive name
         # and ensure uniqueness by add UUID
         if self.readable_names:
-            return 'tmp_' + self.id().replace('.', '_') + '_' + name
+            return "tmp_" + self.id().replace(".", "_") + "_" + name
         else:
             # UUID might be overkill (and expensive) but it's safe and simple
             # alternative is to create hash from the readable name
-            return 'tmp_' + str(uuid.uuid4()).replace('-', '')
+            return "tmp_" + str(uuid.uuid4()).replace("-", "")
 
     def _compute_difference_raster(self, first, second, name_part):
         """Compute difference of two rasters (first - second)
@@ -676,14 +763,13 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new raster
         """
-        diff = self._get_unique_name('compute_difference_raster_' + name_part
-                                     + '_' + first + '_minus_' + second)
-        expression = '"{diff}" = "{first}" - "{second}"'.format(
-            diff=diff,
-            first=first,
-            second=second
+        diff = self._get_unique_name(
+            "compute_difference_raster_" + name_part + "_" + first + "_minus_" + second
         )
-        call_module('r.mapcalc', stdin=expression.encode("utf-8"))
+        expression = '"{diff}" = "{first}" - "{second}"'.format(
+            diff=diff, first=first, second=second
+        )
+        call_module("r.mapcalc", stdin=expression.encode("utf-8"))
         return diff
 
     # TODO: name of map generation is repeated three times
@@ -700,17 +786,17 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new raster
         """
-        diff = self._get_unique_name('compute_difference_raster_' + name_part
-                                     + '_' + first + '_minus_' + second)
+        diff = self._get_unique_name(
+            "compute_difference_raster_" + name_part + "_" + first + "_minus_" + second
+        )
 
-        call_module('r3.mapcalc',
-                    stdin='"{d}" = "{f}" - "{s}"'.format(d=diff,
-                                                         f=first,
-                                                         s=second))
+        call_module(
+            "r3.mapcalc",
+            stdin='"{d}" = "{f}" - "{s}"'.format(d=diff, f=first, s=second),
+        )
         return diff
 
-    def _map_different_raster_cells(self, first, second, name_part,
-                                    precision=0):
+    def _map_different_raster_cells(self, first, second, name_part, precision=0):
         """Marks cells with different values with 1, equal with 0
 
         For FCELL and DCELL maps precision (tolerance to difference)
@@ -727,21 +813,17 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new raster
         """
-        diff = self._get_unique_name('map_different_raster_cells_' + name_part
-                                     + '_' + first + '_minus_' + second)
-        expression = (
-            '"{diff}" = ' +
-            'if( isnull("{first}") && isnull("{second}"), 0, ' +
-            'if( isnull("{first}") || isnull("{second}"), 1, ' +
-            'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
-        ).format(
-            diff=diff,
-            first=first,
-            second=second,
-            precision=precision
+        diff = self._get_unique_name(
+            "map_different_raster_cells_" + name_part + "_" + first + "_minus_" + second
         )
+        expression = (
+            '"{diff}" = '
+            + 'if( isnull("{first}") && isnull("{second}"), 0, '
+            + 'if( isnull("{first}") || isnull("{second}"), 1, '
+            + 'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
+        ).format(diff=diff, first=first, second=second, precision=precision)
 
-        call_module('r.mapcalc', stdin=expression.encode("utf-8"))
+        call_module("r.mapcalc", stdin=expression.encode("utf-8"))
         return diff
 
     def _compute_vector_xor(self, ainput, alayer, binput, blayer, name_part):
@@ -749,12 +831,30 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new vector
         """
-        diff = self._get_unique_name('compute_difference_vector_' + name_part
-                                     + '_' + ainput + '_' + alayer + '_minus_'
-                                     + binput + '_' + blayer)
-        call_module('v.overlay', operator='xor', ainput=ainput, binput=binput,
-                    alayer=alayer, blayer=blayer,
-                    output=diff, atype='area', btype='area', olayer='')
+        diff = self._get_unique_name(
+            "compute_difference_vector_"
+            + name_part
+            + "_"
+            + ainput
+            + "_"
+            + alayer
+            + "_minus_"
+            + binput
+            + "_"
+            + blayer
+        )
+        call_module(
+            "v.overlay",
+            operator="xor",
+            ainput=ainput,
+            binput=binput,
+            alayer=alayer,
+            blayer=blayer,
+            output=diff,
+            atype="area",
+            btype="area",
+            olayer="",
+        )
         # trying to avoid long reports full of categories by olayer=''
         # olayer   Output layer for new category, ainput and binput
         #     If 0 or not given, the category is not written
@@ -771,10 +871,10 @@ class TestCase(unittest.TestCase):
         hasher = hashlib.md5()
         hasher.update(encode(filename))
         namehash = hasher.hexdigest()
-        vector = self._get_unique_name('import_ascii_vector_' + name_part
-                                       + '_' + namehash)
-        call_module('v.in.ascii', input=filename,
-                    output=vector, format='standard')
+        vector = self._get_unique_name(
+            "import_ascii_vector_" + name_part + "_" + namehash
+        )
+        call_module("v.in.ascii", input=filename, output=vector, format="standard")
         return vector
 
     # TODO: -z and 3D support
@@ -784,15 +884,22 @@ class TestCase(unittest.TestCase):
         :returns: name of a new vector
         """
         # TODO: perhaps we can afford just simple file name
-        filename = self._get_unique_name('export_ascii_vector_'
-                                         + name_part + '_' + vector)
-        call_module('v.out.ascii', input=vector,
-                    output=filename, format='standard', layer='-1',
-                    precision=digits)
+        filename = self._get_unique_name(
+            "export_ascii_vector_" + name_part + "_" + vector
+        )
+        call_module(
+            "v.out.ascii",
+            input=vector,
+            output=filename,
+            format="standard",
+            layer="-1",
+            precision=digits,
+        )
         return filename
 
-    def assertRastersNoDifference(self, actual, reference,
-                                  precision, statistics=None, msg=None):
+    def assertRastersNoDifference(
+        self, actual, reference, precision, statistics=None, msg=None
+    ):
         """Test that `actual` raster is not different from `reference` raster
 
         Method behaves in the same way as `assertRasterFitsUnivar()`
@@ -805,29 +912,41 @@ class TestCase(unittest.TestCase):
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
         """
-        if statistics is None or sorted(statistics.keys()) == ['max', 'min']:
+        if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
                 statistics = dict(min=-precision, max=precision)
-            diff = self._compute_difference_raster(reference, actual,
-                                                   'assertRastersNoDifference')
+            diff = self._compute_difference_raster(
+                reference, actual, "assertRastersNoDifference"
+            )
             try:
-                self.assertModuleKeyValue('r.info', map=diff, flags='r',
-                                          sep='=', precision=precision,
-                                          reference=statistics, msg=msg)
+                self.assertModuleKeyValue(
+                    "r.info",
+                    map=diff,
+                    flags="r",
+                    sep="=",
+                    precision=precision,
+                    reference=statistics,
+                    msg=msg,
+                )
             finally:
-                call_module('g.remove', flags='f', type='raster', name=diff)
+                call_module("g.remove", flags="f", type="raster", name=diff)
         else:
             # general case
             # TODO: we are using r.info min max and r.univar min max interchangeably
             # but they might be different if region is different from map
             # not considered as an huge issue since we expect the tested maps
             # to match with region, however a documentation should containe a notice
-            self.assertRastersDifference(actual=actual, reference=reference,
-                                         statistics=statistics,
-                                         precision=precision, msg=msg)
+            self.assertRastersDifference(
+                actual=actual,
+                reference=reference,
+                statistics=statistics,
+                precision=precision,
+                msg=msg,
+            )
 
-    def assertRastersDifference(self, actual, reference,
-                                statistics, precision, msg=None):
+    def assertRastersDifference(
+        self, actual, reference, statistics, precision, msg=None
+    ):
         """Test statistical values of difference of reference and actual rasters
 
         For cases when you are interested in no or minimal difference,
@@ -840,16 +959,19 @@ class TestCase(unittest.TestCase):
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
         """
-        diff = self._compute_difference_raster(reference, actual,
-                                               'assertRastersDifference')
+        diff = self._compute_difference_raster(
+            reference, actual, "assertRastersDifference"
+        )
         try:
-            self.assertRasterFitsUnivar(raster=diff, reference=statistics,
-                                        precision=precision, msg=msg)
+            self.assertRasterFitsUnivar(
+                raster=diff, reference=statistics, precision=precision, msg=msg
+            )
         finally:
-            call_module('g.remove', flags='f', type='raster', name=diff)
+            call_module("g.remove", flags="f", type="raster", name=diff)
 
-    def assertRasters3dNoDifference(self, actual, reference,
-                                    precision, statistics=None, msg=None):
+    def assertRasters3dNoDifference(
+        self, actual, reference, precision, statistics=None, msg=None
+    ):
         """Test that `actual` raster is not different from `reference` raster
 
         Method behaves in the same way as `assertRasterFitsUnivar()`
@@ -857,29 +979,41 @@ class TestCase(unittest.TestCase):
         If statistics is not given ``dict(min=-precision, max=precision)``
         is used.
         """
-        if statistics is None or sorted(statistics.keys()) == ['max', 'min']:
+        if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
                 statistics = dict(min=-precision, max=precision)
-            diff = self._compute_difference_raster3d(reference, actual,
-                                                     'assertRasters3dNoDifference')
+            diff = self._compute_difference_raster3d(
+                reference, actual, "assertRasters3dNoDifference"
+            )
             try:
-                self.assertModuleKeyValue('r3.info', map=diff, flags='r',
-                                          sep='=', precision=precision,
-                                          reference=statistics, msg=msg)
+                self.assertModuleKeyValue(
+                    "r3.info",
+                    map=diff,
+                    flags="r",
+                    sep="=",
+                    precision=precision,
+                    reference=statistics,
+                    msg=msg,
+                )
             finally:
-                call_module('g.remove', flags='f', type='raster_3d', name=diff)
+                call_module("g.remove", flags="f", type="raster_3d", name=diff)
         else:
             # general case
             # TODO: we are using r.info min max and r.univar min max interchangeably
             # but they might be different if region is different from map
             # not considered as an huge issue since we expect the tested maps
             # to match with region, however a documentation should contain a notice
-            self.assertRasters3dDifference(actual=actual, reference=reference,
-                                           statistics=statistics,
-                                           precision=precision, msg=msg)
+            self.assertRasters3dDifference(
+                actual=actual,
+                reference=reference,
+                statistics=statistics,
+                precision=precision,
+                msg=msg,
+            )
 
-    def assertRasters3dDifference(self, actual, reference,
-                                statistics, precision, msg=None):
+    def assertRasters3dDifference(
+        self, actual, reference, statistics, precision, msg=None
+    ):
         """Test statistical values of difference of reference and actual rasters
 
         For cases when you are interested in no or minimal difference,
@@ -887,16 +1021,17 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test r3.mapcalc or r3.univar.
         """
-        diff = self._compute_difference_raster3d(reference, actual,
-                                                 'assertRasters3dDifference')
+        diff = self._compute_difference_raster3d(
+            reference, actual, "assertRasters3dDifference"
+        )
         try:
-            self.assertRaster3dFitsUnivar(raster=diff, reference=statistics,
-                                          precision=precision, msg=msg)
+            self.assertRaster3dFitsUnivar(
+                raster=diff, reference=statistics, precision=precision, msg=msg
+            )
         finally:
-            call_module('g.remove', flags='f', type='raster_3d', name=diff)
+            call_module("g.remove", flags="f", type="raster_3d", name=diff)
 
-    def assertRastersEqual(self, actual, reference,
-                           precision=0, msg=None):
+    def assertRastersEqual(self, actual, reference, precision=0, msg=None):
         """Test that `actual` raster is equal to `reference` raster
 
         Test compares if each cell value in `actual` raster is within
@@ -911,16 +1046,21 @@ class TestCase(unittest.TestCase):
         affected by current computational region.
         """
 
-        diff = self._map_different_raster_cells(reference, actual,
-                                                'assertRastersEqual',
-                                                precision)
+        diff = self._map_different_raster_cells(
+            reference, actual, "assertRastersEqual", precision
+        )
         try:
-            self.assertModuleKeyValue('r.info', map=diff, flags='r',
-                                      sep='=', precision=0,
-                                      reference={'min': 0, 'max': 0},
-                                      msg=msg)
+            self.assertModuleKeyValue(
+                "r.info",
+                map=diff,
+                flags="r",
+                sep="=",
+                precision=0,
+                reference={"min": 0, "max": 0},
+                msg=msg,
+            )
         finally:
-            call_module('g.remove', flags='f', type='raster', name=diff)
+            call_module("g.remove", flags="f", type="raster", name=diff)
 
     # TODO: this works only in 2D
     # TODO: write tests
@@ -930,44 +1070,57 @@ class TestCase(unittest.TestCase):
         This method should not be used to test v.buffer, v.overlay or v.select.
         """
         # TODO: if msg is None: add info specific to this function
-        layer = '-1'
-        self.assertVectorInfoEqualsVectorInfo(actual=actual,
-                                              reference=reference,
-                                              precision=precision, msg=msg)
+        layer = "-1"
+        self.assertVectorInfoEqualsVectorInfo(
+            actual=actual, reference=reference, precision=precision, msg=msg
+        )
         remove = []
-        buffered = reference + '_buffered'  # TODO: more unique name
-        intersection = reference + '_intersection'  # TODO: more unique name
-        self.runModule('v.buffer', input=reference, layer=layer,
-                       output=buffered, distance=precision)
+        buffered = reference + "_buffered"  # TODO: more unique name
+        intersection = reference + "_intersection"  # TODO: more unique name
+        self.runModule(
+            "v.buffer",
+            input=reference,
+            layer=layer,
+            output=buffered,
+            distance=precision,
+        )
         remove.append(buffered)
         try:
-            self.runModule('v.overlay', operator='and', ainput=actual,
-                           binput=reference,
-                           alayer=layer, blayer=layer,
-                           output=intersection, atype='area', btype='area',
-                           olayer='')
+            self.runModule(
+                "v.overlay",
+                operator="and",
+                ainput=actual,
+                binput=reference,
+                alayer=layer,
+                blayer=layer,
+                output=intersection,
+                atype="area",
+                btype="area",
+                olayer="",
+            )
             remove.append(intersection)
             # TODO: this would use some refactoring
             # perhaps different functions or more low level functions would
             # be more appropriate
-            module = SimpleModule('v.info', flags='t', map=reference)
+            module = SimpleModule("v.info", flags="t", map=reference)
             self.runModule(module)
-            ref_topo = text_to_keyvalue(module.outputs.stdout, sep='=')
-            self.assertVectorFitsTopoInfo(vector=intersection,
-                                          reference=ref_topo,
-                                          msg=msg)
-            module = SimpleModule('v.info', flags='g', map=reference)
+            ref_topo = text_to_keyvalue(module.outputs.stdout, sep="=")
+            self.assertVectorFitsTopoInfo(
+                vector=intersection, reference=ref_topo, msg=msg
+            )
+            module = SimpleModule("v.info", flags="g", map=reference)
             self.runModule(module)
-            ref_info = text_to_keyvalue(module.outputs.stdout, sep='=')
-            self.assertVectorFitsRegionInfo(vector=intersection,
-                                            reference=ref_info,
-                                            msg=msg, precision=precision)
+            ref_info = text_to_keyvalue(module.outputs.stdout, sep="=")
+            self.assertVectorFitsRegionInfo(
+                vector=intersection, reference=ref_info, msg=msg, precision=precision
+            )
         finally:
-            call_module('g.remove', flags='f', type='vector', name=remove)
+            call_module("g.remove", flags="f", type="vector", name=remove)
 
     # TODO: write tests
-    def assertVectorsNoAreaDifference(self, actual, reference, precision,
-                                      layer=1, msg=None):
+    def assertVectorsNoAreaDifference(
+        self, actual, reference, precision, layer=1, msg=None
+    ):
         """Test statistical values of difference of reference and actual rasters
 
         Works only for areas.
@@ -976,27 +1129,31 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test v.overlay or v.select.
         """
-        diff = self._compute_xor_vectors(ainput=reference, binput=actual,
-                                         alayer=layer, blayer=layer,
-                                         name_part='assertVectorsNoDifference')
+        diff = self._compute_xor_vectors(
+            ainput=reference,
+            binput=actual,
+            alayer=layer,
+            blayer=layer,
+            name_part="assertVectorsNoDifference",
+        )
         try:
-            module = SimpleModule('v.to.db', map=diff,
-                                  flags='pc', separator='=')
+            module = SimpleModule("v.to.db", map=diff, flags="pc", separator="=")
             self.runModule(module)
             # the output of v.to.db -pc sep== should look like:
             # ...
             # 43=98606087.5818323
             # 44=727592.902311112
             # total area=2219442027.22035
-            total_area = module.outputs.stdout.splitlines()[-1].split('=')[-1]
+            total_area = module.outputs.stdout.splitlines()[-1].split("=")[-1]
             if total_area > precision:
-                stdmsg = ("Area of difference of vectors <{va}> and <{vr}>"
-                          " should be 0"
-                          " in the given precision ({p}) not {a}").format(
-                    va=actual, vr=reference, p=precision, a=total_area)
+                stdmsg = (
+                    "Area of difference of vectors <{va}> and <{vr}>"
+                    " should be 0"
+                    " in the given precision ({p}) not {a}"
+                ).format(va=actual, vr=reference, p=precision, a=total_area)
                 self.fail(self._formatMessage(msg, stdmsg))
         finally:
-            call_module('g.remove', flags='f', type='vector', name=diff)
+            call_module("g.remove", flags="f", type="vector", name=diff)
 
     # TODO: here we have to have significant digits which is not consistent
     # TODO: documentation for all new asserts
@@ -1015,17 +1172,20 @@ class TestCase(unittest.TestCase):
         # both vectors to ascii
         # text diff of two ascii files
         # may also do other comparisons on vectors themselves (asserts)
-        self.assertVectorInfoEqualsVectorInfo(actual=actual, reference=reference, precision=precision, msg=msg)
-        factual = self._export_ascii_vector(vector=actual,
-                                            name_part='assertVectorEqualsVector_actual',
-                                            digits=digits)
-        freference = self._export_ascii_vector(vector=reference,
-                                               name_part='assertVectorEqualsVector_reference',
-                                               digits=digits)
-        self.assertVectorAsciiEqualsVectorAscii(actual=factual,
-                                                reference=freference,
-                                                remove_files=True,
-                                                msg=msg)
+        self.assertVectorInfoEqualsVectorInfo(
+            actual=actual, reference=reference, precision=precision, msg=msg
+        )
+        factual = self._export_ascii_vector(
+            vector=actual, name_part="assertVectorEqualsVector_actual", digits=digits
+        )
+        freference = self._export_ascii_vector(
+            vector=reference,
+            name_part="assertVectorEqualsVector_reference",
+            digits=digits,
+        )
+        self.assertVectorAsciiEqualsVectorAscii(
+            actual=factual, reference=freference, remove_files=True, msg=msg
+        )
 
     def assertVectorEqualsAscii(self, actual, reference, digits, precision, msg=None):
         """Test that vector is equal to the vector stored in GRASS ASCII file.
@@ -1041,30 +1201,31 @@ class TestCase(unittest.TestCase):
         # vector to ascii
         # text diff of two ascii files
         # it may actually import the file and do other asserts
-        factual = self._export_ascii_vector(vector=actual,
-                                            name_part='assertVectorEqualsAscii_actual',
-                                            digits=digits)
+        factual = self._export_ascii_vector(
+            vector=actual, name_part="assertVectorEqualsAscii_actual", digits=digits
+        )
         vreference = None
         try:
-            vreference = self._import_ascii_vector(filename=reference,
-                                               name_part='assertVectorEqualsAscii_reference')
-            self.assertVectorInfoEqualsVectorInfo(actual=actual,
-                                                  reference=vreference,
-                                                  precision=precision, msg=msg)
-            self.assertVectorAsciiEqualsVectorAscii(actual=factual,
-                                                    reference=reference,
-                                                    remove_files=False,
-                                                    msg=msg)
+            vreference = self._import_ascii_vector(
+                filename=reference, name_part="assertVectorEqualsAscii_reference"
+            )
+            self.assertVectorInfoEqualsVectorInfo(
+                actual=actual, reference=vreference, precision=precision, msg=msg
+            )
+            self.assertVectorAsciiEqualsVectorAscii(
+                actual=factual, reference=reference, remove_files=False, msg=msg
+            )
         finally:
             # TODO: manage using cleanup settings
             # we rely on fail method to either raise or return (soon)
             os.remove(factual)
             if vreference:
-                self.runModule('g.remove', flags='f', type='vector', name=vreference)
+                self.runModule("g.remove", flags="f", type="vector", name=vreference)
 
     # TODO: we expect v.out.ascii to give the same order all the time, is that OK?
-    def assertVectorAsciiEqualsVectorAscii(self, actual, reference,
-                                           remove_files=False, msg=None):
+    def assertVectorAsciiEqualsVectorAscii(
+        self, actual, reference, remove_files=False, msg=None
+    ):
         """Test that two GRASS ASCII vector files are equal.
 
         .. note:
@@ -1076,9 +1237,10 @@ class TestCase(unittest.TestCase):
             function works well only for "not too big" vector maps.
         """
         import difflib
+
         # 'U' taken from difflib documentation
-        fromlines = open(actual, 'U').readlines()
-        tolines = open(reference, 'U').readlines()
+        fromlines = open(actual, "U").readlines()
+        tolines = open(reference, "U").readlines()
         context_lines = 3  # number of context lines
         # TODO: filenames are set to "actual" and "reference", isn't it too general?
         # it is even more useful if map names or file names are some generated
@@ -1087,17 +1249,22 @@ class TestCase(unittest.TestCase):
         # but unified is a good choice if you are used to svn or git
         # workaround for missing -h (do not print header) flag in v.out.ascii
         num_lines_of_header = 10
-        diff = difflib.unified_diff(fromlines[num_lines_of_header:],
-                                    tolines[num_lines_of_header:],
-                                    'reference', 'actual', n=context_lines)
+        diff = difflib.unified_diff(
+            fromlines[num_lines_of_header:],
+            tolines[num_lines_of_header:],
+            "reference",
+            "actual",
+            n=context_lines,
+        )
         # TODO: this should be solved according to cleanup policy
         # but the parameter should be kept if it is an existing file
         # or using this method by itself
         if remove_files:
             os.remove(actual)
             os.remove(reference)
-        stdmsg = ("There is a difference between vectors when compared as"
-                  " ASCII files.\n")
+        stdmsg = (
+            "There is a difference between vectors when compared as" " ASCII files.\n"
+        )
 
         output = StringIO()
         # TODO: there is a diff size constant which we can use
@@ -1123,13 +1290,17 @@ class TestCase(unittest.TestCase):
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
-                htmldiff_file_name = self.id() + '_ascii_diff' + '.html'
+                htmldiff_file_name = self.id() + "_ascii_diff" + ".html"
                 self.supplementary_files.append(htmldiff_file_name)
-                htmldiff = difflib.HtmlDiff().make_file(fromlines, tolines,
-                                                        'reference', 'actual',
-                                                        context=True,
-                                                        numlines=context_lines)
-                htmldiff_file = open(htmldiff_file_name, 'w')
+                htmldiff = difflib.HtmlDiff().make_file(
+                    fromlines,
+                    tolines,
+                    "reference",
+                    "actual",
+                    context=True,
+                    numlines=context_lines,
+                )
+                htmldiff_file = open(htmldiff_file_name, "w")
                 for line in htmldiff:
                     htmldiff_file.write(line)
                 htmldiff_file.close()
@@ -1163,16 +1334,17 @@ class TestCase(unittest.TestCase):
             # provide diagnostic at least in English locale
             # TODO: standardized error code would be handy here
             import re
-            if re.search('Raster map.*not found', errors, flags=re.DOTALL):
+
+            if re.search("Raster map.*not found", errors, flags=re.DOTALL):
                 errors += "\nSee available raster maps:\n"
-                errors += call_module('g.list', type='raster')
-            if re.search('Vector map.*not found', errors, flags=re.DOTALL):
+                errors += call_module("g.list", type="raster")
+            if re.search("Vector map.*not found", errors, flags=re.DOTALL):
                 errors += "\nSee available vector maps:\n"
-                errors += call_module('g.list', type='vector')
+                errors += call_module("g.list", type="vector")
             # TODO: message format, parameters
-            raise CalledModuleError(module.popen.returncode, module.name,
-                                    module.get_python(),
-                                    errors=errors)
+            raise CalledModuleError(
+                module.popen.returncode, module.name, module.get_python(), errors=errors
+            )
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and not module.outputs.stdout.strip():
 
@@ -1186,9 +1358,13 @@ class TestCase(unittest.TestCase):
                 got = "only whitespace."
             else:
                 got = "nothing."
-            raise RuntimeError("Module call " + module.get_python() +
-                               " ended successfully but we were expecting"
-                               " output and got " + got + errors)
+            raise RuntimeError(
+                "Module call "
+                + module.get_python()
+                + " ended successfully but we were expecting"
+                " output and got " + got + errors
+            )
+
     # TODO: we can also comapre time to some expected but that's tricky
     # maybe we should measure time but the real benchmarks with stdin/stdout
     # should be done by some other function
@@ -1231,14 +1407,15 @@ class TestCase(unittest.TestCase):
             print(text_to_string(module.outputs.stderr))
             # TODO: message format
             # TODO: stderr?
-            stdmsg = ('Running <{m.name}> module ended'
-                      ' with non-zero return code ({m.popen.returncode})\n'
-                      'Called: {code}\n'
-                      'See the following errors:\n'
-                      '{errors}'.format(
-                          m=module, code=module.get_python(),
-                          errors=module.outputs.stderr
-                      ))
+            stdmsg = (
+                "Running <{m.name}> module ended"
+                " with non-zero return code ({m.popen.returncode})\n"
+                "Called: {code}\n"
+                "See the following errors:\n"
+                "{errors}".format(
+                    m=module, code=module.get_python(), errors=module.outputs.stderr
+                )
+            )
             self.fail(self._formatMessage(msg, stdmsg))
         print(text_to_string(module.outputs.stdout))
         print(text_to_string(module.outputs.stderr))
@@ -1266,8 +1443,10 @@ class TestCase(unittest.TestCase):
         else:
             print(text_to_string(module.outputs.stdout))
             print(text_to_string(module.outputs.stderr))
-            stdmsg = ('Running <%s> ended with zero (successful) return code'
-                      ' when expecting module to fail' % module.get_python())
+            stdmsg = (
+                "Running <%s> ended with zero (successful) return code"
+                " when expecting module to fail" % module.get_python()
+            )
             self.fail(self._formatMessage(msg, stdmsg))
 
 
@@ -1276,13 +1455,14 @@ class TestCase(unittest.TestCase):
 def _module_from_parameters(module, **kwargs):
     if kwargs:
         if not isinstance(module, str):
-            raise ValueError('module can be only string or PyGRASS Module')
+            raise ValueError("module can be only string or PyGRASS Module")
         if isinstance(module, Module):
-            raise ValueError('module can be only string if other'
-                             ' parameters are given')
+            raise ValueError(
+                "module can be only string if other" " parameters are given"
+            )
             # allow passing all parameters in one dictionary called parameters
-        if list(kwargs.keys()) == ['parameters']:
-            kwargs = kwargs['parameters']
+        if list(kwargs.keys()) == ["parameters"]:
+            kwargs = kwargs["parameters"]
         module = SimpleModule(module, **kwargs)
     return module
 
@@ -1290,18 +1470,20 @@ def _module_from_parameters(module, **kwargs):
 def _check_module_run_parameters(module):
     # in this case module already run and we would start it again
     if module.run_:
-        raise ValueError('Do not run the module manually, set run_=False')
+        raise ValueError("Do not run the module manually, set run_=False")
     if not module.finish_:
-        raise ValueError('This function will always finish module run,'
-                         ' set finish_=None or finish_=True.')
+        raise ValueError(
+            "This function will always finish module run,"
+            " set finish_=None or finish_=True."
+        )
     # we expect most of the usages with stdout=PIPE
     # TODO: in any case capture PIPE always?
     if module.stdout_ is None:
         module.stdout_ = subprocess.PIPE
     elif module.stdout_ != subprocess.PIPE:
-        raise ValueError('stdout_ can be only PIPE or None')
+        raise ValueError("stdout_ can be only PIPE or None")
     if module.stderr_ is None:
         module.stderr_ = subprocess.PIPE
     elif module.stderr_ != subprocess.PIPE:
-        raise ValueError('stderr_ can be only PIPE or None')
+        raise ValueError("stderr_ can be only PIPE or None")
         # because we want to capture it

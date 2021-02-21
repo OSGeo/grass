@@ -22,7 +22,10 @@ def _islambda(function):
     >>> _islambda(_islambda)
     False
     """
-    return isinstance(function, type(lambda: None)) and function.__name__ == (lambda: None).__name__
+    return (
+        isinstance(function, type(lambda: None))
+        and function.__name__ == (lambda: None).__name__
+    )
 
 
 class Signal(object):
@@ -107,6 +110,7 @@ class Signal(object):
     >>> signal2.emit(text='Hello')
     lambda handler: Hello
     """
+
     # TODO: use the name for debugging
 
     def __init__(self, name):
@@ -267,11 +271,12 @@ class Signal(object):
         Traceback (most recent call last):
         TypeError: mywrite() takes exactly 1 argument (0 given)
         """
-        if 'signal' in kwargs:
-            del kwargs['signal']
+        if "signal" in kwargs:
+            del kwargs["signal"]
         self.emit(*args, **kwargs)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
