@@ -13,24 +13,21 @@ import subprocess
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
-class TestRaster3dExtraction(TestCase):
 
+class TestRaster3dExtraction(TestCase):
     @classmethod
     def setUpClass(cls):
-        """Initiate the temporal GIS and set the region
-        """
+        """Initiate the temporal GIS and set the region"""
         cls.use_temp_region()
         cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region
-        """
+        """Remove the temporary region"""
         cls.del_temp_region()
 
     def setUp(self):
-        """Create input data for transient groundwater flow computation
-        """
+        """Create input data for transient groundwater flow computation"""
         # Use always the current mapset as temporal database
         self.runModule("r3.mapcalc", expression="a1 = 100", overwrite=True)
         self.runModule("r3.mapcalc", expression="a2 = 200", overwrite=True)
@@ -39,25 +36,39 @@ class TestRaster3dExtraction(TestCase):
         self.runModule("r3.mapcalc", expression="a5 = 500", overwrite=True)
         self.runModule("r3.mapcalc", expression="a6 = 600", overwrite=True)
 
-        self.runModule("t.create", type="str3ds", temporaltype="absolute",
-                                     output="A", title="A test", description="A test", overwrite=True)
-        self.runModule("t.register", flags="i", type="raster_3d", input="A",
-                                     maps="a1,a2,a3,a4,a5,a6",
-                                     start="2001-01-01", increment="3 months", overwrite=True)
+        self.runModule(
+            "t.create",
+            type="str3ds",
+            temporaltype="absolute",
+            output="A",
+            title="A test",
+            description="A test",
+            overwrite=True,
+        )
+        self.runModule(
+            "t.register",
+            flags="i",
+            type="raster_3d",
+            input="A",
+            maps="a1,a2,a3,a4,a5,a6",
+            start="2001-01-01",
+            increment="3 months",
+            overwrite=True,
+        )
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="str3ds",
-                                   inputs="A,B")
+        self.runModule("t.remove", flags="rf", type="str3ds", inputs="A,B")
 
     def test_selection(self):
         """Perform a simple selection by datetime"""
-        self.assertModule("t.rast3d.extract", input="A", output="B",
-                                      where="start_time > '2001-06-01'")
+        self.assertModule(
+            "t.rast3d.extract", input="A", output="B", where="start_time > '2001-06-01'"
+        )
 
-        #self.assertModule("t.info",  flags="g",  input="B")
+        # self.assertModule("t.info",  flags="g",  input="B")
 
-        tinfo_string="""start_time='2001-07-01 00:00:00'
+        tinfo_string = """start_time='2001-07-01 00:00:00'
         end_time='2002-07-01 00:00:00'
         granularity='3 months'
         map_time=interval
@@ -69,18 +80,26 @@ class TestRaster3dExtraction(TestCase):
         max_max=600.0"""
 
         info = SimpleModule("t.info", flags="g", type="str3ds", input="B")
-        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
 
     def test_selection_and_expression(self):
         """Perform a selection by datetime and a r3.mapcalc expression"""
-        self.assertModule("t.rast3d.extract", input="A", output="B",
-                                      where="start_time > '2001-06-01'",
-                                      expression=" if(A > 400, A, null())",
-                                      basename="b", nprocs=2, overwrite=True)
+        self.assertModule(
+            "t.rast3d.extract",
+            input="A",
+            output="B",
+            where="start_time > '2001-06-01'",
+            expression=" if(A > 400, A, null())",
+            basename="b",
+            nprocs=2,
+            overwrite=True,
+        )
 
-        #self.assertModule("t.info",  flags="g",  input="B")
+        # self.assertModule("t.info",  flags="g",  input="B")
 
-        tinfo_string="""start_time='2002-01-01 00:00:00'
+        tinfo_string = """start_time='2002-01-01 00:00:00'
         end_time='2002-07-01 00:00:00'
         granularity='3 months'
         map_time=interval
@@ -92,17 +111,26 @@ class TestRaster3dExtraction(TestCase):
         max_max=600.0"""
 
         info = SimpleModule("t.info", flags="g", type="str3ds", input="B")
-        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
 
     def test_expression_with_empty_maps(self):
         """Perform r3.mapcalc expression and register empty maps"""
-        self.assertModule("t.rast3d.extract", flags="n", input="A", output="B",
-                                      expression=" if(A > 400, A, null())",
-                                      basename="b", nprocs=2, overwrite=True)
+        self.assertModule(
+            "t.rast3d.extract",
+            flags="n",
+            input="A",
+            output="B",
+            expression=" if(A > 400, A, null())",
+            basename="b",
+            nprocs=2,
+            overwrite=True,
+        )
 
-        #self.assertModule("t.info",  flags="g",  input="B")
+        # self.assertModule("t.info",  flags="g",  input="B")
 
-        tinfo_string="""start_time='2001-01-01 00:00:00'
+        tinfo_string = """start_time='2001-01-01 00:00:00'
         end_time='2002-07-01 00:00:00'
         granularity='3 months'
         map_time=interval
@@ -114,38 +142,53 @@ class TestRaster3dExtraction(TestCase):
         max_max=600.0"""
 
         info = SimpleModule("t.info", flags="g", type="str3ds", input="B")
-        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
 
     def test_time_suffix_with_expression(self):
         """Perform extract with time suffix support and test if maps exists"""
-        self.assertModule("t.rast3d.extract", flags="n", input="A", nprocs=2,
-                          output="B", basename="b", overwrite=True,
-                          suffix="time", expression="if(A > 400, A, null())")
-        self.assertRaster3dExists('b_2001_01_01T00_00_00')
-        self.assertRaster3dDoesNotExist('b_2001_01')
+        self.assertModule(
+            "t.rast3d.extract",
+            flags="n",
+            input="A",
+            nprocs=2,
+            output="B",
+            basename="b",
+            overwrite=True,
+            suffix="time",
+            expression="if(A > 400, A, null())",
+        )
+        self.assertRaster3dExists("b_2001_01_01T00_00_00")
+        self.assertRaster3dDoesNotExist("b_2001_01")
 
     def test_num_suffix_with_expression(self):
         """Perform extract with time suffix support and test if maps exists"""
-        self.assertModule("t.rast3d.extract", flags="n", input="A", nprocs=2,
-                          output="B", basename="b", overwrite=True,
-                          suffix='num%03', expression="if(A > 400, A, null())")
-        self.assertRaster3dExists('b_001')
-        self.assertRaster3dDoesNotExist('b_00001')
+        self.assertModule(
+            "t.rast3d.extract",
+            flags="n",
+            input="A",
+            nprocs=2,
+            output="B",
+            basename="b",
+            overwrite=True,
+            suffix="num%03",
+            expression="if(A > 400, A, null())",
+        )
+        self.assertRaster3dExists("b_001")
+        self.assertRaster3dDoesNotExist("b_00001")
 
 
 class TestRaster3dExtractionFails(TestCase):
-
     @classmethod
     def setUpClass(cls):
-        """Initiate the temporal GIS and set the region
-        """
+        """Initiate the temporal GIS and set the region"""
         cls.use_temp_region()
         cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region
-        """
+        """Remove the temporary region"""
         cls.del_temp_region()
 
     def test_error_handling(self):
@@ -155,9 +198,15 @@ class TestRaster3dExtractionFails(TestCase):
         # No output
         self.assertModuleFail("t.rast3d.extract", input="A", basename="b")
         # No basename
-        self.assertModuleFail("t.rast3d.extract", input="A", output="B",
-                          expression=" if(A > 400, A, null())")
+        self.assertModuleFail(
+            "t.rast3d.extract",
+            input="A",
+            output="B",
+            expression=" if(A > 400, A, null())",
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()

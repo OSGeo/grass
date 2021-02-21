@@ -86,6 +86,7 @@ import grass.script as grass
 
 ############################################################################
 
+
 def main():
     # lazy imports
     import grass.temporal as tgis
@@ -110,7 +111,7 @@ def main():
 
     update = False
     if aggr_type and type == "stvds":
-        return()
+        return ()
 
     if aggr_type and type != "stvds":
         stds.metadata.set_aggregation_type(aggregation_type=aggr_type)
@@ -130,7 +131,7 @@ def main():
         stds.update(dbif=dbif)
 
     if map_update:
-        #Update the registered maps from the grass spatial database
+        # Update the registered maps from the grass spatial database
         statement = ""
         # This dict stores the datasets that must be updated
         dataset_dict = {}
@@ -142,7 +143,7 @@ def main():
         for map in maps:
 
             count += 1
-            if count %10 == 0:
+            if count % 10 == 0:
                 grass.percent(count, len(maps), 1)
 
             map.select(dbif=dbif)
@@ -178,6 +179,7 @@ def main():
     stds.update_command_string(dbif=dbif)
 
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

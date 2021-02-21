@@ -103,8 +103,18 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.dataset_mapcalculator(inputs, output, "raster3d", expression,
-                               base, method, nprocs, register_null, spatial)
+    tgis.dataset_mapcalculator(
+        inputs,
+        output,
+        "raster3d",
+        expression,
+        base,
+        method,
+        nprocs,
+        register_null,
+        spatial,
+    )
+
 
 ###############################################################################
 

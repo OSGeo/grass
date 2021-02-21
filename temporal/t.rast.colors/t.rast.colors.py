@@ -127,7 +127,7 @@ def main():
     equi = flags["e"]
 
     if raster == "":
-        raster=None
+        raster = None
 
     if volume == "":
         volume = None
@@ -148,7 +148,7 @@ def main():
     if rows:
         # Create the r.colors input file
         filename = grass.tempfile(True)
-        file = open(filename, 'w')
+        file = open(filename, "w")
 
         for row in rows:
             string = "%s\n" % (row["id"])
@@ -156,28 +156,36 @@ def main():
 
         file.close()
 
-        flags_=""
-        if(remove):
-            flags_+="r"
-        if(write):
-            flags_+="w"
-        if(list):
-            flags_+="l"
-        if(invert):
-            flags_+="n"
-        if(log):
-            flags_+="g"
-        if(abslog):
-            flags_+="a"
-        if(equi):
-            flags_+="e"
+        flags_ = ""
+        if remove:
+            flags_ += "r"
+        if write:
+            flags_ += "w"
+        if list:
+            flags_ += "l"
+        if invert:
+            flags_ += "n"
+        if log:
+            flags_ += "g"
+        if abslog:
+            flags_ += "a"
+        if equi:
+            flags_ += "e"
 
         try:
-            grass.run_command("r.colors", flags=flags_, file=filename,
-                              color=color, raster=raster, volume=volume,
-                              rules=rules, overwrite=grass.overwrite())
+            grass.run_command(
+                "r.colors",
+                flags=flags_,
+                file=filename,
+                color=color,
+                raster=raster,
+                volume=volume,
+                rules=rules,
+                overwrite=grass.overwrite(),
+            )
         except CalledModuleError:
             grass.fatal(_("Error in r.colors call"))
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
