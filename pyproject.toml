@@ -28,9 +28,5 @@ exclude = '''
     | general
     | gui
     | imagery
-    | lib/gis
-    | temporal
-    | raster
-    | vector
 )
 '''

@@ -105,8 +105,20 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.extract_dataset(input, output, "vector", where, expression,
-                         base, time_suffix, nprocs, register_null, layer, type)
+    tgis.extract_dataset(
+        input,
+        output,
+        "vector",
+        where,
+        expression,
+        base,
+        time_suffix,
+        nprocs,
+        register_null,
+        layer,
+        type,
+    )
+
 
 ###############################################################################
 

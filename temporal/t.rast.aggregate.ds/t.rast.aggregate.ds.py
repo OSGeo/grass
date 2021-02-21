@@ -139,25 +139,34 @@ def main():
 
     if sampler_sp.get_temporal_type() != sp.get_temporal_type():
         dbif.close()
-        gcore.fatal(_("Input and aggregation dataset must have "
-                      "the same temporal type"))
+        gcore.fatal(
+            _("Input and aggregation dataset must have " "the same temporal type")
+        )
 
     # Check if intervals are present
     if sampler_sp.temporal_extent.get_map_time() != "interval":
         dbif.close()
-        gcore.fatal(_("All registered maps of the aggregation dataset "
-                      "must have time intervals"))
+        gcore.fatal(
+            _(
+                "All registered maps of the aggregation dataset "
+                "must have time intervals"
+            )
+        )
 
     # We will create the strds later, but need to check here
     tgis.check_new_stds(output, "strds", dbif, gcore.overwrite())
 
-    map_list = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=dbif)
+    map_list = sp.get_registered_maps_as_objects(
+        where=where, order="start_time", dbif=dbif
+    )
 
     if not map_list:
         dbif.close()
         gcore.fatal(_("Space time raster dataset <%s> is empty") % input)
 
-    granularity_list = sampler_sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=dbif)
+    granularity_list = sampler_sp.get_registered_maps_as_objects(
+        where=where, order="start_time", dbif=dbif
+    )
 
     if not granularity_list:
         dbif.close()
@@ -165,25 +174,47 @@ def main():
 
     gran = sampler_sp.get_granularity()
 
-    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list, granularity=gran,
-                                                                       map_list=map_list,
-                                                                       topo_list=topo_list, basename=base, time_suffix=time_suffix,
-                                                                       offset=offset, method=method, nprocs=nprocs, spatial=None,
-                                                                       overwrite=gcore.overwrite())
+    output_list = tgis.aggregate_by_topology(
+        granularity_list=granularity_list,
+        granularity=gran,
+        map_list=map_list,
+        topo_list=topo_list,
+        basename=base,
+        time_suffix=time_suffix,
+        offset=offset,
+        method=method,
+        nprocs=nprocs,
+        spatial=None,
+        overwrite=gcore.overwrite(),
+    )
 
     if output_list:
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        output_strds = tgis.open_new_stds(output, "strds", temporal_type,
-                                                                 title, description, semantic_type,
-                                                                 dbif, gcore.overwrite())
-        tgis.register_map_object_list("rast", output_list, output_strds, register_null,
-                                                       sp.get_relative_time_unit(), dbif)
+        output_strds = tgis.open_new_stds(
+            output,
+            "strds",
+            temporal_type,
+            title,
+            description,
+            semantic_type,
+            dbif,
+            gcore.overwrite(),
+        )
+        tgis.register_map_object_list(
+            "rast",
+            output_list,
+            output_strds,
+            register_null,
+            sp.get_relative_time_unit(),
+            dbif,
+        )
 
         # Update the raster metadata table entries with aggregation type
         output_strds.set_aggregation_type(method)
         output_strds.metadata.update(dbif)
 
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = gcore.parser()

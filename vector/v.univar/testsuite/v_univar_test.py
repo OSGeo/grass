@@ -12,11 +12,11 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-class TestProfiling(TestCase):
 
+class TestProfiling(TestCase):
     def test_flagg(self):
         """Testing flag g with map lakes"""
-        output_str = u"""n=15279
+        output_str = """n=15279
 nmissing=0
 nnull=0
 min=1
@@ -32,14 +32,13 @@ sample_stddev=4410.81
 sample_variance=1.94553e+07
 kurtosis=-1.20024
 skewness=-2.41826e-14"""
-        v_univar = SimpleModule("v.univar", flags="g", map='lakes', column='cat')
+        v_univar = SimpleModule("v.univar", flags="g", map="lakes", column="cat")
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout,
-                             reference=output_str)
+        self.assertLooksLike(actual=v_univar.outputs.stdout, reference=output_str)
 
     def test_flage(self):
         """Testing flag e with map geology"""
-        output_str = u"""number of features with non NULL attribute: 1832
+        output_str = """number of features with non NULL attribute: 1832
 number of missing attributes: 0
 number of NULL attributes: 0
 minimum: 166.947
@@ -59,14 +58,15 @@ skewness: 9.7065
 median (even number of cells): 10308.4
 3rd quartile: 29259.1
 90th percentile: 86449.7"""
-        v_univar = SimpleModule('v.univar', map='geology', column='PERIMETER', flags='e')
+        v_univar = SimpleModule(
+            "v.univar", map="geology", column="PERIMETER", flags="e"
+        )
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout,
-                             reference=output_str)
+        self.assertLooksLike(actual=v_univar.outputs.stdout, reference=output_str)
 
     def test_flagw(self):
         """Testing flag w with map lakes"""
-        output_str = u"""number of features with non NULL attribute: 15279
+        output_str = """number of features with non NULL attribute: 15279
 number of missing attributes: 0
 number of NULL attributes: 0
 minimum: 2
@@ -75,14 +75,13 @@ range: 15278
 sum: 5.76349e+11
 mean: 6190.76
 mean of absolute values: 6190.76"""
-        v_univar = SimpleModule('v.univar', map='lakes', column='FULL_HYDRO', flags='w')
+        v_univar = SimpleModule("v.univar", map="lakes", column="FULL_HYDRO", flags="w")
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout,
-                             reference=output_str)
+        self.assertLooksLike(actual=v_univar.outputs.stdout, reference=output_str)
 
     def test_flagd(self):
         """Testing flag d with map hospitals"""
-        univar_string = u"""number of primitives: 160
+        univar_string = """number of primitives: 160
 number of non zero distances: 12561
 number of zero distances: 0
 minimum: 9.16773
@@ -98,30 +97,34 @@ sample standard deviation: 128511
 sample variance: 1.6515e+10
 kurtosis: 0.277564
 skewness: 0.801646"""
-        v_univar = SimpleModule('v.univar', map='hospitals', column='CITY', flags='d')
+        v_univar = SimpleModule("v.univar", map="hospitals", column="CITY", flags="d")
         v_univar.run()
-        self.assertLooksLike(actual=v_univar.outputs.stdout,
-                             reference=univar_string)
+        self.assertLooksLike(actual=v_univar.outputs.stdout, reference=univar_string)
 
     def test_output(self):
         """Testing output of v.univar"""
-        univar_string="""n=160
+        univar_string = """n=160
         min=1
         max=160
         range=159
         mean=80.5
         sum=12880"""
-        self.assertVectorFitsUnivar(map='hospitals', column='cat', reference=univar_string, precision=3)
+        self.assertVectorFitsUnivar(
+            map="hospitals", column="cat", reference=univar_string, precision=3
+        )
 
     def test_output2(self):
         """Testing output of v.univar"""
-        univar_string="""n=357
+        univar_string = """n=357
         min=1
         max=357
         range=356
         mean=179.82
         sum=63836"""
-        self.assertVectorFitsUnivar(map='roadsmajor', column='MAJORRDS_', reference=univar_string, precision=3)
+        self.assertVectorFitsUnivar(
+            map="roadsmajor", column="MAJORRDS_", reference=univar_string, precision=3
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

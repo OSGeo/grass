@@ -52,27 +52,34 @@ TABLE_1 = """cat|x|y|ed_cat|field_estimate
 
 class SimpleCsvTestCase(TestCase):
 
-    xyvector = 'yxvetor_test'
+    xyvector = "yxvetor_test"
 
     def tearDown(self):
         """Remove the vector map after each test method"""
-        self.runModule('g.remove', flags='f', type='vector',
-                       name=self.xyvector)
+        self.runModule("g.remove", flags="f", type="vector", name=self.xyvector)
 
     def test_no_text_delimeter(self):
         """Test type of resulting map"""
         self.assertModule(
-            'v.in.ascii', input='-', output=self.xyvector,
-            separator='comma', skip=1, x=2, y=3, cat=1,
+            "v.in.ascii",
+            input="-",
+            output=self.xyvector,
+            separator="comma",
+            skip=1,
+            x=2,
+            y=3,
+            cat=1,
             columns="cat int, x double, y double,"
-                    " ed_cat varchar(20), field_estimate varchar(20)",
-            stdin_=INPUT_NOQUOTES)
+            " ed_cat varchar(20), field_estimate varchar(20)",
+            stdin_=INPUT_NOQUOTES,
+        )
 
-        category = read_command('v.db.select', map=self.xyvector,
-                                separator='pipe')
-        self.assertEqual(first=TABLE_1.replace('\n', os.linesep),
-                         second=category,
-                         msg="Attribute table has wrong entries")
+        category = read_command("v.db.select", map=self.xyvector, separator="pipe")
+        self.assertEqual(
+            first=TABLE_1.replace("\n", os.linesep),
+            second=category,
+            msg="Attribute table has wrong entries",
+        )
 
     def test_text_delimeter(self):
         """Test loading CSV with text delimiter
@@ -80,18 +87,26 @@ class SimpleCsvTestCase(TestCase):
         Text delimiter added in r63581
         """
         self.assertModule(
-            'v.in.ascii', input='-', output=self.xyvector,
-            separator='comma', text='doublequote',
-            skip=1, x=2, y=3, cat=1,
+            "v.in.ascii",
+            input="-",
+            output=self.xyvector,
+            separator="comma",
+            text="doublequote",
+            skip=1,
+            x=2,
+            y=3,
+            cat=1,
             columns="cat int, x double, y double,"
-                    " ed_cat varchar(20), field_estimate varchar(20)",
-            stdin_=INPUT_DOUBLEQUOTES)
+            " ed_cat varchar(20), field_estimate varchar(20)",
+            stdin_=INPUT_DOUBLEQUOTES,
+        )
 
-        category = read_command('v.db.select', map=self.xyvector,
-                                separator='pipe')
-        self.assertEqual(first=TABLE_1.replace('\n', os.linesep),
-                         second=category,
-                         msg="Attribute table has wrong entries")
+        category = read_command("v.db.select", map=self.xyvector, separator="pipe")
+        self.assertEqual(
+            first=TABLE_1.replace("\n", os.linesep),
+            second=category,
+            msg="Attribute table has wrong entries",
+        )
         # TODO: a general method to compare attribute tables? (might need to solve because of floats)
         # TODO: standardize string strip? perhaps discourage, it messes up the diff
         # TODO: use replace solution for newlines in lib (compare to current one)
@@ -102,34 +117,50 @@ class SimpleCsvTestCase(TestCase):
         Using double quote character for quote.
         """
         self.assertModule(
-            'v.in.ascii', input='-', output=self.xyvector,
-            separator='tab', text='"',
-            skip=1, x=2, y=3, cat=1,
+            "v.in.ascii",
+            input="-",
+            output=self.xyvector,
+            separator="tab",
+            text='"',
+            skip=1,
+            x=2,
+            y=3,
+            cat=1,
             columns="cat int, x double, y double,"
-                    " ed_cat varchar(20), field_estimate varchar(20)",
-            stdin_=INPUT_TSV)
+            " ed_cat varchar(20), field_estimate varchar(20)",
+            stdin_=INPUT_TSV,
+        )
 
-        category = read_command('v.db.select', map=self.xyvector,
-                                separator='pipe')
-        self.assertEqual(first=TABLE_1.replace('\n', os.linesep),
-                         second=category,
-                         msg="Attribute table has wrong entries")
+        category = read_command("v.db.select", map=self.xyvector, separator="pipe")
+        self.assertEqual(
+            first=TABLE_1.replace("\n", os.linesep),
+            second=category,
+            msg="Attribute table has wrong entries",
+        )
 
     def test_uncommon_delims(self):
         """Test loading CSV with uncommon delimiters"""
         self.assertModule(
-            'v.in.ascii', input='-', output=self.xyvector,
-            separator='@', text='^',
-            skip=1, x=2, y=3, cat=1,
+            "v.in.ascii",
+            input="-",
+            output=self.xyvector,
+            separator="@",
+            text="^",
+            skip=1,
+            x=2,
+            y=3,
+            cat=1,
             columns="cat int, x double, y double,"
-                    " ed_cat varchar(20), field_estimate varchar(20)",
-            stdin_=INPUT_UNCOMMON)
+            " ed_cat varchar(20), field_estimate varchar(20)",
+            stdin_=INPUT_UNCOMMON,
+        )
 
-        category = read_command('v.db.select', map=self.xyvector,
-                                separator='pipe')
-        self.assertEqual(first=TABLE_1.replace('\n', os.linesep),
-                         second=category,
-                         msg="Attribute table has wrong entries")
+        category = read_command("v.db.select", map=self.xyvector, separator="pipe")
+        self.assertEqual(
+            first=TABLE_1.replace("\n", os.linesep),
+            second=category,
+            msg="Attribute table has wrong entries",
+        )
 
 
 INPUT_DELIM_IN_TEXT = """Id,POINT_X,POINT_Y,Category,"ED field estimate"
@@ -151,12 +182,11 @@ TABLE_2 = """cat|x|y|ed_cat|field_estimate
 
 class AdvancedCsvTestCase(TestCase):
 
-    xyvector = 'yxvetor_test'
+    xyvector = "yxvetor_test"
 
     def tearDown(self):
         """Remove the vector map after each test method"""
-        self.runModule('g.remove', flags='f', type='vector',
-                       name=self.xyvector)
+        self.runModule("g.remove", flags="f", type="vector", name=self.xyvector)
 
     def test_delimeter_in_text(self):
         """Test loading CSV with delimiter in text
@@ -164,19 +194,27 @@ class AdvancedCsvTestCase(TestCase):
         Text delimiter added in r63581
         """
         self.assertModule(
-            'v.in.ascii', input='-', output=self.xyvector,
-            separator='comma', text='doublequote',
-            skip=1, x=2, y=3, cat=1,
+            "v.in.ascii",
+            input="-",
+            output=self.xyvector,
+            separator="comma",
+            text="doublequote",
+            skip=1,
+            x=2,
+            y=3,
+            cat=1,
             columns="cat int, x double, y double,"
-                    " ed_cat varchar(40), field_estimate varchar(40)",
-            stdin_=INPUT_DELIM_IN_TEXT)
+            " ed_cat varchar(40), field_estimate varchar(40)",
+            stdin_=INPUT_DELIM_IN_TEXT,
+        )
 
-        category = read_command('v.db.select', map=self.xyvector,
-                                separator='pipe')
-        self.assertEqual(first=TABLE_2.replace('\n', os.linesep),
-                         second=category,
-                         msg="Attribute table has wrong entries")
+        category = read_command("v.db.select", map=self.xyvector, separator="pipe")
+        self.assertEqual(
+            first=TABLE_2.replace("\n", os.linesep),
+            second=category,
+            msg="Attribute table has wrong entries",
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

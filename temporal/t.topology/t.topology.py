@@ -63,8 +63,8 @@ def main():
     name = options["input"]
     type = options["type"]
     where = options["where"]
-    temporal_relations = flags['m']
-    spatio_temporal_relations = flags['s']
+    temporal_relations = flags["m"]
+    spatio_temporal_relations = flags["s"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -72,8 +72,7 @@ def main():
     sp = tgis.open_old_stds(name, type)
 
     # Get ordered map list
-    maps = sp.get_registered_maps_as_objects(
-        where=where, order="start_time", dbif=None)
+    maps = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=None)
 
     spatial = None
 
@@ -90,7 +89,9 @@ def main():
     sp.base.print_info()
 
     #      0123456789012345678901234567890
-    print(" +-------------------- Temporal topology -------------------------------------+")
+    print(
+        " +-------------------- Temporal topology -------------------------------------+"
+    )
     if where:
         print(" | Is subset of dataset: ...... True")
     else:
@@ -124,7 +125,9 @@ def main():
         gran = tgis.compute_relative_time_granularity(maps)
     print(" | Granularity: ............... %s" % str(gran))
 
-    print(" +-------------------- Topological relations ---------------------------------+")
+    print(
+        " +-------------------- Topological relations ---------------------------------+"
+    )
     dict_ = sp.count_temporal_relations(maps)
 
     if dict_:
@@ -156,7 +159,10 @@ def main():
                 print(" | Follows: ................... %s" % (dict_[key]))
             if key == "precedes":
                 print(" | Precedes: .................. %s" % (dict_[key]))
-    print(" +----------------------------------------------------------------------------+")
+    print(
+        " +----------------------------------------------------------------------------+"
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()
