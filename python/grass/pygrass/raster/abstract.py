@@ -4,8 +4,15 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 import ctypes
 
 #
@@ -46,20 +53,20 @@ proj: {proj}
 
 
 class Info(object):
-    def __init__(self, name, mapset=''):
+    def __init__(self, name, mapset=""):
         """Read the information for a raster map. ::
 
-            >>> info = Info(test_raster_name)
-            >>> info.read()
-            >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-            abstract_test_map@
-            rows: 4
-            cols: 4
-            north: 40.0 south: 0.0 nsres:10.0
-            east:  40.0 west: 0.0 ewres:10.0
-            range: 11, 44
-            ...
-            <BLANKLINE>
+        >>> info = Info(test_raster_name)
+        >>> info.read()
+        >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        abstract_test_map@
+        rows: 4
+        cols: 4
+        north: 40.0 south: 0.0 nsres:10.0
+        east:  40.0 west: 0.0 ewres:10.0
+        range: 11, 44
+        ...
+        <BLANKLINE>
 
         """
         self.name = name
@@ -68,7 +75,7 @@ class Info(object):
         self.c_range = None
 
     def _get_range(self):
-        if self.mtype == 'CELL':
+        if self.mtype == "CELL":
             self.c_range = ctypes.pointer(libraster.Range())
             libraster.Rast_read_range(self.name, self.mapset, self.c_range)
         else:
@@ -164,9 +171,9 @@ class Info(object):
         band_ref = None
         p_filename = ctypes.c_char_p()
         p_band_ref = ctypes.c_char_p()
-        ret = libraster.Rast_read_band_reference(self.name, self.mapset,
-                                                 ctypes.byref(p_filename),
-                                                 ctypes.byref(p_band_ref))
+        ret = libraster.Rast_read_band_reference(
+            self.name, self.mapset, ctypes.byref(p_filename), ctypes.byref(p_band_ref)
+        )
         if ret:
             band_ref = utils.decode(p_band_ref.value)
             libgis.G_free(p_filename)
@@ -183,6 +190,7 @@ class Info(object):
         if band_reference:
             # assign
             from grass.bandref import BandReferenceReader, BandReferenceReaderError
+
             reader = BandReferenceReader()
             # determine filename (assuming that band_reference is unique!)
             try:
@@ -195,9 +203,7 @@ class Info(object):
                 raise
 
             # write band reference
-            libraster.Rast_write_band_reference(self.name,
-                                                filename,
-                                                band_reference)
+            libraster.Rast_write_band_reference(self.name, filename, band_reference)
         else:
             libraster.Rast_remove_band_reference(self.name)
 
@@ -220,19 +226,46 @@ class Info(object):
     vdatum = property(_get_vdatum, _set_vdatum)
 
     def __repr__(self):
-        return INFO.format(name=self.name, mapset=self.mapset,
-                           rows=self.rows, cols=self.cols,
-                           north=self.north, south=self.south,
-                           east=self.east, west=self.west,
-                           top=self.top, bottom=self.bottom,
-                           nsres=self.nsres, ewres=self.ewres,
-                           tbres=self.tbres, zone=self.zone,
-                           proj=self.proj, min=self.min, max=self.max)
+        return INFO.format(
+            name=self.name,
+            mapset=self.mapset,
+            rows=self.rows,
+            cols=self.cols,
+            north=self.north,
+            south=self.south,
+            east=self.east,
+            west=self.west,
+            top=self.top,
+            bottom=self.bottom,
+            nsres=self.nsres,
+            ewres=self.ewres,
+            tbres=self.tbres,
+            zone=self.zone,
+            proj=self.proj,
+            min=self.min,
+            max=self.max,
+        )
 
     def keys(self):
-        return ['name', 'mapset', 'rows', 'cols', 'north', 'south',
-                'east', 'west', 'top', 'bottom', 'nsres', 'ewres', 'tbres',
-                'zone', 'proj', 'min', 'max']
+        return [
+            "name",
+            "mapset",
+            "rows",
+            "cols",
+            "north",
+            "south",
+            "east",
+            "west",
+            "top",
+            "bottom",
+            "nsres",
+            "ewres",
+            "tbres",
+            "zone",
+            "proj",
+            "min",
+            "max",
+        ]
 
     def items(self):
         return [(k, self.__getattribute__(k)) for k in self.keys()]
@@ -241,8 +274,7 @@ class Info(object):
         return ((k, self.__getattribute__(k)) for k in self.keys())
 
     def _repr_html_(self):
-        return dict2html(dict(self.items()), keys=self.keys(),
-                         border='1', kdec='b')
+        return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
 
 
 class RasterAbstractBase(object):
@@ -295,8 +327,8 @@ class RasterAbstractBase(object):
         self.info = Info(self.name, self.mapset)
         self._aopen = aopen
         self._kwopen = kwopen
-        self._mtype = 'CELL'
-        self._mode = 'r'
+        self._mtype = "CELL"
+        self._mode = "r"
         self._overwrite = False
 
     def __enter__(self):
@@ -312,11 +344,11 @@ class RasterAbstractBase(object):
 
     def _set_mtype(self, mtype):
         """Private method to change the Raster type"""
-        if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
+        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
             str_err = "Raster type: {0} not supported ('CELL','FCELL','DCELL')"
             raise ValueError(_(str_err).format(mtype))
         self._mtype = mtype
-        self._gtype = RTYPE[self.mtype]['grass type']
+        self._gtype = RTYPE[self.mtype]["grass type"]
 
     mtype = property(fget=_get_mtype, fset=_set_mtype)
 
@@ -324,7 +356,7 @@ class RasterAbstractBase(object):
         return self._mode
 
     def _set_mode(self, mode):
-        if mode.upper() not in ('R', 'W'):
+        if mode.upper() not in ("R", "W"):
             str_err = _("Mode type: {0} not supported ('r', 'w')")
             raise ValueError(str_err.format(mode))
         self._mode = mode
@@ -391,7 +423,11 @@ class RasterAbstractBase(object):
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
-                raise IndexError("The row index {0} is out of range [0, {1}).".format(key, self._rows))
+                raise IndexError(
+                    "The row index {0} is out of range [0, {1}).".format(
+                        key, self._rows
+                    )
+                )
             return self.get_row(key)
         else:
             fatal("Invalid argument type.")
@@ -414,9 +450,9 @@ class RasterAbstractBase(object):
         True
         """
         if self.name:
-            if self.mapset == '':
+            if self.mapset == "":
                 mapset = utils.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset if mapset else ''
+                self.mapset = mapset if mapset else ""
                 return True if mapset else False
             return bool(utils.get_mapset_raster(self.name, self.mapset))
         else:
@@ -445,7 +481,7 @@ class RasterAbstractBase(object):
         """Remove the map"""
         if self.is_open():
             self.close()
-        utils.remove(self.name, 'rast')
+        utils.remove(self.name, "rast")
 
     def fullname(self):
         """Return the full name of a raster map: name@mapset"""
@@ -468,7 +504,7 @@ class RasterAbstractBase(object):
 
         gis_env = gisenv()
 
-        if mapset and mapset != gis_env['MAPSET']:
+        if mapset and mapset != gis_env["MAPSET"]:
             return "{name}@{mapset}".format(name=name, mapset=mapset)
         else:
             return name
@@ -476,39 +512,38 @@ class RasterAbstractBase(object):
     def rename(self, newname):
         """Rename the map"""
         if self.exist():
-            utils.rename(self.name, newname, 'rast')
+            utils.rename(self.name, newname, "rast")
         self._name = newname
 
-    def set_region_from_rast(self, rastname='', mapset=''):
+    def set_region_from_rast(self, rastname="", mapset=""):
         """Set the computational region from a map,
-           if rastername and mapset is not specify, use itself.
-           This region will be used by all
-           raster map layers that are opened in the same process.
+        if rastername and mapset is not specify, use itself.
+        This region will be used by all
+        raster map layers that are opened in the same process.
 
-           The GRASS region settings will not be modified.
+        The GRASS region settings will not be modified.
 
-           call C function `Rast_get_cellhd`, `Rast_set_window`
+        call C function `Rast_get_cellhd`, `Rast_set_window`
 
-           """
+        """
         if self.is_open():
             fatal("You cannot change the region if map is open")
             raise
         region = Region()
-        if rastname == '':
+        if rastname == "":
             rastname = self.name
-        if mapset == '':
+        if mapset == "":
             mapset = self.mapset
 
-        libraster.Rast_get_cellhd(rastname, mapset,
-                                  region.byref())
+        libraster.Rast_get_cellhd(rastname, mapset, region.byref())
         self._set_raster_window(region)
 
     def set_region(self, region):
         """Set the computational region that can be different from the
-           current region settings. This region will be used by all
-           raster map layers that are opened in the same process.
+        current region settings. This region will be used by all
+        raster map layers that are opened in the same process.
 
-           The GRASS region settings will not be modified.
+        The GRASS region settings will not be modified.
         """
         if self.is_open():
             fatal("You cannot change the region if map is open")
@@ -574,12 +609,12 @@ class RasterAbstractBase(object):
         self.cats.write(self)
 
     @must_be_open
-    def read_cats_rules(self, filename, sep=':'):
+    def read_cats_rules(self, filename, sep=":"):
         """Read category from the raster map file"""
         self.cats.read_rules(filename, sep)
 
     @must_be_open
-    def write_cats_rules(self, filename, sep=':'):
+    def write_cats_rules(self, filename, sep=":"):
         """Write category to the raster map file"""
         self.cats.write_rules(filename, sep)
 
@@ -605,17 +640,22 @@ class RasterAbstractBase(object):
         """Set or update a category"""
         self.cats.set_cat(index, (label, min_cat, max_cat))
 
+
 if __name__ == "__main__":
 
     import doctest
     from grass.pygrass.modules import Module
+
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
-    Module("r.mapcalc", expression="%s = row() + (10 * col())" % (test_raster_name),
-        overwrite=True)
+    Module(
+        "r.mapcalc",
+        expression="%s = row() + (10 * col())" % (test_raster_name),
+        overwrite=True,
+    )
 
     doctest.testmod()
 
     """Remove the generated vector map, if exist"""
-    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
-        Module("g.remove", flags='f', type='raster', name=test_raster_name)
+        Module("g.remove", flags="f", type="raster", name=test_raster_name)

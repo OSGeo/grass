@@ -18,8 +18,14 @@ for details.
 :authors: Soeren Gebbert
 """
 from .core import get_tgis_message_interface
-from .space_time_datasets import SpaceTimeRaster3DDataset, SpaceTimeRasterDataset, \
-    SpaceTimeVectorDataset, Raster3DDataset, RasterDataset, VectorDataset
+from .space_time_datasets import (
+    SpaceTimeRaster3DDataset,
+    SpaceTimeRasterDataset,
+    SpaceTimeVectorDataset,
+    Raster3DDataset,
+    RasterDataset,
+    VectorDataset,
+)
 
 
 ###############################################################################
@@ -28,9 +34,9 @@ from .space_time_datasets import SpaceTimeRaster3DDataset, SpaceTimeRasterDatase
 def dataset_factory(type, id):
     """A factory functions to create space time or map datasets
 
-       :param type: the dataset type: rast or raster; rast3d, raster3d or raster_3d;
-                    vect or vector; strds; str3ds; stvds
-       :param id: The id of the dataset ("name@mapset")
+    :param type: the dataset type: rast or raster; rast3d, raster3d or raster_3d;
+                 vect or vector; strds; str3ds; stvds
+    :param id: The id of the dataset ("name@mapset")
     """
     if type == "strds":
         sp = SpaceTimeRasterDataset(id)

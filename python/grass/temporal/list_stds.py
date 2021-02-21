@@ -27,49 +27,50 @@ import grass.script as gscript
 ###############################################################################
 
 
-def get_dataset_list(type, temporal_type, columns=None, where=None,
-                     order=None, dbif=None):
-    """ Return a list of time stamped maps or space time datasets of a specific
-        temporal type that are registered in the temporal database
+def get_dataset_list(
+    type, temporal_type, columns=None, where=None, order=None, dbif=None
+):
+    """Return a list of time stamped maps or space time datasets of a specific
+    temporal type that are registered in the temporal database
 
-        This method returns a dictionary, the keys are the available mapsets,
-        the values are the rows from the SQL database query.
+    This method returns a dictionary, the keys are the available mapsets,
+    the values are the rows from the SQL database query.
 
-        :param type: The type of the datasets (strds, str3ds, stvds, raster,
-                     raster_3d, vector)
-        :param temporal_type: The temporal type of the datasets (absolute,
-                              relative)
-        :param columns: A comma separated list of columns that will be selected
-        :param where: A where statement for selected listing without "WHERE"
-        :param order: A comma separated list of columns to order the
-                      datasets by category
-        :param dbif: The database interface to be used
+    :param type: The type of the datasets (strds, str3ds, stvds, raster,
+                 raster_3d, vector)
+    :param temporal_type: The temporal type of the datasets (absolute,
+                          relative)
+    :param columns: A comma separated list of columns that will be selected
+    :param where: A where statement for selected listing without "WHERE"
+    :param order: A comma separated list of columns to order the
+                  datasets by category
+    :param dbif: The database interface to be used
 
-        :return: A dictionary with the rows of the SQL query for each
-                 available mapset
+    :return: A dictionary with the rows of the SQL query for each
+             available mapset
 
-        .. code-block:: python
+    .. code-block:: python
 
-            >>> import grass.temporal as tgis
-            >>> tgis.core.init()
-            >>> name = "list_stds_test"
-            >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
-            ... temporaltype="absolute", title="title", descr="descr",
-            ... semantic="mean", dbif=None, overwrite=True)
-            >>> mapset = tgis.get_current_mapset()
-            >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
-            >>> rows =  stds_list[mapset]
-            >>> for row in rows:
-            ...     if row["name"] == name:
-            ...         print(True)
-            True
-            >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
-            >>> rows =  stds_list[mapset]
-            >>> for row in rows:
-            ...     if row["name"] == name and row["mapset"] == mapset:
-            ...         print(True)
-            True
-            >>> check = sp.delete()
+        >>> import grass.temporal as tgis
+        >>> tgis.core.init()
+        >>> name = "list_stds_test"
+        >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
+        ... temporaltype="absolute", title="title", descr="descr",
+        ... semantic="mean", dbif=None, overwrite=True)
+        >>> mapset = tgis.get_current_mapset()
+        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
+        >>> rows =  stds_list[mapset]
+        >>> for row in rows:
+        ...     if row["name"] == name:
+        ...         print(True)
+        True
+        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
+        >>> rows =  stds_list[mapset]
+        >>> for row in rows:
+        ...     if row["name"] == name and row["mapset"] == mapset:
+        ...         print(True)
+        True
+        >>> check = sp.delete()
 
     """
     id = None
@@ -113,41 +114,52 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
 
     return result
 
+
 ###############################################################################
 
 
-def list_maps_of_stds(type, input, columns, order, where, separator,
-                      method, no_header=False, gran=None, dbif=None,
-                      outpath=None):
-    """ List the maps of a space time dataset using different methods
+def list_maps_of_stds(
+    type,
+    input,
+    columns,
+    order,
+    where,
+    separator,
+    method,
+    no_header=False,
+    gran=None,
+    dbif=None,
+    outpath=None,
+):
+    """List the maps of a space time dataset using different methods
 
-        :param type: The type of the maps raster, raster3d or vector
-        :param input: Name of a space time raster dataset
-        :param columns: A comma separated list of columns to be printed to stdout
-        :param order: A comma separated list of columns to order the
-                      maps by category
-        :param where: A where statement for selected listing without "WHERE"
-                      e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
-        :param separator: The field separator character between the columns
-        :param method: String identifier to select a method out of cols,
-                       comma,delta or deltagaps
-        :param dbif: The database interface to be used
+    :param type: The type of the maps raster, raster3d or vector
+    :param input: Name of a space time raster dataset
+    :param columns: A comma separated list of columns to be printed to stdout
+    :param order: A comma separated list of columns to order the
+                  maps by category
+    :param where: A where statement for selected listing without "WHERE"
+                  e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
+    :param separator: The field separator character between the columns
+    :param method: String identifier to select a method out of cols,
+                   comma,delta or deltagaps
+    :param dbif: The database interface to be used
 
-            - "cols" Print preselected columns specified by columns
-            - "comma" Print the map ids ("name@mapset") as comma separated string
-            - "delta" Print the map ids ("name@mapset") with start time,
-               end time, relative length of intervals and the relative
-               distance to the begin
-            - "deltagaps" Same as "delta" with additional listing of gaps.
-               Gaps can be easily identified as the id is "None"
-            - "gran" List map using the granularity of the space time dataset,
-               columns are identical to deltagaps
+        - "cols" Print preselected columns specified by columns
+        - "comma" Print the map ids ("name@mapset") as comma separated string
+        - "delta" Print the map ids ("name@mapset") with start time,
+           end time, relative length of intervals and the relative
+           distance to the begin
+        - "deltagaps" Same as "delta" with additional listing of gaps.
+           Gaps can be easily identified as the id is "None"
+        - "gran" List map using the granularity of the space time dataset,
+           columns are identical to deltagaps
 
-        :param no_header: Suppress the printing of column names
-        :param gran: The user defined granule to be used if method=gran is
-                     set, in case gran=None the granule of the space time
-                     dataset is used
-        :param outpath: The path to file where to save output
+    :param no_header: Suppress the printing of column names
+    :param gran: The user defined granule to be used if method=gran is
+                 set, in case gran=None the granule of the space time
+                 dataset is used
+    :param outpath: The path to file where to save output
     """
 
     dbif, connection_state_changed = init_dbif(dbif)
@@ -159,7 +171,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
         separator = "\t"
 
     if outpath:
-        outfile = open(outpath, 'w')
+        outfile = open(outpath, "w")
 
     # This method expects a list of objects for gap detection
     if method == "delta" or method == "deltagaps" or method == "gran":
@@ -168,16 +180,16 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
         else:
             columns = "id,name,mapset,start_time,end_time"
         if method == "deltagaps":
-            maps = sp.get_registered_maps_as_objects_with_gaps(where=where,
-                                                               dbif=dbif)
+            maps = sp.get_registered_maps_as_objects_with_gaps(where=where, dbif=dbif)
         elif method == "delta":
-            maps = sp.get_registered_maps_as_objects(where=where,
-                                                     order="start_time",
-                                                     dbif=dbif)
+            maps = sp.get_registered_maps_as_objects(
+                where=where, order="start_time", dbif=dbif
+            )
         elif method == "gran":
             if gran is not None and gran != "":
-                maps = sp.get_registered_maps_as_objects_by_granularity(gran=gran,
-                                                                        dbif=dbif)
+                maps = sp.get_registered_maps_as_objects_by_granularity(
+                    gran=gran, dbif=dbif
+                )
             else:
                 maps = sp.get_registered_maps_as_objects_by_granularity(dbif=dbif)
 
@@ -193,7 +205,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             string += "%s%s" % ("interval_length", separator)
             string += "%s" % ("distance_from_begin")
             if outpath:
-                outfile.write('{st}\n'.format(st=string))
+                outfile.write("{st}\n".format(st=string))
             else:
                 print(string)
 
@@ -241,14 +253,14 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 string += "%s%s" % (delta, separator)
                 string += "%s" % (delta_first)
                 if outpath:
-                    outfile.write('{st}\n'.format(st=string))
+                    outfile.write("{st}\n".format(st=string))
                 else:
                     print(string)
 
     else:
         # In comma separated mode only map ids are needed
         if method == "comma":
-            if columns not in ['id', 'name']:
+            if columns not in ["id", "name"]:
                 columns = "id"
 
         rows = sp.get_registered_maps(columns, where, order, dbif)
@@ -258,9 +270,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             err = "Space time %(sp)s dataset <%(i)s> is empty"
             if where:
                 err += " or where condition is wrong"
-            gscript.fatal(_(err) % {
-                'sp': sp.get_new_map_instance(None).get_type(),
-                'i': sp.get_id()})
+            gscript.fatal(
+                _(err)
+                % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
+            )
 
         if rows:
             if method == "comma":
@@ -273,7 +286,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                         string += ",%s" % row[columns]
                     count += 1
                 if outpath:
-                    outfile.write('{st}\n'.format(st=string))
+                    outfile.write("{st}\n".format(st=string))
                 else:
                     print(string)
 
@@ -292,7 +305,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                             output += str(key)
                         count += 1
                     if outpath:
-                        outfile.write('{st}\n'.format(st=output))
+                        outfile.write("{st}\n".format(st=output))
                     else:
                         print(output)
 
@@ -306,7 +319,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                             output += str(col)
                         count += 1
                     if outpath:
-                        outfile.write('{st}\n'.format(st=output))
+                        outfile.write("{st}\n".format(st=output))
                     else:
                         print(output)
     if outpath:
@@ -314,8 +327,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
     if connection_state_changed:
         dbif.close()
 
+
 ###############################################################################
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

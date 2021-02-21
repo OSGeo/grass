@@ -19,11 +19,12 @@ class VectorTopoTestCase(TestCase):
     def setUpClass(cls):
 
         from grass.pygrass import utils
+
         utils.create_test_vector_map(cls.tmpname)
 
         cls.vect = None
         cls.vect = VectorTopo(cls.tmpname)
-        cls.vect.open('r')
+        cls.vect.open("r")
         cls.vect.close()
 
     @classmethod
@@ -32,8 +33,7 @@ class VectorTopoTestCase(TestCase):
             cls.vect.close()
 
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='vector',
-                      name=cls.tmpname)
+        cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_getitem_slice(self):
         """Test that getitem handle correctly the slice starting from 1"""
@@ -62,9 +62,10 @@ class VectorTopoTestCase(TestCase):
         an integer or a slice"""
         with VectorTopo(self.tmpname, mode="r") as vect:
             with self.assertRaises(ValueError):
-                vect['value']
+                vect["value"]
 
             self.vect.close()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

@@ -5,8 +5,15 @@ Created on Wed Aug  8 15:29:21 2012
 @author: pietro
 
 """
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 
 import os
 import sys
@@ -39,7 +46,7 @@ if sys.version_info.major >= 3:
 # For test purposes
 test_vector_name = "table_doctest_map"
 
-DRIVERS = ('sqlite', 'pg')
+DRIVERS = ("sqlite", "pg")
 
 
 def get_path(path, vect_name=None):
@@ -69,11 +76,11 @@ def get_path(path, vect_name=None):
         return path
     else:
         mapset = Mapset()
-        path = path.replace('$GISDBASE', mapset.gisdbase)
-        path = path.replace('$LOCATION_NAME', mapset.location)
-        path = path.replace('$MAPSET', mapset.name)
+        path = path.replace("$GISDBASE", mapset.gisdbase)
+        path = path.replace("$LOCATION_NAME", mapset.location)
+        path = path.replace("$MAPSET", mapset.name)
         if vect_name is not None:
-            path = path.replace('$MAP', vect_name)
+            path = path.replace("$MAP", vect_name)
         return path
 
 
@@ -105,7 +112,7 @@ class Filters(object):
 
     def select(self, *args):
         """Create the select query"""
-        cols = ', '.join(args) if args else '*'
+        cols = ", ".join(args) if args else "*"
         select = sql.SELECT[:-1]
         self._select = select.format(cols=cols, tname=self.tname)
         return self
@@ -117,7 +124,7 @@ class Filters(object):
                           `cat = 1`
         :type condition: str
         """
-        self._where = 'WHERE {condition}'.format(condition=condition)
+        self._where = "WHERE {condition}".format(condition=condition)
         return self
 
     def order_by(self, *orderby):
@@ -126,7 +133,7 @@ class Filters(object):
         :param orderby: the name of column/s to order the result
         :type orderby: str
         """
-        self._orderby = 'ORDER BY {orderby}'.format(orderby=', '.join(orderby))
+        self._orderby = "ORDER BY {orderby}".format(orderby=", ".join(orderby))
         return self
 
     def limit(self, number):
@@ -138,7 +145,7 @@ class Filters(object):
         if not isinstance(number, int):
             raise ValueError("Must be an integer.")
         else:
-            self._limit = 'LIMIT {number}'.format(number=number)
+            self._limit = "LIMIT {number}".format(number=number)
         return self
 
     def group_by(self, *groupby):
@@ -147,7 +154,7 @@ class Filters(object):
         :param groupby: the name of column/s to group the result
         :type groupby: str, list
         """
-        self._groupby = 'GROUP BY {groupby}'.format(groupby=', '.join(groupby))
+        self._groupby = "GROUP BY {groupby}".format(groupby=", ".join(groupby))
         return self
 
     def get_sql(self):
@@ -165,7 +172,7 @@ class Filters(object):
             sql_list.append(self._orderby)
         if self._limit is not None:
             sql_list.append(self._limit)
-        return "%s;" % ' '.join(sql_list)
+        return "%s;" % " ".join(sql_list)
 
     def reset(self):
         """Clean internal variables"""
@@ -201,7 +208,7 @@ class Columns(object):
 
     """
 
-    def __init__(self, tname, connection, key='cat'):
+    def __init__(self, tname, connection, key="cat"):
         self.tname = tname
         self.conn = connection
         self.key = key
@@ -262,7 +269,7 @@ class Columns(object):
         True
 
         """
-        return hasattr(self.conn, 'xid')
+        return hasattr(self.conn, "xid")
 
     def update_odict(self):
         """Read columns name and types from table and update the odict
@@ -275,8 +282,9 @@ class Columns(object):
             diz = dict(cur.fetchall())
             odict = OrderedDict()
             import psycopg2 as pg
+
             try:
-                cur.execute(sql.SELECT.format(cols='*', tname=self.tname))
+                cur.execute(sql.SELECT.format(cols="*", tname=self.tname))
                 descr = cur.description
                 for column in descr:
                     name, ctype = column[:2]
@@ -294,12 +302,18 @@ class Columns(object):
                 name, ctype = column[1:3]
                 odict[name] = ctype
             self.odict = odict
-        values = ','.join(['?', ] * self.__len__())
-        kv = ','.join(['%s=?' % k for k in self.odict.keys() if k != self.key])
+        values = ",".join(
+            [
+                "?",
+            ]
+            * self.__len__()
+        )
+        kv = ",".join(["%s=?" % k for k in self.odict.keys() if k != self.key])
         where = "%s=?" % self.key
         self.insert_str = sql.INSERT.format(tname=self.tname, values=values)
-        self.update_str = sql.UPDATE_WHERE.format(tname=self.tname,
-                                                  values=kv, condition=where)
+        self.update_str = sql.UPDATE_WHERE.format(
+            tname=self.tname, values=kv, condition=where
+        )
 
     def sql_descr(self, remove=None):
         """Return a string with description of columns.
@@ -318,11 +332,11 @@ class Columns(object):
         'cat INTEGER, name varchar(50), value double precision'
         """
         if remove:
-            return ', '.join(['%s %s' % (key, val) for key, val in self.items()
-                             if key != remove])
+            return ", ".join(
+                ["%s %s" % (key, val) for key, val in self.items() if key != remove]
+            )
         else:
-            return ', '.join(['%s %s' % (key, val)
-                              for key, val in self.items()])
+            return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
 
     def types(self):
         """Return a list with the column types.
@@ -413,30 +427,48 @@ class Columns(object):
         >>> remove('mycensus', 'vect')
 
         """
+
         def check(col_type):
             """Check the column type if it is supported by GRASS
 
             :param col_type: the type of column
             :type col_type: str
             """
-            valid_type = ('DOUBLE PRECISION', 'DOUBLE', 'INT', 'INTEGER',
-                          'DATE', 'VARCHAR')
+            valid_type = (
+                "DOUBLE PRECISION",
+                "DOUBLE",
+                "INT",
+                "INTEGER",
+                "DATE",
+                "VARCHAR",
+            )
             col = col_type.upper()
             valid = [col.startswith(tp) for tp in valid_type]
             if not any(valid):
-                str_err = ("Type: %r is not supported."
-                           "\nSupported types are: %s")
+                str_err = "Type: %r is not supported." "\nSupported types are: %s"
                 raise TypeError(str_err % (col_type, ", ".join(valid_type)))
             return col_type
 
-        col_type = ([check(col_type), ] if isinstance(col_type, (str, unicode))
-                    else [check(col) for col in col_type])
-        col_name = ([col_name, ] if isinstance(col_name, (str, unicode))
-                    else col_name)
-        sqlcode = [sql.ADD_COL.format(tname=self.tname, cname=cn, ctype=ct)
-                   for cn, ct in zip(col_name, col_type)]
+        col_type = (
+            [
+                check(col_type),
+            ]
+            if isinstance(col_type, (str, unicode))
+            else [check(col) for col in col_type]
+        )
+        col_name = (
+            [
+                col_name,
+            ]
+            if isinstance(col_name, (str, unicode))
+            else col_name
+        )
+        sqlcode = [
+            sql.ADD_COL.format(tname=self.tname, cname=cn, ctype=ct)
+            for cn, ct in zip(col_name, col_type)
+        ]
         cur = self.conn.cursor()
-        cur.executescript('\n'.join(sqlcode))
+        cur.executescript("\n".join(sqlcode))
         self.conn.commit()
         cur.close()
         self.update_odict()
@@ -477,19 +509,23 @@ class Columns(object):
         """
         cur = self.conn.cursor()
         if self.is_pg():
-            cur.execute(sql.RENAME_COL.format(tname=self.tname,
-                                              old_name=old_name,
-                                              new_name=new_name))
+            cur.execute(
+                sql.RENAME_COL.format(
+                    tname=self.tname, old_name=old_name, new_name=new_name
+                )
+            )
             self.conn.commit()
             cur.close()
             self.update_odict()
         else:
-            cur.execute(sql.ADD_COL.format(tname=self.tname,
-                                           cname=new_name,
-                                           ctype=str(self.odict[old_name])))
-            cur.execute(sql.UPDATE.format(tname=self.tname,
-                                          new_col=new_name,
-                                          old_col=old_name))
+            cur.execute(
+                sql.ADD_COL.format(
+                    tname=self.tname, cname=new_name, ctype=str(self.odict[old_name])
+                )
+            )
+            cur.execute(
+                sql.UPDATE.format(tname=self.tname, new_col=new_name, old_col=old_name)
+            )
             self.conn.commit()
             cur.close()
             self.update_odict()
@@ -529,14 +565,15 @@ class Columns(object):
         """
         if self.is_pg():
             cur = self.conn.cursor()
-            cur.execute(sql.CAST_COL.format(tname=self.tname, col=col_name,
-                                            ctype=new_type))
+            cur.execute(
+                sql.CAST_COL.format(tname=self.tname, col=col_name, ctype=new_type)
+            )
             self.conn.commit()
             cur.close()
             self.update_odict()
         else:
             # sqlite does not support rename columns:
-            raise DBError('SQLite does not support to cast columns.')
+            raise DBError("SQLite does not support to cast columns.")
 
     def drop(self, col_name):
         """Drop a column from the table.
@@ -565,15 +602,13 @@ class Columns(object):
         """
         cur = self.conn.cursor()
         if self.is_pg():
-            cur.execute(sql.DROP_COL.format(tname=self.tname,
-                                            cname=col_name))
+            cur.execute(sql.DROP_COL.format(tname=self.tname, cname=col_name))
         else:
             desc = str(self.sql_descr(remove=col_name))
-            names = ', '.join(self.names(remove=col_name, unicod=False))
-            queries = sql.DROP_COL_SQLITE.format(tname=self.tname,
-                                                 keycol=self.key,
-                                                 coldef=desc,
-                                                 colnames=names).split('\n')
+            names = ", ".join(self.names(remove=col_name, unicod=False))
+            queries = sql.DROP_COL_SQLITE.format(
+                tname=self.tname, keycol=self.key, coldef=desc, colnames=names
+            ).split("\n")
             for query in queries:
                 cur.execute(query)
         self.conn.commit()
@@ -637,8 +672,9 @@ class Link(object):
             raise TypeError("Number must be positive and greater than 0.")
         self.c_fieldinfo.contents.number = number
 
-    layer = property(fget=_get_layer, fset=_set_layer,
-                     doc="Set and obtain layer number")
+    layer = property(
+        fget=_get_layer, fset=_set_layer, doc="Set and obtain layer number"
+    )
 
     def _get_name(self):
         return decode(self.c_fieldinfo.contents.name)
@@ -646,8 +682,7 @@ class Link(object):
     def _set_name(self, name):
         self.c_fieldinfo.contents.name = String(name)
 
-    name = property(fget=_get_name, fset=_set_name,
-                    doc="Set and obtain name vale")
+    name = property(fget=_get_name, fset=_set_name, doc="Set and obtain name vale")
 
     def _get_table(self):
         return decode(self.c_fieldinfo.contents.table)
@@ -655,8 +690,9 @@ class Link(object):
     def _set_table(self, new_name):
         self.c_fieldinfo.contents.table = String(new_name)
 
-    table_name = property(fget=_get_table, fset=_set_table,
-                          doc="Set and obtain table name value")
+    table_name = property(
+        fget=_get_table, fset=_set_table, doc="Set and obtain table name value"
+    )
 
     def _get_key(self):
         return decode(self.c_fieldinfo.contents.key)
@@ -664,8 +700,7 @@ class Link(object):
     def _set_key(self, key):
         self.c_fieldinfo.contents.key = String(key)
 
-    key = property(fget=_get_key, fset=_set_key,
-                   doc="Set and obtain cat value")
+    key = property(fget=_get_key, fset=_set_key, doc="Set and obtain cat value")
 
     def _get_database(self):
         return decode(self.c_fieldinfo.contents.database)
@@ -673,26 +708,36 @@ class Link(object):
     def _set_database(self, database):
         self.c_fieldinfo.contents.database = String(database)
 
-    database = property(fget=_get_database, fset=_set_database,
-                        doc="Set and obtain database value")
+    database = property(
+        fget=_get_database, fset=_set_database, doc="Set and obtain database value"
+    )
 
     def _get_driver(self):
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver not in ('sqlite', 'pg'):
+        if driver not in ("sqlite", "pg"):
             str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
             raise TypeError(str_err)
         self.c_fieldinfo.contents.driver = String(driver)
 
-    driver = property(fget=_get_driver, fset=_set_driver,
-                      doc="Set and obtain driver value. The drivers supported \
-                      by PyGRASS are: SQLite and PostgreSQL")
+    driver = property(
+        fget=_get_driver,
+        fset=_set_driver,
+        doc="Set and obtain driver value. The drivers supported \
+                      by PyGRASS are: SQLite and PostgreSQL",
+    )
 
-    def __init__(self, layer=1, name=None, table=None, key='cat',
-                 database='$GISDBASE/$LOCATION_NAME/'
-                          '$MAPSET/sqlite/sqlite.db',
-                 driver='sqlite', c_fieldinfo=None):
+    def __init__(
+        self,
+        layer=1,
+        name=None,
+        table=None,
+        key="cat",
+        database="$GISDBASE/$LOCATION_NAME/" "$MAPSET/sqlite/sqlite.db",
+        driver="sqlite",
+        c_fieldinfo=None,
+    ):
         if c_fieldinfo is not None:
             self.c_fieldinfo = c_fieldinfo
         else:
@@ -721,7 +766,7 @@ class Link(object):
         >>> l1 == l2
         False
         """
-        attrs = ['layer', 'name', 'table_name', 'key', 'driver']
+        attrs = ["layer", "name", "table_name", "key", "driver"]
         for attr in attrs:
             if getattr(self, attr) != getattr(link, attr):
                 return False
@@ -753,24 +798,34 @@ class Link(object):
 
         """
         driver = self.driver
-        if driver == 'sqlite':
+        if driver == "sqlite":
             import sqlite3
+
             # Numpy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
             # sqlite, you'll have to tell it about how to handle them.
-            for t in (np.int8, np.int16, np.int32, np.int64, np.uint8,
-                      np.uint16, np.uint32, np.uint64):
+            for t in (
+                np.int8,
+                np.int16,
+                np.int32,
+                np.int64,
+                np.uint8,
+                np.uint16,
+                np.uint32,
+                np.uint64,
+            ):
                 sqlite3.register_adapter(t, long)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
-        elif driver == 'pg':
+        elif driver == "pg":
             try:
                 import psycopg2
-                psycopg2.paramstyle = 'qmark'
-                db = ' '.join(self.database.split(','))
+
+                psycopg2.paramstyle = "qmark"
+                db = " ".join(self.database.split(","))
                 return psycopg2.connect(db)
             except ImportError:
                 er = "You need to install psycopg2 to connect with this table."
@@ -843,13 +898,10 @@ class DBlinks(object):
         return self.num_dblinks()
 
     def __iter__(self):
-        return (self.by_index(i)
-                for i in range(self.num_dblinks()))
+        return (self.by_index(i) for i in range(self.num_dblinks()))
 
     def __getitem__(self, item):
-        """
-
-        """
+        """"""
         if isinstance(item, int):
             return self.by_index(item)
         else:
@@ -899,26 +951,32 @@ class DBlinks(object):
     def add(self, link):
         """Add a new link. Need to open vector map in write mode
 
-       :param link: the Link to add to the DBlinks
-       :type link: a Link object
+        :param link: the Link to add to the DBlinks
+        :type link: a Link object
 
-        >>> from grass.pygrass.vector import VectorTopo
-        >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open(mode='r')
-        >>> dblinks = DBlinks(test_vect.c_mapinfo)
-        >>> dblinks
-        DBlinks([Link(1, table_doctest_map, sqlite)])
-        >>> link = Link(2, 'pg_link', test_vector_name, 'cat',
-        ...             'host=localhost dbname=grassdb', 'pg') # doctest: +SKIP
-        >>> dblinks.add(link)                             # doctest: +SKIP
-        >>> dblinks                                       # doctest: +SKIP
-        DBlinks([Link(1, table_doctest_map, sqlite)])
+         >>> from grass.pygrass.vector import VectorTopo
+         >>> test_vect = VectorTopo(test_vector_name)
+         >>> test_vect.open(mode='r')
+         >>> dblinks = DBlinks(test_vect.c_mapinfo)
+         >>> dblinks
+         DBlinks([Link(1, table_doctest_map, sqlite)])
+         >>> link = Link(2, 'pg_link', test_vector_name, 'cat',
+         ...             'host=localhost dbname=grassdb', 'pg') # doctest: +SKIP
+         >>> dblinks.add(link)                             # doctest: +SKIP
+         >>> dblinks                                       # doctest: +SKIP
+         DBlinks([Link(1, table_doctest_map, sqlite)])
 
         """
-        #TODO: check if open in write mode or not.
-        libvect.Vect_map_add_dblink(self.c_mapinfo,
-                                    link.layer, link.name, link.table_name,
-                                    link.key, link.database, link.driver)
+        # TODO: check if open in write mode or not.
+        libvect.Vect_map_add_dblink(
+            self.c_mapinfo,
+            link.layer,
+            link.name,
+            link.table_name,
+            link.key,
+            link.database,
+            link.driver,
+        )
 
     def remove(self, key, force=False):
         """Remove a link. If force set to true remove also the table
@@ -981,26 +1039,22 @@ class Table(object):
     def _set_name(self, new_name):
         """Private method to set the name of table
 
-          :param new_name: the new name of table
-          :type new_name: str
+        :param new_name: the new name of table
+        :type new_name: str
         """
         old_name = self._name
         cur = self.conn.cursor()
-        cur.execute(sql.RENAME_TAB.format(old_name=old_name,
-                                          new_name=new_name))
+        cur.execute(sql.RENAME_TAB.format(old_name=old_name, new_name=new_name))
         self.conn.commit()
         cur.close()
 
-    name = property(fget=_get_name, fset=_set_name,
-                    doc="Set and obtain table name")
+    name = property(fget=_get_name, fset=_set_name, doc="Set and obtain table name")
 
-    def __init__(self, name, connection, key='cat'):
+    def __init__(self, name, connection, key="cat"):
         self._name = name
         self.conn = connection
         self.key = key
-        self.columns = Columns(self.name,
-                               self.conn,
-                               self.key)
+        self.columns = Columns(self.name, self.conn, self.key)
         self.filters = Filters(self.name)
 
     def __repr__(self):
@@ -1027,24 +1081,27 @@ class Table(object):
     def drop(self, cursor=None, force=False):
         """Method to drop table from database
 
-          :param cursor: the cursor to connect, if None it use the cursor
-                         of connection table object
-          :type cursor: Cursor object
-          :param force: True to remove the table, by default False to print
-                        advice
-          :type force: bool
+        :param cursor: the cursor to connect, if None it use the cursor
+                       of connection table object
+        :type cursor: Cursor object
+        :param force: True to remove the table, by default False to print
+                      advice
+        :type force: bool
         """
 
         cur = cursor if cursor else self.conn.cursor()
         if self.exist(cursor=cur):
             used = db_table_in_vector(self.name)
             if used is not None and len(used) > 0 and not force:
-                print(_("Deleting table <%s> which is attached"
-                        " to following map(s):") % self.name)
+                print(
+                    _("Deleting table <%s> which is attached" " to following map(s):")
+                    % self.name
+                )
                 for vect in used:
                     warning("%s" % vect)
-                print(_("You must use the force flag to actually"
-                        " remove it. Exiting."))
+                print(
+                    _("You must use the force flag to actually" " remove it. Exiting.")
+                )
             else:
                 cur.execute(sql.DROP_TAB.format(tname=self.name))
 
@@ -1059,7 +1116,7 @@ class Table(object):
         3
         """
         cur = self.conn.cursor()
-        cur.execute(sql.SELECT.format(cols='Count(*)', tname=self.name))
+        cur.execute(sql.SELECT.format(cols="Count(*)", tname=self.name))
         number = cur.fetchone()[0]
         cur.close()
         return number
@@ -1097,9 +1154,11 @@ class Table(object):
                 return cur.executemany(sqlc, values)
             return cur.execute(sqlc, values) if values else cur.execute(sqlc)
         except Exception as exc:
-            raise ValueError("The SQL statement is not correct:\n%r,\n"
-                             "values: %r,\n"
-                             "SQL error: %s" % (sqlc, values, str(exc)))
+            raise ValueError(
+                "The SQL statement is not correct:\n%r,\n"
+                "values: %r,\n"
+                "SQL error: %s" % (sqlc, values, str(exc))
+            )
 
     def exist(self, cursor=None):
         """Return True if the table already exist in the DB, False otherwise
@@ -1142,7 +1201,9 @@ class Table(object):
         :type cursor: Cursor object
         """
         cur = cursor if cursor else self.conn.cursor()
-        vals = list(values) + [key, ]
+        vals = list(values) + [
+            key,
+        ]
         return cur.execute(self.columns.update_str, vals)
 
     def create(self, cols, name=None, overwrite=False, cursor=None):
@@ -1160,7 +1221,7 @@ class Table(object):
 
         """
         cur = cursor if cursor else self.conn.cursor()
-        coldef = ',\n'.join(['%s %s' % col for col in cols])
+        coldef = ",\n".join(["%s %s" % col for col in cols])
         if name:
             newname = name
         else:
@@ -1171,8 +1232,7 @@ class Table(object):
         except OperationalError:  # OperationalError
             if overwrite:
                 self.drop(force=True)
-                cur.execute(sql.CREATE_TAB.format(tname=newname,
-                                                  coldef=coldef))
+                cur.execute(sql.CREATE_TAB.format(tname=newname, coldef=coldef))
                 self.conn.commit()
             else:
                 print("The table: %s already exist." % self.name)
@@ -1183,13 +1243,14 @@ class Table(object):
 if __name__ == "__main__":
     import doctest
     from grass.pygrass import utils
+
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
-
 
     """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
-    mset = get_mapset_vector(test_vector_name, mapset='')
+
+    mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
-        run_command("g.remove", flags='f', type='vector', name=test_vector_name)
+        run_command("g.remove", flags="f", type="vector", name=test_vector_name)

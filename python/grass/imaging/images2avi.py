@@ -59,8 +59,15 @@ def _cleanDir(tempDir):
         print("Oops, could not fully clean up temporary files.")
 
 
-def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
-             inputOptions='', outputOptions='', bg_task=False):
+def writeAvi(
+    filename,
+    images,
+    duration=0.1,
+    encoding="mpeg4",
+    inputOptions="",
+    outputOptions="",
+    bg_task=False,
+):
     """Export movie to a AVI file, which is encoded with the given
     encoding. Hint for Windows users: the 'msmpeg4v2' codec is
     natively supported on Windows.
@@ -89,21 +96,21 @@ def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
     try:
         fps = float(1.0 / duration)
     except Exception:
-        raise ValueError(_('Invalid duration parameter for writeAvi.'))
+        raise ValueError(_("Invalid duration parameter for writeAvi."))
 
     # Determine temp dir and create images
-    tempDir = os.path.join(os.path.expanduser('~'), '.tempIms')
-    images2ims.writeIms(os.path.join(tempDir, 'im*.png'), images)
+    tempDir = os.path.join(os.path.expanduser("~"), ".tempIms")
+    images2ims.writeIms(os.path.join(tempDir, "im*.png"), images)
 
     # Determine formatter
     N = len(images)
-    formatter = '%04d'
+    formatter = "%04d"
     if N < 10:
-        formatter = '%d'
+        formatter = "%d"
     elif N < 100:
-        formatter = '%02d'
+        formatter = "%02d"
     elif N < 1000:
-        formatter = '%03d'
+        formatter = "%03d"
 
     # Compile command to create avi
     command = "ffmpeg -r %i %s " % (int(fps), inputOptions)
@@ -112,8 +119,9 @@ def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
     command += "output.avi"
 
     # Run ffmpeg
-    S = subprocess.Popen(command, shell=True, cwd=tempDir,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    S = subprocess.Popen(
+        command, shell=True, cwd=tempDir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
 
     # Show what ffmpeg has to say
     outPut = S.stdout.read()
@@ -122,17 +130,22 @@ def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
         # Clean up
         _cleanDir(tempDir)
         if bg_task:
-            return gscript.decode(outPut) + '\n' + gscript.decode(
-                S.stderr.read()) + '\n' + _('Could not write avi.')
+            return (
+                gscript.decode(outPut)
+                + "\n"
+                + gscript.decode(S.stderr.read())
+                + "\n"
+                + _("Could not write avi.")
+            )
         else:
             # An error occurred, show
             print(gscript.decode(outPut))
             print(gscript.decode(S.stderr.read()))
-            raise RuntimeError(_('Could not write avi.'))
+            raise RuntimeError(_("Could not write avi."))
     else:
         try:
             # Copy avi
-            shutil.copy(os.path.join(tempDir, 'output.avi'), filename)
+            shutil.copy(os.path.join(tempDir, "output.avi"), filename)
         except Exception as err:
             # Clean up
             _cleanDir(tempDir)
@@ -158,20 +171,21 @@ def readAvi(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError('File not found: '+str(filename))
+        raise IOError("File not found: " + str(filename))
 
     # Determine temp dir, make sure it exists
-    tempDir = os.path.join(os.path.expanduser('~'), '.tempIms')
+    tempDir = os.path.join(os.path.expanduser("~"), ".tempIms")
     if not os.path.isdir(tempDir):
         os.makedirs(tempDir)
 
     # Copy movie there
-    shutil.copy(filename, os.path.join(tempDir, 'input.avi'))
+    shutil.copy(filename, os.path.join(tempDir, "input.avi"))
 
     # Run ffmpeg
     command = "ffmpeg -i input.avi im%d.jpg"
-    S = subprocess.Popen(command, shell=True, cwd=tempDir,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    S = subprocess.Popen(
+        command, shell=True, cwd=tempDir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
 
     # Show what mencodec has to say
     outPut = S.stdout.read()
@@ -185,7 +199,7 @@ def readAvi(filename, asNumpy=True):
         raise RuntimeError("Could not read avi.")
     else:
         # Read images
-        images = images2ims.readIms(os.path.join(tempDir, 'im*.jpg'), asNumpy)
+        images = images2ims.readIms(os.path.join(tempDir, "im*.jpg"), asNumpy)
         # Clean up
         _cleanDir(tempDir)
 

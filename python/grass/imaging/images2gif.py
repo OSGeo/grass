@@ -765,12 +765,15 @@ class NeuQuant:
         self.BETA = 1.0/1024.0
         self.BETAGAMMA = self.BETA * self.GAMMA
 
-        self.network = np.empty((self.NETSIZE, 3), dtype='float64')  # The network itself
-        self.colormap = np.empty((self.NETSIZE, 4), dtype='int32')  # The network itself
+        # The network itself
+        self.network = np.empty((self.NETSIZE, 3), dtype='float64')
+        # The network itself
+        self.colormap = np.empty((self.NETSIZE, 4), dtype='int32')
 
-        self.netindex = np.empty(256, dtype='int32') # For network lookup - really 256
+        self.netindex = np.empty(256, dtype='int32')  # For network lookup - really 256
 
-        self.bias = np.empty(self.NETSIZE, dtype='float64') # Bias and freq arrays for learning
+        # Bias and freq arrays for learning
+        self.bias = np.empty(self.NETSIZE, dtype='float64')
         self.freq = np.empty(self.NETSIZE, dtype='float64')
 
         self.pixels = None
@@ -872,7 +875,7 @@ class NeuQuant:
         p = self.network[lo + 1:hi]
         p -= np.transpose(np.transpose(p - np.array([b, g, r])) * a)
 
-    #def contest(self, b, g, r):
+    # def contest(self, b, g, r):
     #    """ Search for biased BGR values
     #            Finds closest neuron (min dist) and updates self.freq
     #            finds best neuron (min dist-self.bias) and returns position
@@ -927,8 +930,10 @@ class NeuQuant:
         if rad <= 1:
             rad = 0
 
-        print("Beginning 1D learning: samplepixels = %1.2f  rad = %i" %
-             (samplepixels, rad))
+        print(
+            "Beginning 1D learning: samplepixels = %1.2f  rad = %i"
+            % (samplepixels, rad)
+        )
         step = 0
         pos = 0
         if lengthcount % NeuQuant.PRIME1 != 0:
@@ -1089,6 +1094,7 @@ class NeuQuant:
         dists = (self.colormap[:, :3] - np.array([r, g, b]))
         a = np.argmin((dists * dists).sum(1))
         return a
+
 
 if __name__ == '__main__':
     im = np.zeros((200, 200), dtype=np.uint8)

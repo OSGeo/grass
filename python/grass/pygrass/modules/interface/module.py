@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 import sys
 from multiprocessing import cpu_count, Process, Queue
 import time
@@ -20,6 +27,7 @@ if sys.version_info[0] == 2:
     from itertools import izip_longest as zip_longest
 else:
     from itertools import zip_longest
+
     unicode = str
 
 
@@ -301,13 +309,16 @@ class ParallelModuleQueue(object):
         for proc in self._list:
             if proc:
                 if isinstance(proc, Module):
-                    self._finished_modules.extend([proc.wait(),])
+                    self._finished_modules.extend(
+                        [
+                            proc.wait(),
+                        ]
+                    )
                 else:
                     self._finished_modules.extend(proc.wait())
 
         self._list = self._num_procs * [None]
         self._proc_count = 0
-
 
 
 class Module(object):
@@ -538,7 +549,7 @@ class Module(object):
         tree = fromstring(self.xml)
 
         for e in tree:
-            if e.tag not in ('parameter', 'flag'):
+            if e.tag not in ("parameter", "flag"):
                 self.__setattr__(e.tag, GETFROMTAG[e.tag](e))
 
         #
@@ -577,18 +588,24 @@ class Module(object):
         self.stdin = None
         self.stdout_ = None
         self.stderr_ = None
-        diz = {'name': 'stdin', 'required': False,
-               'multiple': False, 'type': 'all',
-               'value': None}
-        self.inputs['stdin'] = Parameter(diz=diz)
-        diz['name'] = 'stdout'
-        self.outputs['stdout'] = Parameter(diz=diz)
-        diz['name'] = 'stderr'
-        self.outputs['stderr'] = Parameter(diz=diz)
+        diz = {
+            "name": "stdin",
+            "required": False,
+            "multiple": False,
+            "type": "all",
+            "value": None,
+        }
+        self.inputs["stdin"] = Parameter(diz=diz)
+        diz["name"] = "stdout"
+        self.outputs["stdout"] = Parameter(diz=diz)
+        diz["name"] = "stderr"
+        self.outputs["stderr"] = Parameter(diz=diz)
         self.popen = None
         self.time = None
-        self.start_time = None            # This variable will be set in the run() function
-        self._finished = False            # This variable is set True if wait() was successfully called
+        self.start_time = None  # This variable will be set in the run() function
+        self._finished = (
+            False  # This variable is set True if wait() was successfully called
+        )
 
         if args or kargs:
             self.__call__(*args, **kargs)
@@ -607,18 +624,18 @@ class Module(object):
         #
         # check for extra kargs, set attribute and remove from dictionary
         #
-        if 'flags' in kargs:
-            for flg in kargs['flags']:
+        if "flags" in kargs:
+            for flg in kargs["flags"]:
                 self.flags[flg].value = True
-            del(kargs['flags'])
+            del kargs["flags"]
 
         # set attributs
-        for key in ('run_', 'env_', 'finish_', 'stdout_', 'stderr_', 'check_'):
+        for key in ("run_", "env_", "finish_", "stdout_", "stderr_", "check_"):
             if key in kargs:
                 setattr(self, key, kargs.pop(key))
 
         # set inputs
-        for key in ('stdin_', ):
+        for key in ("stdin_",):
             if key in kargs:
                 self.inputs[key[:-1]].value = kargs.pop(key)
 
@@ -628,7 +645,7 @@ class Module(object):
         for param, arg in zip(self.params_list, args):
             param.value = arg
         for key, val in kargs.items():
-            key = key.strip('_')
+            key = key.strip("_")
             if key in self.inputs:
                 self.inputs[key].value = val
             elif key in self.outputs:
@@ -638,7 +655,7 @@ class Module(object):
                 # verbose and quiet) work like parameters
                 self.flags[key].value = val
             else:
-                raise ParameterError('%s is not a valid parameter.' % key)
+                raise ParameterError("%s is not a valid parameter." % key)
 
         #
         # check if execute
@@ -654,24 +671,32 @@ class Module(object):
 
     def get_bash(self):
         """Return a BASH representation of the Module."""
-        return ' '.join(self.make_cmd())
+        return " ".join(self.make_cmd())
 
     def get_python(self):
         """Return a Python representation of the Module."""
-        prefix = self.name.split('.')[0]
-        name = '_'.join(self.name.split('.')[1:])
-        params = ', '.join([par.get_python() for par in self.params_list
-                           if par.get_python() != ''])
-        flags = ''.join([flg.get_python()
-                         for flg in self.flags.values()
-                         if not flg.special and flg.get_python() != ''])
-        special = ', '.join([flg.get_python()
-                             for flg in self.flags.values()
-                             if flg.special and flg.get_python() != ''])
+        prefix = self.name.split(".")[0]
+        name = "_".join(self.name.split(".")[1:])
+        params = ", ".join(
+            [par.get_python() for par in self.params_list if par.get_python() != ""]
+        )
+        flags = "".join(
+            [
+                flg.get_python()
+                for flg in self.flags.values()
+                if not flg.special and flg.get_python() != ""
+            ]
+        )
+        special = ", ".join(
+            [
+                flg.get_python()
+                for flg in self.flags.values()
+                if flg.special and flg.get_python() != ""
+            ]
+        )
         #     pre name par flg special
         if flags and special:
-            return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params,
-                                                flags, special)
+            return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params, flags, special)
         elif flags:
             return "%s.%s(%s, flags=%r)" % (prefix, name, params, flags)
         elif special:
@@ -681,26 +706,35 @@ class Module(object):
 
     def __str__(self):
         """Return the command string that can be executed in a shell"""
-        return ' '.join(self.make_cmd())
+        return " ".join(self.make_cmd())
 
     def __repr__(self):
         return "Module(%r)" % self.name
 
     @docstring_property(__doc__)
     def __doc__(self):
-        """{cmd_name}({cmd_params})
-        """
-        head = DOC['head'].format(cmd_name=self.name,
-            cmd_params=('\n' +  # go to a new line
-             # give space under the function name
-             (' ' * (len(self.name) + 1))).join([', '.join(
-                 # transform each parameter in string
-                 [str(param) for param in line if param is not None])
-                 # make a list of parameters with only 3 param per line
-                 for line in zip_longest(*[iter(self.params_list)] * 3)]),)
-        params = '\n'.join([par.__doc__ for par in self.params_list])
+        """{cmd_name}({cmd_params})"""
+        head = DOC["head"].format(
+            cmd_name=self.name,
+            cmd_params=(
+                "\n"
+                +  # go to a new line
+                # give space under the function name
+                (" " * (len(self.name) + 1))
+            ).join(
+                [
+                    ", ".join(
+                        # transform each parameter in string
+                        [str(param) for param in line if param is not None]
+                    )
+                    # make a list of parameters with only 3 param per line
+                    for line in zip_longest(*[iter(self.params_list)] * 3)
+                ]
+            ),
+        )
+        params = "\n".join([par.__doc__ for par in self.params_list])
         flags = self.flags.__doc__
-        return '\n'.join([head, params, DOC['flag_head'], flags, DOC['foot']])
+        return "\n".join([head, params, DOC["flag_head"], flags, DOC["foot"]])
 
     def check(self):
         """Check the correctness of the provide parameters"""
@@ -710,8 +744,9 @@ class Module(object):
                 required = False
         if required:
             for k in self.required:
-                if ((k in self.inputs and self.inputs[k].value is None) or
-                        (k in self.outputs and self.outputs[k].value is None)):
+                if (k in self.inputs and self.inputs[k].value is None) or (
+                    k in self.outputs and self.outputs[k].value is None
+                ):
                     msg = "Required parameter <%s> not set."
                     raise ParameterError(msg % k)
 
@@ -720,12 +755,10 @@ class Module(object):
         inputs, outputs and flags
         """
         dic = {}
-        dic['name'] = self.name
-        dic['inputs'] = [(k, v.value) for k, v in self.inputs.items()
-                         if v.value]
-        dic['outputs'] = [(k, v.value) for k, v in self.outputs.items()
-                          if v.value]
-        dic['flags'] = [flg for flg in self.flags if self.flags[flg].value]
+        dic["name"] = self.name
+        dic["inputs"] = [(k, v.value) for k, v in self.inputs.items() if v.value]
+        dic["outputs"] = [(k, v.value) for k, v in self.outputs.items() if v.value]
+        dic["flags"] = [flg for flg in self.flags if self.flags[flg].value]
         return dic
 
     def make_cmd(self):
@@ -733,13 +766,23 @@ class Module(object):
 
         :returns: the command string
         """
-        skip = ['stdin', 'stdout', 'stderr']
-        args = [self.name, ]
+        skip = ["stdin", "stdout", "stderr"]
+        args = [
+            self.name,
+        ]
         for key in self.inputs:
-            if key not in skip and self.inputs[key].value is not None and self.inputs[key].value != '':
+            if (
+                key not in skip
+                and self.inputs[key].value is not None
+                and self.inputs[key].value != ""
+            ):
                 args.append(self.inputs[key].get_bash())
         for key in self.outputs:
-            if key not in skip and self.outputs[key].value is not None and self.outputs[key].value != '':
+            if (
+                key not in skip
+                and self.outputs[key].value is not None
+                and self.outputs[key].value != ""
+            ):
                 args.append(self.outputs[key].get_bash())
         for flg in self.flags:
             if self.flags[flg].value:
@@ -757,17 +800,19 @@ class Module(object):
         """
         G_debug(1, self.get_bash())
         self._finished = False
-        if self.inputs['stdin'].value:
-            self.stdin = self.inputs['stdin'].value
+        if self.inputs["stdin"].value:
+            self.stdin = self.inputs["stdin"].value
             self.stdin_ = PIPE
 
         cmd = self.make_cmd()
         self.start_time = time.time()
-        self.popen = Popen(cmd,
-                           stdin=self.stdin_,
-                           stdout=self.stdout_,
-                           stderr=self.stderr_,
-                           env=self.env_)
+        self.popen = Popen(
+            cmd,
+            stdin=self.stdin_,
+            stdout=self.stdout_,
+            stderr=self.stderr_,
+            env=self.env_,
+        )
 
         if self.finish_ is True:
             self.wait()
@@ -784,16 +829,19 @@ class Module(object):
             if self.stdin:
                 self.stdin = encode(self.stdin)
             stdout, stderr = self.popen.communicate(input=self.stdin)
-            self.outputs['stdout'].value = decode(stdout) if stdout else ''
-            self.outputs['stderr'].value = decode(stderr) if stderr else ''
+            self.outputs["stdout"].value = decode(stdout) if stdout else ""
+            self.outputs["stderr"].value = decode(stderr) if stderr else ""
             self.time = time.time() - self.start_time
 
             self._finished = True
 
             if self.popen.poll():
-                raise CalledModuleError(returncode=self.popen.returncode,
-                                        code=self.get_bash(),
-                                        module=self.name, errors=stderr)
+                raise CalledModuleError(
+                    returncode=self.popen.returncode,
+                    code=self.get_bash(),
+                    module=self.name,
+                    errors=stderr,
+                )
 
         return self
 
@@ -913,13 +961,13 @@ class MultiModule(object):
         """
         self.module_list = module_list
         self.set_temp_region = set_temp_region
-        self.finish_ = sync      # We use the same variable name a Module
+        self.finish_ = sync  # We use the same variable name a Module
         self.p = None
         self.q = Queue()
 
     def __str__(self):
         """Return the command string that can be executed in a shell"""
-        return ' ; '.join(str(string) for string in self.module_list)
+        return " ; ".join(str(string) for string in self.module_list)
 
     def get_modules(self):
         """Return the list of modules that have been run in synchronous mode
@@ -950,11 +998,11 @@ class MultiModule(object):
             return None
         else:
             if self.set_temp_region is True:
-                self.p = Process(target=run_modules_in_temp_region,
-                                 args=[self.module_list, self.q])
+                self.p = Process(
+                    target=run_modules_in_temp_region, args=[self.module_list, self.q]
+                )
             else:
-                self.p = Process(target=run_modules,
-                                 args=[self.module_list, self.q])
+                self.p = Process(target=run_modules, args=[self.module_list, self.q])
             self.p.start()
 
             return self.p
@@ -1011,8 +1059,10 @@ def run_modules(module_list, q):
     finally:
         q.put(module_list)
 
+
 ###############################################################################
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

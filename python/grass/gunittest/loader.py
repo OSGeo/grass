@@ -17,20 +17,25 @@ import re
 
 
 # TODO: resolve test file versus test module
-GrassTestPythonModule = collections.namedtuple('GrassTestPythonModule',
-                                               ['name', 'module',
-                                                'file_type',
-                                                'tested_dir',
-                                                'file_dir',
-                                                'abs_file_path'])
+GrassTestPythonModule = collections.namedtuple(
+    "GrassTestPythonModule",
+    ["name", "module", "file_type", "tested_dir", "file_dir", "abs_file_path"],
+)
 
 
 # TODO: implement loading without the import
-def discover_modules(start_dir, skip_dirs, testsuite_dir,
-                     grass_location,
-                     all_locations_value, universal_location_value,
-                     import_modules, add_failed_imports=True,
-                     file_pattern=None, file_regexp=None):
+def discover_modules(
+    start_dir,
+    skip_dirs,
+    testsuite_dir,
+    grass_location,
+    all_locations_value,
+    universal_location_value,
+    import_modules,
+    add_failed_imports=True,
+    file_pattern=None,
+    file_regexp=None,
+):
     """Find all test files (modules) in a directory tree.
 
     The function is designed specifically for GRASS testing framework
@@ -94,14 +99,14 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
                 # otherwise we can have successful because nothing was reported
                 abspath = os.path.abspath(full)
                 abs_file_path = os.path.join(abspath, file_name)
-                if file_name.endswith('.py'):
-                    if file_name == '__init__.py':
+                if file_name.endswith(".py"):
+                    if file_name == "__init__.py":
                         # we always ignore __init__.py
                         continue
-                    file_type = 'py'
+                    file_type = "py"
                     name = file_name[:-3]
-                elif file_name.endswith('.sh'):
-                    file_type = 'sh'
+                elif file_name.endswith(".sh"):
+                    file_type = "sh"
                     name = file_name[:-3]
                 else:
                     file_type = None  # alternative would be '', now equivalent
@@ -113,7 +118,7 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
                         add = True
                     else:
                         try:
-                            locations = ['nc', 'stdmaps', 'all']
+                            locations = ["nc", "stdmaps", "all"]
                         except AttributeError:
                             add = True  # test is universal
                         else:
@@ -127,15 +132,23 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
                     if add_failed_imports:
                         add = True
                     else:
-                        raise ImportError('Cannot import module named'
-                                          ' %s in %s (%s)'
-                                          % (name, full, e.message))
+                        raise ImportError(
+                            "Cannot import module named"
+                            " %s in %s (%s)" % (name, full, e.message)
+                        )
                         # alternative is to create TestClass which will raise
                         # see unittest.loader
                 if add:
-                    modules.append(GrassTestPythonModule(
-                        name=name, module=None, tested_dir=root, file_dir=full,
-                        abs_file_path=abs_file_path, file_type=file_type))
+                    modules.append(
+                        GrassTestPythonModule(
+                            name=name,
+                            module=None,
+                            tested_dir=root,
+                            file_dir=full,
+                            abs_file_path=abs_file_path,
+                            file_type=file_type,
+                        )
+                    )
                 # in else with some verbose we could tell about skipped test
     return modules
 
@@ -145,11 +158,11 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
 class GrassTestLoader(unittest.TestLoader):
     """Class handles GRASS-specific loading of test modules."""
 
-    skip_dirs = ['.svn', 'dist.*', 'bin.*', 'OBJ.*']
-    testsuite_dir = 'testsuite'
-    files_in_testsuite = '*.py'
-    all_tests_value = 'all'
-    universal_tests_value = 'universal'
+    skip_dirs = [".svn", "dist.*", "bin.*", "OBJ.*"]
+    testsuite_dir = "testsuite"
+    files_in_testsuite = "*.py"
+    all_tests_value = "all"
+    universal_tests_value = "universal"
 
     def __init__(self, grass_location):
         self.grass_location = grass_location
@@ -157,21 +170,23 @@ class GrassTestLoader(unittest.TestLoader):
     # TODO: what is the purpose of top_level_dir, can it be useful?
     # probably yes, we need to know grass src or dist root
     # TODO: not using pattern here
-    def discover(self, start_dir, pattern='test*.py', top_level_dir=None):
+    def discover(self, start_dir, pattern="test*.py", top_level_dir=None):
         """Load test modules from in GRASS testing framework way."""
-        modules = discover_modules(start_dir=start_dir,
-                                   file_pattern=self.files_in_testsuite,
-                                   skip_dirs=self.skip_dirs,
-                                   testsuite_dir=self.testsuite_dir,
-                                   grass_location=self.grass_location,
-                                   all_locations_value=self.all_tests_value,
-                                   universal_location_value=self.universal_tests_value,
-                                   import_modules=True)
+        modules = discover_modules(
+            start_dir=start_dir,
+            file_pattern=self.files_in_testsuite,
+            skip_dirs=self.skip_dirs,
+            testsuite_dir=self.testsuite_dir,
+            grass_location=self.grass_location,
+            all_locations_value=self.all_tests_value,
+            universal_location_value=self.universal_tests_value,
+            import_modules=True,
+        )
         tests = []
         for module in modules:
             tests.append(self.loadTestsFromModule(module.module))
         return self.suiteClass(tests)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     GrassTestLoader().discover()

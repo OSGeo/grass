@@ -280,7 +280,7 @@ def prepare_base_raster(vector, layer, rastertmp, vtypes, where):
             use="cat",
             type=vtypes,
             quiet=True,
-            **kwargs
+            **kwargs,
         )
     except CalledModuleError:
         grass.fatal(_("An error occurred while converting vector to raster"))

@@ -101,13 +101,13 @@ import sys
 import tempfile as tmpfile
 
 
-windows = sys.platform == 'win32'
+windows = sys.platform == "win32"
 
 
 def write_gisrc(dbase, location, mapset):
     """Write the ``gisrc`` file and return its path."""
     gisrc = tmpfile.mktemp()
-    with open(gisrc, 'w') as rc:
+    with open(gisrc, "w") as rc:
         rc.write("GISDBASE: %s\n" % dbase)
         rc.write("LOCATION_NAME: %s\n" % location)
         rc.write("MAPSET: %s\n" % mapset)
@@ -116,12 +116,12 @@ def write_gisrc(dbase, location, mapset):
 
 def set_gui_path():
     """Insert wxPython GRASS path to sys.path."""
-    gui_path = os.path.join(os.environ['GISBASE'], 'gui', 'wxpython')
+    gui_path = os.path.join(os.environ["GISBASE"], "gui", "wxpython")
     if gui_path and gui_path not in sys.path:
         sys.path.insert(0, gui_path)
 
 
-def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
+def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it with the
@@ -155,50 +155,50 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     :returns: path to ``gisrc`` file (to be deleted later)
     """
     # Set GISBASE
-    os.environ['GISBASE'] = gisbase
-    mswin = sys.platform.startswith('win')
+    os.environ["GISBASE"] = gisbase
+    mswin = sys.platform.startswith("win")
     # define PATH
-    os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'bin')
-    os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'scripts')
+    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "bin")
+    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "scripts")
     if mswin:  # added for winGRASS
-        os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'extrabin')
+        os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "extrabin")
 
     # add addons to the PATH
     # copied and simplified from lib/init/grass.py
     if mswin:
         config_dirname = "GRASS7"
-        config_dir = os.path.join(os.getenv('APPDATA'), config_dirname)
+        config_dir = os.path.join(os.getenv("APPDATA"), config_dirname)
     else:
         config_dirname = ".grass7"
-        config_dir = os.path.join(os.getenv('HOME'), config_dirname)
-    addon_base = os.path.join(config_dir, 'addons')
-    os.environ['GRASS_ADDON_BASE'] = addon_base
+        config_dir = os.path.join(os.getenv("HOME"), config_dirname)
+    addon_base = os.path.join(config_dir, "addons")
+    os.environ["GRASS_ADDON_BASE"] = addon_base
     if not mswin:
-        os.environ['PATH'] += os.pathsep + os.path.join(addon_base, 'scripts')
-    os.environ['PATH'] += os.pathsep + os.path.join(addon_base, 'bin')
+        os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "scripts")
+    os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "bin")
 
     # define LD_LIBRARY_PATH
-    if '@LD_LIBRARY_PATH_VAR@' not in os.environ:
-        os.environ['@LD_LIBRARY_PATH_VAR@'] = ''
-    os.environ['@LD_LIBRARY_PATH_VAR@'] += os.pathsep + os.path.join(gisbase, 'lib')
+    if "@LD_LIBRARY_PATH_VAR@" not in os.environ:
+        os.environ["@LD_LIBRARY_PATH_VAR@"] = ""
+    os.environ["@LD_LIBRARY_PATH_VAR@"] += os.pathsep + os.path.join(gisbase, "lib")
 
     # TODO: lock the mapset?
-    os.environ['GIS_LOCK'] = str(os.getpid())
+    os.environ["GIS_LOCK"] = str(os.getpid())
 
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
-    if not os.getenv('GRASS_PYTHON'):
-        if sys.platform == 'win32':
-            os.environ['GRASS_PYTHON'] = "python3.exe"
+    if not os.getenv("GRASS_PYTHON"):
+        if sys.platform == "win32":
+            os.environ["GRASS_PYTHON"] = "python3.exe"
         else:
-            os.environ['GRASS_PYTHON'] = "python3"
+            os.environ["GRASS_PYTHON"] = "python3"
 
-    path = os.getenv('PYTHONPATH')
-    etcpy = os.path.join(gisbase, 'etc', 'python')
+    path = os.getenv("PYTHONPATH")
+    etcpy = os.path.join(gisbase, "etc", "python")
     if path:
         path = etcpy + os.pathsep + path
     else:
         path = etcpy
-    os.environ['PYTHONPATH'] = path
+    os.environ["PYTHONPATH"] = path
 
     # TODO: isn't this contra-productive? may fail soon since we cannot
     # write to the installation (applies also to defaults for Location
@@ -206,8 +206,8 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     if not dbase:
         dbase = gisbase
 
-    os.environ['GISRC'] = write_gisrc(dbase, location, mapset)
-    return os.environ['GISRC']
+    os.environ["GISRC"] = write_gisrc(dbase, location, mapset)
+    return os.environ["GISRC"]
 
 
 # clean-up functions when terminating a GRASS session
@@ -218,26 +218,28 @@ def clean_default_db():
     from grass.script import core as gcore
 
     conn = gdb.db_connection()
-    if conn and conn['driver'] == 'sqlite':
+    if conn and conn["driver"] == "sqlite":
         # check if db exists
         gisenv = gcore.gisenv()
-        database = conn['database']
-        database = database.replace('$GISDBASE', gisenv['GISDBASE'])
-        database = database.replace('$LOCATION_NAME', gisenv['LOCATION_NAME'])
-        database = database.replace('$MAPSET', gisenv['MAPSET'])
+        database = conn["database"]
+        database = database.replace("$GISDBASE", gisenv["GISDBASE"])
+        database = database.replace("$LOCATION_NAME", gisenv["LOCATION_NAME"])
+        database = database.replace("$MAPSET", gisenv["MAPSET"])
         if os.path.exists(database):
             gcore.message(_("Cleaning up default sqlite database ..."))
-            gcore.start_command('db.execute', sql = 'VACUUM')
+            gcore.start_command("db.execute", sql="VACUUM")
             # give it some time to start
             import time
+
             time.sleep(0.1)
 
 
 def call(cmd, **kwargs):
     import subprocess
+
     """Wrapper for subprocess.call to deal with platform-specific issues"""
     if windows:
-        kwargs['shell'] = True
+        kwargs["shell"] = True
     return subprocess.call(cmd, **kwargs)
 
 
@@ -245,8 +247,8 @@ def clean_temp():
     from grass.script import core as gcore
 
     gcore.message(_("Cleaning up temporary files..."))
-    nul = open(os.devnull, 'w')
-    gisbase = os.environ['GISBASE']
+    nul = open(os.devnull, "w")
+    gisbase = os.environ["GISBASE"]
     call([os.path.join(gisbase, "etc", "clean_temp")], stdout=nul)
     nul.close()
 
@@ -268,7 +270,8 @@ def finish():
     # TODO: unlock the mapset?
     # unset the GISRC and delete the file
     from grass.script import utils as gutils
-    gutils.try_remove(os.environ['GISRC'])
-    os.environ.pop('GISRC')
+
+    gutils.try_remove(os.environ["GISRC"])
+    os.environ.pop("GISRC")
     # remove gislock env var (not the gislock itself
-    os.environ.pop('GIS_LOCK')
+    os.environ.pop("GIS_LOCK")

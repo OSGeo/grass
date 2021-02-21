@@ -20,8 +20,10 @@ def docstring_property(class_doc):
     >>> a.__doc__
     'My value of x is 10.'
     """
+
     def wrapper(fget):
         return DocstringProperty(class_doc, fget)
+
     return wrapper
 
 

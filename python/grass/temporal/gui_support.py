@@ -38,8 +38,8 @@ def tlist_grouped(type, group_type=False, dbif=None):
     dbif, connection_state_changed = init_dbif(dbif)
 
     mapset = None
-    if type == 'stds':
-        types = ['strds', 'str3ds', 'stvds']
+    if type == "stds":
+        types = ["strds", "str3ds", "stvds"]
     else:
         types = [type]
     for type in types:
@@ -51,7 +51,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
 
         for line in tlist_result:
             try:
-                name, mapset = line.split('@')
+                name, mapset = line.split("@")
             except ValueError:
                 gscript.warning(_("Invalid element '%s'") % line)
                 continue
@@ -66,7 +66,9 @@ def tlist_grouped(type, group_type=False, dbif=None):
                 if type in result[mapset]:
                     result[mapset][type].append(name)
                 else:
-                    result[mapset][type] = [name, ]
+                    result[mapset][type] = [
+                        name,
+                    ]
             else:
                 result[mapset].append(name)
 
@@ -74,6 +76,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
         dbif.close()
 
     return result
+
 
 ###############################################################################
 
@@ -92,7 +95,7 @@ def tlist(type, dbif=None):
     mapsets = get_available_temporal_mapsets()
 
     output = []
-    temporal_type = ["absolute", 'relative']
+    temporal_type = ["absolute", "relative"]
     for type in temporal_type:
         # For each available mapset
         for mapset in mapsets.keys():

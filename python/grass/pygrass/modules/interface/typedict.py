@@ -4,9 +4,17 @@ Created on Tue Apr  2 18:37:02 2013
 
 @author: pietro
 """
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 from copy import deepcopy
+
 try:
     from collections import OrderedDict
 except ImportError:
@@ -38,13 +46,12 @@ class TypeDict(OrderedDict):
         if isinstance(value, self._type):
             super(TypeDict, self).__setitem__(key, value)
         else:
-            str_err = 'The value: %r is not a %s instance.'
+            str_err = "The value: %r is not a %s instance."
             raise TypeError(str_err % (value, self._type.__name__))
 
     @docstring_property(__doc__)
     def __doc__(self):
-        return '\n'.join([self.__getitem__(obj).__doc__
-                          for obj in self.__iter__()])
+        return "\n".join([self.__getitem__(obj).__doc__ for obj in self.__iter__()])
 
     def __call__(self):
         return [self.__getitem__(obj) for obj in self.__iter__()]

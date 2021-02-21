@@ -4,8 +4,15 @@ Created on Tue Apr  2 18:57:42 2013
 
 @author: pietro
 """
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.utils import coor2pixel
@@ -51,8 +58,16 @@ def rpatch_row(rast, rasts, bboxes):
         rast.put_row(rbuff)
 
 
-def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
-               start_row=0, start_col=0, prefix=''):
+def rpatch_map(
+    raster,
+    mapset,
+    mset_str,
+    bbox_list,
+    overwrite=False,
+    start_row=0,
+    start_col=0,
+    prefix="",
+):
     # TODO is prefix useful??
     """Patch raster using a bounding box list to trim the raster.
 
@@ -76,22 +91,24 @@ def rpatch_map(raster, mapset, mset_str, bbox_list, overwrite=False,
     # Instantiate the RasterRow input objects
     rast = RasterRow(prefix + raster, mapset)
     rtype = RasterRow(name=raster, mapset=mset_str % (0, 0))
-    rtype.open('r')
-    rast.open('w', mtype=rtype.mtype, overwrite=overwrite)
+    rtype.open("r")
+    rast.open("w", mtype=rtype.mtype, overwrite=overwrite)
     rtype.close()
     rasts = []
     for row, rbbox in enumerate(bbox_list):
         rrasts = []
         for col in range(len(rbbox)):
-            rrasts.append(RasterRow(name=raster,
-                                    mapset=mset_str % (start_row + row,
-                                                       start_col + col)))
-            rrasts[-1].open('r')
+            rrasts.append(
+                RasterRow(
+                    name=raster, mapset=mset_str % (start_row + row, start_col + col)
+                )
+            )
+            rrasts[-1].open("r")
         rasts.append(rrasts)
         rpatch_row(rast, rrasts, rbbox)
 
         for rst in rrasts:
             rst.close()
-            del(rst)
+            del rst
 
     rast.close()

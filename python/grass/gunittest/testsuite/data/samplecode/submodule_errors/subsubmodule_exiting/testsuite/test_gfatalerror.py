@@ -12,5 +12,5 @@ class TestGFatalError(TestCase):
         libgis.G_fatal_error("Testing G_fatal_error() function call")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

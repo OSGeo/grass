@@ -24,18 +24,18 @@ __unittest = True
 class _WritelnDecorator(object):
     """Used to decorate file-like objects with a handy 'writeln' method"""
 
-    def __init__(self,stream):
+    def __init__(self, stream):
         self.stream = stream
 
     def __getattr__(self, attr):
-        if attr in ('stream', '__getstate__'):
+        if attr in ("stream", "__getstate__"):
             raise AttributeError(attr)
-        return getattr(self.stream,attr)
+        return getattr(self.stream, attr)
 
     def writeln(self, arg=None):
         if arg:
             self.write(arg)
-        self.write('\n') # text-mode streams translate to \r\n if needed
+        self.write("\n")  # text-mode streams translate to \r\n if needed
 
 
 class TestResult(unittest.TestResult):
@@ -44,9 +44,9 @@ class TestResult(unittest.TestResult):
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
     def __init__(self, stream=None, descriptions=None, verbosity=None):
-        super(TestResult, self).__init__(stream=stream,
-                                         descriptions=descriptions,
-                                         verbosity=verbosity)
+        super(TestResult, self).__init__(
+            stream=stream, descriptions=descriptions, verbosity=verbosity
+        )
         self.successes = []
 
     def addSuccess(self, test):
@@ -67,12 +67,14 @@ class TextTestResult(TestResult):
 
     Used by TextTestRunner.
     """
-    separator1 = '=' * 70
-    separator2 = '-' * 70
+
+    separator1 = "=" * 70
+    separator2 = "-" * 70
 
     def __init__(self, stream, descriptions, verbosity):
         super(TextTestResult, self).__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity)
+            stream=stream, descriptions=descriptions, verbosity=verbosity
+        )
         self.stream = _WritelnDecorator(stream)
         self.showAll = verbosity > 1
         self.dots = verbosity == 1
@@ -85,7 +87,7 @@ class TextTestResult(TestResult):
     def getDescription(self, test):
         doc_first_line = test.shortDescription()
         if self.descriptions and doc_first_line:
-            return '\n'.join((str(test), doc_first_line))
+            return "\n".join((str(test), doc_first_line))
         else:
             return str(test)
 
@@ -101,7 +103,7 @@ class TextTestResult(TestResult):
         if self.showAll:
             self.stream.writeln("ok")
         elif self.dots:
-            self.stream.write('.')
+            self.stream.write(".")
             self.stream.flush()
 
     def addError(self, test, err):
@@ -109,7 +111,7 @@ class TextTestResult(TestResult):
         if self.showAll:
             self.stream.writeln("ERROR")
         elif self.dots:
-            self.stream.write('E')
+            self.stream.write("E")
             self.stream.flush()
 
     def addFailure(self, test, err):
@@ -117,7 +119,7 @@ class TextTestResult(TestResult):
         if self.showAll:
             self.stream.writeln("FAIL")
         elif self.dots:
-            self.stream.write('F')
+            self.stream.write("F")
             self.stream.flush()
 
     def addSkip(self, test, reason):
@@ -147,14 +149,13 @@ class TextTestResult(TestResult):
     def printErrors(self):
         if self.dots or self.showAll:
             self.stream.writeln()
-        self.printErrorList('ERROR', self.errors)
-        self.printErrorList('FAIL', self.failures)
+        self.printErrorList("ERROR", self.errors)
+        self.printErrorList("FAIL", self.failures)
 
     def printErrorList(self, flavour, errors):
         for test, err in errors:
             self.stream.writeln(self.separator1)
-            self.stream.writeln("%s: %s" % (flavour,
-                                            self.getDescription(test)))
+            self.stream.writeln("%s: %s" % (flavour, self.getDescription(test)))
             self.stream.writeln(self.separator2)
             self.stream.writeln("%s" % err)
 
@@ -174,9 +175,9 @@ class TextTestResult(TestResult):
         self.stream.writeln()
 
         expectedFails = unexpectedSuccesses = skipped = 0
-        results = map(len, (self.expectedFailures,
-                            self.unexpectedSuccesses,
-                            self.skipped))
+        results = map(
+            len, (self.expectedFailures, self.unexpectedSuccesses, self.skipped)
+        )
         expectedFails, unexpectedSuccesses, skipped = results
 
         infos = []
@@ -206,12 +207,14 @@ class KeyValueTestResult(TestResult):
 
     Used by TextTestRunner.
     """
-    separator1 = '=' * 70
-    separator2 = '-' * 70
+
+    separator1 = "=" * 70
+    separator2 = "-" * 70
 
     def __init__(self, stream, test_type=None):
         super(KeyValueTestResult, self).__init__(
-            stream=stream, descriptions=None, verbosity=None)
+            stream=stream, descriptions=None, verbosity=None
+        )
         self._stream = _WritelnDecorator(stream)
 
         self.start_time = None
@@ -221,7 +224,7 @@ class KeyValueTestResult(TestResult):
         if test_type:
             self.test_type = test_type
         else:
-            self.test_type = 'not-specified'
+            self.test_type = "not-specified"
 
         self._grass_modules = []
         self._supplementary_files = []
@@ -233,9 +236,9 @@ class KeyValueTestResult(TestResult):
 
     def stopTest(self, test):
         super(KeyValueTestResult, self).stopTest(test)
-        if hasattr(test, 'grass_modules'):
+        if hasattr(test, "grass_modules"):
             self._grass_modules.extend(test.grass_modules)
-        if hasattr(test, 'supplementary_files'):
+        if hasattr(test, "supplementary_files"):
             self._supplementary_files.extend(test.supplementary_files)
 
     def stopTestRun(self):
@@ -251,19 +254,19 @@ class KeyValueTestResult(TestResult):
         # infos.append("name=%s" % 'unknown')
 
         infos.append("time=%.3fs" % (self.time_taken))
-#            'date={rundate}\n'
-#            'date={runtime}\n'
-#            'date={start_datetime}\n'
-#            'date={end_datetime}\n'
+        #            'date={rundate}\n'
+        #            'date={runtime}\n'
+        #            'date={start_datetime}\n'
+        #            'date={end_datetime}\n'
 
         failed, errored = map(len, (self.failures, self.errors))
         succeeded = len(self.successes)
-        results = map(len, (self.expectedFailures,
-                            self.unexpectedSuccesses,
-                            self.skipped))
+        results = map(
+            len, (self.expectedFailures, self.unexpectedSuccesses, self.skipped)
+        )
         expectedFails, unexpectedSuccesses, skipped = results
 
-        status = 'succeeded' if self.wasSuccessful() else 'failed'
+        status = "succeeded" if self.wasSuccessful() else "failed"
         infos.append("status=%s" % status)
 
         # if only errors occur, tests are not counted properly
@@ -287,8 +290,8 @@ class KeyValueTestResult(TestResult):
         infos.append("unexpected_successes=%d" % unexpectedSuccesses)
 
         # TODO: include each module just once? list good and bad modules?
-        infos.append("tested_modules=%s" % ','.join(self._grass_modules))
-        infos.append("supplementary_files=%s" % ','.join(self._supplementary_files))
+        infos.append("tested_modules=%s" % ",".join(self._grass_modules))
+        infos.append("supplementary_files=%s" % ",".join(self._supplementary_files))
 
         # module, modules?, c, c++?, python
         # TODO: include also type modules?
@@ -296,8 +299,8 @@ class KeyValueTestResult(TestResult):
         # TODO: distinguish C and Python modules?
         infos.append("test_type=%s" % (self.test_type))
 
-        self._stream.write('\n'.join(infos))
-        self._stream.write('\n')
+        self._stream.write("\n".join(infos))
+        self._stream.write("\n")
         self._stream.flush()
 
 
@@ -306,10 +309,10 @@ class MultiTestResult(TestResult):
     # included for compatibility with unittest's TestResult
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
-    def __init__(self, results, forgiving=False,
-                 descriptions=None, verbosity=None):
+    def __init__(self, results, forgiving=False, descriptions=None, verbosity=None):
         super(MultiTestResult, self).__init__(
-            descriptions=descriptions, verbosity=verbosity, stream=None)
+            descriptions=descriptions, verbosity=verbosity, stream=None
+        )
         self._results = results
         self._forgiving = forgiving
 
@@ -460,8 +463,15 @@ class MultiTestResult(TestResult):
 
 
 class GrassTestRunner(object):
-    def __init__(self, stream=sys.stderr, descriptions=True, verbosity=1,
-                 failfast=False, buffer=False, result=None):
+    def __init__(
+        self,
+        stream=sys.stderr,
+        descriptions=True,
+        verbosity=1,
+        failfast=False,
+        buffer=False,
+        result=None,
+    ):
         self.stream = _WritelnDecorator(stream)
         self.descriptions = descriptions
         self.verbosity = verbosity
@@ -476,7 +486,7 @@ class GrassTestRunner(object):
         result.failfast = self.failfast
         result.buffer = self.buffer
         startTime = time.time()
-        startTestRun = getattr(result, 'startTestRun', None)
+        startTestRun = getattr(result, "startTestRun", None)
         if startTestRun is not None:
             startTestRun()
         try:
@@ -484,10 +494,10 @@ class GrassTestRunner(object):
         finally:
             stopTime = time.time()
             timeTaken = stopTime - startTime
-            setTimes = getattr(result, 'setTimes', None)
+            setTimes = getattr(result, "setTimes", None)
             if setTimes is not None:
                 setTimes(startTime, stopTime, timeTaken)
-            stopTestRun = getattr(result, 'stopTestRun', None)
+            stopTestRun = getattr(result, "stopTestRun", None)
             if stopTestRun is not None:
                 stopTestRun()
 

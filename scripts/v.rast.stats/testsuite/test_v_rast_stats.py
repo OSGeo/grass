@@ -45,7 +45,7 @@ class TestRastStats(TestCase):
             type="area",
             overwrite=True,
         )
-        cols = [(u"cat", "INTEGER PRIMARY KEY"), (u"name", "VARCHAR(20)")]
+        cols = [("cat", "INTEGER PRIMARY KEY"), ("name", "VARCHAR(20)")]
         vt = VectorTopo("test_line")
         vt.open("w", tab_cols=cols)
         line1 = Line([(1, 1), (2, 1), (2, 2)])

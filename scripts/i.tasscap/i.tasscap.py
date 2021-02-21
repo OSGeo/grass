@@ -275,7 +275,7 @@ def calc1bands8(out, bands, k1, k2, k3, k4, k5, k6, k7, k8):
         k6=k6,
         k7=k7,
         k8=k8,
-        **bands
+        **bands,
     )
 
 
@@ -305,7 +305,7 @@ def calc1bands13(out, bands, k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, 
         k11=k11,
         k12=k12,
         k13=k13,
-        **bands
+        **bands,
     )
 
 

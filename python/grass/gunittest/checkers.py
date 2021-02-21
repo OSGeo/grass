@@ -50,13 +50,12 @@ def unify_projection(dic):
     """
     # the lookup variable is a list of list, each list contains all the
     # possible name for a projection system
-    lookup = [['Universal Transverse Mercator',
-               'Universe Transverse Mercator']]
+    lookup = [["Universal Transverse Mercator", "Universe Transverse Mercator"]]
     dic = dict(dic)
     for l in lookup:
-        for n in range(len(dic['name'])):
-            if dic['name'][n] in l:
-                dic['name'][n] = l[0]
+        for n in range(len(dic["name"])):
+            if dic["name"][n] in l:
+                dic["name"][n] = l[0]
     return dic
 
 
@@ -77,27 +76,32 @@ def unify_units(dic):
     """
     # the lookup variable is a list of list, each list contains all the
     # possible name for a units
-    lookup = [['meter', 'metre'], ['meters', 'metres'],
-              ['Meter', 'Metre'], ['Meters', 'Metres'],
-              ['kilometer', 'kilometre'], ['kilometers', 'kilometres'],
-              ['Kilometer', 'Kilometre'], ['Kilometers', 'Kilometres'],
-              ]
+    lookup = [
+        ["meter", "metre"],
+        ["meters", "metres"],
+        ["Meter", "Metre"],
+        ["Meters", "Metres"],
+        ["kilometer", "kilometre"],
+        ["kilometers", "kilometres"],
+        ["Kilometer", "Kilometre"],
+        ["Kilometers", "Kilometres"],
+    ]
     dic = dict(dic)
     for l in lookup:
-        if not isinstance(dic['unit'], str):
-            for n in range(len(dic['unit'])):
-                if dic['unit'][n] in l:
-                    dic['unit'][n] = l[0]
+        if not isinstance(dic["unit"], str):
+            for n in range(len(dic["unit"])):
+                if dic["unit"][n] in l:
+                    dic["unit"][n] = l[0]
         else:
-            if dic['unit'] in l:
-                dic['unit'] = l[0]
-        if not isinstance(dic['units'], str):
-            for n in range(len(dic['units'])):
-                if dic['units'][n] in l:
-                    dic['units'][n] = l[0]
+            if dic["unit"] in l:
+                dic["unit"] = l[0]
+        if not isinstance(dic["units"], str):
+            for n in range(len(dic["units"])):
+                if dic["units"][n] in l:
+                    dic["units"][n] = l[0]
         else:
-            if dic['units'] in l:
-                dic['units'] = l[0]
+            if dic["units"] in l:
+                dic["units"] = l[0]
     return dic
 
 
@@ -138,9 +142,15 @@ def value_from_string(value):
 
 
 # TODO: what is the default separator?
-def text_to_keyvalue(text, sep=":", val_sep=",", functions=None,
-                     skip_invalid=False, skip_empty=False,
-                     from_string=value_from_string):
+def text_to_keyvalue(
+    text,
+    sep=":",
+    val_sep=",",
+    functions=None,
+    skip_invalid=False,
+    skip_empty=False,
+    from_string=value_from_string,
+):
     """Convert test to key-value pairs (dictionary-like KeyValue object).
 
     Converts a key-value text file, where entries are separated
@@ -199,18 +209,23 @@ def text_to_keyvalue(text, sep=":", val_sep=",", functions=None,
                     # TODO: here should go _ for translation
                     # TODO: the error message is not really informative
                     # in case of skipping lines we may get here with no key
-                    msg = ("Empty line in the parsed text.")
+                    msg = "Empty line in the parsed text."
                     if kvdict:
                         # key is the one from previous line
-                        msg = ("Empty line in the parsed text."
-                               " Previous line's key is <%s>") % key
+                        msg = (
+                            "Empty line in the parsed text."
+                            " Previous line's key is <%s>"
+                        ) % key
                     raise ValueError(msg)
             else:
                 # line contains something but not separator
                 if not skip_invalid:
                     # TODO: here should go _ for translation
-                    raise ValueError(("Line <{l}> does not contain"
-                                      " separator <{s}>.").format(l=line, s=sep))
+                    raise ValueError(
+                        ("Line <{l}> does not contain" " separator <{s}>.").format(
+                            l=line, s=sep
+                        )
+                    )
             # if we get here we are silently ignoring the line
             # because it is invalid (does not contain key-value separator) or
             # because it is empty
@@ -259,8 +274,9 @@ def values_equal(value_a, value_b, precision=0.000001):
         if abs(value_a - value_b) > precision:
             return False
 
-    elif (isinstance(value_a, float) and isinstance(value_b, int)) or \
-            (isinstance(value_b, float) and isinstance(value_a, int)):
+    elif (isinstance(value_a, float) and isinstance(value_b, int)) or (
+        isinstance(value_b, float) and isinstance(value_a, int)
+    ):
         # on is float the other is int
         # don't accept None
         precision = float(precision)
@@ -270,8 +286,12 @@ def values_equal(value_a, value_b, precision=0.000001):
         if abs(value_a - value_b) > precision:
             return False
 
-    elif isinstance(value_a, int) and isinstance(value_b, int) and \
-            precision and int(precision) > 0:
+    elif (
+        isinstance(value_a, int)
+        and isinstance(value_b, int)
+        and precision
+        and int(precision) > 0
+    ):
         # both int but precision applies for them
         if abs(value_a - value_b) > precision:
             return False
@@ -289,9 +309,9 @@ def values_equal(value_a, value_b, precision=0.000001):
     return True
 
 
-def keyvalue_equals(dict_a, dict_b, precision,
-                    def_equal=values_equal, key_equal=None,
-                    a_is_subset=False):
+def keyvalue_equals(
+    dict_a, dict_b, precision, def_equal=values_equal, key_equal=None, a_is_subset=False
+):
     """Compare two dictionaries.
 
     .. note::
@@ -350,9 +370,9 @@ def keyvalue_equals(dict_a, dict_b, precision,
 
 # TODO: should the return depend on the a_is_subset parameter?
 # this function must have the same interface and behavior as keyvalue_equals
-def diff_keyvalue(dict_a, dict_b, precision,
-                  def_equal=values_equal, key_equal=None,
-                  a_is_subset=False):
+def diff_keyvalue(
+    dict_a, dict_b, precision, def_equal=values_equal, key_equal=None, a_is_subset=False
+):
     """Determine the difference of two dictionaries.
 
     The function returns missing keys and different values for common keys::
@@ -410,26 +430,30 @@ def diff_keyvalue(dict_a, dict_b, precision,
 
 def proj_info_equals(text_a, text_b):
     """Test if two PROJ_INFO texts are equal."""
+
     def compare_sums(list_a, list_b, precision):
         """Compare difference of sums of two list using precision"""
         # derived from the code in grass.script.core
         if abs(sum(list_a) - sum(list_b)) > precision:
             return False
-    sep = ':'
-    val_sep = ','
-    key_equal = {'+towgs84': compare_sums}
-    dict_a = text_to_keyvalue(text_a, sep=sep, val_sep=val_sep,
-                              functions=[unify_projection])
-    dict_b = text_to_keyvalue(text_b, sep=sep, val_sep=val_sep,
-                              functions=[unify_projection])
-    return keyvalue_equals(dict_a, dict_b,
-                            precision=0.000001,
-                            def_equal=values_equal,
-                            key_equal=key_equal)
+
+    sep = ":"
+    val_sep = ","
+    key_equal = {"+towgs84": compare_sums}
+    dict_a = text_to_keyvalue(
+        text_a, sep=sep, val_sep=val_sep, functions=[unify_projection]
+    )
+    dict_b = text_to_keyvalue(
+        text_b, sep=sep, val_sep=val_sep, functions=[unify_projection]
+    )
+    return keyvalue_equals(
+        dict_a, dict_b, precision=0.000001, def_equal=values_equal, key_equal=key_equal
+    )
 
 
 def proj_units_equals(text_a, text_b):
     """Test if two PROJ_UNITS texts are equal."""
+
     def lowercase_equals(string_a, string_b, precision=None):
         # we don't need a warning for unused precision
         # pylint: disable=W0613
@@ -438,17 +462,15 @@ def proj_units_equals(text_a, text_b):
         Precision is accepted as require by `keyvalue_equals()` but ignored.
         """
         return string_a.lower() == string_b.lower()
-    sep = ':'
-    val_sep = ','
-    key_equal = {'unit': lowercase_equals, 'units': lowercase_equals}
-    dict_a = text_to_keyvalue(text_a, sep=sep, val_sep=val_sep,
-                              functions=[unify_units])
-    dict_b = text_to_keyvalue(text_b, sep, val_sep,
-                              functions=[unify_units])
-    return keyvalue_equals(dict_a, dict_b,
-                            precision=0.000001,
-                            def_equal=values_equal,
-                            key_equal=key_equal)
+
+    sep = ":"
+    val_sep = ","
+    key_equal = {"unit": lowercase_equals, "units": lowercase_equals}
+    dict_a = text_to_keyvalue(text_a, sep=sep, val_sep=val_sep, functions=[unify_units])
+    dict_b = text_to_keyvalue(text_b, sep, val_sep, functions=[unify_units])
+    return keyvalue_equals(
+        dict_a, dict_b, precision=0.000001, def_equal=values_equal, key_equal=key_equal
+    )
 
 
 # TODO: support also float (with E, e, inf, nan, ...?) and int (###, ##.)
@@ -500,8 +522,8 @@ def check_text_ellipsis(reference, actual):
     False
     """
     ref_escaped = re.escape(reference)
-    exp = re.compile(r'\\\.\\\.\\\.')  # matching escaped ...
-    ref_regexp = exp.sub('.+', ref_escaped) + "$"
+    exp = re.compile(r"\\\.\\\.\\\.")  # matching escaped ...
+    ref_regexp = exp.sub(".+", ref_escaped) + "$"
     if re.match(ref_regexp, actual, re.DOTALL):
         return True
     else:
@@ -551,19 +573,18 @@ def check_text_ellipsis_doctest(reference, actual):
     """
     # this can be also global
     checker = doctest.OutputChecker()
-    return checker.check_output(reference, actual,
-                                optionflags=doctest.ELLIPSIS)
+    return checker.check_output(reference, actual, optionflags=doctest.ELLIPSIS)
 
 
 # optimal size depends on file system and maybe on hasher.block_size
-_BUFFER_SIZE = 2**16
+_BUFFER_SIZE = 2 ** 16
 
 
 # TODO: accept also open file object
 def file_md5(filename):
     """Get MD5 (check) sum of a file."""
     hasher = hashlib.md5()
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
         buf = f.read(_BUFFER_SIZE)
         while len(buf) > 0:
             hasher.update(buf)
@@ -571,8 +592,9 @@ def file_md5(filename):
     return hasher.hexdigest()
 
 
-def text_file_md5(filename, exclude_lines=None, exclude_re=None,
-                  prepend_lines=None, append_lines=None):
+def text_file_md5(
+    filename, exclude_lines=None, exclude_re=None, prepend_lines=None, append_lines=None
+):
     """Get a MD5 (check) sum of a text file.
 
     Works in the same way as `file_md5()` function but ignores newlines
@@ -594,11 +616,11 @@ def text_file_md5(filename, exclude_lines=None, exclude_re=None,
     if prepend_lines:
         for line in prepend_lines:
             hasher.update(line if sys.version_info[0] == 2 else encode(line))
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         for line in f:
             # replace platform newlines by standard newline
-            if os.linesep != '\n':
-                line = line.rstrip(os.linesep) + '\n'
+            if os.linesep != "\n":
+                line = line.rstrip(os.linesep) + "\n"
             if exclude_lines and line in exclude_lines:
                 continue
             if exclude_re and regexp.match(line):
@@ -621,5 +643,5 @@ def main():  # pragma: no cover
     return ret.failed
 
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     sys.exit(main())

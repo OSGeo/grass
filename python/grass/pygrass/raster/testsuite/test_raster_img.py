@@ -13,6 +13,7 @@ has_PyQt4 = False
 try:
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
+
     has_PyQt4 = True
 except:
     pass
@@ -27,16 +28,18 @@ class RasterRowImgTestCase(TestCase):
         """Create test raster map and region"""
         cls.use_temp_region()
         cls.runModule("g.region", n=60, s=0, e=40, w=0, res=0.1)
-        cls.runModule("r.mapcalc",
-            expression="%s = if(row() >= 10 && row() <= 60, null(), row()  + (10.0 * col()))" % (cls.name),
-            overwrite=True)
+        cls.runModule(
+            "r.mapcalc",
+            expression="%s = if(row() >= 10 && row() <= 60, null(), row()  + (10.0 * col()))"
+            % (cls.name),
+            overwrite=True,
+        )
         cls.runModule("r.colors", map=cls.name, color="elevation")
 
     @classmethod
     def tearDownClass(cls):
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='raster',
-                      name=cls.name)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
         cls.del_temp_region()
 
     @unittest.skipIf(has_PyQt4 is False, "Require PyQt4")
@@ -53,8 +56,7 @@ class RasterRowImgTestCase(TestCase):
 
         a = raster2numpy_img(self.name, region)
 
-        image = QImage(a.data, region.cols, region.rows,
-                       QImage.Format_ARGB32)
+        image = QImage(a.data, region.cols, region.rows, QImage.Format_ARGB32)
         # image.save("data/a.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/a.png")
@@ -74,11 +76,9 @@ class RasterRowImgTestCase(TestCase):
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
 
-        raster2numpy_img(rastname=self.name, region=region,
-                         color="ARGB", array=array)
+        raster2numpy_img(rastname=self.name, region=region, color="ARGB", array=array)
 
-        image = QImage(array.data,
-                       region.cols, region.rows, QImage.Format_ARGB32)
+        image = QImage(array.data, region.cols, region.rows, QImage.Format_ARGB32)
         # image.save("data/b.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/b.png")
@@ -98,11 +98,9 @@ class RasterRowImgTestCase(TestCase):
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
 
-        raster2numpy_img(rastname=self.name, region=region,
-                         color="ARGB", array=array)
+        raster2numpy_img(rastname=self.name, region=region, color="ARGB", array=array)
 
-        image = QImage(array.data,
-                       region.cols, region.rows, QImage.Format_ARGB32)
+        image = QImage(array.data, region.cols, region.rows, QImage.Format_ARGB32)
         # image.save("data/c.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/c.png")
@@ -122,11 +120,9 @@ class RasterRowImgTestCase(TestCase):
         # With array as argument
         array = np.ndarray((region.rows * region.cols * 4), np.uint8)
 
-        raster2numpy_img(rastname=self.name, region=region,
-                         color="RGB", array=array)
+        raster2numpy_img(rastname=self.name, region=region, color="RGB", array=array)
 
-        image = QImage(array.data,
-                       region.cols, region.rows, QImage.Format_RGB32)
+        image = QImage(array.data, region.cols, region.rows, QImage.Format_RGB32)
         # image.save("data/d.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/d.png")
@@ -143,11 +139,9 @@ class RasterRowImgTestCase(TestCase):
         tmpfile = tempfile(False)
         tmpfile = tmpfile + ".png"
 
-        array = raster2numpy_img(rastname=self.name, region=region,
-                                 color="RGB")
+        array = raster2numpy_img(rastname=self.name, region=region, color="RGB")
 
-        image = QImage(array.data,
-                       region.cols, region.rows, QImage.Format_RGB32)
+        image = QImage(array.data, region.cols, region.rows, QImage.Format_RGB32)
         # image.save("data/e.png")
         image.save(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/e.png")
@@ -196,5 +190,6 @@ class RasterRowImgTestCase(TestCase):
 
         self.assertEqual(len(a), region.rows * region.cols * 1)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

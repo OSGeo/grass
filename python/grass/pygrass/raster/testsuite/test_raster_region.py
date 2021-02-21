@@ -17,14 +17,16 @@ class RasterRowRegionTestCase(TestCase):
         """Create test raster map and region"""
         cls.use_temp_region()
         cls.runModule("g.region", n=40, s=0, e=40, w=0, res=10)
-        cls.runModule("r.mapcalc", expression="%s = row() + (10.0 * col())" % (cls.name),
-            overwrite=True)
+        cls.runModule(
+            "r.mapcalc",
+            expression="%s = row() + (10.0 * col())" % (cls.name),
+            overwrite=True,
+        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove the generated vector map, if exist"""
-        cls.runModule("g.remove", flags='f', type='raster',
-                      name=cls.name)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
         cls.del_temp_region()
 
     def test_resampling_1(self):
@@ -41,10 +43,14 @@ class RasterRowRegionTestCase(TestCase):
 
         rast = RasterRow(self.name)
         rast.set_region(region)
-        rast.open(mode='r')
+        rast.open(mode="r")
 
-        six.assertCountEqual(self, rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32])
-        six.assertCountEqual(self, rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33])
+        six.assertCountEqual(
+            self, rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32]
+        )
+        six.assertCountEqual(
+            self, rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33]
+        )
 
         rast.close()
 
@@ -62,7 +68,7 @@ class RasterRowRegionTestCase(TestCase):
 
         rast = RasterRow(self.name)
         rast.set_region(region)
-        rast.open(mode='r')
+        rast.open(mode="r")
 
         """
         [nan, nan, nan, nan, nan, nan, nan, nan]
@@ -75,8 +81,8 @@ class RasterRowRegionTestCase(TestCase):
         [nan, nan, nan, nan, nan, nan, nan, nan]
         """
 
-        six.assertCountEqual(self, rast[2].tolist()[2:6], [11., 21., 31., 41.])
-        six.assertCountEqual(self, rast[5].tolist()[2:6], [14., 24., 34., 44.])
+        six.assertCountEqual(self, rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
+        six.assertCountEqual(self, rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])
 
         rast.close()
 
@@ -110,5 +116,6 @@ class RasterRowRegionTestCase(TestCase):
 
         self.assertEqual(len(a), 8)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

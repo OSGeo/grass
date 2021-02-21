@@ -117,7 +117,7 @@ def main():
             red=tmp_r,
             green=tmp_g,
             blue=tmp_b,
-            **rhis_extra_args
+            **rhis_extra_args,
         )
         to_remove.extend([tmp_r, tmp_g, tmp_b])
         gcore.run_command(

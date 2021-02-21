@@ -36,5 +36,6 @@ class TestUnittestSuccessVerboseClassSetUp(TestCase):
     def test_something_failing(self):
         self.assertTrue(False, msg="This should fail")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

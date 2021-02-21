@@ -49,6 +49,8 @@ class _Any(_Parameter):
     Any should react to all senders/signals, not just
     a particular sender/signal.
     """
+
+
 Any = _Any()
 
 
@@ -70,6 +72,8 @@ class _Anonymous(_Parameter):
         as though there was a single sender (Anonymous)
         being used everywhere.
     """
+
+
 Anonymous = _Anonymous()
 
 WEAKREF_TYPES = (weakref.ReferenceType, saferef.BoundMethodWeakref)
@@ -133,8 +137,7 @@ def connect(receiver, signal=Any, sender=Any, weak=True):
     """
     if signal is None:
         raise errors.DispatcherTypeError(
-            'Signal cannot be None (receiver=%r sender=%r)' % (receiver,
-                                                               sender)
+            "Signal cannot be None (receiver=%r sender=%r)" % (receiver, sender)
         )
     if weak:
         receiver = saferef.safeRef(receiver, onDelete=_removeReceiver)
@@ -146,8 +149,10 @@ def connect(receiver, signal=Any, sender=Any, weak=True):
     # Keep track of senders for cleanup.
     # Is Anonymous something we want to clean up?
     if sender not in (None, Anonymous, Any):
+
         def remove(object, senderkey=senderkey):
             _removeSender(senderkey=senderkey)
+
         # Skip objects that can not be weakly referenced, which means
         # they won't be automatically cleaned up, but that's too bad.
         try:
@@ -204,31 +209,25 @@ def disconnect(receiver, signal=Any, sender=Any, weak=True):
     """
     if signal is None:
         raise errors.DispatcherTypeError(
-            'Signal cannot be None (receiver=%r sender=%r)' % (receiver,
-                                                               sender)
+            "Signal cannot be None (receiver=%r sender=%r)" % (receiver, sender)
         )
-    if weak: receiver = saferef.safeRef(receiver)
+    if weak:
+        receiver = saferef.safeRef(receiver)
     senderkey = id(sender)
     try:
         signals = connections[senderkey]
         receivers = signals[signal]
     except KeyError:
         raise errors.DispatcherKeyError(
-            """No receivers found for signal %r from sender %r"""  % (
-                signal,
-                sender
-            )
+            """No receivers found for signal %r from sender %r""" % (signal, sender)
         )
     try:
         # also removes from receivers
         _removeOldBackRefs(senderkey, signal, receiver, receivers)
     except ValueError:
         raise errors.DispatcherKeyError(
-            """No connection to receiver %s for signal %s from sender %s"""  % (
-                receiver,
-                signal,
-                sender
-            )
+            """No connection to receiver %s for signal %s from sender %s"""
+            % (receiver, signal, sender)
         )
     _cleanupConnections(senderkey, signal)
 
@@ -343,11 +342,7 @@ def send(signal=Any, sender=Anonymous, *arguments, **named):
     responses = []
     for receiver in liveReceivers(getAllReceivers(sender, signal)):
         response = robustapply.robustApply(
-            receiver,
-            signal=signal,
-            sender=sender,
-            *arguments,
-            **named
+            receiver, signal=signal, sender=sender, *arguments, **named
         )
         responses.append((receiver, response))
     return responses
@@ -364,11 +359,7 @@ def sendExact(signal=Any, sender=Anonymous, *arguments, **named):
     responses = []
     for receiver in liveReceivers(getReceivers(sender, signal)):
         response = robustapply.robustApply(
-            receiver,
-            signal=signal,
-            sender=sender,
-            *arguments,
-            **named
+            receiver, signal=signal, sender=sender, *arguments, **named
         )
         responses.append((receiver, response))
     return responses
@@ -378,8 +369,8 @@ def _removeReceiver(receiver):
     """Remove receiver from connections."""
     if not sendersBack or not connections:
         # During module cleanup the objects will be replaced with None
-           # The order of replacing many change, so both variables need
-           # to be checked.
+        # The order of replacing many change, so both variables need
+        # to be checked.
         return False
     backKey = id(receiver)
     try:
@@ -454,6 +445,7 @@ def _removeBackrefs(senderkey):
             for signal, set in items:
                 for item in set:
                     yield item
+
         for receiver in allReceivers():
             _killBackref(receiver, senderkey)
 

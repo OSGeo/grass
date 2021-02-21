@@ -40,56 +40,65 @@ from .base import SQLDatabaseInterface
 class SpatialExtent(SQLDatabaseInterface):
     """This is the spatial extent base class for all maps and space time datasets
 
-        This class implements a three dimensional axis aligned bounding box
-        and functions to compute topological relationships
+    This class implements a three dimensional axis aligned bounding box
+    and functions to compute topological relationships
 
-        Usage:
+    Usage:
 
-        .. code-block:: python
+    .. code-block:: python
 
-            >>> init()
-            >>> extent = SpatialExtent(table="raster_spatial_extent",
-            ... ident="soil@PERMANENT", north=90, south=90, east=180, west=180,
-            ... top=100, bottom=-20)
-            >>> extent.id
-            'soil@PERMANENT'
-            >>> extent.north
-            90.0
-            >>> extent.south
-            90.0
-            >>> extent.east
-            180.0
-            >>> extent.west
-            180.0
-            >>> extent.top
-            100.0
-            >>> extent.bottom
-            -20.0
-            >>> extent.print_info()
-             +-------------------- Spatial extent ----------------------------------------+
-             | North:...................... 90.0
-             | South:...................... 90.0
-             | East:.. .................... 180.0
-             | West:....................... 180.0
-             | Top:........................ 100.0
-             | Bottom:..................... -20.0
-            >>> extent.print_shell_info()
-            north=90.0
-            south=90.0
-            east=180.0
-            west=180.0
-            top=100.0
-            bottom=-20.0
+        >>> init()
+        >>> extent = SpatialExtent(table="raster_spatial_extent",
+        ... ident="soil@PERMANENT", north=90, south=90, east=180, west=180,
+        ... top=100, bottom=-20)
+        >>> extent.id
+        'soil@PERMANENT'
+        >>> extent.north
+        90.0
+        >>> extent.south
+        90.0
+        >>> extent.east
+        180.0
+        >>> extent.west
+        180.0
+        >>> extent.top
+        100.0
+        >>> extent.bottom
+        -20.0
+        >>> extent.print_info()
+         +-------------------- Spatial extent ----------------------------------------+
+         | North:...................... 90.0
+         | South:...................... 90.0
+         | East:.. .................... 180.0
+         | West:....................... 180.0
+         | Top:........................ 100.0
+         | Bottom:..................... -20.0
+        >>> extent.print_shell_info()
+        north=90.0
+        south=90.0
+        east=180.0
+        west=180.0
+        top=100.0
+        bottom=-20.0
 
     """
 
-    def __init__(self, table=None, ident=None, north=None, south=None,
-                 east=None, west=None, top=None, bottom=None, proj="XY"):
+    def __init__(
+        self,
+        table=None,
+        ident=None,
+        north=None,
+        south=None,
+        east=None,
+        west=None,
+        top=None,
+        bottom=None,
+        proj="XY",
+    ):
 
         SQLDatabaseInterface.__init__(self, table, ident)
         self.set_id(ident)
-        self.set_spatial_extent_from_values(north, south, east, west, top,
-                                            bottom)
+        self.set_spatial_extent_from_values(north, south, east, west, top, bottom)
         self.set_projection(proj)
 
     def overlapping_2d(self, extent):
@@ -117,8 +126,12 @@ class SpatialExtent(SQLDatabaseInterface):
         """
 
         if self.get_projection() != extent.get_projection():
-            self.msgr.error(_("Projections are different. Unable to compute "
-                              "overlapping_2d for spatial extents"))
+            self.msgr.error(
+                _(
+                    "Projections are different. Unable to compute "
+                    "overlapping_2d for spatial extents"
+                )
+            )
             return False
 
         N = extent.get_north()
@@ -136,10 +149,10 @@ class SpatialExtent(SQLDatabaseInterface):
                 E -= 360.0
                 W -= 360.0
 
-        if(self.get_north() <= S):
+        if self.get_north() <= S:
             return False
 
-        if(self.get_south() >= N):
+        if self.get_south() >= N:
             return False
 
         if self.get_east() <= W:
@@ -235,8 +248,15 @@ class SpatialExtent(SQLDatabaseInterface):
         if S < eS:
             nS = eS
 
-        new = SpatialExtent(north=nN, south=nS, east=nE, west=nW,
-                            top=0, bottom=0, proj=self.get_projection())
+        new = SpatialExtent(
+            north=nN,
+            south=nS,
+            east=nE,
+            west=nW,
+            top=0,
+            bottom=0,
+            proj=self.get_projection(),
+        )
         return new
 
     def intersect(self, extent):
@@ -387,8 +407,15 @@ class SpatialExtent(SQLDatabaseInterface):
         if S > eS:
             nS = eS
 
-        new = SpatialExtent(north=nN, south=nS, east=nE, west=nW,
-                            top=0, bottom=0, proj=self.get_projection())
+        new = SpatialExtent(
+            north=nN,
+            south=nS,
+            east=nE,
+            west=nW,
+            top=0,
+            bottom=0,
+            proj=self.get_projection(),
+        )
         return new
 
     def union(self, extent):
@@ -523,8 +550,12 @@ class SpatialExtent(SQLDatabaseInterface):
         :return: True or False
         """
         if self.get_projection() != extent.get_projection():
-            self.msgr.error(_("Projections are different. Unable to compute "
-                              "is_in_2d for spatial extents"))
+            self.msgr.error(
+                _(
+                    "Projections are different. Unable to compute "
+                    "is_in_2d for spatial extents"
+                )
+            )
             return False
 
         eN = extent.get_north()
@@ -655,8 +686,12 @@ class SpatialExtent(SQLDatabaseInterface):
         :return: True or False
         """
         if self.get_projection() != extent.get_projection():
-            self.msgr.error(_("Projections are different. Unable to compute "
-                              "equivalent_2d for spatial extents"))
+            self.msgr.error(
+                _(
+                    "Projections are different. Unable to compute "
+                    "equivalent_2d for spatial extents"
+                )
+            )
             return False
 
         eN = extent.get_north()
@@ -760,8 +795,12 @@ class SpatialExtent(SQLDatabaseInterface):
         """
 
         if self.get_projection() != extent.get_projection():
-            self.msgr.error(_("Projections are different. Unable to compute"
-                              " cover_2d for spatial extents"))
+            self.msgr.error(
+                _(
+                    "Projections are different. Unable to compute"
+                    " cover_2d for spatial extents"
+                )
+            )
             return False
 
         # Exclude equivalent_2d
@@ -832,8 +871,12 @@ class SpatialExtent(SQLDatabaseInterface):
         :return: True or False
         """
         if self.get_projection() != extent.get_projection():
-            self.msgr.error(_("Projections are different. Unable to compute "
-                              "cover for spatial extents"))
+            self.msgr.error(
+                _(
+                    "Projections are different. Unable to compute "
+                    "cover for spatial extents"
+                )
+            )
             return False
 
         # Exclude equivalent_2d
@@ -996,10 +1039,10 @@ class SpatialExtent(SQLDatabaseInterface):
                 E -= 360.0
                 W -= 360.0
 
-        if(self.get_north() <= S):
+        if self.get_north() <= S:
             return False
 
-        if(self.get_south() >= N):
+        if self.get_south() >= N:
             return False
 
         if self.get_east() <= W:
@@ -1058,10 +1101,10 @@ class SpatialExtent(SQLDatabaseInterface):
                 E -= 360.0
                 W -= 360.0
 
-        if(self.get_north() <= S):
+        if self.get_north() <= S:
             return False
 
-        if(self.get_south() >= N):
+        if self.get_south() >= N:
             return False
 
         if self.get_east() <= W:
@@ -1551,16 +1594,15 @@ class SpatialExtent(SQLDatabaseInterface):
 
         return "unknown"
 
-    def set_spatial_extent_from_values(self, north, south, east, west, top,
-                                       bottom):
+    def set_spatial_extent_from_values(self, north, south, east, west, top, bottom):
         """Set the three dimensional spatial extent
 
-           :param north: The northern edge
-           :param south: The southern edge
-           :param east: The eastern edge
-           :param west: The western edge
-           :param top: The top edge
-           :param bottom: The bottom edge
+        :param north: The northern edge
+        :param south: The southern edge
+        :param east: The eastern edge
+        :param west: The western edge
+        :param top: The top edge
+        :param bottom: The bottom edge
         """
 
         self.set_north(north)
@@ -1573,8 +1615,8 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent(self, spatial_extent):
         """Set the three dimensional spatial extent
 
-           :param spatial_extent: An object of type SpatialExtent or its
-                                  subclasses
+        :param spatial_extent: An object of type SpatialExtent or its
+                               subclasses
         """
 
         self.set_north(spatial_extent.get_north())
@@ -1586,7 +1628,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def set_projection(self, proj):
         """Set the projection of the spatial extent it should be XY or LL.
-           As default the projection is XY
+        As default the projection is XY
         """
         if proj is None or (proj != "XY" and proj != "LL"):
             self.D["proj"] = "XY"
@@ -1596,10 +1638,10 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent_from_values_2d(self, north, south, east, west):
         """Set the two dimensional spatial extent from values
 
-           :param north: The northern edge
-           :param south: The southern edge
-           :param east: The eastern edge
-           :param west: The western edge
+        :param north: The northern edge
+        :param south: The southern edge
+        :param east: The eastern edge
+        :param west: The western edge
         """
 
         self.set_north(north)
@@ -1610,8 +1652,8 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent_2d(self, spatial_extent):
         """Set the three dimensional spatial extent
 
-           :param spatial_extent: An object of type SpatialExtent or its
-                                  subclasses
+        :param spatial_extent: An object of type SpatialExtent or its
+                               subclasses
         """
 
         self.set_north(spatial_extent.north)
@@ -1668,7 +1710,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
-           :return: None if not found
+        :return: None if not found
         """
         if "id" in self.D:
             return self.D["id"]
@@ -1681,11 +1723,12 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_volume(self):
         """Compute the volume of the extent, in case z is zero
-           (top == bottom or top - bottom = 1) the area is returned"""
+        (top == bottom or top - bottom = 1) the area is returned"""
 
         if self.get_projection() == "LL":
-            self.msgr.error(_("Volume computation is not supported "
-                              "for LL projections"))
+            self.msgr.error(
+                _("Volume computation is not supported " "for LL projections")
+            )
 
         area = self.get_area()
 
@@ -1702,8 +1745,9 @@ class SpatialExtent(SQLDatabaseInterface):
         """Compute the area of the extent, extent in z direction is ignored"""
 
         if self.get_projection() == "LL":
-            self.msgr.error(_("Area computation is not supported "
-                              "for LL projections"))
+            self.msgr.error(
+                _("Area computation is not supported " "for LL projections")
+            )
 
         bbox = self.get_spatial_extent_as_tuple()
 
@@ -1714,20 +1758,17 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_spatial_extent_as_tuple(self):
         """Return a tuple (north, south, east, west, top, bottom)
-           of the spatial extent"""
+        of the spatial extent"""
 
-        return (
-            self.north, self.south, self.east, self.west,
-            self.top, self.bottom)
+        return (self.north, self.south, self.east, self.west, self.top, self.bottom)
 
     def get_spatial_extent_as_tuple_2d(self):
-        """Return a tuple (north, south, east, west,) of the 2d spatial extent
-        """
+        """Return a tuple (north, south, east, west,) of the 2d spatial extent"""
         return (self.north, self.south, self.east, self.west)
 
     def get_north(self):
         """Get the northern edge of the map
-           :return: None if not found"""
+        :return: None if not found"""
         if "north" in self.D:
             return self.D["north"]
         else:
@@ -1735,7 +1776,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_south(self):
         """Get the southern edge of the map
-           :return: None if not found"""
+        :return: None if not found"""
         if "south" in self.D:
             return self.D["south"]
         else:
@@ -1743,7 +1784,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_east(self):
         """Get the eastern edge of the map
-           :return: None if not found"""
+        :return: None if not found"""
         if "east" in self.D:
             return self.D["east"]
         else:
@@ -1751,7 +1792,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_west(self):
         """Get the western edge of the map
-           :return: None if not found"""
+        :return: None if not found"""
         if "west" in self.D:
             return self.D["west"]
         else:
@@ -1759,7 +1800,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_top(self):
         """Get the top edge of the map
-           :return: None if not found"""
+        :return: None if not found"""
         if "top" in self.D:
             return self.D["top"]
         else:
@@ -1767,7 +1808,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
     def get_bottom(self):
         """Get the bottom edge of the map
-           :return: None if not found"""
+        :return: None if not found"""
         if "bottom" in self.D:
             return self.D["bottom"]
         else:
@@ -1784,7 +1825,9 @@ class SpatialExtent(SQLDatabaseInterface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print(" +-------------------- Spatial extent ----------------------------------------+")
+        print(
+            " +-------------------- Spatial extent ----------------------------------------+"
+        )
         print(" | North:...................... " + str(self.get_north()))
         print(" | South:...................... " + str(self.get_south()))
         print(" | East:.. .................... " + str(self.get_east()))
@@ -1804,49 +1847,114 @@ class SpatialExtent(SQLDatabaseInterface):
 
 ###############################################################################
 
+
 class RasterSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None,
-                 west=None, top=None, bottom=None):
-        SpatialExtent.__init__(self, "raster_spatial_extent",
-                               ident, north, south, east, west, top, bottom)
+    def __init__(
+        self,
+        ident=None,
+        north=None,
+        south=None,
+        east=None,
+        west=None,
+        top=None,
+        bottom=None,
+    ):
+        SpatialExtent.__init__(
+            self, "raster_spatial_extent", ident, north, south, east, west, top, bottom
+        )
 
 
 class Raster3DSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None,
-                 west=None, top=None, bottom=None):
-        SpatialExtent.__init__(self, "raster3d_spatial_extent",
-                               ident, north, south, east, west, top, bottom)
+    def __init__(
+        self,
+        ident=None,
+        north=None,
+        south=None,
+        east=None,
+        west=None,
+        top=None,
+        bottom=None,
+    ):
+        SpatialExtent.__init__(
+            self,
+            "raster3d_spatial_extent",
+            ident,
+            north,
+            south,
+            east,
+            west,
+            top,
+            bottom,
+        )
 
 
 class VectorSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None,
-                 west=None, top=None, bottom=None):
-        SpatialExtent.__init__(self, "vector_spatial_extent",
-                               ident, north, south, east, west, top, bottom)
+    def __init__(
+        self,
+        ident=None,
+        north=None,
+        south=None,
+        east=None,
+        west=None,
+        top=None,
+        bottom=None,
+    ):
+        SpatialExtent.__init__(
+            self, "vector_spatial_extent", ident, north, south, east, west, top, bottom
+        )
 
 
 class STRDSSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None,
-                 west=None, top=None, bottom=None):
-        SpatialExtent.__init__(self, "strds_spatial_extent",
-                               ident, north, south, east, west, top, bottom)
+    def __init__(
+        self,
+        ident=None,
+        north=None,
+        south=None,
+        east=None,
+        west=None,
+        top=None,
+        bottom=None,
+    ):
+        SpatialExtent.__init__(
+            self, "strds_spatial_extent", ident, north, south, east, west, top, bottom
+        )
 
 
 class STR3DSSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None,
-                 west=None, top=None, bottom=None):
-        SpatialExtent.__init__(self, "str3ds_spatial_extent",
-                               ident, north, south, east, west, top, bottom)
+    def __init__(
+        self,
+        ident=None,
+        north=None,
+        south=None,
+        east=None,
+        west=None,
+        top=None,
+        bottom=None,
+    ):
+        SpatialExtent.__init__(
+            self, "str3ds_spatial_extent", ident, north, south, east, west, top, bottom
+        )
 
 
 class STVDSSpatialExtent(SpatialExtent):
-    def __init__(self, ident=None, north=None, south=None, east=None,
-                 west=None, top=None, bottom=None):
-        SpatialExtent.__init__(self, "stvds_spatial_extent",
-                               ident, north, south, east, west, top, bottom)
+    def __init__(
+        self,
+        ident=None,
+        north=None,
+        south=None,
+        east=None,
+        west=None,
+        top=None,
+        bottom=None,
+    ):
+        SpatialExtent.__init__(
+            self, "stvds_spatial_extent", ident, north, south, east, west, top, bottom
+        )
+
 
 ###############################################################################
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

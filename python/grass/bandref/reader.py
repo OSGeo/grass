@@ -14,15 +14,17 @@ from collections import OrderedDict
 # https://github.com/radiantearth/stac-spec/blob/master/extensions/eo/README.md#band-object
 # custom names must be possible
 
+
 class BandReferenceReaderError(Exception):
     pass
+
 
 class BandReferenceReader:
     """Band references reader"""
 
     def __init__(self):
         self._json_files = glob.glob(
-            os.path.join(os.environ['GISBASE'], 'etc', 'g.bands', '*.json')
+            os.path.join(os.environ["GISBASE"], "etc", "g.bands", "*.json")
         )
         if not self._json_files:
             raise BandReferenceReaderError("No band definitions found")
@@ -35,15 +37,11 @@ class BandReferenceReader:
         for json_file in self._json_files:
             try:
                 with open(json_file) as fd:
-                    config = json.load(
-                        fd,
-                        object_pairs_hook=OrderedDict
-                    )
+                    config = json.load(fd, object_pairs_hook=OrderedDict)
             except json.decoder.JSONDecodeError as e:
                 raise BandReferenceReaderError(
-                    "Unable to parse '{}': {}".format(
-                        json_file, e
-                    ))
+                    "Unable to parse '{}': {}".format(json_file, e)
+                )
 
             # check if configuration is valid
             self._check_config(config)
@@ -59,12 +57,12 @@ class BandReferenceReader:
         :param dict config: configuration to be validated
         """
         for items in config.values():
-            for item in ('shortcut', 'bands'):
+            for item in ("shortcut", "bands"):
                 if item not in items.keys():
                     raise BandReferenceReaderError(
-                        "Invalid band definition: <{}> is missing".format(item
-                                                                          ))
-            if len(items['bands']) < 1:
+                        "Invalid band definition: <{}> is missing".format(item)
+                    )
+            if len(items["bands"]) < 1:
                 raise BandReferenceReaderError(
                     "Invalid band definition: no bands defined"
                 )
@@ -76,25 +74,24 @@ class BandReferenceReader:
         :param str band: band identifier
         :param str item: items to be printed out
         """
+
         def print_kv(k, v, indent):
             if isinstance(v, OrderedDict):
-                print ('{}{}:'.format(' ' * indent * 2, k))
+                print("{}{}:".format(" " * indent * 2, k))
                 for ki, vi in v.items():
                     print_kv(ki, vi, indent * 2)
             else:
-                print ('{}{}: {}'.format(' ' * indent * 2, k, v))
+                print("{}{}: {}".format(" " * indent * 2, k, v))
 
         indent = 4
-        print ('{}band: {}'.format(
-            ' ' * indent, band
-        ))
+        print("{}band: {}".format(" " * indent, band))
         for k, v in item[band].items():
             print_kv(k, v, indent)
 
     def _print_band(self, shortcut, band, tag=None):
         sys.stdout.write(self._band_identifier(shortcut, band))
         if tag:
-            sys.stdout.write(' {}'.format(tag))
+            sys.stdout.write(" {}".format(tag))
         sys.stdout.write(os.linesep)
 
     def print_info(self, shortcut=None, band=None, extended=False):
@@ -110,48 +107,41 @@ class BandReferenceReader:
         for root in self.config.values():
             for item in root.values():
                 try:
-                    if shortcut and re.match(shortcut, item['shortcut']) is None:
+                    if shortcut and re.match(shortcut, item["shortcut"]) is None:
                         continue
                 except re.error as e:
-                    raise BandReferenceReaderError(
-                        "Invalid pattern: {}".format(e)
-                    )
+                    raise BandReferenceReaderError("Invalid pattern: {}".format(e))
 
                 found = True
-                if band and band not in item['bands']:
+                if band and band not in item["bands"]:
                     raise BandReferenceReaderError(
-                        "Band <{}> not found in <{}>".format(
-                            band, shortcut
-                        ))
+                        "Band <{}> not found in <{}>".format(band, shortcut)
+                    )
 
                 # print generic information
                 if extended:
                     for subitem in item.keys():
-                        if subitem == 'bands':
+                        if subitem == "bands":
                             # bands item is processed bellow
                             continue
-                        print ('{}: {}'.format(
-                            subitem, item[subitem]
-                        ))
+                        print("{}: {}".format(subitem, item[subitem]))
 
                     # print detailed band information
                     if band:
-                        self._print_band_extended(band, item['bands'])
+                        self._print_band_extended(band, item["bands"])
                     else:
-                        for iband in item['bands']:
-                            self._print_band_extended(iband, item['bands'])
+                        for iband in item["bands"]:
+                            self._print_band_extended(iband, item["bands"])
                 else:
                     # basic information only
                     if band:
                         self._print_band(
-                            item['shortcut'], band,
-                            item['bands'][band].get('tag')
+                            item["shortcut"], band, item["bands"][band].get("tag")
                         )
                     else:
-                        for iband in item['bands']:
+                        for iband in item["bands"]:
                             self._print_band(
-                                item['shortcut'], iband,
-                                item['bands'][iband].get('tag')
+                                item["shortcut"], iband, item["bands"][iband].get("tag")
                             )
 
         # raise error when defined shortcut not found
@@ -170,7 +160,7 @@ class BandReferenceReader:
         :return str: file basename if found or None
         """
         try:
-            shortcut, band = band_reference.split('_')
+            shortcut, band = band_reference.split("_")
         except ValueError:
             # raise BandReferenceReaderError("Invalid band identifier <{}>".format(
             #    band_reference
@@ -180,8 +170,11 @@ class BandReferenceReader:
 
         for filename, config in self.config.items():
             for root in config.keys():
-                if config[root]['shortcut'].upper() == shortcut.upper() and \
-                   band.upper() in map(lambda x: x.upper(), config[root]['bands'].keys()):
+                if config[root][
+                    "shortcut"
+                ].upper() == shortcut.upper() and band.upper() in map(
+                    lambda x: x.upper(), config[root]["bands"].keys()
+                ):
                     return filename
 
         return None
@@ -194,12 +187,10 @@ class BandReferenceReader:
         bands = []
         for root in self.config.values():
             for item in root.values():
-                for band in item['bands']:
-                    bands.append(
-                        self._band_identifier(item['shortcut'], band)
-                    )
+                for band in item["bands"]:
+                    bands.append(self._band_identifier(item["shortcut"], band))
         return bands
 
     @staticmethod
     def _band_identifier(shortcut, band):
-        return '{}_{}'.format(shortcut, band)
+        return "{}_{}".format(shortcut, band)

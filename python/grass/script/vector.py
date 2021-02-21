@@ -39,30 +39,32 @@ def vector_db(map, env=None, **kwargs):
 
     :return: dictionary
     """
-    s = read_command('v.db.connect', quiet=True, flags='g', map=map, sep=';',
-                     env=env, **kwargs)
+    s = read_command(
+        "v.db.connect", quiet=True, flags="g", map=map, sep=";", env=env, **kwargs
+    )
     result = {}
 
     for l in s.splitlines():
-        f = l.split(';')
+        f = l.split(";")
         if len(f) != 5:
             continue
 
-        if '/' in f[0]:
-            f1 = f[0].split('/')
+        if "/" in f[0]:
+            f1 = f[0].split("/")
             layer = f1[0]
             name = f1[1]
         else:
             layer = f[0]
-            name = ''
+            name = ""
 
         result[int(layer)] = {
-            'layer': int(layer),
-            'name': name,
-            'table': f[1],
-            'key': f[2],
-            'database': f[3],
-            'driver': f[4] }
+            "layer": int(layer),
+            "name": name,
+            "table": f[1],
+            "key": f[2],
+            "database": f[3],
+            "driver": f[4],
+        }
 
     return result
 
@@ -83,6 +85,7 @@ def vector_layer_db(map, layer, env=None):
         fatal(_("Database connection not defined for layer %s") % layer)
 
     return f
+
 
 # run "v.info -c ..." and parse output
 
@@ -118,17 +121,18 @@ def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
 
     :return: dictionary/list of columns
     """
-    s = read_command('v.info', flags='c', map=map, layer=layer, quiet=True,
-                     env=env, **kwargs)
+    s = read_command(
+        "v.info", flags="c", map=map, layer=layer, quiet=True, env=env, **kwargs
+    )
     if getDict:
         result = dict()
     else:
         result = list()
     i = 0
     for line in s.splitlines():
-        ctype, cname = line.split('|')
+        ctype, cname = line.split("|")
         if getDict:
-            result[cname] = {'type': ctype, 'index': i}
+            result[cname] = {"type": ctype, "index": i}
         else:
             result.append(cname)
         i += 1
@@ -146,8 +150,13 @@ def vector_history(map, replace=False, env=None):
 
     :return: v.support output
     """
-    run_command('v.support', map=map, cmdhist=os.environ['CMDLINE'],
-                flags='h' if replace else None, env=env)
+    run_command(
+        "v.support",
+        map=map,
+        cmdhist=os.environ["CMDLINE"],
+        flags="h" if replace else None,
+        env=env,
+    )
 
 
 def vector_info_topo(map, layer=1, env=None):
@@ -165,11 +174,10 @@ def vector_info_topo(map, layer=1, env=None):
 
     :return: parsed output
     """
-    s = read_command('v.info', flags='t', layer=layer, map=map,
-                     env=env)
+    s = read_command("v.info", flags="t", layer=layer, map=map, env=env)
     ret = parse_key_val(s, val_type=int)
-    if 'map3d' in ret:
-        ret['map3d'] = bool(ret['map3d'])
+    if "map3d" in ret:
+        ret["map3d"] = bool(ret["map3d"])
 
     return ret
 
@@ -188,21 +196,28 @@ def vector_info(map, layer=1, env=None):
     :return: parsed vector info
     """
 
-    s = read_command('v.info', flags='get', layer=layer, map=map,
-                     env=env)
+    s = read_command("v.info", flags="get", layer=layer, map=map, env=env)
 
     kv = parse_key_val(s)
-    for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
+    for k in ["north", "south", "east", "west", "top", "bottom"]:
         kv[k] = float(kv[k])
-    for k in ['level', 'num_dblinks']:
+    for k in ["level", "num_dblinks"]:
         kv[k] = int(kv[k])
-    for k in ['nodes', 'points', 'lines', 'boundaries', 'centroids', 'areas',
-              'islands', 'primitives']:
+    for k in [
+        "nodes",
+        "points",
+        "lines",
+        "boundaries",
+        "centroids",
+        "areas",
+        "islands",
+        "primitives",
+    ]:
         kv[k] = int(kv[k])
-    if 'map3d' in kv:
-        kv['map3d'] = bool(int(kv['map3d']))
-        if kv['map3d']:
-            for k in ['faces', 'kernels', 'volumes', 'holes']:
+    if "map3d" in kv:
+        kv["map3d"] = bool(int(kv["map3d"]))
+        if kv["map3d"]:
+            for k in ["faces", "kernels", "volumes", "holes"]:
                 kv[k] = int(kv[k])
 
     return kv
@@ -229,39 +244,40 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
     :return: dictionary ('columns' and 'values')
     """
     try:
-        key = vector_db(map=map, env=env)[layer]['key']
+        key = vector_db(map=map, env=env)[layer]["key"]
     except KeyError:
-        error(_('Missing layer %(layer)d in vector map <%(map)s>') %
-              {'layer': layer, 'map': map})
-        return {'columns': [], 'values': {}}
+        error(
+            _("Missing layer %(layer)d in vector map <%(map)s>")
+            % {"layer": layer, "map": map}
+        )
+        return {"columns": [], "values": {}}
 
     include_key = True
-    if 'columns' in kwargs:
-        if key not in kwargs['columns'].split(','):
+    if "columns" in kwargs:
+        if key not in kwargs["columns"].split(","):
             # add key column if missing
             include_key = False
             debug("Adding key column to the output")
-            kwargs['columns'] += ',' + key
+            kwargs["columns"] += "," + key
 
-    ret = read_command('v.db.select', map=map, layer=layer,
-                       env=env, **kwargs)
+    ret = read_command("v.db.select", map=map, layer=layer, env=env, **kwargs)
 
     if not ret:
-        error(_('vector_db_select() failed'))
-        return {'columns': [], 'values': {}}
+        error(_("vector_db_select() failed"))
+        return {"columns": [], "values": {}}
 
     columns = []
     values = {}
     for line in ret.splitlines():
         if not columns:
-            columns = line.split('|')
+            columns = line.split("|")
             key_index = columns.index(key)
             # discard key column
             if not include_key:
                 columns = columns[:-1]
             continue
 
-        value = line.split('|')
+        value = line.split("|")
         key_value = int(value[key_index])
         if not include_key:
             # discard key column
@@ -269,16 +285,24 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
         else:
             values[key_value] = value
 
-    return {'columns': columns, 'values': values}
+    return {"columns": columns, "values": values}
 
 
 json = None
 orderedDict = None
 
 
-def vector_what(map, coord, distance=0.0, ttype=None,
-                encoding=None, skip_attributes=False,
-                layer=None, multiple=False, env=None):
+def vector_what(
+    map,
+    coord,
+    distance=0.0,
+    ttype=None,
+    encoding=None,
+    skip_attributes=False,
+    layer=None,
+    multiple=False,
+    env=None,
+):
     """Query vector map at given locations
 
     To query one vector map at one location
@@ -359,36 +383,40 @@ def vector_what(map, coord, distance=0.0, ttype=None,
         else:
             layer_list = [str(layer)]
         if len(layer_list) != len(map_list):
-            raise ScriptError(_("Number of given vector maps ({m}) "
-                                "differs from number of layers ({l})").format(m=len(map_list),
-                                                                              l=len(layer_list)))
+            raise ScriptError(
+                _(
+                    "Number of given vector maps ({m}) "
+                    "differs from number of layers ({l})"
+                ).format(m=len(map_list), l=len(layer_list))
+            )
     else:
-        layer_list = ['-1'] * len(map_list)
+        layer_list = ["-1"] * len(map_list)
 
     coord_list = list()
     if isinstance(coord, tuple):
-        coord_list.append('%f,%f' % (coord[0], coord[1]))
+        coord_list.append("%f,%f" % (coord[0], coord[1]))
     else:
         for e, n in coord:
-            coord_list.append('%f,%f' % (e, n))
+            coord_list.append("%f,%f" % (e, n))
 
-    flags = 'j'
+    flags = "j"
     if not skip_attributes:
-        flags += 'a'
+        flags += "a"
     if multiple:
-        flags += 'm'
-    cmdParams = dict(quiet=True,
-                     flags=flags,
-                     map=','.join(map_list),
-                     layer=','.join(layer_list),
-                     coordinates=','.join(coord_list),
-                     distance=float(distance))
+        flags += "m"
+    cmdParams = dict(
+        quiet=True,
+        flags=flags,
+        map=",".join(map_list),
+        layer=",".join(layer_list),
+        coordinates=",".join(coord_list),
+        distance=float(distance),
+    )
     if ttype:
-        cmdParams['type'] = ','.join(ttype)
+        cmdParams["type"] = ",".join(ttype)
 
     try:
-        ret = read_command('v.what', env=env,
-                           **cmdParams).strip()
+        ret = read_command("v.what", env=env, **cmdParams).strip()
     except CalledModuleError as e:
         raise ScriptError(e.msg)
 
@@ -404,28 +432,31 @@ def vector_what(map, coord, distance=0.0, ttype=None,
     if orderedDict is None:
         try:
             from collections import OrderedDict
+
             orderedDict = OrderedDict
         except ImportError:
             orderedDict = dict
 
     kwargs = {}
     if encoding:
-        kwargs['encoding'] = encoding
+        kwargs["encoding"] = encoding
 
     if sys.version_info[0:2] > (2, 6):
-        kwargs['object_pairs_hook'] = orderedDict
+        kwargs["object_pairs_hook"] = orderedDict
 
     try:
         result = json.loads(ret, **kwargs)
     except ValueError:
-        raise ScriptError(_("v.what output is not valid JSON format:\n {ret}").format(ret=ret))
+        raise ScriptError(
+            _("v.what output is not valid JSON format:\n {ret}").format(ret=ret)
+        )
 
     if multiple:
-        for vmap in result['Maps']:
-            features = vmap.pop('Features', None)
+        for vmap in result["Maps"]:
+            features = vmap.pop("Features", None)
             if features:
                 for feature in features:
-                    cats = feature.pop('Categories', None)
+                    cats = feature.pop("Categories", None)
                     if cats:
                         for cat in cats:
                             tmp = feature.copy()
@@ -434,8 +465,8 @@ def vector_what(map, coord, distance=0.0, ttype=None,
                             tmp2.update(tmp)
                             data.append(tmp2)
     else:
-        for vmap in result['Maps']:
-            cats = vmap.pop('Categories', None)
+        for vmap in result["Maps"]:
+            cats = vmap.pop("Categories", None)
             if cats:
                 for cat in cats:
                     tmp = vmap.copy()

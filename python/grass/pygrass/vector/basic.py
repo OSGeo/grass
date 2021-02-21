@@ -56,8 +56,7 @@ class Bbox(object):
         """Private method to set the north value"""
         self.c_bbox.contents.N = value
 
-    north = property(fget=_get_n, fset=_set_n,
-                     doc="Set and obtain north value")
+    north = property(fget=_get_n, fset=_set_n, doc="Set and obtain north value")
 
     def _get_s(self):
         """Private method to obtain the south value"""
@@ -67,8 +66,7 @@ class Bbox(object):
         """Private method to set the south value"""
         self.c_bbox.contents.S = value
 
-    south = property(fget=_get_s, fset=_set_s,
-                     doc="Set and obtain south value")
+    south = property(fget=_get_s, fset=_set_s, doc="Set and obtain south value")
 
     def _get_e(self):
         """Private method to obtain the east value"""
@@ -78,8 +76,7 @@ class Bbox(object):
         """Private method to set the east value"""
         self.c_bbox.contents.E = value
 
-    east = property(fget=_get_e, fset=_set_e,
-                    doc="Set and obtain east value")
+    east = property(fget=_get_e, fset=_set_e, doc="Set and obtain east value")
 
     def _get_w(self):
         """Private method to obtain the west value"""
@@ -89,8 +86,7 @@ class Bbox(object):
         """Private method to set the west value"""
         self.c_bbox.contents.W = value
 
-    west = property(fget=_get_w, fset=_set_w,
-                    doc="Set and obtain west value")
+    west = property(fget=_get_w, fset=_set_w, doc="Set and obtain west value")
 
     def _get_t(self):
         """Private method to obtain the top value"""
@@ -100,8 +96,7 @@ class Bbox(object):
         """Private method to set the top value"""
         self.c_bbox.contents.T = value
 
-    top = property(fget=_get_t, fset=_set_t,
-                   doc="Set and obtain top value")
+    top = property(fget=_get_t, fset=_set_t, doc="Set and obtain top value")
 
     def _get_b(self):
         """Private method to obtain the bottom value"""
@@ -111,19 +106,18 @@ class Bbox(object):
         """Private method to set the bottom value"""
         self.c_bbox.contents.B = value
 
-    bottom = property(fget=_get_b, fset=_set_b,
-                      doc="Set and obtain bottom value")
+    bottom = property(fget=_get_b, fset=_set_b, doc="Set and obtain bottom value")
 
     def __repr__(self):
-        return "Bbox({n}, {s}, {e}, {w})".format(n=self.north, s=self.south,
-                                                 e=self.east, w=self.west)
+        return "Bbox({n}, {s}, {e}, {w})".format(
+            n=self.north, s=self.south, e=self.east, w=self.west
+        )
 
     def _repr_html_(self):
-        return dict2html(dict(self.items()), keys=self.keys(),
-                         border='1', kdec='b')
+        return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
 
     def keys(self):
-        return ['north', 'south', 'west', 'east', 'top', 'bottom']
+        return ["north", "south", "west", "east", "top", "bottom"]
 
     def contains(self, point):
         """Return True if the object is contained by the BoundingBox
@@ -138,9 +132,11 @@ class Bbox(object):
         True
 
         """
-        return bool(libvect.Vect_point_in_box(point.x, point.y,
-                                              point.z if point.z else 0,
-                                              self.c_bbox))
+        return bool(
+            libvect.Vect_point_in_box(
+                point.x, point.y, point.z if point.z else 0, self.c_bbox
+            )
+        )
 
     def items(self):
         return [(k, self.__getattribute__(k)) for k in self.keys()]
@@ -154,8 +150,7 @@ class Bbox(object):
 
         """
         if tb:
-            return (self.north, self.south, self.east, self.west,
-                    self.top, self.bottom)
+            return (self.north, self.south, self.east, self.west, self.top, self.bottom)
         else:
             return (self.north, self.south, self.east, self.west)
 
@@ -186,8 +181,7 @@ class BoxList(object):
         return self.c_boxlist.contents.n_values
 
     def __repr__(self):
-        return "Boxlist([%s])" % ", ".join([repr(box)
-                                            for box in self.__iter__()])
+        return "Boxlist([%s])" % ", ".join([repr(box) for box in self.__iter__()])
 
     def __getitem__(self, indx):
         bbox = Bbox()
@@ -226,37 +220,37 @@ class BoxList(object):
         indx = self.__len__()
         libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
 
-#    def extend(self, boxlist):
-#        """Extend a boxlist with another boxlist or using a list of Bbox, using
-#        ``Vect_boxlist_append_boxlist`` c function. ::
-#
-#            >>> box0 = Bbox()
-#            >>> box1 = Bbox(1,2,3,4)
-#            >>> box2 = Bbox(5,6,7,8)
-#            >>> box3 = Bbox(9,8,7,6)
-#            >>> boxlist0 = BoxList([box0, box1])
-#            >>> boxlist0
-#            Boxlist([Bbox(0.0, 0.0, 0.0, 0.0), Bbox(1.0, 2.0, 3.0, 4.0)])
-#            >>> boxlist1 = BoxList([box2, box3])
-#            >>> len(boxlist0)
-#            2
-#            >>> boxlist0.extend(boxlist1)
-#            >>> len(boxlist0)
-#            4
-#            >>> boxlist1.extend([box0, box1])
-#            >>> len(boxlist1)
-#            4
-#
-#        ..
-#        """
-#        if hasattr(boxlist, 'c_boxlist'):
-#            #import pdb; pdb.set_trace()
-#            # FIXME: doesn't work
-#            libvect.Vect_boxlist_append_boxlist(self.c_boxlist,
-#                                                boxlist.c_boxlist)
-#        else:
-#            for box in boxlist:
-#                self.append(box)
+    #    def extend(self, boxlist):
+    #        """Extend a boxlist with another boxlist or using a list of Bbox, using
+    #        ``Vect_boxlist_append_boxlist`` c function. ::
+    #
+    #            >>> box0 = Bbox()
+    #            >>> box1 = Bbox(1,2,3,4)
+    #            >>> box2 = Bbox(5,6,7,8)
+    #            >>> box3 = Bbox(9,8,7,6)
+    #            >>> boxlist0 = BoxList([box0, box1])
+    #            >>> boxlist0
+    #            Boxlist([Bbox(0.0, 0.0, 0.0, 0.0), Bbox(1.0, 2.0, 3.0, 4.0)])
+    #            >>> boxlist1 = BoxList([box2, box3])
+    #            >>> len(boxlist0)
+    #            2
+    #            >>> boxlist0.extend(boxlist1)
+    #            >>> len(boxlist0)
+    #            4
+    #            >>> boxlist1.extend([box0, box1])
+    #            >>> len(boxlist1)
+    #            4
+    #
+    #        ..
+    #        """
+    #        if hasattr(boxlist, 'c_boxlist'):
+    #            #import pdb; pdb.set_trace()
+    #            # FIXME: doesn't work
+    #            libvect.Vect_boxlist_append_boxlist(self.c_boxlist,
+    #                                                boxlist.c_boxlist)
+    #        else:
+    #            for box in boxlist:
+    #                self.append(box)
 
     def remove(self, indx):
         """Remove Bbox from the boxlist, given an integer or a list of integer
@@ -274,7 +268,7 @@ class BoxList(object):
         Boxlist([Bbox(1.0, 0.0, 0.0, 1.0), Bbox(1.0, -1.0, -1.0, 1.0)])
 
         """
-        if hasattr(indx, 'c_boxlist'):
+        if hasattr(indx, "c_boxlist"):
             libvect.Vect_boxlist_delete_boxlist(self.c_boxlist, indx.c_boxlist)
         elif isinstance(indx, int):
             libvect.Vect_boxlist_delete(self.c_boxlist, indx)
@@ -301,7 +295,7 @@ class BoxList(object):
 
 class Ilist(object):
     """Instantiate a list of integer using the C GRASS struct ``ilist``,
-    the class contains this struct as ``c_ilist`` attribute. """
+    the class contains this struct as ``c_ilist`` attribute."""
 
     def __init__(self, integer_list=None):
         self.c_ilist = ctypes.pointer(libvect.struct_ilist())
@@ -310,22 +304,24 @@ class Ilist(object):
 
     def __getitem__(self, key):
         if isinstance(key, slice):
-            #import pdb; pdb.set_trace()
-            #Get the start, stop, and step from the slice
-            return [self.c_ilist.contents.value[indx]
-                    for indx in range(*key.indices(len(self)))]
+            # import pdb; pdb.set_trace()
+            # Get the start, stop, and step from the slice
+            return [
+                self.c_ilist.contents.value[indx]
+                for indx in range(*key.indices(len(self)))
+            ]
         elif isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_ilist.contents.n_values
             if key >= self.c_ilist.contents.n_values:
-                raise IndexError('Index out of range')
+                raise IndexError("Index out of range")
             return self.c_ilist.contents.value[key]
         else:
             raise ValueError("Invalid argument type: %r." % key)
 
     def __setitem__(self, key, value):
         if self.contains(value):
-            raise ValueError('Integer already in the list')
+            raise ValueError("Integer already in the list")
         self.c_ilist.contents.value[key] = int(value)
 
     def __len__(self):
@@ -372,7 +368,7 @@ class Ilist(object):
             for i in value:
                 libvect.Vect_list_delete(self.c_ilist, int(i))
         else:
-            raise ValueError('Value: %r, is not supported' % value)
+            raise ValueError("Value: %r, is not supported" % value)
 
     def contains(self, value):
         """Check if value is in the list"""
@@ -411,6 +407,7 @@ class Cats(object):
     []
 
     """
+
     @property
     def layer(self):
         field = self.c_cats.contents.field
@@ -470,7 +467,7 @@ class Cats(object):
             err_msg = err_msg % (layer, cat)
         else:
             self.n_del = libvect.Vect_cat_del(self.c_cats, layer)
-            err_msg = 'Layer: %r does not exist' % layer
+            err_msg = "Layer: %r does not exist" % layer
         if self.n_del == 0:
             raise ValueError(err_msg)
 
@@ -482,8 +479,9 @@ class Cats(object):
         :param layer: the number of layer
         :type layer: int
         """
-        return bool(libvect.Vect_cats_in_constraint(self.c_cats, layer,
-                                                    cats_list.c_cat_list))
+        return bool(
+            libvect.Vect_cats_in_constraint(self.c_cats, layer, cats_list.c_cat_list)
+        )
 
     def get_list(self, layer=1):
         """Get list of categories of given field.
@@ -492,9 +490,8 @@ class Cats(object):
         :type layer: int
         """
         ilist = Ilist()
-        if libvect.Vect_field_cat_get(self.c_cats, layer,
-                                      ilist.c_ilist) < 0:
-            raise ValueError('Layer: %r does not exist' % layer)
+        if libvect.Vect_field_cat_get(self.c_cats, layer, ilist.c_ilist) < 0:
+            raise ValueError("Layer: %r does not exist" % layer)
         return ilist
 
 
@@ -520,6 +517,7 @@ class CatsList(object):
     4
 
     """
+
     @property
     def layer(self):
         """Return the layer number"""
@@ -543,8 +541,9 @@ class CatsList(object):
         return [max_values[i] for i in range(self.n_ranges)]
 
     def __init__(self, c_cat_list=None):
-        self.c_cat_list = c_cat_list if c_cat_list \
-            else ctypes.pointer(libvect.cat_list())
+        self.c_cat_list = (
+            c_cat_list if c_cat_list else ctypes.pointer(libvect.cat_list())
+        )
 
     def from_string(self, string):
         """Converts string of categories and cat ranges separated by commas
@@ -556,6 +555,7 @@ class CatsList(object):
         num_errors = libvect.Vect_str_to_cat_list(string, self.c_cat_list)
         if num_errors:
             from grass.pygrass.errors import GrassError
+
             raise GrassError("%d number of errors in ranges" % num_errors)
 
     def from_array(self, array):
@@ -576,6 +576,8 @@ class CatsList(object):
         """
         return bool(libvect.Vect_cat_in_cat_list(cat, self.c_cat_list))
 
+
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

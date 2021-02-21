@@ -17,44 +17,56 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-from .core import get_current_mapset, get_tgis_message_interface, SQLDatabaseInterfaceConnection
+from .core import (
+    get_current_mapset,
+    get_tgis_message_interface,
+    SQLDatabaseInterfaceConnection,
+)
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
 
 
-def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
-                                 separator, method, spatial=False,
-                                 print_only=True):
+def sample_stds_by_stds_topology(
+    intype,
+    sampletype,
+    inputs,
+    sampler,
+    header,
+    separator,
+    method,
+    spatial=False,
+    print_only=True,
+):
     """Sample the input space time datasets with a sample
-       space time dataset, return the created map matrix and optionally
-       print the result to stdout
+    space time dataset, return the created map matrix and optionally
+    print the result to stdout
 
-        In case multiple maps are located in the current granule,
-        the map names are separated by comma.
+     In case multiple maps are located in the current granule,
+     the map names are separated by comma.
 
-        In case a layer is present, the names map ids are extended
-        in this form: "name:layer@mapset"
+     In case a layer is present, the names map ids are extended
+     in this form: "name:layer@mapset"
 
-        Attention: Do not use the comma as separator for printing
+     Attention: Do not use the comma as separator for printing
 
-        :param intype: Type of the input space time dataset (strds, stvds or
-                       str3ds)
-        :param sampletype: Type of the sample space time datasets (strds,
-                           stvds or str3ds)
-        :param inputs: Name or comma separated names of space time datasets or
-                       a list of map names
-        :param sampler: Name of a space time dataset used for temporal sampling
-        :param header: Set True to print column names
-        :param separator: The field separator character between the columns
-        :param method: The method to be used for temporal sampling
-                       (start,during,contain,overlap,equal) as comma separated
-                       string or as a list of methods
-        :param spatial: Perform spatial overlapping check
-        :param print_only: If set True (default) then the result of the
-                           sampling will be printed to stdout, if set to False
-                           the resulting map matrix will be returned.
+     :param intype: Type of the input space time dataset (strds, stvds or
+                    str3ds)
+     :param sampletype: Type of the sample space time datasets (strds,
+                        stvds or str3ds)
+     :param inputs: Name or comma separated names of space time datasets or
+                    a list of map names
+     :param sampler: Name of a space time dataset used for temporal sampling
+     :param header: Set True to print column names
+     :param separator: The field separator character between the columns
+     :param method: The method to be used for temporal sampling
+                    (start,during,contain,overlap,equal) as comma separated
+                    string or as a list of methods
+     :param spatial: Perform spatial overlapping check
+     :param print_only: If set True (default) then the result of the
+                        sampling will be printed to stdout, if set to False
+                        the resulting map matrix will be returned.
 
-        :return: The map matrix or None if nothing found
+     :return: The map matrix or None if nothing found
     """
     mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
@@ -90,8 +102,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
 
     for st in sts:
         if st.is_in_db(dbif) is False:
-            msgr.fatal(_("Dataset <%s> not found in temporal database")
-                       % (st.get_id()))
+            msgr.fatal(_("Dataset <%s> not found in temporal database") % (st.get_id()))
         st.select(dbif)
 
     if sst.is_in_db(dbif) is False:

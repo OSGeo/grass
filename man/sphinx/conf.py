@@ -38,8 +38,8 @@ source_suffix = ".txt"
 master_doc = "index"
 
 # General information about the project.
-project = u"GRASS 7.9 Documentation"
-copyright = u"2019, GRASS Development Team"
+project = "GRASS 7.9 Documentation"
+copyright = "2019, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -182,8 +182,8 @@ latex_documents = [
     (
         "content",
         "grass79Documentation.tex",
-        u"GRASS 7.9 Documentation",
-        u"GRASS Development Team",
+        "GRASS 7.9 Documentation",
+        "GRASS Development Team",
         "manual",
     ),
 ]
@@ -217,8 +217,8 @@ man_pages = [
     (
         "content",
         "grass79documentation",
-        u"GRASS 7.9 Documentation",
-        [u"GRASS Development Team"],
+        "GRASS 7.9 Documentation",
+        ["GRASS Development Team"],
         1,
     )
 ]
@@ -236,8 +236,8 @@ texinfo_documents = [
     (
         "content",
         "grass79Documentation",
-        u"GRASS 7.9 Documentation",
-        u"GRASS Development Team",
+        "GRASS 7.9 Documentation",
+        "GRASS Development Team",
         "grass79Documentation",
         "One line description of project.",
         "Miscellaneous",
@@ -257,10 +257,10 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u"GRASS 7.9 Documentation"
-epub_author = u"GRASS Development Team"
-epub_publisher = u"GRASS Development Team"
-epub_copyright = u"2017, GRASS Development Team"
+epub_title = "GRASS 7.9 Documentation"
+epub_author = "GRASS Development Team"
+epub_publisher = "GRASS Development Team"
+epub_copyright = "2017, GRASS Development Team"
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

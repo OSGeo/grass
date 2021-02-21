@@ -4,8 +4,15 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
-from __future__ import (nested_scopes, generators, division, absolute_import,
-                        with_statement, print_function, unicode_literals)
+from __future__ import (
+    nested_scopes,
+    generators,
+    division,
+    absolute_import,
+    with_statement,
+    print_function,
+    unicode_literals,
+)
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property
@@ -16,9 +23,9 @@ def _check_value(param, value):
     """Function to check the correctness of a value and
     return the checked value and the original.
     """
-    must_val = 'The Parameter <%s>, must be one of the following values: %r'
-    req = 'The Parameter <%s>, require: %s, get: %s instead: %r\n%s'
-    string = (type(b''), type(u''))
+    must_val = "The Parameter <%s>, must be one of the following values: %r"
+    req = "The Parameter <%s>, require: %s, get: %s instead: %r\n%s"
+    string = (type(b""), type(""))
 
     def raiseexcpet(exc, param, ptype, value):
         """Function to modifa the error message"""
@@ -37,8 +44,9 @@ def _check_value(param, value):
             if type(value) in (int, float):
                 value = str(value)
             if type(value) not in string:
-                msg = ("The Parameter <%s> require a string,"
-                       " %s instead is provided: %r")
+                msg = (
+                    "The Parameter <%s> require a string," " %s instead is provided: %r"
+                )
                 raise ValueError(msg % (param.name, type(value), value))
         return value
 
@@ -49,8 +57,16 @@ def _check_value(param, value):
     # find errors with multiple parmeters
     if isinstance(value, (list, tuple)):
         if param.keydescvalues:
-            return (([value, ], value) if isinstance(value, tuple)
-                    else (value, value))
+            return (
+                (
+                    [
+                        value,
+                    ],
+                    value,
+                )
+                if isinstance(value, tuple)
+                else (value, value)
+            )
         if param.multiple:
             # everything looks fine, so check each value
             try:
@@ -58,14 +74,14 @@ def _check_value(param, value):
             except Exception as exc:
                 raiseexcpet(exc, param, param.type, value)
         else:
-            msg = 'The Parameter <%s> does not accept multiple inputs'
+            msg = "The Parameter <%s> does not accept multiple inputs"
             raise TypeError(msg % param.name)
 
     if param.keydescvalues:
-        msg = 'The Parameter <%s> require multiple inputs in the form: %s'
+        msg = "The Parameter <%s> require multiple inputs in the form: %s"
         raise TypeError(msg % (param.name, param.keydescvalues))
 
-    if param.typedesc == 'all':
+    if param.typedesc == "all":
         return value, value
 
     # check string before trying to convert value to the correct type
@@ -77,20 +93,30 @@ def _check_value(param, value):
         raiseexcpet(exc, param, type(value), value)
 
     # check values
-    if hasattr(param, 'values'):
+    if hasattr(param, "values"):
         if param.type in (float, int):
             # check for value in range
-            if ((param.min is not None and newvalue < param.min) or
-                    (param.max is not None and newvalue > param.max)):
-                err_str = ('The Parameter <%s>, must be between: '
-                           '%g<=value<=%g, %r is outside.')
-                raise ValueError(err_str % (param.name, param.min,
-                                            param.max, newvalue))
+            if (param.min is not None and newvalue < param.min) or (
+                param.max is not None and newvalue > param.max
+            ):
+                err_str = (
+                    "The Parameter <%s>, must be between: "
+                    "%g<=value<=%g, %r is outside."
+                )
+                raise ValueError(err_str % (param.name, param.min, param.max, newvalue))
         # check if value is in the list of valid values
         if param.values is not None and newvalue not in param.values:
             raise ValueError(must_val % (param.name, param.values))
-    return (([newvalue, ] if (param.multiple or param.keydescvalues)
-             else newvalue), value)
+    return (
+        (
+            [
+                newvalue,
+            ]
+            if (param.multiple or param.keydescvalues)
+            else newvalue
+        ),
+        value,
+    )
 
 
 # TODO add documentation
@@ -119,62 +145,62 @@ class Parameter(object):
         self.max = None
         diz = element2dict(xparameter) if xparameter is not None else diz
         if diz is None:
-            raise TypeError('Xparameter or diz are required')
-        self.name = diz['name']
-        self.required = True if diz['required'] == 'yes' else False
-        self.multiple = True if diz['multiple'] == 'yes' else False
+            raise TypeError("Xparameter or diz are required")
+        self.name = diz["name"]
+        self.required = True if diz["required"] == "yes" else False
+        self.multiple = True if diz["multiple"] == "yes" else False
         # check the type
-        if diz['type'] in GETTYPE:
-            self.type = GETTYPE[diz['type']]
-            self.typedesc = diz['type']
+        if diz["type"] in GETTYPE:
+            self.type = GETTYPE[diz["type"]]
+            self.typedesc = diz["type"]
         else:
-            raise TypeError('New type: %s, ignored' % diz['type'])
+            raise TypeError("New type: %s, ignored" % diz["type"])
 
-        self.description = diz.get('description', None)
-        self.keydesc, self.keydescvalues = diz.get('keydesc', (None, None))
+        self.description = diz.get("description", None)
+        self.keydesc, self.keydescvalues = diz.get("keydesc", (None, None))
 
         #
         # values
         #
-        if 'values' in diz:
+        if "values" in diz:
             try:
                 # Check for integer ranges: "3-30" or float ranges: "0.0-1.0"
-                isrange = re.match("(?P<min>-*\d+.*\d*)*-(?P<max>\d+.*\d*)*",
-                                   diz['values'][0])
+                isrange = re.match(
+                    "(?P<min>-*\d+.*\d*)*-(?P<max>\d+.*\d*)*", diz["values"][0]
+                )
                 if isrange:
                     mn, mx = isrange.groups()
                     self.min = None if mn is None else float(mn)
                     self.max = None if mx is None else float(mx)
                     self.values = None
-                    self.isrange = diz['values'][0]
+                    self.isrange = diz["values"][0]
                 # No range was found
                 else:
-                    self.values = [self.type(i) for i in diz['values']]
+                    self.values = [self.type(i) for i in diz["values"]]
                     self.isrange = False
             except TypeError:
-                self.values = [self.type(i) for i in diz['values']]
+                self.values = [self.type(i) for i in diz["values"]]
                 self.isrange = False
 
         #
         # default
         #
-        if 'default' in diz and diz['default']:
+        if "default" in diz and diz["default"]:
             if self.multiple or self.keydescvalues:
-                self.default = [self.type(v)
-                                for v in diz['default'].split(',')]
+                self.default = [self.type(v) for v in diz["default"].split(",")]
             else:
-                self.default = self.type(diz['default'])
+                self.default = self.type(diz["default"])
         else:
             self.default = None
         self._value, self._rawvalue = self.default, self.default
-        self.guisection = diz.get('guisection', None)
+        self.guisection = diz.get("guisection", None)
 
         #
         # gisprompt
         #
-        if 'gisprompt' in diz and diz['gisprompt']:
-            self.typedesc = diz['gisprompt'].get('prompt', '')
-            self.input = False if diz['gisprompt']['age'] == 'new' else True
+        if "gisprompt" in diz and diz["gisprompt"]:
+            self.typedesc = diz["gisprompt"].get("prompt", "")
+            self.input = False if diz["gisprompt"]["age"] == "new" else True
         else:
             self.input = True
 
@@ -186,8 +212,11 @@ class Parameter(object):
 
     # here the property function is used to transform value in an attribute
     # in this case we define which function must be use to get/set the value
-    value = property(fget=_get_value, fset=_set_value,
-                     doc="Parameter value transformed and validated.")
+    value = property(
+        fget=_get_value,
+        fset=_set_value,
+        doc="Parameter value transformed and validated.",
+    )
 
     @property
     def rawvalue(self):
@@ -205,11 +234,16 @@ class Parameter(object):
 
         ..
         """
-        sep = ','
+        sep = ","
         if isinstance(self.rawvalue, (list, tuple)):
-            value = sep.join([sep.join([str(v) for v in val])
-                              if isinstance(val, tuple) else str(val)
-                              for val in self.rawvalue])
+            value = sep.join(
+                [
+                    sep.join([str(v) for v in val])
+                    if isinstance(val, tuple)
+                    else str(val)
+                    for val in self.rawvalue
+                ]
+            )
         else:
             value = str(self.rawvalue)
         return "%s=%s" % (self.name, value)
@@ -226,7 +260,7 @@ class Parameter(object):
         ..
         """
         if self.value is None:
-            return ''
+            return ""
         return """%s=%r""" % (self.name, self.value)
 
     def __str__(self):
@@ -236,11 +270,13 @@ class Parameter(object):
     def __repr__(self):
         """Return the python representation of the GRASS module parameter."""
         str_repr = "Parameter <%s> (required:%s, type:%s, multiple:%s)"
-        mtype = ('raster', 'vector')  # map type
-        return str_repr % (self.name,
-                           "yes" if self.required else "no",
-                           self.type if self.type in mtype else self.typedesc,
-                           "yes" if self.multiple else "no")
+        mtype = ("raster", "vector")  # map type
+        return str_repr % (
+            self.name,
+            "yes" if self.required else "no",
+            self.type if self.type in mtype else self.typedesc,
+            "yes" if self.multiple else "no",
+        )
 
     @docstring_property(__doc__)
     def __doc__(self):
@@ -262,19 +298,22 @@ class Parameter(object):
                 Values: 2, 4, 6, 8
         ..
         """
-        if hasattr(self, 'values'):
+        if hasattr(self, "values"):
             if self.isrange:
                 vals = self.isrange
             else:
-                vals = ', '.join([repr(val) for val in self.values])
+                vals = ", ".join([repr(val) for val in self.values])
         else:
             vals = False
         if self.keydescvalues:
-            keydescvals = "\n    (%s)" % ', '.join(self.keydescvalues)
-        return DOC['param'].format(name=self.name,
-                default=repr(self.default) + ', ' if self.default else '',
-            required='required, ' if self.required else 'optional, ',
-            multi='multi' if self.multiple else '',
-            ptype=self.typedesc, description=self.description,
-            values='\n    Values: {0}'.format(vals)  if vals else '',
-            keydescvalues= keydescvals if self.keydescvalues else '')
+            keydescvals = "\n    (%s)" % ", ".join(self.keydescvalues)
+        return DOC["param"].format(
+            name=self.name,
+            default=repr(self.default) + ", " if self.default else "",
+            required="required, " if self.required else "optional, ",
+            multi="multi" if self.multiple else "",
+            ptype=self.typedesc,
+            description=self.description,
+            values="\n    Values: {0}".format(vals) if vals else "",
+            keydescvalues=keydescvals if self.keydescvalues else "",
+        )

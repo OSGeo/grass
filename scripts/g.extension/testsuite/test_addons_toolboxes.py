@@ -18,7 +18,7 @@ from grass.gunittest.gmodules import SimpleModule
 
 import os
 
-FULL_TOOLBOXES_OUTPUT = u"""\
+FULL_TOOLBOXES_OUTPUT = """\
 Hydrology (HY)
 * r.stream.basins
 * r.stream.channel

@@ -31,7 +31,12 @@ def call_use_temp_region(script, size, remaining, nesting, map_name=None):
             call.append(map_name)
         subprocess.check_call(call)
     if map_name:
-        gs.run_command("r.mapcalc", expression="{map_name}_size_{size}_nesting_{nesting} = 1".format(**locals()))
+        gs.run_command(
+            "r.mapcalc",
+            expression="{map_name}_size_{size}_nesting_{nesting} = 1".format(
+                **locals()
+            ),
+        )
 
 
 def main():
@@ -70,7 +75,11 @@ def main():
         else:
             map_name = None
     call_use_temp_region(
-        script=this_file, size=size, remaining=remaining, nesting=nesting, map_name=map_name
+        script=this_file,
+        size=size,
+        remaining=remaining,
+        nesting=nesting,
+        map_name=map_name,
     )
 
 

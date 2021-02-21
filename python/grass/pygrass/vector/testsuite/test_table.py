@@ -22,14 +22,16 @@ if sys.version_info.major >= 3:
     long = int
 
 # dictionary that generate random data
-COL2VALS = {'INT': lambda n: np.random.randint(9, size=n),
-            'INTEGER': lambda n: np.random.randint(9, size=n),
-            'INTEGER PRIMARY KEY': lambda n: np.arange(1, n+1, dtype=long),
-            'REAL': lambda n: np.random.rand(n),
-            'TEXT': lambda n: np.array([randstr() for _ in range(n)])}
+COL2VALS = {
+    "INT": lambda n: np.random.randint(9, size=n),
+    "INTEGER": lambda n: np.random.randint(9, size=n),
+    "INTEGER PRIMARY KEY": lambda n: np.arange(1, n + 1, dtype=long),
+    "REAL": lambda n: np.random.rand(n),
+    "TEXT": lambda n: np.array([randstr() for _ in range(n)]),
+}
 
 
-def randstr(prefix='', suffix='', size=6, chars=ascii_letters + digits):
+def randstr(prefix="", suffix="", size=6, chars=ascii_letters + digits):
     """Return a random string of characters.
 
     :param prefix: string prefix, default: ''
@@ -46,7 +48,7 @@ def randstr(prefix='', suffix='', size=6, chars=ascii_letters + digits):
 
     :returns: string
     """
-    return prefix + ''.join(choice(chars) for _ in range(size)) + suffix
+    return prefix + "".join(choice(chars) for _ in range(size)) + suffix
 
 
 def get_table_random_values(nrows, columns):
@@ -71,15 +73,26 @@ def get_table_random_values(nrows, columns):
 
 class DBconnection(object):
     """Define a class to share common methods between TestCase."""
-    path = os.path.join(tmp.gettempdir(), randstr(prefix='temp', suffix='.db'))
+
+    path = os.path.join(tmp.gettempdir(), randstr(prefix="temp", suffix=".db"))
     connection = sqlite3.connect(get_path(path))
-    for t in (np.int8, np.int16, np.int32, np.int64, np.uint8,
-              np.uint16, np.uint32, np.uint64):
+    for t in (
+        np.int8,
+        np.int16,
+        np.int32,
+        np.int64,
+        np.uint8,
+        np.uint16,
+        np.uint32,
+        np.uint64,
+    ):
         sqlite3.register_adapter(t, int)
-    columns = [('cat', 'INTEGER PRIMARY KEY'),
-               ('cint', 'INT'),
-               ('creal', 'REAL'),
-               ('ctxt', 'TEXT')]
+    columns = [
+        ("cat", "INTEGER PRIMARY KEY"),
+        ("cint", "INT"),
+        ("creal", "REAL"),
+        ("ctxt", "TEXT"),
+    ]
 
     def create_table_instance(self, **kw):
         """Return a Table class instance
@@ -90,9 +103,8 @@ class DBconnection(object):
 
         :returns: Table instance
         """
-        self.tname = randstr(prefix='temp')
-        return Table(name=self.tname,
-                     connection=self.connection, **kw)
+        self.tname = randstr(prefix="temp")
+        return Table(name=self.tname, connection=self.connection, **kw)
 
     def create_empty_table(self, columns=None, **kw):
         """Create an empty table in the database and return Table class
@@ -112,8 +124,7 @@ class DBconnection(object):
         table.create(columns)
         return table
 
-    def create_not_empty_table(self, nrows=None, values=None,
-                               columns=None, **kw):
+    def create_not_empty_table(self, nrows=None, values=None, columns=None, **kw):
         """Create a not empty table in the database and return Table class
         instance.
 
@@ -136,8 +147,7 @@ class DBconnection(object):
             msg = "Both parameters ``nrows`` ``values`` are empty"
             raise RuntimeError(msg)
         columns = self.columns if columns is None else columns
-        values = (get_table_random_values(nrows, columns) if values is None
-                  else values)
+        values = get_table_random_values(nrows, columns) if values is None else values
         table = self.create_empty_table(columns=columns, **kw)
         table.insert(values, many=True)
         return table
@@ -155,17 +165,15 @@ class DBconnection(object):
 
 
 class ColumnsTestCase(DBconnection, TestCase):
-
     def test_check_insert_update_str(self):
         """Check insert_str and update_str attribute of Columns are correct"""
-        insert = 'INSERT INTO %s VALUES (?,?,?,?)'
+        insert = "INSERT INTO %s VALUES (?,?,?,?)"
         self.assertEqual(self.cols.insert_str, insert % self.tname)
-        update = 'UPDATE %s SET cint=?,creal=?,ctxt=? WHERE cat=?;'
+        update = "UPDATE %s SET cint=?,creal=?,ctxt=? WHERE cat=?;"
         self.assertEqual(self.cols.update_str, update % self.tname)
 
 
 class TableInsertTestCase(DBconnection, TestCase):
-
     def setUp(self):
         """Create a not empty table instance"""
         self.table = self.create_empty_table()
@@ -180,7 +188,7 @@ class TableInsertTestCase(DBconnection, TestCase):
     def test_insert(self):
         """Test Table.insert method"""
         cat = 1
-        vals = (cat, 1111, 0.1111, 'test')
+        vals = (cat, 1111, 0.1111, "test")
         cur = self.connection.cursor()
         self.table.insert(vals, cursor=cur)
         sqlquery = "SELECT cat, cint, creal, ctxt FROM %s WHERE cat=%d"
@@ -189,9 +197,11 @@ class TableInsertTestCase(DBconnection, TestCase):
 
     def test_insert_many(self):
         """Test Table.insert method using many==True"""
-        vals = [(1, 1111, 0.1111, 'test1'),
-                (2, 2222, 0.2222, 'test2'),
-                (3, 3333, 0.3333, 'test3')]
+        vals = [
+            (1, 1111, 0.1111, "test1"),
+            (2, 2222, 0.2222, "test2"),
+            (3, 3333, 0.3333, "test3"),
+        ]
         cur = self.connection.cursor()
         self.table.insert(vals, cursor=cur, many=True)
         sqlquery = "SELECT cat, cint, creal, ctxt FROM %s"
@@ -200,10 +210,9 @@ class TableInsertTestCase(DBconnection, TestCase):
 
 
 class TableUpdateTestCase(DBconnection, TestCase):
-
     def test_update(self):
         """Test Table.update method"""
-        vals = (1122, 0.1122, 'test')
+        vals = (1122, 0.1122, "test")
         cat = 1
         cur = self.connection.cursor()
         self.table.update(cat, list(vals), cursor=cur)
@@ -213,5 +222,5 @@ class TableUpdateTestCase(DBconnection, TestCase):
         self.assertTupleEqual(vals, cur.fetchone())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()
