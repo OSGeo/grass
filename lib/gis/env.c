@@ -116,7 +116,8 @@ void G__read_gisrc_env(void)
 
 static void parse_env(FILE *fd, int loc)
 {
-    /* Account for long lines up to GPATH_MAX. */
+    /* Account for long lines up to GPATH_MAX. 
+       E.g. "GISDBASE: GPATH_MAX\n\0" */
     char buf[GPATH_MAX + 16];
     char *name;
     char *value;
