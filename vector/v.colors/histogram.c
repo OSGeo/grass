@@ -110,6 +110,9 @@ void histogram_eq_colors_bak(const struct Map_info *Map, int field, struct Color
     double total_area, sum_area;
     struct Area *areas;
 
+    if (Vect_level(Map) < 2)
+	G_fatal_error(_("Topology level required for histogram equalization."));
+
     num_areas = Vect_get_num_areas(Map);
     areas = (struct Area *)G_malloc(num_areas * sizeof(struct Area));
     total_area = 0;
