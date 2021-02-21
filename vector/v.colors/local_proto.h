@@ -1,3 +1,9 @@
+#ifndef __LOCAL_PROTO_H__
+#define __LOCAL_PROTO_H__
+
+#include <grass/vector.h>
+#include <grass/raster.h>
+
 /* use option */
 #define USE_ATTR 1
 #define USE_CAT  2
@@ -26,3 +32,8 @@ void write_rgb_values(const struct Map_info *, int, const char *,
 /* read_rgb.c */
 void rgb2colr(const struct Map_info *, int, const char *,
 	      struct Colors *);
+
+/* histogram.c */
+void histogram_eq_colors(const struct Map_info *, int, struct Colors *, struct Colors *);
+
+#endif
