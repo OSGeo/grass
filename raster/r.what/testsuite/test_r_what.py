@@ -15,11 +15,11 @@ import os
 
 
 class TestRasterWhat(TestCase):
-    map1 = 'boundary_county_500m'
-    map2 = 'landuse96_28m,aspect'
+    map1 = "boundary_county_500m"
+    map2 = "landuse96_28m,aspect"
     coordinates = (633614.08, 224125.12, 632972.36, 225382.87)
-    points = 'comm_colleges'
-    refrence_points="""145096.8591495|154534.264883875||39
+    points = "comm_colleges"
+    refrence_points = """145096.8591495|154534.264883875||39
 616341.4371495|146049.750883875||51
 410595.7191495|174301.828883875||71
 734153.6871495|169168.437883875||107
@@ -78,10 +78,10 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7
 332533.5941495|242831.139883875||121
 """
-    refrence_coordinates="""633614.08|224125.12||2|209.5939
+    refrence_coordinates = """633614.08|224125.12||2|209.5939
 632972.36|225382.87||15|140.7571
 """
-    refrence_cats="""1|145096.8591495|154534.264883875||39
+    refrence_cats = """1|145096.8591495|154534.264883875||39
 2|616341.4371495|146049.750883875||51
 3|410595.7191495|174301.828883875||71
 4|734153.6871495|169168.437883875||107
@@ -140,7 +140,7 @@ class TestRasterWhat(TestCase):
 57|511235.1561495|135372.358883875||7
 58|332533.5941495|242831.139883875||121
 """
-    refrence_csv="""easting,northing,site_name,boundary_county_500m
+    refrence_csv = """easting,northing,site_name,boundary_county_500m
 145096.8591495,154534.264883875,,39
 616341.4371495,146049.750883875,,51
 410595.7191495,174301.828883875,,71
@@ -200,7 +200,7 @@ class TestRasterWhat(TestCase):
 511235.1561495,135372.358883875,,7
 332533.5941495,242831.139883875,,121"""
 
-    refrence_flag_i="""145096.8591495|154534.264883875||39
+    refrence_flag_i = """145096.8591495|154534.264883875||39
 616341.4371495|146049.750883875||51
 410595.7191495|174301.828883875||71
 734153.6871495|169168.437883875||107
@@ -259,7 +259,7 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7
 332533.5941495|242831.139883875||121
 """
-    refrence_flag_f="""145096.8591495|154534.264883875||39|
+    refrence_flag_f = """145096.8591495|154534.264883875||39|
 616341.4371495|146049.750883875||51|
 410595.7191495|174301.828883875||71|
 734153.6871495|169168.437883875||107|
@@ -318,7 +318,7 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7|
 332533.5941495|242831.139883875||121|
 """
-    refrence_flag_r="""145096.8591495|154534.264883875||39|006:255:000
+    refrence_flag_r = """145096.8591495|154534.264883875||39|006:255:000
 616341.4371495|146049.750883875||51|000:255:071
 410595.7191495|174301.828883875||71|000:255:199
 734153.6871495|169168.437883875||107|000:080:255
@@ -377,7 +377,7 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7|211:255:000
 332533.5941495|242831.139883875||121|010:000:255
 """
-    refrence_cache="""145096.8591495|154534.264883875||39
+    refrence_cache = """145096.8591495|154534.264883875||39
 616341.4371495|146049.750883875||51
 410595.7191495|174301.828883875||71
 734153.6871495|169168.437883875||107
@@ -440,77 +440,109 @@ class TestRasterWhat(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', raster=cls.map1, flags='p')
+        cls.runModule("g.region", raster=cls.map1, flags="p")
 
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        if os.path.isfile('result.csv'):
-            os.remove('result.csv')
+        if os.path.isfile("result.csv"):
+            os.remove("result.csv")
 
     def test_raster_what_points(self):
         """Testing r.what runs successfully with input coordinates given as a vector points map"""
-        module = SimpleModule('r.what', map=self.map1, points=self.points)
+        module = SimpleModule("r.what", map=self.map1, points=self.points)
         module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=self.refrence_points,
-                             msg="test_raster_what_points did't run successfully")
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout),
+            reference=self.refrence_points,
+            msg="test_raster_what_points did't run successfully",
+        )
 
     def test_raster_what_coordinates(self):
         """Testing r.what runs successfully with input coordinates given as an option and with multiple maps"""
-        module = SimpleModule('r.what', map=self.map2, coordinates=self.coordinates)
+        module = SimpleModule("r.what", map=self.map2, coordinates=self.coordinates)
         module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=self.refrence_coordinates,
-                            msg="test_raster_what_coordinates did't run successfully")
-
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout),
+            reference=self.refrence_coordinates,
+            msg="test_raster_what_coordinates did't run successfully",
+        )
 
     def test_raster_what_cats(self):
         """Testing r.what runs successfully with input coordinates given as a vector points map with cats and flag v"""
-        module = SimpleModule('r.what', map=self.map1, points=self.points, flags='v')
+        module = SimpleModule("r.what", map=self.map1, points=self.points, flags="v")
         module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=self.refrence_cats,
-                             msg="test_raster_what_cats did't run successfully")
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout),
+            reference=self.refrence_cats,
+            msg="test_raster_what_cats did't run successfully",
+        )
 
     def test_raster_what_csv(self):
         """Testing r.what runs successfully with input coordinates given as a vector points map, output into CSV file and flag n"""
-        self.assertModule('r.what', map=self.map1, points=self.points, separator='comma', output='result.csv', flags='n')
-        self.assertFileExists(filename='result.csv', msg="CSV file was not created")
-        if os.path.isfile('result.csv'):
+        self.assertModule(
+            "r.what",
+            map=self.map1,
+            points=self.points,
+            separator="comma",
+            output="result.csv",
+            flags="n",
+        )
+        self.assertFileExists(filename="result.csv", msg="CSV file was not created")
+        if os.path.isfile("result.csv"):
             file = open("result.csv", "r")
             fileData = file.read()
-            self.assertLooksLike(actual=fileData, reference=self.refrence_csv,
-                                 msg="test_raster_what_csv did't run successfully")
+            self.assertLooksLike(
+                actual=fileData,
+                reference=self.refrence_csv,
+                msg="test_raster_what_csv did't run successfully",
+            )
             file.close()
 
     def test_raster_what_points_flag_i(self):
         """Testing r.what runs successfully with flag i"""
-        module = SimpleModule('r.what', map=self.map1, points=self.points, flags='i')
+        module = SimpleModule("r.what", map=self.map1, points=self.points, flags="i")
         module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=self.refrence_flag_i,
-                             msg="test_raster_what_cats did't run successfully")
-
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout),
+            reference=self.refrence_flag_i,
+            msg="test_raster_what_cats did't run successfully",
+        )
 
     def test_raster_what_points_flag_f(self):
         """Testing r.what runs successfully with flag f"""
-        module = SimpleModule('r.what', map=self.map1, points=self.points, flags='f')
+        module = SimpleModule("r.what", map=self.map1, points=self.points, flags="f")
         module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=self.refrence_flag_f,
-                             msg="test_raster_what_cats did't run successfully")
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout),
+            reference=self.refrence_flag_f,
+            msg="test_raster_what_cats did't run successfully",
+        )
 
     def test_raster_what_points_flag_r(self):
         """Testing r.what runs successfully with flag r"""
-        module = SimpleModule('r.what', map=self.map1, points=self.points, flags='r')
+        module = SimpleModule("r.what", map=self.map1, points=self.points, flags="r")
         module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=self.refrence_flag_r,
-                             msg="test_raster_what_cats did't run successfully")
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout),
+            reference=self.refrence_flag_r,
+            msg="test_raster_what_cats did't run successfully",
+        )
 
     def test_raster_what_cache(self):
         """Testing r.what runs successfully with cache"""
-        module = SimpleModule('r.what', map=self.map1, points=self.points, flags='c', cache=500)
+        module = SimpleModule(
+            "r.what", map=self.map1, points=self.points, flags="c", cache=500
+        )
         module.run()
-        self.assertLooksLike(actual=str(module.outputs.stdout), reference=self.refrence_cache,
-                             msg="test_raster_what_cats did't run successfully")
+        self.assertLooksLike(
+            actual=str(module.outputs.stdout),
+            reference=self.refrence_cache,
+            msg="test_raster_what_cats did't run successfully",
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()

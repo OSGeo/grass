@@ -13,48 +13,65 @@ from grass.gunittest.main import test
 
 
 class Testrr(TestCase):
-    input = 'lakes'
-    output = 'testrtovect'
-    point = 'point'
+    input = "lakes"
+    output = "testrtovect"
+    point = "point"
     area = "area"
 
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', raster=cls.input)
+        cls.runModule("g.region", raster=cls.input)
 
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
 
     def tearDown(cls):
-        cls.runModule('g.remove', type='vector', flags='f', name=cls.output)
+        cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
 
     def test_flags(self):
         """Testing flag s"""
-        self.assertModule('r.to.vect', input=self.input, output=self.output, type=self.point, flags='s')
+        self.assertModule(
+            "r.to.vect",
+            input=self.input,
+            output=self.output,
+            type=self.point,
+            flags="s",
+        )
         topology = dict(points=36011, lines=0, areas=0)
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_flagz(self):
         """Testing flag z"""
-        self.assertModule('r.to.vect', input=self.input, output=self.output, type=self.point, flags='z')
+        self.assertModule(
+            "r.to.vect",
+            input=self.input,
+            output=self.output,
+            type=self.point,
+            flags="z",
+        )
         topology = dict(points=36011, lines=0, areas=0)
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_flagb(self):
         """Testing flag b"""
-        self.assertModule('r.to.vect', input=self.input, output=self.output, type=self.area, flags='b')
+        self.assertModule(
+            "r.to.vect", input=self.input, output=self.output, type=self.area, flags="b"
+        )
         topology = dict(points=0, lines=0, areas=0)
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_flagt(self):
         """Testing flag t"""
-        self.assertModule('r.to.vect', input=self.input, output=self.output, type=self.area, flags='t')
+        self.assertModule(
+            "r.to.vect", input=self.input, output=self.output, type=self.area, flags="t"
+        )
         topology = dict(points=0, lines=0, areas=33)
         self.assertVectorFitsTopoInfo(self.output, topology)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()

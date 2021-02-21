@@ -36,8 +36,8 @@ coeff_var=177.119169754436
 sum=3064
 """
 
-class FlowlineTest(TestCase):
 
+class FlowlineTest(TestCase):
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
@@ -47,51 +47,104 @@ class FlowlineTest(TestCase):
         cls.runModule("r3.mapcalc", expression="map_2 = -20")
         cls.runModule("r3.mapcalc", expression="map_3 = 0.01")
         cls.runModule("r3.mapcalc", expression="map_4 = col() + row() + depth()")
-        cls.runModule("r3.mapcalc", expression="map_5 = col() * col() + row() * row() + depth() * depth()")
-        cls.runModule('v.in.ascii', input='-', output='test_seeds', z=3, flags='zt',
-                      stdin=seeds)
+        cls.runModule(
+            "r3.mapcalc",
+            expression="map_5 = col() * col() + row() * row() + depth() * depth()",
+        )
+        cls.runModule(
+            "v.in.ascii", input="-", output="test_seeds", z=3, flags="zt", stdin=seeds
+        )
 
     @classmethod
     def tearDownClass(cls):
         """!Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule('g.remove', flags='f', type='raster_3d', name=','.join(['map_1', 'map_2', 'map_3', 'map_4', 'map_5', 'test_flowaccum']))
-        cls.runModule('g.remove', flags='f', type='vector', name=','.join(['test_flowline', 'test_seeds']))
-        os.remove('./data/flowline_tmp.ascii')
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster_3d",
+            name=",".join(
+                ["map_1", "map_2", "map_3", "map_4", "map_5", "test_flowaccum"]
+            ),
+        )
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="vector",
+            name=",".join(["test_flowline", "test_seeds"]),
+        )
+        os.remove("./data/flowline_tmp.ascii")
 
     def test_interpolation(self):
-        self.assertModuleKeyValue('test.r3flow', test='interpolation',
-                                  coordinates=[100, 55, 11], input=['map_1', 'map_2', 'map_3'],
-                                  reference={'return': 0, 'values': [100, -20, 0.01]},
-                                  precision=1e-10, sep='=')
-        self.assertModuleKeyValue('test.r3flow', test='interpolation',
-                                  coordinates=[5, 5, 5], input=['map_1', 'map_2', 'map_3'],
-                                  reference={'return': 0, 'values': [100, -20, 0.01]},
-                                  precision=1e-10, sep='=')
-        self.assertModuleKeyValue('test.r3flow', test='interpolation',
-                                  coordinates=[10, 10, 60], input=['map_1', 'map_2', 'map_3'],
-                                  reference={'return': -1},
-                                  precision=1e-10, sep='=')
-        self.assertModuleKeyValue('test.r3flow', test='interpolation',
-                                  coordinates=[25, 69, 17], input=['map_4', 'map_4', 'map_4'],
-                                  reference={'return': 0, 'values': [7.8, 7.8, 7.8]},
-                                  precision=1e-10, sep='=')
-        self.assertModuleKeyValue('test.r3flow', test='interpolation',
-                                  coordinates=[81, 30, 25], input=['map_4', 'map_4', 'map_4'],
-                                  reference={'return': 0, 'values': [18.1, 18.1, 18.1]},
-                                  precision=1e-10, sep='=')
+        self.assertModuleKeyValue(
+            "test.r3flow",
+            test="interpolation",
+            coordinates=[100, 55, 11],
+            input=["map_1", "map_2", "map_3"],
+            reference={"return": 0, "values": [100, -20, 0.01]},
+            precision=1e-10,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            "test.r3flow",
+            test="interpolation",
+            coordinates=[5, 5, 5],
+            input=["map_1", "map_2", "map_3"],
+            reference={"return": 0, "values": [100, -20, 0.01]},
+            precision=1e-10,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            "test.r3flow",
+            test="interpolation",
+            coordinates=[10, 10, 60],
+            input=["map_1", "map_2", "map_3"],
+            reference={"return": -1},
+            precision=1e-10,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            "test.r3flow",
+            test="interpolation",
+            coordinates=[25, 69, 17],
+            input=["map_4", "map_4", "map_4"],
+            reference={"return": 0, "values": [7.8, 7.8, 7.8]},
+            precision=1e-10,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            "test.r3flow",
+            test="interpolation",
+            coordinates=[81, 30, 25],
+            input=["map_4", "map_4", "map_4"],
+            reference={"return": 0, "values": [18.1, 18.1, 18.1]},
+            precision=1e-10,
+            sep="=",
+        )
 
     def test_flowlines(self):
-        self.assertModule('r3.flow', input='map_5', flowline='test_flowline',
-                          seed_points='test_seeds', flowaccumulation='test_flowaccum',
-                          direction='down')
-        self.runModule('v.out.ascii', input='test_flowline',
-                       format='standard', output='./data/flowline_tmp.ascii',
-                       precision=6)
-        self.assertVectorAsciiEqualsVectorAscii(actual='./data/flowline_tmp.ascii',
-                                                reference='./data/flowline.ascii')
-        self.assertRaster3dFitsUnivar('test_flowaccum', reference=flowaccum, precision=1e-6)
+        self.assertModule(
+            "r3.flow",
+            input="map_5",
+            flowline="test_flowline",
+            seed_points="test_seeds",
+            flowaccumulation="test_flowaccum",
+            direction="down",
+        )
+        self.runModule(
+            "v.out.ascii",
+            input="test_flowline",
+            format="standard",
+            output="./data/flowline_tmp.ascii",
+            precision=6,
+        )
+        self.assertVectorAsciiEqualsVectorAscii(
+            actual="./data/flowline_tmp.ascii", reference="./data/flowline.ascii"
+        )
+        self.assertRaster3dFitsUnivar(
+            "test_flowaccum", reference=flowaccum, precision=1e-6
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

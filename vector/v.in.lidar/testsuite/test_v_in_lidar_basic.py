@@ -21,26 +21,31 @@ class BasicTest(TestCase):
     """
 
     # Setup variables to be used for outputs
-    vector_points = 'vinlidar_basic_original'
-    imported_points = 'vinlidar_basic_imported'
-    las_file = 'vinlidar_basic_points.las'
+    vector_points = "vinlidar_basic_original"
+    imported_points = "vinlidar_basic_imported"
+    las_file = "vinlidar_basic_points.las"
     npoints = 300
 
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
-        cls.runModule('g.region', n=20, s=10, e=25, w=15, res=1)
-        cls.runModule('v.random', flags='zb', output=cls.vector_points,
-            npoints=cls.npoints, zmin=200, zmax=500, seed=100)
-        cls.runModule('v.out.lidar', input=cls.vector_points,
-            output=cls.las_file)
+        cls.runModule("g.region", n=20, s=10, e=25, w=15, res=1)
+        cls.runModule(
+            "v.random",
+            flags="zb",
+            output=cls.vector_points,
+            npoints=cls.npoints,
+            zmin=200,
+            zmax=500,
+            seed=100,
+        )
+        cls.runModule("v.out.lidar", input=cls.vector_points, output=cls.las_file)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
-        cls.runModule('g.remove', flags='f', type='vector',
-            name=cls.vector_points)
+        cls.runModule("g.remove", flags="f", type="vector", name=cls.vector_points)
         if os.path.isfile(cls.las_file):
             os.remove(cls.las_file)
         cls.del_temp_region()
@@ -50,19 +55,21 @@ class BasicTest(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule('g.remove', flags='f', type='vector',
-            name=self.imported_points)
+        self.runModule("g.remove", flags="f", type="vector", name=self.imported_points)
 
     def test_output_identical(self):
         """Test to see if the standard outputs are created"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt')
+        self.assertModule(
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorEqualsVector(
             actual=self.imported_points,
             reference=self.vector_points,
-            digits=2, precision=.01)
+            digits=2,
+            precision=0.01,
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

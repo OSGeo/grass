@@ -12,17 +12,18 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
+
 class Testrr(TestCase):
 
-    input='lakes'
-    cover="elevation"
-    raster="routfile"
-    vector="voutfile"
+    input = "lakes"
+    cover = "elevation"
+    raster = "routfile"
+    vector = "voutfile"
 
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', raster=cls.input)
+        cls.runModule("g.region", raster=cls.input)
 
     @classmethod
     def tearDownClass(cls):
@@ -31,12 +32,12 @@ class Testrr(TestCase):
     def tearDown(self):
         """Remove the vector map after each test method"""
 
-        self.runModule('g.remove', flags='f', type='vector', name=self.vector)
-        self.runModule('g.remove', flags='f', type='raster', name=self.raster)
+        self.runModule("g.remove", flags="f", type="vector", name=self.vector)
+        self.runModule("g.remove", flags="f", type="raster", name=self.raster)
 
     def test_flag_z(self):
         """Testing flag z"""
-        string="""area_cat|count|sum
+        string = """area_cat|count|sum
         1|0|null
         2|0|null
         3|0|null
@@ -48,32 +49,54 @@ class Testrr(TestCase):
         9|1|7
         10|0|null
         """
-        r_random = SimpleModule('r.random', input=self.input, cover=self.cover, npoints=100, vector=self.vector, flags='z')
-        r_random.outputs.stdout= string
+        r_random = SimpleModule(
+            "r.random",
+            input=self.input,
+            cover=self.cover,
+            npoints=100,
+            vector=self.vector,
+            flags="z",
+        )
+        r_random.outputs.stdout = string
         self.assertLooksLike(reference=string, actual=r_random.outputs.stdout)
 
     def test_flag_i(self):
         """Testing flag i"""
-        self.assertModule('r.random', input=self.input, cover=self.cover, npoints=100, flags='i')
+        self.assertModule(
+            "r.random", input=self.input, cover=self.cover, npoints=100, flags="i"
+        )
 
     def test_flag_d(self):
         """Testing flag d"""
-        self.assertModule('r.random', input=self.input, cover=self.cover, npoints=100, vector=self.vector, flags='d')
-        self.assertModule('v.info', map=self.vector, flags='t')
+        self.assertModule(
+            "r.random",
+            input=self.input,
+            cover=self.cover,
+            npoints=100,
+            vector=self.vector,
+            flags="d",
+        )
+        self.assertModule("v.info", map=self.vector, flags="t")
         topology = dict(points=100, lines=0, areas=0, map3d=1)
         self.assertVectorFitsTopoInfo(self.vector, topology)
 
     def test_flag_b(self):
         """Testing flag b"""
-        self.assertModule('r.random', input=self.input, cover=self.cover,
-                          npoints=36011, vector=self.vector, flags='b',
-                          overwrite=True)
-        self.assertModule('v.info', map=self.vector, flags='t')
+        self.assertModule(
+            "r.random",
+            input=self.input,
+            cover=self.cover,
+            npoints=36011,
+            vector=self.vector,
+            flags="b",
+            overwrite=True,
+        )
+        self.assertModule("v.info", map=self.vector, flags="t")
         topology = dict(points=36011, lines=0, areas=0)
         self.assertVectorFitsTopoInfo(self.vector, topology)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()
