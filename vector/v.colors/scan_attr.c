@@ -7,7 +7,7 @@
 
 int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	      const char *style, const char *rules,
-	      const struct FPRange *range, struct Colors *colors)
+	      const struct FPRange *range, struct Colors *colors, struct Colors *rcolors)
 {
     int ctype, is_fp, nrec;
     double fmin, fmax;
@@ -84,13 +84,19 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 			  (int) range->max, (int) fmin, (int) fmax);
 	}
     }
-    if (style)
-	make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
-    else if (rules)
-	load_colors(&vcolors, rules, (DCELL) fmin, (DCELL) fmax, is_fp);
 
-    /* color table for categories */
-    color_rules_to_cats(&cvarr, is_fp, &vcolors, colors);
+    if (rcolors)
+	/* color table for categories */
+	color_rules_to_cats(&cvarr, is_fp, rcolors, colors);
+    else {
+	if (style)
+	    make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
+	else if (rules)
+	    load_colors(&vcolors, rules, (DCELL) fmin, (DCELL) fmax, is_fp);
+
+	/* color table for categories */
+	color_rules_to_cats(&cvarr, is_fp, &vcolors, colors);
+    }
 
     db_close_database(driver);
 

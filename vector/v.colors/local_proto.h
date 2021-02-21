@@ -9,7 +9,7 @@ void load_colors(struct Colors *, const char *, DCELL, DCELL, int);
 
 /* scan_attr.c */
 int scan_attr(const struct Map_info *, int, const char *, const char *,
-	      const char *, const struct FPRange *, struct Colors *);
+	      const char *, const struct FPRange *, struct Colors *, struct Colors *);
 void color_rules_to_cats(dbCatValArray *, int, struct Colors *, struct Colors *);  
 
 /* scan_cats.c */

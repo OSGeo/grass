@@ -3,7 +3,8 @@
  *
  * MODULE:       v.colors
  * 
- * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
+ * AUTHOR(S):    Martin Landa <landa.martin gmail.com>,
+ *		 Huidae Cho <grass4u gmail.com>
  *               
  * PURPOSE:      Manage color tables for vector maps
  *               
@@ -306,7 +307,7 @@ int main(int argc, char *argv[])
         else {
 	    scan_attr(&Map, layer, attrcolumn, style, rules,
 		      opt.range->answer ? &range : NULL,
-		      &colors);
+		      &colors, NULL);
 	}
     }
     else {
@@ -326,6 +327,13 @@ int main(int argc, char *argv[])
             if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for 3D raster map <%s>"), cmap);
         }
+
+	if (use == USE_ATTR && attrcolumn) {
+	    colors_tmp = colors;
+	    scan_attr(&Map, layer, attrcolumn, style, rules,
+		      opt.range->answer ? &range : NULL,
+		      &colors, &colors_tmp);
+	}
     }
 
     if (flag.n->answer)
