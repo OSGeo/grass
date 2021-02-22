@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
     }
 
     /***** Write bounds *****/
-    G_verbose_message("");
+    G_verbose_message(" ");
     G_verbose_message(_("Using the Current Region settings:"));
     G_verbose_message(_("northern edge=%f"), region.north);
     G_verbose_message(_("southern edge=%f"), region.south);
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
     G_verbose_message(_("ewres=%f"), region.ew_res);
     G_verbose_message(_("rows=%d"), region.rows);
     G_verbose_message(_("cols=%d"), region.cols);
-    G_verbose_message("");
+    G_verbose_message(" ");
 
     for (i = 0; i < 4; i++) {
 	switch (i) {
@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("%ld bytes written to '%s'"), filesize, outfile);
 
-    G_done_msg("");
+    G_done_msg(" ");
 
     G_free(basename);
     G_free(outfile);
