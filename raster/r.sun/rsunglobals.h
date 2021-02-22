@@ -60,4 +60,4 @@ extern struct pj_info iproj;
 extern struct pj_info oproj;
 
 
-extern void (*func) (int, int);
+/* extern void (*func) (int, int); */
