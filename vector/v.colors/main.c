@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct {
-	struct Flag *r, *w, *l, *d, *g, *a, *n, *c;
+	struct Flag *r, *w, *l, *d, *g, *a, *e, *n, *c;
     } flag; 
 
     struct {
@@ -47,7 +47,6 @@ int main(int argc, char *argv[])
     struct Map_info Map;
     struct FPRange range;
     struct Colors colors, colors_tmp;
-    /* struct Cell_stats statf; */
     
     G_gisinit(argv[0]);
     
@@ -154,17 +153,16 @@ int main(int argc, char *argv[])
     flag.a->description = _("Logarithmic-absolute scaling");
     flag.a->guisection = _("Define");
 
-    flag.c = G_define_flag();
-    flag.c->key = 'c';
-    flag.c->label = _("Convert color rules from RGB values to color table");
-    flag.c->description = _("Option 'rgb_column' with valid RGB values required");
-	
-    /* TODO ?
     flag.e = G_define_flag();
     flag.e->key = 'e';
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Define");
-    */
+
+    flag.c = G_define_flag();
+    flag.c->key = 'c';
+    flag.c->label = _("Convert color rules from RGB values to color table");
+    flag.c->description = _("Option 'rgb_column' with valid RGB values required");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -268,7 +266,7 @@ int main(int argc, char *argv[])
     G_suppress_warnings(FALSE);
 
     /* open map and get min/max values */
-    Vect_set_open_level(1); /* no topology required */
+    Vect_set_open_level(1 + flag.e->answer); /* topology required for histogram equalization */
     if (Vect_open_old2(&Map, name, mapset, opt.field->answer) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), name);
 
@@ -331,14 +329,11 @@ int main(int argc, char *argv[])
     if (flag.n->answer)
         Rast_invert_colors(&colors);
 
-    /* TODO ?
     if (flag.e->answer) {
-    if (!have_stats)
-    have_stats = get_stats(name, mapset, &statf);
-    Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
-    colors = colors_tmp;
+        histogram_eq_colors(&Map, layer, &colors_tmp, &colors);
+        colors = colors_tmp;
     }
-    */
+
     if (flag.g->answer) {
         Rast_log_colors(&colors_tmp, &colors, 100);
         colors = colors_tmp;
