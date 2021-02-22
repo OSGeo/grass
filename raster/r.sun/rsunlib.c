@@ -300,11 +300,11 @@ int searching(double *length, struct SunGeometryVarDay *sunVarGeom,
 
     if (succes == 1) {
 	where_is_point(length, sunVarGeom, gridGeom);
-	if (func == NULL) {
+	/*if (func == NULL) {
 	    gridGeom->xx0 = gridGeom->xg0;
 	    gridGeom->yy0 = gridGeom->yg0;
 	    return (3);
-	}
+	}*/
 	curvature_diff = EARTHRADIUS * (1. - cos(*length / EARTHRADIUS));
 
 	z2 = sunVarGeom->z_orig + curvature_diff +
@@ -338,7 +338,7 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
     double timeoffset, horizPos;
     double horizonHeight;
 
-    func = cube;
+    /* func = cube; */
     sunVarGeom->isShadow = 0;
 
     if (useShadow()) {
