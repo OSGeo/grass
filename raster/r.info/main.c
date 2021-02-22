@@ -528,7 +528,7 @@ int main(int argc, char **argv)
 		    }
 		}
 
-		fprintf(out, "n=%jd\n", rstats.count);
+		fprintf(out, "n=%" PRId64 "\n", rstats.count);
 		fprintf(out, "mean=%.15g\n", mean);
 		fprintf(out, "stddev=%.15g\n", sd);
 		fprintf(out, "sum=%.15g\n", rstats.sum);
