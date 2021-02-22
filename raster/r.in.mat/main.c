@@ -387,7 +387,7 @@ int main(int argc, char *argv[])
     G_adjust_Cell_head(&region, 1, 1);
     Rast_set_window(&region);
 
-    G_verbose_message("");
+    G_verbose_message(" ");
     G_verbose_message(_("Map <%s> bounds set to:"), map_name);
     G_verbose_message(_("northern edge=%f"), region.north);
     G_verbose_message(_("southern edge=%f"), region.south);
@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
     G_verbose_message(_("ewres=%f"), region.ew_res);
     G_verbose_message(_("rows=%d"), region.rows);
     G_verbose_message(_("cols=%d"), region.cols);
-    G_verbose_message("");
+    G_verbose_message(" ");
 
     /* prep memory */
     raster = Rast_allocate_buf(map_type);
@@ -483,7 +483,7 @@ int main(int argc, char *argv[])
     Rast_command_history(&history);
     Rast_write_history(map_name, &history);
 
-    G_done_msg("");
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
