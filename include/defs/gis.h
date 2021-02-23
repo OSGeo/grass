@@ -748,6 +748,7 @@ char *G_store_upper(const char *);
 char *G_store_lower(const char *);
 char *G_strchg(char *, char, char);
 char *G_str_replace(const char *, const char *, const char *);
+char *G_str_concat(const char **, int, const char *, int);
 void G_strip(char *);
 char *G_chop(char *);
 void G_str_to_upper(char *);
