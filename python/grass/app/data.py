@@ -17,6 +17,8 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
+from grass.grassdb.create import (create_mapset, get_default_mapset_name)
+from grass.grassdb.checks import (mapset_exists, can_start_in_mapset)
 
 from grass.grassdb.checks import is_location_valid
 
@@ -144,15 +146,39 @@ def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
 def ensure_demolocation():
     """Ensure that demolocation exists
 
-    Creates both database directory and location if needed.
+    Creates database directory and location if needed.
+    Ensures the usable mapset for startup.
 
-    Returns the db, location name, and preferred mapset of the demolocation.
+    Returns the db, location name and usable mapset.
     """
     grassdb = get_possible_database_path()
+
     # If nothing found, try to create GRASS directory and copy startup loc
     if grassdb is None:
         grassdb = create_database_directory()
     location = "world_latlong_wgs84"
     if not is_location_valid(grassdb, location):
         create_startup_location_in_grassdb(grassdb, location)
-    return (grassdb, location, "PERMANENT")
+    return (grassdb, location)
+
+
+def ensure_usable_mapset(grassdb, location):
+    """Ensure that usable mapset exists
+
+    Finds the usable mapset.
+    It can create the new one named after user if needed.
+    """
+    mapset_name = "PERMANENT"
+    mapset_path = os.path.join(grassdb, location, mapset_name)
+    index = 2
+    while not can_start_in_mapset(mapset_path, ignore_lock=False):
+        if mapset_name == "PERMANENT":
+            mapset_name = get_default_mapset_name()
+        else:
+            mapset_name = get_default_mapset_name() + '_' + str(index)
+            index = index + 1
+        if not mapset_exists(grassdb, location, mapset_name):
+            create_mapset(grassdb, location, mapset_name)
+        mapset_path = os.path.join(grassdb, location, mapset_name)
+    return mapset_name
+

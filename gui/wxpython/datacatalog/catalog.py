@@ -26,10 +26,12 @@ from gui_core.infobar import InfoBar
 from datacatalog.infomanager import DataCatalogInfoManager
 from gui_core.wrap import Menu
 from gui_core.forms import GUI
+from grass.script import gisenv
 
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb.checks import is_current_mapset_in_demolocation
+from startup.guiutils import read_gisrc
 
 
 class DataCatalog(wx.Panel):
@@ -65,9 +67,23 @@ class DataCatalog(wx.Panel):
         # some layout
         self._layout()
 
-        # show data structure infobar for first-time user with proper layout
+        # show infobar if applicable
         if is_current_mapset_in_demolocation():
-            wx.CallLater(2000, self.showDataStructureInfo)
+            grassrc = read_gisrc()
+            if grassrc['REASON'] == "invalid":
+                if (grassrc['UNUSED_GISDBASE'] == os.getcwd() and
+                    grassrc['UNUSED_LOCATION_NAME'] == "<UNKNOWN>" and
+                    grassrc['UNUSED_MAPSET'] == "<UNKNOWN>"):
+                    # show data structure infobar for first-time user
+                    wx.CallLater(2000, self.showDataStructureInfo)
+                else:
+                    wx.CallLater(2000, self.showBasicDemolocationInfo)
+            elif "owned by different user" in grassrc['REASON']:
+                # show basic info
+                wx.CallLater(2000, self.showBasicDemolocationInfo)
+            elif grassrc['REASON'] == "locked":
+                # show info allowing to switch to locked mapset
+                wx.CallLater(2000, self.showLockedMapsetInfo)
 
     def _layout(self):
         """Do layout"""
@@ -84,6 +100,12 @@ class DataCatalog(wx.Panel):
 
     def showDataStructureInfo(self):
         self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
+
+    def showLockedMapsetInfo(self):
+        self.infoManager.ShowLockedMapsetInfo(self.OnSwitchMapset)
+
+    def showBasicDemolocationInfo(self):
+        self.infoManager.ShowBasicDemolocationInfo()
 
     def showImportDataInfo(self):
         self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
@@ -134,6 +156,15 @@ class DataCatalog(wx.Panel):
         """Download location to current grass database"""
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.DownloadLocation(db_node)
+
+    def OnSwitchMapset(self, event):
+        """Switch to given mapset"""
+        grassrc = read_gisrc()
+        grassdb=grassrc['UNUSED_GISDBASE']
+        location=grassrc['UNUSED_LOCATION_NAME']
+        mapset=grassrc['UNUSED_MAPSET']
+        self.tree.SwitchMapset(grassdb, location, mapset)
+        event.Skip()
 
     def OnImportGdalLayers(self, event):
         """Convert multiple GDAL layers to GRASS raster map layers"""

@@ -169,6 +169,29 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
     return True
 
 
+def get_reason_mapset_not_usable(mapset_path):
+    """It gets reasons when:
+     * Mapset is invalid.
+     * Mapset is owned by different user.
+     * Mapset is locked.
+
+    Returns message as string if there was a reason, otherwise None.
+    """
+    message = None
+
+    # Check whether mapset is valid
+    if not is_mapset_valid(mapset_path):
+        message = _("invalid")
+    # Check whether mapset is owned by current user
+    elif not is_current_user_mapset_owner(mapset_path):
+        owner = get_mapset_owner(mapset_path)
+        message = _("owned by different user '{}'").format(owner)
+    # Check whether mapset is locked
+    elif is_mapset_locked(mapset_path):
+        message = _("locked")
+    return message
+
+
 def dir_contains_location(path):
     """Return True if directory *path* contains a valid location"""
     if not os.path.isdir(path):
