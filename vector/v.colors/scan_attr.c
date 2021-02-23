@@ -7,18 +7,18 @@
 
 int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	      const char *style, const char *rules,
-	      const struct FPRange *range, struct Colors *colors)
+	      const struct FPRange *range, struct Colors *colors, struct Colors *rcolors)
 {
     int ctype, is_fp, nrec;
     double fmin, fmax;
-    
+
     struct field_info *fi;
     struct Colors vcolors;
     dbDriver *driver;
     dbCatValArray cvarr;
 
     Rast_init_colors(colors);
-    
+
     fi = Vect_get_field(Map, layer);
     if (!fi)
 	G_fatal_error(_("Database connection not defined for layer %d"),
@@ -45,7 +45,7 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	G_important_message(_("No data selected"));
 	return 0;
     }
-    
+
     /* color table for values */
     db_CatValArray_sort_by_value(&cvarr);
     if (is_fp) {
@@ -58,7 +58,7 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	    else
 		G_warning(_("Min value (%f) is out of range %f,%f"),
 			  range->min, fmin, fmax);
-	    
+
 	    if (range->max <= fmax && range->max >= fmin)
 		fmax = range->max;
 	    else
@@ -69,14 +69,14 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
     else {
 	fmin = cvarr.value[0].val.i;
 	fmax = cvarr.value[cvarr.n_values-1].val.i;
-	
+
 	if (range) {
 	    if (range->min >= fmin && range->min <= fmax)
 		fmin = range->min;
 	    else
 		G_warning(_("Min value (%d) is out of range %d,%d"),
 			  (int) range->min, (int) fmin, (int) fmax);
-	    
+
 	    if (range->max <= fmax && range->max >= fmin)
 		fmax = range->max;
 	    else
@@ -84,13 +84,19 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 			  (int) range->max, (int) fmin, (int) fmax);
 	}
     }
-    if (style)
-	make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
-    else if (rules)
-	load_colors(&vcolors, rules, (DCELL) fmin, (DCELL) fmax, is_fp);
 
-    /* color table for categories */
-    color_rules_to_cats(&cvarr, is_fp, &vcolors, colors);
+    if (rcolors)
+	/* color table for categories */
+	color_rules_to_cats(&cvarr, is_fp, rcolors, colors);
+    else {
+	if (style)
+	    make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
+	else if (rules)
+	    load_colors(&vcolors, rules, (DCELL) fmin, (DCELL) fmax, is_fp);
+
+	/* color table for categories */
+	color_rules_to_cats(&cvarr, is_fp, &vcolors, colors);
+    }
 
     db_close_database(driver);
 

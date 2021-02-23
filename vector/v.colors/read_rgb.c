@@ -11,7 +11,7 @@ void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
     int i, ret, nskipped;
     int red, grn, blu;
     const char *rgb;
-    
+
     struct field_info *fi;
 
     dbDriver *driver;
@@ -28,16 +28,16 @@ void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      fi->database, fi->driver);
 
-    if (db_column_Ctype(driver, fi->table, rgb_column) != DB_C_TYPE_STRING)	
+    if (db_column_Ctype(driver, fi->table, rgb_column) != DB_C_TYPE_STRING)
 	G_fatal_error(_("Data type of RGB column <%s> must be char"),
 		      rgb_column);
-    
+
     if (0 > db_select_CatValArray(driver, fi->table, fi->key,
 				  rgb_column, NULL, &cvarr))
 	G_warning(_("No RGB values found"));
 
     Rast_init_colors(colors);
-    
+
     cv = NULL;
     nskipped = 0;
     for (i = 0; i < cvarr.n_values; i++) {
@@ -49,7 +49,7 @@ void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
             nskipped++;
             continue;
         }
-        
+
 	ret = G_str_to_color(rgb, &red, &grn, &blu);
 	if (ret != 1) {
 	    G_debug(3, "Invalid RGB value '%s'", rgb);
@@ -63,6 +63,6 @@ void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
 
     if (nskipped > 0)
         G_warning(_("%d invalid RGB color values skipped"), nskipped);
-    
+
     db_close_database_shutdown_driver(driver);
 }

@@ -24,9 +24,9 @@ void scan_cats(const struct Map_info *Map, int field,
 	    G_fatal_error(_("Unable to read vector map"));
 	if (ltype == -2)
 	    break; /* EOF */
-	
+
 	G_progress(++line, 1e4);
-	
+
 	scan_layer(field, Cats, &lmin, &lmax);
 
 	if (cmin == -1 || lmin <= cmin)
@@ -35,14 +35,14 @@ void scan_cats(const struct Map_info *Map, int field,
 	    cmax = lmax;
     }
     G_progress(1, 1);
-    
+
     if (range) {
 	if (range->min >= cmin && range->min <= cmax)
 	    cmin = range->min;
 	else
 	    G_warning(_("Min value (%d) is out of range %d,%d"),
 		      (int) range->min, cmin, cmax);
-	
+
 	if (range->max <= cmax && range->max >= cmin)
 	    cmax = range->max;
 	else
