@@ -22,6 +22,7 @@ import wx
 from grass.script import gisenv
 from startup.guiutils import read_gisrc
 
+
 class DataCatalogInfoManager:
     """Manager for all things related to info bar in Data Catalog"""
 

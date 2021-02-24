@@ -845,7 +845,7 @@ UNUSED_GISDBASE: None
 UNUSED_LOCATION_NAME: None
 UNUSED_MAPSET: None
 REASON: None
-""" 
+"""
         % os.getcwd()
     )
     writefile(filename, s)
@@ -2511,7 +2511,7 @@ def main():
         mapset_settings = getMapsetSettings(gisrc)
         # Check if mapset from gisrc is usable
         last_mapset_usable = can_start_in_gisrc_mapset(
-            mapset_settings = mapset_settings,
+            mapset_settings=mapset_settings,
             ignore_lock=params.force_gislock_removal
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
@@ -2540,7 +2540,7 @@ def main():
                 reason=mapset_settings.reason
             )
         else:
-            mapset_settings.reason=None
+            mapset_settings.reason = None
             # Write mapset info to gisrc file
             set_mapset_info_to_gisrc(
                 gisrc=gisrc,

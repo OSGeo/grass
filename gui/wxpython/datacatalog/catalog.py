@@ -72,7 +72,7 @@ class DataCatalog(wx.Panel):
             if grassrc['REASON'] == "invalid":
                 if (grassrc['UNUSED_GISDBASE'] == os.getcwd() and
                     grassrc['UNUSED_LOCATION_NAME'] == "<UNKNOWN>" and
-                    grassrc['UNUSED_MAPSET'] == "<UNKNOWN>"):
+                        grassrc['UNUSED_MAPSET'] == "<UNKNOWN>"):
                     # show data structure infobar for first-time user
                     wx.CallLater(2000, self.showDataStructureInfo)
                 else:
@@ -159,9 +159,9 @@ class DataCatalog(wx.Panel):
     def OnSwitchMapset(self, event):
         """Switch to given mapset"""
         grassrc = read_gisrc()
-        grassdb=grassrc['UNUSED_GISDBASE']
-        location=grassrc['UNUSED_LOCATION_NAME']
-        mapset=grassrc['UNUSED_MAPSET']
+        grassdb = grassrc['UNUSED_GISDBASE']
+        location = grassrc['UNUSED_LOCATION_NAME']
+        mapset = grassrc['UNUSED_MAPSET']
         self.tree.SwitchMapset(grassdb, location, mapset)
         event.Skip()
 

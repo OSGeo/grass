@@ -181,4 +181,3 @@ def ensure_usable_mapset(grassdb, location):
             create_mapset(grassdb, location, mapset_name)
         mapset_path = os.path.join(grassdb, location, mapset_name)
     return mapset_name
-
