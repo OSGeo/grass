@@ -26,7 +26,6 @@ from gui_core.infobar import InfoBar
 from datacatalog.infomanager import DataCatalogInfoManager
 from gui_core.wrap import Menu
 from gui_core.forms import GUI
-from grass.script import gisenv
 
 from grass.pydispatch.signal import Signal
 

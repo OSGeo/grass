@@ -2455,7 +2455,6 @@ def main():
 
     # Create the session grassrc file
     gisrc = create_gisrc(tmpdir, gisrcrc)
-    print(gisrc)
 
     ensure_home()
     # Set PATH, PYTHONPATH, ...
