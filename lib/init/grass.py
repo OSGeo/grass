@@ -602,20 +602,27 @@ def write_gisrc(kv, filename, append=False):
     f.close()
 
 
-def set_mapset_info_to_gisrc(gisrc, grassdb, location, mapset,
-                             unused_grassdb=None, unused_location=None,
-                             unused_mapset=None, reason=None):
+def set_mapset_info_to_gisrc(
+    gisrc,
+    grassdb,
+    location,
+    mapset,
+    unused_grassdb=None,
+    unused_location=None,
+    unused_mapset=None,
+    reason=None,
+):
     if os.access(gisrc, os.R_OK):
         kv = read_gisrc(gisrc)
     else:
         kv = {}
-    kv['GISDBASE'] = grassdb
-    kv['LOCATION_NAME'] = location
-    kv['MAPSET'] = mapset
-    kv['UNUSED_GISDBASE'] = unused_grassdb
-    kv['UNUSED_LOCATION_NAME'] = unused_location
-    kv['UNUSED_MAPSET'] = unused_mapset
-    kv['REASON'] = reason
+    kv["GISDBASE"] = grassdb
+    kv["LOCATION_NAME"] = location
+    kv["MAPSET"] = mapset
+    kv["UNUSED_GISDBASE"] = unused_grassdb
+    kv["UNUSED_LOCATION_NAME"] = unused_location
+    kv["UNUSED_MAPSET"] = unused_mapset
+    kv["REASON"] = reason
     write_gisrc(kv, gisrc)
 
 
@@ -1218,6 +1225,7 @@ class MapsetSettings(object):
     def get_reason_mapset_not_usable(self):
         """Check if a mapset is usable for a new session"""
         from grass.grassdb.checks import get_reason_mapset_not_usable
+
         self.reason = get_reason_mapset_not_usable(self._full_mapset)
         return self.reason
 
@@ -1226,13 +1234,13 @@ def getMapsetSettings(gisrc):
     """Get the settings of Location and Mapset from the gisrc file"""
     mapset_settings = MapsetSettings()
     kv = read_gisrc(gisrc)
-    mapset_settings.gisdbase = kv.get('GISDBASE')
-    mapset_settings.location = kv.get('LOCATION_NAME')
-    mapset_settings.mapset = kv.get('MAPSET')
-    mapset_settings.unused_gisdbase = kv.get('UNUSED_GISDBASE')
-    mapset_settings.unused_location = kv.get('UNUSED_LOCATION_NAME')
-    mapset_settings.unused_mapset = kv.get('UNUSED_MAPSET')
-    mapset_settings.reason = kv.get('REASON')
+    mapset_settings.gisdbase = kv.get("GISDBASE")
+    mapset_settings.location = kv.get("LOCATION_NAME")
+    mapset_settings.mapset = kv.get("MAPSET")
+    mapset_settings.unused_gisdbase = kv.get("UNUSED_GISDBASE")
+    mapset_settings.unused_location = kv.get("UNUSED_LOCATION_NAME")
+    mapset_settings.unused_mapset = kv.get("UNUSED_MAPSET")
+    mapset_settings.reason = kv.get("REASON")
     if not mapset_settings.is_valid():
         return None
     return mapset_settings
@@ -1268,6 +1276,7 @@ def load_gisrc(gisrc, gisrcrc):
 def can_start_in_gisrc_mapset(mapset_settings, ignore_lock=False):
     """Check if a mapset from a gisrc file is usable for a new session"""
     from grass.grassdb.checks import can_start_in_mapset
+
     return can_start_in_mapset(
         mapset_path=mapset_settings.full_mapset, ignore_lock=ignore_lock
     )
@@ -1731,9 +1740,7 @@ def run_batch_job(batch_job):
         script_in_addon_path = None
         if "GRASS_ADDON_BASE" in os.environ:
             script_in_addon_path = os.path.join(
-                os.environ["GRASS_ADDON_BASE"],
-                "scripts",
-                batch_job[0],
+                os.environ["GRASS_ADDON_BASE"], "scripts", batch_job[0],
             )
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
@@ -1746,8 +1753,7 @@ def run_batch_job(batch_job):
         proc = Popen(batch_job, shell=False, env=os.environ)
     except OSError as error:
         error_message = _("Execution of <{cmd}> failed:\n" "{error}").format(
-            cmd=batch_job_string,
-            error=error,
+            cmd=batch_job_string, error=error,
         )
         # No such file or directory
         if error.errno == errno.ENOENT:
@@ -2511,8 +2517,7 @@ def main():
         mapset_settings = getMapsetSettings(gisrc)
         # Check if mapset from gisrc is usable
         last_mapset_usable = can_start_in_gisrc_mapset(
-            mapset_settings=mapset_settings,
-            ignore_lock=params.force_gislock_removal
+            mapset_settings=mapset_settings, ignore_lock=params.force_gislock_removal
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
@@ -2522,6 +2527,7 @@ def main():
 
             # Ensure demolocation
             import grass.app as ga
+
             grassdb, location = ga.ensure_demolocation()
             # Ensure usable mapset
             mapset = ga.ensure_usable_mapset(grassdb, location)
@@ -2537,7 +2543,7 @@ def main():
                 unused_grassdb=mapset_settings.gisdbase,
                 unused_location=mapset_settings.location,
                 unused_mapset=mapset_settings.mapset,
-                reason=mapset_settings.reason
+                reason=mapset_settings.reason,
             )
         else:
             mapset_settings.reason = None
@@ -2546,7 +2552,7 @@ def main():
                 gisrc=gisrc,
                 grassdb=mapset_settings.gisdbase,
                 location=mapset_settings.location,
-                mapset=mapset_settings.mapset
+                mapset=mapset_settings.mapset,
             )
     else:
         # Mapset was specified in command line parameters.
