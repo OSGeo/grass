@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
 	struct Map_info Map;
 	struct bound_box box;
 
-	Vect_set_open_level(1);
-	if (Vect_open_old(&Map, name, "") != 1)
+	Vect_set_open_level(2);
+	if (Vect_open_old(&Map, name, "") != 2)
 	    G_fatal_error(_("Unable to open vector map <%s>"), name);
 
 	Vect_get_map_box(&Map, &box);
