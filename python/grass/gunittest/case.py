@@ -1343,7 +1343,7 @@ class TestCase(unittest.TestCase):
                 errors += call_module("g.list", type="vector")
             # TODO: message format, parameters
             raise CalledModuleError(
-                module.popen.returncode, module.name, module.get_python(), errors=errors
+                module.returncode, module.name, module.get_python(), errors=errors
             )
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and not module.outputs.stdout.strip():
@@ -1409,7 +1409,7 @@ class TestCase(unittest.TestCase):
             # TODO: stderr?
             stdmsg = (
                 "Running <{m.name}> module ended"
-                " with non-zero return code ({m.popen.returncode})\n"
+                " with non-zero return code ({m.returncode})\n"
                 "Called: {code}\n"
                 "See the following errors:\n"
                 "{errors}".format(
