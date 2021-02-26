@@ -66,7 +66,13 @@ class TypeDict(OrderedDict):
         inst_dict = vars(self).copy()
         for k in vars(TypeDict(self._type)):
             inst_dict.pop(k, None)
-        return self.__class__, (self._type,), inst_dict or None, None, iter(self.items())
+        return (
+            self.__class__,
+            (self._type,),
+            inst_dict or None,
+            None,
+            iter(self.items()),
+        )
 
     def used(self):
         key_dict = {}
