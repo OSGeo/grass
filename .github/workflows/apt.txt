@@ -11,6 +11,7 @@ libnetcdf-dev
 libopenblas-dev
 libpng-dev
 libproj-dev
+proj-bin
 libreadline-dev
 libzstd-dev
 python3-dateutil
