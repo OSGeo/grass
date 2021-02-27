@@ -6,7 +6,7 @@
 # AUTHOR(S):    Markus Neteler, converted to Python by Glynn Clements
 #               Bug fixes, sort for coor by Huidae Cho <grass4u gmail.com>
 # PURPOSE:      Reports geometry statistics for vector maps
-# COPYRIGHT:    (C) 2005, 2007-2017, 2019 by MN and the GRASS Development Team
+# COPYRIGHT:    (C) 2005-2021 by MN and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -42,6 +42,8 @@
 # % options: asc,desc
 # % descriptions: asc;Sort in ascending order;desc;Sort in descending order
 # %end
+# %option G_OPT_F_SEP
+# %end
 # %flag
 # % key: c
 # % description: Do not include column names in output
@@ -54,7 +56,7 @@
 import sys
 import os
 import grass.script as grass
-from grass.script.utils import decode
+from grass.script.utils import separator, decode
 
 
 def uniq(l):
@@ -69,9 +71,11 @@ def uniq(l):
 
 def main():
     mapname = options["map"]
-    option = options["option"]
     layer = options["layer"]
+    option = options["option"]
     units = options["units"]
+    sort = options["sort"]
+    fs = separator(options["separator"])
 
     nuldev = open(os.devnull, "w")
 
@@ -210,7 +214,7 @@ def main():
 
     # print table header
     if not flags["c"]:
-        sys.stdout.write("|".join(colnames + extracolnames) + "\n")
+        sys.stdout.write(fs.join(colnames + extracolnames) + "\n")
 
     # make and print the table:
     numcols = len(colnames) + len(extracolnames)
@@ -230,14 +234,14 @@ def main():
             records3 = [r1 + [r4] for r1, r4 in zip(records1, records4)]
 
     # sort results
-    if options["sort"]:
-        if options["sort"] == "asc":
-            if options["option"] == "coor":
+    if sort:
+        if sort == "asc":
+            if option == "coor":
                 records3.sort(key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])))
             else:
                 records3.sort(key=lambda r: float(r[-1]))
         else:
-            if options["option"] == "coor":
+            if option == "coor":
                 records3.sort(
                     key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])),
                     reverse=True,
@@ -246,7 +250,7 @@ def main():
                 records3.sort(key=lambda r: float(r[-1]), reverse=True)
 
     for r in records3:
-        sys.stdout.write("|".join(map(str, r)) + "\n")
+        sys.stdout.write(fs.join(map(str, r)) + "\n")
 
 
 if __name__ == "__main__":
