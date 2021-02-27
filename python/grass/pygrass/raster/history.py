@@ -52,7 +52,7 @@ class History(object):
 
     def __repr__(self):
         return "History(%s)" % ", ".join(
-            ["%s=%r" % (self.attr, getattr(self, attr)) for attr in self.attrs]
+            ["%s=%r" % (attr, getattr(self, attr)) for attr in self.attrs]
         )
 
     def __del__(self):
