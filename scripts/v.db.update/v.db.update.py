@@ -92,10 +92,14 @@ def main():
         if not os.access(sqlitefile, os.R_OK):
             grass.fatal(_("File <%s> not found") % sqlitefile)
 
-    # checking column types
-    try:
-        coltype = grass.vector_columns(vector, layer)[column]["type"]
-    except KeyError:
+    # Check column existence and get its type.
+    all_columns = grass.vector_columns(vector, layer)
+    coltype = None
+    for column_name, column_record in all_columns.items():
+        if column.lower() == column_name.lower():
+            coltype = column_record["type"]
+            break
+    if not coltype:
         grass.fatal(_("Column <%s> not found") % column)
 
     if qcolumn:
