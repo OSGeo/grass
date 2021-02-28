@@ -1,7 +1,73 @@
 <h2>DESCRIPTION</h2>
 
-Prints available band references information of multispectral data
-defined by GRASS GIS.
+<em>g.bands</em> prints available band references information of multispectral data
+defined by GRASS GIS. The following multispectral sensors are supported
+by default (other band reference registry files can be added, see below):
+
+<p>
+Generic multispectral system:
+<ul>
+<li>gen_r Visible red</li>
+<li>gen_g Visible green</li>
+<li>gen_b Visible blue</li>
+<li>gen_pan Visible panchromatic</li>
+<li>gen_nir Near infrared</li>
+</ul>
+<p>
+Landsat-5:
+<ul>
+<li>L5_1 Visible (Blue)</li>
+<li>L5_2 Visible (Green)</li>
+<li>L5_3 Visible (Red)</li>
+<li>L5_4 Near-Infrared</li>
+<li>L5_5 Short-wave infrared</li>
+<li>L5_6 Thermal</li>
+<li>L5_7 Short-wave infrared</li>
+</ul>
+<p>
+Landsat-7:
+<ul>
+<li>L7_1 Visible (Blue)</li>
+<li>L7_2 Visible (Green)</li>
+<li>L7_3 Visible (Red)</li>
+<li>L7_4 Near-Infrared</li>
+<li>L7_5 Near-Infrared</li>
+<li>L7_6 Thermal</li>
+<li>L7_7 Mid-Infrared</li>
+<li>L7_8 Panchromatic</li>
+</ul>
+<p>
+Landsat-8:
+<ul>
+<li>L8_1 Visible (Coastal/Aerosol)</li>
+<li>L8_2 Visible (Blue)</li>
+<li>L8_3 Visible (Green)</li>
+<li>L8_4 Visible (Red)</li>
+<li>L8_5 Near-Infrared</li>
+<li>L8_6 SWIR 1</li>
+<li>L8_7 SWIR 2</li>
+<li>L8_8 Panchromatic</li>
+<li>L8_9 Cirrus</li>
+<li>L8_10 TIRS 1</li>
+<li>L8_11 TIRS 1</li>
+</ul>
+<p>
+Sentinel-2:
+<ul>
+<li>S2_1 Visible (Coastal/Aerosol)</li>
+<li>S2_2 Visible (Blue)</li>
+<li>S2_3 Visible (Green)</li>
+<li>S2_4 Visible (Red)</li>
+<li>S2_5 Vegetation Red Edge 1</li>
+<li>S2_6 Vegetation Red Edge 2</li>
+<li>S2_7 Vegetation Red Edge 3</li>
+<li>S2_8 Near-Infrared</li>
+<li>S2_8A Narrow Near-Infrared</li>
+<li>S2_9 Water vapour</li>
+<li>S2_10 SWIR - Cirrus</li>
+<li>S2_11 SWIR 1</li>
+<li>S2_12 SWIR 2</li>
+</ul>
 
 <p>
 Band references to be printed can be filtered by a search pattern (or
@@ -12,7 +78,8 @@ regular expression operations</a> documentation. By
 default, <em>g.bands</em> prints all available band references.
 
 <p>
-Extended metadata is printed only when <b>-e</b> flag is given.
+Extended metadata (central wavelength, spatial resolution, etc.) is printed
+only when the <b>-e</b> flag is given.
 
 <h2>NOTES</h2>
 
