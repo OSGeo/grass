@@ -39,44 +39,6 @@ typedef struct
     CELL *forms_buffer;
 } MULTI;
 
-static const char *form_short_name(const FORMS f)
-{
-    const char *form_short_names[] = {
-        /* skip 0 */
-        [FL] = "FL",
-        [PK] = "PK",
-        [RI] = "RI",
-        [SH] = "SH",
-        [SP] = "SP",
-        [SL] = "SL",
-        [HL] = "HL",
-        [FS] = "FS",
-        [VL] = "VL",
-        [PT] = "PT",
-        [__] = "ERROR",
-    };
-    return (f >= FL && f <= PT) ? form_short_names[f] : form_short_names[__];
-}
-
-static const char *form_long_name(const FORMS f)
-{
-    const char *form_long_names[] = {
-        /* skip 0 */
-        [FL] = "flat",
-        [PK] = "peak",
-        [RI] = "ridge",
-        [SH] = "shoulder",
-        [SP] = "spur",
-        [SL] = "slope",
-        [HL] = "hollow",
-        [FS] = "footslope",
-        [VL] = "valley",
-        [PT] = "pit",
-        [__] = "ERROR",
-    };
-    return (f >= FL && f <= PT) ? form_long_names[f] : form_long_names[__];
-}
-
 int main(int argc, char **argv)
 {
     struct

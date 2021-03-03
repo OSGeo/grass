@@ -2,11 +2,11 @@
 
 typedef struct
 {
-    int cat;
+    const char *sname;
     int r;
     int g;
     int b;
-    char *label;
+    const char *lname;
 } CATCOLORS;
 
 typedef struct
@@ -17,6 +17,22 @@ typedef struct
     int b;
     char *label;
 } FCOLORS;
+
+/* Landform category codes, numbers, names and colors. */
+static const CATCOLORS ccolors[CNT] = {
+    /* skip 0 */
+    [FL] = {"FL", 220, 220, 220, "flat"},
+    [PK] = {"PK", 56, 0, 0, "peak"},
+    [RI] = {"RI", 200, 0, 0, "ridge"},
+    [SH] = {"SH", 255, 80, 20, "shoulder"},
+    [SP] = {"SP", 250, 210, 60, "spur"},
+    [SL] = {"SL", 255, 255, 60, "slope"},
+    [HL] = {"HL", 180, 230, 20, "hollow"},
+    [FS] = {"FS", 60, 250, 150, "footslope"},
+    [VL] = {"VL", 0, 0, 255, "valley"},
+    [PT] = {"PT", 0, 0, 56, "pit"},
+    [__] = {"ERROR", 255, 0, 255, "ERROR"}
+};
 
 static int get_cell(int, float *, void *, RASTER_MAP_TYPE);
 
@@ -128,33 +144,17 @@ int write_form_cat_colors(char *raster)
     struct Categories cats;
     FORMS i;
 
-    const CATCOLORS ccolors[CNT] = {    /* colors and cats for forms */
-        {ZERO, 0, 0, 0, "forms"},
-        {FL, 220, 220, 220, "flat"},
-        {PK, 56, 0, 0, "peak"},
-        {RI, 200, 0, 0, "ridge"},
-        {SH, 255, 80, 20, "shoulder"},
-        {SP, 250, 210, 60, "spur"},
-        {SL, 255, 255, 60, "slope"},
-        {HL, 180, 230, 20, "hollow"},
-        {FS, 60, 250, 150, "footslope"},
-        {VL, 0, 0, 255, "valley"},
-        {PT, 0, 0, 56, "pit"},
-        {__, 255, 0, 255, "ERROR"}
-    };
-
     Rast_init_colors(&colors);
 
-    for (i = FL; i < CNT; ++i)
-        Rast_add_color_rule(&ccolors[i].cat, ccolors[i].r, ccolors[i].g,
-                            ccolors[i].b, &ccolors[i].cat, ccolors[i].r,
-                            ccolors[i].g, ccolors[i].b, &colors, CELL_TYPE);
+    for (i = FL; i <= PT; ++i)
+        Rast_add_color_rule(&i, ccolors[i].r, ccolors[i].g, ccolors[i].b,
+                            &i, ccolors[i].r, ccolors[i].g, ccolors[i].b,
+                            &colors, CELL_TYPE);
     Rast_write_colors(raster, G_mapset(), &colors);
     Rast_free_colors(&colors);
     Rast_init_cats("Forms", &cats);
-    for (i = FL; i < CNT; ++i)
-        Rast_set_cat(&ccolors[i].cat, &ccolors[i].cat, ccolors[i].label,
-                     &cats, CELL_TYPE);
+    for (i = FL; i <= PT; ++i)
+        Rast_set_cat(&i, &i, ccolors[i].lname, &cats, CELL_TYPE);
     Rast_write_cats(raster, &cats);
     Rast_free_cats(&cats);
     return 0;
@@ -196,4 +196,14 @@ int write_contrast_colors(char *raster)
        Rast_free_cats(&cats);
      */
     return 0;
+}
+
+const char *form_short_name(const FORMS f)
+{
+    return (f >= FL && f <= PT) ? ccolors[f].sname : ccolors[__].sname;
+}
+
+const char *form_long_name(const FORMS f)
+{
+    return (f >= FL && f <= PT) ? ccolors[f].lname : ccolors[__].lname;
 }
