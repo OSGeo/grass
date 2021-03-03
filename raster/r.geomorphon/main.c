@@ -60,10 +60,6 @@ static const char *form_short_name(const FORMS f)
 
 static const char *form_long_name(const FORMS f)
 {
-    /*
-     * The list below is the same as in the documentation and the original paper.
-     * The values in ccolors[] are different for PK and PT.
-     */
     const char *form_long_names[] = {
         /* skip 0 */
         [FL] = "flat",
