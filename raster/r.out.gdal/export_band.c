@@ -215,7 +215,8 @@ int export_band(GDALDatasetH hMEMDS, int band,
 		const char *name, const char *mapset,
 		struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
 		double nodataval, int suppress_main_colortable, 
-		int no_metadata, int writenodata)
+		int no_metadata, int writenodata,
+                double *scaleval)
 {
     struct Colors sGrassColors;
     GDALColorTableH hCT;
@@ -355,6 +356,11 @@ int export_band(GDALDatasetH hMEMDS, int band,
 		GDALSetMetadataItem(hBand, key, value, NULL);
 	    }
 	}
+
+        /* apply scale factor if not defined */
+        if (scaleval) {
+            GDALSetRasterScale(hBand, *scaleval);
+        }
     }
 
     /* Create GRASS raster buffer */
