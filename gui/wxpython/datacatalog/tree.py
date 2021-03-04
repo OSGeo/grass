@@ -450,9 +450,9 @@ class DataCatalogTree(TreeView):
         proc_list = []
         loc_list = []
         try:
-            nprocs = cpu_count()
+            nprocs = max(1, cpu_count() - 1)
         except NotImplementedError:
-            nprocs = 4
+            nprocs = 1
 
         results = dict()
         errors = []
