@@ -76,8 +76,7 @@ import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
-                                  is_different_mapset_owner,
-                                  is_current_mapset_in_demolocation)
+                                  is_different_mapset_owner)
 from grass.exceptions import CalledModuleError
 
 
