@@ -17,8 +17,8 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
-from grass.grassdb.create import (create_mapset, get_default_mapset_name)
-from grass.grassdb.checks import (mapset_exists, can_start_in_mapset)
+from grass.grassdb.create import create_mapset, get_default_mapset_name
+from grass.grassdb.checks import mapset_exists, can_start_in_mapset
 
 from grass.grassdb.checks import is_location_valid
 
@@ -175,7 +175,7 @@ def ensure_usable_mapset(grassdb, location):
         if mapset_name == "PERMANENT":
             mapset_name = get_default_mapset_name()
         else:
-            mapset_name = get_default_mapset_name() + '_' + str(index)
+            mapset_name = get_default_mapset_name() + "_" + str(index)
             index = index + 1
         if not mapset_exists(grassdb, location, mapset_name):
             create_mapset(grassdb, location, mapset_name)
