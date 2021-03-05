@@ -170,7 +170,7 @@ def ensure_usable_mapset(grassdb, location):
     """
     mapset_name = "PERMANENT"
     mapset_path = os.path.join(grassdb, location, mapset_name)
-    index = 2
+    index = 1
     while not can_start_in_mapset(mapset_path, ignore_lock=False):
         if mapset_name == "PERMANENT":
             mapset_name = get_default_mapset_name()

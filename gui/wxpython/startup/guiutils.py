@@ -138,6 +138,16 @@ def read_gisrc():
     return grassrc
 
 
+def is_nonstandard_startup():
+    return 'LAST_MAPSET_PATH' in read_gisrc().keys()
+
+
+def is_first_time_user():
+    return read_gisrc()['LAST_MAPSET_PATH'] == os.path.join(os.getcwd(),
+                                                            "<UNKNOWN>",
+                                                            "<UNKNOWN>")
+
+
 def GetVersion():
     """Gets version and revision
 

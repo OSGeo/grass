@@ -46,3 +46,14 @@ def rename_mapset(database, location, old_name, new_name):
 def rename_location(database, old_name, new_name):
     """Rename location from *old_name* to *new_name*"""
     os.rename(os.path.join(database, old_name), os.path.join(database, new_name))
+
+
+def split_mapset_path(mapset_path):
+    """Split mapset path to three part - grassdb, location, mapset"""
+    head_tail = os.path.split(mapset_path)
+    location_path = head_tail[0]
+    mapset = head_tail[1]
+    head_tail = os.path.split(location_path)
+    grassdb = head_tail[0]
+    location = head_tail[1]
+    return grassdb, location, mapset

@@ -177,6 +177,8 @@ def get_reason_mapset_not_usable(mapset_path):
 
     Returns message as string if there was a reason, otherwise None.
     """
+    if mapset_path is None:
+        return
     message = None
 
     # Check whether mapset is valid
@@ -184,8 +186,7 @@ def get_reason_mapset_not_usable(mapset_path):
         message = _("invalid")
     # Check whether mapset is owned by current user
     elif not is_current_user_mapset_owner(mapset_path):
-        owner = get_mapset_owner(mapset_path)
-        message = _("owned by different user '{}'").format(owner)
+        message = _("owned by different user")
     # Check whether mapset is locked
     elif is_mapset_locked(mapset_path):
         message = _("locked")

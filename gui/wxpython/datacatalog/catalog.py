@@ -29,8 +29,11 @@ from gui_core.forms import GUI
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.checks import is_current_mapset_in_demolocation
-from startup.guiutils import read_gisrc
+from startup.guiutils import (read_gisrc,
+                              is_nonstandard_startup,
+                              is_first_time_user)
+from grass.grassdb.checks import get_reason_mapset_not_usable
+from grass.grassdb.manage import split_mapset_path
 
 
 class DataCatalog(wx.Panel):
@@ -67,22 +70,23 @@ class DataCatalog(wx.Panel):
         self._layout()
 
         # show infobar if applicable
-        if is_current_mapset_in_demolocation():
-            grassrc = read_gisrc()
-            if grassrc['REASON'] == "invalid":
-                if (grassrc['UNUSED_GISDBASE'] == os.getcwd() and
-                    grassrc['UNUSED_LOCATION_NAME'] == "<UNKNOWN>" and
-                        grassrc['UNUSED_MAPSET'] == "<UNKNOWN>"):
-                    # show data structure infobar for first-time user
-                    wx.CallLater(2000, self.showDataStructureInfo)
-                else:
-                    wx.CallLater(2000, self.showBasicDemolocationInfo)
-            elif "owned by different user" in grassrc['REASON']:
-                # show basic info
-                wx.CallLater(2000, self.showBasicDemolocationInfo)
-            elif grassrc['REASON'] == "locked":
-                # show info allowing to switch to locked mapset
-                wx.CallLater(2000, self.showLockedMapsetInfo)
+        if is_nonstandard_startup():
+            if is_first_time_user():
+                # show data structure infobar for first-time user
+                wx.CallLater(2000, self.showDataStructureInfo)
+            else:
+                # get reason why last used mapset is not usable
+                last_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+                reason = get_reason_mapset_not_usable(last_mapset_path)
+                if reason == "invalid":
+                    # show invalid mapset info
+                    wx.CallLater(2000, self.showInvalidMapsetInfo)
+                elif reason == "owned by different user":
+                    # show different mapset owner info
+                    wx.CallLater(2000, self.showDifferentMapsetOwnerInfo)
+                elif reason == "locked":
+                    # show info allowing to switch to locked mapset
+                    wx.CallLater(2000, self.showLockedMapsetInfo)
 
     def _layout(self):
         """Do layout"""
@@ -100,11 +104,14 @@ class DataCatalog(wx.Panel):
     def showDataStructureInfo(self):
         self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
 
+    def showInvalidMapsetInfo(self):
+        self.infoManager.ShowInvalidMapsetInfo()
+
+    def showDifferentMapsetOwnerInfo(self):
+        self.infoManager.ShowDifferentMapsetOwnerInfo()
+
     def showLockedMapsetInfo(self):
         self.infoManager.ShowLockedMapsetInfo(self.OnSwitchMapset)
-
-    def showBasicDemolocationInfo(self):
-        self.infoManager.ShowBasicDemolocationInfo()
 
     def showImportDataInfo(self):
         self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
@@ -158,10 +165,8 @@ class DataCatalog(wx.Panel):
 
     def OnSwitchMapset(self, event):
         """Switch to given mapset"""
-        grassrc = read_gisrc()
-        grassdb = grassrc['UNUSED_GISDBASE']
-        location = grassrc['UNUSED_LOCATION_NAME']
-        mapset = grassrc['UNUSED_MAPSET']
+        last_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+        grassdb, location, mapset = split_mapset_path(last_mapset_path)
         self.tree.SwitchMapset(grassdb, location, mapset)
         event.Skip()
 

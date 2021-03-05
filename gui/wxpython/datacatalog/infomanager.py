@@ -21,6 +21,8 @@ import wx
 
 from grass.script import gisenv
 from startup.guiutils import read_gisrc
+from grass.grassdb.manage import split_mapset_path
+from grass.grassdb.checks import get_mapset_owner
 
 
 class DataCatalogInfoManager:
@@ -59,35 +61,53 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()['LOCATION_NAME'])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
+    def ShowInvalidMapsetInfo(self):
+        """Show info when last used mapset is invalid"""
+        last_used_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+        lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
+        message = _(
+            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is invalid."
+            "GRASS GIS has started in the default Location {loc} which uses "
+            "WGS 84 (EPSG:4326). To continue, find or create usable mapset through "
+            "Data catalog below."
+        ).format(lastdb=lastdb,
+                 lastloc=lastloc,
+                 lastmapset=lastmapset,
+                 loc=gisenv()['LOCATION_NAME'])
+        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
+
+    def ShowDifferentMapsetOwnerInfo(self):
+        """Show info when last used mapset is owned by different user"""
+        last_used_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+        lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
+        owner = get_mapset_owner(last_used_mapset_path)
+        message = _(
+            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is owned "
+            "by different user '{owner}'. GRASS GIS has started in the default Location "
+            "{loc} which uses WGS 84 (EPSG:4326). To continue, find or create "
+            "usable mapset through Data catalog below."
+        ).format(lastdb=lastdb,
+                 lastloc=lastloc,
+                 lastmapset=lastmapset,
+                 owner=owner,
+                 loc=gisenv()['LOCATION_NAME'])
+        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
+
     def ShowLockedMapsetInfo(self, OnSwitchMapsetHandler):
         """Show info when last used mapset is locked"""
-        grassrc = read_gisrc()
+        last_used_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+        lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
         buttons = [("Switch to last used mapset", OnSwitchMapsetHandler)]
         message = _(
             "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is locked."
             "GRASS GIS has started in the default Location {loc} which uses "
             "WGS 84 (EPSG:4326). To continue, set usable mapset through Data "
-            "Catalog below, or remove .gislock and switch to last usable mapset."
-        ).format(lastdb=grassrc['UNUSED_GISDBASE'],
-                 lastloc=grassrc['UNUSED_LOCATION_NAME'],
-                 lastmapset=grassrc['UNUSED_MAPSET'],
+            "Catalog below, or remove .gislock and switch to last used mapset."
+        ).format(lastdb=lastdb,
+                 lastloc=lastloc,
+                 lastmapset=lastmapset,
                  loc=gisenv()['LOCATION_NAME'])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
-
-    def ShowBasicDemolocationInfo(self):
-        """Show info when last used mapset is invalid or owned by different user"""
-        grassrc = read_gisrc()
-        message = _(
-            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is {reason}."
-            "GRASS GIS has started in the default Location {loc} which uses "
-            "WGS 84 (EPSG:4326). To continue, find or create usable mapset through "
-            "Data catalog below."
-        ).format(lastdb=grassrc['UNUSED_GISDBASE'],
-                 lastmapset=grassrc['UNUSED_MAPSET'],
-                 lastloc=grassrc['UNUSED_LOCATION_NAME'],
-                 reason=grassrc['REASON'],
-                 loc=gisenv()['LOCATION_NAME'])
-        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
 
     def _onLearnMore(self, event):
         self._giface.Help(entry="grass_database")

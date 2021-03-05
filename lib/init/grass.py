@@ -555,6 +555,11 @@ def create_gisrc(tmpdir, gisrcrc):
     # Copy the global grassrc file to the session grassrc file
     if s:
         writefile(gisrc, s)
+
+        # remove last mapset path from gisrc if applicable
+        line_number = search_string_in_gisrc(gisrc, "LAST_MAPSET_PATH")
+        if line_number:
+            delete_line_from_file(gisrc, line_number)
     return gisrc
 
 
@@ -593,6 +598,27 @@ def read_env_file(path):
     return kv
 
 
+def delete_line_from_file(path, number):
+    """Delete line given by number from file (number 1 = first row)"""
+    with open(path, "r") as f:
+        lines = f.readlines()
+        del lines[number]
+    with open(path, "w") as f:
+        for line in lines:
+            f.write(line)
+
+
+def search_string_in_gisrc(path, string_to_search):
+    """Search for line number of given string"""
+    line_number = 0
+    with open(path, "r") as f:
+        for line in f:
+            if string_to_search in line:
+                return line_number
+            line_number += 1
+    return None
+
+
 def write_gisrc(kv, filename, append=False):
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
@@ -602,16 +628,7 @@ def write_gisrc(kv, filename, append=False):
     f.close()
 
 
-def set_mapset_info_to_gisrc(
-    gisrc,
-    grassdb,
-    location,
-    mapset,
-    unused_grassdb=None,
-    unused_location=None,
-    unused_mapset=None,
-    reason=None,
-):
+def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     if os.access(gisrc, os.R_OK):
         kv = read_gisrc(gisrc)
     else:
@@ -619,10 +636,15 @@ def set_mapset_info_to_gisrc(
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
     kv["MAPSET"] = mapset
-    kv["UNUSED_GISDBASE"] = unused_grassdb
-    kv["UNUSED_LOCATION_NAME"] = unused_location
-    kv["UNUSED_MAPSET"] = unused_mapset
-    kv["REASON"] = reason
+    write_gisrc(kv, gisrc)
+
+
+def set_last_mapset_to_gisrc(gisrc, last_mapset_path):
+    if os.access(gisrc, os.R_OK):
+        kv = read_gisrc(gisrc)
+    else:
+        kv = {}
+    kv["LAST_MAPSET_PATH"] = last_mapset_path
     write_gisrc(kv, gisrc)
 
 
@@ -848,10 +870,6 @@ def create_initial_gisrc(filename):
         r"""GISDBASE: %s
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
-UNUSED_GISDBASE: None
-UNUSED_LOCATION_NAME: None
-UNUSED_MAPSET: None
-REASON: None
 """
         % os.getcwd()
     )
@@ -1179,7 +1197,7 @@ def set_mapset(
                         )
                     )
                     writefile(os.path.join(path, "WIND"), s)
-        set_mapset_info_to_gisrc(gisrc, gisdbase, location_name, mapset)
+        set_mapset_to_gisrc(gisrc, gisdbase, location_name, mapset)
     else:
         fatal(
             _(
@@ -1203,10 +1221,6 @@ class MapsetSettings(object):
         self.location = None
         self.mapset = None
         self._full_mapset = None
-        self.unused_gisdbase = None
-        self.unused_location = None
-        self.unused_mapset = None
-        self.reason = None
 
     # TODO: perhaps full_mapset would be better as mapset_path
     # TODO: works only when set for the first time
@@ -1222,13 +1236,6 @@ class MapsetSettings(object):
     def is_valid(self):
         return self.gisdbase and self.location and self.mapset
 
-    def get_reason_mapset_not_usable(self):
-        """Check if a mapset is usable for a new session"""
-        from grass.grassdb.checks import get_reason_mapset_not_usable
-
-        self.reason = get_reason_mapset_not_usable(self._full_mapset)
-        return self.reason
-
 
 def getMapsetSettings(gisrc):
     """Get the settings of Location and Mapset from the gisrc file"""
@@ -1237,10 +1244,6 @@ def getMapsetSettings(gisrc):
     mapset_settings.gisdbase = kv.get("GISDBASE")
     mapset_settings.location = kv.get("LOCATION_NAME")
     mapset_settings.mapset = kv.get("MAPSET")
-    mapset_settings.unused_gisdbase = kv.get("UNUSED_GISDBASE")
-    mapset_settings.unused_location = kv.get("UNUSED_LOCATION_NAME")
-    mapset_settings.unused_mapset = kv.get("UNUSED_MAPSET")
-    mapset_settings.reason = kv.get("REASON")
     if not mapset_settings.is_valid():
         return None
     return mapset_settings
@@ -1740,7 +1743,9 @@ def run_batch_job(batch_job):
         script_in_addon_path = None
         if "GRASS_ADDON_BASE" in os.environ:
             script_in_addon_path = os.path.join(
-                os.environ["GRASS_ADDON_BASE"], "scripts", batch_job[0],
+                os.environ["GRASS_ADDON_BASE"],
+                "scripts",
+                batch_job[0],
             )
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
@@ -1753,7 +1758,8 @@ def run_batch_job(batch_job):
         proc = Popen(batch_job, shell=False, env=os.environ)
     except OSError as error:
         error_message = _("Execution of <{cmd}> failed:\n" "{error}").format(
-            cmd=batch_job_string, error=error,
+            cmd=batch_job_string,
+            error=error,
         )
         # No such file or directory
         if error.errno == errno.ENOENT:
@@ -2522,33 +2528,30 @@ def main():
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
 
-            # Find reason why mapset is not usable
-            mapset_settings.get_reason_mapset_not_usable()
-
             # Ensure demolocation
             import grass.app as ga
 
             grassdb, location = ga.ensure_demolocation()
+
             # Ensure usable mapset
             mapset = ga.ensure_usable_mapset(grassdb, location)
             if mapset is None:
                 sys.exit("Failed to start GUI, GRASS GIS is not running.")
 
             # Write mapset info to gisrc file
-            set_mapset_info_to_gisrc(
-                gisrc=gisrc,
-                grassdb=grassdb,
-                location=location,
-                mapset=mapset,
-                unused_grassdb=mapset_settings.gisdbase,
-                unused_location=mapset_settings.location,
-                unused_mapset=mapset_settings.mapset,
-                reason=mapset_settings.reason,
+            set_mapset_to_gisrc(
+                gisrc=gisrc, grassdb=grassdb, location=location, mapset=mapset
             )
+            # Write last mapset path to gisrc file
+            last_mapset_path = os.path.join(
+                mapset_settings.gisdbase,
+                mapset_settings.location,
+                mapset_settings.mapset,
+            )
+            set_last_mapset_to_gisrc(gisrc=gisrc, last_mapset_path=last_mapset_path)
         else:
-            mapset_settings.reason = None
             # Write mapset info to gisrc file
-            set_mapset_info_to_gisrc(
+            set_mapset_to_gisrc(
                 gisrc=gisrc,
                 grassdb=mapset_settings.gisdbase,
                 location=mapset_settings.location,
