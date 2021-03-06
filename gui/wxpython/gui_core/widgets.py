@@ -578,14 +578,18 @@ class BaseValidator(Validator):
 
     def OnText(self, event):
         """Do validation"""
-        self.Validate()
+        self._validate(win=event.GetEventObject())
 
         event.Skip()
 
-    def Validate(self):
+    def Validate(self, parent):
+        """Is called upon closing wx.Dialog"""
+        win = self.GetWindow()
+        return self._validate(win)
+
+    def _validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
 
         if text:
             try:
@@ -601,7 +605,6 @@ class BaseValidator(Validator):
         textCtrl = self.GetWindow()
 
         textCtrl.SetBackgroundColour("grey")
-        textCtrl.SetFocus()
         textCtrl.Refresh()
 
     def _valid(self):
@@ -626,11 +629,9 @@ class CoordinatesValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def _validate(self, win):
         """Validate input"""
-
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             try:
                 text = text.split(',')
@@ -683,10 +684,9 @@ class EmailValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def _validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             if re.match(r'\b[\w.-]+@[\w.-]+.\w{2,4}\b', text) is None:
                 self._notvalid()
@@ -706,10 +706,9 @@ class TimeISOValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self):
+    def _validate(self, win):
         """Validate input"""
-        textCtrl = self.GetWindow()
-        text = textCtrl.GetValue()
+        text = win.GetValue()
         if text:
             try:
                 datetime.strptime(text, '%Y-%m-%d')
