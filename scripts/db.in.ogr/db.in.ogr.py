@@ -27,6 +27,20 @@
 # %end
 
 # %option
+# % key: gdal_config
+# % type: string
+# % label: GDAL configuration options
+# % description: Comma-separated list of key=value pairs
+# %end
+
+# %option
+# % key: gdal_doo
+# % type: string
+# % label: GDAL dataset open options
+# % description: Comma-separated list of key=value pairs
+# %end
+
+# %option
 # % key: db_table
 # % type: string
 # % key_desc : name
@@ -66,6 +80,8 @@ from grass.exceptions import CalledModuleError
 
 def main():
     input = options["input"]
+    gdal_config = options['gdal_config']
+    gdal_doo = options['gdal_doo']
     db_table = options["db_table"]
     output = options["output"]
     key = options["key"]
@@ -114,6 +130,8 @@ def main():
             "v.in.ogr",
             flags="o",
             input=input,
+            gdal_config=gdal_config,
+            gdal_doo=gdal_doo,
             output=output,
             layer=layer,
             quiet=True,
