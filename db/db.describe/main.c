@@ -7,7 +7,7 @@
  *               Markus Neteler <neteler itc.it>,
  *               Stephan Holl
  * PURPOSE:      Displays table information
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
