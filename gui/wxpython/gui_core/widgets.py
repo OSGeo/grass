@@ -579,11 +579,16 @@ class BaseValidator(Validator):
 
     def OnText(self, event):
         """Do validation"""
-        self.Validate(win=event.GetEventObject())
+        self._validate(win=event.GetEventObject())
 
         event.Skip()
 
-    def Validate(self, win):
+    def Validate(self, parent):
+        """Is called upon closing wx.Dialog"""
+        win = self.GetWindow()
+        return self._validate(win)
+
+    def _validate(self, win):
         """Validate input"""
         text = win.GetValue()
 
@@ -625,7 +630,7 @@ class CoordinatesValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self, win):
+    def _validate(self, win):
         """Validate input"""
         text = win.GetValue()
         if text:
@@ -680,7 +685,7 @@ class EmailValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self, win):
+    def _validate(self, win):
         """Validate input"""
         text = win.GetValue()
         if text:
@@ -702,7 +707,7 @@ class TimeISOValidator(BaseValidator):
     def __init__(self):
         BaseValidator.__init__(self)
 
-    def Validate(self, win):
+    def _validate(self, win):
         """Validate input"""
         text = win.GetValue()
         if text:
@@ -1048,7 +1053,7 @@ class PlacementValidator(BaseValidator):
         super()._notvalid()
         self._enableDisableBtn(enable=False)
 
-    def Validate(self, win):
+    def _validate(self, win):
         """Validate input"""
         text = win.GetValue()
         if text:
