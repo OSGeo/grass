@@ -6,7 +6,7 @@
 # AUTHOR(S):   	Markus Neteler
 # PURPOSE:      Imports attribute tables in various formats
 #               Converted to Python by Glynn Clements
-# COPYRIGHT:    (C) 2007-2016 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2021 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
