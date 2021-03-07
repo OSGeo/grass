@@ -6,7 +6,7 @@
 # AUTHOR(S):   	Markus Neteler
 # PURPOSE:      Imports attribute tables in various formats
 #               Converted to Python by Glynn Clements
-# COPYRIGHT:    (C) 2007-2016 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2021 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -24,6 +24,20 @@
 
 # %option G_OPT_F_BIN_INPUT
 # % description: Table file to be imported or DB connection string
+# %end
+
+# %option
+# % key: gdal_config
+# % type: string
+# % label: GDAL configuration options
+# % description: Comma-separated list of key=value pairs
+# %end
+
+# %option
+# % key: gdal_doo
+# % type: string
+# % label: GDAL dataset open options
+# % description: Comma-separated list of key=value pairs
 # %end
 
 # %option
@@ -66,6 +80,8 @@ from grass.exceptions import CalledModuleError
 
 def main():
     input = options["input"]
+    gdal_config = options['gdal_config']
+    gdal_doo = options['gdal_doo']
     db_table = options["db_table"]
     output = options["output"]
     key = options["key"]
@@ -114,6 +130,8 @@ def main():
             "v.in.ogr",
             flags="o",
             input=input,
+            gdal_config=gdal_config,
+            gdal_doo=gdal_doo,
             output=output,
             layer=layer,
             quiet=True,
