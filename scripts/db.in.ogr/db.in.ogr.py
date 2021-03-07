@@ -80,8 +80,8 @@ from grass.exceptions import CalledModuleError
 
 def main():
     input = options["input"]
-    gdal_config = options['gdal_config']
-    gdal_doo = options['gdal_doo']
+    gdal_config = options["gdal_config"]
+    gdal_doo = options["gdal_doo"]
     db_table = options["db_table"]
     output = options["output"]
     key = options["key"]
