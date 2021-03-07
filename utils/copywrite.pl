@@ -19,15 +19,16 @@
 ## Please run from top source code directory.
 ## For usage details, see below.
 
+
 #-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#
-#
+## no critic
 # edit this, and edit the bottom of the file after __END__
 
 # my $editor	= "vi -o";
 #my $editor	= "nedit";
 my $editor	= "xemacs";
 
-# don't forget to get a copy of 
+# don't forget to get a copy of
 #   http://www.red-bean.com/cvs2cl/cvs2cl.pl
 # and put it in the same directory as this script
 #
@@ -37,9 +38,9 @@ my $editor	= "xemacs";
 #   the format of the file should be "username,identity", one per line
 #   The contributors.csv is already in the main directory of the GRASS
 #   source code, so it should be found.
-#
+
 ####
-# to work offline: 
+# to work offline:
 #   $ export PATH=$PATH:$(pwd)
 #   $ find . -name main.c | while read i; do \
 #	echo $i; (cd `dirname $i`; cvs2cl.pl -f ChangeLog.tmp main.c); done
@@ -52,11 +53,12 @@ my $editor	= "xemacs";
 #
 #-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#
 
+## use critic
 use File::Find;
 use File::Basename;
-use Cwd;
 use strict;
 use warnings;
+use Cwd;
 use File::Basename;
 
 my $ChangeLog	= "ChangeLog.tmp";
@@ -73,7 +75,7 @@ sub evaluate_file {
     warn "+ Reading $name\n";
 
     # slurp main.c
-    my $main_c = do {local $/; open F, $_ or die "reading $name: $!"; <F>};
+    my $main_c = do {local $/; open F, $_ or die "reading $name: $!"; <F>}; ## no critic
 
     # continue if main.c is 25 lines or longer
     return unless ($main_c =~ y/\n/\n/) >= 25;
@@ -95,8 +97,8 @@ sub evaluate_file {
     {
 	# Read whole paras at once
 	local $/ = "";
-	open LOG, $ChangeLog or die "$ChangeLog: $!";
-	while (my $line = <LOG>) {
+	open my $LOG, '<', $ChangeLog or die "$ChangeLog: $!";
+	while (my $line = $LOG) {
 
 	    # Hack out the pretty printing
 	    $line =~ s/\s+/ /gos;
@@ -110,7 +112,7 @@ sub evaluate_file {
 		$user = $2;
 		$username{$user}++;
 	    }
-	    
+
 	    # Note when a user did the initial check in
 	    # if ($line =~ /^\s+\*\s+[^:]+:\s+(?:initial|new$)/gios) {
 	    #	$original_author = $user;
@@ -123,10 +125,10 @@ sub evaluate_file {
 	    }
 	}
     }
-    
+
     # don't duplicate the original author
     delete $username{$original_author} if $original_author;
-    
+
     #figure out module name
     my $fullname = $name;
     my $mymodule = basename(dirname($fullname));
@@ -134,25 +136,25 @@ sub evaluate_file {
     # append the list of contributors
     my @years   = sort map {$_ + 0} keys %year;
     my @authors = sort keys %username;
-    
+
     # map committers to identities
     @authors = map { exists( $identity{$_} ) ? $identity{$_} : $_ } @authors;
     $original_author = $identity{$original_author}
 			if exists $identity{$original_author};
 
     # execute the template
-    { 
+    {
 	local $" = ", ";
-	$main_c = eval( 
-	    "<<END_OF_TEMPLATE\n" . $template . "\nEND_OF_TEMPLATE" );
+	$main_c = eval{
+	    "<<END_OF_TEMPLATE\n" . $template . "\nEND_OF_TEMPLATE" };
     }
 
     # write the new version of main.c
     warn "+ Rewriting $name\n";
-    open F, ">$_" or die "writing $name: $!";
+    open my $F, '>', $_ or die "writing $name: $!";
     print F $main_c;
     close F;
-    
+
     # load it up in an editor for vetting
     system "$editor $_ $ChangeLog description.html" and die "$editor $_ $ChangeLog: $!";
 
@@ -181,7 +183,7 @@ __END__
  * MODULE:       $mymodule
  * AUTHOR(S):    $original_author (original contributor)
  *               @authors
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) $years[0]-$years[-1] by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
