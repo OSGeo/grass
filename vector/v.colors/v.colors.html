@@ -12,7 +12,9 @@ vector lines are not supported.
 
 <p>The <b>raster</b> option allows user to specify a raster map from
 which to copy the color table, similarly <b>raster_3d</b> option for 3D
-raster map.
+raster map. Without <b>use=attr</b> and <b>column</b> options, raster values
+will be matched with categories. Use these two options to transfer raster
+colors to vector attributes.
 
 <p>The <b>rules</b> color table type will cause <em>v.colors</em> to
 read color table specifications from given file and will build the
@@ -57,7 +59,7 @@ v.colors map=soils_general layer=1 color=wave use=attr column=AREA
 </pre></div>
 
 <h3>Define color table stored as RGB values in attribute table</h3>
-  
+
 Write color values to the attribute table (column <tt>GRASSRGB</tt>)
 instead of creating color table.
 
@@ -65,7 +67,7 @@ instead of creating color table.
 v.colors map=soils_general layer=1 color=wave use=attr column=AREA rgb_column=GRASSRGB
 
 # See some GRASSRGB values:
-v.db.select map=soils_general where="cat < 4"
+v.db.select map=soils_general where="cat &lt; 4"
 cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
 1|1|0|164616.125|2|1|NC113|212:42:127
 2|2|0|30785.529297|3|2|NC096|212:42:127
@@ -85,6 +87,23 @@ assigned (check
 by <em><a href="v.colors.out.html">v.colors.out</a></em>) together
 with GRASSRGB attribute column. Also note that color table is preferred
 over RGB values stored in attribute table.
+
+<h3>Transfer raster colors to vector</h3>
+
+<div class="code"><pre>
+# create an example raster from census blocks (10m pixel resolution)
+g.region vector=censusblk_swwake res=10 -ap
+v.to.rast input=censusblk_swwake use=attr attribute_column=TOTAL_POP output=censusblk_swwake_total_pop
+r.colors -e map=censusblk_swwake_total_pop color=blues
+
+# transfer raster colors to vector attributes (raster values to attributes)
+r.colors.out map=censusblk_swwake_total_pop rules=- | v.colors map=censusblk_swwake use=attr column=TOTAL_POP rules=-
+# equivalent, but simpler
+v.colors map=censusblk_swwake use=attr column=TOTAL_POP raster=censusblk_swwake_total_pop
+
+# transfer raster colors to vector categories (raster values to categories)
+v.colors map=censusblk_swwake raster=censusblk_swwake_total_pop
+</pre></div>
 
 <h3>Remove existing color table</h3>
 
@@ -131,7 +150,8 @@ help people select good color schemes for maps and other graphics.
 
 <h2>AUTHORS</h2>
 
-Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic
+Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic<br>
+Huidae Cho
 
 <!--
 <p>
