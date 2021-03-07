@@ -1600,8 +1600,7 @@ def set_language(grass_config_dir):
         gettext.install("grasslibs", gpath("locale"))
 
 
-# TODO: grass_gui parameter is a hack and should be removed, see below
-def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
+def lock_mapset(mapset_path, force_gislock_removal, user):
     """Lock the mapset and return name of the lock file
 
     Behavior on error must be changed somehow; now it fatals but GUI case is
@@ -1649,15 +1648,8 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
             % lockfile
         )
 
-    # TODO: the gui decision should be done by the caller
-    # this needs some change to the function interface, return tuple or
-    # use exceptions (better option)
     if msg:
-        if grass_gui == "wxpython":
-            call([os.getenv("GRASS_PYTHON"), wxpath("gis_set_error.py"), msg])
-            # TODO: here we probably miss fatal or exit, needs to be added
-        else:
-            fatal(msg)
+        raise Exception(msg)
     debug(
         "Mapset <{mapset}> locked using '{lockfile}'".format(
             mapset=mapset_path, lockfile=lockfile
@@ -2627,13 +2619,21 @@ def main():
 
     location = mapset_settings.full_mapset
 
-    # check and create .gislock file
-    lock_mapset(
-        mapset_settings.full_mapset,
-        user=user,
-        force_gislock_removal=params.force_gislock_removal,
-        grass_gui=grass_gui,
-    )
+    try:
+        # check and create .gislock file
+        lock_mapset(
+            mapset_settings.full_mapset,
+            user=user,
+            force_gislock_removal=params.force_gislock_removal
+        )
+    except Exception as e:
+        msg = e.args[0]
+        if grass_gui == "wxpython":
+            call([os.getenv("GRASS_PYTHON"), wxpath("gis_set_error.py"), msg])
+            sys.exit(_("Exiting..."))
+        else:
+            fatal(msg)
+
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
     atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
