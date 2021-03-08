@@ -28,7 +28,7 @@
    if (default) cells size specification is used, then the neighborhood
    shape is a less exact rectangle; in that case the neighborhood dimensions
    will also be different for x and y if the cell dimensions are different
-   - lat/lon data is allowed, but distance measure for -m(ap units) is straight line! 
+   - lat/lon data is allowed, but distance measure for -m(ap units) is straight line!
    - cell weights are now normalized to be in range [0;1]
    - center cell weight for "wmean" is now "1.0"
 
@@ -159,12 +159,6 @@ void print_weights_matrix(long int rows, long int cols)
             if (WEIGHTS[i][j] != -1.0) {
                 snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
                          "%06.2f ", WEIGHTS[i][j]);
-                if (strlen(weight_matrix_weight_buf) >
-                    (weight_matrix_weight_length)) {
-                    snprintf(weight_matrix_weight_buf,
-                             weight_matrix_line_length, "[????] ",
-                             WEIGHTS[i][j]);
-                }
             }
             else {
                 snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
@@ -608,10 +602,10 @@ void interpolate_row(unsigned long row_index, unsigned long cols,
 
 /*
  * Pre-computes the matrix of spatial weights.
- * for operation mode "wmean" (spatially weighted mean), "constant" is passed as "0"
- * and distance-dependent weigths are calculated. For all other modes, "constant" is
+ * For operation mode "wmean" (spatially weighted mean), "constant" is passed as "0"
+ * and distance-dependent weights are calculated. For all other modes, "constant" is
  * passed as "1" and all cells within the circular neighborhood will be set to "1.0".
- * In both casses, all cells outside the neighborhood will be set to "-1.0".
+ * In both cases, all cells outside the neighborhood will be set to "-1.0".
  */
 void build_weights_matrix(double radius, double power, double res_x,
                           double res_y, int constant, int use_map_units)
