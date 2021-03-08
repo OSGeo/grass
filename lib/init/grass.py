@@ -2539,8 +2539,11 @@ def main():
 
             # Ensure default gisdbase
             import grass.app as ga
+
             if "DEFAULT_GISDBASE" in read_gisrc(gisrc).keys():
-                default_gisdbase = ga.ensure_default_gisdbase(read_gisrc(gisrc).get("DEFAULT_GISDBASE"))
+                default_gisdbase = ga.ensure_default_gisdbase(
+                    read_gisrc(gisrc).get("DEFAULT_GISDBASE")
+                )
             else:
                 default_gisdbase = ga.ensure_default_gisdbase()
 
@@ -2567,14 +2570,16 @@ def main():
             )
             set_last_mapset_to_gisrc(gisrc=gisrc, last_mapset_path=last_mapset_path)
             # Write default grass database to gisrc file
-            set_default_gisdbase_to_gisrc(gisrc=gisrc, default_gisdbase=default_gisdbase)
+            set_default_gisdbase_to_gisrc(
+                gisrc=gisrc, default_gisdbase=default_gisdbase
+            )
         else:
             # Write mapset info to gisrc file
             set_mapset_to_gisrc(
                 gisrc=gisrc,
                 grassdb=mapset_settings.gisdbase,
                 location=mapset_settings.location,
-                mapset=mapset_settings.mapset
+                mapset=mapset_settings.mapset,
             )
     else:
         # Mapset was specified in command line parameters.
