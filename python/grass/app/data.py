@@ -143,23 +143,41 @@ def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
     return False
 
 
-def ensure_demolocation():
-    """Ensure that demolocation exists
+def ensure_default_gisdbase(default_gisdbase=None):
+    """Ensure that default gisdbase exists
+    Creates database directory either based on default gisdbase obtained from
+    gisrc file or on the default path determined according to OS.
 
-    Creates database directory and location if needed.
-    Ensures the usable mapset for startup.
+    Returns the db"""
 
-    Returns the db, location name and usable mapset.
+    if default_gisdbase:
+        if not os.path.exists(default_gisdbase):
+            try:
+                os.mkdir(default_gisdbase)
+                return default_gisdbase
+            except OSError:
+                pass
+        return default_gisdbase
+    else:
+        default_gisdbase = get_possible_database_path()
+        # If nothing found, try to create GRASS directory
+        if not default_gisdbase:
+            default_gisdbase = create_database_directory()
+        return default_gisdbase
+
+
+def ensure_default_location(default_gisdbase):
+    """Ensure that default location exists
+    Creates location if needed.
+
+    Returns the db and location name.
     """
-    grassdb = get_possible_database_path()
 
-    # If nothing found, try to create GRASS directory and copy startup loc
-    if grassdb is None:
-        grassdb = create_database_directory()
-    location = "world_latlong_wgs84"
-    if not is_location_valid(grassdb, location):
-        create_startup_location_in_grassdb(grassdb, location)
-    return (grassdb, location)
+    default_location = "world_latlong_wgs84"
+    if not is_location_valid(default_gisdbase, default_location):
+        # If not valid, copy startup loc
+        create_startup_location_in_grassdb(default_gisdbase, default_location)
+    return default_location
 
 
 def ensure_usable_mapset(grassdb, location):

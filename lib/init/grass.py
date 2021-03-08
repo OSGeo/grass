@@ -639,6 +639,15 @@ def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     write_gisrc(kv, gisrc)
 
 
+def set_default_gisdbase_to_gisrc(gisrc, default_gisdbase):
+    if os.access(gisrc, os.R_OK):
+        kv = read_gisrc(gisrc)
+    else:
+        kv = {}
+    kv["DEFAULT_GISDBASE"] = default_gisdbase
+    write_gisrc(kv, gisrc)
+
+
 def set_last_mapset_to_gisrc(gisrc, last_mapset_path):
     if os.access(gisrc, os.R_OK):
         kv = read_gisrc(gisrc)
@@ -2528,19 +2537,27 @@ def main():
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
 
-            # Ensure demolocation
+            # Ensure default gisdbase
             import grass.app as ga
+            if "DEFAULT_GISDBASE" in read_gisrc(gisrc).keys():
+                default_gisdbase = ga.ensure_default_gisdbase(read_gisrc(gisrc).get("DEFAULT_GISDBASE"))
+            else:
+                default_gisdbase = ga.ensure_default_gisdbase()
 
-            grassdb, location = ga.ensure_demolocation()
+            # Ensure default location
+            default_location = ga.ensure_default_location(default_gisdbase)
 
             # Ensure usable mapset
-            mapset = ga.ensure_usable_mapset(grassdb, location)
+            mapset = ga.ensure_usable_mapset(default_gisdbase, default_location)
             if mapset is None:
                 sys.exit("Failed to start GUI, GRASS GIS is not running.")
 
             # Write mapset info to gisrc file
             set_mapset_to_gisrc(
-                gisrc=gisrc, grassdb=grassdb, location=location, mapset=mapset
+                gisrc=gisrc,
+                grassdb=default_gisdbase,
+                location=default_location,
+                mapset=mapset,
             )
             # Write last mapset path to gisrc file
             last_mapset_path = os.path.join(
@@ -2549,13 +2566,15 @@ def main():
                 mapset_settings.mapset,
             )
             set_last_mapset_to_gisrc(gisrc=gisrc, last_mapset_path=last_mapset_path)
+            # Write default grass database to gisrc file
+            set_default_gisdbase_to_gisrc(gisrc=gisrc, default_gisdbase=default_gisdbase)
         else:
             # Write mapset info to gisrc file
             set_mapset_to_gisrc(
                 gisrc=gisrc,
                 grassdb=mapset_settings.gisdbase,
                 location=mapset_settings.location,
-                mapset=mapset_settings.mapset,
+                mapset=mapset_settings.mapset
             )
     else:
         # Mapset was specified in command line parameters.
