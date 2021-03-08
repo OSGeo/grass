@@ -2,6 +2,7 @@
 import math
 import re
 
+# fmt: off
 fonts = ("cyrilc", "gothgbt", "gothgrt", "gothitt", "greekc", "greekcs",
          "greekp", "greeks", "italicc", "italiccs", "italict", "romanc",
          "romancs", "romand", "romans", "romant", "scriptc", "scripts",
@@ -9,6 +10,7 @@ fonts = ("cyrilc", "gothgbt", "gothgrt", "gothitt", "greekc", "greekcs",
 colors = ("red", "orange", "yellow", "green", "blue", "indigo", "violet",
           "black", "gray", "brown", "magenta", "aqua", "grey", "cyan",
           "purple")
+# fmt: on
 
 
 def rc(*args):
