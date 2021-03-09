@@ -7,7 +7,7 @@
  *               Markus Neteler <neteler itc.it>,
  *               Stephan Holl
  * PURPOSE:      Displays table information
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 static void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database, *table;
-    struct Flag *cols, *tdesc;
+    struct Flag *cols;
     struct GModule *module;
     const char *drv, *db;
 
@@ -107,10 +107,6 @@ static void parse_command_line(int argc, char **argv)
     cols->key = 'c';
     cols->description = _("Print column names only instead "
 			  "of full column descriptions");
-
-    tdesc = G_define_flag();
-    tdesc->key = 't';
-    tdesc->description = _("Print table structure");
 
     table = G_define_standard_option(G_OPT_DB_TABLE);
     table->required = YES;
