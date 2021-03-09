@@ -2624,7 +2624,7 @@ def main():
         lock_mapset(
             mapset_settings.full_mapset,
             user=user,
-            force_gislock_removal=params.force_gislock_removal
+            force_gislock_removal=params.force_gislock_removal,
         )
     except Exception as e:
         msg = e.args[0]
