@@ -75,6 +75,7 @@
  * \author Soeren Gebbert added Dec. 2009 WPS process_description document
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1799,14 +1800,14 @@ FILE *G_open_option_file(const struct Option *option)
 	if (stdinout)
 	    fp = stdin;
 	else if ((fp = fopen(option->answer, "r")) == NULL)
-	    G_fatal_error(_("Unable to open %s file <%s>"),
-			    option->key, option->answer);
+	    G_fatal_error(_("Unable to open %s file <%s>: %s"),
+			    option->key, option->answer, strerror(errno));
     } else if (strcmp(option->gisprompt, "new,file,file") == 0) {
 	if (stdinout)
 	    fp = stdout;
 	else if ((fp = fopen(option->answer, "w")) == NULL)
-	    G_fatal_error(_("Unable to create %s file <%s>"),
-			    option->key, option->answer);
+	    G_fatal_error(_("Unable to create %s file <%s>: %s"),
+			    option->key, option->answer, strerror(errno));
     } else
         G_fatal_error(_("%s= is not a file option"), option->key);
 
