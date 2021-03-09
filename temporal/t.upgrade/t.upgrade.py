@@ -34,6 +34,7 @@ import grass.script as grass
 def main():
     # lazy imports
     import grass.temporal as tgis
+
     tgis.init(skip_db_version_check=True)
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
