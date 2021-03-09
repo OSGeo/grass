@@ -352,7 +352,8 @@ class RasterDataset(AbstractMapDataset):
         set the internal band identifier that should be insert/updated
         in the temporal database.
 
-        :return: True if success, False on error
+        :return: True if success, False if band references could not be
+                 read (due to an error or because not being present)
         """
 
         check, band_ref = self.ciface.read_raster_band_reference(
