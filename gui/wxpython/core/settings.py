@@ -169,6 +169,9 @@ class Settings:
                 'grassdbs': {
                     'listAsString': ""
                 },
+                'lazyLoading': {
+                    'enabled': False
+                }
             },
             'manager': {
                 # show opacity level widget

@@ -89,11 +89,12 @@ class DataCatalog(wx.Panel):
         self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
 
     def LoadItems(self):
-        self.tree.ReloadTreeItems()
+        """Reload tree - full or lazy - based on user settings"""
+        self.tree.ReloadTreeItems(full=False)
 
     def OnReloadTree(self, event):
         """Reload whole tree"""
-        self.LoadItems()
+        self.tree.ReloadTreeItems(full=True)
 
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""

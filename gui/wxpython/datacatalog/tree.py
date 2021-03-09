@@ -82,7 +82,7 @@ from grass.exceptions import CalledModuleError
 updateMapset, EVT_UPDATE_MAPSET = NewEvent()
 
 
-def getLocationTree(gisdbase, location, queue, mapsets=None):
+def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
     """Creates dictionary with mapsets, elements, layers for given location.
     Returns tuple with the dictionary and error (or None)"""
     tmp_gisrc_file, env = gscript.create_environment(gisdbase, location, 'PERMANENT')
@@ -112,6 +112,9 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
                 location, len(mapsets)))
         for each in mapsets:
             maps_dict[each] = []
+    if lazy:
+        queue.put((maps_dict, None))
+        return
     try:
         maplist = gscript.read_command(
             'g.list', flags='mt', type=elements,
@@ -360,6 +363,11 @@ class DataCatalogTree(TreeView):
         self.copy_location = None
         self.copy_grassdb = None
 
+    def _useLazyLoading(self):
+        return UserSettings.Get(group='datacatalog',
+                                key='lazyLoading',
+                                subkey='enabled')
+
     def _getValidSavedGrassDBs(self):
         """Returns list of GRASS databases from settings.
         Returns only existing directories."""
@@ -437,6 +445,50 @@ class DataCatalogTree(TreeView):
         self._model.SortChildren(location_node)
         self._orig_model = copy.deepcopy(self._model)
         return error
+
+    def _lazyReloadGrassDBNode(self, grassdb_node):
+        genv = gisenv()
+        if grassdb_node.children:
+            del grassdb_node.children[:]
+        all_location_nodes = []
+        errors = []
+        current_mapset_node = None
+        locations = GetListOfLocations(grassdb_node.data['name'])
+        for location in locations:
+            loc_node = self._model.AppendNode(parent=grassdb_node,
+                                              data=dict(type='location',
+                                                        name=location))
+            all_location_nodes.append(loc_node)
+            q = Queue()
+            getLocationTree(grassdb_node.data['name'], location, q, lazy=True)
+            maps, error = q.get()
+            if error:
+                errors.append(error)
+            for key in sorted(maps.keys()):
+                mapset_path = os.path.join(loc_node.parent.data['name'],
+                                           loc_node.data['name'],
+                                           key)
+                mapset_node = self._model.AppendNode(
+                    parent=loc_node,
+                    data=dict(type='mapset',
+                              name=key,
+                              lock=is_mapset_locked(mapset_path),
+                              current=False,
+                              is_different_owner=is_different_mapset_owner(mapset_path),
+                              owner=get_mapset_owner(mapset_path)))
+                if (
+                    grassdb_node.data['name'] == genv["GISDBASE"]
+                    and location == genv["LOCATION_NAME"]
+                    and key == genv["MAPSET"]
+                ):
+                    current_mapset_node = mapset_node
+        if current_mapset_node:
+            self._reloadMapsetNode(current_mapset_node)
+        for node in all_location_nodes:
+            self._model.SortChildren(node)
+        self._model.SortChildren(grassdb_node)
+        self._orig_model = copy.deepcopy(self._model)
+        return errors
 
     def _reloadGrassDBNode(self, grassdb_node):
         """Recursively reload the model of a specific grassdb node.
@@ -516,11 +568,13 @@ class DataCatalogTree(TreeView):
         self._orig_model = copy.deepcopy(self._model)
         return errors
 
-    def _reloadTreeItems(self):
+    def _reloadTreeItems(self, full=False):
         """Updates grass databases, locations, mapsets and layers in the tree.
 
         It runs in thread, so it should not directly interact with GUI.
         In case of any errors it returns the errors as a list of strings, otherwise None.
+
+        Option full=True forces full reload, full=False will behave based on user settings.
         """
         errors = []
         for grassdatabase in self.grassdatabases:
@@ -532,7 +586,10 @@ class DataCatalogTree(TreeView):
                                                                 name=grassdatabase))
             else:
                 grassdb_node = grassdb_nodes[0]
-            error = self._reloadGrassDBNode(grassdb_node)
+            if full or not self._useLazyLoading():
+                error = self._reloadGrassDBNode(grassdb_node)
+            else:
+                error = self._lazyReloadGrassDBNode(grassdb_node)
             if error:
                 errors += error
 
@@ -636,11 +693,13 @@ class DataCatalogTree(TreeView):
             self.current_mapset_node.data["current"] = True
             self.current_mapset_node.data["lock"] = is_current_mapset_node_locked()
 
-    def ReloadTreeItems(self):
+    def ReloadTreeItems(self, full=False):
         """Reload dbs, locations, mapsets and layers in the tree."""
         self.busy = wx.BusyCursor()
-        self._quickLoading()
+        if full:
+            self._quickLoading()
         self.thread.Run(callable=self._reloadTreeItems,
+                        full=full,
                         ondone=self._loadItemsDone)
 
     def _quickLoading(self):
@@ -803,6 +862,9 @@ class DataCatalogTree(TreeView):
                     self.DisplayLayer()
                     return
 
+        if node.data['type'] == 'mapset' and not node.children:
+            self._reloadMapsetNode(node)
+            self.RefreshNode(node, recursive=True)
         # expand/collapse location/mapset...
         if self.IsNodeExpanded(node):
             self.CollapseNode(node, recursive=False)
@@ -1303,7 +1365,10 @@ class DataCatalogTree(TreeView):
         if not grassdb_node:
             grassdb_node = self._model.AppendNode(parent=self._model.root,
                                                   data=dict(type="grassdb", name=name))
-            self._reloadGrassDBNode(grassdb_node)
+            if self._useLazyLoading():
+                self._lazyReloadGrassDBNode(grassdb_node)
+            else:
+                self._reloadGrassDBNode(grassdb_node)
             self.RefreshItems()
 
             # Update user's settings
@@ -1603,6 +1668,8 @@ class DataCatalogTree(TreeView):
     def _updateAfterMapsetChanged(self):
         """Update tree after current mapset has changed"""
         self.UpdateCurrentDbLocationMapsetNode()
+        self._reloadMapsetNode(self.current_mapset_node)
+        self.RefreshNode(self.current_mapset_node, recursive=True)
         self.ExpandCurrentMapset()
         self.RefreshItems()
         self.ScheduleWatchCurrentMapset()
@@ -1660,6 +1727,36 @@ class DataCatalogTree(TreeView):
         self.ExpandCurrentMapset()
         if self._model.GetLeafCount(self._model.root) <= 50:
             self.ExpandAll()
+
+    def OnReloadMapset(self, event):
+        """Reload selected mapset"""
+        node = self.selected_mapset[0]
+        self._reloadMapsetNode(node)
+        self.RefreshNode(node, recursive=True)
+        self.ExpandNode(node, recursive=False)
+
+    def OnReloadLocation(self, event):
+        """Reload all mapsets in selected location"""
+        node = self.selected_location[0]
+        self._reloadLocationNode(node)
+        self.UpdateCurrentDbLocationMapsetNode()
+        self.RefreshNode(node, recursive=True)
+        self.ExpandNode(node, recursive=False)
+
+    def OnReloadGrassdb(self, event):
+        """Reload all mapsets in selected grass db"""
+        node = self.selected_grassdb[0]
+        self.busy = wx.BusyCursor()
+        self.thread.Run(callable=self._reloadGrassDBNode,
+                        grassdb_node=node,
+                        ondone=self._onDoneReloadingGrassdb,
+                        userdata={"node": node})
+
+    def _onDoneReloadingGrassdb(self, event):
+        del self.busy
+        self.UpdateCurrentDbLocationMapsetNode()
+        self.RefreshNode(event.userdata["node"], recursive=True)
+        self.ExpandNode(event.userdata["node"], recursive=False)
 
     def _getNewMapName(self, message, title, value, element, mapset, env):
         """Dialog for simple text entry"""
@@ -1793,6 +1890,10 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -1815,6 +1916,10 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
         if self._restricted:
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnReloadLocation, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -1844,6 +1949,10 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnDeleteGrassDb, item)
         if self._restricted:
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnReloadGrassdb, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
