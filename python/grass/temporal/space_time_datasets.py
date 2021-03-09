@@ -360,12 +360,6 @@ class RasterDataset(AbstractMapDataset):
         )
 
         if check < 1:
-            self.msgr.error(
-                _(
-                    "Unable to read band reference file "
-                    "for raster map <%s>" % (self.get_map_id())
-                )
-            )
             return False
 
         self.metadata.set_band_reference(band_ref)
