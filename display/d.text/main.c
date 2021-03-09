@@ -354,13 +354,8 @@ int main(int argc, char **argv)
     D_text_rotation(rotation * 180.0 / M_PI);
 
     if (text) {
-	double x2, y2;
-
-	x2 = x;
-	y2 = y;
-
 	if (text[0])
-	    draw_text(text, &x2, &y2, size, align, rotation, bold, do_background, fg_color, bg_color);
+	    draw_text(text, &x, &y, size, align, rotation, bold, do_background, fg_color, bg_color);
 
 	/* reset */
 	D_text_size(5, 5);
