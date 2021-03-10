@@ -732,6 +732,7 @@ static void begin_spawn(struct spawn *sp)
 }
 
 #define NEXT_ARG(var, type) ((type) *(var)++)
+#define NEXT_ARG_INT(var) (int)((intptr_t) *(var)++)
 
 static void parse_argvec(struct spawn *sp, const char **va)
 {
@@ -744,32 +745,32 @@ static void parse_argvec(struct spawn *sp, const char **va)
 	    break;
 	}
 	else if (arg == SF_REDIRECT_FILE) {
-	    sp->redirects[sp->num_redirects].dst_fd = (int)NEXT_ARG(va, intptr_t);
+	    sp->redirects[sp->num_redirects].dst_fd = NEXT_ARG_INT(va);
 
 	    sp->redirects[sp->num_redirects].src_fd = -1;
-	    sp->redirects[sp->num_redirects].mode = (int)NEXT_ARG(va, intptr_t);
+	    sp->redirects[sp->num_redirects].mode = NEXT_ARG_INT(va);
 	    sp->redirects[sp->num_redirects].file = NEXT_ARG(va, const char *);
 
 	    sp->num_redirects++;
 	}
 	else if (arg == SF_REDIRECT_DESCRIPTOR) {
-	    sp->redirects[sp->num_redirects].dst_fd = (int)NEXT_ARG(va, intptr_t);
-	    sp->redirects[sp->num_redirects].src_fd = (int)NEXT_ARG(va, intptr_t);
+	    sp->redirects[sp->num_redirects].dst_fd = NEXT_ARG_INT(va);
+	    sp->redirects[sp->num_redirects].src_fd = NEXT_ARG_INT(va);
 
 	    sp->redirects[sp->num_redirects].file = NULL;
 	    sp->num_redirects++;
 	}
 	else if (arg == SF_CLOSE_DESCRIPTOR) {
-	    sp->redirects[sp->num_redirects].dst_fd = (int)NEXT_ARG(va, intptr_t);
+	    sp->redirects[sp->num_redirects].dst_fd = NEXT_ARG_INT(va);
 
 	    sp->redirects[sp->num_redirects].src_fd = -1;
 	    sp->redirects[sp->num_redirects].file = NULL;
 	    sp->num_redirects++;
 	}
 	else if (arg == SF_SIGNAL) {
-	    sp->signals[sp->num_signals].which = (int)NEXT_ARG(va, intptr_t);
-	    sp->signals[sp->num_signals].action = (int)NEXT_ARG(va, intptr_t);
-	    sp->signals[sp->num_signals].signum = (int)NEXT_ARG(va, intptr_t);
+	    sp->signals[sp->num_signals].which = NEXT_ARG_INT(va);
+	    sp->signals[sp->num_signals].action = NEXT_ARG_INT(va);
+	    sp->signals[sp->num_signals].signum = NEXT_ARG_INT(va);
 
 	    sp->signals[sp->num_signals].valid = 0;
 	    sp->num_signals++;
