@@ -113,6 +113,8 @@ int main(int argc, char **argv)
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	    G_fatal_error(_("Can't get projection key values of current location"));
 
+	oproj.pj = NULL;
+
 	if (wgs84->answer) {
 	    struct Key_Value *out_proj_info, *out_unit_info;
 

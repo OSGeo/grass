@@ -960,7 +960,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    in_deg2rad = 0;
 	}
 #endif
-	if (info_out->proj[0]) {
+	if (info_out->pj) {
 	    METERS_out = info_out->meters;
 	    out_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
@@ -989,7 +989,7 @@ int GPJ_transform(const struct pj_info *info_in,
 	    out_rad2deg = 0;
 	}
 #endif
-	if (info_out->proj[0]) {
+	if (info_out->pj) {
 	    METERS_in = info_out->meters;
 	    in_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
@@ -1179,7 +1179,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    in_deg2rad = 0;
 	}
 #endif
-	if (info_out->proj[0]) {
+	if (info_out->pj) {
 	    METERS_out = info_out->meters;
 	    out_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
@@ -1208,7 +1208,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
 	    out_rad2deg = 0;
 	}
 #endif
-	if (info_out->proj[0]) {
+	if (info_out->pj) {
 	    METERS_in = info_out->meters;
 	    in_is_ll = !strncmp(info_out->proj, "ll", 2);
 #if PROJ_VERSION_MAJOR >= 6
