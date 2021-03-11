@@ -1091,7 +1091,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
          | Maximum value min:.......... None
          | Maximum value max:.......... None
          | Aggregation type:........... None
-         | Number of registered bands:. None
          | Number of registered maps:.. None
          |
          | Title:
@@ -1100,8 +1099,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
          | Soils 1950 - 2010
          | Command history:
         >>> meta.print_shell_info()
-        aggregation_type=None
-        number_of_maps=None
         nsres_min=None
         nsres_max=None
         ewres_min=None
@@ -1110,6 +1107,8 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         min_max=None
         max_min=None
         max_max=None
+        aggregation_type=None
+        number_of_maps=None
 
     """
 
@@ -1251,12 +1250,8 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         print(" | Maximum value max:.......... " + str(self.get_max_max()))
         print(" | Aggregation type:........... " + str(self.get_aggregation_type()))
 
-        STDSMetadataBase.print_info(self)
-
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        print("aggregation_type=" + str(self.get_aggregation_type()))
-        STDSMetadataBase.print_shell_info(self)
         print("nsres_min=" + str(self.get_nsres_min()))
         print("nsres_max=" + str(self.get_nsres_max()))
         print("ewres_min=" + str(self.get_ewres_min()))
@@ -1265,6 +1260,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         print("min_max=" + str(self.get_min_max()))
         print("max_min=" + str(self.get_max_min()))
         print("max_max=" + str(self.get_max_max()))
+        print("aggregation_type=" + str(self.get_aggregation_type()))
 
 
 ###############################################################################
@@ -1316,6 +1312,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
          | Maximum value min:.......... None
          | Maximum value max:.......... None
          | Aggregation type:........... None
+         | Number of registered bands:. None
          | Number of registered maps:.. None
          |
          | Title:
@@ -1324,8 +1321,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
          | Soils 1950 - 2010
          | Command history:
         >>> meta.print_shell_info()
-        aggregation_type=None
-        number_of_maps=None
+        raster_register=None
         nsres_min=None
         nsres_max=None
         ewres_min=None
@@ -1334,7 +1330,9 @@ class STRDSMetadata(STDSRasterMetadataBase):
         min_max=None
         max_min=None
         max_max=None
-        raster_register=None
+        aggregation_type=None
+        number_of_bands=None
+        number_of_maps=None
 
     """
 
@@ -1381,12 +1379,14 @@ class STRDSMetadata(STDSRasterMetadataBase):
         print(" | Raster register table:...... " + str(self.get_raster_register()))
         STDSRasterMetadataBase.print_info(self)
         print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
+        STDSMetadataBase.print_info(self)
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        STDSRasterMetadataBase.print_shell_info(self)
         print("raster_register=" + str(self.get_raster_register()))
+        STDSRasterMetadataBase.print_shell_info(self)
         print("number_of_bands=" + str(self.get_number_of_bands()))
+        STDSMetadataBase.print_shell_info(self)
 
 
 ###############################################################################
@@ -1450,8 +1450,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
          | Soils 1950 - 2010
          | Command history:
         >>> meta.print_shell_info()
-        aggregation_type=None
-        number_of_maps=None
+        raster3d_register=None
         nsres_min=None
         nsres_max=None
         ewres_min=None
@@ -1462,7 +1461,8 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         max_max=None
         tbres_min=None
         tbres_max=None
-        raster3d_register=None
+        aggregation_type=None
+        number_of_maps=None
 
     """
 
@@ -1525,13 +1525,15 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         print(" | Top-bottom resolution min:.. " + str(self.get_ewres_min()))
         print(" | Top-bottom resolution max:.. " + str(self.get_ewres_max()))
         STDSRasterMetadataBase.print_info(self)
+        STDSMetadataBase.print_info(self)
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        STDSRasterMetadataBase.print_shell_info(self)
+        print("raster3d_register=" + str(self.get_raster3d_register()))
         print("tbres_min=" + str(self.get_tbres_min()))
         print("tbres_max=" + str(self.get_tbres_max()))
-        print("raster3d_register=" + str(self.get_raster3d_register()))
+        STDSRasterMetadataBase.print_shell_info(self)
+        STDSMetadataBase.print_shell_info(self)
 
 
 ###############################################################################
@@ -1597,7 +1599,6 @@ class STVDSMetadata(STDSMetadataBase):
           | LIDARS 2008 - 2010
           | Command history:
          >>> meta.print_shell_info()
-         number_of_maps=None
          vector_register=None
          points=None
          lines=None
@@ -1611,6 +1612,7 @@ class STVDSMetadata(STDSMetadataBase):
          islands=None
          holes=None
          volumes=None
+         number_of_maps=None
 
     """
 
@@ -1802,7 +1804,6 @@ class STVDSMetadata(STDSMetadataBase):
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        STDSMetadataBase.print_shell_info(self)
         print("vector_register=" + str(self.get_vector_register()))
         print("points=" + str(self.get_number_of_points()))
         print("lines=" + str(self.get_number_of_lines()))
@@ -1816,6 +1817,7 @@ class STVDSMetadata(STDSMetadataBase):
         print("islands=" + str(self.get_number_of_islands()))
         print("holes=" + str(self.get_number_of_holes()))
         print("volumes=" + str(self.get_number_of_volumes()))
+        STDSMetadataBase.print_shell_info(self)
 
 
 ###############################################################################
