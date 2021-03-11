@@ -1134,7 +1134,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         self.D["ewres_min"] = None
         self.D["ewres_max"] = None
         self.D["aggregation_type"] = aggregation_type
-        self.D["number_of_bands"] = None
 
     def set_aggregation_type(self, aggregation_type):
         """Set the aggregation type of the dataset (mean, min, max, ...)"""
@@ -1229,15 +1228,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         else:
             return None
 
-    def get_number_of_bands(self):
-        """Get the number of registered bands
-        :return: None if not found
-        """
-        if "number_of_bands" in self.D:
-            return self.D["number_of_bands"]
-        else:
-            return None
-
     nsres_min = property(fget=get_nsres_min)
     nsres_max = property(fget=get_nsres_max)
     ewres_min = property(fget=get_ewres_min)
@@ -1247,7 +1237,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     max_min = property(fget=get_max_min)
     max_max = property(fget=get_max_max)
     aggregation_type = property(fset=set_aggregation_type, fget=get_aggregation_type)
-    number_of_bands = property(fget=get_number_of_bands)
 
     def print_info(self):
         """Print information about this class in human readable style"""
@@ -1261,14 +1250,12 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         print(" | Maximum value min:.......... " + str(self.get_max_min()))
         print(" | Maximum value max:.......... " + str(self.get_max_max()))
         print(" | Aggregation type:........... " + str(self.get_aggregation_type()))
-        print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
 
         STDSMetadataBase.print_info(self)
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         print("aggregation_type=" + str(self.get_aggregation_type()))
-        print("number_of_bands=" + str(self.get_number_of_bands()))
         STDSMetadataBase.print_shell_info(self)
         print("nsres_min=" + str(self.get_nsres_min()))
         print("nsres_max=" + str(self.get_nsres_max()))
@@ -1357,6 +1344,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
             self, "strds_metadata", ident, title, description
         )
 
+        self.D["number_of_bands"] = None
+
         self.set_raster_register(raster_register)
 
     def set_raster_register(self, raster_register):
@@ -1371,7 +1360,17 @@ class STRDSMetadata(STDSRasterMetadataBase):
         else:
             return None
 
+    def get_number_of_bands(self):
+        """Get the number of registered bands
+        :return: None if not found
+        """
+        if "number_of_bands" in self.D:
+            return self.D["number_of_bands"]
+        else:
+            return None
+
     raster_register = property(fget=get_raster_register, fset=set_raster_register)
+    number_of_bands = property(fget=get_number_of_bands)
 
     def print_info(self):
         """Print information about this class in human readable style"""
@@ -1381,11 +1380,13 @@ class STRDSMetadata(STDSRasterMetadataBase):
         #      0123456789012345678901234567890
         print(" | Raster register table:...... " + str(self.get_raster_register()))
         STDSRasterMetadataBase.print_info(self)
+        print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         STDSRasterMetadataBase.print_shell_info(self)
         print("raster_register=" + str(self.get_raster_register()))
+        print("number_of_bands=" + str(self.get_number_of_bands()))
 
 
 ###############################################################################
