@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *in, *dist, *val, *met;
+	struct Option *in, *dist, *val, *met, *max;
     } opt;
     struct
     {
@@ -140,8 +140,9 @@ int main(int argc, char **argv)
     int row, col;
     struct Colors colors;
     struct History hist;
-    DCELL *out_row;
+    DCELL *out_row, *dist_row_max, *val_row_max;
     double scale = 1.0;
+    double maxdist;
     int invert;
 
     G_gisinit(argv[0]);
@@ -174,6 +175,12 @@ int main(int argc, char **argv)
     opt.met->description = _("Metric");
     opt.met->options = "euclidean,squared,maximum,manhattan,geodesic";
     opt.met->answer = "euclidean";
+
+    opt.max = G_define_option();
+    opt.max->key = "maximum_distance";
+    opt.max->type = TYPE_DOUBLE;
+    opt.max->required = NO;
+    opt.max->description = _("Maximum distance threshold");
 
     flag.m = G_define_flag();
     flag.m->key = 'm';
@@ -235,6 +242,21 @@ int main(int argc, char **argv)
 	    scale *= scale;
     }
 
+    maxdist = -1;
+    dist_row_max = val_row_max = NULL;
+    if (opt.max->answer) {
+	if (sscanf(opt.max->answer, "%lf", &maxdist) != 1) {
+	    G_warning(_("Invalid %s value '%s', ignoring."),
+		      opt.max->key, opt.max->answer);
+
+	    maxdist = -1;
+	}
+	else {
+	    dist_row_max = Rast_allocate_d_buf();
+	    val_row_max = Rast_allocate_d_buf();
+	}
+    }
+
     in_fd = Rast_open_old(in_name, "");
 
     if (dist_name)
@@ -265,7 +287,7 @@ int main(int argc, char **argv)
 
     dist_row = Rast_allocate_d_buf();
 
-    if (dist_name && strcmp(opt.met->answer, "euclidean") == 0)
+    if ((maxdist > 0 || dist_name) && strcmp(opt.met->answer, "euclidean") == 0)
 	out_row = Rast_allocate_d_buf();
     else
 	out_row = dist_row;
@@ -349,20 +371,50 @@ int main(int argc, char **argv)
 	for (col = ncols - 1; col >= 0; col--)
 	    check(row, col, 1, 0);
 
-	if (dist_name) {
-	    if (out_row != dist_row)
-		for (col = 0; col < ncols; col++)
-		    out_row[col] = sqrt(dist_row[col]);
+	if (maxdist > 0) {
+	    /* do not modify dist_row or new_val_row, 
+	     * thus copy */
+	    if (out_row != dist_row) {
+		for (col = 0; col < ncols; col++) {
+		    dist_row_max[col] = sqrt(dist_row[col]);
+		}
+	    }
+	    else {
+		for (col = 0; col < ncols; col++) {
+		    dist_row_max[col] = dist_row[col];
+		}
+	    }
+	    for (col = 0; col < ncols; col++) {
+		if (scale != 1.0)
+		    dist_row_max[col] *= scale;
 
-	    if (scale != 1.0)
-		for (col = 0; col < ncols; col++)
-		    out_row[col] *= scale;
+		val_row_max[col] = new_val_row[col];
 
-	    Rast_put_d_row(dist_fd, out_row);
+		if (dist_row_max[col] > maxdist) {
+		    Rast_set_d_null_value(&dist_row_max[col], 1);
+		    Rast_set_d_null_value(&val_row_max[col], 1);
+		}
+	    }
+	    if (dist_name)
+		Rast_put_d_row(dist_fd, dist_row_max);
+	    if (val_name)
+		Rast_put_d_row(val_fd, val_row_max);
 	}
+	else {
+	    if (dist_name) {
+		if (out_row != dist_row)
+		    for (col = 0; col < ncols; col++)
+			out_row[col] = sqrt(dist_row[col]);
 
-	if (val_name)
-	    Rast_put_d_row(val_fd, new_val_row);
+		if (scale != 1.0)
+		    for (col = 0; col < ncols; col++)
+			out_row[col] *= scale;
+
+		Rast_put_d_row(dist_fd, out_row);
+	    }
+	    if (val_name)
+		Rast_put_d_row(val_fd, new_val_row);
+	}
 
 	swap_rows();
     }
