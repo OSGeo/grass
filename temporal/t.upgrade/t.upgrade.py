@@ -20,7 +20,7 @@
 #############################################################################
 
 # %module
-# % description: Upgrades the version of a space time dataset (TGRASS DB).
+# % description: Upgrades the version of the temporal database.
 # % keyword: temporal
 # % keyword: metadata
 # % keyword: extent
