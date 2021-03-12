@@ -28,8 +28,8 @@
 # %end
 
 import sys
-import grass.script as grass
 
+import grass.script as gs
 
 def main():
     # lazy imports
@@ -46,5 +46,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())
