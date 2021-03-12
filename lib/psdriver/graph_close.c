@@ -14,7 +14,7 @@ void PS_Graph_close(void)
 	output("%%%%EndTrailer\n");
     }
 
-    fclose(ps.outfp);
+    fclose(ps.tempfp);
 
     G_rename_file(ps.tempfile, ps.outfile);
 }

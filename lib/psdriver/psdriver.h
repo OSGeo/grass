@@ -11,7 +11,7 @@
 struct ps_state
 {
     const char *tempfile, *outfile;
-    FILE *outfp;
+    FILE *tempfp;
     int true_color;
     int encapsulated;
     int no_header, no_trailer;
