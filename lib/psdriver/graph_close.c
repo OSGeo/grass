@@ -3,6 +3,7 @@
  * termination time.
  */
 
+#include <grass/gis.h>
 #include "psdriver.h"
 
 void PS_Graph_close(void)
@@ -14,4 +15,6 @@ void PS_Graph_close(void)
     }
 
     fclose(ps.outfp);
+
+    G_rename_file(ps.tempfile, ps.outfile);
 }
