@@ -29,6 +29,7 @@
 
 import grass.script as gs
 
+
 def main():
     # lazy imports
     import grass.temporal as tgis
