@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 SUBDIRS = \
 	t.connect \
 	t.create \
+	t.downgrade \
 	t.support \
 	t.topology \
 	t.list \

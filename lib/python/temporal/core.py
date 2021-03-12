@@ -475,7 +475,7 @@ def get_available_temporal_mapsets():
 ###############################################################################
 
 
-def init(raise_fatal_error=False):
+def init(raise_fatal_error=False, skip_db_version_check=False):
     """This function set the correct database backend from GRASS environmental
        variables and creates the grass temporal database structure for raster,
        vector and raster3d maps as well as for the space-time datasets strds,
@@ -516,6 +516,10 @@ def init(raise_fatal_error=False):
                                   exception will be raised in case a fatal
                                   error occurs in the init process, otherwise
                                   sys.exit(1) will be called.
+     :param skip_db_version_check: Set this True to skip mismatch temporal
+                                   database version check.
+                                   Recommended to be used only for
+                                   downgrade_temporal_database().
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
@@ -663,8 +667,11 @@ def init(raise_fatal_error=False):
                    " created automatically.\n"
 
     if db_exists is True:
-        # Check the version of the temporal database
         dbif.close()
+        if skip_db_version_check is True:
+            return
+
+        # Check the version of the temporal database
         dbif.connect()
         metadata = get_tgis_metadata(dbif)
         dbif.close()
@@ -703,6 +710,29 @@ def get_database_info_string():
     return info
 
 ###############################################################################
+
+
+def _create_temporal_database_views(dbif):
+    """Create all views in the temporal database (internal use only)
+
+    Used by downgrade_temporal_database().
+
+    :param dbif: The database interface to be used
+    """
+    template_path = get_sql_template_path()
+
+    for sql_filename in (
+        "raster_views",
+        "raster3d_views",
+        "vector_views",
+        "strds_views",
+        "str3ds_views",
+        "stvds_views",
+    ):
+        sql_filepath = open(
+            os.path.join(template_path, sql_filename + ".sql"), "r"
+        ).read()
+        dbif.execute_transaction(sql_filepath)
 
 
 def create_temporal_database(dbif):
@@ -840,6 +870,73 @@ def create_temporal_database(dbif):
     _create_tgis_metadata_table(metadata, dbif)
 
     dbif.close()
+
+###############################################################################
+
+
+def downgrade_temporal_database(dbif):
+    """This function will downgrade the temporal database if needed.
+
+    It will downdate all tables and triggers that are requested by
+    currently supported TGIS DB version.
+
+    :param dbif: The database interface to be used
+    """
+    global tgis_database_string
+    global tgis_db_version
+
+    metadata = get_tgis_metadata(dbif)
+
+    msgr = get_tgis_message_interface()
+    if metadata is None:
+        msgr.fatal(
+            _(
+                "Unable to receive temporal database metadata.\n"
+                "Current temporal database info:%(info)s"
+            )
+            % ({"info": get_database_info_string()})
+        )
+    downgrade_db_from = None
+    for entry in metadata:
+        if "tgis_db_version" in entry and entry[1] != str(tgis_db_version):
+            downgrade_db_from = entry[1]
+            break
+
+    if downgrade_db_from is None:
+        msgr.message(_("Temporal database is up-to-date. Operation canceled"))
+        dbif.close()
+        return
+
+    template_path = get_sql_template_path()
+    try:
+        downgrade_db_sql = open(
+            os.path.join(
+                template_path,
+                "downgrade_db_%s_to_%s.sql" % (downgrade_db_from, tgis_db_version),
+            ),
+            "r",
+        ).read()
+    except FileNotFoundError:
+        msgr.fatal(
+            _("Unsupported TGIS DB downgrade scenario: from version %s to %s")
+            % (downgrade_db_from, tgis_db_version)
+        )
+
+    drop_views_sql = open(os.path.join(template_path, "drop_views.sql"), "r").read()
+
+    msgr.message(
+        _("Downgrading temporal database <%s> from version %s to %s...")
+        % (tgis_database_string, downgrade_db_from, tgis_db_version)
+    )
+    # Drop views
+    dbif.execute_transaction(drop_views_sql)
+    # Perform upgrade
+    dbif.execute_transaction(downgrade_db_sql)
+    # Recreate views
+    _create_temporal_database_views(dbif)
+
+    dbif.close()
+
 
 ###############################################################################
 
