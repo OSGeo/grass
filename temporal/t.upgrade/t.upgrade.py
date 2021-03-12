@@ -27,8 +27,6 @@
 # % keyword: time
 # %end
 
-import sys
-
 import grass.script as gs
 
 def main():
@@ -42,9 +40,7 @@ def main():
 
     tgis.upgrade_temporal_database(dbif)
 
-    return 0
-
 
 if __name__ == "__main__":
     options, flags = gs.parser()
-    sys.exit(main())
+    main()
