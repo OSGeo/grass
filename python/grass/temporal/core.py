@@ -369,7 +369,9 @@ def get_tgis_version():
     global tgis_version
     return tgis_version
 
+
 ###############################################################################
+
 
 def get_tgis_db_version():
     """Get the supported version number of the temporal database
@@ -377,6 +379,7 @@ def get_tgis_db_version():
     """
     global tgis_db_version
     return tgis_db_version
+
 
 def get_tgis_db_version_from_metadata(metadata=None):
     """Get the version number of the temporal database from metadata
@@ -392,6 +395,7 @@ def get_tgis_db_version_from_metadata(metadata=None):
 
     # return supported version if not possible to get from metadata
     return get_tgis_db_version()
+
 
 ###############################################################################
 
