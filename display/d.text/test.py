@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
+# Rewritten from test.pl
+
 import math
 import re
 
+# Quiet black syntax checking for fonts and colors to keep each respective tuple
+# in the following format when rendering.
 # fmt: off
 fonts = ("cyrilc", "gothgbt", "gothgrt", "gothitt", "greekc", "greekcs",
          "greekp", "greeks", "italicc", "italiccs", "italict", "romanc",
@@ -13,36 +17,36 @@ colors = ("red", "orange", "yellow", "green", "blue", "indigo", "violet",
 # fmt: on
 
 
-def rc(*args):
-    print(f".X {args[0]}\n.Y {args[1]}")
+def rc(r, c):
+    print(f".X {r}\n.Y {c}")
 
 
-def xy(*args):
-    print(f".X {args[0]}\n.Y {args[1]}")
+def xy(x, y):
+    print(f".X {x}%\n.Y {y}%")
 
 
-def font(*args):
-    print(f".F {args[0]}")
+def font(f):
+    print(f".F {f}")
 
 
-def size(*args):
-    print(f".S {args[0]}")
+def size(s):
+    print(f".S {s}")
 
 
-def color(*args):
-    print(f".C {args[0]}")
+def color(c):
+    print(f".C {c}")
 
 
-def rotate(*args):
-    print(f".R {args[0]}")
+def rotate(r):
+    print(f".R {r}")
 
 
-def align(*args):
-    print(f".A {args[0]}")
+def align(a):
+    print(f".A {a}")
 
 
-def text(*args):
-    print(f"{args[0]}")
+def text(in_text):
+    print(f"{in_text}")
 
 
 for i in range(36):
@@ -63,7 +67,14 @@ color("gray")
 rc(1, 1)
 
 with open(__file__) as f:
-    src = "\n.L 1\n.L 0\n".join(f.read().split("\n")[1:])
-    f.close()
+    src = f.read()
+    "\n.L 1\n.L 0\n".join(f.read().split("\n")[1:])
 
-print(re.sub('(".*?")', "\n.C red\n\\g<0>\n.C gray\n", src))
+print(
+    ".L 0\n"
+    + re.sub(
+        '(".*?")',
+        "\n.C red\n,\\g<0>\n.C gray\n",
+        re.sub("\n", "\n.L 1\n.L 0\n", re.sub("(?m)^#.*\n?", "", src)),
+    )
+)

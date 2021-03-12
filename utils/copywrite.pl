@@ -21,12 +21,14 @@
 
 
 #-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#
-## no critic
 # edit this, and edit the bottom of the file after __END__
 
+## no critic
+# Disable perlcritic for specifying editor
 # my $editor	= "vi -o";
 #my $editor	= "nedit";
 my $editor	= "xemacs";
+## use critic
 
 # don't forget to get a copy of
 #   http://www.red-bean.com/cvs2cl/cvs2cl.pl
@@ -53,7 +55,6 @@ my $editor	= "xemacs";
 #
 #-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#
 
-## use critic
 use File::Find;
 use File::Basename;
 use strict;
