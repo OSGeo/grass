@@ -5,7 +5,7 @@
 # AUTHOR(S):    Martin Landa, Markus Neteler
 #
 # PURPOSE:      Upgrade of TGRASS DB
-# COPYRIGHT:    (C) 2019 by Martin Landa, and the GRASS Development Team
+# COPYRIGHT:    (C) 2020-2021 by Martin Landa, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
