@@ -87,7 +87,7 @@ static void write_prolog(void)
 	if (!fgets(buf, sizeof(buf), prolog_fp))
 	    break;
 
-	fputs(buf, ps.outfp);
+	fputs(buf, ps.tempfp);
     }
     output("%%%%EndProlog\n");
 
@@ -204,9 +204,9 @@ int PS_Graph_set(void)
     if (ps.no_header && access(ps.outfile, F_OK) == 0)
 	G_rename_file(ps.outfile, ps.tempfile);
 
-    ps.outfp = fopen(ps.tempfile, ps.no_header ? "a" : "w");
+    ps.tempfp = fopen(ps.tempfile, ps.no_header ? "a" : "w");
 
-    if (!ps.outfp)
+    if (!ps.tempfp)
 	G_fatal_error("Unable to open output file: %s", ps.outfile);
 
     if (!ps.no_header) {
@@ -218,7 +218,7 @@ int PS_Graph_set(void)
     G_verbose_message(_("ps: image size %dx%d"),
 		      screen_width, screen_height);
 
-    fflush(ps.outfp);
+    fflush(ps.tempfp);
 
     return 0;
 }
@@ -238,6 +238,6 @@ void output(const char *fmt, ...)
     va_list va;
 
     va_start(va, fmt);
-    vfprintf(ps.outfp, fmt, va);
+    vfprintf(ps.tempfp, fmt, va);
     va_end(va);
 }
