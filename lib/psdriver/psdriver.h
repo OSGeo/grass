@@ -10,6 +10,7 @@
 
 struct ps_state
 {
+    const char *tempfile, *outfile;
     FILE *outfp;
     int true_color;
     int encapsulated;
