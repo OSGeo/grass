@@ -93,14 +93,14 @@ class MapToolbar(BaseToolbar):
 
         # optional tools
         toolNum = 0
-        choices = [_('2D view'), ]
+        self._mode_label = {'2d': _('2D view')}
         self.toolId = {'2d': toolNum}
         toolNum += 1
         if self.parent.GetLayerManager():
             log = self.parent.GetLayerManager().GetLogWindow()
 
         if haveNviz:
-            choices.append(_('3D view'))
+            self._mode_label['3d'] = _('3D view')
             self.toolId['3d'] = toolNum
             toolNum += 1
         else:
@@ -112,7 +112,7 @@ class MapToolbar(BaseToolbar):
             self.toolId['3d'] = -1
 
         if haveVDigit:
-            choices.append(_("Vector digitizer"))
+            self._mode_label['vdigit'] = _("Vector digitizer")
             self.toolId['vdigit'] = toolNum
             toolNum += 1
         else:
@@ -129,11 +129,11 @@ class MapToolbar(BaseToolbar):
                     wrap=60)
 
             self.toolId['vdigit'] = -1
-        choices.append(_("Raster digitizer"))
+        self._mode_label['rdigit'] = _("Raster digitizer")
         self.toolId['rdigit'] = toolNum
 
         self.combo = wx.ComboBox(parent=self, id=wx.ID_ANY,
-                                 choices=choices,
+                                 choices=tuple(self._mode_label.values()),
                                  style=wx.CB_READONLY, size=(110, -1))
         self.combo.SetSelection(0)
 
@@ -237,20 +237,24 @@ class MapToolbar(BaseToolbar):
         if tool == self.toolId['2d']:
             self.ExitToolbars()
             self.Enable2D(True)
+            self._setComboBoxValue(value=self._mode_label['2d'])
 
         elif tool == self.toolId['3d'] and \
                 not (self.parent.MapWindow3D and self.parent.IsPaneShown('3d')):
             self.ExitToolbars()
+            self._setComboBoxValue(value=self._mode_label['3d'])
             self.parent.AddNviz()
 
         elif tool == self.toolId['vdigit'] and \
                 not self.parent.GetToolbar('vdigit'):
             self.ExitToolbars()
+            self._setComboBoxValue(value=self._mode_label['vdigit'])
             self.parent.AddToolbar("vdigit")
             self.parent.MapWindow.SetFocus()
 
         elif tool == self.toolId['rdigit']:
             self.ExitToolbars()
+            self._setComboBoxValue(value=self._mode_label['rdigit'])
             self.parent.AddRDigit()
 
     def OnAnalyze(self, event):
@@ -296,5 +300,7 @@ class MapToolbar(BaseToolbar):
                      self.select):
             self.EnableTool(tool, enabled)
         self.ChangeToolsDesc(enabled)
-        if enabled:
-            self.combo.SetValue(_("2D view"))
+
+    def _setComboBoxValue(self, value):
+        """Set ComboBox widget value"""
+        self.combo.SetValue(value)
