@@ -6,7 +6,7 @@
  * AUTHOR(S):    Marjorie Larson - CERL
  *               Glynn Clements
  *
- * PURPOSE:      Generates a raster map layer with contiguous areas 
+ * PURPOSE:      Generates a raster map layer with contiguous areas
  *               grown by one cell.
  *
  * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
@@ -224,6 +224,11 @@ int main(int argc, char **argv)
 	}
     }
 
+    if (mindist > 0 && maxdist > 0 && mindist >= maxdist) {
+	G_fatal_error(_("%s must be smaller than %s."),
+	              opt.min->key, opt.max->key);
+    }
+
     if (mindist > 0 || maxdist > 0) {
 	dist_row_max = Rast_allocate_d_buf();
 	val_row_max = Rast_allocate_d_buf();
@@ -266,7 +271,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
 
     if (flag.m->answer) {
-	if (window.proj == PROJECTION_LL && 
+	if (window.proj == PROJECTION_LL &&
 	    strcmp(opt.met->answer, "geodesic") != 0) {
 	    G_fatal_error(_("Output distance in meters for lat/lon is only possible with '%s=%s'"),
 	                  opt.met->key, "geodesic");
@@ -392,7 +397,7 @@ int main(int argc, char **argv)
 	    check(row, col, 1, 0);
 
 	if (mindist > 0 || maxdist > 0) {
-	    /* do not modify dist_row or new_val_row, 
+	    /* do not modify dist_row or new_val_row,
 	     * thus copy */
 	    if (out_row != dist_row) {
 		for (col = 0; col < ncols; col++) {
