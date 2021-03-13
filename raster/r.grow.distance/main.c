@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *in, *dist, *val, *met, *max;
+	struct Option *in, *dist, *val, *met, *min, *max;
     } opt;
     struct
     {
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
     struct History hist;
     DCELL *out_row, *dist_row_max, *val_row_max;
     double scale = 1.0;
-    double maxdist;
+    double mindist, maxdist;
     int invert;
 
     G_gisinit(argv[0]);
@@ -176,6 +176,12 @@ int main(int argc, char **argv)
     opt.met->options = "euclidean,squared,maximum,manhattan,geodesic";
     opt.met->answer = "euclidean";
 
+    opt.min = G_define_option();
+    opt.min->key = "minimum_distance";
+    opt.min->type = TYPE_DOUBLE;
+    opt.min->required = NO;
+    opt.min->description = _("Minimum distance threshold");
+
     opt.max = G_define_option();
     opt.max->key = "maximum_distance";
     opt.max->type = TYPE_DOUBLE;
@@ -197,7 +203,36 @@ int main(int argc, char **argv)
     dist_name = opt.dist->answer;
     val_name = opt.val->answer;
 
-    if ((invert = flag.n->answer)) {
+    dist_row_max = val_row_max = NULL;
+    mindist = -1;
+    if (opt.min->answer) {
+	if (sscanf(opt.min->answer, "%lf", &mindist) != 1) {
+	    G_warning(_("Invalid %s value '%s', ignoring."),
+		      opt.min->key, opt.min->answer);
+
+	    mindist = -1;
+	}
+    }
+
+    maxdist = -1;
+    if (opt.max->answer) {
+	if (sscanf(opt.max->answer, "%lf", &maxdist) != 1) {
+	    G_warning(_("Invalid %s value '%s', ignoring."),
+		      opt.max->key, opt.max->answer);
+
+	    maxdist = -1;
+	}
+    }
+
+    if (mindist > 0 || maxdist > 0) {
+	dist_row_max = Rast_allocate_d_buf();
+	val_row_max = Rast_allocate_d_buf();
+    }
+
+    invert = flag.n->answer;
+    if (mindist <= 0 && maxdist <= 0 && invert) {
+	/* value output for distance to NULL cells makes sense
+	 * if mindist or maxdist is given */
 	if (!dist_name)
 	    G_fatal_error(_("Distance output is required for distance to NULL cells"));
 	if (val_name) {
@@ -242,21 +277,6 @@ int main(int argc, char **argv)
 	    scale *= scale;
     }
 
-    maxdist = -1;
-    dist_row_max = val_row_max = NULL;
-    if (opt.max->answer) {
-	if (sscanf(opt.max->answer, "%lf", &maxdist) != 1) {
-	    G_warning(_("Invalid %s value '%s', ignoring."),
-		      opt.max->key, opt.max->answer);
-
-	    maxdist = -1;
-	}
-	else {
-	    dist_row_max = Rast_allocate_d_buf();
-	    val_row_max = Rast_allocate_d_buf();
-	}
-    }
-
     in_fd = Rast_open_old(in_name, "");
 
     if (dist_name)
@@ -287,7 +307,7 @@ int main(int argc, char **argv)
 
     dist_row = Rast_allocate_d_buf();
 
-    if ((maxdist > 0 || dist_name) && strcmp(opt.met->answer, "euclidean") == 0)
+    if ((mindist > 0 || maxdist > 0 || dist_name) && strcmp(opt.met->answer, "euclidean") == 0)
 	out_row = Rast_allocate_d_buf();
     else
 	out_row = dist_row;
@@ -371,7 +391,7 @@ int main(int argc, char **argv)
 	for (col = ncols - 1; col >= 0; col--)
 	    check(row, col, 1, 0);
 
-	if (maxdist > 0) {
+	if (mindist > 0 || maxdist > 0) {
 	    /* do not modify dist_row or new_val_row, 
 	     * thus copy */
 	    if (out_row != dist_row) {
@@ -390,7 +410,11 @@ int main(int argc, char **argv)
 
 		val_row_max[col] = new_val_row[col];
 
-		if (dist_row_max[col] > maxdist) {
+		if (mindist > 0 && dist_row_max[col] < mindist) {
+		    Rast_set_d_null_value(&dist_row_max[col], 1);
+		    Rast_set_d_null_value(&val_row_max[col], 1);
+		}
+		if (maxdist > 0 && dist_row_max[col] > maxdist) {
 		    Rast_set_d_null_value(&dist_row_max[col], 1);
 		    Rast_set_d_null_value(&val_row_max[col], 1);
 		}
