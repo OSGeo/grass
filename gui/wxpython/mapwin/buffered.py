@@ -902,7 +902,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                 return
 
     def _onUpdateMap(self, event):
-        if self.timerRunId == event.pid:
+        if self and self.timerRunId == event.pid:
             self._runUpdateMap()
 
     def _runUpdateMap(self):
