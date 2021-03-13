@@ -68,7 +68,6 @@ rc(1, 1)
 
 with open(__file__) as f:
     src = f.read()
-    "\n.L 1\n.L 0\n".join(f.read().split("\n")[1:])
 
 print(
     ".L 0\n"
