@@ -5,7 +5,7 @@
 # MODULE:       t.downgrade
 # AUTHOR(S):    Martin Landa, Markus Neteler, Markus Metz
 # PURPOSE:      Downgrade of TGRASS DB
-# COPYRIGHT:    (C) 2019 by Martin Landa, and the GRASS Development Team
+# COPYRIGHT:    (C) 2019-2021 by Martin Landa, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -27,12 +27,14 @@
 #% keyword: time
 #%end
 
-import sys
-import grass.script as grass
-import grass.temporal as tgis
+import grass.script as gs
+
 
 def main():
-    tgis.init(skip_db_version_check=True)
+    # lazy imports
+    import grass.temporal as tgis
+
+     tgis.init(skip_db_version_check=True)
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
@@ -42,5 +44,5 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
-    sys.exit(main())
+    gs.parser()
+    main()
