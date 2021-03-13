@@ -100,7 +100,7 @@ def main():
         metric = "squared"
 
     grass.run_command(
-        "r.grow.distance", input=input, metric=metric, distance=temp_dist, flags="m"
+        "r.grow.distance", input=input, metric=metric, output=temp_dist, flags="m"
     )
 
     if zero:

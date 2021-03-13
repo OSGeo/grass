@@ -28,7 +28,7 @@ No data cells are indicated with "Null".
 A) Distance from the streams network (North Carolina sample dataset):
 <div class="code"><pre>
 g.region raster=streams_derived -p
-r.grow.distance input=streams_derived distance=dist_from_streams
+r.grow.distance input=streams_derived output=dist_from_streams
 d.rast.num dist_from_streams -a
 </pre></div>
 
