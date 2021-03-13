@@ -240,6 +240,8 @@ r.flow|barin:barrier
 r.flow|flout:flowline
 r.flow|lgout:flowlength
 r.flow|dsout:flowaccumulation
+# r.grow.distance
+r.grow.distance|distance:output
 # r.his
 r.his|h_map:hue
 r.his|i_map:intensity

@@ -71,7 +71,7 @@ distances in meters instead of map units.
 North Carolina sample dataset:
 <div class="code"><pre>
 g.region raster=streams_derived -p
-r.grow.distance input=streams_derived distance=dist_from_streams
+r.grow.distance input=streams_derived output=dist_from_streams
 r.colors map=dist_from_streams color=rainbow
 </pre></div>
 
@@ -90,7 +90,7 @@ r.colors map=dist_from_streams color=rainbow
 
 <div class="code"><pre>
 g.region raster=sea -p
-r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
+r.grow.distance -m input=sea output=dist_from_sea_geodetic metric=geodesic
 r.colors map=dist_from_sea_geodetic color=rainbow
 </pre></div>
 

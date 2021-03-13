@@ -38,7 +38,7 @@ class TestGrowDistance(TestCase):
     def test_grow(self):
         """Test to see if the outputs are created"""
         # run the grow distance module
-        self.assertModule("r.grow.distance", input=self.lakes, distance=self.distance)
+        self.assertModule("r.grow.distance", input=self.lakes, output=self.distance)
         # check to see if distance output is in mapset
         self.assertRasterExists(self.distance, msg="distance output was not created")
         self.assertRasterMinMax(
