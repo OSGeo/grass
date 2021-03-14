@@ -110,6 +110,7 @@ class GMFrame(wx.Frame):
 
         self._giface = LayerManagerGrassInterface(self)
 
+<<<<<<< HEAD
         # workspace manager and workspace signals
         self.workspace_manager = WorkspaceManager(lmgr=self,
                                                   giface=self._giface,
@@ -126,6 +127,8 @@ class GMFrame(wx.Frame):
                     'grass.ico'),
                 wx.BITMAP_TYPE_ICO))
 
+=======
+>>>>>>> 6319614be... wxGUI: Attempt of correcting the Load of workspace, but not successful...
         menu_errors = []
 
         def add_menu_error(message):
@@ -185,6 +188,22 @@ class GMFrame(wx.Frame):
                                  BestSize((self.toolbars[toolbar].GetBestSize())))
 
         self._auimgr.GetPane('toolbarNviz').Hide()
+
+        # workspace manager and workspace signals
+        self.workspace_manager = WorkspaceManager(lmgr=self,
+                                                  giface=self._giface,
+                                                  workspaceFile=workspace)
+
+        self._setTitle()
+        self.SetName("LayerManager")
+
+        self.SetIcon(
+            wx.Icon(
+                os.path.join(
+                    globalvar.ICONDIR,
+                    'grass.ico'),
+                wx.BITMAP_TYPE_ICO))
+
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
@@ -894,13 +913,6 @@ class GMFrame(wx.Frame):
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
         return self.GetMapDisplay(onlyCurrent=False)
-
-    def GetPageMaptree(self, displayId):
-        return self.notebookLayers.GetPage(displayId).maptree
-
-    def GetAllPageMaptrees(self):
-        maptrees = [self.notebookLayers.GetPage(i).maptree for i in range(self.notebookLayers.GetPageCount())]
-        return maptrees
 
     def GetLogWindow(self):
         """Gets console for command output and messages"""
