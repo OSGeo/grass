@@ -68,8 +68,8 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
-from grass.grassdb.checks import is_current_mapset_in_demolocation
 from startup.guiutils import (
+    first_time_user,
     switch_mapset_interactively,
     create_mapset_interactively,
     create_location_interactively
@@ -456,9 +456,9 @@ class GMFrame(wx.Frame):
                 lchecked=True,
                 lcmd=["d.vect", "map={}".format(layer_name)],
             )
-        if is_current_mapset_in_demolocation():
+        if first_time_user():
             # Show only after everything is initialized for proper map alignment.
-            wx.CallLater(1000, show_demo)
+            wx.CallLater(1500, show_demo)
 
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page

@@ -30,8 +30,8 @@ from gui_core.forms import GUI
 from grass.pydispatch.signal import Signal
 
 from startup.guiutils import (read_gisrc,
-                              is_nonstandard_startup,
-                              is_first_time_user)
+                              nonstandard_startup,
+                              first_time_user)
 from grass.grassdb.checks import get_reason_mapset_not_usable
 from grass.grassdb.manage import split_mapset_path
 
@@ -65,28 +65,28 @@ class DataCatalog(wx.Panel):
         self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
                                                   giface=self.giface)
         self.tree.showImportDataInfo.connect(self.showImportDataInfo)
-
         # some layout
         self._layout()
 
-        # show infobar if applicable
-        if is_nonstandard_startup():
-            if is_first_time_user():
-                # show data structure infobar for first-time user
-                wx.CallLater(2000, self.showDataStructureInfo)
-            else:
-                # get reason why last used mapset is not usable
-                last_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
-                reason = get_reason_mapset_not_usable(last_mapset_path)
-                if reason == "invalid":
-                    # show invalid mapset info
-                    wx.CallLater(2000, self.showInvalidMapsetInfo)
-                elif reason == "owned by different user":
-                    # show different mapset owner info
-                    wx.CallLater(2000, self.showDifferentMapsetOwnerInfo)
-                elif reason == "locked":
-                    # show info allowing to switch to locked mapset
-                    wx.CallLater(2000, self.showLockedMapsetInfo)
+        # show infobar for first-time user if applicable
+        if first_time_user():
+            # show data structure infobar for first-time user
+            wx.CallLater(2500, self.showDataStructureInfo)
+
+        # show infobar if last used mapset is not usable
+        if nonstandard_startup():
+            # get reason why last used mapset is not usable
+            last_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
+            reason = get_reason_mapset_not_usable(last_mapset_path)
+            if reason == "invalid":
+                # show invalid mapset info
+                wx.CallLater(2000, self.infoManager.ShowInvalidMapsetInfo)
+            elif reason == "owned by different user":
+                # show different mapset owner info
+                wx.CallLater(2000, self.infoManager.ShowDifferentMapsetOwnerInfo)
+            elif reason == "locked":
+                # show info allowing to switch to locked mapset
+                wx.CallLater(2000, self.showLockedMapsetInfo)
 
     def _layout(self):
         """Do layout"""
@@ -104,14 +104,8 @@ class DataCatalog(wx.Panel):
     def showDataStructureInfo(self):
         self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
 
-    def showInvalidMapsetInfo(self):
-        self.infoManager.ShowInvalidMapsetInfo()
-
-    def showDifferentMapsetOwnerInfo(self):
-        self.infoManager.ShowDifferentMapsetOwnerInfo()
-
     def showLockedMapsetInfo(self):
-        self.infoManager.ShowLockedMapsetInfo(self.OnSwitchMapset)
+        self.infoManager.ShowLockedMapsetInfo(self.OnSwitchToLastUsedMapset)
 
     def showImportDataInfo(self):
         self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
@@ -163,9 +157,9 @@ class DataCatalog(wx.Panel):
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.DownloadLocation(db_node)
 
-    def OnSwitchMapset(self, event):
-        """Switch to given mapset"""
-        last_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+    def OnSwitchToLastUsedMapset(self, event):
+        """Switch to last used mapset"""
+        last_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
         grassdb, location, mapset = split_mapset_path(last_mapset_path)
         self.tree.SwitchMapset(grassdb, location, mapset)
         event.Skip()

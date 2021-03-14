@@ -17,8 +17,8 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
-from grass.grassdb.create import create_mapset, get_default_mapset_name
-from grass.grassdb.checks import mapset_exists, can_start_in_mapset
+from grass.grassdb.create import create_mapset
+from grass.grassdb.checks import mapset_exists
 
 from grass.grassdb.checks import is_location_valid
 
@@ -143,59 +143,27 @@ def create_startup_location_in_grassdb(grassdatabase, startup_location_name):
     return False
 
 
-def ensure_default_gisdbase(default_gisdbase=None):
-    """Ensure that default gisdbase exists
-    Creates database directory either based on default gisdbase obtained from
-    gisrc file or on the default path determined according to OS.
+def ensure_default_data_hierarchy():
+    """Ensure that default gisdbase, location and mapset exist.
+    Creates database directory based on the default path determined
+    according to OS if needed. Creates location if needed.
+    Ensure the default mapset and can create the new one if needed.
 
-    Returns the db"""
+    Returns the db, loc, mapset"""
 
-    if default_gisdbase:
-        if not os.path.exists(default_gisdbase):
-            try:
-                os.mkdir(default_gisdbase)
-                return default_gisdbase
-            except OSError:
-                pass
-        return default_gisdbase
-    else:
-        default_gisdbase = get_possible_database_path()
-        # If nothing found, try to create GRASS directory
-        if not default_gisdbase:
-            default_gisdbase = create_database_directory()
-        return default_gisdbase
-
-
-def ensure_default_location(default_gisdbase):
-    """Ensure that default location exists
-    Creates location if needed.
-
-    Returns the db and location name.
-    """
-
+    default_gisdbase = get_possible_database_path()
     default_location = "world_latlong_wgs84"
+    default_mapset = "PERMANENT"
+
+    # If nothing found, try to create GRASS directory
+    if not default_gisdbase:
+        default_gisdbase = create_database_directory()
+
     if not is_location_valid(default_gisdbase, default_location):
         # If not valid, copy startup loc
         create_startup_location_in_grassdb(default_gisdbase, default_location)
-    return default_location
 
+    if not mapset_exists(default_gisdbase, default_location, default_mapset):
+        create_mapset(default_gisdbase, default_location, default_mapset)
 
-def ensure_usable_mapset(grassdb, location):
-    """Ensure that usable mapset exists
-
-    Finds the usable mapset.
-    It can create the new one named after user if needed.
-    """
-    mapset_name = "PERMANENT"
-    mapset_path = os.path.join(grassdb, location, mapset_name)
-    index = 1
-    while not can_start_in_mapset(mapset_path, ignore_lock=False):
-        if mapset_name == "PERMANENT":
-            mapset_name = get_default_mapset_name()
-        else:
-            mapset_name = get_default_mapset_name() + "_" + str(index)
-            index = index + 1
-        if not mapset_exists(grassdb, location, mapset_name):
-            create_mapset(grassdb, location, mapset_name)
-        mapset_path = os.path.join(grassdb, location, mapset_name)
-    return mapset_name
+    return default_gisdbase, default_location, default_mapset

@@ -62,8 +62,7 @@ from startup.guiutils import (
     get_reasons_location_not_removable,
     get_mapset_name_invalid_reason,
     get_location_name_invalid_reason,
-    is_nonstandard_startup,
-    is_first_time_user
+    first_time_user
 )
 from grass.grassdb.manage import (
     rename_mapset,
@@ -970,7 +969,7 @@ class DataCatalogTree(TreeView):
                                              action='new')
 
             # show data import infobar for first-time user with proper layout
-            if is_nonstandard_startup() and is_first_time_user():
+            if first_time_user():
                 self.showImportDataInfo.emit()
 
             # switch to PERMANENT mapset in newly created location

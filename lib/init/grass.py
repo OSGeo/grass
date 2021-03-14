@@ -229,6 +229,25 @@ def writefile(path, s):
     f.close()
 
 
+def readlines(path, skipped_parameter=None):
+    debug("Reading %s" % path)
+    number = 0
+    with open(path, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if skipped_parameter in line:
+                del lines[number]
+            number += 1
+    return lines
+
+
+def writelines(path, lines):
+    debug("Writing %s" % path)
+    with open(path, "w") as f:
+        for line in lines:
+            f.write(line)
+
+
 def call(cmd, **kwargs):
     """Wrapper for subprocess.call to deal with platform-specific issues"""
     if WINDOWS:
@@ -556,10 +575,6 @@ def create_gisrc(tmpdir, gisrcrc):
     if s:
         writefile(gisrc, s)
 
-        # remove last mapset path from gisrc if applicable
-        line_number = search_string_in_gisrc(gisrc, "LAST_MAPSET_PATH")
-        if line_number:
-            delete_line_from_file(gisrc, line_number)
     return gisrc
 
 
@@ -598,27 +613,6 @@ def read_env_file(path):
     return kv
 
 
-def delete_line_from_file(path, number):
-    """Delete line given by number from file (number 1 = first row)"""
-    with open(path, "r") as f:
-        lines = f.readlines()
-        del lines[number]
-    with open(path, "w") as f:
-        for line in lines:
-            f.write(line)
-
-
-def search_string_in_gisrc(path, string_to_search):
-    """Search for line number of given string"""
-    line_number = 0
-    with open(path, "r") as f:
-        for line in f:
-            if string_to_search in line:
-                return line_number
-            line_number += 1
-    return None
-
-
 def write_gisrc(kv, filename, append=False):
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
@@ -636,15 +630,6 @@ def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
     kv["MAPSET"] = mapset
-    write_gisrc(kv, gisrc)
-
-
-def set_default_gisdbase_to_gisrc(gisrc, default_gisdbase):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
-    kv["DEFAULT_GISDBASE"] = default_gisdbase
     write_gisrc(kv, gisrc)
 
 
@@ -883,6 +868,15 @@ MAPSET: <UNKNOWN>
         % os.getcwd()
     )
     writefile(filename, s)
+
+
+def first_time_user(mapset_settings):
+    # Returns true if we are working with initial GISRC
+    return (
+        mapset_settings.gisdbase == os.getcwd()
+        and mapset_settings.location == "<UNKNOWN>"
+        and mapset_settings.mapset == "<UNKNOWN>"
+    )
 
 
 def check_gui(expected_gui):
@@ -2536,43 +2530,69 @@ def main():
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
-
-            # Ensure default gisdbase
             import grass.app as ga
+            from grass.grassdb.checks import can_start_in_mapset
 
-            if "DEFAULT_GISDBASE" in read_gisrc(gisrc).keys():
-                default_gisdbase = ga.ensure_default_gisdbase(
-                    read_gisrc(gisrc).get("DEFAULT_GISDBASE")
+            # Set last used mapset to gisrc
+            set_last_mapset_to_gisrc(
+                gisrc,
+                os.path.join(
+                    mapset_settings.gisdbase,
+                    mapset_settings.location,
+                    mapset_settings.mapset,
+                ),
+            )
+            if first_time_user(mapset_settings):
+                # Ensure default data hiearchy
+                (
+                    default_gisdbase,
+                    default_location,
+                    default_mapset,
+                ) = ga.ensure_default_data_hierarchy()
+
+                if default_mapset is None:
+                    sys.exit("Failed to start GUI, GRASS GIS is not running.")
+
+                default_mapset_path = os.path.join(
+                    default_gisdbase,
+                    default_location,
+                    default_mapset,
                 )
+                # First session
+                if can_start_in_mapset(
+                    mapset_path=default_mapset_path, ignore_lock=False
+                ):
+                    # Write mapset info to gisrc file
+                    set_mapset_to_gisrc(
+                        gisrc=gisrc,
+                        grassdb=default_gisdbase,
+                        location=default_location,
+                        mapset=default_mapset,
+                    )
+                # Second session without closing the first one
+                else:
+                    # Set default path to gisrc
+                    set_last_mapset_to_gisrc(gisrc, default_mapset_path)
+
+                    # Create temporary location
+                    params.tmp_location = True
+                    set_mapset(
+                        gisrc=gisrc,
+                        geofile="XY",
+                        create_new=True,
+                        tmp_location=params.tmp_location,
+                        tmpdir=tmpdir,
+                    )
             else:
-                default_gisdbase = ga.ensure_default_gisdbase()
-
-            # Ensure default location
-            default_location = ga.ensure_default_location(default_gisdbase)
-
-            # Ensure usable mapset
-            mapset = ga.ensure_usable_mapset(default_gisdbase, default_location)
-            if mapset is None:
-                sys.exit("Failed to start GUI, GRASS GIS is not running.")
-
-            # Write mapset info to gisrc file
-            set_mapset_to_gisrc(
-                gisrc=gisrc,
-                grassdb=default_gisdbase,
-                location=default_location,
-                mapset=mapset,
-            )
-            # Write last mapset path to gisrc file
-            last_mapset_path = os.path.join(
-                mapset_settings.gisdbase,
-                mapset_settings.location,
-                mapset_settings.mapset,
-            )
-            set_last_mapset_to_gisrc(gisrc=gisrc, last_mapset_path=last_mapset_path)
-            # Write default grass database to gisrc file
-            set_default_gisdbase_to_gisrc(
-                gisrc=gisrc, default_gisdbase=default_gisdbase
-            )
+                # Create temporary location
+                params.tmp_location = True
+                set_mapset(
+                    gisrc=gisrc,
+                    geofile="XY",
+                    create_new=True,
+                    tmp_location=params.tmp_location,
+                    tmpdir=tmpdir,
+                )
         else:
             # Write mapset info to gisrc file
             set_mapset_to_gisrc(
@@ -2708,7 +2728,9 @@ def main():
         # here we are at the end of grass session
         clean_all()
         if not params.tmp_location:
-            writefile(gisrcrc, readfile(gisrc))
+            writelines(
+                gisrcrc, readlines(path=gisrc, skipped_parameter="LAST_MAPSET_PATH")
+            )
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()
         # or register done_message()

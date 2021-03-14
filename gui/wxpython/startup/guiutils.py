@@ -22,6 +22,8 @@ import wx
 from grass.grassdb.checks import (
     is_mapset_locked,
     get_mapset_lock_info,
+    is_current_mapset_in_default_location,
+    is_mapset_current,
     is_mapset_name_valid,
     is_location_name_valid,
     get_mapset_name_invalid_reason,
@@ -138,14 +140,20 @@ def read_gisrc():
     return grassrc
 
 
-def is_nonstandard_startup():
-    return 'LAST_MAPSET_PATH' in read_gisrc().keys()
+def nonstandard_startup():
+    if 'LAST_MAPSET_PATH' in read_gisrc().keys():
+        return is_mapset_current(os.environ["TMPDIR"], "tmploc", "PERMANENT")
+    return False
 
 
-def is_first_time_user():
-    return read_gisrc()['LAST_MAPSET_PATH'] == os.path.join(os.getcwd(),
-                                                            "<UNKNOWN>",
-                                                            "<UNKNOWN>")
+def first_time_user():
+    if "LAST_MAPSET_PATH" in read_gisrc().keys():
+        if is_current_mapset_in_default_location:
+            initial_gisrc = read_gisrc()["LAST_MAPSET_PATH"] == os.path.join(
+                os.getcwd(), "<UNKNOWN>", "<UNKNOWN>"
+            )
+            return initial_gisrc
+    return False
 
 
 def GetVersion():

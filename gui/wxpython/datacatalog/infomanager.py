@@ -34,8 +34,10 @@ class DataCatalogInfoManager:
 
     def ShowDataStructureInfo(self, onCreateLocationHandler):
         """Show info about the data hierarchy focused on the first-time user"""
-        buttons = [("Create new Location", onCreateLocationHandler),
-                   ("Learn More", self._onLearnMore)]
+        buttons = [
+            ("Create new Location", onCreateLocationHandler),
+            ("Learn More", self._onLearnMore),
+        ]
         message = _(
             "GRASS GIS helps you organize your data using Locations (projects) "
             "which contain Mapsets (subprojects). All data in one Location is "
@@ -44,13 +46,15 @@ class DataCatalogInfoManager:
             "which uses WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
             "specific to your area. You can do it now or anytime later from "
             "the toolbar above."
-        ).format(loc=gisenv()['LOCATION_NAME'])
+        ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def ShowImportDataInfo(self, OnImportOgrLayersHandler, OnImportGdalLayersHandler):
         """Show info about the data import focused on the first-time user"""
-        buttons = [("Import vector data", OnImportOgrLayersHandler),
-                   ("Import raster data", OnImportGdalLayersHandler)]
+        buttons = [
+            ("Import vector data", OnImportOgrLayersHandler),
+            ("Import raster data", OnImportGdalLayersHandler),
+        ]
         message = _(
             "You have successfully created a new Location {loc}. "
             "Currently you are in its PERMANENT Mapset which is used for "
@@ -58,55 +62,61 @@ class DataCatalogInfoManager:
             "Mapsets. You can create new Mapsets for different tasks by right "
             "clicking on the Location name.\n\n"
             "To import data, go to the toolbar above or use the buttons below."
-        ).format(loc=gisenv()['LOCATION_NAME'])
+        ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def ShowInvalidMapsetInfo(self):
         """Show info when last used mapset is invalid"""
-        last_used_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
         lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
         message = _(
             "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is invalid."
-            "GRASS GIS has started in the default Location {loc} which uses "
-            "WGS 84 (EPSG:4326). To continue, find or create usable mapset through "
+            "GRASS GIS has started in the temporary Location {loc}. "
+            "To continue, find or create usable location through "
             "Data catalog below."
-        ).format(lastdb=lastdb,
-                 lastloc=lastloc,
-                 lastmapset=lastmapset,
-                 loc=gisenv()['LOCATION_NAME'])
+        ).format(
+            lastdb=lastdb,
+            lastloc=lastloc,
+            lastmapset=lastmapset,
+            loc=gisenv()["LOCATION_NAME"],
+        )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
 
     def ShowDifferentMapsetOwnerInfo(self):
         """Show info when last used mapset is owned by different user"""
-        last_used_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
         lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
         owner = get_mapset_owner(last_used_mapset_path)
         message = _(
             "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is owned "
-            "by different user '{owner}'. GRASS GIS has started in the default Location "
-            "{loc} which uses WGS 84 (EPSG:4326). To continue, find or create "
-            "usable mapset through Data catalog below."
-        ).format(lastdb=lastdb,
-                 lastloc=lastloc,
-                 lastmapset=lastmapset,
-                 owner=owner,
-                 loc=gisenv()['LOCATION_NAME'])
+            "by different user '{owner}'. GRASS GIS has started in the temporary "
+            "Location {loc}. To continue, find or create usable location through "
+            "Data catalog below."
+        ).format(
+            lastdb=lastdb,
+            lastloc=lastloc,
+            lastmapset=lastmapset,
+            owner=owner,
+            loc=gisenv()["LOCATION_NAME"],
+        )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
 
     def ShowLockedMapsetInfo(self, OnSwitchMapsetHandler):
         """Show info when last used mapset is locked"""
-        last_used_mapset_path = read_gisrc()['LAST_MAPSET_PATH']
+        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
         lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
         buttons = [("Switch to last used mapset", OnSwitchMapsetHandler)]
         message = _(
             "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is locked."
-            "GRASS GIS has started in the default Location {loc} which uses "
-            "WGS 84 (EPSG:4326). To continue, set usable mapset through Data "
-            "Catalog below, or remove .gislock and switch to last used mapset."
-        ).format(lastdb=lastdb,
-                 lastloc=lastloc,
-                 lastmapset=lastmapset,
-                 loc=gisenv()['LOCATION_NAME'])
+            "GRASS GIS has started in the temporary Location {loc}. "
+            "To continue, find or create usable location through "
+            "Data Catalog below, or remove .gislock and switch to last used mapset."
+        ).format(
+            lastdb=lastdb,
+            lastloc=lastloc,
+            lastmapset=lastmapset,
+            loc=gisenv()["LOCATION_NAME"],
+        )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def _onLearnMore(self, event):
