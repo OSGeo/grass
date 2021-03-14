@@ -24,10 +24,6 @@ import tempfile
 import stat
 import platform
 import re
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
 
 from core import globalvar
 import wx
