@@ -2571,7 +2571,7 @@ def main():
                         location=default_location,
                         mapset=default_mapset,
                     )
-                # Second session without closing the first one
+                # Another first-time session
                 else:
                     # Set default path to gisrc
                     set_last_mapset_to_gisrc(gisrc, default_mapset_path)
