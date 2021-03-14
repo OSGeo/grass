@@ -105,6 +105,16 @@ class GMFrame(wx.Frame):
 
         wx.Frame.__init__(self, parent=parent, id=id, size=size,
                           style=style, **kwargs)
+<<<<<<< HEAD
+=======
+
+        self._giface = LayerManagerGrassInterface(self)
+
+        # workspace manager and workspace signals
+        self.workspace_manager = WorkspaceManager(lmgr=self,
+                                                  workspaceFile=workspace)
+
+>>>>>>> bf81df7cb... lmgr is now the parameter of workspace manager and giface is not used
         self._setTitle()
         self.SetName("LayerManager")
 
@@ -885,6 +895,13 @@ class GMFrame(wx.Frame):
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
         return self.GetMapDisplay(onlyCurrent=False)
+
+    def GetPageMaptree(self, displayId):
+        return self.notebookLayers.GetPage(displayId).maptree
+
+    def GetAllPageMaptrees(self):
+        maptrees = [self.notebookLayers.GetPage(i).maptree for i in range(self.notebookLayers.GetPageCount())]
+        return maptrees
 
     def GetLogWindow(self):
         """Gets console for command output and messages"""
