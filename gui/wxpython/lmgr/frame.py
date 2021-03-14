@@ -108,8 +108,11 @@ class GMFrame(wx.Frame):
 <<<<<<< HEAD
 =======
 
+        self._giface = LayerManagerGrassInterface(self)
+
         # workspace manager and workspace signals
         self.workspace_manager = WorkspaceManager(lmgr=self,
+                                                  giface=self._giface,
                                                   workspaceFile=workspace)
 
 >>>>>>> bf81df7cb... lmgr is now the parameter of workspace manager and giface is not used
@@ -122,8 +125,6 @@ class GMFrame(wx.Frame):
                     globalvar.ICONDIR,
                     'grass.ico'),
                 wx.BITMAP_TYPE_ICO))
-
-        self._giface = LayerManagerGrassInterface(self)
 
         menu_errors = []
 

@@ -32,10 +32,11 @@ from core.debug import Debug
 class WorkspaceManager:
     """Workspace Manager for creating, loading and saving workspaces."""
 
-    def __init__(self, lmgr, workspaceFile):
+    def __init__(self, lmgr, giface, workspaceFile):
 
         self.lmgr = lmgr
         self.workspaceFile = workspaceFile
+        self._giface = giface
         self.workspaceChanged = False  # track changes in workspace
         self.loadingWorkspace = False
 
