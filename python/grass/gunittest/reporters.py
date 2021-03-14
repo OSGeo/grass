@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""GRASS Python testing framework module for report generation
+"""
+GRASS Python testing framework module for report generation
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public

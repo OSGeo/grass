@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""GRASS Python testing framework test loading functionality
+"""
+GRASS Python testing framework test loading functionality
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public

@@ -1,4 +1,3 @@
-# -*- coding: utf-8
 import six
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test

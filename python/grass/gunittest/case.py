@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""GRASS Python testing framework test case
+"""
+GRASS Python testing framework test case
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
