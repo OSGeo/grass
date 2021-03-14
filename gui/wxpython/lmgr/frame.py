@@ -108,8 +108,6 @@ class GMFrame(wx.Frame):
 <<<<<<< HEAD
 =======
 
-        self._giface = LayerManagerGrassInterface(self)
-
         # workspace manager and workspace signals
         self.workspace_manager = WorkspaceManager(lmgr=self,
                                                   workspaceFile=workspace)
