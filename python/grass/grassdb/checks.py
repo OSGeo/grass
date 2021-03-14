@@ -116,6 +116,7 @@ def get_mapset_owner(mapset_path):
 
 
 def is_current_mapset_in_default_location():
+    """Check if the mapset is in default location"""
     return (
         gisenv()["LOCATION_NAME"] == "world_latlong_wgs84"
         and gisenv()["MAPSET"] == "PERMANENT"

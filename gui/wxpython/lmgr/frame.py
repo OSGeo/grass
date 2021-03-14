@@ -458,7 +458,7 @@ class GMFrame(wx.Frame):
             )
         if first_time_user():
             # Show only after everything is initialized for proper map alignment.
-            wx.CallLater(1500, show_demo)
+            wx.CallLater(1000, show_demo)
 
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page

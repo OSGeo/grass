@@ -141,18 +141,25 @@ def read_gisrc():
 
 
 def nonstandard_startup():
-    if 'LAST_MAPSET_PATH' in read_gisrc().keys():
+    """
+    Check if a user encounters a nonstandard startup.
+    (Last mapset not usable and at the same time a user is in temporary location).
+    """
+    if "LAST_MAPSET_PATH" in read_gisrc().keys():
         return is_mapset_current(os.environ["TMPDIR"], "tmploc", "PERMANENT")
     return False
 
 
 def first_time_user():
+    """
+    Check if a user is a first-time user.
+    (User is in default location and gisrc file has initial settings.)
+    """
     if "LAST_MAPSET_PATH" in read_gisrc().keys():
-        if is_current_mapset_in_default_location:
-            initial_gisrc = read_gisrc()["LAST_MAPSET_PATH"] == os.path.join(
-                os.getcwd(), "<UNKNOWN>", "<UNKNOWN>"
-            )
-            return initial_gisrc
+        initial_gisrc = read_gisrc()["LAST_MAPSET_PATH"] == os.path.join(
+            os.getcwd(), "<UNKNOWN>", "<UNKNOWN>"
+        )
+        return initial_gisrc and is_current_mapset_in_default_location()
     return False
 
 

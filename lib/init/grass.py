@@ -568,13 +568,15 @@ def create_gisrc(tmpdir, gisrcrc):
     # remove invalid GISRC file to avoid disturbing error messages:
     try:
         s = readfile(gisrcrc)
+        if "UNKNOWN" in s:
+            try_remove(gisrcrc)
+            s = None
     except:
         s = None
 
     # Copy the global grassrc file to the session grassrc file
     if s:
         writefile(gisrc, s)
-
     return gisrc
 
 
@@ -2727,7 +2729,10 @@ def main():
 
         # here we are at the end of grass session
         clean_all()
-        if not params.tmp_location:
+        mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
+        if not params.tmp_location or (
+            params.tmp_location and mapset_settings.gisdbase != os.environ["TMPDIR"]
+        ):
             writelines(
                 gisrcrc, readlines(path=gisrc, skipped_parameter="LAST_MAPSET_PATH")
             )
