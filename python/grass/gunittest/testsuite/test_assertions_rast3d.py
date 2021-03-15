@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Tests assertion methods for 3D rasters.
 """

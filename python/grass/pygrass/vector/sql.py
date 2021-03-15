@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 It is a collection of strings to avoid to repeat the code.
 

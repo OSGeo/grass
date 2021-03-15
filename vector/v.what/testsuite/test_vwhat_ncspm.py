@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Author: Anna Petrasova
 
 from grass.gunittest.case import TestCase
