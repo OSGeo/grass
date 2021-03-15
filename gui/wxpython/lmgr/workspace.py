@@ -62,7 +62,7 @@ class WorkspaceManager:
         if not self.lmgr.currentPage:
             self.lmgr.NewDisplay()
 
-        maptrees =  [self.lmgr.notebookLayers.GetPage(i).maptree for i in range(self.lmgr.notebookLayers.GetPageCount())]
+        maptrees = [self.lmgr.notebookLayers.GetPage(i).maptree for i in range(self.lmgr.notebookLayers.GetPageCount())]
 
         # ask user to save current settings
         if self.workspaceFile and self.workspaceChanged:
@@ -454,5 +454,5 @@ class WorkspaceManager:
         self.workspaceFile = None
         self.workspaceChanged = False
         self.lmgr._setTitle()
-        self.lmgr.setDisplayIndex(index=0)
-        self.lmgr.setCurrentPage(page=None)
+        self.lmgr.displayIndex = 0
+        self.lmgr.currentPage = None

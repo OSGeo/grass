@@ -1629,7 +1629,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Double click on the layer item.
         Launch property dialog, or expand/collapse group of items, etc.
         """
-        self.lmgr.WorkspaceChanged()
+        self._giface.workspaceChanged.emit()
         layer = event.GetItem()
 
         if self.GetLayerInfo(layer, key='type') == 'group':
@@ -1643,7 +1643,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnDeleteLayer(self, event):
         """Remove selected layer item from the layer tree"""
-        self.lmgr.WorkspaceChanged()
+        self._giface.workspaceChanged.emit()
         item = event.GetItem()
 
         try:
@@ -1719,7 +1719,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         if mapLayer:
                             # ignore when map layer is edited
                             self.Map.ChangeLayerActive(mapLayer, checked)
-                        self.lmgr.WorkspaceChanged()
+                        self._giface.workspaceChanged.emit()
                     child = self.GetNextSibling(child)
             else:
                 mapLayer = self.GetLayerInfo(item, key='maplayer')
@@ -1727,7 +1727,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         digitToolbar and digitToolbar.GetLayer() != mapLayer)):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
-                    self.lmgr.WorkspaceChanged()
+                    self._giface.workspaceChanged.emit()
 
         # nviz
         if self.mapdisplay.IsPaneShown('3d') and \
@@ -1739,7 +1739,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             self.mapdisplay.SetStatusText(
                 _("Please wait, updating data..."), 0)
-            self.lmgr.WorkspaceChanged()
+            self._giface.workspaceChanged.emit()
 
             if checked:  # enable
                 if mapLayer.type == 'raster':
