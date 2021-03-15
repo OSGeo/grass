@@ -1,10 +1,16 @@
 """
-@package lmgr::workspaces
-Classes:
+@package lmgr::workspace
+
+@brief Workspace manager class for creating, loading and saving workspaces
+
+Class:
  - lmgr::WorkspaceManager
-(C) 2006-2015 by the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+
+(C) 2021 by the GRASS Development Team
+
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
 """
 
 import sys

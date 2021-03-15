@@ -92,7 +92,6 @@ class GMFrame(wx.Frame):
         self.displayIndex = 0          # index value for map displays and layer trees
         self.currentPage = None       # currently selected page for layer tree notebook
         self.currentPageNum = None       # currently selected page number for layer tree notebook
-
         self.cwdPath = None               # current working directory
 
         wx.Frame.__init__(self, parent=parent, id=id, size=size,
@@ -174,7 +173,6 @@ class GMFrame(wx.Frame):
                                  BestSize((self.toolbars[toolbar].GetBestSize())))
 
         self._auimgr.GetPane('toolbarNviz').Hide()
-
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
@@ -1307,7 +1305,6 @@ class GMFrame(wx.Frame):
 
     def OnWorkspaceNew(self, event=None):
         """Create new workspace file"""
-        Debug.msg(4, "GMFrame.OnWorkspaceNew():")
         self.workspace_manager.New()
 
     def OnWorkspaceOpen(self, event=None):
@@ -1316,12 +1313,10 @@ class GMFrame(wx.Frame):
 
     def OnWorkspaceSave(self, event=None):
         """Save file with workspace definition"""
-        Debug.msg(4, "GMFrame.OnWorkspaceSave():")
         self.workspace_manager.Save()
 
     def OnWorkspaceSaveAs(self, event=None):
         """Save workspace definition to selected file"""
-        Debug.msg(4, "GMFrame.OnWorkspaceSave():")
         self.workspace_manager.SaveAs()
 
     def OnWorkspaceClose(self, event=None):
