@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Jul 18 10:46:25 2012
 
 @author: pietro
-
 """
 import ctypes
 import re

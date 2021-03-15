@@ -1,5 +1,4 @@
 #!/bin/sh
-# -*- coding: utf-8 -*-
 #
 # Derived for GRASS GIS from
 # https://trac.osgeo.org/gdal/browser/trunk/gdal/scripts/fix_typos.sh

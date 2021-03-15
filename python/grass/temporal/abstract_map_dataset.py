@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The abstract_map_dataset module provides the AbstractMapDataset class
 that is the base class for all map layer.

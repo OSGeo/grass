@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
 # (C) 2003-2021 Markus Neteler and the GRASS Development Team

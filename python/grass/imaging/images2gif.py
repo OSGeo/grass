@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #   Copyright (C) 2012, Almar Klein, Ant1, Marius van Voorden
 #
 #   This code is subject to the (new) BSD license:

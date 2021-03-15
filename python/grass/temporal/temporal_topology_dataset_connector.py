@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Temporal topology dataset connector class
 

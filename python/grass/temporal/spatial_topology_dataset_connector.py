@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Spatial topology connector class
 

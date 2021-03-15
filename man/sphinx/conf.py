@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # GRASS GIS 7.9 Documentation documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug  9 17:16:28 2012.

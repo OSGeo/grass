@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The abstract_dataset module provides the AbstractDataset class
 that is the base class for all map layer and Space Time Datasets.

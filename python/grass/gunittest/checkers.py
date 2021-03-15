@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""GRASS Python testing framework checkers
+"""
+GRASS Python testing framework checkers
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public

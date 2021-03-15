@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def docstring_property(class_doc):
     """Property attribute for docstrings.
     Took from: https://gist.github.com/bfroehle/4041015

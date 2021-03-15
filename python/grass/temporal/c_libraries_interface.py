@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Fast and exit-safe interface to GRASS C-library functions
 using ctypes and multiprocessing

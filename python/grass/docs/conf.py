@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # wxGUI documentation build configuration file, created by
 # sphinx-quickstart on Tue Jun  3 09:20:51 2014.
 #

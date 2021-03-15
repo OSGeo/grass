@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Useful functions to be used in Python scripts.
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 @package rlisetup.sampling_frame
 
