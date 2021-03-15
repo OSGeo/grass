@@ -68,7 +68,10 @@ class WorkspaceManager:
         if not self.lmgr.currentPage:
             self.lmgr.NewDisplay()
 
-        maptrees = [self.lmgr.notebookLayers.GetPage(i).maptree for i in range(self.lmgr.notebookLayers.GetPageCount())]
+        maptrees = [
+            self.lmgr.notebookLayers.GetPage(i).maptree
+            for i in range(self.lmgr.notebookLayers.GetPageCount())
+        ]
 
         # ask user to save current settings
         if self.workspaceFile and self.workspaceChanged:
@@ -289,7 +292,7 @@ class WorkspaceManager:
         #
         for layer in gxwXml.layers:
             display = layer["display"]
-            maptree = self.lmgr.notebookLayers.GetPage(displayId).maptree
+            maptree = self.lmgr.notebookLayers.GetPage(display).maptree
             newItem = maptree.AddLayer(
                 ltype=layer["type"],
                 lname=layer["name"],
