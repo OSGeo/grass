@@ -483,10 +483,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             self.msgr.message("Run command:\n" + cmd.get_bash())
                             cmd.run()
 
-                            if cmd.popen.returncode != 0:
+                            if cmd.returncode != 0:
                                 self.msgr.fatal(
                                     _("Error starting %s : \n%s")
-                                    % (cmd.get_bash(), cmd.popen.stderr)
+                                    % (cmd.get_bash(), cmd.outputs.stderr)
                                 )
                             mapname = cmd.outputs["output"].value
                             if mapname.find("@") >= 0:
@@ -575,7 +575,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                         "Error vector map %s exist in temporal database. "
                                         "Use overwrite flag.  : \n%s"
                                     )
-                                    % (map_i.get_map_id(), cmd.popen.stderr)
+                                    % (map_i.get_map_id(), cmd.outputs.stderr)
                                 )
                             else:
                                 # Insert map into temporal database.

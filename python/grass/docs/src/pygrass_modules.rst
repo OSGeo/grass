@@ -168,32 +168,16 @@ User or developer can check which parameters have been set, with: ::
         print "Aspect is not computed"
 
 
-After we set the parameters and run the module, the execution of the module
-instantiate a popen attribute to the class. The `Popen`_ class allow user
-to kill/wait/ the process. ::
+After we set the parameters, we can run the module in the background with
+`finish_=False`. Then call `wait()` and retrieve the returncode. ::
 
     >>> slope_aspect = Module('r.slope.aspect')
     >>> slope_aspect(elevation='elevation', slope='slp', aspect='asp', overwrite=True, finish_=False)
-    >>> slope_aspect.popen.wait() # *.kill(), *.terminate()
+    >>> slope_aspect.wait()
+    Module('r.slope.aspect')
+    >>> slope_aspect.returncode
     0
-    >>> out, err = slope_aspect.popen.communicate()
-    >>> print err #doctest: +NORMALIZE_WHITESPACE
-     100%
-    Aspect raster map <asp> complete
-    Slope raster map <slp> complete
-    <BLANKLINE>
 
-On the above example we use a new parameter `finish_`, if is set to True, the
-run method, automatically store the stdout and stderr to stdout and stderr
-attributes of the class: ::
-
-    >>> slope_aspect = Module('r.slope.aspect')
-    >>> slope_aspect(elevation='elevation', slope='slp', aspect='asp', overwrite=True, finish_=True)
-    >>> print slope_aspect.stderr #doctest: +NORMALIZE_WHITESPACE
-     100%
-    Aspect raster map <asp> complete
-    Slope raster map <slp> complete
-    <BLANKLINE>
 
 Another example of use: ::
 
@@ -202,9 +186,7 @@ Another example of use: ::
     >>> from grass.script.utils import parse_key_val
     >>> parse_key_val(info.outputs.stdout)
     {'max': '156.3299', 'min': '55.57879'}
-    >>> info = Module("r.info", map="elevation", flags="r", finish_=False)
-    >>> category = Module("r.category", map="elevation",
-    ...                   stdin_=info.popen.stdout, finish_=True)
+
 
 Launching GRASS GIS modules in parallel
 ---------------------------------------

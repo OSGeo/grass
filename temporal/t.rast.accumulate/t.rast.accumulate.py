@@ -496,7 +496,7 @@ def main():
             print(accmod)
             accmod.run()
 
-            if accmod.popen.returncode != 0:
+            if accmod.returncode != 0:
                 dbif.close()
                 grass.fatal(_("Error running r.series.accumulate"))
 
