@@ -20,29 +20,36 @@ class Test_v_random(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-
+
+    def tearDown(cls):
+        cls.runModule('g.remove', type='vector', flags='f', name=cls.output)
+        cls.runModule('g.remove', type='vector', flags='f', name=cls.output2)
+
+
+
     #Checking if number of points equals 100
     def test_num_points(self):
-        self.assertModule('v.random', output=output, npoints=npoints,
-                          overwrite=True)
+        self.assertModule('v.random', output=output, npoints=npoints)
 
         topology = dict(points=npoints)
-        self.assertVectorFitsTopoInfo(vector=output, reference=topology)
+        self.assertVectorFitsTopoInfo(vector=output, reference=topology)
+
     #Checking if the map is 3D and number of points is 100
     def test_num_points_3D(self):
         self.assertModule('v.random', output=output, npoints=npoints,
-                          zmin=zmin, zmax=zmax,
-                          overwrite=True, flags='z')
+                          zmin=zmin, zmax=zmax, flags='z')
 
         topology = dict(points=npoints, map3d=1)
-        self.assertVectorFitsTopoInfo(vector=output, reference=topology)
+        self.assertVectorFitsTopoInfo(vector=output, reference=topology)
+
     #Checking if all points are in the polygon boundary state
     def test_restrict(self):
         self.assertModule('v.random', output=output, npoints=npoints,
-                          restrict=state, overwrite=True)
-        self.assertModule('v.clip', input=output, clip=state,
-                          overwrite=True, output=output2)
-        self.assertVectorInfoEqualsVectorInfo(output,output2,precision=0.01)
+                          restrict=state)
+        self.assertModule('v.clip', input=output, clip=state, output=output2)
+
+        self.assertVectorInfoEqualsVectorInfo(output,output2,precision=0.01)
+
 
 if __name__ == '__main__':
     test()
