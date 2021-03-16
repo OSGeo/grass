@@ -41135,9 +41135,9 @@ msgid "Name of new location to create"
 msgstr ""
 
 #: ../general/g.proj/main.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
-msgstr "Một trong các tùy chọn \"color\", \"rast\" OR \"rules\" PHẢI được chỉ định!"
+msgstr ""
 
 #: ../general/g.proj/main.c:300
 msgid "Projection files missing"

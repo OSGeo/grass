@@ -31328,9 +31328,9 @@ msgid "Column <%s> not found"
 msgstr ""
 
 #: ../vector/v.to.rast/vect2rast.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "Column type (%s) not supported (did you mean 'label_column'?)"
-msgstr "Tip de coloană <%s> neacceptat (trebuie să fie întreg sau cu dublă precizie)"
+msgstr ""
 
 #: ../vector/v.to.rast/vect2rast.c:78 ../vector/v.to.rast/support.c:123
 #: ../vector/v.to.rast/support.c:298 ../vector/v.to.rast/support.c:537
@@ -36111,9 +36111,8 @@ msgid "Key column <%s> not found"
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:843
-#, fuzzy
 msgid "Unable to start OGR transaction"
-msgstr "Imposibil de pornit driver-ul<%s>"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:864
 #, c-format
@@ -41495,9 +41494,9 @@ msgid "Unable to convert projection information to PROJ format"
 msgstr ""
 
 #: ../general/g.proj/output.c:233
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create PROJ definition from srid <%s>"
-msgstr "Imposibil de creat harta raster<%s>"
+msgstr ""
 
 #: ../general/g.proj/output.c:274
 msgid "Unable to convert to WKT"
@@ -41653,9 +41652,9 @@ msgid "Name of new location to create"
 msgstr ""
 
 #: ../general/g.proj/main.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
-msgstr "Nici o hartă raster de intrare specificată"
+msgstr ""
 
 #: ../general/g.proj/main.c:300
 msgid "Projection files missing"
@@ -41700,9 +41699,8 @@ msgid "Unable to open init file <%s>"
 msgstr ""
 
 #: ../general/g.proj/input.c:122
-#, fuzzy
 msgid "Error reading WKT definition"
-msgstr "Eroare în citirea datei"
+msgstr ""
 
 #: ../general/g.proj/input.c:129
 #, c-format
@@ -41718,9 +41716,9 @@ msgid "WKT validation grammar errors:"
 msgstr ""
 
 #: ../general/g.proj/input.c:173
-#, fuzzy, c-format
+#, c-format
 msgid "WKT not recognized: %s"
-msgstr "Fișierul nu a fost găsit: %s"
+msgstr ""
 
 #: ../general/g.proj/input.c:245
 msgid "Can't parse PROJ.4-style parameter string"
@@ -41737,9 +41735,8 @@ msgid "WKT for SRID <%s> not recognized by GDAL"
 msgstr ""
 
 #: ../general/g.proj/input.c:304
-#, fuzzy
 msgid "Unable to convert srid to WKT"
-msgstr "Imposibil de inserat rândul: %s"
+msgstr ""
 
 #: ../general/g.proj/input.c:316
 msgid "Input srid requires GDAL 3+ and PROJ 6+"
@@ -47981,9 +47978,9 @@ msgstr ""
 
 #: ../raster/r.in.gdal/main.c:1291 ../raster/r.in.gdal/main.c:1348
 #: ../raster/r.in.gdal/main.c:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read row %d"
-msgstr "Imposibil de inserat rândul: %s"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:1688 ../raster/r.in.gdal/main.c:1745
 #: ../raster/r.external/colors.c:177 ../raster/r.external/colors.c:234
@@ -55685,9 +55682,9 @@ msgid "Input raster map is outside current region"
 msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to reproject map center %g, %g"
-msgstr "Imposibil de exportat harta raster <%s>"
+msgstr ""
 
 #: ../raster/r.proj/readcell.c:67
 msgid "Allocating memory and reading input raster map..."

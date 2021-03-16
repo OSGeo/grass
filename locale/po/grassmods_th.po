@@ -41134,9 +41134,9 @@ msgid "Name of new location to create"
 msgstr ""
 
 #: ../general/g.proj/main.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
-msgstr "ต้องระบุ 1 เงื่อนไข ของ \"-i\" or \"-r\" หรือ เงื่อนไข \"color\", \"rast\" or \"rules\" !"
+msgstr ""
 
 #: ../general/g.proj/main.c:300
 msgid "Projection files missing"

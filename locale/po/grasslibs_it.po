@@ -9714,9 +9714,8 @@ msgid "Unrecognized WKT '%s'"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:316
-#, fuzzy
 msgid "Unable to create PROJ object"
-msgstr "Impossibile definire la proiezione"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:393
 msgid "Input coordinate system is NULL"
