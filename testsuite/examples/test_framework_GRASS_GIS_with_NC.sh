@@ -102,7 +102,7 @@ mkdir -p $GRASSDATA
 
 # fetch sample data
 SAMPLEDATA=nc_spm_full_v2alpha
-(cd $GRASSDATA ; wget -c http://fatra.cnr.ncsu.edu/data/$SAMPLEDATA.tar.gz ; tar xfz $SAMPLEDATA.tar.gz --strip-components 2)
+(cd $GRASSDATA ; wget -c https://grass.osgeo.org/sampledata/north_carolina/$SAMPLEDATA.tar.gz ; tar xfz $SAMPLEDATA.tar.gz --strip-components 2)
 
 set -x
 
