@@ -23,7 +23,6 @@
 #% description: Downgrades the version of a space time dataset (TGRASS DB).
 #% keyword: temporal
 #% keyword: metadata
-#% keyword: extent
 #% keyword: time
 #%end
 
