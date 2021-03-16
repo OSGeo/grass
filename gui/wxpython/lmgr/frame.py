@@ -298,12 +298,12 @@ class GMFrame(wx.Frame):
     def _createDisplayPanel(self):
         """Creates display panel"""
         # create superior display panel
-        display_manager = wx.Panel(self.notebook, id=wx.ID_ANY)
+        display_panel = wx.Panel(self.notebook, id=wx.ID_ANY)
         # create display toolbar
-        dmgrToolbar = DisplayPanelToolbar(guiparent=display_manager,
+        dmgrToolbar = DisplayPanelToolbar(guiparent=display_panel,
                                           parent=self)
         # create display notebook
-        notebookLayers = GNotebook(parent=display_manager,
+        notebookLayers = GNotebook(parent=display_panel,
                                    style=globalvar.FNPageStyle)
         notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
         menu = self._createTabMenu()
@@ -314,12 +314,12 @@ class GMFrame(wx.Frame):
         sizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
         sizer.Add(notebookLayers, proportion=1, flag=wx.EXPAND)
 
-        display_manager.SetAutoLayout(True)
-        display_manager.SetSizer(sizer)
-        display_manager.Fit()
-        display_manager.Layout()
+        display_panel.SetAutoLayout(True)
+        display_panel.SetSizer(sizer)
+        display_panel.Fit()
+        display_panel.Layout()
 
-        return display_manager, notebookLayers
+        return display_panel, notebookLayers
 
     def _setCopyingOfSelectedText(self):
         copy = UserSettings.Get(
@@ -354,9 +354,9 @@ class GMFrame(wx.Frame):
             name='catalog')
 
         # create displays notebook widget
-        self.display_manager, self.notebookLayers = self._createDisplayPanel()
+        self.display_panel, self.notebookLayers = self._createDisplayPanel()
         self.notebook.AddPage(
-            page=self.display_manager,
+            page=self.display_panel,
             text=_("Display"),
             name='layers')
 
