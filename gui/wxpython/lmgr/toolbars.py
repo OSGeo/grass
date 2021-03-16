@@ -5,11 +5,10 @@
 
 Classes:
  - toolbars::LMWorkspaceToolbar
- - toolbars::LMDataToolbar
  - toolbars::LMToolsToolbar
  - toolbars::LMMiscToolbar
- - toolbars::LMVectorToolbar
  - toolbars::LMNvizToolbar
+ - toolbars::DisplayPanelToolbar
 
 (C) 2007-2013 by the GRASS Development Team
 
@@ -20,6 +19,7 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
+@author Linda Kladivova <linda.kladivova gmail com>
 """
 
 from core.gcmd import RunCommand
@@ -43,9 +43,6 @@ class LMWorkspaceToolbar(BaseToolbar):
         """Toolbar data
         """
         icons = {
-            'newdisplay': MetaIcon(
-                img='monitor-create',
-                label=_('Start new map display')),
             'workspaceNew': MetaIcon(
                 img='create',
                 label=_('Create new workspace (Ctrl+N)')),
@@ -56,80 +53,12 @@ class LMWorkspaceToolbar(BaseToolbar):
                 img='save',
                 label=_('Save current workspace to file (Ctrl+S)')),
         }
-        return self._getToolbarData((('newdisplay', icons["newdisplay"],
-                                      self.parent.OnNewDisplay),
-                                     (None, ),
-                                     ('workspaceNew', icons["workspaceNew"],
+        return self._getToolbarData((('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),
                                      ('workspaceOpen', icons["workspaceOpen"],
                                       self.parent.OnWorkspaceOpen),
                                      ('workspaceSave', icons["workspaceSave"],
                                       self.parent.OnWorkspaceSave),
-                                     ))
-
-
-class LMDataToolbar(BaseToolbar):
-    """Layer Manager `data` toolbar
-    """
-
-    def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
-
-        self.InitToolbar(self._toolbarData())
-
-        # realize the toolbar
-        self.Realize()
-
-    def _toolbarData(self):
-        """Toolbar data
-        """
-        icons = {
-            'addMulti': MetaIcon(
-                img='layer-open',
-                label=_('Add multiple raster or vector map layers (Ctrl+Shift+L)')),
-            'addRast': BaseIcons['addRast'].SetLabel(
-                _("Add raster map layer (Ctrl+Shift+R)")),
-            'rastMisc': MetaIcon(
-                img='layer-raster-more',
-                label=_('Add various raster map layers (RGB, HIS, shaded relief...)')),
-            'addVect': BaseIcons['addVect'].SetLabel(
-                _("Add vector map layer (Ctrl+Shift+V)")),
-            'vectMisc': MetaIcon(
-                img='layer-vector-more',
-                label=_('Add various vector map layers (thematic, chart...)')),
-            'addWS': MetaIcon(
-                img='layer-wms-add',
-                label=_('Add web service layer (WMS, WMTS, NASA OnEarth)')),
-            'addGroup': MetaIcon(
-                img='layer-group-add',
-                label=_('Add group')),
-            'addOverlay': MetaIcon(
-                img='layer-more',
-                label=_('Add various overlays')),
-            'delCmd': MetaIcon(
-                img='layer-remove',
-                label=_('Remove selected map layer(s) from layer tree')),
-        }
-
-        return self._getToolbarData((('addMulti', icons["addMulti"],
-                                      self.parent.OnAddMaps),
-                                     ('addrast', icons["addRast"],
-                                      self.parent.OnAddRaster),
-                                     ('rastmisc', icons["rastMisc"],
-                                      self.parent.OnAddRasterMisc),
-                                     ('addvect', icons["addVect"],
-                                      self.parent.OnAddVector),
-                                     ('vectmisc', icons["vectMisc"],
-                                      self.parent.OnAddVectorMisc),
-                                     ('addovl', icons["addOverlay"],
-                                      self.parent.OnAddOverlay),
-                                     ('addWS', icons["addWS"],
-                                      self.parent.OnAddWS),
-                                     (None, ),
-                                     ('addgrp', icons["addGroup"],
-                                      self.parent.OnAddGroup),
-                                     ('delcmd', icons["delCmd"],
-                                      self.parent.OnDeleteLayer),
                                      ))
 
 
@@ -206,37 +135,6 @@ class LMMiscToolbar(BaseToolbar):
                                      ))
 
 
-class LMVectorToolbar(BaseToolbar):
-    """Layer Manager `vector` toolbar
-    """
-
-    def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
-
-        self.InitToolbar(self._toolbarData())
-
-        # realize the toolbar
-        self.Realize()
-
-    def _toolbarData(self):
-        """Toolbar data
-        """
-        icons = {
-            'vdigit': MetaIcon(
-                img='edit',
-                label=_('Edit selected vector map')),
-            'attrTable': MetaIcon(
-                img='table',
-                label=_('Show attribute data for selected vector map')),
-        }
-
-        return self._getToolbarData((('vdigit', icons["vdigit"],
-                                      self.parent.OnVDigit),
-                                     ('attribute', icons["attrTable"],
-                                      self.parent.OnShowAttributeTable),
-                                     ))
-
-
 class LMNvizToolbar(BaseToolbar):
     """Nviz toolbar
     """
@@ -292,3 +190,86 @@ class LMNvizToolbar(BaseToolbar):
             log = self.lmgr.GetLogWindow()
             log.RunCmd(['g.manual',
                         'entry=wxGUI.nviz'])
+
+
+class DisplayPanelToolbar(BaseToolbar):
+    """Toolbar for display tab
+    """
+
+    def __init__(self, guiparent, parent):
+        BaseToolbar.__init__(self, guiparent)
+        self.parent = parent
+
+        self.InitToolbar(self._toolbarData())
+
+        # realize the toolbar
+        self.Realize()
+
+    def _toolbarData(self):
+        """Toolbar data
+        """
+        icons = {
+            'newdisplay': MetaIcon(
+                img='monitor-create',
+                label=_('Start new map display')),
+            'addMulti': MetaIcon(
+                img='layer-open',
+                label=_('Add multiple raster or vector map layers (Ctrl+Shift+L)')),
+            'addRast': BaseIcons['addRast'].SetLabel(
+                _("Add raster map layer (Ctrl+Shift+R)")),
+            'rastMisc': MetaIcon(
+                img='layer-raster-more',
+                label=_('Add various raster map layers (RGB, HIS, shaded relief...)')),
+            'addVect': BaseIcons['addVect'].SetLabel(
+                _("Add vector map layer (Ctrl+Shift+V)")),
+            'vectMisc': MetaIcon(
+                img='layer-vector-more',
+                label=_('Add various vector map layers (thematic, chart...)')),
+            'addWS': MetaIcon(
+                img='layer-wms-add',
+                label=_('Add web service layer (WMS, WMTS, NASA OnEarth)')),
+            'addGroup': MetaIcon(
+                img='layer-group-add',
+                label=_('Add group')),
+            'addOverlay': MetaIcon(
+                img='layer-more',
+                label=_('Add various overlays')),
+            'delCmd': MetaIcon(
+                img='layer-remove',
+                label=_('Remove selected map layer(s) from layer tree')),
+            'vdigit': MetaIcon(
+                img='edit',
+                label=_('Edit selected vector map')),
+            'attrTable': MetaIcon(
+                img='table',
+                label=_('Show attribute data for selected vector map'))
+        }
+
+        return self._getToolbarData((('newdisplay', icons["newdisplay"],
+                                      self.parent.OnNewDisplay),
+                                     (None, ),
+                                     ('addMulti', icons["addMulti"],
+                                      self.parent.OnAddMaps),
+                                     ('addrast', icons["addRast"],
+                                      self.parent.OnAddRaster),
+                                     ('rastmisc', icons["rastMisc"],
+                                      self.parent.OnAddRasterMisc),
+                                     ('addvect', icons["addVect"],
+                                      self.parent.OnAddVector),
+                                     ('vectmisc', icons["vectMisc"],
+                                      self.parent.OnAddVectorMisc),
+                                     ('addovl', icons["addOverlay"],
+                                      self.parent.OnAddOverlay),
+                                     ('addWS', icons["addWS"],
+                                      self.parent.OnAddWS),
+                                     (None, ),
+                                     ('addgrp', icons["addGroup"],
+                                      self.parent.OnAddGroup),
+                                     ('delcmd', icons["delCmd"],
+                                      self.parent.OnDeleteLayer),
+                                     (None, ),
+                                     ('vdigit', icons["vdigit"],
+                                      self.parent.OnVDigit),
+                                     ('attribute', icons["attrTable"],
+                                      self.parent.OnShowAttributeTable),
+                                     ))
