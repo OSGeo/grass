@@ -255,6 +255,9 @@ vim grass-addons/tools/addons/grass-addons-build.sh
 vim grass-addons/tools/addons/grass-addons.sh
 ```
 
+# update addon builder
+- https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line)
+
 ### Close milestone
 
 - Close related milestone: https://github.com/OSGeo/grass/milestones
