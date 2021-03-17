@@ -9669,9 +9669,8 @@ msgid "Unrecognized WKT '%s'"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:316
-#, fuzzy
 msgid "Unable to create PROJ object"
-msgstr "GDAL 링크를 생성할 수 없습니다"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:393
 msgid "Input coordinate system is NULL"

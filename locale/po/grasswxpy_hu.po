@@ -96,7 +96,7 @@ msgstr "Vektor hálózat elemző eszköz"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:63
 msgid "Rotate 3D scene"
-msgstr ""
+msgstr "3D színhely forgatása"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:64
 msgid "Drag with mouse to rotate 3D scene"
@@ -378,7 +378,7 @@ msgstr "Kérem várjon, adatbetöltés..."
 
 #: ../gui/wxpython/mapdisp/frame.py:471
 msgid "Please wait, unloading data..."
-msgstr ""
+msgstr "Kérem várjon, adatok eltávolítása..."
 
 #: ../gui/wxpython/mapdisp/frame.py:473
 msgid "Switching back to 2D view mode..."
@@ -448,7 +448,7 @@ msgstr "Nyomtatási kép"
 #: ../gui/wxpython/gcp/mapdisplay.py:434
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:434
 msgid "Print display"
-msgstr ""
+msgstr "Képernyő nyomtatás"
 
 #: ../gui/wxpython/mapdisp/frame.py:872 ../gui/wxpython/lmgr/frame.py:653
 msgid "Close Map Display {}"
@@ -517,7 +517,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:25
 msgid "Reload GRASS locations"
-msgstr ""
+msgstr "GRASS hely újra betöltése"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:28
 msgid "Reload current GRASS mapset only"
@@ -578,12 +578,12 @@ msgstr "Maximum szegmens hossz:"
 #: ../gui/wxpython/datacatalog/tree.py:122
 #, python-brace-format
 msgid "Failed to read mapsets from location <{l}>."
-msgstr ""
+msgstr "Térképcsoportok olvasása sikertelen a helyről <{l}>."
 
 #: ../gui/wxpython/datacatalog/tree.py:143
 #, python-brace-format
 msgid "Failed to read maps from location <{l}>."
-msgstr ""
+msgstr "Térképek olvasása sikertelen a helyről <{l}>."
 
 #: ../gui/wxpython/datacatalog/tree.py:215
 #, python-brace-format
@@ -601,7 +601,7 @@ msgstr "Felülírhatom?"
 #: ../gui/wxpython/datacatalog/tree.py:301
 #, python-brace-format
 msgid "GRASS locations in {0}"
-msgstr ""
+msgstr "GRASS hely ebben {0}"
 
 #: ../gui/wxpython/datacatalog/tree.py:600
 #, python-brace-format
@@ -784,12 +784,14 @@ msgid ""
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"Az aktuális hely <%(loc)s>.\n"
+"Az aktuális térképcsoport <%(mapset)s>."
 
 #: ../gui/wxpython/datacatalog/frame.py:127 ../gui/wxpython/lmgr/frame.py:1092
 #: ../gui/wxpython/lmgr/frame.py:1114
 #, python-format
 msgid "Current mapset is <%s>."
-msgstr ""
+msgstr "Az aktuális térképcsoport <%s>."
 
 #: ../gui/wxpython/gis_set.py:119
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:119
@@ -809,7 +811,7 @@ msgstr "3. Válasszon GRASS térképcsoportot"
 #: ../gui/wxpython/gis_set.py:143
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:143
 msgid "GRASS GIS database directory contains Locations."
-msgstr ""
+msgstr "A GRASS GIS adatbázis könyvtár tartalmaz helyeket."
 
 #: ../gui/wxpython/gis_set.py:147
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:147
@@ -851,7 +853,7 @@ msgstr "Új"
 #: ../gui/wxpython/gis_set.py:186
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:186
 msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
-msgstr ""
+msgstr "Új hely létrehozása a hely varázsló segítségével. A hely sikeres létrehozása után egy GRASS munkamenet indul."
 
 #. GTC Rename location
 #: ../gui/wxpython/gis_set.py:191
@@ -936,7 +938,7 @@ msgstr "Hiba"
 #: ../gui/wxpython/gis_set.py:287
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:274
 msgid "Unable to set GRASS database. Check your locale settings."
-msgstr ""
+msgstr "Nem tudom a GRASS adatbázist beállítani. Ellenőrizze a helyi beállításait."
 
 #: ../gui/wxpython/gis_set.py:307
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:294
@@ -965,7 +967,7 @@ msgstr "GRASS-nak szüksége van egy könyvtárra (GRASS adatbázis), melyben az
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:536
 #, python-format
 msgid "Do you want to import <%(name)s> to the newly created location?"
-msgstr ""
+msgstr "Importálni akarja <%(name)s>-t az újonnan létrehozott helyre?"
 
 #: ../gui/wxpython/gis_set.py:556
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:539
@@ -979,12 +981,14 @@ msgid ""
 "Import of <%(name)s> failed.\n"
 "Reason: %(msg)s"
 msgstr ""
+"<%(name)s> sikertelen import.\n"
+"Ok: %(msg)s"
 
 #: ../gui/wxpython/gis_set.py:604
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:602
 #, python-format
 msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
-msgstr ""
+msgstr "<%(name)s> adatfájlt sikeresen importáltam. A hely alapértelmezett régióját ebből az importált térképből állítottam be."
 
 #: ../gui/wxpython/gis_set.py:618
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:616
@@ -993,6 +997,9 @@ msgid ""
 "\n"
 "This mapset cannot be renamed."
 msgstr ""
+"<PERMANENT> térképcsoport szükséges egy megfelelő GRASS helyhez.\n"
+"\n"
+"Ez a térképcsoport nem nevezhető át."
 
 #: ../gui/wxpython/gis_set.py:624 ../gui/wxpython/gis_set.py:667
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:622
@@ -1069,6 +1076,9 @@ msgid ""
 "\n"
 "This mapset cannot be deleted."
 msgstr ""
+"<PERMANENT> térképcsoport szükséges egy megfelelő GRASS helyhez.\n"
+"\n"
+"Ez a térképcsoport nem törölhető."
 
 #: ../gui/wxpython/gis_set.py:719
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:717
@@ -1078,6 +1088,9 @@ msgid ""
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
+"Folytatni akarja a <%(mapset)s> térképcsoport törlését a <%(location)s> helyből?\n"
+"\n"
+"Minden a térképcsoporthoz tartozó térképet véglegesen törlök!"
 
 #: ../gui/wxpython/gis_set.py:733
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:731
@@ -1105,7 +1118,7 @@ msgstr "Nem tudom törölni a helyet"
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:771
 #, python-brace-format
 msgid "Unicode error detected. Check your locale settings. Details: {0}"
-msgstr ""
+msgstr "Unicode hibát találtam. Ellenőrizze a helyi beállításait. Részletek: {0}"
 
 #: ../gui/wxpython/gis_set.py:806
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:783
@@ -1122,7 +1135,7 @@ msgstr "'%s' útvonal nem létezik."
 #: ../gui/wxpython/gis_set.py:936 ../gui/wxpython/gui_core/gselect.py:1195
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:920
 msgid "Choose GIS Data Directory"
-msgstr ""
+msgstr "Válasszon GIS adatkönyvtárat"
 
 #: ../gui/wxpython/gis_set.py:963
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:949
@@ -1138,6 +1151,9 @@ msgid ""
 "\n"
 "Are you really sure that you want to create this mapset?"
 msgstr ""
+"<%s> térképcsoportot OGR rétegek közvetlen olvasására tartjuk fenn. Fontolja meg, hogy másik nevet használjon a térképcsoportjához.\n"
+"\n"
+"Biztos benne, hogy létre akarja hozni ezt a térképcsoportot?"
 
 #: ../gui/wxpython/gis_set.py:975
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:961
@@ -1184,6 +1200,9 @@ msgid ""
 "\n"
 "Details: %(reason)s"
 msgstr ""
+"'%(lock)s'.t nem tudom eltávolítani.\n"
+"\n"
+"Részletek: %(reason)s"
 
 #: ../gui/wxpython/gis_set.py:1083
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1087
@@ -2425,7 +2444,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:2269 ../gui/wxpython/vnet/dialogs.py:957
 #: ../gui/wxpython/gui_core/toolbars.py:84
 msgid "Settings"
-msgstr ""
+msgstr "Beállítások"
 
 #: ../gui/wxpython/iscatt/toolbars.py:51 ../gui/wxpython/vnet/toolbars.py:137
 #: ../gui/wxpython/gui_core/toolbars.py:71
@@ -2720,7 +2739,7 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:145 ../gui/wxpython/iclass/dialogs.py:296
 msgid "Classes"
-msgstr ""
+msgstr "Osztályok"
 
 #: ../gui/wxpython/iscatt/frame.py:171
 msgid "GRASS GIS Interactive Scatter Plot Tool"
@@ -3777,7 +3796,7 @@ msgstr "Projekt hely"
 
 #: ../gui/wxpython/location_wizard/wizard.py:218
 msgid "Name of location directory in GIS Data Directory"
-msgstr ""
+msgstr "A hely könyvtár neve a GRASS adatkönyvtárban"
 
 #: ../gui/wxpython/location_wizard/wizard.py:232
 msgid "Location Title"
@@ -3785,12 +3804,12 @@ msgstr "Hely név"
 
 #: ../gui/wxpython/location_wizard/wizard.py:234
 msgid "Optional location title, you can leave this field blank."
-msgstr ""
+msgstr "Opcionális hely cím, ezt a mezőt üresen hagyhatja."
 
 #: ../gui/wxpython/location_wizard/wizard.py:265
 #, python-format
 msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
-msgstr ""
+msgstr "<%(name)s> név nem megfelelő név egy helyhez. Csak az ASCII karaktereket használja kivéve %(chars)s és a szóközt."
 
 #: ../gui/wxpython/location_wizard/wizard.py:273
 msgid "Invalid location name"
@@ -3811,7 +3830,7 @@ msgstr "Nem tudom létrehozni a helyet"
 
 #: ../gui/wxpython/location_wizard/wizard.py:320
 msgid "Title of the location is limited only to one line and 256 characters. The rest of the text will be ignored."
-msgstr ""
+msgstr "Hely címét egy sorra és 256 karakterre korlátozzuk. A szöveg többi részét figyelmen kívül hagyjuk."
 
 #: ../gui/wxpython/location_wizard/wizard.py:330
 msgid "Choose method for creating a new location"
@@ -4731,11 +4750,11 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:242
 msgid "Select attribute column"
-msgstr ""
+msgstr "Válasszon attribútum oszlopot"
 
 #: ../gui/wxpython/tplot/frame.py:255
 msgid "Select category of vector(s)"
-msgstr ""
+msgstr "Válasszon vektor(ok) kategóriát"
 
 #: ../gui/wxpython/tplot/frame.py:273
 msgid "STVDS"
@@ -5363,11 +5382,11 @@ msgstr "Maszk"
 
 #: ../gui/wxpython/nviz/tools.py:975 ../gui/wxpython/nviz/tools.py:2817
 msgid "Transparency"
-msgstr ""
+msgstr "Átlátszóság:"
 
 #: ../gui/wxpython/nviz/tools.py:976 ../gui/wxpython/nviz/tools.py:2818
 msgid "Shininess"
-msgstr ""
+msgstr "Fényesség"
 
 #: ../gui/wxpython/nviz/tools.py:982 ../gui/wxpython/nviz/tools.py:2838
 msgid "map"
@@ -5397,11 +5416,11 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:1069 ../gui/wxpython/nviz/tools.py:1319
 #: ../gui/wxpython/nviz/tools.py:2038 ../gui/wxpython/nviz/tools.py:3041
 msgid "Reset"
-msgstr ""
+msgstr "Visszaállít"
 
 #: ../gui/wxpython/nviz/tools.py:1070 ../gui/wxpython/nviz/tools.py:2039
 msgid "Reset to default position"
-msgstr ""
+msgstr "Alapértelmezett pozíció visszaállítása"
 
 #: ../gui/wxpython/nviz/tools.py:1149
 msgid "Active cutting plane:"
@@ -5509,15 +5528,15 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:1509 ../gui/wxpython/nviz/tools.py:1681
 msgid "color:"
-msgstr ""
+msgstr "szín:"
 
 #: ../gui/wxpython/nviz/tools.py:1526 ../gui/wxpython/nviz/tools.py:1730
 msgid "use color for thematic mapping"
-msgstr ""
+msgstr "használd a színt a tematikus térképezéshez"
 
 #: ../gui/wxpython/nviz/tools.py:1529
 msgid "use width for thematic mapping"
-msgstr ""
+msgstr "használd a vastagságot a tematikus térképezéshez"
 
 #: ../gui/wxpython/nviz/tools.py:1544 ../gui/wxpython/nviz/tools.py:1557
 #: ../gui/wxpython/nviz/tools.py:1753 ../gui/wxpython/nviz/tools.py:1770
@@ -5532,11 +5551,11 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:1577 ../gui/wxpython/nviz/tools.py:5441
 #: ../gui/wxpython/nviz/tools.py:5496
 msgid "as 3D"
-msgstr ""
+msgstr "mint 3D"
 
 #: ../gui/wxpython/nviz/tools.py:1586 ../gui/wxpython/nviz/tools.py:1793
 msgid "Height above surface:"
-msgstr ""
+msgstr "Magasság a felszín felett:"
 
 #: ../gui/wxpython/nviz/tools.py:1637
 msgid "Show vector points"
@@ -5556,7 +5575,7 @@ msgstr "szimbólum:"
 
 #: ../gui/wxpython/nviz/tools.py:1733
 msgid "use size for thematic mapping"
-msgstr ""
+msgstr "használd a méretet a tematikus térképezéshez"
 
 #: ../gui/wxpython/nviz/tools.py:1863 ../gui/wxpython/lmgr/layertree.py:1061
 msgid "3D raster map"
@@ -6353,7 +6372,7 @@ msgstr ""
 #: ../gui/wxpython/rdigit/dialogs.py:100
 #, python-format
 msgid "Raster map <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr ""
+msgstr "<%s> rasztertérkép már létezik az aktuális térképcsoportban. Felül akarja írni?"
 
 #: ../gui/wxpython/rdigit/controller.py:125
 msgid "Please select first the raster map"
@@ -6584,6 +6603,9 @@ msgid ""
 "\n"
 "Do you want to switch to the new location?"
 msgstr ""
+"<%s> helyet létrehoztam.\n"
+"\n"
+"Át akar váltani az új helyre?"
 
 #: ../gui/wxpython/lmgr/frame.py:482
 msgid "Switch to new location?"
@@ -6665,7 +6687,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:1051
 msgid "No location/mapset provided. Operation canceled."
-msgstr ""
+msgstr "Nem kaptam helyet/térképcsoportot. A művelet megszakadt."
 
 #: ../gui/wxpython/lmgr/frame.py:1072
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:934
@@ -6763,7 +6785,7 @@ msgstr "GRASS munkaterület fájl (*.gxw)|*.gxw"
 
 #: ../gui/wxpython/lmgr/frame.py:1391
 msgid "Most likely the database, location or mapset does not exist"
-msgstr ""
+msgstr "Valószínűleg az adatbázis, hely vagy térképcsoport nem létezik"
 
 #: ../gui/wxpython/lmgr/frame.py:1394
 #, python-brace-format
@@ -6900,7 +6922,7 @@ msgstr "Raszter adat import"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:159
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1160
 msgid "Link external raster data"
-msgstr ""
+msgstr "Külső raszter adat kapcsolás"
 
 #: ../gui/wxpython/lmgr/layertree.py:61
 msgid "Unpack GRASS raster map"
@@ -6924,7 +6946,7 @@ msgstr "Vektor adat import"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:161
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1162
 msgid "Link external vector data"
-msgstr ""
+msgstr "Külső vektor adtok kapcsolása"
 
 #: ../gui/wxpython/lmgr/layertree.py:69
 msgid "Unpack GRASS vector map"
@@ -7075,7 +7097,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:633 ../gui/wxpython/lmgr/layertree.py:779
 msgid "Make a copy in the current mapset"
-msgstr ""
+msgstr "Másolat készítés az aktuális térképcsoportban"
 
 #: ../gui/wxpython/lmgr/layertree.py:638 ../gui/wxpython/lmgr/layertree.py:787
 #: ../gui/wxpython/lmgr/layertree.py:860
@@ -7398,7 +7420,7 @@ msgstr "Beállítások importálása"
 #: ../gui/wxpython/modules/import_export.py:384
 #: ../gui/wxpython/modules/import_export.py:525
 msgid "Add linked layers into layer tree"
-msgstr ""
+msgstr "Kapcsolt réteg hozzáadása rétegfához"
 
 #: ../gui/wxpython/modules/import_export.py:386
 #: ../gui/wxpython/modules/import_export.py:527
@@ -7409,12 +7431,12 @@ msgstr "Importált rétegek hozzáadása a rétegfához"
 #: ../gui/wxpython/modules/import_export.py:395
 #: ../gui/wxpython/modules/import_export.py:536
 msgid "&Link"
-msgstr ""
+msgstr "Kapcsolás"
 
 #: ../gui/wxpython/modules/import_export.py:396
 #: ../gui/wxpython/modules/import_export.py:537
 msgid "Link selected layers"
-msgstr ""
+msgstr "Kiválasztott rétegek kapcsolása"
 
 #: ../gui/wxpython/modules/import_export.py:419
 #: ../gui/wxpython/modules/import_export.py:560
@@ -7435,7 +7457,7 @@ msgstr "Adja meg a raszter adatokhoz az output formátumot"
 
 #: ../gui/wxpython/modules/import_export.py:670
 msgid "Set external format and close dialog"
-msgstr ""
+msgstr "Külső formátum beállítása és a párbeszédablak lezárása"
 
 #: ../gui/wxpython/modules/import_export.py:727
 msgid "No data source selected."
@@ -9991,7 +10013,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1066
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1212
 msgid "Reproject raster map from different GRASS location"
-msgstr ""
+msgstr "Egy rasztertérkép vetületi transzformációja egy másik helyről"
 
 #: ../gui/wxpython/menustrings.py:66 ../gui/wxpython/menustrings.py:293
 #: ../gui/wxpython/menustrings.py:1088 ../gui/wxpython/menustrings.py:1238
@@ -10000,7 +10022,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1067
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1213
 msgid "Re-projects a raster map from given location to the current location."
-msgstr ""
+msgstr "Egy rasztertérkép vetületi transzformációja egy adott helyről az aktuális helyre."
 
 #: ../gui/wxpython/menustrings.py:68 ../gui/wxpython/menustrings.py:1090
 msgid "Simplified vector import with reprojection"
@@ -10122,7 +10144,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1090
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1490
 msgid "Reproject vector map from different GRASS location"
-msgstr ""
+msgstr "Egy vektortérkép vetületi transzformációja egy másik helyről"
 
 #: ../gui/wxpython/menustrings.py:91 ../gui/wxpython/menustrings.py:576
 #: ../gui/wxpython/menustrings.py:1113 ../gui/wxpython/menustrings.py:1521
@@ -10131,7 +10153,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1091
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1491
 msgid "Re-projects a vector map from one location to the current location."
-msgstr ""
+msgstr "Egy rasztertérkép vetületi transzformációja egy helyről az aktuális helyre."
 
 #: ../gui/wxpython/menustrings.py:92 ../gui/wxpython/menustrings.py:1114
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:91
@@ -10911,12 +10933,12 @@ msgstr "GRASS munka környezet"
 #: ../gui/wxpython/menustrings.py:228
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:222
 msgid "Mapset access"
-msgstr ""
+msgstr "Térképcsoport hozzáférés"
 
 #: ../gui/wxpython/menustrings.py:229
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:223
 msgid "Set/unset access to other mapsets in current location"
-msgstr ""
+msgstr "Hozzáférés beállítása/törlése egy másik térképcsoporthoz az aktuális helyen"
 
 #: ../gui/wxpython/menustrings.py:230
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:224
@@ -10992,12 +11014,12 @@ msgstr "Új hely létrehozása"
 #: ../gui/wxpython/menustrings.py:245
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:239
 msgid "Launches location wizard to create new GRASS location."
-msgstr ""
+msgstr "Elindítja a hely varázslót egy új GRASS hely létrehozásához."
 
 #: ../gui/wxpython/menustrings.py:247
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:241
 msgid "Creates new mapset in the current location, changes current mapset."
-msgstr ""
+msgstr "Az aktuális helyen létrehoz egy új térképcsoportot, módosítja az aktuális térképcsoportot."
 
 #: ../gui/wxpython/menustrings.py:248
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:242
@@ -12907,7 +12929,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:572
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1498
 msgid "Rebuilds topology on all vector maps in the current mapset."
-msgstr ""
+msgstr "Topológia újraépítése az összes vektortérképhez az aktuális térképcsoportban."
 
 #: ../gui/wxpython/menustrings.py:584 ../gui/wxpython/menustrings.py:1529
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:573
@@ -13015,7 +13037,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:594
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1520
 msgid "Queries a vector map at given locations."
-msgstr ""
+msgstr "Egy vektortérkép lekérdezése adott helyeken."
 
 #: ../gui/wxpython/menustrings.py:606 ../gui/wxpython/menustrings.py:923
 #: ../gui/wxpython/menustrings.py:1551 ../gui/wxpython/menustrings.py:1868
@@ -13606,7 +13628,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:698
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1624
 msgid "Sample raster maps at point locations"
-msgstr ""
+msgstr "Rasztertérkép mintavételezése adott pont helyeken"
 
 #: ../gui/wxpython/menustrings.py:712 ../gui/wxpython/menustrings.py:1657
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:699
@@ -13624,7 +13646,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:701
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1627
 msgid "Samples a raster map at vector point locations."
-msgstr ""
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
 
 #: ../gui/wxpython/menustrings.py:715 ../gui/wxpython/menustrings.py:1660
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:702
@@ -15863,7 +15885,7 @@ msgstr "Ismeretlen formátum '{0}'."
 
 #: ../gui/wxpython/startup/locdownload.py:312
 msgid "Downloaded location is not valid"
-msgstr "Letöltési hely hibás"
+msgstr "Letöltött hely hibás"
 
 #: ../gui/wxpython/startup/locdownload.py:370
 msgid "Abort"
@@ -15871,16 +15893,16 @@ msgstr "Megszakít"
 
 #: ../gui/wxpython/startup/locdownload.py:371
 msgid "Abort download location"
-msgstr ""
+msgstr "Hely letöltés megszakítása"
 
 #: ../gui/wxpython/startup/locdownload.py:375
 msgid "Select sample location to download:"
-msgstr ""
+msgstr "Válasszon minta helyet a letöltéshez:"
 
 #: ../gui/wxpython/startup/locdownload.py:427
 #: ../gui/wxpython/startup/locdownload.py:562
 msgid "Download selected location"
-msgstr ""
+msgstr "Kiválasztott hely letöltése"
 
 #: ../gui/wxpython/startup/locdownload.py:436
 #: ../gui/wxpython/startup/locdownload.py:502
@@ -18005,7 +18027,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:2106
 msgid "Manage access to mapsets"
-msgstr ""
+msgstr "Hozzáférés kezelése a térképcsoportokhoz"
 
 #: ../gui/wxpython/gui_core/preferences.py:2121
 msgid ""
@@ -18513,7 +18535,7 @@ msgstr ""
 #: ../gui/wxpython/gcp/manager.py:354
 #: ../gui/wxpython/image2target/ii2t_manager.py:383
 msgid "Select map type and location/mapset"
-msgstr ""
+msgstr "Válasszon térkép típus és helyet/térképcsoportot"
 
 #: ../gui/wxpython/gcp/manager.py:368
 #: ../gui/wxpython/image2target/ii2t_manager.py:397
@@ -19337,7 +19359,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:249
 #, python-format
 msgid "GRASS GIS %s startup%s"
-msgstr ""
+msgstr "GRASS GIS %sindítás%s"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:553
 msgid "New mapset:"

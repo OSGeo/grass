@@ -1767,7 +1767,7 @@ msgstr "Você vai exibir dados com diferentes tipos temporais de mapas (interval
 #: ../gui/wxpython/animation/temporal_manager.py:348
 #, python-format
 msgid "Topology of Space time dataset %s is invalid."
-msgstr ""
+msgstr "A topologia do conjunto de dados de Espaço-tempo %s é inválida."
 
 #: ../gui/wxpython/animation/data.py:65
 msgid "No animation name selected."
@@ -4865,15 +4865,15 @@ msgstr "Pressione Del para dispensar."
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:138
 msgid "With stvds you have to set 'attr' option"
-msgstr ""
+msgstr "Com stvds, você deve definir a opção 'attr'"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:142
 msgid "With stvds it is not possible to use 'coordinates' and 'cats' options together"
-msgstr ""
+msgstr "Com stvds não é possível usar as opções de 'coordinates' e 'cats' juntas"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:145
 msgid "With stvds you have to use 'coordinates' or 'cats' option"
-msgstr ""
+msgstr "Com stvds você deve usar a opção 'coordinates' ou 'cats'"
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -7427,27 +7427,27 @@ msgstr "Não foi possível determinar o número de bandas raster"
 
 #: ../gui/wxpython/modules/import_export.py:660
 msgid "Define output format for vector data"
-msgstr ""
+msgstr "Defina o formato de saída para dados vetoriais"
 
 #: ../gui/wxpython/modules/import_export.py:662
 msgid "Define output format for raster data"
-msgstr ""
+msgstr "Defina o formato de saída para dados raster"
 
 #: ../gui/wxpython/modules/import_export.py:670
 msgid "Set external format and close dialog"
-msgstr ""
+msgstr "Defina o formato externo e feche a caixa de diálogo"
 
 #: ../gui/wxpython/modules/import_export.py:727
 msgid "No data source selected."
-msgstr ""
+msgstr "Nenhuma fonte de dados selecionada."
 
 #: ../gui/wxpython/modules/import_export.py:742
 msgid "Import DXF layers"
-msgstr ""
+msgstr "Importar camadas DXF"
 
 #: ../gui/wxpython/modules/import_export.py:749
 msgid "Choose DXF file to import"
-msgstr ""
+msgstr "Escolha o arquivo DXF para importar"
 
 #: ../gui/wxpython/modules/import_export.py:778
 msgid "No layers selected."
@@ -7455,23 +7455,23 @@ msgstr "Nenhuma camada selecionada."
 
 #: ../gui/wxpython/modules/import_export.py:868
 msgid "Name for output GRASS map"
-msgstr ""
+msgstr "Nome para o mapa GRASS de saída"
 
 #: ../gui/wxpython/modules/import_export.py:886
 msgid "Projection of following layers do not match with projection of current location. "
-msgstr ""
+msgstr "A projeção das camadas seguintes não coincide com a projeção da location atual."
 
 #: ../gui/wxpython/modules/import_export.py:888
 msgid "Layers to be reprojected"
-msgstr ""
+msgstr "Camadas a serem reprojetadas"
 
 #: ../gui/wxpython/modules/import_export.py:902
 msgid "&Import && reproject"
-msgstr ""
+msgstr "&Import && reproject"
 
 #: ../gui/wxpython/modules/import_export.py:903
 msgid "Reproject selected layers"
-msgstr ""
+msgstr "Reprojetar camadas selecionadas"
 
 #: ../gui/wxpython/modules/histogram.py:296
 msgid "GRASS GIS Histogramming Tool (d.histogram)"
@@ -7555,7 +7555,7 @@ msgstr "Seleciona mapa vetorial de saída:"
 
 #: ../gui/wxpython/modules/vclean.py:178
 msgid "Copy the current command string to the clipboard (Ctrl+C)"
-msgstr ""
+msgstr "Copie a string de comando atual para a área de transferência (Ctrl+C)"
 
 #: ../gui/wxpython/modules/vclean.py:223 ../gui/wxpython/psmap/utils.py:105
 msgid "point"
@@ -7580,38 +7580,38 @@ msgstr "area"
 
 #: ../gui/wxpython/modules/vclean.py:228
 msgid "face"
-msgstr ""
+msgstr "face"
 
 #: ../gui/wxpython/modules/vclean.py:402
 #, python-format
 msgid "%s. cleaning tool removed, will be ignored"
-msgstr ""
+msgstr "%s. ferramenta de limpeza removida, será ignorado"
 
 #: ../gui/wxpython/modules/vclean.py:405
 msgid "Please select a cleaning tool to remove"
-msgstr ""
+msgstr "Por favor, selecione uma ferramenta de limpeza para remover"
 
 #: ../gui/wxpython/modules/vclean.py:429
 #, python-format
 msgid "%s. cleaning tool moved up"
-msgstr ""
+msgstr "%s. ferramenta de limpeza movida para cima"
 
 #: ../gui/wxpython/modules/vclean.py:431
 msgid "1. cleaning tool can not be moved up "
-msgstr ""
+msgstr "1. ferramenta de limpeza não pode ser movida para cima"
 
 #: ../gui/wxpython/modules/vclean.py:433
 msgid "Please select a cleaning tool to move up"
-msgstr ""
+msgstr "Por favor, selecione uma ferramenta de limpeza para mover para cima"
 
 #: ../gui/wxpython/modules/vclean.py:461
 #, python-format
 msgid "%s. cleaning tool moved down"
-msgstr ""
+msgstr "%s. ferramenta de limpeza movida para baixo"
 
 #: ../gui/wxpython/modules/vclean.py:463
 msgid "Last cleaning tool can not be moved down "
-msgstr ""
+msgstr "A última ferramenta de limpeza não pode ser movida para baixo"
 
 #: ../gui/wxpython/modules/vclean.py:465
 msgid "Please select a cleaning tool to move down"
@@ -7920,15 +7920,15 @@ msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:56
 msgid "GRASS GIS Raster Map Calculator"
-msgstr ""
+msgstr "Calculadora de Mapa Raster GRASS GIS "
 
 #: ../gui/wxpython/modules/mcalc_builder.py:59
 msgid "GRASS GIS 3D Raster Map Calculator"
-msgstr ""
+msgstr "Calculadora de Mapa Raster 3D GRASS GIS "
 
 #: ../gui/wxpython/modules/mcalc_builder.py:75
 msgid "mapcalc statement"
-msgstr ""
+msgstr "declaração mapcalc"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:142
 msgid "Operators"
@@ -7949,7 +7949,7 @@ msgstr "Salvar expressão em arquivo"
 #: ../gui/wxpython/modules/mcalc_builder.py:165
 #: ../gui/wxpython/gui_core/forms.py:1876
 msgid "&Load"
-msgstr ""
+msgstr "&Load"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:166
 msgid "Load expression from file"
@@ -7966,11 +7966,11 @@ msgstr "Copiar"
 #: ../gui/wxpython/modules/mcalc_builder.py:170
 #: ../gui/wxpython/gui_core/forms.py:624
 msgid "Copy the current command string to the clipboard"
-msgstr ""
+msgstr "Copia a string de comando atual para a área de transferência"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:174
 msgid "exponent"
-msgstr ""
+msgstr "expoente"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:176
 msgid "divide"
@@ -8062,27 +8062,27 @@ msgstr "OU lógico (ignora NULOS)"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:243
 msgid "conditional"
-msgstr ""
+msgstr "condicional"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:258
 msgid "Name for new 3D raster map to create"
-msgstr ""
+msgstr "Nome para novo mapa raster 3D a ser criado"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:260
 msgid "Name for new raster map to create"
-msgstr ""
+msgstr "Nome para novo mapa raster a ser criado"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:269
 msgid "Insert existing 3D raster map"
-msgstr ""
+msgstr "Inserir mapa raster 3D existente"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:271
 msgid "Insert existing raster map"
-msgstr ""
+msgstr "Inserir mapa raster existente"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:276
 msgid "Insert mapcalc function"
-msgstr ""
+msgstr "Inserir função mapcalc"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:293
 msgid "Generate random seed for rand()"
@@ -8098,41 +8098,41 @@ msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:306
 msgid "Add created raster map into layer tree"
-msgstr ""
+msgstr "Adicionar o mapa raster criado à árvore de camadas"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:664
 msgid "You must enter the name of a new raster map to create."
-msgstr ""
+msgstr "Você deve inserir o nome de um novo mapa raster para criar."
 
 #: ../gui/wxpython/modules/mcalc_builder.py:675
 msgid "You must enter an expression to create a new raster map."
-msgstr ""
+msgstr "Você deve inserir uma expressão para criar um novo mapa raster."
 
 #: ../gui/wxpython/modules/mcalc_builder.py:735
 msgid "Choose a file name to save the expression"
-msgstr ""
+msgstr "Escolha um nome de arquivo para salvar a expressão"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:736
 #: ../gui/wxpython/modules/mcalc_builder.py:758
 msgid "Expression file (*)|*"
-msgstr ""
+msgstr "Arquivo da expressão (*)|*"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:757
 msgid "Choose a file name to load the expression"
-msgstr ""
+msgstr "Escolha um nome de arquivo para carregar a expressão"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:793
 #, python-brace-format
 msgid "'{cmd}' copied to clipboard"
-msgstr ""
+msgstr "'{cmd}' copiado para a área de transferência"
 
 #: ../gui/wxpython/modules/extensions.py:42
 msgid "Fetch & install extension from GRASS Addons"
-msgstr ""
+msgstr "Busque e instale a extensão dos complementos GRASS"
 
 #: ../gui/wxpython/modules/extensions.py:62
 msgid "List of extensions - double-click to install"
-msgstr ""
+msgstr "Lista de extensões - clique duas vezes para instalar"
 
 #: ../gui/wxpython/modules/extensions.py:86
 msgid "Options"
@@ -8140,28 +8140,28 @@ msgstr "Opções"
 
 #: ../gui/wxpython/modules/extensions.py:119
 msgid "&Install"
-msgstr ""
+msgstr "&Install"
 
 #: ../gui/wxpython/modules/extensions.py:121
 msgid "Install selected add-ons GRASS module"
-msgstr ""
+msgstr "Instale o módulo GRASS de complementos selecionados"
 
 #: ../gui/wxpython/modules/extensions.py:124
 msgid "Show g.extension manual page"
-msgstr ""
+msgstr "Mostrar página do manual g.extension"
 
 #: ../gui/wxpython/modules/extensions.py:188
 msgid "Extension not defined"
-msgstr ""
+msgstr "Extensão não definida"
 
 #: ../gui/wxpython/modules/extensions.py:212
 msgid "Fetching list of modules from GRASS-Addons (be patient)..."
-msgstr ""
+msgstr "Buscando lista de módulos de complementos GRASS (seja paciente)..."
 
 #: ../gui/wxpython/modules/extensions.py:227
 #, python-format
 msgid "%d extensions loaded"
-msgstr ""
+msgstr "%dextensões carregadas"
 
 #: ../gui/wxpython/modules/extensions.py:239
 msgid "Install"
@@ -8174,7 +8174,7 @@ msgstr "Mostrar a página do manual"
 #: ../gui/wxpython/modules/extensions.py:345
 #, python-format
 msgid "Unable to load extensions. %s"
-msgstr ""
+msgstr "Não foi possível carregar extensões. %s"
 
 #: ../gui/wxpython/modules/extensions.py:391
 msgid "Manage installed GRASS Addons extensions"
@@ -8673,7 +8673,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:94
 msgid "WARNING"
-msgstr ""
+msgstr "ATENÇÃO: "
 
 #: ../gui/wxpython/rlisetup/frame.py:114
 msgid "GRASS GIS Setup for r.li modules"

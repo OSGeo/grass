@@ -9767,9 +9767,8 @@ msgid "Unrecognized WKT '%s'"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:316
-#, fuzzy
 msgid "Unable to create PROJ object"
-msgstr "No se puede crear índice"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:393
 msgid "Input coordinate system is NULL"
@@ -9789,14 +9788,14 @@ msgid "The transformation pipeline contains an '%s' step. Remove this step if ea
 msgstr ""
 
 #: ../lib/proj/do_proj.c:525
-#, fuzzy, c-format
+#, c-format
 msgid "Input CRS not available for '%s'"
-msgstr "Nodos no disponibles para línea %d"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:546
-#, fuzzy, c-format
+#, c-format
 msgid "Output CRS not available for '%s'"
-msgstr "Nodos no disponibles para línea %d"
+msgstr ""
 
 #: ../lib/proj/do_proj.c:573
 #, c-format

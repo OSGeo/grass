@@ -35991,9 +35991,8 @@ msgid "Key column <%s> not found"
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:843
-#, fuzzy
 msgid "Unable to start OGR transaction"
-msgstr "无法启动驱动 <%s>"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:864
 #, c-format
@@ -41325,9 +41324,9 @@ msgid "Unable to convert projection information to PROJ format"
 msgstr ""
 
 #: ../general/g.proj/output.c:233
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create PROJ definition from srid <%s>"
-msgstr "无法创建栅格地图 %s"
+msgstr ""
 
 #: ../general/g.proj/output.c:274
 msgid "Unable to convert to WKT"
@@ -41483,9 +41482,9 @@ msgid "Name of new location to create"
 msgstr ""
 
 #: ../general/g.proj/main.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
-msgstr "必须指定'from_table'或'select'选项。"
+msgstr ""
 
 #: ../general/g.proj/main.c:300
 msgid "Projection files missing"
@@ -47805,9 +47804,9 @@ msgstr ""
 
 #: ../raster/r.in.gdal/main.c:1291 ../raster/r.in.gdal/main.c:1348
 #: ../raster/r.in.gdal/main.c:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read row %d"
-msgstr "无法创建表 <%s>"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:1688 ../raster/r.in.gdal/main.c:1745
 #: ../raster/r.external/colors.c:177 ../raster/r.external/colors.c:234

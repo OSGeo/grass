@@ -36044,9 +36044,8 @@ msgid "Key column <%s> not found"
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:843
-#, fuzzy
 msgid "Unable to start OGR transaction"
-msgstr "트랜잭션을 커밋할 수 없습니다"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:864
 #, c-format
@@ -36071,9 +36070,8 @@ msgid "Export of volumes not implemented yet. Skipping."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:907
-#, fuzzy
 msgid "Unable to commit OGR transaction"
-msgstr "트랜잭션을 커밋할 수 없습니다"
+msgstr ""
 
 #: ../vector/v.out.ogr/main.c:922
 #, c-format
@@ -41384,9 +41382,9 @@ msgid "Unable to convert projection information to PROJ format"
 msgstr ""
 
 #: ../general/g.proj/output.c:233
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create PROJ definition from srid <%s>"
-msgstr "<%s>로부터 입력을 읽을 수 없습니다"
+msgstr ""
 
 #: ../general/g.proj/output.c:274
 msgid "Unable to convert to WKT"
@@ -41542,9 +41540,9 @@ msgid "Name of new location to create"
 msgstr ""
 
 #: ../general/g.proj/main.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
-msgstr "출력할 래스터맵"
+msgstr ""
 
 #: ../general/g.proj/main.c:300
 msgid "Projection files missing"
@@ -41589,9 +41587,8 @@ msgid "Unable to open init file <%s>"
 msgstr ""
 
 #: ../general/g.proj/input.c:122
-#, fuzzy
 msgid "Error reading WKT definition"
-msgstr "자료를 읽는 중 오류"
+msgstr ""
 
 #: ../general/g.proj/input.c:129
 #, c-format
@@ -41626,9 +41623,8 @@ msgid "WKT for SRID <%s> not recognized by GDAL"
 msgstr ""
 
 #: ../general/g.proj/input.c:304
-#, fuzzy
 msgid "Unable to convert srid to WKT"
-msgstr "행을 삽입할 수 없습니다: %s"
+msgstr ""
 
 #: ../general/g.proj/input.c:316
 msgid "Input srid requires GDAL 3+ and PROJ 6+"
@@ -41639,9 +41635,8 @@ msgid "Unable to translate EPSG code"
 msgstr ""
 
 #: ../general/g.proj/input.c:367
-#, fuzzy
 msgid "Unable to convert EPSG code to WKT"
-msgstr "FIPS 코드파일을 열 수 없습니다"
+msgstr ""
 
 #: ../general/g.proj/input.c:435
 #, c-format
@@ -47869,9 +47864,9 @@ msgstr "무효한 행"
 
 #: ../raster/r.in.gdal/main.c:1291 ../raster/r.in.gdal/main.c:1348
 #: ../raster/r.in.gdal/main.c:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read row %d"
-msgstr "%s를 위한 범위를 읽을 수 없습니다"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:1688 ../raster/r.in.gdal/main.c:1745
 #: ../raster/r.external/colors.c:177 ../raster/r.external/colors.c:234
@@ -55542,18 +55537,18 @@ msgid "Unknown output data type"
 msgstr "알려지지 않은 출력 자료형"
 
 #: ../raster/r.proj/bordwalk.c:92 ../raster/r.proj/bordwalk.c:139
-#, fuzzy, c-format
+#, c-format
 msgid "unable to transform coordinates %g, %g"
-msgstr "무효한 좌표 %s %s"
+msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:230
 msgid "Input raster map is outside current region"
 msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:258
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to reproject map center %g, %g"
-msgstr "지도 중심을 재투영할 수 없습니다"
+msgstr ""
 
 #: ../raster/r.proj/readcell.c:67
 msgid "Allocating memory and reading input raster map..."
@@ -59312,8 +59307,8 @@ msgstr "임시 파일을 초기화할 수 없습니다"
 msgid "eading the input map -%s- and -%s- and creating some temporary files..."
 msgstr "입력 지도 -%s-와 -%s-를 읽으면서 임시 파일을 생성하는 중입니다..."
 
-#~ msgid "Can't get WKT-style parameter string"
-#~ msgstr "WKT 형식의 매개변수 문자열을 얻을 수 없습니다"
+msgid "Can't get WKT-style parameter string"
+msgstr "WKT 형식의 매개변수 문자열을 얻을 수 없습니다"
 
-#~ msgid "Unable to reproject map center"
-#~ msgstr "지도 중심을 재투영할 수 없습니다"
+msgid "Unable to reproject map center"
+msgstr "지도 중심을 재투영할 수 없습니다"

@@ -41008,9 +41008,8 @@ msgid "WKT for SRID <%s> not recognized by GDAL"
 msgstr ""
 
 #: ../general/g.proj/input.c:304
-#, fuzzy
 msgid "Unable to convert srid to WKT"
-msgstr "Indeksiä ei voida luoda:"
+msgstr ""
 
 #: ../general/g.proj/input.c:316
 msgid "Input srid requires GDAL 3+ and PROJ 6+"
@@ -47250,9 +47249,9 @@ msgstr ""
 
 #: ../raster/r.in.gdal/main.c:1291 ../raster/r.in.gdal/main.c:1348
 #: ../raster/r.in.gdal/main.c:1424
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read row %d"
-msgstr "Indeksiä ei voida luoda:"
+msgstr ""
 
 #: ../raster/r.in.gdal/main.c:1688 ../raster/r.in.gdal/main.c:1745
 #: ../raster/r.external/colors.c:177 ../raster/r.external/colors.c:234
