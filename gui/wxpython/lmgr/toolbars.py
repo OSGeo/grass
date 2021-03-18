@@ -5,10 +5,11 @@
 
 Classes:
  - toolbars::LMWorkspaceToolbar
+ - toolbars::DisplayPanelToolbar
  - toolbars::LMToolsToolbar
  - toolbars::LMMiscToolbar
  - toolbars::LMNvizToolbar
- - toolbars::DisplayPanelToolbar
+
 
 (C) 2007-2013 by the GRASS Development Team
 
