@@ -225,7 +225,9 @@ int main(int argc, char **argv)
     }
 
     if (mindist > 0 && maxdist > 0 && mindist >= maxdist) {
-	G_fatal_error(_("%s must be smaller than %s."),
+	/* GTC error because given minimum_distance is not smaller than
+	 * given maximum_distance */
+	G_fatal_error(_("'%s' must be smaller than '%s'."),
 	              opt.min->key, opt.max->key);
     }
 
