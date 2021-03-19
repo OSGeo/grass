@@ -704,8 +704,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
     )
     if tgis_db_version > 2:
         backup_howto += _(
-            "Run t.upgrade command installed from "
-            "GRASS Addons in order to upgrade your temporal database.\n"
+            "Run t.upgrade command to upgrade your temporal database.\n"
         )
     else:
         backup_howto += _(
