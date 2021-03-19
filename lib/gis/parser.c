@@ -65,7 +65,7 @@
  *    out of range.  The acceptable range (or list) will be printed.
  *
  * Overview table: <a href="parser_standard_options.html">Parser standard options</a>
- * 
+ *
  * (C) 2001-2015 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
@@ -90,8 +90,9 @@ enum opt_error {
     BAD_SYNTAX    = 1,
     OUT_OF_RANGE  = 2,
     MISSING_VALUE = 3,
-    AMBIGUOUS     = 4,
-    REPLACED      = 5
+    INVALID_VALUE = 4,
+    AMBIGUOUS     = 5,
+    REPLACED      = 6
 };
 
 
@@ -224,7 +225,7 @@ struct Option *G_define_option(void)
 
     opt->required = NO;
     opt->multiple = NO;
-    
+
     st->current_option = opt;
     st->n_opts++;
 
@@ -447,7 +448,7 @@ int G_parser(int argc, char **argv)
 	if (module_gui_wx() == 0)
             return -1;
     }
-    
+
     if (argc < 2 && st->has_required && isatty(0)) {
       	G_usage();
 	return -1;
@@ -600,7 +601,7 @@ int G_parser(int argc, char **argv)
 
 	}
     }
-    
+
     /* Split options where multiple answers are OK */
     split_opts();
 
@@ -975,7 +976,7 @@ void set_flag(int f)
 {
     struct Flag *flag;
     char *err;
-    
+
     err = NULL;
 
     /* Flag is not valid if there are no flags to set */
@@ -1102,7 +1103,7 @@ void set_option(const char *string)
         if (strcmp(the_key, at_opt->key) == 0) {
 	    matches[0] = at_opt;
 	    found = 1;
-	    break; 
+	    break;
 	}
 
         if (strncmp(the_key, at_opt->key, key_len) == 0 ||
@@ -1159,7 +1160,7 @@ void set_option(const char *string)
                               G_program_name(), the_key, renamed_key);
                     opt = at_opt;
                     found = 1;
-                    break; 
+                    break;
                 }
             }
         }
@@ -1174,7 +1175,7 @@ void set_option(const char *string)
 
     if (getenv("GRASS_FULL_OPTION_NAMES") && strcmp(the_key, opt->key) != 0)
 	G_warning(_("<%s> is an abbreviation for <%s>"), the_key, opt->key);
-    
+
     /* Allocate memory where answer is stored */
     if (opt->count++) {
 	if (!opt->multiple) {
@@ -1255,7 +1256,7 @@ void check_an_opt(const char *key, int type, const char *options,
 	append_error(err);
 	break;
     case OUT_OF_RANGE:
-	G_asprintf(&err, 
+	G_asprintf(&err,
 		   _("Value <%s> out of range for parameter <%s>\n"
 		     "\tLegal range: %s"), answer, key, options);
 	append_error(err);
@@ -1264,6 +1265,12 @@ void check_an_opt(const char *key, int type, const char *options,
 	G_asprintf(&err,
 		   _("Missing value for parameter <%s>"),
 		   key);
+	append_error(err);
+	break;
+    case INVALID_VALUE:
+	G_asprintf(&err,
+		   _("Invalid value <%s> for parameter <%s>"),
+		   answer, key);
 	append_error(err);
 	break;
     case AMBIGUOUS:
@@ -1287,8 +1294,11 @@ int check_int(const char *ans, const char **opts)
     if (strcmp(ans, "-") == 0)
 	return 0;
 
-    if (sscanf(ans, "%d", &d) != 1)
+    if (!ans || !*ans)
 	return MISSING_VALUE;
+
+    if (sscanf(ans, "%d", &d) != 1)
+	return INVALID_VALUE;
 
     if (!opts)
 	return 0;
@@ -1334,9 +1344,12 @@ int check_double(const char *ans, const char **opts)
     /* "-" is reserved for standard input */
     if (strcmp(ans, "-") == 0)
 	return 0;
-    
-    if (sscanf(ans, "%lf", &d) != 1)
+
+    if (!ans || !*ans)
 	return MISSING_VALUE;
+
+    if (sscanf(ans, "%lf", &d) != 1)
+	return INVALID_VALUE;
 
     if (!opts)
 	return 0;
@@ -1398,11 +1411,12 @@ int check_string(const char *ans, const char **opts, int *result)
 	int shortest = 0;
 	int length = strlen(opts[matches[0]]);
 	int prefix = 1;
-	int i;
+
 	for (i = 1; i < found; i++) {
-	    int len = strlen(opts[matches[i]]);
-	    if (len < length) {
-		length = len;
+	    int lengthi = strlen(opts[matches[i]]);
+
+	    if (lengthi < length) {
+		length = lengthi;
 		shortest = i;
 	    }
 	}
@@ -1432,9 +1446,9 @@ void check_required(void)
 {
     struct Option *opt;
     char *err;
-    
+
     err = NULL;
-    
+
     if (!st->n_opts)
 	return;
 
@@ -1537,7 +1551,7 @@ void check_multiple_opts(void)
 			     "\tYou provided %d item(s): %s"),
 			   opt->key, n_commas, n, opt->answer);
 		append_error(err);
-			   
+
 	    }
 	}
 	opt = opt->next_opt;
@@ -1588,7 +1602,7 @@ int check_overwrite(void)
 	    if (strcmp(age, "new") == 0) {
 		int i;
 		char found;
-		
+
 		for (i = 0; opt->answers[i]; i++) {
 		    found = FALSE;
 		    if (strcmp(element, "file") == 0) {
@@ -1602,7 +1616,7 @@ int check_overwrite(void)
                             found = TRUE;
                         }
 		    }
-                    
+
 		    if (found) {	/* found */
 			if (!st->overwrite && !over) {
                             if (G_verbose() > -1) {
@@ -1673,11 +1687,11 @@ const char *get_renamed_option(const char *key)
 {
     const char *pgm, *key_new;
     char *pgm_key;
-    
+
     if (!st->renamed_options) {
         /* read renamed options from file (renamed_options) */
         char path[GPATH_MAX];
-        
+
         G_snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
         st->renamed_options = G_read_key_value_file(path);
     }
@@ -1703,27 +1717,27 @@ const char *get_renamed_option(const char *key)
 
   Calls G_fatal_error() on error. Allocated string can be later freed
   by G_free().
-  
+
   \code
   char *fs;
   struct Option *opt_fs;
-  
+
   opt_fs = G_define_standard_option(G_OPT_F_SEP);
-  
+
   if (G_parser(argc, argv))
       exit(EXIT_FAILURE);
-      
+
   fs = G_option_to_separator(opt_fs);
   \endcode
 
   \param option pointer to separator option
-  
+
   \return allocated string with separator
 */
 char* G_option_to_separator(const struct Option *option)
 {
     char* sep;
-    
+
     if (option->gisprompt == NULL ||
 	strcmp(option->gisprompt, "old,separator,separator") != 0)
         G_fatal_error(_("%s= is not a separator option"), option->key);
@@ -1745,10 +1759,10 @@ char* G_option_to_separator(const struct Option *option)
         sep = G_store("\n");
     else
         sep = G_store(option->answer);
-    
+
     G_debug(3, "G_option_to_separator(): key = %s -> sep = '%s'",
 	    option->key, sep);
-    
+
     return sep;
 }
 
@@ -1758,19 +1772,19 @@ char* G_option_to_separator(const struct Option *option)
 
   Calls G_fatal_error() on error. File pointer can be later closed by
   G_close_option_file().
-  
+
   \code
   FILE *fp_input;
   FILE *fp_output;
   struct Option *opt_input;
   struct Option *opt_output;
-  
+
   opt_input = G_define_standard_option(G_OPT_F_INPUT);
   opt_output = G_define_standard_option(G_OPT_F_OUTPUT);
 
   if (G_parser(argc, argv))
       exit(EXIT_FAILURE);
-      
+
   fp_input = G_open_option_file(opt_input);
   fp_output = G_open_option_file(opt_output);
   ...
@@ -1779,7 +1793,7 @@ char* G_option_to_separator(const struct Option *option)
   \endcode
 
   \param option pointer to a file option
-  
+
   \return file pointer
 */
 FILE *G_open_option_file(const struct Option *option)
