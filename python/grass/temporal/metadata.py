@@ -997,7 +997,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
     description = property(fget=get_description, fset=set_description)
     number_of_maps = property(fget=get_number_of_maps)
 
-    def print_info(self):
+    def print_info_tail(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(" | Number of registered maps:.. " + str(self.get_number_of_maps()))
@@ -1043,7 +1043,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
                     else:
                         print(token)
 
-    def print_shell_info(self):
+    def print_shell_info_tail(self):
         """Print information about this class in shell style"""
         print("number_of_maps=" + str(self.get_number_of_maps()))
 
@@ -1377,16 +1377,16 @@ class STRDSMetadata(STDSRasterMetadataBase):
         )
         #      0123456789012345678901234567890
         print(" | Raster register table:...... " + str(self.get_raster_register()))
-        STDSRasterMetadataBase.print_info(self)
+        super().print_info()
         print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
-        STDSMetadataBase.print_info(self)
+        super().print_info_tail()
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         print("raster_register=" + str(self.get_raster_register()))
-        STDSRasterMetadataBase.print_shell_info(self)
+        super().print_shell_info()
         print("number_of_bands=" + str(self.get_number_of_bands()))
-        STDSMetadataBase.print_shell_info(self)
+        super().print_shell_info_tail()
 
 
 ###############################################################################
@@ -1524,16 +1524,16 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         print(" | 3D raster register table:... " + str(self.get_raster3d_register()))
         print(" | Top-bottom resolution min:.. " + str(self.get_ewres_min()))
         print(" | Top-bottom resolution max:.. " + str(self.get_ewres_max()))
-        STDSRasterMetadataBase.print_info(self)
-        STDSMetadataBase.print_info(self)
+        super().print_info()
+        super().print_info_tail()
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         print("raster3d_register=" + str(self.get_raster3d_register()))
         print("tbres_min=" + str(self.get_tbres_min()))
         print("tbres_max=" + str(self.get_tbres_max()))
-        STDSRasterMetadataBase.print_shell_info(self)
-        STDSMetadataBase.print_shell_info(self)
+        super().print_shell_info()
+        super().print_shell_info_tail()
 
 
 ###############################################################################
@@ -1800,7 +1800,7 @@ class STVDSMetadata(STDSMetadataBase):
         print(" | Number of islands .......... " + str(self.number_of_islands))
         print(" | Number of holes ............ " + str(self.number_of_holes))
         print(" | Number of volumes .......... " + str(self.number_of_volumes))
-        STDSMetadataBase.print_info(self)
+        super().print_info_tail()
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -1817,7 +1817,7 @@ class STVDSMetadata(STDSMetadataBase):
         print("islands=" + str(self.get_number_of_islands()))
         print("holes=" + str(self.get_number_of_holes()))
         print("volumes=" + str(self.get_number_of_volumes()))
-        STDSMetadataBase.print_shell_info(self)
+        super().print_shell_info_tail()
 
 
 ###############################################################################
