@@ -227,8 +227,6 @@
       <wxgui-item name="Save"/>
       <wxgui-item name="SaveAs"/>
       <wxgui-item name="Close"/>
-      <separator/>
-      <wxgui-item name="LoadGRCFileTclTkGUI"/>
     </items>
   </toolbox>
   <toolbox name="MapDisplay">
