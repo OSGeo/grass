@@ -38,10 +38,9 @@ from core.debug import Debug
 class WorkspaceManager:
     """Workspace Manager for creating, loading and saving workspaces."""
 
-    def __init__(self, lmgr, giface, workspaceFile):
+    def __init__(self, lmgr, giface):
 
         self.lmgr = lmgr
-        self.workspaceFile = workspaceFile
         self._giface = giface
         self.workspaceChanged = False  # track changes in workspace
         self.loadingWorkspace = False
@@ -55,7 +54,7 @@ class WorkspaceManager:
         if not self.workspaceChanged:
             self.workspaceChanged = True
 
-        if self.workspaceFile:
+        if self.lmgr.workspaceFile:
             self.lmgr._setTitle()
 
     def New(self):
@@ -74,9 +73,9 @@ class WorkspaceManager:
         ]
 
         # ask user to save current settings
-        if self.workspaceFile and self.workspaceChanged:
+        if self.lmgr.workspaceFile and self.workspaceChanged:
             self.Save()
-        elif self.workspaceFile is None and any(tree.GetCount() for tree in maptrees):
+        elif self.lmgr.workspaceFile is None and any(tree.GetCount() for tree in maptrees):
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(
@@ -105,7 +104,7 @@ class WorkspaceManager:
             for overlayId in display.decorations.keys():
                 display.RemoveOverlay(overlayId)
 
-        self.workspaceFile = None
+        self.lmgr.workspaceFile = None
         self.workspaceChanged = False
         self.lmgr._setTitle()
 
@@ -132,7 +131,7 @@ class WorkspaceManager:
         self.loadingWorkspace = True
         self.Load(filename)
         self.loadingWorkspace = False
-        self.workspaceFile = filename
+        self.lmgr.workspaceFile = filename
         self.lmgr._setTitle()
 
     def _tryToSwitchMapsetFromWorkspaceFile(self, gxwXml):
@@ -395,19 +394,19 @@ class WorkspaceManager:
         Debug.msg(4, "WorkspaceManager.SaveAs(): filename=%s" % filename)
 
         self.SaveToFile(filename)
-        self.workspaceFile = filename
+        self.lmgr.workspaceFile = filename
         self.lmgr._setTitle()
 
     def Save(self):
         """Save file with workspace definition"""
-        if self.workspaceFile:
+        if self.lmgr.workspaceFile:
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(
                     "Workspace file <%s> already exists. "
                     "Do you want to overwrite this file?"
                 )
-                % self.workspaceFile,
+                % self.lmgr.workspaceFile,
                 caption=_("Save workspace"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
@@ -415,9 +414,9 @@ class WorkspaceManager:
                 dlg.Destroy()
             else:
                 Debug.msg(
-                    4, "WorkspaceManager.Save(): filename=%s" % self.workspaceFile
+                    4, "WorkspaceManager.Save(): filename=%s" % self.lmgr.workspaceFile
                 )
-                self.SaveToFile(self.workspaceFile)
+                self.SaveToFile(self.lmgr.workspaceFile)
                 self.lmgr._setTitle()
                 self.workspaceChanged = False
         else:
@@ -457,10 +456,10 @@ class WorkspaceManager:
         """Close file with workspace definition
         If workspace has been modified ask user to save the changes.
         """
-        Debug.msg(4, "WorkspaceManager.Close(): file=%s" % self.workspaceFile)
+        Debug.msg(4, "WorkspaceManager.Close(): file=%s" % self.lmgr.workspaceFile)
 
         self.lmgr.DisplayCloseAll()
-        self.workspaceFile = None
+        self.lmgr.workspaceFile = None
         self.workspaceChanged = False
         self.lmgr._setTitle()
         self.lmgr.displayIndex = 0
