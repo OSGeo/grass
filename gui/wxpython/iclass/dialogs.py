@@ -701,10 +701,10 @@ class IClassSignatureFileDialog(wx.Dialog):
         btnSizer.Realize()
 
         sizer.Add(dataSizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         sizer.Add(btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
         sizer.Fit(self)
@@ -801,10 +801,10 @@ class IClassExportAreasDialog(wx.Dialog):
         btnSizer.Realize()
 
         sizer.Add(dataSizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         sizer.Add(btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+                  flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
         sizer.Fit(self)
