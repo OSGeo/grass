@@ -92,14 +92,11 @@ class GMFrame(wx.Frame):
         self.displayIndex = 0          # index value for map displays and layer trees
         self.currentPage = None       # currently selected page for layer tree notebook
         self.currentPageNum = None       # currently selected page number for layer tree notebook
-        self.cwdPath = None               # current working directory
         self.workspaceFile = workspace
+        self.cwdPath = None               # current working directory
 
         wx.Frame.__init__(self, parent=parent, id=id, size=size,
                           style=style, **kwargs)
-
-        self._giface = LayerManagerGrassInterface(self)
-
         self._setTitle()
         self.SetName("LayerManager")
 
@@ -109,6 +106,8 @@ class GMFrame(wx.Frame):
                     globalvar.ICONDIR,
                     'grass.ico'),
                 wx.BITMAP_TYPE_ICO))
+
+        self._giface = LayerManagerGrassInterface(self)
 
         menu_errors = []
 
