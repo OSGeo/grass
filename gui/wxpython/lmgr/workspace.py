@@ -83,7 +83,9 @@ class WorkspaceManager:
         # ask user to save current settings
         if self.lmgr.workspaceFile and self.workspaceChanged:
             self.Save()
-        elif self.lmgr.workspaceFile is None and any(tree.GetCount() for tree in maptrees):
+        elif self.lmgr.workspaceFile is None and any(
+            tree.GetCount() for tree in maptrees
+        ):
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(

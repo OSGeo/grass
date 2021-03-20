@@ -93,15 +93,12 @@ class GMFrame(wx.Frame):
         self.currentPage = None       # currently selected page for layer tree notebook
         self.currentPageNum = None       # currently selected page number for layer tree notebook
         self.cwdPath = None               # current working directory
+        self.workspaceFile = workspace
 
         wx.Frame.__init__(self, parent=parent, id=id, size=size,
                           style=style, **kwargs)
 
         self._giface = LayerManagerGrassInterface(self)
-
-        # workspace manager and workspace signals
-        self.workspace_manager = WorkspaceManager(lmgr=self,
-                                                  giface=self._giface)
 
         self._setTitle()
         self.SetName("LayerManager")
@@ -170,6 +167,10 @@ class GMFrame(wx.Frame):
                                  BottomDockable(False).TopDockable(True).
                                  CloseButton(False).Layer(2).
                                  BestSize((self.toolbars[toolbar].GetBestSize())))
+
+        # workspace manager
+        self.workspace_manager = WorkspaceManager(lmgr=self,
+                                                  giface=self._giface)
 
         self._auimgr.GetPane('toolbarNviz').Hide()
         # bindings
