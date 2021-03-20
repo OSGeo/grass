@@ -246,7 +246,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     # for compatibility
     layer_selected = property(fget=_getSelectedLayer)
 
-    def _recalcLyrSettingsBtnPos(self):
+    def _recalculateLayerButtonPosition(self):
         """Recalculate layer context options button position
 
         Calculates all the positions of the visible items fix
@@ -1244,14 +1244,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 layer=self.layer_selected, value=value))
         # Apply button
         dlg.applyOpacity.connect(
-            lambda: self._recalcLyrSettingsBtnPos())
+            lambda: self._recalculateLayerButtonPosition())
         dlg.CentreOnParent()
 
         if dlg.ShowModal() == wx.ID_OK:
             self.ChangeLayerOpacity(
                 layer=self.layer_selected,
                 value=dlg.GetOpacity())
-            self._recalcLyrSettingsBtnPos()
+            self._recalculateLayerButtonPosition()
         dlg.Destroy()
 
     def ChangeLayerOpacity(self, layer, value):
@@ -2057,7 +2057,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mapName, found = GetLayerNameFromCmd(dcmd)
             mapLayer = self.GetLayerInfo(layer, key='maplayer')
             self.SetItemText(layer, mapName)
-            self._recalcLyrSettingsBtnPos()
+            self._recalculateLayerButtonPosition()
 
             if not mapText or not found:
                 propwin.Hide()
