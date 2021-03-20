@@ -213,17 +213,6 @@ class GMFrame(wx.Frame):
         self.Layout()
         self.Show()
 
-        # load workspace file if requested
-        if self.workspaceFile:
-            # load given workspace file
-            if self.workspace_manager.Load(self.workspaceFile):
-                self._setTitle()
-            else:
-                self.workspaceFile = None
-        else:
-            # start default initial display
-            self.NewDisplay(show=False)
-
         # show map display widnow
         # -> OnSize() -> UpdateMap()
         for mapdisp in self.GetMapDisplay(onlyCurrent=False):
@@ -234,8 +223,6 @@ class GMFrame(wx.Frame):
 
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * .8))
-
-        self.workspace_manager.workspaceChanged = False
 
         show_menu_errors(menu_errors)
 

@@ -45,6 +45,17 @@ class WorkspaceManager:
         self.workspaceChanged = False  # track changes in workspace
         self.loadingWorkspace = False
 
+        # load workspace file if requested
+        if self.lmgr.workspaceFile:
+            # load given workspace file
+            if self.Load(self.lmgr.workspaceFile):
+                self.lmgr._setTitle()
+            else:
+                self.lmgr.workspaceFile = None
+        else:
+            # start default initial display
+            self.lmgr.NewDisplay(show=False)
+
         Debug.msg(1, "WorkspaceManager.__init__()")
 
         self._giface.workspaceChanged.connect(self.WorkspaceChanged)
@@ -53,9 +64,6 @@ class WorkspaceManager:
         "Update window title"
         if not self.workspaceChanged:
             self.workspaceChanged = True
-
-        if self.lmgr.workspaceFile:
-            self.lmgr._setTitle()
 
     def New(self):
         """Create new workspace file
