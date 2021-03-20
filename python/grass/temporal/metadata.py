@@ -23,6 +23,7 @@ for details.
 """
 from __future__ import print_function
 from .base import SQLDatabaseInterface
+from .core import get_tgis_db_version_from_metadata
 
 ###############################################################################
 
@@ -1134,7 +1135,8 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         self.D["ewres_min"] = None
         self.D["ewres_max"] = None
         self.D["aggregation_type"] = aggregation_type
-        self.D["number_of_bands"] = None
+        if get_tgis_db_version_from_metadata() > 2:
+            self.D["number_of_bands"] = None
 
     def set_aggregation_type(self, aggregation_type):
         """Set the aggregation type of the dataset (mean, min, max, ...)"""
