@@ -714,7 +714,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
     backup_howto = _(
         "Please create a backup of your temporal database "
-        "to avoid lossing data.\nSOLUTION: "
+        "to avoid losing data.\nSOLUTION: "
     )
     if tgis_db_version > 2:
         backup_howto += _(
