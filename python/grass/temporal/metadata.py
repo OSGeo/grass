@@ -242,28 +242,29 @@ class RasterMetadataBase(SQLDatabaseInterface):
     min = property(fget=get_min, fset=set_min)
     max = property(fget=get_max, fset=set_max)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        #      0123456789012345678901234567890
-        print(" | Datatype:................... " + str(self.get_datatype()))
-        print(" | Number of columns:.......... " + str(self.get_cols()))
-        print(" | Number of rows:............. " + str(self.get_rows()))
-        print(" | Number of cells:............ " + str(self.get_number_of_cells()))
-        print(" | North-South resolution:..... " + str(self.get_nsres()))
-        print(" | East-west resolution:....... " + str(self.get_ewres()))
-        print(" | Minimum value:.............. " + str(self.get_min()))
-        print(" | Maximum value:.............. " + str(self.get_max()))
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        print("datatype=" + str(self.get_datatype()))
-        print("cols=" + str(self.get_cols()))
-        print("rows=" + str(self.get_rows()))
-        print("number_of_cells=" + str(self.get_number_of_cells()))
-        print("nsres=" + str(self.get_nsres()))
-        print("ewres=" + str(self.get_ewres()))
-        print("min=" + str(self.get_min()))
-        print("max=" + str(self.get_max()))
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if shell:
+            print("datatype=" + str(self.get_datatype()))
+            print("cols=" + str(self.get_cols()))
+            print("rows=" + str(self.get_rows()))
+            print("number_of_cells=" + str(self.get_number_of_cells()))
+            print("nsres=" + str(self.get_nsres()))
+            print("ewres=" + str(self.get_ewres()))
+            print("min=" + str(self.get_min()))
+            print("max=" + str(self.get_max()))
+        else:
+            print(" | Datatype:................... " + str(self.get_datatype()))
+            print(" | Number of columns:.......... " + str(self.get_cols()))
+            print(" | Number of rows:............. " + str(self.get_rows()))
+            print(" | Number of cells:............ " + str(self.get_number_of_cells()))
+            print(" | North-South resolution:..... " + str(self.get_nsres()))
+            print(" | East-west resolution:....... " + str(self.get_ewres()))
+            print(" | Minimum value:.............. " + str(self.get_min()))
+            print(" | Maximum value:.............. " + str(self.get_max()))
 
 
 ###############################################################################
@@ -369,23 +370,17 @@ class RasterMetadata(RasterMetadataBase):
 
     band_reference = property(fget=get_band_reference, fset=set_band_reference)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        print(
-            " +-------------------- Metadata information ----------------------------------+"
-        )
-        #      0123456789012345678901234567890
-        RasterMetadataBase.print_info(self)
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        super()._print_info_body(shell)
         # band reference section (raster specific only)
-        print(" | Band reference:............. " + str(self.get_band_reference()))
-
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        RasterMetadataBase.print_shell_info(self)
-
-        # band reference section (raster specific only)
-        print("band_reference=" + str(self.get_band_reference()))
+        if shell:
+            print("band_reference=" + str(self.get_band_reference()))
+        else:
+            print(" | Band reference:............. " + str(self.get_band_reference()))
 
 
 ###############################################################################
@@ -522,22 +517,18 @@ class Raster3DMetadata(RasterMetadataBase):
     depths = property(fget=get_depths, fset=set_depths)
     tbres = property(fget=get_tbres, fset=set_tbres)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        print(
-            " +-------------------- Metadata information ----------------------------------+"
-        )
-        #      0123456789012345678901234567890
-        RasterMetadataBase.print_info(self)
-        #      0123456789012345678901234567890
-        print(" | Number of depths:........... " + str(self.get_depths()))
-        print(" | Top-Bottom resolution:...... " + str(self.get_tbres()))
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        RasterMetadataBase.print_shell_info(self)
-        print("depths=" + str(self.get_depths()))
-        print("tbres=" + str(self.get_tbres()))
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        super()._print_info_body(shell)
+        if shell:
+            print("depths=" + str(self.get_depths()))
+            print("tbres=" + str(self.get_tbres()))
+        else:
+            print(" | Number of depths:........... " + str(self.get_depths()))
+            print(" | Top-Bottom resolution:...... " + str(self.get_tbres()))
 
 
 ###############################################################################
@@ -847,41 +838,53 @@ class VectorMetadata(SQLDatabaseInterface):
     number_of_holes = property(fget=get_number_of_holes, fset=set_number_of_holes)
     number_of_volumes = property(fget=get_number_of_volumes, fset=set_number_of_volumes)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        #      0123456789012345678901234567890
-        print(
-            " +-------------------- Metadata information ----------------------------------+"
-        )
-        print(" | Is map 3d .................. " + str(self.get_3d_info()))
-        print(" | Number of points ........... " + str(self.get_number_of_points()))
-        print(" | Number of lines ............ " + str(self.get_number_of_lines()))
-        print(" | Number of boundaries ....... " + str(self.get_number_of_boundaries()))
-        print(" | Number of centroids ........ " + str(self.get_number_of_centroids()))
-        print(" | Number of faces ............ " + str(self.get_number_of_faces()))
-        print(" | Number of kernels .......... " + str(self.get_number_of_kernels()))
-        print(" | Number of primitives ....... " + str(self.get_number_of_primitives()))
-        print(" | Number of nodes ............ " + str(self.get_number_of_nodes()))
-        print(" | Number of areas ............ " + str(self.get_number_of_areas()))
-        print(" | Number of islands .......... " + str(self.get_number_of_islands()))
-        print(" | Number of holes ............ " + str(self.get_number_of_holes()))
-        print(" | Number of volumes .......... " + str(self.get_number_of_volumes()))
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        print("is_3d=" + str(self.get_3d_info()))
-        print("points=" + str(self.get_number_of_points()))
-        print("lines=" + str(self.get_number_of_lines()))
-        print("boundaries=" + str(self.get_number_of_boundaries()))
-        print("centroids=" + str(self.get_number_of_centroids()))
-        print("faces=" + str(self.get_number_of_faces()))
-        print("kernels=" + str(self.get_number_of_kernels()))
-        print("primitives=" + str(self.get_number_of_primitives()))
-        print("nodes=" + str(self.get_number_of_nodes()))
-        print("areas=" + str(self.get_number_of_areas()))
-        print("islands=" + str(self.get_number_of_islands()))
-        print("holes=" + str(self.get_number_of_holes()))
-        print("volumes=" + str(self.get_number_of_volumes()))
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if shell:
+            print("is_3d=" + str(self.get_3d_info()))
+            print("points=" + str(self.get_number_of_points()))
+            print("lines=" + str(self.get_number_of_lines()))
+            print("boundaries=" + str(self.get_number_of_boundaries()))
+            print("centroids=" + str(self.get_number_of_centroids()))
+            print("faces=" + str(self.get_number_of_faces()))
+            print("kernels=" + str(self.get_number_of_kernels()))
+            print("primitives=" + str(self.get_number_of_primitives()))
+            print("nodes=" + str(self.get_number_of_nodes()))
+            print("areas=" + str(self.get_number_of_areas()))
+            print("islands=" + str(self.get_number_of_islands()))
+            print("holes=" + str(self.get_number_of_holes()))
+            print("volumes=" + str(self.get_number_of_volumes()))
+        else:
+            print(" | Is map 3d .................. " + str(self.get_3d_info()))
+            print(" | Number of points ........... " + str(self.get_number_of_points()))
+            print(" | Number of lines ............ " + str(self.get_number_of_lines()))
+            print(
+                " | Number of boundaries ....... "
+                + str(self.get_number_of_boundaries())
+            )
+            print(
+                " | Number of centroids ........ " + str(self.get_number_of_centroids())
+            )
+            print(" | Number of faces ............ " + str(self.get_number_of_faces()))
+            print(
+                " | Number of kernels .......... " + str(self.get_number_of_kernels())
+            )
+            print(
+                " | Number of primitives ....... "
+                + str(self.get_number_of_primitives())
+            )
+            print(" | Number of nodes ............ " + str(self.get_number_of_nodes()))
+            print(" | Number of areas ............ " + str(self.get_number_of_areas()))
+            print(
+                " | Number of islands .......... " + str(self.get_number_of_islands())
+            )
+            print(" | Number of holes ............ " + str(self.get_number_of_holes()))
+            print(
+                " | Number of volumes .......... " + str(self.get_number_of_volumes())
+            )
 
 
 ###############################################################################
@@ -997,20 +1000,49 @@ class STDSMetadataBase(SQLDatabaseInterface):
     description = property(fget=get_description, fset=set_description)
     number_of_maps = property(fget=get_number_of_maps)
 
-    def print_info_tail(self):
+    def print_info(self):
         """Print information about this class in human readable style"""
-        #      0123456789012345678901234567890
-        print(" | Number of registered maps:.. " + str(self.get_number_of_maps()))
-        print(" |")
-        print(" | Title:")
-        print(" | " + str(self.get_title()))
-        print(" | Description:")
-        print(" | " + str(self.get_description()))
-        print(" | Command history:")
-        command = self.get_command()
-        if command:
-            for token in command.split("\n"):
-                print(" | " + str(token))
+        self._print_info_head(shell=False)
+        self._print_info_body(shell=False)
+        self._print_info_tail(shell=False)
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        self._print_info_head(shell=True)
+        self._print_info_body(shell=True)
+        self._print_info_tail(shell=True)
+
+    def _print_info_head(self, shell=False):
+        """Print information about this class (head part).
+
+        No header printed in shell style mode.
+
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if not shell:
+            print(
+                " +-------------------- Metadata information ----------------------------------+"
+            )
+
+    def _print_info_tail(self, shell=False):
+        """Print information about this class (tail part).
+
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if shell:
+            print("number_of_maps=" + str(self.get_number_of_maps()))
+        else:
+            print(" | Number of registered maps:.. " + str(self.get_number_of_maps()))
+            print(" |")
+            print(" | Title:")
+            print(" | " + str(self.get_title()))
+            print(" | Description:")
+            print(" | " + str(self.get_description()))
+            print(" | Command history:")
+            command = self.get_command()
+            if command:
+                for token in command.split("\n"):
+                    print(" | " + str(token))
 
     def print_history(self):
         """Print history information about this class in human readable
@@ -1042,10 +1074,6 @@ class STDSMetadataBase(SQLDatabaseInterface):
                         print(token + " \\")
                     else:
                         print(token)
-
-    def print_shell_info_tail(self):
-        """Print information about this class in shell style"""
-        print("number_of_maps=" + str(self.get_number_of_maps()))
 
 
 ###############################################################################
@@ -1237,30 +1265,31 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     max_max = property(fget=get_max_max)
     aggregation_type = property(fset=set_aggregation_type, fget=get_aggregation_type)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        #      0123456789012345678901234567890
-        print(" | North-South resolution min:. " + str(self.get_nsres_min()))
-        print(" | North-South resolution max:. " + str(self.get_nsres_max()))
-        print(" | East-west resolution min:... " + str(self.get_ewres_min()))
-        print(" | East-west resolution max:... " + str(self.get_ewres_max()))
-        print(" | Minimum value min:.......... " + str(self.get_min_min()))
-        print(" | Minimum value max:.......... " + str(self.get_min_max()))
-        print(" | Maximum value min:.......... " + str(self.get_max_min()))
-        print(" | Maximum value max:.......... " + str(self.get_max_max()))
-        print(" | Aggregation type:........... " + str(self.get_aggregation_type()))
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        print("nsres_min=" + str(self.get_nsres_min()))
-        print("nsres_max=" + str(self.get_nsres_max()))
-        print("ewres_min=" + str(self.get_ewres_min()))
-        print("ewres_max=" + str(self.get_ewres_max()))
-        print("min_min=" + str(self.get_min_min()))
-        print("min_max=" + str(self.get_min_max()))
-        print("max_min=" + str(self.get_max_min()))
-        print("max_max=" + str(self.get_max_max()))
-        print("aggregation_type=" + str(self.get_aggregation_type()))
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if shell:
+            print("nsres_min=" + str(self.get_nsres_min()))
+            print("nsres_max=" + str(self.get_nsres_max()))
+            print("ewres_min=" + str(self.get_ewres_min()))
+            print("ewres_max=" + str(self.get_ewres_max()))
+            print("min_min=" + str(self.get_min_min()))
+            print("min_max=" + str(self.get_min_max()))
+            print("max_min=" + str(self.get_max_min()))
+            print("max_max=" + str(self.get_max_max()))
+            print("aggregation_type=" + str(self.get_aggregation_type()))
+        else:
+            print(" | North-South resolution min:. " + str(self.get_nsres_min()))
+            print(" | North-South resolution max:. " + str(self.get_nsres_max()))
+            print(" | East-west resolution min:... " + str(self.get_ewres_min()))
+            print(" | East-west resolution max:... " + str(self.get_ewres_max()))
+            print(" | Minimum value min:.......... " + str(self.get_min_min()))
+            print(" | Minimum value max:.......... " + str(self.get_min_max()))
+            print(" | Maximum value min:.......... " + str(self.get_max_min()))
+            print(" | Maximum value max:.......... " + str(self.get_max_max()))
+            print(" | Aggregation type:........... " + str(self.get_aggregation_type()))
 
 
 ###############################################################################
@@ -1370,23 +1399,20 @@ class STRDSMetadata(STDSRasterMetadataBase):
     raster_register = property(fget=get_raster_register, fset=set_raster_register)
     number_of_bands = property(fget=get_number_of_bands)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        print(
-            " +-------------------- Metadata information ----------------------------------+"
-        )
-        #      0123456789012345678901234567890
-        print(" | Raster register table:...... " + str(self.get_raster_register()))
-        super().print_info()
-        print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
-        super().print_info_tail()
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        print("raster_register=" + str(self.get_raster_register()))
-        super().print_shell_info()
-        print("number_of_bands=" + str(self.get_number_of_bands()))
-        super().print_shell_info_tail()
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if shell:
+            print("raster_register=" + str(self.get_raster_register()))
+        else:
+            print(" | Raster register table:...... " + str(self.get_raster_register()))
+        super()._print_info_body(shell)
+        if shell:
+            print("number_of_bands=" + str(self.get_number_of_bands()))
+        else:
+            print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
 
 
 ###############################################################################
@@ -1514,26 +1540,22 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     tbres_min = property(fget=get_tbres_min)
     tbres_max = property(fget=get_tbres_max)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        print(
-            " +-------------------- Metadata information ----------------------------------+"
-        )
-        #      0123456789012345678901234567890
-        #      0123456789012345678901234567890
-        print(" | 3D raster register table:... " + str(self.get_raster3d_register()))
-        print(" | Top-bottom resolution min:.. " + str(self.get_ewres_min()))
-        print(" | Top-bottom resolution max:.. " + str(self.get_ewres_max()))
-        super().print_info()
-        super().print_info_tail()
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        print("raster3d_register=" + str(self.get_raster3d_register()))
-        print("tbres_min=" + str(self.get_tbres_min()))
-        print("tbres_max=" + str(self.get_tbres_max()))
-        super().print_shell_info()
-        super().print_shell_info_tail()
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if shell:
+            print("raster3d_register=" + str(self.get_raster3d_register()))
+            print("tbres_min=" + str(self.get_tbres_min()))
+            print("tbres_max=" + str(self.get_tbres_max()))
+        else:
+            print(
+                " | 3D raster register table:... " + str(self.get_raster3d_register())
+            )
+            print(" | Top-bottom resolution min:.. " + str(self.get_ewres_min()))
+            print(" | Top-bottom resolution max:.. " + str(self.get_ewres_max()))
+        super()._print_info_body(shell)
 
 
 ###############################################################################
@@ -1781,43 +1803,39 @@ class STVDSMetadata(STDSMetadataBase):
     number_of_holes = property(fget=get_number_of_holes)
     number_of_volumes = property(fget=get_number_of_volumes)
 
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        print(
-            " +-------------------- Metadata information ----------------------------------+"
-        )
-        #      0123456789012345678901234567890
-        print(" | Vector register table:...... " + str(self.get_vector_register()))
-        print(" | Number of points ........... " + str(self.number_of_points))
-        print(" | Number of lines ............ " + str(self.number_of_lines))
-        print(" | Number of boundaries ....... " + str(self.number_of_boundaries))
-        print(" | Number of centroids ........ " + str(self.number_of_centroids))
-        print(" | Number of faces ............ " + str(self.number_of_faces))
-        print(" | Number of kernels .......... " + str(self.number_of_kernels))
-        print(" | Number of primitives ....... " + str(self.number_of_primitives))
-        print(" | Number of nodes ............ " + str(self.number_of_nodes))
-        print(" | Number of areas ............ " + str(self.number_of_areas))
-        print(" | Number of islands .......... " + str(self.number_of_islands))
-        print(" | Number of holes ............ " + str(self.number_of_holes))
-        print(" | Number of volumes .......... " + str(self.number_of_volumes))
-        super().print_info_tail()
+    def _print_info_body(self, shell=False):
+        """Print information about this class (body part).
 
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        print("vector_register=" + str(self.get_vector_register()))
-        print("points=" + str(self.get_number_of_points()))
-        print("lines=" + str(self.get_number_of_lines()))
-        print("boundaries=" + str(self.get_number_of_boundaries()))
-        print("centroids=" + str(self.get_number_of_centroids()))
-        print("faces=" + str(self.get_number_of_faces()))
-        print("kernels=" + str(self.get_number_of_kernels()))
-        print("primitives=" + str(self.get_number_of_primitives()))
-        print("nodes=" + str(self.get_number_of_nodes()))
-        print("areas=" + str(self.get_number_of_areas()))
-        print("islands=" + str(self.get_number_of_islands()))
-        print("holes=" + str(self.get_number_of_holes()))
-        print("volumes=" + str(self.get_number_of_volumes()))
-        super().print_shell_info_tail()
+        :param bool shell: True for human readable style otherwise shell style
+        """
+        if shell:
+            print("vector_register=" + str(self.get_vector_register()))
+            print("points=" + str(self.get_number_of_points()))
+            print("lines=" + str(self.get_number_of_lines()))
+            print("boundaries=" + str(self.get_number_of_boundaries()))
+            print("centroids=" + str(self.get_number_of_centroids()))
+            print("faces=" + str(self.get_number_of_faces()))
+            print("kernels=" + str(self.get_number_of_kernels()))
+            print("primitives=" + str(self.get_number_of_primitives()))
+            print("nodes=" + str(self.get_number_of_nodes()))
+            print("areas=" + str(self.get_number_of_areas()))
+            print("islands=" + str(self.get_number_of_islands()))
+            print("holes=" + str(self.get_number_of_holes()))
+            print("volumes=" + str(self.get_number_of_volumes()))
+        else:
+            print(" | Vector register table:...... " + str(self.get_vector_register()))
+            print(" | Number of points ........... " + str(self.number_of_points))
+            print(" | Number of lines ............ " + str(self.number_of_lines))
+            print(" | Number of boundaries ....... " + str(self.number_of_boundaries))
+            print(" | Number of centroids ........ " + str(self.number_of_centroids))
+            print(" | Number of faces ............ " + str(self.number_of_faces))
+            print(" | Number of kernels .......... " + str(self.number_of_kernels))
+            print(" | Number of primitives ....... " + str(self.number_of_primitives))
+            print(" | Number of nodes ............ " + str(self.number_of_nodes))
+            print(" | Number of areas ............ " + str(self.number_of_areas))
+            print(" | Number of islands .......... " + str(self.number_of_islands))
+            print(" | Number of holes ............ " + str(self.number_of_holes))
+            print(" | Number of volumes .......... " + str(self.number_of_volumes))
 
 
 ###############################################################################
