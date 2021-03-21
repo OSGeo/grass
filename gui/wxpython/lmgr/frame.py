@@ -92,11 +92,16 @@ class GMFrame(wx.Frame):
         self.displayIndex = 0          # index value for map displays and layer trees
         self.currentPage = None       # currently selected page for layer tree notebook
         self.currentPageNum = None       # currently selected page number for layer tree notebook
-        self.workspaceFile = workspace
         self.cwdPath = None               # current working directory
 
         wx.Frame.__init__(self, parent=parent, id=id, size=size,
                           style=style, **kwargs)
+
+        self._giface = LayerManagerGrassInterface(self)
+
+        # workspace manager
+        self.workspace_manager = WorkspaceManager(lmgr=self,
+                                                  giface=self._giface)
         self._setTitle()
         self.SetName("LayerManager")
 
@@ -106,8 +111,6 @@ class GMFrame(wx.Frame):
                     globalvar.ICONDIR,
                     'grass.ico'),
                 wx.BITMAP_TYPE_ICO))
-
-        self._giface = LayerManagerGrassInterface(self)
 
         menu_errors = []
 
@@ -167,10 +170,6 @@ class GMFrame(wx.Frame):
                                  CloseButton(False).Layer(2).
                                  BestSize((self.toolbars[toolbar].GetBestSize())))
 
-        # workspace manager
-        self.workspace_manager = WorkspaceManager(lmgr=self,
-                                                  giface=self._giface)
-
         self._auimgr.GetPane('toolbarNviz').Hide()
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
@@ -213,6 +212,13 @@ class GMFrame(wx.Frame):
         self.Layout()
         self.Show()
 
+        # load workspace file if requested
+        if workspace and self.workspace_manager.Load(workspace):
+            self._setTitle()
+        else:
+            # start default initial display
+            self.NewDisplay(show=False)
+
         # show map display widnow
         # -> OnSize() -> UpdateMap()
         for mapdisp in self.GetMapDisplay(onlyCurrent=False):
@@ -238,8 +244,8 @@ class GMFrame(wx.Frame):
         gisenv = grass.gisenv()
         location = gisenv["LOCATION_NAME"]
         mapset = gisenv["MAPSET"]
-        if self.workspaceFile:
-            filename = os.path.splitext(os.path.basename(self.workspaceFile))[0]
+        if self.workspace_manager.workspaceFile:
+            filename = os.path.splitext(os.path.basename(self.workspace_manager.workspaceFile))[0]
             self.SetTitle(
                 "{workspace} - {location}/{mapset} - {program}".format(
                     location=location,
@@ -684,7 +690,7 @@ class GMFrame(wx.Frame):
         maptree = self.GetLayerTree()
         if self.workspace_manager.workspaceChanged and UserSettings.Get(
                 group='manager', key='askOnQuit', subkey='enabled'):
-            if self.workspaceFile:
+            if self.workspace_manager.workspaceFile:
                 message = _("Do you want to save changes in the workspace?")
             else:
                 message = _("Do you want to store current settings "
@@ -700,10 +706,10 @@ class GMFrame(wx.Frame):
                 ret = dlg.ShowModal()
                 dlg.Destroy()
                 if ret == wx.ID_YES:
-                    if not self.workspaceFile:
+                    if not self.workspace_manager.workspaceFile:
                         self.OnWorkspaceSaveAs()
                     else:
-                        self.SaveToWorkspaceFile(self.workspaceFile)
+                        self.SaveToWorkspaceFile(self.workspace_manager.workspaceFile)
                 elif ret == wx.ID_CANCEL:
                     return False
         return True

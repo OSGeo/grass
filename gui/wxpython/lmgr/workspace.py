@@ -41,20 +41,10 @@ class WorkspaceManager:
     def __init__(self, lmgr, giface):
 
         self.lmgr = lmgr
+        self.workspaceFile = None
         self._giface = giface
         self.workspaceChanged = False  # track changes in workspace
         self.loadingWorkspace = False
-
-        # load workspace file if requested
-        if self.lmgr.workspaceFile:
-            # load given workspace file
-            if self.Load(self.lmgr.workspaceFile):
-                self.lmgr._setTitle()
-            else:
-                self.lmgr.workspaceFile = None
-        else:
-            # start default initial display
-            self.lmgr.NewDisplay(show=False)
 
         Debug.msg(1, "WorkspaceManager.__init__()")
 
@@ -62,8 +52,7 @@ class WorkspaceManager:
 
     def WorkspaceChanged(self):
         "Update window title"
-        if not self.workspaceChanged:
-            self.workspaceChanged = True
+        self.workspaceChanged = True
 
     def New(self):
         """Create new workspace file
@@ -81,9 +70,9 @@ class WorkspaceManager:
         ]
 
         # ask user to save current settings
-        if self.lmgr.workspaceFile and self.workspaceChanged:
+        if self.workspaceFile and self.workspaceChanged:
             self.Save()
-        elif self.lmgr.workspaceFile is None and any(
+        elif self.workspaceFile is None and any(
             tree.GetCount() for tree in maptrees
         ):
             dlg = wx.MessageDialog(
@@ -114,7 +103,7 @@ class WorkspaceManager:
             for overlayId in display.decorations.keys():
                 display.RemoveOverlay(overlayId)
 
-        self.lmgr.workspaceFile = None
+        self.workspaceFile = None
         self.workspaceChanged = False
         self.lmgr._setTitle()
 
@@ -141,7 +130,6 @@ class WorkspaceManager:
         self.loadingWorkspace = True
         self.Load(filename)
         self.loadingWorkspace = False
-        self.lmgr.workspaceFile = filename
         self.lmgr._setTitle()
 
     def _tryToSwitchMapsetFromWorkspaceFile(self, gxwXml):
@@ -363,6 +351,7 @@ class WorkspaceManager:
                 self.lmgr.nvizUpdateSettings()
                 mapdisplay[i].toolbars["map"].combo.SetSelection(1)
 
+        self.workspaceFile = filename
         return True
 
     def SaveAs(self):
@@ -404,19 +393,19 @@ class WorkspaceManager:
         Debug.msg(4, "WorkspaceManager.SaveAs(): filename=%s" % filename)
 
         self.SaveToFile(filename)
-        self.lmgr.workspaceFile = filename
+        self.workspaceFile = filename
         self.lmgr._setTitle()
 
     def Save(self):
         """Save file with workspace definition"""
-        if self.lmgr.workspaceFile:
+        if self.workspaceFile:
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(
                     "Workspace file <%s> already exists. "
                     "Do you want to overwrite this file?"
                 )
-                % self.lmgr.workspaceFile,
+                % self.workspaceFile,
                 caption=_("Save workspace"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
@@ -424,9 +413,9 @@ class WorkspaceManager:
                 dlg.Destroy()
             else:
                 Debug.msg(
-                    4, "WorkspaceManager.Save(): filename=%s" % self.lmgr.workspaceFile
+                    4, "WorkspaceManager.Save(): filename=%s" % self.workspaceFile
                 )
-                self.SaveToFile(self.lmgr.workspaceFile)
+                self.SaveToFile(self.workspaceFile)
                 self.lmgr._setTitle()
                 self.workspaceChanged = False
         else:
@@ -466,10 +455,10 @@ class WorkspaceManager:
         """Close file with workspace definition
         If workspace has been modified ask user to save the changes.
         """
-        Debug.msg(4, "WorkspaceManager.Close(): file=%s" % self.lmgr.workspaceFile)
+        Debug.msg(4, "WorkspaceManager.Close(): file=%s" % self.workspaceFile)
 
         self.lmgr.DisplayCloseAll()
-        self.lmgr.workspaceFile = None
+        self.workspaceFile = None
         self.workspaceChanged = False
         self.lmgr._setTitle()
         self.lmgr.displayIndex = 0
