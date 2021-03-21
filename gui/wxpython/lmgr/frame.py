@@ -213,8 +213,9 @@ class GMFrame(wx.Frame):
         self.Show()
 
         # load workspace file if requested
-        if workspace and self.workspace_manager.Load(workspace):
-            self._setTitle()
+        if workspace:
+            if self.workspace_manager.Load(workspace):
+                self._setTitle()
         else:
             # start default initial display
             self.NewDisplay(show=False)
