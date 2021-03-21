@@ -198,17 +198,30 @@ def print_gridded_dataset_univar_statistics_over_zones(
             label = label.replace('/', '_')
             zonal_output = output + '_' + label
 
-        # get statistics
-        print_gridded_dataset_univar_statistics(
-                "strds",
-                input=input,
-                output=zonal_output,
-                where=where,
-                extended=extended,
-                no_header=no_header,
-                fs=fs,
-                rast_region=rast_region,
-        )
+            # get statistics
+            print_gridded_dataset_univar_statistics(
+                    "strds",
+                    input=input,
+                    output=zonal_output,
+                    where=where,
+                    extended=extended,
+                    no_header=no_header,
+                    fs=fs,
+                    rast_region=rast_region,
+            )
+        else:
+            # get statistics
+            print_gridded_dataset_univar_statistics(
+                    "strds",
+                    input,
+                    output,
+                    where,
+                    extended,
+                    no_header,
+                    fs,
+                    rast_region,
+            )
+
 
         gscript.message('\n')
 
@@ -217,9 +230,6 @@ def print_gridded_dataset_univar_statistics_over_zones(
         gscript.run_command('r.mask', quiet=True, flags='r')
     except CalledModuleError:
         gscript.fatal(_('%s failed') % 'r.mask')
-
-    gscript.message('')
-
 
 ##############################################################################
 
