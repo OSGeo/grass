@@ -31,6 +31,12 @@
 #%option G_OPT_STRDS_INPUT
 #%end
 
+#%option G_OPT_R_INPUT
+#% key: zones
+#% description: Raster map used for zoning, must be of type CELL
+#% required: no
+#%end
+
 #%option G_OPT_F_OUTPUT
 #% required: no
 #%end
@@ -72,6 +78,7 @@ def main():
 
     # Get the options
     input = options["input"]
+    zones = options["zones"]
     output = options["output"]
     where = options["where"]
     extended = flags["e"]
