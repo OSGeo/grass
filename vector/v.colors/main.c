@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
     } opt;
 
     int layer;
-    int overwrite, remove, is_from_stdin, stat, have_colors, convert, use;
+    int overwrite, remove, is_from_stdin, stat, have_colors, convert,
+	invert, use;
     const char *mapset, *cmapset;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
     char *name;
@@ -188,6 +189,7 @@ int main(int argc, char *argv[])
     attrcolumn = opt.attrcol->answer;
     rgbcolumn = opt.rgbcol->answer;
     convert = flag.c->answer;
+    invert = flag.n->answer;
     use = USE_CAT;
     if (opt.use->answer) {
         switch (opt.use->answer[0]) {
@@ -297,17 +299,17 @@ int main(int argc, char *argv[])
 	if (use == USE_CAT) {
 	    scan_cats(&Map, layer, style, rules,
 		      opt.range->answer ? &range : NULL,
-		      &colors);
+		      &colors, invert);
         }
         else if (use == USE_Z) {
 	    scan_z(&Map, layer, style, rules,
 		      opt.range->answer ? &range : NULL,
-		      &colors);
+		      &colors, invert);
         }
         else {
 	    scan_attr(&Map, layer, attrcolumn, style, rules,
 		      opt.range->answer ? &range : NULL,
-		      &colors, NULL);
+		      &colors, NULL, invert);
 	}
     }
     else {
@@ -332,12 +334,11 @@ int main(int argc, char *argv[])
 	    colors_tmp = colors;
 	    scan_attr(&Map, layer, attrcolumn, style, rules,
 		      opt.range->answer ? &range : NULL,
-		      &colors, &colors_tmp);
+		      &colors, &colors_tmp, invert);
 	}
+	else if (invert)
+	    Rast_invert_colors(&colors);
     }
-
-    if (flag.n->answer)
-        Rast_invert_colors(&colors);
 
     /* TODO ?
     if (flag.e->answer) {

@@ -6,7 +6,7 @@
 
 void scan_z(struct Map_info *Map, int field,
             const char *style, const char *rules,
-            const struct FPRange *range, struct Colors *colors)
+            const struct FPRange *range, struct Colors *colors, int invert)
 {
     int ltype, line, cat, i, found;
     int items_alloc;
@@ -83,10 +83,9 @@ void scan_z(struct Map_info *Map, int field,
     }
 
     /* color table for categories */
-    color_rules_to_cats(&cvarr, TRUE, &vcolors, colors);
+    color_rules_to_cats(&cvarr, TRUE, &vcolors, colors, invert, zmin, zmax);
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
     db_CatValArray_free(&cvarr);
-
 }
