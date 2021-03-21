@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 	/* ************************************************************ */
 	/* set up external memory mode */
 	/* setup STREAM_DIR if not already set */
-	char buf[1000];
+    char buf[GPATH_MAX + 256];
 
 	if (getenv(STREAM_TMPDIR) != NULL) {
 	    /*if already set */

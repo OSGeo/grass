@@ -669,7 +669,7 @@ void AMI_STREAM<T>::persist(persistence p)  {
 // if you are careful.
 template<class T>
 char *AMI_STREAM<T>::sprint()  {
-  static char desc[BUFSIZ];
+  static char desc[BUFSIZ + 256];
   sprintf(desc, "[AMI_STREAM %s %ld]", path, (long)stream_len());
   return desc;
 }

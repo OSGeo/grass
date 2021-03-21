@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     double Thres_j, Thres_d, ew_resol, ns_resol;
     double minNS, minEW, maxNS, maxEW;
     const char *mapset;
-    char buf[1024], table_name[GNAME_MAX];
+    char buf[1024], table_name[GNAME_MAX + 64];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int colorBordo, ripieno, conta, lungPunti, lungHull, xi, c1, c2;

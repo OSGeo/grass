@@ -352,7 +352,8 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 					   int field, const char *field_name, int type)
 {
     struct field_info *fi;
-    char buf[GNAME_MAX], buf2[GNAME_MAX];
+    char buf[GNAME_MAX];
+    char *buf2;
     const char *schema;
     dbConnection connection;
 
@@ -418,8 +419,8 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
     }
     schema = connection.schemaName;
     if (schema && strlen(schema) > 0) {
-	sprintf(buf2, "%s.%s", schema, buf);
-	fi->table = G_store(buf2);
+        G_asprintf(&buf2, "%s.%s", schema, buf);
+        fi->table = buf2;
     }
     else {
 	fi->table = G_store(buf);

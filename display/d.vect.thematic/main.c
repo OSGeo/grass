@@ -647,7 +647,7 @@ int cmp(const void *a, const void *b)
 char *icon_files(void)
 {
     char **list, *ret;
-    char buf[GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
+    char buf[GNAME_MAX + GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
     int i, count;
     size_t len;
     DIR *dir, *dir_i;

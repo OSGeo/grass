@@ -4,7 +4,7 @@
 
 int get_control_points(struct Image_Group *group, int order)
 {
-    char msg[200];
+    char msg[GNAME_MAX + GMAPSET_MAX + 64];
 
     if (!I_get_control_points(group->name, &group->control_points))
 	exit(0);
