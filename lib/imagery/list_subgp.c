@@ -17,8 +17,8 @@
 
 char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
 {
-    /* Unlike I_list_subgroup and I_list_subgroup_simple this function 
-       returns array of subgroup names, it does not use fprintf. 
+    /* Unlike I_list_subgroup and I_list_subgroup_simple this function
+       returns array of subgroup names, it does not use fprintf.
        This approach should make the function usable in more cases. */
 
     char **subgs;
@@ -29,13 +29,13 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
     *subgs_num = 0;
 
     if (I_find_group2(group, mapset) == 0)
-	return NULL;
+        return NULL;
 
     sprintf(buf, "group/%s/subgroup", group);
     G_file_name(path, buf, "", mapset);
 
     if (G_lstat(path, &sb) || !S_ISDIR(sb.st_mode))
-	return NULL;
+        return NULL;
 
     subgs = G_ls2(path, subgs_num);
     return subgs;
@@ -43,7 +43,7 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
 
 /*!
  * \brief Get list of subgroups which a group contatins.
- *  
+ *
  * \param group group name
  * \param[out] subgs_num number of subgroups which the group contains
  * \return array of subgroup names
@@ -51,20 +51,21 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
 
 char **I_list_subgroups(const char *group, int *subgs_num)
 {
-    
+
     return list_subgroups(group, G_mapset(), subgs_num);
 }
 
 /*!
  * \brief Get list of subgroups which a group contatins.
- *  
+ *
  * \param group group name
  * \param mapset mapset name
  * \param[out] subgs_num number of subgroups which the group contains
  * \return array of subgroup names
  */
 
-char **I_list_subgroups2(const char *group, const char *mapset, int *subgs_num)
+char **I_list_subgroups2(const char *group, const char *mapset,
+                         int *subgs_num)
 {
     return list_subgroups(group, mapset, subgs_num);
 }
@@ -78,8 +79,8 @@ char **I_list_subgroups2(const char *group, const char *mapset, int *subgs_num)
  * \param fd where to print (typically stdout)
  * \return 0
  */
-int I_list_subgroup(const char *group,
-		    const char *subgroup, const struct Ref *ref, FILE * fd)
+int I_list_subgroup(const char *group, const char *subgroup,
+                    const struct Ref *ref, FILE * fd)
 {
     char buf[80];
     int i;
@@ -87,34 +88,33 @@ int I_list_subgroup(const char *group,
     int max;
 
     if (ref->nfiles <= 0) {
-	fprintf(fd, _("subgroup <%s> of group <%s> is empty\n"),
-		subgroup, group);
-	return 0;
+        fprintf(fd, _("subgroup <%s> of group <%s> is empty\n"),
+                subgroup, group);
+        return 0;
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
-	len = strlen(buf) + 4;
-	if (len > max)
-	    max = len;
+        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        len = strlen(buf) + 4;
+        if (len > max)
+            max = len;
     }
     fprintf(fd,
-	    _
-	    ("subgroup <%s> of group <%s> references the following raster maps\n"),
-	    subgroup, group);
+            _("subgroup <%s> of group <%s> references the following raster maps\n"),
+            subgroup, group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
-	tot_len += max;
-	if (tot_len > 78) {
-	    fprintf(fd, "\n");
-	    tot_len = max;
-	}
-	fprintf(fd, "%-*s", max, buf);
+        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        tot_len += max;
+        if (tot_len > 78) {
+            fprintf(fd, "\n");
+            tot_len = max;
+        }
+        fprintf(fd, "%-*s", max, buf);
     }
     if (tot_len)
-	fprintf(fd, "\n");
+        fprintf(fd, "\n");
     fprintf(fd, "-------------\n");
 
     return 0;

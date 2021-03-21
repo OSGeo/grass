@@ -1,15 +1,15 @@
 /*!
-  \file list_gp.c
-  
-  \brief Imagery Library - List group
-  
-  (C) 2001-2008 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author USA CERL
-*/
+   \file list_gp.c
+
+   \brief Imagery Library - List group
+
+   (C) 2001-2008 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author USA CERL
+ */
 
 #include <string.h>
 #include <grass/imagery.h>
@@ -31,30 +31,31 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
     int max;
 
     if (ref->nfiles <= 0) {
-	fprintf(fd, _("group <%s> is empty\n"), group);
-	return 0;
+        fprintf(fd, _("group <%s> is empty\n"), group);
+        return 0;
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
-	len = strlen(buf) + 4;
-	if (len > max)
-	    max = len;
+        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        len = strlen(buf) + 4;
+        if (len > max)
+            max = len;
     }
-    fprintf(fd, _("group <%s> references the following raster maps\n"), group);
+    fprintf(fd, _("group <%s> references the following raster maps\n"),
+            group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-	sprintf(buf, "<%s@%s>", ref->file[i].name, ref->file[i].mapset);
-	tot_len += max;
-	if (tot_len > 78) {
-	    fprintf(fd, "\n");
-	    tot_len = max;
-	}
-	fprintf(fd, "%-*s", max, buf);
+        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        tot_len += max;
+        if (tot_len > 78) {
+            fprintf(fd, "\n");
+            tot_len = max;
+        }
+        fprintf(fd, "%-*s", max, buf);
     }
     if (tot_len)
-	fprintf(fd, "\n");
+        fprintf(fd, "\n");
     fprintf(fd, "-------------\n");
 
     return 0;
@@ -75,10 +76,45 @@ int I_list_group_simple(const struct Ref *ref, FILE * fd)
     int i;
 
     if (ref->nfiles <= 0)
-	return 0;
+        return 0;
 
     for (i = 0; i < ref->nfiles; i++)
-	fprintf(fd, "%s@%s\n", ref->file[i].name, ref->file[i].mapset);
+        fprintf(fd, "%s@%s\n", ref->file[i].name, ref->file[i].mapset);
 
     return 0;
+}
+
+/*!
+ * \brief Formats map name to fit in a 80 column layout
+ *
+ * Results in a map name in the "<map@mapset>" form.
+ * If necessary truncates relevant part(s) and denotes
+ * with ellipsis, e.g. "<verylongmapname...@mapset>".
+ *
+ * \param[out] buf formatted map name
+ * \param name map name
+ * \param mapset mapset name
+ */
+void I_list_group_name_fitted(char *buf, const char *name, const char *mapset)
+{
+    char *frmt;
+    char fr[32];
+    int name_length = (int)strlen(name);
+    int mapset_length = (int)strlen(mapset);
+
+    if (name_length + mapset_length + 3 < 75) {
+        frmt = "<%s@%s>";
+    }
+    else if (name_length > 35 && mapset_length > 35) {
+        frmt = "<%.33s...@%.32s...>";
+    }
+    else if (name_length > 35) {
+        sprintf(fr, "<%%.%ds...@%%s>", 68 - mapset_length);
+        frmt = fr;
+    }
+    else {
+        sprintf(fr, "<%%s@%%.%ds...>", 68 - name_length);
+        frmt = fr;
+    }
+    snprintf(buf, 75, frmt, name, mapset);
 }
