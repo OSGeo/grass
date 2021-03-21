@@ -82,7 +82,7 @@ void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
 	    }
 	}
 	else {
-	    CELL v = invert ? (CELL)min + (CELL)max - cv->val.i : cv->val.d;
+	    CELL v = invert ? (CELL) min + (CELL) max - cv->val.i : cv->val.d;
 	    if (Rast_get_c_color((const CELL *) &v, &red, &grn, &blu,
 				 vcolors) == 0) {
 		/* G_warning(_("No color rule defined for value %d"), v); */
