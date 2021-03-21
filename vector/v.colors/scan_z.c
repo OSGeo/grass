@@ -26,7 +26,9 @@ void scan_z(struct Map_info *Map, int field,
     cvarr.ctype = DB_C_TYPE_DOUBLE;
 
     Vect_set_constraint_field(Map, field);
-    Vect_set_constraint_type(Map, GV_POINTS); /* points, centroids or kernels only) */
+
+    /* points, centroids or kernels only) */
+    Vect_set_constraint_type(Map, GV_POINTS);
 
     G_message(_("Reading features..."));
     line = i = found = 0;
@@ -78,9 +80,8 @@ void scan_z(struct Map_info *Map, int field,
 
     if (style)
 	make_colors(&vcolors, style, (DCELL) zmin, (DCELL) zmax, TRUE);
-    else if (rules) {
+    else if (rules)
 	load_colors(&vcolors, rules, (DCELL) zmin, (DCELL) zmax, TRUE);
-    }
 
     /* color table for categories */
     color_rules_to_cats(&cvarr, TRUE, &vcolors, colors, invert, zmin, zmax);

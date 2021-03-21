@@ -35,13 +35,13 @@ int main(int argc, char *argv[])
     } flag;
 
     struct {
-	struct Option *map, *field, *colr, *rast, *volume, *rules,
-          *attrcol, *rgbcol, *range, *use;
+	struct Option *map, *field, *colr, *rast, *volume, *rules, *attrcol,
+		      *rgbcol, *range, *use;
     } opt;
 
     int layer;
-    int overwrite, remove, is_from_stdin, stat, have_colors, convert,
-	invert, use;
+    int overwrite, remove, is_from_stdin, stat, have_colors, convert, invert,
+	use;
     const char *mapset, *cmapset;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
     char *name;
@@ -214,7 +214,8 @@ int main(int argc, char *argv[])
     if (use == USE_ATTR && !attrcolumn)
         G_fatal_error(_("Option <%s> required"), opt.attrcol->key);
     if (use != USE_ATTR && attrcolumn) {
-        G_important_message(_("Option <%s> given, assuming <use=attr>..."), opt.attrcol->key);
+	G_important_message(_("Option <%s> given, assuming <use=attr>..."),
+			    opt.attrcol->key);
         use = USE_ATTR;
     }
 
@@ -255,7 +256,8 @@ int main(int argc, char *argv[])
     if (remove) {
 	stat = Vect_remove_colors(name, mapset);
         if (stat < 0)
-            G_fatal_error(_("Unable to remove color table of vector map <%s>"), name);
+	    G_fatal_error(_("Unable to remove color table of vector map <%s>"),
+			  name);
         if (stat == 0)
             G_warning(_("Color table of vector map <%s> not found"), name);
         return EXIT_SUCCESS;
@@ -264,9 +266,8 @@ int main(int argc, char *argv[])
     G_suppress_warnings(TRUE);
     have_colors = Vect_read_colors(name, mapset, NULL);
 
-    if (have_colors > 0 && !overwrite) {
+    if (have_colors > 0 && !overwrite)
         G_fatal_error(_("Color table exists. Exiting."));
-    }
 
     G_suppress_warnings(FALSE);
 
@@ -376,8 +377,8 @@ int main(int argc, char *argv[])
 
     G_message(_("Color table for vector map <%s> set to '%s'"),
 	      G_fully_qualified_name(name, mapset),
-              is_from_stdin || convert ? "rules" : style ? style : rules ? rules :
-              cmap);
+              is_from_stdin || convert ? "rules" :
+	      (style ? style : (rules ? rules : cmap)));
 
     exit(EXIT_SUCCESS);
 }

@@ -5,7 +5,8 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-void make_colors(struct Colors *colors, const char *style, DCELL min, DCELL max, int is_fp)
+void make_colors(struct Colors *colors, const char *style, DCELL min, DCELL max,
+		 int is_fp)
 {
 
     G_debug(3, "make_colors(): range=%f,%f is_fp=%d", min, max, is_fp);
@@ -39,12 +40,14 @@ void make_colors(struct Colors *colors, const char *style, DCELL min, DCELL max,
     }
 }
 
-void load_colors(struct Colors *colors, const char *rules, DCELL min, DCELL max, int is_fp)
+void load_colors(struct Colors *colors, const char *rules, DCELL min, DCELL max,
+		 int is_fp)
 {
     int ret;
 
     if (rules[0] == '-' && rules[1] == 0)
-	ret = Rast_read_color_rules(colors, min, max, Rast_read_color_rule, stdin);
+	ret = Rast_read_color_rules(colors, min, max, Rast_read_color_rule,
+				    stdin);
     else if (is_fp)
 	ret = Rast_load_fp_colors(colors, rules, (DCELL) min, (DCELL) max);
     else
@@ -55,7 +58,7 @@ void load_colors(struct Colors *colors, const char *rules, DCELL min, DCELL max,
 }
 
 void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
-                         struct Colors *vcolors, struct Colors *colors,
+			 struct Colors *vcolors, struct Colors *colors,
 			 int invert, DCELL min, DCELL max)
 {
     int i, cat;
@@ -73,7 +76,8 @@ void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
 	    if (Rast_get_d_color((const DCELL *) &v, &red, &grn, &blu,
 				 vcolors) == 0) {
 		/* G_warning(_("No color rule defined for value %f"), v); */
-		G_debug(3, "scan_attr(): cat=%d, val=%f -> no color rule", cat, v);
+		G_debug(3, "scan_attr(): cat=%d, val=%f -> no color rule",
+			cat, v);
 		continue;
 	    }
 	}
@@ -82,7 +86,8 @@ void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
 	    if (Rast_get_c_color((const CELL *) &v, &red, &grn, &blu,
 				 vcolors) == 0) {
 		/* G_warning(_("No color rule defined for value %d"), v); */
-		G_debug(3, "scan_attr(): cat=%d, val=%d -> no color rule", cat, v);
+		G_debug(3, "scan_attr(): cat=%d, val=%d -> no color rule",
+			cat, v);
 		continue;
 	    }
 	}
@@ -106,7 +111,8 @@ void invert_cat_colors(struct Colors *dst, struct Colors *src)
     for (c = cmin; c <= cmax; c++) {
 	if (Rast_get_c_color(&c, &red, &grn, &blu, src)){
 	    CELL cat = cmin + cmax - c;
-	    Rast_add_c_color_rule(&cat, red, grn, blu, &cat, red, grn, blu, dst);
+	    Rast_add_c_color_rule(&cat, red, grn, blu,
+				  &cat, red, grn, blu, dst);
 	}
     }
 }
