@@ -132,6 +132,90 @@ def print_gridded_dataset_univar_statistics(type, input, output, where, extended
 
 ###############################################################################
 
+def print_gridded_dataset_univar_statistics_over_zones(
+        type,
+        input,
+        zones,
+        output,
+        where,
+        extended,
+        no_header=False,
+        fs="|",
+        rast_region=False,
+    ):
+    """Print zonal univariate statistics for a space time raster or raster3d dataset
+
+       :param type: Must be "strds" or "str3ds"
+       :param input: The name of the space time dataset
+       :param zones: The name of the zones raster map
+       :param output: Name of the optional output file, if None stdout is used
+       :param where: A temporal database where statement
+       :param extended: If True compute extended statistics
+       :param no_header: Suppress the printing of column names
+       :param fs: Field separator
+       :param rast_region: If set True ignore the current region settings
+              and use the raster map regions for univar statistical calculation.
+              Only available for strds.
+    """
+    # get categories (zones!)
+    categories = gscript.read_command(
+                    'r.describe',
+                    map=zones,
+                    flags='1n',
+                    quiet=True,
+                 )
+
+    # Get maptype (CELL, FCELL, DCELL)
+    maptype = gscript.parse_command('r.info', flags='g', map=zones)['datatype']
+
+    # Check if map has categories if type is CELL
+    if maptype == 'CELL':
+        gscript.verbose('Reading category lables')
+        categories_and_labels = gscript.read_command("r.category", map=zones).rstrip('\n').split('\n')
+        categories_and_labels = [
+                tuple((category.split('\t')[0], category.split('\t')[1]))
+                for category
+                in categories_and_labels
+                ]
+    for category, label in categories_and_labels:
+
+        gscript.message(_(f'Zone {category} \'{label}\''))
+        # mask category
+        try:
+            gscript.run_command(
+                    'r.mask',
+                    quiet=True,
+                    overwrite=True,
+                    maskcats=category,
+                    raster=zones,
+            )
+        except CalledModuleError:
+            gscript.fatal(_('%s failed') % 'r.mask')
+
+        # get statistics
+        print_gridded_dataset_univar_statistics(
+                "strds",
+                input,
+                output,
+                where,
+                extended,
+                no_header,
+                fs,
+                rast_region,
+        )
+
+        gscript.message('\n')
+
+    # remove last mask
+    try:
+        gscript.run_command('r.mask', quiet=True, flags='r')
+    except CalledModuleError:
+        gscript.fatal(_('%s failed') % 'r.mask')
+
+    gscript.message('')
+
+
+##############################################################################
 
 def print_vector_dataset_univar_statistics(input, output, twhere, layer, type, column,
                                            where, extended, no_header=False,
