@@ -300,7 +300,7 @@ int main(int argc, char *argv[])
 	if (use == USE_CAT) {
 	    scan_cats(&Map, layer, style, rules,
 		      opt.range->answer ? &range : NULL,
-		      &colors, invert);
+		      &colors);
         }
         else if (use == USE_Z) {
 	    scan_z(&Map, layer, style, rules,
@@ -337,8 +337,6 @@ int main(int argc, char *argv[])
 		      opt.range->answer ? &range : NULL,
 		      &colors, &colors_tmp, invert);
 	}
-	else if (invert)
-	    Rast_invert_colors(&colors);
     }
 
     /* TODO ?
@@ -358,6 +356,9 @@ int main(int argc, char *argv[])
         Rast_abs_log_colors(&colors_tmp, &colors, 100);
         colors = colors_tmp;
     }
+
+    if (use == USE_CAT && invert)
+	Rast_invert_colors(&colors);
 
     G_important_message(_("Writing color rules..."));
 

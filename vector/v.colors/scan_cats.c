@@ -8,7 +8,7 @@ static void scan_layer(int, const struct line_cats *, int *, int *);
 
 void scan_cats(const struct Map_info *Map, int field,
 	       const char *style, const char *rules,
-	       const struct FPRange *range, struct Colors *colors, int invert)
+	       const struct FPRange *range, struct Colors *colors)
 {
     int ltype, lmin, lmax, cmin, cmax, line;
     struct line_cats *Cats;
@@ -54,12 +54,6 @@ void scan_cats(const struct Map_info *Map, int field,
 	make_colors(colors, style, (DCELL) cmin, (DCELL) cmax, FALSE);
     else if (rules)
 	load_colors(colors, rules, (DCELL) cmin, (DCELL) cmax, FALSE);
-
-    if (invert) {
-	struct Colors colors_tmp;
-	colors_tmp = *colors;
-	invert_cat_colors(colors, &colors_tmp);
-    }
 
     Vect_destroy_cats_struct(Cats);
 }

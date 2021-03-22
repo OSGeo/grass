@@ -98,21 +98,3 @@ void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
     }
     G_percent(2, 2, 2);
 }
-
-void invert_cat_colors(struct Colors *dst, struct Colors *src)
-{
-    CELL cmin, cmax, c;
-    int red, grn, blu;
-
-    Rast_init_colors(dst);
-
-    Rast_get_c_color_range(&cmin, &cmax, src);
-
-    for (c = cmin; c <= cmax; c++) {
-	if (Rast_get_c_color(&c, &red, &grn, &blu, src)){
-	    CELL cat = cmin + cmax - c;
-	    Rast_add_c_color_rule(&cat, red, grn, blu,
-				  &cat, red, grn, blu, dst);
-	}
-    }
-}
