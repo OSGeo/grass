@@ -99,7 +99,7 @@ double AS_class_stdev(double *data, int count, int nbreaks, double *classbreaks)
 		(stats.mean - stats.stdev * scale / 2) -
 		stats.stdev * scale * (nbreaks / 2 - (i + 1));
 	/* classbreaks above the mean */
-	for (i = i; i < nbreaks; i++)
+	for (; i < nbreaks; i++)
 	    classbreaks[i] =
 		(stats.mean + stats.stdev * scale / 2) +
 		stats.stdev * scale * (i - nbreaks / 2);
@@ -124,7 +124,7 @@ double AS_class_stdev(double *data, int count, int nbreaks, double *classbreaks)
 	    classbreaks[i] =
 		stats.mean - stats.stdev * scale * (nbreaks / 2 - i);
 	/* classbreaks above the mean */
-	for (i = i; i < nbreaks; i++)
+	for (; i < nbreaks; i++)
 	    classbreaks[i] =
 		stats.mean + stats.stdev * scale * (i - nbreaks / 2);
     }
@@ -462,7 +462,7 @@ int AS_class_frequencies(double *data, int count, int nbreaks,
     }
 
     /*Now count cases in last class */
-    for (i = i; i < count; i++) {
+    for (; i < count; i++) {
 	frequencies[nbreaks]++;
     }
 
