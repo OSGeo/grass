@@ -6,8 +6,8 @@
 #include "local_proto.h"
 
 int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
-	      const char *style, const char *rules,
-	      const struct FPRange *range, struct Colors *colors, struct Colors *rcolors)
+	      const char *style, const char *rules, const struct FPRange *range,
+	      struct Colors *colors, struct Colors *rcolors, int invert)
 {
     int ctype, is_fp, nrec;
     double fmin, fmax;
@@ -87,7 +87,8 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 
     if (rcolors)
 	/* color table for categories */
-	color_rules_to_cats(&cvarr, is_fp, rcolors, colors);
+	color_rules_to_cats(&cvarr, is_fp, rcolors, colors,
+			    invert, (DCELL) fmin, (DCELL) fmax);
     else {
 	if (style)
 	    make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
@@ -95,47 +96,11 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	    load_colors(&vcolors, rules, (DCELL) fmin, (DCELL) fmax, is_fp);
 
 	/* color table for categories */
-	color_rules_to_cats(&cvarr, is_fp, &vcolors, colors);
+	color_rules_to_cats(&cvarr, is_fp, &vcolors, colors,
+			    invert, (DCELL) fmin, (DCELL) fmax);
     }
 
     db_close_database(driver);
 
     return is_fp;
-}
-
-void color_rules_to_cats(dbCatValArray *cvarr, int is_fp,
-                         struct Colors *vcolors, struct Colors *colors)
-{
-    int i, cat;
-    dbCatVal *cv;
-    int red, grn, blu;
-
-    /* color table for categories */
-    G_message(_("Converting color rules into categories..."));
-    for (i = 0; i < cvarr->n_values; i++) {
-	G_percent(i, cvarr->n_values, 2);
-	cv = &(cvarr->value[i]);
-	cat = cv->cat;
-	if (is_fp) {
-	    if (Rast_get_d_color((const DCELL *) &(cv->val.d), &red, &grn, &blu,
-				 vcolors) == 0) {
-		/* G_warning(_("No color rule defined for value %f"), cv->val.d); */
-		G_debug(3, "scan_attr(): cat=%d, val=%f -> no color rule", cat, cv->val.d);
-		continue;
-	    }
-	}
-	else {
-	    if (Rast_get_c_color((const CELL *) &(cv->val.i), &red, &grn, &blu,
-				 vcolors) == 0) {
-		/* G_warning(_("No color rule defined for value %d"), cv->val.i); */
-		G_debug(3, "scan_attr(): cat=%d, val=%d -> no color rule", cat, cv->val.i);
-		continue;
-	    }
-	}
-	G_debug(3, "scan_attr(): cat=%d, val=%f, r=%d, g=%d, b=%d",
-		cat, is_fp ? cv->val.d : cv->val.i, red, grn, blu);
-	Rast_add_c_color_rule((const CELL*) &cat, red, grn, blu,
-			      (const CELL*) &cat, red, grn, blu, colors);
-    }
-    G_percent(2, 2, 2);
 }
