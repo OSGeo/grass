@@ -456,7 +456,6 @@ int main(int argc, char *argv[])
     gpoint_count n_class_filtered = 0;
 
     int cat = 1;
-    bool cat_max_reached = false;
 
     // define callback
     // Capture all values for reading by value, except for the ones
@@ -465,8 +464,7 @@ int main(int argc, char *argv[])
     // point is filtered out (and should not be used by next stage).
     // Here the return value does not matter unless we split this into
     // two or more stages.
-    auto cb = [=, &cat, &cat_max_reached,
-               &n_outside, &zrange_filtered, &n_filtered,
+    auto cb = [=, &cat, &n_outside, &zrange_filtered, &n_filtered,
                &n_class_filtered, &class_filter, &return_filter_struct,
                &output_vector, &layers](pdal::PointRef& point) -> bool
     {
