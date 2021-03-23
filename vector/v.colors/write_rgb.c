@@ -4,8 +4,8 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-void write_rgb_values(const struct Map_info *Map, int layer, const char *column_name,
-		      struct Colors *colors)
+void write_rgb_values(const struct Map_info *Map, int layer,
+		      const char *column_name, struct Colors *colors)
 {
     int ctype, nrec, i;
     int red, grn, blu;

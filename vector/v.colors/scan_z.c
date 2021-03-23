@@ -6,7 +6,7 @@
 
 void scan_z(struct Map_info *Map, int field,
             const char *style, const char *rules,
-            const struct FPRange *range, struct Colors *colors)
+            const struct FPRange *range, struct Colors *colors, int invert)
 {
     int ltype, line, cat, i, found;
     int items_alloc;
@@ -26,7 +26,9 @@ void scan_z(struct Map_info *Map, int field,
     cvarr.ctype = DB_C_TYPE_DOUBLE;
 
     Vect_set_constraint_field(Map, field);
-    Vect_set_constraint_type(Map, GV_POINTS); /* points, centroids or kernels only) */
+
+    /* points, centroids or kernels only) */
+    Vect_set_constraint_type(Map, GV_POINTS);
 
     G_message(_("Reading features..."));
     line = i = found = 0;
@@ -78,15 +80,13 @@ void scan_z(struct Map_info *Map, int field,
 
     if (style)
 	make_colors(&vcolors, style, (DCELL) zmin, (DCELL) zmax, TRUE);
-    else if (rules) {
+    else if (rules)
 	load_colors(&vcolors, rules, (DCELL) zmin, (DCELL) zmax, TRUE);
-    }
 
     /* color table for categories */
-    color_rules_to_cats(&cvarr, TRUE, &vcolors, colors);
+    color_rules_to_cats(&cvarr, TRUE, &vcolors, colors, invert, zmin, zmax);
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
     db_CatValArray_free(&cvarr);
-
 }
