@@ -1030,7 +1030,7 @@ int main(int argc, char *argv[])
         }
         else {
             for (i = ceil(max_asp); i >= 1; i--) {
-                if (i == 0 && i == 360)
+                if (i == 0 || i == 360)
                     sprintf(buf, "north");
                 else if (i == 45)
                     sprintf(buf, "north-east");
