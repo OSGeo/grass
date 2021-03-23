@@ -2464,7 +2464,7 @@ class CoordinatesSelect(Panel):
 
         :return: None if values are not valid
         """
-        if self.coordsField.GetValidator().Validate():
+        if self.coordsField.GetValidator().Validate(self):
             return self.coordsField.GetValue().split(',')
 
         return None
