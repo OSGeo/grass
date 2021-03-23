@@ -102,7 +102,7 @@ Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
 		 struct ilist *BList, struct ilist *BAList,
 		 struct Map_info *OMap)
 {
-    int i, j, k, node, line, altype, bltype, oltype, area, centr;
+    int i, j, k, line, altype, bltype, oltype, area, centr;
     struct line_pnts *Points;
     struct line_cats *ACats, *BCats, *OCats;
     struct ilist *AOList, *BOList;

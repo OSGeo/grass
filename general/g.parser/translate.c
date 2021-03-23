@@ -9,8 +9,6 @@
    If global variable to output strings for translation is set it spits them out */
 char *translate(const char *arg)
 {
-    static const char *domain;
-
     if (arg == NULL)
 	return (char *) arg;
 
@@ -23,6 +21,8 @@ char *translate(const char *arg)
     }
 
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
+    static const char *domain;
+
     if (!domain) {
 	domain = getenv("GRASS_TRANSLATION_DOMAIN");
 	if (domain)

@@ -3,7 +3,6 @@
 int slope_length(int r, int c, int dr, int dc)
 {
     CELL top_alt, bot_alt, ridge;
-    char asp_value;
     double res, top_ls, bot_ls;
     WAT_ALT wa;
 

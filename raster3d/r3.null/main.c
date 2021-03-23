@@ -90,7 +90,7 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     RASTER3D_Region region;
     int tileX, tileY, tileZ, x, y, z;
     double value;
-    int doCompress, doLzw, doRle, precision;
+    int doCompress, precision;
     int cacheSize;
 
     cacheSize = Rast3d_cache_size_encode(RASTER3D_USE_CACHE_XY, 1);

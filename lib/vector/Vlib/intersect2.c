@@ -107,7 +107,7 @@ static int n_cross;
 static CROSS *cross = NULL;
 static int *use_cross = NULL;
 
-static double rethresh = 0.000001;	/* TODO */
+/* static double rethresh = 0.000001; */	/* TODO */
 
 static double d_ulp(double a, double b)
 {
@@ -1198,7 +1198,7 @@ Vect_line_intersection2(struct line_pnts *APoints,
     return 1;
 }
 
-static int cross_found;		/* set by find_cross() */
+/* static int cross_found; */		/* set by find_cross() */
 
 /* find segment intersection, used by Vect_line_check_intersection2 */
 static int find_cross(int i, int j, int b)

@@ -16,8 +16,8 @@ double r_net(double bbalb, double ndvi, double tempk, double dtair,
     /* sunzangle = sun zenith angle at sat. overpass */ 
     /* tair = air temperature (approximative, or met.station) */ 
     double Kin = 0.0, Lin = 0.0, Lout = 0.0, Lcorr = 0.0, result = 0.0;
-    double temp = 0.0, ds = 0.0, e_atm = 0.0, delta = 0.0;
-    double tsw_for_e_atm = 0.7;	/*Special tsw, consider it a coefficient */
+    double ds = 0.0, e_atm = 0.0, delta = 0.0;
+    /* double tsw_for_e_atm = 0.7; */	/* Special tsw, consider it a coefficient */
     
     /* Atmospheric emissivity (Bastiaanssen, 1995) */ 
     e_atm = 1.08 * pow(-log(tsw), 0.265);

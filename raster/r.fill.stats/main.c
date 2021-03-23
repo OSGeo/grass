@@ -148,7 +148,6 @@ void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
     int weight_matrix_line_length = 80;
-    int weight_matrix_weight_length = 7;
     char weight_matrix_line_buf[weight_matrix_line_length + 1];
     char weight_matrix_weight_buf[weight_matrix_line_length + 1];
 

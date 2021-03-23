@@ -24,7 +24,6 @@
 void G_init_locale(void)
 {
     static int initialized;
-    const char *gisbase;
 
     if (G_is_initialized(&initialized))
 	return;

@@ -10,7 +10,6 @@ void parse_args(int argc, char** argv,
 		int* history, int* columns, int *shell)
 {
     int i;
-    const char *answer;
     
     struct Option *input_opt, *field_opt;
     struct Flag *hist_flag, *col_flag, *shell_flag, *region_flag, *topo_flag;

@@ -191,7 +191,6 @@ int G_make_location_crs(const char *location_name,
 			const char *proj_wkt)
 {
     int ret;
-    char path[GPATH_MAX];
 
     ret = G_make_location(location_name, wind, proj_info, proj_units);
 

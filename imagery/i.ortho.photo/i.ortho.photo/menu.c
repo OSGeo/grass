@@ -27,8 +27,7 @@
 
 int main(int argc, char **argv)
 {
-    char title[80];
-    char buf[80], *p;
+    char *p;
     struct Ortho_Image_Group group;
     struct GModule *module;
     struct Option *group_opt, *ortho_opt;
@@ -36,7 +35,6 @@ int main(int argc, char **argv)
     char *moduletorun;
     const char *grname;
     char tosystem[99];
-    const char *to_system;
     int err=0;
 
     /* initialize grass */

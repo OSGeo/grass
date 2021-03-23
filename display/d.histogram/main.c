@@ -73,7 +73,6 @@ int main(int argc, char **argv)
     struct Option *opt5;
     struct Flag *flag1;
     struct Flag *flag2;
-    struct Flag *flag3;
 
 
     /* Initialize the GIS calls */
@@ -131,9 +130,9 @@ int main(int argc, char **argv)
     flag1->key = 'n';
     flag1->description = _("Display information for null cells");
 
-    flag3 = G_define_flag();
-    flag3->key = 'c';
-    flag3->description =
+    flag2 = G_define_flag();
+    flag2->key = 'c';
+    flag2->description =
 	_("Report for ranges defined in cats file (fp maps only)");
 
     if (G_parser(argc, argv))
@@ -160,7 +159,7 @@ int main(int argc, char **argv)
     if (sscanf(opt5->answer, "%d", &nsteps) != 1)
 	G_fatal_error(_("Invalid number of steps: %s"), opt5->answer);
 
-    cat_ranges = flag3->answer;
+    cat_ranges = flag2->answer;
 
     if (cat_ranges && nsteps != 255)
 	G_warning(_("When -C flag is set, the nsteps argument is ignored"));

@@ -146,7 +146,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                        int *n_noatt, int *n_nocat, int outer_ring_ccw)
 {
     int i, n_exported, area;
-    int cat, ncats_field, line, type, findex, ipart;
+    int cat, ncats_field, line, findex, ipart;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
