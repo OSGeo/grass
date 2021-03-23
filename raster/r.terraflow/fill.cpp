@@ -160,7 +160,6 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
 
   Rtimer rt, rtTotal;
   AMI_STREAM<elevation_type> *elstr_reclass=NULL;
-  AMI_STREAM<ElevationWindow > *winstr=NULL;
   AMI_STREAM<plateauStats> *statstr=NULL;
   AMI_STREAM<plateauType> *platstr=NULL;
   AMI_STREAM<waterType> *waterstr=NULL;
@@ -194,13 +193,10 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   
   rt_start(rt);
   dirstr = new AMI_STREAM<direction_type>;
-  winstr = new AMI_STREAM<ElevationWindow>();
   statstr = new AMI_STREAM<plateauStats>;
   
   platstr = findPlateaus(elstr, nrows, ncols, nodataType::ELEVATION_NODATA,
-						 winstr, dirstr, statstr);
- 
-  delete winstr; /* not used; not made */
+						 dirstr, statstr);
   rt_stop(rt);
   
   if (stats) {
@@ -331,11 +327,10 @@ computeFlowDirections(AMI_STREAM<elevation_type>*& elstr,
   }
 
   rt_start(rt);
-  winstr = NULL;
   dirstr = new AMI_STREAM<direction_type>();
   statstr = new AMI_STREAM<plateauStats>();
   platstr = findPlateaus(filledstr, nrows, ncols, nodataType::ELEVATION_NODATA,
-			 winstr, dirstr, statstr);
+                         dirstr, statstr);
   rt_stop(rt);
   if (stats) {
       stats->recordTime("findingPlateaus2", rt);

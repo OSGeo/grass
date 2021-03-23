@@ -41,7 +41,6 @@ class detectPlateaus {
 private:
   AMI_STREAM<direction_type> *dirStream;
   AMI_STREAM<plateauType> *platStream;
-  AMI_STREAM<ElevationWindow > *winStream;
   queue<direction_type> *dirQueue;
   queue<plateauType> *platQueue;
   ccforest<cclabel_type> colTree;
@@ -54,9 +53,8 @@ private:
   const elevation_type nodata_value;
 public:
   detectPlateaus(const dimension_type gnrows,const dimension_type gncols,
-				 const elevation_type gnodata_value,
-				 AMI_STREAM<direction_type>* dirstr,
-				 AMI_STREAM<ElevationWindow > *winstr);
+                 const elevation_type gnodata_value,
+                 AMI_STREAM<direction_type>* dirstr);
   ~detectPlateaus();
   void processWindow(dimension_type row, dimension_type col,
 					 elevation_type *a,
@@ -74,11 +72,10 @@ public:
 
 
 detectPlateaus::detectPlateaus(const dimension_type gnrows,
-							   const dimension_type gncols,
-							   const elevation_type gnodata_value,
-							   AMI_STREAM<direction_type>* gdirstr,
-							   AMI_STREAM<ElevationWindow > *gwinstr):
-  dirStream(gdirstr), winStream(gwinstr), 
+                               const dimension_type gncols,
+                               const elevation_type gnodata_value,
+                               AMI_STREAM<direction_type>* gdirstr):
+  dirStream(gdirstr), 
   nrows(gnrows), ncols(gncols), nodata_value(gnodata_value) {
   platStream = new AMI_STREAM<plateauType>();
 }
@@ -413,7 +410,6 @@ AMI_STREAM<plateauType> *
 findPlateaus(AMI_STREAM<elevation_type> *elstr,
 	     const dimension_type nrows, const dimension_type ncols,
 	     const elevation_type nodata_value,
-	     AMI_STREAM<ElevationWindow > *winstr,
 	     AMI_STREAM<direction_type> *dirStr,
 	     AMI_STREAM<plateauStats> *statStr) {
   Rtimer rt;
@@ -426,7 +422,7 @@ findPlateaus(AMI_STREAM<elevation_type> *elstr,
       stats->comment("----------",  opt->verbose);
       stats->comment("finding flat areas (plateaus and depressions)");
   }
-  detectPlateaus md(nrows, ncols,nodata_value, dirStr, winstr);
+  detectPlateaus md(nrows, ncols, nodata_value, dirStr);
   md.generatePlateaus(*elstr);
   rt_stop(rt);
   if (stats) {
@@ -477,4 +473,3 @@ findPlateaus(AMI_STREAM<elevation_type> *elstr,
 }
 
 /* ********************************************************************** */
-
