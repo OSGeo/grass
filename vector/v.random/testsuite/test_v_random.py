@@ -41,7 +41,7 @@ class TestVRandom(TestCase):
         topology = dict(points=self.npoints)
         self.assertVectorFitsTopoInfo(vector=self.output, reference=topology)
 
-    # Checking if the map is 3D and number of points is 100
+    """Checking if the map is 3D and number of points is 100"""
     def test_num_points_3D(self):
         self.assertModule(
             "v.random",
@@ -55,7 +55,7 @@ class TestVRandom(TestCase):
         topology = dict(points=self.npoints, map3d=1)
         self.assertVectorFitsTopoInfo(vector=self.output, reference=topology)
 
-    # Checking if all points are in the polygon boundary state
+    """Checking if all points are in the polygon boundary state"""
     def test_restrict(self):
         self.assertModule(
             "v.random", output=self.output, npoints=self.npoints, restrict=self.state
