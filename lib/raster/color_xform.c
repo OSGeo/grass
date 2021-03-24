@@ -188,7 +188,6 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     DCELL min, max;
     double lmin, lmax;
     int red, grn, blu;
-    int use_lmin_eps;
     DCELL prev;
     int i;
 
@@ -217,30 +216,21 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	return;
     }
 
-    use_lmin_eps = 0;
-    if (isnan(lmin)) {
-	/* min < 0 and max > 0; let's use the default color for min up to 0
-	 * whose log cannot be obtained */
-	DCELL zero = 0;
+    if (isnan(lmin) || isinf(lmin)) {
+	/* min <= 0 and max > 0; let's use the default color for min up to
+	 * GRASS_EPSILON */
+	DCELL eps = GRASS_EPSILON;
 	Rast_add_d_color_rule(&min, red, grn, blu,
-			      &zero, red, grn, blu, dst);
-	use_lmin_eps = 1;
-    } else if (isinf(lmin)) {
-	/* min = 0 < max and lmin = -inf;
-	 * let's use the default color for 0 whose log is -inf */
-	Rast_set_d_color(min, red, grn, blu, dst);
-	use_lmin_eps = 1;
-    }
-
-    if (use_lmin_eps) {
-	/* XXX: let's assume that the minimum positive cell value is greater
-	 * than or equal to GRASS_EPSILSON when we cannot use log(min) because
-	 * min <= 0; or would it be logically correct to throw a fatal error?
-	 */
+			      &eps, red, grn, blu, dst);
+	/* XXX: let's assume that the min positive cell value is greater than
+	 * or equal to GRASS_EPSILSON when we cannot use log(min) because min
+	 * <= 0; if the true positive min value is less than GRASS_EPSILON,
+	 * it'll get assigned the default color; or would it be logically
+	 * correct to throw a fatal error? */
 	G_warning(_("Non-positive cell values found; "
 		    "setting to the default color for those cells and "
-		    "assuming a min positive cell value of %g"), GRASS_EPSILON);
-	lmin = log(GRASS_EPSILON);
+		    "assuming a min positive cell value of %g"), eps);
+	lmin = log(eps);
     }
 
     for (i = 0; i <= samples; i++) {
