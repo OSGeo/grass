@@ -185,7 +185,7 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 
 void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
-    DCELL min, max;
+    DCELL min, max, eps = GRASS_EPSILON;
     double lmin, lmax;
     int red, grn, blu;
     DCELL prev;
@@ -204,12 +204,14 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
 
-    if (isnan(lmax) || isinf(lmax)) {
-	/* max cannot be +inf (?), so min <= max <= 0, lmax = -inf or nan;
-	 * we cannot apply log colors to a non-positive raster, so let's use a
-	 * sane default color from the source rule */
-	G_warning(_("Max cell value is non-positive; "
-		    "using the max color only"));
+    if (isnan(lmax) || isinf(lmax) || max <= eps) {
+	/* max cannot be +inf (?), so min <= max <= 0, lmax = -inf or nan, or 0
+	 * < max <= GRASS_EPSILON; we cannot apply log colors to a non-positive
+	 * raster, so let's use a sane default color from the source rule; even
+	 * for a positive raster whose max cell value is very small (<=
+	 * GRASS_EPSILON), let's use the same color */
+	G_warning(_("Max cell value is non-positive or <= %g; "
+		    "using the max color only"), eps);
 	Rast_get_d_color(&max, &red, &grn, &blu, src);
 	Rast_add_d_color_rule(&min, red, grn, blu,
 			      &max, red, grn, blu, dst);
@@ -219,7 +221,6 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     if (isnan(lmin) || isinf(lmin)) {
 	/* min <= 0 and max > 0; let's use the default color for min up to
 	 * GRASS_EPSILON */
-	DCELL eps = GRASS_EPSILON;
 	Rast_add_d_color_rule(&min, red, grn, blu,
 			      &eps, red, grn, blu, dst);
 	/* XXX: let's assume that the min positive cell value is greater than
