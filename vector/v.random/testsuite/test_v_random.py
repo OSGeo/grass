@@ -34,16 +34,14 @@ class TestVRandom(TestCase):
         cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
         cls.runModule("g.remove", type="vector", flags="f", name=cls.output2)
 
-    # Checking if number of points equals 100
     def test_num_points(self):
+        """Checking if number of points equals 100"""
         self.assertModule("v.random", output=self.output, npoints=self.npoints)
-
         topology = dict(points=self.npoints)
         self.assertVectorFitsTopoInfo(vector=self.output, reference=topology)
 
-    """Checking if the map is 3D and number of points is 100"""
-
     def test_num_points_3D(self):
+        """Checking if the map is 3D and number of points is 100"""
         self.assertModule(
             "v.random",
             output=self.output,
@@ -52,20 +50,17 @@ class TestVRandom(TestCase):
             zmax=self.zmax,
             flags="z",
         )
-
         topology = dict(points=self.npoints, map3d=1)
         self.assertVectorFitsTopoInfo(vector=self.output, reference=topology)
 
-    """Checking if all points are in the polygon boundary state"""
-
     def test_restrict(self):
+        """Checking if all points are in the polygon boundary state"""
         self.assertModule(
             "v.random", output=self.output, npoints=self.npoints, restrict=self.state
         )
         self.assertModule(
             "v.clip", input=self.output, clip=self.state, output=self.output2
         )
-
         self.assertVectorInfoEqualsVectorInfo(self.output, self.output2, precision=0.01)
 
 
