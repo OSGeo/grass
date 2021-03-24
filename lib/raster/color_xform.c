@@ -210,8 +210,7 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	 * so let's use a sane default color from the source rule; even for a
 	 * positive raster whose max cell value is very small (<= eps), let's
 	 * use the same color */
-	G_warning(_("Max cell value is non-positive or <= %g; "
-		    "using the max color only"), eps);
+	G_warning(_("Max cell value is <= %g; using the max color only"), eps);
 	Rast_get_d_color(&max, &red, &grn, &blu, src);
 	Rast_add_d_color_rule(&min, red, grn, blu,
 			      &max, red, grn, blu, dst);
@@ -229,8 +228,8 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	 * default color; or would it be logically correct to throw a fatal
 	 * error? */
 	G_warning(_("Non-positive cell values found; "
-		    "setting to the default color for those cells and "
-		    "assuming a min positive cell value of %g"), eps);
+		    "setting to the default color for cells <= %g and "
+		    "assuming a min positive cell value of %g"), eps, eps);
 	lmin = log(eps);
     }
 
