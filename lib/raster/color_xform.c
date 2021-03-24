@@ -229,7 +229,7 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	 * error? */
 	G_warning(_("Non-positive cell values found; "
 		    "setting to the default color for cells <= %g and "
-		    "assuming a min positive cell value of %g"), eps, eps);
+		    "assuming a positive min cell value of %g"), eps, eps);
 	lmin = log(eps);
     }
 
