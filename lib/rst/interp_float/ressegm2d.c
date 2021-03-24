@@ -203,7 +203,7 @@ int IL_resample_interp_segments_2d(struct interp_params *params, struct BM *bitm
         b[0] = 0.;
         G_lubksb(matrix, m1 + 1, indx, b);
 
-        params->check_points(params, data, b, ertot, zmin, *dnorm, triple);
+        params->check_points(params, data, b, ertot, zmin, *dnorm, triple); // 'triple' is uninitialized when used here
 
         if (params->grid_calc(params, data, bitmask,
                               zmin, zmax, zminac, zmaxac, gmin, gmax,

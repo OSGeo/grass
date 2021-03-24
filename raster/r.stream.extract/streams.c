@@ -331,7 +331,7 @@ int do_accum(double d8cut)
                     }
                     else if (ct_dir == np_side) {
                         /* check for consistency with A * path */
-                        workedon++;
+                        workedon++;  // 'workedon' is uninitialized when used here
                     }
                 }
             }

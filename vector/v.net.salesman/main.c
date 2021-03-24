@@ -500,7 +500,7 @@ int main(int argc, char **argv)
 
             /* tmpcost must always be > 0 */
 
-            G_debug(2, "? %d - %d cost = %f x %f", node1, node2, tmpcost,
+            G_debug(2, "? %d - %d cost = %f x %f", node1, node2, tmpcost,  // 'node1' and 'node2' is uninitialized when used here
                     cost);
             /* always true for j = 0 */
             if (tmpcost < cost) {

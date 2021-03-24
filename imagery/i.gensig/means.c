@@ -33,7 +33,7 @@ int compute_means(struct files *files, struct Signature *S)
                            files->band_cell[b], row);
             for (col = 0; col < ncols; col++) {
                 if (Rast_is_d_null_value(&cell[col])) {
-                    n_nulls++;
+                    n_nulls++; // 'n_nulls' is uninitialized when used here
                     continue;
                 }
                 n = class[col];

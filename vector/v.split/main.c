@@ -257,9 +257,9 @@ int main(int argc, char *argv[])
 
                         /* To be sure that the coordinates are identical */
                         if (i > 0) {
-                            Points2->x[0] = x;
-                            Points2->y[0] = y;
-                            Points2->z[0] = z;
+                            Points2->x[0] = x;  // 'x' is uninitialized when used here
+                            Points2->y[0] = y; // 'y' is uninitialized when used here
+                            Points2->z[0] = z; // 'z' is uninitialized when used here
                         }
                         if (i == n - 1) {
                             Points2->x[Points2->n_points - 1] =

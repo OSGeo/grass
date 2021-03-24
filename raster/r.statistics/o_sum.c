@@ -44,7 +44,7 @@ int o_sum(const char *basemap, const char *covermap, const char *outputmap,
     G_popen_close(&stats_child);
     G_popen_close(&reclass_child);
 
-    return stat;
+    return stat; // 'stat' is uninitialized when used here
 }
 
 static void sum_out(FILE * fp, long cat, double sum1)

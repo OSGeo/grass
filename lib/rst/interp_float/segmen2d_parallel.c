@@ -175,7 +175,7 @@ int IL_interp_segments_2d_parallel(struct interp_params *params, struct tree_inf
                                     (1 + params->kmin * pr / params->KMAX2));
                 /* fprintf(stderr,"MINPTS=%d, KMIN=%d, KMAX=%d, pr=%lf, smseg=%lf, DX=%lf \n", MINPTS,params->kmin,params->KMAX2,pr,smseg,xmx-xmn); */
 
-                data_local[tid] =
+                data_local[tid] = // 'tid' is uninitialized when used here
                     (struct quaddata *)quad_data_new(xmn - distx, ymn - disty,
                                                      xmx + distx, ymx + disty,
                                                      0, 0, 0, params->KMAX2);

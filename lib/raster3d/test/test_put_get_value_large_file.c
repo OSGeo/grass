@@ -447,7 +447,7 @@ int test_large_file_sparse_random(int depths, int rows, int cols,
                 if (fabs(value - random_value_vector[i]) > EPSILON) {
                     G_message
                         ("At: z %i y %i x %i -- value %.14lf != %.14lf\n", z,
-                         y, x, value, random_value);
+                         y, x, value, random_value); // 'random_value' is uninitialized when used here
                     sum++;
                 }
                 i++;
