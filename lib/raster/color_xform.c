@@ -206,10 +206,10 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
     if (isnan(lmax) || isinf(lmax) || max <= eps) {
 	/* max cannot be +inf (?), so min <= max <= 0, lmax = -inf or nan, or 0
-	 * < max <= GRASS_EPSILON; we cannot apply log colors to a non-positive
-	 * raster, so let's use a sane default color from the source rule; even
-	 * for a positive raster whose max cell value is very small (<=
-	 * GRASS_EPSILON), let's use the same color */
+	 * < max <= eps; we cannot apply log colors to a non-positive raster,
+	 * so let's use a sane default color from the source rule; even for a
+	 * positive raster whose max cell value is very small (<= eps), let's
+	 * use the same color */
 	G_warning(_("Max cell value is non-positive or <= %g; "
 		    "using the max color only"), eps);
 	Rast_get_d_color(&max, &red, &grn, &blu, src);
@@ -219,15 +219,15 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     }
 
     if (isnan(lmin) || isinf(lmin)) {
-	/* min <= 0 and max > 0; let's use the default color for min up to
-	 * GRASS_EPSILON */
+	/* min <= 0 and max > 0; let's use the default color for min up to eps
+	 */
 	Rast_add_d_color_rule(&min, red, grn, blu,
 			      &eps, red, grn, blu, dst);
 	/* XXX: let's assume that the min positive cell value is greater than
-	 * or equal to GRASS_EPSILSON when we cannot use log(min) because min
-	 * <= 0; if the true positive min value is less than GRASS_EPSILON,
-	 * it'll get assigned the default color; or would it be logically
-	 * correct to throw a fatal error? */
+	 * or equal to eps when we cannot use log(min) because min <= 0; if the
+	 * true positive min value is less than eps, it'll get assigned the
+	 * default color; or would it be logically correct to throw a fatal
+	 * error? */
 	G_warning(_("Non-positive cell values found; "
 		    "setting to the default color for those cells and "
 		    "assuming a min positive cell value of %g"), eps);
