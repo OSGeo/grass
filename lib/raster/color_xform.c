@@ -15,6 +15,7 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 
 /*!
  * \brief Make histogram-stretched version of existing color table
@@ -187,6 +188,7 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     DCELL min, max;
     double lmin, lmax;
     int red, grn, blu;
+    int use_lmin_eps;
     DCELL prev;
     int i;
 
@@ -197,11 +199,49 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     lmin = log(min);
     lmax = log(max);
 
+    Rast_get_null_value_color(&red, &grn, &blu, src);
+    Rast_set_null_value_color(red, grn, blu, dst);
+
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
 
-    Rast_get_null_value_color(&red, &grn, &blu, src);
-    Rast_set_null_value_color(red, grn, blu, dst);
+    if (isnan(lmax) || isinf(lmax)) {
+	/* max cannot be +inf (?), so min <= max <= 0, lmax = -inf or nan;
+	 * we cannot apply log colors to a non-positive raster, so let's use a
+	 * sane default color from the source rule */
+	G_warning(_("Max cell value is non-positive; "
+		    "using the max color only"));
+	Rast_get_d_color(&max, &red, &grn, &blu, src);
+	Rast_add_d_color_rule(&min, red, grn, blu,
+			      &max, red, grn, blu, dst);
+	return;
+    }
+
+    use_lmin_eps = 0;
+    if (isnan(lmin)) {
+	/* min < 0 and max > 0; let's use the default color for min up to 0
+	 * whose log cannot be obtained */
+	DCELL zero = 0;
+	Rast_add_d_color_rule(&min, red, grn, blu,
+			      &zero, red, grn, blu, dst);
+	use_lmin_eps = 1;
+    } else if (isinf(lmin)) {
+	/* min = 0 < max and lmin = -inf;
+	 * let's use the default color for 0 whose log is -inf */
+	Rast_set_d_color(min, red, grn, blu, dst);
+	use_lmin_eps = 1;
+    }
+
+    if (use_lmin_eps) {
+	/* XXX: let's assume that the minimum positive cell value is greater
+	 * than or equal to GRASS_EPSILSON when we cannot use log(min) because
+	 * min <= 0; or would it be logically correct to throw a fatal error?
+	 */
+	G_warning(_("Non-positive cell values found; "
+		    "setting to the default color for those cells and "
+		    "assuming a min positive cell value of %g"), GRASS_EPSILON);
+	lmin = log(GRASS_EPSILON);
+    }
 
     for (i = 0; i <= samples; i++) {
 	int red2, grn2, blu2;
