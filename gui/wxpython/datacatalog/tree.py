@@ -1639,8 +1639,12 @@ class DataCatalogTree(TreeView):
                                       mapset=mapset)
                 if node:
                     if map:
+                        # reload entire mapset when using lazy loading
+                        if not node.children and self._useLazyLoading():
+                            self._reloadMapsetNode(node)
+                            self.RefreshNode(node.parent, recursive=True)
                         # check if map already exists
-                        if not self._model.SearchNodes(parent=node, name=map, type=element):
+                        elif not self._model.SearchNodes(parent=node, name=map, type=element):
                             self.InsertLayer(name=map, mapset_node=node,
                                              element_name=element)
                     else:
