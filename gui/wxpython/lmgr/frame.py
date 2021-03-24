@@ -61,8 +61,8 @@ from gui_core.dialogs import LocationDialog, MapsetDialog, CreateNewVector, Grou
 from gui_core.menu import SearchModuleWindow
 from gui_core.menu import Menu as GMenu
 from core.debug import Debug
-from lmgr.toolbars import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
-from lmgr.toolbars import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
+from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
+from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
@@ -147,32 +147,23 @@ class GMFrame(wx.Frame):
         self.statusbar = self.CreateStatusBar(number=1)
         self.notebook = self._createNoteBook()
         self.toolbars = {'workspace': LMWorkspaceToolbar(parent=self),
-                         'data': LMDataToolbar(parent=self),
                          'tools': LMToolsToolbar(parent=self),
                          'misc': LMMiscToolbar(parent=self),
-                         'vector': LMVectorToolbar(parent=self),
                          'nviz': LMNvizToolbar(parent=self)}
         self._toolbarsData = {'workspace': ("toolbarWorkspace",     # name
                                             _("Workspace Toolbar"),  # caption
                                             1, 0),                   # row, position
-                              'data': ("toolbarData",
-                                       _("Data Toolbar"),
-                                       1, 1),
-                              'misc': ("toolbarMisc",
-                                       _("Misc Toolbar"),
-                                       2, 2),
                               'tools': ("toolbarTools",
                                         _("Tools Toolbar"),
-                                        2, 1),
-                              'vector': ("toolbarVector",
-                                         _("Vector Toolbar"),
-                                         2, 0),
+                                        1, 1),
+                              'misc': ("toolbarMisc",
+                                       _("Misc Toolbar"),
+                                       1, 2),
                               'nviz': ("toolbarNviz",
                                        _("3D view Toolbar"),
-                                       2, 3),
+                                       1, 3),
                               }
-        toolbarsList = ('workspace', 'data',
-                        'vector', 'tools', 'misc', 'nviz')
+        toolbarsList = ('workspace', 'tools', 'misc', 'nviz')
         for toolbar in toolbarsList:
             name, caption, row, position = self._toolbarsData[toolbar]
             self._auimgr.AddPane(self.toolbars[toolbar],
@@ -304,6 +295,30 @@ class GMFrame(wx.Frame):
 
         return menu
 
+    def _createDisplayPanel(self):
+        """Creates display panel"""
+        # create superior display panel
+        displayPanel = wx.Panel(self.notebook, id=wx.ID_ANY)
+        # create display toolbar
+        dmgrToolbar = DisplayPanelToolbar(guiparent=displayPanel, parent=self)
+        # create display notebook
+        notebookLayers = GNotebook(parent=displayPanel, style=globalvar.FNPageStyle)
+        notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
+        menu = self._createTabMenu()
+        notebookLayers.SetRightClickMenu(menu)
+
+        # layout
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(notebookLayers, proportion=1, flag=wx.EXPAND)
+
+        displayPanel.SetAutoLayout(True)
+        displayPanel.SetSizer(sizer)
+        displayPanel.Fit()
+        displayPanel.Layout()
+
+        return displayPanel, notebookLayers
+
     def _setCopyingOfSelectedText(self):
         copy = UserSettings.Get(
             group='manager',
@@ -337,13 +352,9 @@ class GMFrame(wx.Frame):
             name='catalog')
 
         # create displays notebook widget
-        self.notebookLayers = GNotebook(parent=self.notebook,
-                                        style=globalvar.FNPageStyle)
-        self.notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
-        menu = self._createTabMenu()
-        self.notebookLayers.SetRightClickMenu(menu)
+        self.displayPanel, self.notebookLayers = self._createDisplayPanel()
         self.notebook.AddPage(
-            page=self.notebookLayers,
+            page=self.displayPanel,
             text=_("Display"),
             name='layers')
 
