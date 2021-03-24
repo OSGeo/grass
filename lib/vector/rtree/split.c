@@ -171,6 +171,7 @@ void RTreeInitPVars(struct RTree_PartitionVars *p, int maxrects, int minfill,
     }
 }
 
+#ifdef DEBUG
 /*----------------------------------------------------------------------
 | Print out data for a partition from PartitionVars struct.
 | Unused, for debugging only
@@ -210,6 +211,7 @@ static void RTreePrintPVars(struct RTree_PartitionVars *p, struct RTree *t,
     fprintf(stdout, "cover[1]:\n");
     RTreePrintRect(&p->cover[1], 0, t);
 }
+#endif /* DEBUG */
 
 /*----------------------------------------------------------------------
 | Method #0 for choosing a partition: this is Toni Guttman's quadratic

@@ -229,6 +229,7 @@ static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
 
 /*---------------------------------------------------------------------------*/
 
+/* unused
 static int cache_queue_get_top(RASTER3D_cache * c)
 {
     int top;
@@ -239,6 +240,7 @@ static int cache_queue_get_top(RASTER3D_cache * c)
 
     return top;
 }
+*/
 
 /*---------------------------------------------------------------------------*/
 

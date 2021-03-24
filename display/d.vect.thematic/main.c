@@ -27,8 +27,12 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include <grass/arraystats.h>
-#include "plot.h"
 #include "local_proto.h"
+#include "plot.h"
+
+/* prototypes */
+static int cmp(const void *, const void *);
+static char *icon_files(void);
 
 int main(int argc, char **argv)
 {
@@ -643,13 +647,13 @@ int main(int argc, char **argv)
     exit(stat);
 }
 
-int cmp(const void *a, const void *b)
+static int cmp(const void *a, const void *b)
 {
     return (strcmp(*(char **)a, *(char **)b));
 }
 
 /* adopted from r.colors */
-char *icon_files(void)
+static char *icon_files(void)
 {
     char **list, *ret;
     char buf[GNAME_MAX + GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];

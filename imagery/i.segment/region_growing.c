@@ -158,6 +158,7 @@ static int compare_sim_ngbrs(double simi, double simk, int candi, int candk,
     return (Ri->col > Rk->col);
 }
 
+#if 0 /* unused */
 static int dump_Ri(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
                    double *Ri_sim, double *Rk_sim, int *Ri_nn, int *Rk_nn,
                    struct globals *globals)
@@ -181,7 +182,7 @@ static int dump_Ri(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 
     return 1;
 }
-
+#endif /* if 0 unused */
 
 int region_growing(struct globals *globals)
 {

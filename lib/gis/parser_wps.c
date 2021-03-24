@@ -40,8 +40,8 @@ static void wps_print_mimetype_raster_jpeg(void);
 static void wps_print_mimetype_raster_hfa(void);
 static void wps_print_mimetype_raster_netCDF(void);
 static void wps_print_mimetype_raster_netCDF_other(void);
-static void wps_print_mimetype_raster_grass_binary(void);
-static void wps_print_mimetype_raster_grass_ascii(void);
+/* static void wps_print_mimetype_raster_grass_binary(void);
+static void wps_print_mimetype_raster_grass_ascii(void); */
 static void wps_print_mimetype_vector_gml311(void);
 static void wps_print_mimetype_vector_gml311_appl(void);
 static void wps_print_mimetype_vector_gml212(void);
@@ -50,8 +50,8 @@ static void wps_print_mimetype_vector_kml22(void);
 static void wps_print_mimetype_vector_dgn(void);
 static void wps_print_mimetype_vector_shape(void);
 static void wps_print_mimetype_vector_zipped_shape(void);
-static void wps_print_mimetype_vector_grass_ascii(void);
-static void wps_print_mimetype_vector_grass_binary(void);
+/* static void wps_print_mimetype_vector_grass_ascii(void);
+static void wps_print_mimetype_vector_grass_binary(void); */
 static void wps_print_mimetype_space_time_datasets(void);
 static void wps_print_mimetype_space_time_raster_datasets(void);
 static void wps_print_mimetype_space_time_vector_datasets(void);
@@ -928,7 +928,7 @@ static void wps_print_mimetype_raster_png(void)
 }
 
 /* *** Native GRASS raster format urn:grass:raster:location/mapset/raster *** */
-
+/*
 static void wps_print_mimetype_raster_grass_binary(void)
 {
     fprintf(stdout, "\t\t\t\t\t\t<Format>\n");
@@ -936,9 +936,9 @@ static void wps_print_mimetype_raster_grass_binary(void)
             "\t\t\t\t\t\t\t<MimeType>application/grass-raster-binary</MimeType>\n");
     fprintf(stdout, "\t\t\t\t\t\t</Format>\n");
 }
-
+*/
 /* *** GRASS raster maps exported via r.out.ascii ************************** */
-
+/*
 static void wps_print_mimetype_raster_grass_ascii(void)
 {
     fprintf(stdout, "\t\t\t\t\t\t<Format>\n");
@@ -946,7 +946,7 @@ static void wps_print_mimetype_raster_grass_ascii(void)
             "\t\t\t\t\t\t\t<MimeType>application/grass-raster-ascii</MimeType>\n");
     fprintf(stdout, "\t\t\t\t\t\t</Format>\n");
 }
-
+*/
 /* ************************************************************************** */
 
 static void wps_print_mimetype_vector_gml311_appl(void)
@@ -997,7 +997,7 @@ static void wps_print_mimetype_vector_gml212(void)
 }
 
 /* *** GRASS vector format exported via v.out.ascii ************************** */
-
+/*
 static void wps_print_mimetype_vector_grass_ascii(void)
 {
     fprintf(stdout, "\t\t\t\t\t\t<Format>\n");
@@ -1005,9 +1005,9 @@ static void wps_print_mimetype_vector_grass_ascii(void)
             "\t\t\t\t\t\t\t<MimeType>application/grass-vector-ascii</MimeType>\n");
     fprintf(stdout, "\t\t\t\t\t\t</Format>\n");
 }
-
+*/
 /* *** Native GRASS vector format urn:grass:vector:location/mapset/vector *** */
-
+/*
 static void wps_print_mimetype_vector_grass_binary(void)
 {
     fprintf(stdout, "\t\t\t\t\t\t<Format>\n");
@@ -1015,7 +1015,7 @@ static void wps_print_mimetype_vector_grass_binary(void)
             "\t\t\t\t\t\t\t<MimeType>application/grass-vector-binary</MimeType>\n");
     fprintf(stdout, "\t\t\t\t\t\t</Format>\n");
 }
-
+*/
 /* *** Space time dataset format using tar, tar.gz and tar.bz2 methods for packaging */
 
 static void wps_print_mimetype_space_time_datasets(void)
