@@ -18,7 +18,7 @@ Rast3d_get_block_nocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx,
     int tx, ty, tz, dx, dy, dz, x, y, z, rows, cols, depths;
     int tileIndex;
 
-    if (!map->useCache)
+    if (!map->useCache) // 'tile' is used uninitialized whenever 'if' condition is false
         tile = Rast3d_alloc_tiles_type(map, 1, type);
     if (tile == NULL)
         Rast3d_fatal_error

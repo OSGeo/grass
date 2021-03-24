@@ -215,7 +215,7 @@ int main(int argc, char **argv)
         type = Vect_read_line(&In, Points, Cats, line);
         if (!(type & GV_POINT))
             continue;
-        if (field != -1 && !Vect_cat_get(Cats, field, &cat))
+        if (field != -1 && !Vect_cat_get(Cats, field, &cat)) // 'cat' is used uninitialized whenever '&&' condition is false
             continue;
 
         G_debug(4, "cat = %d", cat);

@@ -160,7 +160,7 @@ int I_sc_add_cat(struct scCats *cats)
     if (cats->n_a_cats >= cats->n_cats)
         return -1;
 
-    for (i_cat_id = 0; i_cat_id < cats->n_cats; i_cat_id++)
+    for (i_cat_id = 0; i_cat_id < cats->n_cats; i_cat_id++) // 'cat_id' is used uninitialized whenever 'for' loop exits because its condition is false
         if (cats->cats_idxs[i_cat_id] < 0) {
             cat_id = i_cat_id;
             break;

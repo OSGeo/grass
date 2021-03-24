@@ -2063,7 +2063,7 @@ int v5dReadCompressedGrid(v5dstruct * v, int time, int var,
     else if (v->CompressMode == 2) {
         k = read_block(v->FileDesc, compdata, n, 2) == n;
     }
-    else if (v->CompressMode == 4) {
+    else if (v->CompressMode == 4) { // 'k' is used uninitialized whenever 'if' condition is false
         k = read_block(v->FileDesc, compdata, n, 4) == n;
     }
     if (!k) {
@@ -2115,7 +2115,7 @@ int v5dReadGrid(v5dstruct * v, int time, int var, float data[])
     else if (v->CompressMode == 2) {
         bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned short);
     }
-    else if (v->CompressMode == 4) {
+    else if (v->CompressMode == 4) { // 'bytes' is used uninitialized whenever 'if' condition is false
         bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(float);
     }
     compdata = (void *)G_malloc(bytes);
@@ -2514,7 +2514,7 @@ int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[])
     else if (v->CompressMode == 2) {
         bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned short);
     }
-    else if (v->CompressMode == 4) {
+    else if (v->CompressMode == 4) { // 'bytes' is used uninitialized whenever 'if' condition is false
         bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(float);
     }
     compdata = (void *)G_malloc(bytes);

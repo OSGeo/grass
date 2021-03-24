@@ -14,7 +14,7 @@ double g_0(double bbalb, double ndvi, double tempk, double rnet,
         r0_coef = 1.0;
     else if (time > 11.0 && time <= 13.0)
         r0_coef = 0.9;
-    else if (time > 13.0 && time <= 15.0)
+    else if (time > 13.0 && time <= 15.0) //  'r0_coef' is used uninitialized whenever 'if' condition is false
         r0_coef = 1.0;
     a = (0.0032 * (bbalb / r0_coef) +
          0.0062 * (bbalb / r0_coef) * (bbalb / r0_coef));

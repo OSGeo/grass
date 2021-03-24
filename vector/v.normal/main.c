@@ -179,7 +179,7 @@ int main(int argc, char **argv)
             }
             dval = cval;
         }
-        else if (ctype == DB_C_TYPE_DOUBLE) {
+        else if (ctype == DB_C_TYPE_DOUBLE) { // 'dval' is used uninitialized whenever 'if' condition is false
             ret = db_CatValArray_get_value_double(&cvarr, cat, &dval);
             if (ret != DB_OK) {
                 G_warning(_("No record for cat %d"), cat);

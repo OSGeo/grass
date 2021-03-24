@@ -199,7 +199,7 @@ int build_topo(struct Map_info *Map, int build)
         Vect_build_partial(Map, GV_BUILD_NONE);
     }
 
-    if (plus->built < GV_BUILD_BASE) {
+    if (plus->built < GV_BUILD_BASE) { // 'n_nodes' is used uninitialized whenever 'if' condition is false
         /* force loading nodes from DB to get up-to-date node
          * offsets, see write_nodes() for details */
         Vect__free_offset(&(pg_info->offset));
