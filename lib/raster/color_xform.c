@@ -222,7 +222,7 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	 */
 	Rast_add_d_color_rule(&min, red, grn, blu,
 			      &eps, red, grn, blu, dst);
-	/* XXX: let's assume that the min positive cell value is greater than
+	/* XXX: let's assume that the positive min cell value is greater than
 	 * or equal to eps when we cannot use log(min) because min <= 0; if the
 	 * true positive min value is less than eps, it'll get assigned the
 	 * default color; or would it be logically correct to throw a fatal
