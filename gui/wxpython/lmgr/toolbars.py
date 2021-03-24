@@ -5,11 +5,11 @@
 
 Classes:
  - toolbars::LMWorkspaceToolbar
- - toolbars::LMDataToolbar
+ - toolbars::DisplayPanelToolbar
  - toolbars::LMToolsToolbar
  - toolbars::LMMiscToolbar
- - toolbars::LMVectorToolbar
  - toolbars::LMNvizToolbar
+
 
 (C) 2007-2013 by the GRASS Development Team
 
@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
+@author Linda Kladivova <linda.kladivova gmail com>
 """
 
 from core.gcmd import RunCommand
@@ -43,9 +44,6 @@ class LMWorkspaceToolbar(BaseToolbar):
         """Toolbar data
         """
         icons = {
-            'newdisplay': MetaIcon(
-                img='monitor-create',
-                label=_('Start new map display')),
             'workspaceNew': MetaIcon(
                 img='create',
                 label=_('Create new workspace (Ctrl+N)')),
@@ -56,10 +54,7 @@ class LMWorkspaceToolbar(BaseToolbar):
                 img='save',
                 label=_('Save current workspace to file (Ctrl+S)')),
         }
-        return self._getToolbarData((('newdisplay', icons["newdisplay"],
-                                      self.parent.OnNewDisplay),
-                                     (None, ),
-                                     ('workspaceNew', icons["workspaceNew"],
+        return self._getToolbarData((('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),
                                      ('workspaceOpen', icons["workspaceOpen"],
                                       self.parent.OnWorkspaceOpen),
@@ -68,12 +63,13 @@ class LMWorkspaceToolbar(BaseToolbar):
                                      ))
 
 
-class LMDataToolbar(BaseToolbar):
-    """Layer Manager `data` toolbar
+class DisplayPanelToolbar(BaseToolbar):
+    """Toolbar for display tab
     """
 
-    def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+    def __init__(self, guiparent, parent):
+        BaseToolbar.__init__(self, guiparent)
+        self.parent = parent
 
         self.InitToolbar(self._toolbarData())
 
@@ -84,6 +80,9 @@ class LMDataToolbar(BaseToolbar):
         """Toolbar data
         """
         icons = {
+            'newdisplay': MetaIcon(
+                img='monitor-create',
+                label=_('Start new map display')),
             'addMulti': MetaIcon(
                 img='layer-open',
                 label=_('Add multiple raster or vector map layers (Ctrl+Shift+L)')),
@@ -109,9 +108,18 @@ class LMDataToolbar(BaseToolbar):
             'delCmd': MetaIcon(
                 img='layer-remove',
                 label=_('Remove selected map layer(s) from layer tree')),
+            'vdigit': MetaIcon(
+                img='edit',
+                label=_('Edit selected vector map')),
+            'attrTable': MetaIcon(
+                img='table',
+                label=_('Show attribute data for selected vector map'))
         }
 
-        return self._getToolbarData((('addMulti', icons["addMulti"],
+        return self._getToolbarData((('newdisplay', icons["newdisplay"],
+                                      self.parent.OnNewDisplay),
+                                     (None, ),
+                                     ('addMulti', icons["addMulti"],
                                       self.parent.OnAddMaps),
                                      ('addrast', icons["addRast"],
                                       self.parent.OnAddRaster),
@@ -130,6 +138,11 @@ class LMDataToolbar(BaseToolbar):
                                       self.parent.OnAddGroup),
                                      ('delcmd', icons["delCmd"],
                                       self.parent.OnDeleteLayer),
+                                     (None, ),
+                                     ('vdigit', icons["vdigit"],
+                                      self.parent.OnVDigit),
+                                     ('attribute', icons["attrTable"],
+                                      self.parent.OnShowAttributeTable),
                                      ))
 
 
@@ -203,37 +216,6 @@ class LMMiscToolbar(BaseToolbar):
                                       self.parent.OnPreferences),
                                      ('help', icons["help"],
                                       self.parent.OnHelp),
-                                     ))
-
-
-class LMVectorToolbar(BaseToolbar):
-    """Layer Manager `vector` toolbar
-    """
-
-    def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
-
-        self.InitToolbar(self._toolbarData())
-
-        # realize the toolbar
-        self.Realize()
-
-    def _toolbarData(self):
-        """Toolbar data
-        """
-        icons = {
-            'vdigit': MetaIcon(
-                img='edit',
-                label=_('Edit selected vector map')),
-            'attrTable': MetaIcon(
-                img='table',
-                label=_('Show attribute data for selected vector map')),
-        }
-
-        return self._getToolbarData((('vdigit', icons["vdigit"],
-                                      self.parent.OnVDigit),
-                                     ('attribute', icons["attrTable"],
-                                      self.parent.OnShowAttributeTable),
                                      ))
 
 
