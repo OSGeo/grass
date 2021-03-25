@@ -46,10 +46,13 @@ class DataCatalog(wx.Panel):
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
+
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
         self.SetName("DataCatalog")
 
         Debug.msg(1, "DataCatalog.__init__()")
+
+        delay = 2000
 
         # toolbar
         self.toolbar = DataCatalogToolbar(parent=self)
@@ -65,13 +68,14 @@ class DataCatalog(wx.Panel):
         self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
                                                   giface=self.giface)
         self.tree.showImportDataInfo.connect(self.showImportDataInfo)
+
         # some layout
         self._layout()
 
         # show infobar for first-time user if applicable
         if first_time_user():
             # show data structure infobar for first-time user
-            wx.CallLater(2500, self.showDataStructureInfo)
+            wx.CallLater(delay, self.showDataStructureInfo)
 
         # show infobar if last used mapset is not usable
         if nonstandard_startup():
@@ -80,13 +84,13 @@ class DataCatalog(wx.Panel):
             reason = get_reason_mapset_not_usable(last_mapset_path)
             if reason == "invalid":
                 # show invalid mapset info
-                wx.CallLater(2000, self.infoManager.ShowInvalidMapsetInfo)
+                wx.CallLater(delay, self.infoManager.ShowInvalidMapsetInfo)
             elif reason == "owned by different user":
                 # show different mapset owner info
-                wx.CallLater(2000, self.infoManager.ShowDifferentMapsetOwnerInfo)
+                wx.CallLater(delay, self.infoManager.ShowDifferentMapsetOwnerInfo)
             elif reason == "locked":
                 # show info allowing to switch to locked mapset
-                wx.CallLater(2000, self.showLockedMapsetInfo)
+                wx.CallLater(delay, self.showLockedMapsetInfo)
 
     def _layout(self):
         """Do layout"""
