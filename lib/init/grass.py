@@ -874,10 +874,8 @@ MAPSET: <UNKNOWN>
 
 def first_time_user(mapset_settings):
     # Returns true if we are working with initial GISRC
-    return (
-        mapset_settings.gisdbase == os.getcwd()
-        and mapset_settings.location == "<UNKNOWN>"
-        and mapset_settings.mapset == "<UNKNOWN>"
+    return mapset_settings.full_mapset == os.path.join(
+        os.getcwd(), "<UNKNOWN>", "<UNKNOWN>"
     )
 
 
