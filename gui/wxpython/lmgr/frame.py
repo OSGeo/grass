@@ -710,7 +710,7 @@ class GMFrame(wx.Frame):
                     if not self.workspace_manager.workspaceFile:
                         self.OnWorkspaceSaveAs()
                     else:
-                        self.SaveToWorkspaceFile(self.workspace_manager.workspaceFile)
+                        self.SaveToWorkspaceFile()
                 elif ret == wx.ID_CANCEL:
                     return False
         return True
@@ -1315,6 +1315,10 @@ class GMFrame(wx.Frame):
     def OnWorkspaceClose(self, event=None):
         """Close file with workspace definition"""
         self.workspace_manager.Close()
+
+    def SaveToWorkspaceFile(self, event=None):
+        """Save layer tree layout to workspace file"""
+        self.workspace_manager.SaveToFile(self.workspace_manager.workspaceFile)
 
     def OnDisplayClose(self, event=None):
         """Close current map display window
