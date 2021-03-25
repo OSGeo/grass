@@ -13,21 +13,13 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-import sys
 import os
 import tempfile
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
-from core import globalvar
 import wx
 import wx.aui
-
-if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
-    sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from core.settings import UserSettings
 from core.gcmd import RunCommand, GError, GMessage

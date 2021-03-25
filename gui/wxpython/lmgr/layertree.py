@@ -1382,6 +1382,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         :param bool multiple: True to allow multiple map layers in layer tree
         :param bool loadWorkspace: True if called when loading workspace
         """
+        self._giface.workspaceChanged.emit()
+
         if lname and not multiple:
             # check for duplicates
             item = self.GetFirstChild(self.root)[0]

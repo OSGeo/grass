@@ -979,10 +979,8 @@ class VDigitSettingsDialog(wx.Dialog):
         .. todo::
             Needs refactoring
         """
-        # TODO: it seems that it needs to be replaced by signal
-        # but if it makes sense generally for wxGUI it can be added to giface
         if self.parent.GetLayerManager():
-            self.parent.GetLayerManager().WorkspaceChanged()  # geometry attributes
+            self._giface.workspaceChanged.emit()
         # symbology
         for key, (enabled, color) in six.iteritems(self.symbology):
             if enabled:
