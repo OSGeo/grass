@@ -1316,7 +1316,7 @@ class GMFrame(wx.Frame):
         """Close file with workspace definition"""
         self.workspace_manager.Close()
 
-    def SaveToWorkspaceFile(self, event=None):
+    def SaveToWorkspaceFile(self):
         """Save layer tree layout to workspace file"""
         self.workspace_manager.SaveToFile(self.workspace_manager.workspaceFile)
 
