@@ -44,7 +44,7 @@ int Rast__read_band_reference(FILE *fd, struct Key_Value **key_val)
 
     filename = G_find_key_value("file", *key_val);
     band_id = G_find_key_value("identifier", *key_val);
-    if (!filename || !band_id) {
+    if (!band_id) {
         G_debug(1, "Invalid band reference identifier");
         return -2;
     }
@@ -104,6 +104,7 @@ int Rast_has_band_reference(const char *name, const char *mapset)
    \brief Read raster map band reference identifier.
 
    Note that output arguments should be freed by the caller using G_free().
+   Note that filename might be empty.
 
    \param name map name
    \param mapset mapset name
@@ -162,6 +163,11 @@ int Rast_write_band_reference(const char *name,
     FILE *fd;
 
     G_debug(3, "Writing band reference file for raster map <%s>", name);
+
+    if (!band_id) {
+        G_warning("Programming error. Band ID is empty.");
+        return -1;
+    }
 
     fd = G_fopen_new_misc("cell_misc", _band_file, name);
     if (!fd) {
