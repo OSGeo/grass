@@ -144,7 +144,9 @@ int Rast_read_band_reference(const char *name, const char *mapset,
 }
 
 /*!
-   \brief Write raster map band reference identifier.
+   \brief Write raster map band reference identifier
+
+   Band identifiers must be validated with Rast_legal_band_id() in advance.
 
    \param name map name
    \param filename filename JSON reference
@@ -190,10 +192,12 @@ int Rast_remove_band_reference(const char *name)
 }
 
 /*!
-  \brief Check for legal band name.
+  \brief Check for legal band id
 
-  Legal band names must be legal GRASS file names.
-  They are in format <shortcut>_<band>.
+  Legal band identifiers must be legal GRASS file names.
+  They are in format <shortcut>_<bandname>.
+  Band identifiers are capped in legth to GNAME_MAX.
+
   This function will return -1 if provided band id is not considered
   to be valid.
   This function does not check if band ID maps to any entry in band
@@ -211,13 +215,18 @@ int Rast_legal_band_id(const char *band_id)
     char **tokens;
     int ntok, i;
 
+    if (strlen(band_id) >= GNAME_MAX - 1) {
+        G_warning(_("Band id is too long"));
+        return -1;
+    }
+
     if (G_legal_filename(band_id) != 1)
         return -1;
 
     tokens = G_tokenize(band_id, "_");
     ntok = G_number_of_tokens(tokens);
     if (ntok < 2) {
-        G_warning(_("Illegal band name <%s>"), band_id);
+        G_warning(_("Band id must be in form <shortcut>_<bandname>"));
         G_free_tokens(tokens);
         return -1;
     }

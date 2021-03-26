@@ -9,6 +9,8 @@ Read the file COPYING that comes with GRASS
 for details
 """
 import ctypes
+import random
+import string
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -58,6 +60,10 @@ class RastLegalBandIdTestCase(TestCase):
         ret = Rast_legal_band_id("USER_")
         self.assertEqual(ret, -1)
         ret = Rast_legal_band_id("S2_")
+        self.assertEqual(ret, -1)
+
+    def test_too_long(self):
+        ret = Rast_legal_band_id("".join(random.choices(string.ascii_letters, k=256)))
         self.assertEqual(ret, -1)
 
     def test_good_name(self):
