@@ -43,6 +43,7 @@ int Rast_read_band_reference(const char *, const char *, char **, char **);
 int Rast_write_band_reference(const char *, const char *, const char *);
 int Rast_remove_band_reference(const char *);
 int Rast_legal_band_id(const char *);
+char *Rast_find_band_filename(const char *);
 
 /* cats.c */
 int Rast_read_cats(const char *, const char *, struct Categories *);
