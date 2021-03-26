@@ -112,7 +112,16 @@ class RastBandReferenceTestCase(TestCase):
         ret = Rast_has_band_reference(self.map, self.mapset)
         self.assertEqual(ret, 0)
 
-    def test_bandref_read(self):
+    def test_write_band_id_empty(self):
+        ret = Rast_write_band_reference(self.map, self.band_filename, None)
+        self.assertEqual(ret, -1)
+
+    def test_write_band_filename_empty(self):
+        ret = Rast_write_band_reference(self.map, None, self.band_id)
+        self.assertEqual(ret, 1)
+
+    def test_bandref_read_write_both(self):
+        Rast_remove_band_reference(self.map)
         ret = Rast_write_band_reference(self.map, self.band_filename, self.band_id)
         self.assertEqual(ret, 1)
         ret = Rast_has_band_reference(self.map, self.mapset)
@@ -127,6 +136,23 @@ class RastBandReferenceTestCase(TestCase):
         band_file = utils.decode(p_filename.contents.value)
         self.assertEqual(band_id, self.band_id)
         self.assertEqual(band_file, self.band_filename)
+
+    def test_bandref_read_write_id_only(self):
+        Rast_remove_band_reference(self.map)
+        ret = Rast_write_band_reference(self.map, None, self.band_id)
+        self.assertEqual(ret, 1)
+        ret = Rast_has_band_reference(self.map, self.mapset)
+        self.assertEqual(ret, 1)
+        p_filename = ctypes.pointer(ctypes.create_string_buffer(4096))
+        p_band_id = ctypes.pointer(ctypes.create_string_buffer(4096))
+        ret = Rast_read_band_reference(
+            self.map, self.mapset, ctypes.pointer(p_filename), ctypes.pointer(p_band_id)
+        )
+        self.assertEqual(ret, 1)
+        band_id = utils.decode(p_band_id.contents.value)
+        band_filename = utils.decode(p_filename.contents.value)
+        self.assertEqual(band_id, self.band_id)
+        self.assertFalse(bool(band_filename))
 
 
 class RastBandFindFilenameTestCase(TestCase):
