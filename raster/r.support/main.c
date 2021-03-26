@@ -40,13 +40,12 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *raster, *title_opt, *history_opt;
     struct Option *datasrc1_opt, *datasrc2_opt, *datadesc_opt;
-    struct Option *band_id_opt, *band_file_opt;
+    struct Option *bandref_opt;
     struct Option *map_opt, *units_opt, *vdatum_opt;
     struct Option *load_opt, *save_opt;
-    struct Flag *stats_flag, *null_flag, *del_flag, *band_rm_flag;
+    struct Flag *stats_flag, *null_flag, *del_flag, *bandref_rm_flag;
     int is_reclass;		/* Is raster reclass? */
     const char *infile;
-    char *band_id[GNAME_MAX], *band_file[GNAME_MAX];
     struct History hist;
 
     /* Initialize GIS engine */
@@ -136,28 +135,19 @@ int main(int argc, char *argv[])
     save_opt->guisection = _("Import / export");
     save_opt->description = _("Text file in which to save history");
 
-    band_id_opt = G_define_option();
-    band_id_opt->key = "band_id";
-    band_id_opt->key_desc = "phrase";
-    band_id_opt->type = TYPE_STRING;
-    band_id_opt->required = NO;
-    band_id_opt->guisection = _("Band reference");
-    band_id_opt->description =
-	_("Band ID in form shortcut_name e.g. S2_8A");
+    bandref_opt = G_define_option();
+    bandref_opt->key = "bandref";
+    bandref_opt->key_desc = "phrase";
+    bandref_opt->type = TYPE_STRING;
+    bandref_opt->required = NO;
+    bandref_opt->guisection = _("Band reference");
+    bandref_opt->description =
+	_("Band reference in form shortcut_name e.g. S2_8A");
 
-    band_file_opt = G_define_option();
-    band_file_opt->key = "band_filename";
-    band_file_opt->key_desc = "phrase";
-    band_file_opt->type = TYPE_STRING;
-    band_file_opt->required = NO;
-    band_file_opt->guisection = _("Band reference");
-    band_file_opt->description =
-	_("Name of file with band metadata e.g. landsat.json");
-
-    band_rm_flag = G_define_flag();
-    band_rm_flag->key = 'b';
-    band_rm_flag->guisection = _("Band reference");
-    band_rm_flag->description = _("Delete the band reference");
+    bandref_rm_flag = G_define_flag();
+    bandref_rm_flag->key = 'b';
+    bandref_rm_flag->guisection = _("Band reference");
+    bandref_rm_flag->description = _("Delete the band reference");
 
     stats_flag = G_define_flag();
     stats_flag->key = 's';
@@ -184,7 +174,7 @@ int main(int argc, char *argv[])
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
 	G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
 
-    if (band_rm_flag->answer && (band_id_opt->answer || band_file_opt->answer))
+    if (bandref_rm_flag->answer && bandref_opt->answer)
         G_fatal_error(_("Band reference removal and setting band "
                         "reference values simultaneously doesn't make sense"));
 
@@ -294,44 +284,21 @@ int main(int argc, char *argv[])
 	Rast_free_cats(&cats);
     }
 
-    if (band_id_opt->answer || band_file_opt->answer) {
-        *band_id = NULL;
-        *band_file = NULL;
-        /* Keep extisting band ID or band filename */
-        Rast_read_band_reference(infile, mapset, band_file, band_id);
-        if (band_id_opt->answer) {
-            if (Rast_legal_band_id(band_id_opt->answer) < 0)
-                G_fatal_error(_("Provided band ID is not valid. "
-                                "See documentation for valid examples"));
-            *band_id = band_id_opt->answer;
-        }
+    if (bandref_opt->answer) {
+        if (Rast_legal_bandref(bandref_opt->answer) < 0)
+            G_fatal_error(_("Provided band reference is not valid. "
+                            "See documentation for valid examples"));
 
-        if (band_file_opt->answer) {
-            if (strlen(band_file_opt->answer) >= GNAME_MAX - 1)
-                G_fatal_error(_("Provided band filename is too long. "
-                                "Its length should not exceed %d characters"),
-                                GNAME_MAX);
-            if (!Rast_find_band_filename(band_file_opt->answer))
-                G_fatal_error(_("Provided band filename is not known. "
-                                "See g.band for list of known band metadata file names."));
-            /* FIXME:
-               At the moment there is no C function to check if a band
-               metadata file pointed by band filename contains metadata
-               of the specified band_id */
-            *band_file = band_file_opt->answer;
-        }
-
-        if (Rast_write_band_reference(infile, *band_file, *band_id) < 0)
-            G_fatal_error(_("There was an error writting band reference data"));
+        Rast_write_bandref(infile, bandref_opt->answer);
     }
 
-    if (band_rm_flag->answer)
-        Rast_remove_band_reference(infile);
+    if (bandref_rm_flag->answer)
+        G_remove_misc("cell_misc", "bandref", infile);
 
     if (title_opt->answer || history_opt->answer || units_opt->answer
 	|| vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer
 	|| datadesc_opt->answer || map_opt->answer
-    || band_id_opt->answer || band_file_opt->answer || band_rm_flag->answer)
+    || bandref_opt->answer || bandref_rm_flag->answer)
 	exit(EXIT_SUCCESS);
 
 
