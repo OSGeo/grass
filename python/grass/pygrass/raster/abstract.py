@@ -162,55 +162,33 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
-    def _get_band_reference(self):
+    def _get_bandref(self):
         """Get band reference identifier.
 
         :return str: band identifier (eg. S2_1) or None
         """
-        band_ref = None
-        p_filename = ctypes.c_char_p()
-        p_band_ref = ctypes.c_char_p()
-        ret = libraster.Rast_read_band_reference(
-            self.name, self.mapset, ctypes.byref(p_filename), ctypes.byref(p_band_ref)
-        )
-        if ret:
-            band_ref = utils.decode(p_band_ref.value)
-            libgis.G_free(p_filename)
-            libgis.G_free(p_band_ref)
 
-        return band_ref
+        return libraster.Rast_read_bandref(self.name, self.mapset)
 
     @must_be_in_current_mapset
-    def _set_band_reference(self, band_reference):
+    def _set_bandref(self, bandref):
         """Set/Unset band reference identifier.
 
-        :param str band_reference: band reference to assign or None to remove (unset)
+        :param str bandref: band reference to assign or None to remove (unset)
         """
-        if band_reference:
-            # assign
-            from grass.bandref import BandReferenceReader, BandReferenceReaderError
-
-            reader = BandReferenceReader()
-            # determine filename (assuming that band_reference is unique!)
-            try:
-                filename = reader.find_file(band_reference)
-            except BandReferenceReaderError as e:
-                fatal("{}".format(e))
-                raise
-            if not filename:
-                fatal("Band reference <{}> not found".format(band_reference))
-                raise
-
-            # write band reference
-            libraster.Rast_write_band_reference(self.name, filename, band_reference)
+        if bandref:
+            if libraster.Rast_legal_bandref(bandref) < 0:
+                raise ValueError(_("Invalid band reference"))
+            libraster.Rast_write_bandref(self.name, bandref)
         else:
-            libraster.Rast_remove_band_reference(self.name)
+            libgis.G_remove_misc("cell_misc", "bandref", self.name)
 
-    band_reference = property(fget=_get_band_reference, fset=_set_band_reference)
+    bandref = property(_get_bandref, _set_bandref)
 
     def _get_units(self):
         return libraster.Rast_read_units(self.name, self.mapset)
 
+    @must_be_in_current_mapset
     def _set_units(self, units):
         libraster.Rast_write_units(self.name, units)
 
@@ -219,6 +197,7 @@ class Info(object):
     def _get_vdatum(self):
         return libraster.Rast_read_vdatum(self.name, self.mapset)
 
+    @must_be_in_current_mapset
     def _set_vdatum(self, vdatum):
         libraster.Rast_write_vdatum(self.name, vdatum)
 
