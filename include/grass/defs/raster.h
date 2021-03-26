@@ -36,10 +36,13 @@ void Rast_suppress_masking(void);
 void Rast_unsuppress_masking(void);
 
 /* bands.c */
+int Rast__read_band_reference(FILE *, struct Key_Value **);
+int Rast__write_band_reference(FILE *, const char *, const char *);
 int Rast_has_band_reference(const char *, const char *);
 int Rast_read_band_reference(const char *, const char *, char **, char **);
 int Rast_write_band_reference(const char *, const char *, const char *);
 int Rast_remove_band_reference(const char *);
+int Rast_legal_band_id(const char *);
 
 /* cats.c */
 int Rast_read_cats(const char *, const char *, struct Categories *);
