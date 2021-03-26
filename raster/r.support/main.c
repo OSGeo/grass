@@ -40,11 +40,13 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *raster, *title_opt, *history_opt;
     struct Option *datasrc1_opt, *datasrc2_opt, *datadesc_opt;
+    struct Option *band_id_opt, *band_file_opt;
     struct Option *map_opt, *units_opt, *vdatum_opt;
     struct Option *load_opt, *save_opt;
-    struct Flag *stats_flag, *null_flag, *del_flag;
+    struct Flag *stats_flag, *null_flag, *del_flag, *band_rm_flag;
     int is_reclass;		/* Is raster reclass? */
     const char *infile;
+    char *band_id[GNAME_MAX], *band_file[GNAME_MAX];
     struct History hist;
 
     /* Initialize GIS engine */
@@ -63,6 +65,7 @@ int main(int argc, char *argv[])
     title_opt->key_desc = "phrase";
     title_opt->type = TYPE_STRING;
     title_opt->required = NO;
+    title_opt->guisection = _("Metadata");
     title_opt->description = _("Title for resultant raster map");
 
     history_opt = G_define_option();
@@ -70,6 +73,7 @@ int main(int argc, char *argv[])
     history_opt->key_desc = "phrase";
     history_opt->type = TYPE_STRING;
     history_opt->required = NO;
+    history_opt->guisection = _("Metadata");
     history_opt->description =
 	_("Text to append to the next line of the map's metadata file");
 
@@ -77,12 +81,14 @@ int main(int argc, char *argv[])
     units_opt->key = "units";
     units_opt->type = TYPE_STRING;
     units_opt->required = NO;
+    units_opt->guisection = _("Metadata");
     units_opt->description = _("Text to use for map data units");
 
     vdatum_opt = G_define_option();
     vdatum_opt->key = "vdatum";
     vdatum_opt->type = TYPE_STRING;
     vdatum_opt->required = NO;
+    vdatum_opt->guisection = _("Metadata");
     vdatum_opt->description = _("Text to use for map vertical datum");
 
     datasrc1_opt = G_define_option();
@@ -90,6 +96,7 @@ int main(int argc, char *argv[])
     datasrc1_opt->key_desc = "phrase";
     datasrc1_opt->type = TYPE_STRING;
     datasrc1_opt->required = NO;
+    datasrc1_opt->guisection = _("Metadata");
     datasrc1_opt->description = _("Text to use for data source, line 1");
 
     datasrc2_opt = G_define_option();
@@ -97,6 +104,7 @@ int main(int argc, char *argv[])
     datasrc2_opt->key_desc = "phrase";
     datasrc2_opt->type = TYPE_STRING;
     datasrc2_opt->required = NO;
+    datasrc2_opt->guisection = _("Metadata");
     datasrc2_opt->description = _("Text to use for data source, line 2");
 
     datadesc_opt = G_define_option();
@@ -104,6 +112,7 @@ int main(int argc, char *argv[])
     datadesc_opt->key_desc = "phrase";
     datadesc_opt->type = TYPE_STRING;
     datadesc_opt->required = NO;
+    datadesc_opt->guisection = _("Metadata");
     datadesc_opt->description =
 	_("Text to use for data description or keyword(s)");
 
@@ -112,28 +121,57 @@ int main(int argc, char *argv[])
     map_opt->type = TYPE_STRING;
     map_opt->required = NO;
     map_opt->gisprompt = "old,cell,raster";
+    map_opt->guisection = _("Import / export");
     map_opt->description = _("Raster map from which to copy category table");
 
     load_opt = G_define_standard_option(G_OPT_F_INPUT);
     load_opt->key = "loadhistory";
     load_opt->required = NO;
+    load_opt->guisection = _("Import / export");
     load_opt->description = _("Text file from which to load history");
 
     save_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     save_opt->key = "savehistory";
     save_opt->required = NO;
+    save_opt->guisection = _("Import / export");
     save_opt->description = _("Text file in which to save history");
+
+    band_id_opt = G_define_option();
+    band_id_opt->key = "band_id";
+    band_id_opt->key_desc = "phrase";
+    band_id_opt->type = TYPE_STRING;
+    band_id_opt->required = NO;
+    band_id_opt->guisection = _("Band reference");
+    band_id_opt->description =
+	_("Band ID in form shortcut_name e.g. S2_8A");
+
+    band_file_opt = G_define_option();
+    band_file_opt->key = "band_filename";
+    band_file_opt->key_desc = "phrase";
+    band_file_opt->type = TYPE_STRING;
+    band_file_opt->required = NO;
+    band_file_opt->guisection = _("Band reference");
+    band_file_opt->description =
+	_("Name of file with band metadata e.g. landsat.json");
+
+    band_rm_flag = G_define_flag();
+    band_rm_flag->key = 'b';
+    band_rm_flag->guisection = _("Band reference");
+    band_rm_flag->description = _("Delete the band reference");
 
     stats_flag = G_define_flag();
     stats_flag->key = 's';
+    stats_flag->guisection = _("Maintenece");
     stats_flag->description = _("Update statistics (histogram, range)");
 
     null_flag = G_define_flag();
     null_flag->key = 'n';
+    null_flag->guisection = _("Maintenece");
     null_flag->description = _("Create/reset the null file");
 
     del_flag = G_define_flag();
     del_flag->key = 'd';
+    del_flag->guisection = _("Maintenece");
     del_flag->description = _("Delete the null file");
 
     /* Parse command-line options */
@@ -145,6 +183,10 @@ int main(int argc, char *argv[])
     mapset = G_find_raster2(infile, G_mapset());	/* current mapset only for editing */
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
 	G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
+
+    if (band_rm_flag->answer && (band_id_opt->answer || band_file_opt->answer))
+        G_fatal_error(_("Band reference removal and setting band "
+                        "reference values simultaneously doesn't make sense"));
 
     Rast_get_cellhd(raster->answer, "", &cellhd);
     is_reclass = (Rast_is_reclass(raster->answer, "", rname, rmapset) > 0);
@@ -252,10 +294,44 @@ int main(int argc, char *argv[])
 	Rast_free_cats(&cats);
     }
 
+    if (band_id_opt->answer || band_file_opt->answer) {
+        *band_id = NULL;
+        *band_file = NULL;
+        /* Keep extisting band ID or band filename */
+        Rast_read_band_reference(infile, mapset, band_file, band_id);
+        if (band_id_opt->answer) {
+            if (Rast_legal_band_id(band_id_opt->answer) < 0)
+                G_fatal_error(_("Provided band ID is not valid. "
+                                "See documentation for valid examples"));
+            *band_id = band_id_opt->answer;
+        }
+
+        if (band_file_opt->answer) {
+            if (strlen(band_file_opt->answer) >= GNAME_MAX - 1)
+                G_fatal_error(_("Provided band filename is too long. "
+                                "Its length should not exceed %d characters"),
+                                GNAME_MAX);
+            if (!Rast_find_band_filename(band_file_opt->answer))
+                G_fatal_error(_("Provided band filename is not known. "
+                                "See g.band for list of known band metadata file names."));
+            /* FIXME:
+               At the moment there is no C function to check if a band
+               metadata file pointed by band filename contains metadata
+               of the specified band_id */
+            *band_file = band_file_opt->answer;
+        }
+
+        if (Rast_write_band_reference(infile, *band_file, *band_id) < 0)
+            G_fatal_error(_("There was an error writting band reference data"));
+    }
+
+    if (band_rm_flag->answer)
+        Rast_remove_band_reference(infile);
 
     if (title_opt->answer || history_opt->answer || units_opt->answer
 	|| vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer
-	|| datadesc_opt->answer || map_opt->answer)
+	|| datadesc_opt->answer || map_opt->answer
+    || band_id_opt->answer || band_file_opt->answer || band_rm_flag->answer)
 	exit(EXIT_SUCCESS);
 
 
