@@ -23,6 +23,7 @@ from grass.lib.raster import (
     Rast_write_band_reference,
     Rast_remove_band_reference,
     Rast_read_band_reference,
+    Rast_find_band_filename,
 )
 
 
@@ -120,6 +121,32 @@ class RastBandReferenceTestCase(TestCase):
         band_file = utils.decode(p_filename.contents.value)
         self.assertEqual(band_id, self.band_id)
         self.assertEqual(band_file, self.band_filename)
+
+
+class RastBandFindFilenameTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.doesnt_exist = tempname(10)
+        # Create a user defined band metadata file
+        # (touch $HOME/.grass8/band_meta/RANDOMFILE.json)
+        # Should be done via C user band management function
+
+    @classmethod
+    def tearDownClass(cls):
+        # Remove user defined band metadata file created in setUpClass
+        pass
+
+    def test_unknown_filename(self):
+        ret = Rast_find_band_filename(self.doesnt_exist)
+        self.assertFalse(ret)
+
+    def test_global_filename(self):
+        # TODO: needs a global band metadata file
+        pass
+
+    def test_user_filename(self):
+        # TODO: needs user band management C functions
+        pass
 
 
 if __name__ == "__main__":

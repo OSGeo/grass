@@ -13,12 +13,14 @@
  */
 
 #include <string.h>
+#include <unistd.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
 static const char *_band_file = "band_reference";
+static const char *_band_dir = "band_meta";
 
 /*!
    \brief Read band reference identifier from file (internal use only).
@@ -227,4 +229,28 @@ int Rast_legal_band_id(const char *band_id)
 
     G_free_tokens(tokens);
     return 1;
+}
+
+/*!
+   \brief Searches for band metadata file
+
+   Searches in both GRASS built-in and also user managed band metadata files
+
+   \param band_filename name of band metadata file
+
+   \return pointer to a string with full path to metadata file,
+           or NULL if not found
+*/
+char *Rast_find_band_filename(const char *filename) {
+    char out_path[GPATH_MAX];
+
+    G_snprintf(out_path, GPATH_MAX, "%s/etc/%s/%s", G_gisbase(), _band_dir, filename);
+    if (access(out_path, 0) == 0)
+        return G_store(out_path);
+
+    G_snprintf(out_path, GPATH_MAX, "%s/%s/%s", G_config_path(), _band_dir, filename);
+    if (access(out_path, 0) == 0)
+        return G_store(out_path);
+
+    return NULL;
 }
