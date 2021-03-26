@@ -46,7 +46,6 @@ int main(int argc, char *argv[])
     struct Flag *stats_flag, *null_flag, *del_flag, *bandref_rm_flag;
     int is_reclass;		/* Is raster reclass? */
     const char *infile;
-    char *band_id[GNAME_MAX], *band_file[GNAME_MAX];
     struct History hist;
 
     /* Initialize GIS engine */
