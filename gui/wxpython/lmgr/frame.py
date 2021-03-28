@@ -664,7 +664,7 @@ class GMFrame(wx.Frame):
         # save changes in the workspace
         name = self.notebookLayers.GetPageText(event.GetSelection())
         caption = _("Close Map Display {}").format(name)
-        if not self.CanClosePage(caption):
+        if not self.workspace_manager.CanClosePage(caption):
             event.Veto()
             return
 
@@ -683,37 +683,6 @@ class GMFrame(wx.Frame):
         self.notebookLayers.DeletePage(page_index)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
                                  self.OnCBPageClosing)
-
-    def CanClosePage(self, caption):
-        """Ask if page with map display(s) can be closed
-        """
-        # save changes in the workspace
-        maptree = self.GetLayerTree()
-        if self.workspace_manager.workspaceChanged and UserSettings.Get(
-                group='manager', key='askOnQuit', subkey='enabled'):
-            if self.workspace_manager.workspaceFile:
-                message = _("Do you want to save changes in the workspace?")
-            else:
-                message = _("Do you want to store current settings "
-                            "to workspace file?")
-
-            # ask user to save current settings
-            if maptree.GetCount() > 0:
-                dlg = wx.MessageDialog(self,
-                                       message=message,
-                                       caption=caption,
-                                       style=wx.YES_NO | wx.YES_DEFAULT |
-                                       wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
-                ret = dlg.ShowModal()
-                dlg.Destroy()
-                if ret == wx.ID_YES:
-                    if not self.workspace_manager.workspaceFile:
-                        self.OnWorkspaceSaveAs()
-                    else:
-                        self.SaveToWorkspaceFile()
-                elif ret == wx.ID_CANCEL:
-                    return False
-        return True
 
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
@@ -1316,10 +1285,6 @@ class GMFrame(wx.Frame):
         """Close file with workspace definition"""
         self.workspace_manager.Close()
 
-    def SaveToWorkspaceFile(self):
-        """Save layer tree layout to workspace file"""
-        self.workspace_manager.SaveToFile(self.workspace_manager.workspaceFile)
-
     def OnDisplayClose(self, event=None):
         """Close current map display window
         """
@@ -1329,7 +1294,7 @@ class GMFrame(wx.Frame):
     def OnDisplayCloseAll(self, event):
         """Close all open map display windows (from menu)
         """
-        if not self.CanClosePage(caption=_("Close all Map Displays")):
+        if not self.workspace_manager.CanClosePage(caption=_("Close all Map Displays")):
             return
         self.DisplayCloseAll()
 
@@ -2138,7 +2103,7 @@ class GMFrame(wx.Frame):
             self._auimgr.UnInit()
             self.Destroy()
             return
-        if not self.CanClosePage(caption=_("Quit GRASS GUI")):
+        if not self.workspace_manager.CanClosePage(caption=_("Quit GRASS GUI")):
             # when called from menu, it gets CommandEvent and not
             # CloseEvent
             if hasattr(event, 'Veto'):

@@ -239,6 +239,9 @@ class StandaloneGrassInterface(GrassInterface):
         # Signal emitted to request updating of map
         self.updateMap = Signal('StandaloneGrassInterface.updateMap')
 
+        # Signal emitted when workspace is changed
+        self.workspaceChanged = Signal('StandaloneGrassInterface.workspaceChanged')
+
         # workaround, standalone grass interface should be moved to sep. file
         from core.gconsole import GConsole, \
             EVT_CMD_OUTPUT, EVT_CMD_PROGRESS

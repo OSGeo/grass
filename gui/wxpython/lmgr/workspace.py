@@ -441,6 +441,37 @@ class WorkspaceManager:
 
         return True
 
+    def CanClosePage(self, caption):
+        """Ask if page with map display(s) can be closed
+        """
+        # save changes in the workspace
+        maptree = self._giface.GetLayerTree()
+        if self.workspaceChanged and UserSettings.Get(
+                group='manager', key='askOnQuit', subkey='enabled'):
+            if self.workspaceFile:
+                message = _("Do you want to save changes in the workspace?")
+            else:
+                message = _("Do you want to store current settings "
+                            "to workspace file?")
+
+            # ask user to save current settings
+            if maptree.GetCount() > 0:
+                dlg = wx.MessageDialog(self.lmgr,
+                                       message=message,
+                                       caption=caption,
+                                       style=wx.YES_NO | wx.YES_DEFAULT |
+                                       wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+                ret = dlg.ShowModal()
+                dlg.Destroy()
+                if ret == wx.ID_YES:
+                    if not self.workspaceFile:
+                        self.SaveAs()
+                    else:
+                        self.SaveToFile()
+                elif ret == wx.ID_CANCEL:
+                    return False
+        return True
+
     def Close(self):
         """Close file with workspace definition
         If workspace has been modified ask user to save the changes.
