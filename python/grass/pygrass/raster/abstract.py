@@ -168,7 +168,10 @@ class Info(object):
         :return str: band identifier (eg. S2_1) or None
         """
 
-        return libraster.Rast_read_bandref(self.name, self.mapset)
+        bandref = libraster.Rast_read_bandref(self.name, self.mapset)
+        if bandref:
+            return utils.decode(bandref)
+        return None
 
     @must_be_in_current_mapset
     def _set_bandref(self, bandref):
@@ -186,7 +189,10 @@ class Info(object):
     bandref = property(_get_bandref, _set_bandref)
 
     def _get_units(self):
-        return libraster.Rast_read_units(self.name, self.mapset)
+        units = libraster.Rast_read_units(self.name, self.mapset)
+        if units:
+            return utils.decode(units)
+        return None
 
     @must_be_in_current_mapset
     def _set_units(self, units):
@@ -195,7 +201,10 @@ class Info(object):
     units = property(_get_units, _set_units)
 
     def _get_vdatum(self):
-        return libraster.Rast_read_vdatum(self.name, self.mapset)
+        vdatum = libraster.Rast_read_vdatum(self.name, self.mapset)
+        if vdatum:
+            return utils.decode(vdatum)
+        return None
 
     @must_be_in_current_mapset
     def _set_vdatum(self, vdatum):
