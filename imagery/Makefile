@@ -31,6 +31,8 @@ SUBDIRS = \
 	i.rgb.his \
 	i.segment \
 	i.smap \
+	i.svm.predict \
+	i.svm.train \
 	i.target \
 	i.topo.corr \
 	i.pca \
