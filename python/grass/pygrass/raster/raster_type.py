@@ -7,7 +7,7 @@ import grass.lib.raster as libraster
 import ctypes
 import numpy as np
 
-## Private dictionary to convert RASTER_TYPE into type string.
+# Private dictionary to convert RASTER_TYPE into type string.
 RTYPE_STR = {
     libraster.CELL_TYPE: "CELL",
     libraster.FCELL_TYPE: "FCELL",
