@@ -31,6 +31,12 @@
 #%option G_OPT_STRDS_INPUT
 #%end
 
+#%option G_OPT_R_INPUT
+#% key: zones
+#% description: Raster map used for zoning, must be of type CELL
+#% required: no
+#%end
+
 #%option G_OPT_F_OUTPUT
 #% required: no
 #%end
@@ -72,6 +78,7 @@ def main():
 
     # Get the options
     input = options["input"]
+    zones = options["zones"]
     output = options["output"]
     where = options["where"]
     extended = flags["e"]
@@ -87,8 +94,30 @@ def main():
     if output == "-":
         output = None
 
-    tgis.print_gridded_dataset_univar_statistics(
-        "strds", input, output, where, extended, no_header, separator, rast_region)
+    if not zones:
+        tgis.print_gridded_dataset_univar_statistics(
+                "strds",
+                input,
+                output,
+                where,
+                extended,
+                no_header,
+                separator,
+                rast_region,
+        )
+    else:
+        grass.verbose('Zonal statistics')
+        tgis.print_gridded_dataset_univar_statistics_over_zones(
+                "strds",
+                input,
+                zones,
+                output,
+                where,
+                extended,
+                no_header,
+                separator,
+                rast_region,
+        )
 
 if __name__ == "__main__":
     options, flags = grass.parser()
