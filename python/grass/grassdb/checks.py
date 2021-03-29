@@ -18,6 +18,39 @@ from grass.script import gisenv
 import grass.script as gs
 import glob
 
+from grass.grassdb.strings import (default_location, temporary_location,
+                                   unknown_location, unknown_mapset)
+
+
+def read_gisrc():
+    """Read variables from a current GISRC file
+
+    Returns a dictionary representation of the file content.
+    """
+    grassrc = {}
+
+    gisrc = os.getenv("GISRC")
+
+    try:
+        rc = open(gisrc, "r")
+    except IOError:
+        return grassrc
+
+    if gisrc and os.path.isfile(gisrc):
+        try:
+            rc = open(gisrc, "r")
+            for line in rc.readlines():
+                try:
+                    key, val = line.split(":", 1)
+                except ValueError as e:
+                    sys.stderr.write(
+                        _('Invalid line in GISRC file (%s):%s\n' % (e, line)))
+                grassrc[key.strip()] = val.strip()
+        finally:
+            rc.close()
+
+    return grassrc
+
 
 def mapset_exists(database, location, mapset):
     """Returns True whether mapset path exists."""
@@ -116,11 +149,37 @@ def get_mapset_owner(mapset_path):
 
 
 def is_current_mapset_in_default_location():
-    """Check if the mapset is in default location"""
+    """Returns True if mapset is in a default location"""
     return (
-        gisenv()["LOCATION_NAME"] == "world_latlong_wgs84"
+        gisenv()["LOCATION_NAME"] == default_location
         and gisenv()["MAPSET"] == "PERMANENT"
     )
+
+
+def is_nonstandard_startup():
+    """ Checks if a user encounters a nonstandard startup.
+
+    Returns True if a user encounters a nonstandard startup.
+    It occurs when a last mapset is not usable and at the same time
+    a user is in a temporary location.
+    """
+    if "LAST_MAPSET_PATH" in read_gisrc().keys():
+        return is_mapset_current(os.environ["TMPDIR"], temporary_location, "PERMANENT")
+    return False
+
+
+def is_first_time_user():
+    """ Check if a user is a first-time user.
+
+    Returns True if a user is a first-time user.
+    It occurs when a gisrc file has initial settings.
+    """
+    if "LAST_MAPSET_PATH" in read_gisrc().keys():
+        initial_gisrc = read_gisrc()["LAST_MAPSET_PATH"] == os.path.join(
+            os.getcwd(), unknown_location, unknown_mapset
+        )
+        return initial_gisrc
+    return False
 
 
 def is_mapset_locked(mapset_path):
@@ -174,27 +233,27 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
 
 
 def get_reason_mapset_not_usable(mapset_path):
-    """It gets reasons when:
-     * Mapset is invalid.
-     * Mapset is owned by different user.
-     * Mapset is locked.
+    """It finds a reason why mapset is not usable.
 
-    Returns message as string if there was a reason, otherwise None.
+    Returns a reason id as number if there was a reason, otherwise None.
+    Returns 1 if mapset is invalid.
+    Returns 2 if mapset has a different owner.
+    Returns 3 if mapset is locked.
     """
     if mapset_path is None:
         return
-    message = None
+    reason_id = None
 
     # Check whether mapset is valid
     if not is_mapset_valid(mapset_path):
-        message = _("invalid")
+        reason_id = 1
     # Check whether mapset is owned by current user
     elif not is_current_user_mapset_owner(mapset_path):
-        message = _("owned by different user")
+        reason_id = 2
     # Check whether mapset is locked
     elif is_mapset_locked(mapset_path):
-        message = _("locked")
-    return message
+        reason_id = 3
+    return reason_id
 
 
 def dir_contains_location(path):

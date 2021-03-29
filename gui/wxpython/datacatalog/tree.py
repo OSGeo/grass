@@ -62,7 +62,6 @@ from startup.guiutils import (
     get_reasons_location_not_removable,
     get_mapset_name_invalid_reason,
     get_location_name_invalid_reason,
-    first_time_user
 )
 from grass.grassdb.manage import (
     rename_mapset,
@@ -74,8 +73,10 @@ from grass.pydispatch.signal import Signal
 import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
+from grass.grassdb.manage import delete_temporary_location
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
-                                  is_different_mapset_owner)
+                                  is_different_mapset_owner, is_first_time_user,
+                                  is_nonstandard_startup)
 from grass.exceptions import CalledModuleError
 
 
@@ -957,7 +958,7 @@ class DataCatalogTree(TreeView):
         """
         Creates new location interactively and adds it to the tree and switch
         to its new PERMANENT mapset.
-        If a user was in Demolocation, it shows data import infobar.
+        If a user is a first-time user, it shows data import infobar.
         """
         grassdatabase, location, mapset = (
             create_location_interactively(self, grassdb_node.data['name'])
@@ -968,13 +969,13 @@ class DataCatalogTree(TreeView):
                                              element='location',
                                              action='new')
 
-            # show data import infobar for first-time user with proper layout
-            if first_time_user():
-                self.showImportDataInfo.emit()
-
             # switch to PERMANENT mapset in newly created location
             self.SwitchMapset(grassdatabase, location, mapset,
                               show_confirmation=True)
+
+            # show data import infobar for first-time user with proper layout
+            if is_first_time_user():
+                self.showImportDataInfo.emit()
 
     def OnCreateLocation(self, event):
         """Create new location"""
@@ -1512,6 +1513,8 @@ class DataCatalogTree(TreeView):
             else:
                 switch_mapset_interactively(self, self._giface, grassdb, location, mapset,
                                             show_confirmation)
+            if is_nonstandard_startup():
+                delete_temporary_location()
 
     def OnSwitchMapset(self, event):
         """Switch to location and mapset"""

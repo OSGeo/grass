@@ -66,13 +66,13 @@ class DataCatalogInfoManager:
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def ShowInvalidMapsetInfo(self):
-        """Show info when last used mapset is invalid"""
+        """Show info when last used mapset does not exist"""
         last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
         lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
         message = _(
-            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is invalid."
-            "GRASS GIS has started in the temporary Location {loc}. "
-            "To continue, find or create usable location through "
+            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' does not exist. "
+            "GRASS GIS has started in a temporary Location {loc}. "
+            "To continue, find or create another location through "
             "Data catalog below."
         ).format(
             lastdb=lastdb,
@@ -89,8 +89,8 @@ class DataCatalogInfoManager:
         owner = get_mapset_owner(last_used_mapset_path)
         message = _(
             "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is owned "
-            "by different user '{owner}'. GRASS GIS has started in the temporary "
-            "Location {loc}. To continue, find or create usable location through "
+            "by different user '{owner}'. GRASS GIS has started in a temporary "
+            "Location {loc}. To continue, find or create another location through "
             "Data catalog below."
         ).format(
             lastdb=lastdb,
@@ -107,9 +107,9 @@ class DataCatalogInfoManager:
         lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
         buttons = [("Switch to last used mapset", OnSwitchMapsetHandler)]
         message = _(
-            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is locked."
-            "GRASS GIS has started in the temporary Location {loc}. "
-            "To continue, find or create usable location through "
+            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is locked. "
+            "GRASS GIS has started in a temporary Location {loc}. "
+            "To continue, find or create another location through "
             "Data Catalog below, or remove .gislock and switch to last used mapset."
         ).format(
             lastdb=lastdb,

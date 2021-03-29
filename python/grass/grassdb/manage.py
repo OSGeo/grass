@@ -13,6 +13,8 @@ for details.
 import os
 import shutil
 
+from grass.grassdb.strings import temporary_location
+
 
 def delete_mapset(database, location, mapset):
     """Deletes a specified mapset"""
@@ -26,6 +28,11 @@ def delete_mapset(database, location, mapset):
 def delete_location(database, location):
     """Deletes a specified location"""
     shutil.rmtree(os.path.join(database, location))
+
+
+def delete_temporary_location():
+    """Deletes a temporary location"""
+    shutil.rmtree(os.path.join(os.environ["TMPDIR"], temporary_location))
 
 
 def delete_grassdb(database):
@@ -49,10 +56,7 @@ def rename_location(database, old_name, new_name):
 
 
 def split_mapset_path(mapset_path):
-    """Split mapset path to three part - grassdb, location, mapset"""
-    head_tail = os.path.split(mapset_path)
-    mapset = head_tail[1]
-    head_tail = os.path.split(head_tail[0])
-    grassdb = head_tail[0]
-    location = head_tail[1]
+    """Split mapset path to three parts - grassdb, location, mapset"""
+    path, mapset = os.path.split(mapset_path)
+    grassdb, location = os.path.split(path)
     return grassdb, location, mapset

@@ -29,10 +29,10 @@ from gui_core.forms import GUI
 
 from grass.pydispatch.signal import Signal
 
-from startup.guiutils import (read_gisrc,
-                              nonstandard_startup,
-                              first_time_user)
-from grass.grassdb.checks import get_reason_mapset_not_usable
+from grass.grassdb.checks import (read_gisrc,
+                                  get_reason_mapset_not_usable,
+                                  is_nonstandard_startup,
+                                  is_first_time_user)
 from grass.grassdb.manage import split_mapset_path
 
 
@@ -72,22 +72,22 @@ class DataCatalog(wx.Panel):
         self._layout()
 
         # show infobar for first-time user if applicable
-        if first_time_user():
+        if is_first_time_user():
             # show data structure infobar for first-time user
             wx.CallLater(delay, self.showDataStructureInfo)
 
         # show infobar if last used mapset is not usable
-        if nonstandard_startup():
+        if is_nonstandard_startup():
             # get reason why last used mapset is not usable
             last_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
-            reason = get_reason_mapset_not_usable(last_mapset_path)
-            if reason == "invalid":
+            reason_id = get_reason_mapset_not_usable(last_mapset_path)
+            if reason_id == 1:
                 # show invalid mapset info
                 wx.CallLater(delay, self.infoManager.ShowInvalidMapsetInfo)
-            elif reason == "owned by different user":
+            elif reason_id == 2:
                 # show different mapset owner info
                 wx.CallLater(delay, self.infoManager.ShowDifferentMapsetOwnerInfo)
-            elif reason == "locked":
+            elif reason_id == 3:
                 # show info allowing to switch to locked mapset
                 wx.CallLater(delay, self.showLockedMapsetInfo)
 
