@@ -477,8 +477,8 @@ class GMFrame(wx.Frame):
         self._auimgr.GetPane('toolbarNviz').Show()
         # reorder other toolbars
         for pos, toolbar in enumerate(
-                ('toolbarVector', 'toolbarTools', 'toolbarMisc', 'toolbarNviz')):
-            self._auimgr.GetPane(toolbar).Row(2).Position(pos)
+                ('toolbarWorkspace', 'toolbarTools', 'toolbarMisc', 'toolbarNviz')):
+            self._auimgr.GetPane(toolbar).Row(1).Position(pos)
         self._auimgr.Update()
 
         # create nviz tools tab
@@ -510,8 +510,8 @@ class GMFrame(wx.Frame):
         # hide toolbar
         self._auimgr.GetPane('toolbarNviz').Hide()
         for pos, toolbar in enumerate(
-                ('toolbarVector', 'toolbarTools', 'toolbarMisc')):
-            self._auimgr.GetPane(toolbar).Row(2).Position(pos)
+                ('toolbarWorkspace', 'toolbarTools', 'toolbarMisc')):
+            self._auimgr.GetPane(toolbar).Row(1).Position(pos)
         self._auimgr.Update()
 
     def WorkspaceChanged(self):
