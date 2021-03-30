@@ -29,11 +29,11 @@ from gui_core.forms import GUI
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.checks import (read_gisrc,
-                                  get_reason_mapset_not_usable,
+from grass.grassdb.session import read_gisrc
+from grass.grassdb.manage import split_mapset_path
+from grass.grassdb.checks import (get_reason_mapset_not_usable,
                                   is_nonstandard_startup,
                                   is_first_time_user)
-from grass.grassdb.manage import split_mapset_path
 
 
 class DataCatalog(wx.Panel):

@@ -9,7 +9,6 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 import os
 import sys
 import datetime
@@ -18,38 +17,8 @@ from grass.script import gisenv
 import grass.script as gs
 import glob
 
-from grass.grassdb.strings import (default_location, temporary_location,
-                                   unknown_location, unknown_mapset)
-
-
-def read_gisrc():
-    """Read variables from a current GISRC file
-
-    Returns a dictionary representation of the file content.
-    """
-    grassrc = {}
-
-    gisrc = os.getenv("GISRC")
-
-    try:
-        rc = open(gisrc, "r")
-    except IOError:
-        return grassrc
-
-    if gisrc and os.path.isfile(gisrc):
-        try:
-            rc = open(gisrc, "r")
-            for line in rc.readlines():
-                try:
-                    key, val = line.split(":", 1)
-                except ValueError as e:
-                    sys.stderr.write(
-                        _('Invalid line in GISRC file (%s):%s\n' % (e, line)))
-                grassrc[key.strip()] = val.strip()
-        finally:
-            rc.close()
-
-    return grassrc
+from grass.grassdb.globals import globalvars
+from grass.grassdb.session import read_gisrc
 
 
 def mapset_exists(database, location, mapset):
@@ -151,7 +120,7 @@ def get_mapset_owner(mapset_path):
 def is_current_mapset_in_default_location():
     """Returns True if mapset is in a default location"""
     return (
-        gisenv()["LOCATION_NAME"] == default_location
+        gisenv()["LOCATION_NAME"] == globalvars["DEFAULT_LOCATION"]
         and gisenv()["MAPSET"] == "PERMANENT"
     )
 
@@ -164,7 +133,7 @@ def is_nonstandard_startup():
     a user is in a temporary location.
     """
     if "LAST_MAPSET_PATH" in read_gisrc().keys():
-        return is_mapset_current(os.environ["TMPDIR"], temporary_location, "PERMANENT")
+        return is_mapset_current(os.environ["TMPDIR"], globalvars["TEMPORARY_LOCATION"], "PERMANENT")
     return False
 
 
@@ -176,7 +145,7 @@ def is_first_time_user():
     """
     if "LAST_MAPSET_PATH" in read_gisrc().keys():
         initial_gisrc = read_gisrc()["LAST_MAPSET_PATH"] == os.path.join(
-            os.getcwd(), unknown_location, unknown_mapset
+            os.getcwd(), globalvars["UNKNOWN_LOCATION"], globalvars["UNKNOWN_MAPSET"]
         )
         return initial_gisrc
     return False

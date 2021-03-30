@@ -20,7 +20,7 @@ This program is free software under the GNU General Public License
 import wx
 
 from grass.script import gisenv
-from startup.guiutils import read_gisrc
+from grass.grassdb.session import read_gisrc
 from grass.grassdb.manage import split_mapset_path
 from grass.grassdb.checks import get_mapset_owner
 

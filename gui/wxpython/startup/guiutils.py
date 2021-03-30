@@ -16,14 +16,11 @@ This is for code which depend on something from GUI (wx or wxGUI).
 
 
 import os
-import sys
 import wx
 
 from grass.grassdb.checks import (
     is_mapset_locked,
     get_mapset_lock_info,
-    is_current_mapset_in_default_location,
-    is_mapset_current,
     is_mapset_name_valid,
     is_location_name_valid,
     get_mapset_name_invalid_reason,
@@ -47,7 +44,7 @@ from grass.script.core import create_environment
 from grass.script.utils import try_remove
 
 from core import globalvar
-from core.gcmd import GError, GMessage, DecodeString, RunCommand
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericValidator
@@ -112,32 +109,6 @@ class LocationDialog(TextEntryDialog):
     def _isLocationNameValid(self, text):
         """Check whether user's input location is valid or not."""
         return is_location_name_valid(self.database, text)
-
-
-# TODO: similar to (but not the same as) read_gisrc function in grass.py
-def read_gisrc():
-    """Read variables from a current GISRC file
-
-    Returns a dictionary representation of the file content.
-    """
-    grassrc = {}
-
-    gisrc = os.getenv("GISRC")
-
-    if gisrc and os.path.isfile(gisrc):
-        try:
-            rc = open(gisrc, "r")
-            for line in rc.readlines():
-                try:
-                    key, val = line.split(":", 1)
-                except ValueError as e:
-                    sys.stderr.write(
-                        _('Invalid line in GISRC file (%s):%s\n' % (e, line)))
-                grassrc[key.strip()] = DecodeString(val.strip())
-        finally:
-            rc.close()
-
-    return grassrc
 
 
 def GetVersion():
