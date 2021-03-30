@@ -21,7 +21,6 @@ import wx
 
 from grass.script import gisenv
 from grass.grassdb.session import read_gisrc
-from grass.grassdb.manage import split_mapset_path
 from grass.grassdb.checks import get_mapset_owner
 
 
@@ -65,38 +64,15 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
-    def ShowInvalidMapsetInfo(self):
-        """Show info when last used mapset does not exist"""
-        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
-        lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
+    def ShowNonStandardSituationInfo(self, reason_id):
+        """Show info when last used mapset is not usable"""
+        string = self._getString(reason_id)
         message = _(
-            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' does not exist. "
-            "GRASS GIS has started in a temporary Location {loc}. "
+            "{string}. GRASS GIS has started in a temporary Location {loc}. "
             "To continue, find or create another location through "
-            "Data catalog below."
+            "Data Catalog below."
         ).format(
-            lastdb=lastdb,
-            lastloc=lastloc,
-            lastmapset=lastmapset,
-            loc=gisenv()["LOCATION_NAME"],
-        )
-        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
-
-    def ShowDifferentMapsetOwnerInfo(self):
-        """Show info when last used mapset is owned by different user"""
-        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
-        lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
-        owner = get_mapset_owner(last_used_mapset_path)
-        message = _(
-            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is owned "
-            "by different user '{owner}'. GRASS GIS has started in a temporary "
-            "Location {loc}. To continue, find or create another location through "
-            "Data catalog below."
-        ).format(
-            lastdb=lastdb,
-            lastloc=lastloc,
-            lastmapset=lastmapset,
-            owner=owner,
+            string=string,
             loc=gisenv()["LOCATION_NAME"],
         )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
@@ -104,20 +80,36 @@ class DataCatalogInfoManager:
     def ShowLockedMapsetInfo(self, OnSwitchMapsetHandler):
         """Show info when last used mapset is locked"""
         last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
-        lastdb, lastloc, lastmapset = split_mapset_path(last_used_mapset_path)
         buttons = [("Switch to last used mapset", OnSwitchMapsetHandler)]
         message = _(
-            "Last used mapset in path '{lastdb}/{lastloc}/{lastmapset}' is locked. "
+            "Last used mapset in path '{mapsetpath}' is locked. "
             "GRASS GIS has started in a temporary Location {loc}. "
             "To continue, find or create another location through "
             "Data Catalog below, or remove .gislock and switch to last used mapset."
         ).format(
-            lastdb=lastdb,
-            lastloc=lastloc,
-            lastmapset=lastmapset,
+            mapsetpath=last_used_mapset_path,
             loc=gisenv()["LOCATION_NAME"],
         )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
+    def _getString(self, reason_id):
+        """ Get string for infobar message based on the reason."""
+        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
+        string = None
+        if reason_id == "non-existent":
+            string = "Last used mapset in path '{mapsetpath}' does not exist".format(
+            mapsetpath=last_used_mapset_path)
+        elif reason_id == "invalid":
+            string = "Last used mapset in path '{mapsetpath}' is invalid".format(
+            mapsetpath=last_used_mapset_path)
+        elif reason_id == "different-owner":
+            owner = get_mapset_owner(last_used_mapset_path)
+            string = "Last used mapset in path '{mapsetpath}' has different owner {owner}".format(
+            owner=owner,
+            mapsetpath=last_used_mapset_path)
+        return string
+
     def _onLearnMore(self, event):
         self._giface.Help(entry="grass_database")
+
+

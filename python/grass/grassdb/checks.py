@@ -204,24 +204,24 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
 def get_reason_mapset_not_usable(mapset_path):
     """It finds a reason why mapset is not usable.
 
-    Returns a reason id as number if there was a reason, otherwise None.
-    Returns 1 if mapset is invalid.
-    Returns 2 if mapset has a different owner.
-    Returns 3 if mapset is locked.
+    Returns a reason id as string if there was a reason, otherwise None.
     """
     if mapset_path is None:
         return
     reason_id = None
 
+    # Check whether mapset exists
+    if not os.path.exists(mapset_path):
+        reason_id = "non-existent"
     # Check whether mapset is valid
-    if not is_mapset_valid(mapset_path):
-        reason_id = 1
+    elif not is_mapset_valid(mapset_path):
+        reason_id = "invalid"
     # Check whether mapset is owned by current user
     elif not is_current_user_mapset_owner(mapset_path):
-        reason_id = 2
+        reason_id = "different-owner"
     # Check whether mapset is locked
     elif is_mapset_locked(mapset_path):
-        reason_id = 3
+        reason_id = "locked"
     return reason_id
 
 

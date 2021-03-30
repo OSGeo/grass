@@ -61,11 +61,12 @@ from startup.guiutils import (
     get_reason_mapset_not_removable,
     get_reasons_location_not_removable,
     get_mapset_name_invalid_reason,
-    get_location_name_invalid_reason,
+    get_location_name_invalid_reason
 )
 from grass.grassdb.manage import (
     rename_mapset,
-    rename_location
+    rename_location,
+    delete_temporary_location
 )
 
 from grass.pydispatch.signal import Signal
@@ -73,7 +74,6 @@ from grass.pydispatch.signal import Signal
 import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
-from grass.grassdb.manage import delete_temporary_location
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
                                   is_different_mapset_owner, is_first_time_user,
                                   is_nonstandard_startup)
