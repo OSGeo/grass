@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     int dim_vect, nparameters, BW, npoints;
     double lambda_B, lambda_F, grad_H, grad_L, alpha, mean;
     const char *dvr, *db, *mapset;
-    char table_interpolation[GNAME_MAX], table_name[GNAME_MAX];
+    char table_interpolation[GNAME_MAX + 64], table_name[GNAME_MAX + 64];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int last_row, last_column, flag_auxiliar = FALSE;

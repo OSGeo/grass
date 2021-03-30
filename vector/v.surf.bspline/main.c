@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     double N_extension, E_extension, edgeE, edgeN;
 
     const char *mapset, *drv, *db, *vector, *map;
-    char table_name[GNAME_MAX], title[64];
+    char table_name[GNAME_MAX + 64], title[64];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int dim_vect, nparameters, BW;
