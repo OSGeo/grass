@@ -98,15 +98,17 @@ class DataCatalogInfoManager:
         string = None
         if reason_id == "non-existent":
             string = "Last used mapset in path '{mapsetpath}' does not exist".format(
-            mapsetpath=last_used_mapset_path)
+                mapsetpath=last_used_mapset_path
+            )
         elif reason_id == "invalid":
             string = "Last used mapset in path '{mapsetpath}' is invalid".format(
-            mapsetpath=last_used_mapset_path)
+                mapsetpath=last_used_mapset_path
+            )
         elif reason_id == "different-owner":
             owner = get_mapset_owner(last_used_mapset_path)
             string = "Last used mapset in path '{mapsetpath}' has different owner {owner}".format(
-            owner=owner,
-            mapsetpath=last_used_mapset_path)
+                owner=owner, mapsetpath=last_used_mapset_path
+            )
         return string
 
     def _onLearnMore(self, event):

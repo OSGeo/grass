@@ -126,19 +126,21 @@ def is_current_mapset_in_default_location():
 
 
 def is_nonstandard_startup():
-    """ Checks if a user encounters a nonstandard startup.
+    """Checks if a user encounters a nonstandard startup.
 
     Returns True if a user encounters a nonstandard startup.
     It occurs when a last mapset is not usable and at the same time
     a user is in a temporary location.
     """
     if "LAST_MAPSET_PATH" in read_gisrc().keys():
-        return is_mapset_current(os.environ["TMPDIR"], globalvars["TEMPORARY_LOCATION"], "PERMANENT")
+        return is_mapset_current(
+            os.environ["TMPDIR"], globalvars["TEMPORARY_LOCATION"], "PERMANENT"
+        )
     return False
 
 
 def is_first_time_user():
-    """ Check if a user is a first-time user.
+    """Check if a user is a first-time user.
 
     Returns True if a user is a first-time user.
     It occurs when a gisrc file has initial settings either in last used mapset or in current mapset settings
@@ -146,9 +148,14 @@ def is_first_time_user():
     gisrc = read_gisrc()
     if "LAST_MAPSET_PATH" in gisrc.keys():
         if gisrc["LAST_MAPSET_PATH"] == os.path.join(
-            os.getcwd(), globalvars["UNKNOWN_LOCATION"], globalvars["UNKNOWN_MAPSET"]):
+            os.getcwd(), globalvars["UNKNOWN_LOCATION"], globalvars["UNKNOWN_MAPSET"]
+        ):
             return True
-    elif gisrc["GISDBASE"] == os.getcwd() and gisrc["LOCATION_NAME"] == globalvars["UNKNOWN_LOCATION"] and gisrc["MAPSET"] == globalvars["UNKNOWN_MAPSET"]:
+    elif (
+        gisrc["GISDBASE"] == os.getcwd()
+        and gisrc["LOCATION_NAME"] == globalvars["UNKNOWN_LOCATION"]
+        and gisrc["MAPSET"] == globalvars["UNKNOWN_MAPSET"]
+    ):
         return True
     return False
 

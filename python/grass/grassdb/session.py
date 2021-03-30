@@ -11,10 +11,10 @@ for details.
 
 import os
 import sys
-from grass.grassdb.globals import globalvars
 
-### TODO move SetSessionMapset and GetVersion from guiutils here
-### TODO add read_gisrc and write_gisrcrc and other functions from grass.py
+# TODO move SetSessionMapset and GetVersion from guiutils here
+# TODO add read_gisrc and write_gisrcrc and other functions from grass.py
+
 
 def read_gisrc():
     """Read variables from a current GISRC file
@@ -38,7 +38,8 @@ def read_gisrc():
                     key, val = line.split(":", 1)
                 except ValueError as e:
                     sys.stderr.write(
-                        _('Invalid line in GISRC file (%s):%s\n' % (e, line)))
+                        _("Invalid line in GISRC file (%s):%s\n" % (e, line))
+                    )
                 grassrc[key.strip()] = val.strip()
         finally:
             rc.close()
