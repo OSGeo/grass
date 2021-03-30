@@ -1156,10 +1156,9 @@ class GMFrame(wx.Frame):
         location = globalvars["TEMPORARY_LOCATION"]
         if os.path.exists(os.path.join(grassdb, location)):
             delete_location(grassdb, location)
-            self._giface.grassdbChanged.emit(location=location,
-                                             grassdb=grassdb,
-                                             action='delete',
-                                             element='grassdb')
+            self._giface.grassdbChanged.emit(
+                location=location, grassdb=grassdb, action="delete", element="grassdb"
+            )
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory

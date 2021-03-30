@@ -13,8 +13,6 @@ for details.
 import os
 import shutil
 
-from grass.grassdb.strings import temporary_location
-
 
 def delete_mapset(database, location, mapset):
     """Deletes a specified mapset"""
