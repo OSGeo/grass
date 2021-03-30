@@ -141,13 +141,15 @@ def is_first_time_user():
     """ Check if a user is a first-time user.
 
     Returns True if a user is a first-time user.
-    It occurs when a gisrc file has initial settings.
+    It occurs when a gisrc file has initial settings either in last used mapset or in current mapset settings
     """
-    if "LAST_MAPSET_PATH" in read_gisrc().keys():
-        initial_gisrc = read_gisrc()["LAST_MAPSET_PATH"] == os.path.join(
-            os.getcwd(), globalvars["UNKNOWN_LOCATION"], globalvars["UNKNOWN_MAPSET"]
-        )
-        return initial_gisrc
+    gisrc = read_gisrc()
+    if "LAST_MAPSET_PATH" in gisrc.keys():
+        if gisrc["LAST_MAPSET_PATH"] == os.path.join(
+            os.getcwd(), globalvars["UNKNOWN_LOCATION"], globalvars["UNKNOWN_MAPSET"]):
+            return True
+    elif gisrc["GISDBASE"] == os.getcwd() and gisrc["LOCATION_NAME"] == globalvars["UNKNOWN_LOCATION"] and gisrc["MAPSET"] == globalvars["UNKNOWN_MAPSET"]:
+        return True
     return False
 
 
@@ -204,7 +206,7 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
 def get_reason_mapset_not_usable(mapset_path):
     """It finds a reason why mapset is not usable.
 
-    Returns a reason id as string if there was a reason, otherwise None.
+    Returns a reason id as string if there is a reason, otherwise None.
     """
     if mapset_path is None:
         return

@@ -229,25 +229,6 @@ def writefile(path, s):
     f.close()
 
 
-def readlines(path, skipped_parameter=None):
-    debug("Reading %s" % path)
-    number = 0
-    with open(path, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            if skipped_parameter in line:
-                del lines[number]
-            number += 1
-    return lines
-
-
-def writelines(path, lines):
-    debug("Writing %s" % path)
-    with open(path, "w") as f:
-        for line in lines:
-            f.write(line)
-
-
 def call(cmd, **kwargs):
     """Wrapper for subprocess.call to deal with platform-specific issues"""
     if WINDOWS:
@@ -605,6 +586,21 @@ def read_gisrc(filename):
     return kv
 
 
+def write_gisrcrc(gisrcrc, gisrc, skipped_parameter=None):
+    """Reads gisrc file and write to gisrcrc"""
+    debug("Reading %s" % gisrc)
+    number = 0
+    with open(gisrc, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if skipped_parameter in line:
+                del lines[number]
+            number += 1
+    with open(gisrcrc, "w") as f:
+        for line in lines:
+            f.write(line)
+
+
 def read_env_file(path):
     kv = {}
     f = open(path, "r")
@@ -870,13 +866,6 @@ MAPSET: <UNKNOWN>
         % os.getcwd()
     )
     writefile(filename, s)
-
-
-def first_time_user(mapset_settings):
-    # Returns true if we are working with initial GISRC
-    return mapset_settings.full_mapset == os.path.join(
-        os.getcwd(), "<UNKNOWN>", "<UNKNOWN>"
-    )
 
 
 def check_gui(expected_gui):
@@ -2531,7 +2520,7 @@ def main():
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
             import grass.app as ga
-            from grass.grassdb.checks import can_start_in_mapset
+            from grass.grassdb.checks import can_start_in_mapset, is_first_time_user
 
             # Set last used mapset to gisrc
             set_last_mapset_to_gisrc(
@@ -2542,7 +2531,7 @@ def main():
                     mapset_settings.mapset,
                 ),
             )
-            if first_time_user(mapset_settings):
+            if is_first_time_user():
                 # Ensure default data hiearchy
                 (
                     default_gisdbase,
@@ -2731,9 +2720,7 @@ def main():
         if not params.tmp_location or (
             params.tmp_location and mapset_settings.gisdbase != os.environ["TMPDIR"]
         ):
-            writelines(
-                gisrcrc, readlines(path=gisrc, skipped_parameter="LAST_MAPSET_PATH")
-            )
+            write_gisrcrc(gisrcrc, gisrc, skipped_parameter="LAST_MAPSET_PATH")
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()
         # or register done_message()

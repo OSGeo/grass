@@ -11,8 +11,10 @@ for details.
 
 import os
 import sys
+from grass.grassdb.globals import globalvars
 
 ### TODO move SetSessionMapset and GetVersion from guiutils here
+### TODO add read_gisrc and write_gisrcrc and other functions from grass.py
 
 def read_gisrc():
     """Read variables from a current GISRC file
