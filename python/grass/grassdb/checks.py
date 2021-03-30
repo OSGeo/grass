@@ -117,14 +117,6 @@ def get_mapset_owner(mapset_path):
         return None
 
 
-def is_current_mapset_in_default_location():
-    """Returns True if mapset is in a default location"""
-    return (
-        gisenv()["LOCATION_NAME"] == globalvars["DEFAULT_LOCATION"]
-        and gisenv()["MAPSET"] == "PERMANENT"
-    )
-
-
 def is_nonstandard_startup():
     """Checks if a user encounters a nonstandard startup.
 
