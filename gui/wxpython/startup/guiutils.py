@@ -688,7 +688,7 @@ def import_file(guiparent, filePath, env):
 
 
 def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
-                                show_confirmation=False):
+                                nonstandard_startup=False, show_confirmation=False):
     """Switch current mapset. Emits giface.currentMapsetChanged signal."""
     if dbase:
         if RunCommand('g.mapset', parent=guiparent,
@@ -704,7 +704,8 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
                         {'dbase': dbase, 'loc': location, 'mapset': mapset})
             giface.currentMapsetChanged.emit(dbase=dbase,
                                              location=location,
-                                             mapset=mapset)
+                                             mapset=mapset,
+                                             nonstandard_startup=nonstandard_startup)
     elif location:
         if RunCommand('g.mapset', parent=guiparent,
                       location=location,
@@ -716,7 +717,8 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
                         {'loc': location, 'mapset': mapset})
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=location,
-                                             mapset=mapset)
+                                             mapset=mapset,
+                                             nonstandard_startup=nonstandard_startup)
     else:
         if RunCommand('g.mapset',
                       parent=guiparent,
@@ -724,4 +726,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             if show_confirmation:
                 GMessage(parent=guiparent,
                          message=_("Current mapset is <%s>.") % mapset)
-            giface.currentMapsetChanged.emit(dbase=None, location=None, mapset=mapset)
+            giface.currentMapsetChanged.emit(dbase=None,
+                                             location=None,
+                                             mapset=mapset,
+                                             nonstandard_startup=nonstandard_startup)

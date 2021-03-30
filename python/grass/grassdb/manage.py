@@ -30,11 +30,6 @@ def delete_location(database, location):
     shutil.rmtree(os.path.join(database, location))
 
 
-def delete_temporary_location():
-    """Deletes a temporary location"""
-    shutil.rmtree(os.path.join(os.environ["TMPDIR"], temporary_location))
-
-
 def delete_grassdb(database):
     """Deletes a specified GRASS database"""
     shutil.rmtree(database)

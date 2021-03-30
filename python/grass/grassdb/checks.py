@@ -143,7 +143,8 @@ def is_first_time_user():
     """Check if a user is a first-time user.
 
     Returns True if a user is a first-time user.
-    It occurs when a gisrc file has initial settings either in last used mapset or in current mapset settings
+    It occurs when a gisrc file has initial settings either in last used mapset
+    or in current mapset settings.
     """
     gisrc = read_gisrc()
     if "LAST_MAPSET_PATH" in gisrc.keys():

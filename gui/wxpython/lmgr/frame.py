@@ -72,6 +72,8 @@ from startup.guiutils import (
     create_location_interactively
 )
 from grass.grassdb.checks import is_first_time_user
+from grass.grassdb.manage import delete_location
+from grass.grassdb.globals import globalvars
 
 
 class GMFrame(wx.Frame):
@@ -1130,9 +1132,10 @@ class GMFrame(wx.Frame):
                                             None,
                                             mapset)
 
-    def OnMapsetChanged(self, dbase, location, mapset):
+    def OnMapsetChanged(self, dbase, location, mapset, nonstandard_startup):
         """Current mapset changed.
         If location is None, mapset changed within location.
+        In addition, if nonstandard startup, it deletes temporary location.
         """
         if not location:
             self._setTitle()
@@ -1140,6 +1143,20 @@ class GMFrame(wx.Frame):
             # close current workspace and create new one
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
+        if nonstandard_startup:
+            # Delete temporary location
+            self.DeleteTemporaryLocation()
+
+    def DeleteTemporaryLocation(self):
+        """ Delete location in TMPDIR session dir"""
+        grassdb = os.environ["TMPDIR"]
+        location = globalvars["TEMPORARY_LOCATION"]
+        if os.path.exists(os.path.join(grassdb, location)):
+            delete_location(grassdb, location)
+            self._giface.grassdbChanged.emit(location=location,
+                                             grassdb=grassdb,
+                                             action='delete',
+                                             element='grassdb')
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory

@@ -66,7 +66,6 @@ from startup.guiutils import (
 from grass.grassdb.manage import (
     rename_mapset,
     rename_location,
-    delete_temporary_location
 )
 
 from grass.pydispatch.signal import Signal
@@ -1499,22 +1498,25 @@ class DataCatalogTree(TreeView):
         """
         Switch to location and mapset interactively.
         """
+        # Decide if a startup is nonstandard
+        nonstandard_startup = False
+        if is_nonstandard_startup():
+            nonstandard_startup = True
+
         if can_switch_mapset_interactive(self, grassdb, location, mapset):
             genv = gisenv()
             # Switch to mapset in the same location
             if (grassdb == genv['GISDBASE'] and location == genv['LOCATION_NAME']):
                 switch_mapset_interactively(self, self._giface, None, None, mapset,
-                                            show_confirmation)
+                                            nonstandard_startup, show_confirmation)
             # Switch to mapset in the same grassdb
             elif grassdb == genv['GISDBASE']:
                 switch_mapset_interactively(self, self._giface, None, location, mapset,
-                                            show_confirmation)
+                                            nonstandard_startup, show_confirmation)
             # Switch to mapset in a different grassdb
             else:
                 switch_mapset_interactively(self, self._giface, grassdb, location, mapset,
-                                            show_confirmation)
-            if is_nonstandard_startup():
-                delete_temporary_location()
+                                            nonstandard_startup, show_confirmation)
 
     def OnSwitchMapset(self, event):
         """Switch to location and mapset"""
@@ -1563,6 +1565,11 @@ class DataCatalogTree(TreeView):
                                       location=location)
                 if node:
                     self._renameNode(node, newname)
+        elif element == 'grassdb':
+            if action == 'delete':
+                node = self.GetDbNode(grassdb=grassdb)
+                if node:
+                    self.RemoveGrassDB(node)
         elif element in ('raster', 'vector', 'raster_3d'):
             # when watchdog is used, it watches current mapset,
             # so we don't process any signals here,
