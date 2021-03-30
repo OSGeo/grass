@@ -1146,6 +1146,9 @@ class GMFrame(wx.Frame):
         if nonstandard_startup:
             # Delete temporary location
             self.DeleteTemporaryLocation()
+            # Hide infobar
+            if self.datacatalog.infoBar.IsShown():
+                self.datacatalog.infoBar.Dismiss()
 
     def DeleteTemporaryLocation(self):
         """ Delete location in TMPDIR session dir"""
