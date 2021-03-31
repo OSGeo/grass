@@ -1655,7 +1655,7 @@ def verbosity():
         return 2
 
 
-## various utilities, not specific to GRASS
+# Various utilities, not specific to GRASS
 
 
 def find_program(pgm, *args):
