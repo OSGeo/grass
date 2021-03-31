@@ -719,12 +719,9 @@ class Module(object):
         """{cmd_name}({cmd_params})"""
         head = DOC["head"].format(
             cmd_name=self.name,
-            cmd_params=(
-                "\n"
-                +  # go to a new line
-                # give space under the function name
-                (" " * (len(self.name) + 1))
-            ).join(
+            # go to a new line
+            # give space under the function name
+            cmd_params=("\n" + (" " * (len(self.name) + 1))).join(
                 [
                     ", ".join(
                         # transform each parameter in string

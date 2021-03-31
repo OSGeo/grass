@@ -120,7 +120,7 @@ def main():
     # grass7bin = 'C:\Program Files (x86)\GRASS GIS 7.9.git\grass79dev.bat'
     grass7bin = args.grassbin  # TODO: can be used if pressent
 
-    ########### SOFTWARE
+    # Software
     # query GRASS 7 itself for its GISBASE
     # we assume that GRASS GIS' start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
@@ -143,7 +143,7 @@ def main():
     grass_python_dir = os.path.join(gisbase, "etc", "python")
     sys.path.append(grass_python_dir)
 
-    ########### DATA
+    # Data
     # define GRASS DATABASE
 
     # Set GISDBASE environment variable
