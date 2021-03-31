@@ -217,6 +217,9 @@ int main(int argc, char *argv[])
 		}
 		db_close_database_shutdown_driver(driver_in);
 	    }
+	    else {
+		G_fatal_error(_("Missing attribute table for vector map <%s>"), in_name);
+	    }
 
 	    /* Get the output table structure */
 	    if (i == 0 ) {
