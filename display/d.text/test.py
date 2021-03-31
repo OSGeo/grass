@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Author: Owen Smith - Rewritten from test.pl, Author: Huidae Cho
+# Author: Owen Smith - Rewritten from test.pl by Huidae Cho
 # Run: d.mon start=wx0 && ./test.py | d.text at=1,100
 import math
 import re
