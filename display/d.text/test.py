@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# Rewritten from test.pl
-
+# Author: Owen Smith - Rewritten from test.pl, Author: Huidae Cho
+# Run: d.mon start=wx0 && ./test.py | d.text at=1,100
 import math
 import re
 
-# Quiet black syntax checking for fonts and colors to keep each respective tuple
-# in the following format when rendering.
+# Quiet black syntax checking for fonts and colors to keep the code printed to
+# the display vertically short.
 # fmt: off
 fonts = ("cyrilc", "gothgbt", "gothgrt", "gothitt", "greekc", "greekcs",
          "greekp", "greeks", "italicc", "italiccs", "italict", "romanc",
