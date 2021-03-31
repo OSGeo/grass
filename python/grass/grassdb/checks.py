@@ -17,7 +17,7 @@ from grass.script import gisenv
 import grass.script as gs
 import glob
 
-from grass.grassdb.globals import globalvars
+import grass.grassdb.globals as gl
 from grass.grassdb.session import read_gisrc
 
 
@@ -126,7 +126,7 @@ def is_nonstandard_startup():
     """
     if "LAST_MAPSET_PATH" in read_gisrc().keys():
         return is_mapset_current(
-            os.environ["TMPDIR"], globalvars["TEMPORARY_LOCATION"], "PERMANENT"
+            os.environ["TMPDIR"], gl.temporary_location, "PERMANENT"
         )
     return False
 
@@ -141,13 +141,13 @@ def is_first_time_user():
     gisrc = read_gisrc()
     if "LAST_MAPSET_PATH" in gisrc.keys():
         if gisrc["LAST_MAPSET_PATH"] == os.path.join(
-            os.getcwd(), globalvars["UNKNOWN_LOCATION"], globalvars["UNKNOWN_MAPSET"]
+            os.getcwd(), gl.unknown_location, gl.unknown_mapset
         ):
             return True
     elif (
         gisrc["GISDBASE"] == os.getcwd()
-        and gisrc["LOCATION_NAME"] == globalvars["UNKNOWN_LOCATION"]
-        and gisrc["MAPSET"] == globalvars["UNKNOWN_MAPSET"]
+        and gisrc["LOCATION_NAME"] == gl.unknown_location
+        and gisrc["MAPSET"] == gl.unknown_mapset
     ):
         return True
     return False

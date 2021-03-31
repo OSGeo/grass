@@ -10,8 +10,7 @@ for details.
 """
 
 # global variables
-globalvars = {}
-globalvars["DEFAULT_LOCATION"] = "world_latlong_wgs84"
-globalvars["TEMPORARY_LOCATION"] = "tmploc"
-globalvars["UNKNOWN_LOCATION"] = "<UNKNOWN>"
-globalvars["UNKNOWN_MAPSET"] = "<UNKNOWN>"
+default_location = "world_latlong_wgs84"
+temporary_location = "tmploc"
+unknown_location = "<UNKNOWN>"
+unknown_mapset = "<UNKNOWN>"
