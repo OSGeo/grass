@@ -1132,10 +1132,10 @@ class GMFrame(wx.Frame):
                                             None,
                                             mapset)
 
-    def OnMapsetChanged(self, dbase, location, mapset, nonstandard_startup):
+    def OnMapsetChanged(self, dbase, location, mapset, backup_session):
         """Current mapset changed.
         If location is None, mapset changed within location.
-        In addition, if nonstandard startup, it deletes temporary location.
+        In addition, if backup session, it deletes temporary location.
         """
         if not location:
             self._setTitle()
@@ -1143,7 +1143,7 @@ class GMFrame(wx.Frame):
             # close current workspace and create new one
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
-        if nonstandard_startup:
+        if backup_session:
             # Delete temporary location
             self.DeleteTemporaryLocation()
             # Hide infobar

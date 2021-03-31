@@ -43,18 +43,10 @@ from grass.grassdb.manage import (
 from grass.script.core import create_environment
 from grass.script.utils import try_remove
 
-from core import globalvar
 from core.gcmd import GError, GMessage, RunCommand
 from gui_core.dialogs import TextEntryDialog
 from location_wizard.dialogs import RegionDef
 from gui_core.widgets import GenericValidator
-
-
-def SetSessionMapset(database, location, mapset):
-    """Sets database, location and mapset for the current session"""
-    RunCommand("g.gisenv", set="GISDBASE=%s" % database)
-    RunCommand("g.gisenv", set="LOCATION_NAME=%s" % location)
-    RunCommand("g.gisenv", set="MAPSET=%s" % mapset)
 
 
 class MapsetDialog(TextEntryDialog):
@@ -109,31 +101,6 @@ class LocationDialog(TextEntryDialog):
     def _isLocationNameValid(self, text):
         """Check whether user's input location is valid or not."""
         return is_location_name_valid(self.database, text)
-
-
-def GetVersion():
-    """Gets version and revision
-
-    Returns tuple `(version, revision)`. For standard releases revision
-    is an empty string.
-
-    Revision string is currently wrapped in parentheses with added
-    leading space. This is an implementation detail and legacy and may
-    change anytime.
-    """
-    versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-    versionLine = versionFile.readline().rstrip('\n')
-    versionFile.close()
-    try:
-        grassVersion, grassRevision = versionLine.split(' ', 1)
-        if grassVersion.endswith('dev'):
-            grassRevisionStr = ' (%s)' % grassRevision
-        else:
-            grassRevisionStr = ''
-    except ValueError:
-        grassVersion = versionLine
-        grassRevisionStr = ''
-    return (grassVersion, grassRevisionStr)
 
 
 def create_mapset_interactively(guiparent, grassdb, location):
@@ -688,7 +655,7 @@ def import_file(guiparent, filePath, env):
 
 
 def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
-                                nonstandard_startup=False, show_confirmation=False):
+                                backup_session=False, show_confirmation=False):
     """Switch current mapset. Emits giface.currentMapsetChanged signal."""
     if dbase:
         if RunCommand('g.mapset', parent=guiparent,
@@ -705,7 +672,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             giface.currentMapsetChanged.emit(dbase=dbase,
                                              location=location,
                                              mapset=mapset,
-                                             nonstandard_startup=nonstandard_startup)
+                                             backup_session=backup_session)
     elif location:
         if RunCommand('g.mapset', parent=guiparent,
                       location=location,
@@ -718,7 +685,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=location,
                                              mapset=mapset,
-                                             nonstandard_startup=nonstandard_startup)
+                                             backup_session=backup_session)
     else:
         if RunCommand('g.mapset',
                       parent=guiparent,
@@ -729,4 +696,4 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=None,
                                              mapset=mapset,
-                                             nonstandard_startup=nonstandard_startup)
+                                             backup_session=backup_session)

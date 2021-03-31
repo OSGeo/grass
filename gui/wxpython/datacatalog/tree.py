@@ -65,7 +65,7 @@ from startup.guiutils import (
 )
 from grass.grassdb.manage import (
     rename_mapset,
-    rename_location,
+    rename_location
 )
 
 from grass.pydispatch.signal import Signal
@@ -75,7 +75,7 @@ from grass.script import gisenv
 from grass.grassdb.data import map_exists
 from grass.grassdb.checks import (get_mapset_owner, is_mapset_locked,
                                   is_different_mapset_owner, is_first_time_user,
-                                  is_nonstandard_startup)
+                                  is_backup_session)
 from grass.exceptions import CalledModuleError
 
 
@@ -1498,25 +1498,25 @@ class DataCatalogTree(TreeView):
         """
         Switch to location and mapset interactively.
         """
-        # Decide if a startup is nonstandard
-        nonstandard_startup = False
-        if is_nonstandard_startup():
-            nonstandard_startup = True
+        # Decide if a user is in a backup session
+        backup_session = False
+        if is_backup_session():
+            backup_session = True
 
         if can_switch_mapset_interactive(self, grassdb, location, mapset):
             genv = gisenv()
             # Switch to mapset in the same location
             if (grassdb == genv['GISDBASE'] and location == genv['LOCATION_NAME']):
                 switch_mapset_interactively(self, self._giface, None, None, mapset,
-                                            nonstandard_startup, show_confirmation)
+                                            backup_session, show_confirmation)
             # Switch to mapset in the same grassdb
             elif grassdb == genv['GISDBASE']:
                 switch_mapset_interactively(self, self._giface, None, location, mapset,
-                                            nonstandard_startup, show_confirmation)
+                                            backup_session, show_confirmation)
             # Switch to mapset in a different grassdb
             else:
                 switch_mapset_interactively(self, self._giface, grassdb, location, mapset,
-                                            nonstandard_startup, show_confirmation)
+                                            backup_session, show_confirmation)
 
     def OnSwitchMapset(self, event):
         """Switch to location and mapset"""

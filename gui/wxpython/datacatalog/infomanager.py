@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 import wx
 
 from grass.script import gisenv
-from grass.grassdb.session import read_gisrc
 from grass.grassdb.checks import get_mapset_owner
 
 
@@ -66,7 +65,7 @@ class DataCatalogInfoManager:
 
     def ShowNonStandardSituationInfo(self, reason_id):
         """Show info when last used mapset is not usable"""
-        string = self._getString(reason_id)
+        string = self._text_from_reason_id(reason_id)
         message = _(
             "{string}. GRASS GIS has started in a temporary Location {loc}. "
             "To continue, find or create another location through "
@@ -79,7 +78,7 @@ class DataCatalogInfoManager:
 
     def ShowLockedMapsetInfo(self, OnSwitchMapsetHandler):
         """Show info when last used mapset is locked"""
-        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
+        last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         buttons = [("Switch to last used mapset", OnSwitchMapsetHandler)]
         message = _(
             "Last used mapset in path '{mapsetpath}' is locked. "
@@ -92,9 +91,9 @@ class DataCatalogInfoManager:
         )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
-    def _getString(self, reason_id):
+    def _text_from_reason_id(self, reason_id):
         """ Get string for infobar message based on the reason."""
-        last_used_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
+        last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         string = None
         if reason_id == "non-existent":
             string = "Last used mapset in path '{mapsetpath}' does not exist".format(

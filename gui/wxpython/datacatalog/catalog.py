@@ -26,14 +26,14 @@ from gui_core.infobar import InfoBar
 from datacatalog.infomanager import DataCatalogInfoManager
 from gui_core.wrap import Menu
 from gui_core.forms import GUI
+from grass.script import gisenv
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.session import read_gisrc
 from grass.grassdb.manage import split_mapset_path
-from grass.grassdb.checks import (get_reason_mapset_not_usable,
-                                  is_nonstandard_startup,
-                                  is_first_time_user)
+from grass.grassdb.checks import (get_reason_id_mapset_not_usable,
+                          is_backup_session,
+                          is_first_time_user)
 
 
 class DataCatalog(wx.Panel):
@@ -77,11 +77,11 @@ class DataCatalog(wx.Panel):
             wx.CallLater(delay, self.showDataStructureInfo)
 
         # show infobar if last used mapset is not usable
-        if is_nonstandard_startup():
+        if is_backup_session():
             # get reason why last used mapset is not usable
-            last_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
-            self.reason_id = get_reason_mapset_not_usable(last_mapset_path)
-            if self.reason_id == "non-existent" or self.reason_id == "invalid" or self.reason_id == "different-owner":
+            last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
+            self.reason_id = get_reason_id_mapset_not_usable(last_mapset_path)
+            if self.reason_id in ("non-existent", "invalid", "different-owner"):
                 # show non-standard situation info
                 wx.CallLater(delay, self.showNonStandardSituationInfo)
             elif self.reason_id == "locked":
@@ -162,7 +162,7 @@ class DataCatalog(wx.Panel):
 
     def OnSwitchToLastUsedMapset(self, event):
         """Switch to last used mapset"""
-        last_mapset_path = read_gisrc()["LAST_MAPSET_PATH"]
+        last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         grassdb, location, mapset = split_mapset_path(last_mapset_path)
         self.tree.SwitchMapset(grassdb, location, mapset)
         event.Skip()
