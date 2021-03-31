@@ -18,7 +18,6 @@ import grass.script as gs
 import glob
 
 import grass.grassdb.globals as gl
-from grass.grassdb.session import read_gisrc
 
 
 def mapset_exists(database, location, mapset):
@@ -117,16 +116,16 @@ def get_mapset_owner(mapset_path):
         return None
 
 
-def is_nonstandard_startup():
-    """Checks if a user encounters a nonstandard startup.
+def is_backup_session():
+    """Checks if a user encounters a backup GRASS session.
 
-    Returns True if a user encounters a nonstandard startup.
+    Returns True if a user encounters a backup session.
     It occurs when a last mapset is not usable and at the same time
     a user is in a temporary location.
     """
-    if "LAST_MAPSET_PATH" in read_gisrc().keys():
+    if "LAST_MAPSET_PATH" in gisenv().keys():
         return is_mapset_current(
-            os.environ["TMPDIR"], gl.temporary_location, "PERMANENT"
+            os.environ["TMPDIR"], gl.temporary_location, gl.permanent_mapset
         )
     return False
 
@@ -138,16 +137,16 @@ def is_first_time_user():
     It occurs when a gisrc file has initial settings either in last used mapset
     or in current mapset settings.
     """
-    gisrc = read_gisrc()
-    if "LAST_MAPSET_PATH" in gisrc.keys():
-        if gisrc["LAST_MAPSET_PATH"] == os.path.join(
+    genv = gisenv()
+    if "LAST_MAPSET_PATH" in genv.keys():
+        if genv["LAST_MAPSET_PATH"] == os.path.join(
             os.getcwd(), gl.unknown_location, gl.unknown_mapset
         ):
             return True
     elif (
-        gisrc["GISDBASE"] == os.getcwd()
-        and gisrc["LOCATION_NAME"] == gl.unknown_location
-        and gisrc["MAPSET"] == gl.unknown_mapset
+        genv["GISDBASE"] == os.getcwd()
+        and genv["LOCATION_NAME"] == gl.unknown_location
+        and genv["MAPSET"] == gl.unknown_mapset
     ):
         return True
     return False
@@ -203,10 +202,10 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
     return True
 
 
-def get_reason_mapset_not_usable(mapset_path):
+def get_reason_id_mapset_not_usable(mapset_path):
     """It finds a reason why mapset is not usable.
 
-    Returns a reason id as string if there is a reason, otherwise None.
+    Returns a reason id as string.
     """
     if mapset_path is None:
         return

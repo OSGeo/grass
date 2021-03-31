@@ -17,8 +17,7 @@ import tempfile
 import getpass
 import sys
 from shutil import copytree, ignore_patterns
-from grass.grassdb.create import create_mapset
-from grass.grassdb.checks import mapset_exists
+import grass.grassdb.globals as gl
 
 from grass.grassdb.checks import is_location_valid
 
@@ -152,8 +151,8 @@ def ensure_default_data_hierarchy():
     Returns the db, loc, mapset"""
 
     default_gisdbase = get_possible_database_path()
-    default_location = "world_latlong_wgs84"
-    default_mapset = "PERMANENT"
+    default_location = gl.default_location
+    default_mapset = gl.permanent_mapset
 
     # If nothing found, try to create GRASS directory
     if not default_gisdbase:
@@ -162,8 +161,5 @@ def ensure_default_data_hierarchy():
     if not is_location_valid(default_gisdbase, default_location):
         # If not valid, copy startup loc
         create_startup_location_in_grassdb(default_gisdbase, default_location)
-
-    if not mapset_exists(default_gisdbase, default_location, default_mapset):
-        create_mapset(default_gisdbase, default_location, default_mapset)
 
     return default_gisdbase, default_location, default_mapset
