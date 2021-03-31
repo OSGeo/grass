@@ -19,16 +19,19 @@
 ## Please run from top source code directory.
 ## For usage details, see below.
 
+use File::Find;
+use File::Basename;
+use strict;
+use warnings;
+use Cwd;
+use File::Basename;
 
 #-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#
 # edit this, and edit the bottom of the file after __END__
 
-## no critic
-# Disable perlcritic for specifying editor
 # my $editor	= "vi -o";
-#my $editor	= "nedit";
+# my $editor	= "nedit";
 my $editor	= "xemacs";
-## use critic
 
 # don't forget to get a copy of
 #   http://www.red-bean.com/cvs2cl/cvs2cl.pl
@@ -55,13 +58,6 @@ my $editor	= "xemacs";
 #
 #-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#-=-#
 
-use File::Find;
-use File::Basename;
-use strict;
-use warnings;
-use Cwd;
-use File::Basename;
-
 my $ChangeLog	= "ChangeLog.tmp";
 my $cvs2cl	= getcwd . "/cvs2cl.pl -f $ChangeLog";
 my $template	= do {local $/; <DATA>};
@@ -76,7 +72,7 @@ sub evaluate_file {
     warn "+ Reading $name\n";
 
     # slurp main.c
-    my $main_c = do {local $/; open F, $_ or die "reading $name: $!"; <F>}; ## no critic
+    my $main_c = do {local $/; open my $F, '<', $_ or die "reading $name: $!"; <$F>};
 
     # continue if main.c is 25 lines or longer
     return unless ($main_c =~ y/\n/\n/) >= 25;
