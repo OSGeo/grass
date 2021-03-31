@@ -2,6 +2,7 @@
 ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
+    E402, # module level import not at top of file
     E722, # do not use bare 'except'
     E741, # ambiguous variable name 'l'
     F841, # local variable 'center' is assigned to but never used
