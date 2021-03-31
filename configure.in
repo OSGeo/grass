@@ -31,7 +31,7 @@ $2
 AC_INIT(configure.in)
 AC_PREREQ(2.13)
 AC_PREFIX_DEFAULT(/usr/local)
-AC_CONFIG_HEADER(include/config.h)
+AC_CONFIG_HEADER(include/grass/config.h)
 AC_CANONICAL_HOST
 AC_PROG_CC
 LOC_EXEEXT
@@ -1987,7 +1987,7 @@ AC_SUBST(STRIPFLAG)
 GRASS_HOME="${DSTDIR}"
 AC_SUBST(GRASS_HOME)
 
-AC_OUTPUT(include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex include/version.h grass.pc)
+AC_OUTPUT(include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex include/grass/version.h grass.pc)
 
 LOC_MSG([Copying config.status to config.status.${ARCH}])
 cp -f config.status config.status.${ARCH}
