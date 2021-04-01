@@ -620,7 +620,7 @@ def write_gisrc(kv, filename, append=False):
     f.close()
 
 
-def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
+def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     if os.access(gisrc, os.R_OK):
         kv = read_gisrc(gisrc)
     else:
@@ -631,7 +631,7 @@ def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     write_gisrc(kv, gisrc)
 
 
-def set_last_mapset_to_gisrc(gisrc, last_mapset_path):
+def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
     if os.access(gisrc, os.R_OK):
         kv = read_gisrc(gisrc)
     else:
@@ -1189,7 +1189,7 @@ def set_mapset(
                         )
                     )
                     writefile(os.path.join(path, "WIND"), s)
-        set_mapset_to_gisrc(gisrc, gisdbase, location_name, mapset)
+        add_mapset_to_gisrc(gisrc, gisdbase, location_name, mapset)
     else:
         fatal(
             _(
@@ -2522,8 +2522,8 @@ def main():
             import grass.app as ga
             from grass.grassdb.checks import can_start_in_mapset, is_first_time_user
 
-            # Set last used mapset to gisrc
-            set_last_mapset_to_gisrc(
+            # Add last used mapset to gisrc
+            add_last_mapset_to_gisrc(
                 gisrc,
                 os.path.join(
                     mapset_settings.gisdbase,
@@ -2552,7 +2552,7 @@ def main():
                     mapset_path=default_mapset_path, ignore_lock=False
                 ):
                     # Write mapset info to gisrc file
-                    set_mapset_to_gisrc(
+                    add_mapset_to_gisrc(
                         gisrc=gisrc,
                         grassdb=default_gisdbase,
                         location=default_location,
@@ -2560,8 +2560,8 @@ def main():
                     )
                 # Another first-time session
                 else:
-                    # Set default path to gisrc
-                    set_last_mapset_to_gisrc(gisrc, default_mapset_path)
+                    # Add last used mapset to gisrc
+                    add_last_mapset_to_gisrc(gisrc, default_mapset_path)
 
                     # Create temporary location
                     params.tmp_location = True
@@ -2584,7 +2584,7 @@ def main():
                 )
         else:
             # Write mapset info to gisrc file
-            set_mapset_to_gisrc(
+            add_mapset_to_gisrc(
                 gisrc=gisrc,
                 grassdb=mapset_settings.gisdbase,
                 location=mapset_settings.location,

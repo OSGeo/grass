@@ -73,7 +73,7 @@ from startup.guiutils import (
 )
 from grass.grassdb.checks import is_first_time_user
 from grass.grassdb.manage import delete_location
-import grass.grassdb.globals as gl
+import grass.grassdb.config as cfg
 
 
 class GMFrame(wx.Frame):
@@ -1153,7 +1153,7 @@ class GMFrame(wx.Frame):
     def DeleteTemporaryLocation(self):
         """ Delete location in TMPDIR session dir"""
         grassdb = os.environ["TMPDIR"]
-        location = gl.temporary_location
+        location = cfg.temporary_location
         if os.path.exists(os.path.join(grassdb, location)):
             delete_location(grassdb, location)
             self._giface.grassdbChanged.emit(

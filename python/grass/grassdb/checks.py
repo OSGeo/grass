@@ -17,7 +17,7 @@ from grass.script import gisenv
 import grass.script as gs
 import glob
 
-import grass.grassdb.globals as gl
+import grass.grassdb.config as cfg
 
 
 def mapset_exists(database, location, mapset):
@@ -125,7 +125,7 @@ def is_backup_session():
     """
     if "LAST_MAPSET_PATH" in gisenv().keys():
         return is_mapset_current(
-            os.environ["TMPDIR"], gl.temporary_location, gl.permanent_mapset
+            os.environ["TMPDIR"], cfg.temporary_location, cfg.permanent_mapset
         )
     return False
 
@@ -140,13 +140,13 @@ def is_first_time_user():
     genv = gisenv()
     if "LAST_MAPSET_PATH" in genv.keys():
         if genv["LAST_MAPSET_PATH"] == os.path.join(
-            os.getcwd(), gl.unknown_location, gl.unknown_mapset
+            os.getcwd(), cfg.unknown_location, cfg.unknown_mapset
         ):
             return True
     elif (
         genv["GISDBASE"] == os.getcwd()
-        and genv["LOCATION_NAME"] == gl.unknown_location
-        and genv["MAPSET"] == gl.unknown_mapset
+        and genv["LOCATION_NAME"] == cfg.unknown_location
+        and genv["MAPSET"] == cfg.unknown_mapset
     ):
         return True
     return False
@@ -205,25 +205,25 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
 def get_reason_id_mapset_not_usable(mapset_path):
     """It finds a reason why mapset is not usable.
 
-    Returns a reason id as string.
+    Returns a reason id as a string.
+    If mapset path is None or no reason found, returns None.
     """
-    if mapset_path is None:
-        return
-    reason_id = None
+    if not mapset_path:
+        return None
 
     # Check whether mapset exists
     if not os.path.exists(mapset_path):
-        reason_id = "non-existent"
+        return "non-existent"
     # Check whether mapset is valid
     elif not is_mapset_valid(mapset_path):
-        reason_id = "invalid"
+        return "invalid"
     # Check whether mapset is owned by current user
     elif not is_current_user_mapset_owner(mapset_path):
-        reason_id = "different-owner"
+        return "different-owner"
     # Check whether mapset is locked
     elif is_mapset_locked(mapset_path):
-        reason_id = "locked"
-    return reason_id
+        return "locked"
+    return None
 
 
 def dir_contains_location(path):
