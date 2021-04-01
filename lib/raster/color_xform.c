@@ -5,7 +5,7 @@
  *
  * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
@@ -185,7 +185,7 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 
 void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
-    DCELL min, max, eps = GRASS_EPSILON;
+    DCELL min, max, eps = 1.0;
     double lmin, lmax;
     int red, grn, blu;
     DCELL prev;
@@ -204,10 +204,9 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
 
-    if (isnan(lmax) || isinf(lmax) || max <= eps) {
-	/* max cannot be +inf (?), so min <= max <= 0, lmax = -inf or nan, or 0
-	 * < max <= eps; we cannot apply log colors to a non-positive raster,
-	 * so let's use a sane default color from the source rule; even for a
+    if (max <= eps) {
+	/* we cannot apply log colors to a non-positive raster, so let's use
+	 * the max color from the source rule for the entire raster; even for a
 	 * positive raster whose max cell value is very small (<= eps), let's
 	 * use the same color */
 	G_warning(_("Max cell value is <= %g; using the max color only"), eps);
@@ -217,20 +216,18 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	return;
     }
 
-    if (isnan(lmin) || isinf(lmin)) {
-	/* min <= 0 and max > 0; let's use the default color for min up to eps
-	 */
+    if (min <= 0) {
+	/* use the default color for min up to eps */
 	Rast_add_d_color_rule(&min, red, grn, blu,
 			      &eps, red, grn, blu, dst);
-	/* XXX: let's assume that the positive min cell value is greater than
-	 * or equal to eps when we cannot use log(min) because min <= 0; if the
-	 * true positive min value is less than eps, it'll get assigned the
-	 * default color; or would it be logically correct to throw a fatal
-	 * error? */
+	/* assume that the positive min cell value is equal to eps when we
+	 * cannot use log(min) because min <= 0; if the true positive min value
+	 * is less than eps, it'll get assigned the default color */
 	G_warning(_("Non-positive cell values found; "
 		    "setting to the default color for cells <= %g and "
 		    "assuming a positive min cell value of %g"), eps, eps);
-	lmin = log(eps);
+	min = eps;
+	lmin = log(min);
     }
 
     for (i = 0; i <= samples; i++) {
@@ -272,9 +269,8 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
  */
 void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
-    DCELL min, max;
-    double lmin, lmax;
-    DCELL amax, lamax;
+    DCELL min, max, amin, amax, eps = 1.0;
+    double lamin, lamax;
     int red, grn, blu;
     DCELL prev;
     int i;
@@ -283,17 +279,54 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
     Rast_get_d_color_range(&min, &max, src);
 
-    lmin = log(fabs(min) + 1.0);
-    lmax = log(fabs(max) + 1.0);
+    amin = fabs(min);
+    amax = fabs(max);
 
-    amax = fabs(min) > fabs(max) ? fabs(min) : fabs(max);
-    lamax = lmin > lmax ? lmin : lmax;
+    if (amin > amax) {
+	DCELL tmp = amin;
+
+	amin = amax;
+	amax = tmp;
+    }
+
+    lamin = log(amin);
+    lamax = log(amax);
+
+    Rast_get_null_value_color(&red, &grn, &blu, src);
+    Rast_set_null_value_color(red, grn, blu, dst);
 
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
 
-    Rast_get_null_value_color(&red, &grn, &blu, src);
-    Rast_set_null_value_color(red, grn, blu, dst);
+    if (amax <= eps) {
+	/* use the max color from the source rule for the entire raster whose
+	 * max absolute cell value is very small (<= eps) */
+	G_warning(_("Max absolute cell value is <= %g; "
+		    "using the max color only"), eps);
+	Rast_get_d_color(&max, &red, &grn, &blu, src);
+	Rast_add_d_color_rule(&min, red, grn, blu,
+			      &max, red, grn, blu, dst);
+	return;
+    }
+
+    if (amin == 0) {
+	/* use the default color for 0 up to eps */
+	Rast_add_d_color_rule(&min, red, grn, blu,
+			      &eps, red, grn, blu, dst);
+	/* use the default color for -eps up to 0 */
+	eps = -eps;
+	Rast_add_d_color_rule(&eps, red, grn, blu,
+			      &min, red, grn, blu, dst);
+	eps = -eps;
+	/* assume that the min absolute cell value is equal to eps when we
+	 * cannot use log(amin) because amin == 0; if the true absolute min
+	 * value is less than eps, it'll get assigned the default color */
+	G_warning(_("Min absolute cell value is 0; "
+		    "setting to the default color for absolute cells <= %g and "
+		    "assuming a min absolute cell value of %g"), eps, eps);
+	amin = eps;
+	lamin = log(amin);
+    }
 
     for (i = 0; i <= samples; i++) {
 	int red2, grn2, blu2;
@@ -304,11 +337,11 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	Rast_get_d_color(&y, &red2, &grn2, &blu2, src);
 
 	if (i == 0)
-	    x = 1;
+	    x = amin;
 	else if (i == samples)
 	    x = amax;
 	else {
-	    lx = 0 + lamax * i / samples;
+	    lx = lamin + (lamax - lamin) * i / samples;
 	    x = exp(lx);
 	}
 
