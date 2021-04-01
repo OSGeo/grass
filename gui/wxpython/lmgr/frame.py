@@ -71,7 +71,7 @@ from startup.guiutils import (
     create_mapset_interactively,
     create_location_interactively
 )
-from grass.grassdb.checks import is_first_time_user, is_location_current
+from grass.grassdb.checks import is_first_time_user
 from grass.grassdb.manage import delete_location
 import grass.grassdb.config as cfg
 
