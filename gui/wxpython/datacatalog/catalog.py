@@ -73,6 +73,7 @@ class DataCatalog(wx.Panel):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
+        sizer.AddSpacer(3)
         sizer.Add(self.infoBar, proportion=0, flag=wx.EXPAND)
         sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
 
