@@ -71,7 +71,7 @@ from startup.guiutils import (
     create_mapset_interactively,
     create_location_interactively
 )
-from grass.grassdb.checks import is_first_time_user
+from grass.grassdb.checks import is_first_time_user, is_location_current
 from grass.grassdb.manage import delete_location
 import grass.grassdb.config as cfg
 
@@ -1144,21 +1144,19 @@ class GMFrame(wx.Frame):
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
         if backup_session:
-            # Delete temporary location
-            self.DeleteTemporaryLocation()
+            grassdb = os.environ["TMPDIR"]
+            location = cfg.temporary_location
+            if os.path.exists(os.path.join(grassdb, location)) and not is_location_current(
+                grassdb, location
+            ):
+                # Delete temporary location
+                delete_location(grassdb, location)
+                self._giface.grassdbChanged.emit(
+                    location=location, grassdb=grassdb, action="delete", element="grassdb"
+                )
             # Hide infobar
             if self.datacatalog.infoBar.IsShown():
                 self.datacatalog.infoBar.Dismiss()
-
-    def DeleteTemporaryLocation(self):
-        """ Delete location in TMPDIR session dir"""
-        grassdb = os.environ["TMPDIR"]
-        location = cfg.temporary_location
-        if os.path.exists(os.path.join(grassdb, location)):
-            delete_location(grassdb, location)
-            self._giface.grassdbChanged.emit(
-                location=location, grassdb=grassdb, action="delete", element="grassdb"
-            )
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
