@@ -116,10 +116,10 @@ def get_mapset_owner(mapset_path):
         return None
 
 
-def is_backup_session():
-    """Checks if a user encounters a backup GRASS session.
+def is_fallback_session():
+    """Checks if a user encounters a fallback GRASS session.
 
-    Returns True if a user encounters a backup session.
+    Returns True if a user encounters a fallback session.
     It occurs when a last mapset is not usable and at the same time
     a user is in a temporary location.
     """

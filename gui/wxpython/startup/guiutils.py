@@ -655,7 +655,7 @@ def import_file(guiparent, filePath, env):
 
 
 def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
-                                backup_session=False, show_confirmation=False):
+                                fallback_session=False, show_confirmation=False):
     """Switch current mapset. Emits giface.currentMapsetChanged signal."""
     if dbase:
         if RunCommand('g.mapset', parent=guiparent,
@@ -672,7 +672,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             giface.currentMapsetChanged.emit(dbase=dbase,
                                              location=location,
                                              mapset=mapset,
-                                             backup_session=backup_session)
+                                             fallback_session=fallback_session)
     elif location:
         if RunCommand('g.mapset', parent=guiparent,
                       location=location,
@@ -685,7 +685,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=location,
                                              mapset=mapset,
-                                             backup_session=backup_session)
+                                             fallback_session=fallback_session)
     else:
         if RunCommand('g.mapset',
                       parent=guiparent,
@@ -696,4 +696,4 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=None,
                                              mapset=mapset,
-                                             backup_session=backup_session)
+                                             fallback_session=fallback_session)

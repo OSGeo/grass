@@ -32,7 +32,7 @@ from grass.pydispatch.signal import Signal
 
 from grass.grassdb.manage import split_mapset_path
 from grass.grassdb.checks import (get_reason_id_mapset_not_usable,
-                          is_backup_session,
+                          is_fallback_session,
                           is_first_time_user)
 
 
@@ -77,7 +77,7 @@ class DataCatalog(wx.Panel):
             wx.CallLater(delay, self.showDataStructureInfo)
 
         # show infobar if last used mapset is not usable
-        if is_backup_session():
+        if is_fallback_session():
             # get reason why last used mapset is not usable
             last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
             self.reason_id = get_reason_id_mapset_not_usable(last_mapset_path)

@@ -1132,7 +1132,7 @@ class GMFrame(wx.Frame):
                                             None,
                                             mapset)
 
-    def OnMapsetChanged(self, dbase, location, mapset, backup_session):
+    def OnMapsetChanged(self, dbase, location, mapset, fallback_session):
         """Current mapset changed.
         If location is None, mapset changed within location.
         In addition, if temporary db is not current, it deletes temporary location.
@@ -1143,7 +1143,7 @@ class GMFrame(wx.Frame):
             # close current workspace and create new one
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
-        if backup_session:
+        if fallback_session:
             gisenv = grass.gisenv()
             grassdb = os.environ["TMPDIR"]
             location = cfg.temporary_location
