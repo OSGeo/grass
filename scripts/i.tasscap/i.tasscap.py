@@ -90,7 +90,7 @@ import grass.script as grass
 # Sentinel-2: B1 ... B12, B8A
 # Worldview-2: B1 ... B8 (PAN not used)
 #
-## entries: 1. Brightness, 2. Greeness, 3. Wetness and shadows, 4. Haze
+# entries: 1. Brightness, 2. Greeness, 3. Wetness and shadows, 4. Haze
 parms = [
     [
         (0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),  # Landsat TM4
