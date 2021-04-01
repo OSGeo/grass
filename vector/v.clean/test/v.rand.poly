@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 # Generate GRASS 5.7 ascii file containing random closed polygons
-# Generated vector may be used for tests of v.clean 
+# Generated vector may be used for tests of v.clean
+
+use strict;
 
 $gisdbase = `g.gisenv get=GISDBASE`;
 $location_name = `g.gisenv get=LOCATION_NAME`;
@@ -11,7 +13,7 @@ chomp ($gisdbase); chomp ($location_name); chomp ($mapset);
 $loc = "$gisdbase/$location_name/$mapset";
 
 $npoly = 100;     # number of polygons
-$size = 0.1;    # maximum size of polygon as a portion of region 
+$size = 0.1;    # maximum size of polygon as a portion of region
 $nseg = 50;     # number of segments in polygon
 
 for($i=0; $i<=$#ARGV; $i++){
@@ -25,7 +27,7 @@ $ymin = `g.region -g | grep ^s= `; chomp $ymin; $ymin =~ s/s=(.*)/$1/;
 $xmax = `g.region -g | grep ^e= `; chomp $xmax; $xmax =~ s/e=(.*)/$1/;
 $xmin = `g.region -g | grep ^w= `; chomp $xmin; $xmin =~ s/w=(.*)/$1/;
 
-# Center 
+# Center
 $xc = ($xmax + $xmin) / 2;
 $yc = ($ymax + $ymin) / 2;
 
@@ -39,12 +41,12 @@ $maxsize = $dmin * $size;
 $minsize = $maxsize * 0.7;
 
 # Minimum and maximum radius of centers of polygons
-$rcmax = $dmin / 2 - $maxsize; 
+$rcmax = $dmin / 2 - $maxsize;
 $rcmin = $rcmax * 0.2;
 
 $fascii = "$loc/dig_ascii/clean.test";
 mkdir "$loc/dig_ascii/";
-open(ASCII, ">$fascii") or die "Cannot open: $fascii\n"; 
+open my $ASCII, '>', $fascii or die "Cannot open: $fascii\n";
 
 print ASCII  "ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2002
@@ -55,7 +57,7 @@ MAP SCALE:    10000
 OTHER INFO:   Random closed polygons
 ZONE:         0
 MAP THRESH:   0.500000
-VERTI:\n";      
+VERTI:\n";
 
 for ( $i = 0; $i < $npoly; $i++ ) {
     # random center of polygon
@@ -74,11 +76,11 @@ for ( $i = 0; $i < $npoly; $i++ ) {
             $r =  rand ( $maxsize - $minsize ) + $minsize;
         } else {
 	    $ang = 0;   # last point
-            $r = ($maxsize + $minsize) / 2; 
+            $r = ($maxsize + $minsize) / 2;
         }
 	$x = $xpc + $r * cos ( $ang );
 	$y = $ypc + $r * sin ( $ang );
-	print ASCII " $y  $x\n";      
+	print ASCII " $y  $x\n";
 
     }
 }
