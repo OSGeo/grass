@@ -160,14 +160,16 @@ static int count_present(const struct rule *rule, int start)
 static const char *describe_rule(const struct rule *rule, int start,
 				 int disjunction)
 {
-    char *s = get_name(rule->opts[start]);
+    char *s;
     int i;
+
+    G_asprintf(&s, "<%s>", get_name(rule->opts[start]));
 
     for (i = start + 1; i < rule->count - 1; i++) {
 	char *s0 = s;
 	char *ss = get_name(rule->opts[i]);
 	s = NULL;
-	G_asprintf(&s, "%s>, <%s", s0, ss);
+	G_asprintf(&s, "%s, <%s>", s0, ss);
 	G_free(s0);
 	G_free(ss);
     }
@@ -176,7 +178,7 @@ static const char *describe_rule(const struct rule *rule, int start,
 	char *s0 = s;
 	char *ss = get_name(rule->opts[i]);
 	s = NULL;
-	G_asprintf(&s, disjunction ? _("<%s> or <%s>") : _("<%s> and <%s>"), s0, ss);
+	G_asprintf(&s, disjunction ? _("%s or <%s>") : _("%s and <%s>"), s0, ss);
 	G_free(s0);
 	G_free(ss);
     }
@@ -270,7 +272,7 @@ static void check_requires(const struct rule *rule)
             G_asprintf(&err, _("Option <%s> requires at least one of %s"),
                        get_name(rule->opts[0]), describe_rule(rule, 1, 1));
         else
-            G_asprintf(&err, _("Option <%s> requires <%s>"),
+            G_asprintf(&err, _("Option <%s> requires %s"),
                        get_name(rule->opts[0]), describe_rule(rule, 1, 1));
         append_error(err);
     }
