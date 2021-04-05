@@ -2,10 +2,19 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
+/*!
+ * \brief Initialize struct Signature before use
+ *
+ * Pass 0 as nbands before call to I_read_signatures as nbands might
+ * not be known yet.
+ *
+ * \param *Signature to initialize
+ * \param nbands band (imagery group member) count
+ */
 int I_init_signatures(struct Signature *S, int nbands)
 {
     S->nbands = nbands;
-    S->bandrefs = NULL;
+    S->bandrefs = (char **)G_malloc(nbands * sizeof(char **));
     S->nsigs = 0;
     S->sig = NULL;
     S->title[0] = 0;
@@ -35,6 +44,14 @@ int I_new_signature(struct Signature *S)
     return S->nsigs;
 }
 
+/*!
+ * \brief Free memory allocated for struct Signature
+ *
+ * One must call I_init_signatures() to re-use struct after it has been
+ * passed to this function.
+ *
+ * \param *Signature to free
+ */
 int I_free_signatures(struct Signature *S)
 {
     int n;
@@ -46,10 +63,10 @@ int I_free_signatures(struct Signature *S)
 	free(S->sig[i].var);
 	free(S->sig[i].mean);
     }
+    free(S->sig);
     for (n = 0; n < S->nbands; n++)
         free(S->bandrefs[n]);
     free(S->bandrefs);
-    I_init_signatures(S, 0);
 
     return 0;
 }
@@ -139,7 +156,8 @@ int I_read_signatures(FILE * fd, struct Signature *S)
     G_strip(S->title);
 
     /* Read band references and count them to set nbands */
-    S->bandrefs = (char **)G_malloc(sizeof(char **));
+    if (S->nbands == 0)
+        S->bandrefs = (char **)G_realloc(S->bandrefs, sizeof(char **));
     S->bandrefs[bandref] = (char *)G_malloc((step + 1) * sizeof(char *));
     alloced = step; /* + 1 for '\0' */
     while ((c = (char)fgetc(fd)) != EOF) {
@@ -159,6 +177,8 @@ int I_read_signatures(FILE * fd, struct Signature *S)
         if (c == ' ') {
             S->bandrefs[bandref][pos] = '\0';
             bandref++;
+            /* bandref are 0 based thus: (bandref + 1) */
+            S->bandrefs = (char **)G_realloc(S->bandrefs, (bandref + 1) * sizeof(char **));
             S->bandrefs[bandref] = (char *)G_malloc((step + 1) * sizeof(char *));
             alloced = step; /* + 1 for '\0' */
             pos = 0;
