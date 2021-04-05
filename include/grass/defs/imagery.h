@@ -154,8 +154,8 @@ int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
 
 /* sigfile.c */
-FILE *I_fopen_signature_file_new(const char *, const char *, const char *);
-FILE *I_fopen_signature_file_old(const char *, const char *, const char *);
+FILE *I_fopen_signature_file_new(const char *);
+FILE *I_fopen_signature_file_old(const char *);
 
 /* sigset.c */
 int I_SigSetNClasses(struct SigSet *);

@@ -51,8 +51,8 @@ struct Control_Points
 
 struct One_Sig
 {
-    char desc[100];
-    int npoints;
+    char desc[100];     /* name of target class */
+    int npoints;        /* cell count used to determine class parameters */
     double *mean;		/* one mean for each band */
     double **var;		/* covariance band-band   */
     int status;		/* may be used to 'delete' a signature */
@@ -62,10 +62,11 @@ struct One_Sig
 
 struct Signature
 {
-    int nbands;
-    int nsigs;
-    char title[100];
-    struct One_Sig *sig;
+    int nbands;         /* band (imagery group member) count */
+    char **bandrefs;    /* list of band references */
+    int nsigs;          /* signature count */
+    char title[100];    /* not used? */
+    struct One_Sig *sig;    /* array of one signature per class */
 };
 
 struct SubSig

@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 
 int I_init_signatures(struct Signature *S, int nbands)
 {
     S->nbands = nbands;
+    S->bandrefs = NULL;
     S->nsigs = 0;
     S->sig = NULL;
     S->title[0] = 0;
@@ -29,7 +31,7 @@ int I_new_signature(struct Signature *S)
 
     S->sig[i].status = 0;
     S->sig[i].have_color = 0;
-    sprintf(S->sig[i].desc, "Class %d", i + 1);;
+    sprintf(S->sig[i].desc, "Class %d", i + 1);
     return S->nsigs;
 }
 
@@ -44,6 +46,9 @@ int I_free_signatures(struct Signature *S)
 	free(S->sig[i].var);
 	free(S->sig[i].mean);
     }
+    for (n = 0; n < S->nbands; n++)
+        free(S->bandrefs[n]);
+    free(S->bandrefs);
     I_init_signatures(S, 0);
 
     return 0;
@@ -91,18 +96,84 @@ int I_read_one_signature(FILE * fd, struct Signature *S)
     return 1;
 }
 
+/*!
+ * \brief Read signatures from file
+ *
+ * File stream should be opened in advance by call to
+ * I_fopen_signature_file_old()
+ * It is up to calee to fclose the file stream afterwards.
+ *
+ * \param pointer to FILE*
+ * \param pointer to struct Signature *S
+ *
+ * \return 1 on success, -1 on failure
+ */
 int I_read_signatures(FILE * fd, struct Signature *S)
 {
+    int ver;
     int n;
+    int step, pos, alloced, bandref;
+    char c, prev;
+    step = 8;
+    pos = 0;
+    alloced = 0;
+    bandref = 0;
 
     S->title[0] = 0;
-    while ((n = fgetc(fd)) != EOF)
-	if (n == '#')
-	    break;
-    if (n != '#')
-	return -1;
+    /* File of signatures must start with its version number */
+    if (fscanf(fd, "%d", &ver) != 1) {
+        G_warning(_("Invalid signature file"));
+        return -1;
+    }
+    /* Current version number is 1 */
+    if (ver != 1) {
+        G_warning(_("Invalid signature file version"));
+        return -1;
+    }
+
+    /* Goto title line and strip initial # */
+    while ((c = (char)fgetc(fd)) != EOF)
+        if (c == '#')
+            break;
     I_get_to_eol(S->title, sizeof(S->title), fd);
     G_strip(S->title);
+
+    /* Read band references and count them to set nbands */
+    S->bandrefs = (char **)G_malloc(sizeof(char **));
+    S->bandrefs[bandref] = (char *)G_malloc((step + 1) * sizeof(char *));
+    alloced = step; /* + 1 for '\0' */
+    while ((c = (char)fgetc(fd)) != EOF) {
+        if (c == '\n') {
+            if (prev != ' ') {
+                S->bandrefs[bandref][pos] = '\0';
+                bandref++;
+            }
+            S->nbands = bandref;
+            G_free(S->bandrefs[bandref]);
+            break;
+        }
+        if (pos == alloced) {
+            alloced = alloced + step;
+            S->bandrefs[bandref] = (char *)G_realloc(S->bandrefs[bandref], alloced * sizeof(char *));
+        }
+        if (c == ' ') {
+            S->bandrefs[bandref][pos] = '\0';
+            bandref++;
+            S->bandrefs[bandref] = (char *)G_malloc((step + 1) * sizeof(char *));
+            alloced = step; /* + 1 for '\0' */
+            pos = 0;
+            prev = c;
+            continue;
+        }
+        S->bandrefs[bandref][pos] = c;
+        pos++;
+        prev = c;
+    }
+
+    if (! S->nbands > 0) {
+        G_warning(_("Signature file does not contain bands"));
+        return -1;
+    }
 
     while ((n = I_read_one_signature(fd, S)) == 1) ;
 
@@ -113,6 +184,18 @@ int I_read_signatures(FILE * fd, struct Signature *S)
     return 1;
 }
 
+/*!
+ * \brief Write signatures to file
+ *
+ * File stream should be opened in advance by call to
+ * I_fopen_signature_file_new()
+ * It is up to calee to fclose the file stream afterwards.
+ *
+ * \param pointer to FILE*
+ * \param pointer to struct Signature *S
+ *
+ * \return always 1
+ */
 int I_write_signatures(FILE * fd, struct Signature *S)
 {
     int k;
@@ -120,13 +203,28 @@ int I_write_signatures(FILE * fd, struct Signature *S)
     int i;
     struct One_Sig *s;
 
+    /* Version of signatures file structure.
+     * Increment if file structure changes.
+     */
+    fprintf(fd, "1\n");
+    /* Title of signatures */
     fprintf(fd, "#%s\n", S->title);
+    /* A list of space separated band references for each
+     * raster map used to generate sigs. */
+    for (k = 0; k < S->nbands; k++) {
+        fprintf(fd, "%s ", S->bandrefs[k]);
+    }
+    fprintf(fd, "\n");
+    /* A signature for each target class */
     for (k = 0; k < S->nsigs; k++) {
 	s = &S->sig[k];
 	if (s->status != 1)
 	    continue;
-	fprintf(fd, "#%s\n", s->desc);
+    /* Label for each class repersented by this signature */
+    fprintf(fd, "#%s\n", s->desc);
+    /* Point count used to generate signature */
 	fprintf(fd, "%d\n", s->npoints);
+    /* Values are in the same order as band references */
 	for (i = 0; i < S->nbands; i++)
 	    fprintf(fd, "%g ", s->mean[i]);
 	fprintf(fd, "\n");
