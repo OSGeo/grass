@@ -10,7 +10,8 @@
 
 struct ps_state
 {
-    FILE *outfp;
+    const char *tempfile, *outfile;
+    FILE *tempfp;
     int true_color;
     int encapsulated;
     int no_header, no_trailer;
