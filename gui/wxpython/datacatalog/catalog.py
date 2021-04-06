@@ -83,7 +83,7 @@ class DataCatalog(wx.Panel):
             self.reason_id = get_reason_id_mapset_not_usable(last_mapset_path)
             if self.reason_id in ("non-existent", "invalid", "different-owner"):
                 # show non-standard situation info
-                wx.CallLater(delay, self.showNonStandardSituationInfo)
+                wx.CallLater(delay, self.showFallbackSessionInfo)
             elif self.reason_id == "locked":
                 # show info allowing to switch to locked mapset
                 wx.CallLater(delay, self.showLockedMapsetInfo)
@@ -107,8 +107,8 @@ class DataCatalog(wx.Panel):
     def showLockedMapsetInfo(self):
         self.infoManager.ShowLockedMapsetInfo(self.OnSwitchToLastUsedMapset)
 
-    def showNonStandardSituationInfo(self):
-        self.infoManager.ShowNonStandardSituationInfo(self.reason_id)
+    def showFallbackSessionInfo(self):
+        self.infoManager.ShowFallbackSessionInfo(self.reason_id)
 
     def showImportDataInfo(self):
         self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)

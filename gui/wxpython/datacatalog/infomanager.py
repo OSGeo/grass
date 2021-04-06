@@ -63,16 +63,14 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
-    def ShowNonStandardSituationInfo(self, reason_id):
+    def ShowFallbackSessionInfo(self, reason_id):
         """Show info when last used mapset is not usable"""
         string = self._text_from_reason_id(reason_id)
         message = _(
-            "{string}. GRASS GIS has started in a temporary Location {loc}. "
-            "To continue, find or create another location through "
-            "Data Catalog below."
+            "{string} GRASS GIS has started in a temporary Location. "
+            "To continue, use Data Catalog below to switch to a different Location."
         ).format(
             string=string,
-            loc=gisenv()["LOCATION_NAME"],
         )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
 
@@ -81,13 +79,12 @@ class DataCatalogInfoManager:
         last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         buttons = [("Switch to last used mapset", OnSwitchMapsetHandler)]
         message = _(
-            "Last used mapset in path '{mapsetpath}' is locked. "
-            "GRASS GIS has started in a temporary Location {loc}. "
-            "To continue, find or create another location through "
-            "Data Catalog below, or remove .gislock and switch to last used mapset."
+            "Last used mapset in path '{mapsetpath}' is currently in use. "
+            "GRASS GIS has started in a temporary Location. "
+            "To continue, use Data Catalog below to switch to a different Location "
+            "or remove lock file and switch to the last used mapset."
         ).format(
-            mapsetpath=last_used_mapset_path,
-            loc=gisenv()["LOCATION_NAME"],
+            mapsetpath=last_used_mapset_path
         )
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
@@ -96,16 +93,16 @@ class DataCatalogInfoManager:
         last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         string = None
         if reason_id == "non-existent":
-            string = "Last used mapset in path '{mapsetpath}' does not exist".format(
+            string = _("Last used mapset in path '{mapsetpath}' does not exist.").format(
                 mapsetpath=last_used_mapset_path
             )
         elif reason_id == "invalid":
-            string = "Last used mapset in path '{mapsetpath}' is invalid".format(
+            string = _("Last used mapset in path '{mapsetpath}' is invalid.").format(
                 mapsetpath=last_used_mapset_path
             )
         elif reason_id == "different-owner":
             owner = get_mapset_owner(last_used_mapset_path)
-            string = "Last used mapset in path '{mapsetpath}' has different owner {owner}".format(
+            string = _("Last used mapset in path '{mapsetpath}' has different owner {owner}.").format(
                 owner=owner, mapsetpath=last_used_mapset_path
             )
         return string
