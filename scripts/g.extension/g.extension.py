@@ -1175,8 +1175,12 @@ def install_module_xml(mlist):
             desc = gtask.parse_interface(name).description
             # mname = gtask.parse_interface(name).name
             keywords = gtask.parse_interface(name).keywords
-        except Exception as e:
-            grass.warning(_("No metadata available for module '%s'.") % name)
+        except Exception as error:
+            grass.warning(
+                _("No metadata available for module '{name}': {error}").format(
+                    name=name, error=error
+                )
+            )
             continue
 
         tnode = None

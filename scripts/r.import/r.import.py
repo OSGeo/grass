@@ -206,7 +206,7 @@ def main():
                 % GDALdatasource
             )
             return 0
-        except CalledModuleError as e:
+        except CalledModuleError:
             grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
 
     grassenv = grass.gisenv()

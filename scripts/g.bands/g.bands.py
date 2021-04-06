@@ -51,7 +51,6 @@ import grass.script as gs
 def main():
     from grass.bandref import BandReferenceReader, BandReferenceReaderError
 
-    band = None
     kwargs = {}
     if "," in options["pattern"]:
         gs.fatal("Multiple values not supported")
