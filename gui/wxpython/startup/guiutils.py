@@ -31,6 +31,7 @@ from grass.grassdb.checks import (
     get_reasons_locations_not_removable,
     get_reasons_grassdb_not_removable
 )
+import grass.grassdb.config as cfg
 
 from grass.grassdb.create import create_mapset, get_default_mapset_name
 from grass.grassdb.manage import (
@@ -42,6 +43,7 @@ from grass.grassdb.manage import (
 )
 from grass.script.core import create_environment
 from grass.script.utils import try_remove
+from grass.script import gisenv
 
 from core.gcmd import GError, GMessage, RunCommand
 from gui_core.dialogs import TextEntryDialog
@@ -671,8 +673,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
                         {'dbase': dbase, 'loc': location, 'mapset': mapset})
             giface.currentMapsetChanged.emit(dbase=dbase,
                                              location=location,
-                                             mapset=mapset,
-                                             fallback_session=fallback_session)
+                                             mapset=mapset)
     elif location:
         if RunCommand('g.mapset', parent=guiparent,
                       location=location,
@@ -684,8 +685,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
                         {'loc': location, 'mapset': mapset})
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=location,
-                                             mapset=mapset,
-                                             fallback_session=fallback_session)
+                                             mapset=mapset)
     else:
         if RunCommand('g.mapset',
                       parent=guiparent,
@@ -695,5 +695,13 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
                          message=_("Current mapset is <%s>.") % mapset)
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=None,
-                                             mapset=mapset,
-                                             fallback_session=fallback_session)
+                                             mapset=mapset)
+    if fallback_session:
+        tmp_dbase = os.environ["TMPDIR"]
+        tmp_loc = cfg.temporary_location
+        if tmp_dbase != gisenv()["GISDBASE"]:
+            # Delete temporary location
+            delete_location(tmp_dbase, tmp_loc)
+            giface.grassdbChanged.emit(
+                location=location, grassdb=tmp_dbase, action="delete", element="grassdb"
+            )

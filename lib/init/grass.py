@@ -2519,6 +2519,7 @@ def main():
         last_mapset_path = mapset_settings.full_mapset
         # Check if mapset from gisrc is usable
         from grass.grassdb.checks import can_start_in_mapset
+
         last_mapset_usable = can_start_in_mapset(
             mapset_path=last_mapset_path,
             ignore_lock=params.force_gislock_removal,

@@ -62,6 +62,7 @@ class DataCatalog(wx.Panel):
 
         # infobar for data catalog
         self.infoBar = InfoBar(self)
+        self.giface.currentMapsetChanged.connect(self.dismissInfobar)
 
         # infobar manager for data catalog
         self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
@@ -116,6 +117,10 @@ class DataCatalog(wx.Panel):
     def LoadItems(self):
         self.tree.ReloadTreeItems()
 
+    def dismissInfobar(self):
+        if self.infoBar.IsShown():
+            self.infoBar.Dismiss()
+
     def OnReloadTree(self, event):
         """Reload whole tree"""
         self.LoadItems()
@@ -165,7 +170,6 @@ class DataCatalog(wx.Panel):
         last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         grassdb, location, mapset = split_mapset_path(last_mapset_path)
         self.tree.SwitchMapset(grassdb, location, mapset)
-        event.Skip()
 
     def OnImportGdalLayers(self, event):
         """Convert multiple GDAL layers to GRASS raster map layers"""
