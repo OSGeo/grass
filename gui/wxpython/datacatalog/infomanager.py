@@ -83,9 +83,7 @@ class DataCatalogInfoManager:
             "GRASS GIS has started in a temporary Location. "
             "To continue, use Data Catalog below to switch to a different Location "
             "or remove lock file and switch to the last used mapset."
-        ).format(
-            mapsetpath=last_used_mapset_path
-        )
+        ).format(mapsetpath=last_used_mapset_path)
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def _text_from_reason_id(self, reason_id):
@@ -93,18 +91,18 @@ class DataCatalogInfoManager:
         last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         string = None
         if reason_id == "non-existent":
-            string = _("Last used mapset in path '{mapsetpath}' does not exist.").format(
-                mapsetpath=last_used_mapset_path
-            )
+            string = _(
+                "Last used mapset in path '{mapsetpath}' does not exist."
+            ).format(mapsetpath=last_used_mapset_path)
         elif reason_id == "invalid":
             string = _("Last used mapset in path '{mapsetpath}' is invalid.").format(
                 mapsetpath=last_used_mapset_path
             )
         elif reason_id == "different-owner":
             owner = get_mapset_owner(last_used_mapset_path)
-            string = _("Last used mapset in path '{mapsetpath}' has different owner {owner}.").format(
-                owner=owner, mapsetpath=last_used_mapset_path
-            )
+            string = _(
+                "Last used mapset in path '{mapsetpath}' has different owner {owner}."
+            ).format(owner=owner, mapsetpath=last_used_mapset_path)
         return string
 
     def _onLearnMore(self, event):

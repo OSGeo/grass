@@ -2506,8 +2506,10 @@ def main():
         mapset_settings = get_mapset_settings(gisrc)
         # Check if mapset from gisrc is usable
         from grass.grassdb.checks import can_start_in_mapset
+
         last_mapset_usable = can_start_in_mapset(
-        mapset_path=mapset_settings.full_mapset, ignore_lock=params.force_gislock_removal
+            mapset_path=mapset_settings.full_mapset,
+            ignore_lock=params.force_gislock_removal,
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
@@ -2534,7 +2536,9 @@ def main():
                 if default_gisdbase is None:
                     sys.exit("Failed to start GRASS GUI, no grassdata directory found.")
                 elif default_location is None:
-                    sys.exit("Failed to start GRASS GUI, no default location to copy in the installation or copying failed.")
+                    sys.exit(
+                        "Failed to start GRASS GUI, no default location to copy in the installation or copying failed."
+                    )
 
                 default_mapset_path = os.path.join(
                     default_gisdbase,

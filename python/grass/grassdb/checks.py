@@ -123,7 +123,7 @@ def is_fallback_session():
     It occurs when a last mapset is not usable and at the same time
     a user is in a temporary location.
     """
-    if "LAST_MAPSET_PATH" in gisenv():
+    if "LAST_MAPSET_PATH" in gisenv().keys():
         return is_mapset_current(
             os.environ["TMPDIR"], cfg.temporary_location, cfg.permanent_mapset
         )
@@ -138,7 +138,7 @@ def is_first_time_user():
     or in current mapset settings.
     """
     genv = gisenv()
-    if "LAST_MAPSET_PATH" in genv():
+    if "LAST_MAPSET_PATH" in genv.keys():
         if genv["LAST_MAPSET_PATH"] == os.path.join(
             os.getcwd(), cfg.unknown_location, cfg.unknown_mapset
         ):
