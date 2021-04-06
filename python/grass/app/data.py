@@ -147,18 +147,20 @@ def ensure_default_data_hierarchy():
     Creates database directory based on the default path determined
     according to OS if needed. Creates location if needed.
 
-    Returns the db, loc, mapset"""
+    Returns the db, loc, mapset, mapset_path"""
 
-    default_gisdbase = get_possible_database_path()
-    default_location = cfg.default_location
-    default_mapset = cfg.permanent_mapset
+    gisdbase = get_possible_database_path()
+    location = cfg.default_location
+    mapset = cfg.permanent_mapset
 
     # If nothing found, try to create GRASS directory
-    if not default_gisdbase:
-        default_gisdbase = create_database_directory()
+    if not gisdbase:
+        gisdbase = create_database_directory()
 
-    if not is_location_valid(default_gisdbase, default_location):
+    if not is_location_valid(gisdbase, location):
         # If not valid, copy startup loc
-        create_startup_location_in_grassdb(default_gisdbase, default_location)
+        create_startup_location_in_grassdb(gisdbase, location)
 
-    return default_gisdbase, default_location, default_mapset
+    mapset_path = os.path.join(gisdbase, location, mapset)
+
+    return gisdbase, location, mapset, mapset_path

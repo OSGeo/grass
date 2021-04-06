@@ -640,6 +640,18 @@ def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
     write_gisrc(kv, gisrc)
 
 
+def create_fallback_session(gisrc, tmpdir):
+    """Creates fallback temporary session"""
+    # Create temporary location
+    set_mapset(
+        gisrc=gisrc,
+        geofile="XY",
+        create_new=True,
+        tmp_location=True,
+        tmpdir=tmpdir,
+    )
+
+
 def read_gui(gisrc, default_gui):
     grass_gui = None
     # At this point the GRASS user interface variable has been set from the
@@ -2504,48 +2516,38 @@ def main():
     if not params.mapset and not params.tmp_location:
         # Get mapset parameters from gisrc file
         mapset_settings = get_mapset_settings(gisrc)
+        last_mapset_path = mapset_settings.full_mapset
         # Check if mapset from gisrc is usable
         from grass.grassdb.checks import can_start_in_mapset
-
         last_mapset_usable = can_start_in_mapset(
-            mapset_path=mapset_settings.full_mapset,
+            mapset_path=last_mapset_path,
             ignore_lock=params.force_gislock_removal,
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
-            import grass.app as ga
+            from grass.app import ensure_default_data_hierarchy
             from grass.grassdb.checks import is_first_time_user
 
+            fallback_session = False
+
             # Add last used mapset to gisrc
-            add_last_mapset_to_gisrc(
-                gisrc,
-                os.path.join(
-                    mapset_settings.gisdbase,
-                    mapset_settings.location,
-                    mapset_settings.mapset,
-                ),
-            )
+            add_last_mapset_to_gisrc(gisrc, last_mapset_path)
+
             if is_first_time_user():
-                # Ensure default data hiearchy
+                # Ensure default data hierarchy
                 (
                     default_gisdbase,
                     default_location,
                     default_mapset,
-                ) = ga.ensure_default_data_hierarchy()
+                    default_mapset_path,
+                ) = ensure_default_data_hierarchy()
 
-                if default_gisdbase is None:
+                if not default_gisdbase:
                     sys.exit("Failed to start GRASS GUI, no grassdata directory found.")
-                elif default_location is None:
+                elif not default_location:
                     sys.exit(
                         "Failed to start GRASS GUI, no default location to copy in the installation or copying failed."
                     )
-
-                default_mapset_path = os.path.join(
-                    default_gisdbase,
-                    default_location,
-                    default_mapset,
-                )
-                # First session
                 if can_start_in_mapset(
                     mapset_path=default_mapset_path, ignore_lock=False
                 ):
@@ -2556,30 +2558,16 @@ def main():
                         location=default_location,
                         mapset=default_mapset,
                     )
-                # Another first-time session
                 else:
-                    # Add last used mapset to gisrc
+                    fallback_session = True
                     add_last_mapset_to_gisrc(gisrc, default_mapset_path)
-
-                    # Create temporary location
-                    params.tmp_location = True
-                    set_mapset(
-                        gisrc=gisrc,
-                        geofile="XY",
-                        create_new=True,
-                        tmp_location=params.tmp_location,
-                        tmpdir=tmpdir,
-                    )
             else:
-                # Create temporary location
+                fallback_session = True
+
+            if fallback_session:
+                # Create fallback temporary session
+                create_fallback_session(gisrc, tmpdir)
                 params.tmp_location = True
-                set_mapset(
-                    gisrc=gisrc,
-                    geofile="XY",
-                    create_new=True,
-                    tmp_location=params.tmp_location,
-                    tmpdir=tmpdir,
-                )
         else:
             # Write mapset info to gisrc file
             add_mapset_to_gisrc(
