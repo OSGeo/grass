@@ -586,14 +586,14 @@ def read_gisrc(filename):
     return kv
 
 
-def write_gisrcrc(gisrcrc, gisrc, skipped_parameter=None):
+def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
     """Reads gisrc file and write to gisrcrc"""
     debug("Reading %s" % gisrc)
     number = 0
     with open(gisrc, "r") as f:
         lines = f.readlines()
         for line in lines:
-            if skipped_parameter in line:
+            if skip_variable in line:
                 del lines[number]
             number += 1
     with open(gisrcrc, "w") as f:
@@ -1229,7 +1229,7 @@ class MapsetSettings(object):
         return self.gisdbase and self.location and self.mapset
 
 
-def getMapsetSettings(gisrc):
+def get_mapset_settings(gisrc):
     """Get the settings of Location and Mapset from the gisrc file"""
     mapset_settings = MapsetSettings()
     kv = read_gisrc(gisrc)
@@ -1249,8 +1249,8 @@ def load_gisrc(gisrc, gisrcrc):
 
     :returns: MapsetSettings object
     """
-    mapset_settings = getMapsetSettings(gisrc)
-    if not mapset_settings.is_valid():
+    mapset_settings = get_mapset_settings(gisrc)
+    if not mapset_settings:
         fatal(
             _(
                 "Error reading data path information from g.gisenv.\n"
@@ -1266,15 +1266,6 @@ def load_gisrc(gisrc, gisrcrc):
             )
         )
     return mapset_settings
-
-
-def can_start_in_gisrc_mapset(mapset_settings, ignore_lock=False):
-    """Check if a mapset from a gisrc file is usable for a new session"""
-    from grass.grassdb.checks import can_start_in_mapset
-
-    return can_start_in_mapset(
-        mapset_path=mapset_settings.full_mapset, ignore_lock=ignore_lock
-    )
 
 
 # load environmental variables from grass_env_file
@@ -2512,15 +2503,16 @@ def main():
     # Mapset is not specified in command line arguments
     if not params.mapset and not params.tmp_location:
         # Get mapset parameters from gisrc file
-        mapset_settings = getMapsetSettings(gisrc)
+        mapset_settings = get_mapset_settings(gisrc)
         # Check if mapset from gisrc is usable
-        last_mapset_usable = can_start_in_gisrc_mapset(
-            mapset_settings=mapset_settings, ignore_lock=params.force_gislock_removal
+        from grass.grassdb.checks import can_start_in_mapset
+        last_mapset_usable = can_start_in_mapset(
+        mapset_path=mapset_settings.full_mapset, ignore_lock=params.force_gislock_removal
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
             import grass.app as ga
-            from grass.grassdb.checks import can_start_in_mapset, is_first_time_user
+            from grass.grassdb.checks import is_first_time_user
 
             # Add last used mapset to gisrc
             add_last_mapset_to_gisrc(
@@ -2539,8 +2531,10 @@ def main():
                     default_mapset,
                 ) = ga.ensure_default_data_hierarchy()
 
-                if default_mapset is None:
-                    sys.exit("Failed to start GUI, GRASS GIS is not running.")
+                if default_gisdbase is None:
+                    sys.exit("Failed to start GRASS GUI, no grassdata directory found.")
+                elif default_location is None:
+                    sys.exit("Failed to start GRASS GUI, no default location to copy in the installation or copying failed.")
 
                 default_mapset_path = os.path.join(
                     default_gisdbase,
@@ -2720,7 +2714,7 @@ def main():
         if not params.tmp_location or (
             params.tmp_location and mapset_settings.gisdbase != os.environ["TMPDIR"]
         ):
-            write_gisrcrc(gisrcrc, gisrc, skipped_parameter="LAST_MAPSET_PATH")
+            write_gisrcrc(gisrcrc, gisrc, skip_variable="LAST_MAPSET_PATH")
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()
         # or register done_message()
