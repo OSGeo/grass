@@ -661,9 +661,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
                                 show_confirmation=False):
     """Switch current mapset. Emits giface.currentMapsetChanged signal."""
     # Decide if a user is in a fallback session
-    fallback_session = False
-    if is_fallback_session():
-        fallback_session = True
+    fallback_session = is_fallback_session()
 
     if dbase:
         if RunCommand('g.mapset', parent=guiparent,
