@@ -405,7 +405,7 @@ def wxGUI():
             sizer = wx.BoxSizer(orient=wx.VERTICAL)
 
             self.canvas = Canvas(app, parent=self)
-            si = sizer.Add(self.canvas, proportion=1, flag=wx.EXPAND)
+            sizer.Add(self.canvas, proportion=1, flag=wx.EXPAND)
 
             tools = wx.BoxSizer(wx.HORIZONTAL)
 
