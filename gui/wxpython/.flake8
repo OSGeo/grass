@@ -9,7 +9,6 @@ ignore =
     E741, # ambiguous variable name 'l'
     F403, # 'from gmodeler.model import *' used; unable to detect undefined names
     F405, # '_' may be undefined, or defined from star imports: gmodeler.model
-    F841, # local variable 'dc' is assigned to but never used
     E117, # over-indented
     E122, # continuation line missing indentation or outdented
     E123, # closing bracket does not match indentation of opening bracket's line
@@ -40,6 +39,36 @@ ignore =
     W293, # blank line contains whitespace
     W503, # line break before binary operator
     W504, # line break after binary operator
+
+per-file-ignores =
+    # Many of these ignores can and should be removed and the problem fixed.
+    # F841 local variable is assigned to but never used
+    core/*: F841
+    dbmgr/*: F841
+    gcp/*: F841
+    gmodeler/*: F841
+    gui_core/*: F841
+    image2target/*: F841
+    iscatt/*: F841
+    lmgr/*: F841
+    modules/*: F841
+    nviz/*: F841
+    photo2image/*: F841
+    psmap/*: F841
+    vdigit/*: F841
+    vnet/*: F841
+    wxgui.py: F841
+    animation/mapwindow.py: F841
+    animation/provider.py: F841
+    tplot/frame.py: F841
+    rdigit/g.gui.rdigit.py: F841
+    iclass/statistics.py: F841
+    wxplot/profile.py: F841
+    wxplot/base.py: F841
+    location_wizard/dialogs.py: F841
+    mapdisp/statusbar.py: F841
+    web_services/widgets.py: F841
+    rlisetup/sampling_frame.py: F841
 
 max-line-length = 88
 exclude =

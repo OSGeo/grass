@@ -2548,10 +2548,12 @@ class LocationWizard(wx.Object):
                 try:
                     os.mkdir(database)
                 except OSError as error:
-                    GError(parent=self.wizard,
-                           message="%s <%s>" %
-                           (_("Unable to create new GRASS Database"),
-                            database))
+                    GError(
+                        parent=self.wizard,
+                        message=_(
+                            "Unable to create new GRASS Database <{path}>: {error}"
+                        ).format(path=database, error=error),
+                    )
                     return None
 
             # location created in alternate GISDbase
