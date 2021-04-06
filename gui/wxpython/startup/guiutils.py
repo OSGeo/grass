@@ -29,7 +29,8 @@ from grass.grassdb.checks import (
     get_reasons_mapsets_not_removable,
     get_reasons_location_not_removable,
     get_reasons_locations_not_removable,
-    get_reasons_grassdb_not_removable
+    get_reasons_grassdb_not_removable,
+    is_fallback_session
 )
 import grass.grassdb.config as cfg
 
@@ -657,8 +658,13 @@ def import_file(guiparent, filePath, env):
 
 
 def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
-                                fallback_session=False, show_confirmation=False):
+                                show_confirmation=False):
     """Switch current mapset. Emits giface.currentMapsetChanged signal."""
+    # Decide if a user is in a fallback session
+    fallback_session = False
+    if is_fallback_session():
+        fallback_session = True
+
     if dbase:
         if RunCommand('g.mapset', parent=guiparent,
                       location=location,
@@ -696,6 +702,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
             giface.currentMapsetChanged.emit(dbase=None,
                                              location=None,
                                              mapset=mapset)
+
     if fallback_session:
         tmp_dbase = os.environ["TMPDIR"]
         tmp_loc = cfg.temporary_location
