@@ -44,7 +44,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     struct Range range;
     struct FPRange fprange, render_range;
     CELL min_ind, max_ind;
-    DCELL dmin, dmax, val, eps = 1.0;
+    DCELL dmin, dmax, val, eps_min, eps = 1.0;
     CELL min_colr, max_colr;
     DCELL min_dcolr, max_dcolr;
     int x0, x1, y0, y1, xyTemp;
@@ -306,6 +306,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }
         }
 
+	eps_min = log_sc && dmin <= 0 ? eps : dmin;
+
         if (use_catlist) {
             for (i = 0; i < catlistCount; i++) {
                 if ((catlist[i] < dmin) || (catlist[i] > dmax)) {
@@ -368,12 +370,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             for (k = 0; k < lleg; k++) {
                 if (log_sc) { /* logarithmic scale */
                     num = k / lleg;
-		    if (dmax <= 0)
-			val = dmax;
-		    else if (dmin <= 0)
-			val = eps * pow(dmax/eps, num);
-		    else
-			val = dmin * pow(dmax/dmin, num);
+		    val = dmax <= 0 ? dmax : eps_min * pow(dmax/eps_min, num);
                     D_d_color(val, &colors);
                     if (!flip) {
                         if (horiz)
@@ -509,7 +506,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 			    if (dmax <= 0)
 				val = dmax;
 			    else {
-				num = log10(dmax) - k * ((log10(dmax) - log10(dmin > 0 ? dmin : eps)) / (steps - 1));
+				num = log10(dmax) - k * ((log10(dmax) - log10(eps_min)) / (steps - 1));
 				val = pow(10,num);
 			    }
                         }
@@ -538,10 +535,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         D_get_text_box(buff, &bb, &bt, &bl, &br);
                         if (!horiz) {
                             if (log_sc) {
-				if (dmax <= 0)
-				    coef = 1;
-				else
-				    coef = (log10(val) - log10(dmin > 0 ? dmin : eps)) / (log10(dmax) - log10(dmin > 0 ? dmin : eps));
+				coef = dmax <= 0 ? 1 : (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                                 if (flip)
                             D_pos_abs(x1 + label_indent,
                                               y1 - coef * lleg + (bb - bt) / 2);
@@ -570,10 +564,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         }
                         else {
                             if (log_sc) {
-				if (dmax <= 0)
-				    coef = 1;
-				else
-				    coef = (log10(val) - log10(dmin > 0 ? dmin : eps)) / (log10(dmax) - log10(dmin > 0 ? dmin : eps));
+				coef = dmax <= 0 ? 1 : (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                                 if (flip)
                                     D_pos_abs(x1 - coef * wleg - ((br - bl) / 2),
                                       y1 + label_indent + txsiz);
@@ -633,10 +624,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 }
 
                 if (log_sc) {
-		    if (dmax <= 0)
-			coef = 1;
-		    else
-			coef = (log10(tick_values[i]) - log10(dmin > 0 ? dmin : eps)) / (log10(dmax) - log10(dmin > 0 ? dmin : eps));
+		    coef = dmax <= 0 ? 1 : (log10(tick_values[i]) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                 }
                 else
                 coef = (tick_values[i] - dmin) / ((dmax - dmin) * 1.0);
@@ -694,11 +682,11 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (opt_tstep->answer) {
             if (log_sc) { /* logarithmic */
                 t_start=0;
-                while (log10(dmin > 0 ? dmin : eps) + t_start < (dmax > 0 ? log10(dmax) : log10(dmin > 0 ? dmin : eps) + 1.5 * t_step)){
+                while (log10(eps_min) + t_start < (dmax > 0 ? log10(dmax) : log10(eps_min) + 1.5 * t_step)){
 		    if (dmax <= 0)
 			val = t_start == 0 ? dmax : dmin;
 		    else {
-			num = ceil(log10(dmin > 0 ? dmin : eps)) + t_start;
+			num = ceil(log10(eps_min)) + t_start;
 			val = pow(10,num);
 		    }
                     sprintf(buff, DispFormat, val);
@@ -714,7 +702,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 		    if (dmax <= 0)
 			coef = t_start == 0;
 		    else
-			coef = (log10(val) - log10(dmin > 0 ? dmin : eps)) / (log10(dmax) - log10(dmin > 0 ? dmin : eps));
+			coef = (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                     if (draw){
                         if (!flip){
                             if (!horiz){
