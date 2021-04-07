@@ -1,15 +1,7 @@
 [flake8]
 ignore =
-    E125, # continuation line...
-    E126, # continuation line...
-    E127, # continuation line...
-    E128, # continuation line...
-    E203, # whitespace before ':'
-    E261, # at least two spaces before inline comment
-    E303, # too many blank lines
-    E305, # expected 2 blank lines after class or function definition, found 1
-    E306, # expected 1 blank line before a nested definition, found 0
-    E123, # closing bracket does not match indentation of opening bracket's line
+    E203,  # whitespace before ':' (Black)
+    W503,  # line break before binary operator (Black)
     E501, # line too long
     E722, # do not use bare 'except'
     E741, # ambiguous variable name 'l'
@@ -31,3 +23,6 @@ exclude =
     ENV,
     env.bak,
     venv.bak,
+
+builtins =
+    _
