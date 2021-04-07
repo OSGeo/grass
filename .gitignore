@@ -3,7 +3,7 @@
 *.lock
 *.pyc
 OBJ.*
-locale/*
+locale/scriptstrings/*
 bin.*/*
 dist.*/*
 config.log
