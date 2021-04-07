@@ -11,7 +11,7 @@ import sys
 from grass.lib.gis import *
 from grass.lib.vector import *
 
-if not os.environ.has_key("GISBASE"):
+if "GISBASE" not in os.environ:
     sys.exit("You must be in GRASS GIS to run this program.")
 
 if len(sys.argv) == 2:
