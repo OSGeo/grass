@@ -148,7 +148,7 @@ class IClassToolbar(BaseToolbar):
         self.InitToolbar(self._toolbarData())
 
         self.choice = wx.Choice(parent=self, id=wx.ID_ANY, size=(110, -1))
-        choiceid = self.InsertControl(3, self.choice)
+        self.InsertControl(3, self.choice)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnSelectCategory)
 
@@ -158,7 +158,7 @@ class IClassToolbar(BaseToolbar):
         self.combo = wx.ComboBox(self, id=wx.ID_ANY, size=(130, -1),
                                  style=wx.TE_PROCESS_ENTER)
         self.InitStddev()
-        comboid = self.InsertControl(5, self.combo)
+        self.InsertControl(5, self.combo)
 
         self.EnableControls(False)
 

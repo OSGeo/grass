@@ -455,7 +455,7 @@ class SwipeMapFrame(DoubleMapFrame):
         mapInstance.DeleteAllLayers()
         cmdlist = ['d.rast', 'map=%s' % name]
         # add layer to Map instance (core.render)
-        newLayer = mapInstance.AddLayer(
+        mapInstance.AddLayer(
             ltype='raster',
             command=cmdlist,
             active=True,
