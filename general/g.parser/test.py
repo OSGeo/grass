@@ -42,7 +42,8 @@ def main():
     raster = options["raster"]
     vector = options["vector"]
 
-    #### add your code here ####
+    # Add your main code here
+
     exitcode = 0
 
     if flag_f:
@@ -57,7 +58,7 @@ def main():
     gs.message(_("Value of raster option: '%s'" % raster))
     gs.message(_("Value of vector option: '%s'" % vector))
 
-    #### end of your code ####
+    # End of your main code here
 
     sys.exit(exitcode)
 

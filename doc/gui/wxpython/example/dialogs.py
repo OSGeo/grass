@@ -30,7 +30,8 @@ from gui_core import gselect
 class ExampleMapDialog(SimpleDialog):
     """!Dialog for adding raster map.
 
-    Dialog can be easily changed to enable to choose vector, imagery groups or other elements.
+    Dialog can be easily changed to enable to choose vector,
+    imagery groups, or other elements.
     """
 
     def __init__(self, parent, title=_("Choose raster map")):

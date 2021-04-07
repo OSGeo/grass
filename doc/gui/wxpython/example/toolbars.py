@@ -19,7 +19,6 @@ for details.
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from icons.icon import MetaIcon
 
 
 class ExampleMapToolbar(BaseToolbar):
