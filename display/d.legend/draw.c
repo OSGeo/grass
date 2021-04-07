@@ -682,12 +682,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (opt_tstep->answer) {
             if (log_sc) { /* logarithmic */
                 t_start=0;
-                while (log10(eps_min) + t_start < (dmax > 0 ? log10(dmax) : log10(eps_min) + 1.5 * t_step)){
-		    if (dmax <= 0)
+                while (log10(eps_min) + t_start < (dmax > 0 ? log10(dmax) : log10(eps_min) + 1.5 * t_step)){ /* only twice if dmax <= 0 */
+		    if (dmax <= 0) {
+			/* dmax and dmin only if dmax <= 0 */
 			val = t_start == 0 ? dmax : dmin;
-		    else {
+			coef = t_start == 0;
+		    } else {
 			num = ceil(log10(eps_min)) + t_start;
 			val = pow(10,num);
+			coef = (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
 		    }
                     sprintf(buff, DispFormat, val);
                     if (strlen(units)>0)
@@ -699,10 +702,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         MaxLabelW = LabelW;
                         sprintf(MaxLabel, "%s", buff);
                     }
-		    if (dmax <= 0)
-			coef = t_start == 0;
-		    else
-			coef = (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                     if (draw){
                         if (!flip){
                             if (!horiz){
