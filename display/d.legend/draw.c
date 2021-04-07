@@ -413,7 +413,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         }
 
         /* Format text */
-        if (!fp) {              /* cut down labelnum so they don't repeat */
+        if (fp) {
+	    if (log_sc && dmax <= 0) /* label min and max only */
+		steps = 2;
+	} else {              /* cut down labelnum so they don't repeat */
             if (do_cats < steps)
                 steps = do_cats;
         }
@@ -504,7 +507,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     else {
                         if (log_sc) {
 			    if (dmax <= 0)
-				val = dmax;
+				val = k == 0 ? dmax : dmin;
 			    else {
 				num = log10(dmax) - k * ((log10(dmax) - log10(eps_min)) / (steps - 1));
 				val = pow(10,num);
@@ -535,7 +538,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         D_get_text_box(buff, &bb, &bt, &bl, &br);
                         if (!horiz) {
                             if (log_sc) {
-				coef = dmax <= 0 ? 1 : (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
+				if (dmax <= 0)
+				    coef = k == 0;
+				else
+				    coef = (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                                 if (flip)
                             D_pos_abs(x1 + label_indent,
                                               y1 - coef * lleg + (bb - bt) / 2);
@@ -564,7 +570,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         }
                         else {
                             if (log_sc) {
-				coef = dmax <= 0 ? 1 : (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
+				if (dmax <= 0)
+				    coef = k == 0;
+				else
+				    coef = (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                                 if (flip)
                                     D_pos_abs(x1 - coef * wleg - ((br - bl) / 2),
                                       y1 + label_indent + txsiz);
@@ -612,6 +621,11 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     G_fatal_error(_("tick_value=%.3f out of range [%.3f, %.3f]"),
                                   tick_values[i], dmin, dmax);
                 }
+		if (log_sc && tick_values[i] <= 0) {
+		    G_warning(_("Skipping non-positive tick_value=%.3f"),
+			    tick_values[i]);
+		    continue;
+		}
                 sprintf(buff, DispFormat, tick_values[i]);
                 if (strlen(units)>0)
                     strcat(buff, units);
@@ -623,9 +637,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     sprintf(MaxLabel, "%s", buff);
                 }
 
-                if (log_sc) {
-		    coef = dmax <= 0 ? 1 : (log10(tick_values[i]) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
-                }
+                if (log_sc)
+		    coef = (log10(tick_values[i]) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
                 else
                 coef = (tick_values[i] - dmin) / ((dmax - dmin) * 1.0);
 
