@@ -1837,9 +1837,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	}
 	sunVarGeom.zmax = zmax;
         shadowoffset_base = (j % (numRows)) * n * arrayNumInt;
-    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum, gridGeom,sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar, elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step )
+    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum,gridGeom,elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step)
     {
-      #pragma omp for schedule(dynamic) 
+      #pragma omp for schedule(dynamic) firstprivate(sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar) lastprivate(sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar) 
 	for (i = 0; i < n; i++) {
             shadowoffset = shadowoffset_base + (arrayNumInt * i);
 	    if (useCivilTime()) {
