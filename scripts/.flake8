@@ -2,7 +2,6 @@
 ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
-    E402, # module level import not at top of file
     E722, # do not use bare 'except'
     E741, # ambiguous variable name 'l'
     E501, # line too long (161 > 150 characters)
@@ -10,6 +9,7 @@ ignore =
 per-file-ignores =
     # Many of these ignores can and should be removed and the problem fixed.
     # F841 local variable is assigned to but never used
+    # E402 module level import not at top of file
     d.polar/d.polar.py: F841
     r.in.wms/wms_gdal_drv.py: F841
     r.in.wms/wms_cap_parsers.py: F841
@@ -19,6 +19,7 @@ per-file-ignores =
     g.extension/g.extension.py: F841
     v.unpack/v.unpack.py: F841
     v.import/v.import.py: F841
+    r.in.wms/wms_drv.py: E402
 
 max-line-length = 88
 exclude =
