@@ -33,8 +33,8 @@ class DataCatalogInfoManager:
     def ShowDataStructureInfo(self, onCreateLocationHandler):
         """Show info about the data hierarchy focused on the first-time user"""
         buttons = [
-            ("Create new Location", onCreateLocationHandler),
-            ("Learn More", self._onLearnMore),
+            (_("Create new Location"), onCreateLocationHandler),
+            (_("Learn more"), self._onLearnMore),
         ]
         message = _(
             "GRASS GIS helps you organize your data using Locations (projects) "
@@ -50,8 +50,8 @@ class DataCatalogInfoManager:
     def ShowImportDataInfo(self, OnImportOgrLayersHandler, OnImportGdalLayersHandler):
         """Show info about the data import focused on the first-time user"""
         buttons = [
-            ("Import vector data", OnImportOgrLayersHandler),
-            ("Import raster data", OnImportGdalLayersHandler),
+            (_("Import vector data"), OnImportOgrLayersHandler),
+            (_("Import raster data"), OnImportGdalLayersHandler),
         ]
         message = _(
             "You have successfully created a new Location {loc}. "
@@ -77,7 +77,7 @@ class DataCatalogInfoManager:
     def ShowLockedMapsetInfo(self, OnSwitchMapsetHandler):
         """Show info when last used mapset is locked"""
         last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
-        buttons = [("Switch to last used mapset", OnSwitchMapsetHandler)]
+        buttons = [(_("Switch to last used mapset"), OnSwitchMapsetHandler)]
         message = _(
             "Last used mapset in path '{mapsetpath}' is currently in use. "
             "GRASS GIS has started in a temporary Location. "
