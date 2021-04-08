@@ -225,7 +225,6 @@ def GetRegionParams(opt_region):
 
 
 def main():
-
     sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), "etc", "r.in.wms"))
 
     if "GRASS" in options["driver"]:
