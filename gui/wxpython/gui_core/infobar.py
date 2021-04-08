@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
+import sys
 import wx
 import wx.aui
 try:
@@ -55,13 +56,18 @@ class InfoBar(IB.InfoBar):
 
         self.button_ids = []
 
-        # some system themes have alpha, remove it
-        self._background_color = wx.SystemSettings.GetColour(
-            wx.SYS_COLOUR_HIGHLIGHT
-        ).Get(False)
-        self._foreground_color = wx.SystemSettings.GetColour(
-            wx.SYS_COLOUR_HIGHLIGHTTEXT
-        ).Get(False)
+        # color according to OS
+        if sys.platform == "win32":
+            bgcolor = wx.SYS_COLOUR_INFOBK
+            fgcolor = wx.SYS_COLOUR_INFOTEXT
+        else:
+            bgcolor = wx.SYS_COLOUR_HIGHLIGHT
+            fgcolor = wx.SYS_COLOUR_HIGHLIGHTTEXT
+
+        # set background and foreground color and remove alpha
+        self._background_color = wx.SystemSettings.GetColour(bgcolor).Get(False)
+        self._foreground_color = wx.SystemSettings.GetColour(fgcolor).Get(False)
+
         self.SetBackgroundColour(self._background_color)
         self.SetForegroundColour(self._foreground_color)
         self._text.SetBackgroundColour(self._background_color)
