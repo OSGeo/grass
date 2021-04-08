@@ -1497,7 +1497,6 @@ class DataCatalogTree(TreeView):
         """
         Switch to location and mapset interactively.
         """
-
         if can_switch_mapset_interactive(self, grassdb, location, mapset):
             genv = gisenv()
             # Switch to mapset in the same location

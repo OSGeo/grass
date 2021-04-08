@@ -51,8 +51,6 @@ class DataCatalog(wx.Panel):
 
         Debug.msg(1, "DataCatalog.__init__()")
 
-        delay = 2000
-
         # toolbar
         self.toolbar = DataCatalogToolbar(parent=self)
 
@@ -61,6 +59,7 @@ class DataCatalog(wx.Panel):
         self.tree.showNotification.connect(self.showNotification)
 
         # infobar for data catalog
+        delay = 2000
         self.infoBar = InfoBar(self)
         self.giface.currentMapsetChanged.connect(self.dismissInfobar)
 

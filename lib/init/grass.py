@@ -2544,10 +2544,16 @@ def main():
                 ) = ensure_default_data_hierarchy()
 
                 if not default_gisdbase:
-                    sys.exit("Failed to start GRASS GUI, no grassdata directory found.")
+                    fatal(
+                        _(
+                            "Failed to start GRASS GIS, grassdata directory could not be found or created."
+                        )
+                    )
                 elif not default_location:
-                    sys.exit(
-                        "Failed to start GRASS GUI, no default location to copy in the installation or copying failed."
+                    fatal(
+                        _(
+                            "Failed to start GRASS GIS, no default location to copy in the installation or copying failed."
+                        )
                     )
                 if can_start_in_mapset(
                     mapset_path=default_mapset_path, ignore_lock=False

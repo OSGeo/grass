@@ -89,21 +89,21 @@ class DataCatalogInfoManager:
     def _text_from_reason_id(self, reason_id):
         """ Get string for infobar message based on the reason."""
         last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
-        string = None
+        reason = None
         if reason_id == "non-existent":
-            string = _(
+            reason = _(
                 "Last used mapset in path '{mapsetpath}' does not exist."
             ).format(mapsetpath=last_used_mapset_path)
         elif reason_id == "invalid":
-            string = _("Last used mapset in path '{mapsetpath}' is invalid.").format(
+            reason = _("Last used mapset in path '{mapsetpath}' is invalid.").format(
                 mapsetpath=last_used_mapset_path
             )
         elif reason_id == "different-owner":
             owner = get_mapset_owner(last_used_mapset_path)
-            string = _(
+            reason = _(
                 "Last used mapset in path '{mapsetpath}' has different owner {owner}."
             ).format(owner=owner, mapsetpath=last_used_mapset_path)
-        return string
+        return reason
 
     def _onLearnMore(self, event):
         self._giface.Help(entry="grass_database")
