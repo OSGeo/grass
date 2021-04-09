@@ -2,7 +2,6 @@
 ignore =
     W605, # invalid escape sequence '\.'
     E265, # block comment should start with '# '
-    E266, # too many leading '#' for block comment
     E402, # module level import not at top of file
     E722, # do not use bare 'except'
     E731, # do not assign a lambda expression, use a def
@@ -47,14 +46,14 @@ per-file-ignores =
     dbmgr/*: F841
     gcp/*: F841
     gmodeler/*: F841
-    gui_core/*: F841
+    gui_core/*: F841, E266
     image2target/*: F841
     iscatt/*: F841
-    lmgr/*: F841
+    lmgr/*: F841, E266
     modules/*: F841
-    nviz/*: F841
+    nviz/*: F841, E266
     photo2image/*: F841
-    psmap/*: F841
+    psmap/*: F841, E266
     vdigit/*: F841
     vnet/*: F841
     wxgui.py: F841

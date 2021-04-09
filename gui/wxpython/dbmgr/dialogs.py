@@ -179,7 +179,7 @@ class DisplayAttributesDialog(wx.Dialog):
 
         if self.notebook.GetPageCount() == 0:
             Debug.msg(2, "DisplayAttributesDialog(): Nothing found!")
-            ### self.mapDBInfo = None
+            # self.mapDBInfo = None
 
     def OnSQLStatement(self, event):
         """Update SQL statement"""

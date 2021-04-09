@@ -494,7 +494,7 @@ class Model(object):
                                 _("undefined variable '%s'") %
                                 var)
             # TODO: check variables in file only optionally
-            ### errList += self._substituteFile(action, checkOnly = True)
+            # errList += self._substituteFile(action, checkOnly = True)
 
         return errList
 

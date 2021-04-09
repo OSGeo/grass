@@ -711,7 +711,7 @@ class VDigitSettingsDialog(wx.Dialog):
             # checkbox
             check = CheckBox(parent=panel, id=wx.ID_ANY,
                              label=self.geomAttrb[attrb]['label'])
-            ### self.deleteRecord.SetValue(UserSettings.Get(group='vdigit', key="delRecord", subkey='enabled'))
+            # self.deleteRecord.SetValue(UserSettings.Get(group='vdigit', key="delRecord", subkey='enabled'))
             check.Bind(wx.EVT_CHECKBOX, self.OnGeomAttrb)
             # column (only numeric)
             column = ColumnSelect(parent=panel, size=(200, -1))
