@@ -13,9 +13,6 @@ int check_signatures(struct Signature *S)
 
     lambda = (double *)G_calloc(S->nbands, sizeof(double));
     I_init_signatures(&temp, S->nbands);
-    /* I_free_signatures expects bandref count to match nbands */
-    for (i = 0; i < temp.nbands; i++)
-        temp.bandrefs[i] = (char *)G_malloc(0);
     I_new_signature(&temp);
     for (i = 0; i < S->nsigs; i++) {
 	copy_covariances(temp.sig[0].var, S->sig[i].var, S->nbands);
