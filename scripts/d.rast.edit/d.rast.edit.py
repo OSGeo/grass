@@ -409,15 +409,15 @@ def wxGUI():
 
             tools = wx.BoxSizer(wx.HORIZONTAL)
 
-            l = wx.StaticText(parent=self, label="New Value:")
-            tools.Add(l, flag=wx.ALIGN_CENTER_VERTICAL)
+            label = wx.StaticText(parent=self, label="New Value:")
+            tools.Add(label, flag=wx.ALIGN_CENTER_VERTICAL)
             tools.AddSpacer(5)
 
             self.newval = wx.TextCtrl(parent=self, style=wx.TE_PROCESS_ENTER)
             tools.Add(self.newval, flag=wx.ALIGN_CENTER_VERTICAL)
 
-            l = wx.StaticText(parent=self, label="Color:")
-            tools.Add(l, flag=wx.ALIGN_CENTER_VERTICAL)
+            label = wx.StaticText(parent=self, label="Color:")
+            tools.Add(label, flag=wx.ALIGN_CENTER_VERTICAL)
             tools.AddSpacer(5)
 
             self.color = ColorPanel(parent=self, size=(30, 5))
