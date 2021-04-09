@@ -251,8 +251,8 @@ def main():
     if len(s) == 0:
         gcore.fatal(_("No data returned from query"))
 
-    for l in s.splitlines():
-        f = l.split("|")
+    for line in s.splitlines():
+        f = line.split("|")
         for i, v in enumerate(f):
             if v in ["", "*"]:
                 f[i] = 0

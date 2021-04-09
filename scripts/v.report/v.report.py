@@ -59,10 +59,10 @@ import grass.script as grass
 from grass.script.utils import separator, decode
 
 
-def uniq(l):
+def uniq(items):
     result = []
     last = None
-    for i in l:
+    for i in items:
         if i != last:
             result.append(i)
             last = i
