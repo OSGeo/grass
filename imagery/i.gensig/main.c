@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
     compute_covariances(&files, &S);
     check_signatures(&S);
     write_sigfile(&parms, &S);
+    I_free_signatures(&S);
 
     G_done_msg(" ");
     

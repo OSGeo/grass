@@ -15,6 +15,8 @@ int I_init_signatures(struct Signature *S, int nbands)
 {
     S->nbands = nbands;
     S->bandrefs = (char **)G_malloc(nbands * sizeof(char **));
+    for (int i = 0; i < nbands; i++)
+        S->bandrefs[i] = NULL;
     S->nsigs = 0;
     S->sig = NULL;
     S->title[0] = 0;
@@ -51,6 +53,8 @@ int I_new_signature(struct Signature *S)
  * passed to this function.
  *
  * \param *Signature to free
+ *
+ * \return always 0
  */
 int I_free_signatures(struct Signature *S)
 {
@@ -67,6 +71,10 @@ int I_free_signatures(struct Signature *S)
     for (n = 0; n < S->nbands; n++)
         free(S->bandrefs[n]);
     free(S->bandrefs);
+
+    S->nbands = 0;
+    S->nsigs = 0;
+    S->title[0] = '\0';
 
     return 0;
 }
@@ -118,7 +126,7 @@ int I_read_one_signature(FILE * fd, struct Signature *S)
  *
  * File stream should be opened in advance by call to
  * I_fopen_signature_file_old()
- * It is up to calee to fclose the file stream afterwards.
+ * It is up to caller to fclose the file stream afterwards.
  *
  * \param pointer to FILE*
  * \param pointer to struct Signature *S
@@ -127,14 +135,9 @@ int I_read_one_signature(FILE * fd, struct Signature *S)
  */
 int I_read_signatures(FILE * fd, struct Signature *S)
 {
-    int ver;
-    int n;
-    int step, pos, alloced, bandref;
+    int ver, n, pos;
     char c, prev;
-    step = 8;
-    pos = 0;
-    alloced = 0;
-    bandref = 0;
+    char bandref[GNAME_MAX];
 
     S->title[0] = 0;
     /* File of signatures must start with its version number */
@@ -156,36 +159,36 @@ int I_read_signatures(FILE * fd, struct Signature *S)
     G_strip(S->title);
 
     /* Read band references and count them to set nbands */
-    if (S->nbands == 0)
-        S->bandrefs = (char **)G_realloc(S->bandrefs, sizeof(char **));
-    S->bandrefs[bandref] = (char *)G_malloc((step + 1) * sizeof(char *));
-    alloced = step; /* + 1 for '\0' */
+    n = 0;
+    pos = 0;
+    S->bandrefs = (char **)G_realloc(S->bandrefs, (n + 1) * sizeof(char **));
     while ((c = (char)fgetc(fd)) != EOF) {
         if (c == '\n') {
             if (prev != ' ') {
-                S->bandrefs[bandref][pos] = '\0';
-                bandref++;
+                bandref[pos] = '\0';
+                S->bandrefs[n] = G_store(bandref);
+                n++;
             }
-            S->nbands = bandref;
-            G_free(S->bandrefs[bandref]);
+            S->nbands = n;
             break;
         }
-        if (pos == alloced) {
-            alloced = alloced + step;
-            S->bandrefs[bandref] = (char *)G_realloc(S->bandrefs[bandref], alloced * sizeof(char *));
-        }
         if (c == ' ') {
-            S->bandrefs[bandref][pos] = '\0';
-            bandref++;
-            /* bandref are 0 based thus: (bandref + 1) */
-            S->bandrefs = (char **)G_realloc(S->bandrefs, (bandref + 1) * sizeof(char **));
-            S->bandrefs[bandref] = (char *)G_malloc((step + 1) * sizeof(char *));
-            alloced = step; /* + 1 for '\0' */
+            bandref[pos] = '\0';
+            S->bandrefs[n] = G_store(bandref);
+            n++;
+            /* [n] is 0 based thus: (n + 1) */
+            S->bandrefs = (char **)G_realloc(S->bandrefs, (n + 1) * sizeof(char **));
             pos = 0;
             prev = c;
             continue;
         }
-        S->bandrefs[bandref][pos] = c;
+        /* Band references are limited to GNAME_MAX - 1 + \0 in length;
+         * n is 0-based */
+        if (pos == (GNAME_MAX - 2)) {
+            G_warning(_("Invalid signature file: band reference length limit exceeded"));
+            return -1;
+        }
+        bandref[pos] = c;
         pos++;
         prev = c;
     }
@@ -209,7 +212,7 @@ int I_read_signatures(FILE * fd, struct Signature *S)
  *
  * File stream should be opened in advance by call to
  * I_fopen_signature_file_new()
- * It is up to calee to fclose the file stream afterwards.
+ * It is up to caller to fclose the file stream afterwards.
  *
  * \param pointer to FILE*
  * \param pointer to struct Signature *S
@@ -240,7 +243,7 @@ int I_write_signatures(FILE * fd, struct Signature *S)
 	s = &S->sig[k];
 	if (s->status != 1)
 	    continue;
-    /* Label for each class repersented by this signature */
+    /* Label for each class represented by this signature */
     fprintf(fd, "#%s\n", s->desc);
     /* Point count used to generate signature */
 	fprintf(fd, "%d\n", s->npoints);
