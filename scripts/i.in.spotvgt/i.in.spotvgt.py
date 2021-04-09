@@ -75,8 +75,8 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
 def create_VRT_file(projfile, vrtfile, infile):
     fh = open(projfile)
     kv = {}
-    for l in fh:
-        f = l.rstrip("\r\n").split()
+    for line in fh:
+        f = line.rstrip("\r\n").split()
         if f < 2:
             continue
         kv[f[0]] = f[1]
