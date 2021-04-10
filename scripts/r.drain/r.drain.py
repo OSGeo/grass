@@ -118,12 +118,14 @@ import grass.script as grass
 def cleanup():
     """Delete temporary direction map."""
     if tmp_maps:
-        try:
-            grass.run_command(
-                "g.remove", flags="f", quiet=True, type="raster", name=tmp_maps
-            )
-        except:
-            pass
+        grass.run_command(
+            "g.remove",
+            flags="f",
+            quiet=True,
+            type="raster",
+            name=tmp_maps,
+            errors="ignore",
+        )
 
 
 def main():

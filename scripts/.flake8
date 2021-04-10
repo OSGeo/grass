@@ -2,7 +2,6 @@
 ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
-    E722, # do not use bare 'except'
     E501, # line too long (161 > 150 characters)
 
 per-file-ignores =
@@ -10,18 +9,32 @@ per-file-ignores =
     # F841 local variable is assigned to but never used
     # E402 module level import not at top of file
     # E741 ambiguous variable name 'l' (needs longer name)
+    # E722 do not use bare 'except'
     d.polar/d.polar.py: F841
-    r.in.wms/wms_gdal_drv.py: F841
+    r.in.wms/wms_gdal_drv.py: F841, E722
     r.in.wms/wms_cap_parsers.py: F841, E741
+    r.in.wms/wms_drv.py: E402, E722
+    r.in.wms/srs.py: E722
     i.band/i.band.py: F841
     v.report/v.report.py: F841
     db.out.ogr/db.out.ogr.py: F841
-    g.extension/g.extension.py: F841
-    v.unpack/v.unpack.py: F841
-    v.import/v.import.py: F841
-    r.in.wms/wms_drv.py: E402
+    g.extension/g.extension.py: F841, E722
+    r.unpack/r.unpack.py: E722
+    v.unpack/v.unpack.py: F841, E722
+    v.import/v.import.py: F841, E722
     db.univar/db.univar.py: E741
     d.rast.leg/d.rast.leg.py: E741
+    d.frame/d.frame.py: E722
+    i.pansharpen/i.pansharpen.py: E722
+    r.in.srtm/r.in.srtm.py: E722
+    r.fillnulls/r.fillnulls.py: E722
+    d.rast.edit/d.rast.edit.py: E722
+    g.manual/g.manual.py: E722
+    v.to.lines/v.to.lines.py: E722
+    v.in.wfs/v.in.wfs.py: E722
+    r.plane/r.plane.py: E722
+    v.what.strds/v.what.strds.py: E722
+    i.in.spotvgt/i.in.spotvgt.py: E722
 
 max-line-length = 88
 exclude =
