@@ -38,6 +38,7 @@ from gui_core.wrap import Button, CloseButton, StaticText, StaticBox
 from core.utils import GetValidLayerName
 from core.settings import UserSettings, GetDisplayVectSettings
 
+from grass.pydispatch.signal import Signal
 
 class ImportDialog(wx.Dialog):
     """Dialog for bulk import of various data (base class)"""
@@ -50,6 +51,8 @@ class ImportDialog(wx.Dialog):
         self.importType = itype
         self.options = dict()   # list of options
         self.options_par = dict()
+
+        self.showImportSuccessfulInfo = Signal('ImportDialog.showImportSuccessfulInfo')
 
         self.commandId = -1  # id of running command
 
@@ -517,8 +520,10 @@ class GdalImportDialog(ImportDialog):
 
         self.AddLayers(event.returncode, event.cmd, event.userData)
 
-        if event.returncode == 0 and self.closeOnFinish.IsChecked():
-            self.Close()
+        if event.returncode == 0:
+            self.showImportSuccessfulInfo.emit()
+            if self.closeOnFinish.IsChecked():
+                self.Close()
 
     def _getCommand(self):
         """Get command"""
@@ -671,8 +676,10 @@ class OgrImportDialog(ImportDialog):
         if self.popOGR:
             os.environ.pop('GRASS_VECTOR_OGR')
 
-        if event.returncode == 0 and self.closeOnFinish.IsChecked():
-            self.Close()
+        if event.returncode == 0:
+            self.showImportSuccessfulInfo.emit()
+            if self.closeOnFinish.IsChecked():
+                self.Close()
 
     def _getCommand(self):
         """Get command"""

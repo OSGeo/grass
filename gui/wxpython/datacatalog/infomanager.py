@@ -58,5 +58,14 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()['LOCATION_NAME'])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
+    def ShowImportSuccessfulInfo(self):
+        """Show info about the Display and Modules tabs focused on the first-time user"""
+        message = _(
+            "You have successfully imported data. To change layer properties, "
+            "go to Display tab below and right-click on a layer name.\n\n"
+            "To analyze your data, search for a module (tool) in the Modules tab below."
+        )
+        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION)
+
     def _onLearnMore(self, event):
         self._giface.Help(entry="grass_database")
