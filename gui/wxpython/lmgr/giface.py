@@ -204,6 +204,9 @@ class LayerManagerGrassInterface(object):
         # Signal emitted to request updating of map
         self.updateMap = Signal('LayerManagerGrassInterface.updateMap')
 
+        # Signal emitted when workspace is changed
+        self.workspaceChanged = Signal('LayerManagerGrassInterface.workspaceChanged')
+
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
 
