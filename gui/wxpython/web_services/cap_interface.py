@@ -38,9 +38,9 @@ class CapabilitiesBase:
     def GetLayerByName(self, name):
         """Find layer by name
         """
-        for l in self.layers_by_id:
-            if name == l.GetLayerData('name'):
-                return l
+        for layer in self.layers_by_id:
+            if name == layer.GetLayerData("name"):
+                return layer
         return None
 
     def GetRootLayer(self):
@@ -101,8 +101,8 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
 
         layer_nodes = parent_layer.GetLayerNode().findall((self.xml_ns.Ns("Layer")))
 
-        for l in layer_nodes:
-            layer = WMSLayer(l, id, self)
+        for node in layer_nodes:
+            layer = WMSLayer(node, id, self)
             parent_layer.AddChildLayer(layer)
             self.layers_by_id[id] = layer
             id += 1
@@ -374,8 +374,8 @@ class OnEarthLayer(LayerBase):
 
     def __init__(self, layer_node, parent_layer, id, cap):
         """Common interface for web_services.widgets to NASA Earth
-            capabilities <TiledGroup>\<TiledGroups> element
-            (equivalent to  WMS, WMTS <Layer> element)
+        capabilities <TiledGroup>/<TiledGroups> element
+        (equivalent to  WMS, WMTS <Layer> element)
         """
         self.id = id
         self.cap = cap

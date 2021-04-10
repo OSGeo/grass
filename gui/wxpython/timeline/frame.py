@@ -264,7 +264,7 @@ class TimelineFrame(wx.Frame):
         if self.temporalType == 'absolute':
             convert = mdates.date2num
         else:
-            convert = lambda x: x
+            convert = lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
         plots = []
@@ -310,7 +310,7 @@ class TimelineFrame(wx.Frame):
         if self.temporalType == 'absolute':
             convert = mdates.date2num
         else:
-            convert = lambda x: x
+            convert = lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
 
