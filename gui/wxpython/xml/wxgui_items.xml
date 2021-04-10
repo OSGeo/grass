@@ -154,11 +154,6 @@
     <description>Close workspace file</description>
     <wx-id>ID_CLOSE</wx-id>
   </wxgui-item>
-  <wxgui-item name="LoadGRCFileTclTkGUI">
-    <label>Load GRC file (Tcl/Tk GUI)</label>
-    <handler>OnWorkspaceLoadGrcFile</handler>
-    <description>Load map layers from GRC file to layer tree</description>
-  </wxgui-item>
   <wxgui-item name="AddRaster">
     <label>Add raster</label>
     <handler>OnAddRaster</handler>

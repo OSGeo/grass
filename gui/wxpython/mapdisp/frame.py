@@ -856,7 +856,7 @@ class MapFrame(SingleMapFrame):
             name = self.layerbook.GetPageText(pgnum)
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or \
-               (askIfSaveWorkspace and self._layerManager.CanClosePage(caption)):
+               (askIfSaveWorkspace and self._layerManager.workspace_manager.CanClosePage(caption)):
                 self.CleanUp()
                 if pgnum > -1:
                     self.closingDisplay.emit(page_index=pgnum)
