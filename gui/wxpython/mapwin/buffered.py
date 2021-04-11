@@ -1971,23 +1971,22 @@ class BufferedMapWindow(MapWindowBase, Window):
         rast3d = None
         vect = []
         updated = False
-        for l in layers:
+        for layer in layers:
             # only one raster is used: g.region does not support multiple
-            if l.type == 'raster':
-                rast.append(l.GetName())
-            elif l.type == 'raster_3d':
-                rast3d = l.GetName()
-            elif l.type == 'vector':
-                if self.digit and \
-                        self.toolbar.GetLayer() == l:
+            if layer.type == "raster":
+                rast.append(layer.GetName())
+            elif layer.type == "raster_3d":
+                rast3d = layer.GetName()
+            elif layer.type == "vector":
+                if self.digit and self.toolbar.GetLayer() == layer:
                     w, s, b, e, n, t = self.digit.GetDisplay().GetMapBoundingBox()
                     self.Map.GetRegion(n=n, s=s, w=w, e=e,
                                        update=True)
                     updated = True
                 else:
-                    vect.append(l.name)
-            elif l.type == 'rgb':
-                for rname in l.GetName().splitlines():
+                    vect.append(layer.name)
+            elif layer.type == "rgb":
+                for rname in layer.GetName().splitlines():
                     rast.append(rname)
 
         if not updated:

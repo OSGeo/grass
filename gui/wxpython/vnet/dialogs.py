@@ -1946,7 +1946,7 @@ class TurnAnglesList(
         if column in [1, 2, 3]:
             try:
                 text = float(text)
-            except:
+            except ValueError:
                 return
         if column in [1, 2]:
             text = DegreesToRadians(text)

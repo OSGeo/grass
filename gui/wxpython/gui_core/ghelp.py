@@ -748,34 +748,38 @@ class HelpWindow(HtmlWindow):
         try:
             contents = []
             skip = False
-            for l in open(htmlFile, "rb").readlines():
-                if "DESCRIPTION" in l:
+            for line in open(htmlFile, "rb").readlines():
+                if "DESCRIPTION" in line:
                     skip = False
                 if not skip:
                     # do skip the options description if requested
-                    if "SYNOPSIS" in l:
+                    if "SYNOPSIS" in line:
                         skip = skipDescription
                     else:
                         # FIXME: find only first item
-                        findALink = aLink.search(l)
+                        findALink = aLink.search(line)
                         if findALink is not None:
                             contents.append(
                                 aLink.sub(
                                     findALink.group(1) +
                                     self.fspath +
                                     findALink.group(2),
-                                    l))
-                        findImgLink = imgLink.search(l)
+                                    line
+                                )
+                            )
+                        findImgLink = imgLink.search(line)
                         if findImgLink is not None:
                             contents.append(
                                 imgLink.sub(
                                     findImgLink.group(1) +
                                     self.fspath +
                                     findImgLink.group(2),
-                                    l))
+                                    line
+                                )
+                            )
 
                         if findALink is None and findImgLink is None:
-                            contents.append(l)
+                            contents.append(line)
             self.SetPage("".join(contents))
             self.loaded = True
         except:  # The Manual file was not found
