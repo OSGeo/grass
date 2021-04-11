@@ -701,9 +701,9 @@ class VNETAnalysisParameters:
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])
 
-        for l in ['arc_layer', 'node_layer', 'turn_layer', 'turn_cat_layer']:
-            if not layers or params[l] not in layers:
-                invParams.append(l)
+        for layer in ["arc_layer", "node_layer", "turn_layer", "turn_cat_layer"]:
+            if not layers or params[layer] not in layers:
+                invParams.append(layer)
 
         dbInfo = VectorDBInfo(params["input"])
 

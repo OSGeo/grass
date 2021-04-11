@@ -1,11 +1,7 @@
 [flake8]
 ignore =
-    W605, # invalid escape sequence '\.'
     E265, # block comment should start with '# '
     E402, # module level import not at top of file
-    E722, # do not use bare 'except'
-    E731, # do not assign a lambda expression, use a def
-    E741, # ambiguous variable name 'l'
     F403, # 'from gmodeler.model import *' used; unable to detect undefined names
     F405, # '_' may be undefined, or defined from star imports: gmodeler.model
     E117, # over-indented
@@ -42,32 +38,46 @@ ignore =
 per-file-ignores =
     # Many of these ignores can and should be removed and the problem fixed.
     # F841 local variable is assigned to but never used
-    core/*: F841
-    dbmgr/*: F841
-    gcp/*: F841
-    gmodeler/*: F841
-    gui_core/*: F841, E266
-    image2target/*: F841
-    iscatt/*: F841
-    lmgr/*: F841, E266
-    modules/*: F841
-    nviz/*: F841, E266
-    photo2image/*: F841
-    psmap/*: F841, E266
-    vdigit/*: F841
+    core/*: F841, E722, W605
+    datacatalog/tree.py: E731
+    dbmgr/*: F841, E722
+    gcp/*: F841, E722
+    gmodeler/*: F841, E722, W605
+    gui_core/*: F841, E266, E722, W605
+    image2target/*: F841, E722
+    iscatt/*: F841, E722, E741
+    lmgr/*: F841, E266, E722, E741, W605
+    modules/*: F841, E722, W605
+    nviz/*: F841, E266, E722, W605
+    photo2image/*: F841, E722
+    psmap/*: F841, E266, E722
+    vdigit/*: F841, E722, E741
     vnet/*: F841
     wxgui.py: F841
     animation/mapwindow.py: F841
     animation/provider.py: F841
-    tplot/frame.py: F841
+    tplot/frame.py: F841, E722
     rdigit/g.gui.rdigit.py: F841
+    iclass/dialogs.py: E741
     iclass/statistics.py: F841
-    wxplot/profile.py: F841
-    wxplot/base.py: F841
+    wxplot/histogram.py: E722
+    wxplot/profile.py: F841, E722
+    wxplot/base.py: F841, E722
     location_wizard/dialogs.py: F841
+    location_wizard/wizard.py: E722
+    mapdisp/main.py: E722
     mapdisp/statusbar.py: F841
-    web_services/widgets.py: F841
+    mapwin/base.py: E722
+    mapwin/buffered.py: E722
+    mapwin/graphics.py: E722
+    startup/locdownload.py: E722
+    tools/build_modules_xml.py: E722
+    web_services/widgets.py: F841, E741, W605
+    rlisetup/frame.py: E741
     rlisetup/sampling_frame.py: F841
+    rlisetup/wizard.py: E722, E741
+    # This file will be deleted.
+    gis_set.py: E722
 
 max-line-length = 88
 exclude =

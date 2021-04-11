@@ -878,7 +878,7 @@ def test():
     prov.mapsLoaded.connect(
         lambda: sys.stdout.write("Maps loading finished\n"))
     cmdMatrix = layerListToCmdsMatrix(layerList)
-    prov.SetCmds(cmdMatrix, [l.opacity for l in layerList])
+    prov.SetCmds(cmdMatrix, [layer.opacity for layer in layerList])
     app = wx.App()
 
     prov.Load(bgcolor=(13, 156, 230), nprocs=4)
