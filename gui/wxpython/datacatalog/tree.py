@@ -300,6 +300,7 @@ class DataCatalogTree(TreeView):
 
         self.showNotification = Signal('Tree.showNotification')
         self.showImportDataInfo = Signal('Tree.showImportDataInfo')
+        self.loadingDone = Signal('Tree.loadingDone')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
@@ -364,6 +365,19 @@ class DataCatalogTree(TreeView):
         self.copy_grassdb = None
 
     def _useLazyLoading(self):
+        settings = UserSettings.Get(group='datacatalog')
+        # workaround defining new settings in datacatalog group
+        # force writing new settings in the wx.json file during start
+        # can be removed later on
+        if 'lazyLoading' not in settings:
+            lazySettings = UserSettings.Get(group='datacatalog',
+                                            key='lazyLoading',
+                                            settings_type='default')
+            jsonSettings = {}
+            UserSettings.ReadSettingsFile(settings=jsonSettings)
+            jsonSettings['datacatalog']['lazyLoading'] = lazySettings
+            UserSettings.SaveToFile(jsonSettings)
+            return lazySettings['enabled']
         return UserSettings.Get(group='datacatalog',
                                 key='lazyLoading',
                                 subkey='enabled')
@@ -696,7 +710,7 @@ class DataCatalogTree(TreeView):
     def ReloadTreeItems(self, full=False):
         """Reload dbs, locations, mapsets and layers in the tree."""
         self.busy = wx.BusyCursor()
-        if full:
+        if full or not self._useLazyLoading():
             self._quickLoading()
         self.thread.Run(callable=self._reloadTreeItems,
                         full=full,
@@ -729,6 +743,7 @@ class DataCatalogTree(TreeView):
         self.ScheduleWatchCurrentMapset()
         self.RefreshItems()
         self.ExpandCurrentMapset()
+        self.loadingDone.emit()
 
     def ReloadCurrentMapset(self):
         """Reload current mapset tree only."""

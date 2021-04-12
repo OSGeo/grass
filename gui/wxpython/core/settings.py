@@ -170,7 +170,8 @@ class Settings:
                     'listAsString': ""
                 },
                 'lazyLoading': {
-                    'enabled': False
+                    'enabled': False,
+                    'asked': False
                 }
             },
             'manager': {
