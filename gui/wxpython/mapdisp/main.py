@@ -35,24 +35,25 @@ import time
 import shutil
 import fileinput
 
-from grass.script.setup import set_gui_path
-set_gui_path()
-
-from core import globalvar
-import wx
-
-from core import utils
-from core.giface import StandaloneGrassInterface
-from core.gcmd import RunCommand
-from core.render import Map, MapLayer, RenderMapMgr
-from mapdisp.frame import MapFrame
-from core.debug import Debug
-from core.settings import UserSettings
-
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.script.task import cmdtuple_to_list, cmdlist_to_tuple
 from grass.pydispatch.signal import Signal
+
+from grass.script.setup import set_gui_path
+set_gui_path()
+
+# GUI imports require path to GUI code to be set.
+from core import globalvar  # noqa: E402
+import wx  # noqa: E402
+
+from core import utils  # noqa: E402
+from core.giface import StandaloneGrassInterface  # noqa: E402
+from core.gcmd import RunCommand  # noqa: E402
+from core.render import Map, MapLayer, RenderMapMgr  # noqa: E402
+from mapdisp.frame import MapFrame  # noqa: E402
+from core.debug import Debug  # noqa: E402
+from core.settings import UserSettings  # noqa: E402
 
 # for standalone app
 monFile = {'cmd': None,
