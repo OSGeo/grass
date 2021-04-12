@@ -2360,7 +2360,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                      flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                      border=5)
 
-        length = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+        length = SpinCtrl(parent=panel, id=wx.ID_ANY, size=(137, -1),
                           initial=250,
                           min=1, max=1e6)
         length.Enable(False)
@@ -3089,7 +3089,7 @@ class LayerBook(wx.Notebook):
         self.addLayerWidgets = {'layer':
                                 (StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                             label='%s:' % _("Layer")),
-                                 SpinCtrl(parent=self.addPanel, id=wx.ID_ANY, size=(65, -1),
+                                 SpinCtrl(parent=self.addPanel, id=wx.ID_ANY, size=(137, -1),
                                           initial=maxLayer + 1,
                                           min=1, max=1e6)),
                                 'driver':

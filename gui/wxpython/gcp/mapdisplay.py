@@ -107,6 +107,8 @@ class MapFrame(SingleMapFrame):
         # create statusbar and its manager
         statusbar = self.CreateStatusBar(number=4, style=0)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
+        if globalvar.gtk3:
+            statusbar.SetMinHeight(height=32)
         self.statusbarManager = sb.SbManager(
             mapframe=self, statusbar=statusbar)
 
