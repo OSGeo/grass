@@ -707,6 +707,7 @@ def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
         if tmp_dbase != gisenv()["GISDBASE"]:
             # Delete temporary location
             delete_location(tmp_dbase, tmp_loc)
+            # Remove useless temporary grassdb node
             giface.grassdbChanged.emit(
                 location=location, grassdb=tmp_dbase, action="delete", element="grassdb"
             )
