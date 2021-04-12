@@ -1563,8 +1563,12 @@ def lock_mapset(mapset_path, force_gislock_removal, user):
     Behavior on error must be changed somehow; now it fatals but GUI case is
     unresolved.
     """
+    from grass.grassdb.checks import is_mapset_valid
+
     if not os.path.exists(mapset_path):
         fatal(_("Path '%s' doesn't exist") % mapset_path)
+    if not is_mapset_valid(mapset_path):
+        fatal(_("Mapset in path '%s' is not valid") % mapset_path)
     if not os.access(mapset_path, os.W_OK):
         error = _("Path '%s' not accessible.") % mapset_path
         stat_info = os.stat(mapset_path)
@@ -2572,9 +2576,12 @@ def main():
                 fallback_session = True
 
             if fallback_session:
-                # Create fallback temporary session
-                create_fallback_session(gisrc, tmpdir)
-                params.tmp_location = True
+                if grass_gui == "text":
+                    pass
+                else:
+                    # Create fallback temporary session
+                    create_fallback_session(gisrc, tmpdir)
+                    params.tmp_location = True
         else:
             # Write mapset info to gisrc file
             add_mapset_to_gisrc(
@@ -2622,12 +2629,8 @@ def main():
             force_gislock_removal=params.force_gislock_removal,
         )
     except Exception as e:
-        msg = e.args[0]
-        if grass_gui == "wxpython":
-            call([os.getenv("GRASS_PYTHON"), wxpath("gis_set_error.py"), msg])
-            sys.exit(_("Exiting..."))
-        else:
-            fatal(msg)
+        fatal(e.args[0])
+        sys.exit(_("Exiting..."))
 
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
