@@ -1567,8 +1567,6 @@ def lock_mapset(mapset_path, force_gislock_removal, user):
 
     if not os.path.exists(mapset_path):
         fatal(_("Path '%s' doesn't exist") % mapset_path)
-    if not is_mapset_valid(mapset_path):
-        fatal(_("Mapset in path '%s' is not valid") % mapset_path)
     if not os.access(mapset_path, os.W_OK):
         error = _("Path '%s' not accessible.") % mapset_path
         stat_info = os.stat(mapset_path)
@@ -2543,7 +2541,7 @@ def main():
                 (
                     default_gisdbase,
                     default_location,
-                    default_mapset,
+                    unused_default_mapset,
                     default_mapset_path,
                 ) = ensure_default_data_hierarchy()
 
@@ -2562,13 +2560,8 @@ def main():
                 if can_start_in_mapset(
                     mapset_path=default_mapset_path, ignore_lock=False
                 ):
-                    # Write mapset info to gisrc file
-                    add_mapset_to_gisrc(
-                        gisrc=gisrc,
-                        grassdb=default_gisdbase,
-                        location=default_location,
-                        mapset=default_mapset,
-                    )
+                    # Use the default location/mapset.
+                    set_mapset(gisrc=gisrc, arg=default_mapset_path)
                 else:
                     fallback_session = True
                     add_last_mapset_to_gisrc(gisrc, default_mapset_path)
@@ -2577,19 +2570,15 @@ def main():
 
             if fallback_session:
                 if grass_gui == "text":
-                    pass
+                    # Fallback in command line is just failing in a standard way.
+                    set_mapset(gisrc=gisrc, arg=last_mapset_path)
                 else:
                     # Create fallback temporary session
                     create_fallback_session(gisrc, tmpdir)
                     params.tmp_location = True
         else:
-            # Write mapset info to gisrc file
-            add_mapset_to_gisrc(
-                gisrc=gisrc,
-                grassdb=mapset_settings.gisdbase,
-                location=mapset_settings.location,
-                mapset=mapset_settings.mapset,
-            )
+            # Use the last used mapset.
+            set_mapset(gisrc=gisrc, arg=last_mapset_path)
     else:
         # Mapset was specified in command line parameters.
         if params.tmp_location:
