@@ -1,9 +1,6 @@
 [flake8]
 ignore =
     E265, # block comment should start with '# '
-    E402, # module level import not at top of file
-    F403, # 'from gmodeler.model import *' used; unable to detect undefined names
-    F405, # '_' may be undefined, or defined from star imports: gmodeler.model
     E117, # over-indented
     E122, # continuation line missing indentation or outdented
     E123, # closing bracket does not match indentation of opening bracket's line
@@ -38,20 +35,32 @@ ignore =
 per-file-ignores =
     # Many of these ignores can and should be removed and the problem fixed.
     # F841 local variable is assigned to but never used
-    core/*: F841, E722, W605
-    datacatalog/tree.py: E731
+    # F403 star import used; unable to detect undefined names
+    # F405 variable may be undefined, or defined from star imports
+    # E402 module level import not at top of file
+    core/gcmd.py: E402
+    core/gthread.py: F841
+    core/gconsole.py: E722, W605
+    core/toolboxes.py: E722
+    core/utils.py: E722, F841, W605
+    core/workspace.py: E722
+    core/render.py: E722, F841
+    core/ws.py: F841
+    core/settings.py: E722
+    datacatalog/tree.py: E731, E402
     dbmgr/*: F841, E722
+    docs/wxgui_sphinx/conf.py: E402
     gcp/*: F841, E722
-    gmodeler/*: F841, E722, W605
+    gmodeler/*: F841, E722, W605, F405, F403, E402
     gui_core/*: F841, E266, E722, W605
     image2target/*: F841, E722
-    iscatt/*: F841, E722, E741
+    iscatt/*: F841, E722, E741, F405, F403
     lmgr/*: F841, E266, E722, E741, W605
     modules/*: F841, E722, W605
-    nviz/*: F841, E266, E722, W605
+    nviz/*: F841, E266, E722, W605, F403, F405
     photo2image/*: F841, E722
-    psmap/*: F841, E266, E722
-    vdigit/*: F841, E722, E741
+    psmap/*: F841, E266, E722, F405, F403
+    vdigit/*: F841, E722, E741, F405, F403
     vnet/*: F841
     wxgui.py: F841
     animation/mapwindow.py: F841
@@ -59,7 +68,9 @@ per-file-ignores =
     tplot/frame.py: F841, E722
     rdigit/g.gui.rdigit.py: F841
     iclass/dialogs.py: E741
-    iclass/statistics.py: F841
+    iclass/digit.py: F405, F403
+    iclass/frame.py: F405, F403
+    iclass/statistics.py: F841, F405, F403
     wxplot/histogram.py: E722
     wxplot/profile.py: F841, E722
     wxplot/base.py: F841, E722
@@ -70,9 +81,9 @@ per-file-ignores =
     mapwin/base.py: E722
     mapwin/buffered.py: E722
     mapwin/graphics.py: E722
-    startup/locdownload.py: E722
+    startup/locdownload.py: E722, E402
     tools/build_modules_xml.py: E722
-    web_services/widgets.py: F841, E741, W605
+    web_services/widgets.py: F841, E741, W605, E402
     rlisetup/frame.py: E741
     rlisetup/sampling_frame.py: F841
     rlisetup/wizard.py: E722, E741

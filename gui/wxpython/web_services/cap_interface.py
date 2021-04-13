@@ -28,9 +28,12 @@ WMSLibPath = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if WMSLibPath not in sys.path:
     sys.path.append(WMSLibPath)
 
-from wms_cap_parsers import WMSCapabilitiesTree, \
-    WMTSCapabilitiesTree, \
-    OnEarthCapabilitiesTree
+# Import only after the path has been set up.
+from wms_cap_parsers import (  # noqa: E402
+    WMSCapabilitiesTree,
+    WMTSCapabilitiesTree,
+    OnEarthCapabilitiesTree,
+)
 
 
 class CapabilitiesBase:

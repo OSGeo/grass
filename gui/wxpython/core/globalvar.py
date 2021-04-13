@@ -20,6 +20,12 @@ import locale
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
 
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
+from grass.script.core import get_commands
+
+from core.debug import Debug
+
 # path to python scripts
 ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
 GUIDIR = os.path.join(os.getenv("GISBASE"), "gui")
@@ -27,12 +33,6 @@ WXGUIDIR = os.path.join(GUIDIR, "wxpython")
 ICONDIR = os.path.join(GUIDIR, "icons")
 IMGDIR = os.path.join(GUIDIR, "images")
 SYMBDIR = os.path.join(IMGDIR, "symbols")
-
-# i18n is taken care of in the grass library code.
-# So we need to import it before any of the GUI code.
-from grass.script.core import get_commands
-
-from core.debug import Debug
 
 WXPY3_MIN_VERSION = [4, 0, 0, 0]
 
@@ -114,7 +114,8 @@ def CheckForWx():
 
 if not os.getenv("GRASS_WXBUNDLED"):
     CheckForWx()
-import wx
+# Importing wx only after checks.
+import wx  # noqa: E402
 
 if CheckWxPhoenix():
     try:
