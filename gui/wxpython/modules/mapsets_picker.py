@@ -5,8 +5,9 @@ import wx
 from grass.script.setup import set_gui_path
 set_gui_path()
 
-from core.gcmd import RunCommand
-from gui_core.preferences import MapsetAccess
+# Imports require path to GUI code to be set.
+from core.gcmd import RunCommand  # noqa: E402
+from gui_core.preferences import MapsetAccess  # noqa: E402
 
 
 def main():
