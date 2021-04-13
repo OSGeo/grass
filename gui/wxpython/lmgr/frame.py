@@ -37,9 +37,6 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 
 from grass.script import core as grass
 from grass.script.utils import decode
-from startup.guiutils import (
-    can_switch_mapset_interactive
-)
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
@@ -63,12 +60,13 @@ from lmgr.giface import LayerManagerGrassInterface
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
-from grass.grassdb.checks import is_current_mapset_in_demolocation
 from startup.guiutils import (
+    can_switch_mapset_interactive,
     switch_mapset_interactively,
     create_mapset_interactively,
     create_location_interactively
 )
+from grass.grassdb.checks import is_first_time_user
 
 
 class GMFrame(wx.Frame):
@@ -446,7 +444,7 @@ class GMFrame(wx.Frame):
                 lchecked=True,
                 lcmd=["d.vect", "map={}".format(layer_name)],
             )
-        if is_current_mapset_in_demolocation():
+        if is_first_time_user():
             # Show only after everything is initialized for proper map alignment.
             wx.CallLater(1000, show_demo)
 
