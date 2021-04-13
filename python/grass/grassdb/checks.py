@@ -9,7 +9,6 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 import os
 import sys
 import datetime
@@ -17,6 +16,8 @@ from pathlib import Path
 from grass.script import gisenv
 import grass.script as gs
 import glob
+
+import grass.grassdb.config as cfg
 
 
 def mapset_exists(database, location, mapset):
@@ -115,8 +116,33 @@ def get_mapset_owner(mapset_path):
         return None
 
 
-def is_current_mapset_in_demolocation():
-    return gisenv()["LOCATION_NAME"] == "world_latlong_wgs84"
+def is_fallback_session():
+    """Checks if a user encounters a fallback GRASS session.
+
+    Returns True if a user encounters a fallback session.
+    It occurs when a last mapset is not usable and at the same time
+    a user is in a temporary location.
+    """
+    if "LAST_MAPSET_PATH" in gisenv().keys():
+        return is_mapset_current(
+            os.environ["TMPDIR"], cfg.temporary_location, cfg.permanent_mapset
+        )
+    return False
+
+
+def is_first_time_user():
+    """Check if a user is a first-time user.
+
+    Returns True if a user is a first-time user.
+    It occurs when a gisrc file has initial settings either in last used mapset
+    or in current mapset settings.
+    """
+    genv = gisenv()
+    if "LAST_MAPSET_PATH" in genv.keys():
+        return genv["LAST_MAPSET_PATH"] == os.path.join(
+            os.getcwd(), cfg.unknown_location, cfg.unknown_mapset
+        )
+    return False
 
 
 def is_mapset_locked(mapset_path):
@@ -167,6 +193,27 @@ def can_start_in_mapset(mapset_path, ignore_lock=False):
     if not ignore_lock and is_mapset_locked(mapset_path):
         return False
     return True
+
+
+def get_reason_id_mapset_not_usable(mapset_path):
+    """It finds a reason why mapset is not usable.
+
+    Returns a reason id as a string.
+    If mapset path is None or no reason found, returns None.
+    """
+    # Check whether mapset exists
+    if not os.path.exists(mapset_path):
+        return "non-existent"
+    # Check whether mapset is valid
+    elif not is_mapset_valid(mapset_path):
+        return "invalid"
+    # Check whether mapset is owned by current user
+    elif not is_current_user_mapset_owner(mapset_path):
+        return "different-owner"
+    # Check whether mapset is locked
+    elif is_mapset_locked(mapset_path):
+        return "locked"
+    return None
 
 
 def dir_contains_location(path):

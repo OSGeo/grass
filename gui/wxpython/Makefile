@@ -14,7 +14,7 @@ SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
 	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py \
 	rlisetup/*.py startup/*.py timeline/*.py vdigit/*.py \
 	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py photo2image/*.py image2target/*.py) \
-	gis_set.py gis_set_error.py wxgui.py README
+	wxgui.py README
 
 DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
 	$(patsubst %.py,$(DSTDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
