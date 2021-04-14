@@ -542,7 +542,7 @@ class CheckListExtension(GListCtrl):
         """
         extList = list()
         for i in range(self.GetItemCount()):
-            if self.IsChecked(i):
+            if self.IsItemChecked(i):
                 name = self.GetItemText(i)
                 if name:
                     extList.append(name)
