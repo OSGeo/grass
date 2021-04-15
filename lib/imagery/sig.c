@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
@@ -72,6 +73,8 @@ int I_free_signatures(struct Signature *S)
         free(S->bandrefs[n]);
     free(S->bandrefs);
 
+    S->sig = NULL;
+    S->bandrefs = NULL;
     S->nbands = 0;
     S->nsigs = 0;
     S->title[0] = '\0';
@@ -260,4 +263,167 @@ int I_write_signatures(FILE * fd, struct Signature *S)
 	    fprintf(fd, "%g %g %g\n", s->r, s->g, s->b);
     }
     return 1;
+}
+
+/*!
+ * \brief Reorder struct Signature to match imagery group member order
+ *
+ * The function will check for band reference match between signature struct
+ * and imagery group.
+ *
+ * In the case of a complete band reference match, values of passed in
+ * struct Signature are reordered to match the order of imagery group items.
+ *
+ * If all band references are not identical (in
+ * arbitrary order), function will return two dimensional array with
+ * comma separated list of:
+ *      - [0] band references present in the signature struct but
+ * absent in the imagery group
+ *      - [1] band references present in the imagery group but
+ * absent in the signature struct
+ *
+ * If no mismatch of band references for signatures or imagery group are
+ * detected (== all are present in the other list), a NULL value will be
+ * returned in the particular list of mismatches (not an empty string).
+ * For example:
+ * \code if (ret && ret[1]) printf("List of imagery group bands without signatures: %s\n, ret[1]); \endcode
+ *
+ * \param *Signature existing signatures to check & sort
+ * \param *Ref group reference
+ *
+ * \return NULL successfully sorted
+ * \return err_array two comma separated lists of mismatches
+ */
+char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
+    unsigned int c, i, j, complete;
+    unsigned int *match1, *match2, mc1, mc2, *new_order;
+    double **new_means, ***new_vars;
+    char **group_bandrefs, **mismatches, **new_bandrefs;
+
+    /* Safety measure. Untranslated as this should not happen in production! */
+    if (S->nbands < 1 || R->nfiles < 1)
+        G_fatal_error("Programming error. Invalid length structs passed to "
+                      "I_sort_signatures_by_bandref(%d, %d);", S->nbands,  R->nfiles);
+
+    /* Obtain group band references */
+    group_bandrefs = (char **)G_malloc(R->nfiles * sizeof(char **));
+    for (j = R->nfiles; j--;) {
+        group_bandrefs[j] = Rast_read_bandref(R->file[j].name, R->file[j].mapset);
+    }
+
+    /* If lengths are not equal, there will be a mismatch */
+    complete = S->nbands == R->nfiles;
+
+    /* Initialize match tracker */
+    new_order = (unsigned int *)G_malloc(S->nbands * sizeof(unsigned int));
+    match1 = (unsigned int *)G_calloc(S->nbands, sizeof(unsigned int));
+    match2 = (unsigned int *)G_calloc(R->nfiles, sizeof(unsigned int));
+
+    /* Allocate memory for temporary storage of sorted values */
+    new_bandrefs = (char **)G_malloc(S->nbands * sizeof(char **));
+    new_means = (double **)G_malloc(S->nbands * sizeof(double *));
+    new_vars = (double ***)G_malloc(S->nbands * sizeof(double **));
+    for (c = S->nsigs; c--;) {
+        new_means[c] = (double *)G_malloc(S->nbands * sizeof(double));
+        new_vars[c] = (double **)G_malloc(S->nbands * sizeof(double *));
+        for (i = S->nbands; i--;)
+            new_vars[c][i] = (double *)G_malloc(S->nbands * sizeof(double));
+    }
+
+    /* Obtain order of matching items */
+    for (j = R->nfiles; j--;) {
+        for (i = S->nbands; i--;) {
+            if (S->bandrefs[i] && group_bandrefs[j] &&
+                !strcmp(S->bandrefs[i], group_bandrefs[j])) {
+                    if (complete) {
+                        /* Reorder pointers to existing strings only */
+                        new_bandrefs[j] = S->bandrefs[i];
+                        new_order[i] = j;
+                    }
+                    /* Keep a track of matching items for error reporting */
+                    match1[i] = 1;
+                    match2[j] = 1;
+                    break;
+            }
+        }
+    }
+
+    /* Check for band reference mismatch */
+    mc1 = mc2 = 0;
+    mismatches = (char **)G_malloc(2 * sizeof(char **));
+    mismatches[0] = NULL;
+    mismatches[1] = NULL;
+    for (i = 0; i < S->nbands; i++) {
+        if (!match1[i] && S->bandrefs[i]) {
+            mismatches[0] = (char *)G_realloc(mismatches[0], (strlen(S->bandrefs[i]) + 2) * sizeof(char *));
+            if (mc1)
+                strcat(mismatches[0], ",");
+            else
+                mismatches[0][0] = '\0';
+            strcat(mismatches[0], S->bandrefs[i]);
+            mc1++;
+        }
+    }
+    for (j = 0; j < R->nfiles; j++) {
+        if (!match2[j] && group_bandrefs[j]) {
+            mismatches[1] = (char *)G_realloc(mismatches[1], (strlen(group_bandrefs[j]) + 2) * sizeof(char *));
+            if (mc2)
+                strcat(mismatches[1], ",");
+            else
+                mismatches[1][0] = '\0';
+            strcat(mismatches[1], group_bandrefs[j]);
+            mc2++;
+        }
+    }
+
+    /* Swap var matrix values in each of classes */
+    if (!mc1 && !mc2) {
+        for (c = S->nsigs; c--;) {
+            for (unsigned int b1 = 0; b1 < S->nbands; b1++) {
+                new_means[c][new_order[b1]] = S->sig[c].mean[b1];
+                for (unsigned int b2 = 0; b2 <= b1; b2++) {
+                    if (new_order[b1] > new_order[b2]) {
+                        i = new_order[b1];
+                        j = new_order[b2];
+                    }
+                    else {
+                        i = new_order[b2];
+                        j = new_order[b1];
+                    }
+                    new_vars[c][i][j] = S->sig[c].var[b1][b2];
+                }
+            }
+        }
+
+        /* Replace values in struct with ordered ones */
+        memcpy(S->bandrefs, new_bandrefs, S->nbands * sizeof(char **));
+        for (c = S->nsigs; c--;) {
+            memcpy(S->sig[c].mean, new_means[c], S->nbands * sizeof(double));
+            for (i = S->nbands; i--;)
+                memcpy(S->sig[c].var[i], new_vars[c][i], S->nbands * sizeof(double));
+        }
+    }
+
+    /* Clean up */
+    for (j = R->nfiles; j--;)
+        free(group_bandrefs[j]);
+    free(group_bandrefs);
+    free(new_order);
+    free(match1);
+    free(match2);
+    free(new_bandrefs);
+    for (c = S->nsigs; c--;) {
+        free(new_means[c]);
+        for (i = S->nbands; i--;)
+            free(new_vars[c][i]);
+        free(new_vars[c]);
+    }
+    free(new_means);
+    free(new_vars);
+
+    if (mc1 || mc2) {
+        return mismatches;
+    }
+    free(mismatches);
+    return NULL;
 }

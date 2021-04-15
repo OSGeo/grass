@@ -152,6 +152,7 @@ int I_free_signatures(struct Signature *);
 int I_read_one_signature(FILE *, struct Signature *);
 int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
+char **I_sort_signatures_by_bandref(struct Signature *, const struct Ref *);
 
 /* sigfile.c */
 FILE *I_fopen_signature_file_new(const char *);
