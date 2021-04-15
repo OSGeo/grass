@@ -4865,7 +4865,7 @@ msgstr "Hibás input vektor adathalmaz"
 
 #: ../gui/wxpython/tplot/frame.py:988 ../gui/wxpython/tplot/frame.py:1046
 msgid "Invalid input temporal dataset"
-msgstr ""
+msgstr "Hibás input idősor adatok"
 
 #: ../gui/wxpython/tplot/frame.py:1067
 msgid "Datasets have different number of values"
@@ -4874,7 +4874,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:1097
 #, python-brace-format
 msgid "Value for {date} is {val}"
-msgstr ""
+msgstr "A  {date} érték {val}"
 
 #: ../gui/wxpython/tplot/frame.py:1100
 msgid "Press Del to dismiss."
@@ -7497,7 +7497,7 @@ msgstr "Kiválasztott rétegek átvetítése"
 
 #: ../gui/wxpython/modules/histogram.py:296
 msgid "GRASS GIS Histogramming Tool (d.histogram)"
-msgstr ""
+msgstr "GRASS GIS hisztogram eszköz (d.histogram)"
 
 #: ../gui/wxpython/modules/histogram.py:436
 msgid "Select font for histogram text"
@@ -7716,7 +7716,7 @@ msgstr "Szín tábla import vagy export"
 
 #: ../gui/wxpython/modules/colorrules.py:441
 msgid "Choose file to load color table"
-msgstr ""
+msgstr "Válasszon fájl a szín tábla betöltéséhez"
 
 #: ../gui/wxpython/modules/colorrules.py:442
 msgid "Load"
@@ -7728,7 +7728,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:450
 msgid "Choose file to save color table"
-msgstr ""
+msgstr "Válasszon fájl a szín tábla mentéséhez"
 
 #: ../gui/wxpython/modules/colorrules.py:452
 msgid "Type filename or click to choose file and save color table"
@@ -7893,7 +7893,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1277
 msgid "No database connection defined"
-msgstr ""
+msgstr "Nem definiált adatbázis kapcsolatot"
 
 #: ../gui/wxpython/modules/colorrules.py:1350
 #, python-format
@@ -8220,11 +8220,11 @@ msgstr "Újratelepítés"
 
 #: ../gui/wxpython/modules/extensions.py:423
 msgid "Reinstall selected Addons extensions"
-msgstr ""
+msgstr "Kiválasztott Addons bővítmények újratelepítése"
 
 #: ../gui/wxpython/modules/extensions.py:464
 msgid "No extension selected. Operation canceled."
-msgstr ""
+msgstr "Nem választott bővítményt. A művelet megszakadt."
 
 #: ../gui/wxpython/modules/extensions.py:491
 #, python-format

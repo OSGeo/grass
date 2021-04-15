@@ -264,7 +264,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:214
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1177
 msgid "Computational region"
-msgstr ""
+msgstr "Região computacional"
 
 #: ../gui/wxpython/mapdisp/main.py:189
 #, python-format
@@ -386,7 +386,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/frame.py:306 ../gui/wxpython/gcp/mapdisplay.py:261
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:261
 msgid "Map Toolbar"
-msgstr ""
+msgstr "Barra de Ferramentas do Mapa"
 
 #: ../gui/wxpython/mapdisp/frame.py:608 ../gui/wxpython/lmgr/frame.py:2597
 #: ../gui/wxpython/gui_core/vselect.py:286
@@ -416,7 +416,7 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/frame.py:540 ../gui/wxpython/gcp/mapdisplay.py:382
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:382
 msgid "Nothing to render (empty map). Operation canceled."
-msgstr ""
+msgstr "Nada para renderizar (mapa vazio). Operação cancelada."
 
 #: ../gui/wxpython/mapdisp/frame.py:829
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:425
@@ -456,7 +456,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:924 ../gui/wxpython/mapswipe/frame.py:664
 msgid "No raster or vector map layer selected for querying."
-msgstr ""
+msgstr "Nenhuma camada de mapa vetorial ou raster selecionada para consulta."
 
 #: ../gui/wxpython/mapdisp/frame.py:988
 #, python-brace-format
@@ -3363,7 +3363,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:804
 msgid "Do you want to delete all variables from the model?"
-msgstr ""
+msgstr "Você deseja excluir todas as variáveis ​​do modelo?"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:806
 msgid "Delete variables"
@@ -3453,16 +3453,16 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:420
 msgid "No intermediate data to delete."
-msgstr ""
+msgstr "Nenhum dado intermediário para excluir."
 
 #: ../gui/wxpython/gmodeler/frame.py:426
 #, python-format
 msgid "Do you want to permanently delete data?%s"
-msgstr ""
+msgstr "Você deseja excluir os dados permanentemente? %s"
 
 #: ../gui/wxpython/gmodeler/frame.py:428
 msgid "Delete intermediate data?"
-msgstr ""
+msgstr "Excluir dados intermediários?"
 
 #: ../gui/wxpython/gmodeler/frame.py:448 ../gui/wxpython/gmodeler/frame.py:598
 msgid "Current model is not empty. Do you want to store current settings to model file?"
@@ -4566,7 +4566,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_manager.py:2906
 #: ../gui/wxpython/psmap/dialogs.py:6797
 msgid "Line width:"
-msgstr ""
+msgstr "Espessura da linha:"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2118
 #: ../gui/wxpython/gcp/manager.py:730 ../gui/wxpython/gcp/manager.py:2981
@@ -4701,7 +4701,7 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:43
 #, python-brace-format
 msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr ""
+msgstr "A Ferramenta de Gráfico Temporal precisa do pacote \"matplotlib\" (python-matplotlib) a ser instalado. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:99
 msgid "GRASS GIS Temporal Plot Tool"
@@ -4733,11 +4733,11 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:242
 msgid "Select attribute column"
-msgstr "Selecione a coluna de atributo"
+msgstr "Selecionar a coluna de atributo"
 
 #: ../gui/wxpython/tplot/frame.py:255
 msgid "Select category of vector(s)"
-msgstr "Selecione a categoria de vetor(es)"
+msgstr "Selecionar a categoria de vetor(es)"
 
 #: ../gui/wxpython/tplot/frame.py:273
 msgid "STVDS"
@@ -4792,7 +4792,7 @@ msgstr "Com o conjunto de dados temporais Vetorial, você deve selecionar uma co
 
 #: ../gui/wxpython/tplot/frame.py:529
 msgid "Difference number of vector layers and maps in the vector temporal dataset"
-msgstr ""
+msgstr "Número de diferença de camadas vetoriais e mapas no conjunto de dados temporais vetoriais"
 
 #: ../gui/wxpython/tplot/frame.py:571
 #, python-brace-format
@@ -4832,7 +4832,7 @@ msgstr "Por favor altere o nome do arquivo CSV de saída ou"
 
 #: ../gui/wxpython/tplot/frame.py:835
 msgid "Incorrect coordinates format, should be: x,y"
-msgstr "Formato de coordenadas incorreto, deve ser: x, y"
+msgstr "Formato de coordenadas incorreto, deve ser: x,y"
 
 #: ../gui/wxpython/tplot/frame.py:853
 msgid "Seed point outside the current region"
@@ -5055,7 +5055,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/preferences.py:607
 #: ../gui/wxpython/mapswipe/dialogs.py:353
 msgid "Size:"
-msgstr ""
+msgstr "Tamanho:"
 
 #: ../gui/wxpython/nviz/preferences.py:623
 msgid "Marker:"
@@ -5476,7 +5476,7 @@ msgstr "Novo"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:2056
 #: ../gui/wxpython/psmap/dialogs.py:1776
 msgid "Delete"
-msgstr ""
+msgstr "Excluir"
 
 #: ../gui/wxpython/nviz/tools.py:1382
 msgid "Fine resolution:"
@@ -6475,7 +6475,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:203
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1956
 msgid "Cartographic Composer"
-msgstr ""
+msgstr "Compositor Cartográfico"
 
 #: ../gui/wxpython/lmgr/toolbars.py:163
 msgid "Launch user-defined script"
@@ -7035,7 +7035,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1173
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1860
 msgid "Rename"
-msgstr ""
+msgstr "Renomear"
 
 #: ../gui/wxpython/lmgr/layertree.py:515
 msgid "3D view properties"
@@ -7239,7 +7239,7 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/toolbars.py:33
 #: ../gui/wxpython/mapswipe/dialogs.py:43
 msgid "Select raster maps"
-msgstr ""
+msgstr "Selecione mapas raster"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:116
 msgid "Swipe mode"
@@ -7248,39 +7248,39 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/toolbars.py:117
 #: ../gui/wxpython/mapswipe/dialogs.py:272
 msgid "Mirror mode"
-msgstr ""
+msgstr "Modo espelho"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:129
 msgid "Choose view mode"
-msgstr ""
+msgstr "Escolha o modo de visualização"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:153
 msgid "Switch orientation"
-msgstr ""
+msgstr "Mudar de orientação"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:156
 msgid "Switch maps"
-msgstr ""
+msgstr "Mudar de mapa"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:133
 msgid "Name of top/left raster map:"
-msgstr ""
+msgstr "Nome do mapa raster superior/esquerdo:"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:142
 msgid "Name of bottom/right raster map:"
-msgstr ""
+msgstr "Nome do mapa raster inferior/direito:"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:188
 msgid "Switch to advanced mode"
-msgstr ""
+msgstr "Mudar para o modo avançado"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:189 ../gui/wxpython/gui_core/wrap.py:201
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:195
 msgid "Switch to simple mode"
-msgstr ""
+msgstr "Mudar para o modo simplificado"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:196 ../gui/wxpython/menustrings.py:13
 #: ../gui/wxpython/menustrings.py:2030 ../gui/wxpython/gui_core/wrap.py:212
@@ -7291,11 +7291,11 @@ msgstr "Fechar"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:220
 msgid "Name of the first map is missing."
-msgstr ""
+msgstr "Falta o nome do primeiro mapa."
 
 #: ../gui/wxpython/mapswipe/dialogs.py:223
 msgid "Name of the second map is missing."
-msgstr ""
+msgstr "Falta o nome do segundo mapa."
 
 #: ../gui/wxpython/mapswipe/dialogs.py:256
 msgid "Map Swipe settings"
@@ -7303,11 +7303,11 @@ msgstr ""
 
 #: ../gui/wxpython/mapswipe/dialogs.py:275
 msgid "Mirrored cursor"
-msgstr ""
+msgstr "Cursor espelhado"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:304
 msgid "Shape:"
-msgstr ""
+msgstr "Forma:"
 
 #: ../gui/wxpython/mapswipe/frame.py:41
 msgid "GRASS GIS Map Swipe"
@@ -7316,7 +7316,7 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/frame.py:404
 #, python-format
 msgid "Map <%s> not found. "
-msgstr ""
+msgstr "Mapa <%s> não encontrado."
 
 #: ../gui/wxpython/modules/import_export.py:53
 msgid "Multiple import"
@@ -7427,15 +7427,15 @@ msgstr "Não foi possível determinar o número de bandas raster"
 
 #: ../gui/wxpython/modules/import_export.py:660
 msgid "Define output format for vector data"
-msgstr "Defina o formato de saída para dados vetoriais"
+msgstr "Definir o formato de saída para dados vetoriais"
 
 #: ../gui/wxpython/modules/import_export.py:662
 msgid "Define output format for raster data"
-msgstr "Defina o formato de saída para dados raster"
+msgstr "Definir o formato de saída para dados raster"
 
 #: ../gui/wxpython/modules/import_export.py:670
 msgid "Set external format and close dialog"
-msgstr "Defina o formato externo e feche a caixa de diálogo"
+msgstr "Definir o formato externo e fechar a caixa de diálogo"
 
 #: ../gui/wxpython/modules/import_export.py:727
 msgid "No data source selected."
@@ -7447,7 +7447,7 @@ msgstr "Importar camadas DXF"
 
 #: ../gui/wxpython/modules/import_export.py:749
 msgid "Choose DXF file to import"
-msgstr "Escolha o arquivo DXF para importar"
+msgstr "Escolher o arquivo DXF para importar"
 
 #: ../gui/wxpython/modules/import_export.py:778
 msgid "No layers selected."
@@ -7487,7 +7487,7 @@ msgstr "Configurar ferramentas de limpeza de vetor"
 
 #: ../gui/wxpython/modules/vclean.py:76
 msgid "break lines/boundaries"
-msgstr ""
+msgstr "quebra de linhas/fronteiras"
 
 #: ../gui/wxpython/modules/vclean.py:77
 msgid "remove duplicates"
@@ -7499,7 +7499,7 @@ msgstr "remover pendentes"
 
 #: ../gui/wxpython/modules/vclean.py:79
 msgid "change boundary dangles to lines"
-msgstr ""
+msgstr "alterar nós livres em fronteiras para linhas"
 
 #: ../gui/wxpython/modules/vclean.py:80
 msgid "remove bridges"
@@ -7531,7 +7531,7 @@ msgstr "remove áreas pequenas"
 
 #: ../gui/wxpython/modules/vclean.py:87
 msgid "remove lines/boundaries of zero length"
-msgstr "remova linhas/limites de comprimento zero"
+msgstr "remova linhas/fronteiras de comprimento zero"
 
 #: ../gui/wxpython/modules/vclean.py:88
 msgid "remove small angles at nodes"
@@ -7657,7 +7657,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/vclean.py:529
 msgid "Executing selected cleaning operations..."
-msgstr "Executando operações de limpeza selecionadas ..."
+msgstr "Executando operações de limpeza selecionadas..."
 
 #: ../gui/wxpython/modules/vclean.py:586
 msgid "Vector cleaning command copied to clipboard"
@@ -7673,28 +7673,28 @@ msgstr "Limpar tudo"
 
 #: ../gui/wxpython/modules/colorrules.py:141
 msgid "Enter vector attribute values"
-msgstr ""
+msgstr "Inserir os valores dos atributos do vetor"
 
 #: ../gui/wxpython/modules/colorrules.py:312
 msgid "Bad color format. Use color format '0:0:0'"
-msgstr ""
+msgstr "Formato de cor inadequado. Use o formato de cor '0:0:0'"
 
 #: ../gui/wxpython/modules/colorrules.py:414
 #: ../gui/wxpython/wxplot/dialogs.py:467
 msgid "Select raster map:"
-msgstr ""
+msgstr "Selecione o mapa raster:"
 
 #: ../gui/wxpython/modules/colorrules.py:416
 msgid "Select vector map:"
-msgstr ""
+msgstr "Selecione o mapa vetorial:"
 
 #: ../gui/wxpython/modules/colorrules.py:436
 msgid "Import or export color table:"
-msgstr ""
+msgstr "Importar ou exportar tabela de cores:"
 
 #: ../gui/wxpython/modules/colorrules.py:441
 msgid "Choose file to load color table"
-msgstr ""
+msgstr "Escolha o arquivo para carregar a tabela de cores"
 
 #: ../gui/wxpython/modules/colorrules.py:442
 msgid "Load"
@@ -7702,15 +7702,15 @@ msgstr "Carregar"
 
 #: ../gui/wxpython/modules/colorrules.py:444
 msgid "Type filename or click to choose file and load color table"
-msgstr ""
+msgstr "Digite o nome do arquivo ou clique para escolher o arquivo e carregar a tabela de cores"
 
 #: ../gui/wxpython/modules/colorrules.py:450
 msgid "Choose file to save color table"
-msgstr ""
+msgstr "Escolha o arquivo para salvar a tabela de cores"
 
 #: ../gui/wxpython/modules/colorrules.py:452
 msgid "Type filename or click to choose file and save color table"
-msgstr ""
+msgstr "Digite o nome do arquivo ou clique para escolher o arquivo e salvar a tabela de cores"
 
 #: ../gui/wxpython/modules/colorrules.py:454 ../gui/wxpython/menustrings.py:9
 #: ../gui/wxpython/menustrings.py:2026
@@ -7721,7 +7721,7 @@ msgstr "Gravar"
 
 #: ../gui/wxpython/modules/colorrules.py:466
 msgid "&Set"
-msgstr ""
+msgstr "&Set"
 
 #: ../gui/wxpython/modules/colorrules.py:474
 msgid "Load color table:"
@@ -7729,43 +7729,43 @@ msgstr "Carregar tabela de cores:"
 
 #: ../gui/wxpython/modules/colorrules.py:480
 msgid "Load color table from file:"
-msgstr ""
+msgstr "Carregar tabela de cores do arquivo:"
 
 #: ../gui/wxpython/modules/colorrules.py:488
 msgid "Save color table to file:"
-msgstr ""
+msgstr "Salvar tabela de cores em arquivo:"
 
 #: ../gui/wxpython/modules/colorrules.py:520
 msgid "Reload default table"
-msgstr ""
+msgstr "Recarregar a tabela padrão"
 
 #: ../gui/wxpython/modules/colorrules.py:583
 #: ../gui/wxpython/iclass/toolbars.py:77
 msgid "Preview"
-msgstr ""
+msgstr "Visualização"
 
 #: ../gui/wxpython/modules/colorrules.py:588
 msgid "Show preview of map (current Map Display extent is used)."
-msgstr ""
+msgstr "Mostrar visualização do mapa (a extensão de Exibição do Mapa atual é usada)."
 
 #: ../gui/wxpython/modules/colorrules.py:623
 #: ../gui/wxpython/modules/colorrules.py:1922
 msgid "No valid color rules given."
-msgstr ""
+msgstr "Nenhuma regra de cor válida fornecida."
 
 #: ../gui/wxpython/modules/colorrules.py:681
 #, python-format
 msgid "File <%s> already already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "O arquivo <%s> já existe. Você deseja sobrescrevê-lo?"
 
 #: ../gui/wxpython/modules/colorrules.py:695
 #: ../gui/wxpython/gui_core/forms.py:2383
 msgid "Nothing to save."
-msgstr ""
+msgstr "Nada para salvar."
 
 #: ../gui/wxpython/modules/colorrules.py:728
 msgid "Invalid color table format"
-msgstr ""
+msgstr "Formato de tabela de cores inválido"
 
 #: ../gui/wxpython/modules/colorrules.py:809
 #, python-format
@@ -7774,45 +7774,45 @@ msgstr "Valor de regra '%s' inválido. Não posso aplicar tabela de cores."
 
 #: ../gui/wxpython/modules/colorrules.py:895
 msgid "Create new color table for raster map"
-msgstr ""
+msgstr "Crie uma nova tabela de cores para o mapa raster"
 
 #: ../gui/wxpython/modules/colorrules.py:973
 msgid "Enter raster category values or percents"
-msgstr ""
+msgstr "Insira valores de categoria raster ou porcentagens"
 
 #: ../gui/wxpython/modules/colorrules.py:977
 #: ../gui/wxpython/modules/colorrules.py:1660
 #: ../gui/wxpython/modules/colorrules.py:1664
 #: ../gui/wxpython/psmap/dialogs.py:3538
 msgid "range"
-msgstr ""
+msgstr "intervalo"
 
 #: ../gui/wxpython/modules/colorrules.py:979
 msgid "fp range"
-msgstr ""
+msgstr "intervalo fp"
 
 #: ../gui/wxpython/modules/colorrules.py:981
 #, python-format
 msgid "Enter raster category values or percents (%(range)s = %(min)d-%(max)d)"
-msgstr ""
+msgstr "Insira valores de categoria raster ou porcentagens (%(range)s = %(min)d-%(max)d)"
 
 #: ../gui/wxpython/modules/colorrules.py:1088
 msgid "Create new color rules for vector map"
-msgstr ""
+msgstr "Crie novas regras de cores para o mapa vetorial"
 
 #: ../gui/wxpython/modules/colorrules.py:1099
 #: ../gui/wxpython/modules/colorrules.py:1679
 msgid "Enter vector attribute values or percents:"
-msgstr ""
+msgstr "Insira valores de atributos de vetor ou porcentagens:"
 
 #: ../gui/wxpython/modules/colorrules.py:1101
 #: ../gui/wxpython/modules/colorrules.py:1681
 msgid "Enter vector attribute values:"
-msgstr ""
+msgstr "Insira os valores dos atributos do vetor:"
 
 #: ../gui/wxpython/modules/colorrules.py:1112
 msgid "Select vector columns"
-msgstr ""
+msgstr "Selecione as colunas do vetor"
 
 #: ../gui/wxpython/modules/colorrules.py:1114
 msgid "Layer:"
@@ -7824,31 +7824,31 @@ msgstr "Coluna de atributo:"
 
 #: ../gui/wxpython/modules/colorrules.py:1119
 msgid "Load color from column:"
-msgstr ""
+msgstr "Carregar cor da coluna:"
 
 #: ../gui/wxpython/modules/colorrules.py:1119
 msgid "Save color to column:"
-msgstr ""
+msgstr "Salvar cor na coluna:"
 
 #: ../gui/wxpython/modules/colorrules.py:1121
 msgid "Load size from column:"
-msgstr ""
+msgstr "Carregar tamanho da coluna:"
 
 #: ../gui/wxpython/modules/colorrules.py:1121
 msgid "Save size to column:"
-msgstr ""
+msgstr "Salvar tamanho na coluna:"
 
 #: ../gui/wxpython/modules/colorrules.py:1123
 msgid "Load width from column:"
-msgstr ""
+msgstr "Carregar largura da coluna:"
 
 #: ../gui/wxpython/modules/colorrules.py:1123
 msgid "Save width to column:"
-msgstr ""
+msgstr "Salvar largura na coluna:"
 
 #: ../gui/wxpython/modules/colorrules.py:1128
 msgid "Use color column instead of color table:"
-msgstr ""
+msgstr "Use a coluna de cores em vez da tabela de cores:"
 
 #: ../gui/wxpython/modules/colorrules.py:1142 ../gui/wxpython/dbmgr/base.py:483
 #: ../gui/wxpython/dbmgr/base.py:2321
@@ -7857,66 +7857,66 @@ msgstr "Adicionar coluna"
 
 #: ../gui/wxpython/modules/colorrules.py:1144
 msgid "Add GRASSRGB column to current attribute table."
-msgstr ""
+msgstr "Adicione a coluna GRASSRGB à tabela de atributos atual."
 
 #: ../gui/wxpython/modules/colorrules.py:1203
 #: ../gui/wxpython/modules/colorrules.py:1259
 msgid "Import or export color table"
-msgstr ""
+msgstr "Importar ou exportar tabela de cores"
 
 #: ../gui/wxpython/modules/colorrules.py:1273
 #, python-format
 msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
-msgstr ""
+msgstr "A conexão do banco de dados para o mapa vetorial <%s> não está definida no arquivo do banco de dados. Você deseja criar e conectar uma nova tabela de atributos?"
 
 #: ../gui/wxpython/modules/colorrules.py:1277
 msgid "No database connection defined"
-msgstr ""
+msgstr "Nenhuma conexão de banco de dados definida"
 
 #: ../gui/wxpython/modules/colorrules.py:1350
 #, python-format
 msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
-msgstr ""
+msgstr "O mapa selecionado <%(map)s> não está no mapset atual <%(mapset)s>. A tabela de atributos não pode ser editada."
 
 #: ../gui/wxpython/modules/colorrules.py:1524
 #, python-format
 msgid "%s column already exists."
-msgstr ""
+msgstr "A coluna %s já existe."
 
 #: ../gui/wxpython/modules/colorrules.py:1558
 msgid "Please wait, loading data from attribute table..."
-msgstr ""
+msgstr "Por favor aguarde, carregando dados da tabela de atributos..."
 
 #: ../gui/wxpython/modules/colorrules.py:1619
 #, python-format
 msgid "Number of loaded records reached %d, displaying all the records will be time-consuming and may lead to computer freezing, do you still want to continue?"
-msgstr ""
+msgstr "Atingido o número de registros carregados %d, a exibição de todos os registros levará muito tempo e pode causar o travamento do computador. Ainda deseja continuar?"
 
 #: ../gui/wxpython/modules/colorrules.py:1623
 msgid "Too many records"
-msgstr ""
+msgstr "Registros demais"
 
 #: ../gui/wxpython/modules/colorrules.py:1670
 #, python-format
 msgid "Enter vector attribute values or percents %s:"
-msgstr ""
+msgstr "Insira valores de atributos de vetor ou porcentagens %s:"
 
 #: ../gui/wxpython/modules/colorrules.py:1674
 #, python-format
 msgid "Enter vector attribute values %s:"
-msgstr ""
+msgstr "Insira os valores dos atributos do vetor %s:"
 
 #: ../gui/wxpython/modules/colorrules.py:1827
 msgid "Please select column to save values to."
-msgstr ""
+msgstr "Por favor, selecione a coluna para salvar os valores."
 
 #: ../gui/wxpython/modules/colorrules.py:1863
 msgid "No color column defined. Operation canceled."
-msgstr ""
+msgstr "Nenhuma coluna de cor definida. Operação cancelada."
 
 #: ../gui/wxpython/modules/colorrules.py:1907
 msgid "Thematic mapping for vector map in 3D view"
-msgstr ""
+msgstr "Mapeamento temático para mapa vetorial em visualização 3D"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:56
 msgid "GRASS GIS Raster Map Calculator"
@@ -7966,7 +7966,7 @@ msgstr "Copiar"
 #: ../gui/wxpython/modules/mcalc_builder.py:170
 #: ../gui/wxpython/gui_core/forms.py:624
 msgid "Copy the current command string to the clipboard"
-msgstr "Copia a string de comando atual para a área de transferência"
+msgstr "Copiar a string de comando atual para a área de transferência"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:174
 msgid "exponent"
@@ -8178,11 +8178,11 @@ msgstr "Não foi possível carregar extensões. %s"
 
 #: ../gui/wxpython/modules/extensions.py:391
 msgid "Manage installed GRASS Addons extensions"
-msgstr ""
+msgstr "Gerenciar extensões de complementos GRASS instaladas"
 
 #: ../gui/wxpython/modules/extensions.py:407
 msgid "List of installed extensions"
-msgstr ""
+msgstr "Lista de extensões instaladas"
 
 #: ../gui/wxpython/modules/extensions.py:415
 msgid "Uninstall"
@@ -8190,7 +8190,7 @@ msgstr "Desinstalação"
 
 #: ../gui/wxpython/modules/extensions.py:417
 msgid "Uninstall selected Addons extensions"
-msgstr ""
+msgstr "Desinstalar extensões de complementos selecionadas"
 
 #: ../gui/wxpython/modules/extensions.py:421
 msgid "Reinstall"
@@ -8198,11 +8198,11 @@ msgstr "Reinstalação"
 
 #: ../gui/wxpython/modules/extensions.py:423
 msgid "Reinstall selected Addons extensions"
-msgstr ""
+msgstr "Reinstalar as extensões de complementos selecionadas"
 
 #: ../gui/wxpython/modules/extensions.py:464
 msgid "No extension selected. Operation canceled."
-msgstr ""
+msgstr "Nenhuma extensão selecionada. Operação cancelada."
 
 #: ../gui/wxpython/modules/extensions.py:491
 #, python-format
@@ -8212,6 +8212,10 @@ msgid ""
 "\n"
 "Do you want really to remove <%(ext)s> extension?"
 msgstr ""
+"Lista de arquivos a serem removidos:\n"
+"%(files)s\n"
+"\n"
+"Você realmente deseja remover a extensão <%(ext)s>?"
 
 #: ../gui/wxpython/modules/extensions.py:495
 msgid "Remove extension"
@@ -8219,7 +8223,7 @@ msgstr "Remover extensão"
 
 #: ../gui/wxpython/modules/extensions.py:528
 msgid "Extension"
-msgstr ""
+msgstr "Extensão"
 
 #: ../gui/wxpython/rlisetup/wizard.py:60
 msgid "Create new configuration file for r.li modules"
@@ -9772,24 +9776,24 @@ msgstr "Adicionar camadas múltiplas de raster e vetores à visualização atual
 #: ../gui/wxpython/menustrings.py:24
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:25
 msgid "Add RGB raster layer"
-msgstr ""
+msgstr "Adicionar camada raster RGB"
 
 #: ../gui/wxpython/menustrings.py:25
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:26
 msgid "Add RGB raster map layer to current display"
-msgstr ""
+msgstr "Adicionar camada de mapa raster RGB à exibição atual"
 
 #: ../gui/wxpython/menustrings.py:26 ../gui/wxpython/menustrings.py:27
 #: ../gui/wxpython/web_services/dialogs.py:522
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:27
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:28
 msgid "Add web service layer"
-msgstr ""
+msgstr "Adicionar camada de serviço da web"
 
 #: ../gui/wxpython/menustrings.py:28
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:29
 msgid "New map display window"
-msgstr ""
+msgstr "Nova janela de exibição de mapa"
 
 #: ../gui/wxpython/menustrings.py:29
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:30
@@ -9799,12 +9803,12 @@ msgstr "Abrir nova janela de visualização de mapa"
 #: ../gui/wxpython/menustrings.py:30
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:31
 msgid "Render all map displays"
-msgstr ""
+msgstr "Renderizar todas as exibições do mapa"
 
 #: ../gui/wxpython/menustrings.py:31
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:32
 msgid "Re-render maps in all open map display windows"
-msgstr ""
+msgstr "Renderizar novamente os mapas em todas as janelas de exibição de mapas abertas"
 
 #: ../gui/wxpython/menustrings.py:32 ../gui/wxpython/menustrings.py:33
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:33
@@ -9827,7 +9831,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:39
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1040
 msgid "Imports raster data into a GRASS raster map using GDAL library."
-msgstr ""
+msgstr "Importa dados raster para um mapa raster GRASS usando a biblioteca GDAL."
 
 #: ../gui/wxpython/menustrings.py:39 ../gui/wxpython/menustrings.py:1061
 msgid "Import of common raster formats"
@@ -9843,7 +9847,7 @@ msgstr "grelhagem e importação de ponto x,y,z em ASCII"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:43
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1044
 msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
-msgstr ""
+msgstr "Cria um mapa raster a partir de um conjunto de muitas coordenadas usando estatísticas univariadas."
 
 #: ../gui/wxpython/menustrings.py:43 ../gui/wxpython/menustrings.py:1065
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:44
@@ -9855,7 +9859,7 @@ msgstr "Importar ASCII grid"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:45
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1046
 msgid "Converts a GRASS ASCII raster file to binary raster map."
-msgstr ""
+msgstr "Converte um arquivo raster GRASS ASCII em um mapa raster binário."
 
 #: ../gui/wxpython/menustrings.py:45 ../gui/wxpython/menustrings.py:1067
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:46
@@ -9873,13 +9877,13 @@ msgstr "Cria mapas ráster a partir de arquivos de dados de polígonos/líneas/p
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:48
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1049
 msgid "Raw binary array import"
-msgstr ""
+msgstr "Importação de array binário bruto"
 
 #: ../gui/wxpython/menustrings.py:48 ../gui/wxpython/menustrings.py:1070
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:49
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1050
 msgid "Import a binary raster file into a GRASS raster map layer."
-msgstr ""
+msgstr "Importe um arquivo raster binário para uma camada de mapa raster GRASS."
 
 #: ../gui/wxpython/menustrings.py:49 ../gui/wxpython/menustrings.py:1071
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:50
@@ -9891,13 +9895,13 @@ msgstr "Importar GRDATB.FOR"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:51
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1052
 msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
-msgstr ""
+msgstr "Importa o arquivo de mapa GRIDATB.FOR (TOPMODEL) para um mapa raster GRASS."
 
 #: ../gui/wxpython/menustrings.py:51 ../gui/wxpython/menustrings.py:1073
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:52
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1053
 msgid "Matlab 2D array import"
-msgstr "Importação de rray 2D do Matlab"
+msgstr "Importação de array 2D do Matlab"
 
 #: ../gui/wxpython/menustrings.py:52 ../gui/wxpython/menustrings.py:1074
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:53
@@ -9909,13 +9913,13 @@ msgstr "Importa un archivo binario MAT(v4) a un ráster de GRASS."
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:54
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1055
 msgid "PNG import"
-msgstr ""
+msgstr "Importação PNG"
 
 #: ../gui/wxpython/menustrings.py:54 ../gui/wxpython/menustrings.py:1076
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:55
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1056
 msgid "Imports non-georeferenced PNG format image."
-msgstr ""
+msgstr "Importa imagens no formato PNG não georreferenciadas."
 
 #: ../gui/wxpython/menustrings.py:55 ../gui/wxpython/menustrings.py:1077
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:56
@@ -9927,7 +9931,7 @@ msgstr "Importar SPOT NDVI"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:57
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1058
 msgid "Imports SPOT VGT NDVI data into a raster map."
-msgstr ""
+msgstr "Importa dados SPOT VGT NDVI para um mapa raster."
 
 #: ../gui/wxpython/menustrings.py:57 ../gui/wxpython/menustrings.py:1079
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:58
@@ -9939,7 +9943,7 @@ msgstr "Importar SRTM HGT"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:59
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1060
 msgid "Imports SRTM HGT files into raster map."
-msgstr ""
+msgstr "Importa arquivos SRTM HGT para um mapa raster."
 
 #: ../gui/wxpython/menustrings.py:59 ../gui/wxpython/menustrings.py:1081
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:60
@@ -9951,7 +9955,7 @@ msgstr "Importar HDF Terra ASTER"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:61
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1062
 msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
-msgstr ""
+msgstr "Georreferencie, retifique e importe imagens do Terra-ASTER e DEMs relativos usando gdalwarp."
 
 #: ../gui/wxpython/menustrings.py:61 ../gui/wxpython/menustrings.py:86
 #: ../gui/wxpython/menustrings.py:1083 ../gui/wxpython/menustrings.py:1108
@@ -9960,7 +9964,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1063
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1087
 msgid "LAS LiDAR points import"
-msgstr ""
+msgstr "Importação de pontos LAS LiDAR"
 
 #: ../gui/wxpython/menustrings.py:62 ../gui/wxpython/menustrings.py:1084
 msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
@@ -9970,7 +9974,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:63
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1064
 msgid "Unpack raster map"
-msgstr ""
+msgstr "Descompacte o mapa raster"
 
 #: ../gui/wxpython/menustrings.py:64 ../gui/wxpython/menustrings.py:1086
 msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
@@ -9983,7 +9987,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1066
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1212
 msgid "Reproject raster map from different GRASS location"
-msgstr ""
+msgstr "Reprojetar o mapa raster de location GRASS diferente"
 
 #: ../gui/wxpython/menustrings.py:66 ../gui/wxpython/menustrings.py:293
 #: ../gui/wxpython/menustrings.py:1088 ../gui/wxpython/menustrings.py:1238
@@ -9992,7 +9996,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1067
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1213
 msgid "Re-projects a raster map from given location to the current location."
-msgstr ""
+msgstr "Reprojeta um mapa raster de determinado location para o location atual."
 
 #: ../gui/wxpython/menustrings.py:68 ../gui/wxpython/menustrings.py:1090
 msgid "Simplified vector import with reprojection"
@@ -10003,7 +10007,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:69
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1070
 msgid "Imports vector data into a GRASS vector map using OGR library."
-msgstr ""
+msgstr "Importa dados vetoriais em um mapa vetorial GRASS usando a biblioteca OGR."
 
 #: ../gui/wxpython/menustrings.py:70 ../gui/wxpython/menustrings.py:1092
 msgid "Import of common vector formats"
@@ -10013,13 +10017,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:72
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1073
 msgid "ASCII points or GRASS ASCII format"
-msgstr ""
+msgstr "Pontos ASCII ou formato GRASS ASCII"
 
 #: ../gui/wxpython/menustrings.py:73 ../gui/wxpython/menustrings.py:1095
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:73
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1074
 msgid "Creates a vector map from an ASCII points file or ASCII vector file."
-msgstr ""
+msgstr "Cria um mapa vetorial a partir de um arquivo de pontos ASCII ou arquivo vetorial ASCII."
 
 #: ../gui/wxpython/menustrings.py:74 ../gui/wxpython/menustrings.py:1096
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:74
@@ -10031,7 +10035,7 @@ msgstr "Pontos ASCII como linhas de vetores"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:75
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1076
 msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
-msgstr ""
+msgstr "Importa coordenadas ASCII x, y [,z] como uma série de linhas."
 
 #: ../gui/wxpython/menustrings.py:76 ../gui/wxpython/menustrings.py:1098
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:76
@@ -10055,7 +10059,7 @@ msgstr "WFS"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:79
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1080
 msgid "Imports GetFeature from a WFS server."
-msgstr ""
+msgstr "Importa GetFeature de um servidor WFS."
 
 #: ../gui/wxpython/menustrings.py:80 ../gui/wxpython/menustrings.py:1102
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:80
@@ -10067,7 +10071,7 @@ msgstr "Importar e00 de ESRI"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:81
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1082
 msgid "Imports E00 file into a vector map."
-msgstr ""
+msgstr "Importa o arquivo E00 em um mapa vetorial."
 
 #: ../gui/wxpython/menustrings.py:82 ../gui/wxpython/menustrings.py:1104
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:82
@@ -10079,7 +10083,7 @@ msgstr "Importación de geonames"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:83
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1084
 msgid "Imports geonames.org country files into a vector points map."
-msgstr ""
+msgstr "Importa arquivos de países geonames.org em um mapa de pontos vetoriais."
 
 #: ../gui/wxpython/menustrings.py:84 ../gui/wxpython/menustrings.py:1106
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:84
@@ -10101,7 +10105,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:87
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1088
 msgid "Unpack vector map"
-msgstr ""
+msgstr "Descompacte o mapa vetorial"
 
 #: ../gui/wxpython/menustrings.py:89 ../gui/wxpython/menustrings.py:1111
 msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
@@ -10114,7 +10118,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1090
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1490
 msgid "Reproject vector map from different GRASS location"
-msgstr ""
+msgstr "Reprojetar mapa vetorial de location do GRASS diferente"
 
 #: ../gui/wxpython/menustrings.py:91 ../gui/wxpython/menustrings.py:576
 #: ../gui/wxpython/menustrings.py:1113 ../gui/wxpython/menustrings.py:1521
@@ -10123,7 +10127,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1091
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1491
 msgid "Re-projects a vector map from one location to the current location."
-msgstr ""
+msgstr "Reprojeta um mapa vetorial de um location para o location atual."
 
 #: ../gui/wxpython/menustrings.py:92 ../gui/wxpython/menustrings.py:1114
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:91
@@ -10141,19 +10145,19 @@ msgstr "Importação de 3D ASCII"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:93
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1094
 msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
-msgstr ""
+msgstr "Converte um arquivo de texto raster 3D ASCII em um mapa raster 3D (binário)."
 
 #: ../gui/wxpython/menustrings.py:95 ../gui/wxpython/menustrings.py:1117
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:94
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1095
 msgid "Raw binary array 3D import"
-msgstr ""
+msgstr "Importação de array binário 3D bruto"
 
 #: ../gui/wxpython/menustrings.py:96 ../gui/wxpython/menustrings.py:1118
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:95
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1096
 msgid "Imports a binary raster file into a GRASS 3D raster map."
-msgstr ""
+msgstr "Importa um arquivo raster binário para um mapa raster GRASS 3D."
 
 #: ../gui/wxpython/menustrings.py:97 ../gui/wxpython/menustrings.py:1119
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:96
@@ -10165,7 +10169,7 @@ msgstr "Importação de Vis5D"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:97
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1098
 msgid "Import 3-dimensional Vis5D files."
-msgstr ""
+msgstr "Importe arquivos Vis5D tridimensionais."
 
 #: ../gui/wxpython/menustrings.py:99 ../gui/wxpython/menustrings.py:1121
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:98
@@ -10221,7 +10225,7 @@ msgstr "Exportar grelha ASCII"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:105
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1106
 msgid "Converts a raster map layer into a GRASS ASCII text file."
-msgstr ""
+msgstr "Converte uma camada de mapa raster em um arquivo de texto GRASS ASCII."
 
 #: ../gui/wxpython/menustrings.py:107 ../gui/wxpython/menustrings.py:1129
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:106
@@ -10233,7 +10237,7 @@ msgstr "Exportar pontos x,y,z ASCII"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:107
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1108
 msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
-msgstr ""
+msgstr "Exporta um mapa raster para um arquivo de texto como valores x,y,z com base nos centros das células."
 
 #: ../gui/wxpython/menustrings.py:109 ../gui/wxpython/menustrings.py:1131
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:108
@@ -10245,7 +10249,7 @@ msgstr "Exportar GRIDATB.FOR"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:109
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1110
 msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
-msgstr ""
+msgstr "Exporta o mapa raster GRASS para o arquivo de mapa GRIDATB.FOR (TOPMODEL)."
 
 #: ../gui/wxpython/menustrings.py:111 ../gui/wxpython/menustrings.py:1133
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:110
@@ -10269,55 +10273,55 @@ msgstr "Exporta array de binários raw"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:113
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1114
 msgid "Exports a GRASS raster to a binary array."
-msgstr ""
+msgstr "Exporta um raster GRASS para um array binário."
 
 #: ../gui/wxpython/menustrings.py:115 ../gui/wxpython/menustrings.py:1137
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:114
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1115
 msgid "MPEG-1 export"
-msgstr ""
+msgstr "Exportação MPEG-1"
 
 #: ../gui/wxpython/menustrings.py:116 ../gui/wxpython/menustrings.py:1138
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:115
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1116
 msgid "Converts raster map series to MPEG movie."
-msgstr ""
+msgstr "Converte séries de mapas raster em filmes MPEG."
 
 #: ../gui/wxpython/menustrings.py:117 ../gui/wxpython/menustrings.py:1139
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:116
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1117
 msgid "PNG export"
-msgstr ""
+msgstr "Exportação PNG"
 
 #: ../gui/wxpython/menustrings.py:118 ../gui/wxpython/menustrings.py:1140
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:117
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1118
 msgid "Export a GRASS raster map as a non-georeferenced PNG image."
-msgstr ""
+msgstr "Exporte um mapa raster GRASS como uma imagem PNG não georreferenciada."
 
 #: ../gui/wxpython/menustrings.py:119 ../gui/wxpython/menustrings.py:1141
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:118
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1119
 msgid "PPM export"
-msgstr ""
+msgstr "Exportação PPM"
 
 #: ../gui/wxpython/menustrings.py:120 ../gui/wxpython/menustrings.py:1142
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:119
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1120
 msgid "Converts a GRASS raster map to a PPM image file."
-msgstr ""
+msgstr "Converte um mapa raster GRASS em um arquivo de imagem PPM."
 
 #: ../gui/wxpython/menustrings.py:121 ../gui/wxpython/menustrings.py:1143
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:120
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1121
 msgid "PPM from RGB export"
-msgstr ""
+msgstr "PPM da exportação RGB"
 
 #: ../gui/wxpython/menustrings.py:122 ../gui/wxpython/menustrings.py:1144
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:121
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1122
 msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
-msgstr ""
+msgstr "Converte 3 camadas raster GRASS (R,G,B) em um arquivo de imagem PPM."
 
 #: ../gui/wxpython/menustrings.py:123 ../gui/wxpython/menustrings.py:140
 #: ../gui/wxpython/menustrings.py:1145 ../gui/wxpython/menustrings.py:1162
@@ -10326,25 +10330,25 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1123
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1139
 msgid "POV-Ray export"
-msgstr ""
+msgstr "Exportação POV-Ray"
 
 #: ../gui/wxpython/menustrings.py:124 ../gui/wxpython/menustrings.py:1146
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:123
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1124
 msgid "Converts a raster map layer into a height-field file for POV-Ray."
-msgstr ""
+msgstr "Converte uma camada de mapa raster em um arquivo de campo de altura para POV-Ray."
 
 #: ../gui/wxpython/menustrings.py:125 ../gui/wxpython/menustrings.py:1147
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:124
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1125
 msgid "VRML export"
-msgstr ""
+msgstr "Exportação VRML"
 
 #: ../gui/wxpython/menustrings.py:126 ../gui/wxpython/menustrings.py:1148
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:125
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1126
 msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
-msgstr ""
+msgstr "Exporta um mapa raster para a Virtual Reality Modeling Language (VRML)."
 
 #: ../gui/wxpython/menustrings.py:127 ../gui/wxpython/menustrings.py:144
 #: ../gui/wxpython/menustrings.py:155 ../gui/wxpython/menustrings.py:1149
@@ -10356,31 +10360,31 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1143
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1154
 msgid "VTK export"
-msgstr ""
+msgstr "Exportação VTK"
 
 #: ../gui/wxpython/menustrings.py:128 ../gui/wxpython/menustrings.py:1150
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:127
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1128
 msgid "Converts raster maps into the VTK-ASCII format."
-msgstr ""
+msgstr "Converte mapas raster no formato VTK-ASCII."
 
 #: ../gui/wxpython/menustrings.py:129 ../gui/wxpython/menustrings.py:1151
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:128
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1129
 msgid "Pack raster map"
-msgstr ""
+msgstr "Pacote de mapa raster"
 
 #: ../gui/wxpython/menustrings.py:130 ../gui/wxpython/menustrings.py:1152
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:129
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1130
 msgid "Exports a raster map as GRASS GIS specific archive file"
-msgstr ""
+msgstr "Exporta um mapa raster como um arquivo específico do GRASS GIS"
 
 #: ../gui/wxpython/menustrings.py:131 ../gui/wxpython/menustrings.py:1153
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:130
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1131
 msgid "Export vector map"
-msgstr ""
+msgstr "Exportação de mapa vetorial"
 
 #: ../gui/wxpython/menustrings.py:133 ../gui/wxpython/menustrings.py:1155
 msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
@@ -10390,31 +10394,31 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:133
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1134
 msgid "ASCII points or GRASS ASCII vector export"
-msgstr ""
+msgstr "Exportação de pontos ASCII ou de vetor GRASS ASCII"
 
 #: ../gui/wxpython/menustrings.py:135 ../gui/wxpython/menustrings.py:1157
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:134
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1135
 msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
-msgstr ""
+msgstr "Exporta um mapa vetorial para uma representação vetorial GRASS ASCII. Por padrão, apenas as feições com categoria são exportadas. Para exportar todas as feições, use 'layer=-1'."
 
 #: ../gui/wxpython/menustrings.py:136 ../gui/wxpython/menustrings.py:1158
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:135
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1136
 msgid "DXF export"
-msgstr ""
+msgstr "Exportação DXF"
 
 #: ../gui/wxpython/menustrings.py:137 ../gui/wxpython/menustrings.py:1159
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:136
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1137
 msgid "Exports vector map to DXF file format."
-msgstr ""
+msgstr "Exporta o mapa vetorial para o formato de arquivo DXF."
 
 #: ../gui/wxpython/menustrings.py:138 ../gui/wxpython/menustrings.py:1160
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:137
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1138
 msgid "PostGIS export"
-msgstr ""
+msgstr "Exportação PostGIS"
 
 #: ../gui/wxpython/menustrings.py:139 ../gui/wxpython/menustrings.py:1161
 msgid "Exports a vector map layer to PostGIS feature table."
@@ -10424,25 +10428,25 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:139
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1140
 msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
-msgstr ""
+msgstr "Converte os pontos GRASS x,y,z no formato POV-Ray x,z,y."
 
 #: ../gui/wxpython/menustrings.py:142 ../gui/wxpython/menustrings.py:1164
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:140
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1141
 msgid "SVG export"
-msgstr ""
+msgstr "Exportação SVG"
 
 #: ../gui/wxpython/menustrings.py:143 ../gui/wxpython/menustrings.py:1165
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:141
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1142
 msgid "Exports a vector map to SVG file."
-msgstr ""
+msgstr "Exporta um mapa vetorial para um arquivo SVG."
 
 #: ../gui/wxpython/menustrings.py:145 ../gui/wxpython/menustrings.py:1167
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:143
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1144
 msgid "Converts a vector map to VTK ASCII output."
-msgstr ""
+msgstr "Converte um mapa vetorial em saída VTK ASCII."
 
 #: ../gui/wxpython/menustrings.py:146 ../gui/wxpython/menustrings.py:1168
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:144
@@ -10454,115 +10458,115 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:145
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1146
 msgid "Exports a vector map as GRASS GIS specific archive file"
-msgstr ""
+msgstr "Exporta um mapa vetorial como um arquivo específico do GRASS GIS"
 
 #: ../gui/wxpython/menustrings.py:148 ../gui/wxpython/menustrings.py:1170
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:146
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1147
 msgid "Export 3D raster maps"
-msgstr ""
+msgstr "Exportação de mapas raster 3D"
 
 #: ../gui/wxpython/menustrings.py:149 ../gui/wxpython/menustrings.py:1171
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:147
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1148
 msgid "ASCII 3D export"
-msgstr ""
+msgstr "Exportação ASCII 3D"
 
 #: ../gui/wxpython/menustrings.py:150 ../gui/wxpython/menustrings.py:1172
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:148
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1149
 msgid "Converts a 3D raster map layer into a ASCII text file."
-msgstr ""
+msgstr "Converte uma camada de mapa raster 3D em um arquivo de texto ASCII."
 
 #: ../gui/wxpython/menustrings.py:151 ../gui/wxpython/menustrings.py:1173
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:149
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1150
 msgid "Raw binary array 3D export"
-msgstr ""
+msgstr "Exportação de array 3D binário bruto"
 
 #: ../gui/wxpython/menustrings.py:152 ../gui/wxpython/menustrings.py:1174
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:150
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1151
 msgid "Exports a GRASS 3D raster map to a binary array."
-msgstr ""
+msgstr "Exporta um mapa raster GRASS 3D para um array binário."
 
 #: ../gui/wxpython/menustrings.py:153 ../gui/wxpython/menustrings.py:1175
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:151
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1152
 msgid "Vis5D export"
-msgstr ""
+msgstr "Exportação Vis5D"
 
 #: ../gui/wxpython/menustrings.py:154 ../gui/wxpython/menustrings.py:1176
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:152
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1153
 msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
-msgstr ""
+msgstr "Exporta o mapa raster GRASS 3D para um arquivo Vis5D tridimensional."
 
 #: ../gui/wxpython/menustrings.py:156 ../gui/wxpython/menustrings.py:1178
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:154
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1155
 msgid "Converts 3D raster maps into the VTK-ASCII format."
-msgstr ""
+msgstr "Converte mapas raster 3D no formato VTK-ASCII."
 
 #: ../gui/wxpython/menustrings.py:157 ../gui/wxpython/menustrings.py:1179
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:155
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1156
 msgid "Export database table"
-msgstr ""
+msgstr "Exportação de tabela de banco de dados"
 
 #: ../gui/wxpython/menustrings.py:159 ../gui/wxpython/menustrings.py:1181
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:157
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1158
 msgid "Exports attribute tables into various formats."
-msgstr ""
+msgstr "Exporta tabelas de atributos em vários formatos."
 
 #: ../gui/wxpython/menustrings.py:160 ../gui/wxpython/menustrings.py:1182
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:158
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1159
 msgid "Link external data"
-msgstr ""
+msgstr "Dados externos de link"
 
 #: ../gui/wxpython/menustrings.py:162 ../gui/wxpython/menustrings.py:1184
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:160
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1161
 msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
-msgstr ""
+msgstr "Vincule dados raster suportados pela GDAL como uma camada de mapa raster pseudo GRASS."
 
 #: ../gui/wxpython/menustrings.py:164 ../gui/wxpython/menustrings.py:1186
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:162
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1163
 msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
-msgstr ""
+msgstr "Cria um novo mapa pseudo-vetorial como um link para uma camada compatível com OGR."
 
 #: ../gui/wxpython/menustrings.py:165 ../gui/wxpython/menustrings.py:1187
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:163
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1164
 msgid "Output format for raster data"
-msgstr ""
+msgstr "Formato de saída para dados raster"
 
 #: ../gui/wxpython/menustrings.py:166 ../gui/wxpython/menustrings.py:1188
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:164
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1165
 msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
-msgstr ""
+msgstr "Redireciona a saída raster para arquivo utilizando a biblioteca GDAL em vez de armazenar no formato raster GRASS."
 
 #: ../gui/wxpython/menustrings.py:167 ../gui/wxpython/menustrings.py:1189
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:165
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1166
 msgid "Output format for vector data"
-msgstr ""
+msgstr "Formato de saída para dados vetoriais"
 
 #: ../gui/wxpython/menustrings.py:168 ../gui/wxpython/menustrings.py:1190
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:166
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1167
 msgid "Defines vector output format utilizing OGR library."
-msgstr ""
+msgstr "Define o formato de saída do vetor utilizando a biblioteca OGR."
 
 #: ../gui/wxpython/menustrings.py:169 ../gui/wxpython/menustrings.py:1191
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:167
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1168
 msgid "Manage maps"
-msgstr ""
+msgstr "Gerenciar mapas"
 
 #: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:1193
 msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
@@ -10587,13 +10591,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:173
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1174
 msgid "Renames data base element files in the user's current mapset."
-msgstr ""
+msgstr "Renomeia arquivos de elemento de banco de dados no mapset atual do usuário."
 
 #: ../gui/wxpython/menustrings.py:177 ../gui/wxpython/menustrings.py:1199
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:175
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1176
 msgid "Removes data base element files from the user's current mapset using the search pattern."
-msgstr ""
+msgstr "Remove arquivos de elemento de banco de dados do mapset atual do usuário usando o padrão de pesquisa."
 
 #: ../gui/wxpython/menustrings.py:178 ../gui/wxpython/menustrings.py:316
 #: ../gui/wxpython/menustrings.py:613 ../gui/wxpython/menustrings.py:867
@@ -10607,7 +10611,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1528
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1773
 msgid "Map type conversions"
-msgstr ""
+msgstr "Conversões de tipo de mapa"
 
 #: ../gui/wxpython/menustrings.py:179 ../gui/wxpython/menustrings.py:317
 #: ../gui/wxpython/menustrings.py:1262
@@ -10615,7 +10619,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:311
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1237
 msgid "Raster to vector"
-msgstr ""
+msgstr "Raster para vetor"
 
 #: ../gui/wxpython/menustrings.py:180 ../gui/wxpython/menustrings.py:318
 #: ../gui/wxpython/menustrings.py:1263
@@ -10623,7 +10627,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:312
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1238
 msgid "Converts a raster map into a vector map."
-msgstr ""
+msgstr "Converte um mapa raster em um mapa vetorial."
 
 #: ../gui/wxpython/menustrings.py:181 ../gui/wxpython/menustrings.py:319
 #: ../gui/wxpython/menustrings.py:1264
@@ -10631,7 +10635,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:313
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1239
 msgid "Raster series to 3D raster"
-msgstr ""
+msgstr "Série raster para raster 3D"
 
 #: ../gui/wxpython/menustrings.py:182 ../gui/wxpython/menustrings.py:320
 #: ../gui/wxpython/menustrings.py:1265
@@ -10639,7 +10643,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:314
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1240
 msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr ""
+msgstr "Converte cortes de mapa raster 2D em um mapa raster 3D de volume."
 
 #: ../gui/wxpython/menustrings.py:183 ../gui/wxpython/menustrings.py:321
 #: ../gui/wxpython/menustrings.py:1266
@@ -10647,7 +10651,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:315
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1241
 msgid "Raster 2.5D to 3D raster"
-msgstr ""
+msgstr "Raster 2.5D para raster 3D"
 
 #: ../gui/wxpython/menustrings.py:184 ../gui/wxpython/menustrings.py:322
 #: ../gui/wxpython/menustrings.py:1267
@@ -10663,7 +10667,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:603
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1529
 msgid "Vector to raster"
-msgstr ""
+msgstr "Vetor para raster"
 
 #: ../gui/wxpython/menustrings.py:186 ../gui/wxpython/menustrings.py:615
 #: ../gui/wxpython/menustrings.py:1560
@@ -10671,7 +10675,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:604
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1530
 msgid "Converts (rasterize) a vector map into a raster map."
-msgstr ""
+msgstr "Converte (rasteriza) um mapa vetorial em um mapa raster."
 
 #: ../gui/wxpython/menustrings.py:187 ../gui/wxpython/menustrings.py:616
 #: ../gui/wxpython/menustrings.py:1561
@@ -10679,7 +10683,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:605
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1531
 msgid "Vector to 3D raster"
-msgstr ""
+msgstr "Vetor para raster 3D"
 
 #: ../gui/wxpython/menustrings.py:188 ../gui/wxpython/menustrings.py:617
 #: ../gui/wxpython/menustrings.py:1562
@@ -10687,7 +10691,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:606
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1532
 msgid "Converts a vector map (only points) into a 3D raster map."
-msgstr ""
+msgstr "Converte um mapa vetorial (apenas pontos) em um mapa raster 3D."
 
 #: ../gui/wxpython/menustrings.py:189 ../gui/wxpython/menustrings.py:618
 #: ../gui/wxpython/menustrings.py:1563
@@ -10695,7 +10699,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:607
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1533
 msgid "2D vector to 3D vector"
-msgstr ""
+msgstr "Vetor 2D para vetor 3D"
 
 #: ../gui/wxpython/menustrings.py:190 ../gui/wxpython/menustrings.py:619
 #: ../gui/wxpython/menustrings.py:1564
@@ -10703,12 +10707,12 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:608
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1534
 msgid "Performs transformation of 2D vector features to 3D."
-msgstr ""
+msgstr "Executa a transformação de feições vetoriais 2D em 3D."
 
 #: ../gui/wxpython/menustrings.py:191
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:189
 msgid "3D raster to raster series"
-msgstr ""
+msgstr " Raster 3D para série raster"
 
 #: ../gui/wxpython/menustrings.py:192 ../gui/wxpython/menustrings.py:869
 #: ../gui/wxpython/menustrings.py:1814
@@ -10716,7 +10720,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:849
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1775
 msgid "Converts 3D raster maps to 2D raster maps"
-msgstr ""
+msgstr "Converte mapas raster 3D em mapas raster 2D"
 
 #: ../gui/wxpython/menustrings.py:193 ../gui/wxpython/menustrings.py:2001
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:191
@@ -10728,7 +10732,7 @@ msgstr "Georretificar"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:192
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1959
 msgid "Manage Ground Control Points for Georectification"
-msgstr ""
+msgstr "Gerenciar Pontos de Controle de Solo para Georetificação"
 
 #: ../gui/wxpython/menustrings.py:195 ../gui/wxpython/menustrings.py:2003
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:193
@@ -10756,12 +10760,12 @@ msgstr "Executar modelo preparado pelo modelador gráfico"
 #: ../gui/wxpython/menustrings.py:199
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:197
 msgid "3D image rendering"
-msgstr ""
+msgstr "Renderização de imagem 3D"
 
 #: ../gui/wxpython/menustrings.py:200
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:198
 msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
-msgstr ""
+msgstr "Cria uma renderização 3D de dados GIS. Renderiza superfícies (dados raster), dados vetoriais 2D/3D e volumes (dados raster 3D) em 3D."
 
 #: ../gui/wxpython/menustrings.py:201 ../gui/wxpython/menustrings.py:1040
 #: ../gui/wxpython/menustrings.py:1985 ../gui/wxpython/menustrings.py:1992
@@ -10770,7 +10774,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1946
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1953
 msgid "Animation tool"
-msgstr ""
+msgstr "Ferramenta de animação"
 
 #: ../gui/wxpython/menustrings.py:202 ../gui/wxpython/menustrings.py:1041
 #: ../gui/wxpython/menustrings.py:1986 ../gui/wxpython/menustrings.py:1993
@@ -10779,7 +10783,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1947
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1954
 msgid "Launch animation tool."
-msgstr ""
+msgstr "Iniciar ferramenta de animação."
 
 #: ../gui/wxpython/menustrings.py:203
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:201
@@ -10795,7 +10799,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:204
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1957
 msgid "Launch Cartographic Composer"
-msgstr ""
+msgstr "Iniciar o Compositor Cartográfico"
 
 #: ../gui/wxpython/menustrings.py:207 ../gui/wxpython/menustrings.py:2009
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:205
@@ -10830,35 +10834,35 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:213 ../gui/wxpython/gui_core/dialogs.py:2366
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:209
 msgid "Close GUI"
-msgstr ""
+msgstr "Fechar GUI"
 
 #: ../gui/wxpython/menustrings.py:214
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:210
 msgid "Close graphical user interface."
-msgstr ""
+msgstr "Fecha a interface gráfica do usuário."
 
 #: ../gui/wxpython/menustrings.py:215 ../gui/wxpython/gui_core/dialogs.py:2345
 #: ../gui/wxpython/gui_core/dialogs.py:2369
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:211
 msgid "Quit GRASS GIS"
-msgstr ""
+msgstr "Sair do GRASS GIS"
 
 #: ../gui/wxpython/menustrings.py:216
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:212
 msgid "Close GUI and exit GRASS GIS shell."
-msgstr ""
+msgstr "Fecha a GUI e sai do shell GRASS GIS."
 
 #: ../gui/wxpython/menustrings.py:217 ../gui/wxpython/menustrings.py:2038
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:213
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1989
 msgid "&Settings"
-msgstr ""
+msgstr "&Settings"
 
 #: ../gui/wxpython/menustrings.py:219 ../gui/wxpython/menustrings.py:1201
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:215
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1178
 msgid "Show current region"
-msgstr ""
+msgstr "Mostrar região atual"
 
 #: ../gui/wxpython/menustrings.py:220 ../gui/wxpython/menustrings.py:222
 #: ../gui/wxpython/menustrings.py:1202 ../gui/wxpython/menustrings.py:1204
@@ -10893,22 +10897,22 @@ msgstr "Definir região"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:220
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1183
 msgid "Manages the boundary definitions for the geographic region."
-msgstr ""
+msgstr "Gerencia as definições de fronteiras para a região geográfica."
 
 #: ../gui/wxpython/menustrings.py:227
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:221
 msgid "GRASS working environment"
-msgstr ""
+msgstr "Ambiente de trabalho GRASS"
 
 #: ../gui/wxpython/menustrings.py:228
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:222
 msgid "Mapset access"
-msgstr ""
+msgstr "Acesso ao Mapset"
 
 #: ../gui/wxpython/menustrings.py:229
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:223
 msgid "Set/unset access to other mapsets in current location"
-msgstr ""
+msgstr "Definir/cancelar acesso a outros mapsets na location atual"
 
 #: ../gui/wxpython/menustrings.py:230
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:224
@@ -10933,33 +10937,33 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:234
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:228
 msgid "Change location and mapset"
-msgstr ""
+msgstr "Alterar location e mapset"
 
 #: ../gui/wxpython/menustrings.py:235
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:229
 msgid "Change current location and mapset."
-msgstr ""
+msgstr "Alterar location e mapset atuais"
 
 #: ../gui/wxpython/menustrings.py:236
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:230
 msgid "Change mapset"
-msgstr ""
+msgstr "Alterar mapset"
 
 #: ../gui/wxpython/menustrings.py:237
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:231
 msgid "Change current mapset."
-msgstr ""
+msgstr "Alterar mapset atual"
 
 #: ../gui/wxpython/menustrings.py:238 ../gui/wxpython/menustrings.py:239
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:232
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:233
 msgid "Change working directory"
-msgstr ""
+msgstr "Alterar diretório de trabalho"
 
 #: ../gui/wxpython/menustrings.py:240
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:234
 msgid "Show settings"
-msgstr ""
+msgstr "Mostrar configurações"
 
 #: ../gui/wxpython/menustrings.py:241
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:235
@@ -10969,7 +10973,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:242
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:236
 msgid "Change settings"
-msgstr ""
+msgstr "Alterar configurações"
 
 #: ../gui/wxpython/menustrings.py:243
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:237
@@ -10979,22 +10983,22 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:244
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:238
 msgid "Create new location"
-msgstr ""
+msgstr "Criar uma nova location"
 
 #: ../gui/wxpython/menustrings.py:245
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:239
 msgid "Launches location wizard to create new GRASS location."
-msgstr ""
+msgstr "Inicia o assistente de location para criar uma nova location GRASS."
 
 #: ../gui/wxpython/menustrings.py:247
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:241
 msgid "Creates new mapset in the current location, changes current mapset."
-msgstr ""
+msgstr "Cria um novo mapset na location atual, altera o mapset atual."
 
 #: ../gui/wxpython/menustrings.py:248
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:242
 msgid "Version and copyright"
-msgstr ""
+msgstr "Versão e direitos autorais"
 
 #: ../gui/wxpython/menustrings.py:249
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:243
@@ -11004,17 +11008,17 @@ msgstr "Exibir informações de versão e copyright."
 #: ../gui/wxpython/menustrings.py:250
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:244
 msgid "Map projections"
-msgstr ""
+msgstr "Projeções de mapa"
 
 #: ../gui/wxpython/menustrings.py:251
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:245
 msgid "Display map projection"
-msgstr ""
+msgstr "Exibir projeção de mapa"
 
 #: ../gui/wxpython/menustrings.py:252
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:246
 msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
-msgstr ""
+msgstr "Converte as descrições do sistema de coordenadas (ou seja, informações de projeção) entre vários formatos (incluindo o formato GRASS)."
 
 #: ../gui/wxpython/menustrings.py:253
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:247
@@ -11024,7 +11028,7 @@ msgstr "Gerenciar projeções"
 #: ../gui/wxpython/menustrings.py:254
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:248
 msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions). Can also be used to create new GRASS locations."
-msgstr ""
+msgstr "Imprime ou modifica arquivos de informação de projeção GRASS (em várias descrições de sistema de coordenadas). Também pode ser usado para criar novas locations GRASS."
 
 #: ../gui/wxpython/menustrings.py:255
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:249
@@ -11039,17 +11043,17 @@ msgstr "Converte coordenadas de uma projeção para outra (cs2cs frontend)."
 #: ../gui/wxpython/menustrings.py:257
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:251
 msgid "Addons extensions"
-msgstr ""
+msgstr "Extensões de complementos"
 
 #: ../gui/wxpython/menustrings.py:258
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:252
 msgid "Install extension from addons"
-msgstr ""
+msgstr "Instalar extensão de complementos"
 
 #: ../gui/wxpython/menustrings.py:259
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:253
 msgid "Installs new extension from GRASS AddOns repository."
-msgstr ""
+msgstr "Instala a nova extensão do repositório GRASS AddOns."
 
 #: ../gui/wxpython/menustrings.py:260
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:254
@@ -11059,7 +11063,7 @@ msgstr "Gerenciar extensões instaladas"
 #: ../gui/wxpython/menustrings.py:261
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:255
 msgid "Updates or removes installed GRASS AddOns extension(s)."
-msgstr ""
+msgstr "Atualiza ou remove extensão(ões) de Complementos GRASS instaladas."
 
 #: ../gui/wxpython/menustrings.py:262 ../gui/wxpython/menustrings.py:2039
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:256
@@ -11070,7 +11074,7 @@ msgstr "Preferências"
 #: ../gui/wxpython/menustrings.py:263
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:257
 msgid "User GUI preferences (display font, commands, digitizer, etc.)"
-msgstr ""
+msgstr "Preferências do usuário para GUI (fonte de exibição, comandos, digitalizador, etc.)"
 
 #: ../gui/wxpython/menustrings.py:264 ../gui/wxpython/menustrings.py:1209
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:258
@@ -11082,37 +11086,37 @@ msgstr "&Raster"
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:259
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1185
 msgid "Develop raster map"
-msgstr ""
+msgstr "Desenvolver mapa raster"
 
 #: ../gui/wxpython/menustrings.py:266 ../gui/wxpython/menustrings.py:1211
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:260
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1186
 msgid "Compress/decompress"
-msgstr ""
+msgstr "Comprimir/descomprimir"
 
 #: ../gui/wxpython/menustrings.py:267 ../gui/wxpython/menustrings.py:1212
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:261
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1187
 msgid "Compresses and decompresses raster maps."
-msgstr ""
+msgstr "Comprime e descomprime mapas raster."
 
 #: ../gui/wxpython/menustrings.py:268 ../gui/wxpython/menustrings.py:1213
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:262
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1188
 msgid "Region boundaries"
-msgstr ""
+msgstr "Fronteiras da região"
 
 #: ../gui/wxpython/menustrings.py:269 ../gui/wxpython/menustrings.py:1214
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:263
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1189
 msgid "Sets the boundary definitions for a raster map."
-msgstr ""
+msgstr "Estabelece as definições de fronteira para um mapa raster."
 
 #: ../gui/wxpython/menustrings.py:270 ../gui/wxpython/menustrings.py:1215
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:264
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1190
 msgid "Manage NULL values"
-msgstr ""
+msgstr "Gerenciar valores NULL"
 
 #: ../gui/wxpython/menustrings.py:271 ../gui/wxpython/menustrings.py:1216
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:265
@@ -11136,43 +11140,43 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:268
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1194
 msgid "Timestamp"
-msgstr ""
+msgstr "Timestamp"
 
 #: ../gui/wxpython/menustrings.py:275 ../gui/wxpython/menustrings.py:1220
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:269
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1195
 msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
-msgstr ""
+msgstr "Modifica um timestamp para um mapa raster. Imprime/adiciona/remove um timestamp para um mapa raster."
 
 #: ../gui/wxpython/menustrings.py:276 ../gui/wxpython/menustrings.py:1221
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:270
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1196
 msgid "Resample using aggregate statistics"
-msgstr ""
+msgstr "Reamostrar usando estatísticas agregadas"
 
 #: ../gui/wxpython/menustrings.py:277 ../gui/wxpython/menustrings.py:1222
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:271
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1197
 msgid "Resamples raster map layers to a coarser grid using aggregation."
-msgstr ""
+msgstr "Reamostra as camadas do mapa raster em uma grade mais grosseira usando agregação."
 
 #: ../gui/wxpython/menustrings.py:278 ../gui/wxpython/menustrings.py:1223
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:272
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1198
 msgid "Resample using multiple methods"
-msgstr ""
+msgstr "Reamostrar usando vários métodos"
 
 #: ../gui/wxpython/menustrings.py:279 ../gui/wxpython/menustrings.py:1224
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:273
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1199
 msgid "Resamples raster map to a finer grid using interpolation."
-msgstr ""
+msgstr "Reamostra o mapa raster para uma grade mais fina usando interpolação."
 
 #: ../gui/wxpython/menustrings.py:280 ../gui/wxpython/menustrings.py:1225
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:274
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1200
 msgid "Resample using nearest neighbor"
-msgstr ""
+msgstr "Reamostra usando o vizinho mais próximo"
 
 #: ../gui/wxpython/menustrings.py:281 ../gui/wxpython/menustrings.py:1226
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:275
@@ -16168,7 +16172,7 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:1712
 #, python-format
 msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
-msgstr ""
+msgstr "Os registros de dados selecionados (%d) serão excluídos permanentemente da tabela. Você deseja excluí-los?"
 
 #: ../gui/wxpython/dbmgr/base.py:1715 ../gui/wxpython/dbmgr/base.py:1765
 msgid "Delete records"
@@ -16177,7 +16181,7 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:1762
 #, python-format
 msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
-msgstr ""
+msgstr "Todos os registros de dados (%d) serão excluídos permanentemente da tabela. Você deseja excluí-los?"
 
 #: ../gui/wxpython/dbmgr/base.py:1949
 msgid "Nothing to extract."
@@ -16211,7 +16215,7 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:2309
 #, python-format
 msgid "Table <%s> - right-click to delete column(s)"
-msgstr ""
+msgstr "Tabela <%s> - clique com o botão direito para excluir coluna(s)"
 
 #: ../gui/wxpython/dbmgr/base.py:2333 ../gui/wxpython/dbmgr/base.py:2397
 #: ../gui/wxpython/dbmgr/dialogs.py:784
@@ -19150,7 +19154,7 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:674
 msgid "Delete record from table"
-msgstr ""
+msgstr "Excluir registro da tabela"
 
 #: ../gui/wxpython/vdigit/preferences.py:692
 msgid "Geometry attributes"
@@ -19375,44 +19379,44 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:38
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1039
 msgid "Common formats import"
-msgstr ""
+msgstr "Importação de formatos comuns"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:40
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:70
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1041
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1071
 msgid "Import of common formats with reprojection"
-msgstr ""
+msgstr "Importação de formatos comuns com reprojeção"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:41
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1042
 msgid "Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly."
-msgstr ""
+msgstr "Importa dados raster para um mapa raster GRASS usando a biblioteca GDAL e reprojeta em tempo real."
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:64
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1065
 msgid "Imports a raster map as GRASS GIS specific archive file (packed with r.pack)"
-msgstr ""
+msgstr "Importa um mapa raster como arquivo de arquivo específico do GRASS GIS (compactado com r.pack)"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:71
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1072
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
-msgstr ""
+msgstr "Importa dados vetoriais para um mapa vetorial GRASS usando a biblioteca OGR e reprojeta em tempo real."
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:88
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1089
 msgid "Imports a vector map as GRASS GIS specific archive file (packed with v.pack)"
-msgstr ""
+msgstr "Importa um mapa vetorial como arquivo de arquivo específico do GRASS GIS (empacotado com v.pack)"
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:132
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1133
 msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
-msgstr ""
+msgstr "Exporta uma camada de mapa vetorial para qualquer um dos formatos vetoriais OGR suportados. Por padrão, uma camada de mapa vetorial é exportada para o formato Esri Shapefile."
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:169
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1170
 msgid "Copies available data files in the current mapset search path to the user's current mapset."
-msgstr ""
+msgstr "Copia os arquivos de dados disponíveis no caminho de pesquisa do mapset atual para o mapset atual do usuário."
 
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:327
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:381
