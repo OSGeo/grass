@@ -230,6 +230,7 @@ def extract_tar(name, directory, tmpdir):
 
 extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
 
+
 # based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
 def reporthook(count, block_size, total_size):
     global start_time
