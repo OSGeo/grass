@@ -295,7 +295,7 @@ int I_write_signatures(FILE * fd, struct Signature *S)
  * \return err_array two comma separated lists of mismatches
  */
 char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
-    unsigned int c, i, j, complete;
+    unsigned int total, complete;
     unsigned int *match1, *match2, mc1, mc2, *new_order;
     double **new_means, ***new_vars;
     char **group_bandrefs, **mismatches, **new_bandrefs;
@@ -307,7 +307,7 @@ char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
 
     /* Obtain group band references */
     group_bandrefs = (char **)G_malloc(R->nfiles * sizeof(char **));
-    for (j = R->nfiles; j--;) {
+    for (unsigned int j = R->nfiles; j--;) {
         group_bandrefs[j] = Rast_read_bandref(R->file[j].name, R->file[j].mapset);
     }
 
@@ -323,16 +323,16 @@ char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
     new_bandrefs = (char **)G_malloc(S->nbands * sizeof(char **));
     new_means = (double **)G_malloc(S->nbands * sizeof(double *));
     new_vars = (double ***)G_malloc(S->nbands * sizeof(double **));
-    for (c = S->nsigs; c--;) {
+    for (unsigned int c = S->nsigs; c--;) {
         new_means[c] = (double *)G_malloc(S->nbands * sizeof(double));
         new_vars[c] = (double **)G_malloc(S->nbands * sizeof(double *));
-        for (i = S->nbands; i--;)
+        for (unsigned int i = S->nbands; i--;)
             new_vars[c][i] = (double *)G_malloc(S->nbands * sizeof(double));
     }
 
     /* Obtain order of matching items */
-    for (j = R->nfiles; j--;) {
-        for (i = S->nbands; i--;) {
+    for (unsigned int j = R->nfiles; j--;) {
+        for (unsigned int i = S->nbands; i--;) {
             if (S->bandrefs[i] && group_bandrefs[j] &&
                 !strcmp(S->bandrefs[i], group_bandrefs[j])) {
                     if (complete) {
@@ -353,68 +353,81 @@ char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
     mismatches = (char **)G_malloc(2 * sizeof(char **));
     mismatches[0] = NULL;
     mismatches[1] = NULL;
-    for (i = 0; i < S->nbands; i++) {
-        if (!match1[i] && S->bandrefs[i]) {
-            mismatches[0] = (char *)G_realloc(mismatches[0], (strlen(S->bandrefs[i]) + 2) * sizeof(char *));
+    total = 1;
+    for (unsigned int i = 0; i < S->nbands; i++) {
+        if (!match1[i]) {
+            if (S->bandrefs[i])
+                total = total + strlen(S->bandrefs[i]);
+            else
+                total = total + 24;
+            mismatches[0] = (char *)G_realloc(mismatches[0], total * sizeof(char *));
             if (mc1)
                 strcat(mismatches[0], ",");
             else
                 mismatches[0][0] = '\0';
-            strcat(mismatches[0], S->bandrefs[i]);
+            if (S->bandrefs[i])
+                strcat(mismatches[0], S->bandrefs[i]);
+            else
+                strcat(mismatches[0], "<band reference missing>");
             mc1++;
         }
     }
-    for (j = 0; j < R->nfiles; j++) {
-        if (!match2[j] && group_bandrefs[j]) {
-            mismatches[1] = (char *)G_realloc(mismatches[1], (strlen(group_bandrefs[j]) + 2) * sizeof(char *));
+    total = 1;
+    for (unsigned int j = 0; j < R->nfiles; j++) {
+        if (!match2[j]) {
+            if (group_bandrefs[j])
+                total = total + strlen(group_bandrefs[j]);
+            else
+                total = total + 24;
+            mismatches[1] = (char *)G_realloc(mismatches[1], total * sizeof(char *));
             if (mc2)
                 strcat(mismatches[1], ",");
             else
                 mismatches[1][0] = '\0';
-            strcat(mismatches[1], group_bandrefs[j]);
+            if (group_bandrefs[j])
+                strcat(mismatches[1], group_bandrefs[j]);
+            else
+                strcat(mismatches[1], "<band reference missing>");
             mc2++;
         }
     }
 
     /* Swap var matrix values in each of classes */
     if (!mc1 && !mc2) {
-        for (c = S->nsigs; c--;) {
+        for (unsigned int c = S->nsigs; c--;) {
             for (unsigned int b1 = 0; b1 < S->nbands; b1++) {
                 new_means[c][new_order[b1]] = S->sig[c].mean[b1];
                 for (unsigned int b2 = 0; b2 <= b1; b2++) {
                     if (new_order[b1] > new_order[b2]) {
-                        i = new_order[b1];
-                        j = new_order[b2];
+                        new_vars[c][new_order[b1]][new_order[b2]] = S->sig[c].var[b1][b2];
                     }
                     else {
-                        i = new_order[b2];
-                        j = new_order[b1];
+                        new_vars[c][new_order[b2]][new_order[b1]] = S->sig[c].var[b1][b2];
                     }
-                    new_vars[c][i][j] = S->sig[c].var[b1][b2];
                 }
             }
         }
 
         /* Replace values in struct with ordered ones */
         memcpy(S->bandrefs, new_bandrefs, S->nbands * sizeof(char **));
-        for (c = S->nsigs; c--;) {
+        for (unsigned int c = S->nsigs; c--;) {
             memcpy(S->sig[c].mean, new_means[c], S->nbands * sizeof(double));
-            for (i = S->nbands; i--;)
+            for (unsigned int i = S->nbands; i--;)
                 memcpy(S->sig[c].var[i], new_vars[c][i], S->nbands * sizeof(double));
         }
     }
 
     /* Clean up */
-    for (j = R->nfiles; j--;)
+    for (unsigned int j = R->nfiles; j--;)
         free(group_bandrefs[j]);
     free(group_bandrefs);
     free(new_order);
     free(match1);
     free(match2);
     free(new_bandrefs);
-    for (c = S->nsigs; c--;) {
+    for (unsigned int c = S->nsigs; c--;) {
         free(new_means[c]);
-        for (i = S->nbands; i--;)
+        for (unsigned int i = S->nbands; i--;)
             free(new_vars[c][i]);
         free(new_vars[c]);
     }

@@ -103,6 +103,8 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(Sn.sig[0].var[0][0], 0.7)
 
         # Free signature struct after use
+        So.bandrefs[0] = None
+        I_free_signatures(ctypes.byref(So))
         I_free_signatures(ctypes.byref(Sn))
         self.assertEqual(Sn.nbands, 0)
         self.assertEqual(Sn.nsigs, 0)
@@ -142,6 +144,10 @@ class SignatureFileTestCase(TestCase):
         p_old_sigfile = I_fopen_signature_file_old(self.sig_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, -1)
+
+        So.bandrefs[0] = None
+        I_free_signatures(ctypes.byref(So))
+        I_free_signatures(ctypes.byref(Sn))
 
     def test_roundtrip_signature_v1_norgb_two_bands(self):
         """Test writing and reading back signature (v1) with two bands"""
@@ -217,6 +223,9 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(Sn.sig[1].var[1][1], 1.8)
 
         # Free signature struct after use
+        So.bandrefs[0] = None
+        So.bandrefs[1] = None
+        I_free_signatures(ctypes.byref(So))
         I_free_signatures(ctypes.byref(Sn))
         self.assertEqual(Sn.nbands, 0)
         self.assertEqual(Sn.nsigs, 0)
@@ -231,10 +240,12 @@ class SortSignaturesByBandrefTest(TestCase):
         cls.bandref1 = "The_Doors"
         cls.map2 = tempname(10)
         cls.bandref2 = "The_Who"
+        cls.map3 = tempname(10)
         cls.use_temp_region()
         cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
         cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map1))
         cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map2))
+        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map3))
         Rast_write_bandref(cls.map1, cls.bandref1)
         Rast_write_bandref(cls.map2, cls.bandref2)
 
@@ -243,6 +254,7 @@ class SortSignaturesByBandrefTest(TestCase):
         cls.del_temp_region()
         cls.runModule("g.remove", flags="f", type="raster", name=cls.map1)
         cls.runModule("g.remove", flags="f", type="raster", name=cls.map2)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.map3)
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
@@ -278,10 +290,11 @@ class SortSignaturesByBandrefTest(TestCase):
         S.bandrefs[0] = None  # C should not call free() on memory allocated by python
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
-        if ret[0]:
-            self.libc.free(ret[0])
-        if ret[1]:
-            self.libc.free(ret[1])
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
         self.libc.free(ret)
 
     def test_asymmetric_complete_difference(self):
@@ -320,10 +333,11 @@ class SortSignaturesByBandrefTest(TestCase):
         S.bandrefs[0] = None
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
-        if ret[0]:
-            self.libc.free(ret[0])
-        if ret[1]:
-            self.libc.free(ret[1])
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
         self.libc.free(ret)
 
     def test_missing_bandref(self):
@@ -334,6 +348,8 @@ class SortSignaturesByBandrefTest(TestCase):
         self.assertEqual(ret, 0)
         ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 1)
+        ret = I_add_file_to_group_ref(self.map3, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 2)
 
         # Prepare signature struct
         S = struct_Signature()
@@ -342,7 +358,7 @@ class SortSignaturesByBandrefTest(TestCase):
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 1)
         S.title = b"Signature title"
-        # S.bandrefs[0] = missing value
+        S.bandrefs[0] = None
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 42
@@ -355,16 +371,17 @@ class SortSignaturesByBandrefTest(TestCase):
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
-        self.assertFalse(sig_err)
-        self.assertEqual(ref_err, "The_Doors,The_Who")
+        self.assertEqual(sig_err, "<band reference missing>")
+        self.assertEqual(ref_err, "The_Doors,The_Who,<band reference missing>")
 
         # Clean up memory to help track memory leaks when run by valgrind
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
-        if ret[0]:
-            self.libc.free(ret[0])
-        if ret[1]:
-            self.libc.free(ret[1])
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
         self.libc.free(ret)
 
     def test_single_complete_match(self):
@@ -401,10 +418,11 @@ class SortSignaturesByBandrefTest(TestCase):
         S.bandrefs[0] = None
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
-        if ret[0]:
-            self.libc.free(ret[0])
-        if ret[1]:
-            self.libc.free(ret[1])
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
         self.libc.free(ret)
 
     def test_double_complete_match_reorder(self):
@@ -474,10 +492,11 @@ class SortSignaturesByBandrefTest(TestCase):
         S.bandrefs[1] = None
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
-        if ret[0]:
-            self.libc.free(ret[0])
-        if ret[1]:
-            self.libc.free(ret[1])
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
         self.libc.free(ret)
 
     def test_double_complete_match_same_order(self):
@@ -539,10 +558,11 @@ class SortSignaturesByBandrefTest(TestCase):
         S.bandrefs[1] = None
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
-        if ret[0]:
-            self.libc.free(ret[0])
-        if ret[1]:
-            self.libc.free(ret[1])
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
         self.libc.free(ret)
 
 
