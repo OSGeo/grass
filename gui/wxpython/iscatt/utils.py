@@ -22,6 +22,7 @@ def dist(x, y):
     d = x - y
     return np.sqrt(np.dot(d, d))
 
+
 # Code originate from matplotlib
 # https://matplotlib.org/3.0.0/_modules/matplotlib/mlab.html#dist_point_to_segment
 def dist_point_to_segment(p, s0, s1):

@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 import sys
 import wx
 import wx.aui
+
 try:
     import wx.lib.agw.infobar as IB
 except ImportError:
@@ -30,14 +31,16 @@ def GetCloseButtonBitmap(win, size, colBg, flags=0):
     of wx.RendererNative in certain wx versions.
     See https://github.com/wxWidgets/Phoenix/issues/1425."""
     renderer = wx.RendererNative.Get()
-    if hasattr(renderer, 'DrawTitleBarBitmap'):
+    if hasattr(renderer, "DrawTitleBarBitmap"):
         bmp = wx.Bitmap(*size)
         dc = wx.MemoryDC()
         dc.SelectObject(bmp)
         dc.SetBackground(wx.Brush(colBg))
         dc.Clear()
 
-        wx.RendererNative.Get().DrawTitleBarBitmap(win, dc, wx.Rect(size), wx.TITLEBAR_BUTTON_CLOSE, flags)
+        wx.RendererNative.Get().DrawTitleBarBitmap(
+            win, dc, wx.Rect(size), wx.TITLEBAR_BUTTON_CLOSE, flags
+        )
         dc.SelectObject(wx.NullBitmap)
     else:
         bmp = wx.ArtProvider.GetBitmap(wx.ART_CLOSE, wx.ART_BUTTON)
@@ -122,7 +125,7 @@ class InfoBar(IB.InfoBar):
         button.SetBackgroundColour(self._background_color)
         button.SetForegroundColour(self._foreground_color)
 
-        if wx.Platform == '__WXMAC__':
+        if wx.Platform == "__WXMAC__":
             # smaller buttons look better in the(narrow)info bar under OS X
             button.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
 
@@ -132,7 +135,9 @@ class InfoBar(IB.InfoBar):
             self.subSizerButtons.Add(self._button, wx.SizerFlags().Centre().Border())
             self._button.Show()
         else:
-            self.subSizerButtons.Insert(num_items - 1, button, wx.SizerFlags().Centre().Border())
+            self.subSizerButtons.Insert(
+                num_items - 1, button, wx.SizerFlags().Centre().Border()
+            )
 
         if self.IsShown():
             self.UpdateParent()

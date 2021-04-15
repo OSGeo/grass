@@ -41,6 +41,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from psmap.frame import PsMapFrame
@@ -52,10 +53,11 @@ def main():
     )
     frame.Show()
 
-    if options['file']:
-        frame.LoadFile(options['file'])
+    if options["file"]:
+        frame.LoadFile(options["file"])
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

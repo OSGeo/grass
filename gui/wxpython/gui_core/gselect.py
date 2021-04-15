@@ -55,7 +55,6 @@ import wx.lib.buttons as buttons
 import wx.lib.filebrowsebutton as filebrowse
 
 
-
 import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
@@ -63,27 +62,49 @@ from grass.exceptions import CalledModuleError
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
 from core.gcmd import RunCommand, GMessage, GWarning, GException
-from core.utils    import GetListOfLocations, GetListOfMapsets, \
-    GetFormats, rasterFormatExtension, vectorFormatExtension
+from core.utils import (
+    GetListOfLocations,
+    GetListOfMapsets,
+    GetFormats,
+    rasterFormatExtension,
+    vectorFormatExtension,
+)
 from core.utils import GetSettingsPath, GetValidLayerName, ListSortLower
 from core.utils import GetVectorNumberOfLayers
 from core.settings import UserSettings
 from core.debug import Debug
 from gui_core.vselect import VectorSelectBase
-from gui_core.wrap import TreeCtrl, Button, StaticText, StaticBox, \
-    TextCtrl, Panel, ComboPopup, ComboCtrl
+from gui_core.wrap import (
+    TreeCtrl,
+    Button,
+    StaticText,
+    StaticBox,
+    TextCtrl,
+    Panel,
+    ComboPopup,
+    ComboCtrl,
+)
 
 from grass.pydispatch.signal import Signal
 
 
 class Select(ComboCtrl):
-
     def __init__(
-            self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type=None, multiple=False, nmaps=1, mapsets=None,
-            updateOnPopup=True, onPopup=None, fullyQualified=True,
-            extraItems={},
-            layerTree=None, validator=wx.DefaultValidator):
+        self,
+        parent,
+        id=wx.ID_ANY,
+        size=globalvar.DIALOG_GSELECT_SIZE,
+        type=None,
+        multiple=False,
+        nmaps=1,
+        mapsets=None,
+        updateOnPopup=True,
+        onPopup=None,
+        fullyQualified=True,
+        extraItems={},
+        layerTree=None,
+        validator=wx.DefaultValidator,
+    ):
         """Custom control to create a ComboBox with a tree control to
         display and select GIS elements within acessible mapsets.
         Elements can be selected with mouse. Can allow multiple
@@ -101,12 +122,7 @@ class Select(ComboCtrl):
         :param layerTree: show only elements from given layer tree if not None
         :param validator: validator for TextCtrl
         """
-        ComboCtrl.__init__(
-            self,
-            parent=parent,
-            id=id,
-            size=size,
-            validator=validator)
+        ComboCtrl.__init__(self, parent=parent, id=id, size=size, validator=validator)
         if globalvar.CheckWxVersion([3]):
             self.SetName("Select")
         else:
@@ -127,7 +143,8 @@ class Select(ComboCtrl):
                 onPopup=onPopup,
                 fullyQualified=fullyQualified,
                 extraItems=extraItems,
-                layerTree=layerTree)
+                layerTree=layerTree,
+            )
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def OnKeyDown(self, event):
@@ -154,19 +171,30 @@ class Select(ComboCtrl):
         """Load elements"""
         self.tcp.GetElementList()
 
-    def SetType(self, etype, multiple=False, nmaps=1,
-                mapsets=None, updateOnPopup=True, onPopup=None):
+    def SetType(
+        self,
+        etype,
+        multiple=False,
+        nmaps=1,
+        mapsets=None,
+        updateOnPopup=True,
+        onPopup=None,
+    ):
         """Param set element type for widget
 
         :param etype: element type, see gselect.ElementSelect
         """
-        self.tcp.SetData(type=etype, mapsets=mapsets,
-                         multiple=multiple, nmaps=nmaps,
-                         updateOnPopup=updateOnPopup, onPopup=onPopup)
+        self.tcp.SetData(
+            type=etype,
+            mapsets=mapsets,
+            multiple=multiple,
+            nmaps=nmaps,
+            updateOnPopup=updateOnPopup,
+            onPopup=onPopup,
+        )
 
 
 class VectorSelect(Select):
-
     def __init__(self, parent, ftype, **kwargs):
         """Custom to create a ComboBox with a tree control to display and
         select vector maps. You can filter the vector maps. If you
@@ -174,8 +202,7 @@ class VectorSelect(Select):
 
         :param ftype: filter vector maps based on feature type
         """
-        Select.__init__(self, parent=parent, id=wx.ID_ANY,
-                        type='vector', **kwargs)
+        Select.__init__(self, parent=parent, id=wx.ID_ANY, type="vector", **kwargs)
 
         self.ftype = ftype
 
@@ -202,24 +229,28 @@ class ListCtrlComboPopup(ComboPopup):
         https://groups.google.com/forum/#!topic/wxpython-users/pRz6bi0k0XY
 
     """
+
     # overridden ComboPopup methods
 
     def Init(self):
-        self.value = []            # for multiple is False ->
+        self.value = []  # for multiple is False ->
         # len(self.value) in [0,1]
         self.curitem = None
         self.multiple = False
         self.updateOnPopup = True
-        self.filterItems = []      # limit items based on this list,
+        self.filterItems = []  # limit items based on this list,
         # see layerTree parameter
 
     def Create(self, parent):
-        self.seltree = TreeCtrl(parent, style=wx.TR_HIDE_ROOT |
-                                wx.TR_HAS_BUTTONS |
-                                wx.TR_SINGLE |
-                                wx.TR_LINES_AT_ROOT |
-                                wx.SIMPLE_BORDER |
-                                wx.TR_FULL_ROW_HIGHLIGHT)
+        self.seltree = TreeCtrl(
+            parent,
+            style=wx.TR_HIDE_ROOT
+            | wx.TR_HAS_BUTTONS
+            | wx.TR_SINGLE
+            | wx.TR_LINES_AT_ROOT
+            | wx.SIMPLE_BORDER
+            | wx.TR_FULL_ROW_HIGHLIGHT,
+        )
         self.seltree.Bind(wx.EVT_MOTION, self.OnMotion)
         self.seltree.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         # the following dummy handler are needed to keep tree events
@@ -234,9 +265,7 @@ class ListCtrlComboPopup(ComboPopup):
         # for older versions, we have to workaround it and write our own
         # navigation
         if globalvar.CheckWxVersion(version=[3]):
-            self.seltree.Bind(
-                wx.EVT_TREE_ITEM_ACTIVATED,
-                self._onItemConfirmed)
+            self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._onItemConfirmed)
             self.seltree.Bind(wx.EVT_TREE_KEY_DOWN, self._onDismissPopup)
         else:
             self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, lambda x: None)
@@ -254,23 +283,21 @@ class ListCtrlComboPopup(ComboPopup):
             return self.GetCombo()
 
     def GetStringValue(self):
-        """Get value as a string separated by commas
-        """
-        return ','.join(self.value)
+        """Get value as a string separated by commas"""
+        return ",".join(self.value)
 
     def SetStringValue(self, value):
         # this assumes that item strings are unique...
         root = self.seltree.GetRootItem()
         if not root:
             return
-        winValue = self.GetComboCtrl().GetValue().strip(',')
+        winValue = self.GetComboCtrl().GetValue().strip(",")
         self.value = []
         if winValue:
-            self.value = winValue.split(',')
+            self.value = winValue.split(",")
 
     def OnPopup(self, force=False):
-        """Limited only for first selected
-        """
+        """Limited only for first selected"""
         if not force and not self.updateOnPopup:
             return
 
@@ -284,17 +311,14 @@ class ListCtrlComboPopup(ComboPopup):
                 self.seltree.SelectItem(match)
 
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
-        """Reads UserSettings to get height (which was 200 in old implementation).
-        """
+        """Reads UserSettings to get height (which was 200 in old implementation)."""
         height = UserSettings.Get(
-            group='appearance',
-            key='gSelectPopupHeight',
-            subkey='value')
+            group="appearance", key="gSelectPopupHeight", subkey="value"
+        )
         return wx.Size(minWidth, min(height, maxHeight))
 
     def FindItem(self, parentItem, text, startLetters=False):
-        """Finds item with given name or starting with given text
-        """
+        """Finds item with given name or starting with given text"""
         startletters = startLetters
         item, cookie = self.seltree.GetFirstChild(parentItem)
         while wx.TreeItemId.IsOk(item):
@@ -304,7 +328,9 @@ class ListCtrlComboPopup(ComboPopup):
                 item = self.FindItem(item, text, startLetters=startletters)
                 if wx.TreeItemId.IsOk(item):
                     return item
-            elif startletters and self.seltree.GetItemText(item).startswith(text.split('@', 1)[0]):
+            elif startletters and self.seltree.GetItemText(item).startswith(
+                text.split("@", 1)[0]
+            ):
                 return item
             item, cookie = self.seltree.GetNextChild(parentItem, cookie)
         return wx.TreeItemId()
@@ -365,8 +391,7 @@ class ListCtrlComboPopup(ComboPopup):
         self.Dismiss()
 
     def OnMotion(self, evt):
-        """Have the selection follow the mouse, like in a real combobox
-        """
+        """Have the selection follow the mouse, like in a real combobox"""
         item, flags = self.seltree.HitTest(evt.GetPosition())
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
             self.seltree.SelectItem(item)
@@ -374,8 +399,7 @@ class ListCtrlComboPopup(ComboPopup):
         evt.Skip()
 
     def OnLeftDown(self, evt):
-        """Do the combobox selection
-        """
+        """Do the combobox selection"""
         if self.curitem is None:
             return
 
@@ -386,15 +410,14 @@ class ListCtrlComboPopup(ComboPopup):
 
     def SetData(self, **kargs):
         """Set object properties"""
-        if 'multiple' in kargs:
-            self.multiple = kargs['multiple']
-        if 'onPopup' in kargs:
-            self.onPopup = kargs['onPopup']
-        if kargs.get('layerTree', None):
+        if "multiple" in kargs:
+            self.multiple = kargs["multiple"]
+        if "onPopup" in kargs:
+            self.onPopup = kargs["onPopup"]
+        if kargs.get("layerTree", None):
             self.filterItems = []  # reset
-            ltype = kargs['type']
-            for layer in kargs['layerTree'].GetVisibleLayers(
-                    skipDigitized=True):
+            ltype = kargs["type"]
+            for layer in kargs["layerTree"].GetVisibleLayers(skipDigitized=True):
                 if layer.GetType() != ltype:
                     continue
                 self.filterItems.append(layer.GetName())
@@ -408,6 +431,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
     """Create a tree ComboBox for selecting maps and other GIS elements
     in accessible mapsets within the current location
     """
+
     # overridden ComboPopup methods
 
     def Init(self):
@@ -462,8 +486,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             except:
                 pass
 
-    def _getElementList(self, element, mapsets=None,
-                        elements=None, exclude=False):
+    def _getElementList(self, element, mapsets=None, elements=None, exclude=False):
         """Get list of GIS elements in accessible mapsets and display as tree
         with all relevant elements displayed beneath each mapset branch
 
@@ -473,44 +496,45 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         :param exclude: True to exclude, False for forcing the list (elements)
         """
         # get current mapset
-        curr_mapset = grass.gisenv()['MAPSET']
+        curr_mapset = grass.gisenv()["MAPSET"]
 
         # map element types to g.list types
-        elementdict = {'cell': 'raster',
-                       'raster': 'raster',
-                       'grid3': 'raster_3d',
-                       'raster_3d': 'raster_3d',
-                       'vector': 'vector',
-                       'paint/labels': 'label',
-                       'label': 'label',
-                       'windows': 'region',
-                       'region': 'region',
-                       'group': 'group',
-                       'stds': 'stds',
-                       'strds': 'strds',
-                       'str3ds': 'str3ds',
-                       'stvds': 'stvds'}
+        elementdict = {
+            "cell": "raster",
+            "raster": "raster",
+            "grid3": "raster_3d",
+            "raster_3d": "raster_3d",
+            "vector": "vector",
+            "paint/labels": "label",
+            "label": "label",
+            "windows": "region",
+            "region": "region",
+            "group": "group",
+            "stds": "stds",
+            "strds": "strds",
+            "str3ds": "str3ds",
+            "stvds": "stvds",
+        }
 
         # to support multiple elements
-        element_list = element.split(',')
+        element_list = element.split(",")
         renamed_elements = []
         for elem in element_list:
             if elem not in elementdict:
-                self.AddItem(_('Not selectable element'), node=False)
+                self.AddItem(_("Not selectable element"), node=False)
                 return
             else:
                 renamed_elements.append(elementdict[elem])
 
-        if element in ('stds', 'strds', 'str3ds', 'stvds'):
+        if element in ("stds", "strds", "str3ds", "stvds"):
             if not self.tgis_error:
                 import grass.temporal as tgis
-                filesdict = tgis.tlist_grouped(
-                    elementdict[element], element == 'stds')
+
+                filesdict = tgis.tlist_grouped(elementdict[element], element == "stds")
             else:
                 filesdict = None
         else:
-            filesdict = grass.list_grouped(renamed_elements,
-                                           check_search_path=False)
+            filesdict = grass.list_grouped(renamed_elements, check_search_path=False)
 
         # add extra items first
         if self.extraItems:
@@ -533,7 +557,8 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         first_mapset = None
         for mapset in mapsets:
             mapset_node = self.AddItem(
-                _('Mapset') + ': ' + mapset, node=True, mapset=mapset)
+                _("Mapset") + ": " + mapset, node=True, mapset=mapset
+            )
             node = mapset_node
             if not first_mapset:
                 first_mapset = mapset_node
@@ -545,39 +570,44 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 if isinstance(filesdict[mapset], dict):
                     for elementType in filesdict[mapset].keys():
                         node = self.AddItem(
-                            _('Type: ') + elementType,
+                            _("Type: ") + elementType,
                             mapset=mapset,
                             node=True,
-                            parent=mapset_node)
-                        self.seltree.SetItemTextColour(
-                            node, wx.Colour(50, 50, 200))
+                            parent=mapset_node,
+                        )
+                        self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
                         elem_list = filesdict[mapset][elementType]
                         self._addItems(
                             elist=elem_list,
                             elements=elements,
                             mapset=mapset,
                             exclude=exclude,
-                            node=node)
+                            node=node,
+                        )
                 else:
                     elem_list = filesdict[mapset]
-                    self._addItems(elist=elem_list, elements=elements,
-                                   mapset=mapset, exclude=exclude, node=node)
+                    self._addItems(
+                        elist=elem_list,
+                        elements=elements,
+                        mapset=mapset,
+                        exclude=exclude,
+                        node=node,
+                    )
             except Exception as e:
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
 
             if self.seltree.ItemHasChildren(mapset_node):
                 sel = UserSettings.Get(
-                    group='appearance',
-                    key='elementListExpand',
-                    subkey='selection')
+                    group="appearance", key="elementListExpand", subkey="selection"
+                )
                 collapse = True
 
                 if sel == 0:  # collapse all except PERMANENT and current
-                    if mapset in ('PERMANENT', curr_mapset):
+                    if mapset in ("PERMANENT", curr_mapset):
                         collapse = False
                 elif sel == 1:  # collapse all except PERMANENT
-                    if mapset == 'PERMANENT':
+                    if mapset == "PERMANENT":
                         collapse = False
                 elif sel == 2:  # collapse all except current
                     if mapset == curr_mapset:
@@ -608,20 +638,20 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         """
         elist = grass.naturally_sorted(elist)
         for elem in elist:
-            if elem != '':
-                fullqElem = elem + '@' + mapset
+            if elem != "":
+                fullqElem = elem + "@" + mapset
                 if self.filterItems and fullqElem not in self.filterItems:
                     continue  # skip items missed in self.filterItems
 
                 if elements is not None:
-                    if (exclude and fullqElem in elements) or \
-                            (not exclude and fullqElem not in elements):
+                    if (exclude and fullqElem in elements) or (
+                        not exclude and fullqElem not in elements
+                    ):
                         continue
 
                 if self.filterElements:
                     if self.filterElements(fullqElem):
-                        self.AddItem(
-                            elem, mapset=mapset, node=False, parent=node)
+                        self.AddItem(elem, mapset=mapset, node=False, parent=node)
                 else:
                     self.AddItem(elem, mapset=mapset, node=False, parent=node)
 
@@ -632,10 +662,9 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 root = self.seltree.AddRoot("<hidden root>")
             parent = root
 
-        data = {'node': node, 'mapset': mapset}
+        data = {"node": node, "mapset": mapset}
 
-        item = self.seltree.AppendItem(
-            parent, text=value, data=data)
+        item = self.seltree.AppendItem(parent, text=value, data=data)
         return item
 
     def OnKeyUp(self, event):
@@ -651,15 +680,17 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         # problem with GetPrevVisible
         elif event.GetKeyCode() == wx.WXK_UP:
             if self.seltree.ItemHasChildren(item) and self.seltree.IsExpanded(
-                    self.seltree.GetPrevSibling(item)):
-                itemPrev = self.seltree.GetLastChild(
-                    self.seltree.GetPrevSibling(item))
+                self.seltree.GetPrevSibling(item)
+            ):
+                itemPrev = self.seltree.GetLastChild(self.seltree.GetPrevSibling(item))
             else:
                 itemPrev = self.seltree.GetPrevSibling(item)
                 if not wx.TreeItemId.IsOk(itemPrev):
                     itemPrev = self.seltree.GetItemParent(item)
-                    if item == self.seltree.GetFirstChild(
-                            self.seltree.GetRootItem())[0]:
+                    if (
+                        item
+                        == self.seltree.GetFirstChild(self.seltree.GetRootItem())[0]
+                    ):
                         itemPrev = item
             self.seltree.SelectItem(itemPrev)
 
@@ -673,13 +704,14 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             nextSibling = self.seltree.GetNextSibling(parent)
             if wx.TreeItemId.IsOk(nextSibling):
                 match = self.FindItem(
-                    nextSibling, self.GetCombo().GetValue().strip(), True)
+                    nextSibling, self.GetCombo().GetValue().strip(), True
+                )
             else:
                 match = self.FindItem(
-                    self.seltree.GetFirstChild(
-                        self.seltree.GetItemParent(parent))[0],
+                    self.seltree.GetFirstChild(self.seltree.GetItemParent(parent))[0],
                     self.GetCombo().GetValue().strip(),
-                    True)
+                    True,
+                )
             self.seltree.SelectItem(match)
 
         elif event.GetKeyCode() == wx.WXK_RIGHT:
@@ -694,7 +726,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             self.Dismiss()
 
         elif event.GetKeyCode() == wx.WXK_RETURN:
-            if self.seltree.GetItemData(item)['node']:
+            if self.seltree.GetItemData(item)["node"]:
                 self.value = []
             else:
                 self._selectTreeItem(item)
@@ -702,13 +734,12 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             self.Dismiss()
 
     def OnLeftDown(self, evt):
-        """Do the combobox selection
-        """
+        """Do the combobox selection"""
         item, flags = self.seltree.HitTest(evt.GetPosition())
         if item and flags & wx.TREE_HITTEST_ONITEMLABEL:
             self.curitem = item
 
-            if self.seltree.GetItemData(item)['node']:
+            if self.seltree.GetItemData(item)["node"]:
                 evt.Skip()
                 return
 
@@ -719,8 +750,8 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
     def _selectTreeItem(self, item):
         fullName = self.seltree.GetItemText(item)
-        if self.fullyQualified and self.seltree.GetItemData(item)['mapset']:
-            fullName += '@' + self.seltree.GetItemData(item)['mapset']
+        if self.fullyQualified and self.seltree.GetItemData(item)["mapset"]:
+            fullName += "@" + self.seltree.GetItemData(item)["mapset"]
 
         if self.multiple:
             self.value.append(fullName)
@@ -735,7 +766,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
     def _onItemConfirmed(self, event):
         item = event.GetItem()
-        if self.seltree.GetItemData(item)['node']:
+        if self.seltree.GetItemData(item)["node"]:
             self.value = []
         else:
             self._selectTreeItem(item)
@@ -744,14 +775,15 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
     def SetData(self, **kargs):
         """Set object properties"""
         ListCtrlComboPopup.SetData(self, **kargs)
-        if 'type' in kargs:
-            self.type = kargs['type']
-            if self.type in ('stds', 'strds', 'str3ds', 'stvds'):
+        if "type" in kargs:
+            self.type = kargs["type"]
+            if self.type in ("stds", "strds", "str3ds", "stvds"):
                 # Initiate the temporal framework. Catch database error
                 # and set the error flag for the stds listing.
                 try:
                     import grass.temporal as tgis
                     from grass.pygrass import messages
+
                     try:
                         tgis.init(True)
                     except messages.FatalError as e:
@@ -759,24 +791,27 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                         self.tgis_error = True
                 except ImportError as e:
                     # PyGRASS (ctypes) is the likely cause
-                    sys.stderr.write(_(
-                        "Unable to import pyGRASS: %s\n"
-                        "Some functionality will be not accessible") % e)
+                    sys.stderr.write(
+                        _(
+                            "Unable to import pyGRASS: %s\n"
+                            "Some functionality will be not accessible"
+                        )
+                        % e
+                    )
                     self.tgis_error = True
-        if 'mapsets' in kargs:
-            self.mapsets = kargs['mapsets']
-        if 'nmaps' in kargs:
-            self.nmaps = kargs['nmaps']
-        if 'updateOnPopup' in kargs:
-            self.updateOnPopup = kargs['updateOnPopup']
-        if 'fullyQualified' in kargs:
-            self.fullyQualified = kargs['fullyQualified']
-        if 'extraItems' in kargs:
-            self.extraItems = kargs['extraItems']
+        if "mapsets" in kargs:
+            self.mapsets = kargs["mapsets"]
+        if "nmaps" in kargs:
+            self.nmaps = kargs["nmaps"]
+        if "updateOnPopup" in kargs:
+            self.updateOnPopup = kargs["updateOnPopup"]
+        if "fullyQualified" in kargs:
+            self.fullyQualified = kargs["fullyQualified"]
+        if "extraItems" in kargs:
+            self.extraItems = kargs["extraItems"]
 
     def GetType(self):
-        """Get element type
-        """
+        """Get element type"""
         return self.type
 
 
@@ -800,7 +835,7 @@ class VectorDBInfo:
 
     def _CheckDBConnection(self):
         """Check DB connection"""
-        nuldev = open(os.devnull, 'w+')
+        nuldev = open(os.devnull, "w+")
         # if map is not defined (happens with vnet initialization) or it
         # doesn't exist
         try:
@@ -821,14 +856,18 @@ class VectorDBInfo:
             i = 0
             Debug.msg(
                 1,
-                "gselect.VectorDBInfo._DescribeTables(): table=%s driver=%s database=%s" %
-                (self.layers[layer]["table"],
-                 self.layers[layer]["driver"],
-                 self.layers[layer]["database"]))
+                "gselect.VectorDBInfo._DescribeTables(): table=%s driver=%s database=%s"
+                % (
+                    self.layers[layer]["table"],
+                    self.layers[layer]["driver"],
+                    self.layers[layer]["database"],
+                ),
+            )
             for item in grass.db_describe(
-                    table=self.layers[layer]["table"],
-                    driver=self.layers[layer]["driver"],
-                    database=self.layers[layer]["database"])['cols']:
+                table=self.layers[layer]["table"],
+                driver=self.layers[layer]["driver"],
+                database=self.layers[layer]["database"],
+            )["cols"]:
                 name, type, length = item
                 # FIXME: support more datatypes
                 if type.lower() == "integer":
@@ -838,12 +877,14 @@ class VectorDBInfo:
                 else:
                     ctype = str
 
-                columns[name.strip()] = {'index': i,
-                                         'type': type.lower(),
-                                         'ctype': ctype,
-                                         'length': int(length),
-                                         'values': [],
-                                         'ids': []}
+                columns[name.strip()] = {
+                    "index": i,
+                    "type": type.lower(),
+                    "ctype": ctype,
+                    "length": int(length),
+                    "values": [],
+                    "ids": [],
+                }
                 i += 1
 
             # check for key column
@@ -863,8 +904,8 @@ class VectorDBInfo:
         for layer in self.layers:
             table = self.layers[layer]["table"]  # get table desc
             for name in self.tables[table].keys():
-                self.tables[table][name]['values'] = []
-                self.tables[table][name]['ids'] = []
+                self.tables[table][name]["values"] = []
+                self.tables[table][name]["ids"] = []
 
     def GetName(self):
         """Get vector name"""
@@ -875,7 +916,7 @@ class VectorDBInfo:
 
         :param layer: vector layer number
         """
-        return str(self.layers[layer]['key'])
+        return str(self.layers[layer]["key"])
 
     def GetTable(self, layer):
         """Get table name of given layer
@@ -884,7 +925,7 @@ class VectorDBInfo:
         """
         if layer not in self.layers:
             raise GException(_("No table linked to layer <{}>.".format(layer)))
-        return self.layers[layer]['table']
+        return self.layers[layer]["table"]
 
     def GetDbSettings(self, layer):
         """Get database settings
@@ -893,7 +934,7 @@ class VectorDBInfo:
 
         :return: (driver, database)
         """
-        return self.layers[layer]['driver'], self.layers[layer]['database']
+        return self.layers[layer]["driver"], self.layers[layer]["database"]
 
     def GetTableDesc(self, table):
         """Get table columns
@@ -904,22 +945,23 @@ class VectorDBInfo:
 
 
 class LayerSelect(wx.ComboBox):
-
-    def __init__(self, parent, id=wx.ID_ANY,
-                 size=globalvar.DIALOG_COMBOBOX_SIZE,
-                 vector=None, dsn=None, choices=[], all=False, default=None):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        size=globalvar.DIALOG_COMBOBOX_SIZE,
+        vector=None,
+        dsn=None,
+        choices=[],
+        all=False,
+        default=None,
+    ):
         """Creates combo box for selecting vector map layer names
 
         :param str vector: vector map name (native or connected via v.external)
         :param str dsn: OGR data source name
         """
-        super(
-            LayerSelect,
-            self).__init__(
-            parent,
-            id,
-            size=size,
-            choices=choices)
+        super(LayerSelect, self).__init__(parent, id, size=size, choices=choices)
 
         self.all = all
 
@@ -941,11 +983,7 @@ class LayerSelect(wx.ComboBox):
         if vector:
             layers = GetVectorNumberOfLayers(vector)
         elif dsn:
-            ret = RunCommand('v.in.ogr',
-                             read=True,
-                             quiet=True,
-                             flags='l',
-                             input=dsn)
+            ret = RunCommand("v.in.ogr", read=True, quiet=True, flags="l", input=dsn)
             if ret:
                 layers = ret.splitlines()
 
@@ -956,7 +994,7 @@ class LayerSelect(wx.ComboBox):
                 layers.append(self.default)
 
         if self.all:
-            layers.insert(0, '-1')
+            layers.insert(0, "-1")
 
         if len(layers) > 0:
             self.SetItems(layers)
@@ -970,15 +1008,22 @@ class LayerSelect(wx.ComboBox):
 
 
 class DriverSelect(wx.ComboBox):
-    """Creates combo box for selecting database driver.
-    """
+    """Creates combo box for selecting database driver."""
 
-    def __init__(self, parent, choices, value,
-                 id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=globalvar.DIALOG_LAYER_SIZE, **kargs):
+    def __init__(
+        self,
+        parent,
+        choices,
+        value,
+        id=wx.ID_ANY,
+        pos=wx.DefaultPosition,
+        size=globalvar.DIALOG_LAYER_SIZE,
+        **kargs,
+    ):
 
-        super(DriverSelect, self).__init__(parent, id, value, pos, size,
-                                           choices, style=wx.CB_READONLY)
+        super(DriverSelect, self).__init__(
+            parent, id, value, pos, size, choices, style=wx.CB_READONLY
+        )
 
         self.SetName("DriverSelect")
 
@@ -986,39 +1031,35 @@ class DriverSelect(wx.ComboBox):
 
 
 class DatabaseSelect(TextCtrl):
-    """Creates combo box for selecting database driver.
-    """
+    """Creates combo box for selecting database driver."""
 
-    def __init__(self, parent, value='', id=wx.ID_ANY,
-                 size=globalvar.DIALOG_TEXTCTRL_SIZE, **kargs):
-        super(
-            DatabaseSelect,
-            self).__init__(
-            parent,
-            id,
-            value,
-            size=size,
-            **kargs)
+    def __init__(
+        self,
+        parent,
+        value="",
+        id=wx.ID_ANY,
+        size=globalvar.DIALOG_TEXTCTRL_SIZE,
+        **kargs,
+    ):
+        super(DatabaseSelect, self).__init__(parent, id, value, size=size, **kargs)
         self.SetName("DatabaseSelect")
 
 
 class TableSelect(wx.ComboBox):
-    """Creates combo box for selecting attribute tables from the database
-    """
+    """Creates combo box for selecting attribute tables from the database"""
 
-    def __init__(self, parent,
-                 id=wx.ID_ANY, value='',
-                 size=globalvar.DIALOG_COMBOBOX_SIZE, choices=[], **kargs):
-        super(
-            TableSelect,
-            self).__init__(
-            parent,
-            id,
-            value,
-            size=size,
-            choices=choices,
-            style=wx.CB_READONLY,
-            **kargs)
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        value="",
+        size=globalvar.DIALOG_COMBOBOX_SIZE,
+        choices=[],
+        **kargs,
+    ):
+        super(TableSelect, self).__init__(
+            parent, id, value, size=size, choices=choices, style=wx.CB_READONLY, **kargs
+        )
         self.SetName("TableSelect")
 
         if not choices:
@@ -1031,21 +1072,19 @@ class TableSelect(wx.ComboBox):
         if not driver or not database:
             connect = grass.db_connection()
 
-            driver = connect['driver']
-            database = connect['database']
+            driver = connect["driver"]
+            database = connect["database"]
 
-        ret = RunCommand('db.tables',
-                         flags='p',
-                         read=True,
-                         driver=driver,
-                         database=database)
+        ret = RunCommand(
+            "db.tables", flags="p", read=True, driver=driver, database=database
+        )
 
         if ret:
             for table in ret.splitlines():
                 items.append(table)
 
         self.SetItems(items)
-        self.SetValue('')
+        self.SetValue("")
 
 
 class ColumnSelect(ComboCtrl):
@@ -1063,10 +1102,18 @@ class ColumnSelect(ComboCtrl):
     :param kwags: wx.ComboBox parameters
     """
 
-    def __init__(self, parent, id=wx.ID_ANY, value='',
-                 size=globalvar.DIALOG_COMBOBOX_SIZE,
-                 vector=None, layer=1, multiple=False,
-                 param=None, **kwargs):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        value="",
+        size=globalvar.DIALOG_COMBOBOX_SIZE,
+        vector=None,
+        layer=1,
+        multiple=False,
+        param=None,
+        **kwargs,
+    ):
         self.defaultValue = value
         self.param = param
         self.columns = []
@@ -1095,10 +1142,11 @@ class ColumnSelect(ComboCtrl):
 
     def Clear(self):
         self.tcp.DeleteAllItems()
-        self.SetValue('')
+        self.SetValue("")
 
-    def InsertColumns(self, vector, layer, excludeKey=False,
-                      excludeCols=None, type=None, dbInfo=None):
+    def InsertColumns(
+        self, vector, layer, excludeKey=False, excludeCols=None, type=None, dbInfo=None
+    ):
         """Insert columns for a vector attribute table into the columns combobox
 
         :param str vector: vector name
@@ -1119,9 +1167,9 @@ class ColumnSelect(ComboCtrl):
             table = dbInfo.GetTable(layer)
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
-            self.columns = len(columnchoices.keys()) * ['']
+            self.columns = len(columnchoices.keys()) * [""]
             for key, val in six.iteritems(columnchoices):
-                self.columns[val['index']] = key
+                self.columns[val["index"]] = key
             if excludeKey:  # exclude key column
                 self.columns.remove(keyColumn)
             if excludeCols:  # exclude key column
@@ -1130,7 +1178,7 @@ class ColumnSelect(ComboCtrl):
                         self.columns.remove(key)
             if type:  # only selected column types
                 for key, value in six.iteritems(columnchoices):
-                    if value['type'] not in type:
+                    if value["type"] not in type:
                         try:
                             self.columns.remove(key)
                         except ValueError:
@@ -1146,8 +1194,8 @@ class ColumnSelect(ComboCtrl):
         self.SetValue(self.defaultValue)
 
         if self.param:
-            value = self.param.get('value', '')
-            if value != '' and value in self.columns:
+            value = self.param.get("value", "")
+            if value != "" and value in self.columns:
                 self.SetValue(value)
 
     def InsertTableColumns(self, table, driver=None, database=None):
@@ -1159,11 +1207,9 @@ class ColumnSelect(ComboCtrl):
         """
         self.columns[:] = []
 
-        ret = RunCommand('db.columns',
-                         read=True,
-                         driver=driver,
-                         database=database,
-                         table=table)
+        ret = RunCommand(
+            "db.columns", read=True, driver=driver, database=database, table=table
+        )
 
         if ret:
             self.columns = ret.splitlines()
@@ -1175,8 +1221,8 @@ class ColumnSelect(ComboCtrl):
         for col in self.columns:
             self.tcp.AddItem(col)
         if self.param:
-            value = self.param.get('value', '')
-            if value != '' and value in self.columns:
+            value = self.param.get("value", "")
+            if value != "" and value in self.columns:
                 self.SetValue(value)
 
 
@@ -1184,30 +1230,34 @@ class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):
     """Widget for selecting GRASS Database"""
 
     def __init__(self, parent, **kwargs):
-        super(
-            DbaseSelect,
-            self).__init__(
+        super(DbaseSelect, self).__init__(
             parent,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            labelText='',
-            dialogTitle=_('Choose GIS Data Directory'),
-            buttonText=_('Browse'),
-            startDirectory=grass.gisenv()['GISDBASE'],
-            **kwargs)
+            labelText="",
+            dialogTitle=_("Choose GIS Data Directory"),
+            buttonText=_("Browse"),
+            startDirectory=grass.gisenv()["GISDBASE"],
+            **kwargs,
+        )
 
 
 class LocationSelect(wx.ComboBox):
     """Widget for selecting GRASS location"""
 
     def __init__(
-            self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_COMBOBOX_SIZE,
-            gisdbase=None, **kwargs):
+        self,
+        parent,
+        id=wx.ID_ANY,
+        size=globalvar.DIALOG_COMBOBOX_SIZE,
+        gisdbase=None,
+        **kwargs,
+    ):
         super(LocationSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("LocationSelect")
 
         if not gisdbase:
-            self.gisdbase = grass.gisenv()['GISDBASE']
+            self.gisdbase = grass.gisenv()["GISDBASE"]
         else:
             self.gisdbase = gisdbase
 
@@ -1228,29 +1278,38 @@ class LocationSelect(wx.ComboBox):
 class MapsetSelect(wx.ComboBox):
     """Widget for selecting GRASS mapset"""
 
-    def __init__(self, parent, id=wx.ID_ANY,
-                 size=globalvar.DIALOG_COMBOBOX_SIZE, gisdbase=None,
-                 location=None, setItems=True, searchPath=False, new=False,
-                 skipCurrent=False, multiple=False, **kwargs):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        size=globalvar.DIALOG_COMBOBOX_SIZE,
+        gisdbase=None,
+        location=None,
+        setItems=True,
+        searchPath=False,
+        new=False,
+        skipCurrent=False,
+        multiple=False,
+        **kwargs,
+    ):
         style = 0
         # disabled, read-only widget has no TextCtrl children (TODO: rewrite)
         # if not new and not multiple:
         ###     style = wx.CB_READONLY
 
-        wx.ComboBox.__init__(self, parent, id, size=size,
-                             style=style, **kwargs)
+        wx.ComboBox.__init__(self, parent, id, size=size, style=style, **kwargs)
         self.searchPath = searchPath
         self.skipCurrent = skipCurrent
         self.SetName("MapsetSelect")
-        self.value = ''
+        self.value = ""
         self.multiple = multiple
         if not gisdbase:
-            self.gisdbase = grass.gisenv()['GISDBASE']
+            self.gisdbase = grass.gisenv()["GISDBASE"]
         else:
             self.gisdbase = gisdbase
 
         if not location:
-            self.location = grass.gisenv()['LOCATION_NAME']
+            self.location = grass.gisenv()["LOCATION_NAME"]
         else:
             self.location = location
 
@@ -1265,7 +1324,7 @@ class MapsetSelect(wx.ComboBox):
         value = self.GetValue()
         if value:
             if self.value:
-                self.value += ','
+                self.value += ","
             self.value += value
             self.SetValue(self.value)
         else:
@@ -1290,18 +1349,19 @@ class MapsetSelect(wx.ComboBox):
 
     def _getMapsets(self):
         if self.searchPath:
-            mlist = RunCommand('g.mapsets',
-                               read=True, flags='p',
-                               sep='newline').splitlines()
+            mlist = RunCommand(
+                "g.mapsets", read=True, flags="p", sep="newline"
+            ).splitlines()
         else:
-            mlist = GetListOfMapsets(self.gisdbase, self.location,
-                                     selectable=False)
+            mlist = GetListOfMapsets(self.gisdbase, self.location, selectable=False)
 
         gisenv = grass.gisenv()
-        if self.skipCurrent and \
-                gisenv['LOCATION_NAME'] == self.location and \
-                gisenv['MAPSET'] in mlist:
-            mlist.remove(gisenv['MAPSET'])
+        if (
+            self.skipCurrent
+            and gisenv["LOCATION_NAME"] == self.location
+            and gisenv["MAPSET"] in mlist
+        ):
+            mlist.remove(gisenv["MAPSET"])
 
         return mlist
 
@@ -1309,10 +1369,10 @@ class MapsetSelect(wx.ComboBox):
 class SubGroupSelect(wx.ComboBox):
     """Widget for selecting subgroups"""
 
-    def __init__(self, parent, id=wx.ID_ANY,
-                 size=globalvar.DIALOG_GSELECT_SIZE, **kwargs):
-        super(SubGroupSelect, self).__init__(parent, id, size=size,
-                                             **kwargs)
+    def __init__(
+        self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
+    ):
+        super(SubGroupSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("SubGroupSelect")
 
     def Insert(self, group):
@@ -1321,13 +1381,12 @@ class SubGroupSelect(wx.ComboBox):
             return
         gisenv = grass.gisenv()
         try:
-            name, mapset = group.split('@', 1)
+            name, mapset = group.split("@", 1)
         except ValueError:
             name = group
-            mapset = gisenv['MAPSET']
+            mapset = gisenv["MAPSET"]
 
-        mlist = RunCommand('i.group', group=group,
-                           read=True, flags='sg').splitlines()
+        mlist = RunCommand("i.group", group=group, read=True, flags="sg").splitlines()
         try:
             self.SetItems(mlist)
         except OSError:
@@ -1335,24 +1394,22 @@ class SubGroupSelect(wx.ComboBox):
 
 
 class FormatSelect(wx.Choice):
-
-    def __init__(self, parent, srcType, ogr=False,
-                 size=globalvar.DIALOG_SPIN_SIZE,
-                 **kwargs):
+    def __init__(
+        self, parent, srcType, ogr=False, size=globalvar.DIALOG_SPIN_SIZE, **kwargs
+    ):
         """Widget for selecting external (GDAL/OGR) format
 
         :param parent: parent window
         :param srcType: source type ('file', 'database', 'protocol')
         :param ogr: True for OGR otherwise GDAL
         """
-        super(FormatSelect, self).__init__(parent, id=wx.ID_ANY, size=size,
-                                           **kwargs)
+        super(FormatSelect, self).__init__(parent, id=wx.ID_ANY, size=size, **kwargs)
         self.SetName("FormatSelect")
 
         if ogr:
-            ftype = 'ogr'
+            ftype = "ogr"
         else:
-            ftype = 'gdal'
+            ftype = "gdal"
 
         formats = list()
         for f in GetFormats()[ftype][srcType].values():
@@ -1365,13 +1422,20 @@ class FormatSelect(wx.Choice):
         formatToExt.update(rasterFormatExtension)
         formatToExt.update(vectorFormatExtension)
 
-        return formatToExt.get(name, '')
+        return formatToExt.get(name, "")
 
 
 class GdalSelect(wx.Panel):
-
-    def __init__(self, parent, panel, ogr=False, link=False, dest=False,
-                 exclude=None, settings=True):
+    def __init__(
+        self,
+        parent,
+        panel,
+        ogr=False,
+        link=False,
+        dest=False,
+        exclude=None,
+        settings=True,
+    ):
         """Widget for selecting GDAL/OGR datasource, format
 
         .. todo::
@@ -1390,9 +1454,9 @@ class GdalSelect(wx.Panel):
         self.dest = dest
         self._sourceType = None
 
-        wx.Panel.__init__(self, parent=panel, name='GdalSelect')
+        wx.Panel.__init__(self, parent=panel, name="GdalSelect")
 
-        self.reloadDataRequired = Signal('GdalSelect.reloadDataRequired')
+        self.reloadDataRequired = Signal("GdalSelect.reloadDataRequired")
 
         self.inputBox = StaticBox(parent=self)
         if dest:
@@ -1402,52 +1466,47 @@ class GdalSelect(wx.Panel):
 
         # source type
         sources = list()
-        self.sourceMap = {'file': -1,
-                          'dir': -1,
-                          'db': -1,
-                          'pro': -1,
-                          'native': -1}
+        self.sourceMap = {"file": -1, "dir": -1, "db": -1, "pro": -1, "native": -1}
         idx = 0
         if dest:
             sources.append(_("Native"))
-            self.sourceMap['native'] = idx
+            self.sourceMap["native"] = idx
             idx += 1
         if exclude is None:
             exclude = []
-        if 'file' not in exclude:
+        if "file" not in exclude:
             sources.append(_("File"))
-            self.sourceMap['file'] = idx
+            self.sourceMap["file"] = idx
             idx += 1
-        if 'directory' not in exclude:
+        if "directory" not in exclude:
             sources.append(_("Directory"))
-            self.sourceMap['dir'] = idx
+            self.sourceMap["dir"] = idx
             idx += 1
-        if 'database' not in exclude:
+        if "database" not in exclude:
             sources.append(_("Database"))
-            self.sourceMap['db'] = idx
+            self.sourceMap["db"] = idx
             idx += 1
-        if 'protocol' not in exclude:
+        if "protocol" not in exclude:
             sources.append(_("Protocol"))
-            self.sourceMap['pro'] = idx
+            self.sourceMap["pro"] = idx
             idx += 1
         self.sourceMapByIdx = {}
         for name, idx in self.sourceMap.items():
             self.sourceMapByIdx[idx] = name
 
-        self.source = wx.RadioBox(parent=self, id=wx.ID_ANY,
-                                  style=wx.RA_SPECIFY_COLS,
-                                  choices=sources)
+        self.source = wx.RadioBox(
+            parent=self, id=wx.ID_ANY, style=wx.RA_SPECIFY_COLS, choices=sources
+        )
         if dest:
-            self.source.SetLabel(" %s " % _('Output type'))
+            self.source.SetLabel(" %s " % _("Output type"))
         else:
-            self.source.SetLabel(" %s " % _('Source type'))
+            self.source.SetLabel(" %s " % _("Source type"))
 
         self.source.SetSelection(0)
         self.source.Bind(
             wx.EVT_RADIOBOX,
-            lambda evt: self.SetSourceType(
-                self.sourceMapByIdx[
-                    evt.GetInt()]))
+            lambda evt: self.SetSourceType(self.sourceMapByIdx[evt.GetInt()]),
+        )
 
         self.nativeWidgets = {}
         self.fileWidgets = {}
@@ -1457,32 +1516,49 @@ class GdalSelect(wx.Panel):
         self.pgWidgets = {}
 
         if ogr:
-            fType = 'ogr'
+            fType = "ogr"
         else:
-            fType = 'gdal'
+            fType = "gdal"
 
         # file
-        fileMask = '%(all)s (*)|*|' % {'all': _('All files')}
+        fileMask = "%(all)s (*)|*|" % {"all": _("All files")}
         if not ogr:
             extList = rasterFormatExtension
-            fileMask += ('%(name)s (*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s)|'
-                         '*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s|' %
-                         {'name': 'GeoTIFF', 'low1': 'tif', 'low2': 'tiff', 'up1': 'TIF', 'up2': 'TIFF'})
+            fileMask += (
+                "%(name)s (*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s)|"
+                "*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s|"
+                % {
+                    "name": "GeoTIFF",
+                    "low1": "tif",
+                    "low2": "tiff",
+                    "up1": "TIF",
+                    "up2": "TIFF",
+                }
+            )
         else:
             extList = vectorFormatExtension
-            fileMask += '%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|' % {
-                'name': 'ESRI Shapefile', 'low': 'shp', 'up': 'SHP'}
+            fileMask += "%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|" % {
+                "name": "ESRI Shapefile",
+                "low": "shp",
+                "up": "SHP",
+            }
 
         for name, ext in sorted(extList.items()):
-            if name in ('ESRI Shapefile', 'GeoTIFF'):
+            if name in ("ESRI Shapefile", "GeoTIFF"):
                 continue
-            fileMask += '%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|' % {
-                'name': name, 'low': ext.lower(), 'up': ext.upper()}
-        fileMask += '%s (*.zip;*.ZIP)|*.zip;*.ZIP|' % _('ZIP files')
-        fileMask += '%s (*.gz;*.GZ)|*.gz;*.GZ|' % _('GZIP files')
-        fileMask += '%s (*.tar;*.TAR)|*.tar;*.TAR|' % _('TAR files')
+            fileMask += "%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|" % {
+                "name": name,
+                "low": ext.lower(),
+                "up": ext.upper(),
+            }
+        fileMask += "%s (*.zip;*.ZIP)|*.zip;*.ZIP|" % _("ZIP files")
+        fileMask += "%s (*.gz;*.GZ)|*.gz;*.GZ|" % _("GZIP files")
+        fileMask += "%s (*.tar;*.TAR)|*.tar;*.TAR|" % _("TAR files")
         # don't include last '|' - windows and mac throw error
-        fileMask += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ' % _('TARGZ files')
+        fileMask += (
+            "%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ"
+            % _("TARGZ files")
+        )
         # only contains formats with extensions hardcoded
 
         self.filePanel = wx.Panel(parent=self)
@@ -1490,15 +1566,16 @@ class GdalSelect(wx.Panel):
             parent=self.filePanel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            labelText=_('File:'),
-            dialogTitle=_('Choose file to import'),
-            buttonText=_('Browse'),
+            labelText=_("File:"),
+            dialogTitle=_("Choose file to import"),
+            buttonText=_("Browse"),
             startDirectory=os.getcwd(),
             changeCallback=self.OnUpdate,
-            fileMask=fileMask)
-        browse.GetChildren()[1].SetName('GdalSelectDataSource')
-        self.fileWidgets['browse'] = browse
-        self.fileWidgets['options'] = TextCtrl(parent=self.filePanel)
+            fileMask=fileMask,
+        )
+        browse.GetChildren()[1].SetName("GdalSelectDataSource")
+        self.fileWidgets["browse"] = browse
+        self.fileWidgets["options"] = TextCtrl(parent=self.filePanel)
 
         # directory
         self.dirPanel = wx.Panel(parent=self)
@@ -1506,151 +1583,156 @@ class GdalSelect(wx.Panel):
             parent=self.dirPanel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            labelText=_('Directory:'),
-            dialogTitle=_('Choose input directory'),
-            buttonText=_('Browse'),
+            labelText=_("Directory:"),
+            dialogTitle=_("Choose input directory"),
+            buttonText=_("Browse"),
             startDirectory=os.getcwd(),
-            changeCallback=self.OnUpdate)
-        browse.GetChildren()[1].SetName('GdalSelectDataSource')
+            changeCallback=self.OnUpdate,
+        )
+        browse.GetChildren()[1].SetName("GdalSelectDataSource")
 
-        self.dirWidgets['browse'] = browse
+        self.dirWidgets["browse"] = browse
         formatSelect = wx.Choice(parent=self.dirPanel)
-        self.dirWidgets['format'] = formatSelect
-        fileFormats = GetFormats(writableOnly=dest)[fType]['file']
+        self.dirWidgets["format"] = formatSelect
+        fileFormats = GetFormats(writableOnly=dest)[fType]["file"]
         formatSelect.SetItems(sorted(list(fileFormats)))
         formatSelect.Bind(
-            wx.EVT_CHOICE, lambda evt: self.SetExtension(
-                self.dirWidgets['format'].GetStringSelection()))
+            wx.EVT_CHOICE,
+            lambda evt: self.SetExtension(
+                self.dirWidgets["format"].GetStringSelection()
+            ),
+        )
         formatSelect.Bind(wx.EVT_CHOICE, self.OnUpdate)
 
-        self.dirWidgets['extensionLabel'] = StaticText(
-            parent=self.dirPanel, label=_("Extension:"))
-        self.dirWidgets['extension'] = TextCtrl(parent=self.dirPanel)
-        self.dirWidgets['extension'].Bind(wx.EVT_TEXT, self.ExtensionChanged)
-        self.dirWidgets['options'] = TextCtrl(parent=self.dirPanel)
+        self.dirWidgets["extensionLabel"] = StaticText(
+            parent=self.dirPanel, label=_("Extension:")
+        )
+        self.dirWidgets["extension"] = TextCtrl(parent=self.dirPanel)
+        self.dirWidgets["extension"].Bind(wx.EVT_TEXT, self.ExtensionChanged)
+        self.dirWidgets["options"] = TextCtrl(parent=self.dirPanel)
         if self.ogr:
-            shapefile = 'ESRI Shapefile'
+            shapefile = "ESRI Shapefile"
             if shapefile in fileFormats:
                 formatSelect.SetStringSelection(shapefile)
                 self.SetExtension(shapefile)
         else:
-            tiff = 'GeoTIFF'
+            tiff = "GeoTIFF"
             if tiff in fileFormats:
                 formatSelect.SetStringSelection(tiff)
                 self.SetExtension(tiff)
 
         # database
         self.dbPanel = wx.Panel(parent=self)
-        self.dbFormats = GetFormats(writableOnly=dest)[fType]['database']
+        self.dbFormats = GetFormats(writableOnly=dest)[fType]["database"]
         dbChoice = wx.Choice(parent=self.dbPanel, choices=self.dbFormats)
         dbChoice.Bind(
             wx.EVT_CHOICE,
-            lambda evt: self.SetDatabase(
-                db=dbChoice.GetStringSelection()))
-        self.dbWidgets['format'] = dbChoice
+            lambda evt: self.SetDatabase(db=dbChoice.GetStringSelection()),
+        )
+        self.dbWidgets["format"] = dbChoice
 
         browse = filebrowse.FileBrowseButton(
             parent=self.dbPanel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
             labelText=_("Name:"),
-            dialogTitle=_('Choose file'),
-            buttonText=_('Browse'),
+            dialogTitle=_("Choose file"),
+            buttonText=_("Browse"),
             startDirectory=os.getcwd(),
-            changeCallback=self.OnUpdate)
-        browse.GetChildren()[1].SetName('GdalSelectDataSource')
+            changeCallback=self.OnUpdate,
+        )
+        browse.GetChildren()[1].SetName("GdalSelectDataSource")
 
-        self.dbWidgets['browse'] = browse
-        self.dbWidgets['choice'] = wx.Choice(
-            parent=self.dbPanel, name='GdalSelectDataSource')
-        self.dbWidgets['choice'].Bind(wx.EVT_CHOICE, self.OnUpdate)
-        self.dbWidgets['text'] = TextCtrl(
-            parent=self.dbPanel, name='GdalSelectDataSource')
-        self.dbWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)
-        self.dbWidgets['textLabel1'] = StaticText(
-            parent=self.dbPanel, label=_("Name:"))
-        self.dbWidgets['textLabel2'] = StaticText(
-            parent=self.dbPanel, label=_("Name:"))
-        self.dbWidgets['featType'] = wx.RadioBox(
+        self.dbWidgets["browse"] = browse
+        self.dbWidgets["choice"] = wx.Choice(
+            parent=self.dbPanel, name="GdalSelectDataSource"
+        )
+        self.dbWidgets["choice"].Bind(wx.EVT_CHOICE, self.OnUpdate)
+        self.dbWidgets["text"] = TextCtrl(
+            parent=self.dbPanel, name="GdalSelectDataSource"
+        )
+        self.dbWidgets["text"].Bind(wx.EVT_TEXT, self.OnUpdate)
+        self.dbWidgets["textLabel1"] = StaticText(parent=self.dbPanel, label=_("Name:"))
+        self.dbWidgets["textLabel2"] = StaticText(parent=self.dbPanel, label=_("Name:"))
+        self.dbWidgets["featType"] = wx.RadioBox(
             parent=self.dbPanel,
             id=wx.ID_ANY,
-            label=" %s " %
-            _("Feature type:"),
-            choices=[
-                _("simple features"),
-                _("topological")],
+            label=" %s " % _("Feature type:"),
+            choices=[_("simple features"), _("topological")],
             majorDimension=2,
-            style=wx.RA_SPECIFY_COLS)
+            style=wx.RA_SPECIFY_COLS,
+        )
         if dest:
-            self.dbWidgets['featType'].Disable()
+            self.dbWidgets["featType"].Disable()
         else:
-            self.dbWidgets['featType'].Hide()
+            self.dbWidgets["featType"].Hide()
         browse = filebrowse.DirBrowseButton(
             parent=self.dbPanel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            labelText=_('Directory:'),
-            dialogTitle=_('Choose input directory'),
-            buttonText=_('Browse'),
+            labelText=_("Directory:"),
+            dialogTitle=_("Choose input directory"),
+            buttonText=_("Browse"),
             startDirectory=os.getcwd(),
-            changeCallback=self.OnUpdate)
-        self.dbWidgets['dirbrowse'] = browse
-        self.dbWidgets['options'] = TextCtrl(parent=self.dbPanel)
+            changeCallback=self.OnUpdate,
+        )
+        self.dbWidgets["dirbrowse"] = browse
+        self.dbWidgets["options"] = TextCtrl(parent=self.dbPanel)
 
         # protocol
         self.protocolPanel = wx.Panel(parent=self)
-        protocolFormats = GetFormats(writableOnly=self.dest)[fType]['protocol']
-        protocolChoice = wx.Choice(
-            parent=self.protocolPanel,
-            choices=protocolFormats)
-        self.protocolWidgets['format'] = protocolChoice
+        protocolFormats = GetFormats(writableOnly=self.dest)[fType]["protocol"]
+        protocolChoice = wx.Choice(parent=self.protocolPanel, choices=protocolFormats)
+        self.protocolWidgets["format"] = protocolChoice
 
-        self.protocolWidgets['text'] = TextCtrl(parent=self.protocolPanel)
-        self.protocolWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)
-        self.protocolWidgets['options'] = TextCtrl(
-            parent=self.protocolPanel)
+        self.protocolWidgets["text"] = TextCtrl(parent=self.protocolPanel)
+        self.protocolWidgets["text"].Bind(wx.EVT_TEXT, self.OnUpdate)
+        self.protocolWidgets["options"] = TextCtrl(parent=self.protocolPanel)
 
         # native
         self.nativePanel = wx.Panel(parent=self)
 
         self._layout()
-        sourceType = 'file'
+        sourceType = "file"
         self.SetSourceType(sourceType)  # needed always to fit dialog size
         if self.dest:
-            current = RunCommand('v.external.out',
-                                 parent=self,
-                                 read=True, parse=grass.parse_key_val,
-                                 flags='g')
-            if current['format'] == 'native':
-                sourceType = 'native'
-            elif current['format'] in GetFormats()['ogr']['database']:
-                sourceType = 'db'
+            current = RunCommand(
+                "v.external.out",
+                parent=self,
+                read=True,
+                parse=grass.parse_key_val,
+                flags="g",
+            )
+            if current["format"] == "native":
+                sourceType = "native"
+            elif current["format"] in GetFormats()["ogr"]["database"]:
+                sourceType = "db"
             else:
-                sourceType = 'dir'
+                sourceType = "dir"
 
         if self.dest:
             wx.CallAfter(self._postInit, sourceType, current)
 
     def _postInit(self, sourceType, data):
         """Fill in default values."""
-        format = data.get('format', '')
-        pg = 'conninfo' in data.keys()
+        format = data.get("format", "")
+        pg = "conninfo" in data.keys()
         if pg:
-            dsn = ''
-            for item in data.get('conninfo').split(' '):
-                k, v = item.split('=')
-                if k == 'dbname':
+            dsn = ""
+            for item in data.get("conninfo").split(" "):
+                k, v = item.split("=")
+                if k == "dbname":
                     dsn = v
                     break
             optList = list()
             for k, v in six.iteritems(data):
-                if k in ('format', 'conninfo', 'topology'):
+                if k in ("format", "conninfo", "topology"):
                     continue
-                optList.append('%s=%s' % (k, v))
-            options = ','.join(optList)
+                optList.append("%s=%s" % (k, v))
+            options = ",".join(optList)
         else:
-            dsn = data.get('dsn')
-            options = data.get('options', '')
+            dsn = data.get("dsn")
+            options = data.get("options", "")
 
         self.SetSourceType(sourceType)
         self.source.SetSelection(self.sourceMap[sourceType])
@@ -1659,19 +1741,19 @@ class GdalSelect(wx.Panel):
         if dsn:
             dsn = os.path.expandvars(dsn)  # v.external.out uses $HOME
             # fill in default values
-            if sourceType == 'dir':
-                self.dirWidgets['format'].SetStringSelection(format)
-                self.dirWidgets['browse'].SetValue(dsn)
-                self.dirWidgets['options'].SetValue(options)
-            elif sourceType == 'db':
-                self.dbWidgets['format'].SetStringSelection(format)
-                self.dbWidgets['options'].SetValue(options)
+            if sourceType == "dir":
+                self.dirWidgets["format"].SetStringSelection(format)
+                self.dirWidgets["browse"].SetValue(dsn)
+                self.dirWidgets["options"].SetValue(options)
+            elif sourceType == "db":
+                self.dbWidgets["format"].SetStringSelection(format)
+                self.dbWidgets["options"].SetValue(options)
                 name = self._getCurrentDbWidgetName()
-                if name == 'choice':
+                if name == "choice":
                     if dsn in self.dbWidgets[name].GetItems():
                         self.dbWidgets[name].SetStringSelection(dsn)
-                    if 'topology' in data.keys():
-                        self.dbWidgets['featType'].SetSelection(1)
+                    if "topology" in data.keys():
+                        self.dbWidgets["featType"].SetSelection(1)
                 else:
                     self.dbWidgets[name].SetValue(dsn)
 
@@ -1684,110 +1766,133 @@ class GdalSelect(wx.Panel):
         # file
         paddingSizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.GridBagSizer(vgap=5, hgap=10)
-        paddingSizer.Add(self.fileWidgets['browse'],
-                         flag=wx.BOTTOM | wx.EXPAND,
-                         border=35)
+        paddingSizer.Add(
+            self.fileWidgets["browse"], flag=wx.BOTTOM | wx.EXPAND, border=35
+        )
         sizer.Add(paddingSizer, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
         sizer.AddGrowableCol(0)
         if self.dest:
-            sizer.Add(StaticText(parent=self.filePanel,
-                                 label=_("Creation options:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(1, 0))
-            sizer.Add(self.fileWidgets['options'],
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(1, 1))
+            sizer.Add(
+                StaticText(parent=self.filePanel, label=_("Creation options:")),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                pos=(1, 0),
+            )
+            sizer.Add(
+                self.fileWidgets["options"],
+                flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                pos=(1, 1),
+            )
 
         else:
-            self.fileWidgets['options'].Hide()
+            self.fileWidgets["options"].Hide()
         self.filePanel.SetSizer(sizer)
 
         # directory
         sizer = wx.GridBagSizer(vgap=3, hgap=10)
-        sizer.Add(StaticText(parent=self.dirPanel,
-                             label=_("Format:")),
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(0, 0))
-        sizer.Add(self.dirWidgets['format'],
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                  pos=(0, 1))
-        sizer.Add(self.dirWidgets['extensionLabel'],
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(0, 2))
-        sizer.Add(self.dirWidgets['extension'],
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(0, 3))
-        sizer.Add(self.dirWidgets['browse'],
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                  pos=(1, 0), span=(1, 4))
+        sizer.Add(
+            StaticText(parent=self.dirPanel, label=_("Format:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(0, 0),
+        )
+        sizer.Add(
+            self.dirWidgets["format"],
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            pos=(0, 1),
+        )
+        sizer.Add(
+            self.dirWidgets["extensionLabel"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 2)
+        )
+        sizer.Add(
+            self.dirWidgets["extension"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 3)
+        )
+        sizer.Add(
+            self.dirWidgets["browse"],
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            pos=(1, 0),
+            span=(1, 4),
+        )
         if self.dest:
-            sizer.Add(StaticText(parent=self.dirPanel,
-                                 label=_("Creation options:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(2, 0))
-            sizer.Add(self.dirWidgets['options'],
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(2, 1))
+            sizer.Add(
+                StaticText(parent=self.dirPanel, label=_("Creation options:")),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                pos=(2, 0),
+            )
+            sizer.Add(
+                self.dirWidgets["options"],
+                flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                pos=(2, 1),
+            )
             helpBtn = Button(parent=self.dirPanel, id=wx.ID_HELP)
             helpBtn.Bind(wx.EVT_BUTTON, self.OnHelp)
-            sizer.Add(helpBtn,
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(2, 2))
+            sizer.Add(helpBtn, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, pos=(2, 2))
 
-            self.dirWidgets['extensionLabel'].Hide()
-            self.dirWidgets['extension'].Hide()
+            self.dirWidgets["extensionLabel"].Hide()
+            self.dirWidgets["extension"].Hide()
         else:
-            self.dirWidgets['options'].Hide()
+            self.dirWidgets["options"].Hide()
         sizer.AddGrowableCol(1)
         self.dirPanel.SetSizer(sizer)
 
         # database
         sizer = wx.GridBagSizer(vgap=1, hgap=5)
-        sizer.Add(StaticText(parent=self.dbPanel,
-                             label=_("Format:")),
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(0, 0))
-        sizer.Add(self.dbWidgets['format'],
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(0, 1))
-        sizer.Add(self.dbWidgets['textLabel1'],
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(1, 0))
-        sizer.Add(self.dbWidgets['text'],
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                  pos=(1, 1), span=(1, 2))
-        sizer.Add(self.dbWidgets['browse'],
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                  pos=(2, 0), span=(1, 3))
-        sizer.Add(self.dbWidgets['dirbrowse'],
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                  pos=(3, 0), span=(1, 2))
-        sizer.Add(self.dbWidgets['textLabel2'],
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(4, 0))
-        sizer.Add(self.dbWidgets['choice'],
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                  pos=(4, 1), span=(1, 2))
+        sizer.Add(
+            StaticText(parent=self.dbPanel, label=_("Format:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(0, 0),
+        )
+        sizer.Add(self.dbWidgets["format"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
+        sizer.Add(
+            self.dbWidgets["textLabel1"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0)
+        )
+        sizer.Add(
+            self.dbWidgets["text"],
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            pos=(1, 1),
+            span=(1, 2),
+        )
+        sizer.Add(
+            self.dbWidgets["browse"],
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            pos=(2, 0),
+            span=(1, 3),
+        )
+        sizer.Add(
+            self.dbWidgets["dirbrowse"],
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            pos=(3, 0),
+            span=(1, 2),
+        )
+        sizer.Add(
+            self.dbWidgets["textLabel2"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0)
+        )
+        sizer.Add(
+            self.dbWidgets["choice"],
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            pos=(4, 1),
+            span=(1, 2),
+        )
         if self.dest:
-            sizer.Add(self.dbWidgets['featType'],
-                      pos=(0, 2), flag=wx.EXPAND)
+            sizer.Add(self.dbWidgets["featType"], pos=(0, 2), flag=wx.EXPAND)
 
-            sizer.Add(StaticText(parent=self.dbPanel,
-                                 label=_("Creation options:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(5, 0))
-            sizer.Add(self.dbWidgets['options'],
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(5, 1), span=(1, 2))
+            sizer.Add(
+                StaticText(parent=self.dbPanel, label=_("Creation options:")),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                pos=(5, 0),
+            )
+            sizer.Add(
+                self.dbWidgets["options"],
+                flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                pos=(5, 1),
+                span=(1, 2),
+            )
 
             # help button
             helpBtn = Button(parent=self.dbPanel, id=wx.ID_HELP)
             helpBtn.Bind(wx.EVT_BUTTON, self.OnHelp)
-            sizer.Add(helpBtn,
-                      pos=(5, 3))
+            sizer.Add(helpBtn, pos=(5, 3))
 
         else:
-            self.dbWidgets['options'].Hide()
+            self.dbWidgets["options"].Hide()
 
         self.dbPanel.SetSizer(sizer)
         sizer.SetEmptyCellSize((0, 0))
@@ -1795,52 +1900,66 @@ class GdalSelect(wx.Panel):
 
         # protocol
         sizer = wx.GridBagSizer(vgap=3, hgap=3)
-        sizer.Add(StaticText(parent=self.protocolPanel,
-                             label=_("Format:")),
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(0, 0))
-        sizer.Add(self.protocolWidgets['format'],
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(0, 1))
-        sizer.Add(StaticText(parent=self.protocolPanel,
-                             label=_("Protocol:")),
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  pos=(1, 0))
-        sizer.Add(self.protocolWidgets['text'],
-                  flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                  pos=(1, 1))
+        sizer.Add(
+            StaticText(parent=self.protocolPanel, label=_("Format:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(0, 0),
+        )
+        sizer.Add(
+            self.protocolWidgets["format"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1)
+        )
+        sizer.Add(
+            StaticText(parent=self.protocolPanel, label=_("Protocol:")),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            pos=(1, 0),
+        )
+        sizer.Add(
+            self.protocolWidgets["text"],
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            pos=(1, 1),
+        )
         if self.dest:
-            sizer.Add(StaticText(parent=self.protocolPanel,
-                                 label=_("Creation options:")),
-                      flag=wx.ALIGN_CENTER_VERTICAL,
-                      pos=(2, 0))
-            sizer.Add(self.protocolWidgets['options'],
-                      flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos=(2, 1))
+            sizer.Add(
+                StaticText(parent=self.protocolPanel, label=_("Creation options:")),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                pos=(2, 0),
+            )
+            sizer.Add(
+                self.protocolWidgets["options"],
+                flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                pos=(2, 1),
+            )
 
         else:
-            self.protocolWidgets['options'].Hide()
+            self.protocolWidgets["options"].Hide()
         sizer.AddGrowableCol(1)
         self.protocolPanel.SetSizer(sizer)
 
         # native
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(StaticText(parent=self.nativePanel,
-                             label=_("No settings available")),
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(
+            StaticText(parent=self.nativePanel, label=_("No settings available")),
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
+        )
         self.nativePanel.SetSizer(sizer)
 
-        for panel in (self.nativePanel, self.filePanel,
-                      self.dirPanel, self.dbPanel,
-                      self.protocolPanel):
+        for panel in (
+            self.nativePanel,
+            self.filePanel,
+            self.dirPanel,
+            self.dbPanel,
+            self.protocolPanel,
+        ):
 
-            self.changingSizer.Add(panel, proportion=1,
-                                   flag=wx.EXPAND)
+            self.changingSizer.Add(panel, proportion=1, flag=wx.EXPAND)
 
-        self.mainSizer.Add(self.source, proportion=0,
-                           flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=5)
-        self.mainSizer.Add(self.changingSizer, proportion=1,
-                           flag=wx.ALL | wx.EXPAND, border=5)
+        self.mainSizer.Add(
+            self.source, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=5
+        )
+        self.mainSizer.Add(
+            self.changingSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5
+        )
         self.SetSizer(self.mainSizer)
         self.mainSizer.Fit(self)
 
@@ -1850,37 +1969,31 @@ class GdalSelect(wx.Panel):
         formatToExt.update(rasterFormatExtension)
         formatToExt.update(vectorFormatExtension)
 
-        return formatToExt.get(name, '')
+        return formatToExt.get(name, "")
 
     def SetSourceType(self, sourceType):
         """Set source type (db, file, dir, ...).
         Does not switch radioboxes."""
         self._sourceType = sourceType
-        self.changingSizer.Show(
-            self.filePanel, show=(
-                sourceType == 'file'))
-        self.changingSizer.Show(
-            self.nativePanel, show=(
-                sourceType == 'native'))
-        self.changingSizer.Show(self.dirPanel, show=(sourceType == 'dir'))
-        self.changingSizer.Show(
-            self.protocolPanel, show=(
-                sourceType == 'pro'))
-        self.changingSizer.Show(self.dbPanel, show=(sourceType == 'db'))
+        self.changingSizer.Show(self.filePanel, show=(sourceType == "file"))
+        self.changingSizer.Show(self.nativePanel, show=(sourceType == "native"))
+        self.changingSizer.Show(self.dirPanel, show=(sourceType == "dir"))
+        self.changingSizer.Show(self.protocolPanel, show=(sourceType == "pro"))
+        self.changingSizer.Show(self.dbPanel, show=(sourceType == "db"))
 
         self.changingSizer.Layout()
 
-        if sourceType == 'db':
-            self.dbWidgets['format'].SetItems(self.dbFormats)
+        if sourceType == "db":
+            self.dbWidgets["format"].SetItems(self.dbFormats)
             if self.dbFormats:
-                if 'PostgreSQL' in self.dbFormats:
-                    self.dbWidgets['format'].SetStringSelection('PostgreSQL')
+                if "PostgreSQL" in self.dbFormats:
+                    self.dbWidgets["format"].SetStringSelection("PostgreSQL")
                 else:
-                    self.dbWidgets['format'].SetSelection(0)
-            self.dbWidgets['format'].Enable()
+                    self.dbWidgets["format"].SetSelection(0)
+            self.dbWidgets["format"].Enable()
 
-        if sourceType == 'db':
-            db = self.dbWidgets['format'].GetStringSelection()
+        if sourceType == "db":
+            db = self.dbWidgets["format"].GetStringSelection()
             self.SetDatabase(db)
 
         if not self.dest:
@@ -1891,37 +2004,37 @@ class GdalSelect(wx.Panel):
         """User changed setting"""
         # data list: [type, dsn, format, options]
         if len(data) == 3:
-            data.append('')
+            data.append("")
         elif len(data) < 3:
             return
 
         self.source.SetSelection(self.sourceMap[data[0]])
         self.SetSourceType(data[0])
-        if data[0] == 'file':
-            self.fileWidgets['browse'].SetValue(data[1])
-            self.fileWidgets['options'].SetValue(data[3])
-        elif data[0] == 'dir':
-            self.dirWidgets['browse'].SetValue(data[1])
-            self.dirWidgets['format'].SetStringSelection(data[2])
-            self.dirWidgets['options'].SetValue(data[3])
+        if data[0] == "file":
+            self.fileWidgets["browse"].SetValue(data[1])
+            self.fileWidgets["options"].SetValue(data[3])
+        elif data[0] == "dir":
+            self.dirWidgets["browse"].SetValue(data[1])
+            self.dirWidgets["format"].SetStringSelection(data[2])
+            self.dirWidgets["options"].SetValue(data[3])
             self.SetExtension(data[2])
-        elif data[0] == 'pro':
-            self.protocolWidgets['text'].SetValue(data[2])
-            self.protocolWidgets['options'].SetValue(data[3])
-        elif data[0] == 'db':
+        elif data[0] == "pro":
+            self.protocolWidgets["text"].SetValue(data[2])
+            self.protocolWidgets["options"].SetValue(data[3])
+        elif data[0] == "db":
             name = self._getCurrentDbWidgetName()
-            if name == 'choice':
-                if len(data[1].split(':', 1)) > 1:
-                    for item in data[1].split(':', 1)[1].split(','):
-                        key, value = item.split('=', 1)
-                        if key == 'dbname':
+            if name == "choice":
+                if len(data[1].split(":", 1)) > 1:
+                    for item in data[1].split(":", 1)[1].split(","):
+                        key, value = item.split("=", 1)
+                        if key == "dbname":
                             self.dbWidgets[name].SetStringSelection(value)
                             break
                 else:
                     self.dbWidgets[name].SetStringSelection(data[1])
             else:
                 self.dbWidgets[name].SetValue(data[1])
-            self.dbWidgets['options'].SetValue(data[3])
+            self.dbWidgets["options"].SetValue(data[3])
 
         if not self.dest:
             self.reloadDataRequired.emit(listData=None, data=None)
@@ -1929,129 +2042,130 @@ class GdalSelect(wx.Panel):
 
     def AttachSettings(self):
         if self.ogr:
-            settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
+            settingsFile = os.path.join(GetSettingsPath(), "wxOGR")
         else:
-            settingsFile = os.path.join(GetSettingsPath(), 'wxGDAL')
+            settingsFile = os.path.join(GetSettingsPath(), "wxGDAL")
 
-        self.settsManager = ManageSettingsWidget(parent=self,
-                                                 settingsFile=settingsFile)
+        self.settsManager = ManageSettingsWidget(parent=self, settingsFile=settingsFile)
         self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
         self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
 
         # do layout
-        self.mainSizer.Insert(0, self.settsManager,
-                              flag=wx.ALL | wx.EXPAND, border=5)
+        self.mainSizer.Insert(0, self.settsManager, flag=wx.ALL | wx.EXPAND, border=5)
 
     def OnSettingsSaving(self, name):
         """Saving data"""
         if not self.GetDsn():
-            GMessage(parent=self, message=_(
-                "No data source defined, settings are not saved."))
+            GMessage(
+                parent=self,
+                message=_("No data source defined, settings are not saved."),
+            )
             return
 
-        self.settsManager.SetDataToSave((self._sourceType, self.GetDsn(),
-                                         self.GetFormat(), self.GetOptions()))
+        self.settsManager.SetDataToSave(
+            (self._sourceType, self.GetDsn(), self.GetFormat(), self.GetOptions())
+        )
         self.settsManager.SaveSettings(name)
 
     def _getExtPatternGlob(self, ext):
         """Get pattern for case-insensitive globing"""
-        pattern = '*.'
+        pattern = "*."
         for c in ext:
-            pattern += '[%s%s]' % (c.lower(), c.upper())
+            pattern += "[%s%s]" % (c.lower(), c.upper())
         return pattern
 
     def _getCurrentDbWidgetName(self):
         """Returns active dns database widget name."""
-        for widget in ('browse', 'dirbrowse', 'text', 'choice'):
+        for widget in ("browse", "dirbrowse", "text", "choice"):
             if self.dbWidgets[widget].IsShown():
                 return widget
 
     def GetDsn(self):
-        """Get datasource name
-        """
-        if self._sourceType == 'db':
-            if self.dbWidgets['format'].GetStringSelection() in(
-                    'PostgreSQL', 'PostGIS Raster driver'):
+        """Get datasource name"""
+        if self._sourceType == "db":
+            if self.dbWidgets["format"].GetStringSelection() in (
+                "PostgreSQL",
+                "PostGIS Raster driver",
+            ):
 
-                dsn = 'PG:dbname=%s' % self.dbWidgets[
-                    'choice'].GetStringSelection()
+                dsn = "PG:dbname=%s" % self.dbWidgets["choice"].GetStringSelection()
             else:
                 name = self._getCurrentDbWidgetName()
-                if name == 'choice':
+                if name == "choice":
                     dsn = self.dbWidgets[name].GetStringSelection()
                 else:
                     dsn = self.dbWidgets[name].GetValue()
 
         else:
-            if self._sourceType == 'file':
-                dsn = self.fileWidgets['browse'].GetValue()
-            elif self._sourceType == 'dir':
-                dsn = self.dirWidgets['browse'].GetValue()
-            elif self._sourceType == 'pro':
-                dsn = self.protocolWidgets['text'].GetValue()
+            if self._sourceType == "file":
+                dsn = self.fileWidgets["browse"].GetValue()
+            elif self._sourceType == "dir":
+                dsn = self.dirWidgets["browse"].GetValue()
+            elif self._sourceType == "pro":
+                dsn = self.protocolWidgets["text"].GetValue()
             else:
-                dsn = ''
+                dsn = ""
             # check compressed files
             try:
                 ext = os.path.splitext(dsn)[1].lower()
             except KeyError:
                 ext = None
 
-            if ext == '.zip':
-                dsn = '/vsizip/' + dsn
-            elif ext == '.gzip':
-                dsn = '/vsigzip/' + dsn
-            elif ext in ('.tar', '.tar.gz', '.tgz'):
-                dsn = '/vsitar/' + dsn
+            if ext == ".zip":
+                dsn = "/vsizip/" + dsn
+            elif ext == ".gzip":
+                dsn = "/vsigzip/" + dsn
+            elif ext in (".tar", ".tar.gz", ".tgz"):
+                dsn = "/vsitar/" + dsn
 
         return dsn
 
     def SetDatabase(self, db):
         """Update database panel."""
         sizer = self.dbPanel.GetSizer()
-        showBrowse = db in ('SQLite', 'Rasterlite')
-        showDirbrowse = db in ('FileGDB')
-        showChoice = db in ('PostgreSQL', 'PostGIS WKT Raster driver',
-                            'PostGIS Raster driver')
-        enableFeatType = self.dest and self.ogr and db in ('PostgreSQL')
-        showText = not(showBrowse or showChoice or showDirbrowse)
+        showBrowse = db in ("SQLite", "Rasterlite")
+        showDirbrowse = db in ("FileGDB")
+        showChoice = db in (
+            "PostgreSQL",
+            "PostGIS WKT Raster driver",
+            "PostGIS Raster driver",
+        )
+        enableFeatType = self.dest and self.ogr and db in ("PostgreSQL")
+        showText = not (showBrowse or showChoice or showDirbrowse)
 
-        sizer.Show(self.dbWidgets['browse'], show=showBrowse)
-        sizer.Show(self.dbWidgets['dirbrowse'], show=showDirbrowse)
-        sizer.Show(self.dbWidgets['choice'], show=showChoice)
-        sizer.Show(self.dbWidgets['textLabel2'], show=showChoice)
-        sizer.Show(self.dbWidgets['text'], show=showText)
-        sizer.Show(self.dbWidgets['textLabel1'], show=showText)
-        self.dbWidgets['featType'].Enable(enableFeatType)
+        sizer.Show(self.dbWidgets["browse"], show=showBrowse)
+        sizer.Show(self.dbWidgets["dirbrowse"], show=showDirbrowse)
+        sizer.Show(self.dbWidgets["choice"], show=showChoice)
+        sizer.Show(self.dbWidgets["textLabel2"], show=showChoice)
+        sizer.Show(self.dbWidgets["text"], show=showText)
+        sizer.Show(self.dbWidgets["textLabel1"], show=showText)
+        self.dbWidgets["featType"].Enable(enableFeatType)
         if showChoice:
             # try to get list of PG databases
             dbNames = RunCommand(
-                'db.databases',
-                parent=self,
-                quiet=True,
-                read=True,
-                driver='pg').splitlines()
+                "db.databases", parent=self, quiet=True, read=True, driver="pg"
+            ).splitlines()
             if dbNames is not None:
-                self.dbWidgets['choice'].SetItems(sorted(dbNames))
-                self.dbWidgets['choice'].SetSelection(0)
-            elif grass.find_program('psql', '--help'):
-                if not self.dbWidgets['choice'].GetItems():
-                    p = grass.Popen(['psql', '-ltA'], stdout=grass.PIPE)
+                self.dbWidgets["choice"].SetItems(sorted(dbNames))
+                self.dbWidgets["choice"].SetSelection(0)
+            elif grass.find_program("psql", "--help"):
+                if not self.dbWidgets["choice"].GetItems():
+                    p = grass.Popen(["psql", "-ltA"], stdout=grass.PIPE)
                     ret = p.communicate()[0]
                     if ret:
                         dbNames = list()
                         for line in ret.splitlines():
-                            sline = line.split('|')
+                            sline = line.split("|")
                             if len(sline) < 2:
                                 continue
                             dbname = sline[0]
                             if dbname:
                                 dbNames.append(dbname)
-                        self.dbWidgets['choice'].SetItems(db)
-                        self.dbWidgets['choice'].SetSelection(0)
+                        self.dbWidgets["choice"].SetItems(db)
+                        self.dbWidgets["choice"].SetSelection(0)
             else:
-                sizer.Show(self.dbWidgets['text'])
-                sizer.Show(self.dbWidgets['choice'], False)
+                sizer.Show(self.dbWidgets["text"])
+                sizer.Show(self.dbWidgets["choice"], False)
 
         sizer.Layout()
 
@@ -2067,26 +2181,23 @@ class GdalSelect(wx.Panel):
 
         def hasRastSameProjAsLocation(dsn):
 
-            ret = RunCommand('r.external',
-                             quiet=True,
-                             read=True,
-                             flags='t',
-                             input=dsn)
+            ret = RunCommand("r.external", quiet=True, read=True, flags="t", input=dsn)
 
             # v.external returns info for individual bands, however projection is shared by all bands ->
             # (it is possible to take first line)
 
             lines = ret.splitlines()
-            projectionMatch = '0'
+            projectionMatch = "0"
             if lines:
                 bandNumber, bandType, projectionMatch = map(
-                    lambda x: x.strip(), lines[0].split(','))
+                    lambda x: x.strip(), lines[0].split(",")
+                )
 
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
 
-            if projectionMatch == '0':
+            if projectionMatch == "0":
                 projectionMatchCaption = _("No")
             else:
                 projectionMatchCaption = _("Yes")
@@ -2102,11 +2213,7 @@ class GdalSelect(wx.Panel):
         layerId = 1
 
         if self.ogr:
-            ret = RunCommand('v.external',
-                             quiet=True,
-                             read=True,
-                             flags='t',
-                             input=dsn)
+            ret = RunCommand("v.external", quiet=True, read=True, flags="t", input=dsn)
             if not ret:
                 self.reloadDataRequired.emit(listData=None, data=None)
                 return
@@ -2114,47 +2221,40 @@ class GdalSelect(wx.Panel):
             layerId = 1
             for line in ret.splitlines():
                 layerName, featureType, projectionMatch, geometryColumn = map(
-                    lambda x: x.strip(), line.split(','))
+                    lambda x: x.strip(), line.split(",")
+                )
                 projectionMatchCaption = getProjMatchCaption(projectionMatch)
                 grassName = GetValidLayerName(layerName)
                 if geometryColumn:
-                    featureType = geometryColumn + '/' + featureType
+                    featureType = geometryColumn + "/" + featureType
                 listData.append(
-                    (layerId,
-                     layerName,
-                     featureType,
-                     projectionMatchCaption,
-                     grassName))
+                    (layerId, layerName, featureType, projectionMatchCaption, grassName)
+                )
                 data.append(
-                    (layerId,
-                     layerName,
-                     featureType,
-                     int(projectionMatch),
-                        grassName))
+                    (layerId, layerName, featureType, int(projectionMatch), grassName)
+                )
                 layerId += 1
         else:
-            if self._sourceType == 'file':
+            if self._sourceType == "file":
                 baseName = os.path.basename(dsn)
-                grassName = GetValidLayerName(baseName.split('.', -1)[0])
+                grassName = GetValidLayerName(baseName.split(".", -1)[0])
                 projectionMatch = hasRastSameProjAsLocation(dsn)
                 projectionMatchCaption = getProjMatchCaption(projectionMatch)
-                listData.append(
-                    (layerId, baseName, projectionMatchCaption, grassName))
-                data.append(
-                    (layerId, baseName, int(projectionMatch), grassName))
-            elif self._sourceType == 'dir':
-                ext = self.dirWidgets['extension'].GetValue()
-                for filename in glob.glob(os.path.join(
-                        dsn, "%s") % self._getExtPatternGlob(ext)):
+                listData.append((layerId, baseName, projectionMatchCaption, grassName))
+                data.append((layerId, baseName, int(projectionMatch), grassName))
+            elif self._sourceType == "dir":
+                ext = self.dirWidgets["extension"].GetValue()
+                for filename in glob.glob(
+                    os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)
+                ):
                     baseName = os.path.basename(filename)
-                    grassName = GetValidLayerName(baseName.split('.', -1)[0])
+                    grassName = GetValidLayerName(baseName.split(".", -1)[0])
                     projectionMatch = hasRastSameProjAsLocation(filename)
-                    projectionMatchCaption = getProjMatchCaption(
-                        projectionMatch)
+                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
                     listData.append(
-                        (layerId, baseName, projectionMatchCaption, grassName))
-                    data.append(
-                        (layerId, baseName, int(projectionMatch), grassName))
+                        (layerId, baseName, projectionMatchCaption, grassName)
+                    )
+                    data.append((layerId, baseName, int(projectionMatch), grassName))
                     layerId += 1
 
         # emit signal
@@ -2168,7 +2268,7 @@ class GdalSelect(wx.Panel):
     def SetExtension(self, name):
         """Extension changed"""
         ext = self._getExtension(name)
-        self.dirWidgets['extension'].SetValue(ext)
+        self.dirWidgets["extension"].SetValue(ext)
 
     def GetType(self):
         """Get source type"""
@@ -2176,16 +2276,16 @@ class GdalSelect(wx.Panel):
 
     def GetFormat(self):
         """Get format as string"""
-        if self._sourceType == 'dir':
-            format = self.dirWidgets['format'].GetStringSelection()
-        elif self._sourceType == 'pro':
-            format = self.protocolWidgets['format'].GetStringSelection()
-        elif self._sourceType == 'db':
-            format = self.dbWidgets['format'].GetStringSelection()
+        if self._sourceType == "dir":
+            format = self.dirWidgets["format"].GetStringSelection()
+        elif self._sourceType == "pro":
+            format = self.protocolWidgets["format"].GetStringSelection()
+        elif self._sourceType == "db":
+            format = self.dbWidgets["format"].GetStringSelection()
         else:
-            format = ''
+            format = ""
 
-        return format.replace(' ', '_')
+        return format.replace(" ", "_")
 
     def GetFormatExt(self):
         """Get format extension"""
@@ -2193,78 +2293,86 @@ class GdalSelect(wx.Panel):
 
     def GetOptions(self):
         """Get creation options"""
-        if self._sourceType == 'file':
-            options = self.fileWidgets['options'].GetValue()
-        elif self._sourceType == 'dir':
-            options = self.dirWidgets['options'].GetValue()
-        elif self._sourceType == 'pro':
-            options = self.protocolWidgets['options'].GetValue()
-        elif self._sourceType == 'db':
-            if self.dbWidgets['featType'].GetSelection() == 1:
-                options = 'topology=yes '
+        if self._sourceType == "file":
+            options = self.fileWidgets["options"].GetValue()
+        elif self._sourceType == "dir":
+            options = self.dirWidgets["options"].GetValue()
+        elif self._sourceType == "pro":
+            options = self.protocolWidgets["options"].GetValue()
+        elif self._sourceType == "db":
+            if self.dbWidgets["featType"].GetSelection() == 1:
+                options = "topology=yes "
             else:
-                options = ''
-            options += self.dbWidgets['options'].GetValue()
+                options = ""
+            options += self.dbWidgets["options"].GetValue()
 
         return options.strip()
 
     def OnHelp(self, event):
         """Show related manual page"""
-        cmd = ''
+        cmd = ""
         if self.dest:
             if self.ogr:
-                cmd = 'v.external.out'
+                cmd = "v.external.out"
             else:
-                cmd = 'r.external.out'
+                cmd = "r.external.out"
         else:
             if self.link:
                 if self.ogr:
-                    cmd = 'v.external'
+                    cmd = "v.external"
                 else:
-                    cmd = 'r.external'
+                    cmd = "r.external"
             else:
                 if self.ogr:
-                    cmd = 'v.in.ogr'
+                    cmd = "v.in.ogr"
                 else:
-                    cmd = 'r.in.gdal'
+                    cmd = "r.in.gdal"
 
-        RunCommand('g.manual', entry=cmd)
+        RunCommand("g.manual", entry=cmd)
 
 
 class ProjSelect(wx.ComboBox):
     """Widget for selecting input raster/vector map used by
     r.proj/v.proj modules."""
 
-    def __init__(self, parent, isRaster, id=wx.ID_ANY,
-                 size=globalvar.DIALOG_COMBOBOX_SIZE, **kwargs):
+    def __init__(
+        self,
+        parent,
+        isRaster,
+        id=wx.ID_ANY,
+        size=globalvar.DIALOG_COMBOBOX_SIZE,
+        **kwargs,
+    ):
         super(ProjSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("ProjSelect")
         self.isRaster = isRaster
 
     def UpdateItems(self, dbase, location, mapset):
-        """Update list of maps
-
-        """
+        """Update list of maps"""
         if not dbase:
-            dbase = grass.gisenv()['GISDBASE']
+            dbase = grass.gisenv()["GISDBASE"]
         if not mapset:
-            mapset = grass.gisenv()['MAPSET']
+            mapset = grass.gisenv()["MAPSET"]
         if self.isRaster:
-            ret = RunCommand('r.proj',
-                             quiet=True,
-                             read=True,
-                             flags='l',
-                             dbase=dbase,
-                             location=location,
-                             mapset=mapset)
+            ret = RunCommand(
+                "r.proj",
+                quiet=True,
+                read=True,
+                flags="l",
+                dbase=dbase,
+                location=location,
+                mapset=mapset,
+            )
         else:
-            ret = RunCommand('v.proj',
-                             quiet=True,
-                             read=True,
-                             flags='l',
-                             dbase=dbase,
-                             location=location,
-                             mapset=mapset)
+            ret = RunCommand(
+                "v.proj",
+                quiet=True,
+                read=True,
+                flags="l",
+                dbase=dbase,
+                location=location,
+                mapset=mapset,
+            )
         listMaps = list()
         if ret:
             for line in ret.splitlines():
@@ -2272,27 +2380,30 @@ class ProjSelect(wx.ComboBox):
         ListSortLower(listMaps)
 
         self.SetItems(listMaps)
-        self.SetValue('')
+        self.SetValue("")
 
 
 class ElementSelect(wx.Choice):
-
-    def __init__(self, parent, id=wx.ID_ANY, elements=None,
-                 size=globalvar.DIALOG_COMBOBOX_SIZE,
-                 **kwargs):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        elements=None,
+        size=globalvar.DIALOG_COMBOBOX_SIZE,
+        **kwargs,
+    ):
         """Widget for selecting GIS element
 
         :param parent: parent window
         :param elements: filter elements
         """
-        super(ElementSelect, self).__init__(parent, id, size=size,
-                                            **kwargs)
+        super(ElementSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("ElementSelect")
 
-        task = gtask.parse_interface('g.list')
-        p = task.get_param(value='type')
-        self.values = p.get('values', [])
-        self.valuesDesc = p.get('values_desc', [])
+        task = gtask.parse_interface("g.list")
+        p = task.get_param(value="type")
+        self.values = p.get("values", [])
+        self.valuesDesc = p.get("values_desc", [])
 
         if elements:
             values = []
@@ -2315,11 +2426,10 @@ class ElementSelect(wx.Choice):
         idx = self.valuesDesc.index(name)
         if idx > -1:
             return self.values[idx]
-        return ''
+        return ""
 
 
 class OgrTypeSelect(wx.Panel):
-
     def __init__(self, parent, panel, **kwargs):
         """Widget to choose OGR feature type
 
@@ -2328,22 +2438,24 @@ class OgrTypeSelect(wx.Panel):
         """
         wx.Panel.__init__(self, parent=panel, id=wx.ID_ANY)
 
-        self.ftype = wx.Choice(parent=self, id=wx.ID_ANY, size=(
-            200, -1), choices=(_("Point"), _("LineString"), _("Polygon")))
+        self.ftype = wx.Choice(
+            parent=self,
+            id=wx.ID_ANY,
+            size=(200, -1),
+            choices=(_("Point"), _("LineString"), _("Polygon")),
+        )
         self._layout()
 
     def _layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(StaticText(parent=self,
-                             id=wx.ID_ANY,
-                             label=_("Feature type:")),
-                  proportion=1,
-                  flag=wx.ALIGN_CENTER_VERTICAL,
-                  border=5)
-        sizer.Add(self.ftype,
-                  proportion=0,
-                  flag=wx.EXPAND | wx.ALIGN_RIGHT)
+        sizer.Add(
+            StaticText(parent=self, id=wx.ID_ANY, label=_("Feature type:")),
+            proportion=1,
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=5,
+        )
+        sizer.Add(self.ftype, proportion=0, flag=wx.EXPAND | wx.ALIGN_RIGHT)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -2355,15 +2467,14 @@ class OgrTypeSelect(wx.Panel):
         """
         sel = self.ftype.GetSelection()
         if sel == 0:
-            return 'point'
+            return "point"
         elif sel == 1:
-            return 'line'
+            return "line"
         elif sel == 2:
-            return 'boundary'
+            return "boundary"
 
 
 class CoordinatesSelect(Panel):
-
     def __init__(self, parent, giface, multiple=False, **kwargs):
         """Widget to get coordinates from map window  by mouse click
 
@@ -2378,17 +2489,17 @@ class CoordinatesSelect(Panel):
 
         super(CoordinatesSelect, self).__init__(parent=parent, id=wx.ID_ANY)
 
-        self.coordsField = TextCtrl(parent=self, id=wx.ID_ANY,
-                                    size=globalvar.DIALOG_TEXTCTRL_SIZE,
-                                    validator=CoordinatesValidator())
+        self.coordsField = TextCtrl(
+            parent=self,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_TEXTCTRL_SIZE,
+            validator=CoordinatesValidator(),
+        )
 
-        icon = wx.Bitmap(
-            os.path.join(
-                globalvar.ICONDIR,
-                "grass",
-                "pointer.png"))
+        icon = wx.Bitmap(os.path.join(globalvar.ICONDIR, "grass", "pointer.png"))
         self.buttonInsCoords = buttons.ThemedGenBitmapToggleButton(
-            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE)
+            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE
+        )
         self.registered = False
         self.buttonInsCoords.Bind(wx.EVT_BUTTON, self._onClick)
 
@@ -2396,17 +2507,16 @@ class CoordinatesSelect(Panel):
         if mapdisp:
             switcher = mapdisp.GetToolSwitcher()
             switcher.AddCustomToolToGroup(
-                group='mouseUse',
+                group="mouseUse",
                 btnId=self.buttonInsCoords.GetId(),
-                toggleHandler=self.buttonInsCoords.SetValue)
+                toggleHandler=self.buttonInsCoords.SetValue,
+            )
         self._doLayout()
         self.coordsField.Bind(wx.EVT_TEXT, lambda event: self._draw(delay=1))
 
     def _doLayout(self):
         self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.dialogSizer.Add(self.coordsField,
-                             proportion=1,
-                             flag=wx.EXPAND)
+        self.dialogSizer.Add(self.coordsField, proportion=1, flag=wx.EXPAND)
         self.dialogSizer.Add(self.buttonInsCoords)
         self.SetSizer(self.dialogSizer)
 
@@ -2417,16 +2527,17 @@ class CoordinatesSelect(Panel):
         if self.buttonInsCoords.GetToggle() and self.mapWin:
             switcher = self._giface.GetMapDisplay().GetToolSwitcher()
             switcher.ToolChanged(self.buttonInsCoords.GetId())
-            if not self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN,
-                                                         self._onMapClickHandler,
-                                                         'cross'):
+            if not self.mapWin.RegisterMouseEventHandler(
+                wx.EVT_LEFT_DOWN, self._onMapClickHandler, "cross"
+            ):
                 return
 
             self.registered = True
             self._giface.GetMapDisplay().Raise()
         else:
             if self.mapWin and self.mapWin.UnregisterMouseEventHandler(
-                    wx.EVT_LEFT_DOWN, self._onMapClickHandler):
+                wx.EVT_LEFT_DOWN, self._onMapClickHandler
+            ):
                 self.registered = False
                 return
 
@@ -2441,7 +2552,8 @@ class CoordinatesSelect(Panel):
             if self.mapWin:
                 self.drawMapWin = self.mapWin
                 self.pointsToDraw = self.drawMapWin.RegisterGraphicsToDraw(
-                    graphicsType="point")
+                    graphicsType="point"
+                )
 
         if self.drawMapWin:
             items = self.pointsToDraw.GetAllItems()
@@ -2452,11 +2564,9 @@ class CoordinatesSelect(Panel):
             if coords is not None:
                 for i in range(len(coords) // 2):
                     i = i * 2
-                    self.pointsToDraw.AddItem(
-                        coords=(coords[i], coords[i + 1]))
+                    self.pointsToDraw.AddItem(coords=(coords[i], coords[i + 1]))
 
-            self._giface.updateMap.emit(
-                render=False, renderVector=False, delay=delay)
+            self._giface.updateMap.emit(render=False, renderVector=False, delay=delay)
 
     def _getCoords(self):
         """Get list of coordinates.
@@ -2464,7 +2574,7 @@ class CoordinatesSelect(Panel):
         :return: None if values are not valid
         """
         if self.coordsField.GetValidator().Validate(self):
-            return self.coordsField.GetValue().split(',')
+            return self.coordsField.GetValue().split(",")
 
         return None
 
@@ -2497,8 +2607,9 @@ class CoordinatesSelect(Panel):
             switcher.RemoveCustomToolFromGroup(self.buttonInsCoords.GetId())
 
         if self.mapWin and self.registered:
-            self.mapWin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN,
-                                                    self._onMapClickHandler)
+            self.mapWin.UnregisterMouseEventHandler(
+                wx.EVT_LEFT_DOWN, self._onMapClickHandler
+            )
 
     def GetTextWin(self):
         """Get TextCtrl widget"""
@@ -2520,35 +2631,32 @@ class VectorCategorySelect(wx.Panel):
 
         self.mapdisp = self.giface.GetMapDisplay()
 
-        self.catsField = TextCtrl(parent=self, id=wx.ID_ANY,
-                                  size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.catsField = TextCtrl(
+            parent=self, id=wx.ID_ANY, size=globalvar.DIALOG_TEXTCTRL_SIZE
+        )
 
-        icon = wx.Bitmap(
-            os.path.join(
-                globalvar.ICONDIR,
-                "grass",
-                "select.png"))
+        icon = wx.Bitmap(os.path.join(globalvar.ICONDIR, "grass", "select.png"))
         self.buttonVecSelect = buttons.ThemedGenBitmapToggleButton(
-            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE)
+            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE
+        )
         self.buttonVecSelect.Bind(wx.EVT_BUTTON, self._onClick)
 
         if self.mapdisp:
             switcher = self.mapdisp.GetToolSwitcher()
             switcher.AddCustomToolToGroup(
-                group='mouseUse',
+                group="mouseUse",
                 btnId=self.buttonVecSelect.GetId(),
-                toggleHandler=self.buttonVecSelect.SetValue)
+                toggleHandler=self.buttonVecSelect.SetValue,
+            )
 
         self._layout()
 
     def _isMapSelected(self):
-        """Check if layer list contains at least one selected map
-        """
+        """Check if layer list contains at least one selected map"""
         layerList = self.giface.GetLayerList()
         layerSelected = layerList.GetSelectedLayer()
         if layerSelected is None:
-            GWarning(
-                _("No vector map selected in layer manager. Operation canceled."))
+            GWarning(_("No vector map selected in layer manager. Operation canceled."))
             return False
 
         return True
@@ -2559,18 +2667,20 @@ class VectorCategorySelect(wx.Panel):
             layerList = self.giface.GetLayerList()
             layerSelected = layerList.GetSelectedLayer()
             # d.vect module
-            inputName = self.task.get_param(value='map', raiseError=False)
+            inputName = self.task.get_param(value="map", raiseError=False)
             if not inputName:
-                inputName = self.task.get_param('input')
-            if inputName['value'] != str(layerSelected):
-                if inputName['value'] == '' or inputName['value'] is None:
+                inputName = self.task.get_param("input")
+            if inputName["value"] != str(layerSelected):
+                if inputName["value"] == "" or inputName["value"] is None:
                     GWarning(_("Input vector map is not selected"))
                     return False
                 GWarning(
                     _(
                         "Input vector map <%s> and selected map <%s> in layer manager are different. "
-                        "Operation canceled.") %
-                    (inputName['value'], str(layerSelected)))
+                        "Operation canceled."
+                    )
+                    % (inputName["value"], str(layerSelected))
+                )
                 return False
             return True
         return False
@@ -2591,10 +2701,10 @@ class VectorCategorySelect(wx.Panel):
                     switcher = self.mapdisp.GetToolSwitcher()
                     switcher.ToolChanged(self.buttonVecSelect.GetId())
 
-                self._vectorSelect = VectorSelectBase(
-                    self.mapdisp, self.giface)
+                self._vectorSelect = VectorSelectBase(self.mapdisp, self.giface)
                 if not self.mapdisp.GetWindow().RegisterMouseEventHandler(
-                        wx.EVT_LEFT_DOWN, self._onMapClickHandler, 'cross'):
+                    wx.EVT_LEFT_DOWN, self._onMapClickHandler, "cross"
+                ):
                     return
                 self.registered = True
                 self.mapdisp.Raise()
@@ -2622,14 +2732,12 @@ class VectorCategorySelect(wx.Panel):
             if not self._isMapSelected():
                 self.OnClose()
             else:
-                self.catsField.SetValue(
-                    self._vectorSelect.GetLineStringSelectedCats())
+                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
         else:
             if not self._chckMap():
                 self.OnClose()
             else:
-                self.catsField.SetValue(
-                    self._vectorSelect.GetLineStringSelectedCats())
+                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
 
     def GetTextWin(self):
         return self.catsField
@@ -2642,9 +2750,7 @@ class VectorCategorySelect(wx.Panel):
 
     def _layout(self):
         self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.dialogSizer.Add(self.catsField,
-                             proportion=1,
-                             flag=wx.EXPAND)
+        self.dialogSizer.Add(self.catsField, proportion=1, flag=wx.EXPAND)
 
         self.dialogSizer.Add(self.buttonVecSelect)
         self.SetSizer(self.dialogSizer)
@@ -2653,10 +2759,15 @@ class VectorCategorySelect(wx.Panel):
 class SignatureSelect(wx.ComboBox):
     """Widget for selecting signatures"""
 
-    def __init__(self, parent, element, id=wx.ID_ANY,
-                 size=globalvar.DIALOG_GSELECT_SIZE, **kwargs):
-        super(SignatureSelect, self).__init__(parent, id, size=size,
-                                              **kwargs)
+    def __init__(
+        self,
+        parent,
+        element,
+        id=wx.ID_ANY,
+        size=globalvar.DIALOG_GSELECT_SIZE,
+        **kwargs,
+    ):
+        super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
         self.element = element
         self.SetName("SignatureSelect")
 
@@ -2670,18 +2781,17 @@ class SignatureSelect(wx.ComboBox):
             return
         gisenv = grass.gisenv()
         try:
-            name, mapset = group.split('@', 1)
+            name, mapset = group.split("@", 1)
         except ValueError:
             name = group
-            mapset = gisenv['MAPSET']
+            mapset = gisenv["MAPSET"]
 
         path = os.path.join(
-            gisenv['GISDBASE'],
-            gisenv['LOCATION_NAME'],
-            mapset, 'group', name)
+            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], mapset, "group", name
+        )
 
         if subgroup:
-            path = os.path.join(path, 'subgroup', subgroup)
+            path = os.path.join(path, "subgroup", subgroup)
         try:
             items = list()
             for element in os.listdir(os.path.join(path, self.element)):
@@ -2689,22 +2799,21 @@ class SignatureSelect(wx.ComboBox):
             self.SetItems(items)
         except OSError:
             self.SetItems([])
-        self.SetValue('')
+        self.SetValue("")
 
 
 class SeparatorSelect(wx.ComboBox):
     """Widget for selecting seperator"""
 
-    def __init__(self, parent, id=wx.ID_ANY,
-                 size=globalvar.DIALOG_GSELECT_SIZE, **kwargs):
-        super(SeparatorSelect, self).__init__(parent, id, size=size,
-                                              **kwargs)
+    def __init__(
+        self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
+    ):
+        super(SeparatorSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("SeparatorSelect")
-        self.SetItems(['pipe', 'comma', 'space', 'tab', 'newline'])
+        self.SetItems(["pipe", "comma", "space", "tab", "newline"])
 
 
 class SqlWhereSelect(wx.Panel):
-
     def __init__(self, parent, **kwargs):
         """Widget to define SQL WHERE condition.
 
@@ -2714,26 +2823,21 @@ class SqlWhereSelect(wx.Panel):
         self.parent = parent
         self.vector_map = None
 
-        self.sqlField = TextCtrl(parent=self, id=wx.ID_ANY,
-                                 size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        self.sqlField = TextCtrl(
+            parent=self, id=wx.ID_ANY, size=globalvar.DIALOG_TEXTCTRL_SIZE
+        )
         self.GetChildren()[0].SetName("SqlWhereSelect")
-        icon = wx.Bitmap(
-            os.path.join(
-                globalvar.ICONDIR,
-                "grass",
-                "table.png"))
+        icon = wx.Bitmap(os.path.join(globalvar.ICONDIR, "grass", "table.png"))
         self.buttonInsSql = buttons.ThemedGenBitmapButton(
-            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE)
+            parent=self, id=wx.ID_ANY, bitmap=icon, size=globalvar.DIALOG_COLOR_SIZE
+        )
         self.buttonInsSql.Bind(wx.EVT_BUTTON, self._onClick)
 
         self._doLayout()
 
-
     def _doLayout(self):
         self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.dialogSizer.Add(self.sqlField,
-                             proportion=1,
-                             flag=wx.EXPAND)
+        self.dialogSizer.Add(self.sqlField, proportion=1, flag=wx.EXPAND)
         self.dialogSizer.Add(self.buttonInsSql)
         self.SetSizer(self.dialogSizer)
 
@@ -2742,19 +2846,20 @@ class SqlWhereSelect(wx.Panel):
 
     def _onClick(self, event):
         from dbmgr.sqlbuilder import SQLBuilderWhere
+
         try:
             if not self.vector_map:
-                raise GException(_('No vector map selected'))
-            win = SQLBuilderWhere(parent=self,
-                                  vectmap=self.vector_map,
-                                  layer=self.vector_layer)
+                raise GException(_("No vector map selected"))
+            win = SQLBuilderWhere(
+                parent=self, vectmap=self.vector_map, layer=self.vector_layer
+            )
             win.Show()
         except GException as e:
-            GMessage(parent=self.parent, message='{}'.format(e))
+            GMessage(parent=self.parent, message="{}".format(e))
 
     def SetData(self, vector, layer):
         self.vector_map = vector
-        self.vector_layer = int(layer) # TODO: support layer names
+        self.vector_layer = int(layer)  # TODO: support layer names
 
     def SetValue(self, value):
         self.sqlField.SetValue(value)
