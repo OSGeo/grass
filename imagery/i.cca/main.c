@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     struct Signature sigs;
     FILE *sigfp;
     struct Ref refs;
+    char **err;
     int *datafds;
     int *outfds;
 
@@ -91,13 +92,14 @@ int main(int argc, char *argv[])
 
     grp_opt = G_define_standard_option(G_OPT_I_GROUP);
 
-    subgrp_opt = G_define_standard_option(G_OPT_I_GROUP);
+    subgrp_opt = G_define_standard_option(G_OPT_I_SUBGROUP);
     subgrp_opt->key = "subgroup";
     subgrp_opt->description = _("Name of input imagery subgroup");
 
     sig_opt = G_define_option();
     sig_opt->key = "signature";
     sig_opt->type = TYPE_STRING;
+    sig_opt->gisprompt = "old,signatures/sig,sigfile";
     sig_opt->required = YES;
     sig_opt->key_desc = "name";
     sig_opt->description = _("File containing spectral signatures");
@@ -113,13 +115,16 @@ int main(int argc, char *argv[])
     if (I_find_group(grp_opt->answer) <= 0)
 	G_fatal_error(_("Unknown imagery group."));
 
+    if (!I_find_subgroup(grp_opt->answer, subgrp_opt->answer))
+	G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
+		      subgrp_opt->answer, grp_opt->answer);
+
     if (I_get_subgroup_ref(grp_opt->answer, subgrp_opt->answer, &refs) <= 0)
 	G_fatal_error(_("Unable to find subgroup reference information."));
 
     /* open and input the signatures file */
     if ((sigfp =
-	 I_fopen_signature_file_old(grp_opt->answer, subgrp_opt->answer,
-				    sig_opt->answer)) == NULL)
+	 I_fopen_signature_file_old(sig_opt->answer)) == NULL)
 	G_fatal_error(_("Unable to open the signature file"));
 
     I_init_signatures(&sigs, refs.nfiles);
@@ -130,6 +135,15 @@ int main(int argc, char *argv[])
     nclass = sigs.nsigs;
     if (nclass < 2)
 	G_fatal_error(_("Need at least two signatures in signature file."));
+
+    err = I_sort_signatures_by_bandref(&sigs, &refs);
+    if (err)
+        G_fatal_error(_("Signature – group member band reference mismatch.\n"
+            "Extra signatures for bands: %s\n"
+            "Imagery group bands without signatures: %s"),
+            err[0] ? err[0] : _("none"),
+            err[1] ? err[1] : _("none")
+        );
 
     /* check the number of input bands */
     bands = refs.nfiles;
