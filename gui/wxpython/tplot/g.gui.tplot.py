@@ -118,64 +118,82 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
+
     try:
         from tplot.frame import TplotFrame
     except ImportError as e:
         gscript.fatal(e.message)
     rasters = None
-    if options['strds']:
-        rasters = options['strds'].strip().split(',')
+    if options["strds"]:
+        rasters = options["strds"].strip().split(",")
     coords = None
-    if options['coordinates']:
-        coords = options['coordinates'].strip().split(',')
+    if options["coordinates"]:
+        coords = options["coordinates"].strip().split(",")
     cats = None
-    if options['cats']:
-        cats = options['cats']
-    output = options['output']
+    if options["cats"]:
+        cats = options["cats"]
+    output = options["output"]
     vectors = None
     attr = None
-    if options['stvds']:
-        vectors = options['stvds'].strip().split(',')
-        if not options['attr']:
+    if options["stvds"]:
+        vectors = options["stvds"].strip().split(",")
+        if not options["attr"]:
             gscript.fatal(_("With stvds you have to set 'attr' option"))
         else:
-            attr = options['attr']
+            attr = options["attr"]
         if coords and cats:
-            gscript.fatal(_("With stvds it is not possible to use 'coordinates' "
-                            "and 'cats' options together"))
+            gscript.fatal(
+                _(
+                    "With stvds it is not possible to use 'coordinates' "
+                    "and 'cats' options together"
+                )
+            )
         elif not coords and not cats:
-            gscript.warning(_("With stvds you have to use 'coordinates' or "
-                              "'cats' option"))
+            gscript.warning(
+                _("With stvds you have to use 'coordinates' or " "'cats' option")
+            )
     title = None
-    if options['title']:
-        title = options['title']
+    if options["title"]:
+        title = options["title"]
     xlabel = None
-    if options['xlabel']:
-        xlabel = options['xlabel']
+    if options["xlabel"]:
+        xlabel = options["xlabel"]
     ylabel = None
-    if options['ylabel']:
-        ylabel = options['ylabel']
+    if options["ylabel"]:
+        ylabel = options["ylabel"]
     csvfile = None
-    if options['csv']:
-        csvfile = options['csv']
+    if options["csv"]:
+        csvfile = options["csv"]
     app = wx.App()
     frame = TplotFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
         title=_("Temporal Plot Tool - GRASS GIS"),
     )
-    if flags['l']:
+    if flags["l"]:
         frame.linRegRaster.SetValue(state=True)
         frame.linRegVector.SetValue(state=True)
-    frame.SetDatasets(rasters, vectors, coords, cats, attr, title, xlabel,
-                      ylabel, csvfile, flags['h'], gscript .overwrite)
+    frame.SetDatasets(
+        rasters,
+        vectors,
+        coords,
+        cats,
+        attr,
+        title,
+        xlabel,
+        ylabel,
+        csvfile,
+        flags["h"],
+        gscript.overwrite,
+    )
     if output:
         frame.OnRedraw()
-        if options['size']:
-            sizes = options['size'].strip().split(',')
+        if options["size"]:
+            sizes = options["size"].strip().split(",")
             sizes = [int(s) for s in sizes]
             frame.canvas.SetSize(sizes)
         frame.canvas.figure.savefig(output)
@@ -183,5 +201,6 @@ def main():
         frame.Show()
         app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

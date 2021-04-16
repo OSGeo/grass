@@ -28,6 +28,7 @@ import sys
 import locale
 import struct
 from math import sqrt
+
 try:
     from numpy import matrix
 except ImportError:
@@ -36,7 +37,8 @@ except ImportError:
         "imported. It probably is not installed (it's not part of the "
         "standard Python distribution). See the Numeric Python site "
         "(http://numpy.scipy.org) for information on downloading source or "
-        "binaries.")
+        "binaries."
+    )
     print("wxnviz.py: " + msg, file=sys.stderr)
 
 import wx
@@ -96,6 +98,7 @@ def print_progress(value):
 
     return 0
 
+
 try:
     errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
     errfunc = errtype(print_error)
@@ -106,7 +109,6 @@ except NameError:
 
 
 class Nviz(object):
-
     def __init__(self, glog, gprogress):
         """Initialize Nviz class instance
 
@@ -144,8 +146,8 @@ class Nviz(object):
 
     def Init(self):
         """Initialize window"""
-        if sys.platform != 'win32':
-            locale.setlocale(locale.LC_NUMERIC, 'C')
+        if sys.platform != "win32":
+            locale.setlocale(locale.LC_NUMERIC, "C")
         G_unset_window()
         Rast_unset_window()
         Rast__init_window()
@@ -164,8 +166,9 @@ class Nviz(object):
         """
         self.width = int(width * scale)
         self.height = int(height * scale)
-        Debug.msg(3, "Nviz::ResizeWindow(): width=%d height=%d",
-                  self.width, self.height)
+        Debug.msg(
+            3, "Nviz::ResizeWindow(): width=%d height=%d", self.width, self.height
+        )
         return Nviz_resize_window(self.width, self.height)
 
     def GetLongDim(self):
@@ -187,8 +190,13 @@ class Nviz(object):
         hmax = c_double()
         Nviz_get_exag_height(byref(hdef), byref(hmin), byref(hmax))
 
-        Debug.msg(1, "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
-                  hdef.value, hmin.value, hmax.value)
+        Debug.msg(
+            1,
+            "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
+            hdef.value,
+            hmin.value,
+            hmax.value,
+        )
 
         return (z_exag, hdef.value, hmin.value, hmax.value)
 
@@ -211,7 +219,8 @@ class Nviz(object):
             y,
             height,
             persp,
-            twist)
+            twist,
+        )
 
     def GetViewpointPosition(self):
         x = c_double()
@@ -300,8 +309,7 @@ class Nviz(object):
             Nviz_draw_all(self.data)
 
     def EraseMap(self):
-        """Erase map display (with background color)
-        """
+        """Erase map display (with background color)"""
         Debug.msg(1, "Nviz::EraseMap()")
         GS_clear(Nviz_get_bgcolor(self.data))
 
@@ -341,10 +349,8 @@ class Nviz(object):
         Nviz_set_light_position(self.data, lid, x, y, z, w)
         Nviz_set_light_bright(self.data, lid, bright)
         Nviz_set_light_color(
-            self.data, lid, int(
-                color[0]), int(
-                color[1]), int(
-                color[2]))
+            self.data, lid, int(color[0]), int(color[1]), int(color[2])
+        )
         Nviz_set_light_ambient(self.data, lid, ambient)
 
     def LoadSurface(self, name, color_name, color_value):
@@ -363,30 +369,48 @@ class Nviz(object):
             return -1
 
         # topography
-        id = Nviz_new_map_obj(MAP_OBJ_SURF,
-                              G_fully_qualified_name(name, mapset), 0.0,
-                              self.data)
+        id = Nviz_new_map_obj(
+            MAP_OBJ_SURF, G_fully_qualified_name(name, mapset), 0.0, self.data
+        )
 
-        if color_name:      # check for color map
+        if color_name:  # check for color map
             mapset = G_find_raster2(color_name, "")
             if mapset is None:
                 G_warning(_("Raster map <%s> not found"), color_name)
                 GS_delete_surface(id)
                 return -1
 
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(color_name, mapset), -1.0,
-                          self.data)
+            Nviz_set_attr(
+                id,
+                MAP_OBJ_SURF,
+                ATT_COLOR,
+                MAP_ATT,
+                G_fully_qualified_name(color_name, mapset),
+                -1.0,
+                self.data,
+            )
 
-        elif color_value:   # check for color value
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, CONST_ATT,
-                          None, Nviz_color_from_str(color_value),
-                          self.data)
+        elif color_value:  # check for color value
+            Nviz_set_attr(
+                id,
+                MAP_OBJ_SURF,
+                ATT_COLOR,
+                CONST_ATT,
+                None,
+                Nviz_color_from_str(color_value),
+                self.data,
+            )
 
-        else:               # use by default elevation map for coloring
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(name, mapset), -1.0,
-                          self.data)
+        else:  # use by default elevation map for coloring
+            Nviz_set_attr(
+                id,
+                MAP_OBJ_SURF,
+                ATT_COLOR,
+                MAP_ATT,
+                G_fully_qualified_name(name, mapset),
+                -1.0,
+                self.data,
+            )
 
         # if (i > 1)
         #     set_default_wirecolors(self.data, i)
@@ -402,9 +426,15 @@ class Nviz(object):
         """Add new constant surface"""
         id = Nviz_new_map_obj(MAP_OBJ_SURF, None, value, self.data)
 
-        Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, CONST_ATT,
-                      None, Nviz_color_from_str(color),
-                      self.data)
+        Nviz_set_attr(
+            id,
+            MAP_OBJ_SURF,
+            ATT_COLOR,
+            CONST_ATT,
+            None,
+            Nviz_color_from_str(color),
+            self.data,
+        )
         Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1)
 
         Debug.msg(1, "Nviz::AddConstant(): id=%d", id)
@@ -438,7 +468,7 @@ class Nviz(object):
         :return: -1 on failure
         """
         baseId = -1
-        if GS_num_surfs() == 0:     # load base surface if no loaded
+        if GS_num_surfs() == 0:  # load base surface if no loaded
             baseId = Nviz_new_map_obj(MAP_OBJ_SURF, None, 0.0, self.data)
 
             nsurf = c_int()
@@ -447,17 +477,16 @@ class Nviz(object):
 
         mapset = G_find_vector2(name, "")
         if mapset is None:
-            G_warning(_("Vector map <%s> not found"),
-                      name)
+            G_warning(_("Vector map <%s> not found"), name)
 
         if points:
-            id = Nviz_new_map_obj(MAP_OBJ_SITE,
-                                  G_fully_qualified_name(name, mapset), 0.0,
-                                  self.data)
+            id = Nviz_new_map_obj(
+                MAP_OBJ_SITE, G_fully_qualified_name(name, mapset), 0.0, self.data
+            )
         else:
-            id = Nviz_new_map_obj(MAP_OBJ_VECT,
-                                  G_fully_qualified_name(name, mapset), 0.0,
-                                  self.data)
+            id = Nviz_new_map_obj(
+                MAP_OBJ_VECT, G_fully_qualified_name(name, mapset), 0.0, self.data
+            )
 
         Debug.msg(1, "Nviz::LoadVector(): name=%s -> id=%d", name, id)
 
@@ -502,7 +531,8 @@ class Nviz(object):
             "Nviz::VectorSurfaceSelected(): vid=%s, sid=%d -> selected=%d",
             vid,
             sid,
-            selected)
+            selected,
+        )
         return selected
 
     def LoadVolume(self, name, color_name, color_value):
@@ -517,34 +547,50 @@ class Nviz(object):
         """
         mapset = G_find_raster3d(name, "")
         if mapset is None:
-            G_warning(_("3d raster map <%s> not found"),
-                      name)
+            G_warning(_("3d raster map <%s> not found"), name)
             return -1
 
         # topography
-        id = Nviz_new_map_obj(MAP_OBJ_VOL,
-                              G_fully_qualified_name(name, mapset), 0.0,
-                              self.data)
+        id = Nviz_new_map_obj(
+            MAP_OBJ_VOL, G_fully_qualified_name(name, mapset), 0.0, self.data
+        )
 
-        if color_name:      # check for color map
+        if color_name:  # check for color map
             mapset = G_find_raster3d(color_name, "")
             if mapset is None:
-                G_warning(_("3d raster map <%s> not found"),
-                          color_name)
+                G_warning(_("3d raster map <%s> not found"), color_name)
                 GVL_delete_vol(id)
                 return -1
 
-            Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(color_name, mapset), -1.0,
-                          self.data)
-        elif color_value:   # check for color value
-            Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, CONST_ATT,
-                          None, Nviz_color_from_str(color_value),
-                          self.data)
-        else:               # use by default elevation map for coloring
-            Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, MAP_ATT,
-                          G_fully_qualified_name(name, mapset), -1.0,
-                          self.data)
+            Nviz_set_attr(
+                id,
+                MAP_OBJ_VOL,
+                ATT_COLOR,
+                MAP_ATT,
+                G_fully_qualified_name(color_name, mapset),
+                -1.0,
+                self.data,
+            )
+        elif color_value:  # check for color value
+            Nviz_set_attr(
+                id,
+                MAP_OBJ_VOL,
+                ATT_COLOR,
+                CONST_ATT,
+                None,
+                Nviz_color_from_str(color_value),
+                self.data,
+            )
+        else:  # use by default elevation map for coloring
+            Nviz_set_attr(
+                id,
+                MAP_OBJ_VOL,
+                ATT_COLOR,
+                MAP_ATT,
+                G_fully_qualified_name(name, mapset),
+                -1.0,
+                self.data,
+            )
 
         Debug.msg(1, "Nviz::LoadVolume(): name=%s -> id=%d", name, id)
 
@@ -668,16 +714,14 @@ class Nviz(object):
             return -1
 
         if map:
-            ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, MAP_ATT,
-                                value, -1.0, self.data)
+            ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, MAP_ATT, value, -1.0, self.data)
         else:
             if attr == ATT_COLOR:
                 val = Nviz_color_from_str(value)
             else:
                 val = float(value)
 
-            ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, CONST_ATT,
-                                None, val, self.data)
+            ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, CONST_ATT, None, val, self.data)
 
         Debug.msg(
             3,
@@ -685,7 +729,8 @@ class Nviz(object):
             id,
             attr,
             map,
-            value)
+            value,
+        )
 
         if ret < 0:
             return -2
@@ -739,8 +784,7 @@ class Nviz(object):
         if not GS_surf_exists(id):
             return -1
 
-        Debug.msg(3, "Nviz::UnsetSurfaceAttr(): id=%d, attr=%d",
-                  id, attr)
+        Debug.msg(3, "Nviz::UnsetSurfaceAttr(): id=%d, attr=%d", id, attr)
 
         ret = Nviz_unset_attr(id, MAP_OBJ_SURF, attr)
 
@@ -760,8 +804,9 @@ class Nviz(object):
         :return: -1 surface not found
         :return: -2 setting attributes failed
         """
-        Debug.msg(3, "Nviz::SetSurfaceRes(): id=%d, fine=%d, coarse=%d",
-                  id, fine, coarse)
+        Debug.msg(
+            3, "Nviz::SetSurfaceRes(): id=%d, fine=%d, coarse=%d", id, fine, coarse
+        )
 
         if id > 0:
             if not GS_surf_exists(id):
@@ -795,8 +840,7 @@ class Nviz(object):
         :return: -1 surface not found
         :return: -2 setting attributes failed
         """
-        Debug.msg(3, "Nviz::SetSurfaceStyle(): id=%d, style=%d",
-                  id, style)
+        Debug.msg(3, "Nviz::SetSurfaceStyle(): id=%d, style=%d", id, style)
 
         if id > 0:
             if not GS_surf_exists(id):
@@ -827,8 +871,7 @@ class Nviz(object):
         :return: 1 on success
         :return: 0 on failure
         """
-        Debug.msg(3, "Nviz::SetWireColor(): id=%d, color=%s",
-                  id, color_str)
+        Debug.msg(3, "Nviz::SetWireColor(): id=%d, color=%s", id, color_str)
 
         color = Nviz_color_from_str(color_str)
 
@@ -863,8 +906,14 @@ class Nviz(object):
         x, y, z = c_float(), c_float(), c_float()
         GS_get_trans(id, byref(x), byref(y), byref(z))
 
-        Debug.msg(3, "Nviz::GetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
-                  id, x.value, y.value, z.value)
+        Debug.msg(
+            3,
+            "Nviz::GetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
+            id,
+            x.value,
+            y.value,
+            z.value,
+        )
 
         return [x.value, y.value, z.value]
 
@@ -881,8 +930,7 @@ class Nviz(object):
         if not GS_surf_exists(id):
             return -1
 
-        Debug.msg(3, "Nviz::SetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
-                  id, x, y, z)
+        Debug.msg(3, "Nviz::SetSurfacePosition(): id=%d, x=%f, y=%f, z=%f", id, x, y, z)
 
         GS_set_trans(id, x, y, z)
 
@@ -909,7 +957,8 @@ class Nviz(object):
             id,
             color_str,
             width,
-            use_z)
+            use_z,
+        )
 
         color = Nviz_color_from_str(color_str)
 
@@ -931,8 +980,7 @@ class Nviz(object):
         if not GV_vect_exists(id):
             return -1
 
-        Debug.msg(3, "Nviz::SetVectorLineHeight(): id=%d, height=%f",
-                  id, height)
+        Debug.msg(3, "Nviz::SetVectorLineHeight(): id=%d, height=%f", id, height)
 
         GV_set_trans(id, 0.0, 0.0, height)
 
@@ -1000,9 +1048,16 @@ class Nviz(object):
         if marker > 5:
             marker += 2
 
-        Debug.msg(3, "Nviz::SetVectorPointMode(): id=%d, color=%s, "
-                  "width=%d, size=%f, marker=%d",
-                  id, color_str, width, size, marker)
+        Debug.msg(
+            3,
+            "Nviz::SetVectorPointMode(): id=%d, color=%s, "
+            "width=%d, size=%f, marker=%d",
+            id,
+            color_str,
+            width,
+            size,
+            marker,
+        )
 
         color = Nviz_color_from_str(color_str)
 
@@ -1023,8 +1078,7 @@ class Nviz(object):
         if not GP_site_exists(id):
             return -1
 
-        Debug.msg(3, "Nviz::SetVectorPointHeight(): id=%d, height=%f",
-                  id, height)
+        Debug.msg(3, "Nviz::SetVectorPointHeight(): id=%d, height=%f", id, height)
 
         GP_set_trans(id, 0.0, 0.0, height)
 
@@ -1077,9 +1131,9 @@ class Nviz(object):
         """
         file = c_char_p()
 
-        if type == 'points':
+        if type == "points":
             ret = GP_get_sitename(id, byref(file))
-        elif type == 'lines':
+        elif type == "lines":
             ret = GV_get_vectname(id, byref(file))
 
         if ret < 0:
@@ -1087,8 +1141,16 @@ class Nviz(object):
 
         return self.ReadVectorColors(file, "")
 
-    def SetPointsStyleThematic(self, id, layer, color=None, colorTable=False,
-                               width=None, size=None, symbol=None):
+    def SetPointsStyleThematic(
+        self,
+        id,
+        layer,
+        color=None,
+        colorTable=False,
+        width=None,
+        size=None,
+        symbol=None,
+    ):
         """Set thematic style for vector points
 
         :param id: vector set id
@@ -1109,13 +1171,13 @@ class Nviz(object):
             return -1
 
         if colorTable:
-            GP_set_style_thematic(
-                id, layer, color, width, size, symbol, self.color)
+            GP_set_style_thematic(id, layer, color, width, size, symbol, self.color)
         else:
             GP_set_style_thematic(id, layer, color, width, size, symbol, None)
 
     def SetLinesStyleThematic(
-            self, id, layer, color=None, colorTable=False, width=None):
+        self, id, layer, color=None, colorTable=False, width=None
+    ):
         """Set thematic style for vector lines
 
         :param id: vector set id
@@ -1458,9 +1520,16 @@ class Nviz(object):
 
             ret = GVL_isosurf_set_att_const(id, isosurf_id, attr, val)
 
-        Debug.msg(3, "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, "
-                  "attr=%d, map=%s, value=%s",
-                  id, isosurf_id, attr, map, value)
+        Debug.msg(
+            3,
+            "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, "
+            "attr=%d, map=%s, value=%s",
+            id,
+            isosurf_id,
+            attr,
+            map,
+            value,
+        )
 
         if ret < 0:
             return -2
@@ -1524,8 +1593,13 @@ class Nviz(object):
         if isosurf_id > GVL_isosurf_num_isosurfs(id) - 1:
             return -2
 
-        Debug.msg(3, "Nviz::UnsetSurfaceAttr(): id=%d, isosurf_id=%d, attr=%d",
-                  id, isosurf_id, attr)
+        Debug.msg(
+            3,
+            "Nviz::UnsetSurfaceAttr(): id=%d, isosurf_id=%d, attr=%d",
+            id,
+            isosurf_id,
+            attr,
+        )
 
         ret = GVL_isosurf_unset_att(id, isosurf_id, attr)
 
@@ -1705,8 +1779,14 @@ class Nviz(object):
         x, y, z = c_float(), c_float(), c_float()
         GVL_get_trans(id, byref(x), byref(y), byref(z))
 
-        Debug.msg(3, "Nviz::GetVolumePosition(): id=%d, x=%f, y=%f, z=%f",
-                  id, x.value, y.value, z.value)
+        Debug.msg(
+            3,
+            "Nviz::GetVolumePosition(): id=%d, x=%f, y=%f, z=%f",
+            id,
+            x.value,
+            y.value,
+            z.value,
+        )
 
         return [x.value, y.value, z.value]
 
@@ -1723,8 +1803,7 @@ class Nviz(object):
         if not GVL_vol_exists(id):
             return -1
 
-        Debug.msg(3, "Nviz::SetVolumePosition(): id=%d, x=%f, y=%f, z=%f",
-                  id, x, y, z)
+        Debug.msg(3, "Nviz::SetVolumePosition(): id=%d, x=%f, y=%f, z=%f", id, x, y, z)
 
         GVL_set_trans(id, x, y, z)
 
@@ -1760,12 +1839,7 @@ class Nviz(object):
         x, y, z = c_float(), c_float(), c_float()
 
         current = Nviz_get_current_cplane(self.data)
-        Nviz_get_cplane_rotation(
-            self.data,
-            current,
-            byref(x),
-            byref(y),
-            byref(z))
+        Nviz_get_cplane_rotation(self.data, current, byref(x), byref(y), byref(z))
 
         return x.value, y.value, z.value
 
@@ -1774,8 +1848,7 @@ class Nviz(object):
         x, y, z = c_float(), c_float(), c_float()
 
         current = Nviz_get_current_cplane(self.data)
-        Nviz_get_cplane_translation(
-            self.data, current, byref(x), byref(y), byref(z))
+        Nviz_get_cplane_translation(self.data, current, byref(x), byref(y), byref(z))
 
         return x.value, y.value, z.value
 
@@ -1796,8 +1869,9 @@ class Nviz(object):
         current = Nviz_get_current_cplane(self.data)
         Nviz_set_cplane_translation(self.data, current, x, y, z)
         Nviz_draw_cplane(self.data, -1, -1)
-        Debug.msg(3, "Nviz::SetCPlaneTranslation(): id=%d, x=%f, y=%f, z=%f",
-                  current, x, y, z)
+        Debug.msg(
+            3, "Nviz::SetCPlaneTranslation(): id=%d, x=%f, y=%f, z=%f", current, x, y, z
+        )
 
     def SetCPlaneInteractively(self, x, y):
         current = Nviz_get_current_cplane(self.data)
@@ -1840,7 +1914,7 @@ class Nviz(object):
         Nviz_get_zrange(self.data, byref(min), byref(max))
         return min.value, max.value
 
-    def SaveToFile(self, filename, width=20, height=20, itype='ppm'):
+    def SaveToFile(self, filename, width=20, height=20, itype="ppm"):
         """Save current GL screen to ppm/tif file
 
         :param filename: file name
@@ -1854,7 +1928,7 @@ class Nviz(object):
         self.ResizeWindow(width, height)
         GS_clear(Nviz_get_bgcolor(self.data))
         self.Draw(False, -1)
-        if itype == 'ppm':
+        if itype == "ppm":
             GS_write_ppm(filename)
         else:
             GS_write_tif(filename)
@@ -1870,8 +1944,7 @@ class Nviz(object):
         """Draw fringe"""
         Nviz_draw_fringe(self.data)
 
-    def SetFringe(self, sid, color, elev, nw=False,
-                  ne=False, sw=False, se=False):
+    def SetFringe(self, sid, color, elev, nw=False, ne=False, sw=False, se=False):
         """Set fringe
 
         :param sid: surface id
@@ -1879,14 +1952,20 @@ class Nviz(object):
         :param elev: elevation (height)
         :param nw,ne,sw,se: fringe edges (turn on/off)
         """
-        scolor = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
-        Nviz_set_fringe(self.data,
-                        sid, Nviz_color_from_str(scolor),
-                        elev, int(nw), int(ne), int(sw), int(se))
+        scolor = str(color[0]) + ":" + str(color[1]) + ":" + str(color[2])
+        Nviz_set_fringe(
+            self.data,
+            sid,
+            Nviz_color_from_str(scolor),
+            elev,
+            int(nw),
+            int(ne),
+            int(sw),
+            int(se),
+        )
 
     def DrawArrow(self):
-        """Draw north arrow
-        """
+        """Draw north arrow"""
         return Nviz_draw_arrow(self.data)
 
     def SetArrow(self, sx, sy, size, color):
@@ -1896,12 +1975,10 @@ class Nviz(object):
         :param size: arrow length
         :param color: arrow color
         """
-        return Nviz_set_arrow(self.data, sx, sy, size,
-                              Nviz_color_from_str(color))
+        return Nviz_set_arrow(self.data, sx, sy, size, Nviz_color_from_str(color))
 
     def DeleteArrow(self):
-        """Delete north arrow
-        """
+        """Delete north arrow"""
         Nviz_delete_arrow(self.data)
 
     def SetScalebar(self, id, sx, sy, size, color):
@@ -1913,16 +1990,15 @@ class Nviz(object):
         :param color: scale bar color
         """
         return Nviz_set_scalebar(
-            self.data, id, sx, sy, size, Nviz_color_from_str(color))
+            self.data, id, sx, sy, size, Nviz_color_from_str(color)
+        )
 
     def DrawScalebar(self):
-        """Draw scale bar
-        """
+        """Draw scale bar"""
         return Nviz_draw_scalebar(self.data)
 
     def DeleteScalebar(self, id):
-        """Delete scalebar
-        """
+        """Delete scalebar"""
         Nviz_delete_scalebar(self.data, id)
 
     def GetPointOnSurface(self, sx, sy, scale=1):
@@ -1934,9 +2010,12 @@ class Nviz(object):
         x = c_float()
         y = c_float()
         z = c_float()
-        Debug.msg(5, "Nviz::GetPointOnSurface(): sx=%d sy=%d" % (sx * scale, sy * scale))
+        Debug.msg(
+            5, "Nviz::GetPointOnSurface(): sx=%d sy=%d" % (sx * scale, sy * scale)
+        )
         num = GS_get_selected_point_on_surface(
-            int(sx * scale), int(sy * scale), byref(sid), byref(x), byref(y), byref(z))
+            int(sx * scale), int(sy * scale), byref(sid), byref(x), byref(y), byref(z)
+        )
         if num == 0:
             return (None, None, None, None)
 
@@ -1956,19 +2035,22 @@ class Nviz(object):
         GS_get_cat_at_xy(sid, ATT_TOPO, catstr, x, y)
         GS_get_val_at_xy(sid, ATT_COLOR, valstr, x, y)
 
-        return {'id': sid,
-                'x': x,
-                'y': y,
-                'z': z,
-                'elevation': DecodeString(catstr.value).replace('(', '').replace(')', ''),
-                'color': DecodeString(valstr.value)}
+        return {
+            "id": sid,
+            "x": x,
+            "y": y,
+            "z": z,
+            "elevation": DecodeString(catstr.value).replace("(", "").replace(")", ""),
+            "color": DecodeString(valstr.value),
+        }
 
     def GetDistanceAlongSurface(self, sid, p1, p2, useExag=True):
         """Get distance measured along surface"""
         d = c_float()
 
-        GS_get_distance_alongsurf(sid, p1[0], p1[1], p2[0], p2[1],
-                                  byref(d), int(useExag))
+        GS_get_distance_alongsurf(
+            sid, p1[0], p1[1], p2[0], p2[1], byref(d), int(useExag)
+        )
 
         return d.value
 
@@ -1989,7 +2071,7 @@ class Nviz(object):
                 m.append(row)
                 row = []
         inv = matrix(m).I
-        ax, ay, az = dy, dx, 0.
+        ax, ay, az = dy, dx, 0.0
         x = inv[0, 0] * ax + inv[1, 0] * ay + inv[2, 0] * az
         y = inv[0, 1] * ax + inv[1, 1] * ay + inv[2, 1] * az
         z = inv[0, 2] * ax + inv[1, 2] * ay + inv[2, 2] * az
@@ -2043,8 +2125,8 @@ class Nviz(object):
         for i, item in enumerate(flyInfo):
             fly[i] = item
         exag = (c_int * 2)()
-        exag[0] = int(exagInfo['move'])
-        exag[1] = int(exagInfo['turn'])
+        exag[0] = int(exagInfo["move"])
+        exag[1] = int(exagInfo["turn"])
         Nviz_flythrough(self.data, fly, exag, mode)
 
 
@@ -2111,46 +2193,41 @@ class Texture(object):
         im = (c_ubyte * bytes)()
         bytes3 = 3 * self.width * self.height
         bytes1 = self.width * self.height
-        imageData = struct.unpack(str(bytes3) + 'B', self.image.GetData())
+        imageData = struct.unpack(str(bytes3) + "B", self.image.GetData())
         if self.image.HasAlpha():
             if wxPythonPhoenix:
-                alphaData = struct.unpack(
-                    str(bytes1) + 'B', self.image.GetAlpha())
+                alphaData = struct.unpack(str(bytes1) + "B", self.image.GetAlpha())
             else:
-                alphaData = struct.unpack(
-                    str(bytes1) + 'B', self.image.GetAlphaData())
+                alphaData = struct.unpack(str(bytes1) + "B", self.image.GetAlphaData())
 
         # this takes too much time
         wx.BeginBusyCursor()
         for i in range(self.height):
             for j in range(self.width):
-                im[(j + i * self.width) * bytesPerPixel + 0] = imageData[(j +
-                                                                          (rev_val - i) * self.width) * 3 + 0]
-                im[(j + i * self.width) * bytesPerPixel + 1] = imageData[(j +
-                                                                          (rev_val - i) * self.width) * 3 + 1]
-                im[(j + i * self.width) * bytesPerPixel + 2] = imageData[(j +
-                                                                          (rev_val - i) * self.width) * 3 + 2]
+                im[(j + i * self.width) * bytesPerPixel + 0] = imageData[
+                    (j + (rev_val - i) * self.width) * 3 + 0
+                ]
+                im[(j + i * self.width) * bytesPerPixel + 1] = imageData[
+                    (j + (rev_val - i) * self.width) * 3 + 1
+                ]
+                im[(j + i * self.width) * bytesPerPixel + 2] = imageData[
+                    (j + (rev_val - i) * self.width) * 3 + 2
+                ]
                 if self.image.HasAlpha():
-                    im[(j + i * self.width) * bytesPerPixel + 3] = alphaData[(j +
-                                                                              (rev_val - i) * self.width)]
+                    im[(j + i * self.width) * bytesPerPixel + 3] = alphaData[
+                        (j + (rev_val - i) * self.width)
+                    ]
         wx.EndBusyCursor()
 
-        id = Nviz_load_image(
-            im,
-            self.width,
-            self.height,
-            self.image.HasAlpha())
+        id = Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
 
         return id
 
     def Draw(self):
         """Draw texture as an image"""
         Nviz_draw_image(
-            self.coords[0],
-            self.coords[1],
-            self.width,
-            self.height,
-            self.textureId)
+            self.coords[0], self.coords[1], self.width, self.height, self.textureId
+        )
 
     def HitTest(self, x, y, radius):
         copy = Rect(self.coords[0], self.coords[1], self.orig_width, self.orig_height)
@@ -2190,11 +2267,7 @@ class ImageTexture(Texture):
         :param coords: image coordinates
         :param cmd: d.legend command
         """
-        Texture.__init__(
-            self,
-            filepath=filepath,
-            overlayId=overlayId,
-            coords=coords)
+        Texture.__init__(self, filepath=filepath, overlayId=overlayId, coords=coords)
 
         self.cmd = cmd
 

@@ -32,11 +32,13 @@ from core import globalvar
 from core.utils import registerPid, unregisterPid
 
 import wx
+
 # import adv and html before wx.App is created, otherwise
 # we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
 # during start up, remove when not needed
 import wx.adv
 import wx.html
+
 try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
@@ -44,9 +46,8 @@ except ImportError:
 
 
 class GMApp(wx.App):
-
     def __init__(self, workspace=None):
-        """ Main GUI class.
+        """Main GUI class.
 
         :param workspace: path to the workspace file
         """
@@ -58,7 +59,7 @@ class GMApp(wx.App):
         self.locale = wx.Locale(language=wx.LANGUAGE_DEFAULT)
 
     def OnInit(self):
-        """ Initialize all available image handlers
+        """Initialize all available image handlers
 
         :return: True
         """
@@ -70,44 +71,47 @@ class GMApp(wx.App):
         introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
         introImage = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
         introBmp = introImage.ConvertToBitmap()
-        if SC and sys.platform != 'darwin':
+        if SC and sys.platform != "darwin":
             # AdvancedSplash is buggy on the Mac as of 2.8.12.1
             # and raises annoying (though seemingly harmless) errors everytime
             # the GUI is started
-            splash = SC.AdvancedSplash(bitmap=introBmp,
-                                       timeout=2000, parent=None, id=wx.ID_ANY)
-            splash.SetText(_('Starting GRASS GUI...'))
+            splash = SC.AdvancedSplash(
+                bitmap=introBmp, timeout=2000, parent=None, id=wx.ID_ANY
+            )
+            splash.SetText(_("Starting GRASS GUI..."))
             splash.SetTextColour(wx.Colour(45, 52, 27))
             splash.SetTextFont(
                 wx.Font(
-                    pointSize=15,
-                    family=wx.DEFAULT,
-                    style=wx.NORMAL,
-                    weight=wx.BOLD))
+                    pointSize=15, family=wx.DEFAULT, style=wx.NORMAL, weight=wx.BOLD
+                )
+            )
             splash.SetTextPosition((150, 430))
         else:
             if globalvar.wxPythonPhoenix:
                 import wx.adv as wxadv
+
                 wxadv.SplashScreen(
                     bitmap=introBmp,
                     splashStyle=wxadv.SPLASH_CENTRE_ON_SCREEN | wxadv.SPLASH_TIMEOUT,
                     milliseconds=2000,
                     parent=None,
-                    id=wx.ID_ANY)
+                    id=wx.ID_ANY,
+                )
             else:
                 wx.SplashScreen(
                     bitmap=introBmp,
                     splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
                     milliseconds=2000,
                     parent=None,
-                    id=wx.ID_ANY)
+                    id=wx.ID_ANY,
+                )
 
         wx.GetApp().Yield()
 
         # create and show main frame
         from lmgr.frame import GMFrame
-        mainframe = GMFrame(parent=None, id=wx.ID_ANY,
-                            workspace=self.workspaceFile)
+
+        mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
 
         mainframe.Show()
         self.SetTopWindow(mainframe)
@@ -137,7 +141,7 @@ def process_opt(opts, args):
             printHelp()
 
         elif o in ("-w", "--workspace"):
-            if a != '':
+            if a != "":
                 workspaceFile = str(a)
             else:
                 workspaceFile = args.pop(0)
@@ -151,8 +155,7 @@ def main(argv=None):
         argv = sys.argv
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "hw:",
-                                       ["help", "workspace"])
+            opts, args = getopt.getopt(argv[1:], "hw:", ["help", "workspace"])
         except getopt.error as msg:
             raise Usage(msg)
     except Usage as err:
@@ -171,6 +174,7 @@ def main(argv=None):
     registerPid(os.getpid())
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     sys.exit(main())

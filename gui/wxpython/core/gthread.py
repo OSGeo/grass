@@ -21,6 +21,7 @@ import wx
 from wx.lib.newevent import NewEvent
 
 import sys
+
 if sys.version_info.major == 2:
     import Queue
 else:
@@ -37,6 +38,7 @@ class gThread(threading.Thread, wx.EvtHandler):
     terminating thread:
     https://www.geeksforgeeks.org/python-different-ways-to-kill-a-thread/
     """
+
     requestId = 0
 
     def __init__(self, requestQ=None, resultQ=None, **kwds):
@@ -89,7 +91,7 @@ class gThread(threading.Thread, wx.EvtHandler):
     def run(self):
         while True:
             requestId, args, kwds = self.requestQ.get()
-            for key in ('callable', 'ondone', 'userdata', 'onterminate'):
+            for key in ("callable", "ondone", "userdata", "onterminate"):
                 if key in kwds:
                     vars()[key] = kwds[key]
                     del kwds[key]
@@ -100,10 +102,10 @@ class gThread(threading.Thread, wx.EvtHandler):
 
             ret = None
             exception = None
-            time.sleep(.01)
+            time.sleep(0.01)
 
             self._terminate_evt = wxThdTerminate(
-                onterminate=vars()['onterminate'],
+                onterminate=vars()["onterminate"],
                 kwds=kwds,
                 args=args,
                 pid=requestId,
@@ -112,7 +114,7 @@ class gThread(threading.Thread, wx.EvtHandler):
             if self.terminate:
                 return
 
-            ret = vars()['callable'](*args, **kwds)
+            ret = vars()["callable"](*args, **kwds)
 
             if self.terminate:
                 return
@@ -121,13 +123,15 @@ class gThread(threading.Thread, wx.EvtHandler):
 
             self.resultQ.put((requestId, ret))
 
-            event = wxCmdDone(ondone=vars()['ondone'],
-                              kwds=kwds,
-                              args=args,  # TODO expand args to kwds
-                              ret=ret,
-                              exception=exception,
-                              userdata=vars()['userdata'],
-                              pid=requestId)
+            event = wxCmdDone(
+                ondone=vars()["ondone"],
+                kwds=kwds,
+                args=args,  # TODO expand args to kwds
+                ret=ret,
+                exception=exception,
+                userdata=vars()["userdata"],
+                pid=requestId,
+            )
 
             # send event
             wx.PostEvent(self, event)
@@ -151,14 +155,14 @@ class gThread(threading.Thread, wx.EvtHandler):
         self.run = self.__run_backup
 
     def globaltrace(self, frame, event, arg):
-        if event == 'call':
+        if event == "call":
             return self.localtrace
         else:
             return None
 
     def localtrace(self, frame, event, arg):
         if self.terminate:
-            if event == 'line':
+            if event == "line":
                 # Send event
                 wx.PostEvent(self, self._terminate_evt)
                 raise SystemExit()

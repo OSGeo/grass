@@ -27,18 +27,23 @@ from wx import stc
 from grass.pydispatch.signal import Signal
 
 # needed just for testing
-if __name__ == '__main__':
+if __name__ == "__main__":
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
 from core.gcmd import GError
-from core.gconsole   import GConsole, \
-    EVT_CMD_OUTPUT, EVT_CMD_PROGRESS, EVT_CMD_RUN, EVT_CMD_DONE, \
-    Notification
+from core.gconsole import (
+    GConsole,
+    EVT_CMD_OUTPUT,
+    EVT_CMD_PROGRESS,
+    EVT_CMD_RUN,
+    EVT_CMD_DONE,
+    Notification,
+)
 from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
-from gui_core.wrap import Button, ClearButton, ToggleButton, StaticText, \
-    StaticBox
+from gui_core.wrap import Button, ClearButton, ToggleButton, StaticText, StaticBox
 from core.settings import UserSettings
 
 
@@ -47,13 +52,19 @@ GC_PROMPT = 1
 
 
 class GConsoleWindow(wx.SplitterWindow):
-    """Create and manage output console for commands run by GUI.
-    """
+    """Create and manage output console for commands run by GUI."""
 
-    def __init__(self, parent, giface, gconsole, menuModel=None, margin=False,
-                 style=wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
-                 gcstyle=GC_EMPTY,
-                 **kwargs):
+    def __init__(
+        self,
+        parent,
+        giface,
+        gconsole,
+        menuModel=None,
+        margin=False,
+        style=wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
+        gcstyle=GC_EMPTY,
+        **kwargs,
+    ):
         """
         :param parent: gui parent
         :param gconsole: console logic
@@ -63,15 +74,13 @@ class GConsoleWindow(wx.SplitterWindow):
         :param gcstyle: GConsole style
                         (GC_EMPTY, GC_PROMPT to show command prompt)
         """
-        wx.SplitterWindow.__init__(
-            self, parent, id=wx.ID_ANY, style=style, **kwargs)
+        wx.SplitterWindow.__init__(self, parent, id=wx.ID_ANY, style=style, **kwargs)
         self.SetName("GConsole")
 
         self.panelOutput = wx.Panel(parent=self, id=wx.ID_ANY)
         self.panelProgress = wx.Panel(
-            parent=self.panelOutput,
-            id=wx.ID_ANY,
-            name='progressPanel')
+            parent=self.panelOutput, id=wx.ID_ANY, name="progressPanel"
+        )
         self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent  # GMFrame | CmdPanel | ?
@@ -89,9 +98,14 @@ class GConsoleWindow(wx.SplitterWindow):
         self.contentChanged = Signal("GConsoleWindow.contentChanged")
 
         # progress bar
-        self.progressbar = wx.Gauge(parent=self.panelProgress, id=wx.ID_ANY,
-                                    range=100, pos=(110, 50), size=(-1, 25),
-                                    style=wx.GA_HORIZONTAL)
+        self.progressbar = wx.Gauge(
+            parent=self.panelProgress,
+            id=wx.ID_ANY,
+            range=100,
+            pos=(110, 50),
+            size=(-1, 25),
+            style=wx.GA_HORIZONTAL,
+        )
         self._gconsole.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
         self._gconsole.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
         self._gconsole.Bind(EVT_CMD_RUN, self.OnCmdRun)
@@ -104,10 +118,8 @@ class GConsoleWindow(wx.SplitterWindow):
 
         # text control for command output
         self.cmdOutput = GStc(
-            parent=self.panelOutput,
-            id=wx.ID_ANY,
-            margin=margin,
-            wrap=None)
+            parent=self.panelOutput, id=wx.ID_ANY, margin=margin, wrap=None
+        )
 
         # command prompt
         # move to the if below
@@ -115,8 +127,9 @@ class GConsoleWindow(wx.SplitterWindow):
         self.cmdPrompt = GPromptSTC(
             parent=self, giface=giface, menuModel=self._menuModel
         )
-        self.cmdPrompt.promptRunCmd.connect(lambda cmd:
-                                            self._gconsole.RunCmd(command=cmd))
+        self.cmdPrompt.promptRunCmd.connect(
+            lambda cmd: self._gconsole.RunCmd(command=cmd)
+        )
         self.cmdPrompt.showNotification.connect(self.showNotification)
 
         if not self._gcstyle & GC_PROMPT:
@@ -125,13 +138,12 @@ class GConsoleWindow(wx.SplitterWindow):
         if self._gcstyle & GC_PROMPT:
             cmdLabel = _("Command prompt")
             self.outputBox = StaticBox(
-                parent=self.panelOutput,
-                id=wx.ID_ANY,
-                label=" %s " %
-                _("Output window"))
+                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % _("Output window")
+            )
 
-            self.cmdBox = StaticBox(parent=self.panelOutput, id=wx.ID_ANY,
-                                    label=" %s " % cmdLabel)
+            self.cmdBox = StaticBox(
+                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % cmdLabel
+            )
 
         # buttons
         self.btnOutputClear = ClearButton(parent=self.panelOutput)
@@ -139,17 +151,21 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnCmdClear = ClearButton(parent=self.panelOutput)
         self.btnCmdClear.SetToolTip(_("Clear command prompt content"))
         self.btnOutputSave = Button(parent=self.panelOutput, id=wx.ID_SAVE)
-        self.btnOutputSave.SetToolTip(
-            _("Save output window content to the file"))
+        self.btnOutputSave.SetToolTip(_("Save output window content to the file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
         self.btnCmdProtocol = ToggleButton(
             parent=self.panelOutput,
             id=wx.ID_ANY,
             label=_("&Log file"),
-            size=self.btnCmdClear.GetSize())
-        self.btnCmdProtocol.SetToolTip(_("Toggle to save list of executed commands into "
-                                         "a file; content saved when switching off."))
+            size=self.btnCmdClear.GetSize(),
+        )
+        self.btnCmdProtocol.SetToolTip(
+            _(
+                "Toggle to save list of executed commands into "
+                "a file; content saved when switching off."
+            )
+        )
         self.cmdFileProtocol = None
 
         if not self._gcstyle & GC_PROMPT:
@@ -178,20 +194,25 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if self._gcstyle & GC_PROMPT:
             promptSizer = wx.BoxSizer(wx.VERTICAL)
-            promptSizer.Add(self.cmdPrompt, proportion=1,
-                            flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
-                            border=3)
+            promptSizer.Add(
+                self.cmdPrompt,
+                proportion=1,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+                border=3,
+            )
             helpText = StaticText(
-                self.panelPrompt, id=wx.ID_ANY,
-                label="Press Tab to display command help, Ctrl+Space to autocomplete")
+                self.panelPrompt,
+                id=wx.ID_ANY,
+                label="Press Tab to display command help, Ctrl+Space to autocomplete",
+            )
             helpText.SetForegroundColour(
-                wx.SystemSettings.GetColour(
-                    wx.SYS_COLOUR_GRAYTEXT))
-            promptSizer.Add(helpText,
-                            proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
+                wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
+            )
+            promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
-        self.outputSizer.Add(self.cmdOutput, proportion=1,
-                             flag=wx.EXPAND | wx.ALL, border=3)
+        self.outputSizer.Add(
+            self.cmdOutput, proportion=1, flag=wx.EXPAND | wx.ALL, border=3
+        )
         if self._gcstyle & GC_PROMPT:
             proportion = 1
         else:
@@ -202,40 +223,54 @@ class GConsoleWindow(wx.SplitterWindow):
             self.btnOutputClear,
             proportion=proportion,
             flag=wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-            border=5)
+            border=5,
+        )
 
-        outBtnSizer.Add(self.btnOutputSave, proportion=proportion,
-                        flag=wx.RIGHT | wx.BOTTOM, border=5)
+        outBtnSizer.Add(
+            self.btnOutputSave,
+            proportion=proportion,
+            flag=wx.RIGHT | wx.BOTTOM,
+            border=5,
+        )
 
         cmdBtnSizer.Add(
             self.btnCmdProtocol,
             proportion=1,
-            flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-            border=5)
-        cmdBtnSizer.Add(self.btnCmdClear, proportion=1,
-                        flag=wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM, border=5)
-        progressSizer.Add(self.btnCmdAbort, proportion=0,
-                          flag=wx.ALL | wx.ALIGN_CENTER, border=5)
+            flag=wx.ALIGN_CENTER
+            | wx.ALIGN_CENTER_VERTICAL
+            | wx.LEFT
+            | wx.RIGHT
+            | wx.BOTTOM,
+            border=5,
+        )
+        cmdBtnSizer.Add(
+            self.btnCmdClear,
+            proportion=1,
+            flag=wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM,
+            border=5,
+        )
+        progressSizer.Add(
+            self.btnCmdAbort, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=5
+        )
         progressSizer.Add(
             self.progressbar,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.RIGHT | wx.TOP | wx.BOTTOM,
-            border=5)
+            border=5,
+        )
 
         self.panelProgress.SetSizer(progressSizer)
         progressSizer.Fit(self.panelProgress)
 
-        btnSizer.Add(outBtnSizer, proportion=1,
-                     flag=wx.ALL | wx.ALIGN_CENTER, border=5)
+        btnSizer.Add(outBtnSizer, proportion=1, flag=wx.ALL | wx.ALIGN_CENTER, border=5)
         btnSizer.Add(
             cmdBtnSizer,
             proportion=1,
             flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT,
-            border=5)
-        self.outputSizer.Add(self.panelProgress, proportion=0,
-                             flag=wx.EXPAND)
-        self.outputSizer.Add(btnSizer, proportion=0,
-                             flag=wx.EXPAND)
+            border=5,
+        )
+        self.outputSizer.Add(self.panelProgress, proportion=0, flag=wx.EXPAND)
+        self.outputSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND)
 
         self.outputSizer.Fit(self)
         self.outputSizer.SetSizeHints(self)
@@ -273,8 +308,9 @@ class GConsoleWindow(wx.SplitterWindow):
 
         return self.panelOutput
 
-    def WriteLog(self, text, style=None, wrap=None,
-                 notification=Notification.HIGHLIGHT):
+    def WriteLog(
+        self, text, style=None, wrap=None, notification=Notification.HIGHLIGHT
+    ):
         """Generic method for writing log message in
         given style.
 
@@ -304,7 +340,7 @@ class GConsoleWindow(wx.SplitterWindow):
             # fill space
             if len(line) < self.lineWidth:
                 diff = self.lineWidth - len(line)
-                line += diff * ' '
+                line += diff * " "
 
             self.cmdOutput.AddTextWrapped(line, wrap=wrap)  # adds '\n'
 
@@ -314,15 +350,14 @@ class GConsoleWindow(wx.SplitterWindow):
             try:
                 self.cmdOutput.StartStyling(p1)
             except TypeError:
-                self.cmdOutput.StartStyling(p1, 0xff)
+                self.cmdOutput.StartStyling(p1, 0xFF)
             self.cmdOutput.SetStyling(p2 - p1, style)
 
         self.cmdOutput.EnsureCaretVisible()
 
         self.contentChanged.emit(notification=notification)
 
-    def WriteCmdLog(self, text, pid=None,
-                    notification=Notification.MAKE_VISIBLE):
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         """Write message in selected style
 
         :param text: message to be printed
@@ -330,21 +365,26 @@ class GConsoleWindow(wx.SplitterWindow):
         :param switchPage: True to switch page
         """
         if pid:
-            text = '(' + str(pid) + ') ' + text
+            text = "(" + str(pid) + ") " + text
         self.WriteLog(
-            text,
-            style=self.cmdOutput.StyleCommand,
-            notification=notification)
+            text, style=self.cmdOutput.StyleCommand, notification=notification
+        )
 
     def WriteWarning(self, text):
         """Write message in warning style"""
-        self.WriteLog(text, style=self.cmdOutput.StyleWarning,
-                      notification=Notification.MAKE_VISIBLE)
+        self.WriteLog(
+            text,
+            style=self.cmdOutput.StyleWarning,
+            notification=Notification.MAKE_VISIBLE,
+        )
 
     def WriteError(self, text):
         """Write message in error style"""
-        self.WriteLog(text, style=self.cmdOutput.StyleError,
-                      notification=Notification.MAKE_VISIBLE)
+        self.WriteLog(
+            text,
+            style=self.cmdOutput.StyleError,
+            notification=Notification.MAKE_VISIBLE,
+        )
 
     def OnOutputClear(self, event):
         """Clear content of output window"""
@@ -364,16 +404,17 @@ class GConsoleWindow(wx.SplitterWindow):
             text = self.cmdOutput.GetText()
 
         # add newline if needed
-        if len(text) > 0 and text[-1] != '\n':
-            text += '\n'
+        if len(text) > 0 and text[-1] != "\n":
+            text += "\n"
 
         dlg = wx.FileDialog(
-            self, message=_("Save file as..."),
+            self,
+            message=_("Save file as..."),
             defaultFile="grass_cmd_output.txt",
-            wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") %
-            {'txt': _("Text files"),
-             'files': _("Files")},
-            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+            wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*")
+            % {"txt": _("Text files"), "files": _("Files")},
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
 
         # Show the dialog and retrieve the user response. If it is the OK response,
         # process the data.
@@ -385,9 +426,9 @@ class GConsoleWindow(wx.SplitterWindow):
                 output.write(text)
             except IOError as e:
                 GError(
-                    _("Unable to write file '%(path)s'.\n\nDetails: %(error)s") % {
-                        'path': path,
-                        'error': e})
+                    _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
+                    % {"path": path, "error": e}
+                )
             finally:
                 output.close()
             message = _("Command output saved into '%s'") % path
@@ -403,11 +444,11 @@ class GConsoleWindow(wx.SplitterWindow):
         """
         if copy:
             self.cmdPrompt.Bind(
-                stc.EVT_STC_PAINTED,
-                self.cmdPrompt.OnTextSelectionChanged)
+                stc.EVT_STC_PAINTED, self.cmdPrompt.OnTextSelectionChanged
+            )
             self.cmdOutput.Bind(
-                stc.EVT_STC_PAINTED,
-                self.cmdOutput.OnTextSelectionChanged)
+                stc.EVT_STC_PAINTED, self.cmdOutput.OnTextSelectionChanged
+            )
         else:
             self.cmdPrompt.Unbind(stc.EVT_STC_PAINTED)
             self.cmdOutput.Unbind(stc.EVT_STC_PAINTED)
@@ -422,7 +463,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.cmdOutput.AddStyledMessage(message, type)
 
-        if event.type in ('warning', 'error'):
+        if event.type in ("warning", "error"):
             self.contentChanged.emit(notification=Notification.MAKE_VISIBLE)
         else:
             self.contentChanged.emit(notification=Notification.HIGHLIGHT)
@@ -440,12 +481,15 @@ class GConsoleWindow(wx.SplitterWindow):
         try:
             with open(self.cmdFileProtocol, "a") as output:
                 cmds = self.cmdPrompt.GetCommands()
-                output.write('\n'.join(cmds))
+                output.write("\n".join(cmds))
                 if len(cmds) > 0:
-                    output.write('\n')
+                    output.write("\n")
         except IOError as e:
-            GError(_("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
-                filePath=self.cmdFileProtocol, error=e))
+            GError(
+                _("Unable to write file '{filePath}'.\n\nDetails: {error}").format(
+                    filePath=self.cmdFileProtocol, error=e
+                )
+            )
 
         self.showNotification.emit(
             message=_("Command log saved to '{}'".format(self.cmdFileProtocol))
@@ -463,12 +507,13 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdPrompt.ClearCommands()
             # ask for the file
             dlg = wx.FileDialog(
-                self, message=_("Save file as..."),
+                self,
+                message=_("Save file as..."),
                 defaultFile="grass_cmd_log.txt",
-                wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") %
-                {'txt': _("Text files"),
-                 'files': _("Files")},
-                style=wx.FD_SAVE)
+                wildcard=_("%(txt)s (*.txt)|*.txt|%(files)s (*)|*")
+                % {"txt": _("Text files"), "files": _("Files")},
+                style=wx.FD_SAVE,
+            )
             if dlg.ShowModal() == wx.ID_OK:
                 self.cmdFileProtocol = dlg.GetPath()
             else:
@@ -485,8 +530,7 @@ class GConsoleWindow(wx.SplitterWindow):
         event.Skip()
 
     def OnCmdDone(self, event):
-        """Command done (or aborted)
-        """
+        """Command done (or aborted)"""
         self.progressbar.SetValue(0)  # reset progress bar on '0%'
         wx.CallLater(100, self._hideProgress)
         event.Skip()
@@ -549,8 +593,9 @@ class GStc(stc.StyledTextCtrl):
         self.SetTabWidth(4)
         self.SetUseTabs(False)
         self.UsePopUp(True)
-        self.SetSelBackground(True,
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT))
+        self.SetSelBackground(
+            True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+        )
         self.SetUseHorizontalScrollBar(True)
 
         #
@@ -569,17 +614,11 @@ class GStc(stc.StyledTextCtrl):
         """Set styles for styled text output windows with type face
         and point size selected by user (Courier New 10 is default)"""
 
-        typeface = UserSettings.Get(
-            group='appearance',
-            key='outputfont',
-            subkey='type')
+        typeface = UserSettings.Get(group="appearance", key="outputfont", subkey="type")
         if typeface == "":
             typeface = "Courier New"
 
-        typesize = UserSettings.Get(
-            group='appearance',
-            key='outputfont',
-            subkey='size')
+        typesize = UserSettings.Get(group="appearance", key="outputfont", subkey="size")
         if typesize is None or int(typesize) <= 0:
             typesize = 10
         typesize = float(typesize)
@@ -654,14 +693,14 @@ class GStc(stc.StyledTextCtrl):
         self.SetReadOnly(False)
 
         if wrap:
-            txt = textwrap.fill(txt, wrap) + '\n'
+            txt = textwrap.fill(txt, wrap) + "\n"
         else:
-            if txt[-1] != '\n':
-                txt += '\n'
+            if txt[-1] != "\n":
+                txt += "\n"
 
-        if '\r' in txt:
+        if "\r" in txt:
             self.linePos = -1
-            for seg in txt.split('\r'):
+            for seg in txt.split("\r"):
                 if self.linePos > -1:
                     self.SetCurrentPos(self.linePos)
                     self.ReplaceSelection(seg)
@@ -685,38 +724,38 @@ class GStc(stc.StyledTextCtrl):
                       'warning', 'error' or None
         """
         # message prefix
-        if style == 'warning':
-            message = 'WARNING: ' + message
-        elif style == 'error':
-            message = 'ERROR: ' + message
+        if style == "warning":
+            message = "WARNING: " + message
+        elif style == "error":
+            message = "ERROR: " + message
 
         p1 = self.GetEndStyled()
         self.GotoPos(p1)
 
         # is this still needed?
-        if '\b' in message:
+        if "\b" in message:
             if self.linePos < 0:
                 self.linePos = p1
-            last_c = ''
+            last_c = ""
             for c in message:
-                if c == '\b':
+                if c == "\b":
                     self.linePos -= 1
                 else:
-                    if c == '\r':
+                    if c == "\r":
                         pos = self.GetCurLine()[1]
                         # self.SetCurrentPos(pos)
                     else:
                         self.SetCurrentPos(self.linePos)
                     self.ReplaceSelection(c)
                     self.linePos = self.GetCurrentPos()
-                    if c != ' ':
+                    if c != " ":
                         last_c = c
-            if last_c not in ('0123456789'):
-                self.AddTextWrapped('\n', wrap=None)
+            if last_c not in ("0123456789"):
+                self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1
         else:
             self.linePos = -1  # don't force position
-            if '\n' not in message:
+            if "\n" not in message:
                 self.AddTextWrapped(message, wrap=60)
             else:
                 self.AddTextWrapped(message, wrap=None)
@@ -726,13 +765,13 @@ class GStc(stc.StyledTextCtrl):
             try:
                 self.StartStyling(p1)
             except TypeError:
-                self.StartStyling(p1, 0xff)
+                self.StartStyling(p1, 0xFF)
 
-            if style == 'error':
+            if style == "error":
                 self.SetStyling(p2 - p1, self.StyleError)
-            elif style == 'warning':
+            elif style == "warning":
                 self.SetStyling(p2 - p1, self.StyleWarning)
-            elif style == 'message':
+            elif style == "message":
                 self.SetStyling(p2 - p1, self.StyleMessage)
             else:  # unknown
                 self.SetStyling(p2 - p1, self.StyleUnknown)
@@ -743,25 +782,31 @@ class GStc(stc.StyledTextCtrl):
 class GConsoleFrame(wx.Frame):
     """Standalone GConsole for testing only"""
 
-    def __init__(self, parent, id=wx.ID_ANY, title="GConsole Test Frame",
-                 style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        title="GConsole Test Frame",
+        style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
+        **kwargs,
+    ):
         wx.Frame.__init__(self, parent=parent, id=id, title=title, style=style)
 
         panel = wx.Panel(self, id=wx.ID_ANY)
 
         from lmgr.menudata import LayerManagerMenuData
+
         menuTreeBuilder = LayerManagerMenuData()
         self.gconsole = GConsole(guiparent=self)
-        self.goutput = GConsoleWindow(parent=panel, gconsole=self.gconsole,
-                                      menuModel=menuTreeBuilder.GetModel(),
-                                      gcstyle=GC_PROMPT)
+        self.goutput = GConsoleWindow(
+            parent=panel,
+            gconsole=self.gconsole,
+            menuModel=menuTreeBuilder.GetModel(),
+            gcstyle=GC_PROMPT,
+        )
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(
-            self.goutput,
-            proportion=1,
-            flag=wx.EXPAND,
-            border=0)
+        mainSizer.Add(self.goutput, proportion=1, flag=wx.EXPAND, border=0)
 
         panel.SetSizer(mainSizer)
         mainSizer.Fit(panel)
@@ -774,5 +819,6 @@ def testGConsole():
     frame.Show()
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     testGConsole()

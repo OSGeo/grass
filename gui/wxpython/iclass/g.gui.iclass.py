@@ -60,6 +60,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.settings import UserSettings
@@ -68,40 +69,37 @@ def main():
 
     group_name = subgroup_name = map_name = trainingmap_name = None
 
-    if options['group']:
-        if not options['subgroup']:
+    if options["group"]:
+        if not options["subgroup"]:
             gscript.fatal(_("Name of subgroup required"))
-        group_name = gscript.find_file(name=options['group'],
-                                       element='group')['name']
+        group_name = gscript.find_file(name=options["group"], element="group")["name"]
         if not group_name:
-            gscript.fatal(_("Group <%s> not found") % options['group'])
-        subgroups = gscript.read_command('i.group',
-                                         group=group_name,
-                                         flags='sg').splitlines()
-        if options['subgroup'] not in subgroups:
-            gscript.fatal(_("Subgroup <%s> not found") % options['subgroup'])
-        subgroup_name = options['subgroup']
+            gscript.fatal(_("Group <%s> not found") % options["group"])
+        subgroups = gscript.read_command(
+            "i.group", group=group_name, flags="sg"
+        ).splitlines()
+        if options["subgroup"] not in subgroups:
+            gscript.fatal(_("Subgroup <%s> not found") % options["subgroup"])
+        subgroup_name = options["subgroup"]
 
-    if options['map']:
-        map_name = gscript.find_file(name=options['map'],
-                                     element='cell')['fullname']
+    if options["map"]:
+        map_name = gscript.find_file(name=options["map"], element="cell")["fullname"]
         if not map_name:
-            gscript.fatal(_("Raster map <%s> not found") % options['map'])
+            gscript.fatal(_("Raster map <%s> not found") % options["map"])
 
-    if options['trainingmap']:
-        trainingmap_name = gscript.find_file(name=options['trainingmap'],
-                                             element='vector')['fullname']
+    if options["trainingmap"]:
+        trainingmap_name = gscript.find_file(
+            name=options["trainingmap"], element="vector"
+        )["fullname"]
         if not trainingmap_name:
-            gscript.fatal(
-                _("Vector map <%s> not found") %
-                options['trainingmap'])
+            gscript.fatal(_("Vector map <%s> not found") % options["trainingmap"])
 
     # define display driver
-    driver = UserSettings.Get(group='display', key='driver', subkey='type')
-    if driver == 'png':
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
+    driver = UserSettings.Get(group="display", key="driver", subkey="type")
+    if driver == "png":
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
     else:
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     # launch application
     app = wx.App()
@@ -113,7 +111,7 @@ def main():
         giface=giface,
         title=_("Supervised Classification Tool - GRASS GIS"),
     )
-    if not flags['m']:
+    if not flags["m"]:
         frame.CenterOnScreen()
     if group_name:
         frame.SetGroup(group_name, subgroup_name)
@@ -125,9 +123,10 @@ def main():
         frame.ImportAreas(trainingmap_name)
 
     frame.Show()
-    if flags['m']:
+    if flags["m"]:
         frame.Maximize()
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

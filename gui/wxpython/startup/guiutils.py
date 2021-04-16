@@ -30,7 +30,7 @@ from grass.grassdb.checks import (
     get_reasons_location_not_removable,
     get_reasons_locations_not_removable,
     get_reasons_grassdb_not_removable,
-    is_fallback_session
+    is_fallback_session,
 )
 import grass.grassdb.config as cfg
 
@@ -53,16 +53,25 @@ from gui_core.widgets import GenericValidator
 
 
 class MapsetDialog(TextEntryDialog):
-    def __init__(self, parent=None, default=None, message=None, caption=None,
-                 database=None, location=None):
+    def __init__(
+        self,
+        parent=None,
+        default=None,
+        message=None,
+        caption=None,
+        database=None,
+        location=None,
+    ):
         self.database = database
         self.location = location
 
-        validator = GenericValidator(self._isMapsetNameValid,
-                                     self._showMapsetNameInvalidReason)
+        validator = GenericValidator(
+            self._isMapsetNameValid, self._showMapsetNameInvalidReason
+        )
 
         TextEntryDialog.__init__(
-            self, parent=parent,
+            self,
+            parent=parent,
             message=message,
             caption=caption,
             defaultValue=default,
@@ -70,9 +79,9 @@ class MapsetDialog(TextEntryDialog):
         )
 
     def _showMapsetNameInvalidReason(self, ctrl):
-        message = get_mapset_name_invalid_reason(self.database,
-                                                 self.location,
-                                                 ctrl.GetValue())
+        message = get_mapset_name_invalid_reason(
+            self.database, self.location, ctrl.GetValue()
+        )
         GError(parent=self, message=message, caption=_("Invalid mapset name"))
 
     def _isMapsetNameValid(self, text):
@@ -81,15 +90,18 @@ class MapsetDialog(TextEntryDialog):
 
 
 class LocationDialog(TextEntryDialog):
-    def __init__(self, parent=None, default=None, message=None, caption=None,
-                 database=None):
+    def __init__(
+        self, parent=None, default=None, message=None, caption=None, database=None
+    ):
         self.database = database
 
-        validator = GenericValidator(self._isLocationNameValid,
-                                     self._showLocationNameInvalidReason)
+        validator = GenericValidator(
+            self._isLocationNameValid, self._showLocationNameInvalidReason
+        )
 
         TextEntryDialog.__init__(
-            self, parent=parent,
+            self,
+            parent=parent,
             message=message,
             caption=caption,
             defaultValue=default,
@@ -97,8 +109,7 @@ class LocationDialog(TextEntryDialog):
         )
 
     def _showLocationNameInvalidReason(self, ctrl):
-        message = get_location_name_invalid_reason(self.database,
-                                                   ctrl.GetValue())
+        message = get_location_name_invalid_reason(self.database, ctrl.GetValue())
         GError(parent=self, message=message, caption=_("Invalid location name"))
 
     def _isLocationNameValid(self, text):
@@ -144,8 +155,7 @@ def create_location_interactively(guiparent, grassdb):
     """
     from location_wizard.wizard import LocationWizard
 
-    gWizard = LocationWizard(parent=guiparent,
-                             grassdatabase=grassdb)
+    gWizard = LocationWizard(parent=guiparent, grassdatabase=grassdb)
 
     if gWizard.location is None:
         gWizard_output = (None, None, None)
@@ -154,19 +164,19 @@ def create_location_interactively(guiparent, grassdb):
 
     if gWizard.georeffile:
         message = _(
-            "Do you want to import {} "
-            "to the newly created location?"
+            "Do you want to import {} " "to the newly created location?"
         ).format(gWizard.georeffile)
-        dlg = wx.MessageDialog(parent=guiparent,
-                               message=message,
-                               caption=_("Import data?"),
-                               style=wx.YES_NO | wx.YES_DEFAULT |
-                               wx.ICON_QUESTION)
+        dlg = wx.MessageDialog(
+            parent=guiparent,
+            message=message,
+            caption=_("Import data?"),
+            style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+        )
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_YES:
-            gisrc_file, env = create_environment(gWizard.grassdatabase,
-                                                 gWizard.location,
-                                                 'PERMANENT')
+            gisrc_file, env = create_environment(
+                gWizard.grassdatabase, gWizard.location, "PERMANENT"
+            )
             import_file(guiparent, gWizard.georeffile, env)
             try_remove(gisrc_file)
         dlg.Destroy()
@@ -178,17 +188,15 @@ def create_location_interactively(guiparent, grassdb):
         defineRegion.Destroy()
 
     if gWizard.user_mapset:
-        mapset = create_mapset_interactively(guiparent,
-                                             gWizard.grassdatabase,
-                                             gWizard.location)
+        mapset = create_mapset_interactively(
+            guiparent, gWizard.grassdatabase, gWizard.location
+        )
         # Returns database and location created by user
         # and a mapset user may want to switch to
-        gWizard_output = (gWizard.grassdatabase, gWizard.location,
-                          mapset)
+        gWizard_output = (gWizard.grassdatabase, gWizard.location, mapset)
     else:
         # Returns PERMANENT mapset when user mapset not defined
-        gWizard_output = (gWizard.grassdatabase, gWizard.location,
-                          "PERMANENT")
+        gWizard_output = (gWizard.grassdatabase, gWizard.location, "PERMANENT")
     return gWizard_output
 
 
@@ -205,8 +213,9 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
     newmapset = None
 
     # Check selected mapset
-    message = get_reason_mapset_not_removable(grassdb, location, mapset,
-                                              check_permanent=True)
+    message = get_reason_mapset_not_removable(
+        grassdb, location, mapset, check_permanent=True
+    )
     if message:
         dlg = wx.MessageDialog(
             parent=guiparent,
@@ -216,7 +225,7 @@ def rename_mapset_interactively(guiparent, grassdb, location, mapset):
                 "No mapset will be renamed."
             ).format(mapset=mapset, reason=message),
             caption=_("Unable to rename selected mapset"),
-            style=wx.OK | wx.ICON_WARNING
+            style=wx.OK | wx.ICON_WARNING,
         )
         dlg.ShowModal()
         dlg.Destroy()
@@ -270,7 +279,7 @@ def rename_location_interactively(guiparent, grassdb, location):
                 "No location will be renamed."
             ).format(location=location, reasons="\n".join(messages)),
             caption=_("Unable to rename selected location"),
-            style=wx.OK | wx.ICON_WARNING
+            style=wx.OK | wx.ICON_WARNING,
         )
         dlg.ShowModal()
         dlg.Destroy()
@@ -311,8 +320,7 @@ def download_location_interactively(guiparent, grassdb):
     from startup.locdownload import LocationDownloadDialog
 
     result = (None, None, None)
-    loc_download = LocationDownloadDialog(parent=guiparent,
-                                          database=grassdb)
+    loc_download = LocationDownloadDialog(parent=guiparent, database=grassdb)
     loc_download.Centre()
     loc_download.ShowModal()
 
@@ -361,7 +369,7 @@ def delete_mapsets_interactively(guiparent, mapsets):
                 "No mapsets will be deleted."
             ).format(reasons="\n".join(messages)),
             caption=_("Unable to delete selected mapsets"),
-            style=wx.OK | wx.ICON_WARNING
+            style=wx.OK | wx.ICON_WARNING,
         )
         dlg.ShowModal()
         dlg.Destroy()
@@ -446,7 +454,7 @@ def delete_locations_interactively(guiparent, locations):
                 "No locations will be deleted."
             ).format(reasons="\n".join(messages)),
             caption=_("Unable to delete selected locations"),
-            style=wx.OK | wx.ICON_WARNING
+            style=wx.OK | wx.ICON_WARNING,
         )
         dlg.ShowModal()
         dlg.Destroy()
@@ -519,7 +527,7 @@ def delete_grassdb_interactively(guiparent, grassdb):
                 "GRASS database will not be deleted."
             ).format(reasons="\n".join(messages)),
             caption=_("Unable to delete selected GRASS database"),
-            style=wx.OK | wx.ICON_WARNING
+            style=wx.OK | wx.ICON_WARNING,
         )
         dlg.ShowModal()
     else:
@@ -571,27 +579,24 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
 
     if is_mapset_locked(mapset_path):
         info = get_mapset_lock_info(mapset_path)
-        user = info['owner'] if info['owner'] else _('unknown')
-        lockpath = info['lockpath']
-        timestamp = info['timestamp']
+        user = info["owner"] if info["owner"] else _("unknown")
+        lockpath = info["lockpath"]
+        timestamp = info["timestamp"]
 
         dlg = wx.MessageDialog(
             parent=guiparent,
-            message=_("User {user} is already running GRASS in selected mapset "
-                      "<{mapset}>\n (file {lockpath} created {timestamp} "
-                      "found).\n\n"
-                      "Concurrent use not allowed.\n\n"
-                      "Do you want to stay in the current mapset or remove "
-                      ".gislock and switch to selected mapset?"
-                      ).format(user=user,
-                               mapset=mapset,
-                               lockpath=lockpath,
-                               timestamp=timestamp),
+            message=_(
+                "User {user} is already running GRASS in selected mapset "
+                "<{mapset}>\n (file {lockpath} created {timestamp} "
+                "found).\n\n"
+                "Concurrent use not allowed.\n\n"
+                "Do you want to stay in the current mapset or remove "
+                ".gislock and switch to selected mapset?"
+            ).format(user=user, mapset=mapset, lockpath=lockpath, timestamp=timestamp),
             caption=_("Mapset is in use"),
             style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
         )
-        dlg.SetYesNoLabels("S&witch to selected mapset",
-                           "S&tay in current mapset")
+        dlg.SetYesNoLabels("S&witch to selected mapset", "S&tay in current mapset")
         if dlg.ShowModal() == wx.ID_YES:
             # Remove lockfile
             try:
@@ -600,10 +605,10 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
                 wx.MessageBox(
                     parent=guiparent,
                     caption=_("Error when removing lock file"),
-                    message=_("Unable to remove {lockpath}.\n\n Details: {error}."
-                              ).format(lockpath=lockpath,
-                                       error=e),
-                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE
+                    message=_(
+                        "Unable to remove {lockpath}.\n\n Details: {error}."
+                    ).format(lockpath=lockpath, error=e),
+                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
                 )
                 can_switch = False
         else:
@@ -617,89 +622,100 @@ def import_file(guiparent, filePath, env):
 
     If successful sets default region from imported map.
     """
-    RunCommand('db.connect', flags='c', env=env)
+    RunCommand("db.connect", flags="c", env=env)
     mapName = os.path.splitext(os.path.basename(filePath))[0]
-    vectors = RunCommand('v.in.ogr', input=filePath, flags='l',
-                         read=True, env=env)
+    vectors = RunCommand("v.in.ogr", input=filePath, flags="l", read=True, env=env)
 
     wx.BeginBusyCursor()
     wx.GetApp().Yield()
     if vectors:
         # vector detected
         returncode, error = RunCommand(
-            'v.in.ogr', input=filePath, output=mapName,
-            getErrorMsg=True, env=env)
+            "v.in.ogr", input=filePath, output=mapName, getErrorMsg=True, env=env
+        )
         if returncode == 0:
-            RunCommand('g.region', flags='s', vector=mapName, env=env)
+            RunCommand("g.region", flags="s", vector=mapName, env=env)
     else:
         returncode, error = RunCommand(
-            'r.in.gdal', input=filePath, output=mapName,
-            getErrorMsg=True, env=env)
+            "r.in.gdal", input=filePath, output=mapName, getErrorMsg=True, env=env
+        )
         if returncode == 0:
-            RunCommand('g.region', flags='s', raster=mapName, env=env)
+            RunCommand("g.region", flags="s", raster=mapName, env=env)
     wx.EndBusyCursor()
 
     if returncode != 0:
         GError(
             parent=guiparent,
-            message=_(
-                "Import of <%(name)s> failed.\n"
-                "Reason: %(msg)s") % ({
-                    'name': filePath,
-                    'msg': error}))
+            message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+            % ({"name": filePath, "msg": error}),
+        )
     else:
         GMessage(
             message=_(
                 "Data file <%(name)s> imported successfully. "
                 "The location's default region was set from "
-                "this imported map.") % {
-                'name': filePath},
-            parent=guiparent)
+                "this imported map."
+            )
+            % {"name": filePath},
+            parent=guiparent,
+        )
 
 
-def switch_mapset_interactively(guiparent, giface, dbase, location, mapset,
-                                show_confirmation=False):
+def switch_mapset_interactively(
+    guiparent, giface, dbase, location, mapset, show_confirmation=False
+):
     """Switch current mapset. Emits giface.currentMapsetChanged signal."""
     # Decide if a user is in a fallback session
     fallback_session = is_fallback_session()
 
     if dbase:
-        if RunCommand('g.mapset', parent=guiparent,
-                      location=location,
-                      mapset=mapset,
-                      dbase=dbase) == 0:
+        if (
+            RunCommand(
+                "g.mapset",
+                parent=guiparent,
+                location=location,
+                mapset=mapset,
+                dbase=dbase,
+            )
+            == 0
+        ):
             if show_confirmation:
-                GMessage(parent=guiparent,
-                         message=_("Current GRASS database is <%(dbase)s>.\n"
-                                   "Current location is <%(loc)s>.\n"
-                                   "Current mapset is <%(mapset)s>."
-                                   ) %
-                        {'dbase': dbase, 'loc': location, 'mapset': mapset})
-            giface.currentMapsetChanged.emit(dbase=dbase,
-                                             location=location,
-                                             mapset=mapset)
+                GMessage(
+                    parent=guiparent,
+                    message=_(
+                        "Current GRASS database is <%(dbase)s>.\n"
+                        "Current location is <%(loc)s>.\n"
+                        "Current mapset is <%(mapset)s>."
+                    )
+                    % {"dbase": dbase, "loc": location, "mapset": mapset},
+                )
+            giface.currentMapsetChanged.emit(
+                dbase=dbase, location=location, mapset=mapset
+            )
     elif location:
-        if RunCommand('g.mapset', parent=guiparent,
-                      location=location,
-                      mapset=mapset) == 0:
+        if (
+            RunCommand("g.mapset", parent=guiparent, location=location, mapset=mapset)
+            == 0
+        ):
             if show_confirmation:
-                GMessage(parent=guiparent,
-                         message=_("Current location is <%(loc)s>.\n"
-                                   "Current mapset is <%(mapset)s>.") %
-                        {'loc': location, 'mapset': mapset})
-            giface.currentMapsetChanged.emit(dbase=None,
-                                             location=location,
-                                             mapset=mapset)
+                GMessage(
+                    parent=guiparent,
+                    message=_(
+                        "Current location is <%(loc)s>.\n"
+                        "Current mapset is <%(mapset)s>."
+                    )
+                    % {"loc": location, "mapset": mapset},
+                )
+            giface.currentMapsetChanged.emit(
+                dbase=None, location=location, mapset=mapset
+            )
     else:
-        if RunCommand('g.mapset',
-                      parent=guiparent,
-                      mapset=mapset) == 0:
+        if RunCommand("g.mapset", parent=guiparent, mapset=mapset) == 0:
             if show_confirmation:
-                GMessage(parent=guiparent,
-                         message=_("Current mapset is <%s>.") % mapset)
-            giface.currentMapsetChanged.emit(dbase=None,
-                                             location=None,
-                                             mapset=mapset)
+                GMessage(
+                    parent=guiparent, message=_("Current mapset is <%s>.") % mapset
+                )
+            giface.currentMapsetChanged.emit(dbase=None, location=None, mapset=mapset)
 
     if fallback_session:
         tmp_dbase = os.environ["TMPDIR"]

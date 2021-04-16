@@ -35,11 +35,18 @@ from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
 
 
 class SwipeMapFrame(DoubleMapFrame):
-
-    def __init__(self, parent=None, giface=None,
-                 title=_("Map Swipe"), name="swipe", **kwargs):
-        DoubleMapFrame.__init__(self, parent=parent, title=title, name=name,
-                                firstMap=Map(), secondMap=Map(), **kwargs)
+    def __init__(
+        self, parent=None, giface=None, title=_("Map Swipe"), name="swipe", **kwargs
+    ):
+        DoubleMapFrame.__init__(
+            self,
+            parent=parent,
+            title=title,
+            name=name,
+            firstMap=Map(),
+            secondMap=Map(),
+            **kwargs,
+        )
         Debug.msg(1, "SwipeMapFrame.__init__()")
         #
         # Add toolbars
@@ -56,39 +63,40 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
-        self.mapWindowProperties.autoRenderChanged.connect(
-            self.OnAutoRenderChanged)
+        self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
         self.firstMapWindow = SwipeBufferedWindow(
-            parent=self.splitter, giface=self._giface,
-            properties=self.mapWindowProperties, Map=self.firstMap)
+            parent=self.splitter,
+            giface=self._giface,
+            properties=self.mapWindowProperties,
+            Map=self.firstMap,
+        )
         self.secondMapWindow = SwipeBufferedWindow(
-            parent=self.splitter, giface=self._giface,
-            properties=self.mapWindowProperties, Map=self.secondMap)
+            parent=self.splitter,
+            giface=self._giface,
+            properties=self.mapWindowProperties,
+            Map=self.secondMap,
+        )
         # bind query signal
         self.firstMapWindow.mapQueried.connect(self.Query)
         self.secondMapWindow.mapQueried.connect(self.Query)
 
         # bind tracking cursosr to mirror it
-        self.firstMapWindow.Bind(
-            wx.EVT_MOTION,
-            lambda evt: self.TrackCursor(evt))
-        self.secondMapWindow.Bind(
-            wx.EVT_MOTION,
-            lambda evt: self.TrackCursor(evt))
+        self.firstMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
+        self.secondMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
 
         self.MapWindow = self.firstMapWindow  # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
         self.SetBindRegions(True)
 
-        self._mode = 'swipe'
+        self._mode = "swipe"
 
         self._addPanes()
         self._bindWindowsActivation()
         self._setUpMapWindow(self.firstMapWindow)
         self._setUpMapWindow(self.secondMapWindow)
 
-        self._mgr.GetPane('sliderV').Hide()
-        self._mgr.GetPane('sliderH').Show()
+        self._mgr.GetPane("sliderV").Hide()
+        self._mgr.GetPane("sliderH").Show()
         self.slider = self.sliderH
 
         self.InitStatusbar()
@@ -101,7 +109,7 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self._mgr.Update()
 
-        self.rasters = {'first': None, 'second': None}
+        self.rasters = {"first": None, "second": None}
 
         self._inputDialog = None
         self._preferencesDialog = None
@@ -119,7 +127,7 @@ class SwipeMapFrame(DoubleMapFrame):
 
         Only for mirror mode.
         """
-        if self._mode == 'swipe':
+        if self._mode == "swipe":
             event.Skip()
             return
         coords = event.GetPosition()
@@ -146,38 +154,40 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def CallAfterInit(self):
         self.InitSliderBindings()
-        self.splitter.SplitVertically(
-            self.firstMapWindow, self.secondMapWindow, 0)
+        self.splitter.SplitVertically(self.firstMapWindow, self.secondMapWindow, 0)
         self.splitter.Init()
-        if not (self.rasters['first'] and self.rasters['second']):
+        if not (self.rasters["first"] and self.rasters["second"]):
             self.OnSelectLayers(event=None)
 
     def InitStatusbar(self):
         """Init statusbar (default items)."""
         # items for choice
-        self.statusbarItems = [sb.SbCoordinates,
-                               sb.SbRegionExtent,
-                               sb.SbCompRegionExtent,
-                               sb.SbShowRegion,
-                               sb.SbAlignExtent,
-                               sb.SbResolution,
-                               sb.SbDisplayGeometry,
-                               sb.SbMapScale,
-                               sb.SbGoTo,
-                               sb.SbProjection]
+        self.statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+        ]
 
         # create statusbar and its manager
         statusbar = self.CreateStatusBar(number=4, style=0)
         statusbar.SetMinHeight(24)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(
-            mapframe=self, statusbar=statusbar)
+        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
         self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar)
+            self.statusbarItems, mapframe=self, statusbar=statusbar
+        )
         self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2))
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
         sbRender = sb.SbRender(self, statusbar=statusbar, position=3)
         self.statusbarManager.AddStatusbarItem(sbRender)
 
@@ -193,19 +203,11 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def InitSliderBindings(self):
         self.sliderH.Bind(wx.EVT_SPIN, self.OnSliderPositionChanging)
-        self.sliderH.Bind(
-            wx.EVT_SCROLL_THUMBRELEASE,
-            self.OnSliderPositionChanged)
+        self.sliderH.Bind(wx.EVT_SCROLL_THUMBRELEASE, self.OnSliderPositionChanged)
         self.sliderV.Bind(wx.EVT_SPIN, self.OnSliderPositionChanging)
-        self.sliderV.Bind(
-            wx.EVT_SCROLL_THUMBRELEASE,
-            self.OnSliderPositionChanged)
-        self.splitter.Bind(
-            wx.EVT_SPLITTER_SASH_POS_CHANGING,
-            self.OnSashChanging)
-        self.splitter.Bind(
-            wx.EVT_SPLITTER_SASH_POS_CHANGED,
-            self.OnSashChanged)
+        self.sliderV.Bind(wx.EVT_SCROLL_THUMBRELEASE, self.OnSliderPositionChanged)
+        self.splitter.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGING, self.OnSashChanging)
+        self.splitter.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGED, self.OnSashChanged)
 
     def OnSliderPositionChanging(self, event):
         """Slider changes its position, sash must be moved too."""
@@ -274,59 +276,117 @@ class SwipeMapFrame(DoubleMapFrame):
          - 'swipeMisc'         - misc (settings, help)
         """
         self.toolbars["swipeMap"] = SwipeMapToolbar(self, self._toolSwitcher)
-        self._mgr.AddPane(self.toolbars["swipeMap"],
-                          wx.aui.AuiPaneInfo().
-                          Name("swipeMap").Caption(_("Map Toolbar")).
-                          ToolbarPane().Top().
-                          LeftDockable(False).RightDockable(False).
-                          BottomDockable(False).TopDockable(True).
-                          CloseButton(False).Layer(2).Row(1).Position(1).
-                          BestSize((self.toolbars["swipeMap"].GetBestSize())))
+        self._mgr.AddPane(
+            self.toolbars["swipeMap"],
+            wx.aui.AuiPaneInfo()
+            .Name("swipeMap")
+            .Caption(_("Map Toolbar"))
+            .ToolbarPane()
+            .Top()
+            .LeftDockable(False)
+            .RightDockable(False)
+            .BottomDockable(False)
+            .TopDockable(True)
+            .CloseButton(False)
+            .Layer(2)
+            .Row(1)
+            .Position(1)
+            .BestSize((self.toolbars["swipeMap"].GetBestSize())),
+        )
 
         self.toolbars["swipeMain"] = SwipeMainToolbar(self)
 
-        self._mgr.AddPane(self.toolbars["swipeMain"],
-                          wx.aui.AuiPaneInfo().
-                          Name("swipeMain").Caption(_("Main Toolbar")).
-                          ToolbarPane().Top().
-                          LeftDockable(False).RightDockable(False).
-                          BottomDockable(False).TopDockable(True).
-                          CloseButton(False).Layer(2).Row(1).Position(0).
-                          BestSize((self.toolbars["swipeMain"].GetBestSize())))
+        self._mgr.AddPane(
+            self.toolbars["swipeMain"],
+            wx.aui.AuiPaneInfo()
+            .Name("swipeMain")
+            .Caption(_("Main Toolbar"))
+            .ToolbarPane()
+            .Top()
+            .LeftDockable(False)
+            .RightDockable(False)
+            .BottomDockable(False)
+            .TopDockable(True)
+            .CloseButton(False)
+            .Layer(2)
+            .Row(1)
+            .Position(0)
+            .BestSize((self.toolbars["swipeMain"].GetBestSize())),
+        )
 
         self.toolbars["swipeMisc"] = SwipeMiscToolbar(self)
 
-        self._mgr.AddPane(self.toolbars["swipeMisc"],
-                          wx.aui.AuiPaneInfo().
-                          Name("swipeMisc").Caption(_("Misc Toolbar")).
-                          ToolbarPane().Top().
-                          LeftDockable(False).RightDockable(False).
-                          BottomDockable(False).TopDockable(True).
-                          CloseButton(False).Layer(2).Row(1).Position(2).
-                          BestSize((self.toolbars["swipeMisc"].GetBestSize())))
+        self._mgr.AddPane(
+            self.toolbars["swipeMisc"],
+            wx.aui.AuiPaneInfo()
+            .Name("swipeMisc")
+            .Caption(_("Misc Toolbar"))
+            .ToolbarPane()
+            .Top()
+            .LeftDockable(False)
+            .RightDockable(False)
+            .BottomDockable(False)
+            .TopDockable(True)
+            .CloseButton(False)
+            .Layer(2)
+            .Row(1)
+            .Position(2)
+            .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
+        )
 
     def _addPanes(self):
         """Add splitter window and sliders to aui manager"""
         # splitter window
-        self._mgr.AddPane(self.splitter, wx.aui.AuiPaneInfo().
-                          Name('splitter').CaptionVisible(False).PaneBorder(True).
-                          Dockable(False).Floatable(False).CloseButton(False).
-                          Center().Layer(1).BestSize((self.splitter.GetBestSize())))
+        self._mgr.AddPane(
+            self.splitter,
+            wx.aui.AuiPaneInfo()
+            .Name("splitter")
+            .CaptionVisible(False)
+            .PaneBorder(True)
+            .Dockable(False)
+            .Floatable(False)
+            .CloseButton(False)
+            .Center()
+            .Layer(1)
+            .BestSize((self.splitter.GetBestSize())),
+        )
 
         # sliders
-        self._mgr.AddPane(self.sliderH, wx.aui.AuiPaneInfo().
-                          Name('sliderH').CaptionVisible(False).PaneBorder(False).
-                          CloseButton(False).Gripper(True).GripperTop(False).
-                          BottomDockable(True).TopDockable(True).
-                          LeftDockable(False).RightDockable(False).
-                          Bottom().Layer(1).BestSize((self.sliderH.GetBestSize())))
+        self._mgr.AddPane(
+            self.sliderH,
+            wx.aui.AuiPaneInfo()
+            .Name("sliderH")
+            .CaptionVisible(False)
+            .PaneBorder(False)
+            .CloseButton(False)
+            .Gripper(True)
+            .GripperTop(False)
+            .BottomDockable(True)
+            .TopDockable(True)
+            .LeftDockable(False)
+            .RightDockable(False)
+            .Bottom()
+            .Layer(1)
+            .BestSize((self.sliderH.GetBestSize())),
+        )
 
-        self._mgr.AddPane(self.sliderV, wx.aui.AuiPaneInfo().
-                          Name('sliderV').CaptionVisible(False).PaneBorder(False).
-                          CloseButton(False).Gripper(True).GripperTop(True).
-                          BottomDockable(False).TopDockable(False).
-                          LeftDockable(True).RightDockable(True).
-                          Right().Layer(1).BestSize((self.sliderV.GetBestSize())))
+        self._mgr.AddPane(
+            self.sliderV,
+            wx.aui.AuiPaneInfo()
+            .Name("sliderV")
+            .CaptionVisible(False)
+            .PaneBorder(False)
+            .CloseButton(False)
+            .Gripper(True)
+            .GripperTop(True)
+            .BottomDockable(False)
+            .TopDockable(False)
+            .LeftDockable(True)
+            .RightDockable(True)
+            .Right()
+            .Layer(1)
+            .BestSize((self.sliderV.GetBestSize())),
+        )
 
     def ZoomToMap(self):
         """
@@ -334,9 +394,9 @@ class SwipeMapFrame(DoubleMapFrame):
         or vector map.
         """
         layers = []
-        if self.rasters['first']:
+        if self.rasters["first"]:
             layers += self.firstMap.GetListOfLayers()
-        if self.rasters['second']:
+        if self.rasters["second"]:
             layers += self.secondMap.GetListOfLayers()
 
         if layers:
@@ -354,17 +414,23 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def OnSelectLayers(self, event):
         if self._inputDialog is None:
-            dlg = SwipeMapDialog(self, first=self.rasters['first'],
-                                 second=self.rasters['second'],
-                                 firstLayerList=None, secondLayerList=None)
+            dlg = SwipeMapDialog(
+                self,
+                first=self.rasters["first"],
+                second=self.rasters["second"],
+                firstLayerList=None,
+                secondLayerList=None,
+            )
             dlg.applyChanges.connect(self.OnApplyInputChanges)
             # connect to convertor object to convert to Map
             # store reference to convertor is needed otherwise it would be
             # discarded
             self._firstConverter = self._connectSimpleLmgr(
-                dlg.GetFirstSimpleLmgr(), self.GetFirstMap())
+                dlg.GetFirstSimpleLmgr(), self.GetFirstMap()
+            )
             self._secondConverter = self._connectSimpleLmgr(
-                dlg.GetSecondSimpleLmgr(), self.GetSecondMap())
+                dlg.GetSecondSimpleLmgr(), self.GetSecondMap()
+            )
             self._inputDialog = dlg
             dlg.CentreOnParent()
             dlg.Show()
@@ -394,25 +460,22 @@ class SwipeMapFrame(DoubleMapFrame):
     def OnApplyInputChanges(self):
         first, second = self._inputDialog.GetValues()
         if self._inputDialog.IsSimpleMode():
-            self.rasters['first'], self.rasters['second'] = first, second
-            res1 = self.SetFirstRaster(name=self.rasters['first'])
-            res2 = self.SetSecondRaster(name=self.rasters['second'])
+            self.rasters["first"], self.rasters["second"] = first, second
+            res1 = self.SetFirstRaster(name=self.rasters["first"])
+            res2 = self.SetSecondRaster(name=self.rasters["second"])
             if not (res1 and res2) and (first or second):
-                message = ''
+                message = ""
                 if first and not res1:
-                    message += _("Map <%s> not found. ") % self.rasters[
-                        'first']
+                    message += _("Map <%s> not found. ") % self.rasters["first"]
                 if second and not res2:
-                    message += _("Map <%s> not found.") % self.rasters[
-                        'second']
+                    message += _("Map <%s> not found.") % self.rasters["second"]
                 if message:
                     GError(parent=self, message=message)
                     return
             self.ZoomToMap()
         else:
             LayerListToRendererConverter(self.GetFirstMap()).ConvertAll(first)
-            LayerListToRendererConverter(
-                self.GetSecondMap()).ConvertAll(second)
+            LayerListToRendererConverter(self.GetSecondMap()).ConvertAll(second)
 
         self.SetRasterNames()
         if self.IsAutoRendered():
@@ -421,12 +484,10 @@ class SwipeMapFrame(DoubleMapFrame):
     def SetFirstRaster(self, name):
         """Set raster map to first Map"""
         if name:
-            raster = grass.find_file(name=name, element='cell')
-            if raster.get('fullname'):
-                self.rasters['first'] = raster['fullname']
-                self.SetLayer(
-                    name=raster['fullname'],
-                    mapInstance=self.GetFirstMap())
+            raster = grass.find_file(name=name, element="cell")
+            if raster.get("fullname"):
+                self.rasters["first"] = raster["fullname"]
+                self.SetLayer(name=raster["fullname"], mapInstance=self.GetFirstMap())
                 return True
 
         return False
@@ -434,12 +495,10 @@ class SwipeMapFrame(DoubleMapFrame):
     def SetSecondRaster(self, name):
         """Set raster map to second Map"""
         if name:
-            raster = grass.find_file(name=name, element='cell')
-            if raster.get('fullname'):
-                self.rasters['second'] = raster['fullname']
-                self.SetLayer(
-                    name=raster['fullname'],
-                    mapInstance=self.GetSecondMap())
+            raster = grass.find_file(name=name, element="cell")
+            if raster.get("fullname"):
+                self.rasters["second"] = raster["fullname"]
+                self.SetLayer(name=raster["fullname"], mapInstance=self.GetSecondMap())
                 return True
 
         return False
@@ -453,16 +512,17 @@ class SwipeMapFrame(DoubleMapFrame):
 
         # this simple application enables to keep only one raster
         mapInstance.DeleteAllLayers()
-        cmdlist = ['d.rast', 'map=%s' % name]
+        cmdlist = ["d.rast", "map=%s" % name]
         # add layer to Map instance (core.render)
         mapInstance.AddLayer(
-            ltype='raster',
+            ltype="raster",
             command=cmdlist,
             active=True,
             name=name,
             hidden=False,
             opacity=1.0,
-            render=True)
+            render=True,
+        )
 
     def OnSwitchWindows(self, event):
         """Switch windows position."""
@@ -488,10 +548,10 @@ class SwipeMapFrame(DoubleMapFrame):
         w2 = self.splitter.GetWindow2()
         lineWidth = 1
         # render to temporary files
-        filename1 = grass.tempfile(False) + '1'
-        filename2 = grass.tempfile(False) + '2'
+        filename1 = grass.tempfile(False) + "1"
+        filename2 = grass.tempfile(False) + "2"
         width, height = self.splitter.GetClientSize()
-        if self._mode == 'swipe':
+        if self._mode == "swipe":
             x, y = w2.GetImageCoords()
             w1.SaveToFile(filename1, fileType, width, height)
             w2.SaveToFile(filename2, fileType, width, height)
@@ -506,7 +566,7 @@ class SwipeMapFrame(DoubleMapFrame):
         im.Replace(0, 0, 0, 255, 255, 255)
 
         # paste images
-        if self._mode == 'swipe':
+        if self._mode == "swipe":
             if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
                 im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
                 im.Paste(im1, 0, 0)
@@ -531,21 +591,25 @@ class SwipeMapFrame(DoubleMapFrame):
         grass.try_remove(filename2)
 
     def SaveToFile(self, event):
-        """Save map to image
-        """
+        """Save map to image"""
         img = self.firstMapWindow.img or self.secondMapWindow.img
         if not img:
-            GMessage(parent=self, message=_(
-                "Nothing to render (empty map). Operation canceled."))
+            GMessage(
+                parent=self,
+                message=_("Nothing to render (empty map). Operation canceled."),
+            )
             return
         filetype, ltype = GetImageHandlers(img)
 
         # get filename
-        dlg = wx.FileDialog(parent=self,
-                            message=_("Choose a file name to save the image "
-                                      "(no need to add extension)"),
-                            wildcard=filetype,
-                            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dlg = wx.FileDialog(
+            parent=self,
+            message=_(
+                "Choose a file name to save the image " "(no need to add extension)"
+            ),
+            wildcard=filetype,
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
@@ -554,10 +618,10 @@ class SwipeMapFrame(DoubleMapFrame):
                 return
 
             base, ext = os.path.splitext(path)
-            fileType = ltype[dlg.GetFilterIndex()]['type']
-            extType = ltype[dlg.GetFilterIndex()]['ext']
+            fileType = ltype[dlg.GetFilterIndex()]["type"]
+            extType = ltype[dlg.GetFilterIndex()]["ext"]
             if ext != extType:
-                path = base + '.' + extType
+                path = base + "." + extType
 
             self._saveToFile(path, fileType)
 
@@ -570,19 +634,17 @@ class SwipeMapFrame(DoubleMapFrame):
         splitter = self.splitter
         splitter.Unsplit()
         if splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
-            splitter.SplitVertically(
-                self.firstMapWindow, self.secondMapWindow, 0)
+            splitter.SplitVertically(self.firstMapWindow, self.secondMapWindow, 0)
             self.slider = self.sliderH
-            if self._mode == 'swipe':
-                self._mgr.GetPane('sliderH').Show()
-                self._mgr.GetPane('sliderV').Hide()
+            if self._mode == "swipe":
+                self._mgr.GetPane("sliderH").Show()
+                self._mgr.GetPane("sliderV").Hide()
         else:
-            splitter.SplitHorizontally(
-                self.firstMapWindow, self.secondMapWindow, 0)
+            splitter.SplitHorizontally(self.firstMapWindow, self.secondMapWindow, 0)
             self.slider = self.sliderV
-            if self._mode == 'swipe':
-                self._mgr.GetPane('sliderV').Show()
-                self._mgr.GetPane('sliderH').Hide()
+            if self._mode == "swipe":
+                self._mgr.GetPane("sliderV").Show()
+                self._mgr.GetPane("sliderH").Hide()
         self._mgr.Update()
         splitter.OnSashChanged(None)
         self.OnSize(None)
@@ -603,38 +665,36 @@ class SwipeMapFrame(DoubleMapFrame):
         if self._mode == mode:
             return
         self._mode = mode
-        self.toolbars['swipeMain'].SetMode(mode)
+        self.toolbars["swipeMain"].SetMode(mode)
         # set window mode
         self.GetFirstWindow().SetMode(mode)
         self.GetSecondWindow().SetMode(mode)
         # hide/show slider
         if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
-            self._mgr.GetPane('sliderV').Show(mode == 'swipe')
+            self._mgr.GetPane("sliderV").Show(mode == "swipe")
             size = self.splitter.GetSize()[1] / 2
         else:
-            self._mgr.GetPane('sliderH').Show(mode == 'swipe')
+            self._mgr.GetPane("sliderH").Show(mode == "swipe")
             size = self.splitter.GetSize()[0] / 2
         # set sash in the middle
         self.splitter.SetSashPosition(size)
         self.slider.SetValue(size)
         self._mgr.Update()
         # enable / disable sash
-        self.splitter.EnableSash(mode == 'swipe')
+        self.splitter.EnableSash(mode == "swipe")
         # hack to make it work
         self.splitter.OnSashChanged(None)
         self.SendSizeEvent()
 
     def SetRasterNames(self):
         if not self._inputDialog or self._inputDialog.IsSimpleMode():
-            if self.rasters['first']:
-                self.GetFirstWindow().SetRasterNameText(
-                    self.rasters['first'], 101)
-            if self.rasters['second']:
-                self.GetSecondWindow().SetRasterNameText(
-                    self.rasters['second'], 102)
+            if self.rasters["first"]:
+                self.GetFirstWindow().SetRasterNameText(self.rasters["first"], 101)
+            if self.rasters["second"]:
+                self.GetSecondWindow().SetRasterNameText(self.rasters["second"], 102)
         else:
-            self.GetFirstWindow().SetRasterNameText('', 101)
-            self.GetSecondWindow().SetRasterNameText('', 102)
+            self.GetFirstWindow().SetRasterNameText("", 101)
+            self.GetSecondWindow().SetRasterNameText("", 102)
 
     def Query(self, x, y):
         """Query active layers from both mapwindows.
@@ -642,65 +702,71 @@ class SwipeMapFrame(DoubleMapFrame):
         :param x,y: coordinates
         """
         rasters = (
-            [layer.GetName()
-             for layer in self.GetFirstMap().GetListOfLayers(
-                 ltype='raster', active=True)],
-            [layer.GetName()
-             for layer in self.GetSecondMap().GetListOfLayers(
-                 ltype='raster', active=True)])
+            [
+                layer.GetName()
+                for layer in self.GetFirstMap().GetListOfLayers(
+                    ltype="raster", active=True
+                )
+            ],
+            [
+                layer.GetName()
+                for layer in self.GetSecondMap().GetListOfLayers(
+                    ltype="raster", active=True
+                )
+            ],
+        )
         vectors = (
-            [layer.GetName()
-             for layer in self.GetFirstMap().GetListOfLayers(
-                 ltype='vector', active=True)],
-            [layer.GetName()
-             for layer in self.GetSecondMap().GetListOfLayers(
-                 ltype='vector', active=True)])
+            [
+                layer.GetName()
+                for layer in self.GetFirstMap().GetListOfLayers(
+                    ltype="vector", active=True
+                )
+            ],
+            [
+                layer.GetName()
+                for layer in self.GetSecondMap().GetListOfLayers(
+                    ltype="vector", active=True
+                )
+            ],
+        )
 
         if not (rasters[0] + rasters[1] + vectors[0] + vectors[1]):
             GMessage(
                 parent=self,
-                message=_(
-                    'No raster or vector map layer selected for querying.'))
+                message=_("No raster or vector map layer selected for querying."),
+            )
             return
 
         # set query snap distance for v.what at map unit equivalent of 10
         # pixels
         qdist = 10.0 * (
-            (self.GetFirstMap().region['e'] - self.GetFirstMap().region['w']) /
-            self.GetFirstMap().width)
+            (self.GetFirstMap().region["e"] - self.GetFirstMap().region["w"])
+            / self.GetFirstMap().width
+        )
 
         east, north = self.GetFirstWindow().Pixel2Cell((x, y))
 
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.GetFirstMap(
-        ).SetRegion(windres=False)
+        os.environ["GRASS_REGION"] = self.GetFirstMap().SetRegion(windres=False)
 
         result = []
         if rasters[0]:
             result.extend(
-                grass.raster_what(
-                    map=rasters[0],
-                    coord=(east, north),
-                    localized=True))
+                grass.raster_what(map=rasters[0], coord=(east, north), localized=True)
+            )
         if vectors[0]:
             result.extend(
-                grass.vector_what(
-                    map=vectors[0],
-                    coord=(east, north),
-                    distance=qdist))
+                grass.vector_what(map=vectors[0], coord=(east, north), distance=qdist)
+            )
         if rasters[1]:
             result.extend(
-                grass.raster_what(
-                    map=rasters[1],
-                    coord=(east, north),
-                    localized=True))
+                grass.raster_what(map=rasters[1], coord=(east, north), localized=True)
+            )
         if vectors[1]:
             result.extend(
-                grass.vector_what(
-                    map=vectors[1],
-                    coord=(east, north),
-                    distance=qdist))
+                grass.vector_what(map=vectors[1], coord=(east, north), distance=qdist)
+            )
 
         self._QueryMapDone()
 
@@ -712,7 +778,8 @@ class SwipeMapFrame(DoubleMapFrame):
             self._queryDialog = QueryDialog(parent=self, data=result)
             self._queryDialog.Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
             self._queryDialog.redirectOutput.connect(
-                lambda output: self._giface.WriteLog(output))
+                lambda output: self._giface.WriteLog(output)
+            )
             self._queryDialog.Show()
 
     def _oncloseQueryDialog(self, event):
@@ -720,14 +787,13 @@ class SwipeMapFrame(DoubleMapFrame):
         event.Skip()
 
     def _QueryMapDone(self):
-        """Restore settings after querying (restore GRASS_REGION)
-        """
+        """Restore settings after querying (restore GRASS_REGION)"""
         if hasattr(self, "tmpreg"):
             if self.tmpreg:
                 os.environ["GRASS_REGION"] = self.tmpreg
-            elif 'GRASS_REGION' in os.environ:
+            elif "GRASS_REGION" in os.environ:
                 del os.environ["GRASS_REGION"]
-        elif 'GRASS_REGION' in os.environ:
+        elif "GRASS_REGION" in os.environ:
             del os.environ["GRASS_REGION"]
 
         if hasattr(self, "tmpreg"):
@@ -735,14 +801,14 @@ class SwipeMapFrame(DoubleMapFrame):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars['swipeMap']
+        return self.toolbars["swipeMap"]
 
     def IsStandalone(self):
         """Since we do not need layer manager, we are standalone"""
         return True
 
     def OnHelp(self, event):
-        self._giface.Help(entry='wxGUI.mapswipe')
+        self._giface.Help(entry="wxGUI.mapswipe")
 
     def OnPreferences(self, event):
         if not self._preferencesDialog:
@@ -765,9 +831,7 @@ class MapSplitter(wx.SplitterWindow):
     """Splitter window for displaying two maps"""
 
     def __init__(self, parent, id):
-        wx.SplitterWindow.__init__(self, parent=parent, id=id,
-                                   style=wx.SP_LIVE_UPDATE
-                                   )
+        wx.SplitterWindow.__init__(self, parent=parent, id=id, style=wx.SP_LIVE_UPDATE)
         Debug.msg(2, "MapSplitter.__init__()")
 
         self.sashWidthMin = 1

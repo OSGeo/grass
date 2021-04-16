@@ -22,6 +22,7 @@ from math import ceil, floor, sin, cos, pi
 
 try:
     from PIL import Image as PILImage
+
     havePILImage = True
 except ImportError:
     havePILImage = False
@@ -85,11 +86,7 @@ class Rect2DPS(Rect2D):
     """
 
     def __init__(self, pos=wx.Point2D(), size=(0, 0)):
-        Rect2D.__init__(
-            self, x=pos[0],
-            y=pos[1],
-            width=size[0],
-            height=size[1])
+        Rect2D.__init__(self, x=pos[0], y=pos[1], width=size[0], height=size[1])
 
 
 class UnitConversion:
@@ -101,43 +98,35 @@ class UnitConversion:
             ppi = wx.ClientDC(self.parent).GetPPI()
         else:
             ppi = (72, 72)
-        self._unitsPage = {'inch': {'val': 1.0, 'tr': _("inch")},
-                           'point': {'val': 72.0, 'tr': _("point")},
-                           'centimeter': {'val': 2.54, 'tr': _("centimeter")},
-                           'millimeter': {'val': 25.4, 'tr': _("millimeter")}}
+        self._unitsPage = {
+            "inch": {"val": 1.0, "tr": _("inch")},
+            "point": {"val": 72.0, "tr": _("point")},
+            "centimeter": {"val": 2.54, "tr": _("centimeter")},
+            "millimeter": {"val": 25.4, "tr": _("millimeter")},
+        }
         self._unitsMap = {
-            'meters': {
-                'val': 0.0254,
-                'tr': _("meters")},
-            'kilometers': {
-                'val': 2.54e-5,
-                'tr': _("kilometers")},
-            'feet': {
-                'val': 1. / 12,
-                'tr': _("feet")},
-            'miles': {
-                'val': 1. / 63360,
-                'tr': _("miles")},
-            'nautical miles': {
-                'val': 1 / 72913.386,
-                'tr': _("nautical miles")}}
+            "meters": {"val": 0.0254, "tr": _("meters")},
+            "kilometers": {"val": 2.54e-5, "tr": _("kilometers")},
+            "feet": {"val": 1.0 / 12, "tr": _("feet")},
+            "miles": {"val": 1.0 / 63360, "tr": _("miles")},
+            "nautical miles": {"val": 1 / 72913.386, "tr": _("nautical miles")},
+        }
 
-        self._units = {'pixel': {'val': ppi[0], 'tr': _("pixel")},
-                       'meter': {'val': 0.0254, 'tr': _("meter")},
-                       'nautmiles': {'val': 1 / 72913.386, 'tr': _("nautical miles")},
-                       # like 1 meter, incorrect
-                       'degrees': {'val': 0.0254, 'tr': _("degree")}
-                       }
+        self._units = {
+            "pixel": {"val": ppi[0], "tr": _("pixel")},
+            "meter": {"val": 0.0254, "tr": _("meter")},
+            "nautmiles": {"val": 1 / 72913.386, "tr": _("nautical miles")},
+            # like 1 meter, incorrect
+            "degrees": {"val": 0.0254, "tr": _("degree")},
+        }
         self._units.update(self._unitsPage)
         self._units.update(self._unitsMap)
 
     def getPageUnitsNames(self):
-        return sorted(self._unitsPage[unit]['tr']
-                      for unit in self._unitsPage.keys())
+        return sorted(self._unitsPage[unit]["tr"] for unit in self._unitsPage.keys())
 
     def getMapUnitsNames(self):
-        return sorted(self._unitsMap[unit]['tr']
-                      for unit in self._unitsMap.keys())
+        return sorted(self._unitsMap[unit]["tr"] for unit in self._unitsMap.keys())
 
     def getAllUnits(self):
         return sorted(self._units.keys())
@@ -145,38 +134,41 @@ class UnitConversion:
     def findUnit(self, name):
         """Returns unit by its tr. string"""
         for unit in self._units.keys():
-            if self._units[unit]['tr'] == name:
+            if self._units[unit]["tr"] == name:
                 return unit
         return None
 
     def findName(self, unit):
         """Returns tr. string of a unit"""
         try:
-            return self._units[unit]['tr']
+            return self._units[unit]["tr"]
         except KeyError:
             return None
 
     def convert(self, value, fromUnit=None, toUnit=None):
-        return float(
-            value) / self._units[fromUnit]['val'] * self._units[toUnit]['val']
+        return float(value) / self._units[fromUnit]["val"] * self._units[toUnit]["val"]
 
 
 def convertRGB(rgb):
     """Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
-            or named color/r:g:b string to wx.Colour, depending on input"""
+    or named color/r:g:b string to wx.Colour, depending on input"""
     # transform a wx.Colour tuple into an r:g:b string
     if isinstance(rgb, wx.Colour):
         for name, color in grass.named_colors.items():
-            if  rgb.Red() == int(color[0] * 255) and\
-                    rgb.Green() == int(color[1] * 255) and\
-                    rgb.Blue() == int(color[2] * 255):
+            if (
+                rgb.Red() == int(color[0] * 255)
+                and rgb.Green() == int(color[1] * 255)
+                and rgb.Blue() == int(color[2] * 255)
+            ):
                 return name
-        return str(rgb.Red()) + ':' + str(rgb.Green()) + ':' + str(rgb.Blue())
+        return str(rgb.Red()) + ":" + str(rgb.Green()) + ":" + str(rgb.Blue())
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
     else:
-        color = (int(grass.parse_color(rgb)[0] * 255),
-                 int(grass.parse_color(rgb)[1] * 255),
-                 int(grass.parse_color(rgb)[2] * 255))
+        color = (
+            int(grass.parse_color(rgb)[0] * 255),
+            int(grass.parse_color(rgb)[1] * 255),
+            int(grass.parse_color(rgb)[2] * 255),
+        )
         color = wx.Colour(*color)
         if color.IsOk():
             return color
@@ -192,31 +184,31 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
     :param paperToMap: specify conversion direction
     """
     region = grass.region(env=env)
-    mapWidthPaper = mapInstr['rect'].GetWidth()
-    mapHeightPaper = mapInstr['rect'].GetHeight()
-    mapWidthEN = region['e'] - region['w']
-    mapHeightEN = region['n'] - region['s']
+    mapWidthPaper = mapInstr["rect"].GetWidth()
+    mapHeightPaper = mapInstr["rect"].GetHeight()
+    mapWidthEN = region["e"] - region["w"]
+    mapHeightEN = region["n"] - region["s"]
 
     if paperToMap:
-        diffX = x - mapInstr['rect'].GetX()
-        diffY = y - mapInstr['rect'].GetY()
+        diffX = x - mapInstr["rect"].GetX()
+        diffY = y - mapInstr["rect"].GetY()
         diffEW = diffX * mapWidthEN / mapWidthPaper
         diffNS = diffY * mapHeightEN / mapHeightPaper
-        e = region['w'] + diffEW
-        n = region['n'] - diffNS
+        e = region["w"] + diffEW
+        n = region["n"] - diffNS
 
-        if projInfo()['proj'] == 'll':
+        if projInfo()["proj"] == "ll":
             return e, n
         else:
             return int(e), int(n)
 
     else:
-        diffEW = x - region['w']
-        diffNS = region['n'] - y
+        diffEW = x - region["w"]
+        diffNS = region["n"] - y
         diffX = mapWidthPaper * diffEW / mapWidthEN
         diffY = mapHeightPaper * diffNS / mapHeightEN
-        xPaper = mapInstr['rect'].GetX() + diffX
-        yPaper = mapInstr['rect'].GetY() + diffY
+        xPaper = mapInstr["rect"].GetX() + diffX
+        yPaper = mapInstr["rect"].GetY() + diffY
 
         return xPaper, yPaper
 
@@ -228,17 +220,19 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
     currRegionDict = {}
     try:
         if scaleType == 0 and map:  # automatic, region from raster or vector
-            res = ''
-            if mapType == 'raster':
+            res = ""
+            if mapType == "raster":
                 try:
-                    res = grass.read_command("g.region", flags='gu', raster=map, env=env)
+                    res = grass.read_command(
+                        "g.region", flags="gu", raster=map, env=env
+                    )
                 except grass.ScriptError:
                     pass
-            elif mapType == 'vector':
-                res = grass.read_command("g.region", flags='gu', vector=map, env=env)
+            elif mapType == "vector":
+                res = grass.read_command("g.region", flags="gu", vector=map, env=env)
             currRegionDict = grass.parse_key_val(res, val_type=float)
         elif scaleType == 1 and region:  # saved region
-            res = grass.read_command("g.region", flags='gu', region=region, env=env)
+            res = grass.read_command("g.region", flags="gu", region=region, env=env)
             currRegionDict = grass.parse_key_val(res, val_type=float)
         elif scaleType == 2:  # current region
             currRegionDict = grass.region(env=None)
@@ -255,26 +249,22 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
     rY = rect.y
     rW = rect.width
     rH = rect.height
-    if not hasattr(self, 'unitConv'):
+    if not hasattr(self, "unitConv"):
         self.unitConv = UnitConversion(self)
     toM = 1
-    if projInfo()['proj'] != 'xy':
-        toM = float(projInfo()['meters'])
+    if projInfo()["proj"] != "xy":
+        toM = float(projInfo()["meters"])
 
     mW = self.unitConv.convert(
-        value=(
-            currRegionDict['e'] -
-            currRegionDict['w']) *
-        toM,
-        fromUnit='meter',
-        toUnit='inch')
+        value=(currRegionDict["e"] - currRegionDict["w"]) * toM,
+        fromUnit="meter",
+        toUnit="inch",
+    )
     mH = self.unitConv.convert(
-        value=(
-            currRegionDict['n'] -
-            currRegionDict['s']) *
-        toM,
-        fromUnit='meter',
-        toUnit='inch')
+        value=(currRegionDict["n"] - currRegionDict["s"]) * toM,
+        fromUnit="meter",
+        toUnit="inch",
+    )
     scale = min(rW / mW, rH / mH)
 
     if rW / rH > mW / mH:
@@ -289,8 +279,8 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
         rWNew = rW
 
     # center
-    cE = (currRegionDict['w'] + currRegionDict['e']) / 2
-    cN = (currRegionDict['n'] + currRegionDict['s']) / 2
+    cE = (currRegionDict["w"] + currRegionDict["e"]) / 2
+    cN = (currRegionDict["n"] + currRegionDict["s"]) / 2
     return scale, (cE, cN), Rect2D(x, y, rWNew, rHNew)  # inch
 
 
@@ -302,10 +292,10 @@ def SetResolution(dpi, width, height, env):
     :param height: map frame height
     """
     region = grass.region(env=env)
-    if region['cols'] > width * dpi or region['rows'] > height * dpi:
+    if region["cols"] > width * dpi or region["rows"] > height * dpi:
         rows = height * dpi
         cols = width * dpi
-        env['GRASS_REGION'] = grass.region_env(rows=rows, cols=cols, env=env)
+        env["GRASS_REGION"] = grass.region_env(rows=rows, cols=cols, env=env)
 
 
 def ComputeSetRegion(self, mapDict, env):
@@ -313,48 +303,55 @@ def ComputeSetRegion(self, mapDict, env):
     coordinates and map rectangle
     """
 
-    if mapDict['scaleType'] == 3:  # fixed scale
-        scale = mapDict['scale']
+    if mapDict["scaleType"] == 3:  # fixed scale
+        scale = mapDict["scale"]
 
-        if not hasattr(self, 'unitConv'):
+        if not hasattr(self, "unitConv"):
             self.unitConv = UnitConversion(self)
 
         fromM = 1
-        if projInfo()['proj'] != 'xy':
-            fromM = float(projInfo()['meters'])
-        rectHalfInch = (mapDict['rect'].width / 2, mapDict['rect'].height / 2)
+        if projInfo()["proj"] != "xy":
+            fromM = float(projInfo()["meters"])
+        rectHalfInch = (mapDict["rect"].width / 2, mapDict["rect"].height / 2)
         rectHalfMeter = (
             self.unitConv.convert(
-                value=rectHalfInch[0],
-                fromUnit='inch',
-                toUnit='meter') / fromM / scale,
+                value=rectHalfInch[0], fromUnit="inch", toUnit="meter"
+            )
+            / fromM
+            / scale,
             self.unitConv.convert(
-                value=rectHalfInch[1],
-                fromUnit='inch',
-                toUnit='meter') / fromM / scale)
+                value=rectHalfInch[1], fromUnit="inch", toUnit="meter"
+            )
+            / fromM
+            / scale,
+        )
 
-        centerE = mapDict['center'][0]
-        centerN = mapDict['center'][1]
+        centerE = mapDict["center"][0]
+        centerN = mapDict["center"][1]
 
-        raster = self.instruction.FindInstructionByType('raster')
+        raster = self.instruction.FindInstructionByType("raster")
         if raster:
             rasterId = raster.id
         else:
             rasterId = None
 
         if rasterId:
-            env['GRASS_REGION'] = grass.region_env(n=ceil(centerN + rectHalfMeter[1]),
-                                                   s=floor(centerN - rectHalfMeter[1]),
-                                                   e=ceil(centerE + rectHalfMeter[0]),
-                                                   w=floor(centerE - rectHalfMeter[0]),
-                                                   rast=self.instruction[rasterId]['raster'],
-                                                   env=env)
+            env["GRASS_REGION"] = grass.region_env(
+                n=ceil(centerN + rectHalfMeter[1]),
+                s=floor(centerN - rectHalfMeter[1]),
+                e=ceil(centerE + rectHalfMeter[0]),
+                w=floor(centerE - rectHalfMeter[0]),
+                rast=self.instruction[rasterId]["raster"],
+                env=env,
+            )
         else:
-            env['GRASS_REGION'] = grass.region_env(n=ceil(centerN + rectHalfMeter[1]),
-                                                   s=floor(centerN - rectHalfMeter[1]),
-                                                   e=ceil(centerE + rectHalfMeter[0]),
-                                                   w=floor(centerE - rectHalfMeter[0]),
-                                                   env=env)
+            env["GRASS_REGION"] = grass.region_env(
+                n=ceil(centerN + rectHalfMeter[1]),
+                s=floor(centerN - rectHalfMeter[1]),
+                e=ceil(centerE + rectHalfMeter[0]),
+                w=floor(centerE - rectHalfMeter[0]),
+                env=env,
+            )
 
 
 def projInfo():
@@ -362,12 +359,16 @@ def projInfo():
     taken from render.py
     """
     proj_info = RunCommand(
-        'g.proj', flags='g', read=True, parse=grass.parse_key_val,
+        "g.proj",
+        flags="g",
+        read=True,
+        parse=grass.parse_key_val,
     )
 
     return (
-        proj_info if proj_info.get('name') != 'xy_location_unprojected'
-        else {'proj': 'xy', 'units': ''}
+        proj_info
+        if proj_info.get("name") != "xy_location_unprojected"
+        else {"proj": "xy", "units": ""}
     )
 
 
@@ -377,17 +378,21 @@ def GetMapBounds(filename, env, portrait=True):
     :param filename: psmap input file
     :param env: enironment with GRASS_REGION defined
     :param portrait: page orientation"""
-    orient = ''
+    orient = ""
     if not portrait:
-        orient = 'r'
+        orient = "r"
     try:
-        bb = list(map(float,
-                    grass.read_command(
-                        'ps.map',
-                        flags='b' +
-                        orient,
-                        quiet=True,
-                        input=filename, env=env).strip().split('=')[1].split(',')))
+        bb = list(
+            map(
+                float,
+                grass.read_command(
+                    "ps.map", flags="b" + orient, quiet=True, input=filename, env=env
+                )
+                .strip()
+                .split("=")[1]
+                .split(","),
+            )
+        )
     except (grass.ScriptError, IndexError):
         GError(message=_("Unable to run `ps.map -b`"))
         return None
@@ -397,10 +402,10 @@ def GetMapBounds(filename, env, portrait=True):
 def getRasterType(map):
     """Returns type of raster map (CELL, FCELL, DCELL)"""
     if map is None:
-        map = ''
-    file = grass.find_file(name=map, element='cell')
-    if file.get('file'):
-        rasterType = grass.raster_info(map)['datatype']
+        map = ""
+    file = grass.find_file(name=map, element="cell")
+    if file.get("file"):
+        rasterType = grass.raster_info(map)["datatype"]
         return rasterType
     else:
         return None
@@ -413,7 +418,7 @@ def BBoxAfterRotation(w, h, angle):
     :param h: rectangle height
     :param angle: angle (0, 360) in degrees
     """
-    angleRad = angle / 180. * pi
+    angleRad = angle / 180.0 * pi
     ct = cos(angleRad)
     st = sin(angleRad)
 
@@ -448,6 +453,7 @@ def BBoxAfterRotation(w, h, angle):
     height = int(ceil(abs(y_max) + abs(y_min)))
     return width, height
 
+
 # hack for Windows, loading EPS works only on Unix
 # these functions are taken from EpsImagePlugin.py
 
@@ -473,13 +479,14 @@ def GhostscriptForWindows(tile, size, fp):
     file = tempfile.mkstemp()[1]
 
     # Build ghostscript command - for Windows
-    command = ["gswin32c",
-               "-q",                    # quite mode
-               "-g%dx%d" % size,        # set output geometry (pixels)
-               "-dNOPAUSE -dSAFER",     # don't pause between pages, safe mode
-               "-sDEVICE=ppmraw",       # ppm driver
-               "-sOutputFile=%s" % file  # output file
-               ]
+    command = [
+        "gswin32c",
+        "-q",  # quite mode
+        "-g%dx%d" % size,  # set output geometry (pixels)
+        "-dNOPAUSE -dSAFER",  # don't pause between pages, safe mode
+        "-sDEVICE=ppmraw",  # ppm driver
+        "-sOutputFile=%s" % file,  # output file
+    ]
 
     command = string.join(command)
 

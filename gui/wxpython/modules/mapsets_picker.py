@@ -3,6 +3,7 @@
 import wx
 
 from grass.script.setup import set_gui_path
+
 set_gui_path()
 
 # Imports require path to GUI code to be set.
@@ -18,10 +19,9 @@ def main():
 
     if dlg.ShowModal() == wx.ID_OK:
         ms = dlg.GetMapsets()
-        RunCommand('g.mapsets',
-                   parent=None,
-                   mapset='%s' % ','.join(ms),
-                   operation='set')
+        RunCommand(
+            "g.mapsets", parent=None, mapset="%s" % ",".join(ms), operation="set"
+        )
 
     dlg.Destroy()
 
