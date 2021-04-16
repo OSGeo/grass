@@ -155,7 +155,7 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     :param str sql: SQL statement to perform (or None)
     :param str filename: name of file with SQL statements (or None)
     :param str table: name of table to query (or None)
-    :param str args:  see \gmod{db.select} arguments
+    :param str args: see *db.select* arguments
     :param env: environment
     """
     fname = tempfile(create=False, env=env)

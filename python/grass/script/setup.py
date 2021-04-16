@@ -1,4 +1,4 @@
-"""Setup, initialization, and clean-up functions
+R"""Setup, initialization, and clean-up functions
 
 Functions can be used in Python scripts to setup a GRASS environment
 and session without using grassXY.
