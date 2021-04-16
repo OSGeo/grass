@@ -8,7 +8,6 @@
 int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *trainingmap;
-    char sigfile_name[GNAME_MAX];
     char xmapset[GMAPSET_MAX];
 
     trainingmap = G_define_standard_option(G_OPT_R_MAP);
@@ -33,7 +32,6 @@ int parse(int argc, char *argv[], struct parms *parms)
     parms->training_map = trainingmap->answer;
     parms->group = group->answer;
     parms->subgroup = subgroup->answer;
-    parms->sigfile = sigfile->answer;
 
     /* check all the inputs */
     if (G_find_raster(parms->training_map, "") == NULL)
@@ -45,11 +43,11 @@ int parse(int argc, char *argv[], struct parms *parms)
     if (!I_find_subgroup(parms->group, parms->subgroup))
 	G_fatal_error(_("Subgroup <%s> in group <%s> not found"), parms->subgroup, parms->group);
 
-    if (G_unqualified_name(parms->sigfile, G_mapset(), sigfile_name, xmapset) < 0)
+    if (G_unqualified_name(sigfile->answer, G_mapset(), parms->sigfile, xmapset) < 0)
         G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
 
-    if (G_legal_filename(sigfile_name) < 0)
-        G_fatal_error(_("<%s> is an illegal file name"), sigfile_name);
+    if (G_legal_filename(parms->sigfile) < 0)
+        G_fatal_error(_("<%s> is an illegal file name"), parms->sigfile);
     
     return 0;
 }
