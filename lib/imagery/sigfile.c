@@ -19,12 +19,11 @@
 
    \param name signature filename
 
-   \return pointer to FILE*
+   \return pointer to FILE
    \return NULL on error
 */
 FILE *I_fopen_signature_file_new(const char *name)
 {
-    char element[GPATH_MAX];
     FILE *fd;
 
     /* create sig directory */
@@ -42,7 +41,7 @@ FILE *I_fopen_signature_file_new(const char *name)
 
    \param name signature filename
 
-   \return pointer to FILE*
+   \return pointer to FILE
    \return NULL on error
 */
 FILE *I_fopen_signature_file_old(const char *name)

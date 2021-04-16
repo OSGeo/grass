@@ -40,7 +40,7 @@ char *group;
 char *subgroup;
 struct Ref ref;
 char **bandrefs;
-char outsigfile[GNAME_MAX];
+char outsigfile[GNAME_MAX + GMAPSET_MAX + 1];
 char *insigfile;
 char *reportfile;
 DCELL **cell;
