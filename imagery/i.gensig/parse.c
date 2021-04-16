@@ -8,6 +8,8 @@
 int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *trainingmap;
+    char sigfile_name[GNAME_MAX];
+    char xmapset[GMAPSET_MAX];
 
     trainingmap = G_define_standard_option(G_OPT_R_MAP);
     trainingmap->key = "trainingmap";
@@ -22,7 +24,7 @@ int parse(int argc, char *argv[], struct parms *parms)
     sigfile->type = TYPE_STRING;
     sigfile->key_desc = "name";
     sigfile->required = YES;
-    sigfile->gisprompt = "new,sig,sigfile";
+    sigfile->gisprompt = "new,signatures/sig,sigfile";
     sigfile->description = _("Name for output file containing result signatures");
 
     if (G_parser(argc, argv))
@@ -42,14 +44,12 @@ int parse(int argc, char *argv[], struct parms *parms)
 
     if (!I_find_subgroup(parms->group, parms->subgroup))
 	G_fatal_error(_("Subgroup <%s> in group <%s> not found"), parms->subgroup, parms->group);
-    
-    /* GRASS parser fails to detect existing signature files as
-     * detection needs answers from other parameters as group and subgroup.
-     * Thus check is performed only now. */
-    if (!G_get_overwrite() && I_find_signature_file(parms->group, parms->subgroup, "sig", parms->sigfile)) {
-        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"), 
-                        sigfile->key, sigfile->answer);
-    }
+
+    if (G_unqualified_name(parms->sigfile, G_mapset(), sigfile_name, xmapset) < 0)
+        G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
+
+    if (G_legal_filename(sigfile_name) < 0)
+        G_fatal_error(_("<%s> is an illegal file name"), sigfile_name);
     
     return 0;
 }
