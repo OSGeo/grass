@@ -31,18 +31,27 @@ from grass.script import gisenv
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb.manage import split_mapset_path
-from grass.grassdb.checks import (get_reason_id_mapset_not_usable,
-                          is_fallback_session,
-                          is_first_time_user)
+from grass.grassdb.checks import (
+    get_reason_id_mapset_not_usable,
+    is_fallback_session,
+    is_first_time_user,
+)
 
 
 class DataCatalog(wx.Panel):
     """Data catalog panel"""
 
-    def __init__(self, parent, giface=None, id=wx.ID_ANY,
-                 title=_("Data catalog"), name='catalog', **kwargs):
+    def __init__(
+        self,
+        parent,
+        giface=None,
+        id=wx.ID_ANY,
+        title=_("Data catalog"),
+        name="catalog",
+        **kwargs,
+    ):
         """Panel constructor  """
-        self.showNotification = Signal('DataCatalog.showNotification')
+        self.showNotification = Signal("DataCatalog.showNotification")
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
@@ -64,8 +73,9 @@ class DataCatalog(wx.Panel):
         self.giface.currentMapsetChanged.connect(self.dismissInfobar)
 
         # infobar manager for data catalog
-        self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
-                                                  giface=self.giface)
+        self.infoManager = DataCatalogInfoManager(
+            infobar=self.infoBar, giface=self.giface
+        )
         self.tree.showImportDataInfo.connect(self.showImportDataInfo)
 
         # some layout
@@ -111,7 +121,9 @@ class DataCatalog(wx.Panel):
         self.infoManager.ShowFallbackSessionInfo(self.reason_id)
 
     def showImportDataInfo(self):
-        self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
+        self.infoManager.ShowImportDataInfo(
+            self.OnImportOgrLayers, self.OnImportGdalLayers
+        )
 
     def LoadItems(self):
         self.tree.ReloadTreeItems()
@@ -130,8 +142,9 @@ class DataCatalog(wx.Panel):
 
     def OnAddGrassDB(self, event):
         """Add grass database"""
-        dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
-                           os.getcwd(), wx.DD_DEFAULT_STYLE)
+        dlg = wx.DirDialog(
+            self, _("Choose GRASS data directory:"), os.getcwd(), wx.DD_DEFAULT_STYLE
+        )
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
             grassdb_node = self.tree.InsertGrassDb(name=grassdatabase)
@@ -139,11 +152,12 @@ class DataCatalog(wx.Panel):
             # Offer to create a new location
             if grassdb_node and not os.listdir(grassdatabase):
                 message = _("Do you want to create a location?")
-                dlg2 = wx.MessageDialog(self,
-                                        message=message,
-                                        caption=_("Create location?"),
-                                        style=wx.YES_NO | wx.YES_DEFAULT |
-                                        wx.ICON_QUESTION)
+                dlg2 = wx.MessageDialog(
+                    self,
+                    message=message,
+                    caption=_("Create location?"),
+                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+                )
                 if dlg2.ShowModal() == wx.ID_YES:
                     self.tree.CreateLocation(grassdb_node)
                 dlg2.Destroy()
@@ -173,6 +187,7 @@ class DataCatalog(wx.Panel):
     def OnImportGdalLayers(self, event):
         """Convert multiple GDAL layers to GRASS raster map layers"""
         from modules.import_export import GdalImportDialog
+
         dlg = GdalImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -180,6 +195,7 @@ class DataCatalog(wx.Panel):
     def OnImportOgrLayers(self, event):
         """Convert multiple OGR layers to GRASS vector map layers"""
         from modules.import_export import OgrImportDialog
+
         dlg = OgrImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -187,6 +203,7 @@ class DataCatalog(wx.Panel):
     def OnLinkGdalLayers(self, event):
         """Link multiple GDAL layers to GRASS raster map layers"""
         from modules.import_export import GdalImportDialog
+
         dlg = GdalImportDialog(parent=self, giface=self.giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -194,6 +211,7 @@ class DataCatalog(wx.Panel):
     def OnLinkOgrLayers(self, event):
         """Links multiple OGR layers to GRASS vector map layers"""
         from modules.import_export import OgrImportDialog
+
         dlg = OgrImportDialog(parent=self, giface=self.giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -201,6 +219,7 @@ class DataCatalog(wx.Panel):
     def OnRasterOutputFormat(self, event):
         """Set raster output format handler"""
         from modules.import_export import GdalOutputDialog
+
         dlg = GdalOutputDialog(parent=self, ogr=False)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -208,6 +227,7 @@ class DataCatalog(wx.Panel):
     def OnVectorOutputFormat(self, event):
         """Set vector output format handler"""
         from modules.import_export import GdalOutputDialog
+
         dlg = GdalOutputDialog(parent=self, ogr=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -231,21 +251,29 @@ class DataCatalog(wx.Panel):
         # create submenu
         subMenu = Menu()
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Link external raster data  [r.external]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Link external raster data  [r.external]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnLinkGdalLayers, subitem)
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Link external vector data  [v.external]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Link external vector data  [v.external]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnLinkOgrLayers, subitem)
 
         subMenu.AppendSeparator()
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Set raster output format  [r.external.out]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Set raster output format  [r.external.out]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnRasterOutputFormat, subitem)
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Set vector output format  [v.external.out]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Set vector output format  [v.external.out]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnVectorOutputFormat, subitem)
 
@@ -254,21 +282,25 @@ class DataCatalog(wx.Panel):
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS raster map  [r.unpack]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('r.unpack'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("r.unpack"), item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS vector map  [v.unpack]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('v.unpack'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("v.unpack"), item)
 
         menu.AppendSeparator()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Create raster map from x,y,z data  [r.in.xyz]"))
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Create raster map from x,y,z data  [r.in.xyz]")
+        )
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('r.in.xyz'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("r.in.xyz"), item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Create vector map from x,y,z data  [v.in.ascii]"))
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Create vector map from x,y,z data  [v.in.ascii]")
+        )
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('v.in.ascii'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("v.in.ascii"), item)
 
         menu.AppendSeparator()
         menu.AppendMenu(wx.ID_ANY, _("Link external data"), subMenu)

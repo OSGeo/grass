@@ -35,6 +35,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
@@ -50,6 +51,7 @@ def main():
     frame.CenterOnScreen()
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

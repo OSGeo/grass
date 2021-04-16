@@ -22,15 +22,14 @@ def main():
     if len(sys.argv) == 1:
         msg = "Unknown reason"
     else:
-        msg = ''
+        msg = ""
         for m in sys.argv[1:]:
             msg += m
 
-    wx.MessageBox(caption="Error",
-                  message=msg,
-                  style=wx.OK | wx.ICON_ERROR)
+    wx.MessageBox(caption="Error", message=msg, style=wx.OK | wx.ICON_ERROR)
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

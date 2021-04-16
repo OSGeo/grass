@@ -31,62 +31,53 @@ from gui_core.wrap import StaticText
 import grass.script as grass
 
 iClassIcons = {
-    'opacity': MetaIcon(
-        img='layer-opacity',
-        label=_('Set opacity level')),
-    'classManager': MetaIcon(
-        img='table-manager',
-        label=_('Class manager')),
-    'selectGroup': MetaIcon(
-        img='layer-group-add',
-        label=_('Select imagery group')),
-    'run': MetaIcon(
-        img='execute',
-        label=_('Run analysis, update histogram and coincidence plots')),
-    'sigFile': MetaIcon(
-        img='script-save',
-        label=_('Save signature file for i.maxlik')),
-    'delCmd': MetaIcon(
-        img='layer-remove',
-        label=_('Remove selected map layer')),
-    'exportAreas': MetaIcon(
-        img='layer-export',
-        label=_('Export training areas to vector map')),
-    'importAreas': MetaIcon(
-        img='layer-import',
-        label=_('Import training areas from vector map')),
-    'addRgb': MetaIcon(
-        img='layer-rgb-add',
-        label=_('Add RGB map layer'))}
+    "opacity": MetaIcon(img="layer-opacity", label=_("Set opacity level")),
+    "classManager": MetaIcon(img="table-manager", label=_("Class manager")),
+    "selectGroup": MetaIcon(img="layer-group-add", label=_("Select imagery group")),
+    "run": MetaIcon(
+        img="execute", label=_("Run analysis, update histogram and coincidence plots")
+    ),
+    "sigFile": MetaIcon(img="script-save", label=_("Save signature file for i.maxlik")),
+    "delCmd": MetaIcon(img="layer-remove", label=_("Remove selected map layer")),
+    "exportAreas": MetaIcon(
+        img="layer-export", label=_("Export training areas to vector map")
+    ),
+    "importAreas": MetaIcon(
+        img="layer-import", label=_("Import training areas from vector map")
+    ),
+    "addRgb": MetaIcon(img="layer-rgb-add", label=_("Add RGB map layer")),
+}
 
 
 class IClassMapToolbar(BaseToolbar):
-    """IClass Map toolbar
-    """
+    """IClass Map toolbar"""
 
     def __init__(self, parent, toolSwitcher):
-        """IClass Map toolbar constructor
-        """
+        """IClass Map toolbar constructor"""
         BaseToolbar.__init__(self, parent, toolSwitcher)
 
         self.InitToolbar(self._toolbarData())
         self._default = self.pan
 
         # add tool to toggle active map window
-        self.togglemap = wx.Choice(parent=self, id=wx.ID_ANY,
-                                   choices=[_('Training'), _('Preview')])
+        self.togglemap = wx.Choice(
+            parent=self, id=wx.ID_ANY, choices=[_("Training"), _("Preview")]
+        )
 
         self.InsertControl(9, self.togglemap)
 
         self.SetToolShortHelp(
-            self.togglemap.GetId(), '%s %s %s' %
-            (_('Set map canvas for '),
-             BaseIcons["zoomBack"].GetLabel(),
-             _('/ Zoom to map')))
+            self.togglemap.GetId(),
+            "%s %s %s"
+            % (
+                _("Set map canvas for "),
+                BaseIcons["zoomBack"].GetLabel(),
+                _("/ Zoom to map"),
+            ),
+        )
 
         for tool in (self.pan, self.zoomIn, self.zoomOut):
-            self.toolSwitcher.AddToolToGroup(
-                group='mouseUse', toolbar=self, tool=tool)
+            self.toolSwitcher.AddToolToGroup(group="mouseUse", toolbar=self, tool=tool)
         # realize the toolbar
         self.Realize()
 
@@ -107,41 +98,29 @@ class IClassMapToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         icons = BaseIcons
-        return self._getToolbarData((("displaymap", icons["display"],
-                                      self.parent.OnDraw),
-                                     ("rendermap", icons["render"],
-                                      self.parent.OnRender),
-                                     ("erase", icons["erase"],
-                                      self.parent.OnErase),
-                                     (None, ),
-                                     ("pan", icons["pan"],
-                                      self.parent.OnPan,
-                                      wx.ITEM_CHECK),
-                                     ("zoomIn", icons["zoomIn"],
-                                      self.parent.OnZoomIn,
-                                      wx.ITEM_CHECK),
-                                     ("zoomOut", icons["zoomOut"],
-                                      self.parent.OnZoomOut,
-                                      wx.ITEM_CHECK),
-                                     ("zoomRegion", icons["zoomRegion"],
-                                      self.parent.OnZoomToWind),
-                                     ("zoomMenu", icons["zoomMenu"],
-                                      self.parent.OnZoomMenu),
-                                     (None, ),
-                                     ("zoomBack", icons["zoomBack"],
-                                      self.parent.OnZoomBack),
-                                     ("zoomToMap", icons["zoomExtent"],
-                                      self.parent.OnZoomToMap)
-                                     ))
+        return self._getToolbarData(
+            (
+                ("displaymap", icons["display"], self.parent.OnDraw),
+                ("rendermap", icons["render"], self.parent.OnRender),
+                ("erase", icons["erase"], self.parent.OnErase),
+                (None,),
+                ("pan", icons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
+                ("zoomIn", icons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
+                ("zoomOut", icons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
+                ("zoomRegion", icons["zoomRegion"], self.parent.OnZoomToWind),
+                ("zoomMenu", icons["zoomMenu"], self.parent.OnZoomMenu),
+                (None,),
+                ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
+                ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
+            )
+        )
 
 
 class IClassToolbar(BaseToolbar):
-    """IClass toolbar
-    """
+    """IClass toolbar"""
 
     def __init__(self, parent, stats_data):
-        """IClass toolbar constructor
-        """
+        """IClass toolbar constructor"""
         self.stats_data = stats_data
 
         BaseToolbar.__init__(self, parent)
@@ -153,10 +132,11 @@ class IClassToolbar(BaseToolbar):
         self.choice.Bind(wx.EVT_CHOICE, self.OnSelectCategory)
 
         # stupid workaround to insert small space between controls
-        self.InsertControl(4, StaticText(self, id=wx.ID_ANY, label=' '))
+        self.InsertControl(4, StaticText(self, id=wx.ID_ANY, label=" "))
 
-        self.combo = wx.ComboBox(self, id=wx.ID_ANY, size=(130, -1),
-                                 style=wx.TE_PROCESS_ENTER)
+        self.combo = wx.ComboBox(
+            self, id=wx.ID_ANY, size=(130, -1), style=wx.TE_PROCESS_ENTER
+        )
         self.InitStddev()
         self.InsertControl(5, self.combo)
 
@@ -176,22 +156,23 @@ class IClassToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         icons = iClassIcons
-        return self._getToolbarData((("selectGroup", icons['selectGroup'],
-                                      lambda event: self.parent.AddBands()),
-                                     (None, ),
-                                     ("classManager", icons['classManager'],
-                                      self.parent.OnCategoryManager),
-                                     (None, ),
-                                     ("runAnalysis", icons['run'],
-                                      self.parent.OnRunAnalysis),
-                                     (None, ),
-                                     ("importAreas", icons['importAreas'],
-                                      self.parent.OnImportAreas),
-                                     ("exportAreas", icons['exportAreas'],
-                                      self.parent.OnExportAreas),
-                                     ("sigFile", icons['sigFile'],
-                                      self.parent.OnSaveSigFile),
-                                     ))
+        return self._getToolbarData(
+            (
+                (
+                    "selectGroup",
+                    icons["selectGroup"],
+                    lambda event: self.parent.AddBands(),
+                ),
+                (None,),
+                ("classManager", icons["classManager"], self.parent.OnCategoryManager),
+                (None,),
+                ("runAnalysis", icons["run"], self.parent.OnRunAnalysis),
+                (None,),
+                ("importAreas", icons["importAreas"], self.parent.OnImportAreas),
+                ("exportAreas", icons["exportAreas"], self.parent.OnExportAreas),
+                ("sigFile", icons["sigFile"], self.parent.OnSaveSigFile),
+            )
+        )
 
     def OnMotion(self, event):
         print(self.choice.GetStringSelection())
@@ -207,7 +188,7 @@ class IClassToolbar(BaseToolbar):
 
         if cat:
             stat = self.stats_data.GetStatistics(cat)
-            back_c = wx.Colour([int(x) for x in stat.color.split(':')])
+            back_c = wx.Colour([int(x) for x in stat.color.split(":")])
             text_c = wx.Colour(*ContrastColor(back_c))
         else:
             back_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND)
@@ -258,17 +239,14 @@ class IClassToolbar(BaseToolbar):
         self.parent.StddevChanged(cat=idx, nstd=nstd)
 
     def UpdateStddev(self, nstd):
-        self.combo.SetValue(' '.join(("%.2f" % nstd, _('std dev'))))
+        self.combo.SetValue(" ".join(("%.2f" % nstd, _("std dev"))))
 
     def InitStddev(self):
         for nstd in range(50, 250, 25):
-            nstd /= 100.
+            nstd /= 100.0
             self.combo.Append(
-                item=' '.join(
-                    ("%.2f" %
-                     nstd,
-                     _('std dev'))),
-                clientData=nstd)
+                item=" ".join(("%.2f" % nstd, _("std dev"))), clientData=nstd
+            )
         self.combo.SetSelection(4)  # 1.5
 
     def EnableControls(self, enable=True):
@@ -304,12 +282,10 @@ class IClassToolbar(BaseToolbar):
 
 
 class IClassMapManagerToolbar(BaseToolbar):
-    """IClass toolbar
-    """
+    """IClass toolbar"""
 
     def __init__(self, parent, mapManager):
-        """IClass toolbar constructor
-        """
+        """IClass toolbar constructor"""
         BaseToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
@@ -325,35 +301,31 @@ class IClassMapManagerToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData((("addRast", BaseIcons['addRast'],
-                                      self.OnAddRast),
-                                     ('addRgb', iClassIcons['addRgb'],
-                                      self.OnAddRGB),
-                                     ("delRast", iClassIcons['delCmd'],
-                                      self.OnDelRast),
-                                     ("setOpacity", iClassIcons['opacity'],
-                                      self.OnSetOpacity),
-                                     ))
+        return self._getToolbarData(
+            (
+                ("addRast", BaseIcons["addRast"], self.OnAddRast),
+                ("addRgb", iClassIcons["addRgb"], self.OnAddRGB),
+                ("delRast", iClassIcons["delCmd"], self.OnDelRast),
+                ("setOpacity", iClassIcons["opacity"], self.OnSetOpacity),
+            )
+        )
 
     def OnSelectLayer(self, event):
         layer = self.choice.GetStringSelection()
         self.mapManager.SelectLayer(name=layer)
 
     def OnAddRast(self, event):
-        dlg = IClassMapDialog(
-            self, title=_("Add raster map"),
-            element='raster')
+        dlg = IClassMapDialog(self, title=_("Add raster map"), element="raster")
         if dlg.ShowModal() == wx.ID_OK:
-            raster = grass.find_file(name=dlg.GetMap(), element='cell')
-            if raster['fullname']:
-                self.mapManager.AddLayer(name=raster['fullname'])
+            raster = grass.find_file(name=dlg.GetMap(), element="cell")
+            if raster["fullname"]:
+                self.mapManager.AddLayer(name=raster["fullname"])
 
         dlg.Destroy()
 
     def OnAddRGB(self, event):
-        cmd = ['d.rgb']
-        GUI(parent=self.parent).ParseCommand(
-            cmd, completed=(self.GetOptData, '', ''))
+        cmd = ["d.rgb"]
+        GUI(parent=self.parent).ParseCommand(cmd, completed=(self.GetOptData, "", ""))
 
     def GetOptData(self, dcmd, layer, params, propwin):
         if dcmd:
@@ -375,12 +347,10 @@ class IClassMapManagerToolbar(BaseToolbar):
 
 
 class IClassMiscToolbar(BaseToolbar):
-    """IClass toolbar
-    """
+    """IClass toolbar"""
 
     def __init__(self, parent):
-        """IClass toolbar constructor
-        """
+        """IClass toolbar constructor"""
         BaseToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
@@ -390,8 +360,9 @@ class IClassMiscToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         icons = BaseIcons
-        return self._getToolbarData((("help", icons['help'],
-                                      self.parent.OnHelp),
-                                     ("quit", icons['quit'],
-                                      self.parent.OnCloseWindow),
-                                     ))
+        return self._getToolbarData(
+            (
+                ("help", icons["help"], self.parent.OnHelp),
+                ("quit", icons["quit"], self.parent.OnCloseWindow),
+            )
+        )

@@ -23,6 +23,7 @@ import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as scrolled
 from wx.lib import expando
 from wx.lib import buttons
+
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
@@ -37,6 +38,7 @@ if wxPythonPhoenix:
     from wx.adv import BitmapComboBox as BitmapComboBox_
     from wx.adv import HyperlinkCtrl as HyperlinkCtrl_
     from wx.adv import HL_ALIGN_LEFT, HL_CONTEXTMENU
+
     ComboPopup = wx.ComboPopup
     wxComboCtrl = wx.ComboCtrl
 else:
@@ -46,6 +48,7 @@ else:
     from wx.combo import BitmapComboBox as BitmapComboBox_
     from wx import HyperlinkCtrl as HyperlinkCtrl_
     from wx import HL_ALIGN_LEFT, HL_CONTEXTMENU
+
     ComboPopup = wx.combo.ComboPopup
     wxComboCtrl = wx.combo.ComboCtrl
 
@@ -58,10 +61,11 @@ else:
 def IsDark():
     """Detects if used theme is dark.
     Wraps wx method for different versions."""
+
     def luminance(c):
         return (0.299 * c.Red() + 0.587 * c.Green() + 0.114 * c.Blue()) / 255
 
-    if hasattr(wx.SystemSettings, 'GetAppearance'):
+    if hasattr(wx.SystemSettings, "GetAppearance"):
         return wx.SystemSettings.GetAppearance().IsDark()
 
     # for older wx
@@ -147,10 +151,12 @@ class SpinCtrl(wx.SpinCtrl):
 
     def __init__(self, *args, **kwargs):
         if gtk3:
-            if 'size' in kwargs:
-                kwargs['size'] = wx.Size(max(self.gtk3MinSize, kwargs['size'][0]), kwargs['size'][1])
+            if "size" in kwargs:
+                kwargs["size"] = wx.Size(
+                    max(self.gtk3MinSize, kwargs["size"][0]), kwargs["size"][1]
+                )
             else:
-                kwargs['size'] = wx.Size(self.gtk3MinSize, -1)
+                kwargs["size"] = wx.Size(self.gtk3MinSize, -1)
 
         wx.SpinCtrl.__init__(self, *args, **kwargs)
 
@@ -169,10 +175,12 @@ class FloatSpin(fs.FloatSpin):
 
     def __init__(self, *args, **kwargs):
         if gtk3:
-            if 'size' in kwargs:
-                kwargs['size'] = wx.Size(max(self.gtk3MinSize, kwargs['size'][0]), kwargs['size'][1])
+            if "size" in kwargs:
+                kwargs["size"] = wx.Size(
+                    max(self.gtk3MinSize, kwargs["size"][0]), kwargs["size"][1]
+                )
             else:
-                kwargs['size'] = wx.Size(self.gtk3MinSize, -1)
+                kwargs["size"] = wx.Size(self.gtk3MinSize, -1)
 
         fs.FloatSpin.__init__(self, *args, **kwargs)
 
@@ -222,6 +230,7 @@ class CancelButton(Button):
         else:
             self.SetLabel(_("&Cancel"))
 
+
 class CloseButton(Button):
     """Wrapper around a Close labeled Button with stock id wx.ID_CANCEL
     to disable default key binding on certain platforms/wxpython versions"""
@@ -233,6 +242,7 @@ class CloseButton(Button):
             self.SetLabel(_("Close"))
         else:
             self.SetLabel(_("&Close"))
+
 
 class ApplyButton(Button):
     """Wrapper around a Button with stock id wx.ID_APPLY,
@@ -382,39 +392,50 @@ class ListCtrl(wx.ListCtrl):
 
     def InsertItem(self, index, label, imageIndex=-1):
         if wxPythonPhoenix:
-            return wx.ListCtrl.InsertItem(self, index=index, label=label, imageIndex=imageIndex)
+            return wx.ListCtrl.InsertItem(
+                self, index=index, label=label, imageIndex=imageIndex
+            )
         else:
-            return wx.ListCtrl.InsertStringItem(self, index=index, label=label, imageIndex=imageIndex)
+            return wx.ListCtrl.InsertStringItem(
+                self, index=index, label=label, imageIndex=imageIndex
+            )
 
     def SetItem(self, index, column, label, imageId=-1):
         if wxPythonPhoenix:
-            return wx.ListCtrl.SetItem(self, index=index, column=column, label=label, imageId=imageId)
+            return wx.ListCtrl.SetItem(
+                self, index=index, column=column, label=label, imageId=imageId
+            )
         else:
-            return wx.ListCtrl.SetStringItem(self, index=index, col=column, label=label, imageId=imageId)
+            return wx.ListCtrl.SetStringItem(
+                self, index=index, col=column, label=label, imageId=imageId
+            )
 
     def CheckItem(self, item, check=True):
         """Uses either deprecated listmix.CheckListCtrlMixin
         or new checkbox implementation in wx.ListCtrl since 4.1.0"""
-        if hasattr(self, 'HasCheckBoxes'):
+        if hasattr(self, "HasCheckBoxes"):
             wx.ListCtrl.CheckItem(self, item, check)
         else:
             super(ListCtrl, self).CheckItem(item, check)
 
     def IsItemChecked(self, item):
-        if hasattr(self, 'HasCheckBoxes'):
+        if hasattr(self, "HasCheckBoxes"):
             return wx.ListCtrl.IsItemChecked(self, item)
         else:
             return super(ListCtrl, self).IsChecked(item)
 
 
 if CheckWxVersion([4, 1, 0]):
-    class CheckListCtrlMixin():
+
+    class CheckListCtrlMixin:
         """This class pretends to be deprecated CheckListCtrlMixin mixin and
         only enables checkboxes in new versions of ListCtrl"""
 
         def __init__(self):
             self.EnableCheckBoxes(True)
             self.AssignImageList(wx.ImageList(16, 16), wx.IMAGE_LIST_SMALL)
+
+
 else:
     import wx.lib.mixins.listctrl as listmix
 
@@ -436,7 +457,9 @@ class TreeCtrl(wx.TreeCtrl):
         if wxPythonPhoenix:
             return wx.TreeCtrl.AppendItem(self, parent, text, image, selImage, data)
         else:
-            return wx.TreeCtrl.AppendItem(self, parent, text, image, selImage, wx.TreeItemData(data))
+            return wx.TreeCtrl.AppendItem(
+                self, parent, text, image, selImage, wx.TreeItemData(data)
+            )
 
     def GetItemData(self, item):
         if wxPythonPhoenix:
@@ -466,25 +489,80 @@ class ToolBar(wx.ToolBar):
     def __init__(self, *args, **kwargs):
         wx.ToolBar.__init__(self, *args, **kwargs)
 
-    def AddLabelTool(self, toolId, label, bitmap, bmpDisabled=wx.NullBitmap, kind=0,
-                     shortHelpString='', longHelpString='', clientData=None):
+    def AddLabelTool(
+        self,
+        toolId,
+        label,
+        bitmap,
+        bmpDisabled=wx.NullBitmap,
+        kind=0,
+        shortHelpString="",
+        longHelpString="",
+        clientData=None,
+    ):
         if wxPythonPhoenix:
-            return wx.ToolBar.AddTool(self, toolId=toolId, label=label, bitmap=bitmap, bmpDisabled=bmpDisabled,
-                                      kind=kind, shortHelp=shortHelpString, longHelp=longHelpString,
-                                      clientData=clientData)
+            return wx.ToolBar.AddTool(
+                self,
+                toolId=toolId,
+                label=label,
+                bitmap=bitmap,
+                bmpDisabled=bmpDisabled,
+                kind=kind,
+                shortHelp=shortHelpString,
+                longHelp=longHelpString,
+                clientData=clientData,
+            )
         else:
-            return wx.ToolBar.AddLabelTool(self, toolId, label, bitmap, bmpDisabled, kind,
-                                           shortHelpString, longHelpString, clientData)
+            return wx.ToolBar.AddLabelTool(
+                self,
+                toolId,
+                label,
+                bitmap,
+                bmpDisabled,
+                kind,
+                shortHelpString,
+                longHelpString,
+                clientData,
+            )
 
-    def InsertLabelTool(self, pos, toolId, label, bitmap, bmpDisabled=wx.NullBitmap, kind=0,
-                        shortHelpString='', longHelpString='', clientData=None):
+    def InsertLabelTool(
+        self,
+        pos,
+        toolId,
+        label,
+        bitmap,
+        bmpDisabled=wx.NullBitmap,
+        kind=0,
+        shortHelpString="",
+        longHelpString="",
+        clientData=None,
+    ):
         if wxPythonPhoenix:
-            return wx.ToolBar.InsertTool(self, pos, toolId=toolId, label=label, bitmap=bitmap, bmpDisabled=bmpDisabled,
-                                         kind=kind, shortHelp=shortHelpString, longHelp=longHelpString,
-                                         clientData=clientData)
+            return wx.ToolBar.InsertTool(
+                self,
+                pos,
+                toolId=toolId,
+                label=label,
+                bitmap=bitmap,
+                bmpDisabled=bmpDisabled,
+                kind=kind,
+                shortHelp=shortHelpString,
+                longHelp=longHelpString,
+                clientData=clientData,
+            )
         else:
-            return wx.ToolBar.InsertLabelTool(self, pos, toolId, label, bitmap, bmpDisabled, kind,
-                                              shortHelpString, longHelpString, clientData)
+            return wx.ToolBar.InsertLabelTool(
+                self,
+                pos,
+                toolId,
+                label,
+                bitmap,
+                bmpDisabled,
+                kind,
+                shortHelpString,
+                longHelpString,
+                clientData,
+            )
 
 
 class Menu(wx.Menu):
@@ -615,14 +693,33 @@ class TextEntryDialog(wx.TextEntryDialog):
     """Wrapper around wx.TextEntryDialog to have more control
     over the widget on different platforms/wxpython versions"""
 
-    def __init__(self, parent, message, caption="Please enter text", value="",
-                 style=wx.OK | wx.CANCEL | wx.CENTRE, pos=wx.DefaultPosition):
+    def __init__(
+        self,
+        parent,
+        message,
+        caption="Please enter text",
+        value="",
+        style=wx.OK | wx.CANCEL | wx.CENTRE,
+        pos=wx.DefaultPosition,
+    ):
         if wxPythonPhoenix:
-            super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
-                                                  value=value, style=style, pos=pos)
+            super(TextEntryDialog, self).__init__(
+                parent=parent,
+                message=message,
+                caption=caption,
+                value=value,
+                style=style,
+                pos=pos,
+            )
         else:
-            super(TextEntryDialog, self).__init__(parent=parent, message=message, caption=caption,
-                                                  defaultValue=value, style=style, pos=pos)
+            super(TextEntryDialog, self).__init__(
+                parent=parent,
+                message=message,
+                caption=caption,
+                defaultValue=value,
+                style=style,
+                pos=pos,
+            )
 
 
 class ColourSelect(csel.ColourSelect):
@@ -669,6 +766,7 @@ class Notebook(wx.Notebook):
 class OwnerDrawnComboBox(OwnerDrawnComboBox_):
     """Wrapper around OwnerDrawnComboBox to have more control
     over the widget on different platforms/wxpython versions"""
+
     ODCB_PAINTING_CONTROL = ODCB_PAINTING_CONTROL
     ODCB_PAINTING_SELECTED = ODCB_PAINTING_SELECTED
 
@@ -729,6 +827,7 @@ class DirBrowseButton(filebrowse.DirBrowseButton):
 class ExpandoTextCtrl(expando.ExpandoTextCtrl):
     """Wrapper around expando.ExpandoTextCtrl to have more control
     over the widget on different platforms/wxpython versions"""
+
     EVT_ETC_LAYOUT_NEEDED = expando.EVT_ETC_LAYOUT_NEEDED
 
     def __init__(self, *args, **kwargs):
@@ -760,6 +859,7 @@ class ListBox(wx.ListBox):
 class HyperlinkCtrl(HyperlinkCtrl_):
     """Wrapper around HyperlinkCtrl to have more control
     over the widget on different platforms/wxpython versions"""
+
     HL_ALIGN_LEFT = HL_ALIGN_LEFT
     HL_CONTEXTMENU = HL_CONTEXTMENU
 

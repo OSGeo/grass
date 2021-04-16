@@ -23,7 +23,7 @@ exclude = '''
     # https://github.com/psf/black/issues/1970
     | python/grass/imaging/images2gif.py
     | python/grass/pygrass/raster/category.py
-    # Directories and files not yet under Black
-    | gui/
+    # https://github.com/psf/black/issues/1629
+    | gui/wxpython/lmgr/layertree.py
 )
 '''
