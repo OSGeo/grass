@@ -370,6 +370,7 @@ char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
             else
                 strcat(mismatches[0], "<band reference missing>");
             mc1++;
+            total = total + 1;
         }
     }
     total = 1;
@@ -389,6 +390,7 @@ char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
             else
                 strcat(mismatches[1], "<band reference missing>");
             mc2++;
+            total = total + 1;
         }
     }
 

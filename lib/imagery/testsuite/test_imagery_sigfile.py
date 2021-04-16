@@ -353,12 +353,12 @@ class SortSignaturesByBandrefTest(TestCase):
 
         # Prepare signature struct
         S = struct_Signature()
-        I_init_signatures(ctypes.byref(S), 1)
-        self.assertEqual(S.nbands, 1)
+        I_init_signatures(ctypes.byref(S), 10)
+        self.assertEqual(S.nbands, 10)
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 1)
         S.title = b"Signature title"
-        S.bandrefs[0] = None
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 42
@@ -371,10 +371,18 @@ class SortSignaturesByBandrefTest(TestCase):
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
-        self.assertEqual(sig_err, "<band reference missing>")
-        self.assertEqual(ref_err, "The_Doors,The_Who,<band reference missing>")
+        self.assertEqual(
+            sig_err,
+            "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>",
+        )
+        self.assertEqual(ref_err, "The_Doors,<band reference missing>")
 
         # Clean up memory to help track memory leaks when run by valgrind
+        S.bandrefs[0] = None
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
