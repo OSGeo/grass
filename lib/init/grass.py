@@ -47,7 +47,6 @@ import shutil
 import signal
 import string
 import subprocess
-import types
 import re
 import six
 import platform
@@ -79,8 +78,9 @@ if ENCODING is None:
 # possibly same for GRASS_PROJSHARE and others but maybe not
 #
 # We need to simultaneously make sure that:
-# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are already
-#   inside a GRASS session? If we are, why do we need to run this script again???).
+# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are
+#   already inside a GRASS session? If we are, why do we need to run this script
+#   again???).
 # - GISBASE exists as an ENV variable
 #
 # pmav99: Ugly as hell, but that's what the code before the refactoring was doing.
@@ -158,7 +158,7 @@ def to_text_string(obj, encoding=ENCODING):
 def try_remove(path):
     try:
         os.remove(path)
-    except:
+    except:  # noqa: E722
         pass
 
 
@@ -376,7 +376,8 @@ def help_message(default_gui):
                 "exit after creation of location or mapset. Only with -c flag"
             ),
             force_removal=_(
-                "force removal of .gislock if exists (use with care!). Only with --text flag"
+                "force removal of .gislock if exists (use with care!)."
+                " Only with --text flag"
             ),
             text=_("use text based interface (skip graphical welcome screen)"),
             text_detail=_("and set as default"),
@@ -393,7 +394,8 @@ def help_message(default_gui):
             gisdbase_detail=_("directory containing Locations"),
             location=_("initial GRASS Location"),
             location_detail=_(
-                "directory containing Mapsets with one common coordinate system (projection)"
+                "directory containing Mapsets with one common"
+                " coordinate system (projection)"
             ),
             mapset=_("initial GRASS Mapset"),
             full_mapset=_("fully qualified initial Mapset directory"),
@@ -493,7 +495,7 @@ def create_tmp(user, gis_lock):
         )
         try:
             os.mkdir(tmpdir, 0o700)
-        except:
+        except:  # noqa: E722
             tmp = None
 
     if not tmp:
@@ -504,7 +506,7 @@ def create_tmp(user, gis_lock):
             )
             try:
                 os.mkdir(tmpdir, 0o700)
-            except:
+            except:  # noqa: E722
                 tmp = None
             if tmp:
                 break
@@ -1041,19 +1043,18 @@ def set_mapset(
 
     # TODO: arg param seems to be always the mapset parameter (or a dash
     # in a distant past), refactor
-    l = arg
-    if l:
+    if arg:
         # TODO: the block below could be just one line: os.path.abspath(l)
         # abspath both resolves relative paths and normalizes the path
         # so that trailing / is stripped away and split then always returns
         # non-empty element as the last element (which is good for both mapset
         # and location split)
-        if l == ".":
-            l = os.getcwd()
-        elif not os.path.isabs(l):
-            l = os.path.abspath(l)
-        if l.endswith(os.path.sep):
-            l = l.rstrip(os.path.sep)
+        if arg == ".":
+            arg = os.getcwd()
+        elif not os.path.isabs(arg):
+            arg = os.path.abspath(arg)
+        if arg.endswith(os.path.sep):
+            arg = arg.rstrip(os.path.sep)
             # now we can get the last element by split on the first go
             # and it works for the last element being mapset or location
 
@@ -1062,9 +1063,9 @@ def set_mapset(
             mapset = "tmp_" + uuid.uuid4().hex
             create_new = True
         else:
-            l, mapset = os.path.split(l)
-        l, location_name = os.path.split(l)
-        gisdbase = l
+            arg, mapset = os.path.split(arg)
+        arg, location_name = os.path.split(arg)
+        gisdbase = arg
 
     # all was None for tmp loc so that case goes here quickly
     # TODO: but the above code needs review anyway
@@ -1366,7 +1367,8 @@ def set_language(grass_config_dir):
     # Unfortunately currently a working solution for Windows is lacking
     # thus it always on Vista and XP will print an error.
     # See discussion for Windows not following its own documentation and
-    # not accepting ISO codes as valid locale identifiers http://bugs.python.org/issue10466
+    # not accepting ISO codes as valid locale identifiers
+    # http://bugs.python.org/issue10466
     language = "None"  # Such string sometimes is present in wx file
     encoding = None
 
@@ -1426,7 +1428,7 @@ def set_language(grass_config_dir):
         )
         try:
             locale.setlocale(locale.LC_ALL, language)
-        except locale.Error as e:
+        except locale.Error:
             try:
                 # Locale lang.encoding might be missing. Let's try
                 # UTF-8 encoding before giving up as on Linux systems
@@ -1489,14 +1491,16 @@ def set_language(grass_config_dir):
                         normalized = locale.normalize("%s.%s" % (language, encoding))
                         locale.setlocale(locale.LC_ALL, normalized)
                     except locale.Error as e:
-                        # If we got so far, attempts to set up language and locale have failed
-                        # on this system
+                        # If we got so far, attempts to set up language and locale have
+                        # failed on this system.
                         sys.stderr.write(
                             "Failed to enforce user specified language '%s' with error: '%s'\n"
                             % (language, e)
                         )
                         sys.stderr.write(
-                            "A LANGUAGE environmental variable has been set.\nPart of messages will be displayed in the requested language.\n"
+                            "A LANGUAGE environmental variable has been set.\n"
+                            "Part of messages will be displayed in"
+                            " the requested language.\n"
                         )
                         # Even if setting locale will fail, let's set LANG in a hope,
                         # that UI will use it GRASS texts will be in selected language,
@@ -1563,8 +1567,6 @@ def lock_mapset(mapset_path, force_gislock_removal, user):
     Behavior on error must be changed somehow; now it fatals but GUI case is
     unresolved.
     """
-    from grass.grassdb.checks import is_mapset_valid
-
     if not os.path.exists(mapset_path):
         fatal(_("Path '%s' doesn't exist") % mapset_path)
     if not os.access(mapset_path, os.W_OK):
@@ -1902,9 +1904,9 @@ def csh_startup(location, grass_env_file):
         if os.access(path, os.R_OK):
             s = readfile(path)
             lines = s.splitlines()
-            for l in lines:
-                if mail_re.match(l):
-                    f.write(l)
+            for line in lines:
+                if mail_re.match(line):
+                    f.write(line)
 
     path = os.getenv("PATH").split(":")
     f.write("set path = ( %s ) \n" % " ".join(path))
@@ -1974,7 +1976,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     else:
         f.write(
             "PS1='{name} {db_place}:\\W > '\n".format(
-                name=grass_name, version=GRASS_VERSION, db_place="$_GRASS_DB_PLACE"
+                name=grass_name, db_place="$_GRASS_DB_PLACE"
             )
         )
 
@@ -2548,13 +2550,15 @@ def main():
                 if not default_gisdbase:
                     fatal(
                         _(
-                            "Failed to start GRASS GIS, grassdata directory could not be found or created."
+                            "Failed to start GRASS GIS, grassdata directory cannot"
+                            " be found or created."
                         )
                     )
                 elif not default_location:
                     fatal(
                         _(
-                            "Failed to start GRASS GIS, no default location to copy in the installation or copying failed."
+                            "Failed to start GRASS GIS, no default location to copy in"
+                            " the installation or copying failed."
                         )
                     )
                 if can_start_in_mapset(
