@@ -5,8 +5,13 @@ ignore =
 
 per-file-ignores =
     # Quick reference for some of the most common errors
-    # F401 imported but unused
     # E501 line too long
+    # E722 do not use bare 'except'
+    # W605 invalid escape sequence
+    # F401 imported but unused
+    # F821 undefined name 'unicode'
+    # F841 local variable assigned to but never used
+    lib/init/grass.py: E501, E722, F821, F841, W605
     utils/mkrest.py: E501, W605
     utils/gitlog2changelog.py: E722, E712, W605
     utils/g.html2man/ggroff.py: W605
@@ -51,7 +56,6 @@ exclude =
     # Test output directory
     testreport,
     # Have their own configs for now
-    lib/init,
     python/grass,
     gui/wxpython,
     scripts/*/*.py,

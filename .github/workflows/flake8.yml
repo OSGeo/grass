@@ -13,7 +13,6 @@ jobs:
         directory:
           - .
           - gui/wxpython
-          - lib/init
           - python/grass
           - scripts
           - temporal
