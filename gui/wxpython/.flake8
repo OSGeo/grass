@@ -2,8 +2,6 @@
 ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
-    E501,  # line too long (fix needed)
-    E265,  # block comment should start with '# ' (fix needed)
 
 per-file-ignores =
     # Many of these ignores can and should be removed and the problem fixed.
@@ -11,59 +9,92 @@ per-file-ignores =
     # F403 star import used; unable to detect undefined names
     # F405 variable may be undefined, or defined from star imports
     # E402 module level import not at top of file
-    core/gcmd.py: E402
+    # E501 line too long
+    core/debug.py: E501
+    core/gcmd.py: E402, E501
+    core/giface.py: E501
     core/gthread.py: F841
     core/gconsole.py: E722, W605
-    core/toolboxes.py: E722
+    core/toolboxes.py: E722, E501
     core/utils.py: E722, F841, W605
-    core/workspace.py: E722
-    core/render.py: E722, F841
-    core/ws.py: F841
+    core/workspace.py: E722, E501
+    core/render.py: E722, F841, E501
+    core/ws.py: F841, E501
     core/settings.py: E722
-    datacatalog/tree.py: E731, E402
-    dbmgr/*: F841, E722
-    docs/wxgui_sphinx/conf.py: E402
-    gcp/*: F841, E722
+    datacatalog/tree.py: E731, E402, E501
+    dbmgr/base.py: E501, E722, F841
+    dbmgr/dialogs.py: E501, F841, E722
+    dbmgr/sqlbuilder.py: E501, E722, F841
+    dbmgr/manager.py: E501, E722
+    dbmgr/vinfo.py: F841
+    docs/wxgui_sphinx/conf.py: E402, E501
+    gcp/g.gui.gcp.py: F841
+    gcp/manager.py: E501, F841, E722
+    gcp/mapdisplay.py: F841
     gmodeler/*: F841, E722, W605, F405, F403, E402
     gui_core/*: F841, E266, E722, W605
-    image2target/*: F841, E722
-    iscatt/*: F841, E722, E741, F405, F403
-    lmgr/*: F841, E266, E722, E741, W605
+    gui_core/dialogs.py: E501, E722, F841, W605
+    gui_core/forms.py: E501, E722, F841
+    gui_core/ghelp.py: E501, E722
+    gui_core/gselect.py: E501, F841, E266, E722
+    gui_core/preferences.py: E501, E266, F841
+    gui_core/treeview.py: E501, F841
+    gui_core/widgets.py: E501, F841, E722, E266
+    image2target/*: F841, E722, E265, E501
+    iscatt/*: F841, E722, E741, F405, F403, E501
+    lmgr/giface.py: E501, E741
+    lmgr/frame.py: F841, E722, W605, E501
     # layertree still includes some formatting issues (it is ignored by Black)
-    lmgr/layertree.py: E722, E266, W504, E225
-    modules/*: F841, E722, W605
-    nviz/*: F841, E266, E722, W605, F403, F405
-    photo2image/*: F841, E722
-    psmap/*: F841, E266, E722, F405, F403
-    vdigit/*: F841, E722, E741, F405, F403
-    vnet/*: F841
+    lmgr/layertree.py: E722, E266, W504, E225, E501
+    lmgr/workspace.py: F841
+    modules/*: F841, E722, W605, E501
+    nviz/*: F841, E266, E722, W605, F403, F405, E501
+    photo2image/*: F841, E722, E265, E501
+    psmap/*: F841, E266, E722, F405, F403, E501
+    vdigit/*: F841, E722, E741, F405, F403, E501
+    vnet/*: F841, E501
     wxgui.py: F841
+    animation/g.gui.animation.py: E501
     animation/mapwindow.py: F841
-    animation/provider.py: F841
+    animation/provider.py: F841, E501
+    animation/temporal_manager.py: E501
     tplot/frame.py: F841, E722
+    tplot/g.gui.tplot.py: E501
     rdigit/g.gui.rdigit.py: F841
-    iclass/dialogs.py: E741
+    rdigit/toolbars.py: E501
+    iclass/dialogs.py: E741, E501
     iclass/digit.py: F405, F403
-    iclass/frame.py: F405, F403
+    iclass/frame.py: F405, F403, E501
+    iclass/g.gui.iclass.py: E501
     iclass/statistics.py: F841, F405, F403
+    wxplot/dialogs.py: E501
     wxplot/histogram.py: E722
     wxplot/profile.py: F841, E722
     wxplot/base.py: F841, E722
-    location_wizard/dialogs.py: F841
+    wxplot/scatter.py: E501
+    location_wizard/dialogs.py: F841, E501
     location_wizard/wizard.py: E722
-    mapdisp/main.py: E722
-    mapdisp/statusbar.py: F841
-    mapwin/base.py: E722
-    mapwin/buffered.py: E722
+    mapdisp/frame.py: E501
+    mapdisp/main.py: E722, E501
+    mapdisp/test_mapdisp.py: E501
+    mapdisp/toolbars.py: E501
+    mapdisp/statusbar.py: F841, E501
+    mapswipe/g.gui.mapswipe.py: E501
+    mapwin/base.py: E722, E501
+    mapwin/buffered.py: E722, E501
+    mapwin/decorations.py: E501
     mapwin/graphics.py: E722
-    startup/locdownload.py: E722, E402
-    tools/build_modules_xml.py: E722
-    web_services/widgets.py: F841, E741, W605, E402
+    startup/locdownload.py: E722, E402, E501
+    timeline/g.gui.timeline.py: E501
+    tools/build_modules_xml.py: E722, E501
+    web_services/cap_interface.py: E501
+    web_services/dialogs.py: E501
+    web_services/widgets.py: F841, E741, W605, E402, E501
     rlisetup/frame.py: E741
     rlisetup/sampling_frame.py: F841
     rlisetup/wizard.py: E722, E741
-    # This file will be deleted.
-    gis_set.py: E722
+    # Generated file
+    menustrings.py: E501
 
 max-line-length = 88
 exclude =

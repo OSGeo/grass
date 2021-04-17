@@ -798,7 +798,7 @@ class VNETDialog(wx.Dialog):
     def _updateParamsTab(self, params, flags):
         # TODO flag
 
-        #'turn_layer', 'turn_cat_layer',
+        # 'turn_layer', 'turn_cat_layer',
         for k in [
             "input",
             "arc_layer",

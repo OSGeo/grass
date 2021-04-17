@@ -40,7 +40,8 @@ except ImportError as e:
     raise ImportError(
         _(
             'The Timeline Tool needs the "matplotlib" '
-            "(python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {0}"
+            "(python-matplotlib and on some systems also python-matplotlib-wx) "
+            "package(s) to be installed. {}"
         ).format(e)
     )
 

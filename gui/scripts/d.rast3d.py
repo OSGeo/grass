@@ -30,8 +30,7 @@
 # % required : yes
 # %end
 
-from grass.script import core as grass
+import grass.script as gs
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
-    main()
+    gs.parser()
