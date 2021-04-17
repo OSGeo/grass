@@ -30,6 +30,8 @@ per-file-ignores =
     doc/gui/wxpython/example/dialogs.py: F401
     doc/gui/wxpython/example/g.gui.example.py: E501
     locale/grass_po_stats.py: E122, E128, E231, E401, E501, E722, E741
+    gui/scripts/d.rast3d.py: E501
+    gui/scripts/d.wms.py: E501
 
 max-line-length = 88
 exclude =
@@ -52,8 +54,8 @@ exclude =
     lib/init,
     python/grass,
     gui/wxpython,
-    scripts,
-    temporal,
+    scripts/*/*.py,
+    temporal/*/*.py,
     # No tests checked for now
     testsuite,
 

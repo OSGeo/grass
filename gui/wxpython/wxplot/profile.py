@@ -251,7 +251,10 @@ class ProfileFrame(BasePlotFrame):
             self.ylabel = self.ylabel.rstrip(",")
 
     def CreateDatalist(self, raster, coords):
-        """Build a list of distance, value pairs for points along transect using r.profile"""
+        """Build a list of distance, value pairs for points along transect
+
+        Uses r.profile to obtain the data.
+        """
         datalist = []
 
         # keep total number of transect points to 500 or less to avoid
