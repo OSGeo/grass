@@ -333,7 +333,7 @@ class RLIWizard(object):
             x = float(self.SF_X) / float(self.rasterinfo["cols"])
             y = float(self.SF_Y) / float(self.rasterinfo["rows"])
             fil.write("SAMPLEAREA %r|%r|%r|%r\n" % (self.per_x, self.per_y, rl, cl))
-        ##KMWINC = samplingtype=moving, regionbox=keyboard, shape=circle
+        # KMWINC = samplingtype=moving, regionbox=keyboard, shape=circle
         elif samtype == SamplingType.KMVWINC:
             self._circle(self.moving.width, self.moving.height)
             cl = float(self.CIR_CL) / float(self.rasterinfo["cols"])
@@ -361,8 +361,8 @@ class RLIWizard(object):
             fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
             fil.write("|%s" % self.msAreaList[0].raster)
             fil.write("\nMOVINGWINDOW\n")
-        ##KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
-        ##KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
+        # KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
+        # KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
         elif samtype == SamplingType.KUNITSC or samtype == SamplingType.KUNITSR:
             if samtype == SamplingType.KUNITSC:
                 self._circle(self.units.width, self.units.height)
@@ -389,8 +389,8 @@ class RLIWizard(object):
         # elif self.samplingareapage.samplingtype == SamplingType.UNITS and
         # self.samplingareapage.regionbox=='mouse':
 
-        ##MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
-        ##MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
+        # MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
+        # MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
         elif self.samplingareapage.samplingtype in [
             SamplingType.MUNITSR,
             SamplingType.MUNITSC,
@@ -1274,7 +1274,7 @@ class DrawRegionsPage(TitledPage):
             )
 
     # def OnExitPage(self, event=None):
-    #!Function during exiting
+    # Function during exiting
     # print event.GetDirection()
     # if event.GetDirection():
     #    self.SetNext(self.parent.samplingareapage)
@@ -1789,7 +1789,7 @@ class DrawSampleUnitsPage(TitledPage):
             )
 
     def OnExitPage(self, event=None):
-        #!Function during exiting
+        """Function during exiting"""
         pass
 
         # if event.GetDirection():

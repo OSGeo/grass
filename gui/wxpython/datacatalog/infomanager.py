@@ -41,7 +41,8 @@ class DataCatalogInfoManager:
             "which contain Mapsets (subprojects). All data in one Location is "
             "in the same coordinate reference system (CRS).\n\n"
             "You are currently in Mapset PERMANENT in default Location {loc} "
-            "which uses WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
+            "which uses WGS 84 (EPSG:4326). "
+            "Consider creating a new Location with a CRS "
             "specific to your area. You can do it now or anytime later from "
             "the toolbar above."
         ).format(loc=gisenv()["LOCATION_NAME"])
