@@ -1047,13 +1047,13 @@ def _compare_units(dic):
         ["kilometer", "kilometre"],
         ["kilometers", "kilometres"],
     ]
-    for l in lookup:
+    for item in lookup:
         for n in range(len(dic["unit"])):
-            if dic["unit"][n].lower() in l:
-                dic["unit"][n] = l[0]
+            if dic["unit"][n].lower() in item:
+                dic["unit"][n] = item[0]
         for n in range(len(dic["units"])):
-            if dic["units"][n].lower() in l:
-                dic["units"][n] = l[0]
+            if dic["units"][n].lower() in item:
+                dic["units"][n] = item[0]
     return dic
 
 

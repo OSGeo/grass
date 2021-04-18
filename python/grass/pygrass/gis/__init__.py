@@ -443,7 +443,7 @@ class VisibleMapset(object):
         with open(self.spath, "ab+") as f:
             lines = f.readlines()
             if lines:
-                return [decode(l.strip()) for l in lines]
+                return [decode(line.strip()) for line in lines]
         lns = [
             "PERMANENT",
         ]

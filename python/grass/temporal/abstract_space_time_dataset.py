@@ -1142,13 +1142,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             else:
                 end = end + gran
 
-        l = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+        maplist = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
             maps, start, end, gran
         )
         if connection_state_changed:
             dbif.close()
 
-        return l
+        return maplist
 
     @staticmethod
     def resample_maplist_by_granularity(maps, start, end, gran):
