@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Aug  8 15:29:21 2012
 
 @author: pietro
-
 """
 from __future__ import (
     nested_scopes,

@@ -1,37 +1,40 @@
 [flake8]
 ignore =
-    E265, # block comment should start with '# '
-    E266, # too many leading '#' for block comment
-    E402, # module level import not at top of file
-    E722, # do not use bare 'except'
-    E741, # ambiguous variable name 'l'
-    F841, # local variable 'center' is assigned to but never used
-    E121, # continuation line under-indented for hanging indent
-    E125, # continuation line with same indent as next logical line
-    E127, # continuation line over-indented for visual indent
-    E128, # continuation line under-indented for visual indent
-    E202, # whitespace before ')'
-    E211, # whitespace before '['
-    E221, # multiple spaces before operator
-    E225, # missing whitespace around operator
-    E226, # missing whitespace around arithmetic operator
-    E231, # missing whitespace after ','
-    E251, # unexpected spaces around keyword / parameter equals
-    E261, # at least two spaces before inline comment
-    E271, # multiple spaces after keyword
-    E272, # multiple spaces before keyword
-    E302, # expected 2 blank lines, found 1
-    E303, # too many blank lines (2)
-    E305, # expected 2 blank lines after class or function definition, found 1
+    E203,  # whitespace before ':' (Black)
+    W503,  # line break before binary operator (Black)
     E501, # line too long (161 > 150 characters)
-    W293, # blank line contains whitespace
-    W503, # line break before binary operator
-    W504, # line break after binary operator
 
-# Ignores for Black compatibility
-# This is not to be removed unlike the ones in ignore.
-extend-ignore =
-    E203,  # whitespace before ':' (in a slice the colon acts like a binary operator)
+per-file-ignores =
+    # Many of these ignores can and should be removed and the problem fixed.
+    # F841 local variable is assigned to but never used
+    # E402 module level import not at top of file
+    # E741 ambiguous variable name 'l' (needs longer name)
+    # E722 do not use bare 'except'
+    d.polar/d.polar.py: F841
+    r.in.wms/wms_gdal_drv.py: F841, E722
+    r.in.wms/wms_cap_parsers.py: F841, E741
+    r.in.wms/wms_drv.py: E402, E722
+    r.in.wms/srs.py: E722
+    i.band/i.band.py: F841
+    v.report/v.report.py: F841
+    db.out.ogr/db.out.ogr.py: F841
+    g.extension/g.extension.py: F841, E722
+    r.unpack/r.unpack.py: E722
+    v.unpack/v.unpack.py: F841, E722
+    v.import/v.import.py: F841, E722
+    db.univar/db.univar.py: E741
+    d.rast.leg/d.rast.leg.py: E741
+    d.frame/d.frame.py: E722
+    i.pansharpen/i.pansharpen.py: E722
+    r.in.srtm/r.in.srtm.py: E722
+    r.fillnulls/r.fillnulls.py: E722
+    d.rast.edit/d.rast.edit.py: E722
+    g.manual/g.manual.py: E722
+    v.to.lines/v.to.lines.py: E722
+    v.in.wfs/v.in.wfs.py: E722
+    r.plane/r.plane.py: E722
+    v.what.strds/v.what.strds.py: E722
+    i.in.spotvgt/i.in.spotvgt.py: E722
 
 max-line-length = 88
 exclude =
@@ -47,5 +50,6 @@ exclude =
     ctypes,
     pydispatch,
     testsuite,
+
 builtins =
     _

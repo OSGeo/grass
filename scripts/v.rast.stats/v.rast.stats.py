@@ -112,10 +112,11 @@ def main():
     percentile = options["percentile"]
     basecols = options["method"].split(",")
 
-    ### setup enviro vars ###
+    # Get current mapset
     env = grass.gisenv()
     mapset = env["MAPSET"]
 
+    # Get mapset of the vector
     vs = vector.split("@")
     if len(vs) > 1:
         vect_mapset = vs[1]

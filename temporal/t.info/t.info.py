@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.info
@@ -112,7 +112,11 @@ def main():
     dataset = tgis.dataset_factory(type_, id_)
 
     if not dataset.is_in_db(dbif):
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id_))
+        grass.fatal(
+            _("Dataset <{n}> of type <{t}> not found in temporal database").format(
+                n=id_, t=type_
+            )
+        )
 
     dataset.select(dbif)
 

@@ -63,9 +63,6 @@ from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .space_time_datasets import VectorDataset
 
 
-##############################################################################
-
-
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
     """Lexical analyzer for the GRASS GIS temporal vector algebra"""
 
@@ -115,9 +112,6 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
         else:
             t.type = "NAME"
         return t
-
-
-##############################################################################
 
 
 class TemporalVectorAlgebraParser(TemporalAlgebraParser):
@@ -183,8 +177,6 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.basename = basename
         self.expression = expression
         self.parser.parse(expression)
-
-    ######################### Temporal functions ##############################
 
     def build_spatio_temporal_topology_list(
         self,
@@ -416,13 +408,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             # Append map to result map list.
             # if returncode == 1:
             #    resultlist.append(map_new)
-        # Get sorted map objects as values from result dictionoary.
+        # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
         resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
         return resultlist
-
-    ###########################################################################
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps.
@@ -483,10 +472,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             self.msgr.message("Run command:\n" + cmd.get_bash())
                             cmd.run()
 
-                            if cmd.popen.returncode != 0:
+                            if cmd.returncode != 0:
                                 self.msgr.fatal(
                                     _("Error starting %s : \n%s")
-                                    % (cmd.get_bash(), cmd.popen.stderr)
+                                    % (cmd.get_bash(), cmd.outputs.stderr)
                                 )
                             mapname = cmd.outputs["output"].value
                             if mapname.find("@") >= 0:
@@ -575,7 +564,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                         "Error vector map %s exist in temporal database. "
                                         "Use overwrite flag.  : \n%s"
                                     )
-                                    % (map_i.get_map_id(), cmd.popen.stderr)
+                                    % (map_i.get_map_id(), cmd.outputs.stderr)
                                 )
                             else:
                                 # Insert map into temporal database.

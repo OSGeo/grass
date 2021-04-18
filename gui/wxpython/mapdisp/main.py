@@ -35,37 +35,39 @@ import time
 import shutil
 import fileinput
 
-from grass.script.setup import set_gui_path
-set_gui_path()
-
-from core import globalvar
-import wx
-
-from core import utils
-from core.giface import StandaloneGrassInterface
-from core.gcmd import RunCommand
-from core.render import Map, MapLayer, RenderMapMgr
-from mapdisp.frame import MapFrame
-from core.debug import Debug
-from core.settings import UserSettings
-
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.script.task import cmdtuple_to_list, cmdlist_to_tuple
 from grass.pydispatch.signal import Signal
 
+from grass.script.setup import set_gui_path
+
+set_gui_path()
+
+# GUI imports require path to GUI code to be set.
+from core import globalvar  # noqa: E402
+import wx  # noqa: E402
+
+from core import utils  # noqa: E402
+from core.giface import StandaloneGrassInterface  # noqa: E402
+from core.gcmd import RunCommand  # noqa: E402
+from core.render import Map, MapLayer, RenderMapMgr  # noqa: E402
+from mapdisp.frame import MapFrame  # noqa: E402
+from core.debug import Debug  # noqa: E402
+from core.settings import UserSettings  # noqa: E402
+
 # for standalone app
-monFile = {'cmd': None,
-           'map': None,
-           'env': None,
-           }
+monFile = {
+    "cmd": None,
+    "map": None,
+    "env": None,
+}
 monName = None
 monSize = list(globalvar.MAP_WINDOW_SIZE)
 monDecor = False
 
 
 class DMonMap(Map):
-
     def __init__(self, giface, cmdfile=None, mapfile=None):
         """Map composition (stack of map layers and overlays)
 
@@ -89,69 +91,69 @@ class DMonMap(Map):
 
         if mapfile:
             self.mapfileCmd = mapfile
-            self.maskfileCmd = os.path.splitext(mapfile)[0] + '.pgm'
+            self.maskfileCmd = os.path.splitext(mapfile)[0] + ".pgm"
 
         # generated file for g.pnmcomp output for rendering the map
-        self.mapfile = monFile['map']
-        if os.path.splitext(self.mapfile)[1] != '.ppm':
-            self.mapfile += '.ppm'
+        self.mapfile = monFile["map"]
+        if os.path.splitext(self.mapfile)[1] != ".ppm":
+            self.mapfile += ".ppm"
 
         # signal sent when d.out.file/d.to.rast appears in cmd file, attribute
         # is cmd
-        self.saveToFile = Signal('DMonMap.saveToFile')
-        self.dToRast = Signal('DMonMap.dToRast')
+        self.saveToFile = Signal("DMonMap.saveToFile")
+        self.dToRast = Signal("DMonMap.dToRast")
         # signal sent when d.what.rast/vect appears in cmd file, attribute is
         # cmd
-        self.query = Signal('DMonMap.query')
+        self.query = Signal("DMonMap.query")
 
         self.renderMgr = RenderMapMgr(self)
 
         # update legend file variable with the one d.mon uses
-        with open(monFile['env'], 'r') as f:
+        with open(monFile["env"], "r") as f:
             lines = f.readlines()
             for line in lines:
-                if 'GRASS_LEGEND_FILE' in line:
-                    legfile = line.split('=', 1)[1].strip()
-                    self.renderMgr.UpdateRenderEnv({'GRASS_LEGEND_FILE': legfile})
+                if "GRASS_LEGEND_FILE" in line:
+                    legfile = line.split("=", 1)[1].strip()
+                    self.renderMgr.UpdateRenderEnv({"GRASS_LEGEND_FILE": legfile})
                     break
 
     def GetLayersFromCmdFile(self):
-        """Get list of map layers from cmdfile
-        """
+        """Get list of map layers from cmdfile"""
         if not self.cmdfile:
             return
 
         nlayers = 0
         try:
-            fd = open(self.cmdfile, 'r')
+            fd = open(self.cmdfile, "r")
             lines = fd.readlines()
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export
             # graphics
             if len(lines) > 0:
-                if lines[-1].startswith('d.out.file') or \
-                   lines[-1].startswith('d.to.rast'):
+                if lines[-1].startswith("d.out.file") or lines[-1].startswith(
+                    "d.to.rast"
+                ):
                     dCmd = lines[-1].strip()
-                    fd = open(self.cmdfile, 'w')
+                    fd = open(self.cmdfile, "w")
                     fd.writelines(lines[:-1])
                     fd.close()
-                    if lines[-1].startswith('d.out.file'):
+                    if lines[-1].startswith("d.out.file"):
                         self.saveToFile.emit(cmd=utils.split(dCmd))
                     else:
                         self.dToRast.emit(cmd=utils.split(dCmd))
                     return
-                if lines[-1].startswith('d.what'):
+                if lines[-1].startswith("d.what"):
                     dWhatCmd = lines[-1].strip()
-                    fd = open(self.cmdfile, 'w')
+                    fd = open(self.cmdfile, "w")
                     fd.writelines(lines[:-1])
                     fd.close()
-                    if '=' in utils.split(dWhatCmd)[1]:
-                        maps = utils.split(dWhatCmd)[1].split('=')[
-                            1].split(',')
+                    if "=" in utils.split(dWhatCmd)[1]:
+                        maps = utils.split(dWhatCmd)[1].split("=")[1].split(",")
                     else:
-                        maps = utils.split(dWhatCmd)[1].split(',')
-                    self.query.emit(ltype=utils.split(dWhatCmd)[
-                                    0].split('.')[-1], maps=maps)
+                        maps = utils.split(dWhatCmd)[1].split(",")
+                    self.query.emit(
+                        ltype=utils.split(dWhatCmd)[0].split(".")[-1], maps=maps
+                    )
                     return
             else:
                 # clean overlays after erase
@@ -170,11 +172,11 @@ class DMonMap(Map):
             mapFile = None
             render_env = dict()
             for line in lines:
-                if line.startswith('#'):
-                    if 'GRASS_RENDER_FILE' in line:
-                        mapFile = line.split('=', 1)[1].strip()
+                if line.startswith("#"):
+                    if "GRASS_RENDER_FILE" in line:
+                        mapFile = line.split("=", 1)[1].strip()
                     try:
-                        k, v = line[2:].strip().split('=', 1)
+                        k, v = line[2:].strip().split("=", 1)
                     except:
                         pass
                     render_env[k] = v
@@ -189,36 +191,38 @@ class DMonMap(Map):
                     grass.warning(_("Unsupported command %s.") % cmd[0])
                     continue
 
-                name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True,
-                                                 layerType=ltype)[0]
+                name = utils.GetLayerNameFromCmd(
+                    cmd, fullyQualified=True, layerType=ltype
+                )[0]
 
                 args = {}
 
-                if ltype in ('barscale', 'rastleg', 'northarrow', 'text', 'vectleg'):
+                if ltype in ("barscale", "rastleg", "northarrow", "text", "vectleg"):
                     # TODO: this is still not optimal
                     # it is there to prevent adding the same overlay multiple times
                     if cmd in self.oldOverlays:
                         continue
-                    if ltype == 'rastleg':
+                    if ltype == "rastleg":
                         self._giface.GetMapDisplay().AddLegendRast(cmd=cmd)
-                    elif ltype == 'barscale':
+                    elif ltype == "barscale":
                         self._giface.GetMapDisplay().AddBarscale(cmd=cmd)
-                    elif ltype == 'northarrow':
+                    elif ltype == "northarrow":
                         self._giface.GetMapDisplay().AddArrow(cmd=cmd)
-                    elif ltype == 'text':
+                    elif ltype == "text":
                         self._giface.GetMapDisplay().AddDtext(cmd=cmd)
-                    elif ltype == 'vectleg':
+                    elif ltype == "vectleg":
                         self._giface.GetMapDisplay().AddLegendVect(cmd=cmd)
                     self.oldOverlays.append(cmd)
                     continue
 
                 classLayer = MapLayer
-                args['ltype'] = ltype
+                args["ltype"] = ltype
 
                 exists = False
                 for i, layer in enumerate(existingLayers):
-                    if layer.GetCmd(
-                            string=True) == utils.GetCmdString(cmdlist_to_tuple(cmd)):
+                    if layer.GetCmd(string=True) == utils.GetCmdString(
+                        cmdlist_to_tuple(cmd)
+                    ):
                         exists = True
 
                         if layersOrder[i] == -1:
@@ -236,14 +240,18 @@ class DMonMap(Map):
                 if exists:
                     continue
 
-                mapLayer = classLayer(name=name,
-                                      cmd=cmd,
-                                      Map=None,
-                                      hidden=True,
-                                      render=False,
-                                      mapfile=mapFile,
-                                      **args)
-                mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
+                mapLayer = classLayer(
+                    name=name,
+                    cmd=cmd,
+                    Map=None,
+                    hidden=True,
+                    render=False,
+                    mapfile=mapFile,
+                    **args,
+                )
+                mapLayer.GetRenderMgr().updateProgress.connect(
+                    self.GetRenderMgr().ReportProgress
+                )
                 if render_env:
                     mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
                     render_env = dict()
@@ -279,12 +287,16 @@ class DMonMap(Map):
 
         except IOError as e:
             grass.warning(
-                _("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") %
-                {'cmd': self.cmdfile, 'det': e})
+                _("Unable to read cmdfile '%(cmd)s'. Details: %(det)s")
+                % {"cmd": self.cmdfile, "det": e}
+            )
             return
 
-        Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s, nlayers=%d" %
-                  (self.cmdfile, nlayers))
+        Debug.msg(
+            1,
+            "Map.GetLayersFromCmdFile(): cmdfile=%s, nlayers=%d"
+            % (self.cmdfile, nlayers),
+        )
 
         self._giface.updateMap.emit(render=False)
 
@@ -300,9 +312,9 @@ class DMonMap(Map):
 
         For input params and returned data see overridden method in Map class.
         """
-        driver = UserSettings.Get(group='display', key='driver', subkey='type')
+        driver = UserSettings.Get(group="display", key="driver", subkey="type")
 
-        if driver == 'png':
+        if driver == "png":
             os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
@@ -321,16 +333,16 @@ class Layer(object):
         self._maplayer = maplayer
 
     def __getattr__(self, name):
-        if name == 'cmd':
+        if name == "cmd":
             return cmdtuple_to_list(self._maplayer.GetCmd())
         elif hasattr(self._maplayer, name):
             return getattr(self._maplayer, name)
-        elif name == 'maplayer':
+        elif name == "maplayer":
             return self._maplayer
-        elif name == 'type':
+        elif name == "type":
             return self._maplayer.GetType()
             # elif name == 'ctrl':
-        elif name == 'label':
+        elif name == "label":
             return self._maplayer.GetName()
             # elif name == 'propwin':
 
@@ -378,8 +390,7 @@ class LayerList(object):
         else:
             return None
 
-    def AddLayer(self, ltype, name=None, checked=None,
-                 opacity=1.0, cmd=None):
+    def AddLayer(self, ltype, name=None, checked=None, opacity=1.0, cmd=None):
         """Adds a new layer to the layer list.
 
         Launches property dialog if needed (raster, vector, etc.)
@@ -390,10 +401,15 @@ class LayerList(object):
         :param opacity: layer opacity level
         :param cmd: command (given as a list)
         """
-        self._map.AddLayer(ltype=ltype, command=cmd,
-                           name=name, active=True,
-                           opacity=opacity, render=True,
-                           pos=-1)
+        self._map.AddLayer(
+            ltype=ltype,
+            command=cmd,
+            name=name,
+            active=True,
+            opacity=opacity,
+            render=True,
+            pos=-1,
+        )
         # TODO: this should be solved by signal
         # (which should be introduced everywhere,
         # alternative is some observer list)
@@ -459,7 +475,7 @@ class DMonGrassInterface(StandaloneGrassInterface):
             action = self._mapframe.AddToolbar
         toolbars = list(self._mapframe.GetToolbarNames())
         if not toolbars:
-            toolbars.append('map')
+            toolbars.append("map")
         for toolbar in toolbars:
             action(toolbar)
 
@@ -472,7 +488,6 @@ class DMonGrassInterface(StandaloneGrassInterface):
 
 
 class DMonFrame(MapFrame):
-
     def OnZoomToMap(self, event):
         layers = self.MapWindow.GetMap().GetListOfLayers()
         self.MapWindow.ZoomToMap(layers=layers)
@@ -482,17 +497,16 @@ class DMonFrame(MapFrame):
 
         # update env file
         width, height = self.MapWindow.GetClientSize()
-        for line in fileinput.input(monFile['env'], inplace=True):
-            if 'GRASS_RENDER_WIDTH' in line:
-                print('GRASS_RENDER_WIDTH={0}'.format(width))
-            elif 'GRASS_RENDER_HEIGHT' in line:
-                print('GRASS_RENDER_HEIGHT={0}'.format(height))
+        for line in fileinput.input(monFile["env"], inplace=True):
+            if "GRASS_RENDER_WIDTH" in line:
+                print("GRASS_RENDER_WIDTH={0}".format(width))
+            elif "GRASS_RENDER_HEIGHT" in line:
+                print("GRASS_RENDER_HEIGHT={0}".format(height))
             else:
-                print(line.rstrip('\n'))
+                print(line.rstrip("\n"))
 
 
 class MapApp(wx.App):
-
     def OnInit(self):
         grass.set_raise_on_error(True)
         # actual use of StandaloneGrassInterface not yet tested
@@ -504,12 +518,13 @@ class MapApp(wx.App):
     def CreateMapFrame(self, name, decorations=True):
         toolbars = []
         if decorations:
-            toolbars.append('map')
+            toolbars.append("map")
 
         if __name__ == "__main__":
-            self.cmdTimeStamp = 0 # fake initial timestamp
-            self.Map = DMonMap(giface=self._giface, cmdfile=monFile['cmd'],
-                               mapfile=monFile['map'])
+            self.cmdTimeStamp = 0  # fake initial timestamp
+            self.Map = DMonMap(
+                giface=self._giface, cmdfile=monFile["cmd"], mapfile=monFile["map"]
+            )
 
             self.timer = wx.PyTimer(self.watcher)
             # check each 0.5s
@@ -527,7 +542,8 @@ class MapApp(wx.App):
             giface=self._giface,
             size=monSize,
             toolbars=toolbars,
-            statusbar=decorations)
+            statusbar=decorations,
+        )
 
         # FIXME: hack to solve dependency
         self._giface._mapframe = self.mapFrm
@@ -535,24 +551,31 @@ class MapApp(wx.App):
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(False)
 
         # set default properties
-        self.mapFrm.SetProperties(render=UserSettings.Get(
-            group='display', key='autoRendering', subkey='enabled'),
+        self.mapFrm.SetProperties(
+            render=UserSettings.Get(
+                group="display", key="autoRendering", subkey="enabled"
+            ),
             mode=UserSettings.Get(
-            group='display', key='statusbarMode', subkey='selection'),
+                group="display", key="statusbarMode", subkey="selection"
+            ),
             alignExtent=UserSettings.Get(
-            group='display', key='alignExtent', subkey='enabled'),
+                group="display", key="alignExtent", subkey="enabled"
+            ),
             constrainRes=UserSettings.Get(
-            group='display', key='compResolution', subkey='enabled'),
+                group="display", key="compResolution", subkey="enabled"
+            ),
             showCompExtent=UserSettings.Get(
-            group='display', key='showCompExtent', subkey='enabled'))
+                group="display", key="showCompExtent", subkey="enabled"
+            ),
+        )
 
         self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
         self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
         self.Map.query.connect(
-            lambda ltype,
-            maps: self.mapFrm.SetQueryLayersAndActivate(
-                ltype=ltype,
-                maps=maps))
+            lambda ltype, maps: self.mapFrm.SetQueryLayersAndActivate(
+                ltype=ltype, maps=maps
+            )
+        )
 
         return self.mapFrm
 
@@ -586,7 +609,7 @@ class MapApp(wx.App):
 
         # todo: events
         try:
-            currentCmdFileTime = os.path.getmtime(monFile['cmd'])
+            currentCmdFileTime = os.path.getmtime(monFile["cmd"])
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime
@@ -600,6 +623,7 @@ class MapApp(wx.App):
         """Get Map Frame instance"""
         return self.mapFrm
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 6:
         print(__doc__)
@@ -608,9 +632,11 @@ if __name__ == "__main__":
     # set command variable
     monName = sys.argv[1]
     monPath = sys.argv[2]
-    monFile = {'map': os.path.join(monPath, 'map.ppm'),
-               'cmd': os.path.join(monPath, 'cmd'),
-               'env': os.path.join(monPath, 'env')}
+    monFile = {
+        "map": os.path.join(monPath, "map.ppm"),
+        "cmd": os.path.join(monPath, "cmd"),
+        "env": os.path.join(monPath, "env"),
+    }
 
     # monitor size
     monSize = (int(sys.argv[3]), int(sys.argv[4]))
@@ -620,21 +646,19 @@ if __name__ == "__main__":
 
     # create pid file
     pidFile = os.path.join(monPath, "pid")
-    fd = open(pidFile, 'w')
+    fd = open(pidFile, "w")
     if not fd:
         grass.fatal(_("Unable to create file <%s>") % pidFile)
     fd.write("%s\n" % os.getpid())
     fd.close()
 
-    RunCommand('g.gisenv',
-               set='MONITOR_%s_PID=%d' % (monName.upper(), os.getpid()))
+    RunCommand("g.gisenv", set="MONITOR_%s_PID=%d" % (monName.upper(), os.getpid()))
 
     start = time.time()
     gmMap = MapApp(0)
     mapFrame = gmMap.CreateMapFrame(monName, monDecor)
     mapFrame.Show()
-    Debug.msg(1, "WxMonitor started in %.6f sec" %
-              (time.time() - start))
+    Debug.msg(1, "WxMonitor started in %.6f sec" % (time.time() - start))
 
     gmMap.MainLoop()
 
@@ -646,7 +670,6 @@ if __name__ == "__main__":
     except OSError:
         pass
 
-    RunCommand('g.gisenv',
-               unset='MONITOR')
+    RunCommand("g.gisenv", unset="MONITOR")
 
     sys.exit(0)

@@ -15,6 +15,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <math.h>
+#include <unistd.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -23,8 +24,6 @@
 #define DATE_FORMAT "%c"
 
 struct ps_state ps;
-
-static const char *file_name;
 
 static double width, height;
 static int landscape;
@@ -72,7 +71,7 @@ static void write_prolog(void)
 
     output("%%%%LanguageLevel: %d\n", 3);
     output("%%%%Creator: GRASS PS Driver\n");
-    output("%%%%Title: %s\n", file_name);
+    output("%%%%Title: %s\n", ps.outfile);
     output("%%%%For: %s\n", G_whoami());
     output("%%%%Orientation: %s\n", landscape ? "Landscape" : "Portrait");
     output("%%%%BoundingBox: %d %d %d %d\n",
@@ -88,7 +87,7 @@ static void write_prolog(void)
 	if (!fgets(buf, sizeof(buf), prolog_fp))
 	    break;
 
-	fputs(buf, ps.outfp);
+	fputs(buf, ps.tempfp);
     }
     output("%%%%EndProlog\n");
 
@@ -180,8 +179,8 @@ int PS_Graph_set(void)
     if (!p || strlen(p) == 0)
 	p = FILE_NAME;
 
-    file_name = p;
-    p = file_name + strlen(file_name) - 4;
+    ps.outfile = p;
+    p = ps.outfile + strlen(ps.outfile) - 4;
     ps.encapsulated = (G_strcasecmp(p, ".eps") == 0);
 
     p = getenv("GRASS_RENDER_TRUECOLOR");
@@ -201,21 +200,25 @@ int PS_Graph_set(void)
 
     get_paper();
 
-    ps.outfp = fopen(file_name, ps.no_header ? "a" : "w");
+    ps.tempfile = G_tempfile();
+    if (ps.no_header && access(ps.outfile, F_OK) == 0)
+	G_rename_file(ps.outfile, ps.tempfile);
 
-    if (!ps.outfp)
-	G_fatal_error("Unable to open output file: %s", file_name);
+    ps.tempfp = fopen(ps.tempfile, ps.no_header ? "a" : "w");
+
+    if (!ps.tempfp)
+	G_fatal_error("Unable to open output file: %s", ps.outfile);
 
     if (!ps.no_header) {
 	write_prolog();
 	write_setup();
     }
 
-    G_verbose_message(_("ps: collecting to file '%s'"), file_name);
+    G_verbose_message(_("ps: collecting to file '%s'"), ps.outfile);
     G_verbose_message(_("ps: image size %dx%d"),
 		      screen_width, screen_height);
 
-    fflush(ps.outfp);
+    fflush(ps.tempfp);
 
     return 0;
 }
@@ -227,7 +230,7 @@ int PS_Graph_set(void)
 */
 const char *PS_Graph_get_file(void)
 {
-    return file_name;
+    return ps.outfile;
 }
 
 void output(const char *fmt, ...)
@@ -235,6 +238,6 @@ void output(const char *fmt, ...)
     va_list va;
 
     va_start(va, fmt);
-    vfprintf(ps.outfp, fmt, va);
+    vfprintf(ps.tempfp, fmt, va);
     va_end(va);
 }

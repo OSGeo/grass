@@ -1,45 +1,100 @@
 [flake8]
 ignore =
-    W605, # invalid escape sequence '\.'
-    E265, # block comment should start with '# '
-    E266, # too many leading '#' for block comment
-    E402, # module level import not at top of file
-    E722, # do not use bare 'except'
-    E731, # do not assign a lambda expression, use a def
-    E741, # ambiguous variable name 'l'
-    F403, # 'from gmodeler.model import *' used; unable to detect undefined names
-    F405, # '_' may be undefined, or defined from star imports: gmodeler.model
-    F841, # local variable 'dc' is assigned to but never used
-    E117, # over-indented
-    E122, # continuation line missing indentation or outdented
-    E123, # closing bracket does not match indentation of opening bracket's line
-    E124, # closing bracket does not match visual indentation
-    E125, # continuation line with same indent as next logical line
-    E126, # continuation line over-indented for hanging indent
-    E127, # continuation line over-indented for visual indent
-    E128, # continuation line under-indented for visual indent
-    E131, # continuation line unaligned for hanging indent
-    E202, # whitespace before '}'
-    E203, # whitespace before ':'
-    E211, # whitespace before '('
-    E222, # multiple spaces after operator
-    E225, # missing whitespace around operator
-    E226, # missing whitespace around arithmetic operator
-    E231, # missing whitespace after ','
-    E241, # multiple spaces after ','
-    E261, # at least two spaces before inline comment
-    E271, # multiple spaces after keyword
-    E272, # multiple spaces before keyword
-    E301, # expected 1 blank line, found 0
-    E302, # expected 2 blank lines, found 1
-    E303, # too many blank lines (3)
-    E305, # expected 2 blank lines after class or function definition, found 1
-    E306, # expected 1 blank line before a nested definition, found 0
-    E501, # line too long (96 > 79 characters)
-    W291, # trailing whitespace
-    W293, # blank line contains whitespace
-    W503, # line break before binary operator
-    W504, # line break after binary operator
+    E203,  # whitespace before ':' (Black)
+    W503,  # line break before binary operator (Black)
+
+per-file-ignores =
+    # Many of these ignores can and should be removed and the problem fixed.
+    # F841 local variable is assigned to but never used
+    # F403 star import used; unable to detect undefined names
+    # F405 variable may be undefined, or defined from star imports
+    # E402 module level import not at top of file
+    # E501 line too long
+    core/debug.py: E501
+    core/gcmd.py: E402, E501
+    core/giface.py: E501
+    core/gthread.py: F841
+    core/gconsole.py: E722, W605
+    core/toolboxes.py: E722, E501
+    core/utils.py: E722, F841, W605
+    core/workspace.py: E722, E501
+    core/render.py: E722, F841, E501
+    core/ws.py: F841, E501
+    core/settings.py: E722
+    datacatalog/tree.py: E731, E402, E501
+    dbmgr/base.py: E501, E722, F841
+    dbmgr/dialogs.py: E501, F841, E722
+    dbmgr/sqlbuilder.py: E501, E722, F841
+    dbmgr/manager.py: E501, E722
+    dbmgr/vinfo.py: F841
+    docs/wxgui_sphinx/conf.py: E402, E501
+    gcp/g.gui.gcp.py: F841
+    gcp/manager.py: E501, F841, E722
+    gcp/mapdisplay.py: F841
+    gmodeler/*: F841, E722, W605, F405, F403, E402
+    gui_core/*: F841, E266, E722, W605
+    gui_core/dialogs.py: E501, E722, F841, W605
+    gui_core/forms.py: E501, E722, F841
+    gui_core/ghelp.py: E501, E722
+    gui_core/gselect.py: E501, F841, E266, E722
+    gui_core/preferences.py: E501, E266, F841
+    gui_core/treeview.py: E501, F841
+    gui_core/widgets.py: E501, F841, E722, E266
+    image2target/*: F841, E722, E265, E501
+    iscatt/*: F841, E722, E741, F405, F403, E501
+    lmgr/giface.py: E501, E741
+    lmgr/frame.py: F841, E722, W605, E501
+    # layertree still includes some formatting issues (it is ignored by Black)
+    lmgr/layertree.py: E722, E266, W504, E225, E501
+    lmgr/workspace.py: F841
+    modules/*: F841, E722, W605, E501
+    nviz/*: F841, E266, E722, W605, F403, F405, E501
+    photo2image/*: F841, E722, E265, E501
+    psmap/*: F841, E266, E722, F405, F403, E501
+    vdigit/*: F841, E722, E741, F405, F403, E501
+    vnet/*: F841, E501
+    wxgui.py: F841
+    animation/g.gui.animation.py: E501
+    animation/mapwindow.py: F841
+    animation/provider.py: F841, E501
+    animation/temporal_manager.py: E501
+    tplot/frame.py: F841, E722
+    tplot/g.gui.tplot.py: E501
+    rdigit/g.gui.rdigit.py: F841
+    rdigit/toolbars.py: E501
+    iclass/dialogs.py: E741, E501
+    iclass/digit.py: F405, F403
+    iclass/frame.py: F405, F403, E501
+    iclass/g.gui.iclass.py: E501
+    iclass/statistics.py: F841, F405, F403
+    wxplot/dialogs.py: E501
+    wxplot/histogram.py: E722
+    wxplot/profile.py: F841, E722
+    wxplot/base.py: F841, E722
+    wxplot/scatter.py: E501
+    location_wizard/dialogs.py: F841, E501
+    location_wizard/wizard.py: E722
+    mapdisp/frame.py: E501
+    mapdisp/main.py: E722, E501
+    mapdisp/test_mapdisp.py: E501
+    mapdisp/toolbars.py: E501
+    mapdisp/statusbar.py: F841, E501
+    mapswipe/g.gui.mapswipe.py: E501
+    mapwin/base.py: E722, E501
+    mapwin/buffered.py: E722, E501
+    mapwin/decorations.py: E501
+    mapwin/graphics.py: E722
+    startup/locdownload.py: E722, E402, E501
+    timeline/g.gui.timeline.py: E501
+    tools/build_modules_xml.py: E722, E501
+    web_services/cap_interface.py: E501
+    web_services/dialogs.py: E501
+    web_services/widgets.py: F841, E741, W605, E402, E501
+    rlisetup/frame.py: E741
+    rlisetup/sampling_frame.py: F841
+    rlisetup/wizard.py: E722, E741
+    # Generated file
+    menustrings.py: E501
 
 max-line-length = 88
 exclude =

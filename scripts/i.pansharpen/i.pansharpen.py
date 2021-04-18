@@ -599,13 +599,12 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
     b1evect = []
     b2evect = []
     b3evect = []
-    for l in pca_out.replace("(", ",").replace(")", ",").splitlines():
-        b1evect.append(float(l.split(",")[1]))
-        b2evect.append(float(l.split(",")[2]))
-        b3evect.append(float(l.split(",")[3]))
+    for line in pca_out.replace("(", ",").replace(")", ",").splitlines():
+        b1evect.append(float(line.split(",")[1]))
+        b2evect.append(float(line.split(",")[2]))
+        b3evect.append(float(line.split(",")[3]))
 
     # inverse PCA with hi res pan channel substituted for principal component 1
-    pca1 = "tmp%s.pca.1" % pid
     pca2 = "tmp%s.pca.2" % pid
     pca3 = "tmp%s.pca.3" % pid
     b1evect1 = b1evect[0]

@@ -96,10 +96,6 @@ def main():
         if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
             grass.fatal(_("Key column must be of type integer or string"))
 
-        f = grass.vector_layer_db(input, layer)
-
-        table = f["table"]
-
         tmpfile = "%s_%s" % (output, tmp)
 
         try:

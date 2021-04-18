@@ -197,8 +197,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), "etc", "r.in.wms"))
-
 import grass.script as grass
 from grass.script.utils import decode
 
@@ -227,6 +225,7 @@ def GetRegionParams(opt_region):
 
 
 def main():
+    sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), "etc", "r.in.wms"))
 
     if "GRASS" in options["driver"]:
         grass.debug("Using GRASS driver")

@@ -29,9 +29,15 @@ from gui_core.forms import GUI
 from core.settings import UserSettings
 
 from grass.pydispatch.signal import Signal
-
-from grass.grassdb.checks import is_current_mapset_in_demolocation
 from grass.script.utils import clock
+from grass.script import gisenv
+
+from grass.grassdb.manage import split_mapset_path
+from grass.grassdb.checks import (
+    get_reason_id_mapset_not_usable,
+    is_fallback_session,
+    is_first_time_user,
+)
 
 
 class DataCatalog(wx.Panel):
@@ -65,7 +71,9 @@ class DataCatalog(wx.Panel):
         self.tree.showNotification.connect(self.showNotification)
 
         # infobar for data catalog
+        delay = 2000
         self.infoBar = InfoBar(self)
+        self.giface.currentMapsetChanged.connect(self.dismissInfobar)
 
         # infobar manager for data catalog
         self.infoManager = DataCatalogInfoManager(
@@ -77,9 +85,22 @@ class DataCatalog(wx.Panel):
         # some layout
         self._layout()
 
-        # show data structure infobar for first-time user with proper layout
-        if is_current_mapset_in_demolocation():
-            wx.CallLater(2000, self.showDataStructureInfo)
+        # show infobar for first-time user if applicable
+        if is_first_time_user():
+            # show data structure infobar for first-time user
+            wx.CallLater(delay, self.showDataStructureInfo)
+
+        # show infobar if last used mapset is not usable
+        if is_fallback_session():
+            # get reason why last used mapset is not usable
+            last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
+            self.reason_id = get_reason_id_mapset_not_usable(last_mapset_path)
+            if self.reason_id in ("non-existent", "invalid", "different-owner"):
+                # show non-standard situation info
+                wx.CallLater(delay, self.showFallbackSessionInfo)
+            elif self.reason_id == "locked":
+                # show info allowing to switch to locked mapset
+                wx.CallLater(delay, self.showLockedMapsetInfo)
 
     def _layout(self):
         """Do layout"""
@@ -96,6 +117,12 @@ class DataCatalog(wx.Panel):
 
     def showDataStructureInfo(self):
         self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
+
+    def showLockedMapsetInfo(self):
+        self.infoManager.ShowLockedMapsetInfo(self.OnSwitchToLastUsedMapset)
+
+    def showFallbackSessionInfo(self):
+        self.infoManager.ShowFallbackSessionInfo(self.reason_id)
 
     def showImportDataInfo(self):
         self.infoManager.ShowImportDataInfo(
@@ -149,6 +176,10 @@ class DataCatalog(wx.Panel):
         )
         UserSettings.SaveToFile(dcSettings)
 
+    def dismissInfobar(self):
+        if self.infoBar.IsShown():
+            self.infoBar.Dismiss()
+
     def OnReloadTree(self, event):
         """Reload whole tree"""
         self.tree.ReloadTreeItems(full=True)
@@ -194,6 +225,12 @@ class DataCatalog(wx.Panel):
         """Download location to current grass database"""
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.DownloadLocation(db_node)
+
+    def OnSwitchToLastUsedMapset(self, event):
+        """Switch to last used mapset"""
+        last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
+        grassdb, location, mapset = split_mapset_path(last_mapset_path)
+        self.tree.SwitchMapset(grassdb, location, mapset)
 
     def OnImportGdalLayers(self, event):
         """Convert multiple GDAL layers to GRASS raster map layers"""

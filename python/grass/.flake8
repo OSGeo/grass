@@ -2,16 +2,10 @@
 ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
-    E266, # too many leading '#' for block comment
     E722, # do not use bare 'except'
     E741, # ambiguous variable name 'l'
     F403, # 'from ctypes import *' used; unable to detect undefined names
     F405, # 'RasterRow' may be undefined, or defined from star imports: ctypes, grass.pygrass.raster, grass.pygrass.vector
-    F841, # local variable 't0' is assigned to but never used
-    W293, # blank line contains whitespace
-    W503, # line break before binary operator
-    W504, # line break after binary operator
-    W605, # invalid escape sequence '\_'
 
 per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
@@ -19,17 +13,25 @@ per-file-ignores =
     pygrass/vector/__init__.py: E402,
     pygrass/raster/__init__.py: E402,
     # Files and directories which need fixes or specific exceptions
+    # E501 line too long
+    # W605 invalid escape sequence
     gunittest/*.py: E501  # These are mainly just todo comments
+    gunittest/gmodules.py: E501, W605
+    pygrass/vector/geometry.py: W605
     pygrass/vector/table.py: E501
     pygrass/vector/__init__.py: E501, E402
     pygrass/modules/interface/*.py: E501, F401
+    pygrass/modules/interface/module.py: E501, W605
+    pygrass/modules/interface/parameter.py: E501, W605
     pygrass/modules/grid/*.py: E501, F401
     pygrass/raster/*.py: E501
     pygrass/rpc/__init__.py: E501, F401
     pygrass/utils.py: E402, E501
     script/db.py: E501
+    script/task.py: W605
     script/vector.py: E501  # Long doctest lines which need review anyway
-    temporal/*.py: E501
+    temporal/*.py: E501, F841
+    temporal/abstract_space_time_dataset.py: W605, E501, F841
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     pygrass/tests/benchmark.py: E501, E402, F401, F821

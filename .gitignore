@@ -3,7 +3,7 @@
 *.lock
 *.pyc
 OBJ.*
-locale/*
+locale/scriptstrings/*
 bin.*/*
 dist.*/*
 config.log
@@ -18,8 +18,8 @@ gui/wxpython/xml/module_tree_menudata.xml
 include/Make/Doxyfile_arch_html
 include/Make/Doxyfile_arch_latex
 include/Make/Platform.make
-include/config.h
-include/version.h
+include/grass/config.h
+include/grass/version.h
 lib/db/sqlp/sqlp.output
 lib/db/sqlp/sqlp.tab.c
 lib/db/sqlp/sqlp.tab.h

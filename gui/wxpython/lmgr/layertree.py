@@ -246,6 +246,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     # for compatibility
     layer_selected = property(fget=_getSelectedLayer)
 
+    def _recalculateLayerButtonPosition(self):
+        """Recalculate layer context options button position
+
+        Calculates all the positions of the visible items fix
+        length from item to next non-toplevel window.
+        """
+        self.CalculatePositions()
+
     def GetSelectedLayers(self, checkedOnly=False):
         """Get selected layers as a list.
 
@@ -1234,12 +1242,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         dlg.applyOpacity.connect(
             lambda value: self.ChangeLayerOpacity(
                 layer=self.layer_selected, value=value))
+        # Apply button
+        dlg.applyOpacity.connect(
+            lambda: self._recalculateLayerButtonPosition())
         dlg.CentreOnParent()
 
         if dlg.ShowModal() == wx.ID_OK:
             self.ChangeLayerOpacity(
                 layer=self.layer_selected,
                 value=dlg.GetOpacity())
+            self._recalculateLayerButtonPosition()
         dlg.Destroy()
 
     def ChangeLayerOpacity(self, layer, value):
@@ -1370,6 +1382,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         :param bool multiple: True to allow multiple map layers in layer tree
         :param bool loadWorkspace: True if called when loading workspace
         """
+        self._giface.workspaceChanged.emit()
+
         if lname and not multiple:
             # check for duplicates
             item = self.GetFirstChild(self.root)[0]
@@ -1617,7 +1631,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Double click on the layer item.
         Launch property dialog, or expand/collapse group of items, etc.
         """
-        self.lmgr.WorkspaceChanged()
+        self._giface.workspaceChanged.emit()
         layer = event.GetItem()
 
         if self.GetLayerInfo(layer, key='type') == 'group':
@@ -1631,7 +1645,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnDeleteLayer(self, event):
         """Remove selected layer item from the layer tree"""
-        self.lmgr.WorkspaceChanged()
+        self._giface.workspaceChanged.emit()
         item = event.GetItem()
 
         try:
@@ -1707,7 +1721,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         if mapLayer:
                             # ignore when map layer is edited
                             self.Map.ChangeLayerActive(mapLayer, checked)
-                        self.lmgr.WorkspaceChanged()
+                        self._giface.workspaceChanged.emit()
                     child = self.GetNextSibling(child)
             else:
                 mapLayer = self.GetLayerInfo(item, key='maplayer')
@@ -1715,7 +1729,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         digitToolbar and digitToolbar.GetLayer() != mapLayer)):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
-                    self.lmgr.WorkspaceChanged()
+                    self._giface.workspaceChanged.emit()
 
         # nviz
         if self.mapdisplay.IsPaneShown('3d') and \
@@ -1727,7 +1741,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             self.mapdisplay.SetStatusText(
                 _("Please wait, updating data..."), 0)
-            self.lmgr.WorkspaceChanged()
+            self._giface.workspaceChanged.emit()
 
             if checked:  # enable
                 if mapLayer.type == 'raster':
@@ -2045,9 +2059,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             mapName, found = GetLayerNameFromCmd(dcmd)
             mapLayer = self.GetLayerInfo(layer, key='maplayer')
             self.SetItemText(layer, mapName)
-            # calculates all the positions of the visible items
-            # fix length from item to next non-toplevel window position
-            self.CalculatePositions()
+            self._recalculateLayerButtonPosition()
 
             if not mapText or not found:
                 propwin.Hide()

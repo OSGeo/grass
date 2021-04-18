@@ -22,6 +22,7 @@ from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit import IVDigit
 from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
 from core.gcmd import GWarning
+
 try:
     from grass.lib.gis import G_verbose, G_set_verbose
     from grass.lib.vector import *
@@ -43,8 +44,9 @@ class IClassVDigitWindow(VDigitWindow):
         :param parent: gui parent
         :param map: map renderer instance
         """
-        VDigitWindow.__init__(self, parent=parent, giface=giface,
-                              Map=map, properties=properties)
+        VDigitWindow.__init__(
+            self, parent=parent, giface=giface, Map=map, properties=properties
+        )
 
     def _onLeftDown(self, event):
         action = self.toolbar.GetAction()
@@ -53,13 +55,17 @@ class IClassVDigitWindow(VDigitWindow):
 
         region = grass.region()
         e, n = self.Pixel2Cell(event.GetPosition())
-        if not((region['s'] <= n <= region['n'])
-               and(region['w'] <= e <= region['e'])):
+        if not (
+            (region["s"] <= n <= region["n"]) and (region["w"] <= e <= region["e"])
+        ):
             GWarning(
-                parent=self.parent, message=_(
+                parent=self.parent,
+                message=_(
                     "You are trying to create a training area "
                     "outside the computational region. "
-                    "Please, use g.region to set the appropriate region first."))
+                    "Please, use g.region to set the appropriate region first."
+                ),
+            )
             return
 
         cat = self.GetCurrentCategory()
@@ -71,9 +77,11 @@ class IClassVDigitWindow(VDigitWindow):
                     "In order to create a training area, "
                     "you have to select class first.\n\n"
                     "There is no class yet, "
-                    "do you want to create one?"),
+                    "do you want to create one?"
+                ),
                 caption=_("No class selected"),
-                style=wx.YES_NO)
+                style=wx.YES_NO,
+            )
             if dlg.ShowModal() == wx.ID_YES:
                 self.parent.OnCategoryManager(None)
 
@@ -103,7 +111,7 @@ class IClassVDigitWindow(VDigitWindow):
 
     def GetCategoryColor(self, cat):
         """Get color associated with given category"""
-        r, g, b = [int(x) for x in self.parent.GetClassColor(cat).split(':')][:3]
+        r, g, b = [int(x) for x in self.parent.GetClassColor(cat).split(":")][:3]
         return wx.Colour(r, g, b)
 
 
@@ -112,7 +120,7 @@ class IClassVDigit(IVDigit):
 
     def __init__(self, mapwindow):
         IVDigit.__init__(self, mapwindow, driver=IClassDisplayDriver)
-        self._settings['closeBoundary'] = True  # snap to the first node
+        self._settings["closeBoundary"] = True  # snap to the first node
 
     def _getNewFeaturesLayer(self):
         return 1
@@ -160,7 +168,7 @@ class IClassVDigit(IVDigit):
                 open_fn = Vect_open_tmp_new
 
         if update:
-            if open_fn(poMapInfoNew, name, '') == -1:
+            if open_fn(poMapInfoNew, name, "") == -1:
                 return -1
         else:
             is3D = bool(Vect_is_3d(self.poMapInfo))
@@ -168,7 +176,7 @@ class IClassVDigit(IVDigit):
                 return -1
 
         verbose = G_verbose()
-        G_set_verbose(-1)      # be silent
+        G_set_verbose(-1)  # be silent
 
         if Vect_copy_map_lines(self.poMapInfo, poMapInfoNew) == 1:
             G_set_verbose(verbose)
@@ -195,14 +203,7 @@ class IClassDisplayDriver(DisplayDriver):
     """
 
     def __init__(self, device, deviceTmp, mapObj, window, glog, gprogress):
-        DisplayDriver.__init__(
-            self,
-            device,
-            deviceTmp,
-            mapObj,
-            window,
-            glog,
-            gprogress)
+        DisplayDriver.__init__(self, device, deviceTmp, mapObj, window, glog, gprogress)
         self._cat = -1
 
     def _drawObject(self, robj):

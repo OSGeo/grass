@@ -395,12 +395,12 @@ int Vect_get_map_box(const struct Map_info *Map, struct bound_box *Box)
 {
     const struct Plus_head *Plus;
 
+    if (Vect_level(Map) < 2)
+      return 0;
+
     Plus = &(Map->plus);
     Vect_box_copy(Box, &(Plus->box));
 
-    if (Vect_level(Map) < 2)
-      return 0;
-    
     return 1;
 }
 

@@ -47,7 +47,6 @@ import shutil
 import signal
 import string
 import subprocess
-import types
 import re
 import six
 import platform
@@ -79,8 +78,9 @@ if ENCODING is None:
 # possibly same for GRASS_PROJSHARE and others but maybe not
 #
 # We need to simultaneously make sure that:
-# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are already
-#   inside a GRASS session? If we are, why do we need to run this script again???).
+# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are
+#   already inside a GRASS session? If we are, why do we need to run this script
+#   again???).
 # - GISBASE exists as an ENV variable
 #
 # pmav99: Ugly as hell, but that's what the code before the refactoring was doing.
@@ -158,7 +158,7 @@ def to_text_string(obj, encoding=ENCODING):
 def try_remove(path):
     try:
         os.remove(path)
-    except:
+    except:  # noqa: E722
         pass
 
 
@@ -376,7 +376,8 @@ def help_message(default_gui):
                 "exit after creation of location or mapset. Only with -c flag"
             ),
             force_removal=_(
-                "force removal of .gislock if exists (use with care!). Only with --text flag"
+                "force removal of .gislock if exists (use with care!)."
+                " Only with --text flag"
             ),
             text=_("use text based interface (skip graphical welcome screen)"),
             text_detail=_("and set as default"),
@@ -393,7 +394,8 @@ def help_message(default_gui):
             gisdbase_detail=_("directory containing Locations"),
             location=_("initial GRASS Location"),
             location_detail=_(
-                "directory containing Mapsets with one common coordinate system (projection)"
+                "directory containing Mapsets with one common"
+                " coordinate system (projection)"
             ),
             mapset=_("initial GRASS Mapset"),
             full_mapset=_("fully qualified initial Mapset directory"),
@@ -493,7 +495,7 @@ def create_tmp(user, gis_lock):
         )
         try:
             os.mkdir(tmpdir, 0o700)
-        except:
+        except:  # noqa: E722
             tmp = None
 
     if not tmp:
@@ -504,7 +506,7 @@ def create_tmp(user, gis_lock):
             )
             try:
                 os.mkdir(tmpdir, 0o700)
-            except:
+            except:  # noqa: E722
                 tmp = None
             if tmp:
                 break
@@ -586,6 +588,21 @@ def read_gisrc(filename):
     return kv
 
 
+def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
+    """Reads gisrc file and write to gisrcrc"""
+    debug("Reading %s" % gisrc)
+    number = 0
+    with open(gisrc, "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if skip_variable in line:
+                del lines[number]
+            number += 1
+    with open(gisrcrc, "w") as f:
+        for line in lines:
+            f.write(line)
+
+
 def read_env_file(path):
     kv = {}
     f = open(path, "r")
@@ -605,7 +622,7 @@ def write_gisrc(kv, filename, append=False):
     f.close()
 
 
-def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
+def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     if os.access(gisrc, os.R_OK):
         kv = read_gisrc(gisrc)
     else:
@@ -614,6 +631,27 @@ def set_mapset_to_gisrc(gisrc, grassdb, location, mapset):
     kv["LOCATION_NAME"] = location
     kv["MAPSET"] = mapset
     write_gisrc(kv, gisrc)
+
+
+def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
+    if os.access(gisrc, os.R_OK):
+        kv = read_gisrc(gisrc)
+    else:
+        kv = {}
+    kv["LAST_MAPSET_PATH"] = last_mapset_path
+    write_gisrc(kv, gisrc)
+
+
+def create_fallback_session(gisrc, tmpdir):
+    """Creates fallback temporary session"""
+    # Create temporary location
+    set_mapset(
+        gisrc=gisrc,
+        geofile="XY",
+        create_new=True,
+        tmp_location=True,
+        tmpdir=tmpdir,
+    )
 
 
 def read_gui(gisrc, default_gui):
@@ -1005,19 +1043,18 @@ def set_mapset(
 
     # TODO: arg param seems to be always the mapset parameter (or a dash
     # in a distant past), refactor
-    l = arg
-    if l:
+    if arg:
         # TODO: the block below could be just one line: os.path.abspath(l)
         # abspath both resolves relative paths and normalizes the path
         # so that trailing / is stripped away and split then always returns
         # non-empty element as the last element (which is good for both mapset
         # and location split)
-        if l == ".":
-            l = os.getcwd()
-        elif not os.path.isabs(l):
-            l = os.path.abspath(l)
-        if l.endswith(os.path.sep):
-            l = l.rstrip(os.path.sep)
+        if arg == ".":
+            arg = os.getcwd()
+        elif not os.path.isabs(arg):
+            arg = os.path.abspath(arg)
+        if arg.endswith(os.path.sep):
+            arg = arg.rstrip(os.path.sep)
             # now we can get the last element by split on the first go
             # and it works for the last element being mapset or location
 
@@ -1026,9 +1063,9 @@ def set_mapset(
             mapset = "tmp_" + uuid.uuid4().hex
             create_new = True
         else:
-            l, mapset = os.path.split(l)
-        l, location_name = os.path.split(l)
-        gisdbase = l
+            arg, mapset = os.path.split(arg)
+        arg, location_name = os.path.split(arg)
+        gisdbase = arg
 
     # all was None for tmp loc so that case goes here quickly
     # TODO: but the above code needs review anyway
@@ -1165,84 +1202,13 @@ def set_mapset(
                         )
                     )
                     writefile(os.path.join(path, "WIND"), s)
-        set_mapset_to_gisrc(gisrc, gisdbase, location_name, mapset)
+        add_mapset_to_gisrc(gisrc, gisdbase, location_name, mapset)
     else:
         fatal(
             _(
                 "GRASS GIS database directory, location and mapset"
                 " not set properly."
                 " Use GUI or command line to set them."
-            )
-        )
-
-
-def set_mapset_interactive(grass_gui):
-    """User selects Location and Mapset in an interative way
-
-    The gisrc (GRASS environment file) is written at the end.
-    """
-    if not os.path.exists(wxpath("gis_set.py")) and grass_gui != "text":
-        debug("No GUI available, switching to text mode")
-        return False
-
-    # Check for text interface
-    if grass_gui == "text":
-        # TODO: maybe this should be removed and solved from outside
-        # this depends on what we expect from this function
-        # should gisrc be ok after running or is it allowed to be still not set
-        pass
-    # Check for GUI
-    elif grass_gui in ("gtext", "wxpython"):
-        gui_startup(grass_gui)
-    else:
-        # Shouldn't need this but you never know
-        fatal(
-            _(
-                "Invalid user interface specified - <%s>. "
-                "Use the --help option to see valid interface names."
-            )
-            % grass_gui
-        )
-
-    return True
-
-
-def gui_startup(grass_gui):
-    """Start GUI for startup (setting gisrc file)"""
-    if grass_gui in ("wxpython", "gtext"):
-        ret = call([os.getenv("GRASS_PYTHON"), wxpath("gis_set.py")])
-
-    # this if could be simplified to three branches (0, 5, rest)
-    # if there is no need to handle unknown code separately
-    if ret == 0:
-        pass
-    elif ret in [1, 2]:
-        # 1 probably error coming from gis_set.py
-        # 2 probably file not found from python interpreter
-        # formerly we were starting in text mode instead, now we just fail
-        # which is more straightforward for everybody
-        fatal(
-            _(
-                "Error in GUI startup. See messages above (if any)"
-                " and if necessary, please"
-                " report this error to the GRASS developers.\n"
-                "On systems with package manager, make sure you have the right"
-                " GUI package, probably named grass-gui, installed.\n"
-                "To run GRASS GIS in text mode use the --text flag.\n"
-                "Use '--help' for further options\n"
-                "     {cmd_name} --help\n"
-                "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
-            ).format(cmd_name=CMD_NAME)
-        )
-    elif ret == 5:  # defined in gui/wxpython/gis_set.py
-        # User wants to exit from GRASS
-        message(_("Exit was requested in GUI.\nGRASS GIS will not start. Bye."))
-        sys.exit(0)
-    else:
-        fatal(
-            _(
-                "Invalid return code from GUI startup script.\n"
-                "Please advise GRASS developers of this error."
             )
         )
 
@@ -1276,6 +1242,18 @@ class MapsetSettings(object):
         return self.gisdbase and self.location and self.mapset
 
 
+def get_mapset_settings(gisrc):
+    """Get the settings of Location and Mapset from the gisrc file"""
+    mapset_settings = MapsetSettings()
+    kv = read_gisrc(gisrc)
+    mapset_settings.gisdbase = kv.get("GISDBASE")
+    mapset_settings.location = kv.get("LOCATION_NAME")
+    mapset_settings.mapset = kv.get("MAPSET")
+    if not mapset_settings.is_valid():
+        return None
+    return mapset_settings
+
+
 # TODO: does it really makes sense to tell user about gisrcrc?
 # anything could have happened in between loading from gisrcrc and now
 # (we do e.g. GUI or creating loctation)
@@ -1284,12 +1262,8 @@ def load_gisrc(gisrc, gisrcrc):
 
     :returns: MapsetSettings object
     """
-    mapset_settings = MapsetSettings()
-    kv = read_gisrc(gisrc)
-    mapset_settings.gisdbase = kv.get("GISDBASE")
-    mapset_settings.location = kv.get("LOCATION_NAME")
-    mapset_settings.mapset = kv.get("MAPSET")
-    if not mapset_settings.is_valid():
+    mapset_settings = get_mapset_settings(gisrc)
+    if not mapset_settings:
         fatal(
             _(
                 "Error reading data path information from g.gisenv.\n"
@@ -1305,22 +1279,6 @@ def load_gisrc(gisrc, gisrcrc):
             )
         )
     return mapset_settings
-
-
-def can_start_in_gisrc_mapset(gisrc, ignore_lock=False):
-    """Check if a mapset from a gisrc file is usable for a new session"""
-    from grass.grassdb.checks import can_start_in_mapset
-
-    mapset_settings = MapsetSettings()
-    kv = read_gisrc(gisrc)
-    mapset_settings.gisdbase = kv.get("GISDBASE")
-    mapset_settings.location = kv.get("LOCATION_NAME")
-    mapset_settings.mapset = kv.get("MAPSET")
-    if not mapset_settings.is_valid():
-        return False
-    return can_start_in_mapset(
-        mapset_path=mapset_settings.full_mapset, ignore_lock=ignore_lock
-    )
 
 
 # load environmental variables from grass_env_file
@@ -1409,7 +1367,8 @@ def set_language(grass_config_dir):
     # Unfortunately currently a working solution for Windows is lacking
     # thus it always on Vista and XP will print an error.
     # See discussion for Windows not following its own documentation and
-    # not accepting ISO codes as valid locale identifiers http://bugs.python.org/issue10466
+    # not accepting ISO codes as valid locale identifiers
+    # http://bugs.python.org/issue10466
     language = "None"  # Such string sometimes is present in wx file
     encoding = None
 
@@ -1469,7 +1428,7 @@ def set_language(grass_config_dir):
         )
         try:
             locale.setlocale(locale.LC_ALL, language)
-        except locale.Error as e:
+        except locale.Error:
             try:
                 # Locale lang.encoding might be missing. Let's try
                 # UTF-8 encoding before giving up as on Linux systems
@@ -1532,14 +1491,16 @@ def set_language(grass_config_dir):
                         normalized = locale.normalize("%s.%s" % (language, encoding))
                         locale.setlocale(locale.LC_ALL, normalized)
                     except locale.Error as e:
-                        # If we got so far, attempts to set up language and locale have failed
-                        # on this system
+                        # If we got so far, attempts to set up language and locale have
+                        # failed on this system.
                         sys.stderr.write(
                             "Failed to enforce user specified language '%s' with error: '%s'\n"
                             % (language, e)
                         )
                         sys.stderr.write(
-                            "A LANGUAGE environmental variable has been set.\nPart of messages will be displayed in the requested language.\n"
+                            "A LANGUAGE environmental variable has been set.\n"
+                            "Part of messages will be displayed in"
+                            " the requested language.\n"
                         )
                         # Even if setting locale will fail, let's set LANG in a hope,
                         # that UI will use it GRASS texts will be in selected language,
@@ -1600,8 +1561,7 @@ def set_language(grass_config_dir):
         gettext.install("grasslibs", gpath("locale"))
 
 
-# TODO: grass_gui parameter is a hack and should be removed, see below
-def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
+def lock_mapset(mapset_path, force_gislock_removal, user):
     """Lock the mapset and return name of the lock file
 
     Behavior on error must be changed somehow; now it fatals but GUI case is
@@ -1649,15 +1609,8 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
             % lockfile
         )
 
-    # TODO: the gui decision should be done by the caller
-    # this needs some change to the function interface, return tuple or
-    # use exceptions (better option)
     if msg:
-        if grass_gui == "wxpython":
-            call([os.getenv("GRASS_PYTHON"), wxpath("gis_set_error.py"), msg])
-            # TODO: here we probably miss fatal or exit, needs to be added
-        else:
-            fatal(msg)
+        raise Exception(msg)
     debug(
         "Mapset <{mapset}> locked using '{lockfile}'".format(
             mapset=mapset_path, lockfile=lockfile
@@ -1951,9 +1904,9 @@ def csh_startup(location, grass_env_file):
         if os.access(path, os.R_OK):
             s = readfile(path)
             lines = s.splitlines()
-            for l in lines:
-                if mail_re.match(l):
-                    f.write(l)
+            for line in lines:
+                if mail_re.match(line):
+                    f.write(line)
 
     path = os.getenv("PATH").split(":")
     f.write("set path = ( %s ) \n" % " ".join(path))
@@ -2023,7 +1976,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     else:
         f.write(
             "PS1='{name} {db_place}:\\W > '\n".format(
-                name=grass_name, version=GRASS_VERSION, db_place="$_GRASS_DB_PLACE"
+                name=grass_name, db_place="$_GRASS_DB_PLACE"
             )
         )
 
@@ -2563,39 +2516,73 @@ def main():
         save_gui(gisrc, grass_gui)
 
     # Parsing argument to get LOCATION
+    # Mapset is not specified in command line arguments
     if not params.mapset and not params.tmp_location:
-        # Mapset is not specified in command line arguments.
-        last_mapset_usable = can_start_in_gisrc_mapset(
-            gisrc=gisrc, ignore_lock=params.force_gislock_removal
+        # Get mapset parameters from gisrc file
+        mapset_settings = get_mapset_settings(gisrc)
+        last_mapset_path = mapset_settings.full_mapset
+        # Check if mapset from gisrc is usable
+        from grass.grassdb.checks import can_start_in_mapset
+
+        last_mapset_usable = can_start_in_mapset(
+            mapset_path=last_mapset_path,
+            ignore_lock=params.force_gislock_removal,
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
-            import grass.app as ga
-            from grass.grassdb.checks import can_start_in_mapset
+            from grass.app import ensure_default_data_hierarchy
+            from grass.grassdb.checks import is_first_time_user
 
-            # Try to use demolocation
-            grassdb, location, mapset = ga.ensure_demolocation()
-            demo_mapset_usable = can_start_in_mapset(
-                mapset_path=os.path.join(grassdb, location, mapset),
-                ignore_lock=params.force_gislock_removal,
-            )
-            debug(f"demo_mapset_usable: {demo_mapset_usable}")
-            if demo_mapset_usable:
-                set_mapset_to_gisrc(
-                    gisrc=gisrc, grassdb=grassdb, location=location, mapset=mapset
-                )
-            else:
-                # Try interactive startup
-                # User selects LOCATION and MAPSET if not set
-                if not set_mapset_interactive(grass_gui):
-                    # No GUI available, update gisrc file
+            fallback_session = False
+
+            # Add last used mapset to gisrc
+            add_last_mapset_to_gisrc(gisrc, last_mapset_path)
+
+            if is_first_time_user():
+                # Ensure default data hierarchy
+                (
+                    default_gisdbase,
+                    default_location,
+                    unused_default_mapset,
+                    default_mapset_path,
+                ) = ensure_default_data_hierarchy()
+
+                if not default_gisdbase:
                     fatal(
                         _(
-                            "<{0}> requested, but not available. Run GRASS in text "
-                            "mode (--text) or install missing package (usually "
-                            "'grass-gui')."
-                        ).format(grass_gui)
+                            "Failed to start GRASS GIS, grassdata directory cannot"
+                            " be found or created."
+                        )
                     )
+                elif not default_location:
+                    fatal(
+                        _(
+                            "Failed to start GRASS GIS, no default location to copy in"
+                            " the installation or copying failed."
+                        )
+                    )
+                if can_start_in_mapset(
+                    mapset_path=default_mapset_path, ignore_lock=False
+                ):
+                    # Use the default location/mapset.
+                    set_mapset(gisrc=gisrc, arg=default_mapset_path)
+                else:
+                    fallback_session = True
+                    add_last_mapset_to_gisrc(gisrc, default_mapset_path)
+            else:
+                fallback_session = True
+
+            if fallback_session:
+                if grass_gui == "text":
+                    # Fallback in command line is just failing in a standard way.
+                    set_mapset(gisrc=gisrc, arg=last_mapset_path)
+                else:
+                    # Create fallback temporary session
+                    create_fallback_session(gisrc, tmpdir)
+                    params.tmp_location = True
+        else:
+            # Use the last used mapset.
+            set_mapset(gisrc=gisrc, arg=last_mapset_path)
     else:
         # Mapset was specified in command line parameters.
         if params.tmp_location:
@@ -2627,13 +2614,17 @@ def main():
 
     location = mapset_settings.full_mapset
 
-    # check and create .gislock file
-    lock_mapset(
-        mapset_settings.full_mapset,
-        user=user,
-        force_gislock_removal=params.force_gislock_removal,
-        grass_gui=grass_gui,
-    )
+    try:
+        # check and create .gislock file
+        lock_mapset(
+            mapset_settings.full_mapset,
+            user=user,
+            force_gislock_removal=params.force_gislock_removal,
+        )
+    except Exception as e:
+        fatal(e.args[0])
+        sys.exit(_("Exiting..."))
+
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
     atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
@@ -2714,8 +2705,11 @@ def main():
 
         # here we are at the end of grass session
         clean_all()
-        if not params.tmp_location:
-            writefile(gisrcrc, readfile(gisrc))
+        mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
+        if not params.tmp_location or (
+            params.tmp_location and mapset_settings.gisdbase != os.environ["TMPDIR"]
+        ):
+            write_gisrcrc(gisrcrc, gisrc, skip_variable="LAST_MAPSET_PATH")
         # After this point no more grass modules may be called
         # done message at last: no atexit.register()
         # or register done_message()

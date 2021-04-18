@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #   Copyright (C) 2012, Almar Klein, Ant1, Marius van Voorden
 #
 #   This code is subject to the (new) BSD license:
@@ -66,7 +65,6 @@ Useful links:
 # todo: This module should be part of imageio (or at least based on)
 
 import os
-import time
 
 try:
     import PIL
@@ -320,7 +318,6 @@ class GifWriter:
         # Prepare
         ims2 = [ims[0]]
         xy = [(0, 0)]
-        t0 = time.time()
 
         # Iterate over images
         prev = ims[0]

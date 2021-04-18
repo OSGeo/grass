@@ -52,9 +52,8 @@ void scan_cats(const struct Map_info *Map, int field,
 
     if (style)
 	make_colors(colors, style, (DCELL) cmin, (DCELL) cmax, FALSE);
-    else if (rules) {
+    else if (rules)
 	load_colors(colors, rules, (DCELL) cmin, (DCELL) cmax, FALSE);
-    }
 
     Vect_destroy_cats_struct(Cats);
 }

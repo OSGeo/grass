@@ -74,7 +74,7 @@ from grass.grassdb.checks import (
     get_mapset_owner,
     is_mapset_locked,
     is_different_mapset_owner,
-    is_current_mapset_in_demolocation,
+    is_first_time_user,
 )
 from grass.exceptions import CalledModuleError
 
@@ -575,9 +575,9 @@ class DataCatalogTree(TreeView):
         proc_list = []
         loc_list = []
         try:
-            nprocs = cpu_count()
+            nprocs = max(1, cpu_count() - 1)
         except NotImplementedError:
-            nprocs = 4
+            nprocs = 1
 
         results = dict()
         errors = []
@@ -1150,7 +1150,7 @@ class DataCatalogTree(TreeView):
         """
         Creates new location interactively and adds it to the tree and switch
         to its new PERMANENT mapset.
-        If a user was in Demolocation, it shows data import infobar.
+        If a user is a first-time user, it shows data import infobar.
         """
         grassdatabase, location, mapset = create_location_interactively(
             self, grassdb_node.data["name"]
@@ -1163,12 +1163,12 @@ class DataCatalogTree(TreeView):
                 action="new",
             )
 
-            # show data import infobar for first-time user with proper layout
-            if is_current_mapset_in_demolocation():
-                self.showImportDataInfo.emit()
-
             # switch to PERMANENT mapset in newly created location
             self.SwitchMapset(grassdatabase, location, mapset, show_confirmation=True)
+
+            # show data import infobar for first-time user with proper layout
+            if is_first_time_user():
+                self.showImportDataInfo.emit()
 
     def OnCreateLocation(self, event):
         """Create new location"""
@@ -1880,6 +1880,11 @@ class DataCatalogTree(TreeView):
                 node = self.GetDbNode(grassdb=grassdb, location=location)
                 if node:
                     self._renameNode(node, newname)
+        elif element == "grassdb":
+            if action == "delete":
+                node = self.GetDbNode(grassdb=grassdb)
+                if node:
+                    self.RemoveGrassDB(node)
         elif element in ("raster", "vector", "raster_3d"):
             # when watchdog is used, it watches current mapset,
             # so we don't process any signals here,

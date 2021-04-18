@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import grass.lib.gis as libgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test

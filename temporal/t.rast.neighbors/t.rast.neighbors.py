@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.rast.neighbors
@@ -210,7 +210,7 @@ def main():
     # Check return status of all finished modules
     error = 0
     for proc in proc_list:
-        if proc.popen.returncode != 0:
+        if proc.returncode != 0:
             grass.error(
                 _("Error running module: %\n    stderr: %s")
                 % (proc.get_bash(), proc.outputs.stderr)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	r.plane for GRASS 5.7; based on r.plane for GRASS 5
@@ -86,7 +86,7 @@ def main():
 
     # reg = gscript.region()
 
-    ### test input values ###
+    # Test input values
     if abs(dip) >= 90:
         gscript.fatal(_("dip must be between -90 and 90."))
 

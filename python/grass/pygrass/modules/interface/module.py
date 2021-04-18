@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import (
     nested_scopes,
     generators,
@@ -61,7 +60,7 @@ class ParallelModuleQueue(object):
     Check with a queue size of 3 and 5 processes
 
     >>> import copy
-    >>> from grass.pygrass.modules import Module, ParallelModuleQueue
+    >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
     >>> mapcalc_list = []
 
     Setting run_ to False is important, otherwise a parallel processing is not possible
@@ -80,7 +79,7 @@ class ParallelModuleQueue(object):
     >>> queue.get_max_num_procs()
     3
     >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.popen.returncode)
+    ...     print(mapcalc.returncode)
     0
     0
     0
@@ -103,7 +102,7 @@ class ParallelModuleQueue(object):
     >>> queue.get_max_num_procs()
     8
     >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.popen.returncode)
+    ...     print(mapcalc.returncode)
     0
     0
     0
@@ -130,7 +129,7 @@ class ParallelModuleQueue(object):
     >>> queue.get_max_num_procs()
     3
     >>> for proc in proc_list:
-    ...     print(proc.popen.returncode)
+    ...     print(proc.returncode)
     0
     0
     0
@@ -173,7 +172,7 @@ class ParallelModuleQueue(object):
     >>> queue.get_max_num_procs()
     8
     >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.popen.returncode)
+    ...     print(mapcalc.returncode)
     0
     0
     0
@@ -214,7 +213,7 @@ class ParallelModuleQueue(object):
     >>> queue.get_max_num_procs()
     3
     >>> for mapcalc in mapcalc_list:
-    ...     print(mapcalc.popen.returncode)
+    ...     print(mapcalc.returncode)
     0
     0
     0
@@ -378,7 +377,7 @@ class Module(object):
     ...                  overwrite=True, run_=False)
     >>> mapcalc.run()
     Module('r.mapcalc')
-    >>> mapcalc.popen.returncode
+    >>> mapcalc.returncode
     0
 
     >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
@@ -386,12 +385,12 @@ class Module(object):
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> p = mapcalc.wait()
-    >>> p.popen.returncode
+    >>> p.returncode
     0
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> p = mapcalc.wait()
-    >>> p.popen.returncode
+    >>> p.returncode
     0
 
     >>> colors = Module("r.colors", map="test_a", rules="-",
@@ -400,7 +399,7 @@ class Module(object):
     >>> colors.run()
     Module('r.colors')
     >>> p = mapcalc.wait()
-    >>> p.popen.returncode
+    >>> p.returncode
     0
     >>> colors.inputs["stdin"].value
     '1 red'
@@ -411,43 +410,47 @@ class Module(object):
 
     >>> colors = Module("r.colors", map="test_a", rules="-",
     ...                 run_=False, finish_=False, stdin_=PIPE)
+    >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
-    >>> stdout, stderr = colors.popen.communicate(input=b"1 red")
-    >>> colors.popen.returncode
+    >>> colors.wait()
+    Module('r.colors')
+    >>> colors.returncode
     0
-    >>> stdout
-    >>> stderr
 
     >>> colors = Module("r.colors", map="test_a", rules="-",
     ...                 run_=False, finish_=False,
     ...                 stdin_=PIPE, stderr_=PIPE)
+    >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
-    >>> stdout, stderr = colors.popen.communicate(input=b"1 red")
-    >>> colors.popen.returncode
+    >>> colors.wait()
+    Module('r.colors')
+    >>> colors.outputs["stderr"].value.strip()
+    "Color table for raster map <test_a> set to 'rules'"
+
+    >>> colors.returncode
     0
-    >>> stdout
-    >>> stderr.strip()
-    b"Color table for raster map <test_a> set to 'rules'"
 
     Run a second time
 
+    >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
-    >>> stdout, stderr = colors.popen.communicate(input=b"1 blue")
-    >>> colors.popen.returncode
+    >>> colors.wait()
+    Module('r.colors')
+    >>> colors.outputs["stderr"].value.strip()
+    "Color table for raster map <test_a> set to 'rules'"
+
+    >>> colors.returncode
     0
-    >>> stdout
-    >>> stderr.strip()
-    b"Color table for raster map <test_a> set to 'rules'"
 
     Multiple run test
 
     >>> colors = Module("r.colors", map="test_a",
     ...                                            color="ryb", run_=False)
     >>> colors.get_bash()
-    'r.colors map=test_a color=ryb'
+    'r.colors map=test_a color=ryb offset=0.0 scale=1.0'
     >>> colors.run()
     Module('r.colors')
     >>> colors(color="gyr")
@@ -600,12 +603,12 @@ class Module(object):
         self.outputs["stdout"] = Parameter(diz=diz)
         diz["name"] = "stderr"
         self.outputs["stderr"] = Parameter(diz=diz)
-        self.popen = None
+        self._popen = None
         self.time = None
         self.start_time = None  # This variable will be set in the run() function
-        self._finished = (
-            False  # This variable is set True if wait() was successfully called
-        )
+        # This variable is set True if wait() was successfully called
+        self._finished = False
+        self.returncode = None
 
         if args or kargs:
             self.__call__(*args, **kargs)
@@ -716,12 +719,9 @@ class Module(object):
         """{cmd_name}({cmd_params})"""
         head = DOC["head"].format(
             cmd_name=self.name,
-            cmd_params=(
-                "\n"
-                +  # go to a new line
-                # give space under the function name
-                (" " * (len(self.name) + 1))
-            ).join(
+            # go to a new line
+            # give space under the function name
+            cmd_params=("\n" + (" " * (len(self.name) + 1))).join(
                 [
                     ", ".join(
                         # transform each parameter in string
@@ -806,7 +806,7 @@ class Module(object):
 
         cmd = self.make_cmd()
         self.start_time = time.time()
-        self.popen = Popen(
+        self._popen = Popen(
             cmd,
             stdin=self.stdin_,
             stdout=self.stdout_,
@@ -828,20 +828,21 @@ class Module(object):
         if self._finished is False:
             if self.stdin:
                 self.stdin = encode(self.stdin)
-            stdout, stderr = self.popen.communicate(input=self.stdin)
+            stdout, stderr = self._popen.communicate(input=self.stdin)
             self.outputs["stdout"].value = decode(stdout) if stdout else ""
             self.outputs["stderr"].value = decode(stderr) if stderr else ""
             self.time = time.time() - self.start_time
-
+            self.returncode = self._popen.returncode
             self._finished = True
 
-            if self.popen.poll():
+            if self._popen.poll():
                 raise CalledModuleError(
-                    returncode=self.popen.returncode,
+                    returncode=self._popen.returncode,
                     code=self.get_bash(),
                     module=self.name,
                     errors=stderr,
                 )
+        self._popen = None
 
         return self
 
@@ -886,38 +887,38 @@ class MultiModule(object):
     >>> mm = MultiModule(module_list=[region_1, region_2])
     >>> mm.run()
     >>> m_list = mm.get_modules()
-    >>> m_list[0].popen.returncode
+    >>> m_list[0].returncode
     0
-    >>> m_list[1].popen.returncode
+    >>> m_list[1].returncode
     0
 
     Asynchronous module run, setting finish = False
 
-    >>> region_1 = Module("g.region", run_=False)  # doctest: +SKIP
-    >>> region_1.flags.p = True  # doctest: +SKIP
-    >>> region_2 = copy.deepcopy(region_1)  # doctest: +SKIP
-    >>> region_2.flags.p = True  # doctest: +SKIP
-    >>> region_3 = copy.deepcopy(region_1)  # doctest: +SKIP
-    >>> region_3.flags.p = True  # doctest: +SKIP
-    >>> region_4 = copy.deepcopy(region_1)  # doctest: +SKIP
-    >>> region_4.flags.p = True  # doctest: +SKIP
-    >>> region_5 = copy.deepcopy(region_1)  # doctest: +SKIP
-    >>> region_5.flags.p = True  # doctest: +SKIP
+    >>> region_1 = Module("g.region", run_=False)
+    >>> region_1.flags.p = True
+    >>> region_2 = copy.deepcopy(region_1)
+    >>> region_2.flags.p = True
+    >>> region_3 = copy.deepcopy(region_1)
+    >>> region_3.flags.p = True
+    >>> region_4 = copy.deepcopy(region_1)
+    >>> region_4.flags.p = True
+    >>> region_5 = copy.deepcopy(region_1)
+    >>> region_5.flags.p = True
     >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False)  # doctest: +SKIP
-    >>> t = mm.run()  # doctest: +SKIP
-    >>> isinstance(t, Process)  # doctest: +SKIP
+    ...                  sync=False)
+    >>> t = mm.run()
+    >>> isinstance(t, Process)
     True
-    >>> m_list = mm.wait()  # doctest: +SKIP
-    >>> m_list[0].popen.returncode  # doctest: +SKIP
+    >>> m_list = mm.wait()
+    >>> m_list[0].returncode
     0
-    >>> m_list[1].popen.returncode  # doctest: +SKIP
+    >>> m_list[1].returncode
     0
-    >>> m_list[2].popen.returncode  # doctest: +SKIP
+    >>> m_list[2].returncode
     0
-    >>> m_list[3].popen.returncode  # doctest: +SKIP
+    >>> m_list[3].returncode
     0
-    >>> m_list[4].popen.returncode  # doctest: +SKIP
+    >>> m_list[4].returncode
     0
 
     Asynchronous module run, setting finish = False and using temporary region
@@ -930,15 +931,15 @@ class MultiModule(object):
     >>> isinstance(t, Process)
     True
     >>> m_list = mm.wait()
-    >>> m_list[0].popen.returncode
+    >>> m_list[0].returncode
     0
-    >>> m_list[1].popen.returncode
+    >>> m_list[1].returncode
     0
-    >>> m_list[2].popen.returncode
+    >>> m_list[2].returncode
     0
-    >>> m_list[3].popen.returncode
+    >>> m_list[3].returncode
     0
-    >>> m_list[4].popen.returncode
+    >>> m_list[4].returncode
     0
 
     """

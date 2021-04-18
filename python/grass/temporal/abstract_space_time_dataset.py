@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The abstract_space_time_dataset module provides the AbstractSpaceTimeDataset
 class that is the base class for all space time datasets.
