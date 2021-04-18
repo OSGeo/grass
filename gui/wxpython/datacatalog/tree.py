@@ -373,11 +373,16 @@ class DataCatalogTree(TreeView):
             lazySettings = UserSettings.Get(group='datacatalog',
                                             key='lazyLoading',
                                             settings_type='default')
+            # update local settings
+            for subkey, value in lazySettings.items():
+                UserSettings.Append(UserSettings.userSettings, group='datacatalog',
+                                    key='lazyLoading', subkey=subkey,
+                                    value=value, overwrite=False)
+            # update settings file
             jsonSettings = {}
             UserSettings.ReadSettingsFile(settings=jsonSettings)
             jsonSettings['datacatalog']['lazyLoading'] = lazySettings
             UserSettings.SaveToFile(jsonSettings)
-            return lazySettings['enabled']
         return UserSettings.Get(group='datacatalog',
                                 key='lazyLoading',
                                 subkey='enabled')
