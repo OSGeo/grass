@@ -37,10 +37,17 @@ from grass.script.utils import clock
 class DataCatalog(wx.Panel):
     """Data catalog panel"""
 
-    def __init__(self, parent, giface=None, id=wx.ID_ANY,
-                 title=_("Data catalog"), name='catalog', **kwargs):
+    def __init__(
+        self,
+        parent,
+        giface=None,
+        id=wx.ID_ANY,
+        title=_("Data catalog"),
+        name="catalog",
+        **kwargs,
+    ):
         """Panel constructor  """
-        self.showNotification = Signal('DataCatalog.showNotification')
+        self.showNotification = Signal("DataCatalog.showNotification")
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
@@ -61,8 +68,9 @@ class DataCatalog(wx.Panel):
         self.infoBar = InfoBar(self)
 
         # infobar manager for data catalog
-        self.infoManager = DataCatalogInfoManager(infobar=self.infoBar,
-                                                  giface=self.giface)
+        self.infoManager = DataCatalogInfoManager(
+            infobar=self.infoBar, giface=self.giface
+        )
         self.tree.showImportDataInfo.connect(self.showImportDataInfo)
         self.tree.loadingDone.connect(self._loadingDone)
 
@@ -90,7 +98,9 @@ class DataCatalog(wx.Panel):
         self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)
 
     def showImportDataInfo(self):
-        self.infoManager.ShowImportDataInfo(self.OnImportOgrLayers, self.OnImportGdalLayers)
+        self.infoManager.ShowImportDataInfo(
+            self.OnImportOgrLayers, self.OnImportGdalLayers
+        )
 
     def LoadItems(self):
         """Reload tree - full or lazy - based on user settings"""
@@ -100,42 +110,43 @@ class DataCatalog(wx.Panel):
     def _loadingDone(self):
         """If loading took more time, suggest lazy loading"""
         if clock() - self._startLoadingTime > 5 and not self.tree._useLazyLoading():
-            asked = UserSettings.Get(group='datacatalog',
-                                     key='lazyLoading',
-                                     subkey='asked')
+            asked = UserSettings.Get(
+                group="datacatalog", key="lazyLoading", subkey="asked"
+            )
             if not asked:
-                wx.CallAfter(self.infoManager.ShowLazyLoadingOn,
-                            setLazyLoadingOnHandler=self._saveLazyLoadingOnSettings,
-                            doNotAskHandler=self._saveDontAskLazyLoadingSettings)
+                wx.CallAfter(
+                    self.infoManager.ShowLazyLoadingOn,
+                    setLazyLoadingOnHandler=self._saveLazyLoadingOnSettings,
+                    doNotAskHandler=self._saveDontAskLazyLoadingSettings,
+                )
 
     def _saveLazyLoadingOnSettings(self, event):
         """Turn on lazy loading in settings"""
-        UserSettings.Set(group='datacatalog',
-                         key='lazyLoading',
-                         subkey='enabled',
-                         value=True)
-        UserSettings.Set(group='datacatalog',
-                         key='lazyLoading',
-                         subkey='asked',
-                         value=True)
+        UserSettings.Set(
+            group="datacatalog", key="lazyLoading", subkey="enabled", value=True
+        )
+        UserSettings.Set(
+            group="datacatalog", key="lazyLoading", subkey="asked", value=True
+        )
         self._saveLazyLoadingSettings()
         event.Skip()
 
     def _saveDontAskLazyLoadingSettings(self, event):
         """Save in settings that decision on lazy loading was done to not ask again"""
-        UserSettings.Set(group='datacatalog',
-                         key='lazyLoading',
-                         subkey='asked',
-                         value=True)
+        UserSettings.Set(
+            group="datacatalog", key="lazyLoading", subkey="asked", value=True
+        )
         self._saveLazyLoadingSettings()
         event.Skip()
 
     def _saveLazyLoadingSettings(self):
         dcSettings = {}
         UserSettings.ReadSettingsFile(settings=dcSettings)
-        if 'datacatalog' not in dcSettings:
-            dcSettings['datacatalog'] = UserSettings.Get(group='datacatalog')
-        dcSettings['datacatalog']['lazyLoading'] = UserSettings.Get(group='datacatalog', key='lazyLoading')
+        if "datacatalog" not in dcSettings:
+            dcSettings["datacatalog"] = UserSettings.Get(group="datacatalog")
+        dcSettings["datacatalog"]["lazyLoading"] = UserSettings.Get(
+            group="datacatalog", key="lazyLoading"
+        )
         UserSettings.SaveToFile(dcSettings)
 
     def OnReloadTree(self, event):
@@ -148,8 +159,9 @@ class DataCatalog(wx.Panel):
 
     def OnAddGrassDB(self, event):
         """Add grass database"""
-        dlg = wx.DirDialog(self, _("Choose GRASS data directory:"),
-                           os.getcwd(), wx.DD_DEFAULT_STYLE)
+        dlg = wx.DirDialog(
+            self, _("Choose GRASS data directory:"), os.getcwd(), wx.DD_DEFAULT_STYLE
+        )
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
             grassdb_node = self.tree.InsertGrassDb(name=grassdatabase)
@@ -157,11 +169,12 @@ class DataCatalog(wx.Panel):
             # Offer to create a new location
             if grassdb_node and not os.listdir(grassdatabase):
                 message = _("Do you want to create a location?")
-                dlg2 = wx.MessageDialog(self,
-                                        message=message,
-                                        caption=_("Create location?"),
-                                        style=wx.YES_NO | wx.YES_DEFAULT |
-                                        wx.ICON_QUESTION)
+                dlg2 = wx.MessageDialog(
+                    self,
+                    message=message,
+                    caption=_("Create location?"),
+                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+                )
                 if dlg2.ShowModal() == wx.ID_YES:
                     self.tree.CreateLocation(grassdb_node)
                 dlg2.Destroy()
@@ -185,6 +198,7 @@ class DataCatalog(wx.Panel):
     def OnImportGdalLayers(self, event):
         """Convert multiple GDAL layers to GRASS raster map layers"""
         from modules.import_export import GdalImportDialog
+
         dlg = GdalImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -192,6 +206,7 @@ class DataCatalog(wx.Panel):
     def OnImportOgrLayers(self, event):
         """Convert multiple OGR layers to GRASS vector map layers"""
         from modules.import_export import OgrImportDialog
+
         dlg = OgrImportDialog(parent=self, giface=self.giface)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -199,6 +214,7 @@ class DataCatalog(wx.Panel):
     def OnLinkGdalLayers(self, event):
         """Link multiple GDAL layers to GRASS raster map layers"""
         from modules.import_export import GdalImportDialog
+
         dlg = GdalImportDialog(parent=self, giface=self.giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -206,6 +222,7 @@ class DataCatalog(wx.Panel):
     def OnLinkOgrLayers(self, event):
         """Links multiple OGR layers to GRASS vector map layers"""
         from modules.import_export import OgrImportDialog
+
         dlg = OgrImportDialog(parent=self, giface=self.giface, link=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -213,6 +230,7 @@ class DataCatalog(wx.Panel):
     def OnRasterOutputFormat(self, event):
         """Set raster output format handler"""
         from modules.import_export import GdalOutputDialog
+
         dlg = GdalOutputDialog(parent=self, ogr=False)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -220,6 +238,7 @@ class DataCatalog(wx.Panel):
     def OnVectorOutputFormat(self, event):
         """Set vector output format handler"""
         from modules.import_export import GdalOutputDialog
+
         dlg = GdalOutputDialog(parent=self, ogr=True)
         dlg.CentreOnScreen()
         dlg.Show()
@@ -243,21 +262,29 @@ class DataCatalog(wx.Panel):
         # create submenu
         subMenu = Menu()
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Link external raster data  [r.external]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Link external raster data  [r.external]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnLinkGdalLayers, subitem)
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Link external vector data  [v.external]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Link external vector data  [v.external]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnLinkOgrLayers, subitem)
 
         subMenu.AppendSeparator()
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Set raster output format  [r.external.out]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Set raster output format  [r.external.out]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnRasterOutputFormat, subitem)
 
-        subitem = wx.MenuItem(subMenu, wx.ID_ANY, _("Set vector output format  [v.external.out]"))
+        subitem = wx.MenuItem(
+            subMenu, wx.ID_ANY, _("Set vector output format  [v.external.out]")
+        )
         subMenu.AppendItem(subitem)
         self.Bind(wx.EVT_MENU, self.OnVectorOutputFormat, subitem)
 
@@ -266,21 +293,25 @@ class DataCatalog(wx.Panel):
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS raster map  [r.unpack]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('r.unpack'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("r.unpack"), item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Unpack GRASS vector map  [v.unpack]"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('v.unpack'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("v.unpack"), item)
 
         menu.AppendSeparator()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Create raster map from x,y,z data  [r.in.xyz]"))
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Create raster map from x,y,z data  [r.in.xyz]")
+        )
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('r.in.xyz'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("r.in.xyz"), item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Create vector map from x,y,z data  [v.in.ascii]"))
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Create vector map from x,y,z data  [v.in.ascii]")
+        )
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand('v.in.ascii'), item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("v.in.ascii"), item)
 
         menu.AppendSeparator()
         menu.AppendMenu(wx.ID_ANY, _("Link external data"), subMenu)

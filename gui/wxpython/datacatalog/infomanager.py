@@ -31,8 +31,10 @@ class DataCatalogInfoManager:
 
     def ShowDataStructureInfo(self, onCreateLocationHandler):
         """Show info about the data hierarchy focused on the first-time user"""
-        buttons = [("Create new Location", onCreateLocationHandler),
-                   ("Learn More", self._onLearnMore)]
+        buttons = [
+            ("Create new Location", onCreateLocationHandler),
+            ("Learn More", self._onLearnMore),
+        ]
         message = _(
             "GRASS GIS helps you organize your data using Locations (projects) "
             "which contain Mapsets (subprojects). All data in one Location is "
@@ -41,13 +43,15 @@ class DataCatalogInfoManager:
             "which uses WGS 84 (EPSG:4326). Consider creating a new Location with a CRS "
             "specific to your area. You can do it now or anytime later from "
             "the toolbar above."
-        ).format(loc=gisenv()['LOCATION_NAME'])
+        ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def ShowImportDataInfo(self, OnImportOgrLayersHandler, OnImportGdalLayersHandler):
         """Show info about the data import focused on the first-time user"""
-        buttons = [("Import vector data", OnImportOgrLayersHandler),
-                   ("Import raster data", OnImportGdalLayersHandler)]
+        buttons = [
+            ("Import vector data", OnImportOgrLayersHandler),
+            ("Import raster data", OnImportGdalLayersHandler),
+        ]
         message = _(
             "You have successfully created a new Location {loc}. "
             "Currently you are in its PERMANENT Mapset which is used for "
@@ -55,7 +59,7 @@ class DataCatalogInfoManager:
             "Mapsets. You can create new Mapsets for different tasks by right "
             "clicking on the Location name.\n\n"
             "To import data, go to the toolbar above or use the buttons below."
-        ).format(loc=gisenv()['LOCATION_NAME'])
+        ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def ShowLazyLoadingOn(self, setLazyLoadingOnHandler, doNotAskHandler):
