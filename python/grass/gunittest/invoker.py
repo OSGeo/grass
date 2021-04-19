@@ -232,8 +232,8 @@ class GrassTestFilesInvoker(object):
                 return data.decode(encoding="utf-8", errors="replace")
             return data
 
-        stdout = try_decode(stdout, encoding=encodings)
-        stderr = try_decode(stderr, encoding=encodings)
+        stdout = try_decode(stdout, encodings=encodings)
+        stderr = try_decode(stderr, encodings=encodings)
 
         with open(stdout_path, "w") as stdout_file:
             stdout_file.write(stdout)
