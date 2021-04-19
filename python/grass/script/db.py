@@ -51,8 +51,8 @@ def db_describe(table, env=None, **args):
 
     cols = []
     result = {}
-    for l in s.splitlines():
-        f = l.split(":")
+    for line in s.splitlines():
+        f = line.split(":")
         key = f[0]
         f[1] = f[1].lstrip(" ")
         if key.startswith("Column "):
