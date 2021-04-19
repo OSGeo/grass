@@ -64,6 +64,19 @@ class DataCatalogInfoManager:
         ).format(loc=gisenv()["LOCATION_NAME"])
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
+    def ShowLazyLoadingOn(self, setLazyLoadingOnHandler, doNotAskHandler):
+        """Show info about lazy loading"""
+        message = _(
+            "Loading of Data catalog content took rather long. "
+            "To prevent delay, you can enable loading of current mapset only. "
+            "You can change that later in GUI Settings, General tab."
+        )
+        buttons = [
+            (_("Enable loading current mapset only"), setLazyLoadingOnHandler),
+            (_("No change, don't ask me again"), doNotAskHandler),
+        ]
+        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
+
     def ShowFallbackSessionInfo(self, reason_id):
         """Show info when last used mapset is not usable"""
         string = self._text_from_reason_id(reason_id)

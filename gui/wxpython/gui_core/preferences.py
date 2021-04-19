@@ -371,7 +371,26 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
-
+        #
+        # Data catalog settings
+        #
+        box = StaticBox(
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Data Catalog settings")
+        )
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        lazyLoadingDataCatalog = wx.CheckBox(
+            parent=panel,
+            label=_("At startup load maps from current mapset only (in the Data tab)"),
+            name="IsChecked",
+        )
+        lazyLoadingDataCatalog.SetValue(
+            self.settings.Get(group="datacatalog", key="lazyLoading", subkey="enabled")
+        )
+        self.winId["datacatalog:lazyLoading:enabled"] = lazyLoadingDataCatalog.GetId()
+        sizer.Add(
+            lazyLoadingDataCatalog, proportion=1, flag=wx.ALL | wx.EXPAND, border=5
+        )
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
         #
         # workspace
         #
