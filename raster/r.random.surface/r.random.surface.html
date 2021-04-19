@@ -108,6 +108,40 @@ ignore the current mask for the same reason.
 how the error inherent in raster maps might effect the analyses done with
 those maps.
 
+
+<h2>EXAMPLE</h2>
+
+Generate a random surface (using extent of North Carolina sample dataset):
+
+<div class="code"><pre>
+g.region raster=elevation res=100 -p
+r.surf.random output=randomsurf min=10 max=100
+
+# verify distribution
+r.univar -e map=randomsurf
+</pre></div>
+
+<!--
+d.legend -d raster=randomsurf@user1 title=randomsurf font=Vera
+-->
+
+<div align="center" style="margin: 10px">
+<a href="r_random_surface.jpg">
+<img src="r_random_surface.jpg" width="600" height="288" alt="r.random.surface example (n_min: 10; n_max: 100)" border="0">
+</a><br>
+<i>Figure: Random surface example (min: 10; max: 100)</i>
+</div>
+
+<p>
+With the histogram tool the cell values versus count can be shown.
+<p>
+<div align="center" style="margin: 10px">
+<a href="r_random_surface_hist.png">
+<img src="r_random_surface_hist.png" width="600" height="244" alt="r.random.surface example histogram (n_min: 10; n_max: 100)" border="0">
+</a><br>
+<i>Figure: Histogram of random surface example (min: 10; max: 100)</i>
+</div>
+
 <h2>REFERENCES</h2>
 Random Field Software for GRASS by Chuck Ehlschlaeger
 
@@ -119,25 +153,26 @@ use:
 <ul>
 <li> Ehlschlaeger, C.R., Shortridge, A.M., Goodchild, M.F., 1997. 
  Visualizing spatial data uncertainty using animation. 
- Computers & Geosciences 23, 387-395. doi:10.1016/S0098-3004(97)00005-8</li>
+ Computers & Geosciences 23, 387-395.
+ doi:<a href="https://doi.org/10.1016/S0098-3004(97)00005-8">10.1016/S0098-3004(97)00005-8</a></li>
 
-<li><a href="http://www.geo.hunter.cuny.edu/~chuck/paper.html">Modeling
-Uncertainty in Elevation Data for Geographical Analysis</a>, by
-Charles R. Ehlschlaeger, and Ashton M.  Shortridge. Proceedings of the
+<li> Ehlschlaeger, C.R., Shortridge, A.M., 1996.
+<a href="http://www.geo.hunter.cuny.edu/~chuck/paper.html">Modeling
+Uncertainty in Elevation Data for Geographical Analysis</a>. Proceedings of the
 7th International Symposium on Spatial Data Handling, Delft,
 Netherlands, August 1996.</li>
 
-<li><a href="http://www.geo.hunter.cuny.edu/~chuck/acm/paper.html">Dealing
+<li> Ehlschlaeger, C.R., Goodchild, M.F., 1994.
+<a href="http://www.geo.hunter.cuny.edu/~chuck/acm/paper.html">Dealing
 with Uncertainty in Categorical Coverage Maps: Defining, Visualizing,
-and Managing Data Errors</a>, by Charles Ehlschlaeger and Michael
-Goodchild.  Proceedings, Workshop on Geographic Information Systems at
-the Conference on Information and Knowledge Management, Gaithersburg
+and Managing Data Errors</a>. Proceedings, Workshop on Geographic Information
+Systems at the Conference on Information and Knowledge Management, Gaithersburg
 MD, 1994.</li>
 
-<li><a href="http://www.geo.hunter.cuny.edu/~chuck/gislis/gislis.html">Uncertainty
+<li> Ehlschlaeger, C.R., Goodchild, M.F., 1994.
+<a href="http://www.geo.hunter.cuny.edu/~chuck/gislis/gislis.html">Uncertainty
 in Spatial Data: Defining, Visualizing, and Managing Data
-Errors</a>, by Charles Ehlschlaeger and Michael
-Goodchild. Proceedings, GIS/LIS'94, pp. 246-253, Phoenix AZ,
+Errors</a>. Proceedings, GIS/LIS'94, pp. 246-253, Phoenix AZ,
 1994.</li>
 </ul>
 
