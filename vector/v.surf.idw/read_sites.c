@@ -13,7 +13,8 @@
  * mccauley
  */
 
-void read_sites(const char *name, const char *field_name, const char *col, int noindex)
+void read_sites(const char *name, const char *field_name, const char *col,
+                int noindex)
 {
     extern long npoints;
     int nrec, ctype = 0, type, field, with_z;
@@ -24,14 +25,14 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    Vect_set_open_level(1);	/* without topology */
+    Vect_set_open_level(1);     /* without topology */
     if (Vect_open_old2(&Map, name, "", field_name) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), name);
+        G_fatal_error(_("Unable to open vector map <%s>"), name);
 
     field = Vect_get_field_number(&Map, field_name);
-    with_z = col == NULL && Vect_is_3d(&Map); /* read z-coordinates
-                                                 only when column is
-                                                 not defined */
+    with_z = col == NULL && Vect_is_3d(&Map);   /* read z-coordinates
+                                                   only when column is
+                                                   not defined */
     if (!col) {
         if (!with_z)
             G_important_message(_("Input vector map <%s> is 2D - using categories to interpolate"),
@@ -43,33 +44,35 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
     }
 
     if (col) {
-	db_CatValArray_init(&cvarr);
+        db_CatValArray_init(&cvarr);
 
-	Fi = Vect_get_field(&Map, field);
-	if (Fi == NULL)
-	    G_fatal_error(_("Database connection not defined for layer %s"),
-			  field_name);
+        Fi = Vect_get_field(&Map, field);
+        if (Fi == NULL)
+            G_fatal_error(_("Database connection not defined for layer %s"),
+                          field_name);
 
-	Driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	if (Driver == NULL)
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Fi->database, Fi->driver);
+        Driver = db_start_driver_open_database(Fi->driver, Fi->database);
+        if (Driver == NULL)
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          Fi->database, Fi->driver);
 
-	nrec =
-	    db_select_CatValArray(Driver, Fi->table, Fi->key, col, NULL,
-				  &cvarr);
-	G_debug(3, "nrec = %d", nrec);
+        nrec =
+            db_select_CatValArray(Driver, Fi->table, Fi->key, col, NULL,
+                                  &cvarr);
+        G_debug(3, "nrec = %d", nrec);
 
-	ctype = cvarr.ctype;
-	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Column type not supported"));
+        ctype = cvarr.ctype;
+        if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
+            G_fatal_error(_("Column type not supported"));
 
-	if (nrec < 0)
-	    G_fatal_error(_("Unable to select data from table"));
+        if (nrec < 0)
+            G_fatal_error(_("Unable to select data from table"));
 
-	G_verbose_message(n_("One record selected from table", "%d records selected from table", nrec), nrec);
+        G_verbose_message(n_
+                          ("One record selected from table",
+                           "%d records selected from table", nrec), nrec);
 
-	db_close_database_shutdown_driver(Driver);
+        db_close_database_shutdown_driver(Driver);
     }
 
 
@@ -77,25 +80,25 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
     Cats = Vect_new_cats_struct();
 
     while ((type = Vect_read_next_line(&Map, Points, Cats)) >= 0) {
-	double dval;
+        double dval;
 
-	if (!(type & GV_POINTS))
-	    continue;
+        if (!(type & GV_POINTS))
+            continue;
 
-	if (!with_z) {
-	    int cat, ival, ret;
+        if (!with_z) {
+            int cat, ival, ret;
 
-	    /* TODO: what to do with multiple cats */
-	    Vect_cat_get(Cats, field, &cat);
-	    if (cat < 0) /* skip features without category */
-		continue;
+            /* TODO: what to do with multiple cats */
+            Vect_cat_get(Cats, field, &cat);
+            if (cat < 0)        /* skip features without category */
+                continue;
 
             if (col) {
                 if (ctype == DB_C_TYPE_INT) {
                     ret = db_CatValArray_get_value_int(&cvarr, cat, &ival);
                     dval = ival;
                 }
-                else {		/* DB_C_TYPE_DOUBLE */
+                else {          /* DB_C_TYPE_DOUBLE */
                     ret = db_CatValArray_get_value_double(&cvarr, cat, &dval);
                 }
             }
@@ -103,19 +106,19 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
                 dval = cat;
             }
 
-	    if (ret != DB_OK) {
-		G_warning(_("No record for point (cat = %d)"), cat);
-		continue;
-	    }
-	}
-	else
-	    dval = Points->z[0];
+            if (ret != DB_OK) {
+                G_warning(_("No record for point (cat = %d)"), cat);
+                continue;
+            }
+        }
+        else
+            dval = Points->z[0];
 
-	newpoint(dval, Points->x[0], Points->y[0], noindex);
+        newpoint(dval, Points->x[0], Points->y[0], noindex);
     }
 
     if (col)
-	db_CatValArray_free(&cvarr);
+        db_CatValArray_free(&cvarr);
 
     Vect_set_release_support(&Map);
     Vect_close(&Map);
