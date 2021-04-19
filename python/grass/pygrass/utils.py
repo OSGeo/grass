@@ -538,29 +538,29 @@ def create_test_stream_network_map(map_name="streams"):
     with VectorTopo(map_name, mode="w", tab_name=map_name, tab_cols=cols) as streams:
 
         # First flow graph
-        l = Line([(0, 2), (0.22, 1.75), (0.55, 1.5), (1, 1)])
-        streams.write(l, cat=1, attrs=(1,))
-        l = Line([(2, 2), (1, 1)])
-        streams.write(l, cat=2, attrs=(2,))
-        l = Line([(1, 1), (0.85, 0.5), (1, 0)])
-        streams.write(l, cat=3, attrs=(3,))
-        l = Line([(2, 1), (1, 0)])
-        streams.write(l, cat=4, attrs=(4,))
-        l = Line([(0, 1), (1, 0)])
-        streams.write(l, cat=5, attrs=(5,))
-        l = Line([(1, 0), (1, -1)])
-        streams.write(l, cat=6, attrs=(6,))
+        line = Line([(0, 2), (0.22, 1.75), (0.55, 1.5), (1, 1)])
+        streams.write(line, cat=1, attrs=(1,))
+        line = Line([(2, 2), (1, 1)])
+        streams.write(line, cat=2, attrs=(2,))
+        line = Line([(1, 1), (0.85, 0.5), (1, 0)])
+        streams.write(line, cat=3, attrs=(3,))
+        line = Line([(2, 1), (1, 0)])
+        streams.write(line, cat=4, attrs=(4,))
+        line = Line([(0, 1), (1, 0)])
+        streams.write(line, cat=5, attrs=(5,))
+        line = Line([(1, 0), (1, -1)])
+        streams.write(line, cat=6, attrs=(6,))
         # Reverse line 3
-        l = Line([(1, 0), (1.15, 0.5), (1, 1)])
-        streams.write(l, cat=7, attrs=(7,))
+        line = Line([(1, 0), (1.15, 0.5), (1, 1)])
+        streams.write(line, cat=7, attrs=(7,))
 
         # second flow graph
-        l = Line([(0, -1), (1, -2)])
-        streams.write(l, cat=8, attrs=(8,))
-        l = Line([(2, -1), (1, -2)])
-        streams.write(l, cat=9, attrs=(9,))
-        l = Line([(1, -2), (1, -3)])
-        streams.write(l, cat=10, attrs=(10,))
+        line = Line([(0, -1), (1, -2)])
+        streams.write(line, cat=8, attrs=(8,))
+        line = Line([(2, -1), (1, -2)])
+        streams.write(line, cat=9, attrs=(9,))
+        line = Line([(1, -2), (1, -3)])
+        streams.write(line, cat=10, attrs=(10,))
 
         streams.organization = "Thuenen Institut"
         streams.person = "Soeren Gebbert"

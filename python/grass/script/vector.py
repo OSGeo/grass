@@ -44,8 +44,8 @@ def vector_db(map, env=None, **kwargs):
     )
     result = {}
 
-    for l in s.splitlines():
-        f = l.split(";")
+    for line in s.splitlines():
+        f = line.split(";")
         if len(f) != 5:
             continue
 
@@ -379,7 +379,7 @@ def vector_what(
 
     if layer:
         if isinstance(layer, (tuple, list)):
-            layer_list = [str(l) for l in layer]
+            layer_list = [str(item) for item in layer]
         else:
             layer_list = [str(layer)]
         if len(layer_list) != len(map_list):

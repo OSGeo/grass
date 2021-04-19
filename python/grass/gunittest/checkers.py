@@ -52,10 +52,10 @@ def unify_projection(dic):
     # possible name for a projection system
     lookup = [["Universal Transverse Mercator", "Universe Transverse Mercator"]]
     dic = dict(dic)
-    for l in lookup:
+    for item in lookup:
         for n in range(len(dic["name"])):
-            if dic["name"][n] in l:
-                dic["name"][n] = l[0]
+            if dic["name"][n] in item:
+                dic["name"][n] = item[0]
     return dic
 
 
@@ -87,21 +87,21 @@ def unify_units(dic):
         ["Kilometers", "Kilometres"],
     ]
     dic = dict(dic)
-    for l in lookup:
+    for item in lookup:
         if not isinstance(dic["unit"], str):
             for n in range(len(dic["unit"])):
-                if dic["unit"][n] in l:
-                    dic["unit"][n] = l[0]
+                if dic["unit"][n] in item:
+                    dic["unit"][n] = item[0]
         else:
-            if dic["unit"] in l:
-                dic["unit"] = l[0]
+            if dic["unit"] in item:
+                dic["unit"] = item[0]
         if not isinstance(dic["units"], str):
             for n in range(len(dic["units"])):
-                if dic["units"][n] in l:
-                    dic["units"][n] = l[0]
+                if dic["units"][n] in item:
+                    dic["units"][n] = item[0]
         else:
-            if dic["units"] in l:
-                dic["units"] = l[0]
+            if dic["units"] in item:
+                dic["units"] = item[0]
     return dic
 
 
