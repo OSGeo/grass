@@ -159,6 +159,7 @@ class Settings:
             "datacatalog": {
                 # grassdb string
                 "grassdbs": {"listAsString": ""},
+                "lazyLoading": {"enabled": False, "asked": False},
             },
             "manager": {
                 # show opacity level widget

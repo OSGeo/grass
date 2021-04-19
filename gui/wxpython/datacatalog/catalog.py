@@ -26,9 +26,11 @@ from gui_core.infobar import InfoBar
 from datacatalog.infomanager import DataCatalogInfoManager
 from gui_core.wrap import Menu
 from gui_core.forms import GUI
-from grass.script import gisenv
+from core.settings import UserSettings
 
 from grass.pydispatch.signal import Signal
+from grass.script.utils import clock
+from grass.script import gisenv
 
 from grass.grassdb.manage import split_mapset_path
 from grass.grassdb.checks import (
@@ -55,6 +57,7 @@ class DataCatalog(wx.Panel):
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
+        self._startLoadingTime = 0
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
         self.SetName("DataCatalog")
 
@@ -77,6 +80,7 @@ class DataCatalog(wx.Panel):
             infobar=self.infoBar, giface=self.giface
         )
         self.tree.showImportDataInfo.connect(self.showImportDataInfo)
+        self.tree.loadingDone.connect(self._loadingDone)
 
         # some layout
         self._layout()
@@ -126,7 +130,51 @@ class DataCatalog(wx.Panel):
         )
 
     def LoadItems(self):
-        self.tree.ReloadTreeItems()
+        """Reload tree - full or lazy - based on user settings"""
+        self._startLoadingTime = clock()
+        self.tree.ReloadTreeItems(full=False)
+
+    def _loadingDone(self):
+        """If loading took more time, suggest lazy loading"""
+        if clock() - self._startLoadingTime > 5 and not self.tree._useLazyLoading():
+            asked = UserSettings.Get(
+                group="datacatalog", key="lazyLoading", subkey="asked"
+            )
+            if not asked:
+                wx.CallAfter(
+                    self.infoManager.ShowLazyLoadingOn,
+                    setLazyLoadingOnHandler=self._saveLazyLoadingOnSettings,
+                    doNotAskHandler=self._saveDontAskLazyLoadingSettings,
+                )
+
+    def _saveLazyLoadingOnSettings(self, event):
+        """Turn on lazy loading in settings"""
+        UserSettings.Set(
+            group="datacatalog", key="lazyLoading", subkey="enabled", value=True
+        )
+        UserSettings.Set(
+            group="datacatalog", key="lazyLoading", subkey="asked", value=True
+        )
+        self._saveLazyLoadingSettings()
+        event.Skip()
+
+    def _saveDontAskLazyLoadingSettings(self, event):
+        """Save in settings that decision on lazy loading was done to not ask again"""
+        UserSettings.Set(
+            group="datacatalog", key="lazyLoading", subkey="asked", value=True
+        )
+        self._saveLazyLoadingSettings()
+        event.Skip()
+
+    def _saveLazyLoadingSettings(self):
+        dcSettings = {}
+        UserSettings.ReadSettingsFile(settings=dcSettings)
+        if "datacatalog" not in dcSettings:
+            dcSettings["datacatalog"] = UserSettings.Get(group="datacatalog")
+        dcSettings["datacatalog"]["lazyLoading"] = UserSettings.Get(
+            group="datacatalog", key="lazyLoading"
+        )
+        UserSettings.SaveToFile(dcSettings)
 
     def dismissInfobar(self):
         if self.infoBar.IsShown():
@@ -134,7 +182,7 @@ class DataCatalog(wx.Panel):
 
     def OnReloadTree(self, event):
         """Reload whole tree"""
-        self.LoadItems()
+        self.tree.ReloadTreeItems(full=True)
 
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""
