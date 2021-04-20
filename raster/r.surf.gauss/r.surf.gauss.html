@@ -6,11 +6,6 @@ Gaussian random number generator. It is essentially the same
 as <em><a href="r.surf.random.html">r.surf.random</a></em>, but uses a
 Gaussian random number generator instead.
 
-<center>
-<img src="r_surf_gauss_hist.png" alt="r.surf.gauss map histogram"><br>
-<i>Histogram of map generated with r.surf.gauss (mean=0, sigma=10)</i>
-</center>
-
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
@@ -20,6 +15,27 @@ r.surf.gauss out=gauss mean=0 sigma=10
 # check result
 r.univar gauss
 </pre></div>
+
+<!--
+d.legend -d raster=gauss@user1 title=Gauss font=Vera
+-->
+
+<div align="center" style="margin: 10px">
+<a href="r_surf_gauss.jpg">
+<img src="r_surf_gauss.jpg" width="600" height="295" alt="r.surf.gauss example (mean: 0; sigma: 10)" border="0">
+</a><br>
+<i>Figure: Random Gaussian surface example (mean: 0; sigma: 10)</i>
+</div>
+
+<p>
+With the histogram tool the cell values versus count can be shown.
+<p>
+<div align="center" style="margin: 10px">
+<a href="r_surf_gauss_hist.png">
+<img src="r_surf_gauss_hist.png" width="600" height="275" alt="r.surf.gauss example histogram (mean: 0; sigma: 10)" border="0">
+</a><br>
+<i>Figure: Histogram of random Gaussian surface example (mean: 0; sigma: 10)</i>
+</div>
 
 <h2>SEE ALSO</h2>
 
