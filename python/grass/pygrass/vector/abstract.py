@@ -182,7 +182,7 @@ class Info(object):
         date_str = utils.decode(libvect.Vect_get_map_date(self.c_mapinfo))
         try:
             return datetime.datetime.strptime(date_str, self.date_fmt)
-        except:
+        except ValueError:
             return date_str
 
     def _set_map_date(self, datetimeobj):
