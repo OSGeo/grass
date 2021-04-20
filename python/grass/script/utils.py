@@ -108,7 +108,7 @@ def try_remove(path):
     """
     try:
         os.remove(path)
-    except:
+    except Exception:
         pass
 
 
@@ -120,7 +120,7 @@ def try_rmdir(path):
     """
     try:
         os.rmdir(path)
-    except:
+    except Exception:
         shutil.rmtree(path, ignore_errors=True)
 
 
