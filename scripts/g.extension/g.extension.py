@@ -1466,7 +1466,8 @@ def extract_zip(name, directory, tmpdir):
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
         for subfile in file_list:
-            # this should be safe in Python 2.7.4
+            if "__pycache__" in subfile:
+                continue
             zip_file.extract(subfile, extract_dir)
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
