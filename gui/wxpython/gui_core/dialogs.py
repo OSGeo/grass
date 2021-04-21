@@ -2528,8 +2528,7 @@ class DefaultFontDialog(wx.Dialog):
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        border.Add(btnsizer, proportion=0,
-                   flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+        border.Add(btnsizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         panel.SetAutoLayout(True)
         panel.SetSizer(border)
