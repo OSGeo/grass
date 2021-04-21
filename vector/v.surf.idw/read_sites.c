@@ -83,29 +83,29 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
 	    continue;
 
 	if (!with_z) {
-	    int cat, ival, ret;
+	    int cat;
 
 	    /* TODO: what to do with multiple cats */
 	    Vect_cat_get(Cats, field, &cat);
 	    if (cat < 0) /* skip features without category */
 		continue;
 
-            if (col) {
-                if (ctype == DB_C_TYPE_INT) {
-                    ret = db_CatValArray_get_value_int(&cvarr, cat, &ival);
-                    dval = ival;
-                }
-                else {		/* DB_C_TYPE_DOUBLE */
-                    ret = db_CatValArray_get_value_double(&cvarr, cat, &dval);
-                }
-            }
-            else {
-                dval = cat;
-            }
-
-	    if (ret != DB_OK) {
-		G_warning(_("No record for point (cat = %d)"), cat);
-		continue;
+	    if (col) {
+		int ival, ret;
+		if (ctype == DB_C_TYPE_INT) {
+		    ret = db_CatValArray_get_value_int(&cvarr, cat, &ival);
+		    dval = ival;
+		}
+		else {		/* DB_C_TYPE_DOUBLE */
+		    ret = db_CatValArray_get_value_double(&cvarr, cat, &dval);
+		}
+		if (ret != DB_OK) {
+		    G_warning(_("No record for point (cat = %d)"), cat);
+		    continue;
+		}
+	    }
+	    else {
+		dval = cat;
 	    }
 	}
 	else
