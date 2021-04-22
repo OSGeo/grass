@@ -43,6 +43,7 @@ class SignatureFileTestCase(TestCase):
     def setUpClass(cls):
         cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
+        cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
         cls.sigfile_name = "{}/signatures/sig/{}".format(cls.mpath, cls.sig_name)
 
@@ -88,7 +89,8 @@ class SignatureFileTestCase(TestCase):
         # Read back from signatures file
         Sn = struct_Signature()
         I_init_signatures(ctypes.byref(Sn), 0)
-        p_old_sigfile = I_fopen_signature_file_old(self.sig_name)
+        fq_name = "{}@{}".format(self.sig_name, self.mapset_name)
+        p_old_sigfile = I_fopen_signature_file_old(fq_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, 1)
         self.assertEqual(Sn.title, b"Signature title")

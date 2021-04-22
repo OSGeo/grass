@@ -18,70 +18,42 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Create new signiture file in given group/subgroup
+  \brief Create new sigset file
 
-  Note: Prints warning on error and returns NULL.
-
-  \param group name of group
-  \param subgroup name of subgroup
-  \param name name of signiture file
+  \param name name of sigset file
 
   \return pointer to FILE
   \return NULL on error
 */
-FILE *I_fopen_sigset_file_new(const char *group, const char *subgroup,
-			      const char *name)
+FILE *I_fopen_sigset_file_new(const char *name)
 {
-    char element[GPATH_MAX];
-    char group_name[GNAME_MAX], mapset[GMAPSET_MAX];
     FILE *fd;
 
-    if (G_name_is_fully_qualified(group, group_name, mapset)) {
-	if (strcmp(mapset, G_mapset()) != 0)
-	    G_warning(_("Unable to create signature file <%s> for subgroup <%s> "
-			"of group <%s> - <%s> is not current mapset"),
-		      name, subgroup, group, mapset);
-    }
-    else { 
-	strcpy(group_name, group);
-    }
+    /* create sig directory */
+    G__make_mapset_element_misc("signatures", "sigset");
 
-    /* create sigset directory */
-    sprintf(element, "%s/subgroup/%s/sigset", group_name, subgroup);
-    G__make_mapset_element_misc("group", element);
-
-    sprintf(element, "subgroup/%s/sigset/%s", subgroup, name);
-
-    fd = G_fopen_new_misc("group", element, group_name);
-    if (fd == NULL)
-	G_warning(_("Unable to create signature file <%s> for subgroup <%s> "
-		    "of group <%s>"),
-		  name, subgroup, group);
+    fd = G_fopen_new_misc("signatures", name, "sigset");
     
     return fd;
 }
 
 /*!
-  \brief Open existing signiture file
+  \brief Open existing sigset signature file
 
-  \param group name of group (may be fully qualified)
-  \param subgroup name of subgroup
-  \param name name of signiture file
+  \param name name of signature file (may be fully qualified)
 
   \return pointer to FILE*
   \return NULL on error
 */
-FILE *I_fopen_sigset_file_old(const char *group, const char *subgroup,
-			      const char *name)
+FILE *I_fopen_sigset_file_old(const char *name)
 {
-    char element[GPATH_MAX];
-    char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
+    char sig_name[GNAME_MAX], sig_mapset[GMAPSET_MAX];
     FILE *fd;
 
-    G_unqualified_name(group, NULL, group_name, group_mapset);
-    sprintf(element, "subgroup/%s/sigset/%s", subgroup, name);
+    if (G_unqualified_name(name, NULL, sig_name, sig_mapset) == 0)
+        strcpy(sig_mapset, G_mapset());
 
-    fd = G_fopen_old_misc("group", element, group_name, group_mapset);
+    fd = G_fopen_old_misc("signatures", sig_name, "sigset", sig_mapset);
     
     return fd;
 }

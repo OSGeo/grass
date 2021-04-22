@@ -90,19 +90,20 @@ struct ClassData
 
 struct ClassSig
 {
-    long classnum;
-    char *title;
+    long classnum;      /* c_cat */
+    char *title;        /* from Rast_get_c_cat */
     int used;
-    int type;
-    int nsubclasses;
+    int type;           /* always is SIGNATURE_TYPE_MIXED ? */
+    int nsubclasses;    /* SubSig item count */
     struct SubSig *SubSig;
-    struct ClassData ClassData;
+    struct ClassData ClassData; /* used for SubSig calculation only */
 };
 
 struct SigSet
 {
     int nbands;
-    int nclasses;
+    char **bandrefs;    /* list of band references [nbands]char* */
+    int nclasses;       /* ClassSig item count */
     char *title;
     struct ClassSig *ClassSig;
 };
