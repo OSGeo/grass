@@ -31,7 +31,6 @@ int open_files(void)
 			    "The subgroup must have at least 2 raster maps."), subgroup, group);
     }
 
-    I_init_signatures(&S, 0);
     fd = I_fopen_signature_file_old(sigfile);
     if (fd == NULL)
 	G_fatal_error(_("Unable to open signature file <%s>"),

@@ -6,8 +6,7 @@
 /*!
  * \brief Initialize struct Signature before use
  *
- * Pass 0 as nbands before call to I_read_signatures as nbands might
- * not be known yet.
+ * No need to call before calling I_read_signatures.
  *
  * \param *Signature to initialize
  * \param nbands band (imagery group member) count
@@ -131,6 +130,9 @@ int I_read_one_signature(FILE * fd, struct Signature *S)
  * I_fopen_signature_file_old()
  * It is up to caller to fclose the file stream afterwards.
  *
+ * There is no need to initialize struct Signature in advance, as this
+ * function internally calls I_init_signatures.
+ *
  * \param pointer to FILE*
  * \param pointer to struct Signature *S
  *
@@ -142,6 +144,7 @@ int I_read_signatures(FILE * fd, struct Signature *S)
     char c, prev;
     char bandref[GNAME_MAX];
 
+    I_init_signatures(S, 0);
     S->title[0] = 0;
     /* File of signatures must start with its version number */
     if (fscanf(fd, "%d", &ver) != 1) {

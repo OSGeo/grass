@@ -54,7 +54,6 @@ int open_files(void)
     }
 
     if (insigfile) {
-    I_init_signatures(&in_sig, 0);
 	fd = I_fopen_signature_file_old(insigfile);
 	if (fd == NULL)
 	    G_fatal_error(_("Unable to open seed signature file <%s>"),

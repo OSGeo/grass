@@ -127,7 +127,6 @@ int main(int argc, char *argv[])
 	 I_fopen_signature_file_old(sig_opt->answer)) == NULL)
 	G_fatal_error(_("Unable to open the signature file"));
 
-    I_init_signatures(&sigs, refs.nfiles);
     if (I_read_signatures(sigfp, &sigs) < 0)
 	G_fatal_error(_("Error while reading the signatures file."));
 
