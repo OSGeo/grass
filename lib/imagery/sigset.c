@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 static int gettag(FILE *, char *);
-static int get_nbands(FILE *, struct SigSet *);
+static int get_bandrefs(FILE *, struct SigSet *);
 static int get_title(FILE *, struct SigSet *);
 static int get_class(FILE *, struct SigSet *);
 static int get_classnum(FILE *, struct ClassSig *);
@@ -53,19 +54,21 @@ struct ClassData *I_AllocClassData(struct SigSet *S,
     return Data;
 }
 
-int I_InitSigSet(struct SigSet *S)
+/*!
+ * \brief Initialize struct SigSet before use
+ *
+ * No need to call before calling I_ReadSigSet.
+ *
+ * \param *Signature to initialize
+ * \param nbands band (imagery group member) count
+ */
+int I_InitSigSet(struct SigSet *S, int nbands)
 {
-    S->nbands = 0;
+    S->nbands = nbands;
+    S->bandrefs = (char **)G_malloc(nbands * sizeof(char **));
     S->nclasses = 0;
     S->ClassSig = NULL;
     S->title = NULL;
-
-    return 0;
-}
-
-int I_SigSetNBands(struct SigSet *S, int nbands)
-{
-    S->nbands = nbands;
 
     return 0;
 }
@@ -121,20 +124,44 @@ struct SubSig *I_NewSubSig(struct SigSet *S, struct ClassSig *C)
 
 #define eq(a,b) strcmp(a,b)==0
 
+/*!
+ * \brief Read sigset signatures from file
+ *
+ * File stream should be opened in advance by call to
+ * I_fopen_sigset_file_old()
+ * It is up to caller to fclose the file stream afterwards.
+ *
+ * There is no need to initialise struct SigSet in advance, as this
+ * function internally calls I_InitSigSet.
+ *
+ * \param pointer to FILE*
+ * \param pointer to struct SigSet *S
+ *
+ * \return 1 on success, -1 on failure
+ */
 int I_ReadSigSet(FILE * fd, struct SigSet *S)
 {
     char tag[256];
+    unsigned int version;
 
-    I_InitSigSet(S);
+    if (fscanf(fd, "%u", &version) != 1) {
+        G_warning(_("Invalid signature file"));
+        return -1;
+    }
+    if (version != 1) {
+        G_warning(_("Invalid signature file version"));
+        return -1;
+    }
 
+    I_InitSigSet(S, 0);
     while (gettag(fd, tag)) {
 	if (eq(tag, "title:"))
 	    if (get_title(fd, S) != 0)
             return -1;
-	if (eq(tag, "nbands:"))
-	    if (get_nbands(fd, S) != 0)
+	if (eq(tag, "bandrefs:"))
+        if (get_bandrefs(fd, S) != 0)
             return -1;
-	if (eq(tag, "class:"))
+    if (eq(tag, "class:"))
 	    if (get_class(fd, S) != 0)
             return -1;
     }
@@ -143,16 +170,39 @@ int I_ReadSigSet(FILE * fd, struct SigSet *S)
 
 static int gettag(FILE * fd, char *tag)
 {
-    if (fscanf(fd, "%s", tag) != 1)
+    if (fscanf(fd, "%255s", tag) != 1)
 	return 0;
     G_strip(tag);
     return 1;
 }
 
-static int get_nbands(FILE * fd, struct SigSet *S)
+static int get_bandrefs(FILE * fd, struct SigSet *S)
 {
-    if (fscanf(fd, "%d", &S->nbands) != 1)
+    char **bandrefs;
+    char *bandrefs_str;
+    int ntok, i;
+
+    if (fscanf(fd, "%m[^\n]", &bandrefs_str) != 1) {
+        G_warning(_("Error reading band references from sigset file"));
         return -1;
+    }
+
+    G_strip(bandrefs_str);
+    bandrefs = G_tokenize(bandrefs_str, " ");
+    S->nbands = G_number_of_tokens(bandrefs);
+    if (! S->nbands > 0) {
+        G_warning(_("Signature file does not contain bands"));
+        return -1;
+    }
+    S->bandrefs = (char **)G_malloc(S->nbands * sizeof(char **));
+    for (unsigned int i = S->nbands; i--;) {
+        if (strlen(bandrefs[i]) > (GNAME_MAX - 1)) {
+            G_warning(_("Invalid sigset file: band reference length limit exceeded"));
+            return -1;
+        }
+        S->bandrefs[i] = (char *)G_malloc(GNAME_MAX * sizeof(char *));
+        strcpy(S->bandrefs[i], bandrefs[i]);
+    }
 
     return 0;
 }
@@ -162,8 +212,9 @@ static int get_title(FILE * fd, struct SigSet *S)
     char title[1024];
 
     *title = 0;
-    if (fscanf(fd, "%[^\n]", title) != 1)
+    if (fscanf(fd, "%1024[^\n]", title) != 1)
         return -1;
+    G_strip(title);
     I_SetSigTitle(S, title);
 
     return 0;
@@ -216,8 +267,9 @@ static int get_classtitle(FILE * fd, struct ClassSig *C)
     char title[1024];
 
     *title = 0;
-    if (fscanf(fd, "%[^\n]", title) != 1)
+    if (fscanf(fd, "%1024[^\n]", title) != 1)
         return -1;
+    G_strip(title);
     I_SetClassTitle(C, title);
 
     return 0;
@@ -322,8 +374,14 @@ int I_WriteSigSet(FILE * fd, const struct SigSet *S)
     const struct SubSig *Sp;
     int i, j, b1, b2;
 
+    /* This is version 1 sigset file format */
+    fprintf(fd, "1\n");
     fprintf(fd, "title: %s\n", I_GetSigTitle(S));
-    fprintf(fd, "nbands: %d\n", S->nbands);
+    fprintf(fd, "bandrefs: ");
+    for (i = 0; i < S->nbands; i++) {
+        fprintf(fd, "%s ", S->bandrefs[i]);
+    }
+    fprintf(fd, "\n");
     for (i = 0; i < S->nclasses; i++) {
 	Cp = &S->ClassSig[i];
 	if (!Cp->used)

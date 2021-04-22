@@ -161,8 +161,7 @@ FILE *I_fopen_signature_file_old(const char *);
 /* sigset.c */
 int I_SigSetNClasses(struct SigSet *);
 struct ClassData *I_AllocClassData(struct SigSet *, struct ClassSig *, int);
-int I_InitSigSet(struct SigSet *);
-int I_SigSetNBands(struct SigSet *, int);
+int I_InitSigSet(struct SigSet *, int);
 struct ClassSig *I_NewClassSig(struct SigSet *);
 struct SubSig *I_NewSubSig(struct SigSet *, struct ClassSig *);
 int I_ReadSigSet(FILE *, struct SigSet *) WARN_UNUSED_RESULT;
@@ -173,8 +172,8 @@ const char *I_GetClassTitle(const struct ClassSig *);
 int I_WriteSigSet(FILE *, const struct SigSet *);
 
 /* sigsetfile.c */
-FILE *I_fopen_sigset_file_new(const char *, const char *, const char *);
-FILE *I_fopen_sigset_file_old(const char *, const char *, const char *);
+FILE *I_fopen_sigset_file_new(const char *);
+FILE *I_fopen_sigset_file_old(const char *);
 
 /* target.c */
 int I_get_target(const char *, char *, char *);
