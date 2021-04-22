@@ -49,5 +49,7 @@ int openfiles(struct parms *parms, struct files *files, struct Signature *S)
         S->bandrefs[n] = G_store(bandref);
     }
 
+    I_free_group_ref(&Ref);
+
     return 0;
 }

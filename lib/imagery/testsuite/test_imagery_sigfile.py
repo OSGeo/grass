@@ -88,7 +88,6 @@ class SignatureFileTestCase(TestCase):
 
         # Read back from signatures file
         Sn = struct_Signature()
-        I_init_signatures(ctypes.byref(Sn), 0)
         fq_name = "{}@{}".format(self.sig_name, self.mapset_name)
         p_old_sigfile = I_fopen_signature_file_old(fq_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
@@ -142,7 +141,6 @@ class SignatureFileTestCase(TestCase):
 
         # Read back from signatures file
         Sn = struct_Signature()
-        I_init_signatures(ctypes.byref(Sn), 0)
         p_old_sigfile = I_fopen_signature_file_old(self.sig_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, -1)
@@ -195,7 +193,6 @@ class SignatureFileTestCase(TestCase):
 
         # Read back from signatures file
         Sn = struct_Signature()
-        I_init_signatures(ctypes.byref(Sn), 0)
         p_old_sigfile = I_fopen_signature_file_old(self.sig_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, 1)
