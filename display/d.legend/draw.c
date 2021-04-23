@@ -306,6 +306,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }
         }
 
+	/* if log scale is requested, but dmin is not positive, use eps as the
+	 * min value */
 	eps_min = log_sc && dmin <= 0 ? eps : dmin;
 
         if (use_catlist) {
@@ -370,6 +372,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             for (k = 0; k < lleg; k++) {
                 if (log_sc) { /* logarithmic scale */
                     num = k / lleg;
+		    /* XXX: for log scale, if the entire raster is not
+		     * positive, use the max color only; actually, this is
+		     * incorrect because negative values can have different
+		     * colors on the monitor; maybe, we should throw a fatal
+		     * error in this case because using the max color only for
+		     * displaying a raster and its legend is different and the
+		     * legend must always match the display; well... unless the
+		     * raster is colorized using r.colors -g, but how do we
+		     * know that? */
 		    val = dmax <= 0 ? dmax : eps_min * pow(dmax/eps_min, num);
                     D_d_color(val, &colors);
                     if (!flip) {
@@ -415,6 +426,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         /* Format text */
         if (fp) {
 	    if (log_sc && dmax <= 0) /* label min and max only */
+		/* XXX: again, if the entire raster is not positive, maybe, we
+		 * should quit */
 		steps = 2;
 	} else {              /* cut down labelnum so they don't repeat */
             if (do_cats < steps)
@@ -507,6 +520,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     else {
                         if (log_sc) {
 			    if (dmax <= 0)
+				/* XXX: again, if the entire raster is not
+				 * positive, maybe, we should quit */
 				val = k == 0 ? dmax : dmin;
 			    else {
 				num = log10(dmax) - k * ((log10(dmax) - log10(eps_min)) / (steps - 1));
@@ -539,6 +554,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         if (!horiz) {
                             if (log_sc) {
 				if (dmax <= 0)
+				    /* XXX: again, if the entire raster is not
+				     * positive, maybe, we should quit */
 				    coef = k == 0;
 				else
 				    coef = (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
@@ -571,6 +588,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         else {
                             if (log_sc) {
 				if (dmax <= 0)
+				    /* XXX: again, if the entire raster is not
+				     * positive, maybe, we should quit */
 				    coef = k == 0;
 				else
 				    coef = (log10(val) - log10(eps_min)) / (log10(dmax) - log10(eps_min));
@@ -697,6 +716,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 t_start=0;
                 while (log10(eps_min) + t_start < (dmax > 0 ? log10(dmax) : log10(eps_min) + 1.5 * t_step)){ /* only twice if dmax <= 0 */
 		    if (dmax <= 0) {
+			/* XXX: again, if the entire raster is not positive,
+			 * maybe, we should quit */
 			/* dmax and dmin only if dmax <= 0 */
 			val = t_start == 0 ? dmax : dmin;
 			coef = t_start == 0;
