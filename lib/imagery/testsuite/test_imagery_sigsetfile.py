@@ -28,6 +28,7 @@ from grass.lib.imagery import (
     I_NewSubSig,
     I_WriteSigSet,
     I_ReadSigSet,
+    I_SortSigSetByBandref,
     I_fopen_sigset_file_new,
     I_fopen_sigset_file_old,
     struct_Ref,
@@ -213,6 +214,333 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(Sn.ClassSig[0].SubSig[0].R[1][1], 21.21)
 
         # SigSet does not have free function
+
+
+class SortSigSetByBandrefTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        cls.mapset = Mapset().name
+        cls.map1 = tempname(10)
+        cls.bandref1 = "The_Doors"
+        cls.map2 = tempname(10)
+        cls.bandref2 = "The_Who"
+        cls.map3 = tempname(10)
+        cls.use_temp_region()
+        cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
+        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map1))
+        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map2))
+        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map3))
+        Rast_write_bandref(cls.map1, cls.bandref1)
+        Rast_write_bandref(cls.map2, cls.bandref2)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.map1)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.map2)
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.map3)
+
+    def test_symmetric_complete_difference(self):
+        # Prepare imagery group reference struct
+        R = struct_Ref()
+        I_init_group_ref(ctypes.byref(R))
+        ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 0)
+
+        # Prepare sigset struct
+        S = struct_SigSet()
+        I_InitSigSet(ctypes.byref(S), 1)
+        self.assertEqual(S.nbands, 1)
+        ClassSig = I_NewClassSig(ctypes.byref(S))
+        self.assertEqual(S.nclasses, 1)
+        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        self.assertEqual(S.ClassSig[0].nsubclasses, 1)
+        S.title = String("Signature title")
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
+        S.ClassSig[0].used = 1
+        S.ClassSig[0].classnum = 2
+        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].type = 1
+        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].means[0] = 42.42
+        S.ClassSig[0].SubSig[0].R[0][0] = 69.69
+
+        # This should result in two error strings in ret
+        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertTrue(bool(ret))
+        sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
+        ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
+        self.assertEqual(sig_err, "The_Troggs")
+        self.assertEqual(ref_err, "The_Doors")
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        # I_free_sigset is missing
+        I_free_group_ref(ctypes.byref(R))
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
+        self.libc.free(ret)
+
+    def test_asymmetric_complete_difference(self):
+        # Prepare imagery group reference struct
+        R = struct_Ref()
+        I_init_group_ref(ctypes.byref(R))
+        ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 0)
+        ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 1)
+
+        # Prepare signature struct
+        S = struct_SigSet()
+        I_InitSigSet(ctypes.byref(S), 1)
+        self.assertEqual(S.nbands, 1)
+        ClassSig = I_NewClassSig(ctypes.byref(S))
+        self.assertEqual(S.nclasses, 1)
+        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        self.assertEqual(S.ClassSig[0].nsubclasses, 1)
+        S.title = String("Signature title")
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
+        S.ClassSig[0].used = 1
+        S.ClassSig[0].classnum = 2
+        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].type = 1
+        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].means[0] = 42.42
+        S.ClassSig[0].SubSig[0].R[0][0] = 69.69
+
+        # This should result in two error strings in ret
+        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertTrue(bool(ret))
+        sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
+        ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
+        self.assertEqual(sig_err, "The_Troggs")
+        self.assertEqual(ref_err, "The_Doors,The_Who")
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        I_free_group_ref(ctypes.byref(R))
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
+        self.libc.free(ret)
+
+    def test_missing_bandref(self):
+        # Prepare imagery group reference struct
+        R = struct_Ref()
+        I_init_group_ref(ctypes.byref(R))
+        ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 0)
+        ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 1)
+        ret = I_add_file_to_group_ref(self.map3, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 2)
+
+        # Prepare signature struct
+        S = struct_SigSet()
+        I_InitSigSet(ctypes.byref(S), 10)
+        self.assertEqual(S.nbands, 10)
+        ClassSig = I_NewClassSig(ctypes.byref(S))
+        self.assertEqual(S.nclasses, 1)
+        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        self.assertEqual(S.ClassSig[0].nsubclasses, 1)
+        S.title = String("Signature title")
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.ClassSig[0].used = 1
+        S.ClassSig[0].classnum = 2
+        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].type = 1
+        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].means[0] = 42.42
+        S.ClassSig[0].SubSig[0].R[0][0] = 69.69
+
+        # This should result in two error strings in ret
+        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertTrue(bool(ret))
+        sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
+        ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
+        self.assertEqual(
+            sig_err,
+            "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>",
+        )
+        self.assertEqual(ref_err, "The_Doors,<band reference missing>")
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        I_free_group_ref(ctypes.byref(R))
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
+        self.libc.free(ret)
+
+    def test_single_complete_match(self):
+        # Prepare imagery group reference struct
+        R = struct_Ref()
+        I_init_group_ref(ctypes.byref(R))
+        ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 0)
+
+        # Prepare signature struct
+        S = struct_SigSet()
+        I_InitSigSet(ctypes.byref(S), 1)
+        self.assertEqual(S.nbands, 1)
+        ClassSig = I_NewClassSig(ctypes.byref(S))
+        self.assertEqual(S.nclasses, 1)
+        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        self.assertEqual(S.ClassSig[0].nsubclasses, 1)
+        S.title = String("Signature title")
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
+        S.ClassSig[0].used = 1
+        S.ClassSig[0].classnum = 2
+        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].type = 1
+        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].means[0] = 42.42
+        S.ClassSig[0].SubSig[0].R[0][0] = 69.69
+
+        # This should result in returning NULL
+        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        bandref = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref, "The_Doors")
+        self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
+        self.assertEqual(S.ClassSig[0].SubSig[0].means[0], 42.42)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[0][0], 69.69)
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        I_free_group_ref(ctypes.byref(R))
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
+        self.libc.free(ret)
+
+    def test_double_complete_match_reorder(self):
+        # Prepare imagery group reference struct
+        R = struct_Ref()
+        I_init_group_ref(ctypes.byref(R))
+        ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 0)
+        ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 1)
+
+        # Prepare signature struct
+        S = struct_SigSet()
+        I_InitSigSet(ctypes.byref(S), 2)
+        self.assertEqual(S.nbands, 2)
+        ClassSig = I_NewClassSig(ctypes.byref(S))
+        self.assertEqual(S.nclasses, 1)
+        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        self.assertEqual(S.ClassSig[0].nsubclasses, 1)
+        S.title = String("Signature title")
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+        S.ClassSig[0].used = 1
+        S.ClassSig[0].classnum = 2
+        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].type = 1
+        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].means[0] = 42.42
+        S.ClassSig[0].SubSig[0].means[1] = 24.24
+        S.ClassSig[0].SubSig[0].R[0][0] = 69.69
+        S.ClassSig[0].SubSig[0].R[0][1] = 96.96
+        S.ClassSig[0].SubSig[0].R[1][0] = -69.69
+        S.ClassSig[0].SubSig[0].R[1][1] = -96.96
+
+        # This should result in returning NULL
+        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        # Band references and sig items should be swapped
+        # Static items
+        self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
+        # Reordered items
+        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref1, "The_Doors")
+        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
+        self.assertEqual(bandref2, "The_Who")
+        self.assertEqual(S.ClassSig[0].SubSig[0].means[0], 24.24)
+        self.assertEqual(S.ClassSig[0].SubSig[0].means[1], 42.42)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[0][0], -96.96)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[0][1], -69.69)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[1][0], 96.96)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[1][1], 69.69)
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        I_free_group_ref(ctypes.byref(R))
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
+        self.libc.free(ret)
+
+    def test_double_complete_match_same_order(self):
+        # Prepare imagery group reference struct
+        R = struct_Ref()
+        I_init_group_ref(ctypes.byref(R))
+        ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 0)
+        ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 1)
+
+        # Prepare signature struct
+        S = struct_SigSet()
+        I_InitSigSet(ctypes.byref(S), 2)
+        self.assertEqual(S.nbands, 2)
+        ClassSig = I_NewClassSig(ctypes.byref(S))
+        self.assertEqual(S.nclasses, 1)
+        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        self.assertEqual(S.ClassSig[0].nsubclasses, 1)
+        S.title = String("Signature title")
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+        S.ClassSig[0].used = 1
+        S.ClassSig[0].classnum = 2
+        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].type = 1
+        S.ClassSig[0].SubSig[0].pi = 3.14
+        S.ClassSig[0].SubSig[0].means[0] = 42.42
+        S.ClassSig[0].SubSig[0].means[1] = 24.24
+        S.ClassSig[0].SubSig[0].R[0][0] = 69.69
+        S.ClassSig[0].SubSig[0].R[0][1] = 96.96
+        S.ClassSig[0].SubSig[0].R[1][0] = -69.69
+        S.ClassSig[0].SubSig[0].R[1][1] = -96.96
+
+        # This should result in returning NULL
+        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        # Band references and sig items should not be swapped
+        # Static items
+        self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
+        # Reordered items
+        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref1, "The_Who")
+        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
+        self.assertEqual(bandref2, "The_Doors")
+        self.assertEqual(S.ClassSig[0].SubSig[0].means[0], 42.42)
+        self.assertEqual(S.ClassSig[0].SubSig[0].means[1], 24.24)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[0][0], 69.69)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[0][1], 96.96)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[1][0], -69.69)
+        self.assertEqual(S.ClassSig[0].SubSig[0].R[1][1], -96.96)
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        I_free_group_ref(ctypes.byref(R))
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
+        self.libc.free(ret)
 
 
 if __name__ == "__main__":
