@@ -306,9 +306,19 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }
         }
 
-	/* if log scale is requested, but dmin is not positive, use eps as the
-	 * min value */
-	eps_min = log_sc && dmin <= 0 ? eps : dmin;
+	if (log_sc) {
+	    if (dmax <= 0)
+		G_fatal_error(_("No positive cell values found; "
+			        "logarithmic legend cannot be displayed"));
+	    if (dmin > 0)
+		eps_min = dmin;
+	    else {
+		G_warning(_("Non-positive cell values found; "
+			    "discarding colors for cells <= %g and "
+			    "assuming a positive min cell value of %g"), eps, eps);
+		eps_min = eps;
+	    }
+	}
 
         if (use_catlist) {
             for (i = 0; i < catlistCount; i++) {
