@@ -22,7 +22,7 @@ from grass.pygrass.gis import Mapset
 from grass.lib.gis import G_mapset_path
 from grass.lib.raster import Rast_write_bandref
 from grass.lib.imagery import (
-    struct_SigSet,
+    SigSet,
     I_InitSigSet,
     I_NewClassSig,
     I_NewSubSig,
@@ -31,7 +31,7 @@ from grass.lib.imagery import (
     I_SortSigSetByBandref,
     I_fopen_sigset_file_new,
     I_fopen_sigset_file_old,
-    struct_Ref,
+    Ref,
     I_init_group_ref,
     I_add_file_to_group_ref,
     I_free_group_ref,
@@ -64,12 +64,12 @@ class SigSetFileTestCase(TestCase):
         with a single band and fully qualified sigfile name"""
 
         # Create signature struct
-        So = struct_SigSet()
+        So = SigSet()
         I_InitSigSet(ctypes.byref(So), 1)
         self.assertEqual(So.nbands, 1)
-        ClassSig = I_NewClassSig(ctypes.byref(So))
+        I_NewClassSig(ctypes.byref(So))
         self.assertEqual(So.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(So), ctypes.byref(So.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(So), ctypes.byref(So.ClassSig[0]))
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
@@ -91,7 +91,7 @@ class SigSetFileTestCase(TestCase):
         self.libc.fclose(p_new_sigfile)
 
         # Read back from signatures file
-        Sn = struct_SigSet()
+        Sn = SigSet()
         fq_name = "{}@{}".format(self.sig_name, self.mapset_name)
         p_old_sigfile = I_fopen_sigset_file_old(fq_name)
         ret = I_ReadSigSet(p_old_sigfile, ctypes.byref(Sn))
@@ -117,12 +117,12 @@ class SigSetFileTestCase(TestCase):
         """Reading back should fail as band reference exceeds limit"""
 
         # Create signature struct
-        So = struct_SigSet()
+        So = SigSet()
         I_InitSigSet(ctypes.byref(So), 1)
         self.assertEqual(So.nbands, 1)
-        ClassSig = I_NewClassSig(ctypes.byref(So))
+        I_NewClassSig(ctypes.byref(So))
         self.assertEqual(So.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(So), ctypes.byref(So.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(So), ctypes.byref(So.ClassSig[0]))
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
@@ -144,7 +144,7 @@ class SigSetFileTestCase(TestCase):
         self.libc.fclose(p_new_sigfile)
 
         # Read back from signatures file
-        Sn = struct_SigSet()
+        Sn = SigSet()
         I_InitSigSet(ctypes.byref(So), 0)
         p_old_sigfile = I_fopen_sigset_file_old(self.sig_name)
         ret = I_ReadSigSet(p_old_sigfile, ctypes.byref(Sn))
@@ -156,12 +156,12 @@ class SigSetFileTestCase(TestCase):
         """Test writing and reading back sigset (v1) with two bands"""
 
         # Create signature struct
-        So = struct_SigSet()
+        So = SigSet()
         I_InitSigSet(ctypes.byref(So), 2)
         self.assertEqual(So.nbands, 2)
-        ClassSig = I_NewClassSig(ctypes.byref(So))
+        I_NewClassSig(ctypes.byref(So))
         self.assertEqual(So.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(So), ctypes.byref(So.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(So), ctypes.byref(So.ClassSig[0]))
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
@@ -188,7 +188,7 @@ class SigSetFileTestCase(TestCase):
         self.libc.fclose(p_new_sigfile)
 
         # Read back from signatures file
-        Sn = struct_SigSet()
+        Sn = SigSet()
         p_old_sigfile = I_fopen_sigset_file_old(self.sig_name)
         ret = I_ReadSigSet(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, 1)
@@ -243,18 +243,18 @@ class SortSigSetByBandrefTest(TestCase):
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
 
         # Prepare sigset struct
-        S = struct_SigSet()
+        S = SigSet()
         I_InitSigSet(ctypes.byref(S), 1)
         self.assertEqual(S.nbands, 1)
-        ClassSig = I_NewClassSig(ctypes.byref(S))
+        I_NewClassSig(ctypes.byref(S))
         self.assertEqual(S.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
         S.title = String("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
@@ -286,7 +286,7 @@ class SortSigSetByBandrefTest(TestCase):
 
     def test_asymmetric_complete_difference(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -294,12 +294,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(ret, 1)
 
         # Prepare signature struct
-        S = struct_SigSet()
+        S = SigSet()
         I_InitSigSet(ctypes.byref(S), 1)
         self.assertEqual(S.nbands, 1)
-        ClassSig = I_NewClassSig(ctypes.byref(S))
+        I_NewClassSig(ctypes.byref(S))
         self.assertEqual(S.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
         S.title = String("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
@@ -330,7 +330,7 @@ class SortSigSetByBandrefTest(TestCase):
 
     def test_missing_bandref(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -340,12 +340,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(ret, 2)
 
         # Prepare signature struct
-        S = struct_SigSet()
+        S = SigSet()
         I_InitSigSet(ctypes.byref(S), 10)
         self.assertEqual(S.nbands, 10)
-        ClassSig = I_NewClassSig(ctypes.byref(S))
+        I_NewClassSig(ctypes.byref(S))
         self.assertEqual(S.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
         S.title = String("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
@@ -383,18 +383,18 @@ class SortSigSetByBandrefTest(TestCase):
 
     def test_single_complete_match(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
 
         # Prepare signature struct
-        S = struct_SigSet()
+        S = SigSet()
         I_InitSigSet(ctypes.byref(S), 1)
         self.assertEqual(S.nbands, 1)
-        ClassSig = I_NewClassSig(ctypes.byref(S))
+        I_NewClassSig(ctypes.byref(S))
         self.assertEqual(S.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
         S.title = String("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
@@ -426,7 +426,7 @@ class SortSigSetByBandrefTest(TestCase):
 
     def test_double_complete_match_reorder(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -434,12 +434,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(ret, 1)
 
         # Prepare signature struct
-        S = struct_SigSet()
+        S = SigSet()
         I_InitSigSet(ctypes.byref(S), 2)
         self.assertEqual(S.nbands, 2)
-        ClassSig = I_NewClassSig(ctypes.byref(S))
+        I_NewClassSig(ctypes.byref(S))
         self.assertEqual(S.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
         S.title = String("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
@@ -485,7 +485,7 @@ class SortSigSetByBandrefTest(TestCase):
 
     def test_double_complete_match_same_order(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -493,12 +493,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(ret, 1)
 
         # Prepare signature struct
-        S = struct_SigSet()
+        S = SigSet()
         I_InitSigSet(ctypes.byref(S), 2)
         self.assertEqual(S.nbands, 2)
-        ClassSig = I_NewClassSig(ctypes.byref(S))
+        I_NewClassSig(ctypes.byref(S))
         self.assertEqual(S.nclasses, 1)
-        SubSig = I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
+        I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
         S.title = String("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")

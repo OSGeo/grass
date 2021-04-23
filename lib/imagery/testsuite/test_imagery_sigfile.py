@@ -22,8 +22,8 @@ from grass.pygrass.gis import Mapset
 from grass.lib.gis import G_mapset_path
 from grass.lib.raster import Rast_write_bandref
 from grass.lib.imagery import (
-    struct_Signature,
-    struct_Ref,
+    Signature,
+    Ref,
     I_init_signatures,
     I_new_signature,
     I_fopen_signature_file_new,
@@ -63,7 +63,7 @@ class SignatureFileTestCase(TestCase):
         wiht a single band"""
 
         # Create signature struct
-        So = struct_Signature()
+        So = Signature()
         I_init_signatures(ctypes.byref(So), 1)
         self.assertEqual(So.nbands, 1)
         sig_count = I_new_signature(ctypes.byref(So))
@@ -87,7 +87,7 @@ class SignatureFileTestCase(TestCase):
         self.libc.fclose(p_new_sigfile)
 
         # Read back from signatures file
-        Sn = struct_Signature()
+        Sn = Signature()
         fq_name = "{}@{}".format(self.sig_name, self.mapset_name)
         p_old_sigfile = I_fopen_signature_file_old(fq_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
@@ -115,7 +115,7 @@ class SignatureFileTestCase(TestCase):
         single band reference exceeding maximum length"""
 
         # Create signature struct
-        So = struct_Signature()
+        So = Signature()
         I_init_signatures(ctypes.byref(So), 1)
         self.assertEqual(So.nbands, 1)
         sig_count = I_new_signature(ctypes.byref(So))
@@ -140,7 +140,7 @@ class SignatureFileTestCase(TestCase):
         self.libc.fclose(p_new_sigfile)
 
         # Read back from signatures file
-        Sn = struct_Signature()
+        Sn = Signature()
         p_old_sigfile = I_fopen_signature_file_old(self.sig_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, -1)
@@ -153,7 +153,7 @@ class SignatureFileTestCase(TestCase):
         """Test writing and reading back signature (v1) with two bands"""
 
         # Create signature struct
-        So = struct_Signature()
+        So = Signature()
         I_init_signatures(ctypes.byref(So), 2)
         self.assertEqual(So.nbands, 2)
         sig_count = I_new_signature(ctypes.byref(So))
@@ -192,7 +192,7 @@ class SignatureFileTestCase(TestCase):
         self.libc.fclose(p_new_sigfile)
 
         # Read back from signatures file
-        Sn = struct_Signature()
+        Sn = Signature()
         p_old_sigfile = I_fopen_signature_file_old(self.sig_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, 1)
@@ -257,13 +257,13 @@ class SortSignaturesByBandrefTest(TestCase):
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
 
         # Prepare signature struct
-        S = struct_Signature()
+        S = Signature()
         I_init_signatures(ctypes.byref(S), 1)
         self.assertEqual(S.nbands, 1)
         sig_count = I_new_signature(ctypes.byref(S))
@@ -298,7 +298,7 @@ class SortSignaturesByBandrefTest(TestCase):
 
     def test_asymmetric_complete_difference(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -306,7 +306,7 @@ class SortSignaturesByBandrefTest(TestCase):
         self.assertEqual(ret, 1)
 
         # Prepare signature struct
-        S = struct_Signature()
+        S = Signature()
         I_init_signatures(ctypes.byref(S), 1)
         self.assertEqual(S.nbands, 1)
         sig_count = I_new_signature(ctypes.byref(S))
@@ -341,7 +341,7 @@ class SortSignaturesByBandrefTest(TestCase):
 
     def test_missing_bandref(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -351,7 +351,7 @@ class SortSignaturesByBandrefTest(TestCase):
         self.assertEqual(ret, 2)
 
         # Prepare signature struct
-        S = struct_Signature()
+        S = Signature()
         I_init_signatures(ctypes.byref(S), 10)
         self.assertEqual(S.nbands, 10)
         sig_count = I_new_signature(ctypes.byref(S))
@@ -393,13 +393,13 @@ class SortSignaturesByBandrefTest(TestCase):
 
     def test_single_complete_match(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
 
         # Prepare signature struct
-        S = struct_Signature()
+        S = Signature()
         I_init_signatures(ctypes.byref(S), 1)
         self.assertEqual(S.nbands, 1)
         sig_count = I_new_signature(ctypes.byref(S))
@@ -434,7 +434,7 @@ class SortSignaturesByBandrefTest(TestCase):
 
     def test_double_complete_match_reorder(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -442,7 +442,7 @@ class SortSignaturesByBandrefTest(TestCase):
         self.assertEqual(ret, 1)
 
         # Prepare signature struct
-        S = struct_Signature()
+        S = Signature()
         I_init_signatures(ctypes.byref(S), 2)
         self.assertEqual(S.nbands, 2)
         sig_count = I_new_signature(ctypes.byref(S))
@@ -508,7 +508,7 @@ class SortSignaturesByBandrefTest(TestCase):
 
     def test_double_complete_match_same_order(self):
         # Prepare imagery group reference struct
-        R = struct_Ref()
+        R = Ref()
         I_init_group_ref(ctypes.byref(R))
         ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
         self.assertEqual(ret, 0)
@@ -516,7 +516,7 @@ class SortSignaturesByBandrefTest(TestCase):
         self.assertEqual(ret, 1)
 
         # Prepare signature struct
-        S = struct_Signature()
+        S = Signature()
         I_init_signatures(ctypes.byref(S), 2)
         self.assertEqual(S.nbands, 2)
         sig_count = I_new_signature(ctypes.byref(S))
