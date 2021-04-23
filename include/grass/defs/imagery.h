@@ -94,7 +94,7 @@ void I_iclass_free_statistics(IClass_statistics *);
 /* iclass_signatures.c */
 int I_iclass_init_signatures(struct Signature *, struct Ref *);
 void I_iclass_add_signature(struct Signature *, IClass_statistics *);
-int I_iclass_write_signatures(struct Signature *, const char *, const char *, const char *);
+int I_iclass_write_signatures(struct Signature *, const char *);
 
 /* list_gp.c */
 int I_list_group(const char *, const struct Ref *, FILE *);
