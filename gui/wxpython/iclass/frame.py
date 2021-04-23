@@ -1131,7 +1131,17 @@ class IClassMapFrame(DoubleMapFrame):
             return False
 
         I_free_signatures(self.signatures)
-        I_iclass_init_signatures(self.signatures, self.refer)
+        ret = I_iclass_init_signatures(self.signatures, self.refer)
+        if not ret:
+            GMessage(
+                parent=self,
+                message=_(
+                    "There was an error initializing signatures. "
+                    "Check GUI console for any error messages."
+                ),
+            )
+            I_free_signatures(self.signatures)
+            return False
 
         # why create copy
         # cats = self.statisticsList[:]
@@ -1215,9 +1225,16 @@ class IClassMapFrame(DoubleMapFrame):
                 qdlg.Destroy()
                 return
 
-        dlg = IClassSignatureFileDialog(
-            self, group=self.g["group"], subgroup=self.g["subgroup"], file=self.sigFile
-        )
+        if not self.signatures.contents.nsigs:
+            GMessage(
+                parent=self,
+                message=_(
+                    "Signatures are not valid. Recalculate them and then try again."
+                ),
+            )
+            return
+
+        dlg = IClassSignatureFileDialog(self, file=self.sigFile)
 
         if dlg.ShowModal() == wx.ID_OK:
             if os.path.exists(dlg.GetFileName(fullPath=True)):
@@ -1237,9 +1254,7 @@ class IClassMapFrame(DoubleMapFrame):
                     qdlg.Destroy()
                     return
             self.sigFile = dlg.GetFileName()
-            self.WriteSignatures(
-                self.signatures, self.g["group"], self.g["subgroup"], self.sigFile
-            )
+            self.WriteSignatures(self.signatures, self.sigFile)
 
         dlg.Destroy()
 
@@ -1262,14 +1277,13 @@ class IClassMapFrame(DoubleMapFrame):
         self.refer = pointer(refer_obj)
         I_init_group_ref(self.refer)  # must be freed on exit
 
-    def WriteSignatures(self, signatures, group, subgroup, filename):
+    def WriteSignatures(self, signatures, filename):
         """Writes current signatures to signature file
 
         :param signatures: signature (c structure)
-        :param group: imagery group
         :param filename: signature file name
         """
-        I_iclass_write_signatures(signatures, group, subgroup, filename)
+        I_iclass_write_signatures(signatures, filename)
 
     def CheckInput(self, group, vector):
         """Check if input is valid"""
@@ -1423,7 +1437,7 @@ class MapManager:
         :param str resultsLayer: True if layer is temp. raster showing the results of computation
         """
         if resultsLayer and name in [
-            layer.GetName() for layer in self.map.GetListOfLayers(name=name)
+            l.GetName() for l in self.map.GetListOfLayers(name=name)
         ]:
             self.frame.Render(self.mapWindow)
             return

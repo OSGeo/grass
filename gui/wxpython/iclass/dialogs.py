@@ -599,8 +599,6 @@ class IClassSignatureFileDialog(wx.Dialog):
     def __init__(
         self,
         parent,
-        group,
-        subgroup,
         file=None,
         title=_("Save signature file"),
         id=wx.ID_ANY,
@@ -610,7 +608,6 @@ class IClassSignatureFileDialog(wx.Dialog):
         """Dialog for saving signature file
 
         :param parent: window
-        :param group: group name
         :param file: signature file name
         :param title: window title
         """
@@ -622,16 +619,9 @@ class IClassSignatureFileDialog(wx.Dialog):
 
         # inconsistent group and subgroup name
         # path:
-        # grassdata/nc_spm_08/landsat/group/test_group/subgroup/test_group/sig/sigFile
+        # grassdata/nc_spm_08/landsat/signatures/sig/sigFile
         self.baseFilePath = os.path.join(
-            env["GISDBASE"],
-            env["LOCATION_NAME"],
-            env["MAPSET"],
-            "group",
-            group,
-            "subgroup",
-            subgroup,
-            "sig",
+            env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "signatures", "sig"
         )
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
