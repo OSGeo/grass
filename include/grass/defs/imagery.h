@@ -170,6 +170,7 @@ const char *I_GetSigTitle(const struct SigSet *);
 int I_SetClassTitle(struct ClassSig *, const char *);
 const char *I_GetClassTitle(const struct ClassSig *);
 int I_WriteSigSet(FILE *, const struct SigSet *);
+char **I_SortSigSetByBandref(struct SigSet *, const struct Ref *);
 
 /* sigsetfile.c */
 FILE *I_fopen_sigset_file_new(const char *);
