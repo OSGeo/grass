@@ -187,6 +187,12 @@ g.region raster=basin_50K -p
 r.out.gdal input=basin_50K output=basin_50K.tif
 </pre></div>
 
+<h3>Export the integer raster landclass96 map to Cloud Optimized GeoTIFF format</h3>
+
+<div class="code"><pre>
+g.region -p raster=landclass96
+r.out.gdal -fmt input=landclass96 output=landclass96.tif format=COG overviews=4
+</pre></div>
 
 <h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software</h3>
 
