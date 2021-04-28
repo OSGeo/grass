@@ -364,6 +364,8 @@ class AnimationController(wx.EvtHandler):
                     continue
                 anim = [anim for anim in self.animationData if anim.windowIndex == i][0]
                 regions = anim.GetRegions()
+                if anim.viewMode == "3d":
+                    regions = [None] * len(regions)
                 self.animations[i].SetFrames(
                     [
                         HashCmds(cmdList, region)
@@ -378,6 +380,8 @@ class AnimationController(wx.EvtHandler):
                     continue
                 anim = [anim for anim in self.animationData if anim.windowIndex == i][0]
                 regions = anim.GetRegions()
+                if anim.viewMode == "3d":
+                    regions = [None] * len(regions)
                 identifiers = sampleCmdMatrixAndCreateNames(
                     anim.cmdMatrix, mapNamesDict[anim.firstStdsNameType[0]], regions
                 )
