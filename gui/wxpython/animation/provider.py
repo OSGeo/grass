@@ -349,6 +349,8 @@ class BitmapRenderer:
 
         filteredCmdList = []
         for cmd, region in zip(cmdList, regions):
+            if cmd[0] == "m.nviz.image":
+                region = None
             filename = GetFileFromCmd(self._tempDir, cmd, region)
             if not force and os.path.exists(filename) and self._mapFilesPool.GetSize(
                     HashCmd(cmd, region)) == (self.imageWidth, self.imageHeight):
@@ -721,7 +723,7 @@ class MapFilesPool(DictRefCounter):
         """
         Debug.msg(4, 'MapFilesPool.Clear')
 
-        for key in self.dictionary.keys():
+        for key in list(self.dictionary.keys()):
             if self.referenceCount[key] <= 0:
                 name, ext = os.path.splitext(self.dictionary[key])
                 os.remove(self.dictionary[key])
