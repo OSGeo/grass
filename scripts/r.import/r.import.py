@@ -8,7 +8,7 @@
 #
 # PURPOSE:      Import and reproject on the fly
 #
-# COPYRIGHT:    (C) 2015-2016 GRASS development team
+# COPYRIGHT:    (C) 2015-2021 GRASS development team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that

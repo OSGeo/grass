@@ -38,7 +38,7 @@ For latlong locations, the resolution might be set to arc seconds, e.g. 1, 3, 7.
 
 When reprojecting a map to a new spatial reference system, the projected
 data is resampled with one of four different methods: nearest neighbor,
-bilinear, bicubic iterpolation or lanczos.
+bilinear, bicubic interpolation or lanczos.
 
 <p>
 In the following, common use cases are:
@@ -51,17 +51,9 @@ than <b>nearest</b>. <b>bilinear</b> is recommended when reprojecting a
 DEM for hydrological analysis or for surfaces where overshoots must be
 avoided, e.g. precipitation should not become negative.
 <p>
-<b>bilinear_f</b> works like <b>bilinear</b> with the difference, that for
-each valid input pixel, even if adjacent to NULL pixels or edge pixels,
-a valid output pixel is produced.
-<p>
 <b>bicubic</b> produces smoother output than <b>bilinear</b>, at
 the cost of overshoots. Here, valid pixels that are adjacent to NULL pixels
 or edge pixels are set to NULL.
-<p>
-<b>bicubic_f</b> works like <b>bicubic</b> with the difference, that for
-each valid input pixel, even if adjacent to NULL pixels or edge pixels,
-a valid output pixel is produced.
 <p>
 <b>lanczos</b> produces the smoothest output of all methods and
 preserves contrast best. <b>lanczos</b> is recommended for imagery.
@@ -69,10 +61,15 @@ Both <b>bicubic</b> and <b>lanczos</b> preserve linear features. With
 <b>nearest</b> or <b>bilinear</b>, linear features can become zigzag
 features after reprojection.
 <p>
-<b>lanczos_f</b> works like <b>lanczoz</b> with the difference, that for
-each valid input pixel, even if adjacent to NULL pixels or edge pixels,
-a valid output pixel is produced.
-
+In the bilinear, bicubic and lanczos methods, if any of the surrounding
+cells used to interpolate the new cell value are NULL, the resulting
+cell will be NULL, even if the nearest cell is not NULL. This will
+cause some thinning along NULL borders, such as the coasts of land
+areas in a DEM. The bilinear_f, bicubic_f and lanczos_f interpolation
+methods can be used if thinning along NULL edges is not desired.
+These methods &quot;fall back&quot; to simpler interpolation methods
+along NULL borders.  That is, from lanczos to bicubic to bilinear to
+nearest.
 <p>
 For explanation of the <b>-l</b> flag, please refer to the
 <a href="r.in.gdal.html">r.in.gdal</a> manual.
