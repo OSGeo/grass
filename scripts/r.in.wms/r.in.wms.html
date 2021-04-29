@@ -144,10 +144,10 @@ r.in.wms url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/publ
          maxcols=3400 maxrows=3400
 r.info jrc_copernicus_core003_mosaik
 
-# Alternatively, using WMS_GDAL driver with BIGTIFF enabled
+# Alternatively, using WMS_GDAL driver with BIGTIFF and compression enabled
 r.in.wms url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?" \
          layer="OI.Mosaic.NaturalColor.Feathering" output="jrc_copernicus_core003_mosaik2" \
-         maxcols=3400 maxrows=3400 driver=WMS_GDAL gdal_createopt="BIGTIFF=YES"
+         maxcols=3400 maxrows=3400 driver=WMS_GDAL gdal_createopt="BIGTIFF=YES,COMPRESS=DEFLATE"
 r.info jrc_copernicus_core003_mosaik2
 
 </pre></div>
