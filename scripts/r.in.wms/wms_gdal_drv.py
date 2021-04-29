@@ -5,7 +5,7 @@ List of classes:
  - wms_drv::NullDevice
  - wms_drv::WMSGdalDrv
 
-(C) 2012 by the GRASS Development Team
+(C) 2012-2021 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -35,10 +35,11 @@ class NullDevice:
 
 
 class WMSGdalDrv(WMSBase):
-    def __init__(self):
+    def __init__(self, createopt):
         super(WMSGdalDrv, self).__init__()
         self.proxy = None
         self.proxy_user_pw = None
+        self.createopt = createopt
 
     def setProxy(self, proxy, proxy_user_pw=None):
         """Set the HTTP proxy and its user and password
@@ -183,7 +184,11 @@ class WMSGdalDrv(WMSBase):
 
         self._debug("_download", "calling GDAL CreateCopy...")
 
-        temp_map_dataset = driver.CreateCopy(temp_map, wms_dataset, 0)
+        if self.createopt is None:
+            temp_map_dataset = driver.CreateCopy(temp_map, wms_dataset, 0)
+        else:
+            self._debug("_download", "Using GDAL createopt <%s>" % str(self.createopt))
+            temp_map_dataset = driver.CreateCopy(temp_map, wms_dataset, 0, self.createopt)
 
         if temp_map_dataset is None:
             grass.fatal(_("Incorrect WMS query"))
