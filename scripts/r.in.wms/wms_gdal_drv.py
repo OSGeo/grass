@@ -188,7 +188,9 @@ class WMSGdalDrv(WMSBase):
             temp_map_dataset = driver.CreateCopy(temp_map, wms_dataset, 0)
         else:
             self._debug("_download", "Using GDAL createopt <%s>" % str(self.createopt))
-            temp_map_dataset = driver.CreateCopy(temp_map, wms_dataset, 0, self.createopt)
+            temp_map_dataset = driver.CreateCopy(
+                temp_map, wms_dataset, 0, self.createopt
+            )
 
         if temp_map_dataset is None:
             grass.fatal(_("Incorrect WMS query"))
