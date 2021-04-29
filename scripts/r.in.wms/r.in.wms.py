@@ -6,7 +6,7 @@ AUTHOR(S): Stepan Turek <stepan.turek AT seznam.cz>
 
 PURPOSE:   Downloads and imports data from WMS/WMTS/NASA OnEarth server.
 
-COPYRIGHT: (C) 2012 Stepan Turek, and by the GRASS Development Team
+COPYRIGHT: (C) 2012-2021 Stepan Turek, and by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -131,6 +131,16 @@ This program is free software under the GNU General Public License
 #%end
 
 #%option
+#% key: gdal_createopt
+#% type: string
+#% required: no
+#% multiple: yes
+#% label: GDAL creation option(s) to pass to the output format driver
+#% description: In the form of "NAME=VALUE", separate multiple entries with a comma
+#% guisection: Request
+#%end
+
+#%option
 #% key: region
 #% type: string
 #% description: Request data for this named region instead of the current region bounds
@@ -194,6 +204,7 @@ This program is free software under the GNU General Public License
 #% exclusive: capfile_output, capfile
 #%end
 
+
 import os
 import sys
 sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms'))
@@ -235,12 +246,18 @@ def main():
     elif 'GDAL' in options['driver']:
         grass.debug("Using GDAL WMS driver")
         from wms_gdal_drv import WMSGdalDrv
-        wms = WMSGdalDrv()
+
+        if options['gdal_createopt']:
+            create_options = options['gdal_createopt'].split(',')
+        else:
+            create_options = None
+        wms = WMSGdalDrv(create_options)
 
     if flags['c']:
         wms.GetCapabilities(options)
     else:
         from wms_base import GRASSImporter
+
         # set proxy
         if options['proxy'] and options['proxy_user_pw']:
             wms.setProxy(options['proxy'], options['proxy_user_pw'])
