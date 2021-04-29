@@ -130,15 +130,15 @@ This program is free software under the GNU General Public License
 # % required: no
 # %end
 
-#%option
-#% key: gdal_createopt
-#% type: string
-#% required: no
-#% multiple: yes
-#% label: GDAL creation option(s) to pass to the output format driver
-#% description: In the form of "NAME=VALUE", separate multiple entries with a comma
-#% guisection: Request
-#%end
+# %option
+# % key: gdal_createopt
+# % type: string
+# % required: no
+# % multiple: yes
+# % label: GDAL creation option(s) to pass to the output format driver
+# % description: In the form of "NAME=VALUE", separate multiple entries with a comma
+# % guisection: Request
+# %end
 
 # %option
 # % key: region
