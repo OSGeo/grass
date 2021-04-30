@@ -8,6 +8,10 @@ corresponding PROJ_INFO files). The projection information is taken from the
 current PROJ_INFO files, as set and viewed with
 <em><a href="g.proj.html">g.proj</a></em>.
 
+<p>
+For an introduction to map projections (with PROJ),see the manual page of
+<a href="r.proj.html">r.proj</a>.
+
 <h2>NOTES</h2>
 
 If <b>output</b> is not specified it is set to be the same as input map
@@ -49,7 +53,9 @@ substantially deformed (straight lines become curves, squares become
 trapezoids, etc). The densification of linear features can help to avoid 
 topological errors.
 
-<h2>EXAMPLES</h2>
+<h2>EXAMPLE</h2>
+
+Reprojection of a vector map from another location and mapset into the current mapset:
 
 <div class="code"><pre>
 v.proj in=mymap location=latlong mapset=user1
@@ -77,7 +83,6 @@ v.proj in=mymap location=latlong mapset=user1
   <li> <a href="http://www.mapref.org">MapRef -
       The Collection of Map Projections and Reference Systems for Europe</a> 
   <li> <a href="http://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a>
-  <li> <a href="http://www.progonos.com/furuti/MapProj/Normal/TOC/cartTOC.html">Cartographical Map Projections</a> by Carlos A. Furuti
 </ul>
 
 <h2>SEE ALSO</h2>
