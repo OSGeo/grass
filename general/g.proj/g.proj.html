@@ -2,7 +2,13 @@
 
 <p><em>g.proj</em> provides a means of converting a co-ordinate system
 description (i.e. projection information) between various formats.
-If compiled without <a href="https://www.gdal.org/">OGR</a> present, the
+
+<p>
+For an introduction to map projections (with PROJ),see the manual page of
+<a href="r.proj.html">r.proj</a>.
+
+<p>
+If compiled without <a href="https://gdal.org/">OGR</a> present, the
 functionality is limited to:
 <ul>
 <li>Reporting the projection information for the current location, 
@@ -217,8 +223,8 @@ ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
 <h2>REFERENCES</h2>
 
 <a href="https://proj.org">PROJ</a>: Projection/datum support library<br>
-<a href="https://www.gdal.org">GDAL raster library and toolset</a><br>
-<a href="https://www.gdal.org/">OGR vector library and toolset</a>
+<a href="https://gdal.org">GDAL raster library and toolset</a><br>
+<a href="https://gdal.org/">OGR vector library and toolset</a>
 
 <p><b>Further reading</b>
 <ul>
