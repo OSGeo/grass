@@ -346,6 +346,8 @@ class DataCatalogTree(TreeView):
         self.current_location_node = None
         self.current_mapset_node = None
         self.UpdateCurrentDbLocationMapsetNode()
+        self._lastWatchdogUpdate = gscript.clock()
+        self._updateMapsetWhenIdle = None
 
         # Get databases from settings
         # add current to settings if it's not included
@@ -381,8 +383,10 @@ class DataCatalogTree(TreeView):
         )
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
-        self.Bind(EVT_UPDATE_MAPSET, self.OnWatchdogMapsetReload)
-
+        self.Bind(
+            EVT_UPDATE_MAPSET, lambda evt: self._onWatchdogMapsetReload(evt.src_path)
+        )
+        self.Bind(wx.EVT_IDLE, self._onUpdateMapsetWhenIdle)
         self.observer = None
 
     def _resetSelectVariables(self):
@@ -723,9 +727,24 @@ class DataCatalogTree(TreeView):
             watchdog_used = False
             return
 
-    def OnWatchdogMapsetReload(self, event):
-        """Reload mapset node associated with watchdog event"""
-        mapset_path = os.path.dirname(os.path.dirname(os.path.abspath(event.src_path)))
+    def _onUpdateMapsetWhenIdle(self, event):
+        """When idle, check if current mapset should be reloaded
+        because there are skipped update events."""
+        if self._updateMapsetWhenIdle:
+            self._lastWatchdogUpdate = 0
+            self._onWatchdogMapsetReload(self._updateMapsetWhenIdle)
+            self._updateMapsetWhenIdle = None
+
+    def _onWatchdogMapsetReload(self, event_path):
+        """Reload mapset node associated with watchdog event.
+        Check if events come to quickly and skip them."""
+        time = gscript.clock()
+        time_diff = time - self._lastWatchdogUpdate
+        self._lastWatchdogUpdate = time
+        if (time_diff) < 0.5:
+            self._updateMapsetWhenIdle = event_path
+            return
+        mapset_path = os.path.dirname(os.path.dirname(os.path.abspath(event_path)))
         location_path = os.path.dirname(os.path.abspath(mapset_path))
         db = os.path.dirname(os.path.abspath(location_path))
         node = self.GetDbNode(
