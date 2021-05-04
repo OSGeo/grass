@@ -218,8 +218,14 @@ r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
 <h3>Export a large raster map in LZW compressed (Big) GeoTIFF format</h3>
 
 <div class="code"><pre>
+# integer map export
+g.region raster=zipcodes -p
+# Using PREDICTOR 2 for integer maps can further reduce file size
+r.out.gdal in=zipcodes output=zipcodes.tif createopt="COMPRESS=LZW,PREDICTOR=2,BIGTIFF=YES"
+
+# floating point map export
 g.region raster=elevation -p
-# Using PREDICTOR 2 or 3 (the latter mainly for floating point data) can further reduce file size
+# Using PREDICTOR 3 for floating point data can further reduce file size
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=LZW,PREDICTOR=3,BIGTIFF=YES"
 </pre></div>
 
@@ -230,7 +236,6 @@ g.region raster=elevation -p
 # overviews=5 corresponds to 'gdaladdo ... 2 4 8 16 32'
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE" overviews=5
 </pre></div>
-
 
 <h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software</h3>
 
