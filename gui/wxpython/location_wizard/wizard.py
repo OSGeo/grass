@@ -2700,7 +2700,6 @@ class LocationWizard(wx.Object):
         else:
             datumdesc = ''
         datumparams = self.datumpage.datumparams
-        ellipse = self.ellipsepage.ellipse
         ellipsedesc = self.ellipsepage.ellipsedesc
         ellipseparams = self.ellipsepage.ellipseparams
 
@@ -2710,8 +2709,6 @@ class LocationWizard(wx.Object):
         proj4string = '%s %s' % (proj, proj4params)
 
         # set ellipsoid parameters
-        if ellipse != '':
-            proj4string = '%s +ellps=%s' % (proj4string, ellipse)
         for item in ellipseparams:
             if item[:4] == 'f=1/':
                 item = ' +rf=' + item[4:]
