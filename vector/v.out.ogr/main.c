@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
 	if (!inwkt) {
 	    inwkt = G_get_projwkt();
 	}
-	if (inwkt) {
+	if (inwkt && *inwkt) {
 	    Ogr_projection = OSRNewSpatialReference(inwkt);
 	}
 #endif
