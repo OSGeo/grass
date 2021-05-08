@@ -1,3 +1,24 @@
+# Introduction
+
+GRASS GIS is written in more than one programming language. While most
+of the source code is written in C, about 30% is written in Python. A
+compiler is needed to convert the C/C++ source code into executable
+files ("binaries"). In contrast, Python is an interpreted language that
+can only be executed with Python software.
+
+Now, in order to create an installable binary package from a source
+code package, the so-called "compilation step" is required. While the
+source code consists of thousands of C and Python files (plus HTML
+documentation), the included "makefiles" tell the build system to
+generate binaries from the source code in the correct order, render the
+manual pages, etc.
+
+The way to install the compiler tools and Python depends on the operating
+system. To make this easier, we have collected copy-paste instructions
+for most operating systems in our wiki:
+
+[Compile and install instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
+
 # Contributing
 
 There is more than one way of contributing to GRASS GIS.
