@@ -200,7 +200,11 @@ COPY --from=build /usr/local/grass* /usr/local/grass/
 RUN apk add curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py pip==20.0.2 && rm get-pip.py
 
 # install external Python API
+<<<<<<< HEAD:docker/alpine/Dockerfile
 RUN pip3 install --upgrade pip six grass-session --ignore-installed six
+=======
+RUN pip3 install --upgrade grass-session
+>>>>>>> da389cd55e (Dockerfile_alpine: fix broken pip six installation (#1568)):docker/alpine/Dockerfile_alpine
 
 RUN ln -s /usr/local/grass /usr/local/grass7
 RUN ln -s /usr/local/grass `grass --config path`
