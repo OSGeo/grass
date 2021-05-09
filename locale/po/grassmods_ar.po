@@ -61844,11 +61844,6 @@ msgstr "طبقتين يجب تحديدهم"
 msgid "Creates raster maps from ASCII polygon/line/point data files."
 msgstr "انشاء خرائط راسترية من ملفات بيانية متعدد الأضلاعخط فى الدليل الحالى"
 
-#: ../raster/r.in.poly/main.c:41
-#, fuzzy
-msgid "Name of input file; or \"-\" to read from stdin"
-msgstr "الملف  الأسكى الراسترى المطلوب ادخاله"
-
 #: ../raster/r.in.poly/main.c:60
 #, fuzzy
 msgid "Integer representing NULL value data cell"

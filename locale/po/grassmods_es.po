@@ -56305,10 +56305,6 @@ msgstr "La distancia debe ser >= 0.0"
 msgid "Creates raster maps from ASCII polygon/line/point data files."
 msgstr "Crea mapas ráster a partir de archivos de datos de polígonos/líneas/puntos ASCII."
 
-#: ../raster/r.in.poly/main.c:41
-msgid "Name of input file; or \"-\" to read from stdin"
-msgstr "Nombre del archivo de entrada; o  \"-\" a leer de stdin"
-
 #: ../raster/r.in.poly/main.c:60
 msgid "Integer representing NULL value data cell"
 msgstr "Entero que representa datos de valores NULL"
