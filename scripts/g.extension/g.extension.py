@@ -200,7 +200,7 @@ def replace_shebang_win(python_file):
     cur_dir = os.path.dirname(python_file)
     tmp_name = os.path.join(cur_dir, gscript.tempname(12))
 
-    with codecs.open(file, "r", encoding="utf8") as in_file, codecs.open(
+    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
         tmp_name, "w", encoding="utf8"
     ) as out_file:
 
