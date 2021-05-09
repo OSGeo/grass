@@ -62169,11 +62169,6 @@ msgstr "navedena morata biti 2 sloja"
 msgid "Creates raster maps from ASCII polygon/line/point data files."
 msgstr "Ustvari rastrski sloj iz ascii poligon/linija datotek v trenutni mapi."
 
-#: ../raster/r.in.poly/main.c:41
-#, fuzzy
-msgid "Name of input file; or \"-\" to read from stdin"
-msgstr "Ne najdem vhodne datoteke %s\n"
-
 #: ../raster/r.in.poly/main.c:60
 #, fuzzy
 msgid "Integer representing NULL value data cell"

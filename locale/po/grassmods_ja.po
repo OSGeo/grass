@@ -55713,10 +55713,6 @@ msgstr "レイヤー' は > 0 でなければなりません"
 msgid "Creates raster maps from ASCII polygon/line/point data files."
 msgstr "ASCII ポリゴン/ライン/ポイントデータファイルからラスターマップを作成"
 
-#: ../raster/r.in.poly/main.c:41
-msgid "Name of input file; or \"-\" to read from stdin"
-msgstr "入力するファイル名;（\"-\" で標準入力から読込） "
-
 #: ../raster/r.in.poly/main.c:60
 msgid "Integer representing NULL value data cell"
 msgstr ""
