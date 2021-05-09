@@ -47835,8 +47835,8 @@ msgstr "Mostrar iformación extendida de metadatos en estilo de script de consol
 
 #: ../raster/r.info/main.c:105
 #, c-format
-msgid "Flags -%c and -%c/%c/%c are mutually exclusive"
-msgstr "Las baderas -%c y -%c/%c/%c son mutuamente excluyentes"
+msgid "Flags -%c and -%c/%c/%c/%c are mutually exclusive"
+msgstr "Las baderas -%c y -%c/%c/%c/%c son mutuamente excluyentes"
 
 #: ../raster/r.neighbors/main.c:175
 msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
