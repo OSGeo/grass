@@ -896,11 +896,18 @@ def _parse_opts(lines):
         if not line:
             break
         try:
-            [var, val] = line.split(b"=", 1)
-            [var, val] = [decode(var), decode(val)]
-        except:
-            raise SyntaxError("invalid output from g.parser: %s" % line)
-
+            var, val = line.split(b"=", 1)
+        except ValueError:
+            raise SyntaxError("invalid output from g.parser: {}".format(line))
+        try:
+            var = decode(var)
+            val = decode(val)
+        except UnicodeError as error:
+            raise SyntaxError(
+                "invalid output from g.parser ({error}): {line}".format(
+                    error=error, line=line
+                )
+            )
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
@@ -908,8 +915,9 @@ def _parse_opts(lines):
         elif var in ["GRASS_OVERWRITE", "GRASS_VERBOSE"]:
             os.environ[var] = val
         else:
-            raise SyntaxError("invalid output from g.parser: %s" % line)
-
+            raise SyntaxError(
+                "unexpected output variable from g.parser: {}".format(line)
+            )
     return (options, flags)
 
 
@@ -1112,12 +1120,12 @@ def _text_to_key_value_dict(
             # We first try integer then float
             try:
                 value_converted = int(value)
-            except:
+            except ValueError:
                 not_int = True
             if not_int:
                 try:
                     value_converted = float(value)
-                except:
+                except ValueError:
                     not_float = True
 
             if not_int and not_float:
@@ -1388,7 +1396,8 @@ def del_temp_region():
     try:
         name = os.environ.pop("WIND_OVERRIDE")
         run_command("g.remove", flags="f", quiet=True, type="region", name=name)
-    except:
+    except (KeyError, CalledModuleError):
+        # The function succeeds even when called more than once.
         pass
 
 
@@ -1687,7 +1696,7 @@ def find_program(pgm, *args):
         # TODO: the doc or impl is not correct, any return code is accepted
         call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
         found = True
-    except:
+    except Exception:
         found = False
     nuldev.close()
 

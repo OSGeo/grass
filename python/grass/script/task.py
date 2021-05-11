@@ -17,12 +17,13 @@ for details.
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+import os
 import re
 import sys
 
+from grass.exceptions import ScriptError
 from .utils import decode, split
-from .core import *
-
+from .core import Popen, PIPE, get_real_command
 
 try:
     import xml.etree.ElementTree as etree

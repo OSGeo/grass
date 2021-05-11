@@ -14,7 +14,7 @@ from grass.exceptions import FatalError
 import sys
 from multiprocessing import Process, Lock, Pipe
 import logging
-from ctypes import *
+from ctypes import byref, cast, c_char_p, c_int, c_void_p, CFUNCTYPE, POINTER
 from datetime import datetime
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
