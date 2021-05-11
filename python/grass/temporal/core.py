@@ -33,7 +33,7 @@ import os
 import sys
 import grass.script as gscript
 
-from .c_libraries_interface import *
+from .c_libraries_interface import CLibrariesInterface
 from grass.pygrass import messages
 from grass.script.utils import decode
 

@@ -14,11 +14,12 @@ import time
 import threading
 import sys
 from multiprocessing import Process, Lock, Pipe
-from ctypes import *
+from ctypes import CFUNCTYPE, c_void_p
 
 from grass.exceptions import FatalError
-from grass.pygrass.vector import *
-from grass.pygrass.raster import *
+from grass.pygrass.vector import VectorTopo
+from grass.pygrass.vector.basic import Bbox
+from grass.pygrass.raster import RasterRow, raster2numpy_img
 import grass.lib.gis as libgis
 from .base import RPCServerBase
 from grass.pygrass.gis.region import Region
@@ -81,9 +82,8 @@ def _get_raster_image_as_np(lock, conn, data):
                 reg.adjust()
 
             array = raster2numpy_img(name, reg, color)
-    except:
-        raise
     finally:
+        # Send even if an exception was raised.
         conn.send(array)
 
 
@@ -120,9 +120,8 @@ def _get_vector_table_as_dict(lock, conn, data):
             ret = {}
             ret["table"] = table
             ret["columns"] = columns
-    except:
-        raise
     finally:
+        # Send even if an exception was raised.
         conn.send(ret)
 
 
@@ -156,7 +155,7 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
 
         if layer.exist() is True:
             if extent is not None:
-                bbox = basic.Bbox(
+                bbox = Bbox(
                     north=extent["north"],
                     south=extent["south"],
                     east=extent["east"],
@@ -171,9 +170,8 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
                     bbox=bbox, feature_type=feature_type, field=field
                 )
             layer.close()
-    except:
-        raise
     finally:
+        # Send even if an exception was raised.
         conn.send(wkb_list)
 
 

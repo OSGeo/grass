@@ -137,7 +137,7 @@ class History(object):
         if date_str:
             try:
                 return datetime.datetime.strptime(date_str, self.date_fmt)
-            except:
+            except ValueError:
                 return date_str
 
     def _set_date(self, datetimeobj):
