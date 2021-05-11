@@ -22,7 +22,7 @@ from sqlite3 import OperationalError
 
 try:
     from collections import OrderedDict
-except:
+except ImportError:
     from grass.pygrass.orderdict import OrderedDict
 
 import grass.lib.vector as libvect
