@@ -18,6 +18,7 @@ for details.
 """
 
 import os
+import sys
 
 from .utils import parse_key_val
 from .core import (
@@ -27,6 +28,11 @@ from .core import (
     fatal,
     debug,
 )
+<<<<<<< HEAD
+=======
+
+from grass.exceptions import CalledModuleError, ScriptError
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 
 from grass.exceptions import CalledModuleError, ScriptError
 

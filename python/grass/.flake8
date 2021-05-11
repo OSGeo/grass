@@ -1,0 +1,70 @@
+[flake8]
+ignore =
+    E203,  # whitespace before ':' (Black)
+    W503,  # line break before binary operator (Black)
+    E722, # do not use bare 'except'
+
+per-file-ignores =
+    # C wrappers call libgis.G_gisinit before importing other modules.
+    # TODO: Is this really needed?
+    pygrass/vector/__init__.py: E402,
+    pygrass/raster/__init__.py: E402,
+    # Files and directories which need fixes or specific exceptions
+    # E501 line too long
+    # W605 invalid escape sequence
+    # E741 ambiguous variable name 'l'
+    gunittest/*.py: E501  # These are mainly just todo comments
+    gunittest/gmodules.py: E501, W605
+    pygrass/vector/geometry.py: W605
+    pygrass/vector/table.py: E501
+    pygrass/vector/__init__.py: E501, E402
+    pygrass/modules/interface/*.py: E501, F401
+    pygrass/modules/interface/module.py: E501, W605
+    pygrass/modules/interface/parameter.py: E501, W605
+    pygrass/modules/grid/*.py: E501, F401
+    pygrass/raster/*.py: E501
+    pygrass/raster/rowio.py: E741
+    pygrass/rpc/__init__.py: E501, F401, F403
+    pygrass/utils.py: E402, E501
+    script/db.py: E501
+    script/task.py: W605
+    script/vector.py: E501  # Long doctest lines which need review anyway
+    temporal/*.py: E501, F841
+    temporal/abstract_space_time_dataset.py: W605, E501, F841
+    temporal/temporal_algebra.py: E741, E501, F841
+    temporal/temporal_raster_algebra.py: E741
+    temporal/temporal_raster3d_algebra.py: E741
+    temporal/temporal_vector_algebra.py: E741, E501, F841
+    # Current benchmarks/tests are changing sys.path before import.
+    # Possibly, a different approach should be taken there anyway.
+    pygrass/tests/benchmark.py: E501, E402, F401, F821
+    # Configuration file for Sphinx:
+    # Ignoring import/code mix and line length.
+    docs/conf.py: E402, E501,
+    # Files not managed by Black
+    imaging/images2gif.py: E226, E501
+    # Unused imports in init files
+    # F401 imported but unused
+    # F403 star import used; unable to detect undefined names
+    */__init__.py: F401, F403
+    */*/__init__.py: F401, F403
+    */*/*/__init__.py: F401, F403
+
+
+max-line-length = 88
+exclude =
+    .git,
+    __pycache__,
+    .env,
+    .venv,
+    env,
+    venv,
+    ENV,
+    env.bak,
+    venv.bak,
+    ctypes,
+    pydispatch,
+    testsuite,
+
+builtins =
+    _
