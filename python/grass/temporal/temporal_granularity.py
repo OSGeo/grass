@@ -24,7 +24,10 @@ from .abstract_map_dataset import AbstractMapDataset
 =======
 from __future__ import print_function
 from .datetime_math import compute_datetime_delta
+<<<<<<< HEAD
 >>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
+=======
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
 from functools import reduce
 from collections import OrderedDict
 import ast
