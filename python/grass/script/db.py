@@ -19,7 +19,16 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 from __future__ import absolute_import
-from .core import *
+
+import os
+from .core import (
+    run_command,
+    parse_command,
+    read_command,
+    tempfile,
+    fatal,
+    list_strings,
+)
 from .utils import try_remove
 from grass.exceptions import CalledModuleError
 
