@@ -20,9 +20,11 @@ for details.
 """
 from __future__ import absolute_import
 
+import os
+import time
 import string
 
-from .core import *
+from .core import read_command, write_command, fatal
 from .utils import float_or_dms, parse_key_val
 from grass.exceptions import CalledModuleError
 

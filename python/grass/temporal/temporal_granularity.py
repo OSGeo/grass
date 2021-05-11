@@ -18,7 +18,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-from .datetime_math import *
+from .datetime_math import compute_datetime_delta
 from functools import reduce
 from collections import OrderedDict
 import ast

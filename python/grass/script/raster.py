@@ -24,7 +24,17 @@ import sys
 import string
 import time
 
-from .core import *
+from .core import (
+    gisenv,
+    find_file,
+    tempfile,
+    run_command,
+    read_command,
+    write_command,
+    feed_command,
+    warning,
+    fatal,
+)
 from grass.exceptions import CalledModuleError
 from .utils import encode, float_or_dms, parse_key_val, try_remove
 
