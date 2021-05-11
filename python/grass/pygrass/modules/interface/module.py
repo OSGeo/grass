@@ -1035,8 +1035,6 @@ def run_modules_in_temp_region(module_list, q):
         for proc in module_list:
             proc.run()
             proc.wait()
-    except:
-        raise
     finally:
         q.put(module_list)
         del_temp_region()
@@ -1055,8 +1053,6 @@ def run_modules(module_list, q):
         for proc in module_list:
             proc.run()
             proc.wait()
-    except:
-        raise
     finally:
         q.put(module_list)
 
