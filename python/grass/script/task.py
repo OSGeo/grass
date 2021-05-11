@@ -18,9 +18,12 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
+=======
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
 import os
 import re
 import sys
