@@ -216,25 +216,24 @@ class GrassTestFilesInvoker(object):
         stdout, stderr = p.communicate()
         returncode = p.returncode
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
-        detected = False
-        idx = 0
-        while not detected:
-            try:
-                stdout = decode(stdout, encoding=encodings[idx])
-                detected = True
-            except:
-                idx += 1
-                pass
 
-        detected = False
-        idx = 0
-        while not detected:
-            try:
-                stderr = decode(stderr, encoding=encodings[idx])
-                detected = True
-            except:
-                idx += 1
-                pass
+        def try_decode(data, encodings):
+            """Try to decode data (bytes) using one of encodings
+
+            Falls back to decoding as UTF-8 with replacement for bytes.
+            Strings are returned unmodified.
+            """
+            for encoding in encodings:
+                try:
+                    return decode(stdout, encoding=encoding)
+                except UnicodeError:
+                    pass
+            if isinstance(data, bytes):
+                return data.decode(encoding="utf-8", errors="replace")
+            return data
+
+        stdout = try_decode(stdout, encodings=encodings)
+        stderr = try_decode(stderr, encodings=encodings)
 
         with open(stdout_path, "w") as stdout_file:
             stdout_file.write(stdout)
