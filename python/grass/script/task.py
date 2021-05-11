@@ -17,7 +17,10 @@ for details.
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 import os
 import re
 import sys
@@ -28,7 +31,26 @@ from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
+<<<<<<< HEAD
 ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+=======
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree  # Python <= 2.4
+from xml.parsers import expat  # TODO: works for any Python?
+
+# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
+# and ElementTree 1.3.
+if hasattr(etree, "ParseError"):
+    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+else:
+    ETREE_EXCEPTIONS = expat.ExpatError
+
+
+if sys.version_info.major >= 3:
+    unicode = str
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 
 
 class grassTask:

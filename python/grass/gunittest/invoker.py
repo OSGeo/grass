@@ -201,6 +201,7 @@ class GrassTestFilesInvoker:
                 timeout=timeout,
                 check=False,
             )
+<<<<<<< HEAD
             stdout = p.stdout
             stderr = p.stderr
             returncode = p.returncode
@@ -226,6 +227,12 @@ class GrassTestFilesInvoker:
 
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
 
+=======
+        stdout, stderr = p.communicate()
+        returncode = p.returncode
+        encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
+
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
         def try_decode(data, encodings):
             """Try to decode data (bytes) using one of encodings
 
@@ -234,7 +241,11 @@ class GrassTestFilesInvoker:
             """
             for encoding in encodings:
                 try:
+<<<<<<< HEAD
                     return decode(data, encoding=encoding)
+=======
+                    return decode(stdout, encoding=encoding)
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
                 except UnicodeError:
                     pass
             if isinstance(data, bytes):

@@ -17,9 +17,14 @@ for details.
 
 :authors: Soeren Gebbert
 """
+<<<<<<< HEAD
 
 from .datetime_math import compute_datetime_delta
 from .abstract_map_dataset import AbstractMapDataset
+=======
+from __future__ import print_function
+from .datetime_math import compute_datetime_delta
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 from functools import reduce
 from collections import OrderedDict
 import ast

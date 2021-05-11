@@ -11,6 +11,14 @@ from collections import OrderedDict
 import numpy as np
 from sqlite3 import OperationalError
 
+<<<<<<< HEAD
+=======
+try:
+    from collections import OrderedDict
+except ImportError:
+    from grass.pygrass.orderdict import OrderedDict
+
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
 from grass.exceptions import DBError

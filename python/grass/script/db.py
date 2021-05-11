@@ -18,6 +18,10 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+<<<<<<< HEAD
+=======
+from __future__ import absolute_import
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 
 import os
 from .core import (
