@@ -70,6 +70,11 @@ class GPrompt(object):
         # list of traced commands
         self.commands = list()
 
+        # reload map lists when needed
+        if giface:
+            giface.currentMapsetChanged.connect(self._reloadListOfMaps)
+            giface.grassdbChanged.connect(self._reloadListOfMaps)
+
     def _readHistory(self):
         """Get list of commands from history file"""
         hist = list()
@@ -109,6 +114,9 @@ class GPrompt(object):
         result["vector"] = grass.list_strings("vector")
 
         return result
+
+    def _reloadListOfMaps(self):
+        self.mapList = self._getListOfMaps()
 
     def _runCmd(self, cmdString):
         """Run command
