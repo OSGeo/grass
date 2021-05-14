@@ -4047,7 +4047,8 @@ class FieldStatistics(wx.Frame):
             )
         varSum = 0
         for var in decode(dataVar).splitlines():
-            varSum += float(var)
+            if var:
+                varSum += float(var)
         stddev = math.sqrt(varSum / count)
 
         self.SetTitle(_("Field statistics <%s>") % column)
