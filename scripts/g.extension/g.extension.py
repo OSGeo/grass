@@ -148,6 +148,7 @@ from __future__ import print_function
 import fileinput
 import http
 import os
+import codecs
 import sys
 import re
 import atexit
@@ -181,6 +182,29 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
+
+
+def replace_shebang_win(python_file):
+    """
+    Replaces "python" with "python3" in python files
+    using UTF8 encoding on MS Windows
+    """
+
+    cur_dir = os.path.dirname(python_file)
+    tmp_name = os.path.join(cur_dir, gscript.tempname(12))
+
+    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
+        tmp_name, "w", encoding="utf8"
+    ) as out_file:
+
+        for line in in_file:
+            new_line = line.replace(
+                "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"
+            )
+            out_file.write(new_line)
+
+    os.remove(python_file)  # remove original
+    os.rename(tmp_name, python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
@@ -1238,11 +1262,9 @@ def install_extension_win(name):
     module_list = list()
     for r, d, f in os.walk(srcdir):
         for file in f:
-            if file.endswith('.py'):
-                modulename = file.rsplit('.py')[0]
-                module_list.append(modulename)
-            if file.endswith('.exe'):
-                modulename = file.rsplit('.exe')[0]
+            # Filter GRASS module name patterns
+            if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
+                modulename = os.path.splitext(file)[0]
                 module_list.append(modulename)
     # remove duplicates in case there are .exe wrappers for python scripts
     module_list = set(module_list)
@@ -1255,12 +1277,7 @@ def install_extension_win(name):
                 pyfiles.append(os.path.join(r, file))
 
     for filename in pyfiles:
-        with fileinput.FileInput(filename, inplace=True) as file:
-            for line in file:
-                print(line.replace(
-                    "#!/usr/bin/env python\n",
-                    "#!/usr/bin/env python3\n"
-                ), end='')
+        replace_shebang_win(filename)
 
     # collect old files
     old_file_list = list()
