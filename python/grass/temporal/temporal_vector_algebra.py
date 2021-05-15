@@ -45,7 +45,7 @@ from __future__ import print_function
 
 try:
     import ply.yacc as yacc
-except:
+except ImportError:
     pass
 
 import grass.pygrass.modules as pygrass
