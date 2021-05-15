@@ -155,7 +155,8 @@ def main():
         s = p.communicate()[0]
         if s == "application/x-zip":
             gscript.fatal(_("Please extract %s before import.") % infile)
-    except:
+    # code changed here, Exception included instead of bare except
+    except Exception:
         pass
 
     # create VRT header for NDVI
