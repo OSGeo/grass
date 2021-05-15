@@ -55,7 +55,7 @@ from __future__ import print_function
 
 try:
     import ply.yacc as yacc
-except:
+except ImportError:
     pass
 
 from .temporal_raster_base_algebra import (
