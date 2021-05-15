@@ -359,10 +359,10 @@ int main(int argc, char **argv)
                 fprintf(stdout, "\"%s\":", db_get_column_name(column));
             }
 
-            if (options.nullval->answer && db_test_value_isnull(value)) {
+            if (db_test_value_isnull(value)) {
                 if (json)
                     fprintf(stdout, "null");
-                else
+                else if (options.nullval->answer)
                     fprintf(stdout, "%s", options.nullval->answer);
             }
             else {
@@ -376,12 +376,12 @@ int main(int argc, char **argv)
                     if (strchr(str, '\n'))
                         str = G_str_replace(str, "\n", "\\n");
                     if (strchr(str, '"') && json) {
-                        str = G_str_replace(str, "\"", "\"\"");
+                        str = G_str_replace(str, "\"", "\\\"");
                     }
                 }
                 /* CSV escaping is different from escape and JSON */
                 if (csv && strchr(str, '"')) {
-                    str = G_str_replace(str, "\"", "\\\"");
+                    str = G_str_replace(str, "\"", "\"\"");
                 }
 
                 if (json || csv) {
@@ -434,7 +434,8 @@ int main(int argc, char **argv)
             }
         }
         else {
-            if (!vertical || json || csv)
+            /* End of record in attribute printing */
+            if (!(vertical || json))
                 fprintf(stdout, "\n");
             else if (vsep)
                 fprintf(stdout, "%s\n", vsep);

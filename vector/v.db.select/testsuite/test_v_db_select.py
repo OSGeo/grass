@@ -241,7 +241,7 @@ class SelectTest(TestCase):
 
         sel = SimpleModule(
             "v.db.select",
-            flags="j",
+            format="json",
             map=self.invect,
             where="cat<={cat}".format(cat=self.cat),
         )
