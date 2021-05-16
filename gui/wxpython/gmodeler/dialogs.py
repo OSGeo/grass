@@ -214,8 +214,10 @@ class ModelSearchDialog(wx.Dialog):
             parent=self.panel, model=menuModel.GetModel(), showTip=True
         )
         self.search.moduleSelected.connect(
-            lambda name: (self.cmd_prompt.SetText(name + " "),
-                          self.label.SetValue(name))
+            lambda name: (
+                self.cmd_prompt.SetText(name + " "),
+                self.label.SetValue(name),
+            )
         )
 
         self.label = TextCtrl(parent=self.panel, id=wx.ID_ANY)
