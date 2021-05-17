@@ -2,7 +2,6 @@
 ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
-    E722, # do not use bare 'except'
 
 per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
@@ -29,12 +28,31 @@ per-file-ignores =
     script/db.py: E501
     script/task.py: W605
     script/vector.py: E501  # Long doctest lines which need review anyway
-    temporal/*.py: E501, F841
-    temporal/abstract_space_time_dataset.py: W605, E501, F841
-    temporal/temporal_algebra.py: E741, E501, F841
+    temporal/abstract_map_dataset.py: E501
+    temporal/abstract_space_time_dataset.py: W605, E501, F841, E722
+    temporal/aggregation.py: E501
+    temporal/base.py: E501
+    temporal/c_libraries_interface.py: E501, F841, E722
+    temporal/core.py: E501, E722
+    temporal/datetime_math.py: E501, F841, E722
+    temporal/list_stds.py: E501
+    temporal/metadata.py: E501
+    temporal/open_stds.py: F841
+    temporal/register.py: E501
+    temporal/space_time_datasets.py: E501
+    temporal/spatial_extent.py: E501
+    temporal/spatial_topology_dataset_connector.py: E501, E722
+    temporal/spatio_temporal_relationships.py: E501
+    temporal/temporal_algebra.py: E741, E501, F841, E722
+    temporal/temporal_extent.py: E501
+    temporal/temporal_granularity.py: E501, F841, E722
+    temporal/temporal_operator.py: E501
     temporal/temporal_raster_algebra.py: E741
+    temporal/temporal_raster_base_algebra.py: E501, F841, E722
     temporal/temporal_raster3d_algebra.py: E741
+    temporal/temporal_topology_dataset_connector.py: E501, E722
     temporal/temporal_vector_algebra.py: E741, E501, F841
+    temporal/univar_statistics.py: E501
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     pygrass/tests/benchmark.py: E501, E402, F401, F821
