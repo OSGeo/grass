@@ -71,6 +71,41 @@ class GPrompt:
         if giface:
             giface.currentMapsetChanged.connect(self._reloadListOfMaps)
             giface.grassdbChanged.connect(self._reloadListOfMaps)
+<<<<<<< HEAD
+=======
+
+    def _readHistory(self):
+        """Get list of commands from history file"""
+        hist = list()
+        env = grass.gisenv()
+        try:
+            fileHistory = codecs.open(
+                os.path.join(
+                    env["GISDBASE"],
+                    env["LOCATION_NAME"],
+                    env["MAPSET"],
+                    ".bash_history",
+                ),
+                encoding="utf-8",
+                mode="r",
+                errors="replace",
+            )
+        except IOError:
+            return hist
+
+        try:
+            for line in fileHistory.readlines():
+                hist.append(line.replace("\n", ""))
+        finally:
+            fileHistory.close()
+
+        return hist
+
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        self.cmdbuffer = self._readHistory()
+        self.cmdindex = len(self.cmdbuffer)
+>>>>>>> b3579a4902 (g.proj: fix reading input WKT (#1582))
 
     def _getListOfMaps(self):
         """Get list of maps"""
