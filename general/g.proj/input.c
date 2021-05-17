@@ -116,6 +116,7 @@ int input_wkt(char *wktfile)
 
     if (infd) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         size_t wktlen;
 
         wktlen = fread(buff, 1, sizeof(buff), infd);
@@ -130,6 +131,8 @@ int input_wkt(char *wktfile)
         /* Get rid of newlines */
         G_squeeze(buff);
 =======
+=======
+>>>>>>> 7c10386e82 (g.proj: fix reading input WKT (#1582))
 	size_t wktlen;
 
 	wktlen = fread(buff, 1, sizeof(buff), infd);
