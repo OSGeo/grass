@@ -106,7 +106,7 @@ static void set_authnamecode(OGRSpatialReferenceH);
 int input_wkt(char *wktfile)
 {
     FILE *infd;
-    char buff[8000], *tmpwkt;
+    char buff[8192], *tmpwkt;
     OGRSpatialReferenceH hSRS;
     char *papszOptions[3];
     int ret;
@@ -117,11 +117,17 @@ int input_wkt(char *wktfile)
 	infd = fopen(wktfile, "r");
 
     if (infd) {
-	fread(buff, sizeof(buff), 1, infd);
+	size_t wktlen;
+
+	wktlen = fread(buff, 1, sizeof(buff), infd);
+	if (wktlen == sizeof(buff))
+	    G_fatal_error(_("Input WKT definition is too long"));
 	if (ferror(infd))
 	    G_fatal_error(_("Error reading WKT definition"));
 	else
 	    fclose(infd);
+	/* terminate WKT string */
+	buff[wktlen] = '\0';
 	/* Get rid of newlines */
 	G_squeeze(buff);
     }
