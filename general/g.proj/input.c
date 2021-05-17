@@ -116,15 +116,18 @@ int input_wkt(char *wktfile)
     else
 	infd = fopen(wktfile, "r");
 
-    /* init buff, otherwise valgrind complains about uninitialized values */
-    G_zero(buff, sizeof(buff));
-
     if (infd) {
-	fread(buff, 1, sizeof(buff) - 1, infd);
+	size_t wktlen;
+
+	wktlen = fread(buff, 1, sizeof(buff) - 1, infd);
+	if (wktlen == sizeof(buff) - 1)
+	    G_fatal_error(_("Input WKT definition is too long"));
 	if (ferror(infd))
 	    G_fatal_error(_("Error reading WKT definition"));
 	else
 	    fclose(infd);
+	/* terminate WKT string */
+	buff[wktlen] = '\0';
 	/* Get rid of newlines */
 	G_squeeze(buff);
     }
