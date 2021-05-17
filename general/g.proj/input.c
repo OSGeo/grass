@@ -116,7 +116,7 @@ int input_wkt(char *wktfile)
     else
 	infd = fopen(wktfile, "r");
 
-    /* init buff, otherwise valgrind complains about uninitailized values */
+    /* init buff, otherwise valgrind complains about uninitialized values */
     G_zero(buff, sizeof(buff));
 
     if (infd) {
