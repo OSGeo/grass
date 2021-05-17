@@ -14,10 +14,10 @@ Foundation (OSGeo).
 
 <i>For text-based startup see below.</i>
 <p>
-When <a href="grass7.html">launching</a> GRASS GIS for the first time, you will arrive to a
+When <a href="grass7.html">launching</a> GRASS GIS for the first time, you will arrive in a
 <b>default Location</b> "world_latlog_wgs84" having a character of a prepared template.
 You will find here a map layer called "country_boundaries"
-showing a world map in WGS84 coordinate system:
+showing a world map in the WGS84 coordinate system:
 </p>
  
 <center>
@@ -62,7 +62,7 @@ support simultaneous access of several users to the map layers
 stored within the same LOCATION, i.e. teams working on the same
 project. For teams, a centralized GRASS DATABASE could be defined
 in a shared network file system (e.g. NFS). Besides access to his/her own
-MAPSET, each user can also read map layers in other users' MAPSETS,
+MAPSET, each user can also read map layers in other users' MAPSETS
 but can modify or remove only the map layers in their own MAPSET.
 </p>
 
@@ -70,7 +70,7 @@ but can modify or remove only the map layers in their own MAPSET.
 <p>
 When creating a new LOCATION, GRASS GIS automatically creates a special
 MAPSET called PERMANENT where the core data for the project can be
-stored. Data in the PERMANENT MAPSET can only be added, modified or
+stored. Data in the PERMANENT MAPSET can only be added, modified, or
 removed by the owner of the PERMANENT MAPSET; however, they can be
 accessed, analyzed, and copied into their own MAPSET by the other
 users. The PERMANENT MAPSET is useful for providing general spatial
@@ -78,10 +78,10 @@ data (e.g. an elevation model), accessible but write-protected to all
 users who are working in the same LOCATION as the database owner.
 To manipulate or add data to PERMANENT, the owner should start
 GRASS and choose the relevant LOCATION and the PERMANENT MAPSET. This
-mapset also contains the DEFAULT_WIND file, which holds the default
+MAPSET also contains the DEFAULT_WIND file, which holds the default
 region boundary coordinate values for the LOCATION (which all users
 will inherit when they start using the database). Additionally, in
-all mapsets a WIND file is kept, for storing the current boundary 
+all MAPSETS a WIND file is kept, for storing the current boundary
 coordinate values and the currently selected raster resolution. Users
 have the option of switching back to the default region at any time.
 </p>
@@ -121,7 +121,7 @@ described above also apply here.
 <p>
 You can also create a new LOCATION easily from a georeferenced data file
 (e.g., SHAPE file or GeoTIFF file with the related metadata properly included).
-In this case you are asked whether the data itself should be imported
+In this case, you are asked whether the data itself should be imported
 into the new LOCATION. The default region is then set to match the imported map.
 </p>
 
@@ -140,7 +140,7 @@ For a first time startup, the following steps have to be followed:
 
 <ol>
 <li> Create the GRASS GIS database directory (with a file manager; or on command line: <tt>mkdir /home/user/grassdata</tt></li>
-<li> Create a new location, including it's default PERMANENT mapset,
+<li> Create a new location, including its default PERMANENT mapset,
      without entering the new location:
 <ul>
     <li>Using an EPSG code:<br>
@@ -148,7 +148,7 @@ For a first time startup, the following steps have to be followed:
     <li>Using a georeferenced raster or vector file:<br>
         &nbsp;<tt>grass79 -e -c MyGeoReferenceFile.tif /home/user/grassdata/mylocation</tt></li>
 </ul></li>
-<li> Create new mapset within the new location and launch GRASS GIS within
+<li> Create a new mapset within the new location and launch GRASS GIS within
      that mapset: <br>
         &nbsp;<tt>grass79 -c /home/user/grassdata/mylocation/mymapset</tt>
 </ol>
