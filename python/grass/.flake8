@@ -3,9 +3,12 @@ ignore =
     E203,  # whitespace before ':' (Black)
     W503,  # line break before binary operator (Black)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     E722, # do not use bare 'except'
 >>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
+=======
+>>>>>>> 7c10386e82 (g.proj: fix reading input WKT (#1582))
 
 per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.

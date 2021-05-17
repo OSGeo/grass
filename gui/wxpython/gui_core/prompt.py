@@ -72,7 +72,10 @@ class GPrompt:
             giface.currentMapsetChanged.connect(self._reloadListOfMaps)
             giface.grassdbChanged.connect(self._reloadListOfMaps)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 7c10386e82 (g.proj: fix reading input WKT (#1582))
 
     def _readHistory(self):
         """Get list of commands from history file"""
