@@ -116,8 +116,11 @@ int input_wkt(char *wktfile)
     else
 	infd = fopen(wktfile, "r");
 
+    /* init buff, otherwise valgrind complains about uninitailized values */
+    G_zero(buff, sizeof(buff));
+
     if (infd) {
-	fread(buff, sizeof(buff), 1, infd);
+	fread(buff, 1, sizeof(buff) - 1, infd);
 	if (ferror(infd))
 	    G_fatal_error(_("Error reading WKT definition"));
 	else
