@@ -185,8 +185,13 @@ class SelectTest(TestCase):
     cat = 10
 
     def testRun(self):
-        """Basic test of v.db.select"""
-        self.assertModule("v.db.select", map=self.invect)
+        """Module runs with minimal parameters and give output."""
+        sel = SimpleModule(
+            "v.db.select",
+            map=self.invect,
+        )
+        sel.run()
+        self.assertTrue(sel.outputs.stdout, msg="There should be some output")
 
     def testFileExists(self):
         """This function checks if the output file is written correctly"""
@@ -237,6 +242,7 @@ class SelectTest(TestCase):
         self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
 
     def testJSON(self):
+        """Test that JSON can be decoded and formatted exactly as expected"""
         import json
 
         sel = SimpleModule(
