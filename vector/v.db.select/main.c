@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     char *fsep, *vsep;
     struct bound_box *min_box, *line_box;
     int i, line, area, init_box, cat, field_number;
-    int json, csv, vertical;
+    int plain, json, csv, vertical;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -127,8 +127,8 @@ int main(int argc, char **argv)
     options.format->answer = "plain";
     options.format->guisection = _("Format");
 
-    /* TODO: value 'auto' is needed to set default differently for each format */
     options.fsep = G_define_standard_option(G_OPT_F_SEP);
+    options.fsep->answer = NULL;
     options.fsep->guisection = _("Format");
 
     options.vsep = G_define_standard_option(G_OPT_F_SEP);
@@ -181,6 +181,7 @@ int main(int argc, char **argv)
                           options.file->answer);
     }
 
+    plain = FALSE;
     csv = FALSE;
     json = FALSE;
     vertical = FALSE;
@@ -190,13 +191,15 @@ int main(int argc, char **argv)
         json = TRUE;
     else if (strcmp(options.format->answer, "vertical") == 0)
         vertical = TRUE;
-    if (csv || json) {
+    else
+        plain = TRUE;
+    if (json) {
         fatal_error_option_value_excludes_flag(options.format, flags.escape,
                                                _("Escaping is based on the format"));
-    }
-    if (json) {
         fatal_error_option_value_excludes_flag(options.format, flags.colnames,
                                                _("Column names are always included"));
+        fatal_error_option_value_excludes_option(options.format, options.fsep,
+                                                 _("Separator is based on the format"));
     }
     if (!vertical) {
         fatal_error_option_value_excludes_option(options.format, options.vsep,
@@ -217,7 +220,23 @@ int main(int argc, char **argv)
         list_lines = Vect_new_list();
 
     /* the field separator */
-    fsep = G_option_to_separator(options.fsep);
+    if (options.fsep->answer) {
+        fsep = G_option_to_separator(options.fsep);
+    }
+    else {
+        /* A different separator is needed to for each format and output. */
+        if (csv) {
+            fsep = G_store(",");
+        }
+        else if (plain | vertical) {
+            if (flags.region->answer)
+               fsep = G_store("=");
+            else
+               fsep = G_store("|");
+        }
+        else
+            fsep = NULL;  /* Something like a separator is part of the format. */
+    }
     if (options.vsep->answer)
         vsep = G_option_to_separator(options.vsep);
     else
@@ -368,6 +387,11 @@ int main(int argc, char **argv)
             else {
                 char *str = db_get_string(&value_string);
 
+                /* Escaped charcters in different formats
+                 * JSON (mandatory): \" \\ \r \n \t \f \b
+                 * CSV (usually none, here optional): \\ \r \n \t
+                 * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t
+                 */
                 if (flags.escape->answer || json) {
                     if (strchr(str, '\\'))
                         str = G_str_replace(str, "\\", "\\\\");
@@ -375,12 +399,18 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\r", "\\r");
                     if (strchr(str, '\n'))
                         str = G_str_replace(str, "\n", "\\n");
-                    if (strchr(str, '"') && json) {
+                    if (strchr(str, '\t'))
+                        str = G_str_replace(str, "\t", "\\t");
+                    if (json && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
-                    }
+                    if (json && strchr(str, '\f'))  /* form feed, somewhat unlikely */
+                        str = G_str_replace(str, "\f", "\\f");
+                    if (json && strchr(str, '\b'))  /* backspace, quite unlikely */
+                        str = G_str_replace(str, "\b", "\\b");
                 }
-                /* CSV escaping is different from escape and JSON */
-                if (csv && strchr(str, '"')) {
+                /* Common CSV does not escape, but doubles quotes (and we quote all
+                 * text fields which takes care of a separator character in text). */
+                else if (csv && strchr(str, '"')) {
                     str = G_str_replace(str, "\"", "\"\"");
                 }
 
@@ -449,13 +479,13 @@ int main(int argc, char **argv)
         if (csv) {
             fprintf(stdout, "n%ss%sw%se", fsep, fsep, fsep);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, "t%sb", fsep);
+                fprintf(stdout, "%st%sb", fsep, fsep);
             }
             fprintf(stdout, "\n");
             fprintf(stdout, "%f%s%f%s%f%s%f", min_box->N, fsep, min_box->S,
                     fsep, min_box->W, fsep, min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, "%f%s%f", min_box->T, fsep, min_box->B);
+                fprintf(stdout, "%s%f%s%f", fsep, min_box->T, fsep, min_box->B);
             }
             fprintf(stdout, "\n");
         }
@@ -466,20 +496,19 @@ int main(int argc, char **argv)
             fprintf(stdout, "\"w\":%f,", min_box->W);
             fprintf(stdout, "\"e\":%f", min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, ",\"t\":%f,\n", min_box->T);
-                fprintf(stdout, "\"b\":%f\n", min_box->B);
+                fprintf(stdout, ",\"t\":%f,", min_box->T);
+                fprintf(stdout, "\"b\":%f", min_box->B);
             }
-            fprintf(stdout, "}\n");
+            fprintf(stdout, "\n}}\n");
         }
         else {
-            /* TODO: separator in theory here too */
-            fprintf(stdout, "n=%f\n", min_box->N);
-            fprintf(stdout, "s=%f\n", min_box->S);
-            fprintf(stdout, "w=%f\n", min_box->W);
-            fprintf(stdout, "e=%f\n", min_box->E);
+            fprintf(stdout, "n%s%f\n", fsep, min_box->N);
+            fprintf(stdout, "s%s%f\n", fsep, min_box->S);
+            fprintf(stdout, "w%s%f\n", fsep, min_box->W);
+            fprintf(stdout, "e%s%f\n", fsep, min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, "t=%f\n", min_box->T);
-                fprintf(stdout, "b=%f\n", min_box->B);
+                fprintf(stdout, "t%s%f\n", fsep, min_box->T);
+                fprintf(stdout, "b%s%f\n", fsep, min_box->B);
             }
         }
         fflush(stdout);

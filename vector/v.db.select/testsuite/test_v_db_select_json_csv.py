@@ -147,7 +147,7 @@ class JsonTest(TestCase):
             )
             # This covers the defaults for v.db.select.
             if delimeter is None:
-                delimeter = "|"
+                delimeter = ","
             if null_value is None:
                 null_value = ""
             io_string = io.StringIO(text)
