@@ -324,8 +324,12 @@ int main(int argc, char **argv)
     init_box = TRUE;
     first_rec = TRUE;
 
-    if (!flags.region->answer && json)
-        fprintf(stdout, "[");
+    if (json) {
+        if (flags.region->answer)
+            fprintf(stdout, "{\"extent\":\n");
+        else
+            fprintf(stdout, "{\"records\":[\n");
+    }
 
     /* fetch the data */
     while (1) {
@@ -473,7 +477,7 @@ int main(int argc, char **argv)
     }
 
     if (!flags.region->answer && json)
-        fprintf(stdout, "]\n");
+        fprintf(stdout, "\n]}\n");
 
     if (flags.region->answer) {
         if (csv) {

@@ -170,6 +170,7 @@ class JsonTest(TestCase):
         """"""
         text = gs.read_command("v.db.select", map=self.vector_points, format="json")
         data = json.loads(text)
+        data = data["records"]
         self.assertIsNone(data[2]["place_name"])
         self.assertEqual(data[3]["place_name"], 'The "Great" Place')
         self.assertEqual(data[7]["place_name"], "Building: GeoLab[5]")
