@@ -461,6 +461,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 		    fprintf(stdout,
 			    "Id=%d\nType=%s\nLeft=%d\nRight=%d\n",
 			    line, buf, left, right);
+		    if (type & GV_LINES)
+			fprintf(stdout, "Length=%f\n", l);
 		    break;
 		case OUTPUT_JSON:
 		    fprintf(stdout, "%s\"Feature_max_distance\": %f",
@@ -468,6 +470,8 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 		    fprintf(stdout,
 			    ",\n\"Id\": %d,\n\"Type\": \"%s\",\n\"Left\": %d,\n\"Right\": %d",
 			    line, buf, left, right);
+		    if (type & GV_LINES)
+			fprintf(stdout, ",\n\"Length\": %f", l);
 		    break;
 		default:
 		    fprintf(stdout, "Looking for features within: %f\n",
@@ -475,17 +479,14 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 		    fprintf(stdout,
 			    _("Id: %d\nType: %s\nLeft: %d\nRight: %d\n"),
 			    line, buf, left, right);
+		    if (type & GV_LINES)
+			fprintf(stdout, _("Length: %f\n"), l);
 		    break;
 		}
-		if (type & GV_LINES) {
+		if (type & GV_LINES)
 		    nnodes = 2;
-		    fprintf(stdout, _("Length: %f\n"), l);
-		}
-		else {		/* points */
+		else		/* points */
 		    nnodes = 0;
-		    if (output != OUTPUT_SCRIPT)
-			fprintf(stdout, "\n");
-		}
 
 		if (nnodes > 0)
 		    Vect_get_line_nodes(&(Map[i]), line, &node[0], &node[1]);
@@ -521,15 +522,15 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 			    Vect_get_node_line_angle(&(Map[i]), node[n], nli);
 			switch (output) {
 			case OUTPUT_SCRIPT:
-			    fprintf(stdout, "Id=%5d\nAngle=%.8f\n",
+			    fprintf(stdout, "Id=%d\nAngle=%.8f\n",
 				    nodeline, angle);
 			    break;
 			case OUTPUT_JSON:
-			    fprintf(stdout, ",\n\"Id\": %5d,\n\"Angle\": %.8f",
+			    fprintf(stdout, ",\n\"Id\": %d,\n\"Angle\": %.8f",
 				    nodeline, angle);
 			    break;
 			default:
-			    fprintf(stdout, _("Id: %5d\nAngle: %.8f\n"),
+			    fprintf(stdout, _("Id: %d\nAngle: %.8f\n"),
 				    nodeline, angle);
 			    break;
 			}
