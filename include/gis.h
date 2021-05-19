@@ -23,6 +23,8 @@
 /* System include files */
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdbool.h>
+
 
 /* Grass and local include files */
 #include <grass/config.h>
@@ -51,13 +53,14 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define G_gisinit(pgm) G__gisinit(GIS_H_VERSION, (pgm))
 #define G_no_gisinit() G__no_gisinit(GIS_H_VERSION)
 
-/* Define TRUE and FALSE for boolean comparisons */
+/* For boolean values and comparisons use the C99 type 'bool' with values 'true' */
+/* and 'false' For historical reasons 'TRUE' and 'FALSE' are still valid.        */
 #ifndef TRUE
-#define TRUE 1
+#define TRUE true
 #endif
 
 #ifndef FALSE
-#define FALSE 0
+#define FALSE false
 #endif
 
 #if defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64
