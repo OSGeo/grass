@@ -3,6 +3,187 @@
 <em>v.db.select</em> prints attributes of a vector map from one or several
 user selected attribute table columns.
 
+<h3>Output formats</h3>
+
+Four different formats can be used depending on the circumstances
+using the <b>format</b> option: plain text, CSV, JSON, and vertical
+plain text.
+
+<h4>Plain text</h4>
+
+The plain text is the default output which is most suitable for reading by humans,
+e.g., when working in the command line or obtaining specific values from the attribute
+table using the <em>v.db.select</em> GUI dialog.
+
+<p>
+The individual fields (attribute values) are separated by a pipe (<tt>|</tt>)
+which can be customized using the <b>separator</b> option.
+The records (rows) are separated by newlines.
+
+<p>
+Example with a pipe as a separator (the default):
+
+<div class="code"><pre>
+cat|road_name|multilane|year|length
+1|NC-50|no|2001|4825.369405
+2|NC-50|no|2002|14392.589058
+3|NC-98|no|2003|3212.981242
+4|NC-50|no|2004|13391.907552
+</pre></div>
+
+When escaping is enabled, the following characters in the fields are escaped:
+backslash (<tt>\\</tt>), carriage return (<tt>\r</tt>), line feed (<tt>\n</tt>),
+tabulator (<tt>\t</tt>), form feed (<tt>\f</tt>), and backslash (<tt>\b</tt>).
+
+<p>
+No quoting or escaping is performed by default, so if these characters are in
+the output, they look just like the separators.
+This is usually not a problem for humans looking at the output to get a general idea
+about query result or attribute table content.
+
+<p>
+Consequently, this format is not recommended for computers, e.g., for reading attribute
+data in Python scripts.
+It works for further parsing in limited cases when the values don't contain separators
+or when the separators are set to one of the escaped characters.
+
+<h4>CSV</h4>
+
+CSV (comma-separated values) has many variations. This module by default produces
+CSV with comma (<tt>,</tt>) as the field separator (delimiter). All text fields
+(based on the type) are quoted with double quotes. Double quotes in fields are
+represented as two double quotes. Newline characters in the fields are present
+as-is in the output. Header is included by default containing column names.
+
+<p>
+All full CSV parsers such as the ones in LibreOffice or Python are able to parse this
+format when configured to the above specification.
+
+<p>
+Example with default settings:
+
+<div class="code"><pre>
+cat,road_name,multilane,year,length
+1,"NC-50","no",2001,4825.369405
+2,"NC-50","no",2002,14392.589058
+3,"NC-98","no",2003,3212.981242
+4,"NC-50","no",2004,13391.907552
+</pre></div>
+
+<p>
+If desired, the separator can be customized and escaping can be enabled
+with the same characters being escaped as for the plain text.
+Notably, newlines and tabs are escaped, double quotes are not, and the separator
+is not escaped either (unless it is a tab).
+However, the format is guaranteed only for the commonly used separators
+such as comma, semicolon, pipe, and tab.
+
+<p>
+Note that using multi-character separator is allowed, but not recommended
+as it is not generally supported by CSV readers.
+
+<p>
+CSV is the recommended format for further use in another analytical applications,
+especially for use with spreadsheet applications. For scripting, it is advantageous
+when tabular data is needed (rather than key-value pairs).
+
+<h4>JSON</h4>
+
+JSON (JavaScript Object Notation) format is produced according to
+the specification so it is readily readable by JSON parsers.
+The standard JSON escapes are performed (backslash, carriage return, line feed,
+tabulator, form feed, backslash, and double quote) for string values.
+Numbers in the database such as integers and doubles are represented as numbers,
+while texts (TEXT, VARCHAR, etc.) and dates in the database are represented
+as strings in JSON. NULL values in database are represented as JSON <tt>null</tt>.
+Indentation and newlines in the output are minimal and not guaranteed.
+
+<p>
+Records which are the result of the query are stored under key <tt>records</tt>
+as an array (list) of objects (collections of key-value pairs).
+The keys for attributes are lowercase or uppercase depending on how
+the columns were defined in the database.
+
+<p>
+Example with added indentation (note that booleans are not directly supported;
+here, an attribute is a string with value <tt>no</tt>):
+
+<div class="code"><pre>
+{
+  "records": [
+    {
+      "cat": 1,
+      "road_name": "NC-50",
+      "multilane": "no",
+      "year": 2001,
+      "length": 4825.369405
+    },
+    {
+      "cat": 2,
+      "road_name": "NC-50",
+      "multilane": "no",
+      "year": 2002,
+      "length": 14392.589058
+    }
+  ]
+}
+</pre></div>
+
+<p>
+JSON is the recommended format for reading the data in Python
+and for any uses and environments where convenient access to individual values
+is desired and JSON parser is available.
+
+<h4>Vertical plain text</h4>
+
+In the vertical plain text format, each value is on a single line
+and is preceded by the name of the attribute (column) which is
+separated by separator. The individual records can be separated by
+the vertical separator (<b>vertical_separator</b> option).
+
+<p>
+Example with (horizontal) separator <tt>=</tt> and vertical separator <tt>newline</tt>:
+
+<div class="code"><pre>
+cat=1
+road_name=NC-50
+multilane=no
+year=2001
+length=4825.369405
+
+cat=2
+road_name=NC-50
+multilane=no
+year=2002
+length=14392.589058
+</pre></div>
+
+Newline is automatically added after a vertical separator unless it is a newline
+which allows for separating the records, e.g., by multiple dashes.
+
+The escaping (<b>-e</b>) need to should be enabled in case the output
+is meant for reading by a computer rather than just as a data overview
+for humans. Escaping will ensure that values with newlines will be
+contained to a single line.
+
+This format is for special uses in scripting, for example, in combination
+with <b>columns</b> option set to one column only and escaping (<b>-e</b>)
+and no column names flags (<b>-c</b>). It is also advantageous when you
+need implement the parsing yourself.
+
+<h2>NOTES</h2>
+
+<ul>
+    <li>
+        CSV and JSON were added in version 8.0 as new primary formats for further
+        consumption by scripts and other applications.
+    </li>
+    <li>
+        Escaping of plain and vertical formats was extended from just backslash
+        and newlines to all escapes from JSON except for double quote character.
+    </li>
+</ul>
+
 <h2>EXAMPLES</h2>
 
 All examples are based on the North Carolina sample dataset.
@@ -125,6 +306,21 @@ US-64|yes
 US-70|yes
 </pre></div>
 
+<h3>Read results in Python</h3>
+
+The <em>json</em> package in the standard Python library can load
+a JSON string obtained as output from the <em>v.db.select</em> module
+through the <em>read_command</em> function:
+
+<div class="code"><pre>
+import json
+import grass.script as gs
+
+text = gs.read_command("v.db.select", map="roadsmajor", format="json")
+data = json.loads(text)
+for row in data["records"]:
+    print(row["ROAD_NAME"])
+</pre></div>
 
 <h2>SEE ALSO</h2>
 

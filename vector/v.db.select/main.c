@@ -124,7 +124,10 @@ int main(int argc, char **argv)
     options.format->label = _("Output format");
     options.format->options = "plain,csv,json,vertical";
     options.format->descriptions =
-        "plain;Configurable plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation);vertical;Plain text vertical output (instead of horizontal)";
+        "plain;Configurable plain text output;"
+        "csv;CSV (Comma Separated Values);"
+        "json;JSON (JavaScript Object Notation);"
+        "vertical;Plain text vertical output (instead of horizontal)";
     options.format->answer = "plain";
     options.format->guisection = _("Format");
 
