@@ -7,10 +7,11 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               -e, -j, and -f flags by Huidae Cho <grass4u gmail.com>
  *               group option by Luca Delucchi <lucadeluge gmail.com>
+ *               CSV and format option by Vaclav Petras <wenzeslaus gmail com>
  *
  * PURPOSE:      Print vector attributes
  *
- * COPYRIGHT:    (C) 2005-2020 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
