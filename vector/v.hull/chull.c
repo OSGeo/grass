@@ -29,10 +29,6 @@
 
 #include "globals.h"
 
-/*Define Boolean type */
-typedef enum
-{ BFALSE, BTRUE } bool;
-
 /* Define vertex indices. */
 #define X   0
 #define Y   1
@@ -76,10 +72,10 @@ struct tFaceStructure
 };
 
 /* Define flags */
-#define ONHULL   	BTRUE
-#define REMOVED  	BTRUE
-#define VISIBLE  	BTRUE
-#define PROCESSED	BTRUE
+#define ONHULL   	true
+#define REMOVED  	true
+#define VISIBLE  	true
+#define PROCESSED	true
 
 /* Global variable definitions */
 tVertex vertices = NULL;
@@ -436,7 +432,7 @@ bool AddOne(tVertex p)
     tFace f;
     tEdge e, temp;
     long int vol;
-    bool vis = BFALSE;
+    bool vis = false;
 
 
     /* Mark faces visible from p. */
@@ -446,7 +442,7 @@ bool AddOne(tVertex p)
 
 	if (vol < 0) {
 	    f->visible = VISIBLE;
-	    vis = BTRUE;
+	    vis = true;
 	}
 	f = f->next;
     } while (f != faces);
@@ -454,7 +450,7 @@ bool AddOne(tVertex p)
     /* If no faces are visible from p, then p is inside the hull. */
     if (!vis) {
 	p->onhull = !ONHULL;
-	return BFALSE;
+	return false;
     }
 
     /* Mark edges in interior of visible region for deletion.
@@ -470,7 +466,7 @@ bool AddOne(tVertex p)
 	    e->newface = MakeConeFace(e, p);
 	e = temp;
     } while (e != edges);
-    return BTRUE;
+    return true;
 }
 
 /*---------------------------------------------------------------------
