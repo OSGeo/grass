@@ -88,6 +88,7 @@ int main(int argc, char **argv)
     struct bound_box *min_box, *line_box;
     int i, line, area, init_box, cat, field_number;
     int plain, json, csv, vertical;
+    int vsep_needs_newline;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -241,6 +242,9 @@ int main(int argc, char **argv)
         vsep = G_option_to_separator(options.vsep);
     else
         vsep = NULL;
+    vsep_needs_newline = TRUE;
+    if (vsep && !strcmp(vsep, "\n"))
+        vsep_needs_newline = FALSE;
 
     db_init_string(&sql);
     db_init_string(&value_string);
@@ -471,8 +475,12 @@ int main(int argc, char **argv)
             /* End of record in attribute printing */
             if (!(vertical || json))
                 fprintf(stdout, "\n");
-            else if (vsep)
-                fprintf(stdout, "%s\n", vsep);
+            else if (vsep) {
+                if (vsep_needs_newline)
+                    fprintf(stdout, "%s\n", vsep);
+                else
+                    fprintf(stdout, "%s", vsep);
+            }
         }
     }
 
