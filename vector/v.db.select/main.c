@@ -397,8 +397,8 @@ int main(int argc, char **argv)
 
                 /* Escaped charcters in different formats
                  * JSON (mandatory): \" \\ \r \n \t \f \b
-                 * CSV (usually none, here optional): \\ \r \n \t
-                 * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t
+                 * CSV (usually none, here optional): \\ \r \n \t \f \b
+                 * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
                  */
                 if (flags.escape->answer || json) {
                     if (strchr(str, '\\'))
@@ -411,14 +411,14 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\t", "\\t");
                     if (json && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
-                    if (json && strchr(str, '\f'))  /* form feed, somewhat unlikely */
+                    if (strchr(str, '\f'))  /* form feed, somewhat unlikely */
                         str = G_str_replace(str, "\f", "\\f");
-                    if (json && strchr(str, '\b'))  /* backspace, quite unlikely */
+                    if (strchr(str, '\b'))  /* backspace, quite unlikely */
                         str = G_str_replace(str, "\b", "\\b");
                 }
                 /* Common CSV does not escape, but doubles quotes (and we quote all
                  * text fields which takes care of a separator character in text). */
-                else if (csv && strchr(str, '"')) {
+                if (csv && strchr(str, '"')) {
                     str = G_str_replace(str, "\"", "\"\"");
                 }
 
