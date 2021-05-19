@@ -36,11 +36,13 @@ POINTS = """\
 """
 
 
-class JsonTest(TestCase):
-    """Test case for JSON parsing and structure.
+class DifficultValueTest(TestCase):
+    """Test case for CSV and JSON parsing and structure with difficult values.
 
-    Tests that JSON can be loaded properly by JSON reader and has expected structure.
+    Tests that CSV and JSON can be loaded properly by CSV/JSON readers
+    and have expected structure.
     Standard grass.script is used for testing to mimic actual use.
+    Several hard to swallow texts are generated to test the escaping and quoting.
     """
 
     # Setup variables to be used for outputs
@@ -48,6 +50,7 @@ class JsonTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """Create points with difficult attribute values"""
         cls.runModule(
             "v.in.ascii",
             input="-",
@@ -130,11 +133,11 @@ class JsonTest(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region and generated data"""
-        # cls.runModule("g.remove", flags="f", type="vector", name=cls.vector_points)
+        """Remove the test data"""
+        cls.runModule("g.remove", flags="f", type="vector", name=cls.vector_points)
 
     def test_csv_loads(self):
-        """"""
+        """Load CSV with difficult values with many separators"""
         for delimeter, null_value in itertools.product(
             [None, ",", ";", "\t", "|"], [None, "NULL"]
         ):
@@ -159,7 +162,7 @@ class JsonTest(TestCase):
                 lineterminator="\n",
                 strict=True,
             )
-            data = [row for row in reader]
+            data = list(reader)
             self.assertEqual(data[2]["place_name"], null_value)
             self.assertEqual(data[3]["place_name"], 'The "Great" Place')
             self.assertEqual(data[5]["place_name"], "Bright Hall|BLDG209")
@@ -167,7 +170,7 @@ class JsonTest(TestCase):
             self.assertEqual(data[8]["place_name"], "892 Long Street\nRaleigh NC 29401")
 
     def test_json_loads(self):
-        """"""
+        """Load JSON with difficult values"""
         text = gs.read_command("v.db.select", map=self.vector_points, format="json")
         data = json.loads(text)
         data = data["records"]
