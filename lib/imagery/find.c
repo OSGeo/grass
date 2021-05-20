@@ -176,36 +176,79 @@ int I_find_subgroup_file2(const char *group, const char *subgroup,
 }
 
 /*!
- * \brief does signature file exists?
+ * \brief Find mapset containing signature file
  *
- * Returns 1 if the
- * specified <b>signature</b> exists in the specified subgroup; 0 otherwise.
- * 
- * Should be used to check if signature file exists after G_parser run
- * when generating new signature file.
+ * Looks for the signature <i>name</i> of type <i>type</i>
+ * in the database. The <i>mapset</i> parameter can either be
+ * the empty string "", which means search all the mapsets in
+ * the users current mapset search path
+ * (see \ref Mapset_Search_Path for more details about the search
+ * path) or it can be a specific mapset name, which means look for the
+ * signature only in this one mapset (for example, in the current
+ * mapset). If found, the mapset where the signature lives is
+ * returned. If not found, the NULL pointer is returned.
  *
- *  \param group - group where to search
- *  \param subgroup - subgroup containing signatures
- *  \param type - type of signature ("sig" or "sigset")
- *  \param file - name of signature file
- *  \return int
+ * Note: If the user specifies a fully qualified signature name which
+ * exists, then I_find_signature() modifies <i>name</i> by removing
+ * the "@<i>mapset</i>".
+ * Use I_find_signature2 if altering passed in name is not desired.
+ *
+ * \param type SIGFILE_TYPE_
+ * \param name of signature
+ * \param mapset set NULL to search in all mapsets
+ * \return mapset or NULL
  */
-int I_find_signature_file(const char *group, const char *subgroup,
-                     const char *type, const char *file)
-{
-    char element[GNAME_MAX * 2];
-    
-    if (!I_find_group(group))
-        return 0;
-    if (subgroup == NULL || *subgroup == 0)
-        return 0;
-    if (type == NULL || *type == 0)
-        return 0;
-    if (file == NULL || *file == 0)
-        return 0;
-        
-    sprintf(element, "subgroup%c%s%c%s%c%s", HOST_DIRSEP, subgroup, HOST_DIRSEP, type, HOST_DIRSEP, file);
-    G_debug(5, "I_find_signature_file() element: %s", element);
-    
-    return G_find_file2_misc("group", element, group, G_mapset()) != NULL;
+const char *I_find_signature(int type, char *name, const char *mapset) {
+    char selem[GNAME_MAX]; /* 'signatures/type\0' */
+
+    G_debug(1, "I_find_signature(): type=%d name=%s mapset=%s", type, name, mapset);
+
+    if (type == SIGFILE_TYPE_SIG) {
+        sprintf(selem, "signatures%csig", HOST_DIRSEP);
+    }
+    else if (type == SIGFILE_TYPE_SIGSET) {
+        sprintf(selem, "signatures%csigset", HOST_DIRSEP);
+    }
+    else {
+        G_fatal_error("Programming error: unknown signature file type");
+    }
+    return G_find_file(selem, name, mapset);
+}
+
+/*!
+ * \brief Find mapset containing signature (look but don't touch)
+ *
+ * Looks for the signature <i>name</i> of type <i>type</i>
+ * in the database. The <i>mapset</i> parameter can either be
+ * the empty string "", which means search all the mapsets in
+ * the users current mapset search path
+ * (see \ref Mapset_Search_Path for more details about the search
+ * path) or it can be a specific mapset name, which means look for the
+ * signature only in this one mapset (for example, in the current
+ * mapset). If found, the mapset where the signature lives is
+ * returned. If not found, the NULL pointer is returned.
+ *
+ * Note: The passed name argument is not altered.
+ * Use I_find_signature if stripping mapset part from the name is desired.
+ *
+ * \param type SIGFILE_TYPE_
+ * \param name of signature
+ * \param mapset set NULL to search in all mapsets
+ * \return mapset or NULL
+ */
+const char *I_find_signature2(int type, const char *name, const char *mapset) {
+    char selem[GNAME_MAX]; /* 'signatures/type\0' */
+
+    G_debug(1, "I_find_signature2(): type=%d name=%s mapset=%s", type, name, mapset);
+
+    if (type == SIGFILE_TYPE_SIG) {
+        sprintf(selem, "signatures%csig", HOST_DIRSEP);
+    }
+    else if (type == SIGFILE_TYPE_SIGSET) {
+        sprintf(selem, "signatures%csigset", HOST_DIRSEP);
+    }
+    else {
+        G_fatal_error("Programming error: unknown signature file type");
+    }
+    return G_find_file2(selem, name, mapset);
 }

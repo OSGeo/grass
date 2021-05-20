@@ -196,6 +196,16 @@ struct scdScattData
                                         (used for SC_SCATT_DATA type) otherwise NULL */
 };
 
+/*! Supported signature file types.
+ */
+enum
+{
+    SIGFILE_TYPE_SIG,       /*! Signature files used by i.maxlik */
+    SIGFILE_TYPE_SIGSET,    /*! Signature files used by i.smap */
+
+    SIGFILE_TYPE_COUNT      /*! Total count of supported signature file types */
+};
+
 #define SIGNATURE_TYPE_MIXED 1
 
 #define GROUPFILE "CURGROUP"
