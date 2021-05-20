@@ -3,7 +3,7 @@
  
   \brief Imagery Library - Signature file functions (statistics for i.smap)
  
-  (C) 2001-2011, 2013 by the GRASS Development Team
+  (C) 2001-2011, 2013, 2021 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
