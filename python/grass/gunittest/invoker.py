@@ -266,7 +266,7 @@ class GrassTestFilesInvoker(object):
         if self.clean_mapsets:
             shutil.rmtree(mapset_dir)
 
-    def run_in_location(self, gisdbase, location, location_type, results_dir):
+    def run_in_location(self, gisdbase, location, location_type, results_dir, exclude):
         """Run tests in a given location
 
         Returns an object with counting attributes of GrassTestFilesCountingReporter,
@@ -304,6 +304,7 @@ class GrassTestFilesInvoker(object):
             all_locations_value=GrassTestLoader.all_tests_value,
             universal_location_value=GrassTestLoader.universal_tests_value,
             import_modules=False,
+            exclude=exclude,
         )
 
         self.reporter.start(results_dir)
