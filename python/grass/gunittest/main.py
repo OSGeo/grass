@@ -142,8 +142,6 @@ def get_config(start_directory):
     return {}
 
 
-# TODO: makefile rule should depend on the whole build
-# TODO: create a full interface (using grass parser or argparse)
 def main():
     parser = argparse.ArgumentParser(
         description="Run test files in all testsuite directories starting"
