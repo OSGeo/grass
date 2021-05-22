@@ -400,7 +400,9 @@ class GMFrame(wx.Frame):
             menuModel=self._moduleTreeBuilder.GetModel(),
             gcstyle=GC_PROMPT,
         )
-        self.goutput.showNotification.connect(lambda message: self.SetStatusText(message))
+        self.goutput.showNotification.connect(
+            lambda message: self.SetStatusText(message)
+        )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
         self._gconsole.Bind(
