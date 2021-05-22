@@ -150,11 +150,7 @@ class GMFrame(wx.Frame):
         self._createMenuBar()
         self.statusbar = self.CreateStatusBar(number=1)
         notebook = self._createNotebook()
-        self._createDataCatalogWidget(notebook)
-        self._createDisplayWidget(notebook)
-        self._createSearchModuleWidget(notebook)
-        self._createConsoleWidget(notebook)
-        self._createPythonShellWidget(notebook)
+        self._createWidgets(notebook)
         self.notebook = self._addPagesToNotebook(notebook)
         self.toolbars = {
             "workspace": LMWorkspaceToolbar(parent=self),
@@ -423,6 +419,13 @@ class GMFrame(wx.Frame):
             )
         else:
             self.pyshell = None
+
+    def _createWidgets(self, parent):
+        self._createDataCatalogWidget(parent)
+        self._createDisplayWidget(parent)
+        self._createSearchModuleWidget(parent)
+        self._createConsoleWidget(parent)
+        self._createPythonShellWidget(parent)
 
     def _addPagesToNotebook(self, notebook):
         """Add pages to notebook widget"""
