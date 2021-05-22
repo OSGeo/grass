@@ -18,6 +18,7 @@ for details.
 
 import wx
 import os
+from abc import ABC, abstractmethod
 
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
@@ -40,6 +41,47 @@ from grass.grassdb.checks import (
 )
 
 
+class DataCatalogLayout(ABC):
+    """Base abstract class creating the layout interface for Data Catalog"""
+
+    @abstractmethod
+    def _layout(self, catalog, toolbar, infobar, tree):
+        """Abstract method for creating Data Catalog layout"""
+        raise NotImplementedError
+
+
+class DataCatalogSingleLayout(DataCatalogLayout):
+    """Concrete creator that implements Data Catalog arrangement for single layout"""
+
+    def _layout(self, catalog, toolbar, infobar, tree):
+        """Do layout"""
+        # TODO: decide how the layout will look like
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(toolbar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(infobar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(tree.GetControl(), proportion=1, flag=wx.EXPAND)
+
+        catalog.SetAutoLayout(True)
+        catalog.SetSizer(sizer)
+        catalog.Fit()
+
+
+class DataCatalogMultiLayout(DataCatalogLayout):
+    """Concrete creator that implements Data Catalog arrangement for multi layout"""
+
+    def _layout(self, catalog, toolbar, infobar, tree):
+        """Do layout"""
+        # TODO: decide how the layout will look like
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(toolbar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(infobar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(tree.GetControl(), proportion=1, flag=wx.EXPAND)
+
+        catalog.SetAutoLayout(True)
+        catalog.SetSizer(sizer)
+        catalog.Fit()
+
+
 class DataCatalog(wx.Panel):
     """Data catalog panel"""
 
@@ -50,6 +92,7 @@ class DataCatalog(wx.Panel):
         id=wx.ID_ANY,
         title=_("Data catalog"),
         name="catalog",
+        gui=None,
         **kwargs,
     ):
         """Panel constructor  """
@@ -57,6 +100,7 @@ class DataCatalog(wx.Panel):
         self.parent = parent
         self.baseTitle = title
         self.giface = giface
+        self.gui = gui
         self._startLoadingTime = 0
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
         self.SetName("DataCatalog")
@@ -103,17 +147,15 @@ class DataCatalog(wx.Panel):
                 wx.CallLater(delay, self.showLockedMapsetInfo)
 
     def _layout(self):
-        """Do layout"""
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
-        sizer.Add(self.infoBar, proportion=0, flag=wx.EXPAND)
-        sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
+        self.gui._layout(self, self.toolbar, self.infoBar, self.tree)
 
-        self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        self.Fit()
+    def switchToSingleLayout(self):
+        self.gui = DataCatalogSingleLayout()
+        self._layout()
 
-        self.Layout()
+    def switchToMultiLayout(self):
+        self.gui = DataCatalogMultiLayout()
+        self._layout()
 
     def showDataStructureInfo(self):
         self.infoManager.ShowDataStructureInfo(self.OnCreateLocation)

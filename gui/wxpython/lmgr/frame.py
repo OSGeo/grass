@@ -65,7 +65,7 @@ from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
-from datacatalog.catalog import DataCatalog
+from datacatalog.catalog import DataCatalog, DataCatalogMultiLayout
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import (
@@ -351,7 +351,10 @@ class GMFrame(wx.Frame):
             self.notebook = FormNotebook(parent=self, style=wx.NB_BOTTOM)
 
         # create 'data catalog' widget and add it to main notebook page
-        self.datacatalog = DataCatalog(parent=self.notebook, giface=self._giface)
+        self.datacatalog = DataCatalog(
+            parent=self.notebook, giface=self._giface, gui=DataCatalogMultiLayout()
+        )
+
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message)
         )
