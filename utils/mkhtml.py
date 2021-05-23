@@ -307,7 +307,7 @@ def get_addon_path(pgm):
             for addon in addons_paths["tree"]:
                 split_path = addon["path"].split("/")
                 root_dir, module_dir = split_path[0], split_path[-1]
-                if "grass7" == root_dir and pgm == module_dir:
+                if "grass8" == root_dir and pgm == module_dir:
                     return True, addon["path"]
     return None, None
 
