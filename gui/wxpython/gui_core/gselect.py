@@ -1412,7 +1412,7 @@ class FormatSelect(wx.Choice):
             ftype = "gdal"
 
         formats = list()
-        for f in GetFormats()[ftype][srcType].values():
+        for f in GetFormats()[ftype][srcType].items():
             formats += f
         self.SetItems(formats)
 
@@ -1594,8 +1594,8 @@ class GdalSelect(wx.Panel):
         self.dirWidgets["browse"] = browse
         formatSelect = wx.Choice(parent=self.dirPanel)
         self.dirWidgets["format"] = formatSelect
-        fileFormats = GetFormats(writableOnly=dest)[fType]["file"]
-        formatSelect.SetItems(sorted(list(fileFormats)))
+        self.fileFormats = GetFormats(writableOnly=dest)[fType]["file"]
+        formatSelect.SetItems(sorted(list(self.fileFormats.values())))
         formatSelect.Bind(
             wx.EVT_CHOICE,
             lambda evt: self.SetExtension(
@@ -1612,19 +1612,20 @@ class GdalSelect(wx.Panel):
         self.dirWidgets["options"] = TextCtrl(parent=self.dirPanel)
         if self.ogr:
             shapefile = "ESRI Shapefile"
-            if shapefile in fileFormats:
+            if shapefile in self.fileFormats:
                 formatSelect.SetStringSelection(shapefile)
                 self.SetExtension(shapefile)
         else:
             tiff = "GeoTIFF"
-            if tiff in fileFormats:
+            if tiff in self.fileFormats:
                 formatSelect.SetStringSelection(tiff)
                 self.SetExtension(tiff)
 
         # database
         self.dbPanel = wx.Panel(parent=self)
+
         self.dbFormats = GetFormats(writableOnly=dest)[fType]["database"]
-        dbChoice = wx.Choice(parent=self.dbPanel, choices=self.dbFormats)
+        dbChoice = wx.Choice(parent=self.dbPanel, choices=list(self.dbFormats.values()))
         dbChoice.Bind(
             wx.EVT_CHOICE,
             lambda evt: self.SetDatabase(db=dbChoice.GetStringSelection()),
@@ -1681,8 +1682,10 @@ class GdalSelect(wx.Panel):
 
         # protocol
         self.protocolPanel = wx.Panel(parent=self)
-        protocolFormats = GetFormats(writableOnly=self.dest)[fType]["protocol"]
-        protocolChoice = wx.Choice(parent=self.protocolPanel, choices=protocolFormats)
+        self.protocolFormats = GetFormats(writableOnly=self.dest)[fType]["protocol"]
+        protocolChoice = wx.Choice(
+            parent=self.protocolPanel, choices=list(self.protocolFormats.values())
+        )
         self.protocolWidgets["format"] = protocolChoice
 
         self.protocolWidgets["text"] = TextCtrl(parent=self.protocolPanel)
@@ -1705,7 +1708,7 @@ class GdalSelect(wx.Panel):
             )
             if current["format"] == "native":
                 sourceType = "native"
-            elif current["format"] in GetFormats()["ogr"]["database"]:
+            elif current["format"] in GetFormats()["ogr"]["database"].values():
                 sourceType = "db"
             else:
                 sourceType = "dir"
@@ -1861,6 +1864,7 @@ class GdalSelect(wx.Panel):
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
             pos=(3, 0),
             span=(1, 2),
+
         )
         sizer.Add(
             self.dbWidgets["textLabel2"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0)
@@ -1971,6 +1975,18 @@ class GdalSelect(wx.Panel):
 
         return formatToExt.get(name, "")
 
+    def _getFormatAbbreviation(self, formats, formatName):
+        """Get format abbreviation
+
+        :param dict formats: {formatAbbreviation: formatLongName}
+        :param str formatName: long format name
+
+        return str: return format abbreviation
+        """
+        for key, value in formats.items():
+            if formatName == value:
+                return key
+
     def SetSourceType(self, sourceType):
         """Set source type (db, file, dir, ...).
         Does not switch radioboxes."""
@@ -1984,9 +2000,9 @@ class GdalSelect(wx.Panel):
         self.changingSizer.Layout()
 
         if sourceType == "db":
-            self.dbWidgets["format"].SetItems(self.dbFormats)
+            self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
-                if "PostgreSQL" in self.dbFormats:
+                if "PostgreSQL" in self.dbFormats.values():
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL")
                 else:
                     self.dbWidgets["format"].SetSelection(0)
@@ -2274,14 +2290,34 @@ class GdalSelect(wx.Panel):
         """Get source type"""
         return self._sourceType
 
-    def GetFormat(self):
+    def GetFormat(self, getFormatAbbreviation=False):
         """Get format as string"""
-        if self._sourceType == "dir":
+
+        def _getFormat(getFormatAbbreviation, format_group):
+            """Get format long name or format abbreviation
+
+            :param bool getFormatAbbreviation: get format abbreviation
+            :param dict format_group: formats dict {formatAbbreviation: formatLongName}
+            for 'file', 'protocol', 'database' group
+
+            return str: long format name or format abbreviation
+            """
             format = self.dirWidgets["format"].GetStringSelection()
+            if getFormatAbbreviation:
+                return self._getFormatAbbreviation(
+                    formats=self.fileFormats,
+                    formatName=format,
+                )
+            return format
+
+        if self._sourceType == "dir":
+            format = _getFormat(getFormatAbbreviation, format_group=self.fileFormats)
         elif self._sourceType == "pro":
-            format = self.protocolWidgets["format"].GetStringSelection()
+            format = _getFormat(
+                getFormatAbbreviation, format_group=self.protocolFormats
+            )
         elif self._sourceType == "db":
-            format = self.dbWidgets["format"].GetStringSelection()
+            format = _getFormat(getFormatAbbreviation, format_group=self.dbFormats)
         else:
             format = ""
 
