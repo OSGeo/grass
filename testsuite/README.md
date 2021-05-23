@@ -1,6 +1,6 @@
 This directory contains scripts to check some functionality of GRASS GIS.
 
-GRASS GIS testsuite documentation: https://grass.osgeo.org/grass79/manuals/libpython/gunittest_testing.html
+GRASS GIS testsuite documentation: https://grass.osgeo.org/grass80/manuals/libpython/gunittest_testing.html
 
 ## Simple test data
 
@@ -8,7 +8,7 @@ Some tests may be launched in the location `../demolocation/`:
 
 ```
 # create new mapset for test
-grass79 ../demolocation/user1 -c
+grass80 ../demolocation/user1 -c
 # run the test
 make
 ```

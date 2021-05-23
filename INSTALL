@@ -40,11 +40,11 @@ Installation order:
 
 GRASS source code is currently distributed in 2 forms:
 
-1) Officially released source code (e.g. grass-7.9.0.tar.gz or later)
+1) Officially released source code (e.g. grass-8.0.0.tar.gz or later)
 
   The Full source code version contains all the GRASS source code
   required for compilation. It is distributed as one file (*.tar.gz
-  package) and the version is composed of 3 numbers, e.g. 7.9.0, 7.9.1
+  package) and the version is composed of 3 numbers, e.g. 8.0.0, 8.0.1
   etc.
 
 2) Snapshots of source code (generated from GitHub)
@@ -53,8 +53,8 @@ GRASS source code is currently distributed in 2 forms:
   repository (https://github.com/OSGeo/grass/) or as a auto-generated snapshot
   (*.tar.gz package) of the GitHub repository. The snapshot name
   contains the date when the snapshot was created (checked out from
-  the GitHub repository), e.g. grass-7.9.git_src_snapshot_2019_07_11.tar.gz
-  from https://grass.osgeo.org/grass79/source/snapshot/
+  the GitHub repository), e.g. grass-8.0.git_src_snapshot_2021_06_12.tar.gz
+  from https://grass.osgeo.org/grass80/source/snapshot/
   Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
 
@@ -151,16 +151,16 @@ See also CODE OPTIMIZATION below.
 
 After compilation, the resulting code is stored in the directory
     ./dist.$ARCH
-and the scripts (grass79, ...) in
+and the scripts (grass80, ...) in
     ./bin.$ARCH
 
 To run GRASS, simply start
-    ./bin.$ARCH/grass79
+    ./bin.$ARCH/grass80
 
 or run
 
     make install
-    grass79
+    grass80
 
 
 (E) INSTALLATION ON MACOSX
@@ -189,7 +189,7 @@ GitHub, you have to perform a few steps. In general:
 
 In detail:
 
-    cd /where/your/grass7sourcecode/lives/
+    cd /where/your/grass8sourcecode/lives/
     git fetch --all
     git merge upstream/master
     ./configure ...
@@ -212,9 +212,9 @@ the main source code directory or locally with
     "INST_NOW=y make"
 
 You may want to define an alias for this:
-    alias gmake7='INST_NOW=y make'
+    alias gmake8='INST_NOW=y make'
 Then simply compile/install the current module with
-    gmake7
+    gmake8
 
 Note: If you keep your module source code outside the standard GRASS
 source code directory structure, you will have to change the relative
@@ -249,7 +249,7 @@ by the local machine at GCC runtime including -mtune.
 To find out optional CFLAGS for your platform, enter:
   gcc -dumpspecs
 
-See also: http://gcc.gnu.org/
+See also: https://gcc.gnu.org/
 
 A real fast GRASS version (and small binaries) will be created with
 LDFLAGS set to "stripping" (but this disables debugging):
@@ -303,7 +303,7 @@ developers mailing list. See https://grass.osgeo.org/development/
 
 The Programmer's manual is generated with doxygen from the source code.
 Please see the README file and the files at:
-https://grass.osgeo.org/programming7/
+https://grass.osgeo.org/programming8/
 
 (N) CONTRIBUTING CODE AND PATCHES
 
