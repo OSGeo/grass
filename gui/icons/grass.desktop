@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=GRASS GIS 7
+Name=GRASS GIS 8
 GenericName=Geographic Information System
 GenericName[ar]=نظام المعلومات الجغرافي
 GenericName[az]=Coğrafi informasiya sistemi
@@ -47,8 +47,8 @@ GenericName[tr]=Coğrafi bilgi sistemi
 GenericName[uk]=Геоінформаційна система
 GenericName[uz]=Geografik axborot tizimi
 Icon=grass
-TryExec=/usr/bin/grass79
-Exec=grass79
+TryExec=/usr/bin/grass80
+Exec=grass80
 Terminal=true
 Keywords=gis;spatial;geospatial;database;remote sensing;hydrology;vector;raster;visualization;maps;wms;wfs;ogc;osgeo;
 Categories=Education;Science;Geoscience;Geography;
