@@ -222,7 +222,11 @@ from the command line. For example, the following will start
 in a given Mapset with only command line interface:
 
 <div class="code"><pre>
-grass80 --text ~/grassdata/mylocation/mymapset
+# Linux, Mac, *BSD, ...:
+grass80 --text ~/grassdata/nc_spm_08_grass7/user1
+
+# Windows
+grass80 --text D:\grassdata\nc_spm_08_grass7\user1
 </pre></div>
 
 And the following will create the given Location with projection given
@@ -230,7 +234,11 @@ by the EPSG code and it will start the default interface
 (GUI or command line):
 
 <div class="code"><pre>
+# Linux, Mac, *BSD, ...:
 grass80 -c EPSG:5514:3 ~/grassdata/mylocation
+
+# Windows
+grass80 -c EPSG:5514:3 D:\grassdata\mylocation
 </pre></div>
 
 See <a href="grass8.html"><em>grass</em></a> command manual for more details.
