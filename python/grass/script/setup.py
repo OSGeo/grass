@@ -24,20 +24,20 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass7bin = 'grass79'
+    grass8bin = 'grass80'
     if sys.platform.startswith('win'):
         # MS Windows
-        grass7bin = r'C:\OSGeo4W\bin\grass79.bat'
+        grass8bin = r'C:\OSGeo4W\bin\grass80.bat'
         # uncomment when using standalone WinGRASS installer
-        # grass7bin = r'C:\Program Files (x86)\GRASS GIS 7.9.0\grass79.bat'
+        # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.0.0\grass80.bat'
         # this can be avoided if GRASS executable is added to PATH
     elif sys.platform == 'darwin':
         # Mac OS X
         # TODO: this have to be checked, maybe unix way is good enough
-        grass7bin = '/Applications/GRASS/GRASS-7.9.app/'
+        grass8bin = '/Applications/GRASS/GRASS-8.0.app/'
 
     # query GRASS GIS itself for its GISBASE
-    startcmd = [grass7bin, '--config', 'path']
+    startcmd = [grass8bin, '--config', 'path']
     try:
         p = subprocess.Popen(startcmd, shell=False,
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -66,7 +66,7 @@ Usage::
     rcfile = gsetup.init(gisbase, gisdb, location, mapset)
 
     # example calls
-    gs.message('Current GRASS GIS 7 environment:')
+    gs.message('Current GRASS GIS 8 environment:')
     print(gs.gisenv())
 
     gs.message('Available raster maps:')
@@ -81,7 +81,7 @@ Usage::
     gsetup.cleanup()
 
 
-(C) 2010-2020 by the GRASS Development Team
+(C) 2010-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -140,7 +140,7 @@ def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
 
         # ... setup GISBASE and PYTHON path before import
         import grass.script as gs
-        gisrc = gs.setup.init("/usr/bin/grass7",
+        gisrc = gs.setup.init("/usr/bin/grass8",
                               "/home/john/grassdata",
                               "nc_spm_08", "user1")
         # ... use GRASS modules here
@@ -166,10 +166,10 @@ def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
     # add addons to the PATH
     # copied and simplified from lib/init/grass.py
     if mswin:
-        config_dirname = "GRASS7"
+        config_dirname = "GRASS8"
         config_dir = os.path.join(os.getenv("APPDATA"), config_dirname)
     else:
-        config_dirname = ".grass7"
+        config_dirname = ".grass8"
         config_dir = os.path.join(os.getenv("HOME"), config_dirname)
     addon_base = os.path.join(config_dir, "addons")
     os.environ["GRASS_ADDON_BASE"] = addon_base
