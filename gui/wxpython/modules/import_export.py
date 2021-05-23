@@ -790,7 +790,11 @@ class GdalOutputDialog(wx.Dialog):
                     {"directory": dsn, "extension": extension},
                 )
             RunCommand(
-                cmd, parent=self, format=frmt, options=options, **params,
+                cmd,
+                parent=self,
+                format=frmt,
+                options=options,
+                **params,
             )
         self.Close()
 

@@ -1864,7 +1864,6 @@ class GdalSelect(wx.Panel):
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
             pos=(3, 0),
             span=(1, 2),
-
         )
         sizer.Add(
             self.dbWidgets["textLabel2"], flag=wx.ALIGN_CENTER_VERTICAL, pos=(4, 0)
