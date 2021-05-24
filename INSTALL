@@ -212,9 +212,9 @@ the main source code directory or locally with
     "INST_NOW=y make"
 
 You may want to define an alias for this:
-    alias gmake8='INST_NOW=y make'
+    alias gmake='INST_NOW=y make'
 Then simply compile/install the current module with
-    gmake8
+    gmake
 
 Note: If you keep your module source code outside the standard GRASS
 source code directory structure, you will have to change the relative
