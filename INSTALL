@@ -189,7 +189,7 @@ GitHub, you have to perform a few steps. In general:
 
 In detail:
 
-    cd /where/your/grass8sourcecode/lives/
+    cd /where/your/grass-source-code/lives/
     git fetch --all
     git merge upstream/master
     ./configure ...
