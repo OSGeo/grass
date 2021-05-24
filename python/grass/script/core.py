@@ -347,7 +347,7 @@ def make_command(
                         "To run the module <%s> add underscore at the end"
                         " of the option <%s> to avoid conflict with Python"
                         " keywords. Underscore at the beginning is"
-                        " depreciated in GRASS GIS 7.0 and has been removed"
+                        " deprecated in GRASS GIS 7.0 and has been removed"
                         " in version 7.1."
                     )
                     % (prog, opt)

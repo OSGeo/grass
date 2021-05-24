@@ -207,7 +207,7 @@ class MapWindowBase(object):
     def RegisterMouseEventHandler(self, event, handler, cursor=None):
         """Binds event handler
 
-        @depreciated This method is depreciated. Use Signals or drawing API
+        @deprecated This method is deprecated. Use Signals or drawing API
         instead. Signals do not cover all events but new Signals can be added
         when needed consider also adding generic signal. However, more
         interesting and useful is higher level API to create objects, graphics etc.
@@ -267,7 +267,7 @@ class MapWindowBase(object):
     def UnregisterAllHandlers(self):
         """Unregisters all registered handlers
 
-        @depreciated This method is depreciated. Use Signals or drawing API instead.
+        @deprecated This method is deprecated. Use Signals or drawing API instead.
 
         Before each handler is unregistered it is called with string
         value "unregistered" of event parameter.
@@ -291,7 +291,7 @@ class MapWindowBase(object):
     def UnregisterMouseEventHandler(self, event, handler):
         """Unbinds event handler for event
 
-        @depreciated This method is depreciated. Use Signals or drawing API instead.
+        @deprecated This method is deprecated. Use Signals or drawing API instead.
 
         Before handler is unregistered it is called with string value
         "unregistered" of event parameter.
@@ -361,7 +361,7 @@ class MapWindowBase(object):
     def GetLastEN(self):
         """Returns last coordinates of mouse cursor.
 
-        @depreciated This method is depreciated. Use Signal with coordinates as parameters.
+        @deprecated This method is deprecated. Use Signal with coordinates as parameters.
 
         :func:`OnMotion`
         """
