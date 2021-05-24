@@ -151,16 +151,16 @@ See also CODE OPTIMIZATION below.
 
 After compilation, the resulting code is stored in the directory
     ./dist.$ARCH
-and the scripts (grass80, ...) in
+and the scripts (grass, ...) in
     ./bin.$ARCH
 
 To run GRASS, simply start
-    ./bin.$ARCH/grass80
+    ./bin.$ARCH/grass
 
 or run
 
     make install
-    grass80
+    grass
 
 
 (E) INSTALLATION ON MACOSX

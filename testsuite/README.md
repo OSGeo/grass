@@ -8,7 +8,7 @@ Some tests may be launched in the location `../demolocation/`:
 
 ```
 # create new mapset for test
-grass80 ../demolocation/user1 -c
+grass ../demolocation/user1 -c
 # run the test
 make
 ```

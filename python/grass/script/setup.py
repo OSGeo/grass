@@ -24,12 +24,12 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass8bin = 'grass80'
+    grass8bin = 'grass'
     if sys.platform.startswith('win'):
         # MS Windows
-        grass8bin = r'C:\OSGeo4W\bin\grass80.bat'
+        grass8bin = r'C:\OSGeo4W\bin\grass.bat'
         # uncomment when using standalone WinGRASS installer
-        # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.0.0\grass80.bat'
+        # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.0.0\grass.bat'
         # this can be avoided if GRASS executable is added to PATH
     elif sys.platform == 'darwin':
         # Mac OS X

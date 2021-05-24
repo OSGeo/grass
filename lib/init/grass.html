@@ -2,7 +2,7 @@
 
 <h2>SYNOPSIS</h2>
 
-<b>grass80</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
+<b>grass</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
 [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>] | <b>-e</b> | <b>-f</b> |
 [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> |
 [<b>--tmp-location</b> | <b>--tmp-mapset</b>]
@@ -101,13 +101,13 @@ user interface, as well as the desired mapset to work on.
 
 <p>The startup program will remember both the desired user interface
 and mapset. Thus, the next time the user runs GRASS, typing
-<em>grass80</em> (without any options) will start GRASS with the
+<em>grass</em> (without any options) will start GRASS with the
 previous settings for the user interface and mapset selected.
 
 <p>If you specify a graphical user interface (<b>--gui</b>)
-the <em>grass80</em> program will try to verify that the system you
+the <em>grass</em> program will try to verify that the system you
 specified exists and that you can access it successfully. If any of
-these checks fail then <em>grass80</em> will automatically switch back
+these checks fail then <em>grass</em> will automatically switch back
 to the text user interface mode.
 
 <h2>FLAGS</h2>
@@ -120,7 +120,7 @@ version parameters, with the options:
 <li><b>build</b>: (e.g., <tt>./configure --with-cxx --enable-largefile --with-proj [...]</tt>)</li>
 <li><b>compiler</b>: (e.g., <tt>gcc</tt>)</li>
 <li><b>date</b>: (e.g., <tt>Tue Mar 31 20:34:57 2020 +0200</tt>)</li>
-<li><b>path</b>: (e.g., <tt>/usr/lib64/grass80</tt>)</li>
+<li><b>path</b>: (e.g., <tt>/usr/lib64/grass</tt>)</li>
 <li><b>revision</b>: (e.g., <tt>745ee7ec9</tt>)</li>
 <li><b>svn_revision</b>: (e.g., <tt>062bffc8</tt>)</li>
 <li><b>version</b>: (e.g., <tt>8.0.0dev</tt>)</li>
@@ -160,14 +160,14 @@ propagate).
 
 <h3>User Interface Environment Variable</h3>
 
-<p>The <em>grass80</em> program will check for the existence of an
+<p>The <em>grass</em> program will check for the existence of an
 environment variable called GRASS_GUI which indicates the type of user
 interface for GRASS to use. If this variable is not set
-when <em>grass80</em> is run, then it will be created and then saved
+when <em>grass</em> is run, then it will be created and then saved
 in the <tt>$HOME/.grass8/rc</tt> file for the next time GRASS is
 run. It can be set to <tt>text</tt>, <tt>gtext</tt> or <tt>gui</tt>.
 
-<p>There is an order of precedence in the way <em>grass80</em>
+<p>There is an order of precedence in the way <em>grass</em>
 determines the user interface to use. The following is the hierarchy
 from highest precedence to lowest.
 <ol>
@@ -243,49 +243,49 @@ script. The script file must have its executable bit set.
 <p>The following are some examples of how you could start GRASS
 
 <dl>
-<dt><b>grass80</b>
+<dt><b>grass</b>
 <dd> Start GRASS using the default user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<dt><b>grass80 --gui</b>
+<dt><b>grass --gui</b>
 <dd> Start GRASS using the graphical user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<dt><b>grass80 --text</b>
+<dt><b>grass --text</b>
 <dd> Start GRASS using the text-based user interface. Appropriate
 location and mapset must be set by environmental variables (see
 examples below) otherwise taken from the last GRASS session.</dd>
 
-<dt><b>grass80 --gtext</b>
+<dt><b>grass --gtext</b>
 <dd> Start GRASS using the text-based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<dt><b>grass80 $HOME/grassdata/spearfish70/user1</b>
+<dt><b>grass $HOME/grassdata/spearfish70/user1</b>
 <dd> Start GRASS using the default user interface and automatically
     launch into the given mapset, bypassing the mapset selection menu.
 
-<dt><b>grass80 --gui -</b>
+<dt><b>grass --gui -</b>
 <dd> Start GRASS using the graphical user interface and try to
     obtain the location and mapset from environment variables.
 
-<dt><b>grass80 -c EPSG:4326 $HOME/grassdata/mylocation</b>
+<dt><b>grass -c EPSG:4326 $HOME/grassdata/mylocation</b>
 <dd> Creates a new GRASS location with EPSG code 4326 (latitude-longitude, WGS84)
     in the specified GISDBASE
 
-<dt><b>grass80 -c EPSG:5514:3 $HOME/grassdata/mylocation</b>
+<dt><b>grass -c EPSG:5514:3 $HOME/grassdata/mylocation</b>
 <dd> Creates a new GRASS location with EPSG code 5514 (S-JTSK / Krovak
     East North - SJTSK) with datum transformation parameters used in
     Czech Republic in the specified GISDBASE
 
-<dt><b>grass80 -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'</b>
+<dt><b>grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'</b>
 <dd>  Creates a new GRASS location from PROJ definition string
     (here: <a href="https://proj4.org/operations/projections/gnom.html">gnomonic</a>)
     in the specified GISDBASE
 
-<dt><b>grass80 -c myvector.shp $HOME/grassdata/mylocation</b>
+<dt><b>grass -c myvector.shp $HOME/grassdata/mylocation</b>
 <dd> Creates a new GRASS location based on georeferenced Shapefile
 
-<dt><b>grass80 -c myraster.tif $HOME/grassdata/mylocation</b>
+<dt><b>grass -c myraster.tif $HOME/grassdata/mylocation</b>
 <dd> Creates a new GRASS location based on georeferenced GeoTIFF file
 </dl>
 
@@ -302,26 +302,26 @@ Creating a new Location based on a geodata file's projection (<b>-c</b>)
 and exit (<b>-e</b>) immediately:
 
 <div class="code"><pre>
-grass80 -c elevation.tiff -e /path/to/grassdata/test1/
+grass -c elevation.tiff -e /path/to/grassdata/test1/
 </pre></div>
 
 Linking external raster data to PERMANENT Mapset:
 
 <div class="code"><pre>
-grass80 /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
-grass80 /path/to/grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
+grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
+grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
 </pre></div>
 
 Get statistics for one raster map:
 
 <div class="code"><pre>
-grass80 /path/to/grassdata/test1/PERMANENT/ --exec r.univar map=elevation
+grass /path/to/grassdata/test1/PERMANENT/ --exec r.univar map=elevation
 </pre></div>
 
 Compare the rasters visually:
 
 <div class="code"><pre>
-grass80 /path/to/grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
+grass /path/to/grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
 </pre></div>
 
 <h4>Execution of shell and Python scripts instead of single commands</h4>
@@ -332,7 +332,7 @@ exec interface.
 <b>Shell script example:</b> the command to execute a shell script might be:
 
 <div class="code"><pre>
-grass80 /path/to/grassdata/test1/PERMANENT/ --exec sh test.sh
+grass /path/to/grassdata/test1/PERMANENT/ --exec sh test.sh
 </pre></div>
 
 A very simple bash script ("test.sh") may look like this:
@@ -349,7 +349,7 @@ r.info elevation
 <b>Python script example:</b> the command to execute a Python script might be:
 
 <div class="code"><pre>
-grass80 /path/to/grassdata/test1/PERMANENT/ --exec python test.py
+grass /path/to/grassdata/test1/PERMANENT/ --exec python test.py
 </pre></div>
 
 A very simple Python script ("test.py") may look like this:
@@ -380,19 +380,19 @@ projection coordinate reference system (CRS) and simultaneously starting
 computation in a shell script:
 
 <div class="code"><pre>
-grass80 --tmp-location elevation.tiff --exec test.sh
+grass --tmp-location elevation.tiff --exec test.sh
 </pre></div>
 
 The same, but using an EPSG code and a Python script:
 
 <div class="code"><pre>
-grass80 --tmp-location EPSG:3358 --exec test.py
+grass --tmp-location EPSG:3358 --exec test.py
 </pre></div>
 
 Finally, for special cases, we can create an XY location without any CRS:
 
 <div class="code"><pre>
-grass80 --tmp-location XY --exec test.py
+grass --tmp-location XY --exec test.py
 </pre></div>
 
 Temporary location is automatically deleted after computation,
@@ -404,14 +404,14 @@ A single command can be also executed, e.g. to examine properties of the
 temporary location:
 
 <div class="code"><pre>
-grass80 --tmp-location EPSG:3358 --exec g.proj -p
+grass --tmp-location EPSG:3358 --exec g.proj -p
 </pre></div>
 
 A temporary XY location with single command is useful, e.g. to show
 help text of a module:
 
 <div class="code"><pre>
-grass80 --tmp-location XY --exec r.neighbors --help
+grass --tmp-location XY --exec r.neighbors --help
 </pre></div>
 
 
@@ -422,13 +422,13 @@ A single command can be executed, e.g., to examine properties of a
 location (here using the NC SPM sample location):
 
 <div class="code"><pre>
-grass80 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
 </pre></div>
 
 Computation in a Python script can be executed in the same way:
 
 <div class="code"><pre>
-grass80 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py
 </pre></div>
 
 Additional parameters are just passed to the script, so we can run the
@@ -436,15 +436,15 @@ script with different sets of parameters (here 5, 8 and 3, 9) in
 different temporary mapsets which is good for parallel processing.
 
 <div class="code"><pre>
-grass80 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
-grass80 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
 </pre></div>
 
 The same applies to Bash scripts (and other scripts supported on you
 platform):
 
 <div class="code"><pre>
-grass80 --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
+grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
 </pre></div>
 
 The temporary mapset is automatically deleted after computation,

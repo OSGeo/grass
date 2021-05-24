@@ -160,10 +160,6 @@ RUN echo "  => Configure and compile grass";\
     make install && \
     ldconfig /etc/ld.so.conf.d; \
     #
-    # enable simple grass command regardless of version number
-    #
-    ln -s `find /usr/local/bin -name "grass*"` /usr/local/bin/grass; \
-    #
     # Reduce the image size
     #
     rm -rf /src/*; \

@@ -170,10 +170,6 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
-# enable simple grass command regardless of version number
-# also important for COPY cmd later
-RUN ln -s `find /usr/local/bin -name "grass*"` /usr/local/bin/grass
-
 # Reduce the image size - Remove unnecessary grass files
 RUN cp /usr/local/grass80/gui/wxpython/xml/module_items.xml module_items.xml; \
     rm -rf /usr/local/grass80/demolocation; \
@@ -197,7 +193,6 @@ RUN apk add curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && p
 # install external Python API
 RUN pip3 install --upgrade pip six grass-session --ignore-installed six
 
-RUN ln -s /usr/local/grass /usr/local/grass7
 RUN ln -s /usr/local/grass `grass --config path`
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
     pdal --version && \
