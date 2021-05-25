@@ -111,7 +111,8 @@ read MINOR <&3
 read PATCH <&3
 
 export VERSION=${MAJOR}.${MINOR}.${PATCH}
-export POSTFIX=${MAJOR}${MINOR}
+#export POSTFIX=${MAJOR}${MINOR}
+export POSTFIX=""
 
 GRASS_EXECUTABLE=grass
 
