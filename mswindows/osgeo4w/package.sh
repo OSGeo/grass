@@ -113,7 +113,7 @@ read PATCH <&3
 export VERSION=${MAJOR}.${MINOR}.${PATCH}
 export POSTFIX=${MAJOR}${MINOR}
 
-GRASS_EXECUTABLE=grass${MAJOR}${MINOR}
+GRASS_EXECUTABLE=grass
 
 if [ -f mswindows/osgeo4w/package.log ]; then
     i=0
