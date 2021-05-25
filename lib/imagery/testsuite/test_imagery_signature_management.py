@@ -9,6 +9,7 @@ Read the file COPYING that comes with GRASS
 for details
 """
 import os
+import shutil
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -17,12 +18,13 @@ from grass.script.core import tempname
 from grass.pygrass import utils
 from grass.pygrass.gis import Mapset
 
-from grass.lib.gis import G_mapset_path
+from grass.lib.gis import G_mapset_path, G_make_mapset
 from grass.lib.imagery import (
     SIGFILE_TYPE_SIG,
     SIGFILE_TYPE_SIGSET,
     I_find_signature,
     I_signatures_remove,
+    I_signatures_copy,
 )
 
 
@@ -176,6 +178,139 @@ class SignaturesRemoveTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+
+class SignaturesCopyTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.mpath = utils.decode(G_mapset_path())
+        cls.mapset_name = Mapset().name
+        cls.sigfiles = []
+        # A mapset with a random name
+        cls.src_mapset_name = tempname(10)
+        G_make_mapset(None, None, cls.src_mapset_name)
+        cls.src_mapset_path = (
+            cls.mpath.rsplit("/", maxsplit=1)[0] + "/" + cls.src_mapset_name
+        )
+        os.makedirs(cls.src_mapset_path + "/signatures/sig/")
+        cls.src_sig = tempname(10)
+        cls.sigfiles.append(
+            "{}/signatures/sig/{}".format(cls.src_mapset_path, cls.src_sig)
+        )
+        f = open(cls.sigfiles[0], "w")
+        f.write("A sig file")
+        f.close()
+        os.makedirs(cls.src_mapset_path + "/signatures/sigset/")
+        cls.src_sigset = tempname(10)
+        cls.sigfiles.append(
+            "{}/signatures/sigset/{}".format(cls.src_mapset_path, cls.src_sigset)
+        )
+        f = open(cls.sigfiles[1], "w")
+        f.write("A sigset file")
+        f.close()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Remove random mapset created during setup
+        shutil.rmtree(cls.src_mapset_path, ignore_errors=True)
+        for f in cls.sigfiles:
+            try:
+                os.remove(f)
+            except OSError:
+                pass
+
+    def test_copy_to_wrong_mapset(self):
+        rnd_name = "{0}@{0}".format(tempname(10))
+        ret = I_signatures_copy(
+            SIGFILE_TYPE_SIG, tempname(10), self.mapset_name, rnd_name
+        )
+        self.assertEqual(ret, 1)
+
+    def test_sig_does_not_exist(self):
+        ret = I_signatures_copy(
+            SIGFILE_TYPE_SIG, tempname(10), self.mapset_name, tempname(10)
+        )
+        self.assertEqual(ret, 1)
+
+    def test_sigset_does_not_exist(self):
+        ret = I_signatures_copy(
+            SIGFILE_TYPE_SIGSET, tempname(10), self.mapset_name, tempname(10)
+        )
+        self.assertEqual(ret, 1)
+
+    def test_success_unqualified_sig(self):
+        dst = tempname(10)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
+        self.assertTrue(ret)
+        ret = I_signatures_copy(
+            SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name, dst
+        )
+        self.sigfiles.append(dst)
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+    def test_success_fq_sig(self):
+        dst = tempname(10) + "@" + self.mapset_name
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
+        self.assertTrue(ret)
+        ret = I_signatures_copy(
+            SIGFILE_TYPE_SIG,
+            self.src_sig + "@" + self.src_mapset_name,
+            self.src_mapset_name,
+            dst,
+        )
+        self.sigfiles.append(dst)
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+    def test_success_unqualified_sigset(self):
+        dst = tempname(10)
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(
+            SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name
+        )
+        self.assertTrue(ret)
+        ret = I_signatures_copy(
+            SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name, dst
+        )
+        self.sigfiles.append(dst)
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+    def test_success_fq_sigset(self):
+        dst = tempname(10) + "@" + self.mapset_name
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(
+            SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name
+        )
+        self.assertTrue(ret)
+        ret = I_signatures_copy(
+            SIGFILE_TYPE_SIGSET,
+            self.src_sigset + "@" + self.src_mapset_name,
+            self.src_mapset_name,
+            dst,
+        )
+        self.sigfiles.append(dst)
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
