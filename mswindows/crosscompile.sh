@@ -290,7 +290,7 @@ done
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 
 rm -f $dist/grass$version.tmp
-cp -a bin.$arch/grass$version.py $dist/etc
+cp -a bin.$arch/grass.py $dist/etc
 
 cat<<'EOT' > $dist/grass$version.bat
 @echo off
