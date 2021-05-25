@@ -250,7 +250,7 @@ class SignaturesCopyTestCase(TestCase):
         ret = I_signatures_copy(
             SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name, dst
         )
-        self.sigfiles.append(dst)
+        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
@@ -258,7 +258,9 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 
     def test_success_fq_sig(self):
-        dst = tempname(10) + "@" + self.mapset_name
+        dst = tempname(10)
+        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
+        dst = dst + "@" + self.mapset_name
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
@@ -269,7 +271,6 @@ class SignaturesCopyTestCase(TestCase):
             self.src_mapset_name,
             dst,
         )
-        self.sigfiles.append(dst)
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
@@ -287,7 +288,7 @@ class SignaturesCopyTestCase(TestCase):
         ret = I_signatures_copy(
             SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name, dst
         )
-        self.sigfiles.append(dst)
+        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
@@ -295,7 +296,9 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 
     def test_success_fq_sigset(self):
-        dst = tempname(10) + "@" + self.mapset_name
+        dst = tempname(10)
+        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
+        dst = dst + "@" + self.mapset_name
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(
@@ -308,7 +311,6 @@ class SignaturesCopyTestCase(TestCase):
             self.src_mapset_name,
             dst,
         )
-        self.sigfiles.append(dst)
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
