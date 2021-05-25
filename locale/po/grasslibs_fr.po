@@ -85,7 +85,7 @@ msgstr "afficher les paramètres de configuration GRASS"
 
 #: ../lib/init/grass.py:380
 msgid "options: arch,build,compiler,date,path,revision,svn_revision,version"
-msgstr ""
+msgstr "options: arch,build,compiler,date,path,revision,svn_revision,version"
 
 #: ../lib/init/grass.py:381 ../lib/gis/parser_rest.c:179
 #: ../lib/gis/parser_html.c:201
@@ -363,6 +363,12 @@ msgid ""
 "\n"
 "Check the <{file}> file."
 msgstr ""
+"Erreur de lecture des informations du chemin des données depuis g.gisenv.\n"
+"GISDBASE={gisbase}\n"
+"LOCATION_NAME={location}\n"
+"MAPSET={mapset}\n"
+"\n"
+"Vérifier le fichier <{file}>."
 
 #: ../lib/init/grass.py:1456
 #, python-format
@@ -1383,7 +1389,7 @@ msgstr "Seulement %d%% de la fenêtre sauvegardée dans \"%s\" chevauche(nt) la 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
 #, c-format
 msgid "Unable to seek: %s"
-msgstr ""
+msgstr "Recherche de : %s impossible"
 
 #: ../lib/gis/seek.c:58
 msgid "Seek offset out of range"
@@ -2504,7 +2510,7 @@ msgstr "Maximum de mémoire à utiliser (en MB)"
 
 #: ../lib/gis/parser_standard_options.c:264
 msgid "Cache size for raster rows"
-msgstr ""
+msgstr "Taille de cache pour les lignes du raster"
 
 #: ../lib/gis/parser_standard_options.c:272
 msgid "Name of input raster map"
@@ -2805,7 +2811,7 @@ msgstr "Nom du jeu de données raster temporel en sortie"
 
 #: ../lib/gis/parser_standard_options.c:816
 msgid "Name of the output space time raster datasets"
-msgstr ""
+msgstr "Nom du jeu de données raster temporel en sortie"
 
 #: ../lib/gis/parser_standard_options.c:824
 msgid "Name of the input space time vector dataset"
@@ -5097,7 +5103,7 @@ msgstr "Impossible de sélectionner les attributs pour cat = %d"
 
 #: ../lib/vector/Vlib/ascii.c:724
 msgid "Unable to fetch data from table"
-msgstr "Impossible de récupérer les données depis la table"
+msgstr "Impossible de récupérer les données depuis la table"
 
 #: ../lib/vector/Vlib/ascii.c:756 ../lib/vector/Vlib/net_build.c:216
 #: ../lib/vector/Vlib/net_build.c:501 ../lib/vector/Vlib/net_build.c:519
@@ -8593,11 +8599,11 @@ msgstr ". Voir les erreus dans la sortie (d'erreurs)."
 #: ../lib/python/imaging/operations.py:123
 #: ../lib/python/imaging/operations.py:155
 msgid "Install PIL or Pillow to use this function"
-msgstr ""
+msgstr "Installer PIL ou Pillow pour utiliser cette fonction"
 
 #: ../lib/python/imaging/operations.py:157
 msgid "Install a newer version of PIL or Pillow to use this function (missing ImageOps module)"
-msgstr ""
+msgstr "Installer une version plus récente de PIL ou Pillow pour utiliser cette fonction (Module ImageOps manquant)"
 
 #: ../lib/python/script/task.py:60
 msgid "unknown"
@@ -8629,6 +8635,9 @@ msgid ""
 "\n"
 "Details: <{det}>"
 msgstr ""
+"Impossible de récupérer la description de l'interface pour la commande '<{cmd}>'.\n"
+"\n"
+"Détails: <{det}>"
 
 #: ../lib/python/script/task.py:527
 #, python-brace-format
@@ -10059,12 +10068,12 @@ msgstr "proj_create() a échoué pour '%s'"
 #: ../lib/proj/do_proj.c:284
 #, c-format
 msgid "Unrecognized SRID '%s'"
-msgstr ""
+msgstr "SRID '%s' non reconnu"
 
 #: ../lib/proj/do_proj.c:298
 #, c-format
 msgid "Unrecognized WKT '%s'"
-msgstr ""
+msgstr "WKT '%s' non reconnu"
 
 #: ../lib/proj/do_proj.c:316
 msgid "Unable to create PROJ object"
@@ -10100,22 +10109,22 @@ msgstr ""
 #: ../lib/proj/do_proj.c:573
 #, c-format
 msgid "Found %d possible transformations"
-msgstr ""
+msgstr "%d Possibles transformations trouvées"
 
 #: ../lib/proj/do_proj.c:585
 #, c-format
 msgid "proj_normalize_for_visualization() failed for operation %d"
-msgstr ""
+msgstr "proj_normalize_for_visualization() a échoué pour %d"
 
 #: ../lib/proj/do_proj.c:596
 #, c-format
 msgid "Operation %d:"
-msgstr ""
+msgstr "Operation %d:"
 
 #: ../lib/proj/do_proj.c:598
 #, c-format
 msgid "Description: %s"
-msgstr ""
+msgstr "Description: %s"
 
 #: ../lib/proj/do_proj.c:603
 #, c-format
@@ -10130,7 +10139,7 @@ msgstr ""
 #: ../lib/proj/do_proj.c:615
 #, c-format
 msgid "Remarks: %s"
-msgstr ""
+msgstr "Remarques: %s"
 
 #: ../lib/proj/do_proj.c:620
 #, c-format
@@ -10143,7 +10152,7 @@ msgstr ""
 
 #: ../lib/proj/do_proj.c:635
 msgid "See also output of:"
-msgstr ""
+msgstr "Voir aussi la sortie de:"
 
 #: ../lib/proj/do_proj.c:638
 #, c-format
@@ -10153,7 +10162,7 @@ msgstr ""
 #: ../lib/proj/do_proj.c:740
 #, c-format
 msgid "proj_normalize_for_visualization() failed for '%s'"
-msgstr ""
+msgstr "proj_normalize_for_visualization() a échoué pour '%s'"
 
 #: ../lib/proj/do_proj.c:753
 #, c-format
@@ -10891,3 +10900,6 @@ msgstr "Recherche impossible"
 
 #~ msgid "Copy %s <%s> to current mapset as <%s>"
 #~ msgstr "Copie %s <%s> vers <%s> dans le jeu de cartes courant"
+
+#~ msgid "Invalid value <%s> for parameter <%s>"
+#~ msgstr "Valeur <%s> manquante pour le paramètre <%s>"
