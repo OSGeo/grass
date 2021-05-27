@@ -12,7 +12,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
 
-@unittest.skipIf(sys.version_info[0] > 2, "temporary disabled")
+#@unittest.skipIf(sys.version_info[0] > 2, "temporary disabled")
 class TestAggregationAbsolute(TestCase):
     @classmethod
     def setUpClass(cls):
