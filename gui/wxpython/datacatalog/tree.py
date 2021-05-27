@@ -990,10 +990,10 @@ class DataCatalogTree(TreeView):
                             selected_mapset.data["name"],
                             selected_loc.data["name"],
                         ),
-                        caption=_("Map layer in different location"),
+                        caption=_("Map layer in a different location"),
                         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
-                    dlg.SetYesNoLabels("S&witch now", "S&tay in current mapset")
+                    dlg.SetYesNoLabels("S&witch now", "S&tay in current location")
                     if dlg.ShowModal() == wx.ID_YES:
                         if can_switch_mapset_interactive(
                             self,
