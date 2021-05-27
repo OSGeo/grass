@@ -149,9 +149,13 @@ class GMFrame(wx.Frame):
         # create widgets
         self._createMenuBar()
         self.statusbar = self.CreateStatusBar(number=1)
-        notebook = self._createNotebook()
-        self._createWidgets(notebook)
-        self.notebook = self._addPagesToNotebook(notebook)
+        self.notebook = self._createNotebook()
+        self._createDataCatalog(self.notebook)
+        self._createDisplay(self.notebook)
+        self._createSearchModule(self.notebook)
+        self._createConsole(self.notebook)
+        self._createPythonShell(self.notebook)
+        self._addPagesToNotebook()
         self.toolbars = {
             "workspace": LMWorkspaceToolbar(parent=self),
             "tools": LMToolsToolbar(parent=self),
@@ -352,21 +356,21 @@ class GMFrame(wx.Frame):
         else:
             return FormNotebook(parent=self, style=wx.NB_BOTTOM)
 
-    def _createDataCatalogWidget(self, parent):
+    def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
         self.datacatalog = DataCatalog(parent=parent, giface=self._giface)
         self.datacatalog.showNotification.connect(
             lambda message: self.SetStatusText(message)
         )
 
-    def _createDisplayWidget(self, parent):
+    def _createDisplay(self, parent):
         """Initialize Display widget"""
         self.displayPanel, self.notebookLayers = self._createDisplayPanel(parent)
         # bindings
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
 
-    def _createSearchModuleWidget(self, parent):
+    def _createSearchModule(self, parent):
         """Initialize Search module widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="search"):
             self.search = SearchModuleWindow(
@@ -381,7 +385,7 @@ class GMFrame(wx.Frame):
         else:
             self.search = None
 
-    def _createConsoleWidget(self, parent):
+    def _createConsole(self, parent):
         """Initialize Console widget"""
         # create 'command output' text area
         self._gconsole = GConsole(
@@ -411,7 +415,7 @@ class GMFrame(wx.Frame):
 
         self._setCopyingOfSelectedText()
 
-    def _createPythonShellWidget(self, parent):
+    def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="pyshell"):
             self.pyshell = PyShellWindow(
@@ -422,43 +426,35 @@ class GMFrame(wx.Frame):
         else:
             self.pyshell = None
 
-    def _createWidgets(self, parent):
-        self._createDataCatalogWidget(parent)
-        self._createDisplayWidget(parent)
-        self._createSearchModuleWidget(parent)
-        self._createConsoleWidget(parent)
-        self._createPythonShellWidget(parent)
-
-    def _addPagesToNotebook(self, notebook):
+    def _addPagesToNotebook(self):
         """Add pages to notebook widget"""
         # add 'data catalog' widget to main notebook page
-        notebook.AddPage(page=self.datacatalog, text=_("Data"), name="catalog")
+        self.notebook.AddPage(page=self.datacatalog, text=_("Data"), name="catalog")
 
         # add 'display' widget to main notebook page
-        notebook.AddPage(page=self.displayPanel, text=_("Display"), name="layers")
+        self.notebook.AddPage(page=self.displayPanel, text=_("Display"), name="layers")
 
         # add 'modules' widget to main notebook page
         if self.search:
-            notebook.AddPage(page=self.search, text=_("Modules"), name="search")
+            self.notebook.AddPage(page=self.search, text=_("Modules"), name="search")
 
         # add 'console' widget to main notebook page and add connect switch page signal
-        notebook.AddPage(page=self.goutput, text=_("Console"), name="output")
+        self.notebook.AddPage(page=self.goutput, text=_("Console"), name="output")
         self.goutput.contentChanged.connect(
             lambda notification: self._switchPage(notification)
         )
 
         # add 'python shell' widget to main notebook page
         if self.pyshell:
-            notebook.AddPage(page=self.pyshell, text=_("Python"), name="pyshell")
+            self.notebook.AddPage(page=self.pyshell, text=_("Python"), name="pyshell")
 
         # bindings
         if sys.platform == "win32":
-            notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+            self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         else:
-            notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+            self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
 
         wx.CallAfter(self.datacatalog.LoadItems)
-        return notebook
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
