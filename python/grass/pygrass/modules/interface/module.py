@@ -996,7 +996,7 @@ class MultiModule(object):
             for module in self.module_list:
                 module.finish_ = True
                 module.run()
-            return None
+            return self
         else:
             if self.set_temp_region is True:
                 self.p = Process(
