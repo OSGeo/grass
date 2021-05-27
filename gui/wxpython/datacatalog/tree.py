@@ -972,6 +972,7 @@ class DataCatalogTree(TreeView):
             selected_layer = self.selected_layer[0]
             selected_mapset = self.selected_mapset[0]
             selected_loc = self.selected_location[0]
+            selected_db = self.selected_grassdb[0]
 
             if selected_layer is not None:
                 genv = gisenv()
@@ -981,17 +982,31 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
-                            "Map <{0}@{1}> is not in the current location"
-                            " and therefore cannot be displayed."
-                            "\n\n"
-                            "To display this map switch to mapset <{1}> first."
+                            "Map <{0}@{1}> is not in the current location. "
+                            "Do you want to switch to the location '{2}'? "
+                            "Your currently displayed layers will disappear."
                         ).format(
-                            selected_layer.data["name"], selected_mapset.data["name"]
+                            selected_layer.data["name"],
+                            selected_mapset.data["name"],
+                            selected_loc.data["name"],
                         ),
-                        caption=_("Unable to display the map"),
-                        style=wx.OK | wx.ICON_WARNING,
+                        caption=_("Map layer in different location"),
+                        style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
-                    dlg.ShowModal()
+                    dlg.SetYesNoLabels("S&witch now", "S&tay in current mapset")
+                    if dlg.ShowModal() == wx.ID_YES:
+                        if can_switch_mapset_interactive(
+                            self,
+                            selected_db.data["name"],
+                            selected_loc.data["name"],
+                            selected_mapset.data["name"],
+                        ):
+                            self.SwitchMapset(
+                                selected_db.data["name"],
+                                selected_loc.data["name"],
+                                selected_mapset.data["name"],
+                            )
+                            self.DisplayLayer()
                     dlg.Destroy()
                 else:
                     self.DisplayLayer()
@@ -1000,11 +1015,12 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset" and not node.children:
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
-        # expand/collapse location/mapset...
-        if self.IsNodeExpanded(node):
-            self.CollapseNode(node, recursive=False)
-        else:
-            self.ExpandNode(node, recursive=False)
+        if node.data["type"] in ("mapset", "location", "grassdb"):
+            # expand/collapse location/mapset...
+            if self.IsNodeExpanded(node):
+                self.CollapseNode(node, recursive=False)
+            else:
+                self.ExpandNode(node, recursive=False)
 
     def ExpandCurrentLocation(self):
         """Expand current location"""
@@ -1154,12 +1170,15 @@ class DataCatalogTree(TreeView):
                 element="mapset",
                 action="new",
             )
-            self.SwitchMapset(
-                grassdb_node.data["name"],
-                location_node.data["name"],
-                mapset,
-                show_confirmation=True,
-            )
+            if can_switch_mapset_interactive(
+                self, grassdb_node.data["name"], location_node.data["name"], mapset
+            ):
+                self.SwitchMapset(
+                    grassdb_node.data["name"],
+                    location_node.data["name"],
+                    mapset,
+                    show_confirmation=True,
+                )
 
     def OnCreateMapset(self, event):
         """Create new mapset"""
@@ -1183,7 +1202,10 @@ class DataCatalogTree(TreeView):
             )
 
             # switch to PERMANENT mapset in newly created location
-            self.SwitchMapset(grassdatabase, location, mapset, show_confirmation=True)
+            if can_switch_mapset_interactive(self, grassdatabase, location, mapset):
+                self.SwitchMapset(
+                    grassdatabase, location, mapset, show_confirmation=True
+                )
 
             # show data import infobar for first-time user with proper layout
             if is_first_time_user():
@@ -1838,30 +1860,30 @@ class DataCatalogTree(TreeView):
         """
         Switch to location and mapset interactively.
         """
-        if can_switch_mapset_interactive(self, grassdb, location, mapset):
-            genv = gisenv()
-            # Switch to mapset in the same location
-            if grassdb == genv["GISDBASE"] and location == genv["LOCATION_NAME"]:
-                switch_mapset_interactively(
-                    self, self._giface, None, None, mapset, show_confirmation
-                )
-            # Switch to mapset in the same grassdb
-            elif grassdb == genv["GISDBASE"]:
-                switch_mapset_interactively(
-                    self, self._giface, None, location, mapset, show_confirmation
-                )
-            # Switch to mapset in a different grassdb
-            else:
-                switch_mapset_interactively(
-                    self, self._giface, grassdb, location, mapset, show_confirmation
-                )
+        genv = gisenv()
+        # Switch to mapset in the same location
+        if grassdb == genv["GISDBASE"] and location == genv["LOCATION_NAME"]:
+            switch_mapset_interactively(
+                self, self._giface, None, None, mapset, show_confirmation
+            )
+        # Switch to mapset in the same grassdb
+        elif grassdb == genv["GISDBASE"]:
+            switch_mapset_interactively(
+                self, self._giface, None, location, mapset, show_confirmation
+            )
+        # Switch to mapset in a different grassdb
+        else:
+            switch_mapset_interactively(
+                self, self._giface, grassdb, location, mapset, show_confirmation
+            )
 
     def OnSwitchMapset(self, event):
         """Switch to location and mapset"""
         grassdb = self.selected_grassdb[0].data["name"]
         location = self.selected_location[0].data["name"]
         mapset = self.selected_mapset[0].data["name"]
-        self.SwitchMapset(grassdb, location, mapset)
+        if can_switch_mapset_interactive(self, grassdb, location, mapset):
+            self.SwitchMapset(grassdb, location, mapset)
 
     def _updateAfterGrassdbChanged(
         self, action, element, grassdb, location, mapset=None, map=None, newname=None
