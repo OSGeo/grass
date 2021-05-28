@@ -3,11 +3,11 @@
 # Usage: build_osgeo4w.sh [-p] [path]
 #
 # By default, the script will look for the source code in the current directory
-# and create bin.x86_64-w64-mingw32\grass.bat (run this batch file to start
+# and create bin.x86_64-w64-mingw32\grass$ver.bat (run this batch file to start
 # GRASS GIS) and dist.x86_64-w64-mingw32\etc\env.bat.
 #
 # -p	optionally install GRASS GIS to C:\OSGeo4W64\opt\grass (run
-#	C:\OSGeo4W64\opt\grass\grass.bat) and create an unzippable package
+#	C:\OSGeo4W64\opt\grass\grass$ver.bat) and create an unzippable package
 #	grass$ver-x86_64-w64-mingw32-osgeo4w64-$date.zip
 #
 # path	specify a path to the source code
@@ -56,7 +56,7 @@ bin=bin.$arch
 dist=dist.$arch
 ver=$(sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make)
 
-rm -f $dist/grass.tmp $dist/etc/fontcap
+rm -f $dist/grass$ver.tmp $dist/etc/fontcap
 
 # create batch files
 
@@ -88,8 +88,8 @@ unix2dos $dist/etc/env.bat
         -e 's/^\(.* "\)%GISBASE%\\etc\(\\grass.*\)$/\1%GISBASE%\\..\\'$bin'\2/' \
         -e 's/@POSTFIX@/'$ver'/g' \
         mswindows/osgeo4w/grass.bat.tmpl
-) >$bin/grass.bat
-unix2dos $bin/grass.bat
+) >$bin/grass$ver.bat
+unix2dos $bin/grass$ver.bat
 
 test $package -eq 0 && exit
 
@@ -100,7 +100,7 @@ grass_path=$opt_path/grass
 
 mkdir -p $opt_path
 cp -a $dist $grass_path
-cp -a $bin/grass.py $grass_path/etc
+cp -a $bin/grass$ver.py $grass_path/etc
 cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
     sort -u | grep -v 'lib\(crypto\|ssl\)') $grass_path/lib
 
@@ -128,8 +128,8 @@ unix2dos $grass_path/etc/env.bat
         -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
         -e 's/@POSTFIX@/'$ver'/g' \
         mswindows/osgeo4w/grass.bat.tmpl
-) >$grass_path/grass.bat
-unix2dos $grass_path/grass.bat
+) >$grass_path/grass$ver.bat
+unix2dos $grass_path/grass$ver.bat
 
 exit
 
