@@ -1,8 +1,8 @@
 """
 @package lmgr::single_window
 
-@brief Layer Manager - main menu, layer management toolbar, notebook
-control for display management and access to command console.
+@brief Single Window layout - main menu, main toolbars, dockable
+panes for display management and access to command console.
 
 Classes:
  - frame::SingleWindowFrame
