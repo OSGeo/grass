@@ -66,17 +66,18 @@ import os
 import grass.script as grass
 
 
-def make_frame(f, b, t, l, r):
+# code changed here i is replaced with lnew
+def make_frame(f, b, t, lnew, r):
     (fl, fr, ft, fb) = f
 
     t /= 100.0
     b /= 100.0
-    l /= 100.0
+    lnew /= 100.0
     r /= 100.0
 
     rt = fb + t * (ft - fb)
     rb = fb + b * (ft - fb)
-    rl = fl + l * (fr - fl)
+    rl = fl + lnew * (fr - fl)
     rr = fl + r * (fr - fl)
     s = "%f,%f,%f,%f" % (rt, rb, rl, rr)
     os.environ["GRASS_RENDER_FRAME"] = s

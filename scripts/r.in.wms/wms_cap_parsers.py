@@ -132,7 +132,8 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         """!Check if format element is defined."""
         request = self._find(capability, "Request")
         get_map = self._find(request, "GetMap")
-        formats = self._findall(get_map, "Format")
+        # code changed here noqa F841 added
+        formats = self._findall(get_map, "Format")  # noqa: F841
 
     def _checkLayerTree(self, parent_layer, first=True):
         """!Recursively check layer tree and manage inheritance in the tree"""
@@ -141,9 +142,9 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
 
         layers = parent_layer.findall((self.xml_ns.Ns("Layer")))
 
-        for l in layers:
-            self._initLayer(l, parent_layer)
-            self._checkLayerTree(l, False)
+        for lnew in layers:  # code changed here l is replaced with lnew
+            self._initLayer(lnew, parent_layer)
+            self._checkLayerTree(lnew, False)
 
     def _initLayer(self, layer, parent_layer):
         """Inherit elements from parent layer
@@ -337,10 +338,10 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         self._findall(contents, "TileMatrixSet", self.xml_ns.NsWmts)
 
         layers = self._findall(contents, "Layer", self.xml_ns.NsWmts)
-        for l in layers:
-            if not self._checkLayer(l):
+        for lnew in layers:  # code changed here l is replaced with lnew
+            if not self._checkLayer(lnew):
                 grass.debug("Removed invalid <Layer> element.", 4)
-                contents.remove(l)
+                contents.remove(lnew)
 
         # are there any <Layer> elements after the check
         self._findall(contents, "Layer", self.xml_ns.NsWmts)
@@ -576,12 +577,12 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
             layers = parent_layer.findall("TiledGroup")
             layers += parent_layer.findall("TiledGroups")
 
-        for l in layers:
-            if not self._checkLayer(l):
-                grass.debug(("Removed invalid <%s> element." % l.tag), 4)
-                parent_layer.remove(l)
-            if l.tag == "TiledGroups":
-                self._checkLayerTree(l, False)
+        for lnew in layers:  # code changed here l is replaced with l new
+            if not self._checkLayer(lnew):
+                grass.debug(("Removed invalid <%s> element." % lnew.tag), 4)
+                parent_layer.remove(lnew)
+            if lnew.tag == "TiledGroups":
+                self._checkLayerTree(lnew, False)
 
     def _find(self, etreeElement, tag):
         """!Find child element.

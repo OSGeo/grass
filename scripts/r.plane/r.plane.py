@@ -80,7 +80,8 @@ def main():
         try:
             ea = float(gscript.utils.float_or_dms(options["easting"]))
             no = float(gscript.utils.float_or_dms(options["northing"]))
-        except:
+            # code chnaged here 'Exception added'
+        except Exception:
             gscript.fatal(_("Input coordinates seems to be invalid"))
     el = float(options["elevation"])
 

@@ -457,7 +457,8 @@ def main():
         grass.run_command(
             "g.remove", flags="f", type="raster", pattern="tmp%s*" % pid, quiet=True
         )
-    except:
+        # code chnaged here 'Exception' added
+    except Exception:
         ""
 
 
@@ -522,7 +523,8 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+            # code chnaged here 'Exception' added
+        except Exception:
             ""
 
     # Cleanup
@@ -534,7 +536,8 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
             type="raster",
             name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
         )
-    except:
+        # code chnaged here 'Exception' added
+    except Exception:
         ""
 
 
@@ -576,7 +579,8 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
         grass.run_command(
             "g.remove", flags="f", quiet=True, type="raster", name=panmatch
         )
-    except:
+        # code chnaged here 'Exception' added
+    except Exception:
         ""
 
 
@@ -703,7 +707,8 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+            # code chnaged here 'Exception' added
+        except Exception:
             ""
 
     # Cleanup

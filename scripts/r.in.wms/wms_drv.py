@@ -23,7 +23,7 @@ from time import sleep
 
 try:
     from osgeo import gdal
-except:
+except Exception:  # code changed here 'Exception' added
     grass.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
@@ -34,7 +34,8 @@ import numpy as Numeric
 
 Numeric.arrayrange = Numeric.arange
 
-from math import pi, floor
+# code changed here noqa E402 added
+from math import pi, floor  # noqa: E402
 
 try:
     from urllib2 import HTTPError
@@ -49,10 +50,11 @@ try:
 except ImportError:  # < Python 2.7
     from xml.parsers.expat import ExpatError as ParseError
 
-from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+# code changed here noqa E402 added
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase  # noqa: E402
 
-from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
-from srs import Srs
+from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree  # noqa: E402
+from srs import Srs  # noqa: E402
 
 
 class WMSDrv(WMSBase):

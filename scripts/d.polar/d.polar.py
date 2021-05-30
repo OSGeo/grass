@@ -202,7 +202,7 @@ def plot_eps(psout):
     epsscale = 0.1
     frameallowance = 1.1
     halfframe = 3000
-    center = (halfframe, halfframe)
+    center = (halfframe, halfframe)  # noqa: F841
     scale = halfframe / (outerradius * frameallowance)
 
     diagramlinewidth = halfframe / 400
@@ -211,10 +211,10 @@ def plot_eps(psout):
     diagramfontsize = halfframe / 20
     halfframe_2 = halfframe * 2
 
-    averagedirectioncolor = 1  # (blue)
-    diagramcolor = 4  # (red)
-    circlecolor = 2  # (green)
-    axescolor = 0  # (black)
+    averagedirectioncolor = 1  # (blue)  # noqa: F841
+    diagramcolor = 4  # (red)  # noqa: F841
+    circlecolor = 2  # (green)  # noqa: F841
+    axescolor = 0  # (black)  # noqa: F841
 
     northjustification = 2
     eastjustification = 6
@@ -369,7 +369,7 @@ newpath
     s = t.substitute(DIAGRAMLINEWIDTH=diagramlinewidth)
     outf.write(s)
 
-    sublength = len(vector) - 2
+    sublength = len(vector) - 2  # noqa: F841
     (x, y) = vector[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
     for x, y in vector[2:]:

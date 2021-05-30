@@ -1402,7 +1402,8 @@ def download_source_code_official_github(url, name, outdev, directory=None):
     if not directory:
         directory = os.path.join(os.getcwd, name)
     classchar = name.split(".", 1)[0]
-    moduleclass = expand_module_class_name(classchar)
+    # code changed here noqa F841 added
+    moduleclass = expand_module_class_name(classchar)  # noqa: F841
     if grass.call(["svn", "export", url, directory], stdout=outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
     return directory
@@ -2347,20 +2348,20 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 open_url = urlopen(url)
                 open_url.close()
                 url_validated = True
-            except:
+            except Exception:  # code changed here 'Exception' added
                 pass
         else:
             try:
                 open_url = urlopen("http://" + url)
                 open_url.close()
                 url_validated = True
-            except:
+            except Exception:  # code chnaged here 'Exception' added
                 pass
             try:
                 open_url = urlopen("https://" + url)
                 open_url.close()
                 url_validated = True
-            except:
+            except Exception:  # code changed here 'Exception' added
                 pass
 
         if not url_validated:

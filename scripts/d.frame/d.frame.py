@@ -206,7 +206,8 @@ def calculate_frame(frame, at, width, height):
     """
     try:
         b, t, l, r = list(map(float, at.split(",")))
-    except:
+        # code chnaged here 'Exception' added
+    except Exception:
         fatal(_("Invalid frame position: %s") % at)
 
     top = round(height - (t / 100.0 * height))
@@ -238,7 +239,8 @@ def create_frame(monitor, frame, at, overwrite=False):
                 width = int(line.split("=", 1)[1].rsplit(" ", 1)[0])
             elif "HEIGHT" in line:
                 height = int(line.split("=", 1)[1].rsplit(" ", 1)[0])
-        except:
+                # code changed here 'Exception' added
+        except Exception:
             pass
 
     if width < 0 or height < 0:

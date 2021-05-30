@@ -269,7 +269,8 @@ def main():
                 type="area",
                 quiet=quiet,
             )
-        except:
+            # code changed here 'Exception' added
+        except Exception:
             grass.fatal(
                 _(
                     "abandoned. Removing temporary maps, restoring "
@@ -467,7 +468,8 @@ def main():
                     tmp_rmaps.remove(holename + "_edges")
                     tmp_rmaps.remove(holename + "_dem")
                     tmp_vmaps.remove(holename)
-                except:
+                    # code changed here 'Exception' added
+                except Exception:
                     pass
                 grass.warning(
                     _(
@@ -530,7 +532,8 @@ def main():
                 tmp_rmaps.remove(holename + "_grown")
                 tmp_rmaps.remove(holename + "_edges")
                 tmp_rmaps.remove(holename + "_dem")
-            except:
+                # code changed here 'Exception' added
+            except Exception:
                 pass
             try:
                 grass.run_command(
@@ -554,7 +557,8 @@ def main():
                 )
             try:
                 tmp_vmaps.remove(holename)
-            except:
+                # code changed here 'Exception' added
+            except Exception:
                 pass
             try:
                 grass.run_command(

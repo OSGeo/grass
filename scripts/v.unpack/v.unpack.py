@@ -77,7 +77,7 @@ def main():
     tar = tarfile.TarFile.open(name=input_base, mode="r")
     try:
         data_name = tar.getnames()[0]
-    except:
+    except Exception:  # code changed here 'Exception' added
         grass.fatal(_("Pack file unreadable"))
 
     if flags["p"]:
@@ -203,7 +203,8 @@ def main():
         dbconn = grassdb.db_connection(force=True)
         todb = dbconn["database"]
         # return all tables
-        list_fromtable = grass.read_command(
+        # code changed here noqa F841 added
+        list_fromtable = grass.read_command(  # noqa: F841
             "db.tables", driver="sqlite", database=fromdb
         ).splitlines()
 

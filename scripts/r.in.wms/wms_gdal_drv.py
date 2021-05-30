@@ -17,7 +17,7 @@ import grass.script as grass
 
 try:
     from osgeo import gdal
-except:
+except Exception:  # code changed here 'Exception' added
     grass.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
@@ -59,7 +59,7 @@ class WMSGdalDrv(WMSBase):
 
         gdal_wms = etree.Element("GDAL_WMS")
         service = etree.SubElement(gdal_wms, "Service")
-        name = etree.Element("name")
+        name = etree.Element("name")  # noqa: F841
         service.set("name", "WMS")
 
         version = etree.SubElement(service, "Version")

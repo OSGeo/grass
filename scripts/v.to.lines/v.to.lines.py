@@ -188,7 +188,8 @@ def main():
             )
             grass.fatal(_("Error removing table from layer 1"))
     # TODO: when this except is happaning, it seems that never, so it seems wrong
-    except:
+    # code changed here 'Exception' added
+    except Exception:
         grass.warning(_("No table for layer %d" % 1))
     try:
         grass.run_command(

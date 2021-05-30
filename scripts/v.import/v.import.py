@@ -258,7 +258,8 @@ def main():
     f.write("GUI: text\n")
     f.close()
 
-    tgtsrs = grass.read_command("g.proj", flags="j", quiet=True)
+    tgtsrs = grass.read_command("g.proj", flags="j", quiet=True)  # noqa: F841
+    # code changed here noqa F841 added
 
     # create temp location from input without import
     grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
@@ -266,7 +267,7 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except:
+            except Exception:
                 grass.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
@@ -342,7 +343,7 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except:
+            except Exception:  # code changed here 'Exception' added
                 grass.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"

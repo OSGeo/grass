@@ -228,7 +228,8 @@ def main():
     pymap = Vector(output)
     try:
         pymap.open("r")
-    except:
+        # code changed here 'Exception added'
+    except Exception:
         dbif.close()
         grass.fatal(_("Unable to create vector map <%s>" % output))
 

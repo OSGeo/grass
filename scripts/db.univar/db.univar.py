@@ -246,23 +246,24 @@ def main():
         pval[i] = 0
 
     inf = open(tmp + ".sort")
-    l = 1
+    # code changed here l is replaced with lnew
+    lnew = 1
     for line in inf:
         line = line.rstrip("\r\n")
         if len(line) == 0:
             continue
-        if l == q25pos:
+        if lnew == q25pos:
             q25 = float(line)
-        if l == q50apos:
+        if lnew == q50apos:
             q50a = float(line)
-        if l == q50bpos:
+        if lnew == q50bpos:
             q50b = float(line)
-        if l == q75pos:
+        if lnew == q75pos:
             q75 = float(line)
         for i in range(len(ppos)):
-            if l == ppos[i]:
+            if lnew == ppos[i]:
                 pval[i] = float(line)
-        l += 1
+        lnew += 1
 
     q50 = (q50a + q50b) / 2
 
