@@ -19,7 +19,7 @@ per-file-ignores =
     v.report/v.report.py: F841
     db.out.ogr/db.out.ogr.py: F841
     g.extension/g.extension.py: F841, E722
-    r.unpack/r.unpack.py: E722
+    
     v.unpack/v.unpack.py: F841, E722
     v.import/v.import.py: F841, E722
     db.univar/db.univar.py: E741
