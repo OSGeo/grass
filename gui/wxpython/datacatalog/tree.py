@@ -996,10 +996,10 @@ class DataCatalogTree(TreeView):
                     dlg.SetYesNoLabels("S&witch now", "S&tay in current location")
                     if dlg.ShowModal() == wx.ID_YES:
                         if self.SwitchMapset(
-                                selected_db.data["name"],
-                                selected_loc.data["name"],
-                                selected_mapset.data["name"],
-                            ):
+                            selected_db.data["name"],
+                            selected_loc.data["name"],
+                            selected_mapset.data["name"],
+                        ):
                             self.DisplayLayer()
                     dlg.Destroy()
                 else:
@@ -1193,9 +1193,7 @@ class DataCatalogTree(TreeView):
             )
 
             # switch to PERMANENT mapset in newly created location
-            self.SwitchMapset(
-                grassdatabase, location, mapset, show_confirmation=True
-            )
+            self.SwitchMapset(grassdatabase, location, mapset, show_confirmation=True)
 
             # show data import infobar for first-time user with proper layout
             if is_first_time_user():
