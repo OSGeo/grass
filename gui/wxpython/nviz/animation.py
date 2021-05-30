@@ -171,7 +171,7 @@ class Animation:
         self.stopSaving = True
 
     def IsSaved(self):
-        """"Test if animation has been saved (to images)"""
+        """Test if animation has been saved (to images)"""
         return self.animationSaved
 
     def SaveAnimationFile(self, path, prefix, format):

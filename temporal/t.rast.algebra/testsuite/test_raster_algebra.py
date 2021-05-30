@@ -512,7 +512,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
     def test_tmap_function1(self):
-        """Testing the tmap function. """
+        """Testing the tmap function."""
 
         self.assertModule(
             "t.rast.algebra", expression="R = tmap(singletmap)", basename="r"
@@ -531,7 +531,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_tmap_function2(self):
-        """Testing the tmap function. """
+        """Testing the tmap function."""
 
         self.assertModule(
             "t.rast.algebra", expression="R = tmap(singletmap) + 1", basename="r"
@@ -550,7 +550,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_map_function1(self):
-        """Testing the map function. """
+        """Testing the map function."""
 
         self.assertModule(
             "t.rast.algebra", expression="R = map(singlemap) + A", basename="r"
@@ -569,7 +569,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_map_function2(self):
-        """Testing the map function. """
+        """Testing the map function."""
 
         self.assertModule(
             "t.rast.algebra", expression="R =  A * map(singlemap)", basename="r"
@@ -588,7 +588,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select(self):
-        """Testing the temporal select operator. """
+        """Testing the temporal select operator."""
 
         self.assertModule("t.rast.algebra", expression="R = A : A", basename="r")
 
@@ -604,7 +604,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select(self):
-        """Testing the temporal select operator. """
+        """Testing the temporal select operator."""
 
         self.assertModule("t.rast.algebra", expression="R = A : D", basename="r")
 
@@ -620,7 +620,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select_operators1(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
 
         self.assertModule("t.rast.algebra", expression="R = A : D", basename="r")
 
@@ -636,7 +636,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select_operators2(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
 
         self.assertModule(
             "t.rast.algebra", expression="R = A {!:,during} C", basename="r"
@@ -697,7 +697,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_hash_operator1(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
 
         self.assertModule(
             "t.rast.algebra", expression="R = if(A # D == 1, A)", basename="r"
@@ -715,7 +715,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_hash_operator2(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
 
         self.assertModule("t.rast.algebra", expression="R = A # D", basename="r")
 
@@ -731,7 +731,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_hash_operator3(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
 
         self.assertModule(
             "t.rast.algebra", expression="R = C {#,contains} A", basename="r"
@@ -749,7 +749,7 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_hash_operator4(self):
-        """Testing the temporal hash operator in the raster algebra. """
+        """Testing the temporal hash operator in the raster algebra."""
 
         self.assertModule(
             "t.rast.algebra",

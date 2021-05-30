@@ -2662,7 +2662,7 @@ class VectorCategorySelect(wx.Panel):
         return True
 
     def _chckMap(self):
-        """Check if selected map in 'input' widget is the same as selected map in lmgr """
+        """Check if selected map in 'input' widget is the same as selected map in lmgr"""
         if self._isMapSelected():
             layerList = self.giface.GetLayerList()
             layerSelected = layerList.GetSelectedLayer()

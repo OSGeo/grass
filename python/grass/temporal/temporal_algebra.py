@@ -2558,7 +2558,7 @@ class TemporalAlgebraParser(object):
         t[0] = t[1]
 
     def p_paren_expr(self, t):
-        """ expr : LPAREN expr RPAREN"""
+        """expr : LPAREN expr RPAREN"""
         t[0] = t[2]
 
     def p_number(self, t):
