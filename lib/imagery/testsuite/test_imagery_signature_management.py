@@ -25,6 +25,7 @@ from grass.lib.imagery import (
     I_find_signature,
     I_signatures_remove,
     I_signatures_copy,
+    I_signatures_rename,
 )
 
 
@@ -310,6 +311,130 @@ class SignaturesCopyTestCase(TestCase):
             self.src_sigset + "@" + self.src_mapset_name,
             self.src_mapset_name,
             dst,
+        )
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+
+class SignaturesRenameTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.mpath = utils.decode(G_mapset_path())
+        cls.mapset_name = Mapset().name
+        cls.sigfiles = []
+        # As signatures are created directly not via signature creation
+        # tools, we must ensure signature directories exist
+        os.makedirs(cls.mpath + "/signatures/sig/", exist_ok=True)
+        os.makedirs(cls.mpath + "/signatures/sigset/", exist_ok=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        for f in cls.sigfiles:
+            try:
+                os.remove(f)
+            except OSError:
+                pass
+
+    def test_rename_from_wrong_mapset(self):
+        rnd_name = "{0}@{0}".format(tempname(10))
+        ret = I_signatures_rename(SIGFILE_TYPE_SIG, rnd_name, tempname(10))
+        self.assertEqual(ret, 1)
+
+    def test_rename_to_wrong_mapset(self):
+        rnd_name = "{0}@{0}".format(tempname(10))
+        ret = I_signatures_rename(SIGFILE_TYPE_SIG, tempname(10), rnd_name)
+        self.assertEqual(ret, 1)
+
+    def test_sig_does_not_exist(self):
+        ret = I_signatures_rename(SIGFILE_TYPE_SIG, tempname(10), tempname(10))
+        self.assertEqual(ret, 1)
+
+    def test_sigset_does_not_exist(self):
+        ret = I_signatures_rename(SIGFILE_TYPE_SIGSET, tempname(10), tempname(10))
+        self.assertEqual(ret, 1)
+
+    def test_success_unqualified_sig(self):
+        src_sig = tempname(10)
+        sig_file = "{}/signatures/sig/{}".format(self.mpath, src_sig)
+        self.sigfiles.append(sig_file)
+        f = open(sig_file, "w")
+        f.write("A sig file")
+        f.close()
+        dst = tempname(10)
+        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
+        self.assertTrue(ret)
+        ret = I_signatures_rename(SIGFILE_TYPE_SIG, src_sig, dst)
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+    def test_success_fq_sig(self):
+        src_sig = tempname(10)
+        sig_file = "{}/signatures/sig/{}".format(self.mpath, src_sig)
+        self.sigfiles.append(sig_file)
+        f = open(sig_file, "w")
+        f.write("A sig file")
+        f.close()
+        dst = tempname(10)
+        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
+        dst = dst + "@" + self.mapset_name
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
+        self.assertTrue(ret)
+        ret = I_signatures_rename(
+            SIGFILE_TYPE_SIG, src_sig + "@" + self.mapset_name, dst,
+        )
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+    def test_success_unqualified_sigset(self):
+        src_sigset = tempname(10)
+        sigset_file = "{}/signatures/sigset/{}".format(self.mpath, src_sigset)
+        self.sigfiles.append(sigset_file)
+        f = open(sigset_file, "w")
+        f.write("A sigset file")
+        f.close()
+        dst = tempname(10)
+        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
+        self.assertTrue(ret)
+        ret = I_signatures_rename(SIGFILE_TYPE_SIGSET, src_sigset, dst)
+        self.assertEqual(ret, 0)
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        self.assertTrue(ret)
+        ms = utils.decode(ret)
+        self.assertEqual(ms, self.mapset_name)
+
+    def test_success_fq_sigset(self):
+        src_sigset = tempname(10)
+        sigset_file = "{}/signatures/sigset/{}".format(self.mpath, src_sigset)
+        self.sigfiles.append(sigset_file)
+        f = open(sigset_file, "w")
+        f.write("A sigset file")
+        f.close()
+        dst = tempname(10)
+        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
+        dst = dst + "@" + self.mapset_name
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        self.assertFalse(ret)
+        ret = I_find_signature(SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
+        self.assertTrue(ret)
+        ret = I_signatures_rename(
+            SIGFILE_TYPE_SIGSET, src_sigset + "@" + self.mapset_name, dst,
         )
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
