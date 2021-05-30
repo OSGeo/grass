@@ -38,7 +38,6 @@ from grass.grassdb.checks import (
     is_fallback_session,
     is_first_time_user,
 )
-from startup.guiutils import can_switch_mapset_interactive
 
 
 class DataCatalog(wx.Panel):
@@ -231,8 +230,7 @@ class DataCatalog(wx.Panel):
         """Switch to last used mapset"""
         last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         grassdb, location, mapset = split_mapset_path(last_mapset_path)
-        if can_switch_mapset_interactive(self, grassdb, location, mapset):
-            self.tree.SwitchMapset(grassdb, location, mapset)
+        self.tree.SwitchMapset(grassdb, location, mapset)
 
     def OnImportGdalLayers(self, event):
         """Convert multiple GDAL layers to GRASS raster map layers"""
