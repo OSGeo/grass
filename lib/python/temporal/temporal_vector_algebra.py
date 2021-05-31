@@ -416,11 +416,12 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             self.msgr.message("Run command:\n" + cmd.get_bash())
                             cmd.run()
 
-                            if cmd.popen.returncode != 0:
-                                self.msgr.fatal(_("Error starting %s : \n%s")
-                                                  %(cmd.get_bash(),
-                                                  cmd.popen.stderr))
-                            mapname = cmd.outputs['output'].value
+                            if cmd.returncode != 0:
+                                self.msgr.fatal(
+                                    _("Error starting %s : \n%s")
+                                    % (cmd.get_bash(), cmd.outputs.stderr)
+                                )
+                            mapname = cmd.outputs["output"].value
                             if mapname.find("@") >= 0:
                                 map_test = map_i.get_new_instance(mapname)
                             else:
@@ -490,9 +491,13 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 map_i.update_all(dbif=dbif)
                             elif map_i.is_in_db(dbif=dbif) and self.overwrite == False:
                                 # Raise error if map exists and no overwrite flag is given.
-                                self.msgr.fatal(_("Error vector map %s exist in temporal database. "
-                                                  "Use overwrite flag.  : \n%s") \
-                                                  %(map_i.get_map_id(), cmd.popen.stderr))
+                                self.msgr.fatal(
+                                    _(
+                                        "Error vector map %s exist in temporal database. "
+                                        "Use overwrite flag.  : \n%s"
+                                    )
+                                    % (map_i.get_map_id(), cmd.outputs.stderr)
+                                )
                             else:
                                 # Insert map into temporal database.
                                 map_i.insert(dbif=dbif)

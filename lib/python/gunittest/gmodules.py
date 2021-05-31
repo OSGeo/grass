@@ -26,14 +26,14 @@ class SimpleModule(Module):
     ...                        overwrite=True)
     >>> mapcalc.run()
     Module('r.mapcalc')
-    >>> mapcalc.popen.returncode
+    >>> mapcalc.returncode
     0
 
     >>> colors = SimpleModule('r.colors',
     ...                       map='test_a', rules='-', stdin_='1 red')
     >>> colors.run()
     Module('r.colors')
-    >>> colors.popen.returncode
+    >>> colors.returncode
     0
     >>> str(colors.inputs.stdin)
     '1 red'
