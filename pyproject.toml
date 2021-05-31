@@ -19,5 +19,10 @@ exclude = '''
         | dist\..*
     )/
     | python/grass/ctypes/
+    # Bug in Black related to r-string prefix capitalization reformats
+    # a line in this file unnecessarily. File is however fully Black-formatted
+    # at the time of writing.
+    # https://github.com/psf/black/issues/1244
+    | python/grass/pygrass/utils.py
 )
 '''
