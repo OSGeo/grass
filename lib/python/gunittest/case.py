@@ -1093,9 +1093,9 @@ class TestCase(unittest.TestCase):
                 errors += "\nSee available vector maps:\n"
                 errors += call_module('g.list', type='vector')
             # TODO: message format, parameters
-            raise CalledModuleError(module.popen.returncode, module.name,
-                                    module.get_python(),
-                                    errors=errors)
+            raise CalledModuleError(
+                module.returncode, module.name, module.get_python(), errors=errors
+            )
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and not module.outputs.stdout.strip():
 
@@ -1153,14 +1153,15 @@ class TestCase(unittest.TestCase):
             print(text_to_string(module.outputs.stderr))
             # TODO: message format
             # TODO: stderr?
-            stdmsg = ('Running <{m.name}> module ended'
-                      ' with non-zero return code ({m.popen.returncode})\n'
-                      'Called: {code}\n'
-                      'See the following errors:\n'
-                      '{errors}'.format(
-                          m=module, code=module.get_python(),
-                          errors=module.outputs.stderr
-                      ))
+            stdmsg = (
+                "Running <{m.name}> module ended"
+                " with non-zero return code ({m.returncode})\n"
+                "Called: {code}\n"
+                "See the following errors:\n"
+                "{errors}".format(
+                    m=module, code=module.get_python(), errors=module.outputs.stderr
+                )
+            )
             self.fail(self._formatMessage(msg, stdmsg))
         print(text_to_string(module.outputs.stdout))
         print(text_to_string(module.outputs.stderr))
