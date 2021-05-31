@@ -31,7 +31,7 @@ per-file-ignores =
     d.rast.edit/d.rast.edit.py: E722
     g.manual/g.manual.py: E722
     v.to.lines/v.to.lines.py: E722
-    v.in.wfs/v.in.wfs.py: E722
+    
     
     v.what.strds/v.what.strds.py: E722
     i.in.spotvgt/i.in.spotvgt.py: E722
