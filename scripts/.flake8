@@ -17,7 +17,7 @@ per-file-ignores =
     r.in.wms/srs.py: E722
     
     
-    db.out.ogr/db.out.ogr.py: F841
+    
     g.extension/g.extension.py: F841, E722
     r.unpack/r.unpack.py: E722
     v.unpack/v.unpack.py: F841, E722
