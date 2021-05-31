@@ -983,7 +983,8 @@ class DataCatalogTree(TreeView):
                         parent=self,
                         message=_(
                             "Map <{map_name}@{map_mapset}> is not in the current location. "
-                            "If you switch to the location <{map_location}> all current "
+                            "To be able to display it you need to switch to <{map_location}> "
+                            "location. Note that if you switch there all current "
                             "Map Displays will be closed.\n\n"
                             "Do you want to switch anyway?"
                         ).format(
@@ -994,7 +995,7 @@ class DataCatalogTree(TreeView):
                         caption=_("Map layer in a different location"),
                         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
-                    dlg.SetYesNoLabels("S&witch now", "S&tay in current location")
+                    dlg.SetYesNoLabels("S&witch", "C&ancel")
                     if dlg.ShowModal() == wx.ID_YES:
                         if self.SwitchMapset(
                             selected_db.data["name"],
