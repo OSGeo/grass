@@ -3,13 +3,6 @@
 # exit on error
 set -e
 
-# use code dir for code
-mkdir code
-cd code
-
-# get the source code
-git clone https://github.com/OSGeo/grass.git
-
 # compile
 cd grass
 ./configure \
@@ -26,18 +19,9 @@ cd grass
     --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
     --with-sqlite=yes
 make
-cd $HOME
 
 # put command on path
 # ensure the user specific bin dir exists (already on path)
 mkdir -p $HOME/.local/bin/
 # create link to build
 ln -s $HOME/code/grass/bin.*/grass* $HOME/.local/bin/grass
-
-# OPTIONAL
-# download a sample dataset
-# mkdir -p data/grassdata \
-#  && curl -SL https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip > nc_basic_spm_grass7.zip \
-#  && unzip -qq nc_basic_spm_grass7.zip \
-#  && mv nc_basic_spm_grass7 data/grassdata \
-#  && rm nc_basic_spm_grass7.zip
