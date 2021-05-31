@@ -63,7 +63,7 @@ def print_map_band_reference(name, band_reader):
                 band_reader.print_info(shortcut, band)
             else:
                 gs.info(_("No band reference assigned to <{}>").format(name))
-    except OpenError as e:
+    except OpenError as e:  # noqa: F841
         gs.error(_("Map <{}> not found").format(name))
 
 
@@ -95,7 +95,7 @@ def manage_map_band_reference(name, band_ref):
             except GrassError as e:
                 gs.error(_("Unable to assign/dissociate band reference. {}").format(e))
                 return 1
-    except OpenError as e:
+    except OpenError as e:  # noqa: F841
         gs.error(_("Map <{}> not found in current mapset").format(name))
         return 1
 

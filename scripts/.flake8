@@ -15,7 +15,7 @@ per-file-ignores =
     r.in.wms/wms_cap_parsers.py: F841, E741
     r.in.wms/wms_drv.py: E402, E722
     r.in.wms/srs.py: E722
-    i.band/i.band.py: F841
+    
     
     db.out.ogr/db.out.ogr.py: F841
     g.extension/g.extension.py: F841, E722
