@@ -982,13 +982,14 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
-                            "Map <{0}@{1}> is not in the current location. "
-                            "Do you want to switch to the location '{2}'? \n\n"
-                            "All current Map Displays will be closed."
+                            "Map <{map_name}@{map_mapset}> is not in the current location. "
+                            "If you switch to the location <{map_location}> all current "
+                            "Map Displays will be closed.\n\n"
+                            "Do you want to switch anyway?"
                         ).format(
-                            selected_layer.data["name"],
-                            selected_mapset.data["name"],
-                            selected_loc.data["name"],
+                            map_name=selected_layer.data["name"],
+                            map_mapset=selected_mapset.data["name"],
+                            map_location=selected_loc.data["name"],
                         ),
                         caption=_("Map layer in a different location"),
                         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
