@@ -30,9 +30,6 @@ netcdf-bin
 proj-bin
 python
 python-dev
-python-numpy
-python-pil
-python-ply
 sqlite3
 unixodbc-dev
 zlib1g-dev
