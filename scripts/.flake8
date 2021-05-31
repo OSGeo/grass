@@ -29,7 +29,7 @@ per-file-ignores =
     r.in.srtm/r.in.srtm.py: E722
     r.fillnulls/r.fillnulls.py: E722
     d.rast.edit/d.rast.edit.py: E722
-    g.manual/g.manual.py: E722
+    
     
     
     
