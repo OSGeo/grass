@@ -7,7 +7,7 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:   (C) 2000-2011 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2021 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -124,9 +124,9 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define SRID_FILE       "PROJ_SRID"
 
 #ifdef __MINGW32__
-#define CONFIG_DIR "GRASS7"
+#define CONFIG_DIR "GRASS8"
 #else
-#define CONFIG_DIR ".grass7"
+#define CONFIG_DIR ".grass8"
 #endif
 
 /* define PI and friends */

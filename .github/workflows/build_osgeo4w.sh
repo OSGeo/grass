@@ -100,6 +100,8 @@ grass_path=$opt_path/grass
 
 mkdir -p $opt_path
 cp -a $dist $grass_path
+# have a versionless and versioned startup script
+cp -a $bin/grass.py $bin/grass$ver.py
 cp -a $bin/grass$ver.py $grass_path/etc
 cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
     sort -u | grep -v 'lib\(crypto\|ssl\)') $grass_path/lib

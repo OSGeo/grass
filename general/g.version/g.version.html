@@ -12,7 +12,7 @@ date of the GRASS GIS software currently being run by the user.
 
 <p>
 Information about GRASS GIS
-core <a href="https://grass.osgeo.org/programming7/gislib.html">GIS
+core <a href="https://grass.osgeo.org/programming8/gislib.html">GIS
 Library</a> can be printed by <b>-r</b> flag.
 
 <p>
@@ -38,7 +38,7 @@ print gcore.version()
 <div class="code"><pre>
 g.version 
 
-GRASS 7.9.dev (2019)
+GRASS 8.0.0alpha (2021)
 </pre></div>
 
 <h3>GIS Library info</h3>
@@ -46,27 +46,27 @@ GRASS 7.9.dev (2019)
 <div class="code"><pre>
 g.version -r
 
-GRASS 7.9.dev (2019)
-libgis Revision
-libgis Date
+GRASS 8.0.0alpha (2021)
+libgis revision: 1e0c11f52
+libgis date: 2021-05-19T09:38:49+00:00
 </pre></div>
 
 <h3>Full info in shell script style</h3>
 <div class="code"><pre>
 g.version -rge
 
-version=7.9.dev
-date=2019
-revision=2cb165dc8
-build_date=2019-08-05
+version=8.0.0alpha
+date=2021
+revision=d57f40906
+build_date=2021-05-23
 build_platform=x86_64-pc-linux-gnu
 build_off_t_size=8
-libgis_revision=060163d17
-libgis_date="2017-04-04 09:43:02 +0200 (Tue, 04 Apr 2017) "
-proj4=5.2.0
-gdal=2.3.2
-geos=3.7.1
-sqlite=3.26.0
+libgis_revision=1e0c11f52
+libgis_date=2021-05-19T09:38:49+00:00
+proj=6.3.2
+gdal=3.1.4
+geos=3.8.1
+sqlite=3.34.1
 </pre></div>
 
 Note: if <tt>revision=exported</tt> is reported instead of the git hash then the

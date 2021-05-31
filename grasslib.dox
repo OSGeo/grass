@@ -1,4 +1,4 @@
-/*! \mainpage GRASS GIS 7 Programmer's Manual
+/*! \mainpage GRASS GIS 8 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
      * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018, 2019
@@ -51,7 +51,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - gis: \ref gislib
  - raster: \ref rasterlib
  - vector: \ref vectorlib
- - Temporal GIS API: See https://grass.osgeo.org/grass79/manuals/libpython/temporal_framework.html
+ - Temporal GIS API: See https://grass.osgeo.org/grass80/manuals/libpython/temporal_framework.html
 
 \section libs Further libraries
 
@@ -112,7 +112,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 \subsection pythonlibs Python API
 
- - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass79/manuals/libpython/)
+ - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass80/manuals/libpython/)
 
 \subsection projlibs Projection Libraries
 
