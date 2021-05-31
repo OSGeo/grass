@@ -78,8 +78,8 @@ from grass.grassdb.checks import is_first_time_user
 
 
 class SingleWindowFrame(wx.Frame):
-    """Copy of Multi Window Frame prepared for Single Layout which will be
-    parallelly developed next to the current Multi Window layout solution."""
+    """Single Window Layout which will be parallelly developed next to the
+    current Multi Window layout solution."""
 
     def __init__(
         self,
