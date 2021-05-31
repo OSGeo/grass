@@ -992,7 +992,7 @@ class DataCatalogTree(TreeView):
                             map_mapset=selected_mapset.data["name"],
                             map_location=selected_loc.data["name"],
                         ),
-                        caption=_("Map layer in a different location"),
+                        caption=_("Map in a different location"),
                         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
                     dlg.SetYesNoLabels("S&witch", "C&ancel")
