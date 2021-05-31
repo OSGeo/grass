@@ -42,18 +42,19 @@ To set up shell environment variables permanently:
 <li>
 To get personal BASH shell definitions (aliases, color listing option, ...)
 into GRASS, store them in:<br>
-<tt>$HOME/.grass7/bashrc</tt></li>
+<tt>$HOME/.grass8/bashrc</tt></li>
 <li>
 To get personal CSH shell definitions (aliases, color listing option, ...)
 into GRASS, store them in:<br>
-<tt>$HOME/.grass7/cshrc</tt></li>
+<tt>$HOME/.grass8/cshrc</tt></li>
 </ul>
 
 
 <h2>Setting GRASS gisenv variables</h2>
 
 Use <em><a href="g.gisenv.html">g.gisenv</a></em> within GRASS. This permanently
-predefines GRASS variables in the <tt>$HOME/.grass7/rc</tt> file after the
+predefines GRASS variables in the <tt>$HOME/.grass8/rc</tt> file (Linux, Mac, BSD, ...)
+or in the <tt>%APPDATA%\Roaming\GRASS8\rc</tt> file (Windows) after the
 current GRASS session is closed.
 <br><br>
 Usage:
@@ -83,7 +84,7 @@ PERMANENT
     startup script.</dd>
   
   <dt>GISRC</dt>
-  <dd>name of <tt>$HOME/.grass7/rc</tt> file. Defines the system wide value
+  <dd>name of <tt>$HOME/.grass8/rc</tt> file. Defines the system wide value
     when starting a GRASS session. Within a GRASS session, a temporary copy
     of this file will be used.</dd>
   
@@ -97,8 +98,8 @@ PERMANENT
     for local GRASS modules (normally installed as GRASS Addons
     by <tt>g.extension</tt> module) extra to standard
     distribution. The default on GNU/Linux
-    is <tt>$HOME/.grass7/addons</tt>, on MS
-    Windows <tt>$APPDATA\GRASS7\addons</tt>.</dd>
+    is <tt>$HOME/.grass8/addons</tt>, on MS
+    Windows <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.</dd>
   
   <dt>GRASS_ADDON_ETC</dt>
   <dd>[libgis, g.findetc]<br>
@@ -557,16 +558,16 @@ g.gisenv set="MEMORYMB=6000"
 <h2>GRASS-related Files</h2>
 
 <dl>
-  <dt><tt>$HOME/.grass7/rc</tt></dt>
+  <dt><tt>$HOME/.grass8/rc</tt></dt>
   <dd>stores the GRASS gisenv variables (not shell environment variables)</dd>
 
-  <dt><tt>$HOME/.grass7/bashrc</tt></dt>
+  <dt><tt>$HOME/.grass8/bashrc</tt></dt>
   <dd>stores the shell environment variables (Bash only)</dd>
 
-  <dt><tt>$HOME/.grass7/env.bat</tt></dt>
+  <dt><tt>$HOME/.grass8/env.bat</tt></dt>
   <dd>stores the shell environment variables (MS Windows only)</dd>
   
-  <dt><tt>$HOME/.grass7/login</tt></dt>
+  <dt><tt>$HOME/.grass8/login</tt></dt>
   <dd>stores the DBMI passwords in this hidden file.
     Only the file owner can access this file.</dd>
 

@@ -3,7 +3,7 @@
 #========================
 # North Carolina tests
 
-G_RLI=$HOME/.grass7/r.li
+G_RLI=$HOME/.grass8/r.li
 mkdir -p $G_RLI
 
 echo "SAMPLINGFRAME 0|0|1|1

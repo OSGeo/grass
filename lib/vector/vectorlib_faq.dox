@@ -79,7 +79,7 @@ categories to one feature in one layer)?</dt>
 GRASS supports M:N mapping of categories. Several features can share the same
 category, and one feature can have several categories. Further more, one
 feature can have several categories in the same layer. See manual of
-\gmod{v.buffer} (GRASS 7 only) for an example.
+\gmod{v.buffer} for an example.
 </dd>
 
 <dt>What can I expect to get from function Vect_read_line() according to

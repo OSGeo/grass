@@ -67,7 +67,7 @@ int calculateIndex(char *file, rli_func *f,
     char rlipath[GPATH_MAX];
     char testpath[GPATH_MAX];
 
-	/* conf files go into ~/.grass7/r.li/ */
+	/* conf files go into ~/.grass8/r.li/ */
     sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP);
 
     sprintf(testpath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP);
@@ -98,19 +98,19 @@ int calculateIndex(char *file, rli_func *f,
     }
     else {
 	/* text file output */
-	/* check if ~/.grass7/ exists */
+	/* check if ~/.grass8/ exists */
         sprintf(out, "%s", G_config_path());
 	doneDir = G_mkdir(out);
 	if (doneDir == -1 && errno != EEXIST)
 	    G_fatal_error(_("Cannot create %s directory"), out);
 
-	/* check if ~/.grass7/r.li/ exists */
+	/* check if ~/.grass8/r.li/ exists */
 	sprintf(out, "%s", rlipath);
 	doneDir = G_mkdir(out);
 	if (doneDir == -1 && errno != EEXIST)
 	    G_fatal_error(_("Cannot create %s directory"), out);
 
-	/* check if ~/.grass7/r.li/output exists */
+	/* check if ~/.grass8/r.li/output exists */
 	sprintf(out, "%s%s", rlipath, "output");
 	doneDir = G_mkdir(out);
 	if (doneDir == -1 && errno != EEXIST)

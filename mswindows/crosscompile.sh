@@ -56,7 +56,7 @@ Usage: crosscompile.sh [OPTIONS]
                              (default: /usr/include/freetype2)
     --update                 update the current branch
     --package                package the cross-compiled build as
-                             grass79-x86_64-w64-mingw32-YYYYMMDD.zip
+                             grass80-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
 		;;
@@ -334,7 +334,7 @@ if "%GRASS_PYTHON%"=="" (
 rem XXX: Do we need PYTHONHOME?
 rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
-"%GRASS_PYTHON%" "%GISBASE%\etc\grass79.py" %*
+"%GRASS_PYTHON%" "%GISBASE%\etc\grass80.py" %*
 if %ERRORLEVEL% geq 1 pause
 EOT
 unix2dos $dist/grass$version.bat

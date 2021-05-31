@@ -196,7 +196,7 @@ class Vector(Info):
 
             warnings.warn(
                 "Vector.write(geo_obj, attrs=(...)) is"
-                " depreciated, specify cat explicitly",
+                " deprecated, specify cat explicitly",
                 DeprecationWarning,
             )
             # try to accommodate

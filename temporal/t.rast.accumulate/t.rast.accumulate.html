@@ -66,7 +66,7 @@ wget http://www-pool.math.tu-berlin.de/~soeren/grass/temperature_mean_1990_2000_
 mkdir -p /tmp/grassdata/LL
 
 # Start GRASS and create a new location with PERMANENT mapset
-grass79 -c EPSG:4326 /tmp/grassdata/LL/PERMANENT
+grass -c EPSG:4326 /tmp/grassdata/LL/PERMANENT
 
 # Import the temperature data
 t.rast.import input=temperature_mean_1990_2000_daily_celsius.tar.gz \

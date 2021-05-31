@@ -1590,7 +1590,7 @@ class MapFrame(SingleMapFrame):
         Debug.msg(
             1,
             "MapFrame.IsStandalone(): Method IsStandalone is"
-            "depreciated, use some general approach instead such as"
+            "deprecated, use some general approach instead such as"
             " Signals or giface",
         )
         if self._layerManager:
@@ -1609,7 +1609,7 @@ class MapFrame(SingleMapFrame):
         Debug.msg(
             1,
             "MapFrame.GetLayerManager(): Method GetLayerManager is"
-            "depreciated, use some general approach instead such as"
+            "deprecated, use some general approach instead such as"
             " Signals or giface",
         )
         return self._layerManager

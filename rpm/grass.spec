@@ -1,8 +1,8 @@
-%global shortver 79
+%global shortver 80
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	7.9.0
+Version:	8.0.0
 Release:	1%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
@@ -384,6 +384,9 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Sun May 23 2021 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
+- New upstream version GRASS GIS 8.0.0
+
 * Mon Oct 05 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-1
 - New upstream version GRASS GIS 7.8.4
 - disabled %{name}-config.h

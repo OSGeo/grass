@@ -1,14 +1,14 @@
 o GRASS text mode startup
 
-  "grass79" starts up g.gui by default (if not first time user).
-  "grass79 --text" will start up in text mode.
-  "grass79 --gtext" will start up with graphical welcome screen but continue then in text mode.
-  "grass79 --gui" will start up in wxpython mode.
+  "grass" starts up g.gui by default (if not first time user).
+  "grass --text" will start up in text mode.
+  "grass --gtext" will start up with graphical welcome screen but continue then in text mode.
+  "grass --gui" will start up in wxpython mode.
 
-  You can set an alias "grass79" to e.g. "grass79 --text" to use text mode by default.
+  You can set an alias "grass" to e.g. "grass --text" to use text mode by default.
   Or set the environmental variable GRASS_GUI=text.
 
-  See grass79 --help or the command's manual page for more details
+  See grass --help or the command's manual page for more details
   about invocation.
 
   Send any suggestions to <grass-dev@lists.osgeo.org> at https://lists.osgeo.org/pipermail/grass-dev/
