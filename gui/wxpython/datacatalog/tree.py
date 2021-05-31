@@ -972,6 +972,7 @@ class DataCatalogTree(TreeView):
             selected_layer = self.selected_layer[0]
             selected_mapset = self.selected_mapset[0]
             selected_loc = self.selected_location[0]
+            selected_db = self.selected_grassdb[0]
 
             if selected_layer is not None:
                 genv = gisenv()
@@ -981,17 +982,27 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
-                            "Map <{0}@{1}> is not in the current location"
-                            " and therefore cannot be displayed."
-                            "\n\n"
-                            "To display this map switch to mapset <{1}> first."
+                            "Map <{map_name}@{map_mapset}> is not in the current location. "
+                            "To be able to display it you need to switch to <{map_location}> "
+                            "location. Note that if you switch there all current "
+                            "Map Displays will be closed.\n\n"
+                            "Do you want to switch anyway?"
                         ).format(
-                            selected_layer.data["name"], selected_mapset.data["name"]
+                            map_name=selected_layer.data["name"],
+                            map_mapset=selected_mapset.data["name"],
+                            map_location=selected_loc.data["name"],
                         ),
-                        caption=_("Unable to display the map"),
-                        style=wx.OK | wx.ICON_WARNING,
+                        caption=_("Map in a different location"),
+                        style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
-                    dlg.ShowModal()
+                    dlg.SetYesNoLabels("S&witch", "C&ancel")
+                    if dlg.ShowModal() == wx.ID_YES:
+                        if self.SwitchMapset(
+                            selected_db.data["name"],
+                            selected_loc.data["name"],
+                            selected_mapset.data["name"],
+                        ):
+                            self.DisplayLayer()
                     dlg.Destroy()
                 else:
                     self.DisplayLayer()
@@ -1000,11 +1011,12 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset" and not node.children:
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
-        # expand/collapse location/mapset...
-        if self.IsNodeExpanded(node):
-            self.CollapseNode(node, recursive=False)
-        else:
-            self.ExpandNode(node, recursive=False)
+        if node.data["type"] in ("mapset", "location", "grassdb"):
+            # expand/collapse location/mapset...
+            if self.IsNodeExpanded(node):
+                self.CollapseNode(node, recursive=False)
+            else:
+                self.ExpandNode(node, recursive=False)
 
     def ExpandCurrentLocation(self):
         """Expand current location"""
@@ -1837,6 +1849,7 @@ class DataCatalogTree(TreeView):
     def SwitchMapset(self, grassdb, location, mapset, show_confirmation=False):
         """
         Switch to location and mapset interactively.
+        Returns True if switching is successful.
         """
         if can_switch_mapset_interactive(self, grassdb, location, mapset):
             genv = gisenv()
@@ -1855,6 +1868,8 @@ class DataCatalogTree(TreeView):
                 switch_mapset_interactively(
                     self, self._giface, grassdb, location, mapset, show_confirmation
                 )
+            return True
+        return False
 
     def OnSwitchMapset(self, event):
         """Switch to location and mapset"""
