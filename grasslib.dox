@@ -1,7 +1,7 @@
 /*! \mainpage GRASS GIS 8 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018, 2019
+     * updated 8/2005, 2006-2008, 2010-2011, 2017, 2018, 2019, 2021
   -->
 
 <a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
@@ -38,9 +38,9 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
 <!-- original:
-  https://github.com/OSGeo/grass/blob/master/doc/grass7_arch.odg
+  https://github.com/OSGeo/grass/blob/master/doc/grass8_arch.odg
 -->
-\image html "grass7_arch.png" "GRASS 7 Architecture"
+\image html "grass8_arch.png" "GRASS GIS 8 Architecture"
 
 \section libsOverview Libraries
 
