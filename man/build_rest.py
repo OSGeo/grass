@@ -131,7 +131,7 @@ General
 .. toctree::
     :maxdepth: 1
 
-        GRASS startup manual page <grass7>
+        GRASS startup manual page <grass8>
         General commands manual <general>
 
 Miscellaneous & Variables
