@@ -393,8 +393,12 @@ class MapWindowBase:
     def GetLastEN(self):
         """Returns last coordinates of mouse cursor.
 
+<<<<<<< HEAD
         @deprecated This method is deprecated. Use Signal with coordinates as
         parameters.
+=======
+        @deprecated This method is deprecated. Use Signal with coordinates as parameters.
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
         :func:`OnMotion`
         """

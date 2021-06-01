@@ -2,7 +2,10 @@ NEWS
 
 GRASS GIS 8
  o https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures80
+<<<<<<< HEAD
  o https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures82
+=======
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 GRASS GIS 7
  o https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78

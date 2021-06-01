@@ -1,6 +1,11 @@
 #
+<<<<<<< HEAD
 # GRASS GIS Python documentation build configuration file
 # originally created by sphinx-quickstart.
+=======
+# GRASS GIS 8.0 Documentation documentation build configuration file, created by
+# sphinx-quickstart on Thu Aug  9 17:16:28 2012.
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -37,15 +42,24 @@ source_suffix = ".txt"
 master_doc = "index"
 
 # General information about the project.
+<<<<<<< HEAD
 project = "GRASS GIS"
 copyright = "2024, GRASS Development Team"
+=======
+project = "GRASS GIS 8.0 Documentation"
+copyright = "2021, GRASS Development Team"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
+<<<<<<< HEAD
 version = "8.4"
+=======
+version = "8.0"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 # The full version, including alpha/beta/rc tags.
 release = "dev"
 
@@ -161,7 +175,11 @@ html_use_index = False
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
+<<<<<<< HEAD
 htmlhelp_basename = "grass_gis"
+=======
+htmlhelp_basename = "grass80Documentationdoc"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -180,8 +198,13 @@ latex_elements = {
 latex_documents = [
     (
         "content",
+<<<<<<< HEAD
         "grass_gis.tex",
         project,
+=======
+        "grass80Documentation.tex",
+        "GRASS GIS 8.0 Documentation",
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
         "GRASS Development Team",
         "manual",
     ),
@@ -215,8 +238,13 @@ latex_documents = [
 man_pages = [
     (
         "content",
+<<<<<<< HEAD
         "grass_gis",
         project,
+=======
+        "grass80documentation",
+        "GRASS GIS 8.0 Documentation",
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
         ["GRASS Development Team"],
         1,
     )
@@ -234,11 +262,19 @@ man_pages = [
 texinfo_documents = [
     (
         "content",
+<<<<<<< HEAD
         "grass_gis",
         project,
         "GRASS Development Team",
         "grass_gis",
         "Documentation for GRASS GIS in Sphinx",
+=======
+        "grass80Documentation",
+        "GRASS GIS 8.0 Documentation",
+        "GRASS Development Team",
+        "grass80Documentation",
+        "One line description of project.",
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
         "Miscellaneous",
     ),
 ]
@@ -256,10 +292,17 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
+<<<<<<< HEAD
 epub_title = project
 epub_author = "GRASS Development Team"
 epub_publisher = epub_author
 epub_copyright = copyright
+=======
+epub_title = "GRASS GIS 8.0 Documentation"
+epub_author = "GRASS Development Team"
+epub_publisher = "GRASS Development Team"
+epub_copyright = "2021, GRASS Development Team"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

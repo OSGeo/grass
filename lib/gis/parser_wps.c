@@ -612,10 +612,18 @@ static void wps_print_process_description_begin(
         fprintf(stdout, "</ows:Title>\n");
     }
 
+<<<<<<< HEAD
     if (abstract) {
         fprintf(stdout, "\t\t<ows:Abstract>");
         fprintf(stdout, "https://grass.osgeo.org/grass-devel/manuals/%s.html",
                 identifier);
+=======
+
+    if(abstract)
+    {
+        fprintf(stdout,"\t\t<ows:Abstract>");
+        fprintf(stdout, "https://grass.osgeo.org/grass80/manuals/%s.html", identifier);
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
         fprintf(stdout, "</ows:Abstract>\n");
     }
 

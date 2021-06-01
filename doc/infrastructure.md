@@ -56,7 +56,14 @@ Maintainer: M. Neteler
     - Apache Server with PHP
   - Login: via OSGeo LDAP, there is a "grass" LDAP group
 
+<<<<<<< HEAD
 - Backups:
+=======
+* GRASS programmer's manual (https://grass.osgeo.org/programming8/)
+    * HTML: cronjob run Wednesday morning California time
+    * HTML: cronjob run Saturday morning California time
+    * disabled: PDF: cronjob run Saturday morning California time
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
   - osgeo7-grass: container on osgeo8 is backup'ed, see <http://wiki.osgeo.org/wiki/SAC:Backups>
 
@@ -185,9 +192,15 @@ Maintainer: Martin Landa and Markus Neteler
 
 Details:
 
+<<<<<<< HEAD
 - Windows-addons: grass-addons/utils/addons/README.txt
 - Addon manual pages cronjob: <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd>
 - Rendered manuals: <https://grass.osgeo.org/grass8/manuals/addons/>
+=======
+- Windows-addons: grass-addons/tools/addons/README.txt
+- Addon manual pages cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
+- Rendered manuals: https://grass.osgeo.org/grass8/manuals/addons/
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 The redirect to the latest grassX directory is defined on grass.osgeo.org:
 /etc/apache2/includes/grass.osgeo.org.inc
