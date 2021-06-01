@@ -20,7 +20,7 @@
 
  [1] https://github.com/OSGeo/grass/tree/master/display/d.mon/render_cmd.py
  [2] https://github.com/OSGeo/grass/tree/master/lib/display/r_raster.c#L107
- [3] https://grass.osgeo.org/grass79/manuals/displaydrivers.html
+ [3] https://grass.osgeo.org/grass80/manuals/displaydrivers.html
 
 */
 

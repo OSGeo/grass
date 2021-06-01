@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2020 by the GRASS Development Team
+(C) 2008-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -347,7 +347,7 @@ def make_command(
                         "To run the module <%s> add underscore at the end"
                         " of the option <%s> to avoid conflict with Python"
                         " keywords. Underscore at the beginning is"
-                        " depreciated in GRASS GIS 7.0 and will be removed"
+                        " deprecated in GRASS GIS 7.0 and has been removed"
                         " in version 7.1."
                     )
                     % (prog, opt)
@@ -936,7 +936,7 @@ def parser():
     "flags" are Python booleans.
 
     Overview table of parser standard options:
-    https://grass.osgeo.org/grass79/manuals/parser_standard_options.html
+    https://grass.osgeo.org/grass80/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)

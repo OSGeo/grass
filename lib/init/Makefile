@@ -6,7 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Compile.make
 #for i18N support
 PACKAGE ="grasslibs"
 
-START_UP=grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+START_UP=grass
 
 EXTRA_CFLAGS = \
 	-DD_LOCATION_NAME=\"$(DEFAULT_LOCATION)\" \
