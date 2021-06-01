@@ -72,10 +72,14 @@ class MetaModule:
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # https://grass.osgeo.org/grass-devel/manuals/full_index.html
 =======
 # https://grass.osgeo.org/grass80/manuals/full_index.html
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+# https://grass.osgeo.org/grass80/manuals/full_index.html
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
 # [ d.* | db.* | g.* | i.* | m.* | ps.* | r.* | r3.* | t.* | v.* ]
 #
 #  d.*	display commands

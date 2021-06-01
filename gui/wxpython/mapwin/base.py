@@ -394,11 +394,15 @@ class MapWindowBase:
         """Returns last coordinates of mouse cursor.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         @deprecated This method is deprecated. Use Signal with coordinates as
         parameters.
 =======
         @deprecated This method is deprecated. Use Signal with coordinates as parameters.
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        @deprecated This method is deprecated. Use Signal with coordinates as parameters.
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
         :func:`OnMotion`
         """
