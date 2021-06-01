@@ -2025,7 +2025,11 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
+<<<<<<< HEAD
     path_to_src_code_message = _("Path to the source code:")
+=======
+    source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass8/"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
     # to hide non-error messages from subprocesses
     if gs.verbosity() <= 2:
@@ -2719,8 +2723,13 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
     Subversion:
 
+<<<<<<< HEAD
     >>> resolve_source_code("https://svn.osgeo.org/grass/grass-addons/grass7")
     ('svn', 'https://svn.osgeo.org/grass/grass-addons/grass7')
+=======
+    >>> resolve_source_code('https://svn.osgeo.org/grass/grass-addons/grass8')
+    ('svn', 'https://svn.osgeo.org/grass/grass-addons/grass8')
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
     ZIP files online:
 

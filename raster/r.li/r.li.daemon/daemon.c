@@ -66,9 +66,14 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
     char rlipath[GPATH_MAX];
     char testpath[GPATH_MAX];
 
+<<<<<<< HEAD
     /* conf files go into ~/.grass8/r.li/ */
     sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
             HOST_DIRSEP);
+=======
+	/* conf files go into ~/.grass8/r.li/ */
+    sprintf(rlipath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li", HOST_DIRSEP);
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
     sprintf(testpath, "%s%c%s%c", G_config_path(), HOST_DIRSEP, "r.li",
             HOST_DIRSEP);
@@ -97,13 +102,19 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
             G_fatal_error(_("Cannot create random access file"));
     }
     else {
+<<<<<<< HEAD
         /* text file output */
         /* check if ~/.grass8/ exists */
+=======
+	/* text file output */
+	/* check if ~/.grass8/ exists */
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
         sprintf(out, "%s", G_config_path());
         doneDir = G_mkdir(out);
         if (doneDir == -1 && errno != EEXIST)
             G_fatal_error(_("Cannot create %s directory"), out);
 
+<<<<<<< HEAD
         /* check if ~/.grass8/r.li/ exists */
         sprintf(out, "%s", rlipath);
         doneDir = G_mkdir(out);
@@ -123,6 +134,21 @@ int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
                           "output", HOST_DIRSEP, output);
         if ((res = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
             G_fatal_error(_("Cannot create %s output"), out);
+=======
+	/* check if ~/.grass8/r.li/ exists */
+	sprintf(out, "%s", rlipath);
+	doneDir = G_mkdir(out);
+	if (doneDir == -1 && errno != EEXIST)
+	    G_fatal_error(_("Cannot create %s directory"), out);
+
+	/* check if ~/.grass8/r.li/output exists */
+	sprintf(out, "%s%s", rlipath, "output");
+	doneDir = G_mkdir(out);
+	if (doneDir == -1 && errno != EEXIST)
+	    G_fatal_error(_("Cannot create %s directory"), out);
+	sprintf(out, "%s%s%c%s", rlipath, "output", HOST_DIRSEP, output);
+	res = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
     }
 
     /*#######################################################

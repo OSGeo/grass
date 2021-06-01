@@ -2,7 +2,33 @@ import html.parser as base
 import sys
 from html.entities import entitydefs
 
+<<<<<<< HEAD
 __all__ = ["HTMLParser"]
+=======
+try:
+    # Python 2 import
+    import HTMLParser as base
+
+    HTMLParseError = base.HTMLParseError
+except ImportError:
+    # Python 3 import
+    import html.parser as base
+
+    # TODO: this needs a better fix since HTMLParseError is actually
+    # used including its attributes, so that actually fails
+    # HTMLParseError is deprecated, parsing is not strict
+    HTMLParseError = Exception
+
+try:
+    # Python 3
+    from html.entities import entitydefs
+except ImportError:
+    # Python 2
+    from htmlentitydefs import entitydefs
+
+
+__all__ = ["HTMLParser", "HTMLParseError"]
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 omit_start = ["body", "tbody", "head", "html"]
 

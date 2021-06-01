@@ -100,7 +100,11 @@ index_items = [
     ("wxGUI_graphical.html", std_img_name("gui"), "GUI"),
     ("wxGUI.nviz.html", std_img_name("3dview"), "3D view"),
     (
+<<<<<<< HEAD
         "https://grass.osgeo.org/grass-devel/manuals/libpython/index.html",
+=======
+        "https://grass.osgeo.org/grass80/manuals/libpython/index.html",
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
         std_img_name("python"),
         "Python",
     ),

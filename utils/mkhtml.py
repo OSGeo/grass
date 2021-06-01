@@ -686,6 +686,7 @@ def get_addon_path():
 
     :return str|None: pgm path if pgm is addon else None
     """
+<<<<<<< HEAD
     addons_base_dir = os.getenv("GRASS_ADDON_BASE")
     if addons_base_dir and major:
         grass_addons_dir = pathlib.Path(addons_base_dir) / "grass-addons"
@@ -752,6 +753,23 @@ def get_addon_path():
         for addon_path in addon_paths:
             if pgm == pathlib.Path(addon_path).name:
                 return addon_path
+=======
+    addon_base = os.getenv("GRASS_ADDON_BASE")
+    if addon_base:
+        """'addons_paths.json' is file created during install extension
+        check get_addons_paths() function in the g.extension.py file
+        """
+        addons_paths = os.path.join(addon_base, "addons_paths.json")
+        if os.path.exists(addons_paths):
+            with open(addons_paths, "r") as f:
+                addons_paths = json.load(f)
+            for addon in addons_paths["tree"]:
+                split_path = addon["path"].split("/")
+                root_dir, module_dir = split_path[0], split_path[-1]
+                if "grass8" == root_dir and pgm == module_dir:
+                    return True, addon["path"]
+    return None, None
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 
 # process header
