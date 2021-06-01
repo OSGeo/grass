@@ -77,7 +77,7 @@ from startup.guiutils import (
 from grass.grassdb.checks import is_first_time_user
 
 
-class SingleWindowFrame(wx.Frame):
+class GFrame(wx.Frame):
     """Single Window Layout which will be parallelly developed next to the
     current Multi Window layout solution."""
 
