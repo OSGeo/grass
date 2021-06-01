@@ -1703,12 +1703,12 @@ class GFrame(wx.Frame):
             id=wx.ID_ANY,
             pos=wx.DefaultPosition,
             size=wx.DefaultSize,
-            style=wx.TR_HAS_BUTTONS |
-            wx.TR_LINES_AT_ROOT |
-            wx.TR_HIDE_ROOT |
-            wx.TR_DEFAULT_STYLE |
-            wx.NO_BORDER |
-            wx.FULL_REPAINT_ON_RESIZE,
+            style=wx.TR_HAS_BUTTONS
+            | wx.TR_LINES_AT_ROOT
+            | wx.TR_HIDE_ROOT
+            | wx.TR_DEFAULT_STYLE
+            | wx.NO_BORDER
+            | wx.FULL_REPAINT_ON_RESIZE,
             idx=self.displayIndex,
             lmgr=self,
             notebook=self.notebookLayers,
@@ -1743,8 +1743,8 @@ class GFrame(wx.Frame):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             idx = 4 + self.displayIndex * 4
             try:
-                x, y = map(int, dim.split(",")[idx: idx + 2])
-                w, h = map(int, dim.split(",")[idx + 2: idx + 4])
+                x, y = map(int, dim.split(",")[idx : idx + 2])
+                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
                 self.GetMapDisplay().SetPosition((x, y))
                 self.GetMapDisplay().SetSize((w, h))
             except Exception:
@@ -2020,7 +2020,8 @@ class GFrame(wx.Frame):
 
         # region = tree.GetMap().GetCurrentRegion()
         # if region['cells'] > 10000:
-        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
+        #   GMessage(message = "Cell values can only be displayed
+        #   for regions of < 10,000 cells.", parent = self)
         self.GetLayerTree().AddLayer("rastnum")
 
     def OnAddCommand(self, event):
