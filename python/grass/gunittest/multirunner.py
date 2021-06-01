@@ -106,6 +106,7 @@ def main():
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
+<<<<<<< HEAD
     grass_executable = args.grassbin
 
     # Software
@@ -113,13 +114,27 @@ def main():
     # we assume that the start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass_executable + " --config path"
+=======
+    # grass8bin = 'C:\Program Files (x86)\GRASS GIS 8.0.git\grass.bat'
+    grass8bin = args.grassbin  # TODO: can be used if pressent
+
+    # Software
+    # query GRASS GIS 8 itself for its GISBASE
+    # we assume that GRASS GIS' start script is available and in the PATH
+    # the shell=True is here because of MS Windows? (code taken from wiki)
+    startcmd = grass8bin + " --config path"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
     p = subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     out, err = p.communicate()
     if p.returncode != 0:
         print(
+<<<<<<< HEAD
             "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+=======
+            "ERROR: Cannot find GRASS GIS 8 start script (%s):\n%s" % (startcmd, err),
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
             file=sys.stderr,
         )
         return 1

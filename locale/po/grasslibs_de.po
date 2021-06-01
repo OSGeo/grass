@@ -3441,8 +3441,3724 @@ msgstr ""
 
 #: ../lib/gis/gisinit.c:82
 #, c-format
+<<<<<<< HEAD
 msgid "MAPSET %s - permission denied"
 msgstr "MAPSET %s - Zugriff verweigert."
+=======
+msgid "Unknown keyword <%s> in vector head"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:465
+#, c-format
+msgid "Column <%s> does not exist"
+msgstr "Spalte <%s> existiert nicht"
+
+#: ../lib/vector/Vlib/ascii.c:467
+msgid "Available columns:"
+msgstr "Verfügbare Spalten:"
+
+#: ../lib/vector/Vlib/ascii.c:472
+msgid "Export cancelled"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:505
+#, c-format
+msgid "Unknown type of column <%s>, export cancelled"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:539
+#, c-format
+msgid "Unable to select record from table <%s> (key %s, column %s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:661
+#, c-format
+msgid "Unknown feature type %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:701
+#, c-format
+msgid "Feature has more categories. Only one category (%d) is exported."
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:718
+#, c-format
+msgid "Cannot select attributes for cat = %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:724
+msgid "Unable to fetch data from table"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:756 ../lib/vector/Vlib/net_build.c:216
+#: ../lib/vector/Vlib/net_build.c:501 ../lib/vector/Vlib/net_build.c:519
+#: ../lib/vector/Vlib/net_build.c:802 ../lib/vector/Vlib/net_build.c:820
+#: ../lib/vector/Vlib/net_build.c:981
+#, c-format
+msgid "Column <%s> not found in table <%s>"
+msgstr "Spalte <%s> nicht in Tabelle <%s> gefunden."
+
+#: ../lib/vector/Vlib/ascii.c:758
+#, c-format
+msgid "Column <%s>: unsupported data type"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:840
+msgid "Unknown format"
+msgstr "Unbekanntes Format"
+
+#: ../lib/vector/Vlib/ascii.c:850
+msgid "Topology not available, unable to process areas"
+msgstr "Topologie nicht verfügbar, kann Flächen nicht verarbeiten"
+
+#: ../lib/vector/Vlib/ascii.c:863
+#, c-format
+msgid "Unable to get boundary of area id %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:875
+#, c-format
+msgid "Unable to get boundary of isle id %d (area id %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:889
+#, c-format
+msgid "%d features without category skipped. To export also features without category use '%s=-1'."
+msgstr ""
+
+#: ../lib/vector/Vlib/intersect2.c:1260 ../lib/vector/Vlib/intersect2.c:1266
+#: ../lib/vector/Vlib/intersect2.c:1268 ../lib/vector/Vlib/intersect2.c:1320
+#: ../lib/vector/Vlib/intersect2.c:1329 ../lib/vector/Vlib/intersect2.c:1350
+#: ../lib/vector/Vlib/intersect2.c:1367 ../lib/vector/Vlib/intersect.c:1243
+#: ../lib/vector/Vlib/intersect.c:1249 ../lib/vector/Vlib/intersect.c:1251
+#: ../lib/vector/Vlib/intersect.c:1306 ../lib/vector/Vlib/intersect.c:1315
+#: ../lib/vector/Vlib/intersect.c:1336 ../lib/vector/Vlib/intersect.c:1353
+msgid "Error while adding point to array. Out of memory"
+msgstr "Fehler beim Hinzufügen eines Punktes zum Array. Nicht genügend Arbeitsspeicher."
+
+#: ../lib/vector/Vlib/close.c:91
+#, c-format
+msgid "Unable to create vector map <%s>"
+msgstr "Kann die Vektorkarte <%s> nicht anlegen."
+
+#: ../lib/vector/Vlib/close.c:108
+msgid "Copying features failed"
+msgstr ""
+
+#: ../lib/vector/Vlib/close.c:141
+#, c-format
+msgid "Unable to open %s file"
+msgstr ""
+
+#: ../lib/vector/Vlib/close.c:226
+#, c-format
+msgid "Unable to close vector <%s>"
+msgstr "Kann die Vektorkarte <%s> nicht schließen."
+
+#: ../lib/vector/Vlib/close.c:257
+#, c-format
+msgid "Invalid request for writing frmt file - map format is %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/close.c:284 ../lib/vector/Vlib/simple_features.c:310
+#: ../lib/vector/Vlib/field.c:720 ../lib/vector/Vlib/rewind_ogr.c:47
+#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/header_finfo.c:41
+#: ../lib/vector/Vlib/header_finfo.c:80 ../lib/vector/Vlib/header_finfo.c:113
+#: ../lib/vector/Vlib/header_finfo.c:153 ../lib/vector/Vlib/header_finfo.c:254
+#: ../lib/vector/Vlib/write_sfa.c:298 ../lib/vector/Vlib/open_ogr.c:126
+#: ../lib/vector/Vlib/open_ogr.c:159 ../lib/vector/Vlib/open_ogr.c:236
+#: ../lib/vector/Vlib/write_ogr.c:69 ../lib/vector/Vlib/write_ogr.c:105
+#: ../lib/vector/Vlib/write_ogr.c:146 ../lib/vector/Vlib/close_ogr.c:77
+#: ../lib/vector/Vlib/close_ogr.c:111 ../lib/vector/Vlib/build_sfa.c:714
+#: ../lib/vector/Vlib/build_ogr.c:101 ../lib/vector/Vlib/build_ogr.c:176
+#: ../lib/vector/Vlib/read_ogr.c:56 ../lib/vector/Vlib/read_ogr.c:157
+#: ../lib/vector/Vlib/read_ogr.c:242 ../lib/proj/convert.c:98
+msgid "GRASS is not compiled with OGR support"
+msgstr ""
+
+#: ../lib/vector/Vlib/close.c:289
+#, c-format
+msgid "Link to vector map <%s> created"
+msgstr ""
+
+#: ../lib/vector/Vlib/simple_features.c:225
+#, c-format
+msgid "Unknown Simple Features type (%d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/simple_features.c:332
+msgid "Unable to get number of simple features"
+msgstr ""
+
+#: ../lib/vector/Vlib/simple_features.c:341
+#, c-format
+msgid "Unable to report simple features for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:70
+#, c-format
+msgid "Name <%s> is not SQL compliant. Must start with a letter."
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:120
+msgid "Layer number must be 1 or greater"
+msgstr "Die Layernummer muss >= 1 sein."
+
+#: ../lib/vector/Vlib/field.c:125
+msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:132
+msgid "Unable to add attribute link"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:138
+msgid "Unable to write attribute links"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:183
+msgid "Unable to write database links"
+msgstr "Kann Datenbankverknüpfungen nicht schreiben."
+
+#: ../lib/vector/Vlib/field.c:207
+msgid "Database connection not defined. Skipping."
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:214
+msgid "More DB links defined for input vector map. Using only first DB link for output."
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:290
+#, c-format
+msgid "Layer number %d or name <%s> already exists"
+msgstr "Layernummer %d oder Name <%s> existiert bereits."
+
+#: ../lib/vector/Vlib/field.c:378
+#, c-format
+msgid ""
+"Default driver / database set to:\n"
+"driver: %s\n"
+"database: %s"
+msgstr ""
+"Standard Treiber / Datenbank ist:\n"
+"Treiber: %s\n"
+"Datenbank: %s"
+
+#: ../lib/vector/Vlib/field.c:385
+msgid "Default driver is not set"
+msgstr "Standard-Treiber wurde nicht angegeben."
+
+#: ../lib/vector/Vlib/field.c:388
+msgid "Default database is not set"
+msgstr "Standard-Datenbank ist nicht angegeben."
+
+#: ../lib/vector/Vlib/field.c:473
+#, c-format
+msgid "Requested dblink %d, maximum link number %d"
+msgstr "Angeforderte Datenbankverknüpfung %d, maximale Verknüpfungsanzahl %d"
+
+#: ../lib/vector/Vlib/field.c:659 ../lib/vector/Vlib/field.c:667
+#, c-format
+msgid "Error in rule on row %d in <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:735 ../lib/vector/Vlib/open_ogr.c:77
+#, c-format
+msgid "Unable to open OGR data source '%s'"
+msgstr "Kann die OGR-Datenquelle '%s' nicht öffnen."
+
+#: ../lib/vector/Vlib/field.c:752
+#, c-format
+msgid "Unable to open OGR layer <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:779
+msgid "Unable to open OGR DBMI driver"
+msgstr "Kann den OGR DBMI-Treiber nicht öffnen."
+
+#: ../lib/vector/Vlib/field.c:818
+msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
+msgstr "Alle FID Tests fehlgeschlagen. Weder 'FID' noch 'ogc_fid', 'ogr_fid', 'gid' sind in der OGR DB Tabelle vorhanden."
+
+#: ../lib/vector/Vlib/field.c:885
+#, c-format
+msgid "Feature table <%s> has no primary key defined. Unable to define DB links."
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:905
+msgid "GRASS not compiled with PostgreSQL support"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:937
+msgid "Unknown vector map format"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:970
+#, c-format
+msgid "Unable to create database definition file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/field.c:1065
+msgid "Bug: attempt to update map which is not in current mapset"
+msgstr "Bug: Versuch eine Karte zu aktualisieren, die nicht im aktuellen Mapset ist."
+
+#: ../lib/vector/Vlib/bridges.c:213
+#, c-format
+msgid "Removed lines: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/bridges.c:214
+#, c-format
+msgid "Removed bridges: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:109 ../lib/vector/Vlib/open_pg.c:267
+msgid "No feature tables found in database."
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:133
+#, c-format
+msgid "Feature table <%s> not found in 'geometry_columns'"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:181
+msgid "Topology schema not found."
+msgstr "Topologie-Schema nicht gefunden."
+
+#: ../lib/vector/Vlib/open_pg.c:193 ../lib/vector/Vlib/open_ogr.c:150
+#, c-format
+msgid "Unable to open feature index file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:273
+#, c-format
+msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:276
+#, c-format
+msgid "Unable to delete PostGIS layer <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:282
+#, c-format
+msgid "PostGIS layer <%s.%s> already exists in database '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:390
+msgid "No key column detected."
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:462 ../lib/vector/Vlib/open_pg.c:474
+#, c-format
+msgid "Execution failed: %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:476
+#, c-format
+msgid "PostGIS topology schema <%s> dropped"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:559
+msgid "Connection to PostgreSQL database failed. Try to set up username/password by db.login."
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:566
+msgid "Unable to get database name"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:571
+#, c-format
+msgid "<%s> is not PostGIS database. DB table 'spatial_ref_sys' not found."
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:580
+#, c-format
+msgid "PostGIS Topology extension not found in the database <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:667
+msgid "Empty bounding box"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:768
+#, c-format
+msgid "Inconsistency in topology: unable to read node %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:834
+#, c-format
+msgid "Inconsistency in topology: node %d - unexpected feature type %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1003
+#, c-format
+msgid "Area %d without boundary detected"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1061
+#, c-format
+msgid "Isle %d without boundary detected"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1128
+msgid "Unable to get map bounding box from topology"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1135
+#, c-format
+msgid ""
+"Unable to parse map bounding box:\n"
+"%s"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1159
+#, c-format
+msgid "Different number of nodes detected (%d, %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1187 ../lib/vector/Vlib/open_pg.c:1209
+#, c-format
+msgid "Different number of areas detected (%d, %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1380
+msgid "To be implemented: isles not attached in Topo-Geo-only mode"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1485 ../lib/vector/Vlib/build_pg.c:212
+#, c-format
+msgid "Inconsistency in topology: number of nodes %d (should be %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1569
+#, c-format
+msgid "Inconsistency in topology: number of points %d (should be %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1614
+#, c-format
+msgid "Inconsistency in topology: number of lines %d (should be %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_pg.c:1668
+#, c-format
+msgid "Inconsistency in topology: number of centroids %d (should be %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/dangles.c:148
+msgid "Changed"
+msgstr ""
+
+#: ../lib/vector/Vlib/dangles.c:151
+msgid "Removed"
+msgstr ""
+
+#: ../lib/vector/Vlib/dangles.c:154
+msgid "Selected"
+msgstr ""
+
+#: ../lib/vector/Vlib/dangles.c:262
+#, c-format
+msgid "%s lines: %d"
+msgstr "%s Linien: %d"
+
+#: ../lib/vector/Vlib/dangles.c:263
+#, c-format
+msgid "%s dangles: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:241
+#, c-format
+msgid "%d lines merged"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:242
+#, c-format
+msgid "%d new lines"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:245
+#, c-format
+msgid "%d boundaries merged"
+msgstr "%d Flächengrenzen zusammengelegt"
+
+#: ../lib/vector/Vlib/merge_lines.c:246
+#, c-format
+msgid "%d new boundaries"
+msgstr "%d neue Flächengrenzen"
+
+#: ../lib/vector/Vlib/merge_lines.c:249
+#, c-format
+msgid "%d lines and boundaries merged"
+msgstr ""
+
+#: ../lib/vector/Vlib/merge_lines.c:250
+#, c-format
+msgid "%d new lines and boundaries"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_sfa.c:117
+msgid "Unable to calculate centroid for area"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_sfa.c:219
+msgid "Attempt to delete dead feature"
+msgstr "Versuche totes Objekt zu löschen."
+
+#: ../lib/vector/Vlib/write_sfa.c:311
+#, c-format
+msgid "Unsupported vector map format (%d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/close_nat.c:74
+#, c-format
+msgid "Unable to create '%s': %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/close_nat.c:81
+#, c-format
+msgid "Unable to copy '%s': %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/close_nat.c:167
+#, c-format
+msgid "Unable to drop table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:60
+msgid "OGR datasource not defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:65 ../lib/vector/Vlib/write_ogr.c:129
+msgid "OGR layer not defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:97
+#, c-format
+msgid "OGR layer <%s> not found"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:106 ../lib/vector/Vlib/write_ogr.c:352
+#, c-format
+msgid "OGR transaction with layer <%s> failed to start"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:196
+#, c-format
+msgid "Unable to get OGR driver <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:204
+#, c-format
+msgid "Unable to create OGR data source '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:216
+#, c-format
+msgid "OGR layer <%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:220
+#, c-format
+msgid "Unable to delete OGR layer <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:226
+#, c-format
+msgid "OGR layer <%s> already exists in datasource '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_ogr.c:284
+#, c-format
+msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgstr "Objekt Indexformat Version %d.%d wird von dieser Version nicht unterstützt. Versuchen Sie die Topologie zu erneuern oder GRASS zu aktualisieren."
+
+#: ../lib/vector/Vlib/open_ogr.c:289
+#, c-format
+msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "Ihre GRASS Version unterstützt nicht vollständig das Objekt-Indexformat %d.%d der Vektoren. Versuchen Sie die Topologie zu erneuern oder GRASS zu aktualisieren."
+
+#: ../lib/vector/Vlib/read.c:25 ../lib/vector/Vlib/write.c:30
+#: ../lib/vector/Vlib/write.c:36 ../lib/vector/Vlib/write.c:42
+#: ../lib/vector/Vlib/write.c:49
+msgid "for this format/level not supported"
+msgstr "für dieses Format/Level nicht unterstützt."
+
+#: ../lib/vector/Vlib/read.c:93 ../lib/vector/Vlib/read.c:129
+#: ../lib/vector/Vlib/read.c:168
+msgid "Vector map is not open for reading"
+msgstr ""
+
+#: ../lib/vector/Vlib/read.c:136 ../lib/vector/Vlib/read.c:180
+#, c-format
+msgid "Unable to read feature %d from vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/read.c:200
+msgid "Line index is out of range"
+msgstr ""
+
+#: ../lib/vector/Vlib/read.c:224
+msgid "Node index is out of range"
+msgstr ""
+
+#: ../lib/vector/Vlib/read.c:248
+msgid "Area index is out of range"
+msgstr ""
+
+#: ../lib/vector/Vlib/read.c:272
+msgid "Isle index is out of range"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_nat.c:56
+#, c-format
+msgid "Unable to open coor file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_nat.c:152
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%"
+msgstr ""
+
+#: ../lib/vector/Vlib/open_nat.c:156
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:339
+#: ../lib/vector/Vlib/build_sfa.c:632
+msgid "Registering primitives..."
+msgstr "Registriere Primitive..."
+
+#: ../lib/vector/Vlib/build_nat.c:86 ../lib/vector/Vlib/box.c:436
+msgid "Unable to read vector map"
+msgstr "Kann Vektorkarte nicht lesen."
+
+#: ../lib/vector/Vlib/build_nat.c:119 ../lib/vector/Vlib/build_sfa.c:385
+#: ../lib/vector/Vlib/build_sfa.c:664
+#, c-format
+msgid "One primitive registered"
+msgid_plural "%d primitives registered"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
+#: ../lib/vector/Vlib/build_sfa.c:665
+#, c-format
+msgid "One vertex registered"
+msgid_plural "%<PRId64> vertices registered"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../lib/vector/Vlib/build_nat.c:133
+msgid "Building areas..."
+msgstr "Erzeuge Flächen..."
+
+#: ../lib/vector/Vlib/build_nat.c:157
+#, c-format
+msgid "One area built"
+msgid_plural "%d areas built"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../lib/vector/Vlib/build_nat.c:158
+#, c-format
+msgid "One isle built"
+msgid_plural "%d isles built"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../lib/vector/Vlib/build_nat.c:169
+msgid "Attaching islands..."
+msgstr "Füge Inseln hinzu..."
+
+#: ../lib/vector/Vlib/build_nat.c:189
+msgid "Attaching centroids..."
+msgstr "Füge Zentroide hinzu..."
+
+#: ../lib/vector/Vlib/graph.c:138
+msgid "Unable to add network arc"
+msgstr "Kann 'network arc' nicht hinzufügen."
+
+#: ../lib/vector/Vlib/graph.c:226 ../lib/vector/Vlib/net_analyze.c:201
+#, c-format
+msgid "dglShortestPath error: %s"
+msgstr "dglShortestPath Fehler: %s"
+
+#: ../lib/vector/Vlib/area.c:50
+msgid "Attempt to read points of nonexistent area"
+msgstr "Versuche Punkte nicht existenter Fläche zu lesen."
+
+#: ../lib/vector/Vlib/area.c:81
+msgid "Attempt to read points of nonexistent isle"
+msgstr ""
+
+#: ../lib/vector/Vlib/area.c:121 ../lib/vector/Vlib/area.c:153
+#: ../lib/vector/Vlib/area.c:219 ../lib/vector/Vlib/area.c:248
+#, c-format
+msgid "Attempt to read topo for dead area (%d)"
+msgstr "Versuche Topologie einer toten Fläche (%d) zu lesen."
+
+#: ../lib/vector/Vlib/area.c:189 ../lib/vector/Vlib/area.c:275
+#, c-format
+msgid "Attempt to read topo for dead isle (%d)"
+msgstr "Versuche Topologie einer toten Insel (%d) zu lesen."
+
+#: ../lib/vector/Vlib/open.c:138
+#, c-format
+msgid "Programmer requested unknown access level %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:232
+#, c-format
+msgid "Vector map <%s> not found in current mapset"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:252
+msgid "Temporary vector maps can be accessed only in the current mapset"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:277
+msgid "Vector map which is not in the current mapset cannot be opened for update"
+msgstr "Eine Karte, die sich nicht im aktuellen Mapset befindet, kann nicht zum Aktualisierung geöffnet werden."
+
+#: ../lib/vector/Vlib/open.c:311
+#, c-format
+msgid "Unable to read header file of vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:352
+#, c-format
+msgid "Unable to open topology file for vector map <%s>"
+msgstr "Kann Topologie-Datei der Vektorkarte <%s> nicht öffnen."
+
+#: ../lib/vector/Vlib/open.c:393 ../lib/vector/Vlib/cindex.c:542
+#, c-format
+msgid "Unable to open category index file for vector map <%s>"
+msgstr "Kann die Kategorieindex-Datei der Vektorkarte <%s> nicht öffnen."
+
+#: ../lib/vector/Vlib/open.c:419
+#, c-format
+msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology with v.build."
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:445
+#, c-format
+msgid "Building topology for OGR layer <%s> from datasource '%s'..."
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:453
+#, c-format
+msgid "Unable to open vector map <%s> on level %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:507
+#, c-format
+msgid "Unable to open history file for vector map <%s>"
+msgstr "Kann die History-Datei der Vektorkarte <%s> nicht öffnen."
+
+#: ../lib/vector/Vlib/open.c:777
+#, c-format
+msgid "Unable to create vector map: <%s> is not in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:786
+#, c-format
+msgid "Unable to create vector map: <%s> is not SQL compliant"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:846
+#, c-format
+msgid "Unable to open history file of vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:887
+#, c-format
+msgid "Using OGR/%s format"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:891
+msgid "Using PostGIS Topology format"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:893
+msgid "Using PostGIS format"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:896
+msgid "Using native format"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:985
+#, c-format
+msgid "Unable to stat file <%s>"
+msgstr "Unable to stat file <%s>"
+
+#: ../lib/vector/Vlib/open.c:1049
+#, c-format
+msgid "unknown %d (update Vect_maptype_info)"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:1138
+msgid "Size of 'coor' file differs from value saved in topology file"
+msgstr "Größe der 'coor' Datei unterscheidet sich von dem in der Topologie-Datei gespeicherten Wert."
+
+#: ../lib/vector/Vlib/open.c:1149 ../lib/vector/Vlib/open.c:1248
+#, c-format
+msgid "Please rebuild topology for vector map <%s@%s>"
+msgstr "Bitte erneuern Sie die Topologie der Vektorkarte <%s@%s>."
+
+#: ../lib/vector/Vlib/open.c:1237
+msgid "Size of 'coor' file differs from value saved in sidx file"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:1317
+msgid "Unable to open OGR file"
+msgstr ""
+
+#: ../lib/vector/Vlib/open.c:1343
+msgid "OGR output also detected, using OGR"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_analyze.c:291 ../lib/vector/Vlib/net_analyze.c:332
+#, c-format
+msgid "Unable to find point with defined unique category for node <%d>."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_analyze.c:295 ../lib/vector/Vlib/net_analyze.c:336
+#, c-format
+msgid ""
+"There exists more than one point on node <%d> with unique category in field  <%d>.\n"
+"The unique category layer may not be valid."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_analyze.c:452
+msgid "Wrong line direction in Vect_net_get_line_cost()"
+msgstr "Falsche Linienrichtung in Vect_net_get_line_cost()."
+
+#: ../lib/vector/Vlib/overlay.c:72
+msgid "unknown operator"
+msgstr "unbekannter Operator"
+
+#: ../lib/vector/Vlib/overlay.c:124
+msgid "Overlay: line/boundary types not supported by AND operator"
+msgstr "Overlay: Typ Linie/Grenze wird nicht vom Operator AND unterstützt."
+
+#: ../lib/vector/Vlib/overlay.c:127
+msgid "Overlay: area x area types not supported by AND operator"
+msgstr "Overlay: Typ Fläche x Fläche wird nicht vom Operator AND unterstützt."
+
+#: ../lib/vector/Vlib/clean_nodes.c:248
+#, c-format
+msgid "Modifications: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/cindex.c:32
+msgid "Category index is not up to date"
+msgstr "Kategorieindex ist nicht mehr aktuell."
+
+#: ../lib/vector/Vlib/cindex.c:38
+msgid "Layer index out of range"
+msgstr "Layerindex außerhalb des Wertebereichs."
+
+#: ../lib/vector/Vlib/cindex.c:268
+msgid "Category index out of range"
+msgstr ""
+
+#: ../lib/vector/Vlib/cindex.c:389
+msgid "Mixing IDs of areas and primitives"
+msgstr ""
+
+#: ../lib/vector/Vlib/cindex.c:491
+#, c-format
+msgid "Unable to create category index file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/cindex.c:500
+msgid "Error writing out category index file"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:211 ../lib/db/dbmi_client/table.c:110
+#: ../lib/db/dbmi_client/copy_tab.c:242 ../lib/db/dbmi_client/copy_tab.c:319
+#, c-format
+msgid "Unable to open select cursor: '%s'"
+msgstr "Kann den Select-Cursor '%s' nicht öffnen."
+
+#: ../lib/vector/Vlib/write_ogr.c:240
+#, c-format
+msgid "Creating field <%s> failed"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:328
+#, c-format
+msgid "Unable to create OGR layer <%s> in '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:430
+msgid "Feature is not a point. Skipping."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:438
+msgid "Feature is not a line. Skipping."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:445
+msgid "Feature is not a polygon. Skipping."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:452
+msgid "Feature is not a face. Skipping."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:458
+#, c-format
+msgid "Unsupported feature type (%d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:477
+msgid "Boundary is not closed. Feature skipped."
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:506
+msgid "Unable to writes feature attributes"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:571
+#, c-format
+msgid "Feature without category of layer %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/write_ogr.c:630
+#, c-format
+msgid "Unable to create field <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/legal_vname.c:43
+#, c-format
+msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
+msgstr "Ungültiger Name der Vektorkarte <%s>. Darf nicht '.' oder 'NULL' enthalten."
+
+#: ../lib/vector/Vlib/legal_vname.c:50
+#, c-format
+msgid "Illegal vector map name <%s>. Must start with a letter."
+msgstr "Ungültiger Name der Vektorkarte <%s>. Muss mit einem Buchstaben beginnen."
+
+#: ../lib/vector/Vlib/legal_vname.c:58
+#, c-format
+msgid "Illegal vector map name <%s>. Character '%c' not allowed."
+msgstr "Ungültiger Name der Vektorkarte <%s>. Zeichen '%c' ist nicht erlaubt."
+
+#: ../lib/vector/Vlib/legal_vname.c:65
+#, c-format
+msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgstr "Ungültiger Name der Vektorkarte <%s>. SQL-Schlüsselwort darf nicht als Vektorkartenname benutzt werden."
+
+#: ../lib/vector/Vlib/legal_vname.c:100 ../lib/vector/Vlib/legal_vname.c:104
+#, c-format
+msgid "Output vector map name <%s> is not in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/vector/Vlib/legal_vname.c:117 ../lib/vector/Vlib/legal_vname.c:121
+#, c-format
+msgid "Output vector map name <%s> is not SQL compliant"
+msgstr ""
+
+#: ../lib/vector/Vlib/legal_vname.c:159 ../lib/vector/Vlib/legal_vname.c:163
+#, c-format
+msgid "Output vector map <%s> is used as input"
+msgstr "Ausgabe-Vektorkarte <%s> als Eingabe verwendet."
+
+#: ../lib/vector/Vlib/level_two.c:23
+#, c-format
+msgid "Vector map <%s> is not open at topological level"
+msgstr ""
+
+#: ../lib/vector/Vlib/level_two.c:284
+#, c-format
+msgid "Invalid node id: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/level_two.c:316
+#, c-format
+msgid "Nodes not available for line %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/level_two.c:357
+#, c-format
+msgid "Areas not available for line %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/level_two.c:362
+#, c-format
+msgid "Line %d is not a boundary"
+msgstr ""
+
+#: ../lib/vector/Vlib/level_two.c:445
+#, c-format
+msgid "Topology info not available for feature %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/close_ogr.c:104 ../lib/vector/Vlib/close_pg.c:139
+#, c-format
+msgid "Unable to save feature index file for vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:272 ../lib/vector/Vlib/read_pg.c:471
+#, c-format
+msgid "Feature %ld without geometry skipped"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:365
+#, c-format
+msgid "Requesting invalid feature from cache (%d). Number of features in cache: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:368
+#, c-format
+msgid "Feature %d: unexpected type (%d) - should be %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:378 ../lib/vector/Vlib/build_sfa.c:354
+#: ../lib/vector/Vlib/build_sfa.c:364
+#, c-format
+msgid "Feature %d without geometry skipped"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:482 ../lib/vector/Vlib/read_ogr.c:382
+msgid "Feature without geometry. Skipped."
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:575
+msgid "No geometry or topo geometry column defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:585
+msgid "Random access not supported. Primary key not defined."
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:652
+msgid "Inconsistency in topology: detected centroid (should be point)"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:662
+msgid "Inconsistency in topology: detected boundary (should be line)"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:787
+#, c-format
+msgid "Invalid WKB content: %d bytes"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:803
+msgid "Reading EWKB with 4-dimensional coordinates (XYZM) is not supported"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:996 ../lib/vector/Vlib/read_pg.c:1066
+#: ../lib/vector/Vlib/read_pg.c:1137
+msgid "Length of input WKB is too small"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1077
+#, c-format
+msgid "Invalid cache index %d (max: %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1215
+#, c-format
+msgid "Corrupted data. %s."
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1217
+msgid "Corrupted data"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1252
+#, c-format
+msgid "Unable to parse '%s'"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1420 ../lib/vector/Vlib/close_pg.c:66
+#, c-format
+msgid "Unable to close cursor %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1530
+#, c-format
+msgid ""
+"Execution failed: %s (...)\n"
+"Reason: %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1561
+#, c-format
+msgid ""
+"Execution failed: %s\n"
+"Reason: %s"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_pg.c:1693
+#, c-format
+msgid ""
+"Unable to read features. Reason:\n"
+"%s"
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:45
+msgid "Vect_new_cats_struct(): Out of memory"
+msgstr "Vect_new_cats_struct():  Nicht genügend Arbeitsspeicher."
+
+#: ../lib/vector/Vlib/cats.c:127
+#, c-format
+msgid "Too many categories (%d), unable to set cat %d (layer %d)"
+msgstr "Zuviele Kategorien (%d), kann cat %d (Layer %d) nicht setzen."
+
+#: ../lib/vector/Vlib/cats.c:419
+#, c-format
+msgid "Unable to convert category string '%s' (from '%s') to category range"
+msgstr "Kann die Kategorie-Zeichenkette '%s' (von '%s') nicht in eine Kategoriespanne konvertieren."
+
+#: ../lib/vector/Vlib/cats.c:572 ../lib/vector/Vlib/cats.c:673
+msgid "Layer number must be > 0 for category constraints"
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:585
+#, c-format
+msgid "'%s' and '%s' parameters were supplied, cats will be ignored"
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:593
+#, c-format
+msgid "Loading categories from table <%s>..."
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:603 ../lib/db/dbmi_client/select.c:317
+#, c-format
+msgid "Unable select records from table <%s>"
+msgstr "Kann keine Datensätze in Tabelle <%s> selektieren."
+
+#: ../lib/vector/Vlib/cats.c:605
+#, c-format
+msgid "One category loaded"
+msgid_plural "%d categories loaded"
+msgstr[0] "Eine Kategorie geladen"
+msgstr[1] "%d Kategorien geladen"
+
+#: ../lib/vector/Vlib/cats.c:627
+#, c-format
+msgid "No categories selected with '%s' option"
+msgstr ""
+
+#: ../lib/vector/Vlib/cats.c:637
+#, c-format
+msgid "%d errors in '%s' option"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_sfa.c:279 ../lib/vector/Vlib/build_sfa.c:546
+#, c-format
+msgid "Unable to calculate centroid for area %d"
+msgstr "Kann keinen Zentroid für die Fläche %d berechnen."
+
+#: ../lib/vector/Vlib/build_sfa.c:305
+#, c-format
+msgid "Feature type %d not supported"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_sfa.c:603 ../lib/vector/Vlib/read_ogr.c:344
+#: ../lib/vector/Vlib/read_ogr.c:578
+#, c-format
+msgid "OGR feature type %d not supported"
+msgstr "OGR Objektart %d wird nicht unterstützt."
+
+#: ../lib/vector/Vlib/build_sfa.c:668
+#, c-format
+msgid "One feature without geometry skipped"
+msgid_plural "%d features without geometry skipped"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../lib/vector/Vlib/build_sfa.c:725
+#, c-format
+msgid "%s: Native format unsupported"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_sfa.c:751
+msgid "Feature index is built only for non-native formats. Nothing to dump."
+msgstr ""
+
+#: ../lib/vector/Vlib/box.c:264
+#, c-format
+msgid "Unable to determine bbox for feature %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/box.c:313 ../lib/vector/Vlib/box.c:359
+#, c-format
+msgid "Attempt to access area with invalid id (%d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/box.c:325
+#, c-format
+msgid "Unable to determine bbox for area %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/box.c:371
+#, c-format
+msgid "Unable to determine bbox for isle %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/box.c:429
+#, c-format
+msgid "Topology not available for vector map <%s>. Registering primitives..."
+msgstr ""
+
+#: ../lib/vector/Vlib/break_lines.c:574
+#, c-format
+msgid "Intersections: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/color_write.c:71 ../lib/raster/color_write.c:81
+#, c-format
+msgid "Qualified name <%s> doesn't match mapset <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/color_write.c:91 ../lib/raster/color_write.c:96
+#, c-format
+msgid "Unable to create <%s> file for map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:107 ../lib/vector/Vlib/remove_areas.c:268
+msgid "Area is composed of dead boundary"
+msgstr "Fläche besteht aus toten Grenzen."
+
+#: ../lib/vector/Vlib/remove_areas.c:194 ../lib/vector/Vlib/remove_areas.c:602
+#, c-format
+msgid "%d areas of total size %g removed"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:395
+msgid "Could not delete line from coor"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:458
+msgid "dissolve_neighbour > 0, failed to build new area"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:463 ../lib/vector/Vlib/remove_areas.c:501
+msgid "Dissolve with neighbour area: corrupt topology"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:497
+msgid "Failed to build new area"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:544 ../lib/vector/Vlib/remove_areas.c:571
+msgid "Failed to build new isle"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:549 ../lib/vector/Vlib/remove_areas.c:576
+msgid "Dissolve with outer isle: corrupt topology"
+msgstr ""
+
+#: ../lib/vector/Vlib/remove_areas.c:581
+msgid "Area merging failed"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:81
+#, c-format
+msgid "Unable to copy features. Input vector map <%s> is not open"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:102
+#, c-format
+msgid "Unable to create PostGIS layer <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:134
+#, c-format
+msgid "Vector map <%s> not open on topological level. Areas will be skipped!"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:169 ../lib/vector/Vlib/copy.c:246
+#: ../lib/ogsf/gp3.c:92
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "Kann die Vektorkarte <%s> nicht lesen."
+
+#: ../lib/vector/Vlib/copy.c:230 ../lib/vector/Vlib/copy.c:235
+msgid "Copying features..."
+msgstr "Kopiere Objekte..."
+
+#: ../lib/vector/Vlib/copy.c:232
+#, c-format
+msgid "Copying features (%s)..."
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:358
+msgid "Writing new feature failed"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:364
+#, c-format
+msgid "%d features without category or from different layer skipped"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:396
+msgid "Exporting nodes..."
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:424
+#, c-format
+msgid "Writing node %d failed"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:502
+msgid "Exporting areas..."
+msgstr "Exportiere Flächen..."
+
+#: ../lib/vector/Vlib/copy.c:560 ../lib/vector/Vlib/copy.c:568
+#, c-format
+msgid "Writing area %d failed"
+msgstr "Schreiben der Fläche %d fehlgeschlagen"
+
+#: ../lib/vector/Vlib/copy.c:576
+#, c-format
+msgid "%d areas without category or from different layer skipped"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:630
+#, c-format
+msgid "Unable to copy table <%s> for layer %d from <%s> to <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:749
+#, c-format
+msgid "Unable to add database link for vector map <%s>"
+msgstr "Kann Datenbankverknüpfung für Vektorkarte <%s> nicht hinzufügen."
+
+#: ../lib/vector/Vlib/copy.c:773
+#, c-format
+msgid "Unable to open database <%s> with driver <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:780
+msgid "Unable to create index"
+msgstr ""
+
+#: ../lib/vector/Vlib/copy.c:786
+#, c-format
+msgid "Unable to grant privileges on table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:194
+#, c-format
+msgid "Unable to write feature in vector map <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:234
+#, fuzzy
+msgid "Unable to rewrite feature/offset %"
+msgstr "Kann Objekt %d nicht schreiben."
+
+#: ../lib/vector/Vlib/write.c:266
+#, fuzzy
+msgid "Unable to delete feature/offset %"
+msgstr "Kann Objekt %d nicht schreiben."
+
+#: ../lib/vector/Vlib/write.c:299
+msgid "Unable to restore feature/offset %"
+msgstr ""
+
+#: ../lib/vector/Vlib/write.c:308
+#, c-format
+msgid "Vector map <%s> is not opened"
+msgstr "Vektorkarte <%s> ist nicht geöffnet"
+
+#: ../lib/vector/Vlib/write.c:313
+#, c-format
+msgid "Vector map <%s> is not opened in write mode"
+msgstr "Vektorkarte <%s> ist nicht im Schreibmodus geöffnet"
+
+#: ../lib/vector/Vlib/line.c:184 ../lib/vector/Vlib/line.c:217
+#: ../lib/vector/Vlib/line.c:250
+msgid "Index out of range in"
+msgstr "Index liegt außerhalb des Wertebereichs in"
+
+#: ../lib/vector/Vlib/line.c:550
+msgid "Segment outside line, no segment created"
+msgstr "Segment außerhalb der Linie. Kein Segment erzeugt."
+
+#: ../lib/vector/Vlib/net_build.c:101 ../lib/vector/Vlib/net_build.c:727
+msgid "Building graph..."
+msgstr "Erzeuge Graphen..."
+
+#: ../lib/vector/Vlib/net_build.c:143 ../lib/vector/Vlib/net_build.c:775
+msgid "Unable to build network graph"
+msgstr "Kann den Netzwerk-Graph nicht erzeugen."
+
+#: ../lib/vector/Vlib/net_build.c:149 ../lib/vector/Vlib/net_build.c:781
+msgid "Forward costs column not specified"
+msgstr "Spalte der Vorwärtskosten nicht angegeben."
+
+#: ../lib/vector/Vlib/net_build.c:156
+msgid "Turntable field < 1"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:172
+#, c-format
+msgid "Turntable column <%s> not found in table <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:182 ../lib/vector/Vlib/net_build.c:223
+#: ../lib/vector/Vlib/net_build.c:508 ../lib/vector/Vlib/net_build.c:526
+#: ../lib/vector/Vlib/net_build.c:809 ../lib/vector/Vlib/net_build.c:827
+#: ../lib/vector/Vlib/net_build.c:988
+#, c-format
+msgid "Data type of column <%s> not supported (must be numeric)"
+msgstr "Spaltentyp der Spalte <%s> wird nicht unterstützt (muss numerisch sein)."
+
+#: ../lib/vector/Vlib/net_build.c:202 ../lib/vector/Vlib/net_build.c:967
+msgid "Setting node costs..."
+msgstr "Setze Kosten der Knoten..."
+
+#: ../lib/vector/Vlib/net_build.c:277 ../lib/vector/Vlib/net_build.c:1032
+#, c-format
+msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
+msgstr "Datenbankeintrag für Knoten %d (cat = %d) nicht gefunden (Kosten auf 0 gesetzt)."
+
+#: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
+msgid "Cannot add network arc for virtual node connection."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:364
+#, c-format
+msgid ""
+"There exists more than one point of node <%d> with unique category field  <%d>.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:393
+#, c-format
+msgid ""
+"Unable to find point representing intersection <%d> in unique categories field <%d>.\n"
+"Cost for the intersection was set to 0.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:407
+#, c-format
+msgid ""
+"Unable to find node for point representing intersection <%d> in unique categories field <%d>.\n"
+"Cost for the intersection was set to 0.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:432
+#, c-format
+msgid "Database record for turn with cat = %d in not found. (The turn was skipped."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:465
+msgid "Cannot add network arc representing turn."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:487 ../lib/vector/Vlib/net_build.c:788
+msgid "Arc field < 1"
+msgstr "Arc Feld < 1"
+
+#: ../lib/vector/Vlib/net_build.c:539 ../lib/vector/Vlib/net_build.c:840
+msgid "Registering arcs..."
+msgstr "Registriere arcs..."
+
+#: ../lib/vector/Vlib/net_build.c:558
+#, c-format
+msgid ""
+"Line with id <%d> has more unique categories defined in field <%d>.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:579
+#, c-format
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (cost was set to 0)"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:596
+#, c-format
+msgid "Database record for line %d (cat = %d, backword direction) not found(cost was set to 0)"
+msgstr ""
+
+#: ../lib/vector/Vlib/net_build.c:658 ../lib/vector/Vlib/net_build.c:1064
+msgid "Flattening the graph..."
+msgstr "Mache den Graph flach..."
+
+#: ../lib/vector/Vlib/net_build.c:667 ../lib/vector/Vlib/net_build.c:1073
+msgid "Graph was built"
+msgstr "Graph wurde erstellt."
+
+#: ../lib/vector/Vlib/net_build.c:869
+#, c-format
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
+msgstr "Datenbankeintrag für Linie %d (cat = %d, vorwärts/beide Richtung(en)) nicht gefunden (vorwärts/beide Richtung(en) der Linie übersprungen)."
+
+#: ../lib/vector/Vlib/net_build.c:888
+#, c-format
+msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+msgstr "Datenbankeintrag für Linie %d (cat = %d, rückwärts Richtung) nicht gefunden (Richtung der Linie übersprungen)."
+
+#: ../lib/vector/Vlib/net_build.c:937
+msgid "Cannot add network arc"
+msgstr "Kann Netzwerk arc nicht hinzufügen."
+
+#: ../lib/vector/Vlib/snap.c:223 ../lib/vector/Vlib/snap.c:583
+msgid "Snap vertices Pass 1: select points"
+msgstr "Fang Vertices Durchgang 1: Selektiere Punkte"
+
+#: ../lib/vector/Vlib/snap.c:268 ../lib/vector/Vlib/snap.c:637
+msgid "Snap vertices Pass 2: assign anchor vertices"
+msgstr "Fang Vertices Durchgang 2: Weise Anker-Vertices zu"
+
+#: ../lib/vector/Vlib/snap.c:337 ../lib/vector/Vlib/snap.c:706
+msgid "Snap vertices Pass 3: snap to assigned points"
+msgstr "Fang Vertices Durchgang 3: Fange zugewiesene Punkte"
+
+#: ../lib/vector/Vlib/snap.c:526 ../lib/vector/Vlib/snap.c:889
+#, c-format
+msgid "Snapped vertices: %d"
+msgstr "Gefangene Vertices: %d"
+
+#: ../lib/vector/Vlib/snap.c:527 ../lib/vector/Vlib/snap.c:890
+#, c-format
+msgid "New vertices: %d"
+msgstr "Neue Vertices: %d"
+
+#: ../lib/vector/Vlib/snap.c:917
+msgid "Reading features..."
+msgstr ""
+
+#: ../lib/vector/Vlib/level.c:34
+msgid "Map structure was never initialized"
+msgstr "Kartenstruktur wurde nie initialisiert."
+
+#: ../lib/vector/Vlib/level.c:36
+msgid "Map structure has been closed"
+msgstr "Kartenstruktur wurde geschlossen."
+
+#: ../lib/vector/Vlib/build_ogr.c:72
+msgid "Empty OGR layer, nothing to build"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_ogr.c:87 ../lib/vector/Vlib/build_pg.c:93
+#, c-format
+msgid "Feature table <%s> has no primary key defined"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_ogr.c:89
+msgid "Random read is not supported by OGR for this layer. Unable to build topology."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_ogr.c:95 ../lib/vector/Vlib/build_pg.c:101
+#, c-format
+msgid "Using external data format '%s' (feature type '%s')"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_ogr.c:139
+#, c-format
+msgid "Unable to open fidx file for write <%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:88
+msgid "No DB connection"
+msgstr "Keine DB Verbindung"
+
+#: ../lib/vector/Vlib/build_pg.c:95
+msgid "Random read is not supported for this layer. Unable to build topology."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:105
+msgid "Building pseudo-topology over simple features..."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:107
+#, c-format
+msgid "Building topology from PostGIS topology schema <%s>..."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:237
+msgid "Cleaning-up topology schema..."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:282
+msgid "Updating faces..."
+msgstr "Aktualisiere Oberflächen..."
+
+#: ../lib/vector/Vlib/build_pg.c:314
+msgid "Updating edges..."
+msgstr "Aktualisiere Kanten..."
+
+#: ../lib/vector/Vlib/build_pg.c:323
+msgid "Inconsistency in topology detected. Dead line found."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:377
+msgid "Updating TopoGeometry data..."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:464
+#, c-format
+msgid "Unsupported topo geometry type %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:493
+#, c-format
+msgid "Unable to create <%s.%s>"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:644
+msgid "Unable to write nodes, offset array mismatch"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:673
+msgid "Unable to write nodes"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:718
+#, c-format
+msgid "Inconsistency in topology: number of boundaries %d (should be %d)"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:741
+msgid "Unable to write lines"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:792
+#, c-format
+msgid "Topology for centroid %d not available. Area %d skipped"
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:1002
+msgid "Create simple features topology from topogeometry data..."
+msgstr ""
+
+#: ../lib/vector/Vlib/build_pg.c:1020
+#, c-format
+msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
+msgstr ""
+
+#: ../lib/vector/Vlib/break_polygons.c:102
+msgid "Break polygons: Bug in binary tree!"
+msgstr ""
+
+#: ../lib/vector/Vlib/break_polygons.c:156
+#: ../lib/vector/Vlib/break_polygons.c:435
+msgid "Breaking polygons (pass 1: select break points)..."
+msgstr ""
+
+#: ../lib/vector/Vlib/break_polygons.c:286
+#: ../lib/vector/Vlib/break_polygons.c:552
+msgid "Breaking polygons (pass 2: break at selected points)..."
+msgstr ""
+
+#: ../lib/vector/Vlib/break_polygons.c:398
+#: ../lib/vector/Vlib/break_polygons.c:650
+#, c-format
+msgid "Breaks: %d"
+msgstr ""
+
+#: ../lib/vector/Vlib/break_polygons.c:592
+msgid "Point not in search tree!"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_ogr.c:215 ../lib/vector/Vlib/read_ogr.c:224
+#, c-format
+msgid "Unable to get feature geometry, fid %ld"
+msgstr ""
+
+#: ../lib/vector/Vlib/read_ogr.c:390
+msgid "OGR feature without ID"
+msgstr "OGR Objekt ohne ID."
+
+#: ../lib/vector/Vlib/read_ogr.c:514
+#, c-format
+msgid "OGR feature type '%s' not supported"
+msgstr ""
+
+#: ../lib/vector/Vlib/poly.c:268
+msgid "Unable to find point in polygon"
+msgstr "Kann Punkt in Polygon nicht finden."
+
+#: ../lib/vector/Vlib/poly.c:810
+msgid "conditions failed"
+msgstr "Bedingungen fehlgeschlagen."
+
+#: ../lib/vector/Vlib/intersect.c:128
+msgid "3D not supported by Vect_segment_intersection()"
+msgstr "3D wird von Vect_segment_intersection() nicht unterstützt."
+
+#: ../lib/vector/Vlib/intersect.c:402
+msgid "Vect_segment_intersection() ERROR (collinear vertical segments)"
+msgstr "Vect_segment_intersection() FEHLER (kollineare vertikale Segmente)"
+
+#: ../lib/vector/Vlib/intersect.c:496
+msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
+msgstr "Vect_segment_intersection() FEHLER (kollineare nicht vertikale Segmente)"
+
+#: ../lib/vector/Vlib/select.c:116
+#, c-format
+msgid "Unable to delete item %d from spatial index"
+msgstr "Kann Eintrag %d nicht aus dem räumlichen Index löschen."
+
+#: ../lib/cairodriver/read_ppm.c:28 ../lib/cairodriver/read_bmp.c:88
+#, c-format
+msgid "Cairo: unable to open input file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/read_ppm.c:32 ../lib/cairodriver/read_bmp.c:92
+#, c-format
+msgid "Cairo: invalid input file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/read_ppm.c:38
+#, c-format
+msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgstr ""
+
+#: ../lib/cairodriver/read_ppm.c:46
+#, c-format
+msgid "Cairo: unable to open input mask file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/read_ppm.c:50
+#, c-format
+msgid "Cairo: invalid input mask file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/read_ppm.c:56
+#, c-format
+msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgstr ""
+
+#: ../lib/cairodriver/read_bmp.c:96
+#, c-format
+msgid "Cairo: Invalid BMP header for <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/write_bmp.c:72 ../lib/cairodriver/write_ppm.c:27
+#, c-format
+msgid "Cairo: unable to open output file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/write_xid.c:14 ../lib/pngdriver/read_png.c:71
+#, c-format
+msgid "Unable to open output file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/write_xid.c:19
+#, c-format
+msgid "Unable to write output file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/graph.c:67
+msgid "Unable to open display"
+msgstr ""
+
+#: ../lib/cairodriver/graph.c:85
+msgid "Unable to obtain visual"
+msgstr ""
+
+#: ../lib/cairodriver/graph.c:160
+#, c-format
+msgid "Unknown file extension: %s"
+msgstr "Unbekannte Dateiendung: %s"
+
+#: ../lib/cairodriver/graph.c:190
+#, c-format
+msgid "cairo: collecting to file '%s'"
+msgstr ""
+
+#: ../lib/cairodriver/graph.c:192
+#, c-format
+msgid "cairo: image size %dx%d"
+msgstr "cairo: Bildgröße %dx%d"
+
+#: ../lib/cairodriver/graph.c:371
+msgid "Unknown Cairo surface type"
+msgstr ""
+
+#: ../lib/cairodriver/graph.c:376
+msgid "Failed to initialize Cairo surface"
+msgstr ""
+
+#: ../lib/cairodriver/write_ppm.c:34
+#, c-format
+msgid "Cairo: unable to open mask file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/read_xid.c:14
+#, c-format
+msgid "Unable to open input file <%s>"
+msgstr "Kann die Eingabedatei <%s> nicht öffnen"
+
+#: ../lib/cairodriver/read_xid.c:17
+#, c-format
+msgid "Unable to read input file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/read_xid.c:20
+#, c-format
+msgid "Unable to parse input file <%s>"
+msgstr ""
+
+#: ../lib/cairodriver/raster.c:109
+msgid "Failed to create cairo surface"
+msgstr ""
+
+#: ../lib/cairodriver/draw_bitmap.c:47
+msgid "Cairo_Bitmap: Failed to create source"
+msgstr ""
+
+#: ../lib/cairodriver/text.c:46
+#, c-format
+msgid "Unable to convert from <%s> to UTF-8"
+msgstr ""
+
+#: ../lib/cairodriver/text.c:56
+msgid "Some characters could not be converted to UTF-8"
+msgstr ""
+
+#: ../lib/db/dbmi_base/valuefmt.c:52
+msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
+msgstr ""
+
+#: ../lib/db/dbmi_base/valuefmt.c:91
+msgid "db_convert_value_into_string(): unrecongized sqltype-type"
+msgstr ""
+
+#: ../lib/db/dbmi_base/default_name.c:139
+msgid "Programmer error"
+msgstr "Programmiererfehler"
+
+#: ../lib/db/dbmi_base/error.c:72
+msgid "<NULL error message>"
+msgstr ""
+
+#: ../lib/db/dbmi_base/error.c:91
+msgid "dbmi: Protocol error"
+msgstr ""
+
+#: ../lib/db/dbmi_base/error.c:136
+msgid "dbmi: Out of Memory"
+msgstr ""
+
+#: ../lib/db/dbmi_base/error.c:149
+#, c-format
+msgid "dbmi: %s() not implemented"
+msgstr ""
+
+#: ../lib/db/dbmi_base/error.c:163
+#, c-format
+msgid "dbmi: Invalid procedure %d"
+msgstr ""
+
+#: ../lib/db/dbmi_base/xdrtable.c:109
+msgid "fetch: table has wrong number of columns"
+msgstr ""
+
+#: ../lib/db/dbmi_base/xdrvalue.c:82
+msgid "send data: invalid C-type"
+msgstr ""
+
+#: ../lib/db/dbmi_base/login.c:115
+#, c-format
+msgid "Unable to read file '%s'"
+msgstr ""
+
+#: ../lib/db/dbmi_base/login.c:126
+#, c-format
+msgid "Login file (%s) corrupted (line: %s)"
+msgstr ""
+
+#: ../lib/db/dbmi_base/login.c:164
+#, c-format
+msgid "Unable to write file '%s'"
+msgstr ""
+
+#: ../lib/db/dbmi_base/login.c:229
+#, c-format
+msgid "DB connection <%s/%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../lib/db/dbmi_base/login.c:232
+#, c-format
+msgid "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to overwrite existing settings."
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_main.c:83
+msgid "Performs unit and integration tests for the dbmi base library"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_columns.c:37
+msgid ""
+"\n"
+"++ Running column unit tests ++"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_columns.c:42
+msgid ""
+"\n"
+"-- column unit tests failure --"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_columns.c:44
+msgid ""
+"\n"
+"-- column unit tests finished successfully --"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_columns.c:57
+msgid ""
+"\n"
+"++ Run test copy column ++"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_columns.c:150
+msgid ""
+"\n"
+"++ Test copy column finished ++"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_table.c:38
+msgid ""
+"\n"
+"++ Running table unit tests ++"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_table.c:43
+msgid ""
+"\n"
+"-- Table unit tests failure --"
+msgstr ""
+
+#: ../lib/db/dbmi_base/test/test_table.c:45
+msgid ""
+"\n"
+"-- Table unit tests finished successfully --"
+msgstr ""
+
+#: ../lib/db/dbmi_base/legal_dbname.c:38
+#, c-format
+msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
+msgstr ""
+
+#: ../lib/db/dbmi_base/legal_dbname.c:45
+#, c-format
+msgid "Illegal table map name <%s>. Must start with a letter."
+msgstr ""
+
+#: ../lib/db/dbmi_base/legal_dbname.c:54
+#, c-format
+msgid "Illegal table map name <%s>. Character <%c> not allowed."
+msgstr ""
+
+#: ../lib/db/dbmi_base/index.c:180
+msgid "db_set_index_column_name(): invalid column number"
+msgstr ""
+
+#: ../lib/db/dbmi_base/index.c:197
+msgid "db_get_index_column_name(): invalid column number"
+msgstr ""
+
+#: ../lib/db/dbmi_client/delete_tab.c:40 ../lib/db/dbmi_client/table.c:46
+#, c-format
+msgid "Unable open database <%s> by driver <%s>"
+msgstr "Kann Datenbank <%s> nicht mit dem Treiber <%s> öffnen."
+
+#: ../lib/db/dbmi_client/delete_tab.c:53
+#, c-format
+msgid "Unable to drop table: '%s'"
+msgstr "Kann Tabelle <%s> nicht löschen."
+
+#: ../lib/db/dbmi_client/copy_tab.c:91
+#, c-format
+msgid "Array of values to select from column <%s> is empty"
+msgstr ""
+
+#: ../lib/db/dbmi_client/copy_tab.c:151
+#, c-format
+msgid "Unable to get list tables in database <%s>"
+msgstr "Kann die Tabellen der Datenbank <%s> nicht auflisten."
+
+#: ../lib/db/dbmi_client/copy_tab.c:189
+#, c-format
+msgid "Table <%s> already exists in database and will be overwritten"
+msgstr ""
+
+#: ../lib/db/dbmi_client/copy_tab.c:194
+#, c-format
+msgid "Table <%s> already exists in database <%s>"
+msgstr "Tabelle <%s> existiert bereits in der Datenbank <%s>."
+
+#: ../lib/db/dbmi_client/copy_tab.c:274
+#, c-format
+msgid "Column <%s> is not integer"
+msgstr "Spalte <%s> ist nicht Integer."
+
+#: ../lib/db/dbmi_client/copy_tab.c:294
+#, c-format
+msgid "Unable to create table <%s>"
+msgstr "Kann die Tabelle <%s> nicht anlegen."
+
+#: ../lib/db/dbmi_client/copy_tab.c:394
+#, c-format
+msgid "Unknown column type (column <%s>)"
+msgstr "Unbekannter Spaltentyp (Spalte <%s>)."
+
+#: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
+#: ../lib/db/dbmi_client/select.c:288
+msgid "Missing column name"
+msgstr "Spaltenname fehlt."
+
+#: ../lib/db/dbmi_client/select.c:216 ../lib/db/dbmi_client/select.c:283
+msgid "Missing key column name"
+msgstr "Name der Schlüsselspalte fehlt."
+
+#: ../lib/db/dbmi_client/select.c:333
+msgid "Key column type is not integer"
+msgstr "Schlüssel-Spalte ist nicht vom Typ integer."
+
+#: ../lib/db/dbmi_driver/d_error.c:35
+#, c-format
+msgid "DBMI-%s driver error:"
+msgstr ""
+
+#: ../lib/symbol/read.c:211
+#, c-format
+msgid "Cannot read symbol line coordinates: %s"
+msgstr "Kann die Symbol-Linien-Koordinaten %s nicht lesen."
+
+#: ../lib/symbol/read.c:260
+#, c-format
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgstr "Falscher Symbolname: '%s' (sollte sein: Gruppe/Name oder Gruppe/Name@Mapset)."
+
+#: ../lib/symbol/read.c:284
+#, c-format
+msgid "Cannot find/open symbol: '%s'"
+msgstr "Kann Symbol '%s' nicht finden/öffnen."
+
+#: ../lib/symbol/read.c:393 ../lib/symbol/read.c:411 ../lib/symbol/read.c:421
+#: ../lib/symbol/read.c:439
+#, c-format
+msgid "Incorrect symbol color: '%s', using default."
+msgstr "Falsche Symbolfarbe: '%s', benutze Standardfarbe."
+
+#: ../lib/gpde/n_parse_options.c:106
+msgid "The calculation time in seconds"
+msgstr "Die Berechnungszeit in Sekunden"
+
+#: ../lib/gpde/n_arrays_io.c:93
+#, c-format
+msgid "Reading raster map <%s> into memory"
+msgstr "Lese Rasterkarte <%s> in den Speicher."
+
+#: ../lib/gpde/n_arrays_io.c:183
+msgid "N_array_2d * array is empty"
+msgstr "N_array_2d * Array ist leer."
+
+#: ../lib/gpde/n_arrays_io.c:202
+#, c-format
+msgid "Write 2d array to raster map <%s>"
+msgstr "Schreibe 2D Array in die Rasterkarte <%s>."
+
+#: ../lib/gpde/n_arrays_io.c:281
+#: ../lib/python/temporal/c_libraries_interface.py:813
+#: ../lib/ogsf/gvl_file.c:436
+#, c-format, python-format
+msgid "Unable to open 3D raster map <%s>"
+msgstr "Kann 3D Rasterkarte <%s> nicht öffnen."
+
+#: ../lib/gpde/n_arrays_io.c:309
+#, c-format
+msgid "Read g3d map <%s> into the memory"
+msgstr "Lese G3D-Karte <%s> in den Speicher"
+
+#: ../lib/gpde/n_arrays_io.c:364 ../lib/gpde/n_arrays_io.c:464
+msgid "Error closing g3d file"
+msgstr "Fehler beim Schließen der G3D-Datei."
+
+#: ../lib/gpde/n_arrays_io.c:420
+#, c-format
+msgid "Error opening g3d map <%s>"
+msgstr "Fehler beim Öffnen der G3D-Rasterkarte <%s>."
+
+#: ../lib/gpde/n_arrays_io.c:422
+#, c-format
+msgid "Write 3d array to g3d map <%s>"
+msgstr "Schreibe 3D Array in die G3D-Karte <%s>."
+
+#: ../lib/gpde/test/test_main.c:88
+msgid "Performs unit and integration tests for gpde library"
+msgstr "Führt Unit- und Integrationstest der GPDE-Bibliothek aus."
+
+#: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
+#, c-format
+msgid "The total sum of the water budget: %g\n"
+msgstr ""
+
+#: ../lib/gpde/n_gwflow.c:438 ../lib/gpde/n_gwflow.c:717
+#, c-format
+msgid "The total sum of the water budget is significantly larger then 0: %g\n"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:105
+msgid "input='-' must be used when stdin is specified"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:107
+msgid "stdin must be string or buffer, not PIPE"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:110
+msgid "stdin must be used when input='-'"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:112
+msgid "You cannot merge stdout and stderr and not capture them"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:114
+msgid "stdout argument not allowed, it could be overridden"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:116
+msgid "stderr argument not allowed, it could be overridden"
+msgstr ""
+
+#: ../lib/python/pygrass/utils.py:292
+msgid "Vector doesn't contain points"
+msgstr ""
+
+#: ../lib/python/pygrass/errors.py:18
+msgid "The map is close!"
+msgstr ""
+
+#: ../lib/python/pygrass/errors.py:29
+msgid "The self.c_mapinfo pointer must be correctly initiated"
+msgstr ""
+
+#: ../lib/python/pygrass/errors.py:40
+#, fuzzy
+msgid "Map <{}> not found in current mapset"
+msgstr "Rasterkarte <%s> nicht im Mapset <%s> gefunden."
+
+#: ../lib/python/pygrass/vector/table.py:1042
+#, python-format
+msgid "Deleting table <%s> which is attached to following map(s):"
+msgstr ""
+
+#: ../lib/python/pygrass/vector/table.py:1046
+msgid "You must use the force flag to actually remove it. Exiting."
+msgstr ""
+
+#: ../lib/python/pygrass/vector/__init__.py:819
+#, python-format
+msgid "Unable to read line of feature %i"
+msgstr ""
+
+#: ../lib/python/pygrass/vector/__init__.py:908
+#, python-format
+msgid "Unable to read area with id %i"
+msgstr ""
+
+#: ../lib/python/pygrass/vector/abstract.py:98
+#: ../lib/python/pygrass/raster/abstract.py:328
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w')"
+msgstr ""
+
+#: ../lib/python/pygrass/vector/abstract.py:111
+#: ../lib/python/pygrass/raster/abstract.py:352
+#, python-brace-format
+msgid "Map name {0} not valid"
+msgstr ""
+
+#: ../lib/python/pygrass/modules/grid/grid.py:558
+msgid "Execution of subprocesses was not successful"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/category.py:70
+#, python-brace-format
+msgid "Raster type: {0} not supported"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/category.py:157
+msgid "Error executing: Rast_get_ith_cat"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/category.py:185
+msgid "Null value detected"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/category.py:187
+msgid "Error executing: Rast_set_cat"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:211
+msgid "The map does not exist, I can't open in 'r' mode"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:216
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:220
+msgid "Raster type not defined"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:325
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w','rw')"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:345
+#, python-format
+msgid "Index out of range: %r."
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:534
+#, python-brace-format
+msgid "Raster map <{0}> already exists. Use overwrite."
+msgstr ""
+
+#: ../lib/python/pygrass/raster/__init__.py:565
+#, python-brace-format
+msgid "Raster map <{0}> does not exist"
+msgstr ""
+
+#: ../lib/python/pygrass/raster/abstract.py:339
+#, python-brace-format
+msgid "Overwrite type: {0} not supported (True/False)"
+msgstr ""
+
+#: ../lib/python/temporal/base.py:381
+msgid "Object not found in the temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/base.py:463 ../lib/python/temporal/base.py:514
+msgid "Missing identifier"
+msgstr ""
+
+#: ../lib/python/temporal/base.py:622
+msgid "Wrong identifier, the mapset is missing"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:120
+msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:526
+msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:658
+msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:763
+msgid "Projections are different. Unable to compute cover_2d for spatial extents"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:835
+msgid "Projections are different. Unable to compute cover for spatial extents"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:1687
+msgid "Volume computation is not supported for LL projections"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:1705
+msgid "Area computation is not supported for LL projections"
+msgstr ""
+
+#: ../lib/python/temporal/factory.py:49
+#, python-format
+msgid "Unknown dataset type: %s"
+msgstr ""
+
+#: ../lib/python/temporal/univar_statistics.py:104
+#, python-format
+msgid "Unable to get statistics for raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/univar_statistics.py:107
+#, python-format
+msgid "Unable to get statistics for 3d raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/univar_statistics.py:172
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> not found"
+msgstr ""
+
+#: ../lib/python/temporal/univar_statistics.py:182
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> is empty"
+msgstr ""
+
+#: ../lib/python/temporal/univar_statistics.py:226
+#, python-format
+msgid "Unable to get statistics for vector map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:350
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:357
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:365
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:372
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:381
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:389
+#: ../lib/python/temporal/abstract_map_dataset.py:482
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:424
+#: ../lib/python/temporal/abstract_map_dataset.py:520
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2373
+#: ../lib/python/temporal/abstract_dataset.py:426
+#: ../lib/python/temporal/abstract_dataset.py:469
+#, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:460
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:467
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:476
+#, python-format
+msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:800
+#, python-format
+msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:806
+#, python-format
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:812
+#, python-format
+msgid "Map <%s> has incorrect start time"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:841
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2048
+#, python-format
+msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:859
+#, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:909
+#, python-format
+msgid "Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_map_dataset.py:1074
+msgid "Band references can only be assigned to raster maps"
+msgstr ""
+
+#: ../lib/python/temporal/open_stds.py:69
+#: ../lib/python/temporal/open_stds.py:128
+#, python-format
+msgid "Unknown type: %s"
+msgstr "Unbekannter Typ: %s"
+
+#: ../lib/python/temporal/open_stds.py:75
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> not found"
+msgstr ""
+
+#: ../lib/python/temporal/open_stds.py:113
+msgid "Space time datasets can only be created in the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/open_stds.py:120
+#, fuzzy
+msgid "Illegal dataset name <{}>. Character '.' not allowed."
+msgstr "Ungültiger Name der Vektorkarte <%s>. Zeichen '%c' ist nicht erlaubt."
+
+#: ../lib/python/temporal/open_stds.py:134
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#: ../lib/python/temporal/open_stds.py:169
+#, python-format
+msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
+msgstr ""
+
+#: ../lib/python/temporal/open_stds.py:177
+#, python-format
+msgid "Creating a new space time %s dataset"
+msgstr ""
+
+#: ../lib/python/temporal/open_stds.py:220
+#: ../lib/python/temporal/mapcalc.py:253 ../lib/python/temporal/extract.py:129
+#, python-format
+msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:105
+#, python-format
+msgid "Unable to export raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:116
+#, python-format
+msgid "Unable to export color rules for raster map <%s> r.out.gdal"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:140
+#, python-format
+msgid "Unable to export raster map <%s> with r.pack"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:168
+#, python-format
+msgid "Unable to export vector map <%s> as GML with v.out.ogr"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:197
+#, python-format
+msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:229
+#, python-format
+msgid "Unable to export vector map <%s> with v.pack"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:255
+#, python-format
+msgid "Unable to export raster map <%s> with r3.pack"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:82 ../lib/python/temporal/register.py:85
+#, python-format
+msgid "%s= and %s= are mutually exclusive"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:89
+#, python-format
+msgid "%s= and the %s flag are mutually exclusive"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:93
+msgid "The increment option requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:96
+msgid "The interval flag requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:99
+#, python-format
+msgid "Please specify %s= and %s="
+msgstr ""
+
+#: ../lib/python/temporal/register.py:103
+#, python-format
+msgid "Please specify %s= or %s="
+msgstr ""
+
+#: ../lib/python/temporal/register.py:114
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> with relative time found, but no relative unit set for %(sp)s maps"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:192
+msgid "The increment option will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:196
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:204
+msgid "Gathering map information..."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:214
+#, python-format
+msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:238
+#, python-format
+msgid "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has timestamp and the start time is not set."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:244
+#, python-format
+msgid "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the start time is not set."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:252
+#, python-format
+msgid "%(u)s= can only be set for relative time"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:255
+#, python-format
+msgid "%(u)s= must be set in case of relative time stamps"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:268
+#, python-format
+msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s> with layer %(l)s. Overwrite flag is not set."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:275
+#, python-format
+msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s>. Overwrite flag is not set."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:299
+#, python-format
+msgid "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are different."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:305
+#, python-format
+msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:363
+msgid "Registering maps in the temporal database..."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:370
+msgid "Registering maps in the space time dataset..."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:379
+msgid "Updating space time dataset..."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:432
+#: ../lib/python/temporal/register.py:439
+#, python-format
+msgid "Unable to convert string \"%s\"into a datetime object"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:447
+#: ../lib/python/temporal/register.py:452
+msgid "Error occurred in increment computation"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:455
+#, python-format
+msgid "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - %(end)s"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:460
+#, python-format
+msgid "Set absolute valid time for map <%s> to %s - %s"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:477
+#, python-format
+msgid "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:482
+#, python-format
+msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:189
+#: ../lib/python/temporal/abstract_space_time_dataset.py:323
+#, python-format
+msgid "Unknown temporal type \"%s\""
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:316
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1084
+#, python-format
+msgid "Wrong granularity: \"%s\""
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:344
+#, python-format
+msgid "Unsupported temporal unit: %s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:394
+#, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:712
+#: ../lib/python/temporal/abstract_space_time_dataset.py:954
+msgid "The space time datasets must be of the same temporal type"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:717
+#: ../lib/python/temporal/abstract_space_time_dataset.py:959
+msgid "The temporal map type of the sample dataset must be interval"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1587
+#, python-format
+msgid "Unable to get map ids from register table <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1697
+#, python-format
+msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1704
+#: ../lib/python/temporal/datetime_math.py:455
+#, python-format
+msgid "Wrong granularity format: %s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1866
+#, python-format
+msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1968
+#, python-format
+msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1977
+msgid "Renaming of space time datasets is not supported for PostgreSQL."
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2042
+#, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2061
+#, python-format
+msgid "Drop map register table: %s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2116
+msgid "Error in register table request"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2145
+#, python-format
+msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2154
+msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2177
+#, python-format
+msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2181
+#, python-format
+msgid "Map <%s> has invalid time"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2199
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2205
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2220
+#, python-format
+msgid "Set temporal unit for space time %s dataset <%s> to %s"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2230
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2236
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2242
+msgid "Only maps from the same mapset can be registered"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2247
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is already registered."
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2251
+#, python-format
+msgid "Map <%s> is already registered."
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2299
+#, python-format
+msgid "Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2312
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2318
+#, python-format
+msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2379
+#, python-format
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:117
+msgid "Starting spatio-temporal sampling..."
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:119
+msgid "Starting temporal sampling..."
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:137
+msgid "No samples found for map calculation"
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:164
+msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:185
+msgid "No maps registered in input dataset"
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:203
+msgid "Starting mapcalc computation..."
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:273
+#, python-format
+msgid "Apply mapcalc expression: \"%s\""
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:292
+msgid "Error while mapcalc computation"
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:298
+msgid "Starting map registration in temporal database..."
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:337
+msgid "Removing {}/{} ({}%) maps because empty..."
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:455 ../lib/python/temporal/mapcalc.py:461
+#: ../lib/python/temporal/mapcalc.py:467 ../lib/python/temporal/mapcalc.py:473
+#: ../lib/python/temporal/mapcalc.py:479 ../lib/python/temporal/mapcalc.py:485
+#: ../lib/python/temporal/mapcalc.py:491 ../lib/python/temporal/mapcalc.py:497
+#: ../lib/python/temporal/mapcalc.py:503 ../lib/python/temporal/mapcalc.py:538
+#: ../lib/python/temporal/mapcalc.py:547 ../lib/python/temporal/mapcalc.py:556
+#: ../lib/python/temporal/mapcalc.py:565 ../lib/python/temporal/mapcalc.py:574
+#: ../lib/python/temporal/mapcalc.py:583 ../lib/python/temporal/mapcalc.py:592
+#: ../lib/python/temporal/mapcalc.py:601 ../lib/python/temporal/mapcalc.py:610
+#, python-format
+msgid "The temporal operators <%s> support only absolute time."
+msgstr ""
+
+#: ../lib/python/temporal/temporal_granularity.py:1051
+#: ../lib/python/temporal/temporal_granularity.py:1093
+#, python-brace-format
+msgid "Output granularity seems not to be valid. Please use one of the following values : {gr}"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_granularity.py:1055
+#: ../lib/python/temporal/temporal_granularity.py:1096
+#: ../lib/python/temporal/temporal_granularity.py:1169
+msgid "Invalid absolute granularity"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_granularity.py:1166
+msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_vector_algebra.py:387
+#, python-format
+msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_vector_algebra.py:420
+#, python-format
+msgid ""
+"Error starting %s : \n"
+"%s"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_vector_algebra.py:493
+#, python-format
+msgid ""
+"Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
+"%s"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:828
+msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:867
+msgid "All input space time datasets must have a valid temporal topology."
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:876
+msgid "All input space time datasets must have the same temporal type."
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:1127
+#, python-format
+msgid "Removing un-needed or empty %s maps"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:1182
+#, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:1210
+#: ../lib/python/temporal/temporal_algebra.py:1214
+#, python-format
+msgid "Wrong temporal type of space time dataset <%s>                                       <%s> time is required"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:1234
+msgid "Wrong type of input "
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2213
+#, python-format
+msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2219
+msgid "Maps that should be registered in the resulting space time dataset have different types."
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2434
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:822
+#, python-format
+msgid "%s map <%s> not found in GRASS spatial database"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2440
+msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2468
+msgid "Merging empty map lists"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2471
+msgid "First Map list is empty, can't merge it. Return only last map list"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2474
+msgid "Second Map list is empty, can't merge it. Return only first map list"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2482
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#: ../lib/python/temporal/extract.py:58
+msgid "You need to specify the base name of new created maps"
+msgstr ""
+
+#: ../lib/python/temporal/extract.py:136
+#, python-format
+msgid "Applying r.mapcalc expression: \"%s\""
+msgstr ""
+
+#: ../lib/python/temporal/extract.py:141
+#, python-format
+msgid "Applying r3.mapcalc expression: \"%s\""
+msgstr ""
+
+#: ../lib/python/temporal/extract.py:146
+#, python-format
+msgid "Applying v.extract where statement: \"%s\""
+msgstr ""
+
+#: ../lib/python/temporal/extract.py:174
+msgid "Error in computation process"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:608
+msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:654
+msgid ""
+"The format of your actual temporal database is not supported any more.\n"
+"Please create a backup of your temporal database to avoid lossing data.\n"
+"SOLUTION: "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:659
+msgid "Run t.upgrade command installed from GRASS Addons in order to upgrade your temporal database.\n"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:662
+msgid "You need to export it by restoring the GRASS GIS version used for creating this DB.Notes: Use t.rast.export and t.vect.export to make a backup of your existing space time datasets. To save the timestamps of your existing maps and space time datasets, use t.rast.list, t.vect.list and t.rast3d.list. You can register the existing time stamped maps easily if you export columns=id,start_time,end_time into text files and use t.register to register them again in new created space time datasets (t.create). After the backup remove the existing temporal database, a new one will be created automatically.\n"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:686 ../lib/python/temporal/core.py:879
+#, python-format
+msgid ""
+"Unable to receive temporal database metadata.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:691
+#, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)s Supported temporal API version is: %(api)i.\n"
+"Please update your GRASS GIS installation.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:699
+#, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)sSupported temporal database version is: %(tdb)i\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:793
+#, python-format
+msgid "Creating temporal database: %s"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:802
+#, python-format
+msgid ""
+"Unable to create SQLite temporal database\n"
+"Exception: %s\n"
+"Please use t.connect to set a read- and writable temporal database path"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:889
+msgid "Temporal database is up-to-date. Operation canceled"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:900
+#, python-format
+msgid "Unsupported TGIS DB upgrade scenario: from version %s to %s"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:908
+#, python-format
+msgid "Upgrading temporal database <%s> from version %s to %s..."
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1025
+msgid "Unable to mogrify sql statement. "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1048
+msgid "Unable to check table. "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1065
+msgid "Unable to execute sql statement. "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1076
+msgid "Unable to fetch one. "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1087
+msgid "Unable to fetch all. "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1105
+msgid "Unable to execute transaction. "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1210
+#, python-format
+msgid ""
+"Unable to connect to %(db)s database: %(string)s\n"
+"Exception: \"%(ex)s\"\n"
+"Please use t.connect to set a read- and writable temporal database backend"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1370
+#, python-format
+msgid ""
+"Unable to execute :\n"
+" %(sql)s"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1414
+#, python-format
+msgid ""
+"Unable to execute transaction:\n"
+" %(sql)s"
+msgstr ""
+
+#: ../lib/python/temporal/datetime_math.py:260
+#: ../lib/python/temporal/datetime_math.py:277
+#, python-format
+msgid "Wrong increment format: %s"
+msgstr ""
+
+#: ../lib/python/temporal/datetime_math.py:775
+msgid "Time string seems to specify relative time"
+msgstr ""
+
+#: ../lib/python/temporal/datetime_math.py:787
+msgid "Dates Before Christ (BC) are not supported"
+msgstr ""
+
+#: ../lib/python/temporal/datetime_math.py:791
+msgid "Time zones are not supported"
+msgstr ""
+
+#: ../lib/python/temporal/datetime_math.py:811
+#, python-format
+msgid "Unable to parse time string: %s"
+msgstr ""
+
+#: ../lib/python/temporal/sampling.py:93 ../lib/python/temporal/sampling.py:98
+#, python-format
+msgid "Dataset <%s> not found in temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:83
+#, python-format
+msgid "Unable to import/link raster map <%s> from file %s."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:94
+#, python-format
+msgid "Unable to set the color rules for raster map <%s>."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:118
+#, python-format
+msgid "Unable to unpack raster map <%s> from file %s."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:142
+#, python-format
+msgid "Unable to import vector map <%s> from file %s."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:166
+#, python-format
+msgid "Unable to unpack vector map <%s> from file %s."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:205
+#, python-format
+msgid "Space time raster dataset archive <%s> not found"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:208
+#, python-format
+msgid "Extraction directory <%s> not found"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:214
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:221
+#, python-format
+msgid "Unable to find init file <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:223
+#, python-format
+msgid "Unable to find list file <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:225
+#, python-format
+msgid "Unable to find projection file <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:227
+msgid "Extracting data..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:267
+msgid "Projection information does not match. Proceeding..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:271
+#, python-brace-format
+msgid ""
+"Difference between PROJ_INFO file of imported map and of current location:\n"
+"{diff}"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:274
+msgid "Projection information does not match. Aborting."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:291
+#, python-format
+msgid "Unable to create location %(l)s. Reason: %(e)s"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:299
+#, python-format
+msgid "Unable to switch to location %s"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:304
+#, python-format
+msgid "Unable to create default temporal database in new location %s"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:378
+#, python-format
+msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:384
+msgid "Number of maps mismatch in init and list file."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:395
+msgid "The archive file is of wrong space time dataset type"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:403
+#, python-format
+msgid "Unable to find GeoTIFF raster file <%s> in archive."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:409
+#, python-format
+msgid "Unable to find AAIGrid raster file <%s> in archive."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:415
+#, python-format
+msgid "Unable to find GML vector file <%s> in archive."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:424
+#, python-format
+msgid "Unable to find GRASS package file <%s> in archive."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:427
+msgid "Unsupported input format"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:433
+#, python-format
+msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:454
+#, python-format
+msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:466
+#, python-format
+msgid "Key word %s not found in init file."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:471
+#, python-format
+msgid "Create space time %s dataset."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:500
+msgid "Switching to original location failed"
+msgstr ""
+
+#: ../lib/python/temporal/gui_support.py:56 ../lib/python/script/core.py:1436
+#, python-format
+msgid "Invalid element '%s'"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:735
+#, python-format
+msgid "Error computing map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/c_libraries_interface.py:733
+#: ../lib/python/temporal/c_libraries_interface.py:750
+msgid "Unable to read range file"
+msgstr ""
+
+#: ../lib/python/temporal/c_libraries_interface.py:828
+#, python-format
+msgid "Unable to load range of 3D raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/c_libraries_interface.py:843
+#: ../lib/raster3d/close.c:120 ../lib/raster3d/close.c:130
+#: ../lib/raster3d/close.c:159 ../lib/ogsf/gvl_file.c:470
+#, c-format, python-format
+msgid "Unable to close 3D raster map <%s>"
+msgstr "Kann die 3D Rasterkarte <%s> nicht schließen."
+
+#: ../lib/python/temporal/space_time_datasets.py:247
+#, python-format
+msgid "Unable to read timestamp file for raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:271
+#, python-format
+msgid "Unable to create timestamp file for raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:276
+#, python-format
+msgid "Invalid datetime in timestamp for raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:281
+#: ../lib/python/temporal/space_time_datasets.py:688
+msgid "Internal error"
+msgstr "Interner Fehler"
+
+#: ../lib/python/temporal/space_time_datasets.py:298
+#: ../lib/python/temporal/space_time_datasets.py:702
+#, python-format
+msgid "Unable to remove timestamp for raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:317
+#, fuzzy, python-format
+msgid "Unable to read band reference file for raster map <%s>"
+msgstr "Kann die Kategoriedatei der Rasterkarte <%s> nicht lesen."
+
+#: ../lib/python/temporal/space_time_datasets.py:337
+#, fuzzy, python-format
+msgid "Unable to write band identifier for raster map <%s>"
+msgstr "Kann den Wertebereich der Rasterkarte <%s> nicht lesen."
+
+#: ../lib/python/temporal/space_time_datasets.py:654
+#, python-format
+msgid "Unable to read timestamp file for 3D raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:678
+#, python-format
+msgid "Unable to create timestamp file for 3D raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:683
+#, python-format
+msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:963
+#, python-format
+msgid "Unable to read timestamp file for vector map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:986
+#, python-format
+msgid "Unable to create timestamp file for vector map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:991
+#, python-format
+msgid "Invalid datetime in timestamp for vector map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:1007
+#, python-format
+msgid "Unable to remove timestamp for vector map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_dataset.py:386
+#, python-format
+msgid "Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:126
+#, python-format
+msgid "Aggregating %s raster maps"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:140
+#, python-format
+msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:145
+#, python-format
+msgid "Computing aggregation of maps between %(st)s - %(end)s"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:170
+msgid "Error occurred in r.series computation"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:279
+#, python-format
+msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:300
+#, python-format
+msgid "Unable to perform aggregation. Output raster map <%(name)s> exists and overwrite flag was not set"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:318
+#, python-format
+msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
+msgstr ""
+
+#: ../lib/python/temporal/list_stds.py:206
+msgid "Empty map list"
+msgstr ""
+
+#: ../lib/python/temporal/list_stds.py:217
+msgid "Empty entry in map list, this should not happen"
+msgstr ""
+
+#: ../lib/python/grassdb/manage.py:21
+msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+msgstr ""
+
+#: ../lib/python/grassdb/manage.py:39
+msgid "Mapset PERMANENT cannot be renamed"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:211
+#, python-brace-format
+msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{location}>"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:214
+#, python-format
+msgid "<%s> is not a GRASS Mapset because it is not a directory"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:218
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:227
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:236
+#, python-brace-format
+msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:268
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset is missing"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:276
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:285
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset does not have a DEFAULT_WIND file (default computational region)"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:294
+#, python-brace-format
+msgid "Location <{location_path}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:311
+#, python-brace-format
+msgid "<{location}> looks like a mapset, not a location. Did you mean just <{one_dir_up}>?"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:317
+#, python-brace-format
+msgid "It looks like <{location}> contains locations. Did you mean to specify one of them?"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:339 ../lib/python/grassdb/checks.py:372
+msgid "Name '{}' is not a valid name for location or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:345
+msgid "Name '{}' is reserved for direct read access to OGR layers. Please use another name for your mapset."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:351
+#, python-brace-format
+msgid "Mapset  <{mapset}> already exists. Please consider using another name for your mapset."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:378
+#, python-brace-format
+msgid "Location  <{location}> already exists. Please consider using another name for your location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:433
+#, python-brace-format
+msgid "Mapset <{mapset}> is required for a valid location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:437
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is the current mapset."
+msgstr "Rasterkarte <%s> ist nicht im aktuellen Mapset (%s)."
+
+#: ../lib/python/grassdb/checks.py:441
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is in use."
+msgstr "Mapset <%s> existiert nicht."
+
+#: ../lib/python/grassdb/checks.py:445
+#, python-brace-format
+msgid "Mapset <{mapset}> is owned by a different user."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:474
+#, python-brace-format
+msgid "Location <{location}> is the current location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:511
+#, python-brace-format
+msgid "GRASS database <{grassdb}> is the current database."
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:70
+#, python-format
+msgid "Module run %s %s ended with error"
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:71
+#, python-format
+msgid ""
+"\n"
+"Process ended with non-zero return code %s"
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:73
+#, python-format
+msgid ""
+". See the following errors:\n"
+"%s"
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:77
+msgid ". See errors in the (error) output."
+msgstr ""
+
+#: ../lib/python/imaging/operations.py:77
+#: ../lib/python/imaging/operations.py:99
+#: ../lib/python/imaging/operations.py:123
+#: ../lib/python/imaging/operations.py:155
+msgid "Install PIL or Pillow to use this function"
+msgstr ""
+
+#: ../lib/python/imaging/operations.py:157
+msgid "Install a newer version of PIL or Pillow to use this function (missing ImageOps module)"
+msgstr ""
+
+#: ../lib/python/script/task.py:60
+msgid "unknown"
+msgstr "unbekannt"
+
+#: ../lib/python/script/task.py:171
+#, python-format
+msgid "Parameter element '%(element)s' not found: '%(value)s'"
+msgstr ""
+
+#: ../lib/python/script/task.py:186
+#, python-format
+msgid "Flag not found: %s"
+msgstr "Schalter nicht gefunden: %s"
+
+#: ../lib/python/script/task.py:205
+#, python-format
+msgid "Parameter '%(name)s' (%(desc)s) is missing."
+msgstr ""
+
+#: ../lib/python/script/task.py:238
+msgid "<required>"
+msgstr "<benötigt>"
+
+#: ../lib/python/script/task.py:500 ../lib/python/script/task.py:504
+#, python-brace-format
+msgid ""
+"Unable to fetch interface description for command '<{cmd}>'.\n"
+"\n"
+"Details: <{det}>"
+msgstr ""
+
+#: ../lib/python/script/task.py:527
+#, python-brace-format
+msgid "Cannot parse interface description of<{name}> module: {error}"
+msgstr ""
+
+#: ../lib/python/script/raster3d.py:93
+#, python-format
+msgid "An error occurred while running r3.mapcalc with expression: %s"
+msgstr ""
+
+#: ../lib/python/script/core.py:56
+#, python-brace-format
+msgid "Cannot find the executable {0}"
+msgstr ""
+
+#: ../lib/python/script/core.py:318
+#, python-format
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr ""
+
+#: ../lib/python/script/core.py:385
+#, python-brace-format
+msgid "Module {module} ({code}) failed with non-zero return code {returncode}"
+msgstr ""
+
+#: ../lib/python/script/core.py:1117
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr ""
+
+#: ../lib/python/script/core.py:1319
+#, python-format
+msgid "Element type should be \"cell\" and not \"%s\""
+msgstr ""
+
+#: ../lib/python/script/core.py:1350 ../lib/python/script/core.py:1419
+#, python-format
+msgid "Element type should be \"raster\" and not \"%s\""
+msgstr ""
+
+#: ../lib/python/script/core.py:1588
+msgid "Unable to list mapsets"
+msgstr ""
+
+#: ../lib/python/script/core.py:1624
+#, python-format
+msgid "Location <%s> already exists. Operation canceled."
+msgstr ""
+
+#: ../lib/python/script/core.py:1628
+#, python-format
+msgid "Location <%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../lib/python/script/core.py:1758
+#, python-brace-format
+msgid "Debug level {0}"
+msgstr ""
+
+#: ../lib/python/script/core.py:1761
+#, python-brace-format
+msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
+msgstr ""
+
+#: ../lib/python/script/core.py:1781
+#, python-format
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr ""
+
+#: ../lib/python/script/core.py:1790
+#, python-format
+msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+msgstr ""
+
+#: ../lib/python/script/vector.py:83
+#, python-format
+msgid "Database connection not defined for layer %s"
+msgstr ""
+
+#: ../lib/python/script/vector.py:234
+#, python-format
+msgid "Missing layer %(layer)d in vector map <%(map)s>"
+msgstr ""
+
+#: ../lib/python/script/vector.py:250
+msgid "vector_db_select() failed"
+msgstr ""
+
+#: ../lib/python/script/vector.py:362
+#, python-brace-format
+msgid "Number of given vector maps ({m}) differs from number of layers ({l})"
+msgstr ""
+
+#: ../lib/python/script/vector.py:421
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
+msgstr ""
+
+#: ../lib/python/script/raster.py:60
+#, python-format
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr ""
+
+#: ../lib/python/script/raster.py:120
+#, python-format
+msgid "An error occurred while running r.mapcalc with expression: %s"
+msgstr ""
+
+#: ../lib/python/script/raster.py:199
+msgid "No data"
+msgstr ""
+
+#: ../lib/python/script/raster.py:207
+msgid "value"
+msgstr ""
+
+#: ../lib/python/script/raster.py:207
+msgid "label"
+msgstr ""
+
+#: ../lib/python/script/raster.py:207
+msgid "color"
+msgstr "Farbe"
+
+#: ../lib/python/script/db.py:162
+#, python-format
+msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+msgstr ""
+
+#: ../lib/python/script/db.py:172
+msgid "Fetching data failed"
+msgstr ""
+
+#: ../lib/python/script/array.py:158 ../lib/python/script/array.py:210
+#: ../lib/python/script/array.py:257 ../lib/python/script/array.py:311
+#: ../lib/python/script/array.py:364 ../lib/python/script/array.py:406
+#, python-format
+msgid "Invalid kind <%s>"
+msgstr ""
+
+#: ../lib/python/script/array.py:161 ../lib/python/script/array.py:213
+#: ../lib/python/script/array.py:314 ../lib/python/script/array.py:367
+#, python-format
+msgid "Invalid size <%d>"
+msgstr ""
+
+#: ../lib/python/script/array.py:200
+msgid "grass.script.array.read is deprecated and does not work on MS Windows, pass raster name in the constructor"
+msgstr ""
+
+#: ../lib/python/script/array.py:250 ../lib/python/script/array.py:400
+#, python-format
+msgid "Invalid FP size <%d>"
+msgstr ""
+
+#: ../lib/python/script/array.py:254 ../lib/python/script/array.py:403
+#, python-format
+msgid "Invalid integer size <%d>"
+msgstr ""
+
+#: ../lib/python/script/array.py:354
+msgid "grass.script.array3d.read is deprecated and does not work on MS Windows, pass 3D raster name in the constructor"
+msgstr ""
+
+#: ../lib/python/script/setup.py:229
+msgid "Cleaning up default sqlite database ..."
+msgstr ""
+
+#: ../lib/raster3d/maskfn.c:77
+#, c-format
+msgid "Adding rule: %lf - %lf"
+msgstr ""
+
+#: ../lib/raster3d/maskfn.c:95
+#, c-format
+msgid "%s: illegal value spec"
+msgstr ""
+
+#: ../lib/raster3d/header.c:217 ../lib/raster3d/close.c:99
+#: ../lib/raster3d/close.c:105 ../lib/raster3d/close.c:191
+#, c-format
+msgid "Unable to write header for 3D raster map <%s>"
+msgstr ""
+
+#: ../lib/raster3d/range.c:73
+#, c-format
+msgid "Unable to open range file for [%s in %s]"
+msgstr ""
+
+#: ../lib/raster3d/range.c:88
+#, c-format
+msgid "Error reading range file for [%s in %s]"
+msgstr ""
+
+#: ../lib/raster3d/range.c:150
+#, c-format
+msgid "Unable to open range file for <%s>"
+msgstr ""
+
+#: ../lib/raster3d/close.c:47
+#, c-format
+msgid "Unable to write history for 3D raster map <%s>"
+msgstr ""
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 #: ../lib/gis/gisinit.c:85
 #, c-format

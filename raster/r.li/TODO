@@ -54,3 +54,8 @@ SAMPLEAREA 0.0|0.0|1.0|1.0" > $HOME/.grass8/r.li/landsat_test
 g.region raster=lsat7_2002_40 -p
 r.li.shannon input=lsat7_2002_40 conf=landsat_test output=landsat_shannon
 --> Result written to ASCII file <$HOME/.grass8/r.li/output/landsat_shannon>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))

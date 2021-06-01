@@ -1563,6 +1563,44 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
 
+<<<<<<< HEAD
+=======
+    def IsStandalone(self):
+        """Check if Map display is standalone
+
+        .. deprecated:: 7.0
+        """
+        # TODO: once it is removed from 2 places in vdigit it can be deleted
+        # here and also in base class and other classes in the tree (hopefully)
+        # and one place here still uses IsStandalone
+        Debug.msg(
+            1,
+            "MapFrame.IsStandalone(): Method IsStandalone is"
+            "deprecated, use some general approach instead such as"
+            " Signals or giface",
+        )
+        if self._layerManager:
+            return False
+
+        return True
+
+    def GetLayerManager(self):
+        """Get reference to Layer Manager
+
+        :return: window reference
+        :return: None (if standalone)
+
+        .. deprecated:: 7.0
+        """
+        Debug.msg(
+            1,
+            "MapFrame.GetLayerManager(): Method GetLayerManager is"
+            "deprecated, use some general approach instead such as"
+            " Signals or giface",
+        )
+        return self._layerManager
+
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
         return self.toolbars["map"] if "map" in self.toolbars else None

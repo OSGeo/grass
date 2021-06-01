@@ -872,17 +872,28 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
+<<<<<<< HEAD
                             "Map <{map_name}@{map_mapset}> is not in the current "
                             "project. To be able to display it you need to switch to "
                             "<{map_location}> project. Note that if you switch there "
                             "all current Map Displays will be closed.\n\n"
+=======
+                            "Map <{map_name}@{map_mapset}> is not in the current location. "
+                            "To be able to display it you need to switch to <{map_location}> "
+                            "location. Note that if you switch there all current "
+                            "Map Displays will be closed.\n\n"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
                             "Do you want to switch anyway?"
                         ).format(
                             map_name=selected_layer.data["name"],
                             map_mapset=selected_mapset.data["name"],
                             map_location=selected_loc.data["name"],
                         ),
+<<<<<<< HEAD
                         caption=_("Map in a different project"),
+=======
+                        caption=_("Map in a different location"),
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
                         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
                     dlg.SetYesNoLabels("S&witch", "C&ancel")

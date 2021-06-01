@@ -5977,7 +5977,1900 @@ msgstr "No ha sido posible describir la tabla <%s>"
 msgid "Unable to drop table: '%s'"
 msgstr "No ha sido posible eliminar la tabla: '%s'"
 
+<<<<<<< HEAD
 #: ../lib/psdriver/graph_set.c:195
+=======
+#: ../lib/symbol/read.c:260
+#, c-format
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgstr "Nombre de símbolo incorrecto: '%s' (Debería ser: grupo / nombre o grupo / nombre@mapset)"
+
+#: ../lib/symbol/read.c:284
+#, c-format
+msgid "Cannot find/open symbol: '%s'"
+msgstr "No se puede encontrar / abrir el símbolo: '%s'."
+
+#: ../lib/symbol/read.c:393 ../lib/symbol/read.c:411 ../lib/symbol/read.c:421
+#: ../lib/symbol/read.c:439
+#, c-format
+msgid "Incorrect symbol color: '%s', using default."
+msgstr "Color de símbolo incorrecto: '%s', utilizando el predeterminado."
+
+#: ../lib/gpde/n_parse_options.c:106
+msgid "The calculation time in seconds"
+msgstr "Tiempo de cálculo en segundos"
+
+#: ../lib/gpde/n_arrays_io.c:93
+#, c-format
+msgid "Reading raster map <%s> into memory"
+msgstr "Leyendo el mapa raster <%s> en la memoria."
+
+#: ../lib/gpde/n_arrays_io.c:183
+msgid "N_array_2d * array is empty"
+msgstr "La matriz N_array_2d * se encuentra vacía."
+
+#: ../lib/gpde/n_arrays_io.c:202
+#, c-format
+msgid "Write 2d array to raster map <%s>"
+msgstr "Escribir matriz 2d al mapa raster <%s>."
+
+#: ../lib/gpde/n_arrays_io.c:281
+#: ../lib/python/temporal/c_libraries_interface.py:813
+#: ../lib/ogsf/gvl_file.c:436
+#, c-format, python-format
+msgid "Unable to open 3D raster map <%s>"
+msgstr "No ha sido posible abrir el mapa raster 3D <%s>."
+
+#: ../lib/gpde/n_arrays_io.c:309
+#, c-format
+msgid "Read g3d map <%s> into the memory"
+msgstr "Leer el mapa g3D <%s> en memoria."
+
+#: ../lib/gpde/n_arrays_io.c:364 ../lib/gpde/n_arrays_io.c:464
+msgid "Error closing g3d file"
+msgstr "Error al cerrar el archivo g3D."
+
+#: ../lib/gpde/n_arrays_io.c:420
+#, c-format
+msgid "Error opening g3d map <%s>"
+msgstr "Error al abrir el mapa g3D <%s>."
+
+#: ../lib/gpde/n_arrays_io.c:422
+#, c-format
+msgid "Write 3d array to g3d map <%s>"
+msgstr "Escribir matriz 3D en el mapa g3D <%s>."
+
+#: ../lib/gpde/test/test_main.c:88
+msgid "Performs unit and integration tests for gpde library"
+msgstr "Realiza las pruebas de unidad e integración de la librería gpde."
+
+#: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
+#, c-format
+msgid "The total sum of the water budget: %g\n"
+msgstr "La suma total del presupuesto hídrico: %g\n"
+
+#: ../lib/gpde/n_gwflow.c:438 ../lib/gpde/n_gwflow.c:717
+#, c-format
+msgid "The total sum of the water budget is significantly larger then 0: %g\n"
+msgstr "La suma total del presupuesto hídrico es significativamente mayor entonces 0: %g\n"
+
+#: ../lib/python/gunittest/gmodules.py:105
+msgid "input='-' must be used when stdin is specified"
+msgstr "input='-' debe ser usado cuando se use la entrada estándar"
+
+#: ../lib/python/gunittest/gmodules.py:107
+msgid "stdin must be string or buffer, not PIPE"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:110
+msgid "stdin must be used when input='-'"
+msgstr "Se debe usar la entrada estándar (stdin) cuando input='-'"
+
+#: ../lib/python/gunittest/gmodules.py:112
+msgid "You cannot merge stdout and stderr and not capture them"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:114
+msgid "stdout argument not allowed, it could be overridden"
+msgstr ""
+
+#: ../lib/python/gunittest/gmodules.py:116
+msgid "stderr argument not allowed, it could be overridden"
+msgstr ""
+
+#: ../lib/python/pygrass/utils.py:292
+msgid "Vector doesn't contain points"
+msgstr "El vectorial no contiene puntos"
+
+#: ../lib/python/pygrass/errors.py:18
+msgid "The map is close!"
+msgstr "¡El mapa está cerrado!"
+
+#: ../lib/python/pygrass/errors.py:29
+msgid "The self.c_mapinfo pointer must be correctly initiated"
+msgstr ""
+
+#: ../lib/python/pygrass/errors.py:40
+#, fuzzy
+msgid "Map <{}> not found in current mapset"
+msgstr "Mapa vectorial <%s> no se encuentra en el Directorio de mapas actual"
+
+#: ../lib/python/pygrass/vector/table.py:1042
+#, python-format
+msgid "Deleting table <%s> which is attached to following map(s):"
+msgstr "Eliminar la tabla <%s> que está adjuntada a los siguientes mapa(s):"
+
+#: ../lib/python/pygrass/vector/table.py:1046
+msgid "You must use the force flag to actually remove it. Exiting."
+msgstr "Defe usar la bandera force para realmente eliminarlos. Saliendo."
+
+#: ../lib/python/pygrass/vector/__init__.py:819
+#, python-format
+msgid "Unable to read line of feature %i"
+msgstr "No se puede leer la línea del elemento %i"
+
+#: ../lib/python/pygrass/vector/__init__.py:908
+#, python-format
+msgid "Unable to read area with id %i"
+msgstr "Imposible leer el área con id %i"
+
+#: ../lib/python/pygrass/vector/abstract.py:98
+#: ../lib/python/pygrass/raster/abstract.py:328
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w')"
+msgstr "Tipo de modo: {0} no soportado ('r','w')"
+
+#: ../lib/python/pygrass/vector/abstract.py:111
+#: ../lib/python/pygrass/raster/abstract.py:352
+#, python-brace-format
+msgid "Map name {0} not valid"
+msgstr "Nombre de mapa {0} no válido"
+
+#: ../lib/python/pygrass/modules/grid/grid.py:558
+msgid "Execution of subprocesses was not successful"
+msgstr "La ejecución del subproceso no fue exitosa"
+
+#: ../lib/python/pygrass/raster/category.py:70
+#, python-brace-format
+msgid "Raster type: {0} not supported"
+msgstr "Ráster tipo: {0} no soportado"
+
+#: ../lib/python/pygrass/raster/category.py:157
+msgid "Error executing: Rast_get_ith_cat"
+msgstr "Error al ejecutar: Rast_get_ith_cat"
+
+#: ../lib/python/pygrass/raster/category.py:185
+msgid "Null value detected"
+msgstr "Valor NULO detectado"
+
+#: ../lib/python/pygrass/raster/category.py:187
+msgid "Error executing: Rast_set_cat"
+msgstr "Error ejecutando: Rast_set_cat"
+
+#: ../lib/python/pygrass/raster/__init__.py:211
+msgid "The map does not exist, I can't open in 'r' mode"
+msgstr "El mapa no existe, no puedo abrir modo en 'r'"
+
+#: ../lib/python/pygrass/raster/__init__.py:216
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "Mapa ráster <{0}> ya existe y no será sobreescrito"
+
+#: ../lib/python/pygrass/raster/__init__.py:220
+msgid "Raster type not defined"
+msgstr "Tipo de ráster no definido"
+
+#: ../lib/python/pygrass/raster/__init__.py:325
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w','rw')"
+msgstr "Tipo de modo: {0} no soportado ('r', 'w','rw')"
+
+#: ../lib/python/pygrass/raster/__init__.py:345
+#, python-format
+msgid "Index out of range: %r."
+msgstr "Índice fuera de rango: %r."
+
+#: ../lib/python/pygrass/raster/__init__.py:534
+#, python-brace-format
+msgid "Raster map <{0}> already exists. Use overwrite."
+msgstr "Mapa ráster <{0}> ya existe. Use overwrite."
+
+#: ../lib/python/pygrass/raster/__init__.py:565
+#, python-brace-format
+msgid "Raster map <{0}> does not exist"
+msgstr "Mapa ráster <{0}> no existe"
+
+#: ../lib/python/pygrass/raster/abstract.py:339
+#, python-brace-format
+msgid "Overwrite type: {0} not supported (True/False)"
+msgstr "Tipo de sobreescritura: {0} no soportado (Verdadero/Falso)"
+
+#: ../lib/python/temporal/base.py:381
+msgid "Object not found in the temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/base.py:463 ../lib/python/temporal/base.py:514
+msgid "Missing identifier"
+msgstr "Identificador faltante"
+
+#: ../lib/python/temporal/base.py:622
+msgid "Wrong identifier, the mapset is missing"
+msgstr "Identificador incorrecto, falta el Directorio de mapas"
+
+#: ../lib/python/temporal/spatial_extent.py:120
+msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
+msgstr "Las proyecciones son distintas. No es posible calcular el overlapping_2d para la extensión espacial"
+
+#: ../lib/python/temporal/spatial_extent.py:526
+msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
+msgstr "Las proyecciones son distintas. No es posible calcular is_in_2d para la extensión espacial"
+
+#: ../lib/python/temporal/spatial_extent.py:658
+msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
+msgstr "Las proyecciones son distintas. No es posible calcular equivalent_2d para la extensión espacial"
+
+#: ../lib/python/temporal/spatial_extent.py:763
+msgid "Projections are different. Unable to compute cover_2d for spatial extents"
+msgstr "Las proyecciones son distintas. No es posible calcular cover_2d para la extensión espacial"
+
+#: ../lib/python/temporal/spatial_extent.py:835
+msgid "Projections are different. Unable to compute cover for spatial extents"
+msgstr "Las proyecciones son distintas. No es posible calcular covertura para la extensión espacial"
+
+#: ../lib/python/temporal/spatial_extent.py:1687
+msgid "Volume computation is not supported for LL projections"
+msgstr "Cálculo de volumen no está soportado para proyecciones LL"
+
+#: ../lib/python/temporal/spatial_extent.py:1705
+msgid "Area computation is not supported for LL projections"
+msgstr "Cálculo de área no está soportado para proyecciones LL"
+
+#: ../lib/python/temporal/factory.py:49
+#, python-format
+msgid "Unknown dataset type: %s"
+msgstr "Tipo conjunto de datos desconocido: %s"
+
+#: ../lib/python/temporal/univar_statistics.py:104
+#, python-format
+msgid "Unable to get statistics for raster map <%s>"
+msgstr "No ha sido posile obtener estadísticas de mapa ráster <%s>"
+
+#: ../lib/python/temporal/univar_statistics.py:107
+#, python-format
+msgid "Unable to get statistics for 3d raster map <%s>"
+msgstr "No ha sido posile obtener estadísticas de mapa ráster 3d <%s>"
+
+#: ../lib/python/temporal/univar_statistics.py:172
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> not found"
+msgstr "Conjunto de datos <%(i)s> espacio temporales %(sp)s no encontrado"
+
+#: ../lib/python/temporal/univar_statistics.py:182
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> is empty"
+msgstr "El conjunto de datos %(sp)s espacio temporales <%(i)s> está vacío"
+
+#: ../lib/python/temporal/univar_statistics.py:226
+#, python-format
+msgid "Unable to get statistics for vector map <%s>"
+msgstr "No ha sido posible obtener estadísticas de mapa vectorial <%s>"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:350
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "Tiempo de inicio debe ser de tipo fecha y hora para %(type)s mapa <%(id)s> con capa: %(l)s"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:357
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
+msgstr "Tiempo de inicio debe ser de tipo fecha y hora para %(type)s mapa <%(id)s>"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:365
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "Tiempo de término debe ser de tipo fecha y hora para %(type)s mapa <%(id)s> con capa: %(l)s"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:372
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s>"
+msgstr "Tiempo de término debe ser de tipo fecha y hora para %(type)s mapa <%(id)s>"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:381
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "Tiempo de término debe ser mayor al tiempo de inicio para %(type)s mapa <%(id)s> con capa: %(l)s"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:389
+#: ../lib/python/temporal/abstract_map_dataset.py:482
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s>"
+msgstr "Tiempo de término debe mayor que el tiempo de inicio para %(type)s mapa <%(id)s>"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:424
+#: ../lib/python/temporal/abstract_map_dataset.py:520
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2373
+#: ../lib/python/temporal/abstract_dataset.py:426
+#: ../lib/python/temporal/abstract_dataset.py:469
+#, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "No ha sido posible actualizar el conjunto de datos <%(ds)s> del tipo %(type)s en la base de datos temporales. El Directorio de mapas del conjunto de datos no es igual al Directorio de mapas actual"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:460
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
+msgstr "Tipo de unidad relativa de tiempo no soportada para %(type)s mapa <%(id)s> con capa %(l)s: %(u)s"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:467
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
+msgstr "Tipo de unidad relativa de tiempo no soportada para %(type)s mapa <%(id)s>: %(u)s"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:476
+#, python-format
+msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
+msgstr "Tiempo de término debe ser mayor que tiempo inicial para %(typ)s mapa <%(id)s> con capa %(l)s"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:800
+#, python-format
+msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
+msgstr "Mapa <%(id)s> con la capa %(layer)s tiene un intervalo incorrecto, el tiempo de inicio es mayor que el tiempo de término"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:806
+#, python-format
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
+msgstr "El mapa <%s> tiene un intervalo de tiempo incorrecto, tiempo de inicio es mayor que el de término"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:812
+#, python-format
+msgid "Map <%s> has incorrect start time"
+msgstr "El mapa <%s> tiene un tiempo de inicio incorrecto"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:841
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2048
+#, python-format
+msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "No ha sido posible eliminar el conjunto de datos <%(ds)s> del tipo %(type)s de la base de datos temporales. El Directorio de mapas no coincide con el Directorio de mapas actual"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:859
+#, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr "Eliminar %s conjunto de datos <%s> de base de datos temporales"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:909
+#, python-format
+msgid "Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "No ha sido posible quitar el registro del conjunto de datos <%(ds)s> de tipo %(type)s de la base de datos temporales. El Directorio de mapas del conjunto de datos no coincide con el Directorio de mapas actual"
+
+#: ../lib/python/temporal/abstract_map_dataset.py:1074
+msgid "Band references can only be assigned to raster maps"
+msgstr ""
+
+#: ../lib/python/temporal/open_stds.py:69
+#: ../lib/python/temporal/open_stds.py:128
+#, python-format
+msgid "Unknown type: %s"
+msgstr "Tipo desconocido: %s"
+
+#: ../lib/python/temporal/open_stds.py:75
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> not found"
+msgstr "Conjunto de datos espacio temporales %(sp)s <%(name)s> no encontrado"
+
+#: ../lib/python/temporal/open_stds.py:113
+msgid "Space time datasets can only be created in the current mapset"
+msgstr "Conjuntos de mapas espacio temporales solamente pueden ser creados en el Directorio de mapas actual"
+
+#: ../lib/python/temporal/open_stds.py:120
+#, fuzzy
+msgid "Illegal dataset name <{}>. Character '.' not allowed."
+msgstr "Nombre del mapa vectorial <%s> no admitido. Carácter no permitido '%c'."
+
+#: ../lib/python/temporal/open_stds.py:134
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
+msgstr "Conjunto de datos <%(name)s> espacio temporales %(sp)s ya está en la base de datos. Use la bandera overwrite."
+
+#: ../lib/python/temporal/open_stds.py:169
+#, python-format
+msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
+msgstr "Sobreescribir conjunto de datos espacio temporales %(sp)s <%(name)s> y desregistrar todos los mapas"
+
+#: ../lib/python/temporal/open_stds.py:177
+#, python-format
+msgid "Creating a new space time %s dataset"
+msgstr "Creando un nuevo conjunto de datos %s espacio temporales"
+
+#: ../lib/python/temporal/open_stds.py:220
+#: ../lib/python/temporal/mapcalc.py:253 ../lib/python/temporal/extract.py:129
+#, python-format
+msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgstr "Mapa <%s> ya está en la base de datos temporales, usar bandera overwrite para sobrescribirlo"
+
+#: ../lib/python/temporal/stds_export.py:105
+#, python-format
+msgid "Unable to export raster map <%s>"
+msgstr "No ha sido posible exportar mapa ráster <%s>"
+
+#: ../lib/python/temporal/stds_export.py:116
+#, python-format
+msgid "Unable to export color rules for raster map <%s> r.out.gdal"
+msgstr "No ha sido posible exportar regla de colores para mapas ráster <%s> r.out.gdal"
+
+#: ../lib/python/temporal/stds_export.py:140
+#, python-format
+msgid "Unable to export raster map <%s> with r.pack"
+msgstr "No ha sido posible exportar mapa ráster <%s> con r.pack"
+
+#: ../lib/python/temporal/stds_export.py:168
+#, python-format
+msgid "Unable to export vector map <%s> as GML with v.out.ogr"
+msgstr "No ha sido posible exportar mapa <%s> como GML con v.out.ogr"
+
+#: ../lib/python/temporal/stds_export.py:197
+#, python-format
+msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
+msgstr ""
+
+#: ../lib/python/temporal/stds_export.py:229
+#, python-format
+msgid "Unable to export vector map <%s> with v.pack"
+msgstr "No ha sido posible exportar mapa vectorial <%s> con v.pack"
+
+#: ../lib/python/temporal/stds_export.py:255
+#, python-format
+msgid "Unable to export raster map <%s> with r3.pack"
+msgstr "No ha sido posible exportar mapa ráster <%s> con r3.pack"
+
+#: ../lib/python/temporal/register.py:82 ../lib/python/temporal/register.py:85
+#, python-format
+msgid "%s= and %s= are mutually exclusive"
+msgstr "%s= y %s son mutuamente excluyentes"
+
+#: ../lib/python/temporal/register.py:89
+#, python-format
+msgid "%s= and the %s flag are mutually exclusive"
+msgstr "Las banderas %s= y %s son mutuamente excluyentes"
+
+#: ../lib/python/temporal/register.py:93
+msgid "The increment option requires the start option"
+msgstr "La opción increment necesita a la opción start"
+
+#: ../lib/python/temporal/register.py:96
+msgid "The interval flag requires the start option"
+msgstr "La bandera interval requiere la opción de inicio"
+
+#: ../lib/python/temporal/register.py:99
+#, python-format
+msgid "Please specify %s= and %s="
+msgstr "Por favor especifique %s= y %s="
+
+#: ../lib/python/temporal/register.py:103
+#, python-format
+msgid "Please specify %s= or %s="
+msgstr "Por favor especifique %s= o %s="
+
+#: ../lib/python/temporal/register.py:114
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> with relative time found, but no relative unit set for %(sp)s maps"
+msgstr "Conjunto de datos <%(name)s> espacio temporales %(sp)s con tiempo relativo, pero no se encontraron unidades relativas definidas para los mapas %(sp)s"
+
+#: ../lib/python/temporal/register.py:192
+msgid "The increment option will be ignored because of time stamps in input file"
+msgstr "La opción increment será ignorada dadas las marcas de tiempo en el archivo de entrada"
+
+#: ../lib/python/temporal/register.py:196
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr "La bandera interval será ignorada por que lo"
+
+#: ../lib/python/temporal/register.py:204
+msgid "Gathering map information..."
+msgstr "Reuniendo información del mapa..."
+
+#: ../lib/python/temporal/register.py:214
+#, python-format
+msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
+msgstr "No ha sido posible actualizar %(t)s mapa <%(id)s>. El mapa no existe."
+
+#: ../lib/python/temporal/register.py:238
+#, python-format
+msgid "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has timestamp and the start time is not set."
+msgstr "No ha sido posible registrar %(t)s mapa <%(id)s> con capa %(l)s. El mapa no tiene definidos la marca de tiempo y tiempo de inicio."
+
+#: ../lib/python/temporal/register.py:244
+#, python-format
+msgid "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the start time is not set."
+msgstr "No ha sido posible registra %(t)s mapa <%(id)s>. El mapa no tiene marca de tiempo y el tiempo de inicio no está definido."
+
+#: ../lib/python/temporal/register.py:252
+#, python-format
+msgid "%(u)s= can only be set for relative time"
+msgstr "%(u)s solo puede ser definido para tiempo relativo"
+
+#: ../lib/python/temporal/register.py:255
+#, python-format
+msgid "%(u)s= must be set in case of relative time stamps"
+msgstr "%(u)s solo puede ser definido en el caso de marcas de tiempo relativas"
+
+#: ../lib/python/temporal/register.py:268
+#, python-format
+msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s> with layer %(l)s. Overwrite flag is not set."
+msgstr "El mapa ya está registrado en la base de datos temporales. No ha sido posible actualizar %(t)s mapa <%(id)s> con capa %(l)s. Bandera overwrite no ha sido seleccionada."
+
+#: ../lib/python/temporal/register.py:275
+#, python-format
+msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s>. Overwrite flag is not set."
+msgstr "El mapa ya está registrado en la base de datos temporales. No ha sido posible actualizar %(t)s mapa <%(id)s>. Bandera overwrite no ha sido seleccionada."
+
+#: ../lib/python/temporal/register.py:299
+#, python-format
+msgid "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are different."
+msgstr "No ha sido posible actualizar %(t)s mapa <%(id)s> con capa %(l)s. Los tipos de tiempos son distintos."
+
+#: ../lib/python/temporal/register.py:305
+#, python-format
+msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
+msgstr "No ha sido posible actualizar %(t)s mapa <%(id)s>. Los tipos de tiempos son diferentes."
+
+#: ../lib/python/temporal/register.py:363
+msgid "Registering maps in the temporal database..."
+msgstr "Registrando mapas en la base de datos temporales..."
+
+#: ../lib/python/temporal/register.py:370
+msgid "Registering maps in the space time dataset..."
+msgstr "Registrando mapas en conjunto de datos espacio temporales..."
+
+#: ../lib/python/temporal/register.py:379
+msgid "Updating space time dataset..."
+msgstr "Actualizando conjunto de datos temporales..."
+
+#: ../lib/python/temporal/register.py:432
+#: ../lib/python/temporal/register.py:439
+#, python-format
+msgid "Unable to convert string \"%s\"into a datetime object"
+msgstr "No se ha podido convertir cadena \"%s\" a objeto datetime"
+
+#: ../lib/python/temporal/register.py:447
+#: ../lib/python/temporal/register.py:452
+msgid "Error occurred in increment computation"
+msgstr "Ocurrió un error en el cálculo del incremento"
+
+#: ../lib/python/temporal/register.py:455
+#, python-format
+msgid "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - %(end)s"
+msgstr "Definir tiempo absoluto válido para mapa <%(id)s> con capa %(layer)s en %(start)s - %(end)s"
+
+#: ../lib/python/temporal/register.py:460
+#, python-format
+msgid "Set absolute valid time for map <%s> to %s - %s"
+msgstr "Definir tiempo absoluto válido para mapa <%s> en %s - %s"
+
+#: ../lib/python/temporal/register.py:477
+#, python-format
+msgid "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
+msgstr "Definir tiempo relativo válido para mapa <%s> con capa %s en %i - %s con unidad %s"
+
+#: ../lib/python/temporal/register.py:482
+#, python-format
+msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
+msgstr "Dfinir tiempo relativo válido para mapa <%s> en %i - %s con unidad %s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:189
+#: ../lib/python/temporal/abstract_space_time_dataset.py:323
+#, python-format
+msgid "Unknown temporal type \"%s\""
+msgstr "Tipo temporal desconocido \"%s\""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:316
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1084
+#, python-format
+msgid "Wrong granularity: \"%s\""
+msgstr "Granularidad incorrecta: \"%s\""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:344
+#, python-format
+msgid "Unsupported temporal unit: %s"
+msgstr "Unidad temporal no soportada: %s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:394
+#, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr "Registro de tabla <%s> creado para conjunto de datos <%s> espacio temporales %s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:712
+#: ../lib/python/temporal/abstract_space_time_dataset.py:954
+msgid "The space time datasets must be of the same temporal type"
+msgstr "Los conjuntos de datos espacio temporales deben ser del mismo tipo de tiempo"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:717
+#: ../lib/python/temporal/abstract_space_time_dataset.py:959
+msgid "The temporal map type of the sample dataset must be interval"
+msgstr "El tipo de mapa temporal de la muesta del cnojunto de mapas debe ser de intervalo"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1587
+#, python-format
+msgid "Unable to get map ids from register table <%s>"
+msgstr "No ha sido posible obtener ids de tabla de registro <%s>"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1697
+#, python-format
+msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1704
+#: ../lib/python/temporal/datetime_math.py:455
+#, python-format
+msgid "Wrong granularity format: %s"
+msgstr "Formato de granularidad incorrecto: %s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1866
+#, python-format
+msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1968
+#, python-format
+msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "No ha sido posible renombrar conjunto de datos <%(ds)s> del tipo %(type)s en la base de datos temporales. El Directorio de mapas del conjunto de datos no coincide con el Directorio de mapas actual"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:1977
+msgid "Renaming of space time datasets is not supported for PostgreSQL."
+msgstr "El renombramiento para conjunto de datos espacio temporales no está soportado para PostgreSQL."
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2042
+#, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr "Eliminar conjunto de datos <%s> espacio temporales %s de base de datos temporales"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2061
+#, python-format
+msgid "Drop map register table: %s"
+msgstr "Tabla de registro del mapa eliminada: %s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2116
+msgid "Error in register table request"
+msgstr "Error al registrar solicitud de la tabla"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2145
+#, python-format
+msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the dataset does not match the current mapset"
+msgstr "No ha sido posible registrar mapas en Directorio de mapas <%(ds)s> de tipo %(type)s. El Directorio de mapas del conjunto de datos no coincide con el Directorio de mapas actual"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2154
+msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
+msgstr "Solamente el mapa que haya sido insertado en la base de datos temporales puede ser registrado en un conjunto de datos espacio temporales"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2177
+#, python-format
+msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgstr "Mapa <%(id)s> con capa %(l)s tiene tiempo no válido"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2181
+#, python-format
+msgid "Map <%s> has invalid time"
+msgstr "El mapa <%s> tiene un tiempo no válido"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2199
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr "Son distintos los tipos de tiempo de conjunto de datos espacio temporales <%(id)s> y mapa <%(map)s> con capa %(l)s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2205
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr "Son diferentes los tipos de tiempo del conjunto de datos espacio temporales <%(id)s> y del mapa <%(map)s>"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2220
+#, python-format
+msgid "Set temporal unit for space time %s dataset <%s> to %s"
+msgstr "Definir unidad temporal para conjunto de datos <%s> espacio temporales %s como %s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2230
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr "Son diferentes las unidades de tiempo relativas de conjunto de datos <%(id)s> y mapa <%(map)s> con capa %(l)s"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2236
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr "Son diferentes las unidades de tiempo relativas de conjunto de datos <%(id)s> y mapa <%(map)s>"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2242
+msgid "Only maps from the same mapset can be registered"
+msgstr "Solamente se pueden registrar mapas del mismo Directorio de mapas"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2247
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is already registered."
+msgstr "Mapa <%(map)s> con capa %(l)s ya está registrado."
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2251
+#, python-format
+msgid "Map <%s> is already registered."
+msgstr "Mapa <%s> ya registrado."
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2299
+#, python-format
+msgid "Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "No ha sido posible quitar el registro del mapa del conjunto de datos <%(ds)s> del tipo %(type)s en la base de datos temporales. El Directorio de mapas del conjunto de mapas no coincide con el Directorio de mapas actual"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2312
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgstr "Mapa <%(map)s> con capa %(l)s no está registrado en conjunto de datos espacio temporales <%(base)s>"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2318
+#, python-format
+msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
+msgstr "El mapa <%(map)s> no está registrado en conjunto de datos espacio temporales <%(base)s>"
+
+#: ../lib/python/temporal/abstract_space_time_dataset.py:2379
+#, python-format
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr "Actualizar metadato, extensión espacial y temporal para todos los mapas registrados es de <%s>"
+
+#: ../lib/python/temporal/mapcalc.py:117
+msgid "Starting spatio-temporal sampling..."
+msgstr "Iniciando muestreo espacio temporal..."
+
+#: ../lib/python/temporal/mapcalc.py:119
+msgid "Starting temporal sampling..."
+msgstr "Iniciando muestreo temporal..."
+
+#: ../lib/python/temporal/mapcalc.py:137
+msgid "No samples found for map calculation"
+msgstr "No se encontraron muestras para el cálculo del mapa"
+
+#: ../lib/python/temporal/mapcalc.py:164
+msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
+msgstr "Se encontró más de un mapa en un gránulo muestral. Solo los primeros mapas se usarán para el cálculo. Use t.rast.aggregate.ds para crear conjuntos de datos ráster sincrónicos."
+
+#: ../lib/python/temporal/mapcalc.py:185
+msgid "No maps registered in input dataset"
+msgstr "No se registraron mapas en el conjunto de datos de entrada"
+
+#: ../lib/python/temporal/mapcalc.py:203
+msgid "Starting mapcalc computation..."
+msgstr "Iniciando cálculo mapcalc..."
+
+#: ../lib/python/temporal/mapcalc.py:273
+#, python-format
+msgid "Apply mapcalc expression: \"%s\""
+msgstr "Aplicar expresión mapcalc: \"%s\""
+
+#: ../lib/python/temporal/mapcalc.py:292
+msgid "Error while mapcalc computation"
+msgstr "Error al calcular mapcalc"
+
+#: ../lib/python/temporal/mapcalc.py:298
+msgid "Starting map registration in temporal database..."
+msgstr "Iniciando registro de mapas en base de datos temporales..."
+
+#: ../lib/python/temporal/mapcalc.py:337
+msgid "Removing {}/{} ({}%) maps because empty..."
+msgstr ""
+
+#: ../lib/python/temporal/mapcalc.py:455 ../lib/python/temporal/mapcalc.py:461
+#: ../lib/python/temporal/mapcalc.py:467 ../lib/python/temporal/mapcalc.py:473
+#: ../lib/python/temporal/mapcalc.py:479 ../lib/python/temporal/mapcalc.py:485
+#: ../lib/python/temporal/mapcalc.py:491 ../lib/python/temporal/mapcalc.py:497
+#: ../lib/python/temporal/mapcalc.py:503 ../lib/python/temporal/mapcalc.py:538
+#: ../lib/python/temporal/mapcalc.py:547 ../lib/python/temporal/mapcalc.py:556
+#: ../lib/python/temporal/mapcalc.py:565 ../lib/python/temporal/mapcalc.py:574
+#: ../lib/python/temporal/mapcalc.py:583 ../lib/python/temporal/mapcalc.py:592
+#: ../lib/python/temporal/mapcalc.py:601 ../lib/python/temporal/mapcalc.py:610
+#, python-format
+msgid "The temporal operators <%s> support only absolute time."
+msgstr "El operador temporal <%s> solamente soporta tiempos absolutos."
+
+#: ../lib/python/temporal/temporal_granularity.py:1051
+#: ../lib/python/temporal/temporal_granularity.py:1093
+#, python-brace-format
+msgid "Output granularity seems not to be valid. Please use one of the following values : {gr}"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_granularity.py:1055
+#: ../lib/python/temporal/temporal_granularity.py:1096
+#: ../lib/python/temporal/temporal_granularity.py:1169
+msgid "Invalid absolute granularity"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_granularity.py:1166
+msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_vector_algebra.py:387
+#, python-format
+msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
+msgstr "Error, los mapas vectoriales con nombre base %s ya existen. Use la bandera --o para sobreescribir los archivos existentes"
+
+#: ../lib/python/temporal/temporal_vector_algebra.py:420
+#, python-format
+msgid ""
+"Error starting %s : \n"
+"%s"
+msgstr ""
+"Error iniciando %s : \n"
+"%s"
+
+#: ../lib/python/temporal/temporal_vector_algebra.py:493
+#, python-format
+msgid ""
+"Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
+"%s"
+msgstr ""
+"Error, mapa vectorial %s ya existe en la base de datos temporales. Use bandera overwrite: \n"
+"%s"
+
+#: ../lib/python/temporal/temporal_algebra.py:828
+msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
+msgstr "Los operadores topológicos espacio-temporales no están soportados en el álgebra modo granularidad"
+
+#: ../lib/python/temporal/temporal_algebra.py:867
+msgid "All input space time datasets must have a valid temporal topology."
+msgstr "Todos los conjuntos de datos espacio temporales de entrada deben tener una topología temporal válida."
+
+#: ../lib/python/temporal/temporal_algebra.py:876
+msgid "All input space time datasets must have the same temporal type."
+msgstr "Todos los conjuntos de datos espacio temporales deben ser del mismo tipo de tiempo."
+
+#: ../lib/python/temporal/temporal_algebra.py:1127
+#, python-format
+msgid "Removing un-needed or empty %s maps"
+msgstr "Removiendo mapas vacíos %s no necesitados"
+
+#: ../lib/python/temporal/temporal_algebra.py:1182
+#, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr "Conjunto de datos <%s> espacio temporales %s no encontrado"
+
+#: ../lib/python/temporal/temporal_algebra.py:1210
+#: ../lib/python/temporal/temporal_algebra.py:1214
+#, python-format
+msgid "Wrong temporal type of space time dataset <%s>                                       <%s> time is required"
+msgstr "El tipo temporal del conjunto de datos espacio temporales  es incorrecto <%s>                                       <%s> tiempo es requerido"
+
+#: ../lib/python/temporal/temporal_algebra.py:1234
+msgid "Wrong type of input "
+msgstr "Tipo de entrada incorrecto"
+
+#: ../lib/python/temporal/temporal_algebra.py:2213
+#, python-format
+msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
+msgstr "El tipo <%(a)s> de conjunto de datos espacio temporales es diferente del tipo solicitado <%(b)s>"
+
+#: ../lib/python/temporal/temporal_algebra.py:2219
+msgid "Maps that should be registered in the resulting space time dataset have different types."
+msgstr "Los mapas que deberían estar registrados en el conjunto de datos espacio temporales son de tipos diferentes."
+
+#: ../lib/python/temporal/temporal_algebra.py:2434
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:822
+#, python-format
+msgid "%s map <%s> not found in GRASS spatial database"
+msgstr "%s mapa <%s> no encontrado en base de datos espacial de GRASS"
+
+#: ../lib/python/temporal/temporal_algebra.py:2440
+msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
+msgstr "Tipo de mapa incorrecto. TMAP sólo soporta mapas que estén registrados en la base de datos temporal"
+
+#: ../lib/python/temporal/temporal_algebra.py:2468
+msgid "Merging empty map lists"
+msgstr "Uniendo listas de mapas vacías"
+
+#: ../lib/python/temporal/temporal_algebra.py:2471
+msgid "First Map list is empty, can't merge it. Return only last map list"
+msgstr "La primera lista de mapas esta vacía, no es posible unirla. Devolver únicamente la última lista de mapas"
+
+#: ../lib/python/temporal/temporal_algebra.py:2474
+msgid "Second Map list is empty, can't merge it. Return only first map list"
+msgstr "La segunda lista de mapas esta vacía, no es posible unirla. Devolver únicamente la primer lista de mapas"
+
+#: ../lib/python/temporal/temporal_algebra.py:2482
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr "Los conjuntos de datos espacio temporales a ser unidos deben ser del mismo tipo de tiempo"
+
+#: ../lib/python/temporal/extract.py:58
+msgid "You need to specify the base name of new created maps"
+msgstr "Debe especificar el nombre base de los nuevos mapas creados"
+
+#: ../lib/python/temporal/extract.py:136
+#, python-format
+msgid "Applying r.mapcalc expression: \"%s\""
+msgstr "Aplicando expresión r.mapcalc: \"%s\""
+
+#: ../lib/python/temporal/extract.py:141
+#, python-format
+msgid "Applying r3.mapcalc expression: \"%s\""
+msgstr "Aplicando expresión r3.mapcalc: \"%s\""
+
+#: ../lib/python/temporal/extract.py:146
+#, python-format
+msgid "Applying v.extract where statement: \"%s\""
+msgstr "Aplicando sentencia where en v.extract: \"%s\""
+
+#: ../lib/python/temporal/extract.py:174
+msgid "Error in computation process"
+msgstr "Error en el proceso de cálculo"
+
+#: ../lib/python/temporal/core.py:608
+msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
+msgstr "No ha sido posible inicializar la interfaz temporal DBMI. Por favor use t.connect para especificar el controlador y la cadena de la base de datos"
+
+#: ../lib/python/temporal/core.py:654
+msgid ""
+"The format of your actual temporal database is not supported any more.\n"
+"Please create a backup of your temporal database to avoid lossing data.\n"
+"SOLUTION: "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:659
+msgid "Run t.upgrade command installed from GRASS Addons in order to upgrade your temporal database.\n"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:662
+msgid "You need to export it by restoring the GRASS GIS version used for creating this DB.Notes: Use t.rast.export and t.vect.export to make a backup of your existing space time datasets. To save the timestamps of your existing maps and space time datasets, use t.rast.list, t.vect.list and t.rast3d.list. You can register the existing time stamped maps easily if you export columns=id,start_time,end_time into text files and use t.register to register them again in new created space time datasets (t.create). After the backup remove the existing temporal database, a new one will be created automatically.\n"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:686 ../lib/python/temporal/core.py:879
+#, python-format
+msgid ""
+"Unable to receive temporal database metadata.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+"No ha sido posible recibir metadatos de base de datos temporales.\n"
+"Información de la base de datos temporales actual:%(info)s"
+
+#: ../lib/python/temporal/core.py:691
+#, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)s Supported temporal API version is: %(api)i.\n"
+"Please update your GRASS GIS installation.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+"Base de datos temporal no soportada: no coinciden las versiones.\n"
+"%(backup)s La versión de base de datos soportada es: %(api)i.\n"
+"Por favor actualice su instalación de GRASS GIS. \n"
+"Información de la base de datos temporal actual:%(info)s"
+
+#: ../lib/python/temporal/core.py:699
+#, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)sSupported temporal database version is: %(tdb)i\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+"Base de datos temporales no soportada: no coinciden las versiones.\n"
+"%(backup)sVersión de la base de datos soportada es: %(tdb)i\n"
+"Información de base de datos temporales actual:%(info)s"
+
+#: ../lib/python/temporal/core.py:793
+#, python-format
+msgid "Creating temporal database: %s"
+msgstr "Creando base de datos temporal: %s"
+
+#: ../lib/python/temporal/core.py:802
+#, python-format
+msgid ""
+"Unable to create SQLite temporal database\n"
+"Exception: %s\n"
+"Please use t.connect to set a read- and writable temporal database path"
+msgstr ""
+"No ha sido posible crear base de datos temporal SQLite\n"
+"Excepción: %s\n"
+"Por favor use t.connect para definir una ruta de lectura y escritura de base de datos temporal"
+
+#: ../lib/python/temporal/core.py:889
+msgid "Temporal database is up-to-date. Operation canceled"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:900
+#, python-format
+msgid "Unsupported TGIS DB upgrade scenario: from version %s to %s"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:908
+#, python-format
+msgid "Upgrading temporal database <%s> from version %s to %s..."
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1025
+msgid "Unable to mogrify sql statement. "
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1048
+msgid "Unable to check table. "
+msgstr "No se puede controlar la tabla."
+
+#: ../lib/python/temporal/core.py:1065
+msgid "Unable to execute sql statement. "
+msgstr "No se puede ejecutar la sentencia sql."
+
+#: ../lib/python/temporal/core.py:1076
+msgid "Unable to fetch one. "
+msgstr "No se puede recuperar uno."
+
+#: ../lib/python/temporal/core.py:1087
+msgid "Unable to fetch all. "
+msgstr "No se puede recuperar todo."
+
+#: ../lib/python/temporal/core.py:1105
+msgid "Unable to execute transaction. "
+msgstr "No ha sido posible ejecutar la transacción."
+
+#: ../lib/python/temporal/core.py:1210
+#, python-format
+msgid ""
+"Unable to connect to %(db)s database: %(string)s\n"
+"Exception: \"%(ex)s\"\n"
+"Please use t.connect to set a read- and writable temporal database backend"
+msgstr ""
+"No ha sido posible conectar a la base de datos %(db)s: %(string)s\n"
+"Excepción: \"%(ex)s\"\n"
+"Por favor use t.connect para definir "
+
+#: ../lib/python/temporal/core.py:1370
+#, python-format
+msgid ""
+"Unable to execute :\n"
+" %(sql)s"
+msgstr ""
+"No ha sido posible ejecutar :\n"
+"%(sql)s"
+
+#: ../lib/python/temporal/core.py:1414
+#, python-format
+msgid ""
+"Unable to execute transaction:\n"
+" %(sql)s"
+msgstr ""
+"No ha sido posible ejecutar transacción:\n"
+"%(sql)s"
+
+#: ../lib/python/temporal/datetime_math.py:260
+#: ../lib/python/temporal/datetime_math.py:277
+#, python-format
+msgid "Wrong increment format: %s"
+msgstr "Formato de incremento incorrecto: %s"
+
+#: ../lib/python/temporal/datetime_math.py:775
+msgid "Time string seems to specify relative time"
+msgstr "Cadena de tiempo parece especificar tiempo relativo"
+
+#: ../lib/python/temporal/datetime_math.py:787
+msgid "Dates Before Christ (BC) are not supported"
+msgstr "No están soportadas las fechas antes de cristo (BC)"
+
+#: ../lib/python/temporal/datetime_math.py:791
+msgid "Time zones are not supported"
+msgstr "Las Zonas de tiempo no están soportadas"
+
+#: ../lib/python/temporal/datetime_math.py:811
+#, python-format
+msgid "Unable to parse time string: %s"
+msgstr "No ha sido posible parsear cadena de tiempo: %s"
+
+#: ../lib/python/temporal/sampling.py:93 ../lib/python/temporal/sampling.py:98
+#, python-format
+msgid "Dataset <%s> not found in temporal database"
+msgstr "Conjunto de datos <%s> no encontrado en base de datos temporales"
+
+#: ../lib/python/temporal/stds_import.py:83
+#, python-format
+msgid "Unable to import/link raster map <%s> from file %s."
+msgstr "No ha sido posible importar/enlazar mapa ráster <%s> desde el archivo %s."
+
+#: ../lib/python/temporal/stds_import.py:94
+#, python-format
+msgid "Unable to set the color rules for raster map <%s>."
+msgstr "No ha sido posible definir regla de colores para el mapa ráster <%s>."
+
+#: ../lib/python/temporal/stds_import.py:118
+#, python-format
+msgid "Unable to unpack raster map <%s> from file %s."
+msgstr "No ha sido posible desempaquetar mapa ráster <%s> desde el archivo %s."
+
+#: ../lib/python/temporal/stds_import.py:142
+#, python-format
+msgid "Unable to import vector map <%s> from file %s."
+msgstr "No ha sido posible importar mapa vectorial <%s> desde el archivo %s."
+
+#: ../lib/python/temporal/stds_import.py:166
+#, python-format
+msgid "Unable to unpack vector map <%s> from file %s."
+msgstr "No ha sido posible desempaquetar mapa vectorial <%s> desde el archivo %s."
+
+#: ../lib/python/temporal/stds_import.py:205
+#, python-format
+msgid "Space time raster dataset archive <%s> not found"
+msgstr "Archivo de conjunto de datos ráster espacio temporales <%s> no encontrado"
+
+#: ../lib/python/temporal/stds_import.py:208
+#, python-format
+msgid "Extraction directory <%s> not found"
+msgstr "Directorio de extracción <%s> no encontrado"
+
+#: ../lib/python/temporal/stds_import.py:214
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr "Revisando validez del archivo de entrada (tamaño %0.1f MB). Puede ser tardado..."
+
+#: ../lib/python/temporal/stds_import.py:221
+#, python-format
+msgid "Unable to find init file <%s>"
+msgstr "No ha sido posible encontrar archivo init <%s>"
+
+#: ../lib/python/temporal/stds_import.py:223
+#, python-format
+msgid "Unable to find list file <%s>"
+msgstr "No ha sido posible encontrar archivo de lista <%s>"
+
+#: ../lib/python/temporal/stds_import.py:225
+#, python-format
+msgid "Unable to find projection file <%s>"
+msgstr "No ha sido posible encontrar archivo de proyección <%s>"
+
+#: ../lib/python/temporal/stds_import.py:227
+msgid "Extracting data..."
+msgstr "Extrayendo datos..."
+
+#: ../lib/python/temporal/stds_import.py:267
+msgid "Projection information does not match. Proceeding..."
+msgstr "La información de la proyección no coincide. Procesando..."
+
+#: ../lib/python/temporal/stds_import.py:271
+#, python-brace-format
+msgid ""
+"Difference between PROJ_INFO file of imported map and of current location:\n"
+"{diff}"
+msgstr ""
+"Existe una diferencia entre el archivo PROJ_INFO  del mapa importado y la Localización actual:\n"
+"{diff}"
+
+#: ../lib/python/temporal/stds_import.py:274
+msgid "Projection information does not match. Aborting."
+msgstr "La información de la proyección no concuerda. Abortando."
+
+#: ../lib/python/temporal/stds_import.py:291
+#, python-format
+msgid "Unable to create location %(l)s. Reason: %(e)s"
+msgstr "No ha sido posible crear Localización %(l)s. Razón: %(e)s"
+
+#: ../lib/python/temporal/stds_import.py:299
+#, python-format
+msgid "Unable to switch to location %s"
+msgstr "No ha sido posible cambiar a Localización %s"
+
+#: ../lib/python/temporal/stds_import.py:304
+#, python-format
+msgid "Unable to create default temporal database in new location %s"
+msgstr "No ha sido posible crear la base de datos temporales predeterminada en nueva Localización %s"
+
+#: ../lib/python/temporal/stds_import.py:378
+#, python-format
+msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+msgstr "Palabras clave %(t)s, %(s)s o %(n)s no encontradas en archivo de inicio (init file)."
+
+#: ../lib/python/temporal/stds_import.py:384
+msgid "Number of maps mismatch in init and list file."
+msgstr "La cantidad de mapas no es la misma en los archivos de inicio (init) y lista."
+
+#: ../lib/python/temporal/stds_import.py:395
+msgid "The archive file is of wrong space time dataset type"
+msgstr "El archivo de almacenamiento es de un tipo de conjunto de datos espacio temporales incorrecto"
+
+#: ../lib/python/temporal/stds_import.py:403
+#, python-format
+msgid "Unable to find GeoTIFF raster file <%s> in archive."
+msgstr "No ha sido posible encontrar archivo ráster GeoTIFF <%s> en archivo."
+
+#: ../lib/python/temporal/stds_import.py:409
+#, python-format
+msgid "Unable to find AAIGrid raster file <%s> in archive."
+msgstr "No ha sido posible encontrar archivo ráster AAIGrid <%s> en archivo."
+
+#: ../lib/python/temporal/stds_import.py:415
+#, python-format
+msgid "Unable to find GML vector file <%s> in archive."
+msgstr "No ha sido posible encontrar archivo vectorial GML <%s> en archivo."
+
+#: ../lib/python/temporal/stds_import.py:424
+#, python-format
+msgid "Unable to find GRASS package file <%s> in archive."
+msgstr "No ha sido posible encontrar archivo de paquete GRASS <%s> en archivo."
+
+#: ../lib/python/temporal/stds_import.py:427
+msgid "Unsupported input format"
+msgstr "Tipo de formato no soportado"
+
+#: ../lib/python/temporal/stds_import.py:433
+#, python-format
+msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
+msgstr "Conjunto de datos <%(sp)s> espacio temporales %(t)s ya está en la base de datos. Use la bandera overwrite."
+
+#: ../lib/python/temporal/stds_import.py:454
+#, python-format
+msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
+msgstr "Sobreescribir conjunto de datos <%(id)s> espacio temporales %(sp)s y quitar registro a todos los mapas."
+
+#: ../lib/python/temporal/stds_import.py:466
+#, python-format
+msgid "Key word %s not found in init file."
+msgstr "Palabra clave %s no encontrada en archivo de inicio (init file)."
+
+#: ../lib/python/temporal/stds_import.py:471
+#, python-format
+msgid "Create space time %s dataset."
+msgstr "Creando conjunto de datos espacio temporal %s."
+
+#: ../lib/python/temporal/stds_import.py:500
+msgid "Switching to original location failed"
+msgstr "Ha fallado el cambio a la Localización original"
+
+#: ../lib/python/temporal/gui_support.py:56 ../lib/python/script/core.py:1436
+#, python-format
+msgid "Invalid element '%s'"
+msgstr "Elemento no válido '%s'"
+
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:735
+#, python-format
+msgid "Error computing map <%s>"
+msgstr "Error calculando mapa <%s>"
+
+#: ../lib/python/temporal/c_libraries_interface.py:733
+#: ../lib/python/temporal/c_libraries_interface.py:750
+msgid "Unable to read range file"
+msgstr "No ha sido posible leer archivo de rango"
+
+#: ../lib/python/temporal/c_libraries_interface.py:828
+#, python-format
+msgid "Unable to load range of 3D raster map <%s>"
+msgstr "No ha sido posible cargar rango de mapa ráster 3D <%s>"
+
+#: ../lib/python/temporal/c_libraries_interface.py:843
+#: ../lib/raster3d/close.c:120 ../lib/raster3d/close.c:130
+#: ../lib/raster3d/close.c:159 ../lib/ogsf/gvl_file.c:470
+#, c-format, python-format
+msgid "Unable to close 3D raster map <%s>"
+msgstr "No ha sido posible cerrar el mapa raster 3D <%s>."
+
+#: ../lib/python/temporal/space_time_datasets.py:247
+#, python-format
+msgid "Unable to read timestamp file for raster map <%s>"
+msgstr "No ha sido posible leer el archivo de marca de tiempo para mapa ráster <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:271
+#, python-format
+msgid "Unable to create timestamp file for raster map <%s>"
+msgstr "No ha sido posible crear archivo de marca de tiempo para mapa ráster <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:276
+#, python-format
+msgid "Invalid datetime in timestamp for raster map <%s>"
+msgstr "Fecha y hora no válidas en la marca de tiempo de mapa ráster <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:281
+#: ../lib/python/temporal/space_time_datasets.py:688
+msgid "Internal error"
+msgstr "Error interno"
+
+#: ../lib/python/temporal/space_time_datasets.py:298
+#: ../lib/python/temporal/space_time_datasets.py:702
+#, python-format
+msgid "Unable to remove timestamp for raster map <%s>"
+msgstr "No ha sido posible elminar marca de tiempo de mapa ráster <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:317
+#, fuzzy, python-format
+msgid "Unable to read band reference file for raster map <%s>"
+msgstr "No ha sido posible leer el archivo de categorías del mapa raster <%s>."
+
+#: ../lib/python/temporal/space_time_datasets.py:337
+#, fuzzy, python-format
+msgid "Unable to write band identifier for raster map <%s>"
+msgstr "No ha sido posible escribir el encabezado para el mapa ráster 3D <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:654
+#, python-format
+msgid "Unable to read timestamp file for 3D raster map <%s>"
+msgstr "No ha sido posible leer archivo de marca de tiempo de mapa ráster 3D <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:678
+#, python-format
+msgid "Unable to create timestamp file for 3D raster map <%s>"
+msgstr "No ha sido posible crear archivo de marca de tiempo de mapa ráster 3D <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:683
+#, python-format
+msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+msgstr "Fecha y hora no válidas en marca de tiempo de mapa ráster 3D <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:963
+#, python-format
+msgid "Unable to read timestamp file for vector map <%s>"
+msgstr "No ha sido posible leer archivo de marca de tiempo del mapa vectorial <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:986
+#, python-format
+msgid "Unable to create timestamp file for vector map <%s>"
+msgstr "No ha sido posible crear archivo de marca de tiempo del mapa vectorial <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:991
+#, python-format
+msgid "Invalid datetime in timestamp for vector map <%s>"
+msgstr "Fecha y hora no válidas en marca de tiempo de mapa vectorial <%s>"
+
+#: ../lib/python/temporal/space_time_datasets.py:1007
+#, python-format
+msgid "Unable to remove timestamp for vector map <%s>"
+msgstr "No ha sido posible eliminar marca de tiempo del mapa vectorial <%s>"
+
+#: ../lib/python/temporal/abstract_dataset.py:386
+#, python-format
+msgid "Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "No ha sido posible insertar el conjunto de datos <%(ds)s> del tipo %(type)s en la base de datos temporales. El Directorio de mapas del conjunto de datos no es igual al Directorio de mapas actual"
+
+#: ../lib/python/temporal/aggregation.py:126
+#, python-format
+msgid "Aggregating %s raster maps"
+msgstr "Agregando mapa ráster %s"
+
+#: ../lib/python/temporal/aggregation.py:140
+#, python-format
+msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+msgstr "Mapa ráster <%(name)s> ya está en la base de datos temporales, use la bandera overwrite para sobreescribir"
+
+#: ../lib/python/temporal/aggregation.py:145
+#, python-format
+msgid "Computing aggregation of maps between %(st)s - %(end)s"
+msgstr "Calcular agregación de los mapas entre %(st)s - %(end)s"
+
+#: ../lib/python/temporal/aggregation.py:170
+msgid "Error occurred in r.series computation"
+msgstr "Ocurrió error en cálculo de r.series"
+
+#: ../lib/python/temporal/aggregation.py:279
+#, python-format
+msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+msgstr "Agregando mapas ráster %(len)i desde %(start)s hasta %(end)s"
+
+#: ../lib/python/temporal/aggregation.py:300
+#, python-format
+msgid "Unable to perform aggregation. Output raster map <%(name)s> exists and overwrite flag was not set"
+msgstr "No ha sido posible realizar la agregación. El mapa ráster de salida <%(name)s> ya existe y la bandera overwrite no fue definida"
+
+#: ../lib/python/temporal/aggregation.py:318
+#, python-format
+msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
+msgstr "El limite de archivos abierto (%i) ha sido alcanzado (%i). El módulo r.series se ejecutara con el flag z, para evitar exceder el límite de archivos abiertos. "
+
+#: ../lib/python/temporal/list_stds.py:206
+msgid "Empty map list"
+msgstr "Lista de mapas vacía"
+
+#: ../lib/python/temporal/list_stds.py:217
+msgid "Empty entry in map list, this should not happen"
+msgstr "Entrada vacía en lista de mapas, esto no debería de ocurrir"
+
+#: ../lib/python/grassdb/manage.py:21
+msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+msgstr ""
+
+#: ../lib/python/grassdb/manage.py:39
+msgid "Mapset PERMANENT cannot be renamed"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:211
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{location}>"
+msgstr "No elexiste el Directorio de mapas <{mapset}> en la Localización <{loc}>. Es posible crear un nuevo Direx¿ctorio de mapas usando '-c'"
+
+#: ../lib/python/grassdb/checks.py:214
+#, python-format
+msgid "<%s> is not a GRASS Mapset because it is not a directory"
+msgstr "<%s> no es un Directorio de mapas de GRASS por que no es un directorio"
+
+#: ../lib/python/grassdb/checks.py:218
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+msgstr "<%s> no es un Directorio de mapas de GRASS válido por que no contiene un archivo WIND"
+
+#: ../lib/python/grassdb/checks.py:227
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+msgstr "<%s> no es un Directorio de mapas de GRASS válido por que su archivo WIND no es posible leerlo"
+
+#: ../lib/python/grassdb/checks.py:236
+#, python-brace-format
+msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:268
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset is missing"
+msgstr "<%s> no es una localización de GRASS válida porque no contiene el directorio de mapas PERMANENT"
+
+#: ../lib/python/grassdb/checks.py:276
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
+msgstr "<%s> no es una localización de GRASS válida porque  PERMANENT no es un directorio"
+
+#: ../lib/python/grassdb/checks.py:285
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset does not have a DEFAULT_WIND file (default computational region)"
+msgstr "<%s> no es una localización de GRASS válida porque el directorio de mapas PERMANENT no contiene el archivo DEFAULT_WIND (región computacional predeterminada)"
+
+#: ../lib/python/grassdb/checks.py:294
+#, python-brace-format
+msgid "Location <{location_path}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:311
+#, python-brace-format
+msgid "<{location}> looks like a mapset, not a location. Did you mean just <{one_dir_up}>?"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:317
+#, python-brace-format
+msgid "It looks like <{location}> contains locations. Did you mean to specify one of them?"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:339 ../lib/python/grassdb/checks.py:372
+msgid "Name '{}' is not a valid name for location or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:345
+msgid "Name '{}' is reserved for direct read access to OGR layers. Please use another name for your mapset."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:351
+#, python-brace-format
+msgid "Mapset  <{mapset}> already exists. Please consider using another name for your mapset."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:378
+#, python-brace-format
+msgid "Location  <{location}> already exists. Please consider using another name for your location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:433
+#, python-brace-format
+msgid "Mapset <{mapset}> is required for a valid location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:437
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is the current mapset."
+msgstr "El directorio del grupo de mapas (Mapset) <%s> no es el directorio del conjunto de mapas actual."
+
+#: ../lib/python/grassdb/checks.py:441
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is in use."
+msgstr "El Directorio de mapas <%s> no existe."
+
+#: ../lib/python/grassdb/checks.py:445
+#, python-brace-format
+msgid "Mapset <{mapset}> is owned by a different user."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:474
+#, python-brace-format
+msgid "Location <{location}> is the current location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:511
+#, python-brace-format
+msgid "GRASS database <{grassdb}> is the current database."
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:70
+#, python-format
+msgid "Module run %s %s ended with error"
+msgstr "Ejecución de módulo %s %s finalizó de manera incorrecta"
+
+#: ../lib/python/exceptions/__init__.py:71
+#, python-format
+msgid ""
+"\n"
+"Process ended with non-zero return code %s"
+msgstr ""
+"\n"
+"El proceso terminó con código de retorno no cero %s"
+
+#: ../lib/python/exceptions/__init__.py:73
+#, python-format
+msgid ""
+". See the following errors:\n"
+"%s"
+msgstr ""
+". Ver los siguiente errores:\n"
+"%s"
+
+#: ../lib/python/exceptions/__init__.py:77
+msgid ". See errors in the (error) output."
+msgstr ". Ver los errores en la salida (de errores)."
+
+#: ../lib/python/imaging/operations.py:77
+#: ../lib/python/imaging/operations.py:99
+#: ../lib/python/imaging/operations.py:123
+#: ../lib/python/imaging/operations.py:155
+msgid "Install PIL or Pillow to use this function"
+msgstr ""
+
+#: ../lib/python/imaging/operations.py:157
+msgid "Install a newer version of PIL or Pillow to use this function (missing ImageOps module)"
+msgstr ""
+
+#: ../lib/python/script/task.py:60
+msgid "unknown"
+msgstr "desconocido"
+
+#: ../lib/python/script/task.py:171
+#, python-format
+msgid "Parameter element '%(element)s' not found: '%(value)s'"
+msgstr "Parámetero element '%(element)s' no encontrado: '%(value)s'"
+
+#: ../lib/python/script/task.py:186
+#, python-format
+msgid "Flag not found: %s"
+msgstr "Bandera no encontrada: %s"
+
+#: ../lib/python/script/task.py:205
+#, python-format
+msgid "Parameter '%(name)s' (%(desc)s) is missing."
+msgstr "Faltan parámetros '%(name)s' (%(desc)s)."
+
+#: ../lib/python/script/task.py:238
+msgid "<required>"
+msgstr "<required>"
+
+#: ../lib/python/script/task.py:500 ../lib/python/script/task.py:504
+#, python-brace-format
+msgid ""
+"Unable to fetch interface description for command '<{cmd}>'.\n"
+"\n"
+"Details: <{det}>"
+msgstr ""
+
+#: ../lib/python/script/task.py:527
+#, python-brace-format
+msgid "Cannot parse interface description of<{name}> module: {error}"
+msgstr "No se puede parsear descripción de interface de <{name}> módulo: {error}"
+
+#: ../lib/python/script/raster3d.py:93
+#, python-format
+msgid "An error occurred while running r3.mapcalc with expression: %s"
+msgstr "Ocurrió un error mientras corría r3.mapcalc con la expresión: %s"
+
+#: ../lib/python/script/core.py:56
+#, python-brace-format
+msgid "Cannot find the executable {0}"
+msgstr ""
+
+#: ../lib/python/script/core.py:318
+#, python-format
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."
+
+#: ../lib/python/script/core.py:385
+#, fuzzy, python-brace-format
+msgid "Module {module} ({code}) failed with non-zero return code {returncode}"
+msgstr ""
+"\n"
+"El proceso terminó con código de retorno no cero %s"
+
+#: ../lib/python/script/core.py:1117
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr "Mezclando tipos de valores. Se tratará de comparar luego de la conversión a enteros"
+
+#: ../lib/python/script/core.py:1319
+#, python-format
+msgid "Element type should be \"cell\" and not \"%s\""
+msgstr "Tipo de elemento debe ser \"cell\" y no \"%s\""
+
+#: ../lib/python/script/core.py:1350 ../lib/python/script/core.py:1419
+#, python-format
+msgid "Element type should be \"raster\" and not \"%s\""
+msgstr "Tipo de elemento debe ser \"raster\" y no \"%s\""
+
+#: ../lib/python/script/core.py:1588
+msgid "Unable to list mapsets"
+msgstr "No ha sido posible enlistar Directorios de mapas"
+
+#: ../lib/python/script/core.py:1624
+#, python-format
+msgid "Location <%s> already exists. Operation canceled."
+msgstr "La Localización <%s> ya existe. Operación cancelada."
+
+#: ../lib/python/script/core.py:1628
+#, python-format
+msgid "Location <%s> already exists and will be overwritten"
+msgstr "La Localización <%s> ya existe y será sobreescrita"
+
+#: ../lib/python/script/core.py:1758
+#, python-brace-format
+msgid "Debug level {0}"
+msgstr ""
+
+#: ../lib/python/script/core.py:1761
+#, python-brace-format
+msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
+msgstr ""
+
+#: ../lib/python/script/core.py:1781
+#, python-format
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr "Nombre de archivo <%s> no admitido. No puede ser 'NULL' o empezar con '.'."
+
+#: ../lib/python/script/core.py:1790
+#, python-format
+msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+msgstr "Nombre de archivo <%(s)s> no admitido. <%(il)s> no permitido.\n"
+
+#: ../lib/python/script/vector.py:83
+#, python-format
+msgid "Database connection not defined for layer %s"
+msgstr "La conexión a la base de datos no está definida para capa %s"
+
+#: ../lib/python/script/vector.py:234
+#, python-format
+msgid "Missing layer %(layer)d in vector map <%(map)s>"
+msgstr "Capa faltante %(layer)d en mapa vectorial <%(map)s>"
+
+#: ../lib/python/script/vector.py:250
+msgid "vector_db_select() failed"
+msgstr "Ha fallado vector_db_select()"
+
+#: ../lib/python/script/vector.py:362
+#, python-brace-format
+msgid "Number of given vector maps ({m}) differs from number of layers ({l})"
+msgstr "Número de mapas vectoriales dado ({m}) difiere del número de capas ({l})"
+
+#: ../lib/python/script/vector.py:421
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
+msgstr ""
+"Salida de v.what no está en formato JSON válido:\n"
+"{ret}"
+
+#: ../lib/python/script/raster.py:60
+#, python-format
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr "No ha sido posible escribir historia para <%(map)s>. Mapa ráster >%(map)s> no encontrado en el Directorio de mapas actual."
+
+#: ../lib/python/script/raster.py:120
+#, python-format
+msgid "An error occurred while running r.mapcalc with expression: %s"
+msgstr ""
+
+#: ../lib/python/script/raster.py:199
+msgid "No data"
+msgstr "No hay datos"
+
+#: ../lib/python/script/raster.py:207
+msgid "value"
+msgstr "valor"
+
+#: ../lib/python/script/raster.py:207
+msgid "label"
+msgstr "etiqueta"
+
+#: ../lib/python/script/raster.py:207
+msgid "color"
+msgstr "color"
+
+#: ../lib/python/script/db.py:162
+#, python-format
+msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+msgstr "Error del programador: se debe dar '%(sql)s', '%(filename)s', o '%(table)s'"
+
+#: ../lib/python/script/db.py:172
+msgid "Fetching data failed"
+msgstr "Fallo al recuperar los datos"
+
+#: ../lib/python/script/array.py:158 ../lib/python/script/array.py:210
+#: ../lib/python/script/array.py:257 ../lib/python/script/array.py:311
+#: ../lib/python/script/array.py:364 ../lib/python/script/array.py:406
+#, python-format
+msgid "Invalid kind <%s>"
+msgstr "Clase  no válida <%s>"
+
+#: ../lib/python/script/array.py:161 ../lib/python/script/array.py:213
+#: ../lib/python/script/array.py:314 ../lib/python/script/array.py:367
+#, python-format
+msgid "Invalid size <%d>"
+msgstr "Tamaño no válido <%d>"
+
+#: ../lib/python/script/array.py:200
+msgid "grass.script.array.read is deprecated and does not work on MS Windows, pass raster name in the constructor"
+msgstr ""
+
+#: ../lib/python/script/array.py:250 ../lib/python/script/array.py:400
+#, python-format
+msgid "Invalid FP size <%d>"
+msgstr "Tamaño de punto flotante inválido <%d>"
+
+#: ../lib/python/script/array.py:254 ../lib/python/script/array.py:403
+#, python-format
+msgid "Invalid integer size <%d>"
+msgstr "Tamaño de entero no válido <%d>"
+
+#: ../lib/python/script/array.py:354
+msgid "grass.script.array3d.read is deprecated and does not work on MS Windows, pass 3D raster name in the constructor"
+msgstr ""
+
+#: ../lib/python/script/setup.py:229
+msgid "Cleaning up default sqlite database ..."
+msgstr ""
+
+#: ../lib/raster3d/maskfn.c:77
+#, c-format
+msgid "Adding rule: %lf - %lf"
+msgstr "Añadiendo regla: %lf - %lf"
+
+#: ../lib/raster3d/maskfn.c:95
+#, c-format
+msgid "%s: illegal value spec"
+msgstr "%s: especificación de valor no admitida"
+
+#: ../lib/raster3d/header.c:217 ../lib/raster3d/close.c:99
+#: ../lib/raster3d/close.c:105 ../lib/raster3d/close.c:191
+#, c-format
+msgid "Unable to write header for 3D raster map <%s>"
+msgstr "No ha sido posible escribir el encabezado para el mapa ráster 3D <%s>"
+
+#: ../lib/raster3d/range.c:73
+#, c-format
+msgid "Unable to open range file for [%s in %s]"
+msgstr "No ha sido posible abrir archivo de rango para [%s en %s]"
+
+#: ../lib/raster3d/range.c:88
+#, c-format
+msgid "Error reading range file for [%s in %s]"
+msgstr "Error al leer archivo de rango para [%s in %s]"
+
+#: ../lib/raster3d/range.c:150
+#, c-format
+msgid "Unable to open range file for <%s>"
+msgstr "No ha sido posible abrir archivo de rango para <%s>"
+
+#: ../lib/raster3d/close.c:47
+#, c-format
+msgid "Unable to write history for 3D raster map <%s>"
+msgstr "No ha sido posible escribir historia para mapa ráster 3D <%s>"
+
+#: ../lib/raster3d/close.c:62
+#, c-format
+msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
+msgstr "No ha sido posible mover el mapa ráster temp <%s> al mapa ráster 3D <%s>"
+
+#: ../lib/raster3d/close.c:79
+msgid "Unable to flush all tiles"
+msgstr "No se pueden vaciar todos los mosaicos."
+
+#: ../lib/raster3d/close.c:84
+msgid "Unable to flush index"
+msgstr "No se puede vaciar el índice."
+
+#: ../lib/raster3d/close.c:94
+msgid "Unable to position file"
+msgstr "No ha sido posible encontrar el archivo de posición."
+
+#: ../lib/raster3d/close.c:110 ../lib/raster3d/close.c:153
+#, c-format
+msgid "Unable to create 3D raster map <%s>"
+msgstr "No ha sido posible crear el mapa ráster 3D <%s>"
+
+#: ../lib/raster3d/close.c:169
+msgid "Error in cache"
+msgstr "Error en caché"
+
+#: ../lib/raster3d/color.c:354
+#, c-format
+msgid "mapset <%s> is not the current mapset"
+msgstr "El directorio del grupo de mapas (Mapset) <%s> no es el directorio del conjunto de mapas actual."
+
+#: ../lib/raster3d/open.c:20
+msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
+msgstr "Rast3d_open_cell_old_no_header: error en Rast3d_mask_open_old"
+
+#: ../lib/raster3d/open.c:26
+msgid "Rast3d_open_cell_old_no_header: error in Rast3d_malloc"
+msgstr "Rast3d_open_cell_old_no_header: error en Rast3d_malloc"
+
+#: ../lib/raster3d/open.c:37
+msgid "Rast3d_open_cell_old_no_header: error in G_open_old"
+msgstr "Rast3d_open_cell_old_no_header: error en G_open_old"
+
+#: ../lib/raster3d/open.c:94
+msgid "Rast3d_open_cell_old: error in Rast3d_open_cell_old_no_header"
+msgstr "Rast3d_open_cell_old: error en Rast3d_open_cell_old_no_header"
+
+#: ../lib/raster3d/open.c:99
+msgid "Rast3d_open_cell_old: can't rewind file"
+msgstr "Rast3d_open_cell_old: No se puede rebobinar el archivo."
+
+#: ../lib/raster3d/open.c:112
+msgid "Rast3d_open_cell_old: error in Rast3d_read_header"
+msgstr "Rast3d_open_cell_old: error en Rast3d_read_header"
+
+#: ../lib/raster3d/open.c:120
+msgid "Rast3d_open_cell_old: projection does not match window projection"
+msgstr "Rast3d_open_cell_old: la proyección no coincide con la proyección de ventana"
+
+#: ../lib/raster3d/open.c:124
+msgid "Rast3d_open_cell_old: zone does not match window zone"
+msgstr "Rast3d_open_cell_old: zona no coincide con zona de ventana"
+
+#: ../lib/raster3d/open.c:136 ../lib/raster3d/open.c:153
+msgid "Rast3d_open_cell_old: can't read header"
+msgstr "Rast3d_open_cell_old: no se puede leer encabezado"
+
+#: ../lib/raster3d/open.c:142
+msgid "Rast3d_open_cell_old: index does not fit into long"
+msgstr "Rast3d_open_cell_old: El índice no cabe en una variable de tipo long."
+
+#: ../lib/raster3d/open.c:146
+msgid "Rast3d_open_cell_old: error in Rast3d_malloc"
+msgstr "Rast3d_open_cell_old: error en Rast3d_malloc"
+
+#: ../lib/raster3d/open.c:173
+msgid "Rast3d_open_cell_old: error in Rast3d_fill_header"
+msgstr "Rast3d_open_cell_old: error en Rast3d_fill_header"
+
+#: ../lib/raster3d/open.c:220
+msgid "Rast3d_open_cell_new: error in Rast3d_mask_open_old"
+msgstr "Rast3d_open_cell_new: error en Rast3d_mask_open_old"
+
+#: ../lib/raster3d/open.c:229
+msgid "Rast3d_open_cell_new: error in Rast3d_malloc"
+msgstr "Rast3d_open_cell_new: error en Rast3d_malloc"
+
+#: ../lib/raster3d/open.c:234
+#, c-format
+msgid "map <%s> is not in the current mapset"
+msgstr "el mapa <%s> no está en el Directorio de mapas actual"
+
+#: ../lib/raster3d/open.c:244
+msgid "Rast3d_open_cell_new: could not open file"
+msgstr "Rast3d_open_cell_new: no se pudo abrir archivo"
+
+#: ../lib/raster3d/open.c:288 ../lib/raster3d/open.c:293
+msgid "Rast3d_open_cell_new: can't write header"
+msgstr "Rast3d_open_cell_new: no se pudo escribir encabezado"
+
+#: ../lib/raster3d/open.c:315
+msgid "Rast3d_open_cell_new: error in Rast3d_fill_header"
+msgstr "Rast3d_open_cell_new: error en Rast3d_fill_header"
+
+#: ../lib/raster3d/history.c:43
+#, c-format
+msgid "can't get history information for [%s] in mapset [%s]"
+msgstr "No se puede obtener la información del historial para [%s] en el directorio del conjuto de mapas (Mapset) [%s]"
+
+#: ../lib/raster3d/test/test_main.c:96
+msgid "raster3d"
+msgstr "ráster3d"
+
+#: ../lib/raster3d/test/test_main.c:97
+msgid "unit test"
+msgstr "Prueba de unidad."
+
+#: ../lib/raster3d/param.c:84
+msgid "Rast3d_get_standard3d_params: precision value invalid"
+msgstr "Rast3d_get_standard3d_params: valor de precisión no válido"
+
+#: ../lib/raster3d/param.c:105
+msgid "Rast3d_get_standard3d_params: tile dimension value invalid"
+msgstr "Rast3d_getStandard3dParams: valor de dimensión de mosaico no válido"
+
+#: ../lib/raster3d/param.c:129
+msgid "Window replacing the default"
+msgstr "La ventana está reemplazando los valores preestablecidos."
+
+#: ../lib/psdriver/graph_set.c:199
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 #, c-format
 msgid "ps: truecolor status %s"
 msgstr ""

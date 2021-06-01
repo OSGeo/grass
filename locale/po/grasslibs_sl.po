@@ -6001,7 +6001,757 @@ msgstr "Nezmožen odpreti datoteko %s v %s"
 msgid "Unable to fetch data from table <%s>"
 msgstr "Nezmožen odpreti datoteko %s v %s"
 
+<<<<<<< HEAD
 #: ../lib/db/dbmi_client/copy_tab.c:393
+=======
+#: ../lib/python/temporal/core.py:1105
+#, fuzzy
+msgid "Unable to execute transaction. "
+msgstr "ne morem izvesti ukaza"
+
+#: ../lib/python/temporal/core.py:1210
+#, python-format
+msgid ""
+"Unable to connect to %(db)s database: %(string)s\n"
+"Exception: \"%(ex)s\"\n"
+"Please use t.connect to set a read- and writable temporal database backend"
+msgstr ""
+
+#: ../lib/python/temporal/core.py:1370
+#, fuzzy, python-format
+msgid ""
+"Unable to execute :\n"
+" %(sql)s"
+msgstr "ne morem izvesti ukaza"
+
+#: ../lib/python/temporal/core.py:1414
+#, fuzzy, python-format
+msgid ""
+"Unable to execute transaction:\n"
+" %(sql)s"
+msgstr "ne morem izvesti ukaza"
+
+#: ../lib/python/temporal/datetime_math.py:260
+#: ../lib/python/temporal/datetime_math.py:277
+#, fuzzy, python-format
+msgid "Wrong increment format: %s"
+msgstr "  format: %s\n"
+
+#: ../lib/python/temporal/datetime_math.py:775
+msgid "Time string seems to specify relative time"
+msgstr ""
+
+#: ../lib/python/temporal/datetime_math.py:787
+#, fuzzy
+msgid "Dates Before Christ (BC) are not supported"
+msgstr "Vect_write_line() za ta format/nivo ni podprt"
+
+#: ../lib/python/temporal/datetime_math.py:791
+#, fuzzy
+msgid "Time zones are not supported"
+msgstr "Vneseni vektor '%s' ni bil najden"
+
+#: ../lib/python/temporal/datetime_math.py:811
+#, fuzzy, python-format
+msgid "Unable to parse time string: %s"
+msgstr "Nezmožen odpreti datoteko %s v %s"
+
+#: ../lib/python/temporal/sampling.py:93 ../lib/python/temporal/sampling.py:98
+#, fuzzy, python-format
+msgid "Dataset <%s> not found in temporal database"
+msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
+
+#: ../lib/python/temporal/stds_import.py:83
+#, fuzzy, python-format
+msgid "Unable to import/link raster map <%s> from file %s."
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/stds_import.py:94
+#, fuzzy, python-format
+msgid "Unable to set the color rules for raster map <%s>."
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/stds_import.py:118
+#, fuzzy, python-format
+msgid "Unable to unpack raster map <%s> from file %s."
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/stds_import.py:142
+#, fuzzy, python-format
+msgid "Unable to import vector map <%s> from file %s."
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/stds_import.py:166
+#, fuzzy, python-format
+msgid "Unable to unpack vector map <%s> from file %s."
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/stds_import.py:205
+#, fuzzy, python-format
+msgid "Space time raster dataset archive <%s> not found"
+msgstr "Vneseni vektor '%s' ni bil najden"
+
+#: ../lib/python/temporal/stds_import.py:208
+#, fuzzy, python-format
+msgid "Extraction directory <%s> not found"
+msgstr "Vneseni vektor '%s' ni bil najden"
+
+#: ../lib/python/temporal/stds_import.py:214
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:221
+#, fuzzy, python-format
+msgid "Unable to find init file <%s>"
+msgstr "Nezmožen odpreti datoteko %s v %s"
+
+#: ../lib/python/temporal/stds_import.py:223
+#, fuzzy, python-format
+msgid "Unable to find list file <%s>"
+msgstr "Nezmožen odpreti datoteko %s v %s"
+
+#: ../lib/python/temporal/stds_import.py:225
+#, fuzzy, python-format
+msgid "Unable to find projection file <%s>"
+msgstr "Nezmožen odpreti datoteko %s v %s"
+
+#: ../lib/python/temporal/stds_import.py:227
+#, fuzzy
+msgid "Extracting data..."
+msgstr "Gradim topologijo ...\n"
+
+#: ../lib/python/temporal/stds_import.py:267
+msgid "Projection information does not match. Proceeding..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:271
+#, python-brace-format
+msgid ""
+"Difference between PROJ_INFO file of imported map and of current location:\n"
+"{diff}"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:274
+msgid "Projection information does not match. Aborting."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:291
+#, fuzzy, python-format
+msgid "Unable to create location %(l)s. Reason: %(e)s"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/stds_import.py:299
+#, fuzzy, python-format
+msgid "Unable to switch to location %s"
+msgstr "ne morem zapisati \"history\" podatkov za [%s]"
+
+#: ../lib/python/temporal/stds_import.py:304
+#, fuzzy, python-format
+msgid "Unable to create default temporal database in new location %s"
+msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
+
+#: ../lib/python/temporal/stds_import.py:378
+#, python-format
+msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:384
+msgid "Number of maps mismatch in init and list file."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:395
+msgid "The archive file is of wrong space time dataset type"
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:403
+#, fuzzy, python-format
+msgid "Unable to find GeoTIFF raster file <%s> in archive."
+msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
+
+#: ../lib/python/temporal/stds_import.py:409
+#, fuzzy, python-format
+msgid "Unable to find AAIGrid raster file <%s> in archive."
+msgstr "Nezmožen odpreti datoteko s tabelo fundamentalne točke: %s"
+
+#: ../lib/python/temporal/stds_import.py:415
+#, fuzzy, python-format
+msgid "Unable to find GML vector file <%s> in archive."
+msgstr "ne morem odpreti rastrskega sloja [%s v %s]"
+
+#: ../lib/python/temporal/stds_import.py:424
+#, fuzzy, python-format
+msgid "Unable to find GRASS package file <%s> in archive."
+msgstr "Nezmožen odpreti %s za pisanje"
+
+#: ../lib/python/temporal/stds_import.py:427
+#, fuzzy
+msgid "Unsupported input format"
+msgstr "Nepoznan \"location\""
+
+#: ../lib/python/temporal/stds_import.py:433
+#, fuzzy, python-format
+msgid ""
+"Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
+"overwrite flag."
+msgstr "Vektor '%s' že obstaja in bo prepisan."
+
+#: ../lib/python/temporal/stds_import.py:454
+#, fuzzy, python-format
+msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
+msgstr "Nezmožen ustvariti vzglavno datoteko za [%s]"
+
+#: ../lib/python/temporal/stds_import.py:466
+#, fuzzy, python-format
+msgid "Key word %s not found in init file."
+msgstr "Hrošč: poskus posodobitve sloja, ki ni v trenutnem mapset."
+
+#: ../lib/python/temporal/stds_import.py:471
+#, fuzzy, python-format
+msgid "Create space time %s dataset."
+msgstr "Vneseni vektor '%s' ni bil najden"
+
+#: ../lib/python/temporal/stds_import.py:500
+msgid "Switching to original location failed"
+msgstr ""
+
+#: ../lib/python/temporal/gui_support.py:56 ../lib/python/script/core.py:1436
+#, python-format
+msgid "Invalid element '%s'"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:735
+#, fuzzy, python-format
+msgid "Error computing map <%s>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/c_libraries_interface.py:733
+#: ../lib/python/temporal/c_libraries_interface.py:750
+#, fuzzy
+msgid "Unable to read range file"
+msgstr "Ne morem odpreti temp datoteke"
+
+#: ../lib/python/temporal/c_libraries_interface.py:828
+#, fuzzy, python-format
+msgid "Unable to load range of 3D raster map <%s>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/c_libraries_interface.py:843
+#: ../lib/raster3d/close.c:120 ../lib/raster3d/close.c:130
+#: ../lib/raster3d/close.c:159 ../lib/ogsf/gvl_file.c:470
+#, fuzzy, c-format, python-format
+msgid "Unable to close 3D raster map <%s>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/space_time_datasets.py:247
+#, fuzzy, python-format
+msgid "Unable to read timestamp file for raster map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:271
+#, fuzzy, python-format
+msgid "Unable to create timestamp file for raster map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:276
+#, fuzzy, python-format
+msgid "Invalid datetime in timestamp for raster map <%s>"
+msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
+
+#: ../lib/python/temporal/space_time_datasets.py:281
+#: ../lib/python/temporal/space_time_datasets.py:688
+msgid "Internal error"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:298
+#: ../lib/python/temporal/space_time_datasets.py:702
+#, fuzzy, python-format
+msgid "Unable to remove timestamp for raster map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:317
+#, fuzzy, python-format
+msgid "Unable to read band reference file for raster map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:337
+#, fuzzy, python-format
+msgid "Unable to write band identifier for raster map <%s>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/temporal/space_time_datasets.py:654
+#, fuzzy, python-format
+msgid "Unable to read timestamp file for 3D raster map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:678
+#, fuzzy, python-format
+msgid "Unable to create timestamp file for 3D raster map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:683
+#, fuzzy, python-format
+msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
+
+#: ../lib/python/temporal/space_time_datasets.py:963
+#, fuzzy, python-format
+msgid "Unable to read timestamp file for vector map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:986
+#, fuzzy, python-format
+msgid "Unable to create timestamp file for vector map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/space_time_datasets.py:991
+#, fuzzy, python-format
+msgid "Invalid datetime in timestamp for vector map <%s>"
+msgstr "Neveljavna timestamp datoteka za %s sloj %s v \"mapset\" %s"
+
+#: ../lib/python/temporal/space_time_datasets.py:1007
+#, fuzzy, python-format
+msgid "Unable to remove timestamp for vector map <%s>"
+msgstr "Nezmožen ustvariti datoteko z vzglavjem za [%s v %s]"
+
+#: ../lib/python/temporal/abstract_dataset.py:386
+#, python-format
+msgid ""
+"Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:126
+#, fuzzy, python-format
+msgid "Aggregating %s raster maps"
+msgstr "Ime vhodnega rastrskega sloja"
+
+#: ../lib/python/temporal/aggregation.py:140
+#, fuzzy, python-format
+msgid ""
+"Raster map <%(name)s> is already in temporal database, use overwrite flag to "
+"overwrite"
+msgstr "Vektor '%s' že obstaja in bo prepisan."
+
+#: ../lib/python/temporal/aggregation.py:145
+#, python-format
+msgid "Computing aggregation of maps between %(st)s - %(end)s"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:170
+#, fuzzy
+msgid "Error occurred in r.series computation"
+msgstr "  format: %s\n"
+
+#: ../lib/python/temporal/aggregation.py:279
+#, fuzzy, python-format
+msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+msgstr "Ime vhodnega rastrskega sloja"
+
+#: ../lib/python/temporal/aggregation.py:300
+#, python-format
+msgid ""
+"Unable to perform aggregation. Output raster map <%(name)s> exists and "
+"overwrite flag was not set"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:318
+#, python-format
+msgid ""
+"The limit of open files (%i) was reached (%i). The module r.series will be "
+"run with flag z, to avoid open files limit exceeding."
+msgstr ""
+
+#: ../lib/python/temporal/list_stds.py:206
+msgid "Empty map list"
+msgstr ""
+
+#: ../lib/python/temporal/list_stds.py:217
+msgid "Empty entry in map list, this should not happen"
+msgstr ""
+
+#: ../lib/python/grassdb/manage.py:21
+msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+msgstr ""
+
+#: ../lib/python/grassdb/manage.py:39
+msgid "Mapset PERMANENT cannot be renamed"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:211
+#, python-brace-format
+msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{location}>"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:214
+#, python-format
+msgid "<%s> is not a GRASS Mapset because it is not a directory"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:218
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:227
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:236
+#, python-brace-format
+msgid ""
+"Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:268
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT Mapset is missing"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:276
+#, python-format
+msgid "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:285
+#, python-format
+msgid ""
+"<%s> is not a valid GRASS Location because PERMANENT Mapset does not have a "
+"DEFAULT_WIND file (default computational region)"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:294
+#, python-brace-format
+msgid "Location <{location_path}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:311
+#, python-brace-format
+msgid ""
+"<{location}> looks like a mapset, not a location. Did you mean just "
+"<{one_dir_up}>?"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:317
+#, python-brace-format
+msgid ""
+"It looks like <{location}> contains locations. Did you mean to specify one "
+"of them?"
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:339 ../lib/python/grassdb/checks.py:372
+msgid ""
+"Name '{}' is not a valid name for location or mapset. Please use only ASCII "
+"characters excluding characters {} and space."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:345
+msgid ""
+"Name '{}' is reserved for direct read access to OGR layers. Please use "
+"another name for your mapset."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:351
+#, python-brace-format
+msgid ""
+"Mapset  <{mapset}> already exists. Please consider using another name for "
+"your mapset."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:378
+#, python-brace-format
+msgid ""
+"Location  <{location}> already exists. Please consider using another name "
+"for your location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:433
+#, python-brace-format
+msgid "Mapset <{mapset}> is required for a valid location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:437
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is the current mapset."
+msgstr "Hrošč: poskus posodobitve sloja, ki ni v trenutnem mapset."
+
+#: ../lib/python/grassdb/checks.py:441
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is in use."
+msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
+
+#: ../lib/python/grassdb/checks.py:445
+#, python-brace-format
+msgid "Mapset <{mapset}> is owned by a different user."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:474
+#, python-brace-format
+msgid "Location <{location}> is the current location."
+msgstr ""
+
+#: ../lib/python/grassdb/checks.py:511
+#, python-brace-format
+msgid "GRASS database <{grassdb}> is the current database."
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:70
+#, python-format
+msgid "Module run %s %s ended with error"
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:71
+#, python-format
+msgid ""
+"\n"
+"Process ended with non-zero return code %s"
+msgstr ""
+
+#: ../lib/python/exceptions/__init__.py:73
+#, fuzzy, python-format
+msgid ""
+". See the following errors:\n"
+"%s"
+msgstr ""
+"\n"
+"IZBIRA: Določite naslednjo izbiro?\n"
+
+#: ../lib/python/exceptions/__init__.py:77
+msgid ". See errors in the (error) output."
+msgstr ""
+
+#: ../lib/python/imaging/operations.py:77
+#: ../lib/python/imaging/operations.py:99
+#: ../lib/python/imaging/operations.py:123
+#: ../lib/python/imaging/operations.py:155
+msgid "Install PIL or Pillow to use this function"
+msgstr ""
+
+#: ../lib/python/imaging/operations.py:157
+msgid ""
+"Install a newer version of PIL or Pillow to use this function (missing "
+"ImageOps module)"
+msgstr ""
+
+#: ../lib/python/script/task.py:60
+#, fuzzy
+msgid "unknown"
+msgstr "ni poznan"
+
+#: ../lib/python/script/task.py:171
+#, python-format
+msgid "Parameter element '%(element)s' not found: '%(value)s'"
+msgstr ""
+
+#: ../lib/python/script/task.py:186
+#, fuzzy, python-format
+msgid "Flag not found: %s"
+msgstr "ne najdem %s"
+
+#: ../lib/python/script/task.py:205
+#, python-format
+msgid "Parameter '%(name)s' (%(desc)s) is missing."
+msgstr ""
+
+#: ../lib/python/script/task.py:238
+#, fuzzy
+msgid "<required>"
+msgstr "zahtevan: %s\n"
+
+#: ../lib/python/script/task.py:500 ../lib/python/script/task.py:504
+#, python-brace-format
+msgid ""
+"Unable to fetch interface description for command '<{cmd}>'.\n"
+"\n"
+"Details: <{det}>"
+msgstr ""
+
+#: ../lib/python/script/task.py:527
+#, python-brace-format
+msgid "Cannot parse interface description of<{name}> module: {error}"
+msgstr ""
+
+#: ../lib/python/script/raster3d.py:93
+#, python-format
+msgid "An error occurred while running r3.mapcalc with expression: %s"
+msgstr ""
+
+#: ../lib/python/script/core.py:56
+#, python-brace-format
+msgid "Cannot find the executable {0}"
+msgstr ""
+
+#: ../lib/python/script/core.py:318
+#, python-format
+msgid ""
+"To run the module <%s> add underscore at the end of the option <%s> to avoid "
+"conflict with Python keywords. Underscore at the beginning is deprecated in "
+"GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr ""
+
+#: ../lib/python/script/core.py:385
+#, python-brace-format
+msgid "Module {module} ({code}) failed with non-zero return code {returncode}"
+msgstr ""
+
+#: ../lib/python/script/core.py:1117
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr ""
+
+#: ../lib/python/script/core.py:1319
+#, python-format
+msgid "Element type should be \"cell\" and not \"%s\""
+msgstr ""
+
+#: ../lib/python/script/core.py:1350 ../lib/python/script/core.py:1419
+#, python-format
+msgid "Element type should be \"raster\" and not \"%s\""
+msgstr ""
+
+#: ../lib/python/script/core.py:1588
+#, fuzzy
+msgid "Unable to list mapsets"
+msgstr "Ne morem odpreti %s"
+
+#: ../lib/python/script/core.py:1624
+#, python-format
+msgid "Location <%s> already exists. Operation canceled."
+msgstr ""
+
+#: ../lib/python/script/core.py:1628
+#, fuzzy, python-format
+msgid "Location <%s> already exists and will be overwritten"
+msgstr "Vektor '%s' že obstaja in bo prepisan."
+
+#: ../lib/python/script/core.py:1758
+#, python-brace-format
+msgid "Debug level {0}"
+msgstr ""
+
+#: ../lib/python/script/core.py:1761
+#, python-brace-format
+msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
+msgstr ""
+
+#: ../lib/python/script/core.py:1781
+#, fuzzy, python-format
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr "Neveljavno ime datoteke. Ne more biti '.' ali 'NULL'\n"
+
+#: ../lib/python/script/core.py:1790
+#, fuzzy, python-format
+msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+msgstr "Neveljavno ime. Znak <%c> je prepovedan."
+
+#: ../lib/python/script/vector.py:83
+#, python-format
+msgid "Database connection not defined for layer %s"
+msgstr ""
+
+#: ../lib/python/script/vector.py:234
+#, fuzzy, python-format
+msgid "Missing layer %(layer)d in vector map <%(map)s>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/script/vector.py:250
+msgid "vector_db_select() failed"
+msgstr ""
+
+#: ../lib/python/script/vector.py:362
+#, python-brace-format
+msgid "Number of given vector maps ({m}) differs from number of layers ({l})"
+msgstr ""
+
+#: ../lib/python/script/vector.py:421
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
+msgstr ""
+
+#: ../lib/python/script/raster.py:60
+#, fuzzy, python-format
+msgid ""
+"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
+"current mapset."
+msgstr "Ne morem izbrisati linije, sloj '%s' ni odprt v zapisovalnem načinu"
+
+#: ../lib/python/script/raster.py:120
+#, python-format
+msgid "An error occurred while running r.mapcalc with expression: %s"
+msgstr ""
+
+#: ../lib/python/script/raster.py:199
+#, fuzzy
+msgid "No data"
+msgstr "Ime vhodnega vektorskega sloja"
+
+#: ../lib/python/script/raster.py:207
+msgid "value"
+msgstr ""
+
+#: ../lib/python/script/raster.py:207
+msgid "label"
+msgstr ""
+
+#: ../lib/python/script/raster.py:207
+msgid "color"
+msgstr ""
+
+#: ../lib/python/script/db.py:162
+#, python-format
+msgid ""
+"Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+msgstr ""
+
+#: ../lib/python/script/db.py:172
+#, fuzzy
+msgid "Fetching data failed"
+msgstr "Nezmožen odpreti datoteko %s v %s"
+
+#: ../lib/python/script/array.py:158 ../lib/python/script/array.py:210
+#: ../lib/python/script/array.py:257 ../lib/python/script/array.py:311
+#: ../lib/python/script/array.py:364 ../lib/python/script/array.py:406
+#, fuzzy, python-format
+msgid "Invalid kind <%s>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/script/array.py:161 ../lib/python/script/array.py:213
+#: ../lib/python/script/array.py:314 ../lib/python/script/array.py:367
+#, fuzzy, python-format
+msgid "Invalid size <%d>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/script/array.py:200
+msgid ""
+"grass.script.array.read is deprecated and does not work on MS Windows, pass "
+"raster name in the constructor"
+msgstr ""
+
+#: ../lib/python/script/array.py:250 ../lib/python/script/array.py:400
+#, fuzzy, python-format
+msgid "Invalid FP size <%d>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/script/array.py:254 ../lib/python/script/array.py:403
+#, fuzzy, python-format
+msgid "Invalid integer size <%d>"
+msgstr "ne morem spremeniti direktorija v %s"
+
+#: ../lib/python/script/array.py:354
+msgid ""
+"grass.script.array3d.read is deprecated and does not work on MS Windows, "
+"pass 3D raster name in the constructor"
+msgstr ""
+
+#: ../lib/python/script/setup.py:229
+#, fuzzy
+msgid "Cleaning up default sqlite database ..."
+msgstr "Ne morem odpreti temp datoteke"
+
+#: ../lib/raster3d/maskfn.c:77
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 #, c-format
 msgid "Unknown column type (column <%s>)"
 msgstr ""
