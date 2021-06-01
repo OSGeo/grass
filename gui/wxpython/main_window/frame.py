@@ -1730,7 +1730,7 @@ class GFrame(wx.Frame):
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
         )
         mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
+            lambda firstTime, mapDisplayPage=self.currentPage: self._onStarting3dMode(
                 mapDisplayPage
             )
         )
@@ -1743,8 +1743,8 @@ class GFrame(wx.Frame):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             idx = 4 + self.displayIndex * 4
             try:
-                x, y = map(int, dim.split(",")[idx : idx + 2])
-                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                x, y = map(int, dim.split(",")[idx: idx + 2])
+                w, h = map(int, dim.split(",")[idx + 2: idx + 4])
                 self.GetMapDisplay().SetPosition((x, y))
                 self.GetMapDisplay().SetSize((w, h))
             except Exception:
@@ -1785,7 +1785,7 @@ class GFrame(wx.Frame):
             self.notebookLayers.SetSelection(pgnum)
             self.currentPage = self.notebookLayers.GetCurrentPage()
 
-    def _onMapDisplayStarting3dMode(self, mapDisplayPage):
+    def _onStarting3dMode(self, mapDisplayPage):
         """Disables 3D mode for all map displays except for @p mapDisplay"""
         # TODO: it should be disabled also for newly created map windows
         # moreover mapdisp.Disable3dMode() does not work properly
