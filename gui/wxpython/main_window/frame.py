@@ -230,7 +230,7 @@ class GFrame(wx.Frame):
                 w, h = map(int, dim.split(",")[2:4])
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
-            except:
+            except Exception:
                 pass
         else:
             # does center (of screen) make sense for lmgr?
@@ -674,7 +674,7 @@ class GFrame(wx.Frame):
         try:
             self.GetMapDisplay().SetFocus()
             self.GetMapDisplay().Raise()
-        except:
+        except Exception:
             pass
 
         event.Skip()
@@ -899,7 +899,7 @@ class GFrame(wx.Frame):
 
         try:
             cmdlist = cmd.split(" ")
-        except:  # already list?
+        except Exception:  # already list?
             cmdlist = cmd
 
         # check list of dummy commands for GUI modules that do not have GRASS
@@ -911,7 +911,7 @@ class GFrame(wx.Frame):
             layer = self.GetLayerTree().layer_selected
             name = self.GetLayerTree().GetLayerInfo(layer, key="maplayer").name
             type = self.GetLayerTree().GetLayerInfo(layer, key="type")
-        except:
+        except Exception:
             layer = None
 
         if layer and len(cmdlist) == 1:  # only if no parameters given
@@ -959,7 +959,7 @@ class GFrame(wx.Frame):
         # available only for vector map layers
         try:
             mapLayer = tree.GetLayerInfo(layer, key="maplayer")
-        except:
+        except Exception:
             mapLayer = None
 
         if not mapLayer or mapLayer.GetType() != "vector":
@@ -1642,7 +1642,7 @@ class GFrame(wx.Frame):
         # available only for vector map layers
         try:
             maptype = tree.GetLayerInfo(layer, key="maplayer").type
-        except:
+        except Exception:
             maptype = None
 
         if not maptype or maptype != "vector":
@@ -1703,12 +1703,12 @@ class GFrame(wx.Frame):
             id=wx.ID_ANY,
             pos=wx.DefaultPosition,
             size=wx.DefaultSize,
-            style=wx.TR_HAS_BUTTONS
-            | wx.TR_LINES_AT_ROOT
-            | wx.TR_HIDE_ROOT
-            | wx.TR_DEFAULT_STYLE
-            | wx.NO_BORDER
-            | wx.FULL_REPAINT_ON_RESIZE,
+            style=wx.TR_HAS_BUTTONS |
+            wx.TR_LINES_AT_ROOT |
+            wx.TR_HIDE_ROOT |
+            wx.TR_DEFAULT_STYLE |
+            wx.NO_BORDER |
+            wx.FULL_REPAINT_ON_RESIZE,
             idx=self.displayIndex,
             lmgr=self,
             notebook=self.notebookLayers,
@@ -1743,11 +1743,11 @@ class GFrame(wx.Frame):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             idx = 4 + self.displayIndex * 4
             try:
-                x, y = map(int, dim.split(",")[idx : idx + 2])
-                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                x, y = map(int, dim.split(",")[idx: idx + 2])
+                w, h = map(int, dim.split(",")[idx + 2: idx + 4])
                 self.GetMapDisplay().SetPosition((x, y))
                 self.GetMapDisplay().SetSize((w, h))
-            except:
+            except Exception:
                 pass
 
         # set default properties
@@ -1833,7 +1833,7 @@ class GFrame(wx.Frame):
                 )
                 return
 
-            newItem = maptree.AddLayer(
+            maptree.AddLayer(
                 ltype=ltype,
                 lname=layerName,
                 lchecked=check,
@@ -2155,7 +2155,7 @@ class GFrame(wx.Frame):
                     self.notebook.SetSelectionByName("layers")
 
         try:
-            ckc = chr(kc)
+            kc = chr(kc)
         except ValueError:
             event.Skip()
             return
