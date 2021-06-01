@@ -440,7 +440,7 @@ def get_grass_config_dir():
     (the one which caries mapset settings from session to session).
     """
     if sys.platform == "win32":
-        grass_config_dirname = "GRASS7"
+        grass_config_dirname = "GRASS8"
         win_conf_path = os.getenv("APPDATA")
         # this can happen with some strange settings
         if not win_conf_path:
@@ -459,7 +459,7 @@ def get_grass_config_dir():
             )
         directory = os.path.join(win_conf_path, grass_config_dirname)
     else:
-        grass_config_dirname = ".grass7"
+        grass_config_dirname = ".grass8"
         directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
     if not os.path.isdir(directory):
         try:
@@ -491,7 +491,7 @@ def create_tmp(user, gis_lock):
 
     if tmp:
         tmpdir = os.path.join(
-            tmp, "grass7-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
+            tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
         )
         try:
             os.mkdir(tmpdir, 0o700)
@@ -502,7 +502,7 @@ def create_tmp(user, gis_lock):
         for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
             tmp = ttmp
             tmpdir = os.path.join(
-                tmp, "grass7-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
+                tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
             )
             try:
                 os.mkdir(tmpdir, 0o700)
@@ -514,7 +514,7 @@ def create_tmp(user, gis_lock):
     if not tmp:
         fatal(
             _(
-                "Unable to create temporary directory <grass7-%(user)s-"
+                "Unable to create temporary directory <grass8-%(user)s-"
                 "%(lock)s>! Exiting."
             )
             % {"user": user, "lock": gis_lock}
