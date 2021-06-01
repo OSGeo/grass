@@ -8473,7 +8473,7 @@ msgstr "실행 파일 {0}를 찾을 수 없습니다"
 
 #: ../lib/python/script/core.py:318
 #, python-format
-msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr "모듈 <%s>를 실행하기 위해서는 옵션 <%s>의 끝에 언더스코어를 추가해서 파이썬 키위드와의 충돌을 방지해야 합니다. 앞부분의 언더스코어는 GRASS GIS 7.0에서는 추천하지 않으며 버전 7.1부터는 지원하지 않을 것입니다."
 
 #: ../lib/python/script/core.py:385
