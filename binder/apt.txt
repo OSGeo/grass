@@ -28,8 +28,8 @@ libzstd-dev
 make
 netcdf-bin
 proj-bin
+pil
 python
-python-dev
 sqlite3
 unixodbc-dev
 zlib1g-dev
