@@ -1,11 +1,11 @@
 """
-@package lmgr::single_window
+@package main_window:frame
 
 @brief Single Window layout - main menu, main toolbars, dockable
 panes for display management and access to command console.
 
 Classes:
- - frame::SingleWindowFrame
+ - frame::GMFrame
 
 (C) 2006-2021 by the GRASS Development Team
 
