@@ -14,7 +14,9 @@
 #               Public License (>=v2). Read the file COPYING that
 #               comes with GRASS for details.
 #
-# TODO:         - add sudo support where needed (i.e. check first permission to write into
+# TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
+#                 https://github.com/OSGeo/grass-addons/issues/528
+#               - add sudo support where needed (i.e. check first permission to write into
 #                 $GISBASE directory)
 #               - fix toolbox support in install_private_extension_xml()
 #############################################################################
@@ -1609,7 +1611,8 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
-    source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass8/"
+    # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
+    source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass7/"
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -2228,6 +2231,7 @@ def resolve_known_host_service(url, name, branch):
 
 
 # TODO: add also option to enforce the source type
+# TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
 def resolve_source_code(url=None, name=None, branch=None, fork=False):
     """Return type and URL or path of the source code
 
@@ -2248,8 +2252,8 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
     Subversion:
 
-    >>> resolve_source_code('https://svn.osgeo.org/grass/grass-addons/grass8')
-    ('svn', 'https://svn.osgeo.org/grass/grass-addons/grass8')
+    >>> resolve_source_code('https://svn.osgeo.org/grass/grass-addons/grass7')
+    ('svn', 'https://svn.osgeo.org/grass/grass-addons/grass7')
 
     ZIP files online:
 
@@ -2501,6 +2505,10 @@ if __name__ == "__main__":
 
     grass_version = grass.version()
     version = grass_version["version"].split(".")
+    # TODO: update temporary workaround of using grass7 subdir of addon-repo, see
+    #       https://github.com/OSGeo/grass-addons/issues/528
+    version[0] = 7
+    version[1] = 9
     build_platform = grass_version["build_platform"].split("-", 1)[0]
 
     sys.exit(main())
