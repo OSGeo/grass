@@ -44,7 +44,6 @@ per-file-ignores =
     iscatt/*: F841, E722, E741, F405, F403, E501
     lmgr/giface.py: E501, E741
     lmgr/frame.py: F841, E722, W605, E501
-    main_window/frame.py: F841, E722, W605, E501
     # layertree still includes some formatting issues (it is ignored by Black)
     lmgr/layertree.py: E722, E266, W504, E225, E501
     lmgr/workspace.py: F841
