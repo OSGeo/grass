@@ -2508,7 +2508,7 @@ if __name__ == "__main__":
     # TODO: update temporary workaround of using grass7 subdir of addon-repo, see
     #       https://github.com/OSGeo/grass-addons/issues/528
     version[0] = 7
-    # version[1] = 9
+    version[1] = 9
     build_platform = grass_version["build_platform"].split("-", 1)[0]
 
     sys.exit(main())
