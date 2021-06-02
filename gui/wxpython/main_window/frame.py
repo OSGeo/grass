@@ -1,5 +1,5 @@
 """
-@package main_window:frame
+@package main_window::frame
 
 @brief Single Window layout - main menu, main toolbars, dockable
 panes for display management and access to command console.
@@ -77,7 +77,7 @@ from startup.guiutils import (
 from grass.grassdb.checks import is_first_time_user
 
 
-class GFrame(wx.Frame):
+class GMFrame(wx.Frame):
     """Single Window Layout which will be parallelly developed next to the
     current Multi Window layout solution."""
 
