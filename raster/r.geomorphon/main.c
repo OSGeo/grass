@@ -44,6 +44,16 @@ typedef enum {
     o_size
 } outputs;
 
+<<<<<<< HEAD
+=======
+typedef struct
+{
+    char name[100];
+    int fd;
+    CELL *forms_buffer;
+} MULTI;
+
+>>>>>>> 298e3c87b5 (Dockerfile_alpine: fix broken link creatio)
 int main(int argc, char **argv)
 {
     struct { /* struct is used both for interface and output */
