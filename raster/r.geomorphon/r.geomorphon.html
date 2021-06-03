@@ -149,7 +149,7 @@ r.geomorphon elevation=eu_dem_25m forms=eu_dem_25m_geomorph
 # verify terrestrial landforms found in DEM
 r.category eu_dem_25m_geomorph
  1  flat
- 2  summit
+ 2  peak
  3  ridge
  4  shoulder
  5  spur
@@ -157,7 +157,7 @@ r.category eu_dem_25m_geomorph
  7  hollow
  8  footslope
  9  valley
- 10 depression
+ 10 pit
 </pre></div>
 
 <center>
@@ -165,20 +165,20 @@ r.category eu_dem_25m_geomorph
 </center>
 
 
-<h3>Extraction of summits</h3>
+<h3>Extraction of peaks</h3>
 
 Using the resulting terrestrial landforms map, single landforms can
-be extracted, e.g. the summits, and converted into a vector point map:
+be extracted, e.g. the peaks, and converted into a vector point map:
 
 <div class="code"><pre>
-r.mapcalc expression="eu_dem_25m_summits = if(eu_dem_25m_geomorph == 2, 1, null())"
-r.thin input=eu_dem_25m_summits output=eu_dem_25m_summits_thinned
-r.to.vect input=eu_dem_25m_summits_thinned output=eu_dem_25m_summits type=point
-v.info input=eu_dem_25m_summits
+r.mapcalc expression="eu_dem_25m_peaks = if(eu_dem_25m_geomorph == 2, 1, null())"
+r.thin input=eu_dem_25m_peaks output=eu_dem_25m_peaks_thinned
+r.to.vect input=eu_dem_25m_peaks_thinned output=eu_dem_25m_peaks type=point
+v.info input=eu_dem_25m_peaks
 </pre></div>
 
 <center>
-<img src="r_geomorphon_summits.png" border="0" alt="Extraction of summits from EU DEM 25m (with search=11)"><br>
+<img src="r_geomorphon_peaks.png" border="0" alt="Extraction of peaks from EU DEM 25m (with search=11)"><br>
 </center>
 
 <h2>SEE ALSO</h2>
