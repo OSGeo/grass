@@ -170,18 +170,14 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
-# enable simple grass command regardless of version number
-# also important for COPY cmd later
-RUN ln -s `find /usr/local/bin -name "grass*"` /usr/local/bin/grass
-
 # Reduce the image size - Remove unnecessary grass files
-RUN cp /usr/local/grass79/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass79/demolocation; \
-    rm -rf /usr/local/grass79/fonts; \
-    rm -rf /usr/local/grass79/gui; \
-    rm -rf /usr/local/grass79/share; \
-    mkdir -p /usr/local/grass79/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass79/gui/wxpython/xml/module_items.xml;
+RUN cp /usr/local/grass80/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass80/demolocation; \
+    rm -rf /usr/local/grass80/fonts; \
+    rm -rf /usr/local/grass80/gui; \
+    rm -rf /usr/local/grass80/share; \
+    mkdir -p /usr/local/grass80/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass80/gui/wxpython/xml/module_items.xml;
 
 
 FROM common as grass
@@ -195,10 +191,9 @@ COPY --from=build /usr/local/grass* /usr/local/grass/
 RUN apk add curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py pip==20.0.2 && rm get-pip.py
 
 # install external Python API
-RUN pip3 install --upgrade grass-session
+RUN pip3 install --upgrade pip six grass-session --ignore-installed six
 
-RUN ln -s /usr/local/grass /usr/local/grass7
-RUN ln -s /usr/local/grass `grass --config path`
+RUN ln -sf `grass --config path` /usr/local/grass
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
     pdal --version && \
     python3 --version

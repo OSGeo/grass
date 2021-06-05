@@ -45,7 +45,7 @@ GRASS distribution contains these XML files:
 * ``etc/gui/wxpython/xml/menudata.xml`` (generated during compilation)
 
 
-GRASS directory (``.grass7``) in user home directory
+GRASS directory (``.grass8``) in user home directory
 (i.e., ``$HOME`` on Unix) contains these XML files:
 
 * ``toolboxes/main_menu.xml`` (created by user)
@@ -109,7 +109,7 @@ Generation of files and menu
 
 As noted in the section \ref toolboxesFilesOverview, there are files in the
 GRASS distribution and in the user home directory (particularly in
-``.grass7/tooboxes`` subdirectory).
+``.grass8/toolboxes`` subdirectory).
 
 When user doesn't have any ``toolboxes.xml`` or ``main_menu.xml`` files in the
 home directory, file ``menudata.xml`` included in the distribution is used to
@@ -299,7 +299,7 @@ To create a submenu in your new menu (toolbox), you need to create a new toolbox
 and include this toolbox.
 
 To create your custom main menu create a file main_menu.xml in your user home
-directory, in ``.grass7/toolboxes`` subdirectory. Directory ``.grass7`` may be
+directory, in ``.grass8/toolboxes`` subdirectory. Directory ``.grass8`` may be
 hidden directory on your system. The XML file should contain the definition of
 only one toolbox. The name attribute and label element are not used but should
 be filled for documentation purposes and future compatibility.
@@ -314,8 +314,8 @@ too and find the proper ``name`` attributes.
 Example
 ^^^^^^^
 
-Files should be placed in user home directory in ``.grass7/toolboxes``
-subdirectory, e.g. ``/home/john/.grass7/toolboxes``.
+Files should be placed in user home directory in ``.grass8/toolboxes``
+subdirectory, e.g. ``/home/john/.grass8/toolboxes``.
 
 toolboxes.xml
 """""""""""""

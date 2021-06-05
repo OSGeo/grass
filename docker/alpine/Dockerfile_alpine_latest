@@ -160,10 +160,6 @@ RUN echo "  => Configure and compile grass";\
     make install && \
     ldconfig /etc/ld.so.conf.d; \
     #
-    # enable simple grass command regardless of version number
-    #
-    ln -s `find /usr/local/bin -name "grass*"` /usr/local/bin/grass; \
-    #
     # Reduce the image size
     #
     rm -rf /src/*; \
@@ -172,10 +168,10 @@ RUN echo "  => Configure and compile grass";\
     rm -rf /var/cache/apk/*; \
     rm -rf /root/.cache; \
     # Remove unnecessary grass files
-    rm -rf /usr/local/grass79/demolocation; \
-    rm -rf /usr/local/grass79/fonts; \
-    rm -rf /usr/local/grass79/gui; \
-    rm -rf /usr/local/grass79/share;
+    rm -rf /usr/local/grass80/demolocation; \
+    rm -rf /usr/local/grass80/fonts; \
+    rm -rf /usr/local/grass80/gui; \
+    rm -rf /usr/local/grass80/share;
 
 
 # Unset environmental variables to avoid later compilation issues

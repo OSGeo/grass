@@ -127,11 +127,11 @@ overview_tmpl = string.Template(
        </ul>
         <h3>&nbsp;Addons</h3>
         <ul>
-        <li class="box"><a href="https://grass.osgeo.org/grass7/manuals/addons/">Addons manual pages</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass8/manuals/addons/">Addons manual pages</a></li>
        </ul>
         <h3>&nbsp;Programmer's Manual</h3>
         <ul>
-        <li class="box"><a href="https://grass.osgeo.org/programming7/">Programmer's Manual</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/programming8/">Programmer's Manual</a></li>
        </ul>
       </td>
     </tr>

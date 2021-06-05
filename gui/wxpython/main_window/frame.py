@@ -1,13 +1,13 @@
 """
-@package lmgr::frame
+@package main_window::frame
 
-@brief Layer Manager - main menu, layer management toolbar, notebook
-control for display management and access to command console.
+@brief Single Window layout - main menu, main toolbars, dockable
+panes for display management and access to command console.
 
 Classes:
  - frame::GMFrame
 
-(C) 2006-2015 by the GRASS Development Team
+(C) 2006-2021 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -78,10 +78,8 @@ from grass.grassdb.checks import is_first_time_user
 
 
 class GMFrame(wx.Frame):
-    """Layer Manager frame with notebook widget for controlling GRASS
-    GIS. Includes command console page for typing GRASS (and other)
-    commands, tree widget page for managing map layers.
-    """
+    """Single Window Layout which will be parallelly developed next to the
+    current Multi Window layout solution."""
 
     def __init__(
         self,
@@ -232,7 +230,7 @@ class GMFrame(wx.Frame):
                 w, h = map(int, dim.split(",")[2:4])
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
-            except:
+            except Exception:
                 pass
         else:
             # does center (of screen) make sense for lmgr?
@@ -391,7 +389,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
-            ignoredCmdPattern="^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
+            ignoredCmdPattern=r"^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
             "^r.external$|^r.external.out$|"
             "^v.import$|^v.external$|^v.external.out$|"
             "^cd$|^cd .*",
@@ -676,7 +674,7 @@ class GMFrame(wx.Frame):
         try:
             self.GetMapDisplay().SetFocus()
             self.GetMapDisplay().Raise()
-        except:
+        except Exception:
             pass
 
         event.Skip()
@@ -734,9 +732,9 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
-        if re.compile("^d\..*").search(command[0]):
+        if re.compile(r"^d\..*").search(command[0]):
             self.RunDisplayCmd(command)
-        elif re.compile("r[3]?\.mapcalc").search(command[0]):
+        elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
             self.OnEditImageryGroups(event=None, cmd=command)
@@ -901,7 +899,7 @@ class GMFrame(wx.Frame):
 
         try:
             cmdlist = cmd.split(" ")
-        except:  # already list?
+        except Exception:  # already list?
             cmdlist = cmd
 
         # check list of dummy commands for GUI modules that do not have GRASS
@@ -913,7 +911,7 @@ class GMFrame(wx.Frame):
             layer = self.GetLayerTree().layer_selected
             name = self.GetLayerTree().GetLayerInfo(layer, key="maplayer").name
             type = self.GetLayerTree().GetLayerInfo(layer, key="type")
-        except:
+        except Exception:
             layer = None
 
         if layer and len(cmdlist) == 1:  # only if no parameters given
@@ -961,7 +959,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             mapLayer = tree.GetLayerInfo(layer, key="maplayer")
-        except:
+        except Exception:
             mapLayer = None
 
         if not mapLayer or mapLayer.GetType() != "vector":
@@ -1644,7 +1642,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             maptype = tree.GetLayerInfo(layer, key="maplayer").type
-        except:
+        except Exception:
             maptype = None
 
         if not maptype or maptype != "vector":
@@ -1732,7 +1730,7 @@ class GMFrame(wx.Frame):
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
         )
         mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
+            lambda firstTime, mapDisplayPage=self.currentPage: self._onStarting3dMode(
                 mapDisplayPage
             )
         )
@@ -1749,7 +1747,7 @@ class GMFrame(wx.Frame):
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
                 self.GetMapDisplay().SetPosition((x, y))
                 self.GetMapDisplay().SetSize((w, h))
-            except:
+            except Exception:
                 pass
 
         # set default properties
@@ -1787,7 +1785,7 @@ class GMFrame(wx.Frame):
             self.notebookLayers.SetSelection(pgnum)
             self.currentPage = self.notebookLayers.GetCurrentPage()
 
-    def _onMapDisplayStarting3dMode(self, mapDisplayPage):
+    def _onStarting3dMode(self, mapDisplayPage):
         """Disables 3D mode for all map displays except for @p mapDisplay"""
         # TODO: it should be disabled also for newly created map windows
         # moreover mapdisp.Disable3dMode() does not work properly
@@ -1835,7 +1833,7 @@ class GMFrame(wx.Frame):
                 )
                 return
 
-            newItem = maptree.AddLayer(
+            maptree.AddLayer(
                 ltype=ltype,
                 lname=layerName,
                 lchecked=check,
@@ -2022,7 +2020,8 @@ class GMFrame(wx.Frame):
 
         # region = tree.GetMap().GetCurrentRegion()
         # if region['cells'] > 10000:
-        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
+        #   GMessage(message = "Cell values can only be displayed
+        #   for regions of < 10,000 cells.", parent = self)
         self.GetLayerTree().AddLayer("rastnum")
 
     def OnAddCommand(self, event):
@@ -2157,7 +2156,7 @@ class GMFrame(wx.Frame):
                     self.notebook.SetSelectionByName("layers")
 
         try:
-            ckc = chr(kc)
+            kc = chr(kc)
         except ValueError:
             event.Skip()
             return
