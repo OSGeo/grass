@@ -1288,7 +1288,8 @@ def install_extension_win(name):
             "platform": platform,
             "major": version[0],
             "minor": version[1],
-            "patch": version[2],
+            # "patch": version[2],
+            "patch": "dev",
         }
     )
 
