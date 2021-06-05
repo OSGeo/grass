@@ -160,8 +160,7 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
                          (unsigned)j);
                 prof_dbl(step_name, height);
             }
-            j += cell_step;
-            /*             j++; *//* go to next cell */
+            j++; /* go to the next cell */
             target_northing =
                 Rast_row_to_northing(row + j * nextr[i] + 0.5, &window);
             target_easting =
@@ -254,7 +253,7 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
                 pattern->distance[i] = search_distance;
                 if (oneoff) {
                     /*
-                     * When cell_step == 1, which is always the case in the
+                     * Because the cell step is always 1, in the
                      * one-off mode, which is the only use case for e[] and
                      * n[], after the while() loop the distance to
                      * (target_easting,target_northing) is cur_distance and

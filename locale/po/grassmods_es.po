@@ -56510,23 +56510,6 @@ msgstr ""
 msgid "Comparison mode for zenith/nadir line-of-sight search"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:221
-msgid "Prefix for maps resulting from multiresolution approach"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:222 ../raster/r.geomorphon/main.c:230
-#: ../raster/r.geomorphon/main.c:238
-msgid "Multires"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:229
-msgid "Distance step for every iteration (zero to omit)"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:237
-msgid "Distance where search will start in multiple mode (zero to omit)"
-msgstr ""
-
 #: ../raster/r.geomorphon/main.c:243
 msgid "Use meters to define search units (default is cells)"
 msgstr ""
@@ -56590,15 +56573,6 @@ msgstr ""
 
 #: ../raster/r.geomorphon/main.c:381
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:399
-msgid "For multiresolution mode step must be greater than or equal to resolution of one cell"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:403
-#, c-format
-msgid "<%s> is an incorrect prefix"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:431
