@@ -11,11 +11,14 @@
    \author Maris Nartiss
  */
 
+#include <unistd.h>
 #include <string.h>
 
 #include <grass/gis.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+
+static int list_by_type(int, const char *, int, char ***);
 
 /*!
  * \brief Remove a signature file
@@ -179,7 +182,73 @@ int I_signatures_rename(int type, const char *old_name, const char *new_name)
     return 0;
 }
 
-int I_signatures_list_by_type(int type, const char *mapset, char **list)
+/*!
+ * \brief Get list of existing signatures by type
+ *
+ * Fills passed list with fully qualified names of existing signatures.
+ *
+ * If no mapset is passed, all mapsets in the search path are used.
+ * If no signatures are found, returns 0 and list is set to NULL.
+ *
+ * The function will assign memory for the list. It is up to callee to
+ * free the memory of each list item and the list itself.
+ *
+ * \param type SIGFILE_TYPE_ signature type
+ * \param mapset optional mapset to search in or NULL
+ * \param pointer to array of found signature strings or NULL if none found
+ * \return count of signature strings in the array
+ */
+int I_signatures_list_by_type(int type, const char *mapset, char ***out_list)
 {
-    return 0;
+    int base = 0;
+
+    *out_list = NULL;
+    if (mapset == NULL) {
+        for (int n = 0; (mapset = G_get_mapset_name(n)); n++) {
+            base += list_by_type(type, mapset, base, out_list);
+        }
+    }
+    else {
+        base += list_by_type(type, mapset, base, out_list);
+    }
+
+    return base;
+}
+
+static int list_by_type(int type, const char *mapset, int base,
+                        char ***out_list)
+{
+    int count = 0;
+    char path[GPATH_MAX];
+    char element[GNAME_MAX];
+    char **dirlist;
+
+    if (type == SIGFILE_TYPE_SIG)
+        sprintf(element, "signatures%csig", HOST_DIRSEP);
+    else if (type == SIGFILE_TYPE_SIGSET)
+        sprintf(element, "signatures%csigset", HOST_DIRSEP);
+
+    G_file_name(path, element, "", mapset);
+
+    if (access(path, 0) != 0) {
+        return count;
+    }
+
+    dirlist = G_ls2(path, &count);
+    if (count == 0)
+        return count;
+
+    /* Make items fully qualified names */
+    int mapset_len = strlen(mapset);
+
+    *out_list =
+        (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
+    for (int i = 0; i < count; i++) {
+        (*out_list)[base + i] =
+            (char *)G_malloc((strlen(dirlist[i]) + 1 + mapset_len + 1) *
+                             sizeof(char));
+        sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
+    }
+
+    return count;
 }

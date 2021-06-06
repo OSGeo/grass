@@ -150,7 +150,7 @@ int I_rasterize(double *, int, unsigned char, struct Cell_head *, unsigned char 
 int I_signatures_remove(int, const char *);
 int I_signatures_copy(int, const char *, const char *, const char *);
 int I_signatures_rename(int, const char *, const char *);
-int I_signatures_list_by_type(int, const char *, char **);
+int I_signatures_list_by_type(int, const char *, char ***);
 
 /* sig.c */
 int I_init_signatures(struct Signature *, int);
