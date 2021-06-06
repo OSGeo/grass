@@ -12,6 +12,8 @@ for details.
 import os
 import sys
 import argparse
+import configparser
+from pathlib import Path
 
 from unittest.main import TestProgram
 
@@ -126,8 +128,20 @@ def discovery():
     sys.exit(not program.result.wasSuccessful())
 
 
-# TODO: makefile rule should depend on the whole build
-# TODO: create a full interface (using grass parser or argparse)
+CONFIG_FILENAME = ".gunittest.cfg"
+
+
+def get_config(start_directory):
+    """Read configuration if available, return empty dict if not"""
+    config_parser = configparser.ConfigParser()
+    config_file = Path(start_directory) / CONFIG_FILENAME
+    if config_file.is_file():
+        config_parser.read(config_file)
+    if "gunittest" in config_parser:
+        return config_parser["gunittest"]
+    return {}
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run test files in all testsuite directories starting"
@@ -166,7 +180,7 @@ def main():
         "--min-success",
         dest="min_success",
         action="store",
-        default="90",
+        default="100",
         type=int,
         help=(
             "Minimum success percentage (lower percentage"
@@ -204,6 +218,9 @@ def main():
 
     start_dir = "."
     abs_start_dir = os.path.abspath(start_dir)
+
+    config = get_config(start_dir)
+
     invoker = GrassTestFilesInvoker(
         start_dir=start_dir,
         file_anonymizer=FileAnonymizer(paths_to_remove=[abs_start_dir]),
@@ -217,7 +234,10 @@ def main():
         location=location,
         location_type=location_type,
         results_dir=results_dir,
+        exclude=config.get("exclude", "").split(),
     )
+    if not reporter.test_files:
+        return "No tests found or executed"
     if reporter.file_pass_per >= args.min_success:
         return 0
     return 1
