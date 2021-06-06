@@ -11,4 +11,4 @@ grass --tmp-location XY --exec \
 grass --tmp-location XY --exec \
     python3 -m grass.gunittest.main \
     --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
-    --min-success 80
+    --min-success 100
