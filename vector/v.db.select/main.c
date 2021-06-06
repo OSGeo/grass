@@ -207,7 +207,9 @@ int main(int argc, char **argv)
         fatal_error_option_value_excludes_flag(options.format, flags.colnames,
                                                _("Column names are always included"));
         fatal_error_option_value_excludes_option(options.format, options.fsep,
-                                                 _("Separator is based on the format"));
+                                                 _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(options.format, options.nullval,
+                                                 _("Null value is part of the format"));
     }
     if (format != VERTICAL) {
         fatal_error_option_value_excludes_option(options.format, options.vsep,
