@@ -213,7 +213,7 @@ class AnimationWindow(BufferedWindow):
         self.UpdateDrawing()
 
     def ClearOverlay(self):
-        """Clear overlay (legend) """
+        """Clear overlay (legend)"""
         Debug.msg(3, "AnimationWindow.ClearOverlay()")
         self._overlay = None
         self.bitmap_overlay = None

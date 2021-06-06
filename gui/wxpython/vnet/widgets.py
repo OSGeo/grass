@@ -330,7 +330,7 @@ class PointsList(
             self.selectedkey = -1
 
     def ClearItem(self, event):
-        """"Set all values to default in selected item of points list and uncheck it."""
+        """Set all values to default in selected item of points list and uncheck it."""
         if self.selected == wx.NOT_FOUND:
             return
         index = self.selected

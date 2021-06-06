@@ -191,7 +191,7 @@ class BitArray:
             self._checkSize()
 
     def Reverse(self):
-        """ In-place reverse. """
+        """In-place reverse."""
         tmp = self.data[: self._len].copy()
         self.data[: self._len] = np.flipud(tmp)
 
@@ -397,11 +397,11 @@ class Tag:
         self.tagtype = -1
 
     def ProcessTag(self):
-        """ Implement this to create the tag. """
+        """Implement this to create the tag."""
         raise NotImplementedError()
 
     def GetTag(self):
-        """ Calls processTag and attaches the header. """
+        """Calls processTag and attaches the header."""
         self.ProcessTag()
 
         # tag to binary
@@ -484,7 +484,7 @@ class ShowFrameTag(ControlTag):
 
 
 class SetBackgroundTag(ControlTag):
-    """ Set the color in 0-255, or 0-1 (if floats given). """
+    """Set the color in 0-255, or 0-1 (if floats given)."""
 
     def __init__(self, *rgb):
         self.tagtype = 9
@@ -621,7 +621,7 @@ class ShapeTag(DefinitionTag):
         self.wh = wh
 
     def ProcessTag(self):
-        """ Returns a defineshape tag. with a bitmap fill """
+        """Returns a defineshape tag. with a bitmap fill"""
 
         bb = binary_type()
         bb += intToUint16(self.id)
@@ -743,7 +743,7 @@ class ShapeTag(DefinitionTag):
 
 
 def buildFile(fp, taglist, nframes=1, framesize=(500, 500), fps=10, version=8):
-    """ Give the given file (as bytes) a header. """
+    """Give the given file (as bytes) a header."""
 
     # compose header
     bb = binary_type()

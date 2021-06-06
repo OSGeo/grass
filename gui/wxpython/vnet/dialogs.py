@@ -611,7 +611,7 @@ class VNETDialog(wx.Dialog):
         self.Layout()
 
     def _updateDbMgrData(self):
-        """Updates input/result tables page """
+        """Updates input/result tables page"""
         if self.notebook.GetSelection() == self.notebook.GetPageIndexByName(
             "inputDbMgr"
         ):
@@ -1099,7 +1099,7 @@ class VNETDialog(wx.Dialog):
 
 class PtsList(PointsList):
     def __init__(self, parent, vnet_mgr, id=wx.ID_ANY):
-        """ List with points for analysis"""
+        """List with points for analysis"""
         self.updateMap = True
         self.vnet_mgr = vnet_mgr
         self.pts_data = self.vnet_mgr.GetPointsManager()
