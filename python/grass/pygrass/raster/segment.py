@@ -124,7 +124,7 @@ class Segment(object):
         libseg.Segment_flush(self.c_seg)
 
     def close(self):
-        """Free memory allocated to segment and delete temp file.  """
+        """Free memory allocated to segment and delete temp file."""
         libseg.Segment_close(self.c_seg)
 
     def release(self):

@@ -547,7 +547,7 @@ class IClassMapFrame(DoubleMapFrame):
         return "0:0:0"
 
     def OnZoomMenu(self, event):
-        """Popup Zoom menu """
+        """Popup Zoom menu"""
         zoommenu = Menu()
         # Add items to the menu
 
@@ -586,7 +586,7 @@ class IClassMapFrame(DoubleMapFrame):
         zoommenu.Destroy()
 
     def OnZoomToTraining(self, event):
-        """Set preview display to match extents of training display """
+        """Set preview display to match extents of training display"""
 
         if not self.MapWindow == self.GetSecondWindow():
             self.MapWindow = self.GetSecondWindow()
@@ -599,7 +599,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.Render(self.GetSecondWindow())
 
     def OnZoomToPreview(self, event):
-        """Set preview display to match extents of training display """
+        """Set preview display to match extents of training display"""
 
         if not self.MapWindow == self.GetFirstWindow():
             self.MapWindow = self.GetFirstWindow()

@@ -352,7 +352,7 @@ class Layer(object):
         self.renderMgr.Abort()
 
     def GetRenderMgr(self):
-        """Get render manager """
+        """Get render manager"""
         return self.renderMgr
 
     def Clean(self):
@@ -857,7 +857,7 @@ class Map(object):
         self.renderMgr = RenderMapMgr(self)
 
     def GetRenderMgr(self):
-        """Get render manager """
+        """Get render manager"""
         return self.renderMgr
 
     def GetProjInfo(self):

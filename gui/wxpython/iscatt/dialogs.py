@@ -194,7 +194,6 @@ class AddScattPlotDialog(wx.Dialog):
             self.sel_bands_ids.pop(sel)
 
     def OnAdd(self, event):
-        """"""
         b_x = self.band_1_ch.GetSelection()
         b_y = self.band_2_ch.GetSelection()
 

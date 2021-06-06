@@ -1346,7 +1346,6 @@ class Node(object):
 
 
 class Boundary(Line):
-    """"""
 
     # geometry type
     gtype = libvect.GV_BOUNDARY

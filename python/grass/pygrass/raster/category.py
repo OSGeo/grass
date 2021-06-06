@@ -52,36 +52,35 @@ class Category(list):
 
     """
 
-    def __init__(self, name, mapset='', mtype='CELL', *args, **kargs):
+    def __init__(self, name, mapset="", mtype="CELL", *args, **kargs):
         self.name = name
         self.mapset = mapset
         self.c_cats = libraster.Categories()
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         self._mtype = mtype
-        self._gtype = None if mtype is None else RTYPE[mtype]['grass type']
+        self._gtype = None if mtype is None else RTYPE[mtype]["grass type"]
         super(Category, self).__init__(*args, **kargs)
 
     def _get_mtype(self):
         return self._mtype
 
     def _set_mtype(self, mtype):
-        if mtype.upper() not in ('CELL', 'FCELL', 'DCELL'):
+        if mtype.upper() not in ("CELL", "FCELL", "DCELL"):
             raise ValueError(_("Raster type: {0} not supported".format(mtype)))
         self._mtype = mtype
-        self._gtype = RTYPE[self.mtype]['grass type']
+        self._gtype = RTYPE[self.mtype]["grass type"]
 
-    mtype = property(fget=_get_mtype, fset=_set_mtype,
-                     doc="Set or obtain raster data type")
+    mtype = property(
+        fget=_get_mtype, fset=_set_mtype, doc="Set or obtain raster data type"
+    )
 
     def _get_title(self):
         return libraster.Rast_get_cats_title(ctypes.byref(self.c_cats))
 
     def _set_title(self, newtitle):
-        return libraster.Rast_set_cats_title(newtitle,
-                                             ctypes.byref(self.c_cats))
+        return libraster.Rast_set_cats_title(newtitle, ctypes.byref(self.c_cats))
 
-    title = property(fget=_get_title, fset=_set_title,
-                     doc="Set or obtain raster title")
+    title = property(fget=_get_title, fset=_set_title, doc="Set or obtain raster title")
 
     def __str__(self):
         return self.__repr__()
@@ -103,7 +102,7 @@ class Category(list):
         cats = []
         for cat in self.__iter__():
             cats.append(repr(cat))
-        return "[{0}]".format(',\n '.join(cats))
+        return "[{0}]".format(",\n ".join(cats))
 
     def _chk_index(self, index):
         if type(index) == str:
@@ -120,17 +119,18 @@ class Category(list):
                 label, min_cat = value
                 value = (label, min_cat, None)
             elif length < 2 or length > 3:
-                raise TypeError('Tuple with a length that is not supported.')
+                raise TypeError("Tuple with a length that is not supported.")
         else:
-            raise TypeError('Only Tuple are supported.')
+            raise TypeError("Only Tuple are supported.")
         return value
 
     def __getitem__(self, index):
         return super(Category, self).__getitem__(self._chk_index(index))
 
     def __setitem__(self, index, value):
-        return super(Category, self).__setitem__(self._chk_index(index),
-                                                 self._chk_value(value))
+        return super(Category, self).__setitem__(
+            self._chk_index(index), self._chk_value(value)
+        )
 
     def _get_c_cat(self, index):
         """Returns i-th description and i-th data range from the list of
@@ -144,15 +144,19 @@ class Category(list):
                          RASTER_MAP_TYPE 	data_type
                          )
         """
-        min_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
-        max_cat = ctypes.pointer(RTYPE[self.mtype]['grass def']())
-        lab = decode(libraster.Rast_get_ith_cat(ctypes.byref(self.c_cats),
-                                                index,
-                                                ctypes.cast(min_cat, ctypes.c_void_p),
-                                                ctypes.cast(max_cat, ctypes.c_void_p),
-                                                self._gtype))
+        min_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"]())
+        max_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"]())
+        lab = decode(
+            libraster.Rast_get_ith_cat(
+                ctypes.byref(self.c_cats),
+                index,
+                ctypes.cast(min_cat, ctypes.c_void_p),
+                ctypes.cast(max_cat, ctypes.c_void_p),
+                self._gtype,
+            )
+        )
         # Manage C function Errors
-        if lab == '':
+        if lab == "":
             raise GrassError(_("Error executing: Rast_get_ith_cat"))
         if max_cat.contents.value == min_cat.contents.value:
             max_cat = None
@@ -171,12 +175,15 @@ class Category(list):
                          )
         """
         max_cat = min_cat if max_cat is None else max_cat
-        min_cat = ctypes.pointer(RTYPE[self.mtype]['grass def'](min_cat))
-        max_cat = ctypes.pointer(RTYPE[self.mtype]['grass def'](max_cat))
-        err = libraster.Rast_set_cat(ctypes.cast(min_cat, ctypes.c_void_p),
-                                     ctypes.cast(max_cat, ctypes.c_void_p),
-                                     label,
-                                     ctypes.byref(self.c_cats), self._gtype)
+        min_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"](min_cat))
+        max_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"](max_cat))
+        err = libraster.Rast_set_cat(
+            ctypes.cast(min_cat, ctypes.c_void_p),
+            ctypes.cast(max_cat, ctypes.c_void_p),
+            label,
+            ctypes.byref(self.c_cats),
+            self._gtype,
+        )
         # Manage C function Errors
         if err == 1:
             return None
@@ -201,7 +208,7 @@ class Category(list):
 
     def reset(self):
         for i in range(len(self) - 1, -1, -1):
-            del(self[i])
+            del self[i]
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
 
     def _read_cats(self):
@@ -233,8 +240,9 @@ class Category(list):
                            )
         """
         self.reset()
-        err = libraster.Rast_read_cats(self.name, self.mapset,
-                                       ctypes.byref(self.c_cats))
+        err = libraster.Rast_read_cats(
+            self.name, self.mapset, ctypes.byref(self.c_cats)
+        )
         if err == -1:
             raise GrassError("Can not read the categories.")
         # copy from C struct to list
@@ -259,8 +267,9 @@ class Category(list):
         :param category: Category class to be copied
         :type category: Category object
         """
-        libraster.Rast_copy_cats(ctypes.byref(self.c_cats),     # to
-                                 ctypes.byref(category.c_cats))  # from
+        libraster.Rast_copy_cats(
+            ctypes.byref(self.c_cats), ctypes.byref(category.c_cats)  # to
+        )  # from
         self._read_cats()
 
     def ncats(self):
@@ -273,7 +282,7 @@ class Category(list):
         # TODO: add
         raise ImplementationError("set_cats_fmt() is not implemented yet.")
 
-    def read_rules(self, filename, sep=':'):
+    def read_rules(self, filename, sep=":"):
         """Copy categories from a rules file, default separetor is ':', the
         columns must be: min and/or max and label. ::
 
@@ -290,7 +299,7 @@ class Category(list):
 
         """
         self.reset()
-        with open(filename, 'r') as f:
+        with open(filename, "r") as f:
             for row in f.readlines():
                 cat = row.strip().split(sep)
                 if len(cat) == 2:
@@ -302,7 +311,7 @@ class Category(list):
                     raise TypeError("Row length is greater than 3")
                 self.append((label, min_cat, max_cat))
 
-    def write_rules(self, filename, sep=':'):
+    def write_rules(self, filename, sep=":"):
         """Copy categories from a rules file, default separetor is ':', the
         columns must be: min and/or max and label. ::
 
@@ -317,13 +326,13 @@ class Category(list):
         :param str filename: the name of file with categories rules
         :param str sep: the separator used to divide values and category
         """
-        with open(filename, 'w') as f:
+        with open(filename, "w") as f:
             cats = []
             for cat in self.__iter__():
                 if cat[-1] is None:
                     cat = cat[:-1]
                 cats.append(sep.join([str(i) for i in cat]))
-            f.write('\n'.join(cats))
+            f.write("\n".join(cats))
 
     def sort(self):
         libraster.Rast_sort_cats(ctypes.byref(self.c_cats))

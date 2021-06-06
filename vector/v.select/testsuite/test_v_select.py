@@ -46,7 +46,7 @@ class TestRasterReport(TestCase):
         self.assertVectorFitsTopoInfo(self.overlap, topology)
 
     def test_opd(self):
-        """Testign operator disjoint """
+        """Testign operator disjoint"""
         self.assertModule(
             "v.select",
             ainput=self.ainput,
@@ -58,7 +58,7 @@ class TestRasterReport(TestCase):
         self.assertVectorFitsTopoInfo(self.disjoint, topology)
 
     def test_ope(self):
-        """Testing operator equals """
+        """Testing operator equals"""
         self.assertModule(
             "v.select",
             ainput=self.ainput,

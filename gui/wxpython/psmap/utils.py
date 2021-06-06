@@ -90,7 +90,7 @@ class Rect2DPS(Rect2D):
 
 
 class UnitConversion:
-    """ Class for converting units"""
+    """Class for converting units"""
 
     def __init__(self, parent=None):
         self.parent = parent

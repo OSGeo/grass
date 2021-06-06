@@ -328,7 +328,7 @@ def write_cpp(bands, values, sensor, folder):
 
 
 def main():
-    """ control function """
+    """control function"""
 
     inputfile = sys.argv[1]
 

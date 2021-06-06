@@ -20,7 +20,7 @@ jobs:
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install black==20.8b1
+          pip install black==21.5b1
 
       - name: Run Black
         run: |

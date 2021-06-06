@@ -3047,7 +3047,7 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def OnLayer(self, event):
-        """Change columns on layer change """
+        """Change columns on layer change"""
         if self.layerChoice.GetStringSelection() == self.currLayer:
             return
         self.currLayer = self.layerChoice.GetStringSelection()

@@ -52,7 +52,7 @@ class DataCatalog(wx.Panel):
         name="catalog",
         **kwargs,
     ):
-        """Panel constructor  """
+        """Panel constructor"""
         self.showNotification = Signal("DataCatalog.showNotification")
         self.parent = parent
         self.baseTitle = title

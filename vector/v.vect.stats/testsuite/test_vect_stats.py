@@ -156,7 +156,7 @@ class Testrr(TestCase):
         self.assertLooksLike(reference=string, actual=v_vect_stats.outputs.stdout)
 
     def test_mode(self):
-        """Testing method mode """
+        """Testing method mode"""
         string = """area_cat|count|mode
         1|0|null
         2|0|null
