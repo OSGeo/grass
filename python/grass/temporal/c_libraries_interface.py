@@ -14,7 +14,7 @@ from grass.exceptions import FatalError
 import sys
 from multiprocessing import Process, Lock, Pipe
 import logging
-from ctypes import byref, cast, c_char_p, c_int, c_void_p, CFUNCTYPE, POINTER
+from ctypes import byref, cast, c_int, c_void_p, CFUNCTYPE, POINTER
 from datetime import datetime
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -589,7 +589,7 @@ def _write_band_reference(lock, conn, data):
         if maptype == RPCDefs.TYPE_RASTER:
             if libraster.Rast_legal_bandref(bandref) < 0:
                 raise ValueError(_("Invalid band reference"))
-            libraster.Rast_write_bandref(self.name, bandref)
+            libraster.Rast_write_bandref(name, bandref)
         else:
             logging.error(
                 "Unable to write band reference. " "Unsupported map type %s" % maptype
@@ -623,7 +623,7 @@ def _remove_band_reference(lock, conn, data):
         layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            check = G_remove_misc("cell_misc", "bandref", name)
+            check = libgis.G_remove_misc("cell_misc", "bandref", name)
         else:
             logging.error(
                 "Unable to remove band reference. " "Unsupported map type %s" % maptype
