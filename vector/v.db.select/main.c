@@ -30,6 +30,13 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
+enum OutputFormat {
+    PLAIN,
+    JSON,
+    CSV,
+    VERTICAL
+};
+
 void fatal_error_option_value_excludes_flag(struct Option *option,
                                             struct Flag *excluded,
                                             const char *because)
@@ -88,7 +95,7 @@ int main(int argc, char **argv)
     char *fsep, *vsep;
     struct bound_box *min_box, *line_box;
     int i, line, area, init_box, cat, field_number;
-    int plain, json, csv, vertical;
+    enum OutputFormat format;
     int vsep_needs_newline;
 
     module = G_define_module();
@@ -186,19 +193,15 @@ int main(int argc, char **argv)
                           options.file->answer);
     }
 
-    plain = FALSE;
-    csv = FALSE;
-    json = FALSE;
-    vertical = FALSE;
     if (strcmp(options.format->answer, "csv") == 0)
-        csv = TRUE;
+        format = CSV;
     else if (strcmp(options.format->answer, "json") == 0)
-        json = TRUE;
+        format = JSON;
     else if (strcmp(options.format->answer, "vertical") == 0)
-        vertical = TRUE;
+        format = VERTICAL;
     else
-        plain = TRUE;
-    if (json) {
+        format = PLAIN;
+    if (format == JSON) {
         fatal_error_option_value_excludes_flag(options.format, flags.escape,
                                                _("Escaping is based on the format"));
         fatal_error_option_value_excludes_flag(options.format, flags.colnames,
@@ -206,7 +209,7 @@ int main(int argc, char **argv)
         fatal_error_option_value_excludes_option(options.format, options.fsep,
                                                  _("Separator is based on the format"));
     }
-    if (!vertical) {
+    if (format != VERTICAL) {
         fatal_error_option_value_excludes_option(options.format, options.vsep,
                                                  _("Only vertical output can use vertical separator"));
     }
@@ -230,10 +233,10 @@ int main(int argc, char **argv)
     }
     else {
         /* A different separator is needed to for each format and output. */
-        if (csv) {
+        if (format == CSV) {
             fsep = G_store(",");
         }
-        else if (plain | vertical) {
+        else if (format == PLAIN || format == VERTICAL) {
             if (flags.region->answer)
                fsep = G_store("=");
             else
@@ -319,7 +322,7 @@ int main(int argc, char **argv)
 
     /* column names if horizontal output (ignore for -r, -c, JSON, vertical) */
     if (!flags.region->answer && !flags.colnames->answer &&
-        !vertical && !json) {
+        format != JSON && format != VERTICAL) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -332,7 +335,7 @@ int main(int argc, char **argv)
     init_box = TRUE;
     first_rec = TRUE;
 
-    if (json) {
+    if (format == JSON) {
         if (flags.region->answer)
             fprintf(stdout, "{\"extent\":\n");
         else
@@ -350,7 +353,7 @@ int main(int argc, char **argv)
 
         if (first_rec)
             first_rec = FALSE;
-        else if (!flags.region->answer && json)
+        else if (!flags.region->answer && format == JSON)
             fprintf(stdout, ",\n");
 
         cat = -1;
@@ -378,20 +381,20 @@ int main(int argc, char **argv)
 
             db_convert_column_value_to_string(column, &value_string);
 
-            if (!flags.colnames->answer && vertical)
+            if (!flags.colnames->answer && format == VERTICAL)
                 fprintf(stdout, "%s%s", db_get_column_name(column), fsep);
 
-            if (col && !vertical && !json)
+            if (col && format != JSON && format != VERTICAL)
                 fprintf(stdout, "%s", fsep);
 
-            if (json) {
+            if (format == JSON) {
                 if (!col)
                     fprintf(stdout, "{");
                 fprintf(stdout, "\"%s\":", db_get_column_name(column));
             }
 
             if (db_test_value_isnull(value)) {
-                if (json)
+                if (format == JSON)
                     fprintf(stdout, "null");
                 else if (options.nullval->answer)
                     fprintf(stdout, "%s", options.nullval->answer);
@@ -404,7 +407,7 @@ int main(int argc, char **argv)
                  * CSV (usually none, here optional): \\ \r \n \t \f \b
                  * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
                  */
-                if (flags.escape->answer || json) {
+                if (flags.escape->answer || format == JSON) {
                     if (strchr(str, '\\'))
                         str = G_str_replace(str, "\\", "\\\\");
                     if (strchr(str, '\r'))
@@ -413,7 +416,7 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\n", "\\n");
                     if (strchr(str, '\t'))
                         str = G_str_replace(str, "\t", "\\t");
-                    if (json && strchr(str, '"'))
+                    if (format == JSON && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
                     if (strchr(str, '\f'))  /* form feed, somewhat unlikely */
                         str = G_str_replace(str, "\f", "\\f");
@@ -422,11 +425,11 @@ int main(int argc, char **argv)
                 }
                 /* Common CSV does not escape, but doubles quotes (and we quote all
                  * text fields which takes care of a separator character in text). */
-                if (csv && strchr(str, '"')) {
+                if (format == CSV && strchr(str, '"')) {
                     str = G_str_replace(str, "\"", "\"\"");
                 }
 
-                if (json || csv) {
+                if (format == JSON || format == CSV) {
                     int type =
                         db_sqltype_to_Ctype(db_get_column_sqltype(column));
 
@@ -440,9 +443,9 @@ int main(int argc, char **argv)
                     fprintf(stdout, "%s", str);
             }
 
-            if (vertical)
+            if (format == VERTICAL)
                 fprintf(stdout, "\n");
-            else if (json) {
+            else if (format == JSON) {
                 if (col < ncols - 1)
                     fprintf(stdout, ",");
                 else
@@ -477,7 +480,7 @@ int main(int argc, char **argv)
         }
         else {
             /* End of record in attribute printing */
-            if (!(vertical || json))
+            if (format != JSON && format != VERTICAL)
                 fprintf(stdout, "\n");
             else if (vsep) {
                 if (vsep_needs_newline)
@@ -488,11 +491,11 @@ int main(int argc, char **argv)
         }
     }
 
-    if (!flags.region->answer && json)
+    if (!flags.region->answer && format == JSON)
         fprintf(stdout, "\n]}\n");
 
     if (flags.region->answer) {
-        if (csv) {
+        if (format == CSV) {
             fprintf(stdout, "n%ss%sw%se", fsep, fsep, fsep);
             if (Vect_is_3d(&Map)) {
                 fprintf(stdout, "%st%sb", fsep, fsep);
@@ -505,7 +508,7 @@ int main(int argc, char **argv)
             }
             fprintf(stdout, "\n");
         }
-        else if (json) {
+        else if (format == JSON) {
             fprintf(stdout, "{");
             fprintf(stdout, "\"n\":%f,", min_box->N);
             fprintf(stdout, "\"s\":%f,", min_box->S);
