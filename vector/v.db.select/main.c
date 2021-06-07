@@ -89,13 +89,15 @@ int main(int argc, char **argv)
     dbColumn *column;
     dbValue *value;
     struct field_info *Fi;
-    int ncols, col, more, first_rec;
+    int ncols, col, more;
+    bool first_rec;
     struct Map_info Map;
     char query[DB_SQL_MAX];
     struct ilist *list_lines;
     char *fsep, *vsep;
     struct bound_box *min_box, *line_box;
-    int i, line, area, init_box, cat, field_number;
+    int i, line, area, cat, field_number;
+    bool init_box;
     enum OutputFormat format;
     bool vsep_needs_newline;
 
@@ -335,8 +337,8 @@ int main(int argc, char **argv)
         fprintf(stdout, "\n");
     }
 
-    init_box = TRUE;
-    first_rec = TRUE;
+    init_box = true;
+    first_rec = true;
 
     if (format == JSON) {
         if (flags.region->answer)
@@ -355,7 +357,7 @@ int main(int argc, char **argv)
             break;
 
         if (first_rec)
-            first_rec = FALSE;
+            first_rec = false;
         else if (!flags.region->answer && format == JSON)
             fprintf(stdout, ",\n");
 
@@ -475,7 +477,7 @@ int main(int argc, char **argv)
                                   line);
                 if (init_box) {
                     Vect_box_copy(min_box, line_box);
-                    init_box = FALSE;
+                    init_box = false;
                 }
                 else
                     Vect_box_extend(min_box, line_box);
