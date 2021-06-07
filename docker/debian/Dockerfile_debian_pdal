@@ -1,7 +1,7 @@
 FROM debian:10.1
 
-LABEL authors="Carmen Tawalika,Markus Neteler,Anika Bettge"
-LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,bettge@mundialis.de"
+LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
+LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -39,10 +39,10 @@ RUN apt-get update && apt-get upgrade -y && \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libopenblas-base \
-    libopenblas-dev \
     libnetcdf-dev \
     libncurses5-dev \
+    libopenblas-base \
+    libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
@@ -104,7 +104,7 @@ RUN wget -q https://github.com/hobu/laz-perf/archive/${LAZ_PERF_VERSION}.tar.gz 
     make && \
     make install
 
-## fetch vertical datums and store into PROJ dir
+## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
@@ -226,6 +226,10 @@ WORKDIR /scripts
 
 # install external GRASS GIS session Python API
 RUN pip3 install grass-session
+# GRASS GIS 8 version workaround, awaiting grass-session update
+RUN sed -i 's+\.grass7+\.grass8+g' /usr/lib/python3.?/site-packages/grass_session/*.py
+RUN sed -i 's+grass7+grass+g' /usr/local/lib/python3.?/site-packages/grass_session/*.py
+RUN sed -i 's+GRASS7+GRASS8+g' /usr/local/lib/python3.?/site-packages/grass_session/*.py
 
 # install GRASS GIS extensions
 RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
@@ -241,7 +245,9 @@ COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
 ## just scan the LAZ file
-RUN /usr/bin/python3 /scripts/test_grass_session.py
+# Not yet ready for GRASS GIS 8:
+#RUN /usr/bin/python3 /scripts/test_grass_session.py
+RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
 
 WORKDIR /grassdb
 VOLUME /grassdb
