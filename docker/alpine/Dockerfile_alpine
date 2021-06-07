@@ -193,7 +193,7 @@ RUN apk add curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && p
 # install external Python API
 RUN pip3 install --upgrade pip six grass-session --ignore-installed six
 
-RUN ln -sf `grass --config path` /usr/local/grass
+RUN ln -sf /usr/local/grass `grass --config path`
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
     pdal --version && \
     python3 --version
