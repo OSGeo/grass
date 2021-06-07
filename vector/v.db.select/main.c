@@ -24,6 +24,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include <stdbool.h>
 
 #include <grass/glocale.h>
 #include <grass/gis.h>
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
     struct bound_box *min_box, *line_box;
     int i, line, area, init_box, cat, field_number;
     enum OutputFormat format;
-    int vsep_needs_newline;
+    bool vsep_needs_newline;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -251,9 +252,9 @@ int main(int argc, char **argv)
         vsep = G_option_to_separator(options.vsep);
     else
         vsep = NULL;
-    vsep_needs_newline = TRUE;
+    vsep_needs_newline = true;
     if (vsep && !strcmp(vsep, "\n"))
-        vsep_needs_newline = FALSE;
+        vsep_needs_newline = false;
 
     db_init_string(&sql);
     db_init_string(&value_string);
