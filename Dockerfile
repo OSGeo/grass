@@ -299,7 +299,10 @@ RUN git clone https://github.com/OSGeo/gdal-grass \
 =======
 # enable simple grass command regardless of version number
 RUN if [ ! -e /usr/local/bin/grass ] ; then ln -s /usr/local/bin/grass* /usr/local/bin/grass ; fi
+<<<<<<< HEAD
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 
 # Leave build stage
 FROM grass_gis as grass_gis_final

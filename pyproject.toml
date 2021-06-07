@@ -2,12 +2,15 @@
 required-version = '24'
 line-length = 88
 <<<<<<< HEAD
+<<<<<<< HEAD
 target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
     python/libgrass_interface_generator/
 =======
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 target-version = ['py36', 'py37', 'py38', 'py39']
 include = '\.pyi?$'
 exclude = '''
@@ -32,7 +35,10 @@ exclude = '''
     # at the time of writing.
     # https://github.com/psf/black/issues/1244
     | python/grass/pygrass/utils.py
+<<<<<<< HEAD
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 )
 '''
 
