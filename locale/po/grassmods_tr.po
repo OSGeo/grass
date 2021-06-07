@@ -65988,7 +65988,1883 @@ msgid ""
 "Layer <%d> will not be reconnected because database or schema do not match."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../scripts/v.dissolve/v.dissolve.py:248
+=======
+#: ../raster/r.to.vect/areas_io.c:154
+#, c-format
+msgid ""
+"write_bnd:  line terminated unexpectedly\n"
+"previous (%d) point %d (%d,%d,%d) %p %p"
+msgstr ""
+
+#: ../raster/r.to.vect/areas_io.c:287
+msgid "Writing areas..."
+msgstr ""
+
+#: ../raster/r.to.vect/lines.c:71
+msgid "Extracting lines..."
+msgstr "Çizgiler çıkarılıyor..."
+
+#: ../raster/r.to.vect/lines.c:536
+#, c-format
+msgid "Crowded cell at (%f, %f): row %d, col %d, count %d"
+msgstr ""
+
+#: ../raster/r.to.vect/lines.c:540
+msgid ""
+"Raster map is not thinned properly.\n"
+"Please run r.thin."
+msgstr ""
+
+#: ../raster/r.to.vect/lines.c:614
+msgid "join_lines: p front pointer not NULL!"
+msgstr ""
+
+#: ../raster/r.to.vect/lines.c:620
+msgid "join_lines: q front pointer not NULL!"
+msgstr ""
+
+#: ../raster/r.to.vect/lines.c:638
+msgid "extend line:  p is NULL"
+msgstr ""
+
+#: ../raster/r.to.vect/lines.c:664
+msgid "extend_lines: p front pointer not NULL!"
+msgstr ""
+
+#: ../raster/r.to.vect/lines.c:671
+msgid "extend_lines: q back pointer not NULL!"
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:80
+msgid "Converts a raster map into a vector map."
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:131
+msgid "z flag is supported only for points"
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:142
+msgid "Raster is not CELL, '-v' flag ignored, raster values will be written to the table."
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:144
+msgid "Raster is not CELL, '-v' flag ignored, raster values will be z coordinate."
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:146
+msgid "Raster is not CELL, '-v' flag ignored, raster values will be lost."
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:151
+msgid "Categories will be unique sequence, raster values will be lost."
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:312
+msgid "Updating attributes..."
+msgstr ""
+
+#: ../raster/r.to.vect/main.c:335
+#, c-format
+msgid "Unable to insert into table: %s"
+msgstr "Tabloya veri girilemiyor: %s"
+
+#: ../raster/r.to.vect/points.c:36
+msgid "Extracting points..."
+msgstr "Noktalar çıkarılıyor..."
+
+#: ../raster/r.patch/main.c:66
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr ""
+
+#: ../raster/r.patch/main.c:73
+msgid "Name of raster maps to be patched together"
+msgstr ""
+
+#: ../raster/r.patch/main.c:76
+msgid "Name for resultant raster map"
+msgstr "Sonuç raster haritanın adı"
+
+#: ../raster/r.patch/main.c:103
+msgid "The minimum number of input raster maps is two"
+msgstr "Girdi haritaları en küçük sayısı ikidir"
+
+#: ../raster/r.patch/main.c:180
+#, c-format
+msgid "Creating support files for raster map <%s>..."
+msgstr ""
+
+#: ../raster/r.lake/main.c:154
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+#: ../raster/r.lake/main.c:160
+msgid "Water level"
+msgstr ""
+
+#: ../raster/r.lake/main.c:171
+msgid "Either this coordinates pair or a seed map have to be specified"
+msgstr ""
+
+#: ../raster/r.lake/main.c:175 ../raster/r.lake/main.c:184
+msgid "Seed"
+msgstr ""
+
+#: ../raster/r.lake/main.c:180
+msgid "Input raster map with given starting point(s) (at least 1 cell > 0)"
+msgstr ""
+
+#: ../raster/r.lake/main.c:182
+msgid "Either this parameter or a coordinates pair have to be specified"
+msgstr ""
+
+#: ../raster/r.lake/main.c:194
+msgid "Overwrite seed map with result (lake) map"
+msgstr ""
+
+#: ../raster/r.lake/main.c:201
+msgid "Both seed map and coordinates cannot be specified"
+msgstr ""
+
+#: ../raster/r.lake/main.c:204
+msgid "Seed map or seed coordinates must be set!"
+msgstr ""
+
+#: ../raster/r.lake/main.c:207
+msgid "Seed coordinates and output map lake= must be set!"
+msgstr ""
+
+#: ../raster/r.lake/main.c:210
+msgid "Both lake and overwrite cannot be specified"
+msgstr ""
+
+#: ../raster/r.lake/main.c:213
+msgid "Output lake map or overwrite flag must be set!"
+msgstr ""
+
+#: ../raster/r.lake/main.c:240
+msgid "Seed point outside the current region"
+msgstr "Kaynak noktası geçerli bölge dışındadır"
+
+#: ../raster/r.lake/main.c:254
+msgid "G_malloc: out of memory"
+msgstr "G_malloc: hafıza yetersiz"
+
+#: ../raster/r.lake/main.c:276
+msgid "Given water level at seed point is below earth surface. Increase water level or move seed point."
+msgstr ""
+
+#: ../raster/r.lake/main.c:355
+#, c-format
+msgid "Lake depth from %f to %f (specified water level is taken as zero)"
+msgstr ""
+
+#: ../raster/r.lake/main.c:356
+#, c-format
+msgid "Lake area %f square meters"
+msgstr ""
+
+#: ../raster/r.lake/main.c:357
+#, c-format
+msgid "Lake volume %f cubic meters"
+msgstr ""
+
+#: ../raster/r.lake/main.c:358
+msgid "Volume is correct only if lake depth (terrain raster map) is in meters"
+msgstr ""
+
+#: ../raster/r.cost/main.c:169
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+#: ../raster/r.cost/main.c:176
+msgid "Name of input raster map containing grid cell cost information"
+msgstr ""
+
+#: ../raster/r.cost/main.c:510
+#, c-format
+msgid "Reading raster map <%s>, initializing output..."
+msgstr ""
+
+#: ../raster/r.cost/main.c:555
+#, c-format
+msgid "Negative cell value found at row %d, col %d. Setting negative value to null_cost value"
+msgstr ""
+
+#: ../raster/r.his/main.c:73
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+#: ../raster/r.his/main.c:103
+msgid "Name of output layer to be used for red"
+msgstr ""
+
+#: ../raster/r.his/main.c:110
+msgid "Name of output layer to be used for green"
+msgstr ""
+
+#: ../raster/r.his/main.c:117
+msgid "Name of output layer to be used for blue"
+msgstr ""
+
+#: ../raster/r.his/main.c:145
+#, c-format
+msgid "No such color <%s>"
+msgstr ""
+
+#: ../raster/r.support/main.c:56
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr "Raster harita katmanı destek dosyalarının oluşturulması ve/veya değiştirilmesine olanak tanır"
+
+#: ../raster/r.support/main.c:80
+msgid "Text to use for map data units"
+msgstr "Harita veri birimleri için kullanılacak metin"
+
+#: ../raster/r.support/main.c:86
+msgid "Text to use for map vertical datum"
+msgstr "Harita düşey datumu için kullanılacak metin"
+
+#: ../raster/r.support/main.c:129
+msgid "Update statistics (histogram, range)"
+msgstr ""
+
+#: ../raster/r.support/main.c:133
+msgid "Create/reset the null file"
+msgstr "Boş dosya oluştur/sıfırla"
+
+#: ../raster/r.support/main.c:137
+msgid "Delete the null file"
+msgstr "Boş dosyayı sil"
+
+#: ../raster/r.support/main.c:273 ../raster/r.support/main.c:301
+#, c-format
+msgid "[%s] is a reclass of another map. Exiting."
+msgstr "[%s], başka bir haritanın yeniden sınıflandırmasıdır. Çıkılıyor."
+
+#: ../raster/r.support/main.c:285
+#, c-format
+msgid "Writing new null file for [%s]... "
+msgstr "[%s] için yeni boş değer dosyası yazılıyor..."
+
+#: ../raster/r.support/main.c:305
+#, c-format
+msgid "Removing null file for [%s]...\n"
+msgstr "[%s] in boş değer dosyası siliniyor...\n"
+
+#: ../raster/r.support/main.c:312 ../scripts/r.in.aster/r.in.aster.py:139
+#: ../scripts/i.in.spotvgt/i.in.spotvgt.py:276
+#: ../scripts/r.fillnulls/r.fillnulls.py:533 ../scripts/d.polar/d.polar.py:402
+#: ../scripts/r.plane/r.plane.py:124 ../scripts/v.in.e00/v.in.e00.py:161
+msgid "Done."
+msgstr "Yapıldı."
+
+#: ../raster/r.support/check.c:25
+#, c-format
+msgid ""
+"\n"
+"  Updating statistics for [%s]"
+msgstr ""
+"\n"
+"  [%s]'in istatistikleri güncelleniyor"
+
+#: ../raster/r.support/check.c:49
+#, c-format
+msgid ""
+"   Updating the number of categories for [%s]\n"
+"\n"
+msgstr ""
+"   [%s]'in kategori sayısı güncelleniyor\n"
+"\n"
+
+#: ../raster/r.cross/cross.c:65
+#, c-format
+msgid "%s: STEP 1 ... "
+msgstr "%s: ADIM 1 ... "
+
+#: ../raster/r.cross/renumber.c:33
+#, c-format
+msgid "%s: STEP 3 ... "
+msgstr "%s: ADIM 3 ... "
+
+#: ../raster/r.cross/main.c:71
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr ""
+
+#: ../raster/r.cross/main.c:80
+#, c-format
+msgid "Names of 2-%d input raster maps"
+msgstr ""
+
+#: ../raster/r.cross/main.c:89
+msgid "Non-NULL data only"
+msgstr ""
+
+#: ../raster/r.cross/main.c:102
+#, c-format
+msgid "More than %d files not allowed"
+msgstr "%d den fazla dosya olanaksız"
+
+#: ../raster/r.cross/main.c:111
+msgid "Must specify 2 or more input maps"
+msgstr "2 veya daha fazla girdi harita belirlemelisiniz"
+
+#: ../raster/r.cross/main.c:129
+#, c-format
+msgid "%s: STEP 2 ..."
+msgstr "%s: ADIM 2 ..."
+
+#: ../raster/r.cross/main.c:171
+#, c-format
+msgid "%d categories"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:35
+msgid "input file is not a Surfer ascii grid file"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:41
+msgid "error reading the column and row dimension from the Surfer grid file"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:47
+msgid "error reading the X range from the Surfer grid file"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:53
+msgid "error reading the Y range from the Surfer grid file"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:59
+msgid "error reading the Z range from the Surfer grid file"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:105
+msgid "error getting file position"
+msgstr "Dosyasını konumunu belirlemede hata"
+
+#: ../raster/r.in.ascii/gethead.c:164
+msgid "illegal type field: using type int"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:169
+msgid "ignoring type filed in header, type is set on command line"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:176
+msgid "illegal multiplier field: using 1.0"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:181
+msgid "ignoring multiplier filed in header, multiplier is set on command line"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:189
+msgid "ignoring null filed in header, null string is set on command line"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:218
+msgid "error in ascii data format"
+msgstr "ascii veri biçimini okumada hata"
+
+#: ../raster/r.in.ascii/gethead.c:248
+#, c-format
+msgid "Duplicate \"%s\" field in header"
+msgstr "Üstbilgide tekrarlanan \"%s\" alanı"
+
+#: ../raster/r.in.ascii/gethead.c:253
+#, c-format
+msgid "Illegal \"%s\" value in header: %s"
+msgstr ""
+
+#: ../raster/r.in.ascii/gethead.c:261
+#, c-format
+msgid "\"%s\" field missing from header"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:74
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:85
+msgid "Default: CELL for integer values, DCELL for floating-point values"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:97 ../raster/r.in.ascii/main.c:102
+msgid "Default: read from header"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:99
+msgid "Multiplier for ASCII data"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:103
+msgid "String representing NULL value data cell"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:104
+msgid "NULL data"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:109
+msgid "SURFER (Golden Software) ASCII file will be imported"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:128
+#, c-format
+msgid "Wrong entry for multiplier: %s"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:160
+#, c-format
+msgid "Unable to read input from <%s>"
+msgstr "<%s> den girdi okunamıyor"
+
+#: ../raster/r.in.ascii/main.c:180
+msgid "Can't get cell header"
+msgstr ""
+
+#: ../raster/r.in.ascii/main.c:202
+#, c-format
+msgid "Data conversion failed at row %d, col %d"
+msgstr " %d sütunu %d satırında veri dönüşümünde hata oldu"
+
+#: ../raster/r.out.ascii/main.c:64
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:73
+msgid "Name for output ASCII grid map (use out=- for stdout)"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:87
+msgid "Number of values printed before wrapping a line (only SURFER or MODFLOW format)"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:92
+msgid "String to represent null cell (GRASS grid only)"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:100
+msgid "Write SURFER (Golden Software) ASCII grid"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:104
+msgid "Write MODFLOW (USGS) ASCII array"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:108
+msgid "Force output of integer values"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:115
+msgid "Failed to interpret dp as an integer"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:123
+msgid "Failed to interpret width as an integer"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:129
+msgid "Both -s and -h doesn't make sense"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:132
+msgid "Use -M or -s, not both"
+msgstr "-M veya -s flamasını seçin, ikisini birden değil"
+
+#: ../raster/r.out.ascii/main.c:167
+#, c-format
+msgid "Unable to read fp range for <%s>"
+msgstr "<%s> raster haritası için kn aralığı okunamıyor"
+
+#: ../raster/r.out.ascii/main.c:183
+#, c-format
+msgid "Read failed at row %d"
+msgstr "%d satırında okumada hata"
+
+#: ../raster/r.colors.out/raster3d_main.c:50
+msgid "Exports the color table associated with a 3D raster map."
+msgstr ""
+
+#: ../raster/r.colors.out/raster3d_main.c:70
+#, c-format
+msgid "Unable to read color table for raster3d map <%s>"
+msgstr ""
+
+#: ../raster/r.colors.out/raster_main.c:49
+msgid "Exports the color table associated with a raster map."
+msgstr ""
+
+#: ../raster/r.random.cells/main.c:50
+msgid "autocorrelation"
+msgstr ""
+
+#: ../raster/r.random.cells/main.c:52
+msgid "Generates random cell values with spatial dependence."
+msgstr ""
+
+#: ../raster/r.random.cells/main.c:70
+msgid "Maximum number of cells to be created"
+msgstr ""
+
+#: ../raster/r.random.cells/init.c:77
+msgid "Distance must be >= 0.0"
+msgstr ""
+
+#: ../raster/r.in.poly/main.c:37
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr "ASCII poligon/çizgi/nokta veri dosyalarından raster harita oluşturur."
+
+#: ../raster/r.in.poly/main.c:41
+msgid "Name of input file; or \"-\" to read from stdin"
+msgstr ""
+
+#: ../raster/r.in.poly/main.c:60
+msgid "Integer representing NULL value data cell"
+msgstr ""
+
+#: ../raster/r.in.poly/main.c:66
+msgid "Number of rows to hold in memory"
+msgstr "Hafızada tutulacak satır sayısı"
+
+#: ../raster/r.in.poly/main.c:74
+msgid "Minimum number of rows to hold in memory is 1"
+msgstr "Hafızada tutulacak en küçük satır sayısı 1'dir"
+
+#: ../raster/r.in.poly/main.c:83
+msgid "Type doesn't exist"
+msgstr ""
+
+#: ../raster/r.in.poly/get_item.c:97
+#, c-format
+msgid "Illegal coordinate <%s, %s>, skipping."
+msgstr ""
+
+#: ../raster/r.in.poly/get_item.c:102
+#, c-format
+msgid "Illegal north coordinate <%s>, skipping."
+msgstr ""
+
+#: ../raster/r.in.poly/get_item.c:107
+#, c-format
+msgid "Illegal east coordinate <%s>, skipping."
+msgstr ""
+
+#: ../raster/r.buffer/main.c:131
+msgid "Parse distances error"
+msgstr ""
+
+#: ../raster/r.buffer/main.c:150
+#, c-format
+msgid "Pass %d (of %d)"
+msgstr ""
+
+#: ../raster/r.buffer/parse_dist.c:54
+#, c-format
+msgid "%s: %s - illegal distance specification"
+msgstr "%s: %s - uygun olmayan uzaklık tanımı"
+
+#: ../raster/r.buffer/execute.c:34
+msgid "Finding buffer zones..."
+msgstr "Tampon zonları bulunuyor..."
+
+#: ../raster/r.out.mat/main.c:65
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr "GRASS raster dosyasını ikili MAT-dosyasına aktar."
+
+#: ../raster/r.out.mat/main.c:74
+msgid "Name for output binary MAT file"
+msgstr ""
+
+#: ../raster/r.out.mat/main.c:114
+#, c-format
+msgid "Exporting <%s>"
+msgstr "Dışa aktarılıyor <%s>"
+
+#: ../raster/r.out.mat/main.c:174
+msgid "Using the Current Region settings:"
+msgstr "Geçerli Bölgenin sınırları kullanarak:"
+
+#: ../raster/r.out.mat/main.c:175 ../raster/r.in.mat/main.c:392
+#, c-format
+msgid "northern edge=%f"
+msgstr "kuzey kenar=%f"
+
+#: ../raster/r.out.mat/main.c:176 ../raster/r.in.mat/main.c:393
+#, c-format
+msgid "southern edge=%f"
+msgstr "güney kenar=%f"
+
+#: ../raster/r.out.mat/main.c:177 ../raster/r.in.mat/main.c:394
+#, c-format
+msgid "eastern edge=%f"
+msgstr "doğu kenar=%f"
+
+#: ../raster/r.out.mat/main.c:178 ../raster/r.in.mat/main.c:395
+#, c-format
+msgid "western edge=%f"
+msgstr "batı kenar=%f"
+
+#: ../raster/r.out.mat/main.c:179 ../raster/r.in.mat/main.c:396
+#, c-format
+msgid "nsres=%f"
+msgstr "k-g çözünürlüğü=%f"
+
+#: ../raster/r.out.mat/main.c:180 ../raster/r.in.mat/main.c:397
+#, c-format
+msgid "ewres=%f"
+msgstr "d-b çözünürlüğü=%f"
+
+#: ../raster/r.out.mat/main.c:249
+msgid "Exporting raster as integer values"
+msgstr "Rasterı tamsayı değer olarak dışa aktar"
+
+#: ../raster/r.out.mat/main.c:254
+msgid "Exporting raster as floating point values"
+msgstr "Rasterı kayar noktalı değer olarak dışa aktar"
+
+#: ../raster/r.out.mat/main.c:259
+msgid "Exporting raster as double FP values"
+msgstr "Rasterı ondalık kayar noktalı değer olarak dışa aktar"
+
+#: ../raster/r.out.mat/main.c:302
+msgid "Reading in map ... "
+msgstr "Haritadan okunuyor ... "
+
+#: ../raster/r.out.mat/main.c:315
+msgid "Writing out map..."
+msgstr "Haritaya yazılıyor %s..."
+
+#: ../raster/r.out.mat/main.c:375
+#, c-format
+msgid "%ld bytes written to '%s'"
+msgstr "%ld byte '%s' vektörüne yazılıyor"
+
+#: ../raster/r.series/main.c:142
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#: ../raster/r.series/main.c:151
+msgid "Input file with one raster map name and optional one weight per line, field separator between name and weight is |"
+msgstr ""
+
+#: ../raster/r.series/main.c:177
+msgid "Weighting factor for each input map, default value is 1.0 for each input map"
+msgstr ""
+
+#: ../raster/r.series/main.c:253 ../raster/r.series/main.c:325
+msgid "Weights must be positive"
+msgstr ""
+
+#: ../raster/r.series/main.c:271 ../raster/r.series/main.c:331
+#, c-format
+msgid "Reading raster map <%s> using weight %f..."
+msgstr ""
+
+#: ../raster/r.series/main.c:274 ../raster/r.series/main.c:334
+#, c-format
+msgid "Unable to open input raster <%s>"
+msgstr ""
+
+#: ../raster/r.series/main.c:311
+msgid "input= and weights= must have the same number of values"
+msgstr ""
+
+#: ../raster/r.series/main.c:356
+msgid "output= and method= must have the same number of values"
+msgstr ""
+
+#: ../raster/r.series/main.c:379
+#, c-format
+msgid "Method %s not compatible with weights, using unweighed version instead"
+msgstr ""
+
+#: ../raster/r.geomorphon/memory.c:42
+#, c-format
+msgid "Region resolution shoudn't be lesser than map %s resolution. Run g.region raster=%s to set proper resolution"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:163
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:165
+msgid "geomorphons"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:166
+msgid "terrain patterns"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:167
+msgid "machine vision geomorphometry"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:184
+msgid "Outer search radius"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:191
+msgid "Inner search radius"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:198
+msgid "Flatness threshold (degrees)"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:206
+msgid "Flatness distance, zero for none"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:215
+msgid "Comparison mode for zenith/nadir line-of-sight search"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:243
+msgid "Use meters to define search units (default is cells)"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:247
+msgid "Use extended form correction"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:250
+#, fuzzy
+msgid "Coordinates to profile"
+msgstr "Sorgulanacak koordinatlar"
+
+#: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
+#: ../raster/r.geomorphon/main.c:272
+msgid "Profile"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:261
+msgid "Profile output file name (\"-\" for stdout)"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:271
+#, fuzzy
+msgid "Profile output format"
+msgstr "Çıktı biçimi"
+
+#: ../raster/r.geomorphon/main.c:292
+#, fuzzy, c-format
+msgid "Failed parsing <%s>"
+msgstr "Dışa aktarılıyor <%s>"
+
+#: ../raster/r.geomorphon/main.c:302
+#, c-format
+msgid "At least one output is required, e.g. %s"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:325
+#, fuzzy
+msgid "The coordinates are outside of the computational region"
+msgstr "Son nokta koordinatları geçerli bölge ayarları dışındadır"
+
+#: ../raster/r.geomorphon/main.c:332
+#, fuzzy, c-format
+msgid "Failed to open output file <%s>: %d (%s)"
+msgstr "<%s> çıktı dosyası açılamıyor"
+
+#: ../raster/r.geomorphon/main.c:354
+msgid "Search radius size must cover at least 1 cell"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:366
+msgid "Skip radius size must be at least 1 cell lower than radius"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:372
+msgid "Flatness threshold must be grater than 0"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:381
+msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:431
+#, c-format
+msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:520
+msgid "Unknown output data type"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:653
+msgid "Profile data has been written"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:655
+msgid "Failed writing profile data"
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:751
+msgid "Failed to profile the computation, please check the parameters"
+msgstr ""
+
+#: ../raster/r.geomorphon/pattern.c:231
+#, c-format
+msgid "Internal error in %s()"
+msgstr ""
+
+#: ../raster/r.proj/bordwalk.c:92 ../raster/r.proj/bordwalk.c:139
+#, c-format
+msgid "unable to transform coordinates %g, %g"
+msgstr ""
+
+#: ../raster/r.proj/bordwalk.c:230
+msgid "Input raster map is outside current region"
+msgstr "Girdi raster harita geçerli bölgenin dışında"
+
+#: ../raster/r.proj/bordwalk.c:258
+#, c-format
+msgid "Unable to reproject map center %g, %g"
+msgstr ""
+
+#: ../raster/r.proj/readcell.c:67
+msgid "Allocating memory and reading input raster map..."
+msgstr ""
+
+#: ../raster/r.proj/main.c:152
+msgid "Re-projects a raster map from given location to the current location."
+msgstr ""
+
+#: ../raster/r.proj/main.c:165
+msgid "Name of input raster map to re-project"
+msgstr "Yeniden projeksiyonlanacak girdi raster harita adı"
+
+#: ../raster/r.proj/main.c:174
+msgid "Name for output raster map (default: same as 'input')"
+msgstr ""
+
+#: ../raster/r.proj/main.c:208
+msgid "List raster maps in input mapset and exit"
+msgstr ""
+
+#: ../raster/r.proj/main.c:218
+msgid "Print input map's bounds in the current projection and exit"
+msgstr ""
+
+#: ../raster/r.proj/main.c:224
+msgid "Print input map's bounds in the current projection and exit (shell style)"
+msgstr ""
+
+#: ../raster/r.proj/main.c:259
+msgid "Input and output locations are the same"
+msgstr ""
+
+#: ../raster/r.proj/main.c:269
+msgid "Unable to get projection info of output raster map"
+msgstr "Çıktı raster haritasının projeksiyon bilgisi alınamıyor"
+
+#: ../raster/r.proj/main.c:272
+msgid "Unable to get projection units of output raster map"
+msgstr "Çıktı raster haritasının projeksiyon birimleri alınamıyor"
+
+#: ../raster/r.proj/main.c:275
+msgid "Unable to get projection key values of output raster map"
+msgstr "Çıktı raster haritasının projeksiyon anahtar değerleri alınamıyor"
+
+#: ../raster/r.proj/main.c:288
+#, c-format
+msgid "Mapset <%s> in input location <%s> - %s"
+msgstr "<%s> - %s girdi mevkisindeki <%s> harita takımı"
+
+#: ../raster/r.proj/main.c:312
+#, c-format
+msgid "Raster map <%s> in location <%s> in mapset <%s> not found"
+msgstr "<%s> mevkisi <%s>harita takımındaki <%s> raster haritası bulunamadı"
+
+#: ../raster/r.proj/main.c:320
+msgid "Unable to get projection info of input map"
+msgstr "Girdi haritanın projeksiyon bilgisi alınamıyor"
+
+#: ../raster/r.proj/main.c:331
+msgid "Unable to get projection units of input map"
+msgstr "Girdi haritanın projeksiyon birimleri alınamıyor"
+
+#: ../raster/r.proj/main.c:334
+msgid "Unable to get projection key values of input map"
+msgstr "Girdi haritanın projeksiyon anahtar değerleri alınamıyor"
+
+#: ../raster/r.proj/main.c:358
+msgid "Unable to work with unprojected data (xy location)"
+msgstr "Projeksiyonsuz veri (xy konumu) ile çalışılamıyor"
+
+#: ../raster/r.proj/main.c:377
+#, c-format
+msgid "Input map <%s@%s> in location <%s>:"
+msgstr ""
+
+#: ../raster/r.proj/main.c:521
+msgid "Input:"
+msgstr "Girdi:"
+
+#: ../raster/r.proj/main.c:522 ../raster/r.proj/main.c:533
+#, c-format
+msgid "Cols: %d (original: %d)"
+msgstr ""
+
+#: ../raster/r.proj/main.c:523 ../raster/r.proj/main.c:534
+#, c-format
+msgid "Rows: %d (original: %d)"
+msgstr ""
+
+#: ../raster/r.proj/main.c:524 ../raster/r.proj/main.c:535
+#, c-format
+msgid "North: %f (original: %f)"
+msgstr ""
+
+#: ../raster/r.proj/main.c:525 ../raster/r.proj/main.c:536
+#, c-format
+msgid "South: %f (original: %f)"
+msgstr ""
+
+#: ../raster/r.proj/main.c:526 ../raster/r.proj/main.c:537
+#, c-format
+msgid "West: %f (original: %f)"
+msgstr ""
+
+#: ../raster/r.proj/main.c:527 ../raster/r.proj/main.c:538
+#, c-format
+msgid "East: %f (original: %f)"
+msgstr ""
+
+#: ../raster/r.proj/main.c:528 ../raster/r.proj/main.c:539
+#, c-format
+msgid "EW-res: %f"
+msgstr "DB çözünürlüğü: %f"
+
+#: ../raster/r.proj/main.c:529 ../raster/r.proj/main.c:540
+#, c-format
+msgid "NS-res: %f"
+msgstr "KG çözünürlüğü: %f"
+
+#: ../raster/r.proj/main.c:532
+msgid "Output:"
+msgstr "Çıktı:"
+
+#: ../raster/r.proj/main.c:583
+msgid "Projecting..."
+msgstr "Projeksiyonlandırılıyor..."
+
+#: ../raster/r.clump/minsize.c:357
+msgid "Minimum size must be larger than 1"
+msgstr ""
+
+#: ../raster/r.clump/minsize.c:368
+msgid "Loading input ..."
+msgstr ""
+
+#: ../raster/r.clump/minsize.c:418
+#, c-format
+msgid "Merging clumps smaller than %d cells..."
+msgstr ""
+
+#: ../raster/r.clump/minsize.c:509
+#, c-format
+msgid "Renumbering remaining %d clumps..."
+msgstr ""
+
+#: ../raster/r.clump/main.c:60
+msgid "reclass"
+msgstr ""
+
+#: ../raster/r.clump/main.c:63
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+#: ../raster/r.clump/main.c:82
+msgid "Threshold to identify similar cells"
+msgstr ""
+
+#: ../raster/r.clump/main.c:83
+msgid "Valid range: 0 = identical to < 1 = maximal difference"
+msgstr ""
+
+#: ../raster/r.clump/main.c:90
+msgid "Minimum clump size in cells"
+msgstr ""
+
+#: ../raster/r.clump/main.c:91
+msgid "Clumps smaller than minsize will be merged to form larger clumps"
+msgstr ""
+
+#: ../raster/r.clump/main.c:95
+msgid "Clump also diagonal cells"
+msgstr ""
+
+#: ../raster/r.clump/main.c:96
+msgid "Clumps are also traced along diagonal neighboring cells"
+msgstr ""
+
+#: ../raster/r.clump/main.c:100
+msgid "Print only the number of clumps in shell script style"
+msgstr ""
+
+#: ../raster/r.clump/main.c:122
+#, c-format
+msgid "Valid range for option <%s> is 0 <= value < 1"
+msgstr ""
+
+#: ../raster/r.clump/main.c:180
+#, c-format
+msgid "%d clump."
+msgid_plural "%d clumps."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../raster/r.clump/clump.c:83
+msgid "Pass 2 of 2..."
+msgstr ""
+
+#: ../raster/r.clump/clump.c:124
+#, c-format
+msgid "%d initial clumps"
+msgstr ""
+
+#: ../raster/r.clump/clump.c:235 ../raster/r.clump/clump.c:492
+msgid "Pass 1 of 2..."
+msgstr ""
+
+#: ../raster/r.clump/clump.c:427
+#, c-format
+msgid "%d-band clumping with threshold %g"
+msgstr ""
+
+#: ../raster/r.transect/main.c:84
+#, c-format
+msgid "End coordinate: %.15g, %.15g"
+msgstr ""
+
+#: ../raster/r.transect/main.c:107
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr ""
+
+#: ../raster/r.transect/main.c:111
+msgid "Raster map to be queried"
+msgstr "Sorgulanacak raster harita"
+
+#: ../raster/r.transect/main.c:117
+msgid "Transect definition"
+msgstr ""
+
+#: ../raster/r.support.stats/main.c:37
+msgid "Update raster map statistics"
+msgstr "Raster harita istatistiklerini güncelle"
+
+#: ../raster/r.support.stats/main.c:49
+#, c-format
+msgid "Statistics for <%s> updated"
+msgstr "<%s>'nin istatistikleri güncellendi"
+
+#: ../raster/r.support.stats/check.c:43
+#, c-format
+msgid "Updating statistics for [%s]..."
+msgstr "[%s]'nin istatistikleri güncelleniyor..."
+
+#: ../raster/r.support.stats/check.c:56
+msgid "Updating histogram range..."
+msgstr ""
+
+#: ../raster/r.support.stats/check.c:88
+#, c-format
+msgid "Updating the number of categories for [%s]..."
+msgstr "[%s]'in kategori sayısı günceleniyor..."
+
+#: ../raster/r.in.mat/main.c:94
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr "İkili MAT-File(v4) GRASS raster harita katmanına dönüştür."
+
+#: ../raster/r.in.mat/main.c:101
+msgid "Name of input MAT-File(v4)"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:105
+msgid "Name for output raster map (override)"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:149
+msgid "Reading MAT-File..."
+msgstr "MAT-File okunuyor..."
+
+#: ../raster/r.in.mat/main.c:175
+msgid "Array contains no data"
+msgstr "Veri içermeyen dizi"
+
+#: ../raster/r.in.mat/main.c:180
+msgid "Array contains imaginary data"
+msgstr "Görüntü verisini içeren dizi"
+
+#: ../raster/r.in.mat/main.c:186
+msgid "Invalid array name"
+msgstr "Geçersiz dizi adı"
+
+#: ../raster/r.in.mat/main.c:206
+msgid "Invalid 'map_name' array"
+msgstr "Geçersiz 'harita_adı' dizisi"
+
+#: ../raster/r.in.mat/main.c:216
+msgid "Error reading 'map_name' array"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:227
+msgid "Invalid 'map_northern_edge' array"
+msgstr "Geçersiz 'harita_kuzey_kenarı' dizisi"
+
+#: ../raster/r.in.mat/main.c:236
+msgid "Invalid 'map_southern_edge' array"
+msgstr "Geçersiz 'harita_güney_kenarı' dizisi"
+
+#: ../raster/r.in.mat/main.c:245
+msgid "Invalid 'map_eastern_edge' array"
+msgstr "Geçersiz 'harita_doğu_kenarı' dizisi"
+
+#: ../raster/r.in.mat/main.c:254
+msgid "Invalid 'map_western_edge' array"
+msgstr "Geçersiz 'harita_batı_kenarı' dizisi"
+
+#: ../raster/r.in.mat/main.c:262
+msgid "Invalid 'map_title' array"
+msgstr "Geçersiz 'harita_başlık' dizisi"
+
+#: ../raster/r.in.mat/main.c:272
+msgid "Error reading 'map_title' array"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:285
+msgid "Invalid 'map_data' array"
+msgstr "Geçersiz 'harita_veri' dizisi"
+
+#: ../raster/r.in.mat/main.c:311 ../raster/r.in.mat/main.c:443
+#: ../raster/r.in.mat/main.c:522
+msgid "Please contact the GRASS development team"
+msgstr "Lütfen GRASS geliştirme takımıyla irtibat kurun"
+
+#: ../raster/r.in.mat/main.c:316
+#, c-format
+msgid "Skipping unknown array '%s'"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:344
+#, c-format
+msgid "No 'map_data' array found in <%s>"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:351
+#, c-format
+msgid "Setting map name to <%s> which overrides <%s>"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:358
+#, c-format
+msgid "Setting map name to <%s>"
+msgstr "Harita adı <%s> e ayarlandı"
+
+#: ../raster/r.in.mat/main.c:362
+msgid "No 'map_name' array found; using <MatFile>"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:373
+msgid "Missing bound"
+msgstr "Kayıp sınır"
+
+#: ../raster/r.in.mat/main.c:377
+msgid "Using default bounds"
+msgstr "Varsayılan sınırları kullan"
+
+#: ../raster/r.in.mat/main.c:391
+#, c-format
+msgid "Map <%s> bounds set to:"
+msgstr ""
+
+#: ../raster/r.in.mat/main.c:408
+msgid "Writing new raster map..."
+msgstr "Yeni raster harita yazılıyor..."
+
+#: ../raster/r.fill.stats/main.c:155
+msgid "Spatial weights neighborhood (cells):"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:781
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:789
+msgid "Raster map with data gaps to fill"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:794
+msgid "Name of result output map"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:799
+msgid "Name of uncertainty output map"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:808
+msgid "Distance threshold (default: in cells) for interpolation"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:817
+msgid "Statistic for interpolated cell values"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:828
+msgid "Minimum input data value to include in interpolation"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:837
+msgid "Maximum input data value to include in interpolation"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:846
+msgid "Power coefficient for IDW interpolation"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:856
+msgid "Minimum number of data cells within search radius"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:861
+msgid "Interpret distance as map units, not number of cells"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:865
+msgid "Keep (preserve) original cell values"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:867
+msgid "By default original values are smoothed"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:871
+msgid "Just print the spatial weights matrix"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:875
+msgid "Just print estimated memory usage"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:880
+msgid "Single precision floating point output"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:893
+msgid "You are working with lat/lon data."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:894
+msgid "This module uses a straight-line distance metric."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:895
+msgid "Expect inaccuracies."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:910
+msgid "Result map name cannot be identical with uncertainty map name."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:919
+msgid "Maximum distance must be larger than zero."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:923
+#, c-format
+msgid "Maximum distance must be at least '%.6f' (W-E resolution)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:928
+#, c-format
+msgid "Maximum distance must be at least '%.6f' (S-N resolution)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:933
+#, c-format
+msgid "Maximum distance must be at least '%.6f' (W-E and S-N resolution)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:938
+#, c-format
+msgid "Maximum distance too large. Adjusted to '%.6f' (diagonal of current region)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:948
+msgid "Maximum distance must be at least one cell."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:954
+#, c-format
+msgid "Maximum distance too large. Adjusted to '%lu' cells (diagonal of current region)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:961
+msgid "Minimum number of cells must be at least '1'."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:964
+msgid "Specified minimum number of cells unreachable with current settings."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:969
+msgid "Value for 'minimum' must be smaller than value for 'maximum'."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:973
+msgid "The 'power' option has no effect in any mode other than 'wmean'."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:984
+msgid ""
+"The specified maximum distance cannot be resolved to whole cells\n"
+" at the current resolution settings."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:995
+#, c-format
+msgid "W-E size of neighborhood is %lu cells."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:996
+#, c-format
+msgid "S-N size of neighborhood is %lu cells."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:999
+msgid "Neighborhood cannot be smaller than 3 cells in X or Y direction."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1052
+#, c-format
+msgid "Input data range is %f to %f.\n"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1068
+#, c-format
+msgid "Input data type is integer but interpolation mode is '%s'."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1072
+msgid "Output type changed to floating point (single)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1076
+msgid "Output type changed to floating point (double)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1081
+#, c-format
+msgid "Ignoring '%c' flag. Output data type will be integer."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1111
+#, c-format
+msgid "Input data type is '%s' (%i bytes) and output data type is '%s' (%i bytes)."
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1252
+msgid "Interpolating:"
+msgstr ""
+
+#: ../raster/r.fill.stats/main.c:1386
+#, c-format
+msgid "Processing time was %ih%im%is."
+msgstr ""
+
+#: ../raster/r.fill.dir/resolve.c:136
+#, c-format
+msgid "Downward pass %d"
+msgstr ""
+
+#: ../raster/r.fill.dir/resolve.c:173
+#, c-format
+msgid "Upward pass %d"
+msgstr ""
+
+#: ../raster/r.fill.dir/dopolys.c:84
+#, c-format
+msgid "Found %d unresolved area"
+msgid_plural "Found %d unresolved areas"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../raster/r.fill.dir/main.c:90
+msgid "sink"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:91
+msgid "fill sinks"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:92
+msgid "depressions"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:94
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:101
+msgid "Name for output depressionless elevation raster map"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:105
+msgid "Name for output flow direction map for depressionless elevation raster map"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:110
+msgid "Name for output raster map of problem areas"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:117
+msgid "Aspect direction format"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:123
+msgid "Find unresolved areas only"
+msgstr "Sadece çözümsüz alanları bul"
+
+#: ../raster/r.fill.dir/main.c:129
+#, c-format
+msgid "The '%c' flag requires '%s'to be specified"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:150
+msgid "Direction map is D8 resolution, i.e. 45 degrees"
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:192
+msgid "Reading input elevation raster map..."
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:202
+msgid "Filling sinks..."
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:206
+msgid "Determining flow directions for ambiguous cases..."
+msgstr ""
+
+#: ../raster/r.fill.dir/main.c:219
+msgid "Repeat to get the final directions..."
+msgstr ""
+
+#: ../raster/r.fill.dir/wtrshed.c:95
+#, c-format
+msgid "Watershed pass %d"
+msgstr ""
+
+#: ../raster/r.volume/main.c:80
+msgid "Calculates the volume of data \"clumps\"."
+msgstr ""
+
+#: ../raster/r.volume/main.c:81
+msgid "Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+#: ../raster/r.volume/main.c:86
+msgid "Name of input raster map representing data that will be summed within clumps"
+msgstr ""
+
+#: ../raster/r.volume/main.c:92
+msgid "Name of input clump raster map"
+msgstr ""
+
+#: ../raster/r.volume/main.c:93
+msgid "Preferably the output of r.clump. If no clump map is given than MASK is used."
+msgstr ""
+
+#: ../raster/r.volume/main.c:99
+msgid "Name for output vector points map to contain clump centroids"
+msgstr ""
+
+#: ../raster/r.volume/main.c:104 ../raster/r.report/parse.c:63
+msgid "Name for output file to hold the report"
+msgstr ""
+
+#: ../raster/r.volume/main.c:106 ../raster/r.report/parse.c:65
+msgid "If no output file given report is printed to standard output"
+msgstr ""
+
+#: ../raster/r.volume/main.c:110
+msgid "Generate unformatted report (items separated by colon)"
+msgstr ""
+
+#: ../raster/r.volume/main.c:143
+msgid "No MASK found. If no clump map is given than the MASK is required. You need to define a clump raster map or create a MASK by r.mask command."
+msgstr ""
+
+#: ../raster/r.volume/main.c:145
+msgid "No clump map given, using MASK"
+msgstr ""
+
+#: ../raster/r.volume/main.c:198
+#, c-format
+msgid "Invalid category value %d (max=%d): row=%d col=%d"
+msgstr ""
+
+#: ../raster/r.volume/main.c:231
+#, c-format
+msgid "Creating vector point map <%s>..."
+msgstr ""
+
+#: ../raster/r.volume/main.c:233
+#, c-format
+msgid "From '%s' on raster map <%s> using clumps from <%s>"
+msgstr ""
+
+#: ../raster/r.volume/main.c:266
+#, c-format
+msgid ""
+"\n"
+"Volume report on data from <%s> using clumps on <%s> raster map"
+msgstr ""
+
+#: ../raster/r.volume/main.c:270
+#, c-format
+msgid "Category   Average   Data   # Cells        Centroid             Total\n"
+msgstr ""
+
+#: ../raster/r.volume/main.c:272
+#, c-format
+msgid "Number     in clump  Total  in clump   Easting     Northing     Volume"
+msgstr ""
+
+#: ../raster/r.volume/main.c:319
+msgid "Total Volume"
+msgstr ""
+
+#: ../raster/r.contour/cont.c:82
+#, c-format
+msgid "Writing vector contour (one level)..."
+msgid_plural "Writing vector contours (total levels %d)..."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../raster/r.contour/cont.c:221
+#, c-format
+msgid "%d crossing found"
+msgid_plural "%d crossings found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../raster/r.contour/cont.c:276
+msgid "Illegal edge number"
+msgstr "Uygun olmayan kenar sayısı"
+
+#: ../raster/r.contour/cont.c:385
+msgid "Edge number out of range"
+msgstr "Kenar sayısı aralık dışında"
+
+#: ../raster/r.contour/main.c:90
+msgid "contours"
+msgstr ""
+
+#: ../raster/r.contour/main.c:92
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+#: ../raster/r.contour/main.c:103 ../raster/r.contour/main.c:111
+#: ../raster/r.contour/main.c:118 ../raster/r.contour/main.c:125
+msgid "Contour levels"
+msgstr ""
+
+#: ../raster/r.contour/main.c:141
+#, c-format
+msgid "Either <%s> or <%s> option must be specified"
+msgstr ""
+
+#: ../raster/r.contour/main.c:231
+msgid "Snap lines"
+msgstr ""
+
+#: ../raster/r.contour/main.c:233
+msgid "Break lines at intersections"
+msgstr ""
+
+#: ../raster/r.contour/main.c:237
+msgid "Merge lines"
+msgstr ""
+
+#: ../raster/r.contour/main.c:281
+#, c-format
+msgid "Range of data: min=%f, max=%f"
+msgstr ""
+
+#: ../raster/r.contour/main.c:283
+msgid "Range of data: empty"
+msgstr ""
+
+#: ../raster/r.contour/main.c:311 ../raster/r.contour/main.c:314
+msgid "This step value is not allowed"
+msgstr ""
+
+#: ../raster/r.contour/main.c:339
+#, c-format
+msgid "Range of levels: min = %f, max = %f"
+msgstr ""
+
+#: ../raster/r.contour/main.c:368
+msgid "Displacing data..."
+msgstr ""
+
+#: ../raster/r.report/main.c:69
+msgid "Reports statistics for raster maps."
+msgstr ""
+
+#: ../raster/r.report/stats.c:93
+#, c-format
+msgid "Unable to open result file <%s>"
+msgstr "<%s> sonuç dosyası açılamıyor."
+
+#: ../raster/r.report/parse.c:49
+msgid "area in square miles"
+msgstr ""
+
+#: ../raster/r.report/parse.c:50
+msgid "area in square meters"
+msgstr ""
+
+#: ../raster/r.report/parse.c:51
+msgid "area in square kilometers"
+msgstr ""
+
+#: ../raster/r.report/parse.c:52
+msgid "area in acres"
+msgstr ""
+
+#: ../raster/r.report/parse.c:53
+msgid "area in hectares"
+msgstr ""
+
+#: ../raster/r.report/parse.c:54
+msgid "number of cells"
+msgstr ""
+
+#: ../raster/r.report/parse.c:55
+msgid "percent cover"
+msgstr ""
+
+#: ../raster/r.report/parse.c:75
+msgid "Page length"
+msgstr ""
+
+#: ../raster/r.report/parse.c:83
+msgid "Page width"
+msgstr ""
+
+#: ../raster/r.report/parse.c:113
+msgid "Suppress page headers"
+msgstr ""
+
+#: ../raster/r.report/parse.c:118
+msgid "Use formfeeds between pages"
+msgstr ""
+
+#: ../raster/r.report/parse.c:123
+msgid "Scientific format"
+msgstr "Bilimsel biçim"
+
+#: ../raster/r.report/parse.c:187
+msgid "nsteps has to be > 0; using nsteps=255"
+msgstr ""
+
+#: ../raster/r.report/parse.c:193
+msgid "Illegal page length"
+msgstr "Uygun olmayan sayfa uzunluğu"
+
+#: ../raster/r.report/parse.c:198
+msgid "Illegal page width"
+msgstr "Uygun olmayan sayfa genişliği"
+
+#: ../raster/r.report/parse.c:253
+#, c-format
+msgid "Only %d unit%s allowed"
+msgstr ""
+
+#: ../raster/r.report/parse.c:286
+#, c-format
+msgid "Unable to read fp range for raster map <%s>"
+msgstr "<%s> raster haritasının kayar nokta aralığı okunamıyor"
+
+#: ../raster/r.report/label.c:13
+msgid "Page width is too small"
+msgstr ""
+
+#: ../raster/r.out.ppm/main.c:57
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr ""
+
+#: ../raster/r.out.ppm/main.c:65
+msgid "Name for new PPM file (use '-' for stdout)"
+msgstr ""
+
+#: ../raster/r.out.ppm/main.c:69
+msgid "Output greyscale instead of color"
+msgstr ""
+
+#: ../raster/r.out.ppm/main.c:73
+msgid "Suppress printing of PPM header"
+msgstr ""
+
+#: ../raster/r.out.ppm/main.c:125
+#, c-format
+msgid "Unable to open file <%s> for write"
+msgstr "<%s> dosyası yazma için okunamıyor"
+
+#: ../raster/r.out.ppm/main.c:155
+msgid "Converting..."
+msgstr "Dönüştürülüyor..."
+
+#: ../raster/r.out.ppm/main.c:235
+#, c-format
+msgid "File <%s> created"
+msgstr "<%s> dosyası oluşturuldu"
+
+#: ../scripts/g.extension.all/g.extension.all.py:54
+#, python-format
+msgid "%s not defined"
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:64
+#, python-format
+msgid "Unable to parse metadata file: %s"
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:93
+msgid "No extension found. Nothing to remove."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:96
+msgid "Nothing to rebuild. Rebuilding process can be forced with -f flag."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:100
+msgid "List of extensions to be removed:"
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:103
+msgid "You must use the force flag (-f) to actually remove them. Exiting."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:109
+#, python-format
+msgid "Removing extension <%s>..."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:111
+#, python-format
+msgid "Reinstalling extension <%s>..."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:123
+#, python-format
+msgid "Unable to process extension:%s"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:68
+msgid "The input vector map contains both polygons and points, cannot handle mixed types"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:78
+#, python-format
+msgid "Processing point data (%d points found)..."
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:88
+msgid "The input vector map does not contain polygons"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:93
+#, python-format
+msgid "Processing area data (%d areas found)..."
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:102
+msgid "Error creating layer 2"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:109
+msgid "Error creating new table for layer 2"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:116
+msgid "Error populating new table for layer 2"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:124
+msgid "Error converting polygon to line"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:141
+msgid "Error removing centroids"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:151
+msgid "Error removing table from layer 1"
+msgstr ""
+
+#: ../scripts/v.to.lines/v.to.lines.py:162
+msgid "Error adding categories"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:100
+msgid "Either parameter <raster> or parameter <vector> is required"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:114
+msgid "Raster MASK removed"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:116
+msgid "No existing MASK to remove"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:121
+msgid "MASK already found in current mapset. Delete first or overwrite."
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:123
+msgid "MASK already exists and will be overwritten"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:134
+#, python-format
+msgid "The raster map <%s> must be integer (CELL type)  in order to use the 'maskcats' parameter"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:159
+#, python-format
+msgid "No area found in vector map <%s>. Creating a convex hull for MASK."
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:171
+#, python-format
+msgid "Unable to create a convex hull for vector map <%s>"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:187
+msgid "Creating inverted raster MASK..."
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:189
+msgid "Inverted raster MASK created"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:191
+msgid "Raster MASK created"
+msgstr ""
+
+#: ../scripts/r.mask/r.mask.py:193
+msgid "All subsequent raster operations will be limited to the MASK area. Removing or renaming raster map named 'MASK' will restore raster operations to normal."
+msgstr ""
+
+#: ../scripts/r.unpack/r.unpack.py:65
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 #, python-brace-format
 msgid "At least one method must be provided when backend <{backend}> is used"
 msgstr ""
