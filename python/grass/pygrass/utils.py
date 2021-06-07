@@ -497,7 +497,8 @@ def create_test_vector_map(map_name="test_vector"):
 
 
 def create_test_stream_network_map(map_name="streams"):
-    R"""
+    R"""Create test data
+
        This functions creates a vector map layer with lines that represent
        a stream network with two different graphs. The first graph
        contains a loop, the second can be used as directed graph.

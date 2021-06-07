@@ -121,7 +121,7 @@ class TestTemporalVectorAlgebra(TestCase):
         cls.del_temp_region()
 
     def test_temporal_select(self):
-        """Testing the temporal select operator. """
+        """Testing the temporal select operator."""
 
         self.assertModule("t.vect.algebra", expression="R = A : A", basename="r")
 
@@ -138,7 +138,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_select_operators(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
 
         self.assertModule(
             "t.vect.algebra", expression="R = A {:,during} C", basename="r"

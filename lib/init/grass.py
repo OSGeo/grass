@@ -805,7 +805,7 @@ def set_defaults():
 
 
 def set_display_defaults():
-    """ Predefine monitor size for certain architectures"""
+    """Predefine monitor size for certain architectures"""
     if os.getenv("HOSTTYPE") == "arm":
         # small monitor on ARM (iPAQ, zaurus... etc)
         os.environ["GRASS_RENDER_HEIGHT"] = "320"
@@ -2366,7 +2366,7 @@ def parse_cmdline(argv, default_gui):
 
 
 def validate_cmdline(params):
-    """ Validate the cmdline params and exit if necessary. """
+    """Validate the cmdline params and exit if necessary."""
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
     if params.create_new and not params.mapset:
