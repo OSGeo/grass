@@ -46,6 +46,7 @@ typedef enum {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 typedef struct
 {
@@ -60,6 +61,8 @@ typedef struct
 >>>>>>> 5e2891edf8 (Dockerfile_alpine: fix broken link creatio)
 =======
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 int main(int argc, char **argv)
 {
     struct { /* struct is used both for interface and output */
@@ -117,7 +120,10 @@ int main(int argc, char **argv)
         *par_coords,
         *par_profiledata,
         *par_profileformat;
+<<<<<<< HEAD
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
     struct Flag *flag_units, *flag_extended;
 
     struct History history;
@@ -371,7 +377,10 @@ int main(int argc, char **argv)
                 G_warning(_("There may be a notable processing delay because the "
                            "computational region is %lu times larger than necessary"),
                           window_square / search_square);
+<<<<<<< HEAD
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
         }
     }
 
