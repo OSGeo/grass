@@ -147,7 +147,7 @@ COPY . /src/grass_build/
 WORKDIR /src/grass_build
 
 # Cleanup potentially leftover GISRC file with wrong path to "demolocation"
-RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc7?
+RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
@@ -202,7 +202,7 @@ ENV LC_ALL "en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass `grass --config path`
+RUN ln -sf /usr/local/grass?? `grass --config path`
 
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
