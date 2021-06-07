@@ -208,8 +208,11 @@ class GifWriter:
 
         if loops == 0 or loops == float("inf"):
 <<<<<<< HEAD
+<<<<<<< HEAD
             loops = 2**16 - 1
 =======
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
             loops = 2 ** 16 - 1
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
             # bb = ""
@@ -650,10 +653,14 @@ def readGif(filename, asNumpy=True):
     # Check whether it exists
     if not os.path.isfile(filename):
 <<<<<<< HEAD
+<<<<<<< HEAD
         raise OSError("File not found: " + str(filename))
 =======
         raise IOError("File not found: " + str(filename))
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+        raise IOError("File not found: " + str(filename))
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 
     # Load file using PIL
     pilIm = PIL.Image.open(filename)
