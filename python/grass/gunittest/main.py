@@ -130,6 +130,7 @@ def discovery():
 CONFIG_FILENAME = ".gunittest.cfg"
 
 
+<<<<<<< HEAD
 def get_config(start_directory, config_file):
     """Read configuration if available, return empty section proxy if not
 
@@ -152,6 +153,17 @@ def get_config(start_directory, config_file):
         # Create an empty section if file is not available or section is not present.
         config_parser.read_dict({"gunittest": {}})
     return config_parser["gunittest"]
+=======
+def get_config(start_directory):
+    """Read configuration if available, return empty dict if not"""
+    config_parser = configparser.ConfigParser()
+    config_file = Path(start_directory) / CONFIG_FILENAME
+    if config_file.is_file():
+        config_parser.read(config_file)
+    if "gunittest" in config_parser:
+        return config_parser["gunittest"]
+    return {}
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 
 
 def main():
@@ -229,10 +241,14 @@ def main():
     start_dir = "."
     abs_start_dir = os.path.abspath(start_dir)
 
+<<<<<<< HEAD
     try:
         config = get_config(start_directory=start_dir, config_file=args.config)
     except OSError as error:
         return f"Error reading configuration: {error}"
+=======
+    config = get_config(start_dir)
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 
     invoker = GrassTestFilesInvoker(
         start_dir=start_dir,

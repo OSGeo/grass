@@ -207,7 +207,11 @@ class GifWriter:
         """
 
         if loops == 0 or loops == float("inf"):
+<<<<<<< HEAD
             loops = 2**16 - 1
+=======
+            loops = 2 ** 16 - 1
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
             # bb = ""
             # application extension should not be used
             # (the extension interprets zero loops
@@ -645,7 +649,11 @@ def readGif(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
+<<<<<<< HEAD
         raise OSError("File not found: " + str(filename))
+=======
+        raise IOError("File not found: " + str(filename))
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 
     # Load file using PIL
     pilIm = PIL.Image.open(filename)

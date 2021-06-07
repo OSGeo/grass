@@ -71,7 +71,10 @@ GLOBAL int skip_cells;
 GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 /* Zenith/nadir comparison modes. */
 GLOBAL enum { ANGLEV1, ANGLEV2, ANGLEV2_DISTANCE } compmode;
 
