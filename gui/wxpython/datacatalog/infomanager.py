@@ -101,7 +101,7 @@ class DataCatalogInfoManager:
         self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
 
     def _text_from_reason_id(self, reason_id):
-        """ Get string for infobar message based on the reason."""
+        """Get string for infobar message based on the reason."""
         last_used_mapset_path = gisenv()["LAST_MAPSET_PATH"]
         reason = None
         if reason_id == "non-existent":

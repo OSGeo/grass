@@ -5,6 +5,8 @@ FROM alpine:latest
 LABEL authors="Pietro Zambelli,Markus Neteler"
 LABEL maintainer="peter.zamb@gmail.com,neteler@osgeo.org"
 
+# without PDAL
+
 # PACKAGES VERSIONS
 ARG PYTHON_VERSION=3
 
