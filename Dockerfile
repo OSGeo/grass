@@ -112,7 +112,7 @@ RUN ./configure \
     && make -j $NUMTHREADS && make install && ldconfig
 
 # enable simple grass command regardless of version number
-RUN ln -s /usr/local/bin/grass* /usr/local/bin/grass
+RUN if [ ! -e /usr/local/bin/grass ] ; then ln -s /usr/local/bin/grass* /usr/local/bin/grass ; fi
 
 # Reduce the image size
 RUN apt-get autoremove -y
