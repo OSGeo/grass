@@ -1,4 +1,6 @@
 # Import GRASS Python bindings
+# https://github.com/zarch/grass-session
+
 from grass_session import Session
 import grass.script as gs
 
