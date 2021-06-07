@@ -1,11 +1,38 @@
 [tool.black]
 required-version = '24'
 line-length = 88
+<<<<<<< HEAD
 target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
     python/libgrass_interface_generator/
+=======
+target-version = ['py36', 'py37', 'py38', 'py39']
+include = '\.pyi?$'
+exclude = '''
+(
+    # exclude directories in the root of the project
+    /(
+          \.eggs
+        | \.git
+        | \.hg
+        | \.mypy_cache
+        | \.tox
+        | \.venv
+        | _build
+        | buck-out
+        | build
+        | bin\..*
+        | dist\..*
+    )/
+    | python/grass/ctypes/
+    # Bug in Black related to r-string prefix capitalization reformats
+    # a line in this file unnecessarily. File is however fully Black-formatted
+    # at the time of writing.
+    # https://github.com/psf/black/issues/1244
+    | python/grass/pygrass/utils.py
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 )
 '''
 

@@ -60,7 +60,11 @@ class Category(list):
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         self._mtype = mtype
         self._gtype = None if mtype is None else RTYPE[mtype]["grass type"]
+<<<<<<< HEAD
         super().__init__(*args, **kargs)
+=======
+        super(Category, self).__init__(*args, **kargs)
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 
     def _get_mtype(self):
         return self._mtype
@@ -129,7 +133,13 @@ class Category(list):
         return super().__getitem__(self._chk_index(index))
 
     def __setitem__(self, index, value):
+<<<<<<< HEAD
         return super().__setitem__(self._chk_index(index), self._chk_value(value))
+=======
+        return super(Category, self).__setitem__(
+            self._chk_index(index), self._chk_value(value)
+        )
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 
     def _get_c_cat(self, index):
         """Returns i-th description and i-th data range from the list of
@@ -282,7 +292,11 @@ class Category(list):
         raise ImplementationError("set_cats_fmt() is not implemented yet.")
 
     def read_rules(self, filename, sep=":"):
+<<<<<<< HEAD
         """Copy categories from a rules file, default separator is ':', the
+=======
+        """Copy categories from a rules file, default separetor is ':', the
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
         columns must be: min and/or max and label. ::
 
             1:forest
@@ -311,7 +325,11 @@ class Category(list):
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=":"):
+<<<<<<< HEAD
         """Copy categories from a rules file, default separator is ':', the
+=======
+        """Copy categories from a rules file, default separetor is ':', the
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
         columns must be: min and/or max and label. ::
 
             1:forest

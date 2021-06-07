@@ -100,7 +100,11 @@ you would use::
     [gunittest]
     exclude =
         vector/*
+<<<<<<< HEAD
         raster/r.contour/testsuite/test_broken.py
+=======
+        raster/r.contour/testsuite/testrc.py
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 
 
 Running tests and creating report

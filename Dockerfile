@@ -285,6 +285,7 @@ RUN ./configure $GRASS_CONFIG \
     mkdir -p /usr/local/grass84/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
 
+<<<<<<< HEAD
 # Build the GDAL-GRASS plugin
 RUN git clone https://github.com/OSGeo/gdal-grass \
     && cd "gdal-grass" \
@@ -295,6 +296,10 @@ RUN git clone https://github.com/OSGeo/gdal-grass \
     && make install -j $NUMTHREADS \
     && cd /src \
     && rm -rf "gdal-grass"
+=======
+# enable simple grass command regardless of version number
+RUN if [ ! -e /usr/local/bin/grass ] ; then ln -s /usr/local/bin/grass* /usr/local/bin/grass ; fi
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 
 # Leave build stage
 FROM grass_gis as grass_gis_final
