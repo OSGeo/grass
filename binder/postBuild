@@ -4,7 +4,6 @@
 set -e
 
 # compile
-cd grass
 ./configure \
     --enable-largefile=yes \
     --with-nls \
