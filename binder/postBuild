@@ -24,3 +24,11 @@ make
 mkdir -p $HOME/.local/bin/
 # create link to build
 ln -s $HOME/code/grass/bin.*/grass* $HOME/.local/bin/grass
+
+# download a sample dataset
+mkdir -p data/grassdata \
+  && curl -SL https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip > nc_basic_spm_grass7.zip \
+  && unzip -qq nc_basic_spm_grass7.zip \
+  && mv nc_basic_spm_grass7 data/grassdata \
+  && rm nc_basic_spm_grass7.zip
+  
