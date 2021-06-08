@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdbool.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/raster3d.h>
@@ -31,7 +32,6 @@ int main(int argc, char *argv[])
     int i;
     int print_flag = 0;
     int flat_flag; 
-    int set_flag;
     double x, xs, ys, zs;
     int ival;
     int row_flag = 0, col_flag = 0;
@@ -41,12 +41,13 @@ int main(int argc, char *argv[])
     const char *mapset;
     char **rast_ptr, **vect_ptr;
     int pix;
+    bool update_file = false;
 
     struct GModule *module;
     struct
     {
 	struct Flag
-	    *update, *print, *gprint, *flprint, *lprint, *eprint, *nangle,
+	    *noupdate, *force, *print, *gprint, *flprint, *lprint, *eprint, *nangle,
 	    *center, *res_set, *dist_res, *dflt, *z, *savedefault,
 	    *bbox, *gmt_style, *wms_style;
     } flag;
@@ -160,10 +161,15 @@ int main(int argc, char *argv[])
 	  "works only for 2D resolution)");
     flag.res_set->guisection = _("Bounds");
 
-    flag.update = G_define_flag();
-    flag.update->key = 'u';
-    flag.update->description = _("Do not update the current region");
-    flag.update->guisection = _("Effects");
+    flag.noupdate = G_define_flag();
+    flag.noupdate->key = 'u';
+    flag.noupdate->description = _("Do not update the current region");
+    flag.noupdate->guisection = _("Effects");
+
+    flag.force = G_define_flag();
+    flag.force->key = 'o';
+    flag.force->description = _("Force update of the current region");
+    flag.force->guisection = _("Effects");
 
     /* parameters */
 
@@ -362,18 +368,18 @@ int main(int argc, char *argv[])
     G_option_required(flag.dflt, flag.savedefault, flag.print, flag.lprint,
                       flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
                       flag.dist_res, flag.nangle, flag. z, flag.bbox, flag.gprint,
-                      flag.res_set, flag.update, parm.region, parm.raster,
+                      flag.res_set, flag.noupdate, parm.region, parm.raster,
                       parm.raster3d, parm.vect, parm.north, parm.south, parm.east,
                       parm.west, parm.top, parm.bottom, parm.rows, parm.cols,
                       parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
                       parm.zoom, parm.align, parm.save, parm.grow, NULL);
+    G_option_exclusive(flag.noupdate, flag.force, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     G_get_default_window(&window);
 
-    set_flag = !flag.update->answer;
     flat_flag = flag.flprint->answer;
 
     if (flag.print->answer)
@@ -422,6 +428,7 @@ int main(int argc, char *argv[])
 
     /* region= */
     if ((name = parm.region->answer)) {
+	update_file = true;
 	mapset = G_find_file2("windows", name, "");
 	if (!mapset)
 	    G_fatal_error(_("Region <%s> not found"), name);
@@ -432,6 +439,7 @@ int main(int argc, char *argv[])
     if (parm.raster->answer) {
 	int first = 0;
 
+	update_file = true;
 	rast_ptr = parm.raster->answers;
 	for (; *rast_ptr != NULL; rast_ptr++) {
 	    char rast_name[GNAME_MAX];
@@ -464,6 +472,7 @@ int main(int argc, char *argv[])
     if ((name = parm.raster3d->answer)) {
 	RASTER3D_Region win;
 
+	update_file = true;
 	if ((mapset = G_find_raster3d(name, "")) == NULL)
 	    G_fatal_error(_("3D raster map <%s> not found"), name);
 
@@ -478,6 +487,7 @@ int main(int argc, char *argv[])
     if (parm.vect->answer) {
 	int first = 0;
 
+	update_file = true;
 	vect_ptr = parm.vect->answers;
 	for (; *vect_ptr != NULL; vect_ptr++) {
             int ret;
@@ -560,6 +570,7 @@ int main(int argc, char *argv[])
 
     /* n= */
     if ((value = parm.north->answer)) {
+	update_file = true;
 	if ((i = nsew(value, "n+", "n-", "s+"))) {
 	    if (!G_scan_resolution(value + 2, &x, window.proj))
 		die(parm.north);
@@ -583,6 +594,7 @@ int main(int argc, char *argv[])
 
     /* s= */
     if ((value = parm.south->answer)) {
+	update_file = true;
 	if ((i = nsew(value, "s+", "s-", "n-"))) {
 	    if (!G_scan_resolution(value + 2, &x, window.proj))
 		die(parm.south);
@@ -606,6 +618,7 @@ int main(int argc, char *argv[])
 
     /* e= */
     if ((value = parm.east->answer)) {
+	update_file = true;
 	if ((i = nsew(value, "e+", "e-", "w+"))) {
 	    if (!G_scan_resolution(value + 2, &x, window.proj))
 		die(parm.east);
@@ -629,6 +642,7 @@ int main(int argc, char *argv[])
 
     /* w= */
     if ((value = parm.west->answer)) {
+	update_file = true;
 	if ((i = nsew(value, "w+", "w-", "e-"))) {
 	    if (!G_scan_resolution(value + 2, &x, window.proj))
 		die(parm.west);
@@ -652,6 +666,7 @@ int main(int argc, char *argv[])
 
     /* t= */
     if ((value = parm.top->answer)) {
+	update_file = true;
 	if ((i = nsew(value, "t+", "t-", "b+"))) {
 	    if (sscanf(value + 2, "%lf", &x) != 1)
 		die(parm.top);
@@ -675,6 +690,7 @@ int main(int argc, char *argv[])
 
     /* b= */
     if ((value = parm.bottom->answer)) {
+	update_file = true;
 	if ((i = nsew(value, "b+", "b-", "t-"))) {
 	    if (sscanf(value + 2, "%lf", &x) != 1)
 		die(parm.bottom);
@@ -698,6 +714,7 @@ int main(int argc, char *argv[])
 
     /* res= */
     if ((value = parm.res->answer)) {
+	update_file = true;
 	if (!G_scan_resolution(value, &x, window.proj))
 	    die(parm.res);
 	window.ns_res = x;
@@ -713,6 +730,7 @@ int main(int argc, char *argv[])
 
     /* res3= */
     if ((value = parm.res3->answer)) {
+	update_file = true;
 	if (!G_scan_resolution(value, &x, window.proj))
 	    die(parm.res);
 	window.ns_res3 = x;
@@ -722,6 +740,7 @@ int main(int argc, char *argv[])
 
     /* nsres= */
     if ((value = parm.nsres->answer)) {
+	update_file = true;
 	if (!G_scan_resolution(value, &x, window.proj))
 	    die(parm.nsres);
 	window.ns_res = x;
@@ -734,6 +753,7 @@ int main(int argc, char *argv[])
 
     /* ewres= */
     if ((value = parm.ewres->answer)) {
+	update_file = true;
 	if (!G_scan_resolution(value, &x, window.proj))
 	    die(parm.ewres);
 	window.ew_res = x;
@@ -746,6 +766,7 @@ int main(int argc, char *argv[])
 
     /* tbres= */
     if ((value = parm.tbres->answer)) {
+	update_file = true;
 	if (sscanf(value, "%lf", &x) != 1)
 	    die(parm.tbres);
 	window.tb_res = x;
@@ -758,6 +779,7 @@ int main(int argc, char *argv[])
 
     /* rows= */
     if ((value = parm.rows->answer)) {
+	update_file = true;
 	if (sscanf(value, "%i", &ival) != 1)
 	    die(parm.rows);
 	window.rows = ival;
@@ -766,6 +788,7 @@ int main(int argc, char *argv[])
 
     /* cols= */
     if ((value = parm.cols->answer)) {
+	update_file = true;
 	if (sscanf(value, "%i", &ival) != 1)
 	    die(parm.cols);
 	window.cols = ival;
@@ -774,6 +797,7 @@ int main(int argc, char *argv[])
 
     /* zoom= */
     if ((name = parm.zoom->answer)) {
+	update_file = true;
 	mapset = G_find_raster2(name, "");
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
@@ -782,6 +806,7 @@ int main(int argc, char *argv[])
 
     /* align= */
     if ((name = parm.align->answer)) {
+	update_file = true;
 	mapset = G_find_raster2(name, "");
 	if (!mapset)
 	    G_fatal_error(_("Raster map <%s> not found"), name);
@@ -791,6 +816,7 @@ int main(int argc, char *argv[])
     
     /* grow by number of cells */
     if ((value = parm.grow->answer)){
+        update_file = true;
         if (sscanf(value, "%i", &pix)){
             xs = window.ns_res * pix;
             if (window.north + xs > window.south - xs){
@@ -828,6 +854,7 @@ int main(int argc, char *argv[])
 	
     /* save= */
     if ((name = parm.save->answer)) {
+	update_file = false;
 	temp_window = window;
 	G_adjust_Cell_head3(&temp_window, 0, 0, 0);
 	if (G_put_element_window(&temp_window, "windows", name) < 0)
@@ -835,7 +862,7 @@ int main(int argc, char *argv[])
     }
 
     G_adjust_Cell_head3(&window, row_flag, col_flag, 0);
-    if (set_flag) {
+    if (flag.force->answer || (update_file && !flag.noupdate->answer)) {
 	if (G_put_window(&window) < 0)
 	    G_fatal_error(_("Unable to update current region"));
     }
