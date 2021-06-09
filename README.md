@@ -16,6 +16,12 @@ a Geographic Information System used for geospatial data management and
 analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
 
+## Jupyter Notebook
+Launch this repository in binder and experiment with PyGRASS in Jupyter Notebooks by clinking the button below.
+
+[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/chaedri/grass/binder?urlpath=lab/tree/doc%2Fnotebooks%2Fexample_notebook.ipynb)
+
+
 ## How to get write access here
 
 In general: you don't really need write access as you can simply open
@@ -30,11 +36,6 @@ Want to become a core developer? See
 > See INSTALL file.
 
 Yes, you should really read [INSTALL](INSTALL). In addition, there are detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
-
-## Jupyter Notebook
-Launch this repository in binder and experiment with PyGRASS in Jupyter Notebooks by clinking the button below.
-
-[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/chaedri/grass/binder?urlpath=lab/tree/doc%2Fnotebooks%2Fexample_notebook.ipynb)
 
 ## Docker
 
