@@ -16,7 +16,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include <stdbool.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/raster3d.h>
@@ -374,6 +373,9 @@ int main(int argc, char *argv[])
                       parm.res, parm.res3, parm.nsres, parm.ewres, parm.tbres,
                       parm.zoom, parm.align, parm.save, parm.grow, NULL);
     G_option_exclusive(flag.noupdate, flag.force, NULL);
+    G_option_requires(flag.noupdate, flag.savedefault, flag.print, flag.lprint,
+                      flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
+                      flag.dist_res, flag.nangle, flag.z, flag.bbox, flag.gprint, parm.save, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
