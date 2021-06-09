@@ -714,9 +714,11 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver not in ("sqlite", "pg"):
-            str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
-            raise TypeError(str_err)
+        if driver not in DRIVERS:
+            raise NotImplementedError(
+                "The database driver %s is not supported by PyGRASS, "
+                "use: %s." % (driver, ", ".join(DRIVERS))
+            )
         self.c_fieldinfo.contents.driver = String(driver)
 
     driver = property(
