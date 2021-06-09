@@ -5,7 +5,7 @@
 [![CI](https://github.com/OSGeo/grass/workflows/CI/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACI)
 [![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AOSGeo4W)
 [![Centos](https://github.com/OSGeo/grass/workflows/CentOS/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACentOS)
-[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/chaedri/grass/binder?urlpath=lab/tree/doc%2Fnotebooks%2Fexample_notebook.ipynb)
+
 
 # GRASS GIS Repository
 
@@ -30,6 +30,11 @@ Want to become a core developer? See
 > See INSTALL file.
 
 Yes, you should really read [INSTALL](INSTALL). In addition, there are detailed [compile instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install) in the Wiki.
+
+## Jupyter Notebook
+Launch this repository in binder and try it out with Jupyter Notebooks.
+
+[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/chaedri/grass/binder?urlpath=lab/tree/doc%2Fnotebooks%2Fexample_notebook.ipynb)
 
 ## Docker
 
