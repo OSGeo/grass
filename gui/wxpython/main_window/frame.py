@@ -25,13 +25,12 @@ import platform
 import re
 
 from core import globalvar
-#try:
-#    from agw import aui
-#except ImportError:
-#    import wx.lib.agw.aui as aui
+try:
+    from agw import aui
+except ImportError:
+    import wx.lib.agw.aui as aui
 
 import wx
-import wx.aui as aui
 
 try:
     import wx.lib.agw.flatnotebook as FN
@@ -92,7 +91,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=wx.DisplaySize(),
+        size=globalvar.GM_WINDOW_SIZE,
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -149,11 +148,15 @@ class GMFrame(wx.Frame):
         self.dialogs["nvizPreferences"] = None
         self.dialogs["atm"] = list()
 
+        #set pane sizes according to the full screen size
+        self.PANE_BEST_SIZE = tuple(t/5 for t in wx.DisplaySize())
+        self.PANE_MIN_SIZE = tuple(t/10 for t in wx.DisplaySize())
+
         # create widgets and build panes
         self.CreateMenuBar()
         self.CreateStatusBar(number=1)
         self.BuildPanes()
-        self.BuildEvents()
+        self.BindEvents()
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
@@ -355,6 +358,12 @@ class GMFrame(wx.Frame):
         else:
             self.pyshell = None
 
+    def _createMapDisplay(self, parent):
+        """Set up Map Display"""
+        # blank panel for testing
+        self.mapdisplay = wx.Panel(parent=parent)
+
+
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
 
@@ -367,6 +376,7 @@ class GMFrame(wx.Frame):
         self._createSearchModule(parent=self)
         self._createConsole(parent=self)
         self._createPythonShell(parent=self)
+        self._createMapDisplay(parent=self)
         self.toolbars = {
             "workspace": LMWorkspaceToolbar(parent=self),
             "tools": LMToolsToolbar(parent=self),
@@ -407,32 +417,35 @@ class GMFrame(wx.Frame):
                 .BestSize((self.toolbars[toolbar].GetBestSize())),
             )
 
-        self._auimgr.AddPane(self.datacatalog, aui.AuiPaneInfo().Name("datacatalog").
-                          CenterPane().PaneBorder(False))
+        self._auimgr.AddPane(self.mapdisplay, aui.AuiPaneInfo().Name("map display").
+                          CenterPane().PaneBorder(True))
+
+        self._auimgr.AddPane(self.datacatalog, aui.AuiPaneInfo().
+                          Name("datacatalog").Caption("Data Catalog").
+                          Left().Layer(1).Position(1).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
 
         self._auimgr.AddPane(self.displayPanel, aui.AuiPaneInfo().
                           Name("display").Caption("Display").
-                          Right().Layer(1).Position(1).BestSize(wx.Size(1400,150)).MinSize(wx.Size(800,150)).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+                          Left().Layer(1).Position(2).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
 
         self._auimgr.AddPane(self.search, aui.AuiPaneInfo().
                           Name("modules").Caption("Modules").
-                          Right().Layer(2).Position(1).BestSize(wx.Size(400,150)).MinSize(wx.Size(150,150)).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+                          Right().Layer(2).Position(1).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
 
         self._auimgr.AddPane(self.goutput, aui.AuiPaneInfo().
                           Name("console").Caption("Console").
-                          Right().Layer(2).Position(2).BestSize(wx.Size(400,150)).MinSize(wx.Size(150,150)).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+                          Right().Layer(2).Position(2).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
 
         self._auimgr.AddPane(self.pyshell, aui.AuiPaneInfo().
                           Name("python").Caption("Python").
-                          Right().Layer(2).Position(3).BestSize(wx.Size(400,150)).MinSize(wx.Size(150,150)).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+                          Right().Layer(2).Position(3).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
 
         self._auimgr.GetPane("toolbarNviz").Hide()
-        self._auimgr.GetPane("datacatalog").Show()
         wx.CallAfter(self.datacatalog.LoadItems)
 
         self._auimgr.Update()
 
-    def BuildEvents(self):
+    def BindEvents(self):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
