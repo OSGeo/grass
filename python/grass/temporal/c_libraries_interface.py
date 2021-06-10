@@ -463,7 +463,7 @@ def _write_timestamp(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        # mapset = data[3]
         layer = data[4]
         timestring = data[5]
         ts = libgis.TimeStamp()
@@ -538,13 +538,12 @@ def _read_band_reference(lock, conn, data):
                  mapset, layer, timestring]
 
     """
-    check = False
     bandref = None
     try:
         maptype = data[1]
         name = data[2]
         mapset = data[3]
-        layer = data[4]
+        # layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
             # Must use temporary variable to work around
@@ -578,12 +577,11 @@ def _write_band_reference(lock, conn, data):
                  mapset, layer, timestring]
 
     """
-    check = -3
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
-        layer = data[4]
+        # mapset = data[3]
+        # layer = data[4]
         bandref = data[5]
 
         if maptype == RPCDefs.TYPE_RASTER:
@@ -619,8 +617,8 @@ def _remove_band_reference(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
-        layer = data[4]
+        # mapset = data[3]
+        # layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
             check = libgis.G_remove_misc("cell_misc", "bandref", name)
@@ -1742,9 +1740,7 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Names of available mapsets as list of strings
         """
         self.check_server()
-        self.client_conn.send(
-            [RPCDefs.AVAILABLE_MAPSETS,]
-        )
+        self.client_conn.send([RPCDefs.AVAILABLE_MAPSETS,])
         return self.safe_receive("available_mapsets")
 
     def get_driver_name(self, mapset=None):
@@ -1775,9 +1771,7 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Name of the current mapset
         """
         self.check_server()
-        self.client_conn.send(
-            [RPCDefs.G_MAPSET,]
-        )
+        self.client_conn.send([RPCDefs.G_MAPSET,])
         return self.safe_receive("get_mapset")
 
     def get_location(self):
@@ -1786,9 +1780,7 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Name of the location
         """
         self.check_server()
-        self.client_conn.send(
-            [RPCDefs.G_LOCATION,]
-        )
+        self.client_conn.send([RPCDefs.G_LOCATION,])
         return self.safe_receive("get_location")
 
     def get_gisdbase(self):
@@ -1797,9 +1789,7 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Name of the gisdatabase
         """
         self.check_server()
-        self.client_conn.send(
-            [RPCDefs.G_GISDBASE,]
-        )
+        self.client_conn.send([RPCDefs.G_GISDBASE,])
         return self.safe_receive("get_gisdbase")
 
     def fatal_error(self, mapset=None):
