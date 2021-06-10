@@ -17,9 +17,9 @@ analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
 
 ## Jupyter Notebook
-Launch this repository in binder and experiment with PyGRASS in Jupyter Notebooks by clicking the button below:
+Launch this repository in binder and experiment with GRASS's Python API in Jupyter Notebooks by clicking the button below:
 
-[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/chaedri/grass/binder?urlpath=lab/tree/doc%2Fnotebooks%2Fexample_notebook.ipynb)
+[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/OSGeo/grass/binder?urlpath=lab/tree/doc%2Fnotebooks%2Fexample_notebook.ipynb)
 
 
 ## How to get write access here
