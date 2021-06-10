@@ -29,9 +29,9 @@ class SelectionTest(TestCase):
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
-        cls.runModule('g.region', n=18, s=0, e=18, w=0, res=6)
+        cls.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
 
-        grass.call(os.path.join(os.getcwd(), 'points_csv_to_las.sh'))
+        grass.call(os.path.join(os.getcwd(), "points_csv_to_las.sh"))
 
     @classmethod
     def tearDownClass(cls):
@@ -45,91 +45,117 @@ class SelectionTest(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule('g.remove', flags='f', type='raster',
-                       name=self.imp_raster)
-        self.runModule('g.remove', flags='f', type='raster',
-                       name=self.ref_raster)
+        self.runModule("g.remove", flags="f", type="raster", name=self.imp_raster)
+        self.runModule("g.remove", flags="f", type="raster", name=self.ref_raster)
         try:
-            self.runModule('g.remove', flags='f', type='raster',
-                           name=self.base_raster)
+            self.runModule("g.remove", flags="f", type="raster", name=self.base_raster)
         except AttributeError:
             pass
 
     def test_dimension(self):
         """Test LAS dimension selection"""
-        self.imp_raster = 'imp_intensity'
-        self.ref_raster = 'ref_intensity'
+        self.imp_raster = "imp_intensity"
+        self.ref_raster = "ref_intensity"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.imp_raster,
-                          flags='o', quiet=True,
-                          method='mean', type='CELL',
-                          dimension='intensity')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.imp_raster,
+            flags="o",
+            quiet=True,
+            method="mean",
+            type="CELL",
+            dimension="intensity",
+        )
         self.assertRasterExists(self.imp_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_mean_intensity.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_mean_intensity.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
     def test_user_dimension(self):
         """Test PDAL user dimension selection"""
-        self.imp_raster = 'imp_cellid'
-        self.ref_raster = 'ref_cellid'
+        self.imp_raster = "imp_cellid"
+        self.ref_raster = "ref_cellid"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.imp_raster,
-                          flags='o', quiet=True,
-                          method='mode', type='CELL',
-                          user_dimension='CellID')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.imp_raster,
+            flags="o",
+            quiet=True,
+            method="mode",
+            type="CELL",
+            user_dimension="CellID",
+        )
         self.assertRasterExists(self.imp_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_mode_cellid.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_mode_cellid.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
     def test_filter(self):
         """Test input filtering"""
-        self.imp_raster = 'imp_filtered'
-        self.ref_raster = 'ref_filtered'
+        self.imp_raster = "imp_filtered"
+        self.ref_raster = "ref_filtered"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.imp_raster,
-                          flags='o', quiet=True,
-                          method='mode', type='CELL',
-                          dimension='source',
-                          zrange=(2, 10),
-                          irange=(10, 20),
-                          drange=(1, 1))
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.imp_raster,
+            flags="o",
+            quiet=True,
+            method="mode",
+            type="CELL",
+            dimension="source",
+            zrange=(2, 10),
+            irange=(10, 20),
+            drange=(1, 1),
+        )
         self.assertRasterExists(self.imp_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_filter_z_int_source.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_filter_z_int_source.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
     def test_base_raster(self):
         """Test Z adjustement by base raster"""
-        self.imp_raster = 'imp_base_adj'
-        self.ref_raster = 'ref_base_adj'
-        self.base_raster = 'base_raster'
+        self.imp_raster = "imp_base_adj"
+        self.ref_raster = "ref_base_adj"
+        self.base_raster = "base_raster"
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_mean_z.ascii'),
-                       output=self.base_raster)
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.imp_raster,
-                          flags='o', quiet=True,
-                          method='max',
-                          base_raster=self.base_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_mean_z.ascii"),
+            output=self.base_raster,
+        )
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.imp_raster,
+            flags="o",
+            quiet=True,
+            method="max",
+            base_raster=self.base_raster,
+        )
         self.assertRasterExists(self.imp_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_base_adj.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_base_adj.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0.001)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

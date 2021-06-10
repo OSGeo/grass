@@ -29,9 +29,9 @@ class BinningTest(TestCase):
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
-        cls.runModule('g.region', n=18, s=0, e=18, w=0, res=6)
+        cls.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
 
-        grass.call(os.path.join(os.getcwd(), 'points_csv_to_las.sh'))
+        grass.call(os.path.join(os.getcwd(), "points_csv_to_las.sh"))
 
     @classmethod
     def tearDownClass(cls):
@@ -45,207 +45,283 @@ class BinningTest(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule('g.remove', flags='f', type='raster',
-                       name=self.bin_raster)
-        self.runModule('g.remove', flags='f', type='raster',
-                       name=self.ref_raster)
+        self.runModule("g.remove", flags="f", type="raster", name=self.bin_raster)
+        self.runModule("g.remove", flags="f", type="raster", name=self.ref_raster)
 
     def test_method_n(self):
         """Test binning with n method"""
-        self.bin_raster = 'bin_n'
-        self.ref_raster = 'ref_n'
+        self.bin_raster = "bin_n"
+        self.ref_raster = "ref_n"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='n')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="n",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_n_all.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_n_all.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
     def test_method_min(self):
-        self.bin_raster = 'bin_min'
-        self.ref_raster = 'ref_min'
+        self.bin_raster = "bin_min"
+        self.ref_raster = "ref_min"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='min')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="min",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_min_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_min_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
     def test_method_max(self):
-        self.bin_raster = 'bin_max'
-        self.ref_raster = 'ref_max'
+        self.bin_raster = "bin_max"
+        self.ref_raster = "ref_max"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='max')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="max",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_max_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_max_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
     def test_method_range(self):
-        self.bin_raster = 'bin_range'
-        self.ref_raster = 'ref_range'
+        self.bin_raster = "bin_range"
+        self.ref_raster = "ref_range"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='range')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="range",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_range_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_range_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
     def test_method_sum(self):
-        self.bin_raster = 'bin_sum'
-        self.ref_raster = 'ref_sum'
+        self.bin_raster = "bin_sum"
+        self.ref_raster = "ref_sum"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='sum')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="sum",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_sum_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_sum_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
     def test_method_mean(self):
-        self.bin_raster = 'bin_mean'
-        self.ref_raster = 'ref_mean'
+        self.bin_raster = "bin_mean"
+        self.ref_raster = "ref_mean"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='mean')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="mean",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_mean_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_mean_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
 
     def test_method_stddev(self):
-        self.bin_raster = 'bin_stddev'
-        self.ref_raster = 'ref_stddev'
+        self.bin_raster = "bin_stddev"
+        self.ref_raster = "ref_stddev"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='stddev')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="stddev",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_stddev_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_stddev_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
 
     def test_method_variance(self):
-        self.bin_raster = 'bin_variance'
-        self.ref_raster = 'ref_variance'
+        self.bin_raster = "bin_variance"
+        self.ref_raster = "ref_variance"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='variance')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="variance",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_variance_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_variance_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
 
     def test_method_coeff_var(self):
-        self.bin_raster = 'bin_coeff_var'
-        self.ref_raster = 'ref_coeff_var'
+        self.bin_raster = "bin_coeff_var"
+        self.ref_raster = "ref_coeff_var"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='coeff_var')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="coeff_var",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_coeff_var_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_coeff_var_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
 
     def test_method_median(self):
-        self.bin_raster = 'bin_median'
-        self.ref_raster = 'ref_median'
+        self.bin_raster = "bin_median"
+        self.ref_raster = "ref_median"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='median')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="median",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_median_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_median_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
 
     def test_method_mode(self):
-        self.bin_raster = 'bin_mode'
-        self.ref_raster = 'ref_mode'
+        self.bin_raster = "bin_mode"
+        self.ref_raster = "ref_mode"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='mode')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="mode",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_mode_z.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_mode_z.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
     def test_method_sidnmax(self):
-        self.bin_raster = 'bin_sidnmax'
-        self.ref_raster = 'ref_sidnmax'
+        self.bin_raster = "bin_sidnmax"
+        self.ref_raster = "ref_sidnmax"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='sidnmax')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="sidnmax",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_sidnmax_all.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_sidnmax_all.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
     def test_method_sidnmin(self):
-        self.bin_raster = 'bin_sidnmin'
-        self.ref_raster = 'ref_sidnmin'
+        self.bin_raster = "bin_sidnmin"
+        self.ref_raster = "ref_sidnmin"
 
-        self.assertModule('r.in.pdal', input=self.las_file,
-                          output=self.bin_raster,
-                          flags='o', quiet=True,
-                          method='sidnmin')
+        self.assertModule(
+            "r.in.pdal",
+            input=self.las_file,
+            output=self.bin_raster,
+            flags="o",
+            quiet=True,
+            method="sidnmin",
+        )
         self.assertRasterExists(self.bin_raster)
 
-        self.runModule('r.in.ascii',
-                       input=os.path.join('data', 'res_sidnmin_all.ascii'),
-                       output=self.ref_raster)
+        self.runModule(
+            "r.in.ascii",
+            input=os.path.join("data", "res_sidnmin_all.ascii"),
+            output=self.ref_raster,
+        )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()
