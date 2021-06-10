@@ -2158,16 +2158,6 @@ class GMFrame(wx.Frame):
         """Key pressed"""
         kc = event.GetKeyCode()
 
-        #        if event.ControlDown():
-        #            if kc == wx.WXK_TAB:
-        #                # switch layer list / command output
-        #                if self.notebook.GetSelection() == self.notebook.GetPageIndexByName(
-        #                    "layers"
-        #                ):
-        #                    self.notebook.SetSelectionByName("output")
-        #                else:
-        #                    self.notebook.SetSelectionByName("layers")
-
         try:
             kc = chr(kc)
         except ValueError:
