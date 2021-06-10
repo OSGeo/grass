@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# exit on error
+set -e
+
+# compile
+./configure \
+    --enable-largefile=yes \
+    --with-nls \
+    --with-cxx \
+    --with-readline \
+    --with-bzlib \
+    --with-pthread \
+    --with-proj-share=/usr/share/proj \
+    --with-geos=/usr/bin/geos-config \
+    --with-cairo \
+    --with-opengl-libs=/usr/include/GL \
+    --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
+    --with-sqlite=yes
+make
+
+# put command on path
+# ensure the user specific bin dir exists (already on path)
+mkdir -p $HOME/.local/bin/
+# create link to build
+ln -s $HOME/bin.*/grass* $HOME/.local/bin/grass
+
+# download a sample dataset
+mkdir -p data/grassdata \
+  && curl -SL https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip > nc_basic_spm_grass7.zip \
+  && unzip -qq nc_basic_spm_grass7.zip \
+  && mv nc_basic_spm_grass7 data/grassdata \
+  && rm nc_basic_spm_grass7.zip
+  
