@@ -12,6 +12,7 @@
 #ifndef INFO_H
 #define INFO_H
 
+#include <pdal/pdal_config.hpp>
 #include <pdal/PointTable.hpp>
 #include <pdal/StageFactory.hpp>
 #include <pdal/Options.hpp>
@@ -28,5 +29,6 @@ extern "C"
 void get_extent(struct StringList *, double *, double *,
                 double *, double *, double *, double *);
 void print_extent(struct StringList *);
+void print_lasinfo(struct StringList *);
 
 #endif // INFO_H

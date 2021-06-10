@@ -426,6 +426,15 @@ preserving data precision and limiting system resource consumption.
 Trim option value is used only when calculating trimmed mean values.
 Attempt to use it with other statistical methods will result in an error.
 
+<h3>Print flag</h3>
+<p>
+The <b>-p</b> flag will use PDAL library built-in LAS file metadata
+printing function. It will also include a list of supported dimension
+names. Any of listed dimensions can be passed to the <b>user_dimension</b>
+option. Dimensions are not checked for presence of data for any of points
+in the file and thus importing a dimension without actual data will
+result in an empty map.
+
 <h2>EXAMPLES</h2>
 
 Simple example of binning of point from a LAS file into a newly created
@@ -449,7 +458,7 @@ an iterative approach as outlined here):
 <div class="code"><pre>
 # print LAS metadata (Number of Points)
 r.in.pdal -p input=points.las
-#   Number of Point Records: 1287775
+# Point count: 1287775
 
 # scan for LAS points cloud extent
 r.in.pdal -g input=points.las output=dummy -o

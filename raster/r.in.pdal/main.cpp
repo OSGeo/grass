@@ -445,8 +445,8 @@ int main(int argc, char *argv[])
     }
 
     if (print_info_flag->answer) {
-        // TODO: add print_info() to info.cpp
-        G_fatal_error("LAS info printing not implemented.");
+        print_lasinfo(&infiles);
+        exit(EXIT_SUCCESS);
     }
 
     /* we could use rules but this gives more info and allows continuing */
@@ -531,7 +531,8 @@ int main(int argc, char *argv[])
                                          return_filter_opt->answer);
     struct ClassFilter class_filter;
     bool use_class_filter = class_filter_create_from_strings(&class_filter,
-                                                             class_filter_opt->answers);
+                                                             class_filter_opt->
+                                                             answers);
 
     point_binning_set(&point_binning, method_opt->answer, pth_opt->answer,
                       trim_opt->answer);

@@ -71,3 +71,50 @@ void print_extent(struct StringList *infiles)
     fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
             max_y, min_y, max_x, min_x, min_z, max_z);
 }
+
+
+void print_lasinfo(struct StringList *infiles)
+{
+    pdal::StageFactory factory;
+    pdal::MetadataNode meta_node;
+
+    std::cout << std::endl << "Using PDAL library version '" <<
+        pdal::Config::fullVersionString() << "'" << std::endl << std::endl;
+
+    for (int i = 0; i < infiles->num_items; i++) {
+        const char *infile = infiles->items[i];
+
+        std::string pdal_read_driver = factory.inferReaderDriver(infile);
+        if (pdal_read_driver.empty())
+            G_fatal_error("Cannot determine input file type of <%s>", infile);
+
+        pdal::PointTable table;
+        pdal::Options las_opts;
+        pdal::Option las_opt("filename", infile);
+        las_opts.add(las_opt);
+        pdal::LasReader las_reader;
+        las_reader.setOptions(las_opts);
+        las_reader.prepare(table);
+        pdal::LasHeader las_header = las_reader.header();
+        pdal::PointLayoutPtr point_layout = table.layout();
+        const pdal::Dimension::IdList & dims = point_layout->dims();
+
+        std::cout << "File: " << infile << std::endl;
+        std::cout << las_header;
+
+        bool first = 1;
+
+        for (auto di = dims.begin(); di != dims.end(); ++di) {
+            pdal::Dimension::Id d = *di;
+
+            if (first) {
+                std::cout << "Dimensions: " << point_layout->dimName(d);
+                first = 0;
+            }
+            else {
+                std::cout << ", " << point_layout->dimName(d);
+            }
+        }
+        std::cout << std::endl << std::endl;
+    }
+}
