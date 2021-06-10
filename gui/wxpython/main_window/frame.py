@@ -367,9 +367,6 @@ class GMFrame(wx.Frame):
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
 
-        # minimal frame size
-        self.SetMinSize((1200, 600))
-
         # initialize all main widgets
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
