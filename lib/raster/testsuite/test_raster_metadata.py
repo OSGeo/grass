@@ -56,7 +56,13 @@ class RastLegalBandIdTestCase(TestCase):
         self.assertEqual(ret, -1)
 
     def test_too_long(self):
-        ret = Rast_legal_bandref("".join(random.choices(string.ascii_letters, k=256)))
+        ret = Rast_legal_bandref(
+            "a_" + "".join(random.choices(string.ascii_letters, k=253))
+        )
+        self.assertEqual(ret, 1)
+        ret = Rast_legal_bandref(
+            "a_" + "".join(random.choices(string.ascii_letters, k=254))
+        )
         self.assertEqual(ret, -1)
 
     def test_good_name(self):

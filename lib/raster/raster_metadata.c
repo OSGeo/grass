@@ -138,7 +138,7 @@ int Rast_legal_bandref(const char *bandref)
     char **tokens;
     int ntok;
 
-    if (strlen(bandref) >= GNAME_MAX - 1) {
+    if (strlen(bandref) >= GNAME_MAX) {
         G_warning(_("Band reference is too long"));
         return -1;
     }
