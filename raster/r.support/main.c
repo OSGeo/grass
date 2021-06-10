@@ -151,17 +151,17 @@ int main(int argc, char *argv[])
 
     stats_flag = G_define_flag();
     stats_flag->key = 's';
-    stats_flag->guisection = _("Maintenece");
+    stats_flag->guisection = _("Maintenance");
     stats_flag->description = _("Update statistics (histogram, range)");
 
     null_flag = G_define_flag();
     null_flag->key = 'n';
-    null_flag->guisection = _("Maintenece");
+    null_flag->guisection = _("Maintenance");
     null_flag->description = _("Create/reset the null file");
 
     del_flag = G_define_flag();
     del_flag->key = 'd';
-    del_flag->guisection = _("Maintenece");
+    del_flag->guisection = _("Maintenance");
     del_flag->description = _("Delete the null file");
 
     /* Parse command-line options */
