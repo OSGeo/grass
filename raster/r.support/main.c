@@ -120,19 +120,19 @@ int main(int argc, char *argv[])
     map_opt->type = TYPE_STRING;
     map_opt->required = NO;
     map_opt->gisprompt = "old,cell,raster";
-    map_opt->guisection = _("Import / export");
+    map_opt->guisection = _("Import / Export");
     map_opt->description = _("Raster map from which to copy category table");
 
     load_opt = G_define_standard_option(G_OPT_F_INPUT);
     load_opt->key = "loadhistory";
     load_opt->required = NO;
-    load_opt->guisection = _("Import / export");
+    load_opt->guisection = _("Import / Export");
     load_opt->description = _("Text file from which to load history");
 
     save_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     save_opt->key = "savehistory";
     save_opt->required = NO;
-    save_opt->guisection = _("Import / export");
+    save_opt->guisection = _("Import / Export");
     save_opt->description = _("Text file in which to save history");
 
     bandref_opt = G_define_option();
@@ -298,7 +298,7 @@ int main(int argc, char *argv[])
     if (title_opt->answer || history_opt->answer || units_opt->answer
 	|| vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer
 	|| datadesc_opt->answer || map_opt->answer
-    || bandref_opt->answer || bandref_rm_flag->answer)
+	|| bandref_opt->answer || bandref_rm_flag->answer)
 	exit(EXIT_SUCCESS);
 
 
