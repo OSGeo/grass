@@ -25,6 +25,7 @@ import platform
 import re
 
 from core import globalvar
+
 try:
     from agw import aui
 except ImportError:
@@ -148,9 +149,9 @@ class GMFrame(wx.Frame):
         self.dialogs["nvizPreferences"] = None
         self.dialogs["atm"] = list()
 
-        #set pane sizes according to the full screen size
-        self.PANE_BEST_SIZE = tuple(t/5 for t in wx.DisplaySize())
-        self.PANE_MIN_SIZE = tuple(t/10 for t in wx.DisplaySize())
+        # set pane sizes according to the full screen size
+        self.PANE_BEST_SIZE = tuple(t / 5 for t in wx.DisplaySize())
+        self.PANE_MIN_SIZE = tuple(t / 10 for t in wx.DisplaySize())
 
         # create widgets and build panes
         self.CreateMenuBar()
@@ -363,7 +364,6 @@ class GMFrame(wx.Frame):
         # blank panel for testing
         self.mapdisplay = wx.Panel(parent=parent)
 
-
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
 
@@ -417,28 +417,85 @@ class GMFrame(wx.Frame):
                 .BestSize((self.toolbars[toolbar].GetBestSize())),
             )
 
-        self._auimgr.AddPane(self.mapdisplay, aui.AuiPaneInfo().Name("map display").
-                          CenterPane().PaneBorder(True))
+        self._auimgr.AddPane(
+            self.mapdisplay,
+            aui.AuiPaneInfo().Name("map display").CenterPane().PaneBorder(True),
+        )
 
-        self._auimgr.AddPane(self.datacatalog, aui.AuiPaneInfo().
-                          Name("datacatalog").Caption("Data Catalog").
-                          Left().Layer(1).Position(1).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+        self._auimgr.AddPane(
+            self.datacatalog,
+            aui.AuiPaneInfo()
+            .Name("datacatalog")
+            .Caption("Data Catalog")
+            .Left()
+            .Layer(1)
+            .Position(1)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
 
-        self._auimgr.AddPane(self.displayPanel, aui.AuiPaneInfo().
-                          Name("display").Caption("Display").
-                          Left().Layer(1).Position(2).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+        self._auimgr.AddPane(
+            self.displayPanel,
+            aui.AuiPaneInfo()
+            .Name("display")
+            .Caption("Display")
+            .Left()
+            .Layer(1)
+            .Position(2)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
 
-        self._auimgr.AddPane(self.search, aui.AuiPaneInfo().
-                          Name("modules").Caption("Modules").
-                          Right().Layer(2).Position(1).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+        self._auimgr.AddPane(
+            self.search,
+            aui.AuiPaneInfo()
+            .Name("modules")
+            .Caption("Modules")
+            .Right()
+            .Layer(2)
+            .Position(1)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
 
-        self._auimgr.AddPane(self.goutput, aui.AuiPaneInfo().
-                          Name("console").Caption("Console").
-                          Right().Layer(2).Position(2).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+        self._auimgr.AddPane(
+            self.goutput,
+            aui.AuiPaneInfo()
+            .Name("console")
+            .Caption("Console")
+            .Right()
+            .Layer(2)
+            .Position(2)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
 
-        self._auimgr.AddPane(self.pyshell, aui.AuiPaneInfo().
-                          Name("python").Caption("Python").
-                          Right().Layer(2).Position(3).BestSize(self.PANE_BEST_SIZE).MinSize(self.PANE_MIN_SIZE).CloseButton(False).MinimizeButton(True).MaximizeButton(True))
+        self._auimgr.AddPane(
+            self.pyshell,
+            aui.AuiPaneInfo()
+            .Name("python")
+            .Caption("Python")
+            .Right()
+            .Layer(2)
+            .Position(3)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
         wx.CallAfter(self.datacatalog.LoadItems)
@@ -2101,15 +2158,15 @@ class GMFrame(wx.Frame):
         """Key pressed"""
         kc = event.GetKeyCode()
 
-#        if event.ControlDown():
-#            if kc == wx.WXK_TAB:
-#                # switch layer list / command output
-#                if self.notebook.GetSelection() == self.notebook.GetPageIndexByName(
-#                    "layers"
-#                ):
-#                    self.notebook.SetSelectionByName("output")
-#                else:
-#                    self.notebook.SetSelectionByName("layers")
+        #        if event.ControlDown():
+        #            if kc == wx.WXK_TAB:
+        #                # switch layer list / command output
+        #                if self.notebook.GetSelection() == self.notebook.GetPageIndexByName(
+        #                    "layers"
+        #                ):
+        #                    self.notebook.SetSelectionByName("output")
+        #                else:
+        #                    self.notebook.SetSelectionByName("layers")
 
         try:
             kc = chr(kc)
