@@ -54,7 +54,7 @@ def display_settings(font="sans", driver="cairo"):
     """
     # Set display font
     os.environ["GRASS_FONT"] = font
-   
+
     # Set display modeules to render to a file (named map.png by
     # default).
     os.environ["GRASS_RENDER_iMMEDIATE"] = driver
