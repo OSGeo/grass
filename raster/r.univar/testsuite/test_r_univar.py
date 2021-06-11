@@ -49,6 +49,15 @@ class TestRasterUnivar(TestCase):
         self.assertRasterFitsUnivar(
             raster="map_a", reference=univar_string, precision=3
         )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_a",
+            flags="g",
+            nprocs=4,
+            reference=univar_string,
+            precision=3,
+            sep="=",
+        )
 
     def test_2(self):
         # Output of r.univar
@@ -65,6 +74,15 @@ class TestRasterUnivar(TestCase):
         self.runModule("g.region", res=10)
         self.assertRasterFitsUnivar(
             raster="map_a", reference=univar_string, precision=3
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_a",
+            flags="g",
+            nprocs=4,
+            reference=univar_string,
+            precision=3,
+            sep="=",
         )
 
     def test_3(self):
@@ -92,6 +110,15 @@ class TestRasterUnivar(TestCase):
             precision=3,
             sep="=",
         )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_a",
+            flags="rg",
+            nprocs=4,
+            reference=univar_string,
+            precision=3,
+            sep="=",
+        )
 
     def test_multiple_1(self):
         # Output of r.univar
@@ -109,6 +136,15 @@ class TestRasterUnivar(TestCase):
             module="r.univar",
             map=["map_a", "map_b"],
             flags="rg",
+            reference=univar_string,
+            precision=3,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            flags="rg",
+            nprocs=4,
             reference=univar_string,
             precision=3,
             sep="=",
@@ -131,6 +167,15 @@ class TestRasterUnivar(TestCase):
             module="r.univar",
             map=["map_a", "map_b"],
             flags="g",
+            reference=univar_string,
+            precision=3,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            flags="g",
+            nprocs=4,
             reference=univar_string,
             precision=3,
             sep="=",
@@ -158,6 +203,15 @@ class TestRasterUnivar(TestCase):
             module="r.univar",
             map=["map_a", "map_b"],
             flags="rg",
+            reference=univar_string,
+            precision=3,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            flags="rg",
+            nprocs=4,
             reference=univar_string,
             precision=3,
             sep="=",
@@ -197,6 +251,16 @@ class TestRasterUnivar(TestCase):
             map=["map_a"],
             zones="zone_map",
             flags="g",
+            reference=univar_string,
+            precision=3,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a"],
+            zones="zone_map",
+            flags="g",
+            nprocs=4,
             reference=univar_string,
             precision=3,
             sep="=",
