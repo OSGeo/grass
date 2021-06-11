@@ -1740,7 +1740,11 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Names of available mapsets as list of strings
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.AVAILABLE_MAPSETS,])
+        self.client_conn.send(
+            [
+                RPCDefs.AVAILABLE_MAPSETS,
+            ]
+        )
         return self.safe_receive("available_mapsets")
 
     def get_driver_name(self, mapset=None):
@@ -1771,7 +1775,11 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Name of the current mapset
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.G_MAPSET,])
+        self.client_conn.send(
+            [
+                RPCDefs.G_MAPSET,
+            ]
+        )
         return self.safe_receive("get_mapset")
 
     def get_location(self):
@@ -1780,7 +1788,11 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Name of the location
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.G_LOCATION,])
+        self.client_conn.send(
+            [
+                RPCDefs.G_LOCATION,
+            ]
+        )
         return self.safe_receive("get_location")
 
     def get_gisdbase(self):
@@ -1789,7 +1801,11 @@ class CLibrariesInterface(RPCServerBase):
         :returns: Name of the gisdatabase
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.G_GISDBASE,])
+        self.client_conn.send(
+            [
+                RPCDefs.G_GISDBASE,
+            ]
+        )
         return self.safe_receive("get_gisdbase")
 
     def fatal_error(self, mapset=None):
