@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 88
-target-version = ['py36', 'py37', 'py38']
+target-version = ['py36', 'py37', 'py38', 'py39']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -15,15 +15,14 @@ exclude = '''
         | _build
         | buck-out
         | build
-        | bin\.
-        | dist\.
+        | bin\..*
+        | dist\..*
     )/
     | python/grass/ctypes/
-    # Bug in Black related to tab escape prevents these from being formatted correctly.
-    # https://github.com/psf/black/issues/1970
-    | python/grass/imaging/images2gif.py
-    | python/grass/pygrass/raster/category.py
-    # https://github.com/psf/black/issues/1629
-    | gui/wxpython/lmgr/layertree.py
+    # Bug in Black related to r-string prefix capitalization reformats
+    # a line in this file unnecessarily. File is however fully Black-formatted
+    # at the time of writing.
+    # https://github.com/psf/black/issues/1244
+    | python/grass/pygrass/utils.py
 )
 '''

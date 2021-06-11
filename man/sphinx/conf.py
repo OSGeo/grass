@@ -1,5 +1,5 @@
 #
-# GRASS GIS 7.9 Documentation documentation build configuration file, created by
+# GRASS GIS 8.0 Documentation documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug  9 17:16:28 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -37,15 +37,15 @@ source_suffix = ".txt"
 master_doc = "index"
 
 # General information about the project.
-project = "GRASS 7.9 Documentation"
-copyright = "2019, GRASS Development Team"
+project = "GRASS GIS 8.0 Documentation"
+copyright = "2021, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = "7.9"
+version = "8.0"
 # The full version, including alpha/beta/rc tags.
 release = "dev"
 
@@ -161,7 +161,7 @@ html_use_index = False
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "grass79Documentationdoc"
+htmlhelp_basename = "grass80Documentationdoc"
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -180,8 +180,8 @@ latex_elements = {
 latex_documents = [
     (
         "content",
-        "grass79Documentation.tex",
-        "GRASS 7.9 Documentation",
+        "grass80Documentation.tex",
+        "GRASS GIS 8.0 Documentation",
         "GRASS Development Team",
         "manual",
     ),
@@ -215,8 +215,8 @@ latex_documents = [
 man_pages = [
     (
         "content",
-        "grass79documentation",
-        "GRASS 7.9 Documentation",
+        "grass80documentation",
+        "GRASS GIS 8.0 Documentation",
         ["GRASS Development Team"],
         1,
     )
@@ -234,10 +234,10 @@ man_pages = [
 texinfo_documents = [
     (
         "content",
-        "grass79Documentation",
-        "GRASS 7.9 Documentation",
+        "grass80Documentation",
+        "GRASS GIS 8.0 Documentation",
         "GRASS Development Team",
-        "grass79Documentation",
+        "grass80Documentation",
         "One line description of project.",
         "Miscellaneous",
     ),
@@ -256,10 +256,10 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = "GRASS 7.9 Documentation"
+epub_title = "GRASS GIS 8.0 Documentation"
 epub_author = "GRASS Development Team"
 epub_publisher = "GRASS Development Team"
-epub_copyright = "2017, GRASS Development Team"
+epub_copyright = "2021, GRASS Development Team"
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

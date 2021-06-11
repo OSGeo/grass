@@ -917,7 +917,7 @@ class DrawSampleFramePage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
     def SampleFrameChanged(self, region):
-        """"Enables the next dialog when region is set"""
+        """Enables the next dialog when region is set"""
         if region:
             self.tregion = region
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)

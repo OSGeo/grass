@@ -83,7 +83,6 @@ GLOBAL int skip_cells;
 GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
-GLOBAL int cell_step;
 /* Zenith/nadir comparison modes. */
 GLOBAL enum
 {
@@ -98,6 +97,8 @@ int shift_buffers(int row);
 int free_map(FCELL ** map, int n);
 int write_form_cat_colors(char *raster);
 int write_contrast_colors(char *);
+const char *form_short_name(const FORMS);
+const char *form_long_name(const FORMS);
 
 /* pattern */
 int calc_pattern(PATTERN * pattern, int row, int cur_row, int col, const int);

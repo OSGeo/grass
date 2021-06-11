@@ -8,13 +8,15 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2019 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2021 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
 #               comes with GRASS for details.
 #
-# TODO:         - add sudo support where needed (i.e. check first permission to write into
+# TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
+#                 https://github.com/OSGeo/grass-addons/issues/528
+#               - add sudo support where needed (i.e. check first permission to write into
 #                 $GISBASE directory)
 #               - fix toolbox support in install_private_extension_xml()
 #############################################################################
@@ -154,6 +156,7 @@ from __future__ import print_function
 import fileinput
 import http
 import os
+import codecs
 import sys
 import re
 import atexit
@@ -188,6 +191,29 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
+
+
+def replace_shebang_win(python_file):
+    """
+    Replaces "python" with "python3" in python files
+    using UTF8 encoding on MS Windows
+    """
+
+    cur_dir = os.path.dirname(python_file)
+    tmp_name = os.path.join(cur_dir, gscript.tempname(12))
+
+    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
+        tmp_name, "w", encoding="utf8"
+    ) as out_file:
+
+        for line in in_file:
+            new_line = line.replace(
+                "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"
+            )
+            out_file.write(new_line)
+
+    os.remove(python_file)  # remove original
+    os.rename(tmp_name, python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
@@ -1291,11 +1317,9 @@ def install_extension_win(name):
     module_list = list()
     for r, d, f in os.walk(srcdir):
         for file in f:
-            if file.endswith(".py"):
-                modulename = file.rsplit(".py")[0]
-                module_list.append(modulename)
-            if file.endswith(".exe"):
-                modulename = file.rsplit(".exe")[0]
+            # Filter GRASS module name patterns
+            if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
+                modulename = os.path.splitext(file)[0]
                 module_list.append(modulename)
     # remove duplicates in case there are .exe wrappers for python scripts
     module_list = set(module_list)
@@ -1308,12 +1332,7 @@ def install_extension_win(name):
                 pyfiles.append(os.path.join(r, file))
 
     for filename in pyfiles:
-        with fileinput.FileInput(filename, inplace=True) as file:
-            for line in file:
-                print(
-                    line.replace("#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"),
-                    end="",
-                )
+        replace_shebang_win(filename)
 
     # collect old files
     old_file_list = list()
@@ -1592,6 +1611,7 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
+    # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
     source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass7/"
 
     # to hide non-error messages from subprocesses
@@ -2211,6 +2231,7 @@ def resolve_known_host_service(url, name, branch):
 
 
 # TODO: add also option to enforce the source type
+# TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
 def resolve_source_code(url=None, name=None, branch=None, fork=False):
     """Return type and URL or path of the source code
 
@@ -2484,6 +2505,10 @@ if __name__ == "__main__":
 
     grass_version = grass.version()
     version = grass_version["version"].split(".")
+    # TODO: update temporary workaround of using grass7 subdir of addon-repo, see
+    #       https://github.com/OSGeo/grass-addons/issues/528
+    version[0] = 7
+    version[1] = 9
     build_platform = grass_version["build_platform"].split("-", 1)[0]
 
     sys.exit(main())

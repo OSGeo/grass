@@ -48,7 +48,7 @@ class Testrr(TestCase):
         self.runModule("g.remove", type="raster", flags="f", name=self.output)
 
     def test_rules1(self):
-        """Testing rules 1 """
+        """Testing rules 1"""
         reclass = SimpleModule(
             "r.reclass", input=self.input, output=self.output, rules="-"
         )

@@ -9302,7 +9302,7 @@ msgstr "Installer"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:26
 msgid "Download source code and exit"
-msgstr "Télecharger le code qource et quitter"
+msgstr "Télécharger le code source et quitter"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:28
 msgid "Do not install new extension, just compile it"
@@ -26473,7 +26473,7 @@ msgstr "Impossible d'ouvrir la carte vecteur <%s>"
 #: ../doc/vector/v.example/main.c:109
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr ""
+msgstr "La connexion à la base de données n'a pas été définie pour la couche %d"
 
 #: ../display/d.vect.chart/plot.c:86 ../display/d.vect/attr.c:110
 #: ../vector/v.in.db/main.c:225
@@ -29534,7 +29534,7 @@ msgstr "Impossible de sélectionner les attributs pour cat = %d"
 #: ../vector/v.lrs/v.lrs.label/main.c:331 ../vector/v.out.ogr/attrb.c:53
 #: ../vector/v.overlay/main.c:503
 msgid "Unable to fetch data from table"
-msgstr ""
+msgstr "Impossible de récupérer les données depuis la table"
 
 #: ../vector/v.out.vtk/writeVTK.c:632
 msgid "Cannot export attribute table fields for layer < 1. Skipping export"
@@ -29557,7 +29557,7 @@ msgstr ""
 #: ../scripts/db.univar/db.univar.py:107
 #, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr ""
+msgstr "Impossible de décrire la table <%s>"
 
 #: ../vector/v.out.vtk/writeVTK.c:673
 msgid "No numerical attributes found. Skipping export"
@@ -30093,7 +30093,7 @@ msgstr ""
 #: ../vector/v.out.ogr/list.c:116 ../vector/v.in.ogr/main.c:442
 #: ../raster/r.in.gdal/main.c:314 ../raster/r.external/list.c:23
 msgid "Supported formats:"
-msgstr ""
+msgstr "Formats supportés : "
 
 #: ../vector/v.external/list.c:111
 msgid "GRASS is not compiled with PostgreSQL support"
@@ -32763,7 +32763,7 @@ msgstr ""
 #: ../vector/v.surf.bspline/main.c:882 ../vector/v.out.postgis/main.c:178
 #: ../vector/v.net.components/main.c:213 ../raster/r.resamp.bspline/main.c:723
 msgid "Writing output..."
-msgstr ""
+msgstr "Écriture de la sortie ..."
 
 #: ../vector/v.kernel/main.c:68
 #, c-format
@@ -33751,7 +33751,7 @@ msgstr ""
 
 #: ../vector/v.out.postgis/args.c:66
 msgid "Do not export attribute table"
-msgstr ""
+msgstr "Ne pas exporter de table attributaire"
 
 #: ../vector/v.out.postgis/args.c:72
 msgid "Export PostGIS topology instead of simple features"
@@ -33802,26 +33802,26 @@ msgstr ""
 #: ../vector/v.out.postgis/main.c:111
 #, c-format
 msgid "Unable to open vector map <%s> on topological level"
-msgstr ""
+msgstr "Impossible d'ouvrir la carte vecteur <%s> au niveau topologique"
 
 #: ../vector/v.out.postgis/main.c:135
 #, c-format
 msgid "Unable to create PostGIS layer <%s>"
-msgstr ""
+msgstr "Impossible de créer la couche PostGIS <%s>"
 
 #: ../vector/v.out.postgis/main.c:160
 #, c-format
 msgid "Feature type '%s' not supported"
-msgstr ""
+msgstr "Type d'entité '%s' non supporté"
 
 #: ../vector/v.out.postgis/main.c:165
 #, c-format
 msgid "Feature type %d is not supported"
-msgstr ""
+msgstr "Type d'entité %d non supporté"
 
 #: ../vector/v.out.postgis/main.c:172
 msgid "Copying features failed"
-msgstr ""
+msgstr "Échec de la copie des objets"
 
 #: ../vector/v.out.postgis/main.c:185
 #, c-format
@@ -33855,7 +33855,7 @@ msgstr ""
 #: ../vector/v.out.postgis/table.c:27
 #, c-format
 msgid "No database connection for layer <%s>"
-msgstr ""
+msgstr "Connexion à la base de données non définie pour la couche <%s>"
 
 #: ../vector/v.out.postgis/table.c:50
 #, c-format
@@ -35170,7 +35170,7 @@ msgstr "Position de référence"
 #: ../vector/v.label/main.c:132 ../vector/v.label/main.c:140
 #: ../vector/v.label/main.c:148
 msgid "Font"
-msgstr ""
+msgstr "Police"
 
 #: ../vector/v.lrs/v.lrs.label/main.c:187 ../vector/v.label.sa/main.c:77
 #: ../vector/v.label/main.c:129
@@ -43206,17 +43206,17 @@ msgstr ""
 
 #: ../doc/vector/v.example/main.c:53
 msgid "My first vector module"
-msgstr ""
+msgstr "Mon module vecteur de départ."
 
 #: ../doc/vector/v.example/main.c:175
 #, c-format
 msgid "Unable to get attribute data for cat %d"
-msgstr ""
+msgstr "Impossible de sélectionner les attributs pour cat = %d"
 
 #: ../doc/vector/v.example/main.c:184
 #, c-format
 msgid "Error while retrieving database record for cat %d"
-msgstr ""
+msgstr "Aucun enregistrement pour la catégorie cat = %d"
 
 #: ../doc/vector/v.example/main.c:217
 #, c-format
@@ -43225,7 +43225,7 @@ msgstr "Impossible de copier la table d'attributs vers la carte vecteur <%s>"
 
 #: ../doc/raster/r.example/main.c:86
 msgid "My first raster module"
-msgstr ""
+msgstr "Mon module raster de départ"
 
 #: ../db/db.select/main.c:53 ../db/db.columns/main.c:44
 #: ../db/db.describe/main.c:50 ../db/db.copy/main.c:100
@@ -56166,23 +56166,6 @@ msgstr ""
 msgid "Comparison mode for zenith/nadir line-of-sight search"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:221
-msgid "Prefix for maps resulting from multiresolution approach"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:222 ../raster/r.geomorphon/main.c:230
-#: ../raster/r.geomorphon/main.c:238
-msgid "Multires"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:229
-msgid "Distance step for every iteration (zero to omit)"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:237
-msgid "Distance where search will start in multiple mode (zero to omit)"
-msgstr ""
-
 #: ../raster/r.geomorphon/main.c:243
 msgid "Use meters to define search units (default is cells)"
 msgstr ""
@@ -56246,15 +56229,6 @@ msgstr ""
 
 #: ../raster/r.geomorphon/main.c:381
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:399
-msgid "For multiresolution mode step must be greater than or equal to resolution of one cell"
-msgstr ""
-
-#: ../raster/r.geomorphon/main.c:403
-#, c-format
-msgid "<%s> is an incorrect prefix"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:431

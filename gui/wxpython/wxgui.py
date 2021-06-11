@@ -113,6 +113,10 @@ class GMApp(wx.App):
 
         mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
 
+        # testing purposes
+        # from main_window.frame import GMFrame
+        # mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
+
         mainframe.Show()
         self.SetTopWindow(mainframe)
 
@@ -125,7 +129,7 @@ class GMApp(wx.App):
 
 
 def printHelp():
-    """ Print program help"""
+    """Print program help"""
     print("Usage:", file=sys.stderr)
     print(" python wxgui.py [options]", file=sys.stderr)
     print("%sOptions:" % os.linesep, file=sys.stderr)
@@ -134,7 +138,7 @@ def printHelp():
 
 
 def process_opt(opts, args):
-    """ Process command-line arguments"""
+    """Process command-line arguments"""
     workspaceFile = None
     for o, a in opts:
         if o in ("-h", "--help"):
