@@ -10,6 +10,8 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import os
+import pathlib
+from tempfile import TemporaryDirectory
 
 from grass.script import core as grass
 from grass.gunittest.case import TestCase
@@ -23,21 +25,30 @@ class SelectionTest(TestCase):
     This tests expects r.in.ascii to work properly.
     """
 
-    las_file = "points.las"
-
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
         cls.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
 
-        grass.call(os.path.join(os.getcwd(), "points_csv_to_las.sh"))
+        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.point_file = os.path.join(cls.data_dir, "points.csv")
+        cls.tmp_dir = TemporaryDirectory()
+        cls.las_file = os.path.join(cls.tmp_dir.name, "points.las")
+        grass.call(
+            [
+                os.path.join(
+                    pathlib.Path(__file__).parent.absolute(), "points_csv_to_las.sh"
+                ),
+                cls.point_file,
+                cls.las_file,
+            ]
+        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        cls.tmp_dir.cleanup()
         cls.del_temp_region()
 
     def tearDown(self):
@@ -71,7 +82,7 @@ class SelectionTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_mean_intensity.ascii"),
+            input=os.path.join(self.data_dir, "res_mean_intensity.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
@@ -95,7 +106,7 @@ class SelectionTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_mode_cellid.ascii"),
+            input=os.path.join(self.data_dir, "res_mode_cellid.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
@@ -122,7 +133,7 @@ class SelectionTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_filter_z_int_source.ascii"),
+            input=os.path.join(self.data_dir, "res_filter_z_int_source.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
@@ -135,7 +146,7 @@ class SelectionTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_mean_z.ascii"),
+            input=os.path.join(self.data_dir, "res_mean_z.ascii"),
             output=self.base_raster,
         )
         self.assertModule(
@@ -151,7 +162,7 @@ class SelectionTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_base_adj.ascii"),
+            input=os.path.join(self.data_dir, "res_base_adj.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0.001)

@@ -10,6 +10,8 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import os
+import pathlib
+from tempfile import TemporaryDirectory
 
 from grass.script import core as grass
 from grass.gunittest.case import TestCase
@@ -23,21 +25,30 @@ class BinningTest(TestCase):
     This tests expects r.in.ascii to work properly.
     """
 
-    las_file = "points.las"
-
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
         cls.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
 
-        grass.call(os.path.join(os.getcwd(), "points_csv_to_las.sh"))
+        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.point_file = os.path.join(cls.data_dir, "points.csv")
+        cls.tmp_dir = TemporaryDirectory()
+        cls.las_file = os.path.join(cls.tmp_dir.name, "points.las")
+        grass.call(
+            [
+                os.path.join(
+                    pathlib.Path(__file__).parent.absolute(), "points_csv_to_las.sh"
+                ),
+                cls.point_file,
+                cls.las_file,
+            ]
+        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        cls.tmp_dir.cleanup()
         cls.del_temp_region()
 
     def tearDown(self):
@@ -65,7 +76,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_n_all.ascii"),
+            input=os.path.join(self.data_dir, "res_n_all.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
@@ -86,7 +97,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_min_z.ascii"),
+            input=os.path.join(self.data_dir, "res_min_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
@@ -107,7 +118,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_max_z.ascii"),
+            input=os.path.join(self.data_dir, "res_max_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
@@ -128,7 +139,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_range_z.ascii"),
+            input=os.path.join(self.data_dir, "res_range_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
@@ -149,7 +160,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_sum_z.ascii"),
+            input=os.path.join(self.data_dir, "res_sum_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
@@ -170,7 +181,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_mean_z.ascii"),
+            input=os.path.join(self.data_dir, "res_mean_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
@@ -191,7 +202,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_stddev_z.ascii"),
+            input=os.path.join(self.data_dir, "res_stddev_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
@@ -212,7 +223,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_variance_z.ascii"),
+            input=os.path.join(self.data_dir, "res_variance_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
@@ -233,7 +244,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_coeff_var_z.ascii"),
+            input=os.path.join(self.data_dir, "res_coeff_var_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
@@ -254,7 +265,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_median_z.ascii"),
+            input=os.path.join(self.data_dir, "res_median_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0.0001)
@@ -275,7 +286,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_mode_z.ascii"),
+            input=os.path.join(self.data_dir, "res_mode_z.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
@@ -296,7 +307,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_sidnmax_all.ascii"),
+            input=os.path.join(self.data_dir, "res_sidnmax_all.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
@@ -317,7 +328,7 @@ class BinningTest(TestCase):
 
         self.runModule(
             "r.in.ascii",
-            input=os.path.join("data", "res_sidnmin_all.ascii"),
+            input=os.path.join(self.data_dir, "res_sidnmin_all.ascii"),
             output=self.ref_raster,
         )
         self.assertRastersEqual(self.bin_raster, self.ref_raster, 0)
