@@ -24,7 +24,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-#include <stdbool.h>
 
 #include <grass/glocale.h>
 #include <grass/gis.h>
