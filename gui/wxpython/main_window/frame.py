@@ -92,7 +92,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=wx.Display(0).GetGeometry().GetSize(),
+        size=globalvar.GM_WINDOW_SIZE,
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -150,7 +150,7 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"] = list()
 
         # set pane sizes according to the full screen size of the primary monitor
-        size = wx.Display(0).GetGeometry().GetSize()
+        size = wx.Display().GetGeometry().GetSize()
         self.PANE_BEST_SIZE = tuple(t / 5 for t in size)
         self.PANE_MIN_SIZE = tuple(t / 10 for t in size)
 
