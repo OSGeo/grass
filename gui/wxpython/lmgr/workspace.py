@@ -473,7 +473,7 @@ class WorkspaceManager:
                     if not self.workspaceFile:
                         self.SaveAs()
                     else:
-                        self.SaveToFile()
+                        self.SaveToFile(self.workspaceFile)
                 elif ret == wx.ID_CANCEL:
                     return False
         return True
