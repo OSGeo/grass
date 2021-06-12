@@ -1,199 +1,92 @@
 <!-- meta page description: GRASS GIS Quickstart -->
-<h2>Geographic Resources Analysis Support System</h2>
 
-GRASS GIS, commonly referred to as GRASS (Geographic Resources Analysis 
-Support System), is a free Geographic Information System (GIS) software
-used for geospatial data management and analysis, image processing,
-graphics/maps production, spatial modeling, and visualization. GRASS GIS
-is currently used in academic and commercial settings around the world,
-as well as by many governmental agencies and environmental consulting
-companies. GRASS GIS is an official project of the Open Source Geospatial
-Foundation (OSGeo).
-
-<h2>1. Graphical startup of GRASS GIS</h2>
-
-<i>For text-based startup see below.</i>
 <p>
+When <a href="grass.html">launching</a> GRASS GIS for the first time, you will open a
+<b>default Location</b> "world_latlog_wgs84" where you can find a map layer
+called "country_boundaries" showing a world map in the WGS84 coordinate system.
+</p>
 
-After <a href="grass.html">launching</a> GRASS GIS, the startup screen will open:
-<p>
- 
 <center>
-  <img src="grass_start.png" alt="[GRASS GIS start screen]">
+  <img src="grass_start.png" alt="[GRASS GIS after first startup]">
 </center>
 
-<h3><img src="circle_1.png" alt="[(1)]">&nbsp;Selecting the GIS Database directory</h3>
-
-GRASS data are stored in a directory referred to as DATABASE
-(also called "GISDBASE").  This directory has to be created
-with a file manager or the <tt>mkdir</tt> command, before starting to work
-with GRASS.  Within this DATABASE, the projects are organized
-by project areas stored in subdirectories called LOCATIONs.
-
-<h3><img src="circle_2.png" alt="[(2)]">&nbsp;Selecting the LOCATION (a project)</h3>
-
-A LOCATION is defined by its coordinate system, map projection and
-geographical boundaries. The subdirectories and files defining a
-LOCATION are created automatically when GRASS is started the first
-time with a new LOCATION. It is important to understand that each
-projection stays in its own LOCATION.
+<br>
 <p>
-See the "Location Wizard"&nbsp;<img src="circle_4.png" alt="[(4)]"> to
-easily create a new LOCATION from scratch from a geocoded file, by
-defining the parameters or by selecting the corresponding EPSG projection
-code.
-<p>
-See&nbsp;<img src="circle_5.png" alt="[(5)]"> to directly download a
-sample LOCATION into the DATABASE. 
-
-<h3><img src="circle_3.png" alt="[(3)]">&nbsp;Selecting the MAPSET (a subproject)</h3>
-
-Each LOCATION can have many MAPSETs. Each MAPSET is a LOCATION's
-subdirectory. New MAPSET can be added at GRASS startup (see related
-button).
-
-<h3><img src="circle_4.png" alt="[(4)]">&nbsp;Location Wizard</h3>
-
-The "Location Wizard" let's you easily create a new LOCATION. You
-will be guided through a series of dialogues to browse and select
-predefined projections (also via EPSG code) or to define individual
-projections. You can also create new LOCATION easily from a georeferenced
-data file (e.g., SHAPE file or GeoTIFF, see below).  Find below also some
-rules to define the default raster resolution for a new LOCATION.
-
-<h3><img src="circle_5.png" alt="[(5)]">&nbsp;Download a sample LOCATION</h3>
-
-In the "Location Wizard" there is also a Download button that allows you to
-directly download a ready-to-use LOCATION into the DATABASE. You can
-choose among different sample LOCATIONS that are currently available at the
-<a href="https://grass.osgeo.org/download/sample-data/">Download</a>
-section in the GRASS GIS website.
-
-<h3><img src="circle_6.png" alt="[(6)]">&nbsp;Start GRASS</h3>
-
-Once you have selected an existing LOCATION/MAPSET or defined a new
-one, you can enter GRASS. The graphical user interface 
-<a href="wxGUI.html">wxGUI</a> will open and provide you with a
-menu system, map visualization tool, digitizer, and more.
-
-
-<h2>2. Background: GRASS GIS Location structure</h2>
-
-A LOCATION is simply a set of directories which contains the GRASS
-data of a project. Within each LOCATION, a mandatory "PERMANENT"
-MAPSET exists which contains projection information and some more
-definitions. It can be used to store the base cartography in it as
-"PERMANENT" is visible to all users accessing a LOCATION.
-<p>
-
-<!-- original drawing: ../../doc/grass_database.svg -->
-<center>
-  <img src="grass_database.png" alt="[GRASS GIS Location structure]" style="padding:5px;" border="1"><br>
-  <i>Fig. 1: GRASS GIS 8 location structure</i>
-</center>
-
-<h3>Creating and maintaining MAPSETs</h3>
-One motivation to maintain different MAPSETs is to store maps
-related to project issues or subregions. Another motivation is to
-support simultaneous access of several users to the map layers
-stored within the same LOCATION, i.e. teams working on the same
-project. For teams, a centralized GRASS DATABASE would be defined
-in a shared network file system (e.g. NFS). Besides access to his/her own
-MAPSET, each user can also read map layers in other users' MAPSETs,
-but s/he can modify or remove only the map layers in his/her own
-MAPSET.
-<p>
-You can learn more about mapsets and how to seamlessly access maps
-found in another MAPSET of the same LOCATION in the
-<a href="g.mapsets.html">g.mapsets</a> documentation.
-
-<h3>The role of the "PERMANENT" MAPSET</h3>
-When creating a new LOCATION, GRASS GIS automatically creates a special
-MAPSET called PERMANENT where the core data for the project can be
-stored. Data in the PERMANENT MAPSET can only be added, modified or
-removed by the owner of the PERMANENT MAPSET; however, they can be
-accessed, analyzed, and copied into their own MAPSET by the other
-users. The PERMANENT MAPSET is useful for providing general spatial
-data (e.g. an elevation model), accessible but write-protected to all 
-users who are working in the same LOCATION as the database owner.
-To manipulate or add data to PERMANENT, the owner would start
-GRASS and choose the relevant LOCATION and the PERMANENT MAPSET.  This
-mapset also contains the DEFAULT_WIND file, which holds the default
-region boundary coordinate values for the LOCATION (which all users
-will inherit when they start using the database). Additionally, in 
-all mapsets a WIND file is kept, for storing the current boundary 
-coordinate values and the currently selected raster resolution.  Users
-have the option of switching back to the default region at any time.
-
-<h2>3. Creating a GRASS Database with Sample Data</h2>
-
-To create the GRASS database:
-
-<ol>
-<li> Find a place on your disk where you have write access and that
-    has enough disk space to hold your spatial data.</li>
-<li> Create a subdirectory that will hold the general GRASS database
-    (e.g. using a file manager or with <tt>mkdir /data/grassdata</tt> or 
-    <tt>mkdir /home/yourlogin/grassdata</tt>).</li>
-</ol>
+The main component of the Data tab is the <em>Data Catalog</em>
+which shows the GRASS GIS hierarchical structure consisting of
+Database <img src="grassdb.png" alt="[GRASS Database]">,
+Location <img src="location.png" alt="[Location]"> and
+Mapset <img src="mapset.png" alt="[Mapset]">.
+</p>
+<dl>
+  <dt><img src="grassdb.png" alt="[GRASS Database]">&nbsp;<b>GRASS Database</b> (directory with projects)</dt>
+  <dd>Running GRASS GIS for the first time, a folder named "grassdata" is automatically
+    created. Depending on your operating system, you can find it in your $HOME
+    directory (*nix) or My Documents (MS Windows).</dd>
+  <dt><img src="location.png" alt="[Location]">&nbsp;<b>Location</b> (a project)</dt>
+  <dd>A Location is defined by its coordinate reference system (CRS).
+    In the case of the default Location, it is a geographic coordinate reference system
+    WGS84 (EPSG:4326). If you have data in another CRS than WGS84, you should create
+    a new Location corresponding to your system.</dd>
+  <dt><img src="mapset.png" alt="[Mapset]">&nbsp;<b>Mapset</b> (a subproject)</dt>
+  <dd>Each Location can have many Mapsets for managing different aspects of
+    a project or project's subregions. When creating a new Location, GRASS GIS
+    automatically creates a special Mapset called PERMANENT where the core
+    data for the project can be stored.</dd>
+</dl>
 
 <p>
-Sample data such as the &quot;North Carolina&quot; or the
-&quot;Spearfish&quot; sample datasets may be downloaded from
-<a href="https://grass.osgeo.org/download/data/">https://grass.osgeo.org/download/data/</a>
-and the compressed data package(s) extracted into this new database
-directory.
-<p>
-Now you are ready to select a sample dataset in the GRASS GIS startup screen
-(see above) and start the session.
+For more info about data hierarchy, see
+<a href="grass_database.html">GRASS GIS Database</a> page.
+</p>
 
-<h2>4. Creating a New Location with the Location Wizard</h2>
-The <a href="wxGUI.html">wxGUI</a> graphical user interface provides a
-graphical "Location Wizard" which lets you easily create a
-new LOCATION for own data. You will be guided through a series of dialogues to
-browse and select predefined projections (also via EPSG code) or to
-define individual projections. The rules to define the resolution as
-described above also apply here.
+
+<h2>GRASS started in the default Location, now what?</h2>
+<p>
+First, if you would like to get to know GRASS better before importing your own data,
+please download provided samples such as the &quot;North Carolina&quot; dataset.
+You can simply reach them through
+&quot;Download sample location to current database&quot; management icon
+<img src="location-download.png" alt="[Download Location]">.
+</p>
 
 <p>
-<i>Hint: You can create new LOCATION easily from a georeferenced data file
-(e.g., SHAPE file or GeoTIFF file with the related metadata properly included).
-In this case you are asked whether the data itself should be imported
-into the new LOCATION. The default region is then set to match imported map
-and the GRASS GIS session is opened.</i>
+To work with your own data, you typically want to first create a new Location
+with a <a href="https://en.wikipedia.org/wiki/Spatial_reference_system">
+coordinate reference system (CRS)</a> suitable for your study area or one that
+matches your data's CRS. The Location Wizard <img src="location-add.png" alt="[Add Location]">
+will help you with that by guiding you through a series of dialogs to browse
+and select predefined projections (also via EPSG code) or to define individual
+projections.
 
+<h3>Creating a New Location with the Location Wizard</h3>
 <p>
-After defining new LOCATION, wxGUI starts automatically.
-If data were already imported, you can add them into the Layer Manager now
-and display them. If your LOCATION is empty you can import your data from 
-the menu: Go to "File" -&gt; "Import raster/vector data" (see also the
-related Wiki page on <a href="https://grasswiki.osgeo.org/wiki/Importing_data">Importing data</a>).
+If you know the CRS of your data or study area,
+you can fill <a href="https://epsg.io">EPSG code</a>
+or description and Location Wizard finds appropriate CRS from a predefined list
+of projections.
 
-<h2>5. Text-based startup and location creation</h2>
+If you do not know CRS of you data, you can read it from your georeferenced
+data file (e.g. shapefile or GeoTiff file with the related metadata properly
+included).
+</p>
+
+<h3>Importing data</h3>
+After creating a new Location, you are ready to import your data. You can use
+simple raster or vector data import <img src="raster-import.png" alt="[Raster import]">,
+<img src="vector-import.png" alt="[Vector import]"> or a variety of more specialized tools.
+If the data's CRS does not match your Location's CRS, data will be automatically reprojected.
+
+After import your raster or vector data are added as a layer to Map Display.
+To change layer properties, go to Display tab.
+To analyze your data, search for a tool in the Modules tab.
+
+
+<h2>Text-based startup and Location creation</h2>
 
 GRASS GIS can be run entirely without using the graphical user interface.
-For a first time startup, the following steps have to be followed:
+See <a href="grass.html">examples</a> of running GRASS GIS from a command line.
 
-<ol>
-<li> Create the GRASS GIS database directory (with a file manager; or on command line: <tt>mkdir /home/user/grassdata</tt></li>
-<li> Create a new location, including it's default PERMANENT mapset,
-     without entering the new location:
-<ul>
-    <li>Using an EPSG code:<br>
-        &nbsp;<tt>grass -e -c EPSG:32630 /home/user/grassdata/mylocation</tt></li>
-    <li>Using a georeferenced raster or vector file:<br>
-        &nbsp;<tt>grass -e -c MyGeoReferenceFile.tif /home/user/grassdata/mylocation</tt></li>
-</ul></li>
-<li> Create new mapset within the new location and launch GRASS GIS within
-     that mapset: <br>
-        &nbsp;<tt>grass -c /home/user/grassdata/mylocation/mymapset</tt>
-</ol>
-
-
-<h2>Further Reading</h2>
-
-Please have a look at the GRASS GIS web site for tutorials and books:
-<a href="https://grass.osgeo.org/learn/">https://grass.osgeo.org/learn/</a>.
 
 <h2>See also</h2>
 
@@ -201,6 +94,8 @@ Please have a look at the GRASS GIS web site for tutorials and books:
  <a href="index.html">GRASS GIS 8 Reference Manual</a>
 <br>
  <a href="grass.html">GRASS GIS 8 startup program manual page</a>
+ <br>
+ <a href="https://grass.osgeo.org/learn/">GRASS GIS tutorials and books</a>
 </em>
 
 <p>
