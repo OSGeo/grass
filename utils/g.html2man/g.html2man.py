@@ -38,10 +38,15 @@ def main():
         try:
             p.feed(line)
         except HTMLParseError as err:
-            sys.stderr.write(
-                "%s:%d:%d: Parse error: %s\n"
-                % (infile, err.lineno, err.offset, err.msg)
-            )
+            if hasattr(err, "lineno"):
+                sys.stderr.write(
+                    "%s:%d:%d: Parse error: %s\n"
+                    % (infile, err.lineno, err.offset, err.msg)
+                )
+            else:
+                sys.stderr.write(
+                    "%s:%d:0: Error (%s): %s\n" % (infile, n + 1, repr(err), line)
+                )
             sys.exit(1)
         except Exception as err:
             sys.stderr.write(
