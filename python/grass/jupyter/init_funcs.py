@@ -46,7 +46,7 @@ def display_settings(font="sans", driver="cairo"):
     Inputs:
         font - specifies the font as either the name of a font from
         $GISBASE/etc/fontcap (or alternative fontcap file specified by
-        GRASS_FONT_CAP), or alternatively the full path to a FreeTYpe
+        GRASS_FONT_CAP), or alternatively the full path to a FreeType
         font file.
 
         driver - tell teh display library which driver to use
