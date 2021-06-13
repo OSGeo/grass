@@ -760,8 +760,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->key = "nprocs";
         Opt->type = TYPE_INTEGER;
         Opt->required = NO;
-	Opt->multiple = NO;
-	Opt->answer = "1";
+        Opt->multiple = NO;
+        Opt->answer = "1";
         Opt->description = _("Number of threads for parallel computing");
         break;
 
