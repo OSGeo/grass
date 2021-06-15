@@ -1,3 +1,16 @@
+# MODULE:    grass.jupyter.setup
+#
+# AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+#
+# PURPOSE:   This module contains functions for launching a GRASS session
+#           in Jupyter Notebooks
+#
+# COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
+#
+#           This program is free software under the GNU General Public
+#           License (>=v2). Read the file COPYING that comes with GRASS
+#           for details.
+
 import os
 
 import grass.script as gs
@@ -7,9 +20,9 @@ import grass.script.setup as gsetup
 def _set_notebook_defaults():
     """
     This function sets several GRASS environment variables that are
-    important for GRASS to run smoothly in Jupyter. A complete list and
-    description of environment variables can be found here:
-    https://grass.osgeo.org/grass78/manuals/variables.html
+    important for GRASS to run smoothly in Jupyter.
+    
+    It also allows GRASS to overwrite existing maps of the same name.
     """
     # We want functions to raise exceptions and see standard output of
     # the modules in the notebook.
