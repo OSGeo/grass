@@ -21,7 +21,7 @@ def _set_notebook_defaults():
     """
     This function sets several GRASS environment variables that are
     important for GRASS to run smoothly in Jupyter.
-    
+
     It also allows GRASS to overwrite existing maps of the same name.
     """
     # We want functions to raise exceptions and see standard output of
