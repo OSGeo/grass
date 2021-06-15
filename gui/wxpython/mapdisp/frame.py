@@ -285,10 +285,9 @@ class MapFrame(SingleMapFrame):
         statusbar.SetFieldsCount(4)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
 
-        container = wx.BoxSizer(wx.VERTICAL)
-        container.Add(statusbar, proportion=1, flag=wx.EXPAND)
-        statusbarpanel.SetSizer(container)
-        statusbarpanel.Fit()
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(statusbar, proportion=1, flag=wx.EXPAND)
+        statusbarpanel.SetSizer(sizer)
         statusbarpanel.Layout()
 
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
