@@ -150,7 +150,7 @@ class MapFrame(SingleMapFrame):
         #
         self.statusbarManager = None
         if statusbar:
-            self.CreateStatusbar()
+            statusbarpanel, self.statusbar = self.CreateStatusbar()
 
         # init decoration objects
         self.decorations = {}
@@ -212,6 +212,19 @@ class MapFrame(SingleMapFrame):
             .DestroyOnClose(True)
             .Layer(0),
         )
+
+        self._mgr.AddPane(
+            statusbarpanel,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+        )
         self._mgr.Update()
 
         #
@@ -266,9 +279,18 @@ class MapFrame(SingleMapFrame):
         )
 
         # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number=4, style=0)
-        statusbar.SetMinHeight(24)
+        statusbarpanel = wx.Panel(self, size=wx.DefaultSize, style=wx.SUNKEN_BORDER)
+        statusbar = wx.StatusBar(statusbarpanel, id=wx.ID_ANY)
+        statusbar.SetFieldsCount(4)
+        statusbar.SetMinHeight(30)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
+
+        container = wx.BoxSizer(wx.VERTICAL)
+        container.Add(statusbar, proportion=1, flag=wx.EXPAND)
+        statusbarpanel.SetSizer(container)
+        statusbarpanel.Fit()
+        statusbarpanel.Layout()
+
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
@@ -293,6 +315,7 @@ class MapFrame(SingleMapFrame):
                 % dict(command=" ".join(cmd), error=error)
             )
         )
+        return statusbarpanel, statusbar
 
     def GetMapWindow(self):
         return self.MapWindow
@@ -453,7 +476,7 @@ class MapFrame(SingleMapFrame):
         self._giface.WriteCmdLog(
             _("Starting 3D view mode..."), notification=Notification.HIGHLIGHT
         )
-        self.SetStatusText(_("Please wait, loading data..."), 0)
+        self.statusbar.SetStatusText(_("Please wait, loading data..."), 0)
 
         # create GL window
         if not self.MapWindow3D:
@@ -521,7 +544,7 @@ class MapFrame(SingleMapFrame):
         # is called during update and it must give reasonable values
         wx.CallAfter(self.MapWindow3D.UpdateOverlays)
 
-        self.SetStatusText("", 0)
+        self.statusbar.SetStatusText("", 0)
         self._mgr.Update()
 
     def Disable3dMode(self):
@@ -546,7 +569,7 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.SetMode(
             UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
         )
-        self.SetStatusText(_("Please wait, unloading data..."), 0)
+        self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
             _("Switching back to 2D view mode..."),
@@ -1676,7 +1699,7 @@ class MapFrame(SingleMapFrame):
         self.rdigit.uploadMapCategories.connect(
             self.toolbars["rdigit"].UpdateCellValues
         )
-        self.rdigit.showNotification.connect(lambda text: self.SetStatusText(text, 0))
+        self.rdigit.showNotification.connect(lambda text: self.statusbar.SetStatusText(text, 0))
         self.rdigit.quitDigitizer.connect(self.QuitRDigit)
         self.rdigit.Bind(
             EVT_UPDATE_PROGRESS,
