@@ -56,7 +56,10 @@ from core.watchdog import (
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+<<<<<<< HEAD
 from main_window.notebook import MainNotebook
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
@@ -164,7 +167,11 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
+<<<<<<< HEAD
         self._auimgr = SingleWindowAuiManager(self)
+=======
+        self._auimgr = aui.AuiManager(self)
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 
         # list of open dialogs
         self.dialogs = dict()
@@ -173,6 +180,7 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"] = list()
 
         # set pane sizes according to the full screen size of the primary monitor
+<<<<<<< HEAD
         self.PANE_BEST_SIZE = tuple(t // 5 for t in self.size)
         self.PANE_MIN_SIZE = tuple(t // 8 for t in self.size)
 
@@ -181,6 +189,15 @@ class GMFrame(wx.Frame):
         self.workspace_manager.CreateRecentFilesMenu(
             menu=self.menubar,
         )
+=======
+        size = wx.Display().GetGeometry().GetSize()
+        self.PANE_BEST_SIZE = tuple(t / 5 for t in size)
+        self.PANE_MIN_SIZE = tuple(t / 10 for t in size)
+
+        # create widgets and build panes
+        self.CreateMenuBar()
+        self.CreateStatusBar(number=1)
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
         self.BuildPanes()
         self.BindEvents()
 
@@ -217,6 +234,7 @@ class GMFrame(wx.Frame):
         else:
             self.Maximize(True)
         self.Show()
+        self.Maximize(True)
 
         # load workspace file if requested
         if workspace:
@@ -319,6 +337,7 @@ class GMFrame(wx.Frame):
             return self._auimgr.GetPane(name).IsShown()
         return False
 
+<<<<<<< HEAD
     def SetStatusText(self, *args):
         """Override SbMain statusbar method"""
         self.statusbar.SetStatusText(*args)
@@ -328,6 +347,8 @@ class GMFrame(wx.Frame):
         # create the notebook off-window to avoid flicker
         self.mainnotebook = MainNotebook(parent=self)
 
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
         self.datacatalog = DataCatalog(parent=parent, giface=self._giface)
@@ -415,6 +436,7 @@ class GMFrame(wx.Frame):
         else:
             self.pyshell = None
 
+<<<<<<< HEAD
     def OnNewDisplay(self, event=None):
         """Create new layer tree and map display window instance"""
         self.NewDisplay()
@@ -656,6 +678,88 @@ class GMFrame(wx.Frame):
             aui.AuiPaneInfo()
             .Name("layers")
             .Caption(_("Layers"))
+=======
+    def _createMapDisplay(self, parent):
+        """Set up Map Display"""
+        # blank panel for testing
+        self.mapdisplay = wx.Panel(parent=parent)
+
+    def BuildPanes(self):
+        """Build panes - toolbars as well as panels"""
+
+        # initialize all main widgets
+        self._createDataCatalog(parent=self)
+        self._createDisplay(parent=self)
+        self._createSearchModule(parent=self)
+        self._createConsole(parent=self)
+        self._createPythonShell(parent=self)
+        self._createMapDisplay(parent=self)
+        self.toolbars = {
+            "workspace": LMWorkspaceToolbar(parent=self),
+            "tools": LMToolsToolbar(parent=self),
+            "misc": LMMiscToolbar(parent=self),
+            "nviz": LMNvizToolbar(parent=self),
+        }
+        self._toolbarsData = {
+            "workspace": (
+                "toolbarWorkspace",  # name
+                _("Workspace Toolbar"),  # caption
+                1,
+                0,
+            ),  # row, position
+            "tools": ("toolbarTools", _("Tools Toolbar"), 1, 1),
+            "misc": ("toolbarMisc", _("Misc Toolbar"), 1, 2),
+            "nviz": ("toolbarNviz", _("3D view Toolbar"), 1, 3),
+        }
+
+        # add a bunch of panes
+        toolbarsList = ("workspace", "tools", "misc", "nviz")
+        for toolbar in toolbarsList:
+            name, caption, row, position = self._toolbarsData[toolbar]
+            self._auimgr.AddPane(
+                self.toolbars[toolbar],
+                aui.AuiPaneInfo()
+                .Name(name)
+                .Caption(caption)
+                .ToolbarPane()
+                .Top()
+                .Row(row)
+                .Position(position)
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .BestSize((self.toolbars[toolbar].GetBestSize())),
+            )
+
+        self._auimgr.AddPane(
+            self.mapdisplay,
+            aui.AuiPaneInfo().Name("map display").CenterPane().PaneBorder(True),
+        )
+
+        self._auimgr.AddPane(
+            self.datacatalog,
+            aui.AuiPaneInfo()
+            .Name("datacatalog")
+            .Caption("Data Catalog")
+            .Left()
+            .Layer(1)
+            .Position(1)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.AddPane(
+            self.displayPanel,
+            aui.AuiPaneInfo()
+            .Name("display")
+            .Caption("Display")
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
             .Left()
             .Layer(1)
             .Position(2)
@@ -665,6 +769,7 @@ class GMFrame(wx.Frame):
             .MinimizeButton(True)
             .MaximizeButton(True),
         )
+<<<<<<< HEAD
 
         self._auimgr.AddPane(
             self.search,
@@ -736,9 +841,58 @@ class GMFrame(wx.Frame):
             pane = self._auimgr.GetPane(notebook)
             pane.BestSize(self.PANE_BEST_SIZE)
             pane.MinSize(self.PANE_MIN_SIZE)
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 
+        self._auimgr.AddPane(
+            self.search,
+            aui.AuiPaneInfo()
+            .Name("modules")
+            .Caption("Modules")
+            .Right()
+            .Layer(2)
+            .Position(1)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.AddPane(
+            self.goutput,
+            aui.AuiPaneInfo()
+            .Name("console")
+            .Caption("Console")
+            .Right()
+            .Layer(2)
+            .Position(2)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.AddPane(
+            self.pyshell,
+            aui.AuiPaneInfo()
+            .Name("python")
+            .Caption("Python")
+            .Right()
+            .Layer(2)
+            .Position(3)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.GetPane("toolbarNviz").Hide()
         wx.CallAfter(self.datacatalog.LoadItems)
 
+<<<<<<< HEAD
         single_win_panes_layout_pos_enabled = UserSettings.Get(
             group="general",
             key="singleWinPanesLayoutPos",
@@ -753,11 +907,17 @@ class GMFrame(wx.Frame):
         if single_win_panes_layout_pos_enabled and single_win_panes_layout_pos:
             self._auimgr.LoadPerspective(single_win_panes_layout_pos)
 
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
         self._auimgr.Update()
 
     def BindEvents(self):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
+<<<<<<< HEAD
+=======
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
@@ -1010,12 +1170,15 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
+<<<<<<< HEAD
     def OnCBPageClosed(self, event):
         """Page of notebook has been closed from the Layers pane via x
         button or via closing map display notebook page"""
         # Repaint Layers pane map display toolbar widget on the wxMac
         self._repaintLayersPaneMapDisplayToolbar()
 
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
     def OnCBPageClosing(self, event):
         """Page of notebook is being closed
         from Layer Manager (x button next to arrows)
@@ -1066,6 +1229,7 @@ class GMFrame(wx.Frame):
         if is_docked:
             self.mainnotebook.DeletePage(pgnum_dict["mainnotebook"])
 
+<<<<<<< HEAD
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
         if (
@@ -1083,6 +1247,8 @@ class GMFrame(wx.Frame):
                 if notebook.GetPageText(i) == page_text:
                     notebook.SetSelection(i)
 
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
         result = True
@@ -2374,6 +2540,27 @@ class GMFrame(wx.Frame):
             except ValueError:
                 pass
 
+<<<<<<< HEAD
+=======
+    def OnKeyDown(self, event):
+        """Key pressed"""
+        kc = event.GetKeyCode()
+
+        try:
+            kc = chr(kc)
+        except ValueError:
+            event.Skip()
+            return
+
+        if event.CtrlDown():
+            if kc == "R":
+                self.OnAddRaster(None)
+            elif kc == "V":
+                self.OnAddVector(None)
+
+        event.Skip()
+
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quit"""
         self._closeWindow(event)
