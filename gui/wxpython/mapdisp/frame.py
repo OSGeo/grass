@@ -223,7 +223,7 @@ class MapFrame(SingleMapFrame):
             .CloseButton(False)
             .DestroyOnClose(True)
             .ToolbarPane()
-            .Dockable(False)
+            .Dockable(False),
         )
         self._mgr.Update()
 
@@ -1699,7 +1699,9 @@ class MapFrame(SingleMapFrame):
         self.rdigit.uploadMapCategories.connect(
             self.toolbars["rdigit"].UpdateCellValues
         )
-        self.rdigit.showNotification.connect(lambda text: self.statusbar.SetStatusText(text, 0))
+        self.rdigit.showNotification.connect(
+            lambda text: self.statusbar.SetStatusText(text, 0)
+        )
         self.rdigit.quitDigitizer.connect(self.QuitRDigit)
         self.rdigit.Bind(
             EVT_UPDATE_PROGRESS,
