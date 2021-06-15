@@ -20,12 +20,21 @@ a Geographic Information System used for geospatial data management and
 analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
 
+<<<<<<< HEAD
 Launch this repository in Binder and experiment with GRASS's Python API in
 Jupyter Notebooks by clicking the button below:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fnotebooks%2Fjupyter_example.ipynb)
 
 ## Contributing
+=======
+Launch this repository in Binder and experiment with GRASS's Python API in Jupyter Notebooks by clicking the button below:
+
+[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/OSGeo/grass/master?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fexample_notebook.ipynb)
+
+
+## How to get write access here
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 
 In general: you don't really need write access as you can simply open
 a [pull request](https://github.com/OSGeo/grass/pulls) to contribute to

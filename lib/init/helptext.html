@@ -2,6 +2,7 @@
 
 <p>
 When <a href="grass.html">launching</a> GRASS GIS for the first time, you will open a
+<<<<<<< HEAD
 <b>default project</b> "world_latlog_wgs84" where you can find a map layer
 called "country_boundaries" showing a world map in the WGS84 coordinate system.
 </p>
@@ -15,12 +16,19 @@ After <a href="grass.html">launching</a> GRASS GIS, the startup screen will open
 <p>
  
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+<b>default Location</b> "world_latlog_wgs84" where you can find a map layer
+called "country_boundaries" showing a world map in the WGS84 coordinate system.
+</p>
+
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 <center>
   <img src="grass_start.png" alt="[GRASS GIS after first startup]">
 </center>
 
 <br>
 <p>
+<<<<<<< HEAD
 <<<<<<< HEAD
 The main component of the Data tab is the <em>Data Catalog</em>
 which shows the GRASS GIS hierarchical structure consisting of
@@ -144,12 +152,37 @@ To create the GRASS database:
     <tt>mkdir /home/yourlogin/grassdata</tt>).</li>
 </ol>
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+The main component of the Data tab is the <em>Data Catalog</em>
+which shows the GRASS GIS hierarchical structure consisting of
+Database <img src="grassdb.png" alt="[GRASS Database]">,
+Location <img src="location.png" alt="[Location]"> and
+Mapset <img src="mapset.png" alt="[Mapset]">.
+</p>
+<dl>
+  <dt><img src="grassdb.png" alt="[GRASS Database]">&nbsp;<b>GRASS Database</b> (directory with projects)</dt>
+  <dd>Running GRASS GIS for the first time, a folder named "grassdata" is automatically
+    created. Depending on your operating system, you can find it in your $HOME
+    directory (*nix) or My Documents (MS Windows).</dd>
+  <dt><img src="location.png" alt="[Location]">&nbsp;<b>Location</b> (a project)</dt>
+  <dd>A Location is defined by its coordinate reference system (CRS).
+    In the case of the default Location, it is a geographic coordinate reference system
+    WGS84 (EPSG:4326). If you have data in another CRS than WGS84, you should create
+    a new Location corresponding to your system.</dd>
+  <dt><img src="mapset.png" alt="[Mapset]">&nbsp;<b>Mapset</b> (a subproject)</dt>
+  <dd>Each Location can have many Mapsets for managing different aspects of
+    a project or project's subregions. When creating a new Location, GRASS GIS
+    automatically creates a special Mapset called PERMANENT where the core
+    data for the project can be stored.</dd>
+</dl>
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 
 <p>
 For more info about data hierarchy, see
 <a href="grass_database.html">GRASS GIS Database</a> page.
 </p>
 
+<<<<<<< HEAD
 <h2>GRASS started in the default project, now what?</h2>
 
 <p>
@@ -159,8 +192,30 @@ You can simply reach them through
 &quot;Download sample project to current database&quot; management icon
 <img src="location-download.png" alt="[Download project]">.
 </p>
+=======
+
+<h2>GRASS started in the default Location, now what?</h2>
+<p>
+First, if you would like to get to know GRASS better before importing your own data,
+please download provided samples such as the &quot;North Carolina&quot; dataset.
+You can simply reach them through
+&quot;Download sample location to current database&quot; management icon
+<img src="location-download.png" alt="[Download Location]">.
+</p>
 
 <p>
+To work with your own data, you typically want to first create a new Location
+with a <a href="https://en.wikipedia.org/wiki/Spatial_reference_system">
+coordinate reference system (CRS)</a> suitable for your study area or one that
+matches your data's CRS. The Location Wizard <img src="location-add.png" alt="[Add Location]">
+will help you with that by guiding you through a series of dialogs to browse
+and select predefined projections (also via EPSG code) or to define individual
+projections.
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+
+<h3>Creating a New Location with the Location Wizard</h3>
+<p>
+<<<<<<< HEAD
 To work with your own data, you typically want to first create a new project
 with a <a href="https://en.wikipedia.org/wiki/Spatial_reference_system">
 coordinate reference system (CRS)</a> suitable for your study area or one that
@@ -176,21 +231,36 @@ you can fill <a href="https://epsg.io">EPSG code</a>
 or description and Project Wizard finds appropriate CRS from a predefined list
 of projections.
 
+=======
+If you know the CRS of your data or study area,
+you can fill <a href="https://epsg.io">EPSG code</a>
+or description and Location Wizard finds appropriate CRS from a predefined list
+of projections.
+
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 If you do not know CRS of you data, you can read it from your georeferenced
 data file (e.g. shapefile or GeoTiff file with the related metadata properly
 included).
 </p>
 
 <h3>Importing data</h3>
+<<<<<<< HEAD
 After creating a new project, you are ready to import your data. You can use
 simple raster or vector data import <img src="raster-import.png" alt="[Raster import]">,
 <img src="vector-import.png" alt="[Vector import]"> or a variety of more specialized tools.
 If the data's CRS does not match your project's CRS, data will be automatically reprojected.
+=======
+After creating a new Location, you are ready to import your data. You can use
+simple raster or vector data import <img src="raster-import.png" alt="[Raster import]">,
+<img src="vector-import.png" alt="[Vector import]"> or a variety of more specialized tools.
+If the data's CRS does not match your Location's CRS, data will be automatically reprojected.
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 
 After import your raster or vector data are added as a layer to Map Display.
 To change layer properties, go to Display tab.
 To analyze your data, search for a tool in the Modules tab.
 
+<<<<<<< HEAD
 <h2>Text-based startup and project creation</h2>
 
 GRASS GIS can be run entirely without using the graphical user interface.
@@ -220,6 +290,14 @@ For a first time startup, the following steps have to be followed:
 Please have a look at the GRASS GIS web site for tutorials and books:
 <a href="https://grass.osgeo.org/learn/">https://grass.osgeo.org/learn/</a>.
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+
+<h2>Text-based startup and Location creation</h2>
+
+GRASS GIS can be run entirely without using the graphical user interface.
+See <a href="grass.html">examples</a> of running GRASS GIS from a command line.
+
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 
 <h2>See also</h2>
 
@@ -235,12 +313,17 @@ Please have a look at the GRASS GIS web site for tutorials and books:
  <a href="index.html">GRASS GIS 8 Reference Manual</a>
 <br>
  <a href="grass.html">GRASS GIS 8 startup program manual page</a>
+<<<<<<< HEAD
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
  <a href="index.html">GRASS GIS 8 Reference Manual</a>
 <br>
  <a href="grass.html">GRASS GIS 8 startup program manual page</a>
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+ <br>
+ <a href="https://grass.osgeo.org/learn/">GRASS GIS tutorials and books</a>
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
 </em>
 
 <p>
