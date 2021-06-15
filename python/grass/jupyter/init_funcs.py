@@ -20,7 +20,7 @@ def _set_notebook_defaults():
     os.environ["GRASS_OVERWRITE"] = "1"
 
 
-def init(path, location=None, mapset=None):
+def init(path, location, mapset):
     """
     This function initiates a GRASS session and sets GRASS
     environment variables.
