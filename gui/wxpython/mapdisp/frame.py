@@ -223,7 +223,8 @@ class MapFrame(SingleMapFrame):
             .CloseButton(False)
             .DestroyOnClose(True)
             .ToolbarPane()
-            .Dockable(False),
+            .Dockable(False)
+            .Gripper(False),
         )
         self._mgr.Update()
 
@@ -282,7 +283,6 @@ class MapFrame(SingleMapFrame):
         statusbarpanel = wx.Panel(self, size=wx.DefaultSize, style=wx.SUNKEN_BORDER)
         statusbar = wx.StatusBar(statusbarpanel, id=wx.ID_ANY)
         statusbar.SetFieldsCount(4)
-        statusbar.SetMinHeight(30)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
 
         container = wx.BoxSizer(wx.VERTICAL)
