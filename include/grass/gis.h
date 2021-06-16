@@ -121,12 +121,21 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define U_DEGREES        8
 #define U_USFEET         9
 /* Temporal units from the datetime library */
+<<<<<<< HEAD
 #define U_YEARS          DATETIME_YEAR
 #define U_MONTHS         DATETIME_MONTH
 #define U_DAYS           DATETIME_DAY
 #define U_HOURS          DATETIME_HOUR
 #define U_MINUTES        DATETIME_MINUTE
 #define U_SECONDS        DATETIME_SECOND
+=======
+#define U_YEARS         DATETIME_YEAR
+#define U_MONTHS        DATETIME_MONTH
+#define U_DAYS          DATETIME_DAY
+#define U_HOURS         DATETIME_HOUR
+#define U_MINUTES       DATETIME_MINUTE
+#define U_SECONDS       DATETIME_SECOND
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 
 /*! \brief Projection code - XY coordinate system (unreferenced data) */
 #define PROJECTION_XY    0
@@ -327,6 +336,7 @@ typedef enum {
     G_OPT_C,  /*!< color */
     G_OPT_CN, /*!< color or none */
 
+<<<<<<< HEAD
     G_OPT_M_UNITS,      /*!< units */
     G_OPT_M_DATATYPE,   /*!< datatype */
     G_OPT_M_MAPSET,     /*!< mapset */
@@ -338,6 +348,40 @@ typedef enum {
     G_OPT_M_REGION,     /*!< saved region */
     G_OPT_M_NULL_VALUE, /*!< null value string */
     G_OPT_M_NPROCS,     /*!< number of threads for parallel computing */
+=======
+    G_OPT_M_UNITS,              /*!< units */
+    G_OPT_M_DATATYPE,           /*!< datatype */
+    G_OPT_M_MAPSET,             /*!< mapset */
+    G_OPT_M_LOCATION,           /*!< location */
+    G_OPT_M_DBASE,              /*!< dbase */
+    G_OPT_M_COORDS,             /*!< coordinates */
+    G_OPT_M_COLR,               /*!< color rules */
+    G_OPT_M_DIR,                /*!< directory input */
+    G_OPT_M_REGION,             /*!< saved region */
+    G_OPT_M_NULL_VALUE,         /*!< null value string */
+    G_OPT_M_NPROCS,             /*!< number of threads for parallel computing */
+
+    G_OPT_STDS_INPUT,           /*!< old input space time dataset of type strds, str3ds or stvds */
+    G_OPT_STDS_INPUTS,          /*!< old input space time datasets */
+    G_OPT_STDS_OUTPUT,          /*!< new output space time dataset */
+    G_OPT_STRDS_INPUT,          /*!< old input space time raster dataset */
+    G_OPT_STRDS_INPUTS,         /*!< old input space time raster datasets */
+    G_OPT_STRDS_OUTPUT,         /*!< new output space time raster dataset */
+    G_OPT_STRDS_OUTPUTS,        /*!< new output space time raster datasets */
+    G_OPT_STR3DS_INPUT,         /*!< old input space time raster3d dataset */
+    G_OPT_STR3DS_INPUTS,        /*!< old input space time raster3d datasets */
+    G_OPT_STR3DS_OUTPUT,        /*!< new output space time raster3d dataset */
+    G_OPT_STVDS_INPUT,          /*!< old input space time vector dataset */
+    G_OPT_STVDS_INPUTS,         /*!< old input space time vector datasets */
+    G_OPT_STVDS_OUTPUT,         /*!< new output space time vector dataset */
+    G_OPT_MAP_INPUT,            /*!< old input map of type raster, vector or raster3d  */
+    G_OPT_MAP_INPUTS,           /*!< old input maps of type raster, vector or raster3d  */
+    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */
+    G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
+    G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
+    G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
+    G_OPT_T_SAMPLE             /*!< Temporal sample methods */
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 
     G_OPT_STDS_INPUT, /*!< old input space time dataset of type strds, str3ds or
                          stvds */
