@@ -150,7 +150,7 @@ class MapFrame(SingleMapFrame):
         #
         self.statusbarManager = None
         if statusbar:
-            self.CreateStatusbar()
+            self.statusbar = self.CreateStatusbar()
 
         # init decoration objects
         self.decorations = {}
@@ -212,6 +212,21 @@ class MapFrame(SingleMapFrame):
             .DestroyOnClose(True)
             .Layer(0),
         )
+
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
         self._mgr.Update()
 
         #
@@ -265,9 +280,9 @@ class MapFrame(SingleMapFrame):
             sb.SbMapScale,
         )
 
-        # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number=4, style=0)
+        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         statusbar.SetMinHeight(24)
+        statusbar.SetFieldsCount(4)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
@@ -293,6 +308,20 @@ class MapFrame(SingleMapFrame):
                 % dict(command=" ".join(cmd), error=error)
             )
         )
+        return statusbar
+
+    def ShowStatusbar(self, show):
+        """Show/hide statusbar and associated pane"""
+        self._mgr.GetPane("statusbar").Show(show)
+        self._mgr.Update()
+
+    def IsStatusbarShown(self):
+        """Check if statusbar is shown"""
+        return self._mgr.GetPane("statusbar").IsShown()
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def GetMapWindow(self):
         return self.MapWindow

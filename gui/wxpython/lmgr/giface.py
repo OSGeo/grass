@@ -259,10 +259,10 @@ class LayerManagerGrassInterface(object):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
     def ShowStatusbar(self, show=True):
-        self.lmgr.GetMapDisplay().statusbarManager.Show(show)
+        self.lmgr.GetMapDisplay().ShowStatusbar(show)
 
     def IsStatusbarShown(self):
-        return self.lmgr.GetMapDisplay().statusbarManager.IsShown()
+        return self.lmgr.GetMapDisplay().IsStatusbarShown()
 
     def ShowAllToolbars(self, show=True):
         if not show:  # hide
