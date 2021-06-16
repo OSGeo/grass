@@ -18,6 +18,10 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+    #include <omp.h>
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -132,15 +136,15 @@ static RASTER_MAP_TYPE output_type(RASTER_MAP_TYPE input_type, int weighted, int
 int main(int argc, char *argv[])
 {
     char *p;
-    int in_fd;
-    int selection_fd;
+    int *in_fd;
+    int *selection_fd;
     int num_outputs;
     struct output *outputs = NULL;
     int copycolr, weights, have_weights_mask;
-    char *selection;
+    char **selection;
     RASTER_MAP_TYPE map_type;
     int row, col;
-    int readrow;
+    int *readrow;
     int nrows, ncols;
     int i, n;
     struct Colors colr;
@@ -157,16 +161,17 @@ int main(int argc, char *argv[])
 	struct Option *weighting_function;
 	struct Option *weighting_factor;
 	struct Option *quantile;
+	struct Option *nprocs;
     } parm;
     struct
     {
 	struct Flag *align, *circle;
     } flag;
 
-    DCELL *values;		/* list of neighborhood values */
-    DCELL *values_tmp;		/* list of neighborhood values */
-    DCELL(*values_w)[2];	/* list of neighborhood values and weights */
-    DCELL(*values_w_tmp)[2];	/* list of neighborhood values and weights */
+    DCELL **values;		/* list of neighborhood values */
+    DCELL **values_tmp;		/* list of neighborhood values */
+    DCELL(**values_w)[2];	/* list of neighborhood values and weights */
+    DCELL(**values_w_tmp)[2];	/* list of neighborhood values and weights */
 
     G_gisinit(argv[0]);
 
@@ -266,6 +271,14 @@ int main(int argc, char *argv[])
     parm.title->required = NO;
     parm.title->description = _("Title for output raster map");
 
+    parm.nprocs = G_define_option();
+    parm.nprocs->key = "nprocs";
+    parm.nprocs->type = TYPE_INTEGER;
+    parm.nprocs->answer = "1";
+    parm.nprocs->options = "1-1000";
+    parm.nprocs->required = NO;
+    parm.nprocs->description = _("Number of threads which will be used for parallel computing");
+
     flag.align = G_define_flag();
     flag.align->key = 'a';
     flag.align->description = _("Do not align output with the input");
@@ -285,6 +298,19 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
+#if defined(_OPENMP)
+    sscanf(parm.nprocs->answer, "%d", &ncb.threads);
+    if (ncb.threads < 1)
+    {
+      G_warning(_("<%d> is not valid number of threads. Number of threads will be set to <%d>"),
+      ncb.threads, abs(ncb.threads));
+      ncb.threads = abs(ncb.threads);
+    }
+    omp_set_num_threads(ncb.threads);
+#else
+    ncb.threads = 1;
+#endif
+
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
 	G_fatal_error(_("-%c and %s= are mutually exclusive"),
 			flag.circle->key, parm.weighting_function->answer);
@@ -302,18 +328,21 @@ int main(int argc, char *argv[])
     ncb.oldcell = parm.input->answer;
 
     if (!flag.align->answer) {
-	Rast_get_cellhd(ncb.oldcell, "", &cellhd);
-	G_get_window(&window);
-	Rast_align_window(&window, &cellhd);
-	Rast_set_window(&window);
+        Rast_get_cellhd(ncb.oldcell, "", &cellhd);
+        G_get_window(&window);
+        Rast_align_window(&window, &cellhd);
+        Rast_set_window(&window);
     }
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
     /* open raster maps */
-    in_fd = Rast_open_old(ncb.oldcell, "");
-    map_type = Rast_get_map_type(in_fd);
+    in_fd = G_malloc(ncb.threads * sizeof(int));
+    for (int i = 0; i < ncb.threads; i++) {
+        in_fd[i] = Rast_open_old(ncb.oldcell, "");
+    }
+    map_type = Rast_get_map_type(in_fd[0]);
 
     /* process the output maps */
     for (i = 0; parm.output->answers[i]; i++)
@@ -406,19 +435,19 @@ int main(int argc, char *argv[])
 
     /* allocate the cell buffers */
     allocate_bufs();
-
-    /* initialize the cell bufs with 'dist' rows of the old cellfile */
-    readrow = 0;
-    for (row = 0; row < ncb.dist; row++)
-	readcell(in_fd, readrow++, nrows, ncols);
+    readrow = G_malloc(ncb.threads * sizeof(int));
 
     /* open the selection raster map */
     if (parm.selection->answer) {
-	G_message(_("Opening selection map <%s>"), parm.selection->answer);
-	selection_fd = Rast_open_old(parm.selection->answer, "");
-        selection = Rast_allocate_null_buf();
+        G_message(_("Opening selection map <%s>"), parm.selection->answer);
+        selection_fd = G_malloc(ncb.threads * sizeof(int));
+        selection = G_malloc(ncb.threads * sizeof(char*));
+        for (int t = 0; t < ncb.threads; t++) {
+            selection_fd[t] = Rast_open_old(parm.selection->answer, "");
+            selection[t] = Rast_allocate_null_buf();
+        }
     } else {
-        selection_fd = -1;
+        selection_fd = NULL;
         selection = NULL;
     }
 
@@ -428,35 +457,53 @@ int main(int argc, char *argv[])
     values_w = NULL;
     values_w_tmp = NULL;
     if (weights) {
-	values_w =
-	    (DCELL(*)[2]) G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
-	values_w_tmp =
-	    (DCELL(*)[2]) G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+        values_w = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
+        values_w_tmp = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
+        for (int t = 0; t < ncb.threads; t++) {
+            values_w[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+            values_w_tmp[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+        }
     }
-    values = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
-    values_tmp = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+    values = G_malloc(ncb.threads * sizeof(DCELL*));
+    values_tmp = G_malloc(ncb.threads * sizeof(DCELL*));
+    for (int t = 0; t < ncb.threads; t++) {
+        values[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+        values_tmp[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+    }
 
-    for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
-	readcell(in_fd, readrow++, nrows, ncols);
+    int work = 0;
+    {
+    int thread_id = 0;
+    int num_threads = 1;
+    int low = nrows * thread_id/num_threads;
+    int high = nrows * (thread_id + 1)/num_threads;
+
+    /* initialize the cell bufs with 'dist' rows of the old cellfile */
+    readrow[thread_id] = low-ncb.dist;
+    for (row = low-ncb.dist; row < low+ncb.dist; row++)
+    readcell(in_fd[thread_id], readrow[thread_id]++, nrows, ncols, thread_id);
+
+    for (row = low; row < high; row++) {
+	G_percent(work, nrows, 2);
+	readcell(in_fd[thread_id], readrow[thread_id]++, nrows, ncols, thread_id);
 
 	if (selection)
-            Rast_get_null_value_row(selection_fd, selection, row);
+            Rast_get_null_value_row(selection_fd[thread_id], selection[thread_id], row);
 
 	for (col = 0; col < ncols; col++) {
 
-            if (selection && selection[col]) {
-                /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
-                 * Thus original data start is shifted by ncb.dist! */
-		for (i = 0; i < num_outputs; i++)
-		    outputs[i].buf[col] = ncb.buf[ncb.dist][col + ncb.dist];
-		continue;
+        if (selection && selection[thread_id][col]) {
+            /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
+             * Thus original data start is shifted by ncb.dist! */
+            for (i = 0; i < num_outputs; i++)
+                outputs[i].buf[col] = ncb.buf[thread_id][ncb.dist][col + ncb.dist];
+                continue;
 	    }
 
 	    if (weights)
-		n = gather_w(values, values_w, col);
+		n = gather_w(values[thread_id], values_w[thread_id], col, thread_id);
 	    else
-		n = gather(values, col);
+		n = gather(values[thread_id], col, thread_id);
 
 	    for (i = 0; i < num_outputs; i++) {
 		struct output *out = &outputs[i];
@@ -467,29 +514,33 @@ int main(int argc, char *argv[])
 		}
 		else {
 		    if (out->method_fn_w) {
-			memcpy(values_w_tmp, values_w, n * 2 * sizeof(DCELL));
-			(*out->method_fn_w)(rp, values_w_tmp, n, &out->quantile);
+                memcpy(values_w_tmp[thread_id], values_w[thread_id], n * 2 * sizeof(DCELL));
+                (*out->method_fn_w)(rp, values_w_tmp[thread_id], n, &out->quantile);
 		    }
 		    else {
-			memcpy(values_tmp, values, n * sizeof(DCELL));
-			(*out->method_fn)(rp, values_tmp, n, &out->quantile);
+                memcpy(values_tmp[thread_id], values[thread_id], n * sizeof(DCELL));
+                (*out->method_fn)(rp, values_tmp[thread_id], n, &out->quantile);
 		    }
 		}
 	    }
-	}
+	} // end of col loop
 
-	for (i = 0; i < num_outputs; i++) {
-	    struct output *out = &outputs[i];
+        for (i = 0; i < num_outputs; i++) {
+            struct output *out = &outputs[i];
 
-	    Rast_put_d_row(out->fd, out->buf);
-	}
-    }
-    G_percent(row, nrows, 2);
+            Rast_put_d_row(out->fd, out->buf);
+        }
+        work++;
+    } // end of row loop
+    } // end of parallel region
+    G_percent(work, nrows, 2);
 
-    Rast_close(in_fd);
+    for (int t = 0; t < ncb.threads; t++)
+        Rast_close(in_fd[t]);
 
     if (selection)
-        Rast_close(selection_fd);
+        for (int t = 0; t < ncb.threads; t++)
+            Rast_close(selection_fd[t]);
 
     for (i = 0; i < num_outputs; i++) {
 	Rast_close(outputs[i].fd);
