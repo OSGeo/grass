@@ -286,6 +286,7 @@ class SbManager:
             self.statusbar.SetStatusText(text)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     def OnContextMenu(self, event):
         """Popup context menu enabling to choose a widget that will be shown in
         statusbar."""
@@ -318,6 +319,8 @@ class SbManager:
 
 =======
 >>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+>>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 
 class SbItem:
     """Base class for statusbar items.

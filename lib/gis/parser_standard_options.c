@@ -761,6 +761,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->multiple = NO;
         Opt->answer = "1";
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* start dynamic answer */
         /* check NPROCS in GISRC, set with g.gisenv */
         memstr = G_store(G_getenv_nofatal("NPROCS"));
@@ -772,6 +773,8 @@ struct Option *G_define_standard_option(int opt)
 
         /* Spatio-temporal modules of the temporal GIS framework */
 =======
+=======
+>>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
         Opt->description = _("Number of threads for parallel computing");
         break;
 
