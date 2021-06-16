@@ -284,7 +284,6 @@ class MapFrame(SingleMapFrame):
         statusbar.SetMinHeight(24)
         statusbar.SetFieldsCount(4)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
-
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
