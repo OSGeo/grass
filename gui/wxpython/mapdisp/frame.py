@@ -139,6 +139,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.statusbar = None
         self.statusbarManager = None
         if statusbar:
+<<<<<<< HEAD
             # items for choice
             statusbarItems = [
                 sb.SbCoordinates,
@@ -164,6 +165,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 % dict(command=" ".join(cmd), error=error)
             )
         )
+=======
+            self.statusbar = self.CreateStatusbar()
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 
         # init decoration objects
         self.decorations = {}
@@ -229,10 +233,27 @@ class MapPanel(SingleMapPanel, MainPageBase):
             .Layer(0),
         )
 
+<<<<<<< HEAD
         # statusbar
         if self.statusbar:
             self.AddStatusbarPane()
 
+=======
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
         self._mgr.Update()
 
         #
@@ -263,9 +284,60 @@ class MapPanel(SingleMapPanel, MainPageBase):
     def _registerContextMenuActions(self):
         """Register show/hide toolbars and statusbar context menu actions"""
 
+<<<<<<< HEAD
         def show_hide_toolbar_label():
             return (
                 _("Hide toolbars") if self.AreAllToolbarsShown() else _("Show toolbars")
+=======
+        # items for choice
+        self.statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+        ]
+
+        self.statusbarItemsHiddenInNviz = (
+            sb.SbAlignExtent,
+            sb.SbDisplayGeometry,
+            sb.SbShowRegion,
+            sb.SbResolution,
+            sb.SbMapScale,
+        )
+
+        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
+        statusbar.SetMinHeight(24)
+        statusbar.SetFieldsCount(4)
+        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
+
+        # fill statusbar manager
+        self.statusbarManager.AddStatusbarItemsByClass(
+            self.statusbarItems, mapframe=self, statusbar=statusbar
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
+        sbRender = sb.SbRender(self, statusbar=statusbar, position=3)
+        self.statusbarManager.AddStatusbarItem(sbRender)
+
+        self.statusbarManager.Update()
+
+        #
+        self.Map.GetRenderMgr().updateProgress.connect(
+            self.statusbarManager.SetProgress
+        )
+        self.Map.GetRenderMgr().renderingFailed.connect(
+            lambda cmd, error: self._giface.WriteError(
+                _("Failed to run command '%(command)s'. Details:\n%(error)s")
+                % dict(command=" ".join(cmd), error=error)
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
             )
 
         def on_show_hide_toolbar(event):
@@ -290,6 +362,20 @@ class MapPanel(SingleMapPanel, MainPageBase):
             label=show_hide_statusbar_label,
             action=on_show_hide_statusbar,
         )
+        return statusbar
+
+    def ShowStatusbar(self, show):
+        """Show/hide statusbar and associated pane"""
+        self._mgr.GetPane("statusbar").Show(show)
+        self._mgr.Update()
+
+    def IsStatusbarShown(self):
+        """Check if statusbar is shown"""
+        return self._mgr.GetPane("statusbar").IsShown()
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def GetMapWindow(self):
         return self.MapWindow

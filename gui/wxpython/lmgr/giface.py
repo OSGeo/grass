@@ -275,7 +275,29 @@ class LayerManagerGrassInterface:
         return self.lmgr.goutput.GetProgressBar()
 
 
+<<<<<<< HEAD
 class LayerManagerGrassInterfaceForMapDisplay:
+=======
+    def ShowStatusbar(self, show=True):
+        self.lmgr.GetMapDisplay().ShowStatusbar(show)
+
+    def IsStatusbarShown(self):
+        return self.lmgr.GetMapDisplay().IsStatusbarShown()
+
+    def ShowAllToolbars(self, show=True):
+        if not show:  # hide
+            action = self.lmgr.GetMapDisplay().RemoveToolbar
+        else:
+            action = self.lmgr.GetMapDisplay().AddToolbar
+        for toolbar in self.lmgr.GetMapDisplay().GetToolbarNames():
+            action(toolbar)
+
+    def AreAllToolbarsShown(self):
+        return self.lmgr.GetMapDisplay().GetMapToolbar().IsShown()
+
+
+class LayerManagerGrassInterfaceForMapDisplay(object):
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
     """Provides reference only to the given layer list (according to tree),
     not to the current.
 
