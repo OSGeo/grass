@@ -311,6 +311,20 @@ class MapFrame(SingleMapFrame):
         )
         return statusbar
 
+    def ShowStatusbar(self, show):
+        """Show/hide statusbar and associated pane"""
+        self.statusbarManager.Show(show)
+        if show:
+            self._mgr.GetPane("statusbar").Show()
+        else:
+            self._mgr.GetPane("statusbar").Hide()
+
+        self._mgr.Update()
+
+    def IsStatusbarShown(self):
+        """Check if statusbar is shown"""
+        return self.statusbarManager.IsShown()
+
     def SetStatusText(self, *args):
         """Overide wx.StatusBar method"""
         self.statusbar.SetStatusText(*args)
