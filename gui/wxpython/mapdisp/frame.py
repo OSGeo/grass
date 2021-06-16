@@ -150,7 +150,7 @@ class MapFrame(SingleMapFrame):
         #
         self.statusbarManager = None
         if statusbar:
-            statusbarpanel, self.statusbar = self.CreateStatusbar()
+            self.statusbar = self.CreateStatusbar()
 
         # init decoration objects
         self.decorations = {}
@@ -214,7 +214,7 @@ class MapFrame(SingleMapFrame):
         )
 
         self._mgr.AddPane(
-            statusbarpanel,
+            self.statusbar,
             wx.aui.AuiPaneInfo()
             .Bottom()
             .MinSize(30, 30)
@@ -280,16 +280,10 @@ class MapFrame(SingleMapFrame):
             sb.SbMapScale,
         )
 
-        # create statusbar and its manager
-        statusbarpanel = wx.Panel(self, size=wx.DefaultSize, style=wx.SUNKEN_BORDER)
-        statusbar = wx.StatusBar(statusbarpanel, id=wx.ID_ANY)
+        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
+        statusbar.SetMinHeight(24)
         statusbar.SetFieldsCount(4)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
-
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(statusbar, proportion=1, flag=wx.EXPAND)
-        statusbarpanel.SetSizer(sizer)
-        statusbarpanel.Layout()
 
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
@@ -315,7 +309,7 @@ class MapFrame(SingleMapFrame):
                 % dict(command=" ".join(cmd), error=error)
             )
         )
-        return statusbarpanel, statusbar
+        return statusbar
 
     def SetStatusText(self, *args):
         """Overide wx.StatusBar method"""
