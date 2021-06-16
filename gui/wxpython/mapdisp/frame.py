@@ -1697,9 +1697,7 @@ class MapFrame(SingleMapFrame):
         self.rdigit.uploadMapCategories.connect(
             self.toolbars["rdigit"].UpdateCellValues
         )
-        self.rdigit.showNotification.connect(
-            lambda text: self.SetStatusText(text, 0)
-        )
+        self.rdigit.showNotification.connect(lambda text: self.SetStatusText(text, 0))
         self.rdigit.quitDigitizer.connect(self.QuitRDigit)
         self.rdigit.Bind(
             EVT_UPDATE_PROGRESS,
