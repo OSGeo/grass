@@ -224,6 +224,7 @@ class MapFrame(SingleMapFrame):
             .DestroyOnClose(True)
             .ToolbarPane()
             .Dockable(False)
+            .PaneBorder(False)
             .Gripper(False),
         )
         self._mgr.Update()
@@ -315,6 +316,10 @@ class MapFrame(SingleMapFrame):
             )
         )
         return statusbarpanel, statusbar
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def GetMapWindow(self):
         return self.MapWindow
@@ -475,7 +480,7 @@ class MapFrame(SingleMapFrame):
         self._giface.WriteCmdLog(
             _("Starting 3D view mode..."), notification=Notification.HIGHLIGHT
         )
-        self.statusbar.SetStatusText(_("Please wait, loading data..."), 0)
+        self.SetStatusText(_("Please wait, loading data..."), 0)
 
         # create GL window
         if not self.MapWindow3D:
@@ -543,7 +548,7 @@ class MapFrame(SingleMapFrame):
         # is called during update and it must give reasonable values
         wx.CallAfter(self.MapWindow3D.UpdateOverlays)
 
-        self.statusbar.SetStatusText("", 0)
+        self.SetStatusText("", 0)
         self._mgr.Update()
 
     def Disable3dMode(self):
@@ -568,7 +573,7 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.SetMode(
             UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
         )
-        self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
+        self.SetStatusText(_("Please wait, unloading data..."), 0)
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
             _("Switching back to 2D view mode..."),
@@ -1699,7 +1704,7 @@ class MapFrame(SingleMapFrame):
             self.toolbars["rdigit"].UpdateCellValues
         )
         self.rdigit.showNotification.connect(
-            lambda text: self.statusbar.SetStatusText(text, 0)
+            lambda text: self.SetStatusText(text, 0)
         )
         self.rdigit.quitDigitizer.connect(self.QuitRDigit)
         self.rdigit.Bind(
