@@ -25,9 +25,9 @@ class grassRenderer:
     def __init__(self, width=600, height=400, text_size=12):
         self.height = height
         self.width = width
-        os.environ["GRASS_RENDER_WIDTH"] = width
-        os.environ["GRASS_RENDER_HEIGHT"] = height
-        os.environ["GRASS_TEXT_SIZE"] = text_size
+        os.environ["GRASS_RENDER_WIDTH"] = str(width)
+        os.environ["GRASS_RENDER_HEIGHT"] = str(height)
+        os.environ["GRASS_TEXT_SIZE"] = str(text_size)
         gs.run_command("d.erase")
 
 
@@ -39,11 +39,11 @@ class grassRenderer:
         gs.run_command("d.rast", map=raster)
 
 
-    def d_vect(self, vector, fill="grey", border_color="black", width=2):
+    def d_vect(self, vector, fill="grey", color="black", width=2):
         """
         Adds a vector to the display
         """
-        gs.run_command('d.vect', map=vector, fill_color='none', border_color="black", width=2)
+        gs.run_command('d.vect', map=vector, fill_color=fill, color=color, width=str(width))
 
 
     def show(self):
@@ -52,7 +52,6 @@ class grassRenderer:
         """
         from IPython.display import Image
         return Image("map.png")
-
 
     # def show_interactively(self, opacity=0.8):
     #     # Get extent and center of GRASS region
