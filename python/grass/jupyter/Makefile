@@ -6,6 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 DSTDIR = $(ETC)/python/grass/jupyter
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 MODULES = \
 	setup \
 	map \
@@ -19,6 +20,9 @@ MODULES = \
 =======
 MODULES = setup
 >>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
+=======
+MODULES = setup
+>>>>>>> 847046a031 (Add session initiations functions for Jupyter Notebooks (#1629))
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

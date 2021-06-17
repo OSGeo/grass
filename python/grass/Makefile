@@ -6,6 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 PYDIR = $(ETC)/python/grass
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 SUBDIRS = \
 	app \
 	benchmark \
@@ -24,6 +25,9 @@ SUBDIRS = \
 =======
 SUBDIRS = app exceptions script ctypes grassdb temporal pygrass pydispatch imaging gunittest bandref jupyter
 >>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
+=======
+SUBDIRS = app exceptions script ctypes grassdb temporal pygrass pydispatch imaging gunittest bandref jupyter
+>>>>>>> 847046a031 (Add session initiations functions for Jupyter Notebooks (#1629))
 
 default: $(PYDIR)/__init__.py
 	$(MAKE) subdirs
