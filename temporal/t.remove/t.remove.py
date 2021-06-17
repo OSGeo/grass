@@ -120,7 +120,7 @@ def main():
     remove = pyg.Module("g.remove", quiet=True, flags="f", run_=False)
 
     if not force and not clean:
-        grass.message(_("The following data base element files would be deleted:"))
+        grass.message(_("The following data base element files will be deleted:"))
 
     for name in dataset_list:
         name = name.strip()
