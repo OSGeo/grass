@@ -492,11 +492,15 @@ int main(int argc, char *argv[])
     }
 
     int work = 0;
+    #pragma omp parallel default(shared) private(row, col, i, n)
     {
-    int thread_id = 0;
-    int num_threads = 1;
-    int low = nrows * thread_id/num_threads;
-    int high = nrows * (thread_id + 1)/num_threads;
+    #if defined(_OPENMP)
+        int thread_id = omp_get_thread_num();
+    #else
+        int thread_id = 0;
+    #endif
+    int low = nrows * thread_id/ncb.threads;
+    int high = nrows * (thread_id + 1)/ncb.threads;
 
     /* initialize the cell bufs with 'dist' rows of the old cellfile */
     readrow[thread_id] = low-ncb.dist;
@@ -547,17 +551,22 @@ int main(int argc, char *argv[])
 	    }
 	} // end of col loop
 
+        #pragma omp atomic update
         work++;
     } // end of row loop
     } // end of parallel region
-    for (i = 0; i < num_outputs; i++) {
+   for (i = 0; i < num_outputs; i++) {
         struct output *out = &outputs[i];
         for (int t = 0; t < ncb.threads; t++) {
             Segment_flush(&out_segment[t][i]);
-            for (row = 0; row < nrows; row++) {
-                Segment_get_row(&out_segment[t][i], out->buf, row);
-                Rast_put_d_row(out->fd, out->buf);
-            }
+        }
+
+        for (row = 0; row < nrows; row++) {
+            Segment_get_row(&out_segment[0][i], out->buf, row);
+            Rast_put_d_row(out->fd, out->buf);
+        }
+
+        for (int t = 0; t < ncb.threads; t++) {
             Segment_release(&out_segment[t][i]);
         }
     }
