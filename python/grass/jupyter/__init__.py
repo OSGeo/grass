@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # MODULE:    grass.jupyter
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
@@ -116,3 +117,6 @@ from .seriesmap import SeriesMap
 =======
 from .setup import *
 >>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
+=======
+from .setup import *
+>>>>>>> 847046a031 (Add session initiations functions for Jupyter Notebooks (#1629))
