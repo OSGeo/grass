@@ -422,6 +422,7 @@ process_raster(univar_stat * stats, int fd, int fdz, const struct Cell_head *reg
 
 }
 
+#if defined(_OPENMP)
 static void
 process_raster_threaded(univar_stat * stats, char *fname, char *zone_fname, const struct Cell_head *region, const int threads)
 {
@@ -495,9 +496,7 @@ process_raster_threaded(univar_stat * stats, char *fname, char *zone_fname, cons
     }
 
     unsigned int work = 0;
-    #pragma omp parallel default(none) \
-    shared(stats, fd, fdz, raster_row, zoneraster_row, n, sum, sumsq, sum_abs, min, max, size, region, \
-    rows, cols, n_zones, zone_info, param, work, mapset, map_type, value_sz, n_alloc, minmax)
+    #pragma omp parallel default(shared)
     {
     int id = omp_get_thread_num();
     unsigned int row;
@@ -626,3 +625,4 @@ process_raster_threaded(univar_stat * stats, char *fname, char *zone_fname, cons
     if (n_zones)
         G_free(zoneraster_row);
 }
+#endif
