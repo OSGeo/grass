@@ -57,13 +57,7 @@ void set_params()
 	_("Percentile to calculate (requires extended statistics flag)");
     param.percentile->guisection = _("Extended");
     
-    param.threads = G_define_option();
-    param.threads->key = "nprocs";
-    param.threads->type = TYPE_INTEGER;
-    param.threads->answer = "1";
-    param.threads->options = "1-1000";
-    param.threads->required = NO;
-    param.threads->description = _("Number of threads which will be used for parallel computing");
+    param.threads = G_define_standard_option(G_OPT_M_NPROCS);
 
     param.separator = G_define_standard_option(G_OPT_F_SEP);
     param.separator->guisection = _("Formatting");
