@@ -1,5 +1,6 @@
 /*
- * v.in.lidar filtering functions
+ * r.in.pdal filtering functions
+ * adapted from v.in.lidar
  *
  * Copyright 2011-2015 by Markus Metz, and The GRASS Development Team
  * Authors:

@@ -1,7 +1,8 @@
 
 /****************************************************************************
  *
- * MODULE:       v.in.lidar
+ * MODULE:       r.in.pdal
+ *               adapted from v.in.lidar
  * AUTHOR(S):    Vaclav Petras
  * PURPOSE:      projection related functions
  * COPYRIGHT:    (C) 2015 by the GRASS Development Team

@@ -11,7 +11,7 @@
  * PURPOSE:   Functions performing value updates on each incoming point
  *            during point binning process
  *
- * COPYRIGHT: (C) 2011-2020 by Vaclav Petras and the GRASS Development Team
+ * COPYRIGHT: (C) 2011-2021 by Vaclav Petras and the GRASS Development Team
  *
  *            This program is free software under the GNU General Public
  *            License (>=v2). Read the file COPYING that comes with

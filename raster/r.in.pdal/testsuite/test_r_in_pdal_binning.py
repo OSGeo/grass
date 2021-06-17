@@ -3,7 +3,7 @@ Name:      r.in.pdal binning method test
 Purpose:   Validates output of various binning methods
 
 Author:    Maris Nartiss
-Copyright: (C) 2020 by Maris Nartiss and the GRASS Development Team
+Copyright: (C) 2021 by Maris Nartiss and the GRASS Development Team
 Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
