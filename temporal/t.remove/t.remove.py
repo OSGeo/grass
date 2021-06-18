@@ -190,7 +190,7 @@ def main():
         grass.message(
             _(
                 "Nothing removed. You must use the force flag (-{flag}) to actually "
-                "remove them. Exiting.".format(flag="f")
+                "remove them.".format(flag="f")
             )
         )
     else:
