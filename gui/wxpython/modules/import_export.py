@@ -776,14 +776,25 @@ class GdalOutputDialog(wx.Dialog):
             RunCommand("v.external.out", parent=self, flags="r")
         else:
             dsn = self.dsnInput.GetDsn()
-            frmt = self.dsnInput.GetFormat()
+            frmt = self.dsnInput.GetFormat(getFormatAbbreviation=True)
+            extension = self.dsnInput.GetFormatExt()
             options = self.dsnInput.GetOptions()
             if not dsn:
                 GMessage(_("No data source selected."), parent=self)
                 return
-
+            if self.ogr:
+                cmd, params = "v.external.out", {"output": dsn}
+            else:
+                cmd, params = (
+                    "r.external.out",
+                    {"directory": dsn, "extension": extension},
+                )
             RunCommand(
-                "v.external.out", parent=self, output=dsn, format=frmt, options=options
+                cmd,
+                parent=self,
+                format=frmt,
+                options=options,
+                **params,
             )
         self.Close()
 
