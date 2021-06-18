@@ -127,21 +127,22 @@ def main():
         sp = tgis.open_old_stds(name, type, dbif)
         if not force:
             grass.message(
-                _("{stds}: {gid}".format(stds=sp.get_type().upper(),
-                                         gid=sp.get_id()))
+                _("{stds}: {gid}".format(stds=sp.get_type().upper(), gid=sp.get_id()))
             )
         if recursive or clean:
             if not force:
                 if recursive:
-                    msg = "The following maps of {stds} {gid} would be " \
-                          "unregistered from temporal database:"
+                    msg = (
+                        "The following maps of {stds} {gid} would be "
+                        "unregistered from temporal database:"
+                    )
                 elif clean:
-                    msg = "The following maps of {stds} {gid} would be " \
-                          "unregistered from temporal database and removed " \
-                          "from spatial database:"
-                grass.message(
-                    _(msg.format(stds=sp.get_type(), gid=sp.get_id()))
-                )
+                    msg = (
+                        "The following maps of {stds} {gid} would be "
+                        "unregistered from temporal database and removed "
+                        "from spatial database:"
+                    )
+                grass.message(_(msg.format(stds=sp.get_type(), gid=sp.get_id())))
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1
