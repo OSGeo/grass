@@ -20,6 +20,10 @@ import shlex
 import re
 import inspect
 import operator
+<<<<<<< HEAD
+=======
+import six
+>>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
 
 from grass.script import core as grass
 from grass.script import task as gtask
