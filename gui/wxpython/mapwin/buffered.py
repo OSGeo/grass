@@ -615,7 +615,8 @@ class BufferedMapWindow(MapWindowBase, Window):
                 # decorate with GDDC (transparency)
                 try:
                     gcdc = wx.GCDC(dc)
-                    self.pdcVector.DrawToDCClipped(gcdc, rgn)
+                    if self.pdcVector:
+                        self.pdcVector.DrawToDCClipped(gcdc, rgn)
                 except NotImplementedError as e:
                     print(e, file=sys.stderr)
                     self.pdcVector.DrawToDCClipped(dc, rgn)
