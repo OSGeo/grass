@@ -113,9 +113,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             os.path.join(self.install_prefix, "scripts", "r.clip"),
             os.path.join(self.install_prefix, "docs", "html", "r.clip.html"),
         ]
-        self.assertModule(
-            "g.extension", extension="r.clip", prefix=self.install_prefix
-        )
+        self.assertModule("g.extension", extension="r.clip", prefix=self.install_prefix)
 
         for file in r_clip_files:
             self.assertFileExists(file)
