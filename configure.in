@@ -1011,8 +1011,12 @@ else
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
   CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
-  AC_TRY_LINK([#include <pdal/PointTable.hpp>],[pdal::PointTable table;],,[
-  AC_TRY_LINK([#include <pdal/PointTable.hpp>],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};],[pdal::PointTable table;],,[
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
   AC_MSG_ERROR([*** Unable to locate PDAL library.])
   ])
   ])
