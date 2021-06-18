@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MODULE:    grass.jupyter
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
@@ -112,3 +113,6 @@ from .map3d import Map3D
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
 from .seriesmap import SeriesMap
+=======
+from .setup import *
+>>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))

@@ -5,6 +5,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(ETC)/python/grass/jupyter
 
+<<<<<<< HEAD
 MODULES = \
 	setup \
 	map \
@@ -15,6 +16,9 @@ MODULES = \
 	reprojection_renderer \
 	utils \
 	timeseriesmap
+=======
+MODULES = setup
+>>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
