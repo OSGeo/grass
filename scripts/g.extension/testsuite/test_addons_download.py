@@ -104,7 +104,9 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             os.path.join(self.install_prefix, "bin", "r.gdd"),
             os.path.join(self.install_prefix, "docs", "html", "r.gdd.html"),
         ]
-        self.assertModule("g.extension", extension="r.gdd", prefix=self.install_prefix)
+        self.assertModule(
+            "g.extension", extension="r.clip", prefix=self.install_prefix
+        )
 
         for file in r_gdd_files:
             self.assertFileExists(file)
