@@ -119,24 +119,28 @@ def main():
     # Create the pygrass Module object for g.remove
     remove = pyg.Module("g.remove", quiet=True, flags="f", run_=False)
 
-    if not force and not clean:
+    if not force:
         grass.message(_("The following data base element files will be deleted:"))
 
     for name in dataset_list:
         name = name.strip()
         sp = tgis.open_old_stds(name, type, dbif)
-        if not force and not clean:
+        if not force:
             grass.message(
-                _("{stds}: {gid}".format(stds=sp.get_type().upper(), gid=sp.get_id()))
+                _("{stds}: {gid}".format(stds=sp.get_type().upper(),
+                                         gid=sp.get_id()))
             )
         if recursive or clean:
-            if not force and not clean:
+            if not force:
+                if recursive:
+                    msg = "The following maps of {stds} {gid} would be " \
+                          "unregistered from temporal database:"
+                elif clean:
+                    msg = "The following maps of {stds} {gid} would be " \
+                          "unregistered from temporal database and removed " \
+                          "from spatial database:"
                 grass.message(
-                    _(
-                        "The following maps of {stds} {gid} would be deleted:".format(
-                            stds=sp.get_type(), gid=sp.get_id()
-                        )
-                    )
+                    _(msg.format(stds=sp.get_type(), gid=sp.get_id()))
                 )
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
@@ -147,12 +151,12 @@ def main():
                 # We may have multiple layer for a single map, hence we need
                 # to avoid multiple deletation of the same map,
                 # but the database entries are still present and must be removed
-                if clean:
+                if not force:
+                    grass.message(_("- %s" % map.get_name()))
+                    continue
+                if clean and force:
                     if map.get_name() not in name_list:
                         name_list.append(str(map.get_name()))
-                elif not force:
-                    grass.message(_("  - %s" % map.get_name()))
-                    continue
                 map_statement += map.delete(dbif=dbif, execute=False)
 
                 count += 1
@@ -178,7 +182,7 @@ def main():
                     remove(type="vector", name=name_list, run_=True)
                 if type == "str3ds":
                     remove(type="raster_3d", name=name_list, run_=True)
-        if force or clean:
+        if force:
             statement += sp.delete(dbif=dbif, execute=False)
 
     if not force and not clean:
