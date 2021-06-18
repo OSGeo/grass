@@ -7148,6 +7148,7 @@ fi
 #line 7149 "configure"
 #include "confdefs.h"
 #include <pdal/PointTable.hpp>
+#include <pdal/Streamable.hpp>
 int main() {
 pdal::PointTable table;
 ; return 0; }
@@ -7163,6 +7164,7 @@ else
 #line 7164 "configure"
 #include "confdefs.h"
 #include <pdal/PointTable.hpp>
+#include <pdal/Streamable.hpp>
 int main() {
 pdal::PointTable table;
 ; return 0; }
