@@ -16,7 +16,7 @@ COPYRIGHT: (C) 2020 Stefan Blumentrath, Vaclav Petras,
 """
 
 import os
-import imp
+from importlib.machinery import SourceFileLoader
 from distutils.spawn import find_executable
 import unittest
 
@@ -25,7 +25,7 @@ from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
 
 # Set to False if test is supposed to run
-skip = True
+skip = False
 
 
 class TestModuleDownloadFromDifferentSources(TestCase):
@@ -114,7 +114,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             os.path.join(self.install_prefix, "docs", "html", "r.clip.html"),
         ]
         self.assertModule(
-            "g.extension", extension="r.clip", url=None, prefix=self.install_prefix
+            "g.extension", extension="r.clip", prefix=self.install_prefix
         )
 
         for file in r_clip_files:
@@ -134,7 +134,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             os.path.join(self.install_prefix, "docs", "html", "i.sentinel.import.html"),
         ]
         self.assertModule(
-            "g.extension", extension="i.sentinel", url=None, prefix=self.install_prefix
+            "g.extension", extension="i.sentinel", prefix=self.install_prefix
         )
 
         for file in i_sentinel_files:
@@ -158,7 +158,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             ),
         ]
         g_extension_path = find_executable("g.extension")
-        g_extension = imp.load_source("g.extension", g_extension_path)
+        g_extension = SourceFileLoader("g.extension", g_extension_path).load_module()
         g_extension.options = {
             "extension": "v.in.gbif",
             "operation": "add",
