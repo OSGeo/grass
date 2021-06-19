@@ -37,11 +37,19 @@ class SelectionTest(TestCase):
         cls.las_file = os.path.join(cls.tmp_dir.name, "points.las")
         grass.call(
             [
-                os.path.join(
-                    pathlib.Path(__file__).parent.absolute(), "points_csv_to_las.sh"
-                ),
+                "pdal",
+                "translate",
+                "-i",
                 cls.point_file,
+                "-o",
                 cls.las_file,
+                "-r",
+                "text",
+                "-w",
+                "las",
+                "--writers.las.format=0",
+                "--writers.las.extra_dims=all",
+                "--writers.las.minor_version=4",
             ]
         )
 
