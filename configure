@@ -7179,7 +7179,7 @@ else
   cat conftest.$ac_ext >&5
   rm -rf conftest*
   
-  { echo "configure: error: *** Unable to locate PDAL library." 1>&2; exit 1; }
+  { echo "configure: error: *** Unable to locate suitable (>=1.7.1) PDAL library." 1>&2; exit 1; }
   
 fi
 rm -f conftest*

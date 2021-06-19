@@ -1017,7 +1017,7 @@ else
   AC_TRY_LINK([#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
-  AC_MSG_ERROR([*** Unable to locate PDAL library.])
+  AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
   ])
   ])
   LIBS=${ac_save_libs}
