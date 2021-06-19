@@ -56,6 +56,9 @@ fi
 MAP_PARALLEL_PATTERN="${MAP_PARALLEL}_*_size_*_nesting_*"
 MAP_NEST_PATTERN="${MAP_NEST}_*_size_*_nesting_*"
 
+# After each wait, sleep for additional n seconds.
+SLEEP_AFTER_WAIT=5
+
 # Remove maps at exit.
 cleanup () {
     EXIT_CODE=$?
@@ -99,6 +102,7 @@ do
 done
 
 wait
+sleep $SLEEP_AFTER_WAIT
 
 EXPECTED=$NUM_PARALLELS
 NUM=$(g.list type=raster pattern="${MAP_PARALLEL_PATTERN}" mapset=. | wc -l)
@@ -122,6 +126,7 @@ do
 done
 
 wait
+sleep $SLEEP_AFTER_WAIT
 
 EXPECTED=$(( $NUM_PARALLELS * $NUM_NEST ))
 NUM=$(g.list type=raster pattern="${MAP_NEST_PATTERN}" mapset=. | wc -l)
