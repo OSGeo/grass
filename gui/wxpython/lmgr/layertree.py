@@ -1128,7 +1128,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         if rasters:
             self._giface.RunCmd(
-                ["r.report", "map=%s" % ",".join(rasters), "units=h,c,p"]
+                ["r.report", "map=%s" % ",".join(rasters), "units=hectares,cells,percent"]
             )
 
     def OnStartEditing(self, event):
