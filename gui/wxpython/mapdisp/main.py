@@ -460,13 +460,13 @@ class DMonGrassInterface(StandaloneGrassInterface):
         if not self._mapframe.statusbarManager:
             self._mapframe.CreateStatusbar()
 
-        self._mapframe.statusbarManager.Show(show)
+        self._mapframe.ShowStatusbar(show)
 
     def IsStatusbarShown(self):
         if not self._mapframe.statusbarManager:
             return False
 
-        return self._mapframe.statusbarManager.IsShown()
+        return self._mapframe.IsStatusbarShown()
 
     def ShowAllToolbars(self, show=True):
         if not show:  # hide
