@@ -19,6 +19,7 @@ import glob
 import shlex
 import re
 import inspect
+import operator
 import six
 
 from grass.script import core as grass
@@ -649,7 +650,7 @@ def _getOGRFormats():
 
 def _parseFormats(output, writableOnly=False):
     """Parse r.in.gdal/v.in.ogr -f output"""
-    formats = {"file": list(), "database": list(), "protocol": list()}
+    formats = {"file": {}, "database": {}, "protocol": {}}
 
     if not output:
         return formats
@@ -660,7 +661,6 @@ def _parseFormats(output, writableOnly=False):
 
     for line in output.splitlines():
         key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
-
         if writableOnly and not patt.search(key):
             continue
 
@@ -678,7 +678,7 @@ def _parseFormats(output, writableOnly=False):
             "MSSQLSpatial",
             "FileGDB",
         ):
-            formats["database"].append(name)
+            formats["database"][key.split(" ")[0]] = name
         elif name in (
             "GeoJSON",
             "OGC Web Coverage Service",
@@ -687,12 +687,12 @@ def _parseFormats(output, writableOnly=False):
             "GeoRSS",
             "HTTP Fetching Wrapper",
         ):
-            formats["protocol"].append(name)
+            formats["protocol"][key.split(" ")[0]] = name
         else:
-            formats["file"].append(name)
+            formats["file"][key.split(" ")[0]] = name
 
-    for items in six.itervalues(formats):
-        items.sort()
+    for k, v in formats.items():
+        formats[k] = dict(sorted(v.items(), key=operator.itemgetter(1)))
 
     return formats
 
