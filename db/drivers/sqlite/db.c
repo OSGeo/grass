@@ -34,6 +34,7 @@ int db__driver_open_database(dbHandle * handle)
 {
     char name2[GPATH_MAX], *path;
     const char *name;
+    char name3[GPATH_MAX], *env_nolock;
     int i;
 
     G_debug(3, "\ndb_driver_open_database()");
@@ -102,10 +103,25 @@ int db__driver_open_database(dbHandle * handle)
     }
     G_free(path);
 
-    if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
+    env_nolock = getenv("GRASS_SQLITE_NOLOCK");
+    if (env_nolock && *env_nolock && atoi(env_nolock)) {
+	if (sqlite3_config(SQLITE_CONFIG_URI, 1) == SQLITE_OK) {
+	    if (sprintf(name3, "file:%s?nolock=1", name2) < 0) {
+		return DB_FAILED;
+	    }
+	}
+	else {
+	    G_warning(_("The sqlite config option '%s' is not supported"),
+	              "SQLITE_CONFIG_URI");
+	    strcpy(name3, name2);
+	}
+    }
+    else
+	strcpy(name3, name2);
+    if (sqlite3_open(name3, &sqlite) != SQLITE_OK) {
 	db_d_append_error("%s %s\n%s",
 			  _("Unable to open database:"),
-                          name2,
+                          name3,
 			  (char *)sqlite3_errmsg(sqlite));
 	db_d_report_error();
 	return DB_FAILED;
@@ -147,6 +163,8 @@ int db__driver_close_database(void)
 int db__driver_create_database(dbHandle *handle)
 {
     const char *name;
+    char name2[GPATH_MAX], *env_nolock;
+
     name = db_get_handle_dbname(handle);
     
     G_debug(1, "db_create_database(): %s", name);
@@ -156,8 +174,23 @@ int db__driver_create_database(dbHandle *handle)
         db_d_report_error();
         return DB_FAILED;
     }
-    
-    if (sqlite3_open(name, &sqlite) != SQLITE_OK) {
+
+    env_nolock = getenv("GRASS_SQLITE_NOLOCK");
+    if (env_nolock && *env_nolock && atoi(env_nolock)) {
+	if (sqlite3_config(SQLITE_CONFIG_URI, 1) == SQLITE_OK) {
+	    if (sprintf(name2, "file:%s?nolock=1", name) < 0) {
+		return DB_FAILED;
+	    }
+	}
+	else {
+	    G_warning(_("The sqlite config option '%s' is not supported"),
+	              "SQLITE_CONFIG_URI");
+	    strcpy(name2, name);
+	}
+    }
+    else
+	strcpy(name2, name);
+    if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
 	db_d_append_error("%s %s\n%s",
 			  _("Unable to create database:"),
                           name,
