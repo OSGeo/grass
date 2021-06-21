@@ -109,6 +109,7 @@ int db__driver_open_database(dbHandle * handle)
 	    if (sprintf(name3, "file:%s?nolock=1", name2) < 0) {
 		return DB_FAILED;
 	    }
+	    G_important_message(_("Disabling SQLite locking"));
 	}
 	else {
 	    G_warning(_("The sqlite config option '%s' is not supported"),
@@ -181,6 +182,7 @@ int db__driver_create_database(dbHandle *handle)
 	    if (sprintf(name2, "file:%s?nolock=1", name) < 0) {
 		return DB_FAILED;
 	    }
+	    G_important_message(_("Disabling SQLite locking"));
 	}
 	else {
 	    G_warning(_("The sqlite config option '%s' is not supported"),
