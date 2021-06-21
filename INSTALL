@@ -68,7 +68,10 @@ The command,
    ./configure --help 
 
 explains the options used to disable the compilation of non-mandatory
-GRASS modules. See REQUIREMENTS.html for details.
+GRASS modules. See REQUIREMENTS.html for details on dependencies.
+Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux 
+distributions, FreeBSD, AIX, etc) are available at:
+https://grasswiki.osgeo.org/wiki/Compile_and_Install
   
 First step of the compilation (-g for debugging, or -O2 for optimization):
 
@@ -97,11 +100,7 @@ Explanation of make targets:
 
 Next step is the compilation itself:
 
-    make       
-
-Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux distros,
-FreeBSD, AIX, etc) are available at:
-https://grasswiki.osgeo.org/wiki/Compile_and_Install
+    make
 
 Note for Solaris users (see also Wiki page above):
 
