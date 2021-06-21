@@ -1733,8 +1733,7 @@ class GMFrame(wx.Frame):
             name = self.notebookLayers.GetPageText(pgnum)
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
-                askIfSaveWorkspace
-                and self.workspace_manager.CanClosePage(caption)
+                askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
                 return pgnum
             return None
