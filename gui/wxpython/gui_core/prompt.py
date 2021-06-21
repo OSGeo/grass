@@ -132,8 +132,9 @@ class GPrompt(object):
         except UnicodeError:
             cmd = utils.split(EncodeString((cmdString)))
         cmd = list(map(DecodeString, cmd))
+        _cmd = {"cmd": cmd, "cmdString": str(cmdString)}
 
-        self.promptRunCmd.emit(cmd=cmd)
+        self.promptRunCmd.emit(cmd=_cmd)
 
         self.OnCmdErase(None)
         self.ShowStatusText("")
