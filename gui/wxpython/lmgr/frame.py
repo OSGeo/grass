@@ -1725,8 +1725,22 @@ class GMFrame(wx.Frame):
         cb_boxsizer.Fit(self.GetLayerTree())
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
+        page = self.currentPage
+
+        def CanCloseDisplay(askIfSaveWorkspace):
+            """Callback to check if user wants to close display"""
+            pgnum = self.notebookLayers.GetPageIndex(page)
+            name = self.notebookLayers.GetPageText(pgnum)
+            caption = _("Close Map Display {}").format(name)
+            if not askIfSaveWorkspace or (
+                askIfSaveWorkspace
+                and self.workspace_manager.CanClosePage(caption)
+            ):
+                return pgnum
+            return None
 
         mapdisplay = self.currentPage.maptree.mapdisplay
+        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
         mapdisplay.Bind(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
