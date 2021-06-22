@@ -94,7 +94,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def __init__(
         self,
         parent,
+        guiparent,
         giface,
+        createNewMapDisplay,
         id=wx.ID_ANY,
         style=wx.SUNKEN_BORDER,
         ctstyle=CT.TR_HAS_BUTTONS
@@ -110,15 +112,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if "style" in kwargs:
             ctstyle |= kwargs["style"]
             del kwargs["style"]
-        self.displayIndex = kwargs["idx"]
-        del kwargs["idx"]
         self.lmgr = kwargs["lmgr"]
         del kwargs["lmgr"]
         # GIS Manager notebook for layer tree
         self.notebook = kwargs["notebook"]
         del kwargs["notebook"]
-        showMapDisplay = kwargs["showMapDisplay"]
-        del kwargs["showMapDisplay"]
 
         self._giface = giface
         self.treepg = parent  # notebook page holding layer tree
@@ -158,28 +156,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setGradient()
 
         # init associated map display
-        pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
-        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-            self._giface, self
-        )
-        self.mapdisplay = MapFrame(
-            self,
-            giface=self._gifaceForDisplay,
-            id=wx.ID_ANY,
-            pos=pos,
-            size=globalvar.MAP_WINDOW_SIZE,
-            style=wx.DEFAULT_FRAME_STYLE,
-            tree=self,
-            lmgr=self.lmgr,
-            Map=self.Map,
-            title=title,
-        )
-
-        # show new display
-        if showMapDisplay is True:
-            self.mapdisplay.Show()
-            self.mapdisplay.Refresh()
-            self.mapdisplay.Update()
+        self.mapdisplay = createNewMapDisplay(layertree=self,
+                                              guiparent=guiparent,
+                                              name=title)
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))

@@ -64,7 +64,8 @@ from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import LayerManagerGrassInterface
+from lmgr.giface import LayerManagerGrassInterface, LayerManagerGrassInterfaceForMapDisplay
+from mapdisp.frame import MapFrame
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
@@ -251,7 +252,7 @@ class GMFrame(wx.Frame):
 
         # show map display widnow
         # -> OnSize() -> UpdateMap()
-        for mapdisp in self.GetMapDisplay(onlyCurrent=False):
+        for mapdisp in self.GetAllMapDisplays():
             mapdisp.Show()
 
         # redirect stderr to log area
@@ -404,6 +405,186 @@ class GMFrame(wx.Frame):
             )
         else:
             self.pyshell = None
+
+    def CreateNewMapDisplay(self, layertree, guiparent, name):
+        """Callback function which creates a new Map Display panel
+        :param layertree: layer tree object
+        :param guiparent: parent of Map Display wx.Panel
+        :param name: name of new map display panel
+        :return: reference to mapdisplay instance
+        """
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
+            self._giface, layertree
+        )
+        self.currentPage.mapdisplay = MapFrame(
+            guiparent,
+            giface=self._gifaceForDisplay,
+            id=wx.ID_ANY,
+            tree=layertree,
+            lmgr=self,
+            Map=layertree.Map,
+            title=name,
+        )
+        page = self.currentPage
+
+        def CanCloseDisplay(askIfSaveWorkspace):
+            """Callback to check if user wants to close display"""
+            pgnum = self.notebookLayers.GetPageIndex(page)
+            name = self.notebookLayers.GetPageText(pgnum)
+            caption = _("Close Map Display {}").format(name)
+            if not askIfSaveWorkspace or (
+                askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
+            ):
+                return pgnum
+            return None
+
+        self.currentPage.mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        self.currentPage.mapdisplay.Bind(
+            wx.EVT_ACTIVATE,
+            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
+        )
+        self.currentPage.mapdisplay.starting3dMode.connect(
+            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
+                mapDisplayPage
+            )
+        )
+        self.currentPage.mapdisplay.starting3dMode.connect(self.AddNvizTools)
+        self.currentPage.mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
+        self.currentPage.mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+
+        # set default properties
+        self.currentPage.mapdisplay.SetProperties(
+            render=UserSettings.Get(
+                group="display", key="autoRendering", subkey="enabled"
+            ),
+            mode=UserSettings.Get(
+                group="display", key="statusbarMode", subkey="selection"
+            ),
+            alignExtent=UserSettings.Get(
+                group="display", key="alignExtent", subkey="enabled"
+            ),
+            constrainRes=UserSettings.Get(
+                group="display", key="compResolution", subkey="enabled"
+            ),
+            showCompExtent=UserSettings.Get(
+                group="display", key="showCompExtent", subkey="enabled"
+            ),
+        )
+        self.displayIndex += 1
+
+        return self.currentPage.mapdisplay
+
+    def CreateLayerTree(self, guiparent, name):
+        """Create new layer tree structure and associated map display frame and add it to display notebook tab
+        :param guiparent: parent of Map Display wx.Panel
+        :param name: name of new map display
+        """
+        # make a new page in the bookcontrol for the layer tree (on page 0 of
+        # the notebook)
+        self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.EXPAND)
+        self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
+        self.currentPage = self.notebookLayers.GetCurrentPage()
+
+        # create layer tree (tree control for managing GIS layers)  and put on
+        # new notebook page
+        self.currentPage.maptree = LayerTree(
+            parent=self.currentPage,
+            guiparent=guiparent,
+            giface=self._giface,
+            createNewMapDisplay=self.CreateNewMapDisplay,
+            id=wx.ID_ANY,
+            pos=wx.DefaultPosition,
+            size=wx.DefaultSize,
+            style=wx.TR_HAS_BUTTONS
+            | wx.TR_LINES_AT_ROOT
+            | wx.TR_HIDE_ROOT
+            | wx.TR_DEFAULT_STYLE
+            | wx.NO_BORDER
+            | wx.FULL_REPAINT_ON_RESIZE,
+            lmgr=self,
+            notebook=self.notebookLayers,
+            title=name,
+        )
+
+        # layout for controls
+        cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
+        cb_boxsizer.Add(self.GetLayerTree(), proportion=1, flag=wx.EXPAND, border=1)
+        self.currentPage.SetSizer(cb_boxsizer)
+        cb_boxsizer.Fit(self.GetLayerTree())
+        self.currentPage.Layout()
+        self.GetLayerTree().Layout()
+
+    def NewDisplay(self, name=None, show=True):
+        """Create map display frame.
+        :param name: name of new map display frame
+        :param show: show map display frame if True
+        :return: map display frame
+        """
+        if not name:
+            name = _("Map Display {number}").format(number=self.displayIndex + 1)
+
+        # count map display frame position
+        pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
+
+        # create superior Map Display frame
+        mapframe = wx.Frame(self,
+                              id=wx.ID_ANY,
+                              pos=pos,
+                              size=globalvar.MAP_WINDOW_SIZE,
+                              style=wx.DEFAULT_FRAME_STYLE,
+                              title=name)
+
+        # use default window layout
+        if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
+            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
+            idx = 4 + self.displayIndex * 4
+            try:
+                x, y = map(int, dim.split(",")[idx : idx + 2])
+                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                mapframe.SetPosition((x, y))
+                mapframe.SetSize((w, h))
+            except Exception:
+                pass
+
+        # create layer tree and associated map display panel
+        self.CreateLayerTree(mapframe, name)
+
+        # set the size & system icon
+        mapframe.iconsize = (16, 16)
+
+        mapframe.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # adapt Show and SetTitle methods for Map Display
+        def Show():
+            mapframe.Show
+        def SetTitle():
+            mapframe.SetTitle
+
+        self.currentPage.mapdisplay.Show = Show
+        self.currentPage.mapdisplay.SetTitle = SetTitle
+        print(self.currentPage.mapdisplay)
+        print(self.currentPage.mapdisplay.Show)
+
+        # layout
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.currentPage.mapdisplay, proportion=1, flag=wx.EXPAND)
+        mapframe.SetSizer(sizer)
+        mapframe.Layout()
+
+        if show:
+            mapframe.Show()
+            mapframe.Refresh()
+            mapframe.Update()
+
+        self.currentPage.mapframe = mapframe
+
+    def OnNewDisplay(self, event=None):
+        """Create new layer tree and map display window instance"""
+        self.NewDisplay()
 
     def _addPagesToNotebook(self):
         """Add pages to notebook widget"""
@@ -840,18 +1021,18 @@ class GMFrame(wx.Frame):
         :param bool onlyCurrent: True to return only active mapdisplay
                                  False for list of all mapdisplays
 
-        :return: MapFrame instance (or list)
+        :return: MapDisplay instance (or list)
         :return: None no mapdisplay selected
         """
         if onlyCurrent:
             if self.currentPage:
-                return self.GetLayerTree().GetMapDisplay()
+                return self.currentPage.mapdisplay
             else:
                 return None
         else:  # -> return list of all mapdisplays
             mlist = list()
             for idx in range(0, self.notebookLayers.GetPageCount()):
-                mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
+                mlist.append(self.notebookLayers.GetPage(idx).mapdisplay)
 
             return mlist
 

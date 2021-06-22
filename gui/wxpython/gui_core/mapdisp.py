@@ -19,13 +19,11 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
 import sys
 import six
 
 import wx
 
-from core import globalvar
 from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
@@ -34,7 +32,7 @@ from mapdisp import statusbar as sb
 from grass.script import core as grass
 
 
-class MapFrameBase(wx.Frame):
+class MapFrameBase(wx.Panel):
     """Base class for map display window
 
     Derived class must use (create and initialize) \c statusbarManager
@@ -63,7 +61,6 @@ class MapFrameBase(wx.Frame):
         parent=None,
         id=wx.ID_ANY,
         title="",
-        style=wx.DEFAULT_FRAME_STYLE,
         auimgr=None,
         name="",
         **kwargs,
@@ -76,28 +73,15 @@ class MapFrameBase(wx.Frame):
         :param parent: gui parent
         :param id: wx id
         :param title: window title
-        :param style: \c wx.Frame style
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param auimgr: AUI manager (if \c None, wx.aui.AuiManager is used)
-        :param name: frame name
-        :param kwargs: arguments passed to \c wx.Frame
+        :param name: panel name
+        :param kwargs: arguments passed to \c wx.Panel
         """
 
         self.parent = parent
 
-        wx.Frame.__init__(self, parent, id, title, style=style, name=name, **kwargs)
-
-        #
-        # set the size & system icon
-        #
-        self.SetClientSize(self.GetSize())
-        self.iconsize = (16, 16)
-
-        self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
+        wx.Panel.__init__(self, parent, id, **kwargs)
 
         # toolbars
         self.toolbars = {}
@@ -507,9 +491,9 @@ class MapFrameBase(wx.Frame):
 
 
 class SingleMapFrame(MapFrameBase):
-    """Frame with one map window.
+    """Panel with one map window.
 
-    It is base class for frames which needs only one map.
+    It is base class for panels which needs only one map.
 
     Derived class should have \c self.MapWindow or
     it has to override GetWindow() methods.
@@ -524,7 +508,6 @@ class SingleMapFrame(MapFrameBase):
         giface=None,
         id=wx.ID_ANY,
         title="",
-        style=wx.DEFAULT_FRAME_STYLE,
         Map=None,
         auimgr=None,
         name="",
@@ -535,9 +518,8 @@ class SingleMapFrame(MapFrameBase):
         :param parent: gui parent
         :param id: wx id
         :param title: window title
-        :param style: \c wx.Frame style
         :param map: instance of render.Map
-        :param name: frame name
+        :param name: panel name
         :param kwargs: arguments passed to MapFrameBase
         """
 
@@ -546,7 +528,6 @@ class SingleMapFrame(MapFrameBase):
             parent=parent,
             id=id,
             title=title,
-            style=style,
             auimgr=auimgr,
             name=name,
             **kwargs,
@@ -581,9 +562,9 @@ class SingleMapFrame(MapFrameBase):
 
 
 class DoubleMapFrame(MapFrameBase):
-    """Frame with two map windows.
+    """Panel with two map windows.
 
-    It is base class for frames which needs two maps.
+    It is base class for panels which needs two maps.
     There is no primary and secondary map. Both maps are equal.
     However, one map is current.
 
@@ -606,7 +587,6 @@ class DoubleMapFrame(MapFrameBase):
         parent=None,
         id=wx.ID_ANY,
         title=None,
-        style=wx.DEFAULT_FRAME_STYLE,
         firstMap=None,
         secondMap=None,
         auimgr=None,
@@ -622,8 +602,7 @@ class DoubleMapFrame(MapFrameBase):
         :param parent: gui parent
         :param id: wx id
         :param title: window title
-        :param style: \c wx.Frame style
-        :param name: frame name
+        :param name: panel name
         :param kwargs: arguments passed to MapFrameBase
         """
 
@@ -632,7 +611,6 @@ class DoubleMapFrame(MapFrameBase):
             parent=parent,
             id=id,
             title=title,
-            style=style,
             auimgr=auimgr,
             name=name,
             **kwargs,
