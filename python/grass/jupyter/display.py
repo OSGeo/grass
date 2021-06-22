@@ -40,9 +40,7 @@ class grassRenderer:
 
 
     def d_vect(self, vector, fill="grey", color="black", width=2):
-        """
-        Adds a vector to the display
-        """
+        """Adds a vector to the display"""
         gs.run_command('d.vect', map=vector, fill_color=fill, color=color, width=str(width))
 
 
