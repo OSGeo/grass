@@ -9,7 +9,7 @@ List of classes:
  - dialogs::WSPropertiesDialog
  - dialogs::SaveWMSLayerDialog
 
-(C) 2009-2013 by the GRASS Development Team
+(C) 2009-2021 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -66,14 +66,13 @@ class WSDialogBase(wx.Dialog):
 
         # TODO: should be in file
         self.default_servers = {
-            "OSM-WMS-EUROPE": [
-                "http://watzmann-geog.urz.uni-heidelberg.de/cached/osm",
+            "OSM-WMS": [
+                "https://ows.terrestris.de/osm/service?",
                 "",
                 "",
             ],
-            "irs.gis-lab.info (OSM)": ["http://irs.gis-lab.info", "", ""],
-            "NASA GIBS WMTS": [
-                "http://gibs.earthdata.nasa.gov/wmts/epsg4326/best/wmts.cgi",
+            "tiles.maps.eox.at (Sentinel-2)": [
+                "https://tiles.maps.eox.at/wms",
                 "",
                 "",
             ],
