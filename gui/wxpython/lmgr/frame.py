@@ -250,7 +250,7 @@ class GMFrame(wx.Frame):
             # start default initial display
             self.NewDisplay(show=False)
 
-        # show map display widnow
+        # show map display window
         # -> OnSize() -> UpdateMap()
         for mapdisp in self.GetAllMapDisplays():
             mapdisp.Show()
@@ -560,14 +560,12 @@ class GMFrame(wx.Frame):
 
         # adapt Show and SetTitle methods for Map Display
         def Show():
-            mapframe.Show
+            mapframe.Show()
         def SetTitle():
-            mapframe.SetTitle
+            mapframe.SetTitle()
 
         self.currentPage.mapdisplay.Show = Show
         self.currentPage.mapdisplay.SetTitle = SetTitle
-        print(self.currentPage.mapdisplay)
-        print(self.currentPage.mapdisplay.Show)
 
         # layout
         sizer = wx.BoxSizer(wx.VERTICAL)
