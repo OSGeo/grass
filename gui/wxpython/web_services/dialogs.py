@@ -72,7 +72,7 @@ class WSDialogBase(wx.Dialog):
                 "",
             ],
             "tiles.maps.eox.at (Sentinel-2)": [
-                "https://tiles.maps.eox.at/wms?service=wms&request=getcapabilities",
+                "https://tiles.maps.eox.at/wms",
                 "",
                 "",
             ],
