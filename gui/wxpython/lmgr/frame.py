@@ -561,8 +561,8 @@ class GMFrame(wx.Frame):
         # adapt Show and SetTitle methods for Map Display
         def Show():
             mapframe.Show()
-        def SetTitle():
-            mapframe.SetTitle()
+        def SetTitle(name):
+            mapframe.SetTitle(name)
 
         self.currentPage.mapdisplay.Show = Show
         self.currentPage.mapdisplay.SetTitle = SetTitle
