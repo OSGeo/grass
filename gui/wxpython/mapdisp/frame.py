@@ -113,9 +113,14 @@ class MapPanel(SingleMapPanel, MainPageBase):
         # Layer Manager layer tree object
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
+<<<<<<< HEAD
 
         # Saved Map Display output img size
         self._saved_output_img_size = None
+=======
+        # checks for saving workspace
+        self.canCloseDisplayCallback = None
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already activated.
@@ -1079,10 +1084,17 @@ class MapPanel(SingleMapPanel, MainPageBase):
         """Window closed.
         Also close associated layer tree page
         """
+<<<<<<< HEAD
         Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseCallback:
             pgnum_dict = self.canCloseCallback(askIfSaveWorkspace=askIfSaveWorkspace)
             if pgnum_dict is not None:
+=======
+        Debug.msg(2, "MapFrame.OnCloseWindow()")
+        if self.canCloseDisplayCallback:
+            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
+            if pgnum is not None:
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
                     if self.IsDockable():

@@ -29,7 +29,16 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
+<<<<<<< HEAD
 enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+=======
+enum OutputFormat {
+    PLAIN,
+    JSON,
+    CSV,
+    VERTICAL
+};
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
 
 void fatal_error_option_value_excludes_flag(struct Option *option,
                                             struct Flag *excluded,
@@ -191,6 +200,7 @@ int main(int argc, char **argv)
     else
         format = PLAIN;
     if (format == JSON) {
+<<<<<<< HEAD
         fatal_error_option_value_excludes_flag(
             options.format, flags.escape, _("Escaping is based on the format"));
         fatal_error_option_value_excludes_flag(
@@ -206,6 +216,20 @@ int main(int argc, char **argv)
         fatal_error_option_value_excludes_option(
             options.format, options.vsep,
             _("Only vertical output can use vertical separator"));
+=======
+        fatal_error_option_value_excludes_flag(options.format, flags.escape,
+                                               _("Escaping is based on the format"));
+        fatal_error_option_value_excludes_flag(options.format, flags.colnames,
+                                               _("Column names are always included"));
+        fatal_error_option_value_excludes_option(options.format, options.fsep,
+                                                 _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(options.format, options.nullval,
+                                                 _("Null value is part of the format"));
+    }
+    if (format != VERTICAL) {
+        fatal_error_option_value_excludes_option(options.format, options.vsep,
+                                                 _("Only vertical output can use vertical separator"));
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
     }
 
     min_box = line_box = NULL;
@@ -232,12 +256,21 @@ int main(int argc, char **argv)
         }
         else if (format == PLAIN || format == VERTICAL) {
             if (flags.region->answer)
+<<<<<<< HEAD
                 fsep = G_store("=");
             else
                 fsep = G_store("|");
         }
         else
             fsep = NULL; /* Something like a separator is part of the format. */
+=======
+               fsep = G_store("=");
+            else
+               fsep = G_store("|");
+        }
+        else
+            fsep = NULL;  /* Something like a separator is part of the format. */
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
     }
     if (options.vsep->answer)
         vsep = G_option_to_separator(options.vsep);
@@ -315,8 +348,13 @@ int main(int argc, char **argv)
     ncols = db_get_table_number_of_columns(table);
 
     /* column names if horizontal output (ignore for -r, -c, JSON, vertical) */
+<<<<<<< HEAD
     if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
         format != VERTICAL) {
+=======
+    if (!flags.region->answer && !flags.colnames->answer &&
+        format != JSON && format != VERTICAL) {
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -332,6 +370,7 @@ int main(int argc, char **argv)
     if (format == JSON) {
         if (flags.region->answer)
             fprintf(stdout, "{\"extent\":\n");
+<<<<<<< HEAD
         else {
             fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
             for (col = 0; col < ncols; col++) {
@@ -358,6 +397,10 @@ int main(int argc, char **argv)
             fprintf(stdout, "}\n]},\n");
             fprintf(stdout, "\"records\":[\n");
         }
+=======
+        else
+            fprintf(stdout, "{\"records\":[\n");
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
     }
 
     /* fetch the data */
@@ -419,7 +462,11 @@ int main(int argc, char **argv)
             else {
                 char *str = db_get_string(&value_string);
 
+<<<<<<< HEAD
                 /* Escaped characters in different formats
+=======
+                /* Escaped charcters in different formats
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
                  * JSON (mandatory): \" \\ \r \n \t \f \b
                  * CSV (usually none, here optional): \\ \r \n \t \f \b
                  * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
@@ -435,6 +482,7 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\t", "\\t");
                     if (format == JSON && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
+<<<<<<< HEAD
                     if (strchr(str, '\f')) /* form feed, somewhat unlikely */
                         str = G_str_replace(str, "\f", "\\f");
                     if (strchr(str, '\b')) /* backspace, quite unlikely */
@@ -443,6 +491,15 @@ int main(int argc, char **argv)
                 /* Common CSV does not escape, but doubles quotes (and we quote
                  * all text fields which takes care of a separator character in
                  * text). */
+=======
+                    if (strchr(str, '\f'))  /* form feed, somewhat unlikely */
+                        str = G_str_replace(str, "\f", "\\f");
+                    if (strchr(str, '\b'))  /* backspace, quite unlikely */
+                        str = G_str_replace(str, "\b", "\\b");
+                }
+                /* Common CSV does not escape, but doubles quotes (and we quote all
+                 * text fields which takes care of a separator character in text). */
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
                 if (format == CSV && strchr(str, '"')) {
                     str = G_str_replace(str, "\"", "\"\"");
                 }
