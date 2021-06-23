@@ -94,7 +94,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def __init__(
         self,
         parent,
-        guiparent,
         giface,
         createNewMapDisplay,
         id=wx.ID_ANY,
@@ -156,9 +155,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setGradient()
 
         # init associated map display
-        self.mapdisplay = createNewMapDisplay(layertree=self,
-                                              guiparent=guiparent,
-                                              name=title)
+        self.mapdisplay = createNewMapDisplay(layertree=self)
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))
