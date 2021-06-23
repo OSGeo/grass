@@ -226,7 +226,6 @@ class MapFrame(SingleMapFrame):
         #
         # Bind various events
         #
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         #

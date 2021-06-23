@@ -548,6 +548,10 @@ class GMFrame(wx.Frame):
         self.currentPage.mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
         self.currentPage.mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 
+        # Bind events
+        self.currentPage.mapframe.Bind(
+            wx.EVT_CLOSE, self.currentPage.mapdisplay.OnCloseWindow)
+
         self.currentPage.mapdisplay.Bind(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
