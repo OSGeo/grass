@@ -17,7 +17,7 @@ from IPython.display import Image
 
 
 class GrassRenderer:
-    """The grassRenderer class creates and displays GRASS maps in 
+    """The grassRenderer class creates and displays GRASS maps in
     Jupyter Notebooks."""
 
     def __init__(self, width=600, height=400, text_size=12):
