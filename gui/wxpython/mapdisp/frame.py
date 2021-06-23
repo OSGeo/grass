@@ -76,9 +76,7 @@ class MapFrame(SingleMapFrame):
         toolbars=["map"],
         statusbar=True,
         tree=None,
-        notebook=None,
         lmgr=None,
-        page=None,
         Map=None,
         auimgr=None,
         name="MapWindow",
@@ -90,9 +88,7 @@ class MapFrame(SingleMapFrame):
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param statusbar: True to add statusbar
         :param tree: reference to layer tree
-        :param notebook: control book ID in Layer Manager
         :param lmgr: Layer Manager
-        :param page: notebook page with layer tree
         :param map: instance of render.Map
         :param auimgr: AUI manager
         :param name: frame name
@@ -115,12 +111,8 @@ class MapFrame(SingleMapFrame):
         # Layer Manager layer tree object
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
-        # Notebook page holding the layer tree
-        # used only in OnCloseWindow
-        self.page = page
-        # Layer Manager layer tree notebook
-        # used only in OnCloseWindow
-        self.layerbook = notebook
+        # checks for saving workspace
+        self.canCloseDisplayCallback = None
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already actived.
@@ -1000,14 +992,9 @@ class MapFrame(SingleMapFrame):
         Also close associated layer tree page
         """
         Debug.msg(2, "MapFrame.OnCloseWindow()")
-        if self._layerManager:
-            pgnum = self.layerbook.GetPageIndex(self.page)
-            name = self.layerbook.GetPageText(pgnum)
-            caption = _("Close Map Display {}").format(name)
-            if not askIfSaveWorkspace or (
-                askIfSaveWorkspace
-                and self._layerManager.workspace_manager.CanClosePage(caption)
-            ):
+        if self.canCloseDisplayCallback:
+            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
+            if pgnum is not None:
                 self.CleanUp()
                 if pgnum > -1:
                     self.closingDisplay.emit(page_index=pgnum)
