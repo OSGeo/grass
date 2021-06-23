@@ -406,92 +406,69 @@ class GMFrame(wx.Frame):
         else:
             self.pyshell = None
 
-    def CreateNewMapDisplay(self, layertree, guiparent, name):
-        """Callback function which creates a new Map Display panel
-        :param layertree: layer tree object
-        :param guiparent: parent of Map Display wx.Panel
-        :param name: name of new map display panel
-        :return: reference to mapdisplay instance
+    def NewDisplay(self, name=None, show=True):
+        """Create new layer tree structure and associated map display and
+        add it to display notebook tab
+        :param name: name of new map display window
+        :param show: show map display window if True
         """
-        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-            self._giface, layertree
-        )
-        self.currentPage.mapdisplay = MapFrame(
-            guiparent,
-            giface=self._gifaceForDisplay,
-            id=wx.ID_ANY,
-            tree=layertree,
-            lmgr=self,
-            Map=layertree.Map,
-            title=name,
-        )
-        page = self.currentPage
+        Debug.msg(1, "GMFrame.NewDisplay(): idx=%d" % self.displayIndex)
+        if not name:
+            name = _("Map Display {number}").format(number=self.displayIndex + 1)
 
-        def CanCloseDisplay(askIfSaveWorkspace):
-            """Callback to check if user wants to close display"""
-            pgnum = self.notebookLayers.GetPageIndex(page)
-            name = self.notebookLayers.GetPageText(pgnum)
-            caption = _("Close Map Display {}").format(name)
-            if not askIfSaveWorkspace or (
-                askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
-            ):
-                return pgnum
-            return None
-
-        self.currentPage.mapdisplay.canCloseDisplayCallback = CanCloseDisplay
-        self.currentPage.mapdisplay.Bind(
-            wx.EVT_ACTIVATE,
-            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
-        )
-        self.currentPage.mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
-                mapDisplayPage
-            )
-        )
-        self.currentPage.mapdisplay.starting3dMode.connect(self.AddNvizTools)
-        self.currentPage.mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        self.currentPage.mapdisplay.closingDisplay.connect(self._closePageNoEvent)
-
-        # set default properties
-        self.currentPage.mapdisplay.SetProperties(
-            render=UserSettings.Get(
-                group="display", key="autoRendering", subkey="enabled"
-            ),
-            mode=UserSettings.Get(
-                group="display", key="statusbarMode", subkey="selection"
-            ),
-            alignExtent=UserSettings.Get(
-                group="display", key="alignExtent", subkey="enabled"
-            ),
-            constrainRes=UserSettings.Get(
-                group="display", key="compResolution", subkey="enabled"
-            ),
-            showCompExtent=UserSettings.Get(
-                group="display", key="showCompExtent", subkey="enabled"
-            ),
-        )
-        self.displayIndex += 1
-
-        return self.currentPage.mapdisplay
-
-    def CreateLayerTree(self, guiparent, name):
-        """Create new layer tree structure and associated map display frame and add it to display notebook tab
-        :param guiparent: parent of Map Display wx.Panel
-        :param name: name of new map display
-        """
         # make a new page in the bookcontrol for the layer tree (on page 0 of
         # the notebook)
         self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.EXPAND)
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
+        def CreateNewMapDisplay(layertree):
+            """Callback function which creates a new Map Display window
+            :param layertree: layer tree object
+            :param name: name of new map display window
+            :return: reference to mapdisplay instance
+            """
+            # count map display frame position
+            pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
+
+            # create superior Map Display frame
+            self.currentPage.mapframe = wx.Frame(layertree,
+                                id=wx.ID_ANY,
+                                pos=pos,
+                                size=globalvar.MAP_WINDOW_SIZE,
+                                style=wx.DEFAULT_FRAME_STYLE,
+                                title=name)
+
+            # create instance of Map Display interface
+            self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
+                self._giface, layertree
+            )
+            # create Map Display panel
+            self.currentPage.mapdisplay = MapFrame(
+                self.currentPage.mapframe,
+                giface=self._gifaceForDisplay,
+                id=wx.ID_ANY,
+                tree=layertree,
+                lmgr=self,
+                Map=layertree.Map,
+                title=name,
+            )
+            # set map display properties
+            self._setUpMapDisplay()
+
+            # add Map Display panel to Map Display frame
+            sizer = wx.BoxSizer(wx.VERTICAL)
+            sizer.Add(self.currentPage.mapdisplay, proportion=1, flag=wx.EXPAND)
+            self.currentPage.mapframe.SetSizer(sizer)
+            self.currentPage.mapframe.Layout()
+            return self.currentPage.mapdisplay
+
         # create layer tree (tree control for managing GIS layers)  and put on
-        # new notebook page
+        # new notebook page and new map display frame
         self.currentPage.maptree = LayerTree(
             parent=self.currentPage,
-            guiparent=guiparent,
             giface=self._giface,
-            createNewMapDisplay=self.CreateNewMapDisplay,
+            createNewMapDisplay=CreateNewMapDisplay,
             id=wx.ID_ANY,
             pos=wx.DefaultPosition,
             size=wx.DefaultSize,
@@ -514,26 +491,25 @@ class GMFrame(wx.Frame):
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
 
-    def NewDisplay(self, name=None, show=True):
-        """Create map display frame.
-        :param name: name of new map display frame
-        :param show: show map display frame if True
-        :return: map display frame
-        """
-        if not name:
-            name = _("Map Display {number}").format(number=self.displayIndex + 1)
+        # show map display frame if requested
+        if show:
+            self.currentPage.mapframe.Show()
+            self.currentPage.mapframe.Refresh()
+            self.currentPage.mapframe.Update()
 
-        # count map display frame position
-        pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
+        self.displayIndex += 1
 
-        # create superior Map Display frame
-        mapframe = wx.Frame(self,
-                              id=wx.ID_ANY,
-                              pos=pos,
-                              size=globalvar.MAP_WINDOW_SIZE,
-                              style=wx.DEFAULT_FRAME_STYLE,
-                              title=name)
+        return self.GetMapDisplay()
 
+    def _setUpMapDisplay(self):
+        """Set up Map Display properties"""
+        # set system icon
+        self.currentPage.mapframe.iconsize = (16, 16)
+        self.currentPage.mapframe.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
         # use default window layout
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
@@ -541,44 +517,65 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                mapframe.SetPosition((x, y))
-                mapframe.SetSize((w, h))
+                self.currentPage.mapframe.SetPosition((x, y))
+                self.currentPage.mapframe.SetSize((w, h))
             except Exception:
                 pass
 
-        # create layer tree and associated map display panel
-        self.CreateLayerTree(mapframe, name)
-
-        # set the size & system icon
-        mapframe.iconsize = (16, 16)
-
-        mapframe.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-
-        # adapt Show and SetTitle methods for Map Display
+        # adapt Show and SetTitle methods for Map Display panel
         def Show():
-            mapframe.Show()
+            self.currentPage.mapframe.Show()
         def SetTitle(name):
-            mapframe.SetTitle(name)
+            self.currentPage.mapframe.SetTitle(name)
+
+        page = self.currentPage
+
+        def CanCloseDisplay(askIfSaveWorkspace):
+            """Callback to check if user wants to close display"""
+            pgnum = self.notebookLayers.GetPageIndex(page)
+            name = self.notebookLayers.GetPageText(pgnum)
+            caption = _("Close Map Display {}").format(name)
+            if not askIfSaveWorkspace or (
+                askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
+            ):
+                return pgnum
+            return None
 
         self.currentPage.mapdisplay.Show = Show
         self.currentPage.mapdisplay.SetTitle = SetTitle
+        self.currentPage.mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        self.currentPage.mapdisplay.starting3dMode.connect(self.AddNvizTools)
+        self.currentPage.mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
+        self.currentPage.mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 
-        # layout
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.currentPage.mapdisplay, proportion=1, flag=wx.EXPAND)
-        mapframe.SetSizer(sizer)
-        mapframe.Layout()
+        self.currentPage.mapdisplay.Bind(
+            wx.EVT_ACTIVATE,
+            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
+        )
+        self.currentPage.mapdisplay.starting3dMode.connect(
+            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
+                mapDisplayPage
+            )
+        )
 
-        if show:
-            mapframe.Show()
-            mapframe.Refresh()
-            mapframe.Update()
-
-        self.currentPage.mapframe = mapframe
+        # set default properties
+        self.currentPage.mapdisplay.SetProperties(
+            render=UserSettings.Get(
+                group="display", key="autoRendering", subkey="enabled"
+            ),
+            mode=UserSettings.Get(
+                group="display", key="statusbarMode", subkey="selection"
+            ),
+            alignExtent=UserSettings.Get(
+                group="display", key="alignExtent", subkey="enabled"
+            ),
+            constrainRes=UserSettings.Get(
+                group="display", key="compResolution", subkey="enabled"
+            ),
+            showCompExtent=UserSettings.Get(
+                group="display", key="showCompExtent", subkey="enabled"
+            ),
+        )
 
     def OnNewDisplay(self, event=None):
         """Create new layer tree and map display window instance"""
