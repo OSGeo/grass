@@ -217,9 +217,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             size=globalvar.MAP_WINDOW_SIZE,
             style=wx.DEFAULT_FRAME_STYLE,
             tree=self,
-            notebook=self.notebook,
             lmgr=self.lmgr,
-            page=self.treepg,
             Map=self.Map,
             title=title,
         )

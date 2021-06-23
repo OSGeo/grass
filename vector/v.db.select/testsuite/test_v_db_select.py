@@ -163,6 +163,7 @@ out_sep = """1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.9723
 1290,63600420,109186.835938,1291,1290,Zwe,63600422.4739,109186.832069
 """
 
+<<<<<<< HEAD
 out_json = """\
 {"info":
 {"columns":[
@@ -176,6 +177,9 @@ out_json = """\
 {"name":"SHAPE_len","sql_type":"DOUBLE PRECISION","is_number":true}
 ]},
 "records":[
+=======
+out_json = """{"records":[
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
 {"cat":1,"onemap_pro":963738.75,"PERIMETER":4083.97998,"GEOL250_":2,"GEOL250_ID":1,"GEO_NAME":"Zml","SHAPE_area":963738.608571,"SHAPE_len":4083.979839},
 {"cat":2,"onemap_pro":22189124,"PERIMETER":26628.261719,"GEOL250_":3,"GEOL250_ID":2,"GEO_NAME":"Zmf","SHAPE_area":22189123.2296,"SHAPE_len":26628.261112},
 {"cat":3,"onemap_pro":579286.875,"PERIMETER":3335.55835,"GEOL250_":4,"GEOL250_ID":3,"GEO_NAME":"Zml","SHAPE_area":579286.829631,"SHAPE_len":3335.557182},

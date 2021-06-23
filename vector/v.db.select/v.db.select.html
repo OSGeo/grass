@@ -105,6 +105,7 @@ The keys for attributes are lowercase or uppercase depending on how
 the columns were defined in the database.
 
 <p>
+<<<<<<< HEAD
 The JSON also contains information about columns stored under key
 <code>info</code>. Column names and types are under key <code>columns</code>.
 Each colum has SQL data type under <code>sql_type</code> in all caps.
@@ -149,12 +150,31 @@ Example with added indentation:
   "records": [
     {
       "road_name": "NC-50",
+=======
+Example with added indentation (note that booleans are not directly supported;
+here, an attribute is a string with value <tt>no</tt>):
+
+<div class="code"><pre>
+{
+  "records": [
+    {
+      "cat": 1,
+      "road_name": "NC-50",
+      "multilane": "no",
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
       "year": 2001,
       "length": 4825.369405
     },
     {
+<<<<<<< HEAD
       "road_name": "NC-50",
       "year": 2001,
+=======
+      "cat": 2,
+      "road_name": "NC-50",
+      "multilane": "no",
+      "year": 2002,
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
       "length": 14392.589058
     }
   ]
@@ -373,3 +393,11 @@ Group option added by Luca Delucchi,
 Fondazione Edmund Mach, Trento, Italy<br>
 Huidae Cho (JSON output, escaping and features-only flags)<br>
 Vaclav Petras (true CSV output, format option and documentation)
+<<<<<<< HEAD
+=======
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
