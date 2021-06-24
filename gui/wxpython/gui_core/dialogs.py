@@ -596,14 +596,22 @@ class SavedRegion(wx.Dialog):
         self._selection.SetFocus()
         self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
 
-        sizer.Add(box, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        sizer.Add(
+            box,
+            proportion=0,
+            flag=wx.GROW | wx.ALL,
+            border=5,
+        )
 
         line = wx.StaticLine(
-            parent=self, id=wx.ID_ANY, size=(
-                20, -1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, proportion=0, flag=wx.GROW |
-                  wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border=5)
+            parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL
+        )
+        sizer.Add(
+            line,
+            proportion=0,
+            flag=wx.GROW | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
 
         btnsizer = wx.StdDialogButtonSizer()
 
