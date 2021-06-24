@@ -85,14 +85,24 @@ int make_mapset_element(const char *p_path, const char *p_element)
     while (1) {
 	if (*element == '/' || *element == 0) {
 	    *p = 0;
-	    if (access(path, 0) != 0) { /* directory not yet created */
-		if (G_mkdir(path) != 0)
-		    G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
-				  p_element, path, strerror(errno));
-	    }
-	    if (access(path, 0) != 0)  /* directory not accessible */
-		G_fatal_error(_("Unable to access mapset element %s (%s): %s"),
-			      p_element, path, strerror(errno));
+            if (access(path, 0) != 0) {
+                /* Assuming that directory does not exist. */
+                if (G_mkdir(path) != 0)
+                    msg = G_store(strerror(errno));
+            }
+            if (access(path, 0) != 0) {
+                /* Directory is not accessible even after attempt to create it. */
+                if (msg) {
+                    /* Error already happened when mkdir. */
+                    G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
+                                  p_element, path, strerror(errno));
+                }
+                else {
+                    /* Access error is not related to mkdir. */
+                    G_fatal_error(_("Unable to access mapset element %s (%s): %s"),
+                                  p_element, path, strerror(errno));
+                }
+            }
 	    if (*element == 0)
 		return 1;
 	}
