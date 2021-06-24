@@ -1613,6 +1613,10 @@ def install_extension_std_platforms(name, source, url, branch):
     gisbase = os.getenv("GISBASE")
     # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
     source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass7/"
+    try:
+        url_check = urlopen(source_url)
+    except Exception:
+        source_url = "https://github.com/OSGeo/grass-addons/tree/master/"
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -2308,6 +2312,18 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 version=version[0], module_class=module_class, module_name=name
             )
         )
+        # Note: try-except is a temporary workaround for the addon repo restructuring
+        try:
+            url_check = urlopen(
+                "https://github.com/OSGeo/grass-addons/tree/master/grass7"
+            )
+        except Exception:
+            git_url = (
+                "https://github.com/OSGeo/grass-addons/trunk/"
+                "{module_class}/{module_name}".format(
+                    module_class=module_class, module_name=name
+                )
+            )
         # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
         #            'grass{version}/{module_class}/{module_name}?format=zip' \
         #            .format(version=version[0],
@@ -2334,6 +2350,20 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 branch=svn_reference,
             )
         )
+        # Note: try-except is a temporary workaround for the addon repo restructuring
+        try:
+            url_check = urlopen(
+                "{url}tree/{branch}/grass7".format(
+                    url=url, branch="master" if branch in ["master", "main"] else branch
+                )
+            )
+        except Exception:
+            git_url = "{url}/{branch}/" "{module_class}/{module_name}".format(
+                url=url,
+                module_class=module_class,
+                module_name=name,
+                branch=svn_reference,
+            )
         # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
         #            'grass{version}/{module_class}/{module_name}?format=zip' \
         #            .format(version=version[0],
