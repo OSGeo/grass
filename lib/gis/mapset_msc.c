@@ -85,6 +85,7 @@ int make_mapset_element(const char *p_path, const char *p_element)
     while (1) {
 	if (*element == '/' || *element == 0) {
 	    *p = 0;
+            char *msg = NULL;
             if (access(path, 0) != 0) {
                 /* Assuming that directory does not exist. */
                 if (G_mkdir(path) != 0)
