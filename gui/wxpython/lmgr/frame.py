@@ -538,7 +538,7 @@ class GMFrame(wx.Frame):
             wx.EVT_CLOSE,
             lambda event, page=self.currentPage: self._onMapDisplayClose(page),
         )
-        self.currentPage.mapdisplay.Bind(
+        self.currentPage.mapframe.Bind(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
         )
