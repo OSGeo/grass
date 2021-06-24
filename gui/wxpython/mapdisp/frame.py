@@ -125,9 +125,6 @@ class MapFrame(SingleMapFrame):
         self.ending3dMode = Signal("MapFrame.ending3dMode")
 
         # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapFrame.closingDisplay")
-
-        # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapFrame.closingVNETDialog")
 
         # properties are shared in other objects, so defining here
@@ -974,22 +971,6 @@ class MapFrame(SingleMapFrame):
         if self.dialogs["vnet"]:
             self.closingVNETDialog.emit()
         self._mgr.UnInit()
-
-    def OnCloseWindow(self, event, askIfSaveWorkspace=True):
-        """Window closed.
-        Also close associated layer tree page
-        """
-        Debug.msg(2, "MapFrame.OnCloseWindow()")
-        if self.canCloseDisplayCallback:
-            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
-            if pgnum is not None:
-                self.CleanUp()
-                if pgnum > -1:
-                    self.closingDisplay.emit(page_index=pgnum)
-                    # Destroy is called when notebook page is deleted
-        else:
-            self.CleanUp()
-            self.Destroy()
 
     def Query(self, x, y):
         """Query selected layers.
