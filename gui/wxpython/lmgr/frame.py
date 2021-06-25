@@ -501,6 +501,10 @@ class GMFrame(wx.Frame):
             # set map display properties
             self._setUpMapDisplay()
 
+            # Bind frame events
+            mapframe.Bind(
+                wx.EVT_CLOSE, self.currentPage.mapdisplay.OnCloseWindow)
+
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)
             sizer.Add(self.currentPage.mapdisplay, proportion=1, flag=wx.EXPAND)
@@ -563,6 +567,7 @@ class GMFrame(wx.Frame):
 
         mapdisplay = self.currentPage.mapdisplay
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+
         mapdisplay.Bind(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
@@ -575,8 +580,6 @@ class GMFrame(wx.Frame):
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
         mapdisplay.closingDisplay.connect(self._closePageNoEvent)
-
-
 
         # set default properties
         mapdisplay.SetProperties(
