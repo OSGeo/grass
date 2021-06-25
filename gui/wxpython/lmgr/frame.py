@@ -65,7 +65,7 @@ from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface, LayerManagerGrassInterfaceForMapDisplay
-from mapdisp.frame import MapFrame
+from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
@@ -432,7 +432,7 @@ class GMFrame(wx.Frame):
             pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
 
             # create superior Map Display frame
-            self.currentPage.mapframe = wx.Frame(layertree,
+            mapframe = wx.Frame(layertree,
                                 id=wx.ID_ANY,
                                 pos=pos,
                                 size=globalvar.MAP_WINDOW_SIZE,
@@ -444,8 +444,8 @@ class GMFrame(wx.Frame):
                 self._giface, layertree
             )
             # create Map Display panel
-            self.currentPage.mapdisplay = MapFrame(
-                self.currentPage.mapframe,
+            self.currentPage.mapdisplay = MapDisplay(
+                mapframe,
                 giface=self._gifaceForDisplay,
                 id=wx.ID_ANY,
                 tree=layertree,
@@ -453,14 +453,15 @@ class GMFrame(wx.Frame):
                 Map=layertree.Map,
                 title=name,
             )
+
             # set map display properties
             self._setUpMapDisplay()
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)
             sizer.Add(self.currentPage.mapdisplay, proportion=1, flag=wx.EXPAND)
-            self.currentPage.mapframe.SetSizer(sizer)
-            self.currentPage.mapframe.Layout()
+            mapframe.SetSizer(sizer)
+            mapframe.Layout()
             return self.currentPage.mapdisplay
 
         # create layer tree (tree control for managing GIS layers)  and put on
@@ -491,11 +492,11 @@ class GMFrame(wx.Frame):
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
 
-        # show map display frame if requested
+        # show map display if requested
         if show:
-            self.currentPage.mapframe.Show()
-            self.currentPage.mapframe.Refresh()
-            self.currentPage.mapframe.Update()
+            self.currentPage.mapdisplay.Show()
+            self.currentPage.mapdisplay.Refresh()
+            self.currentPage.mapdisplay.Update()
 
         self.displayIndex += 1
 
@@ -504,12 +505,40 @@ class GMFrame(wx.Frame):
     def _setUpMapDisplay(self):
         """Set up Map Display properties"""
         # set system icon
-        self.currentPage.mapframe.iconsize = (16, 16)
-        self.currentPage.mapframe.SetIcon(
+        self.currentPage.mapdisplay.iconsize = (16, 16)
+        self.currentPage.mapdisplay.SetIcon(
             wx.Icon(
                 os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
             )
         )
+        page = self.currentPage
+
+        def CanCloseDisplay(askIfSaveWorkspace):
+            """Callback to check if user wants to close display"""
+            pgnum = self.notebookLayers.GetPageIndex(page)
+            name = self.notebookLayers.GetPageText(pgnum)
+            caption = _("Close Map Display {}").format(name)
+            if not askIfSaveWorkspace or (
+                askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
+            ):
+                return pgnum
+            return None
+
+        mapdisplay = self.currentPage.mapdisplay
+        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.Bind(
+            wx.EVT_ACTIVATE,
+            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
+        )
+        mapdisplay.starting3dMode.connect(
+            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
+                mapDisplayPage
+            )
+        )
+        mapdisplay.starting3dMode.connect(self.AddNvizTools)
+        mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
+        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+
         # use default window layout
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
@@ -517,39 +546,13 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                self.currentPage.mapframe.SetPosition((x, y))
-                self.currentPage.mapframe.SetSize((w, h))
+                self.GetMapDisplay().SetPosition((x, y))
+                self.GetMapDisplay().SetSize((w, h))
             except Exception:
                 pass
 
-        # adapt Show and SetTitle methods for Map Display panel
-        def Show():
-            self.currentPage.mapframe.Show()
-        def SetTitle(name):
-            self.currentPage.mapframe.SetTitle(name)
-
-        self.currentPage.mapdisplay.Show = Show
-        self.currentPage.mapdisplay.SetTitle = SetTitle
-        self.currentPage.mapdisplay.starting3dMode.connect(self.AddNvizTools)
-        self.currentPage.mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-
-        # Bind events
-        self.currentPage.mapframe.Bind(
-            wx.EVT_CLOSE,
-            lambda event, page=self.currentPage: self._onMapDisplayClose(page),
-        )
-        self.currentPage.mapframe.Bind(
-            wx.EVT_ACTIVATE,
-            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
-        )
-        self.currentPage.mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
-                mapDisplayPage
-            )
-        )
-
         # set default properties
-        self.currentPage.mapdisplay.SetProperties(
+        mapdisplay.SetProperties(
             render=UserSettings.Get(
                 group="display", key="autoRendering", subkey="enabled"
             ),
@@ -566,6 +569,8 @@ class GMFrame(wx.Frame):
                 group="display", key="showCompExtent", subkey="enabled"
             ),
         )
+
+        return self.GetMapDisplay()
 
     def OnNewDisplay(self, event=None):
         """Create new layer tree and map display window instance"""
@@ -1496,7 +1501,8 @@ class GMFrame(wx.Frame):
 
     def OnDisplayClose(self, event=None):
         """Close current map display window"""
-        self._onMapDisplayClose(self.currentPage)
+        if self.currentPage and self.GetMapDisplay():
+            self.GetMapDisplay().OnCloseWindow(event)
 
     def OnDisplayCloseAll(self, event):
         """Close all open map display windows (from menu)"""
@@ -1506,9 +1512,8 @@ class GMFrame(wx.Frame):
 
     def DisplayCloseAll(self):
         """Close all open map display windows"""
-        for idx in range(0, self.notebookLayers.GetPageCount()):
-            page = self.notebookLayers.GetPage(idx)
-            self._onMapDisplayClose(page)
+        for display in self.GetMapDisplay(onlyCurrent=False):
+            display.OnCloseWindow(event=None, askIfSaveWorkspace=False)
 
     def OnRenderAllMapDisplays(self, event=None):
         for display in self.GetAllMapDisplays():

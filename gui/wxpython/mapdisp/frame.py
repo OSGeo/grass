@@ -125,6 +125,9 @@ class MapFrame(SingleMapFrame):
         self.ending3dMode = Signal("MapFrame.ending3dMode")
 
         # Emitted when closing display by closing its window.
+        self.closingDisplay = Signal("MapFrame.closingDisplay")
+
+        # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapFrame.closingVNETDialog")
 
         # properties are shared in other objects, so defining here
@@ -972,6 +975,22 @@ class MapFrame(SingleMapFrame):
             self.closingVNETDialog.emit()
         self._mgr.UnInit()
 
+    def OnCloseWindow(self, event, askIfSaveWorkspace=True):
+        """Window closed.
+        Also close associated layer tree page
+        """
+        Debug.msg(2, "MapFrame.OnCloseWindow()")
+        if self.canCloseDisplayCallback:
+            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
+            if pgnum is not None:
+                self.CleanUp()
+                if pgnum > -1:
+                    self.closingDisplay.emit(page_index=pgnum)
+                    # Destroy is called when notebook page is deleted
+        else:
+            self.CleanUp()
+            self.Destroy()
+
     def Query(self, x, y):
         """Query selected layers.
 
@@ -1682,3 +1701,41 @@ class MapFrame(SingleMapFrame):
         """Quit VDigit"""
         # disable the toolbar
         self.RemoveToolbar("vdigit", destroy=True)
+
+
+class FrameMixin:
+   """Mixin class for wx.Panel that provides methods standardly
+   used on wx.Frame widget"""
+   def Show(self):
+        self.GetParent().Show()
+   def SetTitle(self):
+        self.GetParent().SetTitle()
+   def Raise(self):
+        self.GetParent().Raise()
+   def SetFocus(self):
+        self.GetParent().SetFocus()
+   def Refresh(self):
+        self.GetParent().Refresh()
+   def Update(self):
+        self.GetParent().Update()
+   def SetPosition(self, x, y):
+        self.GetParent().SetPosition(x, y)
+   def SetSize(self, w, h):
+        self.GetParent().SetSize(w, h)
+   def SetIcon(self, icon):
+       self.GetParent().SetIcon(icon)
+
+
+class MapDisplay(MapFrame, FrameMixin):
+    """General Map Display class"""
+    def __init__(parent, giface, id, tree, lmgr, Map, title, **kwargs):
+         MapFrame.__init__(parent=parent,
+                          giface=giface,
+                          id=id,
+                          tree=tree,
+                          lmgr=lmgr,
+                          Map=Map,
+                          title=title,
+                          **kwargs,
+        )
+>>>>>>> step backwards, OnCloseWindow preserved in mapdisp frame, new frame mixin class added
