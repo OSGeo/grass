@@ -1824,7 +1824,6 @@ class GMFrame(wx.Frame):
         # show ATM window
         dbmanager.Show()
 
-<<<<<<< HEAD
     def OnNewDisplay(self, event=None):
         """Create new layer tree and map display instance"""
         self.NewDisplay()
@@ -1970,6 +1969,8 @@ class GMFrame(wx.Frame):
             self.GetMapDisplay().Destroy()
 >>>>>>> OnCloseWindow moved to lmgr and closingDisplay signal removed
 
+=======
+>>>>>>> _onMapDisplayClosed removed
     def _onMapDisplayFocus(self, notebookLayerPage):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
