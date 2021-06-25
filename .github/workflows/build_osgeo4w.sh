@@ -25,7 +25,7 @@ fi
 
 test -d "$1" && cd "$1"
 
-osgeo4w_path=/c/OSGeo4W64
+osgeo4w_path=/c/OSGeo4W
 arch=x86_64-w64-mingw32
 src=$(pwd)
 
