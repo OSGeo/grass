@@ -226,6 +226,7 @@ class MapFrame(SingleMapFrame):
         #
         # Bind various events
         #
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         #
@@ -1728,8 +1729,9 @@ class FrameMixin:
 
 class MapDisplay(MapFrame, FrameMixin):
     """General Map Display class"""
-    def __init__(parent, giface, id, tree, lmgr, Map, title, **kwargs):
-         MapFrame.__init__(parent=parent,
+    def __init__(self, parent, giface, id, tree, lmgr, Map, title, **kwargs):
+         MapFrame.__init__(self,
+                          parent=parent,
                           giface=giface,
                           id=id,
                           tree=tree,

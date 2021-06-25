@@ -406,6 +406,10 @@ class GMFrame(wx.Frame):
         else:
             self.pyshell = None
 
+    def OnNewDisplay(self, event=None):
+        """Create new layer tree and map display window instance"""
+        self.NewDisplay()
+
     def NewDisplay(self, name=None, show=True):
         """Create new layer tree structure and associated map display and
         add it to display notebook tab
@@ -445,7 +449,7 @@ class GMFrame(wx.Frame):
             )
             # create Map Display panel
             self.currentPage.mapdisplay = MapDisplay(
-                mapframe,
+                parent=mapframe,
                 giface=self._gifaceForDisplay,
                 id=wx.ID_ANY,
                 tree=layertree,
@@ -571,10 +575,6 @@ class GMFrame(wx.Frame):
         )
 
         return self.GetMapDisplay()
-
-    def OnNewDisplay(self, event=None):
-        """Create new layer tree and map display window instance"""
-        self.NewDisplay()
 
     def _addPagesToNotebook(self):
         """Add pages to notebook widget"""
