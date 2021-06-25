@@ -122,9 +122,9 @@ void G__temp_element(char *element, int tmp)
     }
     
     if (!tmp)
-        G_make_mapset_element(element);
+        G_make_mapset_element_type_directory(element);
     else
-        G_make_mapset_element_tmp(element);
+        G_make_mapset_element_type_directory_tmp(element);
     
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }

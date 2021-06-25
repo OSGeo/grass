@@ -317,7 +317,7 @@ static int close_new_gdal(int fd, int ok)
 	remove(path);
 
 	/* write 0-length cell file */
-	G_make_mapset_element("cell");
+	G_make_mapset_element_type_directory("cell");
 	G_file_name(path, "cell", fcb->name, fcb->mapset);
 	cell_fd = creat(path, 0666);
 	close(cell_fd);
@@ -326,7 +326,7 @@ static int close_new_gdal(int fd, int ok)
 	    write_fp_format(fd);
 
 	    /* write 0-length fcell file */
-	    G_make_mapset_element("fcell");
+	    G_make_mapset_element_type_directory("fcell");
 	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
 	    cell_fd = creat(path, 0666);
 	    close(cell_fd);
@@ -446,7 +446,7 @@ static int close_new(int fd, int ok)
 	    write_fp_format(fd);
 
 	    /* now write 0-length cell file */
-	    G_make_mapset_element("cell");
+	    G_make_mapset_element_type_directory("cell");
 	    cell_fd =
 		creat(G_file_name(path, "cell", fcb->name, fcb->mapset),
 		      0666);

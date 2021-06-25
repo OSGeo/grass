@@ -395,7 +395,7 @@ static void read_gdal_options(void)
 	G_file_name(path, p, "", G_mapset());
 	st->opts.dir = G_store(path);
 	if (access(path, 0) != 0)
-	    G_make_mapset_element(p);
+	    G_make_mapset_element_type_directory(p);
     }
 
     p = G_find_key_value("extension", key_val);

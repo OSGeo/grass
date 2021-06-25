@@ -20,6 +20,8 @@
 #include <grass/glocale.h>
 
 static int make_mapset_element(const char *, const char *);
+static int make_mapset_element_no_fail_on_race(const char *, const char *);
+static int make_mapset_element_impl(const char *, const char *, bool);
 
 /*!
    \brief Create element in the current mapset.
@@ -38,9 +40,53 @@ static int make_mapset_element(const char *, const char *);
 int G_make_mapset_element(const char *p_element)
 {
     char path[GPATH_MAX];
-    
+
     G_file_name(path, NULL, NULL, G_mapset());
     return make_mapset_element(path, p_element);
+}
+
+/*!
+   \brief Create directory for group of elements of a given type in the current mapset.
+
+   Make the specified element in the current mapset will check for the
+   existence of the element and do nothing if it is found so this
+   routine can be called even if the element already exists.
+
+   Calls G_fatal_error() on failure.
+
+   \param type element type to be created in mapset
+
+   \return 0 no element defined
+   \return 1 on success
+ */
+int G_make_mapset_element_type_directory(const char *type)
+{
+    char path[GPATH_MAX];
+
+    G_file_name(path, NULL, NULL, G_mapset());
+    return make_mapset_element_no_fail_on_race(path, type);
+}
+
+/*!
+   \brief Create directory for an element of a given type in the current mapset.
+
+   Make the specified element in the current mapset will check for the
+   existence of the element and do nothing if it is found so this
+   routine can be called even if the element already exists.
+
+   Calls G_fatal_error() on failure.
+
+   \param type element type to be created in mapset
+
+   \return 0 no element defined
+   \return 1 on success
+ */
+int G_make_mapset_directory_element(const char *type)
+{
+    char path[GPATH_MAX];
+
+    G_file_name(path, NULL, NULL, G_mapset());
+    return make_mapset_element(path, type);
 }
 
 /*!
@@ -56,12 +102,20 @@ int G_make_mapset_element(const char *p_element)
 int G_make_mapset_element_tmp(const char *p_element)
 {
     char path[GPATH_MAX];
-    
+
     G_file_name_tmp(path, NULL, NULL, G_mapset());
     return make_mapset_element(path, p_element);
 }
 
-int make_mapset_element(const char *p_path, const char *p_element)
+int G_make_mapset_element_type_directory_tmp(const char *type)
+{
+    char path[GPATH_MAX];
+
+    G_file_name_tmp(path, NULL, NULL, G_mapset());
+    return make_mapset_element_no_fail_on_race(path, type);
+}
+
+int make_mapset_element_impl(const char *p_path, const char *p_element, bool race_ok)
 {
     char path[GPATH_MAX], *p;
     const char *element;
@@ -85,20 +139,43 @@ int make_mapset_element(const char *p_path, const char *p_element)
     while (1) {
 	if (*element == '/' || *element == 0) {
 	    *p = 0;
-	    if (access(path, 0) != 0) { /* directory not yet created */
-		if (G_mkdir(path) != 0)
-		    G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
-				  p_element, path, strerror(errno));
-	    }
-	    if (access(path, 0) != 0)  /* directory not accessible */
-		G_fatal_error(_("Unable to access mapset element %s (%s): %s"),
-			      p_element, path, strerror(errno));
+            char *msg = NULL;
+            if (access(path, 0) != 0) {
+                /* Assuming that directory does not exist. */
+                if (G_mkdir(path) != 0) {
+                    msg = G_store(strerror(errno));
+                }
+            }
+            if (access(path, 0) != 0 || (msg && !race_ok)) {
+                /* Directory is not accessible even after attempt to create it. */
+                if (msg) {
+                    /* Error already happened when mkdir. */
+                    G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
+                                  p_element, path, strerror(errno));
+                }
+                else {
+                    /* Access error is not related to mkdir. */
+                    G_fatal_error(_("Unable to access mapset element %s (%s): %s"),
+                                  p_element, path, strerror(errno));
+                }
+            }
 	    if (*element == 0)
 		return 1;
 	}
 	*p++ = *element++;
     }
 }
+
+int make_mapset_element(const char *p_path, const char *p_element)
+{
+    return make_mapset_element_impl(p_path, p_element, false);
+}
+
+int make_mapset_element_no_fail_on_race(const char *p_path, const char *p_element)
+{
+    return make_mapset_element_impl(p_path, p_element, true);
+}
+
 
 /*!
    \brief Create misc element in the current mapset.
