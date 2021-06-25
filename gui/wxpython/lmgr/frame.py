@@ -443,6 +443,25 @@ class GMFrame(wx.Frame):
                                 style=wx.DEFAULT_FRAME_STYLE,
                                 title=name)
 
+            # set system icon
+            mapframe.iconsize = (16, 16)
+            mapframe.SetIcon(
+                wx.Icon(
+                    os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+                )
+            )
+            # use default window layout
+            if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
+                dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
+                idx = 4 + self.displayIndex * 4
+                try:
+                    x, y = map(int, dim.split(",")[idx : idx + 2])
+                    w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                    mapframe.SetPosition((x, y))
+                    mapframe.SetSize((w, h))
+                except Exception:
+                    pass
+
             # create instance of Map Display interface
             self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
                 self._giface, layertree
@@ -508,13 +527,6 @@ class GMFrame(wx.Frame):
 
     def _setUpMapDisplay(self):
         """Set up Map Display properties"""
-        # set system icon
-        self.currentPage.mapdisplay.iconsize = (16, 16)
-        self.currentPage.mapdisplay.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
         page = self.currentPage
 
         def CanCloseDisplay(askIfSaveWorkspace):
@@ -543,17 +555,7 @@ class GMFrame(wx.Frame):
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
         mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 
-        # use default window layout
-        if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-            idx = 4 + self.displayIndex * 4
-            try:
-                x, y = map(int, dim.split(",")[idx : idx + 2])
-                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                self.GetMapDisplay().SetPosition((x, y))
-                self.GetMapDisplay().SetSize((w, h))
-            except Exception:
-                pass
+
 
         # set default properties
         mapdisplay.SetProperties(

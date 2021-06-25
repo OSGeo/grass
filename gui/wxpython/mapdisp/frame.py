@@ -1719,15 +1719,9 @@ class FrameMixin:
         self.GetParent().Refresh()
    def Update(self):
         self.GetParent().Update()
-   def SetPosition(self, x, y):
-        self.GetParent().SetPosition(x, y)
-   def SetSize(self, w, h):
-        self.GetParent().SetSize(w, h)
-   def SetIcon(self, icon):
-       self.GetParent().SetIcon(icon)
 
 
-class MapDisplay(MapFrame, FrameMixin):
+class MapDisplay(FrameMixin, MapFrame):
     """General Map Display class"""
     def __init__(self, parent, giface, id, tree, lmgr, Map, title, **kwargs):
          MapFrame.__init__(self,
