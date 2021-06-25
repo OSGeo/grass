@@ -1843,31 +1843,6 @@ class GMFrame(wx.Frame):
         # show ATM window
         dbmanager.Show()
 
-    def _onMapDisplayClose(self, page, askIfSaveWorkspace=True):
-        """Closes Map Display window and its associated layer tree page."""
-
-        def CanCloseDisplay():
-          """Check if user wants to close display"""
-          pgnum = self.notebookLayers.GetPageIndex(page)
-          name = self.notebookLayers.GetPageText(pgnum)
-          caption = _("Close Map Display {}").format(name)
-          if not askIfSaveWorkspace or (
-              askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
-          ):
-              return pgnum
-          return None
-
-        if CanCloseDisplay():
-            pgnum = CanCloseDisplay()
-            if pgnum is not None:
-                self.GetMapDisplay().CleanUp()
-                if pgnum > -1:
-                    self._closePageNoEvent(page_index=pgnum)
-                    # Destroy is called when notebook page is deleted
-        else:
-            self.GetMapDisplay().CleanUp()
-            self.GetMapDisplay().Destroy()
-
     def _onMapDisplayFocus(self, notebookLayerPage):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
