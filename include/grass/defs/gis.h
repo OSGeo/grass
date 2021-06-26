@@ -546,10 +546,9 @@ char *G_mapset_path(void);
 /* mapset_msc.c */
 int G_make_mapset_element(const char *);
 int G_make_mapset_element_tmp(const char *);
-int G_make_mapset_element_type_directory(const char *);
+int G_make_mapset_object_group(const char *);
 int G_make_mapset_directory_element(const char *);
-int G_make_mapset_element_type_directory_tmp(const char *);
-int G_make_mapset_directory_element_tmp(const char *);
+int G_make_mapset_object_group_tmp(const char *);
 int G__make_mapset_element_misc(const char *, const char *);
 int G_mapset_permissions(const char *);
 int G_mapset_permissions2(const char *, const char *, const char *);

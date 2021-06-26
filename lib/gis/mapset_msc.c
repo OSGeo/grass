@@ -59,7 +59,7 @@ int G_make_mapset_element(const char *p_element)
    \return 0 no element defined
    \return 1 on success
  */
-int G_make_mapset_element_type_directory(const char *type)
+int G_make_mapset_object_group(const char *type)
 {
     char path[GPATH_MAX];
 
@@ -81,11 +81,12 @@ int G_make_mapset_element_type_directory(const char *type)
    \return 0 no element defined
    \return 1 on success
  */
-int G_make_mapset_directory_element(const char *type)
+int G_make_mapset_dir_object(const char *type, const char *name)
 {
     char path[GPATH_MAX];
 
-    G_file_name(path, NULL, NULL, G_mapset());
+    G_make_mapset_object_group(type);
+    G_file_name(path, type, NULL, G_mapset());
     return make_mapset_element(path, type);
 }
 
@@ -107,7 +108,7 @@ int G_make_mapset_element_tmp(const char *p_element)
     return make_mapset_element(path, p_element);
 }
 
-int G_make_mapset_element_type_directory_tmp(const char *type)
+int G_make_mapset_object_group_tmp(const char *type)
 {
     char path[GPATH_MAX];
 
