@@ -36,7 +36,7 @@ from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapFrame
+from gui_core.mapdisp import SingleMapPanel
 from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
@@ -63,8 +63,8 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapFrame(SingleMapFrame):
-    """Main frame for map display window. Drawing takes place in
+class MapPanel(SingleMapPanel):
+    """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
 
@@ -91,10 +91,10 @@ class MapFrame(SingleMapFrame):
         :param lmgr: Layer Manager
         :param map: instance of render.Map
         :param auimgr: AUI manager
-        :param name: frame name
-        :param kwargs: wx.Frame attributes
+        :param name: panel name
+        :param kwargs: wx.Panel attributes
         """
-        SingleMapFrame.__init__(
+        SingleMapPanel.__init__(
             self,
             parent=parent,
             title=title,
@@ -116,16 +116,16 @@ class MapFrame(SingleMapFrame):
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already actived.
-        self.starting3dMode = Signal("MapFrame.starting3dMode")
+        self.starting3dMode = Signal("MapPanel.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
-        self.ending3dMode = Signal("MapFrame.ending3dMode")
+        self.ending3dMode = Signal("MapPanel.ending3dMode")
 
         # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapFrame.closingDisplay")
+        self.closingDisplay = Signal("MapPanel.closingDisplay")
 
         # Emitted when closing display by closing its window.
-        self.closingVNETDialog = Signal("MapFrame.closingVNETDialog")
+        self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
 
         # properties are shared in other objects, so defining here
         self.mapWindowProperties = MapWindowProperties()
@@ -971,7 +971,7 @@ class MapFrame(SingleMapFrame):
     def CleanUp(self):
         """Clean up before closing map display.
         End digitizer/nviz."""
-        Debug.msg(2, "MapFrame.CleanUp()")
+        Debug.msg(2, "MapPanel.CleanUp()")
         self.Map.Clean()
         # close edited map and 3D tools properly
         if self.GetToolbar("vdigit"):
@@ -990,7 +990,7 @@ class MapFrame(SingleMapFrame):
         """Window closed.
         Also close associated layer tree page
         """
-        Debug.msg(2, "MapFrame.OnCloseWindow()")
+        Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseDisplayCallback:
             pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
             if pgnum is not None:
@@ -1501,7 +1501,7 @@ class MapFrame(SingleMapFrame):
         """Set display extents to match selected raster (including
         NULLs) or vector map.
         """
-        Debug.msg(3, "MapFrame.OnZoomToMap()")
+        Debug.msg(3, "MapPanel.OnZoomToMap()")
         layers = None
         if self.IsStandalone():
             layers = self.MapWindow.GetMap().GetListOfLayers(active=False)
@@ -1604,7 +1604,7 @@ class MapFrame(SingleMapFrame):
         # and one place here still uses IsStandalone
         Debug.msg(
             1,
-            "MapFrame.IsStandalone(): Method IsStandalone is"
+            "MapPanel.IsStandalone(): Method IsStandalone is"
             "deprecated, use some general approach instead such as"
             " Signals or giface",
         )
@@ -1623,7 +1623,7 @@ class MapFrame(SingleMapFrame):
         """
         Debug.msg(
             1,
-            "MapFrame.GetLayerManager(): Method GetLayerManager is"
+            "MapPanel.GetLayerManager(): Method GetLayerManager is"
             "deprecated, use some general approach instead such as"
             " Signals or giface",
         )
@@ -1780,10 +1780,10 @@ class FrameMixin:
         self.GetParent().Update()
 
 
-class MapDisplay(FrameMixin, MapFrame):
+class MapDisplay(FrameMixin, MapPanel):
     """General Map Display class"""
     def __init__(self, parent, giface, id, tree, lmgr, Map, title, **kwargs):
-         MapFrame.__init__(self,
+         MapPanel.__init__(self,
                           parent=parent,
                           giface=giface,
                           id=id,

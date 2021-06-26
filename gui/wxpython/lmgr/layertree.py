@@ -36,7 +36,6 @@ from grass.script import utils as gutils
 from core import globalvar
 from gui_core.dialogs import SqlQueryFrame, SetOpacityDialog, TextEntryDialog
 from gui_core.forms import GUI
-from mapdisp.frame import MapFrame
 from core.render import Map
 from core.utils import GetLayerNameFromCmd, ltype2command
 from core.debug import Debug
@@ -46,7 +45,6 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from gui_core.widgets import MapValidator
 from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
-from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 
 
 TREE_ITEM_HEIGHT = 25
