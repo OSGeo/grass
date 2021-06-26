@@ -790,3 +790,22 @@ class DoubleMapPanel(MapPanelBase):
     def Draw(self, mapToDraw):
         """Re-display current map composition"""
         mapToDraw.UpdateMap(render=False)
+
+
+class FrameMixin:
+   """Mixin class for wx.Panel that provides methods standardly
+   used on wx.Frame widget"""
+   def Show(self):
+        self.GetParent().Show()
+   def SetTitle(self):
+        self.GetParent().SetTitle()
+   def Raise(self):
+        self.GetParent().Raise()
+   def SetFocus(self):
+        self.GetParent().SetFocus()
+   def Refresh(self):
+        self.GetParent().Refresh()
+   def Update(self):
+        self.GetParent().Update()
+   def BindToFrame(self, *args):
+       self.GetParent().Bind(*args)

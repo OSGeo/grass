@@ -36,7 +36,7 @@ from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapPanel
+from gui_core.mapdisp import SingleMapPanel, FrameMixin
 from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
@@ -1701,25 +1701,6 @@ class MapPanel(SingleMapPanel):
         """Quit VDigit"""
         # disable the toolbar
         self.RemoveToolbar("vdigit", destroy=True)
-
-
-class FrameMixin:
-   """Mixin class for wx.Panel that provides methods standardly
-   used on wx.Frame widget"""
-   def Show(self):
-        self.GetParent().Show()
-   def SetTitle(self):
-        self.GetParent().SetTitle()
-   def Raise(self):
-        self.GetParent().Raise()
-   def SetFocus(self):
-        self.GetParent().SetFocus()
-   def Refresh(self):
-        self.GetParent().Refresh()
-   def Update(self):
-        self.GetParent().Update()
-   def BindToFrame(self, *args):
-       self.GetParent().Bind(*args)
 
 
 class MapDisplay(FrameMixin, MapPanel):
