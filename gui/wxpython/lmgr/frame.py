@@ -443,26 +443,6 @@ class GMFrame(wx.Frame):
                                 style=wx.DEFAULT_FRAME_STYLE,
                                 title=name)
 
-            # set system icon
-            mapframe.iconsize = (16, 16)
-            mapframe.SetIcon(
-                wx.Icon(
-                    os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-                )
-            )
-
-            # use default window layout
-            if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-                dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-                idx = 4 + self.displayIndex * 4
-                try:
-                    x, y = map(int, dim.split(",")[idx : idx + 2])
-                    w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                    mapframe.SetPosition((x, y))
-                    mapframe.SetSize((w, h))
-                except Exception:
-                    pass
-
             # create instance of Map Display interface
             self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
                 self._giface, layertree
@@ -474,22 +454,13 @@ class GMFrame(wx.Frame):
                 id=wx.ID_ANY,
                 tree=layertree,
                 lmgr=self,
+                idx=self.displayIndex,
                 Map=layertree.Map,
                 title=name,
             )
 
             # set map display properties
             self._setUpMapDisplay()
-
-            # Bind frame events
-            mapframe.Bind(
-                wx.EVT_CLOSE, self.currentPage.mapdisplay.OnCloseWindow)
-
-            # add Map Display panel to Map Display frame
-            sizer = wx.BoxSizer(wx.VERTICAL)
-            sizer.Add(self.currentPage.mapdisplay, proportion=1, flag=wx.EXPAND)
-            mapframe.SetSizer(sizer)
-            mapframe.Layout()
             return self.currentPage.mapdisplay
 
         # create layer tree (tree control for managing GIS layers)  and put on
@@ -548,6 +519,8 @@ class GMFrame(wx.Frame):
         mapdisplay = self.currentPage.mapdisplay
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
 
+        mapdisplay.BindToFrame(
+                wx.EVT_CLOSE, self.currentPage.mapdisplay.OnCloseWindow)
         mapdisplay.Bind(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),

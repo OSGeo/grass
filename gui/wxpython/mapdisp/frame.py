@@ -1579,44 +1579,6 @@ class MapPanel(SingleMapPanel):
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
 
-<<<<<<< HEAD
-=======
-    def IsStandalone(self):
-        """Check if Map display is standalone
-
-        .. deprecated:: 7.0
-        """
-        # TODO: once it is removed from 2 places in vdigit it can be deleted
-        # here and also in base class and other classes in the tree (hopefully)
-        # and one place here still uses IsStandalone
-        Debug.msg(
-            1,
-            "MapPanel.IsStandalone(): Method IsStandalone is"
-            "deprecated, use some general approach instead such as"
-            " Signals or giface",
-        )
-        if self._layerManager:
-            return False
-
-        return True
-
-    def GetLayerManager(self):
-        """Get reference to Layer Manager
-
-        :return: window reference
-        :return: None (if standalone)
-
-        .. deprecated:: 7.0
-        """
-        Debug.msg(
-            1,
-            "MapPanel.GetLayerManager(): Method GetLayerManager is"
-            "deprecated, use some general approach instead such as"
-            " Signals or giface",
-        )
-        return self._layerManager
-
->>>>>>> renaming map frame variables to mappanel for better clarity
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
         return self.toolbars["map"] if "map" in self.toolbars else None
@@ -1756,19 +1718,45 @@ class FrameMixin:
         self.GetParent().Refresh()
    def Update(self):
         self.GetParent().Update()
+   def BindToFrame(self, *args):
+       self.GetParent().Bind(*args)
 
 
 class MapDisplay(FrameMixin, MapPanel):
     """General Map Display class"""
-    def __init__(self, parent, giface, id, tree, lmgr, Map, title, **kwargs):
-         MapPanel.__init__(self,
-                          parent=parent,
-                          giface=giface,
-                          id=id,
-                          tree=tree,
-                          lmgr=lmgr,
-                          Map=Map,
-                          title=title,
-                          **kwargs,
+    def __init__(self, parent, giface, id, tree, lmgr, idx, Map, title, **kwargs):
+        MapPanel.__init__(self,
+                         parent=parent,
+                         giface=giface,
+                         id=id,
+                         tree=tree,
+                         lmgr=lmgr,
+                         Map=Map,
+                         title=title,
+                         **kwargs,
         )
->>>>>>> step backwards, OnCloseWindow preserved in mapdisp frame, new frame mixin class added
+
+        # set system icon
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+        # use default window layout
+        if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
+            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
+            idx = 4 + idx * 4
+            try:
+                x, y = map(int, dim.split(",")[idx : idx + 2])
+                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                parent.SetPosition((x, y))
+                parent.SetSize((w, h))
+            except Exception:
+                pass
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
