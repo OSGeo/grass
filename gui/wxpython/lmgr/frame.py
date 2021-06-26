@@ -450,6 +450,7 @@ class GMFrame(wx.Frame):
                     os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
                 )
             )
+
             # use default window layout
             if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
                 dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
@@ -466,7 +467,7 @@ class GMFrame(wx.Frame):
             self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
                 self._giface, layertree
             )
-            # create Map Display panel
+            # create Map Display
             self.currentPage.mapdisplay = MapDisplay(
                 parent=mapframe,
                 giface=self._gifaceForDisplay,

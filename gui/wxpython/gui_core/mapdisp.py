@@ -4,9 +4,9 @@
 @brief Base classes for Map display window
 
 Classes:
- - mapdisp::MapFrameBase
- - mapdisp::SingleMapFrame
- - mapdisp::DoubleMapFrame
+ - mapdisp::MapPanelBase
+ - mapdisp::SingleMapPanel
+ - mapdisp::DoubleMapPanel
 
 (C) 2009-2014 by the GRASS Development Team
 
@@ -32,7 +32,7 @@ from mapdisp import statusbar as sb
 from grass.script import core as grass
 
 
-class MapFrameBase(wx.Panel):
+class MapPanelBase(wx.Panel):
     """Base class for map display window
 
     Derived class must use (create and initialize) \c statusbarManager
@@ -48,7 +48,7 @@ class MapFrameBase(wx.Panel):
     It is expected that derived class will call _setUpMapWindow().
 
     Derived class can has one or more map windows (and map renders)
-    but implementation of MapFrameBase expects that one window and
+    but implementation of MapPanelBase expects that one window and
     one map will be current.
     Current instances of map window and map renderer should be returned
     by methods GetWindow() and GetMap() respectively.
@@ -127,13 +127,13 @@ class MapFrameBase(wx.Panel):
                 % "g.region"
             )
 
-        Debug.msg(2, "MapFrame._initMap():")
+        Debug.msg(2, "MapPanel._initMap():")
         Map.ChangeMapSize(self.GetClientSize())
         Map.region = Map.GetRegion()  # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
 
     def _resize(self):
-        Debug.msg(1, "MapFrame._resize():")
+        Debug.msg(1, "MapPanel_resize():")
         wm, hw = self.MapWindow.GetClientSize()
         wf, hf = self.GetSize()
         dw = wf - wm
@@ -202,7 +202,7 @@ class MapFrameBase(wx.Panel):
 
         Debug.msg(
             4,
-            "MapFrameBase.GetPPM(): size: px=%d,%d mm=%f,%f "
+            "MapPanelBase.GetPPM(): size: px=%d,%d mm=%f,%f "
             "in=%f,%f ppi: sys=%d,%d com=%d,%d; ppm=%f,%f"
             % (
                 dpSizePx[0],
@@ -257,7 +257,7 @@ class MapFrameBase(wx.Panel):
         widthCm = region["cols"] / ppm[0] * 100
 
         Debug.msg(
-            4, "MapFrame.GetMapScale(): width_cm=%f, height_cm=%f" % (widthCm, heightCm)
+            4, "MapPanel.GetMapScale(): width_cm=%f, height_cm=%f" % (widthCm, heightCm)
         )
 
         xscale = (region["e"] - region["w"]) / (region["cols"] / ppm[0])
@@ -266,7 +266,7 @@ class MapFrameBase(wx.Panel):
 
         Debug.msg(
             3,
-            "MapFrame.GetMapScale(): xscale=%f, yscale=%f -> scale=%f"
+            "MapPanel.GetMapScale(): xscale=%f, yscale=%f -> scale=%f"
             % (xscale, yscale, scale),
         )
 
@@ -305,7 +305,7 @@ class MapFrameBase(wx.Panel):
     def StatusbarUpdate(self):
         """Update statusbar content"""
         if self.statusbarManager:
-            Debug.msg(5, "MapFrameBase.StatusbarUpdate()")
+            Debug.msg(5, "MapPanelBase.StatusbarUpdate()")
             self.statusbarManager.Update()
 
     def IsAutoRendered(self):
@@ -490,7 +490,7 @@ class MapFrameBase(wx.Panel):
         self.MapWindow.ZoomToDefault()
 
 
-class SingleMapFrame(MapFrameBase):
+class SingleMapPanel(MapPanelBase):
     """Panel with one map window.
 
     It is base class for panels which needs only one map.
@@ -520,10 +520,10 @@ class SingleMapFrame(MapFrameBase):
         :param title: window title
         :param map: instance of render.Map
         :param name: panel name
-        :param kwargs: arguments passed to MapFrameBase
+        :param kwargs: arguments passed to MapPanelBase
         """
 
-        MapFrameBase.__init__(
+        MapPanelBase.__init__(
             self,
             parent=parent,
             id=id,
@@ -561,7 +561,7 @@ class SingleMapFrame(MapFrameBase):
         self.StatusbarUpdate()
 
 
-class DoubleMapFrame(MapFrameBase):
+class DoubleMapPanel(MapPanelBase):
     """Panel with two map windows.
 
     It is base class for panels which needs two maps.
@@ -578,8 +578,8 @@ class DoubleMapFrame(MapFrameBase):
     (when using class or when writing class itself).
 
     .. todo:
-        Use it in GCP manager (probably changes to both DoubleMapFrame
-        and GCP MapFrame will be necessary).
+        Use it in GCP manager (probably changes to both DoubleMapPanel
+        and GCP MapPanel will be necessary).
     """
 
     def __init__(
@@ -603,10 +603,10 @@ class DoubleMapFrame(MapFrameBase):
         :param id: wx id
         :param title: window title
         :param name: panel name
-        :param kwargs: arguments passed to MapFrameBase
+        :param kwargs: arguments passed to MapPanelBase
         """
 
-        MapFrameBase.__init__(
+        MapPanelBase.__init__(
             self,
             parent=parent,
             id=id,
