@@ -210,6 +210,7 @@ class GrassTestLoader(unittest.TestLoader):
 
     def __init__(self, grass_location):
         self.grass_location = grass_location
+        super().__init__()
 
     # TODO: what is the purpose of top_level_dir, can it be useful?
     # probably yes, we need to know grass src or dist root
