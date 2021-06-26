@@ -87,7 +87,7 @@ int G_make_mapset_dir_object(const char *type, const char *name)
 
     G_make_mapset_object_group(type);
     G_file_name(path, type, NULL, G_mapset());
-    return make_mapset_element(path, type);
+    return make_mapset_element(path, name);
 }
 
 /*!
