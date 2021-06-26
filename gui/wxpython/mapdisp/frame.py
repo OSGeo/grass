@@ -1778,18 +1778,46 @@ class FrameMixin:
         self.GetParent().Refresh()
    def Update(self):
         self.GetParent().Update()
+   def BindToFrame(self, *args):
+       self.GetParent().Bind(*args)
 
 
 class MapDisplay(FrameMixin, MapPanel):
     """General Map Display class"""
-    def __init__(self, parent, giface, id, tree, lmgr, Map, title, **kwargs):
-         MapPanel.__init__(self,
-                          parent=parent,
-                          giface=giface,
-                          id=id,
-                          tree=tree,
-                          lmgr=lmgr,
-                          Map=Map,
-                          title=title,
-                          **kwargs,
+    def __init__(self, parent, giface, id, tree, lmgr, idx, Map, title, **kwargs):
+        MapPanel.__init__(self,
+                         parent=parent,
+                         giface=giface,
+                         id=id,
+                         tree=tree,
+                         lmgr=lmgr,
+                         Map=Map,
+                         title=title,
+                         **kwargs,
         )
+        # set system icon
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+        # use default window layout
+        if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
+            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
+            idx = 4 + idx * 4
+            try:
+                x, y = map(int, dim.split(",")[idx : idx + 2])
+                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                parent.SetPosition((x, y))
+                parent.SetSize((w, h))
+            except Exception:
+                pass
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
+
+
