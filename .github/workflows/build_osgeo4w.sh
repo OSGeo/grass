@@ -36,6 +36,7 @@ export PATH=/mingw64/bin:/c/OSGeo4W/bin:/usr/bin
 OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     ./configure \
     --host=$arch \
+    --without-fftw \
     --with-includes=$osgeo4w_path/include \
     --with-libs="$osgeo4w_path/lib $osgeo4w_path/bin" \
     --with-nls \
@@ -43,6 +44,7 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     --with-bzlib \
     --with-geos=$src/mswindows/osgeo4w/geos-config \
     --with-netcdf=$osgeo4w_path/bin/nc-config \
+    --with-pdal=$osgeo4w_path/bin/pdal-config \
     --with-proj-includes=$osgeo4w_path/include/proj \
     --with-proj-libs=$osgeo4w_path/lib \
     --with-gdal=$src/mswindows/osgeo4w/gdal-config \
