@@ -797,8 +797,8 @@ class FrameMixin:
    used on wx.Frame widget"""
    def Show(self):
         self.GetParent().Show()
-   def SetTitle(self):
-        self.GetParent().SetTitle()
+   def SetTitle(self, name):
+        self.GetParent().SetTitle(name)
    def Raise(self):
         self.GetParent().Raise()
    def SetFocus(self):
