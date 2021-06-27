@@ -12,18 +12,21 @@
 #           for details.
 
 import os
-import grass.script as gs
+from pathlib import Path
 from IPython.display import Image
+import grass.script as gs
 
 
 class GrassRenderer:
     """The grassRenderer class creates and displays GRASS maps in
     Jupyter Notebooks."""
 
-    def __init__(self, env=None, width=600, height=400, filename="map.png",  text_size=12):
+    def __init__(
+        self, env=None, width=600, height=400, filename="map.png", text_size=12
+    ):
         """Initiates an instance of the GrassRenderer class."""
-        
-        if env==None:
+
+        if env is None:
             os.environ["GRASS_RENDER_WIDTH"] = str(width)
             os.environ["GRASS_RENDER_HEIGHT"] = str(height)
             os.environ["GRASS_TEXT_SIZE"] = str(text_size)
