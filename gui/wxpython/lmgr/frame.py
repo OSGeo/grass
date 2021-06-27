@@ -519,7 +519,7 @@ class GMFrame(wx.Frame):
 
         mapdisplay.BindToFrame(
                 wx.EVT_CLOSE, mapdisplay.OnCloseWindow)
-        mapdisplay.Bind(
+        mapdisplay.BindToFrame(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
         )
