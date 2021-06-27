@@ -45,6 +45,7 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     --with-netcdf=$osgeo4w_path/bin/nc-config \
     --with-proj-includes=$osgeo4w_path/include/proj \
     --with-proj-libs=$osgeo4w_path/lib \
+    --with-gdal=$src/mswindows/osgeo4w/gdal-config \
     --with-opengl=windows
 
 make
