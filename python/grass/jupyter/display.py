@@ -20,11 +20,27 @@ class GrassRenderer:
     """The grassRenderer class creates and displays GRASS maps in
     Jupyter Notebooks."""
 
-    def __init__(self, width=600, height=400, text_size=12):
+    def __init__(self, env=None, width=600, height=400, filename="map.png",  text_size=12):
         """Initiates an instance of the GrassRenderer class."""
-        os.environ["GRASS_RENDER_WIDTH"] = str(width)
-        os.environ["GRASS_RENDER_HEIGHT"] = str(height)
-        os.environ["GRASS_TEXT_SIZE"] = str(text_size)
+        
+        if env==None:
+            os.environ["GRASS_RENDER_WIDTH"] = str(width)
+            os.environ["GRASS_RENDER_HEIGHT"] = str(height)
+            os.environ["GRASS_TEXT_SIZE"] = str(text_size)
+            os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
+            os.environ["GRASS_RENDER_FILE"] = filename
+            os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
+            self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
+            os.environ["GRASS_LEGEND_FILE"] = str(self._legend_file)
+            self._env = os.environ.copy()
+        else:
+            self._env = os.environ.copy()
+            self._env["GRASS_RENDER_WIDTH"] = str(width)
+            self._env["GRASS_RENDER_HEIGHT"] = str(height)
+            self._env["GRASS_TEXT_SIZE"] = str(text_size)
+            self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
+            self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
+
         gs.run_command("d.erase")
 
     def d_rast(self, raster, **kwargs):

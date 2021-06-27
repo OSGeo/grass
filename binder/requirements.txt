@@ -2,4 +2,3 @@ numpy
 matplotlib
 Pillow
 ply
-folium

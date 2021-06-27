@@ -48,27 +48,3 @@ def init(path, location, mapset):
     # Set GRASS env. variables
     _set_notebook_defaults()
 
-
-def display_settings(font="sans", driver="cairo"):
-    """
-    This function sets the display settings for a GRASS session
-    in Jupyter Notebooks.
-
-    Example Usage: display_settings(font="sans", driver="cairo")
-
-    Inputs:
-        font - specifies the font as either the name of a font from
-        $GISBASE/etc/fontcap (or alternative fontcap file specified by
-        GRASS_FONT_CAP), or alternatively the full path to a FreeType
-        font file.
-
-        driver - tell teh display library which driver to use
-            Possible values: "cairo", "png", "ps", "html"
-    """
-    # Set display font
-    os.environ["GRASS_FONT"] = font
-
-    # Set display modeules to render to a file (named map.png by
-    # default).
-    os.environ["GRASS_RENDER_IMMEDIATE"] = driver
-    os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
