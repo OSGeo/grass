@@ -448,7 +448,7 @@ class GMFrame(wx.Frame):
                 self._giface, layertree
             )
             # create Map Display
-            self.currentPage.mapdisplay = MapDisplay(
+            mapdisplay = MapDisplay(
                 parent=mapframe,
                 giface=self._gifaceForDisplay,
                 id=wx.ID_ANY,
@@ -460,8 +460,13 @@ class GMFrame(wx.Frame):
             )
 
             # set map display properties
-            self._setUpMapDisplay()
-            return self.currentPage.mapdisplay
+            self._setUpMapDisplay(mapdisplay)
+
+            # show map display if requested
+            if show:
+                mapdisplay.Show()
+
+            return mapdisplay
 
         # create layer tree (tree control for managing GIS layers)  and put on
         # new notebook page and new map display frame
@@ -491,17 +496,11 @@ class GMFrame(wx.Frame):
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
 
-        # show map display if requested
-        if show:
-            self.currentPage.mapdisplay.Show()
-            self.currentPage.mapdisplay.Refresh()
-            self.currentPage.mapdisplay.Update()
-
         self.displayIndex += 1
 
         return self.GetMapDisplay()
 
-    def _setUpMapDisplay(self):
+    def _setUpMapDisplay(self, mapdisplay):
         """Set up Map Display properties"""
         page = self.currentPage
 
@@ -516,11 +515,10 @@ class GMFrame(wx.Frame):
                 return pgnum
             return None
 
-        mapdisplay = self.currentPage.mapdisplay
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
 
         mapdisplay.BindToFrame(
-                wx.EVT_CLOSE, self.currentPage.mapdisplay.OnCloseWindow)
+                wx.EVT_CLOSE, mapdisplay.OnCloseWindow)
         mapdisplay.Bind(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
@@ -552,8 +550,6 @@ class GMFrame(wx.Frame):
                 group="display", key="showCompExtent", subkey="enabled"
             ),
         )
-
-        return self.GetMapDisplay()
 
     def _addPagesToNotebook(self):
         """Add pages to notebook widget"""
@@ -986,22 +982,20 @@ class GMFrame(wx.Frame):
 
     def GetMapDisplay(self, onlyCurrent=True):
         """Get current map display
-
         :param bool onlyCurrent: True to return only active mapdisplay
                                  False for list of all mapdisplays
-
-        :return: MapDisplay instance (or list)
+        :return: MapFrame instance (or list)
         :return: None no mapdisplay selected
         """
         if onlyCurrent:
             if self.currentPage:
-                return self.currentPage.mapdisplay
+                return self.GetLayerTree().GetMapDisplay()
             else:
                 return None
         else:  # -> return list of all mapdisplays
             mlist = list()
             for idx in range(0, self.notebookLayers.GetPageCount()):
-                mlist.append(self.notebookLayers.GetPage(idx).mapdisplay)
+                mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
 
             return mlist
 
