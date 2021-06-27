@@ -31,8 +31,7 @@ src=$(pwd)
 
 # compile
 
-export PATH=/mingw64/bin:/c/OSGeo4W64/bin:/usr/bin
-export PROJ_LIB=$osgeo4w_path/share/proj
+export PATH=/mingw64/bin:/c/OSGeo4W/bin:/usr/bin
 
 OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     ./configure \
@@ -46,8 +45,6 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     --with-netcdf=$osgeo4w_path/bin/nc-config \
     --with-proj-includes=$osgeo4w_path/include/proj \
     --with-proj-libs=$osgeo4w_path/lib \
-    --with-gdal=$src/mswindows/osgeo4w/gdal-config \
-    --with-liblas=$src/mswindows/osgeo4w/liblas-config \
     --with-opengl=windows
 
 make
