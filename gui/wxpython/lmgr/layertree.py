@@ -1280,17 +1280,23 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self._giface.RunCmd(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
                 [
                     "r.report",
                     "map=%s" % ",".join(rasters),
                     "units=hectares,cells,percent",
                 ]
+<<<<<<< HEAD
 =======
                 ["r.report", "map=%s" % ",".join(rasters), "units=h,c,p"]
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
                 ["r.report", "map=%s" % ",".join(rasters), "units=h,c,p"]
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
             )
 
     def OnStartEditing(self, event):
