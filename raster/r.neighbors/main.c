@@ -49,9 +49,24 @@ struct menu {
     char *text;            /* menu display - full description */
 };
 
+<<<<<<< HEAD
 struct weight_functions {
     char *name; /* name  of the weight type */
     char *text; /* weight types display - full description */
+=======
+struct weight_functions
+{
+    char *name;			/* name  of the weight type */
+    char *text;			/* weight types display - full description */
+};
+
+enum out_type {
+    T_FLOAT	= 1,
+    T_INT	= 2,
+    T_COUNT	= 3,
+    T_COPY	= 4,
+    T_SUM	= 5
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
 };
 
 enum out_type { T_FLOAT = 1, T_INT = 2, T_COUNT = 3, T_COPY = 4, T_SUM = 5 };
@@ -154,6 +169,7 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct History history;
     struct GModule *module;
+<<<<<<< HEAD
     struct {
         struct Option *input, *output, *selection;
         struct Option *method, *size;
@@ -164,6 +180,17 @@ int main(int argc, char *argv[])
         struct Option *quantile;
         struct Option *nprocs;
         struct Option *memory;
+=======
+    struct
+    {
+	struct Option *input, *output, *selection;
+	struct Option *method, *size;
+	struct Option *title;
+	struct Option *weight;
+	struct Option *weighting_function;
+	struct Option *weighting_factor;
+	struct Option *quantile;
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
     } parm;
     struct {
         struct Flag *align, *circle;
@@ -210,6 +237,7 @@ int main(int argc, char *argv[])
     parm.size->description = _("Neighborhood size");
     parm.size->answer = "3";
     parm.size->guisection = _("Neighborhood");
+<<<<<<< HEAD
 
     parm.method = G_define_option();
     parm.method->key = "method";
@@ -246,14 +274,57 @@ int main(int argc, char *argv[])
     parm.weighting_function->description = _("Weighting function");
     parm.weighting_function->multiple = NO;
 
+=======
+
+    parm.method = G_define_option();
+    parm.method->key = "method";
+    parm.method->type = TYPE_STRING;
+    parm.method->required = NO;
+    parm.method->answer = "average";
+    p = G_malloc(1024);
+    for (n = 0; menu[n].name; n++) {
+	if (n)
+	    strcat(p, ",");
+	else
+	    *p = 0;
+	strcat(p, menu[n].name);
+    }
+    parm.method->options = p;
+    parm.method->description = _("Neighborhood operation");
+    parm.method->multiple = YES;
+    parm.method->guisection = _("Neighborhood");
+
+    parm.weighting_function = G_define_option();
+    parm.weighting_function->key = "weighting_function";
+    parm.weighting_function->type = TYPE_STRING;
+    parm.weighting_function->required = NO;
+    parm.weighting_function->answer = "none";
+    parm.weighting_function->options = "none,gaussian,exponential,file";
+    G_asprintf((char **)&(parm.weighting_function->descriptions),
+               "none;%s;"
+               "gaussian;%s;"
+               "exponential;%s;"
+               "file;%s;",
+               _("No weighting"),
+               _("Gaussian weighting function"),
+               _("Exponential weighting function"),
+               _("File with a custom weighting matrix"));
+    parm.weighting_function->description = _("Weighting function");
+    parm.weighting_function->multiple = NO;
+
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
     parm.weighting_factor = G_define_option();
     parm.weighting_factor->key = "weighting_factor";
     parm.weighting_factor->type = TYPE_DOUBLE;
     parm.weighting_factor->required = NO;
     parm.weighting_factor->multiple = NO;
+<<<<<<< HEAD
     parm.weighting_factor->description =
         _("Factor used in the selected weighting function (ignored for none "
           "and file)");
+=======
+    parm.weighting_factor->description = _("Factor used in the selected weighting function (ignored for none and file)");
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
 
     parm.weight = G_define_standard_option(G_OPT_F_INPUT);
     parm.weight->key = "weight";
@@ -275,9 +346,12 @@ int main(int argc, char *argv[])
     parm.title->type = TYPE_STRING;
     parm.title->required = NO;
     parm.title->description = _("Title for output raster map");
+<<<<<<< HEAD
 
     parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
     parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
+=======
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
 
     flag.align = G_define_flag();
     flag.align->key = 'a';
@@ -298,6 +372,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
+<<<<<<< HEAD
     sscanf(parm.nprocs->answer, "%d", &ncb.threads);
     if (ncb.threads < 1) {
         G_fatal_error(_("<%d> is not valid number of threads."), ncb.threads);
@@ -329,6 +404,21 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Weighting function '%s' requires a %s."),
                       parm.weighting_function->answer,
                       parm.weighting_factor->key);
+=======
+    if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
+	G_fatal_error(_("-%c and %s= are mutually exclusive"),
+			flag.circle->key, parm.weighting_function->answer);
+
+    if (strcmp(parm.weighting_function->answer, "file") == 0 && !parm.weight->answer)
+	G_fatal_error(_("File with weighting matrix is missing."));
+
+    /* Check if weighting factor is given for all other weighting functions*/
+    if (strcmp(parm.weighting_function->answer, "none") &&
+        strcmp(parm.weighting_function->answer, "file") &&
+        !parm.weighting_factor->answer)
+	G_fatal_error(_("Weighting function '%s' requires a %s."),
+			parm.weighting_function->answer, parm.weighting_factor->key);
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
 
     ncb.oldcell = parm.input->answer;
 
@@ -388,6 +478,7 @@ int main(int argc, char *argv[])
     ncb.weights = NULL;
     ncb.mask = NULL;
     if (strcmp(parm.weighting_function->answer, "file") == 0) {
+<<<<<<< HEAD
         read_weights(parm.weight->answer);
         weights = 1;
     }
@@ -397,6 +488,17 @@ int main(int argc, char *argv[])
         compute_weights(parm.weighting_function->answer,
                         atof(parm.weighting_factor->answer));
         weights = 1;
+=======
+	read_weights(parm.weight->answer);
+	weights = 1;
+    }
+    else if (strcmp(parm.weighting_function->answer, "none")) {
+	G_verbose_message(_("Computing %s weights..."),
+			      parm.weighting_function->answer);
+	compute_weights(parm.weighting_function->answer,
+	                atof(parm.weighting_factor->answer));
+	weights = 1;
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
     }
 
     copycolr = 0;
@@ -410,6 +512,7 @@ int main(int argc, char *argv[])
         RASTER_MAP_TYPE otype =
             output_type(map_type, weights, menu[method].otype);
 
+<<<<<<< HEAD
         out->name = output_name;
         if (weights) {
             if (menu[method].method_w) {
@@ -444,6 +547,41 @@ int main(int argc, char *argv[])
         out->buf = G_malloc(sizeof(DCELL) * brows * ncols);
         out->fd = Rast_open_new(output_name, otype);
         /* TODO: method=mode should propagate its type */
+=======
+	out->name = output_name;
+	if (weights) {
+	    if (menu[method].method_w) {
+		out->method_fn = NULL;
+		out->method_fn_w = menu[method].method_w;
+	    }
+	    else {
+		if (strcmp(parm.weighting_function->answer,"none")) {
+		    G_warning(_("Method %s not compatible with weighing window, using weight mask instead"),
+			      method_name);
+		    if (!have_weights_mask) {
+			weights_mask();
+			have_weights_mask = 1;
+		    }
+		}		
+		out->method_fn = menu[method].method;
+		out->method_fn_w = NULL;
+	    }
+	}
+	else {
+	    out->method_fn = menu[method].method;
+	    out->method_fn_w = NULL;
+	}
+	out->copycolr = menu[method].copycolr;
+	out->cat_names = menu[method].cat_names;
+	if (out->copycolr)
+	    copycolr = 1;
+	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
+	    ? atof(parm.quantile->answers[i])
+	    : 0;
+	out->buf = Rast_allocate_d_buf();
+	out->fd = Rast_open_new(output_name, otype);
+	/* TODO: method=mode should propagate its type */
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
 
         /* get title, initialize the category and stat info */
         if (parm.title->answer)
