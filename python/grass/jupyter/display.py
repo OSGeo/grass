@@ -35,7 +35,7 @@ class GrassRenderer:
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
         self._env["GRASS_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
-        self._env["GRASS_RENDER_FILE"] = filename
+        self._env["GRASS_RENDER_FILE"] = str(filename)
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
 
         self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
