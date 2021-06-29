@@ -803,9 +803,5 @@ class FrameMixin:
         self.GetParent().Raise()
    def SetFocus(self):
         self.GetParent().SetFocus()
-   def Refresh(self):
-        self.GetParent().Refresh()
-   def Update(self):
-        self.GetParent().Update()
    def BindToFrame(self, *args):
        self.GetParent().Bind(*args)
