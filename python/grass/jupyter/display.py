@@ -27,8 +27,8 @@ class GrassRenderer:
         """Initiates an instance of the GrassRenderer class."""
 
         if env:
-            self._env = env
-        if not env:
+            self._env = env.copy()
+        else:
             self._env = os.environ.copy()
 
         self._env["GRASS_RENDER_WIDTH"] = str(width)
@@ -37,21 +37,21 @@ class GrassRenderer:
         self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
         self._env["GRASS_RENDER_FILE"] = filename
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
-        
+
         self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
         self._filename = filename
 
-        gs.run_command("d.erase", env = self._env)
+        self.run("d.erase", env=self._env)
 
-    def run(self, module,  **kwargs):
+    def run(self, module, **kwargs):
         """Run modules from "d." GRASS library"""
         # Check module is from display library then run
-        if module[0]== "d":
+        if module[0] == "d":
             gs.run_command(module, env=self._env, **kwargs)
         else:
-            print("Module must be from GRASS display library. It must begin with letter \'d\'.")
+            raise Exception("Module must begin with letter 'd'.")
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
