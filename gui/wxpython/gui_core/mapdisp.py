@@ -720,7 +720,7 @@ class DoubleMapFrame(MapFrameBase):
 
 
 class MapPanelMixin():
-    """Mixin class for wx.Panel that provides methods common for map panels"""
+    """Mixin class that provides methods common for map panels"""
 
     def ShowStatusbar(self, show):
         """Show/hide statusbar and associated pane"""

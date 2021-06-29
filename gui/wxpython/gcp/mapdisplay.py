@@ -206,10 +206,6 @@ class MapFrame(SingleMapFrame, MapPanelMixin):
         # doing nice things in statusbar when other things are ready
         self.statusbarManager.Update()
 
-    def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
-        self.statusbar.SetStatusText(*args)
-
     def _setUpMapWindow(self, mapWindow):
         # TODO: almost the same implementation as for MapFrameBase (only names differ)
         # enable or disable zoom history tool

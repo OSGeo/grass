@@ -122,10 +122,6 @@ class SwipeMapFrame(DoubleMapFrame, MapPanelMixin):
 
         wx.CallAfter(self.CallAfterInit)
 
-    def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
-        self.statusbar.SetStatusText(*args)
-
     def TrackCursor(self, event):
         """Track cursor in one window and show cross in the other.
 
