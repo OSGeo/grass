@@ -43,7 +43,7 @@ class GrassRenderer:
 
         self._filename = filename
 
-        self.run("d.erase", env=self._env)
+        self.run("d.erase")
 
     def run(self, module, **kwargs):
         """Run modules from "d." GRASS library"""
