@@ -99,7 +99,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self._mgr.GetPane("sliderH").Show()
         self.slider = self.sliderH
 
-        self.InitStatusbar()
+        self.CreateStatusbar()
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
@@ -159,8 +159,8 @@ class SwipeMapFrame(DoubleMapFrame):
         if not (self.rasters["first"] and self.rasters["second"]):
             self.OnSelectLayers(event=None)
 
-    def InitStatusbar(self):
-        """Init statusbar (default items)."""
+    def CreateStatusbar(self):
+        """Create statusbar (default items)."""
         # items for choice
         self.statusbarItems = [
             sb.SbCoordinates,
@@ -176,8 +176,9 @@ class SwipeMapFrame(DoubleMapFrame):
         ]
 
         # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number=4, style=0)
+        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         statusbar.SetMinHeight(24)
+        statusbar.SetFieldsCount(4)
         statusbar.SetStatusWidths([-5, -2, -1, -1])
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
@@ -188,10 +189,26 @@ class SwipeMapFrame(DoubleMapFrame):
         self.statusbarManager.AddStatusbarItem(
             sb.SbMask(self, statusbar=statusbar, position=2)
         )
-        sbRender = sb.SbRender(self, statusbar=statusbar, position=3)
-        self.statusbarManager.AddStatusbarItem(sbRender)
-
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3)
+        )
         self.statusbarManager.Update()
+
+        # add status bar as pane
+        self._mgr.AddPane(
+            statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
 
     def ResetSlider(self):
         if self.splitter.GetSplitMode() == wx.SPLIT_VERTICAL:
