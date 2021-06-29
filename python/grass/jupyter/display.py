@@ -26,35 +26,33 @@ class GrassRenderer:
     ):
         """Initiates an instance of the GrassRenderer class."""
 
-        if env is None:
-            os.environ["GRASS_RENDER_WIDTH"] = str(width)
-            os.environ["GRASS_RENDER_HEIGHT"] = str(height)
-            os.environ["GRASS_TEXT_SIZE"] = str(text_size)
-            os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
-            os.environ["GRASS_RENDER_FILE"] = filename
-            os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
-            self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
-            os.environ["GRASS_LEGEND_FILE"] = str(self._legend_file)
+        if env:
+            self._env = env
+        if not env:
             self._env = os.environ.copy()
+
+        self._env["GRASS_RENDER_WIDTH"] = str(width)
+        self._env["GRASS_RENDER_HEIGHT"] = str(height)
+        self._env["GRASS_TEXT_SIZE"] = str(text_size)
+        self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
+        self._env["GRASS_RENDER_FILE"] = filename
+        self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
+        
+        self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
+        self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
+
+        self._filename = filename
+
+        gs.run_command("d.erase", env = self._env)
+
+    def run(self, module,  **kwargs):
+        """Run modules from "d." GRASS library"""
+        # Check module is from display library then run
+        if module[0]== "d":
+            gs.run_command(module, env=self._env, **kwargs)
         else:
-            self._env = os.environ.copy()
-            self._env["GRASS_RENDER_WIDTH"] = str(width)
-            self._env["GRASS_RENDER_HEIGHT"] = str(height)
-            self._env["GRASS_TEXT_SIZE"] = str(text_size)
-            self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
-            self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
-
-        gs.run_command("d.erase")
-
-    def d_rast(self, raster, **kwargs):
-        """Adds a raster to the display"""
-        # gs.run_command("r.colors", map=raster, color=color)
-        gs.run_command("d.rast", map=raster, **kwargs)
-
-    def d_vect(self, vector, **kwargs):
-        """Adds a vector to the display"""
-        gs.run_command("d.vect", map=vector, **kwargs)
+            print("Module must be from GRASS display library. It must begin with letter \'d\'.")
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
-        return Image("map.png")
+        return Image(self._filename)

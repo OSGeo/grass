@@ -47,4 +47,3 @@ def init(path, location, mapset):
     gsetup.init(os.environ["GISBASE"], path, location, mapset)
     # Set GRASS env. variables
     _set_notebook_defaults()
-
