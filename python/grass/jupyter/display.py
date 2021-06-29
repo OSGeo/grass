@@ -51,7 +51,7 @@ class GrassRenderer:
         if module[0] == "d":
             gs.run_command(module, env=self._env, **kwargs)
         else:
-            raise Exception("Module must begin with letter 'd'.")
+            raise ValueError("Module must begin with letter 'd'.")
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
