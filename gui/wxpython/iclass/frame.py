@@ -190,7 +190,6 @@ class IClassMapFrame(DoubleMapFrame, MapPanelMixin):
 
         self.statusbar = self.CreateStatusbar()
         self._addPanes()
-
         self._mgr.Update()
 
         self.trainingMapManager.SetToolbar(self.toolbars["iClassTrainingMapManager"])
