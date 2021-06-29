@@ -303,6 +303,7 @@ class MapFrame(SingleMapFrame):
         )
 
         self.statusbarManager.SetMode(8)  # goto GCP
+        return statusbar
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
