@@ -97,40 +97,9 @@ class MapFrame(SingleMapFrame):
         self._mgr.SetDockSizeConstraint(0.5, 0.5)
 
         #
-        # Add statusbar
+        # Create statusbar
         #
-
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbProjection,
-            sbgcp.SbGoToGCP,
-            sbgcp.SbRMSError,
-        ]
-
-        # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number=4, style=0)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
-        )
-
-        self.statusbarManager.SetMode(8)  # goto GCP
+        self.statusbar = self.CreateStatusbar()
 
         #
         # Init map display (buffered DC & set default cursor)
@@ -228,6 +197,20 @@ class MapFrame(SingleMapFrame):
             .Right()
             .Layer(0),
         )
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
 
         srcwidth, srcheight = self.SrcMapWindow.GetSize()
         tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
@@ -284,6 +267,42 @@ class MapFrame(SingleMapFrame):
             lambda: self.GetMapToolbar().Enable("zoomback", enable=False)
         )
         mapWindow.mouseMoving.connect(self.CoordinatesChanged)
+
+    def CreateStatusbar(self):
+        """Create statusbar (default items)."""
+        # items for choice
+        self.statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbProjection,
+            sbgcp.SbGoToGCP,
+            sbgcp.SbRMSError,
+        ]
+
+        # create statusbar and its manager
+        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
+        statusbar.SetMinHeight(24)
+        statusbar.SetFieldsCount(4)
+        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
+
+        # fill statusbar manager
+        self.statusbarManager.AddStatusbarItemsByClass(
+            self.statusbarItems, mapframe=self, statusbar=statusbar
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3)
+        )
+
+        self.statusbarManager.SetMode(8)  # goto GCP
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
