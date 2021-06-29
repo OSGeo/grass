@@ -27,7 +27,7 @@ from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GMessage
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
-from gui_core.mapdisp import SingleMapFrame
+from gui_core.mapdisp import SingleMapFrame, MapPanelMixin
 from gui_core.wrap import Menu
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
@@ -39,7 +39,7 @@ import gcp.statusbar as sbgcp
 cmdfilename = None
 
 
-class MapFrame(SingleMapFrame):
+class MapFrame(SingleMapFrame, MapPanelMixin):
     """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -159,58 +159,7 @@ class MapFrame(SingleMapFrame):
         # self.SrcMapWindow.SetSize((300, 300))
         # self.TgtMapWindow.SetSize((300, 300))
         self.list.SetSize((100, 150))
-        self._mgr.AddPane(
-            self.list,
-            wx.aui.AuiPaneInfo()
-            .Name("gcplist")
-            .Caption(_("GCP List"))
-            .LeftDockable(False)
-            .RightDockable(False)
-            .PinButton()
-            .FloatingSize((600, 200))
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .Top()
-            .Layer(1)
-            .MinSize((200, 100)),
-        )
-        self._mgr.AddPane(
-            self.SrcMapWindow,
-            wx.aui.AuiPaneInfo()
-            .Name("source")
-            .Caption(_("Source Display"))
-            .Dockable(False)
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .Floatable(False)
-            .Centre(),
-        )
-        self._mgr.AddPane(
-            self.TgtMapWindow,
-            wx.aui.AuiPaneInfo()
-            .Name("target")
-            .Caption(_("Target Display"))
-            .Dockable(False)
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .Floatable(False)
-            .Right()
-            .Layer(0),
-        )
-        self._mgr.AddPane(
-            self.statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        self._addPanes()
 
         srcwidth, srcheight = self.SrcMapWindow.GetSize()
         tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
@@ -256,6 +205,10 @@ class MapFrame(SingleMapFrame):
 
         # doing nice things in statusbar when other things are ready
         self.statusbarManager.Update()
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def _setUpMapWindow(self, mapWindow):
         # TODO: almost the same implementation as for MapFrameBase (only names differ)
@@ -376,6 +329,61 @@ class MapFrame(SingleMapFrame):
             )
 
         self._mgr.Update()
+
+    def _addPanes(self):
+        """Add mapwindows and toolbars to aui manager"""
+        self._mgr.AddPane(
+            self.list,
+            wx.aui.AuiPaneInfo()
+            .Name("gcplist")
+            .Caption(_("GCP List"))
+            .LeftDockable(False)
+            .RightDockable(False)
+            .PinButton()
+            .FloatingSize((600, 200))
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .Top()
+            .Layer(1)
+            .MinSize((200, 100)),
+        )
+        self._mgr.AddPane(
+            self.SrcMapWindow,
+            wx.aui.AuiPaneInfo()
+            .Name("source")
+            .Caption(_("Source Display"))
+            .Dockable(False)
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .Floatable(False)
+            .Centre(),
+        )
+        self._mgr.AddPane(
+            self.TgtMapWindow,
+            wx.aui.AuiPaneInfo()
+            .Name("target")
+            .Caption(_("Target Display"))
+            .Dockable(False)
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .Floatable(False)
+            .Right()
+            .Layer(0),
+        )
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
 
     def OnUpdateProgress(self, event):
         """

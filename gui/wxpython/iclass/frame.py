@@ -42,7 +42,7 @@ from mapdisp import statusbar as sb
 from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
-from gui_core.mapdisp import DoubleMapFrame
+from gui_core.mapdisp import DoubleMapFrame, MapPanelMixin
 from core.render import Map
 from core.gcmd import RunCommand, GMessage, GError
 from gui_core.dialogs import SetOpacityDialog
@@ -70,7 +70,7 @@ from iclass.plots import PlotPanel
 from grass.pydispatch.signal import Signal
 
 
-class IClassMapFrame(DoubleMapFrame):
+class IClassMapFrame(DoubleMapFrame, MapPanelMixin):
     """wxIClass main frame
 
     It has two map windows one for digitizing training areas and one for
@@ -429,6 +429,8 @@ class IClassMapFrame(DoubleMapFrame):
                 .BestSize((self.toolbars[name].GetBestSize())),
             )
 
+        self._mgr.Update()
+
     def _addPanes(self):
         """Add mapwindows and toolbars to aui manager"""
         self._addPaneMapWindow(name="training", position=0)
@@ -451,7 +453,7 @@ class IClassMapFrame(DoubleMapFrame):
             .Layer(1)
             .BestSize((335, -1)),
         )
-        # add status bar as pane
+
         self._mgr.AddPane(
             self.statusbar,
             wx.aui.AuiPaneInfo()

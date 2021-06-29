@@ -36,7 +36,7 @@ from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapFrame
+from gui_core.mapdisp import SingleMapFrame, MapPanelMixin
 from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
@@ -63,7 +63,7 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapFrame(SingleMapFrame):
+class MapFrame(SingleMapFrame, MapPanelMixin):
     """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -335,19 +335,6 @@ class MapFrame(SingleMapFrame):
             )
         )
         return statusbar
-
-    def ShowStatusbar(self, show):
-        """Show/hide statusbar and associated pane"""
-        self._mgr.GetPane("statusbar").Show(show)
-        self._mgr.Update()
-
-    def IsStatusbarShown(self):
-        """Check if statusbar is shown"""
-        return self._mgr.GetPane("statusbar").IsShown()
-
-    def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
-        self.statusbar.SetStatusText(*args)
 
     def GetMapWindow(self):
         return self.MapWindow
@@ -699,14 +686,7 @@ class MapFrame(SingleMapFrame):
         :param name toolbar to remove
         :param destroy True to destroy otherwise toolbar is only hidden
         """
-        self._mgr.DetachPane(self.toolbars[name])
-        if destroy:
-            self._toolSwitcher.RemoveToolbarFromGroup("mouseUse", self.toolbars[name])
-            self.toolbars[name].Destroy()
-            self.toolbars.pop(name)
-        else:
-            self.toolbars[name].Hide()
-
+        super().RemoveToolbar(name, destroy)
         if name == "vdigit":
             self._mgr.GetPane("vdigit").Hide()
             self._mgr.GetPane("2d").Show()

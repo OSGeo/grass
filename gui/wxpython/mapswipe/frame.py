@@ -19,7 +19,7 @@ import wx
 
 import grass.script as grass
 
-from gui_core.mapdisp import DoubleMapFrame
+from gui_core.mapdisp import DoubleMapFrame, MapPanelMixin
 from gui_core.dialogs import GetImageHandlers
 from mapwin.base import MapWindowProperties
 from core.render import Map
@@ -34,7 +34,7 @@ from mapswipe.mapwindow import SwipeBufferedWindow
 from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
 
 
-class SwipeMapFrame(DoubleMapFrame):
+class SwipeMapFrame(DoubleMapFrame, MapPanelMixin):
     def __init__(
         self, parent=None, giface=None, title=_("Map Swipe"), name="swipe", **kwargs
     ):
@@ -51,7 +51,7 @@ class SwipeMapFrame(DoubleMapFrame):
         #
         # Add toolbars
         #
-        self.AddToolbars()
+        self.AddToolbar()
         self._giface = giface
         #
         # create widgets
@@ -90,6 +90,8 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self._mode = "swipe"
 
+        self.statusbar = self.CreateStatusbar()
+
         self._addPanes()
         self._bindWindowsActivation()
         self._setUpMapWindow(self.firstMapWindow)
@@ -98,8 +100,6 @@ class SwipeMapFrame(DoubleMapFrame):
         self._mgr.GetPane("sliderV").Hide()
         self._mgr.GetPane("sliderH").Show()
         self.slider = self.sliderH
-
-        self.CreateStatusbar()
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
@@ -121,6 +121,10 @@ class SwipeMapFrame(DoubleMapFrame):
         self.resize = False
 
         wx.CallAfter(self.CallAfterInit)
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def TrackCursor(self, event):
         """Track cursor in one window and show cross in the other.
@@ -193,22 +197,7 @@ class SwipeMapFrame(DoubleMapFrame):
             sb.SbRender(self, statusbar=statusbar, position=3)
         )
         self.statusbarManager.Update()
-
-        # add status bar as pane
-        self._mgr.AddPane(
-            statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        return statusbar
 
     def ResetSlider(self):
         if self.splitter.GetSplitMode() == wx.SPLIT_VERTICAL:
@@ -284,7 +273,7 @@ class SwipeMapFrame(DoubleMapFrame):
         style ^= wx.SP_LIVE_UPDATE
         self.splitter.SetWindowStyle(style)
 
-    def AddToolbars(self):
+    def AddToolbar(self, name):
         """Add defined toolbar to the window
 
         Currently known toolbars are:
@@ -292,64 +281,68 @@ class SwipeMapFrame(DoubleMapFrame):
          - 'swipeMain'         - swipe functionality
          - 'swipeMisc'         - misc (settings, help)
         """
-        self.toolbars["swipeMap"] = SwipeMapToolbar(self, self._toolSwitcher)
-        self._mgr.AddPane(
-            self.toolbars["swipeMap"],
-            wx.aui.AuiPaneInfo()
-            .Name("swipeMap")
-            .Caption(_("Map Toolbar"))
-            .ToolbarPane()
-            .Top()
-            .LeftDockable(False)
-            .RightDockable(False)
-            .BottomDockable(False)
-            .TopDockable(True)
-            .CloseButton(False)
-            .Layer(2)
-            .Row(1)
-            .Position(1)
-            .BestSize((self.toolbars["swipeMap"].GetBestSize())),
-        )
+        if name == "swipeMap":
+            self.toolbars[name] = SwipeMapToolbar(self, self._toolSwitcher)
 
-        self.toolbars["swipeMain"] = SwipeMainToolbar(self)
+            self._mgr.AddPane(
+                self.toolbars["swipeMap"],
+                wx.aui.AuiPaneInfo()
+                .Name("swipeMap")
+                .Caption(_("Map Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .Row(1)
+                .Position(1)
+                .BestSize((self.toolbars[name].GetBestSize())),
+            )
 
-        self._mgr.AddPane(
-            self.toolbars["swipeMain"],
-            wx.aui.AuiPaneInfo()
-            .Name("swipeMain")
-            .Caption(_("Main Toolbar"))
-            .ToolbarPane()
-            .Top()
-            .LeftDockable(False)
-            .RightDockable(False)
-            .BottomDockable(False)
-            .TopDockable(True)
-            .CloseButton(False)
-            .Layer(2)
-            .Row(1)
-            .Position(0)
-            .BestSize((self.toolbars["swipeMain"].GetBestSize())),
-        )
+        if name == "swipeMain":
+            self.toolbars[name] = SwipeMainToolbar(self)
 
-        self.toolbars["swipeMisc"] = SwipeMiscToolbar(self)
+            self._mgr.AddPane(
+                self.toolbars["swipeMain"],
+                wx.aui.AuiPaneInfo()
+                .Name("swipeMain")
+                .Caption(_("Main Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .Row(1)
+                .Position(0)
+                .BestSize((self.toolbars[name].GetBestSize())),
+            )
 
-        self._mgr.AddPane(
-            self.toolbars["swipeMisc"],
-            wx.aui.AuiPaneInfo()
-            .Name("swipeMisc")
-            .Caption(_("Misc Toolbar"))
-            .ToolbarPane()
-            .Top()
-            .LeftDockable(False)
-            .RightDockable(False)
-            .BottomDockable(False)
-            .TopDockable(True)
-            .CloseButton(False)
-            .Layer(2)
-            .Row(1)
-            .Position(2)
-            .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
-        )
+        if name == "swipeMisc":
+            self.toolbars[name] = SwipeMiscToolbar(self)
+
+            self._mgr.AddPane(
+                self.toolbars["swipeMisc"],
+                wx.aui.AuiPaneInfo()
+                .Name("swipeMisc")
+                .Caption(_("Misc Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .Row(1)
+                .Position(2)
+                .BestSize((self.toolbars[name].GetBestSize())),
+            )
 
     def _addPanes(self):
         """Add splitter window and sliders to aui manager"""
@@ -403,6 +396,21 @@ class SwipeMapFrame(DoubleMapFrame):
             .Right()
             .Layer(1)
             .BestSize((self.sliderV.GetBestSize())),
+        )
+        # statusbar
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
         )
 
     def ZoomToMap(self):
