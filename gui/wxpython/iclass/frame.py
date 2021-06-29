@@ -188,8 +188,8 @@ class IClassMapFrame(DoubleMapFrame):
         # PyPlot init
         self.plotPanel = PlotPanel(self, giface=self.giface, stats_data=self.stats_data)
 
+        self.statusbar = self.CreateStatusbar()
         self._addPanes()
-        self.CreateStatusbar()
 
         self._mgr.Update()
 
@@ -205,6 +205,10 @@ class IClassMapFrame(DoubleMapFrame):
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         self.SendSizeEvent()
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def OnCloseWindow(self, event):
         self.GetFirstWindow().GetDigit().CloseMap()
@@ -311,22 +315,7 @@ class IClassMapFrame(DoubleMapFrame):
             sb.SbRender(self, statusbar=statusbar, position=3)
         )
         self.statusbarManager.Update()
-
-        # add status bar as pane
-        self._mgr.AddPane(
-            statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        return statusbar
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
@@ -461,6 +450,21 @@ class IClassMapFrame(DoubleMapFrame):
             .Left()
             .Layer(1)
             .BestSize((335, -1)),
+        )
+        # add status bar as pane
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
         )
 
     def _addPaneToolbar(self, name, position):
