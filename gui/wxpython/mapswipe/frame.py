@@ -40,7 +40,8 @@ class SwipeMapFrame(DoubleMapFrame):
     ):
         DoubleMapFrame.__init__(
             self,
-            parent=parent,
+            parent=self,
+            guiparent=parent,
             title=title,
             name=name,
             firstMap=Map(),
