@@ -138,7 +138,7 @@ def main():
                     )
                 elif clean:
                     msg = (
-                        "The following maps of {stds} {gid} would be "
+                        "The following maps of {stds} {gid} will be "
                         "unregistered from temporal database and removed "
                         "from spatial database:"
                     )
