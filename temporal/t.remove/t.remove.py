@@ -133,7 +133,7 @@ def main():
             if not force:
                 if recursive:
                     msg = (
-                        "The following maps of {stds} {gid} would be "
+                        "The following maps of {stds} {gid} will be "
                         "unregistered from temporal database:"
                     )
                 elif clean:
