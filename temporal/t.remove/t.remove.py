@@ -187,7 +187,7 @@ def main():
         if force:
             statement += sp.delete(dbif=dbif, execute=False)
 
-    if not force and not clean:
+    if not force:
         grass.message(
             _(
                 "Nothing removed. You must use the force flag (-{flag}) to actually "
