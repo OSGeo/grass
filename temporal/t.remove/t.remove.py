@@ -53,7 +53,7 @@
 
 # %flag
 # % key: r
-# % description: Remove all registered maps from the temporal
+# % description: Remove stds and unregister maps from temporal database
 # %end
 
 # %flag
