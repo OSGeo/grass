@@ -685,7 +685,7 @@ int main(int argc, char *argv[])
 	else {
 	    G_warning(_("Vector map <%s> is 3D. "
 			"Use format specific layer creation options (parameter 'lco') "
-			"to export <in 3D rather than 2D (default)."),
+			"to export in 3D rather than 2D (default)."),
 		      options.input->answer);
 	}
     }
