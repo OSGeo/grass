@@ -63,7 +63,7 @@
 
 # %flag
 # % key: d
-# % description: Remove stds and maps from temporal framework and from mapset
+# % description: Remove stds, unregister maps from temporal database and delete them from mapset
 # %end
 
 import grass.script as grass
