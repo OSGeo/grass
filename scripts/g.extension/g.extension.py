@@ -1612,7 +1612,9 @@ def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
     # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
-    source_url = "https://github.com/OSGeo/grass-addons/tree/grass{}/src".format(version[0])
+    source_url = "https://github.com/OSGeo/grass-addons/tree/grass{}/src".format(
+        version[0]
+    )
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -2324,14 +2326,11 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         else:
             svn_reference = "branches/{}".format(branch)
 
-        git_url = (
-            "{url}/{branch}/"
-            "src/{module_class}/{module_name}".format(
-                url=url,
-                module_class=module_class,
-                module_name=name,
-                branch=svn_reference,
-            )
+        git_url = "{url}/{branch}/" "src/{module_class}/{module_name}".format(
+            url=url,
+            module_class=module_class,
+            module_name=name,
+            branch=svn_reference,
         )
         # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
         #            'grass{version}/{module_class}/{module_name}?format=zip' \
