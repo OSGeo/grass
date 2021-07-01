@@ -14,6 +14,9 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +28,9 @@
 #include "filter.h"
 #include "glob.h"
 
+const int MASTER = 0;
 int nrows, ncols;
+int nprocs;
 int buflen;
 int direction;
 int null_only;
@@ -49,6 +54,7 @@ int main(int argc, char **argv)
     struct Option *opt3;
     struct Option *opt4;
     struct Option *opt5;
+    struct Option *opt6;
 
     G_gisinit(argv[0]);
 
@@ -85,6 +91,8 @@ int main(int argc, char **argv)
     opt5->required = NO;
     opt5->description = _("Output raster map title");
 
+    opt6 = G_define_standard_option(G_OPT_M_NPROCS);
+
     /* Define the different flags */
 
     /* this isn't implemented at all 
@@ -107,6 +115,15 @@ int main(int argc, char **argv)
     null_only = flag2->answer;
 
     sscanf(opt4->answer, "%d", &repeat);
+    sscanf(opt6->answer, "%d", &nprocs);
+    if (nprocs < 1)
+    {
+      G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
+    }
+    #if defined(_OPENMP)
+        omp_set_num_threads(nprocs);
+    #endif
+
     out_name = opt2->answer;
     filt_name = opt3->answer;
 

@@ -4,7 +4,7 @@
 #include "glob.h"
 #include "filter.h"
 
-int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
+int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 {
     int i;
     int count;
@@ -56,31 +56,33 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
     ccount = ncols - (size - 1);
 
     /* rewind output */
-    lseek(out, 0L, 0);
+    lseek(out[MASTER], 0L, 0);
 
     /* copy border rows to output */
     row = starty;
     for (i = 0; i < mid; i++) {
-	cp = (DCELL *) Rowio_get(r, row);
-	write(out, cp, buflen);
+	cp = (DCELL *) Rowio_get(&r[MASTER], row);
+	write(out[MASTER], cp, buflen);
 	row += dy;
     }
 
     /* for each row */
+    int id = MASTER;
+    int work = 0;
     for (count = 0; count < rcount; count++) {
-	G_percent(count, rcount, 2);
+	G_percent(work, rcount, 2);
 	row = starty;
 	starty += dy;
 	/* get "size" rows */
 	for (i = 0; i < size; i++) {
-	    bufs[i] = (DCELL *) Rowio_get(r, row);
+	    bufs[i] = (DCELL *) Rowio_get(&r[id], row);
 	    box[i] = bufs[i] + startx;
 	    row += dy;
 	}
 	if (filter->type == SEQUENTIAL)
-	    cell = bufs[mid];
+	    cell[id] = bufs[mid];
 	/* copy border */
-	cp = cell;
+	cp = cell[id];
 	for (i = 0; i < mid; i++)
 	    *cp++ = bufs[mid][i];
 
@@ -105,15 +107,16 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
 	    *cp++ = bufs[mid][i];
 
 	/* write row */
-	write(out, cell, buflen);
+	write(out[id], cell[id], buflen);
+    work++;
     }
-    G_percent(count, rcount, 2);
+    G_percent(work, rcount, 2);
 
     /* copy border rows to output */
     row = starty + mid * dy;
     for (i = 0; i < mid; i++) {
 	cp = (DCELL *) Rowio_get(r, row);
-	write(out, cp, buflen);
+	write(out[id], cp, buflen);
 	row += dy;
     }
 
