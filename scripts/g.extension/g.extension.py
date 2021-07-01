@@ -1612,7 +1612,7 @@ def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
     # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
-    source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass7/"
+    source_url = "https://github.com/OSGeo/grass-addons/tree/grass{}/src".format(version[0])
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -2303,8 +2303,8 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         module_class = get_module_class_name(name)
         # note: 'trunk' is required to make URL usable for 'svn export' call
         git_url = (
-            "https://github.com/OSGeo/grass-addons/trunk/"
-            "grass{version}/{module_class}/{module_name}".format(
+            "https://github.com/OSGeo/grass-addons/branches/"
+            "grass{version}/src/{module_class}/{module_name}".format(
                 version=version[0], module_class=module_class, module_name=name
             )
         )
@@ -2319,16 +2319,15 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         module_class = get_module_class_name(name)
 
         # note: 'trunk' is required to make URL usable for 'svn export' call
-        if branch in ["master", "main"]:
-            svn_reference = "trunk"
+        if branch is None or branch in ["master", "main"]:
+            svn_reference = "branches/grass{}".format(version)
         else:
             svn_reference = "branches/{}".format(branch)
 
         git_url = (
             "{url}/{branch}/"
-            "grass{version}/{module_class}/{module_name}".format(
+            "src/{module_class}/{module_name}".format(
                 url=url,
-                version=version[0],
                 module_class=module_class,
                 module_name=name,
                 branch=svn_reference,
