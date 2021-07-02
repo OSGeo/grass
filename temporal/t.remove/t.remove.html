@@ -2,12 +2,13 @@
 
 The module <em>t.remove</em> removes space time datasets (STRDS, STR3DS,
 STVDS) from the temporal database. In other words, by default it deletes
-the relevant database entries but not the maps.
+the relevant database entries. It can also unregister maps from temporal
+database using the recursive mode <b>-r</b> (recursive)
 <p>
 Optionally, also the raster, 3D raster and vector maps of the space time
-datasets can be removed from the current mapset using the <b>-r</b> (recursive)
-and <b>-f</b> (force) flags. This recursive removal only works if both flags
-are checked together (use <b>-rf</b>).
+datasets can be removed from the current mapset using the <b>-d</b> (delete)
+flag.
+All removals only work if <b>-f</b> (force) flag is used.
 
 <h2>EXAMPLE</h2>
 
@@ -38,11 +39,12 @@ t.rast.aggregate input=precip_months_sum \
   years" method=sum
 
 #Remove all newly produced data:
+
 # a) the aggregated STRDS with 1 years granularity along with its raster maps
-t.remove -rf type=strds input=precip_years_sum
+t.remove -df type=strds input=precip_years_sum
 
 # b) the STRDS with 1 months granularity, but not the original sample data
-t.remove type=strds input=precip_months_sum
+t.remove -f type=strds input=precip_months_sum
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -61,4 +63,3 @@ S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 <p>
 <i>Last changed: $Date$</i>
 -->
-

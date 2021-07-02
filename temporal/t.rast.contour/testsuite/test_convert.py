@@ -48,12 +48,12 @@ class TestRasterContour(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.del_temp_region()
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="stvds", inputs="result")
+        self.runModule("t.remove", flags="df", type="stvds", inputs="result")
 
     def test_register_empty_maps(self):
         self.assertModule(
@@ -311,7 +311,7 @@ class TestRasterContourFails(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.del_temp_region()
 
     def test_error_handling(self):

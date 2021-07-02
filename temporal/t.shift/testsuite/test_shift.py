@@ -51,7 +51,7 @@ class TestShiftAbsoluteSTRDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
 
@@ -156,7 +156,7 @@ class TestShiftRelativeSTRDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
 
@@ -210,7 +210,7 @@ class TestShiftAbsoluteSTR3DS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="str3ds", inputs="A")
 
     def test_1(self):
 
@@ -314,7 +314,7 @@ class TestShiftRelativeSTR3DS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="str3ds", inputs="A")
 
     def test_1(self):
 
@@ -369,7 +369,7 @@ class TestShiftAbsoluteSTVDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_1(self):
 
@@ -475,7 +475,7 @@ class TestShiftRelativeSTVDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_1(self):
 
@@ -530,7 +530,7 @@ class TestShiftAbsoluteError(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
         pass

@@ -52,7 +52,7 @@ class TestSupportAbsoluteSTVDS(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_1_metadata(self):
         """Set title, description and aggregation"""

@@ -58,7 +58,7 @@ class TestRaster3dExtraction(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="str3ds", inputs="A,B")
+        self.runModule("t.remove", flags="df", type="str3ds", inputs="A,B")
 
     def test_selection(self):
         """Perform a simple selection by datetime"""
