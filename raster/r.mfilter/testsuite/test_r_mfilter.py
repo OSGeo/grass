@@ -176,7 +176,8 @@ class TestNeighbors(TestCase):
         """Test output with parallel filter type."""
         test_case = "test_parallel"
         output = "{}_raster".format(test_case)
-        self.to_remove.append(output)
+        output_threaded = "{}_threaded_raster".format(test_case)
+        self.to_remove.extend([output, output_threaded])
 
         filter = self.create_filter(self.filter_options["uniform"]["parallel"])
         self.assertModule(
@@ -185,9 +186,21 @@ class TestNeighbors(TestCase):
             output=output,
             filter=filter.name,
         )
+        self.assertModule(
+            "r.mfilter",
+            input="elevation",
+            output=output_threaded,
+            filter=filter.name,
+            nprocs=4,
+        )
         filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
+            reference=self.test_results[test_case],
+            precision=1e-5,
+        )
+        self.assertRasterFitsUnivar(
+            raster=output_threaded,
             reference=self.test_results[test_case],
             precision=1e-5,
         )
