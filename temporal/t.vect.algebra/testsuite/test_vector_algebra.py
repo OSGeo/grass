@@ -116,7 +116,7 @@ class TestTemporalVectorAlgebra(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.runModule(
-            "t.remove", flags="rf", inputs="A,B,C,D", type="stvds", quiet=True
+            "t.remove", flags="df", inputs="A,B,C,D", type="stvds", quiet=True
         )
         cls.del_temp_region()
 

@@ -60,7 +60,7 @@ class TestVectorExtraction(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="stvds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_selection(self):
         """Perform a simple selection by datetime"""
@@ -96,7 +96,7 @@ class TestVectorExtraction(TestCase):
             overwrite=True,
         )
         self.assertVectorDoesNotExist("b_2001_07")
-        self.runModule("t.remove", flags="rf", type="stvds", inputs="B")
+        self.runModule("t.remove", flags="df", type="stvds", inputs="B")
 
     def test_selection_suffix(self):
         """Perform a simple selection by datetime"""
@@ -109,7 +109,7 @@ class TestVectorExtraction(TestCase):
             overwrite=True,
         )
         self.assertVectorDoesNotExist("b_2001_07")
-        self.runModule("t.remove", flags="rf", type="stvds", inputs="B")
+        self.runModule("t.remove", flags="df", type="stvds", inputs="B")
 
     def test_selection_time_suffix(self):
         """Perform a simple selection by datetime"""
@@ -123,7 +123,7 @@ class TestVectorExtraction(TestCase):
             overwrite=True,
         )
         self.assertVectorExists("b_2001_01_01T00_00_00")
-        self.runModule("t.remove", flags="rf", type="stvds", inputs="B")
+        self.runModule("t.remove", flags="df", type="stvds", inputs="B")
 
     def test_selection_num_suffix(self):
         """Perform a simple selection by datetime"""
@@ -137,7 +137,7 @@ class TestVectorExtraction(TestCase):
             overwrite=True,
         )
         self.assertVectorExists("b_00001")
-        self.runModule("t.remove", flags="rf", type="stvds", inputs="B")
+        self.runModule("t.remove", flags="df", type="stvds", inputs="B")
 
     def test_selection_num3_suffix(self):
         """Perform a simple selection by datetime"""
@@ -151,7 +151,7 @@ class TestVectorExtraction(TestCase):
             overwrite=True,
         )
         self.assertVectorExists("b_001")
-        self.runModule("t.remove", flags="rf", type="stvds", inputs="B")
+        self.runModule("t.remove", flags="df", type="stvds", inputs="B")
 
 
 if __name__ == "__main__":
