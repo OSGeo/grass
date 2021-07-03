@@ -75,6 +75,7 @@ jobs:
         run: .github/workflows/test_thorough.sh
 
       - name: Make HTML test report available
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: testreport-${{ matrix.os }}
