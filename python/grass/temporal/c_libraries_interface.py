@@ -1741,7 +1741,9 @@ class CLibrariesInterface(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.AVAILABLE_MAPSETS,]
+            [
+                RPCDefs.AVAILABLE_MAPSETS,
+            ]
         )
         return self.safe_receive("available_mapsets")
 
@@ -1774,7 +1776,9 @@ class CLibrariesInterface(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.G_MAPSET,]
+            [
+                RPCDefs.G_MAPSET,
+            ]
         )
         return self.safe_receive("get_mapset")
 
@@ -1785,7 +1789,9 @@ class CLibrariesInterface(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.G_LOCATION,]
+            [
+                RPCDefs.G_LOCATION,
+            ]
         )
         return self.safe_receive("get_location")
 
@@ -1796,7 +1802,9 @@ class CLibrariesInterface(RPCServerBase):
         """
         self.check_server()
         self.client_conn.send(
-            [RPCDefs.G_GISDBASE,]
+            [
+                RPCDefs.G_GISDBASE,
+            ]
         )
         return self.safe_receive("get_gisdbase")
 

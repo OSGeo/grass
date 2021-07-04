@@ -119,7 +119,7 @@ void Rast_write_bandref(const char *name, const char *str)
  *
  * Legal band identifiers must be legal GRASS file names.
  * They are in format <shortcut>_<bandname>.
- * Band identifiers are capped in legth to GNAME_MAX - 1.
+ * Band identifiers are capped in legth to GNAME_MAX.
  *
  * This function will return -1 if provided band id is not considered
  * to be valid.
