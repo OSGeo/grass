@@ -348,30 +348,30 @@ class Module(object):
     >>> neighbors.inputs.size = 5
     >>> neighbors.inputs.quantile = 0.5
     >>> neighbors.get_bash()
-    'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
+    'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 output=mapB'
 
     >>> new_neighbors1 = copy.deepcopy(neighbors)
     >>> new_neighbors1.inputs.input = "mapD"
     >>> new_neighbors1.inputs.size = 3
     >>> new_neighbors1.inputs.quantile = 0.5
     >>> new_neighbors1.get_bash()
-    'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 output=mapB'
 
     >>> new_neighbors2 = copy.deepcopy(neighbors)
     >>> new_neighbors2(input="mapD", size=3, run_=False)
     Module('r.neighbors')
     >>> new_neighbors2.get_bash()
-    'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 output=mapB'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.get_bash()
-    'r.neighbors method=average size=3'
+    'r.neighbors size=3 method=average weighting_function=none'
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
-    'r.neighbors input=mapA method=average size=3 output=mapB'
+    'r.neighbors input=mapA size=3 method=average weighting_function=none output=mapB'
 
     >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
     ...                  overwrite=True, run_=False)
