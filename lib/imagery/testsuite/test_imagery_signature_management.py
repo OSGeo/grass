@@ -624,8 +624,10 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigfiles.append(sig_file2)
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list))
+        # As temporary mapset is not in the search path, there must be
+        # at least one sig file present
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 2)
+        self.assertTrue(ret >= 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
             "{}@{}".format(rnd_sig1, self.rnd_mapset_name),
@@ -666,8 +668,10 @@ class SignaturesListByTypeTestCase(TestCase):
         ret = I_signatures_list_by_type(
             SIGFILE_TYPE_SIGSET, None, ctypes.byref(sig_list)
         )
+        # As temporary mapset is not in the search path, there must be
+        # at least one sig file present
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 2)
+        self.assertTrue(ret >= 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
             "{}@{}".format(rnd_sig1, self.rnd_mapset_name),
