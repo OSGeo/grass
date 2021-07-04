@@ -111,14 +111,28 @@ class TestNeighbors(TestCase):
             "null_cells": 0,
             "cells": 2025000,
             "min": 55.5787925720215,
-            "max": 156.223892211914,
-            "range": 100.645099639893,
-            "mean": 110.375174079437,
-            "mean_of_abs": 110.375174079437,
-            "stddev": 20.2824544942723,
-            "variance": 411.377960312227,
-            "coeff_var": 18.3759207298509,
-            "sum": 223509727.51086,
+            "max": 155.957977294922,
+            "range": 100.3791847229,
+            "mean": 110.374591878668,
+            "mean_of_abs": 110.374591878668,
+            "stddev": 20.235686035401,
+            "variance": 409.482989323322,
+            "coeff_var": 18.3336451722925,
+            "sum": 223508548.554302,
+        },
+        "test_repeated_filters": {
+            "n": 2025000,
+            "null_cells": 0,
+            "cells": 2025000,
+            "min": 55.5787925720215,
+            "max": 155.465209960938,
+            "range": 99.886417388916,
+            "mean": 110.373036950725,
+            "mean_of_abs": 110.373036950725,
+            "stddev": 20.1413729988748,
+            "variance": 405.674906279802,
+            "coeff_var": 18.2484541110042,
+            "sum": 223505399.825218,
         },
     }
 
@@ -379,6 +393,42 @@ class TestNeighbors(TestCase):
             reference=self.test_results[test_case],
             precision=1e-5,
         )
+
+    def test_repeated_filters(self):
+        """Test output with repeated filters."""
+        test_case = "test_repeated_filters"
+        output = "{}_raster".format(test_case)
+        output_threaded = "{}_threaded_raster".format(test_case)
+        self.to_remove.extend([output, output_threaded])
+
+        filter = self.create_filter(self.filter_options["mix"])
+        self.assertModule(
+            "r.mfilter",
+            input="elevation",
+            output=output,
+            filter=filter.name,
+            repeat=3,
+        )
+        self.assertModule(
+            "r.mfilter",
+            input="elevation",
+            output=output_threaded,
+            filter=filter.name,
+            repeat=3,
+            nprocs=4,
+        )
+        filter.close()
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=self.test_results[test_case],
+            precision=1e-5,
+        )
+        self.assertRasterFitsUnivar(
+            raster=output_threaded,
+            reference=self.test_results[test_case],
+            precision=1e-5,
+        )
+
 
 if __name__ == "__main__":
     test()
