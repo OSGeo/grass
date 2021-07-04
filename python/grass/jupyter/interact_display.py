@@ -1,4 +1,4 @@
-#
+i#
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
 # PURPOSE:   This module contains functions for interactive display
@@ -10,24 +10,136 @@
 #            License (>=v2). Read teh file COPYING that comes with GRASS
 #            for details.
 
+import os
+import sys
+import subprocess
 import folium
 import grass.script as gs
+import shutil
+import codecs
 
+def create_location(
+    dbase,
+    location,
+    epsg=None,
+    overwrite=False,
+    env=None
+):
+    """Create new location
+    Raise ScriptError on error.
+    :param str dbase: path to GRASS database
+    :param str location: location name to create
+    :param epsg: if given create new location based on EPSG code
+    :param bool overwrite: True to overwrite location if exists(WARNING:
+                           ALL DATA from existing location ARE DELETED!)
+    """
 
-class GrassRenderer2:
-    """This class will be merged with display.py eventually?"""
+    # check if location already exists
+    if os.path.exists(os.path.join(dbase, location)):
+        if not overwrite:
+            print(("Location <%s> already exists. Operation canceled.") % location)
+            try:
+                os.remove(tmp_gisrc)
+            except Exception:
+                pass
+            return
+        else:
+            print(("Location <%s> already exists and will be overwritten") % location)
+            shutil.rmtree(os.path.join(dbase, location))
+
+    stdin = None
+    kwargs = dict()
+
+    ps = gs.pipe_command(
+        "g.proj",
+        quiet=True,
+        flags="t",
+        epsg=epsg,
+        location=location,
+        stderr=subprocess.PIPE,
+        env=env,
+        **kwargs,
+    )
+    
+    error = ps.communicate(stdin)[1]
+    try:
+        os.remove(tmp_gisrc)
+    except Exception:
+        pass
+
+    if ps.returncode != 0 and error:
+        raise ScriptError(repr(error))
+
+    try:
+        fd = codecs.open(
+            os.path.join(dbase, location, "PERMANENT", "MYNAME"),
+            encoding="utf-8",
+            mode="w",
+        )
+        
+        fd.write(os.linesep)
+        fd.close()
+    except OSError as e:
+        raise ScriptError(repr(e))
+
+class GrassRendererInteractive():
+    """This class creates interative GRASS maps with folium"""
 
     def __init__(self, width=400, height=400):
         """This initiates an instance of GrassRenderer"""
-        self.height = height
-        self.width = width
-        # We still need d.erase because folium uses png overlay
-        # for rasters
-        gs.run_command("d.erase")
+        self.width=width
+        self.height=height
+        
+        # Get the parent location/mapset
+        self._rc_original = self._get_rc(os.environ)
+        
+        # Create new environment for tmp WGS84 location
+        rcfile, self._env = gs.create_environment(self._rc_original["GISDBASE"], "temp_folium_WGS84", "PERMANENT")       
+        
+        # Location and mapset and region
+        create_location(self._rc_original["GISDBASE"], "temp_folium_WGS84", epsg="3857", overwrite=True, env=self._env)
+        
+        self._rc_tmp = self._get_rc(self._env) # Get tmp location/mapset
+        
+        self._extent = self._convert_extent(env=os.environ) # Get the extent of the original area in WGS84
+        
+        # Set region to match original region extent
+        gs.run_command("g.region",
+                       n=self._extent["North"],
+                       s=self._extent["South"],
+                       e=self._extent["East"],
+                       w=self._extent["West"],
+                       env=self._env
+                      )
+        
+        # Get Center of tmp GRASS region
+        center = gs.parse_command("g.region", flags="cg", env=self._env)
+        center = (float(center["center_northing"]), float(center["center_easting"]))
 
-    def d_rast(self, raster):
-        """This is a wrapper for d.rast that adds a raster to map.png"""
-        gs.run_command("d.rast", map=raster)
+        # Create Folium Map 
+        self.map = folium.Map(
+            width=self.width,
+            height=self.height,
+            location=center,
+            tiles="cartodbpositron",
+        )
+
+        
+    def _get_rc(self, env=None):
+        rc = {}
+        
+        if env:
+            rcfile_location = env["GISRC"]
+        else:
+            rcfile_location = os.environ["GISRC"]
+            
+        with open(rcfile_location) as f:
+            for line in f:
+                entry = line.strip("\n").split(": ")
+                rc[entry[0]] = entry[1]
+        return rc
+    
+    
 
     def _convert_coordinates(self, coordinates, proj_in):
         """This function reprojects coordinates to WGS84, the required
@@ -54,63 +166,63 @@ class GrassRenderer2:
 
         return coords_folium[1], coords_folium[0]  # Return Lat and Lon
 
-    def _get_folium_bounding_box(self):
+    def _convert_extent(self, env=None):
         """This function returns the bounding box of the current region
         in WGS84, the required projection for folium"""
 
         # Get proj of current GRASS region
-        proj = gs.read_command("g.proj", flags="jf")
+        proj = gs.read_command("g.proj", flags="jf", env=env)
 
         # Get extent
-        extent = gs.parse_command("g.region", flags="g")
+        extent = gs.parse_command("g.region", flags="g", env=env)
         extent_ne = "{}, {}".format(extent["e"], extent["n"])
         extent_sw = "{}, {}".format(extent["w"], extent["s"])
 
         # Convert extent to EPSG:3857, required projection for Folium
-        bb_n, bb_e = self._convert_coordinates(extent_ne, proj)
-        bb_s, bb_w = self._convert_coordinates(extent_sw, proj)
+        north, east = self._convert_coordinates(extent_ne, proj)
+        south, west = self._convert_coordinates(extent_sw, proj)
 
-        bounding_box = [[bb_n, bb_w], [bb_s, bb_e]]
+        extent = {'North': north, 'South': south, 'East': east, 'West': west}
 
+        return extent
+    
+    def _folium_bounding_box(self, extent):
+        """Reformats extent into bounding box to pass to folium"""
+        
+        bounding_box = [[extent['North'], extent['West']],
+                        [extent['South'], extent['East']]]
+        
         return bounding_box
-
-    def show_interactively(self, opacity=0.8):
+    
+        
+    def add_vector(self, vector, mapset=None):
+        """Imports vector into temporary WGS84 location, 
+        re-formats to a GeoJSON and adds to folium map"""
+        if mapset is None:
+            mapset = self._rc_original["MAPSET"]
+        
+        # Import vector into new Location/Mapset
+        name = vector+"@"+mapset
+        gs.run_command("v.proj",
+                       input=name,
+                       location=self._rc_original["LOCATION_NAME"],
+                       mapset=self._rc_original["MAPSET"],
+                       env=self._env
+                      )
+        
+        # Convert to GeoJSON
+        gs.run_command("v.out.ogr", input=name, output="tmp_{}.json".format(vector), format="GeoJSON", env=self._env)
+        
+        #style_function = {'Color': '#00ff00'}
+        
+        folium.GeoJson("tmp_{}.json".format(vector), name=vector).add_to(self.map)
+    
+    def show(self):
         """This function creates a folium map with a GRASS raster
         overlayed on a basemap"""
-        # Get extent and center of GRASS region
-        center = gs.parse_command("g.region", flags="cg")
-        center = "{}, {}".format(center["center_easting"], center["center_northing"])
-
-        # Get proj of current GRASS region
-        proj = gs.read_command("g.proj", flags="jf")
-
-        # Convert center and extent to EPSG:3857 for Folium
-        center_folium = self._convert_coordinates(center, proj)
-
-        bounding_box = self._get_folium_bounding_box()
-
-        # Create Folium Map
         fig = folium.Figure(width=self.width, height=self.height)
-        m = folium.Map(
-            width=self.width,  # not sure this work work
-            height=self.height,
-            location=center_folium,
-            tiles="cartodbpositron",
-        )
-
-        # Overlay map.png on folium
-        img = folium.raster_layers.ImageOverlay(
-            image="map.png",
-            bounds=bounding_box,
-            opacity=opacity,
-            interactive=True,
-            cross_origin=False,
-        )
-
-        # Add img layer to m
-        img.add_to(m)
-
+        
         # Add map to figure
-        fig.add_child(m)
-
+        fig.add_child(self.map)
+        
         return fig
