@@ -356,11 +356,11 @@ class RasterDataset(AbstractMapDataset):
                  read (due to an error or because not being present)
         """
 
-        check, band_ref = self.ciface.read_raster_band_reference(
+        band_ref = self.ciface.read_raster_band_reference(
             self.get_name(), self.get_mapset()
         )
 
-        if check < 1:
+        if not band_ref:
             return False
 
         self.metadata.set_band_reference(band_ref)
@@ -441,10 +441,10 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_number_of_cells(ncells)
 
             # Fill band reference if defined
-            check, band_ref = self.ciface.read_raster_band_reference(
+            band_ref = self.ciface.read_raster_band_reference(
                 self.get_name(), self.get_mapset()
             )
-            if check > 0:
+            if band_ref:
                 self.metadata.set_band_reference(band_ref)
 
             return True

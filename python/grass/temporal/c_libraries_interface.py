@@ -14,7 +14,7 @@ from grass.exceptions import FatalError
 import sys
 from multiprocessing import Process, Lock, Pipe
 import logging
-from ctypes import byref, cast, c_char_p, c_int, c_void_p, CFUNCTYPE, POINTER
+from ctypes import byref, cast, c_int, c_void_p, CFUNCTYPE, POINTER
 from datetime import datetime
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -463,7 +463,7 @@ def _write_timestamp(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
+        # mapset = data[3]
         layer = data[4]
         timestring = data[5]
         ts = libgis.TimeStamp()
@@ -529,11 +529,8 @@ def _read_band_reference(lock, conn, data):
     """Read the file based GRASS band identifier
     the result using the provided pipe.
 
-    The tuple to be send via pipe: (return value of
-    Rast_read_band_reference).
-
-    Please have a look at the documentation of
-    Rast_read_band_reference, for the return values description.
+    The result to be sent via pipe is the return value of
+    Rast_read_bandref: either a band reference string or None.
 
     :param lock: A multiprocessing.Lock instance
     :param conn: A multiprocessing.Pipe instance used to send True or False
@@ -541,24 +538,19 @@ def _read_band_reference(lock, conn, data):
                  mapset, layer, timestring]
 
     """
-    check = False
-    band_ref = None
+    bandref = None
     try:
         maptype = data[1]
         name = data[2]
         mapset = data[3]
-        layer = data[4]
+        # layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            p_filename = c_char_p()
-            p_band_ref = c_char_p()
-            check = libraster.Rast_read_band_reference(
-                name, mapset, byref(p_filename), byref(p_band_ref)
-            )
-            if check:
-                band_ref = decode(p_band_ref.value)
-                libgis.G_free(p_filename)
-                libgis.G_free(p_band_ref)
+            # Must use temporary variable to work around
+            # ValueError: ctypes objects containing pointers cannot be pickled
+            ret = libraster.Rast_read_bandref(name, mapset)
+            if ret:
+                bandref = decode(ret)
         else:
             logging.error(
                 "Unable to read band reference. " "Unsupported map type %s" % maptype
@@ -567,20 +559,17 @@ def _read_band_reference(lock, conn, data):
     except:
         raise
     finally:
-        conn.send((check, band_ref))
+        conn.send(bandref)
 
 
 ###############################################################################
 
 
 def _write_band_reference(lock, conn, data):
-    """Write the file based GRASS band identifier
-    the return values of the called C-functions using the provided pipe.
+    """Write the file based GRASS band identifier.
 
-    The value to be send via pipe is the return value of Rast_write_band_reference.
-
-    Please have a look at the documentation of
-    Rast_write_band_reference, for the return values description.
+    Rises ValueError on invalid band reference.
+    Always sends back True.
 
     :param lock: A multiprocessing.Lock instance
     :param conn: A multiprocessing.Pipe instance used to send True or False
@@ -588,22 +577,17 @@ def _write_band_reference(lock, conn, data):
                  mapset, layer, timestring]
 
     """
-    check = -3
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
-        layer = data[4]
-        band_reference = data[5]
+        # mapset = data[3]
+        # layer = data[4]
+        bandref = data[5]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            from grass.bandref import BandReferenceReader
-
-            reader = BandReferenceReader()
-            # determine filename (assuming that band_reference is unique!)
-            filename = reader.find_file(band_reference)
-
-            check = libraster.Rast_write_band_reference(name, filename, band_reference)
+            if libraster.Rast_legal_bandref(bandref) < 0:
+                raise ValueError(_("Invalid band reference"))
+            libraster.Rast_write_bandref(name, bandref)
         else:
             logging.error(
                 "Unable to write band reference. " "Unsupported map type %s" % maptype
@@ -612,20 +596,16 @@ def _write_band_reference(lock, conn, data):
     except:
         raise
     finally:
-        conn.send(check)
+        conn.send(True)
 
 
 ###############################################################################
 
 
 def _remove_band_reference(lock, conn, data):
-    """Remove the file based GRASS band identifier
-    the return values of the called C-functions using the provided pipe.
+    """Remove the file based GRASS band identifier.
 
-    The value to be send via pipe is the return value of Rast_remove_band_reference.
-
-    Please have a look at the documentation of
-    Rast_remove_band_reference, for the return values description.
+    The value to be send via pipe is the return value of G_remove_misc.
 
     :param lock: A multiprocessing.Lock instance
     :param conn: A multiprocessing.Pipe instance used to send True or False
@@ -637,11 +617,11 @@ def _remove_band_reference(lock, conn, data):
     try:
         maptype = data[1]
         name = data[2]
-        mapset = data[3]
-        layer = data[4]
+        # mapset = data[3]
+        # layer = data[4]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            check = libraster.Rast_remove_band_reference(name)
+            check = libgis.G_remove_misc("cell_misc", "bandref", name)
         else:
             logging.error(
                 "Unable to remove band reference. " "Unsupported map type %s" % maptype
@@ -1472,12 +1452,9 @@ class CLibrariesInterface(RPCServerBase):
     def remove_raster_band_reference(self, name, mapset):
         """Remove a file based raster band reference
 
-        Please have a look at the documentation Rast_remove_band_reference
-        for the return values description.
-
         :param name: The name of the map
         :param mapset: The mapset of the map
-        :returns: The return value of Rast_remove_band_reference
+        :returns: The return value of G_remove_misc
         """
         self.check_server()
         self.client_conn.send(
@@ -1488,12 +1465,11 @@ class CLibrariesInterface(RPCServerBase):
     def read_raster_band_reference(self, name, mapset):
         """Read a file based raster band reference
 
-        Please have a look at the documentation Rast_read_band_reference
-        for the return values description.
+        Returns band reference or None
 
         :param name: The name of the map
         :param mapset: The mapset of the map
-        :returns: The return value of Rast_read_band_reference
+        :returns: The return value of Rast_read_bandref
         """
         self.check_server()
         self.client_conn.send(
@@ -1504,16 +1480,13 @@ class CLibrariesInterface(RPCServerBase):
     def write_raster_band_reference(self, name, mapset, band_reference):
         """Write a file based raster band reference
 
-        Please have a look at the documentation Rast_write_band_reference
-        for the return values description.
-
         Note:
-            Only band references of maps from the current mapset can written.
+            Only band references of maps from the current mapset can be written.
 
         :param name: The name of the map
         :param mapset: The mapset of the map
         :param band_reference: band reference identifier
-        :returns: The return value of Rast_write_band_reference
+        :returns: always True
         """
         self.check_server()
         self.client_conn.send(
