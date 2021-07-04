@@ -106,27 +106,63 @@ class TestNeighbors(TestCase):
                 "sum": 7803645.55388512,
             },
         },
+        "test_multiple_filters": {
+            "n": 2025000,
+            "null_cells": 0,
+            "cells": 2025000,
+            "min": 55.5787925720215,
+            "max": 156.223892211914,
+            "range": 100.645099639893,
+            "mean": 110.375174079437,
+            "mean_of_abs": 110.375174079437,
+            "stddev": 20.2824544942723,
+            "variance": 411.377960312227,
+            "coeff_var": 18.3759207298509,
+            "sum": 223509727.51086,
+        },
     }
 
     filter_options = {
-        "uniform": {
-            "sequential": b"""MATRIX 5
-                              1 1 1 1 1
-                              1 1 1 1 1
-                              1 1 1 1 1
-                              1 1 1 1 1
-                              1 1 1 1 1
-                              DIVISOR 0
-                              TYPE    S""",
-            "parallel": b"""MATRIX 5
-                            1 1 1 1 1
-                            1 1 1 1 1
-                            1 1 1 1 1
-                            1 1 1 1 1
-                            1 1 1 1 1
-                            DIVISOR 0
-                            TYPE    P""",
-        },
+        "sequential": b"""MATRIX 5
+                          1 1 1 1 1
+                          1 1 1 1 1
+                          1 1 1 1 1
+                          1 1 1 1 1
+                          1 1 1 1 1
+                          DIVISOR 0
+                          TYPE    S""",
+        "parallel": b"""MATRIX 5
+                        1 1 1 1 1
+                        1 1 1 1 1
+                        1 1 1 1 1
+                        1 1 1 1 1
+                        1 1 1 1 1
+                        DIVISOR 0
+                        TYPE    P""",
+        "mix": b"""MATRIX 5
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   DIVISOR 0
+                   TYPE    P
+
+                   MATRIX 5
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   1 1 1 1 1
+                   DIVISOR 0
+                   TYPE    S
+
+                   MATRIX 3
+                   1 1 1 
+                   1 1 1 
+                   1 1 1 
+                   DIVISOR 9
+                   TYPE    P""",
     }
 
     # TODO: replace by unified handing of maps
@@ -156,18 +192,31 @@ class TestNeighbors(TestCase):
         """Test output with sequential filter type."""
         test_case = "test_sequential"
         output = "{}_raster".format(test_case)
-        self.to_remove.append(output)
+        output_threaded = "{}_threaded_raster".format(test_case)
+        self.to_remove.extend([output, output_threaded])
 
-        filter = self.create_filter(self.filter_options["uniform"]["sequential"])
+        filter = self.create_filter(self.filter_options["sequential"])
         self.assertModule(
             "r.mfilter",
             input="elevation",
             output=output,
             filter=filter.name,
         )
+        self.assertModule(
+            "r.mfilter",
+            input="elevation",
+            output=output_threaded,
+            filter=filter.name,
+            nprocs=4,
+        )
         filter.close()
         self.assertRasterFitsUnivar(
             raster=output,
+            reference=self.test_results[test_case],
+            precision=1e-5,
+        )
+        self.assertRasterFitsUnivar(
+            raster=output_threaded,
             reference=self.test_results[test_case],
             precision=1e-5,
         )
@@ -179,7 +228,7 @@ class TestNeighbors(TestCase):
         output_threaded = "{}_threaded_raster".format(test_case)
         self.to_remove.extend([output, output_threaded])
 
-        filter = self.create_filter(self.filter_options["uniform"]["parallel"])
+        filter = self.create_filter(self.filter_options["parallel"])
         self.assertModule(
             "r.mfilter",
             input="elevation",
@@ -212,7 +261,7 @@ class TestNeighbors(TestCase):
         output_z = "{}_z_raster".format(test_case)
         self.to_remove.extend([output, output_z])
 
-        filter = self.create_filter(self.filter_options["uniform"]["sequential"])
+        filter = self.create_filter(self.filter_options["sequential"])
         self.assertModule(
             "r.mfilter",
             input="slope",
@@ -242,10 +291,12 @@ class TestNeighbors(TestCase):
         """Test output with parallel filter type with null mode enabled."""
         test_case = "test_parallel_null"
         output = "{}_raster".format(test_case)
+        output_threaded = "{}_threaded_raster".format(test_case)
         output_z = "{}_z_raster".format(test_case)
-        self.to_remove.extend([output, output_z])
+        output_z_threaded = "{}_z_threaded_raster".format(test_case)
+        self.to_remove.extend([output, output_threaded, output_z, output_z_threaded])
 
-        filter = self.create_filter(self.filter_options["uniform"]["parallel"])
+        filter = self.create_filter(self.filter_options["parallel"])
         self.assertModule(
             "r.mfilter",
             input="slope",
@@ -255,9 +306,24 @@ class TestNeighbors(TestCase):
         self.assertModule(
             "r.mfilter",
             input="slope",
+            output=output_threaded,
+            filter=filter.name,
+            nprocs=4,
+        )
+        self.assertModule(
+            "r.mfilter",
+            input="slope",
             output=output_z,
             filter=filter.name,
             flags="z",
+        )
+        self.assertModule(
+            "r.mfilter",
+            input="slope",
+            output=output_z_threaded,
+            filter=filter.name,
+            flags="z",
+            nprocs=4,
         )
         filter.close()
         self.assertRasterFitsUnivar(
@@ -266,11 +332,53 @@ class TestNeighbors(TestCase):
             precision=1e-5,
         )
         self.assertRasterFitsUnivar(
+            raster=output_threaded,
+            reference=self.test_results[test_case][False],
+            precision=1e-5,
+        )
+        self.assertRasterFitsUnivar(
             raster=output_z,
             reference=self.test_results[test_case][True],
             precision=1e-5,
         )
+        self.assertRasterFitsUnivar(
+            raster=output_z_threaded,
+            reference=self.test_results[test_case][True],
+            precision=1e-5,
+        )
 
+    def test_multiple_filters(self):
+        """Test output with multiple filters."""
+        test_case = "test_multiple_filters"
+        output = "{}_raster".format(test_case)
+        output_threaded = "{}_threaded_raster".format(test_case)
+        self.to_remove.extend([output, output_threaded])
+
+        filter = self.create_filter(self.filter_options["mix"])
+        self.assertModule(
+            "r.mfilter",
+            input="elevation",
+            output=output,
+            filter=filter.name,
+        )
+        self.assertModule(
+            "r.mfilter",
+            input="elevation",
+            output=output_threaded,
+            filter=filter.name,
+            nprocs=4,
+        )
+        filter.close()
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=self.test_results[test_case],
+            precision=1e-5,
+        )
+        self.assertRasterFitsUnivar(
+            raster=output_threaded,
+            reference=self.test_results[test_case],
+            precision=1e-5,
+        )
 
 if __name__ == "__main__":
     test()

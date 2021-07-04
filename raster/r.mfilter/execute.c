@@ -19,7 +19,15 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     int startx, starty;
     int dx, dy;
     int mid;
+    int old_nprocs = 0;
     DCELL ***bufs, ***box, *cp;
+
+    if (nprocs > 1 && filter->type == SEQUENTIAL) {
+        /* disable parallel temporarily */
+        old_nprocs = nprocs;
+        nprocs = 1;
+    }
+
 
     size = filter->size;
     mid = size / 2;
@@ -81,14 +89,16 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     int start =  0;
     int end = rcount;
     int work = 0;
+    DCELL* cellp = cell[MASTER];
 
-    #pragma omp parallel firstprivate(starty, id, start, end) private(i, count, row, col, cp) if(nprocs > 1)
+    #pragma omp parallel firstprivate(starty, id, start, end, cellp) private(i, count, row, col, cp) if(nprocs > 1)
     {
     #if defined(_OPENMP)
     if (nprocs > 1) {
         id = omp_get_thread_num();
         start = rcount * id/nprocs;
         end = rcount * (id+1)/nprocs;
+        cellp = cell[id];
         starty += start * dy;
         lseek(out[id], (off_t) ((mid + start) * buflen), SEEK_SET);
     }
@@ -106,9 +116,9 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 	    row += dy;
 	}
 	if (filter->type == SEQUENTIAL)
-	    cell[id] = bufs[id][mid];
+	    cellp = bufs[id][mid];
 	/* copy border */
-	cp = cell[id];
+	cp = cellp;
 	for (i = 0; i < mid; i++)
 	    *cp++ = bufs[id][mid][i];
 
@@ -129,14 +139,14 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 	    *cp++ = bufs[id][mid][i];
 
 	/* write row */
-	write(out[id], cell[id], buflen);
+	write(out[id], cellp, buflen);
     #pragma omp atomic update
     work++;
     }
     }
     G_percent(work, rcount, 2);
     starty += rcount * dy;
-    lseek(out[MASTER], 0L, SEEK_END);
+    lseek(out[MASTER], (off_t) ((mid + rcount) * buflen), SEEK_SET);
 
     /* copy border rows to output */
     row = starty + mid * dy;
@@ -144,6 +154,12 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 	cp = (DCELL *) Rowio_get(&r[MASTER], row);
 	write(out[MASTER], cp, buflen);
 	row += dy;
+    }
+
+    if (old_nprocs != 0) {
+        /* restore parallel execution */
+        nprocs = old_nprocs;
+        old_nprocs = 0;
     }
 
     return 0;
