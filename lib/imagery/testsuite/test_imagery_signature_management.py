@@ -402,7 +402,9 @@ class SignaturesRenameTestCase(TestCase):
         ret = I_find_signature(SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
         self.assertTrue(ret)
         ret = I_signatures_rename(
-            SIGFILE_TYPE_SIG, src_sig + "@" + self.mapset_name, dst,
+            SIGFILE_TYPE_SIG,
+            src_sig + "@" + self.mapset_name,
+            dst,
         )
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
@@ -445,7 +447,9 @@ class SignaturesRenameTestCase(TestCase):
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
         self.assertTrue(ret)
         ret = I_signatures_rename(
-            SIGFILE_TYPE_SIGSET, src_sigset + "@" + self.mapset_name, dst,
+            SIGFILE_TYPE_SIGSET,
+            src_sigset + "@" + self.mapset_name,
+            dst,
         )
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
