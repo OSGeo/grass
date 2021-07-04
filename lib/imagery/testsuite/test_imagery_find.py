@@ -31,6 +31,10 @@ class FindSignatureTestCase(TestCase):
     def setUpClass(cls):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
+        # As signatures are created directly not via signature creation
+        # tools, we must ensure signature directories exist
+        os.makedirs(cls.mpath + "/signatures/sig/", exist_ok=True)
+        os.makedirs(cls.mpath + "/signatures/sigset/", exist_ok=True)
         cls.sig_name1 = tempname(10)
         cls.sigfile_name1 = "{}/signatures/sigset/{}".format(cls.mpath, cls.sig_name1)
         open(cls.sigfile_name1, "a").close()
