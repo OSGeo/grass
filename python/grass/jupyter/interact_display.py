@@ -82,7 +82,7 @@ def create_location(
     except OSError as e:
         raise ScriptError(repr(e))
 
-class GrassRendererInteractive():
+class InteractiveMap():
     """This class creates interative GRASS maps with folium"""
 
     def __init__(self, width=400, height=400):
@@ -141,7 +141,7 @@ class GrassRendererInteractive():
     
     
 
-    def _convert_coordinates(self, coordinates, proj_in):
+    def _convert_coordinates(self, x, y, proj_in):
         """This function reprojects coordinates to WGS84, the required
         projection for folium.
 
@@ -151,6 +151,8 @@ class GrassRendererInteractive():
         proj_in is a proj4 string, for example, the output of g.region
         with the `g` flag."""
 
+        coordinates = f"{x}, {y}"
+        
         coords_folium = gs.read_command(
             "m.proj",
             coordinates=coordinates,
@@ -175,22 +177,20 @@ class GrassRendererInteractive():
 
         # Get extent
         extent = gs.parse_command("g.region", flags="g", env=env)
-        extent_ne = "{}, {}".format(extent["e"], extent["n"])
-        extent_sw = "{}, {}".format(extent["w"], extent["s"])
 
         # Convert extent to EPSG:3857, required projection for Folium
-        north, east = self._convert_coordinates(extent_ne, proj)
-        south, west = self._convert_coordinates(extent_sw, proj)
+        north, east = self._convert_coordinates(extent["e"], extent["n"], proj)
+        south, west = self._convert_coordinates(extent["w"], extent["s"], proj)
 
-        extent = {'North': north, 'South': south, 'East': east, 'West': west}
+        extent = {'north': north, 'south': south, 'east': east, 'west': west}
 
         return extent
     
     def _folium_bounding_box(self, extent):
         """Reformats extent into bounding box to pass to folium"""
         
-        bounding_box = [[extent['North'], extent['West']],
-                        [extent['South'], extent['East']]]
+        bounding_box = [[extent['north'], extent['west']],
+                        [extent['south'], extent['east']]]
         
         return bounding_box
     
@@ -202,7 +202,7 @@ class GrassRendererInteractive():
             mapset = self._rc_original["MAPSET"]
         
         # Import vector into new Location/Mapset
-        name = vector+"@"+mapset
+        name =f"{vector}@{mapset}"
         gs.run_command("v.proj",
                        input=name,
                        location=self._rc_original["LOCATION_NAME"],
@@ -211,9 +211,11 @@ class GrassRendererInteractive():
                       )
         
         # Convert to GeoJSON
-        gs.run_command("v.out.ogr", input=name, output="tmp_{}.json".format(vector), format="GeoJSON", env=self._env)
+        json_file = f"tmp_{vector}.json"
+
+        gs.run_command("v.out.ogr", input=name, output=json_file, format="GeoJSON", env=self._env)
         
-        folium.GeoJson("tmp_{}.json".format(vector), name=vector).add_to(self.map)
+        folium.GeoJson(json_file, name=vector).add_to(self.map)
     
     def show(self):
         """This function creates a folium map with a GRASS raster
