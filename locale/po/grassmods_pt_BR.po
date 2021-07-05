@@ -17584,7 +17584,7 @@ msgstr "Usar um subconjunto do intervalo do mapa para a legenda (min,máx)"
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:19
 #: ../display/d.legend/main.c:151
 msgid "Specific values to draw ticks"
-msgstr ""
+msgstr "Valores específicos para desenhar marcas de intervalo"
 
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:21
 #: ../display/d.legend/main.c:160
@@ -17603,7 +17603,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:28
 #: ../display/d.legend/main.c:262
 msgid "Draw legend ticks for labels"
-msgstr ""
+msgstr "Desenhar marcas de legenda para rótulos"
 
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:30
 #: ../display/d.text/main.c:223 ../display/d.rast.num/main.c:119
@@ -23601,17 +23601,17 @@ msgstr "Mapa de saída no qual os erros serão gravados"
 #: ../locale/scriptstrings/r.mapcalc.tiled_to_translate.c:7
 #: ../raster/r.tile/main.c:62
 msgid "Width of tiles (columns)"
-msgstr "Largura dos tiles (colunas)"
+msgstr "Largura dos mosaicos (colunas)"
 
 #: ../locale/scriptstrings/r.mapcalc.tiled_to_translate.c:8
 #: ../raster/r.tile/main.c:69
 msgid "Height of tiles (rows)"
-msgstr "Altura dos tiles (linhas)"
+msgstr "Altura dos mosaicos (linhas)"
 
 #: ../locale/scriptstrings/r.mapcalc.tiled_to_translate.c:9
 #: ../raster/r.tile/main.c:76
 msgid "Overlap of tiles"
-msgstr "Sobreposição de tiles"
+msgstr "Sobreposição de mosaicos"
 
 #: ../locale/scriptstrings/v.habitat.dem_to_translate.c:1
 msgid "Calculates DEM derived characteristics of habitats."
@@ -26840,7 +26840,7 @@ msgstr ""
 #: ../display/d.legend/draw.c:613
 #, c-format
 msgid "tick_value=%.3f out of range [%.3f, %.3f]"
-msgstr ""
+msgstr "tick_value=%.3f fora do intervalo [%.3f, %.3f]"
 
 #: ../display/d.legend/draw.c:1030
 msgid "Histogram plotting not implemented for categorical legends. Use the '-s' flag"
@@ -28354,15 +28354,15 @@ msgstr ""
 
 #: ../display/d.barscale/main.c:110
 msgid "Up ticks style"
-msgstr ""
+msgstr "Estilo de marcas de intervalo para cima"
 
 #: ../display/d.barscale/main.c:111
 msgid "Down ticks style"
-msgstr ""
+msgstr "Estilo de marcas de intervalo para baixo"
 
 #: ../display/d.barscale/main.c:112
 msgid "Both ticks style"
-msgstr ""
+msgstr "Ambos estilos de marcas de intervalo"
 
 #: ../display/d.barscale/main.c:112
 msgid "Arrow ends style"
@@ -29477,58 +29477,58 @@ msgstr ""
 
 #: ../vector/v.net.iso/main.c:177 ../vector/v.net.alloc/main.c:156
 msgid "Create unique categories and attribute table"
-msgstr ""
+msgstr "Crie categorias e tabela de atributos exclusivas"
 
 #: ../vector/v.net.iso/main.c:179
 msgid "Default: one category for each iso-band"
-msgstr ""
+msgstr "Padrão: uma categoria para cada banda iso"
 
 #: ../vector/v.net.iso/main.c:215
 #, c-format
 msgid "Wrong iso cost: %f"
-msgstr ""
+msgstr "Custo da iso errado: %f"
 
 #: ../vector/v.net.iso/main.c:218
 #, c-format
 msgid "Iso cost: %f less than previous"
-msgstr ""
+msgstr "Custo da iso: %f menor que o anterior"
 
 #: ../vector/v.net.iso/main.c:223
 #, c-format
 msgid "Iso cost %d: %f"
-msgstr ""
+msgstr "Custo da iso %d: %f"
 
 #: ../vector/v.net.iso/main.c:231
 msgid "Not enough costs, everything reachable falls to first band"
-msgstr ""
+msgstr "Custos insuficientes, tudo o que é alcançável cai para a primeira faixa"
 
 #: ../vector/v.net.iso/main.c:282 ../vector/v.net.alloc/main.c:224
 #: ../vector/v.net.salesman/main.c:277
 msgid "Point is not connected to the network"
-msgstr ""
+msgstr "O ponto não está conectado à rede"
 
 #: ../vector/v.net.iso/main.c:290 ../vector/v.net.alloc/main.c:232
 msgid "Center at closed node (costs = -1) ignored"
-msgstr ""
+msgstr "Centro no nó fechado (custos = -1) ignorado"
 
 #: ../vector/v.net.iso/main.c:308 ../vector/v.net.alloc/main.c:250
 #, c-format
 msgid "Number of centers: %d (nlayer %d)"
-msgstr ""
+msgstr "Número de centros: %d (nlayer %d)"
 
 #: ../vector/v.net.iso/main.c:311 ../vector/v.net.alloc/main.c:253
 msgid "Not enough centers for selected nlayer. Nothing will be allocated."
-msgstr ""
+msgstr "Centros insuficientes para a camada selecionada. Nada será alocado."
 
 #: ../vector/v.net.iso/main.c:333 ../vector/v.net.iso/main.c:345
 #: ../vector/v.net.alloc/main.c:275 ../vector/v.net.alloc/main.c:287
 msgid "Calculating costs from centers ..."
-msgstr ""
+msgstr "Calculando custos dos centros..."
 
 #: ../vector/v.net.iso/main.c:338 ../vector/v.net.iso/main.c:349
 #: ../vector/v.net.alloc/main.c:280 ../vector/v.net.alloc/main.c:291
 msgid "Calculating costs to centers ..."
-msgstr ""
+msgstr "Calculando custos para centros..."
 
 #: ../vector/v.net.iso/main.c:394 ../vector/v.sample/main.c:193
 #: ../vector/v.net.flow/main.c:185 ../vector/v.net.alloc/main.c:333
@@ -32646,7 +32646,7 @@ msgstr "Linha de perfilagem"
 
 #: ../vector/v.profile/main.c:247
 msgid "Profiling line map"
-msgstr ""
+msgstr "Mapa de linhas de perfil"
 
 #: ../vector/v.profile/main.c:248
 msgid "Vector map containing profiling line"
@@ -37365,7 +37365,7 @@ msgstr "Aumenta a precisão das formas reprojetadas, desativa com smax=0"
 #: ../raster/r.proj/main.c:175 ../raster/r.proj/main.c:186
 #: ../raster/r.proj/main.c:196
 msgid "Target"
-msgstr ""
+msgstr "Destino"
 
 #: ../vector/v.proj/main.c:118 ../raster/r.proj/main.c:203
 msgid "PROJ pipeline for coordinate transformation"
@@ -39056,7 +39056,7 @@ msgstr "Tanto a validação cruzada quanto os desvios devem ser especificados"
 
 #: ../vector/v.vol.rst/main.c:493
 msgid "Crossvalidation cannot be computed simultanuously with output grids or devi file"
-msgstr ""
+msgstr "A validação cruzada não pode ser calculada simultaneamente com grades de saída ou arquivo devi"
 
 #: ../vector/v.vol.rst/main.c:557
 #, c-format
@@ -44833,7 +44833,7 @@ msgstr ""
 
 #: ../raster3d/r3.mask/main.c:104
 msgid "makeMask: error flushing tiles in cube"
-msgstr "makeMask: erro limpando ladrilhos em cubo"
+msgstr "makeMask: erro limpando mosaicos em cubo"
 
 #: ../raster3d/r3.mask/main.c:109
 msgid "makeMask: error flushing all tiles"
@@ -46761,7 +46761,7 @@ msgstr ""
 
 #: ../raster/r.stats.quantile/main.c:315
 msgid "Printing quantiles"
-msgstr ""
+msgstr "Impressão de quantis"
 
 #: ../raster/r.stats.quantile/main.c:360 ../raster/r.quantile/main.c:204
 msgid "Computing quantiles"
@@ -46789,7 +46789,7 @@ msgstr ""
 
 #: ../raster/r.stats.quantile/main.c:531 ../raster/r.quantile/main.c:278
 msgid "Number of quantiles"
-msgstr ""
+msgstr "Número de quantis"
 
 #: ../raster/r.stats.quantile/main.c:537 ../raster/r.quantile/main.c:286
 msgid "List of percentiles"
@@ -47040,12 +47040,12 @@ msgstr ""
 #: ../raster/r.sun/main.c:704
 #, c-format
 msgid "Using slope constant: %lf"
-msgstr ""
+msgstr "Usando a constante de declividade:%lf"
 
 #: ../raster/r.sun/main.c:707
 #, c-format
 msgid "Using slope map <%s>"
-msgstr ""
+msgstr "Usando mapa de declive <%s>"
 
 #: ../raster/r.sun/main.c:712
 #, c-format
@@ -49855,11 +49855,11 @@ msgstr ""
 
 #: ../raster/r.stream.extract/main.c:121
 msgid "Montgomery exponent for slope, disabled with 0"
-msgstr ""
+msgstr "Expoente de Montgomery para declividade, desativado com 0"
 
 #: ../raster/r.stream.extract/main.c:123
 msgid "Montgomery: accumulation is multiplied with pow(slope,mexp) and then compared with threshold"
-msgstr ""
+msgstr "Montgomery: o acúmulo é multiplicado com o pow(slope, mexp) e depois comparado com o limiar"
 
 #: ../raster/r.stream.extract/main.c:131
 msgid "Delete stream segments shorter than stream_length cells"
@@ -50214,7 +50214,7 @@ msgstr "Nome para o mapa raster de elevação de saída"
 
 #: ../raster/r.resamp.rst/main.c:181
 msgid "Name for output slope map (or fx)"
-msgstr ""
+msgstr "Nome para o mapa de declividade de saída (ou fx)"
 
 #: ../raster/r.resamp.rst/main.c:187
 msgid "Name for output aspect map (or fy)"
@@ -52032,12 +52032,12 @@ msgstr ""
 
 #: ../raster/r.tile/main.c:46
 msgid "Splits a raster map into tiles."
-msgstr "Divide um mapa raster em tiles."
+msgstr "Divide um mapa raster em mosaicos."
 
 #: ../raster/r.tile/main.c:129
 #, c-format
 msgid "Generating %d x %d = %d tiles..."
-msgstr "Gerando %d x %d = %d tiles..."
+msgstr "Gerando %d x %d = %d mosaicos..."
 
 #: ../raster/r.tile/main.c:187
 #, c-format
@@ -54376,7 +54376,7 @@ msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:174
 msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map."
-msgstr ""
+msgstr "Gera mapas raster de declividade, aspecto, curvaturas e derivadas parciais de um mapa raster de elevação."
 
 #: ../raster/r.slope.aspect/main.c:176
 msgid "Aspect is calculated counterclockwise from east."

@@ -424,7 +424,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:1469
 msgid "Building user fontcap..."
-msgstr ""
+msgstr "Construindo o fontcap do usuário..."
 
 #: ../lib/init/grass.py:1530
 msgid "The SHELL variable is not set"
@@ -2584,7 +2584,7 @@ msgstr "O método de compactação usado no mapa raster3d de saída"
 
 #: ../lib/gis/parser_standard_options.c:474
 msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
-msgstr "As dimensões dos tiles usados ​​no mapa raster3d de saída (XxYxZ ou padrão: 16x16x8)"
+msgstr "As dimensões dos mosaicos usados ​​no mapa raster3d de saída (XxYxZ ou padrão: 16x16x8)"
 
 #: ../lib/gis/parser_standard_options.c:484
 msgid "Name of input vector map"
@@ -5326,7 +5326,7 @@ msgstr "Extensão PostGIS Topology não encontrada no banco de dados <%s>"
 
 #: ../lib/vector/Vlib/open_pg.c:667
 msgid "Empty bounding box"
-msgstr ""
+msgstr "Retângulo envolvente vazio"
 
 #: ../lib/vector/Vlib/open_pg.c:768
 #, c-format
@@ -5350,7 +5350,7 @@ msgstr "Ilha %d sem fronteira detectada"
 
 #: ../lib/vector/Vlib/open_pg.c:1128
 msgid "Unable to get map bounding box from topology"
-msgstr ""
+msgstr "Não foi possível obter o retângulo envolvente do mapa da topologia"
 
 #: ../lib/vector/Vlib/open_pg.c:1135
 #, c-format
@@ -5358,6 +5358,8 @@ msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
 msgstr ""
+"Não é possível analisar o retângulo envolvente do mapa:\n"
+"%s"
 
 #: ../lib/vector/Vlib/open_pg.c:1159
 #, c-format
@@ -6169,7 +6171,7 @@ msgstr "Intersecções: %d"
 #: ../lib/vector/Vlib/color_write.c:71 ../lib/raster/color_write.c:81
 #, c-format
 msgid "Qualified name <%s> doesn't match mapset <%s>"
-msgstr ""
+msgstr "O nome qualificado <%s> não corresponde ao mapset <%s>"
 
 #: ../lib/vector/Vlib/color_write.c:91 ../lib/raster/color_write.c:96
 #, c-format
@@ -6187,7 +6189,7 @@ msgstr "%d áreas de tamanho total %g removidas"
 
 #: ../lib/vector/Vlib/remove_areas.c:395
 msgid "Could not delete line from coor"
-msgstr ""
+msgstr "Não foi possível excluir linha de coor"
 
 #: ../lib/vector/Vlib/remove_areas.c:458
 msgid "dissolve_neighbour > 0, failed to build new area"
@@ -6368,7 +6370,7 @@ msgstr "Tipo de dados da coluna <%s> não suportado (deve ser numérico)"
 
 #: ../lib/vector/Vlib/net_build.c:202 ../lib/vector/Vlib/net_build.c:967
 msgid "Setting node costs..."
-msgstr ""
+msgstr "Definindo custos de nó..."
 
 #: ../lib/vector/Vlib/net_build.c:277 ../lib/vector/Vlib/net_build.c:1032
 #, c-format
@@ -6377,7 +6379,7 @@ msgstr "Registro do banco de dados para o nó %d (cat = %d) não encontrado (cos
 
 #: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
 msgid "Cannot add network arc for virtual node connection."
-msgstr ""
+msgstr "Não é possível adicionar arco de rede para conexão de nó virtual."
 
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
@@ -6385,6 +6387,8 @@ msgid ""
 "There exists more than one point of node <%d> with unique category field  <%d>.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
+"Existe mais de um ponto de nó <%d> com campo de categoria exclusivo <%d>.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
 #: ../lib/vector/Vlib/net_build.c:393
 #, c-format
@@ -6393,6 +6397,9 @@ msgid ""
 "Cost for the intersection was set to 0.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
+"Não foi possível encontrar o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
+"O custo da interseção foi definido como 0.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
 #: ../lib/vector/Vlib/net_build.c:407
 #, c-format
@@ -6401,6 +6408,9 @@ msgid ""
 "Cost for the intersection was set to 0.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
+"Não foi possível encontrar o nó para o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
+"O custo da interseção foi definido como 0.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
 #: ../lib/vector/Vlib/net_build.c:432
 #, c-format
@@ -8597,11 +8607,11 @@ msgstr "Não foi possível mover o mapa raster temporário <%s> para o mapa rast
 
 #: ../lib/raster3d/close.c:79
 msgid "Unable to flush all tiles"
-msgstr ""
+msgstr "Não foi possível limpar todos os mosaicos"
 
 #: ../lib/raster3d/close.c:84
 msgid "Unable to flush index"
-msgstr ""
+msgstr "Não foi possível limpar o índice"
 
 #: ../lib/raster3d/close.c:94
 msgid "Unable to position file"
@@ -9172,7 +9182,7 @@ msgstr "Erro ao ler linha nula %d para <%s>"
 #: ../lib/raster/close.c:56
 #, c-format
 msgid "Unable to flush file %s for raster map %s: %s"
-msgstr ""
+msgstr "Não foi possível limpar o arquivo %s para o mapa raster %s: %s"
 
 #: ../lib/raster/close.c:64
 #, c-format
