@@ -1403,8 +1403,8 @@ def download_source_code_official_github(url, name, outdev, directory=None):
     """
     if not directory:
         directory = os.path.join(os.getcwd, name)
-    classchar = name.split(".", 1)[0]
-    moduleclass = expand_module_class_name(classchar)
+    # classchar = name.split(".", 1)[0]
+    # moduleclass = expand_module_class_name(classchar)
     if grass.call(["svn", "export", url, directory], stdout=outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
     return directory
@@ -2301,42 +2301,36 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module') # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
+    # Handle URL for the offical repo
     if not url and name:
         module_class = get_module_class_name(name)
-        # note: 'trunk' is required to make URL usable for 'svn export' call
+        # Set URL for the given GRASS version
         git_url = (
             "https://github.com/OSGeo/grass-addons/branches/"
             "grass{version}/src/{module_class}/{module_name}".format(
                 version=version[0], module_class=module_class, module_name=name
             )
         )
-        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
-        #            'grass{version}/{module_class}/{module_name}?format=zip' \
-        #            .format(version=version[0],
-        #                    module_class=module_class, module_name=name)
-        # return 'official', trac_url
         return "official", git_url
 
+    # Handle URL for a fork of the offical repo
     if url and fork:
         module_class = get_module_class_name(name)
 
         # note: 'trunk' is required to make URL usable for 'svn export' call
-        if branch is None or branch in ["master", "main"]:
+        if branch is None:
             svn_reference = "branches/grass{}".format(version)
+        elif branch in ["master", "main"]:
+            svn_reference = "trunk"
         else:
             svn_reference = "branches/{}".format(branch)
 
-        git_url = "{url}/{branch}/" "src/{module_class}/{module_name}".format(
+        git_url = "{url}/{branch}/src/{module_class}/{module_name}".format(
             url=url,
             module_class=module_class,
             module_name=name,
             branch=svn_reference,
         )
-        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
-        #            'grass{version}/{module_class}/{module_name}?format=zip' \
-        #            .format(version=version[0],
-        #                    module_class=module_class, module_name=name)
-        # return 'official', trac_url
         return "official_fork", git_url
 
     # Check if URL can be found
@@ -2349,20 +2343,20 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 open_url = urlopen(url)
                 open_url.close()
                 url_validated = True
-            except:
+            except URLError:
                 pass
         else:
             try:
                 open_url = urlopen("http://" + url)
                 open_url.close()
                 url_validated = True
-            except:
+            except URLError:
                 pass
             try:
                 open_url = urlopen("https://" + url)
                 open_url.close()
                 url_validated = True
-            except:
+            except URLError:
                 pass
 
         if not url_validated:
