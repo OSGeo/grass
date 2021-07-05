@@ -105,10 +105,10 @@ class InteractiveMap():
         
         # Set region to match original region extent
         gs.run_command("g.region",
-                       n=self._extent["North"],
-                       s=self._extent["South"],
-                       e=self._extent["East"],
-                       w=self._extent["West"],
+                       n=self._extent["north"],
+                       s=self._extent["south"],
+                       e=self._extent["east"],
+                       w=self._extent["west"],
                        env=self._env
                       )
         
