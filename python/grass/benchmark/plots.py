@@ -14,6 +14,29 @@
 """Plotting functionality for benchmark results"""
 
 
+def get_pyplot(to_file):
+    """Get pyplot from matplotlib
+
+    Lazy import to easily run code importing this function on limited installations.
+    Only actual call to this function requires matplotlib.
+
+    The *to_file* parameter can be set to True to avoid tkinter dependency
+    if the interactive show method is not needed.
+    """
+    import matplotlib  # pylint: disable=import-outside-toplevel
+
+    if to_file:
+        backend = "agg"
+    else:
+        backend = None
+    if backend:
+        matplotlib.use(backend)
+
+    import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
+
+    return plt
+
+
 def nprocs_plot(results, filename=None):
     """Plot results from a multiple nprocs (thread) benchmarks.
 
@@ -31,10 +54,7 @@ def nprocs_plot(results, filename=None):
     Each result can come with a different list of nprocs, i.e., benchmarks
     which used different values for nprocs can be combined in one plot.
     """
-    # Lazy import to easily run code importing this function on limited installations.
-    # Only actual call to this function requires matplotlib.
-    import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
-
+    plt = get_pyplot(to_file=bool(filename))
     axes = plt.gca()
 
     x_ticks = set()  # gather x values
@@ -69,8 +89,7 @@ def num_cells_plot(results, filename=None, show_resolution=False):
     Each result can come with a different list of nprocs, i.e., benchmarks
     which used different values for nprocs can be combined in one plot.
     """
-    import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
-
+    plt = get_pyplot(to_file=bool(filename))
     axes = plt.gca()
     if show_resolution:
         axes.invert_xaxis()
