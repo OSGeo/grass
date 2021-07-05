@@ -233,7 +233,7 @@ def urlopen(url, *args, **kwargs):
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
-def get_branches(github_api_url, version_only=False):
+def get_github_branches(github_api_url, version_only=False):
     """Get ordered list of branch names in repo using github API"""
     req = urlrequest.urlopen(github_api_url)
     content = json.loads(req.read())
@@ -1417,8 +1417,6 @@ def download_source_code_official_github(url, name, outdev, directory=None):
     """
     if not directory:
         directory = os.path.join(os.getcwd, name)
-    # classchar = name.split(".", 1)[0]
-    # moduleclass = expand_module_class_name(classchar)
     if grass.call(["svn", "export", url, directory], stdout=outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
     return directory
@@ -2320,7 +2318,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     # Handle URL for the offical repo
     if not url and name:
         module_class = get_module_class_name(name)
-        repo_branches = get_branches(
+        repo_branches = get_github_branches(
             "https://api.github.com/repos/OSGeo/grass-addons/branches", True
         )
         # Define branch to fetch from (latest or current version)
@@ -2341,7 +2339,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
         # note: 'trunk' is required to make URL usable for 'svn export' call
         if branch is None:
-            repo_branches = get_branches(
+            repo_branches = get_github_branches(
                 url.rstrip("/").replace("github.com/", "api.github.com/repos/")
                 + "/branches",
                 True,
@@ -2354,17 +2352,10 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 if version_branch not in repo_branches:
                     version_branch = repo_branches[-1]
                 svn_reference = "branches/{}".format(version_branch)
-        elif branch in ["master", "main"]:
-            svn_reference = "trunk"
         else:
             svn_reference = "branches/{}".format(branch)
 
-        git_url = "{url}/{branch}/src/{module_class}/{module_name}".format(
-            url=url,
-            module_class=module_class,
-            module_name=name,
-            branch=svn_reference,
-        )
+        git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
         return "official_fork", git_url
 
     # Check if URL can be found
@@ -2531,12 +2522,6 @@ if __name__ == "__main__":
 
     grass_version = grass.version()
     version = grass_version["version"].split(".")
-    # TODO: update temporary workaround of using grass7 subdir of addon-repo, see
-    #       https://github.com/OSGeo/grass-addons/issues/528
-
-    # if version[0] > 7:
-    #     version[0] = 7
-    #     version[1] = 9
 
     build_platform = grass_version["build_platform"].split("-", 1)[0]
 
