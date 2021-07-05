@@ -1,4 +1,4 @@
-i#
+#
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
 # PURPOSE:   This module contains functions for interactive display
