@@ -77,7 +77,6 @@
 # % description: Specific branch to fetch addon from (only used when fetching from git)
 # % required: no
 # % multiple: no
-# % answer: main
 # %end
 
 # %flag
@@ -232,6 +231,21 @@ def urlopen(url, *args, **kwargs):
     """
     request = urlrequest.Request(url, headers=HEADERS)
     return urlrequest.urlopen(request, *args, **kwargs)
+
+
+def get_branches(github_api_url, version_only=False):
+    """Get ordered list of branch names in repo using github API"""
+    req = urlrequest.urlopen(github_api_url)
+    content = json.loads(req.read())
+    branches = [repo_branch["name"] for repo_branch in content]
+    if version_only:
+        branches = [
+            version_branch
+            for version_branch in branches
+            if version_branch.startswith("grass")
+        ]
+    branches.sort()
+    return branches
 
 
 def download_addons_paths_file(url, response_format, *args, **kwargs):
@@ -1612,9 +1626,9 @@ def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
     # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
-    source_url = "https://github.com/OSGeo/grass-addons/tree/grass{}/src".format(
-        version[0]
-    )
+    # source_url = "https://github.com/OSGeo/grass-addons/tree/grass{}/src".format(
+    #     version[0]
+    # )
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -1696,7 +1710,7 @@ def install_extension_std_platforms(name, source, url, branch):
         "SCRIPTDIR=%s" % dirs["script"],
         "STRINGDIR=%s" % dirs["string"],
         "ETC=%s" % os.path.join(dirs["etc"]),
-        "SOURCE_URL=%s" % source_url,
+        "SOURCE_URL=%s" % url,
     ]
 
     install_cmd = [
@@ -2304,12 +2318,18 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     # Handle URL for the offical repo
     if not url and name:
         module_class = get_module_class_name(name)
+        repo_branches = get_branches(
+            "https://api.github.com/repos/OSGeo/grass-addons/branches", True
+        )
+        # Define branch to fetch from (latest or current version)
+        version_branch = "grass{}".format(version[0])
+        if version_branch not in repo_branches:
+            version_branch = repo_branches[-1]
+
         # Set URL for the given GRASS version
         git_url = (
             "https://github.com/OSGeo/grass-addons/branches/"
-            "grass{version}/src/{module_class}/{module_name}".format(
-                version=version[0], module_class=module_class, module_name=name
-            )
+            f"{version_branch}/src/{module_class}/{name}"
         )
         return "official", git_url
 
@@ -2319,7 +2339,19 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
         # note: 'trunk' is required to make URL usable for 'svn export' call
         if branch is None:
-            svn_reference = "branches/grass{}".format(version)
+            repo_branches = get_branches(
+                url.rstrip("/").replace("github.com/", "api.github.com/repos/")
+                + "/branches",
+                True,
+            )
+            # Define branch to fetch from (latest or current version)
+            if not repo_branches:
+                svn_reference = "trunk"
+            else:
+                version_branch = "grass{}".format(version[0])
+                if version_branch not in repo_branches:
+                    version_branch = repo_branches[-1]
+                svn_reference = "branches/{}".format(version_branch)
         elif branch in ["master", "main"]:
             svn_reference = "trunk"
         else:
@@ -2499,8 +2531,11 @@ if __name__ == "__main__":
     version = grass_version["version"].split(".")
     # TODO: update temporary workaround of using grass7 subdir of addon-repo, see
     #       https://github.com/OSGeo/grass-addons/issues/528
-    version[0] = 7
-    version[1] = 9
+
+    # if version[0] > 7:
+    #     version[0] = 7
+    #     version[1] = 9
+
     build_platform = grass_version["build_platform"].split("-", 1)[0]
 
     sys.exit(main())
