@@ -97,7 +97,7 @@ class GrassRendererInteractive():
         rcfile, self._env = gs.create_environment(self._rc_original["GISDBASE"], "temp_folium_WGS84", "PERMANENT")       
         
         # Location and mapset and region
-        create_location(self._rc_original["GISDBASE"], "temp_folium_WGS84", epsg="3857", overwrite=True, env=self._env)
+        create_location(self._rc_original["GISDBASE"], "temp_folium_WGS84", epsg="4326", overwrite=True, env=self._env)
         
         self._rc_tmp = self._get_rc(self._env) # Get tmp location/mapset
         
@@ -213,14 +213,15 @@ class GrassRendererInteractive():
         # Convert to GeoJSON
         gs.run_command("v.out.ogr", input=name, output="tmp_{}.json".format(vector), format="GeoJSON", env=self._env)
         
-        #style_function = {'Color': '#00ff00'}
-        
         folium.GeoJson("tmp_{}.json".format(vector), name=vector).add_to(self.map)
     
     def show(self):
         """This function creates a folium map with a GRASS raster
         overlayed on a basemap"""
         fig = folium.Figure(width=self.width, height=self.height)
+        
+        # Add Layer Control
+        folium.LayerControl().add_to(self.map)
         
         # Add map to figure
         fig.add_child(self.map)
