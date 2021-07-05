@@ -1569,7 +1569,7 @@ def download_source_code(
             response = urlopen(url)
         except URLError:
             # Try download add-on from 'master' branch if default "main" fails
-            if branch == "main":
+            if branch is None or branch == "":
                 try:
                     url = url.replace("main", "master")
                     gscript.message(
@@ -2234,9 +2234,7 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            suffix = match["url_end"].format(
-                name=name, branch=branch if branch else "main"
-            )
+            suffix = match["url_end"].format(name=name, branch=branch if branch else "main")
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
@@ -2332,7 +2330,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         git_url = (
             "https://github.com/OSGeo/grass-addons/branches/"
             f"{version_branch}/src/{module_class}/{name}"
-        )
+            )
         return "official", git_url
 
     # Handle URL for a fork of the offical repo
