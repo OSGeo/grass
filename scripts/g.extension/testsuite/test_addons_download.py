@@ -18,14 +18,10 @@ COPYRIGHT: (C) 2020 Stefan Blumentrath, Vaclav Petras,
 import os
 from importlib.machinery import SourceFileLoader
 from distutils.spawn import find_executable
-import unittest
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
-
-# Set to False if test is supposed to run
-skip = False
 
 
 class TestModuleDownloadFromDifferentSources(TestCase):
@@ -53,7 +49,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         """Remove created files"""
         silent_rmtree(self.install_prefix)
 
-    @unittest.skipIf(skip, "Skipping as chosen...")
     def test_github_install(self):
         """Test installing extension from github"""
 
@@ -67,16 +62,14 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         # Modules with non-standard branch would be good for testing...
         self.assertModule(
             "g.extension",
-            extension="r.plus.example",
+            extension="r.example.plus",
             url="https://github.com/wenzeslaus/r.example.plus",
             prefix=self.install_prefix,
-            branch="main",
         )
 
         for file in self.files:
             self.assertFileExists(file)
 
-    @unittest.skipIf(skip, "Skipping as chosen...")
     def test_gitlab_install(self):
         """Test installing extension from gitlab"""
         self.assertModule(
@@ -89,7 +82,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
-    @unittest.skipIf(skip, "Skipping as chosen...")
     def test_bitbucket_install(self):
         """Test installing extension from bitbucket"""
         d_rast_files = [
@@ -106,7 +98,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in d_rast_files:
             self.assertFileExists(file)
 
-    @unittest.skipIf(skip, "Skipping as chosen...")
     def test_github_install_official(self):
         """Test installing extension from official addons repository"""
         r_clip_files = [
@@ -118,7 +109,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         for file in r_clip_files:
             self.assertFileExists(file)
 
-    @unittest.skipIf(skip, "Skipping as chosen...")
     def test_github_install_official_multimodule(self):
         """Test installing multi-module extension from official addons repository"""
         i_sentinel_files = [
@@ -141,7 +131,6 @@ class TestModuleDownloadFromDifferentSources(TestCase):
                 print(file)
                 self.assertModule(file, **{"help": True})
 
-    @unittest.skipIf(skip, "Skipping as chosen...")
     def test_windows_install(self):
         """Test function for installing extension on MS Windows"""
 
