@@ -2234,7 +2234,9 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            suffix = match["url_end"].format(name=name, branch=branch)
+            suffix = match["url_end"].format(
+                name=name, branch=branch if branch else "main"
+            )
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
