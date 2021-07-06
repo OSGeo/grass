@@ -11,82 +11,16 @@
 #            for details.
 
 import os
-import sys
-import subprocess
 import folium
 import grass.script as gs
-import shutil
-import codecs
 
-def create_location(
-    dbase,
-    location,
-    epsg=None,
-    overwrite=False,
-    env=None
-):
-    """Create new location
-    Raise ScriptError on error.
-    :param str dbase: path to GRASS database
-    :param str location: location name to create
-    :param epsg: if given create new location based on EPSG code
-    :param bool overwrite: True to overwrite location if exists(WARNING:
-                           ALL DATA from existing location ARE DELETED!)
-    """
-
-    # check if location already exists
-    if os.path.exists(os.path.join(dbase, location)):
-        if not overwrite:
-            print(("Location <%s> already exists. Operation canceled.") % location)
-            try:
-                os.remove(tmp_gisrc)
-            except Exception:
-                pass
-            return
-        else:
-            print(("Location <%s> already exists and will be overwritten") % location)
-            shutil.rmtree(os.path.join(dbase, location))
-
-    stdin = None
-    kwargs = dict()
-
-    ps = gs.pipe_command(
-        "g.proj",
-        quiet=True,
-        flags="t",
-        epsg=epsg,
-        location=location,
-        stderr=subprocess.PIPE,
-        env=env,
-        **kwargs,
-    )
-    
-    error = ps.communicate(stdin)[1]
-    try:
-        os.remove(tmp_gisrc)
-    except Exception:
-        pass
-
-    if ps.returncode != 0 and error:
-        raise ScriptError(repr(error))
-
-    try:
-        fd = codecs.open(
-            os.path.join(dbase, location, "PERMANENT", "MYNAME"),
-            encoding="utf-8",
-            mode="w",
-        )
-        
-        fd.write(os.linesep)
-        fd.close()
-    except OSError as e:
-        raise ScriptError(repr(e))
 
 class InteractiveMap():
     """This class creates interative GRASS maps with folium"""
 
     def __init__(self, width=400, height=400):
-        """This initiates an instance of GrassRenderer"""
+        """This initiates a folium map centered on g.region"""
+        # Store height and width
         self.width=width
         self.height=height
         
@@ -97,10 +31,8 @@ class InteractiveMap():
         rcfile, self._env = gs.create_environment(self._rc_original["GISDBASE"], "temp_folium_WGS84", "PERMANENT")       
         
         # Location and mapset and region
-        create_location(self._rc_original["GISDBASE"], "temp_folium_WGS84", epsg="4326", overwrite=True, env=self._env)
-        
+        gs.create_location(self._rc_original["GISDBASE"], "temp_folium_WGS84", epsg="4326", overwrite=True)
         self._rc_tmp = self._get_rc(self._env) # Get tmp location/mapset
-        
         self._extent = self._convert_extent(env=os.environ) # Get the extent of the original area in WGS84
         
         # Set region to match original region extent
@@ -150,9 +82,10 @@ class InteractiveMap():
 
         proj_in is a proj4 string, for example, the output of g.region
         with the `g` flag."""
-
+        # Reformat input
         coordinates = f"{x}, {y}"
         
+        # Reproject coordinates
         coords_folium = gs.read_command(
             "m.proj",
             coordinates=coordinates,
@@ -188,21 +121,15 @@ class InteractiveMap():
     
     def _folium_bounding_box(self, extent):
         """Reformats extent into bounding box to pass to folium"""
-        
-        bounding_box = [[extent['north'], extent['west']],
-                        [extent['south'], extent['east']]]
-        
-        return bounding_box
+        return [[extent['north'], extent['west']], [extent['south'], extent['east']]]
     
-        
-    def add_vector(self, vector, mapset=None):
+    def add_vector(self, vector):
         """Imports vector into temporary WGS84 location, 
         re-formats to a GeoJSON and adds to folium map"""
-        if mapset is None:
-            mapset = self._rc_original["MAPSET"]
         
         # Import vector into new Location/Mapset
-        name =f"{vector}@{mapset}"
+        name = gs.find_file(vector, element="vector")["fullname"]
+        # Reproject vector into WGS84 Location
         gs.run_command("v.proj",
                        input=name,
                        location=self._rc_original["LOCATION_NAME"],
