@@ -248,6 +248,28 @@ def get_github_branches(github_api_url, version_only=False):
     return branches
 
 
+def get_default_branch(full_url):
+    """Get default branch for repo (currently only implemented for github API and gitlab API"""
+    if "github.com" in full_url:
+        organization, repository = full_url.split("github.com/")[1].split("/")[0:2]
+        req = urlrequest.urlopen(f"https://api.github.com/orgs/{organization}/repos")
+        content = json.loads(req.read())
+        default_branch = [
+            repo["default_branch"] for repo in content if repo["name"] == repository
+        ][0]
+    elif "gitlab.com" in full_url:
+        organization, repository = full_url.split("gitlab.com/")[1].split("/")[0:2]
+        req = urlrequest.urlopen(
+            f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}"
+        )
+        content = json.loads(req.read())
+        default_branch = content["default_branch"]
+
+    else:
+        default_branch = "main"
+    return default_branch
+
+
 def download_addons_paths_file(url, response_format, *args, **kwargs):
     """Generates JSON file containing the download URLs of the official
     Addons
@@ -1567,7 +1589,7 @@ def download_source_code(
             response = urlopen(url)
         except URLError:
             # Try download add-on from 'master' branch if default "main" fails
-            if branch is None or branch == "":
+            if not branch:
                 try:
                     url = url.replace("main", "master")
                     gscript.message(
@@ -2232,9 +2254,7 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            suffix = match["url_end"].format(
-                name=name, branch=branch if branch else "main"
-            )
+            suffix = match["url_end"].format(name=name, branch=get_default_branch(url))
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
@@ -2319,7 +2339,8 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     if not url and name:
         module_class = get_module_class_name(name)
         repo_branches = get_github_branches(
-            "https://api.github.com/repos/OSGeo/grass-addons/branches", True
+            "https://api.github.com/repos/OSGeo/grass-addons/branches",
+            version_only=True,
         )
         # Define branch to fetch from (latest or current version)
         version_branch = "grass{}".format(version[0])
@@ -2342,7 +2363,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
             repo_branches = get_github_branches(
                 url.rstrip("/").replace("github.com/", "api.github.com/repos/")
                 + "/branches",
-                True,
+                version_only=True,
             )
             # Define branch to fetch from (latest or current version)
             if not repo_branches:
@@ -2419,10 +2440,11 @@ def get_addons_paths(gg_addons_base_dir):
     and their paths (mkhmtl.py tool)
     """
     get_addons_paths.json_file = "addons_paths.json"
-
-    url = (
-        "https://api.github.com/repos/OSGeo/grass-addons/git/trees/" "main?recursive=1"
+    addons_branch = get_github_branches(
+        "https://github.com/OSGeo/grass-addons", version_only=True
     )
+
+    url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
 
     response = download_addons_paths_file(
         url=url,
