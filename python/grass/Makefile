@@ -5,7 +5,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 PYDIR = $(ETC)/python/grass
 
-SUBDIRS = app exceptions script ctypes grassdb temporal pygrass pydispatch imaging gunittest bandref jupyter
+SUBDIRS = app benchmark exceptions script ctypes grassdb temporal pygrass pydispatch imaging gunittest bandref jupyter
 
 default: $(PYDIR)/__init__.py
 	$(MAKE) subdirs
