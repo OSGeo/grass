@@ -252,19 +252,13 @@ def get_default_branch(full_url):
     """Get default branch for repo (currently only implemented for github API and gitlab API"""
     if "github.com" in full_url:
         organization, repository = full_url.split("github.com/")[1].split("/")[0:2]
-        try:
-            req = urlrequest.urlopen(f"https://api.github.com/orgs/{organization}/repos")
-        except ValueError:
-            req = urlrequest.urlopen(f"https://api.github.com/users/{organization}/repos")
+        print(organization, repository)
+        req = urlrequest.urlopen(f"https://api.github.com/repos/{organization}/{repository}")
         content = json.loads(req.read())
-        default_branch = [
-            repo["default_branch"] for repo in content if repo["name"] == repository
-        ][0]
+        default_branch = content["default_branch"]
     elif "gitlab.com" in full_url:
         organization, repository = full_url.split("gitlab.com/")[1].split("/")[0:2]
-        req = urlrequest.urlopen(
-            f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}"
-        )
+        req = urlrequest.urlopen(f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}")
         content = json.loads(req.read())
         default_branch = content["default_branch"]
 
