@@ -624,6 +624,27 @@ class Module(object):
             self.run()
             return self
 
+        self.update(*args, **kargs)
+
+        #
+        # check if execute
+        #
+        if self.run_:
+            #
+            # check reqire parameters
+            #
+            if self.check_:
+                self.check()
+            return self.run()
+        return self
+
+    def update(self, *args, **kargs):
+        """Update module parameters and selected object attributes.
+
+        Valid parameters are all the module parameters
+        and additional parameters, namely: run_, stdin_, stdout_, stderr_,
+        env_, and finish_.
+        """
         #
         # check for extra kargs, set attribute and remove from dictionary
         #
@@ -632,7 +653,7 @@ class Module(object):
                 self.flags[flg].value = True
             del kargs["flags"]
 
-        # set attributs
+        # set attributes
         for key in ("run_", "env_", "finish_", "stdout_", "stderr_", "check_"):
             if key in kargs:
                 setattr(self, key, kargs.pop(key))
@@ -660,17 +681,6 @@ class Module(object):
             else:
                 raise ParameterError("%s is not a valid parameter." % key)
 
-        #
-        # check if execute
-        #
-        if self.run_:
-            #
-            # check reqire parameters
-            #
-            if self.check_:
-                self.check()
-            return self.run()
-        return self
 
     def get_bash(self):
         """Return a BASH representation of the Module."""
