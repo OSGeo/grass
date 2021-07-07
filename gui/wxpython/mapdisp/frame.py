@@ -156,12 +156,12 @@ class MapFrame(SingleMapFrame):
                 sb.SbProjection,
             ]
             self.statusbarItemsHiddenInNviz = (
-                        sb.SbAlignExtent,
-                        sb.SbDisplayGeometry,
-                        sb.SbShowRegion,
-                        sb.SbResolution,
-                        sb.SbMapScale,
-                    )
+                sb.SbAlignExtent,
+                sb.SbDisplayGeometry,
+                sb.SbShowRegion,
+                sb.SbResolution,
+                sb.SbMapScale,
+            )
             self.statusbar = self.CreateStatusbar(statusbarItems)
 
             self.Map.GetRenderMgr().updateProgress.connect(

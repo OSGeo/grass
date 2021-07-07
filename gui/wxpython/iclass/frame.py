@@ -186,7 +186,7 @@ class IClassMapFrame(DoubleMapFrame):
             self, giface=self._giface, stats_data=self.stats_data
         )
 
-        #statusbar items
+        # statusbar items
         statusbarItems = [
             sb.SbCoordinates,
             sb.SbRegionExtent,

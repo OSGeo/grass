@@ -366,6 +366,15 @@ class MapFrameBase(wx.Frame):
         """Overide wx.StatusBar method"""
         self.statusbar.SetStatusText(*args)
 
+    def ShowStatusbar(self, show):
+        """Show/hide statusbar and associated pane"""
+        self._mgr.GetPane("statusbar").Show(show)
+        self._mgr.Update()
+
+    def IsStatusbarShown(self):
+        """Check if statusbar is shown"""
+        return self._mgr.GetPane("statusbar").IsShown()
+
     def StatusbarReposition(self):
         """Reposition items in statusbar"""
         if self.statusbarManager:
@@ -375,15 +384,6 @@ class MapFrameBase(wx.Frame):
         """Enable/disable toolbars long help"""
         for toolbar in six.itervalues(self.toolbars):
             toolbar.EnableLongHelp(enable)
-
-    def ShowStatusbar(self, show):
-        """Show/hide statusbar and associated pane"""
-        self._mgr.GetPane("statusbar").Show(show)
-        self._mgr.Update()
-
-    def IsStatusbarShown(self):
-        """Check if statusbar is shown"""
-        return self._mgr.GetPane("statusbar").IsShown()
 
     def ShowAllToolbars(self, show=True):
         if not show:  # hide
