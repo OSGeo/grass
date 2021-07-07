@@ -593,7 +593,7 @@ class VDigitToolbar(BaseToolbar):
         if self.digit is None:
             try:
                 self.digit = self.MapWindow.digit = self.digitClass(
-                    mapwindow=self.MapWindow
+                    giface=self._giface, mapwindow=self.MapWindow
                 )
             except SystemExit:
                 self.digit = self.MapWindow.digit = None
@@ -1004,7 +1004,8 @@ class VDigitToolbar(BaseToolbar):
             )
 
         self.MapWindow.pdcVector = PseudoDC()
-        self.digit = self.MapWindow.digit = self.digitClass(mapwindow=self.MapWindow)
+        self.digit = self.MapWindow.digit = self.digitClass(giface=self._giface,
+                                                            mapwindow=self.MapWindow)
 
         self.mapLayer = mapLayer
         # open vector map (assume that 'hidden' map layer is temporary vector

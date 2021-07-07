@@ -1785,25 +1785,19 @@ class MapFrame(SingleMapFrame):
     def QuitRDigit(self):
         """Calls digitizer cleanup, removes digitizer object and disconnects
         signals from Map."""
-        if not self.IsStandalone():
-            self.rdigit.CleanUp()
-            # disconnect updating layers
-            self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
-            self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
-            self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
-            self._toolSwitcher.toggleToolChanged.disconnect(
-                self.toolbars["rdigit"].CheckSelectedTool,
-            )
+        self.rdigit.CleanUp()
+        # disconnect updating layers
+        self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
+        self._toolSwitcher.toggleToolChanged.disconnect(
+            self.toolbars["rdigit"].CheckSelectedTool,
+        )
 
-            self.RemoveToolbar("rdigit", destroy=True)
-            self.rdigit = None
-        else:
-            self.Close()
+        self.RemoveToolbar("rdigit", destroy=True)
+        self.rdigit = None
 
     def QuitVDigit(self):
         """Quit VDigit"""
-        if not self.IsStandalone():
-            # disable the toolbar
-            self.RemoveToolbar("vdigit", destroy=True)
-        else:
-            self.Close()
+        # disable the toolbar
+        self.RemoveToolbar("vdigit", destroy=True)
