@@ -29,6 +29,7 @@ from core import globalvar
 from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
+from mapdisp import statusbar as sb
 
 from grass.script import core as grass
 
@@ -338,6 +339,32 @@ class MapFrameBase(wx.Frame):
         if self.statusbarManager:
             if self.statusbarManager.GetMode() == 0:
                 self.statusbarManager.ShowItem("coordinates")
+
+    def CreateStatusbar(self, statusbarItems):
+        """Create statusbar (default items)."""
+        # create statusbar and its manager
+        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
+        statusbar.SetMinHeight(24)
+        statusbar.SetFieldsCount(4)
+        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
+
+        # fill statusbar manager
+        self.statusbarManager.AddStatusbarItemsByClass(
+            statusbarItems, mapframe=self, statusbar=statusbar
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3)
+        )
+        self.statusbarManager.Update()
+        return statusbar
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def StatusbarReposition(self):
         """Reposition items in statusbar"""

@@ -99,7 +99,20 @@ class MapFrame(SingleMapFrame):
         #
         # Create statusbar
         #
-        self.statusbar = self.CreateStatusbar()
+        statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbProjection,
+            sbgcp.SbGoToGCP,
+            sbgcp.SbRMSError,
+        ]
+        self.statusbar = self.CreateStatusbar(statusbarItems)
+        self.statusbarManager.SetMode(8)  # goto GCP
 
         #
         # Init map display (buffered DC & set default cursor)
@@ -216,43 +229,6 @@ class MapFrame(SingleMapFrame):
             lambda: self.GetMapToolbar().Enable("zoomback", enable=False)
         )
         mapWindow.mouseMoving.connect(self.CoordinatesChanged)
-
-    def CreateStatusbar(self):
-        """Create statusbar (default items)."""
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbProjection,
-            sbgcp.SbGoToGCP,
-            sbgcp.SbRMSError,
-        ]
-
-        # create statusbar and its manager
-        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
-        statusbar.SetMinHeight(24)
-        statusbar.SetFieldsCount(4)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
-        )
-
-        self.statusbarManager.SetMode(8)  # goto GCP
-        return statusbar
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window

@@ -188,7 +188,20 @@ class IClassMapFrame(DoubleMapFrame):
         # PyPlot init
         self.plotPanel = PlotPanel(self, giface=self.giface, stats_data=self.stats_data)
 
-        self.statusbar = self.CreateStatusbar()
+        #statusbar items
+        statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+        ]
+        self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()
         self._mgr.Update()
 
@@ -204,10 +217,6 @@ class IClassMapFrame(DoubleMapFrame):
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         self.SendSizeEvent()
-
-    def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
-        self.statusbar.SetStatusText(*args)
 
     def OnCloseWindow(self, event):
         self.GetFirstWindow().GetDigit().CloseMap()
@@ -279,42 +288,6 @@ class IClassMapFrame(DoubleMapFrame):
         if ret != 0:
             return False
         return True
-
-    def CreateStatusbar(self):
-        """Create statusbar (default items)."""
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbGoTo,
-            sb.SbProjection,
-        ]
-
-        # create statusbar and its manager
-        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
-        statusbar.SetMinHeight(24)
-        statusbar.SetFieldsCount(4)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
-        )
-        self.statusbarManager.Update()
-        return statusbar
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
