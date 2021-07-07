@@ -30,7 +30,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/segment.h>
 #include <grass/stats.h>
 #include "ncb.h"
 #include "local_proto.h"
@@ -95,7 +94,7 @@ struct output
     const char *name;
     char title[1024];
     int fd;
-    DCELL *buf;
+    DCELL **buf;
     stat_func *method_fn;
     stat_func_w *method_fn_w;
     int copycolr;
@@ -143,15 +142,14 @@ int main(int argc, char *argv[])
     int *selection_fd;
     int num_outputs;
     struct output *outputs = NULL;
-    SEGMENT **out_segment = NULL;
     int **out_fd = NULL;
     int copycolr, weights, have_weights_mask;
     char **selection;
     RASTER_MAP_TYPE map_type;
     int row, col;
     int *readrow;
-    int nrows, ncols;
-    int i, n;
+    int nrows, ncols, buflen;
+    int i, n, t;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -341,6 +339,7 @@ int main(int argc, char *argv[])
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
+    buflen = ncols * sizeof(DCELL);
 
     /* open raster maps */
     in_fd = G_malloc(ncb.threads * sizeof(int));
@@ -361,10 +360,8 @@ int main(int argc, char *argv[])
 			parm.output->key, parm.method->key);
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
-    out_segment = G_malloc(ncb.threads * sizeof(SEGMENT *));
     out_fd = G_malloc(ncb.threads * sizeof(int*));
     for (int t = 0; t < ncb.threads; t++) {
-        out_segment[t] = G_malloc(num_outputs * sizeof(SEGMENT));
         out_fd[t] = G_malloc(num_outputs * sizeof(int));
     }
 
@@ -424,7 +421,10 @@ int main(int argc, char *argv[])
 	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
-	out->buf = Rast_allocate_d_buf();
+    out->buf = G_malloc(ncb.threads * sizeof(DCELL*));
+    for (t = 0; t < ncb.threads; t++) {
+        out->buf[t] = Rast_allocate_d_buf();
+    }
 	out->fd = Rast_open_new(output_name, otype);
 	/* TODO: method=mode should propagate its type */
 
@@ -436,12 +436,9 @@ int main(int argc, char *argv[])
 		    ncb.nsize, ncb.nsize, menu[method].name, ncb.oldcell);
 
         char* fname = G_tempfile();
-        int fd = creat(fname, 0666);
-        Segment_format(fd, nrows, ncols, nrows/80, ncols, sizeof(DCELL));
-        close(fd);
+        close(creat(fname, 0666));
         for (int t = 0; t < ncb.threads; t++) {
             out_fd[t][i] = open(fname, O_RDWR);
-            Segment_init(&out_segment[t][i], out_fd[t][i], 4);
         }
     }
 
@@ -479,14 +476,14 @@ int main(int argc, char *argv[])
     if (weights) {
         values_w = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
         values_w_tmp = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
-        for (int t = 0; t < ncb.threads; t++) {
+        for (t = 0; t < ncb.threads; t++) {
             values_w[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
             values_w_tmp[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
         }
     }
     values = G_malloc(ncb.threads * sizeof(DCELL*));
     values_tmp = G_malloc(ncb.threads * sizeof(DCELL*));
-    for (int t = 0; t < ncb.threads; t++) {
+    for (t = 0; t < ncb.threads; t++) {
         values[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
         values_tmp[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
     }
@@ -501,6 +498,8 @@ int main(int argc, char *argv[])
     #endif
     int low = nrows * thread_id/ncb.threads;
     int high = nrows * (thread_id + 1)/ncb.threads;
+    for (i = 0; i < num_outputs; i++)
+        lseek(out_fd[thread_id][i], (off_t) low * buflen, 0);
 
     /* initialize the cell bufs with 'dist' rows of the old cellfile */
     readrow[thread_id] = low-ncb.dist;
@@ -520,7 +519,8 @@ int main(int argc, char *argv[])
             /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
              * Thus original data start is shifted by ncb.dist! */
             for (i = 0; i < num_outputs; i++) {
-                Segment_put(&out_segment[thread_id][i], &ncb.buf[thread_id][ncb.dist][col + ncb.dist], row, col);
+                outputs[i].buf[thread_id][col] = ncb.buf[thread_id][ncb.dist][col + ncb.dist];
+                /* write(out_fd[thread_id][i], &ncb.buf[thread_id][ncb.dist][col + ncb.dist], sizeof(DCELL)); */
             }
             continue;
 	    }
@@ -547,37 +547,38 @@ int main(int argc, char *argv[])
                 (*out->method_fn)(&temp, values_tmp[thread_id], n, &out->quantile);
 		    }
 		}
-        Segment_put(&out_segment[thread_id][i], &temp, row, col);
+        outputs[i].buf[thread_id][col] = temp;
+        /* write(out_fd[thread_id][i], &temp, sizeof(DCELL)); */
 	    }
 	} // end of col loop
-
+        
+        for (i = 0; i < num_outputs; i++)
+            write(out_fd[thread_id][i], outputs[i].buf[thread_id], buflen);
         #pragma omp atomic update
         work++;
     } // end of row loop
     } // end of parallel region
    for (i = 0; i < num_outputs; i++) {
         struct output *out = &outputs[i];
-        for (int t = 0; t < ncb.threads; t++) {
-            Segment_flush(&out_segment[t][i]);
-        }
+        lseek(out_fd[0][i], 0L, 0);
 
         for (row = 0; row < nrows; row++) {
-            Segment_get_row(&out_segment[0][i], out->buf, row);
-            Rast_put_d_row(out->fd, out->buf);
+            read(out_fd[0][i], out->buf[0], buflen);
+            Rast_put_d_row(out->fd, out->buf[0]);
         }
 
-        for (int t = 0; t < ncb.threads; t++) {
-            Segment_release(&out_segment[t][i]);
+        for (t = 0; t < ncb.threads; t++) {
+            close(out_fd[t][i]);
         }
     }
 
     G_percent(work, nrows, 2);
 
-    for (int t = 0; t < ncb.threads; t++)
+    for (t = 0; t < ncb.threads; t++)
         Rast_close(in_fd[t]);
 
     if (selection)
-        for (int t = 0; t < ncb.threads; t++)
+        for (t = 0; t < ncb.threads; t++)
             Rast_close(selection_fd[t]);
 
     for (i = 0; i < num_outputs; i++) {
