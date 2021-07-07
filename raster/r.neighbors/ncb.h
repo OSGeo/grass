@@ -2,7 +2,7 @@
 
 struct ncb			/* neighborhood control block */
 {
-    DCELL **buf;		/* for reading raster map */
+    DCELL ***buf;		/* for reading raster map */
     int *value;			/* neighborhood values */
     int nsize;			/* size of the neighborhood */
     int dist;			/* nsize/2 */
