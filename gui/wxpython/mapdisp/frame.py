@@ -36,7 +36,7 @@ from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapFrame, MapPanelMixin
+from gui_core.mapdisp import SingleMapFrame
 from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
@@ -63,7 +63,7 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapFrame(SingleMapFrame, MapPanelMixin):
+class MapFrame(SingleMapFrame):
     """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -339,6 +339,10 @@ class MapFrame(SingleMapFrame, MapPanelMixin):
             )
         )
         return statusbar
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
 
     def GetMapWindow(self):
         return self.MapWindow
@@ -691,6 +695,7 @@ class MapFrame(SingleMapFrame, MapPanelMixin):
         :param destroy True to destroy otherwise toolbar is only hidden
         """
         super().RemoveToolbar(name, destroy)
+
         if name == "vdigit":
             self._mgr.GetPane("vdigit").Hide()
             self._mgr.GetPane("2d").Show()

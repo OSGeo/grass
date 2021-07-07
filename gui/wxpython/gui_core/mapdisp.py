@@ -349,6 +349,46 @@ class MapFrameBase(wx.Frame):
         for toolbar in six.itervalues(self.toolbars):
             toolbar.EnableLongHelp(enable)
 
+    def ShowStatusbar(self, show):
+        """Show/hide statusbar and associated pane"""
+        self._mgr.GetPane("statusbar").Show(show)
+        self._mgr.Update()
+
+    def IsStatusbarShown(self):
+        """Check if statusbar is shown"""
+        return self._mgr.GetPane("statusbar").IsShown()
+
+    def ShowAllToolbars(self, show=True):
+        if not show:  # hide
+            action = self.RemoveToolbar
+        else:
+            action = self.AddToolbar
+        for toolbar in self.GetToolbarNames():
+            action(toolbar)
+
+    def AreAllToolbarsShown(self):
+        return self.GetMapToolbar().IsShown()
+
+    def GetToolbarNames(self):
+        """Return toolbar names"""
+        return self.toolbars.keys()
+
+    def RemoveToolbar(self, name, destroy=False):
+        """Removes defined toolbar from the window
+
+        :param name toolbar to remove
+        :param destroy True to destroy otherwise toolbar is only hidden
+        """
+        self._mgr.DetachPane(self.toolbars[name])
+        if destroy:
+            self._toolSwitcher.RemoveToolbarFromGroup("mouseUse", self.toolbars[name])
+            self.toolbars[name].Destroy()
+            self.toolbars.pop(name)
+        else:
+            self.toolbars[name].Hide()
+
+        self._mgr.Update()
+
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         raise NotImplementedError("OnRender")
@@ -717,47 +757,3 @@ class DoubleMapFrame(MapFrameBase):
     def Draw(self, mapToDraw):
         """Re-display current map composition"""
         mapToDraw.UpdateMap(render=False)
-
-
-class MapPanelMixin():
-    """Mixin class that provides methods common for map panels"""
-
-    def ShowStatusbar(self, show):
-        """Show/hide statusbar and associated pane"""
-        self._mgr.GetPane("statusbar").Show(show)
-        self._mgr.Update()
-
-    def IsStatusbarShown(self):
-        """Check if statusbar is shown"""
-        return self._mgr.GetPane("statusbar").IsShown()
-
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.RemoveToolbar
-        else:
-            action = self.AddToolbar
-        for toolbar in self.GetToolbarNames():
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        return self.GetMapToolbar().IsShown()
-
-    def GetToolbarNames(self):
-        """Return toolbar names"""
-        return self.toolbars.keys()
-
-    def RemoveToolbar(self, name, destroy=False):
-        """Removes defined toolbar from the window
-
-        :param name toolbar to remove
-        :param destroy True to destroy otherwise toolbar is only hidden
-        """
-        self._mgr.DetachPane(self.toolbars[name])
-        if destroy:
-            self._toolSwitcher.RemoveToolbarFromGroup("mouseUse", self.toolbars[name])
-            self.toolbars[name].Destroy()
-            self.toolbars.pop(name)
-        else:
-            self.toolbars[name].Hide()
-
-        self._mgr.Update()
