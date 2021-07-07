@@ -17,8 +17,8 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapFrame, handlers support)
-@author Anna Kratochvilova <kratochanna gmail.com> (SingleMapFrame)
+@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapPanel, handlers support)
+@author Anna Kratochvilova <kratochanna gmail.com> (SingleMapPanel)
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
