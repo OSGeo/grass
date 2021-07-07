@@ -432,24 +432,14 @@ class GMFrame(wx.Frame):
             :param name: name of new map display window
             :return: reference to mapdisplay instance
             """
-            # count map display frame position
-            pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
-
-            # create superior Map Display frame
-            mapframe = wx.Frame(layertree,
-                                id=wx.ID_ANY,
-                                pos=pos,
-                                size=globalvar.MAP_WINDOW_SIZE,
-                                style=wx.DEFAULT_FRAME_STYLE,
-                                title=name)
 
             # create instance of Map Display interface
             self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
                 self._giface, layertree
             )
+
             # create Map Display
             mapdisplay = MapDisplay(
-                parent=mapframe,
                 giface=self._gifaceForDisplay,
                 id=wx.ID_ANY,
                 tree=layertree,

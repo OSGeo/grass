@@ -1704,10 +1704,22 @@ class MapPanel(SingleMapPanel):
 
 
 class MapDisplay(FrameMixin, MapPanel):
-    """General Map Display class"""
-    def __init__(self, parent, giface, id, tree, lmgr, idx, Map, title, **kwargs):
+    """Map Display frame used for Multi-Window layout"""
+    def __init__(self, giface, id, tree, lmgr, idx, Map, title, **kwargs):
+        # count map display frame position
+        pos = wx.Point((idx + 1) * 25, (idx + 1) * 25)
+
+        # create superior Map Display frame
+        mapframe = wx.Frame(tree,
+                            id=wx.ID_ANY,
+                            pos=pos,
+                            size=globalvar.MAP_WINDOW_SIZE,
+                            style=wx.DEFAULT_FRAME_STYLE,
+                            title=title)
+
+        # init map panel
         MapPanel.__init__(self,
-                         parent=parent,
+                         parent=mapframe,
                          giface=giface,
                          id=id,
                          tree=tree,
@@ -1718,26 +1730,31 @@ class MapDisplay(FrameMixin, MapPanel):
         )
 
         # set system icon
-        parent.iconsize = (16, 16)
-        parent.SetIcon(
+        mapframe.iconsize = (16, 16)
+        mapframe.SetIcon(
             wx.Icon(
                 os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
             )
         )
-        # use default window layout
+        # use default frame window layout
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             idx = 4 + idx * 4
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                parent.SetPosition((x, y))
-                parent.SetSize((w, h))
+                mapframe.SetPosition((x, y))
+                mapframe.SetSize((w, h))
             except Exception:
                 pass
 
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self, proportion=1, flag=wx.EXPAND)
+
         parent.SetSizer(sizer)
         parent.Layout()
+
+        mapframe.SetSizer(sizer)
+        mapframe.Layout()
+
