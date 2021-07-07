@@ -280,10 +280,6 @@ class MapFrame(SingleMapFrame):
             action=on_show_hide_statusbar,
         )
 
-    def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
-        self.statusbar.SetStatusText(*args)
-
     def CreateStatusbar(self):
         if self.statusbarManager:
             return
