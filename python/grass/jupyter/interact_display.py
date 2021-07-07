@@ -15,63 +15,56 @@ import folium
 import grass.script as gs
 
 
-class InteractiveMap():
+class InteractiveMap:
     """This class creates interative GRASS maps with folium"""
 
     def __init__(self, width=400, height=400):
         """This initiates a folium map centered on g.region"""
         # Store height and width
-        self.width=width
-        self.height=height
-        
-        # Get the parent location/mapset
-        self._rc_original = self._get_rc(os.environ)
-        
+        self.width = width
+        self.height = height
+
+        # Make temporary folder for all our files
+        self.tmp_dir = "./tmp/"
+        try:
+            os.mkdir(self.tmp_dir)
+        except FileExistsError:
+            pass
+
         # Create new environment for tmp WGS84 location
-        rcfile, self._env = gs.create_environment(self._rc_original["GISDBASE"], "temp_folium_WGS84", "PERMANENT")       
-        
+        rcfile, self._vector_env = gs.create_environment(
+            self.tmp_dir, "temp_folium_WGS84", "PERMANENT"
+        )
+
         # Location and mapset and region
-        gs.create_location(self._rc_original["GISDBASE"], "temp_folium_WGS84", epsg="4326", overwrite=True)
-        self._rc_tmp = self._get_rc(self._env) # Get tmp location/mapset
-        self._extent = self._convert_extent(env=os.environ) # Get the extent of the original area in WGS84
-        
+        gs.create_location(
+            self.tmp_dir, "temp_folium_WGS84", epsg="4326", overwrite=True
+        )
+        self._extent = self._convert_extent(
+            env=os.environ
+        )  # Get the extent of the original area in WGS84
+
         # Set region to match original region extent
-        gs.run_command("g.region",
-                       n=self._extent["north"],
-                       s=self._extent["south"],
-                       e=self._extent["east"],
-                       w=self._extent["west"],
-                       env=self._env
-                      )
-        
+        gs.run_command(
+            "g.region",
+            n=self._extent["north"],
+            s=self._extent["south"],
+            e=self._extent["east"],
+            w=self._extent["west"],
+            env=self._vector_env,
+        )
+
         # Get Center of tmp GRASS region
-        center = gs.parse_command("g.region", flags="cg", env=self._env)
+        center = gs.parse_command("g.region", flags="cg", env=self._vector_env)
         center = (float(center["center_northing"]), float(center["center_easting"]))
 
-        # Create Folium Map 
+        # Create Folium Map
         self.map = folium.Map(
             width=self.width,
             height=self.height,
             location=center,
             tiles="cartodbpositron",
         )
-
-        
-    def _get_rc(self, env=None):
-        rc = {}
-        
-        if env:
-            rcfile_location = env["GISRC"]
-        else:
-            rcfile_location = os.environ["GISRC"]
-            
-        with open(rcfile_location) as f:
-            for line in f:
-                entry = line.strip("\n").split(": ")
-                rc[entry[0]] = entry[1]
-        return rc
-    
-    
 
     def _convert_coordinates(self, x, y, proj_in):
         """This function reprojects coordinates to WGS84, the required
@@ -84,7 +77,7 @@ class InteractiveMap():
         with the `g` flag."""
         # Reformat input
         coordinates = f"{x}, {y}"
-        
+
         # Reproject coordinates
         coords_folium = gs.read_command(
             "m.proj",
@@ -115,44 +108,55 @@ class InteractiveMap():
         north, east = self._convert_coordinates(extent["e"], extent["n"], proj)
         south, west = self._convert_coordinates(extent["w"], extent["s"], proj)
 
-        extent = {'north': north, 'south': south, 'east': east, 'west': west}
+        extent = {"north": north, "south": south, "east": east, "west": west}
 
         return extent
-    
+
     def _folium_bounding_box(self, extent):
         """Reformats extent into bounding box to pass to folium"""
-        return [[extent['north'], extent['west']], [extent['south'], extent['east']]]
-    
-    def add_vector(self, vector):
-        """Imports vector into temporary WGS84 location, 
-        re-formats to a GeoJSON and adds to folium map"""
-        
-        # Import vector into new Location/Mapset
-        name = gs.find_file(vector, element="vector")["fullname"]
-        # Reproject vector into WGS84 Location
-        gs.run_command("v.proj",
-                       input=name,
-                       location=self._rc_original["LOCATION_NAME"],
-                       mapset=self._rc_original["MAPSET"],
-                       env=self._env
-                      )
-        
-        # Convert to GeoJSON
-        json_file = f"tmp_{vector}.json"
+        return [[extent["north"], extent["west"]], [extent["south"], extent["east"]]]
 
-        gs.run_command("v.out.ogr", input=name, output=json_file, format="GeoJSON", env=self._env)
-        
+    def add_vector(self, vector="abc"):
+        """Imports vector into temporary WGS84 location,
+        re-formats to a GeoJSON and adds to folium map"""
+
+        # Find full name of vector
+        full_name = gs.find_file(vector, element="vector")["fullname"]
+        # Reproject vector into WGS84 Location
+        gs.run_command(
+            "v.proj",
+            input=full_name,
+            location=gs.gisenv(env=os.environ)["LOCATION_NAME"],
+            dbase=gs.gisenv(env=os.environ)["GISDBASE"],
+            env=self._vector_env,
+        )
+
+        # Convert to GeoJSON
+        json_file = f"{self.tmp_dir}/tmp_{vector}.json"
+
+        gs.run_command(
+            "v.out.ogr",
+            input=vector,
+            output=json_file,
+            format="GeoJSON",
+            env=self._vector_env,
+        )
+
+        # Import GeoJSON to folium and add to map
         folium.GeoJson(json_file, name=vector).add_to(self.map)
-    
+
+    def add_layer_control(self, **kwargs):
+        self.layer_control = folium.LayerControl(**kwargs)
+        return self.map.add_child(self.layer_control)
+
     def show(self):
         """This function creates a folium map with a GRASS raster
         overlayed on a basemap"""
+
+        # Create Figure
         fig = folium.Figure(width=self.width, height=self.height)
-        
-        # Add Layer Control
-        folium.LayerControl().add_to(self.map)
-        
+
         # Add map to figure
         fig.add_child(self.map)
-        
+
         return fig
