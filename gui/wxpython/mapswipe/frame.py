@@ -97,7 +97,20 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self._mode = "swipe"
 
-        self.statusbar = self.CreateStatusbar()
+        # statusbar items
+        statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+        ]
+        self.statusbar = self.CreateStatusbar(statusbarItems)
 
         self._addPanes()
         self._bindWindowsActivation()
@@ -165,42 +178,6 @@ class SwipeMapFrame(DoubleMapFrame):
         self.splitter.Init()
         if not (self.rasters["first"] and self.rasters["second"]):
             self.OnSelectLayers(event=None)
-
-    def CreateStatusbar(self):
-        """Create statusbar (default items)."""
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbGoTo,
-            sb.SbProjection,
-        ]
-
-        # create statusbar and its manager
-        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
-        statusbar.SetMinHeight(24)
-        statusbar.SetFieldsCount(4)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
-        )
-        self.statusbarManager.Update()
-        return statusbar
 
     def ResetSlider(self):
         if self.splitter.GetSplitMode() == wx.SPLIT_VERTICAL:

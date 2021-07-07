@@ -142,7 +142,37 @@ class MapFrame(SingleMapFrame):
         #
         self.statusbarManager = None
         if statusbar:
-            self.statusbar = self.CreateStatusbar()
+            # items for choice
+            statusbarItems = [
+                sb.SbCoordinates,
+                sb.SbRegionExtent,
+                sb.SbCompRegionExtent,
+                sb.SbShowRegion,
+                sb.SbAlignExtent,
+                sb.SbResolution,
+                sb.SbDisplayGeometry,
+                sb.SbMapScale,
+                sb.SbGoTo,
+                sb.SbProjection,
+            ]
+            self.statusbarItemsHiddenInNviz = (
+                        sb.SbAlignExtent,
+                        sb.SbDisplayGeometry,
+                        sb.SbShowRegion,
+                        sb.SbResolution,
+                        sb.SbMapScale,
+                    )
+            self.statusbar = self.CreateStatusbar(statusbarItems)
+
+            self.Map.GetRenderMgr().updateProgress.connect(
+                self.statusbarManager.SetProgress
+            )
+            self.Map.GetRenderMgr().renderingFailed.connect(
+                lambda cmd, error: self._giface.WriteError(
+                    _("Failed to run command '%(command)s'. Details:\n%(error)s")
+                    % dict(command=" ".join(cmd), error=error)
+                )
+            )
 
         # init decoration objects
         self.decorations = {}
@@ -279,66 +309,6 @@ class MapFrame(SingleMapFrame):
             label=show_hide_statusbar_label,
             action=on_show_hide_statusbar,
         )
-
-    def CreateStatusbar(self):
-        if self.statusbarManager:
-            return
-
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbGoTo,
-            sb.SbProjection,
-        ]
-
-        self.statusbarItemsHiddenInNviz = (
-            sb.SbAlignExtent,
-            sb.SbDisplayGeometry,
-            sb.SbShowRegion,
-            sb.SbResolution,
-            sb.SbMapScale,
-        )
-
-        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
-        statusbar.SetMinHeight(24)
-        statusbar.SetFieldsCount(4)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        sbRender = sb.SbRender(self, statusbar=statusbar, position=3)
-        self.statusbarManager.AddStatusbarItem(sbRender)
-
-        self.statusbarManager.Update()
-
-        #
-        self.Map.GetRenderMgr().updateProgress.connect(
-            self.statusbarManager.SetProgress
-        )
-        self.Map.GetRenderMgr().renderingFailed.connect(
-            lambda cmd, error: self._giface.WriteError(
-                _("Failed to run command '%(command)s'. Details:\n%(error)s")
-                % dict(command=" ".join(cmd), error=error)
-            )
-        )
-        return statusbar
-
-    def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
-        self.statusbar.SetStatusText(*args)
 
     def GetMapWindow(self):
         return self.MapWindow
