@@ -6,7 +6,6 @@ struct ncb			/* neighborhood control block */
     int *value;			/* neighborhood values */
     int nsize;			/* size of the neighborhood */
     int dist;			/* nsize/2 */
-    int threads;
     struct Categories cats;
     char **mask;
     DCELL **weights;

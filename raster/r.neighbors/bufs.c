@@ -10,15 +10,15 @@
 
  */
 
-int allocate_bufs(void)
+int allocate_bufs(int nprocs)
 {
     int i;
     int bufsize;
 
     bufsize = (Rast_window_cols() + 2 * ncb.dist) * sizeof(DCELL);
 
-    ncb.buf = G_malloc(ncb.threads * sizeof(DCELL **));
-    for (int t = 0; t < ncb.threads; t++) {
+    ncb.buf = G_malloc(nprocs * sizeof(DCELL **));
+    for (int t = 0; t < nprocs; t++) {
         ncb.buf[t] = (DCELL **) G_malloc(ncb.nsize * sizeof(DCELL *));
         for (i = 0; i < ncb.nsize; i++) {
             ncb.buf[t][i] = (DCELL *) G_malloc(bufsize);

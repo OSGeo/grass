@@ -141,6 +141,7 @@ int main(int argc, char *argv[])
     int *in_fd;
     int *selection_fd;
     int num_outputs;
+    int nprocs;
     struct output *outputs = NULL;
     int **out_fd = NULL;
     int copycolr, weights, have_weights_mask;
@@ -274,13 +275,7 @@ int main(int argc, char *argv[])
     parm.title->required = NO;
     parm.title->description = _("Title for output raster map");
 
-    parm.nprocs = G_define_option();
-    parm.nprocs->key = "nprocs";
-    parm.nprocs->type = TYPE_INTEGER;
-    parm.nprocs->answer = "1";
-    parm.nprocs->options = "1-1000";
-    parm.nprocs->required = NO;
-    parm.nprocs->description = _("Number of threads which will be used for parallel computing");
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
     flag.align = G_define_flag();
     flag.align->key = 'a';
@@ -301,18 +296,14 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
-#if defined(_OPENMP)
-    sscanf(parm.nprocs->answer, "%d", &ncb.threads);
-    if (ncb.threads < 1)
+    sscanf(parm.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1)
     {
-      G_warning(_("<%d> is not valid number of threads. Number of threads will be set to <%d>"),
-      ncb.threads, abs(ncb.threads));
-      ncb.threads = abs(ncb.threads);
+      G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
     }
-    omp_set_num_threads(ncb.threads);
-#else
-    ncb.threads = 1;
-#endif
+    #if defined(_OPENMP)
+        omp_set_num_threads(nprocs);
+    #endif
 
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
 	G_fatal_error(_("-%c and %s= are mutually exclusive"),
@@ -342,8 +333,8 @@ int main(int argc, char *argv[])
     buflen = ncols * sizeof(DCELL);
 
     /* open raster maps */
-    in_fd = G_malloc(ncb.threads * sizeof(int));
-    for (int i = 0; i < ncb.threads; i++) {
+    in_fd = G_malloc(nprocs * sizeof(int));
+    for (int i = 0; i < nprocs; i++) {
         in_fd[i] = Rast_open_old(ncb.oldcell, "");
     }
     map_type = Rast_get_map_type(in_fd[0]);
@@ -360,8 +351,8 @@ int main(int argc, char *argv[])
 			parm.output->key, parm.method->key);
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
-    out_fd = G_malloc(ncb.threads * sizeof(int*));
-    for (int t = 0; t < ncb.threads; t++) {
+    out_fd = G_malloc(nprocs * sizeof(int*));
+    for (int t = 0; t < nprocs; t++) {
         out_fd[t] = G_malloc(num_outputs * sizeof(int));
     }
 
@@ -421,8 +412,8 @@ int main(int argc, char *argv[])
 	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
-    out->buf = G_malloc(ncb.threads * sizeof(DCELL*));
-    for (t = 0; t < ncb.threads; t++) {
+    out->buf = G_malloc(nprocs * sizeof(DCELL*));
+    for (t = 0; t < nprocs; t++) {
         out->buf[t] = Rast_allocate_d_buf();
     }
 	out->fd = Rast_open_new(output_name, otype);
@@ -437,7 +428,7 @@ int main(int argc, char *argv[])
 
         char* fname = G_tempfile();
         close(creat(fname, 0666));
-        for (int t = 0; t < ncb.threads; t++) {
+        for (int t = 0; t < nprocs; t++) {
             out_fd[t][i] = open(fname, O_RDWR);
         }
     }
@@ -451,15 +442,15 @@ int main(int argc, char *argv[])
     }
 
     /* allocate the cell buffers */
-    allocate_bufs();
-    readrow = G_malloc(ncb.threads * sizeof(int));
+    allocate_bufs(nprocs);
+    readrow = G_malloc(nprocs * sizeof(int));
 
     /* open the selection raster map */
     if (parm.selection->answer) {
         G_message(_("Opening selection map <%s>"), parm.selection->answer);
-        selection_fd = G_malloc(ncb.threads * sizeof(int));
-        selection = G_malloc(ncb.threads * sizeof(char*));
-        for (int t = 0; t < ncb.threads; t++) {
+        selection_fd = G_malloc(nprocs * sizeof(int));
+        selection = G_malloc(nprocs * sizeof(char*));
+        for (int t = 0; t < nprocs; t++) {
             selection_fd[t] = Rast_open_old(parm.selection->answer, "");
             selection[t] = Rast_allocate_null_buf();
         }
@@ -474,16 +465,16 @@ int main(int argc, char *argv[])
     values_w = NULL;
     values_w_tmp = NULL;
     if (weights) {
-        values_w = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
-        values_w_tmp = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
-        for (t = 0; t < ncb.threads; t++) {
+        values_w = G_malloc(nprocs * sizeof(DCELL(*)[2]));
+        values_w_tmp = G_malloc(nprocs * sizeof(DCELL(*)[2]));
+        for (t = 0; t < nprocs; t++) {
             values_w[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
             values_w_tmp[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
         }
     }
-    values = G_malloc(ncb.threads * sizeof(DCELL*));
-    values_tmp = G_malloc(ncb.threads * sizeof(DCELL*));
-    for (t = 0; t < ncb.threads; t++) {
+    values = G_malloc(nprocs * sizeof(DCELL*));
+    values_tmp = G_malloc(nprocs * sizeof(DCELL*));
+    for (t = 0; t < nprocs; t++) {
         values[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
         values_tmp[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
     }
@@ -496,8 +487,8 @@ int main(int argc, char *argv[])
     #else
         int thread_id = 0;
     #endif
-    int low = nrows * thread_id/ncb.threads;
-    int high = nrows * (thread_id + 1)/ncb.threads;
+    int low = nrows * thread_id/nprocs;
+    int high = nrows * (thread_id + 1)/nprocs;
     for (i = 0; i < num_outputs; i++)
         lseek(out_fd[thread_id][i], (off_t) low * buflen, 0);
 
@@ -567,18 +558,18 @@ int main(int argc, char *argv[])
             Rast_put_d_row(out->fd, out->buf[0]);
         }
 
-        for (t = 0; t < ncb.threads; t++) {
+        for (t = 0; t < nprocs; t++) {
             close(out_fd[t][i]);
         }
     }
 
     G_percent(work, nrows, 2);
 
-    for (t = 0; t < ncb.threads; t++)
+    for (t = 0; t < nprocs; t++)
         Rast_close(in_fd[t]);
 
     if (selection)
-        for (t = 0; t < ncb.threads; t++)
+        for (t = 0; t < nprocs; t++)
             Rast_close(selection_fd[t]);
 
     for (i = 0; i < num_outputs; i++) {
