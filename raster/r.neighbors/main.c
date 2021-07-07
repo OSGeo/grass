@@ -151,6 +151,7 @@ int main(int argc, char *argv[])
     int *readrow;
     int nrows, ncols, buflen;
     int i, n, t;
+    const int MASTER = 0;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -172,6 +173,7 @@ int main(int argc, char *argv[])
 	struct Flag *align, *circle;
     } flag;
 
+    DCELL val;
     DCELL **values;		/* list of neighborhood values */
     DCELL **values_tmp;		/* list of neighborhood values */
     DCELL(**values_w)[2];	/* list of neighborhood values and weights */
@@ -334,10 +336,10 @@ int main(int argc, char *argv[])
 
     /* open raster maps */
     in_fd = G_malloc(nprocs * sizeof(int));
-    for (int i = 0; i < nprocs; i++) {
+    for (i = 0; i < nprocs; i++) {
         in_fd[i] = Rast_open_old(ncb.oldcell, "");
     }
-    map_type = Rast_get_map_type(in_fd[0]);
+    map_type = Rast_get_map_type(in_fd[MASTER]);
 
     /* process the output maps */
     for (i = 0; parm.output->answers[i]; i++)
@@ -352,7 +354,7 @@ int main(int argc, char *argv[])
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
     out_fd = G_malloc(nprocs * sizeof(int*));
-    for (int t = 0; t < nprocs; t++) {
+    for (t = 0; t < nprocs; t++) {
         out_fd[t] = G_malloc(num_outputs * sizeof(int));
     }
 
@@ -428,7 +430,7 @@ int main(int argc, char *argv[])
 
         char* fname = G_tempfile();
         close(creat(fname, 0666));
-        for (int t = 0; t < nprocs; t++) {
+        for (t = 0; t < nprocs; t++) {
             out_fd[t][i] = open(fname, O_RDWR);
         }
     }
@@ -450,7 +452,7 @@ int main(int argc, char *argv[])
         G_message(_("Opening selection map <%s>"), parm.selection->answer);
         selection_fd = G_malloc(nprocs * sizeof(int));
         selection = G_malloc(nprocs * sizeof(char*));
-        for (int t = 0; t < nprocs; t++) {
+        for (t = 0; t < nprocs; t++) {
             selection_fd[t] = Rast_open_old(parm.selection->answer, "");
             selection[t] = Rast_allocate_null_buf();
         }
@@ -479,83 +481,84 @@ int main(int argc, char *argv[])
         values_tmp[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
     }
 
+    int id = MASTER;
+    int start = 0;
+    int end = nrows;
     int work = 0;
-    #pragma omp parallel default(shared) private(row, col, i, n)
+
+    #pragma omp parallel firstprivate(id, start, end) private(row, col, i, n, val) if(nprocs > 1)
     {
     #if defined(_OPENMP)
-        int thread_id = omp_get_thread_num();
-    #else
-        int thread_id = 0;
+    if (nprocs > 1) {
+        id = omp_get_thread_num();
+        start = nrows * id/nprocs;
+        end = nrows * (id + 1)/nprocs;
+        for (i = 0; i < num_outputs; i++)
+            lseek(out_fd[id][i], (off_t) start * buflen, 0);
+    }
     #endif
-    int low = nrows * thread_id/nprocs;
-    int high = nrows * (thread_id + 1)/nprocs;
-    for (i = 0; i < num_outputs; i++)
-        lseek(out_fd[thread_id][i], (off_t) low * buflen, 0);
 
     /* initialize the cell bufs with 'dist' rows of the old cellfile */
-    readrow[thread_id] = low-ncb.dist;
-    for (row = low-ncb.dist; row < low+ncb.dist; row++)
-    readcell(in_fd[thread_id], readrow[thread_id]++, nrows, ncols, thread_id);
+    readrow[id] = start-ncb.dist;
+    for (row = start-ncb.dist; row < start+ncb.dist; row++)
+    readcell(in_fd[id], readrow[id]++, nrows, ncols, id);
 
-    for (row = low; row < high; row++) {
+    for (row = start; row < end; row++) {
 	G_percent(work, nrows, 2);
-	readcell(in_fd[thread_id], readrow[thread_id]++, nrows, ncols, thread_id);
+	readcell(in_fd[id], readrow[id]++, nrows, ncols, id);
 
 	if (selection)
-            Rast_get_null_value_row(selection_fd[thread_id], selection[thread_id], row);
+            Rast_get_null_value_row(selection_fd[id], selection[id], row);
 
 	for (col = 0; col < ncols; col++) {
 
-        if (selection && selection[thread_id][col]) {
+        if (selection && selection[id][col]) {
             /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
              * Thus original data start is shifted by ncb.dist! */
             for (i = 0; i < num_outputs; i++) {
-                outputs[i].buf[thread_id][col] = ncb.buf[thread_id][ncb.dist][col + ncb.dist];
-                /* write(out_fd[thread_id][i], &ncb.buf[thread_id][ncb.dist][col + ncb.dist], sizeof(DCELL)); */
+                outputs[i].buf[id][col] = ncb.buf[id][ncb.dist][col + ncb.dist];
             }
             continue;
 	    }
 
 	    if (weights)
-		n = gather_w(values[thread_id], values_w[thread_id], col, thread_id);
+		n = gather_w(values[id], values_w[id], col, id);
 	    else
-		n = gather(values[thread_id], col, thread_id);
+		n = gather(values[id], col, id);
 
 	    for (i = 0; i < num_outputs; i++) {
 		struct output *out = &outputs[i];
-        DCELL temp;
 
 		if (n == 0) {
-		    Rast_set_d_null_value(&temp, 1);
+		    Rast_set_d_null_value(&val, 1);
 		}
 		else {
 		    if (out->method_fn_w) {
-                memcpy(values_w_tmp[thread_id], values_w[thread_id], n * 2 * sizeof(DCELL));
-                (*out->method_fn_w)(&temp, values_w_tmp[thread_id], n, &out->quantile);
+                memcpy(values_w_tmp[id], values_w[id], n * 2 * sizeof(DCELL));
+                (*out->method_fn_w)(&val, values_w_tmp[id], n, &out->quantile);
 		    }
 		    else {
-                memcpy(values_tmp[thread_id], values[thread_id], n * sizeof(DCELL));
-                (*out->method_fn)(&temp, values_tmp[thread_id], n, &out->quantile);
+                memcpy(values_tmp[id], values[id], n * sizeof(DCELL));
+                (*out->method_fn)(&val, values_tmp[id], n, &out->quantile);
 		    }
 		}
-        outputs[i].buf[thread_id][col] = temp;
-        /* write(out_fd[thread_id][i], &temp, sizeof(DCELL)); */
+        outputs[i].buf[id][col] = val;
 	    }
 	} // end of col loop
         
         for (i = 0; i < num_outputs; i++)
-            write(out_fd[thread_id][i], outputs[i].buf[thread_id], buflen);
+            write(out_fd[id][i], outputs[i].buf[id], buflen);
         #pragma omp atomic update
         work++;
     } // end of row loop
     } // end of parallel region
    for (i = 0; i < num_outputs; i++) {
         struct output *out = &outputs[i];
-        lseek(out_fd[0][i], 0L, 0);
+        lseek(out_fd[MASTER][i], 0L, 0);
 
         for (row = 0; row < nrows; row++) {
-            read(out_fd[0][i], out->buf[0], buflen);
-            Rast_put_d_row(out->fd, out->buf[0]);
+            read(out_fd[MASTER][i], out->buf[MASTER], buflen);
+            Rast_put_d_row(out->fd, out->buf[MASTER]);
         }
 
         for (t = 0; t < nprocs; t++) {
