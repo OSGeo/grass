@@ -1705,28 +1705,32 @@ class MapPanel(SingleMapPanel):
 
 class MapDisplay(FrameMixin, MapPanel):
     """Map Display frame used for Multi-Window layout"""
+
     def __init__(self, giface, id, tree, lmgr, idx, Map, title, **kwargs):
         # count map display frame position
         pos = wx.Point((idx + 1) * 25, (idx + 1) * 25)
 
         # create superior Map Display frame
-        mapframe = wx.Frame(tree,
-                            id=wx.ID_ANY,
-                            pos=pos,
-                            size=globalvar.MAP_WINDOW_SIZE,
-                            style=wx.DEFAULT_FRAME_STYLE,
-                            title=title)
+        mapframe = wx.Frame(
+            tree,
+            id=wx.ID_ANY,
+            pos=pos,
+            size=globalvar.MAP_WINDOW_SIZE,
+            style=wx.DEFAULT_FRAME_STYLE,
+            title=title,
+        )
 
         # init map panel
-        MapPanel.__init__(self,
-                         parent=mapframe,
-                         giface=giface,
-                         id=id,
-                         tree=tree,
-                         lmgr=lmgr,
-                         Map=Map,
-                         title=title,
-                         **kwargs,
+        MapPanel.__init__(
+            self,
+            parent=mapframe,
+            giface=giface,
+            id=id,
+            tree=tree,
+            lmgr=lmgr,
+            Map=Map,
+            title=title,
+            **kwargs,
         )
 
         # set system icon

@@ -64,7 +64,10 @@ from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import LayerManagerGrassInterface, LayerManagerGrassInterfaceForMapDisplay
+from lmgr.giface import (
+    LayerManagerGrassInterface,
+    LayerManagerGrassInterfaceForMapDisplay,
+)
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
@@ -507,8 +510,7 @@ class GMFrame(wx.Frame):
 
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
 
-        mapdisplay.BindToFrame(
-                wx.EVT_CLOSE, mapdisplay.OnCloseWindow)
+        mapdisplay.BindToFrame(wx.EVT_CLOSE, mapdisplay.OnCloseWindow)
         mapdisplay.BindToFrame(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
