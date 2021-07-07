@@ -188,7 +188,7 @@ class IClassMapFrame(DoubleMapFrame):
         # PyPlot init
         self.plotPanel = PlotPanel(self, giface=self.giface, stats_data=self.stats_data)
 
-        #statusbar items
+        # statusbar items
         statusbarItems = [
             sb.SbCoordinates,
             sb.SbRegionExtent,
