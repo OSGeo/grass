@@ -792,15 +792,20 @@ class DoubleMapPanel(MapPanelBase):
 
 
 class FrameMixin:
-   """Mixin class for wx.Panel that provides methods standardly
-   used on wx.Frame widget"""
-   def Show(self):
+    """Mixin class for wx.Panel that provides methods standardly
+    used on wx.Frame widget"""
+
+    def Show(self):
         self.GetParent().Show()
-   def SetTitle(self, name):
+
+    def SetTitle(self, name):
         self.GetParent().SetTitle(name)
-   def Raise(self):
+
+    def Raise(self):
         self.GetParent().Raise()
-   def SetFocus(self):
+
+    def SetFocus(self):
         self.GetParent().SetFocus()
-   def BindToFrame(self, *args):
-       self.GetParent().Bind(*args)
+
+    def BindToFrame(self, *args):
+        self.GetParent().Bind(*args)
