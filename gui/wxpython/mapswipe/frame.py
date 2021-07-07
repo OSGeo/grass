@@ -19,7 +19,7 @@ import wx
 
 import grass.script as grass
 
-from gui_core.mapdisp import DoubleMapFrame, MapPanelMixin
+from gui_core.mapdisp import DoubleMapFrame
 from gui_core.dialogs import GetImageHandlers
 from mapwin.base import MapWindowProperties
 from core.render import Map
@@ -34,7 +34,7 @@ from mapswipe.mapwindow import SwipeBufferedWindow
 from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
 
 
-class SwipeMapFrame(DoubleMapFrame, MapPanelMixin):
+class SwipeMapFrame(DoubleMapFrame):
     def __init__(
         self, parent=None, giface=None, title=_("Map Swipe"), toolbars=["swipeMap", "swipeMain", "swipeMisc"], name="swipe", **kwargs
     ):

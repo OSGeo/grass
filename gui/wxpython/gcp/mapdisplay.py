@@ -27,7 +27,7 @@ from gcp.toolbars import GCPDisplayToolbar, GCPManToolbar
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GMessage
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
-from gui_core.mapdisp import SingleMapFrame, MapPanelMixin
+from gui_core.mapdisp import SingleMapFrame
 from gui_core.wrap import Menu
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
@@ -39,7 +39,7 @@ import gcp.statusbar as sbgcp
 cmdfilename = None
 
 
-class MapFrame(SingleMapFrame, MapPanelMixin):
+class MapFrame(SingleMapFrame):
     """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """

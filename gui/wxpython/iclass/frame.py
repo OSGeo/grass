@@ -41,7 +41,7 @@ import grass.script as grass
 from mapdisp import statusbar as sb
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
-from gui_core.mapdisp import DoubleMapFrame, MapPanelMixin
+from gui_core.mapdisp import DoubleMapFrame
 from core.render import Map
 from core.gcmd import RunCommand, GMessage, GError
 from gui_core.dialogs import SetOpacityDialog
@@ -69,7 +69,7 @@ from iclass.plots import PlotPanel
 from grass.pydispatch.signal import Signal
 
 
-class IClassMapFrame(DoubleMapFrame, MapPanelMixin):
+class IClassMapFrame(DoubleMapFrame):
     """wxIClass main frame
 
     It has two map windows one for digitizing training areas and one for
