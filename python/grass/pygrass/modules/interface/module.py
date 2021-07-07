@@ -677,7 +677,6 @@ class Module(object):
             else:
                 raise ParameterError("%s is not a valid parameter." % key)
 
-
     def get_bash(self):
         """Return a BASH representation of the Module."""
         return " ".join(self.make_cmd())
