@@ -445,34 +445,30 @@ class Module(object):
     >>> colors.returncode
     0
 
-    Multiple run test
+    Run many times and change parameters for each run
 
-    >>> colors = Module("r.colors", map="test_a",
-    ...                                            color="ryb", run_=False)
+    >>> colors = Module("r.colors", map="test_a", color="ryb", run_=False)
     >>> colors.get_bash()
     'r.colors map=test_a color=ryb offset=0.0 scale=1.0'
     >>> colors.run()
     Module('r.colors')
-    >>> colors(color="gyr")
-    Module('r.colors')
+    >>> colors.update(color="gyr")
     >>> colors.run()
     Module('r.colors')
-    >>> colors(color="ryg")
-    Module('r.colors')
-    >>> colors(stderr_=PIPE)
-    Module('r.colors')
+    >>> colors.update(color="ryg")
+    >>> colors.update(stderr_=PIPE)
     >>> colors.run()
     Module('r.colors')
     >>> print(colors.outputs["stderr"].value.strip())
     Color table for raster map <test_a> set to 'ryg'
-    >>> colors(color="byg")
-    Module('r.colors')
-    >>> colors(stdout_=PIPE)
-    Module('r.colors')
+    >>> colors.update(color="byg")
+    >>> colors.update(stdout_=PIPE)
     >>> colors.run()
     Module('r.colors')
     >>> print(colors.outputs["stderr"].value.strip())
     Color table for raster map <test_a> set to 'byg'
+    >>> colors.get_bash()
+    'r.colors map=test_a color=byg offset=0.0 scale=1.0'
 
     Often in the Module class you can find ``*args`` and ``kwargs`` annotation
     in methods, like in the __call__ method.
