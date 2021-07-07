@@ -36,7 +36,13 @@ from mapswipe.dialogs import SwipeMapDialog, PreferencesDialog
 
 class SwipeMapFrame(DoubleMapFrame):
     def __init__(
-        self, parent=None, giface=None, title=_("Map Swipe"), toolbars=["swipeMap", "swipeMain", "swipeMisc"], name="swipe", **kwargs
+        self,
+        parent=None,
+        giface=None,
+        title=_("Map Swipe"),
+        toolbars=["swipeMap", "swipeMain", "swipeMisc"],
+        name="swipe",
+        **kwargs,
     ):
         DoubleMapFrame.__init__(
             self,
