@@ -820,10 +820,6 @@ class SwipeMapFrame(DoubleMapFrame):
         """Returns toolbar with zooming tools"""
         return self.toolbars["swipeMap"]
 
-    def IsStandalone(self):
-        """Since we do not need layer manager, we are standalone"""
-        return True
-
     def OnHelp(self, event):
         self._giface.Help(entry="wxGUI.mapswipe")
 

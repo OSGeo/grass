@@ -563,11 +563,6 @@ class MapFrame(SingleMapFrame):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
 
-    def IsStandalone(self):
-        """Check if Map display is standalone"""
-        # we do not know and we do not care, so always False
-        return True
-
     def GetLayerManager(self):
         """Get reference to Layer Manager
 

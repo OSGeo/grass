@@ -485,10 +485,6 @@ class IClassMapFrame(DoubleMapFrame):
             .Position(position),
         )
 
-    def IsStandalone(self):
-        """Check if Map display is standalone"""
-        return True
-
     def OnUpdateActive(self, event):
         """
         .. todo::
