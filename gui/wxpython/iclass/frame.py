@@ -301,7 +301,8 @@ class IClassMapFrame(DoubleMapFrame):
          Toolbars 'iClassPreviewMapManager' are added in _addPanes().
         """
         if name == "iClassMap":
-            self.toolbars[name] = IClassMapToolbar(self, self._toolSwitcher)
+            if "iClassMap" not in self.toolbars:
+                self.toolbars[name] = IClassMapToolbar(self, self._toolSwitcher)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -322,7 +323,8 @@ class IClassMapFrame(DoubleMapFrame):
             )
 
         if name == "iClass":
-            self.toolbars[name] = IClassToolbar(self, stats_data=self.stats_data)
+            if "iClass" not in self.toolbars:
+                self.toolbars[name] = IClassToolbar(self, stats_data=self.stats_data)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -343,7 +345,8 @@ class IClassMapFrame(DoubleMapFrame):
             )
 
         if name == "iClassMisc":
-            self.toolbars[name] = IClassMiscToolbar(self)
+            if "iClassMisc" not in self.toolbars:
+                self.toolbars[name] = IClassMiscToolbar(self)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -364,25 +367,27 @@ class IClassMapFrame(DoubleMapFrame):
             )
 
         if name == "vdigit":
-            self.toolbars[name] = VDigitToolbar(
-                parent=self,
-                toolSwitcher=self._toolSwitcher,
-                MapWindow=self.GetFirstWindow(),
-                digitClass=IClassVDigit,
-                giface=self.giface,
-                tools=[
-                    "addArea",
-                    "moveVertex",
-                    "addVertex",
-                    "removeVertex",
-                    "editLine",
-                    "moveLine",
-                    "deleteArea",
-                    "undo",
-                    "redo",
-                    "settings",
-                ],
-            )
+            if "vdigit" not in self.toolbars:
+                self.toolbars[name] = VDigitToolbar(
+                    parent=self,
+                    toolSwitcher=self._toolSwitcher,
+                    MapWindow=self.GetFirstWindow(),
+                    digitClass=IClassVDigit,
+                    giface=self.giface,
+                    tools=[
+                        "addArea",
+                        "moveVertex",
+                        "addVertex",
+                        "removeVertex",
+                        "editLine",
+                        "moveLine",
+                        "deleteArea",
+                        "undo",
+                        "redo",
+                        "settings",
+                    ],
+                )
+
             self._mgr.AddPane(
                 self.toolbars[name],
                 wx.aui.AuiPaneInfo()

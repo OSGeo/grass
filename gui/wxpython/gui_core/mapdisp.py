@@ -417,6 +417,10 @@ class MapFrameBase(wx.Frame):
         """Return toolbar names"""
         return self.toolbars.keys()
 
+    def AddToolbar(self):
+        """Add defined toolbar to the window"""
+        raise NotImplementedError("AddToolbar")
+
     def RemoveToolbar(self, name, destroy=False):
         """Removes defined toolbar from the window
 

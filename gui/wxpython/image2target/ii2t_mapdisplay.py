@@ -247,7 +247,8 @@ class MapFrame(SingleMapFrame):
         """
         # default toolbar
         if name == "map":
-            self.toolbars["map"] = MapToolbar(self, self._toolSwitcher, self._giface)
+            if "map" not in self.toolbars:
+                self.toolbars["map"] = MapToolbar(self, self._toolSwitcher, self._giface)
 
             self._mgr.AddPane(
                 self.toolbars["map"],
@@ -267,7 +268,8 @@ class MapFrame(SingleMapFrame):
 
         # GCP display
         elif name == "gcpdisp":
-            self.toolbars["gcpdisp"] = GCPDisplayToolbar(self, self._toolSwitcher)
+            if "gcpdisp" not in self.toolbars:
+                self.toolbars["gcpdisp"] = GCPDisplayToolbar(self, self._toolSwitcher)
 
             self._mgr.AddPane(
                 self.toolbars["gcpdisp"],
@@ -287,7 +289,8 @@ class MapFrame(SingleMapFrame):
             if not self.show_target:
                 self.toolbars["gcpdisp"].Enable("zoommenu", enable=False)
 
-            self.toolbars["gcpman"] = GCPManToolbar(self)
+            if "gcpman" not in self.toolbars:
+                self.toolbars["gcpman"] = GCPManToolbar(self)
 
             self._mgr.AddPane(
                 self.toolbars["gcpman"],
