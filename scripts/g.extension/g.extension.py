@@ -2251,7 +2251,7 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            suffix = match["url_end"].format(name=name, branch=get_default_branch(url))
+            suffix = match["url_end"].format(name=name, branch=banch if branch else get_default_branch(url))
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
@@ -2438,8 +2438,8 @@ def get_addons_paths(gg_addons_base_dir):
     """
     get_addons_paths.json_file = "addons_paths.json"
     addons_branch = get_github_branches(
-        "https://github.com/OSGeo/grass-addons", version_only=True
-    )
+        "https://api.github.com/repos/OSGeo/grass-addons/branches", version_only=True
+    )[0]
 
     url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
 
