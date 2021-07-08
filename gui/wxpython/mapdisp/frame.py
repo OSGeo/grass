@@ -1548,11 +1548,7 @@ class MapFrame(SingleMapFrame):
         NULLs) or vector map.
         """
         Debug.msg(3, "MapFrame.OnZoomToMap()")
-        layers = None
-        if self.IsStandalone():
-            layers = self.MapWindow.GetMap().GetListOfLayers(active=False)
-
-        self.MapWindow.ZoomToMap(layers=layers)
+        self.MapWindow.ZoomToMap(layers=None)
 
     def OnZoomToRaster(self, event):
         """Set display extents to match selected raster map (ignore NULLs)"""
