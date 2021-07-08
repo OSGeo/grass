@@ -1,4 +1,4 @@
-name: CI
+name: Ubuntu20
 
 on:
   - push

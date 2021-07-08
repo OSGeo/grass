@@ -1,4 +1,4 @@
-name: CI
+name: Ubuntu18
 
 on:
   - push
