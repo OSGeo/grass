@@ -437,6 +437,12 @@ class MapFrameBase(wx.Frame):
 
         self._mgr.Update()
 
+    def IsPaneShown(self, name):
+        """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
+        if self._mgr.GetPane(name).IsOk():
+            return self._mgr.GetPane(name).IsShown()
+        return False
+
     def IsStandalone(self):
         """Check if map frame is standalone"""
         raise NotImplementedError("IsStandalone")
