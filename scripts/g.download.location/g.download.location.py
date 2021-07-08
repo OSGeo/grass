@@ -90,7 +90,7 @@ def location_name_from_url(url):
 def main(options, unused_flags):
     url = options["url"]
     name = options["name"]
-    database = options["dbase"]
+    database = options["path"]
 
     if not database:
         # use current
