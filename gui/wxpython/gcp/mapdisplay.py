@@ -303,7 +303,7 @@ class MapFrame(SingleMapFrame):
         self._mgr.Update()
 
     def _addPanes(self):
-        """Add mapwindows and toolbars to aui manager"""
+        """Add mapwindows, toolbars and statusbar to aui manager"""
         self._mgr.AddPane(
             self.list,
             wx.aui.AuiPaneInfo()
@@ -342,20 +342,8 @@ class MapFrame(SingleMapFrame):
             .Right()
             .Layer(0),
         )
-        self._mgr.AddPane(
-            self.statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        # statusbar
+        self.addPaneStatusbar()
 
     def OnUpdateProgress(self, event):
         """

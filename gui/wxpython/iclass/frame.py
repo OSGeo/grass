@@ -404,7 +404,7 @@ class IClassMapFrame(DoubleMapFrame):
         self._mgr.Update()
 
     def _addPanes(self):
-        """Add mapwindows and toolbars to aui manager"""
+        """Add mapwindows, toolbars and statusbar to aui manager"""
         self._addPaneMapWindow(name="training", position=0)
         self._addPaneToolbar(name="iClassTrainingMapManager", position=1)
         self._addPaneMapWindow(name="preview", position=2)
@@ -426,20 +426,8 @@ class IClassMapFrame(DoubleMapFrame):
             .BestSize((335, -1)),
         )
 
-        self._mgr.AddPane(
-            self.statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        # statusbar
+        self.addPaneStatusbar()
 
     def _addPaneToolbar(self, name, position):
         if name == "iClassPreviewMapManager":
