@@ -240,7 +240,7 @@ class MapFrame(SingleMapFrame):
         )
 
         # statusbar
-        self.addPaneStatusbar()
+        self.addStatusbarPane()
 
         self._mgr.Update()
 

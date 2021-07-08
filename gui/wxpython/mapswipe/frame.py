@@ -366,7 +366,7 @@ class SwipeMapFrame(DoubleMapFrame):
         )
 
         # statusbar
-        self.addPaneStatusbar()
+        self.addStatusbarPane()
 
     def ZoomToMap(self):
         """

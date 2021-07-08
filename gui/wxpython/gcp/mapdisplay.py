@@ -343,7 +343,7 @@ class MapFrame(SingleMapFrame):
             .Layer(0),
         )
         # statusbar
-        self.addPaneStatusbar()
+        self.addStatusbarPane()
 
     def OnUpdateProgress(self, event):
         """
