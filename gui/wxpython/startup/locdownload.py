@@ -175,7 +175,7 @@ def download_location(url, name, database):
     try:
         # TODO: the unpacking could go right to the path (but less
         # robust) or replace copytree here with move
-        directory = download_and_extract(source=url)
+        directory = download_and_extract(source=url, reporthook=reporthook)
         destination = os.path.join(database, name)
         if not is_location_valid(directory):
             return _("Downloaded location is not valid")
