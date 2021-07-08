@@ -49,18 +49,20 @@ def is_mapset_valid(mapset_path):
     return os.access(os.path.join(mapset_path, "WIND"), os.R_OK)
 
 
-def is_location_valid(database, location):
+def is_location_valid(path, location=None):
     """Return True if GRASS Location is valid
 
-    :param database: Path to GRASS GIS database directory
-    :param location: name of a Location
+    :param database: Path to a Location or to a GRASS GIS database directory
+    :param location: name of a Location if not part of *path*
     """
     # DEFAULT_WIND file should not be required until you do something
     # that actually uses them. The check is just a heuristic; a directory
     # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
     # location, while a directory lacking it probably isn't.
+    if location:
+        path = os.path.join(location)
     return os.access(
-        os.path.join(database, location, "PERMANENT", "DEFAULT_WIND"), os.F_OK
+        os.path.join(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK
     )
 
 
