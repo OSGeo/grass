@@ -233,8 +233,12 @@ def urlopen(url, *args, **kwargs):
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
-def get_github_branches(github_api_url, version_only=False):
-    """Get ordered list of branch names in repo using github API"""
+def get_github_branches(
+    github_api_url="https://api.github.com/repos/OSGeo/grass-addons/branches",
+    version_only=True,
+):
+    """Get ordered list of branch names in repo using github API
+    For the official repo we assume that at least one version branch is present"""
     req = urlrequest.urlopen(github_api_url)
     content = json.loads(req.read())
     branches = [repo_branch["name"] for repo_branch in content]
@@ -249,16 +253,23 @@ def get_github_branches(github_api_url, version_only=False):
 
 
 def get_default_branch(full_url):
-    """Get default branch for repo (currently only implemented for github API and gitlab API"""
-    if "github.com" in full_url:
-        organization, repository = full_url.split("github.com/")[1].split("/")[0:2]
-        print(organization, repository)
-        req = urlrequest.urlopen(f"https://api.github.com/repos/{organization}/{repository}")
+    """Get default branch for repo (currently only implemented for github API and gitlab API)"""
+    if "/github.com/" in full_url:
+        organization, repository = re.split(r"/github.com/", full_url)[1].split("/")[
+            0:2
+        ]
+        req = urlrequest.urlopen(
+            f"https://api.github.com/repos/{organization}/{repository}"
+        )
         content = json.loads(req.read())
         default_branch = content["default_branch"]
-    elif "gitlab.com" in full_url:
-        organization, repository = full_url.split("gitlab.com/")[1].split("/")[0:2]
-        req = urlrequest.urlopen(f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}")
+    elif "/gitlab.com/" in full_url:
+        organization, repository = re.split(r"/gitlab.com/", full_url)[1].split("/")[
+            0:2
+        ]
+        req = urlrequest.urlopen(
+            f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}"
+        )
         content = json.loads(req.read())
         default_branch = content["default_branch"]
 
@@ -2173,7 +2184,13 @@ def resolve_xmlurl_prefix(url, source=None):
     gscript.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
     if source == "official":
         # use pregenerated modules XML file
-        url = "https://grass.osgeo.org/addons/grass%s/" % version[0]
+        repo_branches = get_github_branches()
+        # Define branch to fetch from (latest or current version)
+        version_branch = "grass{}".format(version[0])
+        if version_branch not in repo_branches:
+            version_branch = repo_branches[-1]
+
+        url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
     # the exact action depends on subsequent code (somewhere)
 
@@ -2251,7 +2268,9 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            suffix = match["url_end"].format(name=name, branch=banch if branch else get_default_branch(url))
+            suffix = match["url_end"].format(
+                name=name, branch=branch if branch else get_default_branch(url)
+            )
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
@@ -2335,10 +2354,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     # Handle URL for the offical repo
     if not url and name:
         module_class = get_module_class_name(name)
-        repo_branches = get_github_branches(
-            "https://api.github.com/repos/OSGeo/grass-addons/branches",
-            version_only=True,
-        )
+        repo_branches = get_github_branches()
         # Define branch to fetch from (latest or current version)
         version_branch = "grass{}".format(version[0])
         if version_branch not in repo_branches:
@@ -2437,9 +2453,11 @@ def get_addons_paths(gg_addons_base_dir):
     and their paths (mkhmtl.py tool)
     """
     get_addons_paths.json_file = "addons_paths.json"
-    addons_branch = get_github_branches(
-        "https://api.github.com/repos/OSGeo/grass-addons/branches", version_only=True
-    )[0]
+    repo_branches = get_github_branches()[0]
+    # Define branch to fetch from (latest or current version)
+    addons_branch = "grass{}".format(version[0])
+    if addons_branch not in repo_branches:
+        addons_branch = repo_branches[-1]
 
     url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
 
