@@ -325,7 +325,7 @@ class SwipeMapFrame(DoubleMapFrame):
             )
 
     def _addPanes(self):
-        """Add splitter window and sliders to aui manager"""
+        """Add splitter window, sliders and statusbar to aui manager"""
         # splitter window
         self._mgr.AddPane(
             self.splitter,
@@ -377,21 +377,9 @@ class SwipeMapFrame(DoubleMapFrame):
             .Layer(1)
             .BestSize((self.sliderV.GetBestSize())),
         )
+
         # statusbar
-        self._mgr.AddPane(
-            self.statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        self.addPaneStatusbar()
 
     def ZoomToMap(self):
         """

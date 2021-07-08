@@ -362,6 +362,23 @@ class MapFrameBase(wx.Frame):
         self.statusbarManager.Update()
         return statusbar
 
+    def addPaneStatusbar(self):
+        """Add statusbar as a pane"""
+        self._mgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
     def SetStatusText(self, *args):
         """Overide wx.StatusBar method"""
         self.statusbar.SetStatusText(*args)

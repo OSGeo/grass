@@ -239,20 +239,9 @@ class MapFrame(SingleMapFrame):
             .Layer(0),
         )
 
-        self._mgr.AddPane(
-            self.statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        # statusbar
+        self.addPaneStatusbar()
+
         self._mgr.Update()
 
         #
