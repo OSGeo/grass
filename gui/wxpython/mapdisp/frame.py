@@ -661,23 +661,6 @@ class MapFrame(SingleMapFrame):
 
         self._mgr.Update()
 
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.RemoveToolbar
-        else:
-            action = self.AddToolbar
-        for toolbar in self.GetToolbarNames():
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        return self.GetMapToolbar().IsShown()
-
-    def IsPaneShown(self, name):
-        """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
-        if self._mgr.GetPane(name).IsOk():
-            return self._mgr.GetPane(name).IsShown()
-        return False
-
     def RemoveQueryLayer(self):
         """Removes temporary map layers (queries)"""
         qlayer = self.GetMap().GetListOfLayers(name=globalvar.QUERYLAYER)
