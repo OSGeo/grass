@@ -427,7 +427,7 @@ class IClassMapFrame(DoubleMapFrame):
         )
 
         # statusbar
-        self.addPaneStatusbar()
+        self.addStatusbarPane()
 
     def _addPaneToolbar(self, name, position):
         if name == "iClassPreviewMapManager":
