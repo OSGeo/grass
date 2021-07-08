@@ -225,7 +225,7 @@ class GrassTestFilesInvoker(object):
             """
             for encoding in encodings:
                 try:
-                    return decode(stdout, encoding=encoding)
+                    return decode(data, encoding=encoding)
                 except UnicodeError:
                     pass
             if isinstance(data, bytes):

@@ -171,10 +171,6 @@ int G_vfaprintf(FILE *, const char *, va_list);
 int G_vsaprintf(char *, const char *, va_list);
 int G_vsnaprintf(char *, size_t, const char *, va_list);
 
-/* bands.c */
-int G__read_band_reference(FILE *, struct Key_Value **);
-int G__write_band_reference(FILE *, const char *, const char *);
-
 /* basename.c */
 char *G_basename(char *, const char *);
 size_t G_get_num_decimals(const char *);

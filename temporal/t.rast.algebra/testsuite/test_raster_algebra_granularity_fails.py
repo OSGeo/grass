@@ -45,7 +45,7 @@ class TestTRastAlgebraGranularityFails(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", inputs="A", quiet=True)
+        cls.runModule("t.remove", flags="df", inputs="A", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
