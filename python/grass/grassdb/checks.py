@@ -61,9 +61,7 @@ def is_location_valid(path, location=None):
     # location, while a directory lacking it probably isn't.
     if location:
         path = os.path.join(location)
-    return os.access(
-        os.path.join(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK
-    )
+    return os.access(os.path.join(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
 
 
 def is_mapset_current(database, location, mapset):
