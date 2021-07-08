@@ -20,26 +20,16 @@ from __future__ import print_function
 
 import os
 import sys
-import tempfile
 import shutil
 import textwrap
 import time
 
-try:
-    from urllib2 import HTTPError, URLError
-    from urllib import request, urlretrieve
-except ImportError:
-    # there is also HTTPException, perhaps change to list
-    from urllib.error import HTTPError, URLError
-    from urllib.request import urlretrieve
-    from urllib import request
-
 import wx
 from wx.lib.newevent import NewEvent
 
-from grass.script import debug
-from grass.script.utils import try_rmdir
-
+from grass.script.utils import try_rmdir, legalize_vector_name
+from grass.utils import download_and_extract, name_from_url, DownloadError
+from grass.grassdb.checks import is_location_valid
 from grass.script.setup import set_gui_path
 
 set_gui_path()
@@ -92,12 +82,6 @@ LOCATIONS = [
         "maintainer": "Brendan Harmon (brendan.harmon@gmail.com)",
     },
 ]
-
-
-class DownloadError(Exception):
-    """Error happened during download or when processing the file"""
-
-    pass
 
 
 class RedirectText(object):
@@ -155,82 +139,6 @@ class RedirectText(object):
         )
 
 
-# copy from g.extension, potentially move to library
-def move_extracted_files(extract_dir, target_dir, files):
-    """Fix state of extracted file by moving them to different diretcory
-
-    When extracting, it is not clear what will be the root directory
-    or if there will be one at all. So this function moves the files to
-    a different directory in the way that if there was one directory extracted,
-    the contained files are moved.
-    """
-    debug("move_extracted_files({0})".format(locals()))
-    if len(files) == 1:
-        shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
-    else:
-        if not os.path.exists(target_dir):
-            os.mkdir(target_dir)
-        for file_name in files:
-            actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
-                # copy_tree() from distutils failed to create
-                # directories before copying files time to time
-                # (when copying to recently deleted directory)
-                shutil.copytree(actual_file, os.path.join(target_dir, file_name))
-            else:
-                shutil.copy(actual_file, os.path.join(target_dir, file_name))
-
-
-# copy from g.extension, potentially move to library
-def extract_zip(name, directory, tmpdir):
-    """Extract a ZIP file into a directory"""
-    debug(
-        "extract_zip(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
-        3,
-    )
-    try:
-        import zipfile
-
-        zip_file = zipfile.ZipFile(name, mode="r")
-        file_list = zip_file.namelist()
-        # we suppose we can write to parent of the given dir
-        # (supposing a tmp dir)
-        extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
-        for subfile in file_list:
-            # this should be safe in Python 2.7.4
-            zip_file.extract(subfile, extract_dir)
-        files = os.listdir(extract_dir)
-        move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
-    except zipfile.BadZipfile as error:
-        raise DownloadError(_("ZIP file is unreadable: {0}").format(error))
-
-
-# copy from g.extension, potentially move to library
-def extract_tar(name, directory, tmpdir):
-    """Extract a TAR or a similar file into a directory"""
-    debug(
-        "extract_tar(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
-        3,
-    )
-    try:
-        import tarfile  # we don't need it anywhere else
-
-        tar = tarfile.open(name)
-        extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
-        tar.extractall(path=extract_dir)
-        files = os.listdir(extract_dir)
-        move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
-    except tarfile.TarError as error:
-        raise DownloadError(_("Archive file is unreadable: {0}").format(error))
-
-
-extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
-
-
 # based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
 def reporthook(count, block_size, total_size):
     global start_time
@@ -259,64 +167,6 @@ def reporthook(count, block_size, total_size):
     )
 
 
-# based on g.extension, potentially move to library
-def download_and_extract(source):
-    """Download a file (archive) from URL and uncompress it"""
-    tmpdir = tempfile.mkdtemp()
-    Debug.msg(1, "Tmpdir: {}".format(tmpdir))
-    directory = os.path.join(tmpdir, "location")
-    http_error_message = _("Download file from <{url}>, " "return status code {code}, ")
-    url_error_message = _(
-        "Download file from <{url}>, " "failed. Check internet connection."
-    )
-    if source.endswith(".zip"):
-        archive_name = os.path.join(tmpdir, "location.zip")
-        try:
-            filename, headers = urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
-            raise DownloadError(
-                http_error_message.format(
-                    url=source,
-                    code=err,
-                ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
-        if headers.get("content-type", "") != "application/zip":
-            raise DownloadError(
-                _(
-                    "Download of <{url}> failed" " or file <{name}> is not a ZIP file"
-                ).format(url=source, name=filename)
-            )
-        extract_zip(name=archive_name, directory=directory, tmpdir=tmpdir)
-    elif (
-        source.endswith(".tar.gz")
-        or source.rsplit(".", 1)[1] in extract_tar.supported_formats
-    ):
-        if source.endswith(".tar.gz"):
-            ext = "tar.gz"
-        else:
-            ext = source.rsplit(".", 1)[1]
-        archive_name = os.path.join(tmpdir, "location." + ext)
-        try:
-            urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
-            raise DownloadError(
-                http_error_message.format(
-                    url=source,
-                    code=err,
-                ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
-        extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
-    else:
-        # probably programmer error
-        raise DownloadError(_("Unknown format '{0}'.").format(source))
-    assert os.path.isdir(directory)
-    return directory
-
-
 def download_location(url, name, database):
     """Wrapper to return DownloadError by value
 
@@ -336,23 +186,9 @@ def download_location(url, name, database):
     return None
 
 
-# based on grass.py (to be moved to future "grass.init")
-def is_location_valid(location):
-    """Return True if GRASS Location is valid
-
-    :param location: path of a Location
-    """
-    # DEFAULT_WIND file should not be required until you do something
-    # that actually uses them. The check is just a heuristic; a directory
-    # containing a PERMANENT/DEFAULT_WIND file is probably a GRASS
-    # location, while a directory lacking it probably isn't.
-    # TODO: perhaps we can relax this and require only permanent
-    return os.access(os.path.join(location, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
-
-
 def location_name_from_url(url):
     """Create location name from URL"""
-    return url.rsplit("/", 1)[1].split(".", 1)[0].replace("-", "_").replace(" ", "_")
+    return legalize_vector_name(name_from_url(url))
 
 
 DownloadDoneEvent, EVT_DOWNLOAD_DONE = NewEvent()
@@ -508,6 +344,10 @@ class LocationDownloadPanel(wx.Panel):
             self._change_download_btn_label()
 
         def terminate_download_callback(event):
+            # Clean up after urllib urlretrieve which is used internally
+            # in grass.utils.
+            from urllib import request  # pylint: disable=import-outside-toplevel
+
             self._download_in_progress = False
             request.urlcleanup()
             sys.stdout.write("Download aborted")
