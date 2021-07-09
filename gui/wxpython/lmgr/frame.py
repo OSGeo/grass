@@ -519,16 +519,6 @@ class GMFrame(wx.Frame):
 
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
 
-        def OnFullScreen(event):
-            mapdisplay.OnFullScreen(mapdisplay.toolbars,
-                                    mapdisplay._mgr,
-                                    event)
-
-        # extend shortcuts and create frame accelerator table
-        shortcuts_table = mapdisplay.shortcuts_table
-        shortcuts_table.append((OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        mapdisplay._initShortcuts(shortcuts_table)
-
         # bind various events
         mapdisplay.BindToFrame(wx.EVT_CLOSE, mapdisplay.OnCloseWindow)
         mapdisplay.BindToFrame(

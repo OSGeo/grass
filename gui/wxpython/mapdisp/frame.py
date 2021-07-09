@@ -1720,11 +1720,9 @@ class MapDisplay(FrameMixin, MapPanel):
             title=title,
             **kwargs,
         )
-        self.parent = parent
-
         # set system icon
-        self.parent.iconsize = (16, 16)
-        self.parent.SetIcon(
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
             wx.Icon(
                 os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
             )
@@ -1736,14 +1734,24 @@ class MapDisplay(FrameMixin, MapPanel):
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                self.parent.SetPosition((x, y))
-                self.parent.SetSize((w, h))
+                parent.SetPosition((x, y))
+                parent.SetSize((w, h))
             except Exception:
                 pass
+
+        def OnFullScreen(event):
+            self.OnFullScreen(self.toolbars,
+                              self._mgr,
+                              event)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts(self.shortcuts_table)
 
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self, proportion=1, flag=wx.EXPAND)
+
 
         parent.SetSizer(sizer)
         parent.Layout()
@@ -1752,3 +1760,6 @@ class MapDisplay(FrameMixin, MapPanel):
         mapframe.Layout()
         self.parent.SetSizer(sizer)
         self.parent.Layout()
+
+        parent.SetSizer(sizer)
+        parent.Layout()
