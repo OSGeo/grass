@@ -51,9 +51,9 @@ class SwipeMapFrame(DoubleMapFrame):
         #
         # Add toolbars
         #
-        self.AddToolbar("swipeMap")
-        self.AddToolbar("swipeMain")
-        self.AddToolbar("swipeMisc")
+        for name in ("swipeMap", "swipeMain", "swipeMisc"):
+            self.AddToolbar(name)
+
         self._giface = giface
         #
         # create widgets
