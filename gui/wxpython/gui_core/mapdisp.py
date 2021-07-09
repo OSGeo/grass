@@ -362,7 +362,7 @@ class MapFrameBase(wx.Frame):
         self.statusbarManager.Update()
         return statusbar
 
-    def addStatusbarPane(self):
+    def AddStatusbarPane(self):
         """Add statusbar as a pane"""
         self._mgr.AddPane(
             self.statusbar,
