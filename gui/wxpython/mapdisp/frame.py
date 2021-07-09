@@ -1704,26 +1704,14 @@ class MapPanel(SingleMapPanel):
 
 
 class MapDisplay(FrameMixin, MapPanel):
-    """Map Display frame used for Multi-Window layout"""
+    """Map Display used for Multi-Window layout"""
 
-    def __init__(self, giface, id, tree, lmgr, idx, Map, title, **kwargs):
-        # count map display frame position
-        pos = wx.Point((idx + 1) * 25, (idx + 1) * 25)
-
-        # create superior Map Display frame
-        mapframe = wx.Frame(
-            tree,
-            id=wx.ID_ANY,
-            pos=pos,
-            size=globalvar.MAP_WINDOW_SIZE,
-            style=wx.DEFAULT_FRAME_STYLE,
-            title=title,
-        )
+    def __init__(self, parent, giface, id, tree, lmgr, idx, Map, title, **kwargs):
 
         # init map panel
         MapPanel.__init__(
             self,
-            parent=mapframe,
+            parent=parent,
             giface=giface,
             id=id,
             tree=tree,
@@ -1732,10 +1720,11 @@ class MapDisplay(FrameMixin, MapPanel):
             title=title,
             **kwargs,
         )
+        self.parent = parent
 
         # set system icon
-        mapframe.iconsize = (16, 16)
-        mapframe.SetIcon(
+        self.parent.iconsize = (16, 16)
+        self.parent.SetIcon(
             wx.Icon(
                 os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
             )
@@ -1747,8 +1736,8 @@ class MapDisplay(FrameMixin, MapPanel):
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
-                mapframe.SetPosition((x, y))
-                mapframe.SetSize((w, h))
+                self.parent.SetPosition((x, y))
+                self.parent.SetSize((w, h))
             except Exception:
                 pass
 
@@ -1761,4 +1750,5 @@ class MapDisplay(FrameMixin, MapPanel):
 
         mapframe.SetSizer(sizer)
         mapframe.Layout()
-
+        self.parent.SetSizer(sizer)
+        self.parent.Layout()

@@ -435,14 +435,24 @@ class GMFrame(wx.Frame):
             :param name: name of new map display window
             :return: reference to mapdisplay instance
             """
+            # count map display frame position
+            pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
+
+            # create superior Map Display frame
+            mapframe = wx.Frame(layertree,
+                                id=wx.ID_ANY,
+                                pos=pos,
+                                size=globalvar.MAP_WINDOW_SIZE,
+                                style=wx.DEFAULT_FRAME_STYLE,
+                                title=name)
 
             # create instance of Map Display interface
             self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
                 self._giface, layertree
             )
-
             # create Map Display
             mapdisplay = MapDisplay(
+                parent=mapframe,
                 giface=self._gifaceForDisplay,
                 id=wx.ID_ANY,
                 tree=layertree,
@@ -458,7 +468,6 @@ class GMFrame(wx.Frame):
             # show map display if requested
             if show:
                 mapdisplay.Show()
-
             return mapdisplay
 
         # create layer tree (tree control for managing GIS layers)  and put on
@@ -510,11 +519,23 @@ class GMFrame(wx.Frame):
 
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
 
+        def OnFullScreen(event):
+            mapdisplay.OnFullScreen(mapdisplay.toolbars,
+                                    mapdisplay._mgr,
+                                    event)
+
+        # extend shortcuts and create frame accelerator table
+        shortcuts_table = mapdisplay.shortcuts_table
+        shortcuts_table.append((OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        mapdisplay._initShortcuts(shortcuts_table)
+
+        # bind various events
         mapdisplay.BindToFrame(wx.EVT_CLOSE, mapdisplay.OnCloseWindow)
         mapdisplay.BindToFrame(
             wx.EVT_ACTIVATE,
             lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
         )
+
         mapdisplay.starting3dMode.connect(
             lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
                 mapDisplayPage

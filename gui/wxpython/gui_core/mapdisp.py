@@ -100,23 +100,22 @@ class MapPanelBase(wx.Panel):
         self._toolSwitcher = ToolSwitcher()
         self._toolSwitcher.toggleToolChanged.connect(self._onToggleTool)
 
-        self._initShortcuts()
-
-    def _initShortcuts(self):
-
-        # set accelerator table (fullscreen, close window)
-        shortcuts_table = (
-            (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11),
+        # set accelerator table
+        self.shortcuts_table = [
             (self.OnCloseWindow, wx.ACCEL_CTRL, ord("W")),
             (self.OnRender, wx.ACCEL_CTRL, ord("R")),
             (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
-        )
+        ]
+
+        self._initShortcuts(self.shortcuts_table)
+
+    def _initShortcuts(self, shortcuts_table):
+        """init shortcuts to acceleration table"""
         accelTable = []
         for handler, entry, kdb in shortcuts_table:
             wxId = NewId()
             self.Bind(wx.EVT_MENU, handler, id=wxId)
             accelTable.append((entry, kdb, wxId))
-
         self.SetAcceleratorTable(wx.AcceleratorTable(accelTable))
 
     def _initMap(self, Map):
@@ -151,14 +150,6 @@ class MapPanelBase(wx.Panel):
 
         # update statusbar
         self.StatusbarUpdate()
-
-    def OnFullScreen(self, event):
-        """!Switch fullscreen mode, hides also toolbars"""
-        for toolbar in self.toolbars:
-            self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
-        self._mgr.Update()
-        self.ShowFullScreen(not self.IsFullScreen())
-        event.Skip()
 
     def OnCloseWindow(self, event):
         self.Destroy()
@@ -806,6 +797,22 @@ class FrameMixin:
 
     def SetFocus(self):
         self.GetParent().SetFocus()
+
+    def OnFullScreen(self, toolbars, auimgr, event):
+        """!Switches frame to fullscreen mode, hides toolbars"""
+
+        def IsFullScreen(self):
+            return self.GetParent().IsFullScreen()
+
+        def ShowFullScreen(self):
+            self.GetParent().ShowFullScreen(not IsFullScreen(self))
+
+        if toolbars and auimgr:
+            for toolbar in toolbars.keys():
+                auimgr.GetPane(toolbars[toolbar]).Show(IsFullScreen(self))
+            auimgr.Update()
+        ShowFullScreen(self)
+        event.Skip()
 
     def BindToFrame(self, *args):
         self.GetParent().Bind(*args)
