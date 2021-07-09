@@ -5,7 +5,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(ETC)/python/grass/benchmark
 
-MODULES = runners plots
+MODULES = plots results runners
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
