@@ -86,11 +86,6 @@ class GMApp(wx.App):
             from lmgr.frame import GMFrame
 
             mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
-
-            # testing purposes
-            # from main_window.frame import GMFrame
-            # mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
-
             mainframe.Show()
             self.SetTopWindow(mainframe)
 
