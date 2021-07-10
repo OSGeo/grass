@@ -2368,7 +2368,15 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         # and fetches the default branch
         if not branch:
             # Fetch from default branch
-            svn_reference = "trunk"
+            version_branch = get_version_branch(version[0])
+            try:
+                url = (
+                    url.rstrip("/") if url else "https://github.com/OSGeo/grass-addons"
+                )
+                urlrequest.urlopen(source_url=f"{url}/tree/{version_branch}/src")
+                svn_reference = "branches/{}".format(version_branch)
+            except Exception:
+                svn_reference = "trunk"
         else:
             svn_reference = "branches/{}".format(branch)
 
