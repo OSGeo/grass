@@ -233,12 +233,28 @@ def urlopen(url, *args, **kwargs):
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
+def get_version_branch(major_version):
+    """Check if version branch for the current GRASS version exists,
+    if not, take branch for the previous version
+    For the official repo we assume that at least one version branch is present"""
+    version_branch = f"grass{major_version}"
+    try:
+        urlrequest.urlopen(
+            source_url=f"https://github.com/OSGeo/grass-addons/tree/{version_branch}/src"
+        )
+    except Exception:
+        version_branch = "grass{}".format(int(major_version) - 1)
+    return version_branch
+
+
 def get_github_branches(
     github_api_url="https://api.github.com/repos/OSGeo/grass-addons/branches",
     version_only=True,
 ):
     """Get ordered list of branch names in repo using github API
-    For the official repo we assume that at least one version branch is present"""
+    For the official repo we assume that at least one version branch is present
+    Due to strict rate limits in the github API (60 calls per hour) this function
+    is currently not used."""
     req = urlrequest.urlopen(github_api_url)
     content = json.loads(req.read())
     branches = [repo_branch["name"] for repo_branch in content]
@@ -1653,10 +1669,6 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
-    # TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
-    # source_url = "https://github.com/OSGeo/grass-addons/tree/grass{}/src".format(
-    #     version[0]
-    # )
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -2184,11 +2196,8 @@ def resolve_xmlurl_prefix(url, source=None):
     gscript.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
     if source == "official":
         # use pregenerated modules XML file
-        repo_branches = get_github_branches()
         # Define branch to fetch from (latest or current version)
-        version_branch = "grass{}".format(version[0])
-        if version_branch not in repo_branches:
-            version_branch = repo_branches[-1]
+        version_branch = get_version_branch(version[0])
 
         url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
@@ -2269,7 +2278,8 @@ def resolve_known_host_service(url, name, branch):
             actual_start = ""
         if "branch" in match["url_end"]:
             suffix = match["url_end"].format(
-                name=name, branch=branch if branch else get_default_branch(url)
+                name=name,
+                branch=branch if branch else "main",  # get_default_branch(url)
             )
         else:
             suffix = match["url_end"].format(name=name)
@@ -2352,45 +2362,29 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
     # Handle URL for the offical repo
-    if not url and name:
+    if name and (not url or fork):
         module_class = get_module_class_name(name)
-        repo_branches = get_github_branches()
-        # Define branch to fetch from (latest or current version)
-        version_branch = "grass{}".format(version[0])
-        if version_branch not in repo_branches:
-            version_branch = repo_branches[-1]
-
-        # Set URL for the given GRASS version
-        git_url = (
-            "https://github.com/OSGeo/grass-addons/branches/"
-            f"{version_branch}/src/{module_class}/{name}"
-        )
-        return "official", git_url
-
-    # Handle URL for a fork of the offical repo
-    if url and fork:
-        module_class = get_module_class_name(name)
-
         # note: 'trunk' is required to make URL usable for 'svn export' call
-        if branch is None:
-            repo_branches = get_github_branches(
-                url.rstrip("/").replace("github.com/", "api.github.com/repos/")
-                + "/branches",
-                version_only=True,
-            )
-            # Define branch to fetch from (latest or current version)
-            if not repo_branches:
-                svn_reference = "trunk"
-            else:
-                version_branch = "grass{}".format(version[0])
-                if version_branch not in repo_branches:
-                    version_branch = repo_branches[-1]
-                svn_reference = "branches/{}".format(version_branch)
+        # and fetches the default branch
+        if not branch:
+            # Fetch from default branch
+            svn_reference = "trunk"
         else:
             svn_reference = "branches/{}".format(branch)
 
-        git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
-        return "official_fork", git_url
+        if not url:
+            # Set URL for the given GRASS version
+            git_url = (
+                "https://github.com/OSGeo/grass-addons/"
+                f"{svn_reference}/src/{module_class}/{name}"
+            )
+            print(git_url)
+            return "official", git_url
+        else:
+            # Forks from the official repo should reflect the current structure
+            url = url.rstrip("/")
+            git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
+            return "official_fork", git_url
 
     # Check if URL can be found
     # Catch corner case if local URL is given starting with file://
@@ -2453,12 +2447,8 @@ def get_addons_paths(gg_addons_base_dir):
     and their paths (mkhmtl.py tool)
     """
     get_addons_paths.json_file = "addons_paths.json"
-    repo_branches = get_github_branches()[0]
     # Define branch to fetch from (latest or current version)
-    addons_branch = "grass{}".format(version[0])
-    if addons_branch not in repo_branches:
-        addons_branch = repo_branches[-1]
-
+    addons_branch = get_version_branch(version[0])
     url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
 
     response = download_addons_paths_file(
