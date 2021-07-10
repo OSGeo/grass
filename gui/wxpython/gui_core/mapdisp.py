@@ -107,12 +107,12 @@ class MapPanelBase(wx.Panel):
             (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
         ]
 
-        self._initShortcuts(self.shortcuts_table)
+        self._initShortcuts()
 
-    def _initShortcuts(self, shortcuts_table):
+    def _initShortcuts(self):
         """init shortcuts to acceleration table"""
         accelTable = []
-        for handler, entry, kdb in shortcuts_table:
+        for handler, entry, kdb in self.shortcuts_table:
             wxId = NewId()
             self.Bind(wx.EVT_MENU, handler, id=wxId)
             accelTable.append((entry, kdb, wxId))

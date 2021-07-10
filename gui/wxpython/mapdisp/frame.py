@@ -1746,7 +1746,7 @@ class MapDisplay(FrameMixin, MapPanel):
 
         # extend shortcuts and create frame accelerator table
         self.shortcuts_table.append((OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts(self.shortcuts_table)
+        self._initShortcuts()
 
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)
