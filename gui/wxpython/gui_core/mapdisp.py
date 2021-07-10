@@ -798,20 +798,21 @@ class FrameMixin:
     def SetFocus(self):
         self.GetParent().SetFocus()
 
-    def OnFullScreen(self, toolbars, auimgr, event):
-        """!Switches frame to fullscreen mode, hides toolbars"""
+    def IsFullScreen(self):
+        return self.GetParent().IsFullScreen()
 
-        def IsFullScreen(self):
-            return self.GetParent().IsFullScreen()
+    def ShowFullScreen(self, show):
+        for toolbar in self.toolbars.keys():
+            self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
+        if self.statusbar:
+            self._mgr.GetPane("statusbar").Show(self.IsFullScreen())
+        self._mgr.Update()
 
-        def ShowFullScreen(self):
-            self.GetParent().ShowFullScreen(not IsFullScreen(self))
+        self.GetParent().ShowFullScreen(show)
 
-        if toolbars and auimgr:
-            for toolbar in toolbars.keys():
-                auimgr.GetPane(toolbars[toolbar]).Show(IsFullScreen(self))
-            auimgr.Update()
-        ShowFullScreen(self)
+    def OnFullScreen(self, event):
+        """!Switches frame to fullscreen mode, hides toolbars and statusbar"""
+        self.ShowFullScreen(not self.IsFullScreen())
         event.Skip()
 
     def BindToFrame(self, *args):

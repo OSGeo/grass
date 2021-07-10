@@ -1739,13 +1739,8 @@ class MapDisplay(FrameMixin, MapPanel):
             except Exception:
                 pass
 
-        def OnFullScreen(event):
-            self.OnFullScreen(self.toolbars,
-                              self._mgr,
-                              event)
-
         # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
         self._initShortcuts()
 
         # add Map Display panel to Map Display frame
