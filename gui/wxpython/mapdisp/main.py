@@ -22,8 +22,8 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Vaclav Petras <wenzeslaus gmail.com> (MapFrameBase)
-@author Anna Kratochvilova <kratochanna gmail.com> (MapFrameBase)
+@author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
+@author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
 """
 
 from __future__ import print_function
@@ -53,6 +53,7 @@ from core.giface import StandaloneGrassInterface  # noqa: E402
 from core.gcmd import RunCommand  # noqa: E402
 from core.render import Map, MapLayer, RenderMapMgr  # noqa: E402
 from mapdisp.frame import MapPanel  # noqa: E402
+from guicore.mapdisp import FrameMixin
 from core.debug import Debug  # noqa: E402
 from core.settings import UserSettings  # noqa: E402
 
@@ -464,13 +465,13 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
         StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
 
 
-class DMonFrame(MapFrame):
+class DMonPanel(MapPanel):
     def OnZoomToMap(self, event):
         layers = self.MapWindow.GetMap().GetListOfLayers()
         self.MapWindow.ZoomToMap(layers=layers)
 
     def OnSize(self, event):
-        super(DMonFrame, self).OnSize(event)
+        super(DMonPanel, self).OnSize(event)
 
         # update env file
         width, height = self.MapWindow.GetClientSize()
@@ -483,6 +484,41 @@ class DMonFrame(MapFrame):
                 print(line.rstrip("\n"))
 
 
+class DMonDisplay(FrameMixin, MapPanel):
+    """Map display for wrapping map panel with frame methods"""
+
+    def __init__(self, parent, giface, id, Map, title, toolbars, decorations):
+
+        # init map panel
+        MapPanel.__init__(
+            self,
+            parent=parent,
+            id=id,
+            title=title,
+            Map=Map,
+            giface=giface,
+            toolbars=toolbars,
+            statusbar=decorations
+        )
+        # set system icon
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
+
+
 class MapApp(wx.App):
     def OnInit(self):
         grass.set_raise_on_error(True)
@@ -492,7 +528,7 @@ class MapApp(wx.App):
 
         return True
 
-    def CreateMapFrame(self, name, decorations=True):
+    def CreateMapDisplay(self, name, decorations=True):
         toolbars = []
         if decorations:
             toolbars.append("map")
@@ -511,24 +547,29 @@ class MapApp(wx.App):
         else:
             self.Map = None
 
-        self.mapFrm = DMonFrame(
-            parent=None,
+        mapframe = wx.Frame(None,
+                            id=wx.ID_ANY,
+                            size=monSize,
+                            style=wx.DEFAULT_FRAME_STYLE,
+                            title=name)
+
+        self.mapDisplay = DMonDisplay(
+            parent=mapframe,
             id=wx.ID_ANY,
             title=name,
             Map=self.Map,
             giface=self._giface,
-            size=monSize,
             toolbars=toolbars,
             statusbar=decorations,
         )
 
         # FIXME: hack to solve dependency
-        self._giface._mapframe = self.mapFrm
+        self._giface._mapframe = self.mapDisplay
 
-        self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(False)
+        self.mapDisplay.GetMapWindow().SetAlwaysRenderEnabled(False)
 
         # set default properties
-        self.mapFrm.SetProperties(
+        self.mapDisplay.SetProperties(
             render=UserSettings.Get(
                 group="display", key="autoRendering", subkey="enabled"
             ),
@@ -546,15 +587,15 @@ class MapApp(wx.App):
             ),
         )
 
-        self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
-        self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
+        self.Map.saveToFile.connect(lambda cmd: self.mapDisplay.DOutFile(cmd))
+        self.Map.dToRast.connect(lambda cmd: self.mapDisplay.DToRast(cmd))
         self.Map.query.connect(
-            lambda ltype, maps: self.mapFrm.SetQueryLayersAndActivate(
+            lambda ltype, maps: self.mapDisplay.SetQueryLayersAndActivate(
                 ltype=ltype, maps=maps
             )
         )
 
-        return self.mapFrm
+        return self.mapDisplay
 
     def OnExit(self):
         if __name__ == "__main__":
@@ -590,15 +631,15 @@ class MapApp(wx.App):
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime
-                self.mapFrm.GetMap().GetLayersFromCmdFile()
+                self.mapDisplay.GetMap().GetLayersFromCmdFile()
                 self.timer.Start(mtime)
         except OSError as e:
             grass.warning("%s" % e)
             self.timer.Stop()
 
-    def GetMapFrame(self):
-        """Get Map Frame instance"""
-        return self.mapFrm
+    def GetMapDisplay(self):
+        """Get Map Display instance"""
+        return self.mapDisplay
 
 
 if __name__ == "__main__":
@@ -633,8 +674,8 @@ if __name__ == "__main__":
 
     start = time.time()
     gmMap = MapApp(0)
-    mapFrame = gmMap.CreateMapFrame(monName, monDecor)
-    mapFrame.Show()
+    mapDisplay = gmMap.CreateMapDisplay(monName, monDecor)
+    mapDisplay.Show()
     Debug.msg(1, "WxMonitor started in %.6f sec" % (time.time() - start))
 
     gmMap.MainLoop()
