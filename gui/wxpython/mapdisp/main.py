@@ -465,25 +465,6 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
         StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
 
 
-class DMonPanel(MapPanel):
-    def OnZoomToMap(self, event):
-        layers = self.MapWindow.GetMap().GetListOfLayers()
-        self.MapWindow.ZoomToMap(layers=layers)
-
-    def OnSize(self, event):
-        super(DMonPanel, self).OnSize(event)
-
-        # update env file
-        width, height = self.MapWindow.GetClientSize()
-        for line in fileinput.input(monFile["env"], inplace=True):
-            if "GRASS_RENDER_WIDTH" in line:
-                print("GRASS_RENDER_WIDTH={0}".format(width))
-            elif "GRASS_RENDER_HEIGHT" in line:
-                print("GRASS_RENDER_HEIGHT={0}".format(height))
-            else:
-                print(line.rstrip("\n"))
-
-
 class DMonDisplay(FrameMixin, MapPanel):
     """Map display for wrapping map panel with frame methods"""
 
@@ -512,11 +493,28 @@ class DMonDisplay(FrameMixin, MapPanel):
         self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
         self._initShortcuts()
 
+        # update env file
+        width, height = self.MapWindow.GetClientSize()
+        for line in fileinput.input(monFile["env"], inplace=True):
+            if "GRASS_RENDER_WIDTH" in line:
+                print("GRASS_RENDER_WIDTH={0}".format(width))
+            elif "GRASS_RENDER_HEIGHT" in line:
+                print("GRASS_RENDER_HEIGHT={0}".format(height))
+            else:
+                print(line.rstrip("\n"))
+
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self, proportion=1, flag=wx.EXPAND)
         parent.SetSizer(sizer)
         parent.Layout()
+
+    def OnZoomToMap(self, event):
+        layers = self.MapWindow.GetMap().GetListOfLayers()
+        self.MapWindow.ZoomToMap(layers=layers)
+
+    def OnSize(self, event):
+        super().OnSize(event)
 
 
 class MapApp(wx.App):
