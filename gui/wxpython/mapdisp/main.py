@@ -514,7 +514,7 @@ class DMonDisplay(FrameMixin, MapPanel):
         self.MapWindow.ZoomToMap(layers=layers)
 
     def OnSize(self, event):
-        super().OnSize(event)
+        super(DMonDisplay, self).OnSize(event)
 
 
 class MapApp(wx.App):
