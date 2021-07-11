@@ -53,7 +53,7 @@ from core.giface import StandaloneGrassInterface  # noqa: E402
 from core.gcmd import RunCommand  # noqa: E402
 from core.render import Map, MapLayer, RenderMapMgr  # noqa: E402
 from mapdisp.frame import MapPanel  # noqa: E402
-from guicore.mapdisp import FrameMixin
+from gui_core.mapdisp import FrameMixin
 from core.debug import Debug  # noqa: E402
 from core.settings import UserSettings  # noqa: E402
 
@@ -487,7 +487,7 @@ class DMonPanel(MapPanel):
 class DMonDisplay(FrameMixin, MapPanel):
     """Map display for wrapping map panel with frame methods"""
 
-    def __init__(self, parent, giface, id, Map, title, toolbars, decorations):
+    def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
 
         # init map panel
         MapPanel.__init__(
@@ -498,7 +498,7 @@ class DMonDisplay(FrameMixin, MapPanel):
             Map=Map,
             giface=giface,
             toolbars=toolbars,
-            statusbar=decorations
+            statusbar=statusbar
         )
         # set system icon
         parent.iconsize = (16, 16)
