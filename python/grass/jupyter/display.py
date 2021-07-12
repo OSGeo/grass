@@ -31,17 +31,23 @@ class GrassRenderer:
         else:
             self._env = os.environ.copy()
 
+	# Make temporary folder for all our files
+        self._tmp_dir = Path("./tmp/")
+        try:
+            os.mkdir(self._tmp_dir)
+        except FileExistsError:
+            pass
+        self._filepath = os.join(self._tmp_dir, filename)
+        
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
         self._env["GRASS_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
-        self._env["GRASS_RENDER_FILE"] = str(filename)
+        self._env["GRASS_RENDER_FILE"] = str(self._filepath)
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
-
-        self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
+        
+        self._legend_file = self._filepath.with_suffix(".grass_vector_legend")
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
-
-        self._filename = filename
 
         self.run("d.erase")
 
@@ -55,4 +61,4 @@ class GrassRenderer:
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
-        return Image(self._filename)
+        return Image(self._filepath)
