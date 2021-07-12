@@ -15,12 +15,13 @@ import folium
 import grass.script as gs
 from pathlib import Path
 
+
 class InteractiveMap:
     """This class creates interative GRASS maps with folium"""
 
     def __init__(self, width=400, height=400):
         """This initiates a folium map centered on g.region"""
-        
+
         # Store height and width
         self.width = width
         self.height = height
@@ -122,7 +123,7 @@ class InteractiveMap:
             env=self._vector_env,
         )
         # Convert to GeoJSON
-        json_file = self.tmp_dir/ f"tmp_{name}.json")
+        json_file = self.tmp_dir / f"tmp_{name}.json"
         gs.run_command(
             "v.out.ogr",
             input=name,
@@ -135,16 +136,16 @@ class InteractiveMap:
 
     def add_layer_control(self, **kwargs):
         self.layer_control = True
-        self.layer_control_object =  folium.LayerControl(**kwargs)
+        self.layer_control_object = folium.LayerControl(**kwargs)
 
     def show(self):
         """This function creates a folium map with a GRASS raster
         overlayed on a basemap.
 
-        If map has layer control enabled, additional layers cannot be 
+        If map has layer control enabled, additional layers cannot be
         added after calling show()."""
-       
-        if self.layer_control==True:
+
+        if self.layer_control == True:
             self.map.add_child(self.layer_control_object)
         # Create Figure
         fig = folium.Figure(width=self.width, height=self.height)
