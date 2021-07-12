@@ -17,6 +17,7 @@ import shutil
 import tarfile
 import tempfile
 import zipfile
+from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import urlretrieve
@@ -134,14 +135,15 @@ def download_and_extract(source, reporthook=None):
     Call urllib.request.urlcleanup() to clean up after urlretrieve if you terminate
     this function from another thread.
     """
+    source_path = Path(urlparse(source).path)
     tmpdir = tempfile.mkdtemp()
     debug("Tmpdir: {}".format(tmpdir))
-    directory = os.path.join(tmpdir, "extracted")
+    directory = Path(tmpdir) / "extracted"
     http_error_message = _("Download file from <{url}>, return status code {code}, ")
     url_error_message = _(
         "Download file from <{url}>, failed. Check internet connection."
     )
-    if source.endswith(".zip"):
+    if source_path.suffix and source_path.suffix == ".zip":
         archive_name = os.path.join(tmpdir, "archive.zip")
         try:
             filename, headers = urlretrieve(source, archive_name, reporthook)
@@ -161,15 +163,9 @@ def download_and_extract(source, reporthook=None):
                 ).format(url=source, name=filename)
             )
         extract_zip(name=archive_name, directory=directory, tmpdir=tmpdir)
-    elif "." in source and (
-        source.endswith(".tar.gz")
-        or source.rsplit(".", 1)[1] in extract_tar.supported_formats
-    ):
-        if source.endswith(".tar.gz"):
-            ext = "tar.gz"
-        else:
-            ext = source.rsplit(".", 1)[1]
-        archive_name = os.path.join(tmpdir, "archive." + ext)
+    elif source_path.suffix and source_path.suffix[1:] in extract_tar.supported_formats:
+        ext = "".join(source_path.suffixes)
+        archive_name = os.path.join(tmpdir, "archive" + ext)
         try:
             urlretrieve(source, archive_name, reporthook)
         except HTTPError as err:
@@ -184,7 +180,7 @@ def download_and_extract(source, reporthook=None):
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
     else:
         # probably programmer error
-        raise DownloadError(_("Unknown format '{0}'.").format(source))
+        raise DownloadError(_("Unknown format '{}'.").format(source))
     return directory
 
 

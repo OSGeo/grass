@@ -28,7 +28,7 @@ import wx
 from wx.lib.newevent import NewEvent
 
 from grass.script.utils import try_rmdir, legalize_vector_name
-from grass.utils import download_and_extract, name_from_url, DownloadError
+from grass.utils.download import download_and_extract, name_from_url, DownloadError
 from grass.grassdb.checks import is_location_valid
 from grass.script.setup import set_gui_path
 

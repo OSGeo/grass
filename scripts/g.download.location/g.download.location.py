@@ -42,15 +42,15 @@
 # % multiple: no
 # %end
 
+import atexit
 import os
 import shutil
-import atexit
-
+from pathlib import Path
 
 import grass.script as gs
-from grass.script.utils import try_rmdir
-from grass.utils import download_and_extract, name_from_url, DownloadError
 from grass.grassdb.checks import is_location_valid
+from grass.script.utils import try_rmdir
+from grass.utils.download import DownloadError, download_and_extract, name_from_url
 
 
 def find_location_in_directory(path, recurse=0):
@@ -88,24 +88,27 @@ def location_name_from_url(url):
 
 
 def main(options, unused_flags):
+    """Download and copy location to destination"""
     url = options["url"]
     name = options["name"]
     database = options["path"]
 
     if not database:
-        # use current
+        # Use the current database path.
         database = gs.gisenv()["GISDBASE"]
     if not name:
         name = location_name_from_url(url)
-    destination = os.path.join(database, name)
+    destination = Path(database) / name
 
-    if os.path.exists(destination):
-        gs.fatal(_("Location named <%s> already exists, download canceled") % name)
+    if destination.exists():
+        gs.fatal(
+            _("Location named <{}> already exists, download canceled").format(name)
+        )
 
     gs.message(_("Downloading and extracting..."))
     try:
         directory = download_and_extract(url)
-        if not os.path.isdir(directory):
+        if not directory.is_dir():
             gs.fatal(_("Archive contains only one file and no mapset directories"))
         atexit.register(lambda: try_rmdir(directory))
     except DownloadError as error:
