@@ -15,8 +15,6 @@ import folium
 import grass.script as gs
 from pathlib import Path
 
-from pathlib import Path
-
 class InteractiveMap:
     """This class creates interative GRASS maps with folium"""
 
