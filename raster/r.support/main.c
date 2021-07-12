@@ -39,11 +39,19 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *raster, *title_opt, *history_opt;
     struct Option *datasrc1_opt, *datasrc2_opt, *datadesc_opt;
+<<<<<<< HEAD
     struct Option *semantic_label_opt;
     struct Option *map_opt, *units_opt, *vdatum_opt;
     struct Option *load_opt, *save_opt;
     struct Flag *stats_flag, *null_flag, *del_flag, *semantic_label_rm_flag;
     int is_reclass; /* Is raster reclass? */
+=======
+    struct Option *bandref_opt;
+    struct Option *map_opt, *units_opt, *vdatum_opt;
+    struct Option *load_opt, *save_opt;
+    struct Flag *stats_flag, *null_flag, *del_flag, *bandref_rm_flag;
+    int is_reclass;		/* Is raster reclass? */
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
     const char *infile;
     struct History hist;
 
@@ -134,6 +142,7 @@ int main(int argc, char *argv[])
     save_opt->guisection = _("Import / Export");
     save_opt->description = _("Text file in which to save history");
 
+<<<<<<< HEAD
     semantic_label_opt = G_define_option();
     semantic_label_opt->key = "semantic_label";
     semantic_label_opt->key_desc = "phrase";
@@ -146,6 +155,21 @@ int main(int argc, char *argv[])
     semantic_label_rm_flag->key = 'b';
     semantic_label_rm_flag->guisection = _("Semantic label");
     semantic_label_rm_flag->description = _("Delete the semantic label");
+=======
+    bandref_opt = G_define_option();
+    bandref_opt->key = "bandref";
+    bandref_opt->key_desc = "phrase";
+    bandref_opt->type = TYPE_STRING;
+    bandref_opt->required = NO;
+    bandref_opt->guisection = _("Band reference");
+    bandref_opt->description =
+	_("Band reference in form shortcut_name e.g. S2_8A");
+
+    bandref_rm_flag = G_define_flag();
+    bandref_rm_flag->key = 'b';
+    bandref_rm_flag->guisection = _("Band reference");
+    bandref_rm_flag->description = _("Delete the band reference");
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
     stats_flag = G_define_flag();
     stats_flag->key = 's';
@@ -176,6 +200,10 @@ int main(int argc, char *argv[])
     if (semantic_label_rm_flag->answer && semantic_label_opt->answer)
         G_fatal_error(_("Semantic label removal and setting semantic "
                         "label values simultaneously doesn't make sense"));
+
+    if (bandref_rm_flag->answer && bandref_opt->answer)
+        G_fatal_error(_("Band reference removal and setting band "
+                        "reference values simultaneously doesn't make sense"));
 
     Rast_get_cellhd(raster->answer, "", &cellhd);
     is_reclass = (Rast_is_reclass(raster->answer, "", rname, rmapset) > 0);
@@ -285,6 +313,7 @@ int main(int argc, char *argv[])
         Rast_free_cats(&cats);
     }
 
+<<<<<<< HEAD
     if (semantic_label_opt->answer) {
         if (Rast_legal_semantic_label(semantic_label_opt->answer) == false)
             G_fatal_error(_("Provided semantic label is not valid. "
@@ -292,6 +321,24 @@ int main(int argc, char *argv[])
 
         Rast_write_semantic_label(infile, semantic_label_opt->answer);
     }
+=======
+    if (bandref_opt->answer) {
+        if (Rast_legal_bandref(bandref_opt->answer) < 0)
+            G_fatal_error(_("Provided band reference is not valid. "
+                            "See documentation for valid examples"));
+
+        Rast_write_bandref(infile, bandref_opt->answer);
+    }
+
+    if (bandref_rm_flag->answer)
+        G_remove_misc("cell_misc", "bandref", infile);
+
+    if (title_opt->answer || history_opt->answer || units_opt->answer
+	|| vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer
+	|| datadesc_opt->answer || map_opt->answer
+	|| bandref_opt->answer || bandref_rm_flag->answer)
+	exit(EXIT_SUCCESS);
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
     if (semantic_label_rm_flag->answer)
         G_remove_misc("cell_misc", "semantic_label", infile);

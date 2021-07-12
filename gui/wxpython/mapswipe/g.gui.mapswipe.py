@@ -89,6 +89,10 @@ def main():
     frame = SwipeMapDisplay(
         parent=frame,
         giface=StandaloneGrassInterface(),
+<<<<<<< HEAD
+=======
+        title=_("Map Swipe Tool - GRASS GIS"),
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
     )
 
     if first:

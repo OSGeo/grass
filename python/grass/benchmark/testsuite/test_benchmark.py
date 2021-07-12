@@ -18,7 +18,10 @@ from types import SimpleNamespace
 
 from grass.benchmark import (
     benchmark_resolutions,
+<<<<<<< HEAD
     benchmark_single,
+=======
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
     join_results,
     load_results,
     load_results_from_file,
@@ -61,6 +64,7 @@ class TestBenchmarksRun(TestCase):
         num_cells_plot(results, filename=plot_file)
         self.assertTrue(Path(plot_file).is_file())
 
+<<<<<<< HEAD
     def test_single(self):
         """Test that single benchmark function runs"""
         label = "Standard output"
@@ -82,6 +86,8 @@ class TestBenchmarksRun(TestCase):
             self.assertEqual(len(result.all_times), repeat)
         self.assertEqual(results[0].label, label)
 
+=======
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
 class TestBenchmarkResults(TestCase):
     """Tests that saving results work"""
