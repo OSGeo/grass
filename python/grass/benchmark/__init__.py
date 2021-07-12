@@ -6,4 +6,11 @@ file of the subpackage.
 """
 
 from .plots import nprocs_plot, num_cells_plot
+from .results import (
+    join_results,
+    load_results,
+    load_results_from_file,
+    save_results,
+    save_results_to_file,
+)
 from .runners import benchmark_nprocs, benchmark_resolutions
