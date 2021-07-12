@@ -82,6 +82,7 @@ class GMApp(wx.App):
 
         def show_main_gui():
             # create and show main frame
+<<<<<<< HEAD
             single = UserSettings.Get(
                 group="appearance", key="singleWindow", subkey="enabled"
             )
@@ -112,6 +113,14 @@ class GMApp(wx.App):
                 mainframe.Show()
                 self.SetTopWindow(mainframe)
 
+=======
+            from lmgr.frame import GMFrame
+
+            mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
+            mainframe.Show()
+            self.SetTopWindow(mainframe)
+
+>>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
         wx.CallAfter(show_main_gui)
 
         return True
