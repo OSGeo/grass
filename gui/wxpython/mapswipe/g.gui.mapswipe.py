@@ -82,7 +82,7 @@ def main():
     frame = SwipeMapFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Temporal Plot Tool - GRASS GIS"),
+        title=_("Map Swipe Tool - GRASS GIS"),
     )
 
     if first:

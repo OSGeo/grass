@@ -3,9 +3,9 @@ MODULE_TOPDIR = ../../..
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
-DSTDIR = $(ETC)/python/grass/jupyter
+DSTDIR = $(ETC)/python/grass/benchmark
 
-MODULES = setup display
+MODULES = plots results runners
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

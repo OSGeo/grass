@@ -633,7 +633,7 @@ class SavedRegion(wx.Dialog):
         sizer.Add(
             box,
             proportion=0,
-            flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.GROW | wx.ALL,
             border=5,
         )
 
@@ -643,7 +643,7 @@ class SavedRegion(wx.Dialog):
         sizer.Add(
             line,
             proportion=0,
-            flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+            flag=wx.GROW | wx.LEFT | wx.RIGHT,
             border=5,
         )
 
