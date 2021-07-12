@@ -110,12 +110,12 @@ class TestTRastAlgebra(TestCase):
         )
 
     def tearDown(self):
-        self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
+        self.runModule("t.remove", flags="df", inputs="R", quiet=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
+        cls.runModule("t.remove", flags="df", inputs="A,B,C,D", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
