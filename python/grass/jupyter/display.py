@@ -46,7 +46,7 @@ class GrassRenderer:
         self._env["GRASS_RENDER_FILE"] = str(self._filepath)
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
 
-        self._legend_file = self._filepath.with_suffix(".grass_vector_legend")
+        self._legend_file = Path(self._filepath).with_suffix(".grass_vector_legend")
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
         self.run("d.erase")
