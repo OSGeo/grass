@@ -37,7 +37,7 @@ class GrassRenderer:
             os.mkdir(self._tmp_dir)
         except FileExistsError:
             pass
-        self._filepath = os.join(self._tmp_dir, filename)
+        self._filepath = os.path.join(self._tmp_dir, filename)
 
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
