@@ -15,6 +15,7 @@ import folium
 import grass.script as gs
 from pathlib import Path
 
+from pathlib import Path
 
 class InteractiveMap:
     """This class creates interative GRASS maps with folium"""
@@ -61,6 +62,8 @@ class InteractiveMap:
             location=center,
             tiles="cartodbpositron",
         )
+        # Create LayerControl default
+        self.layer_control = False
 
     def _convert_coordinates(self, x, y, proj_in):
         """This function reprojects coordinates to WGS84, the required
@@ -132,7 +135,7 @@ class InteractiveMap:
             env=self._vector_env,
         )
         # Import GeoJSON to folium and add to map
-        folium.GeoJson(json_file, name=name).add_to(self.map)
+        folium.GeoJson(str(json_file), name=name).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
         self.layer_control = True
@@ -145,7 +148,7 @@ class InteractiveMap:
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
 
-        if self.layer_control == True:
+        if self.layer_control:
             self.map.add_child(self.layer_control_object)
         # Create Figure
         fig = folium.Figure(width=self.width, height=self.height)
