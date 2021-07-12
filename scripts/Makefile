@@ -18,6 +18,10 @@ SUBDIRS = \
 	db.out.ogr \
 	db.test \
 	db.univar \
+<<<<<<< HEAD
+=======
+	g.bands \
+>>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
 	g.download.location \
 	g.extension \
 	g.extension.all \

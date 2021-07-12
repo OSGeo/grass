@@ -82,7 +82,11 @@ LOCATIONS = [
 ]
 
 
+<<<<<<< HEAD
 class RedirectText:
+=======
+class RedirectText(object):
+>>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
     def __init__(self, window):
         self.out = window
 
@@ -137,9 +141,13 @@ class RedirectText:
         )
 
 
+<<<<<<< HEAD
 # based on
 # https://blog.shichao.io/2012/10/04/
 # progress_speed_indicator_for_urlretrieve_in_python.html
+=======
+# based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
+>>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
 def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
