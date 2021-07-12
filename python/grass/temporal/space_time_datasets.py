@@ -365,11 +365,19 @@ class RasterDataset(AbstractMapDataset):
                  read (due to an error or because not being present)
         """
 
+<<<<<<< HEAD
         semantic_label = self.ciface.read_raster_semantic_label(
             self.get_name(), self.get_mapset()
         )
 
         if not semantic_label:
+=======
+        band_ref = self.ciface.read_raster_band_reference(
+            self.get_name(), self.get_mapset()
+        )
+
+        if not band_ref:
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
             return False
 
         self.metadata.set_semantic_label(semantic_label)
@@ -458,12 +466,21 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_rows(rows)
             self.metadata.set_number_of_cells(ncells)
 
+<<<<<<< HEAD
             # Fill semantic label if defined
             semantic_label = self.ciface.read_raster_semantic_label(
                 self.get_name(), self.get_mapset()
             )
             if semantic_label:
                 self.metadata.set_semantic_label(semantic_label)
+=======
+            # Fill band reference if defined
+            band_ref = self.ciface.read_raster_band_reference(
+                self.get_name(), self.get_mapset()
+            )
+            if band_ref:
+                self.metadata.set_band_reference(band_ref)
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 
             return True
 

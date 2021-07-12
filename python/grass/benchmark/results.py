@@ -48,7 +48,11 @@ def save_results_to_file(results, filename):
     See :func:`save_results` for details.
     """
     text = save_results(results)
+<<<<<<< HEAD
     with open(filename, "w", encoding="utf-8") as file:
+=======
+    with open(filename, "w") as file:
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
         file.write(text)
 
 
@@ -67,11 +71,19 @@ def load_results_from_file(filename):
 
     See :func:`load_results` for details.
     """
+<<<<<<< HEAD
     with open(filename, "r", encoding="utf-8") as file:
         return load_results(file.read())
 
 
 def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
+=======
+    with open(filename, "r") as file:
+        return load_results(file.read())
+
+
+def join_results(results, prefixes=None):
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
     """Join multiple lists of results together
 
     The *results* argument either needs to be a list of result objects
@@ -88,6 +100,7 @@ def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
             # This is the actual list in the full results structure.
             result_list = result_list.results
         for result in result_list:
+<<<<<<< HEAD
             if select and not select(result):
                 continue
             result = copy.deepcopy(result)
@@ -113,3 +126,10 @@ def join_results_from_files(
         select=select,
         prefixes_as_labels=prefixes_as_labels,
     )
+=======
+            result = copy.deepcopy(result)
+            if prefix:
+                result.label = f"{prefix}: {result.label}"
+            joined.append(result)
+    return joined
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))

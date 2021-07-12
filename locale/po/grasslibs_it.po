@@ -11736,6 +11736,7 @@ msgstr "[%s]: Colore sconosciuto"
 #~ msgid "Copy %s <%s> to current mapset as <%s>"
 #~ msgstr "Copia %s <%s> al mapset corrente come <%s>"
 
+<<<<<<< HEAD
 #~ msgid ""
 #~ "To run the module <%s> add underscore at the end of the option <%s> to "
 #~ "avoid conflict with Python keywords. Underscore at the beginning is "
@@ -11745,3 +11746,7 @@ msgstr "[%s]: Colore sconosciuto"
 #~ "dell'opzione <%s> per evitare conflitti con le parole chiave di Python. "
 #~ "Il trattino basso all'inizio è obsoleto in GRASS GIS 7.0 e sarà rimosso "
 #~ "nella versione 7.1."
+=======
+#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+#~ msgstr "per eseguire il modulo <%s> aggiungere il trattino basso alla fine dell'opzione <%s> per evitare conflitti con le parole chiave di Python. Il trattino basso all'inizio è obsoleto in GRASS GIS 7.0 e sarà rimosso nella versione 7.1."
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))

@@ -13243,6 +13243,7 @@ msgstr "[%s]: No existe tal color"
 #~ msgid "Copy %s <%s> to current mapset as <%s>"
 #~ msgstr "Copiar %s <%s> al Directorio de mapas actual con el nombre <%s>"
 
+<<<<<<< HEAD
 #~ msgid ""
 #~ "To run the module <%s> add underscore at the end of the option <%s> to "
 #~ "avoid conflict with Python keywords. Underscore at the beginning is "
@@ -13252,3 +13253,7 @@ msgstr "[%s]: No existe tal color"
 #~ "para evitar conflicto con las palabras reservadas de Python. El guión "
 #~ "bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión "
 #~ "7.1."
+=======
+#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+#~ msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))

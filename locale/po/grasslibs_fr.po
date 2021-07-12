@@ -13619,6 +13619,7 @@ msgstr "[%s] : cette couleur n'existe pas"
 #~ msgid "Copy %s <%s> to current mapset as <%s>"
 #~ msgstr "Copie %s <%s> vers <%s> dans le jeu de cartes courant"
 
+<<<<<<< HEAD
 #~ msgid ""
 #~ "To run the module <%s> add underscore at the end of the option <%s> to "
 #~ "avoid conflict with Python keywords. Underscore at the beginning is "
@@ -13627,3 +13628,10 @@ msgstr "[%s] : cette couleur n'existe pas"
 #~ "Pour exécuter le module <%s>, ajouter un tiret-bas à la fin de l'option "
 #~ "<%s> pour éviter un conflit avec les mots-clefs Python. Le tiret-bas est "
 #~ "obsolète dans GRASS 7.0 et sera supprimé dans la version 7.1."
+=======
+#~ msgid "Invalid value <%s> for parameter <%s>"
+#~ msgstr "Valeur <%s> manquante pour le paramètre <%s>"
+
+#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+#~ msgstr "Pour exécuter le module <%s>, ajouter un tiret-bas à la fin de l'option <%s> pour éviter un conflit avec les mots-clefs Python. Le tiret-bas est obsolète dans GRASS 7.0 et sera supprimé dans la version 7.1."
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))

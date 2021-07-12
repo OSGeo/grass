@@ -146,9 +146,12 @@ class TestRasterUnivar(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.runModule("t.remove", flags="df", type="strds", inputs="A")
+<<<<<<< HEAD
         cls.runModule("t.remove", flags="df", type="strds", inputs="B")
         cls.runModule("g.remove", flags="f", type="raster", name="zones")
 
+=======
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
         cls.del_temp_region()
 
     def test_with_all_maps(self):
