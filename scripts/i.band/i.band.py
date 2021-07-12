@@ -57,7 +57,7 @@ def print_map_band_reference(name, band_reader):
 
     try:
         with RasterRow(name) as rast:
-            band_ref = rast.info.band_reference
+            band_ref = rast.info.bandref
             if band_ref:
                 shortcut, band = band_ref.split("_")
                 band_reader.print_info(shortcut, band)
@@ -91,7 +91,7 @@ def manage_map_band_reference(name, band_ref):
                     _("Band reference dissociated from raster map <{}>").format(name), 1
                 )
             try:
-                rast.info.band_reference = band_ref
+                rast.info.bandref = band_ref
             except GrassError as e:
                 gs.error(_("Unable to assign/dissociate band reference. {}").format(e))
                 return 1

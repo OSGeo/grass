@@ -172,6 +172,9 @@ class MapFrame(SingleMapFrame):
         self.MapWindow2D.InitZoomHistory()
         self.MapWindow2D.zoomChanged.connect(self.StatusbarUpdate)
 
+        # register context menu actions
+        self._registerContextMenuActions()
+
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
         self.MapWindow = self.MapWindow2D
@@ -245,6 +248,37 @@ class MapFrame(SingleMapFrame):
         self.measureController = None
 
         self._resize()
+
+    def _registerContextMenuActions(self):
+        """Register show/hide toolbars and statusbar context menu actions"""
+
+        def show_hide_toolbar_label():
+            return (
+                _("Hide toolbars") if self.AreAllToolbarsShown() else _("Show toolbars")
+            )
+
+        def on_show_hide_toolbar(event):
+            self.ShowAllToolbars(not self.AreAllToolbarsShown())
+
+        self.MapWindow2D.RegisterContextAction(
+            name="showAllToolbars",
+            label=show_hide_toolbar_label,
+            action=on_show_hide_toolbar,
+        )
+
+        def show_hide_statusbar_label():
+            return (
+                _("Hide statusbar") if self.IsStatusbarShown() else _("Show statusbar")
+            )
+
+        def on_show_hide_statusbar(event):
+            self.ShowStatusbar(not self.IsStatusbarShown())
+
+        self.MapWindow2D.RegisterContextAction(
+            name="showStatusbar",
+            label=show_hide_statusbar_label,
+            action=on_show_hide_statusbar,
+        )
 
     def CreateStatusbar(self):
         if self.statusbarManager:
@@ -670,6 +704,17 @@ class MapFrame(SingleMapFrame):
         self.toolbars["map"].Enable2D(True)
 
         self._mgr.Update()
+
+    def ShowAllToolbars(self, show=True):
+        if not show:  # hide
+            action = self.RemoveToolbar
+        else:
+            action = self.AddToolbar
+        for toolbar in self.GetToolbarNames():
+            action(toolbar)
+
+    def AreAllToolbarsShown(self):
+        return self.GetMapToolbar().IsShown()
 
     def IsPaneShown(self, name):
         """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
