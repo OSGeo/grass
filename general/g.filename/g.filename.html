@@ -63,12 +63,19 @@ base files as well as use existing ones.
 
 <p>
 If the mapset is the current mapset, <em>g.filename</em>
-automatically creates the <em>element</em> specified if it
-doesn't already exist.  This makes it easy to add new files
-to the data base without having to worry about the
-existence of the required data base directories.  (This
+can automatically create the <em>element</em> specified if it
+doesn't already exist when <b>-c</b> flag is used. This makes it easy
+to add new files to the data base without having to worry about the
+existence of the required data base directories. (This
 program will not create a new mapset, however, if that
 specified does not currently exist.)
+
+<p>
+This module should not be used to create directories which are at the level
+of what this module refer to as files, i.e., directory which carries a name
+specified by a user (such as vector map directories) should not be created
+using this module. Standard library functions coming with any given language
+are a more appropriate tool for that.
 
 <p>The program exits with a 0 if everything is ok;  it exits
 with a non-zero value if there is an error, in which case
