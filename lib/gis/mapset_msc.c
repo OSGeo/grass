@@ -181,18 +181,15 @@ int make_mapset_element_no_fail_on_race(const char *p_path, const char *p_elemen
 /*!
    \brief Create misc element in the current mapset.
 
-   \param dir directory path
-   \param name element to be created in mapset
+   \param dir directory path (e.g., `cell_misc`)
+   \param name element to be created in mapset (e.g., `elevation`)
 
    \return 0 no element defined
    \return 1 on success
  */
 int G__make_mapset_element_misc(const char *dir, const char *name)
 {
-    char buf[GNAME_MAX * 2 + 1];
-
-    sprintf(buf, "%s/%s", dir, name);
-    return G_make_mapset_element(buf);
+    G_make_mapset_dir_object(dir, name);
 }
 
 static int check_owner(const struct stat *info)
