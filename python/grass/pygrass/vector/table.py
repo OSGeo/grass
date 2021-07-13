@@ -899,7 +899,6 @@ class DBlinks(object):
         return (self.by_index(i) for i in range(self.num_dblinks()))
 
     def __getitem__(self, item):
-        """"""
         if isinstance(item, int):
             return self.by_index(item)
         else:

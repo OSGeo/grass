@@ -204,7 +204,7 @@ def main():
     try:
         grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
-    except:
+    except Exception:
         grass.message(_("WFS import failed"))
     finally:
         try_remove(tmpxml)

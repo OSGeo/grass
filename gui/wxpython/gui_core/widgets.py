@@ -1281,6 +1281,7 @@ class SearchModuleWidget(wx.Panel):
             self._searchChoice.SetItems(commands)
             if commands:
                 self._searchChoice.SetSelection(0)
+                self.OnSelectModule()
 
         label = _("%d modules match") % len(commands)
         if self._showTip:
@@ -1310,7 +1311,7 @@ class SearchModuleWidget(wx.Panel):
 
         return commands
 
-    def OnSelectModule(self, event):
+    def OnSelectModule(self, event=None):
         """Module selected from choice, update command prompt"""
         cmd = self._searchChoice.GetStringSelection()
         self.moduleSelected.emit(name=cmd)

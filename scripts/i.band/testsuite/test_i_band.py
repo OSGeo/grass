@@ -2,39 +2,48 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule, call_module
 
+from grass.script.core import tempname
+from grass.pygrass.gis import Mapset
 from grass.pygrass.raster import RasterRow
 
 
 class TestBandsSystemDefined(TestCase):
-    # note that full NC dataset is needed
-    raster_map = "lsat7_2002_10"
-    band_ref = "L7_1"
+    @classmethod
+    def setUpClass(cls):
+        cls.map = tempname(10)
+        cls.bandref = "The_Doors"
+        cls.mapset = Mapset()
+        cls.use_temp_region()
+        cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
+        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.map)
 
     def read_band_ref(self):
-        with RasterRow(self.raster_map) as rast:
-            band_ref = rast.info.band_reference
+        with RasterRow(self.map) as rast:
+            band_ref = rast.info.bandref
 
         return band_ref
 
     def test_band_ref_assign_not_current_mapset(self):
-        # it is assumed that we are not in PERMANENT mapset
-        module = SimpleModule(
-            "i.band", map=self.raster_map + "@PERMANENT", band=self.band_ref
-        )
-        self.assertModuleFail(module)
+        if not self.mapset == "PERMANENT":
+            self.mapset.name = "PERMANENT"
+            a_map = self.mapset.glist(type="raster")[0]
+            module = SimpleModule("i.band", map=a_map, band=self.bandref)
+            self.assertModuleFail(module)
 
     def test_band_ref_assign(self):
-        # Copy raster map to the current mapset
-        call_module("g.copy", raster="{m}@PERMANENT,{m}".format(m=self.raster_map))
-
-        module = SimpleModule("i.band", map=self.raster_map, band=self.band_ref)
+        module = SimpleModule("i.band", map=self.map, band=self.bandref)
         self.assertModule(module)
 
         # check also using pygrass
-        self.assertEqual(self.read_band_ref(), self.band_ref)
+        self.assertEqual(self.read_band_ref(), self.bandref)
 
     def test_band_ref_dissociate(self):
-        module = SimpleModule("i.band", operation="remove", map=self.raster_map)
+        module = SimpleModule("i.band", operation="remove", map=self.map)
         self.assertModule(module)
 
         # check also using pygrass

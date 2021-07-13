@@ -9,12 +9,15 @@ libgl1-mesa-dev
 libglu1-mesa-dev
 libnetcdf-dev
 libopenblas-dev
+libpdal-dev
 libpng-dev
 libproj-dev
+pdal
 proj-bin
 libreadline-dev
 libzstd-dev
 python3-dateutil
+python3-matplotlib
 python3-numpy
 python3-ply
 python3-six

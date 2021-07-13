@@ -456,36 +456,6 @@ class DMonGrassInterface(StandaloneGrassInterface):
     def GetProgress(self):
         return self._mapframe.GetProgressBar()
 
-    def ShowStatusbar(self, show=True):
-        if not self._mapframe.statusbarManager:
-            self._mapframe.CreateStatusbar()
-
-        self._mapframe.statusbarManager.Show(show)
-
-    def IsStatusbarShown(self):
-        if not self._mapframe.statusbarManager:
-            return False
-
-        return self._mapframe.statusbarManager.IsShown()
-
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self._mapframe.RemoveToolbar
-        else:
-            action = self._mapframe.AddToolbar
-        toolbars = list(self._mapframe.GetToolbarNames())
-        if not toolbars:
-            toolbars.append("map")
-        for toolbar in toolbars:
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        toolbar = self._mapframe.GetMapToolbar()
-        if toolbar is None:
-            return False
-
-        return toolbar.IsShown()
-
 
 class DMonFrame(MapFrame):
     def OnZoomToMap(self, event):

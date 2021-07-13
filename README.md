@@ -15,6 +15,11 @@ a Geographic Information System used for geospatial data management and
 analysis, image processing, graphics/map production, spatial modeling, and
 visualization.
 
+Launch this repository in Binder and experiment with GRASS's Python API in Jupyter Notebooks by clicking the button below:
+
+[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/OSGeo/grass/master?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fexample_notebook.ipynb)
+
+
 ## How to get write access here
 
 In general: you don't really need write access as you can simply open
@@ -36,7 +41,7 @@ Build a docker image using the downloaded source code (run this in the directory
 containing the source code):
 
 ```
-docker build -t grassgis79 .
+docker build -t grassgis80 .
 ```
 
 A test run (assuming you have the existing GRASS GIS test location; it can be
@@ -46,16 +51,16 @@ downloaded from
 ```
 # case 1: launching in the grassdata directory in which the location is stored:
 docker run -it --rm --user=$(id -u):$(id -g) --volume $(pwd):/data \
-    --env HOME=/data/ grassgis79 grass --text nc_basic_spm_grass7/user1 \
+    --env HOME=/data/ grassgis80 grass --text nc_basic_spm_grass7/user1 \
         --exec g.region -p
 
 # case 2: launching anywhere
 docker run -it --rm --user=$(id -u):$(id -g) \
-    --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis79 \
+    --volume /your/test/grassdata/:/data --env HOME=/data/ grassgis80 \
         grass /data/nc_basic_spm_grass7/PERMANENT --exec g.region -p
 ```
 
-Note that the first `grassgis79` is the name of the image while the second
+Note that the first `grassgis80` is the name of the image while the second
 `grass` is the name of the executable.
 
 To run the tests (again assuming local location):
@@ -63,7 +68,7 @@ To run the tests (again assuming local location):
 ```
 docker run -it --rm --user=$(id -u):$(id -g) \
     --volume /your/test/grassdata/:/data --env HOME=/data/ -w /code/grass \
-        grassgis79 grass /data/nc_basic_spm_grass7/PERMANENT --exec \
+        grassgis80 grass /data/nc_basic_spm_grass7/PERMANENT --exec \
             python -m grass.gunittest.main \
                 --location nc_basic_spm_grass7 --location-type nc
 ```
@@ -79,7 +84,7 @@ make distclean
 
 ## How to generate the 'Programmer's Manual'
 
-You can generate locally the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming7/).
+You can generate locally the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming8/).
 
 This needs doxygen (<http://www.doxygen.org>) and optionally
 Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).

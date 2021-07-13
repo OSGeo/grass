@@ -223,6 +223,9 @@ class BufferedMapWindow(MapWindowBase, Window):
         # list for registration of graphics to draw
         self.graphicsSetList = []
 
+        # dict for registration of context menu actions
+        self._extraContextActions = {}
+
     def OnUpdateMap(self):
         # before lambda func was used, however it was problem
         # to disconnect it from signal
@@ -253,6 +256,15 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.Bind(wx.EVT_MOTION, self.OnMotion)
         self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
 
+    def RegisterContextAction(self, name, label, action):
+        """Register context menu item.
+
+        :param name: action name
+        :param label: callback function returning label
+        :param action: handler
+        """
+        self._extraContextActions[name] = {"label": label, "action": action}
+
     def OnContextMenu(self, event):
         """Show Map Display context menu"""
         if self.digit:
@@ -266,25 +278,14 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.popupCopyCoordinates = NewId()
             self.Bind(wx.EVT_MENU, self.OnCopyCoordinates, id=self.popupCopyCoordinates)
         menu.Append(self.popupCopyCoordinates, _("Copy coordinates to clipboard"))
-        menu.AppendSeparator()
-        if not hasattr(self, "popupShowAllToolbars"):
-            self.popupShowAllToolbars = NewId()
-            self.Bind(wx.EVT_MENU, self.OnShowAllToolbars, id=self.popupShowAllToolbars)
-        menu.Append(
-            self.popupShowAllToolbars,
-            _("Hide toolbars")
-            if self._giface.AreAllToolbarsShown()
-            else _("Show toolbars"),
-        )
-        if not hasattr(self, "popupShowStatusbar"):
-            self.popupShowStatusbar = NewId()
-            self.Bind(wx.EVT_MENU, self.OnShowStatusbar, id=self.popupShowStatusbar)
-        menu.Append(
-            self.popupShowStatusbar,
-            _("Hide statusbar")
-            if self._giface.IsStatusbarShown()
-            else _("Show statusbar"),
-        )
+        if self._extraContextActions:
+            menu.AppendSeparator()
+        for key, action_dict in self._extraContextActions.items():
+            if not hasattr(self, key):
+                aid = NewId()
+                setattr(self, key, aid)
+                self.Bind(wx.EVT_MENU, action_dict["action"], id=aid)
+            menu.Append(getattr(self, key), action_dict["label"]())
 
         pos = self.ScreenToClient(event.GetPosition())
         idlist = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
@@ -615,7 +616,8 @@ class BufferedMapWindow(MapWindowBase, Window):
                 # decorate with GDDC (transparency)
                 try:
                     gcdc = wx.GCDC(dc)
-                    self.pdcVector.DrawToDCClipped(gcdc, rgn)
+                    if self.pdcVector:
+                        self.pdcVector.DrawToDCClipped(gcdc, rgn)
                 except NotImplementedError as e:
                     print(e, file=sys.stderr)
                     self.pdcVector.DrawToDCClipped(dc, rgn)
@@ -1723,14 +1725,6 @@ class BufferedMapWindow(MapWindowBase, Window):
             do.SetText(str(e) + delim + str(n))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
-
-    def OnShowStatusbar(self, event):
-        """Show/hide statusbar"""
-        self._giface.ShowStatusbar(not self._giface.IsStatusbarShown())
-
-    def OnShowAllToolbars(self, event):
-        """Show/hide all toolbars"""
-        self._giface.ShowAllToolbars(not self._giface.AreAllToolbarsShown())
 
     def ClearLines(self, pdc=None):
         """Clears temporary drawn lines from PseudoDC"""

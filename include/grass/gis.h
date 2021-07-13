@@ -7,7 +7,7 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:   (C) 2000-2011 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2021 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -23,6 +23,8 @@
 /* System include files */
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdbool.h>
+
 
 /* Grass and local include files */
 #include <grass/config.h>
@@ -51,13 +53,14 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define G_gisinit(pgm) G__gisinit(GIS_H_VERSION, (pgm))
 #define G_no_gisinit() G__no_gisinit(GIS_H_VERSION)
 
-/* Define TRUE and FALSE for boolean comparisons */
+/* For boolean values and comparisons use the C99 type 'bool' with values 'true' */
+/* and 'false' For historical reasons 'TRUE' and 'FALSE' are still valid.        */
 #ifndef TRUE
-#define TRUE 1
+#define TRUE true
 #endif
 
 #ifndef FALSE
-#define FALSE 0
+#define FALSE false
 #endif
 
 #if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || (__APPLE__ && __LP64__)
@@ -96,12 +99,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define U_DEGREES	8
 #define U_USFEET	9
 /* Temporal units from the datetime library */
-#define U_YEARS         DATETIME_YEAR   
-#define U_MONTHS        DATETIME_MONTH  
-#define U_DAYS          DATETIME_DAY    
-#define U_HOURS         DATETIME_HOUR   
-#define U_MINUTES       DATETIME_MINUTE 
-#define U_SECONDS       DATETIME_SECOND 
+#define U_YEARS         DATETIME_YEAR
+#define U_MONTHS        DATETIME_MONTH
+#define U_DAYS          DATETIME_DAY
+#define U_HOURS         DATETIME_HOUR
+#define U_MINUTES       DATETIME_MINUTE
+#define U_SECONDS       DATETIME_SECOND
 
 /*! \brief Projection code - XY coordinate system (unreferenced data) */
 #define PROJECTION_XY     0
@@ -121,9 +124,9 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define SRID_FILE       "PROJ_SRID"
 
 #ifdef __MINGW32__
-#define CONFIG_DIR "GRASS7"
+#define CONFIG_DIR "GRASS8"
 #else
-#define CONFIG_DIR ".grass7"
+#define CONFIG_DIR ".grass8"
 #endif
 
 /* define PI and friends */
@@ -299,10 +302,11 @@ typedef enum
     G_OPT_M_DBASE,              /*!< dbase */
     G_OPT_M_COORDS,             /*!< coordinates */
     G_OPT_M_COLR,               /*!< color rules */
-    G_OPT_M_DIR,                /*!< directory input */    
+    G_OPT_M_DIR,                /*!< directory input */
     G_OPT_M_REGION,             /*!< saved region */
     G_OPT_M_NULL_VALUE,         /*!< null value string */
-    
+    G_OPT_M_NPROCS,             /*!< number of threads for parallel computing */
+
     G_OPT_STDS_INPUT,           /*!< old input space time dataset of type strds, str3ds or stvds */
     G_OPT_STDS_INPUTS,          /*!< old input space time datasets */
     G_OPT_STDS_OUTPUT,          /*!< new output space time dataset */
@@ -318,7 +322,7 @@ typedef enum
     G_OPT_STVDS_OUTPUT,         /*!< new output space time vector dataset */
     G_OPT_MAP_INPUT,            /*!< old input map of type raster, vector or raster3d  */
     G_OPT_MAP_INPUTS,           /*!< old input maps of type raster, vector or raster3d  */
-    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */ 
+    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */
     G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
@@ -444,15 +448,15 @@ struct Cell_head
     /*! \brief Resolution - east to west cell size for 2D data */
     double ew_res;
     /*! \brief Resolution - east to west cell size for 3D data */
-    double ew_res3;   
+    double ew_res3;
     /*! \brief Resolution - north to south cell size for 2D data */
-    double ns_res;     
+    double ns_res;
     /*! \brief Resolution - north to south cell size for 3D data */
-    double ns_res3;   
+    double ns_res3;
     /*! \brief Resolution - top to bottom cell size for 3D data */
-    double tb_res;    
+    double tb_res;
     /*! \brief Extent coordinates (north) */
-    double north;     
+    double north;
     /*! \brief Extent coordinates (south) */
     double south;
     /*! \brief Extent coordinates (east) */

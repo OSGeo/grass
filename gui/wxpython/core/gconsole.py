@@ -355,7 +355,7 @@ gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
 
 
 class GConsole(wx.EvtHandler):
-    """"""
+    """Backend for command execution, esp. interactive command execution"""
 
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         """

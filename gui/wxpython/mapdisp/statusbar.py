@@ -309,7 +309,7 @@ class SbManager:
             self.statusbarItems["region"].SetValue(True)
             # redraw map if auto-rendering is enabled
             if self.mapFrame.IsAutoRendered():
-                self.mapFrame.GetMapWindow().UpdateMap(render=False)
+                self.mapFrame.GetWindow().UpdateMap(render=False)
 
     def SetMode(self, modeIndex):
         """Sets current mode
@@ -329,14 +329,6 @@ class SbManager:
         self.progressbar.SetValue(value)
         if text:
             self.statusbar.SetStatusText(text)
-
-    def Show(self, show=True):
-        """Show/hide statusbar"""
-        self.statusbar.Show(show)
-
-    def IsShown(self):
-        """Check if statusbar is shown"""
-        return self.statusbar.IsShown()
 
 
 class SbItem:
@@ -503,7 +495,7 @@ class SbShowRegion(SbItem):
 
         # redraw map if auto-rendering is enabled
         if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetMapWindow().UpdateMap(render=False)
+            self.mapFrame.GetWindow().UpdateMap(render=False)
 
     def SetValue(self, value):
         self._disconnectShowRegion()
@@ -611,7 +603,7 @@ class SbResolution(SbItem):
         self._connectResolutionChange()
         # redraw map if auto-rendering is enabled
         if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetMapWindow().UpdateMap()
+            self.mapFrame.GetWindow().UpdateMap()
 
 
 class SbMapScale(SbItem):

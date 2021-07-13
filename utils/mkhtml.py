@@ -307,7 +307,7 @@ def get_addon_path(pgm):
             for addon in addons_paths["tree"]:
                 split_path = addon["path"].split("/")
                 root_dir, module_dir = split_path[0], split_path[-1]
-                if "grass7" == root_dir and pgm == module_dir:
+                if "grass8" == root_dir and pgm == module_dir:
                     return True, addon["path"]
     return None, None
 
@@ -428,7 +428,7 @@ if not year:
 # check the names of scripts to assign the right folder
 topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 curdir = os.path.abspath(os.path.curdir)
-if curdir.startswith(topdir):
+if curdir.startswith(topdir + os.path.sep):
     source_url = trunk_url
     pgmdir = curdir.replace(topdir, "").lstrip(os.path.sep)
 else:
