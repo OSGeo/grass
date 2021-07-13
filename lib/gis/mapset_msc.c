@@ -40,7 +40,7 @@ static int make_mapset_element_impl(const char *, const char *, bool);
 int G_make_mapset_element(const char *p_element)
 {
     char path[GPATH_MAX];
-
+    
     G_file_name(path, NULL, NULL, G_mapset());
     return make_mapset_element(path, p_element);
 }
@@ -103,7 +103,7 @@ int G_make_mapset_dir_object(const char *type, const char *name)
 int G_make_mapset_element_tmp(const char *p_element)
 {
     char path[GPATH_MAX];
-    
+
     G_file_name_tmp(path, NULL, NULL, G_mapset());
     return make_mapset_element(path, p_element);
 }
