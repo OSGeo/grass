@@ -3,7 +3,7 @@
 *.lock
 *.pyc
 OBJ.*
-locale/*
+locale/scriptstrings/*
 bin.*/*
 dist.*/*
 config.log
@@ -18,14 +18,14 @@ gui/wxpython/xml/module_tree_menudata.xml
 include/Make/Doxyfile_arch_html
 include/Make/Doxyfile_arch_latex
 include/Make/Platform.make
-include/config.h
-include/version.h
+include/grass/config.h
+include/grass/version.h
 lib/db/sqlp/sqlp.output
 lib/db/sqlp/sqlp.tab.c
 lib/db/sqlp/sqlp.tab.h
 lib/db/sqlp/sqlp.yy.c
-lib/python/ctypes/ctypesgencore/parser/lextab.py
-lib/python/script/setup.py.tmp
+python/grass/ctypes/ctypesgencore/parser/lextab.py
+python/grass/script/setup.py.tmp
 raster/r.mapcalc/mapcalc.output
 raster/r.mapcalc/mapcalc.tab.c
 raster/r.mapcalc/mapcalc.tab.h
@@ -41,3 +41,4 @@ mswindows/osgeo4w/package/
 mswindows/osgeo4w/setup*.hint
 mswindows/osgeo4w/vc/
 daag*.s
+doc/notebooks/.ipynb_checkpoints/

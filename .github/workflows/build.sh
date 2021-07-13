@@ -11,8 +11,7 @@ set -e
 # print commands
 set -x
 
-if [ -z "$1" ]
-then
+if [ -z "$1" ]; then
     echo "Usage: $0 PREFIX"
     exit 1
 fi
@@ -32,6 +31,7 @@ export INSTALL_PREFIX=$1
     --with-lapack \
     --with-readline \
     --with-openmp \
+    --with-pdal \
     --with-pthread \
     --with-tiff \
     --with-freetype \

@@ -5,7 +5,7 @@
  *
  * AUTHOR(S):    Radim Blazek
  *               Some extensions: Markus Neteler, Benjamin Ducke
- *               Multi-features support by Martin Landa <landa.martin gmail.com> 
+ *               Multi-features support by Martin Landa <landa.martin gmail.com>
  *
  * PURPOSE:      Converts GRASS vector to one of supported OGR vector formats.
  *
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     int num_to_export;
     int field;
     int overwrite, found;
-    
+
     struct GModule *module;
     struct Options options;
     struct Flags flags;
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     int num_types;
     char *dsn;
     int outer_ring_ccw;
-    
+
     G_gisinit(argv[0]);
 
     /* Module options */
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 	_("Exports a vector map layer to any of the supported OGR vector formats.");
     module->description = _("By default a vector map layer is exported to OGC GeoPackage format.");
     module->overwrite = TRUE;
-    
+
     /* parse & read options */
     parse_args(argc, argv, &options, &flags);
 
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
         strcmp(options.format->answer, "PostgreSQL") != 0)
         G_warning(_("Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" "
                     "format (\"%s\" given)"), options.format->answer);
-    
+
     /* parse dataset creation options */
     i = 0;
     while (options.dsco->answers[i]) {
@@ -267,7 +267,71 @@ int main(int argc, char *argv[])
 	projinfo = G_get_projinfo();
 	projunits = G_get_projunits();
 	projepsg = G_get_projepsg();
-	Ogr_projection = GPJ_grass_to_osr2(projinfo, projunits, projepsg);
+
+#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+	char *indef = NULL, *inwkt = NULL;
+
+	if ((indef = G_get_projsrid())) {
+	    PJ *obj = NULL;
+
+	    if ((obj = proj_create(NULL, indef))) {
+		inwkt = G_store(proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL));
+
+		if (inwkt && !*inwkt) {
+		    G_free(inwkt);
+		    inwkt = NULL;
+		}
+	    }
+	}
+	if (!inwkt) {
+	    inwkt = G_get_projwkt();
+	}
+	if (inwkt && *inwkt) {
+	    Ogr_projection = OSRNewSpatialReference(inwkt);
+	}
+#endif
+	if (!Ogr_projection)
+	    Ogr_projection = GPJ_grass_to_osr2(projinfo, projunits, projepsg);
+
+#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+	if (Ogr_projection) {
+	    /* convert bound CRS */
+	    PJ *obj = NULL;
+	    char *papszOptions[2];
+
+	    inwkt = NULL;
+
+	    papszOptions[0] = G_store("FORMAT=WKT2");
+	    papszOptions[1] = NULL;
+	    OSRExportToWktEx(Ogr_projection, &inwkt, (const char **)papszOptions);
+	    G_free(papszOptions[0]);
+
+	    if ((obj = proj_create(NULL, inwkt))) {
+		if (proj_get_type(obj) == PJ_TYPE_BOUND_CRS) {
+		    PJ *source_crs;
+
+		    G_debug(1, "found bound crs");
+		    source_crs = proj_get_source_crs(NULL, obj);
+		    if (source_crs) {
+			inwkt = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_LATEST, NULL));
+			if (inwkt && !*inwkt) {
+			    G_free(inwkt);
+			    inwkt = NULL;
+			}
+			proj_destroy(source_crs);
+			Ogr_projection = NULL;
+			if (inwkt) {
+			    char *inwkttmp = inwkt;
+			    OSRImportFromWkt(Ogr_projection, &inwkttmp);
+			}
+		    }
+		}
+		proj_destroy(obj);
+	    }
+	    if (inwkt)
+		CPLFree(inwkt);
+	}
+#endif
 
 	if (Ogr_projection ==  NULL)
 	    G_fatal_error(_("Unable to create OGR spatial reference"));
@@ -495,7 +559,7 @@ int main(int argc, char *argv[])
 	    G_debug(1, "Create OGR data source");
 	    hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
 	}
-#endif	
+#endif
     }
     else {
 #if GDAL_VERSION_NUM >= 2020000
@@ -518,12 +582,12 @@ int main(int argc, char *argv[])
 	}
 #endif
     }
-	
+
     CSLDestroy(papszDSCO);
     if (hDS == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
 		      options.dsn->answer);
-    
+
     /* check if OGR layer exists */
     overwrite = G_check_overwrite(argc, argv);
     found = FALSE;
@@ -538,7 +602,7 @@ int main(int argc, char *argv[])
 	Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
 	if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
 	    continue;
-	
+
 	found = TRUE;
 	if (!overwrite && !flags.append->answer) {
 	    G_fatal_error(_("Layer <%s> already exists in OGR data source '%s'"),
@@ -562,11 +626,11 @@ int main(int argc, char *argv[])
 		  options.layer->answer);
 	flags.append->answer = FALSE;
     }
-    
+
     /* Automatically append driver options for 3D output to layer
        creation options if '2' is not given.*/
     if (!flags.force2d->answer &&
-        Vect_is_3d(&In) && 
+        Vect_is_3d(&In) &&
         strcmp(options.format->answer, "ESRI_Shapefile") == 0) {
 	/* find right option */
 	char shape_geom[20];
@@ -591,7 +655,7 @@ int main(int argc, char *argv[])
 	    papszLCO = CSLSetNameValue(papszLCO, "SHPT", shape_geom);
 	}
     }
-    
+
     /* check if the map is 3d */
     if (Vect_is_3d(&In)) {
 	/* specific check for ESRI ShapeFile */
@@ -630,19 +694,19 @@ int main(int argc, char *argv[])
 #if GDAL_VERSION_NUM >= 2020000
     if (flags.append->answer)
 	Ogr_layer = GDALDatasetGetLayerByName(hDS, options.layer->answer);
-    else 
+    else
 	Ogr_layer = GDALDatasetCreateLayer(hDS, options.layer->answer,
 	                                   Ogr_projection, wkbtype,
 					   papszLCO);
 #else
     if (flags.append->answer)
 	Ogr_layer = OGR_DS_GetLayerByName(hDS, options.layer->answer);
-    else 
+    else
 	Ogr_layer = OGR_DS_CreateLayer(hDS, options.layer->answer,
 	                               Ogr_projection, wkbtype,
 				       papszLCO);
 #endif
-    
+
     CSLDestroy(papszLCO);
     if (Ogr_layer == NULL) {
 	if (flags.append->answer)
@@ -650,7 +714,7 @@ int main(int argc, char *argv[])
 	else
 	    G_fatal_error(_("Unable to create OGR layer"));
     }
-    
+
     db_init_string(&dbstring);
 
     /* Vector attributes -> OGR fields */
@@ -667,16 +731,16 @@ int main(int argc, char *argv[])
 		G_warning(_("Exporting 'cat' anyway, as it is the only attribute table field"));
 		flags.nocat->answer = FALSE;
 	    }
-	    
+
 	    if (flags.append->answer) {
 		Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
 		if (OGR_FD_GetFieldIndex(Ogr_field, GV_KEY_COLUMN) > -1)
 		    create_field = FALSE;
-		else 
+		else
 		    G_warning(_("New attribute column <%s> added to the table"),
 			      GV_KEY_COLUMN);
 	    }
-	    
+
 	    if (create_field) {
 		Ogr_field = OGR_Fld_Create(GV_KEY_COLUMN, OFTInteger);
 		if (OGR_L_CreateField(Ogr_layer, Ogr_field, 0) != OGRERR_NONE)
@@ -684,7 +748,7 @@ int main(int argc, char *argv[])
 		                  GV_KEY_COLUMN);
 		OGR_Fld_Destroy(Ogr_field);
 	    }
-	    
+
 	    doatt = 0;
 	}
 	else {
@@ -710,7 +774,7 @@ int main(int argc, char *argv[])
 		colwidth = db_get_column_length(Column);
 		G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
 			i, colname[i], colsqltype, colctype[i], colwidth);
-		 
+
 		switch (colctype[i]) {
 		case DB_C_TYPE_INT:
 		    ogr_ftype = OFTInteger;
@@ -754,27 +818,30 @@ int main(int argc, char *argv[])
 			G_warning(_("New attribute column <%s> added to the table"),
 				   colname[i]);
 		}
-		 
+
 		Ogr_field = OGR_Fld_Create(colname[i], ogr_ftype);
 		if (ogr_ftype == OFTString && colwidth > 0)
 		    OGR_Fld_SetWidth(Ogr_field, colwidth);
 		if (OGR_L_CreateField(Ogr_layer, Ogr_field, 0) != OGRERR_NONE)
 		    G_fatal_error(_("Unable to create column <%s>"),
 		                  colname[i]);
-		 
+
 		OGR_Fld_Destroy(Ogr_field);
 	    }
 	    if (keycol == -1)
 		G_fatal_error(_("Key column <%s> not found"), Fi->key);
 	}
     }
-    
+
     Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
     n_feat = n_nocat = n_noatt = 0;
 
-    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
-	OGR_L_StartTransaction(Ogr_layer);
+    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions)) {
+	if (OGR_L_StartTransaction(Ogr_layer) != OGRERR_NONE) {
+	    G_warning(_("Unable to start OGR transaction"));
+	}
+    }
 
     /* export polygons oriented according to OGC simple features standard 1.2.1
      * outer rings are oriented counter-clockwise (CCW)
@@ -801,7 +868,7 @@ int main(int argc, char *argv[])
         n_feat += export_lines(&In, field, otype, flags.multi->answer ? TRUE : FALSE,
                                donocat, ftype == GV_BOUNDARY ? TRUE : FALSE,
                                Ogr_featuredefn, Ogr_layer,
-                               Fi, Driver, ncol, colctype, 
+                               Fi, Driver, ncol, colctype,
                                colname, doatt, flags.nocat->answer ? TRUE : FALSE,
                                &n_noatt, &n_nocat);
     }
@@ -813,9 +880,9 @@ int main(int argc, char *argv[])
                      Vect_get_num_areas(&In)),
 		  Vect_get_num_areas(&In));
 
-        n_feat += export_areas(&In, field, flags.multi->answer ? TRUE : FALSE, donocat, 
+        n_feat += export_areas(&In, field, flags.multi->answer ? TRUE : FALSE, donocat,
                                Ogr_featuredefn, Ogr_layer,
-                               Fi, Driver, ncol, colctype, 
+                               Fi, Driver, ncol, colctype,
                                colname, doatt, flags.nocat->answer ? TRUE : FALSE,
                                &n_noatt, &n_nocat, outer_ring_ccw);
     }
@@ -834,8 +901,11 @@ int main(int argc, char *argv[])
 	G_warning(_("Export of volumes not implemented yet. Skipping."));
     }
 
-    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
-	OGR_L_CommitTransaction(Ogr_layer);
+    if (OGR_L_TestCapability(Ogr_layer, OLCTransactions)) {
+	if (OGR_L_CommitTransaction(Ogr_layer) != OGRERR_NONE) {
+	    G_warning(_("Unable to commit OGR transaction"));
+	}
+    }
 
     ds_close(hDS);
 

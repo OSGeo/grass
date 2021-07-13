@@ -1,33 +1,18 @@
 [flake8]
 ignore =
-    F841, # local variable 'column' is assigned to but never used
-    F821, # undefined name '_'
-    E265, # block comment should start with '# '
-    E266, # too many leading '#' for block comment
-    E502, # the backslash is redundant between brackets
-    W291, # trailing whitespace
-    W293, # blank line contains whitespace
-    W391, # blank line at end of file
-    W504, # line break after binary operator
-    E117, # over-indented
-    E125, # continuation line with same indent as next logical line
-    E126, # continuation line over-indented for hanging indent
-    E127, # continuation line over-indented for visual indent
-    E128, # continuation line under-indented for visual indent
-    E129, # visually indented line with same indent as next logical line
-    E222, # multiple spaces after operator
-    E225, # missing whitespace around operator
-    E226, # missing whitespace around arithmetic operator
-    E228, # missing whitespace around modulo operator
-    E231, # missing whitespace after ','
-    E241, # multiple spaces after ','
-    E251, # unexpected spaces around keyword / parameter equals
-    E271, # multiple spaces after keyword
-    E302, # expected 2 blank lines, found 1
-    E303, # too many blank lines (2)
-    E305, # expected 2 blank lines after class or function definition, found 1
-    E501, # line too long (179 > 150 characters)
-  
+    E203,  # whitespace before ':' (Black)
+    W503,  # line break before binary operator (Black)
+    E501,  # line too long (179 > 150 characters)
+
+per-file-ignores =
+    # local variable 'column' is assigned to but never used
+    t.rast.to.vect/t.rast.to.vect.py: F841
+    # local variable 'stdstype' is assigned to but never used
+    t.vect.algebra/t.vect.algebra.py: F841
+    # ## used (##% key: r etc)
+    # local variable 'map_list' is assigned to but never used
+    t.rast.what/t.rast.what.py: E265, E266, F841
+
 max-line-length = 88
 exclude =
     .git,
@@ -42,3 +27,6 @@ exclude =
     ctypes,
     pydispatch,
     testsuite,
+
+builtins =
+    _

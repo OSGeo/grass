@@ -151,9 +151,10 @@ AEvent *allocate_eventlist(GridHeader * hd)
     }
     else {
 	/* this is the max value of size_t */
-	long long maxsizet = ((long long)1 << (sizeof(size_t) * 8 - 1)) - 1;
+	long long m = ((long long)1 << (sizeof(size_t) * 8 - 1)),
+		  maxsizet = m - 1;
 
-	maxsizet += ((long long)1 << (sizeof(size_t) * 8 - 1));
+	maxsizet += m;
 
 	G_debug(1, "max size_t is %lld", maxsizet);
 

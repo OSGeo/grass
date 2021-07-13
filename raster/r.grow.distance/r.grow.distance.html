@@ -64,6 +64,21 @@ be used only in latitude-longitude locations. It is recommended
 to use it along with the <em>-m</em> flag in order to output 
 distances in meters instead of map units.
 
+<p>
+If <b>minimum_distance</b> is given, all cells with a distance smaller
+than <b>minimum_distance</b> will be set to NULL.
+
+<p>
+If <b>maximum_distance</b> is given, all cells with a distance larger
+than <b>maximum_distance</b> will be set to NULL. The resultant output
+is equivalent to a buffer.
+
+<p>
+If both <b>minimum_distance</b> and <b>maximum_distance</b> are given,
+the result will be similar to a doughnut, a restricted belt for a
+given distance range. All cells outside this distance range will be set
+to NULL.
+
 <h2>EXAMPLES</h2>
 
 <h3>Distance from the streams network</h3>

@@ -6,12 +6,12 @@
 # PURPOSE:      Test GRASS GIS using the test framework
 #               Documentation:
 #                 https://trac.osgeo.org/grass/wiki/GSoC/2014/TestingFrameworkForGRASS
-#                 https://grass.osgeo.org/grass76/manuals/libpython/gunittest_running_tests.html#example-bash-script-to-run-be-used-as-a-cron-job
+#                 https://grass.osgeo.org/grass80/manuals/libpython/gunittest_running_tests.html#example-bash-script-to-run-be-used-as-a-cron-job
 #
 #               Data:
 #                 We use the full NC dataset (nc_spm_full_v2_alpha.tar.gz)
 #
-# COPYRIGHT:    (C) 2019 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2019-2021 by Markus Neteler, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -73,8 +73,8 @@ GRASSDIST="$GRASSSRC/dist.${ARCH}"
 
 # necessary hardcoded GRASS paths
 GRASSDIST_PYTHON="$GRASSDIST/etc/python"
-GRASS_MULTI_RUNNER="$GRASSSRC/lib/python/gunittest/multirunner.py"
-GRASS_MULTI_REPORTER="$GRASSSRC/lib/python/gunittest/multireport.py"
+GRASS_MULTI_RUNNER="$GRASSSRC/python/grass/gunittest/multirunner.py"
+GRASS_MULTI_REPORTER="$GRASSSRC/python/grass/gunittest/multireport.py"
 
 DATE_FLAGS="--utc +%Y-%m-%d-%H-%M"
 NOW=$(date $DATE_FLAGS)
@@ -102,7 +102,7 @@ mkdir -p $GRASSDATA
 
 # fetch sample data
 SAMPLEDATA=nc_spm_full_v2alpha
-(cd $GRASSDATA ; wget -c http://fatra.cnr.ncsu.edu/data/$SAMPLEDATA.tar.gz ; tar xfz $SAMPLEDATA.tar.gz --strip-components 2)
+(cd $GRASSDATA ; wget -c https://grass.osgeo.org/sampledata/north_carolina/$SAMPLEDATA.tar.gz ; tar xfz $SAMPLEDATA.tar.gz --strip-components 2)
 
 set -x
 

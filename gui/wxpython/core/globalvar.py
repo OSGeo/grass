@@ -20,6 +20,12 @@ import locale
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
 
+# i18n is taken care of in the grass library code.
+# So we need to import it before any of the GUI code.
+from grass.script.core import get_commands
+
+from core.debug import Debug
+
 # path to python scripts
 ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
 GUIDIR = os.path.join(os.getenv("GISBASE"), "gui")
@@ -27,12 +33,6 @@ WXGUIDIR = os.path.join(GUIDIR, "wxpython")
 ICONDIR = os.path.join(GUIDIR, "icons")
 IMGDIR = os.path.join(GUIDIR, "images")
 SYMBDIR = os.path.join(IMGDIR, "symbols")
-
-# i18n is taken care of in the grass library code.
-# So we need to import it before any of the GUI code.
-from grass.script.core import get_commands
-
-from core.debug import Debug
 
 WXPY3_MIN_VERSION = [4, 0, 0, 0]
 
@@ -74,7 +74,7 @@ def version_as_string(version):
 
 
 def CheckWxPhoenix():
-    if 'phoenix' in wx.version():
+    if "phoenix" in wx.version():
         return True
     return False
 
@@ -92,38 +92,40 @@ def CheckWxVersion(version):
 
 def CheckForWx():
     """Try to import wx module"""
-    if 'wx' in sys.modules.keys():
+    if "wx" in sys.modules.keys():
         return
 
     try:
         import wx
+
         version = parse_version_string(wx.__version__)
         if version < WXPY3_MIN_VERSION:
-            raise ValueError(
-                "Your wxPython version is {}".format(wx.__version__))
+            raise ValueError("Your wxPython version is {}".format(wx.__version__))
         return
     except ImportError as e:
-        print('ERROR: wxGUI requires wxPython. {}'.format(e),
-              file=sys.stderr)
-        print('You can still use GRASS GIS modules in'
-              ' the command line or in Python.', file=sys.stderr)
+        print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
+        print(
+            "You can still use GRASS GIS modules in" " the command line or in Python.",
+            file=sys.stderr,
+        )
         sys.exit(1)
     except locale.Error as e:
         print("Unable to set locale:", e, file=sys.stderr)
-        os.environ['LC_ALL'] = ''
+        os.environ["LC_ALL"] = ""
+
 
 if not os.getenv("GRASS_WXBUNDLED"):
     CheckForWx()
-import wx
+# Importing wx only after checks.
+import wx  # noqa: E402
 
 if CheckWxPhoenix():
     try:
         import agw.flatnotebook as FN
-    except ImportError: # if it's not there locally, try the wxPython lib.
+    except ImportError:  # if it's not there locally, try the wxPython lib.
         import wx.lib.agw.flatnotebook as FN
 else:
     import wx.lib.flatnotebook as FN
-
 
 
 """
@@ -131,19 +133,20 @@ Query layer (generated for example by selecting item in the Attribute Table Mana
 Deleted automatically on re-render action
 """
 # temporal query layer (removed on re-render action)
-QUERYLAYER = 'qlayer'
+QUERYLAYER = "qlayer"
 
 """Style definition for FlatNotebook pages"""
-FNPageStyle = FN.FNB_FF2 | \
-    FN.FNB_BACKGROUND_GRADIENT | \
-    FN.FNB_NODRAG | \
-    FN.FNB_TABS_BORDER_SIMPLE
+FNPageStyle = (
+    FN.FNB_FF2 | FN.FNB_BACKGROUND_GRADIENT | FN.FNB_NODRAG | FN.FNB_TABS_BORDER_SIMPLE
+)
 
-FNPageDStyle = FN.FNB_FANCY_TABS | \
-    FN.FNB_BOTTOM | \
-    FN.FNB_NODRAG | \
-    FN.FNB_NO_NAV_BUTTONS | \
-    FN.FNB_NO_X_BUTTON
+FNPageDStyle = (
+    FN.FNB_FANCY_TABS
+    | FN.FNB_BOTTOM
+    | FN.FNB_NODRAG
+    | FN.FNB_NO_NAV_BUTTONS
+    | FN.FNB_NO_X_BUTTON
+)
 
 FNPageColor = wx.Colour(125, 200, 175)
 
@@ -167,16 +170,16 @@ GM_WINDOW_MIN_SIZE = (525, 400)
 # use UBUNTU_MENUPROXY=0 to disbale global menu on ubuntu but in the same time
 # to get smaller lmgr
 # [1] https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationMenu#Troubleshooting
-if sys.platform in ('win32', 'darwin') or os.environ.get('UBUNTU_MENUPROXY'):
+if sys.platform in ("win32", "darwin") or os.environ.get("UBUNTU_MENUPROXY"):
     GM_WINDOW_SIZE = (GM_WINDOW_MIN_SIZE[0], 600)
 else:
     GM_WINDOW_SIZE = (625, 600)
 
-if sys.platform == 'win32':
-    BIN_EXT = '.exe'
-    SCT_EXT = '.bat'
+if sys.platform == "win32":
+    BIN_EXT = ".exe"
+    SCT_EXT = ".bat"
 else:
-    BIN_EXT = SCT_EXT = ''
+    BIN_EXT = SCT_EXT = ""
 
 
 def UpdateGRASSAddOnCommands(eList=None):
@@ -188,12 +191,12 @@ def UpdateGRASSAddOnCommands(eList=None):
     global grassCmd, grassScripts
 
     # scan addons (path)
-    addonPath = os.getenv('GRASS_ADDON_PATH', '')
-    addonBase = os.getenv('GRASS_ADDON_BASE')
+    addonPath = os.getenv("GRASS_ADDON_PATH", "")
+    addonBase = os.getenv("GRASS_ADDON_BASE")
     if addonBase:
-        addonPath += os.pathsep + os.path.join(addonBase, 'bin')
-        if sys.platform != 'win32':
-            addonPath += os.pathsep + os.path.join(addonBase, 'scripts')
+        addonPath += os.pathsep + os.path.join(addonBase, "bin")
+        if sys.platform != "win32":
+            addonPath += os.pathsep + os.path.join(addonBase, "scripts")
 
     # remove commands first
     if eList:
@@ -203,17 +206,17 @@ def UpdateGRASSAddOnCommands(eList=None):
         Debug.msg(1, "Number of removed AddOn commands: %d", len(eList))
 
     nCmd = 0
-    pathList = os.getenv('PATH', '').split(os.pathsep)
+    pathList = os.getenv("PATH", "").split(os.pathsep)
     for path in addonPath.split(os.pathsep):
         if not os.path.exists(path) or not os.path.isdir(path):
             continue
 
         # check if addon is in the path
         if pathList and path not in pathList:
-            os.environ['PATH'] = path + os.pathsep + os.environ['PATH']
+            os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
 
         for fname in os.listdir(path):
-            if fname in ['docs', 'modules.xml']:
+            if fname in ["docs", "modules.xml"]:
                 continue
             if grassScripts:  # win32
                 name, ext = os.path.splitext(fname)
@@ -224,9 +227,11 @@ def UpdateGRASSAddOnCommands(eList=None):
                         grassCmd.add(name)
                         Debug.msg(3, "AddOn commands: %s", name)
                         nCmd += 1
-                if ext == SCT_EXT and \
-                        ext in grassScripts.keys() and \
-                        name not in grassScripts[ext]:
+                if (
+                    ext == SCT_EXT
+                    and ext in grassScripts.keys()
+                    and name not in grassScripts[ext]
+                ):
                     grassScripts[ext].append(name)
             else:
                 if fname not in grassCmd:
@@ -235,6 +240,7 @@ def UpdateGRASSAddOnCommands(eList=None):
                     nCmd += 1
 
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
+
 
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd, grassScripts = get_commands()
@@ -248,8 +254,7 @@ toolbarSize = (24, 24)
 hasAgw = CheckWxVersion([2, 8, 11, 0])
 wxPythonPhoenix = CheckWxPhoenix()
 
-gtk3 = True if 'gtk3' in wx.PlatformInfo else False
+gtk3 = True if "gtk3" in wx.PlatformInfo else False
 
 """@Add GUIDIR/scripts into path"""
-os.environ['PATH'] = os.path.join(
-    GUIDIR, 'scripts') + os.pathsep + os.environ['PATH']
+os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]

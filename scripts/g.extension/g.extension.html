@@ -4,7 +4,7 @@
 
 <em>g.extension</em> downloads and installs, removes or updates
 extensions (addons) from the official
-<a href="https://grass.osgeo.org/grass7/manuals/addons/">GRASS GIS Addons repository</a>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS Addons repository</a>
 or from user-specified source code repositories into the local GRASS GIS
 installation.
 <p>
@@ -37,8 +37,8 @@ GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
 the user's home directory. 
-On GNU/Linux it is <tt>$HOME/.grass7/addons</tt>,
-on MS-Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
+On GNU/Linux it is <tt>$HOME/.grass8/addons</tt>,
+on MS-Windows it is <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.
 The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
 environmental variable.
 
@@ -185,7 +185,13 @@ g.extension extension=r.stream.distance operation=remove
 Simple URL to GitHub, GitLab, Bitbucket repositories:
 
 <div class="code"><pre>
-g.extension r.example url=github.com/johnsmith/r.example
+g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus"
+</pre></div>
+
+Simple URL to GitHub, GitLab, Bitbucket repositories from a specific (e.g. development) branch:
+
+<div class="code"><pre>
+g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus" branch=master
 </pre></div>
 
 Simple URL to OSGeo Trac (downloads a ZIP file, requires download to be enabled in Trac):
@@ -253,7 +259,7 @@ with the version number) must be installed.
 </em>
 
 <p>
-<a href="https://grass.osgeo.org/grass7/manuals/addons/">GRASS GIS 7 Addons Manual pages</a>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS 8 Addons Manual pages</a>
 <br>
 <a href="https://grasswiki.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
 

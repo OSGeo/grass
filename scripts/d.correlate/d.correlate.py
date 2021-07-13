@@ -15,16 +15,16 @@
 #
 #############################################################################
 
-#%module
-#% description: Prints a graph of the correlation between raster maps (in pairs).
-#% keyword: display
-#% keyword: statistics
-#% keyword: raster
-#% keyword: diagram
-#% keyword: correlation
-#%end
-#%option G_OPT_R_MAPS
-#%end
+# %module
+# % description: Prints a graph of the correlation between raster maps (in pairs).
+# % keyword: display
+# % keyword: statistics
+# % keyword: raster
+# % keyword: diagram
+# % keyword: correlation
+# %end
+# %option G_OPT_R_MAPS
+# %end
 
 import sys
 import os
@@ -34,7 +34,7 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
-    layers = options['map'].split(',')
+    layers = options["map"].split(",")
 
     if len(layers) < 2:
         gcore.error(_("At least 2 maps are required"))
@@ -42,16 +42,17 @@ def main():
     tmpfile = gcore.tempfile()
 
     for map in layers:
-        if not gcore.find_file(map, element='cell')['file']:
+        if not gcore.find_file(map, element="cell")["file"]:
             gcore.fatal(_("Raster map <%s> not found") % map)
 
     try:
-        gcore.write_command('d.text', color='black', size=4, line=1,
-                            stdin="CORRELATION")
+        gcore.write_command(
+            "d.text", color="black", size=4, line=1, stdin="CORRELATION"
+        )
     except CalledModuleError:
         return 1
-    
-    os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
+
+    os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 
     colors = "red black blue green gray violet".split()
     line = 2
@@ -63,19 +64,19 @@ def main():
                 color = colors[0]
                 colors = colors[1:]
                 colors.append(color)
-                gcore.write_command('d.text', color=color, size=4, line=line,
-                                    stdin="%s %s" % (i, j))
+                gcore.write_command(
+                    "d.text", color=color, size=4, line=line, stdin="%s %s" % (i, j)
+                )
                 line += 1
 
-                ofile = file(tmpfile, 'w')
-                gcore.run_command('r.stats', flags='cnA', input=(i, j),
-                                  stdout=ofile)
+                ofile = open(tmpfile, "w")
+                gcore.run_command("r.stats", flags="cnA", input=(i, j), stdout=ofile)
                 ofile.close()
 
-                ifile = file(tmpfile, 'r')
+                ifile = open(tmpfile, "r")
                 first = True
-                for l in ifile:
-                    f = l.rstrip('\r\n').split(' ')
+                for line in ifile:
+                    f = line.rstrip("\r\n").split(" ")
                     x = float(f[0])
                     y = float(f[1])
                     if first:
@@ -95,16 +96,18 @@ def main():
                 kx = 100.0 / (maxx - minx + 1)
                 ky = 100.0 / (maxy - miny + 1)
 
-                p = gcore.feed_command('d.graph', color=color)
+                p = gcore.feed_command("d.graph", color=color)
                 ofile = p.stdin
 
-                ifile = file(tmpfile, 'r')
-                for l in ifile:
-                    f = l.rstrip('\r\n').split(' ')
+                ifile = open(tmpfile, "r")
+                for line in ifile:
+                    f = line.rstrip("\r\n").split(" ")
                     x = float(f[0])
                     y = float(f[1])
-                    ofile.write("icon + 0.1 %f %f\n" % ((x - minx + 1) * kx,
-                                                        (y - miny + 1) * ky))
+                    ofile.write(
+                        b"icon + 0.1 %f %f\n"
+                        % ((x - minx + 1) * kx, (y - miny + 1) * ky)
+                    )
                 ifile.close()
 
                 ofile.close()
@@ -113,6 +116,7 @@ def main():
     try_remove(tmpfile)
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = gcore.parser()

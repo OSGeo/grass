@@ -12,7 +12,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
-out_where = u"""cat|level
+out_where = """cat|level
 1|56
 2|58
 3|60
@@ -66,47 +66,55 @@ out_where = u"""cat|level
 51|156
 """
 
+
 class Testrr(TestCase):
-    input='elevation'
-    output='towns'
+    input = "elevation"
+    output = "towns"
 
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', raster=cls.input)
-    
+        cls.runModule("g.region", raster=cls.input)
+
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
 
-
     def tearDown(cls):
-        cls.runModule('g.remove', type='vector', flags='f', name=cls.output)
-
+        cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
 
     def test_flag_t(self):
         """Testing flag t"""
-        string=u"""min=1
+        string = """min=1
         max=6"""
-        self.assertModule('r.contour', input=self.input, output=self.output, levels=1, step=1, flags='t')
-        self.assertRasterFitsUnivar(self.output,
-                                reference=string, precision=2)
+        self.assertModule(
+            "r.contour",
+            input=self.input,
+            output=self.output,
+            levels=1,
+            step=1,
+            flags="t",
+        )
+        self.assertRasterFitsUnivar(self.output, reference=string, precision=2)
 
     def test_vector(self):
         """Testing vector output"""
-        self.assertModule('r.contour', input=self.input, output=self.output, step=5, flags='t')
-        self.assertModule('v.info', map=self.output, flags='t')
+        self.assertModule(
+            "r.contour", input=self.input, output=self.output, step=5, flags="t"
+        )
+        self.assertModule("v.info", map=self.output, flags="t")
         topology = dict(points=0, lines=2222, areas=0)
         self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_v_db_select(self):
-        """Testing attribute values of contours with v.db.select """
-        self.assertModule('r.contour', input=self.input, output=self.output, step=2)
-        v_db_select = SimpleModule('v.db.select', map=self.output)
+        """Testing attribute values of contours with v.db.select"""
+        self.assertModule("r.contour", input=self.input, output=self.output, step=2)
+        v_db_select = SimpleModule("v.db.select", map=self.output)
         v_db_select.run()
         self.assertLooksLike(reference=out_where, actual=v_db_select.outputs.stdout)
 
-if __name__ == '__main__':
-    from grass.gunittest.main import test
-    test()
 
+if __name__ == "__main__":
+    from grass.gunittest.main import test
+
+    test()

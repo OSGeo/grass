@@ -64,7 +64,7 @@ static void make_bmp_header(unsigned char *p)
 
 void cairo_write_bmp(void)
 {
-    char header[HEADER_SIZE];
+    unsigned char header[HEADER_SIZE];
     FILE *output;
 
     output = fopen(ca.file_name, "wb");

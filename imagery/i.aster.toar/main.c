@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
     /* For some strange reason infd[0] cannot be used later */
     /* So nfiles is initialized with nfiles = 1 */
-    int nfiles = 1;
+    int nfiles = 0;
     int i = 0, j = 0;
     int radiance = 0;
     void *inrast[MAXFILES];
@@ -227,23 +227,20 @@ int main(int argc, char *argv[])
 
     /********************/
     for (; *ptr != NULL; ptr++) {
-        if (nfiles > MAXFILES)
+        if (nfiles == MAXFILES)
             G_fatal_error(_("Too many input maps. Only %d allowed."),
                           MAXFILES);
         name = *ptr;
         /* Allocate input buffer */
-        in_data_type[nfiles - 1] = Rast_map_type(name, "");
-        /* For some strange reason infd[0] cannot be used later */
-        /* So nfiles is initialized with nfiles = 1 */
+        in_data_type[nfiles] = Rast_map_type(name, "");
         infd[nfiles] = Rast_open_old(name, "");
 
         Rast_get_cellhd(name, "", &cellhd);
-        inrast[nfiles - 1] = Rast_allocate_buf(in_data_type[nfiles - 1]);
+        inrast[nfiles] = Rast_allocate_buf(in_data_type[nfiles]);
         nfiles++;
     }
-    nfiles--;
     if (nfiles < MAXFILES)
-        G_fatal_error(_("The input band number should be 15"));
+        G_fatal_error(_("The input band number should be %d"), MAXFILES);
 
     /***************************************************/
     /* Allocate output buffer, use input map data_type */
@@ -253,21 +250,21 @@ int main(int argc, char *argv[])
     for (i = 0; i < MAXFILES; i++)
         outrast[i] = Rast_allocate_buf(out_data_type);
 
-    outfd[1] = Rast_open_new(result0, 1);
-    outfd[2] = Rast_open_new(result1, 1);
-    outfd[3] = Rast_open_new(result2, 1);
-    outfd[4] = Rast_open_new(result3, 1);
-    outfd[5] = Rast_open_new(result4, 1);
-    outfd[6] = Rast_open_new(result5, 1);
-    outfd[7] = Rast_open_new(result6, 1);
-    outfd[8] = Rast_open_new(result7, 1);
-    outfd[9] = Rast_open_new(result8, 1);
-    outfd[10] = Rast_open_new(result9, 1);
-    outfd[11] = Rast_open_new(result10, 1);
-    outfd[12] = Rast_open_new(result11, 1);
-    outfd[13] = Rast_open_new(result12, 1);
-    outfd[14] = Rast_open_new(result13, 1);
-    outfd[15] = Rast_open_new(result14, 1);
+    outfd[0] = Rast_open_new(result0, 1);
+    outfd[1] = Rast_open_new(result1, 1);
+    outfd[2] = Rast_open_new(result2, 1);
+    outfd[3] = Rast_open_new(result3, 1);
+    outfd[4] = Rast_open_new(result4, 1);
+    outfd[5] = Rast_open_new(result5, 1);
+    outfd[6] = Rast_open_new(result6, 1);
+    outfd[7] = Rast_open_new(result7, 1);
+    outfd[8] = Rast_open_new(result8, 1);
+    outfd[9] = Rast_open_new(result9, 1);
+    outfd[10] = Rast_open_new(result10, 1);
+    outfd[11] = Rast_open_new(result11, 1);
+    outfd[12] = Rast_open_new(result12, 1);
+    outfd[13] = Rast_open_new(result13, 1);
+    outfd[14] = Rast_open_new(result14, 1);
     /* Process pixels */
 
     DCELL dout[MAXFILES];
@@ -276,8 +273,8 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
         G_percent(row, nrows, 2);
         /* read input map */
-        for (i = 1; i <= MAXFILES; i++)
-            Rast_get_row(infd[i], inrast[i - 1], row, in_data_type[i - 1]);
+        for (i = 0; i < MAXFILES; i++)
+            Rast_get_row(infd[i], inrast[i], row, in_data_type[i]);
 
         /*process the data */
         for (col = 0; col < ncols; col++) {
@@ -306,13 +303,13 @@ int main(int argc, char *argv[])
                 outrast[i][col] = dout[i];
             }
         }
-        for (i = 1; i <= MAXFILES; i++)
-            Rast_put_row(outfd[i], outrast[i - 1], out_data_type);
+        for (i = 0; i < MAXFILES; i++)
+            Rast_put_row(outfd[i], outrast[i], out_data_type);
     }
-    for (i = 1; i <= MAXFILES; i++) {
-        G_free(inrast[i - 1]);
+    for (i = 0; i < MAXFILES; i++) {
+        G_free(inrast[i]);
         Rast_close(infd[i]);
-        G_free(outrast[i - 1]);
+        G_free(outrast[i]);
         Rast_close(outfd[i]);
     }
     exit(EXIT_SUCCESS);

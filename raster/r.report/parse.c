@@ -45,7 +45,7 @@ int parse_command_line(int argc, char *argv[])
     parms.units->description = _("Units to report");
     desc = NULL;
     G_asprintf(&desc,
-	       "mi;%s;me;%s;k;%s;a;%s;h;%s;c;%s;p;%s",
+	       "miles;%s;meters;%s;kilometers;%s;acres;%s;hectares;%s;cells;%s;percent;%s",
 	       _("area in square miles"),
 	       _("area in square meters"),
 	       _("area in square kilometers"),
@@ -54,7 +54,8 @@ int parse_command_line(int argc, char *argv[])
 	       _("number of cells"),
 	       _("percent cover"));
     parms.units->descriptions = desc;
-    parms.units->options = "mi,me,k,a,h,c,p";
+    parms.units->options = "miles,meters,kilometers,acres,hectares,cells,percent";
+    parms.units->answer = "cells,percent";
     parms.units->guisection = _("Statistics");
 
     parms.outfile = G_define_standard_option(G_OPT_F_OUTPUT);
@@ -239,9 +240,7 @@ int parse_units(char *s)
 	x = ACRES;
     else if (match(s, "hectares", 1))
 	x = HECTARES;
-    else if (match(s, "cell_counts", 1))
-	x = CELL_COUNTS;
-    else if (match(s, "counts", 1))
+    else if (match(s, "cells", 1))
 	x = CELL_COUNTS;
     else if (match(s, "percent_cover", 1))
 	x = PERCENT_COVER;

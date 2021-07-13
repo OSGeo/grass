@@ -26,6 +26,7 @@
 #define NULL		0
 #endif
 
+static void *G__memccpy(void *, const void *, int, size_t);
 static int _strncasecmp(const char *, const char *, int);
 
 /*!
@@ -251,6 +252,47 @@ char *G_str_replace(const char *buffer, const char *old_str, const char *new_str
 }
 
 /*!
+   \brief String concatenation
+
+   Concatenates the strings in src_strings, which consists of num_strings number
+   of strings, with the separator sep. The size of the concatenated string is
+   limited by maxsize.
+
+   \param src_strings array of strings to concatenate
+   \param num_strings count of strings in src_strings
+   \param sep separator string
+   \param maxsize maximum number of characters of returned string
+
+   \return the concatenated string (allocated)
+ */
+char *G_str_concat(const char **src_strings, int num_strings,
+                   const char *sep, int maxsize)
+{
+    char buffer[maxsize];
+    int i;
+    char *end = buffer + maxsize;
+    char *p = NULL;
+
+    if (maxsize < 1 || num_strings < 1)
+        return NULL;
+
+    memset(buffer, 0, sizeof(buffer));
+
+    for (i = 0; i < num_strings; i++) {
+        if (i == 0)
+            p = (char *)G__memccpy(buffer, src_strings[i], '\0', maxsize);
+        else {
+            if (p)
+                p = (char *)G__memccpy(p - 1, sep, '\0', end - p);
+            if (p)
+                p = (char *)G__memccpy(p - 1, src_strings[i], '\0', end - p);
+        }
+    }
+
+    return G_store(buffer);
+}
+
+/*!
   \brief Removes all leading and trailing white space from string.
   
   \param[in,out] buf buffer to be worked on
@@ -452,7 +494,40 @@ char *G_strcasestr(const char *str, const char *substr)
     return (char *) q;
 }
 
-int _strncasecmp(const char *x, const char *y, int n)
+/*!
+   \brief Copy string until character found
+
+   The bytes from string src are copied to string dst.  If the character c (as
+   converted to an unsigned char) occurs in the string src, the copy stops and
+   a pointer to the byte after the copy of c in the string dst is returned.
+   Otherwise, n bytes are copied, and a NULL pointer is returned.
+
+   The source and destination strings should not overlap, as the behavior
+   is undefined.
+
+   \param dst destination
+   \param src source
+   \param c stop character
+   \param n max number of bytes to copy
+
+   \return a pointer to the next character in dest after c
+   \return NULL if c was not found in the first n  characters of src
+ */
+static void *G__memccpy(void *dst, const void *src, int c, size_t n)
+{
+    const char *s = src;
+    char *ret;
+
+    for (ret = dst; n; ++ret, ++s, --n) {
+        *ret = *s;
+        if ((unsigned char)*ret == (unsigned char)c)
+            return ret + 1;
+    }
+
+    return NULL;
+}
+
+static int _strncasecmp(const char *x, const char *y, int n)
 {
     int xx, yy, i;
 

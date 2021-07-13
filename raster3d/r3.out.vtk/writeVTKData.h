@@ -28,13 +28,15 @@ void write_vtk_points(input_maps * in, FILE * fp, RASTER3D_Region region, int dp
 void write_vtk_unstructured_grid_cells(FILE * fp, RASTER3D_Region region);
 
 /*Write the outputdata */
-void write_vtk_data(FILE * fp, void *map, RASTER3D_Region region, char *varname,
-		    int dp);
+void write_vtk_data(FILE * fp, RASTER3D_Map *map, RASTER3D_Region region,
+		    char *varname, int dp);
 /*Write the rgb voxel data to the output */
-void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b, FILE * fp,
-			const char *string, RASTER3D_Region region, int dp);
+void write_vtk_rgb_data(RASTER3D_Map *map_r, RASTER3D_Map *map_g,
+			RASTER3D_Map *map_b, FILE * fp, const char *string,
+			RASTER3D_Region region, int dp);
 /*Write the vector data to the output */
-void write_vtk_vector_data(void *map_x, void *map_y, void *map_z, FILE * fp,
+void write_vtk_vector_data(RASTER3D_Map *map_x, RASTER3D_Map *map_y,
+			   RASTER3D_Map *map_z, FILE * fp,
 			   const char *string, RASTER3D_Region region, int dp);
 
 #endif

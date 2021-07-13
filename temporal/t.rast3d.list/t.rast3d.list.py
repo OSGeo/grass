@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:   t.rast3d.list
@@ -20,68 +20,68 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists registered maps of a space time raster3d dataset.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: list
-#% keyword: raster3d
-#% keyword: voxel
-#% keyword: time
-#%end
+# %module
+# % description: Lists registered maps of a space time raster3d dataset.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: list
+# % keyword: raster3d
+# % keyword: voxel
+# % keyword: time
+# %end
 
-#%option G_OPT_STR3DS_INPUT
-#%end
+# %option G_OPT_STR3DS_INPUT
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% description: Order the space time dataset by category
-#% required: no
-#% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
-#% answer: start_time
-#%end
+# %option
+# % key: order
+# % type: string
+# % description: Order the space time dataset by category
+# % required: no
+# % multiple: yes
+# % options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
+# % answer: start_time
+# %end
 
-#%option
-#% key: columns
-#% type: string
-#% description: Columns to be printed to stdout
-#% guisection: Selection
-#% required: no
-#% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
-#% answer: name,mapset,start_time,end_time
-#%end
+# %option
+# % key: columns
+# % type: string
+# % description: Columns to be printed to stdout
+# % guisection: Selection
+# % required: no
+# % multiple: yes
+# % options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
+# % answer: name,mapset,start_time,end_time
+# %end
 
-#%option G_OPT_T_WHERE
-#% guisection: Selection
-#%end
+# %option G_OPT_T_WHERE
+# % guisection: Selection
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Method used for data listing
-#% required: no
-#% multiple: no
-#% options: cols,comma,delta,deltagaps,gran
-#% answer: cols
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Method used for data listing
+# % required: no
+# % multiple: no
+# % options: cols,comma,delta,deltagaps,gran
+# % answer: cols
+# %end
 
-#%option G_OPT_F_SEP
-#% label: Field separator character between the output columns
-#% guisection: Formatting
-#%end
+# %option G_OPT_F_SEP
+# % label: Field separator character between the output columns
+# % guisection: Formatting
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# %end
 
-#%flag
-#% key: s
-#% description: Suppress printing of column names
-#% guisection: Formatting
-#%end
+# %flag
+# % key: s
+# % description: Suppress printing of column names
+# % guisection: Formatting
+# %end
 
 import grass.script as grass
 
@@ -106,8 +106,18 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.list_maps_of_stds("str3ds", input, columns, order, where, separator,
-                           method, header, outpath=output)
+    tgis.list_maps_of_stds(
+        "str3ds",
+        input,
+        columns,
+        order,
+        where,
+        separator,
+        method,
+        header,
+        outpath=output,
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 
 from __future__ import print_function
 
-import os
-
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
 from core.utils import GetLayerNameFromCmd
@@ -44,7 +42,11 @@ class Layer(object):
         return self._pydata[0].keys()
 
     def __str__(self):
-        return '' if (self.maplayer is None or self.maplayer.name is None) else self.maplayer.name
+        return (
+            ""
+            if (self.maplayer is None or self.maplayer.name is None)
+            else self.maplayer.name
+        )
 
 
 class LayerList(object):
@@ -72,8 +74,7 @@ class LayerList(object):
         return "LayerList(%r)" % [layer for layer in self]
 
     def GetSelectedLayers(self, checkedOnly=True):
-        items = self._tree.GetSelectedLayer(multi=True,
-                                            checkedOnly=checkedOnly)
+        items = self._tree.GetSelectedLayer(multi=True, checkedOnly=checkedOnly)
         layers = []
         for item in items:
             layer = Layer(item, self._tree.GetPyData(item))
@@ -83,8 +84,7 @@ class LayerList(object):
     # TODO: it is not clear if default of checkedOnly should be False or True
     def GetSelectedLayer(self, checkedOnly=False):
         """Returns selected layer or None when there is no selected layer."""
-        item = self._tree.GetSelectedLayer(multi=False,
-                                           checkedOnly=checkedOnly)
+        item = self._tree.GetSelectedLayer(multi=False, checkedOnly=checkedOnly)
         if item is None:
             return None
         else:
@@ -95,8 +95,7 @@ class LayerList(object):
         """For compatibility only, will be removed."""
         return Layer(layer, self._tree.GetPyData(layer))
 
-    def AddLayer(self, ltype, name=None, checked=None,
-                 opacity=1.0, cmd=None):
+    def AddLayer(self, ltype, name=None, checked=None, opacity=1.0, cmd=None):
         """Adds a new layer to the layer list.
 
         Launches property dialog if needed (raster, vector, etc.)
@@ -107,8 +106,9 @@ class LayerList(object):
         :param opacity: layer opacity level
         :param cmd: command (given as a list)
         """
-        l = self._tree.AddLayer(ltype=ltype, lname=name, lchecked=checked,
-                                lopacity=opacity, lcmd=cmd)
+        l = self._tree.AddLayer(
+            ltype=ltype, lname=name, lchecked=checked, lopacity=opacity, lcmd=cmd
+        )
         return Layer(l, self._tree.GetPyData(l))
 
     def DeleteLayer(self, layer):
@@ -126,15 +126,15 @@ class LayerList(object):
 
     def ChangeLayer(self, layer, **kwargs):
         "Change layer (cmd, ltype, opacity)"
-        if 'cmd' in kwargs:
-            layer._pydata[0]['cmd'] = kwargs['cmd']
-            layerName, found = GetLayerNameFromCmd(kwargs['cmd'], fullyQualified=True)
+        if "cmd" in kwargs:
+            layer._pydata[0]["cmd"] = kwargs["cmd"]
+            layerName, found = GetLayerNameFromCmd(kwargs["cmd"], fullyQualified=True)
             if found:
-                layer._pydata[0]['label'] = layerName
-        if 'ltype' in kwargs:
-            layer._pydata[0]['type'] = kwargs['ltype']
-        if 'opacity' in kwargs:
-            layer._pydata[0]['maplayer'].SetOpacity(kwargs['opacity'])
+                layer._pydata[0]["label"] = layerName
+        if "ltype" in kwargs:
+            layer._pydata[0]["type"] = kwargs["ltype"]
+        if "opacity" in kwargs:
+            layer._pydata[0]["maplayer"].SetOpacity(kwargs["opacity"])
 
         self._tree.ChangeLayer(layer._layer)
         self._tree.SetItemIcon(layer._layer)
@@ -145,7 +145,7 @@ class LayerList(object):
         return self._tree.IsItemChecked(layer._layer)
 
     def GetLayersByName(self, name):
-        items = self._tree.FindItemByData(key='name', value=name)
+        items = self._tree.FindItemByData(key="name", value=name)
         if items is None:
             return []
         else:
@@ -161,9 +161,11 @@ class LayerList(object):
         Returns only one layer.
         Avoid using this method, it might be removed in the future.
         """
-        if key == 'name':
-            print("giface.GetLayerByData(): Do not with use key='name',"
-                  " use GetLayersByName instead.")
+        if key == "name":
+            print(
+                "giface.GetLayerByData(): Do not with use key='name',"
+                " use GetLayersByName instead."
+            )
         item = self._tree.FindItemByData(key=key, value=value)
         if item is None:
             return None
@@ -187,10 +189,12 @@ class LayerManagerGrassInterface(object):
         # Used for adding/refreshing displayed layers.
         # attributes: name: map name, ltype: map type,
         # add: if map should be added to layer tree (questionable attribute)
-        self.mapCreated = Signal('LayerManagerGrassInterface.mapCreated')
+        self.mapCreated = Signal("LayerManagerGrassInterface.mapCreated")
 
         # Signal for communicating current mapset has been switched
-        self.currentMapsetChanged = Signal('LayerManagerGrassInterface.currentMapsetChanged')
+        self.currentMapsetChanged = Signal(
+            "LayerManagerGrassInterface.currentMapsetChanged"
+        )
 
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
@@ -201,30 +205,28 @@ class LayerManagerGrassInterface(object):
         # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
-        self.grassdbChanged = Signal('LayerManagerGrassInterface.grassdbChanged')
+        self.grassdbChanged = Signal("LayerManagerGrassInterface.grassdbChanged")
 
         # Signal emitted to request updating of map
-        self.updateMap = Signal('LayerManagerGrassInterface.updateMap')
+        self.updateMap = Signal("LayerManagerGrassInterface.updateMap")
+
+        # Signal emitted when workspace is changed
+        self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
 
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
 
     def Help(self, entry, online=False):
-        cmdlist = ['g.manual', 'entry=%s' % entry]
+        cmdlist = ["g.manual", "entry=%s" % entry]
         if online:
-            cmdlist.append('-o')
-        self.RunCmd(cmdlist, compReg=False,
-                    notification=Notification.NO_NOTIFICATION)
+            cmdlist.append("-o")
+        self.RunCmd(cmdlist, compReg=False, notification=Notification.NO_NOTIFICATION)
 
-    def WriteLog(self, text, wrap=None,
-                 notification=Notification.HIGHLIGHT):
-        self.lmgr._gconsole.WriteLog(text=text, wrap=wrap,
-                                     notification=notification)
+    def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
+        self.lmgr._gconsole.WriteLog(text=text, wrap=wrap, notification=notification)
 
-    def WriteCmdLog(self, text, pid=None,
-                    notification=Notification.MAKE_VISIBLE):
-        self.lmgr._gconsole.WriteCmdLog(text=text, pid=pid,
-                                        notification=notification)
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
+        self.lmgr._gconsole.WriteCmdLog(text=text, pid=pid, notification=notification)
 
     def WriteWarning(self, text):
         self.lmgr._gconsole.WriteWarning(text=text)
@@ -256,29 +258,12 @@ class LayerManagerGrassInterface(object):
     def UpdateCmdHistory(self, cmd):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
-    def ShowStatusbar(self, show=True):
-        self.lmgr.GetMapDisplay().statusbarManager.Show(show)
-
-    def IsStatusbarShown(self):
-        return self.lmgr.GetMapDisplay().statusbarManager.IsShown()
-
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.lmgr.GetMapDisplay().RemoveToolbar
-        else:
-            action = self.lmgr.GetMapDisplay().AddToolbar
-        for toolbar in self.lmgr.GetMapDisplay().GetToolbarNames():
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        return self.lmgr.GetMapDisplay().GetMapToolbar().IsShown()
-
 
 class LayerManagerGrassInterfaceForMapDisplay(object):
     """Provides reference only to the given layer list (according to tree),
-        not to the current.
+    not to the current.
 
-        @implements core::giface::GrassInterface
+    @implements core::giface::GrassInterface
     """
 
     def __init__(self, giface, tree):
@@ -290,8 +275,7 @@ class LayerManagerGrassInterfaceForMapDisplay(object):
         self.tree = tree
 
         # Signal emitted to request updating of map
-        self.updateMap = Signal(
-            'LayerManagerGrassInterfaceForMapDisplay.updateMap')
+        self.updateMap = Signal("LayerManagerGrassInterfaceForMapDisplay.updateMap")
 
     def GetLayerTree(self):
         return self.tree

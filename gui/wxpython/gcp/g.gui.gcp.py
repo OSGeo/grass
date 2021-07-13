@@ -19,14 +19,14 @@
 #
 ############################################################################
 
-#%module
-#% description: Georectifies a map and allows managing Ground Control Points.
-#% keyword: general
-#% keyword: GUI
-#% keyword: georectification
-#% keyword: geometry
-#% keyword: GCP
-#%end
+# %module
+# % description: Georectifies a map and allows managing Ground Control Points.
+# % keyword: general
+# % keyword: GUI
+# % keyword: georectification
+# % keyword: geometry
+# % keyword: GCP
+# %end
 
 """
 Module to run GCP management tool as stadalone application.
@@ -50,17 +50,18 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.settings import UserSettings
     from core.giface import StandaloneGrassInterface
     from gcp.manager import GCPWizard
 
-    driver = UserSettings.Get(group='display', key='driver', subkey='type')
-    if driver == 'png':
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
+    driver = UserSettings.Get(group="display", key="driver", subkey="type")
+    if driver == "png":
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
     else:
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     app = wx.App()
 
@@ -68,5 +69,6 @@ def main():
 
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

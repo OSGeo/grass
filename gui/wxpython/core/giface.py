@@ -32,6 +32,7 @@ class Notification:
     The value is the suggestion how user should be notified
     about the new message.
     """
+
     NO_NOTIFICATION = 0
     HIGHLIGHT = 1
     MAKE_VISIBLE = 2
@@ -39,18 +40,18 @@ class Notification:
 
 
 class Layer(object):
-    """Layer is generaly usable layer object.
+    """Layer is generally usable layer object.
 
     .. note::
         Currently without specifying the interface.
         Current implementations only provides all attributes of existing
         layer as used in lmgr.
     """
+
     pass
 
 
 class LayerList(object):
-
     def GetSelectedLayers(self, checkedOnly=True):
         """Returns list of selected layers.
 
@@ -71,8 +72,7 @@ class LayerList(object):
         """
         raise NotImplementedError()
 
-    def AddLayer(self, ltype, name=None, checked=None,
-                 opacity=1.0, cmd=None):
+    def AddLayer(self, ltype, name=None, checked=None, opacity=1.0, cmd=None):
         """Adds a new layer to the layer list.
 
         Launches property dialog if needed (raster, vector, etc.)
@@ -118,29 +118,23 @@ class GrassInterface:
     """
 
     def RunCmd(self, *args, **kwargs):
-        """Executes a command.
-        """
+        """Executes a command."""
         raise NotImplementedError()
 
     def Help(self, entry):
-        """Shows a manual page for a given entry.
-        """
+        """Shows a manual page for a given entry."""
         raise NotImplementedError()
 
     def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
-        """Writes log message.
-        """
+        """Writes log message."""
         raise NotImplementedError()
 
-    def WriteCmdLog(self, text, pid=None,
-                    notification=Notification.MAKE_VISIBLE):
-        """Writes message related to start or end of the command.
-        """
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
+        """Writes message related to start or end of the command."""
         raise NotImplementedError()
 
     def WriteWarning(self, text):
-        """Writes warning message for the user.
-        """
+        """Writes warning message for the user."""
         raise NotImplementedError()
 
     def WriteError(self, text):
@@ -156,8 +150,7 @@ class GrassInterface:
         raise NotImplementedError()
 
     def GetLayerList(self):
-        """Returns a layer management object.
-        """
+        """Returns a layer management object."""
         raise NotImplementedError()
 
     def GetMapDisplay(self):
@@ -220,10 +213,12 @@ class StandaloneGrassInterface(GrassInterface):
         # Used for adding/refreshing displayed layers.
         # attributes: name: map name, ltype: map type,
         # add: if map should be added to layer tree (questionable attribute)
-        self.mapCreated = Signal('StandaloneGrassInterface.mapCreated')
+        self.mapCreated = Signal("StandaloneGrassInterface.mapCreated")
 
         # Signal for communicating current mapset has been switched
-        self.currentMapsetChanged = Signal('StandaloneGrassInterface.currentMapsetChanged')
+        self.currentMapsetChanged = Signal(
+            "StandaloneGrassInterface.currentMapsetChanged"
+        )
 
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
@@ -234,14 +229,16 @@ class StandaloneGrassInterface(GrassInterface):
         # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
-        self.grassdbChanged = Signal('StandaloneGrassInterface.grassdbChanged')
+        self.grassdbChanged = Signal("StandaloneGrassInterface.grassdbChanged")
 
         # Signal emitted to request updating of map
-        self.updateMap = Signal('StandaloneGrassInterface.updateMap')
+        self.updateMap = Signal("StandaloneGrassInterface.updateMap")
+
+        # Signal emitted when workspace is changed
+        self.workspaceChanged = Signal("StandaloneGrassInterface.workspaceChanged")
 
         # workaround, standalone grass interface should be moved to sep. file
-        from core.gconsole import GConsole, \
-            EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
+        from core.gconsole import GConsole, EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
 
         self._gconsole = GConsole()
         self._gconsole.Bind(EVT_CMD_PROGRESS, self._onCmdProgress)
@@ -256,9 +253,9 @@ class StandaloneGrassInterface(GrassInterface):
         message = event.text
         style = event.type
 
-        if style == 'warning':
+        if style == "warning":
             self.WriteWarning(message)
-        elif style == 'error':
+        elif style == "error":
             self.WriteError(message)
         else:
             self.WriteLog(message)
@@ -269,9 +266,18 @@ class StandaloneGrassInterface(GrassInterface):
         grass.percent(event.value, 100, 1)
         event.Skip()
 
-    def RunCmd(self, command, compReg=True, env=None, skipInterface=False,
-               onDone=None, onPrepare=None, userData=None, addLayer=None,
-               notification=Notification.MAKE_VISIBLE):
+    def RunCmd(
+        self,
+        command,
+        compReg=True,
+        env=None,
+        skipInterface=False,
+        onDone=None,
+        onPrepare=None,
+        userData=None,
+        addLayer=None,
+        notification=Notification.MAKE_VISIBLE,
+    ):
         self._gconsole.RunCmd(
             command=command,
             compReg=compReg,
@@ -281,19 +287,18 @@ class StandaloneGrassInterface(GrassInterface):
             onPrepare=onPrepare,
             userData=userData,
             addLayer=addLayer,
-            notification=notification)
+            notification=notification,
+        )
 
     def Help(self, entry):
-        self._gconsole.RunCmd(['g.manual', 'entry=%s' % entry])
+        self._gconsole.RunCmd(["g.manual", "entry=%s" % entry])
 
-    def WriteLog(self, text, wrap=None,
-                 notification=Notification.HIGHLIGHT):
+    def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
         self._write(grass.message, text)
 
-    def WriteCmdLog(self, text, pid=None,
-                    notification=Notification.MAKE_VISIBLE):
+    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
         if pid:
-            text = '(' + str(pid) + ') ' + text
+            text = "(" + str(pid) + ") " + text
         self._write(grass.message, text)
 
     def WriteWarning(self, text):
@@ -304,7 +309,7 @@ class StandaloneGrassInterface(GrassInterface):
 
     def _write(self, function, text):
         orig = os.getenv("GRASS_MESSAGE_FORMAT")
-        os.environ["GRASS_MESSAGE_FORMAT"] = 'standard'
+        os.environ["GRASS_MESSAGE_FORMAT"] = "standard"
         function(text)
         os.environ["GRASS_MESSAGE_FORMAT"] = orig
 
@@ -315,13 +320,11 @@ class StandaloneGrassInterface(GrassInterface):
         return None
 
     def GetMapDisplay(self):
-        """Get current map display.
-        """
+        """Get current map display."""
         return None
 
     def GetAllMapDisplays(self):
-        """Get list of all map displays.
-        """
+        """Get list of all map displays."""
         return []
 
     def GetMapWindow(self):

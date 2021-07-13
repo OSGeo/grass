@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
                 || !(opt.blue->answer)) )
 	G_fatal_error(_("evi index requires blue, red and nir maps"));
 
-	if (!strcasecmp(viflag, "evi2") && (!(opt.red->answer) || !(opt.nir->answer) ) )
+    if (!strcasecmp(viflag, "evi2") && (!(opt.red->answer) || !(opt.nir->answer) ) )
 	G_fatal_error(_("evi2 index requires red and nir maps"));
 	
     if (!strcasecmp(viflag, "vari") && (!(opt.red->answer) || !(opt.green->answer)
@@ -291,9 +291,11 @@ int main(int argc, char *argv[])
                 || !(opt.chan5->answer) || !(opt.chan7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
-    infd_redchan = Rast_open_old(redchan, "");
-    data_type_redchan = Rast_map_type(redchan, "");
-    inrast_redchan = Rast_allocate_buf(data_type_redchan);
+    if (redchan) {
+        infd_redchan = Rast_open_old(redchan, "");
+        data_type_redchan = Rast_map_type(redchan, "");
+        inrast_redchan = Rast_allocate_buf(data_type_redchan);
+    }
 
     if (nirchan) {
         infd_nirchan = Rast_open_old(nirchan, "");
@@ -345,7 +347,9 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	/* read input maps */
-	Rast_get_row(infd_redchan,inrast_redchan,row,data_type_redchan);
+	if (redchan) {
+	    Rast_get_row(infd_redchan,inrast_redchan,row,data_type_redchan);
+	}
 	if (nirchan) {
 	    Rast_get_row(infd_nirchan,inrast_nirchan,row,data_type_nirchan);
 	}
@@ -364,6 +368,7 @@ int main(int argc, char *argv[])
 	/* process the data */
 	for (col = 0; col < ncols; col++)
 	{
+	    if (redchan) {
 	    switch(data_type_redchan){
 		    case CELL_TYPE:
 			d_redchan   = (double) ((CELL *) inrast_redchan)[col];
@@ -376,6 +381,7 @@ int main(int argc, char *argv[])
 		    case DCELL_TYPE:
 			d_redchan   = ((DCELL *) inrast_redchan)[col];
 			break;
+	    }
 	    }
 	    if (nirchan) {
 		switch(data_type_nirchan){
@@ -523,9 +529,11 @@ int main(int argc, char *argv[])
 	Rast_put_f_row(outfd, outrast);
     }
     G_percent(1, 1, 1);
-      
-    G_free(inrast_redchan);
-    Rast_close(infd_redchan);
+
+    if (redchan) {
+	G_free(inrast_redchan);
+	Rast_close(infd_redchan);
+    }
     if (nirchan) {
     	G_free(inrast_nirchan);
     	Rast_close(infd_nirchan);
