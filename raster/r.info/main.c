@@ -102,8 +102,9 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     if (hflag->answer && (gflag->answer || rflag->answer || sflag->answer || eflag->answer))
-        G_fatal_error(_("Flags -%c and -%c/%c/%c are mutually exclusive"),
-                      hflag->key, gflag->key, rflag->key, eflag->key);
+        G_fatal_error(_("Flags -%c and -%c/%c/%c/%c are mutually exclusive"),
+                      hflag->key, gflag->key, rflag->key, sflag->key,
+                      eflag->key);
 
     name = G_store(opt1->answer);
     if ((mapset = G_find_raster2(name, "")) == NULL)

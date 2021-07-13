@@ -52466,7 +52466,7 @@ msgstr "Izpiše vrednosti v stilu lupinskega skripta"
 
 #: ../raster/r.info/main.c:105
 #, c-format
-msgid "Flags -%c and -%c/%c/%c are mutually exclusive"
+msgid "Flags -%c and -%c/%c/%c/%c are mutually exclusive"
 msgstr ""
 
 #: ../raster/r.neighbors/main.c:175
