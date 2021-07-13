@@ -31,7 +31,11 @@ static int make_mapset_element_impl(const char *, const char *, bool);
    routine can be called even if the element already exists.
    
    Calls G_fatal_error() on failure.
-   
+
+   \deprecated
+   This function is deprecated due to confusion in element terminology.
+   Use G_make_mapset_object_group() or G_make_mapset_dir_object() instead.
+
    \param p_element element to be created in mapset
 
    \return 0 no element defined
@@ -46,18 +50,26 @@ int G_make_mapset_element(const char *p_element)
 }
 
 /*!
-   \brief Create directory for group of elements of a given type in the current mapset.
+    \brief Create directory for group of elements of a given type.
 
-   Make the specified element in the current mapset will check for the
-   existence of the element and do nothing if it is found so this
-   routine can be called even if the element already exists.
+    Creates the specified element directory in the current mapset.
+    It will check for the existence of the element and do nothing
+    if it is found so this routine can be called even if the element
+    already exists to ensure that it exists.
 
-   Calls G_fatal_error() on failure.
+    If creation fails, but the directory exists after the failure,
+    the function reports success. Therefore, two processes creating
+    a directory in this way can work in parallel.
 
-   \param type element type to be created in mapset
+    Calls G_fatal_error() on failure.
 
-   \return 0 no element defined
-   \return 1 on success
+    \param type object type (e.g., `cell`)
+
+    \return 0 no element defined
+    \return 1 on success
+
+    \sa G_make_mapset_dir_object()
+    \sa G_make_mapset_object_group_tmp()
  */
 int G_make_mapset_object_group(const char *type)
 {
@@ -68,18 +80,30 @@ int G_make_mapset_object_group(const char *type)
 }
 
 /*!
-   \brief Create directory for an element of a given type in the current mapset.
+    \brief Create directory for an object of a given type.
 
-   Make the specified element in the current mapset will check for the
-   existence of the element and do nothing if it is found so this
-   routine can be called even if the element already exists.
+    Creates the specified element directory in the current mapset.
+    It will check for the existence of the element and do nothing
+    if it is found so this routine can be called even if the element
+    already exists to ensure that it exists.
 
-   Calls G_fatal_error() on failure.
+    Any failure to create it, including the case when it exists
+    (i.e., was created by another process after the existence test)
+    is considered a failure because two processes should not attempt
+    to create two objects of the same name (and type).
 
-   \param type element type to be created in mapset
+    This function is for objects which are directories
+    (the function does not create files).
 
-   \return 0 no element defined
-   \return 1 on success
+    Calls G_fatal_error() on failure.
+
+    \param type object type (e.g., `vector`)
+    \param name object name (e.g., `bridges`)
+
+    \return 0 no element defined
+    \return 1 on success
+
+    \sa G_make_mapset_object_group()
  */
 int G_make_mapset_dir_object(const char *type, const char *name)
 {
@@ -95,7 +119,11 @@ int G_make_mapset_dir_object(const char *type, const char *name)
 
    See G_file_name_tmp() for details.
 
-   \param p_element element to be created in mapset
+   \param p_element element to be created in mapset (e.g., `elevation`)
+
+   \note
+   Use G_make_mapset_object_group_tmp() for creating common, shared
+   directories which are for multiple concrete elements (objects).
 
    \return 0 no element defined
    \return 1 on success
@@ -108,6 +136,20 @@ int G_make_mapset_element_tmp(const char *p_element)
     return make_mapset_element(path, p_element);
 }
 
+/*!
+    \brief Create directory for type of objects in the temporary directory.
+
+    See G_file_name_tmp() for details.
+
+    \param type object type (e.g., `cell`)
+
+    \note
+    Use G_make_mapset_object_group_tmp() for creating common, shared
+    directories which are for multiple concrete elements (objects).
+
+    \return 0 no element defined
+    \return 1 on success
+ */
 int G_make_mapset_object_group_tmp(const char *type)
 {
     char path[GPATH_MAX];
