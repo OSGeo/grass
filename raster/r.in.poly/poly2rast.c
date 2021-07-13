@@ -22,11 +22,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows, int
     struct History history;
 
 
-   /* open input file */
-    if (strcmp("-", input_file) == 0)
-	ifd = stdin;
-    else
-	ifd = fopen(input_file, "r");
+    ifd = fopen(input_file, "r");
 
     if (ifd == NULL) {
 	perror(input_file);

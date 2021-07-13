@@ -55901,10 +55901,6 @@ msgstr "Odległość musi być >= 0.0"
 msgid "Creates raster maps from ASCII polygon/line/point data files."
 msgstr "Import pliku ASCII z wielobokami, liniami lub punktami do mapy rastrowej."
 
-#: ../raster/r.in.poly/main.c:41
-msgid "Name of input file; or \"-\" to read from stdin"
-msgstr "Nazwa pliku wejściowego; lub \"-\" aby wczytać z stdin"
-
 #: ../raster/r.in.poly/main.c:60
 msgid "Integer representing NULL value data cell"
 msgstr ""
