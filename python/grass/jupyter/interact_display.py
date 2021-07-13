@@ -11,9 +11,11 @@
 #            for details.
 
 import os
-import folium
-import grass.script as gs
 from pathlib import Path
+
+import folium
+
+import grass.script as gs
 
 
 class InteractiveMap:
@@ -21,7 +23,7 @@ class InteractiveMap:
 
     def __init__(self, width=400, height=400):
         """This initiates a folium map centered on g.region.
-        
+
         Keyword arguments:
             height -- height in pixels of figure (default 400)
             width -- width in pixels of figure (default 400)"""
@@ -75,7 +77,7 @@ class InteractiveMap:
         Arguments:
             x -- x coordinate (string)
             y -- y coordinate (string)
-            proj_in -- proj4 string of location (for example, the output 
+            proj_in -- proj4 string of location (for example, the output
             of g.region run with the `g` flag."""
 
         # Reformat input
