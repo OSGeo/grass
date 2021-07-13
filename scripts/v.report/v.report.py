@@ -217,7 +217,7 @@ def main():
         sys.stdout.write(fs.join(colnames + extracolnames) + "\n")
 
     # make and print the table:
-    numcols = len(colnames) + len(extracolnames)
+    numcols = len(colnames) + len(extracolnames)  # noqa: F841
 
     # calculate percents if requested
     if units == "percent" and option != "coor":
