@@ -20,7 +20,11 @@ class InteractiveMap:
     """This class creates interative GRASS maps with folium"""
 
     def __init__(self, width=400, height=400):
-        """This initiates a folium map centered on g.region"""
+        """This initiates a folium map centered on g.region.
+        
+        Keyword arguments:
+            height -- height in pixels of figure (default 400)
+            width -- width in pixels of figure (default 400)"""
 
         # Store height and width
         self.width = width
@@ -66,13 +70,14 @@ class InteractiveMap:
 
     def _convert_coordinates(self, x, y, proj_in):
         """This function reprojects coordinates to WGS84, the required
-        projection for folium.
+        projection for vectors in folium.
 
-        Coordinates should be a string with x and y values separated
-        by a comma.
+        Arguments:
+            x -- x coordinate (string)
+            y -- y coordinate (string)
+            proj_in -- proj4 string of location (for example, the output 
+            of g.region run with the `g` flag."""
 
-        proj_in is a proj4 string, for example, the output of g.region
-        with the `g` flag."""
         # Reformat input
         coordinates = f"{x}, {y}"
         # Reproject coordinates
@@ -109,7 +114,11 @@ class InteractiveMap:
 
     def add_vector(self, name):
         """Imports vector into temporary WGS84 location,
-        re-formats to a GeoJSON and adds to folium map"""
+        re-formats to a GeoJSON and adds to folium map.
+
+        Arguments:
+            name -- a positional-only parameter; name of vector to be added
+            to map as a string"""
 
         # Find full name of vector
         file_info = gs.find_file(name, element="vector")
