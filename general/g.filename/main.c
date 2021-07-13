@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
                           " <%s> is not the current mapset (%s)",
                           element, flag_create->key, mapset, G_mapset());
         }
-        G_make_mapset_element(element);
+        G_make_mapset_object_group(element);
     }
 
     G_file_name(path, element, name, mapset);
