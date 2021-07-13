@@ -21,6 +21,7 @@ def _set_notebook_defaults():
     """
     This function sets several GRASS environment variables that are
     important for GRASS to run smoothly in Jupyter.
+
     It also allows GRASS to overwrite existing maps of the same name.
     """
     # We want functions to raise exceptions and see standard output of
@@ -36,6 +37,7 @@ def init(path, location, mapset):
     """
     This function initiates a GRASS session and sets GRASS
     environment variables.
+
     Inputs:
         path - path to grass databases
         location - name of GRASS location
