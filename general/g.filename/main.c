@@ -92,6 +92,19 @@ int main(int argc, char *argv[])
         G_make_mapset_object_group(element);
     }
 
+<<<<<<< HEAD
+=======
+    /* Create element directory if requested and in current mapset. */
+    if (flag_create) {
+        if (strcmp(mapset, G_mapset()) != 0) {
+            G_fatal_error("Cannot create <%s> (flag -%c):"
+                          " <%s> is not the current mapset (%s)",
+                          element, flag_create->key, mapset, G_mapset());
+        }
+        G_make_mapset_element(element);
+    }
+
+>>>>>>> 392c6e8e0b (pygrass: Add update parameters method to Module (#1712))
     G_file_name(path, element, name, mapset);
 
     fprintf(stdout, "file='%s'\n", path);
