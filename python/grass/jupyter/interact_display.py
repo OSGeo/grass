@@ -12,7 +12,7 @@
 
 import os
 from pathlib import Path
-
+import tempfile
 import folium
 
 import grass.script as gs
@@ -32,11 +32,8 @@ class InteractiveMap:
         self.width = width
         self.height = height
         # Make temporary folder for all our files
-        self.tmp_dir = Path("./tmp/")
-        try:
-            os.mkdir(self.tmp_dir)
-        except FileExistsError:
-            pass
+        self.tmp_dir = Path(tempfile.NamedTemporaryFile().name)
+        
         # Create new environment for tmp WGS84 location
         rcfile, self._vector_env = gs.create_environment(
             self.tmp_dir, "temp_folium_WGS84", "PERMANENT"
