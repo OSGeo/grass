@@ -38,7 +38,7 @@ class GrassRenderer:
             tmpfile = tempfile.NamedTemporaryFile(suffix=".png")
             self._env["GRASS_RENDER_FILE"] = tmpfile.name
             self._filename = tmpfile.name
-        
+
         # Environment Settings
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
