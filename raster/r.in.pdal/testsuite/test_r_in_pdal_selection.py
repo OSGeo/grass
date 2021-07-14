@@ -28,7 +28,7 @@ class SelectionTest(TestCase):
     """
 
     @classmethod
-    @unittest.skipIf(shutil_which('pdal') is None, "Cannot find pdal utility")
+    @unittest.skipIf(shutil_which("pdal") is None, "Cannot find pdal utility")
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
@@ -74,7 +74,7 @@ class SelectionTest(TestCase):
         except AttributeError:
             pass
 
-    @unittest.skipIf(shutil_which('r.in.pdal') is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_dimension(self):
         """Test LAS dimension selection"""
         self.imp_raster = "imp_intensity"
@@ -99,7 +99,7 @@ class SelectionTest(TestCase):
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
-    @unittest.skipIf(shutil_which('r.in.pdal') is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_user_dimension(self):
         """Test PDAL user dimension selection"""
         self.imp_raster = "imp_cellid"
@@ -124,7 +124,7 @@ class SelectionTest(TestCase):
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
-    @unittest.skipIf(shutil_which('r.in.pdal') is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_filter(self):
         """Test input filtering"""
         self.imp_raster = "imp_filtered"
@@ -152,7 +152,7 @@ class SelectionTest(TestCase):
         )
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
-    @unittest.skipIf(shutil_which('r.in.pdal') is None, "Cannot find r.in.pdal")
+    @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_base_raster(self):
         """Test Z adjustement by base raster"""
         self.imp_raster = "imp_base_adj"
