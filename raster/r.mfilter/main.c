@@ -122,6 +122,8 @@ int main(int argc, char **argv)
     }
     #if defined(_OPENMP)
         omp_set_num_threads(nprocs);
+    #else
+        nprocs = 1;
     #endif
 
     out_name = opt2->answer;
