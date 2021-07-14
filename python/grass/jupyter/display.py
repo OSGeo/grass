@@ -32,11 +32,13 @@ class GrassRenderer:
         # If not user-supplied, create temporary file
         if filename:
             self._env["GRASS_RENDER_FILE"] = filename
+            self._filename = filename
         else:
             # Make temporary file
             tmpfile = tempfile.NamedTemporaryFile(suffix=".png")
             self._env["GRASS_RENDER_FILE"] = tmpfile.name
-        self._filename = tmpfile.name
+            self._filename = tmpfile.name
+        
         # Environment Settings
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
