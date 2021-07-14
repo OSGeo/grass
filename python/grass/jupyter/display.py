@@ -14,6 +14,7 @@
 import os
 from pathlib import Path
 from IPython.display import Image
+import tempfile
 import grass.script as gs
 
 
@@ -22,34 +23,32 @@ class GrassRenderer:
     Jupyter Notebooks."""
 
     def __init__(
-        self, env=None, width=600, height=400, filename="map.png", text_size=12
+        self, env=None, width=600, height=400, filename=None, text_size=12
     ):
         """Initiates an instance of the GrassRenderer class."""
-
+        # Copy Environment
         if env:
             self._env = env.copy()
         else:
             self._env = os.environ.copy()
-
-        # Make temporary folder for all our files
-        self._tmp_dir = Path("./tmp/")
-        try:
-            os.mkdir(self._tmp_dir)
-        except FileExistsError:
-            pass
-        self._filepath = os.path.join(self._tmp_dir, filename)
-
+        # Create PNG file for map
+        # If not user-supplied, create temporary file
+        if filename:
+            self._env["GRASS_RENDER_FILE"] = filename
+        else:
+            # Make temporary file
+            tmpfile = tempfile.NamedTemporaryFile(suffix=".png")
+            self._env["GRASS_RENDER_FILE"] = tmpfile.name
+        self._filename = tmpfile.name
+        # Environment Settings
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
         self._env["GRASS_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
-        self._env["GRASS_RENDER_FILE"] = str(self._filepath)
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
-
-        self._legend_file = Path(self._filepath).with_suffix(".grass_vector_legend")
-        self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
-
-        self.run("d.erase")
+        # Temporary Legend File
+        self._legend_file = tempfile.NamedTemporaryFile()
+        self._env["GRASS_LEGEND_FILE"] = str(self._legend_file.name)
 
     def run(self, module, **kwargs):
         """Run modules from "d." GRASS library"""
@@ -61,4 +60,4 @@ class GrassRenderer:
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
-        return Image(self._filepath)
+        return Image(self._filename)
