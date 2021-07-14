@@ -145,7 +145,7 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     }
     }
     G_percent(work, rcount, 2);
-    starty += rcount * dy;
+    starty = rcount * dy;
     lseek(out[MASTER], (off_t) ((mid + rcount) * buflen), SEEK_SET);
 
     /* copy border rows to output */
