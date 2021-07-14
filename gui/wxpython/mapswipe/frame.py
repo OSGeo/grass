@@ -51,8 +51,9 @@ class SwipeMapFrame(DoubleMapFrame):
         #
         # Add toolbars
         #
-        for name in ("swipeMap", "swipeMain", "swipeMisc"):
+        for name in ("swipeMain", "swipeMap", "swipeMisc"):
             self.AddToolbar(name)
+        self._mgr.Update()
 
         self._giface = giface
         #
@@ -252,31 +253,10 @@ class SwipeMapFrame(DoubleMapFrame):
         """Add defined toolbar to the window
 
         Currently known toolbars are:
-         - 'swipeMap'          - basic map toolbar
          - 'swipeMain'         - swipe functionality
+         - 'swipeMap'          - basic map toolbar
          - 'swipeMisc'         - misc (settings, help)
         """
-        if name == "swipeMap":
-            if "swipeMap" not in self.toolbars:
-                self.toolbars["swipeMap"] = SwipeMapToolbar(self, self._toolSwitcher)
-
-            self._mgr.AddPane(
-                self.toolbars["swipeMap"],
-                wx.aui.AuiPaneInfo()
-                .Name("swipeMap")
-                .Caption(_("Map Toolbar"))
-                .ToolbarPane()
-                .Top()
-                .LeftDockable(False)
-                .RightDockable(False)
-                .BottomDockable(False)
-                .TopDockable(True)
-                .CloseButton(False)
-                .Layer(2)
-                .Row(1)
-                .Position(1)
-                .BestSize((self.toolbars["swipeMap"].GetBestSize())),
-            )
 
         if name == "swipeMain":
             if "swipeMain" not in self.toolbars:
@@ -300,6 +280,28 @@ class SwipeMapFrame(DoubleMapFrame):
                 .BestSize((self.toolbars["swipeMain"].GetBestSize())),
             )
 
+        if name == "swipeMap":
+            if "swipeMap" not in self.toolbars:
+                self.toolbars["swipeMap"] = SwipeMapToolbar(self, self._toolSwitcher)
+
+            self._mgr.AddPane(
+                self.toolbars["swipeMap"],
+                wx.aui.AuiPaneInfo()
+                .Name("swipeMap")
+                .Caption(_("Map Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .Row(1)
+                .Position(1)
+                .BestSize((self.toolbars["swipeMap"].GetBestSize())),
+            )
+
         if name == "swipeMisc":
             if "swipeMisc" not in self.toolbars:
                 self.toolbars["swipeMisc"] = SwipeMiscToolbar(self)
@@ -321,8 +323,6 @@ class SwipeMapFrame(DoubleMapFrame):
                 .Position(2)
                 .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
             )
-
-        self._mgr.Update()
 
     def _addPanes(self):
         """Add splitter window, sliders and statusbar to aui manager"""
