@@ -27,7 +27,6 @@ int get_training_classes(struct files *files, struct Signature *S)
     ncols = Rast_window_cols();
 
     /* determine the categories in the map */
-    I_init_signatures(S, files->nbands);
     Rast_init_cell_stats(&cell_stats);
     G_message(_("Finding training classes..."));
     for (row = 0; row < nrows; row++) {

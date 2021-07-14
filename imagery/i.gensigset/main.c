@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 	_("Generates statistics for i.smap from raster map.");
 
     parse(argc, argv, &parms);
-    openfiles(&parms, &files);
+    openfiles(&parms, &files, &S);
     read_training_labels(&parms, &files);
 
     get_training_classes(&parms, &files, &S);
