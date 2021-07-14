@@ -6,7 +6,7 @@
 # and create bin.x86_64-w64-mingw32\grass$ver.bat (run this batch file to start
 # GRASS GIS) and dist.x86_64-w64-mingw32\etc\env.bat.
 #
-# -p	optionally install GRASS GIS to C:\OSGeo4W64\opt\grass (run
+# -p	optionally install GRASS GIS to C:\OSGeo4W\opt\grass (run
 #	C:\OSGeo4W64\opt\grass\grass$ver.bat) and create an unzippable package
 #	grass$ver-x86_64-w64-mingw32-osgeo4w64-$date.zip
 #
@@ -25,18 +25,18 @@ fi
 
 test -d "$1" && cd "$1"
 
-osgeo4w_path=/c/OSGeo4W64
+osgeo4w_path=/c/OSGeo4W
 arch=x86_64-w64-mingw32
 src=$(pwd)
 
 # compile
 
-export PATH=/mingw64/bin:/c/OSGeo4W64/bin:/usr/bin
-export PROJ_LIB=$osgeo4w_path/share/proj
+export PATH=/mingw64/bin:/c/OSGeo4W/bin:/usr/bin
 
 OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     ./configure \
     --host=$arch \
+    --without-fftw \
     --with-includes=$osgeo4w_path/include \
     --with-libs="$osgeo4w_path/lib $osgeo4w_path/bin" \
     --with-nls \
@@ -44,8 +44,9 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     --with-bzlib \
     --with-geos=$src/mswindows/osgeo4w/geos-config \
     --with-netcdf=$osgeo4w_path/bin/nc-config \
+    --with-proj-includes=$osgeo4w_path/include/proj \
+    --with-proj-libs=$osgeo4w_path/lib \
     --with-gdal=$src/mswindows/osgeo4w/gdal-config \
-    --with-liblas=$src/mswindows/osgeo4w/liblas-config \
     --with-opengl=windows
 
 make
