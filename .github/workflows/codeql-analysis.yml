@@ -50,7 +50,7 @@ jobs:
         env:
           CFLAGS: "-std=gnu11"
           CXXFLAGS: "-std=c++11"
-        run: .github/workflows/build.sh $HOME/install
+        run: .github/workflows/build_ubuntu20.sh $HOME/install
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1

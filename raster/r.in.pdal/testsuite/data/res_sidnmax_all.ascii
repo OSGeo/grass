@@ -1,0 +1,12 @@
+north: 18
+south:  0
+east:  18
+west:   0
+rows:   3
+cols:   3
+null:   n
+type:   int
+
+1 3 4
+21 4 3
+8 0 2
