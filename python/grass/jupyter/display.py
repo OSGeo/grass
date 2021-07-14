@@ -12,7 +12,6 @@
 #           for details.
 
 import os
-from pathlib import Path
 from IPython.display import Image
 import tempfile
 import grass.script as gs
@@ -22,9 +21,7 @@ class GrassRenderer:
     """The grassRenderer class creates and displays GRASS maps in
     Jupyter Notebooks."""
 
-    def __init__(
-        self, env=None, width=600, height=400, filename=None, text_size=12
-    ):
+    def __init__(self, env=None, width=600, height=400, filename=None, text_size=12):
         """Initiates an instance of the GrassRenderer class."""
         # Copy Environment
         if env:
