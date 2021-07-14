@@ -551,44 +551,61 @@ class SwipeMapFrame(DoubleMapFrame):
         filename1 = grass.tempfile(False) + "1"
         filename2 = grass.tempfile(False) + "2"
         width, height = self.splitter.GetClientSize()
+
+        class _onDone:
+            """Callback class that remembers how many times
+            it was called. Needs to be called twice because
+            we are pasting together 2 rendered images, so
+            we need to know when both are finished."""
+
+            def __init__(self2):
+                self2.called = 0
+
+            def __call__(self2):
+                self2.called += 1
+                if self2.called == 2:
+                    self2.process()
+
+            def process(self2):
+                # create empty white image  - needed for line
+                im = wx.Image(width, height)
+                im.Replace(0, 0, 0, 255, 255, 255)
+
+                # paste images
+                if self._mode == "swipe":
+                    if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+                        im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), -x, -y + lineWidth)
+                    else:
+                        im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), -x + lineWidth, -y)
+                else:
+                    if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+                        im1 = wx.Image(filename1)
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), 0, fh + lineWidth)
+                    else:
+                        im1 = wx.Image(filename1)
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), fw + lineWidth, 0)
+                im.SaveFile(fileName, fileType)
+
+                # remove temporary files
+                grass.try_remove(filename1)
+                grass.try_remove(filename2)
+
+        callback = _onDone()
         if self._mode == "swipe":
             x, y = w2.GetImageCoords()
-            w1.SaveToFile(filename1, fileType, width, height)
-            w2.SaveToFile(filename2, fileType, width, height)
+            w1.SaveToFile(filename1, fileType, width, height, callback=callback)
+            w2.SaveToFile(filename2, fileType, width, height, callback=callback)
         else:
             fw, fh = w1.GetClientSize()
-            w1.SaveToFile(filename1, fileType, fw, fh)
+            w1.SaveToFile(filename1, fileType, fw, fh, callback=callback)
             sw, sh = w2.GetClientSize()
-            w2.SaveToFile(filename2, fileType, sw, sh)
-
-        # create empty white image  - needed for line
-        im = wx.EmptyImage(width, height)
-        im.Replace(0, 0, 0, 255, 255, 255)
-
-        # paste images
-        if self._mode == "swipe":
-            if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
-                im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), -x, -y + lineWidth)
-            else:
-                im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), -x + lineWidth, -y)
-        else:
-            if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
-                im1 = wx.Image(filename1)
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), 0, fh + lineWidth)
-            else:
-                im1 = wx.Image(filename1)
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), fw + lineWidth, 0)
-        im.SaveFile(fileName, fileType)
-
-        # remove temporary files
-        grass.try_remove(filename1)
-        grass.try_remove(filename2)
+            w2.SaveToFile(filename2, fileType, sw, sh, callback=callback)
 
     def SaveToFile(self, event):
         """Save map to image"""
