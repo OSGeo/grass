@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE map_type;
     int row, col;
     int *readrow;
-    int nrows, ncols;
+    int nrows, ncols, brows;
     int i, n, t;
     struct Colors colr;
     struct Cell_head cellhd;
@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
 	struct Option *weighting_factor;
 	struct Option *quantile;
 	struct Option *nprocs;
+	struct Option *memory;
     } parm;
     struct
     {
@@ -273,6 +274,7 @@ int main(int argc, char *argv[])
     parm.title->description = _("Title for output raster map");
 
     parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     flag.align = G_define_flag();
     flag.align->key = 'a';
@@ -300,6 +302,8 @@ int main(int argc, char *argv[])
     }
     #if defined(_OPENMP)
         omp_set_num_threads(ncb.threads);
+    #else
+        ncb.threads = 1;
     #endif
 
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
@@ -327,6 +331,10 @@ int main(int argc, char *argv[])
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
+    brows = atoi(parm.memory->answer) * ((1 << 20) / sizeof(DCELL)) / ncols;
+    if (brows > nrows) {
+        brows = nrows;
+    }
 
     /* open raster maps */
     in_fd = G_malloc(ncb.threads * sizeof(int));
@@ -404,7 +412,7 @@ int main(int argc, char *argv[])
 	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
-	out->buf = Rast_allocate_d_buf();
+    out->buf = G_malloc(sizeof(DCELL) * brows * ncols);
 	out->fd = Rast_open_new(output_name, otype);
 	/* TODO: method=mode should propagate its type */
 
@@ -463,67 +471,85 @@ int main(int argc, char *argv[])
     }
 
     int work = 0;
+    int wwork = 0;
+    t = FIRST_THREAD;
+    while (work < nrows)
     {
-    int thread_id = 0;
-    int num_threads = 1;
-    int start = nrows * thread_id / num_threads;
-    int end = nrows * (thread_id + 1) / num_threads;
+        int range;
+        if (nrows - work < brows) {
+            range = nrows - work;
+        } else {
+            range = brows;
+        }
+        #pragma omp parallel private(row, col, n, i, t) if (ncb.threads > 1)
+        {
+        #if defined (_OPENMP)
+            t = omp_get_thread_num();
+        #endif
+        int brow_idx = range * t / ncb.threads;
+        int start = work + (range * t / ncb.threads);
+        int end = work + (range * (t + 1) / ncb.threads);
 
-    /* initialize the cell bufs with 'dist' rows of the old cellfile */
-    readrow[thread_id] = start - ncb.dist;
-    for (row = start - ncb.dist; row < start + ncb.dist; row++)
-      readcell(in_fd[thread_id], readrow[thread_id]++, nrows, ncols, thread_id);
+        /* initialize the cell bufs with 'dist' rows of the old cellfile */
+        readrow[t] = start - ncb.dist;
+        for (row = start - ncb.dist; row < start + ncb.dist; row++)
+          readcell(in_fd[t], readrow[t]++, nrows, ncols, t);
 
-    for (row = start; row < end; row++) {
-      G_percent(work, nrows, 2);
-      readcell(in_fd[thread_id], readrow[thread_id]++, nrows, ncols, thread_id);
+        for (row = start; row < end; row++, brow_idx++) {
+          G_percent(work, nrows, 2);
+          readcell(in_fd[t], readrow[t]++, nrows, ncols, t);
 
-      if (selection)
-        Rast_get_null_value_row(selection_fd[thread_id], selection[thread_id],
-                                row);
+          if (selection)
+            Rast_get_null_value_row(selection_fd[t], selection[t],
+                                    row);
 
-      for (col = 0; col < ncols; col++) {
+          for (col = 0; col < ncols; col++) {
 
-        if (selection && selection[thread_id][col]) {
-            /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
-             * Thus original data start is shifted by ncb.dist! */
-            for (i = 0; i < num_outputs; i++)
-                outputs[i].buf[col] = ncb.buf[thread_id][ncb.dist][col + ncb.dist];
-                continue;
-	    }
+            if (selection && selection[t][col]) {
+                /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
+                 * Thus original data start is shifted by ncb.dist! */
+                for (i = 0; i < num_outputs; i++)
+                    outputs[i].buf[brow_idx * ncols + col] = ncb.buf[t][ncb.dist][col + ncb.dist];
+                    continue;
+            }
 
-	    if (weights)
-            n = gather_w(values[thread_id], values_w[thread_id], col, thread_id);
-	    else
-            n = gather(values[thread_id], col, thread_id);
+            if (weights)
+                n = gather_w(values[t], values_w[t], col, t);
+            else
+                n = gather(values[t], col, t);
 
-	    for (i = 0; i < num_outputs; i++) {
-		struct output *out = &outputs[i];
-		DCELL *rp = &out->buf[col];
+            for (i = 0; i < num_outputs; i++) {
+            struct output *out = &outputs[i];
+            DCELL *rp = &out->buf[brow_idx * ncols + col];
 
-		if (n == 0) {
-		    Rast_set_d_null_value(rp, 1);
-		}
-		else {
-		    if (out->method_fn_w) {
-                memcpy(values_w_tmp[thread_id], values_w[thread_id], n * 2 * sizeof(DCELL));
-                (*out->method_fn_w)(rp, values_w_tmp[thread_id], n, &out->quantile);
-		    }
-		    else {
-                memcpy(values_tmp[thread_id], values[thread_id], n * sizeof(DCELL));
-                (*out->method_fn)(rp, values_tmp[thread_id], n, &out->quantile);
-		    }
-		}
-	    }
-	}
-
+            if (n == 0) {
+                Rast_set_d_null_value(rp, 1);
+            }
+            else {
+                if (out->method_fn_w) {
+                    memcpy(values_w_tmp[t], values_w[t], n * 2 * sizeof(DCELL));
+                    (*out->method_fn_w)(rp, values_w_tmp[t], n, &out->quantile);
+                }
+                else {
+                    memcpy(values_tmp[t], values[t], n * sizeof(DCELL));
+                    (*out->method_fn)(rp, values_tmp[t], n, &out->quantile);
+                }
+            }
+            }
+        }
+            #pragma omp atomic update
+            work++;
+        }
+        }
         for (i = 0; i < num_outputs; i++) {
             struct output *out = &outputs[i];
-
-            Rast_put_d_row(out->fd, out->buf);
+            DCELL *rowptr = out->buf;
+            for (row = wwork; row < wwork + range; row++) {
+                Rast_put_d_row(out->fd, rowptr);
+                rowptr += ncols;
+            }
         }
-        work++;
-    }
+        wwork = work;
     }
     G_percent(work, nrows, 2);
 
@@ -536,6 +562,8 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < num_outputs; i++) {
 	Rast_close(outputs[i].fd);
+
+    G_free(outputs[i].buf);
 
 	/* put out category info */
 	null_cats(outputs[i].title);
