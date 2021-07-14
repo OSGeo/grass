@@ -53,6 +53,28 @@ class GrassRenderer:
         else:
             raise ValueError("Module must begin with letter 'd'.")
 
+    def __getattr__(self, attr, **kwargs):
+        """Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_{module}'."""
+
+        # First check to make sure format is correct
+        if attr[:2] != "d_":
+            print(attr[:2])
+            raise ValueError("Module must begin with 'd_'.")
+        # Now reformat string
+        grass_module = f"d.{attr[2:]}"
+
+        def wrapper(**kwargs):
+            # And try to run module
+            try:
+                self.run(grass_module, **kwargs)
+            except FileNotFoundError:
+                raise ModuleNotFoundError(
+                    f"Could not find GRASS module '{grass_module}'."
+                )
+
+        return wrapper
+
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
         return Image(self._filename)
