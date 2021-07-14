@@ -18,6 +18,10 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+    #include <omp.h>
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -57,6 +61,7 @@ enum out_type {
 };
 
 #define NO_CATS 0
+#define FIRST_THREAD 0
 
 /* modify this table to add new methods */
 static struct menu menu[] = {
@@ -132,17 +137,17 @@ static RASTER_MAP_TYPE output_type(RASTER_MAP_TYPE input_type, int weighted, int
 int main(int argc, char *argv[])
 {
     char *p;
-    int in_fd;
-    int selection_fd;
+    int *in_fd;
+    int *selection_fd;
     int num_outputs;
     struct output *outputs = NULL;
     int copycolr, weights, have_weights_mask;
-    char *selection;
+    char **selection;
     RASTER_MAP_TYPE map_type;
     int row, col;
-    int readrow;
-    int nrows, ncols;
-    int i, n;
+    int *readrow;
+    int nrows, ncols, brows;
+    int i, n, t;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -157,16 +162,18 @@ int main(int argc, char *argv[])
 	struct Option *weighting_function;
 	struct Option *weighting_factor;
 	struct Option *quantile;
+	struct Option *nprocs;
+	struct Option *memory;
     } parm;
     struct
     {
 	struct Flag *align, *circle;
     } flag;
 
-    DCELL *values;		/* list of neighborhood values */
-    DCELL *values_tmp;		/* list of neighborhood values */
-    DCELL(*values_w)[2];	/* list of neighborhood values and weights */
-    DCELL(*values_w_tmp)[2];	/* list of neighborhood values and weights */
+    DCELL **values;		/* list of neighborhood values */
+    DCELL **values_tmp;		/* list of neighborhood values */
+    DCELL(**values_w)[2];	/* list of neighborhood values and weights */
+    DCELL(**values_w_tmp)[2];	/* list of neighborhood values and weights */
 
     G_gisinit(argv[0]);
 
@@ -266,6 +273,9 @@ int main(int argc, char *argv[])
     parm.title->required = NO;
     parm.title->description = _("Title for output raster map");
 
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
+
     flag.align = G_define_flag();
     flag.align->key = 'a';
     flag.align->description = _("Do not align output with the input");
@@ -284,6 +294,17 @@ int main(int argc, char *argv[])
     if (ncb.nsize % 2 == 0)
 	G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
+
+    sscanf(parm.nprocs->answer, "%d", &ncb.threads);
+    if (ncb.threads < 1)
+    {
+      G_fatal_error(_("<%d> is not valid number of threads."), ncb.threads);
+    }
+    #if defined(_OPENMP)
+        omp_set_num_threads(ncb.threads);
+    #else
+        ncb.threads = 1;
+    #endif
 
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
 	G_fatal_error(_("-%c and %s= are mutually exclusive"),
@@ -310,10 +331,17 @@ int main(int argc, char *argv[])
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
+    brows = atoi(parm.memory->answer) * ((1 << 20) / sizeof(DCELL)) / ncols;
+    if (brows > nrows) {
+        brows = nrows;
+    }
 
     /* open raster maps */
-    in_fd = Rast_open_old(ncb.oldcell, "");
-    map_type = Rast_get_map_type(in_fd);
+    in_fd = G_malloc(ncb.threads * sizeof(int));
+    for (i = 0; i < ncb.threads; i++) {
+        in_fd[i] = Rast_open_old(ncb.oldcell, "");
+    }
+    map_type = Rast_get_map_type(in_fd[FIRST_THREAD]);
 
     /* process the output maps */
     for (i = 0; parm.output->answers[i]; i++)
@@ -384,7 +412,7 @@ int main(int argc, char *argv[])
 	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
-	out->buf = Rast_allocate_d_buf();
+    out->buf = G_malloc(sizeof(DCELL) * brows * ncols);
 	out->fd = Rast_open_new(output_name, otype);
 	/* TODO: method=mode should propagate its type */
 
@@ -406,19 +434,19 @@ int main(int argc, char *argv[])
 
     /* allocate the cell buffers */
     allocate_bufs();
-
-    /* initialize the cell bufs with 'dist' rows of the old cellfile */
-    readrow = 0;
-    for (row = 0; row < ncb.dist; row++)
-	readcell(in_fd, readrow++, nrows, ncols);
+    readrow = G_malloc(ncb.threads * sizeof(int));
 
     /* open the selection raster map */
     if (parm.selection->answer) {
-	G_message(_("Opening selection map <%s>"), parm.selection->answer);
-	selection_fd = Rast_open_old(parm.selection->answer, "");
-        selection = Rast_allocate_null_buf();
+        G_message(_("Opening selection map <%s>"), parm.selection->answer);
+        selection_fd = G_malloc(ncb.threads * sizeof(int));
+        selection = G_malloc(ncb.threads * sizeof(char*));
+        for (t = 0; t < ncb.threads; t++) {
+            selection_fd[t] = Rast_open_old(parm.selection->answer, "");
+            selection[t] = Rast_allocate_null_buf();
+        }
     } else {
-        selection_fd = -1;
+        selection_fd = NULL;
         selection = NULL;
     }
 
@@ -428,71 +456,114 @@ int main(int argc, char *argv[])
     values_w = NULL;
     values_w_tmp = NULL;
     if (weights) {
-	values_w =
-	    (DCELL(*)[2]) G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
-	values_w_tmp =
-	    (DCELL(*)[2]) G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+        values_w = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
+        values_w_tmp = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
+        for (t = 0; t < ncb.threads; t++) {
+            values_w[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+            values_w_tmp[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+        }
     }
-    values = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
-    values_tmp = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+    values = G_malloc(ncb.threads * sizeof(DCELL*));
+    values_tmp = G_malloc(ncb.threads * sizeof(DCELL*));
+    for (t = 0; t < ncb.threads; t++) {
+        values[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+        values_tmp[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+    }
 
-    for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
-	readcell(in_fd, readrow++, nrows, ncols);
+    int work = 0;
+    int wwork = 0;
+    t = FIRST_THREAD;
+    while (work < nrows)
+    {
+        int range;
+        if (nrows - work < brows) {
+            range = nrows - work;
+        } else {
+            range = brows;
+        }
+        #pragma omp parallel private(row, col, n, i, t) if (ncb.threads > 1)
+        {
+        #if defined (_OPENMP)
+            t = omp_get_thread_num();
+        #endif
+        int brow_idx = range * t / ncb.threads;
+        int start = work + (range * t / ncb.threads);
+        int end = work + (range * (t + 1) / ncb.threads);
 
-	if (selection)
-            Rast_get_null_value_row(selection_fd, selection, row);
+        /* initialize the cell bufs with 'dist' rows of the old cellfile */
+        readrow[t] = start - ncb.dist;
+        for (row = start - ncb.dist; row < start + ncb.dist; row++)
+          readcell(in_fd[t], readrow[t]++, nrows, ncols, t);
 
-	for (col = 0; col < ncols; col++) {
+        for (row = start; row < end; row++, brow_idx++) {
+          G_percent(work, nrows, 2);
+          readcell(in_fd[t], readrow[t]++, nrows, ncols, t);
 
-            if (selection && selection[col]) {
+          if (selection)
+            Rast_get_null_value_row(selection_fd[t], selection[t],
+                                    row);
+
+          for (col = 0; col < ncols; col++) {
+
+            if (selection && selection[t][col]) {
                 /* ncb.buf length is region row length + 2 * ncb.dist (eq. floor(neighborhood/2))
                  * Thus original data start is shifted by ncb.dist! */
-		for (i = 0; i < num_outputs; i++)
-		    outputs[i].buf[col] = ncb.buf[ncb.dist][col + ncb.dist];
-		continue;
-	    }
+                for (i = 0; i < num_outputs; i++)
+                    outputs[i].buf[brow_idx * ncols + col] = ncb.buf[t][ncb.dist][col + ncb.dist];
+                    continue;
+            }
 
-	    if (weights)
-		n = gather_w(values, values_w, col);
-	    else
-		n = gather(values, col);
+            if (weights)
+                n = gather_w(values[t], values_w[t], col, t);
+            else
+                n = gather(values[t], col, t);
 
-	    for (i = 0; i < num_outputs; i++) {
-		struct output *out = &outputs[i];
-		DCELL *rp = &out->buf[col];
+            for (i = 0; i < num_outputs; i++) {
+            struct output *out = &outputs[i];
+            DCELL *rp = &out->buf[brow_idx * ncols + col];
 
-		if (n == 0) {
-		    Rast_set_d_null_value(rp, 1);
-		}
-		else {
-		    if (out->method_fn_w) {
-			memcpy(values_w_tmp, values_w, n * 2 * sizeof(DCELL));
-			(*out->method_fn_w)(rp, values_w_tmp, n, &out->quantile);
-		    }
-		    else {
-			memcpy(values_tmp, values, n * sizeof(DCELL));
-			(*out->method_fn)(rp, values_tmp, n, &out->quantile);
-		    }
-		}
-	    }
-	}
-
-	for (i = 0; i < num_outputs; i++) {
-	    struct output *out = &outputs[i];
-
-	    Rast_put_d_row(out->fd, out->buf);
-	}
+            if (n == 0) {
+                Rast_set_d_null_value(rp, 1);
+            }
+            else {
+                if (out->method_fn_w) {
+                    memcpy(values_w_tmp[t], values_w[t], n * 2 * sizeof(DCELL));
+                    (*out->method_fn_w)(rp, values_w_tmp[t], n, &out->quantile);
+                }
+                else {
+                    memcpy(values_tmp[t], values[t], n * sizeof(DCELL));
+                    (*out->method_fn)(rp, values_tmp[t], n, &out->quantile);
+                }
+            }
+            }
+        }
+            #pragma omp atomic update
+            work++;
+        }
+        }
+        for (i = 0; i < num_outputs; i++) {
+            struct output *out = &outputs[i];
+            DCELL *rowptr = out->buf;
+            for (row = wwork; row < wwork + range; row++) {
+                Rast_put_d_row(out->fd, rowptr);
+                rowptr += ncols;
+            }
+        }
+        wwork = work;
     }
-    G_percent(row, nrows, 2);
+    G_percent(work, nrows, 2);
 
-    Rast_close(in_fd);
+    for (t = 0; t < ncb.threads; t++)
+        Rast_close(in_fd[t]);
 
     if (selection)
-        Rast_close(selection_fd);
+        for (t = 0; t < ncb.threads; t++)
+            Rast_close(selection_fd[t]);
 
     for (i = 0; i < num_outputs; i++) {
 	Rast_close(outputs[i].fd);
+
+    G_free(outputs[i].buf);
 
 	/* put out category info */
 	null_cats(outputs[i].title);

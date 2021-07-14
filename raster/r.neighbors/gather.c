@@ -45,7 +45,7 @@ void weights_mask(void)
 	    ncb.mask[i][j] = ncb.weights[i][j] != 0;
 }
 
-int gather(DCELL *values, int offset)
+int gather(DCELL *values, int offset, int thread_id)
 {
     int row, col;
     int n = 0;
@@ -58,7 +58,7 @@ int gather(DCELL *values, int offset)
 	    if (ncb.mask && !ncb.mask[row][col])
 		continue;
 
-	    values[n] = ncb.buf[row][offset + col];
+	    values[n] = ncb.buf[thread_id][row][offset + col];
 
 	    n++;
 	}
@@ -67,7 +67,7 @@ int gather(DCELL *values, int offset)
     return n;
 }
 
-int gather_w(DCELL *values, DCELL (*values_w)[2], int offset)
+int gather_w(DCELL *values, DCELL (*values_w)[2], int offset, int thread_id)
 {
     int row, col;
     int n = 0;
@@ -77,7 +77,7 @@ int gather_w(DCELL *values, DCELL (*values_w)[2], int offset)
 
     for (row = 0; row < ncb.nsize; row++) {
 	for (col = 0; col < ncb.nsize; col++) {
-	    values[n] = values_w[n][0] = ncb.buf[row][offset + col];
+	    values[n] = values_w[n][0] = ncb.buf[thread_id][row][offset + col];
 	    values_w[n][1] = ncb.weights[row][col];
 
 	    n++;
