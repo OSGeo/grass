@@ -17,8 +17,13 @@
 
 #if CAIRO_HAS_FT_FONT
 #include <cairo-ft.h>
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1,10,0) || defined(CAIRO_HAS_FC_FONT)
+#define USE_FONTCONFIG 1
 #include <fontconfig/fontconfig.h>
+#else
+#define USE_FONTCONFIG 0
 #endif
+#endif /* CAIRO_HAS_FT_FONT */
 
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
@@ -170,7 +175,7 @@ static void set_font_toy(const char *name)
     G_free(font);
 }
 
-#if CAIRO_HAS_FT_FONT
+#if USE_FONTCONFIG
 
 static void fc_init(void)
 {
@@ -281,7 +286,7 @@ static int is_toy_font(const char *name)
 */
 void Cairo_set_font(const char *name)
 {
-#if CAIRO_HAS_FT_FONT
+#if USE_FONTCONFIG
     if (is_toy_font(name))
 	set_font_toy(name);
     else
@@ -322,7 +327,7 @@ static void font_list_toy(char ***list, int *count, int verbose)
 void Cairo_font_list(char ***list, int *count)
 {
     font_list_toy(list, count, 0);
-#if CAIRO_HAS_FT_FONT
+#if USE_FONTCONFIG
     font_list_fc(list, count, 0);
 #endif
 }
@@ -336,7 +341,7 @@ void Cairo_font_list(char ***list, int *count)
 void Cairo_font_info(char ***list, int *count)
 {
     font_list_toy(list, count, 1);
-#if CAIRO_HAS_FT_FONT
+#if USE_FONTCONFIG
     font_list_fc(list, count, 1);
 #endif
 }
