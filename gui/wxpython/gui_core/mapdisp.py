@@ -798,8 +798,20 @@ class FrameMixin:
     def SetFocus(self):
         self.GetParent().SetFocus()
 
+    def CenterOnScreen(self):
+        self.GetParent().CenterOnScreen()
+
+    def CentreOnScreen(self):
+        self.GetParent().CentreOnScreen()
+
     def IsFullScreen(self):
         return self.GetParent().IsFullScreen()
+
+    def IsIconized(self):
+        self.GetParent().IsIconized()
+
+    def Maximize(self):
+        self.GetParent().Maximize()
 
     def ShowFullScreen(self, show):
         for toolbar in self.toolbars.keys():

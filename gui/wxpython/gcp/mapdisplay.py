@@ -5,7 +5,7 @@
 for various display management functions, one for manipulating GCPs.
 
 Classes:
-- mapdisplay::MapFrame
+- mapdisplay::MapPanel
 
 (C) 2006-2011 by the GRASS Development Team
 
@@ -39,7 +39,7 @@ import gcp.statusbar as sbgcp
 cmdfilename = None
 
 
-class MapFrame(SingleMapPanel):
+class MapPanel(SingleMapPanel):
     """Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
