@@ -100,7 +100,7 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
         end = rcount * (id+1)/nprocs;
         cellp = cell[id];
         starty += start * dy;
-        lseek(out[id], (off_t) ((mid + start) * buflen), SEEK_SET);
+        lseek(out[id], (off_t) buflen * (mid + start), SEEK_SET);
     }
     #endif
 
@@ -111,7 +111,6 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 	/* get "size" rows */
 	for (i = 0; i < size; i++) {
 	    bufs[id][i] = (DCELL *) Rowio_get(&r[id], row);
-        /* printf("bufs - %p, id - %d\n", bufs[id][i], id); */
 	    box[id][i] = bufs[id][i] + startx;
 	    row += dy;
 	}
@@ -146,7 +145,7 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     }
     G_percent(work, rcount, 2);
     starty = rcount * dy;
-    lseek(out[MASTER], (off_t) ((mid + rcount) * buflen), SEEK_SET);
+    lseek(out[MASTER], (off_t) buflen * (mid + rcount), SEEK_SET);
 
     /* copy border rows to output */
     row = starty + mid * dy;
