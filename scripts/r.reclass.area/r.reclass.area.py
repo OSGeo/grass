@@ -74,7 +74,7 @@
 
 # %flag
 # % key: n
-# % description: Create No-Data map if no areas are left after reclass method
+# % description: Create NULL map if no areas are left after reclass method
 # %end
 
 import sys
