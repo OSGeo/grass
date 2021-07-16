@@ -470,14 +470,14 @@ int main(int argc, char *argv[])
         values_tmp[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
     }
 
-    int work = 0;
-    int wwork = 0;
+    int computed = 0;
+    int written = 0;
     t = FIRST_THREAD;
-    while (work < nrows)
+    while (written < nrows)
     {
         int range;
-        if (nrows - work < brows) {
-            range = nrows - work;
+        if (nrows - computed < brows) {
+            range = nrows - computed;
         } else {
             range = brows;
         }
@@ -487,8 +487,8 @@ int main(int argc, char *argv[])
             t = omp_get_thread_num();
         #endif
         int brow_idx = range * t / ncb.threads;
-        int start = work + (range * t / ncb.threads);
-        int end = work + (range * (t + 1) / ncb.threads);
+        int start = written + (range * t / ncb.threads);
+        int end = written + (range * (t + 1) / ncb.threads);
 
         /* initialize the cell bufs with 'dist' rows of the old cellfile */
         readrow[t] = start - ncb.dist;
@@ -496,7 +496,7 @@ int main(int argc, char *argv[])
           readcell(in_fd[t], readrow[t]++, nrows, ncols, t);
 
         for (row = start; row < end; row++, brow_idx++) {
-          G_percent(work, nrows, 2);
+          G_percent(computed, nrows, 2);
           readcell(in_fd[t], readrow[t]++, nrows, ncols, t);
 
           if (selection)
@@ -538,20 +538,20 @@ int main(int argc, char *argv[])
             }
         }
             #pragma omp atomic update
-            work++;
+            computed++;
         }
         }
         for (i = 0; i < num_outputs; i++) {
             struct output *out = &outputs[i];
             DCELL *rowptr = out->buf;
-            for (row = wwork; row < wwork + range; row++) {
+            for (row = written; row < written + range; row++) {
                 Rast_put_d_row(out->fd, rowptr);
                 rowptr += ncols;
             }
         }
-        wwork = work;
+        written = computed;
     }
-    G_percent(work, nrows, 2);
+    G_percent(written, nrows, 2);
 
     for (t = 0; t < ncb.threads; t++)
         Rast_close(in_fd[t]);
