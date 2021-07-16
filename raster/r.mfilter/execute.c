@@ -79,9 +79,10 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     /* copy border rows to output */
     row = starty;
     for (i = 0; i < mid; i++) {
-	cp = (DCELL *) Rowio_get(&r[MASTER], row);
-	write(out[MASTER], cp, buflen);
-	row += dy;
+        cp = (DCELL *) Rowio_get(&r[MASTER], row);
+        if (write(out[MASTER], cp, buflen) < 0) 
+            G_fatal_error("Error writing temporary file");
+        row += dy;
     }
 
     /* for each row */
@@ -151,7 +152,8 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     row = starty + mid * dy;
     for (i = 0; i < mid; i++) {
 	cp = (DCELL *) Rowio_get(&r[MASTER], row);
-	write(out[MASTER], cp, buflen);
+        if (write(out[MASTER], cp, buflen) < 0)
+            G_fatal_error("Error writing temporary file");
 	row += dy;
     }
 
