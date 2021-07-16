@@ -424,7 +424,9 @@ class MapFrame(SingleMapFrame):
             def openATM(selection):
                 self._layerManager.OnShowAttributeTable(None, selection=selection)
 
-            self.toolbars["vdigit"].openATM.connect(lambda selection: openATM(selection))
+            self.toolbars["vdigit"].openATM.connect(
+                lambda selection: openATM(selection)
+            )
             self.Map.layerAdded.connect(self._updateVDigitLayers)
         self.MapWindowVDigit.SetToolbar(self.toolbars["vdigit"])
 
@@ -655,8 +657,9 @@ class MapFrame(SingleMapFrame):
         # default toolbar
         if name == "map":
             if "map" not in self.toolbars:
-                self.toolbars["map"] = MapToolbar(self, toolSwitcher=self._toolSwitcher,
-                                                  giface=self._giface)
+                self.toolbars["map"] = MapToolbar(
+                    self, toolSwitcher=self._toolSwitcher, giface=self._giface
+                )
 
             self._mgr.AddPane(
                 self.toolbars["map"],

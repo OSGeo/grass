@@ -91,6 +91,7 @@ def main():
             # use Close instead of QuitVDigit for standalone tool
             self.toolbars["vdigit"].quitDigitizer.disconnect(self.QuitVDigit)
             self.toolbars["vdigit"].quitDigitizer.connect(lambda: self.Close())
+
     if not haveVDigit:
         grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
 
