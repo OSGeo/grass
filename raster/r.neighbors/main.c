@@ -148,6 +148,7 @@ int main(int argc, char *argv[])
     int *readrow;
     int nrows, ncols, brows;
     int i, n, t;
+    size_t size;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -337,7 +338,7 @@ int main(int argc, char *argv[])
     }
 
     /* open raster maps */
-    in_fd = G_malloc(ncb.threads * sizeof(int));
+    in_fd = G_malloc(sizeof(int) * ncb.threads);
     for (i = 0; i < ncb.threads; i++) {
         in_fd[i] = Rast_open_old(ncb.oldcell, "");
     }
@@ -434,13 +435,13 @@ int main(int argc, char *argv[])
 
     /* allocate the cell buffers */
     allocate_bufs();
-    readrow = G_malloc(ncb.threads * sizeof(int));
+    readrow = G_malloc(sizeof(int) * ncb.threads);
 
     /* open the selection raster map */
     if (parm.selection->answer) {
         G_message(_("Opening selection map <%s>"), parm.selection->answer);
-        selection_fd = G_malloc(ncb.threads * sizeof(int));
-        selection = G_malloc(ncb.threads * sizeof(char*));
+        selection_fd = G_malloc(sizeof(int) * ncb.threads);
+        selection = G_malloc(sizeof(char*) * ncb.threads);
         for (t = 0; t < ncb.threads; t++) {
             selection_fd[t] = Rast_open_old(parm.selection->answer, "");
             selection[t] = Rast_allocate_null_buf();
@@ -456,18 +457,25 @@ int main(int argc, char *argv[])
     values_w = NULL;
     values_w_tmp = NULL;
     if (weights) {
-        values_w = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
-        values_w_tmp = G_malloc(ncb.threads * sizeof(DCELL(*)[2]));
+        size = sizeof(DCELL(*)[2]) * ncb.threads;
+        values_w = G_malloc(size);
+        values_w_tmp = G_malloc(size);
+
+        size = sizeof(DCELL) * 2 * ncb.nsize * ncb.nsize;
         for (t = 0; t < ncb.threads; t++) {
-            values_w[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
-            values_w_tmp[t] = G_malloc(ncb.nsize * ncb.nsize * 2 * sizeof(DCELL));
+            values_w[t] = G_malloc(size);
+            values_w_tmp[t] = G_malloc(size);
         }
     }
-    values = G_malloc(ncb.threads * sizeof(DCELL*));
-    values_tmp = G_malloc(ncb.threads * sizeof(DCELL*));
+
+    size = sizeof(DCELL*) * ncb.threads;
+    values = G_malloc(size);
+    values_tmp = G_malloc(size);
+
+    size = sizeof(DCELL) * ncb.nsize * ncb.nsize;
     for (t = 0; t < ncb.threads; t++) {
-        values[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
-        values_tmp[t] = (DCELL *) G_malloc(ncb.nsize * ncb.nsize * sizeof(DCELL));
+        values[t] = G_malloc(size);
+        values_tmp[t] = G_malloc(size);
     }
 
     int computed = 0;
@@ -527,11 +535,11 @@ int main(int argc, char *argv[])
             }
             else {
                 if (out->method_fn_w) {
-                    memcpy(values_w_tmp[t], values_w[t], n * 2 * sizeof(DCELL));
+                    memcpy(values_w_tmp[t], values_w[t], sizeof(DCELL) * n * 2);
                     (*out->method_fn_w)(rp, values_w_tmp[t], n, &out->quantile);
                 }
                 else {
-                    memcpy(values_tmp[t], values[t], n * sizeof(DCELL));
+                    memcpy(values_tmp[t], values[t], sizeof(DCELL) * n);
                     (*out->method_fn)(rp, values_tmp[t], n, &out->quantile);
                 }
             }
