@@ -222,6 +222,7 @@ int main(int argc, char *argv[])
     }
 #if defined(_OPENMP)
     if (!param.extended->answer) {
+         /* Calculation of extended statistics is not parallelized yet */
         omp_set_num_threads(threads);
         process_raster_threaded(stats, *p, z, &region, threads);
     } else {
