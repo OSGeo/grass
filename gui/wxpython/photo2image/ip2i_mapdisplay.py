@@ -296,7 +296,7 @@ class MapFrame(SingleMapFrame):
         """
         # default toolbar
         if name == "map":
-            self.toolbars["map"] = MapToolbar(self, self._toolSwitcher)
+            self.toolbars["map"] = MapToolbar(self, self._toolSwitcher, self._giface)
 
             self._mgr.AddPane(
                 self.toolbars["map"],
@@ -561,13 +561,6 @@ class MapFrame(SingleMapFrame):
         # will be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
-
-    def GetLayerManager(self):
-        """Get reference to Layer Manager
-
-        :return: always None
-        """
-        return None
 
     def GetSrcWindow(self):
         return self.SrcMapWindow

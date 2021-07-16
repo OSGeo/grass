@@ -47,6 +47,7 @@ class VDigitToolbar(BaseToolbar):
         self.editingStopped = Signal("VDigitToolbar.editingStopped")
         self.editingBgMap = Signal("VDigitToolbar.editingBgMap")
         self.quitDigitizer = Signal("VDigitToolbar.quitDigitizer")
+        self.openATM = Signal("VDigitToolbar.openATM")
         layerTree = self._giface.GetLayerTree()
         if layerTree:
             self.editingStarted.connect(layerTree.StartEditing)
@@ -915,13 +916,10 @@ class VDigitToolbar(BaseToolbar):
 
                 # create table ?
                 if dlg.IsChecked("table"):
-                    # TODO: replace this by signal
-                    # also note that starting of tools such as atm, iclass,
+                    # TODO: starting of tools such as atm, iclass,
                     # plots etc. should be handled in some better way
                     # than starting randomly from mapdisp and lmgr
-                    lmgr = self.parent.GetLayerManager()
-                    if lmgr:
-                        lmgr.OnShowAttributeTable(None, selection="table")
+                    self.openATM.emit(selection="table")
                 dlg.Destroy()
             else:
                 self.combo.SetValue(_("Select vector map"))

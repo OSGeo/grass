@@ -79,7 +79,7 @@ NvizIcons = {
 class MapToolbar(BaseToolbar):
     """Map Display toolbar"""
 
-    def __init__(self, parent, toolSwitcher):
+    def __init__(self, parent, toolSwitcher, giface):
         """Map Display constructor
 
         :param parent: reference to MapFrame
@@ -88,6 +88,7 @@ class MapToolbar(BaseToolbar):
 
         self.InitToolbar(self._toolbarData())
         self._default = self.pointer
+        self._giface = giface
 
         # optional tools
         toolNum = 0
@@ -96,9 +97,6 @@ class MapToolbar(BaseToolbar):
         ]
         self.toolId = {"2d": toolNum}
         toolNum += 1
-        if self.parent.GetLayerManager():
-            log = self.parent.GetLayerManager().GetLogWindow()
-
         if haveNviz:
             choices.append(_("3D view"))
             self.toolId["3d"] = toolNum
@@ -106,9 +104,8 @@ class MapToolbar(BaseToolbar):
         else:
             from nviz.main import errorMsg
 
-            if self.parent.GetLayerManager():
-                log.WriteCmdLog(_("3D view mode not available"))
-                log.WriteWarning(_("Reason: %s") % str(errorMsg))
+            self._giface.WriteCmdLog(_("3D view mode not available"))
+            self._giface.WriteWarning(_("Reason: %s") % str(errorMsg))
 
             self.toolId["3d"] = -1
 
@@ -119,18 +116,17 @@ class MapToolbar(BaseToolbar):
         else:
             from vdigit.main import errorMsg
 
-            if self.parent.GetLayerManager():
-                log.WriteCmdLog(_("Vector digitizer not available"))
-                log.WriteWarning(_("Reason: %s") % errorMsg)
-                log.WriteLog(
-                    _(
-                        "Note that the wxGUI's vector digitizer is disabled in this installation. "
-                        "Please keep an eye out for updated versions of GRASS. "
-                        'In the meantime you can use "v.edit" for non-interactive editing '
-                        "from the Develop vector map menu."
-                    ),
-                    wrap=60,
-                )
+            self._giface.WriteCmdLog(_("Vector digitizer not available"))
+            self._giface.WriteWarning(_("Reason: %s") % errorMsg)
+            self._giface.WriteLog(
+                _(
+                    "Note that the wxGUI's vector digitizer is disabled in this installation. "
+                    "Please keep an eye out for updated versions of GRASS. "
+                    'In the meantime you can use "v.edit" for non-interactive editing '
+                    "from the Develop vector map menu."
+                ),
+                wrap=60,
+            )
 
             self.toolId["vdigit"] = -1
         choices.append(_("Raster digitizer"))
@@ -276,10 +272,7 @@ class MapToolbar(BaseToolbar):
     def ExitToolbars(self):
         if self.parent.GetToolbar("vdigit"):
             self.parent.toolbars["vdigit"].OnExit()
-        if self.parent.GetLayerManager() and self.parent.GetLayerManager().IsPaneShown(
-            "toolbarNviz"
-        ):
-            self.parent.RemoveNviz()
+        self.parent.RemoveNviz()
         if self.parent.GetToolbar("rdigit"):
             self.parent.QuitRDigit()
 

@@ -420,6 +420,11 @@ class MapFrame(SingleMapFrame):
                 giface=self._giface,
             )
             self.toolbars["vdigit"].quitDigitizer.connect(self.QuitVDigit)
+
+            def openATM(selection):
+                self._layerManager.OnShowAttributeTable(None, selection=selection)
+
+            self.toolbars["vdigit"].openATM.connect(lambda selection: openATM(selection))
             self.Map.layerAdded.connect(self._updateVDigitLayers)
         self.MapWindowVDigit.SetToolbar(self.toolbars["vdigit"])
 
@@ -587,7 +592,9 @@ class MapFrame(SingleMapFrame):
             self.toolbars["map"].combo.Delete(1)
 
     def RemoveNviz(self):
-        """Restore 2D view"""
+        """Restore 2D view. Can be called even if 3D is not active."""
+        if not self.IsPaneShown("3d"):
+            return
         try:
             self.toolbars["map"].RemoveTool(self.toolbars["map"].rotate)
             self.toolbars["map"].RemoveTool(self.toolbars["map"].flyThrough)
@@ -648,7 +655,8 @@ class MapFrame(SingleMapFrame):
         # default toolbar
         if name == "map":
             if "map" not in self.toolbars:
-                self.toolbars["map"] = MapToolbar(self, toolSwitcher=self._toolSwitcher)
+                self.toolbars["map"] = MapToolbar(self, toolSwitcher=self._toolSwitcher,
+                                                  giface=self._giface)
 
             self._mgr.AddPane(
                 self.toolbars["map"],
@@ -1024,8 +1032,7 @@ class MapFrame(SingleMapFrame):
             maplayer = self.toolbars["vdigit"].GetLayer()
             if maplayer:
                 self.toolbars["vdigit"].OnExit()
-        if self.IsPaneShown("3d"):
-            self.RemoveNviz()
+        self.RemoveNviz()
         if hasattr(self, "rdigit") and self.rdigit:
             self.rdigit.CleanUp()
         if self.dialogs["vnet"]:
@@ -1635,22 +1642,6 @@ class MapFrame(SingleMapFrame):
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
-
-    def GetLayerManager(self):
-        """Get reference to Layer Manager
-
-        :return: window reference
-        :return: None (if standalone)
-
-        .. deprecated:: 7.0
-        """
-        Debug.msg(
-            1,
-            "MapFrame.GetLayerManager(): Method GetLayerManager is"
-            "deprecated, use some general approach instead such as"
-            " Signals or giface",
-        )
-        return self._layerManager
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
