@@ -292,33 +292,29 @@ class GCPWizard(object):
             # start GCP Manager
             #
             # create superior Map Display frame
-            mapframe = wx.Frame(None,
+            mapframe = wx.Frame(parent=None,
                                 id=wx.ID_ANY,
                                 size=globalvar.MAP_WINDOW_SIZE,
                                 style=wx.DEFAULT_FRAME_STYLE,
                                 title=name)
 
             # create GCP manager
-            self.gcpmgr = GCPDisplay(
+            gcpmgr = GCPDisplay(
                 parent=mapframe,
                 giface=self._giface,
                 grwiz=self,
                 id=wx.ID_ANY,
-                toolbars=["gcpdisp"],
                 Map=self.SrcMap,
                 lmgr=self.parent,
                 title=name,
             )
 
-            # bind to frame
-            self.gcpmgr.BindToFrame(wx.EVT_CLOSE, self.gcpmgr.OnQuit)
-
             # load GCPs
-            self.gcpmgr.InitMapDisplay()
-            self.gcpmgr.CenterOnScreen()
-            self.gcpmgr.Show()
+            gcpmgr.InitMapDisplay()
+            gcpmgr.CenterOnScreen()
+            gcpmgr.Show()
             # need to update AUI here for wingrass
-            self.gcpmgr._mgr.Update()
+            gcpmgr._mgr.Update()
         else:
             self.Cleanup()
 
@@ -3585,6 +3581,9 @@ class GCPDisplay(FrameMixin, GCPPanel):
                 os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
             )
         )
+
+        # bind to frame
+        parent.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         # extend shortcuts and create frame accelerator table
         self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
