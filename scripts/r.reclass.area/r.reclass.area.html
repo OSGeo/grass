@@ -6,6 +6,10 @@ less than a user specified area size (in hectares).
 If the <b>-c</b> flag is used, <em>r.reclass.area</em> will skip the
 creation of a clumped raster and assume that the input raster is
 already clumped.
+<p>
+If the <b>-n</b> flag is used, <em>r.reclass.area</em> will output a raster
+with only NULL values if no areas are left after applying the reclass
+<b>method</b> (instead of throwing an error). 
 
 <h2>EXAMPLES</h2>
 
@@ -22,7 +26,7 @@ Extract only areas greater than 2000 ha, NULL otherwise:
 
 <div class="code"><pre>
 r.reclass.area input=zipcodes output=zipcodes_larger2000ha mode=greater value=2000
-    
+
 r.report zipcodes_larger2000ha unit=h
 </pre></div>
 
