@@ -38,6 +38,9 @@ import shutil
 
 # Tests
 class TestDisplay(TestCase):
+    # Setup variables
+    files = []
+
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region"""
@@ -52,23 +55,12 @@ class TestDisplay(TestCase):
         """Remove temporary region"""
         cls.del_temp_region()
 
-    @classmethod
     def tearDown(self):
         """
         Remove the PNG file created after testing with "filename =" option.
         This is executed after each test run.
         """
-        # silent_rmtree("/map.grass_vector_legend")
-        # silent_rmtree("/test_filename.grass_vector_legend")
-        # silent_rmtree("/map.png")
-        # silent_rmtree("/test_filename.png")
-        # shutil.rmtree(os.path.join(os.getcwd(),"map.png"))
-        
-        files = ["map.grass_vector_legend", 
-                "test_filename.grass_vector_legend",
-                "map.png",
-                "test_filename.png"]
-        for f in files:
+        for f in self.files:
             try:
                 os.remove(os.path.join(os.getcwd(), f))
             except OSError:
@@ -83,6 +75,9 @@ class TestDisplay(TestCase):
         self.mapdisplay.run("d.vect", map="roadsmajor")
         # Assert image exists
         self.assertFileExists("map.png")
+        # Add files to self for cleanup later
+        self.files.append("map.png")
+        self.files.append("map.grass_vector_legend")
 
     def test_GrassRenderer_filename(self):
         """Test that GrassRenderer creates maps with unique filenames."""
@@ -93,6 +88,9 @@ class TestDisplay(TestCase):
         self.mapdisplay.run("d.vect", map="roadsmajor")
         # Assert image exists
         self.assertFileExists("test_filename.png")
+        # Add files to self for cleanup later
+        self.files.append("test_filename.png")
+        self.files.append("test_filename.grass_vector_legend")
 
     def test_GrassRenderer_hw(self):
         """Test that GrassRenderer creates maps with unique height and widths."""
@@ -102,6 +100,9 @@ class TestDisplay(TestCase):
         self.mapdisplay.run("d.vect", map="roadsmajor")
         # Assert image exists
         self.assertFileExists("map.png")
+        # Add files to self for cleanup later
+        self.files.append("map.png")
+        self.files.append("map.grass_vector_legend")
 
     def test_GrassRenderer_env(self):
         """Test that we can hand an environment to GrassRenderer."""
@@ -111,6 +112,9 @@ class TestDisplay(TestCase):
         self.mapdisplay.run("d.rast", map="elevation")
         # Assert image exists
         self.assertFileExists("map.png")
+        # Add files to self for cleanup later
+        self.files.append("map.png")
+        self.files.append("map.grass_vector_legend")
 
     def test_GrassRenderer_text(self):
         """Test that we can set a unique text_size in GrassRenderer."""
@@ -121,6 +125,9 @@ class TestDisplay(TestCase):
         self.mapdisplay.run("d.rast", map="elevation")
         # Assert image exists
         self.assertFileExists("map.png")
+        # Add files to self for cleanup later
+        self.files.append("map.png")
+        self.files.append("map.grass_vector_legend")
 
 
 if __name__ == "__main__":
