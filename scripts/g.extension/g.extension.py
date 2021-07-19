@@ -280,7 +280,6 @@ def get_default_branch(full_url):
         ]
     except URLError:
         gscript.fatal(_("Cannot retrieve organization and repository from URL: <{}>.".format(full_url)))
-
     # Construct API call and retrieve default branch
     if url_parts.netloc == "github.com":
         req = urlrequest.urlopen(
