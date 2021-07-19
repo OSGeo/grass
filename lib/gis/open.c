@@ -110,6 +110,17 @@ static int G__open(const char *element, const char *name, const char *mapset,
             G_file_name(path, element, name, mapset);
         else
             G_file_name_tmp(path, element, name, mapset);
+<<<<<<< HEAD
+=======
+        
+	if (mode == 1 || access(path, 0) != 0) {
+            if (is_tmp)
+                G_make_mapset_object_group_tmp(element);
+            else
+                G_make_mapset_object_group(element);
+	    close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
+	}
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
         if (mode == 1 || access(path, 0) != 0) {
             if (is_tmp)

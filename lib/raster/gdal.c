@@ -210,10 +210,17 @@ static void read_gdal_options(void)
     else {
         char path[GPATH_MAX];
 
+<<<<<<< HEAD
         G_file_name(path, p, "", G_mapset());
         st->opts.dir = G_store(path);
         if (access(path, 0) != 0)
             G_make_mapset_object_group(p);
+=======
+	G_file_name(path, p, "", G_mapset());
+	st->opts.dir = G_store(path);
+	if (access(path, 0) != 0)
+	    G_make_mapset_object_group(p);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     }
 
     p = G_find_key_value("extension", key_val);
