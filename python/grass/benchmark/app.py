@@ -25,8 +25,18 @@ from grass.benchmark import (
 )
 
 
+def cli_usage_error(msg):
+    """Report a usage error and exit."""
+    sys.exit(f"ERROR: {msg}")
+
+
 def join_results_cli(args):
     """Translate CLI parser result to API calls."""
+    if args.prefixes and len(args.results) != len(args.prefixes):
+        cli_usage_error(
+            f"Number of prefixes ({len(args.prefixes)}) needs to be the same"
+            f" as number of input result files ({len(args.results)})"
+        )
     results = join_results_from_files(
         source_filenames=args.results,
         prefixes=args.prefixes,
@@ -54,6 +64,19 @@ def get_executable_name():
     """
     executable = Path(sys.executable).stem
     return f"{executable} -m grass.benchmark"
+
+
+class ExtendAction(argparse.Action):
+    """Support for agrparse action="extend" before Python 3.8
+
+    Each parser instance needs the action to be registered.
+    """
+
+    # pylint: disable=too-few-public-methods
+    def __call__(self, parser, namespace, values, option_string=None):
+        items = getattr(namespace, self.dest) or []
+        items.extend(values)
+        setattr(namespace, self.dest, items)
 
 
 def add_subcommand_parser(subparsers, name, description):
@@ -86,6 +109,8 @@ def add_results_subcommand(parent_subparsers):
     join = main_subparsers.add_parser("join", help="Join results")
     join.add_argument("results", help="Files with results", nargs="*", metavar="file")
     join.add_argument("output", help="Output file", metavar="output_file")
+    if sys.version_info < (3, 8):
+        join.register("action", "extend", ExtendAction)
     join.add_argument(
         "--prefixes",
         help="Add prefixes to result labels per file",
