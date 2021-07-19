@@ -2281,9 +2281,13 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
+            # Due to strict rate limits for the github API and lack of implementation
+            # for other hosting services, the default branch is currently only
+            # fetched for gitlab
+            default_branch = get_default_branch(actual_start) if urlparse(actual_start).netloc == "gitlab.com" else "main"
             suffix = match["url_end"].format(
                 name=name,
-                branch=branch if branch else "main",  # get_default_branch(url)
+                branch=branch if branch else default_branch,
             )
         else:
             suffix = match["url_end"].format(name=name)
