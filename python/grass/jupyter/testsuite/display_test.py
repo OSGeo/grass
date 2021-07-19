@@ -20,9 +20,8 @@
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.utils import silent_rmtree
 import os
-import shutil
+from pathlib import Path
 
 # The module performs as expected if:
 #    1) it can create an instance of GrassRenderer with different heights
@@ -31,9 +30,8 @@ import shutil
 #    3) write and display an image
 
 # TODO
-# 1. After temporary files have been added for png images, update tearDown and
-# test_GrassRenderer tests
-# 2. Add __getattr shortcut test after merge
+# 1. Update tearDown and test_GrassRenderer tests after temporary files are merged
+# 2. Add __getattr__ shortcut test after merge
 
 
 # Tests
@@ -61,10 +59,7 @@ class TestDisplay(TestCase):
         This is executed after each test run.
         """
         for f in self.files:
-            try:
-                os.remove(os.path.join(os.getcwd(), f))
-            except OSError:
-                pass
+            Path(f).unlink(missing_ok=True)
 
     def test_GrassRenderer_defaults(self):
         """Test that GrassRenderer can create a map with default settings."""
