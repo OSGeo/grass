@@ -1738,11 +1738,15 @@ if test -n "$USE_FREETYPE"; then
 
 # With FreeType includes directory
 
+FTINC=`$PKG_CONFIG --cflags freetype2`
+
 LOC_CHECK_INC_PATH(freetype,FreeType,FTINC)
 
 LOC_CHECK_INCLUDES(ft2build.h,FreeType,$FTINC)
 
 # With FreeType library directory
+
+FTLIB=`$PKG_CONFIG --libs freetype2`
 
 LOC_CHECK_LIB_PATH(freetype,FreeType,FTLIB)
 
