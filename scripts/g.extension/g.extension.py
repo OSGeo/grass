@@ -241,7 +241,7 @@ def get_version_branch(major_version):
     version_branch = f"grass{major_version}"
     try:
         urlrequest.urlopen(
-            source_url=f"https://github.com/OSGeo/grass-addons/tree/{version_branch}/src"
+            f"https://github.com/OSGeo/grass-addons/tree/{version_branch}/src"
         )
     except URLError:
         version_branch = "grass{}".format(int(major_version) - 1)
@@ -275,11 +275,15 @@ def get_default_branch(full_url):
     url_parts = urlparse(full_url)
     # Get organization and repository component
     try:
-        organization, repository = url_parts.path.split("/")[
-            1:3
-        ]
+        organization, repository = url_parts.path.split("/")[1:3]
     except URLError:
-        gscript.fatal(_("Cannot retrieve organization and repository from URL: <{}>.".format(full_url)))
+        gscript.fatal(
+            _(
+                "Cannot retrieve organization and repository from URL: <{}>.".format(
+                    full_url
+                )
+            )
+        )
     # Construct API call and retrieve default branch
     if url_parts.netloc == "github.com":
         req = urlrequest.urlopen(
@@ -2284,7 +2288,11 @@ def resolve_known_host_service(url, name, branch):
             # Due to strict rate limits for the github API and lack of implementation
             # for other hosting services, the default branch is currently only
             # fetched for gitlab
-            default_branch = get_default_branch(actual_start) if urlparse(actual_start).netloc == "gitlab.com" else "main"
+            default_branch = (
+                get_default_branch(actual_start)
+                if urlparse(actual_start).netloc == "gitlab.com"
+                else "main"
+            )
             suffix = match["url_end"].format(
                 name=name,
                 branch=branch if branch else default_branch,
@@ -2381,7 +2389,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 url = (
                     url.rstrip("/") if url else "https://github.com/OSGeo/grass-addons"
                 )
-                urlrequest.urlopen(source_url=f"{url}/tree/{version_branch}/src")
+                urlrequest.urlopen(f"{url}/tree/{version_branch}/src")
                 svn_reference = "branches/{}".format(version_branch)
             except URLError:
                 svn_reference = "trunk"
