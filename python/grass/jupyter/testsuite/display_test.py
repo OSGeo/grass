@@ -22,6 +22,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
 import os
+import shutil
 
 # The module performs as expected if:
 #    1) it can create an instance of GrassRenderer with different heights
@@ -57,8 +58,21 @@ class TestDisplay(TestCase):
         Remove the PNG file created after testing with "filename =" option.
         This is executed after each test run.
         """
-        silent_rmtree("/map.png")
-        silent_rmtree("/test_filename.png")
+        # silent_rmtree("/map.grass_vector_legend")
+        # silent_rmtree("/test_filename.grass_vector_legend")
+        # silent_rmtree("/map.png")
+        # silent_rmtree("/test_filename.png")
+        # shutil.rmtree(os.path.join(os.getcwd(),"map.png"))
+        
+        files = ["map.grass_vector_legend", 
+                "test_filename.grass_vector_legend",
+                "map.png",
+                "test_filename.png"]
+        for f in files:
+            try:
+                os.remove(os.path.join(os.getcwd(), f))
+            except OSError:
+                pass
 
     def test_GrassRenderer_defaults(self):
         """Test that GrassRenderer can create a map with default settings."""
