@@ -168,6 +168,7 @@ from distutils.dir_util import copy_tree
 
 from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError
+from six.moves.urllib.parse import urlparse
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
@@ -270,25 +271,29 @@ def get_github_branches(
 
 def get_default_branch(full_url):
     """Get default branch for repo (currently only implemented for github API and gitlab API)"""
-    if "/github.com/" in full_url:
-        organization, repository = re.split(r"/github.com/", full_url)[1].split("/")[
-            0:2
+    # Parse URL
+    url_parts = urlparse(full_url)
+    # Get organization and repository component
+    try:
+        organization, repository = url_parts.path.split("/")[
+            1:3
         ]
+    except URLError:
+        gscript.fatal(_("Cannot retrieve organization and repository from URL: <{}>.".format(full_url)))
+
+    # Construct API call and retrieve default branch
+    if url_parts.netloc == "github.com":
         req = urlrequest.urlopen(
             f"https://api.github.com/repos/{organization}/{repository}"
         )
         content = json.loads(req.read())
         default_branch = content["default_branch"]
-    elif "/gitlab.com/" in full_url:
-        organization, repository = re.split(r"/gitlab.com/", full_url)[1].split("/")[
-            0:2
-        ]
+    elif url_parts.netloc == "gitlab.com":
         req = urlrequest.urlopen(
             f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}"
         )
         content = json.loads(req.read())
         default_branch = content["default_branch"]
-
     else:
         default_branch = "main"
     return default_branch
