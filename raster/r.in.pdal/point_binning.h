@@ -19,6 +19,7 @@
 #include <grass/raster.h>
 
 /* Point binning methods: */
+<<<<<<< HEAD
 #define METHOD_NONE       0
 #define METHOD_N          1
 #define METHOD_MIN        2
@@ -29,6 +30,18 @@
 #define METHOD_STDDEV     7
 #define METHOD_VARIANCE   8
 #define METHOD_COEFF_VAR  9
+=======
+#define METHOD_NONE        0
+#define METHOD_N           1
+#define METHOD_MIN         2
+#define METHOD_MAX         3
+#define METHOD_RANGE       4
+#define METHOD_SUM         5
+#define METHOD_MEAN        6
+#define METHOD_STDDEV      7
+#define METHOD_VARIANCE    8
+#define METHOD_COEFF_VAR   9
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 #define METHOD_MEDIAN     10
 #define METHOD_MODE       11
 #define METHOD_PERCENTILE 12
@@ -40,31 +53,57 @@
 #define METHOD_EV2        18
 #define METHOD_EV3        19
 
+<<<<<<< HEAD
 struct z_node {
+=======
+
+struct z_node
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     int next;
     double z;
 };
 
+<<<<<<< HEAD
 struct cnt_node {
+=======
+struct cnt_node
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     int next;
     CELL value;
     int count;
 };
 
+<<<<<<< HEAD
 struct com_node {
+=======
+struct com_node
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     int n;
     double *meanx;
     double *meany;
     double *comoment;
 };
 
+<<<<<<< HEAD
 struct BinIndex {
+=======
+struct BinIndex
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     int num_nodes;
     int max_nodes;
     void *nodes;
 };
 
+<<<<<<< HEAD
 struct PointBinning {
+=======
+struct PointBinning
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     int method;
 
     int bin_n;
@@ -99,9 +138,19 @@ void point_binning_set(struct PointBinning *, char *, char *, char *);
 void point_binning_allocate(struct PointBinning *, int, int, RASTER_MAP_TYPE);
 void point_binning_free(struct PointBinning *, struct BinIndex *);
 
+<<<<<<< HEAD
 void write_values(struct PointBinning *, struct BinIndex *, void *, int, int,
                   RASTER_MAP_TYPE);
 void update_value(struct PointBinning *, struct BinIndex *, int, int, int,
                   RASTER_MAP_TYPE, double, double, double);
+=======
+
+void write_values(struct PointBinning *,
+                  struct BinIndex *, void *, int, int, RASTER_MAP_TYPE);
+void update_value(struct PointBinning *,
+                  struct BinIndex *, int, int,
+                  int, RASTER_MAP_TYPE, double, double, double);
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 #endif /* __POINT_BINNING_H__ */

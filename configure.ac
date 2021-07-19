@@ -1074,11 +1074,23 @@ else
   ac_save_cflags="$CFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
+<<<<<<< HEAD:configure.ac
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],
   [PDAL_LIBS="$PDAL_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
+=======
+  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};],[pdal::PointTable table;],,[
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
+  AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
+  ])
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697)):configure.in
   ])
 
   AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL exists.])

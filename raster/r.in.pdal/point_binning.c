@@ -24,6 +24,7 @@
 #include "bin_update.h"
 #include "bin_write.h"
 
+<<<<<<< HEAD
 void *get_cell_ptr(void *array, int cols, int row, int col,
                    RASTER_MAP_TYPE map_type)
 {
@@ -31,6 +32,18 @@ void *get_cell_ptr(void *array, int cols, int row, int col,
                                       Rast_cell_size(map_type));
 }
 
+=======
+
+void *get_cell_ptr(void *array, int cols, int row, int col,
+                   RASTER_MAP_TYPE map_type)
+{
+    return G_incr_void_ptr(array,
+                           ((row * (size_t)cols) +
+                            col) * Rast_cell_size(map_type));
+}
+
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
                 int value)
 {
@@ -57,10 +70,14 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
     case -1:
         /* fill with NULL */
         /* alloc for col+1, do we come up (nrows) short? no. */
+<<<<<<< HEAD
         for (row = 0; row < nrows; row++) {
             Rast_set_null_value(ptr, ncols, map_type);
             ptr = G_incr_void_ptr(ptr, ncols * Rast_cell_size(map_type));
         }
+=======
+        Rast_set_null_value(array, nrows * ncols, map_type);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         break;
 
     default:
@@ -70,6 +87,10 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
     return 0;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 void point_binning_set(struct PointBinning *point_binning, char *method,
                        char *percentile, char *trim)
 {
@@ -164,8 +185,12 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
         if (percentile != NULL)
             point_binning->pth = atoi(percentile);
         else
+<<<<<<< HEAD
             G_fatal_error(_("Unable to calculate percentile without the pth "
                             "option specified!"));
+=======
+            G_fatal_error(_("Unable to calculate percentile without the pth option specified!"));
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         point_binning->method = METHOD_PERCENTILE;
         point_binning->bin_z_index = TRUE;
     }
@@ -177,8 +202,12 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
         if (trim != NULL)
             point_binning->trim = atof(trim) / 100.0;
         else
+<<<<<<< HEAD
             G_fatal_error(_("Unable to calculate trimmed mean without the trim "
                             "option specified!"));
+=======
+            G_fatal_error(_("Unable to calculate trimmed mean without the trim option specified!"));
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         point_binning->method = METHOD_TRIMMEAN;
         point_binning->bin_z_index = TRUE;
     }
@@ -204,6 +233,10 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
     }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 void point_binning_allocate(struct PointBinning *point_binning, int rows,
                             int cols, RASTER_MAP_TYPE rtype)
 {
@@ -217,15 +250,23 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
         G_debug(2, "allocating min_array");
         point_binning->min_array =
             G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
+<<<<<<< HEAD
         blank_array(point_binning->min_array, rows, cols, rtype,
                     -1); /* fill with NULLs */
+=======
+        blank_array(point_binning->min_array, rows, cols, rtype, -1);   /* fill with NULLs */
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     }
     if (point_binning->bin_max) {
         G_debug(2, "allocating max_array");
         point_binning->max_array =
             G_calloc((size_t)rows * (cols + 1), Rast_cell_size(rtype));
+<<<<<<< HEAD
         blank_array(point_binning->max_array, rows, cols, rtype,
                     -1); /* fill with NULLs */
+=======
+        blank_array(point_binning->max_array, rows, cols, rtype, -1);   /* fill with NULLs */
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     }
     if (point_binning->bin_sum) {
         G_debug(2, "allocating sum_array");
@@ -248,6 +289,7 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
             G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
         blank_array(point_binning->n_array, rows, cols, CELL_TYPE, 0);
     }
+<<<<<<< HEAD
     if (point_binning->bin_z_index || point_binning->bin_cnt_index ||
         point_binning->bin_eigenvalues) {
         G_debug(2, "allocating index_array");
@@ -258,6 +300,18 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
     }
 }
 
+=======
+    if (point_binning->bin_z_index ||
+        point_binning->bin_cnt_index || point_binning->bin_eigenvalues) {
+        G_debug(2, "allocating index_array");
+        point_binning->index_array =
+            G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+        blank_array(point_binning->index_array, rows, cols, CELL_TYPE, -1);     /* fill with NULLs */
+    }
+}
+
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 void point_binning_free(struct PointBinning *point_binning,
                         struct BinIndex *bin_index_nodes)
 {
@@ -276,8 +330,13 @@ void point_binning_free(struct PointBinning *point_binning,
         G_free(point_binning->mean_array);
         G_free(point_binning->n_array);
     }
+<<<<<<< HEAD
     if (point_binning->bin_z_index || point_binning->bin_cnt_index ||
         point_binning->bin_eigenvalues) {
+=======
+    if (point_binning->bin_z_index ||
+        point_binning->bin_cnt_index || point_binning->bin_eigenvalues) {
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         G_free(point_binning->index_array);
         G_free(bin_index_nodes->nodes);
         bin_index_nodes->num_nodes = 0;
@@ -286,6 +345,10 @@ void point_binning_free(struct PointBinning *point_binning,
     }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 void write_values(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, void *raster_row, int row,
                   int cols, RASTER_MAP_TYPE rtype)
@@ -294,23 +357,36 @@ void write_values(struct PointBinning *point_binning,
     int col;
 
     switch (point_binning->method) {
+<<<<<<< HEAD
     case METHOD_N: /* n is a straight copy */
         Rast_raster_cpy(raster_row,
                         ((char *)point_binning->n_array) +
                             ((size_t)row * cols * Rast_cell_size(CELL_TYPE)),
+=======
+    case METHOD_N:             /* n is a straight copy */
+        Rast_raster_cpy(raster_row,
+                        ((char *)point_binning->n_array) +
+                        ((size_t)row * cols * Rast_cell_size(CELL_TYPE)),
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
                         cols, CELL_TYPE);
         break;
 
     case METHOD_MIN:
         Rast_raster_cpy(raster_row,
                         ((char *)point_binning->min_array) +
+<<<<<<< HEAD
                             ((size_t)row * cols * Rast_cell_size(rtype)),
                         cols, rtype);
+=======
+                        ((size_t)row * cols * Rast_cell_size(rtype)), cols,
+                        rtype);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         break;
 
     case METHOD_MAX:
         Rast_raster_cpy(raster_row,
                         ((char *)point_binning->max_array) +
+<<<<<<< HEAD
                             ((size_t)row * cols * Rast_cell_size(rtype)),
                         cols, rtype);
         break;
@@ -328,21 +404,56 @@ void write_values(struct PointBinning *point_binning,
                 ((char *)point_binning->min_array) + offset, rtype);
             double max = Rast_get_d_value(
                 ((char *)point_binning->max_array) + offset, rtype);
+=======
+                        ((size_t)row * cols * Rast_cell_size(rtype)), cols,
+                        rtype);
+        break;
+
+    case METHOD_SUM:
+        write_sum(raster_row, point_binning->sum_array,
+                  point_binning->c_array, row, cols, rtype);
+        break;
+
+    case METHOD_RANGE:         /* (max-min) */
+        ptr = raster_row;
+        for (col = 0; col < cols; col++) {
+            size_t offset =
+                ((size_t)row * cols + col) * Rast_cell_size(rtype);
+            double min =
+                Rast_get_d_value(((char *)point_binning->min_array) + offset,
+                                 rtype);
+            double max =
+                Rast_get_d_value(((char *)point_binning->max_array) + offset,
+                                 rtype);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
             Rast_set_d_value(ptr, max - min, rtype);
             ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
         }
         break;
 
+<<<<<<< HEAD
     case METHOD_MEAN: /* (sum / n) */
+=======
+    case METHOD_MEAN:          /* (sum / n) */
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         ptr = raster_row;
         for (col = 0; col < cols; col++) {
             size_t n_offset =
                 ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
+<<<<<<< HEAD
             int n = Rast_get_c_value(
                 ((char *)point_binning->n_array) + n_offset, CELL_TYPE);
             double sum = get_sum(point_binning->sum_array,
                                  point_binning->c_array, row, cols, col, rtype);
+=======
+            int n =
+                Rast_get_c_value(((char *)point_binning->n_array) + n_offset,
+                                 CELL_TYPE);
+            double sum =
+                get_sum(point_binning->sum_array, point_binning->c_array,
+                        row, cols, col, rtype);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
             if (n == 0)
                 Rast_set_null_value(ptr, 1, rtype);
@@ -353,6 +464,7 @@ void write_values(struct PointBinning *point_binning,
         }
         break;
 
+<<<<<<< HEAD
     case METHOD_STDDEV:    /*  sqrt(variance)        */
     case METHOD_VARIANCE:  /*  (sumsq - sum*sum/n)/n */
     case METHOD_COEFF_VAR: /*  100 * stdev / mean    */
@@ -362,21 +474,41 @@ void write_values(struct PointBinning *point_binning,
         break;
 
     case METHOD_MEDIAN: /* median, if only one point in cell we will use that */
+=======
+    case METHOD_STDDEV:        /*  sqrt(variance)        */
+    case METHOD_VARIANCE:      /*  (sumsq - sum*sum/n)/n */
+    case METHOD_COEFF_VAR:     /*  100 * stdev / mean    */
+        write_variance(raster_row, point_binning->n_array,
+                       point_binning->mean_array, point_binning->m2_array,
+                       row, cols, rtype, point_binning->method);
+        break;
+
+    case METHOD_MEDIAN:        /* median, if only one point in cell we will use that */
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         write_median(bin_index_nodes, raster_row, point_binning->index_array,
                      row, cols, rtype);
         break;
 
     case METHOD_MODE:
+<<<<<<< HEAD
         write_mode(bin_index_nodes, raster_row, point_binning->index_array, row,
                    cols);
         break;
 
     case METHOD_PERCENTILE: /* rank = (pth*(n+1))/100; interpolate linearly */
+=======
+        write_mode(bin_index_nodes, raster_row, point_binning->index_array,
+                   row, cols);
+        break;
+
+    case METHOD_PERCENTILE:    /* rank = (pth*(n+1))/100; interpolate linearly */
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         write_percentile(bin_index_nodes, raster_row,
                          point_binning->index_array, row, cols, rtype,
                          point_binning->pth);
         break;
 
+<<<<<<< HEAD
     case METHOD_SKEWNESS: /* skewness = sum(xi-mean)^3/(N-1)*s^3 */
         write_skewness(bin_index_nodes, raster_row, point_binning->index_array,
                        row, cols, rtype);
@@ -395,13 +527,39 @@ void write_values(struct PointBinning *point_binning,
     case METHOD_SIDNMIN:
         write_sidn(bin_index_nodes, raster_row, point_binning->index_array, row,
                    cols, 1);
+=======
+    case METHOD_SKEWNESS:      /* skewness = sum(xi-mean)^3/(N-1)*s^3 */
+        write_skewness(bin_index_nodes, raster_row,
+                       point_binning->index_array, row, cols, rtype);
+        break;
+
+    case METHOD_TRIMMEAN:
+        write_trimmean(bin_index_nodes, raster_row,
+                       point_binning->index_array, row, cols, rtype,
+                       point_binning->trim);
+        break;
+
+    case METHOD_SIDNMAX:
+        write_sidn(bin_index_nodes, raster_row, point_binning->index_array,
+                   row, cols, 0);
+        break;
+
+    case METHOD_SIDNMIN:
+        write_sidn(bin_index_nodes, raster_row, point_binning->index_array,
+                   row, cols, 1);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         break;
 
     case METHOD_EV1:
     case METHOD_EV2:
     case METHOD_EV3:
+<<<<<<< HEAD
         write_ev(bin_index_nodes, raster_row, point_binning->index_array, row,
                  cols, rtype, point_binning->method);
+=======
+        write_ev(bin_index_nodes, raster_row, point_binning->index_array,
+                 row, cols, rtype, point_binning->method);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         break;
 
     default:
@@ -409,6 +567,10 @@ void write_values(struct PointBinning *point_binning,
     }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 void update_value(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, int cols, int arr_row,
                   int arr_col, RASTER_MAP_TYPE rtype, double x, double y,
@@ -417,9 +579,17 @@ void update_value(struct PointBinning *point_binning,
     if (point_binning->bin_n)
         update_n(point_binning->n_array, cols, arr_row, arr_col);
     if (point_binning->bin_min)
+<<<<<<< HEAD
         update_min(point_binning->min_array, cols, arr_row, arr_col, rtype, z);
     if (point_binning->bin_max)
         update_max(point_binning->max_array, cols, arr_row, arr_col, rtype, z);
+=======
+        update_min(point_binning->min_array, cols, arr_row, arr_col, rtype,
+                   z);
+    if (point_binning->bin_max)
+        update_max(point_binning->max_array, cols, arr_row, arr_col, rtype,
+                   z);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     if (point_binning->bin_sum)
         update_sum(point_binning->sum_array, point_binning->c_array, cols,
                    arr_row, arr_col, rtype, z);
@@ -430,9 +600,17 @@ void update_value(struct PointBinning *point_binning,
         update_bin_z_index(bin_index_nodes, point_binning->index_array, cols,
                            arr_row, arr_col, z);
     if (point_binning->bin_cnt_index)
+<<<<<<< HEAD
         update_bin_cnt_index(bin_index_nodes, point_binning->index_array, cols,
                              arr_row, arr_col, z);
     if (point_binning->bin_eigenvalues)
         update_bin_com_index(bin_index_nodes, point_binning->index_array, cols,
                              arr_row, arr_col, x, y, z);
+=======
+        update_bin_cnt_index(bin_index_nodes, point_binning->index_array,
+                             cols, arr_row, arr_col, z);
+    if (point_binning->bin_eigenvalues)
+        update_bin_com_index(bin_index_nodes, point_binning->index_array,
+                             cols, arr_row, arr_col, x, y, z);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 }

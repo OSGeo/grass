@@ -15,11 +15,21 @@
 #ifndef __FILTERS_H__
 #define __FILTERS_H__
 
+<<<<<<< HEAD
 struct ReturnFilter {
     int filter;
 };
 
 struct ClassFilter {
+=======
+struct ReturnFilter
+{
+    int filter;
+};
+
+struct ClassFilter
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
     /** NULL terminated list of class numbers represented as string */
     char **str_classes;
@@ -29,8 +39,13 @@ struct Option;
 
 int spatial_filter_from_option(struct Option *option, double *xmin,
                                double *ymin, double *xmax, double *ymax);
+<<<<<<< HEAD
 int spatial_filter_from_current_region(double *xmin, double *ymin, double *xmax,
                                        double *ymax);
+=======
+int spatial_filter_from_current_region(double *xmin, double *ymin,
+                                       double *xmax, double *ymax);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 int range_filter_from_option(struct Option *option, double *min, double *max);
 

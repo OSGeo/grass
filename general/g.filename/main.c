@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
                           element, flag_create->key, mapset, G_mapset());
         }
         G_make_mapset_object_group(element);
+<<<<<<< HEAD
     }
 
 <<<<<<< HEAD
@@ -102,6 +103,8 @@ int main(int argc, char *argv[])
                           element, flag_create->key, mapset, G_mapset());
         }
         G_make_mapset_element(element);
+=======
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     }
 
 >>>>>>> 392c6e8e0b (pygrass: Add update parameters method to Module (#1712))
