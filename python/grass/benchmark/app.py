@@ -25,17 +25,23 @@ from grass.benchmark import (
 )
 
 
-def cli_usage_error(msg):
-    """Report a usage error and exit."""
-    sys.exit(f"ERROR: {msg}")
+class CliUsageError(ValueError):
+    """Raised when error is in the command line arguments.
+
+    Used when the error is discovered only after argparse parsed the arguments.
+    """
+
+    # ArgumentError from argparse may work too, but it is not documented and
+    # takes a reference argument which we don't have access to after the parse step.
+    pass
 
 
 def join_results_cli(args):
     """Translate CLI parser result to API calls."""
     if args.prefixes and len(args.results) != len(args.prefixes):
-        cli_usage_error(
+        raise CliUsageError(
             f"Number of prefixes ({len(args.prefixes)}) needs to be the same"
-            f" as number of input result files ({len(args.results)})"
+            f" as the number of input result files ({len(args.results)})"
         )
     results = join_results_from_files(
         source_filenames=args.results,
@@ -164,7 +170,11 @@ def main(args=None):
     """Define and parse command line parameters then run the appropriate handler."""
     parser = define_arguments()
     args = parser.parse_args(args)
-    args.handler(args)
+    try:
+        args.handler(args)
+    except CliUsageError as error:
+        # Report a usage error and exit.
+        sys.exit(f"ERROR: {error}")
 
 
 if __name__ == "__main__":

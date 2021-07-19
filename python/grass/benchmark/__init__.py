@@ -19,8 +19,8 @@ file of the subpackage.
 The functions in the Python API raise exceptions, although calls of other functions from
 the grass package may call grass.script.fatal and exit
 (see :func:`grass.script.core.set_raise_on_error` for changing the behavior).
-The CLI interface of this subpackage calls *sys.exit* directly if the error originates
-in the CLI code.
+This applies to the CLI interface of this subpackage too except that raised usage exceptions
+# originating in the CLI code result in *sys.exit* with an error message, not traceback.
 Messages and other user-visible texts in this package are not translatable.
 """
 
