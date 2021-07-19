@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 /***************************************************************************
  *
  * MODULE:    r.in.pdal
@@ -18,12 +22,22 @@
 #ifndef GRASSRASTERWRITER_H
 #define GRASSRASTERWRITER_H
 
+<<<<<<< HEAD
 extern "C" {
+=======
+extern "C"
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 #include "lidar.h"
 #include "point_binning.h"
 }
 
+<<<<<<< HEAD
 extern "C" {
+=======
+extern "C"
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 #include <grass/gis.h>
 #include <grass/raster.h>
 }
@@ -31,6 +45,7 @@ extern "C" {
 #include <pdal/Streamable.hpp>
 #include <pdal/Writer.hpp>
 
+<<<<<<< HEAD
 /* Binning code wrapped as a PDAL Writer class */
 #ifdef HAVE_PDAL_NOFILENAMEWRITER
 class GrassRasterWriter : public pdal::NoFilenameWriter,
@@ -47,6 +62,26 @@ public:
                      struct PointBinning *point_binning,
                      struct BinIndex *bin_index_nodes, RASTER_MAP_TYPE rtype,
                      int cols)
+=======
+
+/* Binning code wrapped as a PDAL Writer class */
+class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
+{
+  public:
+    GrassRasterWriter():n_processed(0)
+    {
+    }
+
+    std::string getName() const
+    {
+        return "writers.grassbinning";
+    }
+
+    void set_binning(struct Cell_head *region,
+                     struct PointBinning *point_binning,
+                     struct BinIndex *bin_index_nodes,
+                     RASTER_MAP_TYPE rtype, int cols)
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     {
         region_ = region;
         point_binning_ = point_binning;
@@ -60,10 +95,20 @@ public:
         dim_to_import_ = dim_to_import;
     }
 
+<<<<<<< HEAD
     void set_output_scale(double scale) { scale_ = scale; }
 
     void set_base_raster(SEGMENT *base_segment, struct Cell_head *region,
                          RASTER_MAP_TYPE rtype)
+=======
+    void set_output_scale(double scale)
+    {
+        scale_ = scale;
+    }
+
+    void set_base_raster(SEGMENT * base_segment,
+                         struct Cell_head *region, RASTER_MAP_TYPE rtype)
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     {
         base_segment_ = base_segment;
         input_region_ = region;
@@ -79,6 +124,7 @@ public:
         }
     }
 
+<<<<<<< HEAD
     virtual bool processOne(pdal::PointRef &point)
     {
         using namespace pdal::Dimension;
@@ -86,6 +132,15 @@ public:
         double x = point.getFieldAs<double>(Id::X);
         double y = point.getFieldAs<double>(Id::Y);
         double z = point.getFieldAs<double>(dim_to_import_);
+=======
+    virtual bool processOne(pdal::PointRef & point)
+    {
+        using namespace pdal::Dimension;
+
+        double x = point.getFieldAs < double >(Id::X);
+        double y = point.getFieldAs < double >(Id::Y);
+        double z = point.getFieldAs < double >(dim_to_import_);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
         z *= scale_;
         if (base_segment_) {
@@ -105,6 +160,7 @@ public:
         int arr_col = (int)((x - region_->west) / region_->ew_res);
 
         if (arr_row >= region_->rows || arr_col >= region_->cols) {
+<<<<<<< HEAD
             G_message(_("A point on the edge of computational region detected. "
                         "Ignoring."));
             return false;
@@ -112,13 +168,25 @@ public:
 
         update_value(point_binning_, bin_index_nodes_, cols_, arr_row, arr_col,
                      rtype_, x, y, z);
+=======
+            G_message(_("A point on the edge of computational region detected. Ignoring."));
+            return false;
+        }
+
+        update_value(point_binning_, bin_index_nodes_, cols_,
+                     arr_row, arr_col, rtype_, x, y, z);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
         n_processed++;
         return true;
     }
 
     gpoint_count n_processed;
 
+<<<<<<< HEAD
 private:
+=======
+  private:
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     struct Cell_head *region_;
     struct PointBinning *point_binning_;
     struct BinIndex *bin_index_nodes_;

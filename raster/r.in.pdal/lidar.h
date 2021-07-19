@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 /****************************************************************************
  *
  * MODULE:       r.in.pdal
@@ -12,6 +16,7 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
 #ifndef GRASS_LIDAR_H
 #define GRASS_LIDAR_H
 
@@ -19,6 +24,16 @@
 #define LAS_FIRST 1
 #define LAS_MID   2
 #define LAS_LAST  3
+=======
+
+#ifndef GRASS_LIDAR_H
+#define GRASS_LIDAR_H
+
+#define LAS_ALL 0
+#define LAS_FIRST 1
+#define LAS_MID 2
+#define LAS_LAST 3
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 /* Type and format specifier for count of points */
 #ifdef HAVE_LONG_LONG_INT
@@ -31,7 +46,12 @@ typedef unsigned long gpoint_count;
 #define GPOINT_COUNT_FORMAT "%lu"
 #endif
 
+<<<<<<< HEAD
 struct GLidarLayers {
+=======
+struct GLidarLayers
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     int id_layer;
     int return_layer;
     int class_layer;
@@ -76,7 +96,12 @@ void GLidarLayers_set_no_layers(struct GLidarLayers *layers);
 
 /* keep the comments above in sync with the .c file */
 
+<<<<<<< HEAD
 struct class_table {
+=======
+struct class_table
+{
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     int code;
     char *name;
 };

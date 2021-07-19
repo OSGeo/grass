@@ -287,11 +287,19 @@ int Rast__quant_export(const char *name, const char *mapset,
             return -1;
     }
     else {
+<<<<<<< HEAD
         sprintf(element, "quant2/%s", mapset);
         G_remove(element, name);
         G_make_mapset_object_group(element);
         if (!(fd = G_fopen_new(element, name)))
             return -1;
+=======
+	sprintf(element, "quant2/%s", mapset);
+	G_remove(element, name);
+	G_make_mapset_object_group(element);
+	if (!(fd = G_fopen_new(element, name)))
+	    return -1;
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     }
 
     quant_write(fd, quant);

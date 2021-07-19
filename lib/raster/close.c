@@ -314,15 +314,24 @@ static int close_new_gdal(int fd, int ok)
         G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_mapset());
         remove(path);
 
+<<<<<<< HEAD
         /* write 0-length cell file */
         G_make_mapset_object_group("cell");
         G_file_name(path, "cell", fcb->name, fcb->mapset);
         cell_fd = creat(path, 0666);
         close(cell_fd);
+=======
+	/* write 0-length cell file */
+	G_make_mapset_object_group("cell");
+	G_file_name(path, "cell", fcb->name, fcb->mapset);
+	cell_fd = creat(path, 0666);
+	close(cell_fd);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
         if (fcb->map_type != CELL_TYPE) { /* floating point map */
             write_fp_format(fd);
 
+<<<<<<< HEAD
             /* write 0-length fcell file */
             G_make_mapset_object_group("fcell");
             G_file_name(path, "fcell", fcb->name, fcb->mapset);
@@ -338,6 +347,23 @@ static int close_new_gdal(int fd, int ok)
                              fcb->mapset);
             remove(path);
         }
+=======
+	    /* write 0-length fcell file */
+	    G_make_mapset_object_group("fcell");
+	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
+	    cell_fd = creat(path, 0666);
+	    close(cell_fd);
+	}
+	else {
+	    /* remove fcell/name file */
+	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
+	    remove(path);
+	    /* remove cell_misc/name/f_format */
+	    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
+			      fcb->mapset);
+	    remove(path);
+	}
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
         if (Rast_close_gdal_write_link(fcb->gdal) < 0)
             stat = -1;
@@ -445,6 +471,7 @@ static int close_new(int fd, int ok)
 
             write_fp_format(fd);
 
+<<<<<<< HEAD
             /* now write 0-length cell file */
             G_make_mapset_object_group("cell");
             cell_fd =
@@ -463,6 +490,27 @@ static int close_new(int fd, int ok)
             CELL_DIR = "cell";
         }
     } /* ok */
+=======
+	    /* now write 0-length cell file */
+	    G_make_mapset_object_group("cell");
+	    cell_fd =
+		creat(G_file_name(path, "cell", fcb->name, fcb->mapset),
+		      0666);
+	    close(cell_fd);
+	    CELL_DIR = "fcell";
+	}
+	else {
+	    /* remove fcell/name file */
+	    G_file_name(path, "fcell", fcb->name, fcb->mapset);
+	    remove(path);
+	    /* remove cell_misc/name/f_format */
+	    G_file_name_misc(path, "cell_misc", FORMAT_FILE, fcb->name,
+			      fcb->mapset);
+	    remove(path);
+	    CELL_DIR = "cell";
+	}
+    }				/* ok */
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
     /* NOW CLOSE THE FILE DESCRIPTOR */
 
     sync_and_close(fcb->data_fd,

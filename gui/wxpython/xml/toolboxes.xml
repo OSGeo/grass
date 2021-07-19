@@ -305,10 +305,13 @@
       <module-item name="r.in.pdal">
         <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
+<<<<<<< HEAD
       <separator/>
       <module-item name="r.in.wms">
         <label>WMS/WMTS import</label>
       </module-item>
+=======
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
       <separator/>
       <module-item name="r.unpack">
         <label>Unpack raster map</label>

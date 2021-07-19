@@ -236,7 +236,11 @@ by comma.
 
 <p>
 The user can use a combination of <em>r.in.pdal</em> <b>output</b> maps
+<<<<<<< HEAD
 to create custom raster-based filters, for example, use
+=======
+to create custom raster-based filters, for examplee, use
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create
 a <tt>mean-(2*stddev)</tt> map. (In this example the user may want to
 include a lower bound filter in <em>r.mapcalc</em> to remove highly
@@ -250,9 +254,15 @@ the analysis itself but it can also speed up the processing.
 <p>
 LiDAR points can contain a lot of attributes besides their coordinates.
 By default <em>r.in.pdal</em> will use point Z coordinate as the output
+<<<<<<< HEAD
 raster value source. The <em>dimension</em> option allows using different
 point attributes as an output instead of Z value. In case if other than Z
 value is chosen, output map type will be set to CELL. Explanation
+=======
+raster value source. The <em>dimension</em> option allows to use different
+point attributes as an output instead of Z value. In case if other than Z
+value is choosen, output map type will be set to CELL. Explanation
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 of various attributes can be found in LAS Specification chapter "Point
 Data Records". Be ware - not all attributes might be present and also
 their value ranges and meaning might vary between LAS file producers.
@@ -342,13 +352,21 @@ to importing the dataset.
 Point Z axis values can be altered by scaling parameter set by <em>zscale</em>.
 Each point X axis value is multiplied by provided value before any
 filtering or further transformation takes place. In the same way act
+<<<<<<< HEAD
 <em>iscale</em> and <em>dscale</em> parameters - values are multiplied
+=======
+<em>iscale</em> and <em>dscale</em> parametres – values are multiplied
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 before range filters <em>irange</em> or <em>drnage</em> are applied (if present).
 <p>
 Output value scaling can be performed independently of filtering by providing
 <em>dscale</em> parameter. This scaling parameter is applied only to
 output value independently of its dimension. Thus if <em>zrange</em> and
+<<<<<<< HEAD
 <em>dscale</em> are set for Z output dimension, filtering by <em>zrange</em>
+=======
+<em>dscale</em> are set for Z output dimension, filtering by <em>zrange</em> 
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 will be done with unscaled values but output will be scaled by <em>dscale</em>.
 <em>dscale</em> takes precedence over <em>zscale</em> and <em>iscale</em>
 if more than one parameter is provided.
@@ -360,8 +378,13 @@ if more than one parameter is provided.
 The typical file extensions for the LAS format are .las and .laz
 (compressed). The compressed LAS (.laz) format can be imported only if
 libLAS has been compiled with LASzip support. It is also recommended to
+<<<<<<< HEAD
 compile libLAS with GDAL which is used to test if the LAS coordinate reference
 system matches that of the GRASS project (previously called location).
+=======
+compile libLAS with GDAL which is used to test if the LAS projection
+matches that of the GRASS location.
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 <!--
 <h3>LAS file import preparations</h3>
@@ -438,7 +461,11 @@ result in an empty map.
 <h2>EXAMPLES</h2>
 
 Simple example of binning of point from a LAS file into a newly created
+<<<<<<< HEAD
 raster map in an existing project/mapset (using metric units):
+=======
+raster map in an existing location/mapset (using metric units):
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 <div class="code"><pre>
 # set the computational region automatically, resol. for binning is 5m
@@ -501,10 +528,17 @@ r.in.pdal input=points.las output=lidar_dem_percentile_95 \
 Further hints: how to calculate number of LiDAR points/square meter:
 <div class="code"><pre>
 g.region -e
+<<<<<<< HEAD
   # Metric project:
   # points_per_sq_m = n_points / (ns_extent * ew_extent)
 
   # Lat/Lon project:
+=======
+  # Metric location:
+  # points_per_sq_m = n_points / (ns_extent * ew_extent)
+
+  # Lat/Lon location:
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
   # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
 
@@ -520,11 +554,19 @@ available at
 # print LAS file info
 r.in.pdal -p input="Serpent Mound Model LAS Data.las"
 
+<<<<<<< HEAD
 # using v.in.lidar to create a new project
 # create a project with CRS information of the LAS data
 v.in.lidar -i input="Serpent Mound Model LAS Data.las" project=Serpent_Mound
 
 # quit and restart GRASS in the newly created project "Serpent_Mound"
+=======
+# using v.in.lidar to create a new location
+# create location with projection information of the LAS data
+v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+
+# quit and restart GRASS in the newly created location "Serpent_Mound"
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 
 # scan the extents of the LAS data
 r.in.pdal -g input="Serpent Mound Model LAS Data.las"
@@ -559,7 +601,11 @@ to match the precision of the points rather than deriving it from the base raste
 
 <h3>Multiple file input</h3>
 
+<<<<<<< HEAD
 The file option requires a file that contains a list of file names with the full
+=======
+The file option requres a file that contains a list of file names with the full
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 path. For example, a list of files in the directory /home/user/data:
 <div class="code"><pre>
 points1.laz
@@ -606,6 +652,10 @@ gscript.run_command('r.in.pdal', file=file_list_name,
                     base_raster='elevation' method='mean')
 </pre></div>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 <h2>KNOWN ISSUES</h2>
 
 <ul>
@@ -618,6 +668,10 @@ gscript.run_command('r.in.pdal', file=file_list_name,
 If you encounter any problems (or solutions!) please contact the GRASS
 Development Team.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 <h2>SEE ALSO</h2>
 
 <em>
@@ -641,6 +695,10 @@ Development Team.
 <a href="http://opentopography.org/">OpenTopography</a>
 (LiDAR point cloud repository)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 <h2>REFERENCES</h2>
 
 <ul>
@@ -664,4 +722,13 @@ Vaclav Petras,
 Maris Nartiss, <a href="https://www.geo.lu.lv/">LU GZZF</a>
 (refactoring, additional filters, custom dimension support)
 <br>
+<<<<<<< HEAD
 based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann
+=======
+based on <em>r.in.xyz</em> by Hamish Bowman and Volker Wichmann<br>
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
