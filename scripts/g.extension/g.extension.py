@@ -242,7 +242,7 @@ def get_version_branch(major_version):
         urlrequest.urlopen(
             source_url=f"https://github.com/OSGeo/grass-addons/tree/{version_branch}/src"
         )
-    except Exception:
+    except URLError:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
 
@@ -2375,7 +2375,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 )
                 urlrequest.urlopen(source_url=f"{url}/tree/{version_branch}/src")
                 svn_reference = "branches/{}".format(version_branch)
-            except Exception:
+            except URLError:
                 svn_reference = "trunk"
         else:
             svn_reference = "branches/{}".format(branch)
