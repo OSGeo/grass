@@ -12,6 +12,7 @@
 
 """Tests of grass.benchmark CLI"""
 
+<<<<<<< HEAD
 import sys
 from pathlib import Path
 from subprocess import DEVNULL
@@ -22,12 +23,19 @@ from grass.benchmark import (
     benchmark_resolutions,
     save_results_to_file,
 )
+=======
+from pathlib import Path
+from subprocess import DEVNULL
+
+from grass.benchmark import benchmark_resolutions, save_results_to_file
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 from grass.benchmark.app import main as benchmark_main
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.pygrass.modules import Module
 
 
+<<<<<<< HEAD
 def remove_file(path):
     """Remove filename if exists"""
     if sys.version_info < (3, 8):
@@ -74,6 +82,18 @@ class TestBenchmarkCLI(TestCase):
         """Test that plot cells workflow runs"""
         label = "Standard output"
         repeat = 4
+=======
+class TestBenchmarkCLI(TestCase):
+    """Tests that benchmarkin CLI works"""
+
+    def test_plot_workflow(self):
+        """Test that plot workflow runs"""
+        label = "Standard output"
+        repeat = 4
+        json_filename = "plot_test.json"
+        png_filename = "plot_test.png"
+        png_filename_resolutions = "plot_test_resolutions.png"
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
         # The benchmark part has only Python API, not CLI.
         result = benchmark_resolutions(
             module=Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
@@ -81,6 +101,7 @@ class TestBenchmarkCLI(TestCase):
             repeat=repeat,
             resolutions=[1000, 500],
         )
+<<<<<<< HEAD
         save_results_to_file([result], self.json_filename)
         benchmark_main(["plot", "cells", self.json_filename, self.png_filename1])
         self.assertTrue(Path(self.png_filename1).is_file())
@@ -88,6 +109,15 @@ class TestBenchmarkCLI(TestCase):
             ["plot", "cells", "--resolutions", self.json_filename, self.png_filename2]
         )
         self.assertTrue(Path(self.png_filename2).is_file())
+=======
+        save_results_to_file([result], json_filename)
+        benchmark_main(["plot", "cells", json_filename, png_filename])
+        self.assertTrue(Path(png_filename).is_file())
+        benchmark_main(
+            ["plot", "cells", "--resolutions", json_filename, png_filename_resolutions]
+        )
+        self.assertTrue(Path(png_filename_resolutions).is_file())
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 
 
 if __name__ == "__main__":
