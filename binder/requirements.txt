@@ -3,4 +3,8 @@ matplotlib
 numpy
 Pillow
 ply
+<<<<<<< HEAD
 PyVirtualDisplay
+=======
+folium
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
