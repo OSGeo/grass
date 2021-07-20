@@ -1,5 +1,5 @@
 name: Ubuntu
-description: Build and run tests on Ubuntu
+# Build and run tests on Ubuntu
 
 on:
   - push
