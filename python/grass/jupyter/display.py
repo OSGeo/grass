@@ -74,14 +74,14 @@ class GrassRenderer:
         -------------------
         """
 
-        # First check to make sure format is correct
+        # Check to make sure format is correct
         if not name.startswith("d_"):
             raise AttributeError("Module must begin with 'd_'.")
-        # Now reformat string
+        # Reformat string
         grass_module = f"d.{name[2:]}"
 
         def wrapper(**kwargs):
-            # And try to run module
+            # Try to run module
             try:
                 self.run(grass_module, **kwargs)
             except FileNotFoundError as e:
@@ -89,6 +89,7 @@ class GrassRenderer:
                 raise FileNotFoundError(custom_message) from e
 
         return wrapper
+
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
