@@ -1,0 +1,23 @@
+MODULE_TOPDIR = ../..
+
+PGM=r.in.pdal
+
+LIBES = $(RASTERLIB) $(SEGMENTLIB) $(GPROJLIB) $(VECTORLIB) $(DBMILIB) $(GISLIB) $(MATHLIB) $(PDALLIBS) $(GMATHLIB)
+DEPENDENCIES = $(GPROJDEP) $(VECTORDEP) $(DBMIDEP) $(RASTERDEP) $(GISDEP) $(SEGMENTDEP) $(GMATHDEP)
+
+EXTRA_INC = $(VECT_INC) $(PROJINC) $(PDALINC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+$(OBJDIR)/main.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
+
+$(OBJDIR)/grasslidarfilter.o : EXTRA_CFLAGS += $(PDALCPPFLAGS)
+
+LINK = $(CXX)
+
+ifneq ($(strip $(CXX)),)
+ifneq ($(USE_PDAL),)
+default: cmd
+endif
+endif
