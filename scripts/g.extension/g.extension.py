@@ -191,6 +191,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
+GIT_URL = "https://github.com/OSGeo/grass-addons"
 
 
 def replace_shebang_win(python_file):
@@ -240,9 +241,7 @@ def get_version_branch(major_version):
     For the official repo we assume that at least one version branch is present"""
     version_branch = f"grass{major_version}"
     try:
-        urlrequest.urlopen(
-            f"https://github.com/OSGeo/grass-addons/tree/{version_branch}/src"
-        )
+        urlrequest.urlopen(f"{GIT_URL}/tree/{version_branch}/src")
     except URLError:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
@@ -270,7 +269,9 @@ def get_github_branches(
 
 
 def get_default_branch(full_url):
-    """Get default branch for repo (currently only implemented for github API and gitlab API)"""
+    """Get default branch for repository in known hosting services
+    (currently only implemented for github, gitlab and bitbucket API)
+    In all other cases "main" is used as default"""
     # Parse URL
     url_parts = urlparse(full_url)
     # Get organization and repository component
@@ -285,19 +286,23 @@ def get_default_branch(full_url):
             )
         )
     # Construct API call and retrieve default branch
-    if url_parts.netloc == "github.com":
-        req = urlrequest.urlopen(
-            f"https://api.github.com/repos/{organization}/{repository}"
-        )
+    api_calls = {
+        "github.com": f"https://api.github.com/repos/{organization}/{repository}",
+        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",
+        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",
+    }
+    # Try to get default branch via API. The API call is known to fail a) if the full_url
+    # does not belong to an implemented hosting service or b) if the rate limit of the
+    # API is exceeded
+    try:
+        req = urlrequest.urlopen(api_calls.get(url_parts.netloc))
         content = json.loads(req.read())
-        default_branch = content["default_branch"]
-    elif url_parts.netloc == "gitlab.com":
-        req = urlrequest.urlopen(
-            f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}"
-        )
-        content = json.loads(req.read())
-        default_branch = content["default_branch"]
-    else:
+        # For github and gitlab
+        default_branch = content.get("default_branch")
+        # For bitbucket
+        if not default_branch:
+            default_branch = content.get("development").get("name")
+    except URLError:
         default_branch = "main"
     return default_branch
 
@@ -2285,17 +2290,9 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            # Due to strict rate limits for the github API and lack of implementation
-            # for other hosting services, the default branch is currently only
-            # fetched for gitlab
-            default_branch = (
-                get_default_branch(actual_start)
-                if urlparse(actual_start).netloc == "gitlab.com"
-                else "main"
-            )
             suffix = match["url_end"].format(
                 name=name,
-                branch=branch if branch else default_branch,
+                branch=branch if branch else get_default_branch(url),
             )
         else:
             suffix = match["url_end"].format(name=name)
@@ -2386,9 +2383,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
             # Fetch from default branch
             version_branch = get_version_branch(version[0])
             try:
-                url = (
-                    url.rstrip("/") if url else "https://github.com/OSGeo/grass-addons"
-                )
+                url = url.rstrip("/") if url else GIT_URL
                 urlrequest.urlopen(f"{url}/tree/{version_branch}/src")
                 svn_reference = "branches/{}".format(version_branch)
             except URLError:
@@ -2398,11 +2393,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
         if not url:
             # Set URL for the given GRASS version
-            git_url = (
-                "https://github.com/OSGeo/grass-addons/"
-                f"{svn_reference}/src/{module_class}/{name}"
-            )
-            print(git_url)
+            git_url = f"{GIT_URL}/{svn_reference}/src/{module_class}/{name}"
             return "official", git_url
         else:
             # Forks from the official repo should reflect the current structure
