@@ -84,12 +84,11 @@ class GrassRenderer:
             # Try to run module
             try:
                 self.run(grass_module, **kwargs)
-            except FileNotFoundError as e:
+            except FileNotFoundError as error:
                 custom_message = f"Could not find GRASS module '{grass_module}'."
-                raise FileNotFoundError(custom_message) from e
+                raise FileNotFoundError(custom_message) from error
 
         return wrapper
-
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
