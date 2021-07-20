@@ -93,3 +93,11 @@ def join_results(results, prefixes=None):
                 result.label = f"{prefix}: {result.label}"
             joined.append(result)
     return joined
+
+
+def join_results_from_files(source_filenames, prefixes):
+    """Join multiple files into one results object."""
+    to_merge = []
+    for result_file in source_filenames:
+        to_merge.append(load_results_from_file(result_file))
+    return join_results(to_merge, prefixes=prefixes)
