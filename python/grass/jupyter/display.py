@@ -53,25 +53,40 @@ class GrassRenderer:
         else:
             raise ValueError("Module must begin with letter 'd'.")
 
-    def __getattr__(self, attr, **kwargs):
+    def __getattr__(self, name, **kwargs):
         """Parse attribute to GRASS display module. Attribute should be in
-        the form 'd_{module}'."""
+        the form 'd_{module}'.
+
+        :param str name: display module in form 'd_{module}'
+        :param kwargs: arguments to be passed to display module
+
+        :return: output of display module
+
+        ----- Example -----
+        # Create map instance
+        >>> m = GrassRenderer()
+        # Add elevation raster with shortcut
+        >>> m.d_rast(map="elevation")
+        # Add legend with shortcut
+        >>> m.d_legend(raster="elevation")
+        # Show map
+        >>> m.show()
+        -------------------
+        """
 
         # First check to make sure format is correct
-        if attr[:2] != "d_":
-            print(attr[:2])
-            raise ValueError("Module must begin with 'd_'.")
+        if not name.startswith("d_"):
+            raise AttributeError("Module must begin with 'd_'.")
         # Now reformat string
-        grass_module = f"d.{attr[2:]}"
+        grass_module = f"d.{name[2:]}"
 
         def wrapper(**kwargs):
             # And try to run module
             try:
                 self.run(grass_module, **kwargs)
-            except FileNotFoundError:
-                raise ModuleNotFoundError(
-                    f"Could not find GRASS module '{grass_module}'."
-                )
+            except FileNotFoundError as e:
+                custom_message = f"Could not find GRASS module '{grass_module}'."
+                raise FileNotFoundError(custom_message) from e
 
         return wrapper
 
