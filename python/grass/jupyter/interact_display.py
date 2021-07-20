@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 import tempfile
 import folium
-
 import grass.script as gs
 
 
