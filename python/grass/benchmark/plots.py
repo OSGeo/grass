@@ -40,7 +40,7 @@ def get_pyplot(to_file):
 def nprocs_plot(results, filename=None):
     """Plot results from a multiple nprocs (thread) benchmarks.
 
-    *results* is a list of individual results from separate benchmars.
+    *results* is a list of individual results from separate benchmarks.
     One result is required to have attributes: *nprocs*, *times*, *label*.
     The *nprocs* attribute is a list of all processing elements
     (cores, threads, processes) used in the benchmark.
@@ -76,10 +76,10 @@ def nprocs_plot(results, filename=None):
         plt.show()
 
 
-def num_cells_plot(results, filename=None, show_resolution=False):
+def num_cells_plot(results, filename=None, title=None, show_resolution=False):
     """Plot results from a multiple raster grid size benchmarks.
 
-    *results* is a list of individual results from separate benchmars
+    *results* is a list of individual results from separate benchmarks
     with one result being similar to the :func:`nprocs_plot` function.
     The result is required to have *times* and *label* attributes
     and may have an *all_times* attribute.
@@ -116,6 +116,12 @@ def num_cells_plot(results, filename=None, show_resolution=False):
     else:
         plt.xlabel("Number of cells")
     plt.ylabel("Time [s]")
+    if title:
+        plt.title(title)
+    elif show_resolution:
+        plt.title("Execution time by resolution")
+    else:
+        plt.title("Execution time by cell count")
     if filename:
         plt.savefig(filename)
     else:
