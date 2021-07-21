@@ -20,11 +20,24 @@ import grass.script as gs
 
 
 class GrassRenderer:
-    """The grassRenderer class creates and displays GRASS maps in
-    Jupyter Notebooks."""
+    """GrassRenderer creates and displays GRASS maps in
+    Jupyter Notebooks.
 
-    def __init__(self, env=None, width=600, height=400, filename=None, text_size=12):
-        """Initiates an instance of the GrassRenderer class."""
+    Basic usage::
+        m = GrassRenderer()
+        m.run("d.rast", map="elevation")
+        m.show()
+
+    :param int height: height of map in pixels
+    :param int width: width of map in pixels
+    :param str filename: filename or path to save a PNG of map
+    :param str env: environment
+    :param int text_size: default text size, overwritten by most display modules
+    :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
+
+    """
+
+    def __init__(self, height=400, width=600, filename=None, env=None, text_size=12, renderer = "cairo"):
         # Copy Environment
         if env:
             self._env = env.copy()
@@ -34,7 +47,7 @@ class GrassRenderer:
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
-        self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
+        self._env["GRASS_RENDER_IMMEDIATE"] = renderer
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
         
         # Create PNG file for map
