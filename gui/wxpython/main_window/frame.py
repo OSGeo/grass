@@ -156,7 +156,7 @@ class GMFrame(wx.Frame):
         # set pane sizes according to the full screen size of the primary monitor
         size = wx.Display().GetGeometry().GetSize()
         self.PANE_BEST_SIZE = tuple(t / 3 for t in size)
-        self.PANE_MIN_SIZE = tuple(t / 4 for t in size)
+        self.PANE_MIN_SIZE = tuple(t / 7 for t in size)
 
         # create widgets and build panes
         self.CreateMenuBar()
@@ -309,9 +309,6 @@ class GMFrame(wx.Frame):
         art = arts[notebook_theme]()
         self.mapnotebook.SetArtProvider(art)
 
-        # bindings
-        self.mapnotebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnMapNotebookPageChanged)
-
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
         self.datacatalog = DataCatalog(parent=parent, giface=self._giface)
@@ -401,7 +398,6 @@ class GMFrame(wx.Frame):
         self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.EXPAND)
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
-        print(self.currentPage)
         self.currentPageNum = self.notebookLayers.GetSelection()
 
         def CreateNewMapDisplay(layertree):
@@ -460,8 +456,6 @@ class GMFrame(wx.Frame):
         cb_boxsizer.Fit(self.GetLayerTree())
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
-        print(self.currentPage)
-        print(self.GetLayerTree())
 
         self.displayIndex += 1
 
@@ -706,27 +700,26 @@ class GMFrame(wx.Frame):
         ):
             self._auimgr.GetPane(toolbar).Row(1).Position(pos)
 
-        if firstTime:
-            # create nviz tools tab
-            self.nviz = NvizToolWindow(
-                parent=self, tree=self.GetLayerTree(), display=self.GetMapDisplay()
-            )
-            self._auimgr.AddPane(
-                self.nviz,
-                aui.AuiPaneInfo()
-                .Name("nviz")
-                .Caption("3D view")
-                .Left()
-                .Layer(1)
-                .Position(3)
-                .BestSize(self.PANE_BEST_SIZE)
-                .MinSize(self.PANE_MIN_SIZE)
-                .CloseButton(False)
-                .MinimizeButton(True)
-                .MaximizeButton(True),
-            )
-        else:
-            self._auimgr.GetPane("nviz").Show()
+        # create nviz tools tab
+        self.nviz = NvizToolWindow(
+            parent=self, tree=self.GetLayerTree(), display=self.GetMapDisplay()
+        )
+        self._auimgr.AddPane(
+            self.nviz,
+            aui.AuiPaneInfo()
+            .Name("nviz")
+            .Caption("3D view")
+            .Left()
+            .Layer(1)
+            .Position(3)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.GetPane("nviz").Show()
         self._auimgr.Update()
 
         # this is a bit strange here since a new window is created everytime
@@ -745,7 +738,8 @@ class GMFrame(wx.Frame):
             ("toolbarWorkspace", "toolbarTools", "toolbarMisc")
         ):
             self._auimgr.GetPane(toolbar).Row(1).Position(pos)
-        self._auimgr.GetPane("nviz").Hide()
+        self._auimgr.DetachPane(self.nviz)
+        self.nviz.Destroy()
         self._auimgr.Update()
 
     def OnLocationWizard(self, event):
@@ -887,11 +881,7 @@ class GMFrame(wx.Frame):
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
         try:
-            # Get index of current map display (can be different than index of related layertree)
-            self.mapnotebook.Unbind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED)
-            currentMapDispIndex = self.mapnotebook.GetPageIndex(self.GetMapDisplay())
-            self.mapnotebook.SetSelection(currentMapDispIndex)
-            self.mapnotebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnMapNotebookPageChanged)
+            self.mapnotebook.SetSelection(self.GetMapDisplayIndex())
         except Exception:
             pass
 
@@ -911,22 +901,10 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
+        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
         maptree.Close(True)
 
         self.currentPage = None
-
-        event.Skip()
-
-    def OnMapNotebookPageChanged(self, event):
-        """Page in map notebook is changed"""
-        # get layertree of current mapdisplay (can have different index than index of related map display)
-        try:
-            currentMapDisp = self.mapnotebook.GetCurrentPage()
-            currentPanel = currentMapDisp.tree.GetParent()
-            currentLmgrIndex = self.notebookLayers.GetPageIndex(currentPanel)
-            self.notebookLayers.SetSelection(currentLmgrIndex)
-        except Exception:
-            pass
 
         event.Skip()
 
@@ -936,6 +914,7 @@ class GMFrame(wx.Frame):
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
         self.notebookLayers.DeletePage(page_index)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+        self.mapnotebook.DeletePage(page_index)
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
@@ -1082,6 +1061,11 @@ class GMFrame(wx.Frame):
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
         return self.GetMapDisplay(onlyCurrent=False)
+
+    def GetMapDisplayIndex(self):
+        """Get the index of the currently active map display tab.
+           Can be different than index of related layertree."""
+        return  self.mapnotebook.GetPageIndex(self.GetMapDisplay())
 
     def GetLogWindow(self):
         """Gets console for command output and messages"""
@@ -1584,8 +1568,7 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
-            currentMapDispIndex = self.mapnotebook.GetPageIndex(self.GetMapDisplay())
-            self.mapnotebook.SetPageText(page_idx=currentMapDispIndex, text=name)
+            self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):
@@ -2014,9 +1997,6 @@ class GMFrame(wx.Frame):
             )
         )
 
-        # show map display
-        self.GetMapDisplay().Show()
-
     def OnAddVector(self, event):
         """Add vector map to the current layer tree"""
         # start new map display if no display is available
@@ -2037,9 +2017,6 @@ class GMFrame(wx.Frame):
                 ("layerThemechart", self.OnAddVectorChart),
             )
         )
-
-        # show map display
-        self.GetMapDisplay().Show()
 
     def OnAddVectorTheme(self, event):
         """Add thematic vector map to the current layer tree"""
@@ -2065,9 +2042,6 @@ class GMFrame(wx.Frame):
                 ("layerCmd", self.OnAddCommand),
             )
         )
-
-        # show map display
-        self.GetMapDisplay().Show()
 
     def OnAddRaster3D(self, event):
         """Add 3D raster map to the current layer tree"""
@@ -2126,9 +2100,6 @@ class GMFrame(wx.Frame):
 
         self.GetLayerTree().AddLayer("command")
 
-        # show map display
-        self.GetMapDisplay().Show()
-
     def OnAddGroup(self, event):
         """Add layer group"""
         # start new map display if no display is available
@@ -2136,9 +2107,6 @@ class GMFrame(wx.Frame):
             self.NewDisplay(show=True)
 
         self.GetLayerTree().AddLayer("group")
-
-        # show map display
-        self.GetMapDisplay().Show()
 
     def OnAddGrid(self, event):
         """Add grid map layer to the current layer tree"""
@@ -2159,9 +2127,6 @@ class GMFrame(wx.Frame):
             self.NewDisplay(show=True)
 
         self.GetLayerTree().AddLayer("labels")
-
-        # show map display
-        self.GetMapDisplay().Show()
 
     def OnShowRegionExtent(self, event):
         """Add vector labels map layer to the current layer tree"""
