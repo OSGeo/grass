@@ -155,6 +155,7 @@ import tempfile
 import json
 import xml.etree.ElementTree as etree
 
+<<<<<<< HEAD
 if sys.version_info.major == 3 and sys.version_info.minor < 8:
     from distutils.dir_util import copy_tree
 else:
@@ -167,6 +168,11 @@ from subprocess import PIPE
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlparse
+=======
+from six.moves.urllib import request as urlrequest
+from six.moves.urllib.error import HTTPError, URLError
+from six.moves.urllib.parse import urlparse
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
@@ -187,6 +193,7 @@ PROXIES = {}
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
+<<<<<<< HEAD
 GIT_URL = "https://github.com/OSGeo/grass-addons/"
 
 # MAKE command
@@ -504,6 +511,10 @@ def replace_shebang_win(python_file):
 
     os.remove(python_file)  # remove original
     os.rename(tmp_name, python_file)  # rename temp to original name
+=======
+HTTP_STATUS_CODES = list(http.HTTPStatus)
+GIT_URL = "https://github.com/OSGeo/grass-addons"
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
 
 def replace_shebang_win(python_file):
@@ -552,6 +563,7 @@ def get_version_branch(major_version):
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present"""
     version_branch = f"grass{major_version}"
+<<<<<<< HEAD
     if sys.platform == "win32":
         return version_branch
     else:
@@ -559,6 +571,137 @@ def get_version_branch(major_version):
             ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
             stdout=PIPE,
             stderr=PIPE,
+=======
+    try:
+        urlrequest.urlopen(f"{GIT_URL}/tree/{version_branch}/src")
+    except URLError:
+        version_branch = "grass{}".format(int(major_version) - 1)
+    return version_branch
+
+
+def get_github_branches(
+    github_api_url="https://api.github.com/repos/OSGeo/grass-addons/branches",
+    version_only=True,
+):
+    """Get ordered list of branch names in repo using github API
+    For the official repo we assume that at least one version branch is present
+    Due to strict rate limits in the github API (60 calls per hour) this function
+    is currently not used."""
+    req = urlrequest.urlopen(github_api_url)
+    content = json.loads(req.read())
+    branches = [repo_branch["name"] for repo_branch in content]
+    if version_only:
+        branches = [
+            version_branch
+            for version_branch in branches
+            if version_branch.startswith("grass")
+        ]
+    branches.sort()
+    return branches
+
+
+def get_default_branch(full_url):
+    """Get default branch for repository in known hosting services
+    (currently only implemented for github, gitlab and bitbucket API)
+    In all other cases "main" is used as default"""
+    # Parse URL
+    url_parts = urlparse(full_url)
+    # Get organization and repository component
+    try:
+        organization, repository = url_parts.path.split("/")[1:3]
+    except URLError:
+        gscript.fatal(
+            _(
+                "Cannot retrieve organization and repository from URL: <{}>.".format(
+                    full_url
+                )
+            )
+        )
+    # Construct API call and retrieve default branch
+    api_calls = {
+        "github.com": f"https://api.github.com/repos/{organization}/{repository}",
+        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",
+        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",
+    }
+    # Try to get default branch via API. The API call is known to fail a) if the full_url
+    # does not belong to an implemented hosting service or b) if the rate limit of the
+    # API is exceeded
+    try:
+        req = urlrequest.urlopen(api_calls.get(url_parts.netloc))
+        content = json.loads(req.read())
+        # For github and gitlab
+        default_branch = content.get("default_branch")
+        # For bitbucket
+        if not default_branch:
+            default_branch = content.get("development").get("name")
+    except URLError:
+        default_branch = "main"
+    return default_branch
+
+
+def download_addons_paths_file(url, response_format, *args, **kwargs):
+    """Generates JSON file containing the download URLs of the official
+    Addons
+
+    :param str url: url address
+    :param str response_format: content type
+
+    :return response: urllib.request.urlopen response object or None
+    """
+    try:
+        response = urlopen(url, *args, **kwargs)
+
+        if not response.code == 200:
+            index = HTTP_STATUS_CODES.index(response.code)
+            desc = HTTP_STATUS_CODES[index].description
+            gscript.fatal(
+                _(
+                    "Download file from <{url}>, "
+                    "return status code {code}, "
+                    "{desc}".format(
+                        url=url,
+                        code=response.code,
+                        desc=desc,
+                    ),
+                ),
+            )
+        if response_format not in response.getheader("Content-Type"):
+            gscript.fatal(
+                _(
+                    "Wrong downloaded file format. "
+                    "Check url <{url}>. Allowed file format is "
+                    "{response_format}.".format(
+                        url=url,
+                        response_format=response_format,
+                    ),
+                ),
+            )
+        return response
+
+    except HTTPError as err:
+        if err.code == 403 and err.msg == "rate limit exceeded":
+            gscript.warning(
+                _(
+                    "The download of the json file with add-ons paths "
+                    "from the github server wasn't successful, "
+                    "{}. The previous downloaded json file "
+                    " will be used if exists.".format(err.msg)
+                ),
+            )
+        else:
+            return download_addons_paths_file(
+                url=url.replace("main", "master"),
+                response_format=response_format,
+            )
+    except URLError:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>, "
+                "failed. Check internet connection.".format(
+                    url=url,
+                ),
+            ),
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
         )
         branch, stderr = branch.communicate()
         if stderr:
@@ -1785,6 +1928,7 @@ def download_source_code_official_github(url, name, branch, directory=None):
                       to it),
                       addon official GitHub repository source code URL path
     """
+<<<<<<< HEAD
 
     try:
         ga = GitAdapter(
@@ -1804,6 +1948,13 @@ def download_source_code_official_github(url, name, branch, directory=None):
         str(ga.local_copy / ga.addons[name]),
         ga.get_addons_src_code_git_repo_url_path()[name],
     )
+=======
+    if not directory:
+        directory = os.path.join(os.getcwd, name)
+    if grass.call(["svn", "export", url, directory], stdout=outdev) != 0:
+        grass.fatal(_("GRASS Addons <%s> not found") % name)
+    return directory
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
 
 def move_extracted_files(extract_dir, target_dir, files):
@@ -2027,6 +2178,7 @@ def install_extension_std_platforms(name, source, url, branch):
     gisbase = os.getenv("GISBASE")
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     path_to_src_code_message = _("Path to the source code:")
 =======
     source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass8/"
@@ -2034,6 +2186,8 @@ def install_extension_std_platforms(name, source, url, branch):
 =======
     source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass8/"
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
     # to hide non-error messages from subprocesses
     if gs.verbosity() <= 2:
@@ -2579,7 +2733,11 @@ def resolve_xmlurl_prefix(url, source=None):
     if source in ("official", "official_fork"):
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
+<<<<<<< HEAD
         version_branch = get_version_branch(VERSION[0])
+=======
+        version_branch = get_version_branch(version[0])
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
         url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
@@ -2787,15 +2945,70 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     ...     "https://bitbucket.org/joe-user/grass-module"
     ... )  # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
+<<<<<<< HEAD
     """  # noqa: E501
     # Handle URL for the official repo
     if not url or url == GIT_URL:
         return "official", GIT_URL
+=======
+    """
+    # Handle URL for the offical repo
+    if name and (not url or fork):
+        module_class = get_module_class_name(name)
+        # note: 'trunk' is required to make URL usable for 'svn export' call
+        # and fetches the default branch
+        if not branch:
+            # Fetch from default branch
+            version_branch = get_version_branch(version[0])
+            try:
+                url = url.rstrip("/") if url else GIT_URL
+                urlrequest.urlopen(f"{url}/tree/{version_branch}/src")
+                svn_reference = "branches/{}".format(version_branch)
+            except URLError:
+                svn_reference = "trunk"
+        else:
+            svn_reference = "branches/{}".format(branch)
+
+        if not url:
+            # Set URL for the given GRASS version
+            git_url = f"{GIT_URL}/{svn_reference}/src/{module_class}/{name}"
+            return "official", git_url
+        else:
+            # Forks from the official repo should reflect the current structure
+            url = url.rstrip("/")
+            git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
+            return "official_fork", git_url
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
     # Check if URL can be found
     # Catch corner case if local URL is given starting with file://
     url = url[6:] if url.startswith("file://") else url
+<<<<<<< HEAD
     validate_url(url)
+=======
+    if not os.path.exists(url):
+        url_validated = False
+        if url.startswith("http"):
+            try:
+                open_url = urlopen(url)
+                open_url.close()
+                url_validated = True
+            except URLError:
+                pass
+        else:
+            try:
+                open_url = urlopen("http://" + url)
+                open_url.close()
+                url_validated = True
+            except URLError:
+                pass
+            try:
+                open_url = urlopen("https://" + url)
+                open_url.close()
+                url_validated = True
+            except URLError:
+                pass
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
     # Return validated URL for official fork
     if fork:
@@ -2835,6 +3048,7 @@ def get_addons_paths(gg_addons_base_dir):
 
     :return str: list of all addons source code paths
     """
+<<<<<<< HEAD
     addons_branch = get_version_branch(VERSION[0])
     grass_addons_dir = Path(gg_addons_base_dir) / "grass-addons"
     if grass_addons_dir.exists():
@@ -2856,6 +3070,16 @@ def get_addons_paths(gg_addons_base_dir):
         cwd=grass_addons_dir,
         stdout=PIPE,
         stderr=PIPE,
+=======
+    get_addons_paths.json_file = "addons_paths.json"
+    # Define branch to fetch from (latest or current version)
+    addons_branch = get_version_branch(version[0])
+    url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
+
+    response = download_addons_paths_file(
+        url=url,
+        response_format="application/json",
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
     )
     addons_file_list, stderr = addons_file_list.communicate()
     if stderr:
@@ -2959,7 +3183,14 @@ if __name__ == "__main__":
     TMPDIR = tempfile.mkdtemp()
     atexit.register(cleanup)
 
+<<<<<<< HEAD
     grass_version = gs.version()
     VERSION = grass_version["version"].split(".")
+=======
+    grass_version = grass.version()
+    version = grass_version["version"].split(".")
+
+    build_platform = grass_version["build_platform"].split("-", 1)[0]
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
     sys.exit(main())

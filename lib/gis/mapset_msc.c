@@ -368,10 +368,14 @@ int make_mapset_element_no_fail_on_race(const char *p_path, const char *p_elemen
 int G__make_mapset_element_misc(const char *dir, const char *name)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     return G_make_mapset_dir_object(dir, name);
 =======
     G_make_mapset_dir_object(dir, name);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    return G_make_mapset_dir_object(dir, name);
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 }
 
 static int check_owner(const struct stat *info)
