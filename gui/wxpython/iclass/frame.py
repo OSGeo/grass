@@ -222,9 +222,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.dialogs["category"] = None
 
         # PyPlot init
-        self.plotPanel = PlotPanel(
-            self, giface=self.giface, stats_data=self.stats_data
-        )
+        self.plotPanel = PlotPanel(self, giface=self.giface, stats_data=self.stats_data)
 
         self._addPanes()
         self._mgr.Update()
