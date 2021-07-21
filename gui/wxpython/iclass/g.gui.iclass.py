@@ -114,10 +114,10 @@ def main():
     if group_name:
         frame.SetGroup(group_name, subgroup_name)
     if map_name:
-        giface.WriteLog(_("Loading raster map <%s>...") % map_name)
+        frame.giface.WriteLog(_("Loading raster map <%s>...") % map_name)
         frame.trainingMapManager.AddLayer(map_name)
     if trainingmap_name:
-        giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
+        frame.giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
         frame.ImportAreas(trainingmap_name)
 
     frame.Show()
