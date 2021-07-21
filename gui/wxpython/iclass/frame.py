@@ -39,6 +39,7 @@ except ImportError as e:
 import grass.script as grass
 
 from mapdisp import statusbar as sb
+from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
 from gui_core.mapdisp import DoubleMapFrame
@@ -105,7 +106,10 @@ class IClassMapFrame(DoubleMapFrame):
             secondMap=Map(),
             **kwargs,
         )
-        self._giface = giface
+        if giface:
+            self._giface = giface
+        else:
+            self._giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
