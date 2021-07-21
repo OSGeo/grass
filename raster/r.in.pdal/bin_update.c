@@ -13,9 +13,13 @@
 #include <stddef.h>
 #include <stdlib.h>
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include <math.h>
 =======
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+#include <math.h>
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -143,10 +147,14 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
     tmp = old_sum + value;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (fabs(old_sum) >= fabs(value))
 =======
     if (abs(old_sum) >= abs(value))
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    if (fabs(old_sum) >= fabs(value))
+>>>>>>> 27faeed049 (r.in.pdal: use fabs for double values (#1752))
         Rast_set_d_value(c_ptr, old_c + (old_sum - tmp) + value, map_type);
     else
         Rast_set_d_value(c_ptr, old_c + (value - tmp) + old_sum, map_type);
