@@ -12,6 +12,7 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -102,7 +103,7 @@ void update_sum(void *sum_array, void *c_array, int cols, int row, int col,
     old_c = Rast_get_d_value(c_ptr, map_type);
     tmp = old_sum + value;
 
-    if (abs(old_sum) >= abs(value))
+    if (fabs(old_sum) >= fabs(value))
         Rast_set_d_value(c_ptr, old_c + (old_sum - tmp) + value, map_type);
     else
         Rast_set_d_value(c_ptr, old_c + (value - tmp) + old_sum, map_type);
