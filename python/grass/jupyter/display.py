@@ -14,6 +14,8 @@
 import os
 from IPython.display import Image
 import tempfile
+import weakref
+from pathlib import Path
 import grass.script as gs
 
 
@@ -28,26 +30,43 @@ class GrassRenderer:
             self._env = env.copy()
         else:
             self._env = os.environ.copy()
+        # Environment Settings
+        self._env["GRASS_RENDER_WIDTH"] = str(width)
+        self._env["GRASS_RENDER_HEIGHT"] = str(height)
+        self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
+        self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
+        self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
+        
         # Create PNG file for map
         # If not user-supplied, create temporary file
         if filename:
             self._env["GRASS_RENDER_FILE"] = filename
-            self._filename = filename
         else:
             # Make temporary file
             tmpfile = tempfile.NamedTemporaryFile(suffix=".png")
             self._env["GRASS_RENDER_FILE"] = tmpfile.name
-            self._filename = tmpfile.name
+            self._tmpfile_name = tmpfile.name
+        # Either way, we need _filename for display later when we show map    
+        self._filename = self._env["GRASS_RENDER_FILE"]
 
-        # Environment Settings
-        self._env["GRASS_RENDER_WIDTH"] = str(width)
-        self._env["GRASS_RENDER_HEIGHT"] = str(height)
-        self._env["GRASS_TEXT_SIZE"] = str(text_size)
-        self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
-        self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
-        # Temporary Legend File
+        # Create Temporary Legend File
         self._legend_file = tempfile.NamedTemporaryFile()
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file.name)
+
+        # Clean-up
+        def remove_if_exists(path):
+            path.unlink(missing_ok=True)
+        # Delete temporary PNG file if it exists
+        if not filename:
+            self._finalizer = weakref.finalize(self,
+                                              remove_if_exists,
+                                              Path(self._tmpfile_name))
+        else:
+            pass
+        # Remove legend file
+        self._finalizer = weakref.finalize(self,
+                                          remove_if_exists,
+                                          Path(self._legend_file.name))
 
     def run(self, module, **kwargs):
         """Run modules from "d." GRASS library"""
@@ -56,6 +75,10 @@ class GrassRenderer:
             gs.run_command(module, env=self._env, **kwargs)
         else:
             raise ValueError("Module must begin with letter 'd'.")
+
+    def reset(self):
+        """Clear map by deleting PNG image and legend file"""
+        self._finalizer()
 
     def show(self):
         """Displays a PNG image of the map (non-interactive)"""
