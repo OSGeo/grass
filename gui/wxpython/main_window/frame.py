@@ -298,13 +298,26 @@ class GMFrame(wx.Frame):
         """Create Map Display notebook"""
         # create the notebook off-window to avoid flicker
         client_size = self.GetClientSize()
-        notebook_style = aui.AUI_NB_DEFAULT_STYLE | aui.AUI_NB_TAB_EXTERNAL_MOVE | wx.NO_BORDER
+        notebook_style = (
+            aui.AUI_NB_DEFAULT_STYLE | aui.AUI_NB_TAB_EXTERNAL_MOVE | wx.NO_BORDER
+        )
         notebook_theme = 0
-        self.mapnotebook = aui.AuiNotebook(self, -1, wx.Point(client_size.x, client_size.y),
-                              wx.Size(430, 200), agwStyle=notebook_style)
+        self.mapnotebook = aui.AuiNotebook(
+            self,
+            -1,
+            wx.Point(client_size.x, client_size.y),
+            wx.Size(430, 200),
+            agwStyle=notebook_style,
+        )
 
-        arts = [aui.AuiDefaultTabArt, aui.AuiSimpleTabArt, aui.VC71TabArt, aui.FF2TabArt,
-                aui.VC8TabArt, aui.ChromeTabArt]
+        arts = [
+            aui.AuiDefaultTabArt,
+            aui.AuiSimpleTabArt,
+            aui.VC71TabArt,
+            aui.FF2TabArt,
+            aui.VC8TabArt,
+            aui.ChromeTabArt,
+        ]
 
         art = arts[notebook_theme]()
         self.mapnotebook.SetArtProvider(art)
@@ -1064,8 +1077,8 @@ class GMFrame(wx.Frame):
 
     def GetMapDisplayIndex(self):
         """Get the index of the currently active map display tab.
-           Can be different than index of related layertree."""
-        return  self.mapnotebook.GetPageIndex(self.GetMapDisplay())
+        Can be different than index of related layertree."""
+        return self.mapnotebook.GetPageIndex(self.GetMapDisplay())
 
     def GetLogWindow(self):
         """Gets console for command output and messages"""
