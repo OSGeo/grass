@@ -14,8 +14,6 @@
 import os
 from IPython.display import Image
 import tempfile
-import weakref
-from pathlib import Path
 import grass.script as gs
 
 
@@ -37,7 +35,15 @@ class GrassRenderer:
 
     """
 
-    def __init__(self, height=400, width=600, filename=None, env=None, text_size=12, renderer = "cairo"):
+    def __init__(
+        self,
+        height=400,
+        width=600,
+        filename=None,
+        env=None,
+        text_size=12,
+        renderer="cairo",
+    ):
         # Copy Environment
         if env:
             self._env = env.copy()
@@ -49,7 +55,7 @@ class GrassRenderer:
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
-        
+
         # Create PNG file for map
         # If not user-supplied, create temporary file
         if filename:
@@ -57,7 +63,7 @@ class GrassRenderer:
         else:
             tmpfile = tempfile.NamedTemporaryFile(suffix=".png")
             self._env["GRASS_RENDER_FILE"] = tmpfile.name
-        # Either way, we need _filename for display later when we show map    
+        # Either way, we need _filename for display later when we show map
         self._filename = self._env["GRASS_RENDER_FILE"]
 
         # Create Temporary Legend File
