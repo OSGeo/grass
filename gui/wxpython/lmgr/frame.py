@@ -425,7 +425,7 @@ class GMFrame(wx.Frame):
 
         # make a new page in the bookcontrol for the layer tree (on page 0 of
         # the notebook)
-        self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.EXPAND)
+        self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.BORDER_NONE)
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
@@ -455,6 +455,7 @@ class GMFrame(wx.Frame):
                 parent=mapframe,
                 giface=self._gifaceForDisplay,
                 id=wx.ID_ANY,
+                size=globalvar.MAP_WINDOW_SIZE,
                 tree=layertree,
                 lmgr=self,
                 idx=self.displayIndex,
