@@ -193,20 +193,20 @@ int I_find_subgroup_file2(const char *group, const char *subgroup,
  * the "@<i>mapset</i>".
  * Use I_find_signature2 if altering passed in name is not desired.
  *
- * \param type SIGFILE_TYPE_
+ * \param type I_SIGFILE_TYPE
  * \param name of signature
  * \param mapset set NULL to search in all mapsets
  * \return mapset or NULL
  */
-const char *I_find_signature(int type, char *name, const char *mapset) {
+const char *I_find_signature(I_SIGFILE_TYPE type, char *name, const char *mapset) {
     char selem[GNAME_MAX]; /* 'signatures/type\0' */
 
     G_debug(1, "I_find_signature(): type=%d name=%s mapset=%s", type, name, mapset);
 
-    if (type == SIGFILE_TYPE_SIG) {
+    if (type == I_SIGFILE_TYPE_SIG) {
         sprintf(selem, "signatures%csig", HOST_DIRSEP);
     }
-    else if (type == SIGFILE_TYPE_SIGSET) {
+    else if (type == I_SIGFILE_TYPE_SIGSET) {
         sprintf(selem, "signatures%csigset", HOST_DIRSEP);
     }
     else {
@@ -231,20 +231,20 @@ const char *I_find_signature(int type, char *name, const char *mapset) {
  * Note: The passed name argument is not altered.
  * Use I_find_signature if stripping mapset part from the name is desired.
  *
- * \param type SIGFILE_TYPE_
+ * \param type I_SIGFILE_TYPE
  * \param name of signature
  * \param mapset set NULL to search in all mapsets
  * \return mapset or NULL
  */
-const char *I_find_signature2(int type, const char *name, const char *mapset) {
+const char *I_find_signature2(I_SIGFILE_TYPE type, const char *name, const char *mapset) {
     char selem[GNAME_MAX]; /* 'signatures/type\0' */
 
     G_debug(1, "I_find_signature2(): type=%d name=%s mapset=%s", type, name, mapset);
 
-    if (type == SIGFILE_TYPE_SIG) {
+    if (type == I_SIGFILE_TYPE_SIG) {
         sprintf(selem, "signatures%csig", HOST_DIRSEP);
     }
-    else if (type == SIGFILE_TYPE_SIGSET) {
+    else if (type == I_SIGFILE_TYPE_SIGSET) {
         sprintf(selem, "signatures%csigset", HOST_DIRSEP);
     }
     else {

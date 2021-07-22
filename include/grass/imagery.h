@@ -197,16 +197,18 @@ struct scdScattData
 };
 
 /*! Supported signature file types.
+ *  Remember to adjust I_SIGFILE_TYPE_COUNT on a change
  */
-enum
+typedef enum
 {
-    SIGFILE_TYPE_SIG,       /*! Signature files used by i.maxlik */
-    SIGFILE_TYPE_SIGSET,    /*! Signature files used by i.smap */
+    I_SIGFILE_TYPE_SIG,       /*! Signature files used by i.maxlik */
+    I_SIGFILE_TYPE_SIGSET,    /*! Signature files used by i.smap */
 
-    SIGFILE_TYPE_COUNT      /*! Total count of supported signature file types */
-};
+} I_SIGFILE_TYPE;
 
-#define SIGNATURE_TYPE_MIXED 1
+#define SIGNATURE_TYPE_MIXED 1  /* Unused? */
+#define I_SIGFILE_TYPE_COUNT 2  /*! Total count of supported signature file types */
+
 
 #define GROUPFILE "CURGROUP"
 #define SUBGROUPFILE "CURSUBGROUP"

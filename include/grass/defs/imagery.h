@@ -25,8 +25,8 @@ int I_find_subgroup(const char *, const char *);
 int I_find_subgroup2(const char *, const char *, const char *);
 int I_find_subgroup_file(const char *, const char *, const char *);
 int I_find_subgroup_file2(const char *, const char *, const char *, const char *);
-const char *I_find_signature(int, char *, const char *);
-const char *I_find_signature2(int, const char *, const char *);
+const char *I_find_signature(I_SIGFILE_TYPE, char *, const char *);
+const char *I_find_signature2(I_SIGFILE_TYPE, const char *, const char *);
 
 /* fopen.c */
 FILE *I_fopen_group_file_new(const char *, const char *);
@@ -147,10 +147,10 @@ int I_apply_colormap(unsigned char *, unsigned char *, unsigned,  unsigned char 
 int I_rasterize(double *, int, unsigned char, struct Cell_head *, unsigned char *);
 
 /* manage_signatures.c */
-int I_signatures_remove(int, const char *);
-int I_signatures_copy(int, const char *, const char *, const char *);
-int I_signatures_rename(int, const char *, const char *);
-int I_signatures_list_by_type(int, const char *, char ***);
+int I_signatures_remove(I_SIGFILE_TYPE, const char *);
+int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *, const char *);
+int I_signatures_rename(I_SIGFILE_TYPE, const char *, const char *);
+int I_signatures_list_by_type(I_SIGFILE_TYPE, const char *, char ***);
 
 /* sig.c */
 int I_init_signatures(struct Signature *, int);

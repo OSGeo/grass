@@ -60,8 +60,8 @@ import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
 from grass.lib.imagery import (
-    SIGFILE_TYPE_SIG,
-    SIGFILE_TYPE_SIGSET,
+    I_SIGFILE_TYPE_SIG,
+    I_SIGFILE_TYPE_SIGSET,
     I_signatures_list_by_type,
 )
 from grass.pygrass.utils import decode
@@ -2815,9 +2815,9 @@ class SignatureSelect(wx.ComboBox):
         sig_type = None
         # Extend here if a new signature type is introduced
         if element == "signatures/sig":
-            sig_type = SIGFILE_TYPE_SIG
+            sig_type = I_SIGFILE_TYPE_SIG
         elif element == "signatures/sigset":
-            sig_type = SIGFILE_TYPE_SIGSET
+            sig_type = I_SIGFILE_TYPE_SIGSET
         items = []
         if sig_type is not None:
             if mapsets:

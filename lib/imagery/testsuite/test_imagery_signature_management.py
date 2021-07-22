@@ -22,8 +22,8 @@ from grass.pygrass.gis import Mapset
 
 from grass.lib.gis import G_mapset_path, G_make_mapset, G_reset_mapsets
 from grass.lib.imagery import (
-    SIGFILE_TYPE_SIG,
-    SIGFILE_TYPE_SIGSET,
+    I_SIGFILE_TYPE_SIG,
+    I_SIGFILE_TYPE_SIGSET,
     I_find_signature,
     I_signatures_remove,
     I_signatures_copy,
@@ -67,28 +67,28 @@ class SignaturesRemoveTestCase(TestCase):
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Try to remove with wrong type
-        ret = I_signatures_remove(SIGFILE_TYPE_SIGSET, sig_name2)
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, sig_name2)
         self.assertEqual(ret, 1)
         # Try to remove with wrong mapset
-        ret = I_signatures_remove(SIGFILE_TYPE_SIG, f"{sig_name2}@PERMANENT")
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, f"{sig_name2}@PERMANENT")
         self.assertEqual(ret, 1)
         # Should be still present
-        ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, sig_name2, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Now remove with correct type
-        ret = I_signatures_remove(SIGFILE_TYPE_SIG, sig_name2)
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
         self.assertEqual(ret, 0)
         # removed should be gone
-        ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, sig_name2, self.mapset_name)
         self.assertFalse(ret)
         # Others should remain
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -106,17 +106,17 @@ class SignaturesRemoveTestCase(TestCase):
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Now remove one (should fail as file is absent)
-        ret = I_signatures_remove(SIGFILE_TYPE_SIG, sig_name2)
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
         self.assertEqual(ret, 1)
         # removed should be still absent
-        ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, sig_name2, self.mapset_name)
         self.assertFalse(ret)
         # All others should remain
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -136,28 +136,28 @@ class SignaturesRemoveTestCase(TestCase):
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Try to remove with wrong type
-        ret = I_signatures_remove(SIGFILE_TYPE_SIG, sig_name2)
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
         self.assertEqual(ret, 1)
         # Try to remove with wrong mapset
-        ret = I_signatures_remove(SIGFILE_TYPE_SIGSET, f"{sig_name2}@PERMANENT")
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, f"{sig_name2}@PERMANENT")
         self.assertEqual(ret, 1)
         # Should be still present
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, sig_name2, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Now remove with correct type
-        ret = I_signatures_remove(SIGFILE_TYPE_SIGSET, sig_name2)
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, sig_name2)
         self.assertEqual(ret, 0)
         # removed should be gone
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, sig_name2, self.mapset_name)
         self.assertFalse(ret)
         # Others should remain
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -175,17 +175,17 @@ class SignaturesRemoveTestCase(TestCase):
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Now remove one (should fail as file doesn't exist)
-        ret = I_signatures_remove(SIGFILE_TYPE_SIGSET, sig_name2)
+        ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, sig_name2)
         self.assertEqual(ret, 1)
         # removed should be still absent
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, sig_name2, self.mapset_name)
         self.assertFalse(ret)
         # All others should remain
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, sig_name1, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, sig_name3, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -233,34 +233,34 @@ class SignaturesCopyTestCase(TestCase):
     def test_copy_to_wrong_mapset(self):
         rnd_name = "{0}@{0}".format(tempname(10))
         ret = I_signatures_copy(
-            SIGFILE_TYPE_SIG, tempname(10), self.mapset_name, rnd_name
+            I_SIGFILE_TYPE_SIG, tempname(10), self.mapset_name, rnd_name
         )
         self.assertEqual(ret, 1)
 
     def test_sig_does_not_exist(self):
         ret = I_signatures_copy(
-            SIGFILE_TYPE_SIG, tempname(10), self.mapset_name, tempname(10)
+            I_SIGFILE_TYPE_SIG, tempname(10), self.mapset_name, tempname(10)
         )
         self.assertEqual(ret, 1)
 
     def test_sigset_does_not_exist(self):
         ret = I_signatures_copy(
-            SIGFILE_TYPE_SIGSET, tempname(10), self.mapset_name, tempname(10)
+            I_SIGFILE_TYPE_SIGSET, tempname(10), self.mapset_name, tempname(10)
         )
         self.assertEqual(ret, 1)
 
     def test_success_unqualified_sig(self):
         dst = tempname(10)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
         self.assertTrue(ret)
         ret = I_signatures_copy(
-            SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name, dst
+            I_SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name, dst
         )
         self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -269,36 +269,36 @@ class SignaturesCopyTestCase(TestCase):
         dst = tempname(10)
         self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
         dst = dst + "@" + self.mapset_name
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name)
         self.assertTrue(ret)
         ret = I_signatures_copy(
-            SIGFILE_TYPE_SIG,
+            I_SIGFILE_TYPE_SIG,
             self.src_sig + "@" + self.src_mapset_name,
             self.src_mapset_name,
             dst,
         )
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 
     def test_success_unqualified_sigset(self):
         dst = tempname(10)
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(
-            SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name
+            I_SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name
         )
         self.assertTrue(ret)
         ret = I_signatures_copy(
-            SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name, dst
+            I_SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name, dst
         )
         self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -307,20 +307,20 @@ class SignaturesCopyTestCase(TestCase):
         dst = tempname(10)
         self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
         dst = dst + "@" + self.mapset_name
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(
-            SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name
+            I_SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name
         )
         self.assertTrue(ret)
         ret = I_signatures_copy(
-            SIGFILE_TYPE_SIGSET,
+            I_SIGFILE_TYPE_SIGSET,
             self.src_sigset + "@" + self.src_mapset_name,
             self.src_mapset_name,
             dst,
         )
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -347,20 +347,20 @@ class SignaturesRenameTestCase(TestCase):
 
     def test_rename_from_wrong_mapset(self):
         rnd_name = "{0}@{0}".format(tempname(10))
-        ret = I_signatures_rename(SIGFILE_TYPE_SIG, rnd_name, tempname(10))
+        ret = I_signatures_rename(I_SIGFILE_TYPE_SIG, rnd_name, tempname(10))
         self.assertEqual(ret, 1)
 
     def test_rename_to_wrong_mapset(self):
         rnd_name = "{0}@{0}".format(tempname(10))
-        ret = I_signatures_rename(SIGFILE_TYPE_SIG, tempname(10), rnd_name)
+        ret = I_signatures_rename(I_SIGFILE_TYPE_SIG, tempname(10), rnd_name)
         self.assertEqual(ret, 1)
 
     def test_sig_does_not_exist(self):
-        ret = I_signatures_rename(SIGFILE_TYPE_SIG, tempname(10), tempname(10))
+        ret = I_signatures_rename(I_SIGFILE_TYPE_SIG, tempname(10), tempname(10))
         self.assertEqual(ret, 1)
 
     def test_sigset_does_not_exist(self):
-        ret = I_signatures_rename(SIGFILE_TYPE_SIGSET, tempname(10), tempname(10))
+        ret = I_signatures_rename(I_SIGFILE_TYPE_SIGSET, tempname(10), tempname(10))
         self.assertEqual(ret, 1)
 
     def test_success_unqualified_sig(self):
@@ -372,13 +372,13 @@ class SignaturesRenameTestCase(TestCase):
         f.close()
         dst = tempname(10)
         self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
         self.assertTrue(ret)
-        ret = I_signatures_rename(SIGFILE_TYPE_SIG, src_sig, dst)
+        ret = I_signatures_rename(I_SIGFILE_TYPE_SIG, src_sig, dst)
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -393,17 +393,17 @@ class SignaturesRenameTestCase(TestCase):
         dst = tempname(10)
         self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
         dst = dst + "@" + self.mapset_name
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
         self.assertTrue(ret)
         ret = I_signatures_rename(
-            SIGFILE_TYPE_SIG,
+            I_SIGFILE_TYPE_SIG,
             src_sig + "@" + self.mapset_name,
             dst,
         )
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -417,13 +417,13 @@ class SignaturesRenameTestCase(TestCase):
         f.close()
         dst = tempname(10)
         self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
         self.assertTrue(ret)
-        ret = I_signatures_rename(SIGFILE_TYPE_SIGSET, src_sigset, dst)
+        ret = I_signatures_rename(I_SIGFILE_TYPE_SIGSET, src_sigset, dst)
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -438,17 +438,17 @@ class SignaturesRenameTestCase(TestCase):
         dst = tempname(10)
         self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
         dst = dst + "@" + self.mapset_name
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
         self.assertTrue(ret)
         ret = I_signatures_rename(
-            SIGFILE_TYPE_SIGSET,
+            I_SIGFILE_TYPE_SIGSET,
             src_sigset + "@" + self.mapset_name,
             dst,
         )
         self.assertEqual(ret, 0)
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
@@ -489,7 +489,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # name and thus function call should return 0 sized list
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
+            I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         self.assertEqual(ret, 0)
 
@@ -503,7 +503,7 @@ class SignaturesListByTypeTestCase(TestCase):
         f.close()
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
+            I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         os.remove(sig_file)
         self.assertEqual(ret, 0)
@@ -515,7 +515,7 @@ class SignaturesListByTypeTestCase(TestCase):
         f.close()
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sig_list)
+            I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         os.remove(sigset_file)
         self.assertEqual(ret, 0)
@@ -529,7 +529,7 @@ class SignaturesListByTypeTestCase(TestCase):
         f.close()
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
+            I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         os.remove(sig_file)
         self.assertEqual(ret, 1)
@@ -543,7 +543,7 @@ class SignaturesListByTypeTestCase(TestCase):
         f.close()
         sigset_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
+            I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
         )
         os.remove(sigset_file)
         self.assertEqual(ret, 1)
@@ -565,7 +565,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # POINTER(POINTER(c_char))
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
+            I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         os.remove(sig_file1)
         os.remove(sig_file2)
@@ -589,7 +589,7 @@ class SignaturesListByTypeTestCase(TestCase):
         f.close()
         sigset_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
+            I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
         )
         os.remove(sigset_file1)
         os.remove(sigset_file2)
@@ -615,7 +615,9 @@ class SignaturesListByTypeTestCase(TestCase):
         f.close()
         self.sigfiles.append(sig_file2)
         sig_list = self.list_ptr()
-        ret = I_signatures_list_by_type(SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list))
+        ret = I_signatures_list_by_type(
+            I_SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list)
+        )
         # As temporary mapset is not in the search path, there must be
         # at least one sig file present
         # There could be more sigs if this is not an empty mapset
@@ -632,7 +634,9 @@ class SignaturesListByTypeTestCase(TestCase):
         grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
         G_reset_mapsets()
-        ret = I_signatures_list_by_type(SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list))
+        ret = I_signatures_list_by_type(
+            I_SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list)
+        )
         grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
         os.remove(sig_file1)
@@ -658,7 +662,7 @@ class SignaturesListByTypeTestCase(TestCase):
         self.sigfiles.append(sig_file2)
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIGSET, None, ctypes.byref(sig_list)
+            I_SIGFILE_TYPE_SIGSET, None, ctypes.byref(sig_list)
         )
         # As temporary mapset is not in the search path, there must be
         # at least one sig file present
@@ -677,7 +681,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # Search path is cached for this run => reset!
         G_reset_mapsets()
         ret = I_signatures_list_by_type(
-            SIGFILE_TYPE_SIGSET, None, ctypes.byref(sig_list)
+            I_SIGFILE_TYPE_SIGSET, None, ctypes.byref(sig_list)
         )
         grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()

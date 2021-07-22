@@ -19,8 +19,8 @@ from grass.pygrass.gis import Mapset
 
 from grass.lib.gis import G_mapset_path
 from grass.lib.imagery import (
-    SIGFILE_TYPE_SIG,
-    SIGFILE_TYPE_SIGSET,
+    I_SIGFILE_TYPE_SIG,
+    I_SIGFILE_TYPE_SIGSET,
     I_find_signature,
     I_find_signature2,
 )
@@ -52,98 +52,98 @@ class FindSignatureTestCase(TestCase):
 
     def test_find_sig(self):
         # Non existing without a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIG, tempname(10), None)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, tempname(10), None)
         self.assertFalse(ret)
         # Non existing with a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIG, tempname(10), self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, tempname(10), self.mapset_name)
         self.assertFalse(ret)
         # Sigset with sig type should equal non existing
-        ret = I_find_signature(SIGFILE_TYPE_SIG, self.sig_name1, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.sig_name1, self.mapset_name)
         self.assertFalse(ret)
         # Existing without a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIG, self.sig_name2, None)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.sig_name2, None)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing with a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIG, self.sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.sig_name2, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing in a different mapset should fail
-        ret = I_find_signature(SIGFILE_TYPE_SIG, self.sig_name2, "PERMANENT")
+        ret = I_find_signature(I_SIGFILE_TYPE_SIG, self.sig_name2, "PERMANENT")
         self.assertFalse(ret)
 
     def test_find_sigset(self):
         # Non existing without a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, tempname(10), None)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, tempname(10), None)
         self.assertFalse(ret)
         # Non existing with a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, tempname(10), self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, tempname(10), self.mapset_name)
         self.assertFalse(ret)
         # Sig with sigset type should equal non existing
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, self.sig_name2, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, self.sig_name2, self.mapset_name)
         self.assertFalse(ret)
         # Existing without a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, self.sig_name1, None)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, self.sig_name1, None)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing with a mapset
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, self.sig_name1, self.mapset_name)
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, self.sig_name1, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing in a different mapset should fail
-        ret = I_find_signature(SIGFILE_TYPE_SIGSET, self.sig_name1, "PERMANENT")
+        ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, self.sig_name1, "PERMANENT")
         self.assertFalse(ret)
 
     def test_find2_sig(self):
         # Non existing without a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIG, tempname(10), None)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIG, tempname(10), None)
         self.assertFalse(ret)
         # Non existing with a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIG, tempname(10), self.mapset_name)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIG, tempname(10), self.mapset_name)
         self.assertFalse(ret)
         # Sigset with sig type should equal non existing
-        ret = I_find_signature2(SIGFILE_TYPE_SIG, self.sig_name1, self.mapset_name)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIG, self.sig_name1, self.mapset_name)
         self.assertFalse(ret)
         # Existing without a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIG, self.sig_name2, None)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIG, self.sig_name2, None)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing with a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIG, self.sig_name2, self.mapset_name)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIG, self.sig_name2, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing in a different mapset should fail
-        ret = I_find_signature2(SIGFILE_TYPE_SIG, self.sig_name2, "PERMANENT")
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIG, self.sig_name2, "PERMANENT")
         self.assertFalse(ret)
 
     def test_find2_sigset(self):
         # Non existing without a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIGSET, tempname(10), None)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIGSET, tempname(10), None)
         self.assertFalse(ret)
         # Non existing with a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIGSET, tempname(10), self.mapset_name)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIGSET, tempname(10), self.mapset_name)
         self.assertFalse(ret)
         # Sig with sigset type should equal non existing
-        ret = I_find_signature2(SIGFILE_TYPE_SIGSET, self.sig_name2, self.mapset_name)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIGSET, self.sig_name2, self.mapset_name)
         self.assertFalse(ret)
         # Existing without a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIGSET, self.sig_name1, None)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIGSET, self.sig_name1, None)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing with a mapset
-        ret = I_find_signature2(SIGFILE_TYPE_SIGSET, self.sig_name1, self.mapset_name)
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIGSET, self.sig_name1, self.mapset_name)
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         # Existing in a different mapset should fail
-        ret = I_find_signature2(SIGFILE_TYPE_SIGSET, self.sig_name1, "PERMANENT")
+        ret = I_find_signature2(I_SIGFILE_TYPE_SIGSET, self.sig_name1, "PERMANENT")
         self.assertFalse(ret)
 
 

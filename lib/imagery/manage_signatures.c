@@ -18,7 +18,7 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
-static int list_by_type(int, const char *, int, char ***);
+static int list_by_type(I_SIGFILE_TYPE, const char *, int, char ***);
 
 /*!
  * \brief Remove a signature file
@@ -26,12 +26,12 @@ static int list_by_type(int, const char *, int, char ***);
  * If removal fails, prints a warning and returns 1.
  * It is safe to pass fully qualified names.
  * 
- * \param type SIGFILE_TYPE_ signature type
+ * \param type I_SIGFILE_TYPE signature type
  * \param name of signature to remove
  * \return 0 on success
  * \return 1 on failure
  */
-int I_signatures_remove(int type, const char *name)
+int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     int ret = 0;
@@ -46,9 +46,9 @@ int I_signatures_remove(int type, const char *name)
         return 1;
     }
     if (I_find_signature2(type, name, G_mapset())) {
-        if (type == SIGFILE_TYPE_SIG)
+        if (type == I_SIGFILE_TYPE_SIG)
             ret = G_remove_misc("signatures", name, "sig");
-        else if (type == SIGFILE_TYPE_SIGSET)
+        else if (type == I_SIGFILE_TYPE_SIGSET)
             ret = G_remove_misc("signatures", name, "sigset");
         if (ret == 1) {
             G_verbose_message(_("%s removed"), name);
@@ -67,14 +67,14 @@ int I_signatures_remove(int type, const char *name)
  * If copy fails, prints warning messages and returns 1.
  * It is safe to pass fully qualified names.
  *
- * \param type SIGFILE_TYPE_ signature type
+ * \param type I_SIGFILE_TYPE signature type
  * \param name of old signature
  * \param mapset of old signature
  * \param name of new signature
  * \return 0 on success
  * \return 1 on failure
  */
-int I_signatures_copy(int type, const char *old_name, const char *old_mapset,
+int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name, const char *old_mapset,
                       const char *new_name)
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX],
@@ -103,12 +103,12 @@ int I_signatures_copy(int type, const char *old_name, const char *old_mapset,
     }
     G_unqualified_name(old_name, NULL, sname, xmapset);
 
-    if (type == SIGFILE_TYPE_SIG) {
+    if (type == I_SIGFILE_TYPE_SIG) {
         G_make_mapset_dir_object("signatures", "sig");
         G_file_name_misc(old_path, "signatures", sname, "sig", smapset);
         G_file_name_misc(new_path, "signatures", tname, "sig", G_mapset());
     }
-    else if (type == SIGFILE_TYPE_SIGSET) {
+    else if (type == I_SIGFILE_TYPE_SIGSET) {
         G_make_mapset_dir_object("signatures", "sigset");
         G_file_name_misc(old_path, "signatures", sname, "sigset", smapset);
         G_file_name_misc(new_path, "signatures", tname, "sigset", G_mapset());
@@ -128,13 +128,13 @@ int I_signatures_copy(int type, const char *old_name, const char *old_mapset,
  * If rename fails, prints warning messages and returns 1.
  * It is safe to pass fully qualified names.
  *
- * \param type SIGFILE_TYPE_ signature type
+ * \param type I_SIGFILE_TYPE signature type
  * \param name of old signature
  * \param name of new signature
  * \return 0 on success
  * \return 1 on failure
  */
-int I_signatures_rename(int type, const char *old_name, const char *new_name)
+int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name, const char *new_name)
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX];
     const char *smapset;
@@ -142,7 +142,7 @@ int I_signatures_rename(int type, const char *old_name, const char *new_name)
 
     G_debug(1, "I_signatures_rename(%d, %s, %s);", type, old_name, new_name);
 
-    /* Rename only if source and destinaiton mapset is the current mapset */
+    /* Rename only if source and destination mapset is the current mapset */
     if (G_name_is_fully_qualified(old_name, sname, tmapset)) {
         if (strcmp(tmapset, G_mapset()) != 0) {
             G_warning(_("%s is not in the current mapset (%s)"), old_name,
@@ -168,11 +168,11 @@ int I_signatures_rename(int type, const char *old_name, const char *new_name)
         return 1;
     }
 
-    if (type == SIGFILE_TYPE_SIG) {
+    if (type == I_SIGFILE_TYPE_SIG) {
         G_file_name_misc(old_path, "signatures", sname, "sig", tmapset);
         G_file_name_misc(new_path, "signatures", tname, "sig", tmapset);
     }
-    else if (type == SIGFILE_TYPE_SIGSET) {
+    else if (type == I_SIGFILE_TYPE_SIGSET) {
         G_file_name_misc(old_path, "signatures", sname, "sigset", tmapset);
         G_file_name_misc(new_path, "signatures", tname, "sigset", tmapset);
     }
@@ -195,12 +195,12 @@ int I_signatures_rename(int type, const char *old_name, const char *new_name)
  * The function will assign memory for the list. It is up to callee to
  * free the memory of each list item and the list itself.
  *
- * \param type SIGFILE_TYPE_ signature type
+ * \param type I_SIGFILE_TYPE signature type
  * \param mapset optional mapset to search in or NULL
  * \param pointer to array of found signature strings or NULL if none found
  * \return count of signature strings in the array
  */
-int I_signatures_list_by_type(int type, const char *mapset, char ***out_list)
+int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset, char ***out_list)
 {
     int base = 0;
 
@@ -217,16 +217,16 @@ int I_signatures_list_by_type(int type, const char *mapset, char ***out_list)
     return base;
 }
 
-static int list_by_type(int type, const char *mapset, int base,
+static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
                         char ***out_list)
 {
     int count = 0;
     char path[GPATH_MAX];
     char **dirlist;
 
-    if (type == SIGFILE_TYPE_SIG)
+    if (type == I_SIGFILE_TYPE_SIG)
         G_file_name_misc(path, "signatures", "", "sig", mapset);
-    else if (type == SIGFILE_TYPE_SIGSET)
+    else if (type == I_SIGFILE_TYPE_SIGSET)
         G_file_name_misc(path, "signatures", "", "sigset", mapset);
 
     if (access(path, 0) != 0) {
