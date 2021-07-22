@@ -45,4 +45,4 @@ jobs:
           CFLAGS: "-std=${{ matrix.c }}"
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: "-std=${{ matrix.cpp }}"
-        run: .github/workflows/build_ubuntu20.sh $HOME/install
+        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install
