@@ -27,7 +27,7 @@ extern char *group;
 extern char *subgroup;
 extern struct Ref ref;
 extern char **bandrefs;
-extern char outsigfile[GNAME_MAX + GMAPSET_MAX + 1];
+extern char outsigfile[GNAME_MAX + GMAPSET_MAX];
 extern char *insigfile;
 extern char *reportfile;
 extern DCELL **cell;

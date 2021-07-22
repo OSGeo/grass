@@ -34,8 +34,7 @@ static int list_by_type(int, const char *, int, char ***);
 int I_signatures_remove(int type, const char *name)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    char selem[GNAME_MAX];
-    int ret;
+    int ret = 0;
 
     G_debug(1, "I_signatures_remove(%d, %s);", type, name);
 
@@ -80,7 +79,6 @@ int I_signatures_copy(int type, const char *old_name, const char *old_mapset,
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX],
         xmapset[GMAPSET_MAX];
-    char selem[GNAME_MAX];
     const char *smapset;
     char old_path[GPATH_MAX], new_path[GPATH_MAX];
 
@@ -140,7 +138,6 @@ int I_signatures_rename(int type, const char *old_name, const char *new_name)
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX];
     const char *smapset;
-    char selem[GNAME_MAX];
     char old_path[GPATH_MAX], new_path[GPATH_MAX];
 
     G_debug(1, "I_signatures_rename(%d, %s, %s);", type, old_name, new_name);
@@ -225,7 +222,6 @@ static int list_by_type(int type, const char *mapset, int base,
 {
     int count = 0;
     char path[GPATH_MAX];
-    char element[GNAME_MAX];
     char **dirlist;
 
     if (type == SIGFILE_TYPE_SIG)
