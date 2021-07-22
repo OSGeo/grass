@@ -35,6 +35,7 @@ int I_signatures_remove(int type, const char *name)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     char selem[GNAME_MAX];
+    int ret;
 
     G_debug(1, "I_signatures_remove(%d, %s);", type, name);
 
@@ -47,11 +48,10 @@ int I_signatures_remove(int type, const char *name)
     }
     if (I_find_signature2(type, name, G_mapset())) {
         if (type == SIGFILE_TYPE_SIG)
-            sprintf(selem, "signatures%csig", HOST_DIRSEP);
-        else if (type == SIGFILE_TYPE_SIGSET) {
-            sprintf(selem, "signatures%csigset", HOST_DIRSEP);
-        }
-        if (G_remove(selem, name) == 1) {
+            ret = G_remove_misc("signatures", name, "sig");
+        else if (type == SIGFILE_TYPE_SIGSET)
+            ret = G_remove_misc("signatures", name, "sigset");
+        if (ret == 1) {
             G_verbose_message(_("%s removed"), name);
             return 0;
         }
@@ -78,7 +78,8 @@ int I_signatures_remove(int type, const char *name)
 int I_signatures_copy(int type, const char *old_name, const char *old_mapset,
                       const char *new_name)
 {
-    char tname[GNAME_MAX], tmapset[GMAPSET_MAX];
+    char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX],
+        xmapset[GMAPSET_MAX];
     char selem[GNAME_MAX];
     const char *smapset;
     char old_path[GPATH_MAX], new_path[GPATH_MAX];
@@ -102,16 +103,19 @@ int I_signatures_copy(int type, const char *old_name, const char *old_mapset,
         G_warning(_("%s is missing"), old_name);
         return 1;
     }
+    G_unqualified_name(old_name, NULL, sname, xmapset);
 
-    if (type == SIGFILE_TYPE_SIG)
-        sprintf(selem, "signatures%csig", HOST_DIRSEP);
+    if (type == SIGFILE_TYPE_SIG) {
+        G_make_mapset_dir_object("signatures", "sig");
+        G_file_name_misc(old_path, "signatures", sname, "sig", smapset);
+        G_file_name_misc(new_path, "signatures", tname, "sig", G_mapset());
+    }
     else if (type == SIGFILE_TYPE_SIGSET) {
-        sprintf(selem, "signatures%csigset", HOST_DIRSEP);
+        G_make_mapset_dir_object("signatures", "sigset");
+        G_file_name_misc(old_path, "signatures", sname, "sigset", smapset);
+        G_file_name_misc(new_path, "signatures", tname, "sigset", G_mapset());
     }
 
-    G_make_mapset_element(selem);
-    G_file_name(old_path, selem, old_name, smapset);
-    G_file_name(new_path, selem, tname, G_mapset());
     if (G_copy_file(old_path, new_path) != 1) {
         G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
                   G_fully_qualified_name(old_name, smapset), tname);
@@ -167,14 +171,15 @@ int I_signatures_rename(int type, const char *old_name, const char *new_name)
         return 1;
     }
 
-    if (type == SIGFILE_TYPE_SIG)
-        sprintf(selem, "signatures%csig", HOST_DIRSEP);
+    if (type == SIGFILE_TYPE_SIG) {
+        G_file_name_misc(old_path, "signatures", sname, "sig", tmapset);
+        G_file_name_misc(new_path, "signatures", tname, "sig", tmapset);
+    }
     else if (type == SIGFILE_TYPE_SIGSET) {
-        sprintf(selem, "signatures%csigset", HOST_DIRSEP);
+        G_file_name_misc(old_path, "signatures", sname, "sigset", tmapset);
+        G_file_name_misc(new_path, "signatures", tname, "sigset", tmapset);
     }
 
-    G_file_name(old_path, selem, sname, tmapset);
-    G_file_name(new_path, selem, tname, tmapset);
     if (G_rename_file(old_path, new_path) != 0) {
         G_warning(_("Unable to rename <%s> to <%s>"), old_name, new_name);
         return 1;
@@ -224,11 +229,9 @@ static int list_by_type(int type, const char *mapset, int base,
     char **dirlist;
 
     if (type == SIGFILE_TYPE_SIG)
-        sprintf(element, "signatures%csig", HOST_DIRSEP);
+        G_file_name_misc(path, "signatures", "", "sig", mapset);
     else if (type == SIGFILE_TYPE_SIGSET)
-        sprintf(element, "signatures%csigset", HOST_DIRSEP);
-
-    G_file_name(path, element, "", mapset);
+        G_file_name_misc(path, "signatures", "", "sigset", mapset);
 
     if (access(path, 0) != 0) {
         return count;
