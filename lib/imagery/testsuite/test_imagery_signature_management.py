@@ -40,8 +40,8 @@ class SignaturesRemoveTestCase(TestCase):
         cls.sigfiles = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(cls.mpath + "/signatures/sig/", exist_ok=True)
-        os.makedirs(cls.mpath + "/signatures/sigset/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -55,22 +55,22 @@ class SignaturesRemoveTestCase(TestCase):
         # This test will fail if run in PERMANENT!
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
-        sigfile_name1 = "{}/signatures/sigset/{}".format(self.mpath, sig_name1)
+        sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         open(sigfile_name1, "a").close()
         self.sigfiles.append(sigfile_name1)
         sig_name2 = tempname(10)
-        sigfile_name2 = "{}/signatures/sig/{}".format(self.mpath, sig_name2)
+        sigfile_name2 = f"{self.mpath}/signatures/sig/{sig_name2}"
         open(sigfile_name2, "a").close()
         self.sigfiles.append(sigfile_name2)
         sig_name3 = tempname(10)
-        sigfile_name3 = "{}/signatures/sig/{}".format(self.mpath, sig_name3)
+        sigfile_name3 = f"{self.mpath}/signatures/sig/{sig_name3}"
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Try to remove with wrong type
         ret = I_signatures_remove(SIGFILE_TYPE_SIGSET, sig_name2)
         self.assertEqual(ret, 1)
         # Try to remove with wrong mapset
-        ret = I_signatures_remove(SIGFILE_TYPE_SIG, "{}@PERMANENT".format(sig_name2))
+        ret = I_signatures_remove(SIGFILE_TYPE_SIG, f"{sig_name2}@PERMANENT")
         self.assertEqual(ret, 1)
         # Should be still present
         ret = I_find_signature(SIGFILE_TYPE_SIG, sig_name2, self.mapset_name)
@@ -96,13 +96,13 @@ class SignaturesRemoveTestCase(TestCase):
     def test_remove_nonexisting_sig(self):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
-        sigfile_name1 = "{}/signatures/sigset/{}".format(self.mpath, sig_name1)
+        sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         open(sigfile_name1, "a").close()
         self.sigfiles.append(sigfile_name1)
         sig_name2 = tempname(10)
         # Do not create sig_name2 matching file
         sig_name3 = tempname(10)
-        sigfile_name3 = "{}/signatures/sig/{}".format(self.mpath, sig_name3)
+        sigfile_name3 = f"{self.mpath}/signatures/sig/{sig_name3}"
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Now remove one (should fail as file is absent)
@@ -124,22 +124,22 @@ class SignaturesRemoveTestCase(TestCase):
     def test_remove_existing_sigset(self):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
-        sigfile_name1 = "{}/signatures/sigset/{}".format(self.mpath, sig_name1)
+        sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         open(sigfile_name1, "a").close()
         self.sigfiles.append(sigfile_name1)
         sig_name2 = tempname(10)
-        sigfile_name2 = "{}/signatures/sigset/{}".format(self.mpath, sig_name2)
+        sigfile_name2 = f"{self.mpath}/signatures/sigset/{sig_name2}"
         open(sigfile_name2, "a").close()
         self.sigfiles.append(sigfile_name2)
         sig_name3 = tempname(10)
-        sigfile_name3 = "{}/signatures/sig/{}".format(self.mpath, sig_name3)
+        sigfile_name3 = f"{self.mpath}/signatures/sig/{sig_name3}"
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Try to remove with wrong type
         ret = I_signatures_remove(SIGFILE_TYPE_SIG, sig_name2)
         self.assertEqual(ret, 1)
         # Try to remove with wrong mapset
-        ret = I_signatures_remove(SIGFILE_TYPE_SIGSET, "{}@PERMANENT".format(sig_name2))
+        ret = I_signatures_remove(SIGFILE_TYPE_SIGSET, f"{sig_name2}@PERMANENT")
         self.assertEqual(ret, 1)
         # Should be still present
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, sig_name2, self.mapset_name)
@@ -165,13 +165,13 @@ class SignaturesRemoveTestCase(TestCase):
     def test_remove_nonexisting_sigset(self):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
-        sigfile_name1 = "{}/signatures/sigset/{}".format(self.mpath, sig_name1)
+        sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         open(sigfile_name1, "a").close()
         self.sigfiles.append(sigfile_name1)
         sig_name2 = tempname(10)
         # Do not create sig_name2 matching file
         sig_name3 = tempname(10)
-        sigfile_name3 = "{}/signatures/sig/{}".format(self.mpath, sig_name3)
+        sigfile_name3 = f"{self.mpath}/signatures/sig/{sig_name3}"
         open(sigfile_name3, "a").close()
         self.sigfiles.append(sigfile_name3)
         # Now remove one (should fail as file doesn't exist)
@@ -199,27 +199,23 @@ class SignaturesCopyTestCase(TestCase):
         cls.sigfiles = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(cls.mpath + "/signatures/sig/", exist_ok=True)
-        os.makedirs(cls.mpath + "/signatures/sigset/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
         # A mapset with a random name
         cls.src_mapset_name = tempname(10)
         G_make_mapset(None, None, cls.src_mapset_name)
         cls.src_mapset_path = (
             cls.mpath.rsplit("/", maxsplit=1)[0] + "/" + cls.src_mapset_name
         )
-        os.makedirs(cls.src_mapset_path + "/signatures/sig/")
+        os.makedirs(f"{cls.src_mapset_path}/signatures/sig/")
         cls.src_sig = tempname(10)
-        cls.sigfiles.append(
-            "{}/signatures/sig/{}".format(cls.src_mapset_path, cls.src_sig)
-        )
+        cls.sigfiles.append(f"{cls.src_mapset_path}/signatures/sig/{cls.src_sig}")
         f = open(cls.sigfiles[0], "w")
         f.write("A sig file")
         f.close()
-        os.makedirs(cls.src_mapset_path + "/signatures/sigset/")
+        os.makedirs(f"{cls.src_mapset_path}/signatures/sigset/")
         cls.src_sigset = tempname(10)
-        cls.sigfiles.append(
-            "{}/signatures/sigset/{}".format(cls.src_mapset_path, cls.src_sigset)
-        )
+        cls.sigfiles.append(f"{cls.src_mapset_path}/signatures/sigset/{cls.src_sigset}")
         f = open(cls.sigfiles[1], "w")
         f.write("A sigset file")
         f.close()
@@ -262,7 +258,7 @@ class SignaturesCopyTestCase(TestCase):
         ret = I_signatures_copy(
             SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name, dst
         )
-        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertTrue(ret)
@@ -271,7 +267,7 @@ class SignaturesCopyTestCase(TestCase):
 
     def test_success_fq_sig(self):
         dst = tempname(10)
-        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
         dst = dst + "@" + self.mapset_name
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -300,7 +296,7 @@ class SignaturesCopyTestCase(TestCase):
         ret = I_signatures_copy(
             SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name, dst
         )
-        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
         self.assertEqual(ret, 0)
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertTrue(ret)
@@ -309,7 +305,7 @@ class SignaturesCopyTestCase(TestCase):
 
     def test_success_fq_sigset(self):
         dst = tempname(10)
-        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
         dst = dst + "@" + self.mapset_name
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -338,8 +334,8 @@ class SignaturesRenameTestCase(TestCase):
         cls.sigfiles = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(cls.mpath + "/signatures/sig/", exist_ok=True)
-        os.makedirs(cls.mpath + "/signatures/sigset/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -369,13 +365,13 @@ class SignaturesRenameTestCase(TestCase):
 
     def test_success_unqualified_sig(self):
         src_sig = tempname(10)
-        sig_file = "{}/signatures/sig/{}".format(self.mpath, src_sig)
+        sig_file = f"{self.mpath}/signatures/sig/{src_sig}"
         self.sigfiles.append(sig_file)
         f = open(sig_file, "w")
         f.write("A sig file")
         f.close()
         dst = tempname(10)
-        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(SIGFILE_TYPE_SIG, src_sig, self.mapset_name)
@@ -389,13 +385,13 @@ class SignaturesRenameTestCase(TestCase):
 
     def test_success_fq_sig(self):
         src_sig = tempname(10)
-        sig_file = "{}/signatures/sig/{}".format(self.mpath, src_sig)
+        sig_file = f"{self.mpath}/signatures/sig/{src_sig}"
         self.sigfiles.append(sig_file)
         f = open(sig_file, "w")
         f.write("A sig file")
         f.close()
         dst = tempname(10)
-        self.sigfiles.append("{}/signatures/sig/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
         dst = dst + "@" + self.mapset_name
         ret = I_find_signature(SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -414,13 +410,13 @@ class SignaturesRenameTestCase(TestCase):
 
     def test_success_unqualified_sigset(self):
         src_sigset = tempname(10)
-        sigset_file = "{}/signatures/sigset/{}".format(self.mpath, src_sigset)
+        sigset_file = f"{self.mpath}/signatures/sigset/{src_sigset}"
         self.sigfiles.append(sigset_file)
         f = open(sigset_file, "w")
         f.write("A sigset file")
         f.close()
         dst = tempname(10)
-        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, src_sigset, self.mapset_name)
@@ -434,13 +430,13 @@ class SignaturesRenameTestCase(TestCase):
 
     def test_success_fq_sigset(self):
         src_sigset = tempname(10)
-        sigset_file = "{}/signatures/sigset/{}".format(self.mpath, src_sigset)
+        sigset_file = f"{self.mpath}/signatures/sigset/{src_sigset}"
         self.sigfiles.append(sigset_file)
         f = open(sigset_file, "w")
         f.write("A sigset file")
         f.close()
         dst = tempname(10)
-        self.sigfiles.append("{}/signatures/sigset/{}".format(self.mpath, dst))
+        self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
         dst = dst + "@" + self.mapset_name
         ret = I_find_signature(SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -467,16 +463,16 @@ class SignaturesListByTypeTestCase(TestCase):
         cls.sigfiles = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(cls.mpath + "/signatures/sig/", exist_ok=True)
-        os.makedirs(cls.mpath + "/signatures/sigset/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
         # A mapset with a random name
         cls.rnd_mapset_name = tempname(10)
         G_make_mapset(None, None, cls.rnd_mapset_name)
         cls.rnd_mapset_path = (
             cls.mpath.rsplit("/", maxsplit=1)[0] + "/" + cls.rnd_mapset_name
         )
-        os.makedirs(cls.rnd_mapset_path + "/signatures/sig/")
-        os.makedirs(cls.rnd_mapset_path + "/signatures/sigset/")
+        os.makedirs(f"{cls.rnd_mapset_path}/signatures/sig/")
+        os.makedirs(f"{cls.rnd_mapset_path}/signatures/sigset/")
 
     @classmethod
     def tearDownClass(cls):
@@ -500,7 +496,7 @@ class SignaturesListByTypeTestCase(TestCase):
     def test_sig_in_different_mapset(self):
         # Should return 0 signatures from a different mapset
         local_sig = tempname(10)
-        sig_file = "{}/signatures/sig/{}".format(self.mpath, local_sig)
+        sig_file = f"{self.mpath}/signatures/sig/{local_sig}"
         self.sigfiles.append(sig_file)
         f = open(sig_file, "w")
         f.write("A sig file")
@@ -512,7 +508,7 @@ class SignaturesListByTypeTestCase(TestCase):
         os.remove(sig_file)
         self.assertEqual(ret, 0)
         local_sigset = tempname(10)
-        sigset_file = "{}/signatures/sigset/{}".format(self.mpath, local_sigset)
+        sigset_file = f"{self.mpath}/signatures/sigset/{local_sigset}"
         self.sigfiles.append(sigset_file)
         f = open(sigset_file, "w")
         f.write("A sigset file")
@@ -527,7 +523,7 @@ class SignaturesListByTypeTestCase(TestCase):
     def test_single_sig(self):
         # Case when only a single signature file is present
         rnd_sig = tempname(10)
-        sig_file = "{}/signatures/sig/{}".format(self.rnd_mapset_path, rnd_sig)
+        sig_file = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig}"
         f = open(sig_file, "w")
         f.write("A sig file")
         f.close()
@@ -538,10 +534,10 @@ class SignaturesListByTypeTestCase(TestCase):
         os.remove(sig_file)
         self.assertEqual(ret, 1)
         val = utils.decode(sig_list[0])
-        self.assertEqual(val, "{}@{}".format(rnd_sig, self.rnd_mapset_name))
+        self.assertEqual(val, f"{rnd_sig}@{self.rnd_mapset_name}")
         # SigSet equals sig. Just testing branching inside.
         rnd_sigset = tempname(10)
-        sigset_file = "{}/signatures/sigset/{}".format(self.rnd_mapset_path, rnd_sigset)
+        sigset_file = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset}"
         f = open(sigset_file, "w")
         f.write("A sigset file")
         f.close()
@@ -552,17 +548,17 @@ class SignaturesListByTypeTestCase(TestCase):
         os.remove(sigset_file)
         self.assertEqual(ret, 1)
         val = utils.decode(sigset_list[0])
-        self.assertEqual(val, "{}@{}".format(rnd_sigset, self.rnd_mapset_name))
+        self.assertEqual(val, f"{rnd_sigset}@{self.rnd_mapset_name}")
 
     def test_multiple_sigs(self):
         # Should result into a multiple sigs returned
         rnd_sig1 = tempname(10)
-        sig_file1 = "{}/signatures/sig/{}".format(self.rnd_mapset_path, rnd_sig1)
+        sig_file1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
         f = open(sig_file1, "w")
         f.write("A sig file")
         f.close()
         rnd_sig2 = tempname(10)
-        sig_file2 = "{}/signatures/sig/{}".format(self.rnd_mapset_path, rnd_sig2)
+        sig_file2 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig2}"
         f = open(sig_file2, "w")
         f.write("A sig file")
         f.close()
@@ -575,23 +571,19 @@ class SignaturesListByTypeTestCase(TestCase):
         os.remove(sig_file2)
         self.assertEqual(ret, 2)
         golden = (
-            "{}@{}".format(rnd_sig1, self.rnd_mapset_name),
-            "{}@{}".format(rnd_sig2, self.rnd_mapset_name),
+            f"{rnd_sig1}@{self.rnd_mapset_name}",
+            f"{rnd_sig2}@{self.rnd_mapset_name}",
         )
         self.assertIn(utils.decode(sig_list[0]), golden)
         self.assertIn(utils.decode(sig_list[1]), golden)
         # Ditto for sigset
         rnd_sigset1 = tempname(10)
-        sigset_file1 = "{}/signatures/sigset/{}".format(
-            self.rnd_mapset_path, rnd_sigset1
-        )
+        sigset_file1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset1}"
         f = open(sigset_file1, "w")
         f.write("A sigset file")
         f.close()
         rnd_sigset2 = tempname(10)
-        sigset_file2 = "{}/signatures/sigset/{}".format(
-            self.rnd_mapset_path, rnd_sigset2
-        )
+        sigset_file2 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset2}"
         f = open(sigset_file2, "w")
         f.write("A sigset file")
         f.close()
@@ -603,8 +595,8 @@ class SignaturesListByTypeTestCase(TestCase):
         os.remove(sigset_file2)
         self.assertEqual(ret, 2)
         golden = (
-            "{}@{}".format(rnd_sigset1, self.rnd_mapset_name),
-            "{}@{}".format(rnd_sigset2, self.rnd_mapset_name),
+            f"{rnd_sigset1}@{self.rnd_mapset_name}",
+            f"{rnd_sigset2}@{self.rnd_mapset_name}",
         )
         self.assertIn(utils.decode(sigset_list[0]), golden)
         self.assertIn(utils.decode(sigset_list[1]), golden)
@@ -612,12 +604,12 @@ class SignaturesListByTypeTestCase(TestCase):
     def test_multiple_sigs_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIGSET case
         rnd_sig1 = tempname(10)
-        sig_file1 = "{}/signatures/sig/{}".format(self.rnd_mapset_path, rnd_sig1)
+        sig_file1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
         f = open(sig_file1, "w")
         f.write("A sig file")
         f.close()
         rnd_sig2 = tempname(10)
-        sig_file2 = "{}/signatures/sig/{}".format(self.mpath, rnd_sig2)
+        sig_file2 = f"{self.mpath}/signatures/sig/{rnd_sig2}"
         f = open(sig_file2, "w")
         f.write("A sig file")
         f.close()
@@ -630,8 +622,8 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertTrue(ret >= 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
-            "{}@{}".format(rnd_sig1, self.rnd_mapset_name),
-            "{}@{}".format(rnd_sig2, self.mapset_name),
+            f"{rnd_sig1}@{self.rnd_mapset_name}",
+            f"{rnd_sig2}@{self.mapset_name}",
         )
         self.assertIn(golden[1], ret_list)
         # Temporary mapset is not in the search path:
@@ -654,12 +646,12 @@ class SignaturesListByTypeTestCase(TestCase):
     def test_multiple_sigsets_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIG case
         rnd_sig1 = tempname(10)
-        sig_file1 = "{}/signatures/sigset/{}".format(self.rnd_mapset_path, rnd_sig1)
+        sig_file1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sig1}"
         f = open(sig_file1, "w")
         f.write("A sigset file")
         f.close()
         rnd_sig2 = tempname(10)
-        sig_file2 = "{}/signatures/sigset/{}".format(self.mpath, rnd_sig2)
+        sig_file2 = f"{self.mpath}/signatures/sigset/{rnd_sig2}"
         f = open(sig_file2, "w")
         f.write("A sigset file")
         f.close()
@@ -674,8 +666,8 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertTrue(ret >= 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
-            "{}@{}".format(rnd_sig1, self.rnd_mapset_name),
-            "{}@{}".format(rnd_sig2, self.mapset_name),
+            f"{rnd_sig1}@{self.rnd_mapset_name}",
+            f"{rnd_sig2}@{self.mapset_name}",
         )
         self.assertIn(golden[1], ret_list)
         # Temporary mapset is not in the search path:

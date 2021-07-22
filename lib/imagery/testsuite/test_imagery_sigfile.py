@@ -45,7 +45,7 @@ class SignatureFileTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
-        cls.sigfile_name = "{}/signatures/sig/{}".format(cls.mpath, cls.sig_name)
+        cls.sigfile_name = f"{cls.mpath}/signatures/sig/{cls.sig_name}"
 
     @classmethod
     def tearDownClass(cls):
@@ -88,7 +88,7 @@ class SignatureFileTestCase(TestCase):
 
         # Read back from signatures file
         Sn = Signature()
-        fq_name = "{}@{}".format(self.sig_name, self.mapset_name)
+        fq_name = f"{self.sig_name}@{self.mapset_name}"
         p_old_sigfile = I_fopen_signature_file_old(fq_name)
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, 1)
@@ -242,9 +242,9 @@ class SortSignaturesByBandrefTest(TestCase):
         cls.map3 = tempname(10)
         cls.use_temp_region()
         cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
-        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map1))
-        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map2))
-        cls.runModule("r.mapcalc", expression="{} = 1".format(cls.map3))
+        cls.runModule("r.mapcalc", expression=f"{cls.map1} = 1")
+        cls.runModule("r.mapcalc", expression=f"{cls.map2} = 1")
+        cls.runModule("r.mapcalc", expression=f"{cls.map3} = 1")
         Rast_write_bandref(cls.map1, cls.bandref1)
         Rast_write_bandref(cls.map2, cls.bandref2)
 

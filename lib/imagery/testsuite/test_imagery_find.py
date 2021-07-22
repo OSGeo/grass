@@ -33,13 +33,13 @@ class FindSignatureTestCase(TestCase):
         cls.mapset_name = Mapset().name
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(cls.mpath + "/signatures/sig/", exist_ok=True)
-        os.makedirs(cls.mpath + "/signatures/sigset/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
         cls.sig_name1 = tempname(10)
-        cls.sigfile_name1 = "{}/signatures/sigset/{}".format(cls.mpath, cls.sig_name1)
+        cls.sigfile_name1 = f"{cls.mpath}/signatures/sigset/{cls.sig_name1}"
         open(cls.sigfile_name1, "a").close()
         cls.sig_name2 = tempname(10)
-        cls.sigfile_name2 = "{}/signatures/sig/{}".format(cls.mpath, cls.sig_name2)
+        cls.sigfile_name2 = f"{cls.mpath}/signatures/sig/{cls.sig_name2}"
         open(cls.sigfile_name2, "a").close()
 
     @classmethod
