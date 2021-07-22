@@ -37,7 +37,7 @@ int openfiles(struct parms *parms, struct files *files, struct Signature *S)
     I_init_signatures(S, Ref.nfiles);
 
     /* open all maps for reading and
-    /* store band references of imagery group bands */
+       store band references of imagery group bands */
     for (n = 0; n < Ref.nfiles; n++) {
 	files->band_fd[n] =
 	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);

@@ -191,7 +191,7 @@ static int get_bandrefs(FILE * fd, struct SigSet *S)
     G_strip(bandrefs_str);
     bandrefs = G_tokenize(bandrefs_str, " ");
     S->nbands = G_number_of_tokens(bandrefs);
-    if (! S->nbands > 0) {
+    if (!(S->nbands > 0)) {
         G_warning(_("Signature file does not contain bands"));
         return -1;
     }

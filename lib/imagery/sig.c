@@ -199,7 +199,7 @@ int I_read_signatures(FILE * fd, struct Signature *S)
         prev = c;
     }
 
-    if (! S->nbands > 0) {
+    if (!(S->nbands > 0)) {
         G_warning(_("Signature file does not contain bands"));
         return -1;
     }
