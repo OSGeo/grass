@@ -301,7 +301,6 @@ class GMFrame(wx.Frame):
         notebook_style = (
             aui.AUI_NB_DEFAULT_STYLE | aui.AUI_NB_TAB_EXTERNAL_MOVE | wx.NO_BORDER
         )
-        notebook_theme = 0
         self.mapnotebook = aui.AuiNotebook(
             self,
             -1,
@@ -309,18 +308,7 @@ class GMFrame(wx.Frame):
             wx.Size(430, 200),
             agwStyle=notebook_style,
         )
-
-        arts = [
-            aui.AuiDefaultTabArt,
-            aui.AuiSimpleTabArt,
-            aui.VC71TabArt,
-            aui.FF2TabArt,
-            aui.VC8TabArt,
-            aui.ChromeTabArt,
-        ]
-
-        art = arts[notebook_theme]()
-        self.mapnotebook.SetArtProvider(art)
+        self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -408,7 +396,9 @@ class GMFrame(wx.Frame):
 
         # make a new page in the bookcontrol for the layer tree (on page 0 of
         # the notebook)
-        self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.EXPAND)
+        self.pg_panel = wx.Panel(
+            self.notebookLayers, id=wx.ID_ANY, style=wx.BORDER_NONE
+        )
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
@@ -432,6 +422,7 @@ class GMFrame(wx.Frame):
                 lmgr=self,
                 Map=layertree.Map,
                 title=name,
+                size=globalvar.MAP_WINDOW_SIZE
             )
             # add map display panel to notebook and make it current
             self.mapnotebook.AddPage(mapdisplay, name)
