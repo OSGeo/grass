@@ -63,6 +63,7 @@ from grass.lib.imagery import (
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
     I_signatures_list_by_type,
+    I_free_signatures_list,
 )
 from grass.pygrass.utils import decode
 
@@ -2829,12 +2830,12 @@ class SignatureSelect(wx.ComboBox):
         self.SetValue("")
 
     def _append_mapset_signatures(self, mapset, sig_type, items):
-        # TODO: free sig_list memory
         list_ptr = ctypes.POINTER(ctypes.c_char_p)
         sig_list = list_ptr()
         count = I_signatures_list_by_type(sig_type, mapset, ctypes.byref(sig_list))
         for n in range(count):
             items.append(decode(sig_list[n]))
+        I_free_signatures_list(count, sig_list)
 
 
 class SeparatorSelect(wx.ComboBox):

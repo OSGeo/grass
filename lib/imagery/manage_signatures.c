@@ -74,8 +74,8 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
  * \return 0 on success
  * \return 1 on failure
  */
-int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name, const char *old_mapset,
-                      const char *new_name)
+int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
+                      const char *old_mapset, const char *new_name)
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX],
         xmapset[GMAPSET_MAX];
@@ -134,7 +134,8 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name, const char *old
  * \return 0 on success
  * \return 1 on failure
  */
-int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name, const char *new_name)
+int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
+                        const char *new_name)
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX];
     const char *smapset;
@@ -200,7 +201,8 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name, const char *n
  * \param pointer to array of found signature strings or NULL if none found
  * \return count of signature strings in the array
  */
-int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset, char ***out_list)
+int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset,
+                              char ***out_list)
 {
     int base = 0;
 
@@ -215,6 +217,22 @@ int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset, char ***o
     }
 
     return base;
+}
+
+/*!
+ * \brief Free memory allocated by I_signatures_list_by_type
+ *
+ * Calls G_free for all list items returned by I_signatures_list_by_type()
+ *
+ * \param int Return value of I_signatures_list_by_type()
+ * \param pointer to array filled by I_signatures_list_by_type()
+ */
+void I_free_signatures_list(int count, char ***list)
+{
+    for (int n = 0; n < count; n++) {
+        G_free((*list)[n]);
+    }
+    G_free(*list);
 }
 
 static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,

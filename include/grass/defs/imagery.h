@@ -151,6 +151,7 @@ int I_signatures_remove(I_SIGFILE_TYPE, const char *);
 int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *, const char *);
 int I_signatures_rename(I_SIGFILE_TYPE, const char *, const char *);
 int I_signatures_list_by_type(I_SIGFILE_TYPE, const char *, char ***);
+void I_free_signatures_list(int, char ***);
 
 /* sig.c */
 int I_init_signatures(struct Signature *, int);

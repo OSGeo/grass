@@ -29,6 +29,7 @@ from grass.lib.imagery import (
     I_signatures_copy,
     I_signatures_rename,
     I_signatures_list_by_type,
+    I_free_signatures_list,
 )
 
 
@@ -492,6 +493,7 @@ class SignaturesListByTypeTestCase(TestCase):
             I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
         self.assertEqual(ret, 0)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
 
     def test_sig_in_different_mapset(self):
         # Should return 0 signatures from a different mapset
@@ -507,6 +509,7 @@ class SignaturesListByTypeTestCase(TestCase):
         )
         os.remove(sig_file)
         self.assertEqual(ret, 0)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
         local_sigset = tempname(10)
         sigset_file = f"{self.mpath}/signatures/sigset/{local_sigset}"
         self.sigfiles.append(sigset_file)
@@ -519,6 +522,7 @@ class SignaturesListByTypeTestCase(TestCase):
         )
         os.remove(sigset_file)
         self.assertEqual(ret, 0)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
 
     def test_single_sig(self):
         # Case when only a single signature file is present
@@ -535,6 +539,7 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertEqual(ret, 1)
         val = utils.decode(sig_list[0])
         self.assertEqual(val, f"{rnd_sig}@{self.rnd_mapset_name}")
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
         # SigSet equals sig. Just testing branching inside.
         rnd_sigset = tempname(10)
         sigset_file = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset}"
@@ -549,6 +554,7 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertEqual(ret, 1)
         val = utils.decode(sigset_list[0])
         self.assertEqual(val, f"{rnd_sigset}@{self.rnd_mapset_name}")
+        I_free_signatures_list(ret, ctypes.byref(sigset_list))
 
     def test_multiple_sigs(self):
         # Should result into a multiple sigs returned
@@ -576,6 +582,7 @@ class SignaturesListByTypeTestCase(TestCase):
         )
         self.assertIn(utils.decode(sig_list[0]), golden)
         self.assertIn(utils.decode(sig_list[1]), golden)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Ditto for sigset
         rnd_sigset1 = tempname(10)
         sigset_file1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset1}"
@@ -600,6 +607,7 @@ class SignaturesListByTypeTestCase(TestCase):
         )
         self.assertIn(utils.decode(sigset_list[0]), golden)
         self.assertIn(utils.decode(sigset_list[1]), golden)
+        I_free_signatures_list(ret, ctypes.byref(sigset_list))
 
     def test_multiple_sigs_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIGSET case
@@ -630,6 +638,7 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertIn(golden[1], ret_list)
         # Temporary mapset is not in the search path:
         self.assertNotIn(golden[0], ret_list)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
         grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
@@ -646,6 +655,7 @@ class SignaturesListByTypeTestCase(TestCase):
         ret_list = list(map(utils.decode, sig_list[:ret]))
         self.assertIn(golden[0], ret_list)
         self.assertIn(golden[1], ret_list)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
 
     def test_multiple_sigsets_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIG case
@@ -676,6 +686,7 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertIn(golden[1], ret_list)
         # Temporary mapset is not in the search path:
         self.assertNotIn(golden[0], ret_list)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
         grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
@@ -692,6 +703,7 @@ class SignaturesListByTypeTestCase(TestCase):
         ret_list = list(map(utils.decode, sig_list[:ret]))
         self.assertIn(golden[0], ret_list)
         self.assertIn(golden[1], ret_list)
+        I_free_signatures_list(ret, ctypes.byref(sig_list))
 
 
 if __name__ == "__main__":
