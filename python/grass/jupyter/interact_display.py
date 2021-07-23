@@ -12,7 +12,7 @@
 
 import os
 from pathlib import Path
-
+import tempfile
 import folium
 from .display import GrassRenderer
 import grass.script as gs
@@ -112,6 +112,7 @@ class InteractiveMap:
         from_proj = self.get_location_proj_string(env=self._env)
         to_proj = self.get_location_proj_string(env=self._vector_env)
         new_region = self.reproject_region(region, from_proj, to_proj)
+        #self._folium_region
         # Set vector region to match original region extent
         gs.run_command(
             "g.region",
@@ -188,7 +189,7 @@ class InteractiveMap:
 
     def _folium_bounding_box(self, extent):
         """Reformats extent into bounding box to pass to folium"""
-        return [[extent["north"], extent["west"]], [extent["south"], extent["east"]]]
+        return [[extent["n"], extent["w"]], [extent["s"], extent["e"]]]
 
     def add_vector(self, name):
         """Imports vector into temporary WGS84 location,
@@ -242,26 +243,28 @@ class InteractiveMap:
         )
         
         # Write raster to file with GrassRenderer
-        tmp_file = tempfile.NamedTemporaryFile(suffix=".png")
-        m=GrassRenderer(env=self._raster_env)
-        m.run("d.rast", map=name, filename=tmp_file.name)
+        # tmp_file = tempfile.NamedTemporaryFile(suffix=".png")
+        filename = "map.png"
+        m=GrassRenderer(env=self._raster_env, filename=filename)
+        m.run("d.rast", map=name)
         
-        # Get bounds of map for overlaying png
-        raster_env_info = gs.gisenv(env=self._raster_env)
+        # Get bounds of map for overlaying png (THIS HAS TO BE IN WGS84)
         bounds = gs.read_command("r.proj",
-                                input=name,
-                                location=raster_env_info["LOCATION_NAME"],
+                                input=full_name,
+                                location=env_info["LOCATION_NAME"],
+                                dbase=env_info["GISDBASE"],
                                 flags="g",
-                                env=self._raster_env
+                                env=self._vector_env
         )
-        
+        print(bounds)
+        bounds = gs.parse_key_val(bounds, sep="=", vsep=" ")
         print(bounds)
         # Reformat for folium
         bounds = self._folium_bounding_box(bounds)
-        
+        print(bounds)
         # Overlay image on folium map
         img = folium.raster_layers.ImageOverlay(
-           image=tmp_file.name,
+           image=filename,
            bounds= bounds,
            opacity=opacity,
            interactive=True,
