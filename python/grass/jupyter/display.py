@@ -82,7 +82,7 @@ class GrassRenderer:
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
-        the format 'd_{module}'.
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
 
         # Check to make sure format is correct
