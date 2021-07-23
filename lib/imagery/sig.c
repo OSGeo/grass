@@ -309,7 +309,7 @@ char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
                       "I_sort_signatures_by_bandref(%d, %d);", S->nbands,  R->nfiles);
 
     /* Obtain group band references */
-    group_bandrefs = (char **)G_malloc(R->nfiles * sizeof(char **));
+    group_bandrefs = (char **)G_malloc(R->nfiles * sizeof(char *));
     for (unsigned int j = R->nfiles; j--;) {
         group_bandrefs[j] = Rast_read_bandref(R->file[j].name, R->file[j].mapset);
     }
@@ -323,9 +323,10 @@ char **I_sort_signatures_by_bandref(struct Signature *S, const struct Ref *R) {
     match2 = (unsigned int *)G_calloc(R->nfiles, sizeof(unsigned int));
 
     /* Allocate memory for temporary storage of sorted values */
-    new_bandrefs = (char **)G_malloc(S->nbands * sizeof(char **));
-    new_means = (double **)G_malloc(S->nbands * sizeof(double *));
-    new_vars = (double ***)G_malloc(S->nbands * sizeof(double **));
+    new_bandrefs = (char **)G_malloc(S->nbands * sizeof(char *));
+    new_means = (double **)G_malloc(S->nsigs * sizeof(double *));
+    // new_vars[S.sig[x]][band1][band1]
+    new_vars = (double ***)G_malloc(S->nsigs * sizeof(double **));
     for (unsigned int c = S->nsigs; c--;) {
         new_means[c] = (double *)G_malloc(S->nbands * sizeof(double));
         new_vars[c] = (double **)G_malloc(S->nbands * sizeof(double *));

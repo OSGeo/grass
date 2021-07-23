@@ -572,6 +572,114 @@ class SortSignaturesByBandrefTest(TestCase):
                 self.libc.free(ret[1])
         self.libc.free(ret)
 
+    def test_complete_match_reorder(self):
+        # Prepare imagery group reference struct
+        R = Ref()
+        I_init_group_ref(ctypes.byref(R))
+        ret = I_add_file_to_group_ref(self.map1, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 0)
+        ret = I_add_file_to_group_ref(self.map2, self.mapset, ctypes.byref(R))
+        self.assertEqual(ret, 1)
+
+        # Prepare signature struct
+        S = Signature()
+        I_init_signatures(ctypes.byref(S), 2)
+        self.assertEqual(S.nbands, 2)
+        sig_count = I_new_signature(ctypes.byref(S))
+        self.assertEqual(sig_count, 1)
+        sig_count = I_new_signature(ctypes.byref(S))
+        self.assertEqual(sig_count, 2)
+        sig_count = I_new_signature(ctypes.byref(S))
+        self.assertEqual(sig_count, 3)
+        sig_count = I_new_signature(ctypes.byref(S))
+        self.assertEqual(sig_count, 4)
+        S.title = b"Signature title"
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+        S.sig[0].status = 1
+        S.sig[0].have_color = 0
+        S.sig[0].npoints = 69
+        S.sig[0].desc = b"my label2"
+        S.sig[0].mean[0] = 3.3
+        S.sig[0].mean[1] = 6.6
+        S.sig[0].var[0][0] = 1.7
+        S.sig[0].var[1][0] = 1.2
+        S.sig[0].var[1][1] = 1.8
+        S.sig[1].status = 1
+        S.sig[1].have_color = 0
+        S.sig[1].npoints = 42
+        S.sig[1].desc = b"my label1"
+        S.sig[1].mean[0] = 2.2
+        S.sig[1].mean[1] = 4.4
+        S.sig[1].var[0][0] = 0.7
+        S.sig[1].var[1][0] = 0.2
+        S.sig[1].var[1][1] = 0.8
+        S.sig[2].status = 1
+        S.sig[2].have_color = 0
+        S.sig[2].npoints = 12
+        S.sig[2].desc = b"my label4"
+        S.sig[2].mean[0] = 5.5
+        S.sig[2].mean[1] = 9.9
+        S.sig[2].var[0][0] = 0.9
+        S.sig[2].var[1][0] = 0.8
+        S.sig[2].var[1][1] = 0.7
+        S.sig[3].status = 1
+        S.sig[3].have_color = 0
+        S.sig[3].npoints = 21
+        S.sig[3].desc = b"my label3"
+        S.sig[3].mean[0] = 9.9
+        S.sig[3].mean[1] = 3.3
+        S.sig[3].var[0][0] = 0.8
+        S.sig[3].var[1][0] = 0.7
+        S.sig[3].var[1][1] = 0.6
+
+        # This should result in returning NULL
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        # Band references and sig items should be swapped
+        # Static items
+        self.assertEqual(S.sig[0].npoints, 69)
+        self.assertEqual(S.sig[1].npoints, 42)
+        self.assertEqual(S.sig[2].npoints, 12)
+        self.assertEqual(S.sig[3].npoints, 21)
+        # Reordered items
+        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref1, "The_Doors")
+        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
+        self.assertEqual(bandref2, "The_Who")
+        self.assertEqual(S.sig[0].mean[0], 6.6)
+        self.assertEqual(S.sig[0].mean[1], 3.3)
+        self.assertEqual(S.sig[0].var[0][0], 1.8)
+        self.assertEqual(S.sig[0].var[1][0], 1.2)
+        self.assertEqual(S.sig[0].var[1][1], 1.7)
+        self.assertEqual(S.sig[1].mean[0], 4.4)
+        self.assertEqual(S.sig[1].mean[1], 2.2)
+        self.assertEqual(S.sig[1].var[0][0], 0.8)
+        self.assertEqual(S.sig[1].var[1][0], 0.2)
+        self.assertEqual(S.sig[1].var[1][1], 0.7)
+        self.assertEqual(S.sig[2].mean[0], 9.9)
+        self.assertEqual(S.sig[2].mean[1], 5.5)
+        self.assertEqual(S.sig[2].var[0][0], 0.7)
+        self.assertEqual(S.sig[2].var[1][0], 0.8)
+        self.assertEqual(S.sig[2].var[1][1], 0.9)
+        self.assertEqual(S.sig[3].mean[0], 3.3)
+        self.assertEqual(S.sig[3].mean[1], 9.9)
+        self.assertEqual(S.sig[3].var[0][0], 0.6)
+        self.assertEqual(S.sig[3].var[1][0], 0.7)
+        self.assertEqual(S.sig[3].var[1][1], 0.8)
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        S.bandrefs[0] = None
+        S.bandrefs[1] = None
+        I_free_signatures(ctypes.byref(S))
+        I_free_group_ref(ctypes.byref(R))
+        if ret:
+            if ret[0]:
+                self.libc.free(ret[0])
+            if ret[1]:
+                self.libc.free(ret[1])
+        self.libc.free(ret)
+
 
 if __name__ == "__main__":
     test()
