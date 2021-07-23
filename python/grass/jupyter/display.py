@@ -21,7 +21,7 @@ import grass.script as gs
 class GrassRenderer:
     """GrassRenderer creates and displays GRASS maps in
     Jupyter Notebooks.
-    
+
     Elements are added to the display by calling GRASS display modules.
 
     Basic usage::
@@ -29,10 +29,10 @@ class GrassRenderer:
     >>> m.run("d.rast", map="elevation")
     >>> m.run("d.legend", raster="elevation")
     >>> m.show()
-    
+
     GRASS display modules can also be called by using the name of module
     as a class method and replacing "." with "_" in the name.
-    
+
     Shortcut usage::
     >>> m = GrassRenderer()
     >>> m.d_rast(map="elevation")
@@ -44,7 +44,7 @@ class GrassRenderer:
         self, env=None, width=600, height=400, filename="map.png", text_size=12
     ):
         """Creates an instance of the GrassRenderer class.
-        
+
         :param int height: height of map in pixels
         :param int width: width of map in pixels
         :param str filename: filename or path to save a PNG of map
@@ -92,7 +92,7 @@ class GrassRenderer:
         grass_module = name.replace("_", ".")
         # Assert module exists
         if not shutil.which(grass_module):
-            raise AttributeError(_("Grass module {} does not exist").format(grass_module))
+            raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
 
         def wrapper(**kwargs):
             # Run module
