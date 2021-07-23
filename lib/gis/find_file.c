@@ -206,10 +206,12 @@ const char *G_find_file(const char *element, char *name, const char *mapset)
 }
 
 /*!
- * \brief Searches for a file from the mapset search list or in a
+ * \brief Searches for a misc file from the mapset search list or in a
  * specified mapset.
  *
- * Returns the mapset name where the file was found.
+ * Returns the mapset name where the misc file was found.
+ * Misc files follow structure:
+ * mapset/dir/name/element
  *
  * \param dir     file directory
  * \param element database element (eg, "cell", "cellhd", "colr", etc)
@@ -250,11 +252,12 @@ const char *G_find_file2(const char *element, const char *name, const char *maps
 }
 
 /*!
- * \brief Searches for a file from the mapset search list or in a
+ * \brief Searches for a misc file from the mapset search list or in a
  * specified mapset. (look but don't touch)
  *
- * Returns the mapset name where the file was found.
- *
+ * Returns the mapset name where the misc file was found.
+ * Misc files follow structure:
+ * mapset/dir/name/element
  *
  * \param dir        file directory
  * \param element    database element (eg, "cell", "cellhd", "colr", etc)

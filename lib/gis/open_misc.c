@@ -97,9 +97,9 @@ static int G__open_misc(const char *dir,
 
 
 /*!
- * \brief open a new database file
+ * \brief open a new database misc file
  *
- * The database file <b>name</b> under the <b>element</b> in the
+ * The database file <b>element</b> under the <b>dir/name</b> in the
  * current mapset is created and opened for writing (but not reading).
  * The UNIX open( ) routine is used to open the file. If the file does not exist,
  * -1 is returned. Otherwise the file is positioned at the end of the file and
@@ -117,10 +117,10 @@ int G_open_new_misc(const char *dir, const char *element, const char *name)
 
 
 /*!
- * \brief open a database file for reading
+ * \brief open a database misc file for reading
  *
- * The database file <b>name</b> under the
- * <b>element</b> in the specified <b>mapset</b> is opened for reading (but
+ * The database file <b>element</b> under the
+ * <b>dir/name</b> in the specified <b>mapset</b> is opened for reading (but
  * not for writing).
  * The UNIX open( ) routine is used to open the file. If the file does not exist,
  * -1 is returned. Otherwise the file descriptor from the open( ) is returned.
@@ -139,9 +139,9 @@ int G_open_old_misc(const char *dir, const char *element, const char *name,
 
 
 /*!
- * \brief open a database file for update
+ * \brief open a database misc file for update
  *
- * The database file <b>name</b> under the <b>element</b> in the
+ * The database file <b>element</b> under the <b>dir/name</b> in the
  * current mapset is opened for reading and writing.
  * The UNIX open( ) routine is used to open the file. If the file does not exist,
  * -1 is returned. Otherwise the file is positioned at the end of the file and
@@ -165,9 +165,9 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
 
 
 /*!
- * \brief open a new database file
+ * \brief open a new database misc file
  *
- * The database file <b>name</b> under the <b>element</b> in the
+ * The database file <b>element</b> under the <b>dir/name</b> in the
  * current mapset is created and opened for writing (but not reading).
  * The UNIX fopen( ) routine, with "w" write mode, is used to open the file.  If
  * the file does not exist, the NULL pointer is returned. Otherwise the file is
@@ -192,10 +192,10 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
 
 
 /*!
- * \brief open a database file for reading
+ * \brief open a database misc file for reading
  *
- * The database file <b>name</b> under the
- * <b>element</b> in the specified <b>mapset</b> is opened for reading (but
+ * The database file <b>element</b> under the
+ * <b>dir/name</b> in the specified <b>mapset</b> is opened for reading (but
  * not for writing).
  * The UNIX fopen( ) routine, with "r" read mode, is used to open the file.  If
  * the file does not exist, the NULL pointer is returned. Otherwise the file

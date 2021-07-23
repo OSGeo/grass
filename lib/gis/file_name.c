@@ -27,7 +27,13 @@ static void append_char(char*, char);
   If <i>name</i> is of the form "nnn@ppp" then path is set as if name
   had been "nnn" and mapset had been "ppp" (mapset parameter itself is
   ignored in this case).
-  
+
+  Paths to files are in form:
+  /home/user/GISDBASE/LOCATION/mapset/element/name
+
+  path input buffer memory must be preallocated by caller:
+  char path[GPATH_MAX];
+
   \param[out] path buffer to hold resultant full path to file
   \param element database element (eg, "cell", "cellhd", "vector", etc)
   \param name name of file to build path to (fully qualified names allowed)
@@ -43,6 +49,12 @@ char *G_file_name(char *path,
 
 /*!
   \brief Builds full path names to GIS misc data files
+
+  Paths to misc files are in form:
+  /home/user/GISDBASE/LOCATION/mapset/dir/name/element
+
+  path input buffer memory must be preallocated by caller:
+  char path[GPATH_MAX];
 
   \param[out] path buffer to hold resultant full path to file
   \param dir misc directory
