@@ -162,6 +162,7 @@ static int row_scale, col_scale;
 static DCELL *inbuf;
 static DCELL *outbuf;
 static DCELL **bufs;
+static int bufrows;
 static double *h_weights;
 static double *v_weights;
 static int *mapcol0, *mapcol1;
@@ -317,59 +318,76 @@ static void v_filter(DCELL *dst, DCELL **src, int row, int rows)
 
 static void filter(void)
 {
-    int cur_row = 0;
-    int num_rows = 0;
-    int row;
+    int written_row = 0; /* Written row index */
+    int computed_row = 0; /* Computed but not written row index */
+    int row = 0;      /* Written row index */
 
     make_h_weights();
     make_v_weights();
 
-    for (row = 0; row < dst_w.rows; row++) {
-	int row0 = maprow0[row];
-	int row1 = maprow1[row];
-	int rows = row1 - row0;
-	int i;
+    while(written_row < dst_w.rows) {
+    int range = bufrows;    /* Number of written rows to parallelize over */
+    if (range > dst_w.rows - written_row) {
+        range = dst_w.rows - written_row;
+    }
+    int start = written_row;
+    int end = written_row + range;
+    int read_row = 0; /* Just read row index; row0: to be read row index */
+    int num_rows = 0; /* Number of previously read rows -> to be ignored rows */
 
-	G_percent(row, dst_w.rows, 2);
+    for (row = start; row < end; row++) {
+        int row0 = maprow0[row];
+        int row1 = maprow1[row];
+        int rows = row1 - row0;
+        int i;
 
-	if (row0 >= cur_row && row0 < cur_row + num_rows) {
-	    int m = row0 - cur_row;
-	    int n = cur_row + num_rows - row0;
-	    int i;
+        G_percent(computed_row, dst_w.rows, 2);
 
-	    for (i = 0; i < n; i++) {
-		DCELL *tmp = bufs[i];
-		bufs[i] = bufs[m + i];
-		bufs[m + i] = tmp;
-	    }
+        if (row0 >= read_row && row0 < read_row + num_rows) {
+            int m = row0 - read_row;
+            int n = read_row + num_rows - row0;
+            int i;
 
-	    cur_row = row0;
-	    num_rows = n;
-	}
-	else {
-	    cur_row = row0;
-	    num_rows = 0;
-	}
+            for (i = 0; i < n; i++) {
+            DCELL *tmp = bufs[i];
+            bufs[i] = bufs[m + i];
+            bufs[m + i] = tmp;
+            }
 
-	for (i = num_rows; i < rows; i++) {
-	    G_debug(5, "read: %p = %d", bufs[i], row0 + i);
-	    /* enlarging the source window to the North and South is 
-	     * not possible for global maps in ll */
-	    if (row0 + i >= 0 && row0 + i < src_w.rows)
-		Rast_get_d_row(infile, inbuf, row0 + i);
-	    else
-		Rast_set_d_null_value(inbuf, src_w.cols);
-	    h_filter(bufs[i], inbuf);
-	}
+            read_row = row0;
+            num_rows = n;
+        } else {
+            read_row = row0;
+            num_rows = 0;
+        }
 
-	num_rows = rows;
+        for (i = num_rows; i < rows; i++) {
+            G_debug(5, "read: %p = %d", bufs[i], row0 + i);
+            /* enlarging the source window to the North and South is
+            * not possible for global maps in ll */
+            if (row0 + i >= 0 && row0 + i < src_w.rows)
+            Rast_get_d_row(infile, inbuf, row0 + i);
+            else
+            Rast_set_d_null_value(inbuf, src_w.cols);
+            h_filter(bufs[i], inbuf);
+        }
 
-	v_filter(outbuf, bufs, row, rows);
+        num_rows = rows;
 
-	Rast_put_d_row(outfile, outbuf);
-	G_debug(5, "write: %d", row);
+        v_filter(&outbuf[(row - start) * dst_w.cols], bufs, row, rows);
+        computed_row++;
+
+        /* Rast_put_d_row(outfile, outbuf); */
+        /* G_debug(5, "write: %d", row); */
     }
 
+    for (row = start; row < end; row++) {
+        Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
+        G_debug(5, "write: %d", row);
+    }
+    written_row = end;
+
+    }
     G_percent(dst_w.rows, dst_w.rows, 2);
 }
 
@@ -379,7 +397,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Option *rastin, *rastout, *method,
-	    *radius, *x_radius, *y_radius;
+	    *radius, *x_radius, *y_radius, *memory;
     } parm;
     struct
     {
@@ -442,6 +460,8 @@ int main(int argc, char *argv[])
     parm.y_radius->required = NO;
     parm.y_radius->multiple = YES;
     parm.y_radius->description = _("Filter radius (vertical)");
+
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
@@ -567,8 +587,13 @@ int main(int argc, char *argv[])
     Rast_set_input_window(&src_w);
     Rast_set_output_window(&dst_w);
 
+    bufrows = atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
+    if (bufrows > dst_w.rows) {
+        bufrows = dst_w.rows;
+    }
+
     inbuf = Rast_allocate_d_input_buf();
-    outbuf = Rast_allocate_d_output_buf();
+    outbuf = G_calloc((size_t) bufrows * dst_w.cols, sizeof(DCELL));
 
     infile = Rast_open_old(parm.rastin->answer, "");
     outfile = Rast_open_new(parm.rastout->answer, DCELL_TYPE);
