@@ -11,6 +11,9 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -152,17 +155,18 @@ struct filter {
 
 #define MAX_FILTERS 8
 
-static int infile, outfile;
+static int *infile, outfile;
 static struct filter filters[MAX_FILTERS];
 static int num_filters;
 static int nulls;
 static struct Cell_head dst_w, src_w;
 static double f_x_radius, f_y_radius;
 static int row_scale, col_scale;
-static DCELL *inbuf;
+static DCELL **inbuf;
 static DCELL *outbuf;
-static DCELL **bufs;
+static DCELL ***bufs;
 static int bufrows;
+static int nprocs;
 static double *h_weights;
 static double *v_weights;
 static int *mapcol0, *mapcol1;
@@ -318,74 +322,81 @@ static void v_filter(DCELL *dst, DCELL **src, int row, int rows)
 
 static void filter(void)
 {
-    int written_row = 0; /* Written row index */
-    int computed_row = 0; /* Computed but not written row index */
-    int row = 0;      /* Written row index */
+    int written_row = 0;
+    int computed_row = 0;
+    int row;
 
     make_h_weights();
     make_v_weights();
 
     while(written_row < dst_w.rows) {
-    int range = bufrows;    /* Number of written rows to parallelize over */
-    if (range > dst_w.rows - written_row) {
-        range = dst_w.rows - written_row;
-    }
-    int start = written_row;
-    int end = written_row + range;
-    int read_row = 0; /* Just read row index; row0: to be read row index */
-    int num_rows = 0; /* Number of previously read rows -> to be ignored rows */
+        int range = bufrows;
+        if (range > dst_w.rows - written_row) {
+            range = dst_w.rows - written_row;
+        }
+        int start = written_row;
+        int end = written_row + range;
 
-    for (row = start; row < end; row++) {
-        int row0 = maprow0[row];
-        int row1 = maprow1[row];
-        int rows = row1 - row0;
-        int i;
+        #pragma omp parallel private(row)
+        {
+        int read_row = 0;
+        int num_rows = 0;
+        int t_id = 0;
+#if defined(_OPENMP)
+        t_id = omp_get_thread_num();
+#endif
 
-        G_percent(computed_row, dst_w.rows, 2);
-
-        if (row0 >= read_row && row0 < read_row + num_rows) {
-            int m = row0 - read_row;
-            int n = read_row + num_rows - row0;
+        #pragma omp for schedule(static, 1)
+        for (row = start; row < end; row++) {
+            int row0 = maprow0[row];
+            int row1 = maprow1[row];
+            int rows = row1 - row0;
             int i;
 
-            for (i = 0; i < n; i++) {
-            DCELL *tmp = bufs[i];
-            bufs[i] = bufs[m + i];
-            bufs[m + i] = tmp;
+            G_percent(computed_row, dst_w.rows, 2);
+
+            if (row0 >= read_row && row0 < read_row + num_rows) {
+                int m = row0 - read_row;
+                int n = read_row + num_rows - row0;
+                int i;
+
+                for (i = 0; i < n; i++) {
+                DCELL *tmp = bufs[t_id][i];
+                bufs[t_id][i] = bufs[t_id][m + i];
+                bufs[t_id][m + i] = tmp;
+                }
+
+                read_row = row0;
+                num_rows = n;
+            } else {
+                read_row = row0;
+                num_rows = 0;
             }
 
-            read_row = row0;
-            num_rows = n;
-        } else {
-            read_row = row0;
-            num_rows = 0;
+            for (i = num_rows; i < rows; i++) {
+                G_debug(5, "read: %p = %d", bufs[t_id][i], row0 + i);
+                /* enlarging the source window to the North and South is
+                * not possible for global maps in ll */
+                if (row0 + i >= 0 && row0 + i < src_w.rows)
+                Rast_get_d_row(infile[t_id], inbuf[t_id], row0 + i);
+                else
+                Rast_set_d_null_value(inbuf[t_id], src_w.cols);
+                h_filter(bufs[t_id][i], inbuf[t_id]);
+            }
+
+            num_rows = rows;
+
+            v_filter(&outbuf[(row - start) * dst_w.cols], bufs[t_id], row, rows);
+            #pragma omp atomic update
+            computed_row++;
+
+        }}
+
+        for (row = start; row < end; row++) {
+            Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
+            G_debug(5, "write: %d", row);
         }
-
-        for (i = num_rows; i < rows; i++) {
-            G_debug(5, "read: %p = %d", bufs[i], row0 + i);
-            /* enlarging the source window to the North and South is
-            * not possible for global maps in ll */
-            if (row0 + i >= 0 && row0 + i < src_w.rows)
-            Rast_get_d_row(infile, inbuf, row0 + i);
-            else
-            Rast_set_d_null_value(inbuf, src_w.cols);
-            h_filter(bufs[i], inbuf);
-        }
-
-        num_rows = rows;
-
-        v_filter(&outbuf[(row - start) * dst_w.cols], bufs, row, rows);
-        computed_row++;
-
-        /* Rast_put_d_row(outfile, outbuf); */
-        /* G_debug(5, "write: %d", row); */
-    }
-
-    for (row = start; row < end; row++) {
-        Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
-        G_debug(5, "write: %d", row);
-    }
-    written_row = end;
+        written_row = end;
 
     }
     G_percent(dst_w.rows, dst_w.rows, 2);
@@ -396,15 +407,16 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *rastin, *rastout, *method,
-	    *radius, *x_radius, *y_radius, *memory;
+    struct Option *rastin, *rastout, *method,
+        *radius, *x_radius, *y_radius, *memory, *nprocs;
     } parm;
     struct
     {
 	struct Flag *nulls;
     } flag;
     char title[64];
-    int i;
+    int i, t;
+    int nprocs;
 
     G_gisinit(argv[0]);
 
@@ -462,6 +474,7 @@ int main(int argc, char *argv[])
     parm.y_radius->description = _("Filter radius (vertical)");
 
     parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
@@ -469,6 +482,17 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    sscanf(parm.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1)
+    {
+      G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    nprocs = 1;
+#endif
 
     if (parm.radius->answer) {
 	if (parm.x_radius->answer || parm.y_radius->answer)
@@ -580,9 +604,12 @@ int main(int argc, char *argv[])
     col_scale = 2 + 2 * ceil(f_x_radius / src_w.ew_res);
 
     /* allocate buffers for intermediate rows */
-    bufs = G_malloc(row_scale * sizeof(DCELL *));
-    for (i = 0; i < row_scale; i++)
-	bufs[i] = Rast_allocate_d_buf();
+    bufs = G_malloc(nprocs * sizeof(DCELL **));
+    for (t = 0; t < nprocs; t++) {
+        bufs[t] = G_malloc(row_scale * sizeof(DCELL *));
+        for (i = 0; i < row_scale; i++)
+            bufs[t][i] = Rast_allocate_d_buf();
+    }
 
     Rast_set_input_window(&src_w);
     Rast_set_output_window(&dst_w);
@@ -592,15 +619,20 @@ int main(int argc, char *argv[])
         bufrows = dst_w.rows;
     }
 
-    inbuf = Rast_allocate_d_input_buf();
+    inbuf = G_malloc(nprocs * sizeof(DCELL *));
+    for (t = 0; t < nprocs; t++)
+        inbuf[t] = Rast_allocate_d_input_buf();
     outbuf = G_calloc((size_t) bufrows * dst_w.cols, sizeof(DCELL));
 
-    infile = Rast_open_old(parm.rastin->answer, "");
+    infile = G_malloc(nprocs * sizeof(int));
+    for (t = 0; t < nprocs; t++)
+        infile[t] = Rast_open_old(parm.rastin->answer, "");
     outfile = Rast_open_new(parm.rastout->answer, DCELL_TYPE);
 
     filter();
 
-    Rast_close(infile);
+    for (t = 0; t < nprocs; t++)
+        Rast_close(infile[t]);
     Rast_close(outfile);
 
     /* record map metadata/history info */
