@@ -198,6 +198,9 @@ class GrassTestFilesInvoker(object):
             #                command is used to control an if, elif, while, or
             #                until; or if the command is the left hand operand
             #                of an '&&' or '||' operator.
+            print(shutil.which("sh"))
+            print(shutil.which("sh.exe"))
+            print(cwd, module.abs_file_path)
             p = subprocess.Popen(
                 ["sh", "-e", "-x", module.abs_file_path],
                 cwd=cwd,
