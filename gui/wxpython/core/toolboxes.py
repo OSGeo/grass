@@ -789,9 +789,9 @@ def do_doctest_gettext_workaround():
     sys.displayhook = new_displayhook
     sys.__displayhook__ = new_displayhook
 
-    import __builtin__
-
-    __builtin__._ = new_translator
+    if sys.version_info[0] == 2:
+        import __builtin__
+        __builtin__._ = new_translator
 
 
 def doc_test():
