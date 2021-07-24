@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install OSGeo4W
         run: |
-          $exe = 'osgeo4w-setup-x86_64.exe'
+          $exe = 'osgeo4w-setup-x86_64-v1.exe'
           $url = 'http://download.osgeo.org/osgeo4w/' + $exe
           (New-Object System.Net.WebClient).DownloadFile($url, $exe)
           Start-Process ('.\'+$exe) -ArgumentList '-A -g -k -q -s http://download.osgeo.org/x86_64 -P cairo,fftw,freetype-devel,gdal-ecw,gdal-mrsid,liblas-devel,libxdr,msys,pdcurses,python3-numpy,python3-pywin32,python3-wx,regex-devel,wxpython,zstd-devel' -Wait
