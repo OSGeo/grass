@@ -210,7 +210,7 @@ const char *G_find_file(const char *element, char *name, const char *mapset)
  * specified mapset.
  *
  * Returns the mapset name where the misc file was found.
- * Misc files follow structure:
+ * Paths to misc files currently follow structure:
  * mapset/dir/name/element
  *
  * \param dir     file directory
@@ -256,7 +256,7 @@ const char *G_find_file2(const char *element, const char *name, const char *maps
  * specified mapset. (look but don't touch)
  *
  * Returns the mapset name where the misc file was found.
- * Misc files follow structure:
+ * Paths to misc files currently follow structure:
  * mapset/dir/name/element
  *
  * \param dir        file directory

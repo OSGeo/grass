@@ -28,14 +28,16 @@ static void append_char(char*, char);
   had been "nnn" and mapset had been "ppp" (mapset parameter itself is
   ignored in this case).
 
-  Paths to files are in form:
-  /home/user/GISDBASE/LOCATION/mapset/element/name
+  Paths to files are currently in form:
+  /path/to/location/mapset/element/name
 
-  path input buffer memory must be preallocated by caller.
+  path input buffer memory must be allocated by caller.
 
   C:
   @code
   char path[GPATH_MAX];
+  G_file_name(path, "fcell", "my_raster", "my_mapset");
+  // path now is "/full/path/to/my_mapset/fcell/my_raster"
   @endcode
   Python:
   @code
@@ -46,10 +48,10 @@ static void append_char(char*, char);
   path = ctypes.create_string_buffer(GPATH_MAX)
   path_str = decode(G_file_name(path, "elem", "name", "mapset"))
   print(path_str)
-  /home/user/gisdb/loc/mapset/elem/name
+  >>> /full/path/to/mapset/elem/name
   @endcode
 
-  \param[out] path preallocated buffer to hold resultant full path to file
+  \param[out] path allocated buffer to hold resultant full path to file
   \param element database element (eg, "cell", "cellhd", "vector", etc)
   \param name name of file to build path to (fully qualified names allowed)
   \param mapset mapset name
@@ -65,17 +67,19 @@ char *G_file_name(char *path,
 /*!
   \brief Builds full path names to GIS misc data files
 
-  Paths to misc files are in form:
-  /home/user/GISDBASE/LOCATION/mapset/dir/name/element
+  Paths to misc files are currently in form:
+  /path/to/location/mapset/dir/name/element
 
-  path input buffer memory must be preallocated by caller.
+  path input buffer memory must be allocated by caller.
 
   C:
-  @code
+  @code{.c}
   char path[GPATH_MAX];
+  G_file_name_misc(path, "cell_misc", "history", "my_raster", "my_mapset");
+  // path now contains "/full/path/to/my_mapset/cell_misc/my_raster/history"
   @endcode
   Python:
-  @code
+  @code{.py}
   import ctypes
   from grass.pygrass.utils import decode
   from grass.lib.gis import G_file_name_misc, GPATH_MAX
@@ -83,10 +87,10 @@ char *G_file_name(char *path,
   path = ctypes.create_string_buffer(GPATH_MAX)
   path_str = decode(G_file_name_misc(path, "dir", "elem", "name", "mapset"))
   print(path_str)
-  /home/user/gisdb/loc/mapset/dir/name/elem
+  >>> /full/path/to/mapset/dir/name/elem
   @endcode
 
-  \param[out] path preallocated buffer to hold resultant full path to file
+  \param[out] path allocated buffer to hold resultant full path to file
   \param dir misc directory (e.g., "cell_misc", "group")
   \param element database element (e.g., "history", "REF")
   \param name name of file to build path to (fully qualified names allowed)
