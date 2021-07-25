@@ -34,13 +34,13 @@ static void append_char(char*, char);
   path input buffer memory must be allocated by caller.
 
   C:
-  @code
+  @code{.c}
   char path[GPATH_MAX];
   G_file_name(path, "fcell", "my_raster", "my_mapset");
   // path now is "/full/path/to/my_mapset/fcell/my_raster"
   @endcode
   Python:
-  @code
+  @code{.py}
   import ctypes
   from grass.pygrass.utils import decode
   from grass.lib.gis import G_file_name, GPATH_MAX
