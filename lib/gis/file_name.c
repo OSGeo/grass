@@ -92,8 +92,8 @@ char *G_file_name(char *path,
 
   \param[out] path allocated buffer to hold resultant full path to file
   \param dir misc directory (e.g., "cell_misc", "group")
-  \param element database element (e.g., "history", "REF")
-  \param name name of file to build path to (fully qualified names allowed)
+  \param element database element (in this case – file to build path to e.g., "history", "REF")
+  \param name name of object (raster, group; fully qualified names allowed e.g., "my_raster@PERMANENT")
   \param mapset mapset name
 
   \return pointer to <i>path</i> buffer
