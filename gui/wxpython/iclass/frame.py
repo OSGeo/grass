@@ -362,6 +362,7 @@ class IClassMapPanel(DoubleMapPanel):
             )
 
         if name == "vdigit":
+<<<<<<< HEAD
             if "vdigit" not in self.toolbars:
                 self.toolbars[name] = VDigitToolbar(
                     parent=self,
@@ -383,6 +384,27 @@ class IClassMapPanel(DoubleMapPanel):
                     ],
                 )
 
+=======
+            self.toolbars[name] = VDigitToolbar(
+                parent=self,
+                toolSwitcher=self._toolSwitcher,
+                MapWindow=self.GetFirstWindow(),
+                digitClass=IClassVDigit,
+                giface=self.giface,
+                tools=[
+                    "addArea",
+                    "moveVertex",
+                    "addVertex",
+                    "removeVertex",
+                    "editLine",
+                    "moveLine",
+                    "deleteArea",
+                    "undo",
+                    "redo",
+                    "settings",
+                ],
+            )
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
             self._mgr.AddPane(
                 self.toolbars[name],
                 wx.aui.AuiPaneInfo()
