@@ -1,6 +1,6 @@
 set grass=%1
 set python=C:\OSGeo4W\bin\python3
-setx PATH=C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%PATH%
+setx PATH C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%PATH%
 
 call %grass% --tmp-location XY --exec g.download.location url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=%USERPROFILE%
 call %grass% --tmp-location XY --exec %python% -m grass.gunittest.main --grassdata %USERPROFILE% --location nc_spm_full_v2alpha2 --location-type nc --min-success 60
