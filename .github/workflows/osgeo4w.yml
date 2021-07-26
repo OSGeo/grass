@@ -21,6 +21,8 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
       - uses: actions/checkout@v2
+      - name: Add MSYS to PATH
+      - run: setx PATH C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%PATH%
       - name: Install OSGeo4W
         run: |
           $exe = 'osgeo4w-setup.exe'
