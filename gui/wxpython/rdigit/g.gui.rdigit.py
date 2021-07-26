@@ -140,12 +140,15 @@ def main():
             # use Close instead of QuitRDigit for standalone tool
             self.rdigit.quitDigitizer.disconnect(self.QuitRDigit)
             self.rdigit.quitDigitizer.connect(lambda: self.Close())
+<<<<<<< HEAD
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)
             sizer.Add(self, proportion=1, flag=wx.EXPAND)
             parent.SetSizer(sizer)
             parent.Layout()
+=======
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
 
         def _addLayer(self, name, ltype="raster"):
             """Add layer into map

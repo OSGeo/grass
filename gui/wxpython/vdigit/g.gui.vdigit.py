@@ -105,12 +105,15 @@ def main():
             # use Close instead of QuitVDigit for standalone tool
             self.toolbars["vdigit"].quitDigitizer.disconnect(self.QuitVDigit)
             self.toolbars["vdigit"].quitDigitizer.connect(lambda: self.Close())
+<<<<<<< HEAD
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)
             sizer.Add(self, proportion=1, flag=wx.EXPAND)
             parent.SetSizer(sizer)
             parent.Layout()
+=======
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
 
     if not haveVDigit:
         grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
