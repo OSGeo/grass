@@ -993,9 +993,12 @@ class SaveWMSLayerDialog(wx.Dialog):
         selSizer.Add(selTitleSizer, proportion=0,
                      flag=wx.EXPAND)
 
-        selSizer.Add(sel, proportion=1,
-                     flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER_VERTICAL,
-                     border=5)
+        selSizer.Add(
+            sel,
+            proportion=1,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
         return selSizer
 
