@@ -1798,12 +1798,16 @@ class GMFrame(wx.Frame):
             )
             return
 
+<<<<<<< HEAD
         frame = wx.Frame(
             parent=None,
             size=globalvar.MAP_WINDOW_SIZE,
             title=_("Supervised Classification Tool"),
         )
         win = IClassMapDisplay(parent=frame, giface=self._giface)
+=======
+        win = IClassMapFrame(parent=self)
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
         win.CentreOnScreen()
 
         win.Show()
