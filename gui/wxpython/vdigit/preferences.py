@@ -897,8 +897,7 @@ class VDigitSettingsDialog(wx.Dialog):
         .. todo::
             Needs refactoring
         """
-        if self.parent.GetLayerManager():
-            self._giface.workspaceChanged.emit()
+        self._giface.workspaceChanged.emit()
         # symbology
         for key, (enabled, color) in six.iteritems(self.symbology):
             if enabled:

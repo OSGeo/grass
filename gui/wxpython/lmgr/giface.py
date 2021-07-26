@@ -234,6 +234,9 @@ class LayerManagerGrassInterface(object):
     def WriteError(self, text):
         self.lmgr._gconsole.WriteError(text=text)
 
+    def GetLog(self, err=False):
+        return self.lmgr._gconsole.GetLog(err=err)
+
     def GetLayerTree(self):
         return self.lmgr.GetLayerTree()
 
