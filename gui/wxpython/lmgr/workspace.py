@@ -90,7 +90,7 @@ class WorkspaceManager:
 
         # delete all decorations
         for display in self.lmgr.GetAllMapDisplays():
-            for overlayId in display.decorations.keys():
+            for overlayId in list(display.decorations):
                 display.RemoveOverlay(overlayId)
 
         self.workspaceFile = None
