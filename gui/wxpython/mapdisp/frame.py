@@ -420,6 +420,13 @@ class MapFrame(SingleMapFrame):
                 giface=self._giface,
             )
             self.toolbars["vdigit"].quitDigitizer.connect(self.QuitVDigit)
+
+            def openATM(selection):
+                self._layerManager.OnShowAttributeTable(None, selection=selection)
+
+            self.toolbars["vdigit"].openATM.connect(
+                lambda selection: openATM(selection)
+            )
             self.Map.layerAdded.connect(self._updateVDigitLayers)
         self.MapWindowVDigit.SetToolbar(self.toolbars["vdigit"])
 
@@ -587,7 +594,9 @@ class MapFrame(SingleMapFrame):
             self.toolbars["map"].combo.Delete(1)
 
     def RemoveNviz(self):
-        """Restore 2D view"""
+        """Restore 2D view. Can be called even if 3D is not active."""
+        if not self.IsPaneShown("3d"):
+            return
         try:
             self.toolbars["map"].RemoveTool(self.toolbars["map"].rotate)
             self.toolbars["map"].RemoveTool(self.toolbars["map"].flyThrough)
@@ -648,7 +657,9 @@ class MapFrame(SingleMapFrame):
         # default toolbar
         if name == "map":
             if "map" not in self.toolbars:
-                self.toolbars["map"] = MapToolbar(self, toolSwitcher=self._toolSwitcher)
+                self.toolbars["map"] = MapToolbar(
+                    self, toolSwitcher=self._toolSwitcher, giface=self._giface
+                )
 
             self._mgr.AddPane(
                 self.toolbars["map"],
@@ -1024,8 +1035,7 @@ class MapFrame(SingleMapFrame):
             maplayer = self.toolbars["vdigit"].GetLayer()
             if maplayer:
                 self.toolbars["vdigit"].OnExit()
-        if self.IsPaneShown("3d"):
-            self.RemoveNviz()
+        self.RemoveNviz()
         if hasattr(self, "rdigit") and self.rdigit:
             self.rdigit.CleanUp()
         if self.dialogs["vnet"]:
@@ -1548,11 +1558,7 @@ class MapFrame(SingleMapFrame):
         NULLs) or vector map.
         """
         Debug.msg(3, "MapFrame.OnZoomToMap()")
-        layers = None
-        if self.IsStandalone():
-            layers = self.MapWindow.GetMap().GetListOfLayers(active=False)
-
-        self.MapWindow.ZoomToMap(layers=layers)
+        self.MapWindow.ZoomToMap(layers=None)
 
     def OnZoomToRaster(self, event):
         """Set display extents to match selected raster map (ignore NULLs)"""
@@ -1639,41 +1645,6 @@ class MapFrame(SingleMapFrame):
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
-
-    def IsStandalone(self):
-        """Check if Map display is standalone
-
-        .. deprecated:: 7.0
-        """
-        # TODO: once it is removed from 2 places in vdigit it can be deleted
-        # here and also in base class and other classes in the tree (hopefully)
-        # and one place here still uses IsStandalone
-        Debug.msg(
-            1,
-            "MapFrame.IsStandalone(): Method IsStandalone is"
-            "deprecated, use some general approach instead such as"
-            " Signals or giface",
-        )
-        if self._layerManager:
-            return False
-
-        return True
-
-    def GetLayerManager(self):
-        """Get reference to Layer Manager
-
-        :return: window reference
-        :return: None (if standalone)
-
-        .. deprecated:: 7.0
-        """
-        Debug.msg(
-            1,
-            "MapFrame.GetLayerManager(): Method GetLayerManager is"
-            "deprecated, use some general approach instead such as"
-            " Signals or giface",
-        )
-        return self._layerManager
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
@@ -1785,25 +1756,19 @@ class MapFrame(SingleMapFrame):
     def QuitRDigit(self):
         """Calls digitizer cleanup, removes digitizer object and disconnects
         signals from Map."""
-        if not self.IsStandalone():
-            self.rdigit.CleanUp()
-            # disconnect updating layers
-            self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
-            self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
-            self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
-            self._toolSwitcher.toggleToolChanged.disconnect(
-                self.toolbars["rdigit"].CheckSelectedTool,
-            )
+        self.rdigit.CleanUp()
+        # disconnect updating layers
+        self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
+        self._toolSwitcher.toggleToolChanged.disconnect(
+            self.toolbars["rdigit"].CheckSelectedTool,
+        )
 
-            self.RemoveToolbar("rdigit", destroy=True)
-            self.rdigit = None
-        else:
-            self.Close()
+        self.RemoveToolbar("rdigit", destroy=True)
+        self.rdigit = None
 
     def QuitVDigit(self):
         """Quit VDigit"""
-        if not self.IsStandalone():
-            # disable the toolbar
-            self.RemoveToolbar("vdigit", destroy=True)
-        else:
-            self.Close()
+        # disable the toolbar
+        self.RemoveToolbar("vdigit", destroy=True)

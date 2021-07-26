@@ -437,7 +437,7 @@ class LayerList(object):
         return None
 
 
-class DMonGrassInterface(StandaloneGrassInterface):
+class StandaloneMapDisplayGrassInterface(StandaloneGrassInterface):
     """@implements GrassInterface"""
 
     def __init__(self, mapframe):
@@ -455,6 +455,13 @@ class DMonGrassInterface(StandaloneGrassInterface):
 
     def GetProgress(self):
         return self._mapframe.GetProgressBar()
+
+
+class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
+    """@implements GrassInterface"""
+
+    def __init__(self, mapframe):
+        StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
 
 
 class DMonFrame(MapFrame):

@@ -349,10 +349,6 @@ class MapFrameBase(wx.Frame):
         for toolbar in six.itervalues(self.toolbars):
             toolbar.EnableLongHelp(enable)
 
-    def IsStandalone(self):
-        """Check if map frame is standalone"""
-        raise NotImplementedError("IsStandalone")
-
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         raise NotImplementedError("OnRender")

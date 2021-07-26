@@ -122,6 +122,9 @@ def main():
             else:
                 rdigit._mapSelectionCombo.SetSelection(n=1)
                 rdigit.OnMapSelection()
+            # use Close instead of QuitRDigit for standalone tool
+            self.rdigit.quitDigitizer.disconnect(self.QuitRDigit)
+            self.rdigit.quitDigitizer.connect(lambda: self.Close())
 
         def _addLayer(self, name, ltype="raster"):
             """Add layer into map
