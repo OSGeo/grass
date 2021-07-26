@@ -39,6 +39,7 @@ except ImportError as e:
 import grass.script as grass
 
 from mapdisp import statusbar as sb
+from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
 from gui_core.mapdisp import DoubleMapFrame
@@ -105,7 +106,10 @@ class IClassMapFrame(DoubleMapFrame):
             secondMap=Map(),
             **kwargs,
         )
-        self._giface = giface
+        if giface:
+            self.giface = giface
+        else:
+            self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
@@ -114,13 +118,13 @@ class IClassMapFrame(DoubleMapFrame):
 
         self.firstMapWindow = IClassVDigitWindow(
             parent=self,
-            giface=self._giface,
+            giface=self.giface,
             properties=self.mapWindowProperties,
             map=self.firstMap,
         )
         self.secondMapWindow = BufferedMapWindow(
             parent=self,
-            giface=self._giface,
+            giface=self.giface,
             properties=self.mapWindowProperties,
             Map=self.secondMap,
         )
@@ -218,9 +222,7 @@ class IClassMapFrame(DoubleMapFrame):
         self.dialogs["category"] = None
 
         # PyPlot init
-        self.plotPanel = PlotPanel(
-            self, giface=self._giface, stats_data=self.stats_data
-        )
+        self.plotPanel = PlotPanel(self, giface=self.giface, stats_data=self.stats_data)
 
         self._addPanes()
         self._mgr.Update()
@@ -258,7 +260,7 @@ class IClassMapFrame(DoubleMapFrame):
 
     def OnHelp(self, event):
         """Show help page"""
-        self._giface.Help(entry="wxGUI.iclass")
+        self.giface.Help(entry="wxGUI.iclass")
 
     def _getTempVectorName(self):
         """Return new name for temporary vector map (training areas)"""
@@ -389,7 +391,7 @@ class IClassMapFrame(DoubleMapFrame):
                 toolSwitcher=self._toolSwitcher,
                 MapWindow=self.GetFirstWindow(),
                 digitClass=IClassVDigit,
-                giface=self._giface,
+                giface=self.giface,
                 tools=[
                     "addArea",
                     "moveVertex",
@@ -484,10 +486,6 @@ class IClassMapFrame(DoubleMapFrame):
             .Layer(0)
             .Position(position),
         )
-
-    def IsStandalone(self):
-        """Check if Map display is standalone"""
-        return True
 
     def OnUpdateActive(self, event):
         """
