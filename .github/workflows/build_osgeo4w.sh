@@ -69,7 +69,7 @@ dist_esc="$src_esc\\\\$dist"
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=C:\\msys64\\mingw64\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
+set PATH=C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%PATH%
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
