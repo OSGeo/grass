@@ -239,9 +239,13 @@ def get_version_branch(major_version):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present"""
-    version_branch = f"grass{major_version}"
+    version_branch = "grass{}".format(major_version)
     try:
-        urlrequest.urlopen(f"{GIT_URL}/tree/{version_branch}/src")
+        urlrequest.urlopen(
+            "{GIT_URL}/tree/{version_branch}/src".format(
+                GIT_URL=GIT_URL, version_branch=version_branch
+            )
+        )
     except URLError:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
@@ -287,9 +291,15 @@ def get_default_branch(full_url):
         )
     # Construct API call and retrieve default branch
     api_calls = {
-        "github.com": f"https://api.github.com/repos/{organization}/{repository}",
-        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",
-        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",
+        "github.com": "https://api.github.com/repos/{organization}/{repository}".format(
+            organization=organization, repository=repository
+        ),
+        "gitlab.com": "https://gitlab.com/api/v4/projects/{organization}%2F{repository}".format(
+            organization=organization, repository=repository
+        ),
+        "bitbucket.org": "https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?".format(
+            organization=organization, repository=repository
+        ),
     }
     # Try to get default branch via API. The API call is known to fail a) if the full_url
     # does not belong to an implemented hosting service or b) if the rate limit of the
@@ -2384,7 +2394,11 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
             version_branch = get_version_branch(version[0])
             try:
                 url = url.rstrip("/") if url else GIT_URL
-                urlrequest.urlopen(f"{url}/tree/{version_branch}/src")
+                urlrequest.urlopen(
+                    "{url}/tree/{version_branch}/src".format(
+                        url=url, version_branch=version_branch
+                    )
+                )
                 svn_reference = "branches/{}".format(version_branch)
             except URLError:
                 svn_reference = "trunk"
@@ -2393,12 +2407,22 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
         if not url:
             # Set URL for the given GRASS version
-            git_url = f"{GIT_URL}/{svn_reference}/src/{module_class}/{name}"
+            git_url = "{GIT_URL}/{svn_reference}/src/{module_class}/{name}".format(
+                GIT_URL=GIT_URL,
+                svn_reference=svn_reference,
+                module_class=module_class,
+                name=name,
+            )
             return "official", git_url
         else:
             # Forks from the official repo should reflect the current structure
             url = url.rstrip("/")
-            git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
+            git_url = "{url}/{svn_reference}/src/{module_class}/{name}".format(
+                url=url,
+                svn_reference=svn_reference,
+                module_class=module_class,
+                name=name,
+            )
             return "official_fork", git_url
 
     # Check if URL can be found
@@ -2464,7 +2488,9 @@ def get_addons_paths(gg_addons_base_dir):
     get_addons_paths.json_file = "addons_paths.json"
     # Define branch to fetch from (latest or current version)
     addons_branch = get_version_branch(version[0])
-    url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
+    url = "https://api.github.com/repos/OSGeo/grass-addons/git/trees/{}?recursive=1".format(
+        addons_branch
+    )
 
     response = download_addons_paths_file(
         url=url,
