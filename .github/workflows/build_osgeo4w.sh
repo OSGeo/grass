@@ -112,7 +112,7 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
+set PATH=C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
