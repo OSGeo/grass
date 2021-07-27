@@ -1,5 +1,6 @@
 [flake8]
 ignore =
+    E203, # white space before ':'
     E265, # block comment should start with '# '
     E266, # too many leading '#' for block comment
     E402, # module level import not at top of file
