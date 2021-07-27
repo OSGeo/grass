@@ -209,6 +209,7 @@ class GrassTestLoader(unittest.TestLoader):
     universal_tests_value = "universal"
 
     def __init__(self, grass_location):
+        super().__init__()
         self.grass_location = grass_location
 
     # TODO: what is the purpose of top_level_dir, can it be useful?
