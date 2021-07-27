@@ -110,7 +110,18 @@ specified exists and that you can access it successfully. If any of
 these checks fail then <em>grass</em> will automatically switch back
 to the text user interface mode.
 
-<h2>FLAGS</h2>
+<h3>Running non-interactive jobs</h3>
+
+The <b>--exec</b> flag can run an executable on path, GRASS module, or a script.
+All are executed as a subprocess and any additional arguments are passed to it.
+A script needs to be specified by full or relative path and on unix-likes systems,
+the script file must have its executable bit set. Calling the interpreter
+(e.g., <code>python</code>) and providing the script as a parameter is possible, too.
+When it is finished GRASS will automatically exit using the return code given
+by the subprocess. Although the execution itself is non-interactive (no GUI or shell),
+the subprocess itself can be interactive if that is what the user requires.
+
+<h3>Config flag</h3>
 
 The flag <b>--config option</b> prints GRASS GIS configuration and
 version parameters, with the options:
@@ -228,15 +239,6 @@ and <tt>%APPDATA%\Roaming\GRASS8\addons</tt> on MS Windows.
 
 The GRASS_HTML_BROWSER environment variable allows the user to set the
 HTML web browser to use for displaying help pages.
-
-<h3>Running non-interactive batch jobs</h3>
-
-If the GRASS_BATCH_JOB environment variable is set to the <i>full</i>
-path and filename of a shell script then GRASS will be launched in a
-non-interactive way and the script will be run. The script itself can
-be interactive if that is what the user requires. When it is finished
-GRASS will automatically exit using the exit-success code given by the
-script. The script file must have its executable bit set.
 
 <h2>EXAMPLES</h2>
 
