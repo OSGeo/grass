@@ -84,7 +84,7 @@ EOT
 unix2dos $dist/etc/env.bat
 
 (
-    sed -e 's/^\(call "\)%~dp0\(.*\)$/\1C:\\OSGeo4W64\\bin\2/' \
+    sed -e 's/^\(call "\)%~dp0\(.*\)$/\1C:\\OSGeo4W\\bin\2/' \
         -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1'$dist_esc'\2/' \
         -e 's/^\(.* "\)%GISBASE%\\etc\(\\grass.*\)$/\1%GISBASE%\\..\\'$bin'\2/' \
         -e 's/@POSTFIX@/'$ver'/g' \
