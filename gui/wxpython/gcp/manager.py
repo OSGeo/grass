@@ -292,11 +292,13 @@ class GCPWizard(object):
             # start GCP Manager
             #
             # create superior Map Display frame
-            mapframe = wx.Frame(parent=None,
-                                id=wx.ID_ANY,
-                                size=globalvar.MAP_WINDOW_SIZE,
-                                style=wx.DEFAULT_FRAME_STYLE,
-                                title=name)
+            mapframe = wx.Frame(
+                parent=None,
+                id=wx.ID_ANY,
+                size=globalvar.MAP_WINDOW_SIZE,
+                style=wx.DEFAULT_FRAME_STYLE,
+                title=name,
+            )
 
             # create GCP manager
             gcpmgr = GCPDisplay(

@@ -425,7 +425,9 @@ class GMFrame(wx.Frame):
 
         # make a new page in the bookcontrol for the layer tree (on page 0 of
         # the notebook)
-        self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.BORDER_NONE)
+        self.pg_panel = wx.Panel(
+            self.notebookLayers, id=wx.ID_ANY, style=wx.BORDER_NONE
+        )
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
@@ -439,12 +441,14 @@ class GMFrame(wx.Frame):
             pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
 
             # create superior Map Display frame
-            mapframe = wx.Frame(layertree,
-                                id=wx.ID_ANY,
-                                pos=pos,
-                                size=globalvar.MAP_WINDOW_SIZE,
-                                style=wx.DEFAULT_FRAME_STYLE,
-                                title=name)
+            mapframe = wx.Frame(
+                layertree,
+                id=wx.ID_ANY,
+                pos=pos,
+                size=globalvar.MAP_WINDOW_SIZE,
+                style=wx.DEFAULT_FRAME_STYLE,
+                title=name,
+            )
 
             # create instance of Map Display interface
             self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
@@ -723,9 +727,9 @@ class GMFrame(wx.Frame):
         """Launch Map Swipe. See OnIClass documentation"""
         from mapswipe.frame import SwipeMapDisplay
 
-        frame = wx.Frame(parent=None,
-                         size=globalvar.MAP_WINDOW_SIZE,
-                         title=_("Map Swipe Tool"))
+        frame = wx.Frame(
+            parent=None, size=globalvar.MAP_WINDOW_SIZE, title=_("Map Swipe Tool")
+        )
         win = SwipeMapDisplay(
             parent=frame,
             giface=self._giface,
@@ -1606,9 +1610,11 @@ class GMFrame(wx.Frame):
             )
             return
 
-        frame = wx.Frame(parent=None,
-                         size=globalvar.MAP_WINDOW_SIZE,
-                         title=_("Supervised Classification Tool"))
+        frame = wx.Frame(
+            parent=None,
+            size=globalvar.MAP_WINDOW_SIZE,
+            title=_("Supervised Classification Tool"),
+        )
         win = IClassMapDisplay(parent=frame, giface=self._giface)
         win.CentreOnScreen()
 

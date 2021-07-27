@@ -81,9 +81,11 @@ def main():
     app = wx.App()
 
     # show main frame
-    mapframe = wx.Frame(parent=None,
-                        size=globalvar.MAP_WINDOW_SIZE,
-                        title=_("Map Swipe Tool - GRASS GIS"))
+    mapframe = wx.Frame(
+        parent=None,
+        size=globalvar.MAP_WINDOW_SIZE,
+        title=_("Map Swipe Tool - GRASS GIS"),
+    )
     frame = SwipeMapDisplay(
         parent=mapframe,
         giface=StandaloneGrassInterface(),

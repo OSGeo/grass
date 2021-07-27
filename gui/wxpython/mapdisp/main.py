@@ -479,7 +479,7 @@ class DMonDisplay(FrameMixin, MapPanel):
             Map=Map,
             giface=giface,
             toolbars=toolbars,
-            statusbar=statusbar
+            statusbar=statusbar,
         )
         # set system icon
         parent.iconsize = (16, 16)
@@ -545,11 +545,9 @@ class MapApp(wx.App):
         else:
             self.Map = None
 
-        mapframe = wx.Frame(None,
-                            id=wx.ID_ANY,
-                            size=monSize,
-                            style=wx.DEFAULT_FRAME_STYLE,
-                            title=name)
+        mapframe = wx.Frame(
+            None, id=wx.ID_ANY, size=monSize, style=wx.DEFAULT_FRAME_STYLE, title=name
+        )
 
         self.mapDisplay = DMonDisplay(
             parent=mapframe,

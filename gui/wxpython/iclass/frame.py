@@ -1624,9 +1624,11 @@ class MapManager:
 def test():
     app = wx.App()
 
-    frame = wx.Frame(parent=None,
-                     size=globalvar.MAP_WINDOW_SIZE,
-                     title=_("Supervised Classification Tool"))
+    frame = wx.Frame(
+        parent=None,
+        size=globalvar.MAP_WINDOW_SIZE,
+        title=_("Supervised Classification Tool"),
+    )
     frame = IClassMapDisplay(parent=frame)
     frame.Show()
     app.MainLoop()

@@ -58,6 +58,7 @@ import os
 
 import grass.script as gs
 
+
 def main():
     gs.set_raise_on_error(False)
 
@@ -90,22 +91,19 @@ def main():
             map_type=None,
         ):
             MapPanel.__init__(
-                self,
-                parent=parent,
-                Map=Map(),
-                giface=DMonGrassInterface(None)
+                self, parent=parent, Map=Map(), giface=DMonGrassInterface(None)
             )
 
             # set system icon
             parent.iconsize = (16, 16)
             parent.SetIcon(
-                wx.Icon(
-                    os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-                )
+                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
             )
 
             # extend shortcuts and create frame accelerator table
-            self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+            self.shortcuts_table.append(
+                (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11)
+            )
             self._initShortcuts()
 
             # this giface issue not solved yet, we must set mapframe afterwards
@@ -227,11 +225,13 @@ def main():
         os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     app = wx.App()
-    frame = wx.Frame(None,
-                    id=wx.ID_ANY,
-                    size=(850, 600),
-                    style=wx.DEFAULT_FRAME_STYLE,
-                    title=_("Raster Digitizer - GRASS GIS"))
+    frame = wx.Frame(
+        None,
+        id=wx.ID_ANY,
+        size=(850, 600),
+        style=wx.DEFAULT_FRAME_STYLE,
+        title=_("Raster Digitizer - GRASS GIS"),
+    )
     mapdisplay = RDigitMapDisplay(parent=frame, **kwargs)
     mapdisplay.Show()
 

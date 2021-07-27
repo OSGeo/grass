@@ -105,9 +105,11 @@ def main():
     app = wx.App()
 
     # show main frame
-    mapframe = wx.Frame(parent=None,
-                    size=globalvar.MAP_WINDOW_SIZE,
-                    title=_("Supervised Classification Tool - GRASS GIS"))
+    mapframe = wx.Frame(
+        parent=None,
+        size=globalvar.MAP_WINDOW_SIZE,
+        title=_("Supervised Classification Tool - GRASS GIS"),
+    )
     frame = IClassMapDisplay(
         parent=mapframe,
         giface=None,

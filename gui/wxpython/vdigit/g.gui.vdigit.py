@@ -65,22 +65,19 @@ def main():
     class VDigitMapDisplay(FrameMixin, MapPanel):
         def __init__(self, parent, vectorMap):
             MapPanel.__init__(
-                self,
-                parent=parent,
-                Map=Map(),
-                giface=DMonGrassInterface(None)
+                self, parent=parent, Map=Map(), giface=DMonGrassInterface(None)
             )
 
             # set system icon
             parent.iconsize = (16, 16)
             parent.SetIcon(
-                wx.Icon(
-                    os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-                )
+                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
             )
 
             # extend shortcuts and create frame accelerator table
-            self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+            self.shortcuts_table.append(
+                (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11)
+            )
             self._initShortcuts()
 
             # this giface issue not solved yet, we must set mapframe aferwards
@@ -110,7 +107,6 @@ def main():
             sizer.Add(self, proportion=1, flag=wx.EXPAND)
             parent.SetSizer(sizer)
             parent.Layout()
-
 
     if not haveVDigit:
         grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
@@ -143,11 +139,13 @@ def main():
         os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     app = wx.App()
-    frame = wx.Frame(None,
-                    id=wx.ID_ANY,
-                    size=(850, 600),
-                    style=wx.DEFAULT_FRAME_STYLE,
-                    title=_("Vector Digitizer - GRASS GIS"))
+    frame = wx.Frame(
+        None,
+        id=wx.ID_ANY,
+        size=(850, 600),
+        style=wx.DEFAULT_FRAME_STYLE,
+        title=_("Vector Digitizer - GRASS GIS"),
+    )
     mapdisplay = VDigitMapDisplay(parent=frame, vectorMap=options["map"])
     mapdisplay.Show()
 
