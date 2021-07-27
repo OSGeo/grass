@@ -101,6 +101,7 @@ def main():
     else:
         os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
+    # launch application
     app = wx.App()
 
     # show main frame
@@ -111,7 +112,6 @@ def main():
         parent=mapframe,
         giface=None,
     )
-
     if not flags["m"]:
         frame.CenterOnScreen()
     if group_name:

@@ -1749,15 +1749,5 @@ class MapDisplay(FrameMixin, MapPanel):
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self, proportion=1, flag=wx.EXPAND)
-
-
-        parent.SetSizer(sizer)
-        parent.Layout()
-
-        mapframe.SetSizer(sizer)
-        mapframe.Layout()
-        self.parent.SetSizer(sizer)
-        self.parent.Layout()
-
         parent.SetSizer(sizer)
         parent.Layout()
