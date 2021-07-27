@@ -146,8 +146,8 @@ def main():
         style=wx.DEFAULT_FRAME_STYLE,
         title=_("Vector Digitizer - GRASS GIS"),
     )
-    mapdisplay = VDigitMapDisplay(parent=frame, vectorMap=options["map"])
-    mapdisplay.Show()
+    frame = VDigitMapDisplay(parent=frame, vectorMap=options["map"])
+    frame.Show()
 
     app.MainLoop()
 

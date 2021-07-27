@@ -232,8 +232,8 @@ def main():
         style=wx.DEFAULT_FRAME_STYLE,
         title=_("Raster Digitizer - GRASS GIS"),
     )
-    mapdisplay = RDigitMapDisplay(parent=frame, **kwargs)
-    mapdisplay.Show()
+    frame = RDigitMapDisplay(parent=frame, **kwargs)
+    frame.Show()
 
     app.MainLoop()
 

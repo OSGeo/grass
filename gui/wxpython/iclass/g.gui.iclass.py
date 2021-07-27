@@ -105,13 +105,13 @@ def main():
     app = wx.App()
 
     # show main frame
-    mapframe = wx.Frame(
+    frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
         title=_("Supervised Classification Tool - GRASS GIS"),
     )
     frame = IClassMapDisplay(
-        parent=mapframe,
+        parent=frame,
         giface=None,
     )
     if not flags["m"]:
