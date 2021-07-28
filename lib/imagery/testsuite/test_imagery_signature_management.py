@@ -18,9 +18,15 @@ from grass.gunittest.main import test
 from grass.script.core import tempname
 import grass.script as grass
 from grass.pygrass import utils
-from grass.pygrass.gis import Mapset
+from grass.pygrass.gis import Mapset, make_mapset
 
-from grass.lib.gis import G_mapset_path, G_make_mapset, G_reset_mapsets
+from grass.lib.gis import (
+    G_mapset_path,
+    G_make_mapset,
+    G_reset_mapsets,
+    GNAME_MAX,
+    HOST_DIRSEP,
+)
 from grass.lib.imagery import (
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
@@ -30,7 +36,59 @@ from grass.lib.imagery import (
     I_signatures_rename,
     I_signatures_list_by_type,
     I_free_signatures_list,
+    I__get_signatures_element,
+    I__make_signatures_element,
 )
+
+
+class GetSignaturesElementTestCase(TestCase):
+    def test_get_sig(self):
+        elem = ctypes.create_string_buffer(GNAME_MAX)
+        I__get_signatures_element(elem, I_SIGFILE_TYPE_SIG)
+        self.assertEqual(utils.decode(elem.value), f"signatures{HOST_DIRSEP}sig")
+
+    def test_get_sigset(self):
+        elem = ctypes.create_string_buffer(GNAME_MAX)
+        I__get_signatures_element(elem, I_SIGFILE_TYPE_SIGSET)
+        self.assertEqual(utils.decode(elem.value), f"signatures{HOST_DIRSEP}sigset")
+
+
+class MakeSignaturesElementTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.org_mapset = Mapset()
+        cls.tmp_mapset_name = tempname(10)
+        make_mapset(mapset=cls.tmp_mapset_name)
+        cls.tmp_mapset = Mapset(mapset=cls.tmp_mapset_name)
+        cls.tmp_mapset.current()
+        cls.tmp_mapset_path = cls.tmp_mapset.path()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.org_mapset.current()
+        shutil.rmtree(cls.tmp_mapset_path, ignore_errors=True)
+
+    def test_make_sig(self):
+        I__make_signatures_element(I_SIGFILE_TYPE_SIG)
+        self.assertTrue(
+            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
+        )
+        # There should not be any side effects of calling function multiple times
+        I__make_signatures_element(I_SIGFILE_TYPE_SIG)
+        self.assertTrue(
+            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
+        )
+
+    def test_make_sigset(self):
+        I__make_signatures_element(I_SIGFILE_TYPE_SIGSET)
+        self.assertTrue(
+            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
+        )
+        # There should not be any side effects of calling function multiple times
+        I__make_signatures_element(I_SIGFILE_TYPE_SIGSET)
+        self.assertTrue(
+            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
+        )
 
 
 class SignaturesRemoveTestCase(TestCase):

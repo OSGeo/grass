@@ -147,6 +147,8 @@ int I_apply_colormap(unsigned char *, unsigned char *, unsigned,  unsigned char 
 int I_rasterize(double *, int, unsigned char, struct Cell_head *, unsigned char *);
 
 /* manage_signatures.c */
+void I__get_signatures_element(char *, I_SIGFILE_TYPE);
+void I__make_signatures_element(I_SIGFILE_TYPE);
 int I_signatures_remove(I_SIGFILE_TYPE, const char *);
 int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *, const char *);
 int I_signatures_rename(I_SIGFILE_TYPE, const char *, const char *);

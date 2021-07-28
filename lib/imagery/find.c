@@ -203,15 +203,8 @@ const char *I_find_signature(I_SIGFILE_TYPE type, char *name, const char *mapset
 
     G_debug(1, "I_find_signature(): type=%d name=%s mapset=%s", type, name, mapset);
 
-    if (type == I_SIGFILE_TYPE_SIG) {
-        sprintf(selem, "signatures%csig", HOST_DIRSEP);
-    }
-    else if (type == I_SIGFILE_TYPE_SIGSET) {
-        sprintf(selem, "signatures%csigset", HOST_DIRSEP);
-    }
-    else {
-        G_fatal_error("Programming error: unknown signature file type");
-    }
+    I__get_signatures_element(selem, type);
+
     return G_find_file(selem, name, mapset);
 }
 
@@ -241,14 +234,7 @@ const char *I_find_signature2(I_SIGFILE_TYPE type, const char *name, const char 
 
     G_debug(1, "I_find_signature2(): type=%d name=%s mapset=%s", type, name, mapset);
 
-    if (type == I_SIGFILE_TYPE_SIG) {
-        sprintf(selem, "signatures%csig", HOST_DIRSEP);
-    }
-    else if (type == I_SIGFILE_TYPE_SIGSET) {
-        sprintf(selem, "signatures%csigset", HOST_DIRSEP);
-    }
-    else {
-        G_fatal_error("Programming error: unknown signature file type");
-    }
+    I__get_signatures_element(selem, type);
+
     return G_find_file2(selem, name, mapset);
 }
