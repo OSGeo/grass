@@ -17,18 +17,22 @@
 
 /* TODO: add fallback methods, see e.g. r.proj */
 
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#define FIRST_THREAD 0
 
 static int neighbors;
-static DCELL *bufs[5];
+static DCELL *(*bufs)[5];
 static int cur_row;
 
-static void read_rows(int infile, int row)
+static void read_rows(int infile, int row, int t_id)
 {
     int end_row = cur_row + neighbors;
     int first_row = row;
@@ -42,17 +46,17 @@ static void read_rows(int infile, int row)
 
     if (keep > 0 && offset > 0)
 	for (i = 0; i < keep; i++) {
-	    DCELL *tmp = bufs[i];
+	    DCELL *tmp = bufs[t_id][i];
 
-	    bufs[i] = bufs[i + offset];
-	    bufs[i + offset] = tmp;
+	    bufs[t_id][i] = bufs[t_id][i + offset];
+	    bufs[t_id][i + offset] = tmp;
 	}
 
     if (keep < 0)
 	keep = 0;
 
     for (i = keep; i < neighbors; i++)
-	Rast_get_d_row(infile, bufs[i], first_row + i);
+        Rast_get_d_row(infile, bufs[t_id][i], first_row + i);
 
     cur_row = first_row;
 }
@@ -60,14 +64,17 @@ static void read_rows(int infile, int row)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *rastin, *rastout, *method;
+    struct Option *rastin, *rastout, *method, *nprocs, *memory;
     struct History history;
     char title[64];
     char buf_nsres[100], buf_ewres[100];
     struct Colors colors;
-    int infile, outfile;
+    int *infile;
+    int outfile;
     DCELL *outbuf;
-    int row, col;
+    int bufrows;
+    int threads;
+    int t, row, col;
     struct Cell_head dst_w, src_w;
 
     G_gisinit(argv[0]);
@@ -90,6 +97,9 @@ int main(int argc, char *argv[])
     method->options = "nearest,bilinear,bicubic,lanczos";
     method->answer = "bilinear";
     method->guisection = _("Method");
+
+    nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+    memory = G_define_standard_option(G_OPT_MEMORYMB);
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -106,6 +116,27 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Invalid method: %s"), method->answer);
 
     G_get_set_window(&dst_w);
+
+    sscanf(nprocs->answer, "%d", &threads);
+    if (threads < 1)
+    {
+      G_fatal_error(_("<%d> is not valid number of threads."), threads);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(threads);
+#else
+    threads = 1;
+#endif
+
+    bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
+    /* set the size to be at most covering the entire map */
+    if (bufrows > dst_w.rows) {
+        bufrows = dst_w.rows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < threads) {
+        bufrows = threads;
+    }
 
     /* set window to old map */
     Rast_get_cellhd(rastin->answer, "", &src_w);
@@ -149,18 +180,22 @@ int main(int argc, char *argv[])
     Rast_set_input_window(&src_w);
 
     /* allocate buffers for input rows */
-    for (row = 0; row < neighbors; row++)
-	bufs[row] = Rast_allocate_d_input_buf();
+    bufs = G_malloc(threads * sizeof *bufs);
+    for (t = 0; t < threads; t++)
+        for (row = 0; row < neighbors; row++)
+            bufs[t][row] = Rast_allocate_d_input_buf();
 
     cur_row = -100;
 
     /* open old map */
-    infile = Rast_open_old(rastin->answer, "");
+    infile = G_malloc(threads * sizeof *infile);
+    for (t = 0; t < threads; t++)
+        infile[t] = Rast_open_old(rastin->answer, "");
 
     /* reset window to current region */
     Rast_set_output_window(&dst_w);
 
-    outbuf = Rast_allocate_d_output_buf();
+    outbuf = G_calloc((size_t) bufrows * dst_w.cols, sizeof(DCELL));
 
     /* open new map */
     outfile = Rast_open_new(rastout->answer, DCELL_TYPE);
@@ -174,14 +209,14 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    read_rows(infile, maprow0);
+	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
 		double mapcol_f = Rast_easting_to_col(east, &src_w) - 0.5;
 		int mapcol0 = (int)floor(mapcol_f + 0.5);
 
-		double c = bufs[0][mapcol0];
+		double c = bufs[FIRST_THREAD][0][mapcol0];
 
 		if (Rast_is_d_null_value(&c)) {
 		    Rast_set_d_null_value(&outbuf[col], 1);
@@ -204,7 +239,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    read_rows(infile, maprow0);
+	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
@@ -213,10 +248,10 @@ int main(int argc, char *argv[])
 		int mapcol1 = mapcol0 + 1;
 		double u = mapcol_f - mapcol0;
 
-		double c00 = bufs[0][mapcol0];
-		double c01 = bufs[0][mapcol1];
-		double c10 = bufs[1][mapcol0];
-		double c11 = bufs[1][mapcol1];
+		double c00 = bufs[FIRST_THREAD][0][mapcol0];
+		double c01 = bufs[FIRST_THREAD][0][mapcol1];
+		double c10 = bufs[FIRST_THREAD][1][mapcol0];
+		double c11 = bufs[FIRST_THREAD][1][mapcol1];
 
 		if (Rast_is_d_null_value(&c00) ||
 		    Rast_is_d_null_value(&c01) ||
@@ -242,7 +277,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    read_rows(infile, maprow0);
+	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
@@ -253,25 +288,25 @@ int main(int argc, char *argv[])
 		int mapcol3 = mapcol1 + 2;
 		double u = mapcol_f - mapcol1;
 
-		double c00 = bufs[0][mapcol0];
-		double c01 = bufs[0][mapcol1];
-		double c02 = bufs[0][mapcol2];
-		double c03 = bufs[0][mapcol3];
+		double c00 = bufs[FIRST_THREAD][0][mapcol0];
+		double c01 = bufs[FIRST_THREAD][0][mapcol1];
+		double c02 = bufs[FIRST_THREAD][0][mapcol2];
+		double c03 = bufs[FIRST_THREAD][0][mapcol3];
 
-		double c10 = bufs[1][mapcol0];
-		double c11 = bufs[1][mapcol1];
-		double c12 = bufs[1][mapcol2];
-		double c13 = bufs[1][mapcol3];
+		double c10 = bufs[FIRST_THREAD][1][mapcol0];
+		double c11 = bufs[FIRST_THREAD][1][mapcol1];
+		double c12 = bufs[FIRST_THREAD][1][mapcol2];
+		double c13 = bufs[FIRST_THREAD][1][mapcol3];
 
-		double c20 = bufs[2][mapcol0];
-		double c21 = bufs[2][mapcol1];
-		double c22 = bufs[2][mapcol2];
-		double c23 = bufs[2][mapcol3];
+		double c20 = bufs[FIRST_THREAD][2][mapcol0];
+		double c21 = bufs[FIRST_THREAD][2][mapcol1];
+		double c22 = bufs[FIRST_THREAD][2][mapcol2];
+		double c23 = bufs[FIRST_THREAD][2][mapcol3];
 
-		double c30 = bufs[3][mapcol0];
-		double c31 = bufs[3][mapcol1];
-		double c32 = bufs[3][mapcol2];
-		double c33 = bufs[3][mapcol3];
+		double c30 = bufs[FIRST_THREAD][3][mapcol0];
+		double c31 = bufs[FIRST_THREAD][3][mapcol1];
+		double c32 = bufs[FIRST_THREAD][3][mapcol2];
+		double c33 = bufs[FIRST_THREAD][3][mapcol3];
 
 		if (Rast_is_d_null_value(&c00) ||
 		    Rast_is_d_null_value(&c01) ||
@@ -313,7 +348,7 @@ int main(int argc, char *argv[])
 
 	    G_percent(row, dst_w.rows, 2);
 
-	    read_rows(infile, maprow0);
+	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
@@ -327,7 +362,7 @@ int main(int argc, char *argv[])
 
 		for (i = 0; i < 5; i++) {
 		    for (j = mapcol0; j <= mapcol4; j++) {
-			c[ci] = bufs[i][j];
+			c[ci] = bufs[FIRST_THREAD][i][j];
 			if (Rast_is_d_null_value(&(c[ci]))) {
 			    Rast_set_d_null_value(&outbuf[col], 1);
 			    do_lanczos = 0;
@@ -351,7 +386,8 @@ int main(int argc, char *argv[])
 
     G_percent(dst_w.rows, dst_w.rows, 2);
 
-    Rast_close(infile);
+    for (t = 0; t < threads; t++)
+        Rast_close(infile[t]);
     Rast_close(outfile);
 
 
