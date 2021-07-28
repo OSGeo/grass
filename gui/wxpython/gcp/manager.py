@@ -2024,7 +2024,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
             self.Destroy()
 
-        #event.Skip()
+        # event.Skip()
 
     def OnGROrder(self, event):
         """
