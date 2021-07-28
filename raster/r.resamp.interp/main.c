@@ -30,14 +30,13 @@
 
 static int neighbors;
 static DCELL *(*bufs)[5];
-static int cur_row;
 
-static void read_rows(int infile, int row, int t_id)
+static void read_rows(int infile, int row, int t_id, int *cur_row)
 {
-    int end_row = cur_row + neighbors;
+    int end_row = *cur_row + neighbors;
     int first_row = row;
     int last_row = row + neighbors;
-    int offset = first_row - cur_row;
+    int offset = first_row - *cur_row;
     int keep = end_row - first_row;
     int i;
 
@@ -58,7 +57,7 @@ static void read_rows(int infile, int row, int t_id)
     for (i = keep; i < neighbors; i++)
         Rast_get_d_row(infile, bufs[t_id][i], first_row + i);
 
-    cur_row = first_row;
+    *cur_row = first_row;
 }
 
 int main(int argc, char *argv[])
@@ -129,7 +128,7 @@ int main(int argc, char *argv[])
 #endif
 
     bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
-    /* set the size to be at most covering the entire map */
+    /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > dst_w.rows) {
         bufrows = dst_w.rows;
     }
@@ -185,8 +184,6 @@ int main(int argc, char *argv[])
         for (row = 0; row < neighbors; row++)
             bufs[t][row] = Rast_allocate_d_input_buf();
 
-    cur_row = -100;
-
     /* open old map */
     infile = G_malloc(threads * sizeof *infile);
     for (t = 0; t < threads; t++)
@@ -200,46 +197,67 @@ int main(int argc, char *argv[])
     /* open new map */
     outfile = Rast_open_new(rastout->answer, DCELL_TYPE);
 
+    int computed = 0;
+    int written = 0;
+    int cur_row = -100;
+
+    while (written < dst_w.rows) {
+    int range = bufrows;
+    if (range > dst_w.rows - written)
+        range = dst_w.rows - written;
+    int start = written;
+    int end = written + range;
+    
+    #pragma omp parallel private(row, col) firstprivate(cur_row) if(threads > 1)
+    {
+    int t_id = FIRST_THREAD;
+#if defined(_OPENMP)
+    t_id = omp_get_thread_num();
+#endif
+    
     switch (neighbors) {
     case 1:			/* nearest */
-	for (row = 0; row < dst_w.rows; row++) {
+    #pragma omp for schedule(static)
+	for (row = start; row < end; row++) {
 	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
 	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
 	    int maprow0 = (int)floor(maprow_f + 0.5);
 
-	    G_percent(row, dst_w.rows, 2);
+	    G_percent(computed, dst_w.rows, 2);
 
-	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
+	    read_rows(infile[t_id], maprow0, t_id, &cur_row);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
 		double mapcol_f = Rast_easting_to_col(east, &src_w) - 0.5;
 		int mapcol0 = (int)floor(mapcol_f + 0.5);
 
-		double c = bufs[FIRST_THREAD][0][mapcol0];
+		double c = bufs[t_id][0][mapcol0];
 
 		if (Rast_is_d_null_value(&c)) {
-		    Rast_set_d_null_value(&outbuf[col], 1);
+		    Rast_set_d_null_value(&outbuf[(row - start) * dst_w.cols + col], 1);
 		}
 		else {
-		    outbuf[col] = c;
+		    outbuf[(row - start) * dst_w.cols + col] = c;
 		}
 	    }
 
-	    Rast_put_d_row(outfile, outbuf);
+        #pragma omp atomic update
+        computed++;
 	}
 	break;
 
     case 2:			/* bilinear */
-	for (row = 0; row < dst_w.rows; row++) {
+    #pragma omp for schedule(static)
+	for (row = start; row < end; row++) {
 	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
 	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
 	    int maprow0 = (int)floor(maprow_f);
 	    double v = maprow_f - maprow0;
 
-	    G_percent(row, dst_w.rows, 2);
+	    G_percent(computed, dst_w.rows, 2);
 
-	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
+	    read_rows(infile[t_id], maprow0, t_id, &cur_row);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
@@ -248,36 +266,38 @@ int main(int argc, char *argv[])
 		int mapcol1 = mapcol0 + 1;
 		double u = mapcol_f - mapcol0;
 
-		double c00 = bufs[FIRST_THREAD][0][mapcol0];
-		double c01 = bufs[FIRST_THREAD][0][mapcol1];
-		double c10 = bufs[FIRST_THREAD][1][mapcol0];
-		double c11 = bufs[FIRST_THREAD][1][mapcol1];
+		double c00 = bufs[t_id][0][mapcol0];
+		double c01 = bufs[t_id][0][mapcol1];
+		double c10 = bufs[t_id][1][mapcol0];
+		double c11 = bufs[t_id][1][mapcol1];
 
 		if (Rast_is_d_null_value(&c00) ||
 		    Rast_is_d_null_value(&c01) ||
 		    Rast_is_d_null_value(&c10) || Rast_is_d_null_value(&c11)) {
-		    Rast_set_d_null_value(&outbuf[col], 1);
+		    Rast_set_d_null_value(&outbuf[(row - start) * dst_w.cols + col], 1);
 		}
 		else {
-		    outbuf[col] = Rast_interp_bilinear(u, v, c00, c01, c10, c11);
+		    outbuf[(row - start) * dst_w.cols + col] = Rast_interp_bilinear(u, v, c00, c01, c10, c11);
 		}
 	    }
 
-	    Rast_put_d_row(outfile, outbuf);
+        #pragma omp atomic update
+        computed++;
 	}
 	break;
 
     case 4:			/* bicubic */
-	for (row = 0; row < dst_w.rows; row++) {
+    #pragma omp for schedule(static)
+	for (row = start; row < end; row++) {
 	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
 	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
 	    int maprow1 = (int)floor(maprow_f);
 	    int maprow0 = maprow1 - 1;
 	    double v = maprow_f - maprow1;
 
-	    G_percent(row, dst_w.rows, 2);
+	    G_percent(computed, dst_w.rows, 2);
 
-	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
+	    read_rows(infile[t_id], maprow0, t_id, &cur_row);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
@@ -288,25 +308,25 @@ int main(int argc, char *argv[])
 		int mapcol3 = mapcol1 + 2;
 		double u = mapcol_f - mapcol1;
 
-		double c00 = bufs[FIRST_THREAD][0][mapcol0];
-		double c01 = bufs[FIRST_THREAD][0][mapcol1];
-		double c02 = bufs[FIRST_THREAD][0][mapcol2];
-		double c03 = bufs[FIRST_THREAD][0][mapcol3];
+		double c00 = bufs[t_id][0][mapcol0];
+		double c01 = bufs[t_id][0][mapcol1];
+		double c02 = bufs[t_id][0][mapcol2];
+		double c03 = bufs[t_id][0][mapcol3];
 
-		double c10 = bufs[FIRST_THREAD][1][mapcol0];
-		double c11 = bufs[FIRST_THREAD][1][mapcol1];
-		double c12 = bufs[FIRST_THREAD][1][mapcol2];
-		double c13 = bufs[FIRST_THREAD][1][mapcol3];
+		double c10 = bufs[t_id][1][mapcol0];
+		double c11 = bufs[t_id][1][mapcol1];
+		double c12 = bufs[t_id][1][mapcol2];
+		double c13 = bufs[t_id][1][mapcol3];
 
-		double c20 = bufs[FIRST_THREAD][2][mapcol0];
-		double c21 = bufs[FIRST_THREAD][2][mapcol1];
-		double c22 = bufs[FIRST_THREAD][2][mapcol2];
-		double c23 = bufs[FIRST_THREAD][2][mapcol3];
+		double c20 = bufs[t_id][2][mapcol0];
+		double c21 = bufs[t_id][2][mapcol1];
+		double c22 = bufs[t_id][2][mapcol2];
+		double c23 = bufs[t_id][2][mapcol3];
 
-		double c30 = bufs[FIRST_THREAD][3][mapcol0];
-		double c31 = bufs[FIRST_THREAD][3][mapcol1];
-		double c32 = bufs[FIRST_THREAD][3][mapcol2];
-		double c33 = bufs[FIRST_THREAD][3][mapcol3];
+		double c30 = bufs[t_id][3][mapcol0];
+		double c31 = bufs[t_id][3][mapcol1];
+		double c32 = bufs[t_id][3][mapcol2];
+		double c33 = bufs[t_id][3][mapcol3];
 
 		if (Rast_is_d_null_value(&c00) ||
 		    Rast_is_d_null_value(&c01) ||
@@ -323,10 +343,10 @@ int main(int argc, char *argv[])
 		    Rast_is_d_null_value(&c30) ||
 		    Rast_is_d_null_value(&c31) ||
 		    Rast_is_d_null_value(&c32) || Rast_is_d_null_value(&c33)) {
-		    Rast_set_d_null_value(&outbuf[col], 1);
+		    Rast_set_d_null_value(&outbuf[(row - start) * dst_w.cols + col], 1);
 		}
 		else {
-		    outbuf[col] = Rast_interp_bicubic(u, v,
+		    outbuf[(row - start) * dst_w.cols + col] = Rast_interp_bicubic(u, v,
 						   c00, c01, c02, c03,
 						   c10, c11, c12, c13,
 						   c20, c21, c22, c23,
@@ -334,21 +354,23 @@ int main(int argc, char *argv[])
 		}
 	    }
 
-	    Rast_put_d_row(outfile, outbuf);
+        #pragma omp atomic update
+        computed++;
 	}
 	break;
 
     case 5:			/* lanczos */
-	for (row = 0; row < dst_w.rows; row++) {
+    #pragma omp for schedule(static)
+	for (row = start; row < end; row++) {
 	    double north = Rast_row_to_northing(row + 0.5, &dst_w);
 	    double maprow_f = Rast_northing_to_row(north, &src_w) - 0.5;
 	    int maprow1 = (int)floor(maprow_f + 0.5);
 	    int maprow0 = maprow1 - 2;
 	    double v = maprow_f - maprow1;
 
-	    G_percent(row, dst_w.rows, 2);
+	    G_percent(computed, dst_w.rows, 2);
 
-	    read_rows(infile[FIRST_THREAD], maprow0, FIRST_THREAD);
+	    read_rows(infile[t_id], maprow0, t_id, &cur_row);
 
 	    for (col = 0; col < dst_w.cols; col++) {
 		double east = Rast_col_to_easting(col + 0.5, &dst_w);
@@ -362,9 +384,9 @@ int main(int argc, char *argv[])
 
 		for (i = 0; i < 5; i++) {
 		    for (j = mapcol0; j <= mapcol4; j++) {
-			c[ci] = bufs[FIRST_THREAD][i][j];
+			c[ci] = bufs[t_id][i][j];
 			if (Rast_is_d_null_value(&(c[ci]))) {
-			    Rast_set_d_null_value(&outbuf[col], 1);
+			    Rast_set_d_null_value(&outbuf[(row - start) * dst_w.cols + col], 1);
 			    do_lanczos = 0;
 			    break;
 			}
@@ -375,13 +397,23 @@ int main(int argc, char *argv[])
 		}
 
 		if (do_lanczos) {
-		    outbuf[col] = Rast_interp_lanczos(u, v, c);
+		    outbuf[(row - start) * dst_w.cols + col] = Rast_interp_lanczos(u, v, c);
 		}
 	    }
 
-	    Rast_put_d_row(outfile, outbuf);
+        #pragma omp atomic update
+        computed++;
 	}
 	break;
+    }
+    }
+    
+    /* write to output map */
+    for (row = start; row < end; row++) {
+        Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
+    }
+    written = end;
+
     }
 
     G_percent(dst_w.rows, dst_w.rows, 2);
