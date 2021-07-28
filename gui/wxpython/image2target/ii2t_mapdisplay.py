@@ -248,7 +248,9 @@ class MapFrame(SingleMapFrame):
         # default toolbar
         if name == "map":
             if "map" not in self.toolbars:
-                self.toolbars["map"] = MapToolbar(self, self._toolSwitcher, self._giface)
+                self.toolbars["map"] = MapToolbar(
+                    self, self._toolSwitcher, self._giface
+                )
 
             self._mgr.AddPane(
                 self.toolbars["map"],
