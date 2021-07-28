@@ -170,7 +170,7 @@ class MapFrameBase(wx.Frame):
 
     def OnFullScreen(self, event):
         """!Switch fullscreen mode, hides also toolbars"""
-        for toolbar in list(self.toolbars.keys()):
+        for toolbar in self.toolbars:
             self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
         self._mgr.Update()
         self.ShowFullScreen(not self.IsFullScreen())
