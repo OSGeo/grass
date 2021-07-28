@@ -170,7 +170,7 @@ class MapFrameBase(wx.Frame):
 
     def OnFullScreen(self, event):
         """!Switch fullscreen mode, hides also toolbars"""
-        for toolbar in self.toolbars.keys():
+        for toolbar in list(self.toolbars.keys()):
             self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
         self._mgr.Update()
         self.ShowFullScreen(not self.IsFullScreen())
@@ -415,7 +415,7 @@ class MapFrameBase(wx.Frame):
 
     def GetToolbarNames(self):
         """Return toolbar names"""
-        return self.toolbars.keys()
+        return list(self.toolbars.keys())
 
     def AddToolbar(self):
         """Add defined toolbar to the window"""

@@ -1578,10 +1578,6 @@ class MapFrame(SingleMapFrame):
         """Returns toolbar with zooming tools"""
         return self.toolbars["map"] if "map" in self.toolbars else None
 
-    def GetToolbarNames(self):
-        """Return toolbar names"""
-        return self.toolbars.keys()
-
     def GetDialog(self, name):
         """Get selected dialog if exist"""
         return self.dialogs.get(name, None)
