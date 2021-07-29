@@ -22,12 +22,13 @@
  *               for details.
  *
  *****************************************************************************/
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
+#include <grass/raster.h>
 
 /* 10/99 from GMSL, updated to new GRASS 5 code style , changed default "prec" to float */
 
@@ -154,7 +155,8 @@ int main(int argc, char *argv[])
     struct
     {
         struct Option *elevation, *slope_fmt, *slope, *aspect, *pcurv, *tcurv,
-            *zfactor, *min_slope, *out_precision, *dx, *dy, *dxx, *dyy, *dxy;
+            *zfactor, *min_slope, *out_precision, *dx, *dy, *dxx, *dyy, *dxy,
+            *nprocs, *memory;
     } parm;
     struct
     {
@@ -272,6 +274,9 @@ int main(int argc, char *argv[])
     parm.min_slope->required = NO;
     parm.min_slope->answer = "0.0";
     parm.min_slope->guisection = _("Settings");
+
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
