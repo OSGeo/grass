@@ -151,17 +151,36 @@ class MapPanel(SingleMapPanel, MainPageBase):
         if statusbar:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
             # items for choice
             statusbarItems = [
                 sb.SbCoordinates,
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
+<<<<<<< HEAD
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
             ]
             self.statusbarItemsDisabledInNviz = (
                 sb.SbDisplayGeometry,
+=======
+                sb.SbShowRegion,
+                sb.SbAlignExtent,
+                sb.SbResolution,
+                sb.SbDisplayGeometry,
+                sb.SbMapScale,
+                sb.SbGoTo,
+                sb.SbProjection,
+            ]
+            self.statusbarItemsHiddenInNviz = (
+                sb.SbAlignExtent,
+                sb.SbDisplayGeometry,
+                sb.SbShowRegion,
+                sb.SbResolution,
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
                 sb.SbMapScale,
             )
             self.statusbar = self.CreateStatusbar(statusbarItems)
@@ -176,12 +195,15 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 % dict(command=" ".join(cmd), error=error)
             )
         )
+<<<<<<< HEAD
 =======
             self.statusbar = self.CreateStatusbar()
 >>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 =======
             self.statusbar = self.CreateStatusbar()
 >>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
 
         # init decoration objects
         self.decorations = {}
@@ -253,6 +275,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         # statusbar
         if self.statusbar:
             self.AddStatusbarPane()
@@ -278,6 +301,11 @@ class MapPanel(SingleMapPanel, MainPageBase):
 >>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
 =======
 >>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+        # statusbar
+        self.AddStatusbarPane()
+
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
         self._mgr.Update()
 
         #
@@ -338,6 +366,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             action=on_show_hide_statusbar,
         )
 
+<<<<<<< HEAD
     def CreateStatusbar(self):
         if self.statusbarManager:
             return
@@ -450,6 +479,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
         """Overide wx.StatusBar method"""
         self.statusbar.SetStatusText(*args)
 
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
     def GetMapWindow(self):
         return self.MapWindow
 
@@ -816,6 +847,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self._mgr.Update()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     def ShowAllToolbars(self, show=True):
         if not show:  # hide
@@ -835,6 +867,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
         return False
 
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
     def RemoveQueryLayer(self):
         """Removes temporary map layers (queries)"""
         qlayer = self.GetMap().GetListOfLayers(name=globalvar.QUERYLAYER)
