@@ -75,6 +75,9 @@ set to their default values.
 All raster maps used to generate signature file must have band reference
 set. Use <em><a href="r.support.html">r.support</a></em> to set
 band references of each member of the imagery group.
+Signatures generated for one scene are suitable for classification
+of other scenes as long as they consist of same raster bands
+(band references match).
 
 <h3>Parameters:</h3>
 
@@ -213,13 +216,6 @@ achieve the convergence, and the separability matrix.
 
 <h2>NOTES</h2>
 
-<!-- No longer true
-Running in command line mode, <em>i.cluster</em> will
-overwrite the output signature file and reportfile (if
-required by the user) without prompting if the files
-existed.
--->
-
 <h3>Sampling method</h3>
 
 <em>i.cluster</em> does not cluster all pixels, but only a sample (see
@@ -267,15 +263,32 @@ Preparing the statistics for unsupervised classification of
 a LANDSAT subscene in North Carolina:
 
 <div class="code"><pre>
+## Prepare imagery for classification
+# Skip this step if your rasters already have band references defined
+# Define band references for all LANDSAT bands in mapset PERMANENT
+g.mapset mapset=PERMANENT
+r.support map=lsat7_2002_10 bandref=TM7_1
+r.support map=lsat7_2002_20 bandref=TM7_2
+r.support map=lsat7_2002_30 bandref=TM7_3
+r.support map=lsat7_2002_40 bandref=TM7_4
+r.support map=lsat7_2002_50 bandref=TM7_5
+r.support map=lsat7_2002_61 bandref=TM7_61
+r.support map=lsat7_2002_62 bandref=TM7_62
+r.support map=lsat7_2002_70 bandref=TM7_7
+r.support map=lsat7_2002_80 bandref=TM7_8
+g.mapset mapset=user1  # replace user1 with your mapset name
+
+## Real work starts here
+# Set computational region to match the scene
 g.region raster=lsat7_2002_10 -p
 
 # store VIZ, NIR, MIR into group/subgroup (leaving out TIR)
-i.group group=lsat7_2002 subgroup=lsat7_2002 \
+i.group group=lsat7_2002 subgroup=res_30m \
   input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 
 # generate signature file and report
-i.cluster group=lsat7_2002 subgroup=lsat7_2002 \
-  signaturefile=sig_cluster_lsat2002 \
+i.cluster group=lsat7_2002 subgroup=res_30m \
+  signaturefile=cluster_lsat2002 \
   classes=10 reportfile=rep_clust_lsat2002.txt
 </pre></div>
 
@@ -294,6 +307,7 @@ See example in its manual page.
 
 <p>
 <em>
+<a href="r.support.html">r.support</a>,
 <a href="g.gui.iclass.html">g.gui.iclass</a>,
 <a href="i.group.html">i.group</a>,
 <a href="i.gensig.html">i.gensig</a>,
@@ -307,10 +321,12 @@ See example in its manual page.
 
 Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
-
 <br>
 Tao Wen, 
 University of Illinois at Urbana-Champaign, Illinois
+<br>
+Band reference support: Maris Nartiss,
+University of Latvia
 
 <!--
 <p>
