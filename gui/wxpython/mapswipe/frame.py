@@ -99,9 +99,19 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
+<<<<<<< HEAD
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
+=======
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
@@ -273,7 +283,11 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(0)
+<<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMain"].GetBestSize()),
+=======
+                .BestSize((self.toolbars["swipeMain"].GetBestSize())),
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
             )
 
         if name == "swipeMap":
@@ -295,7 +309,11 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(1)
+<<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMap"].GetBestSize()),
+=======
+                .BestSize((self.toolbars["swipeMap"].GetBestSize())),
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
             )
 
         if name == "swipeMisc":
@@ -317,7 +335,11 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(2)
+<<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMisc"].GetBestSize()),
+=======
+                .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
             )
 
     def _addPanes(self):

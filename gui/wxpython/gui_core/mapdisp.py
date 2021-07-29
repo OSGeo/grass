@@ -28,7 +28,10 @@ from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
 from mapdisp import statusbar as sb
+<<<<<<< HEAD
 from mapwin.base import MapWindowProperties
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
 
 from grass.script import core as grass
 
@@ -161,6 +164,17 @@ class MapPanelBase(wx.Panel):
         # update statusbar
         self.StatusbarUpdate()
 
+<<<<<<< HEAD
+=======
+    def OnFullScreen(self, event):
+        """!Switch fullscreen mode, hides also toolbars"""
+        for toolbar in self.toolbars:
+            self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
+        self._mgr.Update()
+        self.ShowFullScreen(not self.IsFullScreen())
+        event.Skip()
+
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
     def OnCloseWindow(self, event):
         self.Destroy()
 
@@ -336,8 +350,13 @@ class MapPanelBase(wx.Panel):
         # create statusbar and its manager
         statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         statusbar.SetMinHeight(24)
+<<<<<<< HEAD
         statusbar.SetFieldsCount(3)
         statusbar.SetStatusWidths([-6, -2, -1])
+=======
+        statusbar.SetFieldsCount(4)
+        statusbar.SetStatusWidths([-5, -2, -1, -1])
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
@@ -345,8 +364,17 @@ class MapPanelBase(wx.Panel):
             statusbarItems, mapframe=self, statusbar=statusbar
         )
         self.statusbarManager.AddStatusbarItem(
+<<<<<<< HEAD
             sb.SbRender(self, statusbar=statusbar, position=2)
         )
+=======
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3)
+        )
+        self.statusbarManager.Update()
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
         return statusbar
 
     def AddStatusbarPane(self):
@@ -367,7 +395,11 @@ class MapPanelBase(wx.Panel):
         )
 
     def SetStatusText(self, *args):
+<<<<<<< HEAD
         """Override wx.StatusBar method"""
+=======
+        """Overide wx.StatusBar method"""
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
         self.statusbar.SetStatusText(*args)
 
     def ShowStatusbar(self, show):
@@ -391,6 +423,9 @@ class MapPanelBase(wx.Panel):
                 toolbar.EnableLongHelp(enable)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
     def ShowAllToolbars(self, show=True):
         if not show:  # hide
             action = self.RemoveToolbar
@@ -432,8 +467,11 @@ class MapPanelBase(wx.Panel):
             return self._mgr.GetPane(name).IsShown()
         return False
 
+<<<<<<< HEAD
 =======
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         raise NotImplementedError("OnRender")
