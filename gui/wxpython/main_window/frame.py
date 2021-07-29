@@ -422,7 +422,7 @@ class GMFrame(wx.Frame):
                 lmgr=self,
                 Map=layertree.Map,
                 title=name,
-                size=globalvar.MAP_WINDOW_SIZE
+                size=globalvar.MAP_WINDOW_SIZE,
             )
             # add map display panel to notebook and make it current
             self.mapnotebook.AddPage(mapdisplay, name)
@@ -489,7 +489,7 @@ class GMFrame(wx.Frame):
         )
 
         mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
+            lambda firstTime, mapDisplayPage=self.currentPage: self._onStarting3dMode(
                 mapDisplayPage
             )
         )
@@ -1876,7 +1876,7 @@ class GMFrame(wx.Frame):
             self.notebookLayers.SetSelection(pgnum)
             self.currentPage = self.notebookLayers.GetCurrentPage()
 
-    def _onMapDisplayStarting3dMode(self, mapDisplayPage):
+    def _onStarting3dMode(self, mapDisplayPage):
         """Disables 3D mode for all map displays except for @p mapDisplay"""
         # TODO: it should be disabled also for newly created map windows
         # moreover mapdisp.Disable3dMode() does not work properly
