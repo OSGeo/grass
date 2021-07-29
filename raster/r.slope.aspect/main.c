@@ -22,6 +22,10 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,6 +38,7 @@
 
 
 #define abs(x) ((x)<0?-(x):(x))
+#define FIRST_THREAD 0
 
 
 /**************************************************************************
@@ -77,7 +82,7 @@ static double aspect_cw_n(double aspect)
 int main(int argc, char *argv[])
 {
     struct Categories cats;
-    int elevation_fd;
+    int *elevation_fd;
     int aspect_fd;
     int slope_fd;
     int pcurv_fd;
@@ -87,7 +92,8 @@ int main(int argc, char *argv[])
     int dxx_fd;
     int dyy_fd;
     int dxy_fd;
-    DCELL *elev_cell[3], *temp;
+    DCELL *(*elev_cell)[3];
+    DCELL *temp;
     DCELL *pc1, *pc2, *pc3;
     DCELL c1, c2, c3, c4, c5, c6, c7, c8, c9;
     DCELL tmp1, tmp2;
@@ -102,7 +108,7 @@ int main(int argc, char *argv[])
     void *dxx_raster, *dxx_ptr = NULL;
     void *dyy_raster, *dyy_ptr = NULL;
     void *dxy_raster, *dxy_ptr = NULL;
-    int i;
+    int i, t;
     RASTER_MAP_TYPE out_type, data_type;
     int Wrap;                   /* global wraparound */
     struct Cell_head window, cellhd;
@@ -122,6 +128,8 @@ int main(int argc, char *argv[])
     char buf[300];
     int nrows, row;
     int ncols, col;
+    int nprocs;
+    int bufrows;
 
     double north, east, south, west, ns_med;
 
@@ -300,6 +308,16 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    sscanf(parm.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1)
+    {
+      G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    nprocs = 1;
+#endif
 
     radians_to_degrees = 180.0 / M_PI;
     degrees_to_radians = M_PI / 180.0;
@@ -406,6 +424,16 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
+    bufrows = atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (bufrows > nrows) {
+        bufrows = nrows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < nprocs) {
+        bufrows = nprocs;
+    }
+
     if (((window.west == (window.east - 360.))
          || (window.east == (window.west - 360.))) &&
         (G_projection() == PROJECTION_LL)) {
@@ -453,13 +481,17 @@ int main(int argc, char *argv[])
      */
 
     /* open the elevation file for reading */
-    elevation_fd = Rast_open_old(elev_name, "");
-    elev_cell[0] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
-    Rast_set_d_null_value(elev_cell[0], ncols + 2);
-    elev_cell[1] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
-    Rast_set_d_null_value(elev_cell[1], ncols + 2);
-    elev_cell[2] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
-    Rast_set_d_null_value(elev_cell[2], ncols + 2);
+    elevation_fd = G_malloc(nprocs * sizeof *elevation_fd);
+    elev_cell = G_malloc(nprocs * sizeof *elev_cell);
+    for (t = 0; t < nprocs; t++) {
+        elevation_fd[t] = Rast_open_old(elev_name, "");
+        elev_cell[t][0] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
+        Rast_set_d_null_value(elev_cell[t][0], ncols + 2);
+        elev_cell[t][1] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
+        Rast_set_d_null_value(elev_cell[t][1], ncols + 2);
+        elev_cell[t][2] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
+        Rast_set_d_null_value(elev_cell[t][2], ncols + 2);
+    }
 
     if (slope_name != NULL) {
         slope_fd = Rast_open_new(slope_name, out_type);
@@ -546,10 +578,11 @@ int main(int argc, char *argv[])
         && dx_fd < 0 && dy_fd < 0 && dxx_fd < 0 && dyy_fd < 0 && dxy_fd < 0)
         exit(EXIT_FAILURE);
 
-    Rast_get_d_row_nomask(elevation_fd, elev_cell[2] + 1, 0);
+    int t_id = FIRST_THREAD;
+    Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, 0);
     if (Wrap) {
-        elev_cell[2][0] = elev_cell[1][Rast_window_cols()];
-        elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][1];
+        elev_cell[t_id][2][0] = elev_cell[t_id][1][ncols];
+        elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
     }
 
     G_verbose_message(_("Percent complete..."));
@@ -585,24 +618,24 @@ int main(int argc, char *argv[])
         }
 
         G_percent(row, nrows, 2);
-        temp = elev_cell[0];
-        elev_cell[0] = elev_cell[1];
-        elev_cell[1] = elev_cell[2];
-        elev_cell[2] = temp;
+        temp = elev_cell[t_id][0];
+        elev_cell[t_id][0] = elev_cell[t_id][1];
+        elev_cell[t_id][1] = elev_cell[t_id][2];
+        elev_cell[t_id][2] = temp;
 
         if (row < nrows - 1)
-            Rast_get_d_row_nomask(elevation_fd, elev_cell[2] + 1, row + 1);
+            Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row + 1);
         else
-            Rast_set_d_null_value(elev_cell[2], ncols + 2);
+            Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
 
         if (Wrap) {
-            elev_cell[2][0] = elev_cell[2][Rast_window_cols()];
-            elev_cell[2][Rast_window_cols() + 1] = elev_cell[2][1];
+            elev_cell[t_id][2][0] = elev_cell[t_id][2][Rast_window_cols()];
+            elev_cell[t_id][2][Rast_window_cols() + 1] = elev_cell[t_id][2][1];
         }
 
-        pc1 = elev_cell[0];
-        pc2 = elev_cell[1];
-        pc3 = elev_cell[2];
+        pc1 = elev_cell[t_id][0];
+        pc2 = elev_cell[t_id][1];
+        pc3 = elev_cell[t_id][2];
 
         if (aspect_fd >= 0) {
             asp_ptr = asp_raster;
@@ -966,7 +999,8 @@ int main(int argc, char *argv[])
 
     G_percent(row, nrows, 2);
 
-    Rast_close(elevation_fd);
+    for (t = 0; t < nprocs; t++)
+        Rast_close(elevation_fd[t]);
     G_debug(1, "Creating support files...");
 
     G_verbose_message(_("Elevation products for mapset <%s> in <%s>"),
