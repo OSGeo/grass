@@ -8,7 +8,7 @@ Classes:
  - mapdisp::Layer
  - mapdisp::LayerList
  - mapdisp::DMonGrassInterface
- - mapdisp::DMonFrame
+ - mapdisp::DMonDisplay
  - mapdisp::MapApp
 
 Usage:

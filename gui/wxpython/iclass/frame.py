@@ -479,7 +479,7 @@ class IClassMapPanel(DoubleMapPanel):
     def OnUpdateActive(self, event):
         """
         .. todo::
-            move to DoubleMapFrame?
+            move to DoubleMapPanel?
         """
         if self.GetMapToolbar().GetActiveMap() == 0:
             self.MapWindow = self.firstMapWindow
@@ -496,7 +496,7 @@ class IClassMapPanel(DoubleMapPanel):
     def UpdateActive(self, win):
         """
         .. todo::
-            move to DoubleMapFrame?
+            move to DoubleMapPanel?
         """
         mapTb = self.GetMapToolbar()
         # optionally disable tool zoomback tool
