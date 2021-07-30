@@ -12,6 +12,8 @@
 #           for details.
 
 import os
+import shutil
+from pathlib import Path
 from IPython.display import Image
 import tempfile
 import grass.script as gs
@@ -21,18 +23,22 @@ class GrassRenderer:
     """GrassRenderer creates and displays GRASS maps in
     Jupyter Notebooks.
 
+    Elements are added to the display by calling GRASS display modules.
+
     Basic usage::
-        m = GrassRenderer()
-        m.run("d.rast", map="elevation")
-        m.show()
+    >>> m = GrassRenderer()
+    >>> m.run("d.rast", map="elevation")
+    >>> m.run("d.legend", raster="elevation")
+    >>> m.show()
 
-    :param int height: height of map in pixels
-    :param int width: width of map in pixels
-    :param str filename: filename or path to save a PNG of map
-    :param str env: environment
-    :param int text_size: default text size, overwritten by most display modules
-    :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
+    GRASS display modules can also be called by using the name of module
+    as a class method and replacing "." with "_" in the name.
 
+    Shortcut usage::
+    >>> m = GrassRenderer()
+    >>> m.d_rast(map="elevation")
+    >>> m.d_legend(raster="elevation")
+    >>> m.show()
     """
 
     def __init__(
@@ -44,6 +50,17 @@ class GrassRenderer:
         text_size=12,
         renderer="cairo",
     ):
+
+        """Creates an instance of the GrassRenderer class.
+
+        :param int height: height of map in pixels
+        :param int width: width of map in pixels
+        :param str filename: filename or path to save a PNG of map
+        :param str env: environment
+        :param int text_size: default text size, overwritten by most display modules
+        :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
+        """
+
         # Copy Environment
         if env:
             self._env = env.copy()
@@ -78,6 +95,26 @@ class GrassRenderer:
         else:
             raise ValueError("Module must begin with letter 'd'.")
 
+    def __getattr__(self, name):
+        """Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """
+
+        # Check to make sure format is correct
+        if not name.startswith("d_"):
+            raise AttributeError(_("Module must begin with 'd_'"))
+        # Reformat string
+        grass_module = name.replace("_", ".")
+        # Assert module exists
+        if not shutil.which(grass_module):
+            raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
+
+        def wrapper(**kwargs):
+            # Run module
+            self.run(grass_module, **kwargs)
+
+        return wrapper
+
     def show(self):
-        """Displays a PNG image of the map (non-interactive)"""
+        """Displays a PNG image of the map"""
         return Image(self._filename)
