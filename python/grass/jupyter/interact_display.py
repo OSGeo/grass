@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import tempfile
 import folium
+import weakref
 import grass.script as gs
 
 
@@ -31,15 +32,16 @@ class InteractiveMap:
         self.width = width
         self.height = height
         # Make temporary folder for all our files
-        self.tmp_dir = Path(tempfile.NamedTemporaryFile().name)
+        self._tmp_dir = tempfile.TemporaryDirectory()
+        # self.tmp_dir = Path(self._tmp_dir_obj.name)
 
         # Create new environment for tmp WGS84 location
-        rcfile, self._vector_env = gs.create_environment(
-            self.tmp_dir, "temp_folium_WGS84", "PERMANENT"
+        self._rcfile_vect, self._vector_env = gs.create_environment(
+            self._tmp_dir.name, "temp_folium_WGS84", "PERMANENT"
         )
         # Location and mapset and region
         gs.create_location(
-            self.tmp_dir, "temp_folium_WGS84", epsg="4326", overwrite=True
+            self._tmp_dir.name, "temp_folium_WGS84", epsg="4326", overwrite=True
         )
         self._extent = self._convert_extent(
             env=os.environ
@@ -65,6 +67,14 @@ class InteractiveMap:
         )
         # Create LayerControl default
         self.layer_control = False
+
+        # Cleanup rcfile
+        def remove_if_exists(path):
+            path.unlink(missing_ok=True)
+
+        self._finalizer = weakref.finalize(
+            self, remove_if_exists, Path(self._rcfile_vect)
+        )
 
     def _convert_coordinates(self, x, y, proj_in):
         """This function reprojects coordinates to WGS84, the required
@@ -132,7 +142,7 @@ class InteractiveMap:
             env=self._vector_env,
         )
         # Convert to GeoJSON
-        json_file = self.tmp_dir / f"tmp_{name}.json"
+        json_file = Path(self._tmp_dir.name) / f"tmp_{name}.json"
         gs.run_command(
             "v.out.ogr",
             input=name,
