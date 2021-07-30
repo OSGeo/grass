@@ -13,8 +13,8 @@
 
 import os
 import shutil
-from pathlib import Path
 from IPython.display import Image
+import tempfile
 import grass.script as gs
 
 
@@ -41,8 +41,15 @@ class GrassRenderer:
     """
 
     def __init__(
-        self, env=None, width=600, height=400, filename="map.png", text_size=12
+        self,
+        height=400,
+        width=600,
+        filename=None,
+        env=None,
+        text_size=12,
+        renderer="cairo",
     ):
+
         """Creates an instance of the GrassRenderer class.
 
         :param int height: height of map in pixels
@@ -53,24 +60,35 @@ class GrassRenderer:
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
         """
 
+        # Copy Environment
         if env:
             self._env = env.copy()
         else:
             self._env = os.environ.copy()
-
+        # Environment Settings
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
-        self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
-        self._env["GRASS_RENDER_FILE"] = str(filename)
+        self._env["GRASS_RENDER_IMMEDIATE"] = renderer
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
 
-        self._legend_file = Path(filename).with_suffix(".grass_vector_legend")
+        # Create PNG file for map
+        # If not user-supplied, we will write it to a map.png in a
+        # temporary directory that we can delete later. We need
+        # this temporary directory for the legend anyways so we'll
+        # make it now
+        self._tmpdir = tempfile.TemporaryDirectory()
+
+        if filename:
+            self._filename = filename
+        else:
+            self._filename = os.path.join(self._tmpdir.name, "map.png")
+        # Set environment var for file
+        self._env["GRASS_RENDER_FILE"] = self._filename
+
+        # Create Temporary Legend File
+        self._legend_file = os.path.join(self._tmpdir.name, "legend.txt")
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
-
-        self._filename = filename
-
-        self.run("d.erase")
 
     def run(self, module, **kwargs):
         """Run modules from "d." GRASS library"""
