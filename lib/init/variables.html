@@ -105,10 +105,6 @@ PERMANENT
   <dd>[libgis, g.findetc]<br>
     specify paths where support files (etc/) may be found external to
     standard distribution.</dd>
-  
-  <dt>GRASS_BATCH_JOB</dt>
-  <dd>defines the name (path) of a shell script to be processed as
-  batch job.</dd>
 
   <dt>GRASS_COMPRESSOR</dt>
   <dd>[libraster]<br>
@@ -539,6 +535,13 @@ g.gisenv set=DEBUG=0
 # set to 6 GB (default: 300 MB)
 g.gisenv set="MEMORYMB=6000"
 </pre></div>
+  
+  <dt>NPROCS</dt>
+  <dd>sets the number of threads for parallel computing
+<div class="code"><pre>
+# set to use 12 threads (default: 1)
+g.gisenv set="NPROCS=12"
+</pre></div></dd>
 
   <dt>OVERWRITE</dt>
   <dd>[all modules]<br>

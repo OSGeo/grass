@@ -142,7 +142,38 @@ class MapFrame(SingleMapFrame):
         #
         self.statusbarManager = None
         if statusbar:
-            self.statusbar = self.CreateStatusbar()
+            # items for choice
+            statusbarItems = [
+                sb.SbCoordinates,
+                sb.SbRegionExtent,
+                sb.SbCompRegionExtent,
+                sb.SbShowRegion,
+                sb.SbAlignExtent,
+                sb.SbResolution,
+                sb.SbDisplayGeometry,
+                sb.SbMapScale,
+                sb.SbGoTo,
+                sb.SbProjection,
+            ]
+            self.statusbarItemsHiddenInNviz = (
+                sb.SbAlignExtent,
+                sb.SbDisplayGeometry,
+                sb.SbShowRegion,
+                sb.SbResolution,
+                sb.SbMapScale,
+            )
+            self.statusbar = self.CreateStatusbar(statusbarItems)
+
+            self.Map.GetRenderMgr().updateProgress.connect(
+                self.statusbarManager.SetProgress
+            )
+
+        self.Map.GetRenderMgr().renderingFailed.connect(
+            lambda cmd, error: self._giface.WriteError(
+                _("Failed to run command '%(command)s'. Details:\n%(error)s")
+                % dict(command=" ".join(cmd), error=error)
+            )
+        )
 
         # init decoration objects
         self.decorations = {}
@@ -208,20 +239,9 @@ class MapFrame(SingleMapFrame):
             .Layer(0),
         )
 
-        self._mgr.AddPane(
-            self.statusbar,
-            wx.aui.AuiPaneInfo()
-            .Bottom()
-            .MinSize(30, 30)
-            .Fixed()
-            .Name("statusbar")
-            .CloseButton(False)
-            .DestroyOnClose(True)
-            .ToolbarPane()
-            .Dockable(False)
-            .PaneBorder(False)
-            .Gripper(False),
-        )
+        # statusbar
+        self.AddStatusbarPane()
+
         self._mgr.Update()
 
         #
@@ -279,75 +299,6 @@ class MapFrame(SingleMapFrame):
             label=show_hide_statusbar_label,
             action=on_show_hide_statusbar,
         )
-
-    def CreateStatusbar(self):
-        if self.statusbarManager:
-            return
-
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbGoTo,
-            sb.SbProjection,
-        ]
-
-        self.statusbarItemsHiddenInNviz = (
-            sb.SbAlignExtent,
-            sb.SbDisplayGeometry,
-            sb.SbShowRegion,
-            sb.SbResolution,
-            sb.SbMapScale,
-        )
-
-        statusbar = wx.StatusBar(self, id=wx.ID_ANY)
-        statusbar.SetMinHeight(24)
-        statusbar.SetFieldsCount(4)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        sbRender = sb.SbRender(self, statusbar=statusbar, position=3)
-        self.statusbarManager.AddStatusbarItem(sbRender)
-
-        self.statusbarManager.Update()
-
-        #
-        self.Map.GetRenderMgr().updateProgress.connect(
-            self.statusbarManager.SetProgress
-        )
-        self.Map.GetRenderMgr().renderingFailed.connect(
-            lambda cmd, error: self._giface.WriteError(
-                _("Failed to run command '%(command)s'. Details:\n%(error)s")
-                % dict(command=" ".join(cmd), error=error)
-            )
-        )
-        return statusbar
-
-    def ShowStatusbar(self, show):
-        """Show/hide statusbar and associated pane"""
-        self._mgr.GetPane("statusbar").Show(show)
-        self._mgr.Update()
-
-    def IsStatusbarShown(self):
-        """Check if statusbar is shown"""
-        return self._mgr.GetPane("statusbar").IsShown()
-
-    def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
-        self.statusbar.SetStatusText(*args)
 
     def GetMapWindow(self):
         return self.MapWindow
@@ -420,6 +371,13 @@ class MapFrame(SingleMapFrame):
                 giface=self._giface,
             )
             self.toolbars["vdigit"].quitDigitizer.connect(self.QuitVDigit)
+
+            def openATM(selection):
+                self._layerManager.OnShowAttributeTable(None, selection=selection)
+
+            self.toolbars["vdigit"].openATM.connect(
+                lambda selection: openATM(selection)
+            )
             self.Map.layerAdded.connect(self._updateVDigitLayers)
         self.MapWindowVDigit.SetToolbar(self.toolbars["vdigit"])
 
@@ -587,7 +545,9 @@ class MapFrame(SingleMapFrame):
             self.toolbars["map"].combo.Delete(1)
 
     def RemoveNviz(self):
-        """Restore 2D view"""
+        """Restore 2D view. Can be called even if 3D is not active."""
+        if not self.IsPaneShown("3d"):
+            return
         try:
             self.toolbars["map"].RemoveTool(self.toolbars["map"].rotate)
             self.toolbars["map"].RemoveTool(self.toolbars["map"].flyThrough)
@@ -648,7 +608,9 @@ class MapFrame(SingleMapFrame):
         # default toolbar
         if name == "map":
             if "map" not in self.toolbars:
-                self.toolbars["map"] = MapToolbar(self, toolSwitcher=self._toolSwitcher)
+                self.toolbars["map"] = MapToolbar(
+                    self, toolSwitcher=self._toolSwitcher, giface=self._giface
+                )
 
             self._mgr.AddPane(
                 self.toolbars["map"],
@@ -688,13 +650,7 @@ class MapFrame(SingleMapFrame):
         :param name toolbar to remove
         :param destroy True to destroy otherwise toolbar is only hidden
         """
-        self._mgr.DetachPane(self.toolbars[name])
-        if destroy:
-            self._toolSwitcher.RemoveToolbarFromGroup("mouseUse", self.toolbars[name])
-            self.toolbars[name].Destroy()
-            self.toolbars.pop(name)
-        else:
-            self.toolbars[name].Hide()
+        super().RemoveToolbar(name, destroy)
 
         if name == "vdigit":
             self._mgr.GetPane("vdigit").Hide()
@@ -704,23 +660,6 @@ class MapFrame(SingleMapFrame):
         self.toolbars["map"].Enable2D(True)
 
         self._mgr.Update()
-
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.RemoveToolbar
-        else:
-            action = self.AddToolbar
-        for toolbar in self.GetToolbarNames():
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        return self.GetMapToolbar().IsShown()
-
-    def IsPaneShown(self, name):
-        """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
-        if self._mgr.GetPane(name).IsOk():
-            return self._mgr.GetPane(name).IsShown()
-        return False
 
     def RemoveQueryLayer(self):
         """Removes temporary map layers (queries)"""
@@ -1024,8 +963,7 @@ class MapFrame(SingleMapFrame):
             maplayer = self.toolbars["vdigit"].GetLayer()
             if maplayer:
                 self.toolbars["vdigit"].OnExit()
-        if self.IsPaneShown("3d"):
-            self.RemoveNviz()
+        self.RemoveNviz()
         if hasattr(self, "rdigit") and self.rdigit:
             self.rdigit.CleanUp()
         if self.dialogs["vnet"]:
@@ -1548,11 +1486,7 @@ class MapFrame(SingleMapFrame):
         NULLs) or vector map.
         """
         Debug.msg(3, "MapFrame.OnZoomToMap()")
-        layers = None
-        if self.IsStandalone():
-            layers = self.MapWindow.GetMap().GetListOfLayers(active=False)
-
-        self.MapWindow.ZoomToMap(layers=layers)
+        self.MapWindow.ZoomToMap(layers=None)
 
     def OnZoomToRaster(self, event):
         """Set display extents to match selected raster map (ignore NULLs)"""
@@ -1640,48 +1574,9 @@ class MapFrame(SingleMapFrame):
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
 
-    def IsStandalone(self):
-        """Check if Map display is standalone
-
-        .. deprecated:: 7.0
-        """
-        # TODO: once it is removed from 2 places in vdigit it can be deleted
-        # here and also in base class and other classes in the tree (hopefully)
-        # and one place here still uses IsStandalone
-        Debug.msg(
-            1,
-            "MapFrame.IsStandalone(): Method IsStandalone is"
-            "deprecated, use some general approach instead such as"
-            " Signals or giface",
-        )
-        if self._layerManager:
-            return False
-
-        return True
-
-    def GetLayerManager(self):
-        """Get reference to Layer Manager
-
-        :return: window reference
-        :return: None (if standalone)
-
-        .. deprecated:: 7.0
-        """
-        Debug.msg(
-            1,
-            "MapFrame.GetLayerManager(): Method GetLayerManager is"
-            "deprecated, use some general approach instead such as"
-            " Signals or giface",
-        )
-        return self._layerManager
-
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
         return self.toolbars["map"] if "map" in self.toolbars else None
-
-    def GetToolbarNames(self):
-        """Return toolbar names"""
-        return self.toolbars.keys()
 
     def GetDialog(self, name):
         """Get selected dialog if exist"""
@@ -1785,25 +1680,19 @@ class MapFrame(SingleMapFrame):
     def QuitRDigit(self):
         """Calls digitizer cleanup, removes digitizer object and disconnects
         signals from Map."""
-        if not self.IsStandalone():
-            self.rdigit.CleanUp()
-            # disconnect updating layers
-            self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
-            self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
-            self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
-            self._toolSwitcher.toggleToolChanged.disconnect(
-                self.toolbars["rdigit"].CheckSelectedTool,
-            )
+        self.rdigit.CleanUp()
+        # disconnect updating layers
+        self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
+        self._toolSwitcher.toggleToolChanged.disconnect(
+            self.toolbars["rdigit"].CheckSelectedTool,
+        )
 
-            self.RemoveToolbar("rdigit", destroy=True)
-            self.rdigit = None
-        else:
-            self.Close()
+        self.RemoveToolbar("rdigit", destroy=True)
+        self.rdigit = None
 
     def QuitVDigit(self):
         """Quit VDigit"""
-        if not self.IsStandalone():
-            # disable the toolbar
-            self.RemoveToolbar("vdigit", destroy=True)
-        else:
-            self.Close()
+        # disable the toolbar
+        self.RemoveToolbar("vdigit", destroy=True)
