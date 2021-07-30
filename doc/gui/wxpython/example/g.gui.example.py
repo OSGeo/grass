@@ -44,10 +44,10 @@ if __name__ == "__main__":
         sys.path.append(wxbase)
 
 from core.globalvar import CheckWxVersion
-from core.giface import StandaloneGrassInterface
 from core.utils import GuiModuleMain
 from core.settings import UserSettings
-from example.frame import ExampleMapFrame
+from core import globalvar
+from example.frame import ExampleMapDisplay
 
 
 def main():
@@ -72,10 +72,16 @@ def main():
         wx.InitAllImageHandlers()
 
     # show main frame
-    giface = StandaloneGrassInterface()
-    frame = ExampleMapFrame(parent=None, giface=giface)
+    frame = wx.Frame(
+        parent=None,
+        size=globalvar.MAP_WINDOW_SIZE,
+    )
+    frame = ExampleMapDisplay(
+        parent=None,
+        giface=None,
+    )
     if options["input"]:
-        giface.WriteLog(_("Loading raster map <{raster}>...").format(raster=map_name))
+        frame.giface.WriteLog(_("Loading raster map <{raster}>...").format(raster=map_name))
         frame.SetLayer(map_name)
 
     frame.Show()
