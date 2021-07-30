@@ -13,7 +13,6 @@
 
 import os
 import shutil
-from pathlib import Path
 from IPython.display import Image
 import tempfile
 import grass.script as gs
@@ -74,18 +73,22 @@ class GrassRenderer:
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
 
         # Create PNG file for map
-        # If not user-supplied, create temporary file
+        # If not user-supplied, we will write it to a map.png in a
+        # temporary directory that we can delete later. We need
+        # this temporary directory for the legend anyways so we'll
+        # make it now
+        self._tmpdir = tempfile.TemporaryDirectory()
+
         if filename:
-            self._env["GRASS_RENDER_FILE"] = filename
+            self._filename = filename
         else:
-            tmpfile = tempfile.NamedTemporaryFile(suffix=".png")
-            self._env["GRASS_RENDER_FILE"] = tmpfile.name
-        # Either way, we need _filename for display later when we show map
-        self._filename = self._env["GRASS_RENDER_FILE"]
+            self._filename = os.path.join(self._tmpdir.name, "map.png")
+        # Set environment var for file
+        self._env["GRASS_RENDER_FILE"] = self._filename
 
         # Create Temporary Legend File
-        self._legend_file = tempfile.NamedTemporaryFile()
-        self._env["GRASS_LEGEND_FILE"] = str(self._legend_file.name)
+        self._legend_file = os.path.join(self._tmpdir.name, "legend.txt")
+        self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
     def run(self, module, **kwargs):
         """Run modules from "d." GRASS library"""
