@@ -47,6 +47,7 @@ class VDigitToolbar(BaseToolbar):
         self.editingStopped = Signal("VDigitToolbar.editingStopped")
         self.editingBgMap = Signal("VDigitToolbar.editingBgMap")
         self.quitDigitizer = Signal("VDigitToolbar.quitDigitizer")
+        self.openATM = Signal("VDigitToolbar.openATM")
         layerTree = self._giface.GetLayerTree()
         if layerTree:
             self.editingStarted.connect(layerTree.StartEditing)
@@ -593,7 +594,7 @@ class VDigitToolbar(BaseToolbar):
         if self.digit is None:
             try:
                 self.digit = self.MapWindow.digit = self.digitClass(
-                    mapwindow=self.MapWindow
+                    giface=self._giface, mapwindow=self.MapWindow
                 )
             except SystemExit:
                 self.digit = self.MapWindow.digit = None
@@ -915,13 +916,10 @@ class VDigitToolbar(BaseToolbar):
 
                 # create table ?
                 if dlg.IsChecked("table"):
-                    # TODO: replace this by signal
-                    # also note that starting of tools such as atm, iclass,
+                    # TODO: starting of tools such as atm, iclass,
                     # plots etc. should be handled in some better way
                     # than starting randomly from mapdisp and lmgr
-                    lmgr = self.parent.GetLayerManager()
-                    if lmgr:
-                        lmgr.OnShowAttributeTable(None, selection="table")
+                    self.openATM.emit(selection="table")
                 dlg.Destroy()
             else:
                 self.combo.SetValue(_("Select vector map"))
@@ -1004,7 +1002,9 @@ class VDigitToolbar(BaseToolbar):
             )
 
         self.MapWindow.pdcVector = PseudoDC()
-        self.digit = self.MapWindow.digit = self.digitClass(mapwindow=self.MapWindow)
+        self.digit = self.MapWindow.digit = self.digitClass(
+            giface=self._giface, mapwindow=self.MapWindow
+        )
 
         self.mapLayer = mapLayer
         # open vector map (assume that 'hidden' map layer is temporary vector

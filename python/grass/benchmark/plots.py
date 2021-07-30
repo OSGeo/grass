@@ -37,7 +37,7 @@ def get_pyplot(to_file):
     return plt
 
 
-def nprocs_plot(results, filename=None):
+def nprocs_plot(results, filename=None, title=None):
     """Plot results from a multiple nprocs (thread) benchmarks.
 
     *results* is a list of individual results from separate benchmarks.
@@ -67,9 +67,16 @@ def nprocs_plot(results, filename=None):
             maxes = [max(i) for i in result.all_times]
             plt.fill_between(x, mins, maxes, color="gray", alpha=0.3)
     plt.legend()
-    axes.set(xticks=sorted(x_ticks))
-    plt.xlabel("Number of cores (threads, processes)")
+    # If there is not many x values, show ticks for each, but use default
+    # ticks when there is a lot of x values.
+    if len(x_ticks) < 10:
+        axes.set(xticks=sorted(x_ticks))
+    plt.xlabel("Number of processing elements (cores, threads, processes)")
     plt.ylabel("Time [s]")
+    if title:
+        plt.title(title)
+    else:
+        plt.title("Execution time by processing elements")
     if filename:
         plt.savefig(filename)
     else:
