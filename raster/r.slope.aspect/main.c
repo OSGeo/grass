@@ -109,6 +109,7 @@ int main(int argc, char *argv[])
     void *dyy_raster, *dyy_ptr = NULL;
     void *dxy_raster, *dxy_ptr = NULL;
     int i, t;
+    size_t size;
     RASTER_MAP_TYPE out_type, data_type;
     int Wrap;                   /* global wraparound */
     struct Cell_head window, cellhd;
@@ -587,8 +588,19 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("Percent complete..."));
 
-    int computed = 0;
-    for (row = 0; row < nrows; row++) {
+    int computed = 0; /* for computing progress */
+    int written = 0;
+
+    while (written < nrows) {
+
+    int range = bufrows;
+    if (range > nrows - written) {
+        range = nrows - written;
+    }
+    int start = written;
+    int end = written + range;
+
+    for (row = start; row < end; row++) {
         /*  if projection is Lat/Lon, recalculate  V and H   */
         if (G_projection() == PROJECTION_LL) {
             north = Rast_row_to_northing((row - 1 + 0.5), &window);
@@ -602,9 +614,9 @@ int main(int argc, char *argv[])
             /* ____________________________
                |c1      |c2      |c3      |
                |        |        |        |
-               |        |  north |        |        
+               |        |  north |        |
                |        |        |        |
-               |________|________|________|          
+               |________|________|________|
                |c4      |c5      |c6      |
                |        |        |        |
                |  west  | ns_med |  east  |
@@ -638,39 +650,42 @@ int main(int argc, char *argv[])
         pc2 = elev_cell[t_id][1];
         pc3 = elev_cell[t_id][2];
 
+        size = Rast_cell_size(data_type) * ncols * (row - start);
+
         if (aspect_fd >= 0) {
-            asp_ptr = asp_raster;
+            asp_ptr = G_incr_void_ptr(asp_raster, size);
         }
+
         if (slope_fd >= 0) {
-            slp_ptr = slp_raster;
+            slp_ptr = G_incr_void_ptr(slp_raster, size);
         }
 
         if (pcurv_fd >= 0) {
-            pcurv_ptr = pcurv_raster;
+            pcurv_ptr = G_incr_void_ptr(pcurv_raster, size);
         }
 
         if (tcurv_fd >= 0) {
-            tcurv_ptr = tcurv_raster;
+            tcurv_ptr = G_incr_void_ptr(tcurv_raster, size);
         }
 
         if (dx_fd >= 0) {
-            dx_ptr = dx_raster;
+            dx_ptr = G_incr_void_ptr(dx_raster, size);
         }
 
         if (dy_fd >= 0) {
-            dy_ptr = dy_raster;
+            dy_ptr = G_incr_void_ptr(dy_raster, size);
         }
 
         if (dxx_fd >= 0) {
-            dxx_ptr = dxx_raster;
+            dxx_ptr = G_incr_void_ptr(dxx_raster, size);
         }
 
         if (dyy_fd >= 0) {
-            dyy_ptr = dyy_raster;
+            dyy_ptr = G_incr_void_ptr(dyy_raster, size);
         }
 
         if (dxy_fd >= 0) {
-            dxy_ptr = dxy_raster;
+            dxy_ptr = G_incr_void_ptr(dxy_raster, size);
         }
 
         for (col = ncols; col-- > 0; pc1++, pc2++, pc3++) {
@@ -969,35 +984,61 @@ int main(int argc, char *argv[])
 
         }                       /* column for loop */
 
-        if (aspect_fd > 0)
-            Rast_put_row(aspect_fd, asp_raster, data_type);
-
-        if (slope_fd > 0)
-            Rast_put_row(slope_fd, slp_raster, data_type);
-
-        if (pcurv_fd > 0)
-            Rast_put_row(pcurv_fd, pcurv_raster, data_type);
-
-        if (tcurv_fd > 0)
-            Rast_put_row(tcurv_fd, tcurv_raster, data_type);
-
-        if (dx_fd > 0)
-            Rast_put_row(dx_fd, dx_raster, data_type);
-
-        if (dy_fd > 0)
-            Rast_put_row(dy_fd, dy_raster, data_type);
-
-        if (dxx_fd > 0)
-            Rast_put_row(dxx_fd, dxx_raster, data_type);
-
-        if (dyy_fd > 0)
-            Rast_put_row(dyy_fd, dyy_raster, data_type);
-
-        if (dxy_fd > 0)
-            Rast_put_row(dxy_fd, dxy_raster, data_type);
-
         computed++;
     }                           /* row loop */
+    
+    /* write the computed buffer chunk to disk */
+    written = end;
+    for (row = start; row < end; row++) {
+        size = Rast_cell_size(data_type) * ncols * (row - start);
+
+        if (aspect_fd > 0) {
+            asp_ptr = G_incr_void_ptr(asp_raster, size);
+            Rast_put_row(aspect_fd, asp_ptr, data_type);
+        }
+
+        if (slope_fd > 0) {
+            slp_ptr = G_incr_void_ptr(slp_raster, size);
+            Rast_put_row(slope_fd, slp_ptr, data_type);
+        }
+
+        if (pcurv_fd > 0) {
+            pcurv_ptr = G_incr_void_ptr(pcurv_raster, size);
+            Rast_put_row(pcurv_fd, pcurv_ptr, data_type);
+        }
+
+        if (tcurv_fd > 0) {
+            tcurv_ptr = G_incr_void_ptr(tcurv_raster, size);
+            Rast_put_row(tcurv_fd, tcurv_ptr, data_type);
+        }
+
+        if (dx_fd > 0) {
+            dx_ptr = G_incr_void_ptr(dx_raster, size);
+            Rast_put_row(dx_fd, dx_ptr, data_type);
+        }
+
+        if (dy_fd > 0) {
+            dy_ptr = G_incr_void_ptr(dy_raster, size);
+            Rast_put_row(dy_fd, dy_ptr, data_type);
+        }
+
+        if (dxx_fd > 0) {
+            dxx_ptr = G_incr_void_ptr(dxx_raster, size);
+            Rast_put_row(dxx_fd, dxx_ptr, data_type);
+        }
+
+        if (dyy_fd > 0) {
+            dyy_ptr = G_incr_void_ptr(dyy_raster, size);
+            Rast_put_row(dyy_fd, dyy_ptr, data_type);
+        }
+
+        if (dxy_fd > 0) {
+            dxy_ptr = G_incr_void_ptr(dxy_raster, size);
+            Rast_put_row(dxy_fd, dxy_ptr, data_type);
+        }
+    }
+
+    } /* while loop repeats until all chunks are done */
 
     G_percent(row, nrows, 2);
 
