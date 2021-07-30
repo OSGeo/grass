@@ -4,7 +4,8 @@
 @brief Example tool for displaying raster map and related information
 
 Classes:
- - frame::ExampleMapFrame
+ - frame::ExampleMapPanel
+ - frame::ExampleMapDisplay
  - frame::ExampleInfoTextManager
 
 (C) 2011-2014 by the GRASS Development Team
@@ -27,13 +28,14 @@ if __name__ == "__main__":
 # So we need to import it before any of the GUI code.
 from grass.script import core as gcore
 
-from gui_core.mapdisp import SingleMapFrame
+from gui_core.mapdisp import SingleMapPanel, FrameMixin
 from mapwin.buffered import BufferedMapWindow
 from mapwin.base import MapWindowProperties
 from mapdisp import statusbar as sb
 from core.render import Map
 from core.debug import Debug
 from core.gcmd import RunCommand, GError
+from core import globalvar
 
 from toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
 from dialogs import ExampleMapDialog
@@ -52,13 +54,13 @@ from dialogs import ExampleMapDialog
 #     errMsg = _("Loading raster lib failed.\n%s") % e
 
 
-class ExampleMapFrame(SingleMapFrame):
-    """! Main frame of example tool.
+class ExampleMapPanel(SingleMapPanel):
+    """! Main panel of example tool.
 
-    Inherits from SingleMapFrame, so map is displayed in one map widow.
-    In case two map windows are needed, use DoubleMapFrame from (gui_core.mapdisp).
+    Inherits from SingleMapPanel, so map is displayed in one map widow.
+    In case two map windows are needed, use DoubleMapPanel from (gui_core.mapdisp).
 
-    @see IClassMapFrame in iclass.frame
+    @see IClassMapPanel in iclass.frame
     """
 
     def __init__(
@@ -71,14 +73,14 @@ class ExampleMapFrame(SingleMapFrame):
         name="exampleWindow",
         **kwargs,
     ):
-        """!Map Frame constructor
+        """!Map Panel constructor
 
         @param parent (no parent is expected)
         @param title window title
         @param toolbars list of active toolbars (default value represents all toolbars)
         @param size default size
         """
-        SingleMapFrame.__init__(
+        SingleMapPanel.__init__(
             self, parent=parent, title=title, name=name, Map=Map(), **kwargs
         )
 
@@ -86,7 +88,7 @@ class ExampleMapFrame(SingleMapFrame):
         # and set debug level from 1 to 5 (higher to lower level functions).
         # To enable debug mode write:
         # > g.gisenv set=WX_DEBUG=5
-        Debug.msg(1, "ExampleMapFrame.__init__()")
+        Debug.msg(1, "ExampleMapPanel.__init__()")
 
         #
         # Add toolbars to aui manager
@@ -109,7 +111,7 @@ class ExampleMapFrame(SingleMapFrame):
         #
 
         # choose items in statusbar choice, which makes sense for your application
-        self.statusbarItems = [
+        statusbarItems = [
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
@@ -121,24 +123,7 @@ class ExampleMapFrame(SingleMapFrame):
             sb.SbGoTo,
             sb.SbProjection,
         ]
-
-        # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number=4, style=0)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
-        )
-
-        self.statusbarManager.Update()
+        self.statusbar = self.CreateStatusbar(statusbarItems)
 
         # create map window
         self.MapWindow = BufferedMapWindow(
@@ -164,7 +149,6 @@ class ExampleMapFrame(SingleMapFrame):
         self.GetMapToolbar().SelectDefault()
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         self.SetSize(size)
 
@@ -175,17 +159,6 @@ class ExampleMapFrame(SingleMapFrame):
     def OnCloseWindow(self, event):
         """!Destroy frame"""
         self.Destroy()
-
-    def IsStandalone(self):
-        """!Check if application is standalone.
-
-        Standalone application can work without parent.
-        Parent can be e.g. Layer Manager.
-        """
-        if self.parent:
-            return False
-
-        return True
 
     def InitVariables(self):
         """!Initialize any variables nneded by application"""
@@ -325,7 +298,7 @@ class ExampleMapFrame(SingleMapFrame):
 
         @param name layer (raster) name
         """
-        Debug.msg(3, "ExampleMapFrame.SetLayer(): name=%s" % name)
+        Debug.msg(3, "ExampleMapPanel.SetLayer(): name=%s" % name)
 
         # this simple application enables to keep only one raster
         self.GetMap().DeleteAllLayers()
@@ -376,6 +349,40 @@ class ExampleMapFrame(SingleMapFrame):
         """
         stats = self.ComputeStatitistics()
         self.info.WriteStatistics(name=self.currentRaster, statDict=stats)
+
+
+class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
+    """Map Display used for Multi-Window layout"""
+
+    def __init__(self, parent, giface, **kwargs):
+
+        # init map panel
+        ExampleMapPanel.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            **kwargs,
+        )
+        # set system icon
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # bindings
+        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
 
 
 class ExampleInfoTextManager:
