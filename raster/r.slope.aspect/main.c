@@ -495,7 +495,7 @@ int main(int argc, char *argv[])
 
     if (slope_name != NULL) {
         slope_fd = Rast_open_new(slope_name, out_type);
-        slp_raster = Rast_allocate_buf(data_type);
+        slp_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         slp_raster = NULL;
@@ -504,7 +504,7 @@ int main(int argc, char *argv[])
 
     if (aspect_name != NULL) {
         aspect_fd = Rast_open_new(aspect_name, out_type);
-        asp_raster = Rast_allocate_buf(data_type);
+        asp_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         asp_raster = NULL;
@@ -513,7 +513,7 @@ int main(int argc, char *argv[])
 
     if (pcurv_name != NULL) {
         pcurv_fd = Rast_open_new(pcurv_name, out_type);
-        pcurv_raster = Rast_allocate_buf(data_type);
+        pcurv_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         pcurv_raster = NULL;
@@ -522,7 +522,7 @@ int main(int argc, char *argv[])
 
     if (tcurv_name != NULL) {
         tcurv_fd = Rast_open_new(tcurv_name, out_type);
-        tcurv_raster = Rast_allocate_buf(data_type);
+        tcurv_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         tcurv_raster = NULL;
@@ -531,7 +531,7 @@ int main(int argc, char *argv[])
 
     if (dx_name != NULL) {
         dx_fd = Rast_open_new(dx_name, out_type);
-        dx_raster = Rast_allocate_buf(data_type);
+        dx_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dx_raster = NULL;
@@ -540,7 +540,7 @@ int main(int argc, char *argv[])
 
     if (dy_name != NULL) {
         dy_fd = Rast_open_new(dy_name, out_type);
-        dy_raster = Rast_allocate_buf(data_type);
+        dy_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dy_raster = NULL;
@@ -549,7 +549,7 @@ int main(int argc, char *argv[])
 
     if (dxx_name != NULL) {
         dxx_fd = Rast_open_new(dxx_name, out_type);
-        dxx_raster = Rast_allocate_buf(data_type);
+        dxx_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dxx_raster = NULL;
@@ -558,7 +558,7 @@ int main(int argc, char *argv[])
 
     if (dyy_name != NULL) {
         dyy_fd = Rast_open_new(dyy_name, out_type);
-        dyy_raster = Rast_allocate_buf(data_type);
+        dyy_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dyy_raster = NULL;
@@ -567,7 +567,7 @@ int main(int argc, char *argv[])
 
     if (dxy_name != NULL) {
         dxy_fd = Rast_open_new(dxy_name, out_type);
-        dxy_raster = Rast_allocate_buf(data_type);
+        dxy_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dxy_raster = NULL;
@@ -587,6 +587,7 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("Percent complete..."));
 
+    int computed = 0;
     for (row = 0; row < nrows; row++) {
         /*  if projection is Lat/Lon, recalculate  V and H   */
         if (G_projection() == PROJECTION_LL) {
@@ -617,7 +618,7 @@ int main(int argc, char *argv[])
              */
         }
 
-        G_percent(row, nrows, 2);
+        G_percent(computed, nrows, 2);
         temp = elev_cell[t_id][0];
         elev_cell[t_id][0] = elev_cell[t_id][1];
         elev_cell[t_id][1] = elev_cell[t_id][2];
@@ -629,8 +630,8 @@ int main(int argc, char *argv[])
             Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
 
         if (Wrap) {
-            elev_cell[t_id][2][0] = elev_cell[t_id][2][Rast_window_cols()];
-            elev_cell[t_id][2][Rast_window_cols() + 1] = elev_cell[t_id][2][1];
+            elev_cell[t_id][2][0] = elev_cell[t_id][2][ncols];
+            elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
         }
 
         pc1 = elev_cell[t_id][0];
@@ -995,6 +996,7 @@ int main(int argc, char *argv[])
         if (dxy_fd > 0)
             Rast_put_row(dxy_fd, dxy_raster, data_type);
 
+        computed++;
     }                           /* row loop */
 
     G_percent(row, nrows, 2);
