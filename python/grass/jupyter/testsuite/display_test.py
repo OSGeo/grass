@@ -30,8 +30,7 @@ from pathlib import Path
 #    3) write and display an image
 
 # TODO
-# 1. Update tearDown and test_GrassRenderer tests after temporary files are merged
-# 2. Add __getattr__ shortcut test after merge
+# 1. Add __getattr__ shortcut test after merge
 
 
 # Tests
@@ -61,68 +60,57 @@ class TestDisplay(TestCase):
         for f in self.files:
             Path(f).unlink(missing_ok=True)
 
-    def test_GrassRenderer_defaults(self):
+    def test_defaults(self):
         """Test that GrassRenderer can create a map with default settings."""
         # Create a map with default inputs
-        self.mapdisplay = gj.GrassRenderer()
+        grass_renderer = gj.GrassRenderer()
         # Adding vectors and rasters to the map
-        self.mapdisplay.run("d.rast", map="elevation")
-        self.mapdisplay.run("d.vect", map="roadsmajor")
+        grass_renderer.run("d.rast", map="elevation")
+        grass_renderer.run("d.vect", map="roadsmajor")
         # Assert image exists
-        self.assertFileExists("map.png")
-        # Add files to self for cleanup later
-        self.files.append("map.png")
-        self.files.append("map.grass_vector_legend")
+        self.assertFileExists(grass_renderer._filename)
 
-    def test_GrassRenderer_filename(self):
+    def test_filename(self):
         """Test that GrassRenderer creates maps with unique filenames."""
         # Create map with unique filename
-        self.mapdisplay = gj.GrassRenderer(filename="test_filename.png")
-        # Add a vector and a raster to the map
-        self.mapdisplay.run("d.rast", map="elevation")
-        self.mapdisplay.run("d.vect", map="roadsmajor")
-        # Assert image exists
-        self.assertFileExists("test_filename.png")
+        grass_renderer = gj.GrassRenderer(filename="test_filename.png")
         # Add files to self for cleanup later
         self.files.append("test_filename.png")
         self.files.append("test_filename.grass_vector_legend")
+        # Add a vector and a raster to the map
+        grass_renderer.run("d.rast", map="elevation")
+        grass_renderer.run("d.vect", map="roadsmajor")
+        # Assert image exists
+        self.assertFileExists("test_filename.png")
 
-    def test_GrassRenderer_hw(self):
+    def test_hw(self):
         """Test that GrassRenderer creates maps with unique height and widths."""
         # Create map with height and width parameters
-        self.mapdisplay = gj.GrassRenderer(width=400, height=400)
+        grass_renderer = gj.GrassRenderer(width=400, height=400)
         # Add just a vector (for variety here)
-        self.mapdisplay.run("d.vect", map="roadsmajor")
-        # Assert image exists
-        self.assertFileExists("map.png")
-        # Add files to self for cleanup later
-        self.files.append("map.png")
-        self.files.append("map.grass_vector_legend")
+        grass_renderer.run("d.vect", map="roadsmajor")
 
-    def test_GrassRenderer_env(self):
+    def test_env(self):
         """Test that we can hand an environment to GrassRenderer."""
         # Create map with environment parameter
-        self.mapdisplay = gj.GrassRenderer(env=os.environ.copy())
+        grass_renderer = gj.GrassRenderer(env=os.environ.copy())
         # Add just a raster (again for variety)
-        self.mapdisplay.run("d.rast", map="elevation")
-        # Assert image exists
-        self.assertFileExists("map.png")
-        # Add files to self for cleanup later
-        self.files.append("map.png")
-        self.files.append("map.grass_vector_legend")
+        grass_renderer.run("d.rast", map="elevation")
 
-    def test_GrassRenderer_text(self):
+    def test_text(self):
         """Test that we can set a unique text_size in GrassRenderer."""
         # Create map with unique text_size parameter
-        self.mapdisplay = gj.GrassRenderer(text_size=10)
+        grass_renderer = gj.GrassRenderer(text_size=10)
         # Add a vector and a raster
-        self.mapdisplay.run("d.vect", map="roadsmajor")
-        self.mapdisplay.run("d.rast", map="elevation")
-        # Assert image exists
-        self.assertFileExists("map.png")
-        # Add files to self for cleanup later
-        self.files.append("map.png")
-        self.files.append("map.grass_vector_legend")
+        grass_renderer.run("d.vect", map="roadsmajor")
+        grass_renderer.run("d.rast", map="elevation")
+
+    def test_shortcut(self):
+        """Test that we can use display shortcuts with __getattr__."""
+        # Create map
+        grass_renderer = gj.GrassRenderer()
+        # Add raster to map with shortcut
+        grass_renderer.d_rast(map="elevation")
 
 
 if __name__ == "__main__":
