@@ -572,503 +572,503 @@ int main(int argc, char *argv[])
 
     while (written < nrows) {
 
-    int range = bufrows;
-    if (range > nrows - written) {
-        range = nrows - written;
-    }
-    int start = written;
-    int end = written + range;
+        int range = bufrows;
+        if (range > nrows - written) {
+            range = nrows - written;
+        }
+        int start = written;
+        int end = written + range;
 
 #pragma omp parallel if(nprocs > 1) \
-    firstprivate(north, east, south, west, ns_med, H, V) \
-    private(row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
-    {
-    int t_id = FIRST_THREAD;
+        firstprivate(north, east, south, west, ns_med, H, V) \
+        private(row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
+        {
+            int t_id = FIRST_THREAD;
 #if defined(_OPENMP)
-    t_id = omp_get_thread_num();
+            t_id = omp_get_thread_num();
 #endif
 
-    /* private variables that are only used for computation */
-    DCELL *temp;
-    DCELL *pc1, *pc2, *pc3;
-    DCELL c1, c2, c3, c4, c5, c6, c7, c8, c9;
-    double dx;                  /* partial derivative in ew direction */
-    double dy;                  /* partial derivative in ns direction */
-    double dxx, dxy, dyy;
-    double s3, s4, s5, s6;
-    double pcurv, tcurv;
-    double aspect, dnorm1, dx2, dy2, grad2, grad, dxy2;
-    double key;
-    double slp_in_perc, slp_in_deg;
-    int low, hi, test = 0;
-    bool initialized = false;
+            /* private variables that are only used for computation */
+            DCELL *temp;
+            DCELL *pc1, *pc2, *pc3;
+            DCELL c1, c2, c3, c4, c5, c6, c7, c8, c9;
+            double dx;                  /* partial derivative in ew direction */
+            double dy;                  /* partial derivative in ns direction */
+            double dxx, dxy, dyy;
+            double s3, s4, s5, s6;
+            double pcurv, tcurv;
+            double aspect, dnorm1, dx2, dy2, grad2, grad, dxy2;
+            double key;
+            double slp_in_perc, slp_in_deg;
+            int low, hi, test = 0;
+            bool initialized = false;
 
 /* static scheduling is essential for buffer to be initialized properly */
-#pragma omp for schedule(static) \
-    reduction(min: c1min, c2min, min_asp, min_slp) \
-    reduction(max: c1max, c2max, max_asp, max_slp)
-    for (row = start; row < end; row++) {
-        if (!initialized) {
-            initialized = true;
-            Rast_set_d_null_value(elev_cell[t_id][0], ncols + 2);
-            Rast_set_d_null_value(elev_cell[t_id][1], ncols + 2);
-            Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
+#pragma omp for schedule(static)                       \
+        reduction(min: c1min, c2min, min_asp, min_slp) \
+        reduction(max: c1max, c2max, max_asp, max_slp)
+            for (row = start; row < end; row++) {
+                if (!initialized) {
+                    initialized = true;
+                    Rast_set_d_null_value(elev_cell[t_id][0], ncols + 2);
+                    Rast_set_d_null_value(elev_cell[t_id][1], ncols + 2);
+                    Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
 
-            if (row - 1 >= 0)
-                Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][1] + 1, row - 1);
+                    if (row - 1 >= 0)
+                        Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][1] + 1, row - 1);
 
-            if (row >= 0)
-                Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row);
+                    if (row >= 0)
+                        Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row);
 
-            if (Wrap) {
-                /* wrap second row */
-                elev_cell[t_id][1][0] = elev_cell[t_id][1][ncols];
-                elev_cell[t_id][1][ncols + 1] = elev_cell[t_id][1][1];
-                /* wrap third row */
-                elev_cell[t_id][2][0] = elev_cell[t_id][2][ncols];
-                elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
-            }
-        }
-        /*  if projection is Lat/Lon, recalculate  V and H   */
-        if (G_projection() == PROJECTION_LL) {
-            north = Rast_row_to_northing((row - 1 + 0.5), &window);
-            ns_med = Rast_row_to_northing((row + 0.5), &window);
-            south = Rast_row_to_northing((row + 1 + 0.5), &window);
-            east = Rast_col_to_easting(2.5, &window);
-            west = Rast_col_to_easting(0.5, &window);
-            V = G_distance(east, north, east, south) * 4 / (factor * zfactor);
-            H = G_distance(east, ns_med, west,
-                           ns_med) * 4 / (factor * zfactor);
-            /* ____________________________
-               |c1      |c2      |c3      |
-               |        |        |        |
-               |        |  north |        |
-               |        |        |        |
-               |________|________|________|
-               |c4      |c5      |c6      |
-               |        |        |        |
-               |  west  | ns_med |  east  |
-               |        |        |        |
-               |________|________|________|
-               |c7      |c8      |c9      |
-               |        |        |        |
-               |        |  south |        |
-               |        |        |        |
-               |________|________|________|
-             */
-        }
-
-        G_percent(computed, nrows, 2);
-        temp = elev_cell[t_id][0];
-        elev_cell[t_id][0] = elev_cell[t_id][1];
-        elev_cell[t_id][1] = elev_cell[t_id][2];
-        elev_cell[t_id][2] = temp;
-
-        if (row < nrows - 1)
-            Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row + 1);
-        else
-            Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
-
-        if (Wrap) {
-            elev_cell[t_id][2][0] = elev_cell[t_id][2][ncols];
-            elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
-        }
-
-        pc1 = elev_cell[t_id][0];
-        pc2 = elev_cell[t_id][1];
-        pc3 = elev_cell[t_id][2];
-
-        size = Rast_cell_size(data_type) * ncols * (row - start);
-
-        if (aspect_fd >= 0) {
-            asp_ptr = G_incr_void_ptr(asp_raster, size);
-        }
-
-        if (slope_fd >= 0) {
-            slp_ptr = G_incr_void_ptr(slp_raster, size);
-        }
-
-        if (pcurv_fd >= 0) {
-            pcurv_ptr = G_incr_void_ptr(pcurv_raster, size);
-        }
-
-        if (tcurv_fd >= 0) {
-            tcurv_ptr = G_incr_void_ptr(tcurv_raster, size);
-        }
-
-        if (dx_fd >= 0) {
-            dx_ptr = G_incr_void_ptr(dx_raster, size);
-        }
-
-        if (dy_fd >= 0) {
-            dy_ptr = G_incr_void_ptr(dy_raster, size);
-        }
-
-        if (dxx_fd >= 0) {
-            dxx_ptr = G_incr_void_ptr(dxx_raster, size);
-        }
-
-        if (dyy_fd >= 0) {
-            dyy_ptr = G_incr_void_ptr(dyy_raster, size);
-        }
-
-        if (dxy_fd >= 0) {
-            dxy_ptr = G_incr_void_ptr(dxy_raster, size);
-        }
-
-        for (col = ncols; col-- > 0; pc1++, pc2++, pc3++) {
-            c1 = *pc1;
-            c2 = *(pc1 + 1);
-            c3 = *(pc1 + 2);
-            c4 = *pc2;
-            c5 = *(pc2 + 1);
-            c6 = *(pc2 + 2);
-            c7 = *pc3;
-            c8 = *(pc3 + 1);
-            c9 = *(pc3 + 2);
-            /*  DEBUG:
-               fprintf(stdout, "\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n",
-               c1, c2, c3, c4, c5, c6, c7, c8, c9);
-             */
-
-            if (Rast_is_d_null_value(&c5) || (!compute_at_edges &&
-                                              (Rast_is_d_null_value(&c1) ||
-                                               Rast_is_d_null_value(&c2) ||
-                                               Rast_is_d_null_value(&c3) ||
-                                               Rast_is_d_null_value(&c4) ||
-                                               Rast_is_d_null_value(&c6) ||
-                                               Rast_is_d_null_value(&c7) ||
-                                               Rast_is_d_null_value(&c8) ||
-                                               Rast_is_d_null_value(&c9)))) {
-                if (slope_fd > 0) {
-                    Rast_set_null_value(slp_ptr, 1, data_type);
-                    slp_ptr =
-                        G_incr_void_ptr(slp_ptr, Rast_cell_size(data_type));
+                    if (Wrap) {
+                        /* wrap second row */
+                        elev_cell[t_id][1][0] = elev_cell[t_id][1][ncols];
+                        elev_cell[t_id][1][ncols + 1] = elev_cell[t_id][1][1];
+                        /* wrap third row */
+                        elev_cell[t_id][2][0] = elev_cell[t_id][2][ncols];
+                        elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
+                    }
                 }
-                if (aspect_fd > 0) {
-                    Rast_set_null_value(asp_ptr, 1, data_type);
-                    asp_ptr =
-                        G_incr_void_ptr(asp_ptr, Rast_cell_size(data_type));
+                /*  if projection is Lat/Lon, recalculate  V and H   */
+                if (G_projection() == PROJECTION_LL) {
+                    north = Rast_row_to_northing((row - 1 + 0.5), &window);
+                    ns_med = Rast_row_to_northing((row + 0.5), &window);
+                    south = Rast_row_to_northing((row + 1 + 0.5), &window);
+                    east = Rast_col_to_easting(2.5, &window);
+                    west = Rast_col_to_easting(0.5, &window);
+                    V = G_distance(east, north, east, south) * 4 / (factor * zfactor);
+                    H = G_distance(east, ns_med, west,
+                                   ns_med) * 4 / (factor * zfactor);
+                    /* ____________________________
+                       |c1      |c2      |c3      |
+                       |        |        |        |
+                       |        |  north |        |
+                       |        |        |        |
+                       |________|________|________|
+                       |c4      |c5      |c6      |
+                       |        |        |        |
+                       |  west  | ns_med |  east  |
+                       |        |        |        |
+                       |________|________|________|
+                       |c7      |c8      |c9      |
+                       |        |        |        |
+                       |        |  south |        |
+                       |        |        |        |
+                       |________|________|________|
+                     */
                 }
-                if (pcurv_fd > 0) {
-                    Rast_set_null_value(pcurv_ptr, 1, data_type);
-                    pcurv_ptr =
-                        G_incr_void_ptr(pcurv_ptr, Rast_cell_size(data_type));
-                }
-                if (tcurv_fd > 0) {
-                    Rast_set_null_value(tcurv_ptr, 1, data_type);
-                    tcurv_ptr =
-                        G_incr_void_ptr(tcurv_ptr, Rast_cell_size(data_type));
-                }
-                if (dx_fd > 0) {
-                    Rast_set_null_value(dx_ptr, 1, data_type);
-                    dx_ptr =
-                        G_incr_void_ptr(dx_ptr, Rast_cell_size(data_type));
-                }
-                if (dy_fd > 0) {
-                    Rast_set_null_value(dy_ptr, 1, data_type);
-                    dy_ptr =
-                        G_incr_void_ptr(dy_ptr, Rast_cell_size(data_type));
-                }
-                if (dxx_fd > 0) {
-                    Rast_set_null_value(dxx_ptr, 1, data_type);
-                    dxx_ptr =
-                        G_incr_void_ptr(dxx_ptr, Rast_cell_size(data_type));
-                }
-                if (dyy_fd > 0) {
-                    Rast_set_null_value(dyy_ptr, 1, data_type);
-                    dyy_ptr =
-                        G_incr_void_ptr(dyy_ptr, Rast_cell_size(data_type));
-                }
-                if (dxy_fd > 0) {
-                    Rast_set_null_value(dxy_ptr, 1, data_type);
-                    dxy_ptr =
-                        G_incr_void_ptr(dxy_ptr, Rast_cell_size(data_type));
-                }
-                continue;
-            }                   /* no data */
 
-            if (compute_at_edges) {
-                /* same method like ComputeVal in gdaldem_lib.cpp */
-                if (Rast_is_d_null_value(&c1))
-                    c1 = c5;
-                if (Rast_is_d_null_value(&c2))
-                    c2 = c5;
-                if (Rast_is_d_null_value(&c3))
-                    c3 = c5;
-                if (Rast_is_d_null_value(&c4))
-                    c4 = c5;
-                if (Rast_is_d_null_value(&c6))
-                    c6 = c5;
-                if (Rast_is_d_null_value(&c7))
-                    c7 = c5;
-                if (Rast_is_d_null_value(&c8))
-                    c8 = c5;
-                if (Rast_is_d_null_value(&c9))
-                    c9 = c5;
-            }
+                G_percent(computed, nrows, 2);
+                temp = elev_cell[t_id][0];
+                elev_cell[t_id][0] = elev_cell[t_id][1];
+                elev_cell[t_id][1] = elev_cell[t_id][2];
+                elev_cell[t_id][2] = temp;
 
-            dx = ((c1 + c4 + c4 + c7) - (c3 + c6 + c6 + c9)) / H;
-            dy = ((c7 + c8 + c8 + c9) - (c1 + c2 + c2 + c3)) / V;
+                if (row < nrows - 1)
+                    Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row + 1);
+                else
+                    Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
 
-            /* compute topographic parameters */
-            key = dx * dx + dy * dy;
-            slp_in_perc = 100 * sqrt(key);
-            slp_in_deg = atan(sqrt(key)) * radians_to_degrees;
-
-            /* now update min and max */
-            if (deg) {
-                if (min_slp > slp_in_deg)
-                    min_slp = slp_in_deg;
-                if (max_slp < slp_in_deg)
-                    max_slp = slp_in_deg;
-            }
-            else {
-                if (min_slp > slp_in_perc)
-                    min_slp = slp_in_perc;
-                if (max_slp < slp_in_perc)
-                    max_slp = slp_in_perc;
-            }
-            if (slp_in_perc < min_slope)
-                slp_in_perc = 0.;
-
-            if (deg && out_type == CELL_TYPE) {
-                /* INC BY ONE
-                   low = 1;
-                   hi = 91;
-                 */
-                low = 0;
-                hi = 90;
-                test = 20;
-
-                while (hi >= low) {
-                    if (key >= answer[test])
-                        low = test + 1;
-                    else if (key < answer[test - 1])
-                        hi = test - 1;
-                    else
-                        break;
-                    test = (low + hi) / 2;
+                if (Wrap) {
+                    elev_cell[t_id][2][0] = elev_cell[t_id][2][ncols];
+                    elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
                 }
-            }
-            else if (perc && out_type == CELL_TYPE)
-                /* INCR_BY_ONE */
-                /* test = slp_in_perc + 1.5; *//* All the slope categories are
-                   incremented by 1 */
-                test = slp_in_perc + .5;
 
-            if (slope_fd > 0) {
-                if (data_type == CELL_TYPE)
-                    *((CELL *) slp_ptr) = (CELL) test;
-                else {
-                    if (deg)
-                        Rast_set_d_value(slp_ptr,
-                                         (DCELL) slp_in_deg, data_type);
-                    else
-                        Rast_set_d_value(slp_ptr,
-                                         (DCELL) slp_in_perc, data_type);
+                pc1 = elev_cell[t_id][0];
+                pc2 = elev_cell[t_id][1];
+                pc3 = elev_cell[t_id][2];
+
+                size = Rast_cell_size(data_type) * ncols * (row - start);
+
+                if (aspect_fd >= 0) {
+                    asp_ptr = G_incr_void_ptr(asp_raster, size);
                 }
-                slp_ptr = G_incr_void_ptr(slp_ptr, Rast_cell_size(data_type));
-            }                   /* computing slope */
+
+                if (slope_fd >= 0) {
+                    slp_ptr = G_incr_void_ptr(slp_raster, size);
+                }
+
+                if (pcurv_fd >= 0) {
+                    pcurv_ptr = G_incr_void_ptr(pcurv_raster, size);
+                }
+
+                if (tcurv_fd >= 0) {
+                    tcurv_ptr = G_incr_void_ptr(tcurv_raster, size);
+                }
+
+                if (dx_fd >= 0) {
+                    dx_ptr = G_incr_void_ptr(dx_raster, size);
+                }
+
+                if (dy_fd >= 0) {
+                    dy_ptr = G_incr_void_ptr(dy_raster, size);
+                }
+
+                if (dxx_fd >= 0) {
+                    dxx_ptr = G_incr_void_ptr(dxx_raster, size);
+                }
+
+                if (dyy_fd >= 0) {
+                    dyy_ptr = G_incr_void_ptr(dyy_raster, size);
+                }
+
+                if (dxy_fd >= 0) {
+                    dxy_ptr = G_incr_void_ptr(dxy_raster, size);
+                }
+
+                for (col = ncols; col-- > 0; pc1++, pc2++, pc3++) {
+                    c1 = *pc1;
+                    c2 = *(pc1 + 1);
+                    c3 = *(pc1 + 2);
+                    c4 = *pc2;
+                    c5 = *(pc2 + 1);
+                    c6 = *(pc2 + 2);
+                    c7 = *pc3;
+                    c8 = *(pc3 + 1);
+                    c9 = *(pc3 + 2);
+                    /*  DEBUG:
+                       fprintf(stdout, "\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n%.0f %.0f %.0f\n",
+                       c1, c2, c3, c4, c5, c6, c7, c8, c9);
+                     */
+
+                    if (Rast_is_d_null_value(&c5) || (!compute_at_edges &&
+                                                      (Rast_is_d_null_value(&c1) ||
+                                                       Rast_is_d_null_value(&c2) ||
+                                                       Rast_is_d_null_value(&c3) ||
+                                                       Rast_is_d_null_value(&c4) ||
+                                                       Rast_is_d_null_value(&c6) ||
+                                                       Rast_is_d_null_value(&c7) ||
+                                                       Rast_is_d_null_value(&c8) ||
+                                                       Rast_is_d_null_value(&c9)))) {
+                        if (slope_fd > 0) {
+                            Rast_set_null_value(slp_ptr, 1, data_type);
+                            slp_ptr =
+                                G_incr_void_ptr(slp_ptr, Rast_cell_size(data_type));
+                        }
+                        if (aspect_fd > 0) {
+                            Rast_set_null_value(asp_ptr, 1, data_type);
+                            asp_ptr =
+                                G_incr_void_ptr(asp_ptr, Rast_cell_size(data_type));
+                        }
+                        if (pcurv_fd > 0) {
+                            Rast_set_null_value(pcurv_ptr, 1, data_type);
+                            pcurv_ptr =
+                                G_incr_void_ptr(pcurv_ptr, Rast_cell_size(data_type));
+                        }
+                        if (tcurv_fd > 0) {
+                            Rast_set_null_value(tcurv_ptr, 1, data_type);
+                            tcurv_ptr =
+                                G_incr_void_ptr(tcurv_ptr, Rast_cell_size(data_type));
+                        }
+                        if (dx_fd > 0) {
+                            Rast_set_null_value(dx_ptr, 1, data_type);
+                            dx_ptr =
+                                G_incr_void_ptr(dx_ptr, Rast_cell_size(data_type));
+                        }
+                        if (dy_fd > 0) {
+                            Rast_set_null_value(dy_ptr, 1, data_type);
+                            dy_ptr =
+                                G_incr_void_ptr(dy_ptr, Rast_cell_size(data_type));
+                        }
+                        if (dxx_fd > 0) {
+                            Rast_set_null_value(dxx_ptr, 1, data_type);
+                            dxx_ptr =
+                                G_incr_void_ptr(dxx_ptr, Rast_cell_size(data_type));
+                        }
+                        if (dyy_fd > 0) {
+                            Rast_set_null_value(dyy_ptr, 1, data_type);
+                            dyy_ptr =
+                                G_incr_void_ptr(dyy_ptr, Rast_cell_size(data_type));
+                        }
+                        if (dxy_fd > 0) {
+                            Rast_set_null_value(dxy_ptr, 1, data_type);
+                            dxy_ptr =
+                                G_incr_void_ptr(dxy_ptr, Rast_cell_size(data_type));
+                        }
+                        continue;
+                    }                   /* no data */
+
+                    if (compute_at_edges) {
+                        /* same method like ComputeVal in gdaldem_lib.cpp */
+                        if (Rast_is_d_null_value(&c1))
+                            c1 = c5;
+                        if (Rast_is_d_null_value(&c2))
+                            c2 = c5;
+                        if (Rast_is_d_null_value(&c3))
+                            c3 = c5;
+                        if (Rast_is_d_null_value(&c4))
+                            c4 = c5;
+                        if (Rast_is_d_null_value(&c6))
+                            c6 = c5;
+                        if (Rast_is_d_null_value(&c7))
+                            c7 = c5;
+                        if (Rast_is_d_null_value(&c8))
+                            c8 = c5;
+                        if (Rast_is_d_null_value(&c9))
+                            c9 = c5;
+                    }
+
+                    dx = ((c1 + c4 + c4 + c7) - (c3 + c6 + c6 + c9)) / H;
+                    dy = ((c7 + c8 + c8 + c9) - (c1 + c2 + c2 + c3)) / V;
+
+                    /* compute topographic parameters */
+                    key = dx * dx + dy * dy;
+                    slp_in_perc = 100 * sqrt(key);
+                    slp_in_deg = atan(sqrt(key)) * radians_to_degrees;
+
+                    /* now update min and max */
+                    if (deg) {
+                        if (min_slp > slp_in_deg)
+                            min_slp = slp_in_deg;
+                        if (max_slp < slp_in_deg)
+                            max_slp = slp_in_deg;
+                    }
+                    else {
+                        if (min_slp > slp_in_perc)
+                            min_slp = slp_in_perc;
+                        if (max_slp < slp_in_perc)
+                            max_slp = slp_in_perc;
+                    }
+                    if (slp_in_perc < min_slope)
+                        slp_in_perc = 0.;
+
+                    if (deg && out_type == CELL_TYPE) {
+                        /* INC BY ONE
+                           low = 1;
+                           hi = 91;
+                         */
+                        low = 0;
+                        hi = 90;
+                        test = 20;
+
+                        while (hi >= low) {
+                            if (key >= answer[test])
+                                low = test + 1;
+                            else if (key < answer[test - 1])
+                                hi = test - 1;
+                            else
+                                break;
+                            test = (low + hi) / 2;
+                        }
+                    }
+                    else if (perc && out_type == CELL_TYPE)
+                        /* INCR_BY_ONE */
+                        /* test = slp_in_perc + 1.5; *//* All the slope categories are
+                           incremented by 1 */
+                        test = slp_in_perc + .5;
+
+                    if (slope_fd > 0) {
+                        if (data_type == CELL_TYPE)
+                            *((CELL *) slp_ptr) = (CELL) test;
+                        else {
+                            if (deg)
+                                Rast_set_d_value(slp_ptr,
+                                                 (DCELL) slp_in_deg, data_type);
+                            else
+                                Rast_set_d_value(slp_ptr,
+                                                 (DCELL) slp_in_perc, data_type);
+                        }
+                        slp_ptr = G_incr_void_ptr(slp_ptr, Rast_cell_size(data_type));
+                    }                   /* computing slope */
+
+                    if (aspect_fd > 0) {
+                        double aspect_flat = 0.;
+
+                        if (slp_in_perc == 0.)
+                            aspect = 0.;
+                        else if (dx == 0) {
+                            if (dy > 0)
+                                aspect = 90.;
+                            else
+                                aspect = 270.;
+                        }
+                        else {
+                            aspect = (atan2(dy, dx) / degrees_to_radians);
+                            if (aspect <= 0.)
+                                aspect = 360. + aspect;
+                        }
+
+                        if (flag.n->answer) {
+                            aspect_flat = -9999;
+                            aspect = aspect_cw_n(aspect);
+                        }
+
+                        if (out_type == CELL_TYPE) {
+                            if (aspect > 0 && aspect < 0.5)
+                                aspect = 360;
+                            *((CELL *) asp_ptr) = (CELL) floor(aspect + .5);
+                        }
+                        else
+                            Rast_set_d_value(asp_ptr, (DCELL) aspect, data_type);
+
+                        asp_ptr = G_incr_void_ptr(asp_ptr, Rast_cell_size(data_type));
+
+                        /* now update min and max */
+                        if (aspect > aspect_flat && min_asp > aspect)
+                            min_asp = aspect;
+                        if (max_asp < aspect)
+                            max_asp = aspect;
+                    }                   /* computing aspect */
+
+                    if (dx_fd > 0) {
+                        if (out_type == CELL_TYPE)
+                            *((CELL *) dx_ptr) = (CELL) (scik1 * dx);
+                        else
+                            Rast_set_d_value(dx_ptr, (DCELL) dx, data_type);
+                        dx_ptr = G_incr_void_ptr(dx_ptr, Rast_cell_size(data_type));
+                    }
+
+                    if (dy_fd > 0) {
+                        if (out_type == CELL_TYPE)
+                            *((CELL *) dy_ptr) = (CELL) (scik1 * dy);
+                        else
+                            Rast_set_d_value(dy_ptr, (DCELL) dy, data_type);
+                        dy_ptr = G_incr_void_ptr(dy_ptr, Rast_cell_size(data_type));
+                    }
+
+                    if (dxx_fd <= 0 && dxy_fd <= 0 && dyy_fd <= 0 &&
+                        pcurv_fd <= 0 && tcurv_fd <= 0)
+                        continue;
+
+                    /* compute second order derivatives */
+                    s4 = c1 + c3 + c7 + c9 - c5 * 8.;
+                    s5 = c4 * 4. + c6 * 4. - c8 * 2. - c2 * 2.;
+                    s6 = c8 * 4. + c2 * 4. - c4 * 2. - c6 * 2.;
+                    s3 = c7 - c9 + c3 - c1;
+
+                    dxx = -(s4 + s5) / ((3. / 32.) * H * H);
+                    dyy = -(s4 + s6) / ((3. / 32.) * V * V);
+                    dxy = -s3 / ((1. / 16.) * H * V);
+
+                    if (dxx_fd > 0) {
+                        if (out_type == CELL_TYPE)
+                            *((CELL *) dxx_ptr) = (CELL) (scik1 * dxx);
+                        else
+                            Rast_set_d_value(dxx_ptr, (DCELL) dxx, data_type);
+                        dxx_ptr = G_incr_void_ptr(dxx_ptr, Rast_cell_size(data_type));
+                    }
+
+                    if (dyy_fd > 0) {
+                        if (out_type == CELL_TYPE)
+                            *((CELL *) dyy_ptr) = (CELL) (scik1 * dyy);
+                        else
+                            Rast_set_d_value(dyy_ptr, (DCELL) dyy, data_type);
+                        dyy_ptr = G_incr_void_ptr(dyy_ptr, Rast_cell_size(data_type));
+                    }
+
+                    if (dxy_fd > 0) {
+                        if (out_type == CELL_TYPE)
+                            *((CELL *) dxy_ptr) = (CELL) (scik1 * dxy);
+                        else
+                            Rast_set_d_value(dxy_ptr, (DCELL) dxy, data_type);
+                        dxy_ptr = G_incr_void_ptr(dxy_ptr, Rast_cell_size(data_type));
+                    }
+
+                    /* compute curvature */
+                    if (pcurv_fd <= 0 && tcurv_fd <= 0)
+                        continue;
+
+                    grad2 = key;        /*dx2 + dy2 */
+                    grad = sqrt(grad2);
+                    if (grad <= gradmin) {
+                        pcurv = 0.;
+                        tcurv = 0.;
+                    }
+                    else {
+                        dnorm1 = sqrt(grad2 + 1.);
+                        dxy2 = 2. * dxy * dx * dy;
+                        dx2 = dx * dx;
+                        dy2 = dy * dy;
+                        pcurv = (dxx * dx2 + dxy2 + dyy * dy2) /
+                            (grad2 * dnorm1 * dnorm1 * dnorm1);
+                        tcurv = (dxx * dy2 - dxy2 + dyy * dx2) / (grad2 * dnorm1);
+                        if (c1min > pcurv)
+                            c1min = pcurv;
+                        if (c1max < pcurv)
+                            c1max = pcurv;
+                        if (c2min > tcurv)
+                            c2min = tcurv;
+                        if (c2max < tcurv)
+                            c2max = tcurv;
+                    }
+
+                    if (pcurv_fd > 0) {
+                        if (out_type == CELL_TYPE)
+                            *((CELL *) pcurv_ptr) = (CELL) (scik1 * pcurv);
+                        else
+                            Rast_set_d_value(pcurv_ptr, (DCELL) pcurv, data_type);
+                        pcurv_ptr =
+                            G_incr_void_ptr(pcurv_ptr, Rast_cell_size(data_type));
+                    }
+
+                    if (tcurv_fd > 0) {
+                        if (out_type == CELL_TYPE)
+                            *((CELL *) tcurv_ptr) = (CELL) (scik1 * tcurv);
+                        else
+                            Rast_set_d_value(tcurv_ptr, (DCELL) tcurv, data_type);
+                        tcurv_ptr =
+                            G_incr_void_ptr(tcurv_ptr, Rast_cell_size(data_type));
+                    }
+
+                } /* end column loop */
+
+                #pragma omp atomic update
+                computed++;
+            } /* end row loop */
+        } /* end parallel region */
+        
+        /* write the computed buffer chunk to disk */
+        written = end;
+        for (row = start; row < end; row++) {
+            size = Rast_cell_size(data_type) * ncols * (row - start);
 
             if (aspect_fd > 0) {
-                double aspect_flat = 0.;
-
-                if (slp_in_perc == 0.)
-                    aspect = 0.;
-                else if (dx == 0) {
-                    if (dy > 0)
-                        aspect = 90.;
-                    else
-                        aspect = 270.;
-                }
-                else {
-                    aspect = (atan2(dy, dx) / degrees_to_radians);
-                    if (aspect <= 0.)
-                        aspect = 360. + aspect;
-                }
-
-                if (flag.n->answer) {
-                    aspect_flat = -9999;
-                    aspect = aspect_cw_n(aspect);
-                }
-
-                if (out_type == CELL_TYPE) {
-                    if (aspect > 0 && aspect < 0.5)
-                        aspect = 360;
-                    *((CELL *) asp_ptr) = (CELL) floor(aspect + .5);
-                }
-                else
-                    Rast_set_d_value(asp_ptr, (DCELL) aspect, data_type);
-
-                asp_ptr = G_incr_void_ptr(asp_ptr, Rast_cell_size(data_type));
-
-                /* now update min and max */
-                if (aspect > aspect_flat && min_asp > aspect)
-                    min_asp = aspect;
-                if (max_asp < aspect)
-                    max_asp = aspect;
-            }                   /* computing aspect */
-
-            if (dx_fd > 0) {
-                if (out_type == CELL_TYPE)
-                    *((CELL *) dx_ptr) = (CELL) (scik1 * dx);
-                else
-                    Rast_set_d_value(dx_ptr, (DCELL) dx, data_type);
-                dx_ptr = G_incr_void_ptr(dx_ptr, Rast_cell_size(data_type));
+                asp_ptr = G_incr_void_ptr(asp_raster, size);
+                Rast_put_row(aspect_fd, asp_ptr, data_type);
             }
 
-            if (dy_fd > 0) {
-                if (out_type == CELL_TYPE)
-                    *((CELL *) dy_ptr) = (CELL) (scik1 * dy);
-                else
-                    Rast_set_d_value(dy_ptr, (DCELL) dy, data_type);
-                dy_ptr = G_incr_void_ptr(dy_ptr, Rast_cell_size(data_type));
-            }
-
-            if (dxx_fd <= 0 && dxy_fd <= 0 && dyy_fd <= 0 &&
-                pcurv_fd <= 0 && tcurv_fd <= 0)
-                continue;
-
-            /* compute second order derivatives */
-            s4 = c1 + c3 + c7 + c9 - c5 * 8.;
-            s5 = c4 * 4. + c6 * 4. - c8 * 2. - c2 * 2.;
-            s6 = c8 * 4. + c2 * 4. - c4 * 2. - c6 * 2.;
-            s3 = c7 - c9 + c3 - c1;
-
-            dxx = -(s4 + s5) / ((3. / 32.) * H * H);
-            dyy = -(s4 + s6) / ((3. / 32.) * V * V);
-            dxy = -s3 / ((1. / 16.) * H * V);
-
-            if (dxx_fd > 0) {
-                if (out_type == CELL_TYPE)
-                    *((CELL *) dxx_ptr) = (CELL) (scik1 * dxx);
-                else
-                    Rast_set_d_value(dxx_ptr, (DCELL) dxx, data_type);
-                dxx_ptr = G_incr_void_ptr(dxx_ptr, Rast_cell_size(data_type));
-            }
-
-            if (dyy_fd > 0) {
-                if (out_type == CELL_TYPE)
-                    *((CELL *) dyy_ptr) = (CELL) (scik1 * dyy);
-                else
-                    Rast_set_d_value(dyy_ptr, (DCELL) dyy, data_type);
-                dyy_ptr = G_incr_void_ptr(dyy_ptr, Rast_cell_size(data_type));
-            }
-
-            if (dxy_fd > 0) {
-                if (out_type == CELL_TYPE)
-                    *((CELL *) dxy_ptr) = (CELL) (scik1 * dxy);
-                else
-                    Rast_set_d_value(dxy_ptr, (DCELL) dxy, data_type);
-                dxy_ptr = G_incr_void_ptr(dxy_ptr, Rast_cell_size(data_type));
-            }
-
-            /* compute curvature */
-            if (pcurv_fd <= 0 && tcurv_fd <= 0)
-                continue;
-
-            grad2 = key;        /*dx2 + dy2 */
-            grad = sqrt(grad2);
-            if (grad <= gradmin) {
-                pcurv = 0.;
-                tcurv = 0.;
-            }
-            else {
-                dnorm1 = sqrt(grad2 + 1.);
-                dxy2 = 2. * dxy * dx * dy;
-                dx2 = dx * dx;
-                dy2 = dy * dy;
-                pcurv = (dxx * dx2 + dxy2 + dyy * dy2) /
-                    (grad2 * dnorm1 * dnorm1 * dnorm1);
-                tcurv = (dxx * dy2 - dxy2 + dyy * dx2) / (grad2 * dnorm1);
-                if (c1min > pcurv)
-                    c1min = pcurv;
-                if (c1max < pcurv)
-                    c1max = pcurv;
-                if (c2min > tcurv)
-                    c2min = tcurv;
-                if (c2max < tcurv)
-                    c2max = tcurv;
+            if (slope_fd > 0) {
+                slp_ptr = G_incr_void_ptr(slp_raster, size);
+                Rast_put_row(slope_fd, slp_ptr, data_type);
             }
 
             if (pcurv_fd > 0) {
-                if (out_type == CELL_TYPE)
-                    *((CELL *) pcurv_ptr) = (CELL) (scik1 * pcurv);
-                else
-                    Rast_set_d_value(pcurv_ptr, (DCELL) pcurv, data_type);
-                pcurv_ptr =
-                    G_incr_void_ptr(pcurv_ptr, Rast_cell_size(data_type));
+                pcurv_ptr = G_incr_void_ptr(pcurv_raster, size);
+                Rast_put_row(pcurv_fd, pcurv_ptr, data_type);
             }
 
             if (tcurv_fd > 0) {
-                if (out_type == CELL_TYPE)
-                    *((CELL *) tcurv_ptr) = (CELL) (scik1 * tcurv);
-                else
-                    Rast_set_d_value(tcurv_ptr, (DCELL) tcurv, data_type);
-                tcurv_ptr =
-                    G_incr_void_ptr(tcurv_ptr, Rast_cell_size(data_type));
+                tcurv_ptr = G_incr_void_ptr(tcurv_raster, size);
+                Rast_put_row(tcurv_fd, tcurv_ptr, data_type);
             }
 
-        }                       /* column for loop */
+            if (dx_fd > 0) {
+                dx_ptr = G_incr_void_ptr(dx_raster, size);
+                Rast_put_row(dx_fd, dx_ptr, data_type);
+            }
 
-        #pragma omp atomic update
-        computed++;
-    }                           /* row loop */
-    }                           /* parallel region */
-    
-    /* write the computed buffer chunk to disk */
-    written = end;
-    for (row = start; row < end; row++) {
-        size = Rast_cell_size(data_type) * ncols * (row - start);
+            if (dy_fd > 0) {
+                dy_ptr = G_incr_void_ptr(dy_raster, size);
+                Rast_put_row(dy_fd, dy_ptr, data_type);
+            }
 
-        if (aspect_fd > 0) {
-            asp_ptr = G_incr_void_ptr(asp_raster, size);
-            Rast_put_row(aspect_fd, asp_ptr, data_type);
+            if (dxx_fd > 0) {
+                dxx_ptr = G_incr_void_ptr(dxx_raster, size);
+                Rast_put_row(dxx_fd, dxx_ptr, data_type);
+            }
+
+            if (dyy_fd > 0) {
+                dyy_ptr = G_incr_void_ptr(dyy_raster, size);
+                Rast_put_row(dyy_fd, dyy_ptr, data_type);
+            }
+
+            if (dxy_fd > 0) {
+                dxy_ptr = G_incr_void_ptr(dxy_raster, size);
+                Rast_put_row(dxy_fd, dxy_ptr, data_type);
+            }
         }
 
-        if (slope_fd > 0) {
-            slp_ptr = G_incr_void_ptr(slp_raster, size);
-            Rast_put_row(slope_fd, slp_ptr, data_type);
-        }
-
-        if (pcurv_fd > 0) {
-            pcurv_ptr = G_incr_void_ptr(pcurv_raster, size);
-            Rast_put_row(pcurv_fd, pcurv_ptr, data_type);
-        }
-
-        if (tcurv_fd > 0) {
-            tcurv_ptr = G_incr_void_ptr(tcurv_raster, size);
-            Rast_put_row(tcurv_fd, tcurv_ptr, data_type);
-        }
-
-        if (dx_fd > 0) {
-            dx_ptr = G_incr_void_ptr(dx_raster, size);
-            Rast_put_row(dx_fd, dx_ptr, data_type);
-        }
-
-        if (dy_fd > 0) {
-            dy_ptr = G_incr_void_ptr(dy_raster, size);
-            Rast_put_row(dy_fd, dy_ptr, data_type);
-        }
-
-        if (dxx_fd > 0) {
-            dxx_ptr = G_incr_void_ptr(dxx_raster, size);
-            Rast_put_row(dxx_fd, dxx_ptr, data_type);
-        }
-
-        if (dyy_fd > 0) {
-            dyy_ptr = G_incr_void_ptr(dyy_raster, size);
-            Rast_put_row(dyy_fd, dyy_ptr, data_type);
-        }
-
-        if (dxy_fd > 0) {
-            dxy_ptr = G_incr_void_ptr(dxy_raster, size);
-            Rast_put_row(dxy_fd, dxy_ptr, data_type);
-        }
-    }
-
-    } /* while loop repeats until all chunks are done */
+    } /* while loop repeats until all chunks are computed and written */
 
     G_percent(nrows, nrows, 2);
 
