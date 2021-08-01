@@ -12,7 +12,6 @@
 
 import os
 from pathlib import Path
-import tempfile
 import folium
 from .display import GrassRenderer
 import grass.script as gs
@@ -37,16 +36,16 @@ class InteractiveMap:
             os.mkdir(self.tmp_dir)
         except FileExistsError:
             pass
-            
+
         # Remember original environment
-        self._env=os.environ.copy()
-        
+        self._env = os.environ.copy()
+
         # Set up temporary locations for vectors and rasters
         # They must be different since folium takes vectors
         # in WGS84 and rasters in Pseudo-mercator
         self.setup_vector_location()
         self.setup_raster_location()
-        
+
         # Get Center of tmp GRASS region
         center = gs.parse_command("g.region", flags="cg", env=self._vector_env)
         center = (float(center["center_northing"]), float(center["center_easting"]))
@@ -66,23 +65,30 @@ class InteractiveMap:
         Adds long key names.
         """
         region = gs.region(env=env)
-        region['east'] = region['e']
-        region['west'] = region['w']
-        region['north'] = region['n']
-        region['south'] = region['s']
+        region["east"] = region["e"]
+        region["west"] = region["w"]
+        region["north"] = region["n"]
+        region["south"] = region["s"]
         return region
-    
+
     def get_location_proj_string(self, env=None):
-        out = gs.read_command('g.proj', flags='jf', env=env)
+        out = gs.read_command("g.proj", flags="jf", env=env)
         return out.strip()
 
     def reproject_region(self, region, from_proj, to_proj):
         region = region.copy()
-        proj_input = '{east} {north}\n{west} {south}'.format(**region)
-        proc = gs.start_command('m.proj', input='-', separator=' , ',
-	                        proj_in=from_proj, proj_out=to_proj,
-	                        flags="d",
-	                        stdin=gs.PIPE, stdout=gs.PIPE, stderr=gs.PIPE)
+        proj_input = "{east} {north}\n{west} {south}".format(**region)
+        proc = gs.start_command(
+            "m.proj",
+            input="-",
+            separator=" , ",
+            proj_in=from_proj,
+            proj_out=to_proj,
+            flags="d",
+            stdin=gs.PIPE,
+            stdout=gs.PIPE,
+            stderr=gs.PIPE,
+        )
         proc.stdin.write(gs.encode(proj_input))
         proc.stdin.close()
         proc.stdin = None
@@ -90,14 +96,14 @@ class InteractiveMap:
         if proc.returncode:
             raise RuntimeError("reprojecting region: m.proj error: " + stderr)
         enws = gs.decode(proj_output).split(os.linesep)
-        elon, nlat, unused = enws[0].split(' ')
-        wlon, slat, unused = enws[1].split(' ')
-        region['east'] = elon
-        region['north'] = nlat
-        region['west'] = wlon
-        region['south'] = slat
+        elon, nlat, unused = enws[0].split(" ")
+        wlon, slat, unused = enws[1].split(" ")
+        region["east"] = elon
+        region["north"] = nlat
+        region["west"] = wlon
+        region["south"] = slat
         return region
-    
+
     def setup_vector_location(self):
         # Create new vector environment for tmp WGS84 location
         rcfile, self._vector_env = gs.create_environment(
@@ -112,7 +118,7 @@ class InteractiveMap:
         from_proj = self.get_location_proj_string(env=self._env)
         to_proj = self.get_location_proj_string(env=self._vector_env)
         new_region = self.reproject_region(region, from_proj, to_proj)
-        #self._folium_region
+        # self._folium_region
         # Set vector region to match original region extent
         gs.run_command(
             "g.region",
@@ -120,9 +126,9 @@ class InteractiveMap:
             s=new_region["south"],
             e=new_region["east"],
             w=new_region["west"],
-            env=self._vector_env
+            env=self._vector_env,
         )
-        
+
     def setup_raster_location(self):
         # Create new raster environment in PseudoMercator
         rcfile, self._raster_env = gs.create_environment(
@@ -144,9 +150,9 @@ class InteractiveMap:
             s=new_region["south"],
             e=new_region["east"],
             w=new_region["west"],
-            env=self._raster_env
+            env=self._raster_env,
         )
-        
+
     def _convert_coordinates(self, x, y, proj_in):
         """This function reprojects coordinates to WGS84, the required
         projection for vectors in folium.
@@ -173,19 +179,19 @@ class InteractiveMap:
         coords_folium = [float(value) for value in coords_folium]  # Convert to floats
         return coords_folium[1], coords_folium[0]  # Return Lat and Lon
 
-#    def _convert_extent(self, env=None):
-#        """This function returns the bounding box of the current region
-#        in WGS84, the required projection for folium"""
-#
-#        # Get proj of current GRASS region
-#        proj = gs.read_command("g.proj", flags="jf", env=env)
-#        # Get extent
-#        extent = gs.parse_command("g.region", flags="g", env=env)
-#        # Convert extent to EPSG:3857, required projection for Folium
-#        north, east = self._convert_coordinates(extent["e"], extent["n"], proj)
-#        south, west = self._convert_coordinates(extent["w"], extent["s"], proj)
-#        extent = {"north": north, "south": south, "east": east, "west": west}
-#        return extent
+    #    def _convert_extent(self, env=None):
+    #        """This function returns the bounding box of the current region
+    #        in WGS84, the required projection for folium"""
+    #
+    #        # Get proj of current GRASS region
+    #        proj = gs.read_command("g.proj", flags="jf", env=env)
+    #        # Get extent
+    #        extent = gs.parse_command("g.region", flags="g", env=env)
+    #        # Convert extent to EPSG:3857, required projection for Folium
+    #        north, east = self._convert_coordinates(extent["e"], extent["n"], proj)
+    #        south, west = self._convert_coordinates(extent["w"], extent["s"], proj)
+    #        extent = {"north": north, "south": south, "east": east, "west": west}
+    #        return extent
 
     def _folium_bounding_box(self, extent):
         """Reformats extent into bounding box to pass to folium"""
@@ -223,27 +229,28 @@ class InteractiveMap:
         )
         # Import GeoJSON to folium and add to map
         folium.GeoJson(str(json_file), name=name).add_to(self.map)
-               
+
     def add_raster(self, name, opacity=0.8):
         """Imports raster into temporary WGS84 location,
-            exports as png and overlays on folium map"""
+        exports as png and overlays on folium map"""
 
         # Find full name of raster
         file_info = gs.find_file(name, element="raster")
         full_name = file_info["fullname"]
         name = file_info["name"]
-        
+
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=os.environ)
         print("Reprojecting raster... This may take a minute")
-        gs.run_command("r.proj",
-                      input=full_name,
-                      output=name,
-                      location=env_info["LOCATION_NAME"],
-                      dbase=env_info["GISDBASE"],
-                      env=self._raster_env
+        gs.run_command(
+            "r.proj",
+            input=full_name,
+            output=name,
+            location=env_info["LOCATION_NAME"],
+            dbase=env_info["GISDBASE"],
+            env=self._raster_env,
         )
-        
+
         # Reprojects bounds of raster for overlaying png (THIS HAS TO BE IN WGS84)
         bounds = gs.read_command("g.region", flags="g", env=self._env)
         bounds = gs.parse_key_val(bounds, sep="=", vsep="\n")
@@ -251,22 +258,27 @@ class InteractiveMap:
         north, east = self._convert_coordinates(bounds["e"], bounds["n"], proj)
         south, west = self._convert_coordinates(bounds["w"], bounds["s"], proj)
         new_bounds = [[north, west], [south, east]]
-        
+
         # Write raster to png file with GrassRenderer
         filename = os.path.join(self.tmp_dir, "map.png")
-        m=GrassRenderer(width=bounds["cols"], height=bounds["rows"], env=self._raster_env, filename=filename)
+        m = GrassRenderer(
+            width=bounds["cols"],
+            height=bounds["rows"],
+            env=self._raster_env,
+            filename=filename,
+        )
         m.run("d.rast", map=name)
 
         # Overlay image on folium map
         img = folium.raster_layers.ImageOverlay(
-           image=filename,
-           name=name,
-           bounds= new_bounds,
-           opacity=opacity,
-           interactive=True,
-           cross_origin=False
+            image=filename,
+            name=name,
+            bounds=new_bounds,
+            opacity=opacity,
+            interactive=True,
+            cross_origin=False,
         )
-        
+
         # Add image to map
         img.add_to(self.map)
 
