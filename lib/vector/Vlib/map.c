@@ -163,9 +163,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     }
 
     /* Copy the directory */
-    G_make_mapset_element(GV_DIRECTORY);
-    sprintf(buf, "%s/%s", GV_DIRECTORY, out);
-    G_make_mapset_element(buf);
+    G_make_mapset_dir_object(GV_DIRECTORY, out);
 
     i = 0;
     while (files[i]) {

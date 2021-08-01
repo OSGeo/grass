@@ -64,7 +64,6 @@ def main():
     set_gui_path()
 
     from core.settings import UserSettings
-    from core.giface import StandaloneGrassInterface
     from iclass.frame import IClassMapFrame
 
     group_name = subgroup_name = map_name = trainingmap_name = None
@@ -105,10 +104,9 @@ def main():
     app = wx.App()
 
     # show main frame
-    giface = StandaloneGrassInterface()
     frame = IClassMapFrame(
         parent=None,
-        giface=giface,
+        giface=None,
         title=_("Supervised Classification Tool - GRASS GIS"),
     )
     if not flags["m"]:
@@ -116,10 +114,10 @@ def main():
     if group_name:
         frame.SetGroup(group_name, subgroup_name)
     if map_name:
-        giface.WriteLog(_("Loading raster map <%s>...") % map_name)
+        frame.giface.WriteLog(_("Loading raster map <%s>...") % map_name)
         frame.trainingMapManager.AddLayer(map_name)
     if trainingmap_name:
-        giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
+        frame.giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
         frame.ImportAreas(trainingmap_name)
 
     frame.Show()

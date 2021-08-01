@@ -51,7 +51,10 @@ class SwipeMapFrame(DoubleMapFrame):
         #
         # Add toolbars
         #
-        self.AddToolbars()
+        for name in ("swipeMain", "swipeMap", "swipeMisc"):
+            self.AddToolbar(name)
+        self._mgr.Update()
+
         self._giface = giface
         #
         # create widgets
@@ -90,6 +93,21 @@ class SwipeMapFrame(DoubleMapFrame):
 
         self._mode = "swipe"
 
+        # statusbar items
+        statusbarItems = [
+            sb.SbCoordinates,
+            sb.SbRegionExtent,
+            sb.SbCompRegionExtent,
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+        ]
+        self.statusbar = self.CreateStatusbar(statusbarItems)
+
         self._addPanes()
         self._bindWindowsActivation()
         self._setUpMapWindow(self.firstMapWindow)
@@ -98,8 +116,6 @@ class SwipeMapFrame(DoubleMapFrame):
         self._mgr.GetPane("sliderV").Hide()
         self._mgr.GetPane("sliderH").Show()
         self.slider = self.sliderH
-
-        self.InitStatusbar()
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
@@ -158,40 +174,6 @@ class SwipeMapFrame(DoubleMapFrame):
         self.splitter.Init()
         if not (self.rasters["first"] and self.rasters["second"]):
             self.OnSelectLayers(event=None)
-
-    def InitStatusbar(self):
-        """Init statusbar (default items)."""
-        # items for choice
-        self.statusbarItems = [
-            sb.SbCoordinates,
-            sb.SbRegionExtent,
-            sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
-            sb.SbDisplayGeometry,
-            sb.SbMapScale,
-            sb.SbGoTo,
-            sb.SbProjection,
-        ]
-
-        # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number=4, style=0)
-        statusbar.SetMinHeight(24)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
-
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(
-            self.statusbarItems, mapframe=self, statusbar=statusbar
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        sbRender = sb.SbRender(self, statusbar=statusbar, position=3)
-        self.statusbarManager.AddStatusbarItem(sbRender)
-
-        self.statusbarManager.Update()
 
     def ResetSlider(self):
         if self.splitter.GetSplitMode() == wx.SPLIT_VERTICAL:
@@ -267,75 +249,83 @@ class SwipeMapFrame(DoubleMapFrame):
         style ^= wx.SP_LIVE_UPDATE
         self.splitter.SetWindowStyle(style)
 
-    def AddToolbars(self):
+    def AddToolbar(self, name):
         """Add defined toolbar to the window
 
         Currently known toolbars are:
-         - 'swipeMap'          - basic map toolbar
          - 'swipeMain'         - swipe functionality
+         - 'swipeMap'          - basic map toolbar
          - 'swipeMisc'         - misc (settings, help)
         """
-        self.toolbars["swipeMap"] = SwipeMapToolbar(self, self._toolSwitcher)
-        self._mgr.AddPane(
-            self.toolbars["swipeMap"],
-            wx.aui.AuiPaneInfo()
-            .Name("swipeMap")
-            .Caption(_("Map Toolbar"))
-            .ToolbarPane()
-            .Top()
-            .LeftDockable(False)
-            .RightDockable(False)
-            .BottomDockable(False)
-            .TopDockable(True)
-            .CloseButton(False)
-            .Layer(2)
-            .Row(1)
-            .Position(1)
-            .BestSize((self.toolbars["swipeMap"].GetBestSize())),
-        )
 
-        self.toolbars["swipeMain"] = SwipeMainToolbar(self)
+        if name == "swipeMain":
+            if "swipeMain" not in self.toolbars:
+                self.toolbars["swipeMain"] = SwipeMainToolbar(self)
 
-        self._mgr.AddPane(
-            self.toolbars["swipeMain"],
-            wx.aui.AuiPaneInfo()
-            .Name("swipeMain")
-            .Caption(_("Main Toolbar"))
-            .ToolbarPane()
-            .Top()
-            .LeftDockable(False)
-            .RightDockable(False)
-            .BottomDockable(False)
-            .TopDockable(True)
-            .CloseButton(False)
-            .Layer(2)
-            .Row(1)
-            .Position(0)
-            .BestSize((self.toolbars["swipeMain"].GetBestSize())),
-        )
+            self._mgr.AddPane(
+                self.toolbars["swipeMain"],
+                wx.aui.AuiPaneInfo()
+                .Name("swipeMain")
+                .Caption(_("Main Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .Row(1)
+                .Position(0)
+                .BestSize((self.toolbars["swipeMain"].GetBestSize())),
+            )
 
-        self.toolbars["swipeMisc"] = SwipeMiscToolbar(self)
+        if name == "swipeMap":
+            if "swipeMap" not in self.toolbars:
+                self.toolbars["swipeMap"] = SwipeMapToolbar(self, self._toolSwitcher)
 
-        self._mgr.AddPane(
-            self.toolbars["swipeMisc"],
-            wx.aui.AuiPaneInfo()
-            .Name("swipeMisc")
-            .Caption(_("Misc Toolbar"))
-            .ToolbarPane()
-            .Top()
-            .LeftDockable(False)
-            .RightDockable(False)
-            .BottomDockable(False)
-            .TopDockable(True)
-            .CloseButton(False)
-            .Layer(2)
-            .Row(1)
-            .Position(2)
-            .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
-        )
+            self._mgr.AddPane(
+                self.toolbars["swipeMap"],
+                wx.aui.AuiPaneInfo()
+                .Name("swipeMap")
+                .Caption(_("Map Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .Row(1)
+                .Position(1)
+                .BestSize((self.toolbars["swipeMap"].GetBestSize())),
+            )
+
+        if name == "swipeMisc":
+            if "swipeMisc" not in self.toolbars:
+                self.toolbars["swipeMisc"] = SwipeMiscToolbar(self)
+
+            self._mgr.AddPane(
+                self.toolbars["swipeMisc"],
+                wx.aui.AuiPaneInfo()
+                .Name("swipeMisc")
+                .Caption(_("Misc Toolbar"))
+                .ToolbarPane()
+                .Top()
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .Row(1)
+                .Position(2)
+                .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
+            )
 
     def _addPanes(self):
-        """Add splitter window and sliders to aui manager"""
+        """Add splitter window, sliders and statusbar to aui manager"""
         # splitter window
         self._mgr.AddPane(
             self.splitter,
@@ -387,6 +377,9 @@ class SwipeMapFrame(DoubleMapFrame):
             .Layer(1)
             .BestSize((self.sliderV.GetBestSize())),
         )
+
+        # statusbar
+        self.AddStatusbarPane()
 
     def ZoomToMap(self):
         """
@@ -551,44 +544,61 @@ class SwipeMapFrame(DoubleMapFrame):
         filename1 = grass.tempfile(False) + "1"
         filename2 = grass.tempfile(False) + "2"
         width, height = self.splitter.GetClientSize()
+
+        class _onDone:
+            """Callback class that remembers how many times
+            it was called. Needs to be called twice because
+            we are pasting together 2 rendered images, so
+            we need to know when both are finished."""
+
+            def __init__(self2):
+                self2.called = 0
+
+            def __call__(self2):
+                self2.called += 1
+                if self2.called == 2:
+                    self2.process()
+
+            def process(self2):
+                # create empty white image  - needed for line
+                im = wx.Image(width, height)
+                im.Replace(0, 0, 0, 255, 255, 255)
+
+                # paste images
+                if self._mode == "swipe":
+                    if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+                        im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), -x, -y + lineWidth)
+                    else:
+                        im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), -x + lineWidth, -y)
+                else:
+                    if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
+                        im1 = wx.Image(filename1)
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), 0, fh + lineWidth)
+                    else:
+                        im1 = wx.Image(filename1)
+                        im.Paste(im1, 0, 0)
+                        im.Paste(wx.Image(filename2), fw + lineWidth, 0)
+                im.SaveFile(fileName, fileType)
+
+                # remove temporary files
+                grass.try_remove(filename1)
+                grass.try_remove(filename2)
+
+        callback = _onDone()
         if self._mode == "swipe":
             x, y = w2.GetImageCoords()
-            w1.SaveToFile(filename1, fileType, width, height)
-            w2.SaveToFile(filename2, fileType, width, height)
+            w1.SaveToFile(filename1, fileType, width, height, callback=callback)
+            w2.SaveToFile(filename2, fileType, width, height, callback=callback)
         else:
             fw, fh = w1.GetClientSize()
-            w1.SaveToFile(filename1, fileType, fw, fh)
+            w1.SaveToFile(filename1, fileType, fw, fh, callback=callback)
             sw, sh = w2.GetClientSize()
-            w2.SaveToFile(filename2, fileType, sw, sh)
-
-        # create empty white image  - needed for line
-        im = wx.EmptyImage(width, height)
-        im.Replace(0, 0, 0, 255, 255, 255)
-
-        # paste images
-        if self._mode == "swipe":
-            if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
-                im1 = wx.Image(filename1).GetSubImage((0, 0, width, -y))
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), -x, -y + lineWidth)
-            else:
-                im1 = wx.Image(filename1).GetSubImage((0, 0, -x, height))
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), -x + lineWidth, -y)
-        else:
-            if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
-                im1 = wx.Image(filename1)
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), 0, fh + lineWidth)
-            else:
-                im1 = wx.Image(filename1)
-                im.Paste(im1, 0, 0)
-                im.Paste(wx.Image(filename2), fw + lineWidth, 0)
-        im.SaveFile(fileName, fileType)
-
-        # remove temporary files
-        grass.try_remove(filename1)
-        grass.try_remove(filename2)
+            w2.SaveToFile(filename2, fileType, sw, sh, callback=callback)
 
     def SaveToFile(self, event):
         """Save map to image"""
@@ -802,10 +812,6 @@ class SwipeMapFrame(DoubleMapFrame):
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
         return self.toolbars["swipeMap"]
-
-    def IsStandalone(self):
-        """Since we do not need layer manager, we are standalone"""
-        return True
 
     def OnHelp(self, event):
         self._giface.Help(entry="wxGUI.mapswipe")

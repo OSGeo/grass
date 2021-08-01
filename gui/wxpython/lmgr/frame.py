@@ -1472,7 +1472,7 @@ class GMFrame(wx.Frame):
             )
             return
 
-        win = IClassMapFrame(parent=self, giface=self._giface)
+        win = IClassMapFrame(parent=self)
         win.CentreOnScreen()
 
         win.Show()

@@ -19,6 +19,7 @@ SUBDIRS = \
 	db.test \
 	db.univar \
 	g.bands \
+	g.download.location \
 	g.extension \
 	g.extension.all \
 	g.manual \

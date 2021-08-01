@@ -37,10 +37,10 @@ def get_pyplot(to_file):
     return plt
 
 
-def nprocs_plot(results, filename=None):
+def nprocs_plot(results, filename=None, title=None):
     """Plot results from a multiple nprocs (thread) benchmarks.
 
-    *results* is a list of individual results from separate benchmars.
+    *results* is a list of individual results from separate benchmarks.
     One result is required to have attributes: *nprocs*, *times*, *label*.
     The *nprocs* attribute is a list of all processing elements
     (cores, threads, processes) used in the benchmark.
@@ -67,19 +67,26 @@ def nprocs_plot(results, filename=None):
             maxes = [max(i) for i in result.all_times]
             plt.fill_between(x, mins, maxes, color="gray", alpha=0.3)
     plt.legend()
-    axes.set(xticks=sorted(x_ticks))
-    plt.xlabel("Number of cores (threads, processes)")
+    # If there is not many x values, show ticks for each, but use default
+    # ticks when there is a lot of x values.
+    if len(x_ticks) < 10:
+        axes.set(xticks=sorted(x_ticks))
+    plt.xlabel("Number of processing elements (cores, threads, processes)")
     plt.ylabel("Time [s]")
+    if title:
+        plt.title(title)
+    else:
+        plt.title("Execution time by processing elements")
     if filename:
         plt.savefig(filename)
     else:
         plt.show()
 
 
-def num_cells_plot(results, filename=None, show_resolution=False):
+def num_cells_plot(results, filename=None, title=None, show_resolution=False):
     """Plot results from a multiple raster grid size benchmarks.
 
-    *results* is a list of individual results from separate benchmars
+    *results* is a list of individual results from separate benchmarks
     with one result being similar to the :func:`nprocs_plot` function.
     The result is required to have *times* and *label* attributes
     and may have an *all_times* attribute.
@@ -116,6 +123,12 @@ def num_cells_plot(results, filename=None, show_resolution=False):
     else:
         plt.xlabel("Number of cells")
     plt.ylabel("Time [s]")
+    if title:
+        plt.title(title)
+    elif show_resolution:
+        plt.title("Execution time by resolution")
+    else:
+        plt.title("Execution time by cell count")
     if filename:
         plt.savefig(filename)
     else:

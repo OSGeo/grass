@@ -18,6 +18,7 @@ from types import SimpleNamespace
 
 from grass.benchmark import (
     benchmark_resolutions,
+    benchmark_single,
     join_results,
     load_results,
     load_results_from_file,
@@ -59,6 +60,27 @@ class TestBenchmarksRun(TestCase):
         plot_file = "test_res_plot.png"
         num_cells_plot(results, filename=plot_file)
         self.assertTrue(Path(plot_file).is_file())
+
+    def test_single(self):
+        """Test that single benchmark function runs"""
+        label = "Standard output"
+        repeat = 4
+        benchmarks = [
+            dict(
+                module=Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
+                label=label,
+            )
+        ]
+        results = []
+        for benchmark in benchmarks:
+            results.append(benchmark_single(**benchmark, repeat=repeat))
+        self.assertEqual(len(results), len(benchmarks))
+        for result in results:
+            self.assertTrue(hasattr(result, "all_times"))
+            self.assertTrue(hasattr(result, "time"))
+            self.assertTrue(hasattr(result, "label"))
+            self.assertEqual(len(result.all_times), repeat)
+        self.assertEqual(results[0].label, label)
 
 
 class TestBenchmarkResults(TestCase):
