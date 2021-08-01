@@ -227,13 +227,15 @@ class InteractiveMap:
     def add_raster(self, name, opacity=0.8):
         """Imports raster into temporary WGS84 location,
             exports as png and overlays on folium map"""
-        
+
         # Find full name of raster
         file_info = gs.find_file(name, element="raster")
         full_name = file_info["fullname"]
         name = file_info["name"]
+        
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=os.environ)
+        print("Reprojecting raster... This may take a minute")
         gs.run_command("r.proj",
                       input=full_name,
                       output=name,
@@ -242,30 +244,24 @@ class InteractiveMap:
                       env=self._raster_env
         )
         
-        # Write raster to file with GrassRenderer
-        # tmp_file = tempfile.NamedTemporaryFile(suffix=".png")
-        filename = "map.png"
-        m=GrassRenderer(env=self._raster_env, filename=filename)
-        m.run("d.rast", map=name)
+        # Reprojects bounds of raster for overlaying png (THIS HAS TO BE IN WGS84)
+        bounds = gs.read_command("g.region", flags="g", env=self._env)
+        bounds = gs.parse_key_val(bounds, sep="=", vsep="\n")
+        proj = gs.read_command("g.proj", flags="jf", env=self._env)
+        north, east = self._convert_coordinates(bounds["e"], bounds["n"], proj)
+        south, west = self._convert_coordinates(bounds["w"], bounds["s"], proj)
+        new_bounds = [[north, west], [south, east]]
         
-        # Get bounds of map for overlaying png (THIS HAS TO BE IN WGS84)
-        bounds = gs.read_command("r.proj",
-                                input=full_name,
-                                location=env_info["LOCATION_NAME"],
-                                dbase=env_info["GISDBASE"],
-                                flags="g",
-                                env=self._vector_env
-        )
-        print(bounds)
-        bounds = gs.parse_key_val(bounds, sep="=", vsep=" ")
-        print(bounds)
-        # Reformat for folium
-        bounds = self._folium_bounding_box(bounds)
-        print(bounds)
+        # Write raster to png file with GrassRenderer
+        filename = os.path.join(self.tmp_dir, "map.png")
+        m=GrassRenderer(width=bounds["cols"], height=bounds["rows"], env=self._raster_env, filename=filename)
+        m.run("d.rast", map=name)
+
         # Overlay image on folium map
         img = folium.raster_layers.ImageOverlay(
            image=filename,
-           bounds= bounds,
+           name=name,
+           bounds= new_bounds,
            opacity=opacity,
            interactive=True,
            cross_origin=False
