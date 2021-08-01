@@ -50,7 +50,7 @@ class InteractiveMap:
         # Get Center of tmp GRASS region
         center = gs.parse_command("g.region", flags="cg", env=self._vector_env)
         center = (float(center["center_northing"]), float(center["center_easting"]))
-        
+
         # Create Folium Map
         self.map = folium.Map(
             width=self.width,
@@ -60,7 +60,7 @@ class InteractiveMap:
         )
         # Create LayerControl default
         self.layer_control = False
-        
+
     def get_region(self, env=None):
         """Returns current computational region as dictionary.
         Adds long key names.
@@ -273,7 +273,6 @@ class InteractiveMap:
         
         # Add image to map
         img.add_to(self.map)
-        
 
     def add_layer_control(self, **kwargs):
         self.layer_control = True

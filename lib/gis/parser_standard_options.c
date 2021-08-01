@@ -762,6 +762,12 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = NO;
         Opt->multiple = NO;
         Opt->answer = "1";
+        /* start dynamic answer */
+        /* check NPROCS in GISRC, set with g.gisenv */
+        memstr = G_store(G_getenv_nofatal("NPROCS"));
+        if (memstr && *memstr)
+            Opt->answer = memstr;
+        /* end dynamic answer */
         Opt->description = _("Number of threads for parallel computing");
         break;
 
