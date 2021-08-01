@@ -93,9 +93,6 @@ int main(int argc, char *argv[])
     int dyy_fd;
     int dxy_fd;
     DCELL *(*elev_cell)[3];
-    DCELL *temp;
-    DCELL *pc1, *pc2, *pc3;
-    DCELL c1, c2, c3, c4, c5, c6, c7, c8, c9;
     DCELL tmp1, tmp2;
     FCELL dat1, dat2;
     CELL cat;
@@ -137,26 +134,18 @@ int main(int argc, char *argv[])
     double radians_to_degrees;
     double degrees_to_radians;
     double H, V;
-    double dx;                  /* partial derivative in ew direction */
-    double dy;                  /* partial derivative in ns direction */
-    double dxx, dxy, dyy;
-    double s3, s4, s5, s6;
-    double pcurv, tcurv;
+
     double scik1 = 100000.;
     double zfactor;
     double factor;
-    double aspect, min_asp = 360., max_asp = 0.;
-    double dnorm1, dx2, dy2, grad2, grad, dxy2;
+    double min_asp = 360., max_asp = 0.;
     double gradmin = 0.001;
     double c1min = 0., c1max = 0., c2min = 0., c2max = 0.;
 
     double answer[92];
     double degrees;
     double tan_ans;
-    double key;
-    double slp_in_perc, slp_in_deg;
     double min_slp = 900., max_slp = 0., min_slope;
-    int low, hi, test = 0;
     int deg = 0;
     int perc = 0;
     char *slope_fmt;
@@ -487,11 +476,8 @@ int main(int argc, char *argv[])
     for (t = 0; t < nprocs; t++) {
         elevation_fd[t] = Rast_open_old(elev_name, "");
         elev_cell[t][0] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
-        Rast_set_d_null_value(elev_cell[t][0], ncols + 2);
         elev_cell[t][1] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
-        Rast_set_d_null_value(elev_cell[t][1], ncols + 2);
         elev_cell[t][2] = (DCELL *) G_calloc(ncols + 2, sizeof(DCELL));
-        Rast_set_d_null_value(elev_cell[t][2], ncols + 2);
     }
 
     if (slope_name != NULL) {
@@ -579,13 +565,6 @@ int main(int argc, char *argv[])
         && dx_fd < 0 && dy_fd < 0 && dxx_fd < 0 && dyy_fd < 0 && dxy_fd < 0)
         exit(EXIT_FAILURE);
 
-    int t_id = FIRST_THREAD;
-    Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, 0);
-    if (Wrap) {
-        elev_cell[t_id][2][0] = elev_cell[t_id][1][ncols];
-        elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
-    }
-
     G_verbose_message(_("Percent complete..."));
 
     int computed = 0; /* for computing progress */
@@ -600,7 +579,56 @@ int main(int argc, char *argv[])
     int start = written;
     int end = written + range;
 
+#pragma omp parallel if(nprocs > 1) \
+    firstprivate(north, east, south, west, ns_med, H, V) \
+    private(row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
+    {
+    int t_id = FIRST_THREAD;
+#if defined(_OPENMP)
+    t_id = omp_get_thread_num();
+#endif
+
+    /* private variables that are only used for computation */
+    DCELL *temp;
+    DCELL *pc1, *pc2, *pc3;
+    DCELL c1, c2, c3, c4, c5, c6, c7, c8, c9;
+    double dx;                  /* partial derivative in ew direction */
+    double dy;                  /* partial derivative in ns direction */
+    double dxx, dxy, dyy;
+    double s3, s4, s5, s6;
+    double pcurv, tcurv;
+    double aspect, dnorm1, dx2, dy2, grad2, grad, dxy2;
+    double key;
+    double slp_in_perc, slp_in_deg;
+    int low, hi, test = 0;
+    bool initialized = false;
+
+/* static scheduling is essential for buffer to be initialized properly */
+#pragma omp for schedule(static) \
+    reduction(min: c1min, c2min, min_asp, min_slp) \
+    reduction(max: c1max, c2max, max_asp, max_slp)
     for (row = start; row < end; row++) {
+        if (!initialized) {
+            initialized = true;
+            Rast_set_d_null_value(elev_cell[t_id][0], ncols + 2);
+            Rast_set_d_null_value(elev_cell[t_id][1], ncols + 2);
+            Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
+
+            if (row - 1 >= 0)
+                Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][1] + 1, row - 1);
+
+            if (row >= 0)
+                Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row);
+
+            if (Wrap) {
+                /* wrap second row */
+                elev_cell[t_id][1][0] = elev_cell[t_id][1][ncols];
+                elev_cell[t_id][1][ncols + 1] = elev_cell[t_id][1][1];
+                /* wrap third row */
+                elev_cell[t_id][2][0] = elev_cell[t_id][2][ncols];
+                elev_cell[t_id][2][ncols + 1] = elev_cell[t_id][2][1];
+            }
+        }
         /*  if projection is Lat/Lon, recalculate  V and H   */
         if (G_projection() == PROJECTION_LL) {
             north = Rast_row_to_northing((row - 1 + 0.5), &window);
@@ -984,8 +1012,10 @@ int main(int argc, char *argv[])
 
         }                       /* column for loop */
 
+        #pragma omp atomic update
         computed++;
     }                           /* row loop */
+    }                           /* parallel region */
     
     /* write the computed buffer chunk to disk */
     written = end;
@@ -1040,7 +1070,7 @@ int main(int argc, char *argv[])
 
     } /* while loop repeats until all chunks are done */
 
-    G_percent(row, nrows, 2);
+    G_percent(nrows, nrows, 2);
 
     for (t = 0; t < nprocs; t++)
         Rast_close(elevation_fd[t]);
