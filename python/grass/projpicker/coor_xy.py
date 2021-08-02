@@ -6,7 +6,6 @@ the ProjPicker API.
 import re
 import sqlite3
 
-# https://stackoverflow.com/a/49480246/16079666
 if __package__:
     from .common import (pos_float_pat, coor_sep_pat, get_float,
                          query_using_cursor)
