@@ -97,6 +97,8 @@ class TitledPage(WizardPageSimple):
 
     def __init__(self, parent, title):
         self.page = WizardPageSimple.__init__(self, parent)
+        font = wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD)
+        font_height = font.GetPixelSize()[1]
 
         # page title
         self.title = StaticText(
@@ -104,9 +106,9 @@ class TitledPage(WizardPageSimple):
             id=wx.ID_ANY,
             label=title,
             style=wx.ALIGN_CENTRE_HORIZONTAL,
-            size=(-1, 30),
+            size=(-1, font_height),
         )
-        self.title.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD))
+        self.title.SetFont(font)
         # main sizers
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
 
