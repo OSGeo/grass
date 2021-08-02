@@ -71,7 +71,7 @@ from gui_core.wrap import (
 )
 from location_wizard.dialogs import SelectTransformDialog
 
-from projpicker.wxwidgets import (
+from projpicker_gui.wxwidgets import (
     ProjPickerPanel,
     EVT_ITEM_SELECTED,
     EVT_ITEM_DESELECTED,
