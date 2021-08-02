@@ -829,3 +829,6 @@ class FrameMixin:
 
     def BindToFrame(self, *args):
         self.GetParent().Bind(*args)
+
+    def Destroy(self):
+        self.GetParent().Destroy()

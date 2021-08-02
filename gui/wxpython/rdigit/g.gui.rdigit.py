@@ -100,6 +100,9 @@ def main():
                 wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
             )
 
+            # bindings
+            parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
             # extend shortcuts and create frame accelerator table
             self.shortcuts_table.append(
                 (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11)
