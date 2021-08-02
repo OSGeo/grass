@@ -40,16 +40,19 @@ import pprint
 has_gui = True
 has_web = True
 
+try:
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+    from projpicker_gui import gui
+except:
+    hsa_gui = False
+
 # https://stackoverflow.com/a/49480246/16079666
 if __package__:
     from .common import (BBox, coor_sep, pos_float_pat, bbox_schema,
                          bbox_columns, is_verbose, get_float)
     from . import coor_latlon
     from . import coor_xy
-    try:
-        from . import gui
-    except:
-        has_gui = False
     try:
         from . import web
     except:
@@ -59,10 +62,6 @@ else:
                         bbox_columns, is_verbose, get_float)
     import coor_latlon
     import coor_xy
-    try:
-        import gui
-    except:
-        has_gui = False
     try:
         import web
     except:
