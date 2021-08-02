@@ -97,6 +97,7 @@ class TitledPage(WizardPageSimple):
 
     def __init__(self, parent, title):
         self.page = WizardPageSimple.__init__(self, parent)
+
         font = wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD)
         font_height = font.GetPixelSize()[1]
 
