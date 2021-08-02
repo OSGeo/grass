@@ -10,11 +10,11 @@ Classes:
  - manager::GroupPage
  - manager::DispMapPage
  - manager::GCPPanel
+ - manager::GCPDisplay
  - manager::GCPList
  - manager::VectGroup
  - manager::EditGCP
  - manager::GrSettingsDialog
- - manager::GCPDisplay
 
 (C) 2006-2014 by the GRASS Development Team
 
@@ -2400,6 +2400,45 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         pass
 
 
+class GCPDisplay(FrameMixin, GCPPanel):
+    """Map Display used for Multi-Window layout"""
+
+    def __init__(self, parent, giface, grwiz, id, lmgr, Map, title, **kwargs):
+
+        # init map panel
+        GCPPanel.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            grwiz=grwiz,
+            id=id,
+            lmgr=lmgr,
+            Map=Map,
+            title=title,
+            **kwargs,
+        )
+        # set system icon
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # bind to frame
+        parent.Bind(wx.EVT_CLOSE, self.OnQuit)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
+
+
 class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     def __init__(
         self,
@@ -3558,41 +3597,3 @@ class GrSettingsDialog(wx.Dialog):
         """Button 'Cancel' pressed"""
         self.Close()
 
-
-class GCPDisplay(FrameMixin, GCPPanel):
-    """Map Display used for Multi-Window layout"""
-
-    def __init__(self, parent, giface, grwiz, id, lmgr, Map, title, **kwargs):
-
-        # init map panel
-        GCPPanel.__init__(
-            self,
-            parent=parent,
-            giface=giface,
-            grwiz=grwiz,
-            id=id,
-            lmgr=lmgr,
-            Map=Map,
-            title=title,
-            **kwargs,
-        )
-        # set system icon
-        parent.iconsize = (16, 16)
-        parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-
-        # bind to frame
-        parent.Bind(wx.EVT_CLOSE, self.OnQuit)
-
-        # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts()
-
-        # add Map Display panel to Map Display frame
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self, proportion=1, flag=wx.EXPAND)
-        parent.SetSizer(sizer)
-        parent.Layout()
