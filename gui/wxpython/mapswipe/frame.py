@@ -931,10 +931,9 @@ class MapSplitter(wx.SplitterWindow):
 
 
 class SwipeMapDisplay(FrameMixin, SwipeMapPanel):
-    """Map Display used for Multi-Window layout"""
+    """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, **kwargs):
-
         # init map panel
         SwipeMapPanel.__init__(
             self,

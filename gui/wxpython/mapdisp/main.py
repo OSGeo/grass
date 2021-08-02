@@ -466,10 +466,9 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
 
 
 class DMonDisplay(FrameMixin, MapPanel):
-    """Map display for wrapping map panel with frame methods"""
+    """Map display for wrapping map panel with d.mon mathods and frame methods"""
 
     def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
-
         # init map panel
         MapPanel.__init__(
             self,
@@ -488,6 +487,9 @@ class DMonDisplay(FrameMixin, MapPanel):
                 os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
             )
         )
+
+        # bindings
+        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
         # extend shortcuts and create frame accelerator table
         self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
@@ -512,9 +514,6 @@ class DMonDisplay(FrameMixin, MapPanel):
     def OnZoomToMap(self, event):
         layers = self.MapWindow.GetMap().GetListOfLayers()
         self.MapWindow.ZoomToMap(layers=layers)
-
-    def OnSize(self, event):
-        super(DMonDisplay, self).OnSize(event)
 
 
 class MapApp(wx.App):

@@ -7,7 +7,7 @@ functions, and additional toolbars (vector digitizer, 3d view).
 Can be used either from Layer Manager or as d.mon backend.
 
 Classes:
- - mapdisp::MapFrame
+ - mapdisp::MapPanel
 
 (C) 2006-2016 by the GRASS Development Team
 
@@ -1704,10 +1704,9 @@ class MapPanel(SingleMapPanel):
 
 
 class MapDisplay(FrameMixin, MapPanel):
-    """Map Display used for Multi-Window layout"""
+    """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, id, tree, lmgr, idx, Map, title, **kwargs):
-
         # init map panel
         MapPanel.__init__(
             self,

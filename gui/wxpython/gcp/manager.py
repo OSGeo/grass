@@ -2401,10 +2401,9 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
 
 class GCPDisplay(FrameMixin, GCPPanel):
-    """Map Display used for Multi-Window layout"""
+    """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, grwiz, id, lmgr, Map, title, **kwargs):
-
         # init map panel
         GCPPanel.__init__(
             self,

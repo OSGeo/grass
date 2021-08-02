@@ -63,6 +63,8 @@ def main():
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
     class VDigitMapDisplay(FrameMixin, MapPanel):
+        """Map display for wrapping map panel with v.digit mathods and frame methods"""
+
         def __init__(self, parent, vectorMap):
             MapPanel.__init__(
                 self, parent=parent, Map=Map(), giface=DMonGrassInterface(None)
