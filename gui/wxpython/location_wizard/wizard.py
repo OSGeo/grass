@@ -366,7 +366,7 @@ class CoordinateSystemPage(TitledPage):
         # toggles
         self.radioPpik = wx.RadioButton(
             parent=self,
-            id=wx.ID_ANY, label=_("Select CRS spatially"),
+            id=wx.ID_ANY, label=_("Select CRS interactively in a map"),
             style=wx.RB_GROUP,
         )
         self.radioEpsg = wx.RadioButton(
