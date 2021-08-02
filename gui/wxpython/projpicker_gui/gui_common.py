@@ -4,11 +4,7 @@ This module implements common functions for the gui modules.
 
 import os
 
-# https://stackoverflow.com/a/49480246/16079666
-if __package__:
-    from . import projpicker as ppik
-else:
-    import projpicker as ppik
+import grass.projpicker as ppik
 
 projpicker_coordinates_env = "PROJPICKER_COORDINATES"
 projpicker_zoom_env = "PROJPICKER_ZOOM"

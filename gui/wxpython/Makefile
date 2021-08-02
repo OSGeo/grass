@@ -13,7 +13,7 @@ SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
 	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py main_window/*.py mapwin/*.py mapdisp/*.py \
 	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py \
 	rlisetup/*.py startup/*.py timeline/*.py vdigit/*.py \
-	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py photo2image/*.py image2target/*.py projpicker/*.py projpicker/*.db) \
+	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py photo2image/*.py image2target/*.py projpicker_gui/*.py) \
 	wxgui.py README
 
 DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
@@ -22,7 +22,7 @@ DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
 PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr gcp gmodeler \
 	gui_core iclass lmgr location_wizard main_window mapwin mapdisp modules nviz psmap \
 	mapswipe vdigit wxplot web_services rdigit rlisetup startup \
-	vnet timeline iscatt tplot photo2image image2target projpicker)
+	vnet timeline iscatt tplot photo2image image2target projpicker_gui)
 
 
 DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons scripts xml)
