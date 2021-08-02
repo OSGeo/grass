@@ -100,7 +100,8 @@ class TitledPage(WizardPageSimple):
 
         # page title
         self.title = StaticText(
-            parent=self, id=wx.ID_ANY, label=title, style=wx.ALIGN_CENTRE_HORIZONTAL
+            parent=self, id=wx.ID_ANY, label=title, style=wx.ALIGN_CENTRE_HORIZONTAL,
+            size=(-1, 30)
         )
         self.title.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD))
         # main sizers
