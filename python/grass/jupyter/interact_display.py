@@ -19,21 +19,28 @@ import grass.script as gs
 
 
 class InteractiveMap:
-    """This class creates interative GRASS maps with folium"""
+    """This class creates interative GRASS maps with folium.
+
+    Basic Usage:
+    >>> m = InteractiveMap()
+    >>> m.add_vector("streams")
+    >>> m.add_raster("elevation")
+    >>> m.add_layer_control()
+    >>> m.show()
+    """
 
     def __init__(self, width=400, height=400):
-        """This initiates a folium map centered on g.region.
+        """Creates a blank folium map centered on g.region.
 
-        Keyword arguments:
-            height -- height in pixels of figure (default 400)
-            width -- width in pixels of figure (default 400)"""
+        :param int height: height in pixels of figure (default 400)
+        :param int width: width in pixels of figure (default 400)
+        """
 
         # Store height and width
         self.width = width
         self.height = height
         # Make temporary folder for all our files
         self._tmp_dir = tempfile.TemporaryDirectory()
-        # self.tmp_dir = Path(self._tmp_dir_obj.name)
 
         # Create new environment for tmp WGS84 location
         self._rcfile_vect, self._vector_env = gs.create_environment(
@@ -124,9 +131,7 @@ class InteractiveMap:
         """Imports vector into temporary WGS84 location,
         re-formats to a GeoJSON and adds to folium map.
 
-        Arguments:
-            name -- a positional-only parameter; name of vector to be added
-            to map as a string"""
+        :param str name: a positional-only parameter; name of vector to add to map"""
 
         # Find full name of vector
         file_info = gs.find_file(name, element="vector")
