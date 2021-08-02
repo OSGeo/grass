@@ -7,6 +7,7 @@ Classes:
  - mapdisp::DMonMap
  - mapdisp::Layer
  - mapdisp::LayerList
+ - mapdisp::StandaloneMapDisplayGrassInterface
  - mapdisp::DMonGrassInterface
  - mapdisp::DMonDisplay
  - mapdisp::MapApp
