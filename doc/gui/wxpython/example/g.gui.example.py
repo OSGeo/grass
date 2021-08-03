@@ -19,7 +19,7 @@
 ############################################################################
 
 # %module
-# % description: Example GUI application which displays raster map and further information
+# % description: Example GUI app which displays raster map and further information
 # % keyword: example
 # % keyword: GUI
 # % keyword: raster
@@ -47,11 +47,11 @@ def main():
     options, flags = gcore.parser()
 
     import wx
-    
+
     from grass.script.setup import set_gui_path
-    
+
     set_gui_path()
-    
+
     from core.globalvar import CheckWxVersion, MAP_WINDOW_SIZE
     from core.giface import StandaloneGrassInterface
     from core.settings import UserSettings
