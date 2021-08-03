@@ -37,8 +37,8 @@ from core.debug import Debug
 from core.gcmd import RunCommand, GError
 from core import globalvar
 
-from toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
-from dialogs import ExampleMapDialog
+from example.toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainToolbar
+from example.dialogs import ExampleMapDialog
 
 # It is possible to call grass library functions (in C) directly via ctypes
 # however this is less stable. Example is available in trunk/doc/python/, ctypes
@@ -78,7 +78,6 @@ class ExampleMapPanel(SingleMapPanel):
         @param parent (no parent is expected)
         @param title window title
         @param toolbars list of active toolbars (default value represents all toolbars)
-        @param size default size
         """
         SingleMapPanel.__init__(
             self, parent=parent, title=title, name=name, Map=Map(), **kwargs
@@ -157,7 +156,8 @@ class ExampleMapPanel(SingleMapPanel):
         gcore.del_temp_region()
 
     def OnCloseWindow(self, event):
-        """!Destroy frame"""
+        """!Destroy panel"""
+        self._mgr.UnInit()
         self.Destroy()
 
     def InitVariables(self):
@@ -197,6 +197,9 @@ class ExampleMapPanel(SingleMapPanel):
             .Left(),
         )
 
+        # statusbar
+        self.AddStatusbarPane()
+
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
 
@@ -207,7 +210,8 @@ class ExampleMapPanel(SingleMapPanel):
         """
         # see wx.aui.AuiPaneInfo documentation for understanding all options
         if name == "MapToolbar":
-            self.toolbars[name] = ExampleMapToolbar(self, self._toolSwitcher)
+            if "MapToolbar" not in self.toolbars:
+                self.toolbars[name] = ExampleMapToolbar(self, self._toolSwitcher)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -227,7 +231,8 @@ class ExampleMapPanel(SingleMapPanel):
             )
 
         if name == "MiscToolbar":
-            self.toolbars[name] = ExampleMiscToolbar(self)
+            if "MiscToolbar" not in self.toolbars:
+                self.toolbars[name] = ExampleMiscToolbar(self)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -247,7 +252,8 @@ class ExampleMapPanel(SingleMapPanel):
             )
 
         if name == "MainToolbar":
-            self.toolbars[name] = ExampleMainToolbar(self)
+            if "MainToolbar" not in self.toolbars:
+                self.toolbars[name] = ExampleMainToolbar(self)
 
             self._mgr.AddPane(
                 self.toolbars[name],
@@ -352,7 +358,7 @@ class ExampleMapPanel(SingleMapPanel):
 
 
 class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
-    """Map Display used for Multi-Window layout"""
+    """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, **kwargs):
 

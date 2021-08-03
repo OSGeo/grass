@@ -33,7 +33,6 @@ import os
 import sys
 import wx
 
-
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 import grass.script.core as gcore
@@ -43,14 +42,20 @@ if __name__ == "__main__":
     if wxbase not in sys.path:
         sys.path.append(wxbase)
 
+from grass.script.setup import set_gui_path
+
+set_gui_path()
+
 from core.globalvar import CheckWxVersion
-from core.utils import GuiModuleMain
 from core.settings import UserSettings
+from core.giface import StandaloneGrassInterface
 from core import globalvar
+
 from example.frame import ExampleMapDisplay
 
 
 def main():
+
     options, flags = gcore.parser()
     if options["input"]:
         map_name = gcore.find_file(name=options["input"], element="cell")["fullname"]
@@ -75,10 +80,11 @@ def main():
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
+        title=_("Example Tool - GRASS GIS")
     )
     frame = ExampleMapDisplay(
-        parent=None,
-        giface=None,
+        parent=frame,
+        giface=StandaloneGrassInterface(),
     )
     if options["input"]:
         frame.giface.WriteLog(_("Loading raster map <{raster}>...").format(raster=map_name))
@@ -89,4 +95,4 @@ def main():
 
 
 if __name__ == "__main__":
-    GuiModuleMain(main)
+    main()

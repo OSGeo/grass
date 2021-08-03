@@ -56,10 +56,13 @@ a few more things to be done.
     def OnExample(self, event):
         """!Launch ExampleTool"""
         from example.frame import ExampleMapDisplay
-	 frame = wx.Frame(parent=None, size=globalvar.MAP_WINDOW_SIZE)
+
+        frame = wx.Frame(
+        parent=None, size=globalvar.MAP_WINDOW_SIZE, title=_("Example Tool")
+        )
         win = ExampleMapDisplay(parent=frame, giface=self._giface)
         win.CentreOnScreen()
-        
+
         win.Show()
 
 7. Run make again.
