@@ -6,12 +6,8 @@ the ProjPicker API.
 import re
 import sqlite3
 
-if __package__:
-    from .common import (pos_float_pat, coor_sep_pat, get_float,
-                         query_using_cursor)
-else:
-    from common import (pos_float_pat, coor_sep_pat, get_float,
-                        query_using_cursor)
+from .common import (pos_float_pat, coor_sep_pat, get_float,
+                     query_using_cursor)
 
 # x,y
 xy_pat = f"([+-]?{pos_float_pat}){coor_sep_pat}([+-]?{pos_float_pat})"

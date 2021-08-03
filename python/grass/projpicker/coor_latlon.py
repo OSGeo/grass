@@ -6,12 +6,8 @@ system for the ProjPicker API.
 import re
 import sqlite3
 
-if __package__:
-    from .common import (coor_sep_pat, pos_float_pat, get_float,
-                         query_using_cursor)
-else:
-    from common import (coor_sep_pat, pos_float_pat, get_float,
-                        query_using_cursor)
+from .common import (coor_sep_pat, pos_float_pat, get_float,
+                     query_using_cursor)
 
 # symbols for degrees, minutes, and seconds (DMS)
 # degree: [°od] (alt+0 in xterm for °)

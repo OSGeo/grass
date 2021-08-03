@@ -11,6 +11,7 @@ SUBDIRS = \
 	benchmark \
 	ctypes \
 	exceptions \
+	getosm \
 	grassdb \
 	gunittest \
 	imaging \

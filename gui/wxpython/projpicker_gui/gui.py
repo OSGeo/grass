@@ -10,16 +10,11 @@ import textwrap
 import webbrowser
 
 import grass.projpicker as ppik
-if __package__:
-    from .gui_common import (get_latlon, get_zoom, get_dzoom, parse_geoms,
-                             adjust_lon, calc_geoms_bbox, create_crs_info,
-                             find_bbox)
-    from .getosm import OpenStreetMap
-else:
-    from gui_common import (get_latlon, get_zoom, get_dzoom, parse_geoms,
-                            adjust_lon, calc_geoms_bbox, create_crs_info,
-                            find_bbox)
-    from getosm import OpenStreetMap
+from grass.getosm import OpenStreetMap
+
+from .gui_common import (get_latlon, get_zoom, get_dzoom, parse_geoms,
+                         adjust_lon, calc_geoms_bbox, create_crs_info,
+                         find_bbox)
 
 
 def start(
