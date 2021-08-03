@@ -995,8 +995,10 @@ class GMFrame(wx.Frame):
 
     def GetMapDisplay(self, onlyCurrent=True):
         """Get current map display
+
         :param bool onlyCurrent: True to return only active mapdisplay
                                  False for list of all mapdisplays
+
         :return: MapFrame instance (or list)
         :return: None no mapdisplay selected
         """
