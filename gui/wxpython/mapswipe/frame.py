@@ -4,7 +4,9 @@
 @brief Map Swipe Frame
 
 Classes:
- - dialogs::SwipeMapPanel
+ - frame::SwipeMapPanel
+ - frame::SwipeMapDisplay
+ - frame::MapSplitter
 
 (C) 2012 by the GRASS Development Team
 
@@ -833,6 +835,39 @@ class SwipeMapPanel(DoubleMapPanel):
         self.Destroy()
 
 
+class SwipeMapDisplay(FrameMixin, SwipeMapPanel):
+    """Map display for wrapping map panel with frame methods"""
+
+    def __init__(self, parent, giface, **kwargs):
+        # init map panel
+        SwipeMapPanel.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            **kwargs,
+        )
+        # set system icon
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # bindings
+        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
+
+
 class MapSplitter(wx.SplitterWindow):
     """Splitter window for displaying two maps"""
 
@@ -929,35 +964,3 @@ class MapSplitter(wx.SplitterWindow):
         self.GetWindow1().movingSash = True
         self.GetWindow2().movingSash = True
 
-
-class SwipeMapDisplay(FrameMixin, SwipeMapPanel):
-    """Map display for wrapping map panel with frame methods"""
-
-    def __init__(self, parent, giface, **kwargs):
-        # init map panel
-        SwipeMapPanel.__init__(
-            self,
-            parent=parent,
-            giface=giface,
-            **kwargs,
-        )
-        # set system icon
-        parent.iconsize = (16, 16)
-        parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
-        )
-
-        # bindings
-        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-
-        # extend shortcuts and create frame accelerator table
-        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
-        self._initShortcuts()
-
-        # add Map Display panel to Map Display frame
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self, proportion=1, flag=wx.EXPAND)
-        parent.SetSizer(sizer)
-        parent.Layout()
