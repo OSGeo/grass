@@ -43,7 +43,7 @@ class ProjPickerPanel(wx.Panel):
         self.dragged = False
         self.dragging_bbox = False
         self.dragged_bbox = []
-        self.drawing_bbox = False
+        self.drawing_bbox = True
         self.complete_drawing = False
         self.prev_xy = []
         self.bbox = []
@@ -388,7 +388,11 @@ class ProjPickerPanel(wx.Panel):
         elif self.complete_drawing:
             query = ""
             geom = []
-            if self.drawing_bbox:
+            if len(self.curr_geom) == 1:
+                lat, lon = self.curr_geom[0]
+                geom.extend(["point", [lat, lon]])
+                query = f"point {lat:.4f},{lon:.4f}"
+            elif self.drawing_bbox:
                 if len(self.curr_geom) == 2:
                     s = min(self.curr_geom[0][0], self.curr_geom[1][0])
                     n = max(self.curr_geom[0][0], self.curr_geom[1][0])
@@ -396,17 +400,13 @@ class ProjPickerPanel(wx.Panel):
                     e = self.curr_geom[1][1]
                     geom.extend(["bbox", [s, n, w, e]])
                     query = f"bbox {s:.4f},{n:.4f},{w:.4f},{e:.4f}"
-                self.drawing_bbox = False
-            elif len(self.curr_geom) == 1:
-                lat, lon = self.curr_geom[0]
-                geom.extend(["point", [lat, lon]])
-                query = f"point {lat:.4f},{lon:.4f}"
             elif self.curr_geom:
                 geom.extend(["poly", self.curr_geom.copy()])
                 query = "poly"
                 for g in self.curr_geom:
                     lat, lon = g
                     query += f" {lat:.4f},{lon:.4f}"
+            self.drawing_bbox = True
             self.geoms.extend(geom)
             self.curr_geom.clear()
             self.prev_xy.clear()
@@ -432,7 +432,7 @@ class ProjPickerPanel(wx.Panel):
                 self.draw_geoms()
         elif not self.dragged:
             if event.ControlDown():
-                self.drawing_bbox = True
+                self.drawing_bbox = False
                 self.curr_geom.clear()
             elif self.drawing_bbox and len(self.curr_geom) == 2:
                 del self.curr_geom[1]
@@ -454,7 +454,7 @@ class ProjPickerPanel(wx.Panel):
         self.complete_drawing = True
 
     def on_cancel_drawing(self, event):
-        self.drawing_bbox = False
+        self.drawing_bbox = True
         self.curr_geom.clear()
         self.prev_xy.clear()
         self.draw_geoms()
