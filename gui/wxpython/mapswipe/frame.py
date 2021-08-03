@@ -963,4 +963,3 @@ class MapSplitter(wx.SplitterWindow):
 
         self.GetWindow1().movingSash = True
         self.GetWindow2().movingSash = True
-

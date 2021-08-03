@@ -33,6 +33,7 @@ import os
 import sys
 import wx
 
+
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 import grass.script.core as gcore
@@ -75,16 +76,16 @@ def main():
 
     # show main frame
     frame = wx.Frame(
-        parent=None,
-        size=MAP_WINDOW_SIZE,
-        title=_("Example Tool - GRASSGIS")
+        parent=None, size=MAP_WINDOW_SIZE, title=_("Example Tool - GRASSGIS")
     )
     frame = ExampleMapDisplay(
         parent=frame,
         giface=StandaloneGrassInterface(),
     )
     if options["input"]:
-        frame.giface.WriteLog(_("Loading raster map <{raster}>...").format(raster=map_name))
+        frame.giface.WriteLog(
+            _("Loading raster map <{raster}>...").format(raster=map_name)
+        )
         frame.SetLayer(map_name)
 
     frame.Show()

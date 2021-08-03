@@ -3595,4 +3595,3 @@ class GrSettingsDialog(wx.Dialog):
     def OnClose(self, event):
         """Button 'Cancel' pressed"""
         self.Close()
-
