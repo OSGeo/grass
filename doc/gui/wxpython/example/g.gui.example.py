@@ -31,7 +31,6 @@
 
 import os
 import sys
-import wx
 
 
 # i18n is taken care of in the grass library code.
@@ -43,18 +42,21 @@ if __name__ == "__main__":
     if wxbase not in sys.path:
         sys.path.append(wxbase)
 
-from grass.script.setup import set_gui_path
-
-set_gui_path()
-
-from core.globalvar import CheckWxVersion, MAP_WINDOW_SIZE
-from core.giface import StandaloneGrassInterface
-from core.settings import UserSettings
-from example.frame import ExampleMapDisplay
-
 
 def main():
     options, flags = gcore.parser()
+
+    import wx
+    
+    from grass.script.setup import set_gui_path
+    
+    set_gui_path()
+    
+    from core.globalvar import CheckWxVersion, MAP_WINDOW_SIZE
+    from core.giface import StandaloneGrassInterface
+    from core.settings import UserSettings
+    from example.frame import ExampleMapDisplay
+
     if options["input"]:
         map_name = gcore.find_file(name=options["input"], element="cell")["fullname"]
         if not map_name:

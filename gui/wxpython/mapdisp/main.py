@@ -54,7 +54,7 @@ from core.giface import StandaloneGrassInterface  # noqa: E402
 from core.gcmd import RunCommand  # noqa: E402
 from core.render import Map, MapLayer, RenderMapMgr  # noqa: E402
 from mapdisp.frame import MapPanel  # noqa: E402
-from gui_core.mapdisp import FrameMixin
+from gui_core.mapdisp import FrameMixin  # noqa: E402
 from core.debug import Debug  # noqa: E402
 from core.settings import UserSettings  # noqa: E402
 
