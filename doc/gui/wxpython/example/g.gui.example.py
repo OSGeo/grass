@@ -46,16 +46,13 @@ from grass.script.setup import set_gui_path
 
 set_gui_path()
 
-from core.globalvar import CheckWxVersion
-from core.settings import UserSettings
+from core.globalvar import CheckWxVersion, MAP_WINDOW_SIZE
 from core.giface import StandaloneGrassInterface
-from core import globalvar
-
+from core.settings import UserSettings
 from example.frame import ExampleMapDisplay
 
 
 def main():
-
     options, flags = gcore.parser()
     if options["input"]:
         map_name = gcore.find_file(name=options["input"], element="cell")["fullname"]
@@ -79,8 +76,8 @@ def main():
     # show main frame
     frame = wx.Frame(
         parent=None,
-        size=globalvar.MAP_WINDOW_SIZE,
-        title=_("Example Tool - GRASS GIS")
+        size=MAP_WINDOW_SIZE,
+        title=_("Example Tool - GRASSGIS")
     )
     frame = ExampleMapDisplay(
         parent=frame,
