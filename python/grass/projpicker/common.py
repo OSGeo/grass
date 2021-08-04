@@ -72,12 +72,10 @@ def get_float(x):
     Returns:
         float or None: Typecasted x in float if successful, None otherwise.
     """
-    if type(x) != float:
-        try:
-            x = float(x)
-        except:
-            x = None
-    return x
+    try:
+        return float(x)
+    except:
+        pass
 
 
 def query_using_cursor(
