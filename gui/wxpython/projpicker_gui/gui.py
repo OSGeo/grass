@@ -186,7 +186,10 @@ def start(
                 dragged_bbox.append(latlon)
                 map_canvas.Refresh()
         elif event.LeftIsDown() and event.Dragging():
-            osm.drag(event.x, event.y)
+            dx, dy = osm.drag(event.x, event.y)
+            if prev_xy:
+                prev_xy[0] += dx
+                prev_xy[1] += dy
             dragged = True
         else:
             latlon = osm.canvas_to_latlon(event.x, event.y)

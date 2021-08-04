@@ -478,7 +478,10 @@ class ProjPickerPanel(wx.Panel):
                 self.dragged_bbox.append(latlon)
                 self.map_canvas.Refresh()
         elif event.LeftIsDown() and event.Dragging():
-            self.osm.drag(event.x, event.y)
+            dx, dy = self.osm.drag(event.x, event.y)
+            if self.prev_xy:
+                self.prev_xy[0] += dx
+                self.prev_xy[1] += dy
             self.dragged = True
         else:
             latlon = self.osm.canvas_to_latlon(event.x, event.y)
