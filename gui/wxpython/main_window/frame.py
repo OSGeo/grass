@@ -627,7 +627,7 @@ class GMFrame(wx.Frame):
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
-            target=self._auimgr.GetPane("modules")
+            target=self._auimgr.GetPane("modules"),
         )
 
         self._auimgr.AddPane(
@@ -641,7 +641,7 @@ class GMFrame(wx.Frame):
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
-            target=self._auimgr.GetPane("modules")
+            target=self._auimgr.GetPane("modules"),
         )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
