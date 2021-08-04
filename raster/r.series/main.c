@@ -14,6 +14,9 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -114,22 +117,24 @@ int main(int argc, char *argv[])
     struct
     {
         struct Option *input, *file, *output, *method, *weights, *quantile,
-            *range;
+            *range, *nprocs, *memory;
     } parm;
     struct
     {
         struct Flag *nulls, *lazy;
     } flag;
-    int i;
+    int i, t;
+    int nprocs;
     int num_inputs;
-    struct input *inputs = NULL;
+    struct input **inputs = NULL;
+    int bufrows;
     int num_outputs;
     struct output *outputs = NULL;
     struct History history;
-    DCELL *values = NULL, *values_tmp = NULL;
+    DCELL **values = NULL, **values_tmp = NULL;
 
-    DCELL(*values_w)[2];     /* list of values and weights */
-    DCELL(*values_w_tmp)[2]; /* list of values and weights */
+    DCELL(**values_w)[2];     /* list of values and weights */
+    DCELL(**values_w_tmp)[2]; /* list of values and weights */
     int have_weights;
     int nrows, ncols;
     int row, col;
@@ -190,6 +195,9 @@ int main(int argc, char *argv[])
     parm.range->key_desc = "lo,hi";
     parm.range->description = _("Ignore values outside this range");
 
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
+
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
     flag.nulls->description = _("Propagate NULLs");
@@ -200,6 +208,17 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    sscanf(parm.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1)
+    {
+      G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    nprocs = 1;
+#endif
 
     lo = -1.0 / 0.0; /* -inf */
     hi = 1.0 / 0.0;  /* inf */
@@ -221,6 +240,7 @@ int main(int argc, char *argv[])
     intype = -1;
 
     /* process the input maps from the file */
+    inputs = G_malloc(nprocs * sizeof *inputs);
     if (parm.file->answer) {
         FILE *in;
         int max_inputs;
@@ -270,27 +290,31 @@ int main(int argc, char *argv[])
 
             if (num_inputs >= max_inputs) {
                 max_inputs += 100;
-                inputs = G_realloc(inputs, max_inputs * sizeof(struct input));
+                for (t = 0; t < nprocs; t++)
+                    inputs[t] = G_realloc(inputs[t], max_inputs * sizeof(struct input));
             }
-            p = &inputs[num_inputs++];
+            for (t = 0; t < nprocs; t++) {
+                p = &inputs[t][num_inputs++];
 
-            p->name = G_store(name);
-            p->weight = weight;
-            G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                              p->name, p->weight);
-            p->fd = Rast_open_old(p->name, "");
-            if (p->fd < 0)
-                G_fatal_error(_("Unable to open input raster <%s>"), p->name);
-            maptype = Rast_get_map_type(p->fd);
-            if (intype == -1)
-                intype = maptype;
-            else {
-                if (intype != maptype)
-                    intype = DCELL_TYPE;
+                p->name = G_store(name);
+                p->weight = weight;
+                G_verbose_message(_("Reading raster map <%s> using weight %f..."),
+                                  p->name, p->weight);
+                p->fd = Rast_open_old(p->name, "");
+                if (p->fd < 0)
+                    G_fatal_error(_("Unable to open input raster <%s>"), p->name);
+                maptype = Rast_get_map_type(p->fd);
+                if (intype == -1)
+                    intype = maptype;
+                else {
+                    if (intype != maptype)
+                        intype = DCELL_TYPE;
+                }
+                if (flag.lazy->answer)
+                    Rast_close(p->fd);
+                p->buf = Rast_allocate_d_buf();
             }
-            if (flag.lazy->answer)
-                Rast_close(p->fd);
-            p->buf = Rast_allocate_d_buf();
+
         }
 
         if (num_inputs < 1)
@@ -317,40 +341,56 @@ int main(int argc, char *argv[])
             G_fatal_error(
                 _("input= and weights= must have the same number of values"));
 
-        inputs = G_malloc(num_inputs * sizeof(struct input));
+        for (t = 0; t < nprocs; t++) {
+            inputs[t] = G_malloc(num_inputs * sizeof(struct input));
 
-        for (i = 0; i < num_inputs; i++) {
-            struct input *p = &inputs[i];
+            for (i = 0; i < num_inputs; i++) {
+                struct input *p = &inputs[t][i];
 
-            p->name = parm.input->answers[i];
-            p->weight = 1.0;
+                p->name = parm.input->answers[i];
+                p->weight = 1.0;
 
-            if (num_weights) {
-                p->weight = (DCELL) atof(parm.weights->answers[i]);
+                if (num_weights) {
+                    p->weight = (DCELL) atof(parm.weights->answers[i]);
 
-                if (p->weight < 0)
-                    G_fatal_error(_("Weights must be positive"));
+                    if (p->weight < 0)
+                        G_fatal_error(_("Weights must be positive"));
 
-                if (p->weight != 1)
-                    have_weights = 1;
+                    if (p->weight != 1)
+                        have_weights = 1;
+                }
+
+                G_verbose_message(_("Reading raster map <%s> using weight %f..."),
+                                  p->name, p->weight);
+                p->fd = Rast_open_old(p->name, "");
+                if (p->fd < 0)
+                    G_fatal_error(_("Unable to open input raster <%s>"), p->name);
+                maptype = Rast_get_map_type(p->fd);
+                if (intype == -1)
+                    intype = maptype;
+                else {
+                    if (intype != maptype)
+                        intype = DCELL_TYPE;
+                }
+                if (flag.lazy->answer)
+                    Rast_close(p->fd);
+                p->buf = Rast_allocate_d_buf();
             }
 
-            G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                              p->name, p->weight);
-            p->fd = Rast_open_old(p->name, "");
-            if (p->fd < 0)
-                G_fatal_error(_("Unable to open input raster <%s>"), p->name);
-            maptype = Rast_get_map_type(p->fd);
-            if (intype == -1)
-                intype = maptype;
-            else {
-                if (intype != maptype)
-                    intype = DCELL_TYPE;
-            }
-            if (flag.lazy->answer)
-                Rast_close(p->fd);
-            p->buf = Rast_allocate_d_buf();
         }
+    }
+
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
+
+    bufrows = atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (bufrows > nrows) {
+        bufrows = nrows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < nprocs) {
+        bufrows = nprocs;
     }
 
     /* process the output maps */
@@ -397,7 +437,7 @@ int main(int argc, char *argv[])
         out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
                             ? atof(parm.quantile->answers[i])
                             : 0;
-        out->buf = Rast_allocate_d_buf();
+        out->buf = G_calloc((size_t) bufrows * ncols, sizeof(DCELL));
         if (menu[method].outtype == -1)
             out->fd = Rast_open_new(output_name, intype);
         else
@@ -405,20 +445,28 @@ int main(int argc, char *argv[])
     }
 
     /* initialise variables */
-    values = G_malloc(num_inputs * sizeof(DCELL));
-    values_tmp = G_malloc(num_inputs * sizeof(DCELL));
+    values = G_malloc(nprocs * sizeof *values);
+    values_tmp = G_malloc(nprocs * sizeof *values_tmp);
+    for (t = 0; t < nprocs; t++) {
+        values[t] = G_malloc(sizeof(DCELL) * num_inputs);
+        values_tmp[t] = G_malloc(sizeof(DCELL) * num_inputs);
+    }
     values_w = NULL;
     values_w_tmp = NULL;
     if (have_weights) {
-        values_w = (DCELL(*)[2]) G_malloc(num_inputs * 2 * sizeof(DCELL));
-        values_w_tmp = (DCELL(*)[2]) G_malloc(num_inputs * 2 * sizeof(DCELL));
+        values_w = G_malloc(nprocs * sizeof *values_w);
+        values_w_tmp = G_malloc(nprocs * sizeof *values_w_tmp);
+        for (t = 0; t < nprocs; t++) {
+            values_w[t] = (DCELL(*)[2]) G_malloc(sizeof(DCELL) * num_inputs * 2);
+            values_w_tmp[t] = (DCELL(*)[2]) G_malloc(sizeof(DCELL) * num_inputs * 2);
+        }
     }
-
-    nrows = Rast_window_rows();
-    ncols = Rast_window_cols();
 
     /* process the data */
     G_verbose_message(_("Percent complete..."));
+
+    int t_id = 0;
+    struct input *in = inputs[t_id];
 
     for (row = 0; row < nrows; row++) {
         G_percent(row, nrows, 2);
@@ -426,20 +474,20 @@ int main(int argc, char *argv[])
         if (flag.lazy->answer) {
             /* Open the files only on run time */
             for (i = 0; i < num_inputs; i++) {
-                inputs[i].fd = Rast_open_old(inputs[i].name, "");
-                Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
-                Rast_close(inputs[i].fd);
+                in[i].fd = Rast_open_old(in[i].name, "");
+                Rast_get_d_row(in[i].fd, in[i].buf, row);
+                Rast_close(in[i].fd);
             }
         } else {
             for (i = 0; i < num_inputs; i++)
-                Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
+                Rast_get_d_row(in[i].fd, in[i].buf, row);
         }
 
         for (col = 0; col < ncols; col++) {
             int null = 0;
 
             for (i = 0; i < num_inputs; i++) {
-                DCELL v = inputs[i].buf[col];
+                DCELL v = in[i].buf[col];
 
                 if (Rast_is_d_null_value(&v))
                     null = 1;
@@ -447,10 +495,10 @@ int main(int argc, char *argv[])
                     Rast_set_d_null_value(&v, 1);
                     null = 1;
                 }
-                values[i] = v;
+                values[t_id][i] = v;
                 if (have_weights) {
-                    values_w[i][0] = v;
-                    values_w[i][1] = inputs[i].weight;
+                    values_w[t_id][i][0] = v;
+                    values_w[t_id][i][1] = in[i].weight;
                 }
             }
 
@@ -461,13 +509,13 @@ int main(int argc, char *argv[])
                     Rast_set_d_null_value(&out->buf[col], 1);
                 else {
                     if (out->method_fn_w) {
-                        memcpy(values_w_tmp, values_w,
+                        memcpy(values_w_tmp[t_id], values_w[t_id],
                                num_inputs * 2 * sizeof(DCELL));
-                        (*out->method_fn_w)(&out->buf[col], values_w_tmp,
+                        (*out->method_fn_w)(&out->buf[col], values_w_tmp[t_id],
                                             num_inputs, &out->quantile);
                     } else {
-                        memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
-                        (*out->method_fn)(&out->buf[col], values_tmp,
+                        memcpy(values_tmp[t_id], values[t_id], num_inputs * sizeof(DCELL));
+                        (*out->method_fn)(&out->buf[col], values_tmp[t_id],
                                           num_inputs, &out->quantile);
                     }
                 }
@@ -493,8 +541,9 @@ int main(int argc, char *argv[])
 
     /* Close input maps */
     if (!flag.lazy->answer) {
-        for (i = 0; i < num_inputs; i++)
-            Rast_close(inputs[i].fd);
+        for (t = 0; t < nprocs; t++)
+            for (i = 0; i < num_inputs; i++)
+                Rast_close(inputs[t][i].fd);
     }
 
     exit(EXIT_SUCCESS);
