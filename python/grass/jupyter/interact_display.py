@@ -12,6 +12,7 @@
 
 import os
 from pathlib import Path
+import sys
 import tempfile
 import folium
 import weakref
@@ -77,7 +78,13 @@ class InteractiveMap:
 
         # Cleanup rcfile
         def remove_if_exists(path):
-            path.unlink(missing_ok=True)
+            if sys.version_info < (3, 8):
+                try:
+                    os.remove(path)
+                except FileNotFoundError:
+                    pass
+            else:
+                path.unlink(missing_ok=True)
 
         self._finalizer = weakref.finalize(
             self, remove_if_exists, Path(self._rcfile_vect)
