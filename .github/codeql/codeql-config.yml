@@ -4,3 +4,4 @@ paths-ignore:
   - "bin.*"
   - "dist.*"
   - node_modules
+  - python/grass/pygrass/tests
