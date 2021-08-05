@@ -15,9 +15,14 @@
 import os
 from pathlib import Path
 
-from grass.grassdb.checks import (dir_contains_location, get_list_of_locations,
-                                  is_location_valid, is_mapset_valid,
-                                  location_exists, mapset_exists)
+from grass.grassdb.checks import (
+    dir_contains_location,
+    get_list_of_locations,
+    is_location_valid,
+    is_mapset_valid,
+    location_exists,
+    mapset_exists,
+)
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
 from grass.gunittest.main import test
