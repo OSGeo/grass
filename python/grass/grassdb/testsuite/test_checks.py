@@ -1,8 +1,8 @@
-# MODULE:    Test of grass.benchmark
+# MODULE:    Test of grass.grassdb.checks
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Checks of GRASS database/location/mapset structure
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -10,7 +10,7 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""Basic tests of grass.benchmark"""
+"""Tests of grass.grassdb.checks"""
 
 import os
 from pathlib import Path
