@@ -179,23 +179,30 @@ class InteractiveMap:
         coords_folium = [float(value) for value in coords_folium]  # Convert to floats
         return coords_folium[1], coords_folium[0]  # Return Lat and Lon
 
-    #    def _convert_extent(self, env=None):
-    #        """This function returns the bounding box of the current region
-    #        in WGS84, the required projection for folium"""
-    #
-    #        # Get proj of current GRASS region
-    #        proj = gs.read_command("g.proj", flags="jf", env=env)
-    #        # Get extent
-    #        extent = gs.parse_command("g.region", flags="g", env=env)
-    #        # Convert extent to EPSG:3857, required projection for Folium
-    #        north, east = self._convert_coordinates(extent["e"], extent["n"], proj)
-    #        south, west = self._convert_coordinates(extent["w"], extent["s"], proj)
-    #        extent = {"north": north, "south": south, "east": east, "west": west}
-    #        return extent
-
     def _folium_bounding_box(self, extent):
         """Reformats extent into bounding box to pass to folium"""
         return [[extent["n"], extent["w"]], [extent["s"], extent["e"]]]
+    def _estimateResolution(self, raster, dbase, location, env):
+        output = gs.read_command(
+                "r.proj",
+                 flags="g",
+                 input=raster,
+                 dbase=dbase,
+                 location=location,
+                 env=env
+        ).strip()
+        params = gs.parse_key_val(output, vsep=" ")
+        output = gs.read_command(
+                "g.region",
+                flags="ug",
+                env=env,
+                **params
+        )
+        output = gs.parse_key_val(output, val_type=float)
+        cell_ns = (output["n"] - output["s"]) / output["rows"]
+        cell_ew = (output["e"] - output["w"]) / output["cols"]
+        estimate = (cell_ew + cell_ns) / 2.0
+        return estimate
 
     def add_vector(self, name):
         """Imports vector into temporary WGS84 location,
@@ -210,7 +217,7 @@ class InteractiveMap:
         full_name = file_info["fullname"]
         name = file_info["name"]
         # Reproject vector into WGS84 Location
-        env_info = gs.gisenv(env=os.environ)
+        env_info = gs.gisenv(env=self._env)
         gs.run_command(
             "v.proj",
             input=full_name,
@@ -240,14 +247,19 @@ class InteractiveMap:
         name = file_info["name"]
 
         # Reproject raster into WGS84/epsg3857 location
-        env_info = gs.gisenv(env=os.environ)
-        print("Reprojecting raster... This may take a minute")
+        env_info = gs.gisenv(env=self._env)
+        resolution = self._estimateResolution(
+                full_name,
+                env_info["GISDBASE"],
+                env_info["LOCATION_NAME"],
+                self._env)
         gs.run_command(
             "r.proj",
             input=full_name,
             output=name,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
+            resolution=resolution,
             env=self._raster_env,
         )
 
