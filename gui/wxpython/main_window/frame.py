@@ -648,7 +648,7 @@ class GMFrame(wx.Frame):
 
         # Set Modules as active tab
         modules = self._auimgr.GetPane("modules")
-        notebook = self._auimgr._notebooks[modules.notebook_id]
+        notebook = self._auimgr.GetNotebooks()[0]
         notebook.SetSelectionToPage(modules)
 
         wx.CallAfter(self.datacatalog.LoadItems)
