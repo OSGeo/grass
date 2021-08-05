@@ -9,7 +9,7 @@
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Huidae Cho <grass4u gmail.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -19,9 +19,11 @@
  *****************************************************************************/
 #include <stdlib.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
-#include <grass/raster.h>
 #include <grass/glocale.h>
+#include <grass/raster.h>
+
 #include "local_proto.h"
 
 int main(int argc, char *argv[])
@@ -63,9 +65,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("series"));
     module->description =
-	_("Creates a composite raster map layer by using "
-	  "known category values from one (or more) map layer(s) "
-	  "to fill in areas of \"no data\" in another map layer.");
+        _("Creates a composite raster map layer by using "
+          "known category values from one (or more) map layer(s) "
+          "to fill in areas of \"no data\" in another map layer.");
 
     /* Define the different options */
 
@@ -79,16 +81,14 @@ int main(int argc, char *argv[])
 
     zeroflag = G_define_flag();
     zeroflag->key = 'z';
-    zeroflag->description =
-	_("Use zero (0) for transparency instead of NULL");
+    zeroflag->description = _("Use zero (0) for transparency instead of NULL");
 
     nosupportflag = G_define_flag();
     nosupportflag->key = 's';
-    nosupportflag->description =
-	_("Do not create color and category files");
+    nosupportflag->description = _("Do not create color and category files");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     use_zero = (zeroflag->answer);
     no_support = (nosupportflag->answer);
@@ -100,29 +100,29 @@ int main(int argc, char *argv[])
     for (ptr = names, nfiles = 0; *ptr != NULL; ptr++, nfiles++) ;
 
     if (nfiles < 2)
-	G_fatal_error(_("The minimum number of input raster maps is two"));
+        G_fatal_error(_("The minimum number of input raster maps is two"));
 
     infd = G_malloc(nfiles * sizeof(int));
     statf = G_malloc(nfiles * sizeof(struct Cell_stats));
     cellhd = G_malloc(nfiles * sizeof(struct Cell_head));
 
     for (i = 0; i < nfiles; i++) {
-	const char *name = names[i];
-	int fd;
+        const char *name = names[i];
+        int fd;
 
-	fd = Rast_open_old(name, "");
+        fd = Rast_open_old(name, "");
 
-	infd[i] = fd;
+        infd[i] = fd;
 
-	map_type = Rast_get_map_type(fd);
-	if (map_type == FCELL_TYPE && out_type == CELL_TYPE)
-	    out_type = FCELL_TYPE;
-	else if (map_type == DCELL_TYPE)
-	    out_type = DCELL_TYPE;
+        map_type = Rast_get_map_type(fd);
+        if (map_type == FCELL_TYPE && out_type == CELL_TYPE)
+            out_type = FCELL_TYPE;
+        else if (map_type == DCELL_TYPE)
+            out_type = DCELL_TYPE;
 
-	Rast_init_cell_stats(&statf[i]);
+        Rast_init_cell_stats(&statf[i]);
 
-	Rast_get_cellhd(name, "", &cellhd[i]);
+        Rast_get_cellhd(name, "", &cellhd[i]);
     }
 
     out_cell_size = Rast_cell_size(out_type);
@@ -139,55 +139,56 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("Percent complete..."));
     for (row = 0; row < nrows; row++) {
-	double north_edge, south_edge;
+        double north_edge, south_edge;
 
-	G_percent(row, nrows, 2);
-	Rast_get_row(infd[0], presult, row, out_type);
+        G_percent(row, nrows, 2);
+        Rast_get_row(infd[0], presult, row, out_type);
 
-	north_edge = Rast_row_to_northing(row, &window);
-	south_edge = north_edge - window.ns_res;
+        north_edge = Rast_row_to_northing(row, &window);
+        south_edge = north_edge - window.ns_res;
 
-	if (out_type == CELL_TYPE)
-	    Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
-	for (i = 1; i < nfiles; i++) {
-	    /* check if raster i overlaps with the current row */
-	    if (south_edge >= cellhd[i].north ||
-		north_edge <= cellhd[i].south ||
-		window.west >= cellhd[i].east ||
-		window.east <= cellhd[i].west)
-		continue;
+        if (out_type == CELL_TYPE)
+            Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
+        for (i = 1; i < nfiles; i++) {
+            /* check if raster i overlaps with the current row */
+            if (south_edge >= cellhd[i].north ||
+                north_edge <= cellhd[i].south ||
+                window.west >= cellhd[i].east ||
+                window.east <= cellhd[i].west)
+                continue;
 
-	    Rast_get_row(infd[i], patch, row, out_type);
-	    if (!do_patch
-                (presult, patch, &statf[i], ncols, out_type, out_cell_size,
-                 use_zero))
-		break;
-	}
-	Rast_put_row(outfd, presult, out_type);
+            Rast_get_row(infd[i], patch, row, out_type);
+            if (!do_patch(presult, patch, &statf[i], ncols, out_type,
+                          out_cell_size, use_zero))
+                break;
+        }
+        Rast_put_row(outfd, presult, out_type);
     }
     G_percent(row, nrows, 2);
 
     G_free(patch);
     G_free(presult);
     for (i = 0; i < nfiles; i++)
-	Rast_close(infd[i]);
+        Rast_close(infd[i]);
 
-    if(!no_support) {
-        /* 
+    if (!no_support) {
+        /*
          * build the new cats and colors. do this before closing the new
          * file, in case the new file is one of the patching files as well.
          */
-        G_verbose_message(_("Creating support files for raster map <%s>..."), new_name);
-        support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok, out_type);
+        G_verbose_message(_("Creating support files for raster map <%s>..."),
+                          new_name);
+        support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok,
+                out_type);
     }
 
     /* now close (and create) the result */
     Rast_close(outfd);
-    if(!no_support) {
+    if (!no_support) {
         if (cats_ok)
-    	    Rast_write_cats(new_name, &cats);
-	if (colr_ok)
-	    Rast_write_colors(new_name, G_mapset(), &colr);
+            Rast_write_cats(new_name, &cats);
+        if (colr_ok)
+            Rast_write_colors(new_name, G_mapset(), &colr);
     }
 
     Rast_short_history(new_name, "raster", &history);
