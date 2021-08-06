@@ -55,7 +55,7 @@ typedef struct
 /* command line options are the same for raster and raster3d maps */
 typedef struct
 {
-    struct Option *inputfile, *zonefile, *percentile, *output_file, *separator, *threads;
+    struct Option *inputfile, *zonefile, *percentile, *output_file, *separator, *nprocs;
     struct Flag *shell_style, *extended, *table, *use_rast_region;
 } param_type;
 
