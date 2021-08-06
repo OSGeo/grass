@@ -5,5 +5,8 @@ int do_patch(void *result, void *, struct Cell_stats *, int, RASTER_MAP_TYPE,
 /* support.c */
 int support(char **, struct Cell_stats *, int, struct Categories *, int *,
             struct Colors *, int *, RASTER_MAP_TYPE);
+<<<<<<< HEAD
 
 void merge_threads(struct Cell_stats **, int, int);
+=======
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
