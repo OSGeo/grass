@@ -166,7 +166,7 @@ class InteractiveMap:
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
         resolution = estimate_resolution(
-            full_name, env_info["GISDBASE"], env_info["LOCATION_NAME"], self._src_env
+            full_name, env_info["GISDBASE"], env_info["LOCATION_NAME"], self._psmerc_env
         )
         gs.run_command(
             "r.proj",
