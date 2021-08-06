@@ -14,6 +14,13 @@ import os
 from pathlib import Path
 import folium
 from .display import GrassRenderer
+from .utils import (
+    convert_coordinates_to_latlon,
+    get_region,
+    get_location_proj_string,
+    reproject_region,
+    estimate_resolution,
+)
 import grass.script as gs
 
 
@@ -43,8 +50,8 @@ class InteractiveMap:
         # Set up temporary locations for vectors and rasters
         # They must be different since folium takes vectors
         # in WGS84 and rasters in Pseudo-mercator
-        self.setup_vector_location()
-        self.setup_raster_location()
+        self._setup_vector_location()
+        self._setup_raster_location()
 
         # Get Center of tmp GRASS region
         center = gs.parse_command("g.region", flags="cg", env=self._vector_env)
@@ -60,51 +67,7 @@ class InteractiveMap:
         # Create LayerControl default
         self.layer_control = False
 
-    def get_region(self, env=None):
-        """Returns current computational region as dictionary.
-        Adds long key names.
-        """
-        region = gs.region(env=env)
-        region["east"] = region["e"]
-        region["west"] = region["w"]
-        region["north"] = region["n"]
-        region["south"] = region["s"]
-        return region
-
-    def get_location_proj_string(self, env=None):
-        out = gs.read_command("g.proj", flags="jf", env=env)
-        return out.strip()
-
-    def reproject_region(self, region, from_proj, to_proj):
-        region = region.copy()
-        proj_input = "{east} {north}\n{west} {south}".format(**region)
-        proc = gs.start_command(
-            "m.proj",
-            input="-",
-            separator=" , ",
-            proj_in=from_proj,
-            proj_out=to_proj,
-            flags="d",
-            stdin=gs.PIPE,
-            stdout=gs.PIPE,
-            stderr=gs.PIPE,
-        )
-        proc.stdin.write(gs.encode(proj_input))
-        proc.stdin.close()
-        proc.stdin = None
-        proj_output, stderr = proc.communicate()
-        if proc.returncode:
-            raise RuntimeError("reprojecting region: m.proj error: " + stderr)
-        enws = gs.decode(proj_output).split(os.linesep)
-        elon, nlat, unused = enws[0].split(" ")
-        wlon, slat, unused = enws[1].split(" ")
-        region["east"] = elon
-        region["north"] = nlat
-        region["west"] = wlon
-        region["south"] = slat
-        return region
-
-    def setup_vector_location(self):
+    def _setup_vector_location(self):
         # Create new vector environment for tmp WGS84 location
         rcfile, self._vector_env = gs.create_environment(
             self.tmp_dir, "temp_folium_WGS84", "PERMANENT"
@@ -114,10 +77,10 @@ class InteractiveMap:
             self.tmp_dir, "temp_folium_WGS84", epsg="4326", overwrite=True
         )
         # Reproject region
-        region = self.get_region(env=self._env)
-        from_proj = self.get_location_proj_string(env=self._env)
-        to_proj = self.get_location_proj_string(env=self._vector_env)
-        new_region = self.reproject_region(region, from_proj, to_proj)
+        region = get_region(env=self._env)
+        from_proj = get_location_proj_string(env=self._env)
+        to_proj = get_location_proj_string(env=self._vector_env)
+        new_region = reproject_region(region, from_proj, to_proj)
         # self._folium_region
         # Set vector region to match original region extent
         gs.run_command(
@@ -129,7 +92,7 @@ class InteractiveMap:
             env=self._vector_env,
         )
 
-    def setup_raster_location(self):
+    def _setup_raster_location(self):
         # Create new raster environment in PseudoMercator
         rcfile, self._raster_env = gs.create_environment(
             self.tmp_dir, "temp_folium_WGS84_pmerc", "PERMANENT"
@@ -139,10 +102,10 @@ class InteractiveMap:
             self.tmp_dir, "temp_folium_WGS84_pmerc", epsg="3857", overwrite=True
         )
         # Reproject region
-        region = self.get_region(env=self._env)
-        from_proj = self.get_location_proj_string(env=self._env)
-        to_proj = self.get_location_proj_string(env=self._raster_env)
-        new_region = self.reproject_region(region, from_proj, to_proj)
+        region = get_region(env=self._env)
+        from_proj = get_location_proj_string(env=self._env)
+        to_proj = get_location_proj_string(env=self._raster_env)
+        new_region = reproject_region(region, from_proj, to_proj)
         # Set raster region to match original region extent
         gs.run_command(
             "g.region",
@@ -153,55 +116,13 @@ class InteractiveMap:
             env=self._raster_env,
         )
 
-    def _convert_coordinates(self, x, y, proj_in):
-        """This function reprojects coordinates to WGS84, the required
-        projection for vectors in folium.
-
-        Arguments:
-            x -- x coordinate (string)
-            y -- y coordinate (string)
-            proj_in -- proj4 string of location (for example, the output
-            of g.region run with the `g` flag."""
-
-        # Reformat input
-        coordinates = f"{x}, {y}"
-        # Reproject coordinates
-        coords_folium = gs.read_command(
-            "m.proj",
-            coordinates=coordinates,
-            proj_in=proj_in,
-            separator="comma",
-            flags="do",
-        )
-        # Reformat from string to array
-        coords_folium = coords_folium.strip()  # Remove '\n' at end of string
-        coords_folium = coords_folium.split(",")  # Split on comma
-        coords_folium = [float(value) for value in coords_folium]  # Convert to floats
-        return coords_folium[1], coords_folium[0]  # Return Lat and Lon
-
-    def _folium_bounding_box(self, extent):
-        """Reformats extent into bounding box to pass to folium"""
-        return [[extent["n"], extent["w"]], [extent["s"], extent["e"]]]
-
-    def _estimateResolution(self, raster, dbase, location, env):
-        output = gs.read_command(
-            "r.proj", flags="g", input=raster, dbase=dbase, location=location, env=env
-        ).strip()
-        params = gs.parse_key_val(output, vsep=" ")
-        output = gs.read_command("g.region", flags="ug", env=env, **params)
-        output = gs.parse_key_val(output, val_type=float)
-        cell_ns = (output["n"] - output["s"]) / output["rows"]
-        cell_ew = (output["e"] - output["w"]) / output["cols"]
-        estimate = (cell_ew + cell_ns) / 2.0
-        return estimate
-
     def add_vector(self, name):
         """Imports vector into temporary WGS84 location,
         re-formats to a GeoJSON and adds to folium map.
 
-        Arguments:
-            name -- a positional-only parameter; name of vector to be added
-            to map as a string"""
+        :param str name: name of vector to be added to map;
+                         positional-only parameter
+        """
 
         # Find full name of vector
         file_info = gs.find_file(name, element="vector")
@@ -230,7 +151,12 @@ class InteractiveMap:
 
     def add_raster(self, name, opacity=0.8):
         """Imports raster into temporary WGS84 location,
-        exports as png and overlays on folium map"""
+        exports as png and overlays on folium map
+
+        :param str name: name of raster to add to display
+        :param float opacity: raster opacity, number between
+                              0 (transparent) and 1 (opaque)
+        """
 
         # Find full name of raster
         file_info = gs.find_file(name, element="raster")
@@ -239,7 +165,7 @@ class InteractiveMap:
 
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._env)
-        resolution = self._estimateResolution(
+        resolution = estimate_resolution(
             full_name, env_info["GISDBASE"], env_info["LOCATION_NAME"], self._env
         )
         gs.run_command(
@@ -256,8 +182,8 @@ class InteractiveMap:
         bounds = gs.read_command("g.region", flags="g", env=self._env)
         bounds = gs.parse_key_val(bounds, sep="=", vsep="\n")
         proj = gs.read_command("g.proj", flags="jf", env=self._env)
-        north, east = self._convert_coordinates(bounds["e"], bounds["n"], proj)
-        south, west = self._convert_coordinates(bounds["w"], bounds["s"], proj)
+        north, east = convert_coordinates_to_latlon(bounds["e"], bounds["n"], proj)
+        south, west = convert_coordinates_to_latlon(bounds["w"], bounds["s"], proj)
         new_bounds = [[north, west], [south, east]]
 
         # Write raster to png file with GrassRenderer
