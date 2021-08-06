@@ -7,10 +7,10 @@
 #include "files.h"
 #include "parms.h"
 
-int openfiles(struct parms *parms, struct files *files)
+int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 {
     struct Ref Ref;		/* subgroup reference list */
-    const char *mapset;
+    const char *mapset, *bandref;
     int n;
 
 
@@ -28,6 +28,9 @@ int openfiles(struct parms *parms, struct files *files)
     files->band_fd = (int *)G_calloc(Ref.nfiles, sizeof(int));
     files->band_cell = (DCELL **) G_calloc(Ref.nfiles, sizeof(DCELL *));
 
+    /* Prepare SigSet structure */
+    I_InitSigSet(S, files->nbands);
+
     /* open training map for reading */
     mapset = G_find_raster2(parms->training_map, "");
     files->train_fd = Rast_open_old(parms->training_map, mapset);
@@ -38,7 +41,14 @@ int openfiles(struct parms *parms, struct files *files)
 	files->band_fd[n] =
 	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
 	files->band_cell[n] = Rast_allocate_d_buf();
+        bandref = Rast_read_bandref(Ref.file[n].name, Ref.file[n].mapset);
+        if (!bandref)
+            G_fatal_error(_("Raster map <%s@%s> lacks band reference"),
+                            Ref.file[n].name, Ref.file[n].mapset);
+        S->bandrefs[n] = G_store(bandref);
     }
+
+    I_free_group_ref(&Ref);
 
     return 0;
 }
