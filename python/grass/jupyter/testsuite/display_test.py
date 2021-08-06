@@ -17,20 +17,23 @@
 #############################################################################
 
 # Dependencies
+import os
+import unittest
+from pathlib import Path
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import unittest
-import os
-from pathlib import Path
+
 
 # Helper function
 def can_import_folium():
     try:
         import folium
+
         return True
     except ImportError:
         return False
+
 
 # Tests
 class TestDisplay(TestCase):
