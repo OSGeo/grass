@@ -182,22 +182,13 @@ class InteractiveMap:
     def _folium_bounding_box(self, extent):
         """Reformats extent into bounding box to pass to folium"""
         return [[extent["n"], extent["w"]], [extent["s"], extent["e"]]]
+
     def _estimateResolution(self, raster, dbase, location, env):
         output = gs.read_command(
-                "r.proj",
-                 flags="g",
-                 input=raster,
-                 dbase=dbase,
-                 location=location,
-                 env=env
+            "r.proj", flags="g", input=raster, dbase=dbase, location=location, env=env
         ).strip()
         params = gs.parse_key_val(output, vsep=" ")
-        output = gs.read_command(
-                "g.region",
-                flags="ug",
-                env=env,
-                **params
-        )
+        output = gs.read_command("g.region", flags="ug", env=env, **params)
         output = gs.parse_key_val(output, val_type=float)
         cell_ns = (output["n"] - output["s"]) / output["rows"]
         cell_ew = (output["e"] - output["w"]) / output["cols"]
@@ -249,10 +240,8 @@ class InteractiveMap:
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._env)
         resolution = self._estimateResolution(
-                full_name,
-                env_info["GISDBASE"],
-                env_info["LOCATION_NAME"],
-                self._env)
+            full_name, env_info["GISDBASE"], env_info["LOCATION_NAME"], self._env
+        )
         gs.run_command(
             "r.proj",
             input=full_name,
