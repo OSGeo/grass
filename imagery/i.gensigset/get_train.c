@@ -27,8 +27,6 @@ int get_training_classes(struct parms *parms,
     ncols = Rast_window_cols();
 
     /* determine the non-zero categories in the map */
-    I_InitSigSet(S);
-    I_SigSetNBands(S, files->nbands);
     I_SetSigTitle(S, Rast_get_cats_title(&files->training_labels));
 
     Rast_init_cell_stats(&cell_stats);

@@ -103,13 +103,7 @@ categories on the ground.
 </dl>
 
 
-<h2>INTERACTIVE MODE</h2>
-
-If none of the arguments are specified on the command line,
-<em>i.smap</em> will interactively prompt for the names of
-the maps and files.
-
-<a name="notes"></a><h2>NOTES</h2>
+<h2 id="notes">NOTES</h2>
 
 The SMAP algorithm exploits the fact that nearby pixels in
 an image are likely to have the same class.  It works by
@@ -122,7 +116,7 @@ class which may be useful in some applications.
 
 <p>
 The amount of smoothing that is performed in the
-segmentation is dependent of the behavior of the data in
+segmentation is dependent of the behaviour of the data in
 the image.  If the data suggests that the nearby pixels
 often change class, then the algorithm will adaptively
 reduce the amount of smoothing.  This ensures that
@@ -144,24 +138,45 @@ r.mapcalc "MASKed_map = classification_results"
 
 <h2>EXAMPLE</h2>
 
-Supervised classification of LANDSAT
+Supervised classification of LANDSAT scene (complete NC location)
 
 <div class="code"><pre>
+## Prepare imagery for classification
+# Skip this step if your rasters already have band references defined
+# Define band references for all LANDSAT bands in mapset PERMANENT
+g.mapset mapset=PERMANENT
+r.support map=lsat7_2002_10 bandref=TM7_1
+r.support map=lsat7_2002_20 bandref=TM7_2
+r.support map=lsat7_2002_30 bandref=TM7_3
+r.support map=lsat7_2002_40 bandref=TM7_4
+r.support map=lsat7_2002_50 bandref=TM7_5
+r.support map=lsat7_2002_61 bandref=TM7_61
+r.support map=lsat7_2002_62 bandref=TM7_62
+r.support map=lsat7_2002_70 bandref=TM7_7
+r.support map=lsat7_2002_80 bandref=TM7_8
+g.mapset mapset=user1  # replace user1 with your mapset name
+
+## Real work starts here
+# Align computation region to the scene
 g.region raster=lsat7_2002_10 -p
 
 # store VIZ, NIR, MIR into group/subgroup
-i.group group=my_lsat7_2002 subgroup=my_lsat7_2002 \
+i.group group=lsat7_2002 subgroup=res_30m \
   input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 
 # Now digitize training areas "training" with the digitizer
 # and convert to raster model with v.to.rast
 v.to.rast input=training output=training use=cat label_column=label
+# If you are just playing around and do not care about the accuracy of outcome,
+# just use one of existing maps instead e.g.
+# g.copy rast=landuse96_28m,training
 
-# calculate statistics
-i.gensigset trainingmap=training group=my_lsat7_2002 subgroup=my_lsat7_2002 \
-            signaturefile=my_smap_lsat7_2002 maxsig=5
+# Create a signature file with statistics for each class
+i.gensigset trainingmap=training group=lsat7_2002 subgroup=res_30m \
+            signaturefile=lsat7_2002_30m maxsig=5
 
-i.smap group=my_lsat7_2002 subgroup=my_lsat7_2002 signaturefile=my_smap_lsat7_2002 \
+# Predict classes based on whole LANDSAT scene
+i.smap group=lsat7_2002 subgroup=res_30m signaturefile=lsat7_2002_30m \
        output=lsat7_2002_smap_classes
 
 # Visually check result
@@ -195,6 +210,9 @@ pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="r.support.html">r.support</a></em> for setting band references,
+<br>
+<em>
 <a href="i.group.html">i.group</a></em> for creating groups and subgroups
 <br>
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>
@@ -214,11 +232,13 @@ to generate the signature file required by this program
 
 <a href="https://engineering.purdue.edu/~bouman/software/segmentation/">Charles Bouman, 
 School of Electrical Engineering, Purdue University</a>
-
-<p>
+<br>
 Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
+<br>
+Band reference support: Maris Nartiss,
+University of Latvia
 
 <!--
 <p>

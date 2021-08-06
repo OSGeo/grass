@@ -383,28 +383,6 @@ class UpdateThread(Thread):
             elif name == "SubGroupSelect":
                 self.data[win.Insert] = {"group": p.get("value", "")}
 
-            elif name == "SignatureSelect":
-                if p.get("prompt", "group") == "group":
-                    group = p.get("value", "")
-                    pSubGroup = self.task.get_param(
-                        "subgroup", element="prompt", raiseError=False
-                    )
-                    if pSubGroup:
-                        subgroup = pSubGroup.get("value", "")
-                    else:
-                        subgroup = None
-                else:
-                    subgroup = p.get("value", "")
-                    pGroup = self.task.get_param(
-                        "group", element="prompt", raiseError=False
-                    )
-                    if pGroup:
-                        group = pGroup.get("value", "")
-                    else:
-                        group = None
-
-                self.data[win.Insert] = {"group": group, "subgroup": subgroup}
-
             elif name == "LocationSelect":
                 pDbase = self.task.get_param(
                     "dbase", element="element", raiseError=False
@@ -1756,8 +1734,16 @@ class CmdPanel(wx.Panel):
 
                 # sigrature file
                 elif prompt == "sigfile":
+                    if p.get("age", "") == "new":
+                        mapsets = [
+                            grass.gisenv()["MAPSET"],
+                        ]
+                    else:
+                        mapsets = None
                     selection = gselect.SignatureSelect(
-                        parent=which_panel, element=p.get("element", "sig")
+                        parent=which_panel,
+                        element=p.get("element", "sig"),
+                        mapsets=mapsets,
                     )
                     p["wxId"] = [selection.GetId()]
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
@@ -2365,7 +2351,6 @@ class CmdPanel(wx.Panel):
         pColumn = []
         pGroup = None
         pSubGroup = None
-        pSigFile = []
         pDbase = None
         pLocation = None
         pMapset = None
@@ -2412,8 +2397,6 @@ class CmdPanel(wx.Panel):
                 pGroup = p
             elif prompt == "subgroup":
                 pSubGroup = p
-            elif prompt == "sigfile":
-                pSigFile.append(p)
             elif prompt == "dbase":
                 pDbase = p
             elif prompt == "location":
@@ -2430,9 +2413,6 @@ class CmdPanel(wx.Panel):
         pLayerIds = []
         for p in pLayer:
             pLayerIds += p["wxId"]
-        pSigFileIds = []
-        for p in pSigFile:
-            pSigFileIds += p["wxId"]
         pSqlWhereIds = []
         for p in pSqlWhere:
             pSqlWhereIds += p["wxId"]
@@ -2459,11 +2439,7 @@ class CmdPanel(wx.Panel):
             pTable["wxId-bind"] = pColumnIds
 
         if pGroup and pSubGroup:
-            if pSigFile:
-                pGroup["wxId-bind"] = pSigFileIds + pSubGroup["wxId"]
-                pSubGroup["wxId-bind"] = pSigFileIds
-            else:
-                pGroup["wxId-bind"] = pSubGroup["wxId"]
+            pGroup["wxId-bind"] = pSubGroup["wxId"]
 
         if pDbase and pLocation:
             pDbase["wxId-bind"] = pLocation["wxId"]
