@@ -47,6 +47,7 @@ import os
 import sys
 import glob
 import six
+import ctypes
 
 import wx
 
@@ -58,6 +59,13 @@ import wx.lib.filebrowsebutton as filebrowse
 import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
+from grass.lib.imagery import (
+    I_SIGFILE_TYPE_SIG,
+    I_SIGFILE_TYPE_SIGSET,
+    I_signatures_list_by_type,
+    I_free_signatures_list,
+)
+from grass.pygrass.utils import decode
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
@@ -2798,43 +2806,36 @@ class SignatureSelect(wx.ComboBox):
         self,
         parent,
         element,
+        mapsets,
         id=wx.ID_ANY,
         size=globalvar.DIALOG_GSELECT_SIZE,
         **kwargs,
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
-        self.element = element
-        self.SetName("SignatureSelect")
 
-    def Insert(self, group, subgroup=None):
-        """Insert signatures for defined group/subgroup
-
-        :param group: group name (can be fully-qualified)
-        :param subgroup: non fully-qualified name of subgroup
-        """
-        if not group:
-            return
-        gisenv = grass.gisenv()
-        try:
-            name, mapset = group.split("@", 1)
-        except ValueError:
-            name = group
-            mapset = gisenv["MAPSET"]
-
-        path = os.path.join(
-            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], mapset, "group", name
-        )
-
-        if subgroup:
-            path = os.path.join(path, "subgroup", subgroup)
-        try:
-            items = list()
-            for element in os.listdir(os.path.join(path, self.element)):
-                items.append(element)
-            self.SetItems(items)
-        except OSError:
-            self.SetItems([])
+        sig_type = None
+        # Extend here if a new signature type is introduced
+        if element == "signatures/sig":
+            sig_type = I_SIGFILE_TYPE_SIG
+        elif element == "signatures/sigset":
+            sig_type = I_SIGFILE_TYPE_SIGSET
+        items = []
+        if sig_type is not None:
+            if mapsets:
+                for mapset in mapsets:
+                    self._append_mapset_signatures(mapset, sig_type, items)
+            else:
+                self._append_mapset_signatures(None, sig_type, items)
+        self.SetItems(items)
         self.SetValue("")
+
+    def _append_mapset_signatures(self, mapset, sig_type, items):
+        list_ptr = ctypes.POINTER(ctypes.c_char_p)
+        sig_list = list_ptr()
+        count = I_signatures_list_by_type(sig_type, mapset, ctypes.byref(sig_list))
+        for n in range(count):
+            items.append(decode(sig_list[n]))
+        I_free_signatures_list(count, sig_list)
 
 
 class SeparatorSelect(wx.ComboBox):

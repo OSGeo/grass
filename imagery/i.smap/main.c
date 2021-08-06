@@ -45,8 +45,7 @@ int main(int argc, char *argv[])
 	  "using sequential maximum a posteriori (SMAP) estimation.");
 
     parse(argc, argv, &parms);
-    openfiles(&parms, &files);
-    read_signatures(&parms, &S);
+    openfiles(&parms, &files, &S);
     create_output_labels(&S, &files);
 
     segment(&S, &parms, &files);
