@@ -45,7 +45,7 @@ class InteractiveMap:
             pass
 
         # Remember original environment
-        self._env = os.environ.copy()
+        self._src_env = os.environ.copy()
 
         # Set up temporary locations for vectors and rasters
         # They must be different since folium takes vectors
@@ -54,7 +54,7 @@ class InteractiveMap:
         self._setup_raster_location()
 
         # Get Center of tmp GRASS region
-        center = gs.parse_command("g.region", flags="cg", env=self._vector_env)
+        center = gs.parse_command("g.region", flags="cg", env=self._wgs84_env)
         center = (float(center["center_northing"]), float(center["center_easting"]))
 
         # Create Folium Map
@@ -69,7 +69,7 @@ class InteractiveMap:
 
     def _setup_vector_location(self):
         # Create new vector environment for tmp WGS84 location
-        rcfile, self._vector_env = gs.create_environment(
+        rcfile, self._wgs84_env = gs.create_environment(
             self.tmp_dir, "temp_folium_WGS84", "PERMANENT"
         )
         # Location and mapset and region for Vectors
@@ -77,9 +77,9 @@ class InteractiveMap:
             self.tmp_dir, "temp_folium_WGS84", epsg="4326", overwrite=True
         )
         # Reproject region
-        region = get_region(env=self._env)
-        from_proj = get_location_proj_string(env=self._env)
-        to_proj = get_location_proj_string(env=self._vector_env)
+        region = get_region(env=self._src_env)
+        from_proj = get_location_proj_string(env=self._src_env)
+        to_proj = get_location_proj_string(env=self._wgs84_env)
         new_region = reproject_region(region, from_proj, to_proj)
         # self._folium_region
         # Set vector region to match original region extent
@@ -89,12 +89,12 @@ class InteractiveMap:
             s=new_region["south"],
             e=new_region["east"],
             w=new_region["west"],
-            env=self._vector_env,
+            env=self._wgs84_env,
         )
 
     def _setup_raster_location(self):
         # Create new raster environment in PseudoMercator
-        rcfile, self._raster_env = gs.create_environment(
+        rcfile, self._psmerc_env = gs.create_environment(
             self.tmp_dir, "temp_folium_WGS84_pmerc", "PERMANENT"
         )
         # Location and mapset for Rasters
@@ -102,9 +102,9 @@ class InteractiveMap:
             self.tmp_dir, "temp_folium_WGS84_pmerc", epsg="3857", overwrite=True
         )
         # Reproject region
-        region = get_region(env=self._env)
-        from_proj = get_location_proj_string(env=self._env)
-        to_proj = get_location_proj_string(env=self._raster_env)
+        region = get_region(env=self._src_env)
+        from_proj = get_location_proj_string(env=self._src_env)
+        to_proj = get_location_proj_string(env=self._psmerc_env)
         new_region = reproject_region(region, from_proj, to_proj)
         # Set raster region to match original region extent
         gs.run_command(
@@ -113,7 +113,7 @@ class InteractiveMap:
             s=new_region["south"],
             e=new_region["east"],
             w=new_region["west"],
-            env=self._raster_env,
+            env=self._psmerc_env,
         )
 
     def add_vector(self, name):
@@ -129,13 +129,13 @@ class InteractiveMap:
         full_name = file_info["fullname"]
         name = file_info["name"]
         # Reproject vector into WGS84 Location
-        env_info = gs.gisenv(env=self._env)
+        env_info = gs.gisenv(env=self._src_env)
         gs.run_command(
             "v.proj",
             input=full_name,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
-            env=self._vector_env,
+            env=self._wgs84_env,
         )
         # Convert to GeoJSON
         json_file = self.tmp_dir / f"tmp_{name}.json"
@@ -144,7 +144,7 @@ class InteractiveMap:
             input=name,
             output=json_file,
             format="GeoJSON",
-            env=self._vector_env,
+            env=self._wgs84_env,
         )
         # Import GeoJSON to folium and add to map
         folium.GeoJson(str(json_file), name=name).add_to(self.map)
@@ -164,9 +164,9 @@ class InteractiveMap:
         name = file_info["name"]
 
         # Reproject raster into WGS84/epsg3857 location
-        env_info = gs.gisenv(env=self._env)
+        env_info = gs.gisenv(env=self._src_env)
         resolution = estimate_resolution(
-            full_name, env_info["GISDBASE"], env_info["LOCATION_NAME"], self._env
+            full_name, env_info["GISDBASE"], env_info["LOCATION_NAME"], self._src_env
         )
         gs.run_command(
             "r.proj",
@@ -175,13 +175,13 @@ class InteractiveMap:
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             resolution=resolution,
-            env=self._raster_env,
+            env=self._psmerc_env,
         )
 
         # Reprojects bounds of raster for overlaying png (THIS HAS TO BE IN WGS84)
-        bounds = gs.read_command("g.region", flags="g", env=self._env)
+        bounds = gs.read_command("g.region", flags="g", env=self._src_env)
         bounds = gs.parse_key_val(bounds, sep="=", vsep="\n")
-        proj = gs.read_command("g.proj", flags="jf", env=self._env)
+        proj = gs.read_command("g.proj", flags="jf", env=self._src_env)
         north, east = convert_coordinates_to_latlon(bounds["e"], bounds["n"], proj)
         south, west = convert_coordinates_to_latlon(bounds["w"], bounds["s"], proj)
         new_bounds = [[north, west], [south, east]]
@@ -191,7 +191,7 @@ class InteractiveMap:
         m = GrassRenderer(
             width=bounds["cols"],
             height=bounds["rows"],
-            env=self._raster_env,
+            env=self._psmerc_env,
             filename=filename,
         )
         m.run("d.rast", map=name)
