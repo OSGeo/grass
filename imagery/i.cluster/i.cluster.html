@@ -72,6 +72,7 @@ discriminated; any parameter values left unspecified are
 set to their default values.
 
 <p>
+<<<<<<< HEAD
 For all raster maps used to generate signature file it is recommended
 to have semantic label set.
 Use <em><a href="r.support.html">r.support</a></em> to set
@@ -81,6 +82,14 @@ of other scenes as long as they consist of same raster bands
 (semantic labels match). If semantic labels are not set, it will be
 possible to use obtained signature file to classify only the same
 imagery group used for generating signatures.
+=======
+All raster maps used to generate signature file must have band reference
+set. Use <em><a href="r.support.html">r.support</a></em> to set
+band references of each member of the imagery group.
+Signatures generated for one scene are suitable for classification
+of other scenes as long as they consist of same raster bands
+(band references match).
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
 <h3>Parameters:</h3>
 
@@ -266,6 +275,25 @@ Preparing the statistics for unsupervised classification of
 a LANDSAT scene within North Carolina project:
 
 <div class="code"><pre>
+<<<<<<< HEAD
+=======
+## Prepare imagery for classification
+# Skip this step if your rasters already have band references defined
+# Define band references for all LANDSAT bands in mapset PERMANENT
+g.mapset mapset=PERMANENT
+r.support map=lsat7_2002_10 bandref=TM7_1
+r.support map=lsat7_2002_20 bandref=TM7_2
+r.support map=lsat7_2002_30 bandref=TM7_3
+r.support map=lsat7_2002_40 bandref=TM7_4
+r.support map=lsat7_2002_50 bandref=TM7_5
+r.support map=lsat7_2002_61 bandref=TM7_61
+r.support map=lsat7_2002_62 bandref=TM7_62
+r.support map=lsat7_2002_70 bandref=TM7_7
+r.support map=lsat7_2002_80 bandref=TM7_8
+g.mapset mapset=user1  # replace user1 with your mapset name
+
+## Real work starts here
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 # Set computational region to match the scene
 g.region raster=lsat7_2002_10 -p
 
@@ -335,5 +363,15 @@ U.S. Army Construction Engineering Research Laboratory
 Tao Wen,
 University of Illinois at Urbana-Champaign, Illinois
 <br>
+<<<<<<< HEAD
 Semantic label support: Maris Nartiss,
 University of Latvia
+=======
+Band reference support: Maris Nartiss,
+University of Latvia
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))

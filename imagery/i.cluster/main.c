@@ -38,7 +38,11 @@ int mcs;
 char *group;
 char *subgroup;
 struct Ref ref;
+<<<<<<< HEAD
 char **semantic_labels;
+=======
+char **bandrefs;
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 char outsigfile[GNAME_MAX + GMAPSET_MAX];
 char *insigfile;
 char *reportfile;
@@ -90,8 +94,12 @@ int main(int argc, char *argv[])
     parm.out_sig->key_desc = "name";
     parm.out_sig->required = YES;
     parm.out_sig->gisprompt = "new,signatures/sig,sigfile";
+<<<<<<< HEAD
     parm.out_sig->description =
         _("Name for output file containing result signatures");
+=======
+    parm.out_sig->description = _("Name for output file containing result signatures");
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
     parm.class = G_define_option();
     parm.class->key = "classes";
@@ -107,8 +115,12 @@ int main(int argc, char *argv[])
     parm.seed_sig->type = TYPE_STRING;
     parm.seed_sig->key_desc = "name";
     parm.seed_sig->gisprompt = "old,signatures/sig,sigfile";
+<<<<<<< HEAD
     parm.seed_sig->description =
         _("Name of file containing initial signatures");
+=======
+    parm.seed_sig->description = _("Name of file containing initial signatures");
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
     parm.sample_interval = G_define_option();
     parm.sample_interval->key = "sample";
@@ -164,14 +176,31 @@ int main(int argc, char *argv[])
     group = parm.group_name->answer;       /* a required parameter */
     subgroup = parm.subgroup_name->answer; /* required */
 
+<<<<<<< HEAD
+=======
+    group = parm.group_name->answer;	/* a required parameter */
+    subgroup = parm.subgroup_name->answer;	/* required */
+    
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     /* check all the inputs */
     if (!I_find_group(group)) {
         G_fatal_error(_("Group <%s> not found in current mapset"), group);
     }
     if (!I_find_subgroup(group, subgroup)) {
+<<<<<<< HEAD
         G_fatal_error(_("Subgroup <%s> in group <%s> not found"), subgroup,
                       group);
     }
+=======
+        G_fatal_error(_("Subgroup <%s> in group <%s> not found"), subgroup, group);
+    }
+
+    if (G_unqualified_name(parm.out_sig->answer, G_mapset(), outsigfile, xmapset) < 0)
+        G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
+
+    if (G_legal_filename(outsigfile) < 0)
+        G_fatal_error(_("<%s> is an illegal file name"), outsigfile);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
     if (G_unqualified_name(parm.out_sig->answer, G_mapset(), outsigfile,
                            xmapset) < 0)
@@ -338,11 +367,20 @@ int main(int argc, char *argv[])
     print_separability(report, &C);
     print_class_means(report, &C);
 
+<<<<<<< HEAD
     if ((fd = I_fopen_signature_file_new(outsigfile)) != NULL) {
         for (unsigned int i = C.S.nbands; i--;)
             C.S.semantic_labels[i] = semantic_labels[i];
         I_write_signatures(fd, &C.S);
         fclose(fd);
+=======
+    if ((fd =
+	 I_fopen_signature_file_new(outsigfile)) != NULL) {
+        for (unsigned int i = C.S.nbands; i--;)
+            C.S.bandrefs[i] = bandrefs[i];
+	I_write_signatures(fd, &C.S);
+	fclose(fd);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     }
     else {
         G_fatal_error(_("Unable to create signature file <%s> for group "

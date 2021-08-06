@@ -7,10 +7,16 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>,
+<<<<<<< HEAD
  *               Huidae Cho <grass4u gmail.com>,
  *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:
  * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
+=======
+ *               Huidae Cho <grass4u gmail.com>
+ * PURPOSE:
+ * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -101,6 +107,7 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+<<<<<<< HEAD
 
     sscanf(threads->answer, "%d", &nprocs);
     if (nprocs < 1)
@@ -117,6 +124,8 @@ int main(int argc, char *argv[])
         G_warning(_("Parallel processing disabled due to active MASK."));
         nprocs = 1;
     }
+=======
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
     use_zero = (zeroflag->answer);
     no_support = (nosupportflag->answer);
@@ -144,11 +153,17 @@ int main(int argc, char *argv[])
         const char *name = names[i];
         int fd;
 
+<<<<<<< HEAD
         for (t = 0; t < nprocs; t++) {
             infd[t][i] = Rast_open_old(name, "");
         }
 
         fd = infd[0][i];
+=======
+        fd = Rast_open_old(name, "");
+
+        infd[i] = fd;
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
         map_type = Rast_get_map_type(fd);
         if (map_type == FCELL_TYPE && out_type == CELL_TYPE)
@@ -156,9 +171,13 @@ int main(int argc, char *argv[])
         else if (map_type == DCELL_TYPE)
             out_type = DCELL_TYPE;
 
+<<<<<<< HEAD
         for (t = 0; t < nprocs; t++) {
             Rast_init_cell_stats(&thread_statf[t][i]);
         }
+=======
+        Rast_init_cell_stats(&statf[i]);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
         Rast_get_cellhd(name, "", &cellhd[i]);
     }
@@ -180,6 +199,7 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
+<<<<<<< HEAD
     /* memory reserved for presult and patch */
     in_buf_size = out_cell_size * ncols * nprocs * 2;
     /* memory available for output buffer */
@@ -198,6 +218,34 @@ int main(int argc, char *argv[])
     /* but at least the number of threads */
     if (bufrows < nprocs) {
         bufrows = nprocs;
+=======
+    G_verbose_message(_("Percent complete..."));
+    for (row = 0; row < nrows; row++) {
+        double north_edge, south_edge;
+
+        G_percent(row, nrows, 2);
+        Rast_get_row(infd[0], presult, row, out_type);
+
+        north_edge = Rast_row_to_northing(row, &window);
+        south_edge = north_edge - window.ns_res;
+
+        if (out_type == CELL_TYPE)
+            Rast_update_cell_stats((CELL *) presult, ncols, &statf[0]);
+        for (i = 1; i < nfiles; i++) {
+            /* check if raster i overlaps with the current row */
+            if (south_edge >= cellhd[i].north ||
+                north_edge <= cellhd[i].south ||
+                window.west >= cellhd[i].east ||
+                window.east <= cellhd[i].west)
+                continue;
+
+            Rast_get_row(infd[i], patch, row, out_type);
+            if (!do_patch(presult, patch, &statf[i], ncols, out_type,
+                          out_cell_size, use_zero))
+                break;
+        }
+        Rast_put_row(outfd, presult, out_type);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     }
 
     outbuf = G_malloc(out_cell_size * ncols * bufrows);
@@ -280,11 +328,17 @@ int main(int argc, char *argv[])
     }
     G_free(patch);
     G_free(presult);
+<<<<<<< HEAD
 
     for (t = 0; t < nprocs; t++)
         for (i = 0; i < nfiles; i++)
             Rast_close(infd[t][i]);
 
+=======
+    for (i = 0; i < nfiles; i++)
+        Rast_close(infd[i]);
+
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     if (!no_support) {
         /*
          * build the new cats and colors. do this before closing the new
@@ -292,6 +346,7 @@ int main(int argc, char *argv[])
          */
         G_verbose_message(_("Creating support files for raster map <%s>..."),
                           new_name);
+<<<<<<< HEAD
 
         if (out_type == CELL_TYPE) {
             merge_threads(thread_statf, nprocs, nfiles);
@@ -299,6 +354,10 @@ int main(int argc, char *argv[])
 
         support(names, thread_statf[0], nfiles, &cats, &cats_ok, &colr,
                 &colr_ok, out_type);
+=======
+        support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok,
+                out_type);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     }
 
     for (t = 0; t < nprocs; t++) {

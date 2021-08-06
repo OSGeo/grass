@@ -22,6 +22,7 @@ The user would then execute the GRASS program
 to actually create the final classified map.
 
 <p>
+<<<<<<< HEAD
 This module generates signature files of type "sig". Use module
 <a href="i.signatures.html">i.signatures</a> to manage generated signature files.
 
@@ -32,6 +33,14 @@ semantic labels of each member of the imagery group.
 Signatures generated for one scene are suitable for classification
 of other scenes as long as they consist of same raster bands
 (semantic labels match).
+=======
+All raster maps used to generate signature file must have band reference
+set. Use <em><a href="r.support.html">r.support</a></em> to set
+band references of each member of the imagery group.
+Signatures generated for one scene are suitable for classification
+of other scenes as long as they consist of same raster bands
+(band references match).
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
 <h2>OPTIONS</h2>
 
@@ -79,7 +88,11 @@ This is the resultant signature file (containing the means
 and covariance matrices) for each class in the training map
 that is associated with the band files in the subgroup
 select (see <a href="#subgroup">above</a>). Resultant singature file
+<<<<<<< HEAD
 can be used with any other imagery group as long as semantic labels
+=======
+can be used with any other imagery group as long as band references
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 match.
 </dl>
 
@@ -95,6 +108,7 @@ SIG file "lsat7_2000_gensig":
 <div class="code"><pre>
  1 1
  2 #
+<<<<<<< HEAD
  3 Semantic_label1
  4 #water
  5 4186
@@ -105,12 +119,28 @@ SIG file "lsat7_2000_gensig":
 10 0.530339 2.40757 5.52857 22.433
 11 0.561184 2.30762 5.18846 20.5364 20.4926
 12 0.393218 1.2184 2.63628 9.61528 9.36025 5.85314
+=======
+ 3 Band_reference1
+ 4 #water
+ 5 4186
+ 6 67.9508 48.7346 37.8915 15.3129 13.8473 12.0855 
+ 7 1.74334 
+ 8 0.439504 2.07267 
+ 9 0.662523 1.63501 4.21189 
+10 0.530339 2.40757 5.52857 22.433 
+11 0.561184 2.30762 5.18846 20.5364 20.4926 
+12 0.393218 1.2184 2.63628 9.61528 9.36025 5.85314 
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 </pre></div>
 
 <ul>
 <li> Line 1: version number (currently always 1)
 <li> Line 2: text label
+<<<<<<< HEAD
 <li> Line 3: Space separated list of semantic labels
+=======
+<li> Line 3: Space separated list of band references
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 <li> Line 4: text label of class
 <li> Line 5: number of points in class
 <li> Line 6: mean values per band of the class
@@ -136,5 +166,15 @@ SIG file "lsat7_2000_gensig":
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 <br>
+<<<<<<< HEAD
 Semantic label support: Maris Nartiss,
 University of Latvia
+=======
+Band reference support: Maris Nartiss,
+University of Latvia
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
