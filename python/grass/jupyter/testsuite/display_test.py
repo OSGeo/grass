@@ -20,18 +20,17 @@
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+import unittest
 import os
 from pathlib import Path
 
-# The module performs as expected if:
-#    1) it can create an instance of GrassRenderer with different heights
-#       widths, filenames, environments and text_sizes.
-#    2) it can call a 'd.*' GRASS module
-#    3) write and display an image
-
-# TODO
-# 1. Add __getattr__ shortcut test after merge
-
+# Helper function
+def can_import_folium():
+    try:
+        import folium
+        return True
+    except ImportError:
+        return False
 
 # Tests
 class TestDisplay(TestCase):
@@ -60,6 +59,7 @@ class TestDisplay(TestCase):
         for f in self.files:
             Path(f).unlink(missing_ok=True)
 
+    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
     def test_defaults(self):
         """Test that GrassRenderer can create a map with default settings."""
         # Create a map with default inputs
@@ -70,6 +70,7 @@ class TestDisplay(TestCase):
         # Assert image exists
         self.assertFileExists(grass_renderer._filename)
 
+    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
     def test_filename(self):
         """Test that GrassRenderer creates maps with unique filenames."""
         # Create map with unique filename
@@ -83,6 +84,7 @@ class TestDisplay(TestCase):
         # Assert image exists
         self.assertFileExists("test_filename.png")
 
+    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
     def test_hw(self):
         """Test that GrassRenderer creates maps with unique height and widths."""
         # Create map with height and width parameters
@@ -90,6 +92,7 @@ class TestDisplay(TestCase):
         # Add just a vector (for variety here)
         grass_renderer.run("d.vect", map="roadsmajor")
 
+    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
     def test_env(self):
         """Test that we can hand an environment to GrassRenderer."""
         # Create map with environment parameter
@@ -97,6 +100,7 @@ class TestDisplay(TestCase):
         # Add just a raster (again for variety)
         grass_renderer.run("d.rast", map="elevation")
 
+    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
     def test_text(self):
         """Test that we can set a unique text_size in GrassRenderer."""
         # Create map with unique text_size parameter
@@ -105,6 +109,7 @@ class TestDisplay(TestCase):
         grass_renderer.run("d.vect", map="roadsmajor")
         grass_renderer.run("d.rast", map="elevation")
 
+    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
     def test_shortcut(self):
         """Test that we can use display shortcuts with __getattr__."""
         # Create map
