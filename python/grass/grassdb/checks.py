@@ -74,10 +74,14 @@ def is_location_valid(path, location=None):
     """Return True if GRASS Location is valid
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     :param path: Path to a Location or to a GRASS GIS database directory
 =======
     :param database: Path to a Location or to a GRASS GIS database directory
 >>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
+=======
+    :param path: Path to a Location or to a GRASS GIS database directory
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     :param location: name of a Location if not part of *path*
     """
     # DEFAULT_WIND file should not be required until you do something
@@ -86,10 +90,14 @@ def is_location_valid(path, location=None):
     # location, while a directory lacking it probably isn't.
     if location:
 <<<<<<< HEAD
+<<<<<<< HEAD
         path = os.path.join(path, location)
 =======
         path = os.path.join(location)
 >>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
+=======
+        path = os.path.join(path, location)
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     return os.access(os.path.join(path, "PERMANENT", "DEFAULT_WIND"), os.F_OK)
 
 

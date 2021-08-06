@@ -19,6 +19,7 @@ The user would then execute the GRASS program <em>
 final classified map.
 
 <p>
+<<<<<<< HEAD
 This module generates signature files of type "sigset". Use module
 <a href="i.signatures.html">i.signatures</a> to manage generated signature files.
 
@@ -32,6 +33,14 @@ of other scenes as long as they consist of same raster bands
 (semantic labels match). If semantic labels are not set, it will be
 possible to use obtained signature file to classify only the same
 imagery group used for generating signatures.
+=======
+All raster maps used to generate signature file must have band reference
+set. Use <em><a href="r.support.html">r.support</a></em> to set
+band references of each member of the imagery group.
+Signatures generated for one scene are suitable for classification
+of other scenes as long as they consist of same raster bands
+(band references match).
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
 <p>
 An usage example can be found in <a href="i.smap.html">i.smap</a>
@@ -236,5 +245,15 @@ School of Electrical Engineering, Purdue University
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 <br>
+<<<<<<< HEAD
 Semantic label support: Maris Nartiss,
 University of Latvia
+=======
+Band reference support: Maris Nartiss,
+University of Latvia
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))

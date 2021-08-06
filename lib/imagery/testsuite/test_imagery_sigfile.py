@@ -8,11 +8,17 @@
 Read the file COPYING that comes with GRASS
 for details
 """
+<<<<<<< HEAD
 
 import os
 import stat
 import ctypes
 import shutil
+=======
+import os
+import stat
+import ctypes
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -22,7 +28,11 @@ from grass.pygrass import utils
 from grass.pygrass.gis import Mapset
 
 from grass.lib.gis import G_mapset_path
+<<<<<<< HEAD
 from grass.lib.raster import Rast_write_semantic_label
+=======
+from grass.lib.raster import Rast_write_bandref
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 from grass.lib.imagery import (
     Signature,
     Ref,
@@ -32,7 +42,11 @@ from grass.lib.imagery import (
     I_write_signatures,
     I_fopen_signature_file_old,
     I_read_signatures,
+<<<<<<< HEAD
     I_sort_signatures_by_semantic_label,
+=======
+    I_sort_signatures_by_bandref,
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     I_free_signatures,
     I_init_group_ref,
     I_add_file_to_group_ref,
@@ -47,19 +61,36 @@ class SignatureFileTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
+<<<<<<< HEAD
         cls.sig_dir = f"{cls.mpath}/signatures/sig/{cls.sig_name}"
 
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(cls.sig_dir, ignore_errors=True)
+=======
+        cls.sigfile_name = f"{cls.mpath}/signatures/sig/{cls.sig_name}"
+
+    @classmethod
+    def tearDownClass(cls):
+        try:
+            os.remove(cls.sigfile_name)
+        except OSError:
+            pass
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
     def test_I_fopen_signature_file_old_fail(self):
         sigfile = I_fopen_signature_file_old(tempname(10))
         self.assertFalse(sigfile)
 
+<<<<<<< HEAD
     def test_roundtrip_signature_v1_norgb_one_label(self):
         """Test writing and reading back signature file (v1)
         with a single label"""
+=======
+    def test_roundtrip_signature_v1_norgb_one_band(self):
+        """Test writing and reading back signature file (v1)
+        wiht a single band"""
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
         # Create signature struct
         So = Signature()
@@ -70,7 +101,11 @@ class SignatureFileTestCase(TestCase):
 
         # Fill signatures struct with data
         So.title = b"Signature title"
+<<<<<<< HEAD
         So.semantic_labels[0] = ctypes.create_string_buffer(b"The_Doors")
+=======
+        So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         So.sig[0].status = 1
         So.sig[0].have_color = 0
         So.sig[0].npoints = 42
@@ -80,7 +115,11 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
+<<<<<<< HEAD
         sig_stat = os.stat(f"{self.sig_dir}/sig")
+=======
+        sig_stat = os.stat(self.sigfile_name)
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -93,11 +132,16 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(ret, 1)
         self.assertEqual(Sn.title, b"Signature title")
         self.assertEqual(Sn.nbands, 1)
+<<<<<<< HEAD
         self.assertEqual(Sn.have_oclass, 0)
         semantic_label = utils.decode(
             ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label, "The_Doors")
+=======
+        bandref = utils.decode(ctypes.cast(Sn.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref, "The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertEqual(Sn.sig[0].status, 1)
         self.assertEqual(Sn.sig[0].have_color, 0)
         self.assertEqual(Sn.sig[0].npoints, 42)
@@ -106,7 +150,11 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(Sn.sig[0].var[0][0], 0.7)
 
         # Free signature struct after use
+<<<<<<< HEAD
         So.semantic_labels[0] = None
+=======
+        So.bandrefs[0] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(So))
         I_free_signatures(ctypes.byref(Sn))
         self.assertEqual(Sn.nbands, 0)
@@ -114,7 +162,11 @@ class SignatureFileTestCase(TestCase):
 
     def test_broken_signature_v1_norgb(self):
         """Test reading back signature file (v1) should fail due to
+<<<<<<< HEAD
         single semantic label exceeding maximum length"""
+=======
+        single band reference exceeding maximum length"""
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
         # Create signature struct
         So = Signature()
@@ -126,7 +178,11 @@ class SignatureFileTestCase(TestCase):
         # Fill signatures struct with data
         So.title = b"Signature title"
         # len(tempname(251)) == 255
+<<<<<<< HEAD
         So.semantic_labels[0] = ctypes.create_string_buffer(tempname(251).encode())
+=======
+        So.bandrefs[0] = ctypes.create_string_buffer(tempname(251).encode())
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         So.sig[0].status = 1
         So.sig[0].have_color = 0
         So.sig[0].npoints = 42
@@ -136,7 +192,11 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
+<<<<<<< HEAD
         sig_stat = os.stat(f"{self.sig_dir}/sig")
+=======
+        sig_stat = os.stat(self.sigfile_name)
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -147,12 +207,21 @@ class SignatureFileTestCase(TestCase):
         ret = I_read_signatures(p_old_sigfile, ctypes.byref(Sn))
         self.assertEqual(ret, -1)
 
+<<<<<<< HEAD
         So.semantic_labels[0] = None
         I_free_signatures(ctypes.byref(So))
         I_free_signatures(ctypes.byref(Sn))
 
     def test_roundtrip_signature_v1_norgb_two_labelss(self):
         """Test writing and reading back signature (v1) with two labels"""
+=======
+        So.bandrefs[0] = None
+        I_free_signatures(ctypes.byref(So))
+        I_free_signatures(ctypes.byref(Sn))
+
+    def test_roundtrip_signature_v1_norgb_two_bands(self):
+        """Test writing and reading back signature (v1) with two bands"""
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
         # Create signature struct
         So = Signature()
@@ -165,8 +234,13 @@ class SignatureFileTestCase(TestCase):
 
         # Fill signatures struct with data
         So.title = b"Signature title"
+<<<<<<< HEAD
         So.semantic_labels[0] = ctypes.create_string_buffer(b"The_Doors")
         So.semantic_labels[1] = ctypes.create_string_buffer(b"The_Who")
+=======
+        So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
+        So.bandrefs[1] = ctypes.create_string_buffer(b"The_Who")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         So.sig[0].status = 1
         So.sig[0].have_color = 0
         So.sig[0].npoints = 42
@@ -188,7 +262,11 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
+<<<<<<< HEAD
         sig_stat = os.stat(f"{self.sig_dir}/sig")
+=======
+        sig_stat = os.stat(self.sigfile_name)
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -200,11 +278,16 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(ret, 1)
         self.assertEqual(Sn.title, b"Signature title")
         self.assertEqual(Sn.nbands, 2)
+<<<<<<< HEAD
         self.assertEqual(Sn.have_oclass, 0)
         semantic_label = utils.decode(
             ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label, "The_Doors")
+=======
+        bandref = utils.decode(ctypes.cast(Sn.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref, "The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertEqual(Sn.sig[0].status, 1)
         self.assertEqual(Sn.sig[0].have_color, 0)
         self.assertEqual(Sn.sig[0].npoints, 42)
@@ -214,10 +297,15 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(Sn.sig[0].var[0][0], 0.7)
         self.assertEqual(Sn.sig[0].var[1][0], 0.2)
         self.assertEqual(Sn.sig[0].var[1][1], 0.8)
+<<<<<<< HEAD
         semantic_label = utils.decode(
             ctypes.cast(Sn.semantic_labels[1], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label, "The_Who")
+=======
+        bandref = utils.decode(ctypes.cast(Sn.bandrefs[1], ctypes.c_char_p).value)
+        self.assertEqual(bandref, "The_Who")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertEqual(Sn.sig[1].status, 1)
         self.assertEqual(Sn.sig[1].have_color, 0)
         self.assertEqual(Sn.sig[1].npoints, 69)
@@ -229,6 +317,7 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(Sn.sig[1].var[1][1], 1.8)
 
         # Free signature struct after use
+<<<<<<< HEAD
         So.semantic_labels[0] = None
         So.semantic_labels[1] = None
         I_free_signatures(ctypes.byref(So))
@@ -322,29 +411,48 @@ class SignatureFileTestCase(TestCase):
         # Free signature struct after use
         So.semantic_labels[0] = None
         So.semantic_labels[1] = None
+=======
+        So.bandrefs[0] = None
+        So.bandrefs[1] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(So))
         I_free_signatures(ctypes.byref(Sn))
         self.assertEqual(Sn.nbands, 0)
         self.assertEqual(Sn.nsigs, 0)
 
 
+<<<<<<< HEAD
 class SortSignaturesBysemantic_labelTest(TestCase):
+=======
+class SortSignaturesByBandrefTest(TestCase):
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     @classmethod
     def setUpClass(cls):
         cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
+<<<<<<< HEAD
         cls.semantic_label1 = "The_Doors"
         cls.map2 = tempname(10)
         cls.semantic_label2 = "The_Who"
+=======
+        cls.bandref1 = "The_Doors"
+        cls.map2 = tempname(10)
+        cls.bandref2 = "The_Who"
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         cls.map3 = tempname(10)
         cls.use_temp_region()
         cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
         cls.runModule("r.mapcalc", expression=f"{cls.map1} = 1")
         cls.runModule("r.mapcalc", expression=f"{cls.map2} = 1")
         cls.runModule("r.mapcalc", expression=f"{cls.map3} = 1")
+<<<<<<< HEAD
         Rast_write_semantic_label(cls.map1, cls.semantic_label1)
         Rast_write_semantic_label(cls.map2, cls.semantic_label2)
+=======
+        Rast_write_bandref(cls.map1, cls.bandref1)
+        Rast_write_bandref(cls.map2, cls.bandref2)
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
     @classmethod
     def tearDownClass(cls):
@@ -366,7 +474,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(S.nbands, 1)
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 1)
+<<<<<<< HEAD
         S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Troggs")
+=======
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         S.title = b"Signature title"
         S.sig[0].status = 1
         S.sig[0].have_color = 0
@@ -376,7 +488,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         S.sig[0].var[0][0] = 0.7
 
         # This should result in two error strings in ret
+<<<<<<< HEAD
         ret = I_sort_signatures_by_semantic_label(ctypes.byref(S), ctypes.byref(R))
+=======
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
@@ -384,9 +500,13 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(ref_err, "The_Doors")
 
         # Clean up memory to help track memory leaks when run by valgrind
+<<<<<<< HEAD
         S.semantic_labels[0] = (
             None  # C should not call free() on memory allocated by python
         )
+=======
+        S.bandrefs[0] = None  # C should not call free() on memory allocated by python
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
@@ -412,7 +532,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 1)
         S.title = b"Signature title"
+<<<<<<< HEAD
         S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Troggs")
+=======
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 42
@@ -421,7 +545,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         S.sig[0].var[0][0] = 0.7
 
         # This should result in two error strings in ret
+<<<<<<< HEAD
         ret = I_sort_signatures_by_semantic_label(ctypes.byref(S), ctypes.byref(R))
+=======
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
@@ -429,7 +557,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(ref_err, "The_Doors,The_Who")
 
         # Clean up memory to help track memory leaks when run by valgrind
+<<<<<<< HEAD
         S.semantic_labels[0] = None
+=======
+        S.bandrefs[0] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
@@ -439,7 +571,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
                 self.libc.free(ret[1])
         self.libc.free(ret)
 
+<<<<<<< HEAD
     def test_missing_semantic_label(self):
+=======
+    def test_missing_bandref(self):
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         # Prepare imagery group reference struct
         R = Ref()
         I_init_group_ref(ctypes.byref(R))
@@ -457,7 +593,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 1)
         S.title = b"Signature title"
+<<<<<<< HEAD
         S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Who")
+=======
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 42
@@ -466,12 +606,17 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         S.sig[0].var[0][0] = 0.7
 
         # This should result in two error strings in ret
+<<<<<<< HEAD
         ret = I_sort_signatures_by_semantic_label(ctypes.byref(S), ctypes.byref(R))
+=======
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
         self.assertEqual(
             sig_err,
+<<<<<<< HEAD
             "<semantic label missing>,<semantic label missing>,"
             + "<semantic label missing>,<semantic label missing>,"
             + "<semantic label missing>,<semantic label missing>,"
@@ -482,6 +627,18 @@ class SortSignaturesBysemantic_labelTest(TestCase):
 
         # Clean up memory to help track memory leaks when run by valgrind
         S.semantic_labels[0] = None
+=======
+            "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>,<band reference missing>,"
+            + "<band reference missing>",
+        )
+        self.assertEqual(ref_err, "The_Doors,<band reference missing>")
+
+        # Clean up memory to help track memory leaks when run by valgrind
+        S.bandrefs[0] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
@@ -505,7 +662,11 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 1)
         S.title = b"Signature title"
+<<<<<<< HEAD
         S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Doors")
+=======
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 42
@@ -514,17 +675,28 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         S.sig[0].var[0][0] = 0.7
 
         # This should result in returning NULL
+<<<<<<< HEAD
         ret = I_sort_signatures_by_semantic_label(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
         semantic_label = utils.decode(
             ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label, "The_Doors")
+=======
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        bandref = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref, "The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertEqual(S.sig[0].mean[0], 2.5)
         self.assertEqual(S.sig[0].var[0][0], 0.7)
 
         # Clean up memory to help track memory leaks when run by valgrind
+<<<<<<< HEAD
         S.semantic_labels[0] = None
+=======
+        S.bandrefs[0] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
@@ -552,8 +724,13 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 2)
         S.title = b"Signature title"
+<<<<<<< HEAD
         S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Who")
         S.semantic_labels[1] = ctypes.create_string_buffer(b"The_Doors")
+=======
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 69
@@ -574,13 +751,20 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         S.sig[1].var[1][1] = 0.8
 
         # This should result in returning NULL
+<<<<<<< HEAD
         ret = I_sort_signatures_by_semantic_label(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
         # semantic labels and sig items should be swapped
+=======
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        # Band references and sig items should be swapped
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         # Static items
         self.assertEqual(S.sig[0].npoints, 69)
         self.assertEqual(S.sig[1].npoints, 42)
         # Reordered items
+<<<<<<< HEAD
         semantic_label1 = utils.decode(
             ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
         )
@@ -589,6 +773,12 @@ class SortSignaturesBysemantic_labelTest(TestCase):
             ctypes.cast(S.semantic_labels[1], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label2, "The_Who")
+=======
+        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref1, "The_Doors")
+        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
+        self.assertEqual(bandref2, "The_Who")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertEqual(S.sig[0].mean[0], 6.6)
         self.assertEqual(S.sig[0].mean[1], 3.3)
         self.assertEqual(S.sig[0].var[0][0], 1.8)
@@ -601,8 +791,13 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(S.sig[1].var[1][1], 0.7)
 
         # Clean up memory to help track memory leaks when run by valgrind
+<<<<<<< HEAD
         S.semantic_labels[0] = None
         S.semantic_labels[1] = None
+=======
+        S.bandrefs[0] = None
+        S.bandrefs[1] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
@@ -630,8 +825,13 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 2)
         S.title = b"Signature title"
+<<<<<<< HEAD
         S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Who")
         S.semantic_labels[1] = ctypes.create_string_buffer(b"The_Doors")
+=======
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 69
@@ -650,13 +850,20 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         S.sig[1].var[1][1] = 0.8
 
         # This should result in returning NULL
+<<<<<<< HEAD
         ret = I_sort_signatures_by_semantic_label(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
         # semantic labels and sig items should not be swapped
+=======
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        # Band references and sig items should not be swapped
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         # Static items
         self.assertEqual(S.sig[0].npoints, 69)
         self.assertEqual(S.sig[1].npoints, 42)
         # Reordered items
+<<<<<<< HEAD
         semantic_label1 = utils.decode(
             ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
         )
@@ -665,14 +872,25 @@ class SortSignaturesBysemantic_labelTest(TestCase):
             ctypes.cast(S.semantic_labels[1], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label2, "The_Doors")
+=======
+        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref1, "The_Who")
+        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
+        self.assertEqual(bandref2, "The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertEqual(S.sig[0].mean[0], 3.5)
         self.assertEqual(S.sig[0].var[0][0], 1.7)
         self.assertEqual(S.sig[1].mean[0], 2.5)
         self.assertEqual(S.sig[1].var[0][0], 0.7)
 
         # Clean up memory to help track memory leaks when run by valgrind
+<<<<<<< HEAD
         S.semantic_labels[0] = None
         S.semantic_labels[1] = None
+=======
+        S.bandrefs[0] = None
+        S.bandrefs[1] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
@@ -704,8 +922,13 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         sig_count = I_new_signature(ctypes.byref(S))
         self.assertEqual(sig_count, 4)
         S.title = b"Signature title"
+<<<<<<< HEAD
         S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Who")
         S.semantic_labels[1] = ctypes.create_string_buffer(b"The_Doors")
+=======
+        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         S.sig[0].status = 1
         S.sig[0].have_color = 0
         S.sig[0].npoints = 69
@@ -744,15 +967,22 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         S.sig[3].var[1][1] = 0.6
 
         # This should result in returning NULL
+<<<<<<< HEAD
         ret = I_sort_signatures_by_semantic_label(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
         # semantic labels and sig items should be swapped
+=======
+        ret = I_sort_signatures_by_bandref(ctypes.byref(S), ctypes.byref(R))
+        self.assertFalse(bool(ret))
+        # Band references and sig items should be swapped
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         # Static items
         self.assertEqual(S.sig[0].npoints, 69)
         self.assertEqual(S.sig[1].npoints, 42)
         self.assertEqual(S.sig[2].npoints, 12)
         self.assertEqual(S.sig[3].npoints, 21)
         # Reordered items
+<<<<<<< HEAD
         semantic_label1 = utils.decode(
             ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
         )
@@ -761,6 +991,12 @@ class SortSignaturesBysemantic_labelTest(TestCase):
             ctypes.cast(S.semantic_labels[1], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label2, "The_Who")
+=======
+        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
+        self.assertEqual(bandref1, "The_Doors")
+        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
+        self.assertEqual(bandref2, "The_Who")
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         self.assertEqual(S.sig[0].mean[0], 6.6)
         self.assertEqual(S.sig[0].mean[1], 3.3)
         self.assertEqual(S.sig[0].var[0][0], 1.8)
@@ -783,8 +1019,13 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(S.sig[3].var[1][1], 0.8)
 
         # Clean up memory to help track memory leaks when run by valgrind
+<<<<<<< HEAD
         S.semantic_labels[0] = None
         S.semantic_labels[1] = None
+=======
+        S.bandrefs[0] = None
+        S.bandrefs[1] = None
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:

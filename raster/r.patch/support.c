@@ -83,15 +83,23 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                     if (do_cats) {
                         Rast_update_cell_stats(&n, 1, statf);
                         Rast_set_c_cat(
+<<<<<<< HEAD
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
+=======
+                            &n, &n, Rast_get_c_cat((CELL *) &n, &pcats), cats);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
                     }
                     if (do_colr) {
                         Rast_get_c_color(&n, &red, &grn, &blu, &pcolr);
                         Rast_set_c_color(n, red, grn, blu, colr);
                     }
                 }
+<<<<<<< HEAD
         }
         else {
+=======
+        } else {
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
             /* the color would be the color of the first map,
              * possibly not covering the range of the other maps */
             *colr_ok = 0;

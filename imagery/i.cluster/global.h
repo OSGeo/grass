@@ -13,7 +13,11 @@ extern int mcs;
 extern char *group;
 extern char *subgroup;
 extern struct Ref ref;
+<<<<<<< HEAD
 extern char **semantic_labels;
+=======
+extern char **bandrefs;
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 extern char outsigfile[GNAME_MAX + GMAPSET_MAX];
 extern char *insigfile;
 extern char *reportfile;

@@ -49,8 +49,13 @@ void subcluster(struct SigSet *S, int Class_Index, int *Max_num,
     if (first) {
         int i;
 
+<<<<<<< HEAD
         I_InitSigSet(&min_S, nbands);
         min_Sig = I_NewClassSig(&min_S);
+=======
+	I_InitSigSet(&min_S, nbands);
+	min_Sig = I_NewClassSig(&min_S);
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
         /* allocate enough subsignatures in scratch space */
         for (i = 0; i < maxsubclasses; i++)
@@ -391,11 +396,19 @@ static void reduce_order(struct ClassSig *Sig, int nbands, int *min_ii,
 
     /* allocate scratch space first time subroutine is called */
     if (first) {
+<<<<<<< HEAD
         I_InitSigSet(&S, nbands);
         Sig3 = I_NewClassSig(&S);
         I_NewSubSig(&S, Sig3);
         SubSig3 = Sig3->SubSig;
         first = 0;
+=======
+	I_InitSigSet(&S, nbands);
+	Sig3 = I_NewClassSig(&S);
+	I_NewSubSig(&S, Sig3);
+	SubSig3 = Sig3->SubSig;
+	first = 0;
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     }
 
     if (Sig->nsubclasses > 1) {
@@ -466,11 +479,19 @@ static double distance(struct SubSig *SubSig1, struct SubSig *SubSig2,
 
     /* allocate scratch space first time subroutine is called */
     if (first) {
+<<<<<<< HEAD
         I_InitSigSet(&S, nbands);
         Sig3 = I_NewClassSig(&S);
         I_NewSubSig(&S, Sig3);
         SubSig3 = Sig3->SubSig;
         first = 0;
+=======
+	I_InitSigSet(&S, nbands);
+	Sig3 = I_NewClassSig(&S);
+	I_NewSubSig(&S, Sig3);
+	SubSig3 = Sig3->SubSig;
+	first = 0;
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     }
 
     /* form SubSig3 by adding SubSig1 and SubSig2 */

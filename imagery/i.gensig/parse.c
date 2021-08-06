@@ -23,8 +23,12 @@ int parse(int argc, char *argv[], struct parms *parms)
     sigfile->key_desc = "name";
     sigfile->required = YES;
     sigfile->gisprompt = "new,signatures/sig,sigfile";
+<<<<<<< HEAD
     sigfile->description =
         _("Name for output file containing result signatures");
+=======
+    sigfile->description = _("Name for output file containing result signatures");
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -42,15 +46,25 @@ int parse(int argc, char *argv[], struct parms *parms)
                       parms->group);
 
     if (!I_find_subgroup(parms->group, parms->subgroup))
+<<<<<<< HEAD
         G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
                       parms->subgroup, parms->group);
 
     if (G_unqualified_name(sigfile->answer, G_mapset(), parms->sigfile,
                            xmapset) < 0)
+=======
+	G_fatal_error(_("Subgroup <%s> in group <%s> not found"), parms->subgroup, parms->group);
+
+    if (G_unqualified_name(sigfile->answer, G_mapset(), parms->sigfile, xmapset) < 0)
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
         G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
 
     if (G_legal_filename(parms->sigfile) < 0)
         G_fatal_error(_("<%s> is an illegal file name"), parms->sigfile);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
     return 0;
 }
