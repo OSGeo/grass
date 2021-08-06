@@ -7,8 +7,7 @@ int write_sigfile(struct parms *parms, struct SigSet *S)
 {
     FILE *fd;
 
-    fd = I_fopen_sigset_file_new(parms->group, parms->subgroup,
-				 parms->sigfile);
+    fd = I_fopen_sigset_file_new(parms->sigfile);
     if (fd == NULL) {
 	G_fatal_error(_("Unable to create signature file <%s>"),
 		      parms->sigfile);
