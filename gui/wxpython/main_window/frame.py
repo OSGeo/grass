@@ -310,7 +310,9 @@ class GMFrame(wx.Frame):
         )
         self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
         # bindings
-        self.mapnotebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnMapNotebookPageChanged)
+        self.mapnotebook.Bind(
+            aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnMapNotebookPageChanged
+        )
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
