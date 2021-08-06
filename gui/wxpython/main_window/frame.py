@@ -309,6 +309,8 @@ class GMFrame(wx.Frame):
             agwStyle=notebook_style,
         )
         self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
+        # bindings
+        self.mapnotebook.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnMapNotebookPageChanged)
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -480,7 +482,12 @@ class GMFrame(wx.Frame):
                 return pgnum
             return None
 
+        def GetLayerTreeIndex():
+            """Callback to find out GetLayerTreeIndex"""
+            return self.notebookLayers.GetPageIndex(page)
+
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.getLayerTreeIndex = GetLayerTreeIndex
 
         # bind various events
         mapdisplay.Bind(
@@ -903,12 +910,24 @@ class GMFrame(wx.Frame):
             event.Veto()
             return
 
-        maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
-        maptree.GetMapDisplay().CleanUp()
-        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
-        maptree.Close(True)
+        try:
+            self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+        except Exception:
+            pass
 
         self.currentPage = None
+
+        event.Skip()
+
+    def OnMapNotebookPageChanged(self, event):
+        """Page in map notebook changed"""
+        currentMapDisp = self.mapnotebook.GetCurrentPage()
+        try:
+            self.notebookLayers.SetSelection(currentMapDisp.getLayerTreeIndex())
+            self.currentPage = self.notebookLayers.GetCurrentPage()
+            self.currentPageNum = self.notebookLayers.GetSelection()
+        except Exception:
+            pass
 
         event.Skip()
 
