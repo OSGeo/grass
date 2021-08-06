@@ -912,10 +912,10 @@ class GMFrame(wx.Frame):
             event.Veto()
             return
 
-        try:
-            self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
-        except Exception:
-            pass
+        maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
+        maptree.GetMapDisplay().CleanUp()
+        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+        maptree.Close(True)
 
         self.currentPage = None
 
