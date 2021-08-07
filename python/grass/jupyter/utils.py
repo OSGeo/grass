@@ -13,33 +13,6 @@ import os
 import grass.script as gs
 
 
-def convert_coordinates_to_latlon(x, y, proj_in):
-    """This function reprojects coordinates to WGS84, the required
-    projection for vectors in folium.
-
-    Arguments:
-        x -- x coordinate (string)
-        y -- y coordinate (string)
-        proj_in -- proj4 string of location (for example, the output
-        of g.region run with the `g` flag."""
-
-    # Reformat input
-    coordinates = f"{x}, {y}"
-    # Reproject coordinates
-    new_coords = gs.read_command(
-        "m.proj",
-        coordinates=coordinates,
-        proj_in=proj_in,
-        separator="comma",
-        flags="do",
-    )
-    # Reformat from string to array
-    new_coords = new_coords.strip()  # Remove '\n' at end of string
-    new_coords = new_coords.split(",")  # Split on comma
-    new_coords = [float(value) for value in new_coords]  # Convert to floats
-    return new_coords[1], new_coords[0]  # Return Lat and Lon
-
-
 def get_region(env=None):
     """Returns current computational region as dictionary.
     Adds long key names.
@@ -53,11 +26,21 @@ def get_region(env=None):
 
 
 def get_location_proj_string(env=None):
+    """Returns projection of environment in PROJ.4 format"""
     out = gs.read_command("g.proj", flags="jf", env=env)
     return out.strip()
 
 
 def reproject_region(region, from_proj, to_proj):
+    """Reproject boundary of region from one projection to another.
+
+    :param dict region: region to reproject as a dictionary with long key names
+                   output of get_region
+    :param str from_proj: PROJ.4 string of region; output of get_location_proj_string
+    :param str in_proj: PROJ.4 string of target location; output of get_location_proj_string
+
+    :return dict region: reprojected region as a dictionary with long key names
+    """
     region = region.copy()
     proj_input = "{east} {north}\n{west} {south}".format(**region)
     proc = gs.start_command(
@@ -88,6 +71,16 @@ def reproject_region(region, from_proj, to_proj):
 
 
 def estimate_resolution(raster, dbase, location, env):
+    """Estimates resolution of reprojected raster.
+
+    :param str raster: name of raster
+    :param str dbase: path to source database
+    :param str location: name of source location
+    :param str env: target environment
+
+    :return float estimate: estimated resolution of raster in destination
+                            environment
+    """
     output = gs.read_command(
         "r.proj", flags="g", input=raster, dbase=dbase, location=location, env=env
     ).strip()
@@ -98,3 +91,40 @@ def estimate_resolution(raster, dbase, location, env):
     cell_ew = (output["e"] - output["w"]) / output["cols"]
     estimate = (cell_ew + cell_ns) / 2.0
     return estimate
+
+
+def setup_location(name, dbase_location, epsg, src_env):
+    """Setup temporary location with different projection but
+    same extent as source location
+
+    :param str name: name of new location
+    :param path dbase_location: path to new location database
+    :param str epsg: EPSG code
+    :param dict src_env: source environment
+
+    :return str rcfile: name of new locations rcfile
+    :return dict new_env: new environment
+    """
+    # Create new environment
+    rcfile, new_env = gs.create_environment(
+        dbase_location, name, "PERMANENT"
+    )
+    # Location and mapset
+    gs.create_location(
+        dbase_location, name, epsg=epsg, overwrite=True
+    )
+    # Reproject region
+    region = get_region(env=src_env)
+    from_proj = get_location_proj_string(src_env)
+    to_proj = get_location_proj_string(env=new_env)
+    new_region = reproject_region(region, from_proj, to_proj)
+    # Set region to match original region extent
+    gs.run_command(
+        "g.region",
+        n=new_region["north"],
+        s=new_region["south"],
+        e=new_region["east"],
+        w=new_region["west"],
+        env=new_env,
+    )
+    return rcfile, new_env
