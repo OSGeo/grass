@@ -11,20 +11,18 @@
 #            for details.
 
 import os
-from pathlib import Path
-import folium
 import sys
 import tempfile
 import weakref
-from .display import GrassRenderer
-from .utils import (
-    get_region,
-    get_location_proj_string,
-    reproject_region,
-    estimate_resolution,
-    setup_location
-)
+from pathlib import Path
+
+import folium
+
 import grass.script as gs
+
+from .display import GrassRenderer
+from .utils import (estimate_resolution, get_location_proj_string, get_region,
+                    reproject_region, setup_location)
 
 
 class InteractiveMap:
@@ -57,8 +55,12 @@ class InteractiveMap:
         # Set up temporary locations  in WGS84 and Pseudo-Mercator
         # We need two because folium uses WGS84 for vectors and coordinates
         # and Pseudo-Mercator for raster overlays
-        self.rcfile_psmerc, self._psmerc_env = setup_location("psmerc", self._tmp_dir.name, "3857", self._src_env)
-        self.rcfile_wgs84, self._wgs84_env = setup_location("wgs84", self._tmp_dir.name, "4326", self._src_env)
+        self.rcfile_psmerc, self._psmerc_env = setup_location(
+            "psmerc", self._tmp_dir.name, "3857", self._src_env
+        )
+        self.rcfile_wgs84, self._wgs84_env = setup_location(
+            "wgs84", self._tmp_dir.name, "4326", self._src_env
+        )
 
         # Get Center of tmp GRASS region
         center = gs.parse_command("g.region", flags="cg", env=self._wgs84_env)
@@ -142,7 +144,10 @@ class InteractiveMap:
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
         resolution = estimate_resolution(
-            raster=full_name, dbase=env_info["GISDBASE"], location=env_info["LOCATION_NAME"], env=self._psmerc_env
+            raster=full_name,
+            dbase=env_info["GISDBASE"],
+            location=env_info["LOCATION_NAME"],
+            env=self._psmerc_env,
         )
         gs.run_command(
             "r.proj",
@@ -172,7 +177,10 @@ class InteractiveMap:
         from_proj = get_location_proj_string(env=self._src_env)
         to_proj = get_location_proj_string(env=self._wgs84_env)
         bounds = reproject_region(old_bounds, from_proj, to_proj)
-        new_bounds = [[bounds["north"], bounds["west"]], [bounds["south"], bounds["east"]]]
+        new_bounds = [
+            [bounds["north"], bounds["west"]],
+            [bounds["south"], bounds["east"]],
+        ]
 
         # Overlay image on folium map
         img = folium.raster_layers.ImageOverlay(
@@ -187,6 +195,7 @@ class InteractiveMap:
         img.add_to(self.map)
 
     def add_layer_control(self, **kwargs):
+        """Add layer control to display"""
         self.layer_control = True
         self.layer_control_object = folium.LayerControl(**kwargs)
 

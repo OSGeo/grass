@@ -35,9 +35,10 @@ def reproject_region(region, from_proj, to_proj):
     """Reproject boundary of region from one projection to another.
 
     :param dict region: region to reproject as a dictionary with long key names
-                   output of get_region
+                    output of get_region
     :param str from_proj: PROJ.4 string of region; output of get_location_proj_string
-    :param str in_proj: PROJ.4 string of target location; output of get_location_proj_string
+    :param str in_proj: PROJ.4 string of target location;
+                    output of get_location_proj_string
 
     :return dict region: reprojected region as a dictionary with long key names
     """
@@ -95,7 +96,7 @@ def estimate_resolution(raster, dbase, location, env):
 
 def setup_location(name, dbase_location, epsg, src_env):
     """Setup temporary location with different projection but
-    same extent as source location
+    same computational region as source location
 
     :param str name: name of new location
     :param path dbase_location: path to new location database
@@ -106,13 +107,9 @@ def setup_location(name, dbase_location, epsg, src_env):
     :return dict new_env: new environment
     """
     # Create new environment
-    rcfile, new_env = gs.create_environment(
-        dbase_location, name, "PERMANENT"
-    )
+    rcfile, new_env = gs.create_environment(dbase_location, name, "PERMANENT")
     # Location and mapset
-    gs.create_location(
-        dbase_location, name, epsg=epsg, overwrite=True
-    )
+    gs.create_location(dbase_location, name, epsg=epsg, overwrite=True)
     # Reproject region
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
