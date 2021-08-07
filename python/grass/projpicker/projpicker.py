@@ -96,7 +96,7 @@ def read_file(infile="-"):
         list: List of str lines read from infile.
 
     Raises:
-        Exception: If infile does not exist.
+        FileNotFoundError: If infile does not exist.
     """
     if infile in (None, ""):
         infile = "-"
@@ -104,7 +104,7 @@ def read_file(infile="-"):
     if infile == "-":
         f = sys.stdin
     elif not os.path.isfile(infile):
-        raise Exception(f"{infile}: No such file found")
+        raise FileNotFoundError(f"{infile}: No such file found")
     else:
         f = open(infile)
 
@@ -244,10 +244,10 @@ def calc_xy_at_lat_scaling(lat):
         float, float: x and y.
 
     Raises:
-        Exception: If lat is outside [-90, 90].
+        ValueError: If lat is outside [-90, 90].
     """
     if not -90 <= lat <= 90:
-        raise Exception(f"{lat}: Invalid latitude")
+        raise ValueError(f"{lat}: Invalid latitude")
 
     # (x/rx)**2 + (y/ry)**2 = 1
     # x = rx*cos(theta2)
@@ -310,10 +310,10 @@ def calc_radius_at_lat(lat):
         float: Radius.
 
     Raises:
-        Exception: If lat is outside [-90, 90].
+        ValueError: If lat is outside [-90, 90].
     """
     if not -90 <= lat <= 90:
-        raise Exception(f"{lat}: Invalid latitude")
+        raise ValueError(f"{lat}: Invalid latitude")
 
     # (x/rx)**2 + (y/ry)**2 = (r*cos(theta)/rx)**2 + (r*sin(theta)/ry)**2 = 1
     theta = lat/180*math.pi
@@ -336,16 +336,16 @@ def calc_area(bbox):
         float: Area in square kilometers.
 
     Raises:
-        Exception: If s or n is outside [-90, 90], or s is greater than n.
+        ValueError: If s or n is outside [-90, 90], or s is greater than n.
     """
     s, n, w, e = bbox
 
     if not -90 <= s <= 90:
-        raise Exception(f"{s}: Invalid south latitude")
+        raise ValueError(f"{s}: Invalid south latitude")
     if not -90 <= n <= 90:
-        raise Exception(f"{n}: Invalid south latitude")
+        raise ValueError(f"{n}: Invalid south latitude")
     if s > n:
-        raise Exception(f"South ({s}) greater than north ({n})")
+        raise ValueError(f"South ({s}) greater than north ({n})")
 
     lats = []
     nlats = math.ceil(n-s)+1
@@ -451,7 +451,7 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
         str: Unit name.
 
     Raises:
-        Exception: If no or multiple units of measure are found.
+        NotImplementedError: If no or multiple units of measure are found.
     """
     if proj_table == "compound_crs":
         sql = f"""SELECT table_name, horiz_crs_auth_name, horiz_crs_code
@@ -505,9 +505,9 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
                re.sub("^PROJCS\[[^,]*,|\]$", "",
                       proj_cur.fetchone()[0]))))
         if unit == "":
-            raise Exception(f"{crs_auth}:{crs_code}: No units?")
+            raise NotImplementedError(f"{crs_auth}:{crs_code}: No units?")
     elif nuoms > 1:
-        raise Exception(f"{crs_auth}:{crs_code}: Multiple units?")
+        raise NotImplementedError(f"{crs_auth}:{crs_code}: Multiple units?")
 
     # use GRASS unit names
     unit = unit.replace(
@@ -624,7 +624,7 @@ def create_projpicker_db(
         proj_db (str): proj.db path. Defaults to None.
 
     Raises:
-        Exception: If projpicker_db already exists.
+        FileExistsError: If projpicker_db already exists.
     """
     projpicker_db = get_projpicker_db(projpicker_db)
     proj_db = get_proj_db(proj_db)
@@ -633,7 +633,7 @@ def create_projpicker_db(
         if overwrite:
             os.remove(projpicker_db)
         else:
-            raise Exception(f"{projpicker_db}: File already exists")
+            raise FileExistsError(f"{projpicker_db}: File already exists")
 
     with sqlite3.connect(projpicker_db) as projpicker_con:
         projpicker_con.execute(bbox_schema)
@@ -719,14 +719,14 @@ def write_bbox_db(
             False.
 
     Raises:
-        Exception: If bbox_db file already exists when overwriting is not
-        requested.
+        FileExistsError: If bbox_db file already exists when overwriting is not
+            requested.
     """
     if os.path.isfile(bbox_db):
         if overwrite:
             os.remove(bbox_db)
         else:
-            raise Exception(f"{bbox_db}: File already exists")
+            raise FileExistsError(f"{bbox_db}: File already exists")
 
     with sqlite3.connect(bbox_db) as bbox_con:
         bbox_con.execute(bbox_schema)
@@ -820,10 +820,10 @@ def set_coordinate_system(coor_sys="latlon"):
         coor_sys (str): Coordinate system (latlon, xy). Defaults to "latlon".
 
     Raises:
-        Exception: If coor_sys is not one of "latlon" or "xy".
+        ValueError: If coor_sys is not one of "latlon" or "xy".
     """
     if coor_sys not in ("latlon", "xy"):
-        raise Exception(f"{coor_sys}: Invalid coordinate system")
+        raise ValueError(f"{coor_sys}: Invalid coordinate system")
 
     if coor_sys == "latlon":
         coor_mod = coor_latlon
@@ -1021,10 +1021,10 @@ def parse_geom(geom, geom_type="point"):
         list: List of a parsed geometry.
 
     Raises:
-        Exception: If geom_type is not one of "point", "poly", or "bbox".
+        ValueError: If geom_type is not one of "point", "poly", or "bbox".
     """
     if geom_type not in ("point", "poly", "bbox"):
-        raise Exception(f"{geom_type}: Invalid geometry type")
+        raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if geom_type == "point":
         geom = parse_point(geom)
@@ -1049,10 +1049,10 @@ def parse_geoms(geoms, geom_type="point"):
         list: List of parsed geometries.
 
     Raises:
-        Exception: If geom_type is not one of "point", "poly", or "bbox".
+        ValueError: If geom_type is not one of "point", "poly", or "bbox".
     """
     if geom_type not in ("point", "poly", "bbox"):
-        raise Exception(f"{geom_type}: Invalid geometry type")
+        raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if geom_type == "point":
         geoms = parse_points(geoms)
@@ -1089,7 +1089,7 @@ def parse_mixed_geoms(geoms):
         list: List of parsed geometries.
 
     Raises:
-        Exception: If the geometry stack size is not 1 after postfix parsing.
+        SyntaxError: If syntax errors are encountered.
     """
     def parse_next_geom(g):
         if geom_type == "poly":
@@ -1165,9 +1165,9 @@ def parse_mixed_geoms(geoms):
                     elif stack_size >= 2:
                         stack_size -= 1
                     else:
-                        raise Exception(f"Not enough operands for {geom}")
+                        raise SyntaxError(f"Not enough operands for {geom}")
                 else:
-                    raise Exception(f"{geom}: Not in postfix query")
+                    raise SyntaxError(f"{geom}: Not in postfix query")
             elif geom in geom_types:
                 geom_type = geom
             elif geom in coor_sys:
@@ -1199,7 +1199,7 @@ def parse_mixed_geoms(geoms):
                         outgeoms.append(geom)
                     if use:
                         if name not in geom_vars:
-                            raise Exception(f"{name}: Undefined geometry "
+                            raise SyntaxError(f"{name}: Undefined geometry "
                                             "variable")
                         stack_size += 1
                         if not sav:
@@ -1217,9 +1217,9 @@ def parse_mixed_geoms(geoms):
 
         if query_op == "postfix":
             if stack_size == 0:
-                raise Exception("Nothing to return from postfix stack")
+                raise SyntaxError("Nothing to return from postfix stack")
             elif stack_size > 1:
-                raise Exception(f"{stack_size}: Excessive stack size for "
+                raise SyntaxError(f"{stack_size}: Excessive stack size for "
                                 "postfix operations")
     finally:
         if was_latlon and not is_latlon():
@@ -1316,10 +1316,10 @@ def bbox_binary_operator(bbox1, bbox2, bbox_op):
         between bbox1 and bbox2.
 
     Raises:
-        Exception: If bbox_op is not one of "and", "or", or "xor".
+        ValueError: If bbox_op is not one of "and", "or", or "xor".
     """
     if bbox_op not in ("and", "or", "xor"):
-        raise Exception(f"{bbox_op}: Invalid bbox operator")
+        raise ValueError(f"{bbox_op}: Invalid bbox operator")
 
     if bbox_op == "and":
         outbbox = bbox_and(bbox1, bbox2)
@@ -1374,7 +1374,7 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
         geometry.
 
     Raises:
-        Exception: If matching cannot be done for any reason.
+        SyntaxError: If syntax errors are encountered.
     """
     def find_matching_bbox(geom_latlon, geom, bbox):
         obbox = []
@@ -1408,20 +1408,20 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
         return obbox
 
     if None in (gbbox1.type, gbbox2.type):
-        raise Exception("Non-raw geometries cannot be matched")
+        raise SyntaxError("Non-raw geometries cannot be matched")
 
     if gbbox1.type != gbbox2.type:
-        raise Exception("Geometries in different types cannot be matched")
+        raise SyntaxError("Geometries in different types cannot be matched")
 
     if gbbox1.is_latlon == gbbox2.is_latlon:
-        raise Exception("Geometries in the same coordinate system cannot be "
+        raise SyntaxError("Geometries in the same coordinate system cannot be "
                         "matched")
 
     geom1 = gbbox1.geom
     geom2 = gbbox2.geom
 
     if len(geom1) != len(geom2):
-        raise Exception("Geometries in different lengths cannot be matched")
+        raise SyntaxError("Geometries in different lengths cannot be matched")
 
     outbbox = gbbox1.bbox if gbbox2.is_latlon else gbbox2.bbox
 
@@ -1541,10 +1541,10 @@ def query_points(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If query_op is not one of "and", "or", or "xor".
+        ValueError: If query_op is not one of "and", "or", or "xor".
     """
     if query_op not in ("and", "or", "xor"):
-        raise Exception(f"{query_op}: Invalid query operator")
+        raise ValueError(f"{query_op}: Invalid query operator")
 
     points = parse_points(points)
     projpicker_db = get_projpicker_db(projpicker_db)
@@ -1612,10 +1612,10 @@ def query_points_using_bbox(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If query_op is not one of "and", "or", or "xor".
+        ValueError: If query_op is not one of "and", "or", or "xor".
     """
     if query_op not in ("and", "or", "xor"):
-        raise Exception(f"{query_op}: Invalid query operator")
+        raise ValueError(f"{query_op}: Invalid query operator")
 
     points = parse_points(points)
 
@@ -1845,10 +1845,10 @@ def query_bboxes(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If query_op is not one of "and", "or", or "xor".
+        ValueError: If query_op is not one of "and", "or", or "xor".
     """
     if query_op not in ("and", "or", "xor"):
-        raise Exception(f"{query_op}: Invalid query operator")
+        raise ValueError(f"{query_op}: Invalid query operator")
 
     bboxes = parse_bboxes(bboxes)
     projpicker_db = get_projpicker_db()
@@ -1916,10 +1916,10 @@ def query_bboxes_using_bbox(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If query_op is not one of "and", "or", "xor".
+        ValueError: If query_op is not one of "and", "or", "xor".
     """
     if query_op not in ("and", "or", "xor"):
-        raise Exception(f"{query_op}: Invalid query operator")
+        raise ValueError(f"{query_op}: Invalid query operator")
 
     bboxes = parse_bboxes(bboxes)
 
@@ -1968,10 +1968,10 @@ def query_geom(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If geom_type is not one of "point", "poly", or "bbox".
+        ValueError: If geom_type is not one of "point", "poly", or "bbox".
     """
     if geom_type not in ("point", "poly", "bbox"):
-        raise Exception(f"{geom_type}: Invalid geometry type")
+        raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if geom_type == "point":
         outbbox = query_point(geom, unit, proj_table, projpicker_db)
@@ -2008,10 +2008,10 @@ def query_geom_using_bbox(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If geom_type is not one of "point", "poly", or "bbox".
+        ValueError: If geom_type is not one of "point", "poly", or "bbox".
     """
     if geom_type not in ("point", "poly", "bbox"):
-        raise Exception(f"{geom_type}: Invalid geometry type")
+        raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if geom_type == "point":
         outbbox = query_point_using_bbox(prevbbox, geom, unit, proj_table)
@@ -2054,14 +2054,14 @@ def query_geoms(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If geom_type is not one of "point", "poly", or "bbox", or
+        ValueError: If geom_type is not one of "point", "poly", or "bbox", or
             query_op is not one of "and", "or", or "xor".
     """
     if geom_type not in ("point", "poly", "bbox"):
-        raise Exception(f"{geom_type}: Invalid geometry type")
+        raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if query_op not in ("and", "or", "xor"):
-        raise Exception(f"{query_op}: Invalid query operator")
+        raise ValueError(f"{query_op}: Invalid query operator")
 
     if geom_type == "point":
         outbbox = query_points(geoms, query_op, unit, proj_table,
@@ -2102,10 +2102,10 @@ def query_geoms_using_bbox(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If geom_type is not one of "point", "poly", or "bbox".
+        ValueError: If geom_type is not one of "point", "poly", or "bbox".
     """
     if geom_type not in ("point", "poly", "bbox"):
-        raise Exception(f"{geom_type}: Invalid geometry type")
+        raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if geom_type == "point":
         outbbox = query_points_using_bbox(prevbbox, geom, query_op, unit,
@@ -2204,7 +2204,7 @@ def query_mixed_geoms(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If postfix operations failed.
+        SyntaxError: If syntax errors are encountered.
     """
     geoms = parse_mixed_geoms(geoms)
 
@@ -2255,11 +2255,11 @@ def query_mixed_geoms(
                     geom_vars[name] = Geom(is_latlon(), geom_type, geoms[g])
                 if use:
                     if name not in geom_vars:
-                        raise Exception(f"{name}: Undefined geometry variable")
+                        raise SyntaxError(f"{name}: Undefined geometry variable")
                     nam = name
                     while True:
                         if nam not in geom_vars:
-                            raise Exception(f"{nam}: Undefined geometry "
+                            raise SyntaxError(f"{nam}: Undefined geometry "
                                             "variable")
                         geom = geom_vars[nam]
                         typ = type(geom.geom)
@@ -2267,7 +2267,7 @@ def query_mixed_geoms(
                             break
                         nam = geom.geom[1:]
                         if nam == name:
-                            raise Exception(f"{name}: Recursive geometry "
+                            raise SyntaxError(f"{name}: Recursive geometry "
                                             "variable")
                     if geom.is_latlon != is_latlon():
                         sav_is_latlon = is_latlon()
@@ -2317,7 +2317,7 @@ def query_mixed_geoms(
                     gbbox1 = geombbox_stack.pop()
                     if geom == "match":
                         if None in (gbbox1.type, gbbox2.type):
-                            raise Exception("Non-raw geometries cannot be "
+                            raise SyntaxError("Non-raw geometries cannot be "
                                             "matched")
                         obbox = bbox_binary_operator(gbbox1.bbox, gbbox2.bbox,
                                                      "and")
@@ -2333,7 +2333,7 @@ def query_mixed_geoms(
                     geombbox_stack.append(GeomBBox(is_latlon(), None, geom,
                                                    obbox))
                 elif geom in ("and", "or", "xor", "not", "match"):
-                    raise Exception(f"Not enough operands for {geom}")
+                    raise SyntaxError(f"Not enough operands for {geom}")
                 else:
                     if geom == "none":
                         obbox = []
@@ -2350,7 +2350,7 @@ def query_mixed_geoms(
                 if geom in ("or", "xor", "not") and not sort:
                     sort = True
             elif geom in ("and", "or", "xor", "not"):
-                raise Exception(f"{geom}: Not in postfix query")
+                raise SyntaxError(f"{geom}: Not in postfix query")
             elif query_op in ("or", "xor") or first:
                 all_key = unit + proj_table
                 if geom == "none":
@@ -2414,7 +2414,7 @@ def query_mixed_geoms(
 
     if query_op == "postfix":
         if len(geombbox_stack) > 1:
-            raise Exception("Postfix operations failed")
+            raise SyntaxError("Postfix operations failed")
         outbbox = geombbox_stack[0].bbox
 
     if sort:
@@ -2712,11 +2712,14 @@ def start(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        Exception: If format is invalid, both overwrite and append are True,
-            either projpicker_db or outfile already exists when overwrite is
-            False, proj_db does not exist when create is True, projpicker_db
-            does not exist when create is False, output is None or "-" when
-            append is True, or sqlite format is written to stdout.
+        ValueError: If format is invalid.
+        NotImplementedError: If both overwrite and append are True, output is
+            None or "-" when append is True, or sqlite format is written to
+            stdout.
+        FileExistsError: If either projpicker_db or outfile already exists when
+            overwrite is False.
+        FileNotFoundError: If proj_db does not exist when create is True,
+            projpicker_db does not exist when create is False.
     """
     projpicker_db = get_projpicker_db(projpicker_db)
     proj_db = get_proj_db(proj_db)
@@ -2725,25 +2728,25 @@ def start(
         start_gui = None
 
     if fmt not in ("plain", "json", "pretty", "sqlite", "srid"):
-        raise Exception(f"{fmt}: Unsupported output format")
+        raise ValueError(f"{fmt}: Unsupported output format")
 
     if overwrite and append:
-        raise Exception("Both overwrite and append requested")
+        raise NotImplementedError("Both overwrite and append requested")
 
     if create:
         if not overwrite and os.path.isfile(projpicker_db):
-            raise Exception(f"{projpicker_db}: File already exists")
+            raise FileExistsError(f"{projpicker_db}: File already exists")
         if not os.path.isfile(proj_db):
-            raise Exception(f"{proj_db}: No such file found")
+            raise FileNotFoundError(f"{proj_db}: No such file found")
         create_projpicker_db(overwrite, projpicker_db, proj_db)
     elif not os.path.isfile(projpicker_db):
-        raise Exception(f"{projpicker_db}: No such file found")
+        raise FileNotFoundError(f"{projpicker_db}: No such file found")
 
     if not overwrite and not append and outfile and os.path.isfile(outfile):
-        raise Exception(f"{outfile}: File already exists")
+        raise FileExistsError(f"{outfile}: File already exists")
 
     if append and (not outfile or outfile == "-"):
-        raise Exception("Cannot append output to None or stdout")
+        raise NotImplementedError("Cannot append output to None or stdout")
 
     if start_gui == "gui":
         bbox, *_ = gui.start(single=single)
@@ -2804,7 +2807,7 @@ def start(
         bbox_dict = dictify_bbox(bbox)
     elif fmt == "sqlite":
         if outfile == "-":
-            raise Exception("Cannot write sqlite output to stdout")
+            raise NotImplementedError("Cannot write sqlite output to stdout")
         write_bbox_db(bbox, outfile, True)
         return bbox
 

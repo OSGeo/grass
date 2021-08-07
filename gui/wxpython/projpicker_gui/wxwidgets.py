@@ -25,7 +25,7 @@ ItemDeselectedEvent, EVT_ITEM_DESELECTED = wx.lib.newevent.NewEvent()
 class ProjPickerPanel(wx.Panel):
     def __init__(self, *args, layout="full", filter_bbox=None, **kwargs):
         if layout not in ("full", "map_top", "map_left"):
-            raise Exception(f"{layout}: Layout not full, map_top, or map_left")
+            raise ValueError(f"{layout}: Layout not full, map_top, or map_left")
 
         super().__init__(*args, **kwargs)
 #        self.Parent.SetBackgroundColour(wx.Colour("lightgray"))
