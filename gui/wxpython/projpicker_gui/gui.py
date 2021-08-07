@@ -208,7 +208,7 @@ def start(
 
             try:
                 draw_map = zoomer_queue.get_nowait()
-            except:
+            except queue.Empty:
                 zoomer.checker = wx.CallLater(0, check_zoomer)
             else:
                 draw_map()

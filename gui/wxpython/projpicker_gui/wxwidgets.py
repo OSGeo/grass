@@ -498,7 +498,7 @@ class ProjPickerPanel(wx.Panel):
         def check_zoomer():
             try:
                 draw_map = self.zoomer_queue.get_nowait()
-            except:
+            except queue.Empty:
                 self.zoomer.checker = wx.CallLater(0, check_zoomer)
             else:
                 draw_map()
