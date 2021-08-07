@@ -583,28 +583,25 @@ def transform_latlon_bbox(bbox, to_crs):
     import pyproj
 
     s, n, w, e = bbox
-    try:
-        trans = pyproj.Transformer.from_crs("EPSG:4326", to_crs,
-                                            always_xy=True)
-        x = [w, w, e, e]
-        y = [s, n, s, n]
-        if s*n < 0:
-            x.extend([w, e])
-            y.extend([0, 0])
-            inc_zero = True
-        else:
-            inc_zero = False
-        x, y = trans.transform(x, y)
-        b = min(y[0], y[2])
-        t = max(y[1], y[3])
-        l = min(x[0], x[1])
-        r = max(x[2], x[3])
-        if inc_zero:
-            l = min(l, x[4])
-            r = max(r, x[5])
-        if math.isinf(b) or math.isinf(t) or math.isinf(l) or math.isinf(r):
-            b = t = l = r = None
-    except:
+    trans = pyproj.Transformer.from_crs("EPSG:4326", to_crs,
+                                        always_xy=True)
+    x = [w, w, e, e]
+    y = [s, n, s, n]
+    if s*n < 0:
+        x.extend([w, e])
+        y.extend([0, 0])
+        inc_zero = True
+    else:
+        inc_zero = False
+    x, y = trans.transform(x, y)
+    b = min(y[0], y[2])
+    t = max(y[1], y[3])
+    l = min(x[0], x[1])
+    r = max(x[2], x[3])
+    if inc_zero:
+        l = min(l, x[4])
+        r = max(r, x[5])
+    if math.isinf(b) or math.isinf(t) or math.isinf(l) or math.isinf(r):
         b = t = l = r = None
     return b, t, l, r
 

@@ -74,7 +74,7 @@ def get_float(x):
     """
     try:
         return float(x)
-    except:
+    except ValueError:
         pass
 
 
