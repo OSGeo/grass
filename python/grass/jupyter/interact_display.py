@@ -15,14 +15,16 @@ import sys
 import tempfile
 import weakref
 from pathlib import Path
-
 import folium
-
 import grass.script as gs
-
 from .display import GrassRenderer
-from .utils import (estimate_resolution, get_location_proj_string, get_region,
-                    reproject_region, setup_location)
+from .utils import (
+    estimate_resolution,
+    get_location_proj_string,
+    get_region,
+    reproject_region,
+    setup_location,
+)
 
 
 class InteractiveMap:
@@ -137,7 +139,7 @@ class InteractiveMap:
         """
 
         # Find full name of raster
-        file_info = gs.find_file(name, element="raster")
+        file_info = gs.find_file(name, element="cell")
         full_name = file_info["fullname"]
         name = file_info["name"]
 

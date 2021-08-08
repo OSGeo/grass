@@ -77,7 +77,7 @@ def estimate_resolution(raster, dbase, location, env):
     :param str raster: name of raster
     :param str dbase: path to source database
     :param str location: name of source location
-    :param str env: target environment
+    :param dict env: target environment
 
     :return float estimate: estimated resolution of raster in destination
                             environment
