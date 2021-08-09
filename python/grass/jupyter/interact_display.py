@@ -6,8 +6,8 @@
 #
 # COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
 #
-#            This program is free software under the GNU Gernal Public
-#            License (>=v2). Read teh file COPYING that comes with GRASS
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
 import os
@@ -218,7 +218,7 @@ class InteractiveMap:
 
         return fig
 
-    def save(self, filename="map.html"):
+    def save(self, filename):
         """Save map as an html map.
 
         :param str filename: name of html file
