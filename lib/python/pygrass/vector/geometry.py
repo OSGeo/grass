@@ -1690,7 +1690,7 @@ class Area(Geo):
                                   int(round_), int(caps), tol,
                                   p_bound, pp_isle, n_isles)
         return (Line(c_points=p_bound.contents),
-                self.centroid,
+                self.centroid(),
                 [Line(c_points=pp_isle[i].contents)
                  for i in range(n_isles.contents.value)])
 
