@@ -216,3 +216,10 @@ class InteractiveMap:
         fig.add_child(self.map)
 
         return fig
+
+    def save(self, filename="GRASS_map.html"):
+        """Save map as an html map.
+
+        :param str filename: name of html file
+        """
+        self.map.save(filename)
