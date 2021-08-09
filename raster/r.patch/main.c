@@ -17,7 +17,11 @@
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include <grass/gis.h>
@@ -39,9 +43,12 @@ int main(int argc, char *argv[])
     size_t out_cell_size;
     struct History history;
     void *presult, *patch;
+    void *outbuf;
+    int bufrows;
     int nfiles;
     char *rname;
     int i;
+    int nprocs;
     int row, nrows, ncols;
     int use_zero, no_support;
     char *new_name;
@@ -52,7 +59,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Flag *zeroflag, *nosupportflag;
-    struct Option *opt1, *opt2;
+    struct Option *opt1, *opt2, *threads, *memory;
 
     G_gisinit(argv[0]);
 
@@ -77,6 +84,9 @@ int main(int argc, char *argv[])
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt2->description = _("Name for resultant raster map");
 
+    threads = G_define_standard_option(G_OPT_M_NPROCS);
+    memory = G_define_standard_option(G_OPT_MEMORYMB);
+
     /* Define the different flags */
 
     zeroflag = G_define_flag();
@@ -89,6 +99,17 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    sscanf(threads->answer, "%d", &nprocs);
+    if (nprocs < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    if (nprocs != 1) 
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring threads setting."));
+    nprocs = 1;
+#endif
 
     use_zero = (zeroflag->answer);
     no_support = (nosupportflag->answer);
@@ -137,6 +158,18 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
+    bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (bufrows > nrows) {
+        bufrows = nrows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < nprocs) {
+        bufrows = nprocs;
+    }
+
+    outbuf = G_malloc(out_cell_size * ncols * nrows);
+
     G_verbose_message(_("Percent complete..."));
     for (row = 0; row < nrows; row++) {
         double north_edge, south_edge;
@@ -162,7 +195,14 @@ int main(int argc, char *argv[])
                           out_cell_size, use_zero))
                 break;
         }
-        Rast_put_row(outfd, presult, out_type);
+        void *p = G_incr_void_ptr(outbuf, out_cell_size * row * ncols);
+        memcpy(p, presult, out_cell_size * ncols);
+        /* Rast_put_row(outfd, test, out_type); */
+    }
+
+    for (row = 0; row < nrows; row++) {
+        void *p = G_incr_void_ptr(outbuf, out_cell_size * row * ncols);
+        Rast_put_row(outfd, p, out_type);
     }
     G_percent(row, nrows, 2);
 
