@@ -5,8 +5,8 @@
 #
 # COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
 #
-#            This program is free software under the GNU Gernal Public
-#            License (>=v2). Read teh file COPYING that comes with GRASS
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
 import os
@@ -94,12 +94,12 @@ def estimate_resolution(raster, dbase, location, env):
     return estimate
 
 
-def setup_location(name, dbase_location, epsg, src_env):
+def setup_location(name, path, epsg, src_env):
     """Setup temporary location with different projection but
     same computational region as source location
 
     :param str name: name of new location
-    :param path dbase_location: path to new location database
+    :param path path: path to new location's database
     :param str epsg: EPSG code
     :param dict src_env: source environment
 
@@ -107,9 +107,9 @@ def setup_location(name, dbase_location, epsg, src_env):
     :return dict new_env: new environment
     """
     # Create new environment
-    rcfile, new_env = gs.create_environment(dbase_location, name, "PERMANENT")
+    rcfile, new_env = gs.create_environment(path, name, "PERMANENT")
     # Location and mapset
-    gs.create_location(dbase_location, name, epsg=epsg, overwrite=True)
+    gs.create_location(path, name, epsg=epsg, overwrite=True)
     # Reproject region
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)

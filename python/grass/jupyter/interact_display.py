@@ -51,7 +51,8 @@ class InteractiveMap:
         # Make temporary folder for all our files
         self._tmp_dir = tempfile.TemporaryDirectory()
 
-        # Remember original environment
+        # Remember original environment; all environments used
+        # in this class are derived from this one
         self._src_env = os.environ.copy()
 
         # Set up temporary locations  in WGS84 and Pseudo-Mercator
@@ -217,7 +218,7 @@ class InteractiveMap:
 
         return fig
 
-    def save(self, filename="GRASS_map.html"):
+    def save(self, filename="map.html"):
         """Save map as an html map.
 
         :param str filename: name of html file
