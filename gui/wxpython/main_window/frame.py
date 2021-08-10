@@ -492,11 +492,6 @@ class GMFrame(wx.Frame):
         mapdisplay.getLayerTreeIndex = GetLayerTreeIndex
 
         # bind various events
-        mapdisplay.Bind(
-            wx.EVT_ACTIVATE,
-            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
-        )
-
         mapdisplay.starting3dMode.connect(
             lambda firstTime, mapDisplayPage=self.currentPage: self._onStarting3dMode(
                 mapDisplayPage
@@ -1888,18 +1883,6 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"].append(dbmanager)
         # show ATM window
         dbmanager.Show()
-
-    def _onMapDisplayFocus(self, notebookLayerPage):
-        """Changes bookcontrol page to page associated with display."""
-        # moved from mapdisp/frame.py
-        # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
-        if self.workspace_manager.loadingWorkspace:
-            return
-        pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
-        if pgnum > -1:
-            self.notebookLayers.SetSelection(pgnum)
-            self.currentPage = self.notebookLayers.GetCurrentPage()
 
     def _onStarting3dMode(self, mapDisplayPage):
         """Disables 3D mode for all map displays except for @p mapDisplay"""
