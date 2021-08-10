@@ -925,9 +925,11 @@ class GMFrame(wx.Frame):
         """Page in map notebook changed"""
         currentMapDisp = self.mapnotebook.GetCurrentPage()
         try:
-            self.notebookLayers.SetSelection(currentMapDisp.getLayerTreeIndex())
-            self.currentPage = self.notebookLayers.GetCurrentPage()
-            self.currentPageNum = self.notebookLayers.GetSelection()
+            pgnum = currentMapDisp.getLayerTreeIndex()
+            if pgnum > -1:
+                self.notebookLayers.SetSelection(pgnum)
+                self.currentPage = self.notebookLayers.GetCurrentPage()
+                self.currentPageNum = self.notebookLayers.GetSelection()
         except Exception:
             pass
 

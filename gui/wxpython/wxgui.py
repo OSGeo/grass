@@ -83,7 +83,8 @@ class GMApp(wx.App):
 
         def show_main_gui():
             # create and show main frame
-            from lmgr.frame import GMFrame
+            # from lmgr.frame import GMFrame
+            from main_window.frame import GMFrame
 
             mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
             mainframe.Show()
