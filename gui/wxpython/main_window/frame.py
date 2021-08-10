@@ -890,7 +890,8 @@ class GMFrame(wx.Frame):
             )
 
     def OnCBPageChanged(self, event):
-        """Page in notebook (display) changed"""
+        """Page in notebook (display) changed.
+        Also change active map notebook tab."""
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
         try:
@@ -922,7 +923,8 @@ class GMFrame(wx.Frame):
         event.Skip()
 
     def OnMapNotebookPageChanged(self, event):
-        """Page in map notebook changed"""
+        """Page in map notebook changed.
+        Also change active tab in Display panel."""
         currentMapDisp = self.mapnotebook.GetCurrentPage()
         try:
             pgnum = currentMapDisp.getLayerTreeIndex()
