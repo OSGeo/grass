@@ -106,8 +106,9 @@ int main(int argc, char *argv[])
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
 #else
-    if (nprocs != 1) 
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring threads setting."));
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
     nprocs = 1;
 #endif
 
@@ -156,7 +157,7 @@ int main(int argc, char *argv[])
     outfd = Rast_open_new(new_name = rname, out_type);
 
     presult = G_malloc(nprocs * sizeof *presult);
-    patch = G_malloc(nprocs * sizeof* patch);
+    patch = G_malloc(nprocs * sizeof *patch);
     for (t = 0; t < nprocs; t++) {
         presult[t] = Rast_allocate_buf(out_type);
     }
@@ -178,60 +179,74 @@ int main(int argc, char *argv[])
         bufrows = nprocs;
     }
 
-    outbuf = G_malloc(out_cell_size * ncols * nrows);
+    outbuf = G_malloc(out_cell_size * ncols * bufrows);
 
     G_verbose_message(_("Percent complete..."));
-    
-    int computed;
 
-#pragma omp parallel if(nprocs > 1) private(i)
-    {
-        int t_id = 0;
+    int computed = 0;
+    int written = 0;
+
+    while (written < nrows) {
+        int start = written;
+        int end = start + bufrows;
+        if (end > nrows)
+            end = nrows;
+
+#pragma omp parallel private(i) if(nprocs > 1) 
+        {
+            int t_id = 0;
 #if defined(_OPENMP)
-        t_id = omp_get_thread_num();
+            t_id = omp_get_thread_num();
 #endif
-        void *local_presult = presult[t_id];
-        void *local_patch = patch[t_id];
-        int *local_infd = infd[t_id];
+            void *local_presult = presult[t_id];
+            void *local_patch = patch[t_id];
+            int *local_infd = infd[t_id];
 
 #pragma omp for schedule(static)
-        for (row = 0; row < nrows; row++) {
-            double north_edge, south_edge;
+            for (row = start; row < end; row++) {
+                double north_edge, south_edge;
 
-            G_percent(computed, nrows, 2);
-            Rast_get_row(local_infd[0], local_presult, row, out_type);
+                G_percent(computed, nrows, 2);
+                Rast_get_row(local_infd[0], local_presult, row, out_type);
 
-            north_edge = Rast_row_to_northing(row, &window);
-            south_edge = north_edge - window.ns_res;
+                north_edge = Rast_row_to_northing(row, &window);
+                south_edge = north_edge - window.ns_res;
 
-            if (out_type == CELL_TYPE)
-                Rast_update_cell_stats((CELL *) local_presult, ncols, &statf[0]);
-            for (i = 1; i < nfiles; i++) {
-                /* check if raster i overlaps with the current row */
-                if (south_edge >= cellhd[i].north ||
-                    north_edge <= cellhd[i].south ||
-                    window.west >= cellhd[i].east ||
-                    window.east <= cellhd[i].west)
-                    continue;
+                if (out_type == CELL_TYPE)
+                    Rast_update_cell_stats((CELL *) local_presult, ncols,
+                                           &statf[0]);
+                for (i = 1; i < nfiles; i++) {
+                    /* check if raster i overlaps with the current row */
+                    if (south_edge >= cellhd[i].north ||
+                        north_edge <= cellhd[i].south ||
+                        window.west >= cellhd[i].east ||
+                        window.east <= cellhd[i].west)
+                        continue;
 
-                Rast_get_row(local_infd[i], local_patch, row, out_type);
-                if (!do_patch(local_presult, local_patch, &statf[i], ncols, out_type,
-                              out_cell_size, use_zero))
-                    break;
-            }
-            void *p = G_incr_void_ptr(outbuf, out_cell_size * row * ncols);
-            memcpy(p, local_presult, out_cell_size * ncols);
+                    Rast_get_row(local_infd[i], local_patch, row, out_type);
+                    if (!do_patch(local_presult, local_patch, &statf[i], ncols,
+                                  out_type, out_cell_size, use_zero))
+                        break;
+                }
+                void *p = G_incr_void_ptr(outbuf, out_cell_size *
+                                                      (row - start) * ncols);
+                memcpy(p, local_presult, out_cell_size * ncols);
 
 #pragma omp atomic update
-            computed++;
+                computed++;
+            }
+
+        } /* end parallel region */
+
+        for (row = start; row < end; row++) {
+            void *p =
+                G_incr_void_ptr(outbuf, out_cell_size * (row - start) * ncols);
+            Rast_put_row(outfd, p, out_type);
         }
 
-    } /* end parallel region */
+        written = end;
 
-    for (row = 0; row < nrows; row++) {
-        void *p = G_incr_void_ptr(outbuf, out_cell_size * row * ncols);
-        Rast_put_row(outfd, p, out_type);
-    }
+    } /* end while loop */
     G_percent(row, nrows, 2);
 
     for (t = 0; t < nprocs; t++) {
@@ -242,7 +257,7 @@ int main(int argc, char *argv[])
     G_free(presult);
 
     for (t = 0; t < nprocs; t++)
-        for (i = 0; i < nfiles; i++)
+        for (i = 0; i < nfiles; i++) 
             Rast_close(infd[t][i]);
 
     if (!no_support) {
