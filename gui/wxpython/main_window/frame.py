@@ -920,15 +920,15 @@ class GMFrame(wx.Frame):
     def OnMapNotebookPageChanged(self, event):
         """Page in map notebook changed.
         Also change active tab in Display panel."""
+        if self.workspace_manager.loadingWorkspace:
+            return
+
         currentMapDisp = self.mapnotebook.GetCurrentPage()
-        try:
-            pgnum = currentMapDisp.getLayerTreeIndex()
-            if pgnum > -1:
-                self.notebookLayers.SetSelection(pgnum)
-                self.currentPage = self.notebookLayers.GetCurrentPage()
-                self.currentPageNum = self.notebookLayers.GetSelection()
-        except Exception:
-            pass
+        pgnum = currentMapDisp.getLayerTreeIndex()
+        if pgnum > -1:
+            self.notebookLayers.SetSelection(pgnum)
+            self.currentPage = self.notebookLayers.GetCurrentPage()
+            self.currentPageNum = self.notebookLayers.GetSelection()
 
         event.Skip()
 
