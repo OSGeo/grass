@@ -923,12 +923,15 @@ class GMFrame(wx.Frame):
         if self.workspace_manager.loadingWorkspace:
             return
 
-        currentMapDisp = self.mapnotebook.GetCurrentPage()
-        pgnum = currentMapDisp.getLayerTreeIndex()
-        if pgnum > -1:
-            self.notebookLayers.SetSelection(pgnum)
-            self.currentPage = self.notebookLayers.GetCurrentPage()
-            self.currentPageNum = self.notebookLayers.GetSelection()
+        try:
+            currentMapDisp = self.mapnotebook.GetCurrentPage()
+            pgnum = currentMapDisp.getLayerTreeIndex()
+            if pgnum > -1:
+                self.notebookLayers.SetSelection(pgnum)
+                self.currentPage = self.notebookLayers.GetCurrentPage()
+                self.currentPageNum = self.notebookLayers.GetSelection()
+        except Exception:
+            pass
 
         event.Skip()
 
