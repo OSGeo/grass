@@ -65,6 +65,21 @@ char *G_tempfile(void)
 }
 
 /*!
+ * \brief Returns a temporary file name.
+ *
+ * Similar to G_tempfile(), but the temporary file name will include
+ * a provided base directory instead of the path to the current mapset.
+ *
+ * \return pointer to a character string containing the name. The name 
+ * is copied to allocated memory and may be released by the unix free() 
+ * routine.
+ */
+char *G_tempfile_basedir(const char *basedir)
+{
+    return G_tempfile_pid_basedir(getpid(), basedir);
+}
+
+/*!
  * \brief Create tempfile from process id.
  *
  * See G_tempfile().
@@ -86,6 +101,36 @@ char *G_tempfile_pid(int pid)
 	int uniq = G_counter_next(&unique);
 	sprintf(name, "%d.%d", pid, uniq);
 	G_file_name(path, element, name, G_mapset());
+    }
+    while (access(path, F_OK) == 0);
+
+    G_debug(2, "G_tempfile_pid(): %s", path);
+    
+    return G_store(path);
+}
+
+/*!
+ * \brief Create tempfile from process id in given base directory.
+ *
+ * See G_tempfile_basedir().
+ *
+ * \param pid
+ * \return pointer to string path
+ */
+char *G_tempfile_pid_basedir(int pid, const char *basedir)
+{
+    char path[GPATH_MAX];
+    char name[GNAME_MAX];
+    char element[100];
+
+    if (pid <= 0)
+	pid = getpid();
+    G__temp_element_basedir(element, basedir);
+    G_init_tempfile();
+    do {
+	int uniq = G_counter_next(&unique);
+	sprintf(name, "%d.%d", pid, uniq);
+	G_file_name_basedir(path, element, name, G_mapset(), basedir);
     }
     while (access(path, F_OK) == 0);
 
@@ -127,4 +172,29 @@ void G__temp_element(char *element, int tmp)
         G_make_mapset_object_group_tmp(element);
     
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
+}
+
+/*!
+ * \brief Populates element with a path string (internal use only!)
+ *
+ * \param[out] element element name
+ * \param tmp TRUE to use G_make_mapset_element_tmp() instead of G_make_mapset_element()
+ */
+void G__temp_element_basedir(char *element, const char *basedir)
+{
+    const char *machine;
+
+    strcpy(element, ".tmp");
+    machine = G__machine_name();
+    if (machine != NULL && *machine != 0) {
+	strcat(element, "/");
+	strcat(element, machine);
+    }
+    
+    if (basedir && *basedir)
+        G_make_mapset_object_group_basedir(element, basedir);
+    else
+        G_make_mapset_object_group(element);
+    
+    G_debug(2, "G__temp_element_basedir(): %s", element);
 }

@@ -328,6 +328,17 @@ PERMANENT
   exists, <em><a href="v.generalize.html">v.generalize</a></em> runs
   in extremely slow debug mode.</dd>
 
+  <dt>GRASS_RASTER_TMPDIR</dt>
+  <dd>[rasterlib]<br> By default the GRASS temporary directory is
+  located in <tt>$LOCATION/$MAPSET/.tmp/$HOSTNAME</tt>. If
+  GRASS_RASTER_TMPDIR is set to some existing directory, this directory 
+  will be used to store data files of newly created raster maps. This 
+  can be usefull if this temporary directory is located on a fast 
+  storage device. However, upon closing a new raster map, these files 
+  need to be transferred to the final destination (the current mapset) 
+  which might be slow or even slower than creating the temorary raster 
+  data files directly on the final storage device.</dd>
+
   <dt>GRASS_WXBUNDLED</dt>
   <dd>[wxGUI]<br>
     set to tell wxGUI that a bundled wxPython will be used.<br>

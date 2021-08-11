@@ -583,6 +583,7 @@ static int open_raster_new(const char *name, int open_mode,
     struct fileinfo *fcb;
     int fd, cell_fd;
     char *tempname;
+    const char *tmpdir;
     char *map;
     char *mapset;
     const char *cell_dir;
@@ -623,8 +624,18 @@ static int open_raster_new(const char *name, int open_mode,
 	return open_raster_new_gdal(map, mapset, map_type);
 #endif
 
+    tmpdir = getenv("GRASS_RASTER_TMPDIR");
+    if (tmpdir && *tmpdir) {
+	if (access(tmpdir, 0) != 0) {
+	    G_fatal_error(_("Raster tmp dir does not exist: %s"),
+	                    tmpdir);
+	}
+    }
+
     /* open a tempfile name */
-    tempname = G_tempfile();
+    tempname = G_tempfile_basedir(tmpdir);
+    G_debug(0, "tmp data file for new raster map '%s': '%s'",
+            map, tempname);
     cell_fd = creat(tempname, 0666);
     if (cell_fd < 0) {
         int err = errno;
@@ -637,6 +648,7 @@ static int open_raster_new(const char *name, int open_mode,
     fd = new_fileinfo();
     fcb = &R__.fileinfo[fd];
     fcb->data_fd = cell_fd;
+    fcb->tmpdir = tmpdir;
 
     /*
      * since we are bypassing the normal open logic
@@ -703,7 +715,9 @@ static int open_raster_new(const char *name, int open_mode,
     fcb->cur_row = 0;
 
     /* open a null tempfile name */
-    tempname = G_tempfile();
+    tempname = G_tempfile_basedir(tmpdir);
+    G_debug(0, "tmp null file for new raster map '%s': '%s'",
+            map, tempname);
     fcb->null_fd = creat(tempname, 0666);
     if (fcb->null_fd < 0) {
         int err = errno;

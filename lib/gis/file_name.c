@@ -138,6 +138,28 @@ char *G_file_name_tmp(char *path,
     return file_name(path, NULL, element, name, mapset, tmp_path);
 }
 
+/*!
+  \brief Builds full path names to GIS data files in temporary directory (for internal use only)
+
+  By default the GRASS temporary directory is located at
+  $LOCATION/$MAPSET/.tmp/$HOSTNAME/. If basedir is provided, the
+  temporary directory is located at <basedir>/.tmp/$HOSTNAME/.
+
+  \param[out] path buffer to hold resultant full path to file
+  \param element database element (eg, "cell", "cellhd", "vector", etc)
+  \param name name of file to build path to (fully qualified names allowed)
+  \param mapset mapset name
+
+  \return pointer to <i>path</i> buffer
+*/
+char *G_file_name_basedir(char *path,
+                          const char *element,
+                          const char *name, const char *mapset,
+			  const char *basedir)
+{
+    return file_name(path, NULL, element, name, mapset, basedir);
+}
+
 char *file_name(char *path,
                 const char *dir, const char *element, const char *name,
                 const char *mapset, const char *base)

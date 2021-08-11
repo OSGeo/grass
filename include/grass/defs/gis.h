@@ -349,6 +349,8 @@ char *G_file_name(char *, const char *, const char *, const char *);
 char *G_file_name_misc(char *, const char *, const char *, const char *,
 		       const char *);
 char *G_file_name_tmp(char *, const char *, const char *, const char *);
+char *G_file_name_basedir(char *, const char *, const char *, const char *,
+                          const char *);
 
 /* find_file.c */
 const char *G_find_file(const char *, char *, const char *);
@@ -545,6 +547,7 @@ int G_make_mapset_element_tmp(const char *);
 int G_make_mapset_object_group(const char *);
 int G_make_mapset_dir_object(const char *, const char *);
 int G_make_mapset_object_group_tmp(const char *);
+int G_make_mapset_object_group_basedir(const char *, const char *);
 int G__make_mapset_element_misc(const char *, const char *);
 int G_mapset_permissions(const char *);
 int G_mapset_permissions2(const char *, const char *, const char *);
@@ -759,9 +762,12 @@ char *G_strcasestr(const char *, const char *);
 /* tempfile.c */
 void G_init_tempfile(void);
 char *G_tempfile(void);
+char *G_tempfile_basedir(const char *);
 char *G_tempfile_pid(int);
+char *G_tempfile_pid_basedir(int, const char *);
 void G_temp_element(char *);
 void G__temp_element(char *, int);
+void G__temp_element_basedir(char *, const char *);
 
 /* mkstemp.c */
 char *G_mktemp(char *);
