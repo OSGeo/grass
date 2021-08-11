@@ -930,7 +930,7 @@ class GMFrame(wx.Frame):
                 self.notebookLayers.SetSelection(pgnum)
                 self.currentPage = self.notebookLayers.GetCurrentPage()
                 self.currentPageNum = self.notebookLayers.GetSelection()
-        except Exception:
+        except TypeError:
             pass
 
         event.Skip()
