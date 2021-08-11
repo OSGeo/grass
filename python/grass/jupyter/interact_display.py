@@ -65,7 +65,7 @@ class InteractiveMap:
             "wgs84", self._tmp_dir.name, "4326", self._src_env
         )
 
-        # Get Center of tmp GRASS region
+        # Get Center of temporary GRASS regions
         center = gs.parse_command("g.region", flags="cg", env=self._wgs84_env)
         center = (float(center["center_northing"]), float(center["center_easting"]))
 
@@ -76,7 +76,7 @@ class InteractiveMap:
             location=center,
             tiles="cartodbpositron",
         )
-        # Create LayerControl default
+        # Set LayerControl default
         self.layer_control = False
 
         # Cleanup rcfiles with finalizer
@@ -152,10 +152,11 @@ class InteractiveMap:
             location=env_info["LOCATION_NAME"],
             env=self._psmerc_env,
         )
+        tgt_name = full_name.replace("@", "_")
         gs.run_command(
             "r.proj",
             input=full_name,
-            output=name,
+            output=tgt_name,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             resolution=resolution,
@@ -165,14 +166,14 @@ class InteractiveMap:
         region_info = gs.region(env=self._src_env)
         png_width = region_info["cols"]
         png_height = region_info["rows"]
-        filename = os.path.join(self._tmp_dir.name, "map.png")
+        filename = os.path.join(self._tmp_dir.name, f"{tgt_name}.png")
         m = GrassRenderer(
             width=png_width,
             height=png_height,
             env=self._psmerc_env,
             filename=filename,
         )
-        m.run("d.rast", map=name)
+        m.run("d.rast", map=tgt_name)
 
         # Reproject bounds of raster for overlaying png
         # Bounds need to be in WGS84
