@@ -8,7 +8,8 @@ DSTDIR = $(ETC)/python/grass/jupyter
 MODULES = \
 	setup \
 	display \
-	interact_display
+	interact_display \
+	utils
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

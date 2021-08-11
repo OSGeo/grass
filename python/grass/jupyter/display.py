@@ -71,6 +71,7 @@ class GrassRenderer:
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
+        self._env["GRASS_RENDER_TRANSPARENT"] = "TRUE"
 
         # Create PNG file for map
         # If not user-supplied, we will write it to a map.png in a
