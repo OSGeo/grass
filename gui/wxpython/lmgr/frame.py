@@ -412,7 +412,9 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page=self.datacatalog, text=_("Data"), name="catalog")
 
         # add 'display' widget to main notebook page
-        self.notebook.AddPage(page=self.notebookLayers, text=_("Display"), name="layers")
+        self.notebook.AddPage(
+            page=self.notebookLayers, text=_("Display"), name="layers"
+        )
 
         # add 'modules' widget to main notebook page
         if self.search:
