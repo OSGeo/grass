@@ -311,7 +311,8 @@ class GMFrame(wx.Frame):
         self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
         # bindings
         self.mapnotebook.Bind(
-            aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnMapNotebookPageChanged
+            aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
+            lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit()
         )
 
     def _createDataCatalog(self, parent):
@@ -484,14 +485,13 @@ class GMFrame(wx.Frame):
                 return pgnum
             return None
 
-        def GetLayerTreeIndex():
-            """Callback to find out GetLayerTreeIndex"""
-            return self.notebookLayers.GetPageIndex(page)
-
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
-        mapdisplay.getLayerTreeIndex = GetLayerTreeIndex
 
         # bind various events
+        mapdisplay.onFocus.connect(
+            lambda page=self.currentPage: self._onMapDisplayFocus(page),
+        )
+
         mapdisplay.starting3dMode.connect(
             lambda firstTime, mapDisplayPage=self.currentPage: self._onStarting3dMode(
                 mapDisplayPage
@@ -810,6 +810,7 @@ class GMFrame(wx.Frame):
 
         win = SwipeMapFrame(parent=self, giface=self._giface)
 
+
         rasters = []
         tree = self.GetLayerTree()
         if tree:
@@ -914,24 +915,6 @@ class GMFrame(wx.Frame):
         maptree.Close(True)
 
         self.currentPage = None
-
-        event.Skip()
-
-    def OnMapNotebookPageChanged(self, event):
-        """Page in map notebook changed.
-        Also change active tab in Display panel."""
-        if self.workspace_manager.loadingWorkspace:
-            return
-
-        try:
-            currentMapDisp = self.mapnotebook.GetCurrentPage()
-            pgnum = currentMapDisp.getLayerTreeIndex()
-            if pgnum > -1:
-                self.notebookLayers.SetSelection(pgnum)
-                self.currentPage = self.notebookLayers.GetCurrentPage()
-                self.currentPageNum = self.notebookLayers.GetSelection()
-        except TypeError:
-            pass
 
         event.Skip()
 
@@ -1886,6 +1869,18 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"].append(dbmanager)
         # show ATM window
         dbmanager.Show()
+
+    def _onMapDisplayFocus(self, notebookLayerPage):
+        """Changes bookcontrol page to page associated with display."""
+        # moved from mapdisp/frame.py
+        # TODO: why it is called 3 times when getting focus?
+        # and one times when loosing focus?
+        if self.workspace_manager.loadingWorkspace:
+            return
+        pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
+        if pgnum > -1:
+            self.notebookLayers.SetSelection(pgnum)
+            self.currentPage = self.notebookLayers.GetCurrentPage()
 
     def _onStarting3dMode(self, mapDisplayPage):
         """Disables 3D mode for all map displays except for @p mapDisplay"""

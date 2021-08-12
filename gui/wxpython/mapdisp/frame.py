@@ -113,7 +113,9 @@ class MapFrame(SingleMapFrame):
         self.tree = tree
         # checks for saving workspace
         self.canCloseDisplayCallback = None
-        self.getLayerTreeIndex = None
+
+        # Emitted when switching map notebook tabs (Single-Window)
+        self.onFocus = Signal("MapPanel.onFocus")
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already actived.
