@@ -120,11 +120,14 @@ int main(int argc, char **argv)
     {
       G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
     }
-    #if defined(_OPENMP)
-        omp_set_num_threads(nprocs);
-    #else
-        nprocs = 1;
-    #endif
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
+    nprocs = 1;
+#endif
 
     out_name = opt2->answer;
     filt_name = opt3->answer;
