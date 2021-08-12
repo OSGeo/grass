@@ -301,8 +301,9 @@ int main(int argc, char *argv[])
                 for (t = 0; t < nprocs; t++)
                     inputs[t] = G_realloc(inputs[t], max_inputs * sizeof(struct input));
             }
+
             for (t = 0; t < nprocs; t++) {
-                p = &inputs[t][num_inputs++];
+                p = &inputs[t][num_inputs];
 
                 p->name = G_store(name);
                 p->weight = weight;
@@ -323,6 +324,7 @@ int main(int argc, char *argv[])
                 p->buf = Rast_allocate_d_buf();
             }
 
+            num_inputs++;
         }
 
         if (num_inputs < 1)
