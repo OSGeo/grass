@@ -16,17 +16,17 @@
 #
 #############################################################################
 
-# Dependencies
 import os
 import unittest
+import sys
 from pathlib import Path
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 
-# Helper function
 def can_import_folium():
+    """Test folium import to see if test can be run."""
     try:
         import folium
 
@@ -35,7 +35,6 @@ def can_import_folium():
         return False
 
 
-# Tests
 class TestDisplay(TestCase):
     # Setup variables
     files = []
@@ -60,9 +59,16 @@ class TestDisplay(TestCase):
         This is executed after each test run.
         """
         for f in self.files:
-            Path(f).unlink(missing_ok=True)
+            f = Path(f)
+            if sys.version_info < (3, 8):
+                try:
+                    os.remove(f)
+                except FileNotFoundError:
+                    pass
+            else:
+                f.unlink(missing_ok=True)
 
-    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_defaults(self):
         """Test that GrassRenderer can create a map with default settings."""
         # Create a map with default inputs
@@ -73,21 +79,22 @@ class TestDisplay(TestCase):
         # Assert image exists
         self.assertFileExists(grass_renderer._filename)
 
-    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_filename(self):
         """Test that GrassRenderer creates maps with unique filenames."""
         # Create map with unique filename
-        grass_renderer = gj.GrassRenderer(filename="test_filename.png")
+        unique_filename = "test_filename.png"
+        grass_renderer = gj.GrassRenderer(filename=unique_filename)
         # Add files to self for cleanup later
         self.files.append("test_filename.png")
         self.files.append("test_filename.grass_vector_legend")
         # Add a vector and a raster to the map
         grass_renderer.run("d.rast", map="elevation")
         grass_renderer.run("d.vect", map="roadsmajor")
-        # Assert image exists
+        # Make sure image was created
         self.assertFileExists("test_filename.png")
 
-    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_hw(self):
         """Test that GrassRenderer creates maps with unique height and widths."""
         # Create map with height and width parameters
@@ -95,7 +102,7 @@ class TestDisplay(TestCase):
         # Add just a vector (for variety here)
         grass_renderer.run("d.vect", map="roadsmajor")
 
-    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_env(self):
         """Test that we can hand an environment to GrassRenderer."""
         # Create map with environment parameter
@@ -103,7 +110,7 @@ class TestDisplay(TestCase):
         # Add just a raster (again for variety)
         grass_renderer.run("d.rast", map="elevation")
 
-    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_text(self):
         """Test that we can set a unique text_size in GrassRenderer."""
         # Create map with unique text_size parameter
@@ -112,13 +119,34 @@ class TestDisplay(TestCase):
         grass_renderer.run("d.vect", map="roadsmajor")
         grass_renderer.run("d.rast", map="elevation")
 
-    @unittest.skipIf(can_import_folium() is False, "Cannot import folium")
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_shortcut(self):
         """Test that we can use display shortcuts with __getattr__."""
         # Create map
         grass_renderer = gj.GrassRenderer()
         # Add raster to map with shortcut
         grass_renderer.d_rast(map="elevation")
+        grass_renderer.d_vect(map="roadsmajor")
+
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
+    def test_shortcut_error(self):
+        """Test that passing an incorrect attribute raises
+        appropriate error"""
+        # Create map
+        grass_renderer = gj.GrassRenderer()
+        # Pass bad shortcuts
+        with self.assertRaisesRegex(AttributeError, "Module must begin with 'd_'"):
+            grass_renderer.r_watersheds()
+        with self.assertRaisesRegex(AttributeError, "d.ModuleDoesNotExist"):
+            grass_renderer.d_ModuleDoesNotExist()
+
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
+    def test_InteractiveMap(self):
+        # Create InteractiveMap
+        interactive_map = gj.InteractiveMap()
+        # Add raster and vector
+        interactive_map.add_raster("elevation")
+        interactive_map.add_vector("roadsmajor")
 
 
 if __name__ == "__main__":

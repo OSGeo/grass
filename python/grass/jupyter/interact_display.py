@@ -15,7 +15,6 @@ import sys
 import tempfile
 import weakref
 from pathlib import Path
-import folium
 import grass.script as gs
 from .display import GrassRenderer
 from .utils import (
@@ -45,6 +44,9 @@ class InteractiveMap:
         :param int width: width in pixels of figure (default 400)
         """
 
+        import folium
+        self._folium = folium
+
         # Store height and width
         self.width = width
         self.height = height
@@ -70,7 +72,7 @@ class InteractiveMap:
         center = (float(center["center_northing"]), float(center["center_easting"]))
 
         # Create Folium Map
-        self.map = folium.Map(
+        self.map = self._folium.Map(
             width=self.width,
             height=self.height,
             location=center,
@@ -128,7 +130,7 @@ class InteractiveMap:
             env=self._wgs84_env,
         )
         # Import GeoJSON to folium and add to map
-        folium.GeoJson(str(json_file), name=name).add_to(self.map)
+        self._folium.GeoJson(str(json_file), name=name).add_to(self.map)
 
     def add_raster(self, name, opacity=0.8):
         """Imports raster into temporary WGS84 location,
@@ -187,7 +189,7 @@ class InteractiveMap:
         ]
 
         # Overlay image on folium map
-        img = folium.raster_layers.ImageOverlay(
+        img = self._folium.raster_layers.ImageOverlay(
             image=filename,
             name=name,
             bounds=new_bounds,
@@ -201,7 +203,7 @@ class InteractiveMap:
     def add_layer_control(self, **kwargs):
         """Add layer control to display"""
         self.layer_control = True
-        self.layer_control_object = folium.LayerControl(**kwargs)
+        self.layer_control_object = self._folium.LayerControl(**kwargs)
 
     def show(self):
         """This function creates a folium map with a GRASS raster
@@ -213,7 +215,7 @@ class InteractiveMap:
         if self.layer_control:
             self.map.add_child(self.layer_control_object)
         # Create Figure
-        fig = folium.Figure(width=self.width, height=self.height)
+        fig = self._folium.Figure(width=self.width, height=self.height)
         # Add map to figure
         fig.add_child(self.map)
 
