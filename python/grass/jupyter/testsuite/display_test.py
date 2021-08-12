@@ -83,11 +83,11 @@ class TestDisplay(TestCase):
     def test_filename(self):
         """Test that GrassRenderer creates maps with unique filenames."""
         # Create map with unique filename
-        unique_filename = "test_filename.png"
-        grass_renderer = gj.GrassRenderer(filename=unique_filename)
+        custom_filename = "test_filename.png"
+        grass_renderer = gj.GrassRenderer(filename=custon_filename)
         # Add files to self for cleanup later
-        self.files.append("test_filename.png")
-        self.files.append("test_filename.grass_vector_legend")
+        self.files.append(custom_filename)
+        self.files.append(f"{custom_filename}.grass_vector_legend")
         # Add a vector and a raster to the map
         grass_renderer.run("d.rast", map="elevation")
         grass_renderer.run("d.vect", map="roadsmajor")
@@ -137,7 +137,7 @@ class TestDisplay(TestCase):
         # Pass bad shortcuts
         with self.assertRaisesRegex(AttributeError, "Module must begin with 'd_'"):
             grass_renderer.r_watersheds()
-        with self.assertRaisesRegex(AttributeError, "d.ModuleDoesNotExist"):
+        with self.assertRaisesRegex(AttributeError, "d.module_does_not_exist"):
             grass_renderer.d_ModuleDoesNotExist()
 
     @unittest.skipIf(not can_import_folium(), "Cannot import folium")

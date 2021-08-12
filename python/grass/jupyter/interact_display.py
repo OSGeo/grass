@@ -45,6 +45,7 @@ class InteractiveMap:
         """
 
         import folium
+
         self._folium = folium
 
         # Store height and width
