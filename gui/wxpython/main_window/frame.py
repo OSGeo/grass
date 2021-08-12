@@ -312,7 +312,7 @@ class GMFrame(wx.Frame):
         # bindings
         self.mapnotebook.Bind(
             aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
-            lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit()
+            lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit(),
         )
 
     def _createDataCatalog(self, parent):
@@ -809,7 +809,6 @@ class GMFrame(wx.Frame):
         from mapswipe.frame import SwipeMapFrame
 
         win = SwipeMapFrame(parent=self, giface=self._giface)
-
 
         rasters = []
         tree = self.GetLayerTree()
