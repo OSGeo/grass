@@ -301,11 +301,14 @@ int main(int argc, char *argv[])
     {
       G_fatal_error(_("<%d> is not valid number of threads."), ncb.threads);
     }
-    #if defined(_OPENMP)
-        omp_set_num_threads(ncb.threads);
-    #else
-        ncb.threads = 1;
-    #endif
+#if defined(_OPENMP)
+    omp_set_num_threads(ncb.threads);
+#else
+    if (ncb.threads != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
+    ncb.threads = 1;
+#endif
 
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
 	G_fatal_error(_("-%c and %s= are mutually exclusive"),
