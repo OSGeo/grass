@@ -137,5 +137,5 @@ def call_module(
     output, errors = process.communicate(input=encode(decode(stdin)) if stdin else None)
     returncode = process.poll()
     if returncode:
-        raise CalledModuleError(returncode, module, kwargs, errors)
+        raise CalledModuleError(module, kwargs, returncode, errors)
     return decode(output) if output else None
