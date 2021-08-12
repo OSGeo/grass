@@ -147,6 +147,8 @@ class TestDisplay(TestCase):
         # Add raster and vector
         interactive_map.add_raster("elevation")
         interactive_map.add_vector("roadsmajor")
+        # Show
+        interactive_map.show()
 
 
 if __name__ == "__main__":
