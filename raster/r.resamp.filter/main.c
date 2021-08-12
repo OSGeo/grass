@@ -491,6 +491,9 @@ int main(int argc, char *argv[])
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
 #else
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
     nprocs = 1;
 #endif
 
