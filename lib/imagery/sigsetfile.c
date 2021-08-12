@@ -1,15 +1,15 @@
 /*!
-  \file lib/imagery/sigsetfile.c
- 
-  \brief Imagery Library - Signature file functions (statistics for i.smap)
- 
-  (C) 2001-2011, 2013 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author USA CERL
-*/
+   \file lib/imagery/sigsetfile.c
+
+   \brief Imagery Library - Signature file functions (statistics for i.smap)
+
+   (C) 2001-2011, 2013, 2021 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author USA CERL
+ */
 
 #include <string.h>
 
@@ -18,70 +18,46 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Create new signiture file in given group/subgroup
+   \brief Create new sigset file
 
-  Note: Prints warning on error and returns NULL.
+   \param name name of sigset file
 
-  \param group name of group
-  \param subgroup name of subgroup
-  \param name name of signiture file
-
-  \return pointer to FILE
-  \return NULL on error
-*/
-FILE *I_fopen_sigset_file_new(const char *group, const char *subgroup,
-			      const char *name)
+   \return pointer to FILE
+   \return NULL on error
+ */
+FILE *I_fopen_sigset_file_new(const char *name)
 {
-    char element[GPATH_MAX];
-    char group_name[GNAME_MAX], mapset[GMAPSET_MAX];
+    char element[GNAME_MAX];
     FILE *fd;
 
-    if (G_name_is_fully_qualified(group, group_name, mapset)) {
-	if (strcmp(mapset, G_mapset()) != 0)
-	    G_warning(_("Unable to create signature file <%s> for subgroup <%s> "
-			"of group <%s> - <%s> is not current mapset"),
-		      name, subgroup, group, mapset);
-    }
-    else { 
-	strcpy(group_name, group);
-    }
+    /* create sig directory */
+    I__make_signatures_element(I_SIGFILE_TYPE_SIGSET);
 
-    /* create sigset directory */
-    sprintf(element, "%s/subgroup/%s/sigset", group_name, subgroup);
-    G__make_mapset_element_misc("group", element);
+    I__get_signatures_element(element, I_SIGFILE_TYPE_SIGSET);
+    fd = G_fopen_new(element, name);
 
-    sprintf(element, "subgroup/%s/sigset/%s", subgroup, name);
-
-    fd = G_fopen_new_misc("group", element, group_name);
-    if (fd == NULL)
-	G_warning(_("Unable to create signature file <%s> for subgroup <%s> "
-		    "of group <%s>"),
-		  name, subgroup, group);
-    
     return fd;
 }
 
 /*!
-  \brief Open existing signiture file
+   \brief Open existing sigset signature file
 
-  \param group name of group (may be fully qualified)
-  \param subgroup name of subgroup
-  \param name name of signiture file
+   \param name name of signature file (may be fully qualified)
 
-  \return pointer to FILE*
-  \return NULL on error
-*/
-FILE *I_fopen_sigset_file_old(const char *group, const char *subgroup,
-			      const char *name)
+   \return pointer to FILE*
+   \return NULL on error
+ */
+FILE *I_fopen_sigset_file_old(const char *name)
 {
-    char element[GPATH_MAX];
-    char group_name[GNAME_MAX], group_mapset[GMAPSET_MAX];
+    char sig_name[GNAME_MAX], sig_mapset[GMAPSET_MAX];
+    char element[GNAME_MAX];
     FILE *fd;
 
-    G_unqualified_name(group, NULL, group_name, group_mapset);
-    sprintf(element, "subgroup/%s/sigset/%s", subgroup, name);
+    if (G_unqualified_name(name, NULL, sig_name, sig_mapset) == 0)
+        strcpy(sig_mapset, G_mapset());
 
-    fd = G_fopen_old_misc("group", element, group_name, group_mapset);
-    
+    I__get_signatures_element(element, I_SIGFILE_TYPE_SIGSET);
+    fd = G_fopen_old(element, sig_name, sig_mapset);
+
     return fd;
 }
