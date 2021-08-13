@@ -309,7 +309,6 @@ class GMFrame(wx.Frame):
             agwStyle=notebook_style,
         )
         self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
-
         # bindings
         self.mapnotebook.Bind(
             aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
@@ -483,9 +482,8 @@ class GMFrame(wx.Frame):
             """Window closed.
             Also close associated layer tree page
             """
-
             def CanCloseDisplay(askIfSaveWorkspace):
-                """Callback to check if user wants to close display"""
+                """Check if user wants to close display"""
                 pgnum = self.notebookLayers.GetPageIndex(page)
                 name = self.notebookLayers.GetPageText(pgnum)
                 caption = _("Close Map Display {}").format(name)
@@ -515,7 +513,6 @@ class GMFrame(wx.Frame):
         mapdisplay.closingDisplay.connect(
             lambda page=self.currentPage: self._onMapDisplayClose(page)
         )
-
         mapdisplay.starting3dMode.connect(
             lambda firstTime, mapDisplayPage=self.currentPage: self._onStarting3dMode(
                 mapDisplayPage
