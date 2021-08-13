@@ -84,7 +84,7 @@ class TestDisplay(TestCase):
         """Test that GrassRenderer creates maps with unique filenames."""
         # Create map with unique filename
         custom_filename = "test_filename.png"
-        grass_renderer = gj.GrassRenderer(filename=custon_filename)
+        grass_renderer = gj.GrassRenderer(filename=custom_filename)
         # Add files to self for cleanup later
         self.files.append(custom_filename)
         self.files.append(f"{custom_filename}.grass_vector_legend")
@@ -92,11 +92,11 @@ class TestDisplay(TestCase):
         grass_renderer.run("d.rast", map="elevation")
         grass_renderer.run("d.vect", map="roadsmajor")
         # Make sure image was created
-        self.assertFileExists("test_filename.png")
+        self.assertFileExists(custom_filename)
 
     @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_hw(self):
-        """Test that GrassRenderer creates maps with unique height and widths."""
+        """Test that GrassRenderer creates maps with custom height and widths."""
         # Create map with height and width parameters
         grass_renderer = gj.GrassRenderer(width=400, height=400)
         # Add just a vector (for variety here)
@@ -137,8 +137,8 @@ class TestDisplay(TestCase):
         # Pass bad shortcuts
         with self.assertRaisesRegex(AttributeError, "Module must begin with 'd_'"):
             grass_renderer.r_watersheds()
-        with self.assertRaisesRegex(AttributeError, "d.module_does_not_exist"):
-            grass_renderer.d_ModuleDoesNotExist()
+        with self.assertRaisesRegex(AttributeError, "d.module.does.not.exist"):
+            grass_renderer.d_module_does_not_exist()
 
     @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_InteractiveMap(self):
