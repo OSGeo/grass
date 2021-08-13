@@ -18,16 +18,16 @@ name: Docker
 
 on:
   push:
-    branches: [master, releasebranch_7_8, gha-docker]
+    branches: [master, releasebranch_7_8]
     tags: ['*.*.*']
     paths-ignore: ['doc/**']
   release:
-    types: [published, created]
+    types: [published]
 
 env:
     # Additionally mentioned in docker-sha-release-latest
     # as use of variable fails there
-    DOCKERHUB_REPOSITORY: mmacata/grass-py3-pdal
+    DOCKERHUB_REPOSITORY: mundialis/grass-py3-pdal
 
 jobs:
 
@@ -158,7 +158,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           # images: ${DOCKERHUB_REPOSITORY}
-          images: mmacata/grass-py3-pdal
+          images: mundialis/grass-py3-pdal
           tags: |
             type=ref,event=tag
           flavor: |
