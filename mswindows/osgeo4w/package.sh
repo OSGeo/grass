@@ -149,13 +149,13 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	log configure
 	./configure \
-	        --host=x86_64-w64-mingw32 \
+	    --host=x86_64-w64-mingw32 \
 		--with-libs="$OSGEO4W_ROOT_MSYS/lib" \
 		--with-includes=$OSGEO4W_ROOT_MSYS/include \
-                --libexecdir=$OSGEO4W_ROOT_MSYS/bin \
-                --prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
-                --bindir=$OSGEO4W_ROOT_MSYS/bin \
-                --includedir=$OSGEO4W_ROOT_MSYS/include \
+        --libexecdir=$OSGEO4W_ROOT_MSYS/bin \
+        --prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
+        --bindir=$OSGEO4W_ROOT_MSYS/bin \
+        --includedir=$OSGEO4W_ROOT_MSYS/include \
 		--without-x \
 		--with-cxx \
 		--enable-shared \
@@ -178,10 +178,10 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-nls \
 		--with-zstd \
 		--with-odbc \
-	        --with-cairo \
+	    --with-cairo \
 		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
-	        --with-opengl=windows \
+	    --with-opengl=windows \
 		--with-bzlib \
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config
 
