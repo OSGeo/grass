@@ -37,9 +37,13 @@ import math
 import json
 import pprint
 
-from grass.script.setup import set_gui_path
-set_gui_path()
-from projpicker_gui import gui
+has_gui = True
+try:
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+    from projpicker_gui import gui
+except Exception:
+    has_gui = False
 
 from .common import (BBox, _coor_sep, _pos_float_pat, _bbox_schema,
                      _bbox_columns, is_verbose, get_float)
@@ -2721,6 +2725,9 @@ def start(
     """
     projpicker_db = get_projpicker_db(projpicker_db)
     proj_db = get_proj_db(proj_db)
+
+    if not has_gui:
+        start_gui = None
 
     if fmt not in ("plain", "json", "pretty", "sqlite", "srid"):
         raise ValueError(f"{fmt}: Unsupported output format")
