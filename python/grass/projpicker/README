@@ -1,0 +1,10 @@
+projpicker.db is a SQLite database file that contains information about the
+extents of coordinate reference systems (CRSs). It holds one table called bbox
+whose schema is defined in _bbox_schema in common.py. This file can be
+regenerated from the PROJ database file proj.db. The current database was
+created using proj.db from pyproj 3.1.0.
+
+To recreate projpicker.db, run the following command from the GRASS
+installation directory in etc/python/grass:
+
+python -c "import projpicker as ppik; ppik.create_projpicker_db(True)"
