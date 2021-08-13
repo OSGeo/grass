@@ -6,9 +6,9 @@ import os
 
 import grass.projpicker as ppik
 
-projpicker_coordinates_env = "PROJPICKER_COORDINATES"
-projpicker_zoom_env = "PROJPICKER_ZOOM"
-projpicker_dzoom_env = "PROJPICKER_DZOOM"
+_projpicker_coordinates_env = "PROJPICKER_COORDINATES"
+_projpicker_zoom_env = "PROJPICKER_ZOOM"
+_projpicker_dzoom_env = "PROJPICKER_DZOOM"
 
 
 def get_latlon():
@@ -20,7 +20,7 @@ def get_latlon():
     Returns:
         float, float: Initial latitude and longitude in decimal degrees.
     """
-    coor = os.environ.get(projpicker_coordinates_env, "0,0")
+    coor = os.environ.get(_projpicker_coordinates_env, "0,0")
     lat, lon = ppik.parse_point(coor)
     if None in (lat, lon):
         lat = lon = 0
@@ -40,7 +40,7 @@ def get_zoom():
         int: Initial zoom level.
     """
     try:
-        zoom = min(max(round(float(os.environ.get(projpicker_zoom_env, 0))),
+        zoom = min(max(round(float(os.environ.get(_projpicker_zoom_env, 0))),
                        0), 18)
     except ValueError:
         zoom = 0
@@ -57,7 +57,7 @@ def get_dzoom():
         float: Delta zoom level.
     """
     try:
-        dzoom = min(max(float(os.environ.get(projpicker_dzoom_env, 1)), -18),
+        dzoom = min(max(float(os.environ.get(_projpicker_dzoom_env, 1)), -18),
                     18)
     except ValueError:
         dzoom = 1

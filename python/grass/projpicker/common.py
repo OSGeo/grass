@@ -7,17 +7,17 @@ import os
 import re
 import collections
 
-projpicker_verbose_env = "PROJPICKER_VERBOSE"
+_projpicker_verbose_env = "PROJPICKER_VERBOSE"
 
 # regular expression patterns
 # coordinate separator
-coor_sep = ","
-coor_sep_pat = f"[ \t]*[{coor_sep} \t][ \t]*"
+_coor_sep = ","
+_coor_sep_pat = f"[ \t]*[{_coor_sep} \t][ \t]*"
 # positive float
-pos_float_pat = "(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
+_pos_float_pat = "(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
 
 # bbox table schema
-bbox_schema = """
+_bbox_schema = """
 CREATE TABLE bbox (
     proj_table TEXT NOT NULL CHECK (length(proj_table) >= 1),
     crs_name TEXT NOT NULL CHECK (length(crs_name) >= 2),
@@ -46,20 +46,20 @@ CREATE TABLE bbox (
 """
 
 # all column names in the bbox table
-bbox_columns = re.sub("^ +| +$", "",
+_bbox_columns = re.sub("^ +| +$", "",
                re.sub("\n", " ",
                re.sub("(?:^[A-Z]| ).*", "",
                re.sub("\([^(]*\)", "",
                re.sub("^(?:CREATE TABLE.*|\))$|^ *", "",
-                      bbox_schema, flags=re.MULTILINE),
+                      _bbox_schema, flags=re.MULTILINE),
                       flags=re.DOTALL), flags=re.MULTILINE))).split()
 
 # BBox namedtuple class
-BBox = collections.namedtuple("BBox", bbox_columns)
+BBox = collections.namedtuple("BBox", _bbox_columns)
 
 
 def is_verbose():
-    return os.environ.get(projpicker_verbose_env, "NO") == "YES"
+    return os.environ.get(_projpicker_verbose_env, "NO") == "YES"
 
 
 def get_float(x):

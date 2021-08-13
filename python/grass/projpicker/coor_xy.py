@@ -6,16 +6,16 @@ the ProjPicker API.
 import re
 import sqlite3
 
-from .common import (pos_float_pat, coor_sep_pat, get_float,
+from .common import (_pos_float_pat, _coor_sep_pat, get_float,
                      query_using_cursor)
 
 # x,y
-xy_pat = f"([+-]?{pos_float_pat}){coor_sep_pat}([+-]?{pos_float_pat})"
+_xy_pat = f"([+-]?{_pos_float_pat}){_coor_sep_pat}([+-]?{_pos_float_pat})"
 
 # x,y
-xy_re = re.compile(f"^{xy_pat}$")
+_xy_re = re.compile(f"^{_xy_pat}$")
 # xy bbox
-xy_bbox_re = re.compile(f"^{xy_pat}{coor_sep_pat}{xy_pat}$")
+_xy_bbox_re = re.compile(f"^{_xy_pat}{_coor_sep_pat}{_xy_pat}$")
 
 
 ###############################################################################
@@ -39,7 +39,7 @@ def parse_point(point):
     x = y = None
     typ = type(point)
     if typ == str:
-        m = xy_re.match(point)
+        m = _xy_re.match(point)
         if m:
             x = float(m[1])
             y = float(m[2])
@@ -68,7 +68,7 @@ def parse_bbox(bbox):
     b = t = l = r = None
     typ = type(bbox)
     if typ == str:
-        m = xy_bbox_re.match(bbox)
+        m = _xy_bbox_re.match(bbox)
         if m:
             s = float(m[1])
             n = float(m[2])

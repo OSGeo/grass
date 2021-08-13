@@ -41,29 +41,29 @@ from grass.script.setup import set_gui_path
 set_gui_path()
 from projpicker_gui import gui
 
-from .common import (BBox, coor_sep, pos_float_pat, bbox_schema,
-                     bbox_columns, is_verbose, get_float)
+from .common import (BBox, _coor_sep, _pos_float_pat, _bbox_schema,
+                     _bbox_columns, is_verbose, get_float)
 from . import coor_latlon
 from . import coor_xy
 
 # module path
-module_path = os.path.dirname(__file__)
+_module_path = os.path.dirname(__file__)
 
 # environment variables for default paths
-projpicker_db_env = "PROJPICKER_DB"
-proj_db_env = "PROJ_DB"
+_projpicker_db_env = "PROJPICKER_DB"
+_proj_db_env = "PROJ_DB"
 # https://proj.org/usage/environmentvars.html
-proj_lib_env = "PROJ_LIB"
+_proj_lib_env = "PROJ_LIB"
 
 # Earth parameters from https://en.wikipedia.org/wiki/Earth_radius#Global_radii
 # equatorial radius in km
-rx = 6378.1370
+_rx = 6378.1370
 # polar radius in km
-ry = 6356.7523
+_ry = 6356.7523
 
-geom_var_chars = "([a-zA-Z0-9_]+)"
-geom_var_re = re.compile(f"^(?:{geom_var_chars}:|:{geom_var_chars}:|"
-                         f":{geom_var_chars})$")
+_geom_var_chars = "([a-zA-Z0-9_]+)"
+_geom_var_re = re.compile(f"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|"
+                          f":{_geom_var_chars})$")
 
 # geometry-bbox namedtuple class
 GeomBBox = collections.namedtuple("GeomBBox", "is_latlon type geom bbox")
@@ -144,15 +144,15 @@ def tidy_lines(lines):
                 words = lines[i].split()
                 all_nums = True
                 for word in words:
-                    if not re.match(f"^[+-]?{pos_float_pat}", word):
+                    if not re.match(f"^[+-]?{_pos_float_pat}", word):
                         all_nums = False
                         break
                 n = len(words)
-                if (all_nums and n in (2, 4) and coor_sep not in lines[i] and
+                if (all_nums and n in (2, 4) and _coor_sep not in lines[i] and
                     "=" not in lines[i]):
                     # normalize lat lon to lat,lon for multiple geometries per
                     # line; avoid any constraining directives using =
-                    lines[i] = coor_sep.join(words)
+                    lines[i] = _coor_sep.join(words)
                 elif (words[0].startswith("unit=") and '"' not in words[0] and
                       "'" not in words[0]):
                     # protect whitespaces in constraining directives
@@ -249,14 +249,14 @@ def calc_xy_at_lat_scaling(lat):
     if not -90 <= lat <= 90:
         raise ValueError(f"{lat}: Invalid latitude")
 
-    # (x/rx)**2 + (y/ry)**2 = 1
-    # x = rx*cos(theta2)
-    # y = ry*sin(theta2)
-    # theta2 = atan2(rx*tan(theta), ry)
+    # (x/_rx)**2 + (y/_ry)**2 = 1
+    # x = _rx*cos(theta2)
+    # y = _ry*sin(theta2)
+    # theta2 = atan2(_rx*tan(theta), _ry)
     theta = lat/180*math.pi
-    theta2 = math.atan2(rx*math.tan(theta), ry)
-    x = rx*math.cos(theta2)
-    y = ry*math.sin(theta2)
+    theta2 = math.atan2(_rx*math.tan(theta), _ry)
+    x = _rx*math.cos(theta2)
+    y = _ry*math.sin(theta2)
     return x, y
 
 
@@ -274,7 +274,7 @@ def calc_xy_at_lat_noscaling(lat):
     Returns:
         float, float: x and y.
     """
-    # (x/rx)**2 + (y/ry)**2 = (r*cos(theta)/rx)**2 + (r*sin(theta)/ry)**2 = 1
+    # (x/_rx)**2+(y/_ry)**2 = (r*cos(theta)/_rx)**2+(r*sin(theta)/_ry)**2 = 1
     r = calc_radius_at_lat(lat)
     theta = lat/180*math.pi
     x = r*math.cos(theta)
@@ -315,9 +315,10 @@ def calc_radius_at_lat(lat):
     if not -90 <= lat <= 90:
         raise ValueError(f"{lat}: Invalid latitude")
 
-    # (x/rx)**2 + (y/ry)**2 = (r*cos(theta)/rx)**2 + (r*sin(theta)/ry)**2 = 1
+    # (x/_rx)**2+(y/_ry)**2 = (r*cos(theta)/_rx)**2+(r*sin(theta)/_ry)**2 = 1
     theta = lat/180*math.pi
-    r = math.sqrt((rx*ry)**2/((math.cos(theta)*ry)**2+(math.sin(theta)*rx)**2))
+    r = math.sqrt((_rx*_ry)**2/((math.cos(theta)*_ry)**2+
+                  (math.sin(theta)*_rx)**2))
     return r
 
 
@@ -384,7 +385,7 @@ def get_version():
     Returns:
         str: ProjPicker version.
     """
-    with open(os.path.join(module_path, "VERSION")) as f:
+    with open(os.path.join(_module_path, "VERSION")) as f:
         version = f.read().strip()
     return version
 
@@ -403,10 +404,10 @@ def get_projpicker_db(projpicker_db=None):
         str: projpicker.db path.
     """
     if projpicker_db is None:
-        if projpicker_db_env in os.environ:
-            projpicker_db = os.environ[projpicker_db_env]
+        if _projpicker_db_env in os.environ:
+            projpicker_db = os.environ[_projpicker_db_env]
         else:
-            projpicker_db = os.path.join(module_path, "projpicker.db")
+            projpicker_db = os.path.join(_module_path, "projpicker.db")
     return projpicker_db
 
 
@@ -425,10 +426,10 @@ def get_proj_db(proj_db=None):
         str: proj.db path.
     """
     if proj_db is None:
-        if proj_db_env in os.environ:
-            proj_db = os.environ[proj_db_env]
+        if _proj_db_env in os.environ:
+            proj_db = os.environ[_proj_db_env]
         else:
-            proj_lib = os.environ.get(proj_lib_env, "/usr/share/proj")
+            proj_lib = os.environ.get(_proj_lib_env, "/usr/share/proj")
             proj_db = os.path.join(proj_lib, "proj.db")
     return proj_db
 
@@ -633,7 +634,7 @@ def create_projpicker_db(
             raise FileExistsError(f"{projpicker_db}: File already exists")
 
     with sqlite3.connect(projpicker_db) as projpicker_con:
-        projpicker_con.execute(bbox_schema)
+        projpicker_con.execute(_bbox_schema)
         projpicker_con.commit()
         with sqlite3.connect(proj_db) as proj_con:
             proj_cur = proj_con.cursor()
@@ -726,7 +727,7 @@ def write_bbox_db(
             raise FileExistsError(f"{bbox_db}: File already exists")
 
     with sqlite3.connect(bbox_db) as bbox_con:
-        bbox_con.execute(bbox_schema)
+        bbox_con.execute(_bbox_schema)
         bbox_con.commit()
 
         nrows = len(bbox)
@@ -824,10 +825,10 @@ def set_coordinate_system(coor_sys="latlon"):
 
     if coor_sys == "latlon":
         coor_mod = coor_latlon
-        point_re = coor_mod.latlon_re
+        point_re = coor_mod._latlon_re
     else:
         coor_mod = coor_xy
-        point_re = coor_mod.xy_re
+        point_re = coor_mod._xy_re
 
     parse_point = coor_mod.parse_point
     parse_bbox = coor_mod.parse_bbox
@@ -1096,7 +1097,7 @@ def parse_mixed_geoms(geoms):
                         (geoms[i] == "" or None in parse_point(geoms[i]) or
                         (("=" in geoms[i] and
                           geoms[i].split("=")[0] in constraints) or
-                         geom_var_re.match(geoms[i]))))):
+                         _geom_var_re.match(geoms[i]))))):
                 i += 1
             geom = parse_geom(geoms[g:i], geom_type)
             g = i - 1
@@ -1110,7 +1111,7 @@ def parse_mixed_geoms(geoms):
                not (type(geoms[i]) == str and
                     (("=" in geoms[i] and
                       geoms[i].split("=")[0] in constraints) or
-                     geom_var_re.match(geoms[i])))):
+                     _geom_var_re.match(geoms[i])))):
             i += 1
         ogeoms = parse_geoms(geoms[g:i], geom_type)
         g = i
@@ -1178,7 +1179,7 @@ def parse_mixed_geoms(geoms):
             elif geom in ("none", "all"):
                 stack_size += 1
             else:
-                m = geom_var_re.match(geom) if typ == str else None
+                m = _geom_var_re.match(geom) if typ == str else None
                 if m:
                     sav = m[1] is not None or m[2] is not None
                     use = m[2] is not None or m[3] is not None
@@ -1197,7 +1198,7 @@ def parse_mixed_geoms(geoms):
                     if use:
                         if name not in geom_vars:
                             raise SyntaxError(f"{name}: Undefined geometry "
-                                            "variable")
+                                              "variable")
                         stack_size += 1
                         if not sav:
                             outgeoms.append(geom)
@@ -1217,7 +1218,7 @@ def parse_mixed_geoms(geoms):
                 raise SyntaxError("Nothing to return from postfix stack")
             elif stack_size > 1:
                 raise SyntaxError(f"{stack_size}: Excessive stack size for "
-                                "postfix operations")
+                                  "postfix operations")
     finally:
         if was_latlon and not is_latlon():
             set_latlon()
@@ -1412,7 +1413,7 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
 
     if gbbox1.is_latlon == gbbox2.is_latlon:
         raise SyntaxError("Geometries in the same coordinate system cannot be "
-                        "matched")
+                          "matched")
 
     geom1 = gbbox1.geom
     geom2 = gbbox2.geom
@@ -2242,7 +2243,7 @@ def query_mixed_geoms(
             geom = geoms[g]
             typ = type(geom)
 
-            m = geom_var_re.match(geom) if typ == str else None
+            m = _geom_var_re.match(geom) if typ == str else None
             if m:
                 sav = m[1] is not None or m[2] is not None
                 use = m[2] is not None or m[3] is not None
@@ -2252,12 +2253,13 @@ def query_mixed_geoms(
                     geom_vars[name] = Geom(is_latlon(), geom_type, geoms[g])
                 if use:
                     if name not in geom_vars:
-                        raise SyntaxError(f"{name}: Undefined geometry variable")
+                        raise SyntaxError(f"{name}: Undefined geometry "
+                                          "variable")
                     nam = name
                     while True:
                         if nam not in geom_vars:
                             raise SyntaxError(f"{nam}: Undefined geometry "
-                                            "variable")
+                                              "variable")
                         geom = geom_vars[nam]
                         typ = type(geom.geom)
                         if not (typ == str and geom.geom.startswith(":")):
@@ -2265,7 +2267,7 @@ def query_mixed_geoms(
                         nam = geom.geom[1:]
                         if nam == name:
                             raise SyntaxError(f"{name}: Recursive geometry "
-                                            "variable")
+                                              "variable")
                     if geom.is_latlon != is_latlon():
                         sav_is_latlon = is_latlon()
                         if geom.is_latlon:
@@ -2315,7 +2317,7 @@ def query_mixed_geoms(
                     if geom == "match":
                         if None in (gbbox1.type, gbbox2.type):
                             raise SyntaxError("Non-raw geometries cannot be "
-                                            "matched")
+                                              "matched")
                         obbox = bbox_binary_operator(gbbox1.bbox, gbbox2.bbox,
                                                      "and")
                         gbbox1 = GeomBBox(gbbox1.is_latlon, gbbox1.type,
@@ -2517,7 +2519,7 @@ def stringify_bbox(bbox, header=True, separator="|"):
         bbox = [bbox]
 
     if header and bbox:
-        outstr = separator.join(bbox_columns) + "\n"
+        outstr = separator.join(_bbox_columns) + "\n"
     else:
         outstr = ""
     for row in bbox:
@@ -2719,9 +2721,6 @@ def start(
     """
     projpicker_db = get_projpicker_db(projpicker_db)
     proj_db = get_proj_db(proj_db)
-
-    if not has_gui:
-        start_gui = None
 
     if fmt not in ("plain", "json", "pretty", "sqlite", "srid"):
         raise ValueError(f"{fmt}: Unsupported output format")
