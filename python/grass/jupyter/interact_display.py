@@ -112,7 +112,7 @@ class InteractiveMap:
         file_info = gs.find_file(name, element="vector")
         full_name = file_info["fullname"]
         name = file_info["name"]
-        mapset=file_info["mapset"]
+        mapset = file_info["mapset"]
         new_name = full_name.replace("@", "_")
         # Reproject vector into WGS84 Location
         env_info = gs.gisenv(env=self._src_env)
