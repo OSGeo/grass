@@ -451,7 +451,7 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
         str: Unit name.
 
     Raises:
-        NotImplementedError: If no or multiple units of measure are found.
+        RuntimeError: If no or multiple units of measure are found.
     """
     if proj_table == "compound_crs":
         sql = f"""SELECT table_name, horiz_crs_auth_name, horiz_crs_code
@@ -505,9 +505,9 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
                re.sub("^PROJCS\[[^,]*,|\]$", "",
                       proj_cur.fetchone()[0]))))
         if unit == "":
-            raise NotImplementedError(f"{crs_auth}:{crs_code}: No units?")
+            raise RuntimeError(f"{crs_auth}:{crs_code}: No units?")
     elif nuoms > 1:
-        raise NotImplementedError(f"{crs_auth}:{crs_code}: Multiple units?")
+        raise RuntimeError(f"{crs_auth}:{crs_code}: Multiple units?")
 
     # use GRASS unit names
     unit = unit.replace(
@@ -2709,10 +2709,9 @@ def start(
         list: List of queried BBox instances sorted by area.
 
     Raises:
-        ValueError: If format is invalid.
-        NotImplementedError: If both overwrite and append are True, output is
-            None or "-" when append is True, or sqlite format is written to
-            stdout.
+        ValueError: If format is invalid, both overwrite and append are True,
+            output is None or "-" when append is True, or sqlite format is
+            written to stdout.
         FileExistsError: If either projpicker_db or outfile already exists when
             overwrite is False.
         FileNotFoundError: If proj_db does not exist when create is True,
@@ -2728,7 +2727,7 @@ def start(
         raise ValueError(f"{fmt}: Unsupported output format")
 
     if overwrite and append:
-        raise NotImplementedError("Both overwrite and append requested")
+        raise ValueError("Both overwrite and append requested")
 
     if create:
         if not overwrite and os.path.isfile(projpicker_db):
@@ -2743,7 +2742,7 @@ def start(
         raise FileExistsError(f"{outfile}: File already exists")
 
     if append and (not outfile or outfile == "-"):
-        raise NotImplementedError("Cannot append output to None or stdout")
+        raise ValueError("Cannot append output to None or stdout")
 
     if start_gui == "gui":
         bbox, *_ = gui.start(single=single)
@@ -2804,7 +2803,7 @@ def start(
         bbox_dict = dictify_bbox(bbox)
     elif fmt == "sqlite":
         if outfile == "-":
-            raise NotImplementedError("Cannot write sqlite output to stdout")
+            raise ValueError("Cannot write sqlite output to stdout")
         write_bbox_db(bbox, outfile, True)
         return bbox
 
