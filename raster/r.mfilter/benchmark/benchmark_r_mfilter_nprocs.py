@@ -3,6 +3,7 @@
 @author Aaron Saw Min Sern
 """
 
+from grass.exceptions import CalledModuleError
 from grass.pygrass.modules import Module
 from grass.script import tempfile
 from subprocess import DEVNULL
@@ -13,6 +14,7 @@ import grass.benchmark as bm
 def main():
     results = []
 
+    # Users can add more or modify existing reference maps
     benchmark(7071, "r.mfilter_50M", results)
     benchmark(10000, "r.mfilter_100M", results)
     benchmark(14142, "r.mfilter_200M", results)
@@ -21,8 +23,8 @@ def main():
     bm.nprocs_plot(results)
 
 
-def benchmark(length, label, results):
-    fractal = "benchmark_fractal"
+def benchmark(size, label, results):
+    reference = "r_mfilter_reference_map"
     output = "benchmark_r_mfilter_nprocs"
     filter = tempfile()
     with open(filter, "w") as w:
@@ -41,10 +43,10 @@ def benchmark(length, label, results):
                    TYPE    P"""
         )
 
-    generate_fractal(rows=length, cols=length, fname=fractal)
+    generate_map(rows=size, cols=size, fname=reference)
     module = Module(
         "r.mfilter",
-        input=fractal,
+        input=reference,
         output=output,
         filter=filter,
         run_=False,
@@ -52,13 +54,19 @@ def benchmark(length, label, results):
         overwrite=True,
     )
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=16, repeat=3))
-    Module("g.remove", quiet=True, flags="f", type="raster", name=fractal)
+    Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
     Module("g.remove", quiet=True, flags="f", type="raster", name=output)
 
 
-def generate_fractal(rows, cols, fname):
+def generate_map(rows, cols, fname):
     Module("g.region", flags="p", s=0, n=rows, w=0, e=cols, res=1)
-    Module("r.surf.fractal", output=fname)
+    # Generate using r.random.surface if r.surf.fractal fails
+    try:
+        print("Generating reference map using r.surf.fractal...")
+        Module("r.surf.fractal", output=fname)
+    except CalledModuleError:
+        print("r.surf.fractal fails, using r.random.surface instead...")
+        Module("r.random.surface", output=fname)
 
 
 if __name__ == "__main__":
