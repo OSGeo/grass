@@ -84,7 +84,13 @@ def estimate_resolution(raster, mapset, location, dbase, env):
                             environment
     """
     output = gs.read_command(
-        "r.proj", flags="g", input=raster, mapset=mapset, location=location, dbase=dbase, env=env
+        "r.proj",
+        flags="g",
+        input=raster,
+        mapset=mapset,
+        location=location,
+        dbase=dbase,
+        env=env,
     ).strip()
     params = gs.parse_key_val(output, vsep=" ")
     output = gs.read_command("g.region", flags="ug", env=env, **params)
