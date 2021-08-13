@@ -309,10 +309,15 @@ class GMFrame(wx.Frame):
             agwStyle=notebook_style,
         )
         self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
+
         # bindings
         self.mapnotebook.Bind(
             aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
             lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit(),
+        )
+        self.mapnotebook.Bind(
+            aui.EVT_AUINOTEBOOK_PAGE_CLOSE,
+            lambda evt: self.mapnotebook.GetCurrentPage().closingDisplay.emit(),
         )
 
     def _createDataCatalog(self, parent):
@@ -474,22 +479,41 @@ class GMFrame(wx.Frame):
         """Set up Map Display properties"""
         page = self.currentPage
 
-        def CanCloseDisplay(askIfSaveWorkspace):
-            """Callback to check if user wants to close display"""
-            pgnum = self.notebookLayers.GetPageIndex(page)
-            name = self.notebookLayers.GetPageText(pgnum)
-            caption = _("Close Map Display {}").format(name)
-            if not askIfSaveWorkspace or (
-                askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
-            ):
-                return pgnum
-            return None
+        def OnCloseWindow(event=None, askIfSaveWorkspace=True):
+            """Window closed.
+            Also close associated layer tree page
+            """
 
-        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+            def CanCloseDisplay(askIfSaveWorkspace):
+                """Callback to check if user wants to close display"""
+                pgnum = self.notebookLayers.GetPageIndex(page)
+                name = self.notebookLayers.GetPageText(pgnum)
+                caption = _("Close Map Display {}").format(name)
+                if not askIfSaveWorkspace or (
+                    askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
+                ):
+                    return pgnum
+                return None
+
+            if CanCloseDisplay:
+                pgnum = CanCloseDisplay(askIfSaveWorkspace=askIfSaveWorkspace)
+                if pgnum is not None:
+                    mapdisplay.CleanUp()
+                    if pgnum > -1:
+                        self._closePageNoEvent(page_index=pgnum)
+                        # Destroy is called when notebook page is deleted
+            else:
+                mapdisplay.CleanUp()
+                mapdisplay.Destroy()
+
+        mapdisplay.onCloseWindow = OnCloseWindow
 
         # bind various events
         mapdisplay.onFocus.connect(
             lambda page=self.currentPage: self._onMapDisplayFocus(page),
+        )
+        mapdisplay.closingDisplay.connect(
+            lambda page=self.currentPage: self._onMapDisplayClose(page)
         )
 
         mapdisplay.starting3dMode.connect(
@@ -499,7 +523,14 @@ class GMFrame(wx.Frame):
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+
+        # update shortcut for map display close
+        mapdisplay.shortcuts_table[0] = (
+            lambda evt: self.OnDisplayClose(),
+            wx.ACCEL_CTRL,
+            ord("W"),
+        )
+        mapdisplay._initShortcuts()
 
         # set default properties
         mapdisplay.SetProperties(
@@ -923,7 +954,6 @@ class GMFrame(wx.Frame):
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
         self.notebookLayers.DeletePage(page_index)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
-        self.mapnotebook.DeletePage(page_index)
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
@@ -1548,7 +1578,9 @@ class GMFrame(wx.Frame):
     def OnDisplayClose(self, event=None):
         """Close current map display window"""
         if self.currentPage and self.GetMapDisplay():
-            self.GetMapDisplay().OnCloseWindow(event)
+            page_index = self.mapnotebook.GetPageIndex(self.GetMapDisplay())
+            self.GetMapDisplay().closingDisplay.emit()
+            self.mapnotebook.DeletePage(page_index)
 
     def OnDisplayCloseAll(self, event):
         """Close all open map display windows (from menu)"""
@@ -1558,8 +1590,10 @@ class GMFrame(wx.Frame):
 
     def DisplayCloseAll(self):
         """Close all open map display windows"""
-        for display in self.GetMapDisplay(onlyCurrent=False):
-            display.OnCloseWindow(event=None, askIfSaveWorkspace=False)
+        for mapdisplay in self.GetAllMapDisplays():
+            page_index = self.mapnotebook.GetPageIndex(mapdisplay)
+            mapdisplay.closingDisplay.emit()
+            self.mapnotebook.DeletePage(page_index)
 
     def OnRenderAllMapDisplays(self, event=None):
         for display in self.GetAllMapDisplays():
@@ -1880,6 +1914,16 @@ class GMFrame(wx.Frame):
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)
             self.currentPage = self.notebookLayers.GetCurrentPage()
+
+    def _onMapDisplayClose(self, notebookLayerPage):
+        """Checks if a user wants to close map display.
+        If yes, map display is closed."""
+        if not notebookLayerPage:
+            notebookLayerPage = self.currentPage
+        pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
+        mapdisp = notebookLayerPage.maptree.GetMapDisplay()
+        if pgnum > -1:
+            mapdisp.onCloseWindow()
 
     def _onStarting3dMode(self, mapDisplayPage):
         """Disables 3D mode for all map displays except for @p mapDisplay"""

@@ -111,8 +111,10 @@ class MapFrame(SingleMapFrame):
         # Layer Manager layer tree object
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
-        # checks for saving workspace
+        # checks for saving workspace, used only for Multi-Window GUI
         self.canCloseDisplayCallback = None
+        # map display close, used only for Single-Window GUI
+        self.onCloseWindow = None
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
@@ -975,7 +977,8 @@ class MapFrame(SingleMapFrame):
 
     def OnCloseWindow(self, event, askIfSaveWorkspace=True):
         """Window closed.
-        Also close associated layer tree page
+        Also close associated layer tree page.
+        Used only for Multi-Window GUI.
         """
         Debug.msg(2, "MapFrame.OnCloseWindow()")
         if self.canCloseDisplayCallback:
