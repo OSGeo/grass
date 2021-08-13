@@ -31,22 +31,49 @@ src=$(pwd)
 
 # compile
 
-export PATH=/mingw64/bin:/c/OSGeo4W/bin:/usr/bin
+export PATH=/c/OSGeo4W/bin:/usr/bin:/mingw64/bin
+export C_INCLUDE_PATH=".:$osgeo4w_path/include:$src/dist.$arch/include:/c/msys64/mingw64/include"
+export PYTHONHOME=/c/OSGeo4W/apps/Python39
 
 OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     ./configure \
-    --host=$arch \
-    --without-fftw \
-    --with-includes=$osgeo4w_path/include \
-    --with-libs="$osgeo4w_path/lib $osgeo4w_path/bin" \
+    --with-libs="$OSGEO4W_ROOT_MSYS/lib" \
+    --with-includes=$OSGEO4W_ROOT_MSYS/include \
+    --libexecdir=$OSGEO4W_ROOT_MSYS/bin \
+    --prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
+    --bindir=$OSGEO4W_ROOT_MSYS/bin \
+    --includedir=$OSGEO4W_ROOT_MSYS/include \
+    --without-x \
+    --with-cxx \
+    --enable-shared \
+    --enable-largefile \
+    --with-openmp \
+    --with-fftw \
     --with-nls \
-    --with-freetype-includes=$osgeo4w_path/include/freetype2 \
+    --with-freetype \
+    --with-freetype-includes=/mingw64/include/freetype2 \
+    --with-proj-share=$OSGEO4W_ROOT_MSYS/share/proj \
+    --with-proj-includes=$OSGEO4W_ROOT_MSYS/include \
+    --with-proj-libs=$OSGEO4W_ROOT_MSYS/lib \
+    --with-postgres \
+    --with-postgres-includes=$OSGEO4W_ROOT_MSYS/include \
+    --with-postgres-libs=$PWD/mswindows/osgeo4w/lib \
+    --with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
+    --with-geos=$PWD/mswindows/osgeo4w/geos-config \
+    --with-sqlite \
+    --with-sqlite-includes=$OSGEO4W_ROOT_MSYS/include \
+    --with-sqlite-libs=$PWD/mswindows/osgeo4w/lib \
+    --with-regex \
+    --with-nls \
+    --with-zstd \
+    --with-odbc \
+    --with-cairo \
+    --with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
+    --with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
+    --with-opengl=windows \
     --with-bzlib \
-    --with-geos=$src/mswindows/osgeo4w/geos-config \
-    --with-netcdf=$osgeo4w_path/bin/nc-config \
-    --with-proj-includes=$osgeo4w_path/include/proj \
-    --with-proj-libs=$osgeo4w_path/lib \
-    --with-gdal=$src/mswindows/osgeo4w/gdal-config \
+    --with-liblas=$PWD/mswindows/osgeo4w/liblas-config
+    --with-netcdf=$OSGEO4W_ROOT_MSYS/bin/nc-config \
     --with-opengl=windows
 
 make
@@ -69,7 +96,8 @@ dist_esc="$src_esc\\\\$dist"
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%PATH%
+
+set PATH=%PATH%;C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
@@ -84,7 +112,7 @@ EOT
 unix2dos $dist/etc/env.bat
 
 (
-    sed -e 's/^\(call "\)%~dp0\(.*\)$/\1C:\\OSGeo4W\\bin\2/' \
+    sed -e 's/^\(call "\)%~dp0\(.*\)$/\1C:\\OSGeo4W64\\bin\2/' \
         -e 's/^\(call "\).*\(\\etc\\env\.bat"\)$/\1'$dist_esc'\2/' \
         -e 's/^\(.* "\)%GISBASE%\\etc\(\\grass.*\)$/\1%GISBASE%\\..\\'$bin'\2/' \
         -e 's/@POSTFIX@/'$ver'/g' \
@@ -112,7 +140,9 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=C:\\msys64\\mingw64\\bin;C:\\msys64\\usr\\bin;%OSGEO4W_ROOT%\\apps\\msys\\bin;%PATH%
+set PATH=%OSGEO4W_ROOT%\\bin;%PATH%
+
+IF EXISTS "C:\msys64/usr/bin" set PATH=%PATH%;C:/msys64/usr/bin
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
