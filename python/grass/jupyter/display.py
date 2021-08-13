@@ -121,4 +121,5 @@ class GrassRenderer:
     def show(self):
         """Displays a PNG image of the map"""
         from IPython.display import Image
+
         return Image(self._filename)
