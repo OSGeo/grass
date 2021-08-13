@@ -112,20 +112,24 @@ class InteractiveMap:
         file_info = gs.find_file(name, element="vector")
         full_name = file_info["fullname"]
         name = file_info["name"]
+        mapset=file_info["mapset"]
+        new_name = full_name.replace("@", "_")
         # Reproject vector into WGS84 Location
         env_info = gs.gisenv(env=self._src_env)
         gs.run_command(
             "v.proj",
-            input=full_name,
+            input=name,
+            output=new_name,
+            mapset=mapset,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             env=self._wgs84_env,
         )
         # Convert to GeoJSON
-        json_file = Path(self._tmp_dir.name) / f"tmp_{name}.json"
+        json_file = Path(self._tmp_dir.name) / f"{new_name}.json"
         gs.run_command(
             "v.out.ogr",
-            input=name,
+            input=new_name,
             output=json_file,
             format="GeoJSON",
             env=self._wgs84_env,
@@ -143,16 +147,18 @@ class InteractiveMap:
         """
 
         # Find full name of raster
-        file_info = gs.find_file(name, element="cell")
+        file_info = gs.find_file(name, element="cell", env=self._src_env)
         full_name = file_info["fullname"]
         name = file_info["name"]
+        mapset = file_info["mapset"]
 
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
         resolution = estimate_resolution(
-            raster=full_name,
-            dbase=env_info["GISDBASE"],
+            raster=name,
+            mapset=mapset,
             location=env_info["LOCATION_NAME"],
+            dbase=env_info["GISDBASE"],
             env=self._psmerc_env,
         )
         tgt_name = full_name.replace("@", "_")
@@ -160,6 +166,7 @@ class InteractiveMap:
             "r.proj",
             input=full_name,
             output=tgt_name,
+            mapset=mapset,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             resolution=resolution,
