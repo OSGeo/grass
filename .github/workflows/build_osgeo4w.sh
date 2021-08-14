@@ -35,7 +35,7 @@ export PATH=/c/OSGeo4W/bin:/usr/bin:/mingw64/bin
 export C_INCLUDE_PATH=".:$osgeo4w_path/include:$src/dist.$arch/include:/c/msys64/mingw64/include"
 export PYTHONHOME=/c/OSGeo4W/apps/Python39
 
-OSGEO4W_ROOT_MSYS=$osgeo4w_path
+export OSGEO4W_ROOT_MSYS=$osgeo4w_path
 
 ./configure \
     --host=$arch \
@@ -70,7 +70,7 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path
     --with-zstd \
     --with-odbc \
     --with-cairo \
-    --with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
+    --with-cairo-includes=$src/include \
     --with-cairo-ldflags="-L$src/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
     --with-opengl=windows \
     --with-bzlib \
