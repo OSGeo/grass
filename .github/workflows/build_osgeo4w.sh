@@ -64,7 +64,7 @@ export OSGEO4W_ROOT_MSYS=$osgeo4w_path
     --with-geos=$src/mswindows/osgeo4w/geos-config \
     --with-sqlite \
     --with-sqlite-includes=$osgeo4w_path/include \
-    --with-sqlite-libs=$src/mswindows/osgeo4w/lib \
+    --with-sqlite-libs=$osgeo4w_path/lib \
     --with-regex \
     --with-nls \
     --with-zstd \
