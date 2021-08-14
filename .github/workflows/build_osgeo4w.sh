@@ -35,15 +35,23 @@ export PATH=/c/OSGeo4W/bin:/usr/bin:/mingw64/bin
 export C_INCLUDE_PATH=".:$osgeo4w_path/include:$src/dist.$arch/include:/c/msys64/mingw64/include"
 export PYTHONHOME=/c/OSGeo4W/apps/Python39
 
-OSGEO4W_ROOT_MSYS=$osgeo4w_path \
-    ./configure \
+OSGEO4W_ROOT_MSYS=$osgeo4w_path
+
+echo $OSGEO4W_ROOT_MSYS
+echo $osgeo4w_path
+
+echo $OSGEO4W_ROOT_MSYS/include
+echo ${OSGEO4W_ROOT_MSYS}/include
+
+
+./configure \
     --host=$arch \
-    --with-libs="$OSGEO4W_ROOT_MSYS/lib" \
-    --with-includes=$OSGEO4W_ROOT_MSYS/include \
-    --libexecdir=$OSGEO4W_ROOT_MSYS/bin \
-    --prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
-    --bindir=$OSGEO4W_ROOT_MSYS/bin \
-    --includedir=$OSGEO4W_ROOT_MSYS/include \
+    --with-libs="$osgeo4w_path/lib" \
+    --with-includes=$osgeo4w_path/include \
+    --libexecdir=$osgeo4w_path/bin \
+    --prefix=$osgeo4w_path/apps/grass \
+    --bindir=$osgeo4w_path/bin \
+    --includedir=$osgeo4w_path/include \
     --without-x \
     --with-cxx \
     --enable-shared \
@@ -53,29 +61,28 @@ OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     --with-nls \
     --with-freetype \
     --with-freetype-includes=/mingw64/include/freetype2 \
-    --with-proj-share=$OSGEO4W_ROOT_MSYS/share/proj \
-    --with-proj-includes=$OSGEO4W_ROOT_MSYS/include \
-    --with-proj-libs=$OSGEO4W_ROOT_MSYS/lib \
+    --with-proj-share=$osgeo4w_path/share/proj \
+    --with-proj-includes=$osgeo4w_path/include \
+    --with-proj-libs=$osgeo4w_path/lib \
     --with-postgres \
-    --with-postgres-includes=$OSGEO4W_ROOT_MSYS/include \
-    --with-postgres-libs=$PWD/mswindows/osgeo4w/lib \
-    --with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
-    --with-geos=$PWD/mswindows/osgeo4w/geos-config \
+    --with-postgres-includes=$osgeo4w_path/include \
+    --with-postgres-libs=$src/mswindows/osgeo4w/lib \
+    --with-gdal=$src/mswindows/osgeo4w/gdal-config \
+    --with-geos=$src/mswindows/osgeo4w/geos-config \
     --with-sqlite \
-    --with-sqlite-includes=$OSGEO4W_ROOT_MSYS/include \
-    --with-sqlite-libs=$PWD/mswindows/osgeo4w/lib \
+    --with-sqlite-includes=$osgeo4w_path/include \
+    --with-sqlite-libs=$src/mswindows/osgeo4w/lib \
     --with-regex \
     --with-nls \
     --with-zstd \
     --with-odbc \
     --with-cairo \
     --with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
-    --with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
+    --with-cairo-ldflags="-L$src/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
     --with-opengl=windows \
     --with-bzlib \
-    --with-liblas=$PWD/mswindows/osgeo4w/liblas-config
-    --with-netcdf=$OSGEO4W_ROOT_MSYS/bin/nc-config \
-    --with-opengl=windows
+    --with-liblas=$src/mswindows/osgeo4w/liblas-config \
+    --with-netcdf=$osgeo4w_path/bin/nc-config
 
 make
 
