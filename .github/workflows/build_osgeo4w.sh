@@ -59,7 +59,7 @@ export OSGEO4W_ROOT_MSYS=$osgeo4w_path
     --with-proj-libs=$osgeo4w_path/lib \
     --with-postgres \
     --with-postgres-includes=$osgeo4w_path/include \
-    --with-postgres-libs=$src/mswindows/osgeo4w/lib \
+    --with-postgres-libs=$osgeo4w_path/lib \
     --with-gdal=$src/mswindows/osgeo4w/gdal-config \
     --with-geos=$src/mswindows/osgeo4w/geos-config \
     --with-sqlite \
