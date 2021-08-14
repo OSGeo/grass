@@ -128,6 +128,10 @@ test $package -eq 0 && exit
 opt_path=$osgeo4w_path/opt
 grass_path=$opt_path/grass
 
+if [ "add_msys" ]; then
+    msys_path=";C:/msys64/usr/bin"
+fi
+
 mkdir -p $opt_path
 cp -a $dist $grass_path
 # have a versionless and versioned startup script
@@ -141,9 +145,7 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=%OSGEO4W_ROOT%\\bin;%PATH%
-
-IF EXISTS "C:\msys64/usr/bin" set PATH=%PATH%;C:/msys64/usr/bin
+set PATH=%OSGEO4W_ROOT%\\bin;%PATH%$msys_path
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
