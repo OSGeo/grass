@@ -482,6 +482,7 @@ class GMFrame(wx.Frame):
             """Window closed.
             Also close associated layer tree page
             """
+
             def CanCloseDisplay(askIfSaveWorkspace):
                 """Check if user wants to close display"""
                 pgnum = self.notebookLayers.GetPageIndex(page)
