@@ -157,6 +157,8 @@ EOT
 ) >$grass_path/etc/env.bat
 unix2dos $grass_path/etc/env.bat
 
+cat $grass_path/etc/env.bat
+
 (
     sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
         -e 's/^\(call "%OSGEO4W_ROOT%\\\).*\(\\etc\\env\.bat"\)$/\1opt\\grass\2/' \
@@ -164,6 +166,8 @@ unix2dos $grass_path/etc/env.bat
         mswindows/osgeo4w/grass.bat.tmpl
 ) >$grass_path/grass$ver.bat
 unix2dos $grass_path/grass$ver.bat
+
+cat $grass_path/grass$ver.bat
 
 exit
 
