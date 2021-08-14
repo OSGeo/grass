@@ -37,6 +37,7 @@ export PYTHONHOME=/c/OSGeo4W/apps/Python39
 
 OSGEO4W_ROOT_MSYS=$osgeo4w_path \
     ./configure \
+    --host=$arch \
     --with-libs="$OSGEO4W_ROOT_MSYS/lib" \
     --with-includes=$OSGEO4W_ROOT_MSYS/include \
     --libexecdir=$OSGEO4W_ROOT_MSYS/bin \
