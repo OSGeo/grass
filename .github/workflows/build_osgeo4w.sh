@@ -37,16 +37,9 @@ export PYTHONHOME=/c/OSGeo4W/apps/Python39
 
 OSGEO4W_ROOT_MSYS=$osgeo4w_path
 
-echo $OSGEO4W_ROOT_MSYS
-echo $osgeo4w_path
-
-echo $OSGEO4W_ROOT_MSYS/include
-echo ${OSGEO4W_ROOT_MSYS}/include
-
-
 ./configure \
     --host=$arch \
-    --with-libs="$osgeo4w_path/lib" \
+    --with-libs="$osgeo4w_path/lib $osgeo4w_path/bin" \
     --with-includes=$osgeo4w_path/include \
     --libexecdir=$osgeo4w_path/bin \
     --prefix=$osgeo4w_path/apps/grass \
