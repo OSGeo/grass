@@ -81,10 +81,11 @@ def start(
         nonlocal dragged, dragging_bbox, drawing_bbox, complete_drawing
 
         if dragging_bbox:
-            s = min(dragged_bbox[0][0], dragged_bbox[1][0])
-            n = max(dragged_bbox[0][0], dragged_bbox[1][0])
+            ng = len(dragged_bbox)
+            s = min(dragged_bbox[0][0], dragged_bbox[ng-1][0])
+            n = max(dragged_bbox[0][0], dragged_bbox[ng-1][0])
             w = dragged_bbox[0][1]
-            e = dragged_bbox[1][1]
+            e = dragged_bbox[ng-1][1]
             if s == n:
                 n += 0.0001
             if w == e:
@@ -388,10 +389,11 @@ def start(
             g.append(latlon)
 
             if drawing_bbox:
-                s = min(g[0][0], g[1][0])
-                n = max(g[0][0], g[1][0])
+                ng = len(g)
+                s = min(g[0][0], g[ng-1][0])
+                n = max(g[0][0], g[ng-1][0])
                 w = g[0][1]
-                e = g[1][1]
+                e = g[ng-1][1]
                 if s == n:
                     n += 0.0001
                 if w == e:
