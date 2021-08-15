@@ -190,10 +190,11 @@ class ProjPickerPanel(wx.Panel):
 
     def on_draw(self, event):
         if self.dragging_bbox:
-            s = min(self.dragged_bbox[0][0], self.dragged_bbox[1][0])
-            n = max(self.dragged_bbox[0][0], self.dragged_bbox[1][0])
+            ng = len(self.dragged_bbox)
+            s = min(self.dragged_bbox[0][0], self.dragged_bbox[ng-1][0])
+            n = max(self.dragged_bbox[0][0], self.dragged_bbox[ng-1][0])
             w = self.dragged_bbox[0][1]
-            e = self.dragged_bbox[1][1]
+            e = self.dragged_bbox[ng-1][1]
             if s == n:
                 n += 0.0001
             if w == e:
@@ -409,10 +410,11 @@ class ProjPickerPanel(wx.Panel):
             g = self.curr_geom.copy()
             g.append(latlon)
 
-            s = min(g[0][0], g[1][0])
-            n = max(g[0][0], g[1][0])
+            ng = len(g)
+            s = min(g[0][0], g[ng-1][0])
+            n = max(g[0][0], g[ng-1][0])
             w = g[0][1]
-            e = g[1][1]
+            e = g[ng-1][1]
             if s == n:
                 n += 0.0001
             if w == e:
