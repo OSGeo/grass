@@ -3,6 +3,10 @@
 # We need to set a specific region in the
 # @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
+
+echo "$PATH"
+echo "$HOME"
+ls "$HOME"
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 -p
 
 export GRASS_OVERWRITE=1
