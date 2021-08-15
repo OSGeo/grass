@@ -205,6 +205,8 @@ class TestCase(unittest.TestCase):
             isinstance(reference, (str, unicode)),
             ("reference argument is not a string"),
         )
+        if os.linesep != "\n" and os.linesep in reference:
+            reference = reference.replace(os.linesep, "\n")
         if os.linesep != "\n" and os.linesep in actual:
             actual = actual.replace(os.linesep, "\n")
         if not check_text_ellipsis(actual=actual, reference=reference):
@@ -239,6 +241,8 @@ class TestCase(unittest.TestCase):
         which is typically obtained using ``-g`` flag.
         """
         if isinstance(reference, str):
+            if os.linesep != "\n" and os.linesep in reference:
+                reference = reference.replace(os.linesep, "\n")
             reference = text_to_keyvalue(reference, sep=sep, skip_empty=True)
         module = _module_from_parameters(module, **parameters)
         self.runModule(module, expecting_stdout=True)
