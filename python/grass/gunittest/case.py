@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 GRASS Python testing framework test case
 
