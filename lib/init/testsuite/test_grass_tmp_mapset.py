@@ -18,7 +18,7 @@ import unittest
 import os
 import shutil
 import subprocess
-
+import shutil
 
 # Note that unlike rest of GRASS GIS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
@@ -30,7 +30,7 @@ class TestTmpMapset(unittest.TestCase):
     """Tests --tmp-mapset option of grass command"""
 
     # TODO: here we need a name of or path to the main GRASS GIS executable
-    executable = "grass"
+    executable = shutil.which("grass")
     # an arbitrary, but identifiable and fairly unique name
     location = "test_tmp_mapset_xy"
 
