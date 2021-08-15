@@ -129,6 +129,16 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define CONFIG_DIR ".grass8"
 #endif
 
+#ifdef MAX
+#undef MAX
+#endif
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+#ifdef MIN
+#undef MIN
+#endif
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
 /* define PI and friends */
 #undef M_PI
 #define M_PI    3.14159265358979323846	/* pi */
