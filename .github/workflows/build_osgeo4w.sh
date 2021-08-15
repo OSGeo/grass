@@ -29,6 +29,9 @@ osgeo4w_path=/c/OSGeo4W
 arch=x86_64-w64-mingw32
 src=$(pwd)
 
+
+export UNITTEST=1
+
 # compile
 
 export PATH=/c/OSGeo4W/bin:/usr/bin:/mingw64/bin
@@ -128,7 +131,7 @@ test $package -eq 0 && exit
 opt_path=$osgeo4w_path/opt
 grass_path=$opt_path/grass
 
-if [ "add_msys" ]; then
+if [ "$UNITTEST" ]; then
     msys_path=";C:/msys64/usr/bin"
 fi
 
@@ -169,7 +172,9 @@ cat $grass_path/etc/env.bat
 ) >$grass_path/grass$ver.bat
 unix2dos $grass_path/grass$ver.bat
 
-cat $grass_path/grass$ver.bat
+if [ "$UNITTEST" ]; then
+    cp $grass_path/grass$ver.bat $grass_path/grass.bat
+fi
 
 exit
 
