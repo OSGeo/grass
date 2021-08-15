@@ -2205,7 +2205,7 @@ class PPIKPage(TitledPage):
 
         # EPSG only?
         self.ppik = ProjPickerPanel(
-            self, layout="map_left", filter_bbox=lambda b: b.crs_auth_name == "EPSG"
+            self, filter_bbox=lambda b: b.crs_auth_name == "EPSG"
         )
         self.sizer.Add(self.ppik, 1, wx.EXPAND)
 
