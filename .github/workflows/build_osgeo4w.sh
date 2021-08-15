@@ -124,6 +124,10 @@ unix2dos $dist/etc/env.bat
 ) >$bin/grass$ver.bat
 unix2dos $bin/grass$ver.bat
 
+if [ "$UNITTEST" ]; then
+    cp $bin/grass$ver.bat $bin/grass.bat
+fi
+
 test $package -eq 0 && exit
 
 # package
@@ -161,8 +165,6 @@ if not exist %GISBASE%\etc\fontcap (
 EOT
 ) >$grass_path/etc/env.bat
 unix2dos $grass_path/etc/env.bat
-
-cat $grass_path/etc/env.bat
 
 (
     sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
