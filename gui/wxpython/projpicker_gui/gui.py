@@ -81,11 +81,10 @@ def start(
         nonlocal dragged, dragging_bbox, drawing_bbox, complete_drawing
 
         if dragging_bbox:
-            ng = len(dragged_bbox)
-            s = min(dragged_bbox[0][0], dragged_bbox[ng-1][0])
-            n = max(dragged_bbox[0][0], dragged_bbox[ng-1][0])
+            s = min(dragged_bbox[0][0], dragged_bbox[1][0])
+            n = max(dragged_bbox[0][0], dragged_bbox[1][0])
             w = dragged_bbox[0][1]
-            e = dragged_bbox[ng-1][1]
+            e = dragged_bbox[1][1]
             if s == n:
                 n += 0.0001
             if w == e:
@@ -103,6 +102,10 @@ def start(
                     n = max(curr_geom[0][0], curr_geom[1][0])
                     w = curr_geom[0][1]
                     e = curr_geom[1][1]
+                    if s == n:
+                        n += 0.0001
+                    if w == e:
+                        e += 0.0001
                     geom.extend(["bbox", [s, n, w, e]])
                     query = f"bbox {s:.4f},{n:.4f},{w:.4f},{e:.4f}"
                 drawing_bbox = False
@@ -309,11 +312,10 @@ def start(
         if dragged_bbox:
             set_pen_brush(dragged_bbox_color)
 
-            ng = len(dragged_bbox)
-            s = dragged_bbox[ng-1][0]
+            s = dragged_bbox[1][0]
             n = dragged_bbox[0][0]
             w = dragged_bbox[0][1]
-            e = dragged_bbox[ng-1][1]
+            e = dragged_bbox[1][1]
 
             for xy in osm.get_bbox_xy((s, n, w, e)):
                 x, y = xy[0]
@@ -386,17 +388,15 @@ def start(
             g.append(latlon)
 
             if drawing_bbox:
-                ng = len(g)
-                if ng > 0:
-                    s = min(g[0][0], g[ng-1][0])
-                    n = max(g[0][0], g[ng-1][0])
-                    w = g[0][1]
-                    e = g[ng-1][1]
-                    if s == n:
-                        n += 0.0001
-                    if w == e:
-                        e += 0.0001
-                    all_geoms.extend(["bbox", [s, n, w, e]])
+                s = min(g[0][0], g[1][0])
+                n = max(g[0][0], g[1][0])
+                w = g[0][1]
+                e = g[1][1]
+                if s == n:
+                    n += 0.0001
+                if w == e:
+                    e += 0.0001
+                all_geoms.extend(["bbox", [s, n, w, e]])
             elif g:
                 if prev_xy:
                     latlon[1] = adjust_lon(prev_xy[0], x,
