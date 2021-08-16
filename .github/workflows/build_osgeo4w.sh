@@ -126,8 +126,14 @@ unix2dos $bin/grass$ver.bat
 
 if [ "$UNITTEST" ]; then
     cp $bin/grass$ver.bat $bin/grass.bat
-    for f in $src/dist.$arch/bin/*.bat; do echo "$f \$@" > $(echo $f | sed 's/\.bat/\.exe/g'); done
-    ls $src/dist.$arch/bin/
+    for f in $src/dist.$arch/bin/*.bat
+    do
+        bat_exe=$(echo $f | sed 's/\.bat/\.exe/g')
+        echo "$f \$@" > "$bat_exe"
+        unix2dos "$f \$@" > "$bat_exe"
+        file "$f \$@" > "$bat_exe"
+        cat "$f \$@" > "$bat_exe"
+    done
 fi
 
 test $package -eq 0 && exit
