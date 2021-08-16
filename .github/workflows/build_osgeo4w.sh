@@ -128,9 +128,9 @@ if [ "$UNITTEST" ]; then
     cp $bin/grass$ver.bat $bin/grass.bat
     for f in $src/dist.$arch/bin/*.bat
     do
-        bat_exe=$(echo $f | sed 's/\.bat/\.exe/g')
-        echo "$f \$@" > "$bat_exe"
-        unix2dos "$bat_exe"
+        bat_exe=$(echo $f | sed 's/\.bat//g')
+        echo "$f" > "$bat_exe"
+        #unix2dos "$bat_exe"
 	chmod ugo+x "$bat_exe"
         file "$bat_exe"
         cat "$bat_exe"
