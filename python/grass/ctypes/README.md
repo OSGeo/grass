@@ -1,6 +1,6 @@
 ## Notes on ctypesgen
 
-Currently installed version: https://github.com/davidjamesca/ctypesgen/commit/0681f8ef1742206c171d44b7872c700f34ffe044 (3 March 2020)
+Currently installed version: https://github.com/ctypesgen/ctypesgen/commit/0681f8ef1742206c171d44b7872c700f34ffe044 (3 March 2020)
 
 
 ### How to update ctypesgen version
@@ -163,4 +163,62 @@ macOS: use `@rpath` as dynamic linker https://github.com/OSGeo/grass/pull/981
  
          dirs = []
 
-``
+```
+
+
+#### Windows specific patches
+
+https://trac.osgeo.org/grass/ticket/3506
+
+```diff
+--- ctypesgen/ctypedescs.py.orig
++++ ctypesgen/ctypedescs.py
+@@ -41,6 +41,7 @@ ctypes_type_map = {
+     ("int16_t", True, 0): "c_int16",
+     ("int32_t", True, 0): "c_int32",
+     ("int64_t", True, 0): "c_int64",
++    ("__int64", True, 0): "c_int64",
+     ("uint8_t", True, 0): "c_uint8",
+     ("uint16_t", True, 0): "c_uint16",
+     ("uint32_t", True, 0): "c_uint32",
+
+```
+
+```diff
+--- ctypesgen/libraryloader.py.orig
++++ ctypesgen/libraryloader.py
+@@ -322,6 +322,12 @@ class PosixLibraryLoader(LibraryLoader):
+ class WindowsLibraryLoader(LibraryLoader):
+     name_formats = ["%s.dll", "lib%s.dll", "%slib.dll", "%s"]
+ 
++    def __init__(self):
++        super().__init__()
++        for p in os.getenv("PATH").split(";"):
++            if os.path.exists(p) and hasattr(os, 'add_dll_directory'):
++                os.add_dll_directory(p)
++
+     class Lookup(LibraryLoader.Lookup):
+         def __init__(self, path):
+             super(WindowsLibraryLoader.Lookup, self).__init__(path)
+
+```
+
+https://trac.osgeo.org/grass/ticket/1125
+
+https://github.com/OSGeo/grass/commit/65eef4767aa416ca55f7e36f62dce7ce083fe450
+
+```diff
+--- ctypesgen/parser/preprocessor.py.orig
++++ ctypesgen/parser/preprocessor.py
+@@ -159,6 +159,9 @@
+ 
+         self.cparser.handle_status(cmd)
+ 
++        if sys.platform == "win32":
++            cmd = ["sh.exe", "-c", cmd]
++
+         pp = subprocess.Popen(
+             cmd, shell=True, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+         )
+
+```
