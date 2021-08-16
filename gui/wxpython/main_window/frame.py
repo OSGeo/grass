@@ -309,6 +309,11 @@ class GMFrame(wx.Frame):
             agwStyle=notebook_style,
         )
         self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
+        # bindings
+        self.mapnotebook.Bind(
+            aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
+            lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit(),
+        )
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -483,9 +488,8 @@ class GMFrame(wx.Frame):
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
 
         # bind various events
-        mapdisplay.Bind(
-            wx.EVT_ACTIVATE,
-            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
+        mapdisplay.onFocus.connect(
+            lambda page=self.currentPage: self._onMapDisplayFocus(page),
         )
 
         mapdisplay.starting3dMode.connect(
@@ -881,7 +885,8 @@ class GMFrame(wx.Frame):
             )
 
     def OnCBPageChanged(self, event):
-        """Page in notebook (display) changed"""
+        """Page in notebook (display) changed.
+        Also change active map notebook tab."""
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
         try:
