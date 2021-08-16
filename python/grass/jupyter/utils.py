@@ -3,21 +3,33 @@
 #
 # PURPOSE:   This module contains utility functions for InteractiveMap.
 #
+<<<<<<< HEAD
 # COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
+=======
+# COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
+<<<<<<< HEAD
 """Utility functions warpping existing processes in a suitable way"""
 from pathlib import Path
+=======
+import os
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
 import grass.script as gs
 
 
 def get_region(env=None):
     """Returns current computational region as dictionary.
+<<<<<<< HEAD
 
     Additionally, it adds long key names.
+=======
+    Adds long key names.
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
     """
     region = gs.region(env=env)
     region["east"] = region["e"]
@@ -45,6 +57,7 @@ def reproject_region(region, from_proj, to_proj):
     :return dict region: reprojected region as a dictionary with long key names
     """
     region = region.copy()
+<<<<<<< HEAD
     # reproject all corners, otherwise reproj. region may be underestimated
     # even better solution would be reprojecting vector region like in r.import
     proj_input = (
@@ -53,6 +66,9 @@ def reproject_region(region, from_proj, to_proj):
         f"{region['east']} {region['south']}\n"
         f"{region['west']} {region['south']}\n"
     )
+=======
+    proj_input = "{east} {north}\n{west} {south}".format(**region)
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
     proc = gs.start_command(
         "m.proj",
         input="-",
@@ -69,6 +85,7 @@ def reproject_region(region, from_proj, to_proj):
     proc.stdin = None
     proj_output, stderr = proc.communicate()
     if proc.returncode:
+<<<<<<< HEAD
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
@@ -94,12 +111,32 @@ def estimate_resolution(raster, mapset, location, dbase, env):
     :param str mapset: mapset of raster
     :param str location: name of source location
     :param str dbase: path to source database
+=======
+        raise RuntimeError("reprojecting region: m.proj error: " + stderr)
+    enws = gs.decode(proj_output).split(os.linesep)
+    elon, nlat, unused = enws[0].split(" ")
+    wlon, slat, unused = enws[1].split(" ")
+    region["east"] = elon
+    region["north"] = nlat
+    region["west"] = wlon
+    region["south"] = slat
+    return region
+
+
+def estimate_resolution(raster, dbase, location, env):
+    """Estimates resolution of reprojected raster.
+
+    :param str raster: name of raster
+    :param str dbase: path to source database
+    :param str location: name of source location
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
     :param dict env: target environment
 
     :return float estimate: estimated resolution of raster in destination
                             environment
     """
     output = gs.read_command(
+<<<<<<< HEAD
         "r.proj",
         flags="g",
         input=raster,
@@ -107,6 +144,9 @@ def estimate_resolution(raster, mapset, location, dbase, env):
         location=location,
         dbase=dbase,
         env=env,
+=======
+        "r.proj", flags="g", input=raster, dbase=dbase, location=location, env=env
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
     ).strip()
     params = gs.parse_key_val(output, vsep=" ")
     output = gs.read_command("g.region", flags="ug", env=env, **params)
@@ -134,6 +174,7 @@ def setup_location(name, path, epsg, src_env):
     # Location and mapset
     gs.create_location(path, name, epsg=epsg, overwrite=True)
     # Reproject region
+<<<<<<< HEAD
     set_target_region(src_env, new_env)
     return rcfile, new_env
 
@@ -146,6 +187,11 @@ def set_target_region(src_env, tgt_env):
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
     to_proj = get_location_proj_string(env=tgt_env)
+=======
+    region = get_region(env=src_env)
+    from_proj = get_location_proj_string(src_env)
+    to_proj = get_location_proj_string(env=new_env)
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
     new_region = reproject_region(region, from_proj, to_proj)
     # Set region to match original region extent
     gs.run_command(
@@ -154,6 +200,7 @@ def set_target_region(src_env, tgt_env):
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
+<<<<<<< HEAD
         rows=new_region["rows"],
         cols=new_region["cols"],
         env=tgt_env,
@@ -266,3 +313,8 @@ def save_gif(
 
     # Display the GIF
     return filename
+=======
+        env=new_env,
+    )
+    return rcfile, new_env
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
