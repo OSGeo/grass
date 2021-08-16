@@ -129,11 +129,11 @@ if [ "$UNITTEST" ]; then
     for f in $src/dist.$arch/bin/*.bat
     do
         bat_exe=$(echo $f | sed 's/\.bat//g')
-        echo "$f" > "$bat_exe"
+        ln -s "$f" "$bat_exe"
         #unix2dos "$bat_exe"
-	chmod ugo+x "$bat_exe"
+	#chmod ugo+x "$bat_exe"
         file "$bat_exe"
-        cat "$bat_exe"
+        #cat "$bat_exe"
     done
 fi
 
