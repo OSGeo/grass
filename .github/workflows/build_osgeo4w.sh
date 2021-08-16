@@ -126,6 +126,8 @@ unix2dos $bin/grass$ver.bat
 
 if [ "$UNITTEST" ]; then
     cp $bin/grass$ver.bat $bin/grass.bat
+    for f in $src/dist.$arch/bin/*.bat; do echo "$f \$@" > $(echo $f | sed 's/\.bat/\.exe/g'); done
+    ls $src/dist.$arch/bin/
 fi
 
 test $package -eq 0 && exit
