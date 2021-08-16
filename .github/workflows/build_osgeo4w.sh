@@ -130,9 +130,9 @@ if [ "$UNITTEST" ]; then
     do
         bat_exe=$(echo $f | sed 's/\.bat/\.exe/g')
         echo "$f \$@" > "$bat_exe"
-        unix2dos "$f \$@" > "$bat_exe"
-        file "$f \$@" > "$bat_exe"
-        cat "$f \$@" > "$bat_exe"
+        unix2dos "$bat_exe"
+        file "$bat_exe"
+        cat "$bat_exe"
     done
 fi
 
