@@ -124,6 +124,7 @@ class DisplayPanelToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
+<<<<<<< HEAD
                 (
                     ("addMulti", _("Add multiple map layers")),
                     icons["addMulti"],
@@ -170,6 +171,15 @@ class DisplayPanelToolbar(BaseToolbar):
                     icons["delCmd"],
                     self.parent.OnDeleteLayer,
                 ),
+=======
+                ("addMulti", icons["addMulti"], self.parent.OnAddMaps),
+                ("addrast", icons["addRast"], self.parent.OnAddRaster),
+                ("rastmisc", icons["rastMisc"], self.parent.OnAddRasterMisc),
+                ("addvect", icons["addVect"], self.parent.OnAddVector),
+                ("vectmisc", icons["vectMisc"], self.parent.OnAddVectorMisc),
+                ("addovl", icons["addOverlay"], self.parent.OnAddOverlay),
+                ("addWS", icons["addWS"], self.parent.OnAddWS),
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
                 (None,),
                 (
                     ("vdigit", icons["vdigit"].label),
@@ -218,11 +228,20 @@ class LMToolsToolbar(AuiToolbar):
 
         return self._getToolbarData(
             (
+<<<<<<< HEAD
                 (
                     ("newdisplay", _("New display")),
                     icons["newdisplay"],
                     self.parent.OnNewDisplay,
                 ),
+=======
+                ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
+                (None,),
+                ("mapCalc", icons["mapcalc"], self.parent.OnMapCalculator),
+                ("georect", icons["georectify"], self.parent.OnGCPManager),
+                ("modeler", icons["modeler"], self.parent.OnGModeler),
+                ("mapOutput", icons["composer"], self.parent.OnPsMap),
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
                 (None,),
                 (
                     ("mapCalc", icons["mapcalc"].label),
