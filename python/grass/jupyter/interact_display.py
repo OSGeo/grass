@@ -214,7 +214,7 @@ class InteractiveMap:
         self.layer_control_object = self._folium.LayerControl(**kwargs)
 
     def show(self):
-        """This function creates a folium map with a GRASS raster
+        """This function returns a folium figure object with a GRASS raster
         overlayed on a basemap.
 
         If map has layer control enabled, additional layers cannot be

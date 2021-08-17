@@ -2,11 +2,11 @@
 
 ############################################################################
 #
-# NAME:      display_test
+# NAME:      grassrenderer_test.py
 #
 # AUTHOR:    Caitlin Haedrich (caitlin dot haedrich gmail com)
 #
-# PURPOSE:   This is a test script for grass.jupyter's display module
+# PURPOSE:   This is a test script for grass.jupyter's GrassRenderer
 #
 # COPYRIGHT: (C) 2021 by Caitlin Haedrich and the GRASS Development Team
 #
@@ -25,10 +25,10 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 
-def can_import_folium():
+def can_import_ipython():
     """Test folium import to see if test can be run."""
     try:
-        import folium
+        import IPython
 
         return True
     except ImportError:
@@ -68,7 +68,6 @@ class TestDisplay(TestCase):
             else:
                 f.unlink(missing_ok=True)
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_defaults(self):
         """Test that GrassRenderer can create a map with default settings."""
         # Create a map with default inputs
@@ -76,10 +75,9 @@ class TestDisplay(TestCase):
         # Adding vectors and rasters to the map
         grass_renderer.run("d.rast", map="elevation")
         grass_renderer.run("d.vect", map="roadsmajor")
-        # Assert image exists
+        # Make sure image was created
         self.assertFileExists(grass_renderer._filename)
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_filename(self):
         """Test that GrassRenderer creates maps with unique filenames."""
         # Create map with unique filename
@@ -94,7 +92,6 @@ class TestDisplay(TestCase):
         # Make sure image was created
         self.assertFileExists(custom_filename)
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_hw(self):
         """Test that GrassRenderer creates maps with custom height and widths."""
         # Create map with height and width parameters
@@ -102,7 +99,6 @@ class TestDisplay(TestCase):
         # Add just a vector (for variety here)
         grass_renderer.run("d.vect", map="roadsmajor")
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_env(self):
         """Test that we can hand an environment to GrassRenderer."""
         # Create map with environment parameter
@@ -110,25 +106,21 @@ class TestDisplay(TestCase):
         # Add just a raster (again for variety)
         grass_renderer.run("d.rast", map="elevation")
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_text(self):
         """Test that we can set a unique text_size in GrassRenderer."""
         # Create map with unique text_size parameter
         grass_renderer = gj.GrassRenderer(text_size=10)
-        # Add a vector and a raster
         grass_renderer.run("d.vect", map="roadsmajor")
         grass_renderer.run("d.rast", map="elevation")
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_shortcut(self):
         """Test that we can use display shortcuts with __getattr__."""
         # Create map
         grass_renderer = gj.GrassRenderer()
-        # Add raster to map with shortcut
+        # Use shortcut
         grass_renderer.d_rast(map="elevation")
         grass_renderer.d_vect(map="roadsmajor")
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_shortcut_error(self):
         """Test that passing an incorrect attribute raises
         appropriate error"""
@@ -140,15 +132,13 @@ class TestDisplay(TestCase):
         with self.assertRaisesRegex(AttributeError, "d.module.does.not.exist"):
             grass_renderer.d_module_does_not_exist()
 
-    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
-    def test_InteractiveMap(self):
-        # Create InteractiveMap
-        interactive_map = gj.InteractiveMap()
-        # Add raster and vector
-        interactive_map.add_raster("elevation")
-        interactive_map.add_vector("roadsmajor")
-        # Show
-        interactive_map.show()
+    @unittest.skipIf(not can_import_ipython(), "Cannot import IPython")
+    def test_image_creation(self):
+        """Test that show() returns an image object."""
+        # Create map
+        grass_renderer = gj.GrassRenderer()
+        grass_renderer.d_rast(map="elevation")
+        self.assertTrue(grass_renderer.show(), "Failed to open PNG image")
 
 
 if __name__ == "__main__":
