@@ -156,7 +156,7 @@ class GMFrame(wx.Frame):
         # set pane sizes according to the full screen size of the primary monitor
         size = wx.Display().GetGeometry().GetSize()
         self.PANE_BEST_SIZE = tuple(t / 3 for t in size)
-        self.PANE_MIN_SIZE = tuple(t / 7 for t in size)
+        self.PANE_MIN_SIZE = tuple(t / 5 for t in size)
 
         # create widgets and build panes
         self.CreateMenuBar()
@@ -611,7 +611,7 @@ class GMFrame(wx.Frame):
             .Name("modules")
             .Caption("Modules")
             .Right()
-            .Layer(2)
+            .Layer(1)
             .Position(1)
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
@@ -626,13 +626,12 @@ class GMFrame(wx.Frame):
             .Name("console")
             .Caption("Console")
             .Right()
-            .Layer(2)
-            .Position(2)
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
+            target=self._auimgr.GetPane("modules"),
         )
 
         self._auimgr.AddPane(
@@ -641,16 +640,25 @@ class GMFrame(wx.Frame):
             .Name("python")
             .Caption("Python")
             .Right()
-            .Layer(2)
-            .Position(3)
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
+            target=self._auimgr.GetPane("modules"),
         )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
+
+        # Set Modules as active tab
+        modules = self._auimgr.GetPane("modules")
+        notebook = self._auimgr.GetNotebooks()[0]
+        notebook.SetSelectionToPage(modules)
+
+        # Set the size for automatic notebook
+        pane = self._auimgr.GetPane(notebook)
+        pane.MinSize(self.search.GetMinSize())
+
         wx.CallAfter(self.datacatalog.LoadItems)
 
         self._auimgr.Update()
