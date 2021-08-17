@@ -71,19 +71,26 @@ def reproject_region(region, from_proj, to_proj):
     return region
 
 
-def estimate_resolution(raster, dbase, location, env):
+def estimate_resolution(raster, mapset, location, dbase, env):
     """Estimates resolution of reprojected raster.
 
     :param str raster: name of raster
-    :param str dbase: path to source database
+    :param str mapset: mapset of raster
     :param str location: name of source location
+    :param str dbase: path to source database
     :param dict env: target environment
 
     :return float estimate: estimated resolution of raster in destination
                             environment
     """
     output = gs.read_command(
-        "r.proj", flags="g", input=raster, dbase=dbase, location=location, env=env
+        "r.proj",
+        flags="g",
+        input=raster,
+        mapset=mapset,
+        location=location,
+        dbase=dbase,
+        env=env,
     ).strip()
     params = gs.parse_key_val(output, vsep=" ")
     output = gs.read_command("g.region", flags="ug", env=env, **params)
