@@ -128,12 +128,15 @@ if [ "$UNITTEST" ]; then
     cp $bin/grass$ver.bat $bin/grass.bat
     for f in $src/dist.$arch/bin/*.bat
     do
-        bat_exe=$(echo $f | sed 's/\.bat//g')
-        printf "#!/bin/bash\n/c/osgeo4w/bin/python3 ${bat_exe}.py \$@" > "$bat_exe"
+        bash_exe=$(echo $f | sed 's/\.bat//g')
+	py_file=$(echo $f | sed -e 's/\/bin\//\/scripts\//;s/\.bat/\.py/')
+        printf "#!/bin/bash\n/c/osgeo4w/bin/python3 ${py_file} \$@" > "$bash_exe"
         # unix2dos "$bat_exe"
-        chmod ugo+x "$bat_exe"
-        file "$bat_exe"
-        cat "$bat_exe"
+        chmod ugo+x "$bash_exe"
+        file "$py_file"
+        ls "$py_file"
+        file "$bash_exe"
+        cat "$bash_exe"
     done
 fi
 
