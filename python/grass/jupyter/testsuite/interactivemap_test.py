@@ -18,10 +18,16 @@
 
 
 import os
+<<<<<<< HEAD
 import sys
 import unittest
 from pathlib import Path
 
+=======
+import unittest
+import sys
+from pathlib import Path
+>>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -30,7 +36,11 @@ from grass.gunittest.main import test
 def can_import_folium():
     """Test folium import to see if test can be run."""
     try:
+<<<<<<< HEAD
         import folium  # noqa
+=======
+        import folium
+>>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
 
         return True
     except ImportError:
