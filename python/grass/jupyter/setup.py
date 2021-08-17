@@ -38,10 +38,9 @@ def init(path, location, mapset):
     This function initiates a GRASS session and sets GRASS
     environment variables.
 
-    Inputs:
-        path - path to grass databases
-        location - name of GRASS location
-        mapset - name of mapset within location
+    :param str path: path to grass databases
+    :param str location: name of GRASS location
+    :param str mapset: name of mapset within location
     """
     # Create a GRASS GIS session.
     gsetup.init(os.environ["GISBASE"], path, location, mapset)

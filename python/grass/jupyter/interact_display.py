@@ -199,7 +199,10 @@ class InteractiveMap:
         img.add_to(self.map)
 
     def add_layer_control(self, **kwargs):
-        """Add layer control to display"""
+        """Add layer control to display"
+
+        :param **kwargs: named arguments to be passed to folium.LayerControl()"""
+
         self.layer_control = True
         self.layer_control_object = folium.LayerControl(**kwargs)
 
