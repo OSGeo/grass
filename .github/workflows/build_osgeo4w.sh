@@ -133,7 +133,7 @@ if [ "$UNITTEST" ]; then
         # unix2dos "$bat_exe"
         chmod ugo+x "$bat_exe"
         file "$bat_exe"
-        # cat "$bat_exe"
+        cat "$bat_exe"
     done
 fi
 
@@ -145,7 +145,7 @@ opt_path=$osgeo4w_path/opt
 grass_path=$opt_path/grass
 
 if [ "$UNITTEST" ]; then
-    msys_path=";C:/msys64/usr/bin"
+    msys_path=";C:/Program Files/Git/mingw64/bin;C:/Program Files/Git/usr/bin"
 fi
 
 mkdir -p $opt_path
@@ -161,7 +161,7 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=%OSGEO4W_ROOT%\\bin;%PATH%$msys_path
+set PATH=%OSGEO4W_ROOT%\\bin${msys_path};%PATH%
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
