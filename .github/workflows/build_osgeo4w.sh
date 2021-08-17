@@ -129,7 +129,7 @@ if [ "$UNITTEST" ]; then
     for f in $src/dist.$arch/bin/*.bat
     do
         bat_exe=$(echo $f | sed 's/\.bat//g')
-        echo "#!/bin/bash\n/c/osgeo4w/bin/python3 ${bat_exe}.py \$@" > "$bat_exe"
+        printf "#!/bin/bash\n/c/osgeo4w/bin/python3 ${bat_exe}.py \$@" > "$bat_exe"
         # unix2dos "$bat_exe"
         chmod ugo+x "$bat_exe"
         file "$bat_exe"
