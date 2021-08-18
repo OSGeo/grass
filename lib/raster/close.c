@@ -54,16 +54,16 @@ static void sync_and_close(int fd, char *element, char *name)
 
 #ifndef __MINGW32__
     if (fsync(fd)) {
-	G_warning(_("Unable to flush file %s for raster map %s: %s"),
-	            element, name, strerror(errno));
+        G_warning(_("Unable to flush file %s for raster map %s: %s"),
+                  element, name, strerror(errno));
     }
     /* for MS Windows, try fdopen(int, char *) + fflush(FILE *) + fclose(FILE *)
      * flcose() closes the underlying file descriptor, thus no need to 
      * call close(fd) afterwards */
 #endif
     if (close(fd)) {
-	G_warning(_("Unable to close file %s for raster map %s: %s"),
-	            element, name, strerror(errno));
+        G_warning(_("Unable to close file %s for raster map %s: %s"),
+                  element, name, strerror(errno));
     }
 }
 
@@ -419,32 +419,32 @@ static int close_new(int fd, int ok)
 			 fcb->null_row_ptr ? NULLC_FILE : NULL_FILE,
 			 fcb->name, G_mapset());
 
-	if (fcb->null_cur_row > 0) {
-	    if (fcb->tmpdir && *fcb->tmpdir) {
-		/* move file, also across mount points */
-		if (move_file(fcb->null_temp_name, path)) {
-		    G_warning(_("Unable to move null file '%s' to '%s'"),
-			      fcb->null_temp_name, path);
-		    stat = -1;
-		}
-	    }
-	    else {
-		/* if temporary NULL file exists, write it into cell_misc/name/null */
-		if (rename(fcb->null_temp_name, path)) {
-		    G_warning(_("Unable to rename null file '%s' to '%s': %s"),
-			      fcb->null_temp_name, path, strerror(errno));
-		    stat = -1;
-		}
-		/* if rename() was successful what is left to remove() ? */
-		else {
-		    remove(fcb->null_temp_name);
-		}
-	    }
-	}
-	else {
-	    remove(fcb->null_temp_name);
-	    remove(path); /* again ? */
-	}			/* null_cur_row > 0 */
+    if (fcb->null_cur_row > 0) {
+        if (fcb->tmpdir && *fcb->tmpdir) {
+            /* move file, also across mount points */
+            if (move_file(fcb->null_temp_name, path)) {
+                G_warning(_("Unable to move null file '%s' to '%s'"),
+                          fcb->null_temp_name, path);
+                stat = -1;
+            }
+        }
+        else {
+            /* if temporary NULL file exists, write it into cell_misc/name/null */
+            if (rename(fcb->null_temp_name, path)) {
+                G_warning(_("Unable to rename null file '%s' to '%s': %s"),
+                          fcb->null_temp_name, path, strerror(errno));
+                stat = -1;
+            }
+            /* if rename() was successful what is left to remove() ? */
+            else {
+                remove(fcb->null_temp_name);
+            }
+        }
+    }
+    else {
+        remove(fcb->null_temp_name);
+        remove(path); /* again ? */
+    }    /* null_cur_row > 0 */
 
 	if (fcb->open_mode == OPEN_NEW_COMPRESSED) {	/* auto compression */
 	    fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
@@ -504,27 +504,27 @@ static int close_new(int fd, int ok)
      */
     stat = 1;
     if (ok && (fcb->temp_name != NULL)) {
-	G_file_name(path, CELL_DIR, fcb->name, fcb->mapset);
-	remove(path);
-	if (fcb->tmpdir && *fcb->tmpdir) {
-	    /* move file, also across mount points */
-	    if (move_file(fcb->temp_name, path)) {
-		G_warning(_("Unable to move cell file '%s' to '%s'"),
-			  fcb->temp_name, path);
-		stat = -1;
-	    }
-	}
-	else {
-	    if (rename(fcb->temp_name, path)) {
-		G_warning(_("Unable to rename cell file '%s' to '%s': %s"),
-			  fcb->temp_name, path, strerror(errno));
-		stat = -1;
-	    }
-	    /* if rename() was successful what is left to remove() ? */
-	    else {
-		remove(fcb->temp_name);
-	    }
-	}
+        G_file_name(path, CELL_DIR, fcb->name, fcb->mapset);
+        remove(path);
+        if (fcb->tmpdir && *fcb->tmpdir) {
+            /* move file, also across mount points */
+            if (move_file(fcb->temp_name, path)) {
+                G_warning(_("Unable to move cell file '%s' to '%s'"),
+                          fcb->temp_name, path);
+                stat = -1;
+            }
+        }
+        else {
+            if (rename(fcb->temp_name, path)) {
+                G_warning(_("Unable to rename cell file '%s' to '%s': %s"),
+                          fcb->temp_name, path, strerror(errno));
+                stat = -1;
+            }
+            /* if rename() was successful what is left to remove() ? */
+            else {
+                remove(fcb->temp_name);
+            }
+        }
     }
 
     if (fcb->temp_name != NULL) {
@@ -575,17 +575,17 @@ void Rast__close_null(int fd)
 		     fcb->name, G_mapset());
 
     if (fcb->tmpdir && *fcb->tmpdir) {
-	/* move file, also across mount points */
-	if (move_file(fcb->null_temp_name, path)) {
-	    G_warning(_("Unable to move null file '%s' to '%s'"),
-		      fcb->null_temp_name, path);
-	}
+        /* move file, also across mount points */
+        if (move_file(fcb->null_temp_name, path)) {
+            G_warning(_("Unable to move null file '%s' to '%s'"),
+                      fcb->null_temp_name, path);
+        }
     }
     else {
-	if (rename(fcb->null_temp_name, path))
-	    G_warning(_("Unable to rename null file '%s' to '%s': %s"),
-		      fcb->null_temp_name, path, strerror(errno));
-	remove(fcb->null_temp_name);
+        if (rename(fcb->null_temp_name, path))
+            G_warning(_("Unable to rename null file '%s' to '%s': %s"),
+                      fcb->null_temp_name, path, strerror(errno));
+        remove(fcb->null_temp_name);
     }
 
     G_free(fcb->null_temp_name);
@@ -648,7 +648,7 @@ static int move_file(const char *src, const char *dst)
     int len, len2;
 
     G_debug(0, "copy src to dst, delete src: '%s', '%s'",
-               src, dst);
+            src, dst);
 
     if ((fd = open(src, O_RDONLY)) < 0)
         return 1;
@@ -665,17 +665,17 @@ static int move_file(const char *src, const char *dst)
     while ((len = read(fd, buf, 4096)) > 0) {
         while (len && (len2 = write(fd2, buf, len)) >= 0)
             len -= len2;
-	if (len2 == -1) {
-	    G_warning(_("Unable to write to '%s': %s"),
-		        dst, strerror(errno));
-	}
+        if (len2 == -1) {
+            G_warning(_("Unable to write to '%s': %s"),
+                      dst, strerror(errno));
+        }
     }
 
     close(fd);
 #ifndef __MINGW32__
     if (fsync(fd2)) {
-	G_warning(_("Unable to flush file %s: %s"),
-	            dst, strerror(errno));
+        G_warning(_("Unable to flush file %s: %s"),
+                  dst, strerror(errno));
     }
 #endif
     /* close(fd2); */
