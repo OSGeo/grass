@@ -96,6 +96,8 @@ jobs:
 
   # Only run for push to master branch
   # Take care of tag latest
+  # This job needs to build the configured image (ubuntu)
+  # again for master branch to create latest tag.
   docker-master-latest:
     name: build and push latest for master branch
     if: startsWith(github.ref, 'refs/heads/master')
