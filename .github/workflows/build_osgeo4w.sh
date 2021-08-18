@@ -90,8 +90,24 @@ ver=$(sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make)
 
 rm -f $dist/grass$ver.tmp $dist/etc/fontcap
 
-# create batch files
+if [ "$UNITTEST" ]; then
+    bash_bin=bash_bin
+    mkdir "$src/dist.$arch/$bash_bin"
 
+    for f in $src/dist.$arch/scripts/*.py
+    do
+        bash_exe=$(echo $f | sed -e "s/\/scripts\//\/${bash_bin}\//;s/\.py$//")
+        cp "$f" "$bash_exe"
+        # dos2unix "$bash_exe"
+        chmod ugo+x "$bash_exe"
+        bash_exe_path=$(echo "$src/dist.$arch/$bash_bin" | sed -e "s/^\/c/\;c:/;s/^\/\;d/d:/")
+        ls "$src/dist.$arch/$bash_bin"
+        export "$PATH:$src/dist.$arch/$bash_bin"
+        which t.create
+    done
+fi
+
+# create batch files
 src_esc=$(echo $src | sed 's#^/\([a-z]\)#\1:#; s#/#\\\\\\\\#g')
 dist_esc="$src_esc\\\\$dist"
 
@@ -124,22 +140,6 @@ unix2dos $dist/etc/env.bat
 ) >$bin/grass$ver.bat
 unix2dos $bin/grass$ver.bat
 
-if [ "$UNITTEST" ]; then
-    cp $bin/grass$ver.bat $bin/grass.bat
-    for f in $src/dist.$arch/bin/*.bat
-    do
-        bash_exe=$(echo $f | sed 's/\.bat//g')
-	py_file=$(echo $f | sed -e 's/\/bin\//\/scripts\//;s/\.bat/\.py/')
-        printf "#!/bin/bash\n/c/osgeo4w/bin/python3 ${py_file} \$@" > "$bash_exe"
-        # unix2dos "$bat_exe"
-        chmod ugo+x "$bash_exe"
-        file "$py_file"
-        ls "$py_file"
-        file "$bash_exe"
-        cat "$bash_exe"
-    done
-fi
-
 test $package -eq 0 && exit
 
 # package
@@ -164,7 +164,7 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=%OSGEO4W_ROOT%\\bin${msys_path};%PATH%
+set PATH=%OSGEO4W_ROOT%\\bin${msys_path};%PATH%$bash_exe_path
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
@@ -177,6 +177,8 @@ if not exist %GISBASE%\etc\fontcap (
 EOT
 ) >$grass_path/etc/env.bat
 unix2dos $grass_path/etc/env.bat
+
+cat $grass_path/etc/env.bat
 
 (
     sed -e 's/^\(call "%~dp0\)\(.*\)$/\1\\..\\..\\bin\2/' \
