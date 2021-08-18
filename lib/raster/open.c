@@ -630,6 +630,10 @@ static int open_raster_new(const char *name, int open_mode,
             G_fatal_error(_("Raster tmp dir does not exist: %s"),
                           tmpdir);
         }
+        if (access(tmpdir, 2) != 0) {
+            G_fatal_error(_("Raster tmp dir does not have write permission: %s"),
+                          tmpdir);
+        }
     }
 
     /* open a tempfile name */
