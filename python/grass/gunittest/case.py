@@ -1343,7 +1343,7 @@ class TestCase(unittest.TestCase):
                 errors += call_module("g.list", type="vector")
             # TODO: message format, parameters
             raise CalledModuleError(
-                module.returncode, module.name, module.get_python(), errors=errors
+                module.name, module.get_python(), module.returncode, errors=errors
             )
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and not module.outputs.stdout.strip():
