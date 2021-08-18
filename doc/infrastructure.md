@@ -25,7 +25,7 @@ The GitHub repositories are:
 
 Git usage:
 
-* https://github.com/OSGeo/grass/blob/master/CONTRIBUTING.md
+* [CONTRIBUTING.md file](../CONTRIBUTING.md)
 * https://trac.osgeo.org/grass/wiki/HowToGit
 
 Issues:
