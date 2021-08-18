@@ -626,10 +626,10 @@ static int open_raster_new(const char *name, int open_mode,
 
     tmpdir = getenv("GRASS_RASTER_TMPDIR");
     if (tmpdir && *tmpdir) {
-	if (access(tmpdir, 0) != 0) {
-	    G_fatal_error(_("Raster tmp dir does not exist: %s"),
-	                    tmpdir);
-	}
+        if (access(tmpdir, 0) != 0) {
+            G_fatal_error(_("Raster tmp dir does not exist: %s"),
+                          tmpdir);
+        }
     }
 
     /* open a tempfile name */

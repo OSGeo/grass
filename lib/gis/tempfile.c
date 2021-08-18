@@ -124,13 +124,13 @@ char *G_tempfile_pid_basedir(int pid, const char *basedir)
     char element[100];
 
     if (pid <= 0)
-	pid = getpid();
+        pid = getpid();
     G__temp_element_basedir(element, basedir);
     G_init_tempfile();
     do {
-	int uniq = G_counter_next(&unique);
-	sprintf(name, "%d.%d", pid, uniq);
-	G_file_name_basedir(path, element, name, G_mapset(), basedir);
+          int uniq = G_counter_next(&unique);
+          sprintf(name, "%d.%d", pid, uniq);
+          G_file_name_basedir(path, element, name, G_mapset(), basedir);
     }
     while (access(path, F_OK) == 0);
 
@@ -162,8 +162,8 @@ void G__temp_element(char *element, int tmp)
     strcpy(element, ".tmp");
     machine = G__machine_name();
     if (machine != NULL && *machine != 0) {
-	strcat(element, "/");
-	strcat(element, machine);
+        strcat(element, "/");
+        strcat(element, machine);
     }
 
     if (!tmp)
@@ -187,8 +187,8 @@ void G__temp_element_basedir(char *element, const char *basedir)
     strcpy(element, ".tmp");
     machine = G__machine_name();
     if (machine != NULL && *machine != 0) {
-	strcat(element, "/");
-	strcat(element, machine);
+        strcat(element, "/");
+        strcat(element, machine);
     }
 
     if (basedir && *basedir)

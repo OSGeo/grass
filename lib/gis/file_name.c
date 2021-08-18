@@ -155,7 +155,7 @@ char *G_file_name_tmp(char *path,
 char *G_file_name_basedir(char *path,
                           const char *element,
                           const char *name, const char *mapset,
-			  const char *basedir)
+                          const char *basedir)
 {
     return file_name(path, NULL, element, name, mapset, basedir);
 }
