@@ -45,7 +45,7 @@ class GrassRenderer:
         width=600,
         filename=None,
         env=None,
-        font='sans',
+        font="sans",
         text_size=12,
         renderer="cairo",
     ):
