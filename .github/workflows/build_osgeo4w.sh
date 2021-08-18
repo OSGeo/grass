@@ -102,7 +102,7 @@ if [ "$UNITTEST" ]; then
         chmod ugo+x "$bash_exe"
         bash_exe_path=$(echo "$src/dist.$arch/$bash_bin" | sed -e "s/^\/c/\;c:/;s/^\/\;d/d:/")
         ls "$src/dist.$arch/$bash_bin"
-        export "$PATH:$src/dist.$arch/$bash_bin"
+        export PATH="$PATH:$src/dist.$arch/$bash_bin"
         which t.create
     done
 fi
