@@ -70,8 +70,8 @@ char *G_tempfile(void)
  * Similar to G_tempfile(), but the temporary file name will include
  * a provided base directory instead of the path to the current mapset.
  *
- * \return pointer to a character string containing the name. The name 
- * is copied to allocated memory and may be released by the unix free() 
+ * \return pointer to a character string containing the name. The name
+ * is copied to allocated memory and may be released by the unix free()
  * routine.
  */
 char *G_tempfile_basedir(const char *basedir)
@@ -94,18 +94,18 @@ char *G_tempfile_pid(int pid)
     char element[100];
 
     if (pid <= 0)
-	pid = getpid();
+        pid = getpid();
     G_temp_element(element);
     G_init_tempfile();
     do {
-	int uniq = G_counter_next(&unique);
-	sprintf(name, "%d.%d", pid, uniq);
-	G_file_name(path, element, name, G_mapset());
+          int uniq = G_counter_next(&unique);
+          sprintf(name, "%d.%d", pid, uniq);
+          G_file_name(path, element, name, G_mapset());
     }
     while (access(path, F_OK) == 0);
 
     G_debug(2, "G_tempfile_pid(): %s", path);
-    
+
     return G_store(path);
 }
 
@@ -135,7 +135,7 @@ char *G_tempfile_pid_basedir(int pid, const char *basedir)
     while (access(path, F_OK) == 0);
 
     G_debug(2, "G_tempfile_pid(): %s", path);
-    
+
     return G_store(path);
 }
 
@@ -165,12 +165,12 @@ void G__temp_element(char *element, int tmp)
 	strcat(element, "/");
 	strcat(element, machine);
     }
-    
+
     if (!tmp)
         G_make_mapset_object_group(element);
     else
         G_make_mapset_object_group_tmp(element);
-    
+
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }
 
@@ -190,11 +190,11 @@ void G__temp_element_basedir(char *element, const char *basedir)
 	strcat(element, "/");
 	strcat(element, machine);
     }
-    
+
     if (basedir && *basedir)
         G_make_mapset_object_group_basedir(element, basedir);
     else
         G_make_mapset_object_group(element);
-    
+
     G_debug(2, "G__temp_element_basedir(): %s", element);
 }

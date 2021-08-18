@@ -629,7 +629,7 @@ static void write_fp_format(int fd)
 
 /*!
    \brief Move file
-   
+
    rename() does not work across different mount points.
    This function is a replacement for rename() working across different
    mount points.
