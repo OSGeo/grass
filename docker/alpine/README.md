@@ -17,7 +17,7 @@ __Build the docker with__:
 
 ```bash
 docker build \
-         --file docker/alpine/Dockerfile_alpine \
+         --file docker/alpine/Dockerfile \
          --tag grass-py3-pdal:latest-alpine .
 ```
 
@@ -41,7 +41,7 @@ and build and enter with:
 
 ```bash
 $ docker build \
-         -f docker/alpine/Dockerfile_alpine \
+         -f docker/alpine/Dockerfile \
          -t grass-py3-pdal:stable-alpine .
 
 $ docker run -it grass-py3-pdal:stable-alpine /bin/bash
