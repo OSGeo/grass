@@ -54,7 +54,7 @@ void IL_init_params_2d(struct interp_params *params,
                        double scl,  /*!< anisotropy scaling factor */
                        FILE * t1, FILE * t2, FILE * t3, FILE * t4, FILE * t5,
                        FILE * t6,  /*!< temp files for writing interp. values (t1-t6) */
-                       FILE * dev,  /*!< pointer to deviations file */
+                       bool create_devi,  /*!< create deviations file? */
                        struct TimeStamp *ts,
                        int c,  /*!< cross validation */
                        const char *wheresql     /*!< SQL WHERE statement */
@@ -99,7 +99,7 @@ void IL_init_params_2d(struct interp_params *params,
     params->Tmp_fd_xx = t4;
     params->Tmp_fd_yy = t5;
     params->Tmp_fd_xy = t6;
-    params->fddevi = dev;
+    params->create_devi = create_devi;
     params->ts = ts;
     params->cv = c;
     params->wheresql = wheresql;
