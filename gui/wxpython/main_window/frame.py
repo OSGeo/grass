@@ -258,30 +258,6 @@ class GMFrame(wx.Frame):
 
         return menu
 
-    def _createDisplayPanel(self, parent):
-        """Creates display panel"""
-        # create superior display panel
-        displayPanel = wx.Panel(parent, id=wx.ID_ANY)
-        # create display toolbar
-        dmgrToolbar = DisplayPanelToolbar(guiparent=displayPanel, parent=self)
-        # create display notebook
-        notebookLayers = GNotebook(parent=displayPanel, style=globalvar.FNPageStyle)
-        notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
-        menu = self._createTabMenu()
-        notebookLayers.SetRightClickMenu(menu)
-
-        # layout
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
-        sizer.Add(notebookLayers, proportion=1, flag=wx.EXPAND)
-
-        displayPanel.SetAutoLayout(True)
-        displayPanel.SetSizer(sizer)
-        displayPanel.Fit()
-        displayPanel.Layout()
-
-        return displayPanel, notebookLayers
-
     def _setCopyingOfSelectedText(self):
         copy = UserSettings.Get(
             group="manager", key="copySelectedTextToClipboard", subkey="enabled"
@@ -324,7 +300,11 @@ class GMFrame(wx.Frame):
 
     def _createDisplay(self, parent):
         """Initialize Display widget"""
-        self.displayPanel, self.notebookLayers = self._createDisplayPanel(parent)
+        # create display notebook
+        self.notebookLayers = GNotebook(parent=parent, style=globalvar.FNPageStyle)
+        self.notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
+        menu = self._createTabMenu()
+        self.notebookLayers.SetRightClickMenu(menu)
         # bindings
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
@@ -404,6 +384,9 @@ class GMFrame(wx.Frame):
         self.pg_panel = wx.Panel(
             self.notebookLayers, id=wx.ID_ANY, style=wx.BORDER_NONE
         )
+        # create display toolbar
+        dmgrToolbar = DisplayPanelToolbar(guiparent=self.pg_panel, parent=self)
+
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
@@ -460,6 +443,7 @@ class GMFrame(wx.Frame):
 
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
         cb_boxsizer.Add(self.GetLayerTree(), proportion=1, flag=wx.EXPAND, border=1)
         self.currentPage.SetSizer(cb_boxsizer)
         cb_boxsizer.Fit(self.GetLayerTree())
@@ -591,7 +575,7 @@ class GMFrame(wx.Frame):
         )
 
         self._auimgr.AddPane(
-            self.displayPanel,
+            self.notebookLayers,
             aui.AuiPaneInfo()
             .Name("display")
             .Caption("Display")
