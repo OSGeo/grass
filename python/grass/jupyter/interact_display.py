@@ -132,7 +132,14 @@ class InteractiveMap:
 
     def add_raster(self, name, opacity=0.8):
         """Imports raster into temporary WGS84 location,
-        exports as png and overlays on folium map
+        exports as png and overlays on folium map.
+
+        Color table for the raster can be modified with `r.colors` before calling
+        this function. NOTE: this will only work if the raster is located in the
+        current mapset. To change the color table of a raster located outside the
+        current mapset, switch to that mapset with `g.mapset`, modify the color
+        table with `r.color` then switch back to the initial mapset and run this
+        function.
 
         :param str name: name of raster to add to display; positional-only parameter
         :param float opacity: raster opacity, number between
