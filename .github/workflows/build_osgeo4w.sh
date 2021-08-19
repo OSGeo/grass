@@ -193,7 +193,9 @@ if [ "$UNITTEST" ]; then
     dos2unix $src/dist.$arch/$bash_bin/grass
     chmod ugo+x $src/dist.$arch/$bash_bin/grass
     # Set path for bash if not called from OSGeo shell
-    sed -i "5s/^/export PATH=\"\/c\/OSGeo4W\/bin:\/usr\/bin:\/mingw64\/bin:$src\/dist.$arch\/bin:$src\/dist.$arch\/$bash_bin\"/" $src/.github/workflows/test_simple.sh
+    arch_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"$arch")
+    src_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"$src")
+    sed -i "5s/^/export PATH=\"\/c\/OSGeo4W\/bin:\/usr\/bin:\/mingw64\/bin:$src_esc\/dist\.$arch_esc\/bin:$src_esc\/dist\.$arch\/$bash_bin\"/" $src/.github/workflows/test_simple.sh
 fi
 
 exit
