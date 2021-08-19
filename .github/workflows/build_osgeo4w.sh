@@ -189,6 +189,9 @@ unix2dos $grass_path/grass$ver.bat
 
 if [ "$UNITTEST" ]; then
     cp $grass_path/grass$ver.bat $grass_path/grass.bat
+    cp -a $bin/grass.py $src/dist.$arch/$bash_bin/grass
+    dos2unix $src/dist.$arch/$bash_bin/grass
+    chmod ugo+x $src/dist.$arch/$bash_bin/grass
 fi
 
 exit
