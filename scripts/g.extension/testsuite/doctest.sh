@@ -3,4 +3,6 @@
 set -e
 set -x
 
+echo $PATH
+
 g.extension --doctest
