@@ -1414,7 +1414,10 @@ class TestCase(unittest.TestCase):
                 "Called (Bash): {bash}\n"
                 "See the following errors:\n"
                 "{errors}".format(
-                    m=module, code=module.get_python(), bash=module.get_bash(), errors=module.outputs.stderr
+                    m=module,
+                    code=module.get_python(),
+                    bash=module.get_bash(),
+                    errors=module.outputs.stderr,
                 )
             )
             self.fail(self._formatMessage(msg, stdmsg))
