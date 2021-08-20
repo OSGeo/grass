@@ -7,6 +7,9 @@ echo $PATH
 which grass
 grass_exe=$(which grass)
 
+which python3
+python3 -c "import sys; print(sys.executable, sys.version)"
+
 echo $grass_exe
 cat $grass_exe
 
