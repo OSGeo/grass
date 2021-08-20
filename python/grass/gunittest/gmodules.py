@@ -122,8 +122,6 @@ def call_module(
     if "stderr" in kwargs:
         raise TypeError(_("stderr argument not allowed, it could be overridden"))
 
-    kwargs["shell"] = sys.platform == "win32"
-
     if capture_stdout:
         kwargs["stdout"] = subprocess.PIPE
     if capture_stderr:
@@ -140,4 +138,7 @@ def call_module(
     returncode = process.poll()
     if returncode:
         raise CalledModuleError(returncode, module, kwargs, errors)
-    return decode(output) if output else None
+    output = decode(output) if output else None
+    # Make sure that universal newlines are returned
+    output = output.replace(os.linesep, "\n") if os.linesep != "\n" else output
+    return output
