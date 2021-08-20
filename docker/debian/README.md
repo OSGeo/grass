@@ -17,7 +17,7 @@ __Build the docker with__:
 
 ```bash
 docker build \
-         --file docker/debian/Dockerfile_debian_pdal \
+         --file docker/debian/Dockerfile \
          --tag grass-py3-pdal:latest-debian .
 ```
 
@@ -40,7 +40,7 @@ and build and enter with:
 
 ```bash
 $ docker build \
-         -f docker/debian/Dockerfile_debian_pdal \
+         -f docker/debian/Dockerfile \
          -t grass-py3-pdal:stable-debian .
 
 $ docker run -it grass-py3-pdal:stable-debian /bin/bash

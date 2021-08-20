@@ -13,7 +13,6 @@
 
 import os
 import shutil
-from IPython.display import Image
 import tempfile
 import grass.script as gs
 
@@ -128,4 +127,6 @@ class GrassRenderer:
 
     def show(self):
         """Displays a PNG image of map"""
+        from IPython.display import Image
+
         return Image(self._filename)
