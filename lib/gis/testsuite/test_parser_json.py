@@ -22,7 +22,8 @@ import json
 
 print(os.environ["PATH"])
 print(sys.executable, sys.version)
-print(shutil.which("r.slope.aspect"),shutil.which("v.out.ascii"))
+print(shutil.which("r.slope.aspect"), shutil.which("v.out.ascii"))
+
 
 class TestParserJson(TestCase):
     def test_r_slope_aspect_json(self):
