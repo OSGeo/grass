@@ -196,9 +196,9 @@ if [ "$UNITTEST" ]; then
     arch_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"$arch")
     src_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"$src")
     sed -i "5s/^/export PATH=\"\/c\/OSGeo4W\/bin:\/usr\/bin:\/mingw64\/bin:$src_esc\/dist\.$arch_esc\/bin:$src_esc\/dist\.$arch\/$bash_bin\"/" $src/.github/workflows/test_simple.sh
-    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\n" > $HOME/.bash_profile
-    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\n" > $HOME/.profile
-    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\n" > $HOME/.bashrc
+    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\nexport PYTHONHOME=/c/OSGeo4W/apps/Python39" > $HOME/.bash_profile
+    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\nexport PYTHONHOME=/c/OSGeo4W/apps/Python39" > $HOME/.profile
+    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\nexport PYTHONHOME=/c/OSGeo4W/apps/Python39" > $HOME/.bashrc
 fi
 
 exit
