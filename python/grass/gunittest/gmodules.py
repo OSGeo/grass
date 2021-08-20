@@ -122,6 +122,8 @@ def call_module(
     if "stderr" in kwargs:
         raise TypeError(_("stderr argument not allowed, it could be overridden"))
 
+    kwargs["shell"] = sys.platform == "win32"
+
     if capture_stdout:
         kwargs["stdout"] = subprocess.PIPE
     if capture_stderr:
