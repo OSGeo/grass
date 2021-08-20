@@ -10,6 +10,7 @@ for details.
 """
 
 import subprocess
+import sys
 from grass.script.core import start_command
 from grass.script.utils import encode, decode
 from grass.exceptions import CalledModuleError
