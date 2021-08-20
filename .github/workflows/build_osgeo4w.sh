@@ -101,7 +101,7 @@ if [ "$UNITTEST" ]; then
         # dos2unix "$bash_exe"
         chmod ugo+x "$bash_exe"
     done
-    bash_exe_path=$(echo "$src/dist.$arch/$bash_bin" | sed -e "s/^\/c/\;c:/;s/^\/\;d/d:/")
+    bash_exe_path=$(echo "$src/dist.$arch/$bash_bin" | sed -e "s/^\/c/\;c:/;s/^\/d/d:/")
     export PATH="$PATH:$src/dist.$arch/$bash_bin"
     which t.create
 fi
@@ -147,7 +147,7 @@ opt_path=$osgeo4w_path/opt
 grass_path=$opt_path/grass
 
 if [ "$UNITTEST" ]; then
-    msys_path=";C:/Program Files/Git/mingw64/bin;C:/Program Files/Git/usr/bin"
+    msys_path=";C:/msys64/usr/bin;C:/msys64/mingw64/bin"
 fi
 
 mkdir -p $opt_path
@@ -163,7 +163,7 @@ cp -a $(ldd $dist/lib/*.dll | awk '/mingw64/{print $3}' |
         mswindows/osgeo4w/env.bat.tmpl
     cat <<EOT
 
-set PATH=%OSGEO4W_ROOT%\\bin${msys_path};%PATH%$bash_exe_path
+set PATH=%OSGEO4W_ROOT%\\bin${msys_path};%PATH%;$bash_exe_path
 
 if not exist %GISBASE%\etc\fontcap (
 	pushd .
@@ -196,9 +196,9 @@ if [ "$UNITTEST" ]; then
     arch_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"$arch")
     src_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"$src")
     sed -i "5s/^/export PATH=\"\/c\/OSGeo4W\/bin:\/usr\/bin:\/mingw64\/bin:$src_esc\/dist\.$arch_esc\/bin:$src_esc\/dist\.$arch\/$bash_bin\"/" $src/.github/workflows/test_simple.sh
-    printf export PATH="/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin" > $HOME/.bash_profile
-    printf export PATH="/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin" > $HOME/.profile
-    printf export PATH="/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin" > $HOME/.bashrc
+    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\n" > $HOME/.bash_profile
+    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\n" > $HOME/.profile
+    printf "export PATH=\"/c/OSGeo4W/bin:/usr/bin:/mingw64/bin:$src/dist.$arch/bin:$src/dist.$arch/$bash_bin\"\n" > $HOME/.bashrc
 fi
 
 exit
