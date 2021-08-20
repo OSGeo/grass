@@ -210,7 +210,7 @@ class TestCase(unittest.TestCase):
             reference = reference.replace(os.linesep, "\n")
         if os.linesep != "\n" and os.linesep in actual:
             actual = actual.replace(os.linesep, "\n")
-        # Strip newlines (esp. \r) that may remain after splitting lines 
+        # Strip newlines (esp. \r) that may remain after splitting lines
         reference = reference.strip()
         actual = actual.strip()
         if not check_text_ellipsis(actual=actual, reference=reference):
