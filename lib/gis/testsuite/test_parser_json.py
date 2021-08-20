@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Test the JSON extension of the GRASS parser
 
 (C) 2014 by the GRASS Development Team
