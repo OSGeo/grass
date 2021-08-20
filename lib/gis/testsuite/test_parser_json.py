@@ -11,10 +11,18 @@ for details.
 
 import subprocess
 import sys
+
+import os
+import shutil
+
 from grass.gunittest.case import TestCase
 from grass.script import decode
 import json
 
+
+print(os.environ["PATH"])
+print(sys.executable, sys.version)
+print(shutil.which("r.slope.aspect"),shutil.which("v.out.ascii"))
 
 class TestParserJson(TestCase):
     def test_r_slope_aspect_json(self):
