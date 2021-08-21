@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
     stat = EXIT_FAILURE;
     for (n = 0; (name = map->answers[n]); n++)
-	if (process(name, uncompress->answer))
+	if ( ! process(name, uncompress->answer) )
 	    stat = EXIT_SUCCESS;
     exit(stat);
 }
