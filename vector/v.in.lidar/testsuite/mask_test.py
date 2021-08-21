@@ -132,7 +132,7 @@ class VectorMaskTest(TestCase):
     def test_no_mask(self):
         """Test to see if the standard outputs are created"""
         self.assertModule(
-            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bto"
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
@@ -145,7 +145,7 @@ class VectorMaskTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             mask=self.areas,
         )
         self.assertVectorExists(self.imported_points)
@@ -159,7 +159,7 @@ class VectorMaskTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="btu",
+            flags="btuo",
             mask=self.areas,
         )
         self.assertVectorExists(self.imported_points)

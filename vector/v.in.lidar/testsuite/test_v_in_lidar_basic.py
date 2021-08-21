@@ -60,7 +60,7 @@ class BasicTest(TestCase):
     def test_output_identical(self):
         """Test to see if the standard outputs are created"""
         self.assertModule(
-            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bto"
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorEqualsVector(

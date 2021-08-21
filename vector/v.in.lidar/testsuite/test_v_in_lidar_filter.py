@@ -98,7 +98,7 @@ class FilterTest(TestCase):
         This shows if the inpute data are as expected.
         """
         self.assertModule(
-            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bto"
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
@@ -111,7 +111,7 @@ class FilterTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             return_filter=name,
         )
         self.assertVectorExists(self.imported_points)
@@ -137,7 +137,7 @@ class FilterTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             class_filter=class_n,
         )
         self.assertVectorExists(self.imported_points)
@@ -167,7 +167,7 @@ class FilterTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             return_filter=return_name,
             class_filter=class_n,
         )
@@ -190,7 +190,7 @@ class FilterTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             zrange=zrange,
         )
         self.assertVectorExists(self.imported_points)
@@ -215,7 +215,7 @@ class FilterTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             zrange=(141, 900),
             class_filter=5,
         )
@@ -230,7 +230,7 @@ class FilterTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             zrange=(141, 900),
             return_filter="last",
         )

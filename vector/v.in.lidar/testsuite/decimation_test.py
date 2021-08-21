@@ -60,7 +60,7 @@ class TestCountBasedDecimation(TestCase):
     def test_identical(self):
         """Test to see if the standard outputs are created"""
         self.assertModule(
-            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bto"
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
@@ -73,7 +73,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             skip=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -87,7 +87,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             preserve=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -101,7 +101,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             offset=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -115,7 +115,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             limit=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -157,7 +157,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             offset=105,
             preserve=10,
         )
@@ -173,7 +173,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             limit=105,
             skip=10,
         )
@@ -188,7 +188,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags="bto",
             offset=50,
             skip=5,
             limit=self.npoints - 1,
