@@ -8,15 +8,6 @@ jobs:
   flake8:
     name: ${{ matrix.directory }}
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        directory:
-          - .
-          - gui/wxpython
-          - python/grass
-          - scripts
-          - temporal
-      fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
@@ -33,5 +24,4 @@ jobs:
 
       - name: Run Flake8
         run: |
-          cd ${{ matrix.directory }}
           flake8 --count --statistics --show-source --jobs=$(nproc) .
