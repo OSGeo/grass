@@ -349,7 +349,7 @@ class TestFileAssertions(TestCase):
         open(cls.emtpy_file, "w").close()
         cls.file_with_md5 = cls.__name__ + "_this_is_a_file_with_known_md5"
         file_content = "Content of the file with known MD5.\n"
-        with open(cls.file_with_md5, "w") as f:
+        with open(cls.file_with_md5, "w", newline="") as f:
             f.write(file_content)
         # MD5 sum created using:
         # echo 'Content of the file with known MD5.' > some_file.txt
