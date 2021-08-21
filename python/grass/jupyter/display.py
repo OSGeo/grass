@@ -91,7 +91,14 @@ class GrassRenderer:
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
     def run(self, module, **kwargs):
-        """Run modules from "d." GRASS library"""
+        """Run modules from the GRASS display family (modules starting with "d.").
+
+         This function passes arguments directly to grass.script.run_command()
+         so the syntax is the same.
+
+        :param str module: name of GRASS module
+        :param `**kwargs`: named arguments passed to run_command()"""
+
         # Check module is from display library then run
         if module[0] == "d":
             gs.run_command(module, env=self._env, **kwargs)
@@ -119,7 +126,7 @@ class GrassRenderer:
         return wrapper
 
     def show(self):
-        """Displays a PNG image of the map"""
+        """Displays a PNG image of map"""
         from IPython.display import Image
 
         return Image(self._filename)
