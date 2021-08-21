@@ -405,6 +405,19 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
+        singleWindow = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Use single-window mode (requires GUI restart)"),
+            name="IsChecked",
+        )
+        singleWindow.SetValue(
+            self.settings.Get(group="general", key="singleWindow", subkey="enabled")
+        )
+        self.winId["general:singleWindow:enabled"] = singleWindow.GetId()
+        gridSizer.Add(singleWindow, pos=(row, 0), span=(1, 2))
+
+        row += 1
         posDisplay = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
