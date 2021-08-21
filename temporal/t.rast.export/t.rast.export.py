@@ -37,9 +37,8 @@
 
 # %option G_OPT_M_DIR
 # % key: directory
-# % description: Path to the work directory, default is /tmp
+# % description: Path to the work directory, standard temporary directory is used if not given
 # % required: no
-# % answer: /tmp
 # %end
 
 # %option
@@ -102,6 +101,7 @@
 # %option G_OPT_T_WHERE
 # %end
 
+import tempfile
 import grass.script as grass
 
 
@@ -122,6 +122,8 @@ def main():
         key: options[key] for key in ("createopt", "metaopt", "nodata") if options[key]
     }
 
+    if directory is None:
+        directory = tempfile.gettempdir()
     if _type and _format in ["pack", "AAIGrid"]:
         grass.warning(
             _("Type options is not working with pack format, " "it will be skipped")
