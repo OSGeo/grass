@@ -141,5 +141,9 @@ def call_module(
         raise CalledModuleError(returncode, module, kwargs, errors)
     output = decode(output) if output else None
     # Make sure that universal newlines are returned
-    output = output.replace(os.linesep, "\n") if os.linesep != "\n" else output
+    output = (
+        output.replace(os.linesep, "\n")
+        if os.linesep != "\n" and type(output) == str
+        else output
+    )
     return output
