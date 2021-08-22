@@ -190,7 +190,7 @@ In detail:
 
     cd /where/your/grass-source-code/lives/
     git fetch --all
-    git merge upstream/master
+    git merge upstream/main
     ./configure ...
     make
     make install

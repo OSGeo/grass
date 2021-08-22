@@ -18,8 +18,8 @@
  d.mon delegates rendering to Python script [1] through GRASS_RENDER_COMMAND [2].
  See also document [3].
 
- [1] https://github.com/OSGeo/grass/tree/master/display/d.mon/render_cmd.py
- [2] https://github.com/OSGeo/grass/tree/master/lib/display/r_raster.c#L107
+ [1] display/d.mon/render_cmd.py
+ [2] lib/display/r_raster.c
  [3] https://grass.osgeo.org/grass80/manuals/displaydrivers.html
 
 */
