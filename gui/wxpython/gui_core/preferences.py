@@ -408,7 +408,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         singleWindow = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Use single-window mode (requires GUI restart)"),
+            label=_("Use single-window mode (experimental, requires GUI restart)"),
             name="IsChecked",
         )
         singleWindow.SetValue(
