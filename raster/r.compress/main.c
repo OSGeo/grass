@@ -94,10 +94,10 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    stat = EXIT_FAILURE;
+    stat = EXIT_SUCCESS;
     for (n = 0; (name = map->answers[n]); n++)
 	if (process(name, uncompress->answer))
-	    stat = EXIT_SUCCESS;
+	    stat = EXIT_FAILURE;
     exit(stat);
 }
 
