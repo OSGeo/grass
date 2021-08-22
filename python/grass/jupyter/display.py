@@ -45,6 +45,7 @@ class GrassRenderer:
         width=600,
         filename=None,
         env=None,
+        font="sans",
         text_size=12,
         renderer="cairo",
     ):
@@ -55,6 +56,10 @@ class GrassRenderer:
         :param int width: width of map in pixels
         :param str filename: filename or path to save a PNG of map
         :param str env: environment
+        :param str font: font to use in rendering; either the name of a font from
+                        $GISBASE/etc/fontcap (or alternative fontcap file specified
+                        by GRASS_FONT_CAP), or alternatively the full path to a FreeType
+                        font file
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
         """
@@ -67,6 +72,7 @@ class GrassRenderer:
         # Environment Settings
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
+        self._env["GRASS_FONT"] = font
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
