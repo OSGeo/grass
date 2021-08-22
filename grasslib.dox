@@ -37,8 +37,9 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 <i>Note: Missing entries below still need to be documented in Doxygen format.</i>
 
-<!-- original:
-  https://github.com/OSGeo/grass/blob/master/doc/grass8_arch.odg
+<!--
+  original:
+  doc/grass8_arch.odg
 -->
 \image html "grass8_arch.png" "GRASS GIS 8 Architecture"
 
@@ -184,8 +185,9 @@ as follows:
   storage in database (DBMS).</dd>
 </dl>
 
-<!-- original: 
-  https://raw.githubusercontent.com/OSGeo/grass/master/doc/help_loc_structure.odg
+<!--
+  original:
+  doc/help_loc_structure.odg
 -->
 \image html "loc_struct.png" "Diagram of GRASS file structure"
 
