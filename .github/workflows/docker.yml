@@ -3,13 +3,13 @@
 # Summary
 #
 # job docker-branch-os-matrix:
-# * creates tags latest-alpine, latest-debian and latest-ubuntu for master branch
+# * creates tags latest-alpine, latest-debian and latest-ubuntu for main branch
 # * creates tags stable-alpine, stable-debian and stable-ubuntu for releasebranch_7_8
 # * if action would trigger other branches as well, they would create
 #   tags <branch_name>-alpine, <branch_name>-debian and <branch_name>-ubuntu
 #
-# job docker-master-latest:
-# * creates tag latest for master branch
+# job docker-main-latest:
+# * creates tag latest for main branch
 #
 # job docker-release-os-matrix:
 # * creates tags <version>-alpine, <version>-debian and <version>-ubuntu for each release
@@ -18,7 +18,7 @@ name: Docker
 
 on:
   push:
-    branches: [master, releasebranch_7_8]
+    branches: [main, releasebranch_7_8]
     tags: ['*.*.*']
     paths-ignore: ['doc/**']
   release:
@@ -32,13 +32,13 @@ env:
 jobs:
 
   # Only run for push to configured branches, do not run for releases.
-  # Take care of different os. For master branch, created tags are:
+  # Take care of different os. For main branch, created tags are:
   # latest-alpine, latest-debian, latest-ubuntu
   # For releasebranch_7_8, created tags are:
   # stable-alpine, stable-debian, stable-ubuntu
   docker-branch-os-matrix:
     name: build and push ${{ matrix.os }} for branch
-    if: startsWith(github.ref, 'refs/tags/') != true
+    if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
 
     strategy:
@@ -57,7 +57,7 @@ jobs:
       - id: meta
         name: Create tag name
         run: |
-          if [ "$GITHUB_REF" == "refs/heads/master" ]
+          if [ "$GITHUB_REF" == "refs/heads/main" ]
           then
             TAG_PREFIX=latest
           elif [ "$GITHUB_REF" == "refs/heads/releasebranch_7_8" ]
@@ -94,13 +94,13 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
 
-  # Only run for push to master branch
+  # Only run for push to main branch
   # Take care of tag latest
   # This job needs to build the configured image (ubuntu)
-  # again for master branch to create latest tag.
-  docker-master-latest:
-    name: build and push latest for master branch
-    if: startsWith(github.ref, 'refs/heads/master')
+  # again for main branch to create latest tag.
+  docker-main-latest:
+    name: build and push latest for main branch
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
