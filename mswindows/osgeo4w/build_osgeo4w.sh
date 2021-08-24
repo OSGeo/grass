@@ -186,8 +186,9 @@ if [ "$UNITTEST" ]; then
     arch_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"${ARCH}")
     src_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"${SRC}")
     osgeo4w_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"${OSGEO4W_ROOT_MSYS}")
-    sed -i "5s/^/export PATH=\"${osgeo4w_esc}\/bin:\/usr\/bin:\/mingw64\/bin:$src_esc\/dist\.$arch_esc\/bin:$src_esc\/dist\.$arch_esc\/$bash_bin\"/" ${SRC}/.github/workflows/test_simple.sh
-    printf "export PATH=\"${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin:${SRC}/dist.${ARCH}/bin:${SRC}/dist.${ARCH}/$bash_bin\"\nexport PYTHONHOME=${PYTHONHOME}" > $HOME/.bash_profile
-    printf "export PATH=\"${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin:${SRC}/dist.${ARCH}/bin:${SRC}/dist.${ARCH}/$bash_bin\"\nexport PYTHONHOME=${PYTHONHOME}" > $HOME/.profile
-    printf "export PATH=\"${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin:${SRC}/dist.${ARCH}/bin:${SRC}/dist.${ARCH}/$bash_bin\"\nexport PYTHONHOME=${PYTHONHOME}" > $HOME/.bashrc
+    pythonhome_esc=$(sed 's/[\/\*\.]/\\&/g' <<<"${PYTHONHOME}")
+    sed -i "5s/^/export PATH=\"${osgeo4w_esc}\/bin:\/usr\/bin:\/mingw64\/bin:$src_esc\/dist\.$arch_esc\/bin:$src_esc\/dist\.$arch_esc\/$bash_bin\"\nexport PYTHONHOME=\"${pythonhome_esc}\"/" ${SRC}/.github/workflows/test_simple.sh
+    printf "export PATH=\"${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin:${SRC}/dist.${ARCH}/bin:${SRC}/dist.${ARCH}/$bash_bin\"\nexport PYTHONHOME=\"${PYTHONHOME}\"\nexport PYTHONUTF8=1" > $HOME/.bash_profile
+    printf "export PATH=\"${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin:${SRC}/dist.${ARCH}/bin:${SRC}/dist.${ARCH}/$bash_bin\"\nexport PYTHONHOME=\"${PYTHONHOME}\"\nexport PYTHONUTF8=1" > $HOME/.profile
+    printf "export PATH=\"${OSGEO4W_ROOT_MSYS}/bin:/usr/bin:/mingw64/bin:${SRC}/dist.${ARCH}/bin:${SRC}/dist.${ARCH}/$bash_bin\"\nexport PYTHONHOME=\"${PYTHONHOME}\"\nexport PYTHONUTF8=1" > $HOME/.bashrc
 fi
