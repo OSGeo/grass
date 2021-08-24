@@ -578,7 +578,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Dataset doesn't have requested dimension '%s'"
                         " with ID %d (possibly a programming error)"),
                       pdal::Dimension::name(dim_to_use_as_z).c_str(),
-                      dim_to_use_as_z);
+                      static_cast<int>(dim_to_use_as_z));
 
     struct line_pnts *points = Vect_new_line_struct();
     struct line_cats *cats = Vect_new_cats_struct();
