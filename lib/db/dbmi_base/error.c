@@ -101,7 +101,7 @@ void db_protocol_error(void)
 void db_syserror(const char *s)
 {
     char lead[1024];
-    char msg[1024];
+    char msg[2048];
 
 
     err_flag = 0;
@@ -192,7 +192,7 @@ void db_print_error(void)
 	sprintf(lead, "%s: ", who);
 
     if (user_print_function) {
-	char buf[1024];
+        char buf[2048];
 
 	sprintf(buf, "%s%s\n", lead, err_msg);
 	user_print_function(buf);

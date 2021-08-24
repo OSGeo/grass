@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     int dim_vect, nparameters, BW, npoints;
     double mean, lambda;
     const char *dvr, *db, *mapset;
-    char table_name[GNAME_MAX];
+    char table_name[GNAME_MAX + 64];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     int last_row, last_column, flag_auxiliar = FALSE;

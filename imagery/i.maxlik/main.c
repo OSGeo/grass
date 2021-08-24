@@ -141,13 +141,13 @@ int main(int argc, char *argv[])
     Rast_free_cats(&cats);
 
     if (reject_fd > 0) {
-	char title[100];
+        char *title = NULL;
 	char *label[] = { "no data", "0.1%", "0.5%",
 			  "1%", "2%", "5%", "10%",
 			  "20%", "30%", "50%", "70%",
 			  "80%", "90%", "95%", "98%",
 			  "99%", "100%", "bad" };
-	sprintf(title, "Rejection Probability for %s", class_name);
+        G_asprintf(&title, "Rejection Probability for %s", class_name);
 
 	Rast_init_cats(title, &cats);
 	Rast_set_cats_title(title, &cats);

@@ -110,13 +110,19 @@ int calculateIndex(char *file, rli_func *f,
 	if (doneDir == -1 && errno != EEXIST)
 	    G_fatal_error(_("Cannot create %s directory"), out);
 
-	/* check if ~/.grass8/r.li/output exists */
-	sprintf(out, "%s%s", rlipath, "output");
+	/* check if ~/.grass7/r.li/output exists */
+        if (snprintf(out, GPATH_MAX, "%s%s", rlipath, "output") >= GPATH_MAX)
+            G_fatal_error(_("Filepath '%s%s' exceeds max length"), rlipath,
+                          "output");
 	doneDir = G_mkdir(out);
 	if (doneDir == -1 && errno != EEXIST)
 	    G_fatal_error(_("Cannot create %s directory"), out);
-	sprintf(out, "%s%s%c%s", rlipath, "output", HOST_DIRSEP, output);
-	res = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (snprintf(out, GPATH_MAX, "%s%s%c%s", rlipath, "output", HOST_DIRSEP,
+                     output) >= GPATH_MAX)
+            G_fatal_error(_("Filepath '%s%s%c%s' exceeds max length"), rlipath,
+                          "output", HOST_DIRSEP, output);
+        if ((res = open(out, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+            G_fatal_error(_("Cannot create %s output"), out);
     }
     i = 0;
 
