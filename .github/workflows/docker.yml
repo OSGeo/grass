@@ -38,7 +38,7 @@ jobs:
   # stable-alpine, stable-debian, stable-ubuntu
   docker-branch-os-matrix:
     name: build and push ${{ matrix.os }} for branch
-    if: startsWith(github.ref, 'refs/heads/') != true
+    if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
 
     strategy:
