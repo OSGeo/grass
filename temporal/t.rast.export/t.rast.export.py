@@ -37,7 +37,8 @@
 
 # %option G_OPT_M_DIR
 # % key: directory
-# % description: Path to the work directory, standard temporary directory is used if not given
+# % label: Path to the temporary working directory
+# % description: If not given, the default is the standard temporary directory (e.g. defined by the TMP environment variable)
 # % required: no
 # %end
 
