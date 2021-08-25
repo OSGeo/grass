@@ -37,9 +37,6 @@ static DCELL *old_val_row, *new_val_row;
 static double (*distance) (double dx, double dy);
 static double xres, yres;
 
-#undef MAX
-#define MAX(a, b)	((a) > (b) ? (a) : (b))
-
 static double distance_euclidean_squared(double dx, double dy)
 {
     return dx * dx + dy * dy;
