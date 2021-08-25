@@ -49,7 +49,7 @@ class VNETManager:
         self.giface = giface
         self.mapWin = giface.GetMapWindow()
 
-        self.goutput = GConsole(guiparent=guiparent)
+        self.goutput = GConsole(guiparent=guiparent, giface=self.giface)
 
         self.vnet_data = VNETData(guiparent=guiparent, mapWin=self.mapWin)
 

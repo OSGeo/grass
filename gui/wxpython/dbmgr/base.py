@@ -1353,15 +1353,19 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlSimpleSizer = btnApply.GetContainingSizer()
 
         if sqlReduce:
-            self.layerPage[layer]['sqlIsReduced'] = True
-            sqlSimpleSizer.AddGrowableCol(0)
-            sqlSimpleSizer.RemoveGrowableCol(1)
+            self.layerPage[layer]["sqlIsReduced"] = True
+            if not sqlSimpleSizer.IsColGrowable(0):
+                sqlSimpleSizer.AddGrowableCol(0)
+            if sqlSimpleSizer.IsColGrowable(1):
+                sqlSimpleSizer.RemoveGrowableCol(1)
             sqlSimpleSizer.SetItemPosition(wherePanel, (1, 0))
             sqlSimpleSizer.SetItemPosition(btnApply, (1, 1))
         else:
-            self.layerPage[layer]['sqlIsReduced'] = False
-            sqlSimpleSizer.AddGrowableCol(1)
-            sqlSimpleSizer.RemoveGrowableCol(0)
+            self.layerPage[layer]["sqlIsReduced"] = False
+            if not sqlSimpleSizer.IsColGrowable(1):
+                sqlSimpleSizer.AddGrowableCol(1)
+            if sqlSimpleSizer.IsColGrowable(0):
+                sqlSimpleSizer.RemoveGrowableCol(0)
             sqlSimpleSizer.SetItemPosition(wherePanel, (0, 1))
             sqlSimpleSizer.SetItemPosition(btnApply, (0, 2))
 
