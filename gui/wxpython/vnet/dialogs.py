@@ -582,9 +582,9 @@ class VNETDialog(wx.Dialog):
                 name="resultDbMgr",
             )
         elif not haveDbMgr:
-            self.notebook.RemovePage(
-                page=self.notebook.GetPageIndexByName("resultDbMgr")
-            )
+            page = self.notebook.GetPageIndexByName("resultDbMgr")
+            if page != -1:
+                self.notebook.RemovePage(page=page)
 
     def OnPageChanged(self, event):
         """Tab switched"""
