@@ -83,7 +83,6 @@ struct fileinfo			/* Information for opened cell files */
     int data_fd;		/* Raster data fd               */
     off_t *null_row_ptr;	/* Null file row addresses      */
     struct R_vrt *vrt;
-    const char *tmpdir;    /* custom tmpdir for data files */
 };
 
 struct R__			/*  Structure of library globals */
