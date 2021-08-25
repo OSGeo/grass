@@ -25,21 +25,21 @@
 #include <grass/spawn.h>
 #include <grass/glocale.h>
 
-#define COUNT	   1		/* Count                 */
-#define SUM	   2		/* Sum                   */
-#define MIN	   3		/* Minimum               */
-#define MAX	   4		/* Maximum               */
-#define RANGE	   5		/* Range                 */
-#define AVERAGE    6		/* Average (mean)        */
-#define ADEV       7		/* Average deviation     */
-#define VARIANCE1  8		/* Variance              */
-#define STDDEV1    9		/* Standard deviation    */
-#define SKEWNESS1 10		/* Skewness              */
-#define KURTOSIS1 11		/* Kurtosis              */
-#define VARIANCE2 12		/* Variance              */
-#define STDDEV2   13		/* Standard deviation    */
-#define SKEWNESS2 14		/* Skewness              */
-#define KURTOSIS2 15		/* Kurtosis              */
+#define FUNC_COUNT      1		/* Count                 */
+#define FUNC_SUM        2		/* Sum                   */
+#define FUNC_MIN        3		/* Minimum               */
+#define FUNC_MAX        4		/* Maximum               */
+#define FUNC_RANGE      5		/* Range                 */
+#define FUNC_AVERAGE    6		/* Average (mean)        */
+#define FUNC_ADEV       7		/* Average deviation     */
+#define FUNC_VARIANCE1  8		/* Variance              */
+#define FUNC_STDDEV1    9		/* Standard deviation    */
+#define FUNC_SKEWNESS1 10		/* Skewness              */
+#define FUNC_KURTOSIS1 11		/* Kurtosis              */
+#define FUNC_VARIANCE2 12		/* Variance              */
+#define FUNC_STDDEV2   13		/* Standard deviation    */
+#define FUNC_SKEWNESS2 14		/* Skewness              */
+#define FUNC_KURTOSIS2 15		/* Kurtosis              */
 
 struct menu
 {
@@ -52,21 +52,21 @@ extern struct menu menu[];
 
 /* modify this table to add new methods */
 struct menu menu[] = {
-    {"count",     COUNT,     "Count of values in specified objects"},
-    {"sum",       SUM,       "Sum of values in specified objects"},
-    {"min",       MIN,       "Minimum of values in specified objects"},
-    {"max",       MAX,       "Maximum of values in specified objects"},
-    {"range",     RANGE,     "Range of values (max - min) in specified objects"},
-    {"average",   AVERAGE,   "Average of values in specified objects"},
-    {"avedev",    ADEV,      "Average deviation of values in specified objects"},
-    {"variance",  VARIANCE1, "Variance of values in specified objects"},
-    {"stddev",    STDDEV1,   "Standard deviation of values in specified objects"},
-    {"skewness",  SKEWNESS1, "Skewness of values in specified objects"},
-    {"kurtosis",  KURTOSIS1, "Kurtosis of values in specified objects"},
-    {"variance2", VARIANCE2, "(2-pass) Variance of values in specified objects"},
-    {"stddev2",   STDDEV2,   "(2-pass) Standard deviation of values in specified objects"},
-    {"skewness2", SKEWNESS2, "(2-pass) Skewness of values in specified objects"},
-    {"kurtosis2", KURTOSIS2, "(2-pass) Kurtosis of values in specified objects"},
+    {"count",     FUNC_COUNT,     "Count of values in specified objects"},
+    {"sum",       FUNC_SUM,       "Sum of values in specified objects"},
+    {"min",       FUNC_MIN,       "Minimum of values in specified objects"},
+    {"max",       FUNC_MAX,       "Maximum of values in specified objects"},
+    {"range",     FUNC_RANGE,     "Range of values (max - min) in specified objects"},
+    {"average",   FUNC_AVERAGE,   "Average of values in specified objects"},
+    {"avedev",    FUNC_ADEV,      "Average deviation of values in specified objects"},
+    {"variance",  FUNC_VARIANCE1, "Variance of values in specified objects"},
+    {"stddev",    FUNC_STDDEV1,   "Standard deviation of values in specified objects"},
+    {"skewness",  FUNC_SKEWNESS1, "Skewness of values in specified objects"},
+    {"kurtosis",  FUNC_KURTOSIS1, "Kurtosis of values in specified objects"},
+    {"variance2", FUNC_VARIANCE2, "(2-pass) Variance of values in specified objects"},
+    {"stddev2",   FUNC_STDDEV2,   "(2-pass) Standard deviation of values in specified objects"},
+    {"skewness2", FUNC_SKEWNESS2, "(2-pass) Skewness of values in specified objects"},
+    {"kurtosis2", FUNC_KURTOSIS2, "(2-pass) Kurtosis of values in specified objects"},
     {0, 0, 0}
 };
 
@@ -191,44 +191,44 @@ int main(int argc, char **argv)
     cols = Rast_window_cols();
 
     switch (method) {
-    case COUNT:
+    case FUNC_COUNT:
 	count = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case SUM:
+    case FUNC_SUM:
 	sum = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case MIN:
+    case FUNC_MIN:
 	min = G_malloc(ncats * sizeof(DCELL));
 	break;
-    case MAX:
+    case FUNC_MAX:
 	max = G_malloc(ncats * sizeof(DCELL));
 	break;
-    case RANGE:
+    case FUNC_RANGE:
 	min = G_malloc(ncats * sizeof(DCELL));
 	max = G_malloc(ncats * sizeof(DCELL));
 	break;
-    case AVERAGE:
-    case ADEV:
-    case VARIANCE2:
-    case STDDEV2:
-    case SKEWNESS2:
-    case KURTOSIS2:
+    case FUNC_AVERAGE:
+    case FUNC_ADEV:
+    case FUNC_VARIANCE2:
+    case FUNC_STDDEV2:
+    case FUNC_SKEWNESS2:
+    case FUNC_KURTOSIS2:
 	count = G_calloc(ncats, sizeof(DCELL));
 	sum = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case VARIANCE1:
-    case STDDEV1:
+    case FUNC_VARIANCE1:
+    case FUNC_STDDEV1:
 	count = G_calloc(ncats, sizeof(DCELL));
 	sum = G_calloc(ncats, sizeof(DCELL));
 	sum2 = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case SKEWNESS1:
+    case FUNC_SKEWNESS1:
 	count = G_calloc(ncats, sizeof(DCELL));
 	sum = G_calloc(ncats, sizeof(DCELL));
 	sum2 = G_calloc(ncats, sizeof(DCELL));
 	sum3 = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case KURTOSIS1:
+    case FUNC_KURTOSIS1:
 	count = G_calloc(ncats, sizeof(DCELL));
 	sum = G_calloc(ncats, sizeof(DCELL));
 	sum2 = G_calloc(ncats, sizeof(DCELL));
@@ -294,11 +294,11 @@ int main(int argc, char **argv)
     result = G_calloc(ncats, sizeof(DCELL));
 
     switch (method) {
-    case ADEV:
-    case VARIANCE2:
-    case STDDEV2:
-    case SKEWNESS2:
-    case KURTOSIS2:
+    case FUNC_ADEV:
+    case FUNC_VARIANCE2:
+    case FUNC_STDDEV2:
+    case FUNC_SKEWNESS2:
+    case FUNC_KURTOSIS2:
 	mean = G_calloc(ncats, sizeof(DCELL));
 	for (i = 0; i < ncats; i++)
 	    mean[i] = sum[i] / count[i];
@@ -307,18 +307,18 @@ int main(int argc, char **argv)
     }
 
     switch (method) {
-    case ADEV:
+    case FUNC_ADEV:
 	sumu = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case VARIANCE2:
-    case STDDEV2:
+    case FUNC_VARIANCE2:
+    case FUNC_STDDEV2:
 	sum2 = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case SKEWNESS2:
+    case FUNC_SKEWNESS2:
 	sum2 = G_calloc(ncats, sizeof(DCELL));
 	sum3 = G_calloc(ncats, sizeof(DCELL));
 	break;
-    case KURTOSIS2:
+    case FUNC_KURTOSIS2:
 	sum2 = G_calloc(ncats, sizeof(DCELL));
 	sum4 = G_calloc(ncats, sizeof(DCELL));
 	break;
@@ -369,45 +369,45 @@ int main(int argc, char **argv)
     }
 
     switch (method) {
-    case COUNT:
+    case FUNC_COUNT:
 	for (i = 0; i < ncats; i++)
 	    result[i] = count[i];
 	break;
-    case SUM:
+    case FUNC_SUM:
 	for (i = 0; i < ncats; i++)
 	    result[i] = sum[i];
 	break;
-    case AVERAGE:
+    case FUNC_AVERAGE:
 	for (i = 0; i < ncats; i++)
 	    result[i] = sum[i] / count[i];
 	break;
-    case MIN:
+    case FUNC_MIN:
 	for (i = 0; i < ncats; i++)
 	    result[i] = min[i];
 	break;
-    case MAX:
+    case FUNC_MAX:
 	for (i = 0; i < ncats; i++)
 	    result[i] = max[i];
 	break;
-    case RANGE:
+    case FUNC_RANGE:
 	for (i = 0; i < ncats; i++)
 	    result[i] = max[i] - min[i];
 	break;
-    case VARIANCE1:
+    case FUNC_VARIANCE1:
 	for (i = 0; i < ncats; i++) {
 	    double n = count[i];
 	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
 	    result[i] = var;
 	}
 	break;
-    case STDDEV1:
+    case FUNC_STDDEV1:
 	for (i = 0; i < ncats; i++) {
 	    double n = count[i];
 	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
 	    result[i] = sqrt(var);
 	}
 	break;
-    case SKEWNESS1:
+    case FUNC_SKEWNESS1:
 	for (i = 0; i < ncats; i++) {
 	    double n = count[i];
 	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
@@ -418,7 +418,7 @@ int main(int argc, char **argv)
 	    result[i] = skew;
 	}
 	break;
-    case KURTOSIS1:
+    case FUNC_KURTOSIS1:
 	for (i = 0; i < ncats; i++) {
 	    double n = count[i];
 	    double var = (sum2[i] - sum[i] * sum[i] / n) / (n - 1);
@@ -430,19 +430,19 @@ int main(int argc, char **argv)
 	    result[i] = kurt;
 	}
 	break;
-    case ADEV:
+    case FUNC_ADEV:
 	for (i = 0; i < ncats; i++)
 	    result[i] = sumu[i] / count[i];
 	break;
-    case VARIANCE2:
+    case FUNC_VARIANCE2:
 	for (i = 0; i < ncats; i++)
 	    result[i] = sum2[i] / (count[i] - 1);
 	break;
-    case STDDEV2:
+    case FUNC_STDDEV2:
 	for (i = 0; i < ncats; i++)
 	    result[i] = sqrt(sum2[i] / (count[i] - 1));
 	break;
-    case SKEWNESS2:
+    case FUNC_SKEWNESS2:
 	for (i = 0; i < ncats; i++) {
 	    double n = count[i];
 	    double var = sum2[i] / (n - 1);
@@ -453,7 +453,7 @@ int main(int argc, char **argv)
 	G_free(sum2);
 	G_free(sum3);
 	break;
-    case KURTOSIS2:
+    case FUNC_KURTOSIS2:
 	for (i = 0; i < ncats; i++) {
 	    double n = count[i];
 	    double var = sum2[i] / (n - 1);

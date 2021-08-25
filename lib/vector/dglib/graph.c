@@ -30,6 +30,7 @@
 
 #define DGL_V2 1
 
+#include <grass/gis.h>
 #include "type.h"
 #include "tree.h"
 #include "graph.h"
@@ -1686,10 +1687,6 @@ int dglWriteChunk(dglIOContext_s * pIO, dglWriteChunk_fn pfn, void *pv)
     }
     return 0;
 }
-
-#ifndef MIN
-#define MIN(x,y)	(((x)<(y))?x:y)
-#endif
 
 int dglReadChunk(dglIOContext_s * pIO, dglByte_t * pbChunk, int cbChunk)
 {

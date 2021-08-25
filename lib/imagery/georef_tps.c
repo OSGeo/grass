@@ -42,13 +42,6 @@ struct MATRIX
 
 #define MAXORDER 3    /* HIGHEST SUPPORTED ORDER OF TRANSFORMATION */
 
-#ifndef MAX
-#define MAX(x,y) ((x) > (y) ? (x) : (y))
-#endif
-#ifndef MIN
-#define MIN(x,y) ((x) < (y) ? (x) : (y))
-#endif
-
 /***********************************************************************
 
   FUNCTION PROTOTYPES FOR STATIC (INTERNAL) FUNCTIONS

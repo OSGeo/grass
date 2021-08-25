@@ -245,9 +245,6 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
 
 /*---------------------------------------------------------------------------*/
 
-#undef MAX
-#define MAX(a,b) (a > b ? a : b)
-
 void
 asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue)
 {

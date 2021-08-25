@@ -23,13 +23,12 @@
 
 #include <float.h>
 #include <math.h>
+#include <grass/gis.h>
 
 #define BIG_NUM (FLT_MAX/4.0)
 
 
 #define Undefined(x, t) ((x)->boundary[0] > (x)->boundary[t->ndims_alloc])
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 /*!
  \brief Create a new rectangle for a given tree

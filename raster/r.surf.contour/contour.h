@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <grass/gis.h>
 #include <grass/raster.h>
 #include "flag.h"
 
@@ -7,7 +8,6 @@
 #define INIT_AR		64
 #define AR_INCR		64
 #define ABS(x)		(((x) < 0) ? -(x) : (x))
-#define MIN(x,y)	(((x) < (y)) ? (x) : (y))
 #define TST(x)			/* fprintf(stderr,"(x):%d\n",(x)) */
 #define TSTSTR(x)		/* fprintf(stderr,"%s\n",(x)) */
 

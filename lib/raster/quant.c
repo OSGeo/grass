@@ -27,11 +27,6 @@ static int double_comp(const void *, const void *);
 #define MAX_LOOKUP_TABLE_SIZE 2048
 #define NO_DATA (Rast_set_c_null_value (&tmp, 1), (CELL) tmp)
 
-#undef MIN
-#undef MAX
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
-
 #define NO_LEFT_INFINITE_RULE (! q->infiniteLeftSet)
 #define NO_RIGHT_INFINITE_RULE (! q->infiniteRightSet)
 #define NO_FINITE_RULE (q->nofRules <= 0)

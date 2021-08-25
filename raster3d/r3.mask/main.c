@@ -41,9 +41,6 @@ void getParams(char **name, d_Mask ** maskRules)
 
 /*-------------------------------------------------------------------------*/
 
-#undef MAX
-#define MAX(a,b) (a > b ? a : b)
-
 static void makeMask(char *name, d_Mask * maskRules)
 {
     void *map, *mask;

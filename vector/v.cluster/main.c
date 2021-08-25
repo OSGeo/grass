@@ -25,11 +25,6 @@
 #include <grass/glocale.h>
 #include <grass/kdtree.h>
 
-#ifdef MAX
-#undef MAX
-#endif
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
 #define CL_DBSCAN	1
 #define CL_DBSCAN2	2
 #define CL_DENSE	3
