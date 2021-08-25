@@ -906,9 +906,12 @@ class Settings:
             """Recursively update nested dictionary by another nested dictionary"""
             for key, value in update.items():
                 if isinstance(value, collections.abc.Mapping):
-                    update_nested_dict_by_dict(dictionary.get(key, {}), value)
+                    dictionary[key] = update_nested_dict_by_dict(
+                        dictionary.get(key, {}), value
+                    )
                 else:
                     dictionary[key] = value
+            return dictionary
 
         try:
             with open(self.filePath, "r") as f:
