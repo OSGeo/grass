@@ -41,6 +41,7 @@ ctypes_type_map = {
     ("int16_t", True, 0): "c_int16",
     ("int32_t", True, 0): "c_int32",
     ("int64_t", True, 0): "c_int64",
+    ("__int64", True, 0): "c_int64",
     ("uint8_t", True, 0): "c_uint8",
     ("uint16_t", True, 0): "c_uint16",
     ("uint32_t", True, 0): "c_uint32",

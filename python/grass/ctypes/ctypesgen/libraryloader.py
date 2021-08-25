@@ -322,6 +322,12 @@ class PosixLibraryLoader(LibraryLoader):
 class WindowsLibraryLoader(LibraryLoader):
     name_formats = ["%s.dll", "lib%s.dll", "%slib.dll", "%s"]
 
+    def __init__(self):
+        super().__init__()
+        for p in os.getenv("PATH").split(";"):
+            if os.path.exists(p) and hasattr(os, "add_dll_directory"):
+                os.add_dll_directory(p)
+
     class Lookup(LibraryLoader.Lookup):
         def __init__(self, path):
             super(WindowsLibraryLoader.Lookup, self).__init__(path)
