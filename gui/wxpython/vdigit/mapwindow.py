@@ -689,7 +689,8 @@ class VDigitWindow(BufferedMapWindow):
                     else:
                         # unselect
                         self.digit.GetDisplay().SetSelected([])
-                        del self.moveInfo
+                        if hasattr(self, "moveInfo"):
+                            del self.moveInfo
 
                     self.UpdateMap(render=False)
 
