@@ -1166,8 +1166,10 @@ class VDigitWindow(BufferedMapWindow):
                     self.DrawLines(pdc=self.pdcTmp)
 
                 if action == "editLine":
-                    self.MouseDraw(pdc=self.pdcTmp,
-                                   begin=self.Cell2Pixel(self.polycoords[-1]))
+                    if self.polycoords:
+                        self.MouseDraw(
+                            pdc=self.pdcTmp, begin=self.Cell2Pixel(self.polycoords[-1])
+                        )
 
             self.Refresh()  # TODO: use RefreshRect()
             self.mouse['begin'] = self.mouse['end']
