@@ -1035,11 +1035,19 @@ class VDigitWindow(BufferedMapWindow):
             fid = self.digit.RemoveVertex(self.Pixel2Cell(self.mouse['begin']))
             if fid < 0:
                 return
-            self._geomAttrbUpdate([fid, ])
-        elif action in ("copyCats", "copyAttrs"):
-            if action == 'copyCats':
-                if self.digit.CopyCats(self.copyCatsList,
-                                       self.copyCatsIds, copyAttrb=False) < 0:
+            self._geomAttrbUpdate(
+                [
+                    fid,
+                ]
+            )
+        elif action in ("copyCats", "copyAttrs") and hasattr(self, "copyCatsIds"):
+            if action == "copyCats":
+                if (
+                    self.digit.CopyCats(
+                        self.copyCatsList, self.copyCatsIds, copyAttrb=False
+                    )
+                    < 0
+                ):
                     return
             else:
                 if self.digit.CopyCats(self.copyCatsList,
