@@ -100,7 +100,7 @@ int I_iclass_write_signatures(struct Signature *, const char *);
 /* list_gp.c */
 int I_list_group(const char *, const struct Ref *, FILE *);
 int I_list_group_simple(const struct Ref *, FILE *);
-void I_list_group_name_fitted(char *, const char *, const char *);
+void I__list_group_name_fit(char *, const char *, const char *);
 
 /* list_subgp.c */
 char ** I_list_subgroups(const char *, int *);

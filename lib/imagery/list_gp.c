@@ -36,7 +36,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        I__list_group_name_fit(buf, ref->file[i].name, ref->file[i].mapset);
         len = strlen(buf) + 4;
         if (len > max)
             max = len;
@@ -46,7 +46,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        I__list_group_name_fit(buf, ref->file[i].name, ref->file[i].mapset);
         tot_len += max;
         if (tot_len > 78) {
             fprintf(fd, "\n");
@@ -95,7 +95,7 @@ int I_list_group_simple(const struct Ref *ref, FILE * fd)
  * \param name map name
  * \param mapset mapset name
  */
-void I_list_group_name_fitted(char *buf, const char *name, const char *mapset)
+void I__list_group_name_fit(char *buf, const char *name, const char *mapset)
 {
     char *frmt;
     char fr[32];

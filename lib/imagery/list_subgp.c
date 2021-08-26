@@ -94,7 +94,7 @@ int I_list_subgroup(const char *group, const char *subgroup,
     }
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
-        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        I__list_group_name_fit(buf, ref->file[i].name, ref->file[i].mapset);
         len = strlen(buf) + 4;
         if (len > max)
             max = len;
@@ -105,7 +105,7 @@ int I_list_subgroup(const char *group, const char *subgroup,
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
-        I_list_group_name_fitted(buf, ref->file[i].name, ref->file[i].mapset);
+        I__list_group_name_fit(buf, ref->file[i].name, ref->file[i].mapset);
         tot_len += max;
         if (tot_len > 78) {
             fprintf(fd, "\n");
