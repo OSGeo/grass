@@ -1092,7 +1092,7 @@ class VDigitWindow(BufferedMapWindow):
                     fid,
                 ]
             )
-        elif action in ("copyCats", "copyAttrs"):
+        elif action in ("copyCats", "copyAttrs") and hasattr(self, "copyCatsIds"):
             if action == "copyCats":
                 if (
                     self.digit.CopyCats(
