@@ -12,6 +12,7 @@
 #           for details.
 
 import os
+import weakref
 
 import grass.script as gs
 import grass.script.setup as gsetup
@@ -33,7 +34,15 @@ def _set_notebook_defaults():
     os.environ["GRASS_OVERWRITE"] = "1"
 
 
-def init(path, location, mapset):
+class _JupyterSession:
+    def __init__(self):
+        self._finalizer = weakref.finalize(self, gsetup.finish)
+
+    def finish(self):
+        self._finalizer()
+
+
+def init(path, location=None, mapset=None):
     """
     This function initiates a GRASS session and sets GRASS
     environment variables.
@@ -43,6 +52,7 @@ def init(path, location, mapset):
     :param str mapset: name of mapset within location
     """
     # Create a GRASS GIS session.
-    gsetup.init(os.environ["GISBASE"], path, location, mapset)
+    gsetup.init(dbase=path, location=location, mapset=mapset)
     # Set GRASS env. variables
     _set_notebook_defaults()
+    return _JupyterSession()

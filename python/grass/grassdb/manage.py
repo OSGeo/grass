@@ -10,8 +10,10 @@ for details.
 """
 
 
+import collections
 import os
 import shutil
+from pathlib import Path
 
 
 def delete_mapset(database, location, mapset):
@@ -53,3 +55,67 @@ def split_mapset_path(mapset_path):
     path, mapset = os.path.split(mapset_path.rstrip(os.sep))
     grassdb, location = os.path.split(path)
     return grassdb, location, mapset
+
+
+def resolve_mapset_path(path, location=None, mapset=None):
+    """Resolve full path to mapset from given combination of parameters.
+
+    Full or relative path to mapset can be provided as *path*. If the *path*
+    points to a valid location instead of a valid mapset, the mapset defaults
+    to PERMANENT.
+
+    Alternatively, location and mapset can be provided separately. In that case,
+    location and mapset are added to the path. If location is provided and mapset
+    is not, mapset defaults to PERMANENT.
+
+    The function does not enforce the existence of the directory or that it
+    it a mapset. It only manipulates the paths except for internal checks
+    to determine default values in some cases.
+
+    Home represented by ``~`` (tilde) and relative paths are resolved
+    and the result contains absolute paths.
+
+    Returns object with attributes path, db, location, and mapset.
+    The path attribute is a libpath.Path object representing full path
+    to the mapset. The db attribute is full path to the directory where
+    the location directory is. The attributes location and mapset are names
+    of location and mapset, respectively.
+    """
+    # This also resolves symlinks which may or may not be desired.
+    path = Path(path).expanduser().resolve()
+    default_mapset = "PERMANENT"
+    if location and mapset:
+        path = path / location / mapset
+        db = str(path)
+    elif location:
+        mapset = default_mapset
+        path = path / location / mapset
+        db = str(path)
+    elif mapset:
+        # mapset, but not location
+        raise ValueError(
+            _(
+                "Provide only path, or path and location, "
+                "or path, location, and mapset, but not mapset without location"
+            )
+        )
+    else:
+        from grass.grassdb.checks import is_mapset_valid
+
+        if not is_mapset_valid(path) and is_mapset_valid(path / default_mapset):
+            path = path / default_mapset
+        parts = path.parts
+        if len(parts) < 3:
+            raise ValueError(
+                _(
+                    "Parameter path needs to be 'path/to/location/mapset' "
+                    "or location and mapset need to be set"
+                )
+            )
+        mapset = parts[-1]
+        location = parts[-2]
+        db = Path(*parts[:-2])
+    MapsetPath = collections.namedtuple(
+        "MapsetPath", ["path", "db", "location", "mapset"]
+    )
+    return MapsetPath(path=path, db=db, location=location, mapset=mapset)

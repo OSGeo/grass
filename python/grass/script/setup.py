@@ -78,7 +78,7 @@ Usage::
         print(vect)
 
     # clean up at the end
-    gsetup.cleanup()
+    gsetup.finish()
 
 
 (C) 2010-2021 by the GRASS Development Team
@@ -100,7 +100,6 @@ import os
 import sys
 import tempfile as tmpfile
 
-
 windows = sys.platform == "win32"
 
 
@@ -121,39 +120,7 @@ def set_gui_path():
         sys.path.insert(0, gui_path)
 
 
-def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
-    """Initialize system variables to run GRASS modules
-
-    This function is for running GRASS GIS without starting it with the
-    standard script grassXY. No GRASS modules shall be called before
-    call of this function but any module or user script can be called
-    afterwards because a GRASS session has been set up. GRASS Python
-    libraries are usable as well in general but the ones using C
-    libraries through ``ctypes`` are not (which is caused by library
-    path not being updated for the current process which is a common
-    operating system limitation).
-
-    To create a GRASS session a ``gisrc`` file is created.
-    Caller is responsible for deleting the ``gisrc`` file.
-
-    Basic usage::
-
-        # ... setup GISBASE and PYTHON path before import
-        import grass.script as gs
-        gisrc = gs.setup.init("/usr/bin/grass8",
-                              "/home/john/grassdata",
-                              "nc_spm_08", "user1")
-        # ... use GRASS modules here
-        # end the session
-        gs.setup.finish()
-
-    :param gisbase: path to GRASS installation
-    :param dbase: path to GRASS database (default: '')
-    :param location: location name (default: 'demolocation')
-    :param mapset: mapset within given location (default: 'PERMANENT')
-
-    :returns: path to ``gisrc`` file (to be deleted later)
-    """
+def init_runtime_env(gisbase):
     # Set GISBASE
     os.environ["GISBASE"] = gisbase
     mswin = sys.platform.startswith("win")
@@ -200,13 +167,70 @@ def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
         path = etcpy
     os.environ["PYTHONPATH"] = path
 
-    # TODO: isn't this contra-productive? may fail soon since we cannot
-    # write to the installation (applies also to defaults for Location
-    # and mapset) I don't see what would be the use case here.
-    if not dbase:
-        dbase = gisbase
 
-    os.environ["GISRC"] = write_gisrc(dbase, location, mapset)
+def init(gisbase=None, dbase=None, location=None, mapset=None):
+    """Initialize system variables to run GRASS modules
+
+    This function is for running GRASS GIS without starting it with the
+    standard script grassXY. No GRASS modules shall be called before
+    call of this function but any module or user script can be called
+    afterwards because a GRASS session has been set up. GRASS Python
+    libraries are usable as well in general but the ones using C
+    libraries through ``ctypes`` are not (which is caused by library
+    path not being updated for the current process which is a common
+    operating system limitation).
+
+    *gisbase* defaults to GISBASE environmental variable if not set.
+
+    To create a GRASS session a ``gisrc`` file is created.
+    Caller is responsible for deleting the ``gisrc`` file.
+
+    Basic usage::
+
+        # ... setup GISBASE and PYTHON path before import
+        import grass.script as gs
+        gisrc = gs.setup.init("/usr/bin/grass8",
+                              "/home/john/grassdata",
+                              "nc_spm_08", "user1")
+        # ... use GRASS modules here
+        # end the session
+        gs.setup.finish()
+
+    :param gisbase: path to GRASS installation
+    :param dbase: path to GRASS database (default: '')
+    :param location: location name (default: 'demolocation')
+    :param mapset: mapset within given location (default: 'PERMANENT')
+
+    :returns: path to ``gisrc`` file (to be deleted later)
+    """
+    if not gisbase:
+        env_gisbase = os.environ.get("GISBASE")
+        if env_gisbase:
+            gisbase = env_gisbase
+        else:
+            raise ValueError(
+                _("Parameter gisbase or GISBASE environmental variable must be set")
+            )
+
+    from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
+    from grass.grassdb.manage import resolve_mapset_path
+
+    mapset_path = resolve_mapset_path(path=dbase, location=location, mapset=mapset)
+    if not is_mapset_valid(mapset_path):
+        raise ValueError(
+            _("Mapset {path} is not valid: {reason}").format(
+                path=mapset_path.path,
+                reason=get_mapset_invalid_reason(
+                    mapset_path.db, mapset_path.location, mapset_path.mapset
+                ),
+            )
+        )
+
+    init_runtime_env(gisbase)
+
+    os.environ["GISRC"] = write_gisrc(
+        mapset_path.db, mapset_path.location, mapset_path.mapset
+    )
     return os.environ["GISRC"]
 
 
@@ -214,8 +238,8 @@ def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
 # these fns can only be called within a valid GRASS session
 def clean_default_db():
     # clean the default db if it is sqlite
-    from grass.script import db as gdb
     from grass.script import core as gcore
+    from grass.script import db as gdb
 
     conn = gdb.db_connection()
     if conn and conn["driver"] == "sqlite":
@@ -262,7 +286,7 @@ def finish():
     Basic usage::
         import grass.script as gs
 
-        gs.setup.cleanup()
+        gs.setup.finish()
     """
 
     clean_default_db()
