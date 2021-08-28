@@ -899,7 +899,6 @@ class SbMask(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self._mapframe = mapframe
         self.name = "mask"
 
         self.widget = Button(
