@@ -228,9 +228,8 @@ class PsMapFrame(wx.Frame):
             self.book = fnb.FlatNotebook(
                 parent=self, id=wx.ID_ANY, style=globalvar.FNPageDStyle
             )
-        self.book.SetActiveTabColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
-        )
+
+        self.book.SetActiveTabColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         self.book.SetActiveTabTextColour(
             wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
         )

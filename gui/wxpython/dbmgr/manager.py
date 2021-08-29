@@ -125,6 +125,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.CreateStatusBar(number=1)
 
         self.notebook = GNotebook(self.panel, style=globalvar.FNPageDStyle)
+
         self.CreateDbMgrPage(parent=self, pageName="browse")
 
         self.notebook.AddPage(

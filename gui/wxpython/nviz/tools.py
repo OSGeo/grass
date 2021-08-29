@@ -99,9 +99,7 @@ class NvizToolWindow(FN.FlatNotebook):
         else:
             kwargs["style"] = style
         FN.FlatNotebook.__init__(self, parent, id, **kwargs)
-        self.SetActiveTabColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
-        )
+        self.SetActiveTabColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
         self.SetActiveTabTextColour(
             wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
         )

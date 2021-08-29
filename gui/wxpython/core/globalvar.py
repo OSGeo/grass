@@ -141,10 +141,7 @@ FNPageStyle = (
 )
 
 FNPageDStyle = (
-    FN.FNB_BOTTOM
-    | FN.FNB_NODRAG
-    | FN.FNB_NO_NAV_BUTTONS
-    | FN.FNB_NO_X_BUTTON
+    FN.FNB_BOTTOM | FN.FNB_NODRAG | FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON
 )
 
 """Dialog widget dimension"""
