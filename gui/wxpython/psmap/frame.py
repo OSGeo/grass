@@ -228,7 +228,12 @@ class PsMapFrame(wx.Frame):
             self.book = fnb.FlatNotebook(
                 parent=self, id=wx.ID_ANY, style=globalvar.FNPageDStyle
             )
-
+        self.book.SetActiveTabColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
+        self.book.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
         self.book.AddPage(self.canvas, "Draft mode")
         self.book.AddPage(self.previewCanvas, "Preview")
         self.book.SetSelection(0)

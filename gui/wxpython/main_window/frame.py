@@ -302,7 +302,12 @@ class GMFrame(wx.Frame):
         """Initialize Display widget"""
         # create display notebook
         self.notebookLayers = GNotebook(parent=parent, style=globalvar.FNPageStyle)
-        self.notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
+        self.notebookLayers.SetActiveTabColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
+        self.notebookLayers.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
         menu = self._createTabMenu()
         self.notebookLayers.SetRightClickMenu(menu)
         # bindings

@@ -137,6 +137,12 @@ class VNETDialog(wx.Dialog):
 
         self.mainPanel = Panel(parent=self)
         self.notebook = GNotebook(parent=self.mainPanel, style=globalvar.FNPageDStyle)
+        self.notebook.SetActiveTabColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
+        self.notebook.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
 
         # statusbar
         self.stPriorities = {"important": 5, "iformation": 1}
@@ -541,7 +547,6 @@ class VNETDialog(wx.Dialog):
         self.inpDbMgrData["browse"] = self.inpDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.inpDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateInputDbMgrPage(self, show):
         """Show or hide input tables tab"""
@@ -562,7 +567,6 @@ class VNETDialog(wx.Dialog):
         self.resultDbMgrData["browse"] = self.resultDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.resultDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateResultDbMgrPage(self):
         """Show or Hide Result tables tab"""

@@ -1053,11 +1053,16 @@ class CmdPanel(wx.Panel):
         elif style == 1:  # basic left
             self.notebook = FormNotebook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 2:  # fancy green
+        elif style == 2:  # normal style
             self.notebook = GNotebook(
                 self, style=globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON
             )
-            self.notebook.SetTabAreaColour(globalvar.FNPageColor)
+            self.notebook.SetActiveTabColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+            )
+            self.notebook.SetActiveTabTextColour(
+                wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+            )
             self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
         elif style == 3:
             self.notebook = FormListbook(self, style=wx.BK_LEFT)

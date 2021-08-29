@@ -141,14 +141,11 @@ FNPageStyle = (
 )
 
 FNPageDStyle = (
-    FN.FNB_FANCY_TABS
-    | FN.FNB_BOTTOM
+    FN.FNB_BOTTOM
     | FN.FNB_NODRAG
     | FN.FNB_NO_NAV_BUTTONS
     | FN.FNB_NO_X_BUTTON
 )
-
-FNPageColor = wx.Colour(125, 200, 175)
 
 """Dialog widget dimension"""
 DIALOG_SPIN_SIZE = (150, -1)

@@ -132,6 +132,12 @@ class ImportDialog(wx.Dialog):
         self.Bind(wx.EVT_CLOSE, lambda evt: self.Destroy())
 
         self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
+        self.notebook.SetActiveTabColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
+        self.notebook.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
 
         self.notebook.AddPage(page=self.panel, text=_("Source settings"), name="source")
 

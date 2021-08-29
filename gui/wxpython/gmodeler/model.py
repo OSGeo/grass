@@ -2944,6 +2944,12 @@ class ModelParamDialog(wx.Dialog):
         )
 
         self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
+        self.notebook.SetActiveTabColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
+        self.notebook.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
 
         panel = self._createPages()
         wx.CallAfter(self.notebook.SetSelection, 0)
