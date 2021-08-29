@@ -293,6 +293,12 @@ class GNotebook(FN.FlatNotebook):
         self.controller = FlatNotebookController(
             classObject=FN.FlatNotebook, widget=self
         )
+        self.SetActiveTabColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
+        self.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
 
     def AddPage(self, **kwargs):
         """@copydoc NotebookController::AddPage()"""

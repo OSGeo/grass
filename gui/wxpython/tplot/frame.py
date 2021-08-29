@@ -179,7 +179,7 @@ class TplotFrame(wx.Frame):
 
         # ------------ADD NOTEBOOK------------
         self.ntb = GNotebook(
-            parent=self.mainPanel, style=FN.FNB_FANCY_TABS | FN.FNB_NODRAG
+            parent=self.mainPanel, style=FN.FNB_NODRAG
         )
 
         # ------------ITEMS IN NOTEBOOK PAGE (RASTER)------------------------

@@ -125,12 +125,6 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.CreateStatusBar(number=1)
 
         self.notebook = GNotebook(self.panel, style=globalvar.FNPageDStyle)
-        self.notebook.SetActiveTabColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
-        )
-        self.notebook.SetActiveTabTextColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-        )
         self.CreateDbMgrPage(parent=self, pageName="browse")
 
         self.notebook.AddPage(

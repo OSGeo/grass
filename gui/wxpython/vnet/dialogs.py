@@ -137,12 +137,6 @@ class VNETDialog(wx.Dialog):
 
         self.mainPanel = Panel(parent=self)
         self.notebook = GNotebook(parent=self.mainPanel, style=globalvar.FNPageDStyle)
-        self.notebook.SetActiveTabColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
-        )
-        self.notebook.SetActiveTabTextColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-        )
 
         # statusbar
         self.stPriorities = {"important": 5, "iformation": 1}

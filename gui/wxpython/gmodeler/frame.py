@@ -125,12 +125,6 @@ class ModelFrame(wx.Frame):
         self.statusbar = self.CreateStatusBar(number=1)
 
         self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
-        self.notebook.SetActiveTabColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
-        )
-        self.notebook.SetActiveTabTextColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-        )
 
         self.canvas = ModelCanvas(self)
         self.canvas.SetBackgroundColour(
