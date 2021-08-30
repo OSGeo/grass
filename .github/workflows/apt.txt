@@ -12,14 +12,15 @@ libopenblas-dev
 libpdal-dev
 libpng-dev
 libproj-dev
-pdal
-proj-bin
 libreadline-dev
 libzstd-dev
+pdal
+proj-bin
 python3-dateutil
 python3-matplotlib
 python3-numpy
 python3-ply
+python3-pyvirtualdisplay
 python3-six
 python3-termcolor
 sqlite3

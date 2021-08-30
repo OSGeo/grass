@@ -97,7 +97,8 @@ class Grass3dRenderer:
         try:
             # This tests availability of the module and needs to work even
             # when the package is not installed.
-            import pyvirtualdisplay  # pylint: disable=import-outside-toplevel
+            # pylint: disable=import-outside-toplevel,unused-import
+            import pyvirtualdisplay  # noqa: F401
 
             pyvirtualdisplay_available = True
         except ImportError:
