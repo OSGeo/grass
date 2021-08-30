@@ -167,7 +167,7 @@ class Grass3dRenderer:
             kwargs["resolution_fine"] = self._resolution_fine
 
         if self._screen_backend == "pyvirtualdisplay":
-            import inspect
+            import inspect  # pylint: disable=import-outside-toplevel
 
             # This is imported only when needed and when the package is available,
             # but generally, it may not be available.
@@ -175,12 +175,18 @@ class Grass3dRenderer:
             from pyvirtualdisplay import Display
 
             additional_kwargs = {}
+            has_env_copy = False
             if "manage_global_env" in inspect.signature(Display).parameters:
                 additional_kwargs["manage_global_env"] = False
+                has_env_copy = True
             with Display(
                 size=(self._width, self._height), **additional_kwargs
             ) as display:
-                gs.run_command(module, env=display.env(), **kwargs)
+                if has_env_copy:
+                    env = display.env()
+                else:
+                    env = os.environ
+                gs.run_command(module, env=env, **kwargs)
         else:
             gs.run_command(module, **kwargs)
 
