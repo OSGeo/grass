@@ -30,7 +30,8 @@ from grass.gunittest.main import test
 def can_import_ipython():
     """Return True if IPython can be imported, False otherwise"""
     try:
-        import IPython
+        # pylint: disable=import-outside-toplevel,unused-import
+        import IPython  # noqa: F401
 
         return True
     except ImportError:
@@ -40,7 +41,8 @@ def can_import_ipython():
 def can_import_pyvirtualdisplay():
     """Return True if pyvirtualdisplay can be imported, False otherwise"""
     try:
-        import pyvirtualdisplay
+        # pylint: disable=import-outside-toplevel,unused-import
+        import pyvirtualdisplay  # noqa: F401
 
         return True
     except ImportError:
@@ -48,7 +50,7 @@ def can_import_pyvirtualdisplay():
 
 
 class TestDisplay(TestCase):
-    # Setup variables
+    """Test Grass3dRenderer"""
     files = []
 
     @classmethod
@@ -66,19 +68,16 @@ class TestDisplay(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        """
-        Remove the PNG file created after testing with "filename =" option.
-        This is executed after each test run.
-        """
-        for f in self.files:
-            f = Path(f)
+        """After each run, remove the created files if exist"""
+        for file in self.files:
+            file = Path(file)
             if sys.version_info < (3, 8):
                 try:
-                    os.remove(f)
+                    os.remove(file)
                 except FileNotFoundError:
                     pass
             else:
-                f.unlink(missing_ok=True)
+                file.unlink(missing_ok=True)
 
     def test_defaults(self):
         """Check that default settings work"""
