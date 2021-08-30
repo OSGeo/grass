@@ -111,8 +111,8 @@ class Grass3dRenderer:
                     "because pyvirtualdisplay cannot be imported"
                 ).format(screen_backend)
             )
-        elif screen_backend == "simple":
-            self._screen_backend = screen_backend
+        elif screen_backend in ["simple", "auto"]:
+            self._screen_backend = "simple"
         else:
             raise ValueError(
                 _(
