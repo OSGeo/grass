@@ -175,7 +175,7 @@ class Grass3dRenderer:
             from pyvirtualdisplay import Display
 
             additional_kwargs = {}
-            if "manage_global_env" in inspect.signature().parameters:
+            if "manage_global_env" in inspect.signature(Display).parameters:
                 additional_kwargs["manage_global_env"] = False
             with Display(
                 size=(self._width, self._height), **additional_kwargs
