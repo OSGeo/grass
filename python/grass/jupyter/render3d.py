@@ -11,6 +11,8 @@
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 
+"""Render 3D visualizations"""
+
 import os
 import tempfile
 
@@ -21,53 +23,77 @@ from grass.jupyter import GrassRenderer
 class Grass3dRenderer:
     """Creates and displays 3D visualization using GRASS GIS 3D rendering engine NVIZ.
 
-    The 3D image is created using the *render* function. Additional images can be
+    The 3D image is created using the *render* function which uses the *m.nviz.image*
+    module in the background. Additional images can be
     placed on the image using the *overlay* attribute which is the 2D renderer, i.e.,
     has interface of the *GrassRenderer* class.
 
     Basic usage::
+
     >>> m = Grass3dRenderer()
     >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
     >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
     >>> m.show()
+
+    For the OpenGL rendering with *m.nviz.image* to work, a display (screen) is needed.
+    This is not guaranteed on headless systems such as continuous integration (CI) or
+    Binder service(s). This class uses Xvfb and PyVirtualDisplay to support rendering
+    in these environments.
     """
 
     def __init__(
         self,
-        width=600,
-        height=400,
-        filename=None,
-        mode="fine",
-        resolution_fine=1,
-        screen_backend="auto",
-        font="sans",
-        text_size=12,
-        renderer2d="cairo",
+        width: int = 600,
+        height: int = 400,
+        filename: str = None,
+        mode: str = "fine",
+        resolution_fine: int = 1,
+        screen_backend: str = "auto",
+        font: str = "sans",
+        text_size: float = 12,
+        renderer2d: str = "cairo",
     ):
-        """Creates an instance of the GrassRenderer class.
+        """Checks screen_backend and creates a temporary directory for rendering.
 
-        :param int height: height of map in pixels
-        :param int width: width of map in pixels
-        :param str filename: filename or path to save a PNG of map
-        :param str env: environment
-        :param str font: font to use in rendering; either the name of a font from
-                        $GISBASE/etc/fontcap (or alternative fontcap file specified
-                        by GRASS_FONT_CAP), or alternatively the full path to a FreeType
-                        font file
-        :param int text_size: default text size, overwritten by most display modules
-        :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
+        :param width: width of image in pixels
+        :param height: height of image in pixels
+        :param filename: filename or path to save the resulting PNG image
+        :param mode: 3D rendering mode (options: fine, coarse, both)
+        :param resolution_fine: resolution multiplier for the fine mode
+        :param screen_backend: backend for running the 3D rendering
+        :param font: font to use in 2D rendering
+        :param text_size: default text size in 2D rendering, usually overwritten
+        :param renderer2d: GRASS 2D renderer driver (options: cairo, png)
+
+        When *resolution_fine* is 1, rasters are used in the resolution according
+        to the computational region as usual in GRASS GIS.
+        Setting *resolution_fine* to values higher than one, causes rasters to
+        be resampled to a coarser resolution (2 for twice as coarse than computational
+        region resolution). This allows for fast rendering of large rasters without
+        changing the computational region.
+
+        By default (``screen_backend="auto"``), when
+        pyvirtualdisplay Python package is present, the class assumes that it is
+        running in a headless environment, so pyvirtualdisplay is used. When the
+        package is not present, *m.nviz.image* is executed directly. When
+        *screen_backend* is set to ``"pyvirtualdisplay"`` and the package cannot be
+        imported, ValueError is raised. When *screen_backend* is set to ``"simple"``,
+        *m.nviz.image* is executed directly. For other values of *screen_backend*,
+        ValueError is raised.
         """
         self._width = width
         self._height = height
         self._mode = mode
         self._resolution_fine = resolution_fine
 
+        # Temporary dir and files
         self._tmpdir = tempfile.TemporaryDirectory()
         if filename:
             self._filename = filename
         else:
             self._filename = os.path.join(self._tmpdir.name, "map.png")
 
+        # Screen backend
         try:
             # This tests availability of the module and needs to work even
             # when the package is not installed.
@@ -112,9 +138,8 @@ class Grass3dRenderer:
         is provided. Parameters related to size, file, and format are handled
         internally and will be ignored when passed here.
 
-        For the OpenGL rendering to work, a display is needed. This is not guaranteed
-        on headless systems such as continuous integration (CI) or Binder service(s).
-        When pyvirtualdisplay Python package is present, the function assumes that it
+        Calling this function again, overwrites the previously rendered image,
+        so typically, it is called only once.
         """
         module = "m.nviz.image"
         name = os.path.join(self._tmpdir.name, "nviz")
