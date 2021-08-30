@@ -59,3 +59,7 @@ jobs:
           name: testreport-${{ matrix.os }}
           path: testreport
           retention-days: 3
+
+      - name: Print installed versions
+        if: always()
+        run: .github/workflows/print_versions.sh
