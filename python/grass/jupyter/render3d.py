@@ -132,6 +132,16 @@ class Grass3dRenderer:
             renderer=renderer2d,
         )
 
+    @property
+    def filename(self):
+        """Filename or full path to the file with the resulting image.
+
+        The value can be set during initialization. When the filename was not provided
+        during initialization, a path to temporary file is returned. In that case, the
+        file is guaranteed to exist as long as the object exists.
+        """
+        return self._filename
+
     def render(self, **kwargs):
         """Run rendering using *m.nviz.image*.
 
