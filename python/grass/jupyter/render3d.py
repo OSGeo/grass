@@ -30,10 +30,10 @@ class Grass3dRenderer:
 
     Basic usage::
 
-    >>> m = Grass3dRenderer()
+    >>> img = Grass3dRenderer()
     >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
     >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
-    >>> m.show()
+    >>> img.show()
 
     For the OpenGL rendering with *m.nviz.image* to work, a display (screen) is needed.
     This is not guaranteed on headless systems such as continuous integration (CI) or
@@ -103,7 +103,9 @@ class Grass3dRenderer:
         except ImportError:
             pyvirtualdisplay_available = False
         if screen_backend == "auto" and pyvirtualdisplay_available:
-            self._screen_backend = pyvirtualdisplay
+            self._screen_backend = "pyvirtualdisplay"
+        elif screen_backend == "auto":
+            self._screen_backend = "simple"
         elif screen_backend == "pyvirtualdisplay" and not pyvirtualdisplay_available:
             raise ValueError(
                 _(
@@ -111,8 +113,8 @@ class Grass3dRenderer:
                     "because pyvirtualdisplay cannot be imported"
                 ).format(screen_backend)
             )
-        elif screen_backend in ["simple", "auto"]:
-            self._screen_backend = "simple"
+        elif screen_backend in ["simple", "pyvirtualdisplay"]:
+            self._screen_backend = screen_backend
         else:
             raise ValueError(
                 _(
