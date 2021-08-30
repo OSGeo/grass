@@ -51,6 +51,7 @@ def can_import_pyvirtualdisplay():
 
 class TestDisplay(TestCase):
     """Test Grass3dRenderer"""
+
     files = []
 
     @classmethod
