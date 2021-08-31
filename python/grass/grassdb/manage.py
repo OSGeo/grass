@@ -57,6 +57,28 @@ def split_mapset_path(mapset_path):
     return grassdb, location, mapset
 
 
+class MapsetPath:
+    def __init__(self, path, directory, location, mapset):
+        # Path as an attribute. Inheriting from Path would be something to consider
+        # here, however the Path inheritance is somewhat complex, but may be possible
+        # in the future.
+        self.path=Path(path)
+        self.directory=str(directory)
+        self.location=location
+        self.mapset=mapset
+
+    def __repr__(self):
+       return (f'{self.__class__.__name__}('
+               f'{self.path!r}, '
+               f'{self.directory!r}, {self.location!r}, {self.mapset!r})')
+
+    def __str__(self):
+        return str(self.path)
+
+    def __fspath__(self):
+        return os.fspath(self.path)
+
+
 def resolve_mapset_path(path, location=None, mapset=None):
     """Resolve full path to mapset from given combination of parameters.
 
@@ -85,12 +107,12 @@ def resolve_mapset_path(path, location=None, mapset=None):
     path = Path(path).expanduser().resolve()
     default_mapset = "PERMANENT"
     if location and mapset:
+        directory = str(path)
         path = path / location / mapset
-        db = str(path)
     elif location:
         mapset = default_mapset
+        directory = str(path)
         path = path / location / mapset
-        db = str(path)
     elif mapset:
         # mapset, but not location
         raise ValueError(
@@ -114,8 +136,5 @@ def resolve_mapset_path(path, location=None, mapset=None):
             )
         mapset = parts[-1]
         location = parts[-2]
-        db = Path(*parts[:-2])
-    MapsetPath = collections.namedtuple(
-        "MapsetPath", ["path", "db", "location", "mapset"]
-    )
-    return MapsetPath(path=path, db=db, location=location, mapset=mapset)
+        directory = Path(*parts[:-2])
+    return MapsetPath(path=path, directory=directory, location=location, mapset=mapset)
