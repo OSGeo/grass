@@ -58,4 +58,6 @@ jobs:
           .github/workflows/test_simple.sh
       - name: Print installed versions
         if: always()
-        run: .github/workflows/print_versions.sh
+        run: |
+          source $CONDA_ACTIVATE
+          .github/workflows/print_versions.sh
