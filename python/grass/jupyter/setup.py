@@ -44,6 +44,6 @@ def init(path, location=None, mapset=None):
     :param str mapset: name of mapset within location
     """
     # Create a GRASS GIS session.
-    gsetup.init(dbase=path, location=location, mapset=mapset)
+    gsetup.init(path, location=location, mapset=mapset)
     # Set GRASS env. variables
     _set_notebook_defaults()

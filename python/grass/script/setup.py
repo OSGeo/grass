@@ -149,9 +149,6 @@ def init_runtime_env(gisbase):
         os.environ["@LD_LIBRARY_PATH_VAR@"] = ""
     os.environ["@LD_LIBRARY_PATH_VAR@"] += os.pathsep + os.path.join(gisbase, "lib")
 
-    # TODO: lock the mapset?
-    os.environ["GIS_LOCK"] = str(os.getpid())
-
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
     if not os.getenv("GRASS_PYTHON"):
         if sys.platform == "win32":
@@ -168,7 +165,7 @@ def init_runtime_env(gisbase):
     os.environ["PYTHONPATH"] = path
 
 
-def init(gisbase=None, dbase=None, location=None, mapset=None):
+def init(path=None, location=None, mapset=None, grass_path=None):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it with the
@@ -180,7 +177,7 @@ def init(gisbase=None, dbase=None, location=None, mapset=None):
     path not being updated for the current process which is a common
     operating system limitation).
 
-    *gisbase* defaults to GISBASE environmental variable if not set.
+    *grass_path* defaults to GISBASE environmental variable if not set.
 
     To create a GRASS session a ``gisrc`` file is created.
     Caller is responsible for deleting the ``gisrc`` file.
@@ -189,9 +186,7 @@ def init(gisbase=None, dbase=None, location=None, mapset=None):
 
         # ... setup GISBASE and PYTHON path before import
         import grass.script as gs
-        gisrc = gs.setup.init("/usr/bin/grass8",
-                              "/home/john/grassdata",
-                              "nc_spm_08", "user1")
+        gisrc = gs.setup.init("/usr/lib/grass", "~/grassdata", "nc_spm_08", "user1")
         # ... use GRASS modules here
         # end the session
         gs.setup.finish()
@@ -203,10 +198,10 @@ def init(gisbase=None, dbase=None, location=None, mapset=None):
 
     :returns: path to ``gisrc`` file (to be deleted later)
     """
-    if not gisbase:
+    if not grass_path:
         env_gisbase = os.environ.get("GISBASE")
         if env_gisbase:
-            gisbase = env_gisbase
+            grass_path = env_gisbase
         else:
             raise ValueError(
                 _("Parameter gisbase or GISBASE environmental variable must be set")
@@ -215,21 +210,26 @@ def init(gisbase=None, dbase=None, location=None, mapset=None):
     from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
     from grass.grassdb.manage import resolve_mapset_path
 
-    mapset_path = resolve_mapset_path(path=dbase, location=location, mapset=mapset)
+    print(f"path={path}, location={location}, mapset={mapset}")
+    mapset_path = resolve_mapset_path(path=path, location=location, mapset=mapset)
+    print(repr(mapset_path))
     if not is_mapset_valid(mapset_path):
         raise ValueError(
             _("Mapset {path} is not valid: {reason}").format(
                 path=mapset_path.path,
                 reason=get_mapset_invalid_reason(
-                    mapset_path.db, mapset_path.location, mapset_path.mapset
+                    mapset_path.directory, mapset_path.location, mapset_path.mapset
                 ),
             )
         )
 
-    init_runtime_env(gisbase)
+    init_runtime_env(grass_path)
+
+    # TODO: lock the mapset?
+    os.environ["GIS_LOCK"] = str(os.getpid())
 
     os.environ["GISRC"] = write_gisrc(
-        mapset_path.db, mapset_path.location, mapset_path.mapset
+        mapset_path.directory, mapset_path.location, mapset_path.mapset
     )
     return os.environ["GISRC"]
 
