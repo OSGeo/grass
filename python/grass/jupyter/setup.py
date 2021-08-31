@@ -34,14 +34,6 @@ def _set_notebook_defaults():
     os.environ["GRASS_OVERWRITE"] = "1"
 
 
-class _JupyterSession:
-    def __init__(self):
-        self._finalizer = weakref.finalize(self, gsetup.finish)
-
-    def finish(self):
-        self._finalizer()
-
-
 def init(path, location=None, mapset=None):
     """
     This function initiates a GRASS session and sets GRASS
@@ -55,4 +47,3 @@ def init(path, location=None, mapset=None):
     gsetup.init(dbase=path, location=location, mapset=mapset)
     # Set GRASS env. variables
     _set_notebook_defaults()
-    return _JupyterSession()
