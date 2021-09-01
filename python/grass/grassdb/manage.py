@@ -10,7 +10,6 @@ for details.
 """
 
 
-import collections
 import os
 import shutil
 from pathlib import Path
@@ -52,31 +51,61 @@ def rename_location(database, old_name, new_name):
 
 def split_mapset_path(mapset_path):
     """Split mapset path to three parts - grassdb, location, mapset"""
-    path, mapset = os.path.split(mapset_path.rstrip(os.sep))
+    path, mapset = os.path.split(Path(mapset_path))
     grassdb, location = os.path.split(path)
     return grassdb, location, mapset
 
 
 class MapsetPath:
+    """This is a representation of a path to mapset.
+
+    Individual components are accessible through read-only properties.
+    It has with os.PathLike interface.
+
+    Paths are currently stored as is (not resolved, not expanded),
+    but that may change in the future.
+    """
+
     def __init__(self, path, directory, location, mapset):
         # Path as an attribute. Inheriting from Path would be something to consider
-        # here, however the Path inheritance is somewhat complex, but may be possible
-        # in the future.
-        self.path=Path(path)
-        self.directory=str(directory)
-        self.location=location
-        self.mapset=mapset
+        # here, however the Path inheritance is somewhat complex at this point.
+        self._path = Path(path)
+        self._directory = str(directory)
+        self._location = location
+        self._mapset = mapset
 
     def __repr__(self):
-       return (f'{self.__class__.__name__}('
-               f'{self.path!r}, '
-               f'{self.directory!r}, {self.location!r}, {self.mapset!r})')
+        return (
+            f"{self.__class__.__name__}("
+            f"{self._path!r}, "
+            f"{self._directory!r}, {self._location!r}, {self._mapset!r})"
+        )
 
     def __str__(self):
-        return str(self.path)
+        return str(self._path)
 
     def __fspath__(self):
-        return os.fspath(self.path)
+        return os.fspath(self._path)
+
+    @property
+    def path(self):
+        """Full path to the mapset as a pathlib.Path object"""
+        return self._path
+
+    @property
+    def directory(self):
+        """Location name"""
+        return self._directory
+
+    @property
+    def location(self):
+        """Location name"""
+        return self._location
+
+    @property
+    def mapset(self):
+        """Mapset name"""
+        return self._mapset
 
 
 def resolve_mapset_path(path, location=None, mapset=None):
@@ -103,6 +132,9 @@ def resolve_mapset_path(path, location=None, mapset=None):
     the location directory is. The attributes location and mapset are names
     of location and mapset, respectively.
     """
+    # We reduce the top-level imports because this is initialization code.
+    # pylint: disable=import-outside-toplevel
+
     # This also resolves symlinks which may or may not be desired.
     path = Path(path).expanduser().resolve()
     default_mapset = "PERMANENT"

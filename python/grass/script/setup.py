@@ -63,7 +63,7 @@ Usage::
     import grass.script.setup as gsetup
 
     # launch session
-    rcfile = gsetup.init(gisbase, gisdb, location, mapset)
+    rcfile = gsetup.init(gisdb, location, mapset, grass_path=gisbase)
 
     # example calls
     gs.message('Current GRASS GIS 8 environment:')
@@ -120,7 +120,11 @@ def set_gui_path():
         sys.path.insert(0, gui_path)
 
 
-def init_runtime_env(gisbase):
+def setup_runtime_env(gisbase):
+    """Setup the runtime environment.
+
+    Modifies the global environment (os.environ) so that GRASS modules can run.
+    """
     # Set GISBASE
     os.environ["GISBASE"] = gisbase
     mswin = sys.platform.startswith("win")
@@ -169,7 +173,7 @@ def init(path=None, location=None, mapset=None, grass_path=None):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it with the
-    standard script grassXY. No GRASS modules shall be called before
+    standard main executable grass. No GRASS modules shall be called before
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
     libraries are usable as well in general but the ones using C
@@ -177,16 +181,22 @@ def init(path=None, location=None, mapset=None, grass_path=None):
     path not being updated for the current process which is a common
     operating system limitation).
 
-    *grass_path* defaults to GISBASE environmental variable if not set.
+    *grass_path* defaults to GISBASE environmental variable if not set
+    assuming that it was already set before importing the module. The
+    function will raise ValueError if neither of those worked.
 
     To create a GRASS session a ``gisrc`` file is created.
-    Caller is responsible for deleting the ``gisrc`` file.
+    Caller is responsible for deleting the ``gisrc`` file
+    should be done with function finish.
 
     Basic usage::
 
-        # ... setup GISBASE and PYTHON path before import
+        # ... setup GISBASE and sys.path before import
         import grass.script as gs
-        gisrc = gs.setup.init("/usr/lib/grass", "~/grassdata", "nc_spm_08", "user1")
+        gisrc = gs.setup.init(
+            "~/grassdata/nc_spm_08/user1",
+            grass_path="/usr/lib/grass",
+        )
         # ... use GRASS modules here
         # end the session
         gs.setup.finish()
@@ -207,6 +217,8 @@ def init(path=None, location=None, mapset=None, grass_path=None):
                 _("Parameter gisbase or GISBASE environmental variable must be set")
             )
 
+    # We reduce the top-level imports because this is initialization code.
+    # pylint: disable=import-outside-toplevel
     from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
     from grass.grassdb.manage import resolve_mapset_path
 
@@ -223,7 +235,7 @@ def init(path=None, location=None, mapset=None, grass_path=None):
             )
         )
 
-    init_runtime_env(grass_path)
+    setup_runtime_env(grass_path)
 
     # TODO: lock the mapset?
     os.environ["GIS_LOCK"] = str(os.getpid())
