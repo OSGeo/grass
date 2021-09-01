@@ -73,8 +73,8 @@ class TestResolveMapsetPath(TestCase):
         path = "does/not/exist/"
         location_name = "test_location_A"
         mapset_name = "test_mapset_1"
-        path = str(Path(path) / location_name / mapset_name)
-        mapset_path = resolve_mapset_path(path=path)
+        full_path = str(Path(path) / location_name / mapset_name)
+        mapset_path = resolve_mapset_path(path=full_path)
         self.assertEqual(mapset_path.directory, str(Path(path).resolve()))
         self.assertEqual(mapset_path.location, location_name)
         self.assertEqual(mapset_path.mapset, mapset_name)
@@ -91,9 +91,9 @@ class TestMapsetPath(TestCase):
         path = "does/not/exist/"
         location_name = "test_location_A"
         mapset_name = "test_mapset_1"
-        path = Path(path) / location_name / mapset_name
+        full_path = Path(path) / location_name / mapset_name
         mapset_path = MapsetPath(
-            path=path, directory=path, location=location_name, mapset=mapset_name
+            path=full_path, directory=path, location=location_name, mapset=mapset_name
         )
         # Paths are currently stored as is (not resolved).
         self.assertEqual(mapset_path.directory, path)
@@ -103,12 +103,12 @@ class TestMapsetPath(TestCase):
 
     def test_mapset_from_str(self):
         """Check with path from str and database directory as Path"""
-        path = "does/not/exist/"
+        path = "does/not/exist"
         location_name = "test_location_A"
         mapset_name = "test_mapset_1"
-        path = Path(path) / location_name / mapset_name
+        full_path = Path(path) / location_name / mapset_name
         mapset_path = MapsetPath(
-            path=str(path),
+            path=str(full_path),
             directory=Path(path),
             location=location_name,
             mapset=mapset_name,
