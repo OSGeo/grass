@@ -12,7 +12,6 @@
 #           for details.
 
 import os
-import weakref
 
 import grass.script as gs
 import grass.script.setup as gsetup
