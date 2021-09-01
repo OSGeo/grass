@@ -2135,9 +2135,18 @@ def io_is_interactive():
 
 
 def print_params(params):
-    """Write compile flags and other configuration to stderr"""
+    """Write compile flags and other configuration to stdout"""
     if not params:
-        params = ["arch", "build", "compiler", "path", "revision", "version", "date"]
+        params = [
+            "arch",
+            "build",
+            "compiler",
+            "path",
+            "python_path",
+            "revision",
+            "version",
+            "date",
+        ]
 
     # check if we are dealing with parameters which require dev files
     dev_params = ["arch", "compiler", "build", "date"]
@@ -2153,6 +2162,8 @@ def print_params(params):
     for arg in params:
         if arg == "path":
             sys.stdout.write("%s\n" % GISBASE)
+        elif arg in ["python_path" , "python-path"]:
+            sys.stdout.write("%s\n" % gpath("etc", "python"))
         elif arg == "arch":
             val = grep("ARCH", linesplat)
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
