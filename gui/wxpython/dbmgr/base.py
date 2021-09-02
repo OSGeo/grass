@@ -1022,7 +1022,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         if layer not in self.layers:
             return False
 
-        FN.FlatNotebook.DeletePage(self, self.layers.index(layer))
+        GNotebook.DeleteNBPage(self, self.layers.index(layer))
 
         self.layers.remove(layer)
         del self.layerPage[layer]
@@ -1174,8 +1174,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if pos == -1:
             pos = self.GetPageCount()
-        self.InsertPage(
-            pos,
+        self.InsertNBPage(
+            index=pos,
             page=panel,
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),
@@ -2337,8 +2337,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
 
         if pos == -1:
             pos = self.GetPageCount()
-        self.InsertPage(
-            pos,
+        self.InsertNBPage(
+            index=pos,
             page=panel,
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),
