@@ -11,9 +11,9 @@ Usage::
 
     # define GRASS Database
     # add your path to grassdata (GRASS GIS database) directory
-    gisdb = os.path.join(os.path.expanduser("~"), "grassdata")
+    gisdb = "~/grassdata"
     # the following path is the default path on MS Windows
-    # gisdb = os.path.join(os.path.expanduser("~"), "Documents/grassdata")
+    # gisdb = "~/Documents/grassdata"
 
     # specify (existing) Location and Mapset
     location = "nc_spm_08"
@@ -96,7 +96,10 @@ for details.
 # is known, this would allow moving things from there, here
 # then this could even do locking
 
+from pathlib import Path
 import os
+import shutil
+import subprocess
 import sys
 import tempfile as tmpfile
 
@@ -118,6 +121,86 @@ def set_gui_path():
     gui_path = os.path.join(os.environ["GISBASE"], "gui", "wxpython")
     if gui_path and gui_path not in sys.path:
         sys.path.insert(0, gui_path)
+
+
+def get_install_path(path=None):
+    """Get path to GRASS installation usable for setup of environmental variables.
+
+    The function tries to determine path tp GRASS GIS installation so that the
+    returned path can be used for setup of environmental variable for GRASS runtime.
+    If the search fails, None is returned.
+
+    By default, the resulting path is derived relatively from the location of the
+    Python package (specifically this module) in the file system. This derived path
+    is returned only if it has subdirectories called ``bin`` and ``lib``.
+    If the parameter or certain environmental variables are set, the following
+    attempts are made to find the path.
+
+    If *path* is provided and it is an existing executable, the executable is queried
+    for the path. Otherwise, provided *path* is returned as is.
+
+    If *path* is not provided, the GISBASE environmental variable is used as the path
+    if it exists. If GRASSBIN environmental variable exists and it is an existing
+    executable, the executable is queried for the path.
+
+    If *path* is not provided and no relevant environmental variables are set, the
+    default relative path search is performed.
+    If that fails and executable called ``grass`` exists, it is queried for the path.
+    None is returned if all the attempts failed.
+
+    If an existing executable is called as a subprocess is called during the search
+    and it fails, the CalledProcessError exception is propagated from the subprocess
+    call.
+    """
+
+    def ask_executable(arg):
+        """Query the GRASS exectable for the path"""
+        return subprocess.run(
+            [arg, "--config", "path"], text=True, check=True, capture_output=True
+        ).stdout.strip()
+
+    # Exectable was provided as parameter.
+    if path and shutil.which(path):
+        # The path was provided by the user and it is an executable
+        # (on path or provided with full path), so raise exception on failure.
+        ask_executable(path)
+
+    # Presumably directory was provided.
+    if path:
+        return path
+
+    # GISBASE is already set.
+    env_gisbase = os.environ.get("GISBASE")
+    if env_gisbase:
+        return env_gisbase
+
+    # Executable provided in environment (name is from grass-session).
+    # The variable is supported (here), documented, but not widely promoted
+    # at this point (to be re-evaluated).
+    grass_bin = os.environ.get("GRASSBIN")
+    if grass_bin and shutil.which(grass_bin):
+        ask_executable(grass_bin)
+
+    # Derive the path from path to this file (Python module).
+    # This is the standard way when there is no user-provided settings.
+    # Uses relative path to find the right parent and then tests presence of lib
+    # and bin. Removing 5 parts from the path works for
+    # .../grass_install_prefix/etc/python/grass and also .../python3/dist-packages/.
+    install_path = Path(*Path(__file__).parts[:-5])
+    bin_path = install_path / "bin"
+    lib_path = install_path / "lib"
+    if bin_path.is_dir() and lib_path.is_dir():
+        path = install_path
+
+    # As a last resort, try running grass command if it exists.
+    # This is less likely give the right result than the relative path on systems
+    # with multiple installations (where an explicit setup is likely required).
+    # However, it allows for non-standard installations with standard command.
+    grass_bin = "grass"
+    if grass_bin and shutil.which(grass_bin):
+        ask_executable(grass_bin)
+
+    return None
 
 
 def setup_runtime_env(gisbase):
@@ -181,13 +264,14 @@ def init(path=None, location=None, mapset=None, grass_path=None):
     path not being updated for the current process which is a common
     operating system limitation).
 
-    *grass_path* defaults to GISBASE environmental variable if not set
-    assuming that it was already set before importing the module. The
-    function will raise ValueError if neither of those worked.
+    The :func:`get_install_path` function is used to determine where
+    the rest of GRASS files is installed. The *grass_path* parameter is
+    passed to it if provided. If the path cannot be determined,
+    ValueError is raised. Exceptions from the underlying function are propagated.
 
-    To create a GRASS session a ``gisrc`` file is created.
-    Caller is responsible for deleting the ``gisrc`` file
-    should be done with function finish.
+    To create a GRASS session a session file (aka gisrc file) is created.
+    Caller is responsible for deleting the file which is normally done
+    with the function :func:`finish`.
 
     Basic usage::
 
@@ -208,23 +292,17 @@ def init(path=None, location=None, mapset=None, grass_path=None):
 
     :returns: path to ``gisrc`` file (to be deleted later)
     """
+    grass_path = get_install_path(grass_path)
     if not grass_path:
-        env_gisbase = os.environ.get("GISBASE")
-        if env_gisbase:
-            grass_path = env_gisbase
-        else:
-            raise ValueError(
-                _("Parameter gisbase or GISBASE environmental variable must be set")
-            )
-
+        raise ValueError(
+            _("Parameter grass_path or GISBASE environmental variable must be set")
+        )
     # We reduce the top-level imports because this is initialization code.
     # pylint: disable=import-outside-toplevel
     from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
     from grass.grassdb.manage import resolve_mapset_path
 
-    print(f"path={path}, location={location}, mapset={mapset}")
     mapset_path = resolve_mapset_path(path=path, location=location, mapset=mapset)
-    print(repr(mapset_path))
     if not is_mapset_valid(mapset_path):
         raise ValueError(
             _("Mapset {path} is not valid: {reason}").format(
@@ -271,8 +349,6 @@ def clean_default_db():
 
 
 def call(cmd, **kwargs):
-    import subprocess
-
     """Wrapper for subprocess.call to deal with platform-specific issues"""
     if windows:
         kwargs["shell"] = True
@@ -299,6 +375,9 @@ def finish():
         import grass.script as gs
 
         gs.setup.finish()
+
+    The function is not completely symmetrical with :func:`init` because it only
+    closes the mapset, but doesn't undo the runtime environment setup.
     """
 
     clean_default_db()
