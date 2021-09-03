@@ -77,7 +77,7 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
                 if (Rast_is_d_null_value(&buf_bands[band][col]))
                     continue;
                 if (value_num >= value_max) {
-                    /* Three bands are typical, thus we need 4 nodes */
+                    /* Three bands are typical, thus we start with 4 nodes */
                     value_max += 4;
                     problem->x[label_num] = G_realloc(problem->x[label_num],
                                                       ((size_t)value_max +

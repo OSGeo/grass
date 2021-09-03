@@ -5,12 +5,15 @@
  * AUTHOR(S):    Maris Nartiss - maris.gis gmail.com
  * PURPOSE:      Trains Support Vector Machine classifier
  *
- * COPYRIGHT:    (C) 2020 by Maris Nartiss and the GRASS Development Team
+ * COPYRIGHT:    (C) 2021 by Maris Nartiss and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
+ *               Development supported from science funding of
+ *               University of Latvia (2020/2021).
+ * 
  *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +27,7 @@
 
 #include "fill.h"
 
-/* LIBSVM message wrapper */
+/* libsvm message wrapper */
 void print_func(const char *s)
 {
     G_verbose_message("%s", s);
@@ -40,13 +43,17 @@ int main(int argc, char *argv[])
         *opt_svm_coef0, *opt_svm_eps, *opt_svm_cost, *opt_svm_nu, *opt_svm_p;
     struct Flag *flag_svm_shrink, *flag_svm_prob;
 
-    const char *mapset_labels, *name_sigfile;
-    char name_labels[GNAME_MAX], name_group[GNAME_MAX],
-        name_subgroup[GNAME_MAX];
-    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX];
-    char sigfile_dir[GPATH_MAX], out_file[GPATH_MAX];
+    const char *mapset_labels;
+    char name_labels[GNAME_MAX + GMAPSET_MAX];
+    char name_group[GNAME_MAX], name_subgroup[GNAME_MAX],
+        name_sigfile[GNAME_MAX];
+    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX],
+        mapset_sigfile[GMAPSET_MAX];
+    char sigfile_dir[GPATH_MAX];
+    char in_path[GPATH_MAX], out_path[GPATH_MAX];
 
-    struct Ref band_ref;
+    struct Ref group_ref;
+    const char **bandrefs;
 
     struct svm_parameter parameters;
     const char *parameters_error;
@@ -57,9 +64,8 @@ int main(int argc, char *argv[])
     int out_status;
 
     struct Categories cats;
-    char in_path[GPATH_MAX], out_path[GPATH_MAX];
     struct History history;
-    FILE *hist_file;
+    FILE *misc_file;
     int i;
 
     G_gisinit(argv[0]);
@@ -69,7 +75,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("svm"));
     G_add_keyword(_("classification"));
     G_add_keyword(_("training"));
-    module->description = _("Train SVM");
+    module->description = _("Train a SVM");
 
     opt_group = G_define_standard_option(G_OPT_I_GROUP);
     /* GTC: SVM training input */
@@ -82,13 +88,13 @@ int main(int argc, char *argv[])
     opt_labels->description = _("Map with training labels or target values");
 
     opt_sigfile = G_define_option();
-    opt_sigfile->key = "model";
+    opt_sigfile->key = "signaturefile";
     opt_sigfile->type = TYPE_STRING;
     opt_sigfile->key_desc = "name";
     opt_sigfile->required = YES;
-    opt_sigfile->gisprompt = "new,rsvm,sigfile";
+    opt_sigfile->gisprompt = "new,signatures/libsvm,sigfile";
     opt_sigfile->description =
-        _("Name for output file containing trained model");
+        _("Name for output file containing result signatures");
 
     opt_svm_type = G_define_option();
     opt_svm_type->key = "type";
@@ -118,13 +124,13 @@ int main(int argc, char *argv[])
     opt_svm_kernel->type = TYPE_STRING;
     opt_svm_kernel->key_desc = "name";
     opt_svm_kernel->required = NO;
-    opt_svm_kernel->options = "linear,poly,rbf,sigmoid,precomputed";
+    opt_svm_kernel->options = "linear,poly,rbf,sigmoid";
     opt_svm_kernel->answer = "rbf";
     opt_svm_kernel->description = _("SVM kernel type");
     opt_svm_kernel->guisection = _("SVM parameters");
     G_asprintf((char **)&(opt_svm_kernel->descriptions),
                "linear;%s;"
-               "poly;%s;" "rbf;%s;" "sigmoid;%s;" "precomputed;%s;",
+               "poly;%s;" "rbf;%s;" "sigmoid;%s;" /* "precomputed;%s;" */ ,
                /* GTC: SVM kernel type */
                _("u'*v"),
                /* GTC: SVM kernel type */
@@ -132,9 +138,8 @@ int main(int argc, char *argv[])
                /* GTC: SVM kernel type */
                _("exp(-gamma*|u-v|^2)"),
                /* GTC: SVM kernel type */
-               _("tanh(gamma*u'*v + coef0)"),
-               /* GTC: SVM kernel type */
-               _("TODO: precomputed"));
+               _("tanh(gamma*u'*v + coef0)"));
+    /* TODO: precomputed */
 
     opt_svm_cache_size = G_define_option();
     opt_svm_cache_size->key = "cache";
@@ -144,7 +149,6 @@ int main(int argc, char *argv[])
     opt_svm_cache_size->options = "1-999999999";
     opt_svm_cache_size->answer = "512";
     opt_svm_cache_size->description = _("Kernel cache size in MB");
-    /* opt_svm_cache_size->guisection = _("SVM options"); */
 
     opt_svm_degree = G_define_option();
     opt_svm_degree->key = "degree";
@@ -263,19 +267,12 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Raster map <%s> not found"), opt_labels->answer);
     }
 
-    name_sigfile = opt_sigfile->answer;
-    if (opt_subgroup->answer)
-        sprintf(sigfile_dir, "group%c%s%csubgroup%c%s%crsvm", HOST_DIRSEP,
-                name_group, HOST_DIRSEP, HOST_DIRSEP, opt_subgroup->answer,
-                HOST_DIRSEP);
-    else
-        sprintf(sigfile_dir, "group%c%s%crsvm", HOST_DIRSEP, name_group,
-                HOST_DIRSEP);
-    if (!G_get_overwrite() &&
-        G_find_file2_misc(sigfile_dir, "model", name_sigfile,
-                          G_mapset()) != NULL)
-        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
-                      opt_sigfile->key, name_sigfile);
+    if (G_unqualified_name
+        (opt_sigfile->answer, G_mapset(), name_sigfile, mapset_sigfile) < 0)
+        G_fatal_error(_("<%s> does not match the current mapset"),
+                      mapset_sigfile);
+    if (G_legal_filename(name_sigfile) < 0)
+        G_fatal_error(_("<%s> is an illegal file name"), name_sigfile);
 
     /* Input SVM parameters */
     /* TODO: Implement parameter checking duplicating svm_check_parameter() to generate translatable errors */
@@ -338,18 +335,18 @@ int main(int argc, char *argv[])
     /* Get bands */
     if (opt_subgroup->answer) {
         if (!I_get_subgroup_ref2
-            (name_group, opt_subgroup->answer, mapset_group, &band_ref)) {
+            (name_group, opt_subgroup->answer, mapset_group, &group_ref)) {
             G_fatal_error(_("There was an error reading subgroup <%s> in group <%s@%s>"),
                           opt_subgroup->answer, name_group, mapset_group);
         }
     }
     else {
-        if (!I_get_group_ref2(name_group, mapset_group, &band_ref)) {
+        if (!I_get_group_ref2(name_group, mapset_group, &group_ref)) {
             G_fatal_error(_("There was an error reading group <%s@%s>"),
                           name_group, mapset_group);
         }
     }
-    if (band_ref.nfiles <= 0) {
+    if (group_ref.nfiles <= 0) {
         if (opt_subgroup->answer)
             G_fatal_error(_("Subgroup <%s> in group <%s@%s> contains no raster maps."),
                           opt_subgroup->answer, name_group, mapset_group);
@@ -357,38 +354,65 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
     }
+    bandrefs = G_malloc(group_ref.nfiles * sizeof(char *));
+    for (int n = 0; n < group_ref.nfiles; n++) {
+        bandrefs[n] =
+            Rast_read_bandref(group_ref.file[n].name,
+                              group_ref.file[n].mapset);
+        if (!bandrefs[n])
+            G_fatal_error(_("Raster map <%s@%s> lacks band reference"),
+                          group_ref.file[n].name, group_ref.file[n].mapset);
+    }
 
     svm_set_print_string_function(&print_func);
 
     /* Fill svm_problem struct with training data */
     G_message(_("Reading training data"));
-    fill_problem(name_labels, mapset_labels, band_ref, mapset_group,
+    fill_problem(name_labels, mapset_labels, group_ref, mapset_group,
                  &problem);
 
     /* svm_check_parameter needs filled svm_problem struct thus checking only now */
-    G_verbose_message("Checking SVM parameterization");
+    G_verbose_message("Checking SVM parametrization");
     parameters_error = svm_check_parameter(&problem, &parameters);
     if (parameters_error)
         G_fatal_error(_("SVM parameter validation returned an error: %s\n"),
                       parameters_error);
 
     /* Train model. Might take some time. */
-    G_message(_("Starting training process"));
+    G_message(_("Starting training process (it will take some time; "
+                "no progress is printed, be patient)"));
     model = svm_train(&problem, &parameters);
 
     /* Write out training results */
-    /* TODO: Move to Imagery library? */
     G_verbose_message("Writing out trained SVM");
-    if (G__make_mapset_element_misc(sigfile_dir, name_sigfile) == 0)
-        G_fatal_error(_("Failed to create signatures for group <%s>"),
-                      opt_group->answer);
-    G_file_name_misc(out_file, sigfile_dir, "model", name_sigfile,
-                     G_mapset());
-    out_status = svm_save_model(out_file, model);
+    /* This is a specific case as file is not written by GRASS but
+     * by libsvm and thus "normal" GRASS lib functions can not be used. */
+    I__make_signatures_element(I_SIGFILE_TYPE_LIBSVM);
+    I__get_signatures_element(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
+    /* G_fopen_new_misc should create a directory for later use */
+    misc_file = G_fopen_new_misc(sigfile_dir, "version", name_sigfile);
+    if (!misc_file)
+        G_fatal_error(_("Unable to write trained model to file '%s'."),
+                      name_sigfile);
+    fprintf(misc_file, "1\n");
+    fclose(misc_file);
+
+    /* Write out SVM values in a signature file */
+    G_file_name_misc(out_path, sigfile_dir, "sig", name_sigfile, G_mapset());
+    out_status = svm_save_model(out_path, model);
     if (out_status != 0) {
         G_fatal_error(_("Unable to write trained model to file '%s'. Error code: %d"),
-                      out_file, out_status);
+                      out_path, out_status);
     }
+    /* Write out band reference info */
+    misc_file = G_fopen_new_misc(sigfile_dir, "bandref", name_sigfile);
+    if (!misc_file)
+        G_fatal_error(_("Unable to write trained model to file '%s'."),
+                      name_sigfile);
+    for (int n = 0; n < group_ref.nfiles; n++) {
+        fprintf(misc_file, "%s\n", bandrefs[n]);
+    }
+    fclose(misc_file);
 
     /* Copy CATs file. Will be used for prediction result maps */
     G_verbose_message("Copying category information");
@@ -401,7 +425,7 @@ int main(int argc, char *argv[])
     }
 
     /* Copy color file. Will be used for prediction result maps */
-    G_verbose_message("Copying color information");
+    G_verbose_message("Copying colour information");
     if (G_find_file2("colr", name_labels, mapset_labels)) {
         /* Path to training label map colr file */
         G_file_name(in_path, "colr", name_labels, mapset_labels);
@@ -412,20 +436,20 @@ int main(int argc, char *argv[])
 
     /* History will be appended to a prediction result map history */
     G_verbose_message("Writing out history");
-    hist_file = G_fopen_new_misc(sigfile_dir, "history", name_sigfile);
-    if (hist_file != NULL) {
+    misc_file = G_fopen_new_misc(sigfile_dir, "history", name_sigfile);
+    if (misc_file != NULL) {
         G_zero(&history, sizeof(struct History));
         /* Rast_command_history performs command wrapping */
         Rast_command_history(&history);
         for (i = 0; i < history.nlines; i++)
-            fprintf(hist_file, "%s\n", history.lines[i]);
-        fclose(hist_file);
+            fprintf(misc_file, "%s\n", history.lines[i]);
+        fclose(misc_file);
     }
     else {
         G_warning(_("Unable to write history information for <%s>"),
                   name_sigfile);
     }
 
-    G_message(_("Training successfuly complete"));
+    G_message(_("Training successfully complete"));
     exit(EXIT_SUCCESS);
 }
