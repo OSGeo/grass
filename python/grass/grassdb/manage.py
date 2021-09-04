@@ -55,8 +55,8 @@ def rename_location(database, old_name, new_name):
 class MapsetPath:
     """This is a representation of a path to mapset.
 
-    Individual components are accessible through read-only properties.
-    It has with os.PathLike interface.
+    Individual components are accessible through read-only properties
+    and objects have an os.PathLike interface.
 
     Paths are currently stored as is (not resolved, not expanded),
     but that may change in the future.
@@ -123,7 +123,7 @@ def resolve_mapset_path(path, location=None, mapset=None):
     is not, mapset defaults to PERMANENT.
 
     The function does not enforce the existence of the directory or that it
-    it a mapset. It only manipulates the paths except for internal checks
+    is a mapset. It only manipulates the paths except for internal checks
     to determine default values in some cases.
 
     Home represented by ``~`` (tilde) and relative paths are resolved
