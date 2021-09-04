@@ -15,6 +15,9 @@ import shutil
 from pathlib import Path
 
 
+import grass.grassdb.config
+
+
 def delete_mapset(database, location, mapset):
     """Deletes a specified mapset"""
     if mapset == "PERMANENT":
@@ -47,13 +50,6 @@ def rename_mapset(database, location, old_name, new_name):
 def rename_location(database, old_name, new_name):
     """Rename location from *old_name* to *new_name*"""
     os.rename(os.path.join(database, old_name), os.path.join(database, new_name))
-
-
-def split_mapset_path(mapset_path):
-    """Split mapset path to three parts - grassdb, location, mapset"""
-    path, mapset = os.path.split(Path(mapset_path))
-    grassdb, location = os.path.split(path)
-    return grassdb, location, mapset
 
 
 class MapsetPath:
@@ -108,6 +104,13 @@ class MapsetPath:
         return self._mapset
 
 
+def split_mapset_path(mapset_path):
+    """Split mapset path to three parts - grassdb, location, mapset"""
+    path, mapset = os.path.split(Path(mapset_path))
+    grassdb, location = os.path.split(path)
+    return grassdb, location, mapset
+
+
 def resolve_mapset_path(path, location=None, mapset=None):
     """Resolve full path to mapset from given combination of parameters.
 
@@ -137,7 +140,7 @@ def resolve_mapset_path(path, location=None, mapset=None):
 
     # This also resolves symlinks which may or may not be desired.
     path = Path(path).expanduser().resolve()
-    default_mapset = "PERMANENT"
+    default_mapset = grass.grassdb.config.permanent_mapset
     if location and mapset:
         directory = str(path)
         path = path / location / mapset

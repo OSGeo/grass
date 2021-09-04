@@ -20,69 +20,6 @@ from grass.gunittest.gmodules import call_module
 from grass.gunittest.main import test
 
 
-class TestResolveMapsetPath(TestCase):
-    """Check expected results for current mapset and for a non-existent one"""
-
-    def test_default_mapset_exists(self):
-        """Check that default mapset is found for real path/location.
-
-        The location (or mapset) may not exist, but exist in the test.
-        """
-        db_path = call_module("g.gisenv", get="GISDBASE").strip()
-        loc_name = call_module("g.gisenv", get="LOCATION_NAME").strip()
-        mapset_path = resolve_mapset_path(path=db_path, location=loc_name)
-        self.assertEqual(mapset_path.mapset, "PERMANENT")
-
-    def test_default_mapset_does_not_exist(self):
-        """Check that default mapset is found for non-existent path/location.
-
-        The location (or mapset) do not exist.
-        """
-        mapset_path = resolve_mapset_path(
-            path="does/not/exist", location="does_not_exit"
-        )
-        self.assertEqual(mapset_path.mapset, "PERMANENT")
-
-    def test_default_mapset_with_path(self):
-        """Check that default mapset is found for path.
-
-        This requires the location (with default mapset) to exists.
-        """
-        db_path = call_module("g.gisenv", get="GISDBASE").strip()
-        loc_name = call_module("g.gisenv", get="LOCATION_NAME").strip()
-        mapset_path = resolve_mapset_path(path=Path(db_path) / loc_name)
-        self.assertEqual(mapset_path.mapset, "PERMANENT")
-
-    def test_mapset_from_parts(self):
-        """Check that a non-existing path is correctly constructed."""
-        path = "does/not/exist"
-        location_name = "test_location_A"
-        mapset_name = "test_mapset_1"
-        mapset_path = resolve_mapset_path(
-            path=path, location=location_name, mapset=mapset_name
-        )
-        self.assertEqual(mapset_path.directory, str(Path(path).resolve()))
-        self.assertEqual(mapset_path.location, location_name)
-        self.assertEqual(mapset_path.mapset, mapset_name)
-        self.assertEqual(
-            mapset_path.path, Path(path).resolve() / location_name / mapset_name
-        )
-
-    def test_mapset_from_path(self):
-        """Check that a non-existing path is correctly parsed."""
-        path = "does/not/exist/"
-        location_name = "test_location_A"
-        mapset_name = "test_mapset_1"
-        full_path = str(Path(path) / location_name / mapset_name)
-        mapset_path = resolve_mapset_path(path=full_path)
-        self.assertEqual(mapset_path.directory, str(Path(path).resolve()))
-        self.assertEqual(mapset_path.location, location_name)
-        self.assertEqual(mapset_path.mapset, mapset_name)
-        self.assertEqual(
-            mapset_path.path, Path(path).resolve() / location_name / mapset_name
-        )
-
-
 class TestMapsetPath(TestCase):
     """Check that object can be constructed"""
 
@@ -155,6 +92,69 @@ class TestSplitMapsetPath(TestCase):
         self.assertEqual(new_db, ref_db)
         self.assertEqual(new_location, ref_location)
         self.assertEqual(new_mapset, ref_mapset)
+
+
+class TestResolveMapsetPath(TestCase):
+    """Check expected results for current mapset and for a non-existent one"""
+
+    def test_default_mapset_exists(self):
+        """Check that default mapset is found for real path/location.
+
+        The location (or mapset) may not exist, but exist in the test.
+        """
+        db_path = call_module("g.gisenv", get="GISDBASE").strip()
+        loc_name = call_module("g.gisenv", get="LOCATION_NAME").strip()
+        mapset_path = resolve_mapset_path(path=db_path, location=loc_name)
+        self.assertEqual(mapset_path.mapset, "PERMANENT")
+
+    def test_default_mapset_does_not_exist(self):
+        """Check that default mapset is found for non-existent path/location.
+
+        The location (or mapset) do not exist.
+        """
+        mapset_path = resolve_mapset_path(
+            path="does/not/exist", location="does_not_exit"
+        )
+        self.assertEqual(mapset_path.mapset, "PERMANENT")
+
+    def test_default_mapset_with_path(self):
+        """Check that default mapset is found for path.
+
+        This requires the location (with default mapset) to exists.
+        """
+        db_path = call_module("g.gisenv", get="GISDBASE").strip()
+        loc_name = call_module("g.gisenv", get="LOCATION_NAME").strip()
+        mapset_path = resolve_mapset_path(path=Path(db_path) / loc_name)
+        self.assertEqual(mapset_path.mapset, "PERMANENT")
+
+    def test_mapset_from_parts(self):
+        """Check that a non-existing path is correctly constructed."""
+        path = "does/not/exist"
+        location_name = "test_location_A"
+        mapset_name = "test_mapset_1"
+        mapset_path = resolve_mapset_path(
+            path=path, location=location_name, mapset=mapset_name
+        )
+        self.assertEqual(mapset_path.directory, str(Path(path).resolve()))
+        self.assertEqual(mapset_path.location, location_name)
+        self.assertEqual(mapset_path.mapset, mapset_name)
+        self.assertEqual(
+            mapset_path.path, Path(path).resolve() / location_name / mapset_name
+        )
+
+    def test_mapset_from_path(self):
+        """Check that a non-existing path is correctly parsed."""
+        path = "does/not/exist/"
+        location_name = "test_location_A"
+        mapset_name = "test_mapset_1"
+        full_path = str(Path(path) / location_name / mapset_name)
+        mapset_path = resolve_mapset_path(path=full_path)
+        self.assertEqual(mapset_path.directory, str(Path(path).resolve()))
+        self.assertEqual(mapset_path.location, location_name)
+        self.assertEqual(mapset_path.mapset, mapset_name)
+        self.assertEqual(
+            mapset_path.path, Path(path).resolve() / location_name / mapset_name
+        )
 
 
 if __name__ == "__main__":
