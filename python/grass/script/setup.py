@@ -252,7 +252,7 @@ def setup_runtime_env(gisbase):
     os.environ["PYTHONPATH"] = path
 
 
-def init(path=None, location=None, mapset=None, grass_path=None):
+def init(path, location=None, mapset=None, grass_path=None):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it with the
@@ -277,7 +277,7 @@ def init(path=None, location=None, mapset=None, grass_path=None):
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
-        gisrc = gs.setup.init(
+        gs.setup.init(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",
         )
@@ -285,12 +285,12 @@ def init(path=None, location=None, mapset=None, grass_path=None):
         # end the session
         gs.setup.finish()
 
-    :param gisbase: path to GRASS installation
-    :param dbase: path to GRASS database (default: '')
-    :param location: location name (default: 'demolocation')
+    :param path: path to GRASS database
+    :param location: location name
     :param mapset: mapset within given location (default: 'PERMANENT')
+    :param grass_path: path to GRASS installation or executable
 
-    :returns: path to ``gisrc`` file (to be deleted later)
+    :returns: path to ``gisrc`` file (may change in future versions)
     """
     grass_path = get_install_path(grass_path)
     if not grass_path:
