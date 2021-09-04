@@ -1664,12 +1664,20 @@ def get_shell():
         os.environ["SHELL"] = "/usr/bin/bash.exe"
         os.environ["OSTYPE"] = "cygwin"
     else:
-        # in docker the 'SHELL' variable may not be
-        # visible in a Python session unless 'ENV SHELL /bin/bash' is set in Dockerfile
-        try:
-            sh = os.path.basename(os.getenv("SHELL"))
-        except:
-            sh = "sh"
+        # In a Docker container the 'SHELL' variable may not be set
+        # unless 'ENV SHELL /bin/bash' is set in Dockerfile. However, often Bash
+        # is available, so we try Bash first and fall back to sh if needed.
+        sh = os.getenv("SHELL")
+        if sh:
+            sh = os.path.basename(sh)
+        else:
+            # If SHELL is not set, see if there is Bash and use it.
+            if shutil.which("bash"):
+                sh = "bash"
+            else:
+                # Fallback to sh if there is no Bash on path.
+                sh = "sh"
+            # Ensure the variable is set.
             os.environ["SHELL"] = sh
 
         if WINDOWS and sh:
