@@ -809,7 +809,6 @@ class Settings:
         self.internalSettings["appearance"]["commandNotebook"]["choices"] = (
             _("Basic top"),
             _("Basic left"),
-            _("Fancy green"),
             _("List left"),
         )
 

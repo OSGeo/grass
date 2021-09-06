@@ -51,7 +51,13 @@ from gui_core.gselect import VectorDBInfo
 from core.gcmd import GMessage, RunCommand
 from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
-from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
+from gui_core.widgets import (
+        ScrolledPanel,
+        NumTextCtrl,
+        FloatSlider,
+        SymbolButton,
+        GNotebook,
+)
 from gui_core.gselect import Select
 from gui_core.wrap import (
     Window,
@@ -75,7 +81,7 @@ from nviz.mapwindow import (
 from .wxnviz import DM_FLAT, DM_GOURAUD, MAX_ISOSURFS
 
 
-class NvizToolWindow(FN.FlatNotebook):
+class NvizToolWindow(GNotebook):
     """Nviz (3D view) tools panel"""
 
     def __init__(
@@ -94,15 +100,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow = display.GetWindow()
         self._display = self.mapWindow.GetDisplay()
 
-        if globalvar.hasAgw:
-            kwargs["agwStyle"] = style
-        else:
-            kwargs["style"] = style
-        FN.FlatNotebook.__init__(self, parent, id, **kwargs)
-        self.SetActiveTabColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
-        self.SetActiveTabTextColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-        )
+        GNotebook.__init__(self, parent, style=style)
 
         self.win = {}  # window ids
         self.page = {}  # page ids

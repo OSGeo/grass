@@ -279,7 +279,7 @@ class GNotebook(FN.FlatNotebook):
     """Generic notebook widget.
 
     Enables advanced style settings.
-    Problems with hidden tabs and does not respect system colors (native look).
+    Problems with hidden tabs. Uses system colour for active tabs.
     """
 
     def __init__(self, parent, style, **kwargs):
