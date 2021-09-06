@@ -95,9 +95,6 @@
 /* define if "int64_t" is available */
 #undef HAVE_INT64_T
 
-/* Define the return type of signal handlers */
-#define RETSIGTYPE int
-
 /* define if ftime() exists */
 #undef HAVE_FTIME
 
