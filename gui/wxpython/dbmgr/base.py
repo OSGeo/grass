@@ -1201,8 +1201,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         # sql statement box
         sqlNtb = GNotebook(
-                parent=sqlQueryPanel, id=wx.ID_ANY,
-                style=FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON | FN.FNB_NODRAG,
+            parent=sqlQueryPanel,
+            style=FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON | FN.FNB_NODRAG,
         )
 
         # Simple tab

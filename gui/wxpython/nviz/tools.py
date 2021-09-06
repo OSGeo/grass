@@ -52,11 +52,11 @@ from core.gcmd import GMessage, RunCommand
 from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
 from gui_core.widgets import (
-        ScrolledPanel,
-        NumTextCtrl,
-        FloatSlider,
-        SymbolButton,
-        GNotebook,
+    ScrolledPanel,
+    NumTextCtrl,
+    FloatSlider,
+    SymbolButton,
+    GNotebook,
 )
 from gui_core.gselect import Select
 from gui_core.wrap import (

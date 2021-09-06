@@ -1053,7 +1053,7 @@ class CmdPanel(wx.Panel):
         elif style == 1:  # basic left
             self.notebook = FormNotebook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 2: # list left
+        elif style == 2:  # list left
             self.notebook = FormListbook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChange)
         self.notebook.Refresh()
