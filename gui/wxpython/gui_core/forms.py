@@ -607,7 +607,6 @@ class TaskFrame(wx.Frame):
                 parent=self.panel, id=wx.ID_OK, label=_("&Run"))
             self.btn_run.SetToolTip(_("Run the command (Ctrl+R)"))
             self.btn_run.SetDefault()
-            self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
 
             btnsizer.Add(self.btn_run, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
