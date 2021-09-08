@@ -68,10 +68,6 @@ from threading import Thread
 
 import wx
 
-try:
-    import wx.lib.agw.flatnotebook as FN
-except ImportError:
-    import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
@@ -115,7 +111,6 @@ from gui_core.widgets import (
     FloatValidator,
     FormListbook,
     FormNotebook,
-    GNotebook,
     PlacementValidator,
 )
 from core.giface import Notification, StandaloneGrassInterface
