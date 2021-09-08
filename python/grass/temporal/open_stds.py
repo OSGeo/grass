@@ -52,7 +52,15 @@ def open_old_stds(name, type, dbif=None):
     band_ref = None
     if name.find(".") > -1:
         try:
+            from grass.bandref import BandReferenceReader
+
             name, band_ref = name.split(".")
+            if band_ref not in BandReferenceReader().get_bands():
+                msgr.fatal(
+                    "Unknown <{}> band reference. Run g.bands module to list supported bands.".format(
+                        band_ref
+                    )
+                )
         except ValueError:
             msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
     id = name + "@" + mapset
