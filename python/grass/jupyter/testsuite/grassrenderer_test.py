@@ -92,6 +92,14 @@ class TestDisplay(TestCase):
         # Make sure image was created
         self.assertFileExists(custom_filename)
 
+    def test_filename_property(self):
+        """Test of GrassRenderer filename property."""
+        # Create map with unique filename
+        grass_renderer = gj.GrassRenderer()
+        grass_renderer.run("d.rast", map="elevation")
+        # Make sure image was created
+        self.assertFileExists(grass_renderer.filename)
+
     def test_hw(self):
         """Test that GrassRenderer creates maps with custom height and widths."""
         # Create map with height and width parameters
