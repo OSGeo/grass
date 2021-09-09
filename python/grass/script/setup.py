@@ -264,6 +264,8 @@ def init(path, location=None, mapset=None, grass_path=None):
     path not being updated for the current process which is a common
     operating system limitation).
 
+    When the path or specified mapset does not exist, ValueError is raised.
+
     The :func:`get_install_path` function is used to determine where
     the rest of GRASS files is installed. The *grass_path* parameter is
     passed to it if provided. If the path cannot be determined,
@@ -302,6 +304,14 @@ def init(path, location=None, mapset=None, grass_path=None):
     from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
     from grass.grassdb.manage import resolve_mapset_path
 
+    # A simple existence test. The directory, whatever it is, should exist.
+    if not Path(path).exists():
+        raise ValueError(_("Path '{path}' does not exist").format(path=path))
+    # A specific message when it exists, but it is a file.
+    if Path(path).is_file():
+        raise ValueError(
+            _("Path '{path}' is a file, but a directory is needed").format(path=path)
+        )
     mapset_path = resolve_mapset_path(path=path, location=location, mapset=mapset)
     if not is_mapset_valid(mapset_path):
         raise ValueError(
