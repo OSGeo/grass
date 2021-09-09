@@ -96,6 +96,16 @@ class GrassRenderer:
         self._legend_file = os.path.join(self._tmpdir.name, "legend.txt")
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
+    @property
+    def filename(self):
+        """Filename or full path to the file with the resulting image.
+
+        The value can be set during initialization. When the filename was not provided
+        during initialization, a path to temporary file is returned. In that case, the
+        file is guaranteed to exist as long as the object exists.
+        """
+        return self._filename
+
     def run(self, module, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
 
