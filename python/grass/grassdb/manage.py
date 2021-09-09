@@ -12,6 +12,7 @@ for details.
 
 import os
 import shutil
+import sys
 from pathlib import Path
 
 
@@ -129,24 +130,30 @@ def resolve_mapset_path(path, location=None, mapset=None):
     location and mapset are added to the path. If location is provided and mapset
     is not, mapset defaults to PERMANENT.
 
-    The function does not enforce the existence of the directory or that it
-    is a mapset. It only manipulates the paths except for internal checks
-    to determine default values in some cases.
-
     Home represented by ``~`` (tilde) and relative paths are resolved
     and the result contains absolute paths.
 
-    Returns object with attributes path, db, location, and mapset.
-    The path attribute is a libpath.Path object representing full path
-    to the mapset. The db attribute is full path to the directory where
-    the location directory is. The attributes location and mapset are names
-    of location and mapset, respectively.
+    The function does not enforce the existence of the directory or that it
+    is a mapset. It only manipulates the paths except for internal checks
+    which help to determine the result in some cases. On Windows, if the path
+    does not exist and ``..`` is present in the path, it will be not be resolved
+    due to path resolution limitation in the Python pathlib package.
+
+    Returns a MapsetPath object.
     """
     # We reduce the top-level imports because this is initialization code.
     # pylint: disable=import-outside-toplevel
 
-    # This also resolves symlinks which may or may not be desired.
-    path = Path(path).expanduser().resolve()
+    path = Path(path).expanduser()
+    if not sys.platform.startswith("win") or path.exists():
+        # The resolve function works just fine on Windows when the path exists
+        # and everywhere even if it does not.
+        # This also resolves symlinks which may or may not be desired.
+        path = path.resolve()
+    else:
+        # On Windows when the path does not exist, resolve does not work.
+        # This does not resolve `..` which is not desired.
+        path = Path.cwd() / path
     default_mapset = grass.grassdb.config.permanent_mapset
     if location and mapset:
         directory = str(path)
