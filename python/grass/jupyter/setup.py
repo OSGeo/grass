@@ -113,6 +113,14 @@ def init(path, location=None, mapset=None, grass_path=None):
     value to a variable. If you see ``GISRC - variable not set`` after calling
     a GRASS module, you know you have forgot to assign the result to a variable.
 
+    Since the clean up happens when the object is garbadge-collected, it may or may
+    not happen immediately. When you forget to assign the result to a variable, your
+    code may still work even if you don't assign it. However, you need to assign it
+    to ensure that your code always works.
+
+    The returned object can be used to switch to another mapset:
+
+    >>> session.switch_mapset("mapset_name")
 
     :param str path: path to grass databases
     :param str location: name of GRASS location
