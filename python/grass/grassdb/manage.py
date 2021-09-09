@@ -106,9 +106,16 @@ class MapsetPath:
 
 def split_mapset_path(mapset_path):
     """Split mapset path to three parts - grassdb, location, mapset"""
-    path, mapset = os.path.split(Path(mapset_path))
-    grassdb, location = os.path.split(path)
-    return grassdb, location, mapset
+    mapset_path = Path(mapset_path)
+    if len(mapset_path.parts) < 3:
+        ValueError(
+            _("Mapset path '{}' needs at least three components").format(mapset_path)
+        )
+    mapset = mapset_path.name
+    location_path = mapset_path.parent
+    location = location_path.name
+    grassdb = location_path.parent
+    return os.fspath(grassdb), location, mapset
 
 
 def resolve_mapset_path(path, location=None, mapset=None):
@@ -169,7 +176,5 @@ def resolve_mapset_path(path, location=None, mapset=None):
                     "or location and mapset need to be set"
                 )
             )
-        mapset = parts[-1]
-        location = parts[-2]
-        directory = Path(*parts[:-2])
+        directory, location, mapset = split_mapset_path(path)
     return MapsetPath(path=path, directory=directory, location=location, mapset=mapset)
