@@ -5,11 +5,11 @@
 #   	    	Eric G. Miller - egm2 jps.net
 #   	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
 #   	    	Markus Neteler - Germany/Italy - neteler itc.it
-#   	    	Nicklas Larsson (update to 2.69)
+#   	    	Nicklas Larsson (update to autoconfig 2.69)
 # PURPOSE:  	This configure runs all the tests to determine what components
 #   	    	are installed on the current system. It also defines certain
 #   	    	configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2009, 2011-2012 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #   	    	Public License (>=v2). Read the file COPYING that
