@@ -197,9 +197,13 @@ def dataset_mapcalculator(
         for dataset in input_list:
             list = dataset.get_registered_maps_as_objects(dbif=dbif)
 
-            if list is None:
+            if list is None or len(list) < 1:
                 dbif.close()
-                msgr.message(_("No maps registered in input dataset"))
+                msgr.message(
+                    _("No maps registered in input dataset <{}>").format(
+                        dataset.get_name()
+                    )
+                )
                 return 0
 
             map_name_list = []
