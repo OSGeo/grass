@@ -35,7 +35,7 @@ void I_get_signatures_dir(char *dir, I_SIGFILE_TYPE type)
         sprintf(dir, "signatures%csigset", HOST_DIRSEP);
     }
     else if (type == I_SIGFILE_TYPE_LIBSVM) {
-        sprintf(element, "signatures%clibsvm", HOST_DIRSEP);
+        sprintf(dir, "signatures%clibsvm", HOST_DIRSEP);
     }
     else {
         G_fatal_error("Programming error: unknown signature file type");
