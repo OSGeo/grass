@@ -109,6 +109,8 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
         Rast_close(fd_bands[band]);
         G_free(buf_bands[band]);
     }
+    G_free(fd_bands);
+    G_free(buf_bands);
     G_percent(1, 1, 1);
     G_percent_reset();
 }

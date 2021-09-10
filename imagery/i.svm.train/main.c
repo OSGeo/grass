@@ -11,8 +11,8 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
- *               Development supported from science funding of
- *               University of Latvia (2020/2021).
+ *               Development of this module was supported from
+ *               science funding of University of Latvia (2020/2021).
  * 
  *****************************************************************************/
 #include <stdlib.h>
@@ -364,6 +364,7 @@ int main(int argc, char *argv[])
                           group_ref.file[n].name, group_ref.file[n].mapset);
     }
 
+    /* Pass libsvm messages through GRASS */
     svm_set_print_string_function(&print_func);
 
     /* Fill svm_problem struct with training data */
@@ -386,9 +387,9 @@ int main(int argc, char *argv[])
     /* Write out training results */
     G_verbose_message("Writing out trained SVM");
     /* This is a specific case as file is not written by GRASS but
-     * by libsvm and thus "normal" GRASS lib functions can not be used. */
-    I__make_signatures_element(I_SIGFILE_TYPE_LIBSVM);
-    I__get_signatures_element(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
+       by libsvm and thus "normal" GRASS lib functions can not be used. */
+    I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM);
+    I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
     /* G_fopen_new_misc should create a directory for later use */
     misc_file = G_fopen_new_misc(sigfile_dir, "version", name_sigfile);
     if (!misc_file)
@@ -404,6 +405,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to write trained model to file '%s'. Error code: %d"),
                       out_path, out_status);
     }
+    svm_free_and_destroy_model(&model);
     /* Write out band reference info */
     misc_file = G_fopen_new_misc(sigfile_dir, "bandref", name_sigfile);
     if (!misc_file)
@@ -413,6 +415,7 @@ int main(int argc, char *argv[])
         fprintf(misc_file, "%s\n", bandrefs[n]);
     }
     fclose(misc_file);
+    G_free(bandrefs);
 
     /* Copy CATs file. Will be used for prediction result maps */
     G_verbose_message("Copying category information");
@@ -421,6 +424,7 @@ int main(int argc, char *argv[])
         G_file_name(in_path, "cats", name_labels, mapset_labels);
         G_file_name_misc(out_path, sigfile_dir, "cats", name_sigfile,
                          G_mapset());
+        /* It is OK to call G_copy if source file doesn't exist */
         G_copy_file(in_path, out_path);
     }
 
@@ -431,6 +435,7 @@ int main(int argc, char *argv[])
         G_file_name(in_path, "colr", name_labels, mapset_labels);
         G_file_name_misc(out_path, sigfile_dir, "colr", name_sigfile,
                          G_mapset());
+        /* It is OK to call G_copy if source file doesn't exist */
         G_copy_file(in_path, out_path);
     }
 

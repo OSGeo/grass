@@ -27,7 +27,7 @@ from grass.lib.gis import (
 )
 from grass.lib.imagery import (
     I_SIGFILE_TYPE_LIBSVM,
-    I__get_signatures_element,
+    I_get_signatures_dir,
     I_signatures_remove,
 )
 
@@ -155,7 +155,7 @@ class IOValidationTest(TestCase):
         """Validate creation of category, history and colour files"""
         sigfile = grass.tempname(10)
         csigdir = ctypes.create_string_buffer(GNAME_MAX)
-        I__get_signatures_element(csigdir, I_SIGFILE_TYPE_LIBSVM)
+        I_get_signatures_dir(csigdir, I_SIGFILE_TYPE_LIBSVM)
         sigdir = utils.decode(csigdir.value)
         isvm = SimpleModule(
             "i.svm.train",
