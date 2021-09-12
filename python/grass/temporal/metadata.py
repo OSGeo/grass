@@ -23,6 +23,7 @@ for details.
 """
 from __future__ import print_function
 from .base import SQLDatabaseInterface
+from .core import SQLDatabaseInterfaceConnection
 
 ###############################################################################
 
@@ -1396,8 +1397,49 @@ class STRDSMetadata(STDSRasterMetadataBase):
         else:
             return None
 
+    def get_band_names(self):
+        """Get the distinct names of registered bands
+           The distinct band names are not stored in the metadata table
+           and fetched on-the-fly
+        :return: None if not found
+        """
+
+        sql = "SELECT distinct band_reference FROM %s WHERE %s.id " % (
+            "raster_metadata",
+            "raster_metadata"
+        )
+
+        sql += "IN (SELECT id FROM %s)" % (
+            str(self.get_raster_register())
+        )
+
+        dbif = SQLDatabaseInterfaceConnection()
+        dbif.connect()
+        dbif.execute(sql, mapset=self.mapset)
+        rows = dbif.fetchall(mapset=self.mapset)
+        dbif.close()
+
+        if rows:
+            string = ""
+            count = 0
+            for row in rows:
+                if row["band_reference"]:
+                    if count == 0:
+                        string += row["band_reference"]
+                    else:
+                        string += ",%s" % row["band_reference"]
+                    count += 1
+
+            if count > 0:
+                return string
+            else:
+                return None
+        else:
+            return None
+
     raster_register = property(fget=get_raster_register, fset=set_raster_register)
     number_of_bands = property(fget=get_number_of_bands)
+    band_names = property(fget=get_band_names)
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
@@ -1411,8 +1453,10 @@ class STRDSMetadata(STDSRasterMetadataBase):
         super()._print_info_body(shell)
         if shell:
             print("number_of_bands=" + str(self.get_number_of_bands()))
+            print("band_names=" + str(self.get_band_names()))
         else:
             print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
+            print(" | Bands:...................... " + str(self.get_band_names()))
 
 
 ###############################################################################
