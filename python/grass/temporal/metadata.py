@@ -1406,12 +1406,10 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
         sql = "SELECT distinct band_reference FROM %s WHERE %s.id " % (
             "raster_metadata",
-            "raster_metadata"
+            "raster_metadata",
         )
 
-        sql += "IN (SELECT id FROM %s)" % (
-            str(self.get_raster_register())
-        )
+        sql += "IN (SELECT id FROM %s)" % (str(self.get_raster_register()))
 
         dbif = SQLDatabaseInterfaceConnection()
         dbif.connect()
@@ -1456,7 +1454,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
             print("band_names=" + str(self.get_band_names()))
         else:
             print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
-            print(" | Bands:...................... " + str(self.get_band_names()))
+            print(" | Band names:................. " + str(self.get_band_names()))
 
 
 ###############################################################################
