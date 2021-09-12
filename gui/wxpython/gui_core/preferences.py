@@ -130,7 +130,6 @@ class PreferencesBaseDialog(wx.Dialog):
                       flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
-        mainSizer.Fit(self)
 
     def OnDefault(self, event):
         """Button 'Set to default' pressed"""
