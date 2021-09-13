@@ -47,7 +47,7 @@ input map is an integer map.
 The <em>r.mask</em> function creates a MASK with values 1 and NULL. But note 
 that a MASK can also be created using other functions that have a raster as 
 output, by naming the output raster 'MASK'. Such layers could have other
-values than 1 and NULL. The user should therefore be aware that Grid cells 
+values than 1 and NULL. The user should therefore be aware that grid cells 
 in the MASK map containing <tt>NULL</tt> or <tt>0</tt> will replace data with
 NULL, while cells containing other values will allow data to pass through 
 unaltered. This means that:
@@ -61,7 +61,7 @@ r.mapcalc -s "map1 = round(rand(0,1))"
 r.mask raster=map1
 </pre></div>
 
-If it the same binary map is used as input in <em>g.copy</em> to create a MASK,  
+If the same binary map is used as an input in <em>g.copy</em> to create a MASK,  
 only the raster cells with value 1 will be part of the MASK.
 
 <div class="code"><pre>
@@ -75,14 +75,14 @@ g.copy raster=map2,MASK
 floating maps are not allowed in combination with the <em>maskcats</em> 
 parameter); all non-NULL values of the input raster map are converted to 1 and 
 are thus part of the MASK. In the example below, all raster cells are part of 
-the MASK, i.e., nothing is blocked out from analysis and/or display
+the MASK, i.e., nothing is blocked out from analysis and/or display.
 
 <div class="code"><pre>
 r.mapcalc -s "map3 = rand(0.0,1.0)"
 r.mask raster=map3
 </pre></div>
 
-However, if when using another method than <em>r.mask</em> to create a mask,
+However, when using another method than <em>r.mask</em> to create a mask,
 the user should be aware that the MASK is read as an integer map. If MASK is
 a floating-point map, the values will be converted to integers using
 the map's quantisation rules (this defaults to round-to-nearest, but can be
