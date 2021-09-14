@@ -19,7 +19,12 @@ from grass.pygrass.gis import Mapset
 from grass.pygrass import utils
 
 from grass.lib.gis import G_remove_misc
-from grass.lib.raster import Rast_legal_bandref, Rast_read_bandref, Rast_write_bandref
+from grass.lib.raster import (
+    Rast_legal_bandref,
+    Rast_read_bandref,
+    Rast_get_bandref_or_name,
+    Rast_write_bandref,
+)
 
 
 class RastLegalBandIdTestCase(TestCase):
@@ -93,6 +98,14 @@ class RastBandReferenceTestCase(TestCase):
         G_remove_misc("cell_misc", "bandref", self.map)
         Rast_write_bandref(self.map, self.bandref)
         ret = utils.decode(Rast_read_bandref(self.map, self.mapset))
+        self.assertEqual(ret, self.bandref)
+
+    def test_get_bandref_or_name(self):
+        G_remove_misc("cell_misc", "bandref", self.map)
+        ret = utils.decode(Rast_get_bandref_or_name(self.map, self.mapset))
+        self.assertEqual(ret, self.map)
+        Rast_write_bandref(self.map, self.bandref)
+        ret = utils.decode(Rast_get_bandref_or_name(self.map, self.mapset))
         self.assertEqual(ret, self.bandref)
 
 
