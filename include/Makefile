@@ -49,4 +49,4 @@ $(ARCH_INCDIR)/citing.h: $(MODULE_TOPDIR)/CITING | $(ARCH_INCDIR)
 	sed -e 's/^\(.*\)$$/"\1\\n"/' $< > $@
 
 $(ARCH_INCDIR)/confparms.h: $(MODULE_TOPDIR)/config.status | $(ARCH_INCDIR)
-	sed -n '7s/^#\(.*\)$$/"\1"/p' $< > $@
+	$< --config | sed "s/'//g" | sed 's/\(.*\)/".\/configure \1"/' > $@
