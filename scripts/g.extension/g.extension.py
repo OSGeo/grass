@@ -2207,7 +2207,7 @@ def resolve_xmlurl_prefix(url, source=None):
     'https://grass.osgeo.org/addons/'
     """
     gscript.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
-    if source == "official":
+    if source in ("official", "official_fork"):
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
         version_branch = get_version_branch(version[0])
@@ -2391,7 +2391,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         else:
             svn_reference = "branches/{}".format(branch)
 
-        if not url:
+        if not url or url == GIT_URL:
             # Set URL for the given GRASS version
             git_url = f"{GIT_URL}/{svn_reference}/src/{module_class}/{name}"
             return "official", git_url
