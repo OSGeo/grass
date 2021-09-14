@@ -200,9 +200,8 @@ def register_maps_in_space_time_dataset(
 
             if band_reference_in_file:
                 idx = 3 if end_time_in_file else 2
-                row["band_reference"] = (
-                    line_list[idx].strip().upper()
-                )  # case-insensitive
+                # case-sensitive, the user decides on the band name
+                row["band_reference"] = line_list[idx].strip()
 
             row["id"] = AbstractMapDataset.build_id(mapname, mapset)
 
