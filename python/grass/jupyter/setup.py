@@ -73,15 +73,17 @@ class _JupyterGlobalSession:
 
         if mapset_exists(arg):
             path, location, mapset = split_mapset_path(arg)
-            # TODO: Requires direct session file modification.
+            # This requires direct session file modification using g.gisenv because
             # g.mapset locks the mapset which is not how init and finish behave.
-            gs.run_command("g.mapset", dbase=path, location=location, mapset=mapset)
+            gs.run_command("g.gisenv", set=f"GISDBASE={path}")
+            gs.run_command("g.gisenv", set=f"LOCATION_NAME={location}")
+            gs.run_command("g.gisenv", set=f"MAPSET={mapset}")
             return
         gisenv = gs.gisenv()
         if mapset_exists(
             path=gisenv["GISDBASE"], location=gisenv["LOCATION_NAME"], mapset=arg
         ):
-            gs.run_command("g.mapset", mapset=arg)
+            gs.run_command("g.gisenv", set=f"MAPSET={arg}")
             return
         raise ValueError(_("Mapset '{}' does not exist").format(arg))
 
