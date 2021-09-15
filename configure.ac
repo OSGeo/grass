@@ -30,7 +30,7 @@ $2
 ])
 
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
+AC_CONFIG_SRCDIR([configure.ac])
 AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/config.h)
 AC_CANONICAL_HOST

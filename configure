@@ -582,7 +582,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="configure.in"
+ac_unique_file="configure.ac"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
