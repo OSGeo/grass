@@ -51,7 +51,7 @@ else:
     from wx import wizard as wiz
 
 import grass.script as grass
-import grass.script.task import get_map_name_from_command
+from grass.script.task import get_map_name_from_command
 
 from core import utils
 from core.render import Map

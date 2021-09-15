@@ -128,7 +128,9 @@ class LayerList(object):
         "Change layer (cmd, ltype, opacity)"
         if "cmd" in kwargs:
             layer._pydata[0]["cmd"] = kwargs["cmd"]
-            layerName, found = get_map_name_from_command(kwargs["cmd"], fullyQualified=True)
+            layerName, found = get_map_name_from_command(
+                kwargs["cmd"], fullyQualified=True
+            )
             if found:
                 layer._pydata[0]["label"] = layerName
         if "ltype" in kwargs:

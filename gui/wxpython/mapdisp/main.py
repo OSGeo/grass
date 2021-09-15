@@ -37,7 +37,11 @@ import fileinput
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
-from grass.script.task import cmdtuple_to_list, cmdlist_to_tuple, get_map_name_from_command
+from grass.script.task import (
+    cmdtuple_to_list,
+    cmdlist_to_tuple,
+    get_map_name_from_command,
+)
 from grass.pydispatch.signal import Signal
 
 from grass.script.setup import set_gui_path
