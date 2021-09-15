@@ -23,7 +23,7 @@ import sys
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
-from .core import Popen, PIPE, get_real_command
+from .core import Popen, PIPE, get_real_command, find_file
 
 try:
     import xml.etree.ElementTree as etree
@@ -703,3 +703,121 @@ def cmdstring_to_tuple(cmd):
     :return: command as tuple
     """
     return cmdlist_to_tuple(split(cmd))
+
+
+def get_map_name_from_command(dcmd, fullyQualified=False, param=None, layerType=None):
+    """Get map name from GRASS command
+
+    Parameter dcmd can be modified when first parameter is not
+    defined.
+
+    :param dcmd: GRASS command (given as list)
+    :param fullyQualified: change map name to be fully qualified
+    :param param: params directory
+    :param str layerType: check also layer type ('raster', 'vector',
+                          'raster_3d', ...)
+
+    :return: tuple (name, found)
+    """
+    mapname = ""
+    found = True
+
+    if len(dcmd) < 1:
+        return mapname, False
+
+    if "d.grid" == dcmd[0]:
+        mapname = "grid"
+    elif "d.geodesic" in dcmd[0]:
+        mapname = "geodesic"
+    elif "d.rhumbline" in dcmd[0]:
+        mapname = "rhumb"
+    elif "d.graph" in dcmd[0]:
+        mapname = "graph"
+    else:
+        params = list()
+        for idx in range(len(dcmd)):
+            try:
+                p, v = dcmd[idx].split("=", 1)
+            except ValueError:
+                continue
+
+            if p == param:
+                params = [(idx, p, v)]
+                break
+
+            # this does not use types, just some (incomplete subset of?) names
+            if p in (
+                "map",
+                "input",
+                "layer",
+                "red",
+                "blue",
+                "green",
+                "hue",
+                "saturation",
+                "intensity",
+                "shade",
+                "labels",
+            ):
+                params.append((idx, p, v))
+
+        if len(params) < 1:
+            if len(dcmd) > 1:
+                i = 1
+                while i < len(dcmd):
+                    if "=" not in dcmd[i] and not dcmd[i].startswith("-"):
+                        task = parse_interface(dcmd[0])
+                        # this expects the first parameter to be the right one
+                        p = task.get_options()["params"][0].get("name", "")
+                        params.append((i, p, dcmd[i]))
+                        break
+                    i += 1
+            else:
+                return mapname, False
+
+        if len(params) < 1:
+            return mapname, False
+        # need to add mapset for all maps
+        mapsets = {}
+        for i, p, v in params:
+            if p == "layer":
+                continue
+            mapname = v
+            mapset = ""
+            if fullyQualified and "@" not in mapname:
+                if layerType in ("raster", "vector", "raster_3d", "rgb", "his"):
+                    try:
+                        if layerType in ("raster", "rgb", "his"):
+                            findType = "cell"
+                        elif layerType == "raster_3d":
+                            findType = "grid3"
+                        else:
+                            findType = layerType
+                        mapset = find_file(mapname, element=findType)["mapset"]
+                    except AttributeError:  # not found
+                        return "", False
+                    if not mapset:
+                        found = False
+                else:
+                    mapset = ""  # grass.gisenv()['MAPSET']
+            mapsets[i] = mapset
+        # update dcmd
+        for i, p, v in params:
+            if p == "layer":
+                continue
+            dcmd[i] = p + "=" + v
+            if i in mapsets and mapsets[i]:
+                dcmd[i] += "@" + mapsets[i]
+
+        maps = list()
+        ogr = False
+        for i, p, v in params:
+            if v.lower().rfind("@ogr") > -1:
+                ogr = True
+            if p == "layer" and not ogr:
+                continue
+            maps.append(dcmd[i].split("=", 1)[1])
+
+        mapname = "\n".join(maps)
+
+    return mapname, found

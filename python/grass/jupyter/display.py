@@ -16,6 +16,8 @@ import shutil
 import tempfile
 import grass.script as gs
 
+from .region import RegionManagerFor2D
+
 
 class GrassRenderer:
     """GrassRenderer creates and displays GRASS maps in
@@ -48,6 +50,8 @@ class GrassRenderer:
         font="sans",
         text_size=12,
         renderer="cairo",
+        use_region=False,
+        saved_region=None,
     ):
 
         """Creates an instance of the GrassRenderer class.
@@ -62,6 +66,10 @@ class GrassRenderer:
                         font file
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
+        :param use_region: if True, use either current or provided saved region,
+                          else based on rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            set comp region based on it
         """
 
         # Copy Environment
@@ -96,6 +104,9 @@ class GrassRenderer:
         self._legend_file = os.path.join(self._tmpdir.name, "legend.txt")
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
+        # rendering region setting
+        self._region_manager = RegionManagerFor2D(use_region, saved_region, self._env)
+
     @property
     def filename(self):
         """Filename or full path to the file with the resulting image.
@@ -117,6 +128,7 @@ class GrassRenderer:
 
         # Check module is from display library then run
         if module[0] == "d":
+            self._region_manager.set_region(module, **kwargs)
             gs.run_command(module, env=self._env, **kwargs)
         else:
             raise ValueError("Module must begin with letter 'd'.")
