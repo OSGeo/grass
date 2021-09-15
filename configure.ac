@@ -102,10 +102,6 @@ fi
 
 AC_SUBST(ARCH)
 
-# Use absolute path for aux directory so that install-sh works
-
-AC_CONFIG_AUX_DIR("$SRCDIR")
-
 # Set GISBASE and GRASS_BIN
 
 GISBASE="${WINDSTDIR}/dist.${ARCH}"
