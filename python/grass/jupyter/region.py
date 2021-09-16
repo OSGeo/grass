@@ -12,17 +12,26 @@
 
 
 import grass.script as gs
-import grass.script.task as gt
 from grass.exceptions import CalledModuleError
 from .utils import (
     get_location_proj_string,
     get_region,
     reproject_region,
+    get_map_name_from_d_command,
 )
 
 
 class RegionManagerForInteractiveMap:
     def __init__(self, use_region, saved_region, src_env, tgt_env):
+        """Manages region during rendering for interactive map.
+
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
+        :param src_env: source environment (original projection)
+        :param tgt_env: target environment (pseudomercator)
+        """
         self._use_region = use_region
         self._saved_region = saved_region
         self._src_env = src_env
@@ -45,6 +54,8 @@ class RegionManagerForInteractiveMap:
         If user specified the name of saved region during object's initialization,
         the provided region is used. If it's not specified
         and use_region=True, current region is used.
+
+        Also enlarges bounding box based on the raster.
         """
         if self._saved_region:
             self._src_env["GRASS_REGION"] = gs.region_env(
@@ -73,6 +84,7 @@ class RegionManagerForInteractiveMap:
         self._set_bbox(self._src_env)
 
     def set_bbox_vector(self, vector):
+        """Enlarge bounding box based on vector"""
         env = self._src_env.copy()
         env["GRASS_REGION"] = gs.region_env(vector=vector, env=env)
         self._set_bbox(env)
@@ -98,9 +110,9 @@ class RegionManagerFor2D:
         """Manages region during rendering.
 
         :param use_region: if True, use either current or provided saved region,
-                          else based on rendered layers
+                          else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
-                            set comp region based on it
+                            this region is then used for rendering
         :param env: environment for rendering
         """
         self._env = env
@@ -125,20 +137,19 @@ class RegionManagerFor2D:
             self._env["GRASS_REGION"] = gs.region_env(
                 region=self._saved_region, env=self._env
             )
-        elif self._use_region:
+            return
+        if self._use_region:
             # use current
             return
         if self._resolution_set and self._extent_set:
             return
-        name, found = gt.get_map_name_from_command(
-            gt.cmdtuple_to_list((module, kwargs))
-        )
-        if not found:
+        name = get_map_name_from_d_command(module, **kwargs)
+        if not name:
             return
         if len(name.split()) > 1:
             name = name.split()[0]
         try:
-            if module == "d.vect":
+            if module.startswith("d.vect"):
                 if not self._resolution_set and not self._extent_set:
                     self._env["GRASS_REGION"] = gs.region_env(
                         vector=name, env=self._env
@@ -163,9 +174,9 @@ class RegionManagerFor3D:
         """Manages region during rendering.
 
         :param use_region: if True, use either current or provided saved region,
-                          else based on elevation layer
+                          else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
-                            set comp region based on it
+                            this region is then used for rendering
         """
         self._use_region = use_region
         self._saved_region = saved_region
@@ -185,13 +196,15 @@ class RegionManagerFor3D:
             env["GRASS_REGION"] = gs.region_env(
                 region=self._saved_region, env=env
             )
-        elif self._use_region:
+            self._region_set = True
+            return
+        if self._use_region:
             # use current
             return
         if self._region_set:
             return
-        if "elevation" in kwargs:
-            elev = kwargs["elevation"].split(",")[0]
+        if "elevation_map" in kwargs:
+            elev = kwargs["elevation_map"].split(",")[0]
             try:
                 env["GRASS_REGION"] = gs.region_env(raster=elev, env=env)
                 self._region_set = True

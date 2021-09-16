@@ -69,9 +69,9 @@ class Grass3dRenderer:
         :param text_size: default text size in 2D rendering, usually overwritten
         :param renderer2d: GRASS 2D renderer driver (options: cairo, png)
         :param use_region: if True, use either current or provided saved region,
-                          else based on rendered layers
+                          else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
-                            set comp region based on it
+                            this region is then used for rendering
 
         When *resolution_fine* is 1, rasters are used in the resolution according
         to the computational region as usual in GRASS GIS.
@@ -203,7 +203,7 @@ class Grass3dRenderer:
         else:
             env = os.environ.copy()
             self._region_manager.set_region(env=env, **kwargs)
-            gs.run_command(module, **kwargs)
+            gs.run_command(module, env=env, **kwargs)
 
         # Lazy import to avoid an import-time dependency on PIL.
         from PIL import Image  # pylint: disable=import-outside-toplevel

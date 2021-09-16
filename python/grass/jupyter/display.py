@@ -67,9 +67,9 @@ class GrassRenderer:
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
         :param use_region: if True, use either current or provided saved region,
-                          else based on rendered layers
+                          else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
-                            set comp region based on it
+                            this region is then used for rendering
         """
 
         # Copy Environment
