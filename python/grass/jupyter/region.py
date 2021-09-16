@@ -193,9 +193,7 @@ class RegionManagerFor3D:
         and use_region=True, current region is used.
         """
         if self._saved_region:
-            env["GRASS_REGION"] = gs.region_env(
-                region=self._saved_region, env=env
-            )
+            env["GRASS_REGION"] = gs.region_env(region=self._saved_region, env=env)
             self._region_set = True
             return
         if self._use_region:
