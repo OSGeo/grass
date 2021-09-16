@@ -3607,7 +3607,17 @@ CFLAGS=${ac_save_cflags}
 else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-LOC_FP_TEST
+
+#include <float.h>
+int main(void) {
+ double one = 1.0;
+ double zero = 0.0;
+ if (one/zero > DBL_MAX)        /* infinity */
+   if (zero/zero != zero/zero)  /* NaN */
+     return 0;
+ return 1;
+}
+
 _ACEOF
 if ac_fn_c_try_run "$LINENO"; then :
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
@@ -3629,7 +3639,17 @@ $as_echo "unknown (cross-compiling)" >&6; }
 else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-LOC_FP_TEST
+
+#include <float.h>
+int main(void) {
+ double one = 1.0;
+ double zero = 0.0;
+ if (one/zero > DBL_MAX)        /* infinity */
+   if (zero/zero != zero/zero)  /* NaN */
+     return 0;
+ return 1;
+}
+
 _ACEOF
 if ac_fn_c_try_run "$LINENO"; then :
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
