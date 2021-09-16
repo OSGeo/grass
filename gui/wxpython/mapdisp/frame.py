@@ -32,7 +32,7 @@ import wx.aui
 from mapdisp.toolbars import MapToolbar, NvizIcons
 from mapdisp.gprint import PrintOptions
 from core.gcmd import GError, GMessage, RunCommand
-from core.utils import ListOfCatsToRange
+from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
@@ -59,7 +59,6 @@ from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
 
 import grass.script as grass
-from grass.script.task import get_map_name_from_command
 
 from grass.pydispatch.signal import Signal
 
@@ -1005,7 +1004,7 @@ class MapFrame(SingleMapFrame):
             for layer in layers:
                 if layer.type == "command":
                     continue
-                name, found = get_map_name_from_command(layer.cmd)
+                name, found = GetLayerNameFromCmd(layer.cmd)
                 if not found:
                     continue
                 ltype = layer.maplayer.GetType()

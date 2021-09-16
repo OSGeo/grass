@@ -37,7 +37,6 @@ from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
 
 import grass.script as grass
-from grass.script.task import get_map_name_from_command
 
 from core import utils, globalvar
 from core.render import Map
@@ -173,7 +172,7 @@ class GCPWizard(object):
 
         self.SwitchEnv("source")
         cmdlist = ["d.rast", "map=%s" % self.src_map]
-        name, found = get_map_name_from_command(cmdlist)
+        name, found = utils.GetLayerNameFromCmd(cmdlist)
         self.SrcMap.AddLayer(
             ltype=rendertype,
             command=cmdlist,
@@ -189,7 +188,7 @@ class GCPWizard(object):
         #
         self.SwitchEnv("target")
         cmdlist = ["d.rast", "map=%s" % self.tgt_map]
-        name, found = get_map_name_from_command(cmdlist)
+        name, found = utils.GetLayerNameFromCmd(cmdlist)
         self.TgtMap.AddLayer(
             ltype=rendertype,
             command=cmdlist,
@@ -2445,7 +2444,7 @@ class GrSettingsDialog(wx.Dialog):
                 cmdlist = ["d.rast", "map=%s" % src_map]
                 srcrender = True
             self.parent.grwiz.SwitchEnv("source")
-            name, found = get_map_name_from_command(cmdlist)
+            name, found = utils.GetLayerNameFromCmd(cmdlist)
             self.parent.grwiz.SrcMap.AddLayer(
                 ltype=maptype,
                 command=cmdlist,
@@ -2471,7 +2470,7 @@ class GrSettingsDialog(wx.Dialog):
 
             if tgt_map["raster"] != "":
                 cmdlist = ["d.rast", "map=%s" % tgt_map["raster"]]
-                name, found = get_map_name_from_command(cmdlist)
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(
                     ltype="raster",
                     command=cmdlist,

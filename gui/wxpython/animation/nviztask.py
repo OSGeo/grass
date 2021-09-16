@@ -23,6 +23,7 @@ except ImportError:
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
+from core.utils import GetLayerNameFromCmd
 from grass.script import task as gtask
 from core.settings import UserSettings
 
@@ -81,7 +82,7 @@ class NvizTask:
 
             if not layer["nviz"]:
                 continue
-            layerName, found = gtask.get_map_name_from_command(
+            layerName, found = GetLayerNameFromCmd(
                 layer["cmd"], fullyQualified=False, param="map"
             )
             if not found:

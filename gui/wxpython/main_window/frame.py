@@ -43,11 +43,10 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 
 from grass.script import core as grass
 from grass.script.utils import decode
-from grass.script.task import get_map_name_from_command
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
-from core.utils import SetAddOnPath, command2ltype, get_shell_pid
+from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -1016,7 +1015,7 @@ class GMFrame(wx.Frame):
                 self.GetMapDisplay().DToRast(command=task.get_cmd())
         else:
             # add layer into layer tree
-            lname, found = get_map_name_from_command(
+            lname, found = GetLayerNameFromCmd(
                 command, fullyQualified=True, layerType=layertype
             )
             self.GetLayerTree().AddLayer(

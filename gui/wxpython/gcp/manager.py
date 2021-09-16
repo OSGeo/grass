@@ -46,7 +46,7 @@ else:
     from wx import wizard as wiz
 
 import grass.script as grass
-from grass.script.task import get_map_name_from_command
+
 
 from core import utils
 from core.render import Map
@@ -216,7 +216,7 @@ class GCPWizard(object):
                 cmdlist = ["d.vect", "map=%s" % src_map]
 
             self.SwitchEnv("source")
-            name, found = get_map_name_from_command(cmdlist)
+            name, found = utils.GetLayerNameFromCmd(cmdlist)
             self.SrcMap.AddLayer(
                 ltype=rendertype,
                 command=cmdlist,
@@ -257,7 +257,7 @@ class GCPWizard(object):
                 rendertype = "raster"
                 cmdlist = ["d.rast", "map=%s" % tgt_map["raster"]]
 
-                name, found = get_map_name_from_command(cmdlist)
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.TgtMap.AddLayer(
                     ltype=rendertype,
                     command=cmdlist,
@@ -275,7 +275,7 @@ class GCPWizard(object):
                 rendertype = "vector"
                 cmdlist = ["d.vect", "map=%s" % tgt_map["vector"]]
 
-                name, found = get_map_name_from_command(cmdlist)
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.TgtMap.AddLayer(
                     ltype=rendertype,
                     command=cmdlist,
@@ -3421,7 +3421,7 @@ class GrSettingsDialog(wx.Dialog):
                 cmdlist = ["d.vect", "map=%s" % src_map]
                 srcrenderVector = True
             self.parent.grwiz.SwitchEnv("source")
-            name, found = get_map_name_from_command(cmdlist)
+            name, found = utils.GetLayerNameFromCmd(cmdlist)
             self.parent.grwiz.SrcMap.AddLayer(
                 ltype=maptype,
                 command=cmdlist,
@@ -3473,7 +3473,7 @@ class GrSettingsDialog(wx.Dialog):
 
             elif tgt_map["raster"] != "":
                 cmdlist = ["d.rast", "map=%s" % tgt_map["raster"]]
-                name, found = get_map_name_from_command(cmdlist)
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(
                     ltype="raster",
                     command=cmdlist,
@@ -3488,7 +3488,7 @@ class GrSettingsDialog(wx.Dialog):
 
             if tgt_map["vector"] != "":
                 cmdlist = ["d.vect", "map=%s" % tgt_map["vector"]]
-                name, found = get_map_name_from_command(cmdlist)
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(
                     ltype="vector",
                     command=cmdlist,

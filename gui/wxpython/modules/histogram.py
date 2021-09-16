@@ -22,13 +22,12 @@ import sys
 
 import wx
 
-from grass.script.task import get_map_name_from_command
-
 from core import globalvar
 from core.render import Map
 from core.settings import UserSettings
 from gui_core.forms import GUI
 from mapdisp.gprint import PrintOptions
+from core.utils import GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.preferences import DefaultFontDialog
 from core.debug import Debug
@@ -400,7 +399,7 @@ class HistogramFrame(wx.Frame):
         created in menuform.py
         """
         if dcmd:
-            name, found = get_map_name_from_command(
+            name, found = GetLayerNameFromCmd(
                 dcmd, fullyQualified=True, layerType="raster"
             )
             if not found:

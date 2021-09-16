@@ -18,8 +18,8 @@ This program is free software under the GNU General Public License
 from __future__ import print_function
 
 from grass.pydispatch.signal import Signal
-from grass.script.task import get_map_name_from_command
 from core.giface import Notification
+from core.utils import GetLayerNameFromCmd
 
 
 class Layer(object):
@@ -128,9 +128,7 @@ class LayerList(object):
         "Change layer (cmd, ltype, opacity)"
         if "cmd" in kwargs:
             layer._pydata[0]["cmd"] = kwargs["cmd"]
-            layerName, found = get_map_name_from_command(
-                kwargs["cmd"], fullyQualified=True
-            )
+            layerName, found = GetLayerNameFromCmd(kwargs["cmd"], fullyQualified=True)
             if found:
                 layer._pydata[0]["label"] = layerName
         if "ltype" in kwargs:

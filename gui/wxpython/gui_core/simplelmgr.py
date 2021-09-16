@@ -26,13 +26,12 @@ if __name__ == "__main__":
 
     set_gui_path()
 
-from grass.script.task import get_map_name_from_command
-
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
 from gui_core.forms import GUI
 from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import CheckListBox, Menu, NewId
+from core.utils import GetLayerNameFromCmd
 from core.gcmd import GError
 from core.layerlist import LayerList
 
@@ -358,7 +357,7 @@ class SimpleLayerManager(wx.Panel):
         if dcmd:
             layer.cmd = dcmd
             layer.selected = True
-            mapName, found = get_map_name_from_command(dcmd)
+            mapName, found = GetLayerNameFromCmd(dcmd)
             if found:
                 try:
                     if layer.hidden:
