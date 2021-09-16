@@ -316,7 +316,7 @@ int main(void) {
 
 AC_DEFUN([LOC_CHECK_FP_INF_NAN],[
 AC_MSG_CHECKING([for full floating-point support]$1)
-AC_RUN_IFELSE([AC_LANG_SOURCE([[LOC_FP_TEST]])],[   AC_MSG_RESULT(yes)
+AC_RUN_IFELSE([AC_LANG_SOURCE([LOC_FP_TEST])],[   AC_MSG_RESULT(yes)
     $2],[   AC_MSG_RESULT(no)
     $3],[   AC_MSG_RESULT([unknown (cross-compiling)])
     $4

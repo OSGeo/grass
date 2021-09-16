@@ -12,7 +12,7 @@
 
 /* adding a new compressor:
  * add the corresponding functions G_*compress() and G_*_expand()
- * if needed, add checks to configure.in and include/config.in
+ * if needed, add checks to configure.ac and include/config.h.in
  * modify compress.h (this file)
  * nothing to change in compress.c
  */

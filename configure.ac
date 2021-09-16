@@ -30,7 +30,7 @@ $2
 ])
 
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
+AC_CONFIG_SRCDIR([configure.ac])
 AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/config.h)
 AC_CANONICAL_HOST
@@ -101,10 +101,6 @@ ARCH="${host}"
 fi
 
 AC_SUBST(ARCH)
-
-# Use absolute path for aux directory so that install-sh works
-
-AC_CONFIG_AUX_DIR("$SRCDIR")
 
 # Set GISBASE and GRASS_BIN
 
