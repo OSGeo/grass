@@ -45,7 +45,7 @@ class RegionManagerForInteractiveMap:
         """
         return self._bbox
 
-    def set_region(self, raster):
+    def set_region_from_raster(self, raster):
         """Sets computational region for rendering.
 
         This functions sets computational region based on
@@ -121,7 +121,12 @@ class RegionManagerFor2D:
         self._extent_set = False
         self._resolution_set = False
 
-    def set_region(self, module, **kwargs):
+    def set_region_from_env(self, env):
+        """Copies GRASS_REGION from provided environment
+        to local environment to set the computational region"""
+        self._env["GRASS_REGION"] = env["GRASS_REGION"]
+
+    def set_region_from_command(self, module, **kwargs):
         """Sets computational region for rendering.
 
         This functions identifies a raster/vector map from command
@@ -182,7 +187,7 @@ class RegionManagerFor3D:
         self._saved_region = saved_region
         self._region_set = False
 
-    def set_region(self, env, **kwargs):
+    def set_region_from_command(self, env, **kwargs):
         """Sets computational region for rendering.
 
         This functions identifies a raster map from m.nviz.image command

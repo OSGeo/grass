@@ -167,7 +167,7 @@ class InteractiveMap:
         name = file_info["name"]
         mapset = file_info["mapset"]
 
-        self._region_manager.set_region(full_name)
+        self._region_manager.set_region_from_raster(full_name)
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
         resolution = estimate_resolution(

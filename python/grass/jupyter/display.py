@@ -117,6 +117,11 @@ class GrassRenderer:
         """
         return self._filename
 
+    @property
+    def region_manager(self):
+        """Region manager object"""
+        return self._region_manager
+
     def run(self, module, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
 
@@ -128,7 +133,7 @@ class GrassRenderer:
 
         # Check module is from display library then run
         if module[0] == "d":
-            self._region_manager.set_region(module, **kwargs)
+            self._region_manager.set_region_from_command(module, **kwargs)
             gs.run_command(module, env=self._env, **kwargs)
         else:
             raise ValueError("Module must begin with letter 'd'.")

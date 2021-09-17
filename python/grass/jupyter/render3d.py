@@ -155,6 +155,11 @@ class Grass3dRenderer:
         """
         return self._filename
 
+    @property
+    def region_manager(self):
+        """Region manager object"""
+        return self._region_manager
+
     def render(self, **kwargs):
         """Run rendering using *m.nviz.image*.
 
@@ -198,11 +203,13 @@ class Grass3dRenderer:
                     env = display.env()
                 else:
                     env = os.environ.copy()
-                self._region_manager.set_region(env=env, **kwargs)
+                self._region_manager.set_region_from_command(env=env, **kwargs)
+                self.overlay.region_manager.set_region_from_env(env)
                 gs.run_command(module, env=env, **kwargs)
         else:
             env = os.environ.copy()
-            self._region_manager.set_region(env=env, **kwargs)
+            self._region_manager.set_region_from_command(env=env, **kwargs)
+            self.overlay.region_manager.set_region_from_env(env)
             gs.run_command(module, env=env, **kwargs)
 
         # Lazy import to avoid an import-time dependency on PIL.
