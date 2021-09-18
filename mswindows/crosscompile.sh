@@ -334,7 +334,7 @@ if "%GRASS_PYTHON%"=="" (
 rem XXX: Do we need PYTHONHOME?
 rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
-"%GRASS_PYTHON%" "%GISBASE%\etc\grass80.py" %*
+"%GRASS_PYTHON%" "%GISBASE%\etc\grass.py" %*
 if %ERRORLEVEL% geq 1 pause
 EOT
 unix2dos $dist/grass.bat
