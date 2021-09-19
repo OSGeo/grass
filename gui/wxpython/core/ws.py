@@ -249,8 +249,8 @@ class RenderWMSMgr(wx.EvtHandler):
 
             center = (region["east"] - region["west"]) / 2
 
-            region["east"] = center + delta + region["west"]
-            region["west"] = center - delta + region["west"]
+            region["east"] = min(center + delta + region["west"], 180.0)
+            region["west"] = max(center - delta + region["west"], -180.0)
             region["e-w resol"] = region["n-s resol"]
 
         else:
@@ -258,8 +258,8 @@ class RenderWMSMgr(wx.EvtHandler):
 
             center = (region["north"] - region["south"]) / 2
 
-            region["north"] = center + delta + region["south"]
-            region["south"] = center - delta + region["south"]
+            region["north"] = min(center + delta + region["south"], 90.0)
+            region["south"] = max(center - delta + region["south"], -90.0)
             region["n-s resol"] = region["e-w resol"]
 
     def Abort(self):
