@@ -42,6 +42,7 @@
       <wxgui-item name="LaunchScript"/>
       <wxgui-item name="PyEdit"/>
       <separator/>
+      <wxgui-item name="RestartGUI"/>
       <wxgui-item name="CloseGUI"/>
       <wxgui-item name="Quit"/>
     </items>

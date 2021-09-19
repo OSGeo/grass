@@ -2383,6 +2383,10 @@ class QuitDialog(wx.Dialog):
         if self._shell_running:
             self.btnClose = Button(parent=self.panel, id=wx.ID_NO, label=_("Close GUI"))
             self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
+            self.btnRestart = Button(
+                parent=self.panel, id=wx.ID_NO, label=_("Restart GUI")
+            )
+            self.btnRestart.Bind(wx.EVT_BUTTON, self.OnRestart)
         self.btnQuit = Button(
             parent=self.panel, id=wx.ID_YES, label=_("Quit GRASS GIS")
         )
@@ -2398,6 +2402,7 @@ class QuitDialog(wx.Dialog):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.btnCancel, flag=wx.RIGHT, border=5)
         if self._shell_running:
+            btnSizer.Add(self.btnRestart, flag=wx.RIGHT, border=5)
             btnSizer.Add(self.btnClose, flag=wx.RIGHT, border=5)
         btnSizer.Add(self.btnQuit, flag=wx.RIGHT, border=5)
 
@@ -2411,6 +2416,9 @@ class QuitDialog(wx.Dialog):
         self.panel.SetSizer(sizer)
         sizer.Fit(self)
         self.Layout()
+
+    def OnRestart(self, event):
+        self.EndModal(wx.ID_RESET)
 
     def OnClose(self, event):
         self.EndModal(wx.ID_NO)

@@ -2170,7 +2170,11 @@ class GMFrame(wx.Frame):
 
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
-        self._closeWindow(event)
+        self._closeOrRestartWindow(event)
+
+    def OnRestartWindow(self, event):
+        """Cleanup when wxGUI is restarted"""
+        self._closeOrRestartWindow(event, restart=True)
 
     def OnCloseWindowOrExit(self, event):
         """Cleanup when wxGUI is quitted
@@ -2181,18 +2185,32 @@ class GMFrame(wx.Frame):
         ret = dlg.ShowModal()
         dlg.Destroy()
         if ret != wx.ID_CANCEL:
-            self._closeWindow(event)
+            self._closeOrRestartWindow(
+                event, restart=True if ret == wx.ID_RESET else False
+            )
             if ret == wx.ID_YES:
                 self._quitGRASS()
 
-    def _closeWindow(self, event):
-        """Close wxGUI"""
+    def _restartWindow(self, restart):
+        """Restart wxGUI
+
+        :param bool restart: True if you want restart GUI
+        """
+        if restart:
+            grass.run_command("g.gui")
+
+    def _closeOrRestartWindow(self, event, restart=False):
+        """Close or restart wxGUI
+
+        :param bool restart: True if you want restart GUI
+        """
         # save command protocol if actived
         if self.goutput.btnCmdProtocol.GetValue():
             self.goutput.CmdProtocolSave()
 
         if not self.currentPage:
             self._auimgr.UnInit()
+            wx.CallAfter(self._restartWindow, restart)
             self.Destroy()
             return
         if not self.workspace_manager.CanClosePage(caption=_("Quit GRASS GUI")):
@@ -2205,6 +2223,7 @@ class GMFrame(wx.Frame):
         self.DisplayCloseAll()
 
         self._auimgr.UnInit()
+        wx.CallAfter(self._restartWindow, restart)
         self.Destroy()
 
     def _quitGRASS(self):

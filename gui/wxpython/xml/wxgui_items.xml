@@ -67,6 +67,11 @@
     <handler>OnSimpleEditor</handler>
     <description>Launches Simple Python Editor.</description>
   </wxgui-item>
+  <wxgui-item name="RestartGUI">
+    <label>Restart GUI</label>
+    <handler>OnRestartWindow</handler>
+    <description>Restart graphical user interface.</description>
+  </wxgui-item>
   <wxgui-item name="CloseGUI">
     <label>Close GUI</label>
     <handler>OnCloseWindow</handler>
