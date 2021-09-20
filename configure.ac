@@ -1438,7 +1438,18 @@ if test -n "$USE_ODBC"; then
 
 LOC_CHECK_INC_PATH(odbc,ODBC,ODBCINC)
 
-LOC_CHECK_INCLUDES(sql.h,ODBC,$ODBCINC)
+AC_CHECK_HEADER([windows.h],
+    AC_DEFINE(HAVE_WINDOWS_H, 1, [Define to 1 if you have the <windows.h> header file.]))
+
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$ODBCINC $CPPFLAGS"
+AC_CHECK_HEADER([sql.h],
+AC_DEFINE(HAVE_SQL_H, 1, [Define to 1 if you have the <sql.h> header file.]),
+AC_MSG_ERROR([*** Unable to locate <sql.h>.]),[#if defined(HAVE_WINDOWS_H)
+# include <windows.h>
+#endif
+])
+CPPFLAGS=$ac_save_cppflags
 
 # With ODBC library directory
 
