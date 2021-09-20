@@ -23,7 +23,7 @@ import wx.lib.colourselect as csel
 from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
-from gui_core.wrap import Button, CheckBox, SpinCtrl, StaticBox, StaticText
+from gui_core.wrap import Button, CheckBox, FloatSpin, SpinCtrl, StaticBox, StaticText
 
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -179,13 +179,14 @@ class VDigitSettingsDialog(wx.Dialog):
 
         # snapping
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Snapping threshold"))
-        self.snappingValue = SpinCtrl(
+        self.snappingValue = FloatSpin(
             parent=panel,
             id=wx.ID_ANY,
             size=(75, -1),
-            initial=UserSettings.Get(group="vdigit", key="snapping", subkey="value"),
-            min=-1,
-            max=1e6,
+            value=UserSettings.Get(group="vdigit", key="snapping", subkey="value"),
+            min_val=-1,
+            max_val=1e6,
+            digits=7,
         )
         self.snappingValue.Bind(wx.EVT_SPINCTRL, self.OnChangeSnappingValue)
         self.snappingValue.Bind(wx.EVT_TEXT, self.OnChangeSnappingValue)
@@ -933,7 +934,7 @@ class VDigitSettingsDialog(wx.Dialog):
             group="vdigit",
             key="snapping",
             subkey="value",
-            value=int(self.snappingValue.GetValue()),
+            value=self.snappingValue.GetValue(),
         )
         UserSettings.Set(
             group="vdigit",
