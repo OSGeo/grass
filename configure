@@ -12265,27 +12265,32 @@ if test -n "$with_odbc_includes" ; then
 fi
 
 
+ac_fn_c_check_header_mongrel "$LINENO" "windows.h" "ac_cv_header_windows_h" "$ac_includes_default"
+if test "x$ac_cv_header_windows_h" = xyes; then :
 
-ac_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$ODBCINC $CPPFLAGS"
-for ac_header in sql.h
-do :
-  ac_fn_c_check_header_mongrel "$LINENO" "sql.h" "ac_cv_header_sql_h" "$ac_includes_default"
-if test "x$ac_cv_header_sql_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_SQL_H 1
-_ACEOF
-
-else
-
-    as_fn_error $? "*** Unable to locate ODBC includes." "$LINENO" 5
+$as_echo "#define HAVE_WINDOWS_H 1" >>confdefs.h
 
 fi
 
-done
+
+
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$ODBCINC $CPPFLAGS"
+ac_fn_c_check_header_compile "$LINENO" "sql.h" "ac_cv_header_sql_h" "#if defined(HAVE_WINDOWS_H)
+# include <windows.h>
+#endif
+
+"
+if test "x$ac_cv_header_sql_h" = xyes; then :
+
+$as_echo "#define HAVE_SQL_H 1" >>confdefs.h
+
+else
+  as_fn_error $? "*** Unable to locate <sql.h>." "$LINENO" 5
+fi
+
 
 CPPFLAGS=$ac_save_cppflags
-
 
 # With ODBC library directory
 
