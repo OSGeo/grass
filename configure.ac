@@ -1462,7 +1462,7 @@ ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$ODBCINC $CPPFLAGS"
 AC_CHECK_HEADER([sql.h],
 AC_DEFINE(HAVE_SQL_H, 1, [Define to 1 if you have the <sql.h> header file.]),
-C_MSG_ERROR([*** Unable to locate <sql.h>.]),[#if defined(HAVE_WINDOWS_H)
+AC_MSG_ERROR([*** Unable to locate <sql.h>.]),[#if defined(HAVE_WINDOWS_H)
 # include <windows.h>
 #endif
 ])
