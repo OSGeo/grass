@@ -360,7 +360,13 @@ class VDigitToolbar(BaseToolbar):
         :return: True if no vector map is open for editing else None
         """
         if not self.digit:
-            GError(_("No vector map is open for editing."), self.parent)
+            GError(
+                _(
+                    "No vector map is open for editing. Please select first"
+                    "the vector map from the combo box."
+                ),
+                self.parent,
+            )
             return True
 
     def OnTool(self, event):
