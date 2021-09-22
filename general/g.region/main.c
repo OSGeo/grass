@@ -6,7 +6,7 @@
  *              datum added by Andreas Lange <andreas.lange@rhein-main.de>
  * PURPOSE: 	Program to manage and print the boundary definitions for the
  *              geographic region.
- * 
+ *
  * COPYRIGHT:  	(C) 2000 by the GRASS Development Team
  *
  *   	    	This program is free software under the GPL (>=v2)
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     int i;
     int print_flag = 0;
-    int flat_flag; 
+    int flat_flag;
     double x, xs, ys, zs;
     int ival;
     int row_flag = 0, col_flag = 0;
@@ -522,7 +522,7 @@ int main(int argc, char *argv[])
                 ret = Vect_get_map_box1(&Map, &box);
             if (ret != 1)
                 G_fatal_error(_("Unable to get map bounding box"));
-            
+
             map_window = window;
             map_window.north = box.N;
             map_window.south = box.S;
@@ -592,6 +592,9 @@ int main(int argc, char *argv[])
 	    window.north = x;
 	else
 	    die(parm.north);
+
+	if (flag.res_set->answer)
+	    window.north = ceil(window.north / window.ns_res) * window.ns_res;
     }
 
     /* s= */
@@ -616,6 +619,9 @@ int main(int argc, char *argv[])
 	    window.south = x;
 	else
 	    die(parm.south);
+
+	if (flag.res_set->answer)
+	    window.south = floor(window.south / window.ns_res) * window.ns_res;
     }
 
     /* e= */
@@ -640,6 +646,9 @@ int main(int argc, char *argv[])
 	    window.east = x;
 	else
 	    die(parm.east);
+
+	if (flag.res_set->answer)
+	    window.east = ceil(window.east / window.ew_res) * window.ew_res;
     }
 
     /* w= */
@@ -664,6 +673,9 @@ int main(int argc, char *argv[])
 	    window.west = x;
 	else
 	    die(parm.west);
+
+	if (flag.res_set->answer)
+	    window.west = floor(window.west / window.ew_res) * window.ew_res;
     }
 
     /* t= */
@@ -815,7 +827,7 @@ int main(int argc, char *argv[])
 	Rast_get_cellhd(name, mapset, &temp_window);
 	Rast_align_window(&window, &temp_window);
     }
-    
+
     /* grow by number of cells */
     if ((value = parm.grow->answer)){
         update_file = true;
@@ -825,7 +837,7 @@ int main(int argc, char *argv[])
                 if (G_projection() == PROJECTION_LL && (
                     window.north + xs <= 90.0 + 0.5 * window.ns_res ||
                     window.south - xs >= -90.0 - 0.5 * window.ns_res)) {
-                    G_warning(_("'%s' option not used with <%s> because a coordinate would become invalid"), 
+                    G_warning(_("'%s' option not used with <%s> because a coordinate would become invalid"),
 		              parm.grow->key, "latitude");
                 } else {
                     window.north += xs;
