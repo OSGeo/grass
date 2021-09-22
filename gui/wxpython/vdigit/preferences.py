@@ -430,8 +430,14 @@ class VDigitSettingsDialog(wx.Dialog):
         self.queryLengthSL.SetSelection(
             UserSettings.Get(group="vdigit", key="queryLength", subkey="than-selection")
         )
-        self.queryLengthValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(100, -1), initial=1, min=0, max=1e6
+        self.queryLengthValue = FloatSpin(
+            parent=panel,
+            id=wx.ID_ANY,
+            size=(100, -1),
+            value=1,
+            min_val=0,
+            max_val=1e6,
+            digits=7,
         )
         self.queryLengthValue.SetValue(
             UserSettings.Get(group="vdigit", key="queryLength", subkey="thresh")
@@ -1033,7 +1039,7 @@ class VDigitSettingsDialog(wx.Dialog):
             group="vdigit",
             key="queryLength",
             subkey="thresh",
-            value=int(self.queryLengthValue.GetValue()),
+            value=self.queryLengthValue.GetValue(),
         )
         UserSettings.Set(
             group="vdigit",
