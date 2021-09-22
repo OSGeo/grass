@@ -290,9 +290,9 @@ done
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 
 rm -f $dist/grass.tmp
-cp -a bin.$arch/grass.py $dist/etc
+cp -a bin.$arch/grass.py $dist/etc/grass$version.py
 
-cat<<'EOT' > $dist/grass.bat
+cat<<'EOT' | sed "s/\$version/$version/g" > $dist/grass.bat
 @echo off
 
 rem Change this variable to override auto-detection of python.exe in PATH
@@ -334,7 +334,7 @@ if "%GRASS_PYTHON%"=="" (
 rem XXX: Do we need PYTHONHOME?
 rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
-"%GRASS_PYTHON%" "%GISBASE%\etc\grass.py" %*
+"%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
 if %ERRORLEVEL% geq 1 pause
 EOT
 unix2dos $dist/grass.bat
