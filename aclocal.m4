@@ -122,7 +122,7 @@ ac_save_libs="$LIBS"
 AC_MSG_CHECKING(for $4 library)
 LDFLAGS="$5 $LDFLAGS"
 LIBS="-l$1 $7 $8"
-AC_TRY_LINK([$2],[$3],[
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])],[
 AC_MSG_RESULT(found)
 $6="$$6 -l$1 $8"
 ],[
@@ -214,7 +214,7 @@ AC_DEFUN([LOC_CHECK_VERSION_STRING],[
 AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$5 $CPPFLAGS"
-AC_TRY_RUN([
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <stdio.h> 
 #include <$1>
 int main(void) {
@@ -222,11 +222,8 @@ int main(void) {
  fputs($2, fp);
  return 0;
 }
-],
-[   $4=`cat conftestdata`
-    AC_MSG_RESULT($$4)],
-[   AC_MSG_ERROR([*** Could not determine $3 version.]) ],
-[   $4=$6
+]])],[   $4=`cat conftestdata`
+    AC_MSG_RESULT($$4)],[   AC_MSG_ERROR([*** Could not determine $3 version.]) ],[   $4=$6
     AC_MSG_RESULT([unknown (cross-compiling)]) ])
 CPPFLAGS=$ac_save_cppflags
 ])
@@ -241,7 +238,7 @@ AC_DEFUN([LOC_CHECK_VERSION_INT],[
 AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$5 $CPPFLAGS"
-AC_TRY_RUN([
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <stdio.h>
 #include <$1>
 int main(void) {
@@ -249,11 +246,8 @@ int main(void) {
  fprintf(fp, "%d", $2);
  return 0;
 }
-    ],
-    [   $4=`cat conftestdata`
-        AC_MSG_RESULT($$4)],
-    [   AC_MSG_ERROR([*** Could not determine $3 version.]) ],
-    [   $4=$6
+    ]])],[   $4=`cat conftestdata`
+        AC_MSG_RESULT($$4)],[   AC_MSG_ERROR([*** Could not determine $3 version.]) ],[   $4=$6
         AC_MSG_RESULT([unknown (cross-compiling)]) ])
 CPPFLAGS=$ac_save_cppflags
 ])
@@ -261,7 +255,7 @@ CPPFLAGS=$ac_save_cppflags
 dnl autoconf undefines "eval", so use "builtin([eval], ...)"
 
 AC_DEFUN([LOC_PAD],[$1[]ifelse(builtin([eval],len($1) > 23),1,[
-                          ],substr([                        ],len($1)))])
+                          ],m4_substr([                        ],len($1)))])
 
 AC_DEFUN([LOC_ARG_WITH],[
 AC_ARG_WITH($1,
@@ -322,14 +316,11 @@ int main(void) {
 
 AC_DEFUN([LOC_CHECK_FP_INF_NAN],[
 AC_MSG_CHECKING([for full floating-point support]$1)
-AC_TRY_RUN(LOC_FP_TEST,
-[   AC_MSG_RESULT(yes)
-    $2],
-[   AC_MSG_RESULT(no)
-    $3],
-[   AC_MSG_RESULT([unknown (cross-compiling)])
-    $4]
-)
+AC_RUN_IFELSE([AC_LANG_SOURCE([LOC_FP_TEST])],[   AC_MSG_RESULT(yes)
+    $2],[   AC_MSG_RESULT(no)
+    $3],[   AC_MSG_RESULT([unknown (cross-compiling)])
+    $4
+])
 ])
 
 dnl check whether the compiler supports the -mieee switch
@@ -338,10 +329,8 @@ AC_DEFUN([LOC_CHECK_CC_MIEEE],[
 AC_MSG_CHECKING(whether "cc -mieee" works)
 ac_save_cflags=${CFLAGS}
 CFLAGS="$CFLAGS -mieee"
-AC_TRY_COMPILE(,,
-    [   AC_MSG_RESULT(yes)
-        IEEEFLAG="-mieee"],
-    [   AC_MSG_RESULT(no)])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],[   AC_MSG_RESULT(yes)
+        IEEEFLAG="-mieee"],[   AC_MSG_RESULT(no)])
 CFLAGS=${ac_save_cflags}
 ])
 
@@ -349,16 +338,23 @@ AC_DEFUN([LOC_MSG],[
 echo "$1"
 ])
 
-AC_DEFUN([LOC_PAD_26],[substr([                           ],len($1))])
+AC_DEFUN([LOC_PAD_26],[m4_substr([                           ],len($1))])
 
 AC_DEFUN([LOC_YES_NO],[if test -n "${$1}" ; then echo yes ; else echo no ; fi])
 
 AC_DEFUN([LOC_MSG_USE],[
 [echo "  $1:]LOC_PAD_26($1)`LOC_YES_NO($2)`"])
 
-AC_DEFUN(LOC_EXEEXT,
-[AC_REQUIRE([AC_CYGWIN])
-AC_REQUIRE([AC_MINGW32])
+AC_DEFUN(LOC_EXEEXT,[
+[case $host_os in
+  *cygwin* ) CYGWIN=yes;;
+esac
+]
+
+[case $host_os in
+  *mingw32* ) MINGW32=yes;;
+esac
+]
 AC_MSG_CHECKING([for executable suffix])
 AC_CACHE_VAL(ac_cv_exeext,
 [if test "$CYGWIN" = yes || test "$MINGW32" = yes; then
@@ -414,7 +410,7 @@ AC_DEFUN([SC_ENABLE_SHARED], [
     else
 	AC_MSG_RESULT([static])
 	SHARED_BUILD=0
-	AC_DEFINE(STATIC_BUILD)
+	AC_DEFINE(STATIC_BUILD, 1, [define for Windows static build])
 	GRASS_LIBRARY_TYPE='stlib'
     fi
     AC_SUBST(GRASS_LIBRARY_TYPE)
@@ -517,8 +513,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	*-sun-solaris*)
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
-	    AC_DEFINE(_REENTRANT)
-	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -540,8 +536,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    #       derives from UNIX System V Release 4
 	    # Note: If _REENTRANT isn't defined, then Solaris
 	    # won't define thread-safe library routines.
-	    AC_DEFINE(_REENTRANT)
-	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
 	    # Note: need the LIBS below, otherwise Tk won't find Tcl's
 	    # symbols when dynamically loaded into tclsh.
             if test "$GCC" = "yes" ; then
@@ -570,8 +566,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # TODO: add optional pthread support with any combination of: 
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
-	    # AC_DEFINE(_REENTRANT)
-	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
 	    ;;
 	*-netbsd*)
 	    # NetBSD has ELF.
@@ -591,8 +587,8 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    # TODO: add optional pthread support with any combination of: 
 	    # CFLAGS="$CFLAGS -pthread"
 	    # LDFLAGS="$LDFLAGS -lpthread"
-	    # AC_DEFINE(_REENTRANT)
-	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS)
+	    # AC_DEFINE(_REENTRANT, 1, [define _REENTRANT flag (for SunOS)])
+	    # AC_DEFINE(_POSIX_PTHREAD_SEMANTICS, 1, [enable threading extensions on Solaris])
 	    ;;
 	*aix*)
 		# NOTE: do we need to support aix < 6 ?
@@ -676,14 +672,9 @@ dnl AC_SYS_LARGEFILE_MACRO_VALUE(C-MACRO, VALUE, CACHE-VAR, COMMENT, INCLUDES, F
 AC_DEFUN([AC_SYS_LARGEFILE_MACRO_VALUE],
   [AC_CACHE_CHECK([for $1 value needed for large files], $3,
      [$3=no
-      AC_TRY_COMPILE([$5],
-	[$6], 
-	,
-	[AC_TRY_COMPILE([#define $1 $2]
-[$5]
-	   ,
-	   [$6],
-	   [$3=$2])])])
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$5]], [[$6]])],[],[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#define $1 $2
+$5
+	   ]], [[$6]])],[$3=$2],[])])])
    if test "[$]$3" != no; then
      AC_DEFINE_UNQUOTED([$1], [$]$3, [$4])
 
@@ -713,11 +704,9 @@ AC_DEFUN([AC_SYS_LARGEFILE],
         if test "$GCC" != yes; then
 	  # IRIX 6.2 and later do not support large files by default,
 	  # so use the C compiler's -n32 option if that helps.
-	  AC_TRY_COMPILE(AC_SYS_LARGEFILE_TEST_INCLUDES, , ,
-	    [ac_save_CC="${CC-cc}"
+	  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_SYS_LARGEFILE_TEST_INCLUDES], [[]])],[],[ac_save_CC="${CC-cc}"
 	     CC="$CC -n32"
-	     AC_TRY_COMPILE(AC_SYS_LARGEFILE_TEST_INCLUDES, ,
-	       ac_cv_sys_largefile_CC=' -n32')
+	     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_SYS_LARGEFILE_TEST_INCLUDES], [[]])],[ac_cv_sys_largefile_CC=' -n32'],[])
 	     CC="$ac_save_CC"])
         fi])
      if test "$ac_cv_sys_largefile_CC" != no; then
@@ -761,9 +750,7 @@ AC_DEFUN([AC_FUNC_FSEEKO],
 
    AC_CACHE_CHECK([for fseeko], ac_cv_func_fseeko,
      [ac_cv_func_fseeko=no
-      AC_TRY_LINK([#include <stdio.h>],
-        [return fseeko && fseeko (stdin, 0, 0);],
-	[ac_cv_func_fseeko=yes])])
+      AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[return fseeko && fseeko (stdin, 0, 0);]])],[ac_cv_func_fseeko=yes],[])])
    if test $ac_cv_func_fseeko != no; then
      AC_DEFINE(HAVE_FSEEKO, 1,
        [Define if fseeko (and presumably ftello) exists and is declared.])
@@ -774,9 +761,8 @@ dnl XXXXXXXXXXXXXXXXXX End Stolen (but modified) from GNU tar XXXXXXXXXXXXXX
 
 AC_DEFUN([AC_HAVE_LARGEFILES],
 [AC_CACHE_CHECK([if system supports Large Files at all], ac_cv_largefiles,
-     	[AC_TRY_COMPILE([#include <stdio.h>
-#include <sys/types.h>],
-     		[
+     	[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+#include <sys/types.h>]], [[
 /*
  * Check that off_t can represent 2**63 - 1 correctly.
  * We can't simply "#define LARGE_OFF_T 9223372036854775807",
@@ -800,11 +786,9 @@ return !ftello64;
 #else
 return !fseeko;
 return !ftello;
-#endif],
-     		[ac_cv_largefiles=yes],
-     		[ac_cv_largefiles=no])])
+#endif]])],[ac_cv_largefiles=yes],[ac_cv_largefiles=no])])
 	if test $ac_cv_largefiles = yes; then
-		AC_DEFINE(HAVE_LARGEFILES)
+		AC_DEFINE(HAVE_LARGEFILES, 1, [define if we have LFS])
 	  USE_LARGEFILES=1
 	else
 	  USE_LARGEFILES=
@@ -819,12 +803,9 @@ dnl and whether there is a prototype for fseeko()
 dnl Defines HAVE_FSEEKO on success.
 AC_DEFUN([AC_SMALL_FSEEKO],
 [AC_CACHE_CHECK([for fseeko()], ac_cv_func_fseeko,
-                [AC_TRY_LINK([#include <stdio.h>],
-[return !fseeko;],
-                [ac_cv_func_fseeko=yes],
-                [ac_cv_func_fseeko=no])])
+                [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[return !fseeko;]])],[ac_cv_func_fseeko=yes],[ac_cv_func_fseeko=no])])
 if test $ac_cv_func_fseeko = yes; then
-  AC_DEFINE(HAVE_FSEEKO)
+  AC_DEFINE(HAVE_FSEEKO, 1, [define if fseeko() exists])
 fi])
 
 dnl Checks for whether ftello() is available in non large file mode
@@ -832,12 +813,9 @@ dnl and whether there is a prototype for ftello()
 dnl Defines HAVE_FTELLO on success.
 AC_DEFUN([AC_SMALL_FTELLO],
 [AC_CACHE_CHECK([for ftello()], ac_cv_func_ftello,
-                [AC_TRY_LINK([#include <stdio.h>],
-[return !ftello;],
-                [ac_cv_func_ftello=yes],
-                [ac_cv_func_ftello=no])])
+                [AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>]], [[return !ftello;]])],[ac_cv_func_ftello=yes],[ac_cv_func_ftello=no])])
 if test $ac_cv_func_ftello = yes; then
-  AC_DEFINE(HAVE_FTELLO)
+  AC_DEFINE(HAVE_FTELLO, 1, [define if ftello() exists])
 fi])
 
 dnl XXXXXXXXXXX End Stolen from cdrtools-2.01 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

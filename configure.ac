@@ -4,11 +4,12 @@
 # AUTHOR(S):	Original author unknown - probably CERL
 #   	    	Eric G. Miller - egm2 jps.net
 #   	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
-#		Markus Neteler - Germany/Italy - neteler itc.it
+#   	    	Markus Neteler - Germany/Italy - neteler itc.it
+#   	    	Nicklas Larsson (update to autoconfig 2.69)
 # PURPOSE:  	This configure runs all the tests to determine what components
 #   	    	are installed on the current system. It also defines certain
 #   	    	configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2009, 2011-2012 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #   	    	Public License (>=v2). Read the file COPYING that
@@ -19,7 +20,7 @@
 # Website for   config.guess, config.sub:
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-#               Note: use autoconf-2.13
+#               Note: use autoconf-2.69
 #############################################################################
 
 define([AC_CACHE_LOAD], )
@@ -28,9 +29,9 @@ define([AC_CACHE_VAL], [
 $2
 ])
 
-AC_INIT(configure.in)
-AC_PREREQ(2.13)
-AC_PREFIX_DEFAULT(/usr/local)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.ac])
+AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/grass/config.h)
 AC_CANONICAL_HOST
 AC_PROG_CC
@@ -113,10 +114,6 @@ ARCH="${host}"
 fi
 
 AC_SUBST(ARCH)
-
-# Use absolute path for aux directory so that install-sh works
-
-AC_CONFIG_AUX_DIR("$SRCDIR")
 
 # Set GISBASE and GRASS_BIN
 
@@ -492,8 +489,13 @@ AC_CHECK_HEADERS(langinfo.h)
 AC_HEADER_TIME
 AC_TYPE_OFF_T
 AC_TYPE_UID_T
-AC_TYPE_SIGNAL
-AC_CYGWIN
+
+AC_CANONICAL_HOST
+case $host_os in
+  *cygwin* ) CYGWIN=yes;;
+	 * ) CYGWIN=no;;
+esac
+
 AC_CHECK_FUNCS(ftime gethostname gettimeofday lseek nice time uname)
 AC_CHECK_FUNCS(seteuid setpriority setreuid setruid)
 AC_CHECK_FUNCS(drand48)
@@ -507,17 +509,17 @@ AC_SUBST(CROSS_COMPILING)
 fi
 
 AC_MSG_CHECKING(for long long int)
-AC_TRY_COMPILE(,[long long int x;],[
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[long long int x;]])],[
 AC_MSG_RESULT(yes)
-AC_DEFINE(HAVE_LONG_LONG_INT)
+AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
 ],[
 AC_MSG_RESULT(no)
 ])
 
 AC_MSG_CHECKING(for int64_t)
-AC_TRY_COMPILE([#include <sys/types.h>],[int64_t x;],[
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]], [[int64_t x;]])],[
 AC_MSG_RESULT(yes)
-AC_DEFINE(HAVE_INT64_T)
+AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
 ],[
 AC_MSG_RESULT(no)
 ])
@@ -602,7 +604,7 @@ AC_CHECK_LIB(socket, socket, SOCKLIB=-lsocket, [
 AC_SUBST(SOCKLIB)
 if test "$have_socket" = 1 ; then
   HAVE_SOCKET=1
-  AC_DEFINE(HAVE_SOCKET)
+  AC_DEFINE(HAVE_SOCKET, 1, [define if socket() exists])
 else
   HAVE_SOCKET=
 fi
@@ -745,7 +747,7 @@ if test $PROJ4API = 0 ; then
     LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
 else
     AC_MSG_RESULT([using old PROJ version 4 API])
-    AC_DEFINE(USE_PROJ4API)
+    AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
 
     LOC_CHECK_INCLUDES(proj_api.h,External PROJ,$PROJINC)
     # PROJ version check for v4.x
@@ -889,7 +891,7 @@ else
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
     USE_GDAL=1
     if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
-      AC_DEFINE(HAVE_OGR)
+      AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
       USE_OGR=1
     fi
   fi
@@ -899,7 +901,7 @@ else
   ac_save_cflags="$CFLAGS"
   LIBS="$LIBS $GDAL_LIBS"
   CFLAGS="$CFLAGS $GDAL_CFLAGS"
-  AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],,[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[],[
   LIBS="$LIBS $GDAL_DEP_LIBS"
   AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
   AC_MSG_ERROR([*** Unable to locate GDAL library.])
@@ -908,7 +910,7 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_GDAL)
+  AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
 fi
 
 AC_SUBST(GDAL_LIBS)
@@ -953,7 +955,7 @@ else
   CFLAGS="$CFLAGS $LIBLAS_CFLAGS"
   CPPFLAGS="$CPPFLAGS $LIBLAS_INC"
   AC_CHECK_HEADERS(liblas/capi/liblas.h)
-  AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],,[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[],[
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
   AC_MSG_ERROR([*** Unable to locate libLAS library.])
   ])
@@ -962,7 +964,7 @@ else
   CFLAGS=${ac_save_cflags}
   CPPFLAGS=${ac_save_cppflags}
 
-  AC_DEFINE(HAVE_LIBLAS)
+  AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
 fi
 
 AC_SUBST(LIBLAS_LIBS)
@@ -974,10 +976,7 @@ AC_SUBST(USE_LIBLAS)
 
 AC_MSG_CHECKING(whether to use PDAL)
 
-# new and currently used way to switch language to C++
-# AC_LANG_PUSH(C++)
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
+AC_LANG_PUSH(C++)
 
 PDAL_LIBS=
 PDAL_CPPFLAGS=
@@ -1011,9 +1010,9 @@ else
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
   CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
-  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};],[pdal::PointTable table;],,[
+  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
   AC_TRY_LINK([#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
@@ -1024,7 +1023,7 @@ else
   CFLAGS=${ac_save_cflags}
   CPPFLAGS=${ac_save_cppflags}
 
-  AC_DEFINE(HAVE_PDAL)
+  AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
 fi
 
 AC_SUBST(PDAL_LIBS)
@@ -1032,10 +1031,7 @@ AC_SUBST(PDAL_CPPFLAGS)
 AC_SUBST(PDAL_INC)
 AC_SUBST(USE_PDAL)
 
-# new and currently used way to switch language back to C
-# AC_LANG_POP(C++)
-AC_LANG_C
-AC_LANG_RESTORE
+AC_LANG_POP(C++)
 
 # NetCDF option
 
@@ -1070,7 +1066,7 @@ else
   ac_save_cflags="$CFLAGS"
   LIBS="$LIBS $NETCDF_LIBS"
   CFLAGS="$CFLAGS $NETCDF_CFLAGS"
-  AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],,[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[],[
   AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
   AC_MSG_ERROR([*** Unable to locate NetCDF library.])
   ])
@@ -1078,7 +1074,7 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_NETCDF)
+  AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
 fi
 
 AC_SUBST(NETCDF_LIBS)
@@ -1121,7 +1117,7 @@ else
 #  else
   LOC_CHECK_LIBS(geos_c,initGEOS,GEOS,$GEOS_LIBS,GEOS_LIBS)
 #  fi
-  AC_DEFINE(HAVE_GEOS)
+  AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
 fi
 
 AC_SUBST(GEOS_LIBS)
@@ -1192,7 +1188,7 @@ AC_SUBST(USE_PNG)
 LOC_CHECK_USE(postgres,PostgreSQL,USE_POSTGRES)
 
 if test -n "$USE_POSTGRES"; then
-AC_DEFINE(HAVE_POSTGRES)
+AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
 fi # $USE_POSTGRES
 
 PQINCPATH=
@@ -1219,8 +1215,8 @@ LOC_CHECK_LIBS(pq,PQsetdbLogin,PostgreSQL,$PQLIBPATH,PQLIB,,,,-lcrypt,-lssl -lcr
 
 ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$LDFLAGS $PQLIBPATH"
-AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES)], [
-AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES)], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
 ], -lcrypt)
 ])
 LDFLAGS="${ac_save_ldflags}"
@@ -1268,8 +1264,7 @@ if test -n "$USE_MYSQL"; then
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
+    AC_LANG_PUSH([C++])
     ac_save_libs="$LIBS"
     MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
 
@@ -1277,8 +1272,7 @@ if test -n "$USE_MYSQL"; then
     AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
                   AC_MSG_WARN([libmysqld not found])] )
     LIBS=$ac_save_libs
-    AC_LANG_C
-    AC_LANG_RESTORE
+    AC_LANG_POP([C++])
   fi
 
 fi # $USE_MYSQL
@@ -1308,7 +1302,7 @@ LOC_CHECK_INC_PATH(sqlite,SQLite,SQLITEINCPATH)
 
 LOC_CHECK_INCLUDES(sqlite3.h,SQLite,$SQLITEINCPATH)
 
-AC_DEFINE(HAVE_SQLITE)
+AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
 
 fi # $USE_SQLITE
 
@@ -1387,10 +1381,10 @@ LOC_CHECK_LIBS(GLU,gluBeginCurve,GLU,$OPENGL_LIB_PATH,OPENGLULIB,$OPENGLLIB $X_L
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
-LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS)])
-LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS)])
+LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS, 1, [define if glXCreatePbuffer exists])])
+LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS, 1, [define if glXCreateGLXPixmap exists])])
 
-AC_DEFINE(OPENGL_X11)
+AC_DEFINE(OPENGL_X11, 1, [define if OpenGL uses X11])
 
 fi # $OPENGL_X11
 
@@ -1406,7 +1400,7 @@ LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
 
-AC_DEFINE(OPENGL_AQUA)
+AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
 
 fi # $OPENGL_AQUA
 
@@ -1431,7 +1425,7 @@ CFLAGS="${ac_save_cflags}"
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
-AC_DEFINE(OPENGL_WINDOWS)
+AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
 
 fi # $OPENGL_WINDOWS
 
@@ -1461,7 +1455,18 @@ if test -n "$USE_ODBC"; then
 
 LOC_CHECK_INC_PATH(odbc,ODBC,ODBCINC)
 
-LOC_CHECK_INCLUDES(sql.h,ODBC,$ODBCINC)
+AC_CHECK_HEADER([windows.h],
+    AC_DEFINE(HAVE_WINDOWS_H, 1, [Define to 1 if you have the <windows.h> header file.]))
+ 
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$ODBCINC $CPPFLAGS"
+AC_CHECK_HEADER([sql.h],
+AC_DEFINE(HAVE_SQL_H, 1, [Define to 1 if you have the <sql.h> header file.]),
+AC_MSG_ERROR([*** Unable to locate <sql.h>.]),[#if defined(HAVE_WINDOWS_H)
+# include <windows.h>
+#endif
+])
+CPPFLAGS=$ac_save_cppflags
 
 # With ODBC library directory
 
@@ -1560,7 +1565,7 @@ LDFLAGS="$save_LDFLAGS"
 
 # Do we have ATLAS?
 if test $blas_ok = yes; then
-	AC_DEFINE(HAVE_LIBATLAS)
+	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
 fi
 
 # BLAS in Apple vecLib framework? (Mac OS-X)
@@ -1571,7 +1576,7 @@ if test $blas_ok = no; then
 	save_LIBS="$LIBS"
 	LIBS="$vlib_flags $LIBS"
 	AC_MSG_CHECKING([for sgemm in $vlib_flags])
-	AC_TRY_LINK([], [sgemm], [blas_ok=yes; BLASLIB="$vlib_flags"], [BLASLIB=""])
+	AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[sgemm]])],[blas_ok=yes; BLASLIB="$vlib_flags"],[BLASLIB=""])
 	AC_MSG_RESULT($blas_ok)
 	LIBS="$save_LIBS"
 fi
@@ -1605,7 +1610,7 @@ if test $blas_ok = no; then
 fi
 
 if test $blas_ok = yes; then
-AC_DEFINE(HAVE_LIBBLAS)
+AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
 fi
 
 fi # $USE_BLAS
@@ -1664,7 +1669,7 @@ if test $lapack_ok = no; then
 	LOC_CHECK_LIBS(lapack,dgesv_,LAPACK,$LAPACKLIB,LAPACKLIB,$BLASLIB $MATHLIB,,,-lg2c)
 fi
 
-AC_DEFINE(HAVE_LIBLAPACK)
+AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
 
 fi # $USE_LAPACK
 fi # $USE_BLAS
@@ -1767,7 +1772,7 @@ INTLLIB=
 HAVE_NLS=
 
 if test -n "${USE_NLS}" ; then
-    AC_DEFINE(USE_NLS)
+    AC_DEFINE(USE_NLS, 1, [define if NLS requested])
 
 AC_CHECK_FUNC(gettext, INTLLIB=, [
 AC_CHECK_LIB(intl, gettext, INTLLIB=-lintl, [
@@ -1995,7 +2000,8 @@ AC_SUBST(STRIPFLAG)
 GRASS_HOME="${DSTDIR}"
 AC_SUBST(GRASS_HOME)
 
-AC_OUTPUT(include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex include/grass/version.h grass.pc)
+AC_CONFIG_FILES([include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex include/grass/version.h grass.pc])
+AC_OUTPUT
 
 LOC_MSG([Copying config.status to config.status.${ARCH}])
 cp -f config.status config.status.${ARCH}

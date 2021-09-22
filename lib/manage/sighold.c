@@ -23,7 +23,7 @@
 */
 int M__hold_signals(int hold)
 {
-    RETSIGTYPE (*sig)() = hold ? SIG_IGN : SIG_DFL;
+    void (*sig)() = hold ? SIG_IGN : SIG_DFL;
 
     signal(SIGINT, sig);
 

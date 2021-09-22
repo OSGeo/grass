@@ -89,17 +89,16 @@ FROM common as build
 ENV GRASS_CONFIG="\
       --enable-largefile \
       --with-cxx \
-      --with-proj --with-proj-share=/usr/share/proj \
+      --with-proj-share=/usr/share/proj \
       --with-gdal \
       --with-pdal \
-      --with-python \
       --with-geos \
       --with-sqlite \
       --with-bzlib \
       --with-zstd \
       --with-cairo --with-cairo-ldflags=-lfontconfig \
       --with-fftw \
-      --with-postgres --with-postgres-includes='/usr/include/postgresql' \
+      --with-postgres --with-postgres-includes=/usr/include/postgresql \
       --without-freetype \
       --without-openmp \
       --without-opengl \
@@ -107,7 +106,6 @@ ENV GRASS_CONFIG="\
       --without-mysql \
       --without-odbc \
       --without-openmp \
-      --without-ffmpeg \
       "
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols

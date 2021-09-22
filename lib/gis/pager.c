@@ -7,7 +7,7 @@
 #include <grass/gis.h>
 
 #ifdef SIGPIPE
-static RETSIGTYPE (*sigpipe)(int);
+static void (*sigpipe)(int);
 #endif
 
 FILE *G_open_pager(struct Popen *pager)
