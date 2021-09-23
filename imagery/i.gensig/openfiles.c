@@ -42,10 +42,7 @@ int openfiles(struct parms *parms, struct files *files, struct Signature *S)
 	files->band_fd[n] =
 	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
 	files->band_cell[n] = Rast_allocate_d_buf();
-        bandref = Rast_read_bandref(Ref.file[n].name, Ref.file[n].mapset);
-        if (!bandref)
-            G_fatal_error(_("Raster map <%s@%s> lacks band reference"),
-                            Ref.file[n].name, Ref.file[n].mapset);
+        bandref = Rast_get_bandref_or_name(Ref.file[n].name, Ref.file[n].mapset);
         S->bandrefs[n] = G_store(bandref);
     }
 

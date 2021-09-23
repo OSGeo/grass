@@ -488,8 +488,7 @@ char **I_SortSigSetByBandref(struct SigSet *S, const struct Ref *R)
     /* Obtain group band references */
     group_bandrefs = (char **)G_malloc(R->nfiles * sizeof(char *));
     for (unsigned int j = R->nfiles; j--;) {
-        group_bandrefs[j] =
-            Rast_read_bandref(R->file[j].name, R->file[j].mapset);
+        group_bandrefs[j] = Rast_get_bandref_or_name(R->file[j].name, R->file[j].mapset);
     }
 
     /* If lengths are not equal, there will be a mismatch */

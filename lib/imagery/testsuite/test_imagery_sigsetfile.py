@@ -368,7 +368,7 @@ class SortSigSetByBandrefTest(TestCase):
             + "<band reference missing>,<band reference missing>,"
             + "<band reference missing>",
         )
-        self.assertEqual(ref_err, "The_Doors,<band reference missing>")
+        self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 
         # Clean up memory to help track memory leaks when run by valgrind
         I_free_group_ref(ctypes.byref(R))

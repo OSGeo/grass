@@ -50,12 +50,7 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
 
     I_init_signatures(sigs, refer->nfiles);
     for (unsigned int i = refer->nfiles; i--;) {
-        sigs->bandrefs[i] = Rast_read_bandref(refer->file[i].name, refer->file[i].mapset);
-        if (!sigs->bandrefs[i]) {
-            G_warning(_("Raster map <%s@%s> lacks band reference"),
-                refer->file[i].name, refer->file[i].mapset);
-            return 0;
-        }
+        sigs->bandrefs[i] = Rast_get_bandref_or_name(refer->file[i].name, refer->file[i].mapset);
     }
 
     return 1;
