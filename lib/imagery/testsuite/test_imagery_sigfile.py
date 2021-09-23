@@ -376,7 +376,7 @@ class SortSignaturesByBandrefTest(TestCase):
             + "<band reference missing>,<band reference missing>,"
             + "<band reference missing>",
         )
-        self.assertEqual(ref_err, "The_Doors,<band reference missing>")
+        self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 
         # Clean up memory to help track memory leaks when run by valgrind
         S.bandrefs[0] = None

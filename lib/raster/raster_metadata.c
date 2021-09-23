@@ -99,6 +99,23 @@ char *Rast_read_bandref(const char *name, const char *mapset)
 }
 
 /*!
+ * \brief Get a raster map band reference or fall back to its name
+ * 
+ * Use this function if a band reference is needed but not mandated.
+ * 
+ * \param name raster map name
+ * \param mapset mapset name
+ *
+ * \return  string representing band reference or map name
+ */
+char *Rast_get_bandref_or_name(const char *name, const char *mapset) {
+    char *buff;
+
+    buff = Rast_read_bandref(name, mapset);
+    return buff ? buff : G_store(name);
+}
+
+/*!
  * \brief Write a string into a raster's band reference metadata file
  *
  * Raster map must exist in the current mapset.
