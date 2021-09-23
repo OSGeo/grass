@@ -11,6 +11,7 @@ for details
 import os
 import stat
 import ctypes
+import shutil
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -45,14 +46,11 @@ class SignatureFileTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
-        cls.sigfile_name = f"{cls.mpath}/signatures/sig/{cls.sig_name}"
+        cls.sig_dir = f"{cls.mpath}/signatures/sig/{cls.sig_name}"
 
     @classmethod
     def tearDownClass(cls):
-        try:
-            os.remove(cls.sigfile_name)
-        except OSError:
-            pass
+        shutil.rmtree(cls.sig_dir, ignore_errors=True)
 
     def test_I_fopen_signature_file_old_fail(self):
         sigfile = I_fopen_signature_file_old(tempname(10))
@@ -81,7 +79,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(self.sigfile_name)
+        sig_stat = os.stat(f"{self.sig_dir}/sig")
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -134,7 +132,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(self.sigfile_name)
+        sig_stat = os.stat(f"{self.sig_dir}/sig")
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -186,7 +184,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(self.sigfile_name)
+        sig_stat = os.stat(f"{self.sig_dir}/sig")
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)

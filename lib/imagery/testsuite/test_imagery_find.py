@@ -9,6 +9,7 @@ Read the file COPYING that comes with GRASS
 for details
 """
 import os
+import shutil
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -31,24 +32,26 @@ class FindSignatureTestCase(TestCase):
     def setUpClass(cls):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
+        cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
         cls.sig_name1 = tempname(10)
-        cls.sigfile_name1 = f"{cls.mpath}/signatures/sigset/{cls.sig_name1}"
-        open(cls.sigfile_name1, "a").close()
+        cls.sig_dir1 = f"{cls.mpath}/signatures/sigset/{cls.sig_name1}"
+        os.makedirs(cls.sig_dir1)
+        cls.sigdirs.append(cls.sig_dir1)
+        open(f"{cls.sig_dir1}/sig", "a").close()
         cls.sig_name2 = tempname(10)
-        cls.sigfile_name2 = f"{cls.mpath}/signatures/sig/{cls.sig_name2}"
-        open(cls.sigfile_name2, "a").close()
+        cls.sig_dir2 = f"{cls.mpath}/signatures/sig/{cls.sig_name2}"
+        os.makedirs(cls.sig_dir2)
+        cls.sigdirs.append(cls.sig_dir2)
+        open(f"{cls.sig_dir2}/sig", "a").close()
 
     @classmethod
     def tearDownClass(cls):
-        try:
-            os.remove(cls.sigfile_name1)
-            os.remove(cls.sigfile_name2)
-        except OSError:
-            pass
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
 
     def test_find_sig(self):
         # Non existing without a mapset
