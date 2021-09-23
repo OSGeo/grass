@@ -54,11 +54,15 @@ class IOValidationTest(TestCase):
         cls.rast2 = grass.tempname(10)
         cls.runModule("r.mapcalc", expression=f"{cls.rast2}=1", quiet=True)
         cls.tmp_rasts.append(cls.rast2)
-        cls.runModule("r.support", _map=cls.rast2, bandref="GRASS_RND", quiet=True)
+        cls.runModule("r.support", _map=cls.rast2, bandref="GRASS_RND1", quiet=True)
         cls.rast3 = grass.tempname(10)
         cls.runModule("r.mapcalc", expression=f"{cls.rast3}=1", quiet=True)
         cls.tmp_rasts.append(cls.rast3)
-        cls.runModule("r.support", _map=cls.rast3, bandref="GRASS_RND", quiet=True)
+        cls.runModule("r.support", _map=cls.rast3, bandref="GRASS_RND2", quiet=True)
+        cls.rast4 = grass.tempname(10)
+        cls.runModule("r.mapcalc", expression=f"{cls.rast4}=1", quiet=True)
+        cls.tmp_rasts.append(cls.rast4)
+        cls.runModule("r.support", _map=cls.rast4, bandref="GRASS_RND3", quiet=True)
         # An empty imagery group
         cls.group1 = grass.tempname(10)
         cls.runModule("i.group", group=cls.group1, _input=(cls.rast1,), quiet=True)
@@ -179,6 +183,39 @@ class IOValidationTest(TestCase):
         G_file_name_misc(cpath, sigdir, "colr", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
         self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+
+    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
+    def test_dont_fail_if_misc_files_missing(self):
+        """Colour file is missing but it should not cause a failure"""
+        sigfile = grass.tempname(10)
+        csigdir = ctypes.create_string_buffer(GNAME_MAX)
+        I_get_signatures_dir(csigdir, I_SIGFILE_TYPE_LIBSVM)
+        sigdir = utils.decode(csigdir.value)
+        isvm = SimpleModule(
+            "i.svm.train",
+            group=self.group3,
+            _input=self.rast4,
+            signaturefile=sigfile,
+            quiet=True,
+        )
+        self.assertModule(isvm)
+        self.tmp_sigs.append(sigfile)
+        cpath = ctypes.create_string_buffer(GPATH_MAX)
+        G_file_name_misc(cpath, sigdir, "version", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "sig", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "cats", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertTrue(os.path.isfile(misc_file))
+        G_file_name_misc(cpath, sigdir, "colr", sigfile, self.mapset_name)
+        misc_file = utils.decode(cpath.value)
+        self.assertFalse(os.path.isfile(misc_file))
         G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
         self.assertTrue(os.path.isfile(misc_file))

@@ -86,7 +86,8 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
                                                              svm_node));
                 }
                 problem->x[label_num][value_num].index = band;
-                problem->x[label_num][value_num].value = buf_bands[band][col];
+                problem->x[label_num][value_num].value =
+                    buf_bands[band][col] / 255;
                 value_num++;
             }
             /* If label has no data */

@@ -13,9 +13,9 @@ into value prediction or estimation with libsvm, see
 Practical Guide to Support Vector Classification</a> by 
 Chih-Wei Hsu, Chih-Chung Chang, and Chih-Jen Lin.</p>
 
-<p>The module requires all training data (feature value) rasters to
-have band references set. Use <a href="r.support.html">r.support</a>
-to set band references if you get an error of missing band reference.</p>
+<p>It is strongly suggested to have semantic labels set for each raster
+map in the training data (feature value) imagery group.
+Use <a href="r.support.html">r.support</a> to set semantic labels.</p>
 
 <h2>PERFORMANCE</h2>
 
@@ -33,25 +33,9 @@ just be patient.</p>
 <a href="i.svm.predict.html">i.svm.predict</a> for the second part.</p>
 
 <p>Train a SVM to identify land use classes according to the 1996 land
-use map <em>landuse_96_28m</em> and then classify a LANDSAT scene from
+use map <em>landuse96_28m</em> and then classify a LANDSAT scene from
 October of 2002. Example requires the nc_spm_08 location.</p>
 <div class="code"><pre>
-## Prepare imagery for classification
-# Skip this step if your rasters already have band references defined
-# Define band references for all LANDSAT bands in mapset PERMANENT
-g.mapset mapset=PERMANENT
-r.support map=lsat7_2002_10 bandref=TM7_1
-r.support map=lsat7_2002_20 bandref=TM7_2
-r.support map=lsat7_2002_30 bandref=TM7_3
-r.support map=lsat7_2002_40 bandref=TM7_4
-r.support map=lsat7_2002_50 bandref=TM7_5
-r.support map=lsat7_2002_61 bandref=TM7_61
-r.support map=lsat7_2002_62 bandref=TM7_62
-r.support map=lsat7_2002_70 bandref=TM7_7
-r.support map=lsat7_2002_80 bandref=TM7_8
-g.mapset mapset=user1  # replace user1 with your mapset name
-
-## Real work starts here
 # Align computation region to the scene
 g.region raster=lsat7_2002_10 -p
 
@@ -64,11 +48,11 @@ i.group group=lsat7_2002 subgroup=res_30m \
 v.to.rast input=training output=training use=cat label_column=label
 # If you are just playing around and do not care about the accuracy of outcome,
 # just use one of existing maps instead e.g.
-# r.random input=landuse96_28m npoints=5000 raster=training
+# r.random input=landuse96_28m npoints=10000 raster=training
 
 # Train the SVM
 i.svm.train group=lsat7_2002 subgroup=lsat7_2002\
-    input=training signaturefile=landuse_96_rnd_points
+    input=training signaturefile=landuse96_rnd_points
 
 # Go to i.svm.predict for the next step.
 </pre></div>
@@ -77,7 +61,7 @@ i.svm.train group=lsat7_2002 subgroup=lsat7_2002\
 
 <em>
 Predict values: <a href="i.svm.predict.html">i.svm.predict</a><br>
-Set band references: <a href="r.support.html">r.support</a><br>
+Set semantic labels: <a href="r.support.html">r.support</a><br>
 Other classification modules: <a href="i.maxlik.html">i.maxlik</a>,
 <a href="i.smap.html">i.smap</a>
 </em><br>

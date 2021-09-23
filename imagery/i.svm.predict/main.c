@@ -5,15 +5,19 @@
  * AUTHOR(S):    Maris Nartiss - maris.gis gmail.com
  * PURPOSE:      Predicts values with Support Vector Machine classifier
  *
- * COPYRIGHT:    (C) 2020 by Maris Nartiss and the GRASS Development Team
+ * COPYRIGHT:    (C) 2021 by Maris Nartiss and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
+ *               Development of this module was supported from
+ *               science funding of University of Latvia (2020/2021).
+ * 
  *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include <libsvm/svm.h>
 
@@ -21,6 +25,9 @@
 #include <grass/raster.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
+
+#define XSTR(s) STR(s)
+#define STR(s) #s
 
 
 /* LIBSVM message wrapper */
@@ -36,21 +43,23 @@ int main(int argc, char *argv[])
     struct Option *opt_group, *opt_subgroup, *opt_sigfile, *opt_values;
     struct Option *opt_svm_cache_size;
 
-    char name_values[GNAME_MAX], name_group[GNAME_MAX],
-        name_subgroup[GNAME_MAX];
-    const char *name_sigfile, *mapset_sigfile;
-    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX],
-        mapset_values[GMAPSET_MAX];
+    char name_values[GNAME_MAX], name_sigfile[GNAME_MAX];
+    char name_group[GNAME_MAX], name_subgroup[GNAME_MAX];
+    char mapset_values[GMAPSET_MAX], mapset_sigfile[GMAPSET_MAX];
+    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX];
     char sigfile_dir[GPATH_MAX], model_file[GPATH_MAX];
-    char in_path[GPATH_MAX], out_path[GPATH_MAX];
 
-    struct Ref band_ref;
+    struct Ref group_ref;
+    char **names_ordered, **mapsets_ordered;
+    const char **bandrefs_group, **bandrefs_svm;
+    char bandref[GNAME_MAX];
+    int bandref_count = 0, bandref_match_count = 0;
 
     struct svm_model *model;
 
     struct History history;
-    FILE *hist_file;
-    char hist_line[4096];       /* history lines are limited to 4096 */
+    FILE *misc_file;
+    int sigfile_version;
 
     G_gisinit(argv[0]);
 
@@ -60,7 +69,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("classification"));
     G_add_keyword(_("prediction"));
     G_add_keyword(_("regression"));
-    module->description = _("Predict with SVM");
+    module->description = _("Predict with a SVM");
 
     opt_group = G_define_standard_option(G_OPT_I_GROUP);
     /* GTC: SVM prediction input */
@@ -70,12 +79,12 @@ int main(int argc, char *argv[])
     opt_subgroup->required = NO;
 
     opt_sigfile = G_define_option();
-    opt_sigfile->key = "model";
+    opt_sigfile->key = "signaturefile";
     opt_sigfile->type = TYPE_STRING;
     opt_sigfile->key_desc = "name";
     opt_sigfile->required = YES;
-    opt_sigfile->gisprompt = "old,rsvm,sigfile";
-    opt_sigfile->description = _("Name trained SVM model");
+    opt_sigfile->gisprompt = "old,signatures/libsvm,sigfile";
+    opt_sigfile->description = _("Name of input file containing signatures");
 
     opt_values = G_define_standard_option(G_OPT_R_OUTPUT);
     opt_values->required = YES;
@@ -90,7 +99,6 @@ int main(int argc, char *argv[])
     opt_svm_cache_size->options = "1-999999999";
     opt_svm_cache_size->answer = "512";
     opt_svm_cache_size->description = _("Kernel cache size in MB");
-    /* opt_svm_cache_size->guisection = _("SVM options"); */
 
 
     if (G_parser(argc, argv))
@@ -117,19 +125,13 @@ int main(int argc, char *argv[])
                       name_subgroup, name_group, mapset_group);
     }
 
-    name_sigfile = opt_sigfile->answer;
-    if (opt_subgroup->answer)
-        sprintf(sigfile_dir, "group%c%s%csubgroup%c%s%crsvm", HOST_DIRSEP,
-                name_group, HOST_DIRSEP, HOST_DIRSEP, opt_subgroup->answer,
-                HOST_DIRSEP);
-    else
-        sprintf(sigfile_dir, "group%c%s%crsvm", HOST_DIRSEP, name_group,
-                HOST_DIRSEP);
-    mapset_sigfile =
-        G_find_file2_misc(sigfile_dir, "model", name_sigfile, "");
-    if (mapset_sigfile == NULL)
-        G_fatal_error(_("File <%s> with trained SVM model not found"),
-                      name_sigfile);
+    if (G_unqualified_name
+        (opt_sigfile->answer, NULL, name_sigfile, mapset_sigfile) == 0)
+        strcpy(mapset_sigfile, G_mapset());
+    if (!I_find_signature2
+        (I_SIGFILE_TYPE_LIBSVM, name_sigfile, mapset_sigfile))
+        G_fatal_error(_("Signature file <%s@%s> not found"), name_sigfile,
+                      mapset_sigfile);
 
     if (G_unqualified_name
         (opt_values->answer, G_mapset(), name_values, mapset_values) < 0)
@@ -141,18 +143,18 @@ int main(int argc, char *argv[])
     /* Get bands */
     if (opt_subgroup->answer) {
         if (!I_get_subgroup_ref2
-            (name_group, opt_subgroup->answer, mapset_group, &band_ref)) {
+            (name_group, opt_subgroup->answer, mapset_group, &group_ref)) {
             G_fatal_error(_("There was an error reading subgroup <%s> in group <%s@%s>"),
                           opt_subgroup->answer, name_group, mapset_group);
         }
     }
     else {
-        if (!I_get_group_ref2(name_group, mapset_group, &band_ref)) {
+        if (!I_get_group_ref2(name_group, mapset_group, &group_ref)) {
             G_fatal_error(_("There was an error reading group <%s@%s>"),
                           name_group, mapset_group);
         }
     }
-    if (band_ref.nfiles <= 0) {
+    if (group_ref.nfiles <= 0) {
         if (opt_subgroup->answer)
             G_fatal_error(_("Subgroup <%s> in group <%s@%s> contains no raster maps."),
                           opt_subgroup->answer, name_group, mapset_group);
@@ -160,12 +162,69 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
     }
+    bandrefs_group = G_malloc(group_ref.nfiles * sizeof(char *));
+    for (int n = 0; n < group_ref.nfiles; n++) {
+        bandrefs_group[n] =
+            Rast_read_bandref(group_ref.file[n].name,
+                              group_ref.file[n].mapset);
+        if (!bandrefs_group[n])
+            G_fatal_error(_("Raster map <%s@%s> lacks band reference"),
+                          group_ref.file[n].name, group_ref.file[n].mapset);
+    }
 
+    I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
+    /* Reorder rasters to match the training order */
+    misc_file =
+        G_fopen_old_misc(sigfile_dir, "version", name_sigfile,
+                         mapset_sigfile);
+    if (fscanf(misc_file, "%d", &sigfile_version) != 1) {
+        G_fatal_error(_("Invalid signature file"));
+    }
+    fclose(misc_file);
+    /* Current version number is 1 */
+    if (sigfile_version != 1) {
+        G_fatal_error(_("Invalid signature file version"));
+    }
+
+    /* Reorder group items to match order from the signature file */
+    misc_file =
+        G_fopen_old_misc(sigfile_dir, "bandref", name_sigfile,
+                         mapset_sigfile);
+    if (!misc_file)
+        G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
+    names_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
+    mapsets_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
+    while (fscanf(misc_file, "%" XSTR(GNAME_MAX) "s", bandref) == 1) {
+        bandref_count++;
+        bool found = false;
+
+        for (int n = 0; n < group_ref.nfiles; n++) {
+            if (bandref && strcmp(bandref, bandrefs_group[n]) == 0) {
+                bandref_match_count++;
+                found = true;
+                names_ordered[n] = group_ref.file[n].name;
+                mapsets_ordered[n] = group_ref.file[n].mapset;
+                break;
+            }
+        }
+        if (!found)
+            G_fatal_error(_("Imagery group does not contain a raster with a band reference '%s'"),
+                          bandref);
+    }
+    fclose(misc_file);
+    if (bandref_match_count != bandref_count ||
+        bandref_match_count != group_ref.nfiles) {
+        G_fatal_error(_("Unable to match all signature file bands to imagery group bands. "
+                       "Signature band count: %d, imagery group band count: %d, band match count: %d."),
+                      bandref_count, group_ref.nfiles, bandref_match_count);
+    }
+
+    /* Pass libsvm messages through GRASS */
     svm_set_print_string_function(&print_func);
 
     /* Load trained model from a file */
     G_verbose_message("Reading in trained SVM");
-    G_file_name_misc(model_file, sigfile_dir, "model", name_sigfile,
+    G_file_name_misc(model_file, sigfile_dir, "sig", name_sigfile,
                      mapset_sigfile);
     model = svm_load_model(model_file);
     if (model == NULL)
@@ -189,16 +248,15 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    buf_bands = (DCELL **) G_malloc(band_ref.nfiles * sizeof(DCELL *));
-    fd_bands = (int *)G_calloc(band_ref.nfiles, sizeof(int));
-    for (band = 0; band < band_ref.nfiles; band++) {
+    buf_bands = (DCELL **) G_malloc(group_ref.nfiles * sizeof(DCELL *));
+    fd_bands = (int *)G_calloc(group_ref.nfiles, sizeof(int));
+    for (band = 0; band < group_ref.nfiles; band++) {
         buf_bands[band] = Rast_allocate_d_buf();
         fd_bands[band] =
-            Rast_open_old(band_ref.file[band].name,
-                          band_ref.file[band].mapset);
+            Rast_open_old(names_ordered[band], mapsets_ordered[band]);
     }
     nodes =
-        (struct svm_node *)G_malloc(((size_t)band_ref.nfiles + 1) *
+        (struct svm_node *)G_malloc(((size_t)group_ref.nfiles + 1) *
                                     sizeof(struct svm_node));
 
     /* Predict a class or calculate a value */
@@ -212,15 +270,15 @@ int main(int argc, char *argv[])
 
         for (row = 0; row < nrows; row++) {
             G_percent(row, nrows, 2);
-            for (band = 0; band < band_ref.nfiles; band++)
+            for (band = 0; band < group_ref.nfiles; band++)
                 Rast_get_d_row(fd_bands[band], &buf_bands[band][0], row);
             for (col = 0; col < ncols; col++) {
                 nodes[0].index = -1;
-                for (band = 0; band < band_ref.nfiles; band++) {
+                for (band = 0; band < group_ref.nfiles; band++) {
                     if (Rast_is_d_null_value(&buf_bands[band][col]))
                         continue;
                     nodes[band].index = band;
-                    nodes[band].value = buf_bands[band][col];
+                    nodes[band].value = buf_bands[band][col] / 255;
                 }
 
                 /* All values where NULLs */
@@ -228,6 +286,8 @@ int main(int argc, char *argv[])
                     Rast_set_c_null_value(&out_row[col], 1);
                     continue;
                 }
+                /* Mark the end of values in nodes */
+                nodes[group_ref.nfiles].index = -1;
 
                 val = svm_predict(model, nodes);
                 out_row[col] = (CELL) val;
@@ -247,15 +307,15 @@ int main(int argc, char *argv[])
 
         for (row = 0; row < nrows; row++) {
             G_percent(row, nrows, 2);
-            for (band = 0; band < band_ref.nfiles; band++)
+            for (band = 0; band < group_ref.nfiles; band++)
                 Rast_get_d_row(fd_bands[band], &buf_bands[band][0], row);
             for (col = 0; col < ncols; col++) {
                 nodes[0].index = -1;
-                for (band = 0; band < band_ref.nfiles; band++) {
+                for (band = 0; band < group_ref.nfiles; band++) {
                     if (Rast_is_d_null_value(&buf_bands[band][col]))
                         continue;
                     nodes[band].index = band;
-                    nodes[band].value = buf_bands[band][col];
+                    nodes[band].value = buf_bands[band][col] / 255;
                 }
 
                 /* All values where NULLs */
@@ -263,6 +323,8 @@ int main(int argc, char *argv[])
                     Rast_set_d_null_value(&out_row[col], 1);
                     continue;
                 }
+                /* Mark the end of values in nodes */
+                nodes[group_ref.nfiles].index = -1;
 
                 val = svm_predict(model, nodes);
                 out_row[col] = val;
@@ -275,7 +337,7 @@ int main(int argc, char *argv[])
 
     /* Clean up */
     Rast_close(fd_values);
-    for (band = 0; band < band_ref.nfiles; band++) {
+    for (band = 0; band < group_ref.nfiles; band++) {
         Rast_close(fd_bands[band]);
         G_free(buf_bands[band]);
     }
@@ -284,14 +346,16 @@ int main(int argc, char *argv[])
     /* Try to give full history */
     G_verbose_message("Writing out history");
     Rast_short_history(name_values, "raster", &history);
-    hist_file =
+    misc_file =
         G_fopen_old_misc(sigfile_dir, "history", name_sigfile,
                          mapset_sigfile);
-    if (hist_file != NULL) {
-        while (G_getl(hist_line, sizeof(hist_line), hist_file) == 1) {
+    if (misc_file != NULL) {
+        char hist_line[4096];   /* history lines are limited to 4096 */
+
+        while (G_getl(hist_line, sizeof(hist_line), misc_file) == 1) {
             Rast_append_history(&history, hist_line);
         }
-        fclose(hist_file);
+        fclose(misc_file);
     }
     Rast_command_history(&history);
     if (opt_subgroup->answer)
@@ -306,6 +370,8 @@ int main(int argc, char *argv[])
     Rast_write_history(name_values, &history);
 
     if (svm_type != ONE_CLASS) {
+        char in_path[GPATH_MAX], out_path[GPATH_MAX];
+
         /* Copy CATs file from the original training map */
         G_verbose_message("Copying category information");
         G_file_name_misc(in_path, sigfile_dir, "cats", name_sigfile,
@@ -322,7 +388,7 @@ int main(int argc, char *argv[])
     }
     Rast_put_cell_title(name_values,
                         /* GTC: A map title */
-                        _("Values predicted with Support Vector Machine"));
+                        _("Values predicted with a Support Vector Machine"));
 
     exit(EXIT_SUCCESS);
 }

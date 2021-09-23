@@ -62,6 +62,7 @@ from grass.exceptions import CalledModuleError
 from grass.lib.imagery import (
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
+    I_SIGFILE_TYPE_LIBSVM,
     I_signatures_list_by_type,
     I_free_signatures_list,
 )
@@ -2819,6 +2820,8 @@ class SignatureSelect(wx.ComboBox):
             sig_type = I_SIGFILE_TYPE_SIG
         elif element == "signatures/sigset":
             sig_type = I_SIGFILE_TYPE_SIGSET
+        elif element == "signatures/libsvm":
+            sig_type = I_SIGFILE_TYPE_LIBSVM
         items = []
         if sig_type is not None:
             if mapsets:
