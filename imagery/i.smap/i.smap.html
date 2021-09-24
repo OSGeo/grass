@@ -141,11 +141,6 @@ r.mapcalc "MASKed_map = classification_results"
 Supervised classification of LANDSAT scene (complete NC location)
 
 <div class="code"><pre>
-# To use signature file for classification of a different group, set
-# band references for each group member. In this example we'll create
-# signature file suitable only for the same group and thus band
-# references are not mandatory.
-
 # Align computation region to the scene
 g.region raster=lsat7_2002_10 -p
 
@@ -176,6 +171,28 @@ d.rast.leg lsat7_2002_smap_classes
 r.kappa -w classification=lsat7_2002_smap_classes reference=training
 </pre></div>
 
+<p>
+The signature file obtained in the example above will allow
+to classify the current imagery group only (lsat7_2002).
+If the user would like to re-use the signature file for the
+classification of different imagery group(s), they can set
+band references for each group member beforehand, i.e.,
+before generating the signature files.
+Band references are set by means of <em>r.support</em>
+as shown below:
+
+<div class="code"><pre>
+# Define band references for all LANDSAT bands
+r.support map=lsat7_2002_10 bandref=TM7_1
+r.support map=lsat7_2002_20 bandref=TM7_2
+r.support map=lsat7_2002_30 bandref=TM7_3
+r.support map=lsat7_2002_40 bandref=TM7_4
+r.support map=lsat7_2002_50 bandref=TM7_5
+r.support map=lsat7_2002_61 bandref=TM7_61
+r.support map=lsat7_2002_62 bandref=TM7_62
+r.support map=lsat7_2002_70 bandref=TM7_7
+r.support map=lsat7_2002_80 bandref=TM7_8
+</pre></div>
 
 <h2>REFERENCES</h2>
 
