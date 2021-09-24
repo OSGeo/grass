@@ -1,7 +1,6 @@
 #!/bin/sh
 
 set -e
-set -x
 
 [ -d mswindows/osgeo4w/vc ] || mkdir mswindows/osgeo4w/vc
 
