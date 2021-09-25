@@ -39,13 +39,21 @@ import pprint
 has_gui = True
 try:
     from grass.script.setup import set_gui_path
+
     set_gui_path()
     from projpicker_gui import gui
 except Exception:
     has_gui = False
 
-from .common import (BBox, _coor_sep, _pos_float_pat, _bbox_schema,
-                     _bbox_columns, is_verbose, get_float)
+from .common import (
+    BBox,
+    _coor_sep,
+    _pos_float_pat,
+    _bbox_schema,
+    _bbox_columns,
+    is_verbose,
+    get_float,
+)
 from . import coor_latlon
 from . import coor_xy
 
@@ -65,8 +73,9 @@ _rx = 6378.1370
 _ry = 6356.7523
 
 _geom_var_chars = "([a-zA-Z0-9_]+)"
-_geom_var_re = re.compile(f"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|"
-                          f":{_geom_var_chars})$")
+_geom_var_re = re.compile(
+    f"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|" f":{_geom_var_chars})$"
+)
 
 # geometry-bbox namedtuple class
 GeomBBox = collections.namedtuple("GeomBBox", "is_latlon type geom bbox")
@@ -76,6 +85,7 @@ Geom = collections.namedtuple("Geom", "is_latlon type geom")
 
 ###############################################################################
 # generic
+
 
 def message(*args, end=None):
     """
@@ -133,7 +143,7 @@ def tidy_lines(lines):
     for i in reversed(range(len(lines))):
         if lines[i].startswith("#"):
             del lines[i]
-        elif i > 0 and lines[i].strip() == lines[i-1].strip() == "":
+        elif i > 0 and lines[i].strip() == lines[i - 1].strip() == "":
             del lines[i]
         else:
             commented = False
@@ -151,13 +161,20 @@ def tidy_lines(lines):
                         all_nums = False
                         break
                 n = len(words)
-                if (all_nums and n in (2, 4) and _coor_sep not in lines[i] and
-                    "=" not in lines[i]):
+                if (
+                    all_nums
+                    and n in (2, 4)
+                    and _coor_sep not in lines[i]
+                    and "=" not in lines[i]
+                ):
                     # normalize lat lon to lat,lon for multiple geometries per
                     # line; avoid any constraining directives using =
                     lines[i] = _coor_sep.join(words)
-                elif (words[0].startswith("unit=") and '"' not in words[0] and
-                      "'" not in words[0]):
+                elif (
+                    words[0].startswith("unit=")
+                    and '"' not in words[0]
+                    and "'" not in words[0]
+                ):
                     # protect whitespaces in constraining directives
                     m = re.match("""^([^ =]+=)([^"'].*)$""", lines[i])
                     if m:
@@ -191,9 +208,9 @@ def normalize_lines(lines):
             lines[i] = m[1] + m[3]
             quote = m[2]
             if lines[i].endswith(quote):
-                lines[i] = lines[i][:-len(quote)]
+                lines[i] = lines[i][: -len(quote)]
             else:
-                for j in range(i+1, n):
+                for j in range(i + 1, n):
                     idx.append(j)
                     m = re.match(f"^(.*){quote}$", lines[j])
                     if m:
@@ -219,12 +236,7 @@ def get_separator(separator):
     Returns:
         str: Separator character.
     """
-    sep_dic = {
-            "pipe": "|",
-            "comma": ",",
-            "space": " ",
-            "tab": "\t",
-            "newline": "\n"}
+    sep_dic = {"pipe": "|", "comma": ",", "space": " ", "tab": "\t", "newline": "\n"}
     if separator in sep_dic:
         separator = sep_dic[separator]
     return separator
@@ -232,6 +244,7 @@ def get_separator(separator):
 
 ###############################################################################
 # Earth parameters
+
 
 def calc_xy_at_lat_scaling(lat):
     """
@@ -256,10 +269,10 @@ def calc_xy_at_lat_scaling(lat):
     # x = _rx*cos(theta2)
     # y = _ry*sin(theta2)
     # theta2 = atan2(_rx*tan(theta), _ry)
-    theta = lat/180*math.pi
-    theta2 = math.atan2(_rx*math.tan(theta), _ry)
-    x = _rx*math.cos(theta2)
-    y = _ry*math.sin(theta2)
+    theta = lat / 180 * math.pi
+    theta2 = math.atan2(_rx * math.tan(theta), _ry)
+    x = _rx * math.cos(theta2)
+    y = _ry * math.sin(theta2)
     return x, y
 
 
@@ -279,9 +292,9 @@ def calc_xy_at_lat_noscaling(lat):
     """
     # (x/_rx)**2+(y/_ry)**2 = (r*cos(theta)/_rx)**2+(r*sin(theta)/_ry)**2 = 1
     r = calc_radius_at_lat(lat)
-    theta = lat/180*math.pi
-    x = r*math.cos(theta)
-    y = r*math.sin(theta)
+    theta = lat / 180 * math.pi
+    x = r * math.cos(theta)
+    y = r * math.sin(theta)
     return x, y
 
 
@@ -319,9 +332,10 @@ def calc_radius_at_lat(lat):
         raise ValueError(f"{lat}: Invalid latitude")
 
     # (x/_rx)**2+(y/_ry)**2 = (r*cos(theta)/_rx)**2+(r*sin(theta)/_ry)**2 = 1
-    theta = lat/180*math.pi
-    r = math.sqrt((_rx*_ry)**2/((math.cos(theta)*_ry)**2+
-                  (math.sin(theta)*_rx)**2))
+    theta = lat / 180 * math.pi
+    r = math.sqrt(
+        (_rx * _ry) ** 2 / ((math.cos(theta) * _ry) ** 2 + (math.sin(theta) * _rx) ** 2)
+    )
     return r
 
 
@@ -352,34 +366,35 @@ def calc_area(bbox):
         raise ValueError(f"South ({s}) greater than north ({n})")
 
     lats = []
-    nlats = math.ceil(n-s)+1
-    for i in range(nlats-1):
-        lats.append(s+i)
+    nlats = math.ceil(n - s) + 1
+    for i in range(nlats - 1):
+        lats.append(s + i)
     lats.append(n)
 
     if w == e or (w == -180 and e == 180):
         dlon = 360
     elif w < e:
-        dlon = e-w
+        dlon = e - w
     else:
-        dlon = 360-w+e
-    dlon *= math.pi/180
+        dlon = 360 - w + e
+    dlon *= math.pi / 180
 
     area = 0
-    for i in range(nlats-1):
+    for i in range(nlats - 1):
         b = lats[i]
-        t = lats[i+1]
-        r = calc_horiz_radius_at_lat((b+t)/2)
-        width = r*dlon
+        t = lats[i + 1]
+        r = calc_horiz_radius_at_lat((b + t) / 2)
+        width = r * dlon
         xb, yb = calc_xy_at_lat(b)
         xt, yt = calc_xy_at_lat(t)
-        height = math.sqrt((xt-xb)**2+(yt-yb)**2)
-        area += width*height
+        height = math.sqrt((xt - xb) ** 2 + (yt - yb) ** 2)
+        area += width * height
     return area
 
 
 ###############################################################################
 # version and default paths
+
 
 def get_version():
     """
@@ -440,6 +455,7 @@ def get_proj_db(proj_db=None):
 ###############################################################################
 # projpicker.db creation
 
+
 def find_unit(proj_table, crs_auth, crs_code, proj_cur):
     """
     Find and return the unit of a given coordinate reference system (CRS) using
@@ -488,9 +504,7 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
     nuoms = 0
     uom_auth = uom_code = unit = None
     for uom_row in proj_cur.fetchall():
-        (orien,
-         um_auth, um_code,
-         um_name) = uom_row
+        (orien, um_auth, um_code, um_name) = uom_row
         if table != "vertical_crs" and orien in ("up", "down"):
             continue
         if um_auth != uom_auth or um_code != uom_code:
@@ -503,24 +517,33 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
                   FROM {table}
                   WHERE auth_name='{auth}' AND code='{code}'"""
         proj_cur.execute(sql)
-        unit = re.sub("^.*\"([^\"]+)\".*$", r"\1",
-               re.sub("[A-Z]*\[.*\[.*\],?", "",
-               re.sub("UNIT\[([^]]+)\]", r"\1",
-               re.sub("^PROJCS\[[^,]*,|\]$", "",
-                      proj_cur.fetchone()[0]))))
+        unit = re.sub(
+            '^.*"([^"]+)".*$',
+            r"\1",
+            re.sub(
+                "[A-Z]*\[.*\[.*\],?",
+                "",
+                re.sub(
+                    "UNIT\[([^]]+)\]",
+                    r"\1",
+                    re.sub("^PROJCS\[[^,]*,|\]$", "", proj_cur.fetchone()[0]),
+                ),
+            ),
+        )
         if unit == "":
             raise RuntimeError(f"{crs_auth}:{crs_code}: No units?")
     elif nuoms > 1:
         raise RuntimeError(f"{crs_auth}:{crs_code}: Multiple units?")
 
     # use GRASS unit names
-    unit = unit.replace(
-        "Meter", "meter").replace(
-        "metre", "meter").replace(
-        "Foot_US", "US foot").replace(
-        "US survey foot", "US foot").replace(
-        "_Kilo", " kilo").replace(
-        " (supplier to define representation)", "")
+    unit = (
+        unit.replace("Meter", "meter")
+        .replace("metre", "meter")
+        .replace("Foot_US", "US foot")
+        .replace("US survey foot", "US foot")
+        .replace("_Kilo", " kilo")
+        .replace(" (supplier to define representation)", "")
+    )
 
     return unit
 
@@ -588,11 +611,10 @@ def transform_latlon_bbox(bbox, to_crs):
 
     s, n, w, e = bbox
     try:
-        trans = pyproj.Transformer.from_crs("EPSG:4326", to_crs,
-                                            always_xy=True)
+        trans = pyproj.Transformer.from_crs("EPSG:4326", to_crs, always_xy=True)
         x = [w, w, e, e]
         y = [s, n, s, n]
-        if s*n < 0:
+        if s * n < 0:
             x.extend([w, e])
             y.extend([0, 0])
             inc_zero = True
@@ -613,10 +635,7 @@ def transform_latlon_bbox(bbox, to_crs):
     return b, t, l, r
 
 
-def create_projpicker_db(
-        overwrite=False,
-        projpicker_db=None,
-        proj_db=None):
+def create_projpicker_db(overwrite=False, projpicker_db=None, proj_db=None):
     """
     Create a projpicker.db sqlite database. If projpicker_db or proj_db is None
     (default), get_projpicker_db() or get_proj_db() is used, respectively.
@@ -666,21 +685,33 @@ def create_projpicker_db(
             sql = sql_tpl.replace("{columns}", "count(c.table_name)")
             proj_cur.execute(sql)
             nrows = proj_cur.fetchone()[0]
-            sql = sql_tpl.replace("{columns}", """c.table_name, c.name,
+            sql = sql_tpl.replace(
+                "{columns}",
+                """c.table_name, c.name,
                                                   c.auth_name, c.code,
                                                   u.auth_name, u.code,
                                                   e.auth_name, e.code,
                                                   south_lat, north_lat,
-                                                  west_lon, east_lon""")
+                                                  west_lon, east_lon""",
+            )
             proj_cur.execute(sql)
             nrow = 1
             for row in proj_cur.fetchall():
-                message("\b"*80+f"{nrow}/{nrows}", end="")
-                (proj_table, crs_name,
-                 crs_auth, crs_code,
-                 usg_auth, usg_code,
-                 ext_auth, ext_code,
-                 s, n, w, e) = row
+                message("\b" * 80 + f"{nrow}/{nrows}", end="")
+                (
+                    proj_table,
+                    crs_name,
+                    crs_auth,
+                    crs_code,
+                    usg_auth,
+                    usg_code,
+                    ext_auth,
+                    ext_code,
+                    s,
+                    n,
+                    w,
+                    e,
+                ) = row
                 bbox = s, n, w, e
                 area = calc_area(bbox)
                 unit = find_unit(proj_table, crs_auth, crs_code, proj_cur)
@@ -688,8 +719,7 @@ def create_projpicker_db(
                     # XXX: might be incorrect!
                     b, t, l, r = s, n, w, e
                 else:
-                    b, t, l, r = transform_latlon_bbox(
-                                                bbox, f"{crs_auth}:{crs_code}")
+                    b, t, l, r = transform_latlon_bbox(bbox, f"{crs_auth}:{crs_code}")
 
                 sql = """INSERT INTO bbox
                          VALUES (?, ?,
@@ -697,22 +727,35 @@ def create_projpicker_db(
                                  ?, ?, ?, ?,
                                  ?, ?, ?, ?,
                                  ?, ?)"""
-                projpicker_con.execute(sql, (proj_table, crs_name,
-                                             crs_auth, crs_code,
-                                             usg_auth, usg_code,
-                                             ext_auth, ext_code,
-                                             s, n, w, e,
-                                             b, t, l, r,
-                                             unit, area))
+                projpicker_con.execute(
+                    sql,
+                    (
+                        proj_table,
+                        crs_name,
+                        crs_auth,
+                        crs_code,
+                        usg_auth,
+                        usg_code,
+                        ext_auth,
+                        ext_code,
+                        s,
+                        n,
+                        w,
+                        e,
+                        b,
+                        t,
+                        l,
+                        r,
+                        unit,
+                        area,
+                    ),
+                )
                 projpicker_con.commit()
                 nrow += 1
             message()
 
 
-def write_bbox_db(
-        bbox,
-        bbox_db,
-        overwrite=False):
+def write_bbox_db(bbox, bbox_db, overwrite=False):
     """
     Write a list of BBox instances to a bbox database.
 
@@ -739,31 +782,42 @@ def write_bbox_db(
         nrows = len(bbox)
         nrow = 1
         for row in bbox:
-            message("\b"*80+f"{nrow}/{nrows}", end="")
+            message("\b" * 80 + f"{nrow}/{nrows}", end="")
             sql = """INSERT INTO bbox
                      VALUES (?, ?,
                              ?, ?, ?, ?, ?, ?,
                              ?, ?, ?, ?,
                              ?, ?, ?, ?,
                              ?, ?)"""
-            bbox_con.execute(sql, (row.proj_table, row.crs_name,
-                                   row.crs_auth_name, row.crs_code,
-                                   row.usage_auth_name, row.usage_code,
-                                   row.extent_auth_name, row.extent_code,
-                                   row.south_lat, row.north_lat,
-                                   row.west_lon, row.east_lon,
-                                   row.bottom, row.top,
-                                   row.left, row.right,
-                                   row.unit, row.area_sqkm))
+            bbox_con.execute(
+                sql,
+                (
+                    row.proj_table,
+                    row.crs_name,
+                    row.crs_auth_name,
+                    row.crs_code,
+                    row.usage_auth_name,
+                    row.usage_code,
+                    row.extent_auth_name,
+                    row.extent_code,
+                    row.south_lat,
+                    row.north_lat,
+                    row.west_lon,
+                    row.east_lon,
+                    row.bottom,
+                    row.top,
+                    row.left,
+                    row.right,
+                    row.unit,
+                    row.area_sqkm,
+                ),
+            )
             bbox_con.commit()
             nrow += 1
         message()
 
 
-def read_bbox_db(
-        bbox_db,
-        unit="any",
-        proj_table="any"):
+def read_bbox_db(bbox_db, unit="any", proj_table="any"):
     """
     Return a list of all BBox instances in unit in proj_table in a bbox
     database. Each BBox instance is a named tuple with all the columns from the
@@ -794,16 +848,15 @@ def read_bbox_db(
         if unit == "any" and proj_table == "any":
             sql = sql.replace("WHERE_UNIT_AND_PROJ_TABLE", "")
         elif unit == "any":
-            sql = sql.replace("WHERE_UNIT_AND_PROJ_TABLE",
-                              "WHERE proj_table = ?")
+            sql = sql.replace("WHERE_UNIT_AND_PROJ_TABLE", "WHERE proj_table = ?")
             params.append(proj_table)
         elif proj_table == "any":
-            sql = sql.replace("WHERE_UNIT_AND_PROJ_TABLE",
-                              "WHERE unit = ?")
+            sql = sql.replace("WHERE_UNIT_AND_PROJ_TABLE", "WHERE unit = ?")
             params.append(unit)
         else:
-            sql = sql.replace("WHERE_UNIT_AND_PROJ_TABLE",
-                              "WHERE unit = ? and proj_table = ?")
+            sql = sql.replace(
+                "WHERE_UNIT_AND_PROJ_TABLE", "WHERE unit = ? and proj_table = ?"
+            )
             params.extend([unit, proj_table])
         bbox_cur.execute(sql, params)
         for row in map(BBox._make, bbox_cur.fetchall()):
@@ -813,6 +866,7 @@ def read_bbox_db(
 
 ###############################################################################
 # coordinate systems
+
 
 def set_coordinate_system(coor_sys="latlon"):
     """
@@ -875,6 +929,7 @@ def is_latlon():
 
 ###############################################################################
 # parsing
+
 
 def parse_points(points):
     """
@@ -951,9 +1006,12 @@ def parse_polys(polys):
                 typ1 = type(point[1])
             else:
                 typ0 = typ1 = None
-            if ((typ0 in (int, float) and typ1 in (int, float)) or
-                (typ0 == str and not point_re.match(point[0]) and
-                 typ1 == str and not point_re.match(point[1]))):
+            if (typ0 in (int, float) and typ1 in (int, float)) or (
+                typ0 == str
+                and not point_re.match(point[0])
+                and typ1 == str
+                and not point_re.match(point[1])
+            ):
                 # [ lat, lon ] or [ x, y ]
                 c1, c2 = point
                 c1 = get_float(c1)
@@ -1095,15 +1153,25 @@ def parse_mixed_geoms(geoms):
     Raises:
         SyntaxError: If syntax errors are encountered.
     """
+
     def parse_next_geom(g):
         if geom_type == "poly":
             i = g
-            while (i < ngeoms and geoms[i] not in keywords and
-                   not (type(geoms[i]) == str and
-                        (geoms[i] == "" or None in parse_point(geoms[i]) or
-                        (("=" in geoms[i] and
-                          geoms[i].split("=")[0] in constraints) or
-                         _geom_var_re.match(geoms[i]))))):
+            while (
+                i < ngeoms
+                and geoms[i] not in keywords
+                and not (
+                    type(geoms[i]) == str
+                    and (
+                        geoms[i] == ""
+                        or None in parse_point(geoms[i])
+                        or (
+                            ("=" in geoms[i] and geoms[i].split("=")[0] in constraints)
+                            or _geom_var_re.match(geoms[i])
+                        )
+                    )
+                )
+            ):
                 i += 1
             geom = parse_geom(geoms[g:i], geom_type)
             g = i - 1
@@ -1113,11 +1181,17 @@ def parse_mixed_geoms(geoms):
 
     def parse_next_geoms(g):
         i = g
-        while (i < ngeoms and geoms[i] not in keywords and
-               not (type(geoms[i]) == str and
-                    (("=" in geoms[i] and
-                      geoms[i].split("=")[0] in constraints) or
-                     _geom_var_re.match(geoms[i])))):
+        while (
+            i < ngeoms
+            and geoms[i] not in keywords
+            and not (
+                type(geoms[i]) == str
+                and (
+                    ("=" in geoms[i] and geoms[i].split("=")[0] in constraints)
+                    or _geom_var_re.match(geoms[i])
+                )
+            )
+        ):
             i += 1
         ogeoms = parse_geoms(geoms[g:i], geom_type)
         g = i
@@ -1179,8 +1253,7 @@ def parse_mixed_geoms(geoms):
                     set_latlon()
                 else:
                     set_xy()
-            elif (typ == str and "=" in geom and
-                  geom.split("=")[0] in constraints):
+            elif typ == str and "=" in geom and geom.split("=")[0] in constraints:
                 pass
             elif geom in ("none", "all"):
                 stack_size += 1
@@ -1197,14 +1270,16 @@ def parse_mixed_geoms(geoms):
                         g += 1
                         geom = geoms[g]
                         typ = type(geom)
-                        if (typ == str and not geom.startswith(":") and
-                            geom not in spec_geoms):
+                        if (
+                            typ == str
+                            and not geom.startswith(":")
+                            and geom not in spec_geoms
+                        ):
                             geom, g = parse_next_geom(g)
                         outgeoms.append(geom)
                     if use:
                         if name not in geom_vars:
-                            raise SyntaxError(f"{name}: Undefined geometry "
-                                              "variable")
+                            raise SyntaxError(f"{name}: Undefined geometry " "variable")
                         stack_size += 1
                         if not sav:
                             outgeoms.append(geom)
@@ -1223,8 +1298,9 @@ def parse_mixed_geoms(geoms):
             if stack_size == 0:
                 raise SyntaxError("Nothing to return from postfix stack")
             elif stack_size > 1:
-                raise SyntaxError(f"{stack_size}: Excessive stack size for "
-                                  "postfix operations")
+                raise SyntaxError(
+                    f"{stack_size}: Excessive stack size for " "postfix operations"
+                )
     finally:
         if was_latlon and not is_latlon():
             set_latlon()
@@ -1236,6 +1312,7 @@ def parse_mixed_geoms(geoms):
 
 ###############################################################################
 # bbox operators
+
 
 def bbox_not(bbox, bbox_all):
     """
@@ -1343,19 +1420,27 @@ def sort_bbox(bbox):
     Args:
         bbox (list): List of BBox instances.
     """
-    bbox.sort(key=lambda x: x.crs_auth_name+":"+x.crs_code)
+    bbox.sort(key=lambda x: x.crs_auth_name + ":" + x.crs_code)
     for i in reversed(range(len(bbox))):
-        if i > 0 and bbox[i] == bbox[i-1]:
+        if i > 0 and bbox[i] == bbox[i - 1]:
             del bbox[i]
-    bbox.sort(key=lambda x: (x.area_sqkm,
-                             x.proj_table,
-                             x.crs_auth_name, x.crs_code,
-                             x.usage_auth_name, x.usage_code,
-                             x.extent_auth_name, x.extent_code))
+    bbox.sort(
+        key=lambda x: (
+            x.area_sqkm,
+            x.proj_table,
+            x.crs_auth_name,
+            x.crs_code,
+            x.usage_auth_name,
+            x.usage_code,
+            x.extent_auth_name,
+            x.extent_code,
+        )
+    )
 
 
 ###############################################################################
 # geometry operators
+
 
 def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
     """
@@ -1380,6 +1465,7 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
     Raises:
         SyntaxError: If syntax errors are encountered.
     """
+
     def find_matching_bbox(geom_latlon, geom, bbox):
         obbox = []
         if len(geom) == 2:
@@ -1389,21 +1475,25 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
         nrows = len(bbox)
         nrow = 1
         for b in bbox:
-            message("\b"*80+f"Matching... {nrow}/{nrows}", end="")
+            message("\b" * 80 + f"Matching... {nrow}/{nrows}", end="")
             crs = f"{b.crs_auth_name}:{b.crs_code}"
             if len(geom) == 2:
                 x2, y2 = transform_latlon_point(geom_latlon, crs)
-                dist = math.sqrt((x1-x2)**2+(y1-y2)**2)
+                dist = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
                 if dist <= match_tol:
                     obbox.append(b)
             else:
                 b2, t2, l2, r2 = transform_latlon_bbox(geom_latlon, crs)
-                dist1 = math.sqrt((b1-b2)**2+(l1-l2)**2)
-                dist2 = math.sqrt((b1-b2)**2+(r1-r2)**2)
-                dist3 = math.sqrt((t1-t2)**2+(l1-l2)**2)
-                dist4 = math.sqrt((t1-t2)**2+(r1-r2)**2)
-                if (dist1 <= match_tol and dist2 <= match_tol and
-                    dist3 <= match_tol and dist4 <= match_tol):
+                dist1 = math.sqrt((b1 - b2) ** 2 + (l1 - l2) ** 2)
+                dist2 = math.sqrt((b1 - b2) ** 2 + (r1 - r2) ** 2)
+                dist3 = math.sqrt((t1 - t2) ** 2 + (l1 - l2) ** 2)
+                dist4 = math.sqrt((t1 - t2) ** 2 + (r1 - r2) ** 2)
+                if (
+                    dist1 <= match_tol
+                    and dist2 <= match_tol
+                    and dist3 <= match_tol
+                    and dist4 <= match_tol
+                ):
                     obbox.append(b)
             if len(obbox) >= match_max > 0:
                 break
@@ -1418,8 +1508,9 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
         raise SyntaxError("Geometries in different types cannot be matched")
 
     if gbbox1.is_latlon == gbbox2.is_latlon:
-        raise SyntaxError("Geometries in the same coordinate system cannot be "
-                          "matched")
+        raise SyntaxError(
+            "Geometries in the same coordinate system cannot be " "matched"
+        )
 
     geom1 = gbbox1.geom
     geom2 = gbbox2.geom
@@ -1451,11 +1542,8 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
 ###############################################################################
 # queries
 
-def query_point(
-        point,
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+
+def query_point(point, unit="any", proj_table="any", projpicker_db=None):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input point geometry. Each BBox instance is a named tuple with
@@ -1478,16 +1566,11 @@ def query_point(
 
     with sqlite3.connect(projpicker_db) as projpicker_con:
         projpicker_cur = projpicker_con.cursor()
-        outbbox = query_point_using_cursor(projpicker_cur, point, unit,
-                                           proj_table)
+        outbbox = query_point_using_cursor(projpicker_cur, point, unit, proj_table)
     return outbbox
 
 
-def query_point_using_bbox(
-        prevbbox,
-        point,
-        unit="any",
-        proj_table="any"):
+def query_point_using_bbox(prevbbox, point, unit="any", proj_table="any"):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain an input point geometry. Each BBox instance is a named
@@ -1510,20 +1593,19 @@ def query_point_using_bbox(
 
     idx = []
     for i in range(len(prevbbox)):
-        if is_point_within_bbox(point, prevbbox[i]) and (
-            unit == "any" or prevbbox[i].unit == unit) and (
-            proj_table == "any" or prevbbox[i].proj_table == proj_table):
+        if (
+            is_point_within_bbox(point, prevbbox[i])
+            and (unit == "any" or prevbbox[i].unit == unit)
+            and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+        ):
             idx.append(i)
     outbbox = [prevbbox[i] for i in idx]
     return outbbox
 
 
 def query_points(
-        points,
-        query_op="and",
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+    points, query_op="and", unit="any", proj_table="any", projpicker_db=None
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain input point geometries. Each BBox instance is a named tuple with
@@ -1562,8 +1644,9 @@ def query_points(
         projpicker_cur = projpicker_con.cursor()
         for point in points:
             if query_op in ("or", "xor") or first:
-                obbox = query_point_using_cursor(projpicker_cur, point, unit,
-                                                 proj_table)
+                obbox = query_point_using_cursor(
+                    projpicker_cur, point, unit, proj_table
+                )
                 if obbox:
                     n = len(outbbox)
                     if query_op in ("or", "xor") and not sort and n > 0:
@@ -1582,8 +1665,7 @@ def query_points(
                         outbbox.extend(obbox)
                 first = False
             else:
-                outbbox = query_point_using_bbox(outbbox, point, unit,
-                                                 proj_table)
+                outbbox = query_point_using_bbox(outbbox, point, unit, proj_table)
 
     if sort:
         sort_bbox(outbbox)
@@ -1592,11 +1674,8 @@ def query_points(
 
 
 def query_points_using_bbox(
-        prevbbox,
-        points,
-        query_op="and",
-        unit="any",
-        proj_table="any"):
+    prevbbox, points, query_op="and", unit="any", proj_table="any"
+):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain input point geometres. Each BBox instance is a named
@@ -1627,9 +1706,11 @@ def query_points_using_bbox(
 
     for point in points:
         for i in range(len(prevbbox)):
-            if is_point_within_bbox(point, prevbbox[i]) and (
-                unit == "any" or prevbbox[i].unit == unit) and (
-                proj_table == "any" or prevbbox[i].proj_table == proj_table):
+            if (
+                is_point_within_bbox(point, prevbbox[i])
+                and (unit == "any" or prevbbox[i].unit == unit)
+                and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+            ):
                 if query_op != "xor" or i not in idx:
                     idx.append(i)
         if query_op == "and":
@@ -1641,11 +1722,7 @@ def query_points_using_bbox(
     return prevbbox
 
 
-def query_poly(
-        poly,
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+def query_poly(poly, unit="any", proj_table="any", projpicker_db=None):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input poly geometry. Each BBox instance is a named tuple with
@@ -1666,11 +1743,7 @@ def query_poly(
     return query_polys([poly], "and", unit, proj_table, projpicker_db)
 
 
-def query_poly_using_bbox(
-        prevbbox,
-        poly,
-        unit="any",
-        proj_table="any"):
+def query_poly_using_bbox(prevbbox, poly, unit="any", proj_table="any"):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain an input poly geometres. Each BBox instance is a named
@@ -1692,11 +1765,8 @@ def query_poly_using_bbox(
 
 
 def query_polys(
-        polys,
-        query_op="and",
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+    polys, query_op="and", unit="any", proj_table="any", projpicker_db=None
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain input poly geometries. Each BBox instance is a named tuple with all
@@ -1724,11 +1794,8 @@ def query_polys(
 
 
 def query_polys_using_bbox(
-        prevbbox,
-        polys,
-        query_op="and",
-        unit="any",
-        proj_table="any"):
+    prevbbox, polys, query_op="and", unit="any", proj_table="any"
+):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain input poly geometres. Each BBox instance is a named
@@ -1750,15 +1817,10 @@ def query_polys_using_bbox(
     polys = parse_polys(polys)
 
     bboxes = [calc_poly_bbox(poly) for poly in polys]
-    return query_bboxes_using_bbox(prevbbox, bboxes, query_op, unit,
-                                   proj_table)
+    return query_bboxes_using_bbox(prevbbox, bboxes, query_op, unit, proj_table)
 
 
-def query_bbox(
-        bbox,
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+def query_bbox(bbox, unit="any", proj_table="any", projpicker_db=None):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input bbox geometry. Each BBox instance is a named tuple with
@@ -1781,16 +1843,11 @@ def query_bbox(
 
     with sqlite3.connect(projpicker_db) as projpicker_con:
         projpicker_cur = projpicker_con.cursor()
-        outbbox = query_bbox_using_cursor(projpicker_cur, bbox, unit,
-                                          proj_table)
+        outbbox = query_bbox_using_cursor(projpicker_cur, bbox, unit, proj_table)
     return outbbox
 
 
-def query_bbox_using_bbox(
-        prevbbox,
-        bbox,
-        unit="any",
-        proj_table="any"):
+def query_bbox_using_bbox(prevbbox, bbox, unit="any", proj_table="any"):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain an input bbox geometry defined by sout, north, west, and
@@ -1815,19 +1872,18 @@ def query_bbox_using_bbox(
     idx = []
 
     for i in range(len(prevbbox)):
-        if is_bbox_within_bbox(bbox, prevbbox[i]) and (
-            unit == "any" or prevbbox[i].unit == unit) and (
-            proj_table == "any" or prevbbox[i].proj_table == proj_table):
+        if (
+            is_bbox_within_bbox(bbox, prevbbox[i])
+            and (unit == "any" or prevbbox[i].unit == unit)
+            and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+        ):
             idx.append(i)
     return [prevbbox[i] for i in idx]
 
 
 def query_bboxes(
-        bboxes,
-        query_op="and",
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+    bboxes, query_op="and", unit="any", proj_table="any", projpicker_db=None
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain input bbox geometries. Each BBox instance is a named tuple with all
@@ -1866,8 +1922,7 @@ def query_bboxes(
         projpicker_cur = projpicker_con.cursor()
         for bbox in bboxes:
             if query_op in ("or", "xor") or first:
-                obbox = query_bbox_using_cursor(projpicker_cur, bbox, unit,
-                                                proj_table)
+                obbox = query_bbox_using_cursor(projpicker_cur, bbox, unit, proj_table)
                 if obbox:
                     n = len(outbbox)
                     if query_op in ("or", "xor") and not sort and n > 0:
@@ -1886,8 +1941,7 @@ def query_bboxes(
                         outbbox.extend(obbox)
                 first = False
             else:
-                outbbox = query_bbox_using_bbox(outbbox, bbox, unit,
-                                                proj_table)
+                outbbox = query_bbox_using_bbox(outbbox, bbox, unit, proj_table)
 
     if sort:
         sort_bbox(outbbox)
@@ -1896,11 +1950,8 @@ def query_bboxes(
 
 
 def query_bboxes_using_bbox(
-        prevbbox,
-        bboxes,
-        query_op="and",
-        unit="any",
-        proj_table="any"):
+    prevbbox, bboxes, query_op="and", unit="any", proj_table="any"
+):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain input bbox geometres. Each BBox instance is a named
@@ -1931,9 +1982,11 @@ def query_bboxes_using_bbox(
 
     for bbox in bboxes:
         for i in range(len(prevbbox)):
-            if is_bbox_within_bbox(bbox, prevbbox[i]) and (
-                unit == "any" or prevbbox[i].unit == unit) and (
-                proj_table == "any" or prevbbox[i].proj_table == proj_table):
+            if (
+                is_bbox_within_bbox(bbox, prevbbox[i])
+                and (unit == "any" or prevbbox[i].unit == unit)
+                and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+            ):
                 if query_op != "xor" or i not in idx:
                     idx.append(i)
         if query_op == "and":
@@ -1946,11 +1999,8 @@ def query_bboxes_using_bbox(
 
 
 def query_geom(
-        geom,
-        geom_type="point",
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+    geom, geom_type="point", unit="any", proj_table="any", projpicker_db=None
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input geometry. Each BBox instance is a named tuple with all the
@@ -1987,11 +2037,8 @@ def query_geom(
 
 
 def query_geom_using_bbox(
-        prevbbox,
-        geom,
-        geom_type="point",
-        unit="any",
-        proj_table="any"):
+    prevbbox, geom, geom_type="point", unit="any", proj_table="any"
+):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain an input geometry. Each BBox instance is a named tuple
@@ -2028,12 +2075,13 @@ def query_geom_using_bbox(
 
 
 def query_geoms(
-        geoms,
-        geom_type="point",
-        query_op="and",
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+    geoms,
+    geom_type="point",
+    query_op="and",
+    unit="any",
+    proj_table="any",
+    projpicker_db=None,
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain input geometries. Each BBox instance is a named tuple with all the
@@ -2068,23 +2116,17 @@ def query_geoms(
         raise ValueError(f"{query_op}: Invalid query operator")
 
     if geom_type == "point":
-        outbbox = query_points(geoms, query_op, unit, proj_table,
-                               projpicker_db)
+        outbbox = query_points(geoms, query_op, unit, proj_table, projpicker_db)
     elif geom_type == "poly":
         outbbox = query_polys(geoms, query_op, unit, proj_table, projpicker_db)
     else:
-        outbbox = query_bboxes(geoms, query_op, unit, proj_table,
-                               projpicker_db)
+        outbbox = query_bboxes(geoms, query_op, unit, proj_table, projpicker_db)
     return outbbox
 
 
 def query_geoms_using_bbox(
-        prevbbox,
-        geoms,
-        geom_type="point",
-        query_op="and",
-        unit="any",
-        proj_table="any"):
+    prevbbox, geoms, geom_type="point", query_op="and", unit="any", proj_table="any"
+):
     """
     Return a subset list of input BBox instances in unit in proj_table that
     completely contain input geometries. Each BBox instance is a named tuple
@@ -2112,21 +2154,15 @@ def query_geoms_using_bbox(
         raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if geom_type == "point":
-        outbbox = query_points_using_bbox(prevbbox, geom, query_op, unit,
-                                          proj_table)
+        outbbox = query_points_using_bbox(prevbbox, geom, query_op, unit, proj_table)
     elif geom_type == "poly":
-        outbbox = query_polys_using_bbox(prevbbox, geom, query_op, unit,
-                                         proj_table)
+        outbbox = query_polys_using_bbox(prevbbox, geom, query_op, unit, proj_table)
     else:
-        outbbox = query_bboxes_using_bbox(prevbbox, geom, query_op, unit,
-                                          proj_table)
+        outbbox = query_bboxes_using_bbox(prevbbox, geom, query_op, unit, proj_table)
     return outbbox
 
 
-def query_all(
-        unit="any",
-        proj_table="any",
-        projpicker_db=None):
+def query_all(unit="any", proj_table="any", projpicker_db=None):
     """
     Return a list of all BBox instances in unit in proj_table. Each BBox
     instance is a named tuple with all the columns from the bbox table in
@@ -2146,10 +2182,7 @@ def query_all(
     return read_bbox_db(projpicker_db, unit, proj_table)
 
 
-def query_all_using_bbox(
-        prevbbox,
-        unit="any",
-        proj_table="any"):
+def query_all_using_bbox(prevbbox, unit="any", proj_table="any"):
     """
     Return a subset list of input BBox instances in unit in proj_table. Each
     BBox instance is a named tuple with all the columns from the bbox table in
@@ -2168,15 +2201,14 @@ def query_all_using_bbox(
     idx = []
     for i in range(len(prevbbox)):
         if (unit == "any" or prevbbox[i].unit == unit) and (
-            proj_table == "any" or prevbbox[i].proj_table == proj_table):
+            proj_table == "any" or prevbbox[i].proj_table == proj_table
+        ):
             idx.append(i)
     outbbox = [prevbbox[i] for i in idx]
     return outbbox
 
 
-def query_mixed_geoms(
-        geoms,
-        projpicker_db=None):
+def query_mixed_geoms(geoms, projpicker_db=None):
     """
     Return a list of BBox instances that completely contain mixed input
     geometries. Each BBox instance is a named tuple with all the columns from
@@ -2259,21 +2291,18 @@ def query_mixed_geoms(
                     geom_vars[name] = Geom(is_latlon(), geom_type, geoms[g])
                 if use:
                     if name not in geom_vars:
-                        raise SyntaxError(f"{name}: Undefined geometry "
-                                          "variable")
+                        raise SyntaxError(f"{name}: Undefined geometry " "variable")
                     nam = name
                     while True:
                         if nam not in geom_vars:
-                            raise SyntaxError(f"{nam}: Undefined geometry "
-                                              "variable")
+                            raise SyntaxError(f"{nam}: Undefined geometry " "variable")
                         geom = geom_vars[nam]
                         typ = type(geom.geom)
                         if not (typ == str and geom.geom.startswith(":")):
                             break
                         nam = geom.geom[1:]
                         if nam == name:
-                            raise SyntaxError(f"{name}: Recursive geometry "
-                                              "variable")
+                            raise SyntaxError(f"{name}: Recursive geometry " "variable")
                     if geom.is_latlon != is_latlon():
                         sav_is_latlon = is_latlon()
                         if geom.is_latlon:
@@ -2311,32 +2340,27 @@ def query_mixed_geoms(
                 n = len(geombbox_stack)
                 if geom == "not" and n >= 1:
                     if all_key not in bbox_all:
-                        bbox_all[all_key] = query_all(unit, proj_table,
-                                                      projpicker_db)
+                        bbox_all[all_key] = query_all(unit, proj_table, projpicker_db)
                     gbbox = geombbox_stack.pop()
                     obbox = bbox_not(gbbox.bbox, bbox_all[all_key])
-                    geombbox_stack.append(GeomBBox(is_latlon(), None, geom,
-                                                   obbox))
+                    geombbox_stack.append(GeomBBox(is_latlon(), None, geom, obbox))
                 elif geom in ("and", "or", "xor", "match") and n >= 2:
                     gbbox2 = geombbox_stack.pop()
                     gbbox1 = geombbox_stack.pop()
                     if geom == "match":
                         if None in (gbbox1.type, gbbox2.type):
-                            raise SyntaxError("Non-raw geometries cannot be "
-                                              "matched")
-                        obbox = bbox_binary_operator(gbbox1.bbox, gbbox2.bbox,
-                                                     "and")
-                        gbbox1 = GeomBBox(gbbox1.is_latlon, gbbox1.type,
-                                          gbbox1.geom, obbox)
-                        gbbox2 = GeomBBox(gbbox2.is_latlon, gbbox2.type,
-                                          gbbox2.geom, obbox)
-                        obbox = match_geoms(gbbox1, gbbox2, match_max,
-                                            match_tol)
+                            raise SyntaxError("Non-raw geometries cannot be " "matched")
+                        obbox = bbox_binary_operator(gbbox1.bbox, gbbox2.bbox, "and")
+                        gbbox1 = GeomBBox(
+                            gbbox1.is_latlon, gbbox1.type, gbbox1.geom, obbox
+                        )
+                        gbbox2 = GeomBBox(
+                            gbbox2.is_latlon, gbbox2.type, gbbox2.geom, obbox
+                        )
+                        obbox = match_geoms(gbbox1, gbbox2, match_max, match_tol)
                     else:
-                        obbox = bbox_binary_operator(gbbox1.bbox, gbbox2.bbox,
-                                                     geom)
-                    geombbox_stack.append(GeomBBox(is_latlon(), None, geom,
-                                                   obbox))
+                        obbox = bbox_binary_operator(gbbox1.bbox, gbbox2.bbox, geom)
+                    geombbox_stack.append(GeomBBox(is_latlon(), None, geom, obbox))
                 elif geom in ("and", "or", "xor", "not", "match"):
                     raise SyntaxError(f"Not enough operands for {geom}")
                 else:
@@ -2344,14 +2368,15 @@ def query_mixed_geoms(
                         obbox = []
                     elif geom == "all":
                         if all_key not in bbox_all:
-                            bbox_all[all_key] = query_all(unit, proj_table,
-                                                          projpicker_db)
+                            bbox_all[all_key] = query_all(
+                                unit, proj_table, projpicker_db
+                            )
                         obbox = bbox_all[all_key]
                     else:
-                        obbox = query_geom(geom, geom_type, unit, proj_table,
-                                           projpicker_db)
-                    geombbox_stack.append(GeomBBox(is_latlon(), geom_type,
-                                                   geom, obbox))
+                        obbox = query_geom(
+                            geom, geom_type, unit, proj_table, projpicker_db
+                        )
+                    geombbox_stack.append(GeomBBox(is_latlon(), geom_type, geom, obbox))
                 if geom in ("or", "xor", "not") and not sort:
                     sort = True
             elif geom in ("and", "or", "xor", "not"):
@@ -2362,12 +2387,10 @@ def query_mixed_geoms(
                     obbox = []
                 elif geom == "all":
                     if all_key not in bbox_all:
-                        bbox_all[all_key] = query_all(unit, proj_table,
-                                                      projpicker_db)
+                        bbox_all[all_key] = query_all(unit, proj_table, projpicker_db)
                     obbox = bbox_all[all_key]
                 else:
-                    obbox = query_geom(geom, geom_type, unit, proj_table,
-                                       projpicker_db)
+                    obbox = query_geom(geom, geom_type, unit, proj_table, projpicker_db)
                 if obbox:
                     n = len(outbbox)
                     if query_op in ("or", "xor") and not sort and n > 0:
@@ -2392,12 +2415,12 @@ def query_mixed_geoms(
             elif geom == "all":
                 all_key = unit + proj_table
                 if all_key not in bbox_all:
-                    bbox_all[all_key] = query_all(unit, proj_table,
-                                                  projpicker_db)
+                    bbox_all[all_key] = query_all(unit, proj_table, projpicker_db)
                 outbbox = bbox_all[all_key]
             else:
-                outbbox = query_geom_using_bbox(outbbox, geom, geom_type, unit,
-                                                proj_table)
+                outbbox = query_geom_using_bbox(
+                    outbbox, geom, geom_type, unit, proj_table
+                )
 
             if sav_is_latlon is not None:
                 if sav_is_latlon:
@@ -2431,6 +2454,7 @@ def query_mixed_geoms(
 ###############################################################################
 # search
 
+
 def search_bbox(bbox, text, ignore_case=True, search_op="and"):
     """
     Search a list of BBox instances for text in any string fields. Text can be
@@ -2446,6 +2470,7 @@ def search_bbox(bbox, text, ignore_case=True, search_op="and"):
         list: List of BBox instances any of whose string field values contain
         text.
     """
+
     def compare_crs_id(crs_id, b):
         auth, code = crs_id.split(":")
         b_auth, b_code = b.crs_auth_name, b.crs_code
@@ -2503,6 +2528,7 @@ def search_bbox(bbox, text, ignore_case=True, search_op="and"):
 
 ###############################################################################
 # conversions
+
 
 def stringify_bbox(bbox, header=True, separator="|"):
     r"""
@@ -2595,6 +2621,7 @@ def extract_srids(bbox):
 ###############################################################################
 # plain printing
 
+
 def print_bbox(bbox, outfile=sys.stdout, header=True, separator="|"):
     r"""
     Print a list of BBox instances in a plain format.
@@ -2640,22 +2667,24 @@ def print_srids(bbox, outfile=sys.stdout, separator="\n"):
 ###############################################################################
 # main
 
+
 def start(
-        geoms=[],
-        infile="-",
-        outfile="-",
-        fmt="plain",
-        no_header=False,
-        separator=None,
-        max_bbox=0,
-        print_geoms=False,
-        overwrite=False,
-        append=False,
-        start_gui=None,
-        single=False,
-        projpicker_db=None,
-        proj_db=None,
-        create=False):
+    geoms=[],
+    infile="-",
+    outfile="-",
+    fmt="plain",
+    no_header=False,
+    separator=None,
+    max_bbox=0,
+    print_geoms=False,
+    overwrite=False,
+    append=False,
+    start_gui=None,
+    single=False,
+    projpicker_db=None,
+    proj_db=None,
+    create=False,
+):
     r"""
     Process options and perform requested tasks. This is the main API function.
     If geometries and an input file are specified at the same time, both
@@ -2755,9 +2784,9 @@ def start(
     if start_gui == "gui":
         bbox, *_ = gui.start(single=single)
     else:
-        if ((create and (infile != "-" or not sys.stdin.isatty())) or
-            (not create and (len(geoms) == 0 or infile != "-" or
-                             not sys.stdin.isatty()))):
+        if (create and (infile != "-" or not sys.stdin.isatty())) or (
+            not create and (len(geoms) == 0 or infile != "-" or not sys.stdin.isatty())
+        ):
             geoms.extend(read_file(infile))
 
         tidy_lines(geoms)

@@ -16,9 +16,16 @@ import sys
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
 
-from .gui_common import (get_latlon, get_zoom, get_dzoom, parse_geoms,
-                         adjust_lon, calc_geoms_bbox, create_crs_info,
-                         find_bbox)
+from .gui_common import (
+    get_latlon,
+    get_zoom,
+    get_dzoom,
+    parse_geoms,
+    adjust_lon,
+    calc_geoms_bbox,
+    create_crs_info,
+    find_bbox,
+)
 
 ItemSelectedEvent, EVT_ITEM_SELECTED = wx.lib.newevent.NewEvent()
 ItemDeselectedEvent, EVT_ITEM_DESELECTED = wx.lib.newevent.NewEvent()
@@ -74,17 +81,21 @@ class ProjPickerPanel(wx.Panel):
         map_canvas_size = (map_canvas_width, map_canvas_height)
 
         self.map_canvas = wx.lib.statbmp.GenStaticBitmap(
-                        self, wx.ID_ANY, wx.NullBitmap, size=map_canvas_size)
+            self, wx.ID_ANY, wx.NullBitmap, size=map_canvas_size
+        )
 
         self.osm = OpenStreetMap(
-                self.create_image,
-                self.draw_image,
-                lambda data: wx.Image(io.BytesIO(data)),
-                lambda image, tile, x, y: image.Paste(tile, x, y),
-                lambda tile, dz: tile.Scale(tile.Width*2**dz,
-                                            tile.Height*2**dz),
-                map_canvas_width, map_canvas_height,
-                lat, lon, zoom)
+            self.create_image,
+            self.draw_image,
+            lambda data: wx.Image(io.BytesIO(data)),
+            lambda image, tile, x, y: image.Paste(tile, x, y),
+            lambda tile, dz: tile.Scale(tile.Width * 2 ** dz, tile.Height * 2 ** dz),
+            map_canvas_width,
+            map_canvas_height,
+            lat,
+            lon,
+            zoom,
+        )
 
         self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_grab)
         self.map_canvas.Bind(wx.EVT_LEFT_UP, self.on_draw)
@@ -100,7 +111,7 @@ class ProjPickerPanel(wx.Panel):
         # label for coordinates
 
         # label=" "*40 hack to reserve enough space for coordinates
-        self.coor_label = wx.StaticText(self, label=" "*40)
+        self.coor_label = wx.StaticText(self, label=" " * 40)
         # to avoid redrawing the entire map just to refresh coordinates; use a
         # vertical box sizer for right alignment, which is not allowed with a
         # horizontal box sizer
@@ -114,8 +125,9 @@ class ProjPickerPanel(wx.Panel):
         # bottom/right frame
         bottom_box = wx.BoxSizer(wx.HORIZONTAL)
 
-        mono_font = wx.Font(9, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL,
-                            wx.FONTWEIGHT_NORMAL)
+        mono_font = wx.Font(
+            9, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL
+        )
 
         # bottom/right notebook
         self.notebook = wx.Notebook(self)
@@ -132,8 +144,9 @@ class ProjPickerPanel(wx.Panel):
 
         # list of CRSs
         crs_box = wx.BoxSizer(wx.VERTICAL)
-        self.crs_list = wx.ListCtrl(self.crs_panel, style=wx.LC_REPORT |
-                                                          wx.LC_SINGLE_SEL)
+        self.crs_list = wx.ListCtrl(
+            self.crs_panel, style=wx.LC_REPORT | wx.LC_SINGLE_SEL
+        )
 
         self.crs_list.AppendColumn(_("ID"))
         self.crs_list.AppendColumn(_("Name"))
@@ -156,7 +169,10 @@ class ProjPickerPanel(wx.Panel):
 
         # text for help
         help_text = wx.TextCtrl(
-                help_panel, value=textwrap.dedent(_(f"""\
+            help_panel,
+            value=textwrap.dedent(
+                _(
+                    f"""\
                 Pan:               Left drag
                 Zoom:              Scroll
                 Zoom to bboxes:    Ctrl + scroll up
@@ -172,12 +188,15 @@ class ProjPickerPanel(wx.Panel):
                 operator.
 
                 See {doc_url}
-                to learn more.""")),
-                style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL |
-                      wx.TE_AUTO_URL)
-        help_text.Bind(wx.EVT_TEXT_URL,
-                       lambda e: webbrowser.open(doc_url)
-                                 if e.MouseEvent.LeftIsDown() else None)
+                to learn more."""
+                )
+            ),
+            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL | wx.TE_AUTO_URL,
+        )
+        help_text.Bind(
+            wx.EVT_TEXT_URL,
+            lambda e: webbrowser.open(doc_url) if e.MouseEvent.LeftIsDown() else None,
+        )
         help_text.SetFont(mono_font)
         help_box.Add(help_text, 1, wx.EXPAND)
         help_panel.SetSizer(help_box)
@@ -194,10 +213,10 @@ class ProjPickerPanel(wx.Panel):
     def on_draw(self, event):
         if self.dragging_bbox:
             ng = len(self.dragged_bbox)
-            s = min(self.dragged_bbox[0][0], self.dragged_bbox[ng-1][0])
-            n = max(self.dragged_bbox[0][0], self.dragged_bbox[ng-1][0])
+            s = min(self.dragged_bbox[0][0], self.dragged_bbox[ng - 1][0])
+            n = max(self.dragged_bbox[0][0], self.dragged_bbox[ng - 1][0])
             w = self.dragged_bbox[0][1]
-            e = self.dragged_bbox[ng-1][1]
+            e = self.dragged_bbox[ng - 1][1]
             if s == n:
                 n += 0.0001
             if w == e:
@@ -273,8 +292,7 @@ class ProjPickerPanel(wx.Panel):
             try:
                 draw_map = self.zoomer_queue.get_nowait()
             except queue.Empty:
-                self.zoomer.checker = wx.CallLater(self.zoomer_delay,
-                        check_zoomer)
+                self.zoomer.checker = wx.CallLater(self.zoomer_delay, check_zoomer)
             else:
                 draw_map()
 
@@ -286,8 +304,7 @@ class ProjPickerPanel(wx.Panel):
                 if None not in geoms_bbox:
                     self.osm.zoom_to_bbox(geoms_bbox, False)
             else:
-                self.osm.zoom(event.x, event.y, self.osm.z_min - self.osm.z,
-                              False)
+                self.osm.zoom(event.x, event.y, self.osm.z_min - self.osm.z, False)
             self.draw_map(event.x, event.y)
             return
 
@@ -306,8 +323,9 @@ class ProjPickerPanel(wx.Panel):
         # if used without osm.draw(), it works; otherwise, only osm.draw()
         # is visible; timing?
         self.osm.rescale(event.x, event.y, dz)
-        self.zoomer = threading.Thread(target=zoom, args=(event.x, event.y, dz,
-                                                          cancel_event))
+        self.zoomer = threading.Thread(
+            target=zoom, args=(event.x, event.y, dz, cancel_event)
+        )
         self.zoomer.cancel_event = cancel_event
         self.zoomer.checker = wx.CallLater(self.zoomer_delay, check_zoomer)
         self.zoomer.start()
@@ -321,8 +339,9 @@ class ProjPickerPanel(wx.Panel):
     def on_paint(self, event):
         def set_pen_brush(color):
             outline = wx.Colour(color)
-            fill = wx.Colour(outline.Red(), outline.Green(), outline.Blue(),
-                             self.fill_alpha)
+            fill = wx.Colour(
+                outline.Red(), outline.Green(), outline.Blue(), self.fill_alpha
+            )
 
             dc.SetPen(wx.Pen(outline, width=self.line_width))
 
@@ -415,10 +434,10 @@ class ProjPickerPanel(wx.Panel):
             g.append(latlon)
 
             ng = len(g)
-            s = min(g[0][0], g[ng-1][0])
-            n = max(g[0][0], g[ng-1][0])
+            s = min(g[0][0], g[ng - 1][0])
+            n = max(g[0][0], g[ng - 1][0])
             w = g[0][1]
-            e = g[ng-1][1]
+            e = g[ng - 1][1]
             if s == n:
                 n += 0.0001
             if w == e:
@@ -452,8 +471,7 @@ class ProjPickerPanel(wx.Panel):
         self.crs_list.DeleteAllItems()
         for b in bbox:
             if not self.filter_bbox or self.filter_bbox(b):
-                self.crs_list.Append((f"{b.crs_auth_name}:{b.crs_code}",
-                                      b.crs_name))
+                self.crs_list.Append((f"{b.crs_auth_name}:{b.crs_code}", b.crs_name))
         self.sel_bbox.clear()
         self.post_item_deselected()
 

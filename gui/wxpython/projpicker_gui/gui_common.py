@@ -29,6 +29,7 @@ def get_latlon():
         lon = min(max(lon, -180), 180)
     return lat, lon
 
+
 def get_zoom():
     """
     Get the initial zoom level from the PROJPICKER_ZOOM environment variable.
@@ -40,8 +41,7 @@ def get_zoom():
         int: Initial zoom level.
     """
     try:
-        zoom = min(max(round(float(os.environ.get(_projpicker_zoom_env, 0))),
-                       0), 18)
+        zoom = min(max(round(float(os.environ.get(_projpicker_zoom_env, 0))), 0), 18)
     except ValueError:
         zoom = 0
     return zoom
@@ -57,8 +57,7 @@ def get_dzoom():
         float: Delta zoom level.
     """
     try:
-        dzoom = min(max(float(os.environ.get(_projpicker_dzoom_env, 1)), -18),
-                    18)
+        dzoom = min(max(float(os.environ.get(_projpicker_dzoom_env, 1)), -18), 18)
     except ValueError:
         dzoom = 1
     return dzoom
@@ -246,5 +245,6 @@ def find_bbox(crs_id, bbox):
         return None
 
     auth, code = crs_id.split(":")
-    return list(filter(lambda b: b.crs_auth_name==auth and
-                                 b.crs_code==code, bbox))[0]
+    return list(filter(lambda b: b.crs_auth_name == auth and b.crs_code == code, bbox))[
+        0
+    ]

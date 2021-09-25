@@ -6,8 +6,7 @@ the ProjPicker API.
 import re
 import sqlite3
 
-from .common import (_pos_float_pat, _coor_sep_pat, get_float,
-                     query_using_cursor)
+from .common import _pos_float_pat, _coor_sep_pat, get_float, query_using_cursor
 
 # x,y
 _xy_pat = f"([+-]?{_pos_float_pat}){_coor_sep_pat}([+-]?{_pos_float_pat})"
@@ -20,6 +19,7 @@ _xy_bbox_re = re.compile(f"^{_xy_pat}{_coor_sep_pat}{_xy_pat}$")
 
 ###############################################################################
 # parsing
+
 
 def parse_point(point):
     """
@@ -87,6 +87,7 @@ def parse_bbox(bbox):
 
 ###############################################################################
 # relations
+
 
 def calc_poly_bbox(poly):
     """
@@ -167,12 +168,10 @@ def is_bbox_within_bbox(bbox1, bbox2):
 ###############################################################################
 # queries
 
+
 def query_point_using_cursor(
-        projpicker_cur,
-        point,
-        unit="any",
-        proj_table="any",
-        negate=False):
+    projpicker_cur, point, unit="any", proj_table="any", negate=False
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input point geometry defined by x and y. Use the negate argument
@@ -209,11 +208,8 @@ def query_point_using_cursor(
 
 
 def query_bbox_using_cursor(
-        projpicker_cur,
-        bbox,
-        unit="any",
-        proj_table="any",
-        negate=False):
+    projpicker_cur, bbox, unit="any", proj_table="any", negate=False
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input bbox geometry defined by bottom, top, left, and right

@@ -12,18 +12,26 @@ import webbrowser
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
 
-from .gui_common import (get_latlon, get_zoom, get_dzoom, parse_geoms,
-                         adjust_lon, calc_geoms_bbox, create_crs_info,
-                         find_bbox)
+from .gui_common import (
+    get_latlon,
+    get_zoom,
+    get_dzoom,
+    parse_geoms,
+    adjust_lon,
+    calc_geoms_bbox,
+    create_crs_info,
+    find_bbox,
+)
 
 
 def start(
-        geoms=None,
-        bbox=[],
-        bbox_or_quit=False,
-        single=False,
-        format_crs_info=None,
-        projpicker_db=None):
+    geoms=None,
+    bbox=[],
+    bbox_or_quit=False,
+    single=False,
+    format_crs_info=None,
+    projpicker_db=None,
+):
     """
     Start the GUI. Parsable geometries by geoms or queried BBox instances by
     bbox can be specified optionally. If both are given, bbox is ignored and
@@ -85,10 +93,10 @@ def start(
 
         if dragging_bbox:
             ng = len(dragged_bbox)
-            s = min(dragged_bbox[0][0], dragged_bbox[ng-1][0])
-            n = max(dragged_bbox[0][0], dragged_bbox[ng-1][0])
+            s = min(dragged_bbox[0][0], dragged_bbox[ng - 1][0])
+            n = max(dragged_bbox[0][0], dragged_bbox[ng - 1][0])
             w = dragged_bbox[0][1]
-            e = dragged_bbox[ng-1][1]
+            e = dragged_bbox[ng - 1][1]
             if s == n:
                 n += 0.0001
             if w == e:
@@ -137,8 +145,7 @@ def start(
                 if name and ppik.geom_var_re.match(name):
                     query = query.replace(" ", f" {name} ", 1)
                 sel = query_text.GetSelection()
-                if (sel[0] > 0 and
-                    query_text.GetRange(sel[0] - 1, sel[0]) != "\n"):
+                if sel[0] > 0 and query_text.GetRange(sel[0] - 1, sel[0]) != "\n":
                     query = "\n" + query
                 query_text.Replace(sel[0], sel[1], query)
                 notebook.ChangeSelection(query_panel.page)
@@ -152,9 +159,9 @@ def start(
             latlon = list(osm.canvas_to_latlon(event.x, event.y))
             if not drawing_bbox:
                 if prev_xy:
-                    latlon[1] = adjust_lon(prev_xy[0], event.x,
-                                           curr_geom[len(curr_geom)-1][1],
-                                           latlon[1])
+                    latlon[1] = adjust_lon(
+                        prev_xy[0], event.x, curr_geom[len(curr_geom) - 1][1], latlon[1]
+                    )
                 prev_xy.clear()
                 prev_xy.extend([event.x, event.y])
             curr_geom.append(latlon)
@@ -249,8 +256,9 @@ def start(
         # if used without osm.draw(), it works; otherwise, only osm.draw()
         # is visible; timing?
         osm.rescale(event.x, event.y, dz)
-        zoomer = threading.Thread(target=zoom, args=(event.x, event.y, dz,
-                                                     cancel_event))
+        zoomer = threading.Thread(
+            target=zoom, args=(event.x, event.y, dz, cancel_event)
+        )
         zoomer.cancel_event = cancel_event
         zoomer.checker = wx.CallLater(zoomer_delay, check_zoomer)
         zoomer.start()
@@ -264,8 +272,7 @@ def start(
     def on_paint(event):
         def set_pen_brush(color):
             outline = wx.Colour(color)
-            fill = wx.Colour(outline.Red(), outline.Green(), outline.Blue(),
-                             fill_alpha)
+            fill = wx.Colour(outline.Red(), outline.Green(), outline.Blue(), fill_alpha)
 
             dc.SetPen(wx.Pen(outline, width=line_width))
 
@@ -357,11 +364,11 @@ def start(
             del prev_crs_items[prev_crs_items.index(item)]
             l = len(prev_crs_items)
             if l > 0:
-                curr_crs_item = prev_crs_items[l-1]
+                curr_crs_item = prev_crs_items[l - 1]
         elif curr_crs_items:
             prev_crs_items.clear()
             prev_crs_items.extend(curr_crs_items)
-            curr_crs_item = prev_crs_items[len(prev_crs_items)-1]
+            curr_crs_item = prev_crs_items[len(prev_crs_items) - 1]
 
         crs_info_text.Clear()
         sel_bbox.clear()
@@ -393,10 +400,10 @@ def start(
 
             if drawing_bbox:
                 ng = len(g)
-                s = min(g[0][0], g[ng-1][0])
-                n = max(g[0][0], g[ng-1][0])
+                s = min(g[0][0], g[ng - 1][0])
+                n = max(g[0][0], g[ng - 1][0])
                 w = g[0][1]
-                e = g[ng-1][1]
+                e = g[ng - 1][1]
                 if s == n:
                     n += 0.0001
                 if w == e:
@@ -404,9 +411,9 @@ def start(
                 all_geoms.extend(["bbox", [s, n, w, e]])
             elif g:
                 if prev_xy:
-                    latlon[1] = adjust_lon(prev_xy[0], x,
-                                           curr_geom[len(curr_geom)-1][1],
-                                           latlon[1])
+                    latlon[1] = adjust_lon(
+                        prev_xy[0], x, curr_geom[len(curr_geom) - 1][1], latlon[1]
+                    )
                 g.append(latlon)
                 all_geoms.extend(["poly", g])
 
@@ -424,29 +431,39 @@ def start(
         map_canvas.Refresh()
 
     def import_query():
-        with wx.FileDialog(query_text, "Import query", wildcard=file_types,
-                           style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as fd:
+        with wx.FileDialog(
+            query_text,
+            "Import query",
+            wildcard=file_types,
+            style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST,
+        ) as fd:
             if fd.ShowModal() != wx.ID_CANCEL:
                 try:
                     with open(fd.Path) as f:
                         query_text.SetValue(f.read())
                         f.close()
                 except Exception as e:
-                    wx.MessageDialog(query_text, str(e),
-                                     "Import query error").ShowModal()
+                    wx.MessageDialog(
+                        query_text, str(e), "Import query error"
+                    ).ShowModal()
 
     def export_query():
-        with wx.FileDialog(query_text, "Export query", wildcard=file_types,
-                           defaultFile="query",
-                           style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT) as fd:
+        with wx.FileDialog(
+            query_text,
+            "Export query",
+            wildcard=file_types,
+            defaultFile="query",
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        ) as fd:
             if fd.ShowModal() != wx.ID_CANCEL:
                 query_to_export = query_text.Value
                 try:
                     with open(fd.Path, "w") as f:
                         f.write(query_to_export)
                 except Exception as e:
-                    wx.MessageDialog(query_text, str(e),
-                                     "Export query error").ShowModal()
+                    wx.MessageDialog(
+                        query_text, str(e), "Export query error"
+                    ).ShowModal()
 
     def query():
         nonlocal bbox
@@ -513,7 +530,7 @@ def start(
     root_size = (root_width, root_height)
     root = wx.Frame(None, title="ProjPicker wxGUI")
     root.SetClientSize(root_size)
-#    root.SetBackgroundColour(wx.Colour("lightgray"))
+    #    root.SetBackgroundColour(wx.Colour("lightgray"))
     main_box = wx.BoxSizer(wx.VERTICAL)
 
     ###########
@@ -522,17 +539,23 @@ def start(
     map_canvas_height = root_height // 2
     map_canvas_size = (map_canvas_width, map_canvas_height)
 
-    map_canvas = wx.lib.statbmp.GenStaticBitmap(root, wx.ID_ANY, wx.NullBitmap,
-                                                size=map_canvas_size)
+    map_canvas = wx.lib.statbmp.GenStaticBitmap(
+        root, wx.ID_ANY, wx.NullBitmap, size=map_canvas_size
+    )
 
     osm = OpenStreetMap(
-            create_image,
-            draw_image,
-            lambda data: wx.Image(io.BytesIO(data)),
-            lambda image, tile, x, y: image.Paste(tile, x, y),
-            lambda tile, dz: tile.Scale(tile.Width*2**dz, tile.Height*2**dz),
-            map_canvas_width, map_canvas_height,
-            lat, lon, zoom, ppik.is_verbose())
+        create_image,
+        draw_image,
+        lambda data: wx.Image(io.BytesIO(data)),
+        lambda image, tile, x, y: image.Paste(tile, x, y),
+        lambda tile, dz: tile.Scale(tile.Width * 2 ** dz, tile.Height * 2 ** dz),
+        map_canvas_width,
+        map_canvas_height,
+        lat,
+        lon,
+        zoom,
+        ppik.is_verbose(),
+    )
 
     map_canvas.Bind(wx.EVT_LEFT_DOWN, on_grab)
     map_canvas.Bind(wx.EVT_LEFT_UP, on_draw)
@@ -560,7 +583,7 @@ def start(
     # horizontal box sizer
     coor_box = wx.BoxSizer(wx.VERTICAL)
     # label=" "*40 hack to reserve enough space for coordinates
-    coor_label = wx.StaticText(root, label=" "*40)
+    coor_label = wx.StaticText(root, label=" " * 40)
     coor_box.Add(coor_label, 0, wx.ALIGN_RIGHT)
     main_box.Add(coor_box, 0, wx.ALIGN_RIGHT)
 
@@ -568,8 +591,9 @@ def start(
     # bottom frame
     bottom_box = wx.BoxSizer(wx.HORIZONTAL)
 
-    mono_font = wx.Font(9, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL,
-                        wx.FONTWEIGHT_NORMAL)
+    mono_font = wx.Font(
+        9, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL
+    )
 
     ###################
     # bottom-left frame
@@ -577,8 +601,8 @@ def start(
 
     # list of CRSs
     crs_list = wx.ListCtrl(
-            root,
-            style=wx.LC_REPORT | (wx.LC_SINGLE_SEL if single else 0))
+        root, style=wx.LC_REPORT | (wx.LC_SINGLE_SEL if single else 0)
+    )
 
     crs_list.AppendColumn("ID")
     crs_list.AppendColumn("Name")
@@ -641,8 +665,7 @@ def start(
     query_text.Bind(wx.EVT_MENU, lambda e: import_query(), import_menuitem)
     query_text.Bind(wx.EVT_MENU, lambda e: export_query(), export_menuitem)
 
-    query_text.Bind(wx.EVT_RIGHT_DOWN,
-                    lambda e: query_text.PopupMenu(menu, e.Position))
+    query_text.Bind(wx.EVT_RIGHT_DOWN, lambda e: query_text.PopupMenu(menu, e.Position))
 
     # buttons
     query_button = wx.Button(query_panel, label="Query")
@@ -671,8 +694,8 @@ def start(
 
     # text for CRS info
     crs_info_text = wx.TextCtrl(
-            crs_info_panel,
-            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL)
+        crs_info_panel, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL
+    )
     # https://dzone.com/articles/wxpython-learning-use-fonts
     crs_info_text.SetFont(mono_font)
     crs_info_box.Add(crs_info_text, 1, wx.EXPAND)
@@ -696,8 +719,9 @@ def start(
     log_box = wx.BoxSizer()
 
     # text for CRS info
-    log_text = wx.TextCtrl(log_panel,
-                           style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL)
+    log_text = wx.TextCtrl(
+        log_panel, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL
+    )
     # https://dzone.com/articles/wxpython-learning-use-fonts
     log_text.SetFont(mono_font)
     log_box.Add(log_text, 1, wx.EXPAND)
@@ -709,7 +733,9 @@ def start(
 
     # text for help
     help_text = wx.TextCtrl(
-            help_panel, value=textwrap.dedent(f"""\
+        help_panel,
+        value=textwrap.dedent(
+            f"""\
             Pan:                        Left drag
             Zoom:                       Scroll
             Zoom to geometries:         Ctrl + scroll up
@@ -732,12 +758,14 @@ def start(
             a semicolon to search multiple fields using
             the logical AND operator.
 
-            See {doc_url} to learn more."""),
-            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL |
-                  wx.TE_AUTO_URL)
-    help_text.Bind(wx.EVT_TEXT_URL,
-                   lambda e: webbrowser.open(doc_url)
-                             if e.MouseEvent.LeftIsDown() else None)
+            See {doc_url} to learn more."""
+        ),
+        style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL | wx.TE_AUTO_URL,
+    )
+    help_text.Bind(
+        wx.EVT_TEXT_URL,
+        lambda e: webbrowser.open(doc_url) if e.MouseEvent.LeftIsDown() else None,
+    )
     help_text.SetFont(mono_font)
     help_box.Add(help_text, 1, wx.EXPAND)
     help_panel.SetSizer(help_box)

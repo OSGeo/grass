@@ -46,13 +46,27 @@ CREATE TABLE bbox (
 """
 
 # all column names in the bbox table
-_bbox_columns = re.sub("^ +| +$", "",
-               re.sub("\n", " ",
-               re.sub("(?:^[A-Z]| ).*", "",
-               re.sub("\([^(]*\)", "",
-               re.sub("^(?:CREATE TABLE.*|\))$|^ *", "",
-                      _bbox_schema, flags=re.MULTILINE),
-                      flags=re.DOTALL), flags=re.MULTILINE))).split()
+_bbox_columns = re.sub(
+    "^ +| +$",
+    "",
+    re.sub(
+        "\n",
+        " ",
+        re.sub(
+            "(?:^[A-Z]| ).*",
+            "",
+            re.sub(
+                "\([^(]*\)",
+                "",
+                re.sub(
+                    "^(?:CREATE TABLE.*|\))$|^ *", "", _bbox_schema, flags=re.MULTILINE
+                ),
+                flags=re.DOTALL,
+            ),
+            flags=re.MULTILINE,
+        ),
+    ),
+).split()
 
 # BBox namedtuple class
 BBox = collections.namedtuple("BBox", _bbox_columns)
@@ -78,11 +92,7 @@ def get_float(x):
         return None
 
 
-def query_using_cursor(
-        projpicker_cur,
-        sql,
-        unit="any",
-        proj_table="any"):
+def query_using_cursor(projpicker_cur, sql, unit="any", proj_table="any"):
     """
     Return a list of BBox instances in unit in proj_table using a SQL
     statement.
@@ -100,23 +110,19 @@ def query_using_cursor(
     outbbox = []
     params = []
     if unit == "any" and proj_table == "any":
-        sql = sql.replace(
-                "AND_UNIT", "").replace(
-                "AND_PROJ_TABLE", "")
+        sql = sql.replace("AND_UNIT", "").replace("AND_PROJ_TABLE", "")
     elif unit == "any":
-        sql = sql.replace(
-                "AND_UNIT", "").replace(
-                "AND_PROJ_TABLE", "AND proj_table = ?")
+        sql = sql.replace("AND_UNIT", "").replace(
+            "AND_PROJ_TABLE", "AND proj_table = ?"
+        )
         params.append(proj_table)
     elif proj_table == "any":
-        sql = sql.replace(
-                "AND_PROJ_TABLE", "").replace(
-                "AND_UNIT", "AND unit = ?")
+        sql = sql.replace("AND_PROJ_TABLE", "").replace("AND_UNIT", "AND unit = ?")
         params.append(unit)
     else:
-        sql = sql.replace(
-                "AND_UNIT", "AND unit = ?").replace(
-                "AND_PROJ_TABLE", "AND proj_table = ?")
+        sql = sql.replace("AND_UNIT", "AND unit = ?").replace(
+            "AND_PROJ_TABLE", "AND proj_table = ?"
+        )
         params.extend([unit, proj_table])
     projpicker_cur.execute(sql, params)
     for row in map(BBox._make, projpicker_cur.fetchall()):

@@ -45,6 +45,7 @@ class Tile:
     rescaled. Once the tile is rescaled x, y, dz, and rescaled_image are
     updated.
     """
+
     def __init__(self, key, x, y, z):
         self.key = key
         self.x = x
@@ -65,6 +66,7 @@ class CachedTile:
     flag is now set to False. There is no way to go back to the original raw
     data.
     """
+
     def __init__(self, image, raw):
         self.image = image
         self.raw = raw
@@ -75,9 +77,21 @@ class OpenStreetMap:
     Provide the public-facing API for downloading, dragging, zooming, and
     coordinate conversions.
     """
-    def __init__(self, create_image, draw_image, create_tile, draw_tile,
-                 resample_tile, width=256, height=256, lat=0, lon=0, z=0,
-                 verbose=False):
+
+    def __init__(
+        self,
+        create_image,
+        draw_image,
+        create_tile,
+        draw_tile,
+        resample_tile,
+        width=256,
+        height=256,
+        lat=0,
+        lon=0,
+        z=0,
+        verbose=False,
+    ):
         """
         Instantiate a new instance of the OpenStreetMap class.
 
@@ -201,9 +215,9 @@ class OpenStreetMap:
         """
         lat = min(max(lat, self.lat_min), self.lat_max)
         lat = math.radians(lat)
-        n = 2**z
-        x = (lon+180)/360*n
-        y = (1-math.log(math.tan(lat)+(1/math.cos(lat)))/math.pi)/2*n
+        n = 2 ** z
+        x = (lon + 180) / 360 * n
+        y = (1 - math.log(math.tan(lat) + (1 / math.cos(lat))) / math.pi) / 2 * n
         return x, y
 
     def tile_to_latlon(self, x, y, z):
@@ -223,9 +237,9 @@ class OpenStreetMap:
         Returns:
             float, float: Latitude and longitude in decimal degrees.
         """
-        n = 2**z
-        lat = math.degrees(math.atan(math.sinh(math.pi*(1-2*y/n))))
-        lon = x/n*360-180
+        n = 2 ** z
+        lat = math.degrees(math.atan(math.sinh(math.pi * (1 - 2 * y / n))))
+        lon = x / n * 360 - 180
         return lat, lon
 
     def latlon_to_canvas(self, lat, lon):
@@ -316,9 +330,9 @@ class OpenStreetMap:
         tile_key = f"{z}/{x}/{y}"
         if tile_key not in self.cached_tiles:
             # need this header to successfully download tiles from the server
-            req = urllib.request.Request(tile_url, headers={
-                "User-Agent": "urllib.request"
-            })
+            req = urllib.request.Request(
+                tile_url, headers={"User-Agent": "urllib.request"}
+            )
             try:
                 with urllib.request.urlopen(req) as f:
                     self.cached_tiles[tile_key] = CachedTile(f.read(), True)
@@ -349,7 +363,7 @@ class OpenStreetMap:
             sessions to save data traffic and CPU time.
         """
         z = min(max(z, self.z_min), self.z_max)
-        ntiles = 2**z
+        ntiles = 2 ** z
 
         # calculate x,y offsets to lat,lon within width,height
         xc, yc = self.latlon_to_tile(lat, lon, z)
@@ -531,8 +545,9 @@ class OpenStreetMap:
         """
         zoomed = False
         self.dz += dz
-        if ((self.z < self.z_max and self.dz >= 1) or
-            (self.z > self.z_min and self.dz <= -1)):
+        if (self.z < self.z_max and self.dz >= 1) or (
+            self.z > self.z_min and self.dz <= -1
+        ):
             dz = int(self.dz)
             self.message("rescale:", self.z, dz)
             z = self.z + dz
@@ -552,8 +567,9 @@ class OpenStreetMap:
             # lat,lon at xc,yc
             lat, lon = self.canvas_to_latlon(xc, yc)
             zoomed = True
-        elif ((self.z == self.z_max and self.dz >= 1) or
-              (self.z == self.z_min and self.dz <= -1)):
+        elif (self.z == self.z_max and self.dz >= 1) or (
+            self.z == self.z_min and self.dz <= -1
+        ):
             # need to download map for z_max or z_min because when the first
             # event of either zoom level was canceled, there are no cached
             # tiles
@@ -660,8 +676,9 @@ class OpenStreetMap:
         """
         rescaled = False
         self.dz += dz
-        if ((self.z < self.z_max and self.dz >= 1) or
-            (self.z > self.z_min and self.dz <= -1)):
+        if (self.z < self.z_max and self.dz >= 1) or (
+            self.z > self.z_min and self.dz <= -1
+        ):
             dz = int(self.dz)
             self.message("rescale:", self.z, dz)
             z = self.z + dz
@@ -684,18 +701,23 @@ class OpenStreetMap:
                     del self.rescaled_tiles[i]
                     continue
 
-                tile.x = self.width / 2 - 2**dz * (xc - tile.x)
-                tile.y = self.height / 2 - 2**dz * (yc - tile.y)
+                tile.x = self.width / 2 - 2 ** dz * (xc - tile.x)
+                tile.y = self.height / 2 - 2 ** dz * (yc - tile.y)
                 tile.dz = dz
-                tile_size = 2**(z - tile.z) * 256
+                tile_size = 2 ** (z - tile.z) * 256
 
-                if (tile.x + tile_size < 0 or tile.y + tile_size < 0 or
-                    tile.x >= self.width or tile.y >= self.height or
+                if (
+                    tile.x + tile_size < 0
+                    or tile.y + tile_size < 0
+                    or tile.x >= self.width
+                    or tile.y >= self.height
+                    or
                     # rescaling too fast can raise a memory exception:
                     # _tkinter.TclError: not enough free memory for image
                     # buffer; avoid rescaling more than 2**6 = 64 times; this
                     # number is experimental
-                    z > tile.z + 6):
+                    z > tile.z + 6
+                ):
                     del self.rescaled_tiles[i]
 
             lat, lon = self.canvas_to_latlon(xc, yc)

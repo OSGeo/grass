@@ -6,8 +6,7 @@ system for the ProjPicker API.
 import re
 import sqlite3
 
-from .common import (_coor_sep_pat, _pos_float_pat, get_float,
-                     query_using_cursor)
+from .common import _coor_sep_pat, _pos_float_pat, get_float, query_using_cursor
 
 # symbols for degrees, minutes, and seconds (DMS)
 # degree: [°od] (alt+0 in xterm for °)
@@ -16,12 +15,15 @@ from .common import (_coor_sep_pat, _pos_float_pat, get_float,
 # decimal degrees
 _dd_pat = f"([+-]?{_pos_float_pat})[°od]?"
 # DMS without [SNWE]
-_dms_pat = (f"([0-9]+)(?:[°od](?:[ \t]*(?:({_pos_float_pat})['′m]?|"
-            f"""([0-9]+)['′m](?:[ \t]*({_pos_float_pat})(?:["″s]|'')?)?))?|"""
-            f":(?:({_pos_float_pat})|([0-9]+):({_pos_float_pat})))")
+_dms_pat = (
+    f"([0-9]+)(?:[°od](?:[ \t]*(?:({_pos_float_pat})['′m]?|"
+    f"""([0-9]+)['′m](?:[ \t]*({_pos_float_pat})(?:["″s]|'')?)?))?|"""
+    f":(?:({_pos_float_pat})|([0-9]+):({_pos_float_pat})))"
+)
 # coordinate without [SNWE]
-_coor_pat = (f"{_dd_pat}|([+-])?{_dms_pat}|"
-             f"(?:({_pos_float_pat})[°od]?|{_dms_pat})[ \t]*")
+_coor_pat = (
+    f"{_dd_pat}|([+-])?{_dms_pat}|" f"(?:({_pos_float_pat})[°od]?|{_dms_pat})[ \t]*"
+)
 # latitude
 _lat_pat = f"(?:{_coor_pat}([SN])?)"
 # longitude
@@ -45,12 +47,14 @@ _latlon_pat = f"{_lat_pat}{_coor_sep_pat}{_lon_pat}"
 _latlon_re = re.compile(f"^{_latlon_pat}$")
 # bounding box (south,north,west,east)
 _latlon_bbox_re = re.compile(
-                        f"^{_lat_pat}{_coor_sep_pat}{_lat_pat}{_coor_sep_pat}"
-                        f"{_lon_pat}{_coor_sep_pat}{_lon_pat}$")
+    f"^{_lat_pat}{_coor_sep_pat}{_lat_pat}{_coor_sep_pat}"
+    f"{_lon_pat}{_coor_sep_pat}{_lon_pat}$"
+)
 
 
 ###############################################################################
 # parsing
+
 
 def parse_coor(m, ith, lat):
     """
@@ -66,39 +70,40 @@ def parse_coor(m, ith, lat):
     Returns:
         float: Parsed coordinate in decimal degrees.
     """
-    i = 18*ith
-    if m[i+1] is not None:
+    i = 18 * ith
+    if m[i + 1] is not None:
         # 1: (-1.2)°
-        x = float(m[i+1])
-    elif m[i+4] is not None:
+        x = float(m[i + 1])
+    elif m[i + 4] is not None:
         # 2,3,4: (-)(1)°(2.3)'
-        x = float(m[i+3])+float(m[i+4])/60
-    elif m[i+5] is not None:
+        x = float(m[i + 3]) + float(m[i + 4]) / 60
+    elif m[i + 5] is not None:
         # 2,3,5,6: (-)(1)°(2)'(3.4)"
-        x = float(m[i+3])+float(m[i+5])/60+float(m[i+6])/3600
-    elif m[i+10] is not None:
+        x = float(m[i + 3]) + float(m[i + 5]) / 60 + float(m[i + 6]) / 3600
+    elif m[i + 10] is not None:
         # 10,18: (1.2)°(S)
-        x = float(m[i+10])
-    elif m[i+12] is not None:
+        x = float(m[i + 10])
+    elif m[i + 12] is not None:
         # 11,12,18: (1)°(2.3)'(S)
-        x = float(m[i+11])+float(m[i+12])/60
-    elif m[i+13] is not None:
+        x = float(m[i + 11]) + float(m[i + 12]) / 60
+    elif m[i + 13] is not None:
         # 11,13,14,18: (1)°(2)'(3.4)"(S)
-        x = float(m[i+11])+float(m[i+13])/60+float(m[i+14])/3600
-    elif m[i+7] is not None:
+        x = float(m[i + 11]) + float(m[i + 13]) / 60 + float(m[i + 14]) / 3600
+    elif m[i + 7] is not None:
         # 2,3,7: (-)(1):(2.3)
-        x = float(m[i+3])+float(m[i+7])/60
-    elif m[i+8] is not None:
+        x = float(m[i + 3]) + float(m[i + 7]) / 60
+    elif m[i + 8] is not None:
         # 2,3,8,9: (-)(1):(2):(3.4)
-        x = float(m[i+3])+float(m[i+8])/60+float(m[i+9])/3600
-    elif m[i+15] is not None:
+        x = float(m[i + 3]) + float(m[i + 8]) / 60 + float(m[i + 9]) / 3600
+    elif m[i + 15] is not None:
         # 11,15,18: (1):(2.3)(S)
-        x = float(m[i+11])+float(m[i+15])/60
-    elif m[i+16] is not None:
+        x = float(m[i + 11]) + float(m[i + 15]) / 60
+    elif m[i + 16] is not None:
         # 11,16,17,18: (1):(2):(3.4)(S)
-        x = float(m[i+11])+float(m[i+16])/60+float(m[i+17])/3600
-    if x is not None and (m[i+2] == "-" or
-        (lat and m[i+18] == "S") or (not lat and m[i+18] == "W")):
+        x = float(m[i + 11]) + float(m[i + 16]) / 60 + float(m[i + 17]) / 3600
+    if x is not None and (
+        m[i + 2] == "-" or (lat and m[i + 18] == "S") or (not lat and m[i + 18] == "W")
+    ):
         x *= -1
     return x
 
@@ -158,8 +163,8 @@ def parse_point(point):
             x = parse_lon(m, 1)
             if y is not None and -90 <= y <= 90:
                 lat = y
-            if x is not None: # don't check if -180 <= x <= 180 to support
-                              # antimeridian crossing
+            if x is not None:  # don't check if -180 <= x <= 180 to support
+                # antimeridian crossing
                 lon = x
     elif typ in (list, tuple) and len(point) == 2:
         lat = get_float(point[0])
@@ -210,6 +215,7 @@ def parse_bbox(bbox):
 
 ###############################################################################
 # relations
+
 
 def calc_poly_bbox(poly):
     """
@@ -267,10 +273,11 @@ def is_point_within_bbox(point, bbox):
     w = bbox.west_lon
     e = bbox.east_lon
     return s <= lat <= n and (
-            w == e or
-            (w == -180 and e == 180) or
-            (w < e and w <= lon <= e) or
-            (w > e and (-180 <= lon <= e or w <= lon <= 180)))
+        w == e
+        or (w == -180 and e == 180)
+        or (w < e and w <= lon <= e)
+        or (w > e and (-180 <= lon <= e or w <= lon <= 180))
+    )
 
 
 def is_bbox_within_bbox(bbox1, bbox2):
@@ -290,27 +297,38 @@ def is_bbox_within_bbox(bbox1, bbox2):
     t = bbox2.north_lat
     l = bbox2.west_lon
     r = bbox2.east_lon
-    return b <= s <= t and b <= n <= t and (
-            l == r or
-            (l == -180 and r == 180) or
-            (l < r and w <= e and l <= w <= r and l <= e <= r) or
-            (l > r and
-             ((w <= e and
-              ((-180 <= w <= r and -180 <= e <= r) or
-               l <= w <= 180 and l <= e <= 180)) or
-              (w > e and
-               -180 <= e <= r and l <= w <= 180))))
+    return (
+        b <= s <= t
+        and b <= n <= t
+        and (
+            l == r
+            or (l == -180 and r == 180)
+            or (l < r and w <= e and l <= w <= r and l <= e <= r)
+            or (
+                l > r
+                and (
+                    (
+                        w <= e
+                        and (
+                            (-180 <= w <= r and -180 <= e <= r)
+                            or l <= w <= 180
+                            and l <= e <= 180
+                        )
+                    )
+                    or (w > e and -180 <= e <= r and l <= w <= 180)
+                )
+            )
+        )
+    )
 
 
 ###############################################################################
 # queries
 
+
 def query_point_using_cursor(
-        projpicker_cur,
-        point,
-        unit="any",
-        proj_table="any",
-        negate=False):
+    projpicker_cur, point, unit="any", proj_table="any", negate=False
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input point geometry defined by latitude and longitude in
@@ -356,11 +374,8 @@ def query_point_using_cursor(
 
 
 def query_bbox_using_cursor(
-        projpicker_cur,
-        bbox,
-        unit="any",
-        proj_table="any",
-        negate=False):
+    projpicker_cur, bbox, unit="any", proj_table="any", negate=False
+):
     """
     Return a list of BBox instances in unit in proj_table that completely
     contain an input bbox geometry defined by sout, north, west, and east using
