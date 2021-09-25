@@ -11,6 +11,7 @@ import queue
 import textwrap
 import webbrowser
 import locale
+import sys
 
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
@@ -33,6 +34,8 @@ class ProjPickerPanel(wx.Panel):
         self.sel_bbox = []
 
         self.zoomer = None
+        # timer delay must be positive on macOS
+        self.zoomer_delay = 1 if sys.platform == "darwin" else 0
         self.zoomer_queue = queue.Queue()
         self.dzoom = get_dzoom()
 
@@ -270,7 +273,8 @@ class ProjPickerPanel(wx.Panel):
             try:
                 draw_map = self.zoomer_queue.get_nowait()
             except queue.Empty:
-                self.zoomer.checker = wx.CallLater(0, check_zoomer)
+                self.zoomer.checker = wx.CallLater(self.zoomer_delay,
+                        check_zoomer)
             else:
                 draw_map()
 
@@ -305,7 +309,7 @@ class ProjPickerPanel(wx.Panel):
         self.zoomer = threading.Thread(target=zoom, args=(event.x, event.y, dz,
                                                           cancel_event))
         self.zoomer.cancel_event = cancel_event
-        self.zoomer.checker = wx.CallLater(0, check_zoomer)
+        self.zoomer.checker = wx.CallLater(self.zoomer_delay, check_zoomer)
         self.zoomer.start()
 
     def on_resize(self, event):
