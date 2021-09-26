@@ -15,6 +15,8 @@ import sys
 
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
+from gui_core.toolbars import BaseToolbar, BaseIcons
+from icons.icon import MetaIcon
 
 from .gui_common import (
     get_latlon,
@@ -29,6 +31,42 @@ from .gui_common import (
 
 ItemSelectedEvent, EVT_ITEM_SELECTED = wx.lib.newevent.NewEvent()
 ItemDeselectedEvent, EVT_ITEM_DESELECTED = wx.lib.newevent.NewEvent()
+
+
+class ProjPickerToolbar(BaseToolbar):
+    def __init__(self, parent):
+        BaseToolbar.__init__(self, parent)
+        self.icons = BaseIcons
+        self.icons = {**self.icons, **self._add_icons()}
+        self.InitToolbar(self._toolbarData())
+        parent.SetExtraStyle(wx.TB_NODIVIDER)
+        # realize the toolbar
+        self.Realize()
+
+    def _toolbarData(self):
+        return self._getToolbarData(
+            (
+                ("pan", self.icons["pan"], self.parent.on_grab),
+                (None,),
+                ("edit", self.icons["edit"], self.parent.on_draw),
+                (None,),
+                ("clear", self.icons["erase"], self.parent.on_clear_drawing),
+            )
+        )
+
+    def _add_icons(self):
+        return {
+            "edit": MetaIcon(
+                img="edit",
+                label=_("Edit"),
+                desc=_("Add bbox"),
+            ),
+            "erase": MetaIcon(
+                img="erase",
+                label=_("Erase"),
+                desc=_("Erase current geometry"),
+            ),
+        }
 
 
 class ProjPickerPanel(wx.Panel):
@@ -62,6 +100,7 @@ class ProjPickerPanel(wx.Panel):
         self.sel_bbox_color = "red"
 
         width, height = kwargs.pop("size", (800, 800))
+
         width = min(width, self.Parent.Size.Width)
         height = min(height, self.Parent.Size.Height)
 
@@ -107,6 +146,14 @@ class ProjPickerPanel(wx.Panel):
         self.map_canvas.Bind(wx.EVT_PAINT, self.on_paint)
         map_box.Add(self.map_canvas, 1, wx.EXPAND)
 
+        ###########
+        # toolbar
+
+        # Sizer so toolbar and coordinates are on same row
+        toolbar_coors_box = wx.BoxSizer(wx.HORIZONTAL)
+        toolbar = ProjPickerToolbar(self)
+        toolbar_coors_box.Add(toolbar, 0, wx.EXPAND)
+
         #######################
         # label for coordinates
 
@@ -117,7 +164,8 @@ class ProjPickerPanel(wx.Panel):
         # horizontal box sizer
         self.coor_label.box = wx.BoxSizer(wx.VERTICAL)
         self.coor_label.box.Add(self.coor_label, 0, wx.ALIGN_RIGHT)
-        map_box.Add(self.coor_label.box, 0, wx.ALIGN_RIGHT)
+        toolbar_coors_box.Add(self.coor_label.box, 0, wx.EXPAND | wx.TOP, 10)
+        map_box.Add(toolbar_coors_box, 0, wx.EXPAND)
 
         main_box.Add(map_box, 1, wx.EXPAND)
 
