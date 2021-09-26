@@ -293,7 +293,7 @@ def get_addon_path(pgm):
 
     :param pgm str: pgm
 
-    :return tuple: (True, path) if pgm is addon else (None, None)
+    return: True if pgm is addon else None
     """
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if addon_base:
@@ -305,11 +305,8 @@ def get_addon_path(pgm):
             with open(addons_paths, "r") as f:
                 addons_paths = json.load(f)
             for addon in addons_paths["tree"]:
-                split_path = addon["path"].split("/")
-                root_dir, module_dir = split_path[0], split_path[-1]
-                if "grass8" == root_dir and pgm == module_dir:
-                    return True, addon["path"]
-    return None, None
+                if pgm == addon["path"].split("/")[-1]:
+                    return addon["path"]
 
 
 # process header
@@ -454,21 +451,28 @@ if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
 if index_name:
-    tree = "grass/tree"
-    commits = "grass/commits"
-    is_addon, addon_path = get_addon_path(pgm=pgm)
-    if is_addon:
+    branches = "branches"
+    tree = "tree"
+    commits = "commits"
+    addon_path = get_addon_path(pgm=pgm)
+
+    if addon_path:
         # Fix gui/wxpython addon url path
         url_source = urlparse.urljoin(
-            os.environ["SOURCE_URL"],
-            addon_path.split("/", 1)[1],
+            os.environ["SOURCE_URL"].split("src")[0],
+            addon_path,
         )
-        tree = "grass-addons/tree"
-        commits = "grass-addons/commits"
+    if branches in url_source:
+        url_log = url_source.replace(branches, commits)
+        url_source = url_source.replace(branches, tree)
+    else:
+        url_log = url_source.replace(tree, commits)
 
     sys.stdout.write(
         sourcecode.substitute(
-            URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(tree, commits)
+            URL_SOURCE=url_source,
+            PGM=pgm,
+            URL_LOG=url_log,
         )
     )
     sys.stdout.write(
