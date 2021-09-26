@@ -36268,8 +36268,8 @@ msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específ
 
 #: ../vector/v.out.ogr/main.c:686
 #, c-format
-msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
-msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de formato (parâmetro 'lco') para exportar <em 3D em vez de 2D (padrão)."
+msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
+msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de formato (parâmetro 'lco') para exportar em 3D em vez de 2D (padrão)."
 
 #: ../vector/v.out.ogr/main.c:713 ../db/drivers/ogr/execute.c:56
 #, c-format
