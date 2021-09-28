@@ -94,7 +94,7 @@ int M_do_rename(int n, const char *old, const char *new)
 	}
 
 	if (G_strcasecmp(list[n].element[0], "cell") == 0) {
-	    char colr2[50];
+	    char colr2[GNAME_MAX];
 
 	    sprintf(colr2, "colr2/%s", G_mapset());
 	    G_remove(colr2, new);
