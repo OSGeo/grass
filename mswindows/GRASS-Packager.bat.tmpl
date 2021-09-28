@@ -53,9 +53,7 @@ mkdir %PACKAGE_DIR%\extrabin\gdalplugins
 
 copy %OSGEO4W_PKG_DIR%\bin\* %PACKAGE_DIR%\extrabin
 xcopy %OSGEO4W_PKG_DIR%\bin\gdalplugins\* %PACKAGE_DIR%\extrabin\gdalplugins /S/V/F/I
-del %PACKAGE_DIR%\extrabin\msvcp*
-del %PACKAGE_DIR%\extrabin\msvcr*
-del %PACKAGE_DIR%\extrabin\vcredist_*
+del %PACKAGE_DIR%\extrabin\*140*.dll # msvcrt2019
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
