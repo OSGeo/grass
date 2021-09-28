@@ -14,14 +14,14 @@ rem ----------------------------------------------------------------------------
 
 set PACKAGE_DIR=.\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package
 
-set OSGEO4W_BLD_DIR=C:\OSGeo4W%1
-if exist C:\OSGeo4W%1_grass@GRASS_VERSION_MAJOR@_py3 (
-set OSGEO4W_PKG_DIR=C:\OSGeo4W%1_grass@GRASS_VERSION_MAJOR@_py3
+set OSGEO4W_BLD_DIR=C:\OSGeo4W
+if exist C:\OSGeo4W_grass@GRASS_VERSION_MAJOR@ (
+set OSGEO4W_PKG_DIR=C:\OSGeo4W_grass@GRASS_VERSION_MAJOR@
 ) else (
-set OSGEO4W_PKG_DIR=C:\OSGeo4W%1
+set OSGEO4W_PKG_DIR=C:\OSGeo4W
 )
 
-set MSYS_BLD_DIR=C:\msys%1\mingw%1
+set MSYS_BLD_DIR=C:\msys64\mingw64
 
 set GRASS_PREFIX=%OSGEO4W_BLD_DIR%\apps\grass\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@
 
