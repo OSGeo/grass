@@ -162,27 +162,31 @@ class PreprocessorParser(object):
         if sys.platform == "win32":
             cmd = ["sh.exe", "-c", cmd]
 
-        pp = subprocess.Popen(cmd,
-                              shell=True,
-                              universal_newlines=True,
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)
+        pp = subprocess.Popen(
+            cmd,
+            shell=True,
+            universal_newlines=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
         try:
             ppout, pperr = pp.communicate()
         except UnicodeError:
             # Fix for https://trac.osgeo.org/grass/ticket/3883,
             # handling file(s) encoded with mac_roman
-            if sys.platform == 'darwin':
-                pp = subprocess.Popen(cmd,
-                                      shell=True,
-                                      universal_newlines=False,  # read as binary
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.PIPE)
+            if sys.platform == "darwin":
+                pp = subprocess.Popen(
+                    cmd,
+                    shell=True,
+                    universal_newlines=False,  # read as binary
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
                 ppout, pperr = pp.communicate()
 
-                data = ppout.decode('utf8', errors='replace')
-                ppout = data.replace('\r\n', '\n').replace('\r', '\n')
-                pperr = pperr.decode('utf8', errors='replace')
+                data = ppout.decode("utf8", errors="replace")
+                ppout = data.replace("\r\n", "\n").replace("\r", "\n")
+                pperr = pperr.decode("utf8", errors="replace")
             else:
                 raise UnicodeError
 

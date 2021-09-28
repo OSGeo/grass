@@ -1,6 +1,7 @@
 ## Notes on ctypesgen
 
-Currently installed version: https://github.com/ctypesgen/ctypesgen/commit/0681f8ef1742206c171d44b7872c700f34ffe044 (3 March 2020)
+Currently installed version:
+https://github.com/ctypesgen/ctypesgen/commit/0681f8ef1742206c171d44b7872c700f34ffe044 (3 March 2020)
 
 
 ### How to update ctypesgen version
@@ -14,7 +15,7 @@ Currently installed version: https://github.com/ctypesgen/ctypesgen/commit/0681f
 
 ### Patches
 
-It is highly encouraged to report [upstreams](https://github.com/davidjamesca/ctypesgen) necessary patches for GRASS.
+It is highly encouraged to report [upstreams](https://github.com/ctypesgen/ctypesgen) necessary patches for GRASS.
 
 #### POINTER patch
 
@@ -107,40 +108,42 @@ https://github.com/OSGeo/grass/commit/59eeff479cd39fd503e276d164977648938cc85b
 
 #### Mac specific patches
 
-Enable Ctypesgen parsing of non-utf8 files on macOS https://github.com/OSGeo/grass/pull/385
+Enable Ctypesgen parsing of non-utf8 files on macOS
+https://github.com/OSGeo/grass/pull/385
 
 ```diff
 --- ctypesgen/parser/preprocessor.py.orig
 +++ ctypesgen/parser/preprocessor.py
-@@ -159,10 +159,29 @@
- 
+@@ -160,9 +160,32 @@
          self.cparser.handle_status(cmd)
  
--        pp = subprocess.Popen(
+         pp = subprocess.Popen(
 -            cmd, shell=True, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
--        )
++            cmd,
++            shell=True,
++            universal_newlines=True,
++            stdout=subprocess.PIPE,
++            stderr=subprocess.PIPE,
+         )
 -        ppout, pperr = pp.communicate()
-+        pp = subprocess.Popen(cmd,
-+                              shell=True,
-+                              universal_newlines=True,
-+                              stdout=subprocess.PIPE,
-+                              stderr=subprocess.PIPE)
 +        try:
 +            ppout, pperr = pp.communicate()
 +        except UnicodeError:
 +            # Fix for https://trac.osgeo.org/grass/ticket/3883,
 +            # handling file(s) encoded with mac_roman
-+            if sys.platform == 'darwin':
-+                pp = subprocess.Popen(cmd,
-+                                      shell=True,
-+                                      universal_newlines=False,  # read as binary
-+                                      stdout=subprocess.PIPE,
-+                                      stderr=subprocess.PIPE)
++            if sys.platform == "darwin":
++                pp = subprocess.Popen(
++                    cmd,
++                    shell=True,
++                    universal_newlines=False,  # read as binary
++                    stdout=subprocess.PIPE,
++                    stderr=subprocess.PIPE,
++                )
 +                ppout, pperr = pp.communicate()
 +
-+                data = ppout.decode('utf8', errors='replace')
-+                ppout = data.replace('\r\n', '\n').replace('\r', '\n')
-+                pperr = pperr.decode('utf8', errors='replace')
++                data = ppout.decode("utf8", errors="replace")
++                ppout = data.replace("\r\n", "\n").replace("\r", "\n")
++                pperr = pperr.decode("utf8", errors="replace")
 +            else:
 +                raise UnicodeError
  
@@ -150,7 +153,8 @@ Enable Ctypesgen parsing of non-utf8 files on macOS https://github.com/OSGeo/gra
 ```
 
 
-macOS: use `@rpath` as dynamic linker https://github.com/OSGeo/grass/pull/981
+macOS: use `@rpath` as dynamic linker
+https://github.com/OSGeo/grass/pull/981
 
 ```diff
 --- ctypesgen/libraryloader.py.orig
@@ -168,6 +172,7 @@ macOS: use `@rpath` as dynamic linker https://github.com/OSGeo/grass/pull/981
 
 #### Windows specific patches
 
+The type `__int64` isn't defined in ctypesgen
 https://trac.osgeo.org/grass/ticket/3506
 
 ```diff
@@ -184,17 +189,20 @@ https://trac.osgeo.org/grass/ticket/3506
 
 ```
 
+Patch for OSGeo4W packaging, adapted from
+https://github.com/jef-n/OSGeo4W/blob/master/src/grass/osgeo4w/patch
+
 ```diff
 --- ctypesgen/libraryloader.py.orig
 +++ ctypesgen/libraryloader.py
-@@ -322,6 +322,12 @@ class PosixLibraryLoader(LibraryLoader):
+@@ -321,6 +321,12 @@
  class WindowsLibraryLoader(LibraryLoader):
      name_formats = ["%s.dll", "lib%s.dll", "%slib.dll", "%s"]
  
 +    def __init__(self):
 +        super().__init__()
 +        for p in os.getenv("PATH").split(";"):
-+            if os.path.exists(p) and hasattr(os, 'add_dll_directory'):
++            if os.path.exists(p) and hasattr(os, "add_dll_directory"):
 +                os.add_dll_directory(p)
 +
      class Lookup(LibraryLoader.Lookup):
@@ -203,7 +211,8 @@ https://trac.osgeo.org/grass/ticket/3506
 
 ```
 
-https://trac.osgeo.org/grass/ticket/1125
+Invoke preprocessor via `sh.exe`, workaround to get the -I switches to be recognized.
+https://trac.osgeo.org/grass/ticket/1125#comment:21
 
 https://github.com/OSGeo/grass/commit/65eef4767aa416ca55f7e36f62dce7ce083fe450
 
