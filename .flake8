@@ -243,7 +243,7 @@ exclude =
     # Test output directory
     testreport,
     # Not yet compliant
-    python/grass/ctypes,
+    python/libgrass-interface-generator,
     # No tests checked for now
     testsuite,
 

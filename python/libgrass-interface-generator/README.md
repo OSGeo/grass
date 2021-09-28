@@ -6,7 +6,7 @@ https://github.com/ctypesgen/ctypesgen/commit/0681f8ef1742206c171d44b7872c700f34
 
 ### How to update ctypesgen version
 
-1. Replace the GRASS directory `python/grass/ctypes/ctypesgen` with the `ctypesgen`
+1. Replace the GRASS directory `python/libgrass-interface-generator/ctypesgen` with the `ctypesgen`
    directory from ctypesgen source directory.
 2. Replace `python/grass/ctypes/run.py` with `run.py` from ctypesgen source directory.
 3. Apply the patches below.
