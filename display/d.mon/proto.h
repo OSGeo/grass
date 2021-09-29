@@ -1,3 +1,4 @@
+#include <dirent.h>
 #ifndef __PROTO_H__
 #define __PROTO_H__
 #define DEFAULT_WIDTH 720
@@ -15,7 +16,7 @@ int select_mon(const char *);
 int stop_mon(const char *);
 
 /* list.c */
-void list_mon();
+DIR *list_mon();
 void print_list(FILE *);
 int check_mon(const char *);
 void list_cmd(const char *, FILE *);
