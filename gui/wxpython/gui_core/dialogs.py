@@ -2007,7 +2007,7 @@ class ImageSizeDialog(wx.Dialog):
         sizer.Add(btnsizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        sizer.Fit(self)
         self.Layout()
 
     def GetValues(self):
