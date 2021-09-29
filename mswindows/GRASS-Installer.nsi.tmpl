@@ -834,7 +834,7 @@ FunctionEnd
 Section "Important Microsoft Runtime DLLs" SecMSRuntime
 
 	;Set the size (in KB)  of the archive file
-	StrCpy $ARCHIVE_SIZE_KB 18512
+	StrCpy $ARCHIVE_SIZE_KB 833
 	
 	;Set the size (in KB) of the unpacked archive file
 	AddSize 13500
@@ -850,11 +850,12 @@ SectionEnd
 
 Function DownloadDataSet
 
-	IntOp $ARCHIVE_SIZE_MB $ARCHIVE_SIZE_KB / 1024
+	; IntOp $ARCHIVE_SIZE_MB $ARCHIVE_SIZE_KB / 1024
 	
 	StrCpy $DOWNLOAD_MESSAGE_ "The installer will download the $EXTENDED_ARCHIVE_NAME sample data set.$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
-	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_MB MB and may take"
+	; StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_MB MB and may take"
+        StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_KB KB and may take"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ several minutes to download.$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The $EXTENDED_ARCHIVE_NAME dataset will be copied to:$\r$\n"
