@@ -11,6 +11,7 @@
   \author Original author CERL
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -34,7 +35,6 @@
 int M_do_rename(int n, const char *old, const char *new)
 {
     int i, ret;
-    int len;
     const char *mapset;
     int result = 0;
     int renamed = 0;
@@ -44,8 +44,6 @@ int M_do_rename(int n, const char *old, const char *new)
     
     if (G_strcasecmp(old, new) == 0)
 	return 1;
-
-    len = M__get_description_len(n);
 
     M__hold_signals(1);
 
@@ -94,9 +92,11 @@ int M_do_rename(int n, const char *old, const char *new)
 	}
 
 	if (G_strcasecmp(list[n].element[0], "cell") == 0) {
-	    char colr2[GNAME_MAX];
+	    char colr2[6 + GMAPSET_MAX];
 
-	    sprintf(colr2, "colr2/%s", G_mapset());
+	    if (snprintf(colr2, 6 + GMAPSET_MAX, "colr2/%s", G_mapset()) >=
+		6 + GMAPSET_MAX)
+		G_warning(_("String for secondary color table has been truncated"));
 	    G_remove(colr2, new);
 	    switch (G_rename(colr2, old, new)) {
 	    case -1:
