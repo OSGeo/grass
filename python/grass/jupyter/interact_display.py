@@ -24,6 +24,7 @@ from .utils import (
     reproject_region,
     setup_location,
 )
+from .region import RegionManagerForInteractiveMap
 
 
 class InteractiveMap:
@@ -37,7 +38,7 @@ class InteractiveMap:
     >>> m.show()
     """
 
-    def __init__(self, width=400, height=400):
+    def __init__(self, width=400, height=400, use_region=False, saved_region=None):
         """Creates a blank folium map centered on g.region.
 
         :param int height: height in pixels of figure (default 400)
@@ -81,6 +82,10 @@ class InteractiveMap:
         )
         # Set LayerControl default
         self.layer_control = False
+        # region handling
+        self._region_manager = RegionManagerForInteractiveMap(
+            use_region, saved_region, self._src_env, self._psmerc_env
+        )
 
         # Cleanup rcfiles with finalizer
         def remove_if_exists(path):
@@ -114,6 +119,8 @@ class InteractiveMap:
         name = file_info["name"]
         mapset = file_info["mapset"]
         new_name = full_name.replace("@", "_")
+        # set bbox
+        self._region_manager.set_bbox_vector(full_name)
         # Reproject vector into WGS84 Location
         env_info = gs.gisenv(env=self._src_env)
         gs.run_command(
@@ -160,6 +167,7 @@ class InteractiveMap:
         name = file_info["name"]
         mapset = file_info["mapset"]
 
+        self._region_manager.set_region_from_raster(full_name)
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
         resolution = estimate_resolution(
@@ -190,6 +198,7 @@ class InteractiveMap:
             height=png_height,
             env=self._psmerc_env,
             filename=filename,
+            use_region=True,
         )
         m.run("d.rast", map=tgt_name)
 
@@ -237,6 +246,7 @@ class InteractiveMap:
         fig = self._folium.Figure(width=self.width, height=self.height)
         # Add map to figure
         fig.add_child(self.map)
+        self.map.fit_bounds(self._region_manager.bbox)
 
         return fig
 
