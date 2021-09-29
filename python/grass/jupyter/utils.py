@@ -132,3 +132,15 @@ def setup_location(name, path, epsg, src_env):
         env=new_env,
     )
     return rcfile, new_env
+
+
+def get_map_name_from_d_command(module, **kwargs):
+    """Returns map name from display command.
+
+    Assumes only positional parameters.
+    When more maps are present (e.g., d.rgb), it returns only 1.
+    Returns empty string if fails to find it.
+    """
+    special = {"d.his": "hue", "d.legend": "raster", "d.rgb": "red", "d.shade": "shade"}
+    parameter = special.get(module, "map")
+    return kwargs.get(parameter, "")
