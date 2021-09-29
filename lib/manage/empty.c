@@ -29,7 +29,7 @@ int M__empty(char *elem)
 {
     DIR *dirp;
     struct dirent *dp;
-    char dir[1024];
+    char dir[GPATH_MAX];
     int any;
 
     G_file_name(dir, elem, "", G_mapset());
