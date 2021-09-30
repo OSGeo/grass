@@ -480,24 +480,25 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID["rename"], _("Rename"))
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id=self.popupID["rename"])
 
-        item = wx.MenuItem(
-            self.popupMenu,
-            id=self.popupID["check"],
-            text=_("Check selected layer(s)"),
-        )
-        self.popupMenu.AppendItem(item)
-        self.Bind(
-            wx.EVT_MENU, self.OnCheckUncheckSelectedLayer, id=self.popupID["check"]
-        )
-        item = wx.MenuItem(
-            self.popupMenu,
-            id=self.popupID["uncheck"],
-            text=_("Uncheck selected layer(s)"),
-        )
-        self.popupMenu.AppendItem(item)
-        self.Bind(
-            wx.EVT_MENU, self.OnCheckUncheckSelectedLayer, id=self.popupID["uncheck"]
-        )
+        if numSelected > 1:
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["check"],
+                text=_("Check selected layer(s)"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU, self.OnCheckUncheckSelectedLayer, id=self.popupID["check"]
+            )
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["uncheck"],
+                text=_("Uncheck selected layer(s)"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU, self.OnCheckUncheckSelectedLayer, id=self.popupID["uncheck"]
+            )
 
         # when multiple maps are selected of different types
         # we cannot zoom or change region
