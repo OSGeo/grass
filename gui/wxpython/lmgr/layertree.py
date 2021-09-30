@@ -488,7 +488,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
             self.popupMenu.AppendItem(item)
             self.Bind(
-                wx.EVT_MENU, self.OnCheckUncheckSelectedLayer, id=self.popupID["check"]
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["check"],
             )
             item = wx.MenuItem(
                 self.popupMenu,
@@ -497,7 +499,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
             self.popupMenu.AppendItem(item)
             self.Bind(
-                wx.EVT_MENU, self.OnCheckUncheckSelectedLayer, id=self.popupID["uncheck"]
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["uncheck"],
             )
 
         # when multiple maps are selected of different types
