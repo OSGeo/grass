@@ -32,24 +32,23 @@ char *get_path(const char *name, int fpath)
 }
 
 /* get list of running monitors */
-DIR *list_mon(char ***list, int *n)
+void list_mon(char ***list, int *n, DIR **dirp)
 {
     char *mon_path;
     struct dirent *dp;
-    DIR *dirp;
     struct stat s;
-    
+
     *list = NULL;
     *n    = 0;
-    
-    mon_path = get_path(NULL, TRUE);
-    dirp = opendir(mon_path);
-    G_free(mon_path);
-    
-    if (!dirp)
-        return dirp;
 
-    while ((dp = readdir(dirp)) != NULL) {
+    mon_path = get_path(NULL, TRUE);
+    *dirp = opendir(mon_path);
+    G_free(mon_path);
+
+    if (!*dirp)
+        return;
+
+    while ((dp = readdir(*dirp)) != NULL) {
 	int ret;
 
 	if (!dp->d_name[0] || dp->d_name[0] == '.')
@@ -66,7 +65,6 @@ DIR *list_mon(char ***list, int *n)
         (*list)[*n] = dp->d_name;
         (*n)++;
     }
-    return dirp;
 }
 
 /* print list of running monitors */
@@ -76,7 +74,7 @@ void print_list(FILE *fd)
     int   i, n;
     DIR *dirp;
 
-    dirp = list_mon(&list, &n);
+    list_mon(&list, &n, &dirp);
     if (n > 0)
 	G_message(_("List of running monitors:"));
     else {
@@ -99,8 +97,8 @@ int check_mon(const char *name)
     int   i, n;
     DIR *dirp;
 
-    dirp = list_mon(&list, &n);
-    
+    list_mon(&list, &n, &dirp);
+
     for (i = 0; i < n; i++)
         if (G_strcasecmp(list[i], name) == 0)
             return TRUE;

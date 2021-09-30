@@ -16,7 +16,7 @@ int select_mon(const char *);
 int stop_mon(const char *);
 
 /* list.c */
-DIR *list_mon();
+void list_mon(char ***list, int *n, DIR **dirp);
 void print_list(FILE *);
 int check_mon(const char *);
 void list_cmd(const char *, FILE *);
