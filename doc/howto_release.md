@@ -240,10 +240,11 @@ ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJO
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 
 # update winGRASS related files: Update the winGRASS version
-vim grass-addons/tools/wingrass-packager/grass_packager_release.bat
-vim grass-addons/tools/wingrass-packager/grass_addons.sh
-vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
-vim grass-addons/tools/wingrass-packager/cronjob.sh       # major/minor release only
+# https://github.com/landam/wingrass-maintenance-scripts
+vim wingrass-maintenance-scripts/grass_packager_release.bat
+vim wingrass-maintenance-scripts/grass_addons.sh
+vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
+vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
 # update addons - major/minor release only
 vim grass-addons/tools/addons/grass-addons-publish.sh
