@@ -306,8 +306,17 @@ def get_num_suffix(number, max_number):
 
 
 def split(s):
-    """!Platform specific shlex.split"""
-    return shlex.split(s, posix=(sys.platform != "win32"))
+    """!Platform specific shlex.split
+
+    :param str s: cmd string
+
+    return list: cmd list
+    """
+    if sys.platform == "win32":
+        # ^ carret symbol for escaping special MS Windows Command Prompt characters < > ( ) & | , ; "
+        return shlex.split(s.replace("\\", r"\\").replace("^", ""))
+    else:
+        return shlex.split(s)
 
 
 # source:
