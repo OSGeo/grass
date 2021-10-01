@@ -33,7 +33,7 @@ from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 
 from grass.pygrass.vector import sql
-from grass.lib.ctypes_preamble import String
+from grass.lib.ctypes_preamble import ReturnString
 
 
 if sys.version_info.major >= 3:
@@ -678,7 +678,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.name)
 
     def _set_name(self, name):
-        self.c_fieldinfo.contents.name = String(name)
+        self.c_fieldinfo.contents.name = ReturnString(name)
 
     name = property(fget=_get_name, fset=_set_name, doc="Set and obtain name vale")
 
@@ -686,7 +686,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.table)
 
     def _set_table(self, new_name):
-        self.c_fieldinfo.contents.table = String(new_name)
+        self.c_fieldinfo.contents.table = ReturnString(new_name)
 
     table_name = property(
         fget=_get_table, fset=_set_table, doc="Set and obtain table name value"
@@ -696,7 +696,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.key)
 
     def _set_key(self, key):
-        self.c_fieldinfo.contents.key = String(key)
+        self.c_fieldinfo.contents.key = ReturnString(key)
 
     key = property(fget=_get_key, fset=_set_key, doc="Set and obtain cat value")
 
@@ -704,7 +704,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.database)
 
     def _set_database(self, database):
-        self.c_fieldinfo.contents.database = String(database)
+        self.c_fieldinfo.contents.database = ReturnString(database)
 
     database = property(
         fget=_get_database, fset=_set_database, doc="Set and obtain database value"
@@ -717,7 +717,7 @@ class Link(object):
         if driver not in ("sqlite", "pg"):
             str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
             raise TypeError(str_err)
-        self.c_fieldinfo.contents.driver = String(driver)
+        self.c_fieldinfo.contents.driver = ReturnString(driver)
 
     driver = property(
         fget=_get_driver,

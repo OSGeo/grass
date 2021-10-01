@@ -26,7 +26,7 @@
 #define RASTER3D_USE_CACHE_YZ -7
 #define RASTER3D_USE_CACHE_XYZ -8
 
-#define RASTER3D_DEFAULT_WINDOW NULL
+#define RASTER3D_DEFAULT_WINDOW 0 /* NULL pointer, now (int)0 because issues with ctypesgen */
 
 #define RASTER3D_DIRECTORY      "grid3"
 #define RASTER3D_CELL_ELEMENT   "cell"
