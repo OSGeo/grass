@@ -313,7 +313,7 @@ def split(s):
     return list: cmd list
     """
     if sys.platform == "win32":
-        return shlex.split(s.replace("\\", r"\\")
+        return shlex.split(s.replace("\\", r"\\"))
     else:
         return shlex.split(s)
 
