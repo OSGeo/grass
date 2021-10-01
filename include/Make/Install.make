@@ -115,11 +115,6 @@ real-install: | $(DESTDIR) $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN)
 
 	-$(CHMOD) -R a+rX $(DESTDIR)$(INST_DIR) 2>/dev/null
 
-ifneq ($(findstring darwin,$(ARCH)),)
-	@# enable OSX Help Viewer
-	@/bin/ln -sfh "$(INST_DIR)/docs/html" /Library/Documentation/Help/GRASS-$(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR)
-endif
-
 $(DESTDIR):
 	$(MAKE_DIR_CMD) -p $@
 
