@@ -313,9 +313,7 @@ def split(s):
     return list: cmd list
     """
     if sys.platform == "win32":
-        # ^ carret symbol for escaping special MS Windows Command Prompt
-        # characters < > ( ) & | , ; "
-        return shlex.split(s.replace("\\", r"\\").replace("^", ""))
+        return shlex.split(s.replace("\\", r"\\")
     else:
         return shlex.split(s)
 
