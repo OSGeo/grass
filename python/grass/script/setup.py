@@ -121,12 +121,12 @@ def set_gui_path():
         sys.path.insert(0, gui_path)
 
 
-def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
+class init():
     """Initialize system variables to run GRASS modules
 
-    This function is for running GRASS GIS without starting it with the
+    This class is for running GRASS GIS without starting it with the
     standard script grassXY. No GRASS modules shall be called before
-    call of this function but any module or user script can be called
+    call of this class but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
     libraries are usable as well in general but the ones using C
     libraries through ``ctypes`` are not (which is caused by library
@@ -134,80 +134,110 @@ def init(gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
     operating system limitation).
 
     To create a GRASS session a ``gisrc`` file is created.
-    Caller is responsible for deleting the ``gisrc`` file.
+    Caller is responsible for deleting the ``gisrc`` file, either
+    manually or using the `finish` method, unless the context manager
+    is used, in which case it's called automatically.
 
     Basic usage::
 
         # ... setup GISBASE and PYTHON path before import
         import grass.script as gs
-        gisrc = gs.setup.init("/usr/bin/grass8",
-                              "/home/john/grassdata",
-                              "nc_spm_08", "user1")
+        gs.setup.init("/usr/bin/grass8",
+                      "/home/john/grassdata",
+                      "nc_spm_08", "user1")
         # ... use GRASS modules here
         # end the session
         gs.setup.finish()
+
+    Basic usage as context manager::
+        # ... setup GISBASE and PYTHON path before import
+        import grass.script as gs
+        with gs.setup.init("/usr/bin/grass8",
+                            "/home/john/grassdata",
+                            "nc_spm_08", "user1"):
+            # ... use GRASS modules here
+        # session ended automatically
 
     :param gisbase: path to GRASS installation
     :param dbase: path to GRASS database (default: '')
     :param location: location name (default: 'demolocation')
     :param mapset: mapset within given location (default: 'PERMANENT')
-
-    :returns: path to ``gisrc`` file (to be deleted later)
     """
-    # Set GISBASE
-    os.environ["GISBASE"] = gisbase
-    mswin = sys.platform.startswith("win")
-    # define PATH
-    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "bin")
-    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "scripts")
-    if mswin:  # added for winGRASS
-        os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "extrabin")
 
-    # add addons to the PATH
-    # copied and simplified from lib/init/grass.py
-    if mswin:
-        config_dirname = "GRASS8"
-        config_dir = os.path.join(os.getenv("APPDATA"), config_dirname)
-    else:
-        config_dirname = ".grass8"
-        config_dir = os.path.join(os.getenv("HOME"), config_dirname)
-    addon_base = os.path.join(config_dir, "addons")
-    os.environ["GRASS_ADDON_BASE"] = addon_base
-    if not mswin:
-        os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "scripts")
-    os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "bin")
+    def __init__(self, gisbase, dbase="", location="demolocation", mapset="PERMANENT"):
+        self.gisbase = gisbase
+        self.dbase = dbase
+        self.location = location
+        self.mapset = mapset
+        self.gisrc = None
 
-    # define LD_LIBRARY_PATH
-    if "@LD_LIBRARY_PATH_VAR@" not in os.environ:
-        os.environ["@LD_LIBRARY_PATH_VAR@"] = ""
-    os.environ["@LD_LIBRARY_PATH_VAR@"] += os.pathsep + os.path.join(gisbase, "lib")
+        self.__initmethod()
 
-    # TODO: lock the mapset?
-    os.environ["GIS_LOCK"] = str(os.getpid())
+    def __initmethod(self):
+        """Meant to be called from within init
+        """
+        # Set GISBASE
+        os.environ["GISBASE"] = self.gisbase
+        mswin = sys.platform.startswith("win")
+        # define PATH
+        os.environ["PATH"] += os.pathsep + os.path.join(self.gisbase, "bin")
+        os.environ["PATH"] += os.pathsep + os.path.join(self.gisbase, "scripts")
+        if mswin:  # added for winGRASS
+            os.environ["PATH"] += os.pathsep + os.path.join(self.gisbase, "extrabin")
 
-    # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
-    if not os.getenv("GRASS_PYTHON"):
-        if sys.platform == "win32":
-            os.environ["GRASS_PYTHON"] = "python3.exe"
+        # add addons to the PATH
+        # copied and simplified from lib/init/grass.py
+        if mswin:
+            config_dirname = "GRASS8"
+            config_dir = os.path.join(os.getenv("APPDATA"), config_dirname)
         else:
-            os.environ["GRASS_PYTHON"] = "python3"
+            config_dirname = ".grass8"
+            config_dir = os.path.join(os.getenv("HOME"), config_dirname)
+        addon_base = os.path.join(config_dir, "addons")
+        os.environ["GRASS_ADDON_BASE"] = addon_base
+        if not mswin:
+            os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "scripts")
+        os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "bin")
 
-    path = os.getenv("PYTHONPATH")
-    etcpy = os.path.join(gisbase, "etc", "python")
-    if path:
-        path = etcpy + os.pathsep + path
-    else:
-        path = etcpy
-    os.environ["PYTHONPATH"] = path
+        # define LD_LIBRARY_PATH
+        if "@LD_LIBRARY_PATH_VAR@" not in os.environ:
+            os.environ["@LD_LIBRARY_PATH_VAR@"] = ""
+        os.environ["@LD_LIBRARY_PATH_VAR@"] += os.pathsep + os.path.join(self.gisbase, "lib")
 
-    # TODO: isn't this contra-productive? may fail soon since we cannot
-    # write to the installation (applies also to defaults for Location
-    # and mapset) I don't see what would be the use case here.
-    if not dbase:
-        dbase = gisbase
+        # TODO: lock the mapset?
+        os.environ["GIS_LOCK"] = str(os.getpid())
 
-    os.environ["GISRC"] = write_gisrc(dbase, location, mapset)
-    return os.environ["GISRC"]
+        # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
+        if not os.getenv("GRASS_PYTHON"):
+            if sys.platform == "win32":
+                os.environ["GRASS_PYTHON"] = "python3.exe"
+            else:
+                os.environ["GRASS_PYTHON"] = "python3"
+
+        path = os.getenv("PYTHONPATH")
+        etcpy = os.path.join(self.gisbase, "etc", "python")
+        if path:
+            path = etcpy + os.pathsep + path
+        else:
+            path = etcpy
+        os.environ["PYTHONPATH"] = path
+
+        # TODO: isn't this contra-productive? may fail soon since we cannot
+        # write to the installation (applies also to defaults for Location
+        # and mapset) I don't see what would be the use case here.
+        if not self.dbase:
+            self.dbase = self.gisbase
+
+        os.environ["GISRC"] = write_gisrc(self.dbase, self.location, self.mapset)
+
+        self.gisrc = os.environ["GISRC"]
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, type, value, tb):
+        # Cleanup on context manager exit
+        finish()
 
 
 # clean-up functions when terminating a GRASS session
