@@ -122,7 +122,7 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;General</h3>
        <ul>
-        <li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual</a></li>
+        <li class="box"><a href="grass.html">GRASS GIS startup manual</a></li>
         <li class="box"><a href="general.html">General commands manual</a></li>
        </ul>
         <h3>&nbsp;Addons</h3>
