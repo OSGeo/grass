@@ -30,43 +30,43 @@ from grass.lib.raster import (
 class RastLegalBandIdTestCase(TestCase):
     def test_empty_name(self):
         ret = Rast_legal_bandref("")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref(" ")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
 
     def test_illegal_name(self):
         ret = Rast_legal_bandref(".a")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref("a/b")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref("a@b")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref("a#b")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
 
     def test_too_long(self):
         ret = Rast_legal_bandref(
             "a_" + "".join(random.choices(string.ascii_letters, k=253))
         )
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref(
             "a_" + "".join(random.choices(string.ascii_letters, k=254))
         )
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
 
     def test_good_name(self):
         ret = Rast_legal_bandref("1")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("1a")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("clouds")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("rededge1")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("S2_1")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("GRASS_aspect_deg")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
 
 
 class RastBandReferenceTestCase(TestCase):
