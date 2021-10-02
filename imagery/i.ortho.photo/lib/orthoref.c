@@ -277,7 +277,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 	WT1.x[5][5] = (Q1 / (kappa_var * kappa_var));
     }
     else {
-	G_warning(_("Camera postion not available"));
+	G_warning(_("Camera position not available"));
 #ifdef DEBUG
 	fclose(debug);
 #endif
@@ -547,7 +547,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 #endif
 
     }  /* end ITERATION loop */
-    G_verbose_message("%d iterations to refine camera postion", iter);
+    G_verbose_message("%d iterations to refine camera position", iter);
 
     /* This is the solution */
     *XC = epsilon.x[0][0];
