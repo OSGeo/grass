@@ -549,7 +549,7 @@ char *Rast_get_bandref_or_name(const char *, const char *);
 void Rast_write_units(const char *, const char *);
 void Rast_write_vdatum(const char *, const char *);
 void Rast_write_bandref(const char *, const char *);
-int Rast_legal_bandref(const char *);
+bool Rast_legal_bandref(const char *);
 
 /* rast_to_img_string.c */
 int Rast_map_to_img_str(char *, int, unsigned char*);

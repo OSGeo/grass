@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
     }
 
     if (bandref_opt->answer) {
-        if (Rast_legal_bandref(bandref_opt->answer) < 0)
+        if (Rast_legal_bandref(bandref_opt->answer) == false)
             G_fatal_error(_("Provided band reference is not valid. "
                             "See documentation for valid examples"));
 

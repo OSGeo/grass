@@ -585,7 +585,7 @@ def _write_band_reference(lock, conn, data):
         bandref = data[5]
 
         if maptype == RPCDefs.TYPE_RASTER:
-            if libraster.Rast_legal_bandref(bandref) < 0:
+            if libraster.Rast_legal_bandref(bandref) is False:
                 raise ValueError(_("Invalid band reference"))
             libraster.Rast_write_bandref(name, bandref)
         else:

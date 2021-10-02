@@ -180,7 +180,7 @@ class Info(object):
         :param str bandref: band reference to assign or None to remove (unset)
         """
         if bandref:
-            if libraster.Rast_legal_bandref(bandref) < 0:
+            if libraster.Rast_legal_bandref(bandref) is False:
                 raise ValueError(_("Invalid band reference"))
             libraster.Rast_write_bandref(self.name, bandref)
         else:
