@@ -18,7 +18,7 @@ int select_mon(const char *name)
 	return 0;
     }
 
-    list_mon(&list, &n, &dirp);
+    dirp = list_mon(&list, &n);
     found = FALSE;
     for (i = 0; i < n; i++) {
 	if (G_strcasecmp(list[i], name) == 0) {
