@@ -238,12 +238,6 @@ class _WindowsLibrary(object):
 class WindowsLibraryLoader(LibraryLoader):
     name_formats = ["%s.dll", "lib%s.dll"]
 
-    def __init__(self):
-        super().__init__()
-        for p in os.getenv("PATH").split(";"):
-            if os.path.exists(p) and hasattr(os, 'add_dll_directory'):
-                os.add_dll_directory(p)
-
     def load(self, path):
         return _WindowsLibrary(path)
 
