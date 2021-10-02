@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 @author Anna Kratochvilova <kratochanna gmail.com> (refactoring)
+@author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
 from __future__ import print_function
@@ -802,7 +803,7 @@ class GConsole(wx.EvtHandler):
         env = grass.gisenv()
         try:
             filePath = os.path.join(
-                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".bash_history"
+                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".wxgui_history"
             )
             fileHistory = codecs.open(filePath, encoding="utf-8", mode="a")
         except IOError as e:
