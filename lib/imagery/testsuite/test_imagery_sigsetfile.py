@@ -36,7 +36,7 @@ from grass.lib.imagery import (
     I_init_group_ref,
     I_add_file_to_group_ref,
     I_free_group_ref,
-    String,
+    ReturnString,
 )
 
 
@@ -71,11 +71,11 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
+        So.title = ReturnString("Signature title")
         So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -124,11 +124,11 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
+        So.title = ReturnString("Signature title")
         So.bandrefs[0] = ctypes.create_string_buffer(tempname(252).encode())
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -163,12 +163,12 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
+        So.title = ReturnString("Signature title")
         So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
         So.bandrefs[1] = ctypes.create_string_buffer(b"The_Who")
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -254,11 +254,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -299,11 +299,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -345,11 +345,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -394,11 +394,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -439,12 +439,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
         S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -498,12 +498,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
         S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
