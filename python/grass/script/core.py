@@ -464,10 +464,11 @@ def start_command(
 
     :return: Popen object
     """
-    if "encoding" in kwargs.keys():
-        # This variable was never used for anything.
-        # See https://github.com/OSGeo/grass/issues/1521
-        encoding = kwargs.pop("encoding")  # noqa: F841
+    # If encoding is in kwargs, remove it,
+    # as we dont want it to be used on the
+    # call to make_command
+    if "encoding" in kwargs:
+        kwargs.pop("encoding")
 
     options = {}
     popts = {}
