@@ -363,7 +363,7 @@ class VDigitToolbar(BaseToolbar):
             GError(
                 _(
                     "No vector map is open for editing. Please select first"
-                    "the vector map from the combo box."
+                    "a vector map from the combo box."
                 ),
                 self.parent,
             )
