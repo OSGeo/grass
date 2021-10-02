@@ -334,14 +334,14 @@ def init(path, location=None, mapset=None, grass_path=None):
     return os.environ["GISRC"]
 
 
-class session():
+class SessionHandle():
     """Object used to manage grass sessions.
 
     Basic usage::
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
-        gsession = gs.setup.session(
+        gsession = gs.setup.SessionHandle(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",
         )
@@ -355,7 +355,7 @@ class session():
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
-        with gs.setup.session(
+        with gs.setup.SessionHandle(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",
         ):
@@ -368,7 +368,7 @@ class session():
     """
 
     def __init__(self, path=None, location=None, mapset=None, grass_path=None):
-        """Creates a session object to handle the GRASS session
+        """Creates a Sessionhandle object to handle the GRASS session
 
         Can be used as a context manager, for use with the "with" keyword,
         or with the open() and close() functions.
