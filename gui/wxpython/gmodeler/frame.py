@@ -258,7 +258,7 @@ class ModelFrame(wx.Frame):
                 self.SetStatusText(
                     _(
                         "{} script is up-to-date".format(
-                            self.pythonPanel.script_type
+                            self.pythonPanel.body.script_type
                         )
                       ),
                     0
