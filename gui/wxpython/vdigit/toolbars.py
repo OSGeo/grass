@@ -271,6 +271,21 @@ class VDigitToolbar(BaseToolbar):
 
         return self._getToolbarData(data)
 
+    def _noVMapOpenForEditingErrDlg(self):
+        """Show error message dialog if no vector map is open for editing
+
+        :return: True if no vector map is open for editing else None
+        """
+        if not self.digit:
+            GError(
+                _(
+                    "No vector map is open for editing. Please select first"
+                    "a vector map from the combo box."
+                ),
+                self.parent,
+            )
+            return True
+
     def OnTool(self, event):
         """Tool selected -> untoggles previusly selected tool in
         toolbar"""
@@ -599,8 +614,7 @@ class VDigitToolbar(BaseToolbar):
 
     def OnCopy(self, event):
         """Copy selected features from (background) vector map"""
-        if not self.digit:
-            GError(_("No vector map open for editing."), self.parent)
+        if self._noVMapOpenForEditingErrDlg():
             return
 
         # select background map
@@ -763,6 +777,8 @@ class VDigitToolbar(BaseToolbar):
 
     def OnZBulk(self, event):
         """Z bulk-labeling selected lines/boundaries"""
+        if self._noVMapOpenForEditingErrDlg():
+            return
         if not self.digit.IsVector3D():
             GError(parent=self.parent,
                    message=_("Vector map is not 3D. Operation canceled."))
