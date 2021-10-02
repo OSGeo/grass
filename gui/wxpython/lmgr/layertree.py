@@ -137,7 +137,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.forceCheck = False  # force check layer if CheckItem is called
         # forms default to centering on screen, this will put on lmgr
         self.centreFromsOnParent = True
-        self.thisItem = None  # identified layer item by mouse motion event
 
         try:
             ctstyle |= CT.TR_ALIGN_WINDOWS
@@ -1797,7 +1796,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         Detects if mouse points at checkbox.
         """
-        self.thisItem, flags = self.HitTest(event.GetPosition())
+        thisItem, flags = self.HitTest(event.GetPosition())
         # workaround: in order not to check checkox when clicking outside
         # we need flag TREE_HITTEST_ONITEMCHECKICON but not TREE_HITTEST_ONITEMLABEL
         # this applies only for TR_FULL_ROW_HIGHLIGHT style
@@ -1815,8 +1814,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         If the user is clicking on checkbox, selection change is vetoed.
         """
         if self.hitCheckbox:
-            # Prevent the scrollbar from scrolling up when a layer item is checked or unchecked
-            self.thisItem.GetWindow().SetFocus()
             event.Veto()
 
     def OnChangeSel(self, event):
