@@ -5,7 +5,7 @@
  *
  * (C) 2001-2009 by the GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
@@ -193,10 +193,17 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     Rast_init_colors(dst);
 
     Rast_get_d_color_range(&min, &max, src);
-
-    lmin = log(min);
-    lmax = log(max);
-
+		/* Make sure that the log makes sense, floor values < 1.0 to 1. */
+		if (min < 1.0) {
+ 	lmin = 0.0;
+		} else {
+ 	lmin = log(min);
+		}
+		if (max < 1.0) {
+ 	lmax = 1.0;
+		} else {
+	lmax = log(max);
+		}
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
 
