@@ -94,4 +94,3 @@ class ModelerToolbar(BaseToolbar):
                 ("quit", icons["quit"], self.parent.OnCloseWindow),
             )
         )
-

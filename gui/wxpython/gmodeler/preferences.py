@@ -759,4 +759,3 @@ class PropertiesDialog(wx.Dialog):
         self.author.SetValue(prop["author"])
         if "overwrite" in prop:
             self.overwrite.SetValue(prop["overwrite"])
-
