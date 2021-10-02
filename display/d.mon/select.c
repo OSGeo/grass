@@ -1,5 +1,3 @@
-#include <dirent.h>
-
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "proto.h"
@@ -10,7 +8,6 @@ int select_mon(const char *name)
     const char *curr_mon;
     char **list;
     int   i, n, found;
-    DIR *dirp;
 
     curr_mon = G_getenv_nofatal("MONITOR");
     if (G_strcasecmp(name, curr_mon) == 0) {
@@ -18,17 +15,13 @@ int select_mon(const char *name)
 	return 0;
     }
 
-    dirp = list_mon(&list, &n);
+    list_mon(&list, &n);
     found = FALSE;
     for (i = 0; i < n; i++) {
 	if (G_strcasecmp(list[i], name) == 0) {
 	    found = TRUE;
 	    break;
 	}
-    }
-    if (dirp) {
-        closedir(dirp);
-        G_free(list);
     }
     
     if (found)
