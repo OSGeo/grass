@@ -2,6 +2,15 @@
 
 set -e
 
+if [ "$CI" ] ; then
+	DUMPBIN_PATH=$(cygpath -ua "C:/Program Files (x86)\Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30133/bin/HostX64/x64/")
+	export PATH="${DUMPBIN_PATH}:$PATH"
+	# dumpbin in GH actions does not support options starting with "-"
+	DUMPBIN_EXPORT="/EXPORTS"
+else
+	DUMPBIN_EXPORT="-exports"
+fi
+
 [ -d mswindows/osgeo4w/vc ] || mkdir mswindows/osgeo4w/vc
 
 if [ -n "$VCPATH" ]; then
@@ -20,7 +29,7 @@ for dllfile in "$@"; do
 
  	echo "$dllfile => $dllname"
 
-	(cd $dlldir; dumpbin -exports $dllfile) |
+	(cd $dlldir; dumpbin "$DUMPBIN_EXPORT" $dllfile) |
 		sed -nf mswindows/osgeo4w/mklibs.sed |
 		egrep -v "^[	 ]*(_+IMPORT_DESCRIPTOR_.*|_+NULL_IMPORT_DESCRIPTOR)$" >mswindows/osgeo4w/vc/${defname%$VERSION}
 
@@ -28,4 +37,3 @@ for dllfile in "$@"; do
 	    lib -nologo -def:${defname} -subsystem:windows -machine:x64
 	    lib -nologo $libname || exit)
 done
-
