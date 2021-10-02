@@ -89,6 +89,9 @@ class PyStc(stc.StyledTextCtrl):
         self.parent = parent
         self.statusbar = statusbar
 
+        # for support of different export in gmodeler
+        self.script_type = 'Python'
+
         self.modified = False  # content modified ?
 
         # this is supposed to get monospace
@@ -260,7 +263,10 @@ class PyStc(stc.StyledTextCtrl):
             self.modified = True
             if self.statusbar:
                 self.statusbar.SetStatusText(
-                    _("Python script contains local modifications"), 0
+                    _('{} script contains local modifications'.format(
+                        self.script_type)
+                    ),
+                    0,
                 )
 
         event.Skip()
