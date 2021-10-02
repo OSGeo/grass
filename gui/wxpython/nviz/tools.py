@@ -5719,7 +5719,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
 class PositionWindow(Window):
     """Abstract position control window, see subclasses
-    ViewPostionWindow and LightPositionWindow"""
+    ViewPositionWindow and LightPositionWindow"""
 
     def __init__(self, parent, mapwindow, id=wx.ID_ANY,
                  **kwargs):
