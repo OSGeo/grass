@@ -2566,8 +2566,9 @@ class WriteScriptFile(ABC):
             if ignoreBlock and item.GetBlockId():
                 # ignore items in loops of conditions
                 return
-            self._writePythonAction(item, variables,
-                                    self.model.GetIntermediateData()[:3])
+            self._writePythonAction(
+                item, variables, self.model.GetIntermediateData()[:3]
+            )
         elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
             # substitute condition
             cond = item.GetLabel()
@@ -2584,8 +2585,7 @@ class WriteScriptFile(ABC):
                 )
                 cond = "%sfor %s in " % (" " * self.indent, condVar)
                 if condText[0] == "`" and condText[-1] == "`":
-                    task = GUI(show=None).ParseCommand(
-                        cmd=utils.split(condText[1:-1]))
+                    task = GUI(show=None).ParseCommand(cmd=utils.split(condText[1:-1]))
                     cond += "grass.read_command("
                     cond += (
                         self._getPythonActionCmd(task, len(cond), variables=[condVar])
@@ -2598,8 +2598,7 @@ class WriteScriptFile(ABC):
                 variablesLoop = variables.copy()
                 variablesLoop[condVar] = None
                 for action in item.GetItems(self.model.GetItems(objType=ModelAction)):
-                    self._writeItem(
-                        action, ignoreBlock=False, variables=variablesLoop)
+                    self._writeItem(action, ignoreBlock=False, variables=variablesLoop)
                 self.indent -= 4
             if isinstance(item, ModelCondition):
                 self.fd.write("%sif %s:\n" % (" " * self.indent, cond))
@@ -2669,9 +2668,7 @@ class WritePyWPSFile(WriteScriptFile):
     """Class for exporting model to PyWPS script."""
 
     def __init__(self, fd, model):
-        """Class for exporting model to PyWPS script.
-
-        """
+        """Class for exporting model to PyWPS script."""
         self.fd = fd
         self.model = model
         self.indent = 8
@@ -2682,7 +2679,8 @@ class WritePyWPSFile(WriteScriptFile):
         """Write PyWPS model to file"""
         properties = self.model.GetProperties()
 
-        self.fd.write(r"""#!/usr/bin/env python3
+        self.fd.write(
+            r"""#!/usr/bin/env python3
 
 import sys
 import os
@@ -2702,13 +2700,14 @@ class Model(Process):
         inputs = list()
         outputs = list()
 
-""")
+"""
+        )
 
         for item in self.model.GetItems():
-            self._write_input_outputs(item,
-                                      self.model.GetIntermediateData()[:3])
+            self._write_input_outputs(item, self.model.GetIntermediateData()[:3])
 
-        self.fd.write(r"""        super(Model, self).__init__(
+        self.fd.write(
+            r"""        super(Model, self).__init__(
             self._handler,
             identifier="{identifier}",
             title="{title}",
@@ -2727,15 +2726,18 @@ class Model(Process):
             )
         )
 
-        self.fd.write("""
+        self.fd.write(
+            """
     @staticmethod
-    def _handler(request, response):""")
+    def _handler(request, response):"""
+        )
 
         self._writeHandler()
 
         for item in self.model.GetItems():
             if item.GetParameterizedParams()["flags"]:
-                self.fd.write(r"""
+                self.fd.write(
+                    r"""
 def getParameterizedFlags(paramFlags, itemFlags):
     fl = ""
     for i in [key for key, value in paramFlags.items() if value[0].data == "True"]:
@@ -2743,17 +2745,20 @@ def getParameterizedFlags(paramFlags, itemFlags):
             fl += i[-1]
 
     return fl
-""")
+"""
+                )
                 break
 
-        self.fd.write("""
+        self.fd.write(
+            """
 
 if __name__ == "__main__":
     process = Model()
 
     processes = [Model()]
     application = Service(processes)
-""")
+"""
+        )
 
     def _write_input_outputs(self, item, intermediates):
         # TODO: Default values
@@ -2765,8 +2770,7 @@ if __name__ == "__main__":
 
             if flag["value"]:
                 value = '\n{}default="{}"'.format(
-                    " " * (self.indent + 4),
-                    flag["value"]
+                    " " * (self.indent + 4), flag["value"]
                 )
             else:
                 value = '\n{}default="False"'.format(" " * (self.indent + 4))
@@ -2834,17 +2838,17 @@ if __name__ == "__main__":
                 self.fd.write("\n")
 
     def _write_input_output_object(
-            self,
-            io_data,
-            object_type,
-            name,
-            item,
-            desc,
-            format_spec,
-            value,
+        self,
+        io_data,
+        object_type,
+        name,
+        item,
+        desc,
+        format_spec,
+        value,
     ):
         self.fd.write(
-"""        {ins_or_outs}.append({lit_or_complex}(
+            """        {ins_or_outs}.append({lit_or_complex}(
             identifier="{param_name}",
             title="{description}",
             {special_params}{value}))
@@ -2860,8 +2864,7 @@ if __name__ == "__main__":
 
     def _writeHandler(self):
         for item in self.model.GetItems():
-            self._writeItem(item,
-                            variables=item.GetParameterizedParams())
+            self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("\n{}return response\n\n".format(" " * self.indent))
 
@@ -2870,7 +2873,8 @@ if __name__ == "__main__":
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
         strcmd = "\n%srun_command(" % (" " * self.indent)
         self.fd.write(
-            strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables))
+            strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
+        )
 
         # write v.out.ogr and r.out.gdal exports for all outputs
         for param in item.GetParams()["params"]:
@@ -2895,12 +2899,12 @@ if __name__ == "__main__":
 
                 keys = param.keys()
                 if "parameterized" in keys and param["parameterized"] is True:
-                    param_request = 'request.inputs["{}"][0].data'.format(
-                        param_name)
+                    param_request = 'request.inputs["{}"][0].data'.format(param_name)
                 else:
                     param_request = '"{}"'.format(param["value"])
 
-                self.fd.write("""
+                self.fd.write(
+                    """
 {run_command}"{cmd}",
 {indent1}input={input},
 {indent2}output=os.path.join(
@@ -2908,33 +2912,36 @@ if __name__ == "__main__":
 {indent4}{out} + "{format_ext}"),
 {indent5}format={format})
 """.format(
-                    run_command=strcmd,
-                    cmd=command,
-                    indent1=" " * (self.indent + 12),
-                    input=param_request,
-                    indent2=" " * (self.indent + 12),
-                    indent3=" " * (self.indent + 16),
-                    indent4=" " * (self.indent + 16),
-                    out=param_request,
-                    format_ext=extension,
-                    indent5=" " * (self.indent + 12),
-                    format=format,
+                        run_command=strcmd,
+                        cmd=command,
+                        indent1=" " * (self.indent + 12),
+                        input=param_request,
+                        indent2=" " * (self.indent + 12),
+                        indent3=" " * (self.indent + 16),
+                        indent4=" " * (self.indent + 16),
+                        out=param_request,
+                        format_ext=extension,
+                        indent5=" " * (self.indent + 12),
+                        format=format,
                     )
                 )
 
-                left_side_out = 'response.outputs["{}"].file'.format(
-                    param_name)
-                right_side_out = 'os.path.join(\n{indent1}' \
-                                 'tempfile.gettempdir(),\n{indent2}{out} + "' \
-                                 '{format_ext}")'.format(
-                    indent1=" " * (self.indent + 4),
-                    indent2=" " * (self.indent + 4),
-                    out=param_request,
-                    format_ext=extension,
+                left_side_out = 'response.outputs["{}"].file'.format(param_name)
+                right_side_out = (
+                    "os.path.join(\n{indent1}"
+                    'tempfile.gettempdir(),\n{indent2}{out} + "'
+                    '{format_ext}")'.format(
+                        indent1=" " * (self.indent + 4),
+                        indent2=" " * (self.indent + 4),
+                        out=param_request,
+                        format_ext=extension,
+                    )
                 )
-                self.fd.write("\n{}{} = {}".format(" " * self.indent,
-                                                   left_side_out,
-                                                   right_side_out))
+                self.fd.write(
+                    "\n{}{} = {}".format(
+                        " " * self.indent, left_side_out, right_side_out
+                    )
+                )
 
     def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
         opts = task.get_options()
@@ -2942,8 +2949,9 @@ if __name__ == "__main__":
         ret = ""
         parameterizedParams = [v["name"] for v in variables["params"]]
 
-        flags, itemParameterizedFlags, params = self._getItemFlags(item, opts,
-                                                                   variables)
+        flags, itemParameterizedFlags, params = self._getItemFlags(
+            item, opts, variables
+        )
 
         out = None
 
@@ -2975,8 +2983,7 @@ if __name__ == "__main__":
         if flags:
             ret += ',\n{indent}flags="{fl}"'.format(indent=" " * cmdIndent, fl=flags)
             if itemParameterizedFlags:
-                ret += " + getParameterizedFlags(\n{}request.inputs, " \
-                       "[{}])".format(
+                ret += " + getParameterizedFlags(\n{}request.inputs, [{}])".format(
                     " " * (cmdIndent + 4), itemParameterizedFlags
                 )
         elif itemParameterizedFlags:
@@ -3170,7 +3177,7 @@ def cleanup():
             )
         if vect:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="vector", 
+                r"""    run_command("g.remove", flags="f", type="vector",
                 name=%s)
 """
                 % ",".join(map(lambda x: '"' + x + '"', vect))

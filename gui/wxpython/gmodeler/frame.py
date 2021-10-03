@@ -249,10 +249,10 @@ class ModelFrame(wx.Frame):
                 self.SetStatusText(
                     _(
                         "{} script contains local modifications".format(
-                            self.pythonPanel.script_type
+                            self.pythonPanel.body.script_type
                         )
                     ),
-                    0
+                    0,
                 )
             else:
                 self.SetStatusText(
@@ -261,7 +261,7 @@ class ModelFrame(wx.Frame):
                             self.pythonPanel.body.script_type
                         )
                       ),
-                    0
+                    0,
                 )
         elif page == self.notebook.GetPageIndexByName("items"):
             self.itemPanel.Update()
@@ -1997,8 +1997,7 @@ class ItemPanel(wx.Panel):
 class PythonPanel(wx.Panel):
     """Model as a Python script of choice."""
 
-    def __init__(self, parent, id=wx.ID_ANY,
-                 **kwargs):
+    def __init__(self, parent, id=wx.ID_ANY, **kwargs):
         """Initialize the panel."""
         self.parent = parent
 
@@ -2060,13 +2059,12 @@ class PythonPanel(wx.Panel):
         btnSizer.Add(self.btnSaveAs, proportion=0, flag=wx.RIGHT, border=5)
         btnSizer.Add(self.btnRun, proportion=0, flag=wx.RIGHT, border=5)
         btnSizer.Add(
-            StaticText(parent=self, id=wx.ID_ANY,
-                       label="%s:" % _("Python script type")),
+            StaticText(
+                parent=self, id=wx.ID_ANY, label="%s:" % _("Python script type")
+            ),
             flag=wx.ALIGN_CENTER_VERTICAL,
         )
-        btnSizer.Add(
-            self.script_type_box, proportion=0, flag=wx.RIGHT, border=5
-        )
+        btnSizer.Add(self.script_type_box, proportion=0, flag=wx.RIGHT, border=5)
 
         sizer.Add(bodySizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
         sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
@@ -2083,7 +2081,7 @@ class PythonPanel(wx.Panel):
         """
         if len(self.parent.GetModel().GetItems()) == 0:
             # no need to fully parse an empty script
-            self.body.SetText('')
+            self.body.SetText("")
             return True
 
         if self.body.modified:
@@ -2092,9 +2090,7 @@ class PythonPanel(wx.Panel):
                 message=_(
                     "{} script is locally modified. "
                     "Refresh will discard all changes. "
-                    "Do you really want to continue?".format(
-                        self.body.script_type
-                    )
+                    "Do you really want to continue?".format(self.body.script_type)
                 ),
                 caption=_("Update"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
@@ -2145,9 +2141,10 @@ class PythonPanel(wx.Panel):
                 message=_(
                     "File <%s> already exists. " "Do you want to overwrite this file?"
                 )
-                        % filename,
+                % filename,
                 caption=_("Save file"),
-                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
             if dlg.ShowModal() == wx.ID_NO:
                 dlg.Destroy()
                 return ""
@@ -2194,8 +2191,8 @@ class PythonPanel(wx.Panel):
                 break
         else:
             self.parent._gconsole.RunCmd(
-                [fd.name],
-                skipInterface=True, onDone=self.OnDone)
+                [fd.name], skipInterface=True, onDone=self.OnDone
+            )
 
         event.Skip()
 
@@ -2206,9 +2203,9 @@ class PythonPanel(wx.Panel):
 
     def OnChangeScriptType(self, event):
         new_script_type = self.script_type_box.GetStringSelection()
-        if new_script_type == 'Python':
+        if new_script_type == "Python":
             self.write_object = WritePythonFile
-        elif new_script_type == 'PyWPS':
+        elif new_script_type == "PyWPS":
             self.write_object = WritePyWPSFile
 
         if self.RefreshScript():
@@ -2220,19 +2217,16 @@ class PythonPanel(wx.Panel):
 
         self.script_type_box.SetStringSelection(self.body.script_type)
 
-        if self.body.script_type == 'Python':
+        if self.body.script_type == "Python":
             self.write_object = WritePythonFile
             self.btnRun.Enable()
-            self.btnRun.SetToolTip(
-                _("Run script")
-            )
-        elif self.body.script_type == 'PyWPS':
+            self.btnRun.SetToolTip(_("Run script"))
+        elif self.body.script_type == "PyWPS":
             self.write_object = WritePyWPSFile
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")
             )
-
 
     def OnRefresh(self, event):
         """Refresh the script."""

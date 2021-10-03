@@ -90,7 +90,7 @@ class PyStc(stc.StyledTextCtrl):
         self.statusbar = statusbar
 
         # for support of different export in gmodeler
-        self.script_type = 'Python'
+        self.script_type = "Python"
 
         self.modified = False  # content modified ?
 
@@ -263,8 +263,10 @@ class PyStc(stc.StyledTextCtrl):
             self.modified = True
             if self.statusbar:
                 self.statusbar.SetStatusText(
-                    _('{} script contains local modifications'.format(
-                        self.script_type)
+                    _(
+                        "{} script contains local modifications".format(
+                            self.script_type
+                        )
                     ),
                     0,
                 )
