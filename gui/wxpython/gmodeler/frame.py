@@ -260,7 +260,7 @@ class ModelFrame(wx.Frame):
                         "{} script is up-to-date".format(
                             self.pythonPanel.body.script_type
                         )
-                      ),
+                    ),
                     0,
                 )
         elif page == self.notebook.GetPageIndexByName("items"):
