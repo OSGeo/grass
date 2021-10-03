@@ -78,8 +78,7 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 
 	if (!first)
 	    Rast_add_c_color_rule(&prev, red, grn, blu,
-				  &cat, red2, grn2, blu2,
-				  dst);
+				  &cat, red2, grn2, blu2, dst);
 
 	first = 0;
 
@@ -91,8 +90,7 @@ void Rast_histogram_eq_colors(struct Colors *dst,
 
     if (!first && cat > prev)
 	Rast_add_c_color_rule(&prev, red, grn, blu,
-			      &cat, red2, grn2, blu2,
-			      dst);
+			      &cat, red2, grn2, blu2, dst);
 }
 
 /*!
@@ -154,8 +152,7 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 
 	if (!first)
 	    Rast_add_d_color_rule(&val, red, grn, blu,
-				  &val2, red2, grn2, blu2,
-				  dst);
+				  &val2, red2, grn2, blu2, dst);
 
 	first = 0;
 
@@ -170,8 +167,7 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 
     if (!first && val2 > val)
 	Rast_add_d_color_rule(&val, red, grn, blu,
-			      &val2, red2, grn2, blu2,
-			      dst);
+			      &val2, red2, grn2, blu2, dst);
 }
 
 /*!
@@ -193,17 +189,19 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     Rast_init_colors(dst);
 
     Rast_get_d_color_range(&min, &max, src);
-		/* Make sure that the log makes sense, floor values < 1.0 to 1. */
-		if (min < 1.0) {
- 	lmin = 0.0;
-		} else {
- 	lmin = log(min);
-		}
-		if (max < 1.0) {
- 	lmax = 1.0;
-		} else {
+    /* Make sure that the log makes sense, floor values < 1.0 to 1. */
+    if (min < 1.0) {
+	lmin = 0.0;
+    }
+    else {
+	lmin = log(min);
+    }
+    if (max < 1.0) {
+	lmax = 1.0;
+    }
+    else {
 	lmax = log(max);
-		}
+    }
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
 
@@ -251,7 +249,8 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
     double lmin, lmax;
-    DCELL amax, lamax;
+    double absmin, absmax;
+    DCELL amin, amax, lamax, lamin;
     int red, grn, blu;
     DCELL prev;
     int i;
@@ -260,11 +259,26 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
     Rast_get_d_color_range(&min, &max, src);
 
-    lmin = log(fabs(min) + 1.0);
-    lmax = log(fabs(max) + 1.0);
+    /* Make sure that the log makes sense, floor values < 1.0 to 1. */
+    absmin = fabs(min);
+    absmax = fabs(max);
+    amax = MAX(absmin, absmax);
+    amin = MIN(absmin, absmax);
+    if (amin < 1.0) {
+	lmin = 0.0;
+    }
+    else {
+	lmin = log(amin);
+    }
+    if (amax < 1.0) {
+	lmax = 1.0;
+    }
+    else {
+	lmax = log(amax);
+    }
 
-    amax = fabs(min) > fabs(max) ? fabs(min) : fabs(max);
-    lamax = lmin > lmax ? lmin : lmax;
+    lamax = MAX(lmin, lmax);
+    lamin = MIN(lmin, lmax);
 
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
@@ -277,15 +291,15 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	double lx;
 	DCELL x, y;
 
-	y = min + (max - min) * i / samples;
+	y = amin + (amax - amin) * i / samples;
 	Rast_get_d_color(&y, &red2, &grn2, &blu2, src);
 
 	if (i == 0)
-	    x = 1;
+	    x = amin;
 	else if (i == samples)
 	    x = amax;
 	else {
-	    lx = 0 + lamax * i / samples;
+	    lx = lamin + (lamax - lamin) * i / samples;
 	    x = exp(lx);
 	}
 
