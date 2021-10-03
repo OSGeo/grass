@@ -25,8 +25,7 @@ from core.debug import Debug
 from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
-from gui_core.wrap import Button, CheckBox, SpinCtrl, StaticBox, \
-    StaticText
+from gui_core.wrap import Button, CheckBox, FloatSpin, SpinCtrl, StaticBox, StaticText
 
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -206,15 +205,16 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.AddGrowableCol(0)
 
         # snapping
-        text = StaticText(
+        text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Snapping threshold"))
+        self.snappingValue = FloatSpin(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Snapping threshold"))
-        self.snappingValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(75, -1),
-            initial=UserSettings.Get(
-                group='vdigit', key="snapping", subkey='value'),
-            min=-1, max=1e6)
+            size=(75, -1),
+            value=UserSettings.Get(group="vdigit", key="snapping", subkey="value"),
+            min_val=-1,
+            max_val=1e6,
+            digits=7,
+        )
         self.snappingValue.Bind(wx.EVT_SPINCTRL, self.OnChangeSnappingValue)
         self.snappingValue.Bind(wx.EVT_TEXT, self.OnChangeSnappingValue)
         self.snappingUnit = wx.Choice(parent=panel, id=wx.ID_ANY, size=(
@@ -475,13 +475,17 @@ class VDigitSettingsDialog(wx.Dialog):
             parent=panel, id=wx.ID_ANY, choices=[
                 _("shorter than"), _("longer than")])
         self.queryLengthSL.SetSelection(
-            UserSettings.Get(
-                group='vdigit',
-                key="queryLength",
-                subkey='than-selection'))
-        self.queryLengthValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(
-                100, -1), initial=1, min=0, max=1e6)
+            UserSettings.Get(group="vdigit", key="queryLength", subkey="than-selection")
+        )
+        self.queryLengthValue = FloatSpin(
+            parent=panel,
+            id=wx.ID_ANY,
+            size=(100, -1),
+            value=1,
+            min_val=0,
+            max_val=1e6,
+            digits=7,
+        )
         self.queryLengthValue.SetValue(
             UserSettings.Get(
                 group='vdigit',
@@ -1003,12 +1007,24 @@ class VDigitSettingsDialog(wx.Dialog):
                          value=int(self.lineWidthValue.GetValue()))
 
         # snapping
-        UserSettings.Set(group='vdigit', key="snapping", subkey='value',
-                         value=int(self.snappingValue.GetValue()))
-        UserSettings.Set(group='vdigit', key="snapping", subkey='unit',
-                         value=self.snappingUnit.GetSelection())
-        UserSettings.Set(group='vdigit', key="snapToVertex", subkey='enabled',
-                         value=self.snapVertex.IsChecked())
+        UserSettings.Set(
+            group="vdigit",
+            key="snapping",
+            subkey="value",
+            value=self.snappingValue.GetValue(),
+        )
+        UserSettings.Set(
+            group="vdigit",
+            key="snapping",
+            subkey="unit",
+            value=self.snappingUnit.GetSelection(),
+        )
+        UserSettings.Set(
+            group="vdigit",
+            key="snapToVertex",
+            subkey="enabled",
+            value=self.snapVertex.IsChecked(),
+        )
 
         # digitize new feature
         UserSettings.Set(group='vdigit', key="addRecord", subkey='enabled',
@@ -1069,10 +1085,9 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(
             group='vdigit',
             key="queryLength",
-            subkey='than-selection',
-            value=self.queryLengthSL.GetSelection())
-        UserSettings.Set(group='vdigit', key="queryLength", subkey='thresh',
-                         value=int(self.queryLengthValue.GetValue()))
+            subkey="thresh",
+            value=self.queryLengthValue.GetValue(),
+        )
         UserSettings.Set(
             group='vdigit',
             key="queryDangle",
