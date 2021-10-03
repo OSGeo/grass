@@ -38,7 +38,7 @@ jobs:
   # stable-alpine, stable-debian, stable-ubuntu
   docker-branch-os-matrix:
     name: build and push ${{ matrix.os }} for branch
-    if: startsWith(github.ref, 'refs/heads/')
+    if: startsWith(github.ref, 'refs/heads/') && github.repository_owner == 'OSGeo'
     runs-on: ubuntu-latest
 
     strategy:
@@ -100,7 +100,7 @@ jobs:
   # again for main branch to create latest tag.
   docker-main-latest:
     name: build and push latest for main branch
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.repository_owner == 'OSGeo'
     runs-on: ubuntu-latest
 
     steps:
@@ -140,7 +140,7 @@ jobs:
   # run for releases, take care of release tags
   docker-release-os-matrix:
     name: build and push release for ${{ matrix.os }}
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') && github.repository_owner == 'OSGeo'
     runs-on: ubuntu-latest
     strategy:
       matrix:
