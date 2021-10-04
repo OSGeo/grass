@@ -11,6 +11,7 @@ for details
 import os
 import stat
 import ctypes
+import shutil
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -35,7 +36,7 @@ from grass.lib.imagery import (
     I_init_group_ref,
     I_add_file_to_group_ref,
     I_free_group_ref,
-    String,
+    ReturnString,
 )
 
 
@@ -46,14 +47,11 @@ class SigSetFileTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
-        cls.sigfile_name = f"{cls.mpath}/signatures/sigset/{cls.sig_name}"
+        cls.sig_dir = f"{cls.mpath}/signatures/sigset/{cls.sig_name}"
 
     @classmethod
     def tearDownClass(cls):
-        try:
-            os.remove(cls.sigfile_name)
-        except OSError:
-            pass
+        shutil.rmtree(cls.sig_dir, ignore_errors=True)
 
     def test_I_fopen_signature_file_old_fail(self):
         sigfile = I_fopen_sigset_file_old(tempname(10))
@@ -73,11 +71,11 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
+        So.title = ReturnString("Signature title")
         So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -85,7 +83,7 @@ class SigSetFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_sigset_file_new(self.sig_name)
-        sig_stat = os.stat(self.sigfile_name)
+        sig_stat = os.stat(f"{self.sig_dir}/sig")
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_WriteSigSet(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -126,11 +124,11 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
+        So.title = ReturnString("Signature title")
         So.bandrefs[0] = ctypes.create_string_buffer(tempname(252).encode())
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -138,7 +136,7 @@ class SigSetFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_sigset_file_new(self.sig_name)
-        sig_stat = os.stat(self.sigfile_name)
+        sig_stat = os.stat(f"{self.sig_dir}/sig")
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_WriteSigSet(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -165,12 +163,12 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
+        So.title = ReturnString("Signature title")
         So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
         So.bandrefs[1] = ctypes.create_string_buffer(b"The_Who")
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -182,7 +180,7 @@ class SigSetFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_sigset_file_new(self.sig_name)
-        sig_stat = os.stat(self.sigfile_name)
+        sig_stat = os.stat(f"{self.sig_dir}/sig")
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_WriteSigSet(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -256,11 +254,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -301,11 +299,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -347,11 +345,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -370,7 +368,7 @@ class SortSigSetByBandrefTest(TestCase):
             + "<band reference missing>,<band reference missing>,"
             + "<band reference missing>",
         )
-        self.assertEqual(ref_err, "The_Doors,<band reference missing>")
+        self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 
         # Clean up memory to help track memory leaks when run by valgrind
         I_free_group_ref(ctypes.byref(R))
@@ -396,11 +394,11 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -441,12 +439,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
         S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -500,12 +498,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
+        S.title = ReturnString("Signature title")
         S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
         S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42

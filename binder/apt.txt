@@ -4,6 +4,8 @@ bison
 flex
 g++
 gettext
+git
+imagemagick
 libblas-dev
 libbz2-dev
 libcairo2-dev
@@ -27,10 +29,9 @@ libxmu-dev
 libzstd-dev
 make
 netcdf-bin
+p7zip
 proj-bin
 sqlite3
 unixodbc-dev
+xvfb
 zlib1g-dev
-p7zip
-imagemagick
-git

@@ -61,8 +61,7 @@ ifneq ($(findstring darwin,$(ARCH)),)
 MAC_FLAGS  = "-D_Nullable="
 endif
 
-SED = sed
-CTYPESGEN = ./ctypesgen.py
+CTYPESGEN = ./run.py
 CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(MAC_FLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
 EXTRA_CLEAN_FILES := $(wildcard ctypesgencore/*.pyc) $(wildcard ctypesgencore/*/*.pyc)
 
@@ -76,12 +75,14 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/lib
 
-PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypes_preamble ctypes_loader)
-PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypes_preamble ctypes_loader)
+PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES))
+PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES))
 LPYFILES := $(patsubst %,$(OBJDIR)/%.py,$(MODULES))
 
+COPY_FILES = $(DSTDIR)/ctypes_loader.py $(DSTDIR)/ctypes_preamble.py
+
 ifeq ($(strip $(GRASS_LIBRARY_TYPE)),shlib)
-default:
+default: $(COPY_FILES)
 	$(MAKE) $(DSTDIR)
 	$(MAKE) $(LPYFILES) $(PYFILES) $(PYCFILES)
 else
@@ -90,13 +91,13 @@ default:
 	exit 1
 endif
 
-$(DSTDIR)/__init__.py: __init__.py | $(DSTDIR)
-	$(INSTALL_DATA) $< $@
+$(COPY_FILES): | $(DSTDIR)
+$(DSTDIR)/ctypes_loader.py: ctypesgen/libraryloader.py
+	cp -f $< $@
+$(DSTDIR)/ctypes_preamble.py: ctypesgen/printer_python/preamble/3_2.py
+	cp -f $< $@
 
 $(DSTDIR)/%.py: $(OBJDIR)/%.py | $(DSTDIR)
-	$(SED) -f fix.sed $< > $@
-
-$(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
 define module_rule

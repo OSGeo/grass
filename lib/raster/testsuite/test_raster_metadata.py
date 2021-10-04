@@ -19,49 +19,54 @@ from grass.pygrass.gis import Mapset
 from grass.pygrass import utils
 
 from grass.lib.gis import G_remove_misc
-from grass.lib.raster import Rast_legal_bandref, Rast_read_bandref, Rast_write_bandref
+from grass.lib.raster import (
+    Rast_legal_bandref,
+    Rast_read_bandref,
+    Rast_get_bandref_or_name,
+    Rast_write_bandref,
+)
 
 
 class RastLegalBandIdTestCase(TestCase):
     def test_empty_name(self):
         ret = Rast_legal_bandref("")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref(" ")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
 
     def test_illegal_name(self):
         ret = Rast_legal_bandref(".a")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref("a/b")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref("a@b")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
         ret = Rast_legal_bandref("a#b")
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
 
     def test_too_long(self):
         ret = Rast_legal_bandref(
             "a_" + "".join(random.choices(string.ascii_letters, k=253))
         )
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref(
             "a_" + "".join(random.choices(string.ascii_letters, k=254))
         )
-        self.assertEqual(ret, -1)
+        self.assertEqual(ret, False)
 
     def test_good_name(self):
         ret = Rast_legal_bandref("1")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("1a")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("clouds")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("rededge1")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("S2_1")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
         ret = Rast_legal_bandref("GRASS_aspect_deg")
-        self.assertEqual(ret, 1)
+        self.assertEqual(ret, True)
 
 
 class RastBandReferenceTestCase(TestCase):
@@ -93,6 +98,14 @@ class RastBandReferenceTestCase(TestCase):
         G_remove_misc("cell_misc", "bandref", self.map)
         Rast_write_bandref(self.map, self.bandref)
         ret = utils.decode(Rast_read_bandref(self.map, self.mapset))
+        self.assertEqual(ret, self.bandref)
+
+    def test_get_bandref_or_name(self):
+        G_remove_misc("cell_misc", "bandref", self.map)
+        ret = utils.decode(Rast_get_bandref_or_name(self.map, self.mapset))
+        self.assertEqual(ret, self.map)
+        Rast_write_bandref(self.map, self.bandref)
+        ret = utils.decode(Rast_get_bandref_or_name(self.map, self.mapset))
         self.assertEqual(ret, self.bandref)
 
 

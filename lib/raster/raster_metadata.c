@@ -99,6 +99,23 @@ char *Rast_read_bandref(const char *name, const char *mapset)
 }
 
 /*!
+ * \brief Get a raster map band reference or fall back to its name
+ * 
+ * Use this function if a band reference is needed but not mandated.
+ * 
+ * \param name raster map name
+ * \param mapset mapset name
+ *
+ * \return  string representing band reference or map name
+ */
+char *Rast_get_bandref_or_name(const char *name, const char *mapset) {
+    char *buff;
+
+    buff = Rast_read_bandref(name, mapset);
+    return buff ? buff : G_store(name);
+}
+
+/*!
  * \brief Write a string into a raster's band reference metadata file
  *
  * Raster map must exist in the current mapset.
@@ -121,7 +138,7 @@ void Rast_write_bandref(const char *name, const char *str)
  * They are in format <shortcut>_<bandname>.
  * Band identifiers are capped in legth to GNAME_MAX.
  *
- * This function will return -1 if provided band id is not considered
+ * This function will return false if provided band id is not considered
  * to be valid.
  * This function does not check if band id maps to any entry in band
  * metadata files as not all band id's have files with extra metadata.
@@ -130,32 +147,32 @@ void Rast_write_bandref(const char *name, const char *str)
  *
  * \param bandref band reference to check
  *
- * \return 1 success
- * \return -1 failure
+ * \return true success
+ * \return false failure
  */
-int Rast_legal_bandref(const char *bandref)
+bool Rast_legal_bandref(const char *bandref)
 {
     const char *s;
 
     if (strlen(bandref) >= GNAME_MAX) {
         G_warning(_("Band reference is too long"));
-        return -1;
+        return false;
     }
 
     if (G_legal_filename(bandref) != 1)
-        return -1;
+        return false;
 
     s = bandref;
     while (*s) {
 	if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
 	      (*s >= '0' && *s <= '9') || *s == '_'  || *s == '-')) {
 	    G_warning(_("Character '%c' not allowed in band reference."), *s);
-	    return -1;
+	    return false;
 	}
 	s++;
     }
 
-    return 1;
+    return true;
 }
 
 /*!

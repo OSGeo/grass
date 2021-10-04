@@ -21,7 +21,8 @@ Notebooks. The original version was written as part of Google Summer of Code in 
 For more information, visit https://trac.osgeo.org/grass/wiki/GSoC/2021/JupyterAndGRASS
 """
 
-from .setup import *
-from .interact_display import *
 from .display import *
+from .interact_display import *
+from .render3d import *
+from .setup import *
 from .utils import *

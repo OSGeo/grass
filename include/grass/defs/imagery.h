@@ -100,6 +100,7 @@ int I_iclass_write_signatures(struct Signature *, const char *);
 /* list_gp.c */
 int I_list_group(const char *, const struct Ref *, FILE *);
 int I_list_group_simple(const struct Ref *, FILE *);
+void I__list_group_name_fit(char *, const char *, const char *);
 
 /* list_subgp.c */
 char ** I_list_subgroups(const char *, int *);
@@ -147,8 +148,8 @@ int I_apply_colormap(unsigned char *, unsigned char *, unsigned,  unsigned char 
 int I_rasterize(double *, int, unsigned char, struct Cell_head *, unsigned char *);
 
 /* manage_signatures.c */
-void I__get_signatures_element(char *, I_SIGFILE_TYPE);
-void I__make_signatures_element(I_SIGFILE_TYPE);
+void I_get_signatures_dir(char *, I_SIGFILE_TYPE);
+void I_make_signatures_dir(I_SIGFILE_TYPE);
 int I_signatures_remove(I_SIGFILE_TYPE, const char *);
 int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *, const char *);
 int I_signatures_rename(I_SIGFILE_TYPE, const char *, const char *);

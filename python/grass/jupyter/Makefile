@@ -9,6 +9,8 @@ MODULES = \
 	setup \
 	display \
 	interact_display \
+	region \
+	render3d \
 	utils
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)

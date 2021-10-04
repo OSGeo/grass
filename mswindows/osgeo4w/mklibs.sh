@@ -37,3 +37,4 @@ for dllfile in "$@"; do
 	    lib -nologo -def:${defname} -subsystem:windows -machine:x64
 	    lib -nologo $libname || exit)
 done
+

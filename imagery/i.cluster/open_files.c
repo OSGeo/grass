@@ -25,10 +25,7 @@ int open_files(void)
 	    G_warning(_("Raster map <%s> do not exists in subgroup <%s>"),
 		      G_fully_qualified_name(name, mapset), subgroup);
         }
-        bandref = Rast_read_bandref(ref.file[n].name, ref.file[n].mapset);
-        if (!bandref)
-            G_fatal_error(_("Raster map <%s@%s> lacks band reference"),
-                            ref.file[n].name, ref.file[n].mapset);
+        bandref = Rast_get_bandref_or_name(ref.file[n].name, ref.file[n].mapset);
         bandrefs[n] = G_store(bandref);
     }
     if (missing)

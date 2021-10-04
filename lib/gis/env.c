@@ -269,9 +269,9 @@ static void write_env(int loc)
     FILE *fd;
     int n;
     char dummy[2];
-    RETSIGTYPE (*sigint)(int);
+    void (*sigint)(int);
 #ifdef SIGQUIT
-    RETSIGTYPE (*sigquit)(int);
+    void (*sigquit)(int);
 #endif
 
     if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
