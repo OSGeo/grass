@@ -924,7 +924,7 @@ class AbstractMapDataset(AbstractDataset):
         # database even if the map is in a different mapset,
         # as long as the temporal database of the current mapset is used
 
-        mapset=get_current_mapset()
+        mapset = get_current_mapset()
 
         dbif, connection_state_changed = init_dbif(dbif)
         statement = ""

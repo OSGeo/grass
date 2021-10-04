@@ -30,7 +30,7 @@ from .core import (
     get_tgis_message_interface,
     get_tgis_dbmi_paramstyle,
     SQLDatabaseInterfaceConnection,
-    get_current_mapset
+    get_current_mapset,
 )
 
 ###############################################################################
@@ -329,7 +329,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         # default: search temporal database in the mapset of the map
         if mapset is None:
-            mapset=self.mapset
+            mapset = self.mapset
 
         if dbif:
             dbif.execute(sql, mapset=mapset)
@@ -433,9 +433,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         # mapset must be the mapset of the temporal database
         # not of the map
         mapset = get_current_mapset()
-        return dbif.mogrify_sql_statement(
-            self.get_insert_statement(), mapset=mapset
-        )
+        return dbif.mogrify_sql_statement(self.get_insert_statement(), mapset=mapset)
 
     def insert(self, dbif=None):
         """Serialize the content of this object and store it in the temporal
@@ -552,8 +550,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(
-            self.get_update_all_statement(ident))
+        return dbif.mogrify_sql_statement(self.get_update_all_statement(ident))
 
     def update_all(self, dbif=None, ident=None):
         """Serialize the content of this object, including None objects,

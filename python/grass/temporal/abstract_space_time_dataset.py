@@ -2359,7 +2359,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if stds_mapset != mapset:
             dbif.close()
-            self.msgr.fatal(_("Maps can only registered in a database in the current mapset"))
+            self.msgr.fatal(
+                _("Maps can only registered in a database in the current mapset")
+            )
 
         # Check if map is already registered
         if self.is_map_registered(map_id, dbif=dbif):
@@ -2422,7 +2424,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if self.get_mapset() != mapset:
             self.msgr.debug(1, "STDS name <%s>" % self.get_name())
             dbif.close()
-            self.msgr.fatal(_("Maps can only unregistered in a database in the current mapset"))
+            self.msgr.fatal(
+                _("Maps can only unregistered in a database in the current mapset")
+            )
 
         statement = ""
 

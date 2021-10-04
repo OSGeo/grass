@@ -16,6 +16,7 @@ import grass.script as gscript
 import datetime
 import os
 
+
 class TestRasterRegisterFunctions(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -924,12 +925,13 @@ class TestRegisterMapsetAccess(TestCase):
             quiet=True,
         )
         grassenv = gscript.gisenv()
-        mapset_path = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"], self.newmapset)
+        mapset_path = os.path.join(
+            grassenv["GISDBASE"], grassenv["LOCATION_NAME"], self.newmapset
+        )
         gscript.try_rmdir(mapset_path)
 
     def test_mapset_access_1(self):
-        """Test the registration of maps from a different mapset.
-        """
+        """Test the registration of maps from a different mapset."""
 
         self.strds_abs_2 = tgis.open_new_stds(
             name="register_test_abs",
@@ -942,7 +944,7 @@ class TestRegisterMapsetAccess(TestCase):
         )
 
         # register maps from another mapset
-        # names are not fully qualified, maps are in a different mapset 
+        # names are not fully qualified, maps are in a different mapset
         strdsname = self.strds_abs_2.get_name() + "@" + self.newmapset
         maps = "register_map_1,register_map_2"
         tgis.register_maps_in_space_time_dataset(
