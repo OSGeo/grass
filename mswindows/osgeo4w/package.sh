@@ -178,15 +178,15 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-nls \
 		--with-zstd \
 		--with-odbc \
-    --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
+                --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
 		--with-blas \
 		--with-lapack-includes=/mingw64/include/lapack \
 		--with-openmp \
 		--with-wxwidgets \
-    --with-cairo \
+                --with-cairo \
 		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
-    --with-opengl=windows \
+                --with-opengl=windows \
 		--with-bzlib \
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config
 
