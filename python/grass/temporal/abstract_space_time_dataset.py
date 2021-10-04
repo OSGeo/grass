@@ -21,7 +21,6 @@ from .core import (
     get_sql_template_path,
     get_tgis_metadata,
     get_current_mapset,
-    get_enable_mapset_check,
 )
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .temporal_granularity import (
@@ -1746,15 +1745,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 granularity
 
         """
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to shift dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset "
-                    "of the dataset does not match the current "
+                    "of the database does not match the current "
                     "mapset"
                 )
                 % ({"ds": self.get_id()}, {"type": self.get_type()})
@@ -1924,15 +1920,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to snap dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset "
-                    "of the dataset does not match the current "
+                    "of the database does not match the current "
                     "mapset"
                 )
                 % ({"ds": self.get_id()}, {"type": self.get_type()})
@@ -2034,15 +2027,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to rename dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset "
-                    "of the dataset does not match the current "
+                    "of the database does not match the current "
                     "mapset"
                 )
                 % ({"ds": self.get_id()}, {"type": self.get_type()})
@@ -2126,15 +2116,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             % (self.get_new_map_instance(ident=None).get_type(), self.get_id())
         )
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to delete dataset <%(ds)s> of type "
                     "%(type)s from the temporal database. The mapset"
-                    " of the dataset does not match the current "
+                    " of the database does not match the current "
                     "mapset"
                 )
                 % {"ds": self.get_id(), "type": self.get_type()}
@@ -2190,6 +2177,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         is_registered = False
 
+        # TODO: use mapset of the corresponding stds
+
         # Check if map is already registered
         if stds_register_table is not None:
             if dbif.get_dbmi().paramstyle == "qmark":
@@ -2227,14 +2216,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :return: True if success, False otherwise
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        # only modify database in current mapset
+        mapset = get_current_mapset()
+
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to register map in dataset <%(ds)s> of "
-                    "type %(type)s. The mapset of the dataset does "
+                    "type %(type)s. The mapset of the database does "
                     "not match the current mapset"
                 )
                 % {"ds": self.get_id(), "type": self.get_type()}
@@ -2242,7 +2231,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         dbif, connection_state_changed = init_dbif(dbif)
 
-        if map.is_in_db(dbif) is False:
+        if map.is_in_db(dbif, mapset=self.get_mapset()) is False:
             dbif.close()
             self.msgr.fatal(
                 _(
@@ -2273,8 +2262,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 % (map.get_type(), map.get_map_id(), map.get_type(), self.get_id()),
             )
 
-        # First select all data from the database
-        map.select(dbif)
+        # First select all data from the database in the current mapset
+        map.select(dbif, mapset=mapset)
 
         if not map.check_for_correct_time():
             if map.get_layer():
@@ -2368,9 +2357,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     % {"id": self.get_id(), "map": map.get_map_id()}
                 )
 
-        if get_enable_mapset_check() is True and stds_mapset != map_mapset:
+        if stds_mapset != mapset:
             dbif.close()
-            self.msgr.fatal(_("Only maps from the same mapset can be registered"))
+            self.msgr.fatal(_("Maps can only registered in a database in the current mapset"))
 
         # Check if map is already registered
         if self.is_map_registered(map_id, dbif=dbif):
@@ -2399,7 +2388,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         statement += dbif.mogrify_sql_statement((sql, (map_id,)))
 
         # Now execute the insert transaction
-        dbif.execute_transaction(statement)
+        # only databases in the current mapset can be modified
+        dbif.execute_transaction(statement, mapset=stds_mapset)
 
         if connection_state_changed:
             dbif.close()
@@ -2426,19 +2416,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 string, None in case of a failure
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
-            self.msgr.fatal(
-                _(
-                    "Unable to unregister map from dataset <%(ds)s>"
-                    " of type %(type)s in the temporal database."
-                    " The mapset of the dataset does not match the"
-                    " current mapset"
-                )
-                % {"ds": self.get_id(), "type": self.get_type()}
-            )
+        # only modify database in current mapset
+        mapset = get_current_mapset()
+
+        if self.get_mapset() != mapset:
+            self.msgr.debug(1, "STDS name <%s>" % self.get_name())
+            dbif.close()
+            self.msgr.fatal(_("Maps can only unregistered in a database in the current mapset"))
 
         statement = ""
 
@@ -2487,7 +2471,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             statement += dbif.mogrify_sql_statement((sql, (map.get_id(),)))
 
         if execute:
-            dbif.execute_transaction(statement)
+            dbif.execute_transaction(statement, mapset=mapset)
             statement = ""
 
         if connection_state_changed:
@@ -2514,15 +2498,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         """
 
-        if (
-            get_enable_mapset_check() is True
-            and self.get_mapset() != get_current_mapset()
-        ):
+        if self.get_mapset() != get_current_mapset():
             self.msgr.fatal(
                 _(
                     "Unable to update dataset <%(ds)s> of type "
                     "%(type)s in the temporal database. The mapset"
-                    " of the dataset does not match the current "
+                    " of the database does not match the current "
                     "mapset"
                 )
                 % {"ds": self.get_id(), "type": self.get_type()}
@@ -2582,7 +2563,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         sql_script += sql
         sql_script += "\n"
 
-        dbif.execute_transaction(sql_script)
+        dbif.execute_transaction(sql_script, mapset=self.base.mapset)
 
         # Read and validate the selected end time
         self.select(dbif)
@@ -2662,7 +2643,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
                 sql = sql.replace("STDS", self.get_type())
 
-            dbif.execute_transaction(sql)
+            dbif.execute_transaction(sql, mapset=self.base.mapset)
 
         # Count the temporal map types
         maps = self.get_registered_maps_as_objects(dbif=dbif)

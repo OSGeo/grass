@@ -264,7 +264,7 @@ def get_tgis_message_interface():
     """Return the temporal GIS message interface which is of type
     grass.pygrass.message.Messenger()
 
-    Use this message interface to print messages to stdout using the
+    Use this message interface to print messages to stderr using the
     GRASS C-library messaging system.
     """
     global message_interface

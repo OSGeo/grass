@@ -12,9 +12,9 @@ for details.
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+import grass.script as gscript
 import datetime
 import os
-
 
 class TestRasterRegisterFunctions(TestCase):
     @classmethod
@@ -78,7 +78,7 @@ class TestRasterRegisterFunctions(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name="register_map_1,register_map_2",
+            name="register_map_1,register_map_2,register_map_null",
             quiet=True,
         )
         self.strds_abs.delete()
@@ -575,6 +575,13 @@ class TestVectorRegisterFunctions(TestCase):
             name="register_map_1,register_map_2",
             quiet=True,
         )
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="register_map_null",
+            quiet=True,
+        )
         self.stvds_abs.delete()
         self.stvds_rel.delete()
 
@@ -818,6 +825,141 @@ class TestRegisterFails(TestCase):
             start="2001-01-01",
             end="2001-01-01",
             maps=("a", "b"),
+        )
+
+
+class TestRegisterMapsetAccess(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        """Initiate the temporal GIS and set the region"""
+        os.putenv("GRASS_OVERWRITE", "1")
+        tgis.init()
+        cls.use_temp_region()
+        cls.runModule("g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0)
+
+        # Create the test maps
+        cls.runModule(
+            "r.mapcalc",
+            expression="register_map_1 = 1",
+            overwrite=True,
+            quiet=True,
+        )
+        cls.runModule(
+            "r.mapcalc",
+            expression="register_map_2 = 2",
+            overwrite=True,
+            quiet=True,
+        )
+
+        cls.del_temp_region()
+
+    def setUp(self):
+        """Create the space time raster dataset"""
+        self.strds_abs = tgis.open_new_stds(
+            name="register_test_abs",
+            type="strds",
+            temporaltype="absolute",
+            title="Test strds",
+            descr="Test strds",
+            semantic="field",
+            overwrite=True,
+        )
+        tgis.register_maps_in_space_time_dataset(
+            type="raster",
+            name=self.strds_abs.get_name(),
+            maps="register_map_1,register_map_2",
+            start="2001-01-01",
+            increment="1 day",
+            interval=True,
+        )
+
+        self.currmapset = tgis.get_current_mapset()
+        self.newmapset = "test_temporal_register_mapset_access"
+
+        # create and switch to new mapset
+        self.runModule(
+            "g.mapset",
+            mapset=self.newmapset,
+            flags="c",
+            quiet=True,
+        )
+
+        # add old mapset to search path
+        self.runModule(
+            "g.mapsets",
+            mapset=self.currmapset,
+            operation="add",
+            quiet=True,
+        )
+        self.runModule(
+            "g.mapsets",
+            flags="p",
+            verbose=True,
+        )
+
+        tgis.stop_subprocesses()
+        tgis.init()
+        self.assertNotEqual(self.currmapset, tgis.get_current_mapset())
+
+    def tearDown(self):
+        """Remove raster maps from current mapset"""
+
+        # switch to old mapset
+        self.runModule(
+            "g.mapset",
+            mapset=self.currmapset,
+            quiet=True,
+        )
+
+        tgis.stop_subprocesses()
+        tgis.init()
+
+        self.strds_abs.delete()
+
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="register_map_1,register_map_2",
+            quiet=True,
+        )
+        grassenv = gscript.gisenv()
+        mapset_path = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"], self.newmapset)
+        gscript.try_rmdir(mapset_path)
+
+    def test_mapset_access_1(self):
+        """Test the registration of maps from a different mapset.
+        """
+
+        self.strds_abs_2 = tgis.open_new_stds(
+            name="register_test_abs",
+            type="strds",
+            temporaltype="absolute",
+            title="Test strds",
+            descr="Test strds",
+            semantic="field",
+            overwrite=True,
+        )
+
+        # register maps from another mapset
+        # names are not fully qualified, maps are in a different mapset 
+        strdsname = self.strds_abs_2.get_name() + "@" + self.newmapset
+        maps = "register_map_1,register_map_2"
+        tgis.register_maps_in_space_time_dataset(
+            type="raster",
+            name=strdsname,
+            maps=maps,
+            start="2001-01-01",
+            increment="1 day",
+            interval=True,
+        )
+
+        self.assertModule(
+            "t.remove",
+            type="strds",
+            inputs=strdsname,
+            flags="rf",
+            quiet=True,
         )
 
 
