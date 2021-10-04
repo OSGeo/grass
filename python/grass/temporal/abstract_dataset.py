@@ -486,9 +486,6 @@ class AbstractDataset(
                  empty string otherwise
         """
 
-        # only modify database in current mapset
-        mapset = get_current_mapset()
-
         dbif, connection_state_changed = init_dbif(dbif)
 
         # Build the UPDATE SQL statement
