@@ -59,12 +59,12 @@ InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
 
 !define PACKAGE_FOLDER ".\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package"
 !if ${INSTALLER_TYPE} == "Release"
-	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup-${PLATFORM}.exe"
-	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${BINARY_REVISION} (${PLATFORM})"
+	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup.exe"
+	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${BINARY_REVISION}"
 	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
-	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}-Setup-${PLATFORM}.exe"
-	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION} (${PLATFORM})"
+	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}-Setup.exe"
+	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}"
 	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ GIT"
 !endif
 
@@ -610,7 +610,7 @@ Section "GRASS" SecGRASS
 	
 	;HKEY_LOCAL_MACHINE Install entries
 	;Set the Name, Version and Revision of GRASS + PublisherInfo + InstallPath
-	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE} (${PLATFORM})"
+	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "VersionNumber" "${VERSION_NUMBER}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "GitRevision" "${GIT_REVISION}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "BinaryRevision" "${BINARY_REVISION}"
@@ -619,7 +619,7 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "InstallPath" "$INSTALL_DIR"
 	
 	;HKEY_LOCAL_MACHINE Uninstall entries
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@ (${PLATFORM})"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString" "$INSTALL_DIR\Uninstall-GRASS.exe"
 	
 	!if ${INSTALLER_TYPE} == "Release"
