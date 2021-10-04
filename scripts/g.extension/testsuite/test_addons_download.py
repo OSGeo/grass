@@ -59,7 +59,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         self.assertModule(
             "g.extension",
-            extension="r.plus.example",
+            extension="r.example.plus",
             url="https://github.com/wenzeslaus/r.example.plus",
             prefix=self.install_prefix,
         )
@@ -67,7 +67,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         # Modules with non-standard branch would be good for testing...
         self.assertModule(
             "g.extension",
-            extension="r.plus.example",
+            extension="r.example.plus",
             url="https://github.com/wenzeslaus/r.example.plus",
             prefix=self.install_prefix,
             branch="main",
@@ -81,7 +81,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         """Test installing extension from gitlab"""
         self.assertModule(
             "g.extension",
-            extension="r.plus.example",
+            extension="r.example.plus",
             url="https://gitlab.com/vpetras/r.example.plus",
             prefix=self.install_prefix,
         )
@@ -114,7 +114,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             os.path.join(self.install_prefix, "docs", "html", "r.clip.html"),
         ]
         self.assertModule(
-            "g.extension", extension="r.clip", url=None, prefix=self.install_prefix
+            "g.extension", extension="v.in.gbif", url=None, prefix=self.install_prefix
         )
 
         for file in r_clip_files:
@@ -165,7 +165,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             "prefix": self.install_prefix,
         }
         g_extension.build_platform = "x86_64"
-        g_extension.version = "784"
+        g_extension.version = "785"
         g_extension.TMPDIR = self.install_prefix
         g_extension.install_extension_win("v.in.gbif")
 
