@@ -136,7 +136,7 @@ class GMFrame(wx.Frame):
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(
-                    _("There were some issues when loading menu" " or Tools pane:")
+                    _("There were some issues when loading menu" " or Tools:")
                 )
                 for message in messages:
                     self._gconsole.WriteError(message)
