@@ -106,8 +106,6 @@ int main(int argc, char *argv[])
     Rast_get_window(&cellhd);
     nrows = cellhd.rows;
     ncols = cellhd.cols;
-    /* for unit = cells */
-    /* ew_factor = cellhd.ew_res / cellhd.ns_res; */
 
     /* allocate CELL buffers two columns larger than current window */
     len = (ncols + 2) * sizeof(CELL);
@@ -198,7 +196,6 @@ int main(int argc, char *argv[])
                     obj_geos[cur - min].max_col = col + 1;
             }
 
-            /* TODO: convert perimeter to meters for -m flag */
             if (cmp_cells(cur, top, cur_null, top_null)) {
                 if (flag_m->answer) {
                     double perimeter;
@@ -265,7 +262,6 @@ int main(int argc, char *argv[])
                 obj_geos[cur - min].perimeter += 1;
         }
 
-
         /* switch the buffers so that the current buffer becomes the previous */
         temp_in = cur_in;
         cur_in = prev_in;
@@ -303,8 +299,6 @@ int main(int argc, char *argv[])
 
     G_message(_("Writing output"));
     /* print table */
-    /* TODO: use separator */
-    /* print table header (column names) */
     fprintf(out_fp, "cat%s", sep);
     fprintf(out_fp, "area%s", sep);
     fprintf(out_fp, "perimeter%s", sep);
@@ -318,7 +312,7 @@ int main(int argc, char *argv[])
     /* print table body */
     for (i = 0; i < n_objects; i++) {
         G_percent(i, n_objects - 1, 1);
-        /* skip emtpy objects */
+        /* skip empty objects */
         if (obj_geos[i].area == 0)
             continue;
 
@@ -338,9 +332,6 @@ int main(int argc, char *argv[])
             obj_geos[i].num = obj_geos[i].area;
         fprintf(out_fp, "%f%s", obj_geos[i].x / obj_geos[i].num, sep);
         fprintf(out_fp, "%f", obj_geos[i].y / obj_geos[i].num);
-        /* TODO: convert bounding box area and perimeter to (square) meters for -m flag */
-
-
         /* object id: i + min */
 
         /* TODO */
