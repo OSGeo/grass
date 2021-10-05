@@ -185,7 +185,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
 		--with-blas \
 		--with-lapack \
-		--with-lapack-includes=/mingw64/include/lapack \
+		--with-lapack-includes=/mingw64/include \
 		--with-openmp \
 		--with-wxwidgets \
 		--with-cairo \
