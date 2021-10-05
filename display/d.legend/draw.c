@@ -67,7 +67,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     double coef;
     double ppl;
     double bb,bt,bl,br;
-    char MaxLabel[512];
+    char MaxLabel[513];
     double num;
     int MaxLabelW, LabelW;
 
@@ -594,7 +594,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         }
                         if (color)
                             D_use_color(color);
-                            D_text(buff);
+                        D_text(buff);
                     }
                 }
             }                   /* for */
@@ -947,7 +947,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             if (maptype == MAP_TYPE_RASTER2D)
                 units_bottom = Rast_read_units(map_name, "");
             else
-                units = "";
+                units_bottom = "";
             /* FIXME: does the raster3d really need to be opened to read the units?
                units_bottom = Rast3d_get_unit(map_fid); */
 
@@ -956,15 +956,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
 
             if (strlen(units_bottom)) {
                 D_text_size(titsiz, titsiz);
-                D_get_text_box(title, &bb, &bt, &bl, &br);
+                D_get_text_box(units_bottom, &bb, &bt, &bl, &br);
                 if (horiz) {
-                    x_tit =
-                        (x0 + x1) / 2. - (br - bl) / 2;
-                    y_tit = y1 + (txsiz * 2.75);
+                    x_tit = (x0 + x1) / 2. - (br - bl) / 2;
+                    y_tit = y0 - (titsiz) - max_hist;
                 }
                 else {
                     x_tit = x0;
+                    y_tit = y0 - txsiz;
                 }
+
                 x1_tit = x_tit + (br - bl);
 
                 if (draw) {
@@ -985,7 +986,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 if (x1bg < x1_tit)
                     x1bg = x1_tit + txsiz;
                 y1bg = y0 + lleg + txsiz;
-                if (strlen(title) > 0)
+                if (strlen(title) > 0 || strlen(units_bottom) > 0)
                     y0bg = y0 - titsiz -2 * txsiz;
                 else
                     y0bg = y0 - txsiz;
@@ -998,7 +999,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     x1bg = x1_tit + txsiz;
                 }
                 y1bg = y0 + lleg + label_indent + 1.5 * txsiz;
-                if (strlen(title) > 0)
+                if (strlen(title) > 0 || strlen(units_bottom) > 0)
                     y0bg = y0 - (2.5 * titsiz) - max_hist;
                 else
                     y0bg = y0 - titsiz - max_hist;
@@ -1360,5 +1361,4 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         }
 
     }
-    D_save_command(G_recreate_command());
 }

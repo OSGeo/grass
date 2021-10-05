@@ -11,8 +11,7 @@ set -e
 # print commands
 set -x
 
-if [ -z "$1" ]
-then
+if [ -z "$1" ]; then
     echo "Usage: $0 PREFIX"
     exit 1
 fi
@@ -21,6 +20,10 @@ fi
 set -u
 
 export INSTALL_PREFIX=$1
+
+# Old versions of GCC on CentOS default to C89 although are C11 capable
+# This causes compilation to fail on >C89 code
+export CFLAGS="-O2 -std=gnu11"
 
 ./configure \
     --prefix="$INSTALL_PREFIX/" \

@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <inttypes.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -44,10 +45,9 @@ int main(int argc, char **argv)
     const char *title;
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
-    char *units, *vdatum;
+    char *units, *vdatum, *bandref;
     int i;
     CELL mincat = 0, maxcat = 0, cat;
-    double zmin, zmax;		/* min and max data values */
     FILE *out;
     struct Range crange;
     struct FPRange range;
@@ -120,6 +120,8 @@ int main(int argc, char **argv)
 
     vdatum = Rast_read_vdatum(name, "");
 
+    bandref = Rast_read_bandref(name, "");
+
     /*Check the Timestamp */
     time_ok = G_read_raster_timestamp(name, "", &ts) > 0;
     /*Check for valid entries, show none if no timestamp available */
@@ -129,10 +131,6 @@ int main(int argc, char **argv)
 	if (ts.count > 1)
 	    second_time_ok = 1;
     }
-
-    if (Rast_read_fp_range(name, "", &range) < 0)
-	G_fatal_error(_("Unable to read range file"));
-    Rast_get_fp_range_min_max(&range, &zmin, &zmax);
 
     out = stdout;
 
@@ -182,10 +180,11 @@ int main(int argc, char **argv)
 		     "  Type of Map:  %-20.20s Number of Categories: %-9s",
 		     hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??", cats_ok ? tmp1 : "??");
 
-	compose_line(out, "  Data Type:    %s",
+	compose_line(out, "  Data Type:    %-20.20s Band reference: %s ",
 		     (data_type == CELL_TYPE ? "CELL" :
 		      (data_type == DCELL_TYPE ? "DCELL" :
-		       (data_type == FCELL_TYPE ? "FCELL" : "??"))));
+		       (data_type == FCELL_TYPE ? "FCELL" : "??"))),
+             (bandref ? bandref : "(none)"));
 
 	/* For now hide these unless they exist to keep the noise low. In
 	 *   future when the two are used more widely they can be printed
@@ -225,27 +224,54 @@ int main(int argc, char **argv)
 			 tmp1, tmp2, tmp3);
 
 	    if (data_type == CELL_TYPE) {
-		if (2 == Rast_read_range(name, "", &crange))
+		int ret;
+		CELL min, max;
+
+		/* print range only if available */
+		ret = Rast_read_range(name, "", &crange);
+		if (ret == 2)
 		    compose_line(out,
 				 "  Range of data:    min = NULL  max = NULL");
-		else
-		    compose_line(out,
-				 "  Range of data:    min = %i  max = %i",
-				 (CELL) zmin, (CELL) zmax);
+		else if (ret > 0) {
+		    Rast_get_range_min_max(&crange, &min, &max);
+
+		    if (Rast_is_c_null_value(&min)) {
+			compose_line(out,
+				     "  Range of data:    min = NULL  max = NULL");
+		    }
+		    else {
+			compose_line(out,
+				     "  Range of data:    min = %i  max = %i",
+				     min, max);
+		    }
+		}
 	    }
 	    else {
-		if (Rast_is_d_null_value(&zmin)) {
+		int ret;
+		DCELL min, max;
+
+		/* print range only if available */
+		ret = Rast_read_fp_range(name, "", &range);
+		if (ret == 2) {
 		    compose_line(out,
 				 "  Range of data:    min = NULL  max = NULL");
 		}
-		else {
-		    if (data_type == FCELL_TYPE) {
-			compose_line(out, "  Range of data:    min = %.7g  max = %.7g",
-				     zmin, zmax);
+		else if (ret > 0) {
+		    Rast_get_fp_range_min_max(&range, &min, &max);
+
+		    if (Rast_is_d_null_value(&min)) {
+			compose_line(out,
+				     "  Range of data:    min = NULL  max = NULL");
 		    }
 		    else {
-			compose_line(out, "  Range of data:    min = %.15g  max = %.15g",
-				     zmin, zmax);
+			if (data_type == FCELL_TYPE) {
+			    compose_line(out, "  Range of data:    min = %.7g  max = %.7g",
+					 min, max);
+			}
+			else {
+			    compose_line(out, "  Range of data:    min = %.15g  max = %.15g",
+					 min, max);
+			}
 		    }
 		}
 	    }
@@ -325,7 +351,83 @@ int main(int argc, char **argv)
 
 	fprintf(out, "\n");
     }
-    else {	/* g,r,s, e, or h flags */
+    else {	/* g, r, s, e, or h flags */
+	int need_range, have_range, need_stats, have_stats;
+	
+	need_range = rflag->answer;
+	need_stats = sflag->answer;
+	if (need_stats)
+	    need_range = 1;
+
+	have_range = have_stats = 0;
+	if (need_range) {
+	    if (data_type == CELL_TYPE) {
+		if (Rast_read_range(name, "", &crange) > 0)
+		    have_range = 1;
+	    }
+	    else {
+		if (Rast_read_fp_range(name, "", &range) > 0)
+		    have_range = 1;
+	    }
+	}
+	if (need_stats) {
+	    if (Rast_read_rstats(name, mapset, &rstats) > 0)
+		have_stats = 1;
+	}
+	
+	if ((need_stats && !have_stats) || (need_range && !have_range)) {
+	    DCELL *dbuf, val, min, max;
+	    int fd, r, c;
+	    int first = 1;
+
+	    Rast_set_input_window(&cellhd);
+	    dbuf = Rast_allocate_d_input_buf();
+	    fd = Rast_open_old(name, mapset);
+	    min = max = 0;
+
+	    for (r = 0; r < cellhd.rows; r++) {
+		Rast_get_d_row_nomask(fd, dbuf, r);
+		for (c = 0; c < cellhd.cols; c++) {
+		    val = dbuf[c];
+		    if (Rast_is_d_null_value(&val))
+			continue;
+		    if (first) {
+			rstats.sum = val;
+			rstats.sumsq = (DCELL) val * val;
+			rstats.count = 1;
+			min = max = val;
+
+			first = 0;
+		    }
+		    else {
+			rstats.sum += val;
+			rstats.sumsq += (DCELL) val * val;
+			rstats.count += 1;
+			if (min > val)
+			    min = val;
+			if (max < val)
+			    max = val;
+		    }
+		}
+	    }
+	    Rast_close(fd);
+	    G_free(dbuf);
+
+	    if (data_type == CELL_TYPE) {
+		Rast_init_range(&crange);
+		if (rstats.count > 0) {
+		    Rast_update_range((CELL) min, &crange);
+		    Rast_update_range((CELL) max, &crange);
+		}
+	    }
+	    else {
+		Rast_init_fp_range(&range);
+		if (rstats.count > 0) {
+		    Rast_update_fp_range(min, &range);
+		    Rast_update_fp_range(max, &range);
+		}
+	    }
+	}
 
 	if (gflag->answer) {
 	    G_format_northing(cellhd.north, tmp1, -1);
@@ -347,7 +449,7 @@ int main(int argc, char **argv)
             fprintf(out, "rows=%d\n", cellhd.rows);
             fprintf(out, "cols=%d\n", cellhd.cols);
             
-            fprintf(out, "cells=%jd\n",
+            fprintf(out, "cells=%" PRId64 "\n",
                     (grass_int64)cellhd.rows * cellhd.cols);
             
 	    fprintf(out, "datatype=%s\n",
@@ -360,30 +462,36 @@ int main(int argc, char **argv)
                     cats_ok ? tmp1 : "??");
 	}
 
-	if (rflag->answer) {
+	if (rflag->answer || sflag->answer) {
 	    if (data_type == CELL_TYPE) {
-		if (2 == Rast_read_range(name, "", &crange)) {
+		CELL min, max;
+		
+		Rast_get_range_min_max(&crange, &min, &max);
+		if (Rast_is_c_null_value(&min)) {
 		    fprintf(out, "min=NULL\n");
 		    fprintf(out, "max=NULL\n");
 		}
 		else {
-		    fprintf(out, "min=%i\n", (CELL) zmin);
-		    fprintf(out, "max=%i\n", (CELL) zmax);
+		    fprintf(out, "min=%i\n", min);
+		    fprintf(out, "max=%i\n", max);
 		}
 	    }
 	    else {
-		if (Rast_is_d_null_value(&zmin)) {
+		DCELL min, max;
+
+		Rast_get_fp_range_min_max(&range, &min, &max);
+		if (Rast_is_d_null_value(&min)) {
 		    fprintf(out, "min=NULL\n");
 		    fprintf(out, "max=NULL\n");
 		}
 		else {
 		    if (data_type == FCELL_TYPE) {
-			fprintf(out, "min=%.7g\n", zmin);
-			fprintf(out, "max=%.7g\n", zmax);
+			fprintf(out, "min=%.7g\n", min);
+			fprintf(out, "max=%.7g\n", max);
 		    }
 		    else {
-			fprintf(out, "min=%.15g\n", zmin);
-			fprintf(out, "max=%.15g\n", zmax);
+			fprintf(out, "min=%.15g\n", min);
+			fprintf(out, "max=%.15g\n", max);
 		    }
 		}
 	    }
@@ -391,42 +499,9 @@ int main(int argc, char **argv)
 
 	if (sflag->answer) {
 
-	    if (Rast_read_rstats(name, mapset, &rstats) < 0) {
-		DCELL *dbuf, val;
-		int fd, r, c;
-		int first = 1;
-
-		Rast_set_input_window(&cellhd);
-		dbuf = Rast_allocate_d_input_buf();
-		fd = Rast_open_old(name, mapset);
-
-		for (r = 0; r < cellhd.rows; r++) {
-		    Rast_get_d_row(fd, dbuf, r);
-		    for (c = 0; c < cellhd.cols; c++) {
-			val = dbuf[c];
-			if (Rast_is_d_null_value(&val))
-			    continue;
-			if (first) {
-			    rstats.sum = val;
-			    rstats.sumsq = (DCELL) val * val;
-			    rstats.count = 1;
-
-			    first = 0;
-			}
-			else {
-			    rstats.sum += val;
-			    rstats.sumsq += (DCELL) val * val;
-			    rstats.count += 1;
-			}
-		    }
-		}
-		Rast_close(fd);
-		G_free(dbuf);
-	    }
-
 	    if (!gflag->answer) {
 		/* always report total number of cells */
-		fprintf(out, "cells=%jd\n",
+		fprintf(out, "cells=%" PRId64 "\n",
 			(grass_int64)cellhd.rows * cellhd.cols);
 	    }
 
@@ -436,28 +511,33 @@ int main(int argc, char **argv)
 		mean = (double)(rstats.sum / rstats.count);
 		sd = sqrt(rstats.sumsq / rstats.count - (mean * mean));
 
-		fprintf(out, "n=%jd\n", rstats.count);
 
-		if (!rflag->answer) {
-		    fprintf(out, "min=%.15g\n", zmin);
-		    fprintf(out, "max=%.15g\n", zmax);
-		}
-		if (zmin == zmax) {
-		    fprintf(out, "mean=%.15g\n", zmin);
-		    fprintf(out, "stddev=0\n");
+		if (data_type == CELL_TYPE) {
+		    CELL min, max;
+		
+		    Rast_get_range_min_max(&crange, &min, &max);
+		    if (min == max) {
+			mean = min;
+			sd = 0;
+		    }
 		}
 		else {
-		    fprintf(out, "mean=%.15g\n", mean);
-		    fprintf(out, "stddev=%.15g\n", sd);
+		    DCELL min, max;
+
+		    Rast_get_fp_range_min_max(&range, &min, &max);
+		    if (min == max) {
+			mean = min;
+			sd = 0;
+		    }
 		}
+
+		fprintf(out, "n=%" PRId64 "\n", rstats.count);
+		fprintf(out, "mean=%.15g\n", mean);
+		fprintf(out, "stddev=%.15g\n", sd);
 		fprintf(out, "sum=%.15g\n", rstats.sum);
 	    }
 	    else {
 		fprintf(out, "n=0\n");
-		if (!rflag->answer) {
-		    fprintf(out, "min=NULL\n");
-		    fprintf(out, "max=NULL\n");
-		}
 		fprintf(out, "mean=NULL\n");
 		fprintf(out, "stddev=NULL\n");
 		fprintf(out, "sum=NULL\n");
@@ -489,6 +569,7 @@ int main(int argc, char **argv)
 	    }
 	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
 	    fprintf(out, "vdatum=%s\n", vdatum ? vdatum : "\"none\"");
+        fprintf(out, "bandref=%s\n", bandref ? bandref : "\"none\"");
 	    fprintf(out, "source1=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1) : "\"none\"");
 	    fprintf(out, "source2=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2) : "\"none\"");
 	    fprintf(out, "description=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_KEYWRD) : "\"none\"");

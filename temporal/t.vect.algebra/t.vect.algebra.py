@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.vect.algebra
@@ -22,45 +22,46 @@
 #
 #############################################################################
 
-#%module
-#% description: Apply temporal and spatial operations on space time vector datasets using temporal vector algebra.
-#% keyword: temporal
-#% keyword: algebra
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Apply temporal and spatial operations on space time vector datasets using temporal vector algebra.
+# % keyword: temporal
+# % keyword: algebra
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option
-#% key: expression
-#% type: string
-#% description: Spatio-temporal mapcalc expression
-#% key_desc: expression
-#% required : yes
-#%end
+# %option
+# % key: expression
+# % type: string
+# % description: Spatio-temporal mapcalc expression
+# % key_desc: expression
+# % required : yes
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% key_desc: basename
-#% required : yes
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % key_desc: basename
+# % required : yes
+# %end
 
-#%flag
-#% key: s
-#% description: Check the spatial topology of temporally related maps and process only spatially related maps
-#%end
+# %flag
+# % key: s
+# % description: Check the spatial topology of temporally related maps and process only spatially related maps
+# %end
 
 import grass.script
 import sys
+
 
 def main():
     # lazy imports
     import grass.temporal as tgis
 
-    expression = options['expression']
-    basename = options['basename']
+    expression = options["expression"]
+    basename = options["basename"]
     spatial = flags["s"]
     stdstype = "stvds"
 
@@ -70,13 +71,17 @@ def main():
         import ply.lex as lex  # noqa: F401
         import ply.yacc as yacc  # noqa: F401
     except ImportError:
-        grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."))
+        grass.script.fatal(
+            _(
+                "Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."
+            )
+        )
 
     tgis.init(True)
-    p = tgis.TemporalVectorAlgebraParser(run = True, debug=False, spatial = spatial)
+    p = tgis.TemporalVectorAlgebraParser(run=True, debug=False, spatial=spatial)
     p.parse(expression, basename, grass.script.overwrite())
+
 
 if __name__ == "__main__":
     options, flags = grass.script.parser()
     sys.exit(main())
-

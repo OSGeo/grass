@@ -94,10 +94,10 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    stat = EXIT_FAILURE;
+    stat = EXIT_SUCCESS;
     for (n = 0; (name = map->answers[n]); n++)
 	if (process(name, uncompress->answer))
-	    stat = EXIT_SUCCESS;
+	    stat = EXIT_FAILURE;
     exit(stat);
 }
 
@@ -216,13 +216,13 @@ static int process(char *name, int uncompress)
 
     if (newsize < oldsize)
 	G_message(uncompress
-		  ? _("DONE: uncompressed file is %lu %s (%.2f%) smaller")
-		  : _("DONE: compressed file is %lu %s (%.2f%) smaller"),
+		  ? _("DONE: uncompressed file is %lu %s (%.2f%%) smaller")
+		  : _("DONE: compressed file is %lu %s (%.2f%%) smaller"),
 		  (unsigned long)diff, sizestr, (double) 100.0 - 100.0 * newsize / oldsize);
     else if (newsize > oldsize)
 	G_message(uncompress
-		  ? _("DONE: uncompressed file is %lu %s (%.2f%) larger")
-		  : _("DONE: compressed file is %lu %s (%.2f%) larger"),
+		  ? _("DONE: uncompressed file is %lu %s (%.2f%%) larger")
+		  : _("DONE: compressed file is %lu %s (%.2f%%) larger"),
 		  (unsigned long)diff, sizestr, (double) 100.0 * newsize / oldsize - 100.0);
     else
 	G_message(_("same size"));

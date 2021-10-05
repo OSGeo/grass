@@ -45,8 +45,7 @@ void sensor_TM(lsat_data * lsat)
     double wmax[] = { 0.52, 0.60, 0.69, 0.90, 1.75, 12.50, 2.35 };
     /* 30, 30, 30, 30, 30, 120 original, 60 resamples before Feb 25, 2010 and 30 after, 30 */
 
-    if (!lsat->sensor)
-	strcpy(lsat->sensor, "TM");
+    strcpy(lsat->sensor, "TM");
 
     lsat->bands = 7;
     for (i = 0; i < lsat->bands; i++) {

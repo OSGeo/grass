@@ -1,7 +1,7 @@
-/*  
+/*
  ****************************************************************************
  *
- * MODULE:       g.proj 
+ * MODULE:       g.proj
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
@@ -48,21 +48,18 @@ void print_projinfo(int shell)
 	    fprintf(stdout, "%-11s: %s\n", projinfo->key[i], projinfo->value[i]);
     }
 
-    if (projepsg) {
-        const char *epsg_value, *epsg_key;
-
-	epsg_key = projepsg->key[0];
-	epsg_value = projepsg->value[0];
+    /* TODO: use projsrid instead */
+    if (projsrid) {
 
 	if (!shell) {
 	    fprintf(stdout,
-		"-PROJ_EPSG-------------------------------------------------\n");
-	    fprintf(stdout, "%-11s: %s\n", epsg_key, epsg_value);
+		"-PROJ_SRID-------------------------------------------------\n");
+	    fprintf(stdout, "%-11s: %s\n", "SRID", projsrid);
 	}
 	else
-	    fprintf(stdout, "%s=%s\n", epsg_key, epsg_value);
+	    fprintf(stdout, "%s=%s\n", "srid", projsrid);
     }
- 
+
     if (projunits) {
 	if (!shell)
 	    fprintf(stdout,
@@ -76,10 +73,11 @@ void print_projinfo(int shell)
 			projunits->key[i], projunits->value[i]);
 	}
     }
-    
+
     return;
 }
 
+/* DEPRECATED: datum transformation is handled by PROJ */
 void print_datuminfo(void)
 {
     char *datum, *params;
@@ -212,7 +210,7 @@ void print_wkt(int esristyle, int dontprettify)
     {
 	OGRSpatialReferenceH hSRS;
 	const char *tmpwkt;
-	const char **papszOptions = NULL;
+	char **papszOptions = NULL;
 
 	papszOptions = G_calloc(3, sizeof(char *));
 	if (dontprettify)
@@ -233,29 +231,33 @@ void print_wkt(int esristyle, int dontprettify)
 	    obj = proj_create(NULL, projsrid);
 	    if (!obj)
 		G_fatal_error(_("Unable to create PROJ definition from srid <%s>"), projsrid);
-	    tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_2019, NULL);
+	    tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
 	    hSRS = OSRNewSpatialReference(tmpwkt);
-	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	    OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
 	}
 	if (!outwkt && projwkt) {
 	    hSRS = OSRNewSpatialReference(projwkt);
-	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	    OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
 	}
 	if (!outwkt && projepsg) {
 	    int epsg_num;
 
 	    epsg_num = atoi(G_find_key_value("epsg", projepsg));
 
+	    hSRS = OSRNewSpatialReference(NULL);
 	    OSRImportFromEPSG(hSRS, epsg_num);
-	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	    OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
 	}
 	if (!outwkt) {
 	    /* use GRASS proj info + units */
 	    projwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
 				      !(dontprettify));
 	    hSRS = OSRNewSpatialReference(projwkt);
-	    OSRExportToWktEx(hSRS, &outwkt, papszOptions);
+	    OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
 	}
+	G_free(papszOptions[0]);
+	G_free(papszOptions[1]);
+	G_free(papszOptions);
 	if (hSRS)
 	    OSRDestroySpatialReference(hSRS);
     }

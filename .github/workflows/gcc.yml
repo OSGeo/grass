@@ -1,47 +1,48 @@
 name: GCC C/C++ standards check
 
 on:
-- push
-- pull_request
+  - push
+  - pull_request
 
 jobs:
   build:
     name: ${{ matrix.c }} & ${{ matrix.cpp }}
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        c:
-        - gnu99
-        - gnu11
-        # - gnu17  # not available in Ubuntu 18.04
-        cpp:
-        - c++11
-        - c++14
-        - c++17
+        include:
+          - c: gnu99
+            cpp: c++11
+          - c: gnu11
+            cpp: c++11
+          - c: gnu11
+            cpp: c++14
+          - c: gnu17
+            cpp: c++17
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Get dependencies
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y wget git gawk findutils
-        xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
-            sudo apt-get install -y --no-install-recommends --no-install-suggests
-    - name: Create installation directory
-      run: |
-        mkdir $HOME/install
-    - name: Ensure one core for compilation
-      run: |
-        echo "::set-env name=MAKEFLAGS::-j1"
-    - name: Set LD_LIBRARY_PATH for compilation
-      run: |
-        echo "::set-env name=LD_LIBRARY_PATH::$HOME/install/lib"
-    - name: Build
-      env:
-        # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-        CFLAGS: "-std=${{ matrix.c }}"
-        # TODO: -pedantic-errors here won't compile
-        CXXFLAGS: "-std=${{ matrix.cpp }}"
-      run: .github/workflows/build.sh $HOME/install
+      - uses: actions/checkout@v2
+      - name: Get dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+      - name: Create installation directory
+        run: |
+          mkdir $HOME/install
+      - name: Ensure one core for compilation
+        run: |
+          echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+      - name: Build
+        env:
+          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+          CFLAGS: "-std=${{ matrix.c }} -fPIC"
+          # TODO: -pedantic-errors here won't compile
+          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC"
+        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install -Werror

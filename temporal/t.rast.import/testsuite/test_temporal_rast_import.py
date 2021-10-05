@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Feb 26 14:46:06 2016
 
@@ -19,19 +18,21 @@ for details.
 from grass.gunittest.case import TestCase
 import os
 
+
 class TestRasterImport(TestCase):
-    
+
     input_ = os.path.join("data", "precip_2000.tar.bzip2")
+
     @classmethod
     def tearDownClass(cls):
-        """Remove the temporary region
-        """
+        """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", inputs="A")
-        
+        cls.runModule("t.remove", flags="df", inputs="A")
+
     def test_import(self):
-        self.assertModule("t.rast.import", input=self.input_, output="A", 
-                          basename="a", overwrite=True)
+        self.assertModule(
+            "t.rast.import", input=self.input_, output="A", basename="a", overwrite=True
+        )
         tinfo = """start_time='2000-01-01 00:00:00'
                    end_time='2001-01-01 00:00:00'
                    granularity='1 month'
@@ -41,7 +42,6 @@ class TestRasterImport(TestCase):
                    east=935000.0
                    west=120000.0
                 """
-                
+
         info = SimpleModule("t.info", flags="g", input="A")
-        self.assertModuleKeyValue(module=info, reference=tinfo,
-                                  precision=2, sep="=")
+        self.assertModuleKeyValue(module=info, reference=tinfo, precision=2, sep="=")

@@ -17,7 +17,7 @@ Check examples if still compiling
 ### Fix typos in source code with
 
 ```bash
-tools/fix_typos.sh
+utils/fix_typos.sh
 ```
 
 ### i18N: sync from Transifex
@@ -29,7 +29,7 @@ master .po files
 
 ```bash
 cd locale
-sh ~/software/grass_addons_git/tools/transifex_merge.sh
+sh ~/software/grass-addons/utils/transifex_merge.sh
 make
 make verify
 # ... then fix .po files as needed.
@@ -59,8 +59,8 @@ Now check if configure still works.
 If yes, submit to git:
 
 ```bash
-git add config.guess config.sub configure
 git checkout -b config_sub_update_r78
+git add config.guess config.sub configure
 git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
 # test by running ./configure
 
@@ -84,7 +84,7 @@ find . -name '*.o'    | xargs rm
 find . -name '*.pyc'  | xargs rm
 find . -name 'OBJ.*'  | xargs rm -r
 find . -name '__pycache__' | xargs rm -r
-rm -f lib/python/ctypes/ctypesgencore/parser/lextab.py
+rm -f python/grass/ctypes/ctypesgencore/parser/lextab.py
 rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc \
   gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
 chmod -R a+r *
@@ -179,7 +179,7 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 Create Changelog file on release branch:
 
 ```bash
-python tools/gitlog2changelog.py
+python utils/gitlog2changelog.py
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
@@ -238,10 +238,10 @@ scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.md5sum"
-ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.md5sum"
+ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJOR.$MINOR-latest.md5sum"
 
 # verify
-echo "https://$SERVER1/grass$MAJOR$MINOR/source/"
+echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 
 # update winGRASS related files: Update the winGRASS version
 vim grass-addons/tools/wingrass-packager/grass_packager_release.bat
@@ -255,50 +255,47 @@ vim grass-addons/tools/addons/grass-addons-build.sh
 vim grass-addons/tools/addons/grass-addons.sh
 ```
 
+# update addon builder
+- https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line)
+
+### Close milestone
+
+- Close related milestone: https://github.com/OSGeo/grass/milestones
+
 Release is done.
 
-### Advertise new release
+### Advertise the new release
 
-#### Update CMS web site to show new version
+#### Write trac Wiki release page
 
-- News section
-- <https://grass.osgeo.org/download/software/>
-- <https://grass.osgeo.org/download/software/sources/>
-- <https://grass.osgeo.org/download/software/linux/>
-- <https://grass.osgeo.org/home/history/releases/>
-
-TODO: git tags
-
-- <https://grass.osgeo.org/development/svn/svn-tags/> (add tag): echo $RELEASETAG
-
-#### Write announcement and publish it
-
-To easily generate the entries for the trac Wiki release pages, use a `git log` approach:
-
-- List of latest changes (example, get from GitHub release page)
-   - https://github.com/OSGeo/grass/compare/releasebranch_7_8@%7B05-05-20%7D...releasebranch_7_8@%7B09-26-20%7D
-- identify start and end commit hash
+To easily generate the entries for the trac Wiki release page, use the `git log` approach:
 - extract entries from oneline git log and prepare for trac Wiki copy-paste:
 
 ```
-#START=76d5988
-#END=8a81328
-##git log --oneline | sed -n "+^$START+,+^$END+p;+^$END+q"
-
+# get date of previous release from https://github.com/OSGeo/grass/releases
 # verify
-git log --oneline | sed -n '/^76d5988/,/^8a81328/p;/^8a81328/q' | tac
+git log --oneline --after="2020-10-05" | tac
 
-# prepare for trac Wiki release page
-git log --oneline | sed -n '/^76d5988/,/^8a81328/p;/^8a81328/q' | cut -d' ' -f2- | sed 's+^+ * G78:+g' | sort -u
+# prepare for trac Wiki release page (incl. PR trac macro)
+git log --oneline --after="2020-10-05" | cut -d' ' -f2- | sed 's+^+ * G78:+g' | sed 's+(#+(PR:+g' | sort -u
 ```
 
-- store entries in trac, by section:
+- store changelog entries in trac, by section:
     - <https://trac.osgeo.org/grass/wiki/Release/7.8.x-News>
-    - <https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78>  <- add content
-      of major changes only
-- update version in <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
-- ~~store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how?
-  with protected PHP upload page?~~ (dropped since CMS)
+    - <https://trac.osgeo.org/grass/wiki/Grass7/NewFeatures78>  <- add content of major changes only
+
+#### Update CMS web site to show new version (not for RCs!)
+
+Write announcement and publish it:
+- News section, https://github.com/OSGeo/grass-website/tree/master/content/news
+
+Software pages:
+- Linux: https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md
+- Windows: https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md
+- Mac: https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md
+- Releases: https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md
+- Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
+
 
 #### Only in case of new major release
 
@@ -371,31 +368,18 @@ git log --oneline | sed -n '/^76d5988/,/^8a81328/p;/^8a81328/q' | cut -d' ' -f2-
     - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- DebianGIS: <debian-gis@lists.debian.org> - send only small note
 - FreeGIS: <freegis-list@intevation.de>
 - Geowanking: <geowanking@geowanking.org>
-- OSGeo.org: <news_item@osgeo.org>
-
-Via Email:
-
-- info@osgeo.org
-- <http://www.gis-news.de/>  (franz-josef.behr@gismngt.de)
-- mfeilner@linuxnewmedia.de
-- info@harzer.de
-- editor-geo@geoconnexion.com
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
+- Geo Connexion: <editor-geo@geoconnexion.com>
 
 Via Web:
 
 - <http://linuxtoday.com/contribute.php3>
 - <https://joinup.ec.europa.eu/software/grassgis/home> (submit news, MN)
-- <http://www.macnn.com/contact/newstips/1>
-- <http://www10.giscafe.com/submit_material/submit_options.php#Press> (MN) -->
-  Press releases
 - <http://www.directionsmag.com/pressreleases/> (News -> Submit Press Release)
 - <http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29>
 - <https://www.linux-apps.com/p/1128004/edit/> (MN)
-- <https://news.eoportal.org/web/eoportal/share-your-news> (MN) -> Share your
-  news with the EO community
 - <https://www.heise.de/download/product/grass-gis-7105> (update, MN)
 - See also: <https://grass.osgeo.org/wiki/Contact_Databases>
 - ... anywhere else? Please add here.

@@ -6,40 +6,47 @@ import os
 import tempfile
 from grass.gunittest.case import TestCase
 
+
 class TestTerraflow(TestCase):
 
-    elevation = 'elevation'
-    testdir = os.path.join(tempfile.gettempdir(), 'terraflow_test')
-    teststats = os.path.join(tempfile.gettempdir(), 'terraflow_test_stats.txt')
-  
+    elevation = "elevation"
+    testdir = os.path.join(tempfile.gettempdir(), "terraflow_test")
+    teststats = os.path.join(tempfile.gettempdir(), "terraflow_test_stats.txt")
+
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
         cls.use_temp_region()
-        cls.runModule("g.region", flags="p",  raster=cls.elevation)
+        cls.runModule("g.region", flags="p", raster=cls.elevation)
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region
-        """
+        """!Remove the temporary region"""
         cls.del_temp_region()
 
     def setUp(cls):
-        """Create input data for steady state groundwater flow computation
-        """
+        """Create input data for steady state groundwater flow computation"""
         if not os.path.exists(cls.testdir):
             os.mkdir(cls.testdir)
 
     def test_univar_mfd(cls):
-        #compute a steady state groundwater flow
-        cls.assertModule("r.terraflow", overwrite=True, verbose=True,
-        elevation=cls.elevation, filled='terra_flooded',
-        direction='terra_flowdir', swatershed='terra_sink',
-        accumulation='terra_flowaccum', tci='terra_tci',
-        directory=cls.testdir, stats=cls.teststats)
-        
+        # compute a steady state groundwater flow
+        cls.assertModule(
+            "r.terraflow",
+            overwrite=True,
+            verbose=True,
+            elevation=cls.elevation,
+            filled="terra_flooded",
+            direction="terra_flowdir",
+            swatershed="terra_sink",
+            accumulation="terra_flowaccum",
+            tci="terra_tci",
+            directory=cls.testdir,
+            stats=cls.teststats,
+        )
+
         # Output of r.univar -g
-        terra_flooded_univar="""n=2025000
+        terra_flooded_univar = """n=2025000
 null_cells=0
 cells=2025000
 min=55.5787925720215
@@ -52,7 +59,7 @@ variance=410.339616685993
 coeff_var=18.3374758755462
 sum=223695473.535042"""
 
-        terra_flowdir_univar="""n=2025000
+        terra_flowdir_univar = """n=2025000
 null_cells=0
 cells=2025000
 min=0
@@ -64,8 +71,8 @@ stddev=84.9304048144913
 variance=7213.17366195336
 coeff_var=74.344179186649
 sum=231334950"""
-        
-        terra_sink_univar="""n=2025000
+
+        terra_sink_univar = """n=2025000
 null_cells=0
 cells=2025000
 min=0
@@ -78,7 +85,7 @@ variance=5535582.67198542
 coeff_var=63.2980628790363
 sum=7526902297"""
 
-        terra_flowaccum_univar="""n=2025000
+        terra_flowaccum_univar = """n=2025000
 null_cells=0
 cells=2025000
 min=1
@@ -91,7 +98,7 @@ variance=112702574.858836
 coeff_var=1646.67618536449
 sum=1305520639.08371"""
 
-        terra_tci_univar="""n=2025000
+        terra_tci_univar = """n=2025000
 null_cells=0
 cells=2025000
 min=1.07463788986206
@@ -104,14 +111,22 @@ variance=3.88643128378274
 coeff_var=47.8572213922083
 sum=8341670.75914752"""
 
-        #cls.assertRasterFitsUnivar(raster="terra_flooded",  reference=terra_flooded_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_flowdir",  reference=terra_flowdir_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_sink",  reference=terra_sink_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_flowaccum",  reference=terra_flowaccum_univar,  precision=3)
-        cls.assertRasterFitsUnivar(raster="terra_tci",  reference=terra_tci_univar,  precision=3)
+        # cls.assertRasterFitsUnivar(raster="terra_flooded",  reference=terra_flooded_univar,  precision=3)
+        cls.assertRasterFitsUnivar(
+            raster="terra_flowdir", reference=terra_flowdir_univar, precision=3
+        )
+        cls.assertRasterFitsUnivar(
+            raster="terra_sink", reference=terra_sink_univar, precision=3
+        )
+        cls.assertRasterFitsUnivar(
+            raster="terra_flowaccum", reference=terra_flowaccum_univar, precision=3
+        )
+        cls.assertRasterFitsUnivar(
+            raster="terra_tci", reference=terra_tci_univar, precision=3
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from grass.gunittest.main import test
+
     test()
-
-

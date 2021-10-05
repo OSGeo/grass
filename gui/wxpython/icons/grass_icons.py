@@ -15,6 +15,6 @@ iconSet = dict()
 
 for icon in os.listdir(iconPath):
     name, ext = os.path.splitext(icon)
-    if ext != '.png':
+    if ext != ".png":
         continue
     iconSet[name] = icon

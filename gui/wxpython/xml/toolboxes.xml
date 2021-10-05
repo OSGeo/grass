@@ -227,8 +227,6 @@
       <wxgui-item name="Save"/>
       <wxgui-item name="SaveAs"/>
       <wxgui-item name="Close"/>
-      <separator/>
-      <wxgui-item name="LoadGRCFileTclTkGUI"/>
     </items>
   </toolbox>
   <toolbox name="MapDisplay">
@@ -303,6 +301,9 @@
       </module-item>
       <module-item name="r.in.lidar">
         <label>LAS LiDAR points import</label>
+      </module-item>
+      <module-item name="r.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
       <separator/>
       <module-item name="r.unpack">
@@ -609,8 +610,6 @@
       <separator/>
       <wxgui-item name="CreateNewLocation"/>
       <wxgui-item name="CreateNewMapset"/>
-      <separator/>
-      <wxgui-item name="VersionAndCopyright"/>
     </items>
   </toolbox>
   <toolbox name="MapProjections">

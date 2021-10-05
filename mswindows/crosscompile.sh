@@ -56,7 +56,7 @@ Usage: crosscompile.sh [OPTIONS]
                              (default: /usr/include/freetype2)
     --update                 update the current branch
     --package                package the cross-compiled build as
-                             grass79-x86_64-w64-mingw32-YYYYMMDD.zip
+                             grass80-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
 		;;
@@ -289,17 +289,17 @@ done
 
 version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
 
-rm -f $dist/grass$version.tmp
-cp -a bin.$arch/grass$version.py $dist/etc
+rm -f $dist/grass.tmp
+cp -a bin.$arch/grass.py $dist/etc/grass$version.py
 
-cat<<'EOT' > $dist/grass$version.bat
+cat<<'EOT' | sed "s/\$version/$version/g" > $dist/grass.bat
 @echo off
 
 rem Change this variable to override auto-detection of python.exe in PATH
-set GRASS_PYTHON=C:\Python38\python.exe
+set GRASS_PYTHON=C:\Python39\python.exe
 
 rem For portable installation, use %~d0 for the changing drive letter
-rem set GRASS_PYTHON=%~d0\Python38\python.exe
+rem set GRASS_PYTHON=%~d0\Python39\python.exe
 
 set GISBASE=%~dp0
 set GRASS_PROJSHARE=%GISBASE%\share\proj
@@ -334,10 +334,10 @@ if "%GRASS_PYTHON%"=="" (
 rem XXX: Do we need PYTHONHOME?
 rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
-"%GRASS_PYTHON%" "%GISBASE%\etc\grass79.py" %*
+"%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
 if %ERRORLEVEL% geq 1 pause
 EOT
-unix2dos $dist/grass$version.bat
+unix2dos $dist/grass.bat
 
 # package if requested
 if [ $package -eq 1 ]; then

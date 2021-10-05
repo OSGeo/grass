@@ -118,11 +118,12 @@ int main(int argc, char **argv)
     /* Colors */
     color_opt = G_define_standard_option(G_OPT_CN);
     color_opt->label = _("Feature color");
+    color_opt->answer = "0:29:57";
     color_opt->guisection = _("Colors");
     
     fcolor_opt = G_define_standard_option(G_OPT_CN);
     fcolor_opt->key = "fill_color";
-    fcolor_opt->answer = "200:200:200";
+    fcolor_opt->answer = "0:103:204";
     fcolor_opt->label = _("Area fill color");
     fcolor_opt->guisection = _("Colors");
 
@@ -515,7 +516,7 @@ int cmp(const void *a, const void *b)
 char *icon_files(void)
 {
     char **list, *ret;
-    char buf[GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
+    char buf[GNAME_MAX + GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
     int i, count;
     size_t len;
     DIR *dir, *dir_i;

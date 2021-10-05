@@ -1,5 +1,5 @@
 
-#ifndef CRS3D_H
+#ifndef CRS3D_H_
 #define CRS3D_H_
 
 #define MAXORDER 3

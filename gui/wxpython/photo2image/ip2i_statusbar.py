@@ -33,11 +33,10 @@ class SbGoToGCP(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'gotoGCP'
+        self.name = "gotoGCP"
         self.label = _("Go to GCP No.")
 
-        self.widget = SpinCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                               value="", min=0)
+        self.widget = SpinCtrl(parent=self.statusbar, id=wx.ID_ANY, value="", min=0)
         self.widget.Hide()
 
         self.widget.Bind(wx.EVT_TEXT_ENTER, self.OnGoToGCP)
@@ -50,9 +49,9 @@ class SbGoToGCP(SbItem):
 
         # always false, spin checks it
         if gcpNumber < 0 or gcpNumber > len(mapCoords):
-            GMessage(parent=self,
-                     message="%s 1 - %s." % (_("Valid Range:"),
-                                             len(mapCoords)))
+            GMessage(
+                parent=self, message="%s 1 - %s." % (_("Valid Range:"), len(mapCoords))
+            )
             return
 
         if gcpNumber == 0:
@@ -61,11 +60,11 @@ class SbGoToGCP(SbItem):
         listCtrl = self.mapFrame.GetListCtrl()
 
         listCtrl.selectedkey = gcpNumber
-        listCtrl.selected = listCtrl.FindItemData(-1, gcpNumber)
+        listCtrl.selected = listCtrl.FindItem(-1, gcpNumber)
         listCtrl.render = False
-        listCtrl.SetItemState(listCtrl.selected,
-                              wx.LIST_STATE_SELECTED,
-                              wx.LIST_STATE_SELECTED)
+        listCtrl.SetItemState(
+            listCtrl.selected, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED
+        )
         listCtrl.render = True
 
         listCtrl.EnsureVisible(listCtrl.selected)
@@ -116,12 +115,13 @@ class SbRMSError(SbTextItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'RMSError'
+        self.name = "RMSError"
         self.label = _("RMS error")
 
     def Show(self):
         """Shows the RMS errors."""
-        self.SetValue(_("Forward: %(forw)s, Backward: %(back)s") %
-                      {'forw': self.mapFrame.GetFwdError(),
-                       'back': self.mapFrame.GetBkwError()})
+        self.SetValue(
+            _("Forward: %(forw)s, Backward: %(back)s")
+            % {"forw": self.mapFrame.GetFwdError(), "back": self.mapFrame.GetBkwError()}
+        )
         SbTextItem.Show(self)

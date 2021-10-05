@@ -94,7 +94,7 @@ dbDriver *db_start_driver(const char *name)
 	return (dbDriver *) NULL;
 
     /* if name is empty use connection.driverName, added by RB 4/2000 */
-    if (name == '\0') {
+    if (name[0] == '\0') {
 	db_get_connection(&connection);
 	if (NULL == (name = connection.driverName))
 	    return (dbDriver *) NULL;

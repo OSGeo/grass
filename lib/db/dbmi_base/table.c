@@ -192,7 +192,7 @@ void db_set_table_select_priv_not_granted(dbTable * table)
 
   \param table pointer to dbTable
  
-  \return privilages
+  \return privileges
 */
 int db_get_table_select_priv(dbTable * table)
 {
@@ -224,7 +224,7 @@ void db_set_table_update_priv_not_granted(dbTable * table)
 
   \param table pointer to dbTable
 
-  \return privilages
+  \return privileges
 */
 int db_get_table_update_priv(dbTable * table)
 {

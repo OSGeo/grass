@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.merge
@@ -20,30 +20,31 @@
 #
 #############################################################################
 
-#%module
-#% description: Merges several space time datasets into a single space time dataset.
-#% keyword: temporal
-#% keyword: time management
-#% keyword: merge
-#% keyword: time
-#%end
+# %module
+# % description: Merges several space time datasets into a single space time dataset.
+# % keyword: temporal
+# % keyword: time management
+# % keyword: merge
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUTS
-#%end
+# %option G_OPT_STDS_INPUTS
+# %end
 
-#%option G_OPT_STDS_OUTPUT
-#%end
+# %option G_OPT_STDS_OUTPUT
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: inputs
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: inputs
+# % guisection: Required
+# %end
 
 import grass.script as grass
 
 
 ############################################################################
 grass.set_raise_on_error(True)
+
 
 def main():
     # lazy imports
@@ -57,7 +58,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    #Get the current mapset to create the id of the space time dataset
+    # Get the current mapset to create the id of the space time dataset
     mapset = grass.gisenv()["MAPSET"]
 
     inputs_split = inputs.split(",")
@@ -73,7 +74,10 @@ def main():
     if output.find("@") >= 0:
         out_mapset = output.split("@")[1]
         if out_mapset != mapset:
-            grass.fatal(_("Output space time dataset <%s> must be located in this mapset") % (output))
+            grass.fatal(
+                _("Output space time dataset <%s> must be located in this mapset")
+                % (output)
+            )
     else:
         output_id = output + "@" + mapset
 
@@ -90,7 +94,9 @@ def main():
 
         if first.get_temporal_type() != stds.get_temporal_type():
             dbif.close()
-            grass.fatal(_("Space time datasets to merge must have the same temporal type"))
+            grass.fatal(
+                _("Space time datasets to merge must have the same temporal type")
+            )
 
         stds_list.append(stds)
 
@@ -105,21 +111,30 @@ def main():
 
     if output_exists and not grass.overwrite():
         dbif.close()
-        grass.fatal(_("Unable to merge maps into space time %s dataset <%s> "\
-                      "please use the overwrite flag.") % \
-                      (stds.get_new_map_instance(None).get_type(), output_id))
+        grass.fatal(
+            _(
+                "Unable to merge maps into space time %s dataset <%s> "
+                "please use the overwrite flag."
+            )
+            % (stds.get_new_map_instance(None).get_type(), output_id)
+        )
 
     if not output_exists:
-        output_stds = tgis.open_new_stds(output, type,
-                                   first.get_temporal_type(),
-                                   "Merged space time dataset",
-                                   "Merged space time dataset",
-                                   "mean", dbif=dbif, overwrite=False)
+        output_stds = tgis.open_new_stds(
+            output,
+            type,
+            first.get_temporal_type(),
+            "Merged space time dataset",
+            "Merged space time dataset",
+            "mean",
+            dbif=dbif,
+            overwrite=False,
+        )
     else:
         output_stds.select(dbif=dbif)
 
     registered_output_maps = {}
-    # Maps that are already registered in an existing dataset 
+    # Maps that are already registered in an existing dataset
     # are not registered again
     if output_exists:
         rows = output_stds.get_registered_maps(columns="id", dbif=dbif)
@@ -147,6 +162,7 @@ def main():
 
     if output_exists:
         output_stds.update_command_string(dbif=dbif)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

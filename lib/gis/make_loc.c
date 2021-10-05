@@ -26,7 +26,7 @@
 
 /*!
  * \brief Create a new location
- * 
+ *
  * This function creates a new location in the current database,
  * initializes the projection, default window and current window.
  *
@@ -48,7 +48,7 @@
  * \return 0 on success
  * \return -1 to indicate a system error (check errno).
  * \return -2 failed to create projection file (currently not used)
- * \return -3 illegal name 
+ * \return -3 illegal name
  */
 int G_make_location(const char *location_name,
                     struct Cell_head *wind,
@@ -96,7 +96,7 @@ int G_make_location(const char *location_name,
 
 /*!
  * \brief Create a new location
- * 
+ *
  * This function creates a new location in the current database,
  * initializes the projection, default window and current window,
  * and sets the EPSG code if present
@@ -115,14 +115,14 @@ int G_make_location(const char *location_name,
  *
  * \param proj_units    projection units suitable to write to the PROJ_UNITS
  *                      file, or NULL.
- * 
+ *
  * \param proj_epsg     EPSG code suitable to write to the PROJ_EPSG
  *                      file, or NULL.
  *
  * \return 0 on success
  * \return -1 to indicate a system error (check errno).
  * \return -2 failed to create projection file (currently not used)
- * \return -3 illegal name 
+ * \return -3 illegal name
  */
 int G_make_location_epsg(const char *location_name,
 			 struct Cell_head *wind,
@@ -149,7 +149,7 @@ int G_make_location_epsg(const char *location_name,
 
 /*!
  * \brief Create a new location
- * 
+ *
  * This function creates a new location in the current database,
  * initializes the projection, default window and current window,
  * and sets WKT, srid, and EPSG code if present
@@ -168,11 +168,11 @@ int G_make_location_epsg(const char *location_name,
  *
  * \param proj_units    projection units suitable to write to the PROJ_UNITS
  *                      file, or NULL.
- * 
+ *
  * \param proj_epsg     EPSG code suitable to write to the PROJ_EPSG
  *                      file, or NULL.
  *
- * \param proj_wkt      WKT defintion suitable to write to the PROJ_WKT
+ * \param proj_wkt      WKT definition suitable to write to the PROJ_WKT
  *                      file, or NULL.
  *
  * \param proj_srid     Spatial reference ID suitable to write to the PROJ_SRID
@@ -181,15 +181,14 @@ int G_make_location_epsg(const char *location_name,
  * \return 0 on success
  * \return -1 to indicate a system error (check errno).
  * \return -2 failed to create projection file (currently not used)
- * \return -3 illegal name 
+ * \return -3 illegal name
  */
 int G_make_location_crs(const char *location_name,
 			struct Cell_head *wind,
 			const struct Key_Value *proj_info,
 			const struct Key_Value *proj_units,
-			const struct Key_Value *proj_epsg,
-			const char *proj_wkt,
-			const char *proj_srid)
+			const char *proj_srid,
+			const char *proj_wkt)
 {
     int ret;
     char path[GPATH_MAX];
@@ -199,20 +198,14 @@ int G_make_location_crs(const char *location_name,
     if (ret != 0)
 	return ret;
 
-    /* Write out PROJ_EPSG if epsg code is available. */
-    if (proj_epsg != NULL) {
-	G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
-	G_write_key_value_file(path, proj_epsg);
+    /* Write out PROJ_SRID if srid is available. */
+    if (proj_srid != NULL) {
+	G_write_projsrid(location_name, proj_srid);
     }
 
     /* Write out PROJ_WKT if WKT is available. */
     if (proj_wkt != NULL) {
 	G_write_projwkt(location_name, proj_wkt);
-    }
-
-    /* Write out PROJ_SRID if srid is available. */
-    if (proj_srid != NULL) {
-	G_write_projsrid(location_name, proj_srid);
     }
 
     return 0;
@@ -469,7 +462,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	    /* lat_1 differ */
 	    /* check for swapped lat_1, lat_2 */
 	    l_2 = G_find_key_value("lat_2", proj_info2);
-	    
+
 	    if (!l_2)
 		return -11;
 	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
@@ -488,7 +481,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	    /* lat_2 differ */
 	    /* check for swapped lat_1, lat_2 */
 	    l_2 = G_find_key_value("lat_1", proj_info2);
-	    
+
 	    if (!l_2)
 		return -11;
 	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
@@ -508,7 +501,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 
 /*!
    \brief Write WKT definition to file
-   
+
    Any WKT string and version recognized by PROJ is supported.
 
    \param location_name name of the location to write the WKT definition

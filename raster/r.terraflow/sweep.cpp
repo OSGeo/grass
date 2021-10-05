@@ -207,7 +207,7 @@ sweep(AMI_STREAM<sweepItem> *sweepstr, const flowaccumulation_type D8CUT,
     /* read next sweepItem = (prio, elevwin, topoRankwin, dir) */
     ae = sweepstr->read_item(&crtpoint);
     if (ae != AMI_ERROR_NO_ERROR) {
-      fprintf(stderr, "sweep: k=%ld: cannot read next item..\n", k);
+      fprintf(stderr, "sweep: k=%" PRI_OFF_T ": cannot read next item..\n", k);
       exit(1);
     }
     /* cout << "k=" << k << " prio =" << crtpoint->getPriority() << "\n"; */

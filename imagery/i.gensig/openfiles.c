@@ -8,10 +8,10 @@
 #include "files.h"
 
 
-int openfiles(struct parms *parms, struct files *files)
+int openfiles(struct parms *parms, struct files *files, struct Signature *S)
 {
     struct Ref Ref;		/* subgroup reference list */
-    const char *mapset;
+    const char *mapset, *bandref;
     int n;
 
 
@@ -33,12 +33,20 @@ int openfiles(struct parms *parms, struct files *files)
     files->train_fd = Rast_open_old(parms->training_map, mapset);
     files->train_cell = Rast_allocate_c_buf();
 
-    /* open all maps for reading */
+    /* prepare signature struct */
+    I_init_signatures(S, Ref.nfiles);
+
+    /* open all maps for reading and
+       store band references of imagery group bands */
     for (n = 0; n < Ref.nfiles; n++) {
 	files->band_fd[n] =
 	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
 	files->band_cell[n] = Rast_allocate_d_buf();
+        bandref = Rast_get_bandref_or_name(Ref.file[n].name, Ref.file[n].mapset);
+        S->bandrefs[n] = G_store(bandref);
     }
+
+    I_free_group_ref(&Ref);
 
     return 0;
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE: t.list
@@ -20,72 +20,72 @@
 #
 #############################################################################
 
-#%module
-#% description: Lists space time datasets and maps registered in the temporal database.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: list
-#% keyword: time
-#%end
+# %module
+# % description: Lists space time datasets and maps registered in the temporal database.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: list
+# % keyword: time
+# %end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the space time dataset or map, default is strds
-#% guisection: Selection
-#% required: no
-#% options: strds, str3ds, stvds, raster, raster_3d, vector
-#% answer: strds
-#%end
+# %option
+# % key: type
+# % type: string
+# % description: Type of the space time dataset or map, default is strds
+# % guisection: Selection
+# % required: no
+# % options: strds, str3ds, stvds, raster, raster_3d, vector
+# % answer: strds
+# %end
 
-#%option G_OPT_T_TYPE
-#% multiple: yes
-#% answer: absolute,relative
-#% guisection: Selection
-#%end
+# %option G_OPT_T_TYPE
+# % multiple: yes
+# % answer: absolute,relative
+# % guisection: Selection
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% description: Columns number_of_maps and granularity only available for space time datasets
-#% label: Sort the space time dataset by category
-#% guisection: Formatting
-#% required: no
-#% multiple: yes
-#% options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
-#% answer: id
-#%end
+# %option
+# % key: order
+# % type: string
+# % description: Columns number_of_maps and granularity only available for space time datasets
+# % label: Sort the space time dataset by category
+# % guisection: Formatting
+# % required: no
+# % multiple: yes
+# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
+# % answer: id
+# %end
 
-#%option
-#% key: columns
-#% type: string
-#% description: Columns number_of_maps and granularity only available for space time datasets
-#% label: Columns to be printed to stdout
-#% guisection: Selection
-#% required: no
-#% multiple: yes
-#% options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
-#% answer: id
-#%end
+# %option
+# % key: columns
+# % type: string
+# % description: Columns number_of_maps and granularity only available for space time datasets
+# % label: Columns to be printed to stdout
+# % guisection: Selection
+# % required: no
+# % multiple: yes
+# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+# % answer: id
+# %end
 
-#%option G_OPT_T_WHERE
-#% guisection: Selection
-#%end
+# %option G_OPT_T_WHERE
+# % guisection: Selection
+# %end
 
-#%option G_OPT_F_SEP
-#% label: Field separator character between the output columns
-#% guisection: Formatting
-#%end
+# %option G_OPT_F_SEP
+# % label: Field separator character between the output columns
+# % guisection: Formatting
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# %end
 
-#%flag
-#% key: c
-#% description: Print the column names as first row
-#% guisection: Formatting
-#%end
+# %flag
+# % key: c
+# % description: Print the column names as first row
+# % guisection: Formatting
+# %end
 
 from __future__ import print_function
 import grass.script as gscript
@@ -106,7 +106,7 @@ def main():
     where = options["where"]
     separator = gscript.separator(options["separator"])
     outpath = options["output"]
-    colhead = flags['c']
+    colhead = flags["c"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -116,11 +116,11 @@ def main():
     dbif.connect()
     first = True
 
-    if  gscript.verbosity() > 0 and not outpath:
+    if gscript.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
     if outpath:
-        outfile = open(outpath, 'w')
+        outfile = open(outpath, "w")
 
     for ttype in temporal_type.split(","):
         if ttype == "absolute":
@@ -128,7 +128,7 @@ def main():
         else:
             time = "relative time"
 
-        stds_list = tgis.get_dataset_list(type,  ttype,  columns,  where,  order, dbif=dbif)
+        stds_list = tgis.get_dataset_list(type, ttype, columns, where, order, dbif=dbif)
 
         # Use the correct order of the mapsets, hence first the current mapset, then
         # alphabetic ordering
@@ -140,13 +140,21 @@ def main():
                 rows = stds_list[key]
 
                 if rows:
-                    if  gscript.verbosity() > 0 and not outpath:
-                        if issubclass(sp.__class__,  tgis.AbstractMapDataset):
-                            sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%\
-                                                     (sp.get_type(),  time,  key))
+                    if gscript.verbosity() > 0 and not outpath:
+                        if issubclass(sp.__class__, tgis.AbstractMapDataset):
+                            sys.stderr.write(
+                                _(
+                                    "Time stamped %s maps with %s available in mapset <%s>:\n"
+                                )
+                                % (sp.get_type(), time, key)
+                            )
                         else:
-                            sys.stderr.write(_("Space time %s datasets with %s available in mapset <%s>:\n")%\
-                                                     (sp.get_new_map_instance(None).get_type(),  time,  key))
+                            sys.stderr.write(
+                                _(
+                                    "Space time %s datasets with %s available in mapset <%s>:\n"
+                                )
+                                % (sp.get_new_map_instance(None).get_type(), time, key)
+                            )
 
                     # Print the column names if requested
                     if colhead and first:
@@ -180,6 +188,7 @@ def main():
     if outpath:
         outfile.close()
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = gscript.parser()

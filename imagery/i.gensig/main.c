@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 	_("Generates statistics for i.maxlik from raster map.");
 
     parse(argc, argv, &parms);
-    openfiles(&parms, &files);
+    openfiles(&parms, &files, &S);
     read_training_labels(&parms, &files);
 
     get_training_classes(&files, &S);
@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
     compute_covariances(&files, &S);
     check_signatures(&S);
     write_sigfile(&parms, &S);
+    I_free_signatures(&S);
 
     G_done_msg(" ");
     

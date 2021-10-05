@@ -6,10 +6,10 @@
  * AUTHOR(S):    Marjorie Larson - CERL
  *               Glynn Clements
  *
- * PURPOSE:      Generates a raster map layer with contiguous areas 
+ * PURPOSE:      Generates a raster map layer with contiguous areas
  *               grown by one cell.
  *
- * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2021 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -37,9 +37,6 @@ static DCELL *old_val_row, *new_val_row;
 static double (*distance) (double dx, double dy);
 static double xres, yres;
 
-#undef MAX
-#define MAX(a, b)	((a) > (b) ? (a) : (b))
-
 static double distance_euclidean_squared(double dx, double dy)
 {
     return dx * dx + dy * dy;
@@ -47,12 +44,12 @@ static double distance_euclidean_squared(double dx, double dy)
 
 static double distance_maximum(double dx, double dy)
 {
-    return MAX(abs(dx), abs(dy));
+    return MAX(fabs(dx), fabs(dy));
 }
 
 static double distance_manhattan(double dx, double dy)
 {
-    return abs(dx) + abs(dy);
+    return fabs(dx) + fabs(dy);
 }
 
 static double geodesic_distance(int x1, int y1, int x2, int y2)
@@ -124,7 +121,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *in, *dist, *val, *met;
+	struct Option *in, *dist, *val, *met, *min, *max;
     } opt;
     struct
     {
@@ -140,8 +137,9 @@ int main(int argc, char **argv)
     int row, col;
     struct Colors colors;
     struct History hist;
-    DCELL *out_row;
+    DCELL *out_row, *dist_row_max, *val_row_max;
     double scale = 1.0;
+    double mindist, maxdist;
     int invert;
 
     G_gisinit(argv[0]);
@@ -175,6 +173,18 @@ int main(int argc, char **argv)
     opt.met->options = "euclidean,squared,maximum,manhattan,geodesic";
     opt.met->answer = "euclidean";
 
+    opt.min = G_define_option();
+    opt.min->key = "minimum_distance";
+    opt.min->type = TYPE_DOUBLE;
+    opt.min->required = NO;
+    opt.min->description = _("Minimum distance threshold");
+
+    opt.max = G_define_option();
+    opt.max->key = "maximum_distance";
+    opt.max->type = TYPE_DOUBLE;
+    opt.max->required = NO;
+    opt.max->description = _("Maximum distance threshold");
+
     flag.m = G_define_flag();
     flag.m->key = 'm';
     flag.m->description = _("Output distances in meters instead of map units");
@@ -190,7 +200,43 @@ int main(int argc, char **argv)
     dist_name = opt.dist->answer;
     val_name = opt.val->answer;
 
-    if ((invert = flag.n->answer)) {
+    dist_row_max = val_row_max = NULL;
+    mindist = -1;
+    if (opt.min->answer) {
+	if (sscanf(opt.min->answer, "%lf", &mindist) != 1) {
+	    G_warning(_("Invalid %s value '%s', ignoring."),
+		      opt.min->key, opt.min->answer);
+
+	    mindist = -1;
+	}
+    }
+
+    maxdist = -1;
+    if (opt.max->answer) {
+	if (sscanf(opt.max->answer, "%lf", &maxdist) != 1) {
+	    G_warning(_("Invalid %s value '%s', ignoring."),
+		      opt.max->key, opt.max->answer);
+
+	    maxdist = -1;
+	}
+    }
+
+    if (mindist > 0 && maxdist > 0 && mindist >= maxdist) {
+	/* GTC error because given minimum_distance is not smaller than
+	 * given maximum_distance */
+	G_fatal_error(_("'%s' must be smaller than '%s'."),
+	              opt.min->key, opt.max->key);
+    }
+
+    if (mindist > 0 || maxdist > 0) {
+	dist_row_max = Rast_allocate_d_buf();
+	val_row_max = Rast_allocate_d_buf();
+    }
+
+    invert = flag.n->answer;
+    if (mindist <= 0 && maxdist <= 0 && invert) {
+	/* value output for distance to NULL cells makes sense
+	 * if mindist or maxdist is given */
 	if (!dist_name)
 	    G_fatal_error(_("Distance output is required for distance to NULL cells"));
 	if (val_name) {
@@ -224,7 +270,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
 
     if (flag.m->answer) {
-	if (window.proj == PROJECTION_LL && 
+	if (window.proj == PROJECTION_LL &&
 	    strcmp(opt.met->answer, "geodesic") != 0) {
 	    G_fatal_error(_("Output distance in meters for lat/lon is only possible with '%s=%s'"),
 	                  opt.met->key, "geodesic");
@@ -265,7 +311,7 @@ int main(int argc, char **argv)
 
     dist_row = Rast_allocate_d_buf();
 
-    if (dist_name && strcmp(opt.met->answer, "euclidean") == 0)
+    if ((mindist > 0 || maxdist > 0 || dist_name) && strcmp(opt.met->answer, "euclidean") == 0)
 	out_row = Rast_allocate_d_buf();
     else
 	out_row = dist_row;
@@ -349,20 +395,54 @@ int main(int argc, char **argv)
 	for (col = ncols - 1; col >= 0; col--)
 	    check(row, col, 1, 0);
 
-	if (dist_name) {
-	    if (out_row != dist_row)
-		for (col = 0; col < ncols; col++)
-		    out_row[col] = sqrt(dist_row[col]);
+	if (mindist > 0 || maxdist > 0) {
+	    /* do not modify dist_row or new_val_row,
+	     * thus copy */
+	    if (out_row != dist_row) {
+		for (col = 0; col < ncols; col++) {
+		    dist_row_max[col] = sqrt(dist_row[col]);
+		}
+	    }
+	    else {
+		for (col = 0; col < ncols; col++) {
+		    dist_row_max[col] = dist_row[col];
+		}
+	    }
+	    for (col = 0; col < ncols; col++) {
+		if (scale != 1.0)
+		    dist_row_max[col] *= scale;
 
-	    if (scale != 1.0)
-		for (col = 0; col < ncols; col++)
-		    out_row[col] *= scale;
+		val_row_max[col] = new_val_row[col];
 
-	    Rast_put_d_row(dist_fd, out_row);
+		if (mindist > 0 && dist_row_max[col] < mindist) {
+		    Rast_set_d_null_value(&dist_row_max[col], 1);
+		    Rast_set_d_null_value(&val_row_max[col], 1);
+		}
+		if (maxdist > 0 && dist_row_max[col] > maxdist) {
+		    Rast_set_d_null_value(&dist_row_max[col], 1);
+		    Rast_set_d_null_value(&val_row_max[col], 1);
+		}
+	    }
+	    if (dist_name)
+		Rast_put_d_row(dist_fd, dist_row_max);
+	    if (val_name)
+		Rast_put_d_row(val_fd, val_row_max);
 	}
+	else {
+	    if (dist_name) {
+		if (out_row != dist_row)
+		    for (col = 0; col < ncols; col++)
+			out_row[col] = sqrt(dist_row[col]);
 
-	if (val_name)
-	    Rast_put_d_row(val_fd, new_val_row);
+		if (scale != 1.0)
+		    for (col = 0; col < ncols; col++)
+			out_row[col] *= scale;
+
+		Rast_put_d_row(dist_fd, out_row);
+	    }
+	    if (val_name)
+		Rast_put_d_row(val_fd, new_val_row);
+	}
 
 	swap_rows();
     }

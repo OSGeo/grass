@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-SUBDIRS = docs animation datacatalog mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass gcp timeline tplot photo2image image2target
+SUBDIRS = docs animation datacatalog mapswipe gmodeler rlisetup psmap dbmgr vdigit rdigit iclass gcp timeline tplot photo2image image2target
 EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml xml/module_tree_menudata.xml */*.pyc
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
@@ -10,17 +10,17 @@ DSTDIR = $(GUIDIR)/wxpython
 
 SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
 	$(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
-	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py mapwin/*.py mapdisp/*.py \
+	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py main_window/*.py mapwin/*.py mapdisp/*.py \
 	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py \
 	rlisetup/*.py startup/*.py timeline/*.py vdigit/*.py \
 	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py photo2image/*.py image2target/*.py) \
-	gis_set.py gis_set_error.py wxgui.py README
+	wxgui.py README
 
 DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
 	$(patsubst %.py,$(DSTDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
 PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr gcp gmodeler \
-	gui_core iclass lmgr location_wizard mapwin mapdisp modules nviz psmap \
+	gui_core iclass lmgr location_wizard main_window mapwin mapdisp modules nviz psmap \
 	mapswipe vdigit wxplot web_services rdigit rlisetup startup \
 	vnet timeline iscatt tplot photo2image image2target)
 

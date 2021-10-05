@@ -51,7 +51,7 @@ levels: 4
 
 # created from the above data above
 OUTPUTS = [
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -62,7 +62,7 @@ cols: 3
 0 * 5
 1 7 *
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -73,7 +73,7 @@ cols: 3
 * 4 2
 8 5 6
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -84,7 +84,7 @@ cols: 3
 1 5 *
 1 1 *
 """,
-"""\
+    """\
 north: 12
 south: 9
 east: 21
@@ -104,43 +104,53 @@ class TestR3ToRastNulls(TestCase):
     # mixing class and object attributes
     to_remove_3d = []
     to_remove_2d = []
-    rast3d = 'r3_to_rast_test_nulls'
-    rast2d = 'r3_to_rast_test_nulls'
-    rast2d_ref = 'r3_to_rast_test_nulls_ref'
+    rast3d = "r3_to_rast_test_nulls"
+    rast2d = "r3_to_rast_test_nulls"
+    rast2d_ref = "r3_to_rast_test_nulls_ref"
     rast2d_refs = []
 
     def setUp(self):
         self.use_temp_region()
-        self.runModule('r3.in.ascii', input='-', stdin_=INPUT,
-                       output=self.rast3d)
+        self.runModule("r3.in.ascii", input="-", stdin_=INPUT, output=self.rast3d)
         self.to_remove_3d.append(self.rast3d)
-        self.runModule('g.region', raster_3d=self.rast3d)
+        self.runModule("g.region", raster_3d=self.rast3d)
 
         for i, data in enumerate(OUTPUTS):
             rast = "%s_%d" % (self.rast2d_ref, i)
-            self.runModule('r.in.ascii', input='-', stdin_=data,
-                           output=rast)
+            self.runModule("r.in.ascii", input="-", stdin_=data, output=rast)
             self.to_remove_2d.append(rast)
             self.rast2d_refs.append(rast)
 
     def tearDown(self):
         if self.to_remove_3d:
-            self.runModule('g.remove', flags='f', type='raster_3d',
-                           name=','.join(self.to_remove_3d), verbose=True)
+            self.runModule(
+                "g.remove",
+                flags="f",
+                type="raster_3d",
+                name=",".join(self.to_remove_3d),
+                verbose=True,
+            )
         if self.to_remove_2d:
-            self.runModule('g.remove', flags='f', type='raster',
-                           name=','.join(self.to_remove_2d), verbose=True)
+            self.runModule(
+                "g.remove",
+                flags="f",
+                type="raster",
+                name=",".join(self.to_remove_2d),
+                verbose=True,
+            )
         self.del_temp_region()
 
     def test_b(self):
-        self.assertModule('r3.to.rast', input=self.rast3d,
-                          output=self.rast2d)
-        rasts = list_strings('raster', mapset=".",
-                             pattern="%s_*" % self.rast2d,
-                             exclude="%s_*" % self.rast2d_ref)
-        self.assertEquals(len(rasts), 4,
-                          msg="Wrong number of 2D rasters present"
-                              " in the mapset")
+        self.assertModule("r3.to.rast", input=self.rast3d, output=self.rast2d)
+        rasts = list_strings(
+            "raster",
+            mapset=".",
+            pattern="%s_*" % self.rast2d,
+            exclude="%s_*" % self.rast2d_ref,
+        )
+        self.assertEquals(
+            len(rasts), 4, msg="Wrong number of 2D rasters present" " in the mapset"
+        )
         ref_info = dict(cells=9)
         # only this tests the presence of nulls
         ref_univar = dict(cells=9, null_cells=2)
@@ -148,19 +158,17 @@ class TestR3ToRastNulls(TestCase):
             self.assertRasterExists(rast)
             # the following doesn't make much sense because we just listed them
             self.to_remove_2d.append(rast)
-            self.assertRasterFitsInfo(raster=rast, reference=ref_info,
-                                      precision=0)
-            self.assertRasterFitsUnivar(raster=rast, reference=ref_univar,
-                                        precision=0)
+            self.assertRasterFitsInfo(raster=rast, reference=ref_info, precision=0)
+            self.assertRasterFitsUnivar(raster=rast, reference=ref_univar, precision=0)
 
         # check the actual values
         # TODO: this does not check the position of nulls
         # (it ignores nulls)
         for rast_ref, rast in zip(self.rast2d_refs, rasts):
-            self.assertRastersNoDifference(actual=rast,
-                                           reference=rast_ref,
-                                           precision=0.1)
+            self.assertRastersNoDifference(
+                actual=rast, reference=rast_ref, precision=0.1
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

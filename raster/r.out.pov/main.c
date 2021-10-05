@@ -48,9 +48,6 @@ void processProfiles(int inputFile, FILE * outputF);
 #define     YMAX     65536	/*  max length scan line */
 #define     XMAX     65536	/*  max # of scan lines */
 
-#define MIN(x,y)     (((x) < (y)) ? (x) : (y))
-#define MAX(x,y)     (((x) > (y)) ? (x) : (y))
-
 #define SW     0
 #define NW     1
 #define NE     2

@@ -533,6 +533,7 @@ int main(int argc, char *argv[])
 
     grad_check();
     main_loop();
+    free_walkers();
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

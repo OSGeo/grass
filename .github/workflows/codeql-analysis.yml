@@ -1,0 +1,61 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [main, releasebranch_7_8]
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "**/*.html"
+      - "**/*.md"
+      - "**/*.txt"
+  schedule:
+    # Check every Saturday at 18:36
+    - cron: "36 18 * * 6"
+
+jobs:
+  analyze:
+    name: ${{ matrix.language }}
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # C is included in cpp, no separate C language available on CodeQL
+        language:
+          - cpp
+          - python
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: ${{ matrix.language }}
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Get dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Create installation directory
+        run: |
+          mkdir $HOME/install
+
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+
+      - name: Build
+        env:
+          CFLAGS: "-std=gnu11"
+          CXXFLAGS: "-std=c++11"
+        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1

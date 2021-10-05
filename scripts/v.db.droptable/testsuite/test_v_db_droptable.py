@@ -18,31 +18,31 @@ class TestVDbDropTable(TestCase):
     @classmethod
     def setUpClass(cls):
         """Copy vector."""
-        run_command('g.copy', vector='roadsmajor,myroads')
+        run_command("g.copy", vector="roadsmajor,myroads")
 
     @classmethod
     def tearDownClass(cls):
         """Remove copied vector"""
-        run_command('g.remove', type='vector', name='myroads',
-                    flags='f')
+        run_command("g.remove", type="vector", name="myroads", flags="f")
 
     def test_drop_table_check(self):
         """Drop table check, the column should still be in the table"""
-        module = SimpleModule('v.db.droptable', map='myroads')
+        module = SimpleModule("v.db.droptable", map="myroads")
         self.assertModule(module)
 
-        m = SimpleModule('db.tables', flags='p')
+        m = SimpleModule("db.tables", flags="p")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), 'myroads')
+        self.assertRegexpMatches(decode(m.outputs.stdout), "myroads")
 
     def test_drop_table_with_force(self):
         """Drop table with force, the column should not be in the table"""
-        module = SimpleModule('v.db.droptable', map='myroads', flags='f')
+        module = SimpleModule("v.db.droptable", map="myroads", flags="f")
         self.assertModule(module)
 
-        m = SimpleModule('db.tables', flags='p')
+        m = SimpleModule("db.tables", flags="p")
         self.assertModule(m)
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), 'myroads')
+        self.assertNotRegexpMatches(decode(m.outputs.stdout), "myroads")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

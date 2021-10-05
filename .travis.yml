@@ -7,14 +7,14 @@ cache: ccache
 matrix:
    include:
       - os: linux
-        dist: xenial
+        dist: focal
         compiler: gcc
         sudo: required
         env:
             CC=gcc
 
       - os: linux
-        dist: xenial
+        dist: focal
         compiler: clang
         sudo: required
         env:
