@@ -128,11 +128,10 @@ DLLS="
 	/mingw64/bin/libpcre-1.dll
 	/mingw64/bin/libstdc++-6.dll
 	/mingw64/bin/libgcc_s_seh-1.dll
-    /mingw64/bin/libgcc_s_dw2-1.dll
 	/mingw64/bin/libfftw3-3.dll
-    /mingw64/bin/libblas.dll
-    /mingw64/bin/liblapack.dll
-    /mingw64/bin/libomp.dll
+	/mingw64/bin/libblas.dll
+	/mingw64/bin/liblapack.dll
+	/mingw64/bin/libomp.dll
 "
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
