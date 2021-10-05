@@ -3,6 +3,8 @@
 set -e
 
 if [ "$CI" ] ; then
+	DUMPBIN_PATH=$(cygpath -ua "C:/Program Files (x86)\Microsoft Visual Studio/2019/Enterprise/VC/Tools/MSVC/14.29.30133/bin/HostX64/x64/")
+	export PATH="${DUMPBIN_PATH}:$PATH"
 	# dumpbin in GH actions does not support options starting with "-"
 	DUMPBIN_EXPORT="/EXPORTS"
 else
