@@ -236,11 +236,10 @@ class RasterDataset(AbstractMapDataset):
         array back into grass.
         """
 
-        a = garray.array()
-
         if self.map_exists():
-            a.read(self.get_map_id())
-
+            a = garray.array(self.get_map_id())
+        else:
+            a = garray.array()
         return a
 
     def reset(self, ident):
@@ -662,11 +661,10 @@ class Raster3DDataset(AbstractMapDataset):
         array back into grass.
         """
 
-        a = garray.array3d()
-
         if self.map_exists():
-            a.read(self.get_map_id())
-
+            garray.array3d(self.get_map_id())
+        else:
+            a = garray.array3d()
         return a
 
     def reset(self, ident):
