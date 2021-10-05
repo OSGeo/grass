@@ -131,26 +131,26 @@ class NotebookController:
         """Binds page changed event."""
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """Add a new page"""
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
-        self.classObject.AddPage(self.widget, **kwargs)
+        self.classObject.AddPage(self.widget, *args, **kwargs)
 
-    def InsertPage(self, **kwargs):
+    def InsertPage(self, *args, **kwargs):
         """Insert a new page"""
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
         try:
-            self.classObject.InsertPage(self.widget, **kwargs)
+            self.classObject.InsertPage(self.widget, *args, **kwargs)
         except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
-            self.classObject.InsertPage(self.widget, **kwargs)
+            self.classObject.InsertPage(self.widget, *args, **kwargs)
 
     def DeletePage(self, page):
         """Delete page
@@ -264,7 +264,7 @@ class FlatNotebookController(NotebookController):
 
         return self.classObject.GetPageIndex(self.widget, self.notebookPages[page])
 
-    def InsertPage(self, **kwargs):
+    def InsertPage(self, *args, **kwargs):
         """Insert a new page"""
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
@@ -272,14 +272,14 @@ class FlatNotebookController(NotebookController):
 
         kwargs["indx"] = kwargs["index"]
         del kwargs["index"]
-        self.classObject.InsertPage(self.widget, **kwargs)
+        self.classObject.InsertPage(self.widget, *args, **kwargs)
 
 
 class GNotebook(FN.FlatNotebook):
     """Generic notebook widget.
 
     Enables advanced style settings.
-    Problems with hidden tabs and does not respect system colors (native look).
+    Problems with hidden tabs. Uses system colours for active tabs.
     """
 
     def __init__(self, parent, style, **kwargs):
@@ -293,14 +293,18 @@ class GNotebook(FN.FlatNotebook):
         self.controller = FlatNotebookController(
             classObject=FN.FlatNotebook, widget=self
         )
+        self.SetActiveTabColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+        self.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertNBPage(self, **kwargs):
+    def InsertNBPage(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -328,13 +332,13 @@ class FormNotebook(wx.Notebook):
         wx.Notebook.__init__(self, parent, id=wx.ID_ANY, style=style)
         self.controller = NotebookController(classObject=wx.Notebook, widget=self)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertNBPage(self, **kwargs):
+    def InsertNBPage(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -362,13 +366,13 @@ class FormListbook(wx.Listbook):
         wx.Listbook.__init__(self, parent, id=wx.ID_ANY, style=style)
         self.controller = NotebookController(classObject=wx.Listbook, widget=self)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertPage_(self, **kwargs):
+    def InsertPage_(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeletePage(self, page):
         """@copydoc NotebookController::DeletePage()"""

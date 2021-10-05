@@ -541,7 +541,6 @@ class VNETDialog(wx.Dialog):
         self.inpDbMgrData["browse"] = self.inpDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.inpDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateInputDbMgrPage(self, show):
         """Show or hide input tables tab"""
@@ -562,7 +561,6 @@ class VNETDialog(wx.Dialog):
         self.resultDbMgrData["browse"] = self.resultDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.resultDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateResultDbMgrPage(self):
         """Show or Hide Result tables tab"""
