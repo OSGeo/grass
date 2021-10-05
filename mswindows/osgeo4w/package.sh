@@ -128,7 +128,11 @@ DLLS="
 	/mingw64/bin/libpcre-1.dll
 	/mingw64/bin/libstdc++-6.dll
 	/mingw64/bin/libgcc_s_seh-1.dll
+    /mingw64/bin/libgcc_s_dw2-1.dll
 	/mingw64/bin/libfftw3-3.dll
+    /mingw64/bin/libblas.dll
+    /mingw64/bin/liblapack.dll
+    /mingw64/bin/libomp.dll
 "
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
@@ -182,7 +186,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-blas \
 		--with-lapack-includes=/mingw64/include/lapack \
 		--with-openmp \
-		--with-wxwidgets 
+		--with-wxwidgets
 		--with-cairo \
 		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
@@ -242,19 +246,6 @@ if [ -n "$PACKAGE_PATCH" ]; then
     unix2dos etc/preremove/grass${PACKAGE_POSTFIX}.bat
 
     # copy dependencies (TODO: to be reduced)
-    blas_dll=../msys64/mingw64/bin/libblas.dll
-    lapack_dll=../msys64/mingw64/bin/liblapack.dll
-    lapack_gcc=../msys64/mingw64/bin/libgcc_s_dw2-1.dll
-    omp=../msys64/mingw64/bin/libomp.dll
-
-    cp -uv $DLLS apps/grass/grass$POSTFIX/bin
-    if [ -f "$blas_dll" ] ; then echo "Copying libblas.dll"; fi
-    if [ -f "$blas_dll" ] ; then cp -uv "$blas_dll" apps/grass/grass$POSTFIX/bin/ ; fi
-
-    if [ -f "$lapack_dll" ] ; then echo "Copying liblapack.dll"; fi
-    if [ -f "$lapack_dll" ] ; then cp -uv "$lapack_dll" apps/grass/grass$POSTFIX/bin/ ; fi
-    if [ -f "$lapack_gcc" ] ; then cp -uv "$lapack_gcc" apps/grass/grass$POSTFIX/bin/ ; fi
-    if [ -f "$omp" ] ; then cp -uv "$omp" apps/grass/grass$POSTFIX/bin/ ; fi
     cp -uv $DLLS apps/grass/grass$POSTFIX/bin
     cp -uv /mingw64/etc/fonts/fonts.conf apps/grass/grass$POSTFIX/etc
 
