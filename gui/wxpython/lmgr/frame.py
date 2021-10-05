@@ -129,7 +129,7 @@ class GMFrame(wx.Frame):
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(
-                    _("There were some issues when loading menu" " or Modules tab:")
+                    _("There were some issues when loading menu" " or Tools tab:")
                 )
                 for message in messages:
                     self._gconsole.WriteError(message)
@@ -415,9 +415,9 @@ class GMFrame(wx.Frame):
             page=self.notebookLayers, text=_("Display"), name="layers"
         )
 
-        # add 'modules' widget to main notebook page
+        # add 'tools' widget to main notebook page
         if self.search:
-            self.notebook.AddPage(page=self.search, text=_("Modules"), name="search")
+            self.notebook.AddPage(page=self.search, text=_("Tools"), name="search")
 
         # add 'console' widget to main notebook page and add connect switch page signal
         self.notebook.AddPage(page=self.goutput, text=_("Console"), name="output")
