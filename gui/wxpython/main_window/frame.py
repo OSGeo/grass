@@ -577,8 +577,8 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(
             self.notebookLayers,
             aui.AuiPaneInfo()
-            .Name("display")
-            .Caption("Display")
+            .Name("layers")
+            .Caption("Layers")
             .Left()
             .Layer(1)
             .Position(2)
