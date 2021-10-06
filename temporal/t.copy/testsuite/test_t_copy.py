@@ -1,4 +1,4 @@
-"""Test t.rast.extract
+"""Test t.copy
 
 (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
