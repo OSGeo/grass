@@ -1,4 +1,4 @@
-MODULE_TOPDIR = ../../..
+MODULE_TOPDIR = ../..
 
 PACKAGE = "grasslibs"
 
@@ -75,11 +75,11 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/lib
 
-PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES))
-PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES))
+PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypes_preamble ctypes_loader)
+PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypes_preamble ctypes_loader)
 LPYFILES := $(patsubst %,$(OBJDIR)/%.py,$(MODULES))
 
-COPY_FILES = $(DSTDIR)/ctypes_loader.py $(DSTDIR)/ctypes_preamble.py
+COPY_FILES = $(DSTDIR)/ctypes_loader.py $(DSTDIR)/ctypes_preamble.py $(DSTDIR)/__init__.py
 
 ifeq ($(strip $(GRASS_LIBRARY_TYPE)),shlib)
 default: $(COPY_FILES)
@@ -95,6 +95,8 @@ $(COPY_FILES): | $(DSTDIR)
 $(DSTDIR)/ctypes_loader.py: ctypesgen/libraryloader.py
 	cp -f $< $@
 $(DSTDIR)/ctypes_preamble.py: ctypesgen/printer_python/preamble/3_2.py
+	cp -f $< $@
+$(DSTDIR)/__init__.py: libgrass__init__.py
 	cp -f $< $@
 
 $(DSTDIR)/%.py: $(OBJDIR)/%.py | $(DSTDIR)
