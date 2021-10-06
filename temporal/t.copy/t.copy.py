@@ -167,7 +167,7 @@ def main():
                 else:
                     msgr.error(
                         _(
-                            "Map <%s> is already in temporal database"
+                            "Map <%s> is already in the temporal database"
                             ", use overwrite flag to overwrite"
                         )
                         % (new_map.get_map_id())
