@@ -484,7 +484,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             item = wx.MenuItem(
                 self.popupMenu,
                 id=self.popupID["check"],
-                text=_("Check selected layer(s)"),
+                text=_("Check selected layers"),
             )
             self.popupMenu.AppendItem(item)
             self.Bind(
@@ -495,7 +495,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             item = wx.MenuItem(
                 self.popupMenu,
                 id=self.popupID["uncheck"],
-                text=_("Uncheck selected layer(s)"),
+                text=_("Uncheck selected layers"),
             )
             self.popupMenu.AppendItem(item)
             self.Bind(
