@@ -59,7 +59,7 @@ def register_maps_in_space_time_dataset(
                  to None
     :param maps: A comma separated list of map names
     :param file: Input file, one map per line map with start and optional
-                end time
+                end time, or the same as io object (with readline capability)
     :param start: The start date and time of the first map
                  (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                  format relative is integer 5)
