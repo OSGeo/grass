@@ -1930,7 +1930,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == "bash":
         # set bash history to record an unlimited command history
-        sh_history_limit = "-1"  # unlimited
+        sh_history_limit = ""  # unlimited
         os.environ["HISTSIZE"] = sh_history_limit
         os.environ["HISTFILESIZE"] = sh_history_limit
         sh_history = ".bash_history"
