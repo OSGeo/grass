@@ -400,7 +400,8 @@ class MapFrameBase(wx.Frame):
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
         for toolbar in six.itervalues(self.toolbars):
-            toolbar.EnableLongHelp(enable)
+            if toolbar:
+                toolbar.EnableLongHelp(enable)
 
     def ShowAllToolbars(self, show=True):
         if not show:  # hide
