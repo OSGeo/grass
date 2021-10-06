@@ -113,7 +113,6 @@ class MapFrame(SingleMapFrame):
         self.tree = tree
         # checks for saving workspace
         self.canCloseDisplayCallback = None
-        self.statusbar = None
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
@@ -144,6 +143,7 @@ class MapFrame(SingleMapFrame):
         #
         # Add statusbar
         #
+        self.statusbar = None
         self.statusbarManager = None
         if statusbar:
             # items for choice
