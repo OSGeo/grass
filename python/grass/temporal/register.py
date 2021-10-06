@@ -154,7 +154,10 @@ def register_maps_in_space_time_dataset(
 
     # Read the map list from file
     if file:
-        fd = open(file, "r")
+        if hasattr(file, "readline"):
+            fd = file
+        else:
+            fd = open(file, "r")
 
         line = True
         while True:
