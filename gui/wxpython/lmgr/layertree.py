@@ -1814,6 +1814,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         If the user is clicking on checkbox, selection change is vetoed.
         """
         if self.hitCheckbox:
+            # Prevent the scrollbar from scrolling up when a layer item
+            # is checked or unchecked
+            self.EnsureVisible(event.GetItem())
             event.Veto()
 
     def OnChangeSel(self, event):
