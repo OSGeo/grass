@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     struct
     {
 	struct Option *in, *out, *dist, *pars, *min, *seed, *field;
-	struct Flag *no_topo;
+	struct Flag *gen_seed, *no_topo;
     } parm;
 
     G_gisinit(argv[0]);
@@ -105,16 +105,30 @@ int main(int argc, char **argv)
     parm.seed->key = "seed";
     parm.seed->type = TYPE_INTEGER;
     parm.seed->required = NO;
-    parm.seed->answer = "0";
     parm.seed->description = _("Seed for random number generation");
-    
+
+    parm.gen_seed = G_define_flag();
+    parm.gen_seed->key = 's';
+    parm.gen_seed->description = _("Generate random seed (result is non-deterministic)");
+
     parm.no_topo = G_define_standard_flag(G_FLG_V_TOPO);
+
+    /* Either explicit seed or explicitly generate seed, but not both. */
+    G_option_exclusive(parm.seed, parm.gen_seed, NULL);
+    G_option_required(parm.seed, parm.gen_seed, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     min = atof(parm.min->answer);
-    seed = atoi(parm.seed->answer);
+    if (parm.seed->answer) {
+        seed = atol(parm.seed->answer);
+        G_debug(3, "Read random seed from seed=: %d", seed);
+    }
+    else {
+        seed = G_srand48_auto();
+        G_debug(3, "Generated random seed (-s): %d", seed);
+    }
 
     switch (parm.dist->answer[0]) {
     case 'u':
