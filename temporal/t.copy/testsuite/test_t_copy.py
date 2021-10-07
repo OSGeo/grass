@@ -19,37 +19,12 @@ class TestSTDSCopy(TestCase):
         cls.use_temp_region()
         cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
-        cls.runModule("r.mapcalc", expression="prec_1 = 100", overwrite=True)
-        cls.runModule("r.mapcalc", expression="prec_2 = 200", overwrite=True)
-        cls.runModule("r.mapcalc", expression="prec_3 = 300", overwrite=True)
-        cls.runModule("r.mapcalc", expression="prec_4 = 400", overwrite=True)
-        cls.runModule("r.mapcalc", expression="prec_5 = 500", overwrite=True)
-        cls.runModule("r.mapcalc", expression="prec_6 = 600", overwrite=True)
-
-        cls.runModule(
-            "t.create",
-            type="strds",
-            temporaltype="absolute",
-            output="precip_abs1",
-            title="A test",
-            description="A test",
-            overwrite=True,
-        )
-        cls.runModule(
-            "t.register",
-            flags="i",
-            type="raster",
-            input="precip_abs1",
-            maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
-            start="2001-01-01",
-            increment="3 months",
-            overwrite=True,
-        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
+        cls.runModule("g.remove", flags="f", type="raster", pattern="prec_*")
 
     def setUp(self):
         """Create input data for t.copy"""
@@ -121,6 +96,7 @@ class TestSTDSCopy(TestCase):
         self.assertModuleKeyValue(
             module=info, reference=tinfo_string, precision=2, sep="="
         )
+        self.runModule("t.remove", flags="df", type="strds", inputs="precip_abs2")
 
 
 class TestSTDSCopyFails(TestCase):
@@ -130,11 +106,39 @@ class TestSTDSCopyFails(TestCase):
         cls.use_temp_region()
         cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
+        cls.runModule("r.mapcalc", expression="prec_1 = 100", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_2 = 200", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_3 = 300", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_4 = 400", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_5 = 500", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_6 = 600", overwrite=True)
+
+        cls.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="absolute",
+            output="precip_abs1",
+            title="A test",
+            description="A test",
+            overwrite=True,
+        )
+        cls.runModule(
+            "t.register",
+            flags="i",
+            type="raster",
+            input="precip_abs1",
+            maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
+            start="2001-01-01",
+            increment="3 months",
+            overwrite=True,
+        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
+        cls.runModule("t.remove", flags="df", type="strds", inputs="precip_abs1")
+        cls.runModule("g.remove", flags="f", type="raster", pattern="prec_*")
 
     def test_error_handling(self):
         """Test arguments for t.copy"""
