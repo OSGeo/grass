@@ -459,6 +459,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 "export-pg",
                 "export-attr",
                 "pack",
+                "check",
+                "uncheck",
             ):
                 self.popupID[key] = NewId()
 
@@ -477,6 +479,30 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype != "command" and numSelected == 1:
             self.popupMenu.Append(self.popupID["rename"], _("Rename"))
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id=self.popupID["rename"])
+
+        if numSelected > 1:
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["check"],
+                text=_("Check selected layers"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["check"],
+            )
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["uncheck"],
+                text=_("Uncheck selected layers"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["uncheck"],
+            )
 
         # when multiple maps are selected of different types
         # we cannot zoom or change region
@@ -1333,6 +1359,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         "@" + mapset, "@" + newname
                     )
                     self.SetItemText(item, newlabel)
+
+    def OnCheckUncheckSelectedLayer(self, event):
+        """Check/uncheck selected layer(s)"""
+        check = wx.CHK_CHECKED
+        if event.GetId() == self.popupID["uncheck"]:
+            check = wx.CHK_UNCHECKED
+        self.hitCheckbox = True
+        for layer in self.GetSelections():
+            self.CheckItem(layer, checked=check)
 
     def AddLayer(
         self,
