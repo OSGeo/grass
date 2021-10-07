@@ -131,14 +131,12 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.notebook.AddPage(
             page=self.pages["browse"], text=_("Browse data"), name="browse"
         )
-        self.pages["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
         self.CreateDbMgrPage(parent=self, pageName="manageTable")
 
         self.notebook.AddPage(
             page=self.pages["manageTable"], text=_("Manage tables"), name="table"
         )
-        self.pages["manageTable"].SetTabAreaColour(globalvar.FNPageColor)
 
         self.CreateDbMgrPage(parent=self, pageName="manageLayer")
         self.notebook.AddPage(

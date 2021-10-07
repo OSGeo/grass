@@ -9,7 +9,6 @@ SUBDIRS = \
 	app \
 	bandref \
 	benchmark \
-	ctypes \
 	exceptions \
 	grassdb \
 	gunittest \
