@@ -143,6 +143,7 @@ class MapFrame(SingleMapFrame):
         #
         # Add statusbar
         #
+        self.statusbar = None
         self.statusbarManager = None
         if statusbar:
             # items for choice
@@ -207,7 +208,8 @@ class MapFrame(SingleMapFrame):
         self.MapWindow2D.zoomChanged.connect(self.StatusbarUpdate)
 
         # register context menu actions
-        self._registerContextMenuActions()
+        if self.statusbar:
+            self._registerContextMenuActions()
 
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
         # default is 2D display mode
@@ -243,7 +245,8 @@ class MapFrame(SingleMapFrame):
         )
 
         # statusbar
-        self.AddStatusbarPane()
+        if self.statusbar:
+            self.AddStatusbarPane()
 
         self._mgr.Update()
 
