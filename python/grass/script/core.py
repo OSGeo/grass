@@ -92,6 +92,7 @@ _popen_args = [
     "universal_newlines",
     "startupinfo",
     "creationflags",
+    "encoding"
 ]
 
 
@@ -464,12 +465,6 @@ def start_command(
 
     :return: Popen object
     """
-    # If encoding is in kwargs, remove it,
-    # as we dont want it to be used on the
-    # call to make_command
-    if "encoding" in kwargs:
-        kwargs.pop("encoding")
-
     options = {}
     popts = {}
     for opt, val in kwargs.items():
