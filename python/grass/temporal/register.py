@@ -226,6 +226,7 @@ def register_maps_in_space_time_dataset(
                     "The interval flag will be ignored because of time stamps in input file"
                 )
             )
+        fd.close()
 
     num_maps = len(maplist)
     map_object_list = []
