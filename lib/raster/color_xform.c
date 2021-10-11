@@ -270,6 +270,7 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
     if (min * max <= 0.0) {
 	/* 0 <= abs(cell) <= amax */
 	amin = 0;
+	/* use the same shifting for Rast_log_colors */
 	delta = 1 - amin;
 	lamin = log(amin + delta);
 	lamax = log(amax + delta);
