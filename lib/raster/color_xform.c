@@ -195,9 +195,9 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
     Rast_get_d_color_range(&min, &max, src);
 
     if (min <= 0.0) {
-	/* shift cell values by GRASS_EPSILON - min so that they are in
-	 * [GRASS_EPSILON, max - min + GRASS_EPSILON] */
-	delta = GRASS_EPSILON - min;
+	/* shift cell values by 1 - min so that they are in [1, max - min + 1]
+	 */
+	delta = 1 - min;
 	lmin = log(min + delta);
 	lmax = log(max + delta);
     } else {
@@ -253,8 +253,7 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
-    double absmin, absmax, delta;
-    DCELL amin, amax, lamin, lamax;
+    double absmin, absmax, amin, amax, delta, lamin, lamax;
     int red, grn, blu;
     DCELL prev;
     int i;
@@ -268,13 +267,14 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
     amin = MIN(absmin, absmax);
     amax = MAX(absmin, absmax);
 
-    if (amin == 0.0) {
-	/* shift cell values by GRASS_EPSILON so that they are in
-	 * [GRASS_EPSILON, amax + GRASS_EPSILON] */
-	delta = GRASS_EPSILON;
-	lamin = log(delta);
+    if (min * max <= 0.0) {
+	/* 0 <= abs(cell) <= amax */
+	amin = 0;
+	delta = 1 - amin;
+	lamin = log(amin + delta);
 	lamax = log(amax + delta);
     } else {
+	/* 0 < amin <= abs(cell) <= amax */
 	delta = 0;
 	lamin = log(amin);
 	lamax = log(amax);
@@ -299,7 +299,7 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	else if (i == samples)
 	    x = amax;
 	else {
-	    lx = lamin + lamax * i / samples;
+	    lx = lamin + (lamax - lamin) * i / samples;
 	    /* restore cell values approximately */
 	    x = exp(lx) - delta;
 	}
