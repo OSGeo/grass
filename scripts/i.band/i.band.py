@@ -5,7 +5,7 @@
 # MODULE:       i.band
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
-# PURPOSE:      Manages band reference information assigned to a single
+# PURPOSE:      Manages semantic label information assigned to a single
 #               raster map or to a list of raster maps.
 #
 # COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
@@ -17,19 +17,19 @@
 #############################################################################
 
 # %module
-# % description: Manages band reference information assigned to a single raster map or to a list of raster maps.
+# % description: Manages semantic label information assigned to a single raster map or to a list of raster maps.
 # % keyword: general
 # % keyword: imagery
-# % keyword: band reference
+# % keyword: semantic label
 # % keyword: image collections
 # %end
 # %option G_OPT_R_MAPS
 # %end
 # %option
-# % key: band
+# % key: semantic label
 # % type: string
 # % key_desc: name
-# % description: Name of band reference identifier (example: S2_1)
+# % description: Name of semantic label identifier (example: S2_1)
 # % required: no
 # % multiple: yes
 # %end
@@ -48,8 +48,8 @@ import grass.script as gs
 from grass.exceptions import GrassError, OpenError
 
 
-def print_map_band_reference(name, band_reader):
-    """Print band reference information assigned to a single raster map
+def print_map_semantic_label(name, band_reader):
+    """Print semantic label information assigned to a single raster map
 
     :param str name: raster map name
     """
@@ -57,21 +57,21 @@ def print_map_band_reference(name, band_reader):
 
     try:
         with RasterRow(name) as rast:
-            band_ref = rast.info.bandref
-            if band_ref:
-                shortcut, band = band_ref.split("_")
+            semantic_label = rast.info.semantic_label
+            if semantic_label:
+                shortcut, band = semantic_label.split("_")
                 band_reader.print_info(shortcut, band)
             else:
-                gs.info(_("No band reference assigned to <{}>").format(name))
+                gs.info(_("No semantic label assigned to <{}>").format(name))
     except OpenError as e:
         gs.error(_("Map <{}> not found").format(name))
 
 
-def manage_map_band_reference(name, band_ref):
-    """Manage band reference assigned to a single raster map
+def manage_map_semantic_label(name, semantic_label):
+    """Manage semantic label assigned to a single raster map
 
     :param str name: raster map name
-    :param str band_ref: band reference (None for dissociating band reference)
+    :param str semantic_label: semantic label (None for dissociating semantic label)
 
     :return int: return code
     """
@@ -79,21 +79,21 @@ def manage_map_band_reference(name, band_ref):
 
     try:
         with RasterRow(name) as rast:
-            if band_ref:
+            if semantic_label:
                 gs.debug(
-                    _("Band reference <{}> assigned to raster map <{}>").format(
-                        band_ref, name
+                    _("Semantic label <{}> assigned to raster map <{}>").format(
+                        semantic_label, name
                     ),
                     1,
                 )
             else:
                 gs.debug(
-                    _("Band reference dissociated from raster map <{}>").format(name), 1
+                    _("Semantic label dissociated from raster map <{}>").format(name), 1
                 )
             try:
-                rast.info.bandref = band_ref
+                rast.info.semantic_label = semantic_label
             except GrassError as e:
-                gs.error(_("Unable to assign/dissociate band reference. {}").format(e))
+                gs.error(_("Unable to assign/dissociate semantic label. {}").format(e))
                 return 1
     except OpenError as e:
         gs.error(_("Map <{}> not found in current mapset").format(name))
@@ -105,32 +105,32 @@ def manage_map_band_reference(name, band_ref):
 def main():
     maps = options["map"].split(",")
     if options["operation"] == "add":
-        if not options["band"]:
+        if not options["semantic_label"]:
             gs.fatal(
                 _("Operation {}: required parameter <{}> not set").format(
-                    options["operation"], "band"
+                    options["operation"], "semantic_label"
                 )
             )
-        bands = options["band"].split(",")
-        if len(bands) > 1 and len(bands) != len(maps):
-            gs.fatal(_("Number of maps differs from number of bands"))
+        semantic_labels = options["semantic_label"].split(",")
+        if len(semantic_labels) > 1 and len(semantic_labels) != len(maps):
+            gs.fatal(_("Number of maps differs from number of semantic labels"))
     else:
-        bands = [None]
+        semantic_labels = [None]
 
     if options["operation"] == "print":
-        from grass.bandref import BandReferenceReader
+        from grass.semantic_label import semantic_labelerenceReader
 
-        band_reader = BandReferenceReader()
+        band_reader = semantic_labelerenceReader()
     else:
         band_reader = None
-    multi_bands = len(bands) > 1
+    multi_labels = len(semantic_labels) > 1
     ret = 0
     for i in range(len(maps)):
-        band_ref = bands[i] if multi_bands else bands[0]
+        semantic_label = semantic_labels[i] if multi_labels else semantic_labels[0]
         if options["operation"] == "print":
-            print_map_band_reference(maps[i], band_reader)
+            print_map_semantic_label(maps[i], band_reader)
         else:
-            if manage_map_band_reference(maps[i], band_ref) != 0:
+            if manage_map_semantic_label(maps[i], semantic_label) != 0:
                 ret = 1
 
     return ret

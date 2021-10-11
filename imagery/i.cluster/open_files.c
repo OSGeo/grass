@@ -7,7 +7,7 @@
 
 int open_files(void)
 {
-    char *name, *mapset, **err, *bandref;
+    char *name, *mapset, **err, *semantic_label;
     FILE *fd;
     int n, missing;
 
@@ -15,7 +15,7 @@ int open_files(void)
     I_free_group_ref(&ref);
     I_get_subgroup_ref(group, subgroup, &ref);
 
-    bandrefs = (char **)G_malloc(ref.nfiles * sizeof(char **));
+    semantic_labels = (char **)G_malloc(ref.nfiles * sizeof(char **));
     missing = 0;
     for (n = 0; n < ref.nfiles; n++) {
 	name = ref.file[n].name;
@@ -25,8 +25,8 @@ int open_files(void)
 	    G_warning(_("Raster map <%s> do not exists in subgroup <%s>"),
 		      G_fully_qualified_name(name, mapset), subgroup);
         }
-        bandref = Rast_get_bandref_or_name(ref.file[n].name, ref.file[n].mapset);
-        bandrefs[n] = G_store(bandref);
+        semantic_label = Rast_get_semantic_label_or_name(ref.file[n].name, ref.file[n].mapset);
+        semantic_labels[n] = G_store(semantic_label);
     }
     if (missing)
 	G_fatal_error(_("No raster maps found"));
@@ -66,9 +66,9 @@ int open_files(void)
 	    G_fatal_error(_("<%s> has too many signatures (limit is 255)"),
 			  insigfile);
 
-        err = I_sort_signatures_by_bandref(&in_sig, &ref);
+        err = I_sort_signatures_by_semantic_label(&in_sig, &ref);
         if (err)
-            G_fatal_error(_("Signature – group member band reference mismatch.\n"
+            G_fatal_error(_("Signature – group member semantic label mismatch.\n"
                 "Extra signatures for bands: %s\n"
                 "Imagery group bands without signatures: %s"),
                 err[0] ? err[0] : _("none"),

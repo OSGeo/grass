@@ -7,11 +7,11 @@ from grass.pygrass.gis import Mapset
 from grass.pygrass.raster import RasterRow
 
 
-class TestBandsSystemDefined(TestCase):
+class TestSemanticLabelsSystemDefined(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.map = tempname(10)
-        cls.bandref = "The_Doors"
+        cls.semantic_label = "The_Doors"
         cls.mapset = Mapset()
         cls.use_temp_region()
         cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
@@ -22,32 +22,32 @@ class TestBandsSystemDefined(TestCase):
         cls.del_temp_region()
         cls.runModule("g.remove", flags="f", type="raster", name=cls.map)
 
-    def read_band_ref(self):
+    def read_semantic_label(self):
         with RasterRow(self.map) as rast:
-            band_ref = rast.info.bandref
+            semantic_label = rast.info.semantic_label
 
-        return band_ref
+        return semantic_label
 
-    def test_band_ref_assign_not_current_mapset(self):
+    def test_semantic_label_assign_not_current_mapset(self):
         if not self.mapset == "PERMANENT":
             self.mapset.name = "PERMANENT"
             a_map = self.mapset.glist(type="raster")[0]
-            module = SimpleModule("i.band", map=a_map, band=self.bandref)
+            module = SimpleModule("i.band", map=a_map, semantic_label=self.semantic_label)
             self.assertModuleFail(module)
 
-    def test_band_ref_assign(self):
-        module = SimpleModule("i.band", map=self.map, band=self.bandref)
+    def test_semantic_label_assign(self):
+        module = SimpleModule("i.band", map=self.map, semantic_label=self.semantic_label)
         self.assertModule(module)
 
         # check also using pygrass
-        self.assertEqual(self.read_band_ref(), self.bandref)
+        self.assertEqual(self.read_semantic_label(), self.semantic_label)
 
-    def test_band_ref_dissociate(self):
+    def test_semantic_label_dissociate(self):
         module = SimpleModule("i.band", operation="remove", map=self.map)
         self.assertModule(module)
 
         # check also using pygrass
-        self.assertEqual(self.read_band_ref(), None)
+        self.assertEqual(self.read_semantic_label(), None)
 
 
 if __name__ == "__main__":

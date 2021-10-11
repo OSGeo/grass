@@ -338,7 +338,7 @@ class RasterMetadata(RasterMetadataBase):
         ewres=None,
         min=None,
         max=None,
-        band_reference=None,
+        semantic_label=None,
     ):
 
         RasterMetadataBase.__init__(
@@ -355,21 +355,21 @@ class RasterMetadata(RasterMetadataBase):
             max,
         )
 
-        self.set_band_reference(band_reference)
+        self.set_semantic_label(semantic_label)
 
-    def set_band_reference(self, band_reference):
-        """Set the band reference identifier"""
-        self.D["band_reference"] = band_reference
+    def set_semantic_label(self, semantic_label):
+        """Set the semantic label identifier"""
+        self.D["semantic_label"] = semantic_label
 
-    def get_band_reference(self):
-        """Get the band reference identifier
+    def get_semantic_label(self):
+        """Get the semantic label identifier
         :return: None if not found"""
-        if "band_reference" in self.D:
-            return self.D["band_reference"]
+        if "semantic_label" in self.D:
+            return self.D["semantic_label"]
         else:
             return None
 
-    band_reference = property(fget=get_band_reference, fset=set_band_reference)
+    semantic_label = property(fget=get_semantic_label, fset=set_semantic_label)
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
@@ -377,11 +377,11 @@ class RasterMetadata(RasterMetadataBase):
         :param bool shell: True for human readable style otherwise shell style
         """
         super()._print_info_body(shell)
-        # band reference section (raster specific only)
+        # semantic label section (raster specific only)
         if shell:
-            print("band_reference=" + str(self.get_band_reference()))
+            print("semantic_label=" + str(self.get_semantic_label()))
         else:
-            print(" | Band reference:............. " + str(self.get_band_reference()))
+            print(" | Semantic label:............. " + str(self.get_semantic_label()))
 
 
 ###############################################################################
@@ -1404,7 +1404,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
         :return: None if not found
         """
 
-        sql = "SELECT distinct band_reference FROM %s WHERE %s.id " % (
+        sql = "SELECT distinct semantic_label FROM %s WHERE %s.id " % (
             "raster_metadata",
             "raster_metadata",
         )
@@ -1421,11 +1421,11 @@ class STRDSMetadata(STDSRasterMetadataBase):
             string = ""
             count = 0
             for row in rows:
-                if row["band_reference"]:
+                if row["semantic_label"]:
                     if count == 0:
-                        string += row["band_reference"]
+                        string += row["semantic_label"]
                     else:
-                        string += ",%s" % row["band_reference"]
+                        string += ",%s" % row["semantic_label"]
                     count += 1
 
             if count > 0:
