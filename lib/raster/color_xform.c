@@ -3,9 +3,9 @@
  *
  * \brief Raster Library - Colors management
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2021 by the GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
@@ -185,7 +185,7 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst,
 void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
-    double lmin, lmax;
+    double delta, lmin, lmax;
     int red, grn, blu;
     DCELL prev;
     int i;
@@ -194,8 +194,17 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
     Rast_get_d_color_range(&min, &max, src);
 
-    lmin = log(min);
-    lmax = log(max);
+    if (min <= 0.0) {
+	/* shift cell values by GRASS_EPSILON - min so that they are in
+	 * [GRASS_EPSILON, max - min + GRASS_EPSILON] */
+	delta = GRASS_EPSILON - min;
+	lmin = log(min + delta);
+	lmax = log(max + delta);
+    } else {
+	delta = 0;
+	lmin = log(min);
+	lmax = log(max);
+    }
 
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
@@ -217,7 +226,8 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	    x = max;
 	else {
 	    lx = lmin + (lmax - lmin) * i / samples;
-	    x = exp(lx);
+	    /* restore cell values approximately */
+	    x = exp(lx) - delta;
 	}
 
 	if (i > 0)
@@ -243,8 +253,8 @@ void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
-    double lmin, lmax;
-    DCELL amax, lamax;
+    double absmin, absmax, delta;
+    DCELL amin, amax, lamin, lamax;
     int red, grn, blu;
     DCELL prev;
     int i;
@@ -253,11 +263,22 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 
     Rast_get_d_color_range(&min, &max, src);
 
-    lmin = log(fabs(min) + 1.0);
-    lmax = log(fabs(max) + 1.0);
+    absmin = fabs(min);
+    absmax = fabs(max);
+    amin = MIN(absmin, absmax);
+    amax = MAX(absmin, absmax);
 
-    amax = fabs(min) > fabs(max) ? fabs(min) : fabs(max);
-    lamax = lmin > lmax ? lmin : lmax;
+    if (amin == 0.0) {
+	/* shift cell values by GRASS_EPSILON so that they are in
+	 * [GRASS_EPSILON, amax + GRASS_EPSILON] */
+	delta = GRASS_EPSILON;
+	lamin = log(delta);
+	lamax = log(amax + delta);
+    } else {
+	delta = 0;
+	lamin = log(amin);
+	lamax = log(amax);
+    }
 
     Rast_get_default_color(&red, &grn, &blu, src);
     Rast_set_default_color(red, grn, blu, dst);
@@ -274,12 +295,13 @@ void Rast_abs_log_colors(struct Colors *dst, struct Colors *src, int samples)
 	Rast_get_d_color(&y, &red2, &grn2, &blu2, src);
 
 	if (i == 0)
-	    x = 1;
+	    x = amin;
 	else if (i == samples)
 	    x = amax;
 	else {
-	    lx = 0 + lamax * i / samples;
-	    x = exp(lx);
+	    lx = lamin + lamax * i / samples;
+	    /* restore cell values approximately */
+	    x = exp(lx) - delta;
 	}
 
 	if (i > 0) {
