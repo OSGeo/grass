@@ -38,7 +38,9 @@ class RSupportSemanticLabelHandlingTestCase(TestCase):
         cls.runModule("g.remove", flags="f", type="raster", name=cls.map)
 
     def test_exclusitivity(self):
-        self.assertModuleFail("r.support", map=self.map, semantic_label=self.semantic_label, b=True)
+        self.assertModuleFail(
+            "r.support", map=self.map, semantic_label=self.semantic_label, b=True
+        )
 
     def test_semantic_label_invalid(self):
         self.assertModuleFail(
