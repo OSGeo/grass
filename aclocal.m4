@@ -560,7 +560,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
 	    SHLIB_LD="${CC} -shared"
             SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$[@])"
 	    SHLIB_SUFFIX=".so"
-	    LDFLAGS="-export-dynamic"
+	    LDFLAGS="-Wl,--export-dynamic"
 	    #LD_SEARCH_FLAGS='-rpath ${LIB_RUNTIME_DIR}'
 	    LD_SEARCH_FLAGS='-Wl,-rpath-link,${LIB_RUNTIME_DIR}'
 	    # TODO: add optional pthread support with any combination of: 
