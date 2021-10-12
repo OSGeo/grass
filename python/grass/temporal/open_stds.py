@@ -49,18 +49,18 @@ def open_old_stds(name, type, dbif=None):
         mapset = get_current_mapset()
     else:
         name, mapset = name.split("@")
-    band_ref = None
+    semantic_label = None
     if name.find(".") > -1:
         try:
-            name, band_ref = name.split(".")
+            name, semantic_label = name.split(".")
         except ValueError:
             msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
     id = name + "@" + mapset
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
-        if band_ref:
-            sp.set_band_reference(band_ref)
+        if semantic_label:
+            sp.set_semantic_label(semantic_label)
     elif (
         type == "str3ds"
         or type == "raster3d"

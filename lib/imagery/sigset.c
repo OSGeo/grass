@@ -472,7 +472,7 @@ int I_WriteSigSet(FILE * fd, const struct SigSet *S)
  * \return NULL successfully sorted
  * \return err_array two comma separated lists of mismatches
  */
-char **I_SortSigSetBysemantic_label(struct SigSet *S, const struct Ref *R)
+char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
 {
     unsigned int total, complete;
     unsigned int *match1, *match2, mc1, mc2, *new_order;

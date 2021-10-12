@@ -6,7 +6,7 @@ import re
 from collections import OrderedDict
 
 
-# band reference should be required to have the format
+# semantic label should be required to have the format
 # <shortcut>_<band>
 # instead, the sensor name should be stored somewhere else,
 # and band names should be STAC common names, see
@@ -20,7 +20,7 @@ class BandReferenceReaderError(Exception):
 
 
 class BandReferenceReader:
-    """Band references reader"""
+    """semantic labels reader"""
 
     def __init__(self):
         self._json_files = glob.glob(
@@ -95,7 +95,7 @@ class BandReferenceReader:
         sys.stdout.write(os.linesep)
 
     def print_info(self, shortcut=None, band=None, extended=False):
-        """Prints band reference information to stdout.
+        """Prints semantic label information to stdout.
 
         Can be filtered by shortcut or band identifier.
 
@@ -147,15 +147,15 @@ class BandReferenceReader:
         # raise error when defined shortcut not found
         if shortcut and not found:
             raise BandReferenceReaderError(
-                "Band reference <{}> not found".format(shortcut)
+                "Semantic label <{}> not found".format(shortcut)
             )
 
     def find_file(self, band_reference):
-        """Find file by band reference.
+        """Find file by semantic label.
 
         Match is case-insensitive.
 
-        :param str band_reference: band reference identifier to search for (eg. S2_1)
+        :param str band_reference: semantic label identifier to search for (eg. S2_1)
 
         :return str: file basename if found or None
         """
