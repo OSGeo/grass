@@ -216,7 +216,7 @@ for i in \
 	libblas.dll \
 	libbz2.dll \
 	libcairo-2.dll \
-	libcrypto-1_1-x64.dll \
+	libcrypto-3-x64.dll \
 	libcurl-4.dll \
 	libdf-0.dll \
 	libexpat-1.dll \
@@ -262,7 +262,7 @@ for i in \
 	libspatialite-7.dll \
 	libsqlite3-0.dll \
 	libssh2-1.dll \
-	libssl-1_1-x64.dll \
+	libssl-3-x64.dll \
 	libstdc++-6.dll \
 	libtermcap.dll \
 	libtiff-5.dll \
