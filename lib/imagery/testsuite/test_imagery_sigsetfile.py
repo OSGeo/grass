@@ -97,7 +97,7 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(utils.decode(Sn.title), "Signature title")
         self.assertEqual(Sn.nbands, 1)
         semantic_label = utils.decode(
-            ctypes.cast(Sn.semantic_label[0], ctypes.c_char_p).value
+            ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label, "The_Doors")
         self.assertEqual(Sn.nclasses, 1)
@@ -199,7 +199,7 @@ class SigSetFileTestCase(TestCase):
         )
         self.assertEqual(semantic_label, "The_Doors")
         semantic_label = utils.decode(
-            ctypes.cast(Sn.semantic_label[1], ctypes.c_char_p).value
+            ctypes.cast(Sn.semantic_labels[1], ctypes.c_char_p).value
         )
         self.assertEqual(semantic_label, "The_Who")
         self.assertEqual(Sn.nclasses, 1)
@@ -463,9 +463,9 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].SubSig[0].R[1][1] = -96.96
 
         # This should result in returning NULL
-        ret = I_SortSigSetBysemantic_label(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
-        # Band references and sig items should be swapped
+        # Semantic labels and sig items should be swapped
         # Static items
         self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
         # Reordered items
@@ -526,9 +526,9 @@ class SortSigSetBySemanticLabelTest(TestCase):
         S.ClassSig[0].SubSig[0].R[1][1] = -96.96
 
         # This should result in returning NULL
-        ret = I_SortSigSetBysemantic_label(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
-        # Band references and sig items should not be swapped
+        # Semantic labels and sig items should not be swapped
         # Static items
         self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
         # Reordered items
