@@ -5,7 +5,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
-DSTDIR = $(GDIR)/bandref
+DSTDIR = $(GDIR)/semantic_label
 
 MODULES = reader
 

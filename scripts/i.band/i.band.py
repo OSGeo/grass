@@ -26,7 +26,7 @@
 # %option G_OPT_R_MAPS
 # %end
 # %option
-# % key: semantic label
+# % key: semantic_label
 # % type: string
 # % key_desc: name
 # % description: Name of semantic label identifier (example: S2_1)
@@ -48,7 +48,7 @@ import grass.script as gs
 from grass.exceptions import GrassError, OpenError
 
 
-def print_map_semantic_label(name, band_reader):
+def print_map_semantic_label(name, label_reader):
     """Print semantic label information assigned to a single raster map
 
     :param str name: raster map name
@@ -59,8 +59,7 @@ def print_map_semantic_label(name, band_reader):
         with RasterRow(name) as rast:
             semantic_label = rast.info.semantic_label
             if semantic_label:
-                shortcut, band = semantic_label.split("_")
-                band_reader.print_info(shortcut, band)
+                label_reader.print_info(semantic_label)
             else:
                 gs.info(_("No semantic label assigned to <{}>").format(name))
     except OpenError as e:
@@ -118,17 +117,17 @@ def main():
         semantic_labels = [None]
 
     if options["operation"] == "print":
-        from grass.semantic_label import semantic_labelerenceReader
+        from grass.semantic_label import SemanticLabelReader
 
-        band_reader = semantic_labelerenceReader()
+        label_reader = SemanticLabelReader()
     else:
-        band_reader = None
+        label_reader = None
     multi_labels = len(semantic_labels) > 1
     ret = 0
     for i in range(len(maps)):
         semantic_label = semantic_labels[i] if multi_labels else semantic_labels[0]
         if options["operation"] == "print":
-            print_map_semantic_label(maps[i], band_reader)
+            print_map_semantic_label(maps[i], label_reader)
         else:
             if manage_map_semantic_label(maps[i], semantic_label) != 0:
                 ret = 1

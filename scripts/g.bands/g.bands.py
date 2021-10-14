@@ -5,7 +5,7 @@
 # MODULE:       g.bands
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
-# PURPOSE:      Prints available band reference information used for multispectral data.
+# PURPOSE:      Prints available semantic label information used for multispectral data.
 #
 # COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
 #
@@ -16,16 +16,16 @@
 #############################################################################
 
 # %module
-# % description: Prints available band reference information used for multispectral data.
+# % description: Prints available semantic label information used for multispectral data.
 # % keyword: general
 # % keyword: imagery
-# % keyword: band reference
+# % keyword: semantic label
 # % keyword: image collections
 # %end
 # %option
 # % key: pattern
 # % type: string
-# % description: Band reference search pattern (examples: L, S2, .*_2, S2_1)
+# % description: Semantic label search pattern (examples: L, S2, .*_2, S2_1)
 # % required: no
 # % multiple: no
 # %end
@@ -49,7 +49,7 @@ import grass.script as gs
 
 
 def main():
-    from grass.bandref import BandReferenceReader, BandReferenceReaderError
+    from grass.semantic_label import SemanticLabelReader, SemanticLabelReaderError
 
     kwargs = {}
     if "," in options["pattern"]:
@@ -64,9 +64,9 @@ def main():
 
     if options["operation"] == "print":
         try:
-            reader = BandReferenceReader()
+            reader = SemanticLabelReader()
             reader.print_info(**kwargs)
-        except BandReferenceReaderError as e:
+        except SemanticLabelReaderError as e:
             gs.fatal(e)
 
     return 0
