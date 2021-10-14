@@ -116,6 +116,9 @@ static void load_library(void)
 	"libgdal1.7.0.so",
 # endif
 # ifdef _WIN32
+	"gdal303.dll",
+	"gdal302.dll",
+	"gdal301.dll",
 	"gdal300.dll",
 	"gdal204.dll",        
 	"gdal203.dll",        
