@@ -59,7 +59,7 @@ def register_maps_in_space_time_dataset(
                  to None
     :param maps: A comma separated list of map names
     :param file: Input file, one map per line map with start and optional
-                end time
+                end time, or the same as io object (with readline capability)
     :param start: The start date and time of the first map
                  (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                  format relative is integer 5)
@@ -154,7 +154,10 @@ def register_maps_in_space_time_dataset(
 
     # Read the map list from file
     if file:
-        fd = open(file, "r")
+        if hasattr(file, "readline"):
+            fd = file
+        else:
+            fd = open(file, "r")
 
         line = True
         while True:
@@ -222,6 +225,7 @@ def register_maps_in_space_time_dataset(
                     "The interval flag will be ignored because of time stamps in input file"
                 )
             )
+        fd.close()
 
     num_maps = len(maplist)
     map_object_list = []
