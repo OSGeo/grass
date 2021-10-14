@@ -74,54 +74,55 @@ class MapCalcFrame(wx.Frame):
         #
         self.heading = _('mapcalc statement')
         self.funct_dict = {
-            'abs(x)': 'abs()',
-            'acos(x)': 'acos()',
-            'asin(x)': 'asin()',
-            'atan(x)': 'atan()',
-            'atan(x,y)': 'atan( , )',
-            'cos(x)': 'cos()',
-            'double(x)': 'double()',
-            'eval([x,y,...,]z)': 'eval()',
-            'exp(x)': 'exp()',
-            'exp(x,y)': 'exp( , )',
-            'float(x)': 'float()',
-            'graph(x,x1,y1[x2,y2..])': 'graph( , , )',
-            'if(x)': 'if()',
-            'if(x,a)': 'if( , )',
-            'if(x,a,b)': 'if( , , )',
-            'if(x,a,b,c)': 'if( , , , )',
-            'int(x)': 'int()',
-            'isnull(x)': 'isnull()',
-            'log(x)': 'log(',
-            'log(x,b)': 'log( , )',
-            'max(x,y[,z...])': 'max( , )',
-            'median(x,y[,z...])': 'median( , )',
-            'min(x,y[,z...])': 'min( , )',
-            'mode(x,y[,z...])': 'mode( , )',
-            'nmax(x,y[,z...])': 'nmax( , )',
-            'nmedian(x,y[,z...])': 'nmedian( , )',
-            'nmin(x,y[,z...])': 'nmin( , )',
-            'nmode(x,y[,z...])': 'nmode( , )',
-            'not(x)': 'not()',
-            'pow(x,y)': 'pow( , )',
-            'rand(a,b)': 'rand( , )',
-            'round(x)': 'round()',
-            'round(x,y)': 'round( , )',
-            'round(x,y,z)': 'round( , , )',
-            'sin(x)': 'sin()',
-            'sqrt(x)': 'sqrt()',
-            'tan(x)': 'tan()',
-            'xor(x,y)': 'xor( , )',
-            'row()': 'row()',
-            'col()': 'col()',
-            'nrows()': 'nrows()',
-            'ncols()': 'ncols()',
-            'x()': 'x()',
-            'y()': 'y()',
-            'ewres()': 'ewres()',
-            'nsres()': 'nsres()',
-            'area()': 'area()',
-            'null()': 'null()'
+            "abs(x)": "abs()",
+            "acos(x)": "acos()",
+            "asin(x)": "asin()",
+            "atan(x)": "atan()",
+            "atan(x,y)": "atan( , )",
+            "cos(x)": "cos()",
+            "double(x)": "double()",
+            "eval([x,y,...,]z)": "eval()",
+            "exp(x)": "exp()",
+            "exp(x,y)": "exp( , )",
+            "float(x)": "float()",
+            "graph(x,x1,y1[x2,y2..])": "graph( , , )",
+            "if(x)": "if()",
+            "if(x,a)": "if( , )",
+            "if(x,a,b)": "if( , , )",
+            "if(x,a,b,c)": "if( , , , )",
+            "int(x)": "int()",
+            "isnull(x)": "isnull()",
+            "log(x)": "log(",
+            "log(x,b)": "log( , )",
+            "max(x,y[,z...])": "max( , )",
+            "median(x,y[,z...])": "median( , )",
+            "min(x,y[,z...])": "min( , )",
+            "mod(x,y)": "mod( , )",
+            "mode(x,y[,z...])": "mode( , )",
+            "nmax(x,y[,z...])": "nmax( , )",
+            "nmedian(x,y[,z...])": "nmedian( , )",
+            "nmin(x,y[,z...])": "nmin( , )",
+            "nmode(x,y[,z...])": "nmode( , )",
+            "not(x)": "not()",
+            "pow(x,y)": "pow( , )",
+            "rand(a,b)": "rand( , )",
+            "round(x)": "round()",
+            "round(x,y)": "round( , )",
+            "round(x,y,z)": "round( , , )",
+            "sin(x)": "sin()",
+            "sqrt(x)": "sqrt()",
+            "tan(x)": "tan()",
+            "xor(x,y)": "xor( , )",
+            "row()": "row()",
+            "col()": "col()",
+            "nrows()": "nrows()",
+            "ncols()": "ncols()",
+            "x()": "x()",
+            "y()": "y()",
+            "ewres()": "ewres()",
+            "nsres()": "nsres()",
+            "area()": "area()",
+            "null()": "null()",
         }
 
         if self.rast3d:
@@ -627,16 +628,16 @@ class MapCalcFrame(wx.Frame):
             pass
 
         newmcalcstr += what
-        
+
         # Do not add extra space if there is already one
         try:
             if newmcalcstr[-1] != ' ' and mcalcstr[position] != ' ':
                 newmcalcstr += ' '
         except:
             newmcalcstr += ' '
-        
+
         newmcalcstr += mcalcstr[position:]
-        
+
         self.text_mcalc.SetValue(newmcalcstr)
         if len(what) > 0:
             match = re.search(pattern="\(.*\)", string=what)
