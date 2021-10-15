@@ -165,6 +165,7 @@ RANLIB=$mxe_bin-ranlib \
 WINDRES=$mxe_bin-windres \
 PKG_CONFIG=$mxe_bin-pkg-config \
 ./configure \
+--build=$build_arch \
 --host=$arch \
 --with-nls \
 --with-readline \
