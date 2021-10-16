@@ -31,6 +31,7 @@
 #
 # cd ~/usr/src
 # git clone https://github.com/OSGeo/grass.git
+# git clone https://github.com/OSGeo/grass-addons.git
 # cd grass
 # mswindows/crosscompile.sh --mxe-path=$HOME/usr/src/mxe --update --package \
 #      > crosscompile.log 2>&1
