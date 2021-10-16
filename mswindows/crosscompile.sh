@@ -328,11 +328,38 @@ cat<<'EOT' | sed "s/\$version/$version/g" > $dist/grass.bat
 @echo off
 setlocal EnableDelayedExpansion
 
-rem Change this variable to override auto-detection of python.exe in PATH
-set GRASS_PYTHON=C:\Python39\python.exe
+if defined GRASS_PYTHON (
+	if not exist "%GRASS_PYTHON%" (
+		echo.
+		echo %GRASS_PYTHON% not found
+		echo Please fix GRASS_PYTHON
+		echo.
+		pause
+		goto:eof
+	)
+) else (
+	rem Change this variable to override auto-detection of python.exe in
+	rem PATH
+	set GRASS_PYTHON=C:\Python39\python.exe
 
-rem For portable installation, use %~d0 for the changing drive letter
-rem set GRASS_PYTHON=%~d0\Python39\python.exe
+	rem For portable installation, use %~d0 for the changing drive letter
+	rem set GRASS_PYTHON=%~d0\Python39\python.exe
+
+	if not exist "%GRASS_PYTHON%" (
+		set GRASS_PYTHON=
+		for /f usebackq %%i in (`where python.exe`) do if "!GRASS_PYTHON!"=="" set GRASS_PYTHON=%%i
+	)
+	if not defined GRASS_PYTHON (
+		echo.
+		echo python.exe not found in PATH
+		echo Please set GRASS_PYTHON in %~f0
+		echo.
+		pause
+		goto:eof
+	)
+)
+rem XXX: Do we need PYTHONHOME?
+rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
 set GISBASE=%~dp0
 set GISBASE=%GISBASE:~0,-1%
@@ -359,24 +386,9 @@ if not exist "%GISBASE%\etc\fontcap" (
 	pushd .
 	set GISRC=dummy
 	cd %GISBASE%\lib
-	%GISBASE%\bin\g.mkfontcap.exe
+	"%GISBASE%\bin\g.mkfontcap.exe"
 	popd
 )
-
-if not exist "%GRASS_PYTHON%" (
-	set GRASS_PYTHON=
-	for /f usebackq %%i in (`where python.exe`) do if "!GRASS_PYTHON!"=="" set GRASS_PYTHON=%%i
-)
-if not defined GRASS_PYTHON (
-	echo.
-	echo python.exe not found in PATH
-	echo Please set GRASS_PYTHON in %~f0
-	echo.
-	pause
-	goto:eof
-)
-rem XXX: Do we need PYTHONHOME?
-rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
 if %ERRORLEVEL% geq 1 pause
