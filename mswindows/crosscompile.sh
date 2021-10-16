@@ -306,9 +306,9 @@ rem set GRASS_PYTHON=%~d0\Python39\python.exe
 set GISBASE=%~dp0
 set GISBASE=%GISBASE:~0,-1%
 
-rem If %GRASS_SH% is externally defined, that shell will be used; Otherwise,
-rem %GISBASE%\etc\sh.exe will be used if it exists; If not, cmd.exe will be
-rem used; This check is mainly for supporting BusyBox for Windows
+rem If GRASS_SH is externally defined, that shell will be used; Otherwise,
+rem GISBASE\etc\sh.exe will be used if it exists; If not, cmd.exe will be used;
+rem This check is mainly for supporting BusyBox for Windows
 rem (https://frippery.org/busybox/)
 if not defined GRASS_SH (
 	set GRASS_SH=%GISBASE%\etc\sh.exe
