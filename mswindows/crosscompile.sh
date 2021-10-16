@@ -310,8 +310,10 @@ rem If %GRASS_SH% is externally defined, that shell will be used; Otherwise,
 rem %GISBASE%\etc\sh.exe will be used if it exists; If not, cmd.exe will be
 rem used; This check is mainly for supporting BusyBox for Windows
 rem (https://frippery.org/busybox/)
-if not defined GRASS_SH set GRASS_SH=%GISBASE%\etc\sh.exe
-if not exist "%GRASS_SH%" set GRASS_SH=
+if not defined GRASS_SH (
+	set GRASS_SH=%GISBASE%\etc\sh.exe
+	if not exist "!GRASS_SH!" set GRASS_SH=
+)
 
 set GRASS_PROJSHARE=%GISBASE%\share\proj
 
