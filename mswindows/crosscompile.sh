@@ -151,6 +151,7 @@ if [ -d $addons_path ]; then
 	if [ $update -eq 1 -a -d .git ]; then
 		git pull
 	fi
+	cd src
 	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
 	)
 fi
@@ -209,6 +210,7 @@ if [ -d $addons_path ]; then
 	if [ $update -eq 1 -a -d .git ]; then
 		git pull
 	fi
+	cd src
 	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
 	)
 fi
