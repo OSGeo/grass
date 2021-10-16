@@ -304,6 +304,15 @@ rem For portable installation, use %~d0 for the changing drive letter
 rem set GRASS_PYTHON=%~d0\Python39\python.exe
 
 set GISBASE=%~dp0
+set GISBASE=%GISBASE:~0,-1%
+
+rem If %GRASS_SH% is externally defined, that shell will be used; Otherwise,
+rem %GISBASE%\etc\sh.exe will be used if it exists; If not, cmd.exe will be
+rem used; This check is mainly for supporting BusyBox for Windows
+rem (https://frippery.org/busybox/)
+if not defined GRASS_SH set GRASS_SH=%GISBASE%\etc\sh.exe
+if not exist "%GRASS_SH%" set GRASS_SH=
+
 set GRASS_PROJSHARE=%GISBASE%\share\proj
 
 set PROJ_LIB=%GISBASE%\share\proj
@@ -313,7 +322,7 @@ rem XXX: Do we need these variables?
 rem set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
 rem set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
 
-if not exist %GISBASE%\etc\fontcap (
+if not exist "%GISBASE%\etc\fontcap" (
 	pushd .
 	set GISRC=dummy
 	cd %GISBASE%\lib
@@ -325,7 +334,7 @@ if not exist "%GRASS_PYTHON%" (
 	set GRASS_PYTHON=
 	for /f usebackq %%i in (`where python.exe`) do if "!GRASS_PYTHON!"=="" set GRASS_PYTHON=%%i
 )
-if "%GRASS_PYTHON%"=="" (
+if not defined GRASS_PYTHON (
 	echo.
 	echo python.exe not found in PATH
 	echo Please set GRASS_PYTHON in %~f0
