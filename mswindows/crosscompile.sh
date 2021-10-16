@@ -5,7 +5,7 @@
 # MODULE:	crosscompile.sh
 # AUTHOR(S):	Huidae Cho <grass4u gmail.com>
 # PURPOSE:	Builds a cross-compiled portable package of GRASS GIS
-# COPYRIGHT:	(C) 2019, 2020 by Huidae Cho and the GRASS Development Team
+# COPYRIGHT:	(C) 2019-2021 by Huidae Cho and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,9 @@
 #
 # This script requires MXE <https://mxe.cc/> for cross-compilation and was
 # tested on Slackware 14.2 x86_64 with up-to-date packages from slackpkg and
-# sbopkg.
+# sbopkg. It was also tested on WSLackware
+# <https://github.com/Mohsens22/WSLackware> in WSL
+# <https://docs.microsoft.com/en-us/windows/wsl/>.
 #
 # Basic steps:
 #
@@ -39,6 +41,7 @@ set -e
 
 # default paths, but can be overriden from the command line
 mxe_path=${MXE_PATH-$HOME/usr/local/src/mxe}
+addons_path=${ADDONS_PATH-../grass-addons}
 freetype_include=${FREETYPE_INCLUDE-/usr/include/freetype2}
 
 # process options
@@ -52,6 +55,7 @@ Usage: crosscompile.sh [OPTIONS]
 
 -h, --help                   display this help message
     --mxe-path=PATH          MXE path (default: $HOME/usr/local/src/mxe)
+    --addons-path=PATH       grass-addons path (default: ../grass-addons)
     --freetype-include=PATH  FreeType include path
                              (default: /usr/include/freetype2)
     --update                 update the current branch
@@ -62,6 +66,9 @@ EOT
 		;;
 	--mxe-path=*)
 		mxe_path=`echo $opt | sed 's/^[^=]*=//'`
+		;;
+	--addons-path=*)
+		addons_path=`echo $opt | sed 's/^[^=]*=//'`
 		;;
 	--freetype-include=*)
 		freetype_include=`echo $opt | sed 's/^[^=]*=//'`
@@ -137,6 +144,17 @@ LDFLAGS="-lcurses" \
 
 make clean default
 
+if [ -d $addons_path ]; then
+	MODULE_TOPDIR=`pwd`
+	(
+	cd $addons_path
+	if [ $update -eq 1 -a -d .git ]; then
+		git pull
+	fi
+	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
+	)
+fi
+
 build_arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
@@ -184,6 +202,17 @@ PKG_CONFIG=$mxe_bin-pkg-config \
 >> /dev/stdout
 
 make clean default
+
+if [ -d $addons_path ]; then
+	MODULE_TOPDIR=`pwd`
+	(
+	cd $addons_path
+	if [ $update -eq 1 -a -d .git ]; then
+		git pull
+	fi
+	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
+	)
+fi
 
 arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
