@@ -204,7 +204,6 @@ PKG_CONFIG=$mxe_bin-pkg-config \
 make clean default
 
 if [ -d $addons_path ]; then
-	MODULE_TOPDIR=`pwd`
 	(
 	cd $addons_path
 	if [ $update -eq 1 -a -d .git ]; then
