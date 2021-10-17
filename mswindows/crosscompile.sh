@@ -347,7 +347,7 @@ if defined GRASS_PYTHON (
 
 	if not exist "%GRASS_PYTHON%" (
 		set GRASS_PYTHON=
-		for /f usebackq %%i in (`where python.exe`) do if "!GRASS_PYTHON!"=="" set GRASS_PYTHON=%%i
+		for /f usebackq %%i in (`where python.exe`) do if "!GRASS_PYTHON!" == "" set GRASS_PYTHON=%%i
 	)
 	if not defined GRASS_PYTHON (
 		echo.
@@ -366,7 +366,7 @@ set GISBASE=%GISBASE:~0,-1%
 
 rem If GRASS_SH is externally defined, that shell will be used; Otherwise,
 rem GISBASE\etc\sh.exe will be used if it exists; If not, cmd.exe will be used;
-rem This check is mainly for supporting BusyBox for Windows
+rem This check is mainly for supporting BusyBox for Windows (busybox64.exe)
 rem (https://frippery.org/busybox/)
 if not defined GRASS_SH (
 	set GRASS_SH=%GISBASE%\etc\sh.exe
@@ -388,6 +388,25 @@ if not exist "%GISBASE%\etc\fontcap" (
 	cd %GISBASE%\lib
 	"%GISBASE%\bin\g.mkfontcap.exe"
 	popd
+)
+
+rem With busybox64.exe and Firefox as the default browser, g.manual fails with
+rem "Your Firefox profile cannot be loaded. It may be missing or inaccessible";
+rem I tried to set GRASS_HTML_BROWSER to the full path of chrome.exe, but it
+rem didn't work; Setting BROWSER to its full path according to the webbrowser
+rem manual worked
+if "%GRASS_SH%" == "%GISBASE%\etc\sh.exe" if not defined BROWSER (
+	for %%i in ("%ProgramFiles%" "%ProgramFiles(x86)%") do (
+		if not defined BROWSER (
+			set BROWSER=%%i
+			set BROWSER=!BROWSER:"=!
+			if exist "!BROWSER!\Google\Chrome\Application\chrome.exe" (
+				set BROWSER=!BROWSER!\Google\Chrome\Application\chrome.exe
+			) else (
+				set BROWSER=
+			)
+		)
+	)
 )
 
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
