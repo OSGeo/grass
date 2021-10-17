@@ -73,8 +73,8 @@ docker run -it --rm --user=$(id -u):$(id -g) \
                 --location nc_basic_spm_grass7 --location-type nc
 ```
 
-Note: If you compiled locally before building the Docker image, you may
-encounter problems as the local configuration and locally compiled file
+Note: If you locally compile before building the Docker image, you may
+encounter problems as the local configuration and the locally compiled files
 are copied to and used in the Docker image. To make sure you don't have
 this issue, clean all the compiled files from the source code:
 
@@ -84,7 +84,7 @@ make distclean
 
 ## How to generate the 'Programmer's Manual'
 
-You can generate locally the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming8/).
+You can locally generate the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming8/).
 
 This needs doxygen (<http://www.doxygen.org>) and optionally
 Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
@@ -95,14 +95,14 @@ To build the GRASS programmer's documentation, run
 make htmldocs
 ```
 
-or to generate documentation as single html file
+Or to generate documentation as single html file
 (recommended for simple reading)
 
 ```
 make htmldocs-single
 ```
 
-here. This takes quite some time. The result is in `lib/html/index.html`
+Here, this takes quite some time. The result is in `lib/html/index.html`
 which refers to further document repositories in
 
 ```
@@ -112,7 +112,7 @@ lib/gis/html/index.html
 ```
 
 The master file is: `./grasslib.dox` where all sub-documents have to
-be linked into.
+be linked to.
 
 To generate the documents in PDF format, run
 
