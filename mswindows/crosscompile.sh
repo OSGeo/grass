@@ -335,7 +335,7 @@ if defined GRASS_PYTHON (
 		echo Please fix GRASS_PYTHON
 		echo.
 		pause
-		goto:eof
+		goto :eof
 	)
 ) else (
 	rem Change this variable to override auto-detection of python.exe in
@@ -355,7 +355,7 @@ if defined GRASS_PYTHON (
 		echo Please set GRASS_PYTHON in %~f0
 		echo.
 		pause
-		goto:eof
+		goto :eof
 	)
 )
 rem XXX: Do we need PYTHONHOME?
