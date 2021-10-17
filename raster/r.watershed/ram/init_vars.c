@@ -253,7 +253,9 @@ int init_vars(int argc, char *argv[])
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_d_row(fd, dbuf, r);
 	    for (c = 0; c < ncols; c++) {
-		if (MASK_flag) {
+		if (Rast_is_d_null_value(&dbuf[c]))
+		    wat[SEG_INDEX(wat_seg, r, c)] = 0.0;
+		else if (MASK_flag) {
 		    block_value = FLAG_GET(worked, r, c);
 		    if (!block_value)
 			wat[SEG_INDEX(wat_seg, r, c)] = dbuf[c];
