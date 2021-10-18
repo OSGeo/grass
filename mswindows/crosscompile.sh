@@ -352,7 +352,7 @@ if defined GRASS_PYTHON (
 	if not defined GRASS_PYTHON (
 		echo.
 		echo python.exe not found in PATH
-		echo Please set GRASS_PYTHON in %~f0
+		echo Please set GRASS_PYTHON
 		echo.
 		pause
 		goto :eof
