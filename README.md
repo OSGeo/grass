@@ -73,7 +73,7 @@ docker run -it --rm --user=$(id -u):$(id -g) \
                 --location nc_basic_spm_grass7 --location-type nc
 ```
 
-Note: If you locally compile before building the Docker image, you may
+Note: If you compiled locally before building the Docker image, you may
 encounter problems as the local configuration and the locally compiled files
 are copied to and used in the Docker image. To make sure you don't have
 this issue, clean all the compiled files from the source code:
