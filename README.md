@@ -102,7 +102,7 @@ Or to generate documentation as single html file
 make htmldocs-single
 ```
 
-Here, this takes quite some time. The result is in `lib/html/index.html`
+This takes quite some time. The result is in `lib/html/index.html`
 which refers to further document repositories in
 
 ```
