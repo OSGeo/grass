@@ -1382,7 +1382,7 @@ def set_language(grass_config_dir):
     else:
         for line in fd:
             if re.search("^language", line):
-                line = line.rstrip(" %s" % os.linesep)
+                line = line.rstrip(" %s\n")
                 language = "".join(line.split(";")[-1:])
                 break
         fd.close()
