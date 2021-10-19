@@ -1291,7 +1291,7 @@ def load_env(grass_env_file):
     # \1 and \2 are a variable name and its value, respectively.
     export_re = re.compile("^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
 
-    for line in readfile(grass_env_file).split(os.linesep):
+    for line in readfile(grass_env_file).splitlines():
         # match ^export lines
         m = export_re.match(line)
         # if not ^export lines, skip
