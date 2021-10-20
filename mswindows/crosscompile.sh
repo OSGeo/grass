@@ -403,8 +403,9 @@ if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
 
 if not exist "%GISBASE%\etc\fontcap" (
 	pushd .
-	set GISRC=dummy
+	%~d0
 	cd %GISBASE%\lib
+	set GISRC=dummy
 	"%GISBASE%\bin\g.mkfontcap.exe"
 	popd
 )
