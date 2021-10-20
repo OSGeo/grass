@@ -328,6 +328,18 @@ cat<<'EOT' | sed "s/\$version/$version/g" > $dist/grass.bat
 @echo off
 setlocal EnableDelayedExpansion
 
+set GISBASE=%~dp0
+set GISBASE=%GISBASE:~0,-1%
+
+set GRASS_PROJSHARE=%GISBASE%\share\proj
+
+set PROJ_LIB=%GISBASE%\share\proj
+set GDAL_DATA=%GISBASE%\share\gdal
+
+rem XXX: Do we need these variables?
+rem set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
+rem set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
+
 if defined GRASS_PYTHON (
 	if not exist "%GRASS_PYTHON%" (
 		echo.
@@ -361,9 +373,6 @@ if defined GRASS_PYTHON (
 rem XXX: Do we need PYTHONHOME?
 rem for %%i in (%GRASS_PYTHON%) do set PYTHONHOME=%%~dpi
 
-set GISBASE=%~dp0
-set GISBASE=%GISBASE:~0,-1%
-
 rem If GRASS_SH is externally defined, that shell will be used; Otherwise,
 rem GISBASE\etc\sh.bat will be used if it exists; If not, cmd.exe will be used;
 rem This check is mainly for supporting BusyBox for Windows (busybox64.exe)
@@ -371,23 +380,6 @@ rem (https://frippery.org/busybox/)
 if not defined GRASS_SH (
 	set GRASS_SH=%GISBASE%\etc\sh.bat
 	if not exist "!GRASS_SH!" set GRASS_SH=
-)
-
-set GRASS_PROJSHARE=%GISBASE%\share\proj
-
-set PROJ_LIB=%GISBASE%\share\proj
-set GDAL_DATA=%GISBASE%\share\gdal
-
-rem XXX: Do we need these variables?
-rem set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
-rem set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
-
-if not exist "%GISBASE%\etc\fontcap" (
-	pushd .
-	set GISRC=dummy
-	cd %GISBASE%\lib
-	"%GISBASE%\bin\g.mkfontcap.exe"
-	popd
 )
 
 rem With busybox64.exe and Firefox as the default browser, g.manual fails with
@@ -407,6 +399,14 @@ if "%GRASS_SH%" == "%GISBASE%\etc\sh.bat" if not defined BROWSER (
 			)
 		)
 	)
+)
+
+if not exist "%GISBASE%\etc\fontcap" (
+	pushd .
+	set GISRC=dummy
+	cd %GISBASE%\lib
+	"%GISBASE%\bin\g.mkfontcap.exe"
+	popd
 )
 
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
