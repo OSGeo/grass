@@ -2054,10 +2054,6 @@ class PythonPanel(wx.Panel):
 
         bodySizer.Add(self.body, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
-        btnSizer.Add(self.btnRefresh, proportion=0, flag=wx.LEFT | wx.RIGHT, border=5)
-        btnSizer.AddStretchSpacer()
-        btnSizer.Add(self.btnSaveAs, proportion=0, flag=wx.RIGHT, border=5)
-        btnSizer.Add(self.btnRun, proportion=0, flag=wx.RIGHT, border=5)
         btnSizer.Add(
             StaticText(
                 parent=self, id=wx.ID_ANY, label="%s:" % _("Python script type")
@@ -2065,6 +2061,10 @@ class PythonPanel(wx.Panel):
             flag=wx.ALIGN_CENTER_VERTICAL,
         )
         btnSizer.Add(self.script_type_box, proportion=0, flag=wx.RIGHT, border=5)
+        btnSizer.AddStretchSpacer()
+        btnSizer.Add(self.btnRefresh, proportion=0, flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(self.btnSaveAs, proportion=0, flag=wx.RIGHT, border=5)
+        btnSizer.Add(self.btnRun, proportion=0, flag=wx.RIGHT, border=5)
 
         sizer.Add(bodySizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
         sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
