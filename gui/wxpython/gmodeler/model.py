@@ -2893,6 +2893,8 @@ if __name__ == "__main__":
                 else:
                     # TODO: Support 3D
                     command = "WRITE YOUR EXPORT COMMAND"
+                    format = '"WRITE YOUR EXPORT FORMAT"'
+                    extension = "WRITE YOUR EXPORT EXTENSION"
 
                 n = param.get("name", None)
                 param_name = self._getParamName(n, item)
