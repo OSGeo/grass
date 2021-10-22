@@ -129,6 +129,9 @@ DLLS="
 	/mingw64/bin/libstdc++-6.dll
 	/mingw64/bin/libgcc_s_seh-1.dll
 	/mingw64/bin/libfftw3-3.dll
+	/mingw64/bin/libblas.dll
+	/mingw64/bin/liblapack.dll
+	/mingw64/bin/libomp.dll
 "
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
@@ -149,13 +152,14 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	log configure
 	./configure \
-	    --host=x86_64-w64-mingw32 \
+		--host=x86_64-w64-mingw32 \
 		--with-libs="$OSGEO4W_ROOT_MSYS/lib" \
 		--with-includes=$OSGEO4W_ROOT_MSYS/include \
-        --libexecdir=$OSGEO4W_ROOT_MSYS/bin \
-        --prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
-        --bindir=$OSGEO4W_ROOT_MSYS/bin \
-        --includedir=$OSGEO4W_ROOT_MSYS/include \
+		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
+		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
+		--bindir=$OSGEO4W_ROOT_MSYS/bin \
+		--includedir=$OSGEO4W_ROOT_MSYS/include \
+		--with-opengl=windows \
 		--without-x \
 		--with-cxx \
 		--enable-shared \
@@ -178,10 +182,15 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-nls \
 		--with-zstd \
 		--with-odbc \
-	    --with-cairo \
+		--with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
+		--with-blas \
+		--with-lapack \
+		--with-lapack-includes=/mingw64/include \
+		--with-openmp \
+		--with-wxwidgets \
+		--with-cairo \
 		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
-	    --with-opengl=windows \
 		--with-bzlib \
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config
 
@@ -203,6 +212,9 @@ mv $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass/config.h \
    $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass/config.h.mingw
 cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass/config.h
 cp mswindows/osgeo4w/config.h.vc $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/include/grass
+# rename grass.py to avoid ModuleNotFoundError
+mv $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/etc/grass.py $OSGEO4W_ROOT_MSYS/apps/grass/grass$POSTFIX/etc/grass${POSTFIX}.py
+
 mkdir -p $OSGEO4W_ROOT_MSYS/etc/preremove $OSGEO4W_ROOT_MSYS/etc/postinstall
 sed -e "s#@POSTFIX@#$POSTFIX#g" \
     mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat
