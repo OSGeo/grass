@@ -5,6 +5,8 @@ import glob
 import re
 from collections import OrderedDict
 
+import grass.script as gs
+
 # Semantic label can have any form. Explanatory metadata can be stored
 # separately. It is suggested to follow some standard e.g. remote
 # sensing band names should be STAC common names, see
@@ -146,19 +148,21 @@ class SemanticLabelReader:
                     # basic information only
                     if band:
                         self._print_label(
-                            shorcut=item["shortcut"], band=band, tag=item["bands"][band].get("tag")
+                            shorcut=item["shortcut"],
+                            band=band,
+                            tag=item["bands"][band].get("tag"),
                         )
                     else:
                         for iband in item["bands"]:
                             self._print_label(
-                                shorcut=item["shortcut"], band=iband, tag=item["bands"][iband].get("tag")
+                                shorcut=item["shortcut"],
+                                band=iband,
+                                tag=item["bands"][iband].get("tag"),
                             )
 
-        # raise error when defined shortcut not found
+        # print warning when defined shortcut not found
         if shortcut and not found:
-            raise SemanticLabelReaderError(
-                "Semantic label <{}> not found".format(shortcut)
-            )
+            gs.warning("Metadata for semantic label <{}> not found".format(shortcut))
 
     def find_file(self, semantic_label):
         """Find file by semantic label.
