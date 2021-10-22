@@ -54,12 +54,7 @@ def main():
     kwargs = {}
     if "," in options["pattern"]:
         gs.fatal("Multiple values not supported")
-    if "_" in options["pattern"]:
-        # full band identifier specified
-        kwargs["shortcut"], kwargs["band"] = options["pattern"].split("_")
-    else:
-        # pattern
-        kwargs["shortcut"] = options["pattern"]
+    kwargs["semantic_label"] = options["pattern"]
     kwargs["extended"] = flags["e"]
 
     if options["operation"] == "print":

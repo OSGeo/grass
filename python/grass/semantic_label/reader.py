@@ -87,14 +87,8 @@ class SemanticLabelReader:
         for k, v in item[label].items():
             print_kv(k, v, indent)
 
-    def _print_label(self, shortcut=None, band=None, semantic_label=None, tag=None):
-        if semantic_label:
-            try:
-                shortcut, band = semantic_label.split("_")
-            except ValueError:
-                shortcut = "unknown"
-                band = semantic_label
-        sys.stdout.write(self._label_identifier(semantic_label))
+    def _print_label(self, semantic_label=None, tag=None):
+        sys.stdout.write(semantic_label)
         if tag:
             sys.stdout.write(" {}".format(tag))
         sys.stdout.write(os.linesep)
@@ -113,8 +107,8 @@ class SemanticLabelReader:
             try:
                 shortcut, band = semantic_label.split("_")
             except ValueError:
-                shortcut = "unknown"
-                band = semantic_label
+                shortcut = semantic_label
+                band = None
         found = False
         for root in self.config.values():
             for item in root.values():
@@ -148,21 +142,21 @@ class SemanticLabelReader:
                     # basic information only
                     if band:
                         self._print_label(
-                            shorcut=item["shortcut"],
-                            band=band,
+                            semantic_label=item["shortcut"],
                             tag=item["bands"][band].get("tag"),
                         )
                     else:
                         for iband in item["bands"]:
                             self._print_label(
-                                shorcut=item["shortcut"],
-                                band=iband,
+                                semantic_label=item["shortcut"],
                                 tag=item["bands"][iband].get("tag"),
                             )
 
         # print warning when defined shortcut not found
-        if shortcut and not found:
-            gs.warning("Metadata for semantic label <{}> not found".format(shortcut))
+        if not found:
+            gs.warning(
+                "Metadata for semantic label <{}> not found".format(semantic_label)
+            )
 
     def find_file(self, semantic_label):
         """Find file by semantic label.
@@ -179,15 +173,15 @@ class SemanticLabelReader:
             # raise SemanticLabelReaderError("Invalid band identifier <{}>".format(
             #    semantic_label
             # ))
-            shortcut = "unknown"
-            band = semantic_label
+            shortcut = None
 
         for filename, config in self.config.items():
             for root in config.keys():
-                if config[root][
-                    "shortcut"
-                ].upper() == shortcut.upper() and band.upper() in map(
-                    lambda x: x.upper(), config[root]["bands"].keys()
+                if (
+                    shortcut
+                    and config[root]["shortcut"].upper() == shortcut.upper()
+                    and band.upper()
+                    in map(lambda x: x.upper(), config[root]["bands"].keys())
                 ):
                     return filename
 
@@ -202,9 +196,5 @@ class SemanticLabelReader:
         for root in self.config.values():
             for item in root.values():
                 for band in item["bands"]:
-                    bands.append(self._band_identifier(item["shortcut"], band))
+                    bands.append("{}_{}".format(item["shortcut"], band))
         return bands
-
-    @staticmethod
-    def _band_identifier(shortcut, band):
-        return "{}_{}".format(shortcut, band)
