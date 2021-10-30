@@ -404,6 +404,7 @@ class PsMapFrame(wx.Frame):
                            '-sOutputFile=%s' % event.userData['pdfname'],
                            '-P-', '-dSAFER',
                            '-dCompatibilityLevel=1.4',
+                           '-c', '30000000', 'setvmthreshold',
                            '-f', event.userData['filename']]
             else:
                 command = [
