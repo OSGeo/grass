@@ -415,6 +415,9 @@ class PsMapFrame(wx.Frame):
                     "-P-",
                     "-dSAFER",
                     "-dCompatibilityLevel=1.4",
+                    "-c",
+                    "30000000",
+                    "setvmthreshold",
                     "-f",
                     event.userData["filename"],
                 ]
