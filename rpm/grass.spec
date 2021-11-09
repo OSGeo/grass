@@ -3,7 +3,7 @@
 
 Name:		grass
 Version:	7.8.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
@@ -23,6 +23,9 @@ Summary:	GRASS GIS - Geographic Resources Analysis Support System
 License:	GPLv2+
 URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
+
+# fix pkgconfig file
+Patch0:		grass-pkgconfig.patch
 
 BuildRequires:	bison
 %if %{with flexiblas}
@@ -173,6 +176,7 @@ GRASS GIS development headers
 
 %prep
 %setup -q
+%patch0 -p1 -b.libdir
 
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
@@ -362,6 +366,9 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Sun Nov 07 2021 Björn Esser <besser82@fedoraproject.org> - 7.8.6-2
+- Add patch to fix installation path in pkgconfig file
+
 * Tue Nov 02 2021 Markus Neteler <neteler@mundialis.de> - 7.8.6-1
 - New upstream version GRASS GIS 7.8.6
 
