@@ -44,7 +44,7 @@ def open_old_stds(name, type, dbif=None):
     """
     msgr = get_tgis_message_interface()
 
-    # Check if the dataset name contains the mapset and the band reference as well
+    # Check if the dataset name contains the mapset and the semantic label as well
     if name.find("@") < 0:
         mapset = get_current_mapset()
     else:
@@ -124,7 +124,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
 
     if type == "strds" or type == "rast" or type == "raster":
         if name.find(".") > -1:
-            # a dot is used as a separator for band reference filtering
+            # a dot is used as a separator for semantic label filtering
             msgr.fatal(
                 _("Illegal dataset name <{}>. " "Character '.' not allowed.").format(
                     name
