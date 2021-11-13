@@ -1078,7 +1078,7 @@
       </module-item>
       <separator/>
       <module-item name="r.fill.stats">
-        <label>Fill NULL cells with IDW</label>
+        <label>Fill NULL cells using IDW</label>
       </module-item>
     </items>
   </toolbox>
