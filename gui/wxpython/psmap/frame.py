@@ -416,7 +416,8 @@ class PsMapFrame(wx.Frame):
                     "-dSAFER",
                     "-dCompatibilityLevel=1.4",
                     "-c",
-                    ".setpdfwrite",
+                    "30000000",
+                    "setvmthreshold",
                     "-f",
                     event.userData["filename"],
                 ]
