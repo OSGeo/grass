@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     const char *title;
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
-    char *units, *vdatum, *bandref;
+    char *units, *vdatum, *semantic_label;
     int i;
     CELL mincat = 0, maxcat = 0, cat;
     FILE *out;
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
     vdatum = Rast_read_vdatum(name, "");
 
-    bandref = Rast_read_bandref(name, "");
+    semantic_label = Rast_read_semantic_label(name, "");
 
     /*Check the Timestamp */
     time_ok = G_read_raster_timestamp(name, "", &ts) > 0;
@@ -180,11 +180,11 @@ int main(int argc, char **argv)
 		     "  Type of Map:  %-20.20s Number of Categories: %-9s",
 		     hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??", cats_ok ? tmp1 : "??");
 
-	compose_line(out, "  Data Type:    %-20.20s Band reference: %s ",
+	compose_line(out, "  Data Type:    %-20.20s Semantic label: %s ",
 		     (data_type == CELL_TYPE ? "CELL" :
 		      (data_type == DCELL_TYPE ? "DCELL" :
 		       (data_type == FCELL_TYPE ? "FCELL" : "??"))),
-             (bandref ? bandref : "(none)"));
+             (semantic_label ? semantic_label : "(none)"));
 
 	/* For now hide these unless they exist to keep the noise low. In
 	 *   future when the two are used more widely they can be printed
@@ -569,7 +569,7 @@ int main(int argc, char **argv)
 	    }
 	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
 	    fprintf(out, "vdatum=%s\n", vdatum ? vdatum : "\"none\"");
-        fprintf(out, "bandref=%s\n", bandref ? bandref : "\"none\"");
+        fprintf(out, "semantic_label=%s\n", semantic_label ? semantic_label : "\"none\"");
 	    fprintf(out, "source1=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1) : "\"none\"");
 	    fprintf(out, "source2=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2) : "\"none\"");
 	    fprintf(out, "description=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_KEYWRD) : "\"none\"");

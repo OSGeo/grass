@@ -5,29 +5,28 @@ import glob
 import re
 from collections import OrderedDict
 
+import grass.script as gs
 
-# band reference should be required to have the format
-# <shortcut>_<band>
-# instead, the sensor name should be stored somewhere else,
-# and band names should be STAC common names, see
+# Semantic label can have any form. Explanatory metadata can be stored
+# separately. It is suggested to follow some standard e.g. remote
+# sensing band names should be STAC common names, see
 # https://stacspec.org/
 # https://github.com/radiantearth/stac-spec/blob/master/extensions/eo/README.md#band-object
-# custom names must be possible
 
 
-class BandReferenceReaderError(Exception):
+class SemanticLabelReaderError(Exception):
     pass
 
 
-class BandReferenceReader:
-    """Band references reader"""
+class SemanticLabelReader:
+    """Semantic label reader"""
 
     def __init__(self):
         self._json_files = glob.glob(
             os.path.join(os.environ["GISBASE"], "etc", "g.bands", "*.json")
         )
         if not self._json_files:
-            raise BandReferenceReaderError("No band definitions found")
+            raise SemanticLabelReaderError("No semantic label definitions found")
 
         self._read_config()
 
@@ -39,7 +38,7 @@ class BandReferenceReader:
                 with open(json_file) as fd:
                     config = json.load(fd, object_pairs_hook=OrderedDict)
             except json.decoder.JSONDecodeError as e:
-                raise BandReferenceReaderError(
+                raise SemanticLabelReaderError(
                     "Unable to parse '{}': {}".format(json_file, e)
                 )
 
@@ -59,19 +58,19 @@ class BandReferenceReader:
         for items in config.values():
             for item in ("shortcut", "bands"):
                 if item not in items.keys():
-                    raise BandReferenceReaderError(
+                    raise SemanticLabelReaderError(
                         "Invalid band definition: <{}> is missing".format(item)
                     )
             if len(items["bands"]) < 1:
-                raise BandReferenceReaderError(
+                raise SemanticLabelReaderError(
                     "Invalid band definition: no bands defined"
                 )
 
     @staticmethod
-    def _print_band_extended(band, item):
-        """Print band-specific metadata
+    def _print_label_extended(label, item):
+        """Print label specific metadata
 
-        :param str band: band identifier
+        :param str label: label identifier
         :param str item: items to be printed out
         """
 
@@ -84,25 +83,32 @@ class BandReferenceReader:
                 print("{}{}: {}".format(" " * indent * 2, k, v))
 
         indent = 4
-        print("{}band: {}".format(" " * indent, band))
-        for k, v in item[band].items():
+        print("{}label: {}".format(" " * indent, label))
+        for k, v in item[label].items():
             print_kv(k, v, indent)
 
-    def _print_band(self, shortcut, band, tag=None):
-        sys.stdout.write(self._band_identifier(shortcut, band))
+    def _print_label(self, semantic_label=None, tag=None):
+        sys.stdout.write(semantic_label)
         if tag:
             sys.stdout.write(" {}".format(tag))
         sys.stdout.write(os.linesep)
 
-    def print_info(self, shortcut=None, band=None, extended=False):
-        """Prints band reference information to stdout.
+    def print_info(self, shortcut=None, band=None, semantic_label=None, extended=False):
+        """Prints semantic label information to stdout.
 
-        Can be filtered by shortcut or band identifier.
+        Can be filtered by semantic label identifier.
 
         :param str shortcut: shortcut to filter (eg. S2) or None
         :param str band: band (eg. 1) or None
+        :param str semantic_label: semantic_label filter (eg. S2_8A) or None
         :param bool extended: print also extended metadata
         """
+        if semantic_label:
+            try:
+                shortcut, band = semantic_label.split("_")
+            except ValueError:
+                shortcut = semantic_label
+                band = None
         found = False
         for root in self.config.values():
             for item in root.values():
@@ -110,11 +116,11 @@ class BandReferenceReader:
                     if shortcut and re.match(shortcut, item["shortcut"]) is None:
                         continue
                 except re.error as e:
-                    raise BandReferenceReaderError("Invalid pattern: {}".format(e))
+                    raise SemanticLabelReaderError("Invalid pattern: {}".format(e))
 
                 found = True
                 if band and band not in item["bands"]:
-                    raise BandReferenceReaderError(
+                    raise SemanticLabelReaderError(
                         "Band <{}> not found in <{}>".format(band, shortcut)
                     )
 
@@ -128,52 +134,54 @@ class BandReferenceReader:
 
                     # print detailed band information
                     if band:
-                        self._print_band_extended(band, item["bands"])
+                        self._print_label_extended(band, item["bands"])
                     else:
                         for iband in item["bands"]:
-                            self._print_band_extended(iband, item["bands"])
+                            self._print_label_extended(iband, item["bands"])
                 else:
                     # basic information only
                     if band:
-                        self._print_band(
-                            item["shortcut"], band, item["bands"][band].get("tag")
+                        self._print_label(
+                            semantic_label=item["shortcut"],
+                            tag=item["bands"][band].get("tag"),
                         )
                     else:
                         for iband in item["bands"]:
-                            self._print_band(
-                                item["shortcut"], iband, item["bands"][iband].get("tag")
+                            self._print_label(
+                                semantic_label=item["shortcut"],
+                                tag=item["bands"][iband].get("tag"),
                             )
 
-        # raise error when defined shortcut not found
-        if shortcut and not found:
-            raise BandReferenceReaderError(
-                "Band reference <{}> not found".format(shortcut)
+        # print warning when defined shortcut not found
+        if not found:
+            gs.warning(
+                "Metadata for semantic label <{}> not found".format(semantic_label)
             )
 
-    def find_file(self, band_reference):
-        """Find file by band reference.
+    def find_file(self, semantic_label):
+        """Find file by semantic label.
 
         Match is case-insensitive.
 
-        :param str band_reference: band reference identifier to search for (eg. S2_1)
+        :param str semantic_label: semantic label identifier to search for (eg. S2_1)
 
         :return str: file basename if found or None
         """
         try:
-            shortcut, band = band_reference.split("_")
+            shortcut, band = semantic_label.split("_")
         except ValueError:
-            # raise BandReferenceReaderError("Invalid band identifier <{}>".format(
-            #    band_reference
+            # raise SemanticLabelReaderError("Invalid band identifier <{}>".format(
+            #    semantic_label
             # ))
-            shortcut = "unknown"
-            band = band_reference
+            shortcut = None
 
         for filename, config in self.config.items():
             for root in config.keys():
-                if config[root][
-                    "shortcut"
-                ].upper() == shortcut.upper() and band.upper() in map(
-                    lambda x: x.upper(), config[root]["bands"].keys()
+                if (
+                    shortcut
+                    and config[root]["shortcut"].upper() == shortcut.upper()
+                    and band.upper()
+                    in map(lambda x: x.upper(), config[root]["bands"].keys())
                 ):
                     return filename
 
@@ -188,9 +196,5 @@ class BandReferenceReader:
         for root in self.config.values():
             for item in root.values():
                 for band in item["bands"]:
-                    bands.append(self._band_identifier(item["shortcut"], band))
+                    bands.append("{}_{}".format(item["shortcut"], band))
         return bands
-
-    @staticmethod
-    def _band_identifier(shortcut, band):
-        return "{}_{}".format(shortcut, band)
