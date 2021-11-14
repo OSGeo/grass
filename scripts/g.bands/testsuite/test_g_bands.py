@@ -17,9 +17,9 @@ class TestBandsSystemDefined(TestCase):
         nbands = self._number_of_bands()
 
         # get number of valid band identifiers by Bands lib
-        from grass.bandref import BandReferenceReader
+        from grass.semantic_label import SemanticLabelReader
 
-        nbands_ref = len(BandReferenceReader().get_bands())
+        nbands_ref = len(SemanticLabelReader().get_bands())
         self.assertEqual(nbands, nbands_ref)
 
     def test_number_s2(self):

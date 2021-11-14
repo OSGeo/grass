@@ -39,7 +39,7 @@ int mcs;
 char *group;
 char *subgroup;
 struct Ref ref;
-char **bandrefs;
+char **semantic_labels;
 char outsigfile[GNAME_MAX + GMAPSET_MAX];
 char *insigfile;
 char *reportfile;
@@ -334,7 +334,7 @@ int main(int argc, char *argv[])
     if ((fd =
 	 I_fopen_signature_file_new(outsigfile)) != NULL) {
         for (unsigned int i = C.S.nbands; i--;)
-            C.S.bandrefs[i] = bandrefs[i];
+            C.S.semantic_labels[i] = semantic_labels[i];
 	I_write_signatures(fd, &C.S);
 	fclose(fd);
     }
