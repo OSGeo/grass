@@ -153,10 +153,10 @@ t.rast.list tempmean_monthly columns=name,start_time,min,max | grep 01-01
 2012_01_tempmean|2012-01-01 00:00:00|-0.534994|9.69511
 </pre></div>
 
-<h3>Band reference filtering</h3>
+<h3>Semantic label filtering</h3>
 
-<em>t.rast.mapcalc</em> supports band reference filtering similarly
-to <em><a href="t.rast.list.html#filtering-the-result-by-band-references">t.rast.list</a></em>. In
+<em>t.rast.mapcalc</em> supports semantic label filtering similarly
+to <em><a href="t.rast.list.html#filtering-the-result-by-semantic-label">t.rast.list</a></em>. In
 example below a new STRDS will be created and filled by NDVI products.
 
 <div class="code"><pre>
@@ -164,7 +164,7 @@ t.rast.mapcalc inputs=test.S2_8,test.S2_4 output=ndvi basename=ndvi \
      expression="float(test.S2_8 - test.S2_4) / (test.S2_8 + test.S2_4)"
 </pre></div>
 
-For more information about band reference concept
+For more information about semantic label concept
 see <em><a href="g.bands.html">g.bands</a></em> module.
 
 <h2>SEE ALSO</h2>

@@ -10,7 +10,7 @@
 int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 {
     struct Ref Ref;		/* subgroup reference list */
-    const char *mapset, *bandref;
+    const char *mapset, *semantic_label;
     int n;
 
 
@@ -41,8 +41,8 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 	files->band_fd[n] =
 	    Rast_open_old(Ref.file[n].name, Ref.file[n].mapset);
 	files->band_cell[n] = Rast_allocate_d_buf();
-        bandref = Rast_get_bandref_or_name(Ref.file[n].name, Ref.file[n].mapset);
-        S->bandrefs[n] = G_store(bandref);
+        semantic_label = Rast_get_semantic_label_or_name(Ref.file[n].name, Ref.file[n].mapset);
+        S->semantic_labels[n] = G_store(semantic_label);
     }
 
     I_free_group_ref(&Ref);

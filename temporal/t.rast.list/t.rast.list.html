@@ -184,16 +184,16 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 For the <em>deltagaps</em> value you can see the example for space time
 vector dataset <a href="t.vect.list.html#using-method-option">t.vect.list</a>
 
-<h3>Filtering the result by band references</h3>
+<h3>Filtering the result by semantic label</h3>
 
-Band reference can be assigned to raster maps
+Semantic label can be assigned to raster maps
 by <em><a href="i.band.html">i.band</a></em> module or even when
 registrating raster maps into STRDS
-by <em><a href="t.register.html#support-for-band-references">t.register</a></em>.
+by <em><a href="t.register.html#support-for-semantic-labels">t.register</a></em>.
 
 <p>
-Name of STRDS can be extended by band reference identifier used for
-filtering. Name of STRDS and band reference is split by a <i>single
+Name of STRDS can be extended by semantic label used for
+filtering. Name of STRDS and semantic label is split by a <i>single
 dot</i>.
 
 <div class="code"><pre>
@@ -201,12 +201,12 @@ t.rast.list input=test.S2_1
 </pre></div>
 
 
-Note that band reference filtering is <i>supported by all temporal
+Note that semantic label filtering is <i>supported by all temporal
 modules</i>.
 
 <p>
-Also note that only STRDS can be filtered by band reference
-identifier, see <em><a href="i.band.html#known-issues">i.band</a></em> for
+Also note that only STRDS can be filtered by semantic label,
+see <em><a href="i.band.html#known-issues">i.band</a></em> for
 current limitations.
 
 

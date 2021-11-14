@@ -6,7 +6,7 @@
 
 -- raster_metadata_table.sql
 ALTER TABLE raster_metadata
- ADD COLUMN band_reference VARCHAR;
+ ADD COLUMN semantic_label VARCHAR;
 
 -- strds_metadata_table.sql
 ALTER TABLE strds_metadata

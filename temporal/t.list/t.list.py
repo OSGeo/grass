@@ -52,7 +52,7 @@
 # % guisection: Formatting
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
+# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,interval,north,south,west,east,granularity
 # % answer: id
 # %end
 
@@ -64,7 +64,7 @@
 # % guisection: Selection
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
 # % answer: id
 # %end
 

@@ -63,7 +63,7 @@ struct One_Sig
 struct Signature
 {
     int nbands;         /* band (imagery group member) count */
-    char **bandrefs;    /* list of band references */
+    char **semantic_labels;    /* list of semantic labels */
     int nsigs;          /* signature count */
     char title[100];    /* not used? */
     struct One_Sig *sig;    /* array of one signature per class */
@@ -102,7 +102,7 @@ struct ClassSig
 struct SigSet
 {
     int nbands;
-    char **bandrefs;    /* list of band references [nbands]char* */
+    char **semantic_labels;    /* list of semantic labels [nbands]char* */
     int nclasses;       /* ClassSig item count */
     char *title;
     struct ClassSig *ClassSig;
