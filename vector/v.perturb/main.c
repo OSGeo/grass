@@ -40,6 +40,7 @@ int main(int argc, char **argv)
     int i;
     int line, nlines, ttype, n, ret, seed, field;
     struct field_info *Fi, *Fin;
+    int out_is_3d;
     double min = 0.;
     int debuglevel = 3;
 
@@ -163,9 +164,14 @@ int main(int argc, char **argv)
     
     field = Vect_get_field_number(&In, parm.field->answer);
     
+    out_is_3d = WITHOUT_Z;
+    if (Vect_is_3d(&In))
+	out_is_3d = WITH_Z;
+
     /* Open output */
-    if (Vect_open_new(&Out, parm.out->answer, WITHOUT_Z) < 0)	/* TODO add z support ? */
+    if (Vect_open_new(&Out, parm.out->answer, out_is_3d) < 0)
 	G_fatal_error(_("Unable to create vector map <%s>"), parm.out->answer);
+    /* TODO: Add also optional z perturb support */
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
