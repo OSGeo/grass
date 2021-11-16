@@ -2162,7 +2162,7 @@ def print_params(params):
     for arg in params:
         if arg == "path":
             sys.stdout.write("%s\n" % GISBASE)
-        elif arg in ["python_path" , "python-path"]:
+        elif arg in ["python_path", "python-path"]:
             sys.stdout.write("%s\n" % gpath("etc", "python"))
         elif arg == "arch":
             val = grep("ARCH", linesplat)
