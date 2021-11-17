@@ -54,6 +54,24 @@ import os
 # - https://www.wefearchange.org/2012/06/the-right-way-to-internationalize-your.html
 
 
+def _import_user_settings():
+    """Import UserSettings
+
+    Required for getting user defined language.
+    """
+    try:
+        import gettext
+        from grass.script.setup import set_gui_path
+
+        set_gui_path()
+        # Initialize translatation func before import UserSettings
+        _builtins.__dict__["_"] = gettext.gettext
+        global _UserSettings
+        from core.settings import UserSettings as _UserSettings
+    except ModuleNotFoundError:  # during compilation, and tests (without wxGUI)
+        pass
+
+
 def _translate(text):
     """Get translated version of text
 
@@ -75,16 +93,47 @@ def _translate(text):
             # does not raise an exception even if the locale settings is broken
             # or the translation files were not installed.
             fallback = True
-            translation = gettext.translation(
-                "grasslibs", locale_dir, fallback=fallback
-            )
-            # Add other domains as fallback.
-            translation.add_fallback(
-                gettext.translation("grassmods", locale_dir, fallback=fallback)
-            )
-            translation.add_fallback(
-                gettext.translation("grasswxpy", locale_dir, fallback=fallback)
-            )
+            translation = None
+            domains = ("grasslibs", "grassmods", "grasswxpy")
+
+            def apply_trans(kwargs):
+                nonlocal translation
+                if kwargs["domain"] == "grasslibs":
+                    translation = gettext.translation(**kwargs)
+                else:
+                    translation.add_fallback(gettext.translation(**kwargs))
+
+            try:
+                # Get user defined lang
+                lang = _UserSettings.Get(
+                    group="language",
+                    key="locale",
+                    subkey="lc_all",
+                )
+            except NameError:  # if _UserSettings isn't imported during tests (without wxGUI)
+                lang = None
+
+            if lang and lang not in ("en", "system"):
+                for domain in domains:
+                    apply_trans(
+                        {
+                            "domain": domain,
+                            "localedir": locale_dir,
+                            "fallback": fallback,
+                            "languages": (lang,),
+                        }
+                    )
+            elif lang == "en":
+                translation = gettext.NullTranslations()
+            else:
+                for domain in domains:
+                    apply_trans(
+                        {
+                            "domain": domain,
+                            "localedir": locale_dir,
+                            "fallback": fallback,
+                        }
+                    )
             # Store the resulting translation object.
             _translate.translation = translation
         except (KeyError, ImportError):
@@ -97,7 +146,7 @@ def _translate(text):
 # Initialize the translation attribute of the translate function to indicate
 # that the translations are not initialized.
 _translate.translation = None
-
+_import_user_settings()
 _builtins.__dict__["_"] = _translate
 
 
