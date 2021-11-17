@@ -110,7 +110,8 @@ def _translate(text):
                     key="locale",
                     subkey="lc_all",
                 )
-            except NameError:  # if _UserSettings isn't imported during tests (without wxGUI)
+            except NameError:
+                # If _UserSettings isn't imported during tests (without wxGUI)
                 lang = None
 
             if lang and lang not in ("en", "system"):
