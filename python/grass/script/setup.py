@@ -163,7 +163,7 @@ def get_install_path(path=None):
     if path and shutil.which(path):
         # The path was provided by the user and it is an executable
         # (on path or provided with full path), so raise exception on failure.
-        ask_executable(path)
+        return ask_executable(path)
 
     # Presumably directory was provided.
     if path:
@@ -179,7 +179,7 @@ def get_install_path(path=None):
     # at this point (to be re-evaluated).
     grass_bin = os.environ.get("GRASSBIN")
     if grass_bin and shutil.which(grass_bin):
-        ask_executable(grass_bin)
+        return ask_executable(grass_bin)
 
     # Derive the path from path to this file (Python module).
     # This is the standard way when there is no user-provided settings.
@@ -190,7 +190,7 @@ def get_install_path(path=None):
     bin_path = install_path / "bin"
     lib_path = install_path / "lib"
     if bin_path.is_dir() and lib_path.is_dir():
-        path = install_path
+        return install_path
 
     # As a last resort, try running grass command if it exists.
     # This is less likely give the right result than the relative path on systems
@@ -198,7 +198,7 @@ def get_install_path(path=None):
     # However, it allows for non-standard installations with standard command.
     grass_bin = "grass"
     if grass_bin and shutil.which(grass_bin):
-        ask_executable(grass_bin)
+        return ask_executable(grass_bin)
 
     return None
 
@@ -208,6 +208,8 @@ def setup_runtime_env(gisbase):
 
     Modifies the global environment (os.environ) so that GRASS modules can run.
     """
+    # Accept Path objects.
+    gisbase = os.fspath(gisbase)
     # Set GISBASE
     os.environ["GISBASE"] = gisbase
     mswin = sys.platform.startswith("win")
@@ -304,11 +306,13 @@ def init(path, location=None, mapset=None, grass_path=None):
     from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
     from grass.grassdb.manage import resolve_mapset_path
 
+    # Support ~ in the path for user home directory.
+    path = Path(path).expanduser()
     # A simple existence test. The directory, whatever it is, should exist.
-    if not Path(path).exists():
+    if not path.exists():
         raise ValueError(_("Path '{path}' does not exist").format(path=path))
     # A specific message when it exists, but it is a file.
-    if Path(path).is_file():
+    if path.is_file():
         raise ValueError(
             _("Path '{path}' is a file, but a directory is needed").format(path=path)
         )
