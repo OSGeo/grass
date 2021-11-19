@@ -92,7 +92,7 @@ _popen_args = [
     "universal_newlines",
     "startupinfo",
     "creationflags",
-    "encoding"
+    "encoding",
 ]
 
 
