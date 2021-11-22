@@ -17,7 +17,7 @@ double p_vi(double redchan, double nirchan)
 	result = -1.0;
     }
     else {
-	result = (sin(0.785) * nirchan) - (cos(0.785) * redchan);
+	result = (sin(1) * nirchan) - (cos(1) * redchan);
     }
     return result;
 }
