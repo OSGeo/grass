@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = g.bands
+PGM = i.band.library
 
 # TODO: unfortunately Script.make assumes that ETCFILES are Python
 # modules only, this should be improved (by introducing a new variable
