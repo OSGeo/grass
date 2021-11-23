@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = i.band
+PGM = r.semantic.label
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 

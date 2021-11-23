@@ -2,7 +2,7 @@
 
 ############################################################################
 #
-# MODULE:       g.bands
+# MODULE:       i.band.library
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
 # PURPOSE:      Prints available semantic label information used for multispectral data.

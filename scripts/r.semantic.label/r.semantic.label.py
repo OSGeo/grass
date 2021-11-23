@@ -2,7 +2,7 @@
 
 ############################################################################
 #
-# MODULE:       i.band
+# MODULE:       r.semantic.label
 # AUTHOR(S):    Martin Landa <landa.martin gmail com>
 #
 # PURPOSE:      Manages semantic label information assigned to a single

@@ -23,7 +23,7 @@ class SemanticLabelReader:
 
     def __init__(self):
         self._json_files = glob.glob(
-            os.path.join(os.environ["GISBASE"], "etc", "g.bands", "*.json")
+            os.path.join(os.environ["GISBASE"], "etc", "i.band.library", "*.json")
         )
         if not self._json_files:
             raise SemanticLabelReaderError("No semantic label definitions found")

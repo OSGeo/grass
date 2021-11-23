@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.bands</em> prints available band references information of multispectral data
+<em>i.band.library</em> prints available band information of multispectral data
 defined by GRASS GIS. The following multispectral sensors are supported
 by default (other band reference registry files can be added, see below):
 
@@ -75,19 +75,27 @@ fully defined band reference identifier) which can be specified
 by <b>pattern</b> option. For pattern syntax
 see <a href="https://docs.python.org/3/library/re.html#regular-expression-syntax">Python
 regular expression operations</a> documentation. By
-default, <em>g.bands</em> prints all available band references.
+default, <em>i.band.library</em> prints all available band references.
 
 <p>
 Extended metadata (central wavelength, spatial resolution, etc.) is printed
 only when the <b>-e</b> flag is given.
 
-<h2>NOTES</h2>
-
-Specific band reference can be assigned to a raster map
-by <em><a href="i.band.html">i.band</a></em> module.
+<h2>Band reference and semantic label relation</h2>
 
 <p>
-Band reference concept is supported by temporal GRASS modules,
+Band references are a special case (a subset) of semantic labels.
+Any string can be a semantic label but strings identifying specific
+remote sensing platform bands (=band references)
+can have additional metadata managed by <em>i.band.library</em>.
+Specific band reference can be assigned to a raster map as a semantic
+label by <em><a href="r.semantic.label.html">r.semantic.label</a></em>
+or <em><a href="r.support.html">r.support</a></em> modules.
+
+<h2>NOTES</h2>
+
+<p>
+Semantic label concept is supported by temporal GRASS modules,
 see <em><a href="t.register.html#support-for-band-references">t.register</a></em>,
 <em><a href="t.rast.list.html#filtering-the-result-by-band-references">t.rast.list</a></em>,
 <em><a href="t.info.html#space-time-dataset-with-band-references-assigned">t.info</a></em>
@@ -102,7 +110,7 @@ multi band data. It is used in many frameworks
 Earth Engine API</a> for example) to address multi spectral satellite
 images series. GRASS supports a multi-band raster layer approach
 basically with the imagery group concept
-(<em><a href="i.group.html">i.group</a></em>). A new band reference
+(<em><a href="i.group.html">i.group</a></em>). A new semantic label
 concept is designed in order to support image collections in GRASS
 GIS.
 
@@ -169,8 +177,8 @@ identifier.
 
 <p>
 System-defined registry files are located in GRASS GIS installation
-directory (<tt>$GISBASE/etc/g.bands</tt>). Note that
-currently <i>g.bands</i> allows to manage only system-defined registry
+directory (<tt>$GISBASE/etc/i.band.library</tt>). Note that
+currently <i>i.band.library</i> allows to manage only system-defined registry
 files. Support for user-defined registry files is planned to be
 implemented, see <a href="#known-issues">KNOWN ISSUES</a> section for
 details.
@@ -180,7 +188,7 @@ details.
 <h3>Print all available band references</h3>
 
 <div class="code"><pre>
-g.bands
+i.band.library
 
 S2_1 Visible (Coastal/Aerosol)
 S2_2 Visible (Blue)
@@ -201,7 +209,7 @@ Only band identifiers related to Sentinel-2 satellite will be
 printed.
 
 <div class="code"><pre>
-g.bands pattern=S2
+i.band.library pattern=S2
 
 S2_1 Visible (Coastal/Aerosol)
 ...
@@ -213,7 +221,7 @@ S2_12 SWIR 2
 Print all available 2nd bands:
 
 <div class="code"><pre>
-g.bands pattern=.*_2
+i.band.library pattern=.*_2
 
 S2_2 Visible (Blue)
 L7_2 Visible (Green)
@@ -227,7 +235,7 @@ Extended metadata related to the first band of Sentinel-2 satellite
 will be printed.
 
 <div class="code"><pre>
-g.bands -e pattern=S2_1
+i.band.library -e pattern=S2_1
 
 description: The Sentinel-2 A/B bands
 shortcut: S2
@@ -247,7 +255,7 @@ source: https://sentinel.esa.int/web/sentinel/missions/sentinel-2
 
 <h2>KNOWN ISSUES</h2>
 
-<em>g.bands</em> has currently <b>very limited functionality</b>. Only
+<em>i.band.library</em> has currently <b>very limited functionality</b>. Only
 system-defined band references are supported. The final implementation
 will support managing (add, modify, delete) user-defined band
 references.
@@ -266,7 +274,7 @@ will be improved in the near future.
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="i.band.html">i.band</a>,
+  <a href="r.semantic.label.html">r.semantic.label</a>,
   <a href="r.info.html">r.info</a>
 </em>
 
