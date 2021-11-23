@@ -33,13 +33,13 @@ class TestSemanticLabelsSystemDefined(TestCase):
             self.mapset.name = "PERMANENT"
             a_map = self.mapset.glist(type="raster")[0]
             module = SimpleModule(
-                "i.band", map=a_map, semantic_label=self.semantic_label
+                "r.semantic.label", map=a_map, semantic_label=self.semantic_label
             )
             self.assertModuleFail(module)
 
     def test_semantic_label_assign(self):
         module = SimpleModule(
-            "i.band", map=self.map, semantic_label=self.semantic_label
+            "r.semantic.label", map=self.map, semantic_label=self.semantic_label
         )
         self.assertModule(module)
 
@@ -47,7 +47,7 @@ class TestSemanticLabelsSystemDefined(TestCase):
         self.assertEqual(self.read_semantic_label(), self.semantic_label)
 
     def test_semantic_label_dissociate(self):
-        module = SimpleModule("i.band", operation="remove", map=self.map)
+        module = SimpleModule("r.semantic.label", operation="remove", map=self.map)
         self.assertModule(module)
 
         # check also using pygrass

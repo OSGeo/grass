@@ -196,7 +196,7 @@ per-file-ignores =
     scripts/r.in.wms/wms_cap_parsers.py: F841, E741, E501
     scripts/r.in.wms/wms_drv.py: E402, E722, E501
     scripts/r.in.wms/srs.py: E722, E501
-    scripts/i.band/i.band.py: F841, E501
+    scripts/r.semantic.label/r.semantic.label.py: F841, E501
     scripts/v.report/v.report.py: F841, E501
     scripts/db.out.ogr/db.out.ogr.py: F841
     scripts/g.extension/g.extension.py: F841, E722, E501
