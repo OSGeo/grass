@@ -193,10 +193,9 @@ int main(int argc, char **argv)
     float xscale;
     float yscale;
 
-    char xlabel;
     char txt[1024];
     char tic_name[1024];
-    char *name, *pxlabel = &xlabel;
+    char *name, *xlabel;
     char color_name[20];
 
     FILE *fopen();
@@ -890,16 +889,16 @@ int main(int argc, char **argv)
 
     /* draw the x-axis label */
     if ((strcmp(title[0]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        *pxlabel = '\0';
+        *xlabel = '\0';
     else
-        G_asprintf(&pxlabel, "X: %s %s", title[0]->answer, tic_name);
+        G_asprintf(&xlabel, "X: %s %s", title[0]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     D_text_size(text_width, text_height);
-    D_get_text_box(pxlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_pos_abs((l + (r - l) / 2 - (tr - tl) / 2), (b - LABEL_1 * (b - t)));
     D_use_color(title_color);
-    D_text(pxlabel);
+    D_text(xlabel);
 
     /* DRAW Y-AXIS TIC-MARKS AND NUMBERS
        first, figure tic_every and tic_units for the x-axis of the bar-chart.
@@ -1002,30 +1001,30 @@ int main(int argc, char **argv)
 
     /* draw the y-axis label */
     if ((strcmp(title[1]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        *pxlabel = '\0';
+        *xlabel = '\0';
     else
-        G_asprintf(&pxlabel, "Y: %s %s", title[1]->answer, tic_name);
+        G_asprintf(&xlabel, "Y: %s %s", title[1]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     D_text_size(text_width, text_height);
-    D_get_text_box(pxlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2, b - LABEL_2 * (b - t));
     D_use_color(title_color);
-    D_text(pxlabel);
+    D_text(xlabel);
 
     /* top label */
-    sprintf(pxlabel, "%s", title[2]->answer);
+    sprintf(xlabel, "%s", title[2]->answer);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 2.0;
     D_text_size(text_width, text_height);
-    D_get_text_box(pxlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     /*
        D_move_abs((int)(((r-l)/2)-(tr-tl)/2),
        (int) (t+ (b-t)*.07) );
      */
     D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2, t + (b - t) * .07);
     D_use_color(title_color);
-    D_text(pxlabel);
+    D_text(xlabel);
 
     /* draw x and y axis lines */
     D_use_color(title_color);
