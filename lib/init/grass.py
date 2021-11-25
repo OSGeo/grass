@@ -55,6 +55,7 @@ import locale
 import uuid
 import unicodedata
 import argparse
+import json
 
 
 # mechanism meant for debugging this script (only)
@@ -1373,19 +1374,11 @@ def set_language(grass_config_dir):
     encoding = None
 
     # Override value is stored in wxGUI preferences file.
-    # As it's the only thing required, we'll just grep it out.
-    try:
-        fd = open(os.path.join(grass_config_dir, "wx"), "r")
-    except:
-        # Even if there is no override, we still need to set locale.
-        pass
-    else:
-        for line in fd:
-            if re.search("^language", line):
-                line = line.rstrip(" %s" % os.linesep)
-                language = "".join(line.split(";")[-1:])
-                break
-        fd.close()
+    with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
+        try:
+            language = json.load(json_file)["language"]["locale"]["lc_all"]
+        except KeyError:
+            language = None
 
     # Backwards compatibility with old wx preferences files
     if language == "C":
