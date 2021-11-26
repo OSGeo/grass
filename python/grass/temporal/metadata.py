@@ -355,7 +355,8 @@ class RasterMetadata(RasterMetadataBase):
             max,
         )
 
-        self.set_semantic_label(semantic_label)
+        if get_tgis_db_version_from_metadata() > 2:
+            self.set_semantic_label(semantic_label)
 
     def set_semantic_label(self, semantic_label):
         """Set the semantic label identifier"""
@@ -1162,8 +1163,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         self.D["ewres_min"] = None
         self.D["ewres_max"] = None
         self.D["aggregation_type"] = aggregation_type
-        if get_tgis_db_version_from_metadata() > 2:
-            self.D["number_of_bands"] = None
 
     def set_aggregation_type(self, aggregation_type):
         """Set the aggregation type of the dataset (mean, min, max, ...)"""
@@ -1374,7 +1373,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
             self, "strds_metadata", ident, title, description
         )
 
-        self.D["number_of_bands"] = None
+        if get_tgis_db_version_from_metadata() > 2:
+            self.D["number_of_bands"] = None
 
         self.set_raster_register(raster_register)
 
@@ -1405,6 +1405,9 @@ class STRDSMetadata(STDSRasterMetadataBase):
            and fetched on-the-fly
         :return: None if not found
         """
+        if get_tgis_db_version_from_metadata() <= 2:
+            # band names supported from TGIS DB version 3
+            return None
 
         sql = "SELECT distinct semantic_label FROM %s WHERE %s.id " % (
             "raster_metadata",
