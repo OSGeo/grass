@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import (
     nested_scopes,
     generators,
@@ -69,7 +68,7 @@ class MetaModule(object):
         return self.cls("%s.%s" % (self.prefix, name.strip("_").replace("_", ".")))
 
 
-# https://grass.osgeo.org/grass79/manuals/full_index.html
+# https://grass.osgeo.org/grass80/manuals/full_index.html
 # [ d.* | db.* | g.* | i.* | m.* | ps.* | r.* | r3.* | t.* | v.* ]
 #
 #  d.*	display commands

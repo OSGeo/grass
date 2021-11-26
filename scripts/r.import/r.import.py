@@ -8,7 +8,7 @@
 #
 # PURPOSE:      Import and reproject on the fly
 #
-# COPYRIGHT:    (C) 2015-2016 GRASS development team
+# COPYRIGHT:    (C) 2015-2021 GRASS development team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -206,7 +206,7 @@ def main():
                 % GDALdatasource
             )
             return 0
-        except CalledModuleError as e:
+        except CalledModuleError:
             grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
 
     grassenv = grass.gisenv()

@@ -41,13 +41,6 @@
 #include <grass/glocale.h>
 #include "linegraph.h"
 
-#ifndef MAX
-#define MAX(x,y) ((x) > (y) ? (x) : (y))
-#endif
-#ifndef MIN
-#define MIN(x,y) ((x) < (y) ? (x) : (y))
-#endif
-
 /* the default order of precedence of colors to use for Y lines */
 int default_y_colors[] = {
     0,
@@ -89,7 +82,7 @@ static int cmp(const void *a, const void *b)
 static char *icon_files(void)
 {
     char **list, *ret;
-    char buf[GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
+    char buf[GNAME_MAX + GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
     int i, count;
     size_t len;
     DIR *dir, *dir_i;
@@ -200,9 +193,9 @@ int main(int argc, char **argv)
     float xscale;
     float yscale;
 
-    char txt[1024], xlabel[512];
+    char txt[1024];
     char tic_name[1024];
-    char *name;
+    char *name, *xlabel;
     char color_name[20];
 
     FILE *fopen();
@@ -896,9 +889,9 @@ int main(int argc, char **argv)
 
     /* draw the x-axis label */
     if ((strcmp(title[0]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        *xlabel = '\0';
+        xlabel =  G_store("");
     else
-        sprintf(xlabel, "X: %s %s", title[0]->answer, tic_name);
+        G_asprintf(&xlabel, "X: %s %s", title[0]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     D_text_size(text_width, text_height);
@@ -1008,9 +1001,9 @@ int main(int argc, char **argv)
 
     /* draw the y-axis label */
     if ((strcmp(title[1]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        *xlabel = '\0';
+        xlabel = G_store("");
     else
-        sprintf(xlabel, "Y: %s %s", title[1]->answer, tic_name);
+        G_asprintf(&xlabel, "Y: %s %s", title[1]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     D_text_size(text_width, text_height);

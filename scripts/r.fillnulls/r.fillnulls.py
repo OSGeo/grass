@@ -611,7 +611,7 @@ def main():
                         )
                         % (input,)
                     )
-            except CalledModuleError as e:
+            except CalledModuleError:
                 grass.fatal(
                     _("Failure during bspline interpolation. Error message: %s")
                     % stderr
@@ -643,7 +643,7 @@ def main():
                         )
                         % (input,)
                     )
-            except CalledModuleError as e:
+            except CalledModuleError:
                 grass.fatal(
                     _("Failure during bspline interpolation. Error message: %s")
                     % stderr

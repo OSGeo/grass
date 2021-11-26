@@ -47,8 +47,21 @@ void query_band(GDALRasterBandH hBand, const char *output,
 	break;
     }
 
-    if (info->have_minmax)
+    if (info->have_minmax == 1) {
 	GDALComputeRasterMinMax(hBand, 0, info->minmax);
+    }
+    else if (info->have_minmax == 2) {
+	double min, max, mean, stddev;
+
+	G_warning(_("Statistics in metadata are sometimes approximations: min and max can be wrong!"));
+
+	if (GDALGetRasterStatistics(hBand, false, true, &min, &max,
+	                            &mean, &stddev) != CE_None) {
+	    G_fatal_error(_("Unable to get raster band statistics"));
+	}
+	info->minmax[0] = min;
+	info->minmax[1] = max;
+    }
 
     Rast_init_colors(&info->colors);
 

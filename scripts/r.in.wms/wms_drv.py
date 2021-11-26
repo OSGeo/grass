@@ -1007,7 +1007,6 @@ class OnEarthRequestMgr(BaseRequestMgr):
             if best_patt is None:
                 best_res = t_res[comp_res]
                 best_patt = pattern
-                first = False
                 continue
 
             best_diff = best_res - res[comp_res]

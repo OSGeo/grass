@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # This is an example script how groundwater flow and solute transport are
 # computed within GRASS GIS
-import sys
-import os
 import grass.script as gs
 
 # Overwrite existing maps
@@ -17,7 +15,7 @@ gs.run_command("r.mapcalc", expression="phead=if(col() ==200  , 45 + row()/40, p
 gs.run_command("r.mapcalc", expression="status=if(col() == 1 || col() == 200 , 2, 1)")
 gs.run_command(
     "r.mapcalc",
-    expression="well=if((row() == 50 && col() == 175) || (row() == 10 && col() == 135) , -0.001, 0)",
+    expression="well=if((row() == 50 && col() == 175) || (row() == 10 && col() == 135) , -0.001, 0)",  # noqa: E501
 )
 gs.run_command("r.mapcalc", expression="hydcond=0.00005")
 gs.run_command("r.mapcalc", expression="recharge=0")

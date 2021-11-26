@@ -8,7 +8,7 @@
 
 int open_files(void)
 {
-    char *name, *mapset;
+    char *name, *mapset, **err;
     FILE *fd;
     int n;
 
@@ -31,18 +31,7 @@ int open_files(void)
 			    "The subgroup must have at least 2 raster maps."), subgroup, group);
     }
 
-    cell = (DCELL **) G_malloc(Ref.nfiles * sizeof(DCELL *));
-    cellfd = (int *)G_malloc(Ref.nfiles * sizeof(int));
-    P = (double *)G_malloc(Ref.nfiles * sizeof(double));
-    for (n = 0; n < Ref.nfiles; n++) {
-	cell[n] = Rast_allocate_d_buf();
-	name = Ref.file[n].name;
-	mapset = Ref.file[n].mapset;
-	cellfd[n] = Rast_open_old(name, mapset);
-    }
-
-    I_init_signatures(&S, Ref.nfiles);
-    fd = I_fopen_signature_file_old(group, subgroup, sigfile);
+    fd = I_fopen_signature_file_old(sigfile);
     if (fd == NULL)
 	G_fatal_error(_("Unable to open signature file <%s>"),
 		      sigfile);
@@ -57,8 +46,27 @@ int open_files(void)
 	G_fatal_error(_("<%s> has too many signatures (limit is 255)"),
 		      sigfile);
 
+    err = I_sort_signatures_by_semantic_label(&S, &Ref);
+    if (err)
+        G_fatal_error(_("Signature – group member semantic label mismatch.\n"
+            "Extra signatures for bands: %s\n"
+            "Imagery group bands without signatures: %s"),
+            err[0] ? err[0] : _("none"),
+            err[1] ? err[1] : _("none")
+        );
+
     B = (double *)G_malloc(S.nsigs * sizeof(double));
     invert_signatures();
+
+    cell = (DCELL **) G_malloc(Ref.nfiles * sizeof(DCELL *));
+    cellfd = (int *)G_malloc(Ref.nfiles * sizeof(int));
+    P = (double *)G_malloc(Ref.nfiles * sizeof(double));
+    for (n = 0; n < Ref.nfiles; n++) {
+	cell[n] = Rast_allocate_d_buf();
+	name = Ref.file[n].name;
+	mapset = Ref.file[n].mapset;
+	cellfd[n] = Rast_open_old(name, mapset);
+    }
 
     class_fd = Rast_open_c_new(class_name);
     class_cell = Rast_allocate_c_buf();

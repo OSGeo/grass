@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Feb 26 14:46:06 2016
 
@@ -28,7 +27,7 @@ class TestRasterImport(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", inputs="A")
+        cls.runModule("t.remove", flags="df", inputs="A")
 
     def test_import(self):
         self.assertModule(

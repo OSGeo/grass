@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 # generates keywords.html
 # (c) 2013 by the GRASS Development Team, Luca Delucchi

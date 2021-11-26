@@ -18,18 +18,13 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
 #include "dgraph.h"
 
 #define LENGTH(DX, DY) (sqrt((DX*DX)+(DY*DY)))
-#ifndef MIN
-#define MIN(X,Y) ((X<Y)?X:Y)
-#endif
-#ifndef MAX
-#define MAX(X,Y) ((X>Y)?X:Y)
-#endif
 #define PI M_PI
 #define RIGHT_SIDE 1
 #define LEFT_SIDE -1

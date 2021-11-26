@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Thu Jun 28 17:44:45 2012
 
@@ -138,7 +137,7 @@ class History(object):
         if date_str:
             try:
                 return datetime.datetime.strptime(date_str, self.date_fmt)
-            except:
+            except ValueError:
                 return date_str
 
     def _set_date(self, datetimeobj):

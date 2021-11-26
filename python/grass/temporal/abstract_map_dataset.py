@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The abstract_map_dataset module provides the AbstractMapDataset class
 that is the base class for all map layer.
@@ -1159,7 +1158,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return statement
 
-    def read_band_reference_from_grass(self):
+    def read_semantic_label_from_grass(self):
         """Read the band identifier of this map from the map metadata
         in the GRASS file system based spatial database and
         set the internal band identifier that should be insert/updated
@@ -1170,13 +1169,13 @@ class AbstractMapDataset(AbstractDataset):
         """
         pass
 
-    def set_band_reference(self, band_reference):
-        """Set band reference identifier
+    def set_semantic_label(self, semantic_label):
+        """Set semantic label identifier
 
         Currently only implemented in RasterDataset. Otherwise
         report a warning.
         """
-        self.msgr.warning(_("Band references can only be assigned to raster maps"))
+        self.msgr.warning(_("semantic labels can only be assigned to raster maps"))
 
 
 ###############################################################################

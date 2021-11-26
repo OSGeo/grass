@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # Shellscript to verify r.solute.transport calculation, this calculation is based on
 # the example 1.1 and 1.2 at page 175 of the following book:
-# 	title = "Str{\"o}mungs und Transportmodellierung",
-# 	author = "Lege, T. and Kolditz, O. and Zielke W.",
-# 	publisher = "Springer (Berlin; Heidelberg; New York; Barcelona; Hongkong; London; Mailand; Paris; Singapur; Tokio)",
-# 	edition = "2. Auflage",
-# 	year = "1996",
-# 	series = "Handbuch zur Erkundung des Untergrundes von Deponien und Altlasten"
-#
+# title = "Str{\"o}mungs und Transportmodellierung",
+# author = "Lege, T. and Kolditz, O. and Zielke W.",
+# publisher = "Springer",
+# edition = "2. Auflage",
+# year = "1996",
+# series = "Handbuch zur Erkundung des Untergrundes von Deponien und Altlasten"
 
 import grass.script as grass
 
@@ -24,7 +23,8 @@ grass.message(_("Create all the input maps needed for groundwater flow computati
 # Initial condition of the piezometric head, we have a huge gradient from 275m to 50m
 # over a distance of 2000m
 grass.run_command("r.mapcalc", expression="phead_1=if(col() == 1 , 275, 50)")
-# Set the active cells and the dirichlet boundary condition, the first and the last cells a dirichlet
+# Set the active cells and the dirichlet boundary condition,
+# the first and the last cells a dirichlet
 grass.run_command(
     "r.mapcalc", expression="status_1=if(col() == 1 || col() == 40 , 2, 1)"
 )
@@ -45,7 +45,8 @@ grass.run_command("r.mapcalc", expression="syield_1=0.0001")
 grass.run_command("r.mapcalc", expression="null_1=0.0")
 
 grass.message(
-    "First compute a steady state groundwater flow with a mean velocity of 5.88 m/d or 6.8*10^5m/s"
+    "First compute a steady state groundwater flow with a mean velocity"
+    " of 5.88 m/d or 6.8*10^5m/s"
 )
 
 # Compute the steady state groundwater flow
@@ -92,7 +93,8 @@ grass.run_command("r.mapcalc", expression="R_1=1.0")
 AL = 100
 AT = 10
 
-# Compute the solute transport using the above defined dispersivity coefficients for a timestep of 1000d
+# Compute the solute transport using the above defined dispersivity coefficients
+# for a timestep of 1000d
 grass.run_command(
     "r.solute.transport",
     "c",
@@ -140,10 +142,12 @@ grass.run_command(
 
 # The second computation uses different porosity for higher groundwater velocity
 
-# Used to compute a lower velocity, so the mean velocity is about 1 m/d or 1.15*10^-5 m/s
+# Used to compute a lower velocity, so the mean velocity is
+# about 1 m/d or 1.15*10^-5 m/s
 grass.run_command("r.mapcalc", expression="poros_2=1")
 
-# Compute the solute transport using the above defined dispersivity coefficients for a timestep of 1000d
+# Compute the solute transport using the above defined dispersivity coefficients for
+# a timestep of 1000d
 grass.run_command(
     "r.solute.transport",
     "c",

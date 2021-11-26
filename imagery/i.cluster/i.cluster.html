@@ -71,6 +71,17 @@ The classes value is the initial number of clusters to be
 discriminated; any parameter values left unspecified are
 set to their default values.
 
+<p>
+For all raster maps used to generate signature file it is recommended
+to have semantic label set.
+Use <em><a href="r.support.html">r.support</a></em> to set
+semantc labels of each member of the imagery group.
+Signatures generated for one scene are suitable for classification
+of other scenes as long as they consist of same raster bands
+(semantic labels match). If semantic labels are not set, it will be
+possible to use obtained signature file to classify only the same
+imagery group used for generating signatures.
+
 <h3>Parameters:</h3>
 
 <dl>
@@ -208,13 +219,6 @@ achieve the convergence, and the separability matrix.
 
 <h2>NOTES</h2>
 
-<!-- No longer true
-Running in command line mode, <em>i.cluster</em> will
-overwrite the output signature file and reportfile (if
-required by the user) without prompting if the files
-existed.
--->
-
 <h3>Sampling method</h3>
 
 <em>i.cluster</em> does not cluster all pixels, but only a sample (see
@@ -259,23 +263,47 @@ over, whichever comes first.
 <h2>EXAMPLE</h2>
 
 Preparing the statistics for unsupervised classification of
-a LANDSAT subscene in North Carolina:
+a LANDSAT scene within North Carolina location:
 
 <div class="code"><pre>
+# Set computational region to match the scene
 g.region raster=lsat7_2002_10 -p
 
 # store VIZ, NIR, MIR into group/subgroup (leaving out TIR)
-i.group group=lsat7_2002 subgroup=lsat7_2002 \
+i.group group=lsat7_2002 subgroup=res_30m \
   input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 
 # generate signature file and report
-i.cluster group=lsat7_2002 subgroup=lsat7_2002 \
-  signaturefile=sig_cluster_lsat2002 \
+i.cluster group=lsat7_2002 subgroup=res_30m \
+  signaturefile=cluster_lsat2002 \
   classes=10 reportfile=rep_clust_lsat2002.txt
 </pre></div>
 
 To complete the unsupervised classification, <em>i.maxlik</em> is subsequently used.
 See example in its manual page.
+
+<p>
+The signature file obtained in the example above will allow
+to classify the current imagery group only (lsat7_2002).
+If the user would like to re-use the signature file for the
+classification of different imagery group(s), they can set
+semantic labels for each group member beforehand, i.e.,
+before generating the signature files.
+Semantic labels are set by means of <em>r.support</em>
+as shown below:
+
+<div class="code"><pre>
+# Define semantic labels for all LANDSAT bands
+r.support map=lsat7_2002_10 semantic_label=TM7_1
+r.support map=lsat7_2002_20 semantic_label=TM7_2
+r.support map=lsat7_2002_30 semantic_label=TM7_3
+r.support map=lsat7_2002_40 semantic_label=TM7_4
+r.support map=lsat7_2002_50 semantic_label=TM7_5
+r.support map=lsat7_2002_61 semantic_label=TM7_61
+r.support map=lsat7_2002_62 semantic_label=TM7_62
+r.support map=lsat7_2002_70 semantic_label=TM7_7
+r.support map=lsat7_2002_80 semantic_label=TM7_8
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
@@ -289,6 +317,7 @@ See example in its manual page.
 
 <p>
 <em>
+<a href="r.support.html">r.support</a>,
 <a href="g.gui.iclass.html">g.gui.iclass</a>,
 <a href="i.group.html">i.group</a>,
 <a href="i.gensig.html">i.gensig</a>,
@@ -302,10 +331,12 @@ See example in its manual page.
 
 Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
-
 <br>
 Tao Wen, 
 University of Illinois at Urbana-Champaign, Illinois
+<br>
+Semantic label support: Maris Nartiss,
+University of Latvia
 
 <!--
 <p>

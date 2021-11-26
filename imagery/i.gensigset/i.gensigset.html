@@ -18,6 +18,21 @@ The user would then execute the GRASS program <em>
 <a href="i.smap.html">i.smap</a></em> to create the
 final classified map.
 
+<p>
+For all raster maps used to generate signature file it is recommended
+to have semantic label set.
+Use <em><a href="r.support.html">r.support</a></em> to set
+semantic labels of each member of the imagery group.
+Signatures generated for one scene are suitable for classification
+of other scenes as long as they consist of same raster bands
+(semantic labels match). If semantic labels are not set, it will be
+possible to use obtained signature file to classify only the same
+imagery group used for generating signatures.
+
+<p>
+An usage example can be found in <a href="i.smap.html">i.smap</a>
+documentation.
+
 <h2>OPTIONS</h2>
 
 <h3>Parameters</h3>
@@ -110,21 +125,7 @@ starting value with this option.
 </dl>
 
 
-<h2>INTERACTIVE MODE</h2>
-
-If none of the arguments are specified on the command line,
-<em>i.gensigset</em> will interactively prompt for the
-names of these maps and files.
-
-<p>
-It should be noted that interactive mode here only means
-interactive prompting for maps and files.  It does not mean
-visualization of the signatures that result from the
-process.
-
-<p>
-
-<A NAME="notes"></a><h2>NOTES</h2>
+<h2 id="notes">NOTES</h2>
 
 The algorithm in <em>i.gensigset</em> determines the
 parameters of a spectral class model known as a Gaussian
@@ -216,6 +217,7 @@ then the user should check for:
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="r.support">r.support</a>,
 <a href="i.group.html">i.group</a>,
 <a href="i.smap.html">i.smap</a>,
 <a href="r.info.html">r.info</a>,
@@ -230,6 +232,9 @@ School of Electrical Engineering, Purdue University
 <br>
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
+<br>
+Semantic label support: Maris Nartiss,
+University of Latvia
 
 <!--
 <p>

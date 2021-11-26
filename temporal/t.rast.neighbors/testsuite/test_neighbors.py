@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Feb 17 19:53:04 2016
 
@@ -57,11 +56,11 @@ class TestAggregationAbsolute(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="strds", inputs="B")
+        self.runModule("t.remove", flags="df", type="strds", inputs="B")
 
     def test_where(self):
         """Test simple t.rast.neighbors"""

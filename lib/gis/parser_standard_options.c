@@ -109,6 +109,7 @@
    - G_OPT_M_COLR
    - G_OPT_M_REGION
    - G_OPT_M_NULL_VALUE
+   - G_OPT_M_NPROCS
 
   - temporal GIS framework
    - G_OPT_STDS_INPUT
@@ -753,6 +754,21 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = NO;
         Opt->gisprompt = "old,windows,region";
         Opt->description = _("Name of saved region");
+        break;
+
+    case G_OPT_M_NPROCS:
+        Opt->key = "nprocs";
+        Opt->type = TYPE_INTEGER;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->answer = "1";
+        /* start dynamic answer */
+        /* check NPROCS in GISRC, set with g.gisenv */
+        memstr = G_store(G_getenv_nofatal("NPROCS"));
+        if (memstr && *memstr)
+            Opt->answer = memstr;
+        /* end dynamic answer */
+        Opt->description = _("Number of threads for parallel computing");
         break;
 
     /* Spatio-temporal modules of the temporal GIS framework */

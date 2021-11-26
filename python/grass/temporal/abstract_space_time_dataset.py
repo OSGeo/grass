@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The abstract_space_time_dataset module provides the AbstractSpaceTimeDataset
 class that is the base class for all space time datasets.
@@ -64,13 +63,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.map_counter = 0
 
         # SpaceTimeRasterDataset related only
-        self.band_reference = None
+        self.semantic_label = None
 
-    def get_name(self, band_reference=True):
-        """Get dataset name including band reference filter if enabled.
+    def get_name(self, semantic_label=True):
+        """Get dataset name including semantic label filter if enabled.
 
-        :param bool band_reference: True to return dataset name
-        including band reference filter if defined
+        :param bool semantic_label: True to return dataset name
+        including semantic label filter if defined
         (eg. "landsat.L8_1") otherwise dataset name is returned only
         (eg. "landsat").
 
@@ -79,8 +78,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
         dataset_name = super(AbstractSpaceTimeDataset, self).get_name()
 
-        if band_reference and self.band_reference:
-            return "{}.{}".format(dataset_name, self.band_reference)
+        if semantic_label and self.semantic_label:
+            return "{}.{}".format(dataset_name, self.semantic_label)
 
         return dataset_name
 
@@ -1143,13 +1142,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             else:
                 end = end + gran
 
-        l = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
+        maplist = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
             maps, start, end, gran
         )
         if connection_state_changed:
             dbif.close()
 
-        return l
+        return maplist
 
     @staticmethod
     def resample_maplist_by_granularity(maps, start, end, gran):
@@ -1521,10 +1520,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
-    def _update_where_statement_by_band_reference(self, where):
-        """Update given SQL WHERE statement by band reference.
+    def _update_where_statement_by_semantic_label(self, where):
+        """Update given SQL WHERE statement by semantic label.
 
-        Call this method only when self.band_reference is defined.
+        Call this method only when self.semantic_label is defined.
 
         :param str where: SQL WHERE statement to be updated
 
@@ -1549,12 +1548,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             where = ""
 
         # be case-insensitive
-        if "_" in self.band_reference:
-            # fully-qualified band reference
-            where += "band_reference IN ('{}'".format(self.band_reference.upper())
+        if "_" in self.semantic_label:
+            # fully-qualified semantic label
+            where += "semantic_label IN ('{}'".format(self.semantic_label.upper())
 
             # be zero-padding less sensitive
-            shortcut, identifier = self.band_reference.split("_", -1)
+            shortcut, identifier = self.semantic_label.split("_", -1)
             identifier_zp = leading_zero(identifier)
             if identifier_zp:
                 where += ", '{fl}_{zp}'".format(
@@ -1565,19 +1564,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             where += ")"
         else:
             # shortcut or band identifier given
-            shortcut_identifier = leading_zero(self.band_reference)
+            shortcut_identifier = leading_zero(self.semantic_label)
             if shortcut_identifier:
                 where += (
                     "{br} LIKE '{si}\_%' {esc} OR {br} LIKE '%\_{si}' {esc} OR "
                     "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
-                        br="band_reference",
+                        br="semantic_label",
                         si=shortcut_identifier,
-                        orig=self.band_reference.upper(),
+                        orig=self.semantic_label.upper(),
                         esc="ESCAPE '\\'",
                     )
                 )
             else:
-                where += "band_reference = '{}'".format(self.band_reference)
+                where += "semantic_label = '{}'".format(self.semantic_label)
 
         return where
 
@@ -1623,9 +1622,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     self.get_map_register(),
                 )
 
-            # filter by band reference identifier
-            if self.band_reference:
-                where = self._update_where_statement_by_band_reference(where)
+            # filter by semantic label identifier
+            if self.semantic_label:
+                where = self._update_where_statement_by_semantic_label(where)
 
             if where is not None and where != "":
                 sql += " AND (%s)" % (where.split(";")[0])

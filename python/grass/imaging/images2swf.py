@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #   Copyright (C) 2012, Almar Klein
 #
 #   This code is subject to the (new) BSD license:
@@ -141,7 +140,7 @@ def checkImages(images):
     return images2
 
 
-## Base functions and classes
+# Base functions and classes
 
 
 class BitArray:
@@ -192,7 +191,7 @@ class BitArray:
             self._checkSize()
 
     def Reverse(self):
-        """ In-place reverse. """
+        """In-place reverse."""
         tmp = self.data[: self._len].copy()
         self.data[: self._len] = np.flipud(tmp)
 
@@ -219,39 +218,16 @@ class BitArray:
         return bb
 
 
-if PY3:
-
-    def intToUint32(i):
-        return int(i).to_bytes(4, "little")
-
-    def intToUint16(i):
-        return int(i).to_bytes(2, "little")
-
-    def intToUint8(i):
-        return int(i).to_bytes(1, "little")
+def intToUint32(i):
+    return int(i).to_bytes(4, "little")
 
 
-else:
+def intToUint16(i):
+    return int(i).to_bytes(2, "little")
 
-    def intToUint32(i):
-        number = int(i)
-        n1, n2, n3, n4 = 1, 256, 256 * 256, 256 * 256 * 256
-        b4, number = number // n4, number % n4
-        b3, number = number // n3, number % n3
-        b2, number = number // n2, number % n2
-        b1 = number
-        return chr(b1) + chr(b2) + chr(b3) + chr(b4)
 
-    def intToUint16(i):
-        i = int(i)
-        # divide in two parts (bytes)
-        i1 = i % 256
-        i2 = int(i // 256)
-        # make string (little endian)
-        return chr(i1) + chr(i2)
-
-    def intToUint8(i):
-        return chr(int(i))
+def intToUint8(i):
+    return int(i).to_bytes(1, "little")
 
 
 def intToBits(i, n=None):
@@ -412,7 +388,7 @@ def _readFrom(fp, n):
     return bb
 
 
-## Base Tag
+# Base Tag
 
 
 class Tag:
@@ -421,11 +397,11 @@ class Tag:
         self.tagtype = -1
 
     def ProcessTag(self):
-        """ Implement this to create the tag. """
+        """Implement this to create the tag."""
         raise NotImplementedError()
 
     def GetTag(self):
-        """ Calls processTag and attaches the header. """
+        """Calls processTag and attaches the header."""
         self.ProcessTag()
 
         # tag to binary
@@ -481,7 +457,7 @@ class Tag:
         return bits
 
 
-## Control tags
+# Control tags
 
 
 class ControlTag(Tag):
@@ -508,7 +484,7 @@ class ShowFrameTag(ControlTag):
 
 
 class SetBackgroundTag(ControlTag):
-    """ Set the color in 0-255, or 0-1 (if floats given). """
+    """Set the color in 0-255, or 0-1 (if floats given)."""
 
     def __init__(self, *rgb):
         self.tagtype = 9
@@ -551,7 +527,9 @@ class DoActionTag(Tag):
         self.bytes = bb
 
 
-## Definition tags
+# Definition tags
+
+
 class DefinitionTag(Tag):
     counter = 0  # to give automatically id's
 
@@ -643,7 +621,7 @@ class ShapeTag(DefinitionTag):
         self.wh = wh
 
     def ProcessTag(self):
-        """ Returns a defineshape tag. with a bitmap fill """
+        """Returns a defineshape tag. with a bitmap fill"""
 
         bb = binary_type()
         bb += intToUint16(self.id)
@@ -761,9 +739,11 @@ class ShapeTag(DefinitionTag):
         # return bitsToBytes(bits)
 
 
-## Last few functions
+# Last few functions
+
+
 def buildFile(fp, taglist, nframes=1, framesize=(500, 500), fps=10, version=8):
-    """ Give the given file (as bytes) a header. """
+    """Give the given file (as bytes) a header."""
 
     # compose header
     bb = binary_type()
@@ -872,7 +852,7 @@ def _readPixels(bb, i, tagType, L1):
         raise RuntimeError("Need Numpy to read an SWF file.")
 
     # Get info
-    charId = bb[i : i + 2]
+    # charId = bb[i : i + 2]  # unused
     i += 2
     format = ord(bb[i : i + 1])
     i += 1
@@ -881,7 +861,7 @@ def _readPixels(bb, i, tagType, L1):
     height = bitsToInt(bb[i : i + 2], 16)
     i += 2
 
-    # If we can, get pixeldata and make nunmpy array
+    # If we can, get pixeldata and make numpy array
     if format != 5:
         print("Can only read 24bit or 32bit RGB(A) lossless images.")
     else:

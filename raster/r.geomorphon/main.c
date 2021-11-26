@@ -32,55 +32,6 @@ typedef enum
     o_range, o_variance, o_elongation, o_azimuth, o_extend, o_width, o_size
 } outputs;
 
-typedef struct
-{
-    char name[100];
-    int fd;
-    CELL *forms_buffer;
-} MULTI;
-
-static const char *form_short_name(const FORMS f)
-{
-    const char *form_short_names[] = {
-        /* skip 0 */
-        [FL] = "FL",
-        [PK] = "PK",
-        [RI] = "RI",
-        [SH] = "SH",
-        [SP] = "SP",
-        [SL] = "SL",
-        [HL] = "HL",
-        [FS] = "FS",
-        [VL] = "VL",
-        [PT] = "PT",
-        [__] = "ERROR",
-    };
-    return (f >= FL && f <= PT) ? form_short_names[f] : form_short_names[__];
-}
-
-static const char *form_long_name(const FORMS f)
-{
-    /*
-     * The list below is the same as in the documentation and the original paper.
-     * The values in ccolors[] are different for PK and PT.
-     */
-    const char *form_long_names[] = {
-        /* skip 0 */
-        [FL] = "flat",
-        [PK] = "peak",
-        [RI] = "ridge",
-        [SH] = "shoulder",
-        [SP] = "spur",
-        [SL] = "slope",
-        [HL] = "hollow",
-        [FS] = "footslope",
-        [VL] = "valley",
-        [PT] = "pit",
-        [__] = "ERROR",
-    };
-    return (f >= FL && f <= PT) ? form_long_names[f] : form_long_names[__];
-}
-
 int main(int argc, char **argv)
 {
     struct
@@ -133,24 +84,20 @@ int main(int argc, char **argv)
         *par_comparison,
         *par_coords,
         *par_profiledata,
-        *par_profileformat,
-        *par_multi_prefix, *par_multi_step, *par_multi_start;
+        *par_profileformat;
     struct Flag *flag_units, *flag_extended;
 
     struct History history;
 
     int i;
-    int meters = 0, multires = 0, extended = 0; /* flags */
+    int meters = 0, extended = 0; /* flags */
     int oneoff;
     int row, cur_row, col;
     int nrows;
     int pattern_size;
-    int search_cells, step_cells, start_cells;
-    int num_of_steps;
-    double start_distance, step_distance;       /* multiresolution mode */
+    int search_cells;
     double skip_distance;
     double max_resolution;
-    char prefix[20];
     double oneoff_easting, oneoff_northing;
     int oneoff_row, oneoff_col;
     FILE *profile_file;
@@ -214,29 +161,6 @@ int main(int argc, char **argv)
         par_comparison->description =
             _("Comparison mode for zenith/nadir line-of-sight search");
 
-        par_multi_prefix = G_define_option();
-        par_multi_prefix->key = "prefix";
-        par_multi_prefix->type = TYPE_STRING;
-        par_multi_prefix->description =
-            _("Prefix for maps resulting from multiresolution approach");
-        par_multi_prefix->guisection = _("Multires");
-
-        par_multi_step = G_define_option();
-        par_multi_step->key = "step";
-        par_multi_step->type = TYPE_DOUBLE;
-        par_multi_step->answer = "0";
-        par_multi_step->description =
-            _("Distance step for every iteration (zero to omit)");
-        par_multi_step->guisection = _("Multires");
-
-        par_multi_start = G_define_option();
-        par_multi_start->key = "start";
-        par_multi_start->type = TYPE_DOUBLE;
-        par_multi_start->answer = "0";
-        par_multi_start->description =
-            _("Distance where search will start in multiple mode (zero to omit)");
-        par_multi_start->guisection = _("Multires");
-
         flag_units = G_define_flag();
         flag_units->key = 'm';
         flag_units->description =
@@ -249,7 +173,6 @@ int main(int argc, char **argv)
         par_coords = G_define_standard_option(G_OPT_M_COORDS);
         par_coords->description = _("Coordinates to profile");
         par_coords->guisection = _("Profile");
-        G_option_excludes(par_coords, par_multi_prefix, NULL);
         for (i = o_forms; i < o_size; i++)
             G_option_excludes(par_coords, opt_output[i], NULL);
 
@@ -281,7 +204,6 @@ int main(int argc, char **argv)
         double search_radius, skip_radius, start_radius, step_radius;
         double ns_resolution;
 
-        multires = (par_multi_prefix->answer) ? 1 : 0;
         if (!strcmp(par_comparison->answer, "anglev1"))
             compmode = ANGLEV1;
         else if (!strcmp(par_comparison->answer, "anglev2"))
@@ -298,7 +220,7 @@ int main(int argc, char **argv)
                                   opt_output[i]->answer);
                 num_outputs++;
             }
-        if (!num_outputs && !multires && !oneoff)
+        if (!num_outputs && !oneoff)
             G_fatal_error(_("At least one output is required, e.g. %s"),
                           opt_output[o_forms]->key);
 
@@ -381,31 +303,6 @@ int main(int argc, char **argv)
             G_warning(_("Flatness distance should be between skip and search radius. Otherwise ignored"));
             flat_distance = 0;
         }
-        if (multires) {
-            start_radius = atof(par_multi_start->answer);
-            start_cells =
-                meters ? (int)(start_radius / max_resolution) : start_radius;
-            if (start_cells <= skip_cells)
-                start_cells = skip_cells + 1;
-            start_distance =
-                (meters) ? start_radius : ns_resolution * start_cells;
-
-            step_radius = atof(par_multi_step->answer);
-            step_cells =
-                meters ? (int)(step_radius / max_resolution) : step_radius;
-            step_distance =
-                (meters) ? step_radius : ns_resolution * step_cells;
-            if (step_distance < ns_resolution)
-                G_fatal_error(_("For multiresolution mode step must be greater than or equal to resolution of one cell"));
-
-            if (G_legal_filename(par_multi_prefix->answer) < 0 ||
-                strlen(par_multi_prefix->answer) > 19)
-                G_fatal_error(_("<%s> is an incorrect prefix"),
-                              par_multi_prefix->answer);
-            strcpy(prefix, par_multi_prefix->answer);
-            strcat(prefix, "_");
-            num_of_steps = (int)ceil(search_distance / step_distance);
-        }                       /* end multires preparation */
 
         /* print information about distances */
         G_verbose_message("Search distance m: %f, cells: %d", search_distance,
@@ -432,15 +329,6 @@ int main(int argc, char **argv)
                            "computational region is %lu times larger than necessary"),
                           window_square / search_square);
         }
-        if (multires) {
-            G_verbose_message
-                ("Multiresolution mode: search start at: m: %f, cells: %d",
-                 start_distance, start_cells);
-            G_verbose_message
-                ("Multiresolution mode: search step is: m: %f, number of steps %d",
-                 step_distance, num_of_steps);
-            G_verbose_message("Prefix for output: %s", prefix);
-        }
     }
 
     generate_ternary_codes();
@@ -449,7 +337,7 @@ int main(int argc, char **argv)
     strcpy(elevation.elevname, opt_input->answer);
     open_map(&elevation);
 
-    if (!multires) {
+    if (1) {
         PATTERN *pattern;
         PATTERN patterns[4];
         void *pointer_buf;
@@ -460,7 +348,6 @@ int main(int argc, char **argv)
             4 * (search_distance * search_distance) * sin(DEGREE2RAD(45.));
         unsigned char oneoff_done = 0;
 
-        cell_step = 1;
         /* prepare outputs */
         for (i = o_forms; i < o_size; ++i)
             if (opt_output[i]->answer) {
@@ -754,66 +641,5 @@ int main(int argc, char **argv)
         }
 
         exit(EXIT_SUCCESS);
-    }                           /* end of NOT multiresolution */
-
-    if (multires) {
-        PATTERN *multi_patterns;
-        MULTI multiple_output[5];       /* ten form maps + all forms */
-        char *postfixes[] = { "scale_300", "scale_100", "scale_50", "scale_20", "scale_10" };   /* in pixels */
-        num_of_steps = 5;
-        multi_patterns = G_malloc(num_of_steps * sizeof(PATTERN));
-        /* prepare outputs */
-        for (i = 0; i < 5; ++i) {
-            multiple_output[i].forms_buffer = Rast_allocate_buf(CELL_TYPE);
-            strcpy(multiple_output[i].name, prefix);
-            strcat(multiple_output[i].name, postfixes[i]);
-            multiple_output[i].fd =
-                Rast_open_new(multiple_output[i].name, CELL_TYPE);
-        }
-
-        /* main loop */
-        for (row = 0; row < nrows; ++row) {
-            G_percent(row, nrows, 2);
-            cur_row = (row < row_radius_size) ? row :
-                ((row >=
-                  nrows - row_radius_size - 1) ? row_buffer_size - (nrows -
-                                                                    row -
-                                                                    1) :
-                 row_radius_size);
-
-            if (row > (row_radius_size) &&
-                row < nrows - (row_radius_size + 1))
-                shift_buffers(row);
-            for (col = 0; col < ncols; ++col) {
-                if (row < (skip_cells + 1) || row > nrows - (skip_cells + 2)
-                    || col < (skip_cells + 1) ||
-                    col > ncols - (skip_cells + 2) ||
-                    Rast_is_f_null_value(&elevation.elev[cur_row][col])) {
-                    for (i = 0; i < num_of_steps; ++i)
-                        Rast_set_c_null_value(&multiple_output[i].forms_buffer
-                                              [col], 1);
-                    continue;
-                }
-                cell_step = 10;
-                calc_pattern(&multi_patterns[0], row, cur_row, col, 0);
-            }
-
-            for (i = 0; i < num_of_steps; ++i)
-                Rast_put_row(multiple_output[i].fd,
-                             multiple_output[i].forms_buffer, CELL_TYPE);
-
-        }
-        G_percent(row, nrows, 2);       /* end main loop */
-
-        for (i = 0; i < num_of_steps; ++i) {
-            G_free(multiple_output[i].forms_buffer);
-            Rast_close(multiple_output[i].fd);
-            Rast_short_history(multiple_output[i].name, "raster", &history);
-            Rast_command_history(&history);
-            Rast_write_history(multiple_output[i].name, &history);
-        }
-        G_message("Multiresolution Done!");
-        exit(EXIT_SUCCESS);
-    }                           /* end of multiresolution */
-
+    }
 }

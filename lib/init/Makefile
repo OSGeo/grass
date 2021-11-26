@@ -6,7 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Compile.make
 #for i18N support
 PACKAGE ="grasslibs"
 
-START_UP=grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
+START_UP=grass
 
 EXTRA_CFLAGS = \
 	-DD_LOCATION_NAME=\"$(DEFAULT_LOCATION)\" \
@@ -26,11 +26,13 @@ FILES = \
 	$(ETC)/license \
 	$(ETC)/VERSIONNUMBER \
 	$(HTMLDIR)/help_loc_struct.png \
-	$(HTMLDIR)/circle_1.png \
-	$(HTMLDIR)/circle_2.png \
-	$(HTMLDIR)/circle_3.png \
-	$(HTMLDIR)/circle_4.png \
-	$(HTMLDIR)/circle_5.png \
+	$(HTMLDIR)/grassdb.png \
+	$(HTMLDIR)/location.png \
+	$(HTMLDIR)/location-add.png \
+	$(HTMLDIR)/location-download.png \
+	$(HTMLDIR)/mapset.png \
+	$(HTMLDIR)/raster-import.png \
+	$(HTMLDIR)/vector-import.png \
 	$(HTMLDIR)/grass_start.png
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)

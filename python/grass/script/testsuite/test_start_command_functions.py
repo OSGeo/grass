@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
-# the utf-8 is important because we do use the characters
-"""Tests of start_command function family (location independent)"""
+"""
+Tests of start_command function family (location independent)
+"""
 
 import sys
 from grass.gunittest.case import TestCase

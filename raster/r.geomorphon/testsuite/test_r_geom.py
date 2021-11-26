@@ -23,7 +23,7 @@ synth_out = """1	flat
 """
 
 ele_out = """1	flat
-2	summit
+2	peak
 3	ridge
 4	shoulder
 5	spur
@@ -31,7 +31,7 @@ ele_out = """1	flat
 7	hollow
 8	footslope
 9	valley
-10	depression
+10	pit
 """
 
 

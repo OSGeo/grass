@@ -57,7 +57,7 @@ class TestRasterreport(TestCase):
         cls.runModule("g.remove", flags="f", type="vector", name=cls.output)
 
     def test_flagd(self):
-        """Testing flag d """
+        """Testing flag d"""
         self.assertModule(
             "v.extract", input=self.input, output=self.output, cats="1,2,3,4"
         )
@@ -69,7 +69,7 @@ class TestRasterreport(TestCase):
         )
 
     def test_cats2(self):
-        """Testing cats=2 """
+        """Testing cats=2"""
         self.assertModule(
             "v.extract",
             input=self.geology,
@@ -91,7 +91,7 @@ class TestRasterreport(TestCase):
         )
 
     def test_flatr(self):
-        """Testing flag r """
+        """Testing flag r"""
         self.assertModule(
             "v.extract", input=self.geology, output=self.output, flags="r", cats=1
         )
