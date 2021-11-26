@@ -714,12 +714,11 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
     backup_howto = _(
         "Please create a backup of your temporal database "
-        "to avoid losing data.\nSOLUTION: "
+        "to avoid losing data.\n"
     )
     if tgis_db_version > 2:
         backup_howto += _(
-            "Run t.upgrade command installed from "
-            "GRASS Addons in order to upgrade your temporal database.\n"
+            "Run t.upgrade command in order to upgrade your temporal database.\n"
         )
     else:
         backup_howto += _(
@@ -780,12 +779,13 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         tgis_db_version_meta = get_tgis_db_version_from_metadata(metadata)
         if tgis_db_version_meta != tgis_db_version:
             message = _(
-                "Temporal database version mismatch detected."
-                "\n {backup}Supported temporal database version"
-                " is: {tdb}\nCurrent temporal database info:"
-                "{info}".format(
+                "Temporal database version mismatch detected.\n{backup}"
+                "Supported temporal database version is: {tdb}\n"
+                "Your existing temporal database version: {ctdb}\n"
+                "Current temporal database info: {info}".format(
                     backup=backup_howto,
                     tdb=tgis_db_version,
+                    ctdb=tgis_db_version_meta,
                     info=get_database_info_string(),
                 )
             )
