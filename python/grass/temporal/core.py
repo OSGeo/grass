@@ -713,8 +713,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
             db_exists = True
 
     backup_howto = _(
-        "Please create a backup of your temporal database "
-        "to avoid losing data.\n"
+        "Please create a backup of your temporal database to avoid losing data.\n"
     )
     if tgis_db_version > 2:
         backup_howto += _("Run t.upgrade command to upgrade your temporal database.\n")
