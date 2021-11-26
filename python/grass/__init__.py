@@ -54,11 +54,8 @@ import os
 # - https://www.wefearchange.org/2012/06/the-right-way-to-internationalize-your.html
 
 
-def _import_user_settings():
-    """Import UserSettings
-
-    Required for getting user defined language.
-    """
+def _get_lang_from_user_settings():
+    """Get language from user settings"""
     try:
         import gettext
         from grass.script.setup import set_gui_path
@@ -69,7 +66,7 @@ def _import_user_settings():
         global _UserSettings
         from core.settings import UserSettings as _UserSettings
     except ModuleNotFoundError:  # during compilation, and tests (without wxGUI)
-        pass
+        _UserSettings = None
 
 
 def _translate(text):
@@ -93,48 +90,43 @@ def _translate(text):
             # does not raise an exception even if the locale settings is broken
             # or the translation files were not installed.
             fallback = True
-            translation = None
-            domains = ("grasslibs", "grassmods", "grasswxpy")
+            lang = None
 
-            def apply_trans(kwargs):
-                nonlocal translation
-                if kwargs["domain"] == "grasslibs":
-                    translation = gettext.translation(**kwargs)
-                else:
-                    translation.add_fallback(gettext.translation(**kwargs))
-
-            try:
+            if _UserSettings:
                 # Get user defined lang
-                lang = _UserSettings.Get(
-                    group="language",
-                    key="locale",
-                    subkey="lc_all",
-                )
-            except NameError:
-                # If _UserSettings isn't imported during tests (without wxGUI)
-                lang = None
+                lang = [
+                    _UserSettings.Get(
+                        group="language",
+                        key="locale",
+                        subkey="lc_all",
+                    )
+                ]
+                if lang.count(None):
+                    lang = None
 
-            if lang and lang not in ("en", "system"):
-                for domain in domains:
-                    apply_trans(
-                        {
-                            "domain": domain,
-                            "localedir": locale_dir,
-                            "fallback": fallback,
-                            "languages": (lang,),
-                        }
-                    )
-            elif lang == "en":
-                translation = gettext.NullTranslations()
-            else:
-                for domain in domains:
-                    apply_trans(
-                        {
-                            "domain": domain,
-                            "localedir": locale_dir,
-                            "fallback": fallback,
-                        }
-                    )
+            translation = gettext.translation(
+                "grasslibs",
+                locale_dir,
+                fallback=fallback,
+                languages=lang,
+            )
+            # Add other domains as fallback.
+            translation.add_fallback(
+                gettext.translation(
+                    "grassmods",
+                    locale_dir,
+                    fallback=fallback,
+                    languages=lang,
+                )
+            )
+            translation.add_fallback(
+                gettext.translation(
+                    "grasswxpy",
+                    locale_dir,
+                    fallback=fallback,
+                    languages=lang,
+                )
+            )
             # Store the resulting translation object.
             _translate.translation = translation
         except (KeyError, ImportError):
@@ -147,7 +139,7 @@ def _translate(text):
 # Initialize the translation attribute of the translate function to indicate
 # that the translations are not initialized.
 _translate.translation = None
-_import_user_settings()
+_get_lang_from_user_settings()
 _builtins.__dict__["_"] = _translate
 
 
