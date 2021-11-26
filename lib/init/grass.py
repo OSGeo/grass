@@ -1370,21 +1370,26 @@ def set_language(grass_config_dir):
     # See discussion for Windows not following its own documentation and
     # not accepting ISO codes as valid locale identifiers
     # http://bugs.python.org/issue10466
-    language = "None"  # Such string sometimes is present in wx file
+    # As this code relies heavily on various locale calls, it is necessary
+    # to track related python changes:
+    # https://bugs.python.org/issue43557
     encoding = None
 
     # Override value is stored in wxGUI preferences file.
-    with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
-        try:
-            language = json.load(json_file)["language"]["locale"]["lc_all"]
-        except KeyError:
-            language = None
+    try:
+        with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
+            try:
+                language = json.load(json_file)["language"]["locale"]["lc_all"]
+            except KeyError:
+                language = None
+    except FileNotFoundError:
+        language = None
 
     # Backwards compatibility with old wx preferences files
     if language == "C":
         language = "en"
 
-    if language == "None" or language == "" or not language:
+    if not language:
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
