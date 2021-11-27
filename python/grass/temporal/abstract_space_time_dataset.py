@@ -2579,6 +2579,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
 
+        # check version
+        idx = sql.find("-- VERSION")
+        if idx > -1:
+            from .core import get_tgis_db_version_from_metadata
+            version = int(sql[idx+len("-- VERSION ")])
+            if get_tgis_db_version_from_metadata() < version:
+                sql = sql[:idx] # remove version-relevant code
+
         sql_script += sql
         sql_script += "\n"
 
