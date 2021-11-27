@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *flag_l, *flag_c, *flag_m, *flag_f, *flag_t;
     struct Option *input, *format, *type, *output, *createopt, *metaopt,
-        *nodataopt, *overviewopt, *scaleopt;
+        *nodataopt, *overviewopt, *offsetopt, *scaleopt;
 
     struct Cell_head cellhead;
     struct Ref ref;
@@ -250,6 +250,15 @@ int main(int argc, char *argv[])
     overviewopt->multiple = NO;
     overviewopt->required = NO;
     overviewopt->guisection = _("Creation");
+
+    offsetopt = G_define_option();
+    offsetopt->key = "offset";
+    offsetopt->type = TYPE_DOUBLE;
+    offsetopt->description =
+	_("Assign a specified offset value to output bands");
+    offsetopt->multiple = NO;
+    offsetopt->required = NO;
+    offsetopt->guisection = _("Creation");
 
     scaleopt = G_define_option();
     scaleopt->key = "scale";
@@ -595,6 +604,13 @@ int main(int argc, char *argv[])
 	    set_default_nodata_value(datatype, export_min, export_max);
     }
 
+    /* Offset value */
+    double *offsetval = NULL; /* not defined */
+    if (offsetopt->answer != NULL) {
+        offsetval = (double *) G_malloc(sizeof(double));
+        *offsetval = atof(offsetopt->answer);
+    }
+
     /* Scale value */
     double *scaleval = NULL; /* not defined */
     if (scaleopt->answer != NULL) {
@@ -724,7 +740,7 @@ int main(int argc, char *argv[])
 	    (hCurrDS, band + 1, ref.file[band].name,
 	     ref.file[band].mapset, &cellhead, maptype, nodataval,
 	     flag_c->answer, flag_m->answer, (nodataopt->answer != NULL),
-             scaleval);
+             offsetval, scaleval);
 
 	/* read/write error */
 	if (retval == -1) {
