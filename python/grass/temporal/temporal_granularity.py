@@ -18,7 +18,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from __future__ import print_function
-from .datetime_math import *
+from .datetime_math import compute_datetime_delta
 from functools import reduce
 from collections import OrderedDict
 import ast
@@ -1195,7 +1195,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
 
 
 def gcd(a, b):
-    """The Euclidean Algorithm """
+    """The Euclidean Algorithm"""
     a = abs(a)
     b = abs(b)
     while a:

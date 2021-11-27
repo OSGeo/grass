@@ -49,8 +49,7 @@ subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
     if (first) {
 	int i;
 
-	I_InitSigSet(&min_S);
-	I_SigSetNBands(&min_S, nbands);
+	I_InitSigSet(&min_S, nbands);
 	min_Sig = I_NewClassSig(&min_S);
 
 	/* allocate enough subsignatures in scratch space */
@@ -406,8 +405,7 @@ reduce_order(struct ClassSig *Sig, int nbands, int *min_ii, int *min_jj)
 
     /* allocate scratch space first time subroutine is called */
     if (first) {
-	I_InitSigSet(&S);
-	I_SigSetNBands(&S, nbands);
+	I_InitSigSet(&S, nbands);
 	Sig3 = I_NewClassSig(&S);
 	I_NewSubSig(&S, Sig3);
 	SubSig3 = Sig3->SubSig;
@@ -486,8 +484,7 @@ distance(struct SubSig *SubSig1, struct SubSig *SubSig2, int nbands)
 
     /* allocate scratch space first time subroutine is called */
     if (first) {
-	I_InitSigSet(&S);
-	I_SigSetNBands(&S, nbands);
+	I_InitSigSet(&S, nbands);
 	Sig3 = I_NewClassSig(&S);
 	I_NewSubSig(&S, Sig3);
 	SubSig3 = Sig3->SubSig;

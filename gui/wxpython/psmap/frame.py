@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+
 if sys.version_info.major == 2:
     import Queue
 else:
@@ -26,9 +27,9 @@ from math import sin, cos, pi, sqrt
 import wx
 
 try:
-    import wx.lib.agw.flatnotebook as fnb
+    import wx.lib.agw.flatnotebook as FN
 except ImportError:
-    import wx.lib.flatnotebook as fnb
+    import wx.lib.flatnotebook as FN
 
 import grass.script as grass
 
@@ -40,6 +41,7 @@ from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings
 from core.utils import PilImageToWxImage
 from gui_core.forms import GUI
+from gui_core.widgets import GNotebook
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
 from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
@@ -52,9 +54,9 @@ from psmap.utils import *
 
 
 class PsMapFrame(wx.Frame):
-
-    def __init__(self, parent=None, id=wx.ID_ANY,
-                 title=_("Cartographic Composer"), **kwargs):
+    def __init__(
+        self, parent=None, id=wx.ID_ANY, title=_("Cartographic Composer"), **kwargs
+    ):
         """Main window of ps.map GUI
 
         :param parent: parent window
@@ -66,31 +68,22 @@ class PsMapFrame(wx.Frame):
         self.parent = parent
 
         wx.Frame.__init__(
-            self,
-            parent=parent,
-            id=id,
-            title=title,
-            name="PsMap",
-            **kwargs)
+            self, parent=parent, id=id, title=title, name="PsMap", **kwargs
+        )
         self.SetIcon(
-            wx.Icon(
-                os.path.join(
-                    globalvar.ICONDIR,
-                    'grass.ico'),
-                wx.BITMAP_TYPE_ICO))
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
+        )
         # menubar
         self.menubar = Menu(
-            parent=self,
-            model=PsMapMenuData().GetModel(
-                separators=True))
+            parent=self, model=PsMapMenuData().GetModel(separators=True)
+        )
         self.SetMenuBar(self.menubar)
         # toolbar
 
         self._toolSwitcher = ToolSwitcher()
-        self.toolbar = PsMapToolbar(
-            parent=self, toolSwitcher=self._toolSwitcher)
+        self.toolbar = PsMapToolbar(parent=self, toolSwitcher=self._toolSwitcher)
         # workaround for http://trac.wxwidgets.org/ticket/13888
-        if sys.platform != 'darwin':
+        if sys.platform != "darwin":
             self.SetToolBar(self.toolbar)
 
         self.iconsize = (16, 16)
@@ -100,49 +93,49 @@ class PsMapFrame(wx.Frame):
         # mouse attributes -- position on the screen, begin and end of
         # dragging, and type of drawing
         self.mouse = {
-            'begin': [0, 0],  # screen coordinates
-            'end': [0, 0],
-            'use': "pointer",
+            "begin": [0, 0],  # screen coordinates
+            "end": [0, 0],
+            "use": "pointer",
         }
         # available cursors
         self.cursors = {
             "default": StockCursor(wx.CURSOR_ARROW),
             "cross": StockCursor(wx.CURSOR_CROSS),
             "hand": StockCursor(wx.CURSOR_HAND),
-            "sizenwse": StockCursor(wx.CURSOR_SIZENWSE)
+            "sizenwse": StockCursor(wx.CURSOR_SIZENWSE),
         }
         # pen and brush
         self.pen = {
-            'paper': wx.Pen(colour="BLACK", width=1),
-            'margins': wx.Pen(colour="GREY", width=1),
-            'map': wx.Pen(colour=wx.Colour(86, 122, 17), width=2),
-            'rasterLegend': wx.Pen(colour=wx.Colour(219, 216, 4), width=2),
-            'vectorLegend': wx.Pen(colour=wx.Colour(219, 216, 4), width=2),
-            'mapinfo': wx.Pen(colour=wx.Colour(5, 184, 249), width=2),
-            'scalebar': wx.Pen(colour=wx.Colour(150, 150, 150), width=2),
-            'image': wx.Pen(colour=wx.Colour(255, 150, 50), width=2),
-            'northArrow': wx.Pen(colour=wx.Colour(200, 200, 200), width=2),
-            'point': wx.Pen(colour=wx.Colour(100, 100, 100), width=2),
-            'line': wx.Pen(colour=wx.Colour(0, 0, 0), width=2),
-            'box': wx.Pen(colour='RED', width=2, style=wx.SHORT_DASH),
-            'select': wx.Pen(colour='BLACK', width=1, style=wx.SHORT_DASH),
-            'resize': wx.Pen(colour='BLACK', width=1)
+            "paper": wx.Pen(colour="BLACK", width=1),
+            "margins": wx.Pen(colour="GREY", width=1),
+            "map": wx.Pen(colour=wx.Colour(86, 122, 17), width=2),
+            "rasterLegend": wx.Pen(colour=wx.Colour(219, 216, 4), width=2),
+            "vectorLegend": wx.Pen(colour=wx.Colour(219, 216, 4), width=2),
+            "mapinfo": wx.Pen(colour=wx.Colour(5, 184, 249), width=2),
+            "scalebar": wx.Pen(colour=wx.Colour(150, 150, 150), width=2),
+            "image": wx.Pen(colour=wx.Colour(255, 150, 50), width=2),
+            "northArrow": wx.Pen(colour=wx.Colour(200, 200, 200), width=2),
+            "point": wx.Pen(colour=wx.Colour(100, 100, 100), width=2),
+            "line": wx.Pen(colour=wx.Colour(0, 0, 0), width=2),
+            "box": wx.Pen(colour="RED", width=2, style=wx.SHORT_DASH),
+            "select": wx.Pen(colour="BLACK", width=1, style=wx.SHORT_DASH),
+            "resize": wx.Pen(colour="BLACK", width=1),
         }
         self.brush = {
-            'paper': wx.WHITE_BRUSH,
-            'margins': wx.TRANSPARENT_BRUSH,
-            'map': wx.Brush(wx.Colour(151, 214, 90)),
-            'rasterLegend': wx.Brush(wx.Colour(250, 247, 112)),
-            'vectorLegend': wx.Brush(wx.Colour(250, 247, 112)),
-            'mapinfo': wx.Brush(wx.Colour(127, 222, 252)),
-            'scalebar': wx.Brush(wx.Colour(200, 200, 200)),
-            'image': wx.Brush(wx.Colour(255, 200, 50)),
-            'northArrow': wx.Brush(wx.Colour(255, 255, 255)),
-            'point': wx.Brush(wx.Colour(200, 200, 200)),
-            'line': wx.TRANSPARENT_BRUSH,
-            'box': wx.TRANSPARENT_BRUSH,
-            'select': wx.TRANSPARENT_BRUSH,
-            'resize': wx.BLACK_BRUSH
+            "paper": wx.WHITE_BRUSH,
+            "margins": wx.TRANSPARENT_BRUSH,
+            "map": wx.Brush(wx.Colour(151, 214, 90)),
+            "rasterLegend": wx.Brush(wx.Colour(250, 247, 112)),
+            "vectorLegend": wx.Brush(wx.Colour(250, 247, 112)),
+            "mapinfo": wx.Brush(wx.Colour(127, 222, 252)),
+            "scalebar": wx.Brush(wx.Colour(200, 200, 200)),
+            "image": wx.Brush(wx.Colour(255, 200, 50)),
+            "northArrow": wx.Brush(wx.Colour(255, 255, 255)),
+            "point": wx.Brush(wx.Colour(200, 200, 200)),
+            "line": wx.TRANSPARENT_BRUSH,
+            "box": wx.TRANSPARENT_BRUSH,
+            "select": wx.TRANSPARENT_BRUSH,
+            "resize": wx.BLACK_BRUSH,
         }
 
         # list of objects to draw
@@ -153,12 +146,13 @@ class PsMapFrame(wx.Frame):
 
         # instructions
         self.instruction = Instruction(
-            parent=self, objectsToDraw=self.objectId, env=self.env)
+            parent=self, objectsToDraw=self.objectId, env=self.env
+        )
         # open dialogs
         self.openDialogs = dict()
 
         self.pageId = NewId()
-        # current page of flatnotebook
+        # current page of GNotebook
         self.currentPage = 0
         # canvas for draft mode
         self.canvas = PsMapBufferedWindow(
@@ -172,7 +166,8 @@ class PsMapFrame(wx.Frame):
             pageId=self.pageId,
             objectId=self.objectId,
             preview=False,
-            env=self.env)
+            env=self.env,
+        )
 
         self.canvas.SetCursor(self.cursors["default"])
         self.getInitMap()
@@ -189,7 +184,8 @@ class PsMapFrame(wx.Frame):
             pen=self.pen,
             brush=self.brush,
             preview=True,
-            env=self.env)
+            env=self.env,
+        )
 
         self.toolbar.SelectDefault()
 
@@ -204,7 +200,7 @@ class PsMapFrame(wx.Frame):
         # workaround for http://trac.wxwidgets.org/ticket/13628
         self.SetSize(self.GetBestSize())
 
-        self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
 
@@ -212,26 +208,21 @@ class PsMapFrame(wx.Frame):
             wx.CallAfter(self._showErrMsg)
 
     def _showErrMsg(self):
-        """Show error message (missing preview)
-        """
-        GError(parent=self,
-               message=_("Python Imaging Library is not available.\n"
-                         "'Preview' functionality won't work."),
-               showTraceback=False)
+        """Show error message (missing preview)"""
+        GError(
+            parent=self,
+            message=_(
+                "Python Imaging Library is not available.\n"
+                "'Preview' functionality won't work."
+            ),
+            showTraceback=False,
+        )
 
     def _layout(self):
-        """Do layout
-        """
+        """Do layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        if globalvar.hasAgw:
-            self.book = fnb.FlatNotebook(parent=self,
-                                         id=wx.ID_ANY,
-                                         agwStyle=globalvar.FNPageDStyle)
-        else:
-            self.book = fnb.FlatNotebook(parent=self,
-                                         id=wx.ID_ANY,
-                                         style=globalvar.FNPageDStyle)
 
+        self.book = GNotebook(parent=self, style=globalvar.FNPageDStyle)
         self.book.AddPage(self.canvas, "Draft mode")
         self.book.AddPage(self.previewCanvas, "Preview")
         self.book.SetSelection(0)
@@ -248,8 +239,8 @@ class PsMapFrame(wx.Frame):
 
         :return bool: False if map frame doesn't exists
         """
-        if self.instruction.FindInstructionByType('map'):
-            mapId = self.instruction.FindInstructionByType('map').id
+        if self.instruction.FindInstructionByType("map"):
+            mapId = self.instruction.FindInstructionByType("map").id
         else:
             mapId = None
 
@@ -272,39 +263,46 @@ class PsMapFrame(wx.Frame):
 
         text = str(self.instruction)
         try:
-            text = text.encode('Latin_1')
+            text = text.encode("Latin_1")
         except UnicodeEncodeError as err:
             try:
-                pos = str(err).split('position')[1].split(':')[0].strip()
+                pos = str(err).split("position")[1].split(":")[0].strip()
             except IndexError:
-                pos = ''
+                pos = ""
             if pos:
-                message = _("Characters on position %s are not supported "
-                            "by ISO-8859-1 (Latin 1) encoding "
-                            "which is required by module ps.map.") % pos
+                message = (
+                    _(
+                        "Characters on position %s are not supported "
+                        "by ISO-8859-1 (Latin 1) encoding "
+                        "which is required by module ps.map."
+                    )
+                    % pos
+                )
             else:
-                message = _("Not all characters are supported "
-                            "by ISO-8859-1 (Latin 1) encoding "
-                            "which is required by module ps.map.")
+                message = _(
+                    "Not all characters are supported "
+                    "by ISO-8859-1 (Latin 1) encoding "
+                    "which is required by module ps.map."
+                )
             GMessage(message=message)
-            return ''
+            return ""
         return text
 
     def OnPSFile(self, event):
         """Generate PostScript"""
         filename = self.getFile(
-            wildcard="PostScript (*.ps)|*.ps|Encapsulated PostScript (*.eps)|*.eps")
+            wildcard="PostScript (*.ps)|*.ps|Encapsulated PostScript (*.eps)|*.eps"
+        )
         if filename:
             self.PSFile(filename)
 
     def OnPsMapDialog(self, event):
-        """Launch ps.map dialog
-        """
-        GUI(parent=self).ParseCommand(cmd=['ps.map'])
+        """Launch ps.map dialog"""
+        GUI(parent=self).ParseCommand(cmd=["ps.map"])
 
     def OnPDFFile(self, event):
         """Generate PDF from PS with ps2pdf if available"""
-        if not sys.platform == 'win32':
+        if not sys.platform == "win32":
             try:
                 p = grass.Popen(["ps2pdf"], stderr=grass.PIPE)
                 p.stderr.close()
@@ -313,7 +311,9 @@ class PsMapFrame(wx.Frame):
                 GMessage(
                     parent=self,
                     message=_(
-                        "Program ps2pdf is not available. Please install it first to create PDF."))
+                        "Program ps2pdf is not available. Please install it first to create PDF."
+                    ),
+                )
                 return
 
         filename = self.getFile(wildcard="PDF (*.pdf)|*.pdf")
@@ -327,7 +327,7 @@ class PsMapFrame(wx.Frame):
     def PSFile(self, filename=None, pdf=False):
         """Create temporary instructions file and run ps.map with output = filename"""
         instrFile = grass.tempfile()
-        instrFileFd = open(instrFile, mode='wb')
+        instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
         if not content:
             return
@@ -342,40 +342,45 @@ class PsMapFrame(wx.Frame):
             pdfname = filename
         else:
             pdfname = None
-        #preview or pdf
+        # preview or pdf
         if not filename or (filename and pdf):
             temp = True
             filename = grass.tempfile()
             if not pdf:  # lower resolution for preview
-                if self.instruction.FindInstructionByType('map'):
-                    mapId = self.instruction.FindInstructionByType('map').id
-                    SetResolution(dpi=100, width=self.instruction[mapId]['rect'][
-                                  2], height=self.instruction[mapId]['rect'][3],
-                                  env=self.env)
+                if self.instruction.FindInstructionByType("map"):
+                    mapId = self.instruction.FindInstructionByType("map").id
+                    SetResolution(
+                        dpi=100,
+                        width=self.instruction[mapId]["rect"][2],
+                        height=self.instruction[mapId]["rect"][3],
+                        env=self.env,
+                    )
 
-        cmd = ['ps.map', '--overwrite']
-        if os.path.splitext(filename)[1] == '.eps':
-            cmd.append('-e')
-        if self.instruction[self.pageId]['Orientation'] == 'Landscape':
-            cmd.append('-r')
-        cmd.append('input=%s' % instrFile)
-        cmd.append('output=%s' % filename)
+        cmd = ["ps.map", "--overwrite"]
+        if os.path.splitext(filename)[1] == ".eps":
+            cmd.append("-e")
+        if self.instruction[self.pageId]["Orientation"] == "Landscape":
+            cmd.append("-r")
+        cmd.append("input=%s" % instrFile)
+        cmd.append("output=%s" % filename)
         if pdf:
-            self.SetStatusText(_('Generating PDF...'), 0)
+            self.SetStatusText(_("Generating PDF..."), 0)
         elif not temp:
-            self.SetStatusText(_('Generating PostScript...'), 0)
+            self.SetStatusText(_("Generating PostScript..."), 0)
         else:
-            self.SetStatusText(_('Generating preview...'), 0)
+            self.SetStatusText(_("Generating preview..."), 0)
 
         self.cmdThread.RunCmd(
             cmd,
             env=self.env,
             userData={
-                'instrFile': instrFile,
-                'filename': filename,
-                'pdfname': pdfname,
-                'temp': temp,
-                'regionOld': regOld})
+                "instrFile": instrFile,
+                "filename": filename,
+                "pdfname": pdfname,
+                "temp": temp,
+                "regionOld": regOld,
+            },
+        )
 
     def OnCmdDone(self, event):
         """ps.map process finished"""
@@ -383,137 +388,157 @@ class PsMapFrame(wx.Frame):
         if event.returncode != 0:
             GMessage(
                 parent=self,
-                message=_("Ps.map exited with return code %s") %
-                event.returncode)
+                message=_("Ps.map exited with return code %s") % event.returncode,
+            )
 
-            grass.try_remove(event.userData['instrFile'])
-            if event.userData['temp']:
-                grass.try_remove(event.userData['filename'])
+            grass.try_remove(event.userData["instrFile"])
+            if event.userData["temp"]:
+                grass.try_remove(event.userData["filename"])
             return
 
-        if event.userData['pdfname']:
-            if sys.platform == 'win32':
-                command = ['gswin32c',
-                           '-P-', '-dSAFER',
-                           '-dCompatibilityLevel=1.4',
-                           '-q', '-P-',
-                           '-dNOPAUSE', '-dBATCH',
-                           '-sDEVICE=pdfwrite',
-                           '-dPDFSETTINGS=/prepress', '-r1200',
-                           '-sstdout=%stderr',
-                           '-sOutputFile=%s' % event.userData['pdfname'],
-                           '-P-', '-dSAFER',
-                           '-dCompatibilityLevel=1.4',
-                           '-c', '.setpdfwrite', '-f',
-                           event.userData['filename']]
+        if event.userData["pdfname"]:
+            if sys.platform == "win32":
+                command = [
+                    "gswin32c",
+                    "-P-",
+                    "-dSAFER",
+                    "-dCompatibilityLevel=1.4",
+                    "-q",
+                    "-P-",
+                    "-dNOPAUSE",
+                    "-dBATCH",
+                    "-sDEVICE=pdfwrite",
+                    "-dPDFSETTINGS=/prepress",
+                    "-r1200",
+                    "-sstdout=%stderr",
+                    "-sOutputFile=%s" % event.userData["pdfname"],
+                    "-P-",
+                    "-dSAFER",
+                    "-dCompatibilityLevel=1.4",
+                    "-c",
+                    "30000000",
+                    "setvmthreshold",
+                    "-f",
+                    event.userData["filename"],
+                ]
             else:
                 command = [
-                    'ps2pdf',
-                    '-dPDFSETTINGS=/prepress',
-                    '-r1200',
-                    event.userData['filename'],
-                    event.userData['pdfname']]
+                    "ps2pdf",
+                    "-dPDFSETTINGS=/prepress",
+                    "-r1200",
+                    event.userData["filename"],
+                    event.userData["pdfname"],
+                ]
             try:
                 proc = grass.Popen(command)
                 ret = proc.wait()
                 if ret > 0:
                     GMessage(
                         parent=self,
-                        message=_("%(prg)s exited with return code %(code)s") % {
-                            'prg': command[0],
-                            'code': ret})
+                        message=_("%(prg)s exited with return code %(code)s")
+                        % {"prg": command[0], "code": ret},
+                    )
                 else:
-                    self.SetStatusText(_('PDF generated'), 0)
+                    self.SetStatusText(_("PDF generated"), 0)
             except OSError as e:
-                GError(parent=self, message=_(
-                    "Program ps2pdf is not available. Please install it to create PDF.\n\n %s") % e)
+                GError(
+                    parent=self,
+                    message=_(
+                        "Program ps2pdf is not available. Please install it to create PDF.\n\n %s"
+                    )
+                    % e,
+                )
 
-        elif not event.userData['temp']:
-            self.SetStatusText(_('PostScript file generated'), 0)
+        elif not event.userData["temp"]:
+            self.SetStatusText(_("PostScript file generated"), 0)
 
         # show preview only when user doesn't want to create ps or pdf
-        if havePILImage and event.userData[
-                'temp'] and not event.userData['pdfname']:
-            self.env['GRASS_REGION'] = grass.region_env(cols=event.userData['regionOld']['cols'],
-                                                        rows=event.userData['regionOld']['rows'],
-                                                        env=self.env)
+        if havePILImage and event.userData["temp"] and not event.userData["pdfname"]:
+            self.env["GRASS_REGION"] = grass.region_env(
+                cols=event.userData["regionOld"]["cols"],
+                rows=event.userData["regionOld"]["rows"],
+                env=self.env,
+            )
             # wx.BusyInfo does not display the message
-            busy = wx.BusyInfo(
-                _("Generating preview, wait please"),
-                parent=self)
+            busy = wx.BusyInfo(_("Generating preview, wait please"), parent=self)
             wx.GetApp().Yield()
             try:
-                im = PILImage.open(event.userData['filename'])
-                if self.instruction[self.pageId]['Orientation'] == 'Landscape':
+                im = PILImage.open(event.userData["filename"])
+                if self.instruction[self.pageId]["Orientation"] == "Landscape":
                     import numpy as np
+
                     im_array = np.array(im)
                     im = PILImage.fromarray(np.rot90(im_array, 3))
 
                 # hack for Windows, change method for loading EPS
-                if sys.platform == 'win32':
+                if sys.platform == "win32":
                     import types
+
                     im.load = types.MethodType(loadPSForWindows, im)
-                im.save(self.imgName, format='PNG')
+                im.save(self.imgName, format="PNG")
             except (IOError, OSError) as e:
                 del busy
                 dlg = HyperlinkDialog(
-                    self, title=_("Preview not available"),
+                    self,
+                    title=_("Preview not available"),
                     message=_(
-                        "Preview is not available probably because Ghostscript is not installed or not on PATH."),
-                    hyperlink='http://trac.osgeo.org/grass/wiki/CompileOnWindows#Ghostscript',
-                    hyperlinkLabel=_(
-                        "Please follow instructions on GRASS Trac Wiki."))
+                        "Preview is not available probably because Ghostscript is not installed or not on PATH."
+                    ),
+                    hyperlink="http://trac.osgeo.org/grass/wiki/CompileOnWindows#Ghostscript",
+                    hyperlinkLabel=_("Please follow instructions on GRASS Trac Wiki."),
+                )
                 dlg.ShowModal()
                 dlg.Destroy()
                 return
 
             rect = self.previewCanvas.ImageRect()
-            self.previewCanvas.image = wx.Image(
-                self.imgName, wx.BITMAP_TYPE_PNG)
+            self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
             self.previewCanvas.DrawImage(rect=rect)
 
             del busy
-            self.SetStatusText(_('Preview generated'), 0)
+            self.SetStatusText(_("Preview generated"), 0)
             self.book.SetSelection(1)
             self.currentPage = 1
 
-        grass.try_remove(event.userData['instrFile'])
-        if event.userData['temp']:
-            grass.try_remove(event.userData['filename'])
+        grass.try_remove(event.userData["instrFile"])
+        if event.userData["temp"]:
+            grass.try_remove(event.userData["filename"])
 
-        self.delayedCall = wx.CallLater(
-            4000, lambda: self.SetStatusText("", 0))
+        self.delayedCall = wx.CallLater(4000, lambda: self.SetStatusText("", 0))
 
     def getFile(self, wildcard):
         suffix = []
-        for filter in wildcard.split('|')[1::2]:
-            s = filter.strip('*').split('.')[1]
+        for filter in wildcard.split("|")[1::2]:
+            s = filter.strip("*").split(".")[1]
             if s:
-                s = '.' + s
+                s = "." + s
             suffix.append(s)
-        raster = self.instruction.FindInstructionByType('raster')
+        raster = self.instruction.FindInstructionByType("raster")
         if raster:
             rasterId = raster.id
         else:
             rasterId = None
 
-        if rasterId and self.instruction[rasterId]['raster']:
-            mapName = self.instruction[rasterId][
-                'raster'].split('@')[0] + suffix[0]
+        if rasterId and self.instruction[rasterId]["raster"]:
+            mapName = self.instruction[rasterId]["raster"].split("@")[0] + suffix[0]
         else:
-            mapName = ''
+            mapName = ""
 
-        filename = ''
+        filename = ""
         dlg = wx.FileDialog(
-            self, message=_("Save file as"),
-            defaultDir="", defaultFile=mapName, wildcard=wildcard,
-            style=wx.FD_CHANGE_DIR | wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+            self,
+            message=_("Save file as"),
+            defaultDir="",
+            defaultFile=mapName,
+            wildcard=wildcard,
+            style=wx.FD_CHANGE_DIR | wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
             suffix = suffix[dlg.GetFilterIndex()]
             if not os.path.splitext(filename)[1]:
                 filename = filename + suffix
-            elif os.path.splitext(filename)[1] != suffix and suffix != '':
+            elif os.path.splitext(filename)[1] != suffix and suffix != "":
                 filename = os.path.splitext(filename)[0] + suffix
 
         dlg.Destroy()
@@ -521,7 +546,8 @@ class PsMapFrame(wx.Frame):
 
     def OnInstructionFile(self, event):
         filename = self.getFile(
-            wildcard="*.psmap|*.psmap|Text file(*.txt)|*.txt|All files(*.*)|*.*")
+            wildcard="*.psmap|*.psmap|Text file(*.txt)|*.txt|All files(*.*)|*.*"
+        )
         if filename:
             instrFile = open(filename, "wb")
             content = self.InstructionFile()
@@ -533,14 +559,15 @@ class PsMapFrame(wx.Frame):
     def OnLoadFile(self, event):
         """Launch file dialog and load selected file"""
         # find file
-        filename = ''
+        filename = ""
         dlg = wx.FileDialog(
             self,
             message="Find instructions file",
             defaultDir="",
-            defaultFile='',
+            defaultFile="",
             wildcard="All files (*.*)|*.*",
-            style=wx.FD_CHANGE_DIR | wx.FD_OPEN)
+            style=wx.FD_CHANGE_DIR | wx.FD_OPEN,
+        )
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
         dlg.Destroy()
@@ -552,7 +579,9 @@ class PsMapFrame(wx.Frame):
     def LoadFile(self, filename):
         """Load file and read instructions"""
         readObjectId = []
-        readInstruction = Instruction(parent=self, objectsToDraw=readObjectId, env=self.env)
+        readInstruction = Instruction(
+            parent=self, objectsToDraw=readObjectId, env=self.env
+        )
         ok = readInstruction.Read(filename)
         if not ok:
             GMessage(_("Failed to read file %s.") % filename)
@@ -560,7 +589,8 @@ class PsMapFrame(wx.Frame):
             self.instruction = self.canvas.instruction = readInstruction
             self.objectId = self.canvas.objectId = readObjectId
             self.pageId = self.canvas.pageId = self.instruction.FindInstructionByType(
-                'page').id
+                "page"
+            ).id
             self.canvas.UpdateMapLabel()
             self.canvas.dragId = -1
             self.canvas.Clear()
@@ -571,7 +601,7 @@ class PsMapFrame(wx.Frame):
 
     def OnPageSetup(self, event=None):
         """Specify paper size, margins and orientation"""
-        id = self.instruction.FindInstructionByType('page').id
+        id = self.instruction.FindInstructionByType("page").id
         dlg = PageSetupDialog(self, id=id, settings=self.instruction, env=self.env)
         dlg.CenterOnParent()
         val = dlg.ShowModal()
@@ -602,7 +632,7 @@ class PsMapFrame(wx.Frame):
         self.previewCanvas.SetCursor(self.cursors["cross"])
 
     def OnZoomAll(self, event):
-        self.mouseOld = self.mouse['use']
+        self.mouseOld = self.mouse["use"]
         if self.currentPage == 0:
             self.cursorOld = self.canvas.GetCursor()
         else:
@@ -621,19 +651,19 @@ class PsMapFrame(wx.Frame):
 
     def OnAddMap(self, event, notebook=False):
         """Add or edit map frame"""
-        if self.instruction.FindInstructionByType('map'):
-            mapId = self.instruction.FindInstructionByType('map').id
+        if self.instruction.FindInstructionByType("map"):
+            mapId = self.instruction.FindInstructionByType("map").id
         else:
             mapId = None
         id = [mapId, None, None]
 
         if notebook:
-            if self.instruction.FindInstructionByType('vector'):
-                vectorId = self.instruction.FindInstructionByType('vector').id
+            if self.instruction.FindInstructionByType("vector"):
+                vectorId = self.instruction.FindInstructionByType("vector").id
             else:
                 vectorId = None
-            if self.instruction.FindInstructionByType('raster'):
-                rasterId = self.instruction.FindInstructionByType('raster').id
+            if self.instruction.FindInstructionByType("raster"):
+                rasterId = self.instruction.FindInstructionByType("raster").id
             else:
                 rasterId = None
             id[1] = rasterId
@@ -644,37 +674,39 @@ class PsMapFrame(wx.Frame):
 
             if notebook:
                 # check map, raster, vector and save, destroy them
-                if 'map' in self.openDialogs:
-                    self.openDialogs['map'].OnOK(event=None)
-                if 'raster' in self.openDialogs:
-                    self.openDialogs['raster'].OnOK(event=None)
-                if 'vector' in self.openDialogs:
-                    self.openDialogs['vector'].OnOK(event=None)
+                if "map" in self.openDialogs:
+                    self.openDialogs["map"].OnOK(event=None)
+                if "raster" in self.openDialogs:
+                    self.openDialogs["raster"].OnOK(event=None)
+                if "vector" in self.openDialogs:
+                    self.openDialogs["vector"].OnOK(event=None)
 
-                if 'mapNotebook' not in self.openDialogs:
+                if "mapNotebook" not in self.openDialogs:
                     dlg = MapDialog(
                         parent=self,
                         id=id,
                         settings=self.instruction,
                         env=self.env,
-                        notebook=notebook)
-                    self.openDialogs['mapNotebook'] = dlg
-                self.openDialogs['mapNotebook'].Show()
+                        notebook=notebook,
+                    )
+                    self.openDialogs["mapNotebook"] = dlg
+                self.openDialogs["mapNotebook"].Show()
             else:
-                if 'mapNotebook' in self.openDialogs:
-                    self.openDialogs['mapNotebook'].notebook.ChangeSelection(0)
+                if "mapNotebook" in self.openDialogs:
+                    self.openDialogs["mapNotebook"].notebook.ChangeSelection(0)
                 else:
-                    if 'map' not in self.openDialogs:
+                    if "map" not in self.openDialogs:
                         dlg = MapDialog(
                             parent=self,
                             id=id,
                             settings=self.instruction,
                             env=self.env,
-                            notebook=notebook)
-                        self.openDialogs['map'] = dlg
-                    self.openDialogs['map'].Show()
+                            notebook=notebook,
+                        )
+                        self.openDialogs["map"] = dlg
+                    self.openDialogs["map"].Show()
 
-        else:    # sofar no map
+        else:  # sofar no map
             self.mouse["use"] = "addMap"
             self.canvas.SetCursor(self.cursors["cross"])
             if self.currentPage == 1:
@@ -683,125 +715,126 @@ class PsMapFrame(wx.Frame):
 
     def OnAddRaster(self, event):
         """Add raster map"""
-        if self.instruction.FindInstructionByType('raster'):
-            id = self.instruction.FindInstructionByType('raster').id
+        if self.instruction.FindInstructionByType("raster"):
+            id = self.instruction.FindInstructionByType("raster").id
         else:
             id = None
 
         if not self._checkMapFrameExists(type_id=id):
             return
 
-##        dlg = RasterDialog(self, id = id, settings = self.instruction)
-# dlg.ShowModal()
-        if 'mapNotebook' in self.openDialogs:
-            self.openDialogs['mapNotebook'].notebook.ChangeSelection(1)
+        ##        dlg = RasterDialog(self, id = id, settings = self.instruction)
+        # dlg.ShowModal()
+        if "mapNotebook" in self.openDialogs:
+            self.openDialogs["mapNotebook"].notebook.ChangeSelection(1)
         else:
-            if 'raster' not in self.openDialogs:
+            if "raster" not in self.openDialogs:
                 dlg = RasterDialog(self, id=id, settings=self.instruction, env=self.env)
-                self.openDialogs['raster'] = dlg
-            self.openDialogs['raster'].Show()
+                self.openDialogs["raster"] = dlg
+            self.openDialogs["raster"].Show()
 
     def OnAddVect(self, event):
         """Add vector map"""
-        if self.instruction.FindInstructionByType('vector'):
-            id = self.instruction.FindInstructionByType('vector').id
+        if self.instruction.FindInstructionByType("vector"):
+            id = self.instruction.FindInstructionByType("vector").id
         else:
             id = None
 
         if not self._checkMapFrameExists(type_id=id):
             return
 
-##        dlg = MainVectorDialog(self, id = id, settings = self.instruction)
-# dlg.ShowModal()
-        if 'mapNotebook' in self.openDialogs:
-            self.openDialogs['mapNotebook'].notebook.ChangeSelection(2)
+        ##        dlg = MainVectorDialog(self, id = id, settings = self.instruction)
+        # dlg.ShowModal()
+        if "mapNotebook" in self.openDialogs:
+            self.openDialogs["mapNotebook"].notebook.ChangeSelection(2)
         else:
-            if 'vector' not in self.openDialogs:
-                dlg = MainVectorDialog(self, id=id, settings=self.instruction, env=self.env)
-                self.openDialogs['vector'] = dlg
-            self.openDialogs['vector'].Show()
+            if "vector" not in self.openDialogs:
+                dlg = MainVectorDialog(
+                    self, id=id, settings=self.instruction, env=self.env
+                )
+                self.openDialogs["vector"] = dlg
+            self.openDialogs["vector"].Show()
 
     def OnAddScalebar(self, event):
         """Add scalebar"""
-        if projInfo()['proj'] == 'll':
-            GMessage(
-                message=_("Scalebar is not appropriate for this projection"))
+        if projInfo()["proj"] == "ll":
+            GMessage(message=_("Scalebar is not appropriate for this projection"))
             return
-        if self.instruction.FindInstructionByType('scalebar'):
-            id = self.instruction.FindInstructionByType('scalebar').id
+        if self.instruction.FindInstructionByType("scalebar"):
+            id = self.instruction.FindInstructionByType("scalebar").id
         else:
             id = None
 
-        if 'scalebar' not in self.openDialogs:
+        if "scalebar" not in self.openDialogs:
             dlg = ScalebarDialog(self, id=id, settings=self.instruction, env=self.env)
-            self.openDialogs['scalebar'] = dlg
-        self.openDialogs['scalebar'].Show()
+            self.openDialogs["scalebar"] = dlg
+        self.openDialogs["scalebar"].Show()
 
     def OnAddLegend(self, event, page=0):
         """Add raster or vector legend"""
-        if self.instruction.FindInstructionByType('rasterLegend'):
-            idR = self.instruction.FindInstructionByType('rasterLegend').id
+        if self.instruction.FindInstructionByType("rasterLegend"):
+            idR = self.instruction.FindInstructionByType("rasterLegend").id
         else:
             idR = None
-        if self.instruction.FindInstructionByType('vectorLegend'):
-            idV = self.instruction.FindInstructionByType('vectorLegend').id
+        if self.instruction.FindInstructionByType("vectorLegend"):
+            idV = self.instruction.FindInstructionByType("vectorLegend").id
         else:
             idV = None
 
-        if 'rasterLegend' not in self.openDialogs:
+        if "rasterLegend" not in self.openDialogs:
             dlg = LegendDialog(
-                self, id=[idR, idV],
-                settings=self.instruction, env=self.env, page=page)
-            self.openDialogs['rasterLegend'] = dlg
-            self.openDialogs['vectorLegend'] = dlg
-        self.openDialogs['rasterLegend'].notebook.ChangeSelection(page)
-        self.openDialogs['rasterLegend'].Show()
+                self, id=[idR, idV], settings=self.instruction, env=self.env, page=page
+            )
+            self.openDialogs["rasterLegend"] = dlg
+            self.openDialogs["vectorLegend"] = dlg
+        self.openDialogs["rasterLegend"].notebook.ChangeSelection(page)
+        self.openDialogs["rasterLegend"].Show()
 
     def OnAddMapinfo(self, event):
-        if self.instruction.FindInstructionByType('mapinfo'):
-            id = self.instruction.FindInstructionByType('mapinfo').id
+        if self.instruction.FindInstructionByType("mapinfo"):
+            id = self.instruction.FindInstructionByType("mapinfo").id
         else:
             id = None
 
-        if 'mapinfo' not in self.openDialogs:
+        if "mapinfo" not in self.openDialogs:
             dlg = MapinfoDialog(self, id=id, settings=self.instruction, env=self.env)
-            self.openDialogs['mapinfo'] = dlg
-        self.openDialogs['mapinfo'].Show()
+            self.openDialogs["mapinfo"] = dlg
+        self.openDialogs["mapinfo"].Show()
 
     def OnAddImage(self, event, id=None):
         """Show dialog for image adding and editing"""
         position = None
-        if 'image' in self.openDialogs:
-            position = self.openDialogs['image'].GetPosition()
-            self.openDialogs['image'].OnApply(event=None)
-            self.openDialogs['image'].Destroy()
+        if "image" in self.openDialogs:
+            position = self.openDialogs["image"].GetPosition()
+            self.openDialogs["image"].OnApply(event=None)
+            self.openDialogs["image"].Destroy()
         dlg = ImageDialog(self, id=id, settings=self.instruction, env=self.env)
-        self.openDialogs['image'] = dlg
+        self.openDialogs["image"] = dlg
         if position:
             dlg.SetPosition(position)
         dlg.Show()
 
     def OnAddNorthArrow(self, event, id=None):
         """Show dialog for north arrow adding and editing"""
-        if self.instruction.FindInstructionByType('northArrow'):
-            id = self.instruction.FindInstructionByType('northArrow').id
+        if self.instruction.FindInstructionByType("northArrow"):
+            id = self.instruction.FindInstructionByType("northArrow").id
         else:
             id = None
 
-        if 'northArrow' not in self.openDialogs:
+        if "northArrow" not in self.openDialogs:
             dlg = NorthArrowDialog(self, id=id, settings=self.instruction, env=self.env)
-            self.openDialogs['northArrow'] = dlg
-        self.openDialogs['northArrow'].Show()
+            self.openDialogs["northArrow"] = dlg
+        self.openDialogs["northArrow"].Show()
 
     def OnAddText(self, event, id=None):
         """Show dialog for text adding and editing"""
         position = None
-        if 'text' in self.openDialogs:
-            position = self.openDialogs['text'].GetPosition()
-            self.openDialogs['text'].OnApply(event=None)
-            self.openDialogs['text'].Destroy()
+        if "text" in self.openDialogs:
+            position = self.openDialogs["text"].GetPosition()
+            self.openDialogs["text"].OnApply(event=None)
+            self.openDialogs["text"].Destroy()
         dlg = TextDialog(self, id=id, settings=self.instruction, env=self.env)
-        self.openDialogs['text'] = dlg
+        self.openDialogs["text"] = dlg
         if position:
             dlg.SetPosition(position)
         dlg.Show()
@@ -819,13 +852,18 @@ class PsMapFrame(wx.Frame):
         :param coordinates: coordinates of new point
         """
         position = None
-        if 'point' in self.openDialogs:
-            position = self.openDialogs['point'].GetPosition()
-            self.openDialogs['point'].OnApply(event=None)
-            self.openDialogs['point'].Destroy()
-        dlg = PointDialog(self, id=id, settings=self.instruction,
-                          coordinates=coordinates, env=self.env)
-        self.openDialogs['point'] = dlg
+        if "point" in self.openDialogs:
+            position = self.openDialogs["point"].GetPosition()
+            self.openDialogs["point"].OnApply(event=None)
+            self.openDialogs["point"].Destroy()
+        dlg = PointDialog(
+            self,
+            id=id,
+            settings=self.instruction,
+            coordinates=coordinates,
+            env=self.env,
+        )
+        self.openDialogs["point"] = dlg
         if position:
             dlg.SetPosition(position)
         if coordinates:
@@ -845,14 +883,19 @@ class PsMapFrame(wx.Frame):
         :param coordinates: coordinates of new line
         """
         position = None
-        if 'line' in self.openDialogs:
-            position = self.openDialogs['line'].GetPosition()
-            self.openDialogs['line'].OnApply(event=None)
-            self.openDialogs['line'].Destroy()
-        dlg = RectangleDialog(self, id=id, settings=self.instruction,
-                              type='line', coordinates=coordinates,
-                              env=self.env)
-        self.openDialogs['line'] = dlg
+        if "line" in self.openDialogs:
+            position = self.openDialogs["line"].GetPosition()
+            self.openDialogs["line"].OnApply(event=None)
+            self.openDialogs["line"].Destroy()
+        dlg = RectangleDialog(
+            self,
+            id=id,
+            settings=self.instruction,
+            type="line",
+            coordinates=coordinates,
+            env=self.env,
+        )
+        self.openDialogs["line"] = dlg
         if position:
             dlg.SetPosition(position)
         if coordinates:
@@ -872,14 +915,19 @@ class PsMapFrame(wx.Frame):
         :param coordinates: coordinates of new rectangle
         """
         position = None
-        if 'rectangle' in self.openDialogs:
-            position = self.openDialogs['rectangle'].GetPosition()
-            self.openDialogs['rectangle'].OnApply(event=None)
-            self.openDialogs['rectangle'].Destroy()
-        dlg = RectangleDialog(self, id=id, settings=self.instruction,
-                              type='rectangle', coordinates=coordinates,
-                              env=self.env)
-        self.openDialogs['rectangle'] = dlg
+        if "rectangle" in self.openDialogs:
+            position = self.openDialogs["rectangle"].GetPosition()
+            self.openDialogs["rectangle"].OnApply(event=None)
+            self.openDialogs["rectangle"].Destroy()
+        dlg = RectangleDialog(
+            self,
+            id=id,
+            settings=self.instruction,
+            type="rectangle",
+            coordinates=coordinates,
+            env=self.env,
+        )
+        self.openDialogs["rectangle"] = dlg
         if position:
             dlg.SetPosition(position)
         if coordinates:
@@ -888,18 +936,18 @@ class PsMapFrame(wx.Frame):
 
     def OnAddLabels(self, event, id=None):
         """Show dialog for labels"""
-        if self.instruction.FindInstructionByType('labels'):
-            id = self.instruction.FindInstructionByType('labels').id
+        if self.instruction.FindInstructionByType("labels"):
+            id = self.instruction.FindInstructionByType("labels").id
         else:
             id = None
 
         if not self._checkMapFrameExists(type_id=id):
             return
 
-        if 'labels' not in self.openDialogs:
+        if "labels" not in self.openDialogs:
             dlg = LabelsDialog(self, id=id, settings=self.instruction, env=self.env)
-            self.openDialogs['labels'] = dlg
-        self.openDialogs['labels'].Show()
+            self.openDialogs["labels"] = dlg
+        self.openDialogs["labels"].Show()
 
     def getModifiedTextBounds(self, x, y, textExtent, rotation):
         """computes bounding box of rotated text, not very precisely"""
@@ -921,53 +969,55 @@ class PsMapFrame(wx.Frame):
         """creates a wx.Font object from selected postscript font. To be
         used for estimating bounding rectangle of text"""
 
-        fontsize = textDict['fontsize'] * self.canvas.currScale
-        fontface = textDict['font'].split('-')[0]
+        fontsize = textDict["fontsize"] * self.canvas.currScale
+        fontface = textDict["font"].split("-")[0]
         try:
-            fontstyle = textDict['font'].split('-')[1]
+            fontstyle = textDict["font"].split("-")[1]
         except IndexError:
-            fontstyle = ''
+            fontstyle = ""
 
         if fontface == "Times":
             family = wx.FONTFAMILY_ROMAN
             face = "times"
         elif fontface == "Helvetica":
             family = wx.FONTFAMILY_SWISS
-            face = 'helvetica'
+            face = "helvetica"
         elif fontface == "Courier":
             family = wx.FONTFAMILY_TELETYPE
-            face = 'courier'
+            face = "courier"
         else:
             family = wx.FONTFAMILY_DEFAULT
-            face = ''
+            face = ""
 
         style = wx.FONTSTYLE_NORMAL
         weight = wx.FONTWEIGHT_NORMAL
 
-        if 'Oblique' in fontstyle:
+        if "Oblique" in fontstyle:
             style = wx.FONTSTYLE_SLANT
 
-        if 'Italic' in fontstyle:
+        if "Italic" in fontstyle:
             style = wx.FONTSTYLE_ITALIC
 
-        if 'Bold' in fontstyle:
+        if "Bold" in fontstyle:
             weight = wx.FONTWEIGHT_BOLD
 
         try:
-            fn = wx.Font(pointSize=fontsize, family=family, style=style,
-                         weight=weight, face=face)
+            fn = wx.Font(
+                pointSize=fontsize, family=family, style=style, weight=weight, face=face
+            )
         except:
             fn = wx.Font(
                 pointSize=fontsize,
                 family=wx.FONTFAMILY_DEFAULT,
                 style=wx.FONTSTYLE_NORMAL,
-                weight=wx.FONTWEIGHT_NORMAL)
+                weight=wx.FONTWEIGHT_NORMAL,
+            )
 
         return fn
 
     def getTextExtent(self, textDict):
         """Estimates bounding rectangle of text"""
-        #fontsize = str(fontsize if fontsize >= 4 else 4)
+        # fontsize = str(fontsize if fontsize >= 4 else 4)
         # dc created because of method GetTextExtent, which pseudoDC lacks
         dc = ClientDC(self)
 
@@ -975,7 +1025,7 @@ class PsMapFrame(wx.Frame):
 
         try:
             dc.SetFont(fn)
-            w, h, lh = dc.GetFullMultiLineTextExtent(textDict['text'])
+            w, h, lh = dc.GetFullMultiLineTextExtent(textDict["text"])
             return (w, h)
         except:
             return (0, 0)
@@ -983,7 +1033,7 @@ class PsMapFrame(wx.Frame):
     def getInitMap(self):
         """Create default map frame when no map is selected, needed for coordinates in map units"""
         instrFile = grass.tempfile()
-        instrFileFd = open(instrFile, mode='wb')
+        instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
         if not content:
             return
@@ -991,21 +1041,20 @@ class PsMapFrame(wx.Frame):
         instrFileFd.flush()
         instrFileFd.close()
 
-        page = self.instruction.FindInstructionByType('page')
+        page = self.instruction.FindInstructionByType("page")
         mapInitRect = GetMapBounds(
-            instrFile, portrait=(
-                page['Orientation'] == 'Portrait'),
-            env=self.env)
+            instrFile, portrait=(page["Orientation"] == "Portrait"), env=self.env
+        )
         grass.try_remove(instrFile)
 
         region = grass.region(env=self.env)
         units = UnitConversion(self)
         realWidth = units.convert(
-            value=abs(region['w'] - region['e']),
-            fromUnit='meter', toUnit='inch')
+            value=abs(region["w"] - region["e"]), fromUnit="meter", toUnit="inch"
+        )
         scale = mapInitRect.Get()[2] / realWidth
 
-        initMap = self.instruction.FindInstructionByType('initMap')
+        initMap = self.instruction.FindInstructionByType("initMap")
         if initMap:
             id = initMap.id
         else:
@@ -1015,12 +1064,11 @@ class PsMapFrame(wx.Frame):
             id = NewId()
             initMap = InitMap(id, env=self.env)
             self.instruction.AddInstruction(initMap)
-        self.instruction[id].SetInstruction(
-            dict(rect=mapInitRect, scale=scale))
+        self.instruction[id].SetInstruction(dict(rect=mapInitRect, scale=scale))
 
     def OnDelete(self, event):
         if self.canvas.dragId != -1 and self.currentPage == 0:
-            if self.instruction[self.canvas.dragId].type == 'map':
+            if self.instruction[self.canvas.dragId].type == "map":
                 self.deleteObject(self.canvas.dragId)
                 self.getInitMap()
                 self.canvas.RecalculateEN()
@@ -1046,209 +1094,226 @@ class PsMapFrame(wx.Frame):
         for id in ids:
             itype = self.instruction[id].type
 
-            if itype in ('scalebar', 'mapinfo', 'image'):
+            if itype in ("scalebar", "mapinfo", "image"):
                 drawRectangle = self.canvas.CanvasPaperCoordinates(
-                    rect=self.instruction[id]['rect'], canvasToPaper=False)
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
                 self.canvas.UpdateLabel(itype=itype, id=id)
                 self.canvas.Draw(
                     pen=self.pen[itype],
                     brush=self.brush[itype],
                     pdc=self.canvas.pdcObj,
                     drawid=id,
-                    pdctype='rectText',
-                    bb=drawRectangle)
+                    pdctype="rectText",
+                    bb=drawRectangle,
+                )
                 self.canvas.RedrawSelectBox(id)
-            if itype == 'northArrow':
+            if itype == "northArrow":
                 self.canvas.UpdateLabel(itype=itype, id=id)
                 drawRectangle = self.canvas.CanvasPaperCoordinates(
-                    rect=self.instruction[id]['rect'], canvasToPaper=False)
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
                 self.canvas.Draw(
                     pen=self.pen[itype],
                     brush=self.brush[itype],
                     pdc=self.canvas.pdcObj,
                     drawid=id,
-                    pdctype='bitmap',
-                    bb=drawRectangle)
+                    pdctype="bitmap",
+                    bb=drawRectangle,
+                )
                 self.canvas.RedrawSelectBox(id)
 
-            if itype in ('point', 'line', 'rectangle'):
+            if itype in ("point", "line", "rectangle"):
                 drawRectangle = self.canvas.CanvasPaperCoordinates(
-                    rect=self.instruction[id]['rect'], canvasToPaper=False)
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
                 # coords only for line
                 coords = None
-                if itype == 'line':
-                    point1 = self.instruction[id]['where'][0]
-                    point2 = self.instruction[id]['where'][1]
+                if itype == "line":
+                    point1 = self.instruction[id]["where"][0]
+                    point2 = self.instruction[id]["where"][1]
                     point1Coords = self.canvas.CanvasPaperCoordinates(
-                        rect=Rect2DPS(point1, (0, 0)), canvasToPaper=False)[:2]
+                        rect=Rect2DPS(point1, (0, 0)), canvasToPaper=False
+                    )[:2]
                     point2Coords = self.canvas.CanvasPaperCoordinates(
-                        rect=Rect2DPS(point2, (0, 0)), canvasToPaper=False)[:2]
+                        rect=Rect2DPS(point2, (0, 0)), canvasToPaper=False
+                    )[:2]
                     coords = (point1Coords, point2Coords)
 
                 # fill color is not in line
                 fcolor = None
-                if 'fcolor' in self.instruction[id].GetInstruction():
-                    fcolor = self.instruction[id]['fcolor']
+                if "fcolor" in self.instruction[id].GetInstruction():
+                    fcolor = self.instruction[id]["fcolor"]
                 # width is not in point
                 width = None
-                if 'width' in self.instruction[id].GetInstruction():
-                    width = self.instruction[id]['width']
+                if "width" in self.instruction[id].GetInstruction():
+                    width = self.instruction[id]["width"]
 
                 self.canvas.DrawGraphics(
                     drawid=id,
-                    color=self.instruction[id]['color'],
+                    color=self.instruction[id]["color"],
                     shape=itype,
                     fcolor=fcolor,
                     width=width,
                     bb=drawRectangle,
-                    lineCoords=coords)
+                    lineCoords=coords,
+                )
 
                 self.canvas.RedrawSelectBox(id)
 
-            if itype == 'text':
+            if itype == "text":
 
-                if self.instruction[id]['rotate']:
-                    rot = float(self.instruction[id]['rotate'])
+                if self.instruction[id]["rotate"]:
+                    rot = float(self.instruction[id]["rotate"])
                 else:
                     rot = 0
 
                 extent = self.getTextExtent(
-                    textDict=self.instruction[id].GetInstruction())
-                rect = Rect2DPS(self.instruction[id]['where'], (0, 0))
-                self.instruction[id]['coords'] = list(
-                    self.canvas.CanvasPaperCoordinates(
-                        rect=rect, canvasToPaper=False)[: 2])
+                    textDict=self.instruction[id].GetInstruction()
+                )
+                rect = Rect2DPS(self.instruction[id]["where"], (0, 0))
+                self.instruction[id]["coords"] = list(
+                    self.canvas.CanvasPaperCoordinates(rect=rect, canvasToPaper=False)[
+                        :2
+                    ]
+                )
 
                 # computes text coordinates according to reference point, not
                 # precisely
-                if self.instruction[id]['ref'].split()[0] == 'lower':
-                    self.instruction[id]['coords'][1] -= extent[1]
-                elif self.instruction[id]['ref'].split()[0] == 'center':
-                    self.instruction[id]['coords'][1] -= extent[1] / 2
-                if self.instruction[id]['ref'].split()[1] == 'right':
-                    self.instruction[id]['coords'][
-                        0] -= extent[0] * cos(rot / 180 * pi)
-                    self.instruction[id]['coords'][
-                        1] += extent[0] * sin(rot / 180 * pi)
-                elif self.instruction[id]['ref'].split()[1] == 'center':
-                    self.instruction[id]['coords'][
-                        0] -= extent[0] / 2 * cos(rot / 180 * pi)
-                    self.instruction[id]['coords'][
-                        1] += extent[0] / 2 * sin(rot / 180 * pi)
+                if self.instruction[id]["ref"].split()[0] == "lower":
+                    self.instruction[id]["coords"][1] -= extent[1]
+                elif self.instruction[id]["ref"].split()[0] == "center":
+                    self.instruction[id]["coords"][1] -= extent[1] / 2
+                if self.instruction[id]["ref"].split()[1] == "right":
+                    self.instruction[id]["coords"][0] -= extent[0] * cos(rot / 180 * pi)
+                    self.instruction[id]["coords"][1] += extent[0] * sin(rot / 180 * pi)
+                elif self.instruction[id]["ref"].split()[1] == "center":
+                    self.instruction[id]["coords"][0] -= (
+                        extent[0] / 2 * cos(rot / 180 * pi)
+                    )
+                    self.instruction[id]["coords"][1] += (
+                        extent[0] / 2 * sin(rot / 180 * pi)
+                    )
 
-                self.instruction[id]['coords'][
-                    0] += self.instruction[id]['xoffset']
-                self.instruction[id]['coords'][
-                    1] -= self.instruction[id]['yoffset']
-                coords = self.instruction[id]['coords']
-                self.instruction[id]['rect'] = bounds = self.getModifiedTextBounds(
-                    coords[0], coords[1], extent, rot)
+                self.instruction[id]["coords"][0] += self.instruction[id]["xoffset"]
+                self.instruction[id]["coords"][1] -= self.instruction[id]["yoffset"]
+                coords = self.instruction[id]["coords"]
+                self.instruction[id]["rect"] = bounds = self.getModifiedTextBounds(
+                    coords[0], coords[1], extent, rot
+                )
                 self.canvas.DrawRotText(
-                    pdc=self.canvas.pdcObj, drawId=id,
+                    pdc=self.canvas.pdcObj,
+                    drawId=id,
                     textDict=self.instruction[id].GetInstruction(),
-                    coords=coords, bounds=bounds)
+                    coords=coords,
+                    bounds=bounds,
+                )
                 self.canvas.RedrawSelectBox(id)
 
-            if itype in ('map', 'vector', 'raster', 'labels'):
+            if itype in ("map", "vector", "raster", "labels"):
 
-                if itype == 'raster':  # set resolution
+                if itype == "raster":  # set resolution
                     try:
-                        info = grass.raster_info(self.instruction[id]['raster'])
-                        self.env['GRASS_REGION'] = grass.region_env(nsres=info['nsres'],
-                                                                    ewres=info['ewres'],
-                                                                    env=self.env)
+                        info = grass.raster_info(self.instruction[id]["raster"])
+                        self.env["GRASS_REGION"] = grass.region_env(
+                            nsres=info["nsres"], ewres=info["ewres"], env=self.env
+                        )
                     except grass.CalledModuleError:  # fails after switching location
                         pass
                     # change current raster in raster legend
 
-                if 'rasterLegend' in self.openDialogs:
-                    self.openDialogs['rasterLegend'].updateDialog()
-                id = self.instruction.FindInstructionByType('map').id
+                if "rasterLegend" in self.openDialogs:
+                    self.openDialogs["rasterLegend"].updateDialog()
+                id = self.instruction.FindInstructionByType("map").id
 
                 # check resolution
-                if itype == 'raster':
-                    SetResolution(dpi=self.instruction[id]['resolution'],
-                                  width=self.instruction[id]['rect'].width,
-                                  height=self.instruction[id]['rect'].height,
-                                  env=self.env)
+                if itype == "raster":
+                    SetResolution(
+                        dpi=self.instruction[id]["resolution"],
+                        width=self.instruction[id]["rect"].width,
+                        height=self.instruction[id]["rect"].height,
+                        env=self.env,
+                    )
                 rectCanvas = self.canvas.CanvasPaperCoordinates(
-                    rect=self.instruction[id]['rect'], canvasToPaper=False)
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
                 self.canvas.RecalculateEN()
                 self.canvas.UpdateMapLabel()
 
                 self.canvas.Draw(
-                    pen=self.pen['map'],
-                    brush=self.brush['map'],
+                    pen=self.pen["map"],
+                    brush=self.brush["map"],
                     pdc=self.canvas.pdcObj,
                     drawid=id,
-                    pdctype='rectText',
-                    bb=rectCanvas)
+                    pdctype="rectText",
+                    bb=rectCanvas,
+                )
                 # redraw select box
                 self.canvas.RedrawSelectBox(id)
                 self.canvas.pdcTmp.RemoveId(self.canvas.idZoomBoxTmp)
                 # redraw to get map to the bottom layer
-                #self.canvas.Zoom(zoomFactor = 1, view = (0, 0))
+                # self.canvas.Zoom(zoomFactor = 1, view = (0, 0))
 
-            if itype == 'rasterLegend':
-                if self.instruction[id]['rLegend']:
+            if itype == "rasterLegend":
+                if self.instruction[id]["rLegend"]:
                     self.canvas.UpdateLabel(itype=itype, id=id)
                     drawRectangle = self.canvas.CanvasPaperCoordinates(
-                        rect=self.instruction[id]['rect'], canvasToPaper=False)
+                        rect=self.instruction[id]["rect"], canvasToPaper=False
+                    )
                     self.canvas.Draw(
                         pen=self.pen[itype],
                         brush=self.brush[itype],
                         pdc=self.canvas.pdcObj,
                         drawid=id,
-                        pdctype='rectText',
-                        bb=drawRectangle)
+                        pdctype="rectText",
+                        bb=drawRectangle,
+                    )
                     self.canvas.RedrawSelectBox(id)
                 else:
                     self.deleteObject(id)
 
-            if itype == 'vectorLegend':
-                if not self.instruction.FindInstructionByType('vector'):
+            if itype == "vectorLegend":
+                if not self.instruction.FindInstructionByType("vector"):
                     self.deleteObject(id)
-                elif self.instruction[id]['vLegend']:
+                elif self.instruction[id]["vLegend"]:
                     self.canvas.UpdateLabel(itype=itype, id=id)
                     drawRectangle = self.canvas.CanvasPaperCoordinates(
-                        rect=self.instruction[id]['rect'], canvasToPaper=False)
+                        rect=self.instruction[id]["rect"], canvasToPaper=False
+                    )
                     self.canvas.Draw(
                         pen=self.pen[itype],
                         brush=self.brush[itype],
                         pdc=self.canvas.pdcObj,
                         drawid=id,
-                        pdctype='rectText',
-                        bb=drawRectangle)
+                        pdctype="rectText",
+                        bb=drawRectangle,
+                    )
                     self.canvas.RedrawSelectBox(id)
 
                 else:
                     self.deleteObject(id)
 
     def OnPageChanged(self, event):
-        """Flatnotebook page has changed"""
+        """GNotebook page has changed"""
         self.currentPage = self.book.GetPageIndex(self.book.GetCurrentPage())
         if self.currentPage == 1:
             self.SetStatusText(
-                _("Press button with green triangle icon to generate preview."))
+                _("Press button with green triangle icon to generate preview.")
+            )
         else:
-            self.SetStatusText('')
+            self.SetStatusText("")
 
     def OnHelp(self, event):
         """Show help"""
-        if self.parent and self.parent.GetName() == 'LayerManager':
+        if self.parent and self.parent.GetName() == "LayerManager":
             log = self.parent.GetLogWindow()
-            log.RunCmd(['g.manual',
-                        'entry=wxGUI.psmap'])
+            log.RunCmd(["g.manual", "entry=wxGUI.psmap"])
         else:
-            RunCommand('g.manual',
-                       quiet=True,
-                       entry='wxGUI.psmap')
+            RunCommand("g.manual", quiet=True, entry="wxGUI.psmap")
 
     def OnAbout(self, event):
         """Display About window"""
-        ShowAboutDialog(
-            prgName=_('wxGUI Cartographic Composer'),
-            startYear='2011')
+        ShowAboutDialog(prgName=_("wxGUI Cartographic Composer"), startYear="2011")
 
     def OnCloseWindow(self, event):
         """Close window"""
@@ -1257,7 +1322,7 @@ class PsMapFrame(wx.Frame):
         except OSError:
             pass
         grass.set_raise_on_error(False)
-        if hasattr(self, 'delayedCall') and self.delayedCall.IsRunning():
+        if hasattr(self, "delayedCall") and self.delayedCall.IsRunning():
             self.delayedCall.Stop()
         self.Destroy()
 
@@ -1265,9 +1330,9 @@ class PsMapFrame(wx.Frame):
 class PsMapBufferedWindow(wx.Window):
     """A buffered window class."""
 
-    def __init__(self, parent, id=wx.ID_ANY,
-                 style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 **kwargs):
+    def __init__(
+        self, parent, id=wx.ID_ANY, style=wx.NO_FULL_REPAINT_ON_RESIZE, **kwargs
+    ):
         """
         :param parent: parent window
         :param kwargs: other wx.Window parameters
@@ -1282,30 +1347,32 @@ class PsMapBufferedWindow(wx.Window):
         # indicates whether or not a resize event has taken place
         self.resize = False
 
-        self.mouse = kwargs['mouse']
-        self.cursors = kwargs['cursors']
-        self.preview = kwargs['preview']
-        self.pen = kwargs['pen']
-        self.brush = kwargs['brush']
+        self.mouse = kwargs["mouse"]
+        self.cursors = kwargs["cursors"]
+        self.preview = kwargs["preview"]
+        self.pen = kwargs["pen"]
+        self.brush = kwargs["brush"]
 
-        if 'instruction' in kwargs:
-            self.instruction = kwargs['instruction']
-        if 'openDialogs' in kwargs:
-            self.openDialogs = kwargs['openDialogs']
-        if 'pageId' in kwargs:
-            self.pageId = kwargs['pageId']
-        if 'objectId' in kwargs:
-            self.objectId = kwargs['objectId']
-        if 'env' in kwargs:
-            self.env = kwargs['env']
+        if "instruction" in kwargs:
+            self.instruction = kwargs["instruction"]
+        if "openDialogs" in kwargs:
+            self.openDialogs = kwargs["openDialogs"]
+        if "pageId" in kwargs:
+            self.pageId = kwargs["pageId"]
+        if "objectId" in kwargs:
+            self.objectId = kwargs["objectId"]
+        if "env" in kwargs:
+            self.env = kwargs["env"]
         # labels
-        self.itemLabelsDict = {'map': _("MAP FRAME"),
-                               'rasterLegend': _("RASTER LEGEND"),
-                               'vectorLegend': _("VECTOR LEGEND"),
-                               'mapinfo': _("MAP INFO"),
-                               'scalebar': _("SCALE BAR"),
-                               'image': _("IMAGE"),
-                               'northArrow': _("NORTH ARROW")}
+        self.itemLabelsDict = {
+            "map": _("MAP FRAME"),
+            "rasterLegend": _("RASTER LEGEND"),
+            "vectorLegend": _("VECTOR LEGEND"),
+            "mapinfo": _("MAP INFO"),
+            "scalebar": _("SCALE BAR"),
+            "image": _("IMAGE"),
+            "northArrow": _("NORTH ARROW"),
+        }
         self.itemLabels = {}
 
         # define PseudoDC
@@ -1347,8 +1414,7 @@ class PsMapBufferedWindow(wx.Window):
         self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
 
     def Clear(self):
-        """Clear canvas and set paper
-        """
+        """Clear canvas and set paper"""
         bg = wx.LIGHT_GREY_BRUSH
         self.pdcPaper.BeginDrawing()
         self.pdcPaper.SetBackground(bg)
@@ -1366,41 +1432,33 @@ class PsMapBufferedWindow(wx.Window):
 
         units = UnitConversion(self)
 
-        fromU = 'pixel'
-        toU = 'inch'
+        fromU = "pixel"
+        toU = "inch"
         pRect = self.pdcPaper.GetIdBounds(self.pageId)
         pRectx, pRecty = pRect.x, pRect.y
         scale = 1 / self.currScale
         if not canvasToPaper:  # paper -> canvas
-            fromU = 'inch'
-            toU = 'pixel'
+            fromU = "inch"
+            toU = "pixel"
             scale = self.currScale
-            pRectx = units.convert(
-                value=- pRect.x,
-                fromUnit='pixel',
-                toUnit='inch') / scale  # inch, real, negative
-            pRecty = units.convert(
-                value=- pRect.y,
-                fromUnit='pixel',
-                toUnit='inch') / scale
-        Width = units.convert(
-            value=rect.GetWidth(),
-            fromUnit=fromU,
-            toUnit=toU) * scale
-        Height = units.convert(
-            value=rect.GetHeight(),
-            fromUnit=fromU,
-            toUnit=toU) * scale
-        X = units.convert(
-            value=(
-                rect.GetX() - pRectx),
-            fromUnit=fromU,
-            toUnit=toU) * scale
-        Y = units.convert(
-            value=(
-                rect.GetY() - pRecty),
-            fromUnit=fromU,
-            toUnit=toU) * scale
+            pRectx = (
+                units.convert(value=-pRect.x, fromUnit="pixel", toUnit="inch") / scale
+            )  # inch, real, negative
+            pRecty = (
+                units.convert(value=-pRect.y, fromUnit="pixel", toUnit="inch") / scale
+            )
+        Width = units.convert(value=rect.GetWidth(), fromUnit=fromU, toUnit=toU) * scale
+        Height = (
+            units.convert(value=rect.GetHeight(), fromUnit=fromU, toUnit=toU) * scale
+        )
+        X = (
+            units.convert(value=(rect.GetX() - pRectx), fromUnit=fromU, toUnit=toU)
+            * scale
+        )
+        Y = (
+            units.convert(value=(rect.GetY() - pRecty), fromUnit=fromU, toUnit=toU)
+            * scale
+        )
 
         return Rect2D(X, Y, Width, Height)
 
@@ -1414,7 +1472,7 @@ class PsMapBufferedWindow(wx.Window):
 
         ppi = wx.ClientDC(self).GetPPI()
         cW, cH = self.GetClientSize()
-        pW, pH = page['Width'] * ppi[0], page['Height'] * ppi[1]
+        pW, pH = page["Width"] * ppi[0], page["Height"] * ppi[1]
 
         if self.currScale is None:
             self.currScale = min(cW / pW, cH / pH)
@@ -1438,58 +1496,61 @@ class PsMapBufferedWindow(wx.Window):
     def RecalculateEN(self):
         """Recalculate east and north for texts (eps, points) after their or map's movement"""
         try:
-            mapId = self.instruction.FindInstructionByType('map').id
+            mapId = self.instruction.FindInstructionByType("map").id
         except AttributeError:
-            mapId = self.instruction.FindInstructionByType('initMap').id
+            mapId = self.instruction.FindInstructionByType("initMap").id
 
-        for itemType in ('text', 'image', 'northArrow',
-                         'point', 'line', 'rectangle'):
+        for itemType in ("text", "image", "northArrow", "point", "line", "rectangle"):
             items = self.instruction.FindInstructionByType(itemType, list=True)
             for item in items:
                 instr = self.instruction[item.id]
-                if itemType in ('line', 'rectangle'):
-                    if itemType == 'line':
+                if itemType in ("line", "rectangle"):
+                    if itemType == "line":
                         e1, n1 = PaperMapCoordinates(
                             mapInstr=self.instruction[mapId],
-                            x=instr['where'][0][0],
-                            y=instr['where'][0][1],
+                            x=instr["where"][0][0],
+                            y=instr["where"][0][1],
                             paperToMap=True,
-                            env=self.env)
+                            env=self.env,
+                        )
                         e2, n2 = PaperMapCoordinates(
                             mapInstr=self.instruction[mapId],
-                            x=instr['where'][1][0],
-                            y=instr['where'][1][1],
+                            x=instr["where"][1][0],
+                            y=instr["where"][1][1],
                             paperToMap=True,
-                            env=self.env)
+                            env=self.env,
+                        )
                     else:
                         e1, n1 = PaperMapCoordinates(
                             mapInstr=self.instruction[mapId],
-                            x=instr['rect'].GetLeft(),
-                            y=instr['rect'].GetTop(),
+                            x=instr["rect"].GetLeft(),
+                            y=instr["rect"].GetTop(),
                             paperToMap=True,
-                            env=self.env)
+                            env=self.env,
+                        )
                         e2, n2 = PaperMapCoordinates(
                             mapInstr=self.instruction[mapId],
-                            x=instr['rect'].GetRight(),
-                            y=instr['rect'].GetBottom(),
+                            x=instr["rect"].GetRight(),
+                            y=instr["rect"].GetBottom(),
                             paperToMap=True,
-                            env=self.env)
-                    instr['east1'] = e1
-                    instr['north1'] = n1
-                    instr['east2'] = e2
-                    instr['north2'] = n2
+                            env=self.env,
+                        )
+                    instr["east1"] = e1
+                    instr["north1"] = n1
+                    instr["east2"] = e2
+                    instr["north2"] = n2
                 else:
                     e, n = PaperMapCoordinates(
                         mapInstr=self.instruction[mapId],
-                        x=instr['where'][0],
-                        y=instr['where'][1],
+                        x=instr["where"][0],
+                        y=instr["where"][1],
                         paperToMap=True,
-                        env=self.env)
-                    instr['east'], instr['north'] = e, n
+                        env=self.env,
+                    )
+                    instr["east"], instr["north"] = e, n
 
     def OnPaint(self, event):
-        """Draw pseudo DC to buffer
-        """
+        """Draw pseudo DC to buffer"""
         if not self._buffer:
             return
         dc = wx.BufferedPaintDC(self, self._buffer)
@@ -1514,11 +1575,15 @@ class PsMapBufferedWindow(wx.Window):
         self.pdcTmp.DrawToDCClipped(dc, rgn.GetBox())
 
     def MouseActions(self, event):
-        """Mouse motion and button click notifier
-        """
-        disable = self.preview and self.mouse['use'] in ('pointer', 'resize',
-                                                         'addMap', 'addPoint',
-                                                         'addLine', 'addRectangle')
+        """Mouse motion and button click notifier"""
+        disable = self.preview and self.mouse["use"] in (
+            "pointer",
+            "resize",
+            "addMap",
+            "addPoint",
+            "addLine",
+            "addRectangle",
+        )
         # zoom with mouse wheel
         if event.GetWheelRotation() != 0:
             self.OnMouseWheel(event)
@@ -1550,29 +1615,28 @@ class PsMapBufferedWindow(wx.Window):
         """Mouse wheel scrolled.
 
         Changes zoom."""
-        if UserSettings.Get(group='display',
-                            key='mouseWheelZoom',
-                            subkey='selection') == 2:
+        if (
+            UserSettings.Get(group="display", key="mouseWheelZoom", subkey="selection")
+            == 2
+        ):
             event.Skip()
             return
 
         zoom = event.GetWheelRotation()
-        oldUse = self.mouse['use']
-        self.mouse['begin'] = event.GetPosition()
+        oldUse = self.mouse["use"]
+        self.mouse["begin"] = event.GetPosition()
 
-        if UserSettings.Get(group='display',
-                            key='scrollDirection',
-                            subkey='selection'):
+        if UserSettings.Get(group="display", key="scrollDirection", subkey="selection"):
             zoom *= -1
 
         if zoom > 0:
-            self.mouse['use'] = 'zoomin'
+            self.mouse["use"] = "zoomin"
         else:
-            self.mouse['use'] = 'zoomout'
+            self.mouse["use"] = "zoomout"
 
         zoomFactor, view = self.ComputeZoom(Rect(0, 0, 0, 0))
         self.Zoom(zoomFactor, view)
-        self.mouse['use'] = oldUse
+        self.mouse["use"] = oldUse
 
     def OnMouseMoving(self, event):
         """Mouse cursor moving.
@@ -1582,18 +1646,19 @@ class PsMapBufferedWindow(wx.Window):
         if self.preview:
             return
 
-        if self.mouse['use'] in ('pointer', 'resize'):
+        if self.mouse["use"] in ("pointer", "resize"):
             pos = event.GetPosition()
             foundResize = self.pdcTmp.FindObjects(pos[0], pos[1])
-            if foundResize and foundResize[0] in (
-                    self.idResizeBoxTmp,) + self.idLinePointsTmp:
+            if (
+                foundResize
+                and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp
+            ):
                 self.SetCursor(self.cursors["sizenwse"])
-                self.parent.SetStatusText(
-                    _('Click and drag to resize object'), 0)
+                self.parent.SetStatusText(_("Click and drag to resize object"), 0)
                 self.showResizeHelp = True
             else:
                 if self.showResizeHelp:
-                    self.parent.SetStatusText('', 0)
+                    self.parent.SetStatusText("", 0)
                     self.SetCursor(self.cursors["default"])
                     self.showResizeHelp = False
 
@@ -1602,43 +1667,42 @@ class PsMapBufferedWindow(wx.Window):
 
         Select objects, redraw, prepare for moving/resizing.
         """
-        self.mouse['begin'] = event.GetPosition()
-        self.begin = self.mouse['begin']
+        self.mouse["begin"] = event.GetPosition()
+        self.begin = self.mouse["begin"]
 
         # select
-        if self.mouse['use'] == 'pointer':
+        if self.mouse["use"] == "pointer":
             found = self.pdcObj.FindObjects(
-                self.mouse['begin'][0],
-                self.mouse['begin'][1])
+                self.mouse["begin"][0], self.mouse["begin"][1]
+            )
             foundResize = self.pdcTmp.FindObjects(
-                self.mouse['begin'][0], self.mouse['begin'][1])
+                self.mouse["begin"][0], self.mouse["begin"][1]
+            )
 
-            if foundResize and foundResize[0] in (
-                    self.idResizeBoxTmp,) + self.idLinePointsTmp:
-                self.mouse['use'] = 'resize'
+            if (
+                foundResize
+                and foundResize[0] in (self.idResizeBoxTmp,) + self.idLinePointsTmp
+            ):
+                self.mouse["use"] = "resize"
 
                 # when resizing, proportions match region
-                if self.instruction[self.dragId].type == 'map':
+                if self.instruction[self.dragId].type == "map":
                     self.constraint = False
                     self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
-                    if self.instruction[self.dragId]['scaleType'] in (0, 1, 2):
+                    if self.instruction[self.dragId]["scaleType"] in (0, 1, 2):
                         self.constraint = True
                         self.mapBounds = self.pdcObj.GetIdBounds(self.dragId)
 
-                if self.instruction[self.dragId].type == 'line':
-                    self.currentLinePoint = self.idLinePointsTmp.index(
-                        foundResize
-                        [0])
+                if self.instruction[self.dragId].type == "line":
+                    self.currentLinePoint = self.idLinePointsTmp.index(foundResize[0])
 
             elif found:
                 self.dragId = found[0]
                 self.RedrawSelectBox(self.dragId)
-                if self.instruction[
-                        self.dragId].type not in (
-                        'map', 'rectangle'):
+                if self.instruction[self.dragId].type not in ("map", "rectangle"):
                     self.pdcTmp.RemoveId(self.idResizeBoxTmp)
                     self.Refresh()
-                if self.instruction[self.dragId].type != 'line':
+                if self.instruction[self.dragId].type != "line":
                     for id in self.idLinePointsTmp:
                         self.pdcTmp.RemoveId(id)
                     self.Refresh()
@@ -1657,7 +1721,7 @@ class PsMapBufferedWindow(wx.Window):
         Recalculate zooming/resizing/moving and redraw.
         """
         # zoom in, zoom out
-        if self.mouse['use'] in ('zoomin', 'zoomout'):
+        if self.mouse["use"] in ("zoomin", "zoomout"):
             zoomR = self.pdcTmp.GetIdBounds(self.idZoomBoxTmp)
             self.pdcTmp.RemoveId(self.idZoomBoxTmp)
             self.Refresh()
@@ -1665,30 +1729,33 @@ class PsMapBufferedWindow(wx.Window):
             self.Zoom(zoomFactor, view)
 
         # draw map frame
-        if self.mouse['use'] == 'addMap':
+        if self.mouse["use"] == "addMap":
             rectTmp = self.pdcTmp.GetIdBounds(self.idZoomBoxTmp)
             # too small rectangle, it's usually some mistake
             if rectTmp.GetWidth() < 20 or rectTmp.GetHeight() < 20:
                 self.pdcTmp.RemoveId(self.idZoomBoxTmp)
                 self.Refresh()
                 return
-            rectPaper = self.CanvasPaperCoordinates(
-                rect=rectTmp, canvasToPaper=True)
+            rectPaper = self.CanvasPaperCoordinates(rect=rectTmp, canvasToPaper=True)
 
             dlg = MapDialog(
-                parent=self.parent, id=[None, None, None],
-                settings=self.instruction, env=self.env, rect=rectPaper)
-            self.openDialogs['map'] = dlg
-            self.openDialogs['map'].Show()
+                parent=self.parent,
+                id=[None, None, None],
+                settings=self.instruction,
+                env=self.env,
+                rect=rectPaper,
+            )
+            self.openDialogs["map"] = dlg
+            self.openDialogs["map"].Show()
 
             self.parent.toolbar.SelectDefault()
             return
 
         # resize resizable objects (map, line, rectangle)
-        if self.mouse['use'] == 'resize':
-            mapObj = self.instruction.FindInstructionByType('map')
+        if self.mouse["use"] == "resize":
+            mapObj = self.instruction.FindInstructionByType("map")
             if not mapObj:
-                mapObj = self.instruction.FindInstructionByType('initMap')
+                mapObj = self.instruction.FindInstructionByType("initMap")
             mapId = mapObj.id
 
             if self.dragId == mapId:
@@ -1696,84 +1763,98 @@ class PsMapBufferedWindow(wx.Window):
                 # region (scaletype 3)
                 newRectCanvas = self.pdcObj.GetIdBounds(mapId)
                 newRectPaper = self.CanvasPaperCoordinates(
-                    rect=newRectCanvas, canvasToPaper=True)
-                self.instruction[mapId]['rect'] = newRectPaper
+                    rect=newRectCanvas, canvasToPaper=True
+                )
+                self.instruction[mapId]["rect"] = newRectPaper
 
-                if self.instruction[mapId]['scaleType'] in (0, 1, 2):
-                    if self.instruction[mapId]['scaleType'] == 0:
+                if self.instruction[mapId]["scaleType"] in (0, 1, 2):
+                    if self.instruction[mapId]["scaleType"] == 0:
 
                         scale, foo, rect = AutoAdjust(
-                            self, scaleType=0, map=self.instruction[mapId]
-                            ['map'], env=self.env,
-                            mapType=self.instruction[mapId]['mapType'],
-                            rect=self.instruction[mapId]['rect'])
+                            self,
+                            scaleType=0,
+                            map=self.instruction[mapId]["map"],
+                            env=self.env,
+                            mapType=self.instruction[mapId]["mapType"],
+                            rect=self.instruction[mapId]["rect"],
+                        )
 
-                    elif self.instruction[mapId]['scaleType'] == 1:
+                    elif self.instruction[mapId]["scaleType"] == 1:
                         scale, foo, rect = AutoAdjust(
-                            self, scaleType=1, env=self.env,
-                            region=self.instruction[mapId]['region'],
-                            rect=self.instruction[mapId]['rect'])
+                            self,
+                            scaleType=1,
+                            env=self.env,
+                            region=self.instruction[mapId]["region"],
+                            rect=self.instruction[mapId]["rect"],
+                        )
                     else:
                         scale, foo, rect = AutoAdjust(
-                            self, scaleType=2, rect=self.instruction[mapId]['rect'],
-                            env=self.env)
-                    self.instruction[mapId]['rect'] = rect
-                    self.instruction[mapId]['scale'] = scale
+                            self,
+                            scaleType=2,
+                            rect=self.instruction[mapId]["rect"],
+                            env=self.env,
+                        )
+                    self.instruction[mapId]["rect"] = rect
+                    self.instruction[mapId]["scale"] = scale
 
                     rectCanvas = self.CanvasPaperCoordinates(
-                        rect=rect, canvasToPaper=False)
+                        rect=rect, canvasToPaper=False
+                    )
                     self.Draw(
-                        pen=self.pen['map'],
-                        brush=self.brush['map'],
+                        pen=self.pen["map"],
+                        brush=self.brush["map"],
                         pdc=self.pdcObj,
                         drawid=mapId,
-                        pdctype='rectText',
-                        bb=rectCanvas)
+                        pdctype="rectText",
+                        bb=rectCanvas,
+                    )
 
-                elif self.instruction[mapId]['scaleType'] == 3:
+                elif self.instruction[mapId]["scaleType"] == 3:
                     ComputeSetRegion(
-                        self, mapDict=self.instruction[mapId].GetInstruction(), env=self.env)
+                        self,
+                        mapDict=self.instruction[mapId].GetInstruction(),
+                        env=self.env,
+                    )
                 # check resolution
-                SetResolution(dpi=self.instruction[mapId]['resolution'],
-                              width=self.instruction[mapId]['rect'].width,
-                              height=self.instruction[mapId]['rect'].height,
-                              env=self.env)
+                SetResolution(
+                    dpi=self.instruction[mapId]["resolution"],
+                    width=self.instruction[mapId]["rect"].width,
+                    height=self.instruction[mapId]["rect"].height,
+                    env=self.env,
+                )
 
                 self.RedrawSelectBox(mapId)
                 self.Zoom(zoomFactor=1, view=(0, 0))
 
-            elif self.instruction[self.dragId].type == 'line':
-                points = self.instruction[self.dragId]['where']
-                self.instruction[
-                    self.dragId]['rect'] = Rect2DPP(
-                    points[0], points[1])
+            elif self.instruction[self.dragId].type == "line":
+                points = self.instruction[self.dragId]["where"]
+                self.instruction[self.dragId]["rect"] = Rect2DPP(points[0], points[1])
                 self.RecalculatePosition(ids=[self.dragId])
 
-            elif self.instruction[self.dragId].type == 'rectangle':
+            elif self.instruction[self.dragId].type == "rectangle":
                 self.RecalculatePosition(ids=[self.dragId])
 
-            self.mouse['use'] = 'pointer'
+            self.mouse["use"] = "pointer"
 
         # recalculate the position of objects after dragging
-        if self.mouse['use'] in ('pointer', 'resize') and self.dragId != -1:
-            if self.mouse['begin'] != event.GetPosition():  # for double click
+        if self.mouse["use"] in ("pointer", "resize") and self.dragId != -1:
+            if self.mouse["begin"] != event.GetPosition():  # for double click
 
                 self.RecalculatePosition(ids=[self.dragId])
                 if self.instruction[self.dragId].type in self.openDialogs:
-                    self.openDialogs[
-                        self.instruction[
-                            self.dragId].type].updateDialog()
+                    self.openDialogs[self.instruction[self.dragId].type].updateDialog()
 
-        elif self.mouse['use'] in ('addPoint', 'addLine', 'addRectangle'):
-            endCoordinates = self.CanvasPaperCoordinates(rect=Rect(
-                event.GetX(), event.GetY(), 0, 0), canvasToPaper=True)[:2]
+        elif self.mouse["use"] in ("addPoint", "addLine", "addRectangle"):
+            endCoordinates = self.CanvasPaperCoordinates(
+                rect=Rect(event.GetX(), event.GetY(), 0, 0), canvasToPaper=True
+            )[:2]
 
-            diffX = event.GetX() - self.mouse['begin'][0]
-            diffY = event.GetY() - self.mouse['begin'][1]
+            diffX = event.GetX() - self.mouse["begin"][0]
+            diffY = event.GetY() - self.mouse["begin"][1]
 
-            if self.mouse['use'] == 'addPoint':
+            if self.mouse["use"] == "addPoint":
                 self.parent.AddPoint(coordinates=endCoordinates)
-            elif self.mouse['use'] in ('addLine', 'addRectangle'):
+            elif self.mouse["use"] in ("addLine", "addRectangle"):
                 # not too small lines/rectangles
                 if sqrt(diffX * diffX + diffY * diffY) < 5:
                     self.pdcTmp.RemoveId(self.idZoomBoxTmp)
@@ -1781,51 +1862,48 @@ class PsMapBufferedWindow(wx.Window):
                     return
 
                 beginCoordinates = self.CanvasPaperCoordinates(
-                    rect=Rect(
-                        self.mouse['begin'][0],
-                        self.mouse['begin'][1],
-                        0, 0),
-                    canvasToPaper=True)[
-                    : 2]
-                if self.mouse['use'] == 'addLine':
-                    self.parent.AddLine(
-                        coordinates=[
-                            beginCoordinates,
-                            endCoordinates])
+                    rect=Rect(self.mouse["begin"][0], self.mouse["begin"][1], 0, 0),
+                    canvasToPaper=True,
+                )[:2]
+                if self.mouse["use"] == "addLine":
+                    self.parent.AddLine(coordinates=[beginCoordinates, endCoordinates])
                 else:
                     self.parent.AddRectangle(
-                        coordinates=[
-                            beginCoordinates,
-                            endCoordinates])
+                        coordinates=[beginCoordinates, endCoordinates]
+                    )
                 self.pdcTmp.RemoveId(self.idZoomBoxTmp)
                 self.Refresh()
 
     def OnButtonDClick(self, event):
         """Open object dialog for editing."""
-        if self.mouse['use'] == 'pointer' and self.dragId != -1:
-            itemCall = {'text': self.parent.OnAddText,
-                        'mapinfo': self.parent.OnAddMapinfo,
-                        'scalebar': self.parent.OnAddScalebar,
-                        'image': self.parent.OnAddImage,
-                        'northArrow': self.parent.OnAddNorthArrow,
-                        'point': self.parent.AddPoint,
-                        'line': self.parent.AddLine,
-                        'rectangle': self.parent.AddRectangle,
-                        'rasterLegend': self.parent.OnAddLegend,
-                        'vectorLegend': self.parent.OnAddLegend,
-                        'map': self.parent.OnAddMap}
+        if self.mouse["use"] == "pointer" and self.dragId != -1:
+            itemCall = {
+                "text": self.parent.OnAddText,
+                "mapinfo": self.parent.OnAddMapinfo,
+                "scalebar": self.parent.OnAddScalebar,
+                "image": self.parent.OnAddImage,
+                "northArrow": self.parent.OnAddNorthArrow,
+                "point": self.parent.AddPoint,
+                "line": self.parent.AddLine,
+                "rectangle": self.parent.AddRectangle,
+                "rasterLegend": self.parent.OnAddLegend,
+                "vectorLegend": self.parent.OnAddLegend,
+                "map": self.parent.OnAddMap,
+            }
 
-            itemArg = {'text': dict(event=None, id=self.dragId),
-                       'mapinfo': dict(event=None),
-                       'scalebar': dict(event=None),
-                       'image': dict(event=None, id=self.dragId),
-                       'northArrow': dict(event=None, id=self.dragId),
-                       'point': dict(id=self.dragId),
-                       'line': dict(id=self.dragId),
-                       'rectangle': dict(id=self.dragId),
-                       'rasterLegend': dict(event=None),
-                       'vectorLegend': dict(event=None, page=1),
-                       'map': dict(event=None, notebook=True)}
+            itemArg = {
+                "text": dict(event=None, id=self.dragId),
+                "mapinfo": dict(event=None),
+                "scalebar": dict(event=None),
+                "image": dict(event=None, id=self.dragId),
+                "northArrow": dict(event=None, id=self.dragId),
+                "point": dict(id=self.dragId),
+                "line": dict(id=self.dragId),
+                "rectangle": dict(id=self.dragId),
+                "rasterLegend": dict(event=None),
+                "vectorLegend": dict(event=None, page=1),
+                "map": dict(event=None, notebook=True),
+            }
 
             type = self.instruction[self.dragId].type
             itemCall[type](**itemArg[type])
@@ -1834,80 +1912,101 @@ class PsMapBufferedWindow(wx.Window):
         """Process panning/resizing/drawing/moving."""
         if event.MiddleIsDown():
             # panning
-            self.mouse['end'] = event.GetPosition()
-            self.Pan(begin=self.mouse['begin'], end=self.mouse['end'])
-            self.mouse['begin'] = event.GetPosition()
+            self.mouse["end"] = event.GetPosition()
+            self.Pan(begin=self.mouse["begin"], end=self.mouse["end"])
+            self.mouse["begin"] = event.GetPosition()
 
         elif event.LeftIsDown():
             # draw box when zooming, creating map
-            if self.mouse['use'] in (
-                    'zoomin', 'zoomout', 'addMap', 'addLine', 'addRectangle'):
-                self.mouse['end'] = event.GetPosition()
+            if self.mouse["use"] in (
+                "zoomin",
+                "zoomout",
+                "addMap",
+                "addLine",
+                "addRectangle",
+            ):
+                self.mouse["end"] = event.GetPosition()
                 r = Rect(
-                    self.mouse['begin'][0],
-                    self.mouse['begin'][1],
-                    self.mouse['end'][0] -
-                    self.mouse['begin'][0],
-                    self.mouse['end'][1] -
-                    self.mouse['begin'][1])
+                    self.mouse["begin"][0],
+                    self.mouse["begin"][1],
+                    self.mouse["end"][0] - self.mouse["begin"][0],
+                    self.mouse["end"][1] - self.mouse["begin"][1],
+                )
                 r = self.modifyRectangle(r)
 
-                if self.mouse['use'] in ('addLine', 'addRectangle'):
-                    if self.mouse['use'] == 'addLine':
-                        pdcType = 'line'
-                        lineCoords = (self.mouse['begin'], self.mouse['end'])
+                if self.mouse["use"] in ("addLine", "addRectangle"):
+                    if self.mouse["use"] == "addLine":
+                        pdcType = "line"
+                        lineCoords = (self.mouse["begin"], self.mouse["end"])
                     else:
-                        pdcType = 'rect'
+                        pdcType = "rect"
                         lineCoords = None
                         if r[2] < 2 or r[3] < 2:
                             # to avoid strange behaviour
                             return
 
-                    self.Draw(pen=self.pen['line'], brush=self.brush['line'],
-                              pdc=self.pdcTmp, drawid=self.idZoomBoxTmp,
-                              pdctype=pdcType, bb=r, lineCoords=lineCoords)
+                    self.Draw(
+                        pen=self.pen["line"],
+                        brush=self.brush["line"],
+                        pdc=self.pdcTmp,
+                        drawid=self.idZoomBoxTmp,
+                        pdctype=pdcType,
+                        bb=r,
+                        lineCoords=lineCoords,
+                    )
 
                 else:
-                    self.Draw(pen=self.pen['box'], brush=self.brush['box'],
-                              pdc=self.pdcTmp, drawid=self.idZoomBoxTmp,
-                              pdctype='rect', bb=r)
+                    self.Draw(
+                        pen=self.pen["box"],
+                        brush=self.brush["box"],
+                        pdc=self.pdcTmp,
+                        drawid=self.idZoomBoxTmp,
+                        pdctype="rect",
+                        bb=r,
+                    )
 
             # panning
-            if self.mouse["use"] == 'pan':
-                self.mouse['end'] = event.GetPosition()
-                self.Pan(begin=self.mouse['begin'], end=self.mouse['end'])
-                self.mouse['begin'] = event.GetPosition()
+            if self.mouse["use"] == "pan":
+                self.mouse["end"] = event.GetPosition()
+                self.Pan(begin=self.mouse["begin"], end=self.mouse["end"])
+                self.mouse["begin"] = event.GetPosition()
 
             # move object
-            if self.mouse['use'] == 'pointer' and self.dragId != -1:
-                self.mouse['end'] = event.GetPosition()
-                dx, dy = self.mouse['end'][
-                    0] - self.begin[0], self.mouse['end'][1] - self.begin[1]
+            if self.mouse["use"] == "pointer" and self.dragId != -1:
+                self.mouse["end"] = event.GetPosition()
+                dx, dy = (
+                    self.mouse["end"][0] - self.begin[0],
+                    self.mouse["end"][1] - self.begin[1],
+                )
                 self.pdcObj.TranslateId(self.dragId, dx, dy)
                 self.pdcTmp.TranslateId(self.idBoxTmp, dx, dy)
                 self.pdcTmp.TranslateId(self.idResizeBoxTmp, dx, dy)
                 for id in self.idLinePointsTmp:
                     self.pdcTmp.TranslateId(id, dx, dy)
-                if self.instruction[self.dragId].type == 'text':
-                    self.instruction[self.dragId]['coords'] = self.instruction[self.dragId][
-                        'coords'][0] + dx, self.instruction[self.dragId]['coords'][1] + dy
+                if self.instruction[self.dragId].type == "text":
+                    self.instruction[self.dragId]["coords"] = (
+                        self.instruction[self.dragId]["coords"][0] + dx,
+                        self.instruction[self.dragId]["coords"][1] + dy,
+                    )
                 self.begin = event.GetPosition()
                 self.Refresh()
 
             # resize object
-            if self.mouse['use'] == 'resize':
+            if self.mouse["use"] == "resize":
                 pos = event.GetPosition()
-                diffX = pos[0] - self.mouse['begin'][0]
-                diffY = pos[1] - self.mouse['begin'][1]
-                if self.instruction[self.dragId].type == 'map':
+                diffX = pos[0] - self.mouse["begin"][0]
+                diffY = pos[1] - self.mouse["begin"][1]
+                if self.instruction[self.dragId].type == "map":
                     x, y = self.mapBounds.GetX(), self.mapBounds.GetY()
-                    width, height = self.mapBounds.GetWidth(), self.mapBounds.GetHeight()
+                    width, height = (
+                        self.mapBounds.GetWidth(),
+                        self.mapBounds.GetHeight(),
+                    )
                     # match given region
                     if self.constraint:
                         if width > height:
                             newWidth = width + diffX
-                            newHeight = height + diffX * \
-                                (float(height) / width)
+                            newHeight = height + diffX * (float(height) / width)
                         else:
                             newWidth = width + diffY * (float(width) / height)
                             newHeight = height + diffY
@@ -1920,17 +2019,19 @@ class PsMapBufferedWindow(wx.Window):
 
                     bounds = Rect(x, y, newWidth, newHeight)
                     self.Draw(
-                        pen=self.pen['map'],
-                        brush=self.brush['map'],
+                        pen=self.pen["map"],
+                        brush=self.brush["map"],
                         pdc=self.pdcObj,
                         drawid=self.dragId,
-                        pdctype='rectText',
-                        bb=bounds)
+                        pdctype="rectText",
+                        bb=bounds,
+                    )
 
-                elif self.instruction[self.dragId].type == 'rectangle':
+                elif self.instruction[self.dragId].type == "rectangle":
                     instr = self.instruction[self.dragId]
                     rect = self.CanvasPaperCoordinates(
-                        rect=instr['rect'], canvasToPaper=False)
+                        rect=instr["rect"], canvasToPaper=False
+                    )
                     rect.SetWidth(rect.GetWidth() + diffX)
                     rect.SetHeight(rect.GetHeight() + diffY)
 
@@ -1939,42 +2040,44 @@ class PsMapBufferedWindow(wx.Window):
 
                     self.DrawGraphics(
                         drawid=self.dragId,
-                        shape='rectangle',
-                        color=instr['color'],
-                        fcolor=instr['fcolor'],
-                        width=instr['width'],
-                        bb=rect)
+                        shape="rectangle",
+                        color=instr["color"],
+                        fcolor=instr["fcolor"],
+                        width=instr["width"],
+                        bb=rect,
+                    )
 
-                elif self.instruction[self.dragId].type == 'line':
+                elif self.instruction[self.dragId].type == "line":
                     instr = self.instruction[self.dragId]
-                    points = instr['where']
+                    points = instr["where"]
                     # moving point
                     if self.currentLinePoint == 0:
                         pPaper = points[1]
                     else:
                         pPaper = points[0]
                     pCanvas = self.CanvasPaperCoordinates(
-                        rect=Rect2DPS(pPaper, (0, 0)), canvasToPaper=False)[:2]
+                        rect=Rect2DPS(pPaper, (0, 0)), canvasToPaper=False
+                    )[:2]
                     bounds = wx.Rect(pCanvas, pos)
                     self.DrawGraphics(
                         drawid=self.dragId,
-                        shape='line',
-                        color=instr['color'],
-                        width=instr['width'],
+                        shape="line",
+                        color=instr["color"],
+                        width=instr["width"],
                         bb=bounds,
-                        lineCoords=(
-                            pos,
-                            pCanvas))
+                        lineCoords=(pos, pCanvas),
+                    )
 
                     # update paper coordinates
                     points[self.currentLinePoint] = self.CanvasPaperCoordinates(
-                        rect=Rect(pos[0], pos[1], 0, 0), canvasToPaper=True)[:2]
+                        rect=Rect(pos[0], pos[1], 0, 0), canvasToPaper=True
+                    )[:2]
 
                 self.RedrawSelectBox(self.dragId)
 
     def OnMiddleDown(self, event):
         """Middle mouse button pressed."""
-        self.mouse['begin'] = event.GetPosition()
+        self.mouse["begin"] = event.GetPosition()
 
     def Pan(self, begin, end):
         """Move canvas while dragging.
@@ -1989,77 +2092,90 @@ class PsMapBufferedWindow(wx.Window):
     def RecalculatePosition(self, ids):
         for id in ids:
             itype = self.instruction[id].type
-            if itype in ('map', 'rectangle'):
-                self.instruction[id]['rect'] = self.CanvasPaperCoordinates(
-                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True)
+            if itype in ("map", "rectangle"):
+                self.instruction[id]["rect"] = self.CanvasPaperCoordinates(
+                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True
+                )
                 self.RecalculateEN()
 
-            elif itype in ('mapinfo', 'rasterLegend', 'vectorLegend', 'image', 'northArrow'):
-                self.instruction[id]['rect'] = self.CanvasPaperCoordinates(
-                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True)
-                self.instruction[id]['where'] = self.CanvasPaperCoordinates(
-                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True)[:2]
-                if itype in ('image', 'northArrow'):
+            elif itype in (
+                "mapinfo",
+                "rasterLegend",
+                "vectorLegend",
+                "image",
+                "northArrow",
+            ):
+                self.instruction[id]["rect"] = self.CanvasPaperCoordinates(
+                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True
+                )
+                self.instruction[id]["where"] = self.CanvasPaperCoordinates(
+                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True
+                )[:2]
+                if itype in ("image", "northArrow"):
                     self.RecalculateEN()
 
-            elif itype == 'point':
+            elif itype == "point":
                 rect = self.pdcObj.GetIdBounds(id)
-                self.instruction[id]['rect'] = self.CanvasPaperCoordinates(
-                    rect=rect, canvasToPaper=True)
-                rect.Offset(
-                    dx=rect.GetWidth() / 2, dy=rect.GetHeight() / 2,
+                self.instruction[id]["rect"] = self.CanvasPaperCoordinates(
+                    rect=rect, canvasToPaper=True
                 )
-                self.instruction[id]['where'] = self.CanvasPaperCoordinates(
-                    rect=rect, canvasToPaper=True)[: 2]
+                rect.Offset(
+                    dx=rect.GetWidth() / 2,
+                    dy=rect.GetHeight() / 2,
+                )
+                self.instruction[id]["where"] = self.CanvasPaperCoordinates(
+                    rect=rect, canvasToPaper=True
+                )[:2]
                 self.RecalculateEN()
 
-            elif itype == 'line':
+            elif itype == "line":
                 rect = self.pdcObj.GetIdBounds(id)
-                oldRect = self.instruction[id]['rect']
-                newRect = self.CanvasPaperCoordinates(
-                    rect=rect, canvasToPaper=True)
+                oldRect = self.instruction[id]["rect"]
+                newRect = self.CanvasPaperCoordinates(rect=rect, canvasToPaper=True)
                 xDiff = newRect[0] - oldRect[0]
                 yDiff = newRect[1] - oldRect[1]
-                self.instruction[id]['rect'] = newRect
+                self.instruction[id]["rect"] = newRect
 
-                point1 = wx.Point2D(*self.instruction[id]['where'][0])
-                point2 = wx.Point2D(*self.instruction[id]['where'][1])
+                point1 = wx.Point2D(*self.instruction[id]["where"][0])
+                point2 = wx.Point2D(*self.instruction[id]["where"][1])
                 point1 += wx.Point2D(xDiff, yDiff)
                 point2 += wx.Point2D(xDiff, yDiff)
-                self.instruction[id]['where'] = [point1, point2]
+                self.instruction[id]["where"] = [point1, point2]
 
                 self.RecalculateEN()
 
-            elif itype == 'scalebar':
-                self.instruction[id]['rect'] = self.CanvasPaperCoordinates(
-                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True)
+            elif itype == "scalebar":
+                self.instruction[id]["rect"] = self.CanvasPaperCoordinates(
+                    rect=self.pdcObj.GetIdBounds(id), canvasToPaper=True
+                )
 
-                self.instruction[id]['where'] = self.instruction[
-                    id]['rect'].GetCentre()
+                self.instruction[id]["where"] = self.instruction[id]["rect"].GetCentre()
 
-            elif itype == 'text':
-                x, y = self.instruction[id]['coords'][0] - self.instruction[id]['xoffset'],\
-                    self.instruction[id]['coords'][1] + self.instruction[id]['yoffset']
-                extent = self.parent.getTextExtent(
-                    textDict=self.instruction[id])
-                if self.instruction[id]['rotate'] is not None:
-                    rot = float(self.instruction[id]['rotate']) / 180 * pi
+            elif itype == "text":
+                x, y = (
+                    self.instruction[id]["coords"][0] - self.instruction[id]["xoffset"],
+                    self.instruction[id]["coords"][1] + self.instruction[id]["yoffset"],
+                )
+                extent = self.parent.getTextExtent(textDict=self.instruction[id])
+                if self.instruction[id]["rotate"] is not None:
+                    rot = float(self.instruction[id]["rotate"]) / 180 * pi
                 else:
                     rot = 0
 
-                if self.instruction[id]['ref'].split()[0] == 'lower':
+                if self.instruction[id]["ref"].split()[0] == "lower":
                     y += extent[1]
-                elif self.instruction[id]['ref'].split()[0] == 'center':
+                elif self.instruction[id]["ref"].split()[0] == "center":
                     y += extent[1] / 2
-                if self.instruction[id]['ref'].split()[1] == 'right':
+                if self.instruction[id]["ref"].split()[1] == "right":
                     x += extent[0] * cos(rot)
                     y -= extent[0] * sin(rot)
-                elif self.instruction[id]['ref'].split()[1] == 'center':
+                elif self.instruction[id]["ref"].split()[1] == "center":
                     x += extent[0] / 2 * cos(rot)
                     y -= extent[0] / 2 * sin(rot)
 
-                self.instruction[id]['where'] = self.CanvasPaperCoordinates(
-                    rect=Rect2D(x, y, 0, 0), canvasToPaper=True)[:2]
+                self.instruction[id]["where"] = self.CanvasPaperCoordinates(
+                    rect=Rect2D(x, y, 0, 0), canvasToPaper=True
+                )[:2]
                 self.RecalculateEN()
 
     def ComputeZoom(self, rect):
@@ -2069,9 +2185,9 @@ class PsMapBufferedWindow(wx.Window):
         cW = float(cW)
         if rect.IsEmpty():  # clicked on canvas
             zoomFactor = 1.5
-            if self.mouse['use'] == 'zoomout':
-                zoomFactor = 1. / zoomFactor
-            x, y = self.mouse['begin']
+            if self.mouse["use"] == "zoomout":
+                zoomFactor = 1.0 / zoomFactor
+            x, y = self.mouse["begin"]
             xView = x - x / zoomFactor  # x - cW/(zoomFactor * 2)
             yView = y - y / zoomFactor  # y - cH/(zoomFactor * 2)
 
@@ -2086,22 +2202,22 @@ class PsMapBufferedWindow(wx.Window):
             if abs(zoomFactor - 1) > 0.01:
                 zoomFactor = zoomFactor
             else:
-                zoomFactor = 1.
+                zoomFactor = 1.0
 
-            if self.mouse['use'] == 'zoomout':
+            if self.mouse["use"] == "zoomout":
                 zoomFactor = min(rW / cW, rH / cH)
             try:
                 if rW / rH > cW / cH:
                     yView = rect.GetY() - (rW * (cH / cW) - rH) / 2
                     xView = rect.GetX()
 
-                    if self.mouse['use'] == 'zoomout':
+                    if self.mouse["use"] == "zoomout":
                         x, y = rect.GetX() + (rW - (cW / cH) * rH) / 2, rect.GetY()
                         xView, yView = -x, -y
                 else:
                     xView = rect.GetX() - (rH * (cW / cH) - rW) / 2
                     yView = rect.GetY()
-                    if self.mouse['use'] == 'zoomout':
+                    if self.mouse["use"] == "zoomout":
                         x, y = rect.GetX(), rect.GetY() + (rH - (cH / cW) * rW) / 2
                         xView, yView = -x, -y
             except ZeroDivisionError:
@@ -2130,57 +2246,66 @@ class PsMapBufferedWindow(wx.Window):
             # redraw objects
             for id in self.objectId:
                 type = self.instruction[id].type
-                if type == 'labels':  # why it's here? it should not
+                if type == "labels":  # why it's here? it should not
                     continue
                 oRect = self.CanvasPaperCoordinates(
-                    rect=self.instruction[id]['rect'], canvasToPaper=False)
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
 
-                if type == 'text':
+                if type == "text":
                     # recalculate coordinates, they are not equal to BB
-                    coords = self.instruction[id]['coords']
-                    self.instruction[id]['coords'] = coords = [
-                        (int(coord) - view[i]) * zoomFactor for i, coord in enumerate(coords)]
-                    extent = self.parent.getTextExtent(
-                        textDict=self.instruction[id])
-                    if self.instruction[id]['rotate']:
-                        rot = float(self.instruction[id]['rotate'])
+                    coords = self.instruction[id]["coords"]
+                    self.instruction[id]["coords"] = coords = [
+                        (int(coord) - view[i]) * zoomFactor
+                        for i, coord in enumerate(coords)
+                    ]
+                    extent = self.parent.getTextExtent(textDict=self.instruction[id])
+                    if self.instruction[id]["rotate"]:
+                        rot = float(self.instruction[id]["rotate"])
                     else:
                         rot = 0
-                    self.instruction[id]['rect'] = bounds = self.parent.getModifiedTextBounds(
-                        coords[0], coords[1], extent, rot)
+                    self.instruction[id][
+                        "rect"
+                    ] = bounds = self.parent.getModifiedTextBounds(
+                        coords[0], coords[1], extent, rot
+                    )
                     self.DrawRotText(
                         pdc=self.pdcObj,
                         drawId=id,
                         textDict=self.instruction[id],
                         coords=coords,
-                        bounds=bounds)
+                        bounds=bounds,
+                    )
 
                     self.pdcObj.SetIdBounds(id, bounds)
 
-                elif type == 'northArrow':
+                elif type == "northArrow":
                     self.Draw(
                         pen=self.pen[type],
                         brush=self.brush[type],
                         pdc=self.pdcObj,
                         drawid=id,
-                        pdctype='bitmap',
-                        bb=oRect)
+                        pdctype="bitmap",
+                        bb=oRect,
+                    )
 
-                elif type in ('point', 'line', 'rectangle'):
+                elif type in ("point", "line", "rectangle"):
                     instr = self.instruction[id]
-                    color = self.instruction[id]['color']
+                    color = self.instruction[id]["color"]
                     width = fcolor = coords = None
 
-                    if type in ('point', 'rectangle'):
-                        fcolor = self.instruction[id]['fcolor']
-                    if type in ('line', 'rectangle'):
-                        width = self.instruction[id]['width']
-                    if type in ('line'):
-                        point1, point2 = instr['where'][0], instr['where'][1]
+                    if type in ("point", "rectangle"):
+                        fcolor = self.instruction[id]["fcolor"]
+                    if type in ("line", "rectangle"):
+                        width = self.instruction[id]["width"]
+                    if type in ("line"):
+                        point1, point2 = instr["where"][0], instr["where"][1]
                         point1 = self.CanvasPaperCoordinates(
-                            rect=Rect2DPS(point1, (0, 0)), canvasToPaper=False)[:2]
+                            rect=Rect2DPS(point1, (0, 0)), canvasToPaper=False
+                        )[:2]
                         point2 = self.CanvasPaperCoordinates(
-                            rect=Rect2DPS(point2, (0, 0)), canvasToPaper=False)[:2]
+                            rect=Rect2DPS(point2, (0, 0)), canvasToPaper=False
+                        )[:2]
                         coords = (point1, point2)
 
                     self.DrawGraphics(
@@ -2190,7 +2315,8 @@ class PsMapBufferedWindow(wx.Window):
                         lineCoords=coords,
                         color=color,
                         fcolor=fcolor,
-                        width=width)
+                        width=width,
+                    )
 
                 else:
                     self.Draw(
@@ -2198,8 +2324,9 @@ class PsMapBufferedWindow(wx.Window):
                         brush=self.brush[type],
                         pdc=self.pdcObj,
                         drawid=id,
-                        pdctype='rectText',
-                        bb=oRect)
+                        pdctype="rectText",
+                        bb=oRect,
+                    )
             # redraw tmp objects
             if self.dragId != -1:
                 self.RedrawSelectBox(self.dragId)
@@ -2224,8 +2351,16 @@ class PsMapBufferedWindow(wx.Window):
         zoomFactor, view = self.ComputeZoom(zoomP)
         self.Zoom(zoomFactor, view)
 
-    def Draw(self, pen, brush, pdc, drawid=None, pdctype='rect',
-             bb=Rect(0, 0, 0, 0), lineCoords=None):
+    def Draw(
+        self,
+        pen,
+        brush,
+        pdc,
+        drawid=None,
+        pdctype="rect",
+        bb=Rect(0, 0, 0, 0),
+        lineCoords=None,
+    ):
         """Draw object with given pen and brush.
 
         :param pdc: PseudoDC
@@ -2242,22 +2377,18 @@ class PsMapBufferedWindow(wx.Window):
         pdc.SetPen(pen)
         pdc.SetBrush(brush)
 
-        if pdctype == 'bitmap':
+        if pdctype == "bitmap":
             if havePILImage:
-                file = self.instruction[drawid]['epsfile']
-                rotation = self.instruction[drawid]['rotate']
-                self.DrawBitmap(
-                    pdc=pdc,
-                    filePath=file,
-                    rotation=rotation,
-                    bbox=bb)
+                file = self.instruction[drawid]["epsfile"]
+                rotation = self.instruction[drawid]["rotate"]
+                self.DrawBitmap(pdc=pdc, filePath=file, rotation=rotation, bbox=bb)
             else:  # draw only rectangle with label
-                pdctype = 'rectText'
+                pdctype = "rectText"
 
-        if pdctype in ('rect', 'rectText'):
+        if pdctype in ("rect", "rectText"):
             pdc.DrawRectangle(*bb)
 
-        if pdctype == 'rectText':
+        if pdctype == "rectText":
             # dc created because of method GetTextExtent, which pseudoDC lacks
             dc = ClientDC(self)
             font = dc.GetFont()
@@ -2266,7 +2397,7 @@ class PsMapBufferedWindow(wx.Window):
             font.SetStyle(wx.ITALIC)
             dc.SetFont(font)
             pdc.SetFont(font)
-            text = '\n'.join(self.itemLabels[drawid])
+            text = "\n".join(self.itemLabels[drawid])
             w, h, lh = dc.GetFullMultiLineTextExtent(text)
             textExtent = (w, h)
             textRect = Rect(0, 0, *textExtent).CenterIn(bb)
@@ -2282,12 +2413,10 @@ class PsMapBufferedWindow(wx.Window):
             pdc.SetBackgroundMode(wx.TRANSPARENT)
             pdc.DrawLabel(text=text, rect=textRect)
 
-        elif pdctype == 'point':
-            pdc.DrawCircle(x=bb[0] + bb[2] / 2,
-                           y=bb[1] + bb[3] / 2,
-                           radius=bb[2] / 2)
+        elif pdctype == "point":
+            pdc.DrawCircle(x=bb[0] + bb[2] / 2, y=bb[1] + bb[3] / 2, radius=bb[2] / 2)
 
-        elif pdctype == 'line':
+        elif pdctype == "line":
             pdc.DrawLinePoint(lineCoords[0], lineCoords[1])
 
         pdc.SetIdBounds(drawid, bb)
@@ -2296,8 +2425,9 @@ class PsMapBufferedWindow(wx.Window):
 
         return drawid
 
-    def DrawGraphics(self, drawid, shape, color, bb,
-                     width=None, fcolor=None, lineCoords=None):
+    def DrawGraphics(
+        self, drawid, shape, color, bb, width=None, fcolor=None, lineCoords=None
+    ):
         """Draw point/line/rectangle with given color and width
 
         :param drawid: id of drawn object
@@ -2308,28 +2438,24 @@ class PsMapBufferedWindow(wx.Window):
         :param bb: bounding box
         :param lineCoords: line coordinates (for line only)
         """
-        pdctype = {'point': 'point',
-                   'line': 'line',
-                   'rectangle': 'rect'}
+        pdctype = {"point": "point", "line": "line", "rectangle": "rect"}
 
-        if color == 'none':
+        if color == "none":
             pen = wx.TRANSPARENT_PEN
         else:
             if width is not None:
                 units = UnitConversion(self)
                 width = int(
-                    units.convert(
-                        value=width,
-                        fromUnit='point',
-                        toUnit='pixel') *
-                    self.currScale)
+                    units.convert(value=width, fromUnit="point", toUnit="pixel")
+                    * self.currScale
+                )
             else:
                 width = 2
             pen = wx.Pen(colour=convertRGB(color), width=width)
             pen.SetCap(wx.CAP_BUTT)  # this is how ps.map draws
 
         brush = wx.TRANSPARENT_BRUSH
-        if fcolor and fcolor != 'none':
+        if fcolor and fcolor != "none":
             brush = wx.Brush(colour=convertRGB(fcolor))
 
         self.Draw(
@@ -2339,26 +2465,24 @@ class PsMapBufferedWindow(wx.Window):
             pdctype=pdctype[shape],
             drawid=drawid,
             bb=bb,
-            lineCoords=lineCoords)
+            lineCoords=lineCoords,
+        )
 
     def DrawBitmap(self, pdc, filePath, rotation, bbox):
         """Draw bitmap using PIL"""
         pImg = PILImage.open(filePath)
-        if sys.platform == 'win32' and \
-           'eps' in os.path.splitext(filePath)[1].lower():
+        if sys.platform == "win32" and "eps" in os.path.splitext(filePath)[1].lower():
             import types
+
             pImg.load = types.MethodType(loadPSForWindows, pImg)
 
         if rotation:
             # get rid of black background
             pImg = pImg.convert("RGBA")
             rot = pImg.rotate(rotation, expand=1)
-            new = PILImage.new('RGBA', rot.size, (255,) * 4)
+            new = PILImage.new("RGBA", rot.size, (255,) * 4)
             pImg = PILImage.composite(rot, new, rot)
-        pImg = pImg.resize(
-            (int(
-                bbox[2]), int(
-                bbox[3])), resample=PILImage.BICUBIC)
+        pImg = pImg.resize((int(bbox[2]), int(bbox[3])), resample=PILImage.BICUBIC)
         img = PilImageToWxImage(pImg)
         bitmap = img.ConvertToBitmap()
         mask = wx.Mask(bitmap, wx.WHITE)
@@ -2366,13 +2490,13 @@ class PsMapBufferedWindow(wx.Window):
         pdc.DrawBitmap(bitmap, bbox[0], bbox[1], useMask=True)
 
     def DrawRotText(self, pdc, drawId, textDict, coords, bounds):
-        if textDict['rotate']:
-            rot = float(textDict['rotate'])
+        if textDict["rotate"]:
+            rot = float(textDict["rotate"])
         else:
             rot = 0
 
-        if textDict['background'] != 'none':
-            background = textDict['background']
+        if textDict["background"] != "none":
+            background = textDict["background"]
         else:
             background = None
 
@@ -2381,12 +2505,12 @@ class PsMapBufferedWindow(wx.Window):
         pdc.BeginDrawing()
 
         # border is not redrawn when zoom changes, why?
-# if textDict['border'] != 'none' and not rot:
-##            units = UnitConversion(self)
-# borderWidth = units.convert(value = textDict['width'],
-# fromUnit = 'point', toUnit = 'pixel' ) * self.currScale
-##            pdc.SetPen(wx.Pen(colour = convertRGB(textDict['border']), width = borderWidth))
-# pdc.DrawRectangle(*bounds)
+        # if textDict['border'] != 'none' and not rot:
+        ##            units = UnitConversion(self)
+        # borderWidth = units.convert(value = textDict['width'],
+        # fromUnit = 'point', toUnit = 'pixel' ) * self.currScale
+        ##            pdc.SetPen(wx.Pen(colour = convertRGB(textDict['border']), width = borderWidth))
+        # pdc.DrawRectangle(*bounds)
 
         if background:
             pdc.SetTextBackground(convertRGB(background))
@@ -2397,11 +2521,11 @@ class PsMapBufferedWindow(wx.Window):
         fn = self.parent.makePSFont(textDict)
 
         pdc.SetFont(fn)
-        pdc.SetTextForeground(convertRGB(textDict['color']))
+        pdc.SetTextForeground(convertRGB(textDict["color"]))
         if rot == 0:
-            pdc.DrawLabel(text=textDict['text'], rect=bounds)
+            pdc.DrawLabel(text=textDict["text"], rect=bounds)
         else:
-            pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
+            pdc.DrawRotatedText(textDict["text"], coords[0], coords[1], rot)
 
         pdc.SetIdBounds(drawId, Rect(*bounds))
         self.Refresh()
@@ -2426,21 +2550,21 @@ class PsMapBufferedWindow(wx.Window):
     def DrawPaper(self, rect):
         """Draw paper and margins"""
         page = self.instruction[self.pageId]
-        scale = page['Width'] / rect.GetWidth()
-        w = (page['Width'] - page['Right'] - page['Left']) / scale
-        h = (page['Height'] - page['Top'] - page['Bottom']) / scale
-        x = page['Left'] / scale + rect.GetX()
-        y = page['Top'] / scale + rect.GetY()
+        scale = page["Width"] / rect.GetWidth()
+        w = (page["Width"] - page["Right"] - page["Left"]) / scale
+        h = (page["Height"] - page["Top"] - page["Bottom"]) / scale
+        x = page["Left"] / scale + rect.GetX()
+        y = page["Top"] / scale + rect.GetY()
 
         self.pdcPaper.BeginDrawing()
         self.pdcPaper.RemoveId(self.pageId)
         self.pdcPaper.SetId(self.pageId)
-        self.pdcPaper.SetPen(self.pen['paper'])
-        self.pdcPaper.SetBrush(self.brush['paper'])
+        self.pdcPaper.SetPen(self.pen["paper"])
+        self.pdcPaper.SetBrush(self.brush["paper"])
         self.pdcPaper.DrawRectangleRect(rect)
 
-        self.pdcPaper.SetPen(self.pen['margins'])
-        self.pdcPaper.SetBrush(self.brush['margins'])
+        self.pdcPaper.SetPen(self.pen["margins"])
+        self.pdcPaper.SetBrush(self.brush["margins"])
         self.pdcPaper.DrawRectangle(x, y, w, h)
 
         self.pdcPaper.SetIdBounds(self.pageId, rect)
@@ -2466,98 +2590,110 @@ class PsMapBufferedWindow(wx.Window):
         """Redraws select box when selected object changes its size"""
         if self.dragId == id:
             rect = self.pdcObj.GetIdBounds(id)
-            if self.instruction[id].type != 'line':
+            if self.instruction[id].type != "line":
                 rect = rect.Inflate(3, 3)
             # draw select box around object
             self.Draw(
-                pen=self.pen['select'],
-                brush=self.brush['select'],
+                pen=self.pen["select"],
+                brush=self.brush["select"],
                 pdc=self.pdcTmp,
                 drawid=self.idBoxTmp,
-                pdctype='rect',
-                bb=rect)
+                pdctype="rect",
+                bb=rect,
+            )
 
             # draw small marks signalizing resizing
-            if self.instruction[id].type in ('map', 'rectangle'):
+            if self.instruction[id].type in ("map", "rectangle"):
                 controlP = self.pdcObj.GetIdBounds(id).GetBottomRight()
-                rect = Rect(controlP[0], controlP[1], self.resizeBoxSize[0], self.resizeBoxSize[1])
+                rect = Rect(
+                    controlP[0],
+                    controlP[1],
+                    self.resizeBoxSize[0],
+                    self.resizeBoxSize[1],
+                )
                 self.Draw(
-                    pen=self.pen['resize'],
-                    brush=self.brush['resize'],
+                    pen=self.pen["resize"],
+                    brush=self.brush["resize"],
                     pdc=self.pdcTmp,
                     drawid=self.idResizeBoxTmp,
-                    pdctype='rect',
-                    bb=rect)
+                    pdctype="rect",
+                    bb=rect,
+                )
 
-            elif self.instruction[id].type == 'line':
-                p1Paper = self.instruction[id]['where'][0]
-                p2Paper = self.instruction[id]['where'][1]
+            elif self.instruction[id].type == "line":
+                p1Paper = self.instruction[id]["where"][0]
+                p2Paper = self.instruction[id]["where"][1]
                 p1Canvas = self.CanvasPaperCoordinates(
-                    rect=Rect2DPS(p1Paper, (0, 0)), canvasToPaper=False)[:2]
+                    rect=Rect2DPS(p1Paper, (0, 0)), canvasToPaper=False
+                )[:2]
                 p2Canvas = self.CanvasPaperCoordinates(
-                    rect=Rect2DPS(p2Paper, (0, 0)), canvasToPaper=False)[:2]
+                    rect=Rect2DPS(p2Paper, (0, 0)), canvasToPaper=False
+                )[:2]
                 rect = []
                 box = Rect(0, 0, self.resizeBoxSize[0], self.resizeBoxSize[1])
                 rect.append(box.CenterIn(Rect(p1Canvas[0], p1Canvas[1], 0, 0)))
                 rect.append(box.CenterIn(Rect(p2Canvas[0], p2Canvas[1], 0, 0)))
                 for i, point in enumerate((p1Canvas, p2Canvas)):
                     self.Draw(
-                        pen=self.pen['resize'],
-                        brush=self.brush['resize'],
+                        pen=self.pen["resize"],
+                        brush=self.brush["resize"],
                         pdc=self.pdcTmp,
                         drawid=self.idLinePointsTmp[i],
-                        pdctype='rect',
-                        bb=rect[i])
+                        pdctype="rect",
+                        bb=rect[i],
+                    )
 
     def UpdateMapLabel(self):
         """Updates map frame label"""
 
-        vector = self.instruction.FindInstructionByType('vector')
+        vector = self.instruction.FindInstructionByType("vector")
         if vector:
             vectorId = vector.id
         else:
             vectorId = None
 
-        raster = self.instruction.FindInstructionByType('raster')
+        raster = self.instruction.FindInstructionByType("raster")
         if raster:
             rasterId = raster.id
         else:
             rasterId = None
 
-        rasterName = 'None'
+        rasterName = "None"
         if rasterId:
-            rasterName = self.instruction[rasterId]['raster'].split('@')[0]
+            rasterName = self.instruction[rasterId]["raster"].split("@")[0]
 
-        mapId = self.instruction.FindInstructionByType('map').id
+        mapId = self.instruction.FindInstructionByType("map").id
         self.itemLabels[mapId] = []
-        self.itemLabels[mapId].append(self.itemLabelsDict['map'])
+        self.itemLabels[mapId].append(self.itemLabelsDict["map"])
         self.itemLabels[mapId].append("raster: " + rasterName)
         if vectorId:
-            for map in self.instruction[vectorId]['list']:
-                self.itemLabels[mapId].append(
-                    'vector: ' + map[0].split('@')[0])
+            for map in self.instruction[vectorId]["list"]:
+                self.itemLabels[mapId].append("vector: " + map[0].split("@")[0])
 
-        labels = self.instruction.FindInstructionByType('labels')
+        labels = self.instruction.FindInstructionByType("labels")
         if labels:
-            labelFiles = self.instruction[labels.id]['labels']
+            labelFiles = self.instruction[labels.id]["labels"]
             if not labelFiles:
                 return
-            labelFiles = [lFile.split('@')[0] for lFile in labelFiles]
-            self.itemLabels[mapId].append(
-                _("labels: ") + ', '.join(labelFiles))
+            labelFiles = [lFile.split("@")[0] for lFile in labelFiles]
+            self.itemLabels[mapId].append(_("labels: ") + ", ".join(labelFiles))
 
     def UpdateLabel(self, itype, id):
         self.itemLabels[id] = []
         self.itemLabels[id].append(self.itemLabelsDict[itype])
-        if itype == 'image':
-            file = os.path.basename(self.instruction[id]['epsfile'])
+        if itype == "image":
+            file = os.path.basename(self.instruction[id]["epsfile"])
             self.itemLabels[id].append(file)
 
     def OnSize(self, event):
-        """Init image size to match window size
-        """
+        """Init image size to match window size"""
         # not zoom all when notebook page is changed
-        if self.preview and self.parent.currentPage == 1 or not self.preview and self.parent.currentPage == 0:
+        if (
+            self.preview
+            and self.parent.currentPage == 1
+            or not self.preview
+            and self.parent.currentPage == 0
+        ):
             self.ZoomAll()
         self.OnIdle(None)
         event.Skip()
@@ -2579,5 +2715,9 @@ class PsMapBufferedWindow(wx.Window):
 
     def ScaleRect(self, rect, scale):
         """Scale rectangle"""
-        return Rect(rect.GetLeft() * scale, rect.GetTop() * scale,
-                       rect.GetSize()[0] * scale, rect.GetSize()[1] * scale)
+        return Rect(
+            rect.GetLeft() * scale,
+            rect.GetTop() * scale,
+            rect.GetSize()[0] * scale,
+            rect.GetSize()[1] * scale,
+        )

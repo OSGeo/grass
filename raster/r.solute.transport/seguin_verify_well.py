@@ -3,7 +3,7 @@
 # the example 2.1 and 2.2 at page 181 of the following book:
 # 	title = "Str{\"o}mungs und Transportmodellierung",
 # 	author = "Lege, T. and Kolditz, O. and Zielke W.",
-# 	publisher = "Springer (Berlin; Heidelberg; New York; Barcelona; Hongkong; London; Mailand; Paris; Singapur; Tokio)",
+# 	publisher = "Springer",
 # 	edition = "2. Auflage",
 # 	year = "1996",
 # 	series = "Handbuch zur Erkundung des Untergrundes von Deponien und Altlasten"
@@ -92,7 +92,8 @@ grass.run_command("r.mapcalc", expression="R_1=1.0")
 AL = 50
 AT = 5
 
-# Compute the solute transport using the above defined dispersivity coefficients for a timestep of 250d
+# Compute the solute transport using the above defined dispersivity coefficients
+# for a timestep of 250d
 grass.run_command(
     "r.solute.transport",
     "c",
@@ -140,7 +141,8 @@ grass.run_command(
 AL = 10
 AT = 1
 
-# Compute the solute transport using the above defined dispersivity coefficients for a timestep of 250d
+# Compute the solute transport using the above defined dispersivity coefficients
+# for a timestep of 250d
 grass.run_command(
     "r.solute.transport",
     "c",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	r.plane for GRASS 5.7; based on r.plane for GRASS 5
@@ -80,13 +80,13 @@ def main():
         try:
             ea = float(gscript.utils.float_or_dms(options["easting"]))
             no = float(gscript.utils.float_or_dms(options["northing"]))
-        except:
+        except Exception:
             gscript.fatal(_("Input coordinates seems to be invalid"))
     el = float(options["elevation"])
 
     # reg = gscript.region()
 
-    ### test input values ###
+    # Test input values
     if abs(dip) >= 90:
         gscript.fatal(_("dip must be between -90 and 90."))
 

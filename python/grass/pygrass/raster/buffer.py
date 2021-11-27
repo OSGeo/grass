@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 import ctypes
 import numpy as np

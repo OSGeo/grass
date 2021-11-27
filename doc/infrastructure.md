@@ -25,7 +25,7 @@ The GitHub repositories are:
 
 Git usage:
 
-* https://github.com/OSGeo/grass/blob/master/CONTRIBUTING.md
+* [CONTRIBUTING.md file](../CONTRIBUTING.md)
 * https://trac.osgeo.org/grass/wiki/HowToGit
 
 Issues:
@@ -90,7 +90,7 @@ Maintainer: M. Neteler
 * GRASS addons manual HTML:
     * generated during compilation of weekly Linux binary snapshot on grasslxd
 
-* GRASS programmer's manual (https://grass.osgeo.org/programming7/)
+* GRASS programmer's manual (https://grass.osgeo.org/programming8/)
     * HTML: cronjob run Wednesday morning California time
     * HTML: cronjob run Saturday morning California time
     * disabled: PDF: cronjob run Saturday morning California time
@@ -230,7 +230,7 @@ Details:
 
 - Windows-addons: grass-addons/tools/addons/README.txt
 - Addon manual pages cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
-- Rendered manuals: https://grass.osgeo.org/grass7/manuals/addons/
+- Rendered manuals: https://grass.osgeo.org/grass8/manuals/addons/
 
 The redirect to the latest grass7x directory is defined on grass.osgeo.org:
   /etc/apache2/includes/grass.osgeo.org.inc

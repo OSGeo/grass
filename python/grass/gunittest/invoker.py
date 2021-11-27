@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""GRASS Python testing framework test files invoker (runner)
+"""
+GRASS Python testing framework test files invoker (runner)
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -216,25 +216,24 @@ class GrassTestFilesInvoker(object):
         stdout, stderr = p.communicate()
         returncode = p.returncode
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
-        detected = False
-        idx = 0
-        while not detected:
-            try:
-                stdout = decode(stdout, encoding=encodings[idx])
-                detected = True
-            except:
-                idx += 1
-                pass
 
-        detected = False
-        idx = 0
-        while not detected:
-            try:
-                stderr = decode(stderr, encoding=encodings[idx])
-                detected = True
-            except:
-                idx += 1
-                pass
+        def try_decode(data, encodings):
+            """Try to decode data (bytes) using one of encodings
+
+            Falls back to decoding as UTF-8 with replacement for bytes.
+            Strings are returned unmodified.
+            """
+            for encoding in encodings:
+                try:
+                    return decode(data, encoding=encoding)
+                except UnicodeError:
+                    pass
+            if isinstance(data, bytes):
+                return data.decode(encoding="utf-8", errors="replace")
+            return data
+
+        stdout = try_decode(stdout, encodings=encodings)
+        stderr = try_decode(stderr, encodings=encodings)
 
         with open(stdout_path, "w") as stdout_file:
             stdout_file.write(stdout)
@@ -267,7 +266,7 @@ class GrassTestFilesInvoker(object):
         if self.clean_mapsets:
             shutil.rmtree(mapset_dir)
 
-    def run_in_location(self, gisdbase, location, location_type, results_dir):
+    def run_in_location(self, gisdbase, location, location_type, results_dir, exclude):
         """Run tests in a given location
 
         Returns an object with counting attributes of GrassTestFilesCountingReporter,
@@ -305,6 +304,7 @@ class GrassTestFilesInvoker(object):
             all_locations_value=GrassTestLoader.all_tests_value,
             universal_location_value=GrassTestLoader.universal_tests_value,
             import_modules=False,
+            exclude=exclude,
         )
 
         self.reporter.start(results_dir)

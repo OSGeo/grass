@@ -107,7 +107,7 @@ def dataset_mapcalculator(
     input_name_list_uniq = []
     for input_name in input_name_list:
         ds = open_old_stds(input_name, type, dbif)
-        ds_name = ds.get_name(band_reference=False)
+        ds_name = ds.get_name(semantic_label=False)
         if ds_name not in input_name_list_uniq:
             input_name_list_uniq.append(ds_name)
     do_sampling = len(input_name_list_uniq) > 1
@@ -197,9 +197,13 @@ def dataset_mapcalculator(
         for dataset in input_list:
             list = dataset.get_registered_maps_as_objects(dbif=dbif)
 
-            if list is None:
+            if list is None or len(list) < 1:
                 dbif.close()
-                msgr.message(_("No maps registered in input dataset"))
+                msgr.message(
+                    _("No maps registered in input dataset <{}>").format(
+                        dataset.get_name()
+                    )
+                )
                 return 0
 
             map_name_list = []

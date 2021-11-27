@@ -63,9 +63,6 @@ from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffix
 
 
-##############################################################################
-
-
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
     """Lexical analyzer for the GRASS GIS temporal algebra"""
 
@@ -147,9 +144,6 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
         return t
 
 
-##############################################################################
-
-
 class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     """The temporal algebra class"""
 
@@ -203,7 +197,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         except ValueError:
             return "null()"
 
-    ######################### Temporal functions ##############################
     def build_spatio_temporal_topology_list(
         self,
         maplistA,
@@ -631,7 +624,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             # Append map to result map list.
             # if returncode == 1:
             #    resultlist.append(map_new)
-        # Get sorted map objects as values from result dictionoary.
+        # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
         resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
@@ -741,8 +734,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 cmd_type="condition",
             )
             return resultlist
-
-    ###########################################################################
 
     def p_statement_assign(self, t):
         # This function executes the processing of raster/raster3d algebra
@@ -2056,8 +2047,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-
-###############################################################################
 
 if __name__ == "__main__":
     import doctest

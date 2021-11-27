@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Tue Apr  2 18:37:02 2013
 
@@ -61,6 +60,18 @@ class TypeDict(OrderedDict):
         for k, v in self.items():
             obj[k] = deepcopy(v)
         return obj
+
+    def __reduce__(self):
+        inst_dict = vars(self).copy()
+        for k in vars(TypeDict(self._type)):
+            inst_dict.pop(k, None)
+        return (
+            self.__class__,
+            (self._type,),
+            inst_dict or None,
+            None,
+            iter(self.items()),
+        )
 
     def used(self):
         key_dict = {}

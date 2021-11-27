@@ -116,6 +116,9 @@ static void load_library(void)
 	"libgdal1.7.0.so",
 # endif
 # ifdef _WIN32
+	"gdal303.dll",
+	"gdal302.dll",
+	"gdal301.dll",
 	"gdal300.dll",
 	"gdal204.dll",        
 	"gdal203.dll",        
@@ -395,7 +398,7 @@ static void read_gdal_options(void)
 	G_file_name(path, p, "", G_mapset());
 	st->opts.dir = G_store(path);
 	if (access(path, 0) != 0)
-	    G_make_mapset_element(p);
+	    G_make_mapset_object_group(p);
     }
 
     p = G_find_key_value("extension", key_val);

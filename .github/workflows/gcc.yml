@@ -42,7 +42,7 @@ jobs:
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: "-std=${{ matrix.c }}"
+          CFLAGS: "-std=${{ matrix.c }} -fPIC"
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: "-std=${{ matrix.cpp }}"
-        run: .github/workflows/build.sh $HOME/install
+          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC"
+        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install -Werror

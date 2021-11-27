@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 @package rdigit.controller
 
@@ -76,7 +75,7 @@ class RDigitController(wx.EvtHandler):
         # transparency used to draw (should be moved to settings)
         self._drawTransparency = 100
         # current selected drawing method
-        self._graphicsType = 'area'
+        self._graphicsType = "area"
         # last edited cell value
         self._currentCellValue = None
         # last edited buffer value
@@ -88,15 +87,14 @@ class RDigitController(wx.EvtHandler):
         self._oldCursor = None
 
         # signal to add new raster to toolbar items
-        self.newRasterCreated = Signal('RDigitController:newRasterCreated')
+        self.newRasterCreated = Signal("RDigitController:newRasterCreated")
         # signal to add just used cell value in toolbar combo
-        self.newFeatureCreated = Signal('RDigitController:newFeatureCreated')
+        self.newFeatureCreated = Signal("RDigitController:newFeatureCreated")
         # signal to upload unique categories of background map into toolbar
         # combo
-        self.uploadMapCategories = Signal(
-            'RDigitController:uploadMapCategories')
-        self.quitDigitizer = Signal('RDigitController:quitDigitizer')
-        self.showNotification = Signal('RDigitController:showNotification')
+        self.uploadMapCategories = Signal("RDigitController:uploadMapCategories")
+        self.quitDigitizer = Signal("RDigitController:quitDigitizer")
+        self.showNotification = Signal("RDigitController:showNotification")
 
     def _connectAll(self):
         self._mapWindow.mouseLeftDown.connect(self._start)
@@ -108,9 +106,7 @@ class RDigitController(wx.EvtHandler):
         self._mapWindow.mouseLeftDown.disconnect(self._start)
         self._mapWindow.mouseLeftUp.disconnect(self._addPoint)
         self._mapWindow.mouseRightUp.disconnect(self._finish)
-        self._mapWindow.Bind(
-            wx.EVT_CONTEXT_MENU,
-            self._mapWindow.OnContextMenu)
+        self._mapWindow.Bind(wx.EVT_CONTEXT_MENU, self._mapWindow.OnContextMenu)
 
     def _start(self, x, y):
         """Start digitizing a new object.
@@ -121,21 +117,22 @@ class RDigitController(wx.EvtHandler):
             return
 
         if not self._editedRaster:
-            GMessage(parent=self._mapWindow, message=_(
-                "Please select first the raster map"))
+            GMessage(
+                parent=self._mapWindow, message=_("Please select first the raster map")
+            )
             return
         if not self._drawing:
-            if self._graphicsType == 'area':
+            if self._graphicsType == "area":
                 item = self._areas.AddItem(coords=[])
-                item.SetPropertyVal('penName', 'pen1')
+                item.SetPropertyVal("penName", "pen1")
                 self._all.append(item)
-            elif self._graphicsType == 'line':
+            elif self._graphicsType == "line":
                 item = self._lines.AddItem(coords=[])
-                item.SetPropertyVal('penName', 'pen1')
+                item.SetPropertyVal("penName", "pen1")
                 self._all.append(item)
-            elif self._graphicsType == 'point':
+            elif self._graphicsType == "point":
                 item = self._points.AddItem(coords=[])
-                item.SetPropertyVal('penName', 'pen1')
+                item.SetPropertyVal("penName", "pen1")
                 self._all.append(item)
             self._drawing = True
 
@@ -150,17 +147,17 @@ class RDigitController(wx.EvtHandler):
         if not self._drawing:
             return
 
-        if self._graphicsType == 'area':
+        if self._graphicsType == "area":
             area = self._areas.GetItem(-1)
             coords = area.GetCoords() + [[x, y]]
             area.SetCoords(coords)
             self.showNotification.emit(text=_("Right click to finish area"))
-        elif self._graphicsType == 'line':
+        elif self._graphicsType == "line":
             line = self._lines.GetItem(-1)
             coords = line.GetCoords() + [[x, y]]
             line.SetCoords(coords)
             self.showNotification.emit(text=_("Right click to finish line"))
-        elif self._graphicsType == 'point':
+        elif self._graphicsType == "point":
             point = self._points.GetItem(-1)
             point.SetCoords([x, y])
             self._finish()
@@ -181,21 +178,21 @@ class RDigitController(wx.EvtHandler):
         if self._running:
             return
 
-        if self._graphicsType == 'point':
+        if self._graphicsType == "point":
             item = self._points.GetItem(-1)
-        elif self._graphicsType == 'area':
+        elif self._graphicsType == "area":
             item = self._areas.GetItem(-1)
-        elif self._graphicsType == 'line':
+        elif self._graphicsType == "line":
             item = self._lines.GetItem(-1)
         else:
             return
 
         self._drawing = False
-        item.SetPropertyVal('brushName', 'done')
-        item.AddProperty('cellValue')
-        item.AddProperty('widthValue')
-        item.SetPropertyVal('cellValue', self._currentCellValue)
-        item.SetPropertyVal('widthValue', self._currentWidthValue)
+        item.SetPropertyVal("brushName", "done")
+        item.AddProperty("cellValue")
+        item.AddProperty("widthValue")
+        item.SetPropertyVal("cellValue", self._currentCellValue)
+        item.SetPropertyVal("widthValue", self._currentWidthValue)
         self.newFeatureCreated.emit()
 
         self._mapWindow.ClearLines()
@@ -210,28 +207,31 @@ class RDigitController(wx.EvtHandler):
         Connects and disconnects signal to allow other tools
         in map toolbar to work.
         """
-        if self._graphicsType and drawingType and self._graphicsType != drawingType \
-                and self._drawing:
+        if (
+            self._graphicsType
+            and drawingType
+            and self._graphicsType != drawingType
+            and self._drawing
+        ):
             # if we select different drawing tool, finish the feature
             self._finish()
 
         if self._graphicsType and not drawingType:
             self._mapWindow.ClearLines(pdc=self._mapWindow.pdcTmp)
-            self._mapWindow.mouse['end'] = self._mapWindow.mouse['begin']
+            self._mapWindow.mouse["end"] = self._mapWindow.mouse["begin"]
             # disconnect mouse events
             self._disconnectAll()
             self._mapWindow.SetNamedCursor(self._oldCursor)
-            self._mapWindow.mouse['use'] = self._oldMouseUse
+            self._mapWindow.mouse["use"] = self._oldMouseUse
         elif self._graphicsType is None and drawingType:
             self._connectAll()
             # change mouse['box'] and pen to draw line during dragging
             # TODO: better solution for drawing this line
-            self._mapWindow.mouse['use'] = None
-            self._mapWindow.mouse['box'] = "line"
-            self._mapWindow.pen = wx.Pen(
-                colour='red', width=2, style=wx.SHORT_DASH)
+            self._mapWindow.mouse["use"] = None
+            self._mapWindow.mouse["box"] = "line"
+            self._mapWindow.pen = wx.Pen(colour="red", width=2, style=wx.SHORT_DASH)
             # change the cursor
-            self._mapWindow.SetNamedCursor('pencil')
+            self._mapWindow.SetNamedCursor("pencil")
 
         self._graphicsType = drawingType
 
@@ -244,59 +244,46 @@ class RDigitController(wx.EvtHandler):
     def ChangeDrawColor(self, color):
         self._drawColor = color[:3] + (self._drawTransparency,)
         for each in (self._areas, self._lines, self._points):
-            each.GetPen('pen1').SetColour(self._drawColor)
-            each.GetBrush('done').SetColour(self._drawColor)
+            each.GetPen("pen1").SetColour(self._drawColor)
+            each.GetBrush("done").SetColour(self._drawColor)
         self._mapWindow.UpdateMap(render=False)
 
     def Start(self):
         """Registers graphics to map window,
         connect required mouse signals.
         """
-        self._oldMouseUse = self._mapWindow.mouse['use']
+        self._oldMouseUse = self._mapWindow.mouse["use"]
         self._oldCursor = self._mapWindow.GetNamedCursor()
 
         self._connectAll()
 
         # change mouse['box'] and pen to draw line during dragging
         # TODO: better solution for drawing this line
-        self._mapWindow.mouse['use'] = None
-        self._mapWindow.mouse['box'] = "line"
-        self._mapWindow.pen = wx.Pen(
-            colour='red', width=2, style=wx.SHORT_DASH)
+        self._mapWindow.mouse["use"] = None
+        self._mapWindow.mouse["box"] = "line"
+        self._mapWindow.pen = wx.Pen(colour="red", width=2, style=wx.SHORT_DASH)
 
         color = self._drawColor[:3] + (self._drawTransparency,)
         self._areas = self._mapWindow.RegisterGraphicsToDraw(
-            graphicsType='polygon', pdc=self._mapWindow.pdcTransparent, mapCoords=True)
-        self._areas.AddPen(
-            'pen1',
-            wx.Pen(
-                colour=color,
-                width=2,
-                style=wx.SOLID))
-        self._areas.AddBrush('done', wx.Brush(colour=color, style=wx.SOLID))
+            graphicsType="polygon", pdc=self._mapWindow.pdcTransparent, mapCoords=True
+        )
+        self._areas.AddPen("pen1", wx.Pen(colour=color, width=2, style=wx.SOLID))
+        self._areas.AddBrush("done", wx.Brush(colour=color, style=wx.SOLID))
 
         self._lines = self._mapWindow.RegisterGraphicsToDraw(
-            graphicsType='line', pdc=self._mapWindow.pdcTransparent, mapCoords=True)
-        self._lines.AddPen(
-            'pen1',
-            wx.Pen(
-                colour=color,
-                width=2,
-                style=wx.SOLID))
-        self._lines.AddBrush('done', wx.Brush(colour=color, style=wx.SOLID))
+            graphicsType="line", pdc=self._mapWindow.pdcTransparent, mapCoords=True
+        )
+        self._lines.AddPen("pen1", wx.Pen(colour=color, width=2, style=wx.SOLID))
+        self._lines.AddBrush("done", wx.Brush(colour=color, style=wx.SOLID))
 
         self._points = self._mapWindow.RegisterGraphicsToDraw(
-            graphicsType='point', pdc=self._mapWindow.pdcTransparent, mapCoords=True)
-        self._points.AddPen(
-            'pen1',
-            wx.Pen(
-                colour=color,
-                width=2,
-                style=wx.SOLID))
-        self._points.AddBrush('done', wx.Brush(colour=color, style=wx.SOLID))
+            graphicsType="point", pdc=self._mapWindow.pdcTransparent, mapCoords=True
+        )
+        self._points.AddPen("pen1", wx.Pen(colour=color, width=2, style=wx.SOLID))
+        self._points.AddBrush("done", wx.Brush(colour=color, style=wx.SOLID))
 
         # change the cursor
-        self._mapWindow.SetNamedCursor('pencil')
+        self._mapWindow.SetNamedCursor("pencil")
 
     def Stop(self):
         """Before stopping digitizer, asks to save edits"""
@@ -305,12 +292,15 @@ class RDigitController(wx.EvtHandler):
                 self._mapWindow,
                 _("Do you want to save changes?"),
                 _("Save raster map changes"),
-                wx.YES_NO)
+                wx.YES_NO,
+            )
             if dlg.ShowModal() == wx.ID_YES:
                 if self._drawing:
                     self._finish()
-                self._thread.Run(callable=self._exportRaster,
-                                 ondone=lambda event: self._updateAndQuit())
+                self._thread.Run(
+                    callable=self._exportRaster,
+                    ondone=lambda event: self._updateAndQuit(),
+                )
             else:
                 self.quitDigitizer.emit()
         else:
@@ -321,8 +311,9 @@ class RDigitController(wx.EvtHandler):
         if self._drawing:
             self._finish()
 
-        self._thread.Run(callable=self._exportRaster,
-                         ondone=lambda event: self._update())
+        self._thread.Run(
+            callable=self._exportRaster, ondone=lambda event: self._update()
+        )
 
     def Undo(self):
         """Undo a change, goes object back (finished or not finished)"""
@@ -343,16 +334,17 @@ class RDigitController(wx.EvtHandler):
         try:
             if self._backupRasterName:
                 gcore.run_command(
-                    'g.remove',
-                    type='raster',
-                    flags='f',
+                    "g.remove",
+                    type="raster",
+                    flags="f",
                     name=self._backupRasterName,
-                    quiet=True)
+                    quiet=True,
+                )
         except CalledModuleError:
             pass
 
         self._mapWindow.ClearLines(pdc=self._mapWindow.pdcTmp)
-        self._mapWindow.mouse['end'] = self._mapWindow.mouse['begin']
+        self._mapWindow.mouse["end"] = self._mapWindow.mouse["begin"]
         # disconnect mouse events
         if self._graphicsType:
             self._disconnectAll()
@@ -360,14 +352,14 @@ class RDigitController(wx.EvtHandler):
         self._mapWindow.UnregisterGraphicsToDraw(self._areas)
         self._mapWindow.UnregisterGraphicsToDraw(self._lines)
         self._mapWindow.UnregisterGraphicsToDraw(self._points)
-        #self._registeredGraphics = None
+        # self._registeredGraphics = None
         self._mapWindow.UpdateMap(render=False)
 
         if restore:
             # restore mouse['use'] and cursor to the state before measuring
             # starts
             self._mapWindow.SetNamedCursor(self._oldCursor)
-            self._mapWindow.mouse['use'] = self._oldMouseUse
+            self._mapWindow.mouse["use"] = self._oldMouseUse
 
     def _updateAndQuit(self):
         """Called when thread is done. Updates map and calls to quits digitizer."""
@@ -385,18 +377,22 @@ class RDigitController(wx.EvtHandler):
         try:
             self._backupRaster(name)
         except ScriptError:
-            GError(parent=self._mapWindow, message=_(
-                "Failed to create backup copy of edited raster map."))
+            GError(
+                parent=self._mapWindow,
+                message=_("Failed to create backup copy of edited raster map."),
+            )
             return False
         self._editedRaster = name
-        self._mapType = grast.raster_info(map=name)['datatype']
+        self._mapType = grast.raster_info(map=name)["datatype"]
         self._editOldRaster = True
         return True
 
     def SelectNewMap(
-            self, standalone=False, mapName=None, bgMap=None,
-            mapType=None,
-
+        self,
+        standalone=False,
+        mapName=None,
+        bgMap=None,
+        mapType=None,
     ):
         """After selecting new raster, shows dialog to choose name,
         background map and type of the new map.
@@ -413,14 +409,14 @@ class RDigitController(wx.EvtHandler):
         if standalone:
             try:
                 self._createNewMap(
-                    mapName=mapName, backgroundMap=bgMap,
+                    mapName=mapName,
+                    backgroundMap=bgMap,
                     mapType=mapType,
                 )
             except ScriptError:
                 GError(
-                    parent=self._mapWindow, message=_(
-                        "Failed to create new raster map."
-                    ),
+                    parent=self._mapWindow,
+                    message=_("Failed to create new raster map."),
                 )
                 return False
             return True
@@ -436,9 +432,8 @@ class RDigitController(wx.EvtHandler):
                     )
                 except ScriptError:
                     GError(
-                        parent=self._mapWindow, message=_(
-                            "Failed to create new raster map."
-                        ),
+                        parent=self._mapWindow,
+                        message=_("Failed to create new raster map."),
                     )
                     return False
                 finally:
@@ -450,59 +445,59 @@ class RDigitController(wx.EvtHandler):
 
     def _createNewMap(self, mapName, backgroundMap, mapType):
         """Creates a new raster map based on specified background and type."""
-        name = mapName.split('@')[0]
-        background = backgroundMap.split('@')[0]
-        types = {'CELL': 'int', 'FCELL': 'float', 'DCELL': 'double'}
+        name = mapName.split("@")[0]
+        background = backgroundMap.split("@")[0]
+        types = {"CELL": "int", "FCELL": "float", "DCELL": "double"}
         if background:
             back = background
         else:
-            back = 'null()'
+            back = "null()"
         try:
             grast.mapcalc(
                 exp="{name} = {mtype}({back})".format(
-                    name=name,
-                    mtype=types[mapType],
-                    back=back),
+                    name=name, mtype=types[mapType], back=back
+                ),
                 overwrite=True,
-                quiet=True)
+                quiet=True,
+            )
             if background:
                 self._backgroundRaster = backgroundMap
                 gcore.run_command(
-                    'r.colors',
-                    map=name,
-                    raster=self._backgroundRaster,
-                    quiet=True)
-                if mapType == 'CELL':
-                    values = gcore.read_command('r.describe', flags='1n',
-                                                map=name, quiet=True).strip()
+                    "r.colors", map=name, raster=self._backgroundRaster, quiet=True
+                )
+                if mapType == "CELL":
+                    values = gcore.read_command(
+                        "r.describe", flags="1n", map=name, quiet=True
+                    ).strip()
                     if values:
-                        self.uploadMapCategories.emit(
-                            values=values.split('\n'))
+                        self.uploadMapCategories.emit(values=values.split("\n"))
         except CalledModuleError:
             raise ScriptError
         self._backupRaster(name)
 
-        name = name + '@' + gcore.gisenv()['MAPSET']
+        name = name + "@" + gcore.gisenv()["MAPSET"]
         self._editedRaster = name
         self._mapType = mapType
         self.newRasterCreated.emit(name=name)
         gisenv = gcore.gisenv()
-        self._giface.grassdbChanged.emit(grassdb=gisenv['GISDBASE'],
-                                         location=gisenv['LOCATION_NAME'],
-                                         mapset=gisenv['MAPSET'],
-                                         action='new',
-                                         map=name.split('@')[0],
-                                         element='raster')
+        self._giface.grassdbChanged.emit(
+            grassdb=gisenv["GISDBASE"],
+            location=gisenv["LOCATION_NAME"],
+            mapset=gisenv["MAPSET"],
+            action="new",
+            map=name.split("@")[0],
+            element="raster",
+        )
 
     def _backupRaster(self, name):
         """Creates a temporary backup raster necessary for undo behavior.
 
         :param str name: name of raster map for which we create backup
         """
-        name = name.split('@')[0]
-        backup = name + '_backupcopy_' + str(os.getpid())
+        name = name.split("@")[0]
+        backup = name + "_backupcopy_" + str(os.getpid())
         try:
-            gcore.run_command('g.copy', raster=[name, backup], quiet=True)
+            gcore.run_command("g.copy", raster=[name, backup], quiet=True)
         except CalledModuleError:
             raise ScriptError
 
@@ -524,110 +519,126 @@ class RDigitController(wx.EvtHandler):
 
         if len(self._all) < 1:
             new = self._editedRaster
-            if '@' in self._editedRaster:
-                new = self._editedRaster.split('@')[0]
-            gcore.run_command('g.copy', raster=[self._backupRasterName, new],
-                              overwrite=True, quiet=True)
+            if "@" in self._editedRaster:
+                new = self._editedRaster.split("@")[0]
+            gcore.run_command(
+                "g.copy",
+                raster=[self._backupRasterName, new],
+                overwrite=True,
+                quiet=True,
+            )
         else:
-            tempRaster = 'tmp_rdigit_rast_' + str(os.getpid())
+            tempRaster = "tmp_rdigit_rast_" + str(os.getpid())
             text = []
             rastersToPatch = []
             i = 0
             lastCellValue = lastWidthValue = None
             evt = updateProgress(
-                range=len(self._all),
-                value=0, text=_("Rasterizing..."))
+                range=len(self._all), value=0, text=_("Rasterizing...")
+            )
             wx.PostEvent(self, evt)
-            lastCellValue = self._all[0].GetPropertyVal('cellValue')
-            lastWidthValue = self._all[0].GetPropertyVal('widthValue')
+            lastCellValue = self._all[0].GetPropertyVal("cellValue")
+            lastWidthValue = self._all[0].GetPropertyVal("widthValue")
             for item in self._all:
-                if item.GetPropertyVal('widthValue') and \
-                    (lastCellValue != item.GetPropertyVal('cellValue') or
-                     lastWidthValue != item.GetPropertyVal('widthValue')):
+                if item.GetPropertyVal("widthValue") and (
+                    lastCellValue != item.GetPropertyVal("cellValue")
+                    or lastWidthValue != item.GetPropertyVal("widthValue")
+                ):
                     if text:
                         out = self._rasterize(
-                            text, lastWidthValue, self._mapType, tempRaster)
+                            text, lastWidthValue, self._mapType, tempRaster
+                        )
                         rastersToPatch.append(out)
                         text = []
                     self._writeItem(item, text)
                     out = self._rasterize(
-                        text, item.GetPropertyVal('widthValue'),
-                        self._mapType, tempRaster)
+                        text,
+                        item.GetPropertyVal("widthValue"),
+                        self._mapType,
+                        tempRaster,
+                    )
                     rastersToPatch.append(out)
                     text = []
                 else:
                     self._writeItem(item, text)
 
-                lastCellValue = item.GetPropertyVal('cellValue')
-                lastWidthValue = item.GetPropertyVal('widthValue')
+                lastCellValue = item.GetPropertyVal("cellValue")
+                lastWidthValue = item.GetPropertyVal("widthValue")
 
                 i += 1
                 evt = updateProgress(
-                    range=len(self._all),
-                    value=i, text=_("Rasterizing..."))
+                    range=len(self._all), value=i, text=_("Rasterizing...")
+                )
                 wx.PostEvent(self, evt)
             if text:
-                out = self._rasterize(text, item.GetPropertyVal('widthValue'),
-                                      self._mapType, tempRaster)
+                out = self._rasterize(
+                    text, item.GetPropertyVal("widthValue"), self._mapType, tempRaster
+                )
                 rastersToPatch.append(out)
 
             gcore.run_command(
-                'r.patch', input=rastersToPatch[:: -1] +
-                [self._backupRasterName],
-                output=self._editedRaster, overwrite=True, quiet=True,
-                env=self._env)
+                "r.patch",
+                input=rastersToPatch[::-1] + [self._backupRasterName],
+                output=self._editedRaster,
+                overwrite=True,
+                quiet=True,
+                env=self._env,
+            )
             gcore.run_command(
-                'g.remove',
-                type='raster',
-                flags='f',
-                name=rastersToPatch +
-                [tempRaster],
-                quiet=True)
+                "g.remove",
+                type="raster",
+                flags="f",
+                name=rastersToPatch + [tempRaster],
+                quiet=True,
+            )
         try:
             # setting the right color table
             if self._editOldRaster:
                 return
             if not self._backgroundRaster:
                 table = UserSettings.Get(
-                    group='rasterLayer',
-                    key='colorTable',
-                    subkey='selection')
+                    group="rasterLayer", key="colorTable", subkey="selection"
+                )
                 if not table:
-                    table = 'rainbow'
+                    table = "rainbow"
                 gcore.run_command(
-                    'r.colors',
-                    color=table,
-                    map=self._editedRaster,
-                    quiet=True)
+                    "r.colors", color=table, map=self._editedRaster, quiet=True
+                )
             else:
-                gcore.run_command('r.colors', map=self._editedRaster,
-                                  raster=self._backgroundRaster, quiet=True)
+                gcore.run_command(
+                    "r.colors",
+                    map=self._editedRaster,
+                    raster=self._backgroundRaster,
+                    quiet=True,
+                )
         except CalledModuleError:
             self._running = False
-            GError(parent=self._mapWindow, message=_(
-                "Failed to set default color table for edited raster map"))
+            GError(
+                parent=self._mapWindow,
+                message=_("Failed to set default color table for edited raster map"),
+            )
 
     def _writeFeature(self, item, vtype, text):
         """Writes digitized features in r.in.poly format."""
         coords = item.GetCoords()
-        if vtype == 'P':
+        if vtype == "P":
             coords = [coords]
-        cellValue = item.GetPropertyVal('cellValue')
-        record = '{vtype}\n'.format(vtype=vtype)
+        cellValue = item.GetPropertyVal("cellValue")
+        record = "{vtype}\n".format(vtype=vtype)
         for coord in coords:
-            record += ' '.join([str(c) for c in coord])
-            record += '\n'
-        record += '= {cellValue}\n'.format(cellValue=cellValue)
+            record += " ".join([str(c) for c in coord])
+            record += "\n"
+        record += "= {cellValue}\n".format(cellValue=cellValue)
 
         text.append(record)
 
     def _writeItem(self, item, text):
         if item in self._areas.GetAllItems():
-            self._writeFeature(item, vtype='A', text=text)
+            self._writeFeature(item, vtype="A", text=text)
         elif item in self._lines.GetAllItems():
-            self._writeFeature(item, vtype='L', text=text)
+            self._writeFeature(item, vtype="L", text=text)
         elif item in self._points.GetAllItems():
-            self._writeFeature(item, vtype='P', text=text)
+            self._writeFeature(item, vtype="P", text=text)
 
     def _rasterize(self, text, bufferDist, mapType, tempRaster):
         """Performs the actual rasterization using r.in.poly
@@ -640,30 +651,42 @@ class RDigitController(wx.EvtHandler):
 
         :return: output raster map name as a result of digitization
         """
-        output = 'x' + str(uuid.uuid4())[:8]
-        asciiFile = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        asciiFile.write('\n'.join(text))
+        output = "x" + str(uuid.uuid4())[:8]
+        asciiFile = tempfile.NamedTemporaryFile(mode="w", delete=False)
+        asciiFile.write("\n".join(text))
         asciiFile.close()
 
         if bufferDist:
-            bufferDist /= 2.
+            bufferDist /= 2.0
             gcore.run_command(
-                'r.in.poly',
+                "r.in.poly",
                 input=asciiFile.name,
                 output=tempRaster,
                 type_=mapType,
                 overwrite=True,
-                quiet=True)
-            gcore.run_command('r.grow', input=tempRaster, output=output,
-                              flags='m', radius=bufferDist, quiet=True,
-                              env=self._env)
+                quiet=True,
+            )
+            gcore.run_command(
+                "r.grow",
+                input=tempRaster,
+                output=output,
+                flags="m",
+                radius=bufferDist,
+                quiet=True,
+                env=self._env,
+            )
         else:
-            gcore.run_command('r.in.poly', input=asciiFile.name, output=output,
-                              type_=mapType, quiet=True, env=self._env)
+            gcore.run_command(
+                "r.in.poly",
+                input=asciiFile.name,
+                output=output,
+                type_=mapType,
+                quiet=True,
+                env=self._env,
+            )
         os.unlink(asciiFile.name)
         return output
 
     def _setRegion(self):
         """Set region according input raster map"""
-        self._env['GRASS_REGION'] = gcore.region_env(
-            raster=self._backupRasterName)
+        self._env["GRASS_REGION"] = gcore.region_env(raster=self._backupRasterName)

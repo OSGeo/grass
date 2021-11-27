@@ -11,6 +11,7 @@
   \author Original author CERL
 */
 
+#include <stdio.h>
 #include <string.h>
 
 #include <grass/gis.h>
@@ -32,16 +33,12 @@
 int M_do_remove(int n, const char *old)
 {
     int i, ret;
-
-    /* int len; */
     const char *mapset;
     int result = 0;
     int removed = 0;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_message(_("Removing %s <%s>"), list[n].maindesc, old);
-
-    /* len = get_description_len(n); */
 
     M__hold_signals(1);
 
@@ -97,9 +94,11 @@ int M_do_remove(int n, const char *old)
     }
 
     if (G_strcasecmp(list[n].element[0], "cell") == 0) {
-	char colr2[GPATH_MAX];
+	char colr2[6 + GMAPSET_MAX];
 
-	G_snprintf(colr2, GPATH_MAX, "colr2/%s", G_mapset());
+	if (snprintf(colr2, 6 + GMAPSET_MAX, "colr2/%s", G_mapset()) >=
+	    6 + GMAPSET_MAX)
+	    G_warning(_("String for secondary color table has been truncated"));
 	switch (G_remove(colr2, old)) {
 	case -1:
 	    G_warning(_("Unable to remove %s"), colr2);

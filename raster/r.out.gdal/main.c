@@ -336,7 +336,7 @@ int main(int argc, char *argv[])
 
 #if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
 	/* convert bound CRS */
-	{
+	if (srswkt && *srswkt) {
 	    PJ *obj = NULL;
 
 	    indef = srswkt;
@@ -680,7 +680,7 @@ int main(int argc, char *argv[])
     /* Set Projection  */
     CPLErr ret = CE_None;
 
-    if (srswkt)
+    if (srswkt && *srswkt)
 	ret = GDALSetProjection(hCurrDS, srswkt);
     if (!srswkt || ret == CE_Failure)
 	G_warning(_("Unable to set projection"));

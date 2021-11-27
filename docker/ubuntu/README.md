@@ -19,7 +19,7 @@ __Build the docker with__:
 
 ```bash
 docker build \
-         --file docker/ubuntu/Dockerfile_ubuntu_pdal \
+         --file docker/ubuntu/Dockerfile \
          --tag grass-py3-pdal:stable-ubuntu .
 ```
 
@@ -43,7 +43,7 @@ and build and enter with:
 
 ```bash
 $ docker build \
-         -f docker/ubuntu/Dockerfile_ubuntu_pdal \
+         -f docker/ubuntu/Dockerfile \
          -t grass-py3-pdal:stable-ubuntu .
 
 $ docker run -it grass-py3-pdal:stable-ubuntu /bin/bash

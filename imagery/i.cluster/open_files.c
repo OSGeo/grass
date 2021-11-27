@@ -7,7 +7,7 @@
 
 int open_files(void)
 {
-    char *name, *mapset;
+    char *name, *mapset, **err, *semantic_label;
     FILE *fd;
     int n, missing;
 
@@ -15,6 +15,7 @@ int open_files(void)
     I_free_group_ref(&ref);
     I_get_subgroup_ref(group, subgroup, &ref);
 
+    semantic_labels = (char **)G_malloc(ref.nfiles * sizeof(char **));
     missing = 0;
     for (n = 0; n < ref.nfiles; n++) {
 	name = ref.file[n].name;
@@ -23,7 +24,9 @@ int open_files(void)
 	    missing = 1;
 	    G_warning(_("Raster map <%s> do not exists in subgroup <%s>"),
 		      G_fully_qualified_name(name, mapset), subgroup);
-	}
+        }
+        semantic_label = Rast_get_semantic_label_or_name(ref.file[n].name, ref.file[n].mapset);
+        semantic_labels[n] = G_store(semantic_label);
     }
     if (missing)
 	G_fatal_error(_("No raster maps found"));
@@ -47,9 +50,8 @@ int open_files(void)
 	cellfd[n] = Rast_open_old(name, mapset);
     }
 
-    I_init_signatures(&in_sig, ref.nfiles);
     if (insigfile) {
-	fd = I_fopen_signature_file_old(group, subgroup, insigfile);
+	fd = I_fopen_signature_file_old(insigfile);
 	if (fd == NULL)
 	    G_fatal_error(_("Unable to open seed signature file <%s>"),
 			  insigfile);
@@ -63,6 +65,15 @@ int open_files(void)
 	if (in_sig.nsigs > 255)
 	    G_fatal_error(_("<%s> has too many signatures (limit is 255)"),
 			  insigfile);
+
+        err = I_sort_signatures_by_semantic_label(&in_sig, &ref);
+        if (err)
+            G_fatal_error(_("Signature – group member semantic label mismatch.\n"
+                "Extra signatures for bands: %s\n"
+                "Imagery group bands without signatures: %s"),
+                err[0] ? err[0] : _("none"),
+                err[1] ? err[1] : _("none")
+            );
 
 	maxclass = in_sig.nsigs;
     }

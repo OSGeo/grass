@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.rast.accumulate
@@ -496,7 +496,7 @@ def main():
             print(accmod)
             accmod.run()
 
-            if accmod.popen.returncode != 0:
+            if accmod.returncode != 0:
                 dbif.close()
                 grass.fatal(_("Error running r.series.accumulate"))
 

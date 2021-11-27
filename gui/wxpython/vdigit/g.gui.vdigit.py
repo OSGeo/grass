@@ -48,6 +48,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.render import Map
@@ -60,57 +61,73 @@ def main():
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
     class VDigitMapFrame(MapFrame):
-
         def __init__(self, vectorMap):
             MapFrame.__init__(
-                self, parent=None, Map=Map(), giface=DMonGrassInterface(None),
-                title=_("Vector Digitizer - GRASS GIS"), size=(850, 600))
+                self,
+                parent=None,
+                Map=Map(),
+                giface=DMonGrassInterface(None),
+                title=_("Vector Digitizer - GRASS GIS"),
+                size=(850, 600),
+            )
             # this giface issue not solved yet, we must set mapframe aferwards
             self._giface._mapframe = self
             # load vector map
             mapLayer = self.GetMap().AddLayer(
-                ltype='vector', name=vectorMap,
-                command=['d.vect', 'map=%s' % vectorMap],
-                active=True, hidden=False, opacity=1.0, render=True)
+                ltype="vector",
+                name=vectorMap,
+                command=["d.vect", "map=%s" % vectorMap],
+                active=True,
+                hidden=False,
+                opacity=1.0,
+                render=True,
+            )
 
             # switch toolbar
-            self.AddToolbar('vdigit', fixed=True)
+            self.AddToolbar("vdigit", fixed=True)
 
             # start editing
-            self.toolbars['vdigit'].StartEditing(mapLayer)
+            self.toolbars["vdigit"].StartEditing(mapLayer)
+            # use Close instead of QuitVDigit for standalone tool
+            self.toolbars["vdigit"].quitDigitizer.disconnect(self.QuitVDigit)
+            self.toolbars["vdigit"].quitDigitizer.connect(lambda: self.Close())
 
     if not haveVDigit:
         grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
 
-    if not grass.find_file(name=options['map'], element='vector',
-                           mapset=grass.gisenv()['MAPSET'])['fullname']:
-        if not flags['c']:
-            grass.fatal(_("Vector map <%s> not found in current mapset. "
-                          "New vector map can be created by providing '-c' flag.") %
-                        options['map'])
+    if not grass.find_file(
+        name=options["map"], element="vector", mapset=grass.gisenv()["MAPSET"]
+    )["fullname"]:
+        if not flags["c"]:
+            grass.fatal(
+                _(
+                    "Vector map <%s> not found in current mapset. "
+                    "New vector map can be created by providing '-c' flag."
+                )
+                % options["map"]
+            )
         else:
-            grass.verbose(_("New vector map <%s> created") % options['map'])
+            grass.verbose(_("New vector map <%s> created") % options["map"])
             try:
                 grass.run_command(
-                    'v.edit', map=options['map'],
-                    tool='create', quiet=True)
+                    "v.edit", map=options["map"], tool="create", quiet=True
+                )
             except CalledModuleError:
-                grass.fatal(
-                    _("Unable to create new vector map <%s>") %
-                    options['map'])
+                grass.fatal(_("Unable to create new vector map <%s>") % options["map"])
 
     # allow immediate rendering
-    driver = UserSettings.Get(group='display', key='driver', subkey='type')
-    if driver == 'png':
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
+    driver = UserSettings.Get(group="display", key="driver", subkey="type")
+    if driver == "png":
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
     else:
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
     app = wx.App()
-    frame = VDigitMapFrame(options['map'])
+    frame = VDigitMapFrame(options["map"])
     frame.Show()
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 import numpy as np
 
+
 # Code originate from matplotlib
 # https://matplotlib.org/3.0.0/_modules/matplotlib/mlab.html#dist
 def dist(x, y):
@@ -21,6 +22,7 @@ def dist(x, y):
     """
     d = x - y
     return np.sqrt(np.dot(d, d))
+
 
 # Code originate from matplotlib
 # https://matplotlib.org/3.0.0/_modules/matplotlib/mlab.html#dist_point_to_segment

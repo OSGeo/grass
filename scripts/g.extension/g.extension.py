@@ -8,13 +8,15 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2019 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2021 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
 #               comes with GRASS for details.
 #
-# TODO:         - add sudo support where needed (i.e. check first permission to write into
+# TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
+#                 https://github.com/OSGeo/grass-addons/issues/528
+#               - add sudo support where needed (i.e. check first permission to write into
 #                 $GISBASE directory)
 #               - fix toolbox support in install_private_extension_xml()
 #############################################################################
@@ -75,7 +77,6 @@
 # % description: Specific branch to fetch addon from (only used when fetching from git)
 # % required: no
 # % multiple: no
-# % answer: main
 # %end
 
 # %flag
@@ -154,6 +155,7 @@ from __future__ import print_function
 import fileinput
 import http
 import os
+import codecs
 import sys
 import re
 import atexit
@@ -166,6 +168,7 @@ from distutils.dir_util import copy_tree
 
 from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError
+from six.moves.urllib.parse import urlparse
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
@@ -188,6 +191,30 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
+GIT_URL = "https://github.com/OSGeo/grass-addons"
+
+
+def replace_shebang_win(python_file):
+    """
+    Replaces "python" with "python3" in python files
+    using UTF8 encoding on MS Windows
+    """
+
+    cur_dir = os.path.dirname(python_file)
+    tmp_name = os.path.join(cur_dir, gscript.tempname(12))
+
+    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
+        tmp_name, "w", encoding="utf8"
+    ) as out_file:
+
+        for line in in_file:
+            new_line = line.replace(
+                "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"
+            )
+            out_file.write(new_line)
+
+    os.remove(python_file)  # remove original
+    os.rename(tmp_name, python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
@@ -206,6 +233,78 @@ def urlopen(url, *args, **kwargs):
     """
     request = urlrequest.Request(url, headers=HEADERS)
     return urlrequest.urlopen(request, *args, **kwargs)
+
+
+def get_version_branch(major_version):
+    """Check if version branch for the current GRASS version exists,
+    if not, take branch for the previous version
+    For the official repo we assume that at least one version branch is present"""
+    version_branch = f"grass{major_version}"
+    try:
+        urlrequest.urlopen(f"{GIT_URL}/tree/{version_branch}/src")
+    except URLError:
+        version_branch = "grass{}".format(int(major_version) - 1)
+    return version_branch
+
+
+def get_github_branches(
+    github_api_url="https://api.github.com/repos/OSGeo/grass-addons/branches",
+    version_only=True,
+):
+    """Get ordered list of branch names in repo using github API
+    For the official repo we assume that at least one version branch is present
+    Due to strict rate limits in the github API (60 calls per hour) this function
+    is currently not used."""
+    req = urlrequest.urlopen(github_api_url)
+    content = json.loads(req.read())
+    branches = [repo_branch["name"] for repo_branch in content]
+    if version_only:
+        branches = [
+            version_branch
+            for version_branch in branches
+            if version_branch.startswith("grass")
+        ]
+    branches.sort()
+    return branches
+
+
+def get_default_branch(full_url):
+    """Get default branch for repository in known hosting services
+    (currently only implemented for github, gitlab and bitbucket API)
+    In all other cases "main" is used as default"""
+    # Parse URL
+    url_parts = urlparse(full_url)
+    # Get organization and repository component
+    try:
+        organization, repository = url_parts.path.split("/")[1:3]
+    except URLError:
+        gscript.fatal(
+            _(
+                "Cannot retrieve organization and repository from URL: <{}>.".format(
+                    full_url
+                )
+            )
+        )
+    # Construct API call and retrieve default branch
+    api_calls = {
+        "github.com": f"https://api.github.com/repos/{organization}/{repository}",
+        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",
+        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",
+    }
+    # Try to get default branch via API. The API call is known to fail a) if the full_url
+    # does not belong to an implemented hosting service or b) if the rate limit of the
+    # API is exceeded
+    try:
+        req = urlrequest.urlopen(api_calls.get(url_parts.netloc))
+        content = json.loads(req.read())
+        # For github and gitlab
+        default_branch = content.get("default_branch")
+        # For bitbucket
+        if not default_branch:
+            default_branch = content.get("development").get("name")
+    except URLError:
+        default_branch = "main"
+    return default_branch
 
 
 def download_addons_paths_file(url, response_format, *args, **kwargs):
@@ -1175,8 +1274,12 @@ def install_module_xml(mlist):
             desc = gtask.parse_interface(name).description
             # mname = gtask.parse_interface(name).name
             keywords = gtask.parse_interface(name).keywords
-        except Exception as e:
-            grass.warning(_("No metadata available for module '%s'.") % name)
+        except Exception as error:
+            grass.warning(
+                _("No metadata available for module '{name}': {error}").format(
+                    name=name, error=error
+                )
+            )
             continue
 
         tnode = None
@@ -1287,11 +1390,9 @@ def install_extension_win(name):
     module_list = list()
     for r, d, f in os.walk(srcdir):
         for file in f:
-            if file.endswith(".py"):
-                modulename = file.rsplit(".py")[0]
-                module_list.append(modulename)
-            if file.endswith(".exe"):
-                modulename = file.rsplit(".exe")[0]
+            # Filter GRASS module name patterns
+            if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
+                modulename = os.path.splitext(file)[0]
                 module_list.append(modulename)
     # remove duplicates in case there are .exe wrappers for python scripts
     module_list = set(module_list)
@@ -1304,12 +1405,7 @@ def install_extension_win(name):
                 pyfiles.append(os.path.join(r, file))
 
     for filename in pyfiles:
-        with fileinput.FileInput(filename, inplace=True) as file:
-            for line in file:
-                print(
-                    line.replace("#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"),
-                    end="",
-                )
+        replace_shebang_win(filename)
 
     # collect old files
     old_file_list = list()
@@ -1380,8 +1476,6 @@ def download_source_code_official_github(url, name, outdev, directory=None):
     """
     if not directory:
         directory = os.path.join(os.getcwd, name)
-    classchar = name.split(".", 1)[0]
-    moduleclass = expand_module_class_name(classchar)
     if grass.call(["svn", "export", url, directory], stdout=outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
     return directory
@@ -1462,7 +1556,8 @@ def extract_zip(name, directory, tmpdir):
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
         for subfile in file_list:
-            # this should be safe in Python 2.7.4
+            if "__pycache__" in subfile:
+                continue
             zip_file.extract(subfile, extract_dir)
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
@@ -1531,7 +1626,7 @@ def download_source_code(
             response = urlopen(url)
         except URLError:
             # Try download add-on from 'master' branch if default "main" fails
-            if branch == "main":
+            if not branch:
                 try:
                     url = url.replace("main", "master")
                     gscript.message(
@@ -1587,7 +1682,6 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
-    source_url = "https://github.com/OSGeo/grass-addons/tree/master/grass7/"
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
@@ -1669,7 +1763,7 @@ def install_extension_std_platforms(name, source, url, branch):
         "SCRIPTDIR=%s" % dirs["script"],
         "STRINGDIR=%s" % dirs["string"],
         "ETC=%s" % os.path.join(dirs["etc"]),
-        "SOURCE_URL=%s" % source_url,
+        "SOURCE_URL=%s" % url,
     ]
 
     install_cmd = [
@@ -2113,9 +2207,12 @@ def resolve_xmlurl_prefix(url, source=None):
     'https://grass.osgeo.org/addons/'
     """
     gscript.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
-    if source == "official":
+    if source in ("official", "official_fork"):
         # use pregenerated modules XML file
-        url = "https://grass.osgeo.org/addons/grass%s/" % version[0]
+        # Define branch to fetch from (latest or current version)
+        version_branch = get_version_branch(version[0])
+
+        url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
     # the exact action depends on subsequent code (somewhere)
 
@@ -2193,7 +2290,10 @@ def resolve_known_host_service(url, name, branch):
         else:
             actual_start = ""
         if "branch" in match["url_end"]:
-            suffix = match["url_end"].format(name=name, branch=branch)
+            suffix = match["url_end"].format(
+                name=name,
+                branch=branch if branch else get_default_branch(url),
+            )
         else:
             suffix = match["url_end"].format(name=name)
         url = "{prefix}{base}{suffix}".format(
@@ -2206,6 +2306,7 @@ def resolve_known_host_service(url, name, branch):
 
 
 # TODO: add also option to enforce the source type
+# TODO: workaround, https://github.com/OSGeo/grass-addons/issues/528
 def resolve_source_code(url=None, name=None, branch=None, fork=False):
     """Return type and URL or path of the source code
 
@@ -2273,47 +2374,32 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module') # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
-    if not url and name:
+    # Handle URL for the offical repo
+    if name and (not url or fork):
         module_class = get_module_class_name(name)
         # note: 'trunk' is required to make URL usable for 'svn export' call
-        git_url = (
-            "https://github.com/OSGeo/grass-addons/trunk/"
-            "grass{version}/{module_class}/{module_name}".format(
-                version=version[0], module_class=module_class, module_name=name
-            )
-        )
-        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
-        #            'grass{version}/{module_class}/{module_name}?format=zip' \
-        #            .format(version=version[0],
-        #                    module_class=module_class, module_name=name)
-        # return 'official', trac_url
-        return "official", git_url
-
-    if url and fork:
-        module_class = get_module_class_name(name)
-
-        # note: 'trunk' is required to make URL usable for 'svn export' call
-        if branch in ["master", "main"]:
-            svn_reference = "trunk"
+        # and fetches the default branch
+        if not branch:
+            # Fetch from default branch
+            version_branch = get_version_branch(version[0])
+            try:
+                url = url.rstrip("/") if url else GIT_URL
+                urlrequest.urlopen(f"{url}/tree/{version_branch}/src")
+                svn_reference = "branches/{}".format(version_branch)
+            except URLError:
+                svn_reference = "trunk"
         else:
             svn_reference = "branches/{}".format(branch)
 
-        git_url = (
-            "{url}/{branch}/"
-            "grass{version}/{module_class}/{module_name}".format(
-                url=url,
-                version=version[0],
-                module_class=module_class,
-                module_name=name,
-                branch=svn_reference,
-            )
-        )
-        # trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
-        #            'grass{version}/{module_class}/{module_name}?format=zip' \
-        #            .format(version=version[0],
-        #                    module_class=module_class, module_name=name)
-        # return 'official', trac_url
-        return "official_fork", git_url
+        if not url or url == GIT_URL:
+            # Set URL for the given GRASS version
+            git_url = f"{GIT_URL}/{svn_reference}/src/{module_class}/{name}"
+            return "official", git_url
+        else:
+            # Forks from the official repo should reflect the current structure
+            url = url.rstrip("/")
+            git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
+            return "official_fork", git_url
 
     # Check if URL can be found
     # Catch corner case if local URL is given starting with file://
@@ -2325,20 +2411,20 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
                 open_url = urlopen(url)
                 open_url.close()
                 url_validated = True
-            except:
+            except URLError:
                 pass
         else:
             try:
                 open_url = urlopen("http://" + url)
                 open_url.close()
                 url_validated = True
-            except:
+            except URLError:
                 pass
             try:
                 open_url = urlopen("https://" + url)
                 open_url.close()
                 url_validated = True
-            except:
+            except URLError:
                 pass
 
         if not url_validated:
@@ -2376,10 +2462,9 @@ def get_addons_paths(gg_addons_base_dir):
     and their paths (mkhmtl.py tool)
     """
     get_addons_paths.json_file = "addons_paths.json"
-
-    url = (
-        "https://api.github.com/repos/OSGeo/grass-addons/git/trees/" "main?recursive=1"
-    )
+    # Define branch to fetch from (latest or current version)
+    addons_branch = get_version_branch(version[0])
+    url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
 
     response = download_addons_paths_file(
         url=url,
@@ -2479,6 +2564,7 @@ if __name__ == "__main__":
 
     grass_version = grass.version()
     version = grass_version["version"].split(".")
+
     build_platform = grass_version["build_platform"].split("-", 1)[0]
 
     sys.exit(main())

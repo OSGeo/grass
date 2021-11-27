@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 ############################################################################
 #
@@ -101,14 +100,14 @@ index_items = [
     ("wxGUI_graphical.html", std_img_name("gui"), "GUI"),
     ("wxGUI.nviz.html", std_img_name("3dview"), "3D view"),
     (
-        "https://grass.osgeo.org/grass79/manuals/libpython/index.html",
+        "https://grass.osgeo.org/grass80/manuals/libpython/index.html",
         std_img_name("python"),
         "Python",
     ),
-    ("https://grass.osgeo.org/programming7/", std_img_name("c"), "C library"),
+    ("https://grass.osgeo.org/programming8/", std_img_name("c"), "C library"),
     ("manual_gallery.html", std_img_name("gallery"), "Gallery"),
     (
-        "https://grass.osgeo.org/grass7/manuals/addons/",
+        "https://grass.osgeo.org/grass8/manuals/addons/",
         std_img_name("addons"),
         "Addons",
     ),

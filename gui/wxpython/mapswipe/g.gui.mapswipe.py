@@ -54,26 +54,27 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.settings import UserSettings
     from core.giface import StandaloneGrassInterface
     from mapswipe.frame import SwipeMapFrame
 
-    driver = UserSettings.Get(group='display', key='driver', subkey='type')
-    if driver == 'png':
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
+    driver = UserSettings.Get(group="display", key="driver", subkey="type")
+    if driver == "png":
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
     else:
-        os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+        os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
-    first = options['first']
-    second = options['second']
-    mode = options['mode']
+    first = options["first"]
+    second = options["second"]
+    mode = options["mode"]
 
     for mapName in [first, second]:
         if mapName:
             gfile = gscript.find_file(name=mapName)
-            if not gfile['name']:
+            if not gfile["name"]:
                 gscript.fatal(_("Raster map <%s> not found") % mapName)
 
     app = wx.App()
@@ -81,7 +82,7 @@ def main():
     frame = SwipeMapFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Temporal Plot Tool - GRASS GIS"),
+        title=_("Map Swipe Tool - GRASS GIS"),
     )
 
     if first:
@@ -97,5 +98,5 @@ def main():
     app.MainLoop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

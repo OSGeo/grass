@@ -14,7 +14,7 @@ from __future__ import print_function
 
 try:
     import ply.yacc as yacc
-except:
+except ImportError:
     pass
 
 from .temporal_raster_base_algebra import (
@@ -23,9 +23,6 @@ from .temporal_raster_base_algebra import (
 )
 import grass.pygrass.modules as pymod
 from .space_time_datasets import Raster3DDataset
-
-
-###############################################################################
 
 
 class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
@@ -84,8 +81,6 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.parser.parse(expression)
 
         return self.process_chain_dict
-
-    ######################### Temporal functions ##############################
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps.
@@ -161,8 +156,6 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 
             t[0] = resultlist
 
-
-###############################################################################
 
 if __name__ == "__main__":
     import doctest

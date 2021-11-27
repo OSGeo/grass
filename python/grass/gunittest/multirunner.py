@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
-"""Testing framework module for running tests in Python unittest fashion
+"""
+Testing framework module for running tests in Python unittest fashion
 
-Copyright (C) 2014 by the GRASS Development Team
+Copyright (C) 2014-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
@@ -117,21 +117,21 @@ def main():
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
-    # grass7bin = 'C:\Program Files (x86)\GRASS GIS 7.9.git\grass79dev.bat'
-    grass7bin = args.grassbin  # TODO: can be used if pressent
+    # grass8bin = 'C:\Program Files (x86)\GRASS GIS 8.0.git\grass.bat'
+    grass8bin = args.grassbin  # TODO: can be used if pressent
 
-    ########### SOFTWARE
-    # query GRASS 7 itself for its GISBASE
+    # Software
+    # query GRASS GIS 8 itself for its GISBASE
     # we assume that GRASS GIS' start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
-    startcmd = grass7bin + " --config path"
+    startcmd = grass8bin + " --config path"
     p = subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     out, err = p.communicate()
     if p.returncode != 0:
         print(
-            "ERROR: Cannot find GRASS GIS 7 start script (%s):\n%s" % (startcmd, err),
+            "ERROR: Cannot find GRASS GIS 8 start script (%s):\n%s" % (startcmd, err),
             file=sys.stderr,
         )
         return 1
@@ -143,7 +143,7 @@ def main():
     grass_python_dir = os.path.join(gisbase, "etc", "python")
     sys.path.append(grass_python_dir)
 
-    ########### DATA
+    # Data
     # define GRASS DATABASE
 
     # Set GISDBASE environment variable

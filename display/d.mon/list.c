@@ -63,7 +63,7 @@ void list_mon(char ***list, int *n)
             continue;
 
         *list = G_realloc(*list, (*n + 1) * sizeof(char *));
-        (*list)[*n] = dp->d_name;
+        (*list)[*n] = G_store(dp->d_name);
         (*n)++;
     }
     closedir(dirp);

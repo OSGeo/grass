@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2020 by the GRASS Development Team
+(C) 2008-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -92,6 +92,7 @@ _popen_args = [
     "universal_newlines",
     "startupinfo",
     "creationflags",
+    "encoding",
 ]
 
 
@@ -347,7 +348,7 @@ def make_command(
                         "To run the module <%s> add underscore at the end"
                         " of the option <%s> to avoid conflict with Python"
                         " keywords. Underscore at the beginning is"
-                        " depreciated in GRASS GIS 7.0 and will be removed"
+                        " deprecated in GRASS GIS 7.0 and has been removed"
                         " in version 7.1."
                     )
                     % (prog, opt)
@@ -361,16 +362,16 @@ def make_command(
 def handle_errors(returncode, result, args, kwargs):
     """Error handler for :func:`run_command()` and similar functions
 
-    The function returns *result* if *returncode* is equal to 0,
-    otherwise it reports errors based on the current settings.
-
     The functions which are using this function to handle errors,
     can be typically called with an *errors* parameter.
     This function can handle one of the following values: raise,
     fatal, status, exit, and ignore. The value raise is a default.
 
+    If returncode is 0, *result* is returned, unless
+    ``errors="status"`` is set.
+
     If *kwargs* dictionary contains key ``errors``, the value is used
-    to determine the behavior on error.
+    to determine the return value and the behavior on error.
     The value ``errors="raise"`` is a default in which case a
     ``CalledModuleError`` exception is raised.
 
@@ -406,13 +407,13 @@ def handle_errors(returncode, result, args, kwargs):
         code = " ".join(args)
         return module, code
 
+    handler = kwargs.get("errors", "raise")
+    if handler.lower() == "status":
+        return returncode
     if returncode == 0:
         return result
-    handler = kwargs.get("errors", "raise")
     if handler.lower() == "ignore":
         return result
-    elif handler.lower() == "status":
-        return returncode
     elif handler.lower() == "fatal":
         module, code = get_module_and_code(args, kwargs)
         fatal(
@@ -464,9 +465,6 @@ def start_command(
 
     :return: Popen object
     """
-    if "encoding" in kwargs.keys():
-        encoding = kwargs.pop("encoding")
-
     options = {}
     popts = {}
     for opt, val in kwargs.items():
@@ -693,7 +691,7 @@ def write_command(*args, **kwargs):
     returncode = process.poll()
     if _capture_stderr and returncode:
         sys.stderr.write(stderr)
-    return handle_errors(returncode, returncode, args, kwargs)
+    return handle_errors(returncode, None, args, kwargs)
 
 
 def exec_command(
@@ -894,11 +892,18 @@ def _parse_opts(lines):
         if not line:
             break
         try:
-            [var, val] = line.split(b"=", 1)
-            [var, val] = [decode(var), decode(val)]
-        except:
-            raise SyntaxError("invalid output from g.parser: %s" % line)
-
+            var, val = line.split(b"=", 1)
+        except ValueError:
+            raise SyntaxError("invalid output from g.parser: {}".format(line))
+        try:
+            var = decode(var)
+            val = decode(val)
+        except UnicodeError as error:
+            raise SyntaxError(
+                "invalid output from g.parser ({error}): {line}".format(
+                    error=error, line=line
+                )
+            )
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
@@ -906,8 +911,9 @@ def _parse_opts(lines):
         elif var in ["GRASS_OVERWRITE", "GRASS_VERBOSE"]:
             os.environ[var] = val
         else:
-            raise SyntaxError("invalid output from g.parser: %s" % line)
-
+            raise SyntaxError(
+                "unexpected output variable from g.parser: {}".format(line)
+            )
     return (options, flags)
 
 
@@ -926,7 +932,7 @@ def parser():
     "flags" are Python booleans.
 
     Overview table of parser standard options:
-    https://grass.osgeo.org/grass79/manuals/parser_standard_options.html
+    https://grass.osgeo.org/grass80/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)
@@ -1045,13 +1051,13 @@ def _compare_units(dic):
         ["kilometer", "kilometre"],
         ["kilometers", "kilometres"],
     ]
-    for l in lookup:
+    for item in lookup:
         for n in range(len(dic["unit"])):
-            if dic["unit"][n].lower() in l:
-                dic["unit"][n] = l[0]
+            if dic["unit"][n].lower() in item:
+                dic["unit"][n] = item[0]
         for n in range(len(dic["units"])):
-            if dic["units"][n].lower() in l:
-                dic["units"][n] = l[0]
+            if dic["units"][n].lower() in item:
+                dic["units"][n] = item[0]
     return dic
 
 
@@ -1110,12 +1116,12 @@ def _text_to_key_value_dict(
             # We first try integer then float
             try:
                 value_converted = int(value)
-            except:
+            except ValueError:
                 not_int = True
             if not_int:
                 try:
                     value_converted = float(value)
-                except:
+                except ValueError:
                     not_float = True
 
             if not_int and not_float:
@@ -1386,7 +1392,8 @@ def del_temp_region():
     try:
         name = os.environ.pop("WIND_OVERRIDE")
         run_command("g.remove", flags="f", quiet=True, type="region", name=name)
-    except:
+    except (KeyError, CalledModuleError):
+        # The function succeeds even when called more than once.
         pass
 
 
@@ -1655,7 +1662,7 @@ def verbosity():
         return 2
 
 
-## various utilities, not specific to GRASS
+# Various utilities, not specific to GRASS
 
 
 def find_program(pgm, *args):
@@ -1685,7 +1692,7 @@ def find_program(pgm, *args):
         # TODO: the doc or impl is not correct, any return code is accepted
         call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
         found = True
-    except:
+    except Exception:
         found = False
     nuldev.close()
 

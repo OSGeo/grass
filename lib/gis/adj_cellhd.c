@@ -440,7 +440,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
 	    }
 	}
 	else
-	    G_fatal_error(_("Illegal latitude for North"));
+	    G_fatal_error(_("Illegal latitude for North: %g"), cellhd->north);
     }
 
     /* south */
@@ -490,7 +490,7 @@ static int ll_check_ns(struct Cell_head *cellhd)
 	    }
 	}
 	else
-	    G_fatal_error(_("Illegal latitude for South"));
+	    G_fatal_error(_("Illegal latitude for South: %g"), cellhd->south);
     }
 
     if (lladjust)
@@ -525,8 +525,9 @@ static int ll_check_ew(struct Cell_head *cellhd)
     if (cellhd->east - cellhd->west > 360.0) {
 	diff = (cellhd->east - cellhd->west - 360.0) / cellhd->ew_res;
 	if (diff > fpepsilon)
-	    G_important_message(_("360 degree EW extent is exceeded by %g cells"),
-		      diff);
+	    G_important_message(_("360 degree EW extent is exceeded by %g cells"
+		" (East: %g, West: %g)"),
+		      diff, cellhd->east, cellhd->west);
     }
     else if (cellhd->east - cellhd->west < 360.0) {
 	diff = (360.0 - (cellhd->east - cellhd->west)) / cellhd->ew_res;

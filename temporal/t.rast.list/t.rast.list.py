@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.rast.list
@@ -39,7 +39,7 @@
 # % guisection: Formatting
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
+# % options: id,name,semantic_label,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
 # % answer: start_time
 # %end
 
@@ -50,7 +50,7 @@
 # % guisection: Selection
 # % required: no
 # % multiple: yes
-# % options: id,name,band_reference,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
+# % options: id,name,semantic_label,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max
 # % answer: name,mapset,start_time,end_time
 # %end
 

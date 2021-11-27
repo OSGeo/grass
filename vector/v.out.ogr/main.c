@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
 	if (!inwkt) {
 	    inwkt = G_get_projwkt();
 	}
-	if (inwkt) {
+	if (inwkt && *inwkt) {
 	    Ogr_projection = OSRNewSpatialReference(inwkt);
 	}
 #endif
@@ -685,7 +685,7 @@ int main(int argc, char *argv[])
 	else {
 	    G_warning(_("Vector map <%s> is 3D. "
 			"Use format specific layer creation options (parameter 'lco') "
-			"to export <in 3D rather than 2D (default)."),
+			"to export in 3D rather than 2D (default)."),
 		      options.input->answer);
 	}
     }

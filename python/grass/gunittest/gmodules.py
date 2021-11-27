@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""Specialized interfaces for invoking modules for testing framework
+"""
+Specialized interfaces for invoking modules for testing framework
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -26,14 +26,14 @@ class SimpleModule(Module):
     ...                        overwrite=True)
     >>> mapcalc.run()
     Module('r.mapcalc')
-    >>> mapcalc.popen.returncode
+    >>> mapcalc.returncode
     0
 
     >>> colors = SimpleModule('r.colors',
     ...                       map='test_a', rules='-', stdin_='1 red')
     >>> colors.run()
     Module('r.colors')
-    >>> colors.popen.returncode
+    >>> colors.returncode
     0
     >>> str(colors.inputs.stdin)
     '1 red'
@@ -137,5 +137,5 @@ def call_module(
     output, errors = process.communicate(input=encode(decode(stdin)) if stdin else None)
     returncode = process.poll()
     if returncode:
-        raise CalledModuleError(returncode, module, kwargs, errors)
+        raise CalledModuleError(module, kwargs, returncode, errors)
     return decode(output) if output else None
