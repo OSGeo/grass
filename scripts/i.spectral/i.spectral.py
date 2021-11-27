@@ -200,24 +200,23 @@ def draw_linegraph(what):
                 " monitor {}.".format(", ".join(supported_monitors))
             )
         )
-    selected_monitor = (
-        gcore.read_command("d.mon", flags="p", quiet=True).strip().split("\n")
+    selected_monitor = gcore.read_command("d.mon", flags="p", quiet=True).replace(
+        "\n", ""
     )
-    for monitor in selected_monitor:
-        if monitor not in supported_monitors:
-            gcore.fatal(
-                _(
-                    "Supported monitor isn't selected. Please select one of the"
-                    " monitor {}.".format(", ".join(supported_monitors))
-                )
+    if selected_monitor not in supported_monitors:
+        gcore.fatal(
+            _(
+                "Supported monitor isn't selected. Please select one of the"
+                " monitor {}.".format(", ".join(supported_monitors))
             )
+        )
     with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
         for line in f.readlines():
             if "GRASS_RENDER_FILE=" in line:
                 gcore.info(
                     _(
                         "{} monitor is used, output file {}".format(
-                            monitor.capitalize(), line.split("=")[-1]
+                            selected_monitor.capitalize(), line.split("=")[-1]
                         )
                     )
                 )
