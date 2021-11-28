@@ -27,6 +27,7 @@ import stat
 import tempfile
 import random
 import six
+import math
 
 import wx
 from wx.lib import ogl
@@ -954,9 +955,10 @@ class ModelFrame(wx.Frame):
     def GetOptData(self, dcmd, layer, params, propwin):
         """Process action data"""
         if params:  # add data items
-            width, height = self.canvas.GetSize()
-            x = width / 2 - 200 + self._randomShift()
-            y = height / 2 + self._randomShift()
+            data_items = []
+            x = layer.GetX()
+            y = layer.GetY()
+
             for p in params["params"]:
                 if p.get("prompt", "") not in (
                     "raster",
@@ -1003,11 +1005,12 @@ class ModelFrame(wx.Frame):
                         value=p.get("value", ""),
                         prompt=p.get("prompt", ""),
                         x=x,
-                        y=y,
+                        y=y
                     )
+                    data_items.append(data)
                     self._addEvent(data)
                     self.canvas.diagram.AddShape(data)
-                    data.Show(True)
+                    data.Show(False)
 
                     if p.get("age", "old") == "old":
                         rel = ModelRelation(
@@ -1042,6 +1045,16 @@ class ModelFrame(wx.Frame):
 
             # valid / parameterized ?
             layer.SetValid(params)
+
+            # arrange data items
+            p = 360 / len(data_items)
+            r = 200
+            alpha = 270 * (math.pi / 180)
+            for data in data_items:
+                data.SetX(x + r * math.sin(alpha))
+                data.SetY(y + r * math.cos(alpha))
+                alpha += p * (math.pi / 180)
+                data.Show(True)
 
             self.canvas.Refresh()
 
