@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     in_fd = Rast_open_old(opt_in->answer, "");
 
     if (Rast_get_map_type(in_fd) != CELL_TYPE)
-        G_fatal_error(_("Input raster mus be of type CELL"));
+        G_fatal_error(_("Input raster must be of type CELL"));
 
     if (opt_out->answer != NULL && strcmp(opt_out->answer, "-") != 0) {
         if (!(out_fp = fopen(opt_out->answer, "w")))
