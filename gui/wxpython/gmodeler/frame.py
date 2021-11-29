@@ -1047,16 +1047,17 @@ class ModelFrame(wx.Frame):
             layer.SetValid(params)
 
             # arrange data items
-            dc = wx.ClientDC(self.canvas)
-            p = 360 / len(data_items)
-            r = 200
-            alpha = 270 * (math.pi / 180)
-            for data in data_items:
-                data.Move(dc,
-                          x + r * math.sin(alpha),
-                          y + r * math.cos(alpha))
-                alpha += p * (math.pi / 180)
-                data.Show(True)
+            if data_items:
+                dc = wx.ClientDC(self.canvas)
+                p = 360 / len(data_items)
+                r = 200
+                alpha = 270 * (math.pi / 180)
+                for data in data_items:
+                    data.Move(dc,
+                              x + r * math.sin(alpha),
+                              y + r * math.cos(alpha))
+                    alpha += p * (math.pi / 180)
+                    data.Show(True)
 
         if dcmd:
             layer.SetProperties(params, propwin)
