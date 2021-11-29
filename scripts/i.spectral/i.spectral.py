@@ -67,7 +67,7 @@
 # %End
 # %flag
 # % key: c
-# % description: Show sampling coordinates instead of numbering in the legend (is valid for -g flag)
+# % description: Show sampling coordinates instead of numbering in the legend (valid for -g flag)
 # %end
 # % flag
 # % key: g
@@ -197,7 +197,7 @@ def draw_linegraph(what):
         gcore.fatal(
             _(
                 "Supported monitor isn't running. Please launch one of the"
-                " monitor {}.".format(", ".join(supported_monitors))
+                " monitors {}.".format(", ".join(supported_monitors))
             )
         )
     selected_monitor = gcore.read_command("d.mon", flags="p", quiet=True).replace(
@@ -207,7 +207,7 @@ def draw_linegraph(what):
         gcore.fatal(
             _(
                 "Supported monitor isn't selected. Please select one of the"
-                " monitor {}.".format(", ".join(supported_monitors))
+                " monitors {}.".format(", ".join(supported_monitors))
             )
         )
     with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
