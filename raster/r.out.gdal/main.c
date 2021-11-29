@@ -605,17 +605,15 @@ int main(int argc, char *argv[])
     }
 
     /* Offset value */
-    double *offsetval = NULL; /* not defined */
+    double offsetval = 0; /* not defined */
     if (offsetopt->answer != NULL) {
-        offsetval = (double *) G_malloc(sizeof(double));
-        *offsetval = atof(offsetopt->answer);
+        offsetval = atof(offsetopt->answer);
     }
 
     /* Scale value */
-    double *scaleval = NULL; /* not defined */
+    double scaleval = 1; /* not defined */
     if (scaleopt->answer != NULL) {
-        scaleval = (double *) G_malloc(sizeof(double));
-        *scaleval = atof(scaleopt->answer);
+        scaleval = atof(scaleopt->answer);
     }
 
     /* exact range and nodata checks for each band */
