@@ -34,7 +34,11 @@ class TestObjectGeometryPixel(TestCase):
     def setUpClass(cls):
         """Imports test raster(s), ensures expected computational region and setup"""
         cls.runModule(
-            "r.in.ascii", input="-", type="CELL", stdin_=testraster1, output=cls.test_objects1
+            "r.in.ascii",
+            input="-",
+            type="CELL",
+            stdin_=testraster1,
+            output=cls.test_objects1,
         )
         cls.use_temp_region()
         cls.runModule("g.region", raster=cls.test_objects1)
