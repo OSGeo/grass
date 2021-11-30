@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 ############################################################################
 #
 # MODULE:       t.rast.aggregate
@@ -19,7 +20,7 @@
 #
 #############################################################################
 
-#%module
+# %module
 # % description: Aggregates temporally the maps of a space time raster dataset by a user defined granularity.
 # % keyword: temporal
 # % keyword: aggregation
