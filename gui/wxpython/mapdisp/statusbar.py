@@ -923,7 +923,7 @@ class SbMask(SbItem):
         )["name"]:
 
             dlg = wx.MessageDialog(
-                self._mapframe,
+                self.mapFrame,
                 message=_("Are you sure that you want to remove the MASK?"),
                 caption=_("Remove MASK"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
@@ -933,7 +933,7 @@ class SbMask(SbItem):
                 return
             RunCommand("r.mask", flags="r")
             self.Hide()
-            self._mapframe.OnRender(event=None)
+            self.mapFrame.OnRender(event=None)
 
 
 class SbTextItem(SbItem):
