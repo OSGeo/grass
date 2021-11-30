@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 ############################################################################
 #
 # MODULE:       t.rast.aggregate
@@ -21,100 +20,100 @@
 #############################################################################
 
 #%module
-#% description: Aggregates temporally the maps of a space time raster dataset by a user defined granularity.
-#% keyword: temporal
-#% keyword: aggregation
-#% keyword: raster
-#% keyword: time
-#%end
+# % description: Aggregates temporally the maps of a space time raster dataset by a user defined granularity.
+# % keyword: temporal
+# % keyword: aggregation
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STRDS_OUTPUT
-#%end
+# %option G_OPT_STRDS_OUTPUT
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: Either a numerical suffix or the start time (s-flag) separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: Either a numerical suffix or the start time (s-flag) separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: granularity
-#% type: string
-#% description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or an integer value for relative time
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: granularity
+# % type: string
+# % description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or an integer value for relative time
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Aggregate operation to be performed on the raster maps
-#% required: yes
-#% multiple: no
-#% options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
-#% answer: average
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Aggregate operation to be performed on the raster maps
+# % required: yes
+# % multiple: no
+# % options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
+# % answer: average
+# %end
 
-#%option
-#% key: offset
-#% type: integer
-#% description: Offset that is used to create the output map ids, output map id is generated as: basename_ (count + offset)
-#% required: no
-#% multiple: no
-#% answer: 0
-#%end
+# %option
+# % key: offset
+# % type: integer
+# % description: Offset that is used to create the output map ids, output map id is generated as: basename_ (count + offset)
+# % required: no
+# % multiple: no
+# % answer: 0
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.series processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.series processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%option
-#% key: file_limit
-#% type: integer
-#% description: The maximum number of open files allowed for each r.series process
-#% required: no
-#% multiple: no
-#% answer: 1000
-#%end
+# %option
+# % key: file_limit
+# % type: integer
+# % description: The maximum number of open files allowed for each r.series process
+# % required: no
+# % multiple: no
+# % answer: 1000
+# %end
 
-#%option G_OPT_T_SAMPLE
-#% options: equal,overlaps,overlapped,starts,started,finishes,finished,during,contains,related
-#% answer: contains
-#%end
+# %option G_OPT_T_SAMPLE
+# % options: equal,overlaps,overlapped,starts,started,finishes,finished,during,contains,related
+# % answer: contains
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%flag
-#% key: n
-#% description: Register Null maps
-#%end
+# %flag
+# % key: n
+# % description: Register Null maps
+# %end
 
-#%flag
-#% key: w
-#% description: Aggregation weighted by temporal overlap between input rasters and rasters of defined granularity
-#%end
+# %flag
+# % key: w
+# % description: Aggregation weighted by temporal overlap between input rasters and rasters of defined granularity
+# %end
 
 import grass.script as gcore
 
