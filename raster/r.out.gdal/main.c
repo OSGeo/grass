@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *flag_l, *flag_c, *flag_m, *flag_f, *flag_t;
     struct Option *input, *format, *type, *output, *createopt, *metaopt,
-	          *nodataopt, *overviewopt;
+        *nodataopt, *overviewopt, *offsetopt, *scaleopt;
 
     struct Cell_head cellhead;
     struct Ref ref;
@@ -250,6 +250,24 @@ int main(int argc, char *argv[])
     overviewopt->multiple = NO;
     overviewopt->required = NO;
     overviewopt->guisection = _("Creation");
+
+    offsetopt = G_define_option();
+    offsetopt->key = "offset";
+    offsetopt->type = TYPE_DOUBLE;
+    offsetopt->description =
+	_("Assign a specified offset value to output bands");
+    offsetopt->multiple = NO;
+    offsetopt->required = NO;
+    offsetopt->guisection = _("Creation");
+
+    scaleopt = G_define_option();
+    scaleopt->key = "scale";
+    scaleopt->type = TYPE_DOUBLE;
+    scaleopt->description =
+	_("Assign a specified scale value to output bands");
+    scaleopt->multiple = NO;
+    scaleopt->required = NO;
+    scaleopt->guisection = _("Creation");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -586,6 +604,18 @@ int main(int argc, char *argv[])
 	    set_default_nodata_value(datatype, export_min, export_max);
     }
 
+    /* Offset value */
+    double offsetval = 0; /* not defined */
+    if (offsetopt->answer != NULL) {
+        offsetval = atof(offsetopt->answer);
+    }
+
+    /* Scale value */
+    double scaleval = 1; /* not defined */
+    if (scaleopt->answer != NULL) {
+        scaleval = atof(scaleopt->answer);
+    }
+
     /* exact range and nodata checks for each band */
     G_message(_("Checking GDAL data type and nodata value..."));
     for (band = 0; band < ref.nfiles; band++) {
@@ -707,7 +737,8 @@ int main(int argc, char *argv[])
 	retval = export_band
 	    (hCurrDS, band + 1, ref.file[band].name,
 	     ref.file[band].mapset, &cellhead, maptype, nodataval,
-	     flag_c->answer, flag_m->answer, (nodataopt->answer != NULL));
+	     flag_c->answer, flag_m->answer, (nodataopt->answer != NULL),
+             offsetval, scaleval);
 
 	/* read/write error */
 	if (retval == -1) {
