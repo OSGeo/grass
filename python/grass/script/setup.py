@@ -36,34 +36,19 @@ Usage::
         # TODO: this have to be checked, maybe unix way is good enough
         grass8bin = '/Applications/GRASS/GRASS-8.0.app/'
 
-    # query GRASS GIS itself for its GISBASE
-    startcmd = [grass8bin, '--config', 'path']
-    try:
-        p = subprocess.Popen(startcmd, shell=False,
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-    except OSError as error:
-        sys.exit("ERROR: Cannot find GRASS GIS start script"
-                 " {cmd}: {error}".format(cmd=startcmd[0], error=error))
-    if p.returncode != 0:
-        sys.exit("ERROR: Issues running GRASS GIS start script"
-                 " {cmd}: {error}"
-                 .format(cmd=' '.join(startcmd), error=err))
-    gisbase = out.strip(os.linesep)
-
-    # set GISBASE environment variable
-    os.environ['GISBASE'] = gisbase
+    # query GRASS GIS itself for its Python package path
+    grass_cmd = [grass8bin, "--config", "python_path"]
+    process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 
     # define GRASS-Python environment
-    grass_pydir = os.path.join(gisbase, "etc", "python")
-    sys.path.append(grass_pydir)
+    sys.path.append(process.stdout.strip())
 
     # import (some) GRASS Python bindings
     import grass.script as gs
     import grass.script.setup as gsetup
 
     # launch session
-    rcfile = gsetup.init(gisdb, location, mapset, grass_path=gisbase)
+    rcfile = gsetup.init(gisdb, location, mapset)
 
     # example calls
     gs.message('Current GRASS GIS 8 environment:')
