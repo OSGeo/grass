@@ -177,8 +177,10 @@ def reclass(inf, outf, lim, clump, diag, les, nodata=False):
             op_str = "greater"
         if nodata is True:
             grass.warning(
-                _("No areas of size %s than or equal to %f "
-                  "hectares found. Creating NULL raster...")
+                _(
+                    "No areas of size %s than or equal to %f "
+                    "hectares found. Creating NULL raster..."
+                )
                 % (op_str, limit)
             )
             expression = "$outfile = null()"
@@ -240,8 +242,9 @@ def main():
         grass.fatal(_("Raster map <%s> not found") % infile)
 
     if method == "reclass":
-        reclass(infile, outfile, limit, clumped, diagonal, mode == "lesser",
-                nodata=nodata)
+        reclass(
+            infile, outfile, limit, clumped, diagonal, mode == "lesser", nodata=nodata
+        )
     elif method == "rmarea":
         rmarea(infile, outfile, limit, in_proj["meters"])
 
