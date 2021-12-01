@@ -59,7 +59,7 @@ class MinMaxTestCase(TestCase):
         # arbitrary, but with more cells, we expect higher precision
         precision = 0.00001
         self.assertModule(
-            "r.surf.random", min=min_value, max=max_value, output=self.output,
+            "r.surf.random", min=min_value, max=max_value, output=self.output
         )
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterMinMax(
