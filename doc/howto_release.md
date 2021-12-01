@@ -22,7 +22,7 @@ tools/fix_typos.sh
 
 ### i18N: sync from Transifex
 
-See <https://www.transifex.com/grass-gis/grass8/dashboard/>
+See <https://www.transifex.com/grass-gis/grass7/dashboard/>
 
 Exception Latvian as Latvian is directly edited in git and then sync'ed from
 master .po files
