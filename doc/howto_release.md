@@ -318,7 +318,7 @@ Software pages:
 - Update addons (grass_addons.sh) rules, eg.
 
 ```
-     compile $GIT_PATH/grass8 $GISBASE_PATH/grass80RC1  $ADDON_PATH/grass80RC1/addons
+     compile $GIT_PATH/grass8 $GISBASE_PATH/grass800RC1  $ADDON_PATH/grass800RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
