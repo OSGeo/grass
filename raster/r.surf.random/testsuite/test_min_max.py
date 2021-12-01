@@ -23,6 +23,7 @@ from grass.gunittest.main import test
 
 
 def get_raster_min_max(raster_map):
+    """Get minimum and maximum value from raster metadata as a tuple"""
     info = gs.raster_info(raster_map)
     return info["min"], info["max"]
 
