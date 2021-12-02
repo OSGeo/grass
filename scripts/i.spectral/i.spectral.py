@@ -235,7 +235,6 @@ def draw_linegraph(what):
         x_title=_("Bands"),
         y_title=_("DN Value"),
     )
->>>>>>> 79b77ba90 (scripts/i.spectral: show error message if one of the supported monitor isn't running (#1991))
 
 
 def main():
