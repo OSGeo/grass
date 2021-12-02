@@ -2514,7 +2514,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         :param dbif: The database interface to be used
         """
-
         if (
             get_enable_mapset_check() is True
             and self.get_mapset() != get_current_mapset()
@@ -2578,10 +2577,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "r",
         ).read()
 
-        for version in range(3, get_tgis_db_version_from_metadata()+1):
+        for version in range(3, get_tgis_db_version_from_metadata() + 1):
             sqlfile = os.path.join(
                 sql_path,
-                "update_" + self.get_type() + "_metadata_template_v{}.sql".format(version)
+                "update_"
+                + self.get_type()
+                + "_metadata_template_v{}.sql".format(version),
             )
             if os.path.exists(sqlfile):
                 sql += open(sqlfile).read()
