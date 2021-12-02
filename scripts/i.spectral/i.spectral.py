@@ -25,58 +25,58 @@
 # 3 March 2006: Added multiple images and group support by Francesco Pirotti - CIRGEO
 #
 
-#%Module
-#% description: Displays spectral response at user specified locations in group or images.
-#% keyword: imagery
-#% keyword: querying
-#% keyword: raster
-#% keyword: multispectral
-#%End
-#%option G_OPT_I_GROUP
-#% required : no
-#% guisection: Input
-#%end
-#%option G_OPT_I_SUBGROUP
-#% required : no
-#% guisection: Input
-#%end
-#%option G_OPT_R_INPUTS
-#% key: raster
-#% required : no
-#% guisection: Input
-#%end
-#%option G_OPT_M_COORDS
-#% multiple: yes
-#% required: yes
-#% guisection: Input
-#%end
-#%option G_OPT_F_OUTPUT
-#% key: output
-#% description: Name for output image (or text file for -t)
-#% guisection: Output
-#% required : no
-#%end
-#%Option
-#% key: format
-#% type: string
-#% description: Graphics format for output file
-#% options: png,eps,svg
-#% answer: png
-#% multiple: no
-#% guisection: Output
-#%End
-#%flag
-#% key: c
-#% description: Show sampling coordinates instead of numbering in the legend
-#%end
-#% flag
-#% key: g
-#% description: Use gnuplot for display
-#%end
-#% flag
-#% key: t
-#% description: output to text file
-#%end
+# %Module
+# % description: Displays spectral response at user specified locations in group or images.
+# % keyword: imagery
+# % keyword: querying
+# % keyword: raster
+# % keyword: multispectral
+# %End
+# %option G_OPT_I_GROUP
+# % required : no
+# % guisection: Input
+# %end
+# %option G_OPT_I_SUBGROUP
+# % required : no
+# % guisection: Input
+# %end
+# %option G_OPT_R_INPUTS
+# % key: raster
+# % required : no
+# % guisection: Input
+# %end
+# %option G_OPT_M_COORDS
+# % multiple: yes
+# % required: yes
+# % guisection: Input
+# %end
+# %option G_OPT_F_OUTPUT
+# % key: output
+# % description: Name for output image is valid for -g (or text file for -t flag)
+# % guisection: Output
+# % required : no
+# %end
+# %Option
+# % key: format
+# % type: string
+# % description: Graphics format for output file (valid for -g flag)
+# % options: png,eps,svg
+# % answer: png
+# % multiple: no
+# % guisection: Output
+# %End
+# %flag
+# % key: c
+# % description: Show sampling coordinates instead of numbering in the legend (valid for -g flag)
+# %end
+# % flag
+# % key: g
+# % description: Use gnuplot for display
+# %end
+# % flag
+# % key: t
+# % description: output to text file
+# %end
 
 import os
 import atexit
@@ -191,9 +191,51 @@ def draw_linegraph(what):
         colors += gp_colors
     colors = colors[0:len(what)]
 
-    gcore.run_command('d.linegraph', x_file=xfile, y_file=yfiles,
-                      y_color=colors, title=_("Spectral signatures"),
-                      x_title=_("Bands"), y_title=_("DN Value"))
+    supported_monitors = ("cairo", "png", "ps")
+    monitors = gcore.read_command("d.mon", flags="l", quiet=True)
+    found = []
+    for monitor in supported_monitors:
+        if monitor in monitors:
+            found.append(monitor)
+    if not found:
+        gcore.fatal(
+            _(
+                "Supported monitor isn't running. Please launch one of the"
+                " monitors {}.".format(", ".join(supported_monitors))
+            )
+        )
+    selected_monitor = gcore.read_command("d.mon", flags="p", quiet=True).replace(
+        "\n", ""
+    )
+    if selected_monitor not in supported_monitors:
+        gcore.fatal(
+            _(
+                "Supported monitor isn't selected. Please select one of the"
+                " monitors {}.".format(", ".join(supported_monitors))
+            )
+        )
+    with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
+        for line in f.readlines():
+            if "GRASS_RENDER_FILE=" in line:
+                gcore.info(
+                    _(
+                        "{} monitor is used, output file {}".format(
+                            selected_monitor.capitalize(), line.split("=")[-1]
+                        )
+                    )
+                )
+                break
+
+    gcore.run_command(
+        "d.linegraph",
+        x_file=xfile,
+        y_file=yfiles,
+        y_color=colors,
+        title=_("Spectral signatures"),
+        x_title=_("Bands"),
+        y_title=_("DN Value"),
+    )
+>>>>>>> 79b77ba90 (scripts/i.spectral: show error message if one of the supported monitor isn't running (#1991))
 
 
 def main():
