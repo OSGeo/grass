@@ -61,7 +61,7 @@ If yes, submit to git:
 ```bash
 git checkout -b config_sub_update_r80
 git add config.guess config.sub configure
-git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
+git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
 # test by running ./configure
 
 git push origin config_sub_update_r80
