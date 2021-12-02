@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.snap
@@ -20,22 +20,22 @@
 #
 #############################################################################
 
-#%module
-#% description: Snaps temporally the maps of a space time dataset.
-#% keyword: temporal
-#% keyword: time management
-#% keyword: snapping
-#% keyword: time
-#%end
+# %module
+# % description: Snaps temporally the maps of a space time dataset.
+# % keyword: temporal
+# % keyword: time management
+# % keyword: snapping
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% description: Name of an existing space time dataset
-#%end
+# %option G_OPT_STDS_INPUT
+# % description: Name of an existing space time dataset
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% guidependency: input
-#% guisection: Required
-#%end
+# %option G_OPT_STDS_TYPE
+# % guidependency: input
+# % guisection: Required
+# %end
 
 import grass.script as grass
 
@@ -61,6 +61,7 @@ def main():
 
     stds.update_command_string(dbif=dbif)
     dbif.close()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

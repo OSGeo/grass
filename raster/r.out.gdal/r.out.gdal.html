@@ -139,7 +139,7 @@ This issue only arises when writing out multi-band imagery groups.
 <p>Classic TIFF format supports only files with up to 4GB. Files that 
 exceed this limit (in compressed or uncompressed form) need to be 
 exported with <em>createopt="BIGTIFF=YES"</em>. BIGTIFF is available if 
-GDAL is built with libtiff >= 4.0.
+GDAL is built with libtiff &amp;= 4.0.
 
 <h3>Improving GeoTIFF compatibility</h3>
 
@@ -173,20 +173,32 @@ a method to reset the color table and assign a new color table
 tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).
 </ul>
 
+<!-- outdated?
 <p>
 Cloud Optimized GeoTIFFs (COG) can be created with the creation options 
 <em>createopt=TILED=YES,COMPRESS=DEFLATE</em>, followed by 
 <em>gdaladdo</em> to build overviews.
+-->
 
 <h2>EXAMPLES</h2>
 
 <h3>Export the integer raster basin_50K map to GeoTIFF format</h3>
+
+See also <a href="https://gdal.org/drivers/raster/gtiff.html">GeoTIFF format description</a> (GDAL):
 
 <div class="code"><pre>
 g.region raster=basin_50K -p
 r.out.gdal input=basin_50K output=basin_50K.tif
 </pre></div>
 
+<h3>Export the integer raster landclass96 map to Cloud Optimized GeoTIFF format</h3>
+
+See also <a href="https://gdal.org/drivers/raster/cog.html">Cloud Optimized GeoTIFF (COG) format description</a> (GDAL):
+
+<div class="code"><pre>
+g.region -p raster=landclass96
+r.out.gdal -fmt input=landclass96 output=landclass96.tif format=COG overviews=4
+</pre></div>
 
 <h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software</h3>
 
@@ -206,8 +218,14 @@ r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
 <h3>Export a large raster map in LZW compressed (Big) GeoTIFF format</h3>
 
 <div class="code"><pre>
+# integer map export
+g.region raster=zipcodes -p
+# Using PREDICTOR 2 for integer maps can further reduce file size
+r.out.gdal in=zipcodes output=zipcodes.tif createopt="COMPRESS=LZW,PREDICTOR=2,BIGTIFF=YES"
+
+# floating point map export
 g.region raster=elevation -p
-# Using PREDICTOR 2 or 3 (the latter mainly for floating point data) can further reduce file size
+# Using PREDICTOR 3 for floating point data can further reduce file size
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=LZW,PREDICTOR=3,BIGTIFF=YES"
 </pre></div>
 
@@ -219,7 +237,6 @@ g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE" overviews=5
 </pre></div>
 
-
 <h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software</h3>
 
 <div class="code"><pre>
@@ -227,14 +244,6 @@ i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
 g.region raster=lsat7_2002_30 -p
 r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
   createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
-</pre></div>
-
-
-<h3>Export the floating point raster elevation map to ERDAS/IMG format</h3>
-
-<div class="code"><pre>
-g.region raster=elevation -p
-r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
 </pre></div>
 
 
@@ -304,6 +313,17 @@ gdalinfo $OUTNAME
 
 The resulting GeoTIFF file can be used e.g. for Web server applications.
 
+
+<h3>Export the floating point raster elevation map to ERDAS/IMG format</h3>
+
+See also <a href="https://gdal.org/drivers/raster/hfa.html">Erdas Imagine .img format description</a> (GDAL):
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
+</pre></div>
+
+
 <h2>GDAL RELATED ERROR MESSAGES</h2>
 
 <ul>
@@ -324,9 +344,10 @@ The resulting GeoTIFF file can be used e.g. for Web server applications.
 
 <h2>SEE ALSO</h2>
 
-The <a href="http://www.gdal.org/formats_list.html">GDAL supported formats</a>
-page.
-<br>
+<a href="https://gdal.org/drivers/raster/index.html">GDAL supported raster formats</a> and
+<a href="https://gdal.org/drivers/vector/index.html">GDAL supported vector formats</a>
+
+<p>
 <em>
 <a href="r.out.ascii.html">r.out.ascii</a>,
 <a href="r.out.bin.html">r.out.bin</a>,
@@ -338,7 +359,7 @@ page.
 
 <h2>REFERENCES</h2>
 
-GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org</a>
+GDAL Pages: <a href="http://gdal.org">https://gdal.org</a>
 
 
 <h2>AUTHORS</h2>

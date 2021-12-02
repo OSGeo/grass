@@ -36,9 +36,9 @@ class NewRasterDialog(wx.Dialog):
         self._type = None
 
         # create widgets
-        self._mapSelect = Select(parent=self, type='raster')
-        self._backgroundSelect = Select(parent=self, type='raster')
-        self._typeChoice = wx.Choice(self, choices=['CELL', 'FCELL', 'DCELL'])
+        self._mapSelect = Select(parent=self, type="raster")
+        self._backgroundSelect = Select(parent=self, type="raster")
+        self._typeChoice = wx.Choice(self, choices=["CELL", "FCELL", "DCELL"])
         self._typeChoice.SetSelection(0)
         self._mapSelect.SetFocus()
 
@@ -50,17 +50,25 @@ class NewRasterDialog(wx.Dialog):
         # do layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.GridBagSizer(hgap=10, vgap=10)
-        sizer.Add(StaticText(self, label=_("Name for new raster map:")),
-                  pos=(0, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        sizer.Add(
+            StaticText(self, label=_("Name for new raster map:")),
+            pos=(0, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
         sizer.Add(self._mapSelect, pos=(1, 0), span=(1, 2))
         sizer.Add(
-            StaticText(
-                self, label=_("Optionally select background raster map:")), pos=(
-                2, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+            StaticText(self, label=_("Optionally select background raster map:")),
+            pos=(2, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
         sizer.Add(self._backgroundSelect, pos=(3, 0), span=(1, 2))
-        sizer.Add(StaticText(self, label=_("New raster map type:")),
-                  pos=(4, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+        sizer.Add(
+            StaticText(self, label=_("New raster map type:")),
+            pos=(4, 0),
+            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
+        )
         sizer.Add(self._typeChoice, pos=(4, 1), flag=wx.EXPAND)
 
         mainSizer.Add(sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
@@ -81,28 +89,31 @@ class NewRasterDialog(wx.Dialog):
         value = self._backgroundSelect.GetValue()
         try:
             ret = grast.raster_info(value)
-            self._typeChoice.SetStringSelection(ret['datatype'])
+            self._typeChoice.SetStringSelection(ret["datatype"])
         except CalledModuleError:
             return
 
     def OnOK(self, event):
         mapName = self.GetMapName()
         if not mapName:
-            GWarning(parent=self.GetParent(), message=_(
-                "Please specify name for a new raster map"))
+            GWarning(
+                parent=self.GetParent(),
+                message=_("Please specify name for a new raster map"),
+            )
         else:
-            found = gcore.find_file(
-                name=mapName, mapset=gcore.gisenv()['MAPSET'])
-            if found and found['mapset'] == gcore.gisenv()['MAPSET']:
+            found = gcore.find_file(name=mapName, mapset=gcore.gisenv()["MAPSET"])
+            if found and found["mapset"] == gcore.gisenv()["MAPSET"]:
                 dlgOverwrite = wx.MessageDialog(
                     self.GetParent(),
                     message=_(
                         "Raster map <%s> already exists "
                         "in the current mapset. "
-                        "Do you want to overwrite it?") %
-                    mapName,
+                        "Do you want to overwrite it?"
+                    )
+                    % mapName,
                     caption=_("Overwrite?"),
-                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+                )
                 if not dlgOverwrite.ShowModal() == wx.ID_YES:
                     dlgOverwrite.Destroy()
                     return
@@ -122,7 +133,7 @@ class NewRasterDialog(wx.Dialog):
         return self._typeChoice.GetStringSelection()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = wx.App()
     dlg = NewRasterDialog(None)
     dlg.Show()

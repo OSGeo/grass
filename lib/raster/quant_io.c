@@ -287,7 +287,7 @@ int Rast__quant_export(const char *name, const char *mapset,
     else {
 	sprintf(element, "quant2/%s", mapset);
 	G_remove(element, name);
-	G_make_mapset_element(element);
+	G_make_mapset_object_group(element);
 	if (!(fd = G_fopen_new(element, name)))
 	    return -1;
     }

@@ -13,7 +13,7 @@
 #               setting the GISDBASE, LOCATION, and/or MAPSET.
 #               Finally it starts GRASS with the appropriate user
 #   	    	interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2020 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #   	    	Public License (>=v2). Read the file COPYING that
@@ -28,4 +28,4 @@ if [ -z "$GRASS_PYTHON" ] ; then
 fi
 export GRASS_PYTHON
 
-exec "$GRASS_PYTHON" "@BINDIR@/grass79.py" "$@" &
+exec "$GRASS_PYTHON" "@BINDIR@/grass.py" "$@" &

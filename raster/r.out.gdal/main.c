@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 #endif
     format->answer = "GTiff";
     format->required = YES;
-    
+
     type = G_define_option();
     type->key = "type";
     type->type = TYPE_STRING;
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
 	"Byte,Int16,UInt16,Int32,UInt32,Float32,Float64,CInt16,CInt32,CFloat32,CFloat64";
     type->required = NO;
     type->guisection = _("Creation");
- 
+
     createopt = G_define_option();
     createopt->key = "createopt";
     createopt->type = TYPE_STRING;
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
     nodataopt->multiple = NO;
     nodataopt->required = NO;
     nodataopt->guisection = _("Creation");
-    
+
     overviewopt = G_define_option();
     overviewopt->key = "overviews";
     overviewopt->type = TYPE_INTEGER;
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
 	supported_formats(&gdal_formats);
 	exit(EXIT_SUCCESS);
     }
-    
+
     /* Find input GRASS raster.. */
     mapset = G_find_raster2(input->answer, "");
 
@@ -286,7 +286,71 @@ int main(int argc, char *argv[])
     struct Key_Value *projinfo = G_get_projinfo();
     struct Key_Value *projunits = G_get_projunits();
     struct Key_Value *projepsg = G_get_projepsg();
-    char *srswkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, 0, 0);
+    char *srswkt = NULL;
+
+#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+    char *indef;
+
+    if ((indef = G_get_projsrid())) {
+	PJ *obj = NULL;
+
+	if ((obj = proj_create(NULL, indef))) {
+	    srswkt = G_store(proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL));
+
+	    if (srswkt && !*srswkt) {
+		G_free(srswkt);
+		srswkt = NULL;
+	    }
+	    proj_destroy(obj);
+	}
+    }
+    if (!srswkt && (indef = G_get_projwkt())) {
+	OGRSpatialReferenceH hSRS;
+	char **papszOptions = NULL;
+
+	hSRS = OSRNewSpatialReference(indef);
+	papszOptions = G_calloc(2, sizeof(char *));
+	papszOptions[0] = G_store("FORMAT=WKT2");
+	OSRExportToWktEx(hSRS, &srswkt, (const char **)papszOptions);
+	G_free(papszOptions[0]);
+	G_free(papszOptions);
+	srswkt = G_store(srswkt);
+	if (srswkt && !*srswkt) {
+	    G_free(srswkt);
+	    srswkt = NULL;
+	}
+	OSRDestroySpatialReference(hSRS);
+    }
+#endif
+    if (!srswkt) {
+	srswkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, 0, 0);
+
+#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+	/* convert bound CRS */
+	if (srswkt && *srswkt) {
+	    PJ *obj = NULL;
+
+	    indef = srswkt;
+	    if ((obj = proj_create(NULL, indef))) {
+		if (proj_get_type(obj) == PJ_TYPE_BOUND_CRS) {
+		    PJ *source_crs;
+
+		    G_debug(1, "found bound crs");
+		    source_crs = proj_get_source_crs(NULL, obj);
+		    if (source_crs) {
+			srswkt = G_store(proj_as_wkt(NULL, source_crs, PJ_WKT2_LATEST, NULL));
+			if (srswkt && !*srswkt) {
+			    G_free(srswkt);
+			    srswkt = NULL;
+			}
+			proj_destroy(source_crs);
+		    }
+		}
+		proj_destroy(obj);
+	    }
+	}
+#endif
+    }
 
     G_get_window(&cellhead);
 
@@ -298,7 +362,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to get <%s> driver"), format->answer);
     /* Does driver support GDALCreate ? */
     if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATE, NULL) == NULL) {
-	/* If not - create MEM driver for intermediate dataset. 
+	/* If not - create MEM driver for intermediate dataset.
 	 * Check if raster can be created at all (with GDALCreateCopy) */
 	if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATECOPY, NULL)) {
 	    G_message(_("Driver <%s> does not support direct writing. "
@@ -454,7 +518,7 @@ int main(int argc, char *argv[])
     /* if GDAL datatype set by user, do checks */
     if (type->answer) {
 
-	/* Check if raster data range is outside of the range of 
+	/* Check if raster data range is outside of the range of
 	 * given GDAL datatype, not even overlapping */
 	if (range_check(export_min, export_max, datatype))
 	    G_fatal_error(_("Raster export would result in complete data loss, aborting."));
@@ -600,7 +664,7 @@ int main(int argc, char *argv[])
     /* Set Projection  */
     CPLErr ret = CE_None;
 
-    if (srswkt)
+    if (srswkt && *srswkt)
 	ret = GDALSetProjection(hCurrDS, srswkt);
     if (!srswkt || ret == CE_Failure)
 	G_warning(_("Unable to set projection"));
@@ -668,7 +732,7 @@ int main(int argc, char *argv[])
 	int i, oi, *ol;
 
 	G_message(_("Building overviews ..."));
-	
+
 	ol = G_malloc(n_overviews * sizeof(int));
 	oi = 2;
 	for (i = 0; i < n_overviews; i++) {
@@ -681,7 +745,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /* Finally create user requested raster format from memory raster 
+    /* Finally create user requested raster format from memory raster
      * if in-memory driver was used */
     if (hMEMDS) {
 	hDstDS =

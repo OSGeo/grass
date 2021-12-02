@@ -1,8 +1,6 @@
 #include <grass/raster.h>
 
 #define         SHORT           short
-#define         TRUE    1
-#define         FALSE   0
 
 #define MELEMENT        struct Melement
 MELEMENT {

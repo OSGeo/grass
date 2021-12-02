@@ -58,12 +58,35 @@ from gui_core.gselect import Select
 from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
 from gui_core.wrap import (
-    BitmapButton, BitmapComboBox, BitmapFromImage, Button,
-    CheckBox, Choice, ClientDC, ColourPickerCtrl, Dialog, DirBrowseButton,
-    EmptyBitmap, ExpandoTextCtrl, FileBrowseButton, FloatSpin, ListBox,
-    ListCtrl, Notebook, OwnerDrawnComboBox, Panel, RadioButton,
-    Rect, ScrolledPanel, SpinCtrl, StaticBox, StaticText, TextCtrl,
-    TextEntryDialog, EmptyImage, CheckListCtrlMixin
+    BitmapButton,
+    BitmapComboBox,
+    BitmapFromImage,
+    Button,
+    CheckBox,
+    Choice,
+    ClientDC,
+    ColourPickerCtrl,
+    Dialog,
+    DirBrowseButton,
+    EmptyBitmap,
+    ExpandoTextCtrl,
+    FileBrowseButton,
+    FloatSpin,
+    ListBox,
+    ListCtrl,
+    Notebook,
+    OwnerDrawnComboBox,
+    Panel,
+    RadioButton,
+    Rect,
+    ScrolledPanel,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+    TextEntryDialog,
+    EmptyImage,
+    CheckListCtrlMixin,
 )
 from psmap.utils import *
 from psmap.instructions import *
@@ -71,22 +94,23 @@ from psmap.instructions import *
 # grass.set_raise_on_error(True)
 
 PSMAP_COLORS = [
-    'aqua',
-    'black',
-    'blue',
-    'brown',
-    'cyan',
-    'gray',
-    'grey',
-    'green',
-    'indigo',
-    'magenta',
-    'orange',
-    'purple',
-    'red',
-    'violet',
-    'white',
-    'yellow']
+    "aqua",
+    "black",
+    "blue",
+    "brown",
+    "cyan",
+    "gray",
+    "grey",
+    "green",
+    "indigo",
+    "magenta",
+    "orange",
+    "purple",
+    "red",
+    "violet",
+    "white",
+    "yellow",
+]
 
 
 class TCValidator(Validator):
@@ -105,7 +129,7 @@ class TCValidator(Validator):
         tc = self.GetWindow()
         val = tc.GetValue()
 
-        if self.flag == 'DIGIT_ONLY':
+        if self.flag == "DIGIT_ONLY":
             for x in val:
                 if x not in string.digits:
                     return False
@@ -116,13 +140,13 @@ class TCValidator(Validator):
         if key < wx.WXK_SPACE or key == wx.WXK_DELETE or key > 255:
             event.Skip()
             return
-        if self.flag == 'DIGIT_ONLY' and chr(key) in string.digits + '.-':
+        if self.flag == "DIGIT_ONLY" and chr(key) in string.digits + ".-":
             event.Skip()
             return
-# if self.flag == 'SCALE' and chr(key) in string.digits + ':':
-# event.Skip()
-# return
-        if self.flag == 'ZERO_AND_ONE_ONLY' and chr(key) in '01':
+        # if self.flag == 'SCALE' and chr(key) in string.digits + ':':
+        # event.Skip()
+        # return
+        if self.flag == "ZERO_AND_ONE_ONLY" and chr(key) in "01":
             event.Skip()
             return
         if not wx.Validator_IsSilent():
@@ -157,22 +181,28 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         dc.SetPen(pen)
 
         # for painting the items in the popup
-        dc.DrawText(self.GetString(item),
-                    r.x + 3,
-                    (r.y + 0) + ((r.height / 2) - dc.GetCharHeight()) / 2
-                    )
-        dc.DrawLine(r.x + 5, r.y + ((r.height / 4) * 3) + 1,
-                    r.x + r.width - 5, r.y + ((r.height / 4) * 3) + 1)
+        dc.DrawText(
+            self.GetString(item),
+            r.x + 3,
+            (r.y + 0) + ((r.height / 2) - dc.GetCharHeight()) / 2,
+        )
+        dc.DrawLine(
+            r.x + 5,
+            r.y + ((r.height / 4) * 3) + 1,
+            r.x + r.width - 5,
+            r.y + ((r.height / 4) * 3) + 1,
+        )
 
     def OnDrawBackground(self, dc, rect, item, flags):
         """Overridden from OwnerDrawnComboBox, called for drawing the
         background area of each item."""
         # If the item is selected, or its item # iseven, or we are painting the
         # combo control itself, then use the default rendering.
-        if (item & 1 == 0 or flags & (OwnerDrawnComboBox.ODCB_PAINTING_CONTROL |
-                                      OwnerDrawnComboBox.ODCB_PAINTING_SELECTED)):
-            OwnerDrawnComboBox.OnDrawBackground(
-                self, dc, rect, item, flags)
+        if item & 1 == 0 or flags & (
+            OwnerDrawnComboBox.ODCB_PAINTING_CONTROL
+            | OwnerDrawnComboBox.ODCB_PAINTING_SELECTED
+        ):
+            OwnerDrawnComboBox.OnDrawBackground(self, dc, rect, item, flags)
             return
 
         # Otherwise, draw every other background with different colour.
@@ -200,18 +230,29 @@ class CheckListCtrl(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
 
     def __init__(self, parent):
         ListCtrl.__init__(
-            self, parent, id=wx.ID_ANY, style=wx.LC_REPORT | wx.LC_SINGLE_SEL |
-            wx.BORDER_SUNKEN | wx.LC_VRULES | wx.LC_HRULES)
+            self,
+            parent,
+            id=wx.ID_ANY,
+            style=wx.LC_REPORT
+            | wx.LC_SINGLE_SEL
+            | wx.BORDER_SUNKEN
+            | wx.LC_VRULES
+            | wx.LC_HRULES,
+        )
         CheckListCtrlMixin.__init__(self)
         ListCtrlAutoWidthMixin.__init__(self)
 
 
 class PsmapDialog(Dialog):
-
     def __init__(self, parent, id, title, settings, env, apply=True):
-        Dialog.__init__(self, parent=parent, id=wx.ID_ANY,
-                           title=title, size=wx.DefaultSize,
-                           style=wx.CAPTION | wx.MINIMIZE_BOX | wx.CLOSE_BOX)
+        Dialog.__init__(
+            self,
+            parent=parent,
+            id=wx.ID_ANY,
+            title=title,
+            size=wx.DefaultSize,
+            style=wx.CAPTION | wx.MINIMIZE_BOX | wx.CLOSE_BOX,
+        )
         self.apply = apply
         self.id = id
         self.env = env
@@ -225,73 +266,79 @@ class PsmapDialog(Dialog):
 
     def AddUnits(self, parent, dialogDict):
         parent.units = dict()
-        parent.units['unitsLabel'] = StaticText(
-            parent, id=wx.ID_ANY, label=_("Units:"))
+        parent.units["unitsLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("Units:"))
         choices = self.unitConv.getPageUnitsNames()
-        parent.units['unitsCtrl'] = Choice(
-            parent, id=wx.ID_ANY, choices=choices)
-        parent.units['unitsCtrl'].SetStringSelection(
-            self.unitConv.findName(dialogDict['unit']))
+        parent.units["unitsCtrl"] = Choice(parent, id=wx.ID_ANY, choices=choices)
+        parent.units["unitsCtrl"].SetStringSelection(
+            self.unitConv.findName(dialogDict["unit"])
+        )
 
     def AddPosition(self, parent, dialogDict):
         if not hasattr(parent, "position"):
             parent.position = dict()
-        parent.position['comment'] = StaticText(parent, id=wx.ID_ANY, label=_(
-            "Position of the top left corner\nfrom the top left edge of the paper"))
-        parent.position['xLabel'] = StaticText(
-            parent, id=wx.ID_ANY, label=_("X:"))
-        parent.position['yLabel'] = StaticText(
-            parent, id=wx.ID_ANY, label=_("Y:"))
-        parent.position['xCtrl'] = TextCtrl(
-            parent, id=wx.ID_ANY, value=str(
-                dialogDict['where'][0]), validator=TCValidator(
-                flag='DIGIT_ONLY'))
-        parent.position['yCtrl'] = TextCtrl(
-            parent, id=wx.ID_ANY, value=str(
-                dialogDict['where'][1]), validator=TCValidator(
-                flag='DIGIT_ONLY'))
-        if 'unit' in dialogDict:
+        parent.position["comment"] = StaticText(
+            parent,
+            id=wx.ID_ANY,
+            label=_(
+                "Position of the top left corner\nfrom the top left edge of the paper"
+            ),
+        )
+        parent.position["xLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("X:"))
+        parent.position["yLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("Y:"))
+        parent.position["xCtrl"] = TextCtrl(
+            parent,
+            id=wx.ID_ANY,
+            value=str(dialogDict["where"][0]),
+            validator=TCValidator(flag="DIGIT_ONLY"),
+        )
+        parent.position["yCtrl"] = TextCtrl(
+            parent,
+            id=wx.ID_ANY,
+            value=str(dialogDict["where"][1]),
+            validator=TCValidator(flag="DIGIT_ONLY"),
+        )
+        if "unit" in dialogDict:
             x = self.unitConv.convert(
-                value=dialogDict['where'][0],
-                fromUnit='inch',
-                toUnit=dialogDict['unit'])
+                value=dialogDict["where"][0], fromUnit="inch", toUnit=dialogDict["unit"]
+            )
             y = self.unitConv.convert(
-                value=dialogDict['where'][1],
-                fromUnit='inch',
-                toUnit=dialogDict['unit'])
-            parent.position['xCtrl'].SetValue("%5.3f" % x)
-            parent.position['yCtrl'].SetValue("%5.3f" % y)
+                value=dialogDict["where"][1], fromUnit="inch", toUnit=dialogDict["unit"]
+            )
+            parent.position["xCtrl"].SetValue("%5.3f" % x)
+            parent.position["yCtrl"].SetValue("%5.3f" % y)
 
     def AddExtendedPosition(self, panel, gridBagSizer, dialogDict):
         """Add widgets for setting position relative to paper and to map"""
         panel.position = dict()
-        positionLabel = StaticText(
-            panel, id=wx.ID_ANY, label=_("Position is given:"))
-        panel.position['toPaper'] = RadioButton(
-            panel, id=wx.ID_ANY, label=_("relative to paper"), style=wx.RB_GROUP)
-        panel.position['toMap'] = RadioButton(
-            panel, id=wx.ID_ANY, label=_("by map coordinates"))
-        panel.position['toPaper'].SetValue(dialogDict['XY'])
-        panel.position['toMap'].SetValue(not dialogDict['XY'])
+        positionLabel = StaticText(panel, id=wx.ID_ANY, label=_("Position is given:"))
+        panel.position["toPaper"] = RadioButton(
+            panel, id=wx.ID_ANY, label=_("relative to paper"), style=wx.RB_GROUP
+        )
+        panel.position["toMap"] = RadioButton(
+            panel, id=wx.ID_ANY, label=_("by map coordinates")
+        )
+        panel.position["toPaper"].SetValue(dialogDict["XY"])
+        panel.position["toMap"].SetValue(not dialogDict["XY"])
 
         gridBagSizer.Add(
-            positionLabel, pos=(
-                0, 0), span=(
-                1, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT, border=0)
-        gridBagSizer.Add(
-            panel.position['toPaper'],
-            pos=(
-                1,
-                0),
+            positionLabel,
+            pos=(0, 0),
+            span=(1, 3),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
-            border=0)
+            border=0,
+        )
         gridBagSizer.Add(
-            panel.position['toMap'],
-            pos=(
-                1,
-                1),
+            panel.position["toPaper"],
+            pos=(1, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
-            border=0)
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.position["toMap"],
+            pos=(1, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+            border=0,
+        )
 
         # first box - paper coordinates
         box1 = StaticBox(parent=panel, id=wx.ID_ANY, label="")
@@ -299,41 +346,58 @@ class PsmapDialog(Dialog):
         self.gridBagSizerP = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.AddPosition(parent=panel, dialogDict=dialogDict)
-        panel.position['comment'].SetLabel(
-            _("Position from the top left\nedge of the paper"))
+        panel.position["comment"].SetLabel(
+            _("Position from the top left\nedge of the paper")
+        )
         self.AddUnits(parent=panel, dialogDict=dialogDict)
         self.gridBagSizerP.Add(
-            panel.units['unitsLabel'], pos=(
-                0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            panel.units["unitsLabel"],
+            pos=(0, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerP.Add(
-            panel.units['unitsCtrl'], pos=(
-                0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            panel.units["unitsCtrl"],
+            pos=(0, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerP.Add(
-            panel.position['xLabel'], pos=(
-                1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        self.gridBagSizerP.Add(panel.position['xCtrl'], pos=(
-            1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            panel.position["xLabel"],
+            pos=(1, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerP.Add(
-            panel.position['yLabel'], pos=(
-                2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        self.gridBagSizerP.Add(panel.position['yCtrl'], pos=(
-            2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            panel.position["xCtrl"], pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerP.Add(
-            panel.position['comment'], pos=(
-                3, 0), span=(
-                1, 2), flag=wx.ALIGN_BOTTOM, border=0)
+            panel.position["yLabel"],
+            pos=(2, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        self.gridBagSizerP.Add(
+            panel.position["yCtrl"], pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        self.gridBagSizerP.Add(
+            panel.position["comment"],
+            pos=(3, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_BOTTOM,
+            border=0,
+        )
 
         self.gridBagSizerP.AddGrowableCol(1)
         self.gridBagSizerP.AddGrowableRow(3)
-        sizerP.Add(
-            self.gridBagSizerP,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizerP.Add(self.gridBagSizerP, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         gridBagSizer.Add(
-            sizerP, pos=(
-                2, 0), span=(
-                1, 1), flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=0)
+            sizerP,
+            pos=(2, 0),
+            span=(1, 1),
+            flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND,
+            border=0,
+        )
 
         # second box - map coordinates
         box2 = StaticBox(parent=panel, id=wx.ID_ANY, label="")
@@ -342,95 +406,94 @@ class PsmapDialog(Dialog):
 
         eastingLabel = StaticText(panel, id=wx.ID_ANY, label="E:")
         northingLabel = StaticText(panel, id=wx.ID_ANY, label="N:")
-        panel.position['eCtrl'] = TextCtrl(panel, id=wx.ID_ANY, value="")
-        panel.position['nCtrl'] = TextCtrl(panel, id=wx.ID_ANY, value="")
+        panel.position["eCtrl"] = TextCtrl(panel, id=wx.ID_ANY, value="")
+        panel.position["nCtrl"] = TextCtrl(panel, id=wx.ID_ANY, value="")
         east, north = PaperMapCoordinates(
             mapInstr=self.instruction[self.mapId],
-            x=dialogDict['where'][0],
-            y=dialogDict['where'][1],
+            x=dialogDict["where"][0],
+            y=dialogDict["where"][1],
             paperToMap=True,
-            env=self.env)
-        panel.position['eCtrl'].SetValue(str(east))
-        panel.position['nCtrl'].SetValue(str(north))
+            env=self.env,
+        )
+        panel.position["eCtrl"].SetValue(str(east))
+        panel.position["nCtrl"].SetValue(str(north))
 
         self.gridBagSizerM.Add(
-            eastingLabel, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            eastingLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerM.Add(
-            northingLabel, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        self.gridBagSizerM.Add(panel.position['eCtrl'], pos=(
-            0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        self.gridBagSizerM.Add(panel.position['nCtrl'], pos=(
-            1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            northingLabel, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        self.gridBagSizerM.Add(
+            panel.position["eCtrl"], pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        self.gridBagSizerM.Add(
+            panel.position["nCtrl"], pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
         self.gridBagSizerM.AddGrowableCol(0)
         self.gridBagSizerM.AddGrowableCol(1)
-        sizerM.Add(
-            self.gridBagSizerM,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
-        gridBagSizer.Add(
-            sizerM, pos=(2, 1),
-            flag=wx.ALIGN_LEFT | wx.EXPAND, border=0)
+        sizerM.Add(self.gridBagSizerM, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        gridBagSizer.Add(sizerM, pos=(2, 1), flag=wx.ALIGN_LEFT | wx.EXPAND, border=0)
 
     def AddFont(self, parent, dialogDict, color=True):
         parent.font = dict()
-##        parent.font['fontLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Choose font:"))
-##        parent.font['fontCtrl'] = wx.FontPickerCtrl(parent, id = wx.ID_ANY)
-##
-# parent.font['fontCtrl'].SetSelectedFont(
-# wx.FontFromNativeInfoString(dialogDict['font'] + " " + str(dialogDict['fontsize'])))
-# parent.font['fontCtrl'].SetMaxPointSize(50)
-##
-# if color:
-##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Choose color:"))
-##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL)
-# parent.font['colorCtrl'].SetColour(dialogDict['color'])
+        ##        parent.font['fontLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Choose font:"))
+        ##        parent.font['fontCtrl'] = wx.FontPickerCtrl(parent, id = wx.ID_ANY)
+        ##
+        # parent.font['fontCtrl'].SetSelectedFont(
+        # wx.FontFromNativeInfoString(dialogDict['font'] + " " + str(dialogDict['fontsize'])))
+        # parent.font['fontCtrl'].SetMaxPointSize(50)
+        ##
+        # if color:
+        ##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Choose color:"))
+        ##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL)
+        # parent.font['colorCtrl'].SetColour(dialogDict['color'])
 
-# parent.font['colorCtrl'].SetColour(convertRGB(dialogDict['color']))
+        # parent.font['colorCtrl'].SetColour(convertRGB(dialogDict['color']))
 
-        parent.font['fontLabel'] = StaticText(
-            parent, id=wx.ID_ANY, label=_("Font:"))
-        parent.font['fontSizeLabel'] = StaticText(
-            parent, id=wx.ID_ANY, label=_("Font size:"))
+        parent.font["fontLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("Font:"))
+        parent.font["fontSizeLabel"] = StaticText(
+            parent, id=wx.ID_ANY, label=_("Font size:")
+        )
         fontChoices = [
-            'Times-Roman',
-            'Times-Italic',
-            'Times-Bold',
-            'Times-BoldItalic',
-            'Helvetica',
-            'Helvetica-Oblique',
-            'Helvetica-Bold',
-            'Helvetica-BoldOblique',
-            'Courier',
-            'Courier-Oblique',
-            'Courier-Bold',
-            'Courier-BoldOblique']
-        parent.font['fontCtrl'] = Choice(
-            parent, id=wx.ID_ANY, choices=fontChoices)
-        if dialogDict['font'] in fontChoices:
-            parent.font['fontCtrl'].SetStringSelection(dialogDict['font'])
+            "Times-Roman",
+            "Times-Italic",
+            "Times-Bold",
+            "Times-BoldItalic",
+            "Helvetica",
+            "Helvetica-Oblique",
+            "Helvetica-Bold",
+            "Helvetica-BoldOblique",
+            "Courier",
+            "Courier-Oblique",
+            "Courier-Bold",
+            "Courier-BoldOblique",
+        ]
+        parent.font["fontCtrl"] = Choice(parent, id=wx.ID_ANY, choices=fontChoices)
+        if dialogDict["font"] in fontChoices:
+            parent.font["fontCtrl"].SetStringSelection(dialogDict["font"])
         else:
-            parent.font['fontCtrl'].SetStringSelection('Helvetica')
-        parent.font['fontSizeCtrl'] = SpinCtrl(
-            parent, id=wx.ID_ANY, min=4, max=50, initial=10)
-        parent.font['fontSizeCtrl'].SetValue(dialogDict['fontsize'])
+            parent.font["fontCtrl"].SetStringSelection("Helvetica")
+        parent.font["fontSizeCtrl"] = SpinCtrl(
+            parent, id=wx.ID_ANY, min=4, max=50, initial=10
+        )
+        parent.font["fontSizeCtrl"].SetValue(dialogDict["fontsize"])
 
         if color:
-            parent.font['colorLabel'] = StaticText(
-                parent, id=wx.ID_ANY, label=_("Choose color:"))
-            parent.font['colorCtrl'] = ColourPickerCtrl(
-                parent, id=wx.ID_ANY)
-            parent.font['colorCtrl'].SetColour(convertRGB(dialogDict['color']))
-##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Color:"))
-# colorChoices = [  'aqua', 'black', 'blue', 'brown', 'cyan', 'gray', 'green', 'indigo', 'magenta',\
-# 'orange', 'purple', 'red', 'violet', 'white', 'yellow']
-##            parent.colorCtrl = Choice(parent, id = wx.ID_ANY, choices = colorChoices)
-# parent.colorCtrl.SetStringSelection(parent.rLegendDict['color'])
-##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY)
-# parent.font['colorCtrl'].SetColour(dialogDict['color'])
+            parent.font["colorLabel"] = StaticText(
+                parent, id=wx.ID_ANY, label=_("Choose color:")
+            )
+            parent.font["colorCtrl"] = ColourPickerCtrl(parent, id=wx.ID_ANY)
+            parent.font["colorCtrl"].SetColour(convertRGB(dialogDict["color"]))
+
+    ##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Color:"))
+    # colorChoices = [  'aqua', 'black', 'blue', 'brown', 'cyan', 'gray', 'green', 'indigo', 'magenta',\
+    # 'orange', 'purple', 'red', 'violet', 'white', 'yellow']
+    ##            parent.colorCtrl = Choice(parent, id = wx.ID_ANY, choices = colorChoices)
+    # parent.colorCtrl.SetStringSelection(parent.rLegendDict['color'])
+    ##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY)
+    # parent.font['colorCtrl'].SetColour(dialogDict['color'])
 
     def OnApply(self, event):
         ok = self.update()
@@ -470,7 +533,7 @@ class PsmapDialog(Dialog):
         # bindigs
         btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
         btnOK.SetToolTip(_("Close dialog and apply changes"))
-        #btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        # btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         btnCancel.SetToolTip(_("Close dialog and ignore changes"))
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         if self.apply:
@@ -486,13 +549,8 @@ class PsmapDialog(Dialog):
         btnSizer.Realize()
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(
-            panel,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
-        mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(panel, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizer(mainSizer)
         mainSizer.Layout()
@@ -500,38 +558,35 @@ class PsmapDialog(Dialog):
 
 
 class PageSetupDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, env):
         PsmapDialog.__init__(
-            self,
-            parent=parent,
-            id=id,
-            title="Page setup",
-            settings=settings,
-            env=env)
+            self, parent=parent, id=id, title="Page setup", settings=settings, env=env
+        )
 
         self.cat = [
-            'Units',
-            'Format',
-            'Orientation',
-            'Width',
-            'Height',
-            'Left',
-            'Right',
-            'Top',
-            'Bottom']
+            "Units",
+            "Format",
+            "Orientation",
+            "Width",
+            "Height",
+            "Left",
+            "Right",
+            "Top",
+            "Bottom",
+        ]
         labels = [
-            _('Units'),
-            _('Format'),
-            _('Orientation'),
-            _('Width'),
-            _('Height'),
-            _('Left'),
-            _('Right'),
-            _('Top'),
-            _('Bottom')]
+            _("Units"),
+            _("Format"),
+            _("Orientation"),
+            _("Width"),
+            _("Height"),
+            _("Left"),
+            _("Right"),
+            _("Top"),
+            _("Bottom"),
+        ]
         self.catsLabels = dict(zip(self.cat, labels))
-        paperString = RunCommand('ps.map', flags='p', read=True, quiet=True)
+        paperString = RunCommand("ps.map", flags="p", read=True, quiet=True)
         self.paperTable = self._toList(paperString)
         self.unitsList = self.unitConv.getPageUnitsNames()
         self.pageSetupDict = settings[id].GetInstruction()
@@ -539,52 +594,59 @@ class PageSetupDialog(PsmapDialog):
         self._layout()
 
         if self.pageSetupDict:
-            self.getCtrl('Units').SetStringSelection(
-                self.unitConv.findName(self.pageSetupDict['Units']))
-            if self.pageSetupDict['Format'] == 'custom':
-                self.getCtrl('Format').SetSelection(
-                    self.getCtrl('Format').GetCount() - 1)
+            self.getCtrl("Units").SetStringSelection(
+                self.unitConv.findName(self.pageSetupDict["Units"])
+            )
+            if self.pageSetupDict["Format"] == "custom":
+                self.getCtrl("Format").SetSelection(
+                    self.getCtrl("Format").GetCount() - 1
+                )
             else:
-                self.getCtrl('Format').SetStringSelection(
-                    self.pageSetupDict['Format'])
-            if self.pageSetupDict['Orientation'] == 'Portrait':
-                self.getCtrl('Orientation').SetSelection(0)
+                self.getCtrl("Format").SetStringSelection(self.pageSetupDict["Format"])
+            if self.pageSetupDict["Orientation"] == "Portrait":
+                self.getCtrl("Orientation").SetSelection(0)
             else:
-                self.getCtrl('Orientation').SetSelection(1)
+                self.getCtrl("Orientation").SetSelection(1)
 
             for item in self.cat[3:]:
                 val = self.unitConv.convert(
                     value=self.pageSetupDict[item],
-                    fromUnit='inch',
-                    toUnit=self.pageSetupDict['Units'])
+                    fromUnit="inch",
+                    toUnit=self.pageSetupDict["Units"],
+                )
                 self.getCtrl(item).SetValue("%4.3f" % val)
 
-        if self.getCtrl('Format').GetSelection() != self.getCtrl(
-                'Format').GetCount() - 1:  # custom
-            self.getCtrl('Width').Disable()
-            self.getCtrl('Height').Disable()
+        if (
+            self.getCtrl("Format").GetSelection()
+            != self.getCtrl("Format").GetCount() - 1
+        ):  # custom
+            self.getCtrl("Width").Disable()
+            self.getCtrl("Height").Disable()
         else:
-            self.getCtrl('Orientation').Disable()
+            self.getCtrl("Orientation").Disable()
         # events
-        self.getCtrl('Units').Bind(wx.EVT_CHOICE, self.OnChoice)
-        self.getCtrl('Format').Bind(wx.EVT_CHOICE, self.OnChoice)
-        self.getCtrl('Orientation').Bind(wx.EVT_CHOICE, self.OnChoice)
+        self.getCtrl("Units").Bind(wx.EVT_CHOICE, self.OnChoice)
+        self.getCtrl("Format").Bind(wx.EVT_CHOICE, self.OnChoice)
+        self.getCtrl("Orientation").Bind(wx.EVT_CHOICE, self.OnChoice)
         self.btnOk.Bind(wx.EVT_BUTTON, self.OnOK)
 
     def update(self):
-        self.pageSetupDict['Units'] = self.unitConv.findUnit(
-            self.getCtrl('Units').GetStringSelection())
-        self.pageSetupDict['Format'] = self.paperTable[
-            self.getCtrl('Format').GetSelection()]['Format']
-        if self.getCtrl('Orientation').GetSelection() == 0:
-            self.pageSetupDict['Orientation'] = 'Portrait'
+        self.pageSetupDict["Units"] = self.unitConv.findUnit(
+            self.getCtrl("Units").GetStringSelection()
+        )
+        self.pageSetupDict["Format"] = self.paperTable[
+            self.getCtrl("Format").GetSelection()
+        ]["Format"]
+        if self.getCtrl("Orientation").GetSelection() == 0:
+            self.pageSetupDict["Orientation"] = "Portrait"
         else:
-            self.pageSetupDict['Orientation'] = 'Landscape'
+            self.pageSetupDict["Orientation"] = "Landscape"
         for item in self.cat[3:]:
             self.pageSetupDict[item] = self.unitConv.convert(
                 value=float(self.getCtrl(item).GetValue()),
-                fromUnit=self.pageSetupDict['Units'],
-                toUnit='inch')
+                fromUnit=self.pageSetupDict["Units"],
+                toUnit="inch",
+            )
 
     def OnOK(self, event):
         try:
@@ -592,8 +654,9 @@ class PageSetupDialog(PsmapDialog):
         except ValueError:
             wx.MessageBox(
                 message=_("Literal is not allowed!"),
-                caption=_('Invalid input'),
-                style=wx.OK | wx.ICON_ERROR)
+                caption=_("Invalid input"),
+                style=wx.OK | wx.ICON_ERROR,
+            )
         else:
             event.Skip()
 
@@ -601,67 +664,49 @@ class PageSetupDialog(PsmapDialog):
         size = (110, -1)
         # sizers
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        pageBox = StaticBox(
-            self,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Page size"))
+        pageBox = StaticBox(self, id=wx.ID_ANY, label=" %s " % _("Page size"))
         pageSizer = wx.StaticBoxSizer(pageBox, wx.VERTICAL)
-        marginBox = StaticBox(
-            self, id=wx.ID_ANY, label=" %s " %
-            _("Margins"))
+        marginBox = StaticBox(self, id=wx.ID_ANY, label=" %s " % _("Margins"))
         marginSizer = wx.StaticBoxSizer(marginBox, wx.VERTICAL)
         horSizer = wx.BoxSizer(wx.HORIZONTAL)
-        #staticText + choice
+        # staticText + choice
         choices = [
-            self.unitsList, [
-                item['Format'] for item in self.paperTable], [
-                _('Portrait'), _('Landscape')]]
+            self.unitsList,
+            [item["Format"] for item in self.paperTable],
+            [_("Portrait"), _("Landscape")],
+        ]
         propor = [0, 1, 1]
         border = [5, 3, 3]
         self.hBoxDict = {}
         for i, item in enumerate(self.cat[:3]):
             hBox = wx.BoxSizer(wx.HORIZONTAL)
-            stText = StaticText(
-                self, id=wx.ID_ANY, label=self.catsLabels[item] + ':')
-            choice = Choice(
-                self,
-                id=wx.ID_ANY,
-                choices=choices[i],
-                size=size)
+            stText = StaticText(self, id=wx.ID_ANY, label=self.catsLabels[item] + ":")
+            choice = Choice(self, id=wx.ID_ANY, choices=choices[i], size=size)
             hBox.Add(
                 stText,
                 proportion=propor[i],
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                border=border[i])
+                border=border[i],
+            )
             hBox.Add(choice, proportion=0, flag=wx.ALL, border=border[i])
-            if item == 'Units':
+            if item == "Units":
                 hBox.Add(size, 1)
             self.hBoxDict[item] = hBox
 
-        #staticText + TextCtrl
+        # staticText + TextCtrl
         for item in self.cat[3:]:
             hBox = wx.BoxSizer(wx.HORIZONTAL)
-            label = StaticText(
-                self, id=wx.ID_ANY, label=self.catsLabels[item] + ':')
-            textctrl = TextCtrl(self, id=wx.ID_ANY, size=size, value='')
+            label = StaticText(self, id=wx.ID_ANY, label=self.catsLabels[item] + ":")
+            textctrl = TextCtrl(self, id=wx.ID_ANY, size=size, value="")
             hBox.Add(
-                label,
-                proportion=1,
-                flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                border=3)
-            hBox.Add(
-                textctrl,
-                proportion=0,
-                flag=wx.ALIGN_CENTRE | wx.ALL,
-                border=3)
+                label, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=3
+            )
+            hBox.Add(textctrl, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=3)
             self.hBoxDict[item] = hBox
 
         sizer = list([mainSizer] + [pageSizer] * 4 + [marginSizer] * 4)
         for i, item in enumerate(self.cat):
-            sizer[i].Add(
-                self.hBoxDict[item],
-                0, wx.GROW | wx.RIGHT | wx.LEFT, 5)
+            sizer[i].Add(self.hBoxDict[item], 0, wx.GROW | wx.RIGHT | wx.LEFT, 5)
         # OK button
         btnSizer = wx.StdDialogButtonSizer()
         self.btnOk = Button(self, wx.ID_OK)
@@ -672,43 +717,42 @@ class PageSetupDialog(PsmapDialog):
         btnSizer.Realize()
 
         horSizer.Add(
-            pageSizer,
+            pageSizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=10
+        )
+        horSizer.Add(
+            marginSizer,
             proportion=0,
-            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM,
-            border=10)
-        horSizer.Add(marginSizer, proportion=0, flag=wx.LEFT |
-                     wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=10)
+            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+            border=10,
+        )
         mainSizer.Add(horSizer, proportion=0, border=10)
-        mainSizer.Add(
-            btnSizer,
-            proportion=0,
-            flag=wx.ALIGN_RIGHT | wx.ALL,
-            border=10)
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=10)
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
 
     def OnChoice(self, event):
-        currPaper = self.paperTable[self.getCtrl('Format').GetSelection()]
-        currUnit = self.unitConv.findUnit(
-            self.getCtrl('Units').GetStringSelection())
-        currOrientIdx = self.getCtrl('Orientation').GetSelection()
+        currPaper = self.paperTable[self.getCtrl("Format").GetSelection()]
+        currUnit = self.unitConv.findUnit(self.getCtrl("Units").GetStringSelection())
+        currOrientIdx = self.getCtrl("Orientation").GetSelection()
         newSize = dict()
         for item in self.cat[3:]:
             newSize[item] = self.unitConv.convert(
-                float(currPaper[item]),
-                fromUnit='inch', toUnit=currUnit)
+                float(currPaper[item]), fromUnit="inch", toUnit=currUnit
+            )
 
         enable = True
-        if currPaper['Format'] != _('custom'):
+        if currPaper["Format"] != _("custom"):
             if currOrientIdx == 1:  # portrait
-                newSize['Width'], newSize['Height'] = newSize[
-                    'Height'], newSize['Width']
+                newSize["Width"], newSize["Height"] = (
+                    newSize["Height"],
+                    newSize["Width"],
+                )
             for item in self.cat[3:]:
                 self.getCtrl(item).ChangeValue("%4.3f" % newSize[item])
             enable = False
-        self.getCtrl('Width').Enable(enable)
-        self.getCtrl('Height').Enable(enable)
-        self.getCtrl('Orientation').Enable(not enable)
+        self.getCtrl("Width").Enable(enable)
+        self.getCtrl("Height").Enable(enable)
+        self.getCtrl("Orientation").Enable(not enable)
 
     def getCtrl(self, item):
         return self.hBoxDict[item].GetItem(1).GetWindow()
@@ -716,11 +760,11 @@ class PageSetupDialog(PsmapDialog):
     def _toList(self, paperStr):
 
         sizeList = list()
-        for line in paperStr.strip().split('\n'):
+        for line in paperStr.strip().split("\n"):
             d = dict(zip([self.cat[1]] + self.cat[3:], line.split()))
             sizeList.append(d)
         d = {}.fromkeys([self.cat[1]] + self.cat[3:], 100)
-        d.update(Format=_('custom'))
+        d.update(Format=_("custom"))
         sizeList.append(d)
         return sizeList
 
@@ -730,38 +774,42 @@ class MapDialog(PsmapDialog):
 
     def __init__(self, parent, id, settings, env, rect=None, notebook=False):
         PsmapDialog.__init__(
-            self,
-            parent=parent,
-            id=id,
-            title="",
-            settings=settings,
-            env=env)
+            self, parent=parent, id=id, title="", settings=settings, env=env
+        )
 
         self.isNotebook = notebook
         if self.isNotebook:
-            self.objectType = ('mapNotebook',)
+            self.objectType = ("mapNotebook",)
         else:
-            self.objectType = ('map',)
+            self.objectType = ("map",)
 
         # notebook
         if self.isNotebook:
-            self.notebook = Notebook(
-                parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+            self.notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
             self.mPanel = MapFramePanel(
                 parent=self.notebook,
                 id=self.id[0],
                 settings=self.instruction,
                 env=env,
                 rect=rect,
-                notebook=True)
+                notebook=True,
+            )
             self.id[0] = self.mPanel.getId()
             self.rPanel = RasterPanel(
-                parent=self.notebook, id=self.id[1],
-                settings=self.instruction, env=env, notebook=True)
+                parent=self.notebook,
+                id=self.id[1],
+                settings=self.instruction,
+                env=env,
+                notebook=True,
+            )
             self.id[1] = self.rPanel.getId()
             self.vPanel = VectorPanel(
-                parent=self.notebook, id=self.id[2],
-                settings=self.instruction, env=env, notebook=True)
+                parent=self.notebook,
+                id=self.id[2],
+                settings=self.instruction,
+                env=env,
+                notebook=True,
+            )
             self.id[2] = self.vPanel.getId()
             self._layout(self.notebook)
             self.SetTitle(_("Map settings"))
@@ -772,7 +820,8 @@ class MapDialog(PsmapDialog):
                 settings=self.instruction,
                 env=env,
                 rect=rect,
-                notebook=False)
+                notebook=False,
+            )
             self.id[0] = self.mPanel.getId()
             self._layout(self.mPanel)
             self.SetTitle(_("Map frame settings"))
@@ -806,17 +855,23 @@ class MapDialog(PsmapDialog):
         """Update raster and vector information"""
         if self.mPanel.scaleChoice.GetSelection() == 0:
             if self.mPanel.rasterTypeRadio.GetValue():
-                if 'raster' in self.parent.openDialogs:
-                    if self.parent.openDialogs['raster'].rPanel.rasterYesRadio.GetValue() and \
-                            self.parent.openDialogs['raster'].rPanel.rasterSelect.GetValue() == self.mPanel.select.GetValue():
+                if "raster" in self.parent.openDialogs:
+                    if (
+                        self.parent.openDialogs[
+                            "raster"
+                        ].rPanel.rasterYesRadio.GetValue()
+                        and self.parent.openDialogs[
+                            "raster"
+                        ].rPanel.rasterSelect.GetValue()
+                        == self.mPanel.select.GetValue()
+                    ):
                         self.mPanel.drawMap.SetValue(True)
                     else:
                         self.mPanel.drawMap.SetValue(False)
             else:
-                if 'vector' in self.parent.openDialogs:
+                if "vector" in self.parent.openDialogs:
                     found = False
-                    for each in self.parent.openDialogs[
-                            'vector'].vPanel.vectorList:
+                    for each in self.parent.openDialogs["vector"].vPanel.vectorList:
                         if each[0] == self.mPanel.select.GetValue():
                             found = True
                     self.mPanel.drawMap.SetValue(found)
@@ -845,37 +900,36 @@ class MapFramePanel(Panel):
             self.id = NewId()
             mapFrame = MapFrame(self.id, env=self.env)
             self.mapFrameDict = mapFrame.GetInstruction()
-            self.mapFrameDict['rect'] = rect
+            self.mapFrameDict["rect"] = rect
 
         self._layout()
 
         self.scale = [None] * 4
         self.center = [None] * 4
 
-        self.selectedMap = self.mapFrameDict['map']
-        self.selectedRegion = self.mapFrameDict['region']
-        self.scaleType = self.mapFrameDict['scaleType']
-        self.mapType = self.mapFrameDict['mapType']
-        self.scaleChoice.SetSelection(self.mapFrameDict['scaleType'])
+        self.selectedMap = self.mapFrameDict["map"]
+        self.selectedRegion = self.mapFrameDict["region"]
+        self.scaleType = self.mapFrameDict["scaleType"]
+        self.mapType = self.mapFrameDict["mapType"]
+        self.scaleChoice.SetSelection(self.mapFrameDict["scaleType"])
         if self.instruction[self.id]:
-            self.drawMap.SetValue(self.mapFrameDict['drawMap'])
+            self.drawMap.SetValue(self.mapFrameDict["drawMap"])
         else:
             self.drawMap.SetValue(True)
-        if self.mapFrameDict['scaleType'] == 0 and self.mapFrameDict['map']:
-            self.select.SetValue(self.mapFrameDict['map'])
-            if self.mapFrameDict['mapType'] == 'raster':
+        if self.mapFrameDict["scaleType"] == 0 and self.mapFrameDict["map"]:
+            self.select.SetValue(self.mapFrameDict["map"])
+            if self.mapFrameDict["mapType"] == "raster":
                 self.rasterTypeRadio.SetValue(True)
                 self.vectorTypeRadio.SetValue(False)
             else:
                 self.rasterTypeRadio.SetValue(False)
                 self.vectorTypeRadio.SetValue(True)
-        elif self.mapFrameDict['scaleType'] == 1 and self.mapFrameDict['region']:
-            self.select.SetValue(self.mapFrameDict['region'])
+        elif self.mapFrameDict["scaleType"] == 1 and self.mapFrameDict["region"]:
+            self.select.SetValue(self.mapFrameDict["region"])
 
         self.OnMap(None)
-        self.scale[self.mapFrameDict['scaleType']] = self.mapFrameDict['scale']
-        self.center[self.mapFrameDict['scaleType']
-                    ] = self.mapFrameDict['center']
+        self.scale[self.mapFrameDict["scaleType"]] = self.mapFrameDict["scale"]
+        self.center[self.mapFrameDict["scaleType"]] = self.mapFrameDict["center"]
         self.OnScaleChoice(None)
         self.OnElementType(None)
         self.OnBorder(None)
@@ -884,108 +938,94 @@ class MapFramePanel(Panel):
         """Do layout"""
         border = wx.BoxSizer(wx.VERTICAL)
 
-        box = StaticBox(
-            parent=self,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Map frame"))
+        box = StaticBox(parent=self, id=wx.ID_ANY, label=" %s " % _("Map frame"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         # scale options
-        frameText = StaticText(
-            self, id=wx.ID_ANY, label=_("Map frame options:"))
-        scaleChoices = [_("fit frame to match selected map"),
-                        _("fit frame to match saved region"),
-                        _("fit frame to match current computational region"),
-                        _("fixed scale and map center")]
+        frameText = StaticText(self, id=wx.ID_ANY, label=_("Map frame options:"))
+        scaleChoices = [
+            _("fit frame to match selected map"),
+            _("fit frame to match saved region"),
+            _("fit frame to match current computational region"),
+            _("fixed scale and map center"),
+        ]
         self.scaleChoice = Choice(self, id=wx.ID_ANY, choices=scaleChoices)
 
-        gridBagSizer.Add(
-            frameText, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+        gridBagSizer.Add(frameText, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
             self.scaleChoice,
-            pos=(
-                1,
-                0),
+            pos=(1, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
 
         # map and region selection
         self.staticBox = StaticBox(
-            parent=self, id=wx.ID_ANY, label=" %s " %
-            _("Map selection"))
+            parent=self, id=wx.ID_ANY, label=" %s " % _("Map selection")
+        )
         sizerM = wx.StaticBoxSizer(self.staticBox, wx.HORIZONTAL)
         self.mapSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.rasterTypeRadio = RadioButton(
-            self, id=wx.ID_ANY, label=" %s " %
-            _("raster"), style=wx.RB_GROUP)
+            self, id=wx.ID_ANY, label=" %s " % _("raster"), style=wx.RB_GROUP
+        )
         self.vectorTypeRadio = RadioButton(
-            self, id=wx.ID_ANY, label=" %s " %
-            _("vector"))
-        self.drawMap = CheckBox(
-            self, id=wx.ID_ANY, label="add selected map")
+            self, id=wx.ID_ANY, label=" %s " % _("vector")
+        )
+        self.drawMap = CheckBox(self, id=wx.ID_ANY, label="add selected map")
 
         self.mapOrRegionText = [_("Map:"), _("Region:")]
         dc = ClientDC(self)  # determine size of labels
         width = max(
-            dc.GetTextExtent(
-                self.mapOrRegionText[0])[0], dc.GetTextExtent(
-                self.mapOrRegionText[1])[0])
+            dc.GetTextExtent(self.mapOrRegionText[0])[0],
+            dc.GetTextExtent(self.mapOrRegionText[1])[0],
+        )
         self.mapText = StaticText(
-            self, id=wx.ID_ANY, label=self.mapOrRegionText[0],
-            size=(width, -1))
+            self, id=wx.ID_ANY, label=self.mapOrRegionText[0], size=(width, -1)
+        )
         self.select = Select(
             self,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster',
+            type="raster",
             multiple=False,
             updateOnPopup=True,
-            onPopup=None)
+            onPopup=None,
+        )
 
         self.mapSizer.Add(
-            self.rasterTypeRadio, pos=(0, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.rasterTypeRadio, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.mapSizer.Add(
-            self.vectorTypeRadio, pos=(0, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.vectorTypeRadio, pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.mapSizer.Add(
             self.drawMap,
-            pos=(
-                0,
-                3),
+            pos=(0, 3),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
+            border=0,
+        )
         self.mapSizer.Add(
-            self.mapText, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.mapText, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.mapSizer.Add(
-            self.select, pos=(
-                1, 1), span=(
-                1, 3), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.select,
+            pos=(1, 1),
+            span=(1, 3),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
 
-        sizerM.Add(
-            self.mapSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizerM.Add(self.mapSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         gridBagSizer.Add(
-            sizerM,
-            pos=(
-                2,
-                0),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            sizerM, pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0
+        )
 
         # map scale and center
         boxC = StaticBox(
-            parent=self,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Map scale and center"))
+            parent=self, id=wx.ID_ANY, label=" %s " % _("Map scale and center")
+        )
         sizerC = wx.StaticBoxSizer(boxC, wx.HORIZONTAL)
         self.centerSizer = wx.FlexGridSizer(rows=2, cols=5, hgap=5, vgap=5)
 
@@ -993,174 +1033,151 @@ class MapFramePanel(Panel):
         self.eastingText = StaticText(self, id=wx.ID_ANY, label=_("E:"))
         self.northingText = StaticText(self, id=wx.ID_ANY, label=_("N:"))
         self.eastingTextCtrl = TextCtrl(
-            self, id=wx.ID_ANY, style=wx.TE_RIGHT,
-            validator=TCValidator(flag='DIGIT_ONLY'))
+            self,
+            id=wx.ID_ANY,
+            style=wx.TE_RIGHT,
+            validator=TCValidator(flag="DIGIT_ONLY"),
+        )
         self.northingTextCtrl = TextCtrl(
-            self, id=wx.ID_ANY, style=wx.TE_RIGHT,
-            validator=TCValidator(flag='DIGIT_ONLY'))
+            self,
+            id=wx.ID_ANY,
+            style=wx.TE_RIGHT,
+            validator=TCValidator(flag="DIGIT_ONLY"),
+        )
         scaleText = StaticText(self, id=wx.ID_ANY, label=_("Scale:"))
         scalePrefixText = StaticText(self, id=wx.ID_ANY, label=_("1 :"))
         self.scaleTextCtrl = TextCtrl(
-            self, id=wx.ID_ANY, value="", style=wx.TE_RIGHT,
-            validator=TCValidator('DIGIT_ONLY'))
+            self,
+            id=wx.ID_ANY,
+            value="",
+            style=wx.TE_RIGHT,
+            validator=TCValidator("DIGIT_ONLY"),
+        )
 
         self.centerSizer.Add(
             centerText,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
-            border=10)
+            border=10,
+        )
         self.centerSizer.Add(
             self.eastingText,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
+            border=0,
+        )
         self.centerSizer.Add(
-            self.eastingTextCtrl,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            self.eastingTextCtrl, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.centerSizer.Add(
             self.northingText,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
+            border=0,
+        )
         self.centerSizer.Add(
-            self.northingTextCtrl,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            self.northingTextCtrl, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
         self.centerSizer.Add(
-            scaleText,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
-            border=10)
+            scaleText, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border=10
+        )
         self.centerSizer.Add(
             scalePrefixText,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
+            border=0,
+        )
         self.centerSizer.Add(
-            self.scaleTextCtrl,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            self.scaleTextCtrl, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
-        sizerC.Add(
-            self.centerSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizerC.Add(self.centerSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         gridBagSizer.Add(
-            sizerC,
-            pos=(
-                3,
-                0),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            sizerC, pos=(3, 0), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0
+        )
 
         # resolution
         flexSizer = wx.FlexGridSizer(rows=1, cols=2, hgap=5, vgap=5)
 
         resolutionText = StaticText(
-            self, id=wx.ID_ANY, label=_("Map max resolution (dpi):"))
-        self.resolutionSpin = SpinCtrl(
-            self, id=wx.ID_ANY, min=1, max=1000, initial=300)
+            self, id=wx.ID_ANY, label=_("Map max resolution (dpi):")
+        )
+        self.resolutionSpin = SpinCtrl(self, id=wx.ID_ANY, min=1, max=1000, initial=300)
 
         flexSizer.Add(
-            resolutionText,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            resolutionText, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         flexSizer.Add(
-            self.resolutionSpin,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
-        self.resolutionSpin.SetValue(self.mapFrameDict['resolution'])
+            self.resolutionSpin, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        self.resolutionSpin.SetValue(self.mapFrameDict["resolution"])
 
         gridBagSizer.Add(
-            flexSizer,
-            pos=(
-                4,
-                0),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            flexSizer, pos=(4, 0), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # border
         # GTC Line around legend or map frame
-        box = StaticBox(
-            parent=self,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Border"))
+        box = StaticBox(parent=self, id=wx.ID_ANY, label=" %s " % _("Border"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.borderCheck = CheckBox(
-            self, id=wx.ID_ANY, label=(
-                _("draw border around map frame")))
-        if self.mapFrameDict['border'] == 'y':
+            self, id=wx.ID_ANY, label=(_("draw border around map frame"))
+        )
+        if self.mapFrameDict["border"] == "y":
             self.borderCheck.SetValue(True)
         else:
             self.borderCheck.SetValue(False)
 
-        self.borderColorText = StaticText(
-            self, id=wx.ID_ANY, label=_("border color:"))
+        self.borderColorText = StaticText(self, id=wx.ID_ANY, label=_("border color:"))
         self.borderWidthText = StaticText(
-            self, id=wx.ID_ANY, label=_("border width (pts):"))
+            self, id=wx.ID_ANY, label=_("border width (pts):")
+        )
         self.borderColourPicker = ColourPickerCtrl(self, id=wx.ID_ANY)
-        self.borderWidthCtrl = SpinCtrl(
-            self, id=wx.ID_ANY, min=1, max=100, initial=1)
+        self.borderWidthCtrl = SpinCtrl(self, id=wx.ID_ANY, min=1, max=100, initial=1)
 
-        if self.mapFrameDict['border'] == 'y':
-            self.borderWidthCtrl.SetValue(int(self.mapFrameDict['width']))
-            self.borderColourPicker.SetColour(
-                convertRGB(self.mapFrameDict['color']))
+        if self.mapFrameDict["border"] == "y":
+            self.borderWidthCtrl.SetValue(int(self.mapFrameDict["width"]))
+            self.borderColourPicker.SetColour(convertRGB(self.mapFrameDict["color"]))
 
         gridBagSizer.Add(
-            self.borderCheck, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.borderCheck,
+            pos=(0, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
         gridBagSizer.Add(
-            self.borderColorText, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.borderColorText, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.borderWidthText, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.borderWidthText, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.borderColourPicker,
-            pos=(
-                1,
-                2),
+            pos=(1, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
         gridBagSizer.Add(
             self.borderWidthCtrl,
-            pos=(
-                2,
-                2),
+            pos=(2, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.SetSizer(border)
         self.Fit()
 
-        if projInfo()['proj'] == 'll':
+        if projInfo()["proj"] == "ll":
             self.scaleChoice.SetItems(self.scaleChoice.GetItems()[0:3])
             boxC.Hide()
             for each in self.centerSizer.GetChildren():
@@ -1183,25 +1200,35 @@ class MapFramePanel(Panel):
         if self.scaleChoice.GetSelection() == 0:
             self.selectedMap = self.selected
             if self.rasterTypeRadio.GetValue():
-                mapType = 'raster'
+                mapType = "raster"
             else:
-                mapType = 'vector'
+                mapType = "vector"
 
             self.scale[0], self.center[0], foo = AutoAdjust(
-                self, scaleType=0, map=self.selected, mapType=mapType,
-                rect=self.mapFrameDict['rect'], env=self.env)
-            #self.center[0] = self.RegionCenter(self.RegionDict(scaleType = 0))
+                self,
+                scaleType=0,
+                map=self.selected,
+                mapType=mapType,
+                rect=self.mapFrameDict["rect"],
+                env=self.env,
+            )
+            # self.center[0] = self.RegionCenter(self.RegionDict(scaleType = 0))
 
         elif self.scaleChoice.GetSelection() == 1:
             self.selectedRegion = self.selected
             self.scale[1], self.center[1], foo = AutoAdjust(
-                self, scaleType=1, region=self.selected,
-                rect=self.mapFrameDict['rect'], env=self.env)
-            #self.center[1] = self.RegionCenter(self.RegionDict(scaleType = 1))
+                self,
+                scaleType=1,
+                region=self.selected,
+                rect=self.mapFrameDict["rect"],
+                env=self.env,
+            )
+            # self.center[1] = self.RegionCenter(self.RegionDict(scaleType = 1))
         elif self.scaleChoice.GetSelection() == 2:
             self.scale[2], self.center[2], foo = AutoAdjust(
-                self, scaleType=2, rect=self.mapFrameDict['rect'], env=self.env)
-            #self.center[2] = self.RegionCenter(self.RegionDict(scaleType = 2))
+                self, scaleType=2, rect=self.mapFrameDict["rect"], env=self.env
+            )
+            # self.center[2] = self.RegionCenter(self.RegionDict(scaleType = 2))
 
         else:
             self.scale[3] = None
@@ -1217,8 +1244,7 @@ class MapFramePanel(Panel):
             self.scaleType = scaleType
             self.select.SetValue("")
 
-        if scaleType in (
-                0, 1):  # automatic - region from raster map, saved region
+        if scaleType in (0, 1):  # automatic - region from raster map, saved region
             if scaleType == 0:
                 # set map selection
                 self.rasterTypeRadio.Show()
@@ -1226,14 +1252,17 @@ class MapFramePanel(Panel):
                 self.drawMap.Show()
                 self.staticBox.SetLabel(" %s " % _("Map selection"))
                 if self.rasterTypeRadio.GetValue():
-                    stype = 'raster'
+                    stype = "raster"
                 else:
-                    stype = 'vector'
+                    stype = "vector"
 
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[0])
                 self.select.SetToolTip(
-                    _("Region is set to match this map,\nraster or vector map must be added later"))
+                    _(
+                        "Region is set to match this map,\nraster or vector map must be added later"
+                    )
+                )
 
             if scaleType == 1:
                 # set region selection
@@ -1241,7 +1270,7 @@ class MapFramePanel(Panel):
                 self.vectorTypeRadio.Hide()
                 self.drawMap.Hide()
                 self.staticBox.SetLabel(" %s " % _("Region selection"))
-                stype = 'region'
+                stype = "region"
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[1])
                 self.select.SetToolTip("")
@@ -1253,8 +1282,7 @@ class MapFramePanel(Panel):
 
             if self.scale[scaleType]:
 
-                self.scaleTextCtrl.SetValue(
-                    "%.0f" % (1 / self.scale[scaleType]))
+                self.scaleTextCtrl.SetValue("%.0f" % (1 / self.scale[scaleType]))
             if self.center[scaleType]:
                 self.eastingTextCtrl.SetValue(str(self.center[scaleType][0]))
                 self.northingTextCtrl.SetValue(str(self.center[scaleType][1]))
@@ -1265,8 +1293,7 @@ class MapFramePanel(Panel):
                 each.GetWindow().Disable()
 
             if self.scale[scaleType]:
-                self.scaleTextCtrl.SetValue(
-                    "%.0f" % (1 / self.scale[scaleType]))
+                self.scaleTextCtrl.SetValue("%.0f" % (1 / self.scale[scaleType]))
             if self.center[scaleType]:
                 self.eastingTextCtrl.SetValue(str(self.center[scaleType][0]))
                 self.northingTextCtrl.SetValue(str(self.center[scaleType][1]))
@@ -1277,8 +1304,7 @@ class MapFramePanel(Panel):
                 each.GetWindow().Enable()
 
             if self.scale[scaleType]:
-                self.scaleTextCtrl.SetValue(
-                    "%.0f" % (1 / self.scale[scaleType]))
+                self.scaleTextCtrl.SetValue("%.0f" % (1 / self.scale[scaleType]))
             if self.center[scaleType]:
                 self.eastingTextCtrl.SetValue(str(self.center[scaleType][0]))
                 self.northingTextCtrl.SetValue(str(self.center[scaleType][1]))
@@ -1286,19 +1312,23 @@ class MapFramePanel(Panel):
     def OnElementType(self, event):
         """Changes data in map selection tree ctrl popup"""
         if self.rasterTypeRadio.GetValue():
-            mapType = 'raster'
+            mapType = "raster"
         else:
-            mapType = 'vector'
+            mapType = "vector"
         self.select.SetElementList(type=mapType)
         if self.mapType != mapType and event is not None:
             self.mapType = mapType
-            self.select.SetValue('')
+            self.select.SetValue("")
         self.mapType = mapType
 
     def OnBorder(self, event):
         """Enables/disable the part relating to border of map frame"""
-        for each in (self.borderColorText, self.borderWidthText,
-                     self.borderColourPicker, self.borderWidthCtrl):
+        for each in (
+            self.borderColorText,
+            self.borderWidthText,
+            self.borderColourPicker,
+            self.borderWidthCtrl,
+        ):
             each.Enable(self.borderCheck.GetValue())
 
     def getId(self):
@@ -1309,186 +1339,203 @@ class MapFramePanel(Panel):
         """Save changes"""
         mapFrameDict = dict(self.mapFrameDict)
         # resolution
-        mapFrameDict['resolution'] = self.resolutionSpin.GetValue()
+        mapFrameDict["resolution"] = self.resolutionSpin.GetValue()
         # scale
         scaleType = self.scaleType
-        mapFrameDict['scaleType'] = scaleType
+        mapFrameDict["scaleType"] = scaleType
 
-        if mapFrameDict['scaleType'] == 0:
+        if mapFrameDict["scaleType"] == 0:
             if self.select.GetValue():
-                mapFrameDict['drawMap'] = self.drawMap.GetValue()
-                mapFrameDict['map'] = self.select.GetValue()
-                mapFrameDict['mapType'] = self.mapType
-                mapFrameDict['region'] = None
+                mapFrameDict["drawMap"] = self.drawMap.GetValue()
+                mapFrameDict["map"] = self.select.GetValue()
+                mapFrameDict["mapType"] = self.mapType
+                mapFrameDict["region"] = None
 
-                if mapFrameDict['drawMap']:
+                if mapFrameDict["drawMap"]:
 
-                    if mapFrameDict['mapType'] == 'raster':
-                        mapFile = grass.find_file(
-                            mapFrameDict['map'],
-                            element='cell')
-                        if mapFile['file'] == '':
-                            GMessage(
-                                "Raster %s not found" %
-                                mapFrameDict['map'])
+                    if mapFrameDict["mapType"] == "raster":
+                        mapFile = grass.find_file(mapFrameDict["map"], element="cell")
+                        if mapFile["file"] == "":
+                            GMessage("Raster %s not found" % mapFrameDict["map"])
                             return False
-                        raster = self.instruction.FindInstructionByType(
-                            'raster')
+                        raster = self.instruction.FindInstructionByType("raster")
                         if raster:
-                            raster['raster'] = mapFrameDict['map']
+                            raster["raster"] = mapFrameDict["map"]
                         else:
                             raster = Raster(NewId(), env=self.env)
-                            raster['raster'] = mapFrameDict['map']
-                            raster['isRaster'] = True
+                            raster["raster"] = mapFrameDict["map"]
+                            raster["isRaster"] = True
                             self.instruction.AddInstruction(raster)
 
-                    elif mapFrameDict['mapType'] == 'vector':
+                    elif mapFrameDict["mapType"] == "vector":
 
-                        mapFile = grass.find_file(
-                            mapFrameDict['map'],
-                            element='vector')
-                        if mapFile['file'] == '':
-                            GMessage(
-                                "Vector %s not found" %
-                                mapFrameDict['map'])
+                        mapFile = grass.find_file(mapFrameDict["map"], element="vector")
+                        if mapFile["file"] == "":
+                            GMessage("Vector %s not found" % mapFrameDict["map"])
                             return False
 
-                        vector = self.instruction.FindInstructionByType(
-                            'vector')
+                        vector = self.instruction.FindInstructionByType("vector")
                         isAdded = False
                         if vector:
-                            for each in vector['list']:
-                                if each[0] == mapFrameDict['map']:
+                            for each in vector["list"]:
+                                if each[0] == mapFrameDict["map"]:
                                     isAdded = True
                         if not isAdded:
-                            topoInfo = grass.vector_info_topo(
-                                map=mapFrameDict['map'])
+                            topoInfo = grass.vector_info_topo(map=mapFrameDict["map"])
                             if topoInfo:
-                                if bool(topoInfo['areas']):
-                                    topoType = 'areas'
-                                elif bool(topoInfo['lines']):
-                                    topoType = 'lines'
+                                if bool(topoInfo["areas"]):
+                                    topoType = "areas"
+                                elif bool(topoInfo["lines"]):
+                                    topoType = "lines"
                                 else:
-                                    topoType = 'points'
-                                label = '('.join(
-                                    mapFrameDict['map'].split('@')) + ')'
+                                    topoType = "points"
+                                label = "(".join(mapFrameDict["map"].split("@")) + ")"
 
                                 if not vector:
                                     vector = Vector(NewId(), env=self.env)
-                                    vector['list'] = []
+                                    vector["list"] = []
                                     self.instruction.AddInstruction(vector)
                                 id = NewId()
-                                vector['list'].insert(
-                                    0, [mapFrameDict['map'], topoType, id, 1, label])
+                                vector["list"].insert(
+                                    0, [mapFrameDict["map"], topoType, id, 1, label]
+                                )
                                 vProp = VProperties(id, topoType, env=self.env)
-                                vProp['name'], vProp['label'], vProp[
-                                    'lpos'] = mapFrameDict['map'], label, 1
+                                vProp["name"], vProp["label"], vProp["lpos"] = (
+                                    mapFrameDict["map"],
+                                    label,
+                                    1,
+                                )
                                 self.instruction.AddInstruction(vProp)
                             else:
                                 return False
 
                 self.scale[0], self.center[0], self.rectAdjusted = AutoAdjust(
-                    self, scaleType=0, map=mapFrameDict['map'], env=self.env,
-                    mapType=self.mapType, rect=self.mapFrameDict['rect'])
+                    self,
+                    scaleType=0,
+                    map=mapFrameDict["map"],
+                    env=self.env,
+                    mapType=self.mapType,
+                    rect=self.mapFrameDict["rect"],
+                )
 
                 if self.rectAdjusted:
-                    mapFrameDict['rect'] = self.rectAdjusted
+                    mapFrameDict["rect"] = self.rectAdjusted
                 else:
-                    mapFrameDict['rect'] = self.mapFrameDict['rect']
+                    mapFrameDict["rect"] = self.mapFrameDict["rect"]
 
-                mapFrameDict['scale'] = self.scale[0]
+                mapFrameDict["scale"] = self.scale[0]
 
-                mapFrameDict['center'] = self.center[0]
+                mapFrameDict["center"] = self.center[0]
                 # set region
-                if self.mapType == 'raster':
-                    self.env['GRASS_REGION'] = grass.region_env(raster=mapFrameDict['map'],
-                                                                env=self.env)
-                if self.mapType == 'vector':
-                    raster = self.instruction.FindInstructionByType('raster')
+                if self.mapType == "raster":
+                    self.env["GRASS_REGION"] = grass.region_env(
+                        raster=mapFrameDict["map"], env=self.env
+                    )
+                if self.mapType == "vector":
+                    raster = self.instruction.FindInstructionByType("raster")
                     if raster:
                         rasterId = raster.id
                     else:
                         rasterId = None
 
                     if rasterId:
-                        self.env['GRASS_REGION'] = grass.region_env(vector=mapFrameDict['map'],
-                                                                    raster=self.instruction[rasterId]['raster'],
-                                                                    env=self.env)
+                        self.env["GRASS_REGION"] = grass.region_env(
+                            vector=mapFrameDict["map"],
+                            raster=self.instruction[rasterId]["raster"],
+                            env=self.env,
+                        )
                     else:
-                        self.env['GRASS_REGION'] = grass.region_env(vector=mapFrameDict['map'],
-                                                                    env=self.env)
+                        self.env["GRASS_REGION"] = grass.region_env(
+                            vector=mapFrameDict["map"], env=self.env
+                        )
 
             else:
                 wx.MessageBox(
                     message=_("No map selected!"),
-                    caption=_('Invalid input'),
-                    style=wx.OK | wx.ICON_ERROR)
+                    caption=_("Invalid input"),
+                    style=wx.OK | wx.ICON_ERROR,
+                )
                 return False
 
-        elif mapFrameDict['scaleType'] == 1:
+        elif mapFrameDict["scaleType"] == 1:
             if self.select.GetValue():
-                mapFrameDict['drawMap'] = False
-                mapFrameDict['map'] = None
-                mapFrameDict['mapType'] = None
-                mapFrameDict['region'] = self.select.GetValue()
+                mapFrameDict["drawMap"] = False
+                mapFrameDict["map"] = None
+                mapFrameDict["mapType"] = None
+                mapFrameDict["region"] = self.select.GetValue()
                 self.scale[1], self.center[1], self.rectAdjusted = AutoAdjust(
-                    self, scaleType=1, region=mapFrameDict['region'],
-                    rect=self.mapFrameDict['rect'], env=self.env)
+                    self,
+                    scaleType=1,
+                    region=mapFrameDict["region"],
+                    rect=self.mapFrameDict["rect"],
+                    env=self.env,
+                )
                 if self.rectAdjusted:
-                    mapFrameDict['rect'] = self.rectAdjusted
+                    mapFrameDict["rect"] = self.rectAdjusted
                 else:
-                    mapFrameDict['rect'] = self.mapFrameDict['rect']
+                    mapFrameDict["rect"] = self.mapFrameDict["rect"]
 
-                mapFrameDict['scale'] = self.scale[1]
-                mapFrameDict['center'] = self.center[1]
+                mapFrameDict["scale"] = self.scale[1]
+                mapFrameDict["center"] = self.center[1]
                 # set region
-                self.env['GRASS_REGION'] = grass.region_env(region=mapFrameDict['region'],
-                                                            env=self.env)
+                self.env["GRASS_REGION"] = grass.region_env(
+                    region=mapFrameDict["region"], env=self.env
+                )
             else:
                 wx.MessageBox(
                     message=_("No region selected!"),
-                    caption=_('Invalid input'),
-                    style=wx.OK | wx.ICON_ERROR)
+                    caption=_("Invalid input"),
+                    style=wx.OK | wx.ICON_ERROR,
+                )
                 return False
 
         elif scaleType == 2:
-            mapFrameDict['drawMap'] = False
-            mapFrameDict['map'] = None
-            mapFrameDict['mapType'] = None
-            mapFrameDict['region'] = None
+            mapFrameDict["drawMap"] = False
+            mapFrameDict["map"] = None
+            mapFrameDict["mapType"] = None
+            mapFrameDict["region"] = None
             self.scale[2], self.center[2], self.rectAdjusted = AutoAdjust(
-                self, scaleType=2, rect=self.mapFrameDict['rect'], env=self.env)
+                self, scaleType=2, rect=self.mapFrameDict["rect"], env=self.env
+            )
             if self.rectAdjusted:
-                mapFrameDict['rect'] = self.rectAdjusted
+                mapFrameDict["rect"] = self.rectAdjusted
             else:
-                mapFrameDict['rect'] = self.mapFrameDict['rect']
+                mapFrameDict["rect"] = self.mapFrameDict["rect"]
 
-            mapFrameDict['scale'] = self.scale[2]
-            mapFrameDict['center'] = self.center[2]
+            mapFrameDict["scale"] = self.scale[2]
+            mapFrameDict["center"] = self.center[2]
             region = grass.region(env=None)
 
-            raster = self.instruction.FindInstructionByType('raster')
+            raster = self.instruction.FindInstructionByType("raster")
             if raster:
                 rasterId = raster.id
             else:
                 rasterId = None
 
             if rasterId:  # because of resolution
-                self.env['GRASS_REGION'] = grass.region_env(n=region['n'], s=region['s'],
-                                                            e=region['e'], w=region['w'],
-                                                            raster=self.instruction[rasterId]['raster'],
-                                                            env=self.env)
+                self.env["GRASS_REGION"] = grass.region_env(
+                    n=region["n"],
+                    s=region["s"],
+                    e=region["e"],
+                    w=region["w"],
+                    raster=self.instruction[rasterId]["raster"],
+                    env=self.env,
+                )
             else:
-                self.env['GRASS_REGION'] = grass.region_env(n=region['n'], s=region['s'],
-                                                            e=region['e'], w=region['w'],
-                                                            env=self.env)
+                self.env["GRASS_REGION"] = grass.region_env(
+                    n=region["n"],
+                    s=region["s"],
+                    e=region["e"],
+                    w=region["w"],
+                    env=self.env,
+                )
 
         elif scaleType == 3:
-            mapFrameDict['drawMap'] = False
-            mapFrameDict['map'] = None
-            mapFrameDict['mapType'] = None
-            mapFrameDict['region'] = None
-            mapFrameDict['rect'] = self.mapFrameDict['rect']
+            mapFrameDict["drawMap"] = False
+            mapFrameDict["map"] = None
+            mapFrameDict["mapType"] = None
+            mapFrameDict["region"] = None
+            mapFrameDict["rect"] = self.mapFrameDict["rect"]
             try:
                 scaleNumber = float(self.scaleTextCtrl.GetValue())
                 centerE = float(self.eastingTextCtrl.GetValue())
@@ -1496,30 +1543,31 @@ class MapFramePanel(Panel):
             except (ValueError, SyntaxError):
                 wx.MessageBox(
                     message=_("Invalid scale or map center!"),
-                    caption=_('Invalid input'),
-                    style=wx.OK | wx.ICON_ERROR)
+                    caption=_("Invalid input"),
+                    style=wx.OK | wx.ICON_ERROR,
+                )
                 return False
-            mapFrameDict['scale'] = 1 / scaleNumber
-            mapFrameDict['center'] = centerE, centerN
+            mapFrameDict["scale"] = 1 / scaleNumber
+            mapFrameDict["center"] = centerE, centerN
 
             ComputeSetRegion(self, mapDict=mapFrameDict, env=self.env)
 
         # check resolution
         SetResolution(
-            dpi=mapFrameDict['resolution'],
-            width=mapFrameDict['rect'].width,
-            height=mapFrameDict['rect'].height,
-            env=self.env)
+            dpi=mapFrameDict["resolution"],
+            width=mapFrameDict["rect"].width,
+            height=mapFrameDict["rect"].height,
+            env=self.env,
+        )
         # border
         if self.borderCheck.GetValue():
-            mapFrameDict['border'] = 'y'
+            mapFrameDict["border"] = "y"
         else:
-            mapFrameDict['border'] = 'n'
+            mapFrameDict["border"] = "n"
 
-        if mapFrameDict['border'] == 'y':
-            mapFrameDict['width'] = self.borderWidthCtrl.GetValue()
-            mapFrameDict['color'] = convertRGB(
-                self.borderColourPicker.GetColour())
+        if mapFrameDict["border"] == "y":
+            mapFrameDict["width"] = self.borderWidthCtrl.GetValue()
+            mapFrameDict["color"] = convertRGB(self.borderColourPicker.GetColour())
 
         if self.id not in self.instruction:
             mapFrame = MapFrame(self.id, env=self.env)
@@ -1528,7 +1576,8 @@ class MapFramePanel(Panel):
 
         if self.id not in self.mapDialog.parent.objectId:
             self.mapDialog.parent.objectId.insert(
-                0, self.id)  # map frame is drawn first
+                0, self.id
+            )  # map frame is drawn first
         return True
 
 
@@ -1564,65 +1613,63 @@ class RasterPanel(Panel):
         # choose raster map
 
         box = StaticBox(
-            parent=self,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Choose raster map"))
+            parent=self, id=wx.ID_ANY, label=" %s " % _("Choose raster map")
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.rasterNoRadio = RadioButton(
-            self, id=wx.ID_ANY, label=_("no raster map"),
-            style=wx.RB_GROUP)
-        self.rasterYesRadio = RadioButton(
-            self, id=wx.ID_ANY, label=_("raster:"))
+            self, id=wx.ID_ANY, label=_("no raster map"), style=wx.RB_GROUP
+        )
+        self.rasterYesRadio = RadioButton(self, id=wx.ID_ANY, label=_("raster:"))
 
         self.rasterSelect = Select(
             self,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster',
+            type="raster",
             multiple=False,
             updateOnPopup=True,
-            onPopup=None)
-        if self.rasterDict['isRaster']:
+            onPopup=None,
+        )
+        if self.rasterDict["isRaster"]:
             self.rasterYesRadio.SetValue(True)
             self.rasterNoRadio.SetValue(False)
-            self.rasterSelect.SetValue(self.rasterDict['raster'])
+            self.rasterSelect.SetValue(self.rasterDict["raster"])
         else:
             self.rasterYesRadio.SetValue(False)
             self.rasterNoRadio.SetValue(True)
-            mapId = self.instruction.FindInstructionByType('map').id
+            mapId = self.instruction.FindInstructionByType("map").id
 
-            if self.instruction[mapId]['map'] and self.instruction[
-                    mapId]['mapType'] == 'raster':
+            if (
+                self.instruction[mapId]["map"]
+                and self.instruction[mapId]["mapType"] == "raster"
+            ):
                 # raster map from map frame dialog if possible
-                self.rasterSelect.SetValue(self.instruction[mapId]['map'])
+                self.rasterSelect.SetValue(self.instruction[mapId]["map"])
             else:
-                self.rasterSelect.SetValue('')
+                self.rasterSelect.SetValue("")
         gridBagSizer.Add(
-            self.rasterNoRadio, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.rasterNoRadio,
+            pos=(0, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         gridBagSizer.Add(
-            self.rasterYesRadio, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.rasterYesRadio, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.rasterSelect,
-            pos=(
-                1,
-                1),
+            pos=(1, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
-        #self.rasterSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnRaster)
+        # self.rasterSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnRaster)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnRaster, self.rasterNoRadio)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnRaster, self.rasterYesRadio)
 
@@ -1635,25 +1682,25 @@ class RasterPanel(Panel):
 
     def update(self):
         # draw raster
-        mapInstr = self.instruction.FindInstructionByType('map')
+        mapInstr = self.instruction.FindInstructionByType("map")
         if not mapInstr:  # no map frame
             GMessage(message=_("Please, create map frame first."))
             return
 
         if self.rasterNoRadio.GetValue() or not self.rasterSelect.GetValue():
-            self.rasterDict['isRaster'] = False
-            self.rasterDict['raster'] = None
-            mapInstr['drawMap'] = False
+            self.rasterDict["isRaster"] = False
+            self.rasterDict["raster"] = None
+            mapInstr["drawMap"] = False
             if self.id in self.instruction:
                 del self.instruction[self.id]
 
         else:
-            self.rasterDict['isRaster'] = True
-            self.rasterDict['raster'] = self.rasterSelect.GetValue()
-            if self.rasterDict['raster'] != mapInstr['drawMap']:
-                mapInstr['drawMap'] = False
+            self.rasterDict["isRaster"] = True
+            self.rasterDict["raster"] = self.rasterSelect.GetValue()
+            if self.rasterDict["raster"] != mapInstr["drawMap"]:
+                mapInstr["drawMap"] = False
 
-            raster = self.instruction.FindInstructionByType('raster')
+            raster = self.instruction.FindInstructionByType("raster")
             if not raster:
                 raster = Raster(self.id, env=self.env)
                 self.instruction.AddInstruction(raster)
@@ -1661,8 +1708,8 @@ class RasterPanel(Panel):
             else:
                 self.instruction[raster.id].SetInstruction(self.rasterDict)
 
-        if 'map' in self.mainDialog.parent.openDialogs:
-            self.mainDialog.parent.openDialogs['map'].updateDialog()
+        if "map" in self.mainDialog.parent.openDialogs:
+            self.mainDialog.parent.openDialogs["map"].updateDialog()
         return True
 
     def getId(self):
@@ -1679,20 +1726,20 @@ class VectorPanel(Panel):
         self.env = env
         self.instruction = settings
         self.tmpDialogDict = {}
-        vectors = self.instruction.FindInstructionByType(
-            'vProperties', list=True)
+        vectors = self.instruction.FindInstructionByType("vProperties", list=True)
         for vector in vectors:
             self.tmpDialogDict[vector.id] = dict(
-                self.instruction[vector.id].GetInstruction())
+                self.instruction[vector.id].GetInstruction()
+            )
 
         if id:
             self.id = id
-            self.vectorList = deepcopy(self.instruction[id]['list'])
+            self.vectorList = deepcopy(self.instruction[id]["list"])
         else:
             self.id = NewId()
             self.vectorList = []
 
-        vLegend = self.instruction.FindInstructionByType('vectorLegend')
+        vLegend = self.instruction.FindInstructionByType("vectorLegend")
         if vLegend:
             self.vLegendId = vLegend.id
         else:
@@ -1710,67 +1757,62 @@ class VectorPanel(Panel):
 
         # choose vector map
 
-        box = StaticBox(
-            parent=self,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Add map"))
+        box = StaticBox(parent=self, id=wx.ID_ANY, label=" %s " % _("Add map"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         text = StaticText(self, id=wx.ID_ANY, label=_("Map:"))
-        self.select = Select(self, id=wx.ID_ANY,  # size = globalvar.DIALOG_GSELECT_SIZE,
-                             type='vector', multiple=False,
-                             updateOnPopup=True, onPopup=None)
+        self.select = Select(
+            self,
+            id=wx.ID_ANY,  # size = globalvar.DIALOG_GSELECT_SIZE,
+            type="vector",
+            multiple=False,
+            updateOnPopup=True,
+            onPopup=None,
+        )
         topologyTypeTr = [_("points"), _("lines"), _("areas")]
         self.topologyTypeList = ["points", "lines", "areas"]
         self.vectorType = wx.RadioBox(
             self,
             id=wx.ID_ANY,
-            label=" %s " %
-            _("Data Type"),
+            label=" %s " % _("Data Type"),
             choices=topologyTypeTr,
             majorDimension=3,
-            style=wx.RA_SPECIFY_COLS)
+            style=wx.RA_SPECIFY_COLS,
+        )
 
         self.AddVector = Button(self, id=wx.ID_ANY, label=_("Add"))
 
+        gridBagSizer.Add(text, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
-            text, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.select,
+            pos=(0, 1),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(self.vectorType, pos=(1, 1), flag=wx.ALIGN_CENTER, border=0)
         gridBagSizer.Add(
-            self.select, pos=(
-                0, 1), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(
-            self.vectorType, pos=(1, 1),
-            flag=wx.ALIGN_CENTER, border=0)
-        gridBagSizer.Add(
-            self.AddVector, pos=(1, 2),
-            flag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT, border=0)
+            self.AddVector, pos=(1, 2), flag=wx.ALIGN_BOTTOM | wx.ALIGN_RIGHT, border=0
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # manage vector layers
 
         box = StaticBox(
-            parent=self,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Manage vector maps"))
+            parent=self, id=wx.ID_ANY, label=" %s " % _("Manage vector maps")
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        text = StaticText(self, id=wx.ID_ANY, label=_(
-            "The topmost vector map overlaps the others"))
+        text = StaticText(
+            self, id=wx.ID_ANY, label=_("The topmost vector map overlaps the others")
+        )
         self.listbox = ListBox(
-            self, id=wx.ID_ANY, choices=[],
-            style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
+            self, id=wx.ID_ANY, choices=[], style=wx.LB_SINGLE | wx.LB_NEEDED_SB
+        )
         self.btnUp = Button(self, id=wx.ID_ANY, label=_("Up"))
         self.btnDown = Button(self, id=wx.ID_ANY, label=_("Down"))
         self.btnDel = Button(self, id=wx.ID_ANY, label=_("Delete"))
@@ -1778,41 +1820,32 @@ class VectorPanel(Panel):
 
         self.updateListBox(selected=0)
 
+        gridBagSizer.Add(text, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
-            text, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(
-            self.listbox, pos=(
-                1, 0), span=(
-                4, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
-        gridBagSizer.Add(
-            self.btnUp,
-            pos=(
-                1,
-                1),
+            self.listbox,
+            pos=(1, 0),
+            span=(4, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.btnUp, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0
+        )
         gridBagSizer.Add(
             self.btnDown,
-            pos=(
-                2,
-                1),
+            pos=(2, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
         gridBagSizer.Add(
-            self.btnDel,
-            pos=(
-                3,
-                1),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            self.btnDel, pos=(3, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0
+        )
         gridBagSizer.Add(
             self.btnProp,
-            pos=(
-                4,
-                1),
+            pos=(4, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
 
         gridBagSizer.AddGrowableCol(0, 2)
         gridBagSizer.AddGrowableCol(1, 1)
@@ -1840,15 +1873,13 @@ class VectorPanel(Panel):
             return
 
         if topoInfo:
-            self.vectorType.EnableItem(2, bool(topoInfo['areas']))
+            self.vectorType.EnableItem(2, bool(topoInfo["areas"]))
             self.vectorType.EnableItem(
-                1, bool(
-                    topoInfo['boundaries']) or bool(
-                    topoInfo['lines']))
+                1, bool(topoInfo["boundaries"]) or bool(topoInfo["lines"])
+            )
             self.vectorType.EnableItem(
-                0, bool(
-                    topoInfo['centroids'] or bool(
-                        topoInfo['points'])))
+                0, bool(topoInfo["centroids"] or bool(topoInfo["points"]))
+            )
             for item in range(2, -1, -1):
                 if self.vectorType.IsItemEnabled(item):
                     self.vectorType.SetSelection(item)
@@ -1860,11 +1891,11 @@ class VectorPanel(Panel):
         """Adds vector map to list"""
         vmap = self.select.GetValue()
         if vmap:
-            mapname = vmap.split('@')[0]
+            mapname = vmap.split("@")[0]
             try:
-                mapset = '(' + vmap.split('@')[1] + ')'
+                mapset = "(" + vmap.split("@")[1] + ")"
             except IndexError:
-                mapset = ''
+                mapset = ""
             idx = self.vectorType.GetSelection()
             ttype = self.topologyTypeList[idx]
             record = "%s - %s" % (vmap, ttype)
@@ -1877,7 +1908,7 @@ class VectorPanel(Panel):
 
             vector = VProperties(id, ttype, env=self.env)
             self.tmpDialogDict[id] = vector.GetInstruction()
-            self.tmpDialogDict[id]['name'] = vmap
+            self.tmpDialogDict[id]["name"] = vmap
 
             self.listbox.SetSelection(0)
             self.listbox.EnsureVisible(0)
@@ -1943,7 +1974,8 @@ class VectorPanel(Panel):
                 settings=self.instruction,
                 env=self.env,
                 vectors=self.vectorList,
-                tmpSettings=self.tmpDialogDict[id])
+                tmpSettings=self.tmpDialogDict[id],
+            )
             dlg.ShowModal()
 
             self.parent.FindWindowById(wx.ID_OK).SetFocus()
@@ -1976,8 +2008,7 @@ class VectorPanel(Panel):
         return self.id
 
     def update(self):
-        vectors = self.instruction.FindInstructionByType(
-            'vProperties', list=True)
+        vectors = self.instruction.FindInstructionByType("vProperties", list=True)
 
         for vector in vectors:
             del self.instruction[vector.id]
@@ -1988,7 +2019,7 @@ class VectorPanel(Panel):
             vector = Vector(self.id, env=self.env)
             self.instruction.AddInstruction(vector)
 
-            vector.SetInstruction({'list': deepcopy(self.vectorList)})
+            vector.SetInstruction({"list": deepcopy(self.vectorList)})
 
             # save new vectors
             for item in self.vectorList:
@@ -1997,22 +2028,21 @@ class VectorPanel(Panel):
                 vLayer = VProperties(id, item[1], env=self.env)
                 self.instruction.AddInstruction(vLayer)
                 vLayer.SetInstruction(self.tmpDialogDict[id])
-                vLayer['name'] = item[0]
-                vLayer['label'] = item[4]
-                vLayer['lpos'] = item[3]
+                vLayer["name"] = item[0]
+                vLayer["label"] = item[4]
+                vLayer["lpos"] = item[3]
 
         else:
             if self.id in self.instruction:
                 del self.instruction[self.id]
 
-        if 'map' in self.parent.parent.openDialogs:
-            self.parent.parent.openDialogs['map'].updateDialog()
+        if "map" in self.parent.parent.openDialogs:
+            self.parent.parent.openDialogs["map"].updateDialog()
 
         return True
 
 
 class RasterDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, env):
         PsmapDialog.__init__(
             self,
@@ -2020,15 +2050,17 @@ class RasterDialog(PsmapDialog):
             id=id,
             title=_("Raster map settings"),
             settings=settings,
-            env=env)
-        self.objectType = ('raster',)
+            env=env,
+        )
+        self.objectType = ("raster",)
 
         self.rPanel = RasterPanel(
             parent=self,
             id=self.id,
             settings=self.instruction,
             notebook=False,
-            env=self.env)
+            env=self.env,
+        )
 
         self.id = self.rPanel.getId()
         self._layout(self.rPanel)
@@ -2047,13 +2079,15 @@ class RasterDialog(PsmapDialog):
         if self.id in self.instruction:
             self.parent.DialogDataChanged(id=self.id)
         else:
-            mapId = self.instruction.FindInstructionByType('map').id
+            mapId = self.instruction.FindInstructionByType("map").id
             self.parent.DialogDataChanged(id=mapId)
         return True
 
     def updateDialog(self):
         """Update information (not used)"""
         pass
+
+
 # if 'map' in self.parent.openDialogs:
 # if self.parent.openDialogs['map'].mPanel.rasterTypeRadio.GetValue()\
 # and self.parent.openDialogs['map'].mPanel.select.GetValue():
@@ -2062,7 +2096,6 @@ class RasterDialog(PsmapDialog):
 
 
 class MainVectorDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, env):
         PsmapDialog.__init__(
             self,
@@ -2070,14 +2103,12 @@ class MainVectorDialog(PsmapDialog):
             id=id,
             title=_("Vector maps settings"),
             settings=settings,
-            env=env)
-        self.objectType = ('vector',)
-        self.vPanel = VectorPanel(
-            parent=self,
-            id=self.id,
-            settings=self.instruction,
             env=env,
-            notebook=False)
+        )
+        self.objectType = ("vector",)
+        self.vPanel = VectorPanel(
+            parent=self, id=self.id, settings=self.instruction, env=env, notebook=False
+        )
 
         self.id = self.vPanel.getId()
         self._layout(self.vPanel)
@@ -2090,7 +2121,7 @@ class MainVectorDialog(PsmapDialog):
         if self.id in self.instruction:
             self.parent.DialogDataChanged(id=self.id)
         else:
-            mapId = self.instruction.FindInstructionByType('map').id
+            mapId = self.instruction.FindInstructionByType("map").id
             self.parent.DialogDataChanged(id=mapId)
         return True
 
@@ -2100,7 +2131,6 @@ class MainVectorDialog(PsmapDialog):
 
 
 class VPropertiesDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, vectors, tmpSettings, env):
         PsmapDialog.__init__(
             self,
@@ -2109,7 +2139,8 @@ class VPropertiesDialog(PsmapDialog):
             title="",
             settings=settings,
             env=env,
-            apply=False)
+            apply=False,
+        )
 
         vectorList = vectors
         self.vPropertiesDict = tmpSettings
@@ -2133,198 +2164,196 @@ class VPropertiesDialog(PsmapDialog):
             self.connection = False
             self.layers = []
 
-        self.currLayer = self.vPropertiesDict['layer']
+        self.currLayer = self.vPropertiesDict["layer"]
 
         # path to symbols, patterns
         gisbase = os.getenv("GISBASE")
-        self.symbolPath = os.path.join(gisbase, 'etc', 'symbol')
+        self.symbolPath = os.path.join(gisbase, "etc", "symbol")
         self.symbols = []
         for dir in os.listdir(self.symbolPath):
             for symbol in os.listdir(os.path.join(self.symbolPath, dir)):
                 self.symbols.append(os.path.join(dir, symbol))
-        self.patternPath = os.path.join(gisbase, 'etc', 'paint', 'patterns')
+        self.patternPath = os.path.join(gisbase, "etc", "paint", "patterns")
 
         # notebook
         notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.DSpanel = self._DataSelectionPanel(notebook)
         self.EnableLayerSelection(enable=self.connection)
         selectPanel = {
-            'points': [
-                self._ColorsPointAreaPanel, self._StylePointPanel], 'lines': [
-                self._ColorsLinePanel, self._StyleLinePanel], 'areas': [
-                self._ColorsPointAreaPanel, self._StyleAreaPanel]}
+            "points": [self._ColorsPointAreaPanel, self._StylePointPanel],
+            "lines": [self._ColorsLinePanel, self._StyleLinePanel],
+            "areas": [self._ColorsPointAreaPanel, self._StyleAreaPanel],
+        }
         self.ColorsPanel = selectPanel[self.type][0](notebook)
 
         self.OnOutline(None)
-        if self.type in ('points', 'areas'):
+        if self.type in ("points", "areas"):
             self.OnFill(None)
         self.OnColor(None)
 
         self.StylePanel = selectPanel[self.type][1](notebook)
-        if self.type == 'points':
+        if self.type == "points":
             self.OnSize(None)
             self.OnRotation(None)
             self.OnSymbology(None)
-        if self.type == 'areas':
+        if self.type == "areas":
             self.OnPattern(None)
 
         self._layout(notebook)
 
     def _DataSelectionPanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Data selection"))
 
         border = wx.BoxSizer(wx.VERTICAL)
 
         # data type
         self.checkType1 = self.checkType2 = None
-        if self.type in ('lines', 'points'):
+        if self.type in ("lines", "points"):
             box = StaticBox(
-                parent=panel,
-                id=wx.ID_ANY,
-                label=" %s " %
-                _("Feature type"))
+                parent=panel, id=wx.ID_ANY, label=" %s " % _("Feature type")
+            )
             sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
             gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
-            if self.type == 'points':
+            if self.type == "points":
                 label = (_("points"), _("centroids"))
             else:
                 label = (_("lines"), _("boundaries"))
-            if self.type == 'points':
+            if self.type == "points":
                 name = ("point", "centroid")
             else:
                 name = ("line", "boundary")
             self.checkType1 = CheckBox(
-                panel, id=wx.ID_ANY, label=label[0], name=name[0])
+                panel, id=wx.ID_ANY, label=label[0], name=name[0]
+            )
             self.checkType2 = CheckBox(
-                panel, id=wx.ID_ANY, label=label[1], name=name[1])
-            self.checkType1.SetValue(
-                self.vPropertiesDict['type'].find(
-                    name[0]) >= 0)
-            self.checkType2.SetValue(
-                self.vPropertiesDict['type'].find(
-                    name[1]) >= 0)
+                panel, id=wx.ID_ANY, label=label[1], name=name[1]
+            )
+            self.checkType1.SetValue(self.vPropertiesDict["type"].find(name[0]) >= 0)
+            self.checkType2.SetValue(self.vPropertiesDict["type"].find(name[1]) >= 0)
 
             gridBagSizer.Add(
-                self.checkType1, pos=(0, 0),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                self.checkType1, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             gridBagSizer.Add(
-                self.checkType2, pos=(0, 1),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-            sizer.Add(
-                gridBagSizer,
-                proportion=1,
-                flag=wx.EXPAND | wx.ALL,
-                border=5)
-            border.Add(
-                sizer,
-                proportion=0,
-                flag=wx.ALL | wx.EXPAND,
-                border=5)
+                self.checkType2, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
+            sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+            border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # layer selection
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Layer selection"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Layer selection"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerL = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.warning = StaticText(panel, id=wx.ID_ANY, label="")
         if not self.connection:
-            self.warning = StaticText(panel, id=wx.ID_ANY, label=_(
-                "Database connection is not defined in DB file."))
+            self.warning = StaticText(
+                panel,
+                id=wx.ID_ANY,
+                label=_("Database connection is not defined in DB file."),
+            )
         text = StaticText(panel, id=wx.ID_ANY, label=_("Select layer:"))
         self.layerChoice = Choice(
-            panel, id=wx.ID_ANY, choices=[str(each) for each in self.layers],
-            size=self.spinCtrlSize)
+            panel,
+            id=wx.ID_ANY,
+            choices=[str(each) for each in self.layers],
+            size=self.spinCtrlSize,
+        )
 
         self.layerChoice.SetStringSelection(self.currLayer)
 
         if self.connection:
-            table = self.mapDBInfo.layers[int(self.currLayer)]['table']
+            table = self.mapDBInfo.layers[int(self.currLayer)]["table"]
         else:
             table = ""
 
         self.radioWhere = RadioButton(
-            panel, id=wx.ID_ANY, label="SELECT * FROM %s WHERE" %
-            table, style=wx.RB_GROUP)
+            panel,
+            id=wx.ID_ANY,
+            label="SELECT * FROM %s WHERE" % table,
+            style=wx.RB_GROUP,
+        )
         self.textCtrlWhere = TextCtrl(panel, id=wx.ID_ANY, value="")
 
         if self.connection:
             cols = self.mapDBInfo.GetColumns(
-                self.mapDBInfo.layers[int(self.currLayer)]['table'])
+                self.mapDBInfo.layers[int(self.currLayer)]["table"]
+            )
         else:
             cols = []
 
         self.choiceColumns = Choice(panel, id=wx.ID_ANY, choices=cols)
 
-        self.radioCats = RadioButton(
-            panel, id=wx.ID_ANY, label="Choose categories ")
+        self.radioCats = RadioButton(panel, id=wx.ID_ANY, label="Choose categories ")
         self.textCtrlCats = TextCtrl(panel, id=wx.ID_ANY, value="")
-        self.textCtrlCats.SetToolTip(
-            _("list of categories (e.g. 1,3,5-7)"))
+        self.textCtrlCats.SetToolTip(_("list of categories (e.g. 1,3,5-7)"))
 
-        if 'cats' in self.vPropertiesDict:
+        if "cats" in self.vPropertiesDict:
             self.radioCats.SetValue(True)
-            self.textCtrlCats.SetValue(self.vPropertiesDict['cats'])
-        if 'where' in self.vPropertiesDict:
+            self.textCtrlCats.SetValue(self.vPropertiesDict["cats"])
+        if "where" in self.vPropertiesDict:
             self.radioWhere.SetValue(True)
-            where = self.vPropertiesDict['where'].strip().split(" ", 1)
+            where = self.vPropertiesDict["where"].strip().split(" ", 1)
             self.choiceColumns.SetStringSelection(where[0])
             self.textCtrlWhere.SetValue(where[1])
 
         row = 0
         if not self.connection:
             self.gridBagSizerL.Add(
-                self.warning, pos=(
-                    0, 0), span=(
-                    1, 3), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                self.warning,
+                pos=(0, 0),
+                span=(1, 3),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                border=0,
+            )
             row = 1
         self.gridBagSizerL.Add(
-            text, pos=(0 + row, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            text, pos=(0 + row, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerL.Add(
-            self.layerChoice, pos=(0 + row, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.layerChoice,
+            pos=(0 + row, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
         self.gridBagSizerL.Add(
-            self.radioWhere, pos=(1 + row, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.radioWhere, pos=(1 + row, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerL.Add(
-            self.choiceColumns, pos=(1 + row, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.choiceColumns,
+            pos=(1 + row, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerL.Add(
-            self.textCtrlWhere, pos=(1 + row, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.textCtrlWhere,
+            pos=(1 + row, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerL.Add(
-            self.radioCats, pos=(2 + row, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.radioCats, pos=(2 + row, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerL.Add(
-            self.textCtrlCats, pos=(2 + row, 1),
+            self.textCtrlCats,
+            pos=(2 + row, 1),
             span=(1, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
 
-        sizer.Add(
-            self.gridBagSizerL,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(self.gridBagSizerL, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # mask
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Mask"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Mask"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
-        self.mask = CheckBox(
-            panel, id=wx.ID_ANY, label=_("Use current mask"))
-        if self.vPropertiesDict['masked'] == 'y':
+        self.mask = CheckBox(panel, id=wx.ID_ANY, label=_("Use current mask"))
+        if self.vPropertiesDict["masked"] == "y":
             self.mask.SetValue(True)
         else:
             self.mask.SetValue(False)
@@ -2340,24 +2369,19 @@ class VPropertiesDialog(PsmapDialog):
 
     def _ColorsPointAreaPanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Colors"))
 
         border = wx.BoxSizer(wx.VERTICAL)
 
-        #colors - outline
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Outline"))
+        # colors - outline
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Outline"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerO = wx.GridBagSizer(hgap=5, vgap=2)
 
-        self.outlineCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("draw outline"))
-        self.outlineCheck.SetValue(self.vPropertiesDict['color'] != 'none')
+        self.outlineCheck = CheckBox(panel, id=wx.ID_ANY, label=_("draw outline"))
+        self.outlineCheck.SetValue(self.vPropertiesDict["color"] != "none")
 
         widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
@@ -2368,90 +2392,89 @@ class VPropertiesDialog(PsmapDialog):
             max_val=30,
             increment=0.5,
             value=1,
-            style=fs.FS_RIGHT)
+            style=fs.FS_RIGHT,
+        )
         self.widthSpin.SetFormat("%f")
         self.widthSpin.SetDigits(2)
 
-        if self.vPropertiesDict['color'] is None:
-            self.vPropertiesDict['color'] = 'none'
+        if self.vPropertiesDict["color"] is None:
+            self.vPropertiesDict["color"] = "none"
 
-        if self.vPropertiesDict['color'] != 'none':
-            self.widthSpin.SetValue(self.vPropertiesDict['width'])
+        if self.vPropertiesDict["color"] != "none":
+            self.widthSpin.SetValue(self.vPropertiesDict["width"])
         else:
             self.widthSpin.SetValue(1)
 
         colorText = StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
         self.colorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        if self.vPropertiesDict['color'] != 'none':
-            self.colorPicker.SetColour(
-                convertRGB(self.vPropertiesDict['color']))
+        if self.vPropertiesDict["color"] != "none":
+            self.colorPicker.SetColour(convertRGB(self.vPropertiesDict["color"]))
         else:
-            self.colorPicker.SetColour(convertRGB('black'))
+            self.colorPicker.SetColour(convertRGB("black"))
 
         self.gridBagSizerO.Add(
-            self.outlineCheck, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.outlineCheck,
+            pos=(0, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerO.Add(
-            widthText, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            widthText, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerO.Add(
-            self.widthSpin, pos=(1, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.widthSpin,
+            pos=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
         self.gridBagSizerO.Add(
-            colorText, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            colorText, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerO.Add(
-            self.colorPicker, pos=(2, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.colorPicker, pos=(2, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
-        sizer.Add(
-            self.gridBagSizerO,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(self.gridBagSizerO, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnOutline, self.outlineCheck)
 
-        #colors - fill
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Fill"))
+        # colors - fill
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Fill"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerF = wx.GridBagSizer(hgap=5, vgap=2)
 
-        self.fillCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("fill color"))
+        self.fillCheck = CheckBox(panel, id=wx.ID_ANY, label=_("fill color"))
         self.fillCheck.SetValue(
-            self.vPropertiesDict['fcolor'] !=
-            'none' or self.vPropertiesDict['rgbcolumn'] is not None)
+            self.vPropertiesDict["fcolor"] != "none"
+            or self.vPropertiesDict["rgbcolumn"] is not None
+        )
 
         self.colorPickerRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("choose color:"), style=wx.RB_GROUP)
+            panel, id=wx.ID_ANY, label=_("choose color:"), style=wx.RB_GROUP
+        )
         # set choose color option if there is no db connection
         if self.connection:
-            self.colorPickerRadio.SetValue(
-                not self.vPropertiesDict['rgbcolumn'])
+            self.colorPickerRadio.SetValue(not self.vPropertiesDict["rgbcolumn"])
         else:
             self.colorPickerRadio.SetValue(False)
         self.fillColorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        if self.vPropertiesDict['fcolor'] != 'none':
-            self.fillColorPicker.SetColour(
-                convertRGB(self.vPropertiesDict['fcolor']))
+        if self.vPropertiesDict["fcolor"] != "none":
+            self.fillColorPicker.SetColour(convertRGB(self.vPropertiesDict["fcolor"]))
         else:
-            self.fillColorPicker.SetColour(convertRGB('red'))
+            self.fillColorPicker.SetColour(convertRGB("red"))
 
         self.colorColRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("color from map table column:"))
+            panel, id=wx.ID_ANY, label=_("color from map table column:")
+        )
         self.colorColChoice = self.getColsChoice(parent=panel)
         if self.connection:
-            if self.vPropertiesDict['rgbcolumn']:
+            if self.vPropertiesDict["rgbcolumn"]:
                 self.colorColRadio.SetValue(True)
                 self.colorColChoice.SetStringSelection(
-                    self.vPropertiesDict['rgbcolumn'])
+                    self.vPropertiesDict["rgbcolumn"]
+                )
             else:
                 self.colorColRadio.SetValue(False)
                 self.colorColChoice.SetSelection(0)
@@ -2459,27 +2482,29 @@ class VPropertiesDialog(PsmapDialog):
         self.colorColRadio.Enable(self.connection)
 
         self.gridBagSizerF.Add(
-            self.fillCheck, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.fillCheck,
+            pos=(0, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerF.Add(
-            self.colorPickerRadio, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.colorPickerRadio, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerF.Add(
-            self.fillColorPicker, pos=(1, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.fillColorPicker, pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerF.Add(
-            self.colorColRadio, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.colorColRadio, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerF.Add(
-            self.colorColChoice, pos=(2, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.colorColChoice,
+            pos=(2, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
 
-        sizer.Add(
-            self.gridBagSizerF,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(self.gridBagSizerF, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnFill, self.fillCheck)
@@ -2492,31 +2517,25 @@ class VPropertiesDialog(PsmapDialog):
 
     def _ColorsLinePanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Colors"))
 
         border = wx.BoxSizer(wx.VERTICAL)
 
-        #colors - outline
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Outline"))
+        # colors - outline
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Outline"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerO = wx.GridBagSizer(hgap=5, vgap=2)
 
-        if self.vPropertiesDict['hcolor'] is None:
-            self.vPropertiesDict['hcolor'] = 'none'
-        if self.vPropertiesDict['color'] is None:
-            self.vPropertiesDict['color'] = 'none'
+        if self.vPropertiesDict["hcolor"] is None:
+            self.vPropertiesDict["hcolor"] = "none"
+        if self.vPropertiesDict["color"] is None:
+            self.vPropertiesDict["color"] = "none"
 
-        self.outlineCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("draw outline"))
-        self.outlineCheck.SetValue(self.vPropertiesDict['hcolor'] != 'none')
-        self.outlineCheck.SetToolTip(
-            _("No effect for fill color from table column"))
+        self.outlineCheck = CheckBox(panel, id=wx.ID_ANY, label=_("draw outline"))
+        self.outlineCheck.SetValue(self.vPropertiesDict["hcolor"] != "none")
+        self.outlineCheck.SetToolTip(_("No effect for fill color from table column"))
 
         widthText = StaticText(panel, id=wx.ID_ANY, label=_("Width (pts):"))
 
@@ -2527,85 +2546,83 @@ class VPropertiesDialog(PsmapDialog):
             max_val=30,
             increment=0.5,
             value=1,
-            style=fs.FS_RIGHT)
+            style=fs.FS_RIGHT,
+        )
         self.outWidthSpin.SetFormat("%f")
         self.outWidthSpin.SetDigits(1)
 
-        if self.vPropertiesDict['hcolor'] != 'none':
-            self.outWidthSpin.SetValue(self.vPropertiesDict['hwidth'])
+        if self.vPropertiesDict["hcolor"] != "none":
+            self.outWidthSpin.SetValue(self.vPropertiesDict["hwidth"])
         else:
             self.outWidthSpin.SetValue(1)
 
         colorText = StaticText(panel, id=wx.ID_ANY, label=_("Color:"))
         self.colorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        if self.vPropertiesDict['hcolor'] != 'none':
-            self.colorPicker.SetColour(
-                convertRGB(self.vPropertiesDict['hcolor']))
+        if self.vPropertiesDict["hcolor"] != "none":
+            self.colorPicker.SetColour(convertRGB(self.vPropertiesDict["hcolor"]))
         else:
-            self.colorPicker.SetColour(convertRGB('black'))
+            self.colorPicker.SetColour(convertRGB("black"))
 
         self.gridBagSizerO.Add(
-            self.outlineCheck, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.outlineCheck,
+            pos=(0, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.gridBagSizerO.Add(
-            widthText, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            widthText, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerO.Add(
-            self.outWidthSpin, pos=(1, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.outWidthSpin,
+            pos=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
         self.gridBagSizerO.Add(
-            colorText, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            colorText, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerO.Add(
-            self.colorPicker, pos=(2, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.colorPicker, pos=(2, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
-        sizer.Add(
-            self.gridBagSizerO,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(self.gridBagSizerO, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnOutline, self.outlineCheck)
 
-        #colors - fill
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Fill"))
+        # colors - fill
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Fill"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.gridBagSizerF = wx.GridBagSizer(hgap=5, vgap=2)
 
-        fillText = StaticText(
-            panel, id=wx.ID_ANY, label=_("Color of lines:"))
+        fillText = StaticText(panel, id=wx.ID_ANY, label=_("Color of lines:"))
 
         self.colorPickerRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("choose color:"), style=wx.RB_GROUP)
+            panel, id=wx.ID_ANY, label=_("choose color:"), style=wx.RB_GROUP
+        )
 
         # set choose color option if there is no db connection
         if self.connection:
-            self.colorPickerRadio.SetValue(
-                not self.vPropertiesDict['rgbcolumn'])
+            self.colorPickerRadio.SetValue(not self.vPropertiesDict["rgbcolumn"])
         else:
             self.colorPickerRadio.SetValue(False)
         self.fillColorPicker = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        if self.vPropertiesDict['color'] != 'none':
-            self.fillColorPicker.SetColour(
-                convertRGB(self.vPropertiesDict['color']))
+        if self.vPropertiesDict["color"] != "none":
+            self.fillColorPicker.SetColour(convertRGB(self.vPropertiesDict["color"]))
         else:
-            self.fillColorPicker.SetColour(convertRGB('black'))
+            self.fillColorPicker.SetColour(convertRGB("black"))
 
         self.colorColRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("color from map table column:"))
+            panel, id=wx.ID_ANY, label=_("color from map table column:")
+        )
         self.colorColChoice = self.getColsChoice(parent=panel)
         if self.connection:
-            if self.vPropertiesDict['rgbcolumn']:
+            if self.vPropertiesDict["rgbcolumn"]:
                 self.colorColRadio.SetValue(True)
                 self.colorColChoice.SetStringSelection(
-                    self.vPropertiesDict['rgbcolumn'])
+                    self.vPropertiesDict["rgbcolumn"]
+                )
             else:
                 self.colorColRadio.SetValue(False)
                 self.colorColChoice.SetSelection(0)
@@ -2613,27 +2630,25 @@ class VPropertiesDialog(PsmapDialog):
         self.colorColRadio.Enable(self.connection)
 
         self.gridBagSizerF.Add(
-            fillText, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            fillText, pos=(0, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerF.Add(
-            self.colorPickerRadio, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.colorPickerRadio, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerF.Add(
-            self.fillColorPicker, pos=(1, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.fillColorPicker, pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerF.Add(
-            self.colorColRadio, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.colorColRadio, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         self.gridBagSizerF.Add(
-            self.colorColChoice, pos=(2, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.colorColChoice,
+            pos=(2, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
 
-        sizer.Add(
-            self.gridBagSizerF,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(self.gridBagSizerF, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_RADIOBUTTON, self.OnColor, self.colorColRadio)
@@ -2645,79 +2660,73 @@ class VPropertiesDialog(PsmapDialog):
 
     def _StylePointPanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Size and style"))
 
         border = wx.BoxSizer(wx.VERTICAL)
 
         # symbology
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Symbology"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Symbology"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.symbolRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("symbol:"),
-            style=wx.RB_GROUP)
-        self.symbolRadio.SetValue(bool(self.vPropertiesDict['symbol']))
+            panel, id=wx.ID_ANY, label=_("symbol:"), style=wx.RB_GROUP
+        )
+        self.symbolRadio.SetValue(bool(self.vPropertiesDict["symbol"]))
 
         self.symbolName = StaticText(panel, id=wx.ID_ANY)
-        self.symbolName.SetLabel(self.vPropertiesDict['symbol'])
+        self.symbolName.SetLabel(self.vPropertiesDict["symbol"])
         bitmap = wx.Bitmap(
-            os.path.join(
-                globalvar.SYMBDIR,
-                self.vPropertiesDict['symbol']) +
-            '.png')
+            os.path.join(globalvar.SYMBDIR, self.vPropertiesDict["symbol"]) + ".png"
+        )
         self.symbolButton = BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
 
-        self.epsRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("eps file:"))
-        self.epsRadio.SetValue(bool(self.vPropertiesDict['eps']))
+        self.epsRadio = RadioButton(panel, id=wx.ID_ANY, label=_("eps file:"))
+        self.epsRadio.SetValue(bool(self.vPropertiesDict["eps"]))
 
         self.epsFileCtrl = FileBrowseButton(
-            panel, id=wx.ID_ANY, labelText='', buttonText=_("Browse"),
+            panel,
+            id=wx.ID_ANY,
+            labelText="",
+            buttonText=_("Browse"),
             toolTip=_("Type filename or click browse to choose file"),
             dialogTitle=_("Choose a file"),
-            startDirectory='', initialValue='',
+            startDirectory="",
+            initialValue="",
             fileMask="Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*",
-            fileMode=wx.FD_OPEN)
-        if not self.vPropertiesDict['eps']:
-            self.epsFileCtrl.SetValue('')
+            fileMode=wx.FD_OPEN,
+        )
+        if not self.vPropertiesDict["eps"]:
+            self.epsFileCtrl.SetValue("")
         else:  # eps chosen
-            self.epsFileCtrl.SetValue(self.vPropertiesDict['eps'])
+            self.epsFileCtrl.SetValue(self.vPropertiesDict["eps"])
 
         gridBagSizer.Add(
-            self.symbolRadio, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.symbolRadio, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.symbolName,
-            pos=(
-                0,
-                1),
+            pos=(0, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
-            border=10)
+            border=10,
+        )
+        gridBagSizer.Add(self.symbolButton, pos=(0, 2), flag=wx.ALIGN_RIGHT, border=0)
         gridBagSizer.Add(
-            self.symbolButton, pos=(0, 2),
-            flag=wx.ALIGN_RIGHT, border=0)
+            self.epsRadio, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.epsRadio, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(
-            self.epsFileCtrl, pos=(
-                1, 1), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.epsFileCtrl,
+            pos=(1, 1),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
 
         gridBagSizer.AddGrowableCol(1)
         gridBagSizer.AddGrowableCol(2)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_BUTTON, self.OnSymbolSelection, self.symbolButton)
@@ -2726,150 +2735,136 @@ class VPropertiesDialog(PsmapDialog):
 
         # size
 
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Size"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Size"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.sizeRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("size:"),
-            style=wx.RB_GROUP)
-        self.sizeSpin = SpinCtrl(
-            panel, id=wx.ID_ANY, min=1, max=50, initial=1)
+            panel, id=wx.ID_ANY, label=_("size:"), style=wx.RB_GROUP
+        )
+        self.sizeSpin = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=50, initial=1)
         self.sizecolumnRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("size from map table column:"))
+            panel, id=wx.ID_ANY, label=_("size from map table column:")
+        )
         self.sizeColChoice = self.getColsChoice(panel)
         self.scaleText = StaticText(panel, id=wx.ID_ANY, label=_("scale:"))
-        self.scaleSpin = SpinCtrl(
-            panel, id=wx.ID_ANY, min=1, max=25, initial=1)
+        self.scaleSpin = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=25, initial=1)
 
-        self.sizeRadio.SetValue(self.vPropertiesDict['size'] is not None)
-        self.sizecolumnRadio.SetValue(bool(self.vPropertiesDict['sizecolumn']))
-        if self.vPropertiesDict['size']:
-            self.sizeSpin.SetValue(self.vPropertiesDict['size'])
+        self.sizeRadio.SetValue(self.vPropertiesDict["size"] is not None)
+        self.sizecolumnRadio.SetValue(bool(self.vPropertiesDict["sizecolumn"]))
+        if self.vPropertiesDict["size"]:
+            self.sizeSpin.SetValue(self.vPropertiesDict["size"])
         else:
             self.sizeSpin.SetValue(5)
-        if self.vPropertiesDict['sizecolumn']:
-            self.scaleSpin.SetValue(self.vPropertiesDict['scale'])
-            self.sizeColChoice.SetStringSelection(
-                self.vPropertiesDict['sizecolumn'])
+        if self.vPropertiesDict["sizecolumn"]:
+            self.scaleSpin.SetValue(self.vPropertiesDict["scale"])
+            self.sizeColChoice.SetStringSelection(self.vPropertiesDict["sizecolumn"])
         else:
             self.scaleSpin.SetValue(1)
             self.sizeColChoice.SetSelection(0)
         if not self.connection:
-            for each in (self.sizecolumnRadio, self.sizeColChoice,
-                         self.scaleSpin, self.scaleText):
+            for each in (
+                self.sizecolumnRadio,
+                self.sizeColChoice,
+                self.scaleSpin,
+                self.scaleText,
+            ):
                 each.Disable()
 
         gridBagSizer.Add(
-            self.sizeRadio, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.sizeRadio, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.sizeSpin, pos=(0, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.sizeSpin, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.sizecolumnRadio, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.sizecolumnRadio, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.sizeColChoice,
-            pos=(
-                1,
-                1),
+            pos=(1, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
         gridBagSizer.Add(
             self.scaleText,
-            pos=(
-                2,
-                0),
+            pos=(2, 0),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
+            border=0,
+        )
         gridBagSizer.Add(
-            self.scaleSpin, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.scaleSpin, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
         gridBagSizer.AddGrowableCol(0)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_RADIOBUTTON, self.OnSize, self.sizeRadio)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnSize, self.sizecolumnRadio)
 
         # rotation
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Rotation"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Rotation"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.rotateCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("rotate symbols:"))
-        self.rotateRadio = RadioButton(panel, id=wx.ID_ANY, label=_(
-            "counterclockwise in degrees:"), style=wx.RB_GROUP)
-        self.rotateSpin = SpinCtrl(
-            panel, id=wx.ID_ANY, min=0, max=360, initial=0)
+        self.rotateCheck = CheckBox(panel, id=wx.ID_ANY, label=_("rotate symbols:"))
+        self.rotateRadio = RadioButton(
+            panel,
+            id=wx.ID_ANY,
+            label=_("counterclockwise in degrees:"),
+            style=wx.RB_GROUP,
+        )
+        self.rotateSpin = SpinCtrl(panel, id=wx.ID_ANY, min=0, max=360, initial=0)
         self.rotatecolumnRadio = RadioButton(
-            panel, id=wx.ID_ANY, label=_("from map table column:"))
+            panel, id=wx.ID_ANY, label=_("from map table column:")
+        )
         self.rotateColChoice = self.getColsChoice(panel)
 
-        self.rotateCheck.SetValue(self.vPropertiesDict['rotation'])
-        self.rotateRadio.SetValue(self.vPropertiesDict['rotate'] is not None)
-        self.rotatecolumnRadio.SetValue(
-            bool(self.vPropertiesDict['rotatecolumn']))
-        if self.vPropertiesDict['rotate']:
-            self.rotateSpin.SetValue(self.vPropertiesDict['rotate'])
+        self.rotateCheck.SetValue(self.vPropertiesDict["rotation"])
+        self.rotateRadio.SetValue(self.vPropertiesDict["rotate"] is not None)
+        self.rotatecolumnRadio.SetValue(bool(self.vPropertiesDict["rotatecolumn"]))
+        if self.vPropertiesDict["rotate"]:
+            self.rotateSpin.SetValue(self.vPropertiesDict["rotate"])
         else:
             self.rotateSpin.SetValue(0)
-        if self.vPropertiesDict['rotatecolumn']:
+        if self.vPropertiesDict["rotatecolumn"]:
             self.rotateColChoice.SetStringSelection(
-                self.vPropertiesDict['rotatecolumn'])
+                self.vPropertiesDict["rotatecolumn"]
+            )
         else:
             self.rotateColChoice.SetSelection(0)
 
         gridBagSizer.Add(
-            self.rotateCheck, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.rotateCheck,
+            pos=(0, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         gridBagSizer.Add(
-            self.rotateRadio, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.rotateRadio, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.rotateSpin, pos=(1, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.rotateSpin, pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.rotatecolumnRadio, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.rotatecolumnRadio, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.rotateColChoice,
-            pos=(
-                2,
-                2),
+            pos=(2, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
 
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnRotation, self.rotateCheck)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnRotationType, self.rotateRadio)
-        self.Bind(
-            wx.EVT_RADIOBUTTON,
-            self.OnRotationType,
-            self.rotatecolumnRadio)
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnRotationType, self.rotatecolumnRadio)
 
         panel.SetSizer(border)
         panel.Fit()
@@ -2877,23 +2872,18 @@ class VPropertiesDialog(PsmapDialog):
 
     def _StyleLinePanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Size and style"))
 
         border = wx.BoxSizer(wx.VERTICAL)
 
         # width
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Width"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Width"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        widthText = StaticText(
-            panel, id=wx.ID_ANY, label=_("Set width (pts):"))
+        widthText = StaticText(panel, id=wx.ID_ANY, label=_("Set width (pts):"))
 
         self.widthSpin = FloatSpin(
             panel,
@@ -2902,95 +2892,80 @@ class VPropertiesDialog(PsmapDialog):
             max_val=30,
             increment=0.5,
             value=1,
-            style=fs.FS_RIGHT)
+            style=fs.FS_RIGHT,
+        )
         self.widthSpin.SetFormat("%f")
         self.widthSpin.SetDigits(1)
 
         self.cwidthCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("multiply width by category value"))
+            panel, id=wx.ID_ANY, label=_("multiply width by category value")
+        )
 
-        if self.vPropertiesDict['width']:
-            self.widthSpin.SetValue(self.vPropertiesDict['width'])
+        if self.vPropertiesDict["width"]:
+            self.widthSpin.SetValue(self.vPropertiesDict["width"])
             self.cwidthCheck.SetValue(False)
         else:
-            self.widthSpin.SetValue(self.vPropertiesDict['cwidth'])
+            self.widthSpin.SetValue(self.vPropertiesDict["cwidth"])
             self.cwidthCheck.SetValue(True)
 
+        gridBagSizer.Add(widthText, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
-            widthText, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.widthSpin, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.widthSpin, pos=(0, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(
-            self.cwidthCheck, pos=(
-                1, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.cwidthCheck,
+            pos=(1, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # style
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Line style"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Line style"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        styleText = StaticText(
-            panel, id=wx.ID_ANY, label=_("Choose line style:"))
+        styleText = StaticText(panel, id=wx.ID_ANY, label=_("Choose line style:"))
         penStyles = ["solid", "dashed", "dotted", "dashdotted"]
         self.styleCombo = PenStyleComboBox(
-            panel, choices=penStyles, validator=TCValidator(
-                flag='ZERO_AND_ONE_ONLY'))
-# self.styleCombo = wx.ComboBox(panel, id = wx.ID_ANY,
-##                            choices = ["solid", "dashed", "dotted", "dashdotted"],
-# validator = TCValidator(flag = 'ZERO_AND_ONE_ONLY'))
-# self.styleCombo.SetToolTipString(_("It's possible to enter a series of 0's and 1's too. "\
-##                                    "The first block of repeated zeros or ones represents 'draw', "\
-##                                    "the second block represents 'blank'. An even number of blocks "\
-# "will repeat the pattern, an odd number of blocks will alternate the pattern."))
-        linecapText = StaticText(
-            panel, id=wx.ID_ANY, label=_("Choose linecap:"))
+            panel, choices=penStyles, validator=TCValidator(flag="ZERO_AND_ONE_ONLY")
+        )
+        # self.styleCombo = wx.ComboBox(panel, id = wx.ID_ANY,
+        ##                            choices = ["solid", "dashed", "dotted", "dashdotted"],
+        # validator = TCValidator(flag = 'ZERO_AND_ONE_ONLY'))
+        # self.styleCombo.SetToolTipString(_("It's possible to enter a series of 0's and 1's too. "\
+        ##                                    "The first block of repeated zeros or ones represents 'draw', "\
+        ##                                    "the second block represents 'blank'. An even number of blocks "\
+        # "will repeat the pattern, an odd number of blocks will alternate the pattern."))
+        linecapText = StaticText(panel, id=wx.ID_ANY, label=_("Choose linecap:"))
         self.linecapChoice = Choice(
-            panel, id=wx.ID_ANY, choices=[
-                "butt", "round", "extended_butt"])
+            panel, id=wx.ID_ANY, choices=["butt", "round", "extended_butt"]
+        )
 
-        self.styleCombo.SetValue(self.vPropertiesDict['style'])
-        self.linecapChoice.SetStringSelection(self.vPropertiesDict['linecap'])
+        self.styleCombo.SetValue(self.vPropertiesDict["style"])
+        self.linecapChoice.SetStringSelection(self.vPropertiesDict["linecap"])
 
-        gridBagSizer.Add(
-            styleText, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+        gridBagSizer.Add(styleText, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
             self.styleCombo,
-            pos=(
-                0,
-                1),
+            pos=(0, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
         gridBagSizer.Add(
-            linecapText, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            linecapText, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.linecapChoice,
-            pos=(
-                1,
-                1),
+            pos=(1, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
@@ -2999,72 +2974,70 @@ class VPropertiesDialog(PsmapDialog):
 
     def _StyleAreaPanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Size and style"))
 
         border = wx.BoxSizer(wx.VERTICAL)
 
         # pattern
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Pattern"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Pattern"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        self.patternCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("use pattern:"))
+        self.patternCheck = CheckBox(panel, id=wx.ID_ANY, label=_("use pattern:"))
         self.patFileCtrl = FileBrowseButton(
-            panel, id=wx.ID_ANY, labelText=_("Choose pattern file:"),
+            panel,
+            id=wx.ID_ANY,
+            labelText=_("Choose pattern file:"),
             buttonText=_("Browse"),
             toolTip=_("Type filename or click browse to choose file"),
             dialogTitle=_("Choose a file"),
-            startDirectory=self.patternPath, initialValue='',
+            startDirectory=self.patternPath,
+            initialValue="",
             fileMask="Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*",
-            fileMode=wx.FD_OPEN)
+            fileMode=wx.FD_OPEN,
+        )
         self.patWidthText = StaticText(
-            panel, id=wx.ID_ANY, label=_("pattern line width (pts):"))
-        self.patWidthSpin = SpinCtrl(
-            panel, id=wx.ID_ANY, min=1, max=25, initial=1)
+            panel, id=wx.ID_ANY, label=_("pattern line width (pts):")
+        )
+        self.patWidthSpin = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=25, initial=1)
         self.patScaleText = StaticText(
-            panel, id=wx.ID_ANY, label=_("pattern scale factor:"))
-        self.patScaleSpin = SpinCtrl(
-            panel, id=wx.ID_ANY, min=1, max=25, initial=1)
+            panel, id=wx.ID_ANY, label=_("pattern scale factor:")
+        )
+        self.patScaleSpin = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=25, initial=1)
 
-        self.patternCheck.SetValue(bool(self.vPropertiesDict['pat']))
+        self.patternCheck.SetValue(bool(self.vPropertiesDict["pat"]))
         if self.patternCheck.GetValue():
-            self.patFileCtrl.SetValue(self.vPropertiesDict['pat'])
-            self.patWidthSpin.SetValue(self.vPropertiesDict['pwidth'])
-            self.patScaleSpin.SetValue(self.vPropertiesDict['scale'])
+            self.patFileCtrl.SetValue(self.vPropertiesDict["pat"])
+            self.patWidthSpin.SetValue(self.vPropertiesDict["pwidth"])
+            self.patScaleSpin.SetValue(self.vPropertiesDict["scale"])
 
         gridBagSizer.Add(
-            self.patternCheck, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.patternCheck, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.patFileCtrl, pos=(
-                1, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.patFileCtrl,
+            pos=(1, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
         gridBagSizer.Add(
-            self.patWidthText, pos=(2, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.patWidthText, pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.patWidthSpin, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.patWidthSpin, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.patScaleText, pos=(3, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.patScaleText, pos=(3, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.patScaleSpin, pos=(3, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.patScaleSpin, pos=(3, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_CHECKBOX, self.OnPattern, self.patternCheck)
@@ -3074,20 +3047,21 @@ class VPropertiesDialog(PsmapDialog):
         return panel
 
     def OnLayer(self, event):
-        """Change columns on layer change """
+        """Change columns on layer change"""
         if self.layerChoice.GetStringSelection() == self.currLayer:
             return
         self.currLayer = self.layerChoice.GetStringSelection()
         if self.connection:
             cols = self.mapDBInfo.GetColumns(
-                self.mapDBInfo.layers[int(self.currLayer)]['table'])
+                self.mapDBInfo.layers[int(self.currLayer)]["table"]
+            )
         else:
             cols = []
 
         self.choiceColumns.SetItems(cols)
 
         self.choiceColumns.SetSelection(0)
-        if self.type in ('points', 'lines'):
+        if self.type in ("points", "lines"):
             self.colorColChoice.SetItems(cols)
             self.colorColChoice.SetSelection(0)
 
@@ -3120,8 +3094,12 @@ class VPropertiesDialog(PsmapDialog):
         self.scaleSpin.Enable(self.sizecolumnRadio.GetValue())
 
     def OnRotation(self, event):
-        for each in (self.rotateRadio, self.rotatecolumnRadio,
-                     self.rotateColChoice, self.rotateSpin):
+        for each in (
+            self.rotateRadio,
+            self.rotatecolumnRadio,
+            self.rotateColChoice,
+            self.rotateSpin,
+        ):
             if self.rotateCheck.GetValue():
                 each.Enable()
                 self.OnRotationType(event=None)
@@ -3133,8 +3111,13 @@ class VPropertiesDialog(PsmapDialog):
         self.rotateColChoice.Enable(self.rotatecolumnRadio.GetValue())
 
     def OnPattern(self, event):
-        for each in (self.patFileCtrl, self.patWidthText,
-                     self.patWidthSpin, self.patScaleText, self.patScaleSpin):
+        for each in (
+            self.patFileCtrl,
+            self.patWidthText,
+            self.patWidthSpin,
+            self.patScaleText,
+            self.patScaleSpin,
+        ):
             each.Enable(self.patternCheck.GetValue())
 
     def OnSymbology(self, event):
@@ -3145,12 +3128,13 @@ class VPropertiesDialog(PsmapDialog):
         self.epsFileCtrl.Enable(not useSymbol)
 
     def OnSymbolSelection(self, event):
-        dlg = SymbolDialog(self, symbolPath=globalvar.SYMBDIR,
-                           currentSymbol=self.symbolName.GetLabel())
+        dlg = SymbolDialog(
+            self, symbolPath=globalvar.SYMBDIR, currentSymbol=self.symbolName.GetLabel()
+        )
         if dlg.ShowModal() == wx.ID_OK:
             img = dlg.GetSelectedSymbolPath()
             name = dlg.GetSelectedSymbolName()
-            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
+            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
             self.symbolName.SetLabel(name)
 
         dlg.Destroy()
@@ -3164,7 +3148,8 @@ class VPropertiesDialog(PsmapDialog):
         """Returns a Choice with table columns"""
         if self.connection:
             cols = self.mapDBInfo.GetColumns(
-                self.mapDBInfo.layers[int(self.currLayer)]['table'])
+                self.mapDBInfo.layers[int(self.currLayer)]["table"]
+            )
         else:
             cols = []
 
@@ -3173,7 +3158,7 @@ class VPropertiesDialog(PsmapDialog):
 
     def update(self):
         # feature type
-        if self.type in ('lines', 'points'):
+        if self.type in ("lines", "points"):
             featureType = None
             if self.checkType1.GetValue():
                 featureType = self.checkType1.GetName()
@@ -3182,124 +3167,131 @@ class VPropertiesDialog(PsmapDialog):
             elif self.checkType2.GetValue():
                 featureType = self.checkType2.GetName()
             if featureType:
-                self.vPropertiesDict['type'] = featureType
+                self.vPropertiesDict["type"] = featureType
 
         # is connection
-        self.vPropertiesDict['connection'] = self.connection
+        self.vPropertiesDict["connection"] = self.connection
         if self.connection:
-            self.vPropertiesDict[
-                'layer'] = self.layerChoice.GetStringSelection()
+            self.vPropertiesDict["layer"] = self.layerChoice.GetStringSelection()
             if self.radioCats.GetValue() and not self.textCtrlCats.IsEmpty():
-                self.vPropertiesDict['cats'] = self.textCtrlCats.GetValue()
+                self.vPropertiesDict["cats"] = self.textCtrlCats.GetValue()
             elif self.radioWhere.GetValue() and not self.textCtrlWhere.IsEmpty():
-                self.vPropertiesDict['where'] = self.choiceColumns.GetStringSelection(
-                ) + " " + self.textCtrlWhere.GetValue()
+                self.vPropertiesDict["where"] = (
+                    self.choiceColumns.GetStringSelection()
+                    + " "
+                    + self.textCtrlWhere.GetValue()
+                )
         # mask
         if self.mask.GetValue():
-            self.vPropertiesDict['masked'] = 'y'
+            self.vPropertiesDict["masked"] = "y"
         else:
-            self.vPropertiesDict['masked'] = 'n'
+            self.vPropertiesDict["masked"] = "n"
 
         # colors
-        if self.type in ('points', 'areas'):
+        if self.type in ("points", "areas"):
             if self.outlineCheck.GetValue():
-                self.vPropertiesDict['color'] = convertRGB(
-                    self.colorPicker.GetColour())
-                self.vPropertiesDict['width'] = self.widthSpin.GetValue()
+                self.vPropertiesDict["color"] = convertRGB(self.colorPicker.GetColour())
+                self.vPropertiesDict["width"] = self.widthSpin.GetValue()
             else:
-                self.vPropertiesDict['color'] = 'none'
+                self.vPropertiesDict["color"] = "none"
 
             if self.fillCheck.GetValue():
                 if self.colorPickerRadio.GetValue():
-                    self.vPropertiesDict['fcolor'] = convertRGB(
-                        self.fillColorPicker.GetColour())
-                    self.vPropertiesDict['rgbcolumn'] = None
+                    self.vPropertiesDict["fcolor"] = convertRGB(
+                        self.fillColorPicker.GetColour()
+                    )
+                    self.vPropertiesDict["rgbcolumn"] = None
                 if self.colorColRadio.GetValue():
                     # this color is taken in case of no record in rgb column
-                    self.vPropertiesDict['fcolor'] = 'none'
+                    self.vPropertiesDict["fcolor"] = "none"
                     self.vPropertiesDict[
-                        'rgbcolumn'] = self.colorColChoice.GetStringSelection()
+                        "rgbcolumn"
+                    ] = self.colorColChoice.GetStringSelection()
             else:
-                self.vPropertiesDict['fcolor'] = 'none'
+                self.vPropertiesDict["fcolor"] = "none"
 
-        if self.type == 'lines':
-                # hcolor only when no rgbcolumn
+        if self.type == "lines":
+            # hcolor only when no rgbcolumn
             # and self.fillCheck.GetValue() and self.colorColRadio.GetValue():
             if self.outlineCheck.GetValue():
-                self.vPropertiesDict['hcolor'] = convertRGB(
-                    self.colorPicker.GetColour())
-                self.vPropertiesDict['hwidth'] = self.outWidthSpin.GetValue()
+                self.vPropertiesDict["hcolor"] = convertRGB(
+                    self.colorPicker.GetColour()
+                )
+                self.vPropertiesDict["hwidth"] = self.outWidthSpin.GetValue()
 
             else:
-                self.vPropertiesDict['hcolor'] = 'none'
+                self.vPropertiesDict["hcolor"] = "none"
 
             if self.colorPickerRadio.GetValue():
-                self.vPropertiesDict['color'] = convertRGB(
-                    self.fillColorPicker.GetColour())
-                self.vPropertiesDict['rgbcolumn'] = None
+                self.vPropertiesDict["color"] = convertRGB(
+                    self.fillColorPicker.GetColour()
+                )
+                self.vPropertiesDict["rgbcolumn"] = None
             if self.colorColRadio.GetValue():
                 # this color is taken in case of no record in rgb column
-                self.vPropertiesDict['color'] = 'none'
+                self.vPropertiesDict["color"] = "none"
                 self.vPropertiesDict[
-                    'rgbcolumn'] = self.colorColChoice.GetStringSelection()
+                    "rgbcolumn"
+                ] = self.colorColChoice.GetStringSelection()
         #
-        #size and style
+        # size and style
         #
 
-        if self.type == 'points':
+        if self.type == "points":
             # symbols
             if self.symbolRadio.GetValue():
-                self.vPropertiesDict['symbol'] = self.symbolName.GetLabel()
-                self.vPropertiesDict['eps'] = None
+                self.vPropertiesDict["symbol"] = self.symbolName.GetLabel()
+                self.vPropertiesDict["eps"] = None
             else:
-                self.vPropertiesDict['eps'] = self.epsFileCtrl.GetValue()
+                self.vPropertiesDict["eps"] = self.epsFileCtrl.GetValue()
             # size
             if self.sizeRadio.GetValue():
-                self.vPropertiesDict['size'] = self.sizeSpin.GetValue()
-                self.vPropertiesDict['sizecolumn'] = None
-                self.vPropertiesDict['scale'] = None
+                self.vPropertiesDict["size"] = self.sizeSpin.GetValue()
+                self.vPropertiesDict["sizecolumn"] = None
+                self.vPropertiesDict["scale"] = None
             else:
                 self.vPropertiesDict[
-                    'sizecolumn'] = self.sizeColChoice.GetStringSelection()
-                self.vPropertiesDict['scale'] = self.scaleSpin.GetValue()
-                self.vPropertiesDict['size'] = None
+                    "sizecolumn"
+                ] = self.sizeColChoice.GetStringSelection()
+                self.vPropertiesDict["scale"] = self.scaleSpin.GetValue()
+                self.vPropertiesDict["size"] = None
 
             # rotation
-            self.vPropertiesDict['rotate'] = None
-            self.vPropertiesDict['rotatecolumn'] = None
-            self.vPropertiesDict['rotation'] = False
+            self.vPropertiesDict["rotate"] = None
+            self.vPropertiesDict["rotatecolumn"] = None
+            self.vPropertiesDict["rotation"] = False
             if self.rotateCheck.GetValue():
-                self.vPropertiesDict['rotation'] = True
+                self.vPropertiesDict["rotation"] = True
             if self.rotateRadio.GetValue():
-                self.vPropertiesDict['rotate'] = self.rotateSpin.GetValue()
+                self.vPropertiesDict["rotate"] = self.rotateSpin.GetValue()
             else:
                 self.vPropertiesDict[
-                    'rotatecolumn'] = self.rotateColChoice.GetStringSelection()
+                    "rotatecolumn"
+                ] = self.rotateColChoice.GetStringSelection()
 
-        if self.type == 'areas':
+        if self.type == "areas":
             # pattern
-            self.vPropertiesDict['pat'] = None
+            self.vPropertiesDict["pat"] = None
             if self.patternCheck.GetValue() and bool(self.patFileCtrl.GetValue()):
-                self.vPropertiesDict['pat'] = self.patFileCtrl.GetValue()
-                self.vPropertiesDict['pwidth'] = self.patWidthSpin.GetValue()
-                self.vPropertiesDict['scale'] = self.patScaleSpin.GetValue()
+                self.vPropertiesDict["pat"] = self.patFileCtrl.GetValue()
+                self.vPropertiesDict["pwidth"] = self.patWidthSpin.GetValue()
+                self.vPropertiesDict["scale"] = self.patScaleSpin.GetValue()
 
-        if self.type == 'lines':
+        if self.type == "lines":
             # width
             if self.cwidthCheck.GetValue():
-                self.vPropertiesDict['cwidth'] = self.widthSpin.GetValue()
-                self.vPropertiesDict['width'] = None
+                self.vPropertiesDict["cwidth"] = self.widthSpin.GetValue()
+                self.vPropertiesDict["width"] = None
             else:
-                self.vPropertiesDict['width'] = self.widthSpin.GetValue()
-                self.vPropertiesDict['cwidth'] = None
+                self.vPropertiesDict["width"] = self.widthSpin.GetValue()
+                self.vPropertiesDict["cwidth"] = None
             # line style
             if self.styleCombo.GetValue():
-                self.vPropertiesDict['style'] = self.styleCombo.GetValue()
+                self.vPropertiesDict["style"] = self.styleCombo.GetValue()
             else:
-                self.vPropertiesDict['style'] = 'solid'
+                self.vPropertiesDict["style"] = "solid"
 
-            self.vPropertiesDict[
-                'linecap'] = self.linecapChoice.GetStringSelection()
+            self.vPropertiesDict["linecap"] = self.linecapChoice.GetStringSelection()
 
     def OnOK(self, event):
         self.update()
@@ -3307,7 +3299,6 @@ class VPropertiesDialog(PsmapDialog):
 
 
 class LegendDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, page, env):
         PsmapDialog.__init__(
             self,
@@ -3315,28 +3306,29 @@ class LegendDialog(PsmapDialog):
             id=id,
             title="Legend settings",
             settings=settings,
-            env=env)
-        self.objectType = ('rasterLegend', 'vectorLegend')
+            env=env,
+        )
+        self.objectType = ("rasterLegend", "vectorLegend")
         self.instruction = settings
-        map = self.instruction.FindInstructionByType('map')
+        map = self.instruction.FindInstructionByType("map")
         if map:
             self.mapId = map.id
         else:
             self.mapId = None
 
-        vector = self.instruction.FindInstructionByType('vector')
+        vector = self.instruction.FindInstructionByType("vector")
         if vector:
             self.vectorId = vector.id
         else:
             self.vectorId = None
 
-        raster = self.instruction.FindInstructionByType('raster')
+        raster = self.instruction.FindInstructionByType("raster")
         if raster:
             self.rasterId = raster.id
         else:
             self.rasterId = None
 
-        self.pageId = self.instruction.FindInstructionByType('page').id
+        self.pageId = self.instruction.FindInstructionByType("page").id
         currPage = self.instruction[self.pageId].GetInstruction()
         # raster legend
         if self.id[0] is not None:
@@ -3346,7 +3338,7 @@ class LegendDialog(PsmapDialog):
             self.id[0] = NewId()
             self.rasterLegend = RasterLegend(self.id[0], env=self.env)
             self.rLegendDict = self.rasterLegend.GetInstruction()
-            self.rLegendDict['where'] = currPage['Left'], currPage['Top']
+            self.rLegendDict["where"] = currPage["Left"], currPage["Top"]
 
         # vector legend
         if self.id[1] is not None:
@@ -3355,16 +3347,15 @@ class LegendDialog(PsmapDialog):
             self.id[1] = NewId()
             vectorLegend = VectorLegend(self.id[1], env=self.env)
             self.vLegendDict = vectorLegend.GetInstruction()
-            self.vLegendDict['where'] = currPage['Left'], currPage['Top']
+            self.vLegendDict["where"] = currPage["Left"], currPage["Top"]
 
         if self.rasterId:
-            self.currRaster = self.instruction[self.rasterId]['raster']
+            self.currRaster = self.instruction[self.rasterId]["raster"]
         else:
             self.currRaster = None
 
         # notebook
-        self.notebook = Notebook(
-            parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+        self.notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.panelRaster = self._rasterLegend(self.notebook)
         self.panelVector = self._vectorLegend(self.notebook)
         self.OnRaster(None)
@@ -3379,217 +3370,173 @@ class LegendDialog(PsmapDialog):
 
     def OnPageChanging(self, event):
         """Workaround to scroll up to see the checkbox"""
-        wx.CallAfter(self.FindWindowByName('rasterPanel').ScrollChildIntoView,
-                     self.FindWindowByName('showRLegend'))
-        wx.CallAfter(self.FindWindowByName('vectorPanel').ScrollChildIntoView,
-                     self.FindWindowByName('showVLegend'))
+        wx.CallAfter(
+            self.FindWindowByName("rasterPanel").ScrollChildIntoView,
+            self.FindWindowByName("showRLegend"),
+        )
+        wx.CallAfter(
+            self.FindWindowByName("vectorPanel").ScrollChildIntoView,
+            self.FindWindowByName("showVLegend"),
+        )
 
     def _rasterLegend(self, notebook):
         panel = ScrolledPanel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, 500),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, 500), style=wx.TAB_TRAVERSAL
+        )
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
-        panel.SetName('rasterPanel')
+        panel.SetName("rasterPanel")
         notebook.AddPage(page=panel, text=_("Raster legend"))
 
         border = wx.BoxSizer(wx.VERTICAL)
         # is legend
-        self.isRLegend = CheckBox(
-            panel, id=wx.ID_ANY, label=_("Show raster legend"))
-        self.isRLegend.SetValue(self.rLegendDict['rLegend'])
+        self.isRLegend = CheckBox(panel, id=wx.ID_ANY, label=_("Show raster legend"))
+        self.isRLegend.SetValue(self.rLegendDict["rLegend"])
         self.isRLegend.SetName("showRLegend")
-        border.Add(
-            self.isRLegend,
-            proportion=0,
-            flag=wx.ALL | wx.EXPAND,
-            border=5)
+        border.Add(self.isRLegend, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # choose raster
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Source raster"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Source raster"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
         self.rasterDefault = RadioButton(
-            panel, id=wx.ID_ANY, label=_("current raster"),
-            style=wx.RB_GROUP)
-        self.rasterOther = RadioButton(
-            panel, id=wx.ID_ANY, label=_("select raster"))
-        self.rasterDefault.SetValue(self.rLegendDict['rasterDefault'])
-        self.rasterOther.SetValue(not self.rLegendDict['rasterDefault'])
+            panel, id=wx.ID_ANY, label=_("current raster"), style=wx.RB_GROUP
+        )
+        self.rasterOther = RadioButton(panel, id=wx.ID_ANY, label=_("select raster"))
+        self.rasterDefault.SetValue(self.rLegendDict["rasterDefault"])
+        self.rasterOther.SetValue(not self.rLegendDict["rasterDefault"])
 
         rasterType = getRasterType(map=self.currRaster)
 
         self.rasterCurrent = StaticText(
-            panel, id=wx.ID_ANY, label=_("%(rast)s: type %(type)s") %
-            {'rast': self.currRaster, 'type': rasterType})
+            panel,
+            id=wx.ID_ANY,
+            label=_("%(rast)s: type %(type)s")
+            % {"rast": self.currRaster, "type": rasterType},
+        )
         self.rasterSelect = Select(
             panel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster',
+            type="raster",
             multiple=False,
             updateOnPopup=True,
-            onPopup=None)
-        if not self.rLegendDict['rasterDefault']:
-            self.rasterSelect.SetValue(self.rLegendDict['raster'])
+            onPopup=None,
+        )
+        if not self.rLegendDict["rasterDefault"]:
+            self.rasterSelect.SetValue(self.rLegendDict["raster"])
         else:
-            self.rasterSelect.SetValue('')
+            self.rasterSelect.SetValue("")
         flexSizer.Add(
-            self.rasterDefault,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            self.rasterDefault, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         flexSizer.Add(
             self.rasterCurrent,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
-            border=10)
+            border=10,
+        )
         flexSizer.Add(
-            self.rasterOther,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            self.rasterOther, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         flexSizer.Add(
             self.rasterSelect,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
+            border=0,
+        )
         flexSizer.AddGrowableCol(1)
 
-        sizer.Add(
-            flexSizer,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=1)
+        sizer.Add(flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # type of legend
 
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Type of legend"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Type of legend"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         vbox = wx.BoxSizer(wx.VERTICAL)
         self.discrete = RadioButton(
-            parent=panel, id=wx.ID_ANY, label=" %s " %
-            _("discrete legend (categorical maps)"),
-            style=wx.RB_GROUP)
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s " % _("discrete legend (categorical maps)"),
+            style=wx.RB_GROUP,
+        )
         self.continuous = RadioButton(
-            parent=panel, id=wx.ID_ANY, label=" %s " %
-            _("continuous color gradient legend (floating point map)"))
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s " % _("continuous color gradient legend (floating point map)"),
+        )
 
-        vbox.Add(
-            self.discrete,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=0)
-        vbox.Add(
-            self.continuous,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=0)
+        vbox.Add(self.discrete, proportion=1, flag=wx.EXPAND | wx.ALL, border=0)
+        vbox.Add(self.continuous, proportion=1, flag=wx.EXPAND | wx.ALL, border=0)
         sizer.Add(vbox, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # size, position and font
-        self.sizePositionFont(
-            legendType='raster',
-            parent=panel,
-            mainSizer=border)
+        self.sizePositionFont(legendType="raster", parent=panel, mainSizer=border)
 
         # advanced settings
         box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Advanced legend settings"))
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Advanced legend settings")
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
         # no data
-        self.nodata = CheckBox(
-            panel, id=wx.ID_ANY, label=_('draw "no data" box'))
-        if self.rLegendDict['nodata'] == 'y':
+        self.nodata = CheckBox(panel, id=wx.ID_ANY, label=_('draw "no data" box'))
+        if self.rLegendDict["nodata"] == "y":
             self.nodata.SetValue(True)
         else:
             self.nodata.SetValue(False)
         # tickbar
         self.ticks = CheckBox(
-            panel,
-            id=wx.ID_ANY,
-            label=_("draw ticks across color table"))
-        if self.rLegendDict['tickbar'] == 'y':
+            panel, id=wx.ID_ANY, label=_("draw ticks across color table")
+        )
+        if self.rLegendDict["tickbar"] == "y":
             self.ticks.SetValue(True)
         else:
             self.ticks.SetValue(False)
         # range
-        if self.rasterId and self.instruction[self.rasterId]['raster']:
-            rinfo = grass.raster_info(
-                self.instruction[
-                    self.rasterId]['raster'])
-            self.minim, self.maxim = rinfo['min'], rinfo['max']
+        if self.rasterId and self.instruction[self.rasterId]["raster"]:
+            rinfo = grass.raster_info(self.instruction[self.rasterId]["raster"])
+            self.minim, self.maxim = rinfo["min"], rinfo["max"]
         else:
             self.minim, self.maxim = 0, 0
         self.range = CheckBox(panel, id=wx.ID_ANY, label=_("range"))
-        self.range.SetValue(self.rLegendDict['range'])
-        self.minText = StaticText(
-            panel,
-            id=wx.ID_ANY,
-            label="min (%s)" %
-            self.minim)
-        self.maxText = StaticText(
-            panel,
-            id=wx.ID_ANY,
-            label="max (%s)" %
-            self.maxim)
-        self.min = TextCtrl(
-            panel, id=wx.ID_ANY, value=str(
-                self.rLegendDict['min']))
-        self.max = TextCtrl(
-            panel, id=wx.ID_ANY, value=str(
-                self.rLegendDict['max']))
+        self.range.SetValue(self.rLegendDict["range"])
+        self.minText = StaticText(panel, id=wx.ID_ANY, label="min (%s)" % self.minim)
+        self.maxText = StaticText(panel, id=wx.ID_ANY, label="max (%s)" % self.maxim)
+        self.min = TextCtrl(panel, id=wx.ID_ANY, value=str(self.rLegendDict["min"]))
+        self.max = TextCtrl(panel, id=wx.ID_ANY, value=str(self.rLegendDict["max"]))
 
         gridBagSizer.Add(
-            self.nodata, pos=(
-                0, 0), span=(
-                1, 5), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.nodata,
+            pos=(0, 0),
+            span=(1, 5),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         gridBagSizer.Add(
-            self.ticks, pos=(
-                1, 0), span=(
-                1, 5), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.ticks, pos=(1, 0), span=(1, 5), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.range, pos=(2, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.range, pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.minText,
-            pos=(
-                2,
-                1),
+            pos=(2, 1),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
-        gridBagSizer.Add(
-            self.min, pos=(2, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            border=0,
+        )
+        gridBagSizer.Add(self.min, pos=(2, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
             self.maxText,
-            pos=(
-                2,
-                3),
+            pos=(2, 3),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-            border=0)
-        gridBagSizer.Add(
-            self.max, pos=(2, 4),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            border=0,
+        )
+        gridBagSizer.Add(self.max, pos=(2, 4), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=0,
-            border=0)
+        sizer.Add(gridBagSizer, proportion=0, border=0)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
@@ -3601,7 +3548,7 @@ class LegendDialog(PsmapDialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnIsLegend, self.isRLegend)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.discrete)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.continuous)
-##        self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
+        ##        self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
         self.Bind(wx.EVT_CHECKBOX, self.OnRange, self.range)
         self.rasterSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnRaster)
 
@@ -3609,35 +3556,29 @@ class LegendDialog(PsmapDialog):
 
     def _vectorLegend(self, notebook):
         panel = ScrolledPanel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, 500),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, 500), style=wx.TAB_TRAVERSAL
+        )
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
-        panel.SetName('vectorPanel')
+        panel.SetName("vectorPanel")
         notebook.AddPage(page=panel, text=_("Vector legend"))
 
         border = wx.BoxSizer(wx.VERTICAL)
         # is legend
-        self.isVLegend = CheckBox(
-            panel, id=wx.ID_ANY, label=_("Show vector legend"))
-        self.isVLegend.SetValue(self.vLegendDict['vLegend'])
+        self.isVLegend = CheckBox(panel, id=wx.ID_ANY, label=_("Show vector legend"))
+        self.isVLegend.SetValue(self.vLegendDict["vLegend"])
         self.isVLegend.SetName("showVLegend")
-        border.Add(
-            self.isVLegend,
-            proportion=0,
-            flag=wx.ALL | wx.EXPAND,
-            border=5)
+        border.Add(self.isVLegend, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # vector maps, their order, labels
         box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Source vector maps"))
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Source vector maps")
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        vectorText = StaticText(panel, id=wx.ID_ANY, label=_(
-            "Choose vector maps and their order in legend"))
+        vectorText = StaticText(
+            panel, id=wx.ID_ANY, label=_("Choose vector maps and their order in legend")
+        )
 
         self.vectorListCtrl = CheckListCtrl(panel)
 
@@ -3645,13 +3586,13 @@ class LegendDialog(PsmapDialog):
         self.vectorListCtrl.InsertColumn(1, _("Label"))
         if self.vectorId:
             vectors = sorted(
-                self.instruction[
-                    self.vectorId]['list'],
-                key=lambda x: x[3])
+                self.instruction[self.vectorId]["list"], key=lambda x: x[3]
+            )
 
             for vector in vectors:
                 index = self.vectorListCtrl.InsertItem(
-                    self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
+                    self.vectorListCtrl.GetItemCount(), vector[0].split("@")[0]
+                )
                 self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
@@ -3668,75 +3609,59 @@ class LegendDialog(PsmapDialog):
         self.btnLabel = Button(panel, id=wx.ID_ANY, label=_("Edit label"))
 
         gridBagSizer.Add(
-            vectorText, pos=(
-                0, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            vectorText, pos=(0, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.vectorListCtrl, pos=(
-                1, 0), span=(
-                3, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.vectorListCtrl,
+            pos=(1, 0),
+            span=(3, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
         gridBagSizer.Add(
-            self.btnUp, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.btnUp, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.btnDown, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.btnDown, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.btnLabel, pos=(3, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.btnLabel, pos=(3, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
         gridBagSizer.AddGrowableCol(0, 3)
         gridBagSizer.AddGrowableCol(1, 1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=0,
-            flag=wx.EXPAND,
-            border=0)
+        sizer.Add(gridBagSizer, proportion=0, flag=wx.EXPAND, border=0)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # size, position and font
-        self.sizePositionFont(
-            legendType='vector',
-            parent=panel,
-            mainSizer=border)
+        self.sizePositionFont(legendType="vector", parent=panel, mainSizer=border)
 
         # border
         # GTC  Line around legend or map frame
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Border"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Border"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexGridSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
         self.borderCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("draw border around legend"))
+            panel, id=wx.ID_ANY, label=_("draw border around legend")
+        )
         self.borderColorCtrl = ColourPickerCtrl(
-            panel, id=wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL)
-        if self.vLegendDict['border'] == 'none':
+            panel, id=wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL
+        )
+        if self.vLegendDict["border"] == "none":
             self.borderColorCtrl.SetColour(wx.BLACK)
             self.borderCheck.SetValue(False)
         else:
-            self.borderColorCtrl.SetColour(
-                convertRGB(self.vLegendDict['border']))
+            self.borderColorCtrl.SetColour(convertRGB(self.vLegendDict["border"]))
             self.borderCheck.SetValue(True)
 
         flexGridSizer.Add(
-            self.borderCheck,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            self.borderCheck, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         flexGridSizer.Add(
-            self.borderColorCtrl,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
-        sizer.Add(
-            flexGridSizer,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=1)
+            self.borderColorCtrl, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        sizer.Add(flexGridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(wx.EVT_BUTTON, self.OnUp, self.btnUp)
@@ -3745,10 +3670,7 @@ class LegendDialog(PsmapDialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnIsLegend, self.isVLegend)
         self.Bind(wx.EVT_CHECKBOX, self.OnSpan, panel.spanRadio)
         self.Bind(wx.EVT_CHECKBOX, self.OnBorder, self.borderCheck)
-        self.Bind(
-            wx.EVT_FONTPICKER_CHANGED,
-            self.OnFont,
-            panel.font['fontCtrl'])
+        self.Bind(wx.EVT_FONTPICKER_CHANGED, self.OnFont, panel.font["fontCtrl"])
 
         panel.SetSizer(border)
 
@@ -3757,7 +3679,7 @@ class LegendDialog(PsmapDialog):
 
     def sizePositionFont(self, legendType, parent, mainSizer):
         """Insert widgets for size, position and font control"""
-        if legendType == 'raster':
+        if legendType == "raster":
             legendDict = self.rLegendDict
         else:
             legendDict = self.vLegendDict
@@ -3766,124 +3688,128 @@ class LegendDialog(PsmapDialog):
 
         # size and position
         box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Size and position"))
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Size and position")
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         # unit
         self.AddUnits(parent=panel, dialogDict=legendDict)
         unitBox = wx.BoxSizer(wx.HORIZONTAL)
         unitBox.Add(
-            panel.units['unitsLabel'],
+            panel.units["unitsLabel"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
-            border=10)
-        unitBox.Add(
-            panel.units['unitsCtrl'],
-            proportion=1,
-            flag=wx.ALL,
-            border=5)
-        sizer.Add(
-            unitBox,
-            proportion=0,
-            border=0)
+            border=10,
+        )
+        unitBox.Add(panel.units["unitsCtrl"], proportion=1, flag=wx.ALL, border=5)
+        sizer.Add(unitBox, proportion=0, border=0)
 
         hBox = wx.BoxSizer(wx.HORIZONTAL)
-        posBox = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Position"))
+        posBox = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Position"))
         posSizer = wx.StaticBoxSizer(posBox, wx.VERTICAL)
-        sizeBox = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Size"))
+        sizeBox = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Size"))
         sizeSizer = wx.StaticBoxSizer(sizeBox, wx.VERTICAL)
         posGridBagSizer = wx.GridBagSizer(hgap=10, vgap=5)
 
         # position
         self.AddPosition(parent=panel, dialogDict=legendDict)
 
-        posGridBagSizer.Add(panel.position['xLabel'], pos=(
-            0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        posGridBagSizer.Add(panel.position['xCtrl'], pos=(
-            0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        posGridBagSizer.Add(panel.position['yLabel'], pos=(
-            1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        posGridBagSizer.Add(panel.position['yCtrl'], pos=(
-            1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         posGridBagSizer.Add(
-            panel.position['comment'], pos=(
-                2, 0), span=(
-                1, 2), flag=wx.ALIGN_BOTTOM, border=0)
+            panel.position["xLabel"],
+            pos=(0, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        posGridBagSizer.Add(
+            panel.position["xCtrl"], pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        posGridBagSizer.Add(
+            panel.position["yLabel"],
+            pos=(1, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        posGridBagSizer.Add(
+            panel.position["yCtrl"], pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        posGridBagSizer.Add(
+            panel.position["comment"],
+            pos=(2, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_BOTTOM,
+            border=0,
+        )
         posGridBagSizer.AddGrowableRow(2)
-        posSizer.Add(
-            posGridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        posSizer.Add(posGridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
         # size
         width = StaticText(panel, id=wx.ID_ANY, label=_("Width:"))
-        if legendDict['width']:
+        if legendDict["width"]:
             w = self.unitConv.convert(
-                value=float(legendDict['width']),
-                fromUnit='inch', toUnit=legendDict['unit'])
+                value=float(legendDict["width"]),
+                fromUnit="inch",
+                toUnit=legendDict["unit"],
+            )
         else:
-            w = ''
+            w = ""
         panel.widthCtrl = TextCtrl(
-            panel, id=wx.ID_ANY, value=str(w),
-            validator=TCValidator("DIGIT_ONLY"))
+            panel, id=wx.ID_ANY, value=str(w), validator=TCValidator("DIGIT_ONLY")
+        )
         panel.widthCtrl.SetToolTip(
-            _("Leave the edit field empty, to use default values."))
+            _("Leave the edit field empty, to use default values.")
+        )
 
-        if legendType == 'raster':
+        if legendType == "raster":
             ##            panel.defaultSize = wx.CheckBox(panel, id = wx.ID_ANY, label = _("Use default size"))
             # panel.defaultSize.SetValue(legendDict['defaultSize'])
 
             panel.heightOrColumnsLabel = StaticText(
-                panel, id=wx.ID_ANY, label=_("Height:"))
-            if legendDict['height']:
+                panel, id=wx.ID_ANY, label=_("Height:")
+            )
+            if legendDict["height"]:
                 h = self.unitConv.convert(
-                    value=float(legendDict['height']),
-                    fromUnit='inch', toUnit=legendDict['unit'])
+                    value=float(legendDict["height"]),
+                    fromUnit="inch",
+                    toUnit=legendDict["unit"],
+                )
             else:
-                h = ''
+                h = ""
             panel.heightOrColumnsCtrl = TextCtrl(
-                panel, id=wx.ID_ANY, value=str(h),
-                validator=TCValidator("DIGIT_ONLY"))
+                panel, id=wx.ID_ANY, value=str(h), validator=TCValidator("DIGIT_ONLY")
+            )
 
             self.rSizeGBSizer = wx.GridBagSizer(hgap=5, vgap=5)
-##            self.rSizeGBSizer.Add(panel.defaultSize, pos = (0,0), span = (1,2), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+            ##            self.rSizeGBSizer.Add(panel.defaultSize, pos = (0,0), span = (1,2), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
             self.rSizeGBSizer.Add(
-                width, pos=(0, 0),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                width, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.rSizeGBSizer.Add(
-                panel.widthCtrl, pos=(0, 1),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                panel.widthCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.rSizeGBSizer.Add(
-                panel.heightOrColumnsLabel, pos=(
-                    1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                panel.heightOrColumnsLabel,
+                pos=(1, 0),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                border=0,
+            )
             self.rSizeGBSizer.Add(
-                panel.heightOrColumnsCtrl, pos=(
-                    1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                panel.heightOrColumnsCtrl,
+                pos=(1, 1),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                border=0,
+            )
             sizeSizer.Add(
-                self.rSizeGBSizer,
-                proportion=1,
-                flag=wx.EXPAND | wx.ALL,
-                border=5)
+                self.rSizeGBSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5
+            )
 
-        if legendType == 'vector':
+        if legendType == "vector":
             panel.widthCtrl.SetToolTip(
-                _("Width of the color symbol (for lines)\nin front of the legend text"))
+                _("Width of the color symbol (for lines)\nin front of the legend text")
+            )
             # columns
             minVect, maxVect = 0, 0
             if self.vectorId:
                 minVect = 1
-                maxVect = min(10, len(self.instruction[self.vectorId]['list']))
+                maxVect = min(10, len(self.instruction[self.vectorId]["list"]))
             cols = StaticText(panel, id=wx.ID_ANY, label=_("Columns:"))
             panel.colsCtrl = SpinCtrl(
                 panel,
@@ -3891,47 +3817,51 @@ class LegendDialog(PsmapDialog):
                 value="",
                 min=minVect,
                 max=maxVect,
-                initial=legendDict['cols'])
+                initial=legendDict["cols"],
+            )
             # span
-            panel.spanRadio = CheckBox(
-                panel, id=wx.ID_ANY, label=_("column span:"))
-            panel.spanTextCtrl = TextCtrl(panel, id=wx.ID_ANY, value='')
-            panel.spanTextCtrl.SetToolTip(_("Column separation distance between the left edges\n"
-                                            "of two columns in a multicolumn legend"))
-            if legendDict['span']:
+            panel.spanRadio = CheckBox(panel, id=wx.ID_ANY, label=_("column span:"))
+            panel.spanTextCtrl = TextCtrl(panel, id=wx.ID_ANY, value="")
+            panel.spanTextCtrl.SetToolTip(
+                _(
+                    "Column separation distance between the left edges\n"
+                    "of two columns in a multicolumn legend"
+                )
+            )
+            if legendDict["span"]:
                 panel.spanRadio.SetValue(True)
                 s = self.unitConv.convert(
-                    value=float(legendDict['span']),
-                    fromUnit='inch', toUnit=legendDict['unit'])
+                    value=float(legendDict["span"]),
+                    fromUnit="inch",
+                    toUnit=legendDict["unit"],
+                )
                 panel.spanTextCtrl.SetValue(str(s))
             else:
                 panel.spanRadio.SetValue(False)
 
             self.vSizeGBSizer = wx.GridBagSizer(hgap=5, vgap=5)
             self.vSizeGBSizer.Add(
-                width, pos=(0, 0),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                width, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.vSizeGBSizer.Add(
-                panel.widthCtrl, pos=(0, 1),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                panel.widthCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.vSizeGBSizer.Add(
-                cols, pos=(1, 0),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                cols, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.vSizeGBSizer.Add(
-                panel.colsCtrl, pos=(1, 1),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                panel.colsCtrl, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.vSizeGBSizer.Add(
-                panel.spanRadio, pos=(2, 0),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                panel.spanRadio, pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.vSizeGBSizer.Add(
-                panel.spanTextCtrl, pos=(2, 1),
-                flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+                panel.spanTextCtrl, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+            )
             self.vSizeGBSizer.AddGrowableCol(1)
             sizeSizer.Add(
-                self.vSizeGBSizer,
-                proportion=1,
-                flag=wx.EXPAND | wx.ALL,
-                border=5)
+                self.vSizeGBSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5
+            )
 
         hBox.Add(posSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
         hBox.Add(sizeSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
@@ -3939,61 +3869,55 @@ class LegendDialog(PsmapDialog):
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Font settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
         fontSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
-        if legendType == 'raster':
+        if legendType == "raster":
             self.AddFont(parent=panel, dialogDict=legendDict, color=True)
         else:
             self.AddFont(parent=panel, dialogDict=legendDict, color=False)
         flexSizer.Add(
-            panel.font['fontLabel'],
+            panel.font["fontLabel"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexSizer.Add(
-            panel.font['fontCtrl'],
+            panel.font["fontCtrl"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexSizer.Add(
-            panel.font['fontSizeLabel'],
+            panel.font["fontSizeLabel"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexSizer.Add(
-            panel.font['fontSizeCtrl'],
+            panel.font["fontSizeCtrl"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
-        if legendType == 'raster':
+            border=0,
+        )
+        if legendType == "raster":
             flexSizer.Add(
-                panel.font['colorLabel'],
+                panel.font["colorLabel"],
                 proportion=0,
                 flag=wx.ALIGN_CENTER_VERTICAL,
-                border=0)
+                border=0,
+            )
             flexSizer.Add(
-                panel.font['colorCtrl'],
+                panel.font["colorCtrl"],
                 proportion=0,
                 flag=wx.ALIGN_CENTER_VERTICAL,
-                border=0)
+                border=0,
+            )
         flexSizer.AddGrowableCol(1)
 
-        fontSizer.Add(
-            flexSizer,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=1)
-        border.Add(
-            fontSizer,
-            proportion=0,
-            flag=wx.ALL | wx.EXPAND,
-            border=5)
+        fontSizer.Add(flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
+        border.Add(fontSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
     #   some enable/disable methods
 
@@ -4010,7 +3934,7 @@ class LegendDialog(PsmapDialog):
                 self.OnDiscrete(None)
             else:
                 for widget in children:
-                    if widget.GetName() != 'showRLegend':
+                    if widget.GetName() != "showRLegend":
                         widget.Disable()
         if page == 1 or event is None:
             children = self.panelVector.GetChildren()
@@ -4021,7 +3945,7 @@ class LegendDialog(PsmapDialog):
                 self.OnBorder(None)
             else:
                 for widget in children:
-                    if widget.GetName() != 'showVLegend':
+                    if widget.GetName() != "showVLegend":
                         widget.Disable()
 
     def OnRaster(self, event):
@@ -4033,14 +3957,14 @@ class LegendDialog(PsmapDialog):
             map = self.rasterSelect.GetValue()
             type = getRasterType(map)
 
-        if type == 'CELL':
+        if type == "CELL":
             self.discrete.SetValue(True)
-        elif type in ('FCELL', 'DCELL'):
+        elif type in ("FCELL", "DCELL"):
             self.continuous.SetValue(True)
         if event is None:
-            if self.rLegendDict['discrete'] == 'y':
+            if self.rLegendDict["discrete"] == "y":
                 self.discrete.SetValue(True)
-            elif self.rLegendDict['discrete'] == 'n':
+            elif self.rLegendDict["discrete"] == "n":
                 self.continuous.SetValue(True)
         self.OnDiscrete(None)
 
@@ -4051,8 +3975,13 @@ class LegendDialog(PsmapDialog):
         if self.discrete.GetValue():
             self.panelRaster.heightOrColumnsLabel.SetLabel(_("Columns:"))
             self.panelRaster.heightOrColumnsCtrl = SpinCtrl(
-                self.panelRaster, id=wx.ID_ANY, value="", min=1, max=10,
-                initial=self.rLegendDict['cols'])
+                self.panelRaster,
+                id=wx.ID_ANY,
+                value="",
+                min=1,
+                max=10,
+                initial=self.rLegendDict["cols"],
+            )
             self.panelRaster.heightOrColumnsCtrl.Enable(enabledSize)
             self.nodata.Enable()
             self.range.Disable()
@@ -4063,17 +3992,20 @@ class LegendDialog(PsmapDialog):
             self.ticks.Disable()
         else:
             self.panelRaster.heightOrColumnsLabel.SetLabel(_("Height:"))
-            if self.rLegendDict['height']:
+            if self.rLegendDict["height"]:
                 h = self.unitConv.convert(
-                    value=float(
-                        self.rLegendDict['height']),
-                    fromUnit='inch',
-                    toUnit=self.rLegendDict['unit'])
+                    value=float(self.rLegendDict["height"]),
+                    fromUnit="inch",
+                    toUnit=self.rLegendDict["unit"],
+                )
             else:
-                h = ''
+                h = ""
             self.panelRaster.heightOrColumnsCtrl = TextCtrl(
-                self.panelRaster, id=wx.ID_ANY, value=str(h),
-                validator=TCValidator("DIGIT_ONLY"))
+                self.panelRaster,
+                id=wx.ID_ANY,
+                value=str(h),
+                validator=TCValidator("DIGIT_ONLY"),
+            )
             self.panelRaster.heightOrColumnsCtrl.Enable(enabledSize)
             self.nodata.Disable()
             self.range.Enable()
@@ -4085,8 +4017,11 @@ class LegendDialog(PsmapDialog):
             self.ticks.Enable()
 
         self.rSizeGBSizer.Add(
-            self.panelRaster.heightOrColumnsCtrl, pos=(
-                1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.panelRaster.heightOrColumnsCtrl,
+            pos=(1, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
         self.panelRaster.Layout()
         self.panelRaster.Fit()
 
@@ -4113,7 +4048,7 @@ class LegendDialog(PsmapDialog):
                 self.vectorListCtrl.SetItemData(pos - 1, idx2)
                 self.vectorListCtrl.SortItems(cmp)
                 if pos > 0:
-                    selected = (pos - 1)
+                    selected = pos - 1
                 else:
                     selected = 0
 
@@ -4130,7 +4065,7 @@ class LegendDialog(PsmapDialog):
                 self.vectorListCtrl.SetItemData(pos + 1, idx2)
                 self.vectorListCtrl.SortItems(cmp)
                 if pos < self.vectorListCtrl.GetItemCount() - 1:
-                    selected = (pos + 1)
+                    selected = pos + 1
                 else:
                     selected = self.vectorListCtrl.GetItemCount() - 1
 
@@ -4146,24 +4081,25 @@ class LegendDialog(PsmapDialog):
                 message=_("Edit legend label:"),
                 caption=_("Edit label"),
                 value=default,
-                style=wx.OK | wx.CANCEL | wx.CENTRE)
+                style=wx.OK | wx.CANCEL | wx.CENTRE,
+            )
             if dlg.ShowModal() == wx.ID_OK:
                 new = dlg.GetValue()
                 self.vectorListCtrl.SetItem(idx, 1, new)
             dlg.Destroy()
 
     def OnSpan(self, event):
-        self.panelVector.spanTextCtrl.Enable(
-            self.panelVector.spanRadio.GetValue())
+        self.panelVector.spanTextCtrl.Enable(self.panelVector.spanRadio.GetValue())
 
     def OnFont(self, event):
         """Changes default width according to fontsize, width [inch] = fontsize[pt]/24"""
-##        fontsize = self.panelVector.font['fontCtrl'].GetSelectedFont().GetPointSize()
-        fontsize = self.panelVector.font['fontSizeCtrl'].GetValue()
+        ##        fontsize = self.panelVector.font['fontCtrl'].GetSelectedFont().GetPointSize()
+        fontsize = self.panelVector.font["fontSizeCtrl"].GetValue()
         unit = self.unitConv.findUnit(
-            self.panelVector.units['unitsCtrl'].GetStringSelection())
-        w = fontsize / 24.
-        width = self.unitConv.convert(value=w, fromUnit='inch', toUnit=unit)
+            self.panelVector.units["unitsCtrl"].GetStringSelection()
+        )
+        w = fontsize / 24.0
+        width = self.unitConv.convert(value=w, fromUnit="inch", toUnit=unit)
         self.panelVector.widthCtrl.SetValue("%3.2f" % width)
 
     def OnBorder(self, event):
@@ -4175,114 +4111,125 @@ class LegendDialog(PsmapDialog):
 
         # is raster legend
         if not self.isRLegend.GetValue():
-            self.rLegendDict['rLegend'] = False
+            self.rLegendDict["rLegend"] = False
         else:
-            self.rLegendDict['rLegend'] = True
+            self.rLegendDict["rLegend"] = True
         # units
         currUnit = self.unitConv.findUnit(
-            self.panelRaster.units['unitsCtrl'].GetStringSelection())
-        self.rLegendDict['unit'] = currUnit
+            self.panelRaster.units["unitsCtrl"].GetStringSelection()
+        )
+        self.rLegendDict["unit"] = currUnit
         # raster
         if self.rasterDefault.GetValue():
-            self.rLegendDict['rasterDefault'] = True
-            self.rLegendDict['raster'] = self.currRaster
+            self.rLegendDict["rasterDefault"] = True
+            self.rLegendDict["raster"] = self.currRaster
         else:
-            self.rLegendDict['rasterDefault'] = False
-            self.rLegendDict['raster'] = self.rasterSelect.GetValue()
-        if self.rLegendDict['rLegend'] and not self.rLegendDict['raster']:
-            wx.MessageBox(message=_("No raster map selected!"),
-                          caption=_('No raster'), style=wx.OK | wx.ICON_ERROR)
+            self.rLegendDict["rasterDefault"] = False
+            self.rLegendDict["raster"] = self.rasterSelect.GetValue()
+        if self.rLegendDict["rLegend"] and not self.rLegendDict["raster"]:
+            wx.MessageBox(
+                message=_("No raster map selected!"),
+                caption=_("No raster"),
+                style=wx.OK | wx.ICON_ERROR,
+            )
             return False
 
-        if self.rLegendDict['raster']:
+        if self.rLegendDict["raster"]:
             # type and range of map
-            rasterType = getRasterType(self.rLegendDict['raster'])
+            rasterType = getRasterType(self.rLegendDict["raster"])
             if rasterType is None:
                 return False
-            self.rLegendDict['type'] = rasterType
+            self.rLegendDict["type"] = rasterType
 
             # discrete
             if self.discrete.GetValue():
-                self.rLegendDict['discrete'] = 'y'
+                self.rLegendDict["discrete"] = "y"
             else:
-                self.rLegendDict['discrete'] = 'n'
+                self.rLegendDict["discrete"] = "n"
 
             # font
-            self.rLegendDict['font'] = self.panelRaster.font[
-                'fontCtrl'].GetStringSelection()
-            self.rLegendDict['fontsize'] = self.panelRaster.font[
-                'fontSizeCtrl'].GetValue()
-            color = self.panelRaster.font['colorCtrl'].GetColour()
-            self.rLegendDict['color'] = convertRGB(color)
+            self.rLegendDict["font"] = self.panelRaster.font[
+                "fontCtrl"
+            ].GetStringSelection()
+            self.rLegendDict["fontsize"] = self.panelRaster.font[
+                "fontSizeCtrl"
+            ].GetValue()
+            color = self.panelRaster.font["colorCtrl"].GetColour()
+            self.rLegendDict["color"] = convertRGB(color)
 
             # position
             x = self.unitConv.convert(
-                value=float(
-                    self.panelRaster.position
-                    ['xCtrl'].GetValue()),
-                fromUnit=currUnit, toUnit='inch')
+                value=float(self.panelRaster.position["xCtrl"].GetValue()),
+                fromUnit=currUnit,
+                toUnit="inch",
+            )
             y = self.unitConv.convert(
-                value=float(
-                    self.panelRaster.position
-                    ['yCtrl'].GetValue()),
-                fromUnit=currUnit, toUnit='inch')
-            self.rLegendDict['where'] = (x, y)
+                value=float(self.panelRaster.position["yCtrl"].GetValue()),
+                fromUnit=currUnit,
+                toUnit="inch",
+            )
+            self.rLegendDict["where"] = (x, y)
             # estimated size
             width = self.panelRaster.widthCtrl.GetValue()
             try:
                 width = float(width)
                 width = self.unitConv.convert(
-                    value=width, fromUnit=currUnit, toUnit='inch')
+                    value=width, fromUnit=currUnit, toUnit="inch"
+                )
             except ValueError:
                 width = None
-            self.rLegendDict['width'] = width
-            if self.rLegendDict['discrete'] == 'n':
+            self.rLegendDict["width"] = width
+            if self.rLegendDict["discrete"] == "n":
                 height = self.panelRaster.heightOrColumnsCtrl.GetValue()
                 try:
                     height = float(height)
                     height = self.unitConv.convert(
-                        value=height, fromUnit=currUnit, toUnit='inch')
+                        value=height, fromUnit=currUnit, toUnit="inch"
+                    )
                 except ValueError:
                     height = None
-                self.rLegendDict['height'] = height
+                self.rLegendDict["height"] = height
             else:
                 cols = self.panelRaster.heightOrColumnsCtrl.GetValue()
-                self.rLegendDict['cols'] = cols
+                self.rLegendDict["cols"] = cols
             drawHeight = self.rasterLegend.EstimateHeight(
-                raster=self.rLegendDict['raster'],
-                discrete=self.rLegendDict['discrete'],
-                fontsize=self.rLegendDict['fontsize'],
-                cols=self.rLegendDict['cols'],
-                height=self.rLegendDict['height'])
+                raster=self.rLegendDict["raster"],
+                discrete=self.rLegendDict["discrete"],
+                fontsize=self.rLegendDict["fontsize"],
+                cols=self.rLegendDict["cols"],
+                height=self.rLegendDict["height"],
+            )
             drawWidth = self.rasterLegend.EstimateWidth(
-                raster=self.rLegendDict['raster'],
-                discrete=self.rLegendDict['discrete'],
-                fontsize=self.rLegendDict['fontsize'],
-                cols=self.rLegendDict['cols'],
-                width=self.rLegendDict['width'],
-                paperInstr=self.instruction[self.pageId])
-            self.rLegendDict['rect'] = Rect2D(
-                x=x, y=y, width=drawWidth, height=drawHeight)
+                raster=self.rLegendDict["raster"],
+                discrete=self.rLegendDict["discrete"],
+                fontsize=self.rLegendDict["fontsize"],
+                cols=self.rLegendDict["cols"],
+                width=self.rLegendDict["width"],
+                paperInstr=self.instruction[self.pageId],
+            )
+            self.rLegendDict["rect"] = Rect2D(
+                x=x, y=y, width=drawWidth, height=drawHeight
+            )
 
             # no data
-            if self.rLegendDict['discrete'] == 'y':
+            if self.rLegendDict["discrete"] == "y":
                 if self.nodata.GetValue():
-                    self.rLegendDict['nodata'] = 'y'
+                    self.rLegendDict["nodata"] = "y"
                 else:
-                    self.rLegendDict['nodata'] = 'n'
+                    self.rLegendDict["nodata"] = "n"
             # tickbar
-            elif self.rLegendDict['discrete'] == 'n':
+            elif self.rLegendDict["discrete"] == "n":
                 if self.ticks.GetValue():
-                    self.rLegendDict['tickbar'] = 'y'
+                    self.rLegendDict["tickbar"] = "y"
                 else:
-                    self.rLegendDict['tickbar'] = 'n'
-            # range
+                    self.rLegendDict["tickbar"] = "n"
+                # range
                 if self.range.GetValue():
-                    self.rLegendDict['range'] = True
-                    self.rLegendDict['min'] = self.min.GetValue()
-                    self.rLegendDict['max'] = self.max.GetValue()
+                    self.rLegendDict["range"] = True
+                    self.rLegendDict["min"] = self.min.GetValue()
+                    self.rLegendDict["max"] = self.max.GetValue()
                 else:
-                    self.rLegendDict['range'] = False
+                    self.rLegendDict["range"] = False
 
         if not self.id[0] in self.instruction:
             rasterLegend = RasterLegend(self.id[0], env=self.env)
@@ -4296,7 +4243,7 @@ class LegendDialog(PsmapDialog):
     def updateVectorLegend(self):
         """Save information from vector legend dialog to dictionary"""
 
-        vector = self.instruction.FindInstructionByType('vector')
+        vector = self.instruction.FindInstructionByType("vector")
         if vector:
             self.vectorId = vector.id
         else:
@@ -4304,10 +4251,10 @@ class LegendDialog(PsmapDialog):
 
         # is vector legend
         if not self.isVLegend.GetValue():
-            self.vLegendDict['vLegend'] = False
+            self.vLegendDict["vLegend"] = False
         else:
-            self.vLegendDict['vLegend'] = True
-        if self.vLegendDict['vLegend'] and self.vectorId is not None:
+            self.vLegendDict["vLegend"] = True
+        if self.vLegendDict["vLegend"] and self.vectorId is not None:
             # labels
             # reindex order
             idx = 1
@@ -4318,81 +4265,91 @@ class LegendDialog(PsmapDialog):
                 else:
                     self.vectorListCtrl.SetItemData(item, 0)
             if idx == 1:
-                self.vLegendDict['vLegend'] = False
+                self.vLegendDict["vLegend"] = False
             else:
-                vList = self.instruction[self.vectorId]['list']
+                vList = self.instruction[self.vectorId]["list"]
                 for i, vector in enumerate(vList):
                     item = self.vectorListCtrl.FindItem(
-                        start=-1, str=vector[0].split('@')[0])
+                        start=-1, str=vector[0].split("@")[0]
+                    )
                     vList[i][3] = self.vectorListCtrl.GetItemData(item)
-                    vList[i][4] = self.vectorListCtrl.GetItem(
-                        item, 1).GetText()
-                vmaps = self.instruction.FindInstructionByType(
-                    'vProperties', list=True)
+                    vList[i][4] = self.vectorListCtrl.GetItem(item, 1).GetText()
+                vmaps = self.instruction.FindInstructionByType("vProperties", list=True)
                 for vmap, vector in zip(vmaps, vList):
-                    self.instruction[vmap.id]['lpos'] = vector[3]
-                    self.instruction[vmap.id]['label'] = vector[4]
+                    self.instruction[vmap.id]["lpos"] = vector[3]
+                    self.instruction[vmap.id]["label"] = vector[4]
                 # units
                 currUnit = self.unitConv.findUnit(
-                    self.panelVector.units['unitsCtrl'].GetStringSelection())
-                self.vLegendDict['unit'] = currUnit
+                    self.panelVector.units["unitsCtrl"].GetStringSelection()
+                )
+                self.vLegendDict["unit"] = currUnit
                 # position
                 x = self.unitConv.convert(
-                    value=float(
-                        self.panelVector.position['xCtrl'].GetValue()),
+                    value=float(self.panelVector.position["xCtrl"].GetValue()),
                     fromUnit=currUnit,
-                    toUnit='inch')
+                    toUnit="inch",
+                )
                 y = self.unitConv.convert(
-                    value=float(
-                        self.panelVector.position['yCtrl'].GetValue()),
+                    value=float(self.panelVector.position["yCtrl"].GetValue()),
                     fromUnit=currUnit,
-                    toUnit='inch')
-                self.vLegendDict['where'] = (x, y)
+                    toUnit="inch",
+                )
+                self.vLegendDict["where"] = (x, y)
 
                 # font
-                self.vLegendDict['font'] = self.panelVector.font[
-                    'fontCtrl'].GetStringSelection()
-                self.vLegendDict['fontsize'] = self.panelVector.font[
-                    'fontSizeCtrl'].GetValue()
+                self.vLegendDict["font"] = self.panelVector.font[
+                    "fontCtrl"
+                ].GetStringSelection()
+                self.vLegendDict["fontsize"] = self.panelVector.font[
+                    "fontSizeCtrl"
+                ].GetValue()
                 dc = ClientDC(self)
                 dc.SetFont(
                     wx.Font(
-                        pointSize=self.vLegendDict['fontsize'],
+                        pointSize=self.vLegendDict["fontsize"],
                         family=wx.FONTFAMILY_DEFAULT,
                         style=wx.FONTSTYLE_NORMAL,
-                        weight=wx.FONTWEIGHT_NORMAL))
+                        weight=wx.FONTWEIGHT_NORMAL,
+                    )
+                )
                 # size
                 width = self.unitConv.convert(
                     value=float(self.panelVector.widthCtrl.GetValue()),
-                    fromUnit=currUnit, toUnit='inch')
-                self.vLegendDict['width'] = width
-                self.vLegendDict['cols'] = self.panelVector.colsCtrl.GetValue()
-                if self.panelVector.spanRadio.GetValue() and self.panelVector.spanTextCtrl.GetValue():
-                    self.vLegendDict[
-                        'span'] = self.panelVector.spanTextCtrl.GetValue()
+                    fromUnit=currUnit,
+                    toUnit="inch",
+                )
+                self.vLegendDict["width"] = width
+                self.vLegendDict["cols"] = self.panelVector.colsCtrl.GetValue()
+                if (
+                    self.panelVector.spanRadio.GetValue()
+                    and self.panelVector.spanTextCtrl.GetValue()
+                ):
+                    self.vLegendDict["span"] = self.panelVector.spanTextCtrl.GetValue()
                 else:
-                    self.vLegendDict['span'] = None
+                    self.vLegendDict["span"] = None
 
                 # size estimation
-                vectors = self.instruction[self.vectorId]['list']
+                vectors = self.instruction[self.vectorId]["list"]
                 labels = [vector[4] for vector in vectors if vector[3] != 0]
                 extent = dc.GetTextExtent(max(labels, key=len))
                 wExtent = self.unitConv.convert(
-                    value=extent[0], fromUnit='pixel', toUnit='inch')
+                    value=extent[0], fromUnit="pixel", toUnit="inch"
+                )
                 hExtent = self.unitConv.convert(
-                    value=extent[1], fromUnit='pixel', toUnit='inch')
-                w = (width + wExtent) * self.vLegendDict['cols']
-                h = len(labels) * hExtent / self.vLegendDict['cols']
+                    value=extent[1], fromUnit="pixel", toUnit="inch"
+                )
+                w = (width + wExtent) * self.vLegendDict["cols"]
+                h = len(labels) * hExtent / self.vLegendDict["cols"]
                 h *= 1.1
-                self.vLegendDict['rect'] = Rect2D(x, y, w, h)
+                self.vLegendDict["rect"] = Rect2D(x, y, w, h)
 
                 # border
                 if self.borderCheck.GetValue():
                     color = self.borderColorCtrl.GetColour()
-                    self.vLegendDict['border'] = convertRGB(color)
+                    self.vLegendDict["border"] = convertRGB(color)
 
                 else:
-                    self.vLegendDict['border'] = 'none'
+                    self.vLegendDict["border"] = "none"
 
         if not self.id[1] in self.instruction:
             vectorLegend = VectorLegend(self.id[1], env=self.env)
@@ -4413,60 +4370,62 @@ class LegendDialog(PsmapDialog):
         """Update legend coordinates after moving"""
 
         # raster legend
-        if 'rect' in self.rLegendDict:
-            x, y = self.rLegendDict['rect'][:2]
+        if "rect" in self.rLegendDict:
+            x, y = self.rLegendDict["rect"][:2]
             currUnit = self.unitConv.findUnit(
-                self.panelRaster.units['unitsCtrl'].GetStringSelection())
-            x = self.unitConv.convert(
-                value=x, fromUnit='inch', toUnit=currUnit)
-            y = self.unitConv.convert(
-                value=y, fromUnit='inch', toUnit=currUnit)
-            self.panelRaster.position['xCtrl'].SetValue("%5.3f" % x)
-            self.panelRaster.position['yCtrl'].SetValue("%5.3f" % y)
+                self.panelRaster.units["unitsCtrl"].GetStringSelection()
+            )
+            x = self.unitConv.convert(value=x, fromUnit="inch", toUnit=currUnit)
+            y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
+            self.panelRaster.position["xCtrl"].SetValue("%5.3f" % x)
+            self.panelRaster.position["yCtrl"].SetValue("%5.3f" % y)
         # update name and type of raster
-        raster = self.instruction.FindInstructionByType('raster')
+        raster = self.instruction.FindInstructionByType("raster")
         if raster:
             self.rasterId = raster.id
         else:
             self.rasterId = None
 
         if raster:
-            currRaster = raster['raster']
+            currRaster = raster["raster"]
         else:
             currRaster = None
 
         rasterType = getRasterType(map=currRaster)
         self.rasterCurrent.SetLabel(
-            _("%(rast)s: type %(type)s") %
-            {'rast': currRaster, 'type': str(rasterType)})
+            _("%(rast)s: type %(type)s") % {"rast": currRaster, "type": str(rasterType)}
+        )
 
         # vector legend
-        if 'rect' in self.vLegendDict:
-            x, y = self.vLegendDict['rect'][:2]
+        if "rect" in self.vLegendDict:
+            x, y = self.vLegendDict["rect"][:2]
             currUnit = self.unitConv.findUnit(
-                self.panelVector.units['unitsCtrl'].GetStringSelection())
-            x = self.unitConv.convert(
-                value=x, fromUnit='inch', toUnit=currUnit)
-            y = self.unitConv.convert(
-                value=y, fromUnit='inch', toUnit=currUnit)
-            self.panelVector.position['xCtrl'].SetValue("%5.3f" % x)
-            self.panelVector.position['yCtrl'].SetValue("%5.3f" % y)
+                self.panelVector.units["unitsCtrl"].GetStringSelection()
+            )
+            x = self.unitConv.convert(value=x, fromUnit="inch", toUnit=currUnit)
+            y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
+            self.panelVector.position["xCtrl"].SetValue("%5.3f" % x)
+            self.panelVector.position["yCtrl"].SetValue("%5.3f" % y)
         # update vector maps
-        if self.instruction.FindInstructionByType('vector'):
+        if self.instruction.FindInstructionByType("vector"):
             vectors = sorted(
-                self.instruction.FindInstructionByType('vector')['list'],
-                key=lambda x: x[3])
+                self.instruction.FindInstructionByType("vector")["list"],
+                key=lambda x: x[3],
+            )
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
                 index = self.vectorListCtrl.InsertItem(
-                    self.vectorListCtrl.GetItemCount(), vector[0].split('@')[0])
+                    self.vectorListCtrl.GetItemCount(), vector[0].split("@")[0]
+                )
                 self.vectorListCtrl.SetItem(index, 1, vector[4])
                 self.vectorListCtrl.SetItemData(index, index)
                 self.vectorListCtrl.CheckItem(index, True)
                 if vector[3] == 0:
                     self.vectorListCtrl.CheckItem(index, False)
             self.panelVector.colsCtrl.SetRange(
-                1, min(10, len(self.instruction.FindInstructionByType('vector')['list'])))
+                1,
+                min(10, len(self.instruction.FindInstructionByType("vector")["list"])),
+            )
             self.panelVector.colsCtrl.SetValue(1)
         else:
             self.vectorListCtrl.DeleteAllItems()
@@ -4475,7 +4434,6 @@ class LegendDialog(PsmapDialog):
 
 
 class MapinfoDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, env):
         PsmapDialog.__init__(
             self,
@@ -4483,9 +4441,10 @@ class MapinfoDialog(PsmapDialog):
             id=id,
             title=_("Mapinfo settings"),
             settings=settings,
-            env=env)
+            env=env,
+        )
 
-        self.objectType = ('mapinfo',)
+        self.objectType = ("mapinfo",)
         if self.id is not None:
             self.mapinfo = self.instruction[self.id]
             self.mapinfoDict = self.mapinfo.GetInstruction()
@@ -4493,9 +4452,8 @@ class MapinfoDialog(PsmapDialog):
             self.id = NewId()
             self.mapinfo = Mapinfo(self.id, env=self.env)
             self.mapinfoDict = self.mapinfo.GetInstruction()
-            page = self.instruction.FindInstructionByType(
-                'page').GetInstruction()
-            self.mapinfoDict['where'] = page['Left'], page['Top']
+            page = self.instruction.FindInstructionByType("page").GetInstruction()
+            self.mapinfoDict["where"] = page["Left"], page["Top"]
 
         self.panel = self._mapinfoPanel()
 
@@ -4504,228 +4462,237 @@ class MapinfoDialog(PsmapDialog):
         self.OnIsBorder(None)
 
     def _mapinfoPanel(self):
-        panel = Panel(
-            parent=self, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
-        #panel.SetupScrolling(scroll_x = False, scroll_y = True)
+        panel = Panel(parent=self, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL)
+        # panel.SetupScrolling(scroll_x = False, scroll_y = True)
         border = wx.BoxSizer(wx.VERTICAL)
 
         # position
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Position"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Position"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.AddPosition(parent=panel, dialogDict=self.mapinfoDict)
         self.AddUnits(parent=panel, dialogDict=self.mapinfoDict)
-        gridBagSizer.Add(panel.units['unitsLabel'], pos=(
-            0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.units['unitsCtrl'], pos=(
-            0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['xLabel'], pos=(
-            1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['xCtrl'], pos=(
-            1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['yLabel'], pos=(
-            2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['yCtrl'], pos=(
-            2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
-            panel.position['comment'], pos=(
-                3, 0), span=(
-                1, 2), flag=wx.ALIGN_BOTTOM, border=0)
+            panel.units["unitsLabel"],
+            pos=(0, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.units["unitsCtrl"],
+            pos=(0, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.position["xLabel"],
+            pos=(1, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.position["xCtrl"], pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        gridBagSizer.Add(
+            panel.position["yLabel"],
+            pos=(2, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.position["yCtrl"], pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        gridBagSizer.Add(
+            panel.position["comment"],
+            pos=(3, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_BOTTOM,
+            border=0,
+        )
 
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Font settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         # creates font color too, used below
         self.AddFont(parent=panel, dialogDict=self.mapinfoDict)
 
-        gridBagSizer.Add(panel.font['fontLabel'], pos=(
-            0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
-            panel.font['fontCtrl'],
-            pos=(0, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.font['fontSizeLabel'], pos=(
-            1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.font['fontSizeCtrl'], pos=(
-            1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.font['colorLabel'], pos=(
-            2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.font['colorCtrl'], pos=(
-            2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            panel.font["fontLabel"], pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        gridBagSizer.Add(
+            panel.font["fontCtrl"], pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        gridBagSizer.Add(
+            panel.font["fontSizeLabel"],
+            pos=(1, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.font["fontSizeCtrl"],
+            pos=(1, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.font["colorLabel"],
+            pos=(2, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.font["colorCtrl"], pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=1)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # colors
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Color settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Color settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
 
         self.colors = {}
-        self.colors['borderCtrl'] = CheckBox(
-            panel, id=wx.ID_ANY, label=_("use border color:"))
-        self.colors['backgroundCtrl'] = CheckBox(
-            panel, id=wx.ID_ANY, label=_("use background color:"))
-        self.colors['borderColor'] = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.colors['backgroundColor'] = ColourPickerCtrl(
-            panel, id=wx.ID_ANY)
+        self.colors["borderCtrl"] = CheckBox(
+            panel, id=wx.ID_ANY, label=_("use border color:")
+        )
+        self.colors["backgroundCtrl"] = CheckBox(
+            panel, id=wx.ID_ANY, label=_("use background color:")
+        )
+        self.colors["borderColor"] = ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.colors["backgroundColor"] = ColourPickerCtrl(panel, id=wx.ID_ANY)
 
-        if self.mapinfoDict['border'] is None:
-            self.mapinfoDict['border'] = 'none'
-        if self.mapinfoDict['border'] != 'none':
-            self.colors['borderCtrl'].SetValue(True)
-            self.colors['borderColor'].SetColour(
-                convertRGB(self.mapinfoDict['border']))
+        if self.mapinfoDict["border"] is None:
+            self.mapinfoDict["border"] = "none"
+        if self.mapinfoDict["border"] != "none":
+            self.colors["borderCtrl"].SetValue(True)
+            self.colors["borderColor"].SetColour(convertRGB(self.mapinfoDict["border"]))
         else:
-            self.colors['borderCtrl'].SetValue(False)
-            self.colors['borderColor'].SetColour(convertRGB('black'))
+            self.colors["borderCtrl"].SetValue(False)
+            self.colors["borderColor"].SetColour(convertRGB("black"))
 
-        if self.mapinfoDict['background'] is None:
-            self.mapinfoDict['background'] == 'none'
-        if self.mapinfoDict['background'] != 'none':
-            self.colors['backgroundCtrl'].SetValue(True)
-            self.colors['backgroundColor'].SetColour(
-                convertRGB(self.mapinfoDict['background']))
+        if self.mapinfoDict["background"] is None:
+            self.mapinfoDict["background"] == "none"
+        if self.mapinfoDict["background"] != "none":
+            self.colors["backgroundCtrl"].SetValue(True)
+            self.colors["backgroundColor"].SetColour(
+                convertRGB(self.mapinfoDict["background"])
+            )
         else:
-            self.colors['backgroundCtrl'].SetValue(False)
-            self.colors['backgroundColor'].SetColour(convertRGB('white'))
+            self.colors["backgroundCtrl"].SetValue(False)
+            self.colors["backgroundColor"].SetColour(convertRGB("white"))
 
         flexSizer.Add(
-            self.colors['borderCtrl'],
+            self.colors["borderCtrl"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexSizer.Add(
-            self.colors['borderColor'],
+            self.colors["borderColor"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexSizer.Add(
-            self.colors['backgroundCtrl'],
+            self.colors["backgroundCtrl"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexSizer.Add(
-            self.colors['backgroundColor'],
+            self.colors["backgroundColor"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexSizer.AddGrowableCol(1)
 
-        sizer.Add(
-            flexSizer,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=1)
+        sizer.Add(flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
 
-        self.Bind(wx.EVT_CHECKBOX, self.OnIsBorder, self.colors['borderCtrl'])
-        self.Bind(
-            wx.EVT_CHECKBOX,
-            self.OnIsBackground,
-            self.colors['backgroundCtrl'])
+        self.Bind(wx.EVT_CHECKBOX, self.OnIsBorder, self.colors["borderCtrl"])
+        self.Bind(wx.EVT_CHECKBOX, self.OnIsBackground, self.colors["backgroundCtrl"])
 
         return panel
 
     def OnIsBackground(self, event):
-        if self.colors['backgroundCtrl'].GetValue():
-            self.colors['backgroundColor'].Enable()
+        if self.colors["backgroundCtrl"].GetValue():
+            self.colors["backgroundColor"].Enable()
             self.update()
         else:
-            self.colors['backgroundColor'].Disable()
+            self.colors["backgroundColor"].Disable()
 
     def OnIsBorder(self, event):
-        if self.colors['borderCtrl'].GetValue():
-            self.colors['borderColor'].Enable()
+        if self.colors["borderCtrl"].GetValue():
+            self.colors["borderColor"].Enable()
             self.update()
         else:
-            self.colors['borderColor'].Disable()
+            self.colors["borderColor"].Disable()
 
     def update(self):
 
         # units
         currUnit = self.unitConv.findUnit(
-            self.panel.units['unitsCtrl'].GetStringSelection())
-        self.mapinfoDict['unit'] = currUnit
+            self.panel.units["unitsCtrl"].GetStringSelection()
+        )
+        self.mapinfoDict["unit"] = currUnit
 
         # position
-        if self.panel.position['xCtrl'].GetValue():
-            x = self.panel.position['xCtrl'].GetValue()
+        if self.panel.position["xCtrl"].GetValue():
+            x = self.panel.position["xCtrl"].GetValue()
         else:
-            x = self.mapinfoDict['where'][0]
+            x = self.mapinfoDict["where"][0]
 
-        if self.panel.position['yCtrl'].GetValue():
-            y = self.panel.position['yCtrl'].GetValue()
+        if self.panel.position["yCtrl"].GetValue():
+            y = self.panel.position["yCtrl"].GetValue()
         else:
-            y = self.mapinfoDict['where'][1]
+            y = self.mapinfoDict["where"][1]
 
         x = self.unitConv.convert(
-            value=float(
-                self.panel.position['xCtrl'].GetValue()),
+            value=float(self.panel.position["xCtrl"].GetValue()),
             fromUnit=currUnit,
-            toUnit='inch')
+            toUnit="inch",
+        )
         y = self.unitConv.convert(
-            value=float(
-                self.panel.position['yCtrl'].GetValue()),
+            value=float(self.panel.position["yCtrl"].GetValue()),
             fromUnit=currUnit,
-            toUnit='inch')
-        self.mapinfoDict['where'] = (x, y)
+            toUnit="inch",
+        )
+        self.mapinfoDict["where"] = (x, y)
 
         # font
-        self.mapinfoDict['font'] = self.panel.font[
-            'fontCtrl'].GetStringSelection()
-        self.mapinfoDict['fontsize'] = self.panel.font[
-            'fontSizeCtrl'].GetValue()
+        self.mapinfoDict["font"] = self.panel.font["fontCtrl"].GetStringSelection()
+        self.mapinfoDict["fontsize"] = self.panel.font["fontSizeCtrl"].GetValue()
 
         # colors
-        color = self.panel.font['colorCtrl'].GetColour()
-        self.mapinfoDict['color'] = convertRGB(color)
+        color = self.panel.font["colorCtrl"].GetColour()
+        self.mapinfoDict["color"] = convertRGB(color)
 
-        if self.colors['backgroundCtrl'].GetValue():
-            background = self.colors['backgroundColor'].GetColour()
-            self.mapinfoDict['background'] = convertRGB(background)
+        if self.colors["backgroundCtrl"].GetValue():
+            background = self.colors["backgroundColor"].GetColour()
+            self.mapinfoDict["background"] = convertRGB(background)
         else:
-            self.mapinfoDict['background'] = 'none'
+            self.mapinfoDict["background"] = "none"
 
-        if self.colors['borderCtrl'].GetValue():
-            border = self.colors['borderColor'].GetColour()
-            self.mapinfoDict['border'] = convertRGB(border)
+        if self.colors["borderCtrl"].GetValue():
+            border = self.colors["borderColor"].GetColour()
+            self.mapinfoDict["border"] = convertRGB(border)
         else:
-            self.mapinfoDict['border'] = 'none'
+            self.mapinfoDict["border"] = "none"
 
         # estimation of size
-        self.mapinfoDict['rect'] = self.mapinfo.EstimateRect(self.mapinfoDict)
+        self.mapinfoDict["rect"] = self.mapinfo.EstimateRect(self.mapinfoDict)
 
         if self.id not in self.instruction:
             mapinfo = Mapinfo(self.id, env=self.env)
@@ -4742,13 +4709,14 @@ class MapinfoDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update mapinfo coordinates, after moving"""
-        x, y = self.mapinfoDict['where']
+        x, y = self.mapinfoDict["where"]
         currUnit = self.unitConv.findUnit(
-            self.panel.units['unitsCtrl'].GetStringSelection())
-        x = self.unitConv.convert(value=x, fromUnit='inch', toUnit=currUnit)
-        y = self.unitConv.convert(value=y, fromUnit='inch', toUnit=currUnit)
-        self.panel.position['xCtrl'].SetValue("%5.3f" % x)
-        self.panel.position['yCtrl'].SetValue("%5.3f" % y)
+            self.panel.units["unitsCtrl"].GetStringSelection()
+        )
+        x = self.unitConv.convert(value=x, fromUnit="inch", toUnit=currUnit)
+        y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
+        self.panel.position["xCtrl"].SetValue("%5.3f" % x)
+        self.panel.position["yCtrl"].SetValue("%5.3f" % y)
 
 
 class ScalebarDialog(PsmapDialog):
@@ -4761,8 +4729,9 @@ class ScalebarDialog(PsmapDialog):
             id=id,
             title="Scale bar settings",
             settings=settings,
-            env=env)
-        self.objectType = ('scalebar',)
+            env=env,
+        )
+        self.objectType = ("scalebar",)
         if self.id is not None:
             self.scalebar = self.instruction[id]
             self.scalebarDict = self.scalebar.GetInstruction()
@@ -4770,19 +4739,18 @@ class ScalebarDialog(PsmapDialog):
             self.id = NewId()
             self.scalebar = Scalebar(self.id, env=self.env)
             self.scalebarDict = self.scalebar.GetInstruction()
-            page = self.instruction.FindInstructionByType(
-                'page').GetInstruction()
-            self.scalebarDict['where'] = page['Left'], page['Top']
+            page = self.instruction.FindInstructionByType("page").GetInstruction()
+            self.scalebarDict["where"] = page["Left"], page["Top"]
 
         self.panel = self._scalebarPanel()
 
         self._layout(self.panel)
 
-        self.mapUnit = projInfo()['units'].lower()
-        if projInfo()['proj'] == 'xy':
-            self.mapUnit = 'meters'
+        self.mapUnit = projInfo()["units"].lower()
+        if projInfo()["proj"] == "xy":
+            self.mapUnit = "meters"
         if self.mapUnit not in self.unitConv.getAllUnits():
-            self.mapUnit = 'meters'
+            self.mapUnit = "meters"
 
     def _scalebarPanel(self):
         panel = Panel(parent=self, id=wx.ID_ANY, style=wx.TAB_TRAVERSAL)
@@ -4790,11 +4758,7 @@ class ScalebarDialog(PsmapDialog):
         #
         # position
         #
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Position"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Position"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
@@ -4802,55 +4766,69 @@ class ScalebarDialog(PsmapDialog):
         self.AddPosition(parent=panel, dialogDict=self.scalebarDict)
 
         if self.scalebarDict[
-                'rect']:  # set position, ref point is center and not left top corner
+            "rect"
+        ]:  # set position, ref point is center and not left top corner
 
             x = self.unitConv.convert(
-                value=self.scalebarDict['where'][0] -
-                self.scalebarDict['rect'].Get()[2] /
-                2,
-                fromUnit='inch',
-                toUnit=self.scalebarDict['unit'])
+                value=self.scalebarDict["where"][0]
+                - self.scalebarDict["rect"].Get()[2] / 2,
+                fromUnit="inch",
+                toUnit=self.scalebarDict["unit"],
+            )
             y = self.unitConv.convert(
-                value=self.scalebarDict['where'][1] -
-                self.scalebarDict['rect'].Get()[3] /
-                2,
-                fromUnit='inch',
-                toUnit=self.scalebarDict['unit'])
-            panel.position['xCtrl'].SetValue("%5.3f" % x)
-            panel.position['yCtrl'].SetValue("%5.3f" % y)
+                value=self.scalebarDict["where"][1]
+                - self.scalebarDict["rect"].Get()[3] / 2,
+                fromUnit="inch",
+                toUnit=self.scalebarDict["unit"],
+            )
+            panel.position["xCtrl"].SetValue("%5.3f" % x)
+            panel.position["yCtrl"].SetValue("%5.3f" % y)
 
-        gridBagSizer.Add(panel.units['unitsLabel'], pos=(
-            0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.units['unitsCtrl'], pos=(
-            0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['xLabel'], pos=(
-            1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['xCtrl'], pos=(
-            1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['yLabel'], pos=(
-            2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(panel.position['yCtrl'], pos=(
-            2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
-            panel.position['comment'], pos=(
-                3, 0), span=(
-                1, 2), flag=wx.ALIGN_BOTTOM, border=0)
+            panel.units["unitsLabel"],
+            pos=(0, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.units["unitsCtrl"],
+            pos=(0, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.position["xLabel"],
+            pos=(1, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.position["xCtrl"], pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        gridBagSizer.Add(
+            panel.position["yLabel"],
+            pos=(2, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            panel.position["yCtrl"], pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
+        gridBagSizer.Add(
+            panel.position["comment"],
+            pos=(3, 0),
+            span=(1, 2),
+            flag=wx.ALIGN_BOTTOM,
+            border=0,
+        )
 
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         #
         # size
         #
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Size"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Size"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
@@ -4858,174 +4836,164 @@ class ScalebarDialog(PsmapDialog):
         heightText = StaticText(panel, id=wx.ID_ANY, label=_("Height:"))
 
         self.lengthTextCtrl = TextCtrl(
-            panel, id=wx.ID_ANY, validator=TCValidator('DIGIT_ONLY'))
-        self.lengthTextCtrl.SetToolTip(
-            _("Scalebar length is given in map units"))
+            panel, id=wx.ID_ANY, validator=TCValidator("DIGIT_ONLY")
+        )
+        self.lengthTextCtrl.SetToolTip(_("Scalebar length is given in map units"))
 
         self.heightTextCtrl = TextCtrl(
-            panel, id=wx.ID_ANY, validator=TCValidator('DIGIT_ONLY'))
-        self.heightTextCtrl.SetToolTip(
-            _("Scalebar height is real height on paper"))
+            panel, id=wx.ID_ANY, validator=TCValidator("DIGIT_ONLY")
+        )
+        self.heightTextCtrl.SetToolTip(_("Scalebar height is real height on paper"))
 
-        choices = [_('default')] + self.unitConv.getMapUnitsNames()
+        choices = [_("default")] + self.unitConv.getMapUnitsNames()
         self.unitsLength = Choice(panel, id=wx.ID_ANY, choices=choices)
         choices = self.unitConv.getPageUnitsNames()
         self.unitsHeight = Choice(panel, id=wx.ID_ANY, choices=choices)
 
         # set values
-        unitName = self.unitConv.findName(self.scalebarDict['unitsLength'])
+        unitName = self.unitConv.findName(self.scalebarDict["unitsLength"])
         if unitName:
             self.unitsLength.SetStringSelection(unitName)
         else:
-            if self.scalebarDict['unitsLength'] == 'auto':
+            if self.scalebarDict["unitsLength"] == "auto":
                 self.unitsLength.SetSelection(0)
-            elif self.scalebarDict['unitsLength'] == 'nautmiles':
+            elif self.scalebarDict["unitsLength"] == "nautmiles":
                 self.unitsLength.SetStringSelection(
-                    self.unitConv.findName("nautical miles"))
+                    self.unitConv.findName("nautical miles")
+                )
         self.unitsHeight.SetStringSelection(
-            self.unitConv.findName(
-                self.scalebarDict['unitsHeight']))
-        if self.scalebarDict['length']:
-            self.lengthTextCtrl.SetValue(str(self.scalebarDict['length']))
+            self.unitConv.findName(self.scalebarDict["unitsHeight"])
+        )
+        if self.scalebarDict["length"]:
+            self.lengthTextCtrl.SetValue(str(self.scalebarDict["length"]))
         else:  # estimate default
             reg = grass.region(env=self.env)
-            w = int((reg['e'] - reg['w']) / 3)
+            w = int((reg["e"] - reg["w"]) / 3)
             w = round(w, -len(str(w)) + 2)  # 12345 -> 12000
             self.lengthTextCtrl.SetValue(str(w))
 
         h = self.unitConv.convert(
-            value=self.scalebarDict['height'],
-            fromUnit='inch',
-            toUnit=self.scalebarDict['unitsHeight'])
+            value=self.scalebarDict["height"],
+            fromUnit="inch",
+            toUnit=self.scalebarDict["unitsHeight"],
+        )
         self.heightTextCtrl.SetValue(str(h))
 
         gridBagSizer.Add(
-            lengthText, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            lengthText, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.lengthTextCtrl, pos=(0, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.lengthTextCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.unitsLength,
-            pos=(
-                0,
-                2),
+            pos=(0, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
         gridBagSizer.Add(
-            heightText, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            heightText, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.heightTextCtrl, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.heightTextCtrl, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
             self.unitsHeight,
-            pos=(
-                1,
-                2),
+            pos=(1, 2),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-            border=0)
+            border=0,
+        )
 
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         #
         # style
         #
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Style"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Style"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         sbTypeText = StaticText(panel, id=wx.ID_ANY, label=_("Type:"))
         self.sbCombo = BitmapComboBox(panel, style=wx.CB_READONLY)
         # only temporary, images must be moved away
-        imagePath = os.path.join(
-            globalvar.IMGDIR, "scalebar-fancy.png"), os.path.join(
-            globalvar.IMGDIR, "scalebar-simple.png")
-        for item, path in zip(['fancy', 'simple'], imagePath):
+        imagePath = os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"), os.path.join(
+            globalvar.IMGDIR, "scalebar-simple.png"
+        )
+        for item, path in zip(["fancy", "simple"], imagePath):
             if not os.path.exists(path):
                 bitmap = EmptyBitmap(0, 0)
             else:
                 bitmap = wx.Bitmap(path)
-            self.sbCombo.Append(item='', bitmap=bitmap, clientData=item[0])
-        #self.sbCombo.Append(item = 'simple', bitmap = wx.Bitmap("./images/scalebar-simple.png"), clientData = 's')
-        if self.scalebarDict['scalebar'] == 'f':
+            self.sbCombo.Append(item="", bitmap=bitmap, clientData=item[0])
+        # self.sbCombo.Append(item = 'simple', bitmap = wx.Bitmap("./images/scalebar-simple.png"), clientData = 's')
+        if self.scalebarDict["scalebar"] == "f":
             self.sbCombo.SetSelection(0)
-        elif self.scalebarDict['scalebar'] == 's':
+        elif self.scalebarDict["scalebar"] == "s":
             self.sbCombo.SetSelection(1)
 
-        sbSegmentsText = StaticText(
-            panel, id=wx.ID_ANY, label=_("Number of segments:"))
-        self.sbSegmentsCtrl = SpinCtrl(
-            panel, id=wx.ID_ANY, min=1, max=30, initial=4)
-        self.sbSegmentsCtrl.SetValue(self.scalebarDict['segment'])
+        sbSegmentsText = StaticText(panel, id=wx.ID_ANY, label=_("Number of segments:"))
+        self.sbSegmentsCtrl = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=30, initial=4)
+        self.sbSegmentsCtrl.SetValue(self.scalebarDict["segment"])
 
-        sbLabelsText1 = StaticText(
-            panel, id=wx.ID_ANY, label=_("Label every "))
+        sbLabelsText1 = StaticText(panel, id=wx.ID_ANY, label=_("Label every "))
         sbLabelsText2 = StaticText(panel, id=wx.ID_ANY, label=_("segments"))
-        self.sbLabelsCtrl = SpinCtrl(
-            panel, id=wx.ID_ANY, min=1, max=30, initial=1)
-        self.sbLabelsCtrl.SetValue(self.scalebarDict['numbers'])
+        self.sbLabelsCtrl = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=30, initial=1)
+        self.sbLabelsCtrl.SetValue(self.scalebarDict["numbers"])
 
         # font
-        fontsizeText = StaticText(
-            panel, id=wx.ID_ANY, label=_("Font size:"))
-        self.fontsizeCtrl = SpinCtrl(
-            panel, id=wx.ID_ANY, min=4, max=30, initial=10)
-        self.fontsizeCtrl.SetValue(self.scalebarDict['fontsize'])
+        fontsizeText = StaticText(panel, id=wx.ID_ANY, label=_("Font size:"))
+        self.fontsizeCtrl = SpinCtrl(panel, id=wx.ID_ANY, min=4, max=30, initial=10)
+        self.fontsizeCtrl.SetValue(self.scalebarDict["fontsize"])
 
         self.backgroundCheck = CheckBox(
-            panel, id=wx.ID_ANY, label=_("transparent text background"))
-        if self.scalebarDict['background'] == 'y':
+            panel, id=wx.ID_ANY, label=_("transparent text background")
+        )
+        if self.scalebarDict["background"] == "y":
             self.backgroundCheck.SetValue(False)
         else:
             self.backgroundCheck.SetValue(True)
 
         gridBagSizer.Add(
-            sbTypeText, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            sbTypeText, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.sbCombo, pos=(
-                0, 1), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND, border=0)
+            self.sbCombo,
+            pos=(0, 1),
+            span=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            border=0,
+        )
         gridBagSizer.Add(
-            sbSegmentsText, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            sbSegmentsText, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.sbSegmentsCtrl, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.sbSegmentsCtrl, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            sbLabelsText1, pos=(2, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            sbLabelsText1, pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.sbLabelsCtrl, pos=(2, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.sbLabelsCtrl, pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            sbLabelsText2, pos=(2, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            sbLabelsText2, pos=(2, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            fontsizeText, pos=(3, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            fontsizeText, pos=(3, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.fontsizeCtrl, pos=(3, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.fontsizeCtrl, pos=(3, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizer.Add(
-            self.backgroundCheck, pos=(
-                4, 0), span=(
-                1, 3), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.backgroundCheck,
+            pos=(4, 0),
+            span=(1, 3),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
@@ -5037,87 +5005,90 @@ class ScalebarDialog(PsmapDialog):
 
         # units
         currUnit = self.unitConv.findUnit(
-            self.panel.units['unitsCtrl'].GetStringSelection())
-        self.scalebarDict['unit'] = currUnit
+            self.panel.units["unitsCtrl"].GetStringSelection()
+        )
+        self.scalebarDict["unit"] = currUnit
         # position
-        if self.panel.position['xCtrl'].GetValue():
-            x = self.panel.position['xCtrl'].GetValue()
+        if self.panel.position["xCtrl"].GetValue():
+            x = self.panel.position["xCtrl"].GetValue()
         else:
-            x = self.scalebarDict['where'][0]
+            x = self.scalebarDict["where"][0]
 
-        if self.panel.position['yCtrl'].GetValue():
-            y = self.panel.position['yCtrl'].GetValue()
+        if self.panel.position["yCtrl"].GetValue():
+            y = self.panel.position["yCtrl"].GetValue()
         else:
-            y = self.scalebarDict['where'][1]
+            y = self.scalebarDict["where"][1]
 
         x = self.unitConv.convert(
-            value=float(
-                self.panel.position['xCtrl'].GetValue()),
+            value=float(self.panel.position["xCtrl"].GetValue()),
             fromUnit=currUnit,
-            toUnit='inch')
+            toUnit="inch",
+        )
         y = self.unitConv.convert(
-            value=float(
-                self.panel.position['yCtrl'].GetValue()),
+            value=float(self.panel.position["yCtrl"].GetValue()),
             fromUnit=currUnit,
-            toUnit='inch')
+            toUnit="inch",
+        )
 
         # style
-        self.scalebarDict['scalebar'] = self.sbCombo.GetClientData(
-            self.sbCombo.GetSelection())
-        self.scalebarDict['segment'] = self.sbSegmentsCtrl.GetValue()
-        self.scalebarDict['numbers'] = self.sbLabelsCtrl.GetValue()
-        self.scalebarDict['fontsize'] = self.fontsizeCtrl.GetValue()
+        self.scalebarDict["scalebar"] = self.sbCombo.GetClientData(
+            self.sbCombo.GetSelection()
+        )
+        self.scalebarDict["segment"] = self.sbSegmentsCtrl.GetValue()
+        self.scalebarDict["numbers"] = self.sbLabelsCtrl.GetValue()
+        self.scalebarDict["fontsize"] = self.fontsizeCtrl.GetValue()
         if self.backgroundCheck.GetValue():
-            self.scalebarDict['background'] = 'n'
+            self.scalebarDict["background"] = "n"
         else:
-            self.scalebarDict['background'] = 'y'
+            self.scalebarDict["background"] = "y"
 
         # size
 
         # height
-        self.scalebarDict['unitsHeight'] = self.unitConv.findUnit(
-            self.unitsHeight.GetStringSelection())
+        self.scalebarDict["unitsHeight"] = self.unitConv.findUnit(
+            self.unitsHeight.GetStringSelection()
+        )
         try:
             height = float(self.heightTextCtrl.GetValue())
             height = self.unitConv.convert(
-                value=height,
-                fromUnit=self.scalebarDict['unitsHeight'],
-                toUnit='inch')
+                value=height, fromUnit=self.scalebarDict["unitsHeight"], toUnit="inch"
+            )
         except (ValueError, SyntaxError):
             height = 0.1  # default in inch
-        self.scalebarDict['height'] = height
+        self.scalebarDict["height"] = height
 
         # length
         if self.unitsLength.GetSelection() == 0:
-            selected = 'auto'
+            selected = "auto"
         else:
-            selected = self.unitConv.findUnit(
-                self.unitsLength.GetStringSelection())
-            if selected == 'nautical miles':
-                selected = 'nautmiles'
-        self.scalebarDict['unitsLength'] = selected
+            selected = self.unitConv.findUnit(self.unitsLength.GetStringSelection())
+            if selected == "nautical miles":
+                selected = "nautmiles"
+        self.scalebarDict["unitsLength"] = selected
         try:
             length = float(self.lengthTextCtrl.GetValue())
         except (ValueError, SyntaxError):
             wx.MessageBox(
                 message=_("Length of scale bar is not defined"),
-                caption=_('Invalid input'),
-                style=wx.OK | wx.ICON_ERROR)
+                caption=_("Invalid input"),
+                style=wx.OK | wx.ICON_ERROR,
+            )
             return False
-        self.scalebarDict['length'] = length
+        self.scalebarDict["length"] = length
 
         # estimation of size
-        map = self.instruction.FindInstructionByType('map')
+        map = self.instruction.FindInstructionByType("map")
         if not map:
-            map = self.instruction.FindInstructionByType('initMap')
+            map = self.instruction.FindInstructionByType("initMap")
         mapId = map.id
 
         rectSize = self.scalebar.EstimateSize(
-            scalebarDict=self.scalebarDict,
-            scale=self.instruction[mapId]['scale'])
-        self.scalebarDict['rect'] = Rect2D(
-            x=x, y=y, width=rectSize[0], height=rectSize[1])
-        self.scalebarDict['where'] = self.scalebarDict['rect'].GetCentre()
+            scalebarDict=self.scalebarDict, scale=self.instruction[mapId]["scale"]
+        )
+        self.scalebarDict["rect"] = Rect2D(
+            x=x, y=y, width=rectSize[0], height=rectSize[1]
+        )
+        self.scalebarDict["where"] = self.scalebarDict["rect"].GetCentre()
 
         if self.id not in self.instruction:
             scalebar = Scalebar(self.id, env=self.env)
@@ -5130,17 +5101,17 @@ class ScalebarDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update scalebar coordinates, after moving"""
-        x, y = self.scalebarDict['rect'][:2]
+        x, y = self.scalebarDict["rect"][:2]
         currUnit = self.unitConv.findUnit(
-            self.panel.units['unitsCtrl'].GetStringSelection())
-        x = self.unitConv.convert(value=x, fromUnit='inch', toUnit=currUnit)
-        y = self.unitConv.convert(value=y, fromUnit='inch', toUnit=currUnit)
-        self.panel.position['xCtrl'].SetValue("%5.3f" % x)
-        self.panel.position['yCtrl'].SetValue("%5.3f" % y)
+            self.panel.units["unitsCtrl"].GetStringSelection()
+        )
+        x = self.unitConv.convert(value=x, fromUnit="inch", toUnit=currUnit)
+        y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
+        self.panel.position["xCtrl"].SetValue("%5.3f" % x)
+        self.panel.position["yCtrl"].SetValue("%5.3f" % y)
 
 
 class TextDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, env):
         PsmapDialog.__init__(
             self,
@@ -5148,28 +5119,30 @@ class TextDialog(PsmapDialog):
             id=id,
             title="Text settings",
             settings=settings,
-            env=env)
-        self.objectType = ('text',)
+            env=env,
+        )
+        self.objectType = ("text",)
         if self.id is not None:
             self.textDict = self.instruction[id].GetInstruction()
         else:
             self.id = NewId()
             text = Text(self.id, env=self.env)
             self.textDict = text.GetInstruction()
-            page = self.instruction.FindInstructionByType(
-                'page').GetInstruction()
-            self.textDict['where'] = page['Left'], page['Top']
+            page = self.instruction.FindInstructionByType("page").GetInstruction()
+            self.textDict["where"] = page["Left"], page["Top"]
 
-        map = self.instruction.FindInstructionByType('map')
+        map = self.instruction.FindInstructionByType("map")
         if not map:
-            map = self.instruction.FindInstructionByType('initMap')
+            map = self.instruction.FindInstructionByType("initMap")
         self.mapId = map.id
 
-        self.textDict['east'], self.textDict['north'] = PaperMapCoordinates(
-            mapInstr=map, x=self.textDict['where'][0],
-            y=self.textDict['where'][1],
+        self.textDict["east"], self.textDict["north"] = PaperMapCoordinates(
+            mapInstr=map,
+            x=self.textDict["where"][0],
+            y=self.textDict["where"][1],
             paperToMap=True,
-            env=self.env)
+            env=self.env,
+        )
 
         notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.textPanel = self._textPanel(notebook)
@@ -5189,185 +5162,208 @@ class TextDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # text entry
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Text"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Text"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
         textLabel = StaticText(panel, id=wx.ID_ANY, label=_("Enter text:"))
         self.textCtrl = ExpandoTextCtrl(
-            panel, id=wx.ID_ANY, value=self.textDict['text'])
+            panel, id=wx.ID_ANY, value=self.textDict["text"]
+        )
 
         sizer.Add(
-            textLabel,
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-            border=5)
+            textLabel, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5
+        )
         sizer.Add(
             self.textCtrl,
             proportion=1,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-            border=5)
+            border=5,
+        )
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # font
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Font settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexGridSizer = wx.FlexGridSizer(rows=3, cols=2, hgap=5, vgap=5)
 
         self.AddFont(parent=panel, dialogDict=self.textDict)
 
         flexGridSizer.Add(
-            panel.font['fontLabel'],
+            panel.font["fontLabel"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexGridSizer.Add(
-            panel.font['fontCtrl'],
+            panel.font["fontCtrl"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexGridSizer.Add(
-            panel.font['fontSizeLabel'],
+            panel.font["fontSizeLabel"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexGridSizer.Add(
-            panel.font['fontSizeCtrl'],
+            panel.font["fontSizeCtrl"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexGridSizer.Add(
-            panel.font['colorLabel'],
+            panel.font["colorLabel"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexGridSizer.Add(
-            panel.font['colorCtrl'],
+            panel.font["colorCtrl"],
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
+            border=0,
+        )
         flexGridSizer.AddGrowableCol(1)
 
-        sizer.Add(
-            flexGridSizer,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=1)
+        sizer.Add(flexGridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # text effects
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Text effects"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Text effects"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.effect = {}
-        self.effect['backgroundCtrl'] = CheckBox(
-            panel, id=wx.ID_ANY, label=_("text background"))
-        self.effect['backgroundColor'] = ColourPickerCtrl(
-            panel, id=wx.ID_ANY)
+        self.effect["backgroundCtrl"] = CheckBox(
+            panel, id=wx.ID_ANY, label=_("text background")
+        )
+        self.effect["backgroundColor"] = ColourPickerCtrl(panel, id=wx.ID_ANY)
 
-        self.effect['highlightCtrl'] = CheckBox(
-            panel, id=wx.ID_ANY, label=_("highlight"))
-        self.effect['highlightColor'] = ColourPickerCtrl(
-            panel, id=wx.ID_ANY)
-        self.effect['highlightWidth'] = SpinCtrl(
-            panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=0, max=5, initial=1)
-        self.effect['highlightWidthLabel'] = StaticText(
-            panel, id=wx.ID_ANY, label=_("Width (pts):"))
+        self.effect["highlightCtrl"] = CheckBox(
+            panel, id=wx.ID_ANY, label=_("highlight")
+        )
+        self.effect["highlightColor"] = ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.effect["highlightWidth"] = SpinCtrl(
+            panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=0, max=5, initial=1
+        )
+        self.effect["highlightWidthLabel"] = StaticText(
+            panel, id=wx.ID_ANY, label=_("Width (pts):")
+        )
 
-        self.effect['borderCtrl'] = CheckBox(
-            panel, id=wx.ID_ANY, label=_("text border"))
-        self.effect['borderColor'] = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.effect['borderWidth'] = SpinCtrl(
-            panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=1, max=25, initial=1)
-        self.effect['borderWidthLabel'] = StaticText(
-            panel, id=wx.ID_ANY, label=_("Width (pts):"))
+        self.effect["borderCtrl"] = CheckBox(
+            panel, id=wx.ID_ANY, label=_("text border")
+        )
+        self.effect["borderColor"] = ColourPickerCtrl(panel, id=wx.ID_ANY)
+        self.effect["borderWidth"] = SpinCtrl(
+            panel, id=wx.ID_ANY, size=self.spinCtrlSize, min=1, max=25, initial=1
+        )
+        self.effect["borderWidthLabel"] = StaticText(
+            panel, id=wx.ID_ANY, label=_("Width (pts):")
+        )
 
         # set values
-        if self.textDict['background'] is None:
-            self.textDict['background'] = 'none'
-        if self.textDict['background'] != 'none':
-            self.effect['backgroundCtrl'].SetValue(True)
-            self.effect['backgroundColor'].SetColour(
-                convertRGB(self.textDict['background']))
+        if self.textDict["background"] is None:
+            self.textDict["background"] = "none"
+        if self.textDict["background"] != "none":
+            self.effect["backgroundCtrl"].SetValue(True)
+            self.effect["backgroundColor"].SetColour(
+                convertRGB(self.textDict["background"])
+            )
         else:
-            self.effect['backgroundCtrl'].SetValue(False)
-            self.effect['backgroundColor'].SetColour(convertRGB('white'))
+            self.effect["backgroundCtrl"].SetValue(False)
+            self.effect["backgroundColor"].SetColour(convertRGB("white"))
 
-        if self.textDict['hcolor'] is None:
-            self.textDict['hcolor'] = 'none'
-        if self.textDict['hcolor'] != 'none':
-            self.effect['highlightCtrl'].SetValue(True)
-            self.effect['highlightColor'].SetColour(
-                convertRGB(self.textDict['hcolor']))
+        if self.textDict["hcolor"] is None:
+            self.textDict["hcolor"] = "none"
+        if self.textDict["hcolor"] != "none":
+            self.effect["highlightCtrl"].SetValue(True)
+            self.effect["highlightColor"].SetColour(convertRGB(self.textDict["hcolor"]))
         else:
-            self.effect['highlightCtrl'].SetValue(False)
-            self.effect['highlightColor'].SetColour(convertRGB('grey'))
+            self.effect["highlightCtrl"].SetValue(False)
+            self.effect["highlightColor"].SetColour(convertRGB("grey"))
 
-        self.effect['highlightWidth'].SetValue(float(self.textDict['hwidth']))
+        self.effect["highlightWidth"].SetValue(float(self.textDict["hwidth"]))
 
-        if self.textDict['border'] is None:
-            self.textDict['border'] = 'none'
-        if self.textDict['border'] != 'none':
-            self.effect['borderCtrl'].SetValue(True)
-            self.effect['borderColor'].SetColour(
-                convertRGB(self.textDict['border']))
+        if self.textDict["border"] is None:
+            self.textDict["border"] = "none"
+        if self.textDict["border"] != "none":
+            self.effect["borderCtrl"].SetValue(True)
+            self.effect["borderColor"].SetColour(convertRGB(self.textDict["border"]))
         else:
-            self.effect['borderCtrl'].SetValue(False)
-            self.effect['borderColor'].SetColour(convertRGB('black'))
+            self.effect["borderCtrl"].SetValue(False)
+            self.effect["borderColor"].SetColour(convertRGB("black"))
 
-        self.effect['borderWidth'].SetValue(float(self.textDict['width']))
+        self.effect["borderWidth"].SetValue(float(self.textDict["width"]))
 
-        gridBagSizer.Add(self.effect['backgroundCtrl'], pos=(
-            0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['backgroundColor'], pos=(
-            0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['highlightCtrl'], pos=(
-            1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['highlightColor'], pos=(
-            1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         gridBagSizer.Add(
-            self.effect['highlightWidthLabel'], pos=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['highlightWidth'], pos=(
-            1, 3), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['borderCtrl'], pos=(
-            2, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['borderColor'], pos=(
-            2, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['borderWidthLabel'], pos=(
-            2, 2), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        gridBagSizer.Add(self.effect['borderWidth'], pos=(
-            2, 3), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.effect["backgroundCtrl"],
+            pos=(0, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["backgroundColor"],
+            pos=(0, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["highlightCtrl"],
+            pos=(1, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["highlightColor"],
+            pos=(1, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["highlightWidthLabel"],
+            pos=(1, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["highlightWidth"],
+            pos=(1, 3),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["borderCtrl"],
+            pos=(2, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["borderColor"],
+            pos=(2, 1),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["borderWidthLabel"],
+            pos=(2, 2),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
+        gridBagSizer.Add(
+            self.effect["borderWidth"],
+            pos=(2, 3),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+            border=0,
+        )
 
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=1)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.Bind(ExpandoTextCtrl.EVT_ETC_LAYOUT_NEEDED, self.OnRefit, self.textCtrl)
-        self.Bind(
-            wx.EVT_CHECKBOX,
-            self.OnBackground,
-            self.effect['backgroundCtrl'])
-        self.Bind(
-            wx.EVT_CHECKBOX,
-            self.OnHighlight,
-            self.effect['highlightCtrl'])
-        self.Bind(wx.EVT_CHECKBOX, self.OnBorder, self.effect['borderCtrl'])
+        self.Bind(wx.EVT_CHECKBOX, self.OnBackground, self.effect["backgroundCtrl"])
+        self.Bind(wx.EVT_CHECKBOX, self.OnHighlight, self.effect["highlightCtrl"])
+        self.Bind(wx.EVT_CHECKBOX, self.OnBorder, self.effect["borderCtrl"])
 
         panel.SetSizer(border)
         panel.Fit()
@@ -5380,11 +5376,7 @@ class TextDialog(PsmapDialog):
 
         border = wx.BoxSizer(wx.VERTICAL)
 
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Position"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Position"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
@@ -5392,56 +5384,40 @@ class TextDialog(PsmapDialog):
         self.AddExtendedPosition(panel, gridBagSizer, self.textDict)
 
         # offset
-        box3 = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Offset"))
+        box3 = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Offset"))
         sizerO = wx.StaticBoxSizer(box3, wx.VERTICAL)
         gridBagSizerO = wx.GridBagSizer(hgap=5, vgap=5)
-        self.xoffLabel = StaticText(
-            panel, id=wx.ID_ANY, label=_("horizontal (pts):"))
-        self.yoffLabel = StaticText(
-            panel, id=wx.ID_ANY, label=_("vertical (pts):"))
+        self.xoffLabel = StaticText(panel, id=wx.ID_ANY, label=_("horizontal (pts):"))
+        self.yoffLabel = StaticText(panel, id=wx.ID_ANY, label=_("vertical (pts):"))
         self.xoffCtrl = SpinCtrl(
-            panel, id=wx.ID_ANY, size=(50, -1),
-            min=-50, max=50, initial=0)
+            panel, id=wx.ID_ANY, size=(50, -1), min=-50, max=50, initial=0
+        )
         self.yoffCtrl = SpinCtrl(
-            panel, id=wx.ID_ANY, size=(50, -1),
-            min=-50, max=50, initial=0)
-        self.xoffCtrl.SetValue(self.textDict['xoffset'])
-        self.yoffCtrl.SetValue(self.textDict['yoffset'])
+            panel, id=wx.ID_ANY, size=(50, -1), min=-50, max=50, initial=0
+        )
+        self.xoffCtrl.SetValue(self.textDict["xoffset"])
+        self.yoffCtrl.SetValue(self.textDict["yoffset"])
         gridBagSizerO.Add(
-            self.xoffLabel, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.xoffLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizerO.Add(
-            self.yoffLabel, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.yoffLabel, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizerO.Add(
-            self.xoffCtrl, pos=(0, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.xoffCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
         gridBagSizerO.Add(
-            self.yoffCtrl, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+            self.yoffCtrl, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL, border=0
+        )
 
-        sizerO.Add(
-            gridBagSizerO,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizerO.Add(gridBagSizerO, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         gridBagSizer.Add(
-            sizerO,
-            pos=(
-                3,
-                0),
-            flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND,
-            border=0)
+            sizerO, pos=(3, 0), flag=wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border=0
+        )
         # reference point
         box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _(" Reference point"))
+            parent=panel, id=wx.ID_ANY, label=" %s " % _(" Reference point")
+        )
         sizerR = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(rows=3, cols=3, hgap=5, vgap=5)
         ref = []
@@ -5449,64 +5425,41 @@ class TextDialog(PsmapDialog):
             for col in ["left", "center", "right"]:
                 ref.append(row + " " + col)
         self.radio = [
-            RadioButton(
-                panel,
-                id=wx.ID_ANY,
-                label='',
-                style=wx.RB_GROUP,
-                name=ref[0])]
+            RadioButton(panel, id=wx.ID_ANY, label="", style=wx.RB_GROUP, name=ref[0])
+        ]
         self.radio[0].SetValue(False)
-        flexSizer.Add(
-            self.radio[0],
-            proportion=0,
-            flag=wx.ALIGN_CENTER,
-            border=0)
+        flexSizer.Add(self.radio[0], proportion=0, flag=wx.ALIGN_CENTER, border=0)
         for i in range(1, 9):
-            self.radio.append(
-                RadioButton(
-                    panel,
-                    id=wx.ID_ANY,
-                    label='',
-                    name=ref[i]))
+            self.radio.append(RadioButton(panel, id=wx.ID_ANY, label="", name=ref[i]))
             self.radio[-1].SetValue(False)
-            flexSizer.Add(self.radio[-1], proportion=0,
-                          flag=wx.ALIGN_CENTER, border=0)
-        self.FindWindowByName(self.textDict['ref']).SetValue(True)
+            flexSizer.Add(self.radio[-1], proportion=0, flag=wx.ALIGN_CENTER, border=0)
+        self.FindWindowByName(self.textDict["ref"]).SetValue(True)
         flexSizer.AddGrowableCol(0)
         flexSizer.AddGrowableCol(1)
         flexSizer.AddGrowableCol(2)
 
         sizerR.Add(flexSizer, proportion=1, flag=wx.EXPAND, border=0)
-        gridBagSizer.Add(
-            sizerR, pos=(3, 1),
-            flag=wx.ALIGN_LEFT | wx.EXPAND, border=0)
+        gridBagSizer.Add(sizerR, pos=(3, 1), flag=wx.ALIGN_LEFT | wx.EXPAND, border=0)
         gridBagSizer.AddGrowableCol(0)
         gridBagSizer.AddGrowableCol(1)
 
         sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-            border=5)
+            gridBagSizer, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5
+        )
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         # rotation
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Text rotation"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Text rotation"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
         self.rotCtrl = CheckBox(
-            panel,
-            id=wx.ID_ANY,
-            label=_("rotate text (counterclockwise)"))
+            panel, id=wx.ID_ANY, label=_("rotate text (counterclockwise)")
+        )
         self.rotValue = SpinCtrl(
-            panel, wx.ID_ANY, size=(50, -1),
-            min=0, max=360, initial=0)
-        if self.textDict['rotate']:
-            self.rotValue.SetValue(int(self.textDict['rotate']))
+            panel, wx.ID_ANY, size=(50, -1), min=0, max=360, initial=0
+        )
+        if self.textDict["rotate"]:
+            self.rotValue.SetValue(int(self.textDict["rotate"]))
             self.rotCtrl.SetValue(True)
         else:
             self.rotValue.SetValue(0)
@@ -5515,26 +5468,22 @@ class TextDialog(PsmapDialog):
             self.rotCtrl,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.ALL,
-            border=5)
+            border=5,
+        )
         sizer.Add(
             self.rotValue,
             proportion=0,
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.ALL,
-            border=5)
+            border=5,
+        )
 
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
         panel.Fit()
 
-        self.Bind(
-            wx.EVT_RADIOBUTTON,
-            self.OnPositionType,
-            panel.position['toPaper'])
-        self.Bind(
-            wx.EVT_RADIOBUTTON,
-            self.OnPositionType,
-            panel.position['toMap'])
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position["toPaper"])
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position["toMap"])
         self.Bind(wx.EVT_CHECKBOX, self.OnRotation, self.rotCtrl)
 
         return panel
@@ -5549,7 +5498,7 @@ class TextDialog(PsmapDialog):
             self.rotValue.Disable()
 
     def OnPositionType(self, event):
-        if self.positionPanel.position['toPaper'].GetValue():
+        if self.positionPanel.position["toPaper"].GetValue():
             for widget in self.gridBagSizerP.GetChildren():
                 widget.GetWindow().Enable()
             for widget in self.gridBagSizerM.GetChildren():
@@ -5561,128 +5510,125 @@ class TextDialog(PsmapDialog):
                 widget.GetWindow().Disable()
 
     def OnBackground(self, event):
-        if self.effect['backgroundCtrl'].GetValue():
-            self.effect['backgroundColor'].Enable()
+        if self.effect["backgroundCtrl"].GetValue():
+            self.effect["backgroundColor"].Enable()
             self.update()
         else:
-            self.effect['backgroundColor'].Disable()
+            self.effect["backgroundColor"].Disable()
 
     def OnHighlight(self, event):
-        if self.effect['highlightCtrl'].GetValue():
-            self.effect['highlightColor'].Enable()
-            self.effect['highlightWidth'].Enable()
-            self.effect['highlightWidthLabel'].Enable()
+        if self.effect["highlightCtrl"].GetValue():
+            self.effect["highlightColor"].Enable()
+            self.effect["highlightWidth"].Enable()
+            self.effect["highlightWidthLabel"].Enable()
             self.update()
         else:
-            self.effect['highlightColor'].Disable()
-            self.effect['highlightWidth'].Disable()
-            self.effect['highlightWidthLabel'].Disable()
+            self.effect["highlightColor"].Disable()
+            self.effect["highlightWidth"].Disable()
+            self.effect["highlightWidthLabel"].Disable()
 
     def OnBorder(self, event):
-        if self.effect['borderCtrl'].GetValue():
-            self.effect['borderColor'].Enable()
-            self.effect['borderWidth'].Enable()
-            self.effect['borderWidthLabel'].Enable()
+        if self.effect["borderCtrl"].GetValue():
+            self.effect["borderColor"].Enable()
+            self.effect["borderWidth"].Enable()
+            self.effect["borderWidthLabel"].Enable()
             self.update()
         else:
-            self.effect['borderColor'].Disable()
-            self.effect['borderWidth'].Disable()
-            self.effect['borderWidthLabel'].Disable()
+            self.effect["borderColor"].Disable()
+            self.effect["borderWidth"].Disable()
+            self.effect["borderWidthLabel"].Disable()
 
     def update(self):
         # text
-        self.textDict['text'] = self.textCtrl.GetValue()
-        if not self.textDict['text']:
+        self.textDict["text"] = self.textCtrl.GetValue()
+        if not self.textDict["text"]:
             wx.MessageBox(_("No text entered!"), _("Error"))
             return False
 
         # font
-        self.textDict['font'] = self.textPanel.font[
-            'fontCtrl'].GetStringSelection()
-        self.textDict['fontsize'] = self.textPanel.font[
-            'fontSizeCtrl'].GetValue()
-        color = self.textPanel.font['colorCtrl'].GetColour()
-        self.textDict['color'] = convertRGB(color)
+        self.textDict["font"] = self.textPanel.font["fontCtrl"].GetStringSelection()
+        self.textDict["fontsize"] = self.textPanel.font["fontSizeCtrl"].GetValue()
+        color = self.textPanel.font["colorCtrl"].GetColour()
+        self.textDict["color"] = convertRGB(color)
 
         # effects
-        if self.effect['backgroundCtrl'].GetValue():
-            background = self.effect['backgroundColor'].GetColour()
-            self.textDict['background'] = convertRGB(background)
+        if self.effect["backgroundCtrl"].GetValue():
+            background = self.effect["backgroundColor"].GetColour()
+            self.textDict["background"] = convertRGB(background)
         else:
-            self.textDict['background'] = 'none'
+            self.textDict["background"] = "none"
 
-        if self.effect['borderCtrl'].GetValue():
-            border = self.effect['borderColor'].GetColour()
-            self.textDict['border'] = convertRGB(border)
+        if self.effect["borderCtrl"].GetValue():
+            border = self.effect["borderColor"].GetColour()
+            self.textDict["border"] = convertRGB(border)
         else:
-            self.textDict['border'] = 'none'
+            self.textDict["border"] = "none"
 
-        self.textDict['width'] = self.effect['borderWidth'].GetValue()
+        self.textDict["width"] = self.effect["borderWidth"].GetValue()
 
-        if self.effect['highlightCtrl'].GetValue():
-            highlight = self.effect['highlightColor'].GetColour()
-            self.textDict['hcolor'] = convertRGB(highlight)
+        if self.effect["highlightCtrl"].GetValue():
+            highlight = self.effect["highlightColor"].GetColour()
+            self.textDict["hcolor"] = convertRGB(highlight)
         else:
-            self.textDict['hcolor'] = 'none'
+            self.textDict["hcolor"] = "none"
 
-        self.textDict['hwidth'] = self.effect['highlightWidth'].GetValue()
+        self.textDict["hwidth"] = self.effect["highlightWidth"].GetValue()
 
         # offset
-        self.textDict['xoffset'] = self.xoffCtrl.GetValue()
-        self.textDict['yoffset'] = self.yoffCtrl.GetValue()
+        self.textDict["xoffset"] = self.xoffCtrl.GetValue()
+        self.textDict["yoffset"] = self.yoffCtrl.GetValue()
 
         # position
-        if self.positionPanel.position['toPaper'].GetValue():
-            self.textDict['XY'] = True
+        if self.positionPanel.position["toPaper"].GetValue():
+            self.textDict["XY"] = True
             currUnit = self.unitConv.findUnit(
-                self.positionPanel.units['unitsCtrl'].GetStringSelection())
-            self.textDict['unit'] = currUnit
-            if self.positionPanel.position['xCtrl'].GetValue():
-                x = self.positionPanel.position['xCtrl'].GetValue()
+                self.positionPanel.units["unitsCtrl"].GetStringSelection()
+            )
+            self.textDict["unit"] = currUnit
+            if self.positionPanel.position["xCtrl"].GetValue():
+                x = self.positionPanel.position["xCtrl"].GetValue()
             else:
-                x = self.textDict['where'][0]
+                x = self.textDict["where"][0]
 
-            if self.positionPanel.position['yCtrl'].GetValue():
-                y = self.positionPanel.position['yCtrl'].GetValue()
+            if self.positionPanel.position["yCtrl"].GetValue():
+                y = self.positionPanel.position["yCtrl"].GetValue()
             else:
-                y = self.textDict['where'][1]
+                y = self.textDict["where"][1]
 
-            x = self.unitConv.convert(
-                value=float(x), fromUnit=currUnit, toUnit='inch')
-            y = self.unitConv.convert(
-                value=float(y), fromUnit=currUnit, toUnit='inch')
-            self.textDict['where'] = x, y
-            self.textDict['east'], self.textDict['north'] = PaperMapCoordinates(
-                self.instruction[self.mapId], x, y, paperToMap=True, env=self.env)
+            x = self.unitConv.convert(value=float(x), fromUnit=currUnit, toUnit="inch")
+            y = self.unitConv.convert(value=float(y), fromUnit=currUnit, toUnit="inch")
+            self.textDict["where"] = x, y
+            self.textDict["east"], self.textDict["north"] = PaperMapCoordinates(
+                self.instruction[self.mapId], x, y, paperToMap=True, env=self.env
+            )
         else:
-            self.textDict['XY'] = False
-            if self.positionPanel.position['eCtrl'].GetValue():
-                self.textDict['east'] = self.positionPanel.position[
-                    'eCtrl'].GetValue()
+            self.textDict["XY"] = False
+            if self.positionPanel.position["eCtrl"].GetValue():
+                self.textDict["east"] = self.positionPanel.position["eCtrl"].GetValue()
             else:
-                self.textDict['east'] = self.textDict['east']
+                self.textDict["east"] = self.textDict["east"]
 
-            if self.positionPanel.position['nCtrl'].GetValue():
-                self.textDict['north'] = self.positionPanel.position[
-                    'nCtrl'].GetValue()
+            if self.positionPanel.position["nCtrl"].GetValue():
+                self.textDict["north"] = self.positionPanel.position["nCtrl"].GetValue()
             else:
-                self.textDict['north'] = self.textDict['north']
+                self.textDict["north"] = self.textDict["north"]
 
-            self.textDict['where'] = PaperMapCoordinates(
-                mapInstr=self.instruction[
-                    self.mapId], x=float(
-                    self.textDict['east']), y=float(
-                    self.textDict['north']), paperToMap=False,
-                    env=self.env)
+            self.textDict["where"] = PaperMapCoordinates(
+                mapInstr=self.instruction[self.mapId],
+                x=float(self.textDict["east"]),
+                y=float(self.textDict["north"]),
+                paperToMap=False,
+                env=self.env,
+            )
         # rotation
         if self.rotCtrl.GetValue():
-            self.textDict['rotate'] = self.rotValue.GetValue()
+            self.textDict["rotate"] = self.rotValue.GetValue()
         else:
-            self.textDict['rotate'] = None
+            self.textDict["rotate"] = None
         # reference point
         for radio in self.radio:
             if radio.GetValue():
-                self.textDict['ref'] = radio.GetName()
+                self.textDict["ref"] = radio.GetName()
 
         if self.id not in self.instruction:
             text = Text(self.id, env=self.env)
@@ -5692,26 +5638,25 @@ class TextDialog(PsmapDialog):
         if self.id not in self.parent.objectId:
             self.parent.objectId.append(self.id)
 
-#        self.updateDialog()
+        #        self.updateDialog()
 
         return True
 
     def updateDialog(self):
         """Update text coordinates, after moving"""
         # XY coordinates
-        x, y = self.textDict['where'][:2]
+        x, y = self.textDict["where"][:2]
         currUnit = self.unitConv.findUnit(
-            self.positionPanel.units['unitsCtrl'].GetStringSelection())
-        x = self.unitConv.convert(value=x, fromUnit='inch', toUnit=currUnit)
-        y = self.unitConv.convert(value=y, fromUnit='inch', toUnit=currUnit)
-        self.positionPanel.position['xCtrl'].SetValue("%5.3f" % x)
-        self.positionPanel.position['yCtrl'].SetValue("%5.3f" % y)
+            self.positionPanel.units["unitsCtrl"].GetStringSelection()
+        )
+        x = self.unitConv.convert(value=x, fromUnit="inch", toUnit=currUnit)
+        y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
+        self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
+        self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.textDict['east'], self.textDict['north']
-        self.positionPanel.position['eCtrl'].SetValue(
-            str(self.textDict['east']))
-        self.positionPanel.position['nCtrl'].SetValue(
-            str(self.textDict['north']))
+        e, n = self.textDict["east"], self.textDict["north"]
+        self.positionPanel.position["eCtrl"].SetValue(str(self.textDict["east"]))
+        self.positionPanel.position["nCtrl"].SetValue(str(self.textDict["north"]))
 
 
 class ImageDialog(PsmapDialog):
@@ -5727,9 +5672,10 @@ class ImageDialog(PsmapDialog):
             id=id,
             title="Image settings",
             settings=settings,
-            env=env)
+            env=env,
+        )
 
-        self.objectType = ('image',)
+        self.objectType = ("image",)
         if self.id is not None:
             self.imageObj = self.instruction[self.id]
             self.imageDict = self.instruction[id].GetInstruction()
@@ -5737,19 +5683,21 @@ class ImageDialog(PsmapDialog):
             self.id = NewId()
             self.imageObj = self._newObject()
             self.imageDict = self.imageObj.GetInstruction()
-            page = self.instruction.FindInstructionByType(
-                'page').GetInstruction()
-            self.imageDict['where'] = page['Left'], page['Top']
+            page = self.instruction.FindInstructionByType("page").GetInstruction()
+            self.imageDict["where"] = page["Left"], page["Top"]
 
-        map = self.instruction.FindInstructionByType('map')
+        map = self.instruction.FindInstructionByType("map")
         if not map:
-            map = self.instruction.FindInstructionByType('initMap')
+            map = self.instruction.FindInstructionByType("initMap")
         self.mapId = map.id
 
-        self.imageDict['east'], self.imageDict['north'] = PaperMapCoordinates(
-            mapInstr=map, x=self.imageDict['where'][0],
-            y=self.imageDict['where'][1],
-            paperToMap=True, env=self.env)
+        self.imageDict["east"], self.imageDict["north"] = PaperMapCoordinates(
+            mapInstr=map,
+            x=self.imageDict["where"][0],
+            y=self.imageDict["where"][1],
+            paperToMap=True,
+            env=self.env,
+        )
 
         notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.imagePanelName = imagePanelName
@@ -5757,11 +5705,12 @@ class ImageDialog(PsmapDialog):
         self.positionPanel = self._positionPanel(notebook)
         self.OnPositionType(None)
 
-        if self.imageDict['epsfile']:
-            self.imagePanel.image['dir'].SetValue(
-                os.path.dirname(self.imageDict['epsfile']))
+        if self.imageDict["epsfile"]:
+            self.imagePanel.image["dir"].SetValue(
+                os.path.dirname(self.imageDict["epsfile"])
+            )
         else:
-            self.imagePanel.image['dir'].SetValue(self._getImageDirectory())
+            self.imagePanel.image["dir"].SetValue(self._getImageDirectory())
         self.OnDirChanged(None)
 
         self._layout(notebook)
@@ -5772,24 +5721,20 @@ class ImageDialog(PsmapDialog):
 
     def _imagePanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=self.imagePanelName)
         border = wx.BoxSizer(wx.VERTICAL)
         #
         # choose image
         #
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Image"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Image"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         # choose directory
         panel.image = {}
-        if self.imageDict['epsfile']:
-            startDir = os.path.dirname(self.imageDict['epsfile'])
+        if self.imageDict["epsfile"]:
+            startDir = os.path.dirname(self.imageDict["epsfile"])
         else:
             startDir = self._getImageDirectory()
         dir = DirBrowseButton(
@@ -5797,10 +5742,11 @@ class ImageDialog(PsmapDialog):
             id=wx.ID_ANY,
             labelText=_("Choose a directory:"),
             dialogTitle=_("Choose a directory with images"),
-            buttonText=_('Browse'),
+            buttonText=_("Browse"),
             startDirectory=startDir,
-            changeCallback=self.OnDirChanged)
-        panel.image['dir'] = dir
+            changeCallback=self.OnDirChanged,
+        )
+        panel.image["dir"] = dir
 
         sizer.Add(dir, proportion=0, flag=wx.EXPAND, border=0)
 
@@ -5808,43 +5754,31 @@ class ImageDialog(PsmapDialog):
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         imageList = ListBox(parent=panel, id=wx.ID_ANY)
-        panel.image['list'] = imageList
+        panel.image["list"] = imageList
         imageList.Bind(wx.EVT_LISTBOX, self.OnImageSelectionChanged)
 
-        hSizer.Add(
-            imageList,
-            proportion=1,
-            flag=wx.EXPAND | wx.RIGHT,
-            border=10)
+        hSizer.Add(imageList, proportion=1, flag=wx.EXPAND | wx.RIGHT, border=10)
 
         # image preview
         vSizer = wx.BoxSizer(wx.VERTICAL)
         self.previewSize = (150, 150)
         img = EmptyImage(*self.previewSize)
-        panel.image['preview'] = wx.StaticBitmap(
-            panel, wx.ID_ANY, BitmapFromImage(img))
+        panel.image["preview"] = wx.StaticBitmap(panel, wx.ID_ANY, BitmapFromImage(img))
         vSizer.Add(
-            panel.image['preview'],
-            proportion=0,
-            flag=wx.EXPAND | wx.BOTTOM,
-            border=5)
-        panel.image['sizeInfo'] = StaticText(parent=panel, id=wx.ID_ANY)
+            panel.image["preview"], proportion=0, flag=wx.EXPAND | wx.BOTTOM, border=5
+        )
+        panel.image["sizeInfo"] = StaticText(parent=panel, id=wx.ID_ANY)
         vSizer.Add(
-            panel.image['sizeInfo'],
-            proportion=0,
-            flag=wx.ALIGN_CENTER,
-            border=0)
+            panel.image["sizeInfo"], proportion=0, flag=wx.ALIGN_CENTER, border=0
+        )
 
         hSizer.Add(vSizer, proportion=0, flag=wx.EXPAND, border=0)
         sizer.Add(hSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
-        epsInfo = StaticText(parent=panel, id=wx.ID_ANY,
-                                label=_("Note: only EPS format supported"))
-        sizer.Add(
-            epsInfo,
-            proportion=0,
-            flag=wx.ALL,
-            border=3)
+        epsInfo = StaticText(
+            parent=panel, id=wx.ID_ANY, label=_("Note: only EPS format supported")
+        )
+        sizer.Add(epsInfo, proportion=0, flag=wx.ALL, border=3)
 
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -5852,72 +5786,62 @@ class ImageDialog(PsmapDialog):
         # rotation
         #
         box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Scale And Rotation"))
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Scale And Rotation")
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        scaleLabel = StaticText(
-            parent=panel, id=wx.ID_ANY, label=_("Scale:"))
+        scaleLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("Scale:"))
 
-        panel.image['scale'] = FloatSpin(
-            panel, id=wx.ID_ANY, min_val=0, max_val=50, increment=0.5,
-            value=1, style=fs.FS_RIGHT)
-        panel.image['scale'].SetFormat("%f")
-        panel.image['scale'].SetDigits(1)
+        panel.image["scale"] = FloatSpin(
+            panel,
+            id=wx.ID_ANY,
+            min_val=0,
+            max_val=50,
+            increment=0.5,
+            value=1,
+            style=fs.FS_RIGHT,
+        )
+        panel.image["scale"].SetFormat("%f")
+        panel.image["scale"].SetDigits(1)
 
-        if self.imageDict['scale']:
-            value = float(self.imageDict['scale'])
+        if self.imageDict["scale"]:
+            value = float(self.imageDict["scale"])
         else:
             value = 0
 
-        panel.image['scale'].SetValue(value)
+        panel.image["scale"].SetValue(value)
 
-        gridSizer.Add(
-            scaleLabel, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            panel.image['scale'],
-            pos=(0, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(scaleLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(panel.image["scale"], pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         rotLabel = StaticText(
-            parent=panel,
+            parent=panel, id=wx.ID_ANY, label=_("Rotation angle (deg):")
+        )
+        panel.image["rotate"] = FloatSpin(
+            panel,
             id=wx.ID_ANY,
-            label=_("Rotation angle (deg):"))
-        panel.image['rotate'] = FloatSpin(
-            panel, id=wx.ID_ANY, min_val=0, max_val=360, increment=0.5,
-            value=0, style=fs.FS_RIGHT)
-        panel.image['rotate'].SetFormat("%f")
-        panel.image['rotate'].SetDigits(1)
+            min_val=0,
+            max_val=360,
+            increment=0.5,
+            value=0,
+            style=fs.FS_RIGHT,
+        )
+        panel.image["rotate"].SetFormat("%f")
+        panel.image["rotate"].SetDigits(1)
 
-        panel.image['rotate'].SetToolTip(
-            _("Counterclockwise rotation in degrees"))
-        if self.imageDict['rotate']:
-            panel.image['rotate'].SetValue(int(self.imageDict['rotate']))
+        panel.image["rotate"].SetToolTip(_("Counterclockwise rotation in degrees"))
+        if self.imageDict["rotate"]:
+            panel.image["rotate"].SetValue(int(self.imageDict["rotate"]))
         else:
-            panel.image['rotate'].SetValue(0)
+            panel.image["rotate"].SetValue(0)
 
-        gridSizer.Add(
-            rotLabel,
-            pos=(
-                1,
-                0),
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
-        gridSizer.Add(
-            panel.image['rotate'], pos=(
-                1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(rotLabel, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+        gridSizer.Add(panel.image["rotate"], pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         self._addConvergence(panel=panel, gridBagSizer=gridSizer)
-        sizer.Add(
-            gridSizer,
-            proportion=0,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
@@ -5927,40 +5851,26 @@ class ImageDialog(PsmapDialog):
 
     def _positionPanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Position"))
         border = wx.BoxSizer(wx.VERTICAL)
         #
         # set position
         #
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Position"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Position"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.AddExtendedPosition(panel, gridBagSizer, self.imageDict)
 
-        self.Bind(
-            wx.EVT_RADIOBUTTON,
-            self.OnPositionType,
-            panel.position['toPaper'])
-        self.Bind(
-            wx.EVT_RADIOBUTTON,
-            self.OnPositionType,
-            panel.position['toMap'])
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position["toPaper"])
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position["toMap"])
 
         gridBagSizer.AddGrowableCol(0)
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
@@ -5970,7 +5880,7 @@ class ImageDialog(PsmapDialog):
 
     def OnDirChanged(self, event):
         """Image directory changed"""
-        path = self.imagePanel.image['dir'].GetValue()
+        path = self.imagePanel.image["dir"].GetValue()
         try:
             files = os.listdir(path)
         except OSError:  # no such directory
@@ -5979,24 +5889,24 @@ class ImageDialog(PsmapDialog):
 
         # no setter for startDirectory?
         try:
-            self.imagePanel.image['dir'].startDirectory = path
+            self.imagePanel.image["dir"].startDirectory = path
         except AttributeError:  # for sure
             pass
         for file in files:
-            if os.path.splitext(file)[1].lower() == '.eps':
+            if os.path.splitext(file)[1].lower() == ".eps":
                 imageList.append(file)
 
         imageList.sort()
-        self.imagePanel.image['list'].SetItems(imageList)
-        if self.imageDict['epsfile']:
-            file = os.path.basename(self.imageDict['epsfile'])
-            self.imagePanel.image['list'].SetStringSelection(file)
+        self.imagePanel.image["list"].SetItems(imageList)
+        if self.imageDict["epsfile"]:
+            file = os.path.basename(self.imageDict["epsfile"])
+            self.imagePanel.image["list"].SetStringSelection(file)
         elif imageList:
-            self.imagePanel.image['list'].SetSelection(0)
+            self.imagePanel.image["list"].SetSelection(0)
         self.OnImageSelectionChanged(None)
 
     def OnPositionType(self, event):
-        if self.positionPanel.position['toPaper'].GetValue():
+        if self.positionPanel.position["toPaper"].GetValue():
             for widget in self.gridBagSizerP.GetChildren():
                 widget.GetWindow().Enable()
             for widget in self.gridBagSizerM.GetChildren():
@@ -6017,27 +5927,29 @@ class ImageDialog(PsmapDialog):
     def OnImageSelectionChanged(self, event):
         """Image selected, show preview and size"""
         if not self.imagePanel.image[
-                'dir']:  # event is emitted when closing dialog an it causes error
+            "dir"
+        ]:  # event is emitted when closing dialog an it causes error
             return
 
         if not havePILImage:
             self.DrawWarningText(_("PIL\nmissing"))
             return
 
-        imageName = self.imagePanel.image['list'].GetStringSelection()
+        imageName = self.imagePanel.image["list"].GetStringSelection()
         if not imageName:
             self.ClearPreview()
             return
-        basePath = self.imagePanel.image['dir'].GetValue()
+        basePath = self.imagePanel.image["dir"].GetValue()
         file = os.path.join(basePath, imageName)
         if not os.path.exists(file):
             return
 
-        if os.path.splitext(file)[1].lower() == '.eps':
+        if os.path.splitext(file)[1].lower() == ".eps":
             try:
                 pImg = PILImage.open(file)
-                if sys.platform == 'win32':
+                if sys.platform == "win32":
                     import types
+
                     pImg.load = types.MethodType(loadPSForWindows, pImg)
                 img = PilImageToWxImage(pImg)
             except IOError as e:
@@ -6078,13 +5990,15 @@ class ImageDialog(PsmapDialog):
         posX = self.previewSize[0] / 2 - extent[0] / 2
         posY = self.previewSize[1] / 2 - extent[1] / 2
         dc.DrawText(warning, posX, posY)
-        self.imagePanel.image['preview'].SetBitmap(buffer)
+        self.imagePanel.image["preview"].SetBitmap(buffer)
         dc.SelectObject(wx.NullBitmap)
 
     def DrawBitmap(self, bitmap):
         """Draw bitmap, center it if smaller than preview size"""
-        if bitmap.GetWidth() <= self.previewSize[
-                0] and bitmap.GetHeight() <= self.previewSize[1]:
+        if (
+            bitmap.GetWidth() <= self.previewSize[0]
+            and bitmap.GetHeight() <= self.previewSize[1]
+        ):
             buffer = EmptyBitmap(*self.previewSize)
             dc = wx.MemoryDC()
             dc.SelectObject(buffer)
@@ -6093,19 +6007,19 @@ class ImageDialog(PsmapDialog):
             posX = self.previewSize[0] / 2 - bitmap.GetWidth() / 2
             posY = self.previewSize[1] / 2 - bitmap.GetHeight() / 2
             dc.DrawBitmap(bitmap, posX, posY)
-            self.imagePanel.image['preview'].SetBitmap(buffer)
+            self.imagePanel.image["preview"].SetBitmap(buffer)
             dc.SelectObject(wx.NullBitmap)
         else:
-            self.imagePanel.image['preview'].SetBitmap(bitmap)
+            self.imagePanel.image["preview"].SetBitmap(bitmap)
         self.imagePanel.Refresh()
 
     def SetSizeInfoLabel(self, image):
         """Update image size label"""
-        self.imagePanel.image['sizeInfo'].SetLabel(
-            _("size: %(width)s x %(height)s pts") %
-            {'width': image.GetWidth(),
-             'height': image.GetHeight()})
-        self.imagePanel.image['sizeInfo'].GetContainingSizer().Layout()
+        self.imagePanel.image["sizeInfo"].SetLabel(
+            _("size: %(width)s x %(height)s pts")
+            % {"width": image.GetWidth(), "height": image.GetHeight()}
+        )
+        self.imagePanel.image["sizeInfo"].GetContainingSizer().Layout()
 
     def ClearPreview(self):
         """Clear preview window"""
@@ -6117,85 +6031,89 @@ class ImageDialog(PsmapDialog):
         dc.SelectObject(wx.NullBitmap)
         mask = wx.Mask(buffer, wx.WHITE)
         buffer.SetMask(mask)
-        self.imagePanel.image['preview'].SetBitmap(buffer)
+        self.imagePanel.image["preview"].SetBitmap(buffer)
 
     def update(self):
         # epsfile
-        selected = self.imagePanel.image['list'].GetStringSelection()
-        basePath = self.imagePanel.image['dir'].GetValue()
+        selected = self.imagePanel.image["list"].GetStringSelection()
+        basePath = self.imagePanel.image["dir"].GetValue()
         if not selected:
             GMessage(parent=self, message=_("No image selected."))
             return False
 
-        self.imageDict['epsfile'] = os.path.join(basePath, selected)
+        self.imageDict["epsfile"] = os.path.join(basePath, selected)
 
         # position
-        if self.positionPanel.position['toPaper'].GetValue():
-            self.imageDict['XY'] = True
+        if self.positionPanel.position["toPaper"].GetValue():
+            self.imageDict["XY"] = True
             currUnit = self.unitConv.findUnit(
-                self.positionPanel.units['unitsCtrl'].GetStringSelection())
-            self.imageDict['unit'] = currUnit
-            if self.positionPanel.position['xCtrl'].GetValue():
-                x = self.positionPanel.position['xCtrl'].GetValue()
+                self.positionPanel.units["unitsCtrl"].GetStringSelection()
+            )
+            self.imageDict["unit"] = currUnit
+            if self.positionPanel.position["xCtrl"].GetValue():
+                x = self.positionPanel.position["xCtrl"].GetValue()
             else:
-                x = self.imageDict['where'][0]
+                x = self.imageDict["where"][0]
 
-            if self.positionPanel.position['yCtrl'].GetValue():
-                y = self.positionPanel.position['yCtrl'].GetValue()
+            if self.positionPanel.position["yCtrl"].GetValue():
+                y = self.positionPanel.position["yCtrl"].GetValue()
             else:
-                y = self.imageDict['where'][1]
+                y = self.imageDict["where"][1]
 
-            x = self.unitConv.convert(
-                value=float(x), fromUnit=currUnit, toUnit='inch')
-            y = self.unitConv.convert(
-                value=float(y), fromUnit=currUnit, toUnit='inch')
-            self.imageDict['where'] = x, y
+            x = self.unitConv.convert(value=float(x), fromUnit=currUnit, toUnit="inch")
+            y = self.unitConv.convert(value=float(y), fromUnit=currUnit, toUnit="inch")
+            self.imageDict["where"] = x, y
 
         else:
-            self.imageDict['XY'] = False
-            if self.positionPanel.position['eCtrl'].GetValue():
-                e = self.positionPanel.position['eCtrl'].GetValue()
+            self.imageDict["XY"] = False
+            if self.positionPanel.position["eCtrl"].GetValue():
+                e = self.positionPanel.position["eCtrl"].GetValue()
             else:
-                self.imageDict['east'] = self.imageDict['east']
+                self.imageDict["east"] = self.imageDict["east"]
 
-            if self.positionPanel.position['nCtrl'].GetValue():
-                n = self.positionPanel.position['nCtrl'].GetValue()
+            if self.positionPanel.position["nCtrl"].GetValue():
+                n = self.positionPanel.position["nCtrl"].GetValue()
             else:
-                self.imageDict['north'] = self.imageDict['north']
+                self.imageDict["north"] = self.imageDict["north"]
 
             x, y = PaperMapCoordinates(
-                mapInstr=self.instruction[
-                    self.mapId], x=float(
-                    self.imageDict['east']), y=float(
-                    self.imageDict['north']), paperToMap=False,
-                    env=self.env)
+                mapInstr=self.instruction[self.mapId],
+                x=float(self.imageDict["east"]),
+                y=float(self.imageDict["north"]),
+                paperToMap=False,
+                env=self.env,
+            )
 
         # rotation
-        rot = self.imagePanel.image['rotate'].GetValue()
+        rot = self.imagePanel.image["rotate"].GetValue()
         if rot == 0:
-            self.imageDict['rotate'] = None
+            self.imageDict["rotate"] = None
         else:
-            self.imageDict['rotate'] = rot
+            self.imageDict["rotate"] = rot
 
         # scale
-        self.imageDict['scale'] = self.imagePanel.image['scale'].GetValue()
+        self.imageDict["scale"] = self.imagePanel.image["scale"].GetValue()
 
         # scale
-        w, h = self.imageObj.GetImageOrigSize(self.imageDict['epsfile'])
-        if self.imageDict['rotate']:
-            self.imageDict['size'] = BBoxAfterRotation(
-                w, h, self.imageDict['rotate'])
+        w, h = self.imageObj.GetImageOrigSize(self.imageDict["epsfile"])
+        if self.imageDict["rotate"]:
+            self.imageDict["size"] = BBoxAfterRotation(w, h, self.imageDict["rotate"])
         else:
-            self.imageDict['size'] = w, h
+            self.imageDict["size"] = w, h
 
-        w = self.unitConv.convert(value=self.imageDict['size'][0],
-                                  fromUnit='point', toUnit='inch')
-        h = self.unitConv.convert(value=self.imageDict['size'][1],
-                                  fromUnit='point', toUnit='inch')
+        w = self.unitConv.convert(
+            value=self.imageDict["size"][0], fromUnit="point", toUnit="inch"
+        )
+        h = self.unitConv.convert(
+            value=self.imageDict["size"][1], fromUnit="point", toUnit="inch"
+        )
 
-        self.imageDict['rect'] = Rect2D(x=x, y=y,
-                                        width=w * self.imageDict['scale'],
-                                        height=h * self.imageDict['scale'])
+        self.imageDict["rect"] = Rect2D(
+            x=x,
+            y=y,
+            width=w * self.imageDict["scale"],
+            height=h * self.imageDict["scale"],
+        )
 
         if self.id not in self.instruction:
             image = self._newObject()
@@ -6210,28 +6128,32 @@ class ImageDialog(PsmapDialog):
     def updateDialog(self):
         """Update text coordinates, after moving"""
         # XY coordinates
-        x, y = self.imageDict['where'][:2]
+        x, y = self.imageDict["where"][:2]
         currUnit = self.unitConv.findUnit(
-            self.positionPanel.units['unitsCtrl'].GetStringSelection())
-        x = self.unitConv.convert(value=x, fromUnit='inch', toUnit=currUnit)
-        y = self.unitConv.convert(value=y, fromUnit='inch', toUnit=currUnit)
-        self.positionPanel.position['xCtrl'].SetValue("%5.3f" % x)
-        self.positionPanel.position['yCtrl'].SetValue("%5.3f" % y)
+            self.positionPanel.units["unitsCtrl"].GetStringSelection()
+        )
+        x = self.unitConv.convert(value=x, fromUnit="inch", toUnit=currUnit)
+        y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
+        self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
+        self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.imageDict['east'], self.imageDict['north']
-        self.positionPanel.position['eCtrl'].SetValue(
-            str(self.imageDict['east']))
-        self.positionPanel.position['nCtrl'].SetValue(
-            str(self.imageDict['north']))
+        e, n = self.imageDict["east"], self.imageDict["north"]
+        self.positionPanel.position["eCtrl"].SetValue(str(self.imageDict["east"]))
+        self.positionPanel.position["nCtrl"].SetValue(str(self.imageDict["north"]))
 
 
 class NorthArrowDialog(ImageDialog):
-
     def __init__(self, parent, id, settings, env):
-        ImageDialog.__init__(self, parent=parent, id=id, settings=settings,
-                             imagePanelName=_("North Arrow"), env=env)
+        ImageDialog.__init__(
+            self,
+            parent=parent,
+            id=id,
+            settings=settings,
+            imagePanelName=_("North Arrow"),
+            env=env,
+        )
 
-        self.objectType = ('northArrow',)
+        self.objectType = ("northArrow",)
         self.SetTitle(_("North Arrow settings"))
 
     def _newObject(self):
@@ -6239,41 +6161,42 @@ class NorthArrowDialog(ImageDialog):
 
     def _getImageDirectory(self):
         gisbase = os.getenv("GISBASE")
-        return os.path.join(gisbase, 'etc', 'paint', 'decorations')
+        return os.path.join(gisbase, "etc", "paint", "decorations")
 
     def _addConvergence(self, panel, gridBagSizer):
-        convergence = Button(parent=panel, id=wx.ID_ANY,
-                             label=_("Compute convergence"))
-        gridBagSizer.Add(convergence, pos=(1, 2),
-                         flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+        convergence = Button(parent=panel, id=wx.ID_ANY, label=_("Compute convergence"))
+        gridBagSizer.Add(
+            convergence, pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND
+        )
         convergence.Bind(wx.EVT_BUTTON, self.OnConvergence)
-        panel.image['convergence'] = convergence
+        panel.image["convergence"] = convergence
 
     def OnConvergence(self, event):
-        ret = RunCommand('g.region', read=True, flags='nug', env=self.env)
+        ret = RunCommand("g.region", read=True, flags="nug", env=self.env)
         if ret:
-            convergence = float(ret.strip().split('=')[1])
+            convergence = float(ret.strip().split("=")[1])
             if convergence < 0:
-                self.imagePanel.image['rotate'].SetValue(abs(convergence))
+                self.imagePanel.image["rotate"].SetValue(abs(convergence))
             else:
-                self.imagePanel.image['rotate'].SetValue(360 - convergence)
+                self.imagePanel.image["rotate"].SetValue(360 - convergence)
 
 
 class PointDialog(PsmapDialog):
     """Dialog for setting point properties."""
 
     def __init__(
-            self, parent, id, settings, env, coordinates=None,
-            pointPanelName=_("Point")):
+        self, parent, id, settings, env, coordinates=None, pointPanelName=_("Point")
+    ):
         PsmapDialog.__init__(
             self,
             parent=parent,
             id=id,
             title="Point settings",
             settings=settings,
-            env=env)
+            env=env,
+        )
 
-        self.objectType = ('point',)
+        self.objectType = ("point",)
         if self.id is not None:
             self.pointObj = self.instruction[self.id]
             self.pointDict = self.instruction[id].GetInstruction()
@@ -6281,19 +6204,21 @@ class PointDialog(PsmapDialog):
             self.id = NewId()
             self.pointObj = Point(self.id, env=self.env)
             self.pointDict = self.pointObj.GetInstruction()
-            self.pointDict['where'] = coordinates
+            self.pointDict["where"] = coordinates
         self.defaultDict = self.pointObj.defaultInstruction
 
-        mapObj = self.instruction.FindInstructionByType('map')
+        mapObj = self.instruction.FindInstructionByType("map")
         if not mapObj:
-            mapObj = self.instruction.FindInstructionByType('initMap')
+            mapObj = self.instruction.FindInstructionByType("initMap")
         self.mapId = mapObj.id
 
-        self.pointDict['east'], self.pointDict['north'] = PaperMapCoordinates(
-            mapInstr=mapObj, x=self.pointDict['where'][0],
-            y=self.pointDict['where'][1],
+        self.pointDict["east"], self.pointDict["north"] = PaperMapCoordinates(
+            mapInstr=mapObj,
+            x=self.pointDict["where"][0],
+            y=self.pointDict["where"][1],
             paperToMap=True,
-            env=self.env)
+            env=self.env,
+        )
 
         notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         self.pointPanelName = pointPanelName
@@ -6305,54 +6230,49 @@ class PointDialog(PsmapDialog):
 
     def _pointPanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=self.pointPanelName)
         border = wx.BoxSizer(wx.VERTICAL)
         #
         # choose image
         #
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Symbol"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Symbol"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         gridSizer.Add(
-            StaticText(
-                parent=panel, id=wx.ID_ANY, label=_("Select symbol:")), pos=(
-                0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("Select symbol:")),
+            pos=(0, 0),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
 
-        self.symbolLabel = StaticText(parent=panel, id=wx.ID_ANY,
-                                      label=self.pointDict['symbol'])
-        gridSizer.Add(self.symbolLabel, pos=(0, 1),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-        bitmap = wx.Bitmap(os.path.join(globalvar.SYMBDIR,
-                           self.pointDict['symbol']) + '.png')
+        self.symbolLabel = StaticText(
+            parent=panel, id=wx.ID_ANY, label=self.pointDict["symbol"]
+        )
+        gridSizer.Add(self.symbolLabel, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
+        bitmap = wx.Bitmap(
+            os.path.join(globalvar.SYMBDIR, self.pointDict["symbol"]) + ".png"
+        )
         self.symbolButton = BitmapButton(panel, id=wx.ID_ANY, bitmap=bitmap)
         self.symbolButton.Bind(wx.EVT_BUTTON, self.OnSymbolSelection)
 
-        gridSizer.Add(
-            self.symbolButton, pos=(0, 2),
-            flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.symbolButton, pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         self.noteLabel = StaticText(
-            parent=panel, id=wx.ID_ANY, label=_(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_(
                 "Note: Selected symbol is not displayed\n"
-                "in draft mode (only in preview mode)"))
+                "in draft mode (only in preview mode)"
+            ),
+        )
         gridSizer.Add(
-            self.noteLabel, pos=(
-                1, 0), span=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+            self.noteLabel, pos=(1, 0), span=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL
+        )
 
         gridSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridSizer,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -6361,73 +6281,42 @@ class PointDialog(PsmapDialog):
         #
 
         # outline
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Color"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Color"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        outlineLabel = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Outline color:"))
+        outlineLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("Outline color:"))
         self.outlineColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.outlineTranspCtrl = CheckBox(
-            panel, id=wx.ID_ANY, label=_("transparent"))
+        self.outlineTranspCtrl = CheckBox(panel, id=wx.ID_ANY, label=_("transparent"))
 
-        if self.pointDict['color'] != 'none':
+        if self.pointDict["color"] != "none":
             self.outlineTranspCtrl.SetValue(False)
-            self.outlineColorCtrl.SetColour(
-                convertRGB(self.pointDict['color']))
+            self.outlineColorCtrl.SetColour(convertRGB(self.pointDict["color"]))
         else:
             self.outlineTranspCtrl.SetValue(True)
-            self.outlineColorCtrl.SetColour(
-                convertRGB(self.defaultDict['color']))
+            self.outlineColorCtrl.SetColour(convertRGB(self.defaultDict["color"]))
 
-        gridSizer.Add(
-            outlineLabel, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.outlineColorCtrl, pos=(
-                0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.outlineTranspCtrl, pos=(
-                0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(outlineLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.outlineColorCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.outlineTranspCtrl, pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        fillLabel = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Fill color:"))
+        fillLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("Fill color:"))
         self.fillColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.fillTranspCtrl = CheckBox(
-            panel, id=wx.ID_ANY, label=_("transparent"))
+        self.fillTranspCtrl = CheckBox(panel, id=wx.ID_ANY, label=_("transparent"))
 
-        if self.pointDict['fcolor'] != 'none':
+        if self.pointDict["fcolor"] != "none":
             self.fillTranspCtrl.SetValue(False)
-            self.fillColorCtrl.SetColour(convertRGB(self.pointDict['fcolor']))
+            self.fillColorCtrl.SetColour(convertRGB(self.pointDict["fcolor"]))
         else:
             self.fillTranspCtrl.SetValue(True)
-            self.fillColorCtrl.SetColour(
-                convertRGB(self.defaultDict['fcolor']))
+            self.fillColorCtrl.SetColour(convertRGB(self.defaultDict["fcolor"]))
 
-        gridSizer.Add(
-            fillLabel, pos=(1, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.fillColorCtrl, pos=(
-                1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.fillTranspCtrl, pos=(
-                1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(fillLabel, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.fillColorCtrl, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.fillTranspCtrl, pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        sizer.Add(
-            gridSizer,
-            proportion=0,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         #
@@ -6436,35 +6325,24 @@ class PointDialog(PsmapDialog):
 
         # size
         box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Size and Rotation"))
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Size and Rotation")
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        sizeLabel = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Size (pt):"))
-        self.sizeCtrl = SpinCtrl(
-            panel, id=wx.ID_ANY, size=self.spinCtrlSize)
+        sizeLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("Size (pt):"))
+        self.sizeCtrl = SpinCtrl(panel, id=wx.ID_ANY, size=self.spinCtrlSize)
         self.sizeCtrl.SetToolTip(_("Symbol size in points"))
-        self.sizeCtrl.SetValue(self.pointDict['size'])
+        self.sizeCtrl.SetValue(self.pointDict["size"])
 
-        gridSizer.Add(
-            sizeLabel, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.sizeCtrl, pos=(
-                0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(sizeLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.sizeCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # rotation
         rotLabel = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Rotation angle (deg):"))
+            parent=panel, id=wx.ID_ANY, label=_("Rotation angle (deg):")
+        )
 
         self.rotCtrl = FloatSpin(
             panel,
@@ -6473,30 +6351,18 @@ class PointDialog(PsmapDialog):
             max_val=360,
             increment=1,
             value=0,
-            style=fs.FS_RIGHT)
+            style=fs.FS_RIGHT,
+        )
         self.rotCtrl.SetFormat("%f")
         self.rotCtrl.SetDigits(1)
 
-        self.rotCtrl.SetToolTip(
-            _("Counterclockwise rotation in degrees"))
-        self.rotCtrl.SetValue(float(self.pointDict['rotate']))
+        self.rotCtrl.SetToolTip(_("Counterclockwise rotation in degrees"))
+        self.rotCtrl.SetValue(float(self.pointDict["rotate"]))
 
-        gridSizer.Add(
-            rotLabel,
-            pos=(
-                1,
-                0),
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            border=0)
-        gridSizer.Add(
-            self.rotCtrl, pos=(1, 1),
-            flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(rotLabel, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+        gridSizer.Add(self.rotCtrl, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        sizer.Add(
-            gridSizer,
-            proportion=0,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(gridSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
@@ -6506,40 +6372,26 @@ class PointDialog(PsmapDialog):
 
     def _positionPanel(self, notebook):
         panel = Panel(
-            parent=notebook, id=wx.ID_ANY, size=(-1, -1),
-            style=wx.TAB_TRAVERSAL)
+            parent=notebook, id=wx.ID_ANY, size=(-1, -1), style=wx.TAB_TRAVERSAL
+        )
         notebook.AddPage(page=panel, text=_("Position"))
         border = wx.BoxSizer(wx.VERTICAL)
         #
         # set position
         #
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Position"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Position"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridBagSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         self.AddExtendedPosition(panel, gridBagSizer, self.pointDict)
 
-        self.Bind(
-            wx.EVT_RADIOBUTTON,
-            self.OnPositionType,
-            panel.position['toPaper'])
-        self.Bind(
-            wx.EVT_RADIOBUTTON,
-            self.OnPositionType,
-            panel.position['toMap'])
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position["toPaper"])
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position["toMap"])
 
         gridBagSizer.AddGrowableCol(0)
         gridBagSizer.AddGrowableCol(1)
-        sizer.Add(
-            gridBagSizer,
-            proportion=1,
-            flag=wx.ALL,
-            border=5)
+        sizer.Add(gridBagSizer, proportion=1, flag=wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         panel.SetSizer(border)
@@ -6548,7 +6400,7 @@ class PointDialog(PsmapDialog):
         return panel
 
     def OnPositionType(self, event):
-        if self.positionPanel.position['toPaper'].GetValue():
+        if self.positionPanel.position["toPaper"].GetValue():
             for widget in self.gridBagSizerP.GetChildren():
                 widget.GetWindow().Enable()
             for widget in self.gridBagSizerM.GetChildren():
@@ -6560,86 +6412,87 @@ class PointDialog(PsmapDialog):
                 widget.GetWindow().Disable()
 
     def OnSymbolSelection(self, event):
-        dlg = SymbolDialog(self, symbolPath=globalvar.SYMBDIR,
-                           currentSymbol=self.symbolLabel.GetLabel())
+        dlg = SymbolDialog(
+            self,
+            symbolPath=globalvar.SYMBDIR,
+            currentSymbol=self.symbolLabel.GetLabel(),
+        )
         if dlg.ShowModal() == wx.ID_OK:
             img = dlg.GetSelectedSymbolPath()
             name = dlg.GetSelectedSymbolName()
-            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
+            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
             self.symbolLabel.SetLabel(name)
 
         dlg.Destroy()
 
     def update(self):
         # symbol
-        self.pointDict['symbol'] = self.symbolLabel.GetLabel()
+        self.pointDict["symbol"] = self.symbolLabel.GetLabel()
 
         # position
-        if self.positionPanel.position['toPaper'].GetValue():
-            self.pointDict['XY'] = True
+        if self.positionPanel.position["toPaper"].GetValue():
+            self.pointDict["XY"] = True
             currUnit = self.unitConv.findUnit(
-                self.positionPanel.units['unitsCtrl'].GetStringSelection())
-            self.pointDict['unit'] = currUnit
-            if self.positionPanel.position['xCtrl'].GetValue():
-                x = self.positionPanel.position['xCtrl'].GetValue()
+                self.positionPanel.units["unitsCtrl"].GetStringSelection()
+            )
+            self.pointDict["unit"] = currUnit
+            if self.positionPanel.position["xCtrl"].GetValue():
+                x = self.positionPanel.position["xCtrl"].GetValue()
             else:
-                x = self.pointDict['where'][0]
+                x = self.pointDict["where"][0]
 
-            if self.positionPanel.position['yCtrl'].GetValue():
-                y = self.positionPanel.position['yCtrl'].GetValue()
+            if self.positionPanel.position["yCtrl"].GetValue():
+                y = self.positionPanel.position["yCtrl"].GetValue()
             else:
-                y = self.pointDict['where'][1]
+                y = self.pointDict["where"][1]
 
-            x = self.unitConv.convert(
-                value=float(x), fromUnit=currUnit, toUnit='inch')
-            y = self.unitConv.convert(
-                value=float(y), fromUnit=currUnit, toUnit='inch')
-            self.pointDict['where'] = x, y
+            x = self.unitConv.convert(value=float(x), fromUnit=currUnit, toUnit="inch")
+            y = self.unitConv.convert(value=float(y), fromUnit=currUnit, toUnit="inch")
+            self.pointDict["where"] = x, y
 
         else:
-            self.pointDict['XY'] = False
-            if self.positionPanel.position['eCtrl'].GetValue():
-                e = self.positionPanel.position['eCtrl'].GetValue()
+            self.pointDict["XY"] = False
+            if self.positionPanel.position["eCtrl"].GetValue():
+                e = self.positionPanel.position["eCtrl"].GetValue()
             else:
-                self.pointDict['east'] = self.pointDict['east']
+                self.pointDict["east"] = self.pointDict["east"]
 
-            if self.positionPanel.position['nCtrl'].GetValue():
-                n = self.positionPanel.position['nCtrl'].GetValue()
+            if self.positionPanel.position["nCtrl"].GetValue():
+                n = self.positionPanel.position["nCtrl"].GetValue()
             else:
-                self.pointDict['north'] = self.pointDict['north']
+                self.pointDict["north"] = self.pointDict["north"]
 
             x, y = PaperMapCoordinates(
-                mapInstr=self.instruction[
-                    self.mapId], x=float(
-                    self.pointDict['east']), y=float(
-                    self.pointDict['north']), paperToMap=False,
-                    env=self.env)
+                mapInstr=self.instruction[self.mapId],
+                x=float(self.pointDict["east"]),
+                y=float(self.pointDict["north"]),
+                paperToMap=False,
+                env=self.env,
+            )
 
         # rotation
-        self.pointDict['rotate'] = self.rotCtrl.GetValue()
+        self.pointDict["rotate"] = self.rotCtrl.GetValue()
 
         # size
-        self.pointDict['size'] = self.sizeCtrl.GetValue()
+        self.pointDict["size"] = self.sizeCtrl.GetValue()
 
-        w = h = self.unitConv.convert(value=self.pointDict['size'],
-                                      fromUnit='point', toUnit='inch')
+        w = h = self.unitConv.convert(
+            value=self.pointDict["size"], fromUnit="point", toUnit="inch"
+        )
 
         # outline color
         if self.outlineTranspCtrl.GetValue():
-            self.pointDict['color'] = 'none'
+            self.pointDict["color"] = "none"
         else:
-            self.pointDict['color'] = convertRGB(
-                self.outlineColorCtrl.GetColour())
+            self.pointDict["color"] = convertRGB(self.outlineColorCtrl.GetColour())
 
         # fill color
         if self.fillTranspCtrl.GetValue():
-            self.pointDict['fcolor'] = 'none'
+            self.pointDict["fcolor"] = "none"
         else:
-            self.pointDict['fcolor'] = convertRGB(
-                self.fillColorCtrl.GetColour())
+            self.pointDict["fcolor"] = convertRGB(self.fillColorCtrl.GetColour())
 
-        self.pointDict['rect'] = Rect2D(
-            x=x - w / 2, y=y - h / 2, width=w, height=h)
+        self.pointDict["rect"] = Rect2D(x=x - w / 2, y=y - h / 2, width=w, height=h)
 
         if self.id not in self.instruction:
             point = Point(self.id, env=self.env)
@@ -6654,40 +6507,33 @@ class PointDialog(PsmapDialog):
     def updateDialog(self):
         """Update text coordinates, after moving"""
         # XY coordinates
-        x, y = self.pointDict['where'][:2]
+        x, y = self.pointDict["where"][:2]
         currUnit = self.unitConv.findUnit(
-            self.positionPanel.units['unitsCtrl'].GetStringSelection())
-        x = self.unitConv.convert(value=x, fromUnit='inch', toUnit=currUnit)
-        y = self.unitConv.convert(value=y, fromUnit='inch', toUnit=currUnit)
-        self.positionPanel.position['xCtrl'].SetValue("%5.3f" % x)
-        self.positionPanel.position['yCtrl'].SetValue("%5.3f" % y)
+            self.positionPanel.units["unitsCtrl"].GetStringSelection()
+        )
+        x = self.unitConv.convert(value=x, fromUnit="inch", toUnit=currUnit)
+        y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
+        self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
+        self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.pointDict['east'], self.pointDict['north']
-        self.positionPanel.position['eCtrl'].SetValue(
-            str(self.pointDict['east']))
-        self.positionPanel.position['nCtrl'].SetValue(
-            str(self.pointDict['north']))
+        e, n = self.pointDict["east"], self.pointDict["north"]
+        self.positionPanel.position["eCtrl"].SetValue(str(self.pointDict["east"]))
+        self.positionPanel.position["nCtrl"].SetValue(str(self.pointDict["north"]))
 
 
 class RectangleDialog(PsmapDialog):
-
-    def __init__(self, parent, id, settings, env,
-                 type='rectangle', coordinates=None):
+    def __init__(self, parent, id, settings, env, type="rectangle", coordinates=None):
         """
 
         :param coordinates: begin and end point coordinate (wx.Point, wx.Point)
         """
-        if type == 'rectangle':
+        if type == "rectangle":
             title = _("Rectangle settings")
         else:
             title = _("Line settings")
         PsmapDialog.__init__(
-            self,
-            parent=parent,
-            id=id,
-            title=title,
-            settings=settings,
-            env=env)
+            self, parent=parent, id=id, title=title, settings=settings, env=env
+        )
 
         self.objectType = (type,)
 
@@ -6696,14 +6542,14 @@ class RectangleDialog(PsmapDialog):
             self.rectDict = self.rectObj.GetInstruction()
         else:
             self.id = NewId()
-            if type == 'rectangle':
+            if type == "rectangle":
                 self.rectObj = Rectangle(self.id, env=self.env)
             else:
                 self.rectObj = Line(self.id, env=self.env)
             self.rectDict = self.rectObj.GetInstruction()
 
-            self.rectDict['rect'] = Rect2DPP(coordinates[0], coordinates[1])
-            self.rectDict['where'] = coordinates
+            self.rectDict["rect"] = Rect2DPP(coordinates[0], coordinates[1])
+            self.rectDict["where"] = coordinates
 
         self.defaultDict = self.rectObj.defaultInstruction
         self.panel = self._rectPanel()
@@ -6715,86 +6561,57 @@ class RectangleDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # color
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Color"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Color"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
-        outlineLabel = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Outline color:"))
+        outlineLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("Outline color:"))
         self.outlineColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
-        self.outlineTranspCtrl = CheckBox(
-            panel, id=wx.ID_ANY, label=_("transparent"))
+        self.outlineTranspCtrl = CheckBox(panel, id=wx.ID_ANY, label=_("transparent"))
 
-        if self.rectDict['color'] != 'none':
+        if self.rectDict["color"] != "none":
             self.outlineTranspCtrl.SetValue(False)
-            self.outlineColorCtrl.SetColour(convertRGB(self.rectDict['color']))
+            self.outlineColorCtrl.SetColour(convertRGB(self.rectDict["color"]))
         else:
             self.outlineTranspCtrl.SetValue(True)
-            self.outlineColorCtrl.SetColour(
-                convertRGB(self.defaultDict['color']))
+            self.outlineColorCtrl.SetColour(convertRGB(self.defaultDict["color"]))
 
         # transparent outline makes sense only for rectangle
-        if self.objectType == ('line',):
+        if self.objectType == ("line",):
             self.outlineTranspCtrl.Hide()
 
-        gridSizer.Add(
-            outlineLabel, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.outlineColorCtrl, pos=(
-                0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.outlineTranspCtrl, pos=(
-                0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(outlineLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.outlineColorCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.outlineTranspCtrl, pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # fill color only in rectangle
-        if self.objectType == ('rectangle',):
-            fillLabel = StaticText(
-                parent=panel, id=wx.ID_ANY, label=_("Fill color:"))
+        if self.objectType == ("rectangle",):
+            fillLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("Fill color:"))
             self.fillColorCtrl = ColourPickerCtrl(panel, id=wx.ID_ANY)
-            self.fillTranspCtrl = CheckBox(
-                panel, id=wx.ID_ANY, label=_("transparent"))
+            self.fillTranspCtrl = CheckBox(panel, id=wx.ID_ANY, label=_("transparent"))
 
-            if self.rectDict['fcolor'] != 'none':
+            if self.rectDict["fcolor"] != "none":
                 self.fillTranspCtrl.SetValue(False)
-                self.fillColorCtrl.SetColour(
-                    convertRGB(self.rectDict['fcolor']))
+                self.fillColorCtrl.SetColour(convertRGB(self.rectDict["fcolor"]))
             else:
                 self.fillTranspCtrl.SetValue(True)
                 self.fillColorCtrl.SetColour(wx.WHITE)
 
+            gridSizer.Add(fillLabel, pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+            gridSizer.Add(self.fillColorCtrl, pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
             gridSizer.Add(
-                fillLabel, pos=(1, 0),
-                flag=wx.ALIGN_CENTER_VERTICAL)
-            gridSizer.Add(
-                self.fillColorCtrl, pos=(
-                    1, 1), flag=wx.ALIGN_CENTER_VERTICAL)
-            gridSizer.Add(
-                self.fillTranspCtrl, pos=(
-                    1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+                self.fillTranspCtrl, pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL
+            )
 
         sizer.Add(gridSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
         gridSizer = wx.GridBagSizer(hgap=5, vgap=5)
 
         # width
-        box = StaticBox(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=" %s " %
-            _("Line style"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Line style"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        widthLabel = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Line width:"))
+        widthLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width:"))
 
         self.widthCtrl = FloatSpin(
             panel,
@@ -6803,19 +6620,16 @@ class RectangleDialog(PsmapDialog):
             max_val=50,
             increment=1,
             value=0,
-            style=fs.FS_RIGHT)
+            style=fs.FS_RIGHT,
+        )
         self.widthCtrl.SetFormat("%f")
         self.widthCtrl.SetDigits(1)
 
         self.widthCtrl.SetToolTip(_("Line width in points"))
-        self.widthCtrl.SetValue(float(self.rectDict['width']))
+        self.widthCtrl.SetValue(float(self.rectDict["width"]))
 
-        gridSizer.Add(
-            widthLabel, pos=(0, 0),
-            flag=wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(
-            self.widthCtrl, pos=(
-                0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(widthLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(self.widthCtrl, pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(gridSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
@@ -6825,38 +6639,36 @@ class RectangleDialog(PsmapDialog):
         return panel
 
     def update(self):
-        mapInstr = self.instruction.FindInstructionByType('map')
+        mapInstr = self.instruction.FindInstructionByType("map")
         if not mapInstr:
-            mapInstr = self.instruction.FindInstructionByType('initMap')
+            mapInstr = self.instruction.FindInstructionByType("initMap")
         self.mapId = mapInstr.id
-        point1 = self.rectDict['where'][0]
-        point2 = self.rectDict['where'][1]
-        self.rectDict['east1'], self.rectDict['north1'] = PaperMapCoordinates(
-            mapInstr=mapInstr, x=point1[0], y=point1[1], paperToMap=True,
-            env=self.env)
-        self.rectDict['east2'], self.rectDict['north2'] = PaperMapCoordinates(
-            mapInstr=mapInstr, x=point2[0], y=point2[1], paperToMap=True,
-            env=self.env)
+        point1 = self.rectDict["where"][0]
+        point2 = self.rectDict["where"][1]
+        self.rectDict["east1"], self.rectDict["north1"] = PaperMapCoordinates(
+            mapInstr=mapInstr, x=point1[0], y=point1[1], paperToMap=True, env=self.env
+        )
+        self.rectDict["east2"], self.rectDict["north2"] = PaperMapCoordinates(
+            mapInstr=mapInstr, x=point2[0], y=point2[1], paperToMap=True, env=self.env
+        )
         # width
-        self.rectDict['width'] = self.widthCtrl.GetValue()
+        self.rectDict["width"] = self.widthCtrl.GetValue()
 
         # outline color
         if self.outlineTranspCtrl.GetValue():
-            self.rectDict['color'] = 'none'
+            self.rectDict["color"] = "none"
         else:
-            self.rectDict['color'] = convertRGB(
-                self.outlineColorCtrl.GetColour())
+            self.rectDict["color"] = convertRGB(self.outlineColorCtrl.GetColour())
 
         # fill color
-        if self.objectType == ('rectangle',):
+        if self.objectType == ("rectangle",):
             if self.fillTranspCtrl.GetValue():
-                self.rectDict['fcolor'] = 'none'
+                self.rectDict["fcolor"] = "none"
             else:
-                self.rectDict['fcolor'] = convertRGB(
-                    self.fillColorCtrl.GetColour())
+                self.rectDict["fcolor"] = convertRGB(self.fillColorCtrl.GetColour())
 
         if self.id not in self.instruction:
-            if self.objectType == ('rectangle',):
+            if self.objectType == ("rectangle",):
                 rect = Rectangle(self.id, env=self.env)
             else:
                 rect = Line(self.id, env=self.env)
@@ -6877,7 +6689,6 @@ class RectangleDialog(PsmapDialog):
 
 
 class LabelsDialog(PsmapDialog):
-
     def __init__(self, parent, id, settings, env):
         PsmapDialog.__init__(
             self,
@@ -6885,8 +6696,9 @@ class LabelsDialog(PsmapDialog):
             id=id,
             title=_("Vector labels"),
             settings=settings,
-            env=env)
-        self.objectType = ('labels',)
+            env=env,
+        )
+        self.objectType = ("labels",)
         if self.id is not None:
             self.labels = self.instruction[self.id]
         else:
@@ -6903,33 +6715,25 @@ class LabelsDialog(PsmapDialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         box = StaticBox(
-            parent=panel, id=wx.ID_ANY, label=" %s " %
-            _("Vector label files created beforehand by v.label module"))
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s " % _("Vector label files created beforehand by v.label module"),
+        )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         self.select = Select(
-            parent=panel,
-            multiple=True,
-            type='label',
-            fullyQualified=False)
-        self.select.SetValue(','.join(self.labelsDict['labels']))
+            parent=panel, multiple=True, type="label", fullyQualified=False
+        )
+        self.select.SetValue(",".join(self.labelsDict["labels"]))
         self.select.SetFocus()
-        sizer.Add(
-            self.select,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
+        sizer.Add(self.select, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         helpText = StaticText(
-            panel, id=wx.ID_ANY,
-            label=_("You can select multiple label files."))
+            panel, id=wx.ID_ANY, label=_("You can select multiple label files.")
+        )
         helpText.SetForegroundColour(
-            wx.SystemSettings.GetColour(
-                wx.SYS_COLOUR_GRAYTEXT))
-        sizer.Add(
-            helpText,
-            proportion=0,
-            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
-            border=5)
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
+        )
+        sizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
 
         border.Add(sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         panel.SetSizer(border)
@@ -6939,9 +6743,9 @@ class LabelsDialog(PsmapDialog):
     def update(self):
         value = self.select.GetValue()
         if not value:
-            self.labelsDict['labels'] = []
+            self.labelsDict["labels"] = []
         else:
-            self.labelsDict['labels'] = value.split(',')
+            self.labelsDict["labels"] = value.split(",")
         if self.id not in self.instruction:
             labels = Labels(self.id, env=self.env)
             self.instruction.AddInstruction(labels)

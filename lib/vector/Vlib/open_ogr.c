@@ -100,8 +100,13 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     G_debug(2, "OGR layer %d opened", layer);
 
     ogr_info->layer = Ogr_layer;
-    if (update && OGR_L_TestCapability(ogr_info->layer, OLCTransactions))
-	OGR_L_StartTransaction(ogr_info->layer);
+    if (update && OGR_L_TestCapability(ogr_info->layer, OLCTransactions) &&
+	(OGR_L_StartTransaction(ogr_info->layer) != OGRERR_NONE)) {
+	OGR_DS_Destroy(Ogr_ds);
+	G_warning(_("OGR transaction with layer <%s> failed to start"),
+		  ogr_info->layer_name);
+	return -1;
+    }
     
     switch(Ogr_geom_type) {
     case wkbPoint25D: case wkbLineString25D: case wkbPolygon25D:

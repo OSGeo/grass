@@ -1,7 +1,7 @@
 # How to release GRASS GIS binaries and source code
 
 *Note: Some steps in this text are to be done by the development coordinator
-(currently Markus Neteler, PSC Chair) due to needed logins.*
+(currently Markus Neteler and Martin Landa) due to needed logins.*
 
 ## HOWTO create a release
 
@@ -51,7 +51,7 @@ rm -f config.guess config.sub
 wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
 git diff config.guess config.sub
-autoconf-2.13
+autoconf2.69
 ```
 
 Now check if configure still works.
@@ -74,17 +74,17 @@ git push origin config_sub_update_r78
 rm -f locale/templates/*.pot
 rm -f locale/po/messages.mo
 rm -f demolocation/PERMANENT/.bash*
-find . -name '*~'     | xargs rm
-find . -name '*.bak'  | xargs rm
-find . -name '*.swp'  | xargs rm
-find . -name '.#*'    | xargs rm
-find . -name '*.orig' | xargs rm
-find . -name '*.rej'  | xargs rm
-find . -name '*.o'    | xargs rm
-find . -name '*.pyc'  | xargs rm
-find . -name 'OBJ.*'  | xargs rm -r
-find . -name '__pycache__' | xargs rm -r
-rm -f lib/python/ctypes/ctypesgencore/parser/lextab.py
+find . -name '*~'     | xargs -r rm
+find . -name '*.bak'  | xargs -r rm
+find . -name '*.swp'  | xargs -r rm
+find . -name '.#*'    | xargs -r rm
+find . -name '*.orig' | xargs -r rm
+find . -name '*.rej'  | xargs -r rm
+find . -name '*.o'    | xargs -r rm
+find . -name '*.pyc'  | xargs -r rm
+find . -name 'OBJ.*'  | xargs -r rm -r
+find . -name '__pycache__' | xargs -r rm -r
+rm -f python/grass/ctypes/ctypesgencore/parser/lextab.py
 rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc \
   gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
 chmod -R a+r *
@@ -114,11 +114,6 @@ Example:
 1RC1
 2019
 ```
-
-~~Update OSGeo4W setup.hint file~~
-~~no longer needed~~
-~~vim mswindows/osgeo4w/setup_x86.hint.tmpl~~
-~~vim mswindows/osgeo4w/setup_x86_64.hint.tmpl~~
 
 ### Create release tag
 
@@ -179,7 +174,7 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 Create Changelog file on release branch:
 
 ```bash
-python tools/gitlog2changelog.py
+python3 tools/gitlog2changelog.py
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
@@ -219,7 +214,8 @@ Note: grasslxd only reachable via jumphost - https://wiki.osgeo.org/wiki/SAC_Ser
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
-SERVER1=grasslxd
+USER=neteler
+SERVER1=grass.lxd
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=upload.osgeo.org
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
@@ -228,32 +224,40 @@ echo $SERVER2:$SERVER2DIR
 
 # upload along with associated files:
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER1:$SERVER1DIR
+  INSTALL REQUIREMENTS.html SUBMITTING $USER@$SERVER1:$SERVER1DIR
 
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING neteler@$SERVER2:$SERVER2DIR
+  INSTALL REQUIREMENTS.html SUBMITTING $USER@$SERVER2:$SERVER2DIR
 
 # Only at full release!
 # generate link to "latest" source code
-ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
-ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
-ssh neteler@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.md5sum"
-ssh neteler@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.md5sum"
+ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
+ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
+ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.md5sum"
+ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJOR.$MINOR-latest.md5sum"
 
 # verify
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 
 # update winGRASS related files: Update the winGRASS version
-vim grass-addons/tools/wingrass-packager/grass_packager_release.bat
-vim grass-addons/tools/wingrass-packager/grass_addons.sh
-vim grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
-vim grass-addons/tools/wingrass-packager/cronjob.sh       # major/minor release only
+# https://github.com/landam/wingrass-maintenance-scripts
+vim wingrass-maintenance-scripts/grass_packager_release.bat
+vim wingrass-maintenance-scripts/grass_addons.sh
+vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
+vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
 # update addons - major/minor release only
 vim grass-addons/tools/addons/grass-addons-publish.sh
 vim grass-addons/tools/addons/grass-addons-build.sh
 vim grass-addons/tools/addons/grass-addons.sh
 ```
+
+# update addon builder
+- https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line)
+
+### Close milestone
+
+- Close related milestone: https://github.com/OSGeo/grass/milestones
 
 Release is done.
 
@@ -361,31 +365,18 @@ Software pages:
     - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- DebianGIS: <debian-gis@lists.debian.org> - send only small note
 - FreeGIS: <freegis-list@intevation.de>
 - Geowanking: <geowanking@geowanking.org>
-- OSGeo.org: <news_item@osgeo.org>
-
-Via Email:
-
-- info@osgeo.org
-- <http://www.gis-news.de/>  (franz-josef.behr@gismngt.de)
-- mfeilner@linuxnewmedia.de
-- info@harzer.de
-- editor-geo@geoconnexion.com
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
+- Geo Connexion: <editor-geo@geoconnexion.com>
 
 Via Web:
 
 - <http://linuxtoday.com/contribute.php3>
 - <https://joinup.ec.europa.eu/software/grassgis/home> (submit news, MN)
-- <http://www.macnn.com/contact/newstips/1>
-- <http://www10.giscafe.com/submit_material/submit_options.php#Press> (MN) -->
-  Press releases
 - <http://www.directionsmag.com/pressreleases/> (News -> Submit Press Release)
 - <http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29>
 - <https://www.linux-apps.com/p/1128004/edit/> (MN)
-- <https://news.eoportal.org/web/eoportal/share-your-news> (MN) -> Share your
-  news with the EO community
 - <https://www.heise.de/download/product/grass-gis-7105> (update, MN)
 - See also: <https://grass.osgeo.org/wiki/Contact_Databases>
 - ... anywhere else? Please add here.

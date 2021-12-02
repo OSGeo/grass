@@ -154,11 +154,6 @@
     <description>Close workspace file</description>
     <wx-id>ID_CLOSE</wx-id>
   </wxgui-item>
-  <wxgui-item name="LoadGRCFileTclTkGUI">
-    <label>Load GRC file (Tcl/Tk GUI)</label>
-    <handler>OnWorkspaceLoadGrcFile</handler>
-    <description>Load map layers from GRC file to layer tree</description>
-  </wxgui-item>
   <wxgui-item name="AddRaster">
     <label>Add raster</label>
     <handler>OnAddRaster</handler>
@@ -310,12 +305,6 @@
     <handler>OnCreateMapset</handler>
     <description>Creates new mapset in the current location, changes current mapset.</description>
     <keywords>general,mapset,create</keywords>
-  </wxgui-item>
-  <wxgui-item name="VersionAndCopyright">
-    <label>Version and copyright</label>
-    <command>g.version -c</command>
-    <description>Displays version and copyright information.</description>
-    <keywords>general,version</keywords>
   </wxgui-item>
   <wxgui-item name="DisplayMapProjection">
     <label>Display map projection</label>

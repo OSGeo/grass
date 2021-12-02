@@ -22,33 +22,34 @@
 #       fix spurious char stuff in elevation column
 #############################################################################
 
-#%module
-#% description: Imports geonames.org country files into a vector points map.
-#% keyword: vector
-#% keyword: import
-#% keyword: gazetteer
-#%end
-#%option G_OPT_F_INPUT
-#% description: Name of uncompressed geonames file (with .txt extension)
-#%end
-#%option G_OPT_V_OUTPUT
-#%end
+# %module
+# % description: Imports geonames.org country files into a vector points map.
+# % keyword: vector
+# % keyword: import
+# % keyword: gazetteer
+# %end
+# %option G_OPT_F_INPUT
+# % description: Name of uncompressed geonames file (with .txt extension)
+# %end
+# %option G_OPT_V_OUTPUT
+# %end
 
 import os
 import sys
+
 if sys.version_info.major == 2:
     from io import open
 import grass.script as grass
 
 
 def main():
-    infile = options['input']
-    outfile = options['output']
+    infile = options["input"]
+    outfile = options["output"]
 
     # are we in LatLong location?
-    s = grass.read_command("g.proj", flags='j')
+    s = grass.read_command("g.proj", flags="j")
     kv = grass.parse_key_val(s)
-    if kv['+proj'] != 'longlat':
+    if kv["+proj"] != "longlat":
         grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
 
     # input test
@@ -57,12 +58,15 @@ def main():
 
     # DBF doesn't support lengthy text fields
     kv = grass.db_connection()
-    dbfdriver = kv['driver'] == 'dbf'
+    dbfdriver = kv["driver"] == "dbf"
     if dbfdriver:
         grass.warning(
-            _("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
+            _(
+                "Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"
+            )
+        )
 
-    with open(infile, encoding='utf-8') as f:
+    with open(infile, encoding="utf-8") as f:
         num_places = sum(1 for each in f)
     grass.message(_("Converting %d place names...") % num_places)
 
@@ -97,52 +101,64 @@ def main():
 
     # use different column names limited to 10 chars for dbf
     if dbfdriver:
-        columns = ['geonameid integer',
-                   'name varchar(200)',
-                   'asciiname varchar(200)',
-                   'altname varchar(4000)',
-                   'latitude double precision',
-                   'longitude double precision',
-                   'featrclass varchar(1)',
-                   'featrcode varchar(10)',
-                   'cntrycode varchar(2)',
-                   'cc2 varchar(60)',
-                   'admin1code varchar(20)',
-                   'admin2code varchar(20)',
-                   'admin3code varchar(20)',
-                   'admin4code varchar(20)',
-                   'population integer',
-                   'elevation integer',
-                   'gtopo30 integer',
-                   'timezone varchar(50)',
-                   'mod_date date']
+        columns = [
+            "geonameid integer",
+            "name varchar(200)",
+            "asciiname varchar(200)",
+            "altname varchar(4000)",
+            "latitude double precision",
+            "longitude double precision",
+            "featrclass varchar(1)",
+            "featrcode varchar(10)",
+            "cntrycode varchar(2)",
+            "cc2 varchar(60)",
+            "admin1code varchar(20)",
+            "admin2code varchar(20)",
+            "admin3code varchar(20)",
+            "admin4code varchar(20)",
+            "population integer",
+            "elevation integer",
+            "gtopo30 integer",
+            "timezone varchar(50)",
+            "mod_date date",
+        ]
     else:
-        columns = ['geonameid integer',
-                   'name varchar(200)',
-                   'asciiname varchar(200)',
-                   'alternatename varchar(4000)',
-                   'latitude double precision',
-                   'longitude double precision',
-                   'featureclass varchar(1)',
-                   'featurecode varchar(10)',
-                   'countrycode varchar(2)',
-                   'cc2 varchar(60)',
-                   'admin1code varchar(20)',
-                   'admin2code varchar(20)',
-                   'admin3code varchar(20)',
-                   'admin4code varchar(20)',
-                   'population integer',
-                   'elevation integer',
-                   'gtopo30 integer',
-                   'timezone varchar(50)',
-                   'modification date']
+        columns = [
+            "geonameid integer",
+            "name varchar(200)",
+            "asciiname varchar(200)",
+            "alternatename varchar(4000)",
+            "latitude double precision",
+            "longitude double precision",
+            "featureclass varchar(1)",
+            "featurecode varchar(10)",
+            "countrycode varchar(2)",
+            "cc2 varchar(60)",
+            "admin1code varchar(20)",
+            "admin2code varchar(20)",
+            "admin3code varchar(20)",
+            "admin4code varchar(20)",
+            "population integer",
+            "elevation integer",
+            "gtopo30 integer",
+            "timezone varchar(50)",
+            "modification date",
+        ]
 
-    grass.run_command('v.in.ascii', cat=0, x=6, y=5, sep='tab',
-                      input=infile, output=outfile,
-                      columns=columns)
+    grass.run_command(
+        "v.in.ascii",
+        cat=0,
+        x=6,
+        y=5,
+        sep="tab",
+        input=infile,
+        output=outfile,
+        columns=columns,
+    )
 
     # write cmd history:
     grass.vector_history(outfile)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -80,7 +80,7 @@ static int read_bmp_header(const unsigned char *p)
 
 void cairo_read_bmp(void)
 {
-    char header[HEADER_SIZE];
+    unsigned char header[HEADER_SIZE];
     FILE *input;
 
     input = fopen(ca.file_name, "rb");

@@ -39,12 +39,11 @@ from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
 
 from core import globalvar
+
 if globalvar.wxPythonPhoenix:
     from wx import adv as wiz
-    from wx.adv import Wizard
 else:
     from wx import wizard as wiz
-    from wx.wizard import Wizard
 
 import grass.script as grass
 
@@ -57,8 +56,18 @@ from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from gcp.mapdisplay import MapFrame
 from core.giface import Notification
-from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, \
-    CheckListBox, TextCtrl, Menu, ListCtrl, BitmapFromImage, CheckListCtrlMixin
+from gui_core.wrap import (
+    SpinCtrl,
+    Button,
+    StaticText,
+    StaticBox,
+    CheckListBox,
+    TextCtrl,
+    Menu,
+    ListCtrl,
+    BitmapFromImage,
+    CheckListCtrlMixin,
+)
 
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
@@ -69,14 +78,13 @@ global src_map
 global tgt_map
 global maptype
 
-src_map = ''
-tgt_map = {'raster': '',
-           'vector': ''}
-maptype = 'raster'
+src_map = ""
+tgt_map = {"raster": "", "vector": ""}
+maptype = "raster"
 
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, 'small_up_arrow.png'), 'rb')
+    stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
     try:
         img = wx.Image(stream)
     finally:
@@ -85,7 +93,7 @@ def getSmallUpArrowImage():
 
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, 'small_down_arrow.png'), 'rb')
+    stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
     try:
         img = wx.Image(stream)
     finally:
@@ -106,50 +114,49 @@ class GCPWizard(object):
         #
         # get environmental variables
         #
-        self.grassdatabase = grass.gisenv()['GISDBASE']
+        self.grassdatabase = grass.gisenv()["GISDBASE"]
 
         #
         # read original environment settings
         #
-        self.target_gisrc = os.environ['GISRC']
+        self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
         try:
-            f = open(self.target_gisrc, 'r')
+            f = open(self.target_gisrc, "r")
             for line in f.readlines():
-                line = line.replace('\n', '').strip()
+                line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
-                key, value = line.split(':', 1)
+                key, value = line.split(":", 1)
                 self.gisrc_dict[key.strip()] = value.strip()
         finally:
             f.close()
 
-        self.currentlocation = self.gisrc_dict['LOCATION_NAME']
-        self.currentmapset = self.gisrc_dict['MAPSET']
+        self.currentlocation = self.gisrc_dict["LOCATION_NAME"]
+        self.currentmapset = self.gisrc_dict["MAPSET"]
         # location for xy map to georectify
-        self.newlocation = ''
+        self.newlocation = ""
         # mapset for xy map to georectify
-        self.newmapset = ''
+        self.newmapset = ""
 
         global maptype
         global src_map
         global tgt_map
 
-        #src_map = ''
-        #tgt_map = ''
-        maptype = 'raster'
+        # src_map = ''
+        # tgt_map = ''
+        maptype = "raster"
 
         # GISRC file for source location/mapset of map(s) to georectify
-        self.source_gisrc = ''
+        self.source_gisrc = ""
         self.src_maps = []
 
         #
         # define wizard pages
         #
         self.wizard = wiz.Wizard(
-            parent=parent,
-            id=wx.ID_ANY,
-            title=_("Setup for georectification"))
+            parent=parent, id=wx.ID_ANY, title=_("Setup for georectification")
+        )
         self.startpage = LocationPage(self.wizard, self)
         self.grouppage = GroupPage(self.wizard, self)
         self.mappage = DispMapPage(self.wizard, self)
@@ -181,12 +188,10 @@ class GCPWizard(object):
         if self.wizard.RunWizard(self.startpage):
             success = self.OnWizFinished()
             if not success:
-                GMessage(parent=self.parent,
-                         message=_("Georectifying setup canceled."))
+                GMessage(parent=self.parent, message=_("Georectifying setup canceled."))
                 self.Cleanup()
         else:
-            GMessage(parent=self.parent,
-                     message=_("Georectifying setup canceled."))
+            GMessage(parent=self.parent, message=_("Georectifying setup canceled."))
             self.Cleanup()
 
         #
@@ -194,23 +199,23 @@ class GCPWizard(object):
         #
         if success:
             # instance of render.Map to be associated with display
-            self.SwitchEnv('source')
+            self.SwitchEnv("source")
             self.SrcMap = Map(gisrc=self.source_gisrc)
-            self.SwitchEnv('target')
+            self.SwitchEnv("target")
             self.TgtMap = Map(gisrc=self.target_gisrc)
             self.Map = self.SrcMap
 
             #
             # add layer to source map
             #
-            if maptype == 'raster':
-                rendertype = 'raster'
-                cmdlist = ['d.rast', 'map=%s' % src_map]
+            if maptype == "raster":
+                rendertype = "raster"
+                cmdlist = ["d.rast", "map=%s" % src_map]
             else:  # -> vector layer
-                rendertype = 'vector'
-                cmdlist = ['d.vect', 'map=%s' % src_map]
+                rendertype = "vector"
+                cmdlist = ["d.vect", "map=%s" % src_map]
 
-            self.SwitchEnv('source')
+            self.SwitchEnv("source")
             name, found = utils.GetLayerNameFromCmd(cmdlist)
             self.SrcMap.AddLayer(
                 ltype=rendertype,
@@ -219,21 +224,21 @@ class GCPWizard(object):
                 name=name,
                 hidden=False,
                 opacity=1.0,
-                render=False)
+                render=False,
+            )
 
-            self.SwitchEnv('target')
+            self.SwitchEnv("target")
 
-            web_service_layer = self.mappage.GetWebServiceLayers(
-                name=tgt_map['raster'])
+            web_service_layer = self.mappage.GetWebServiceLayers(name=tgt_map["raster"])
 
-            if tgt_map['raster'] and web_service_layer:
+            if tgt_map["raster"] and web_service_layer:
                 #
                 # add web service layer to target map
                 #
 
-                rendertype = web_service_layer['type']
-                cmdlist = web_service_layer['cmd']
-                name = tgt_map['raster']
+                rendertype = web_service_layer["type"]
+                cmdlist = web_service_layer["cmd"]
+                name = tgt_map["raster"]
 
                 self.TgtMap.AddLayer(
                     ltype=rendertype,
@@ -242,14 +247,15 @@ class GCPWizard(object):
                     name=name,
                     hidden=False,
                     opacity=1.0,
-                    render=False)
+                    render=False,
+                )
 
-            elif tgt_map['raster']:
+            elif tgt_map["raster"]:
                 #
                 # add raster layer to target map
                 #
-                rendertype = 'raster'
-                cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
+                rendertype = "raster"
+                cmdlist = ["d.rast", "map=%s" % tgt_map["raster"]]
 
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.TgtMap.AddLayer(
@@ -259,14 +265,15 @@ class GCPWizard(object):
                     name=name,
                     hidden=False,
                     opacity=1.0,
-                    render=False)
+                    render=False,
+                )
 
-            if tgt_map['vector']:
+            if tgt_map["vector"]:
                 #
                 # add raster layer to target map
                 #
-                rendertype = 'vector'
-                cmdlist = ['d.vect', 'map=%s' % tgt_map['vector']]
+                rendertype = "vector"
+                cmdlist = ["d.vect", "map=%s" % tgt_map["vector"]]
 
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.TgtMap.AddLayer(
@@ -276,15 +283,21 @@ class GCPWizard(object):
                     name=name,
                     hidden=False,
                     opacity=1.0,
-                    render=False)
+                    render=False,
+                )
 
             #
             # start GCP Manager
             #
-            self.gcpmgr = GCP(self.parent, giface=self._giface,
-                              grwiz=self, size=globalvar.MAP_WINDOW_SIZE,
-                              toolbars=["gcpdisp"],
-                              Map=self.SrcMap, lmgr=self.parent)
+            self.gcpmgr = GCP(
+                self.parent,
+                giface=self._giface,
+                grwiz=self,
+                size=globalvar.MAP_WINDOW_SIZE,
+                toolbars=["gcpdisp"],
+                Map=self.SrcMap,
+                lmgr=self.parent,
+            )
 
             # load GCPs
             self.gcpmgr.InitMapDisplay()
@@ -311,16 +324,19 @@ class GCPWizard(object):
 
         # check to see if we are georectifying map in current working
         # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        if (
+            self.newlocation == self.currentlocation
+            and self.newmapset == self.currentmapset
+        ):
             return False
 
-        self.gisrc_dict['LOCATION_NAME'] = location
-        self.gisrc_dict['MAPSET'] = mapset
+        self.gisrc_dict["LOCATION_NAME"] = location
+        self.gisrc_dict["MAPSET"] = mapset
 
         self.source_gisrc = utils.GetTempfile()
 
         try:
-            f = open(self.source_gisrc, mode='w')
+            f = open(self.source_gisrc, mode="w")
             for line in self.gisrc_dict.items():
                 f.write(line[0] + ": " + line[1] + "\n")
         finally:
@@ -335,13 +351,16 @@ class GCPWizard(object):
         """
         # check to see if we are georectifying map in current working
         # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
+        if (
+            self.newlocation == self.currentlocation
+            and self.newmapset == self.currentmapset
+        ):
             return False
 
-        if grc == 'target':
-            os.environ['GISRC'] = str(self.target_gisrc)
-        elif grc == 'source':
-            os.environ['GISRC'] = str(self.source_gisrc)
+        if grc == "target":
+            os.environ["GISRC"] = str(self.target_gisrc)
+        elif grc == "source":
+            os.environ["GISRC"] = str(self.source_gisrc)
 
         return True
 
@@ -361,7 +380,7 @@ class GCPWizard(object):
         # here was also the cleaning of gcpmanagement from layer manager
         # which is no longer needed
 
-        self.SwitchEnv('target')
+        self.SwitchEnv("target")
         self.wizard.Destroy()
 
 
@@ -372,63 +391,64 @@ class LocationPage(TitledPage):
     """
 
     def __init__(self, wizard, parent):
-        TitledPage.__init__(self, wizard, _(
-            "Select map type and location/mapset"))
+        TitledPage.__init__(self, wizard, _("Select map type and location/mapset"))
 
         self.parent = parent
         self.grassdatabase = self.parent.grassdatabase
 
-        self.xylocation = ''
-        self.xymapset = ''
+        self.xylocation = ""
+        self.xymapset = ""
 
         #
         # layout
         #
         # map type
         self.rb_maptype = wx.RadioBox(
-            parent=self, id=wx.ID_ANY, label=' %s ' %
-            _("Map type to georectify"), choices=[
-                _('raster'), _('vector')], majorDimension=wx.RA_SPECIFY_COLS)
-        self.sizer.Add(self.rb_maptype,
-                       flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
-                       pos=(1, 1), span=(1, 2))
+            parent=self,
+            id=wx.ID_ANY,
+            label=" %s " % _("Map type to georectify"),
+            choices=[_("raster"), _("vector")],
+            majorDimension=wx.RA_SPECIFY_COLS,
+        )
+        self.sizer.Add(
+            self.rb_maptype,
+            flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND,
+            border=5,
+            pos=(1, 1),
+            span=(1, 2),
+        )
 
         # location
         self.sizer.Add(
-            StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_('Select source location:')),
+            StaticText(parent=self, id=wx.ID_ANY, label=_("Select source location:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                2,
-                1))
-        self.cb_location = LocationSelect(
-            parent=self, gisdbase=self.grassdatabase)
+            pos=(2, 1),
+        )
+        self.cb_location = LocationSelect(parent=self, gisdbase=self.grassdatabase)
         self.sizer.Add(
             self.cb_location,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                2,
-                2))
+            pos=(2, 2),
+        )
 
         # mapset
         self.sizer.Add(
-            StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_('Select source mapset:')),
+            StaticText(parent=self, id=wx.ID_ANY, label=_("Select source mapset:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                3,
-                1))
-        self.cb_mapset = MapsetSelect(parent=self, gisdbase=self.grassdatabase,
-                                      setItems=False)
-        self.sizer.Add(self.cb_mapset, flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(3, 2))
+            pos=(3, 1),
+        )
+        self.cb_mapset = MapsetSelect(
+            parent=self, gisdbase=self.grassdatabase, setItems=False
+        )
+        self.sizer.Add(
+            self.cb_mapset,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(3, 2),
+        )
         self.sizer.AddGrowableCol(2)
 
         #
@@ -446,9 +466,9 @@ class LocationPage(TitledPage):
         global maptype
 
         if event.GetInt() == 0:
-            maptype = 'raster'
+            maptype = "raster"
         else:
-            maptype = 'vector'
+            maptype = "vector"
 
     def OnLocation(self, event):
         """Sets source location for map(s) to georectify"""
@@ -458,14 +478,17 @@ class LocationPage(TitledPage):
         tmplist = os.listdir(os.path.join(self.grassdatabase, self.xylocation))
         self.mapsetList = []
         for item in tmplist:
-            if os.path.isdir(os.path.join(self.grassdatabase, self.xylocation, item)) and \
-                    os.path.exists(os.path.join(self.grassdatabase, self.xylocation, item, 'WIND')):
-                if item != 'PERMANENT':
+            if os.path.isdir(
+                os.path.join(self.grassdatabase, self.xylocation, item)
+            ) and os.path.exists(
+                os.path.join(self.grassdatabase, self.xylocation, item, "WIND")
+            ):
+                if item != "PERMANENT":
                     self.mapsetList.append(item)
 
-        self.xymapset = 'PERMANENT'
+        self.xymapset = "PERMANENT"
         utils.ListSortLower(self.mapsetList)
-        self.mapsetList.insert(0, 'PERMANENT')
+        self.mapsetList.insert(0, "PERMANENT")
         self.cb_mapset.SetItems(self.mapsetList)
         self.cb_mapset.SetStringSelection(self.xymapset)
 
@@ -474,10 +497,11 @@ class LocationPage(TitledPage):
 
     def OnMapset(self, event):
         """Sets source mapset for map(s) to georectify"""
-        if self.xylocation == '':
-            GMessage(_('You must select a valid location '
-                       'before selecting a mapset'),
-                     parent=self)
+        if self.xylocation == "":
+            GMessage(
+                _("You must select a valid location " "before selecting a mapset"),
+                parent=self,
+            )
             return
 
         self.xymapset = event.GetString()
@@ -486,18 +510,21 @@ class LocationPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
     def OnPageChanging(self, event=None):
-        if event.GetDirection() and \
-                (self.xylocation == '' or self.xymapset == ''):
-            GMessage(_('You must select a valid location '
-                       'and mapset in order to continue'),
-                     parent=self)
+        if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
+            GMessage(
+                _(
+                    "You must select a valid location "
+                    "and mapset in order to continue"
+                ),
+                parent=self,
+            )
             event.Veto()
             return
 
         self.parent.SetSrcEnv(self.xylocation, self.xymapset)
 
     def OnEnterPage(self, event=None):
-        if self.xylocation == '' or self.xymapset == '':
+        if self.xylocation == "" or self.xymapset == "":
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -509,92 +536,88 @@ class GroupPage(TitledPage):
     """
 
     def __init__(self, wizard, parent):
-        TitledPage.__init__(self, wizard, _(
-            "Select image/map group to georectify"))
+        TitledPage.__init__(self, wizard, _("Select image/map group to georectify"))
 
         self.parent = parent
 
         self.grassdatabase = self.parent.grassdatabase
         self.groupList = []
 
-        self.xylocation = ''
-        self.xymapset = ''
-        self.xygroup = ''
+        self.xylocation = ""
+        self.xymapset = ""
+        self.xygroup = ""
 
         # default extension
-        self.extension = '_georect' + str(os.getpid())
+        self.extension = "_georect" + str(os.getpid())
 
         #
         # layout
         #
         # group
         self.sizer.Add(
-            StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_('Select/create group:')),
+            StaticText(parent=self, id=wx.ID_ANY, label=_("Select/create group:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                1,
-                1))
-        self.cb_group = wx.ComboBox(parent=self, id=wx.ID_ANY,
-                                    choices=self.groupList, size=(350, -1),
-                                    style=wx.CB_DROPDOWN)
-        self.sizer.Add(self.cb_group, flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(1, 2))
+            pos=(1, 1),
+        )
+        self.cb_group = wx.ComboBox(
+            parent=self,
+            id=wx.ID_ANY,
+            choices=self.groupList,
+            size=(350, -1),
+            style=wx.CB_DROPDOWN,
+        )
+        self.sizer.Add(
+            self.cb_group,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(1, 2),
+        )
 
         # create group
         self.sizer.Add(
             StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_('Create group if none exists')),
+                parent=self, id=wx.ID_ANY, label=_("Create group if none exists")
+            ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                2,
-                1))
+            pos=(2, 1),
+        )
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         self.btn_mkgroup = Button(
-            parent=self,
-            id=wx.ID_ANY,
-            label=_("Create/edit group..."))
+            parent=self, id=wx.ID_ANY, label=_("Create/edit group...")
+        )
         self.btn_vgroup = Button(
-            parent=self,
-            id=wx.ID_ANY,
-            label=_("Add vector map to group..."))
-        btnSizer.Add(self.btn_mkgroup,
-                     flag=wx.RIGHT, border=5)
+            parent=self, id=wx.ID_ANY, label=_("Add vector map to group...")
+        )
+        btnSizer.Add(self.btn_mkgroup, flag=wx.RIGHT, border=5)
 
-        btnSizer.Add(self.btn_vgroup,
-                     flag=wx.LEFT, border=5)
+        btnSizer.Add(self.btn_vgroup, flag=wx.LEFT, border=5)
 
         self.sizer.Add(
             btnSizer,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                2,
-                2))
+            pos=(2, 2),
+        )
 
         # extension
         self.sizer.Add(
             StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_('Extension for output maps:')),
+                parent=self, id=wx.ID_ANY, label=_("Extension for output maps:")
+            ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                3,
-                1))
-        self.ext_txt = TextCtrl(
-            parent=self, id=wx.ID_ANY, value="", size=(
-                350, -1))
+            pos=(3, 1),
+        )
+        self.ext_txt = TextCtrl(parent=self, id=wx.ID_ANY, value="", size=(350, -1))
         self.ext_txt.SetValue(self.extension)
-        self.sizer.Add(self.ext_txt, flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5, pos=(3, 2))
+        self.sizer.Add(
+            self.ext_txt,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            border=5,
+            pos=(3, 2),
+        )
 
         self.sizer.AddGrowableCol(2)
         #
@@ -614,7 +637,7 @@ class GroupPage(TitledPage):
 
     def OnMkGroup(self, event):
         """Create new group in source location/mapset"""
-        if self.xygroup == '':
+        if self.xygroup == "":
             self.xygroup = self.cb_group.GetValue()
         dlg = GroupDialog(parent=self, defaultGroup=self.xygroup)
         dlg.DisableSubgroupEdit()
@@ -623,7 +646,7 @@ class GroupPage(TitledPage):
         if gr in dlg.GetExistGroups():
             self.xygroup = gr
         else:
-            gr = ''
+            gr = ""
         dlg.Destroy()
 
         self.OnEnterPage()
@@ -632,21 +655,22 @@ class GroupPage(TitledPage):
     def OnVGroup(self, event):
         """Add vector maps to group"""
 
-        if self.xygroup == '':
+        if self.xygroup == "":
             self.xygroup = self.cb_group.GetValue()
 
-        vector_dir = os.path.join(self.grassdatabase,
-                                  self.xylocation,
-                                  self.xymapset,
-                                  'vector')
+        vector_dir = os.path.join(
+            self.grassdatabase, self.xylocation, self.xymapset, "vector"
+        )
 
         if os.path.exists(vector_dir):
-            dlg = VectGroup(parent=self,
-                            id=wx.ID_ANY,
-                            grassdb=self.grassdatabase,
-                            location=self.xylocation,
-                            mapset=self.xymapset,
-                            group=self.xygroup)
+            dlg = VectGroup(
+                parent=self,
+                id=wx.ID_ANY,
+                grassdb=self.grassdatabase,
+                location=self.xylocation,
+                mapset=self.xymapset,
+                group=self.xygroup,
+            )
 
             if dlg.ShowModal() != wx.ID_OK:
                 return
@@ -654,23 +678,25 @@ class GroupPage(TitledPage):
             dlg.MakeVGroup()
             self.OnEnterPage()
         else:
-            GError(parent=self, message=_('No vector maps.'))
+            GError(parent=self, message=_("No vector maps."))
 
     def OnExtension(self, event):
         self.extension = self.ext_txt.GetValue()
 
     def OnPageChanging(self, event=None):
-        if event.GetDirection() and self.xygroup == '':
-            GMessage(_('You must select a valid image/map '
-                       'group in order to continue'),
-                     parent=self)
+        if event.GetDirection() and self.xygroup == "":
+            GMessage(
+                _("You must select a valid image/map " "group in order to continue"),
+                parent=self,
+            )
             event.Veto()
             return
 
-        if event.GetDirection() and self.extension == '':
-            GMessage(_('You must enter an map name '
-                       'extension in order to continue'),
-                     parent=self)
+        if event.GetDirection() and self.extension == "":
+            GMessage(
+                _("You must enter an map name " "extension in order to continue"),
+                parent=self,
+            )
             event.Veto()
             return
 
@@ -679,31 +705,35 @@ class GroupPage(TitledPage):
 
         self.groupList = []
 
-        self.xylocation = self.parent.gisrc_dict['LOCATION_NAME']
-        self.xymapset = self.parent.gisrc_dict['MAPSET']
+        self.xylocation = self.parent.gisrc_dict["LOCATION_NAME"]
+        self.xymapset = self.parent.gisrc_dict["MAPSET"]
 
         # create a list of groups in selected mapset
-        if os.path.isdir(os.path.join(self.grassdatabase,
-                                      self.xylocation,
-                                      self.xymapset,
-                                      'group')):
-            tmplist = os.listdir(os.path.join(self.grassdatabase,
-                                              self.xylocation,
-                                              self.xymapset,
-                                              'group'))
+        if os.path.isdir(
+            os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "group")
+        ):
+            tmplist = os.listdir(
+                os.path.join(
+                    self.grassdatabase, self.xylocation, self.xymapset, "group"
+                )
+            )
             for item in tmplist:
-                if os.path.isdir(os.path.join(self.grassdatabase,
-                                              self.xylocation,
-                                              self.xymapset,
-                                              'group',
-                                              item)):
+                if os.path.isdir(
+                    os.path.join(
+                        self.grassdatabase,
+                        self.xylocation,
+                        self.xymapset,
+                        "group",
+                        item,
+                    )
+                ):
                     self.groupList.append(item)
 
-        if maptype == 'raster':
+        if maptype == "raster":
             self.btn_vgroup.Hide()
             self.Bind(wx.EVT_BUTTON, self.OnMkGroup, self.btn_mkgroup)
 
-        elif maptype == 'vector':
+        elif maptype == "vector":
             self.btn_vgroup.Show()
             self.Bind(wx.EVT_BUTTON, self.OnMkGroup, self.btn_mkgroup)
             self.Bind(wx.EVT_BUTTON, self.OnVGroup, self.btn_vgroup)
@@ -718,14 +748,13 @@ class GroupPage(TitledPage):
                 self.cb_group.SetSelection(0)
                 self.xygroup = self.groupList[0]
 
-        if self.xygroup == '' or \
-                self.extension == '':
+        if self.xygroup == "" or self.extension == "":
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
         # switch to source
-        self.parent.SwitchEnv('source')
+        self.parent.SwitchEnv("source")
 
 
 class DispMapPage(TitledPage):
@@ -736,89 +765,94 @@ class DispMapPage(TitledPage):
 
     def __init__(self, wizard, parent):
         TitledPage.__init__(
-            self, wizard,
-            _("Select maps to display for ground control point (GCP) creation"))
+            self,
+            wizard,
+            _("Select maps to display for ground control point (GCP) creation"),
+        )
 
         self.parent = parent
         global maptype
-        self.web_servc_lyrs_root_node_name = \
-            _("Map Display Web Service Layer(s)")
+        self.web_servc_lyrs_root_node_name = _("Map Display Web Service Layer(s)")
 
         #
         # layout
         #
         self.sizer.Add(
             StaticText(
-                parent=self,
-                id=wx.ID_ANY,
-                label=_('Select source map to display:')),
+                parent=self, id=wx.ID_ANY, label=_("Select source map to display:")
+            ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                1,
-                1))
+            pos=(1, 1),
+        )
 
         self.srcselection = Select(
             self,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
             type=maptype,
-            updateOnPopup=False)
+            updateOnPopup=False,
+        )
 
         self.sizer.Add(
             self.srcselection,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                1,
-                2))
+            pos=(1, 2),
+        )
 
         self.sizer.Add(
             StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_('Select target raster map to display:')),
+                label=_("Select target raster map to display:"),
+            ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                2,
-                1))
+            pos=(2, 1),
+        )
 
         self.tgtrastselection = Select(
-            self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster', updateOnPopup=False,
-            extraItems=self.GetSelectTargetRasterExtraItems())
+            self,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            type="raster",
+            updateOnPopup=False,
+            extraItems=self.GetSelectTargetRasterExtraItems(),
+        )
 
         self.sizer.Add(
             self.tgtrastselection,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                2,
-                2))
+            pos=(2, 2),
+        )
 
         self.sizer.Add(
             StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_('Select target vector map to display:')),
+                label=_("Select target vector map to display:"),
+            ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                3,
-                1))
+            pos=(3, 1),
+        )
 
         self.tgtvectselection = Select(
-            self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='vector', updateOnPopup=False)
+            self,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            type="vector",
+            updateOnPopup=False,
+        )
 
         self.sizer.Add(
             self.tgtvectselection,
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
-            pos=(
-                3,
-                2))
+            pos=(3, 2),
+        )
 
         #
         # bindings
@@ -837,7 +871,7 @@ class DispMapPage(TitledPage):
 
         src_map = self.srcselection.GetValue()
 
-        if src_map == '':
+        if src_map == "":
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -845,13 +879,13 @@ class DispMapPage(TitledPage):
         try:
             # set computational region to match selected map and zoom display
             # to region
-            if maptype == 'raster':
-                p = RunCommand('g.region', 'raster=src_map')
-            elif maptype == 'vector':
-                p = RunCommand('g.region', 'vector=src_map')
+            if maptype == "raster":
+                p = RunCommand("g.region", "raster=src_map")
+            elif maptype == "vector":
+                p = RunCommand("g.region", "vector=src_map")
 
             if p.returncode == 0:
-                print('returncode = ', str(p.returncode))
+                print("returncode = ", str(p.returncode))
                 self.parent.Map.region = self.parent.Map.GetRegion()
         except:
             pass
@@ -860,26 +894,26 @@ class DispMapPage(TitledPage):
         """Source map to display selected"""
         global tgt_map
 
-        tgt_map['raster'] = self.tgtrastselection.GetValue()
+        tgt_map["raster"] = self.tgtrastselection.GetValue()
 
     def OnTgtVectSelection(self, event):
         """Source map to display selected"""
         global tgt_map
 
-        tgt_map['vector'] = self.tgtvectselection.GetValue()
+        tgt_map["vector"] = self.tgtvectselection.GetValue()
 
     def OnPageChanging(self, event=None):
         global src_map
         global tgt_map
 
-        if event.GetDirection() and (src_map == ''):
-            GMessage(_('You must select a source map '
-                       'in order to continue'),
-                     parent=self)
+        if event.GetDirection() and (src_map == ""):
+            GMessage(
+                _("You must select a source map " "in order to continue"), parent=self
+            )
             event.Veto()
             return
 
-        self.parent.SwitchEnv('target')
+        self.parent.SwitchEnv("target")
 
     def OnEnterPage(self, event=None):
         global maptype
@@ -888,51 +922,60 @@ class DispMapPage(TitledPage):
 
         self.srcselection.SetElementList(maptype)
 
-        if maptype == 'raster':
-            ret = RunCommand('i.group',
-                             parent=self,
-                             read=True,
-                             group=self.parent.grouppage.xygroup,
-                             flags='g')
+        if maptype == "raster":
+            ret = RunCommand(
+                "i.group",
+                parent=self,
+                read=True,
+                group=self.parent.grouppage.xygroup,
+                flags="g",
+            )
 
             if ret:
                 self.parent.src_maps = ret.splitlines()
             else:
                 GError(
-                    parent=self, message=_(
-                        'No maps in selected group <%s>.\n'
-                        'Please edit group or select another group.') %
-                    self.parent.grouppage.xygroup)
+                    parent=self,
+                    message=_(
+                        "No maps in selected group <%s>.\n"
+                        "Please edit group or select another group."
+                    )
+                    % self.parent.grouppage.xygroup,
+                )
                 return
 
-        elif maptype == 'vector':
+        elif maptype == "vector":
             grassdatabase = self.parent.grassdatabase
-            xylocation = self.parent.gisrc_dict['LOCATION_NAME']
-            xymapset = self.parent.gisrc_dict['MAPSET']
+            xylocation = self.parent.gisrc_dict["LOCATION_NAME"]
+            xymapset = self.parent.gisrc_dict["MAPSET"]
             # make list of vectors to georectify from VREF
 
-            vgrpfile = os.path.join(grassdatabase,
-                                    xylocation,
-                                    xymapset,
-                                    'group',
-                                    self.parent.grouppage.xygroup,
-                                    'VREF')
+            vgrpfile = os.path.join(
+                grassdatabase,
+                xylocation,
+                xymapset,
+                "group",
+                self.parent.grouppage.xygroup,
+                "VREF",
+            )
 
-            error_message = _(
-                'No maps in selected group <%s>.\n'
-                'Please edit group or select another group.') % \
-                self.parent.grouppage.xygroup
+            error_message = (
+                _(
+                    "No maps in selected group <%s>.\n"
+                    "Please edit group or select another group."
+                )
+                % self.parent.grouppage.xygroup
+            )
 
             try:
                 with open(vgrpfile) as f:
                     for vect in f.readlines():
-                        vect = vect.strip('\n')
+                        vect = vect.strip("\n")
                         if len(vect) < 1:
                             continue
                         self.parent.src_maps.append(vect)
             except FileNotFoundError:
-                GError(parent=self, message=error_message,
-                       showTraceback=False)
+                GError(parent=self, message=error_message, showTraceback=False)
                 return
 
             if len(self.parent.src_maps) < 1:
@@ -944,14 +987,14 @@ class DispMapPage(TitledPage):
         src_map = self.parent.src_maps[0]
         self.srcselection.SetValue(src_map)
 
-        self.parent.SwitchEnv('target')
-        self.tgtrastselection.SetElementList('raster')
+        self.parent.SwitchEnv("target")
+        self.tgtrastselection.SetElementList("raster")
         self.tgtrastselection.GetElementList()
-        self.tgtvectselection.SetElementList('vector')
+        self.tgtvectselection.SetElementList("vector")
         self.tgtvectselection.GetElementList()
-        self.parent.SwitchEnv('source')
+        self.parent.SwitchEnv("source")
 
-        if src_map == '':
+        if src_map == "":
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -968,23 +1011,19 @@ class DispMapPage(TitledPage):
            ...
         }
         :return: None when web service map layer name doesn't exist
-       """
+        """
         layers = {}
         for layer in self.parent._giface.GetLayerList():
             if layer.type in ltype:
-                layers[str(layer)] = {
-                    'type' : layer.type,
-                    'cmd': layer.cmd
-                }
+                layers[str(layer)] = {"type": layer.type, "cmd": layer.cmd}
         if name:
             return layers.get(name)
         return layers
 
     def GetSelectTargetRasterExtraItems(self):
         """Get select target raster widget extra items."""
-        return {
-            self.web_servc_lyrs_root_node_name: self.GetWebServiceLayers().keys()
-        }
+        return {self.web_servc_lyrs_root_node_name: self.GetWebServiceLayers().keys()}
+
 
 class GCP(MapFrame, ColumnSorterMixin):
     """
@@ -992,19 +1031,28 @@ class GCP(MapFrame, ColumnSorterMixin):
     Calls i.rectify or v.rectify to georectify map.
     """
 
-    def __init__(self, parent, giface, grwiz=None, id=wx.ID_ANY,
-                 title=_("Manage Ground Control Points"),
-                 size=(700, 300), toolbars=["gcpdisp"], Map=None, lmgr=None):
+    def __init__(
+        self,
+        parent,
+        giface,
+        grwiz=None,
+        id=wx.ID_ANY,
+        title=_("Manage Ground Control Points"),
+        size=(700, 300),
+        toolbars=["gcpdisp"],
+        Map=None,
+        lmgr=None,
+    ):
 
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
-        if tgt_map['raster'] == '' and tgt_map['vector'] == '':
+        if tgt_map["raster"] == "" and tgt_map["vector"] == "":
             self.show_target = False
         else:
             self.show_target = True
 
-        #wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
+        # wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
         MapFrame.__init__(
             self,
             parent=parent,
@@ -1013,7 +1061,8 @@ class GCP(MapFrame, ColumnSorterMixin):
             size=size,
             Map=Map,
             toolbars=toolbars,
-            name='GCPMapWindow')
+            name="GCPMapWindow",
+        )
 
         # init variables
         self.parent = parent
@@ -1022,18 +1071,20 @@ class GCP(MapFrame, ColumnSorterMixin):
         # register data structures for drawing GCP's
         #
         self.pointsToDrawTgt = self.TgtMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus)
+            graphicsType="point", setStatusFunc=self.SetGCPSatus
+        )
         self.pointsToDrawSrc = self.SrcMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus)
+            graphicsType="point", setStatusFunc=self.SetGCPSatus
+        )
 
         # connect to the map windows signals
         # used to add or edit GCP
         self.SrcMapWindow.mouseLeftUpPointer.connect(
-            lambda x, y:
-            self._onMouseLeftUpPointer(self.SrcMapWindow, x, y))
+            lambda x, y: self._onMouseLeftUpPointer(self.SrcMapWindow, x, y)
+        )
         self.TgtMapWindow.mouseLeftUpPointer.connect(
-            lambda x, y:
-            self._onMouseLeftUpPointer(self.TgtMapWindow, x, y))
+            lambda x, y: self._onMouseLeftUpPointer(self.TgtMapWindow, x, y)
+        )
 
         # window resized
         self.resize = False
@@ -1046,55 +1097,65 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.newlocation = self.grwiz.newlocation
         self.newmapset = self.grwiz.newmapset
 
-        self.xylocation = self.grwiz.gisrc_dict['LOCATION_NAME']
-        self.xymapset = self.grwiz.gisrc_dict['MAPSET']
+        self.xylocation = self.grwiz.gisrc_dict["LOCATION_NAME"]
+        self.xymapset = self.grwiz.gisrc_dict["MAPSET"]
         self.xygroup = self.grwiz.grouppage.xygroup
         self.src_maps = self.grwiz.src_maps
         self.extension = self.grwiz.grouppage.extension
-        self.outname = ''
+        self.outname = ""
         self.VectGRList = []
 
         self.file = {
-            'points': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
-                                   'group',
-                                   self.xygroup,
-                                   'POINTS'),
-            'points_bak': os.path.join(self.grassdatabase,
-                                       self.xylocation,
-                                       self.xymapset,
-                                       'group',
-                                       self.xygroup,
-                                       'POINTS_BAK'),
-            'rgrp': os.path.join(self.grassdatabase,
-                                 self.xylocation,
-                                 self.xymapset,
-                                 'group',
-                                 self.xygroup,
-                                 'REF'),
-            'vgrp': os.path.join(self.grassdatabase,
-                                 self.xylocation,
-                                 self.xymapset,
-                                 'group',
-                                 self.xygroup,
-                                 'VREF'),
-            'target': os.path.join(self.grassdatabase,
-                                   self.xylocation,
-                                   self.xymapset,
-                                   'group',
-                                   self.xygroup,
-                                   'TARGET'),
+            "points": os.path.join(
+                self.grassdatabase,
+                self.xylocation,
+                self.xymapset,
+                "group",
+                self.xygroup,
+                "POINTS",
+            ),
+            "points_bak": os.path.join(
+                self.grassdatabase,
+                self.xylocation,
+                self.xymapset,
+                "group",
+                self.xygroup,
+                "POINTS_BAK",
+            ),
+            "rgrp": os.path.join(
+                self.grassdatabase,
+                self.xylocation,
+                self.xymapset,
+                "group",
+                self.xygroup,
+                "REF",
+            ),
+            "vgrp": os.path.join(
+                self.grassdatabase,
+                self.xylocation,
+                self.xymapset,
+                "group",
+                self.xygroup,
+                "VREF",
+            ),
+            "target": os.path.join(
+                self.grassdatabase,
+                self.xylocation,
+                self.xymapset,
+                "group",
+                self.xygroup,
+                "TARGET",
+            ),
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file['points']):
-            shutil.copy(self.file['points'], self.file['points_bak'])
+        if os.path.exists(self.file["points"]):
+            shutil.copy(self.file["points"], self.file["points_bak"])
 
         # polynomial order transformation for georectification
         self.gr_order = 1
         # interpolation method for georectification
-        self.gr_method = 'nearest'
+        self.gr_method = "nearest"
         # region clipping for georectified map
         self.clip_to_region = False
         # overwrite result map
@@ -1107,13 +1168,17 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.bkw_rmserror = 0.0
         # list map coords and ID of map display they came from
         self.mapcoordlist = []
-        self.mapcoordlist.append([0,        # GCP number
-                                  0.0,      # source east
-                                  0.0,      # source north
-                                  0.0,      # target east
-                                  0.0,      # target north
-                                  0.0,      # forward error
-                                  0.0])   # backward error
+        self.mapcoordlist.append(
+            [
+                0,  # GCP number
+                0.0,  # source east
+                0.0,  # source north
+                0.0,  # target east
+                0.0,  # target north
+                0.0,  # forward error
+                0.0,
+            ]
+        )  # backward error
 
         # init vars to highlight high RMS errors
         self.highest_only = True
@@ -1138,20 +1203,20 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         # set mouse characteristics
         self.mapwin = self.SrcMapWindow
-        self.mapwin.mouse['box'] = 'point'
+        self.mapwin.mouse["box"] = "point"
         self.mapwin.mouse["use"] == "pointer"
         self.mapwin.zoomtype = 0
-        self.mapwin.pen = wx.Pen(colour='black', width=2, style=wx.SOLID)
-        self.mapwin.SetNamedCursor('cross')
+        self.mapwin.pen = wx.Pen(colour="black", width=2, style=wx.SOLID)
+        self.mapwin.SetNamedCursor("cross")
 
         self.mapwin = self.TgtMapWindow
 
         # set mouse characteristics
-        self.mapwin.mouse['box'] = 'point'
+        self.mapwin.mouse["box"] = "point"
         self.mapwin.mouse["use"] == "pointer"
         self.mapwin.zoomtype = 0
-        self.mapwin.pen = wx.Pen(colour='black', width=2, style=wx.SOLID)
-        self.mapwin.SetNamedCursor('cross')
+        self.mapwin.pen = wx.Pen(colour="black", width=2, style=wx.SOLID)
+        self.mapwin.SetNamedCursor("cross")
 
         #
         # show new display & draw map
@@ -1219,19 +1284,21 @@ class GCP(MapFrame, ColumnSorterMixin):
         """
         # check to see if we are georectifying map in current working
         # location/mapset
-        if self.newlocation == self.currentlocation and self.newmapset == self.currentmapset:
-            RunCommand('i.target',
-                       parent=self,
-                       flags='c',
-                       group=tgroup)
+        if (
+            self.newlocation == self.currentlocation
+            and self.newmapset == self.currentmapset
+        ):
+            RunCommand("i.target", parent=self, flags="c", group=tgroup)
         else:
-            self.grwiz.SwitchEnv('source')
-            RunCommand('i.target',
-                       parent=self,
-                       group=tgroup,
-                       location=tlocation,
-                       mapset=tmapset)
-            self.grwiz.SwitchEnv('target')
+            self.grwiz.SwitchEnv("source")
+            RunCommand(
+                "i.target",
+                parent=self,
+                group=tgroup,
+                location=tlocation,
+                mapset=tmapset,
+            )
+            self.grwiz.SwitchEnv("target")
 
     def AddGCP(self, event):
         """
@@ -1240,13 +1307,17 @@ class GCP(MapFrame, ColumnSorterMixin):
         keyval = self.list.AddGCPItem() + 1
         # source east, source north, target east, target north, forward error,
         # backward error
-        self.mapcoordlist.append([keyval,             # GCP number
-                                  0.0,                # source east
-                                  0.0,                # source north
-                                  0.0,                # target east
-                                  0.0,                # target north
-                                  0.0,                # forward error
-                                  0.0])             # backward error
+        self.mapcoordlist.append(
+            [
+                keyval,  # GCP number
+                0.0,  # source east
+                0.0,  # source north
+                0.0,  # target east
+                0.0,  # target north
+                0.0,  # forward error
+                0.0,
+            ]
+        )  # backward error
 
         if self.statusbarManager.GetMode() == 8:  # go to
             self.StatusbarUpdate()
@@ -1260,8 +1331,9 @@ class GCP(MapFrame, ColumnSorterMixin):
         if self.list.GetItemCount() <= minNumOfItems:
             GMessage(
                 parent=self,
-                message=_("At least %d GCPs required. Operation canceled.") %
-                minNumOfItems)
+                message=_("At least %d GCPs required. Operation canceled.")
+                % minNumOfItems,
+            )
             return
 
         key = self.list.DeleteGCPItem()
@@ -1269,7 +1341,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         # update key and GCP number
         for newkey in range(key, len(self.mapcoordlist)):
-            index = self.list.FindItemData(-1, newkey + 1)
+            index = self.list.FindItem(-1, newkey + 1)
             self.mapcoordlist[newkey][0] = newkey
             self.list.SetItem(index, 0, str(newkey))
             self.list.SetItemData(index, newkey)
@@ -1277,16 +1349,14 @@ class GCP(MapFrame, ColumnSorterMixin):
         # update selected
         if self.list.GetItemCount() > 0:
             if self.list.selected < self.list.GetItemCount():
-                self.list.selectedkey = self.list.GetItemData(
-                    self.list.selected)
+                self.list.selectedkey = self.list.GetItemData(self.list.selected)
             else:
                 self.list.selected = self.list.GetItemCount() - 1
-                self.list.selectedkey = self.list.GetItemData(
-                    self.list.selected)
+                self.list.selectedkey = self.list.GetItemData(self.list.selected)
 
-            self.list.SetItemState(self.list.selected,
-                                   wx.LIST_STATE_SELECTED,
-                                   wx.LIST_STATE_SELECTED)
+            self.list.SetItemState(
+                self.list.selected, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED
+            )
         else:
             self.list.selected = wx.NOT_FOUND
             self.list.selectedkey = -1
@@ -1296,8 +1366,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         if self.statusbarManager.GetMode() == 8:  # go to
             self.StatusbarUpdate()
             if self.list.selectedkey > 0:
-                self.statusbarManager.SetProperty(
-                    'gotoGCP', self.list.selectedkey)
+                self.statusbarManager.SetProperty("gotoGCP", self.list.selectedkey)
 
     def ClearGCP(self, event):
         """
@@ -1307,9 +1376,9 @@ class GCP(MapFrame, ColumnSorterMixin):
         key = self.list.GetItemData(index)
 
         for i in range(1, 5):
-            self.list.SetItem(index, i, '0.0')
-        self.list.SetItem(index, 5, '')
-        self.list.SetItem(index, 6, '')
+            self.list.SetItem(index, i, "0.0")
+        self.list.SetItem(index, 5, "")
+        self.list.SetItem(index, 6, "")
         self.list.CheckItem(index, False)
 
         # GCP number, source E, source N, target E, target N, fwd error, bkwd
@@ -1317,30 +1386,35 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.mapcoordlist[key] = [key, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
     def SetSettings(self):
-        """Sets settings for drawing of GCP's.
-        """
+        """Sets settings for drawing of GCP's."""
         self.highest_only = UserSettings.Get(
-            group='gcpman', key='rms', subkey='highestonly')
+            group="gcpman", key="rms", subkey="highestonly"
+        )
         self.show_unused = UserSettings.Get(
-            group='gcpman', key='symbol', subkey='unused')
+            group="gcpman", key="symbol", subkey="unused"
+        )
 
-        colours = {"color": "default",
-                   "hcolor": "highest",
-                   "scolor": "selected",
-                   "ucolor": "unused"}
-        wpx = UserSettings.Get(group='gcpman', key='symbol', subkey='width')
+        colours = {
+            "color": "default",
+            "hcolor": "highest",
+            "scolor": "selected",
+            "ucolor": "unused",
+        }
+        wpx = UserSettings.Get(group="gcpman", key="symbol", subkey="width")
 
         for k, v in six.iteritems(colours):
-            col = UserSettings.Get(group='gcpman', key='symbol', subkey=k)
-            self.pointsToDrawSrc.GetPen(v).SetColour(wx.Colour(
-                col[0], col[1], col[2], 255))  # TODO GetPen neni to spatne?
+            col = UserSettings.Get(group="gcpman", key="symbol", subkey=k)
+            self.pointsToDrawSrc.GetPen(v).SetColour(
+                wx.Colour(col[0], col[1], col[2], 255)
+            )  # TODO GetPen neni to spatne?
             self.pointsToDrawTgt.GetPen(v).SetColour(
-                wx.Colour(col[0], col[1], col[2], 255))
+                wx.Colour(col[0], col[1], col[2], 255)
+            )
 
             self.pointsToDrawSrc.GetPen(v).SetWidth(wpx)
             self.pointsToDrawTgt.GetPen(v).SetWidth(wpx)
 
-        spx = UserSettings.Get(group='gcpman', key='symbol', subkey='size')
+        spx = UserSettings.Get(group="gcpman", key="symbol", subkey="size")
         self.pointsToDrawSrc.SetPropertyVal("size", int(spx))
         self.pointsToDrawTgt.SetPropertyVal("size", int(spx))
 
@@ -1348,14 +1422,13 @@ class GCP(MapFrame, ColumnSorterMixin):
         font.SetPointSize(int(spx) + 2)
 
         textProp = {}
-        textProp['active'] = True
-        textProp['font'] = font
+        textProp["active"] = True
+        textProp["font"] = font
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
 
         # overwrite result map
-        self.overwrite = UserSettings.Get(group='gcpman', key='map',
-                                          subkey='overwrite')
+        self.overwrite = UserSettings.Get(group="gcpman", key="map", subkey="overwrite")
 
     def SetGCPSatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
@@ -1369,19 +1442,19 @@ class GCP(MapFrame, ColumnSorterMixin):
         if not self.list.IsItemChecked(key - 1):
             wxPen = "unused"
             if not self.show_unused:
-                item.SetPropertyVal('hide', True)
+                item.SetPropertyVal("hide", True)
             else:
-                item.SetPropertyVal('hide', False)
+                item.SetPropertyVal("hide", False)
 
         else:
-            item.SetPropertyVal('hide', False)
+            item.SetPropertyVal("hide", False)
             if self.highest_only:
                 if itemIndex == self.highest_key:
                     wxPen = "highest"
                 else:
                     wxPen = "default"
             else:
-                if (self.mapcoordlist[key][5] > self.rmsthresh):
+                if self.mapcoordlist[key][5] > self.rmsthresh:
                     wxPen = "highest"
                 else:
                     wxPen = "default"
@@ -1389,8 +1462,8 @@ class GCP(MapFrame, ColumnSorterMixin):
         if itemIndex == self.list.selectedkey:
             wxPen = "selected"
 
-        item.SetPropertyVal('label', str(itemIndex))
-        item.SetPropertyVal('penName', wxPen)
+        item.SetPropertyVal("label", str(itemIndex))
+        item.SetPropertyVal("penName", wxPen)
 
     def SetGCPData(self, coordtype, coord, mapdisp=None, confirm=False):
         """Inserts coordinates from file, mouse click on map, or
@@ -1411,38 +1484,44 @@ class GCP(MapFrame, ColumnSorterMixin):
             else:
                 currloc = _("target")
             ret = wx.MessageBox(
-                parent=self, caption=_("Set GCP coordinates"),
+                parent=self,
+                caption=_("Set GCP coordinates"),
                 message=_(
-                    'Set %(coor)s coordinates for GCP No. %(key)s? \n\n'
-                    'East: %(coor0)s \n'
-                    'North: %(coor1)s') %
-                {'coor': currloc, 'key': str(key),
-                 'coor0': str(coord0),
-                 'coor1': str(coord1)},
-                style=wx.ICON_QUESTION | wx.YES_NO | wx.CENTRE)
+                    "Set %(coor)s coordinates for GCP No. %(key)s? \n\n"
+                    "East: %(coor0)s \n"
+                    "North: %(coor1)s"
+                )
+                % {
+                    "coor": currloc,
+                    "key": str(key),
+                    "coor0": str(coord0),
+                    "coor1": str(coord1),
+                },
+                style=wx.ICON_QUESTION | wx.YES_NO | wx.CENTRE,
+            )
 
             # for wingrass
-            if os.name == 'nt':
+            if os.name == "nt":
                 self.MapWindow.SetFocus()
             if ret == wx.NO:
                 return
 
-        if coordtype == 'source':
+        if coordtype == "source":
             self.list.SetItem(index, 1, str(coord0))
             self.list.SetItem(index, 2, str(coord1))
             self.mapcoordlist[key][1] = coord[0]
             self.mapcoordlist[key][2] = coord[1]
             self.pointsToDrawSrc.GetItem(key - 1).SetCoords([coord0, coord1])
 
-        elif coordtype == 'target':
+        elif coordtype == "target":
             self.list.SetItem(index, 3, str(coord0))
             self.list.SetItem(index, 4, str(coord1))
             self.mapcoordlist[key][3] = coord[0]
             self.mapcoordlist[key][4] = coord[1]
             self.pointsToDrawTgt.GetItem(key - 1).SetCoords([coord0, coord1])
 
-        self.list.SetItem(index, 5, '0')
-        self.list.SetItem(index, 6, '0')
+        self.list.SetItem(index, 5, "0")
+        self.list.SetItem(index, 6, "0")
         self.mapcoordlist[key][5] = 0.0
         self.mapcoordlist[key][6] = 0.0
 
@@ -1454,16 +1533,17 @@ class GCP(MapFrame, ColumnSorterMixin):
         """
         self.GCPcount = 0
         try:
-            f = open(self.file['points'], mode='w')
+            f = open(self.file["points"], mode="w")
             # use os.linesep or '\n' here ???
-            f.write('# Ground Control Points File\n')
+            f.write("# Ground Control Points File\n")
             f.write("# \n")
-            f.write("# target location: " + self.currentlocation + '\n')
-            f.write("# target mapset: " + self.currentmapset + '\n')
+            f.write("# target location: " + self.currentlocation + "\n")
+            f.write("# target mapset: " + self.currentmapset + "\n")
             f.write("#\tsource\t\ttarget\t\tstatus\n")
             f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
             f.write(
-                "#-----------------------     -----------------------     ---------------\n")
+                "#-----------------------     -----------------------     ---------------\n"
+            )
 
             for index in range(self.list.GetItemCount()):
                 if self.list.IsItemChecked(index):
@@ -1476,36 +1556,38 @@ class GCP(MapFrame, ColumnSorterMixin):
                 coord2 = self.list.GetItem(index, 3).GetText()
                 coord3 = self.list.GetItem(index, 4).GetText()
                 f.write(
-                    coord0 +
-                    ' ' +
-                    coord1 +
-                    '     ' +
-                    coord2 +
-                    ' ' +
-                    coord3 +
-                    '     ' +
-                    check +
-                    '\n')
+                    coord0
+                    + " "
+                    + coord1
+                    + "     "
+                    + coord2
+                    + " "
+                    + coord3
+                    + "     "
+                    + check
+                    + "\n"
+                )
 
         except IOError as err:
             GError(
                 parent=self,
-                message="%s <%s>. %s%s" %
-                (_("Writing POINTS file failed"),
-                 self.file['points'],
+                message="%s <%s>. %s%s"
+                % (
+                    _("Writing POINTS file failed"),
+                    self.file["points"],
                     os.linesep,
-                    err))
+                    err,
+                ),
+            )
             return
 
         f.close()
 
         # if event != None save also to backup file
         if event:
-            shutil.copy(self.file['points'], self.file['points_bak'])
-            self._giface.WriteLog(
-                _('POINTS file saved for group <%s>') %
-                self.xygroup)
-            #self.SetStatusText(_('POINTS file saved'))
+            shutil.copy(self.file["points"], self.file["points_bak"])
+            self._giface.WriteLog(_("POINTS file saved for group <%s>") % self.xygroup)
+            # self.SetStatusText(_('POINTS file saved'))
 
     def ReadGCPs(self):
         """
@@ -1518,23 +1600,19 @@ class GCP(MapFrame, ColumnSorterMixin):
         targetMapWin = self.TgtMapWindow
 
         if not sourceMapWin:
-            GError(parent=self,
-                   message="%s. %s%s" % (_("source mapwin not defined"),
-                                         os.linesep, err))
+            GError(parent=self, message=_("source mapwin not defined"))
 
         if not targetMapWin:
-            GError(parent=self,
-                   message="%s. %s%s" % (_("target mapwin not defined"),
-                                         os.linesep, err))
+            GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file['points'], 'r')
+            f = open(self.file["points"], "r")
             GCPcnt = 0
 
             for line in f.readlines():
-                if line[0] == '#' or line == '':
+                if line[0] == "#" or line == "":
                     continue
-                line = line.replace('\n', '').strip()
+                line = line.replace("\n", "").strip()
                 coords = list(map(float, line.split()))
                 if coords[4] == 1:
                     check = True
@@ -1543,8 +1621,8 @@ class GCP(MapFrame, ColumnSorterMixin):
                     check = False
 
                 self.AddGCP(event=None)
-                self.SetGCPData('source', (coords[0], coords[1]), sourceMapWin)
-                self.SetGCPData('target', (coords[2], coords[3]), targetMapWin)
+                self.SetGCPData("source", (coords[0], coords[1]), sourceMapWin)
+                self.SetGCPData("target", (coords[2], coords[3]), targetMapWin)
                 index = self.list.GetSelected()
                 if index != wx.NOT_FOUND:
                     self.list.CheckItem(index, check)
@@ -1553,11 +1631,14 @@ class GCP(MapFrame, ColumnSorterMixin):
         except IOError as err:
             GError(
                 parent=self,
-                message="%s <%s>. %s%s" %
-                (_("Reading POINTS file failed"),
-                 self.file['points'],
+                message="%s <%s>. %s%s"
+                % (
+                    _("Reading POINTS file failed"),
+                    self.file["points"],
                     os.linesep,
-                    err))
+                    err,
+                ),
+            )
             return
 
         f.close()
@@ -1575,17 +1656,21 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Reload data from file"""
 
         # use backup
-        shutil.copy(self.file['points_bak'], self.file['points'])
+        shutil.copy(self.file["points_bak"], self.file["points"])
 
         # delete all items in mapcoordlist
         self.mapcoordlist = []
-        self.mapcoordlist.append([0,        # GCP number
-                                  0.0,      # source east
-                                  0.0,      # source north
-                                  0.0,      # target east
-                                  0.0,      # target north
-                                  0.0,      # forward error
-                                  0.0])   # backward error
+        self.mapcoordlist.append(
+            [
+                0,  # GCP number
+                0.0,  # source east
+                0.0,  # source north
+                0.0,  # target east
+                0.0,  # target north
+                0.0,  # forward error
+                0.0,
+            ]
+        )  # backward error
 
         self.list.LoadData()
         self.itemDataMap = self.mapcoordlist
@@ -1608,9 +1693,9 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def _onMouseLeftUpPointer(self, mapWindow, x, y):
         if mapWindow == self.SrcMapWindow:
-            coordtype = 'source'
+            coordtype = "source"
         else:
-            coordtype = 'target'
+            coordtype = "target"
 
         coord = (x, y)
         self.SetGCPData(coordtype, coord, self, confirm=True)
@@ -1633,18 +1718,23 @@ class GCP(MapFrame, ColumnSorterMixin):
         Checks to make sure that the minimum number of GCPs have been defined and
         are active for the selected transformation order
         """
-        if (self.GCPcount < 3 and self.gr_order == 1) or \
-                (self.GCPcount < 6 and self.gr_order == 2) or \
-                (self.GCPcount < 10 and self.gr_order == 3):
+        if (
+            (self.GCPcount < 3 and self.gr_order == 1)
+            or (self.GCPcount < 6 and self.gr_order == 2)
+            or (self.GCPcount < 10 and self.gr_order == 3)
+        ):
             if msg:
                 GWarning(
-                    parent=self, message=_(
-                        'Insufficient points defined and active (checked) '
-                        'for selected rectification method (order: %d).\n'
-                        '3+ points needed for 1st order,\n'
-                        '6+ points for 2nd order, and\n'
-                        '10+ points for 3rd order.') %
-                    self.gr_order)
+                    parent=self,
+                    message=_(
+                        "Insufficient points defined and active (checked) "
+                        "for selected rectification method (order: %d).\n"
+                        "3+ points needed for 1st order,\n"
+                        "6+ points for 2nd order, and\n"
+                        "10+ points for 3rd order."
+                    )
+                    % self.gr_order,
+                )
                 return False
         else:
             return True
@@ -1661,34 +1751,39 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         None: it isn't necessary to display the overwrite dialog
         """
-        if maptype == 'raster':
-            self.grwiz.SwitchEnv('source')
+        if maptype == "raster":
+            self.grwiz.SwitchEnv("source")
             maps = grass.read_command(
-                'i.group', flags='gl', group=self.xygroup, quiet=True,
-            ).split('\n')
-            self.grwiz.SwitchEnv('target')
+                "i.group",
+                flags="gl",
+                group=self.xygroup,
+                quiet=True,
+            ).split("\n")
+            self.grwiz.SwitchEnv("target")
             found_maps = []
             if maps:
                 for map in maps:
                     if map:
-                        map_name = map.split('@')[0] + self.extension
+                        map_name = map.split("@")[0] + self.extension
                         found = grass.find_file(
-                            name=map_name, element='cell',
+                            name=map_name,
+                            element="cell",
                             mapset=self.currentmapset,
                         )
-                        if found['name']:
-                            found_maps.append("<{}>".format(found['name']))
-                map_name = ', '.join(found_maps)
+                        if found["name"]:
+                            found_maps.append("<{}>".format(found["name"]))
+                map_name = ", ".join(found_maps)
         else:
-            self.grwiz.SwitchEnv('target')
+            self.grwiz.SwitchEnv("target")
             found = grass.find_file(
-                name=self.outname, element='vector',
+                name=self.outname,
+                element="vector",
                 mapset=self.currentmapset,
             )
-            self.grwiz.SwitchEnv('source')
-            map_name = "<{}>".format(found['name'])
+            self.grwiz.SwitchEnv("source")
+            map_name = "<{}>".format(found["name"])
 
-        if found['name'] and not overwrite:
+        if found["name"] and not overwrite:
             overwrite_dlg = wx.MessageDialog(
                 self.GetParent(),
                 message=_(
@@ -1698,7 +1793,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                         map_name=map_name,
                     ),
                 ),
-                caption=_('Overwrite?'),
+                caption=_("Overwrite?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             return overwrite_dlg
@@ -1713,9 +1808,10 @@ class GCP(MapFrame, ColumnSorterMixin):
         if not self.CheckGCPcount(msg=True):
             return
 
-        if maptype == 'raster':
+        if maptype == "raster":
             overwrite_dlg = self._getOverWriteDialog(
-                maptype=maptype, overwrite=self.overwrite,
+                maptype=maptype,
+                overwrite=self.overwrite,
             )
             if overwrite_dlg:
                 if not overwrite_dlg.ShowModal() == wx.ID_YES:
@@ -1726,27 +1822,28 @@ class GCP(MapFrame, ColumnSorterMixin):
             else:
                 overwrite = self.overwrite
 
-            self.grwiz.SwitchEnv('source')
+            self.grwiz.SwitchEnv("source")
 
             if self.clip_to_region:
                 flags = "ac"
             else:
                 flags = "a"
 
-            busy = wx.BusyInfo(_("Rectifying images, please wait..."),
-                               parent=self)
+            busy = wx.BusyInfo(_("Rectifying images, please wait..."), parent=self)
             wx.GetApp().Yield()
 
-            ret, msg = RunCommand('i.rectify',
-                                  parent=self,
-                                  getErrorMsg=True,
-                                  quiet=True,
-                                  group=self.xygroup,
-                                  extension=self.extension,
-                                  order=self.gr_order,
-                                  method=self.gr_method,
-                                  flags=flags,
-                                  overwrite=overwrite)
+            ret, msg = RunCommand(
+                "i.rectify",
+                parent=self,
+                getErrorMsg=True,
+                quiet=True,
+                group=self.xygroup,
+                extension=self.extension,
+                order=self.gr_order,
+                method=self.gr_method,
+                flags=flags,
+                overwrite=overwrite,
+            )
 
             del busy
 
@@ -1754,18 +1851,18 @@ class GCP(MapFrame, ColumnSorterMixin):
             if ret != 0:
                 print(msg, file=sys.stderr)
 
-        elif maptype == 'vector':
+        elif maptype == "vector":
 
             # loop through all vectors in VREF
 
-            self.grwiz.SwitchEnv('source')
+            self.grwiz.SwitchEnv("source")
 
             # make list of vectors to georectify from VREF
-            f = open(self.file['vgrp'])
+            f = open(self.file["vgrp"])
             vectlist = []
             try:
                 for vect in f.readlines():
-                    vect = vect.strip('\n')
+                    vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
                     vectlist.append(vect)
@@ -1774,9 +1871,10 @@ class GCP(MapFrame, ColumnSorterMixin):
 
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
-                self.outname = str(vect.split('@')[0]) + self.extension
+                self.outname = str(vect.split("@")[0]) + self.extension
                 overwrite_dlg = self._getOverWriteDialog(
-                    maptype=maptype, overwrite=self.overwrite,
+                    maptype=maptype,
+                    overwrite=self.overwrite,
                 )
                 if overwrite_dlg:
                     if not overwrite_dlg.ShowModal() == wx.ID_YES:
@@ -1786,24 +1884,28 @@ class GCP(MapFrame, ColumnSorterMixin):
                     overwrite = True
                 else:
                     overwrite = self.overwrite
-                self._giface.WriteLog(text=_('Transforming <%s>...') % vect,
-                                      notification=Notification.MAKE_VISIBLE)
-                ret = msg = ''
+                self._giface.WriteLog(
+                    text=_("Transforming <%s>...") % vect,
+                    notification=Notification.MAKE_VISIBLE,
+                )
+                ret = msg = ""
 
                 busy = wx.BusyInfo(
-                    _("Rectifying vector map <%s>, please wait...") %
-                    vect, parent=self)
+                    _("Rectifying vector map <%s>, please wait...") % vect, parent=self
+                )
                 wx.GetApp().Yield()
 
-                ret, msg = RunCommand('v.rectify',
-                                      parent=self,
-                                      getErrorMsg=True,
-                                      quiet=True,
-                                      input=vect,
-                                      output=self.outname,
-                                      group=self.xygroup,
-                                      order=self.gr_order,
-                                      overwrite=overwrite)
+                ret, msg = RunCommand(
+                    "v.rectify",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=True,
+                    input=vect,
+                    output=self.outname,
+                    group=self.xygroup,
+                    order=self.gr_order,
+                    overwrite=overwrite,
+                )
 
                 del busy
 
@@ -1811,36 +1913,45 @@ class GCP(MapFrame, ColumnSorterMixin):
                 if ret != 0:
                     print(msg, file=sys.stderr)
 
-        self.grwiz.SwitchEnv('target')
+        self.grwiz.SwitchEnv("target")
 
     def OnGeorectDone(self, **kargs):
         """Print final message"""
         global maptype
-        if maptype == 'raster':
+        if maptype == "raster":
             return
 
-        returncode = kargs['returncode']
+        returncode = kargs["returncode"]
 
         if returncode == 0:
             self.VectGRList.append(self.outname)
-            print('*****vector list = ' + str(self.VectGRList))
+            print("*****vector list = " + str(self.VectGRList))
         else:
             self._giface.WriteError(
-                _('Georectification of vector map <%s> failed') %
-                self.outname)
+                _("Georectification of vector map <%s> failed") % self.outname
+            )
 
     def OnSettings(self, event):
         """GCP Manager settings"""
-        dlg = GrSettingsDialog(parent=self, giface=self._giface,
-                               id=wx.ID_ANY, title=_('GCP Manager settings'))
+        dlg = GrSettingsDialog(
+            parent=self,
+            giface=self._giface,
+            id=wx.ID_ANY,
+            title=_("GCP Manager settings"),
+        )
 
         if dlg.ShowModal() == wx.ID_OK:
             pass
 
         dlg.Destroy()
 
-    def UpdateColours(self, srcrender=False, srcrenderVector=False,
-                      tgtrender=False, tgtrenderVector=False):
+    def UpdateColours(
+        self,
+        srcrender=False,
+        srcrenderVector=False,
+        tgtrender=False,
+        tgtrenderVector=False,
+    ):
         """update colours"""
         highest_fwd_err = 0.0
         self.highest_key = 0
@@ -1858,7 +1969,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                         self.highest_key = key
                         highest_idx = index
                 elif self.rmsthresh > 0:
-                    if (fwd_err > self.rmsthresh):
+                    if fwd_err > self.rmsthresh:
                         self.list.SetItemTextColour(index, wx.RED)
                     else:
                         self.list.SetItemTextColour(index, wx.BLACK)
@@ -1872,27 +1983,27 @@ class GCP(MapFrame, ColumnSorterMixin):
         sourceMapWin.UpdateMap(render=srcrender, renderVector=srcrenderVector)
         if self.show_target:
             targetMapWin = self.TgtMapWindow
-            targetMapWin.UpdateMap(
-                render=tgtrender,
-                renderVector=tgtrenderVector)
+            targetMapWin.UpdateMap(render=tgtrender, renderVector=tgtrenderVector)
 
     def OnQuit(self, event):
         """Quit georectifier"""
         ret = wx.MessageBox(
-            parent=self, caption=_("Quit GCP Manager"),
-            message=_('Save ground control points?'),
-            style=wx.ICON_QUESTION | wx.YES_NO | wx.CANCEL | wx.CENTRE)
+            parent=self,
+            caption=_("Quit GCP Manager"),
+            message=_("Save ground control points?"),
+            style=wx.ICON_QUESTION | wx.YES_NO | wx.CANCEL | wx.CENTRE,
+        )
 
         if ret != wx.CANCEL:
             if ret == wx.YES:
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file['points_bak']):
-                    shutil.copy(self.file['points_bak'], self.file['points'])
+                if os.path.exists(self.file["points_bak"]):
+                    shutil.copy(self.file["points_bak"], self.file["points"])
 
-            if os.path.exists(self.file['points_bak']):
-                os.unlink(self.file['points_bak'])
+            if os.path.exists(self.file["points_bak"]):
+                os.unlink(self.file["points_bak"])
 
             self.SrcMap.Clean()
             self.TgtMap.Clean()
@@ -1946,30 +2057,28 @@ class GCP(MapFrame, ColumnSorterMixin):
             return
 
         # get list of forward and reverse rms error values for each point
-        self.grwiz.SwitchEnv('source')
+        self.grwiz.SwitchEnv("source")
 
-        ret = RunCommand('m.transform',
-                         parent=self,
-                         read=True,
-                         group=xygroup,
-                         order=order)
+        ret = RunCommand(
+            "m.transform", parent=self, read=True, group=xygroup, order=order
+        )
 
-        self.grwiz.SwitchEnv('target')
+        self.grwiz.SwitchEnv("target")
 
         if ret:
             errlist = ret.splitlines()
         else:
-            GError(parent=self,
-                   message=_('Could not calculate RMS Error.\n'
-                             'Possible error with m.transform.'))
+            GError(
+                parent=self,
+                message=_(
+                    "Could not calculate RMS Error.\n"
+                    "Possible error with m.transform."
+                ),
+            )
             return
 
         # insert error values into GCP list for checked items
-        sdfactor = float(
-            UserSettings.Get(
-                group='gcpman',
-                key='rms',
-                subkey='sdfactor'))
+        sdfactor = float(UserSettings.Get(group="gcpman", key="rms", subkey="sdfactor"))
         GCPcount = 0
         sumsq_fwd_err = 0.0
         sumsq_bkw_err = 0.0
@@ -1993,13 +2102,13 @@ class GCP(MapFrame, ColumnSorterMixin):
                         self.highest_key = key
                         highest_idx = index
 
-                sumsq_fwd_err += float(fwd_err)**2
-                sumsq_bkw_err += float(bkw_err)**2
+                sumsq_fwd_err += float(fwd_err) ** 2
+                sumsq_bkw_err += float(bkw_err) ** 2
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
             else:
-                self.list.SetItem(index, 5, '')
-                self.list.SetItem(index, 6, '')
+                self.list.SetItem(index, 5, "")
+                self.list.SetItem(index, 6, "")
                 self.mapcoordlist[key][5] = 0.0
                 self.mapcoordlist[key][6] = 0.0
                 self.list.SetItemTextColour(index, wx.BLACK)
@@ -2007,7 +2116,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # SD
         if GCPcount > 0:
             self.rmsmean = sum_fwd_err / GCPcount
-            self.rmssd = ((sumsq_fwd_err - self.rmsmean**2)**0.5)
+            self.rmssd = (sumsq_fwd_err - self.rmsmean ** 2) ** 0.5
             self.rmsthresh = self.rmsmean + sdfactor * self.rmssd
         else:
             self.rmsthresh = 0
@@ -2020,29 +2129,34 @@ class GCP(MapFrame, ColumnSorterMixin):
             for index in range(self.list.GetItemCount()):
                 if self.list.IsItemChecked(index):
                     key = self.list.GetItemData(index)
-                    if (self.mapcoordlist[key][5] > self.rmsthresh):
+                    if self.mapcoordlist[key][5] > self.rmsthresh:
                         self.list.SetItemTextColour(index, wx.RED)
 
         # calculate global RMS error (geometric mean)
-        self.fwd_rmserror = round((sumsq_fwd_err / GCPcount)**0.5, 4)
-        self.bkw_rmserror = round((sumsq_bkw_err / GCPcount)**0.5, 4)
+        self.fwd_rmserror = round((sumsq_fwd_err / GCPcount) ** 0.5, 4)
+        self.bkw_rmserror = round((sumsq_bkw_err / GCPcount) ** 0.5, 4)
         self.list.ResizeColumns()
 
     def GetNewExtent(self, region, map=None):
 
         coord_file = utils.GetTempfile()
-        newreg = {'n': 0.0, 's': 0.0, 'e': 0.0, 'w': 0.0, }
+        newreg = {
+            "n": 0.0,
+            "s": 0.0,
+            "e": 0.0,
+            "w": 0.0,
+        }
 
         try:
-            f = open(coord_file, mode='w')
+            f = open(coord_file, mode="w")
             # NW corner
-            f.write(str(region['e']) + " " + str(region['n']) + "\n")
+            f.write(str(region["e"]) + " " + str(region["n"]) + "\n")
             # NE corner
-            f.write(str(region['e']) + " " + str(region['s']) + "\n")
+            f.write(str(region["e"]) + " " + str(region["s"]) + "\n")
             # SW corner
-            f.write(str(region['w']) + " " + str(region['n']) + "\n")
+            f.write(str(region["w"]) + " " + str(region["n"]) + "\n")
             # SE corner
-            f.write(str(region['w']) + " " + str(region['s']) + "\n")
+            f.write(str(region["w"]) + " " + str(region["s"]) + "\n")
         finally:
             f.close()
 
@@ -2059,66 +2173,74 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.gr_order = order
 
         # get list of forward and reverse rms error values for each point
-        self.grwiz.SwitchEnv('source')
+        self.grwiz.SwitchEnv("source")
 
-        if map == 'source':
-            ret = RunCommand('m.transform',
-                             parent=self,
-                             read=True,
-                             group=self.xygroup,
-                             order=1,
-                             format='dst',
-                             coords=coord_file)
+        if map == "source":
+            ret = RunCommand(
+                "m.transform",
+                parent=self,
+                read=True,
+                group=self.xygroup,
+                order=1,
+                format="dst",
+                coords=coord_file,
+            )
 
-        elif map == 'target':
-            ret = RunCommand('m.transform',
-                             parent=self,
-                             read=True,
-                             group=self.xygroup,
-                             order=1,
-                             flags='r',
-                             format='src',
-                             coords=coord_file)
+        elif map == "target":
+            ret = RunCommand(
+                "m.transform",
+                parent=self,
+                read=True,
+                group=self.xygroup,
+                order=1,
+                flags="r",
+                format="src",
+                coords=coord_file,
+            )
 
         os.unlink(coord_file)
 
-        self.grwiz.SwitchEnv('target')
+        self.grwiz.SwitchEnv("target")
 
         if ret:
             errlist = ret.splitlines()
         else:
-            GError(parent=self,
-                   message=_('Could not calculate new extends.\n'
-                             'Possible error with m.transform.'))
+            GError(
+                parent=self,
+                message=_(
+                    "Could not calculate new extends.\n"
+                    "Possible error with m.transform."
+                ),
+            )
             return
 
         # fist corner
         e, n = errlist[0].split()
         fe = float(e)
         fn = float(n)
-        newreg['n'] = fn
-        newreg['s'] = fn
-        newreg['e'] = fe
-        newreg['w'] = fe
+        newreg["n"] = fn
+        newreg["s"] = fn
+        newreg["e"] = fe
+        newreg["w"] = fe
         # other three corners
         for i in range(1, 4):
             e, n = errlist[i].split()
             fe = float(e)
             fn = float(n)
-            if fe < newreg['w']:
-                newreg['w'] = fe
-            if fe > newreg['e']:
-                newreg['e'] = fe
-            if fn < newreg['s']:
-                newreg['s'] = fn
-            if fn > newreg['n']:
-                newreg['n'] = fn
+            if fe < newreg["w"]:
+                newreg["w"] = fe
+            if fe > newreg["e"]:
+                newreg["e"] = fe
+            if fn < newreg["s"]:
+                newreg["s"] = fn
+            if fn > newreg["n"]:
+                newreg["n"] = fn
 
         return newreg
 
     def OnHelp(self, event):
         """Show GCP Manager manual page"""
-        self._giface.Help(entry='wxGUI.gcp')
+        self._giface.Help(entry="wxGUI.gcp")
 
     def OnUpdateActive(self, event):
 
@@ -2131,52 +2253,59 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         self.UpdateActive(self.MapWindow)
         # for wingrass
-        if os.name == 'nt':
+        if os.name == "nt":
             self.MapWindow.SetFocus()
 
     def UpdateActive(self, win):
 
         # optionally disable tool zoomback tool
-        self.GetMapToolbar().Enable('zoomback',
-                                    enable=(len(self.MapWindow.zoomhistory) > 1))
+        self.GetMapToolbar().Enable(
+            "zoomback", enable=(len(self.MapWindow.zoomhistory) > 1)
+        )
 
         if self.activemap.GetSelection() != (win == self.TgtMapWindow):
             self.activemap.SetSelection(win == self.TgtMapWindow)
         self.StatusbarUpdate()
 
     def AdjustMap(self, newreg):
-        """Adjust map window to new extents
-        """
+        """Adjust map window to new extents"""
 
         # adjust map window
-        self.Map.region['n'] = newreg['n']
-        self.Map.region['s'] = newreg['s']
-        self.Map.region['e'] = newreg['e']
-        self.Map.region['w'] = newreg['w']
+        self.Map.region["n"] = newreg["n"]
+        self.Map.region["s"] = newreg["s"]
+        self.Map.region["e"] = newreg["e"]
+        self.Map.region["w"] = newreg["w"]
 
-        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
-                                   self.Map.region['e'], self.Map.region['w'])
+        self.MapWindow.ZoomHistory(
+            self.Map.region["n"],
+            self.Map.region["s"],
+            self.Map.region["e"],
+            self.Map.region["w"],
+        )
 
         # LL locations
-        if self.Map.projinfo['proj'] == 'll':
-            if newreg['n'] > 90.0:
-                newreg['n'] = 90.0
-            if newreg['s'] < -90.0:
-                newreg['s'] = -90.0
+        if self.Map.projinfo["proj"] == "ll":
+            if newreg["n"] > 90.0:
+                newreg["n"] = 90.0
+            if newreg["s"] < -90.0:
+                newreg["s"] = -90.0
 
-        ce = newreg['w'] + (newreg['e'] - newreg['w']) / 2
-        cn = newreg['s'] + (newreg['n'] - newreg['s']) / 2
+        ce = newreg["w"] + (newreg["e"] - newreg["w"]) / 2
+        cn = newreg["s"] + (newreg["n"] - newreg["s"]) / 2
 
         # calculate new center point and display resolution
-        self.Map.region['center_easting'] = ce
-        self.Map.region['center_northing'] = cn
-        self.Map.region["ewres"] = (newreg['e'] - newreg['w']) / self.Map.width
-        self.Map.region["nsres"] = (
-            newreg['n'] - newreg['s']) / self.Map.height
+        self.Map.region["center_easting"] = ce
+        self.Map.region["center_northing"] = cn
+        self.Map.region["ewres"] = (newreg["e"] - newreg["w"]) / self.Map.width
+        self.Map.region["nsres"] = (newreg["n"] - newreg["s"]) / self.Map.height
         self.Map.AlignExtentFromDisplay()
 
-        self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
-                                   self.Map.region['e'], self.Map.region['w'])
+        self.MapWindow.ZoomHistory(
+            self.Map.region["n"],
+            self.Map.region["s"],
+            self.Map.region["e"],
+            self.Map.region["w"],
+        )
 
         if self.MapWindow.redrawAll is False:
             self.MapWindow.redrawAll = True
@@ -2185,8 +2314,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.StatusbarUpdate()
 
     def OnZoomToSource(self, event):
-        """Set target map window to match extents of source map window
-        """
+        """Set target map window to match extents of source map window"""
 
         if not self.MapWindow == self.TgtMapWindow:
             self.MapWindow = self.TgtMapWindow
@@ -2194,13 +2322,12 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.UpdateActive(self.TgtMapWindow)
 
         # get new N, S, E, W for target
-        newreg = self.GetNewExtent(self.SrcMap.region, 'source')
+        newreg = self.GetNewExtent(self.SrcMap.region, "source")
         if newreg:
             self.AdjustMap(newreg)
 
     def OnZoomToTarget(self, event):
-        """Set source map window to match extents of target map window
-        """
+        """Set source map window to match extents of target map window"""
 
         if not self.MapWindow == self.SrcMapWindow:
             self.MapWindow = self.SrcMapWindow
@@ -2208,24 +2335,25 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.UpdateActive(self.SrcMapWindow)
 
         # get new N, S, E, W for target
-        newreg = self.GetNewExtent(self.TgtMap.region, 'target')
+        newreg = self.GetNewExtent(self.TgtMap.region, "target")
         if newreg:
             self.AdjustMap(newreg)
 
     def OnZoomMenuGCP(self, event):
-        """Popup Zoom menu
-        """
+        """Popup Zoom menu"""
         point = wx.GetMousePosition()
         zoommenu = Menu()
         # Add items to the menu
 
-        zoomsource = wx.MenuItem(zoommenu, wx.ID_ANY, _(
-            'Adjust source display to target display'))
+        zoomsource = wx.MenuItem(
+            zoommenu, wx.ID_ANY, _("Adjust source display to target display")
+        )
         zoommenu.AppendItem(zoomsource)
         self.Bind(wx.EVT_MENU, self.OnZoomToTarget, zoomsource)
 
-        zoomtarget = wx.MenuItem(zoommenu, wx.ID_ANY, _(
-            'Adjust target display to source display'))
+        zoomtarget = wx.MenuItem(
+            zoommenu, wx.ID_ANY, _("Adjust target display to source display")
+        )
         zoommenu.AppendItem(zoomtarget)
         self.Bind(wx.EVT_MENU, self.OnZoomToSource, zoomtarget)
 
@@ -2235,15 +2363,13 @@ class GCP(MapFrame, ColumnSorterMixin):
         zoommenu.Destroy()
 
     def OnSize(self, event):
-        """Adjust Map Windows after GCP Map Display has been resized
-        """
+        """Adjust Map Windows after GCP Map Display has been resized"""
         # re-render image on idle
         self.resize = grass.clock()
         super(MapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
-        """GCP Map Display resized, adjust Map Windows
-        """
+        """GCP Map Display resized, adjust Map Windows"""
         if self.GetMapToolbar():
             if self.resize and self.resize + 0.2 < grass.clock():
                 srcwidth, srcheight = self.SrcMapWindow.GetSize()
@@ -2263,14 +2389,16 @@ class GCP(MapFrame, ColumnSorterMixin):
         pass
 
 
-class GCPList(ListCtrl,
-              CheckListCtrlMixin,
-              ListCtrlAutoWidthMixin):
-
-    def __init__(self, parent, gcp, id=wx.ID_ANY,
-                 pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES |
-                 wx.LC_SINGLE_SEL):
+class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
+    def __init__(
+        self,
+        parent,
+        gcp,
+        id=wx.ID_ANY,
+        pos=wx.DefaultPosition,
+        size=wx.DefaultSize,
+        style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES | wx.LC_SINGLE_SEL,
+    ):
 
         ListCtrl.__init__(self, parent, id, pos, size, style)
 
@@ -2299,31 +2427,34 @@ class GCPList(ListCtrl,
         if 0:
             # normal, simple columns
             idx_col = 0
-            for col in (_('use'),
-                        _('source E'),
-                        _('source N'),
-                        _('target E'),
-                        _('target N'),
-                        _('Forward error'),
-                        _('Backward error')):
+            for col in (
+                _("use"),
+                _("source E"),
+                _("source N"),
+                _("target E"),
+                _("target N"),
+                _("Forward error"),
+                _("Backward error"),
+            ):
                 self.InsertColumn(idx_col, col)
                 idx_col += 1
         else:
             # the hard way: we want images on the column header
             info = wx.ListItem()
-            info.SetMask(
-                wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT)
+            info.SetMask(wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT)
             info.SetImage(-1)
             info.m_format = wx.LIST_FORMAT_LEFT
 
             idx_col = 0
-            for lbl in (_('use'),
-                        _('source E'),
-                        _('source N'),
-                        _('target E'),
-                        _('target N'),
-                        _('Forward error'),
-                        _('Backward error')):
+            for lbl in (
+                _("use"),
+                _("source E"),
+                _("source N"),
+                _("target E"),
+                _("target N"),
+                _("Forward error"),
+                _("Backward error"),
+            ):
                 info.SetText(lbl)
                 self.InsertColumn(idx_col, info)
                 idx_col += 1
@@ -2333,7 +2464,7 @@ class GCPList(ListCtrl,
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file['points']):
+        if os.path.isfile(self.gcp.file["points"]):
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum
@@ -2343,9 +2474,7 @@ class GCPList(ListCtrl,
         # select first point by default
         self.selected = 0
         self.selectedkey = self.GetItemData(self.selected)
-        self.SetItemState(self.selected,
-                          wx.LIST_STATE_SELECTED,
-                          wx.LIST_STATE_SELECTED)
+        self.SetItemState(self.selected, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
 
         self.ResizeColumns()
         self.render = True
@@ -2369,35 +2498,34 @@ class GCPList(ListCtrl,
         """
         self.selectedkey = self.GetItemCount() + 1
 
-        self.Append([str(self.selectedkey),    # GCP number
-                     '0.0',                # source E
-                     '0.0',                # source N
-                     '0.0',                # target E
-                     '0.0',                # target N
-                     '',                   # forward error
-                     ''])                  # backward error
+        self.Append(
+            [
+                str(self.selectedkey),  # GCP number
+                "0.0",  # source E
+                "0.0",  # source N
+                "0.0",  # target E
+                "0.0",  # target N
+                "",  # forward error
+                "",
+            ]
+        )  # backward error
 
         self.selected = self.GetItemCount() - 1
         self.SetItemData(self.selected, self.selectedkey)
 
-        self.SetItemState(self.selected,
-                          wx.LIST_STATE_SELECTED,
-                          wx.LIST_STATE_SELECTED)
+        self.SetItemState(self.selected, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
 
         self.ResizeColumns()
 
-        self.gcp.pointsToDrawSrc.AddItem(
-            coords=[0, 0], label=str(self.selectedkey))
-        self.gcp.pointsToDrawTgt.AddItem(
-            coords=[0, 0], label=str(self.selectedkey))
+        self.gcp.pointsToDrawSrc.AddItem(coords=[0, 0], label=str(self.selectedkey))
+        self.gcp.pointsToDrawTgt.AddItem(coords=[0, 0], label=str(self.selectedkey))
 
         self.EnsureVisible(self.selected)
 
         return self.selected
 
     def DeleteGCPItem(self):
-        """Deletes selected item in GCP list.
-        """
+        """Deletes selected item in GCP list."""
         if self.selected == wx.NOT_FOUND:
             return
 
@@ -2429,8 +2557,7 @@ class GCPList(ListCtrl,
         return self.selected
 
     def OnItemSelected(self, event):
-        """Item selected
-        """
+        """Item selected"""
         if self.render and self.selected != event.GetIndex():
             self.selected = event.GetIndex()
             self.selectedkey = self.GetItemData(self.selected)
@@ -2459,8 +2586,10 @@ class GCPList(ListCtrl,
             values = dlg.GetValues()  # string
 
             if len(values) == 0:
-                GError(parent=self, message=_(
-                    "Invalid coordinate value. Operation canceled."))
+                GError(
+                    parent=self,
+                    message=_("Invalid coordinate value. Operation canceled."),
+                )
             else:
                 for i in range(len(values)):
                     if values[i] != coords[i]:
@@ -2469,29 +2598,31 @@ class GCPList(ListCtrl,
 
                 if changed:
                     # reset RMS and update mapcoordlist
-                    self.SetItem(index, 5, '')
-                    self.SetItem(index, 6, '')
+                    self.SetItem(index, 5, "")
+                    self.SetItem(index, 6, "")
                     key = self.GetItemData(index)
-                    self.gcp.mapcoordlist[key] = [key,
-                                                  float(values[0]),
-                                                  float(values[1]),
-                                                  float(values[2]),
-                                                  float(values[3]),
-                                                  0.0,
-                                                  0.0]
+                    self.gcp.mapcoordlist[key] = [
+                        key,
+                        float(values[0]),
+                        float(values[1]),
+                        float(values[2]),
+                        float(values[3]),
+                        0.0,
+                        0.0,
+                    ]
 
-                    self.gcp.pointsToDrawSrc.GetItem(
-                        key - 1).SetCoords([float(values[0]), float(values[1])])
-                    self.gcp.pointsToDrawTgt.GetItem(
-                        key - 1).SetCoords([float(values[2]), float(values[3])])
+                    self.gcp.pointsToDrawSrc.GetItem(key - 1).SetCoords(
+                        [float(values[0]), float(values[1])]
+                    )
+                    self.gcp.pointsToDrawTgt.GetItem(key - 1).SetCoords(
+                        [float(values[2]), float(values[3])]
+                    )
                     self.gcp.UpdateColours()
 
     def OnColClick(self, event):
         """ListCtrl forgets selected item..."""
-        self.selected = self.FindItemData(-1, self.selectedkey)
-        self.SetItemState(self.selected,
-                          wx.LIST_STATE_SELECTED,
-                          wx.LIST_STATE_SELECTED)
+        self.selected = self.FindItem(-1, self.selectedkey)
+        self.SetItemState(self.selected, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
 
         event.Skip()
 
@@ -2503,11 +2634,20 @@ class VectGroup(wx.Dialog):
         Replace by g.group
     """
 
-    def __init__(self, parent, id, grassdb, location, mapset, group,
-                 style=wx.DEFAULT_DIALOG_STYLE):
+    def __init__(
+        self,
+        parent,
+        id,
+        grassdb,
+        location,
+        mapset,
+        group,
+        style=wx.DEFAULT_DIALOG_STYLE,
+    ):
 
-        wx.Dialog.__init__(self, parent, id, style=style,
-                           title=_("Create vector map group"))
+        wx.Dialog.__init__(
+            self, parent, id, style=style, title=_("Create vector map group")
+        )
 
         self.grassdatabase = grassdb
         self.xylocation = location
@@ -2517,60 +2657,62 @@ class VectGroup(wx.Dialog):
         #
         # get list of valid vector directories
         #
-        vectlist = os.listdir(os.path.join(self.grassdatabase,
-                                           self.xylocation,
-                                           self.xymapset,
-                                           'vector'))
+        vectlist = os.listdir(
+            os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "vector")
+        )
         for dir in vectlist:
-            if not os.path.isfile(os.path.join(self.grassdatabase,
-                                               self.xylocation,
-                                               self.xymapset,
-                                               'vector',
-                                               dir,
-                                               'coor')):
+            if not os.path.isfile(
+                os.path.join(
+                    self.grassdatabase,
+                    self.xylocation,
+                    self.xymapset,
+                    "vector",
+                    dir,
+                    "coor",
+                )
+            ):
                 vectlist.remove(dir)
 
         utils.ListSortLower(vectlist)
 
         # path to vref file
-        self.vgrpfile = os.path.join(self.grassdatabase,
-                                     self.xylocation,
-                                     self.xymapset,
-                                     'group',
-                                     self.xygroup,
-                                     'VREF')
+        self.vgrpfile = os.path.join(
+            self.grassdatabase,
+            self.xylocation,
+            self.xymapset,
+            "group",
+            self.xygroup,
+            "VREF",
+        )
 
         #
         # buttons
         #
-        self.btnCancel = Button(parent=self,
-                                   id=wx.ID_CANCEL)
-        self.btnOK = Button(parent=self,
-                               id=wx.ID_OK)
+        self.btnCancel = Button(parent=self, id=wx.ID_CANCEL)
+        self.btnOK = Button(parent=self, id=wx.ID_OK)
         self.btnOK.SetDefault()
 
         #
         # list of vector maps
         #
-        self.listMap = CheckListBox(parent=self, id=wx.ID_ANY,
-                                    choices=vectlist)
+        self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
         if os.path.isfile(self.vgrpfile):
             f = open(self.vgrpfile)
             try:
                 checked = []
                 for line in f.readlines():
-                    line = line.replace('\n', '')
+                    line = line.replace("\n", "")
                     if len(line) < 1:
                         continue
-                    checked.append(line.split('@')[0])
+                    checked.append(line.split("@")[0])
                 self.listMap.SetCheckedStrings(checked)
             finally:
                 f.close()
 
-        line = wx.StaticLine(parent=self,
-                             id=wx.ID_ANY, size=(20, -1),
-                             style=wx.LI_HORIZONTAL)
+        line = wx.StaticLine(
+            parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL
+        )
 
         #
         # layout
@@ -2582,20 +2724,26 @@ class VectGroup(wx.Dialog):
             StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_('Select vector map(s) to add to group:')),
+                label=_("Select vector map(s) to add to group:"),
+            ),
             flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
-            border=5)
+            border=5,
+        )
 
-        box.Add(self.listMap,
-                flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
-                border=5)
+        box.Add(
+            self.listMap,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.LEFT,
+            border=5,
+        )
 
-        sizer.Add(box, flag=wx.ALIGN_RIGHT | wx.ALL,
-                  border=3)
+        sizer.Add(box, flag=wx.ALIGN_RIGHT | wx.ALL, border=3)
 
-        sizer.Add(line, proportion=0,
-                  flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
-                  border=5)
+        sizer.Add(
+            line,
+            proportion=0,
+            flag=wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
 
         # buttons
         btnSizer = wx.StdDialogButtonSizer()
@@ -2603,9 +2751,9 @@ class VectGroup(wx.Dialog):
         btnSizer.AddButton(self.btnOK)
         btnSizer.Realize()
 
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER,
-                  border=5)
+        sizer.Add(
+            btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5
+        )
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -2617,29 +2765,31 @@ class VectGroup(wx.Dialog):
         for item in range(self.listMap.GetCount()):
             if not self.listMap.IsChecked(item):
                 continue
-            vgrouplist.append(
-                self.listMap.GetString(item) +
-                '@' +
-                self.xymapset)
+            vgrouplist.append(self.listMap.GetString(item) + "@" + self.xymapset)
 
         dirname = os.path.dirname(self.vgrpfile)
 
         if not os.path.exists(dirname):
             os.makedirs(dirname)
 
-        f = open(self.vgrpfile, mode='w')
+        f = open(self.vgrpfile, mode="w")
         try:
             for vect in vgrouplist:
-                f.write(vect + '\n')
+                f.write(vect + "\n")
         finally:
             f.close()
 
 
 class EditGCP(wx.Dialog):
-
-    def __init__(self, parent, data, gcpno, id=wx.ID_ANY,
-                 title=_("Edit GCP"),
-                 style=wx.DEFAULT_DIALOG_STYLE):
+    def __init__(
+        self,
+        parent,
+        data,
+        gcpno,
+        id=wx.ID_ANY,
+        title=_("Edit GCP"),
+        style=wx.DEFAULT_DIALOG_STYLE,
+    ):
         """Dialog for editing GPC and map coordinates in list control"""
 
         wx.Dialog.__init__(self, parent, id, title=title, style=style)
@@ -2649,8 +2799,10 @@ class EditGCP(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = StaticBox(
-            parent=panel, id=wx.ID_ANY, label=" %s %s " %
-            (_("Ground Control Point No."), str(gcpno)))
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s %s " % (_("Ground Control Point No."), str(gcpno)),
+        )
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         # source coordinates
@@ -2669,21 +2821,19 @@ class EditGCP(wx.Dialog):
         row = 0
         col = 0
         idx = 0
-        for label, win in ((_("source E:"), self.xcoord),
-                           (_("target E:"), self.ecoord),
-                           (_("source N:"), self.ycoord),
-                           (_("target N:"), self.ncoord)):
-            label = StaticText(parent=panel, id=wx.ID_ANY,
-                               label=label)
-            gridSizer.Add(label,
-                          flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(row, col))
+        for label, win in (
+            (_("source E:"), self.xcoord),
+            (_("target E:"), self.ecoord),
+            (_("source N:"), self.ycoord),
+            (_("target N:"), self.ncoord),
+        ):
+            label = StaticText(parent=panel, id=wx.ID_ANY, label=label)
+            gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, col))
 
             col += 1
             win.SetValue(str(data[idx]))
 
-            gridSizer.Add(win,
-                          pos=(row, col))
+            gridSizer.Add(win, pos=(row, col))
 
             col += 1
             idx += 1
@@ -2692,11 +2842,9 @@ class EditGCP(wx.Dialog):
                 row += 1
                 col = 0
 
-        boxSizer.Add(gridSizer, proportion=1,
-                     flag=wx.EXPAND | wx.ALL, border=5)
+        boxSizer.Add(gridSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        sizer.Add(boxSizer, proportion=1,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(boxSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
         #
         # buttons
@@ -2710,15 +2858,13 @@ class EditGCP(wx.Dialog):
         btnSizer.AddButton(self.btnOk)
         btnSizer.Realize()
 
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+        sizer.Add(btnSizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         panel.SetSizer(sizer)
         sizer.Fit(self)
 
     def GetValues(self, columns=None):
-        """Return list of values (as strings).
-        """
+        """Return list of values (as strings)."""
         valuelist = []
         try:
             float(self.xcoord.GetValue())
@@ -2737,10 +2883,16 @@ class EditGCP(wx.Dialog):
 
 
 class GrSettingsDialog(wx.Dialog):
-
     def __init__(
-            self, parent, id, giface, title, pos=wx.DefaultPosition,
-            size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
+        self,
+        parent,
+        id,
+        giface,
+        title,
+        pos=wx.DefaultPosition,
+        size=wx.DefaultSize,
+        style=wx.DEFAULT_DIALOG_STYLE,
+    ):
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         """
         Dialog to set profile text options: font, title
@@ -2751,19 +2903,20 @@ class GrSettingsDialog(wx.Dialog):
         #
         self.parent = parent
         self.new_src_map = src_map
-        self.new_tgt_map = {'raster': tgt_map['raster'],
-                            'vector': tgt_map['vector']}
+        self.new_tgt_map = {"raster": tgt_map["raster"], "vector": tgt_map["vector"]}
         self.sdfactor = 0
 
         self.symbol = {}
 
-        self.methods = ["nearest",
-                        "linear",
-                        "linear_f",
-                        "cubic",
-                        "cubic_f",
-                        "lanczos",
-                        "lanczos_f"]
+        self.methods = [
+            "nearest",
+            "linear",
+            "linear_f",
+            "cubic",
+            "cubic_f",
+            "lanczos",
+            "lanczos_f",
+        ]
 
         # notebook
         notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
@@ -2781,7 +2934,10 @@ class GrSettingsDialog(wx.Dialog):
         btnApply.SetToolTip(_("Apply changes for the current session"))
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTip(
-            _("Apply and save changes to user settings file (default for next sessions)"))
+            _(
+                "Apply and save changes to user settings file (default for next sessions)"
+            )
+        )
         btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
         btnClose.SetToolTip(_("Close dialog"))
 
@@ -2793,13 +2949,8 @@ class GrSettingsDialog(wx.Dialog):
 
         # sizers
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(
-            notebook,
-            proportion=1,
-            flag=wx.EXPAND | wx.ALL,
-            border=5)
-        mainSizer.Add(btnSizer, proportion=0,
-                      flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+        mainSizer.Add(notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(btnSizer, proportion=0, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
         #              flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
 
         self.SetSizer(mainSizer)
@@ -2817,47 +2968,42 @@ class GrSettingsDialog(wx.Dialog):
 
         # highlight only highest forward RMS error
         self.highlighthighest = wx.CheckBox(
-            parent=panel, id=wx.ID_ANY,
-            label=_("Highlight highest RMS error only"))
-        hh = UserSettings.Get(group='gcpman', key='rms', subkey='highestonly')
+            parent=panel, id=wx.ID_ANY, label=_("Highlight highest RMS error only")
+        )
+        hh = UserSettings.Get(group="gcpman", key="rms", subkey="highestonly")
         self.highlighthighest.SetValue(hh)
         rmsgridSizer.Add(
-            self.highlighthighest,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                0,
-                0))
+            self.highlighthighest, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0)
+        )
 
         # RMS forward error threshold
         rmslabel = StaticText(
-            parent=panel, id=wx.ID_ANY,
-            label=_("Highlight RMS error > M + SD * factor:"))
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Highlight RMS error > M + SD * factor:"),
+        )
         rmslabel.SetToolTip(
-                _(
-                    "Highlight GCPs with an RMS error larger than \n"
-                    "mean + standard deviation * given factor. \n"
-                    "Recommended values for this factor are between 1 and 2."))
-        rmsgridSizer.Add(
-            rmslabel,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                1,
-                0))
-        sdfactor = UserSettings.Get(
-            group='gcpman', key='rms', subkey='sdfactor')
-        self.rmsWin = TextCtrl(parent=panel, id=wx.ID_ANY,
-                               size=(70, -1), style=wx.TE_NOHIDESEL)
+            _(
+                "Highlight GCPs with an RMS error larger than \n"
+                "mean + standard deviation * given factor. \n"
+                "Recommended values for this factor are between 1 and 2."
+            )
+        )
+        rmsgridSizer.Add(rmslabel, flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
+        sdfactor = UserSettings.Get(group="gcpman", key="rms", subkey="sdfactor")
+        self.rmsWin = TextCtrl(
+            parent=panel, id=wx.ID_ANY, size=(70, -1), style=wx.TE_NOHIDESEL
+        )
         self.rmsWin.SetValue("%s" % str(sdfactor))
-        if (self.parent.highest_only):
+        if self.parent.highest_only:
             self.rmsWin.Disable()
 
-        self.symbol['sdfactor'] = self.rmsWin.GetId()
+        self.symbol["sdfactor"] = self.rmsWin.GetId()
         rmsgridSizer.Add(self.rmsWin, flag=wx.ALIGN_RIGHT, pos=(1, 1))
         rmsgridSizer.AddGrowableCol(1)
         sizer.Add(rmsgridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
-        box = StaticBox(parent=panel, id=wx.ID_ANY,
-                        label=" %s " % _("Symbol settings"))
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Symbol settings"))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
@@ -2867,133 +3013,90 @@ class GrSettingsDialog(wx.Dialog):
         row = 0
         label = StaticText(parent=panel, id=wx.ID_ANY, label=_("Color:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        col = UserSettings.Get(group='gcpman', key='symbol', subkey='color')
-        colWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
-                                   colour=wx.Colour(col[0],
-                                                    col[1],
-                                                    col[2],
-                                                    255))
-        self.symbol['color'] = colWin.GetId()
-        gridSizer.Add(colWin,
-                      flag=wx.ALIGN_RIGHT,
-                      pos=(row, 1))
+        col = UserSettings.Get(group="gcpman", key="symbol", subkey="color")
+        colWin = csel.ColourSelect(
+            parent=panel, id=wx.ID_ANY, colour=wx.Colour(col[0], col[1], col[2], 255)
+        )
+        self.symbol["color"] = colWin.GetId()
+        gridSizer.Add(colWin, flag=wx.ALIGN_RIGHT, pos=(row, 1))
 
         #
         # symbol color for high forward RMS error
         #
         row += 1
         label = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Color for high RMS error:"))
+            parent=panel, id=wx.ID_ANY, label=_("Color for high RMS error:")
+        )
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        hcol = UserSettings.Get(group='gcpman', key='symbol', subkey='hcolor')
-        hcolWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
-                                    colour=wx.Colour(hcol[0],
-                                                     hcol[1],
-                                                     hcol[2],
-                                                     255))
-        self.symbol['hcolor'] = hcolWin.GetId()
-        gridSizer.Add(hcolWin,
-                      flag=wx.ALIGN_RIGHT,
-                      pos=(row, 1))
+        hcol = UserSettings.Get(group="gcpman", key="symbol", subkey="hcolor")
+        hcolWin = csel.ColourSelect(
+            parent=panel, id=wx.ID_ANY, colour=wx.Colour(hcol[0], hcol[1], hcol[2], 255)
+        )
+        self.symbol["hcolor"] = hcolWin.GetId()
+        gridSizer.Add(hcolWin, flag=wx.ALIGN_RIGHT, pos=(row, 1))
 
         #
         # symbol color for selected GCP
         #
         row += 1
         label = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Color for selected GCP:"))
+            parent=panel, id=wx.ID_ANY, label=_("Color for selected GCP:")
+        )
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        scol = UserSettings.Get(group='gcpman', key='symbol', subkey='scolor')
-        scolWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
-                                    colour=wx.Colour(scol[0],
-                                                     scol[1],
-                                                     scol[2],
-                                                     255))
-        self.symbol['scolor'] = scolWin.GetId()
-        gridSizer.Add(scolWin,
-                      flag=wx.ALIGN_RIGHT,
-                      pos=(row, 1))
+        scol = UserSettings.Get(group="gcpman", key="symbol", subkey="scolor")
+        scolWin = csel.ColourSelect(
+            parent=panel, id=wx.ID_ANY, colour=wx.Colour(scol[0], scol[1], scol[2], 255)
+        )
+        self.symbol["scolor"] = scolWin.GetId()
+        gridSizer.Add(scolWin, flag=wx.ALIGN_RIGHT, pos=(row, 1))
 
         #
         # symbol color for unused GCP
         #
         row += 1
         label = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Color for unused GCPs:"))
+            parent=panel, id=wx.ID_ANY, label=_("Color for unused GCPs:")
+        )
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        ucol = UserSettings.Get(group='gcpman', key='symbol', subkey='ucolor')
-        ucolWin = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
-                                    colour=wx.Colour(ucol[0],
-                                                     ucol[1],
-                                                     ucol[2],
-                                                     255))
-        self.symbol['ucolor'] = ucolWin.GetId()
-        gridSizer.Add(ucolWin,
-                      flag=wx.ALIGN_RIGHT,
-                      pos=(row, 1))
+        ucol = UserSettings.Get(group="gcpman", key="symbol", subkey="ucolor")
+        ucolWin = csel.ColourSelect(
+            parent=panel, id=wx.ID_ANY, colour=wx.Colour(ucol[0], ucol[1], ucol[2], 255)
+        )
+        self.symbol["ucolor"] = ucolWin.GetId()
+        gridSizer.Add(ucolWin, flag=wx.ALIGN_RIGHT, pos=(row, 1))
 
         # show unused GCPs
         row += 1
-        self.showunused = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                      label=_("Show unused GCPs"))
-        shuu = UserSettings.Get(group='gcpman', key='symbol', subkey='unused')
+        self.showunused = wx.CheckBox(
+            parent=panel, id=wx.ID_ANY, label=_("Show unused GCPs")
+        )
+        shuu = UserSettings.Get(group="gcpman", key="symbol", subkey="unused")
         self.showunused.SetValue(shuu)
-        gridSizer.Add(
-            self.showunused,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(
-                row,
-                0))
+        gridSizer.Add(self.showunused, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
 
         #
         # symbol size
         #
         row += 1
-        label = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Symbol size:"))
+        label = StaticText(parent=panel, id=wx.ID_ANY, label=_("Symbol size:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        symsize = int(
-            UserSettings.Get(
-                group='gcpman',
-                key='symbol',
-                subkey='size'))
-        sizeWin = SpinCtrl(parent=panel, id=wx.ID_ANY,
-                           min=1, max=20)
+        symsize = int(UserSettings.Get(group="gcpman", key="symbol", subkey="size"))
+        sizeWin = SpinCtrl(parent=panel, id=wx.ID_ANY, min=1, max=20)
         sizeWin.SetValue(symsize)
-        self.symbol['size'] = sizeWin.GetId()
-        gridSizer.Add(sizeWin,
-                      flag=wx.ALIGN_RIGHT,
-                      pos=(row, 1))
+        self.symbol["size"] = sizeWin.GetId()
+        gridSizer.Add(sizeWin, flag=wx.ALIGN_RIGHT, pos=(row, 1))
 
         #
         # symbol width
         #
         row += 1
-        label = StaticText(
-            parent=panel,
-            id=wx.ID_ANY,
-            label=_("Line width:"))
+        label = StaticText(parent=panel, id=wx.ID_ANY, label=_("Line width:"))
         gridSizer.Add(label, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
-        width = int(
-            UserSettings.Get(
-                group='gcpman',
-                key='symbol',
-                subkey='width'))
-        widWin = SpinCtrl(parent=panel, id=wx.ID_ANY,
-                          min=1, max=10)
+        width = int(UserSettings.Get(group="gcpman", key="symbol", subkey="width"))
+        widWin = SpinCtrl(parent=panel, id=wx.ID_ANY, min=1, max=10)
         widWin.SetValue(width)
-        self.symbol['width'] = widWin.GetId()
-        gridSizer.Add(widWin,
-                      flag=wx.ALIGN_RIGHT,
-                      pos=(row, 1))
+        self.symbol["width"] = widWin.GetId()
+        gridSizer.Add(widWin, flag=wx.ALIGN_RIGHT, pos=(row, 1))
         gridSizer.AddGrowableCol(1)
 
         boxSizer.Add(gridSizer, flag=wx.EXPAND)
@@ -3007,70 +3110,77 @@ class GrSettingsDialog(wx.Dialog):
             panel,
             id=wx.ID_ANY,
             size=globalvar.DIALOG_GSELECT_SIZE,
-            type='maptype',
-            updateOnPopup=False)
-        self.parent.grwiz.SwitchEnv('source')
+            type="maptype",
+            updateOnPopup=False,
+        )
+        self.parent.grwiz.SwitchEnv("source")
         self.srcselection.SetElementList(maptype)
         # filter out all maps not in group
         self.srcselection.tcp.GetElementList(elements=self.parent.src_maps)
 
         # target map(s) to display
-        self.parent.grwiz.SwitchEnv('target')
+        self.parent.grwiz.SwitchEnv("target")
         self.tgtrastselection = Select(
-            panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='raster', updateOnPopup=False,
-            extraItems=self.parent.grwiz.mappage.GetSelectTargetRasterExtraItems())
-        self.tgtrastselection.SetElementList('cell')
+            panel,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            type="raster",
+            updateOnPopup=False,
+            extraItems=self.parent.grwiz.mappage.GetSelectTargetRasterExtraItems(),
+        )
+        self.tgtrastselection.SetElementList("cell")
         self.tgtrastselection.GetElementList()
 
         self.tgtvectselection = Select(
-            panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-            type='vector', updateOnPopup=False)
-        self.tgtvectselection.SetElementList('vector')
+            panel,
+            id=wx.ID_ANY,
+            size=globalvar.DIALOG_GSELECT_SIZE,
+            type="vector",
+            updateOnPopup=False,
+        )
+        self.tgtvectselection.SetElementList("vector")
         self.tgtvectselection.GetElementList()
 
         sizer.Add(
             StaticText(
-                parent=panel,
-                id=wx.ID_ANY,
-                label=_('Select source map to display:')),
+                parent=panel, id=wx.ID_ANY, label=_("Select source map to display:")
+            ),
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
+            border=5,
+        )
         sizer.Add(
-            self.srcselection,
-            proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
+            self.srcselection, proportion=0, flag=wx.ALIGN_LEFT | wx.ALL, border=5
+        )
         self.srcselection.SetValue(src_map)
         sizer.Add(
             StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
-                label=_('Select target raster map to display:')),
+                label=_("Select target raster map to display:"),
+            ),
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
+            border=5,
+        )
         sizer.Add(
-            self.tgtrastselection,
-            proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
-        self.tgtrastselection.SetValue(tgt_map['raster'])
+            self.tgtrastselection, proportion=0, flag=wx.ALIGN_LEFT | wx.ALL, border=5
+        )
+        self.tgtrastselection.SetValue(tgt_map["raster"])
         sizer.Add(
             StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
-                label=_('Select target vector map to display:')),
+                label=_("Select target vector map to display:"),
+            ),
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
+            border=5,
+        )
         sizer.Add(
-            self.tgtvectselection,
-            proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
-        self.tgtvectselection.SetValue(tgt_map['vector'])
+            self.tgtvectselection, proportion=0, flag=wx.ALIGN_LEFT | wx.ALL, border=5
+        )
+        self.tgtvectselection.SetValue(tgt_map["vector"])
 
         # bindings
         self.highlighthighest.Bind(wx.EVT_CHECKBOX, self.OnHighlight)
@@ -3095,73 +3205,60 @@ class GrSettingsDialog(wx.Dialog):
         self.rb_grorder = wx.RadioBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=" %s " %
-            _("Select rectification order"),
-            choices=[
-                _('1st order'),
-                _('2nd order'),
-                _('3rd order')],
-            majorDimension=wx.RA_SPECIFY_COLS)
-        sizer.Add(self.rb_grorder, proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+            label=" %s " % _("Select rectification order"),
+            choices=[_("1st order"), _("2nd order"), _("3rd order")],
+            majorDimension=wx.RA_SPECIFY_COLS,
+        )
+        sizer.Add(self.rb_grorder, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         self.rb_grorder.SetSelection(self.parent.gr_order - 1)
 
         # interpolation method
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         gridSizer.Add(
             StaticText(
-                parent=panel,
-                id=wx.ID_ANY,
-                label=_('Select interpolation method:')),
-            pos=(
-                0,
-                0),
+                parent=panel, id=wx.ID_ANY, label=_("Select interpolation method:")
+            ),
+            pos=(0, 0),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-            border=5)
-        self.grmethod = wx.Choice(parent=panel, id=wx.ID_ANY,
-                                  choices=self.methods)
-        gridSizer.Add(self.grmethod, pos=(0, 1),
-                      flag=wx.ALIGN_RIGHT, border=5)
+            border=5,
+        )
+        self.grmethod = wx.Choice(parent=panel, id=wx.ID_ANY, choices=self.methods)
+        gridSizer.Add(self.grmethod, pos=(0, 1), flag=wx.ALIGN_RIGHT, border=5)
         self.grmethod.SetStringSelection(self.parent.gr_method)
         gridSizer.AddGrowableCol(1)
         sizer.Add(gridSizer, flag=wx.EXPAND | wx.ALL, border=5)
 
         # clip to region
-        self.check = wx.CheckBox(parent=panel, id=wx.ID_ANY, label=_(
-            "clip to computational region in target location"))
-        sizer.Add(self.check, proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        self.check = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("clip to computational region in target location"),
+        )
+        sizer.Add(self.check, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         self.check.SetValue(self.parent.clip_to_region)
 
         # overwrite result map
-        overwrite = UserSettings.Get(group='gcpman', key='map',
-                                     subkey='overwrite')
-        self.overwrite = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                     label=_('overwrite result map'))
+        overwrite = UserSettings.Get(group="gcpman", key="map", subkey="overwrite")
+        self.overwrite = wx.CheckBox(
+            parent=panel, id=wx.ID_ANY, label=_("overwrite result map")
+        )
         self.Bind(wx.EVT_CHECKBOX, self.OnOverwrite, self.overwrite)
-        sizer.Add(self.overwrite, proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(self.overwrite, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
         self.overwrite.SetValue(overwrite)
         self.parent.overwrite = overwrite
 
         # extension
         sizer.Add(
             StaticText(
-                parent=panel,
-                id=wx.ID_ANY,
-                label=_('Extension for output maps:')),
+                parent=panel, id=wx.ID_ANY, label=_("Extension for output maps:")
+            ),
             proportion=0,
             flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
-        self.ext_txt = TextCtrl(
-            parent=panel, id=wx.ID_ANY, value="", size=(
-                350, -1))
+            border=5,
+        )
+        self.ext_txt = TextCtrl(parent=panel, id=wx.ID_ANY, value="", size=(350, -1))
         self.ext_txt.SetValue(self.parent.extension)
-        sizer.Add(
-            self.ext_txt,
-            proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALL,
-            border=5)
+        sizer.Add(self.ext_txt, proportion=0, flag=wx.ALIGN_LEFT | wx.ALL, border=5)
 
         # bindings
         self.ext_txt.Bind(wx.EVT_TEXT, self.OnExtension)
@@ -3189,12 +3286,15 @@ class GrSettingsDialog(wx.Dialog):
         except ValueError:
             return
         if self.sdfactor <= 0:
-            GError(parent=self,
-                   message=_('RMS threshold factor must be > 0'))
+            GError(parent=self, message=_("RMS threshold factor must be > 0"))
         elif self.sdfactor < 1:
-            GError(parent=self,
-                   message=_('RMS threshold factor is < 1\n'
-                             'Too many points might be highlighted'))
+            GError(
+                parent=self,
+                message=_(
+                    "RMS threshold factor is < 1\n"
+                    "Too many points might be highlighted"
+                ),
+            )
 
     def OnSrcSelection(self, event):
         """Source map to display selected"""
@@ -3202,20 +3302,20 @@ class GrSettingsDialog(wx.Dialog):
 
         tmp_map = self.srcselection.GetValue()
 
-        if not tmp_map == '' and not tmp_map == src_map:
+        if not tmp_map == "" and not tmp_map == src_map:
             self.new_src_map = tmp_map
 
     def OnTgtRastSelection(self, event):
         """Target map to display selected"""
         global tgt_map
 
-        self.new_tgt_map['raster'] = self.tgtrastselection.GetValue()
+        self.new_tgt_map["raster"] = self.tgtrastselection.GetValue()
 
     def OnTgtVectSelection(self, event):
         """Target map to display selected"""
         global tgt_map
 
-        self.new_tgt_map['vector'] = self.tgtvectselection.GetValue()
+        self.new_tgt_map["vector"] = self.tgtvectselection.GetValue()
 
     def OnMethod(self, event):
         self.parent.gr_method = self.methods[event.GetSelection()]
@@ -3236,63 +3336,70 @@ class GrSettingsDialog(wx.Dialog):
 
         layers = None
 
-        UserSettings.Set(group='gcpman', key='rms', subkey='highestonly',
-                         value=self.highlighthighest.GetValue())
+        UserSettings.Set(
+            group="gcpman",
+            key="rms",
+            subkey="highestonly",
+            value=self.highlighthighest.GetValue(),
+        )
 
         if self.sdfactor > 0:
-            UserSettings.Set(group='gcpman', key='rms', subkey='sdfactor',
-                             value=self.sdfactor)
+            UserSettings.Set(
+                group="gcpman", key="rms", subkey="sdfactor", value=self.sdfactor
+            )
 
             self.parent.sdfactor = self.sdfactor
             if self.parent.rmsthresh > 0:
-                self.parent.rmsthresh = self.parent.rmsmean + self.parent.sdfactor * self.parent.rmssd
+                self.parent.rmsthresh = (
+                    self.parent.rmsmean + self.parent.sdfactor * self.parent.rmssd
+                )
 
         UserSettings.Set(
-            group='gcpman',
-            key='symbol',
-            subkey='color',
-            value=tuple(
-                wx.FindWindowById(
-                    self.symbol['color']).GetColour()))
+            group="gcpman",
+            key="symbol",
+            subkey="color",
+            value=tuple(wx.FindWindowById(self.symbol["color"]).GetColour()),
+        )
         UserSettings.Set(
-            group='gcpman',
-            key='symbol',
-            subkey='hcolor',
-            value=tuple(
-                wx.FindWindowById(
-                    self.symbol['hcolor']).GetColour()))
+            group="gcpman",
+            key="symbol",
+            subkey="hcolor",
+            value=tuple(wx.FindWindowById(self.symbol["hcolor"]).GetColour()),
+        )
         UserSettings.Set(
-            group='gcpman',
-            key='symbol',
-            subkey='scolor',
-            value=tuple(
-                wx.FindWindowById(
-                    self.symbol['scolor']).GetColour()))
+            group="gcpman",
+            key="symbol",
+            subkey="scolor",
+            value=tuple(wx.FindWindowById(self.symbol["scolor"]).GetColour()),
+        )
         UserSettings.Set(
-            group='gcpman',
-            key='symbol',
-            subkey='ucolor',
-            value=tuple(
-                wx.FindWindowById(
-                    self.symbol['ucolor']).GetColour()))
-        UserSettings.Set(group='gcpman', key='symbol', subkey='unused',
-                         value=self.showunused.GetValue())
+            group="gcpman",
+            key="symbol",
+            subkey="ucolor",
+            value=tuple(wx.FindWindowById(self.symbol["ucolor"]).GetColour()),
+        )
         UserSettings.Set(
-            group='gcpman',
-            key='symbol',
-            subkey='size',
-            value=wx.FindWindowById(
-                self.symbol['size']).GetValue())
+            group="gcpman",
+            key="symbol",
+            subkey="unused",
+            value=self.showunused.GetValue(),
+        )
         UserSettings.Set(
-            group='gcpman',
-            key='symbol',
-            subkey='width',
-            value=wx.FindWindowById(
-                self.symbol['width']).GetValue())
+            group="gcpman",
+            key="symbol",
+            subkey="size",
+            value=wx.FindWindowById(self.symbol["size"]).GetValue(),
+        )
         UserSettings.Set(
-            group='gcpman',
-            key='map',
-            subkey='overwrite',
+            group="gcpman",
+            key="symbol",
+            subkey="width",
+            value=wx.FindWindowById(self.symbol["width"]).GetValue(),
+        )
+        UserSettings.Set(
+            group="gcpman",
+            key="map",
+            subkey="overwrite",
             value=self.parent.overwrite,
         )
 
@@ -3307,22 +3414,30 @@ class GrSettingsDialog(wx.Dialog):
             self.parent.grwiz.SrcMap.DeleteLayer(layers[0])
 
             src_map = self.new_src_map
-            if maptype == 'raster':
-                cmdlist = ['d.rast', 'map=%s' % src_map]
+            if maptype == "raster":
+                cmdlist = ["d.rast", "map=%s" % src_map]
                 srcrender = True
             else:
-                cmdlist = ['d.vect', 'map=%s' % src_map]
+                cmdlist = ["d.vect", "map=%s" % src_map]
                 srcrenderVector = True
-            self.parent.grwiz.SwitchEnv('source')
+            self.parent.grwiz.SwitchEnv("source")
             name, found = utils.GetLayerNameFromCmd(cmdlist)
             self.parent.grwiz.SrcMap.AddLayer(
-                ltype=maptype, command=cmdlist, active=True, name=name,
-                hidden=False, opacity=1.0, render=False)
+                ltype=maptype,
+                command=cmdlist,
+                active=True,
+                name=name,
+                hidden=False,
+                opacity=1.0,
+                render=False,
+            )
 
-            self.parent.grwiz.SwitchEnv('target')
+            self.parent.grwiz.SwitchEnv("target")
 
-        if self.new_tgt_map['raster'] != tgt_map['raster'] or \
-           self.new_tgt_map['vector'] != tgt_map['vector']:
+        if (
+            self.new_tgt_map["raster"] != tgt_map["raster"]
+            or self.new_tgt_map["vector"] != tgt_map["vector"]
+        ):
             # remove all layers
             layers = self.parent.grwiz.TgtMap.GetListOfLayers()
             while layers:
@@ -3331,19 +3446,20 @@ class GrSettingsDialog(wx.Dialog):
                 layers = self.parent.grwiz.TgtMap.GetListOfLayers()
             # self.parent.grwiz.TgtMap.DeleteAllLayers()
             reload_target = True
-            tgt_map['raster'] = self.new_tgt_map['raster']
-            tgt_map['vector'] = self.new_tgt_map['vector']
+            tgt_map["raster"] = self.new_tgt_map["raster"]
+            tgt_map["vector"] = self.new_tgt_map["vector"]
 
             web_service_layer = self.parent.grwiz.mappage.GetWebServiceLayers(
-                name=tgt_map['raster'])
+                name=tgt_map["raster"]
+            )
 
-            if tgt_map['raster'] != '' and web_service_layer:
+            if tgt_map["raster"] != "" and web_service_layer:
                 #
                 # add web service layer to target map
                 #
-                rendertype = web_service_layer['type']
-                cmdlist = web_service_layer['cmd']
-                name = tgt_map['raster']
+                rendertype = web_service_layer["type"]
+                cmdlist = web_service_layer["cmd"]
+                name = tgt_map["raster"]
 
                 self.parent.grwiz.TgtMap.AddLayer(
                     ltype=rendertype,
@@ -3352,34 +3468,47 @@ class GrSettingsDialog(wx.Dialog):
                     name=name,
                     hidden=False,
                     opacity=1.0,
-                    render=False)
+                    render=False,
+                )
 
-            elif tgt_map['raster'] != '':
-                cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
+            elif tgt_map["raster"] != "":
+                cmdlist = ["d.rast", "map=%s" % tgt_map["raster"]]
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(
-                    ltype='raster', command=cmdlist, active=True, name=name,
-                    hidden=False, opacity=1.0, render=False)
+                    ltype="raster",
+                    command=cmdlist,
+                    active=True,
+                    name=name,
+                    hidden=False,
+                    opacity=1.0,
+                    render=False,
+                )
 
                 tgtrender = True
 
-            if tgt_map['vector'] != '':
-                cmdlist = ['d.vect', 'map=%s' % tgt_map['vector']]
+            if tgt_map["vector"] != "":
+                cmdlist = ["d.vect", "map=%s" % tgt_map["vector"]]
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(
-                    ltype='vector', command=cmdlist, active=True, name=name,
-                    hidden=False, opacity=1.0, render=False)
+                    ltype="vector",
+                    command=cmdlist,
+                    active=True,
+                    name=name,
+                    hidden=False,
+                    opacity=1.0,
+                    render=False,
+                )
 
                 tgtrenderVector = True
 
-        if tgt_map['raster'] == '' and tgt_map['vector'] == '':
+        if tgt_map["raster"] == "" and tgt_map["vector"] == "":
             if self.parent.show_target:
                 self.parent.show_target = False
                 self.parent._mgr.GetPane("target").Hide()
                 self.parent._mgr.Update()
                 self.parent.activemap.SetSelection(0)
                 self.parent.activemap.Enable(False)
-                self.parent.GetMapToolbar().Enable('zoommenu', enable=False)
+                self.parent.GetMapToolbar().Enable("zoommenu", enable=False)
         else:
             if not self.parent.show_target:
                 self.parent.show_target = True
@@ -3387,15 +3516,14 @@ class GrSettingsDialog(wx.Dialog):
                 self.parent._mgr.Update()
                 self.parent.activemap.SetSelection(0)
                 self.parent.activemap.Enable(True)
-                self.parent.GetMapToolbar().Enable('zoommenu', enable=True)
+                self.parent.GetMapToolbar().Enable("zoommenu", enable=True)
                 self.parent.TgtMapWindow.ZoomToMap(
-                    layers=self.parent.TgtMap.GetListOfLayers())
+                    layers=self.parent.TgtMap.GetListOfLayers()
+                )
 
         self.parent.UpdateColours(
-            srcrender,
-            srcrenderVector,
-            tgtrender,
-            tgtrenderVector)
+            srcrender, srcrenderVector, tgtrender, tgtrenderVector
+        )
         self.parent.SetSettings()
 
     def OnSave(self, event):
@@ -3403,11 +3531,11 @@ class GrSettingsDialog(wx.Dialog):
         self.UpdateSettings()
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings=fileSettings)
-        fileSettings['gcpman'] = UserSettings.Get(group='gcpman')
+        fileSettings["gcpman"] = UserSettings.Get(group="gcpman")
         file = UserSettings.SaveToFile(fileSettings)
         self.parent._giface.WriteLog(
-            _('GCP Manager settings saved to file \'%s\'.') %
-            file)
+            _("GCP Manager settings saved to file '%s'.") % file
+        )
         # self.Close()
 
     def OnApply(self, event):

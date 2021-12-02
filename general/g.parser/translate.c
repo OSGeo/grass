@@ -12,7 +12,7 @@ char *translate(const char *arg)
     static const char *domain;
 
     if (arg == NULL)
-	return arg;
+	return (char *) arg;
 
     if (strlen(arg) == 0)
         return NULL; /* unset */
@@ -33,6 +33,6 @@ char *translate(const char *arg)
 
     return G_gettext(domain, arg);
 #else
-    return arg;
+    return (char *) arg;
 #endif
 }

@@ -31,8 +31,7 @@ from gui_core.wrap import StaticText, TextCtrl
 from core.gcmd import RunCommand, GWarning
 
 from animation.mapwindow import AnimationWindow
-from animation.provider import BitmapProvider, BitmapPool, \
-    MapFilesPool, CleanUp
+from animation.provider import BitmapProvider, BitmapPool, MapFilesPool, CleanUp
 from animation.controller import AnimationController
 from animation.anim import Animation
 from animation.toolbars import MainToolbar, AnimationToolbar, MiscToolbar
@@ -47,21 +46,21 @@ gcore.set_raise_on_error(True)
 
 
 class AnimationFrame(wx.Frame):
-
-    def __init__(self, parent, giface, title=_("GRASS GIS Animation tool"),
-                 rasters=None, timeseries=None):
-        wx.Frame.__init__(self, parent, title=title,
-                          style=wx.DEFAULT_FRAME_STYLE, size=(800, 600))
+    def __init__(
+        self, parent, giface, title=_("Animation Tool"), rasters=None, timeseries=None
+    ):
+        wx.Frame.__init__(
+            self, parent, title=title, style=wx.DEFAULT_FRAME_STYLE, size=(800, 600)
+        )
         self._giface = giface
         self.SetClientSize(self.GetSize())
         self.iconsize = (16, 16)
 
         self.SetIcon(
             wx.Icon(
-                os.path.join(
-                    globalvar.ICONDIR,
-                    'grass_map.ico'),
-                wx.BITMAP_TYPE_ICO))
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
 
         # Make sure the temporal database exists
         try:
@@ -77,7 +76,8 @@ class AnimationFrame(wx.Frame):
         self.animations = [Animation() for i in range(MAX_COUNT)]
         self.windows = []
         self.animationPanel = AnimationsPanel(
-            self, self.windows, initialCount=MAX_COUNT)
+            self, self.windows, initialCount=MAX_COUNT
+        )
         bitmapPool = BitmapPool()
         mapFilesPool = MapFilesPool()
 
@@ -85,27 +85,27 @@ class AnimationFrame(wx.Frame):
         self._progressDlgMax = None
 
         self.provider = BitmapProvider(
+            bitmapPool=bitmapPool, mapFilesPool=mapFilesPool, tempDir=TMP_DIR
+        )
+        self.animationSliders = {}
+        self.animationSliders["nontemporal"] = SimpleAnimationSlider(self)
+        self.animationSliders["temporal"] = TimeAnimationSlider(self)
+        self.controller = AnimationController(
+            frame=self,
+            sliders=self.animationSliders,
+            animations=self.animations,
+            mapwindows=self.windows,
+            provider=self.provider,
             bitmapPool=bitmapPool,
             mapFilesPool=mapFilesPool,
-            tempDir=TMP_DIR)
-        self.animationSliders = {}
-        self.animationSliders['nontemporal'] = SimpleAnimationSlider(self)
-        self.animationSliders['temporal'] = TimeAnimationSlider(self)
-        self.controller = AnimationController(frame=self,
-                                              sliders=self.animationSliders,
-                                              animations=self.animations,
-                                              mapwindows=self.windows,
-                                              provider=self.provider,
-                                              bitmapPool=bitmapPool,
-                                              mapFilesPool=mapFilesPool)
+        )
         for win in self.windows:
             win.Bind(wx.EVT_SIZE, self.FrameSizeChanged)
-            self.provider.mapsLoaded.connect(lambda: self.SetStatusText(''))
+            self.provider.mapsLoaded.connect(lambda: self.SetStatusText(""))
             self.provider.renderingStarted.connect(self._showRenderingProgress)
             self.provider.renderingContinues.connect(self._updateProgress)
             self.provider.renderingFinished.connect(self._closeProgress)
-            self.provider.compositionStarted.connect(
-                self._showRenderingProgress)
+            self.provider.compositionStarted.connect(self._showRenderingProgress)
             self.provider.compositionContinues.connect(self._updateProgress)
             self.provider.compositionFinished.connect(self._closeProgress)
 
@@ -119,8 +119,8 @@ class AnimationFrame(wx.Frame):
         self._mgr.Update()
 
         self.dialogs = dict()
-        self.dialogs['speed'] = None
-        self.dialogs['preferences'] = None
+        self.dialogs["speed"] = None
+        self.dialogs["preferences"] = None
 
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -129,19 +129,34 @@ class AnimationFrame(wx.Frame):
         self.CreateStatusBar(number=1, style=0)
 
     def _addPanes(self):
-        self._mgr.AddPane(self.animationPanel,
-                          wx.aui.AuiPaneInfo().CentrePane().
-                          Name('animPanel').CentrePane().CaptionVisible(False).PaneBorder(False).
-                          Floatable(False).BestSize((-1, -1)).
-                          CloseButton(False).DestroyOnClose(True).Layer(0))
+        self._mgr.AddPane(
+            self.animationPanel,
+            wx.aui.AuiPaneInfo()
+            .CentrePane()
+            .Name("animPanel")
+            .CentrePane()
+            .CaptionVisible(False)
+            .PaneBorder(False)
+            .Floatable(False)
+            .BestSize((-1, -1))
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .Layer(0),
+        )
         for name, slider in six.iteritems(self.animationSliders):
             self._mgr.AddPane(
                 slider,
-                wx.aui.AuiPaneInfo().PaneBorder(False).Name(
-                    'slider_' +
-                    name). Layer(1).CaptionVisible(False).BestSize(
-                    slider.GetBestSize()). DestroyOnClose(True).CloseButton(False).Bottom())
-            self._mgr.GetPane('slider_' + name).Hide()
+                wx.aui.AuiPaneInfo()
+                .PaneBorder(False)
+                .Name("slider_" + name)
+                .Layer(1)
+                .CaptionVisible(False)
+                .BestSize(slider.GetBestSize())
+                .DestroyOnClose(True)
+                .CloseButton(False)
+                .Bottom(),
+            )
+            self._mgr.GetPane("slider_" + name).Hide()
 
     def _addToolbars(self):
         """Add toolbars to the window
@@ -152,36 +167,62 @@ class AnimationFrame(wx.Frame):
          - 'miscToolbar'          - help, close
         """
         self.toolbars["mainToolbar"] = MainToolbar(self)
-        self._mgr.AddPane(self.toolbars["mainToolbar"],
-                          wx.aui.AuiPaneInfo().
-                          Name('mainToolbar').Caption(_("Main Toolbar")).
-                          ToolbarPane().Top().
-                          LeftDockable(False).RightDockable(False).
-                          BottomDockable(True).TopDockable(True).
-                          CloseButton(False).Layer(2).Row(1).Position(0).
-                          BestSize((self.toolbars['mainToolbar'].GetBestSize())))
+        self._mgr.AddPane(
+            self.toolbars["mainToolbar"],
+            wx.aui.AuiPaneInfo()
+            .Name("mainToolbar")
+            .Caption(_("Main Toolbar"))
+            .ToolbarPane()
+            .Top()
+            .LeftDockable(False)
+            .RightDockable(False)
+            .BottomDockable(True)
+            .TopDockable(True)
+            .CloseButton(False)
+            .Layer(2)
+            .Row(1)
+            .Position(0)
+            .BestSize((self.toolbars["mainToolbar"].GetBestSize())),
+        )
 
-        self.toolbars['animationToolbar'] = AnimationToolbar(self)
-        self._mgr.AddPane(self.toolbars['animationToolbar'],
-                          wx.aui.AuiPaneInfo().
-                          Name('animationToolbar').Caption(_("Animation Toolbar")).
-                          ToolbarPane().Top().
-                          LeftDockable(False).RightDockable(False).
-                          BottomDockable(True).TopDockable(True).
-                          CloseButton(False).Layer(2).Row(1).Position(1).
-                          BestSize((self.toolbars['animationToolbar'].GetBestSize())))
-        self.controller.SetAnimationToolbar(
-            self.toolbars['animationToolbar'])
+        self.toolbars["animationToolbar"] = AnimationToolbar(self)
+        self._mgr.AddPane(
+            self.toolbars["animationToolbar"],
+            wx.aui.AuiPaneInfo()
+            .Name("animationToolbar")
+            .Caption(_("Animation Toolbar"))
+            .ToolbarPane()
+            .Top()
+            .LeftDockable(False)
+            .RightDockable(False)
+            .BottomDockable(True)
+            .TopDockable(True)
+            .CloseButton(False)
+            .Layer(2)
+            .Row(1)
+            .Position(1)
+            .BestSize((self.toolbars["animationToolbar"].GetBestSize())),
+        )
+        self.controller.SetAnimationToolbar(self.toolbars["animationToolbar"])
 
-        self.toolbars['miscToolbar'] = MiscToolbar(self)
-        self._mgr.AddPane(self.toolbars['miscToolbar'],
-                          wx.aui.AuiPaneInfo().
-                          Name('miscToolbar').Caption(_("Misc Toolbar")).
-                          ToolbarPane().Top().
-                          LeftDockable(False).RightDockable(False).
-                          BottomDockable(True).TopDockable(True).
-                          CloseButton(False).Layer(2).Row(1).Position(2).
-                          BestSize((self.toolbars['miscToolbar'].GetBestSize())))
+        self.toolbars["miscToolbar"] = MiscToolbar(self)
+        self._mgr.AddPane(
+            self.toolbars["miscToolbar"],
+            wx.aui.AuiPaneInfo()
+            .Name("miscToolbar")
+            .Caption(_("Misc Toolbar"))
+            .ToolbarPane()
+            .Top()
+            .LeftDockable(False)
+            .RightDockable(False)
+            .BottomDockable(True)
+            .TopDockable(True)
+            .CloseButton(False)
+            .Layer(2)
+            .Row(1)
+            .Position(2)
+            .BestSize((self.toolbars["miscToolbar"].GetBestSize())),
+        )
 
     def SetAnimations(self, layerLists):
         """Set animation data
@@ -206,16 +247,16 @@ class AnimationFrame(wx.Frame):
         self.controller.EditAnimations()
 
     def SetSlider(self, name):
-        if name == 'nontemporal':
-            self._mgr.GetPane('slider_nontemporal').Show()
-            self._mgr.GetPane('slider_temporal').Hide()
+        if name == "nontemporal":
+            self._mgr.GetPane("slider_nontemporal").Show()
+            self._mgr.GetPane("slider_temporal").Hide()
 
-        elif name == 'temporal':
-            self._mgr.GetPane('slider_temporal').Show()
-            self._mgr.GetPane('slider_nontemporal').Hide()
+        elif name == "temporal":
+            self._mgr.GetPane("slider_temporal").Show()
+            self._mgr.GetPane("slider_nontemporal").Hide()
         else:
-            self._mgr.GetPane('slider_temporal').Hide()
-            self._mgr.GetPane('slider_nontemporal').Hide()
+            self._mgr.GetPane("slider_temporal").Hide()
+            self._mgr.GetPane("slider_nontemporal").Hide()
         self._mgr.Update()
 
     def OnPlayForward(self, event):
@@ -247,7 +288,7 @@ class AnimationFrame(wx.Frame):
         self.controller.SetReplayMode(mode)
 
     def OnAdjustSpeed(self, event):
-        win = self.dialogs['speed']
+        win = self.dialogs["speed"]
         if win:
             win.SetTemporalMode(self.controller.GetTemporalMode())
             win.SetTimeGranularity(self.controller.GetTimeGranularity())
@@ -258,11 +299,13 @@ class AnimationFrame(wx.Frame):
                 win.Show()
         else:  # start
             win = SpeedDialog(
-                self, temporalMode=self.controller.GetTemporalMode(),
+                self,
+                temporalMode=self.controller.GetTemporalMode(),
                 timeGranularity=self.controller.GetTimeGranularity(),
-                initialSpeed=self.controller.timeTick)
+                initialSpeed=self.controller.timeTick,
+            )
             win.CenterOnParent()
-            self.dialogs['speed'] = win
+            self.dialogs["speed"] = win
             win.speedChanged.connect(self.ChangeSpeed)
             win.Show()
 
@@ -280,12 +323,12 @@ class AnimationFrame(wx.Frame):
             message="Loading data started, please be patient.",
             maximum=count,
             parent=self,
-            style=wx.PD_CAN_ABORT | wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH)
+            style=wx.PD_CAN_ABORT | wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
+        )
         self._progressDlgMax = count
 
     def _updateProgress(self, current, text):
-        text += _(" ({c} out of {p})").format(c=current,
-                                              p=self._progressDlgMax)
+        text += _(" ({c} out of {p})").format(c=current, p=self._progressDlgMax)
         keepGoing, skip = self._progressDlg.Update(current, text)
         if not keepGoing:
             self.provider.RequestStopRendering()
@@ -307,19 +350,16 @@ class AnimationFrame(wx.Frame):
         event.Skip()
 
     def OnPreferences(self, event):
-        if not self.dialogs['preferences']:
+        if not self.dialogs["preferences"]:
             dlg = PreferencesDialog(parent=self, giface=self._giface)
-            self.dialogs['preferences'] = dlg
-            dlg.formatChanged.connect(
-                lambda: self.controller.UpdateAnimations())
+            self.dialogs["preferences"] = dlg
+            dlg.formatChanged.connect(lambda: self.controller.UpdateAnimations())
             dlg.CenterOnParent()
 
-        self.dialogs['preferences'].Show()
+        self.dialogs["preferences"].Show()
 
     def OnHelp(self, event):
-        RunCommand('g.manual',
-                   quiet=True,
-                   entry='wxGUI.animation')
+        RunCommand("g.manual", quiet=True, entry="wxGUI.animation")
 
     def OnCloseWindow(self, event):
         if self.controller.timer.IsRunning():
@@ -330,14 +370,13 @@ class AnimationFrame(wx.Frame):
 
     def __del__(self):
         """It might not be called, therefore we try to clean it all in OnCloseWindow."""
-        if hasattr(self, 'controller') and hasattr(self.controller, 'timer'):
+        if hasattr(self, "controller") and hasattr(self.controller, "timer"):
             if self.controller.timer.IsRunning():
                 self.controller.timer.Stop()
         CleanUp(TMP_DIR)()
 
 
 class AnimationsPanel(wx.Panel):
-
     def __init__(self, parent, windows, initialCount=4):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.NO_BORDER)
         self.shown = []
@@ -378,14 +417,17 @@ class AnimationsPanel(wx.Panel):
 
 
 class AnimationSliderBase(wx.Panel):
-
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
         self.label1 = StaticText(self, id=wx.ID_ANY)
         self.slider = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
-        self.indexField = TextCtrl(self, id=wx.ID_ANY, size=(40, -1),
-                                   style=wx.TE_PROCESS_ENTER | wx.TE_RIGHT,
-                                   validator=IntegerValidator())
+        self.indexField = TextCtrl(
+            self,
+            id=wx.ID_ANY,
+            size=(40, -1),
+            style=wx.TE_PROCESS_ENTER | wx.TE_RIGHT,
+            validator=IntegerValidator(),
+        )
 
         self.callbackSliderChanging = None
         self.callbackSliderChanged = None
@@ -467,7 +509,6 @@ class AnimationSliderBase(wx.Panel):
 
 
 class SimpleAnimationSlider(AnimationSliderBase):
-
     def __init__(self, parent):
         AnimationSliderBase.__init__(self, parent)
 
@@ -476,15 +517,16 @@ class SimpleAnimationSlider(AnimationSliderBase):
 
     def _doLayout(self):
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(self.indexField, proportion=0,
-                 flag=wx.ALIGN_CENTER | wx.LEFT, border=5)
-        hbox.Add(self.label1, proportion=0,
-                 flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, border=5)
         hbox.Add(
-            self.slider,
-            proportion=1,
-            flag=wx.EXPAND,
-            border=0)
+            self.indexField, proportion=0, flag=wx.ALIGN_CENTER | wx.LEFT, border=5
+        )
+        hbox.Add(
+            self.label1,
+            proportion=0,
+            flag=wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
+        hbox.Add(self.slider, proportion=1, flag=wx.EXPAND, border=0)
         self.SetSizerAndFit(hbox)
 
     def _setFrames(self, count):
@@ -497,7 +539,7 @@ class SimpleAnimationSlider(AnimationSliderBase):
         self._setLabel()
 
     def _setLabel(self):
-        label = "/ %(framesCount)s" % {'framesCount': self.framesCount}
+        label = "/ %(framesCount)s" % {"framesCount": self.framesCount}
         self.label1.SetLabel(label)
         self.Layout()
 
@@ -506,7 +548,6 @@ class SimpleAnimationSlider(AnimationSliderBase):
 
 
 class TimeAnimationSlider(AnimationSliderBase):
-
     def __init__(self, parent):
         AnimationSliderBase.__init__(self, parent)
         self.timeLabels = []
@@ -521,24 +562,18 @@ class TimeAnimationSlider(AnimationSliderBase):
     def _doLayout(self):
         vbox = wx.BoxSizer(wx.VERTICAL)
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(self.label1, proportion=0,
-                 flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+        hbox.Add(self.label1, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         hbox.AddStretchSpacer()
-        hbox.Add(self.indexField, proportion=0,
-                 flag=wx.ALIGN_CENTER_VERTICAL, border=0)
-        hbox.Add(self.label2, proportion=0,
-                 flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3)
+        hbox.Add(self.indexField, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+        hbox.Add(
+            self.label2, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=3
+        )
         hbox.AddStretchSpacer()
-        hbox.Add(self.label3, proportion=0,
-                 flag=wx.ALIGN_CENTER_VERTICAL, border=0)
+        hbox.Add(self.label3, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL, border=0)
         vbox.Add(hbox, proportion=0, flag=wx.EXPAND, border=0)
 
         hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.Add(
-            self.slider,
-            proportion=1,
-            flag=wx.EXPAND,
-            border=0)
+        hbox.Add(self.slider, proportion=1, flag=wx.EXPAND, border=0)
         vbox.Add(hbox, proportion=0, flag=wx.EXPAND, border=0)
 
         self._setTemporalType()
@@ -584,7 +619,7 @@ class TimeAnimationSlider(AnimationSliderBase):
                     end = self.timeLabels[-1][1]
                 else:
                     end = self.timeLabels[-1][0]
-                end = "%(end)s %(unit)s" % {'end': end, 'unit': unit}
+                end = "%(end)s %(unit)s" % {"end": end, "unit": unit}
                 self.label3.SetLabel(end)
 
             self.label2Length = len(start)
@@ -601,16 +636,17 @@ class TimeAnimationSlider(AnimationSliderBase):
         if self.timeLabels[index][1]:  # interval
             if self.temporalType == TemporalType.ABSOLUTE:
                 label = _("%(from)s %(dash)s %(to)s") % {
-                    'from': start,
-                    'dash': u"\u2013",
-                    'to': self.timeLabels[index][1]}
+                    "from": start,
+                    "dash": "\u2013",
+                    "to": self.timeLabels[index][1],
+                }
             else:
-                label = _("to %(to)s") % {'to': self.timeLabels[index][1]}
+                label = _("to %(to)s") % {"to": self.timeLabels[index][1]}
         else:
             if self.temporalType == TemporalType.ABSOLUTE:
                 label = start
             else:
-                label = ''
+                label = ""
         self.label2.SetLabel(label)
         if self.temporalType == TemporalType.RELATIVE:
             self.indexField.SetValue(start)

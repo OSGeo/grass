@@ -35,7 +35,7 @@ import copy
 import wx
 
 from core import utils
-from core.gcmd import GMessage, RunCommand
+from core.gcmd import RunCommand
 from core.settings import UserSettings
 from gui_core.wrap import StaticText, TextCtrl
 
@@ -95,7 +95,7 @@ class SbManager:
         self.progressbar.progressShown.connect(self._progressShown)
         self.progressbar.progressHidden.connect(self._progressHidden)
 
-        self._oldStatus = ''
+        self._oldStatus = ""
 
         self._hiddenItems = {}
 
@@ -194,8 +194,10 @@ class SbManager:
 
         :func:`Update`
         """
-        if self.statusbarItems[itemName].GetPosition() != 0 or \
-           not self.progressbar.IsShown():
+        if (
+            self.statusbarItems[itemName].GetPosition() != 0
+            or not self.progressbar.IsShown()
+        ):
             self.statusbarItems[itemName].Show()
 
     def _postInit(self):
@@ -206,16 +208,20 @@ class SbManager:
         It needs choice filled by items.
         it is called automatically.
         """
-        UserSettings.Set(group='display',
-                         key='statusbarMode',
-                         subkey='choices',
-                         value=self.choice.GetItems(),
-                         settings_type='internal')
+        UserSettings.Set(
+            group="display",
+            key="statusbarMode",
+            subkey="choices",
+            value=self.choice.GetItems(),
+            settings_type="internal",
+        )
 
         if not self._modeIndexSet:
-            self.choice.SetSelection(UserSettings.Get(group='display',
-                                                      key='statusbarMode',
-                                                      subkey='selection'))
+            self.choice.SetSelection(
+                UserSettings.Get(
+                    group="display", key="statusbarMode", subkey="selection"
+                )
+            )
         self.Reposition()
 
         self._postInitialized = True
@@ -296,15 +302,14 @@ class SbManager:
         self.choice.GetClientData(self.choice.GetSelection()).Show()
 
     def OnToggleStatus(self, event):
-        """Toggle status text
-        """
+        """Toggle status text"""
         self.Update()
         if event.GetSelection() == 3:  # use something better than magic numbers
             # show computation region extent by default
-            self.statusbarItems['region'].SetValue(True)
+            self.statusbarItems["region"].SetValue(True)
             # redraw map if auto-rendering is enabled
             if self.mapFrame.IsAutoRendered():
-                self.mapFrame.GetMapWindow().UpdateMap(render=False)
+                self.mapFrame.GetWindow().UpdateMap(render=False)
 
     def SetMode(self, modeIndex):
         """Sets current mode
@@ -324,14 +329,6 @@ class SbManager:
         self.progressbar.SetValue(value)
         if text:
             self.statusbar.SetStatusText(text)
-
-    def Show(self, show=True):
-        """Show/hide statusbar"""
-        self.statusbar.Show(show)
-
-    def IsShown(self):
-        """Check if statusbar is shown"""
-        return self.statusbar.IsShown()
 
 
 class SbItem:
@@ -400,8 +397,7 @@ class SbItem:
         self.mapFrame.StatusbarEnableLongHelp(longHelp)
 
     def Update(self):
-        """Called when statusbar action is activated (e.g. through wx.Choice).
-        """
+        """Called when statusbar action is activated (e.g. through wx.Choice)."""
         self._update(longHelp=False)
 
 
@@ -413,10 +409,11 @@ class SbRender(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'render'
+        self.name = "render"
         self._properties = mapframe.mapWindowProperties
-        self.widget = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                  label=_("Render"))
+        self.widget = wx.CheckBox(
+            parent=self.statusbar, id=wx.ID_ANY, label=_("Render")
+        )
 
         self.widget.SetValue(self._properties.autoRender)
         self.widget.Hide()
@@ -451,12 +448,13 @@ class SbShowRegion(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'region'
+        self.name = "region"
         self.label = _("Show comp. extent")
         self._properties = mapframe.mapWindowProperties
 
-        self.widget = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                  label=_("Show computational extent"))
+        self.widget = wx.CheckBox(
+            parent=self.statusbar, id=wx.ID_ANY, label=_("Show computational extent")
+        )
         self.widget.SetValue(self._properties.showRegion)
         self.widget.Hide()
         self.widget.SetToolTip(
@@ -467,7 +465,10 @@ class SbShowRegion(SbItem):
                     "Display region drawn as a blue box inside the "
                     "computational region, "
                     "computational region inside a display region "
-                    "as a red box).")))
+                    "as a red box)."
+                )
+            )
+        )
         self.widget.Bind(wx.EVT_CHECKBOX, self.OnToggleShowRegion)
         self._connectShowRegion()
 
@@ -494,7 +495,7 @@ class SbShowRegion(SbItem):
 
         # redraw map if auto-rendering is enabled
         if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetMapWindow().UpdateMap(render=False)
+            self.mapFrame.GetWindow().UpdateMap(render=False)
 
     def SetValue(self, value):
         self._disconnectShowRegion()
@@ -512,13 +513,15 @@ class SbAlignExtent(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'alignExtent'
+        self.name = "alignExtent"
         self.label = _("Display mode")
         self._properties = mapframe.mapWindowProperties
 
         self.widget = wx.CheckBox(
-            parent=self.statusbar, id=wx.ID_ANY,
-            label=_("Align region extent based on display size"))
+            parent=self.statusbar,
+            id=wx.ID_ANY,
+            label=_("Align region extent based on display size"),
+        )
         self.widget.SetValue(self._properties.alignExtent)
         self.widget.Hide()
         self.widget.SetToolTip(
@@ -527,7 +530,10 @@ class SbAlignExtent(SbItem):
                     "Align region extent based on display "
                     "size from center point. "
                     "Default value for new map displays can "
-                    "be set up in 'User GUI settings' dialog.")))
+                    "be set up in 'User GUI settings' dialog."
+                )
+            )
+        )
         self._connectAlignExtent()
         self.widget.Bind(wx.EVT_CHECKBOX, self._onCheckbox)
 
@@ -557,11 +563,14 @@ class SbResolution(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'resolution'
+        self.name = "resolution"
         self.label = _("Display resolution")
         self._properties = self.mapFrame.mapWindowProperties
-        self.widget = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY, label=_(
-            "Constrain display resolution to computational settings"))
+        self.widget = wx.CheckBox(
+            parent=self.statusbar,
+            id=wx.ID_ANY,
+            label=_("Constrain display resolution to computational settings"),
+        )
         self.widget.SetValue(self._properties.resolution)
         self.widget.Hide()
         self.widget.SetToolTip(
@@ -570,7 +579,10 @@ class SbResolution(SbItem):
                     "Constrain display resolution "
                     "to computational region settings. "
                     "Default value for new map displays can "
-                    "be set up in 'User GUI settings' dialog.")))
+                    "be set up in 'User GUI settings' dialog."
+                )
+            )
+        )
 
         self.widget.Bind(wx.EVT_CHECKBOX, self.OnToggleUpdateMap)
         self._connectResolutionChange()
@@ -585,14 +597,13 @@ class SbResolution(SbItem):
         self._properties.resolutionChanged.disconnect(self._setValue)
 
     def OnToggleUpdateMap(self, event):
-        """Update display when toggle display mode
-        """
+        """Update display when toggle display mode"""
         self._disconnectResolutionChange()
         self._properties.resolution = self.widget.GetValue()
         self._connectResolutionChange()
         # redraw map if auto-rendering is enabled
         if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetMapWindow().UpdateMap()
+            self.mapFrame.GetWindow().UpdateMap()
 
 
 class SbMapScale(SbItem):
@@ -604,20 +615,27 @@ class SbMapScale(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'mapscale'
+        self.name = "mapscale"
         self.label = _("Map scale")
 
-        self.widget = wx.ComboBox(parent=self.statusbar, id=wx.ID_ANY,
-                                  style=wx.TE_PROCESS_ENTER,
-                                  size=(150, -1))
+        self.widget = wx.ComboBox(
+            parent=self.statusbar,
+            id=wx.ID_ANY,
+            style=wx.TE_PROCESS_ENTER,
+            size=(150, -1),
+        )
 
-        self.widget.SetItems(['1:1000',
-                              '1:5000',
-                              '1:10000',
-                              '1:25000',
-                              '1:50000',
-                              '1:100000',
-                              '1:1000000'])
+        self.widget.SetItems(
+            [
+                "1:1000",
+                "1:5000",
+                "1:10000",
+                "1:25000",
+                "1:50000",
+                "1:100000",
+                "1:1000000",
+            ]
+        )
         self.widget.Hide()
         self.widget.SetToolTip(
             wx.ToolTip(
@@ -625,7 +643,10 @@ class SbMapScale(SbItem):
                     "As everyone's monitors and resolutions "
                     "are set differently these values are not "
                     "true map scales, but should get you into "
-                    "the right neighborhood.")))
+                    "the right neighborhood."
+                )
+            )
+        )
 
         self.widget.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMapScale)
         self.widget.Bind(wx.EVT_COMBOBOX, self.OnChangeMapScale)
@@ -647,16 +668,15 @@ class SbMapScale(SbItem):
         self.mapFrame.StatusbarEnableLongHelp(False)
 
     def OnChangeMapScale(self, event):
-        """Map scale changed by user
-        """
+        """Map scale changed by user"""
         scale = event.GetString()
 
         try:
-            if scale[:2] != '1:':
+            if scale[:2] != "1:":
                 raise ValueError
             value = int(scale[2:])
         except ValueError:
-            self.SetValue('1:%ld' % int(self.lastMapScale))
+            self.SetValue("1:%ld" % int(self.lastMapScale))
             return
 
         self.mapFrame.SetMapScale(value)
@@ -674,12 +694,16 @@ class SbGoTo(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'goto'
+        self.name = "goto"
         self.label = _("Go to")
 
-        self.widget = TextCtrl(parent=self.statusbar, id=wx.ID_ANY,
-                               value="", style=wx.TE_PROCESS_ENTER,
-                               size=(300, -1))
+        self.widget = TextCtrl(
+            parent=self.statusbar,
+            id=wx.ID_ANY,
+            value="",
+            style=wx.TE_PROCESS_ENTER,
+            size=(300, -1),
+        )
 
         self.widget.Hide()
 
@@ -695,58 +719,66 @@ class SbGoTo(SbItem):
         """
         if useDefinedProjection:
             settings = UserSettings.Get(
-                group='projection', key='statusbar', subkey='proj4')
+                group="projection", key="statusbar", subkey="proj4"
+            )
             if not settings:
-                raise SbException(
-                    _("Projection not defined (check the settings)"))
+                raise SbException(_("Projection not defined (check the settings)"))
             else:
                 # reproject values
                 projIn = settings
-                projOut = RunCommand('g.proj',
-                                     flags='jf',
-                                     read=True)
-                proj = projIn.split(' ')[0].split('=')[1]
-                if proj in ('ll', 'latlong', 'longlat'):
+                projOut = RunCommand("g.proj", flags="jf", read=True)
+                proj = projIn.split(" ")[0].split("=")[1]
+                if proj in ("ll", "latlong", "longlat"):
                     e, n = utils.DMS2Deg(e, n)
                     proj, coord1 = utils.ReprojectCoordinates(
-                        coord=(e, n), projIn=projIn, projOut=projOut, flags='d')
+                        coord=(e, n), projIn=projIn, projOut=projOut, flags="d"
+                    )
                     e, n = coord1
                 else:
                     e, n = float(e), float(n)
                     proj, coord1 = utils.ReprojectCoordinates(
-                        coord=(e, n), projIn=projIn, projOut=projOut, flags='d')
+                        coord=(e, n), projIn=projIn, projOut=projOut, flags="d"
+                    )
                     e, n = coord1
-        elif self.mapFrame.GetMap().projinfo['proj'] == 'll':
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll":
             e, n = utils.DMS2Deg(e, n)
         else:
             e, n = float(e), float(n)
         return e, n
 
     def OnGoTo(self, event):
-        """Go to position
-        """
+        """Go to position"""
         try:
-            e, n = self.GetValue().split(';')
-            e, n = self.ReprojectENToMap(
-                e, n, self.mapFrame.GetProperty('projection'))
+            e, n = self.GetValue().split(";")
+            e, n = self.ReprojectENToMap(e, n, self.mapFrame.GetProperty("projection"))
             self.mapFrame.GetWindow().GoTo(e, n)
             self.widget.SetFocus()
         except ValueError:
             # FIXME: move this code to MapWindow/BufferedWindow/MapFrame
             region = self.mapFrame.GetMap().GetCurrentRegion()
-            precision = int(UserSettings.Get(group='projection', key='format',
-                                             subkey='precision'))
-            format = UserSettings.Get(group='projection', key='format',
-                                      subkey='ll')
-            if self.mapFrame.GetMap().projinfo[
-                    'proj'] == 'll' and format == 'DMS':
-                self.SetValue("%s" % utils.Deg2DMS(region['center_easting'],
-                                                   region['center_northing'],
-                                                   precision=precision))
+            precision = int(
+                UserSettings.Get(group="projection", key="format", subkey="precision")
+            )
+            format = UserSettings.Get(group="projection", key="format", subkey="ll")
+            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+                self.SetValue(
+                    "%s"
+                    % utils.Deg2DMS(
+                        region["center_easting"],
+                        region["center_northing"],
+                        precision=precision,
+                    )
+                )
             else:
-                self.SetValue("%.*f; %.*f" %
-                              (precision, region['center_easting'],
-                               precision, region['center_northing']))
+                self.SetValue(
+                    "%.*f; %.*f"
+                    % (
+                        precision,
+                        region["center_easting"],
+                        precision,
+                        region["center_northing"],
+                    )
+                )
         except SbException as e:
             # FIXME: this may be useless since statusbar update checks user
             # defined projection and this exception raises when user def proj
@@ -756,47 +788,46 @@ class SbGoTo(SbItem):
     def GetCenterString(self, map):
         """Get current map center in appropriate format"""
         region = map.GetCurrentRegion()
-        precision = int(UserSettings.Get(group='projection', key='format',
-                                         subkey='precision'))
-        format = UserSettings.Get(group='projection', key='format',
-                                  subkey='ll')
+        precision = int(
+            UserSettings.Get(group="projection", key="format", subkey="precision")
+        )
+        format = UserSettings.Get(group="projection", key="format", subkey="ll")
         projection = UserSettings.Get(
-            group='projection',
-            key='statusbar',
-            subkey='proj4')
+            group="projection", key="statusbar", subkey="proj4"
+        )
 
-        if self.mapFrame.GetProperty('projection'):
+        if self.mapFrame.GetProperty("projection"):
             if not projection:
-                raise SbException(
-                    _("Projection not defined (check the settings)"))
+                raise SbException(_("Projection not defined (check the settings)"))
             else:
                 proj, coord = utils.ReprojectCoordinates(
-                    coord=(region['center_easting'],
-                           region['center_northing']),
-                    projOut=projection, flags='d')
+                    coord=(region["center_easting"], region["center_northing"]),
+                    projOut=projection,
+                    flags="d",
+                )
                 if coord:
-                    if proj in ('ll', 'latlong',
-                                'longlat') and format == 'DMS':
-                        return "%s" % utils.Deg2DMS(coord[0],
-                                                    coord[1],
-                                                    precision=precision)
+                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
+                        return "%s" % utils.Deg2DMS(
+                            coord[0], coord[1], precision=precision
+                        )
                     else:
-                        return "%.*f; %.*f" % (precision,
-                                               coord[0], precision, coord[1])
+                        return "%.*f; %.*f" % (precision, coord[0], precision, coord[1])
                 else:
-                    raise SbException(
-                        _("Error in projection (check the settings)"))
+                    raise SbException(_("Error in projection (check the settings)"))
         else:
-            if self.mapFrame.GetMap().projinfo[
-                    'proj'] == 'll' and format == 'DMS':
+            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
                 return "%s" % utils.Deg2DMS(
-                    region['center_easting'],
-                    region['center_northing'],
-                    precision=precision)
+                    region["center_easting"],
+                    region["center_northing"],
+                    precision=precision,
+                )
             else:
                 return "%.*f; %.*f" % (
-                    precision, region['center_easting'],
-                    precision, region['center_northing'])
+                    precision,
+                    region["center_easting"],
+                    precision,
+                    region["center_northing"],
+                )
 
     def SetCenter(self):
         """Set current map center as item value"""
@@ -821,13 +852,14 @@ class SbProjection(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'projection'
+        self.name = "projection"
         self.label = _("Projection")
 
         self.defaultLabel = _("Use defined projection")
 
-        self.widget = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,
-                                  label=self.defaultLabel)
+        self.widget = wx.CheckBox(
+            parent=self.statusbar, id=wx.ID_ANY, label=self.defaultLabel
+        )
 
         self.widget.SetValue(False)
 
@@ -842,16 +874,16 @@ class SbProjection(SbItem):
                     "Reproject coordinates displayed "
                     "in the statusbar. Projection can be "
                     "defined in GUI preferences dialog "
-                    "(tab 'Projection')")))
+                    "(tab 'Projection')"
+                )
+            )
+        )
 
     def Update(self):
         self.statusbar.SetStatusText("")
-        epsg = UserSettings.Get(
-            group='projection',
-            key='statusbar',
-            subkey='epsg')
+        epsg = UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
         if epsg:
-            label = '%s (EPSG: %s)' % (self.defaultLabel, epsg)
+            label = "%s (EPSG: %s)" % (self.defaultLabel, epsg)
             self.widget.SetLabel(label)
         else:
             self.widget.SetLabel(self.defaultLabel)
@@ -866,18 +898,16 @@ class SbMask(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'mask'
+        self.name = "mask"
 
-        self.widget = StaticText(
-            parent=self.statusbar,
-            id=wx.ID_ANY,
-            label=_('MASK'))
+        self.widget = StaticText(parent=self.statusbar, id=wx.ID_ANY, label=_("MASK"))
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
         self.widget.Hide()
 
     def Update(self):
-        if grass.find_file(name='MASK', element='cell',
-                           mapset=grass.gisenv()['MAPSET'])['name']:
+        if grass.find_file(
+            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
+        )["name"]:
             self.Show()
         else:
             self.Hide()
@@ -918,22 +948,25 @@ class SbDisplayGeometry(SbTextItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'displayGeometry'
+        self.name = "displayGeometry"
         self.label = _("Display geometry")
 
     def Show(self):
         region = copy.copy(self.mapFrame.GetMap().GetCurrentRegion())
         if self.mapFrame.mapWindowProperties.resolution:
             compRegion = self.mapFrame.GetMap().GetRegion(add3d=False)
-            region['rows'] = abs(
-                int((region['n'] - region['s']) / compRegion['nsres']) + 0.5)
-            region['cols'] = abs(
-                int((region['e'] - region['w']) / compRegion['ewres']) + 0.5)
-            region['nsres'] = compRegion['nsres']
-            region['ewres'] = compRegion['ewres']
-        self.SetValue("rows=%d; cols=%d; nsres=%.2f; ewres=%.2f" %
-                      (region["rows"], region["cols"],
-                       region["nsres"], region["ewres"]))
+            region["rows"] = abs(
+                int((region["n"] - region["s"]) / compRegion["nsres"]) + 0.5
+            )
+            region["cols"] = abs(
+                int((region["e"] - region["w"]) / compRegion["ewres"]) + 0.5
+            )
+            region["nsres"] = compRegion["nsres"]
+            region["ewres"] = compRegion["ewres"]
+        self.SetValue(
+            "rows=%d; cols=%d; nsres=%.2f; ewres=%.2f"
+            % (region["rows"], region["cols"], region["nsres"], region["ewres"])
+        )
         SbTextItem.Show(self)
 
 
@@ -944,7 +977,7 @@ class SbCoordinates(SbTextItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'coordinates'
+        self.name = "coordinates"
         self.label = _("Coordinates")
         self._additionalInfo = None
         self._basicValue = None
@@ -953,20 +986,22 @@ class SbCoordinates(SbTextItem):
         """Show the last map window coordinates.
 
         .. todo::
-            remove last EN call and use coordinates comming from signal
+            remove last EN call and use coordinates coming from signal
         """
-        precision = int(UserSettings.Get(group='projection', key='format',
-                                         subkey='precision'))
-        format = UserSettings.Get(group='projection', key='format',
-                                  subkey='ll')
-        projection = self.mapFrame.GetProperty('projection')
+        precision = int(
+            UserSettings.Get(group="projection", key="format", subkey="precision")
+        )
+        format = UserSettings.Get(group="projection", key="format", subkey="ll")
+        projection = self.mapFrame.GetProperty("projection")
         try:
             e, n = self.mapFrame.GetWindow().GetLastEN()
             self._basicValue = self.ReprojectENFromMap(
-                e, n, projection, precision, format)
+                e, n, projection, precision, format
+            )
             if self._additionalInfo:
                 value = "{coords} ({additionalInfo})".format(
-                    coords=self._basicValue, additionalInfo=self._additionalInfo)
+                    coords=self._basicValue, additionalInfo=self._additionalInfo
+                )
             else:
                 value = self._basicValue
             self.SetValue(value)
@@ -994,8 +1029,7 @@ class SbCoordinates(SbTextItem):
         """
         self._additionalInfo = text
 
-    def ReprojectENFromMap(
-            self, e, n, useDefinedProjection, precision, format):
+    def ReprojectENFromMap(self, e, n, useDefinedProjection, precision, format):
         """Reproject east, north to user defined projection.
 
         :param e,n: coordinate
@@ -1004,28 +1038,25 @@ class SbCoordinates(SbTextItem):
         """
         if useDefinedProjection:
             settings = UserSettings.Get(
-                group='projection', key='statusbar', subkey='proj4')
+                group="projection", key="statusbar", subkey="proj4"
+            )
             if not settings:
-                raise SbException(
-                    _("Projection not defined (check the settings)"))
+                raise SbException(_("Projection not defined (check the settings)"))
             else:
                 # reproject values
-                proj, coord = utils.ReprojectCoordinates(coord=(e, n),
-                                                         projOut=settings,
-                                                         flags='d')
+                proj, coord = utils.ReprojectCoordinates(
+                    coord=(e, n), projOut=settings, flags="d"
+                )
                 if coord:
                     e, n = coord
-                    if proj in ('ll', 'latlong',
-                                'longlat') and format == 'DMS':
+                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
                         return utils.Deg2DMS(e, n, precision=precision)
                     else:
                         return "%.*f; %.*f" % (precision, e, precision, n)
                 else:
-                    raise SbException(
-                        _("Error in projection (check the settings)"))
+                    raise SbException(_("Error in projection (check the settings)"))
         else:
-            if self.mapFrame.GetMap().projinfo[
-                    'proj'] == 'll' and format == 'DMS':
+            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
                 return utils.Deg2DMS(e, n, precision=precision)
             else:
                 return "%.*f; %.*f" % (precision, e, precision, n)
@@ -1036,19 +1067,20 @@ class SbRegionExtent(SbTextItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'displayRegion'
+        self.name = "displayRegion"
         self.label = _("Extent")
 
     def Show(self):
-        precision = int(UserSettings.Get(group='projection', key='format',
-                                         subkey='precision'))
-        format = UserSettings.Get(group='projection', key='format',
-                                  subkey='ll')
-        projection = self.mapFrame.GetProperty('projection')
+        precision = int(
+            UserSettings.Get(group="projection", key="format", subkey="precision")
+        )
+        format = UserSettings.Get(group="projection", key="format", subkey="ll")
+        projection = self.mapFrame.GetProperty("projection")
         region = self._getRegion()
         try:
             regionReprojected = self.ReprojectRegionFromMap(
-                region, projection, precision, format)
+                region, projection, precision, format
+            )
             self.SetValue(regionReprojected)
         except SbException as e:
             self.SetValue(e.message)
@@ -1064,13 +1096,20 @@ class SbRegionExtent(SbTextItem):
         :param nsres,ewres: unused
         """
         if precision is not None:
-            return "%.*f - %.*f, %.*f - %.*f" % (precision, w, precision, e,
-                                                 precision, s, precision, n)
+            return "%.*f - %.*f, %.*f - %.*f" % (
+                precision,
+                w,
+                precision,
+                e,
+                precision,
+                s,
+                precision,
+                n,
+            )
         else:
             return "%s - %s, %s - %s" % (w, e, s, n)
 
-    def ReprojectRegionFromMap(
-            self, region, useDefinedProjection, precision, format):
+    def ReprojectRegionFromMap(self, region, useDefinedProjection, precision, format):
         """Reproject region values
 
         .. todo::
@@ -1078,70 +1117,79 @@ class SbRegionExtent(SbTextItem):
         """
         if useDefinedProjection:
             settings = UserSettings.Get(
-                group='projection', key='statusbar', subkey='proj4')
+                group="projection", key="statusbar", subkey="proj4"
+            )
 
             if not settings:
-                raise SbException(
-                    _("Projection not defined (check the settings)"))
+                raise SbException(_("Projection not defined (check the settings)"))
             else:
                 projOut = settings
                 proj, coord1 = utils.ReprojectCoordinates(
-                    coord=(region["w"], region["s"]), projOut=projOut, flags='d')
+                    coord=(region["w"], region["s"]), projOut=projOut, flags="d"
+                )
                 proj, coord2 = utils.ReprojectCoordinates(
-                    coord=(region["e"], region["n"]), projOut=projOut, flags='d')
+                    coord=(region["e"], region["n"]), projOut=projOut, flags="d"
+                )
                 # useless, used in derived class
                 proj, coord3 = utils.ReprojectCoordinates(
-                    coord=(0.0, 0.0), projOut=projOut, flags='d')
+                    coord=(0.0, 0.0), projOut=projOut, flags="d"
+                )
                 proj, coord4 = utils.ReprojectCoordinates(
-                    coord=(
-                        region
-                        ["ewres"],
-                        region
-                        ["nsres"]),
-                    projOut=projOut,
-                    flags='d')
+                    coord=(region["ewres"], region["nsres"]), projOut=projOut, flags="d"
+                )
                 if coord1 and coord2:
-                    if proj in ('ll', 'latlong',
-                                'longlat') and format == 'DMS':
+                    if proj in ("ll", "latlong", "longlat") and format == "DMS":
                         w, s = utils.Deg2DMS(
-                            coord1[0], coord1[1], string=False, precision=precision)
+                            coord1[0], coord1[1], string=False, precision=precision
+                        )
                         e, n = utils.Deg2DMS(
-                            coord2[0], coord2[1], string=False, precision=precision)
+                            coord2[0], coord2[1], string=False, precision=precision
+                        )
                         ewres, nsres = utils.Deg2DMS(
                             abs(coord3[0]) - abs(coord4[0]),
                             abs(coord3[1]) - abs(coord4[1]),
-                            string=False, hemisphere=False,
-                            precision=precision)
+                            string=False,
+                            hemisphere=False,
+                            precision=precision,
+                        )
                         return self._formatRegion(
-                            w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
+                            w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres
+                        )
                     else:
                         w, s = coord1
                         e, n = coord2
                         ewres, nsres = coord3
                         return self._formatRegion(
-                            w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres,
-                            precision=precision)
+                            w=w,
+                            s=s,
+                            e=e,
+                            n=n,
+                            ewres=ewres,
+                            nsres=nsres,
+                            precision=precision,
+                        )
                 else:
-                    raise SbException(
-                        _("Error in projection (check the settings)"))
+                    raise SbException(_("Error in projection (check the settings)"))
 
         else:
-            if self.mapFrame.GetMap().projinfo[
-                    'proj'] == 'll' and format == 'DMS':
-                w, s = utils.Deg2DMS(region["w"], region["s"],
-                                     string=False, precision=precision)
-                e, n = utils.Deg2DMS(region["e"], region["n"],
-                                     string=False, precision=precision)
-                ewres, nsres = utils.Deg2DMS(region['ewres'], region['nsres'],
-                                             string=False, precision=precision)
-                return self._formatRegion(
-                    w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
+            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+                w, s = utils.Deg2DMS(
+                    region["w"], region["s"], string=False, precision=precision
+                )
+                e, n = utils.Deg2DMS(
+                    region["e"], region["n"], string=False, precision=precision
+                )
+                ewres, nsres = utils.Deg2DMS(
+                    region["ewres"], region["nsres"], string=False, precision=precision
+                )
+                return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
             else:
                 w, s = region["w"], region["s"]
                 e, n = region["e"], region["n"]
-                ewres, nsres = region['ewres'], region['nsres']
-                return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres,
-                                          nsres=nsres, precision=precision)
+                ewres, nsres = region["ewres"], region["nsres"]
+                return self._formatRegion(
+                    w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres, precision=precision
+                )
 
 
 class SbCompRegionExtent(SbRegionExtent):
@@ -1149,15 +1197,26 @@ class SbCompRegionExtent(SbRegionExtent):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbRegionExtent.__init__(self, mapframe, statusbar, position)
-        self.name = 'computationalRegion'
+        self.name = "computationalRegion"
         self.label = _("Computational region")
 
     def _formatRegion(self, w, e, s, n, ewres, nsres, precision=None):
         """Format computational region string for statusbar"""
         if precision is not None:
             return "%.*f - %.*f, %.*f - %.*f (%.*f, %.*f)" % (
-                precision, w, precision, e, precision, s, precision, n,
-                precision, ewres, precision, nsres)
+                precision,
+                w,
+                precision,
+                e,
+                precision,
+                s,
+                precision,
+                n,
+                precision,
+                ewres,
+                precision,
+                nsres,
+            )
         else:
             return "%s - %s, %s - %s (%s, %s)" % (w, e, s, n, ewres, nsres)
 
@@ -1173,14 +1232,15 @@ class SbProgress(SbItem):
     """
 
     def __init__(self, mapframe, statusbar, sbManager, position=0):
-        self.progressShown = Signal('SbProgress.progressShown')
-        self.progressHidden = Signal('SbProgress.progressHidden')
+        self.progressShown = Signal("SbProgress.progressShown")
+        self.progressHidden = Signal("SbProgress.progressHidden")
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = 'progress'
+        self.name = "progress"
         self.sbManager = sbManager
         # on-render gauge
-        self.widget = wx.Gauge(parent=self.statusbar, id=wx.ID_ANY,
-                               range=0, style=wx.GA_HORIZONTAL)
+        self.widget = wx.Gauge(
+            parent=self.statusbar, id=wx.ID_ANY, range=0, style=wx.GA_HORIZONTAL
+        )
         self.Hide()
 
     def GetRange(self):
@@ -1207,8 +1267,7 @@ class SbProgress(SbItem):
             self.widget.Hide()
 
     def IsShown(self):
-        """Is progress bar shown
-        """
+        """Is progress bar shown"""
         return self.widget.IsShown()
 
     def SetValue(self, value):

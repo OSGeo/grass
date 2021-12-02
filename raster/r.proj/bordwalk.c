@@ -33,16 +33,6 @@
 #include <grass/glocale.h>
 #include "r.proj.h"
 
-#ifdef MIN
-#undef MIN
-#endif
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-
-#ifdef MAX
-#undef MAX
-#endif
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-
 static void debug(const char *name, const struct Cell_head *hd)
 {
     G_debug(3, "%s: xmin: %f; xmax: %f; ymin: %f; ymax: %f",
@@ -88,8 +78,11 @@ static void proj_update(const struct pj_info *from_pj, const struct pj_info *to_
 			struct Cell_head *to_hd, double hx, double hy)
 {
 	if (GPJ_transform(from_pj, to_pj, trans_pj, dir,
-			  &hx, &hy, NULL) < 0)
+			  &hx, &hy, NULL) < 0) {
+	    G_fatal_error(_("unable to transform coordinates %g, %g"),
+			  hx, hy);
 	    return;
+	}
 	update(to_hd, hx, hy);
 }
 
@@ -132,8 +125,12 @@ static int proj_inside(const struct pj_info *from_pj, const struct pj_info *to_p
 		       const struct pj_info *trans_pj, int dir, 
 		       const struct Cell_head *ref_hd, double hx, double hy)
 {
-    if (GPJ_transform(from_pj, to_pj, trans_pj, -dir, &hx, &hy, NULL) < 0)
+    if (GPJ_transform(from_pj, to_pj, trans_pj, -dir, &hx, &hy, NULL) < 0) {
+	G_fatal_error(_("unable to transform coordinates %g, %g"),
+		      hx, hy);
+
 	return 0;
+    }
     return inside(ref_hd, hx, hy);
 }
 
@@ -247,8 +244,9 @@ void bordwalk_edge(const struct Cell_head *from_hd, struct Cell_head *to_hd,
     hy = (from_hd->north + from_hd->south) / 2.0;
 
     if (GPJ_transform(from_pj, to_pj, trans_pj, dir,
-		      &hx, &hy, NULL) < 0)
-	G_fatal_error(_("Unable to reproject map center"));
+		      &hx, &hy, NULL) < 0) {
+	G_fatal_error(_("Unable to reproject map center %g, %g"), hx, hy);
+    }
 
     to_hd->east  = hx;
     to_hd->west  = hx;

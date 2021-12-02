@@ -12,16 +12,16 @@ class TestGrowDistance(TestCase):
     """Test case for grow distance module"""
 
     # Setup variables to be used for outputs
-    distance = 'test_distance'
-    lakes = 'lakes'
-    elevation = 'elevation'
+    distance = "test_distance"
+    lakes = "lakes"
+    elevation = "elevation"
 
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region and setup"""
         # Always use the computational region of the raster elevation
         cls.use_temp_region()
-        cls.runModule('g.region', raster=cls.elevation)
+        cls.runModule("g.region", raster=cls.elevation)
 
     @classmethod
     def tearDownClass(cls):
@@ -33,20 +33,18 @@ class TestGrowDistance(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule('g.remove', flags='f', type='raster',
-                       name=self.distance)
+        self.runModule("g.remove", flags="f", type="raster", name=self.distance)
 
     def test_grow(self):
         """Test to see if the outputs are created"""
         # run the grow distance module
-        self.assertModule('r.grow.distance', input=self.lakes,
-                          distance=self.distance)
+        self.assertModule("r.grow.distance", input=self.lakes, distance=self.distance)
         # check to see if distance output is in mapset
-        self.assertRasterExists(self.distance,
-                                msg='distance output was not created')
-        self.assertRasterMinMax(self.distance, 0, 5322,
-                                msg='distance output not in range')
+        self.assertRasterExists(self.distance, msg="distance output was not created")
+        self.assertRasterMinMax(
+            self.distance, 0, 5322, msg="distance output not in range"
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

@@ -16,11 +16,10 @@ This program is free software under the GNU General Public License
 
 from __future__ import print_function
 
-import os
-
 import wx
 from wx.lib.mixins.treemixin import VirtualTree, ExpansionState
 from core.globalvar import hasAgw, wxPythonPhoenix
+
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
@@ -28,14 +27,15 @@ except ImportError:
 if wxPythonPhoenix:
     try:
         from agw.hypertreelist import HyperTreeList as TreeListCtrl
-    except ImportError: # if it's not there locally, try the wxPython lib.
+    except ImportError:  # if it's not there locally, try the wxPython lib.
         from wx.lib.agw.hypertreelist import HyperTreeList as TreeListCtrl
 else:
     from wx.gizmos import TreeListCtrl
 
 # needed just for testing
-if __name__ == '__main__':
+if __name__ == "__main__":
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
 from core.treemodel import TreeModel, DictNode
@@ -60,16 +60,22 @@ class AbstractTreeViewMixin(VirtualTree):
         self._model = model
         super(AbstractTreeViewMixin, self).__init__(parent=parent, *args, **kw)
 
-        self.selectionChanged = Signal('TreeView.selectionChanged')
-        self.itemActivated = Signal('TreeView.itemActivated')
-        self.contextMenu = Signal('TreeView.contextMenu')
+        self.selectionChanged = Signal("TreeView.selectionChanged")
+        self.itemActivated = Signal("TreeView.itemActivated")
+        self.contextMenu = Signal("TreeView.contextMenu")
 
-        self.Bind(wx.EVT_TREE_SEL_CHANGED, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.selectionChanged))
-        self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.itemActivated))
-        self.Bind(wx.EVT_TREE_ITEM_MENU, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.contextMenu))
+        self.Bind(
+            wx.EVT_TREE_SEL_CHANGED,
+            lambda evt: self._emitSignal(evt.GetItem(), self.selectionChanged),
+        )
+        self.Bind(
+            wx.EVT_TREE_ITEM_ACTIVATED,
+            lambda evt: self._emitSignal(evt.GetItem(), self.itemActivated),
+        )
+        self.Bind(
+            wx.EVT_TREE_ITEM_MENU,
+            lambda evt: self._emitSignal(evt.GetItem(), self.contextMenu),
+        )
 
     def SetModel(self, model):
         """Set tree model and refresh.
@@ -87,7 +93,7 @@ class AbstractTreeViewMixin(VirtualTree):
         """
         node = self._model.GetNodeByIndex(index)
         # remove & because of & needed in menu (&Files)
-        label = node.label.replace('&', '')
+        label = node.label.replace("&", "")
         return label
 
     def OnGetChildrenCount(self, index):
@@ -134,6 +140,20 @@ class AbstractTreeViewMixin(VirtualTree):
         else:
             self.Expand(item)
         self.EnsureVisible(item)
+
+    def ExpandAll(self):
+        """Expand all items."""
+
+        def _expand(item, root=False):
+            if not root:
+                self.Expand(item)
+            child, cookie = self.GetFirstChild(item)
+            while child:
+                _expand(child)
+                child, cookie = self.GetNextChild(item, cookie)
+
+        item = self.GetRootItem()
+        _expand(item, True)
 
     def IsNodeExpanded(self, node):
         """Check if node is expanded"""
@@ -193,35 +213,40 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
 
     def __init__(self, model, parent, **kw):
         if hasAgw:
-            style = 'agwStyle'
+            style = "agwStyle"
         else:
-            style = 'style'
+            style = "style"
 
         if style not in kw:
-            kw[style] = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT |\
-                CT.TR_HAS_BUTTONS | CT.TR_LINES_AT_ROOT | CT.TR_SINGLE
+            kw[style] = (
+                CT.TR_HIDE_ROOT
+                | CT.TR_FULL_ROW_HIGHLIGHT
+                | CT.TR_HAS_BUTTONS
+                | CT.TR_LINES_AT_ROOT
+                | CT.TR_SINGLE
+            )
         super(CTreeView, self).__init__(parent=parent, model=model, **kw)
-        self.SetBackgroundColour(
-            wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
+        self.SetBackgroundColour(wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
         self.RefreshItems()
 
 
 class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
-
     def __init__(self, model, parent, columns, **kw):
         self._columns = columns
-        if wxPythonPhoenix and 'style' in kw:
-            flags = kw['style']
-            kw['agwStyle'] = flags
-            del kw['style']
+        if wxPythonPhoenix and "style" in kw:
+            flags = kw["style"]
+            kw["agwStyle"] = flags
+            del kw["style"]
         super(TreeListView, self).__init__(parent=parent, model=model, **kw)
         for column in columns:
             self.AddColumn(column)
         self.SetMainColumn(0)
         self.RefreshItems()
         # to solve events inconsitency
-        self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, lambda evt:
-                  self._emitSignal(evt.GetItem(), self.contextMenu))
+        self.Bind(
+            wx.EVT_TREE_ITEM_RIGHT_CLICK,
+            lambda evt: self._emitSignal(evt.GetItem(), self.contextMenu),
+        )
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnRightClick)
 
     def OnGetItemText(self, index, column=0):
@@ -233,9 +258,9 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
         node = self._model.GetNodeByIndex(index)
         # remove & because of & needed in menu (&Files)
         if column > 0:
-            return node.data.get(self._columns[column], '')
+            return node.data.get(self._columns[column], "")
         else:
-            label = node.label.replace('&', '')
+            label = node.label.replace("&", "")
             return label
 
     def OnRightClick(self, event):
@@ -253,11 +278,11 @@ class TreeFrame(wx.Frame):
     """Frame for testing purposes only."""
 
     def __init__(self, model=None):
-        wx.Frame.__init__(self, None, title='Test tree')
+        wx.Frame.__init__(self, None, title="Test tree")
 
         panel = wx.Panel(self)
-#        self.tree = TreeListView(model=model, parent=panel, columns=['col1', 'xxx'])
-#        self.tree = TreeView(model=model, parent=panel)
+        #        self.tree = TreeListView(model=model, parent=panel, columns=['col1', 'xxx'])
+        #        self.tree = TreeView(model=model, parent=panel)
         self.tree = CTreeView(model=model, parent=panel)
         self.tree.selectionChanged.connect(self.OnSelChanged)
         self.tree.itemActivated.connect(self.OnItemActivated)
@@ -269,11 +294,12 @@ class TreeFrame(wx.Frame):
         szr.SetSizeHints(self)
 
     def OnSelChanged(self):
-        print('selected items: ' +
-              str([node.label for node in self.tree.GetSelected()]))
+        print(
+            "selected items: " + str([node.label for node in self.tree.GetSelected()])
+        )
 
     def OnItemActivated(self, node):
-        print('activated: ' + node.label)
+        print("activated: " + node.label)
 
 
 def main():
@@ -284,18 +310,21 @@ def main():
     n3 = tree.AppendNode(parent=root, data={"label": "node3"})  # pylint: disable=W0612
     n11 = tree.AppendNode(parent=n1, data={"label": "node11", "xxx": "A"})
     n12 = tree.AppendNode(
-        parent=n1, data={"label": "node12", "xxx": "B"})  # pylint: disable=W0612
+        parent=n1, data={"label": "node12", "xxx": "B"}
+    )  # pylint: disable=W0612
     n21 = tree.AppendNode(
-        parent=n2, data={"label": "node21", "xxx": "A"})  # pylint: disable=W0612
+        parent=n2, data={"label": "node21", "xxx": "A"}
+    )  # pylint: disable=W0612
     n111 = tree.AppendNode(
-        parent=n11, data={"label": "node111", "xxx": "A"})  # pylint: disable=W0612
+        parent=n11, data={"label": "node111", "xxx": "A"}
+    )  # pylint: disable=W0612
 
     app = wx.App()
     frame = TreeFrame(model=tree)
-#    frame.tree.Select(n111)
+    #    frame.tree.Select(n111)
     frame.Show()
     app.MainLoop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

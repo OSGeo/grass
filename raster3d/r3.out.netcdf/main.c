@@ -51,7 +51,7 @@
 #define UNITS "units"
 #define DEGREES_EAST "degrees_east"
 #define DEGREES_NORTH "degrees_north"
-#define HISTORY_TEXT "GRASS GIS 7 netCDF export of r3.out.netcdf"
+#define HISTORY_TEXT "GRASS GIS 8 netCDF export of r3.out.netcdf"
 #define CF_SUPPORT "CF-1.5"
 
 #define ERR(e) {fatalError(nc_strerror(e));}

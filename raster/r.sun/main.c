@@ -118,8 +118,8 @@ int OUTGR(void);
 int min(int, int);
 int max(int, int);
 
-void cube(int, int);
-void (*func) (int, int);
+/*void cube(int, int);
+void (*func) (int, int);*/
 
 void joules2(struct SunGeometryConstDay *sunGeom,
 	     struct SunGeometryVarDay *sunVarGeom,
@@ -1685,9 +1685,9 @@ void where_is_point(double *length, struct SunGeometryVarDay *sunVarGeom,
  * }
  */
 
-void cube(jmin, imin)
+/*void cube(jmin, imin)
 {
-}
+}*/
 
 
 /*////////////////////////////////////////////////////////////////////// */
@@ -1837,9 +1837,13 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	}
 	sunVarGeom.zmax = zmax;
         shadowoffset_base = (j % (numRows)) * n * arrayNumInt;
-    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,func,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum, gridGeom,sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar, elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step )
+    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum,gridGeom,elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step)
     {
-      #pragma omp for schedule(dynamic) 
+      #pragma omp for schedule(dynamic)                                                        \
+                      firstprivate(sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar)                  \
+                      lastprivate(sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar)                   \
+                      reduction(max : linke_max, albedo_max, lat_max, sunrise_max, sunset_max) \
+                      reduction(min : linke_min, albedo_min, lat_min, sunrise_min, sunset_min)
 	for (i = 0; i < n; i++) {
             shadowoffset = shadowoffset_base + (arrayNumInt * i);
 	    if (useCivilTime()) {
@@ -1858,7 +1862,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 		coslatsq = coslat * coslat;
 	    }
 
-	    func = NULL;
+	    /* func = NULL; */
 
 	    sunVarGeom.z_orig = z1 = sunVarGeom.zp = z[arrayOffset][i];
 

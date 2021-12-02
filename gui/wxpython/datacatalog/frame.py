@@ -28,16 +28,10 @@ from gui_core.wrap import Button
 class DataCatalogFrame(wx.Frame):
     """Frame for testing purposes only."""
 
-    def __init__(self, parent, giface=None):
-        wx.Frame.__init__(self, parent=parent,
-                          title=_('GRASS GIS Data Catalog'))
+    def __init__(self, parent, giface=None, title=_("Data Catalog")):
+        wx.Frame.__init__(self, parent=parent, title=title)
         self.SetName("DataCatalog")
-        self.SetIcon(
-            wx.Icon(
-                os.path.join(
-                    ICONDIR,
-                    'grass.ico'),
-                wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO))
 
         self._giface = giface
         self.panel = wx.Panel(self)
@@ -62,9 +56,7 @@ class DataCatalogFrame(wx.Frame):
         btnSizer.AddStretchSpacer()
         btnSizer.Add(self.btnClose)
 
-        sizer.Add(btnSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND,
-                  border=5)
+        sizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)

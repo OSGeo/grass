@@ -17,9 +17,15 @@
 #include <unistd.h>
 #include <grass/dbmi.h>
 /* NOTE: these should come from <unistd.h> or from <sys/file.h> */
+#ifndef R_OK
 #define R_OK 4
+#endif
+#ifndef W_OK
 #define W_OK 2
+#endif
+#ifndef X_OK
 #define X_OK 1
+#endif
 
 #include <sys/types.h>
 #ifdef USE_DIRECT

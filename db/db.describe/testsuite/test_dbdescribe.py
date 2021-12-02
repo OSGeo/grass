@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 """
 Created on Tue Nov 14 09:43:55 2017
 
@@ -10,7 +10,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
 
-output="""table:zipcodes
+output = """table:zipcodes
 description:
 insert:?
 delete:?
@@ -150,7 +150,7 @@ select:?
 update:?
 """
 
-outcol="""ncols: 12
+outcol = """ncols: 12
 nrows: 44
 Column 1: cat:INTEGER:20
 Column 2: OBJECTID:INTEGER:20
@@ -168,23 +168,23 @@ Column 12: SHAPE_Area:DOUBLE PRECISION:20
 
 
 class TestDbCopy(TestCase):
-    invect = 'zipcodes'
-    mapset = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    invect = "zipcodes"
+    mapset = "$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db"
 
     @classmethod
     def setUpClass(cls):
-        cls.runModule('db.connect', flags='c')
+        cls.runModule("db.connect", flags="c")
 
     def test_describe(self):
-        cols = read_command('db.describe', table=self.invect,
-                            database=self.mapset)
+        cols = read_command("db.describe", table=self.invect, database=self.mapset)
         self.assertEqual(first=cols, second=output)
 
     def test_columns(self):
-        cols = read_command('db.describe', table=self.invect, flags='c',
-                            database=self.mapset)
+        cols = read_command(
+            "db.describe", table=self.invect, flags="c", database=self.mapset
+        )
         self.assertEqual(first=cols, second=outcol)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

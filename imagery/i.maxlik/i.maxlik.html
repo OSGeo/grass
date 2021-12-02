@@ -11,8 +11,10 @@ steps.  The first step in an unsupervised image
 classification is performed by
 <em><a href="i.cluster.html">i.cluster</a></em>; the first step in a
 supervised classification is executed by the GRASS
-program <em><a href="g.gui.iclass.html">g.gui.iclass</a></em>. In both
-cases, the second step in the image classification procedure is
+program <em><a href="g.gui.iclass.html">g.gui.iclass</a></em>
+(or by providing any other raster map with already existing
+training areas). In both cases, the second step in
+the image classification procedure is
 performed by <em>i.maxlik</em>.
 
 <p>
@@ -85,8 +87,8 @@ part of the example):
 
 <div class="code"><pre>
 # using here the signaturefile created by i.cluster
-i.maxlik group=lsat7_2002 subgroup=lsat7_2002 \
-  signaturefile=sig_cluster_lsat2002 \
+i.maxlik group=lsat7_2002 subgroup=res_30m \
+  signaturefile=cluster_lsat2002 \
   output=lsat7_2002_cluster_classes reject=lsat7_2002_cluster_reject
 
 # visually check result
@@ -146,11 +148,13 @@ Processing manual</a></em>
 Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
-
 <br>
 Tao Wen, 
 University of Illinois at Urbana-Champaign,
 Illinois
+<br>
+Semantic label support: Maris Nartiss,
+University of Latvia
 
 <!--
 <p>
