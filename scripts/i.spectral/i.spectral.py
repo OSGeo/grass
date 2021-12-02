@@ -52,14 +52,14 @@
 # %end
 # %option G_OPT_F_OUTPUT
 # % key: output
-# % description: Name for output image (or text file for -t)
+# % description: Name for output image is valid for -g (or text file for -t flag)
 # % guisection: Output
 # % required : no
 # %end
 # %Option
 # % key: format
 # % type: string
-# % description: Graphics format for output file
+# % description: Graphics format for output file (valid for -g flag)
 # % options: png,eps,svg
 # % answer: png
 # % multiple: no
@@ -67,7 +67,7 @@
 # %End
 # %flag
 # % key: c
-# % description: Show sampling coordinates instead of numbering in the legend
+# % description: Show sampling coordinates instead of numbering in the legend (valid for -g flag)
 # %end
 # % flag
 # % key: g
@@ -186,6 +186,41 @@ def draw_linegraph(what):
     while len(what) > len(colors):
         colors += gp_colors
     colors = colors[0 : len(what)]
+
+    supported_monitors = ("cairo", "png", "ps")
+    monitors = gcore.read_command("d.mon", flags="l", quiet=True)
+    found = []
+    for monitor in supported_monitors:
+        if monitor in monitors:
+            found.append(monitor)
+    if not found:
+        gcore.fatal(
+            _(
+                "Supported monitor isn't running. Please launch one of the"
+                " monitors {}.".format(", ".join(supported_monitors))
+            )
+        )
+    selected_monitor = gcore.read_command("d.mon", flags="p", quiet=True).replace(
+        "\n", ""
+    )
+    if selected_monitor not in supported_monitors:
+        gcore.fatal(
+            _(
+                "Supported monitor isn't selected. Please select one of the"
+                " monitors {}.".format(", ".join(supported_monitors))
+            )
+        )
+    with open(gcore.parse_command("d.mon", flags="g", quiet=True)["env"]) as f:
+        for line in f.readlines():
+            if "GRASS_RENDER_FILE=" in line:
+                gcore.info(
+                    _(
+                        "{} monitor is used, output file {}".format(
+                            selected_monitor.capitalize(), line.split("=")[-1]
+                        )
+                    )
+                )
+                break
 
     gcore.run_command(
         "d.linegraph",
