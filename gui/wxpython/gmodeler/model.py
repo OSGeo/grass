@@ -2688,7 +2688,6 @@ import atexit
 import tempfile
 from grass.script import run_command
 from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
-from pywps.app.Service import Service
 from pywps.inout.formats import FORMATS
 
 sup_formats = [Format(form.mime_type) for form in FORMATS]
@@ -2753,6 +2752,8 @@ def getParameterizedFlags(paramFlags, itemFlags):
             """
 
 if __name__ == "__main__":
+    from pywps.app.Service import Service
+
     processes = [Model()]
     application = Service(processes)
 """
