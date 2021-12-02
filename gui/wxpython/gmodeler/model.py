@@ -2753,8 +2753,6 @@ def getParameterizedFlags(paramFlags, itemFlags):
             """
 
 if __name__ == "__main__":
-    process = Model()
-
     processes = [Model()]
     application = Service(processes)
 """
