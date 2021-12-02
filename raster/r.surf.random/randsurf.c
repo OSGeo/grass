@@ -1,14 +1,19 @@
-#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/gmath.h>
 #include <grass/glocale.h>
 
 
-int randsurf(char *out,		/* Name of raster maps to be opened.    */
-	     int min, int max,	/* Minimum and maximum cell values.     */
+/** Generate random values in a raster map
+ *
+ * @param out Name of raster maps to be opened
+ * @param min Minimum cell value
+ * @param min Maximum cell value
+ * @param int_map TRUE for a CELL map, FALSE for DCELL
+ */
+int randsurf(char *out,
+	     double min, double max,
 	     int int_map)
-{				/* if map is to be written as a CELL map */
+{
     int nrows, ncols;		/* Number of cell rows and columns      */
 
     DCELL *row_out_D;		/* Buffer just large enough to hold one */
@@ -21,7 +26,7 @@ int randsurf(char *out,		/* Name of raster maps to be opened.    */
 
 	/****** INITIALISE RANDOM NUMBER GENERATOR ******/
     /* You can set GRASS_RANDOM_SEED for repeatability */
-    G_math_srand_auto();
+    G_srand48_auto();
 
 	/****** OPEN CELL FILES AND GET CELL DETAILS ******/
     fd_out = Rast_open_new(out, int_map ? CELL_TYPE : DCELL_TYPE);
@@ -38,14 +43,15 @@ int randsurf(char *out,		/* Name of raster maps to be opened.    */
     for (row_count = 0; row_count < nrows; row_count++) {
 	G_percent(row_count, nrows, 2);
 	for (col_count = 0; col_count < ncols; col_count++) {
-	    if (int_map)
-		*(row_out_C + col_count) =
-		    (CELL) (G_math_rand() * (max + 1 - min) + min);
-	    /* under represents first and last bin */
-	    /*                  *(row_out_C + col_count) = (CELL) floor(rand1(2742)*(max-min)+min +0.5); */
-	    else
+	    if (int_map) {
+		unsigned int x = (unsigned int)G_mrand48();
+                *(row_out_C + col_count) =
+		    (CELL) (min + x % (unsigned int)(max + 1 - min));
+	    }
+	    else {
 		*(row_out_D + col_count) =
-		    (DCELL) (G_math_rand() * (max - min) + min);
+		    (DCELL) (min + G_drand48() * (max - min));
+	    }
 	}
 
 	/* Write contents row by row */
