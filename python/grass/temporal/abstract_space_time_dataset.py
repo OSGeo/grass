@@ -22,6 +22,7 @@ from .core import (
     get_tgis_metadata,
     get_current_mapset,
     get_enable_mapset_check,
+    get_tgis_db_version_from_metadata,
 )
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .temporal_granularity import (
@@ -2576,16 +2577,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             ),
             "r",
         ).read()
+
+        for version in range(3, get_tgis_db_version_from_metadata()+1):
+            sqlfile = os.path.join(
+                sql_path,
+                "update_" + self.get_type() + "_metadata_template_v{}.sql".format(version)
+            )
+            if os.path.exists(sqlfile):
+                sql += open(sqlfile).read()
+
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
-
-        # check version
-        idx = sql.find("-- VERSION")
-        if idx > -1:
-            from .core import get_tgis_db_version_from_metadata
-            version = int(sql[idx+len("-- VERSION ")])
-            if get_tgis_db_version_from_metadata() < version:
-                sql = sql[:idx] # remove version-relevant code
 
         sql_script += sql
         sql_script += "\n"
