@@ -259,7 +259,7 @@ def aggregate_by_topology(
 
     msgr = get_tgis_message_interface()
 
-    dbif, connected = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     topo_builder = SpatioTemporalTopologyBuilder()
     topo_builder.build(mapsA=granularity_list, mapsB=map_list, spatial=spatial)
@@ -289,7 +289,6 @@ def aggregate_by_topology(
         count += 1
 
         aggregation_list = []
-
         if "equal" in topo_list and granule.equal:
             for map_layer in granule.equal:
                 aggregation_list.append(map_layer.get_name())
@@ -320,45 +319,40 @@ def aggregate_by_topology(
         if "related" in topo_list:
             aggregation_weights = []
             set_list = set()
-            try:
+            if granule.overlaps:
                 for map_layer in granule.overlaps:
                     set_list.add(map_layer)
-            except:
-                pass
-            try:
+            if granule.overlapped:
                 for map_layer in granule.overlapped:
                     set_list.add(map_layer)
-            except:
-                pass
-            try:
+            if granule.contains:
                 for map_layer in granule.contains:
                     set_list.add(map_layer)
-            except:
-                pass
-            try:
+            if granule.equal:
                 for map_layer in granule.equal:
                     set_list.add(map_layer)
-            except:
-                pass
-            try:
+            if granule.during:
                 for map_layer in granule.during:
                     set_list.add(map_layer)
-            except:
-                pass
-            if set_list:
+            if len(set_list) > 0:
                 for map_layer in set_list:
                     aggregation_list.append(map_layer.get_name())
                     t_granule_contained = map_layer.get_absolute_time()
                     t_granule = granule.get_absolute_time()
                     if None in t_granule_contained or None in t_granule:
+                        # no weight for this map_layer because no
+                        # overlap whatsoever
                         aggregation_weights.append(0)
                     else:
+                        # calculate the absolute temporal overlap between the
+                        # new granule and the map_layer
                         overlap_abs = min(t_granule[1], t_granule_contained[1]) - max(
                             t_granule[0], t_granule_contained[0]
                         )
+                        # calculate the relative percentage of the overlap
+                        # with respect to the total granule duration
                         overlap_rel = overlap_abs / (t_granule[1] - t_granule[0])
                         aggregation_weights.append(overlap_rel)
-
         if aggregation_list:
             msgr.verbose(
                 _("Aggregating %(len)i raster maps from %(start)s to" " %(end)s")
@@ -401,18 +395,16 @@ def aggregate_by_topology(
             if len(aggregation_list) > 1:
                 # Create the r.series input file
                 filename = gscript.tempfile(True)
-                file = open(filename, "w")
-                if weighting:
-                    for i, name in enumerate(aggregation_list):
-                        string = name
-                        weight = aggregation_weights[i]
-                        file.write("%s|%f\n" % (string, weight))
-                    file.close()
-                else:
-                    for name in aggregation_list:
-                        string = "%s\n" % (name)
-                        file.write(string)
-                    file.close()
+                with open(filename, "w") as file:
+                    if weighting:
+                        for i, name in enumerate(aggregation_list):
+                            string = name
+                            weight = aggregation_weights[i]
+                            file.write("%s|%f\n" % (string, weight))
+                    else:
+                        for name in aggregation_list:
+                            string = "%s\n" % (name)
+                            file.write(string)
                 # Perform aggregation
                 mod = copy.deepcopy(r_series)
                 mod(file=filename, output=output_name)
@@ -443,7 +435,7 @@ def aggregate_by_topology(
 
     process_queue.wait()
 
-    if connected:
+    if connection_state_changed:
         dbif.close()
 
     msgr.percent(1, 1, 1)

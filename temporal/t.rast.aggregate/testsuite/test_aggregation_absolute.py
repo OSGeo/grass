@@ -55,11 +55,11 @@ class TestAggregationAbsolute(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule("t.remove", flags="df", type="strds", inputs="A")
+        cls.runModule("t.remove", flags="rf", type="strds", inputs="A")
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="df", type="strds", inputs="B")
+        self.runModule("t.remove", flags="rf", type="strds", inputs="B")
 
     def test_disaggregation(self):
         """Disaggregation with empty maps"""
@@ -235,6 +235,43 @@ class TestAggregationAbsolute(TestCase):
         # print lister.outputs.stdout
         maps = "b_101" + os.linesep
         self.assertEqual(maps, lister.outputs.stdout)
+
+    def test_weighted_aggregation(self):
+        """Weighted aggregation to 3 weeks"""
+        self.assertModule(
+            "t.rast.aggregate",
+            input="A",
+            output="B",
+            basename="b",
+            granularity="3 weeks",
+            method="average",
+            sampling=["related"],
+            file_limit=0,
+            suffix="num%03",
+            flags="w",
+        )
+        # assert that there are 5 rasters
+        t_rast_list = SimpleModule("t.rast.list", input="B", flags="u").run()
+        rasters = [
+            item
+            for item in t_rast_list.outputs.stdout.split(os.linesep)
+            if (len(item) > 0 and item.startswith("b_"))
+        ]
+        self.assertEqual(
+            5,
+            len(rasters),
+            ("Output STRDS does not contain the correct number of rasters."),
+        )
+
+        # assert that the granularity is correct and the whole time range is
+        # covered
+        info = SimpleModule("t.info", flags="g", input="B")
+        ref_dict = {
+            "start_time": "'2001-01-15 00:00:00'",
+            "end_time": "'2001-04-30 00:00:00'",
+            "granularity": "'21 days'",
+        }
+        self.assertModuleKeyValue(module=info, reference=ref_dict, precision=2, sep="=")
 
 
 if __name__ == "__main__":
