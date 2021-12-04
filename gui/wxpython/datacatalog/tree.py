@@ -2031,6 +2031,17 @@ class DataCatalogTree(TreeView):
 
     def _updateAfterMapsetChanged(self):
         """Update tree after current mapset has changed"""
+        db_node, location_node, mapset_node = self.GetCurrentDbLocationMapsetNode()
+        # mapset is not in tree, create its node
+        if not mapset_node:
+            genv = gisenv()
+            if not location_node:
+                if not db_node:
+                    self.InsertGrassDb(genv["GISDBASE"])
+                else:
+                    self.InsertLocation(genv["LOCATION_NAME"], db_node)
+            else:
+                self.InsertMapset(genv["MAPSET"], location_node)
         self.UpdateCurrentDbLocationMapsetNode()
         self._reloadMapsetNode(self.current_mapset_node)
         self.RefreshNode(self.current_mapset_node, recursive=True)
