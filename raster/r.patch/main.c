@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
         written = end;
 
     } /* end while loop */
-    G_percent(row, nrows, 2);
+    G_percent(nrows, nrows, 2);
 
     for (t = 0; t < nprocs; t++) {
         G_free(patch[t]);
