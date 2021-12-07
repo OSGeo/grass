@@ -88,7 +88,11 @@ import subprocess
 import sys
 import tempfile as tmpfile
 
-windows = sys.platform == "win32"
+WINDOWS = sys.platform.startswith("win")
+MACOS = sys.platform == "darwin"
+
+VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
+VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 
 
 def write_gisrc(dbase, location, mapset):
@@ -197,26 +201,35 @@ def setup_runtime_env(gisbase):
     gisbase = os.fspath(gisbase)
     # Set GISBASE
     os.environ["GISBASE"] = gisbase
-    mswin = sys.platform.startswith("win")
-    # define PATH
-    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "bin")
-    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "scripts")
-    if mswin:  # added for winGRASS
-        os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "extrabin")
 
-    # add addons to the PATH
+    # define PATH
+    path_addition = os.pathsep + os.path.join(gisbase, "bin")
+    path_addition += os.pathsep + os.path.join(gisbase, "scripts")
+    if WINDOWS:
+        path_addition += os.pathsep + os.path.join(gisbase, "extrabin")
+
+    # add addons to the PATH, use GRASS_ADDON_BASE if set
     # copied and simplified from lib/init/grass.py
-    if mswin:
-        config_dirname = "GRASS8"
-        config_dir = os.path.join(os.getenv("APPDATA"), config_dirname)
-    else:
-        config_dirname = ".grass8"
-        config_dir = os.path.join(os.getenv("HOME"), config_dirname)
-    addon_base = os.path.join(config_dir, "addons")
-    os.environ["GRASS_ADDON_BASE"] = addon_base
-    if not mswin:
-        os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "scripts")
-    os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "bin")
+    addon_base = os.getenv("GRASS_ADDON_BASE")
+    if not addon_base:
+        if WINDOWS:
+            config_dirname = f"GRASS{VERSION_MAJOR}"
+            addon_base = os.path.join(os.getenv("APPDATA"), config_dirname, "addons")
+        elif MACOS:
+            version = f"{VERSION_MAJOR}.{VERSION_MINOR}"
+            addon_base = os.path.join(
+                os.getenv("HOME"), "Library", "GRASS", version, "Addons"
+            )
+        else:
+            config_dirname = f".grass{VERSION_MAJOR}"
+            addon_base = os.path.join(os.getenv("HOME"), config_dirname, "addons")
+        os.environ["GRASS_ADDON_BASE"] = addon_base
+
+    if not WINDOWS:
+        path_addition += os.pathsep + os.path.join(addon_base, "scripts")
+    path_addition += os.pathsep + os.path.join(addon_base, "bin")
+
+    os.environ["PATH"] = path_addition + os.pathsep + os.getenv("PATH")
 
     # define LD_LIBRARY_PATH
     if "@LD_LIBRARY_PATH_VAR@" not in os.environ:
@@ -225,7 +238,7 @@ def setup_runtime_env(gisbase):
 
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
     if not os.getenv("GRASS_PYTHON"):
-        if sys.platform == "win32":
+        if WINDOWS:
             os.environ["GRASS_PYTHON"] = "python3.exe"
         else:
             os.environ["GRASS_PYTHON"] = "python3"
@@ -349,7 +362,7 @@ def clean_default_db():
 
 def call(cmd, **kwargs):
     """Wrapper for subprocess.call to deal with platform-specific issues"""
-    if windows:
+    if WINDOWS:
         kwargs["shell"] = True
     return subprocess.call(cmd, **kwargs)
 
