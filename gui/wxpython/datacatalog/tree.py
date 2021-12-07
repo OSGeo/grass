@@ -26,10 +26,11 @@ from multiprocessing import Process, Queue, cpu_count
 watchdog_used = True
 try:
     from watchdog.observers import Observer
-    from watchdog.events import PatternMatchingEventHandler
+    from watchdog.events import PatternMatchingEventHandler, FileSystemEventHandler
 except ImportError:
     watchdog_used = False
     PatternMatchingEventHandler = object
+    FileSystemEventHandler = object
 
 
 import wx
@@ -80,6 +81,7 @@ from grass.exceptions import CalledModuleError
 
 
 updateMapset, EVT_UPDATE_MAPSET = NewEvent()
+currentMapsetChanged, EVT_CURRENT_MAPSET_CHANGED = NewEvent()
 
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
@@ -141,6 +143,42 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
 
     queue.put((maps_dict, None))
     gscript.try_remove(tmp_gisrc_file)
+
+
+class CurrentMapsetWatch(FileSystemEventHandler):
+    """Monitors rc file to check if mapset has been changed.
+    In that case wx event is dispatched to event handler.
+    Needs to check timestamp, because the modified event is sent twice.
+    This assumes new instance of this class is started
+    whenever mapset is changed."""
+
+    def __init__(self, rcfile, mapset_path, event_handler):
+        FileSystemEventHandler.__init__(self)
+        self.event_handler = event_handler
+        self.mapset_path = mapset_path
+        self.rcfile_name = os.path.basename(rcfile)
+        self.modified_time = 0
+
+    def on_modified(self, event):
+        if (
+            not event.is_directory
+            and os.path.basename(event.src_path) == self.rcfile_name
+        ):
+            timestamp = os.stat(event.src_path).st_mtime
+            if timestamp - self.modified_time < 0.5:
+                return
+            self.modified_time = timestamp
+            with open(event.src_path, "r") as f:
+                gisrc = {}
+                for line in f.readlines():
+                    key, val = line.split(":")
+                    gisrc[key.strip()] = val.strip()
+                new = os.path.join(
+                    gisrc["GISDBASE"], gisrc["LOCATION_NAME"], gisrc["MAPSET"]
+                )
+                if new != self.mapset_path:
+                    evt = currentMapsetChanged()
+                    wx.PostEvent(self.event_handler, evt)
 
 
 class MapWatch(PatternMatchingEventHandler):
@@ -327,7 +365,7 @@ class DataCatalogTree(TreeView):
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
-        self._giface.currentMapsetChanged.connect(self._updateAfterMapsetChanged)
+        self._giface.currentMapsetChanged.connect(self.UpdateAfterMapsetChanged)
         self._giface.grassdbChanged.connect(self._updateAfterGrassdbChanged)
         self._iconTypes = [
             "grassdb",
@@ -387,6 +425,9 @@ class DataCatalogTree(TreeView):
             EVT_UPDATE_MAPSET, lambda evt: self._onWatchdogMapsetReload(evt.src_path)
         )
         self.Bind(wx.EVT_IDLE, self._onUpdateMapsetWhenIdle)
+        self.Bind(
+            EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
+        )
         self.observer = None
 
     def _resetSelectVariables(self):
@@ -691,6 +732,7 @@ class DataCatalogTree(TreeView):
         to detect changes not captured by other means (e.g. from command line).
         Schedules 3 watches (raster, vector, 3D raster).
         If watchdog observers are active, it restarts the observers in current mapset.
+        Also schedules monitoring of rc file to detect mapset change.
         """
         global watchdog_used
         if not watchdog_used:
@@ -703,14 +745,21 @@ class DataCatalogTree(TreeView):
         self.observer = Observer()
 
         gisenv = gscript.gisenv()
+        mapset_path = os.path.join(
+            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"]
+        )
+        rcfile = os.environ["GISRC"]
+        self.observer.schedule(
+            CurrentMapsetWatch(rcfile, mapset_path, self),
+            os.path.dirname(rcfile),
+            recursive=False,
+        )
         for element, directory in (
             ("raster", "cell"),
             ("vector", "vector"),
             ("raster_3d", "grid3"),
         ):
-            path = os.path.join(
-                gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"], directory
-            )
+            path = os.path.join(mapset_path, directory)
             if not os.path.exists(path):
                 try:
                     os.mkdir(path)
@@ -755,6 +804,15 @@ class DataCatalogTree(TreeView):
         if node:
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
+
+    def UpdateAfterMapsetChanged(self):
+        """Wrapper around updating function called
+        after mapset was changed, as a handler of signal.
+        If watchdog is active, updating is skipped here
+        to avoid double updating.
+        """
+        if not watchdog_used:
+            self._updateAfterMapsetChanged()
 
     def GetDbNode(self, grassdb, location=None, mapset=None, map=None, map_type=None):
         """Returns node representing db/location/mapset/map or None if not found."""
@@ -1973,6 +2031,17 @@ class DataCatalogTree(TreeView):
 
     def _updateAfterMapsetChanged(self):
         """Update tree after current mapset has changed"""
+        db_node, location_node, mapset_node = self.GetCurrentDbLocationMapsetNode()
+        # mapset is not in tree, create its node
+        if not mapset_node:
+            genv = gisenv()
+            if not location_node:
+                if not db_node:
+                    self.InsertGrassDb(genv["GISDBASE"])
+                else:
+                    self.InsertLocation(genv["LOCATION_NAME"], db_node)
+            else:
+                self.InsertMapset(genv["MAPSET"], location_node)
         self.UpdateCurrentDbLocationMapsetNode()
         self._reloadMapsetNode(self.current_mapset_node)
         self.RefreshNode(self.current_mapset_node, recursive=True)
