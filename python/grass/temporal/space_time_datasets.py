@@ -237,10 +237,8 @@ class RasterDataset(AbstractMapDataset):
         """
 
         if self.map_exists():
-            a = garray.array(self.get_map_id())
-        else:
-            a = garray.array()
-        return a
+            return garray.array(self.get_map_id())
+        return garray.array()
 
     def reset(self, ident):
         """Reset the internal structure and set the identifier"""
@@ -662,10 +660,8 @@ class Raster3DDataset(AbstractMapDataset):
         """
 
         if self.map_exists():
-            garray.array3d(self.get_map_id())
-        else:
-            a = garray.array3d()
-        return a
+            return garray.array3d(self.get_map_id())
+        return garray.array3d()
 
     def reset(self, ident):
         """Reset the internal structure and set the identifier"""
