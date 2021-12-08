@@ -729,7 +729,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
 
             msgr.fatal(
                 _(
-                    "The format of your actual temporal database is "
+                    "The format of your existing temporal database is "
                     "not supported.\n{m}".format(m=message)
                 )
             )
