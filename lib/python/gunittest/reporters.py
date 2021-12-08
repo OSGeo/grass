@@ -17,6 +17,7 @@ import subprocess
 import sys
 import collections
 import re
+from collections.abc import Iterable
 
 from .utils import ensure_dir
 from .checkers import text_to_keyvalue
@@ -37,8 +38,7 @@ def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
     items = []
     for key, value in keyvalue.items():
         # TODO: use isep for iterables other than strings
-        if (not isinstance(value, str)
-                and isinstance(value, collections.Iterable)):
+        if not isinstance(value, str) and isinstance(value, Iterable):
             # TODO: this does not work for list of non-strings
             value = isep.join(value)
         items.append('{key}{sep}{value}'.format(
