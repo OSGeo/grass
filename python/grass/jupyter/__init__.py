@@ -26,3 +26,4 @@ from .interact_display import *
 from .render3d import *
 from .setup import *
 from .utils import *
+from .timeseries import *
