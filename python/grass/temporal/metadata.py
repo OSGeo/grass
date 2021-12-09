@@ -23,6 +23,7 @@ for details.
 """
 from __future__ import print_function
 from .base import SQLDatabaseInterface
+from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
 
 ###############################################################################
 
@@ -337,7 +338,7 @@ class RasterMetadata(RasterMetadataBase):
         ewres=None,
         min=None,
         max=None,
-        band_reference=None,
+        semantic_label=None,
     ):
 
         RasterMetadataBase.__init__(
@@ -354,21 +355,22 @@ class RasterMetadata(RasterMetadataBase):
             max,
         )
 
-        self.set_band_reference(band_reference)
+        if get_tgis_db_version_from_metadata() > 2:
+            self.set_semantic_label(semantic_label)
 
-    def set_band_reference(self, band_reference):
-        """Set the band reference identifier"""
-        self.D["band_reference"] = band_reference
+    def set_semantic_label(self, semantic_label):
+        """Set the semantic label identifier"""
+        self.D["semantic_label"] = semantic_label
 
-    def get_band_reference(self):
-        """Get the band reference identifier
+    def get_semantic_label(self):
+        """Get the semantic label identifier
         :return: None if not found"""
-        if "band_reference" in self.D:
-            return self.D["band_reference"]
+        if "semantic_label" in self.D:
+            return self.D["semantic_label"]
         else:
             return None
 
-    band_reference = property(fget=get_band_reference, fset=set_band_reference)
+    semantic_label = property(fget=get_semantic_label, fset=set_semantic_label)
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
@@ -376,11 +378,11 @@ class RasterMetadata(RasterMetadataBase):
         :param bool shell: True for human readable style otherwise shell style
         """
         super()._print_info_body(shell)
-        # band reference section (raster specific only)
+        # semantic label section (raster specific only)
         if shell:
-            print("band_reference=" + str(self.get_band_reference()))
+            print("semantic_label=" + str(self.get_semantic_label()))
         else:
-            print(" | Band reference:............. " + str(self.get_band_reference()))
+            print(" | Semantic label:............. " + str(self.get_semantic_label()))
 
 
 ###############################################################################
@@ -1371,7 +1373,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
             self, "strds_metadata", ident, title, description
         )
 
-        self.D["number_of_bands"] = None
+        if get_tgis_db_version_from_metadata() > 2:
+            self.D["number_of_bands"] = None
 
         self.set_raster_register(raster_register)
 
@@ -1396,8 +1399,50 @@ class STRDSMetadata(STDSRasterMetadataBase):
         else:
             return None
 
+    def get_band_names(self):
+        """Get the distinct names of registered bands
+           The distinct band names are not stored in the metadata table
+           and fetched on-the-fly
+        :return: None if not found
+        """
+        if get_tgis_db_version_from_metadata() <= 2:
+            # band names supported from TGIS DB version 3
+            return None
+
+        sql = "SELECT distinct semantic_label FROM %s WHERE %s.id " % (
+            "raster_metadata",
+            "raster_metadata",
+        )
+
+        sql += "IN (SELECT id FROM %s)" % (str(self.get_raster_register()))
+
+        dbif = SQLDatabaseInterfaceConnection()
+        dbif.connect()
+        dbif.execute(sql, mapset=self.mapset)
+        rows = dbif.fetchall(mapset=self.mapset)
+        dbif.close()
+
+        if rows:
+            string = ""
+            count = 0
+            for row in rows:
+                if row["semantic_label"]:
+                    if count == 0:
+                        string += row["semantic_label"]
+                    else:
+                        string += ",%s" % row["semantic_label"]
+                    count += 1
+
+            if count > 0:
+                return string
+            else:
+                return None
+        else:
+            return None
+
     raster_register = property(fget=get_raster_register, fset=set_raster_register)
     number_of_bands = property(fget=get_number_of_bands)
+    band_names = property(fget=get_band_names)
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
@@ -1411,8 +1456,10 @@ class STRDSMetadata(STDSRasterMetadataBase):
         super()._print_info_body(shell)
         if shell:
             print("number_of_bands=" + str(self.get_number_of_bands()))
+            print("band_names=" + str(self.get_band_names()))
         else:
             print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
+            print(" | Band names:................. " + str(self.get_band_names()))
 
 
 ###############################################################################

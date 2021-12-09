@@ -68,10 +68,6 @@ from threading import Thread
 
 import wx
 
-try:
-    import wx.lib.agw.flatnotebook as FN
-except ImportError:
-    import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
@@ -115,7 +111,6 @@ from gui_core.widgets import (
     FloatValidator,
     FormListbook,
     FormNotebook,
-    GNotebook,
     PlacementValidator,
 )
 from core.giface import Notification, StandaloneGrassInterface
@@ -1053,13 +1048,7 @@ class CmdPanel(wx.Panel):
         elif style == 1:  # basic left
             self.notebook = FormNotebook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 2:  # fancy green
-            self.notebook = GNotebook(
-                self, style=globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON
-            )
-            self.notebook.SetTabAreaColour(globalvar.FNPageColor)
-            self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 3:
+        elif style == 2:  # list left
             self.notebook = FormListbook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChange)
         self.notebook.Refresh()

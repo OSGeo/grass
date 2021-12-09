@@ -314,7 +314,7 @@ void print_info(const struct Map_info *Map)
     struct TimeStamp ts;
     int time_ok, first_time_ok, second_time_ok;
     struct bound_box box;
-    char tmp1[1024], tmp2[1024];
+    char tmp1[256], tmp2[256];
     
     time_ok = first_time_ok = second_time_ok = FALSE;
     map_type = Vect_maptype(Map);

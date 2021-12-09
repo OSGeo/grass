@@ -26,6 +26,7 @@ import sys
 import copy
 import wx
 import json
+import collections.abc
 
 from core import globalvar
 from core.gcmd import GException, GError
@@ -808,7 +809,6 @@ class Settings:
         self.internalSettings["appearance"]["commandNotebook"]["choices"] = (
             _("Basic top"),
             _("Basic left"),
-            _("Fancy green"),
             _("List left"),
         )
 
@@ -900,9 +900,22 @@ class Settings:
 
         :param settings: dict where to store settings (None for self.userSettings)
         """
+
+        def update_nested_dict_by_dict(dictionary, update):
+            """Recursively update nested dictionary by another nested dictionary"""
+            for key, value in update.items():
+                if isinstance(value, collections.abc.Mapping):
+                    dictionary[key] = update_nested_dict_by_dict(
+                        dictionary.get(key, {}), value
+                    )
+                else:
+                    dictionary[key] = value
+            return dictionary
+
         try:
             with open(self.filePath, "r") as f:
-                settings.update(json.load(f, object_hook=settings_JSON_decode_hook))
+                update = json.load(f, object_hook=settings_JSON_decode_hook)
+                update_nested_dict_by_dict(settings, update)
         except json.JSONDecodeError as e:
             sys.stderr.write(
                 _("Unable to read settings file <{path}>:\n{err}").format(

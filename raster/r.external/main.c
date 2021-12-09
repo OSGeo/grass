@@ -2,7 +2,7 @@
 /****************************************************************************
  *
  * MODULE:       r.external
- *               
+ *
  * AUTHOR(S):    Glynn Clements, based on r.in.gdal
  *               List GDAL layers by Martin Landa <landa.martin gmail.com> 8/2011
  *
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct {
-	struct Flag *o, *j, *f, *e, *h, *v, *t, *a, *r;
+	struct Flag *o, *j, *f, *e, *h, *v, *t, *a, *m, *r;
     } flag;
     int min_band, max_band, band;
     struct band_info info;
@@ -72,9 +72,9 @@ int main(int argc, char *argv[])
     parm.source->type = TYPE_STRING;
     parm.source->key_desc = "name";
     parm.source->guisection = _("Input");
-    
+
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    
+
     parm.band = G_define_option();
     parm.band->key = "band";
     parm.band->type = TYPE_INTEGER;
@@ -135,6 +135,11 @@ int main(int argc, char *argv[])
     flag.t->guisection = _("Print");
     flag.t->suppress_required = YES;
 
+    flag.m = G_define_flag();
+    flag.m->key = 'm';
+    flag.m->label = _("Read data range from metadata");
+    flag.m->description = _("WARNING: metadata are sometimes approximations with wrong data range");
+
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->label = _("Create fast link without data range");
@@ -174,13 +179,13 @@ int main(int argc, char *argv[])
     if (input && source)
 	G_fatal_error(_("%s= and %s= are mutually exclusive"),
 		      parm.input->key, parm.source->key);
-    
+
     if (input && !G_is_absolute_path(input)) {
 	char path[GPATH_MAX], *cwd;
 	cwd = CPLGetCurrentDir();
 	if (!cwd)
 	    G_fatal_error(_("Unable to get current working directory"));
-	
+
 	G_snprintf(path, GPATH_MAX, "%s%c%s", cwd, HOST_DIRSEP, input);
 	input = G_store(path);
 	CPLFree(cwd);
@@ -225,6 +230,8 @@ int main(int argc, char *argv[])
     }
 
     info.have_minmax = !flag.r->answer;
+    if (info.have_minmax && flag.m->answer)
+	info.have_minmax = 2;
     for (band = min_band; band <= max_band; band++) {
 	char *output2, *title2 = NULL;
 

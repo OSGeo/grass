@@ -100,6 +100,7 @@ int I_iclass_write_signatures(struct Signature *, const char *);
 /* list_gp.c */
 int I_list_group(const char *, const struct Ref *, FILE *);
 int I_list_group_simple(const struct Ref *, FILE *);
+void I__list_group_name_fit(char *, const char *, const char *);
 
 /* list_subgp.c */
 char ** I_list_subgroups(const char *, int *);
@@ -147,8 +148,8 @@ int I_apply_colormap(unsigned char *, unsigned char *, unsigned,  unsigned char 
 int I_rasterize(double *, int, unsigned char, struct Cell_head *, unsigned char *);
 
 /* manage_signatures.c */
-void I__get_signatures_element(char *, I_SIGFILE_TYPE);
-void I__make_signatures_element(I_SIGFILE_TYPE);
+void I_get_signatures_dir(char *, I_SIGFILE_TYPE);
+void I_make_signatures_dir(I_SIGFILE_TYPE);
 int I_signatures_remove(I_SIGFILE_TYPE, const char *);
 int I_signatures_copy(I_SIGFILE_TYPE, const char *, const char *, const char *);
 int I_signatures_rename(I_SIGFILE_TYPE, const char *, const char *);
@@ -162,7 +163,7 @@ int I_free_signatures(struct Signature *);
 int I_read_one_signature(FILE *, struct Signature *);
 int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
-char **I_sort_signatures_by_bandref(struct Signature *, const struct Ref *);
+char **I_sort_signatures_by_semantic_label(struct Signature *, const struct Ref *);
 
 /* sigfile.c */
 FILE *I_fopen_signature_file_new(const char *);
@@ -180,7 +181,7 @@ const char *I_GetSigTitle(const struct SigSet *);
 int I_SetClassTitle(struct ClassSig *, const char *);
 const char *I_GetClassTitle(const struct ClassSig *);
 int I_WriteSigSet(FILE *, const struct SigSet *);
-char **I_SortSigSetByBandref(struct SigSet *, const struct Ref *);
+char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 
 /* sigsetfile.c */
 FILE *I_fopen_sigset_file_new(const char *);

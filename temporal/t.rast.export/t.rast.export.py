@@ -37,9 +37,11 @@
 
 # %option G_OPT_M_DIR
 # % key: directory
-# % description: Path to the work directory, default is /tmp
+# % label: Path to the directory where output is written
+# % description: If not given, the default is the current working directory
 # % required: no
-# % answer: /tmp
+# % multiple: no
+# % answer: ./
 # %end
 
 # %option
@@ -102,6 +104,7 @@
 # %option G_OPT_T_WHERE
 # %end
 
+import os
 import grass.script as grass
 
 
@@ -121,6 +124,12 @@ def main():
     kws = {
         key: options[key] for key in ("createopt", "metaopt", "nodata") if options[key]
     }
+
+    if not directory or not os.path.exists(directory):
+        grass.fatal(_("Directory {} not found".format(directory)))
+
+    if not os.access(directory, os.W_OK):
+        grass.fatal(_("Directory {} is not writable".format(directory)))
 
     if _type and _format in ["pack", "AAIGrid"]:
         grass.warning(

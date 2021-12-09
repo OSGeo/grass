@@ -78,7 +78,7 @@ pgm = sys.argv[1]
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-trunk_url = "https://github.com/OSGeo/grass/tree/master/"
+trunk_url = "https://github.com/OSGeo/grass/tree/main/"
 addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

@@ -137,18 +137,15 @@ QUERYLAYER = "qlayer"
 
 """Style definition for FlatNotebook pages"""
 FNPageStyle = (
-    FN.FNB_FF2 | FN.FNB_BACKGROUND_GRADIENT | FN.FNB_NODRAG | FN.FNB_TABS_BORDER_SIMPLE
+    FN.FNB_NODRAG
+    | FN.FNB_TABS_BORDER_SIMPLE
+    | FN.FNB_NAV_BUTTONS_WHEN_NEEDED
+    | FN.FNB_HIDE_ON_SINGLE_TAB
 )
 
 FNPageDStyle = (
-    FN.FNB_FANCY_TABS
-    | FN.FNB_BOTTOM
-    | FN.FNB_NODRAG
-    | FN.FNB_NO_NAV_BUTTONS
-    | FN.FNB_NO_X_BUTTON
+    FN.FNB_BOTTOM | FN.FNB_NODRAG | FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON
 )
-
-FNPageColor = wx.Colour(125, 200, 175)
 
 """Dialog widget dimension"""
 DIALOG_SPIN_SIZE = (150, -1)

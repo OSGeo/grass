@@ -55,6 +55,7 @@ import locale
 import uuid
 import unicodedata
 import argparse
+import json
 
 
 # mechanism meant for debugging this script (only)
@@ -1369,29 +1370,26 @@ def set_language(grass_config_dir):
     # See discussion for Windows not following its own documentation and
     # not accepting ISO codes as valid locale identifiers
     # http://bugs.python.org/issue10466
-    language = "None"  # Such string sometimes is present in wx file
+    # As this code relies heavily on various locale calls, it is necessary
+    # to track related python changes:
+    # https://bugs.python.org/issue43557
     encoding = None
 
     # Override value is stored in wxGUI preferences file.
-    # As it's the only thing required, we'll just grep it out.
     try:
-        fd = open(os.path.join(grass_config_dir, "wx"), "r")
-    except:
-        # Even if there is no override, we still need to set locale.
-        pass
-    else:
-        for line in fd:
-            if re.search("^language", line):
-                line = line.rstrip(" %s" % os.linesep)
-                language = "".join(line.split(";")[-1:])
-                break
-        fd.close()
+        with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
+            try:
+                language = json.load(json_file)["language"]["locale"]["lc_all"]
+            except KeyError:
+                language = None
+    except FileNotFoundError:
+        language = None
 
     # Backwards compatibility with old wx preferences files
     if language == "C":
         language = "en"
 
-    if language == "None" or language == "" or not language:
+    if not language:
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
@@ -1664,12 +1662,20 @@ def get_shell():
         os.environ["SHELL"] = "/usr/bin/bash.exe"
         os.environ["OSTYPE"] = "cygwin"
     else:
-        # in docker the 'SHELL' variable may not be
-        # visible in a Python session unless 'ENV SHELL /bin/bash' is set in Dockerfile
-        try:
-            sh = os.path.basename(os.getenv("SHELL"))
-        except:
-            sh = "sh"
+        # In a Docker container the 'SHELL' variable may not be set
+        # unless 'ENV SHELL /bin/bash' is set in Dockerfile. However, often Bash
+        # is available, so we try Bash first and fall back to sh if needed.
+        sh = os.getenv("SHELL")
+        if sh:
+            sh = os.path.basename(sh)
+        else:
+            # If SHELL is not set, see if there is Bash and use it.
+            if shutil.which("bash"):
+                sh = "bash"
+            else:
+                # Fallback to sh if there is no Bash on path.
+                sh = "sh"
+            # Ensure the variable is set.
             os.environ["SHELL"] = sh
 
         if WINDOWS and sh:
@@ -1922,7 +1928,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == "bash":
         # set bash history to record an unlimited command history
-        sh_history_limit = "-1"  # unlimited
+        sh_history_limit = ""  # unlimited
         os.environ["HISTSIZE"] = sh_history_limit
         os.environ["HISTFILESIZE"] = sh_history_limit
         sh_history = ".bash_history"
@@ -2127,9 +2133,18 @@ def io_is_interactive():
 
 
 def print_params(params):
-    """Write compile flags and other configuration to stderr"""
+    """Write compile flags and other configuration to stdout"""
     if not params:
-        params = ["arch", "build", "compiler", "path", "revision", "version", "date"]
+        params = [
+            "arch",
+            "build",
+            "compiler",
+            "path",
+            "python_path",
+            "revision",
+            "version",
+            "date",
+        ]
 
     # check if we are dealing with parameters which require dev files
     dev_params = ["arch", "compiler", "build", "date"]
@@ -2145,6 +2160,8 @@ def print_params(params):
     for arg in params:
         if arg == "path":
             sys.stdout.write("%s\n" % GISBASE)
+        elif arg in ["python_path", "python-path"]:
+            sys.stdout.write("%s\n" % gpath("etc", "python"))
         elif arg == "arch":
             val = grep("ARCH", linesplat)
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())

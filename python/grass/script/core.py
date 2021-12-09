@@ -92,6 +92,7 @@ _popen_args = [
     "universal_newlines",
     "startupinfo",
     "creationflags",
+    "encoding",
 ]
 
 
@@ -361,16 +362,16 @@ def make_command(
 def handle_errors(returncode, result, args, kwargs):
     """Error handler for :func:`run_command()` and similar functions
 
-    The function returns *result* if *returncode* is equal to 0,
-    otherwise it reports errors based on the current settings.
-
     The functions which are using this function to handle errors,
     can be typically called with an *errors* parameter.
     This function can handle one of the following values: raise,
     fatal, status, exit, and ignore. The value raise is a default.
 
+    If returncode is 0, *result* is returned, unless
+    ``errors="status"`` is set.
+
     If *kwargs* dictionary contains key ``errors``, the value is used
-    to determine the behavior on error.
+    to determine the return value and the behavior on error.
     The value ``errors="raise"`` is a default in which case a
     ``CalledModuleError`` exception is raised.
 
@@ -406,13 +407,13 @@ def handle_errors(returncode, result, args, kwargs):
         code = " ".join(args)
         return module, code
 
+    handler = kwargs.get("errors", "raise")
+    if handler.lower() == "status":
+        return returncode
     if returncode == 0:
         return result
-    handler = kwargs.get("errors", "raise")
     if handler.lower() == "ignore":
         return result
-    elif handler.lower() == "status":
-        return returncode
     elif handler.lower() == "fatal":
         module, code = get_module_and_code(args, kwargs)
         fatal(
@@ -464,11 +465,6 @@ def start_command(
 
     :return: Popen object
     """
-    if "encoding" in kwargs.keys():
-        # This variable was never used for anything.
-        # See https://github.com/OSGeo/grass/issues/1521
-        encoding = kwargs.pop("encoding")  # noqa: F841
-
     options = {}
     popts = {}
     for opt, val in kwargs.items():
@@ -695,7 +691,7 @@ def write_command(*args, **kwargs):
     returncode = process.poll()
     if _capture_stderr and returncode:
         sys.stderr.write(stderr)
-    return handle_errors(returncode, returncode, args, kwargs)
+    return handle_errors(returncode, None, args, kwargs)
 
 
 def exec_command(

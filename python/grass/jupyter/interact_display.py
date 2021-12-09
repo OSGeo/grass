@@ -15,7 +15,6 @@ import sys
 import tempfile
 import weakref
 from pathlib import Path
-import folium
 import grass.script as gs
 from .display import GrassRenderer
 from .utils import (
@@ -25,6 +24,7 @@ from .utils import (
     reproject_region,
     setup_location,
 )
+from .region import RegionManagerForInteractiveMap
 
 
 class InteractiveMap:
@@ -38,12 +38,16 @@ class InteractiveMap:
     >>> m.show()
     """
 
-    def __init__(self, width=400, height=400):
+    def __init__(self, width=400, height=400, use_region=False, saved_region=None):
         """Creates a blank folium map centered on g.region.
 
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
         """
+
+        import folium
+
+        self._folium = folium
 
         # Store height and width
         self.width = width
@@ -70,7 +74,7 @@ class InteractiveMap:
         center = (float(center["center_northing"]), float(center["center_easting"]))
 
         # Create Folium Map
-        self.map = folium.Map(
+        self.map = self._folium.Map(
             width=self.width,
             height=self.height,
             location=center,
@@ -78,6 +82,10 @@ class InteractiveMap:
         )
         # Set LayerControl default
         self.layer_control = False
+        # region handling
+        self._region_manager = RegionManagerForInteractiveMap(
+            use_region, saved_region, self._src_env, self._psmerc_env
+        )
 
         # Cleanup rcfiles with finalizer
         def remove_if_exists(path):
@@ -109,30 +117,44 @@ class InteractiveMap:
         file_info = gs.find_file(name, element="vector")
         full_name = file_info["fullname"]
         name = file_info["name"]
+        mapset = file_info["mapset"]
+        new_name = full_name.replace("@", "_")
+        # set bbox
+        self._region_manager.set_bbox_vector(full_name)
         # Reproject vector into WGS84 Location
         env_info = gs.gisenv(env=self._src_env)
         gs.run_command(
             "v.proj",
-            input=full_name,
+            input=name,
+            output=new_name,
+            mapset=mapset,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             env=self._wgs84_env,
         )
         # Convert to GeoJSON
-        json_file = Path(self._tmp_dir.name) / f"tmp_{name}.json"
+        json_file = Path(self._tmp_dir.name) / f"{new_name}.json"
         gs.run_command(
             "v.out.ogr",
-            input=name,
+            input=new_name,
             output=json_file,
             format="GeoJSON",
             env=self._wgs84_env,
         )
         # Import GeoJSON to folium and add to map
-        folium.GeoJson(str(json_file), name=name).add_to(self.map)
+        self._folium.GeoJson(str(json_file), name=name).add_to(self.map)
 
     def add_raster(self, name, opacity=0.8):
         """Imports raster into temporary WGS84 location,
-        exports as png and overlays on folium map
+        exports as png and overlays on folium map.
+
+        Color table for the raster can be modified with `r.colors` before calling
+        this function.
+
+        .. note:: This will only work if the raster is located in the current mapset.
+        To change the color table of a raster located outside the current mapset,
+        switch to that mapset with `g.mapset`, modify the color table with `r.color`
+        then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
         :param float opacity: raster opacity, number between
@@ -140,16 +162,19 @@ class InteractiveMap:
         """
 
         # Find full name of raster
-        file_info = gs.find_file(name, element="cell")
+        file_info = gs.find_file(name, element="cell", env=self._src_env)
         full_name = file_info["fullname"]
         name = file_info["name"]
+        mapset = file_info["mapset"]
 
+        self._region_manager.set_region_from_raster(full_name)
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
         resolution = estimate_resolution(
-            raster=full_name,
-            dbase=env_info["GISDBASE"],
+            raster=name,
+            mapset=mapset,
             location=env_info["LOCATION_NAME"],
+            dbase=env_info["GISDBASE"],
             env=self._psmerc_env,
         )
         tgt_name = full_name.replace("@", "_")
@@ -157,6 +182,7 @@ class InteractiveMap:
             "r.proj",
             input=full_name,
             output=tgt_name,
+            mapset=mapset,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             resolution=resolution,
@@ -172,6 +198,7 @@ class InteractiveMap:
             height=png_height,
             env=self._psmerc_env,
             filename=filename,
+            use_region=True,
         )
         m.run("d.rast", map=tgt_name)
 
@@ -187,7 +214,7 @@ class InteractiveMap:
         ]
 
         # Overlay image on folium map
-        img = folium.raster_layers.ImageOverlay(
+        img = self._folium.raster_layers.ImageOverlay(
             image=filename,
             name=name,
             bounds=new_bounds,
@@ -199,12 +226,15 @@ class InteractiveMap:
         img.add_to(self.map)
 
     def add_layer_control(self, **kwargs):
-        """Add layer control to display"""
+        """Add layer control to display"
+
+        :param `**kwargs`: named arguments to be passed to folium.LayerControl()"""
+
         self.layer_control = True
-        self.layer_control_object = folium.LayerControl(**kwargs)
+        self.layer_control_object = self._folium.LayerControl(**kwargs)
 
     def show(self):
-        """This function creates a folium map with a GRASS raster
+        """This function returns a folium figure object with a GRASS raster
         overlayed on a basemap.
 
         If map has layer control enabled, additional layers cannot be
@@ -213,9 +243,10 @@ class InteractiveMap:
         if self.layer_control:
             self.map.add_child(self.layer_control_object)
         # Create Figure
-        fig = folium.Figure(width=self.width, height=self.height)
+        fig = self._folium.Figure(width=self.width, height=self.height)
         # Add map to figure
         fig.add_child(self.map)
+        self.map.fit_bounds(self._region_manager.bbox)
 
         return fig
 

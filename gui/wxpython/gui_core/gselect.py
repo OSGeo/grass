@@ -2835,7 +2835,7 @@ class SignatureSelect(wx.ComboBox):
         count = I_signatures_list_by_type(sig_type, mapset, ctypes.byref(sig_list))
         for n in range(count):
             items.append(decode(sig_list[n]))
-        I_free_signatures_list(count, sig_list)
+        I_free_signatures_list(count, ctypes.byref(sig_list))
 
 
 class SeparatorSelect(wx.ComboBox):

@@ -93,9 +93,6 @@
 /* define if "long long" is available */
 #define HAVE_LONG_LONG_INT 1
 
-/* Define the return type of signal handlers */
-#define RETSIGTYPE void
-
 /* define curses.h WINDOW structure component */
 #define CURSES_MAXY _maxy
 
@@ -298,4 +295,5 @@
 /* define if langinfo.h exists */
 /* #undef HAVE_LANGINFO_H */
 
+#define HAVE_PROJ_H 1
 #endif /* _config_h */

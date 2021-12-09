@@ -13,9 +13,10 @@
 
 import os
 import shutil
-from IPython.display import Image
 import tempfile
 import grass.script as gs
+
+from .region import RegionManagerFor2D
 
 
 class GrassRenderer:
@@ -46,8 +47,11 @@ class GrassRenderer:
         width=600,
         filename=None,
         env=None,
+        font="sans",
         text_size=12,
         renderer="cairo",
+        use_region=False,
+        saved_region=None,
     ):
 
         """Creates an instance of the GrassRenderer class.
@@ -56,8 +60,16 @@ class GrassRenderer:
         :param int width: width of map in pixels
         :param str filename: filename or path to save a PNG of map
         :param str env: environment
+        :param str font: font to use in rendering; either the name of a font from
+                        $GISBASE/etc/fontcap (or alternative fontcap file specified
+                        by GRASS_FONT_CAP), or alternatively the full path to a FreeType
+                        font file
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
         """
 
         # Copy Environment
@@ -68,6 +80,7 @@ class GrassRenderer:
         # Environment Settings
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
+        self._env["GRASS_FONT"] = font
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
@@ -91,10 +104,36 @@ class GrassRenderer:
         self._legend_file = os.path.join(self._tmpdir.name, "legend.txt")
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
+        # rendering region setting
+        self._region_manager = RegionManagerFor2D(use_region, saved_region, self._env)
+
+    @property
+    def filename(self):
+        """Filename or full path to the file with the resulting image.
+
+        The value can be set during initialization. When the filename was not provided
+        during initialization, a path to temporary file is returned. In that case, the
+        file is guaranteed to exist as long as the object exists.
+        """
+        return self._filename
+
+    @property
+    def region_manager(self):
+        """Region manager object"""
+        return self._region_manager
+
     def run(self, module, **kwargs):
-        """Run modules from "d." GRASS library"""
+        """Run modules from the GRASS display family (modules starting with "d.").
+
+         This function passes arguments directly to grass.script.run_command()
+         so the syntax is the same.
+
+        :param str module: name of GRASS module
+        :param `**kwargs`: named arguments passed to run_command()"""
+
         # Check module is from display library then run
         if module[0] == "d":
+            self._region_manager.set_region_from_command(module, **kwargs)
             gs.run_command(module, env=self._env, **kwargs)
         else:
             raise ValueError("Module must begin with letter 'd'.")
@@ -120,5 +159,7 @@ class GrassRenderer:
         return wrapper
 
     def show(self):
-        """Displays a PNG image of the map"""
+        """Displays a PNG image of map"""
+        from IPython.display import Image
+
         return Image(self._filename)

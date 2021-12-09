@@ -363,8 +363,8 @@ def get_raise_on_error():
 
 
 def get_tgis_version():
-    """Get the version number of the temporal framework
-    :returns: The version number of the temporal framework as string
+    """Get the supported version of the temporal framework
+    :returns: The version number of the temporal framework as integer
     """
     global tgis_version
     return tgis_version
@@ -374,11 +374,27 @@ def get_tgis_version():
 
 
 def get_tgis_db_version():
-    """Get the version number of the temporal framework
-    :returns: The version number of the temporal framework as string
+    """Get the supported version of the temporal database
+    :returns: The version number of the temporal database as integer
     """
     global tgis_db_version
     return tgis_db_version
+
+
+def get_tgis_db_version_from_metadata(metadata=None):
+    """Get the version number of the temporal database from metadata
+
+    :param list metadata: list of metadata items or None
+    :returns: The version number of the temporal database as integer
+    """
+    if metadata is None:
+        metadata = get_tgis_metadata()
+    for entry in metadata:
+        if "tgis_db_version" in entry:
+            return int(entry[1])
+
+    # return supported version if not possible to get from metadata
+    return get_tgis_db_version()
 
 
 ###############################################################################
@@ -697,10 +713,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
             db_exists = True
 
     backup_howto = _(
-        "The format of your actual temporal database is not "
-        "supported any more.\n"
-        "Please create a backup of your temporal database "
-        "to avoid lossing data.\nSOLUTION: "
+        "Please create a backup of your temporal database to avoid losing data.\n"
     )
     if tgis_db_version > 2:
         backup_howto += _("Run t.upgrade command to upgrade your temporal database.\n")
@@ -738,6 +751,8 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                 )
                 % ({"info": get_database_info_string()})
             )
+
+        # temporal framework version check
         for entry in metadata:
             if "tgis_version" in entry and entry[1] != str(get_tgis_version()):
                 msgr.fatal(
@@ -756,22 +771,33 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                         }
                     )
                 )
-            if "tgis_db_version" in entry and entry[1] != str(get_tgis_db_version()):
+
+        # temporal database version check
+        tgis_db_version_meta = get_tgis_db_version_from_metadata(metadata)
+        if tgis_db_version_meta != tgis_db_version:
+            message = _(
+                "Temporal database version mismatch detected.\n{backup}"
+                "Supported temporal database version is: {tdb}\n"
+                "Your existing temporal database version: {ctdb}\n"
+                "Current temporal database info: {info}".format(
+                    backup=backup_howto,
+                    tdb=tgis_db_version,
+                    ctdb=tgis_db_version_meta,
+                    info=get_database_info_string(),
+                )
+            )
+
+            if tgis_db_version_meta == 2 and tgis_db_version == 3:
+                # version 3 is backward compatible with version 2
+                msgr.warning(message)
+            else:
                 msgr.fatal(
                     _(
-                        "Unsupported temporal database: version mismatch."
-                        "\n %(backup)sSupported temporal database version"
-                        " is: %(tdb)i\nCurrent temporal database info:"
-                        "%(info)s"
-                    )
-                    % (
-                        {
-                            "backup": backup_howto,
-                            "tdb": get_tgis_version(),
-                            "info": get_database_info_string(),
-                        }
+                        "The format of your actual temporal database is "
+                        "not supported any more. {m}".format(m=message)
                     )
                 )
+
         return
 
     create_temporal_database(dbif)

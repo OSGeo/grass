@@ -266,10 +266,10 @@ def extract_dataset(
                     new_map.set_temporal_extent(old_map.get_temporal_extent())
 
                     if type == "raster":
-                        # Set the band reference
-                        band_reference = old_map.metadata.get_band_reference()
-                        if band_reference is not None:
-                            new_map.set_band_reference(band_reference)
+                        # Set the semantic label
+                        semantic_label = old_map.metadata.get_semantic_label()
+                        if semantic_label is not None:
+                            new_map.set_semantic_label(semantic_label)
 
                     # Insert map in temporal database
                     new_map.insert(dbif)

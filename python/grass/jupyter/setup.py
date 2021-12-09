@@ -33,17 +33,16 @@ def _set_notebook_defaults():
     os.environ["GRASS_OVERWRITE"] = "1"
 
 
-def init(path, location, mapset):
+def init(path, location=None, mapset=None, grass_path=None):
     """
     This function initiates a GRASS session and sets GRASS
     environment variables.
 
-    Inputs:
-        path - path to grass databases
-        location - name of GRASS location
-        mapset - name of mapset within location
+    :param str path: path to grass databases
+    :param str location: name of GRASS location
+    :param str mapset: name of mapset within location
     """
     # Create a GRASS GIS session.
-    gsetup.init(os.environ["GISBASE"], path, location, mapset)
+    gsetup.init(path, location=location, mapset=mapset, grass_path=grass_path)
     # Set GRASS env. variables
     _set_notebook_defaults()

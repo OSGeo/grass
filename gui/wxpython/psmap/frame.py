@@ -27,9 +27,9 @@ from math import sin, cos, pi, sqrt
 import wx
 
 try:
-    import wx.lib.agw.flatnotebook as fnb
+    import wx.lib.agw.flatnotebook as FN
 except ImportError:
-    import wx.lib.flatnotebook as fnb
+    import wx.lib.flatnotebook as FN
 
 import grass.script as grass
 
@@ -41,6 +41,7 @@ from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings
 from core.utils import PilImageToWxImage
 from gui_core.forms import GUI
+from gui_core.widgets import GNotebook
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
 from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
@@ -151,7 +152,7 @@ class PsMapFrame(wx.Frame):
         self.openDialogs = dict()
 
         self.pageId = NewId()
-        # current page of flatnotebook
+        # current page of GNotebook
         self.currentPage = 0
         # canvas for draft mode
         self.canvas = PsMapBufferedWindow(
@@ -199,7 +200,7 @@ class PsMapFrame(wx.Frame):
         # workaround for http://trac.wxwidgets.org/ticket/13628
         self.SetSize(self.GetBestSize())
 
-        self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
 
@@ -220,15 +221,8 @@ class PsMapFrame(wx.Frame):
     def _layout(self):
         """Do layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        if globalvar.hasAgw:
-            self.book = fnb.FlatNotebook(
-                parent=self, id=wx.ID_ANY, agwStyle=globalvar.FNPageDStyle
-            )
-        else:
-            self.book = fnb.FlatNotebook(
-                parent=self, id=wx.ID_ANY, style=globalvar.FNPageDStyle
-            )
 
+        self.book = GNotebook(parent=self, style=globalvar.FNPageDStyle)
         self.book.AddPage(self.canvas, "Draft mode")
         self.book.AddPage(self.previewCanvas, "Preview")
         self.book.SetSelection(0)
@@ -422,7 +416,8 @@ class PsMapFrame(wx.Frame):
                     "-dSAFER",
                     "-dCompatibilityLevel=1.4",
                     "-c",
-                    ".setpdfwrite",
+                    "30000000",
+                    "setvmthreshold",
                     "-f",
                     event.userData["filename"],
                 ]
@@ -1299,7 +1294,7 @@ class PsMapFrame(wx.Frame):
                     self.deleteObject(id)
 
     def OnPageChanged(self, event):
-        """Flatnotebook page has changed"""
+        """GNotebook page has changed"""
         self.currentPage = self.book.GetPageIndex(self.book.GetCurrentPage())
         if self.currentPage == 1:
             self.SetStatusText(

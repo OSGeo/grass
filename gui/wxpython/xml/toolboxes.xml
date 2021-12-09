@@ -348,6 +348,9 @@
       <module-item name="v.in.lidar">
         <label>LAS LiDAR points import</label>
       </module-item>
+      <module-item name="v.in.pdal">
+        <label>Point cloud (LAS LiDAR) import</label>
+      </module-item>
       <separator/>
       <module-item name="v.unpack">
         <label>Unpack vector map</label>
@@ -1072,6 +1075,10 @@
       <separator/>
       <module-item name="r.fillnulls">
         <label>Fill NULL cells</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.fill.stats">
+        <label>Fill NULL cells using IDW</label>
       </module-item>
     </items>
   </toolbox>

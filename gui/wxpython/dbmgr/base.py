@@ -57,6 +57,7 @@ from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd import RunCommand, GException, GError, GMessage, GWarning
 from core.utils import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
+from gui_core.widgets import GNotebook
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc, GetDbEncoding
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
@@ -885,7 +886,7 @@ class DbMgrBase:
         return self.dbMgrData["mapDBInfo"].layers.keys()
 
 
-class DbMgrNotebookBase(FN.FlatNotebook):
+class DbMgrNotebookBase(GNotebook):
     def __init__(self, parent, parentDbMgrBase):
         """Base class for notebook with attribute tables in tabs
 
@@ -922,12 +923,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         # list which represents layers numbers in order of tabs
         self.layers = []
 
-        if globalvar.hasAgw:
-            dbmStyle = {"agwStyle": globalvar.FNPageStyle}
-        else:
-            dbmStyle = {"style": globalvar.FNPageStyle}
-
-        FN.FlatNotebook.__init__(self, parent=self.parent, id=wx.ID_ANY, **dbmStyle)
+        GNotebook.__init__(self, parent=self.parent, style=globalvar.FNPageStyle)
 
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged)
 
@@ -1022,7 +1018,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         if layer not in self.layers:
             return False
 
-        FN.FlatNotebook.DeletePage(self, self.layers.index(layer))
+        GNotebook.DeleteNBPage(self, self.layers.index(layer))
 
         self.layers.remove(layer)
         del self.layerPage[layer]
@@ -1036,7 +1032,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
 
     def DeleteAllPages(self):
         """Removes all layer pages"""
-        FN.FlatNotebook.DeleteAllPages(self)
+        GNotebook.DeleteAllPages(self)
         self.layerPage = {}
         self.layers = []
         self.selLayer = None
@@ -1174,8 +1170,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if pos == -1:
             pos = self.GetPageCount()
-        self.InsertPage(
-            pos,
+        self.InsertNBPage(
+            index=pos,
             page=panel,
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),
@@ -1204,17 +1200,11 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         listSizer.Add(win, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
         # sql statement box
-        FNPageStyle = (
-            FN.FNB_NO_NAV_BUTTONS
-            | FN.FNB_NO_X_BUTTON
-            | FN.FNB_NODRAG
-            | FN.FNB_FANCY_TABS
+        sqlNtb = GNotebook(
+            parent=sqlQueryPanel,
+            style=FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON | FN.FNB_NODRAG,
         )
-        if globalvar.hasAgw:
-            dbmStyle = {"agwStyle": FNPageStyle}
-        else:
-            dbmStyle = {"style": FNPageStyle}
-        sqlNtb = FN.FlatNotebook(parent=sqlQueryPanel, id=wx.ID_ANY, **dbmStyle)
+
         # Simple tab
         simpleSqlPanel = wx.Panel(parent=sqlNtb, id=wx.ID_ANY)
         sqlNtb.AddPage(page=simpleSqlPanel, text=_("Simple"))
@@ -1384,14 +1374,18 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if sqlReduce:
             self.layerPage[layer]["sqlIsReduced"] = True
-            sqlSimpleSizer.AddGrowableCol(0)
-            sqlSimpleSizer.RemoveGrowableCol(1)
+            if not sqlSimpleSizer.IsColGrowable(0):
+                sqlSimpleSizer.AddGrowableCol(0)
+            if sqlSimpleSizer.IsColGrowable(1):
+                sqlSimpleSizer.RemoveGrowableCol(1)
             sqlSimpleSizer.SetItemPosition(wherePanel, (1, 0))
             sqlSimpleSizer.SetItemPosition(btnApply, (1, 1))
         else:
             self.layerPage[layer]["sqlIsReduced"] = False
-            sqlSimpleSizer.AddGrowableCol(1)
-            sqlSimpleSizer.RemoveGrowableCol(0)
+            if not sqlSimpleSizer.IsColGrowable(1):
+                sqlSimpleSizer.AddGrowableCol(1)
+            if sqlSimpleSizer.IsColGrowable(0):
+                sqlSimpleSizer.RemoveGrowableCol(0)
             sqlSimpleSizer.SetItemPosition(wherePanel, (0, 1))
             sqlSimpleSizer.SetItemPosition(btnApply, (0, 2))
 
@@ -2333,8 +2327,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
 
         if pos == -1:
             pos = self.GetPageCount()
-        self.InsertPage(
-            pos,
+        self.InsertNBPage(
+            index=pos,
             page=panel,
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),

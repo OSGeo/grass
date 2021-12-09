@@ -313,30 +313,6 @@ class GMFrame(wx.Frame):
 
         return menu
 
-    def _createDisplayPanel(self, parent):
-        """Creates display panel"""
-        # create superior display panel
-        displayPanel = wx.Panel(parent, id=wx.ID_ANY)
-        # create display toolbar
-        dmgrToolbar = DisplayPanelToolbar(guiparent=displayPanel, parent=self)
-        # create display notebook
-        notebookLayers = GNotebook(parent=displayPanel, style=globalvar.FNPageStyle)
-        notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
-        menu = self._createTabMenu()
-        notebookLayers.SetRightClickMenu(menu)
-
-        # layout
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
-        sizer.Add(notebookLayers, proportion=1, flag=wx.EXPAND)
-
-        displayPanel.SetAutoLayout(True)
-        displayPanel.SetSizer(sizer)
-        displayPanel.Fit()
-        displayPanel.Layout()
-
-        return displayPanel, notebookLayers
-
     def _setCopyingOfSelectedText(self):
         copy = UserSettings.Get(
             group="manager", key="copySelectedTextToClipboard", subkey="enabled"
@@ -365,7 +341,10 @@ class GMFrame(wx.Frame):
 
     def _createDisplay(self, parent):
         """Initialize Display widget"""
-        self.displayPanel, self.notebookLayers = self._createDisplayPanel(parent)
+        # create display notebook
+        self.notebookLayers = GNotebook(parent=parent, style=globalvar.FNPageStyle)
+        menu = self._createTabMenu()
+        self.notebookLayers.SetRightClickMenu(menu)
         # bindings
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
@@ -432,7 +411,9 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page=self.datacatalog, text=_("Data"), name="catalog")
 
         # add 'display' widget to main notebook page
-        self.notebook.AddPage(page=self.displayPanel, text=_("Display"), name="layers")
+        self.notebook.AddPage(
+            page=self.notebookLayers, text=_("Display"), name="layers"
+        )
 
         # add 'modules' widget to main notebook page
         if self.search:
@@ -1690,6 +1671,9 @@ class GMFrame(wx.Frame):
         # make a new page in the bookcontrol for the layer tree (on page 0 of
         # the notebook)
         self.pg_panel = wx.Panel(self.notebookLayers, id=wx.ID_ANY, style=wx.EXPAND)
+        # create display toolbar
+        dmgrToolbar = DisplayPanelToolbar(guiparent=self.pg_panel, parent=self)
+
         if name:
             dispName = name
         else:
@@ -1720,11 +1704,11 @@ class GMFrame(wx.Frame):
 
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
         cb_boxsizer.Add(self.GetLayerTree(), proportion=1, flag=wx.EXPAND, border=1)
         self.currentPage.SetSizer(cb_boxsizer)
-        cb_boxsizer.Fit(self.GetLayerTree())
+        self.currentPage.Fit()
         self.currentPage.Layout()
-        self.GetLayerTree().Layout()
         page = self.currentPage
 
         def CanCloseDisplay(askIfSaveWorkspace):

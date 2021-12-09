@@ -27,14 +27,14 @@
  */
 FILE *I_fopen_sigset_file_new(const char *name)
 {
-    char element[GNAME_MAX];
+    char dir[GNAME_MAX];
     FILE *fd;
 
     /* create sig directory */
-    I__make_signatures_element(I_SIGFILE_TYPE_SIGSET);
+    I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET);
 
-    I__get_signatures_element(element, I_SIGFILE_TYPE_SIGSET);
-    fd = G_fopen_new(element, name);
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
+    fd = G_fopen_new_misc(dir, "sig", name);
 
     return fd;
 }
@@ -50,14 +50,14 @@ FILE *I_fopen_sigset_file_new(const char *name)
 FILE *I_fopen_sigset_file_old(const char *name)
 {
     char sig_name[GNAME_MAX], sig_mapset[GMAPSET_MAX];
-    char element[GNAME_MAX];
+    char dir[GNAME_MAX];
     FILE *fd;
 
     if (G_unqualified_name(name, NULL, sig_name, sig_mapset) == 0)
         strcpy(sig_mapset, G_mapset());
 
-    I__get_signatures_element(element, I_SIGFILE_TYPE_SIGSET);
-    fd = G_fopen_old(element, sig_name, sig_mapset);
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
+    fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
 
     return fd;
 }
