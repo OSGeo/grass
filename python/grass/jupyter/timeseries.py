@@ -2,8 +2,8 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
-# PURPOSE:   This module contains functions visualizing time-space raster
-#            and vector datasets in Jupyter Notebooks
+# PURPOSE:   This module contains functions for visualizing raster and vector
+#            space-time datasets in Jupyter Notebooks
 #
 # COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
 #
