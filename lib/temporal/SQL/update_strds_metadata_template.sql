@@ -42,7 +42,7 @@ UPDATE strds_metadata SET ewres_max =
     		(SELECT id FROM SPACETIME_REGISTER_TABLE)
        ) WHERE id = 'SPACETIME_ID';
 -- Update the number of registered bands
-UPDATE strds_metadata SET number_of_bands =
+UPDATE strds_metadata SET number_of_semantic_labels =
        (SELECT count(distinct semantic_label) FROM raster_metadata WHERE
        raster_metadata.id IN
     		(SELECT id FROM SPACETIME_REGISTER_TABLE)

@@ -1342,7 +1342,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
          | Maximum value min:.......... None
          | Maximum value max:.......... None
          | Aggregation type:........... None
-         | Number of registered bands:. None
+         | Number of semantic labels:.. None
+         | Semantic labels:............ None
          | Number of registered maps:.. None
          |
          | Title:
@@ -1361,7 +1362,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
         max_min=None
         max_max=None
         aggregation_type=None
-        number_of_bands=None
+        number_of_semantic_labels=None
+        semantic_labels=None
         number_of_maps=None
 
     """
@@ -1372,7 +1374,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
             self, "strds_metadata", ident, title, description
         )
 
-        self.D["number_of_bands"] = None
+        self.D["number_of_semantic_labels"] = None
 
         self.set_raster_register(raster_register)
 
@@ -1388,18 +1390,18 @@ class STRDSMetadata(STDSRasterMetadataBase):
         else:
             return None
 
-    def get_number_of_bands(self):
-        """Get the number of registered bands
+    def get_number_of_semantic_labels(self):
+        """Get the number of registered semantic labels
         :return: None if not found
         """
-        if "number_of_bands" in self.D:
-            return self.D["number_of_bands"]
+        if "number_of_semantic_labels" in self.D:
+            return self.D["number_of_semantic_labels"]
         else:
             return None
 
-    def get_band_names(self):
-        """Get the distinct names of registered bands
-           The distinct band names are not stored in the metadata table
+    def get_semantic_labels(self):
+        """Get the distinct semantic lables of registered maps
+           The distinct semantic labels are not stored in the metadata table
            and fetched on-the-fly
         :return: None if not found
         """
@@ -1436,8 +1438,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
             return None
 
     raster_register = property(fget=get_raster_register, fset=set_raster_register)
-    number_of_bands = property(fget=get_number_of_bands)
-    band_names = property(fget=get_band_names)
+    number_of_semantic_labels = property(fget=get_number_of_semantic_labels)
+    semantic_labels = property(fget=get_semantic_labels)
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
@@ -1450,11 +1452,11 @@ class STRDSMetadata(STDSRasterMetadataBase):
             print(" | Raster register table:...... " + str(self.get_raster_register()))
         super()._print_info_body(shell)
         if shell:
-            print("number_of_bands=" + str(self.get_number_of_bands()))
-            print("band_names=" + str(self.get_band_names()))
+            print("number_of_semantic_labels=" + str(self.get_number_of_semantic_labels()))
+            print("semantic_labels=" + str(self.get_semantic_labels()))
         else:
-            print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
-            print(" | Band names:................. " + str(self.get_band_names()))
+            print(" | Number of semantic labels:.. " + str(self.get_number_of_semantic_labels()))
+            print(" | Semantic labels:............ " + str(self.get_semantic_labels()))
 
 
 ###############################################################################
