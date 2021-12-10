@@ -150,7 +150,7 @@ class GrassRenderer:
         grass_module = name.replace("_", ".")
         # Assert module exists
         if not shutil.which(grass_module):
-            raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
+            raise AttributeError(_(f"Cannot find GRASS module {grass_module}"))
 
         def wrapper(**kwargs):
             # Run module

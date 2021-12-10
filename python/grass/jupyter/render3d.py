@@ -118,18 +118,18 @@ class Grass3dRenderer:
         elif screen_backend == "pyvirtualdisplay" and not pyvirtualdisplay_available:
             raise ValueError(
                 _(
-                    "Screen backend '{}' cannot be used "
-                    "because pyvirtualdisplay cannot be imported"
-                ).format(screen_backend)
+                    f"Screen backend '{screen_backend}' cannot be used "
+                    f"because pyvirtualdisplay cannot be imported"
+                )
             )
         elif screen_backend in ["simple", "pyvirtualdisplay"]:
             self._screen_backend = screen_backend
         else:
             raise ValueError(
                 _(
-                    "Screen backend '{}' does not exist. "
-                    "See documentation for the list of supported backends."
-                ).format(screen_backend)
+                    f"Screen backend '{screen_backend}' does not exist. "
+                    f"See documentation for the list of supported backends."
+                )
             )
 
         self.overlay = GrassRenderer(

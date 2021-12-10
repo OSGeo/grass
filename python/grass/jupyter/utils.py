@@ -60,7 +60,9 @@ def reproject_region(region, from_proj, to_proj):
     proc.stdin = None
     proj_output, stderr = proc.communicate()
     if proc.returncode:
-        raise RuntimeError("reprojecting region: m.proj error: " + stderr)
+        raise RuntimeError(
+            f"Reprojecting region encountered error while running m.proj: {stderr}"
+        )
     enws = gs.decode(proj_output).split(os.linesep)
     elon, nlat, unused = enws[0].split(" ")
     wlon, slat, unused = enws[1].split(" ")
