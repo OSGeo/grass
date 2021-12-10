@@ -89,7 +89,7 @@ import sys
 import tempfile as tmpfile
 
 WINDOWS = sys.platform.startswith("win")
-MACOS = sys.platform == "darwin"
+MACOS = sys.platform.startswith("darwin")
 
 VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
 VERSION_MINOR = "@GRASS_VERSION_MINOR@"

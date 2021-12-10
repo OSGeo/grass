@@ -98,9 +98,9 @@ LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
 CONFIG_PROJSHARE = os.environ.get("GRASS_PROJSHARE", "@CONFIG_PROJSHARE@")
 
 # Get the system name
-WINDOWS = sys.platform == "win32"
-CYGWIN = "cygwin" in sys.platform
-MACOS = "darwin" in sys.platform
+WINDOWS = sys.platform.startswith("win")
+CYGWIN = sys.platform.startswith("cygwin")
+MACOS = sys.platform.startswith("darwin")
 
 
 def decode(bytes_, encoding=ENCODING):
@@ -492,7 +492,7 @@ def create_tmp(user, gis_lock):
     if not tmp:
         tmp = tempfile.gettempdir()
 
-    tmpdir_name = f"grass{GRASS_VERSION_MAJOR}-{user!s}-{gis_lock!s}"
+    tmpdir_name = f"grass{GRASS_VERSION_MAJOR}-{user}-{gis_lock}"
     if tmp:
         tmpdir = os.path.join(tmp, tmpdir_name)
         try:
@@ -513,8 +513,9 @@ def create_tmp(user, gis_lock):
 
     if not tmp:
         fatal(
-            _("Unable to create temporary directory <%(tmpdir_name)s>! Exiting.")
-            % {"tmpdir_name": tmpdir_name}
+            _("Unable to create temporary directory <{tmpdir_name}>! Exiting.").format(
+                tmpdir_name=tmpdir_name
+            )
         )
 
     # promoting the variable even if it was not defined before
