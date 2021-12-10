@@ -800,8 +800,8 @@ class Settings:
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
-            _("Combined (labels and module names)"),
-            _("Expert (module names only)"),
+            _("Combined (labels and tool names)"),
+            _("Expert (tool names only)"),
         )
         self.internalSettings["appearance"]["gSelectPopupHeight"]["min"] = 50
         # there is also maxHeight given to TreeCtrlComboPopup.GetAdjustedSize
