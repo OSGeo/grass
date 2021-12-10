@@ -93,6 +93,7 @@ class Grass3dRenderer:
         self._height = height
         self._mode = mode
         self._resolution_fine = resolution_fine
+        self._env = os.environ.copy()
 
         # Temporary dir and files
         self._tmpdir = tempfile.TemporaryDirectory()
@@ -202,15 +203,14 @@ class Grass3dRenderer:
                 if has_env_copy:
                     env = display.env()
                 else:
-                    env = os.environ.copy()
+                    env = self._env
                 self._region_manager.set_region_from_command(env=env, **kwargs)
                 self.overlay.region_manager.set_region_from_env(env)
                 gs.run_command(module, env=env, **kwargs)
         else:
-            env = os.environ.copy()
-            self._region_manager.set_region_from_command(env=env, **kwargs)
-            self.overlay.region_manager.set_region_from_env(env)
-            gs.run_command(module, env=env, **kwargs)
+            self._region_manager.set_region_from_command(env=self._env, **kwargs)
+            self.overlay.region_manager.set_region_from_env(self._env)
+            gs.run_command(module, env=self._env, **kwargs)
 
         # Lazy import to avoid an import-time dependency on PIL.
         from PIL import Image  # pylint: disable=import-outside-toplevel
