@@ -1457,10 +1457,15 @@ class STRDSMetadata(STDSRasterMetadataBase):
             print(" | Raster register table:...... " + str(self.get_raster_register()))
         super()._print_info_body(shell)
         if shell:
-            print("number_of_semantic_labels=" + str(self.get_number_of_semantic_labels()))
+            print(
+                "number_of_semantic_labels=" + str(self.get_number_of_semantic_labels())
+            )
             print("semantic_labels=" + str(self.get_semantic_labels()))
         else:
-            print(" | Number of semantic labels:.. " + str(self.get_number_of_semantic_labels()))
+            print(
+                " | Number of semantic labels:.. "
+                + str(self.get_number_of_semantic_labels())
+            )
             print(" | Semantic labels:............ " + str(self.get_semantic_labels()))
 
 
