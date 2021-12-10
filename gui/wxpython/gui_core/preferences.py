@@ -1129,7 +1129,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         close = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Close dialog when command is successfully finished"),
+            label=_("Close dialog when completed successfully"),
             name="IsChecked",
         )
         close.SetValue(self.settings.Get(group="cmd", key="closeDlg", subkey="enabled"))
