@@ -136,7 +136,7 @@ class GMFrame(wx.Frame):
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(
-                    _("There were some issues when loading menu" " or Modules tab:")
+                    _("There were some issues when loading menu" " or Tools:")
                 )
                 for message in messages:
                     self._gconsole.WriteError(message)
@@ -577,8 +577,8 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(
             self.notebookLayers,
             aui.AuiPaneInfo()
-            .Name("display")
-            .Caption("Display")
+            .Name("layers")
+            .Caption("Layers")
             .Left()
             .Layer(1)
             .Position(2)
@@ -592,8 +592,8 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(
             self.search,
             aui.AuiPaneInfo()
-            .Name("modules")
-            .Caption("Modules")
+            .Name("tools")
+            .Caption("Tools")
             .Right()
             .Layer(1)
             .Position(1)
@@ -615,7 +615,7 @@ class GMFrame(wx.Frame):
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
-            target=self._auimgr.GetPane("modules"),
+            target=self._auimgr.GetPane("tools"),
         )
 
         self._auimgr.AddPane(
@@ -629,15 +629,15 @@ class GMFrame(wx.Frame):
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
-            target=self._auimgr.GetPane("modules"),
+            target=self._auimgr.GetPane("tools"),
         )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
 
-        # Set Modules as active tab
-        modules = self._auimgr.GetPane("modules")
+        # Set Tools as active tab
+        tools = self._auimgr.GetPane("tools")
         notebook = self._auimgr.GetNotebooks()[0]
-        notebook.SetSelectionToPage(modules)
+        notebook.SetSelectionToPage(tools)
 
         # Set the size for automatic notebook
         pane = self._auimgr.GetPane(notebook)
