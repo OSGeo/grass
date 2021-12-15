@@ -887,6 +887,9 @@ class BufferedMapWindow(MapWindowBase, Window):
         will be updated with the True value of the argument.
         """
 
+        if not self._properties.autoRender:
+            return
+
         if self.timerRunId is None or delay < self.updDelay:
             self.updDelay = delay
 
@@ -1398,7 +1401,8 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # dragging
         elif event.Dragging():
-            self.OnDragging(event)
+            if self._properties.autoRender:
+                self.OnDragging(event)
 
         # double click
         elif event.ButtonDClick():

@@ -106,6 +106,7 @@ class MapPanelBase(wx.Panel):
             (self.OnCloseWindow, wx.ACCEL_CTRL, ord("W")),
             (self.OnRender, wx.ACCEL_CTRL, ord("R")),
             (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
+            (self.OnEnableDisableRender, wx.ACCEL_NORMAL, wx.WXK_F6),
         ]
 
         self._initShortcuts()
@@ -423,6 +424,13 @@ class MapPanelBase(wx.Panel):
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         raise NotImplementedError("OnRender")
+
+    def OnEnableDisableRender(self, event):
+        """Enable/disable auto-rendering map composition (each map layer)"""
+        if self.MapWindow._properties.autoRender:
+            self.MapWindow._properties.autoRender = False
+        else:
+            self.MapWindow._properties.autoRender = True
 
     def OnDraw(self, event):
         """Re-display current map composition"""
