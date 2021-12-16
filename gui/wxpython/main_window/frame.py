@@ -798,9 +798,15 @@ class GMFrame(wx.Frame):
 
     def OnMapSwipe(self, event=None, cmd=None):
         """Launch Map Swipe. See OnIClass documentation"""
-        from mapswipe.frame import SwipeMapFrame
+        from mapswipe.frame import SwipeMapDisplay
 
-        win = SwipeMapFrame(parent=self, giface=self._giface)
+        frame = wx.Frame(
+            parent=None, size=globalvar.MAP_WINDOW_SIZE, title=_("Map Swipe Tool")
+        )
+        win = SwipeMapDisplay(
+            parent=frame,
+            giface=self._giface,
+        )
 
         rasters = []
         tree = self.GetLayerTree()
@@ -1652,7 +1658,7 @@ class GMFrame(wx.Frame):
             This documentation is actually documentation of some
             component related to gui_core/menu.py file.
         """
-        from iclass.frame import IClassMapFrame, haveIClass, errMsg
+        from iclass.frame import IClassMapDisplay, haveIClass, errMsg
 
         if not haveIClass:
             GError(
@@ -1661,7 +1667,12 @@ class GMFrame(wx.Frame):
             )
             return
 
-        win = IClassMapFrame(parent=self, giface=self._giface)
+        frame = wx.Frame(
+            parent=None,
+            size=globalvar.MAP_WINDOW_SIZE,
+            title=_("Supervised Classification Tool"),
+        )
+        win = IClassMapDisplay(parent=frame, giface=self._giface)
         win.CentreOnScreen()
 
         win.Show()
