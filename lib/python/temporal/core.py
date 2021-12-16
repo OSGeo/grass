@@ -679,7 +679,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
             ". From there, create a backup of your temporal database "
             "to avoid the loss of your temporal data.\nNotes: Use "
             "t.rast.export and t.vect.export to make a backup of your"
-            " existing space time datasets. To safe the timestamps of"
+            " existing space time datasets. To save the timestamps of"
             " your existing maps and space time datasets, use "
             "t.rast.list, t.vect.list and t.rast3d.list. "
             "You can register the existing time stamped maps easily if"
