@@ -7,7 +7,7 @@ functions, and additional toolbars (vector digitizer, 3d view).
 Can be used either from Layer Manager or as d.mon backend.
 
 Classes:
- - mapdisp::MapFrame
+ - mapdisp::MapPanel
 
 (C) 2006-2016 by the GRASS Development Team
 
@@ -17,8 +17,8 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapFrame, handlers support)
-@author Anna Kratochvilova <kratochanna gmail.com> (SingleMapFrame)
+@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapPanel, handlers support)
+@author Anna Kratochvilova <kratochanna gmail.com> (SingleMapPanel)
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
@@ -36,7 +36,7 @@ from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapFrame
+from gui_core.mapdisp import SingleMapPanel, FrameMixin
 from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
@@ -63,8 +63,8 @@ import grass.script as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapFrame(SingleMapFrame):
-    """Main frame for map display window. Drawing takes place in
+class MapPanel(SingleMapPanel):
+    """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
 
@@ -91,10 +91,10 @@ class MapFrame(SingleMapFrame):
         :param lmgr: Layer Manager
         :param map: instance of render.Map
         :param auimgr: AUI manager
-        :param name: frame name
-        :param kwargs: wx.Frame attributes
+        :param name: panel name
+        :param kwargs: wx.Panel attributes
         """
-        SingleMapFrame.__init__(
+        SingleMapPanel.__init__(
             self,
             parent=parent,
             title=title,
@@ -119,16 +119,16 @@ class MapFrame(SingleMapFrame):
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already actived.
-        self.starting3dMode = Signal("MapFrame.starting3dMode")
+        self.starting3dMode = Signal("MapPanel.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
-        self.ending3dMode = Signal("MapFrame.ending3dMode")
+        self.ending3dMode = Signal("MapPanel.ending3dMode")
 
         # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapFrame.closingDisplay")
+        self.closingDisplay = Signal("MapPanel.closingDisplay")
 
         # Emitted when closing display by closing its window.
-        self.closingVNETDialog = Signal("MapFrame.closingVNETDialog")
+        self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
 
         # properties are shared in other objects, so defining here
         self.mapWindowProperties = MapWindowProperties()
@@ -226,7 +226,6 @@ class MapFrame(SingleMapFrame):
         #
         # Bind various events
         #
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
         #
@@ -962,7 +961,7 @@ class MapFrame(SingleMapFrame):
     def CleanUp(self):
         """Clean up before closing map display.
         End digitizer/nviz."""
-        Debug.msg(2, "MapFrame.CleanUp()")
+        Debug.msg(2, "MapPanel.CleanUp()")
         self.Map.Clean()
         # close edited map and 3D tools properly
         if self.GetToolbar("vdigit"):
@@ -980,7 +979,7 @@ class MapFrame(SingleMapFrame):
         """Window closed.
         Also close associated layer tree page
         """
-        Debug.msg(2, "MapFrame.OnCloseWindow()")
+        Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseDisplayCallback:
             pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
             if pgnum is not None:
@@ -1491,7 +1490,7 @@ class MapFrame(SingleMapFrame):
         """Set display extents to match selected raster (including
         NULLs) or vector map.
         """
-        Debug.msg(3, "MapFrame.OnZoomToMap()")
+        Debug.msg(3, "MapPanel.OnZoomToMap()")
         self.MapWindow.ZoomToMap(layers=None)
 
     def OnZoomToRaster(self, event):
@@ -1702,3 +1701,52 @@ class MapFrame(SingleMapFrame):
         """Quit VDigit"""
         # disable the toolbar
         self.RemoveToolbar("vdigit", destroy=True)
+
+
+class MapDisplay(FrameMixin, MapPanel):
+    """Map display for wrapping map panel with frame methods"""
+
+    def __init__(self, parent, giface, id, tree, lmgr, idx, Map, title, **kwargs):
+        # init map panel
+        MapPanel.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            id=id,
+            tree=tree,
+            lmgr=lmgr,
+            Map=Map,
+            title=title,
+            **kwargs,
+        )
+        # set system icon
+        parent.iconsize = (16, 16)
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+        # use default frame window layout
+        if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
+            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
+            idx = 4 + idx * 4
+            try:
+                x, y = map(int, dim.split(",")[idx : idx + 2])
+                w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                parent.SetPosition((x, y))
+                parent.SetSize((w, h))
+            except Exception:
+                pass
+
+        # bindings
+        parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
