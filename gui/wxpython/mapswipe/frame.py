@@ -847,7 +847,6 @@ class SwipeMapDisplay(FrameMixin, SwipeMapPanel):
             **kwargs,
         )
         # set system icon
-        parent.iconsize = (16, 16)
         parent.SetIcon(
             wx.Icon(
                 os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO

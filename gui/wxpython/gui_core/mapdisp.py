@@ -85,6 +85,7 @@ class MapPanelBase(wx.Panel):
 
         # toolbars
         self.toolbars = {}
+        self.iconsize = (16, 16)
 
         #
         # Fancy gui
