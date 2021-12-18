@@ -23,6 +23,7 @@ import re
 from datetime import datetime
 import locale
 import json
+import pathlib
 
 try:
     # Python 2 import
@@ -288,24 +289,21 @@ def update_toc(data):
     return "\n".join(ret_data)
 
 
-def get_addon_path(pgm):
-    """Check if pgm is in addons list and get addon path
+def get_addon_path():
+    """Check if pgm is in the addons list and get addon path
 
-    :param pgm str: pgm
-
-    return: True if pgm is addon else None
+    return: pgm path if pgm is addon else None
     """
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if addon_base:
-        """'addons_paths.json' is file created during install extension
-        check get_addons_paths() function in the g.extension.py file
-        """
+        # addons_paths.json is file created during install extension
+        # check get_addons_paths() function in the g.extension.py file
         addons_paths = os.path.join(addon_base, "addons_paths.json")
         if os.path.exists(addons_paths):
-            with open(addons_paths, "r") as f:
+            with open(addons_paths) as f:
                 addons_paths = json.load(f)
             for addon in addons_paths["tree"]:
-                if pgm == addon["path"].split("/")[-1]:
+                if pgm == pathlib.Path(addon["path"]).name:
                     return addon["path"]
 
 
@@ -434,17 +432,12 @@ else:
     pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
 url_source = ""
 if os.getenv("SOURCE_URL", ""):
-    # addons
-    for prefix in index_names.keys():
-        cwd = os.getcwd()
-        idx = cwd.find("{0}{1}.".format(os.path.sep, prefix))
-        if idx > -1:
-            pgmname = cwd[idx + 1 :]
-            classname = index_names[prefix]
-            url_source = urlparse.urljoin(
-                "{0}{1}/".format(os.environ["SOURCE_URL"], classname), pgmname
-            )
-            break
+    addon_path = get_addon_path()
+    if addon_path:
+        url_source = urlparse.urljoin(
+            os.environ["SOURCE_URL"].split("src")[0],
+            addon_path,
+        )
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == "win32":
@@ -454,14 +447,7 @@ if index_name:
     branches = "branches"
     tree = "tree"
     commits = "commits"
-    addon_path = get_addon_path(pgm=pgm)
 
-    if addon_path:
-        # Fix gui/wxpython addon url path
-        url_source = urlparse.urljoin(
-            os.environ["SOURCE_URL"].split("src")[0],
-            addon_path,
-        )
     if branches in url_source:
         url_log = url_source.replace(branches, commits)
         url_source = url_source.replace(branches, tree)
