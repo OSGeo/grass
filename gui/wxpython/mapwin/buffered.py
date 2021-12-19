@@ -851,7 +851,13 @@ class BufferedMapWindow(MapWindowBase, Window):
     def IsAlwaysRenderEnabled(self):
         return self.alwaysRender
 
-    def UpdateMap(self, render=True, renderVector=True, delay=0.0):
+    def UpdateMap(
+        self,
+        render=True,
+        renderVector=True,
+        delay=0.0,
+        reRenderTool=False,
+    ):
         """Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
 
@@ -869,6 +875,10 @@ class BufferedMapWindow(MapWindowBase, Window):
         :param renderVector: re-render vector map layer enabled for editing (used for digitizer)
         :param delay: defines time threshold  in seconds for postponing
                       rendering to merge more update requests.
+        :param reRenderTool bool: enable re-render map if True, when
+                                  auto re-render map is disabled and
+                                  Render map tool is pressed from Map
+                                  Display toolbar
 
         If another request comes within the limit, rendering is delayed
         again. Next delay limit is chosen according to the smallest
@@ -887,7 +897,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         will be updated with the True value of the argument.
         """
 
-        if not self._properties.autoRender:
+        if not self._properties.autoRender and not reRenderTool:
             return
 
         if self.timerRunId is None or delay < self.updDelay:

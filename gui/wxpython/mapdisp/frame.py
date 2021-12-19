@@ -680,9 +680,13 @@ class MapPanel(SingleMapPanel):
         if self.GetToolbar("vdigit"):
             if self.MapWindow.digit:
                 self.MapWindow.digit.GetDisplay().SetSelected([])
-            self.MapWindow.UpdateMap(render=True, renderVector=True)
+            self.MapWindow.UpdateMap(
+                render=True,
+                renderVector=True,
+                reRenderTool=True,
+            )
         else:
-            self.MapWindow.UpdateMap(render=True)
+            self.MapWindow.UpdateMap(render=True, reRenderTool=True)
 
         # reset dialog with selected features
         if self.dialogs["vselect"]:
