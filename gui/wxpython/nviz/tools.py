@@ -2807,8 +2807,7 @@ class NvizToolWindow(GNotebook):
             if item > wx.NOT_FOUND:
                 checklist.Delete(item)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnConstantSelection(self, event):
         """Constant selected"""
@@ -2848,8 +2847,7 @@ class NvizToolWindow(GNotebook):
         # update properties
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnFringe(self, event):
         """Show/hide fringe"""
@@ -3301,8 +3299,7 @@ class NvizToolWindow(GNotebook):
         color = str(color[0]) + ":" + str(color[1]) + ":" + str(color[2])
         self._display.SetBgColor(str(color))
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSetSurface(self, event):
         """Surface selected, currently used for fringes"""
@@ -3391,8 +3388,7 @@ class NvizToolWindow(GNotebook):
 
         self.mapWindow.iview["dir"]["use"] = False
         self.mapWindow.render["quick"] = True
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -3465,8 +3461,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnLookFrom(self, event):
         """Position of view/light changed by buttons"""
@@ -3580,8 +3575,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def EnablePage(self, name, enabled=True):
         """Enable/disable all widgets on page"""
@@ -3711,15 +3705,13 @@ class NvizToolWindow(GNotebook):
             event = wxUpdateProperties(data=data)
             wx.PostEvent(self.mapWindow, event)
 
-            if self.mapDisplay.IsAutoRendered():
-                self.mapWindow.Refresh(False)
+            self.mapWindow.Refresh(False)
 
     def OnSurfaceResolution(self, event):
         """Draw resolution changed"""
         self.SetSurfaceResolution()
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def SetSurfaceResolution(self):
         """Set draw resolution"""
@@ -3767,8 +3759,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
         """Set draw mode (including wire color) for all loaded surfaces"""
@@ -3805,8 +3796,7 @@ class NvizToolWindow(GNotebook):
             event = wxUpdateProperties(data=data)
             wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def _getColorString(self, color):
         """Convert color tuple to R:G:B format
@@ -3857,8 +3847,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSurfaceAxis(self, event):
         """Surface position, axis changed"""
@@ -3932,8 +3921,7 @@ class NvizToolWindow(GNotebook):
         wx.PostEvent(self.mapWindow, event)
 
         self.mapWindow.render["quick"] = True
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
         #        self.UpdatePage('surface')
 
     def OnSurfacePositionChanged(self, event):
@@ -4013,8 +4001,7 @@ class NvizToolWindow(GNotebook):
                 event = wxUpdateProperties(data=data)
                 wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4082,8 +4069,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVectorPointsMode(self, event):
         rasters = self.mapWindow.GetLayerNames("raster")
@@ -4183,8 +4169,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVectorPoints(self, event):
         """Set vector points mode, apply changes if auto-rendering is enabled"""
@@ -4214,8 +4199,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCheckThematic(self, event):
         """Switch on/off thematic mapping"""
@@ -4275,8 +4259,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def HasGRASSRGB(self, name):
         """Check if GRASSRGB column exist."""
@@ -4379,8 +4362,7 @@ class NvizToolWindow(GNotebook):
         self._display.SetVolumeDrawBox(vid, checked)
         data["draw"]["box"]["enabled"] = checked
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def SetVolumeDrawMode(self, selection):
         """Set isosurface draw mode"""
@@ -4402,8 +4384,7 @@ class NvizToolWindow(GNotebook):
             data["draw"]["shading"]["slice"]["desc"] = "flat"
             data["draw"]["shading"]["slice"]["value"] = mode
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeResolution(self, event):
         """Set isosurface/slice draw resolution"""
@@ -4421,8 +4402,7 @@ class NvizToolWindow(GNotebook):
             self._display.SetSliceRes(id, res)
             data["draw"]["resolution"]["slice"]["value"] = res
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnInOutMode(self, event):
         """Change isosurfaces mode inout"""
@@ -4434,8 +4414,7 @@ class NvizToolWindow(GNotebook):
         if ret == 1:
             data["isosurface"][isosurfId]["inout"]["value"] = event.GetInt()
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeIsosurfMap(self, event):
         """Set surface attribute"""
@@ -4484,8 +4463,7 @@ class NvizToolWindow(GNotebook):
                 # disable -> make transparent
                 self._display.SetSliceTransp(vid, id, 255)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeSelect(self, event):
         """Isosurface/Slice item selected"""
@@ -4598,8 +4576,7 @@ class NvizToolWindow(GNotebook):
         else:
             self.UpdateVolumeSlicePage(sliceData)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4645,8 +4622,7 @@ class NvizToolWindow(GNotebook):
                 self.UpdateVolumeSlicePage(None)
         self.UpdateIsosurfButtons(list)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4686,8 +4662,7 @@ class NvizToolWindow(GNotebook):
         # update buttons
         self.UpdateIsosurfButtons(list)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4727,8 +4702,7 @@ class NvizToolWindow(GNotebook):
         # update buttons
         self.UpdateIsosurfButtons(list)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4780,8 +4754,7 @@ class NvizToolWindow(GNotebook):
         wx.PostEvent(self.mapWindow, event)
 
         self.mapWindow.render["quick"] = True
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeAxis(self, event):
         """Volume position, axis changed"""
@@ -4835,8 +4808,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeSliceAxes(self, event):
         """Slice axis changed"""
@@ -4858,8 +4830,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSliceTransparency(self, event):
         """Slice transparency changed"""
@@ -4880,8 +4851,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSliceReset(self, event):
         """Slice position reset"""
@@ -4903,8 +4873,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSlicePositionChange(self, event):
         """Slice position is changing"""
@@ -4927,14 +4896,12 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSlicePositionChanged(self, event):
         """Slice position is changed"""
         self.mapWindow.render["quick"] = False
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCPlaneSelection(self, event):
         """Cutting plane selected"""
@@ -4951,8 +4918,7 @@ class NvizToolWindow(GNotebook):
                 planeIndex, changes=["rotation", "position", "shading"]
             )
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
         self.UpdateCPlanePage(planeIndex)
 
     def OnCPlaneChanging(self, event):
@@ -4977,14 +4943,12 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateCPlane(update=(action,), current=planeIndex)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCPlaneChangeDone(self, event):
         """Cutting plane change done"""
         self.mapWindow.render["quick"] = False
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCPlaneChangeText(self, event):
         """Cutting plane changed by textctrl"""

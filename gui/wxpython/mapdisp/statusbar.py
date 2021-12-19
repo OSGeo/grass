@@ -307,8 +307,7 @@ class SbManager:
             # show computation region extent by default
             self.statusbarItems["region"].SetValue(True)
             # redraw map if auto-rendering is enabled
-            if self.mapFrame.IsAutoRendered():
-                self.mapFrame.GetWindow().UpdateMap(render=False)
+            self.mapFrame.GetWindow().UpdateMap(render=False)
 
     def SetMode(self, modeIndex):
         """Sets current mode
@@ -493,8 +492,7 @@ class SbShowRegion(SbItem):
         self._connectShowRegion()
 
         # redraw map if auto-rendering is enabled
-        if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetWindow().UpdateMap(render=False)
+        self.mapFrame.GetWindow().UpdateMap(render=False)
 
     def SetValue(self, value):
         self._disconnectShowRegion()
@@ -601,8 +599,7 @@ class SbResolution(SbItem):
         self._properties.resolution = self.widget.GetValue()
         self._connectResolutionChange()
         # redraw map if auto-rendering is enabled
-        if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetWindow().UpdateMap()
+        self.mapFrame.GetWindow().UpdateMap()
 
 
 class SbMapScale(SbItem):

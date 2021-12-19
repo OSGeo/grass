@@ -2154,8 +2154,7 @@ class GMFrame(wx.Frame):
         # redraw map if auto-rendering is enabled
         # seems little too low level for this place
         # no redraw when Render is unchecked
-        if mapdisp.IsAutoRendered():
-            mapdisp.GetMapWindow().UpdateMap(render=False)
+        mapdisp.GetMapWindow().UpdateMap(render=False)
 
     def OnDeleteLayer(self, event):
         """Remove selected map layer from the current layer Tree"""

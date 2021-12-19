@@ -360,8 +360,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # restart rerender value here before wx.Yield
             # can cause another idle event
             self.rerender = False
-            if self.mapdisplay.IsAutoRendered():
-                self.mapdisplay.GetMapWindow().UpdateMap(render=False)
+            self.mapdisplay.GetMapWindow().UpdateMap(render=False)
 
         event.Skip()
 
@@ -1871,12 +1870,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         ):
             mapLayer = self.GetLayerInfo(layer, key="maplayer")
             if mapLayer.GetType() in ("raster", "vector"):
-                render = self.mapdisplay.IsAutoRendered()
                 self.mapdisplay.MapWindow.ZoomToMap(
                     layers=[
                         mapLayer,
                     ],
-                    render=render,
                 )
 
         # update nviz tools
