@@ -124,7 +124,8 @@ class RegionManagerFor2D:
     def set_region_from_env(self, env):
         """Copies GRASS_REGION from provided environment
         to local environment to set the computational region"""
-        self._env["GRASS_REGION"] = env["GRASS_REGION"]
+        if "GRASS_REGION" in env:
+            self._env["GRASS_REGION"] = env["GRASS_REGION"]
 
     def set_region_from_command(self, module, **kwargs):
         """Sets computational region for rendering.
@@ -185,7 +186,6 @@ class RegionManagerFor3D:
         """
         self._use_region = use_region
         self._saved_region = saved_region
-        self._region_set = False
 
     def set_region_from_command(self, env, **kwargs):
         """Sets computational region for rendering.
@@ -199,17 +199,13 @@ class RegionManagerFor3D:
         """
         if self._saved_region:
             env["GRASS_REGION"] = gs.region_env(region=self._saved_region, env=env)
-            self._region_set = True
             return
         if self._use_region:
             # use current
-            return
-        if self._region_set:
             return
         if "elevation_map" in kwargs:
             elev = kwargs["elevation_map"].split(",")[0]
             try:
                 env["GRASS_REGION"] = gs.region_env(raster=elev, env=env)
-                self._region_set = True
             except CalledModuleError:
                 return
