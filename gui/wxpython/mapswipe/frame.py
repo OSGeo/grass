@@ -250,6 +250,7 @@ class SwipeMapPanel(DoubleMapPanel):
         style = self.splitter.GetWindowStyle()
         style ^= wx.SP_LIVE_UPDATE
         self.splitter.SetWindowStyle(style)
+        self._simpleLmgrChanged()
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
