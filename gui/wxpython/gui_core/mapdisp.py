@@ -760,13 +760,20 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
-        self.Render(mapToRender=self.GetFirstWindow())
-        self.Render(mapToRender=self.GetSecondWindow())
+        kwargs = {}
+        # Handle re-render map event (mouse click on toolbar Render map
+        # tool, F5/Ctrl + R keyboard shortcut)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Render(mapToRender=self.GetFirstWindow(), **kwargs)
+        self.Render(mapToRender=self.GetSecondWindow(), **kwargs)
 
-    def Render(self, mapToRender):
+    def Render(self, mapToRender, reRenderTool=False):
         """Re-render map composition"""
         mapToRender.UpdateMap(
-            render=True, renderVector=mapToRender == self.GetFirstWindow()
+            render=True,
+            renderVector=mapToRender == self.GetFirstWindow(),
+            reRenderTool=reRenderTool,
         )
 
         # update statusbar
@@ -783,12 +790,17 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnDraw(self, event):
         """Re-display current map composition"""
-        self.Draw(mapToDraw=self.GetFirstWindow())
-        self.Draw(mapToDraw=self.GetSecondWindow())
+        kwargs = {}
+        # Handle display map event (mouse click on toolbar Display map
+        # tool)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Draw(mapToDraw=self.GetFirstWindow(), **kwargs)
+        self.Draw(mapToDraw=self.GetSecondWindow(), **kwargs)
 
-    def Draw(self, mapToDraw):
+    def Draw(self, mapToDraw, reRenderTool=False):
         """Re-display current map composition"""
-        mapToDraw.UpdateMap(render=False)
+        mapToDraw.UpdateMap(render=False, reRenderTool=reRenderTool)
 
 
 class FrameMixin:
