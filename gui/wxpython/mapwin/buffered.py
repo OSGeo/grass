@@ -1100,6 +1100,13 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         :param moveto: dx,dy
         """
+        # Prevent drag map error if auto re-render map is disabled
+        # wx._core.wxAssertionError: C++ assertion "!wxMouseCapture::IsInCaptureStack(this)
+        # failed at /tmp/pip-req-build-oxkmg2wi/ext/wxWidgets/src/common/wincmn.cpp(3270) in
+        # CaptureMouse(): Recapturing the mouse in the same window?
+        if not self._properties.autoRender:
+            return
+
         dc = wx.BufferedDC(wx.ClientDC(self))
         dc.SetBackground(wx.Brush("White"))
         dc.Clear()
@@ -1411,8 +1418,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # dragging
         elif event.Dragging():
-            if self._properties.autoRender:
-                self.OnDragging(event)
+            self.OnDragging(event)
 
         # double click
         elif event.ButtonDClick():
