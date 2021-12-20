@@ -877,8 +877,8 @@ class BufferedMapWindow(MapWindowBase, Window):
                       rendering to merge more update requests.
         :param reRenderTool bool: enable re-render map if True, when
                                   auto re-render map is disabled and
-                                  Render map tool is pressed from Map
-                                  Display toolbar
+                                  Display map or Render map tool is
+                                  activated from the Map Display toolbar
 
         If another request comes within the limit, rendering is delayed
         again. Next delay limit is chosen according to the smallest
