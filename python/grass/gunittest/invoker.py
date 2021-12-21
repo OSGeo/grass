@@ -29,6 +29,7 @@ from .reporters import (
 )
 from .utils import silent_rmtree, ensure_dir
 
+import grass.script as gs
 from grass.script.utils import decode, _get_encoding
 
 try:
@@ -118,9 +119,9 @@ class GrassTestFilesInvoker(object):
         """
         # TODO: use g.mapset -c, no need to duplicate functionality
         # All path characters such as slash, backslash and dot are replaced.
-        dir_as_name = legalize_vector_name(module.tested_dir, fallback_prefix=None)
+        dir_as_name = gs.legalize_vector_name(module.tested_dir, fallback_prefix=None)
         # Multiple processes can run the same test in the same location.
-        mapset = append_node_pid(f"{dir_as_name}_{module.name}")
+        mapset = gs.append_node_pid(f"{dir_as_name}_{module.name}")
         # TODO: use grass module to do this? but we are not in the right gisdbase
         mapset_dir = os.path.join(gisdbase, location, mapset)
         if self.clean_before:
