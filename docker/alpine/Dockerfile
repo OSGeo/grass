@@ -185,8 +185,6 @@ ENV LC_ALL="en_US.UTF-8"
 # Copy GRASS GIS from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
-# pip 20.0.0 fix
-RUN apk add curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py pip==20.0.2 && rm get-pip.py
 
 # install external Python API
 RUN pip3 install --upgrade pip six grass-session --ignore-installed six
