@@ -667,13 +667,14 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = _(
-        "Please create a backup of your temporal database to avoid losing data.\n"
-    )
     if tgis_db_version == 2:
-        backup_howto += _("Run t.downgrade command to downgrade your temporal database.\n")
+        backup_howto = _(
+            "Run t.downgrade command to downgrade your temporal database.\n"
+            "Consider creating a backup of your temporal database to avoid "
+            "losing data in case something goes wrong.\n"
+        )
     else:
-        backup_howto += _(
+        backup_howto = _(
             "You need to export it by "
             "restoring the GRASS GIS version used for creating this DB"
             ". From there, create a backup of your temporal database "
