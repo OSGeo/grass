@@ -151,19 +151,13 @@ class MapPanel(SingleMapPanel):
                 sb.SbCoordinates,
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
-                sb.SbShowRegion,
-                sb.SbAlignExtent,
-                sb.SbResolution,
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
                 sb.SbProjection,
             ]
             self.statusbarItemsHiddenInNviz = (
-                sb.SbAlignExtent,
                 sb.SbDisplayGeometry,
-                sb.SbShowRegion,
-                sb.SbResolution,
                 sb.SbMapScale,
             )
             self.statusbar = self.CreateStatusbar(statusbarItems)
@@ -1561,6 +1555,14 @@ class MapPanel(SingleMapPanel):
         # be called before PopupMenu returns.
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
+
+    def OnMapDisplayPreferences(self, event):
+        """Show Map Display Preferences dialog"""
+        from mapdisp.settings import MapDisplayPreferencesDialog
+
+        dlg = MapDisplayPreferencesDialog(parent=self, giface=self._giface)
+        dlg.CenterOnParent()
+        dlg.Show()
 
     def SetProperties(
         self,
