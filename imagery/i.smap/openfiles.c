@@ -39,7 +39,7 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 
     err = I_SortSigSetBySemanticLabel(S, &Ref);
     if (err)
-        G_fatal_error(_("Signature – group member semantic label mismatch.\n"
+        G_fatal_error(_("Signature - group member semantic label mismatch.\n"
             "Extra signatures for bands: %s\n"
             "Imagery group bands without signatures: %s"),
             err[0] ? err[0] : _("none"),
