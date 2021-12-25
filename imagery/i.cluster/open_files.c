@@ -68,7 +68,7 @@ int open_files(void)
 
         err = I_sort_signatures_by_semantic_label(&in_sig, &ref);
         if (err)
-            G_fatal_error(_("Signature – group member semantic label mismatch.\n"
+            G_fatal_error(_("Signature - group member semantic label mismatch.\n"
                 "Extra signatures for bands: %s\n"
                 "Imagery group bands without signatures: %s"),
                 err[0] ? err[0] : _("none"),
