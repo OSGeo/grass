@@ -180,6 +180,7 @@ class DatabasePage(TitledPage):
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
         self.sizer.SetRows(8)
+        self.sizer.AddGrowableCol(1)
 
         # definition of variables
         self.grassdatabase = grassdatabase
@@ -191,7 +192,7 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
-        self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
+        self.tlocation = self.MakeTextCtrl("newLocation")
         self.tlocation.SetFocus()
 
         checks = [
@@ -199,7 +200,7 @@ class DatabasePage(TitledPage):
             (self._checkLocationNotExists, self._locationAlreadyExists),
         ]
         self.tlocation.SetValidator(GenericMultiValidator(checks))
-        self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
+        self.tlocTitle = self.MakeTextCtrl()
 
         # text for required options
         required_txt = self.MakeLabel("*")
@@ -226,7 +227,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tlocation,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(2, 1),
         )
@@ -248,7 +249,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tlocTitle,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(4, 1),
         )
