@@ -80,7 +80,7 @@ src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
 trunk_url = "https://github.com/OSGeo/grass/tree/main/"
-addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
+addons_url = "https://github.com/OSGeo/grass-addons/tree/grass8/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -434,10 +434,17 @@ url_source = ""
 if os.getenv("SOURCE_URL", ""):
     addon_path = get_addon_path()
     if addon_path:
-        url_source = urlparse.urljoin(
-            os.environ["SOURCE_URL"].split("src")[0],
-            addon_path,
-        )
+        # Addon is installed from the local dir
+        if os.path.exists(os.getenv("SOURCE_URL")):
+            url_source = urlparse.urljoin(
+                addons_url,
+                addon_path,
+            )
+        else:
+            url_source = urlparse.urljoin(
+                os.environ["SOURCE_URL"].split("src")[0],
+                addon_path,
+            )
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == "win32":
