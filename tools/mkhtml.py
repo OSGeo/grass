@@ -23,6 +23,7 @@ import re
 from datetime import datetime
 import locale
 import json
+import pathlib
 
 try:
     # Python 2 import
@@ -266,28 +267,22 @@ def update_toc(data):
     return '\n'.join(ret_data)
 
 
-def get_addon_path(pgm):
-    """Check if pgm is in addons list and get addon path
+def get_addon_path():
+    """Check if pgm is in the addons list and get addon path
 
-    :param pgm str: pgm
-
-    :return tuple: (True, path) if pgm is addon else (None, None)
+    return: pgm path if pgm is addon else None
     """
     addon_base = os.getenv('GRASS_ADDON_BASE')
     if addon_base:
-        """'addons_paths.json' is file created during install extension
-        check get_addons_paths() function in the g.extension.py file
-        """
-        addons_paths = os.path.join(addon_base, 'addons_paths.json')
+        # addons_paths.json is file created during install extension
+        # check get_addons_paths() function in the g.extension.py file
+        addons_paths = os.path.join(addon_base, "addons_paths.json")
         if os.path.exists(addons_paths):
-            with open(addons_paths, 'r') as f:
+            with open(addons_paths) as f:
                 addons_paths = json.load(f)
-            for addon in addons_paths['tree']:
-                split_path = addon['path'].split('/')
-                root_dir, module_dir = split_path[0], split_path[-1]
-                if 'grass7' == root_dir and pgm == module_dir:
-                    return True, addon['path']
-    return None, None
+            for addon in addons_paths["tree"]:
+                if pgm == pathlib.Path(addon["path"]).name:
+                    return addon["path"]
 
 
 # process header
@@ -411,40 +406,37 @@ else:
     # addons
     source_url = addons_url
     pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
-url_source = ''
-if os.getenv('SOURCE_URL', ''):
-    # addons
-    for prefix in index_names.keys():
-        cwd = os.getcwd()
-        idx = cwd.find('{0}{1}.'.format(os.path.sep, prefix))
-        if idx > -1:
-            pgmname = cwd[idx+1:]
-            classname = index_names[prefix]
-            url_source = urlparse.urljoin('{0}{1}/'.format(
-                    os.environ['SOURCE_URL'], classname),
-                    pgmname
-            )
-            break
+url_source = ""
+if os.getenv("SOURCE_URL", ""):
+    addon_path = get_addon_path()
+    if addon_path:
+        url_source = urlparse.urljoin(
+            os.environ["SOURCE_URL"].split("src")[0],
+            addon_path,
+        )
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == 'win32':
     url_source = url_source.replace(os.path.sep, '/')
 
 if index_name:
-    tree = 'grass/tree'
-    commits = 'grass/commits'
-    is_addon, addon_path = get_addon_path(pgm=pgm)
-    if is_addon:
-        # Fix gui/wxpython addon url path
-        url_source = urlparse.urljoin(
-            os.environ['SOURCE_URL'], addon_path.split('/', 1)[1],
-        )
-        tree = 'grass-addons/tree'
-        commits = 'grass-addons/commits'
+    branches = "branches"
+    tree = "tree"
+    commits = "commits"
 
-    sys.stdout.write(sourcecode.substitute(
-        URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(
-            tree,  commits)))
+    if branches in url_source:
+        url_log = url_source.replace(branches, commits)
+        url_source = url_source.replace(branches, tree)
+    else:
+        url_log = url_source.replace(tree, commits)
+
+    sys.stdout.write(
+        sourcecode.substitute(
+            URL_SOURCE=url_source,
+            PGM=pgm,
+            URL_LOG=url_log,
+        )
+    )
     sys.stdout.write(
         footer_index.substitute(
             INDEXNAME=index_name,
