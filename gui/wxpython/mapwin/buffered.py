@@ -1793,8 +1793,8 @@ class BufferedMapWindow(MapWindowBase, Window):
         w = self.Map.region["center_easting"] - (self.Map.width / 2) * res
         n = self.Map.region["center_northing"] + (self.Map.height / 2) * res
 
-        x = (east - w) / res
-        y = (n - north) / res
+        x = round((east - w) / res)
+        y = round((n - north) / res)
 
         return (x, y)
 
