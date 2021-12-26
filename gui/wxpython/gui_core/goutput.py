@@ -621,7 +621,7 @@ class GStc(stc.StyledTextCtrl):
         typesize = UserSettings.Get(group="appearance", key="outputfont", subkey="size")
         if typesize is None or int(typesize) <= 0:
             typesize = 10
-        typesize = float(typesize)
+        typesize = int(float(typesize))
 
         fontInfo = wx.FontInfo(typesize)
         fontInfo.FaceName(typeface)
