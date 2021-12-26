@@ -630,7 +630,7 @@ class GStc(stc.StyledTextCtrl):
             subkey='size')
         if typesize is None or int(typesize) <= 0:
             typesize = 10
-        typesize = float(typesize)
+        typesize = int(float(typesize))
 
         self.StyleDefault = 0
         self.StyleDefaultSpec = "face:%s,size:%d,fore:#000000,back:#FFFFFF" % (
