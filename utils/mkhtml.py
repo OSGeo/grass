@@ -84,7 +84,7 @@ trunk_url = ""
 addons_url = ""
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
-    trunk_url = "https://github.com/OSGeo/grass/tree/main/"
+    trunk_url = f"https://github.com/OSGeo/grass/tree/releasebranch_{major}_{minor}/"
     addons_url = f"https://github.com/OSGeo/grass-addons/tree/grass{major}/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
