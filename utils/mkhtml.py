@@ -79,8 +79,13 @@ pgm = sys.argv[1]
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-trunk_url = "https://github.com/OSGeo/grass/tree/main/"
-addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
+grass_version = os.getenv("VERSION_NUMBER", "unknown")
+trunk_url = ""
+addons_url = ""
+if grass_version != "unknown":
+    major, minor, patch = grass_version.split(".")
+    trunk_url = "https://github.com/OSGeo/grass/tree/main/"
+    addons_url = f"https://github.com/OSGeo/grass-addons/tree/grass{major}/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -415,7 +420,6 @@ else:
     index_name = index_names.get(mod_class, "")
     index_name_cap = index_titles.get(mod_class, "")
 
-grass_version = os.getenv("VERSION_NUMBER", "unknown")
 year = os.getenv("VERSION_DATE")
 if not year:
     year = str(datetime.now().year)
@@ -434,10 +438,17 @@ url_source = ""
 if os.getenv("SOURCE_URL", ""):
     addon_path = get_addon_path()
     if addon_path:
-        url_source = urlparse.urljoin(
-            os.environ["SOURCE_URL"].split("src")[0],
-            addon_path,
-        )
+        # Addon is installed from the local dir
+        if os.path.exists(os.getenv("SOURCE_URL")):
+            url_source = urlparse.urljoin(
+                addons_url,
+                addon_path,
+            )
+        else:
+            url_source = urlparse.urljoin(
+                os.environ["SOURCE_URL"].split("src")[0],
+                addon_path,
+            )
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == "win32":
