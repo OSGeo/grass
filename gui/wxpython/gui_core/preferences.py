@@ -155,7 +155,11 @@ class PreferencesBaseDialog(wx.Dialog):
                 )
             win = self.FindWindowById(self.winId[gks])
 
-            if win.GetName() in ("GetValue", "IsChecked"):
+            if win.GetName() == "IsChecked":
+                value = win.SetValue(value)
+            elif win.GetName() == "GetValue":
+                if isinstance(win, (wx.ComboBox, wx.TextCtrl)):
+                    value = str(value)
                 value = win.SetValue(value)
             elif win.GetName() == "GetSelection":
                 value = win.SetSelection(value)
