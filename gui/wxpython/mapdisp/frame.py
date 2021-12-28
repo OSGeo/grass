@@ -1560,7 +1560,9 @@ class MapPanel(SingleMapPanel):
         """Show Map Display Preferences dialog"""
         from mapdisp.settings import MapDisplayPreferencesDialog
 
-        dlg = MapDisplayPreferencesDialog(parent=self, giface=self._giface)
+        dlg = MapDisplayPreferencesDialog(parent=self,
+                                          giface=self._giface,
+                                          properties=self.mapWindowProperties)
         dlg.CenterOnParent()
         dlg.Show()
 

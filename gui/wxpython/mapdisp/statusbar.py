@@ -406,7 +406,8 @@ class SbRender(SbItem):
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
-        self.item = ChBRender(parent=statusbar, mapframe=mapframe)
+        self.item = ChBRender(parent=statusbar,
+                              mapWindowProperties=mapframe.mapWindowProperties)
         self.widget = self.item.checkbox
         self.position = position
 
