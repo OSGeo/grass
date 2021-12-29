@@ -654,6 +654,11 @@ class PseudoDC(
         kwargs = self.convertToInt(argsOrKwargs=kwargs, roundVal=True)
         super(PseudoDC, self).DrawRectangle(*args, **kwargs)
 
+    def DrawBitmap(self, *args, **kwargs):
+        args = self.convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = self.convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawBitmap(*args, **kwargs)
+
 
 class ClientDC(wx.ClientDC):
     """Wrapper around wx.ClientDC to have more control
