@@ -444,9 +444,9 @@ class FloatSlider(wx.Slider):
                 value *= 100
                 self.coef *= 100
             super(FloatSlider, self).SetRange(
-                self.minValueOrig * self.coef, self.maxValueOrig * self.coef
+                int(self.minValueOrig * self.coef), int(self.maxValueOrig * self.coef)
             )
-        super(FloatSlider, self).SetValue(value)
+        super(FloatSlider, self).SetValue(int(value))
 
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
 
@@ -462,9 +462,9 @@ class FloatSlider(wx.Slider):
                 maxValue *= 100
                 self.coef *= 100
             super(FloatSlider, self).SetValue(
-                super(FloatSlider, self).GetValue() * self.coef
+                int(super(FloatSlider, self).GetValue() * self.coef)
             )
-        super(FloatSlider, self).SetRange(minValue, maxValue)
+        super(FloatSlider, self).SetRange(int(minValue), int(maxValue))
         Debug.msg(
             4,
             "FloatSlider.SetRange(): minValue = %f, maxValue = %f"
@@ -516,7 +516,7 @@ class SymbolButton(BitmapTextButton):
     def DrawRecord(self, dc, size):
         """Draw record symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
-        dc.DrawCircle(size[0] / 2, size[1] / 2, size[0] / 2)
+        dc.DrawCircle(size[0] // 2, size[1] // 2, size[0] // 2)
 
     def DrawStop(self, dc, size):
         """Draw stop symbol"""
@@ -526,14 +526,14 @@ class SymbolButton(BitmapTextButton):
     def DrawPlay(self, dc, size):
         """Draw play symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0)))
-        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
+        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] // 2))
         dc.DrawPolygon(points)
 
     def DrawPause(self, dc, size):
         """Draw pause symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
-        dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
-        dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
+        dc.DrawRectangle(0, 0, 2 * size[0] // 5, size[1])
+        dc.DrawRectangle(3 * size[0] // 5, 0, 2 * size[0] // 5, size[1])
 
 
 class StaticWrapText(GenStaticText):
@@ -1672,14 +1672,14 @@ class PictureComboBox(OwnerDrawnComboBox):
         # for painting the items in the popup
         bitmap = self.GetPictureBitmap(self.GetString(item))
         if bitmap:
-            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
+            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) // 2)
             width = bitmap.GetWidth() + 10
         else:
             width = 0
         dc.DrawText(
             self.GetString(item),
             r.x + width,
-            (r.y + 0) + (r.height - dc.GetCharHeight()) / 2,
+            (r.y + 0) + (r.height - dc.GetCharHeight()) // 2,
         )
 
     def OnMeasureItem(self, item):

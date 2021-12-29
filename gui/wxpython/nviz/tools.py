@@ -5805,8 +5805,8 @@ class PositionWindow(Window):
             y = y * h
         self.pdc.Clear()
         self.pdc.BeginDrawing()
-        self.pdc.DrawLine(w / 2, h / 2, x, y)
-        self.pdc.DrawCircle(x, y, 5)
+        self.pdc.DrawLine(w // 2, h // 2, int(x), int(y))
+        self.pdc.DrawCircle(int(x), int(y), 5)
         self.pdc.EndDrawing()
 
     def OnPaint(self, event):
