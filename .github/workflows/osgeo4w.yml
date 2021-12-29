@@ -42,7 +42,7 @@ jobs:
         run: C:\msys64\usr\bin\bash.exe .github/workflows/test_simple.sh
 
       - name: Run tests
-        run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass80.bat'
+        run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass80.bat' 'C:\OSGeo4W\bin\python3'
 
       - name: Print installed versions
         if: always()
