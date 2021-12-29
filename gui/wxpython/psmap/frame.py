@@ -2420,7 +2420,7 @@ class PsMapBufferedWindow(wx.Window):
         elif pdctype == "line":
             pdc.DrawLinePoint(*lineCoords[0], *lineCoords[1])
 
-        pdc.SetIdBounds(drawid, bb)
+        pdc.SetIdBounds(drawid, Rect(*bb))
         pdc.EndDrawing()
         self.Refresh()
 
