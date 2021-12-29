@@ -639,11 +639,13 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def __init__(self, *args, **kwargs):
         super(PseudoDC, self).__init__(*args, **kwargs)
 
-    def DrawLinePoint(self, pt1, pt2):
+    def DrawLinePoint(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
         if wxPythonPhoenix:
-            super(PseudoDC, self).DrawLine(pt1, pt2)
+            super(PseudoDC, self).DrawLine(*args, **kwargs)
         else:
-            super(PseudoDC, self).DrawLinePoint(pt1, pt2)
+            super(PseudoDC, self).DrawLinePoint(*args, **kwargs)
 
     def DrawRectangleRect(self, rect):
         if wxPythonPhoenix:

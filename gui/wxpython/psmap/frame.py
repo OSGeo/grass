@@ -2418,7 +2418,7 @@ class PsMapBufferedWindow(wx.Window):
             pdc.DrawCircle(x=bb[0] + bb[2] / 2, y=bb[1] + bb[3] / 2, radius=bb[2] / 2)
 
         elif pdctype == "line":
-            pdc.DrawLinePoint(lineCoords[0], lineCoords[1])
+            pdc.DrawLinePoint(*lineCoords[0], *lineCoords[1])
 
         pdc.SetIdBounds(drawid, bb)
         pdc.EndDrawing()
