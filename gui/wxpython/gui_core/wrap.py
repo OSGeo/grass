@@ -669,6 +669,11 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
         kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
         super(PseudoDC, self).DrawBitmap(*args, **kwargs)
 
+    def DrawCircle(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawCircle(*args, **kwargs)
+
 
 class ClientDC(wx.ClientDC):
     """Wrapper around wx.ClientDC to have more control
