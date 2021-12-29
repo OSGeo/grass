@@ -143,6 +143,23 @@ class Panel(wx.Panel):
             wx.Panel.SetToolTipString(self, tip)
 
 
+class Slider(wx.Slider):
+    """Wrapper around wx.Slider to have more control
+    over the widget on different platforms/wxpython versions"""
+    def __init__(self, *args, **kwargs):
+        for param in ["value", "minValue", "maxValue"]:
+            if param in kwargs:
+                kwargs[param] = int(kwargs[param])
+
+        wx.Slider.__init__(self, *args, **kwargs)
+
+    def SetRange(self, minValue, maxValue):
+        wx.Slider.SetRange(self, int(minValue), int(maxValue))
+
+    def SetValue(self, value):
+        wx.Slider.SetValue(self, int(value))
+
+
 class SpinCtrl(wx.SpinCtrl):
     """Wrapper around wx.SpinCtrl to have more control
     over the widget on different platforms"""
@@ -158,6 +175,10 @@ class SpinCtrl(wx.SpinCtrl):
             else:
                 kwargs["size"] = wx.Size(self.gtk3MinSize, -1)
 
+        if "min" in kwargs:
+            kwargs["min"] = int(kwargs["min"])
+        if "max" in kwargs:
+            kwargs["max"] = int(kwargs["max"])
         wx.SpinCtrl.__init__(self, *args, **kwargs)
 
     def SetToolTip(self, tip):

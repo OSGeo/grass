@@ -1459,8 +1459,9 @@ class PsMapBufferedWindow(wx.Window):
             units.convert(value=(rect.GetY() - pRecty), fromUnit=fromU, toUnit=toU)
             * scale
         )
-
-        return Rect2D(X, Y, Width, Height)
+        if canvasToPaper:
+            return Rect2D(X, Y, Width, Height)
+        return Rect2D(int(X), int(Y), int(Width), int(Height))
 
     def SetPage(self):
         """Sets and changes page, redraws paper"""
@@ -1481,7 +1482,7 @@ class PsMapBufferedWindow(wx.Window):
 
         x = cW / 2 - pW / 2
         y = cH / 2 - pH / 2
-        self.DrawPaper(Rect(x, y, pW, pH))
+        self.DrawPaper(Rect(int(x), int(y), int(pW), int(pH)))
 
     def modifyRectangle(self, r):
         """Recalculates rectangle not to have negative size"""
@@ -2347,7 +2348,7 @@ class PsMapBufferedWindow(wx.Window):
             bounds = self.pdcPaper.GetIdBounds(self.pageId)
         else:
             bounds = self.pdcImage.GetIdBounds(self.imageId)
-        zoomP = bounds.Inflate(bounds.width / 20, bounds.height / 20)
+        zoomP = bounds.Inflate(bounds.width // 20, bounds.height // 20)
         zoomFactor, view = self.ComputeZoom(zoomP)
         self.Zoom(zoomFactor, view)
 
@@ -2565,7 +2566,7 @@ class PsMapBufferedWindow(wx.Window):
 
         self.pdcPaper.SetPen(self.pen["margins"])
         self.pdcPaper.SetBrush(self.brush["margins"])
-        self.pdcPaper.DrawRectangle(x, y, w, h)
+        self.pdcPaper.DrawRectangle(int(x), int(y), int(w), int(h))
 
         self.pdcPaper.SetIdBounds(self.pageId, rect)
         self.pdcPaper.EndDrawing()
@@ -2582,7 +2583,7 @@ class PsMapBufferedWindow(wx.Window):
         iH = iH * self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
-        imageRect = Rect(x, y, iW, iH)
+        imageRect = Rect(int(x), int(y), int(iW), int(iH))
 
         return imageRect
 
@@ -2716,8 +2717,8 @@ class PsMapBufferedWindow(wx.Window):
     def ScaleRect(self, rect, scale):
         """Scale rectangle"""
         return Rect(
-            rect.GetLeft() * scale,
-            rect.GetTop() * scale,
-            rect.GetSize()[0] * scale,
-            rect.GetSize()[1] * scale,
+            int(rect.GetLeft() * scale),
+            int(rect.GetTop() * scale),
+            int(rect.GetSize()[0] * scale),
+            int(rect.GetSize()[1] * scale),
         )

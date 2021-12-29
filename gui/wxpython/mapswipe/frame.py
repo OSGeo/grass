@@ -23,6 +23,7 @@ import grass.script as grass
 
 from gui_core.mapdisp import DoubleMapPanel, FrameMixin
 from gui_core.dialogs import GetImageHandlers
+from gui_core.wrap import Slider
 from mapwin.base import MapWindowProperties
 from core.render import Map
 from mapdisp import statusbar as sb
@@ -64,8 +65,8 @@ class SwipeMapPanel(DoubleMapPanel):
         #
         self.splitter = MapSplitter(parent=self, id=wx.ID_ANY)
 
-        self.sliderH = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
-        self.sliderV = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_VERTICAL)
+        self.sliderH = Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
+        self.sliderV = Slider(self, id=wx.ID_ANY, style=wx.SL_VERTICAL)
 
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()

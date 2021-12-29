@@ -94,6 +94,7 @@ from core.debug import Debug
 from gui_core.wrap import (
     Button,
     SearchCtrl,
+    Slider,
     StaticText,
     StaticBox,
     TextCtrl,
@@ -426,12 +427,12 @@ class NumTextCtrl(TextCtrl):
         pass
 
 
-class FloatSlider(wx.Slider):
+class FloatSlider(Slider):
     """Class derived from wx.Slider for floats"""
 
     def __init__(self, **kwargs):
         Debug.msg(1, "FloatSlider.__init__()")
-        wx.Slider.__init__(self, **kwargs)
+        Slider.__init__(self, **kwargs)
         self.coef = 1.0
         # init range
         self.minValueOrig = 0
@@ -444,9 +445,9 @@ class FloatSlider(wx.Slider):
                 value *= 100
                 self.coef *= 100
             super(FloatSlider, self).SetRange(
-                int(self.minValueOrig * self.coef), int(self.maxValueOrig * self.coef)
+                self.minValueOrig * self.coef, self.maxValueOrig * self.coef
             )
-        super(FloatSlider, self).SetValue(int(value))
+        super(FloatSlider, self).SetValue(value)
 
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
 
@@ -462,9 +463,9 @@ class FloatSlider(wx.Slider):
                 maxValue *= 100
                 self.coef *= 100
             super(FloatSlider, self).SetValue(
-                int(super(FloatSlider, self).GetValue() * self.coef)
+                super(FloatSlider, self).GetValue() * self.coef
             )
-        super(FloatSlider, self).SetRange(int(minValue), int(maxValue))
+        super(FloatSlider, self).SetRange(minValue, maxValue)
         Debug.msg(
             4,
             "FloatSlider.SetRange(): minValue = %f, maxValue = %f"
