@@ -58,6 +58,27 @@ else:
     from wx import NewId  # noqa: F401
 
 
+def convertToInt(argsOrKwargs, roundVal=False):
+    """Convert args, kwargs float value to int
+
+    :param tuple/list/dict argsOrKwargs: args or kwargs
+    :param bool roundVal: True if you want round float value
+
+    return list or dict
+    """
+    result = {} if isinstance(argsOrKwargs, dict) else []
+    j = None
+    for i in argsOrKwargs:
+        if isinstance(result, dict):
+            i, j = argsOrKwargs[i], i
+        if isinstance(i, float):
+            if roundVal:
+                i = round(i)
+            i = int(i)
+        result.update({j: i}) if j else result.append(i)
+    return result
+
+
 def IsDark():
     """Detects if used theme is dark.
     Wraps wx method for different versions."""
@@ -147,9 +168,8 @@ class Slider(wx.Slider):
     """Wrapper around wx.Slider to have more control
     over the widget on different platforms/wxpython versions"""
     def __init__(self, *args, **kwargs):
-        for param in ["value", "minValue", "maxValue"]:
-            if param in kwargs:
-                kwargs[param] = int(kwargs[param])
+        args = convertToInt(argsOrKwargs=args)
+        kwargs = convertToInt(argsOrKwargs=kwargs)
 
         wx.Slider.__init__(self, *args, **kwargs)
 
@@ -167,6 +187,8 @@ class SpinCtrl(wx.SpinCtrl):
     gtk3MinSize = 130
 
     def __init__(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args)
+        kwargs = convertToInt(argsOrKwargs=kwargs)
         if gtk3:
             if "size" in kwargs:
                 kwargs["size"] = wx.Size(
@@ -175,10 +197,6 @@ class SpinCtrl(wx.SpinCtrl):
             else:
                 kwargs["size"] = wx.Size(self.gtk3MinSize, -1)
 
-        if "min" in kwargs:
-            kwargs["min"] = int(kwargs["min"])
-        if "max" in kwargs:
-            kwargs["max"] = int(kwargs["max"])
         wx.SpinCtrl.__init__(self, *args, **kwargs)
 
     def SetToolTip(self, tip):
@@ -641,6 +659,16 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
         if not wxPythonPhoenix:
             super(PseudoDC, self).EndDrawing()
 
+    def DrawRectangle(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawRectangle(*args, **kwargs)
+
+    def DrawBitmap(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawBitmap(*args, **kwargs)
+
 
 class ClientDC(wx.ClientDC):
     """Wrapper around wx.ClientDC to have more control
@@ -661,13 +689,15 @@ class Rect(wx.Rect):
     over the widget on different platforms/wxpython versions"""
 
     def __init__(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args)
+        kwargs = convertToInt(argsOrKwargs=kwargs)
         wx.Rect.__init__(self, *args, **kwargs)
 
     def ContainsXY(self, x, y):
         if wxPythonPhoenix:
-            return wx.Rect.Contains(self, x=x, y=y)
+            return wx.Rect.Contains(self, x=int(x), y=int(y))
         else:
-            return wx.Rect.ContainsXY(self, x, y)
+            return wx.Rect.ContainsXY(self, int(x), int(y))
 
     def ContainsRect(self, rect):
         if wxPythonPhoenix:
@@ -677,9 +707,9 @@ class Rect(wx.Rect):
 
     def OffsetXY(self, dx, dy):
         if wxPythonPhoenix:
-            return wx.Rect.Offset(self, dx, dy)
+            return wx.Rect.Offset(self, int(dx), int(dy))
         else:
-            return wx.Rect.OffsetXY(self, dx, dy)
+            return wx.Rect.OffsetXY(self, int(dx), int(dy))
 
 
 class CheckBox(wx.CheckBox):

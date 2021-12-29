@@ -6004,8 +6004,8 @@ class ImageDialog(PsmapDialog):
             dc.SelectObject(buffer)
             dc.SetBrush(dc.GetBrush())
             dc.Clear()
-            posX = self.previewSize[0] / 2 - bitmap.GetWidth() / 2
-            posY = self.previewSize[1] / 2 - bitmap.GetHeight() / 2
+            posX = self.previewSize[0] // 2 - bitmap.GetWidth() // 2
+            posY = self.previewSize[1] // 2 - bitmap.GetHeight() // 2
             dc.DrawBitmap(bitmap, posX, posY)
             self.imagePanel.image["preview"].SetBitmap(buffer)
             dc.SelectObject(wx.NullBitmap)
