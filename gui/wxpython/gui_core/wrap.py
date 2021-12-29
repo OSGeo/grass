@@ -150,6 +150,10 @@ class SpinCtrl(wx.SpinCtrl):
     gtk3MinSize = 130
 
     def __init__(self, *args, **kwargs):
+        if "min" in kwargs:
+            kwargs["min"] = int(kwargs["min"])
+        if "max" in kwargs:
+            kwargs["max"] = int(kwargs["max"])
         if gtk3:
             if "size" in kwargs:
                 kwargs["size"] = wx.Size(
