@@ -661,18 +661,20 @@ class ClientDC(wx.ClientDC):
             return super(ClientDC, self).GetMultiLineTextExtent(string, font)
 
 
-class Rect(wx.Rect):
+class Rect(wx.Rect, ConvertParamArgToInt):
     """Wrapper around wx.Rect to have more control
     over the widget on different platforms/wxpython versions"""
 
     def __init__(self, *args, **kwargs):
+        args = self.convertToInt(argsOrKwargs=args)
+        kwargs = self.convertToInt(argsOrKwargs=kwargs)
         wx.Rect.__init__(self, *args, **kwargs)
 
     def ContainsXY(self, x, y):
         if wxPythonPhoenix:
-            return wx.Rect.Contains(self, x=x, y=y)
+            return wx.Rect.Contains(self, x=int(x), y=int(y))
         else:
-            return wx.Rect.ContainsXY(self, x, y)
+            return wx.Rect.ContainsXY(self, int(x), int(y))
 
     def ContainsRect(self, rect):
         if wxPythonPhoenix:
@@ -682,9 +684,9 @@ class Rect(wx.Rect):
 
     def OffsetXY(self, dx, dy):
         if wxPythonPhoenix:
-            return wx.Rect.Offset(self, dx, dy)
+            return wx.Rect.Offset(self, int(dx), int(dy))
         else:
-            return wx.Rect.OffsetXY(self, dx, dy)
+            return wx.Rect.OffsetXY(self, int(dx), int(dy))
 
 
 class CheckBox(wx.CheckBox):
