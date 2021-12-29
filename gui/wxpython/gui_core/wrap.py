@@ -58,6 +58,30 @@ else:
     from wx import NewId  # noqa: F401
 
 
+class ConvertParamArgToInt:
+    """Mixin class for conversion args, kwargs float value to int"""
+
+    def convertToInt(self, argsOrKwargs, roundVal=False):
+        """Convert args, kwargs float value to int
+
+        :param tuple/list/dict argsOrKwargs: args or kwargs
+        :param bool roundVal: True if you want round float value
+
+        return tuple or dict
+        """
+        result = {} if isinstance(argsOrKwargs, dict) else []
+        j = None
+        for i in argsOrKwargs:
+            if isinstance(result, dict):
+                i, j = argsOrKwargs[i], i
+            if isinstance(i, float):
+                if roundVal:
+                    i = round(i)
+                i = int(i)
+            result.update({j: i}) if j else result.append(i)
+        return result
+
+
 def IsDark():
     """Detects if used theme is dark.
     Wraps wx method for different versions."""
@@ -143,17 +167,15 @@ class Panel(wx.Panel):
             wx.Panel.SetToolTipString(self, tip)
 
 
-class SpinCtrl(wx.SpinCtrl):
+class SpinCtrl(wx.SpinCtrl, ConvertParamArgToInt):
     """Wrapper around wx.SpinCtrl to have more control
     over the widget on different platforms"""
 
     gtk3MinSize = 130
 
     def __init__(self, *args, **kwargs):
-        if "min" in kwargs:
-            kwargs["min"] = int(kwargs["min"])
-        if "max" in kwargs:
-            kwargs["max"] = int(kwargs["max"])
+        args = self.convertToInt(argsOrKwargs=args)
+        kwargs = self.convertToInt(argsOrKwargs=kwargs)
         if gtk3:
             if "size" in kwargs:
                 kwargs["size"] = wx.Size(
