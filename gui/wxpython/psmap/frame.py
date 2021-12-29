@@ -2401,7 +2401,7 @@ class PsMapBufferedWindow(wx.Window):
             text = "\n".join(self.itemLabels[drawid])
             w, h, lh = dc.GetFullMultiLineTextExtent(text)
             textExtent = (w, h)
-            textRect = Rect(0, 0, *textExtent).CenterIn(bb)
+            textRect = Rect(0, 0, *textExtent).CenterIn(Rect(*bb))
             r = map(int, bb)
             while not Rect(*r).ContainsRect(textRect) and size >= 8:
                 size -= 2
@@ -2409,7 +2409,7 @@ class PsMapBufferedWindow(wx.Window):
                 dc.SetFont(font)
                 pdc.SetFont(font)
                 textExtent = dc.GetTextExtent(text)
-                textRect = Rect(0, 0, *textExtent).CenterIn(bb)
+                textRect = Rect(0, 0, *textExtent).CenterIn(Rect(*bb))
             pdc.SetTextForeground(wx.Colour(100, 100, 100, 200))
             pdc.SetBackgroundMode(wx.TRANSPARENT)
             pdc.DrawLabel(text=text, rect=textRect)
