@@ -619,7 +619,10 @@ class DragImage(wx.GenericDragImage if wxPythonPhoenix else wx.DragImage):
         super(DragImage, self).__init__(*args, **kwargs)
 
 
-class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
+class PseudoDC(
+    wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC,
+    ConvertParamArgToInt,
+):
     """Wrapper around wx.PseudoDC to have more control
     over the widget on different platforms/wxpython versions"""
 
@@ -645,6 +648,11 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def EndDrawing(self):
         if not wxPythonPhoenix:
             super(PseudoDC, self).EndDrawing()
+
+    def DrawRectangle(self, *args, **kwargs):
+        args = self.convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = self.convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawRectangle(*args, **kwargs)
 
 
 class ClientDC(wx.ClientDC):
