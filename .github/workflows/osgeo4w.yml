@@ -46,4 +46,4 @@ jobs:
 
       - name: Print installed versions
         if: always()
-        run: .github/workflows/print_versions.sh
+        run: C:\msys64\usr\bin\bash.exe .github/workflows/print_versions.sh
