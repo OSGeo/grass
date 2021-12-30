@@ -671,7 +671,7 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         backup_howto = _(
             "Run t.downgrade command to downgrade your temporal database.\n"
             "Consider creating a backup of your temporal database to avoid "
-            "losing data in case something goes wrong.\n"
+            "loosing data in case something goes wrong.\n"
         )
     else:
         backup_howto = _(
