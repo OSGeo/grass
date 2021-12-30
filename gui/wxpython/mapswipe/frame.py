@@ -685,10 +685,10 @@ class SwipeMapPanel(DoubleMapPanel):
         # hide/show slider
         if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
             self._mgr.GetPane("sliderV").Show(mode == "swipe")
-            size = self.splitter.GetSize()[1] / 2
+            size = self.splitter.GetSize()[1] // 2
         else:
             self._mgr.GetPane("sliderH").Show(mode == "swipe")
-            size = self.splitter.GetSize()[0] / 2
+            size = self.splitter.GetSize()[0] // 2
         # set sash in the middle
         self.splitter.SetSashPosition(size)
         self.slider.SetValue(size)
