@@ -5283,7 +5283,7 @@ class TextDialog(PsmapDialog):
             self.effect["highlightCtrl"].SetValue(False)
             self.effect["highlightColor"].SetColour(convertRGB("grey"))
 
-        self.effect["highlightWidth"].SetValue(float(self.textDict["hwidth"]))
+        self.effect["highlightWidth"].SetValue(int(float(self.textDict["hwidth"])))
 
         if self.textDict["border"] is None:
             self.textDict["border"] = "none"
@@ -5294,7 +5294,7 @@ class TextDialog(PsmapDialog):
             self.effect["borderCtrl"].SetValue(False)
             self.effect["borderColor"].SetColour(convertRGB("black"))
 
-        self.effect["borderWidth"].SetValue(float(self.textDict["width"]))
+        self.effect["borderWidth"].SetValue(int(float(self.textDict["width"])))
 
         gridBagSizer.Add(
             self.effect["backgroundCtrl"],

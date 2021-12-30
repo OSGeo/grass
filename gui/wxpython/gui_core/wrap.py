@@ -167,6 +167,7 @@ class Panel(wx.Panel):
 class Slider(wx.Slider):
     """Wrapper around wx.Slider to have more control
     over the widget on different platforms/wxpython versions"""
+
     def __init__(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args)
         kwargs = convertToInt(argsOrKwargs=kwargs)

@@ -969,7 +969,7 @@ class PsMapFrame(wx.Frame):
         """creates a wx.Font object from selected postscript font. To be
         used for estimating bounding rectangle of text"""
 
-        fontsize = textDict["fontsize"] * self.canvas.currScale
+        fontsize = round(textDict["fontsize"] * self.canvas.currScale)
         fontface = textDict["font"].split("-")[0]
         try:
             fontstyle = textDict["font"].split("-")[1]
