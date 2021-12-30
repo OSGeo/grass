@@ -48,8 +48,20 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
     MapValidator
 from core.settings import UserSettings
 from core.debug import Debug
-from gui_core.wrap import Button, CheckListBox, EmptyBitmap, HyperlinkCtrl, \
-    Menu, NewId, SpinCtrl, StaticBox, StaticText, TextCtrl
+from core.utils import is_shell_running
+from gui_core.wrap import (
+    Button,
+    CheckListBox,
+    EmptyBitmap,
+    HyperlinkCtrl,
+    Menu,
+    NewId,
+    Slider,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
+)
 
 
 class SimpleDialog(wx.Dialog):
@@ -1791,8 +1803,10 @@ class SetOpacityDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(vgap=5, hgap=5)
-        self.value = wx.Slider(
-            panel, id=wx.ID_ANY, value=int(self.opacity * 100),
+        self.value = Slider(
+            panel,
+            id=wx.ID_ANY,
+            value=int(self.opacity * 100),
             style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_TOP | wx.SL_LABELS,
             minValue=0, maxValue=100, size=(350, -1))
 

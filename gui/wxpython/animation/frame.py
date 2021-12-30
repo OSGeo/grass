@@ -28,8 +28,8 @@ import grass.script as gcore
 import grass.temporal as tgis
 from core import globalvar
 from gui_core.widgets import IntegerValidator
-from gui_core.wrap import StaticText, TextCtrl
-from core.gcmd import RunCommand
+from gui_core.wrap import StaticText, TextCtrl, Slider
+from core.gcmd import RunCommand, GWarning
 
 from animation.mapwindow import AnimationWindow
 from animation.provider import BitmapProvider, BitmapPool, \
@@ -380,10 +380,14 @@ class AnimationSliderBase(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
         self.label1 = StaticText(self, id=wx.ID_ANY)
-        self.slider = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
-        self.indexField = TextCtrl(self, id=wx.ID_ANY, size=(40, -1),
-                                   style=wx.TE_PROCESS_ENTER | wx.TE_RIGHT,
-                                   validator=IntegerValidator())
+        self.slider = Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
+        self.indexField = TextCtrl(
+            self,
+            id=wx.ID_ANY,
+            size=(40, -1),
+            style=wx.TE_PROCESS_ENTER | wx.TE_RIGHT,
+            validator=IntegerValidator(),
+        )
 
         self.callbackSliderChanging = None
         self.callbackSliderChanged = None

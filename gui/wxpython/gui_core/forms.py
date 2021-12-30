@@ -1344,9 +1344,9 @@ class CmdPanel(wx.Panel):
                         which_sizer.Add(win, proportion=0,
                                         flag=style, border=5)
 
-                elif p.get('type', '') == 'integer':
-                    minValue = -1e9
-                    maxValue = 1e9
+                elif p.get("type", "") == "integer":
+                    minValue = int(-1e9)
+                    maxValue = int(1e9)
                     value = self._getValue(p)
 
                     win = SpinCtrl(

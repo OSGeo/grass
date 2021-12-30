@@ -1257,7 +1257,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.SetDiagram(self.diagram)
         self.diagram.SetCanvas(self)
 
-        self.SetScrollbars(20, 20, 2000 / 20, 2000 / 20)
+        self.SetScrollbars(20, 20, 2000 // 20, 2000 // 20)
 
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)

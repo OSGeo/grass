@@ -52,8 +52,19 @@ from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
 from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
 from gui_core.gselect import Select
-from gui_core.wrap import Window, SpinCtrl, PseudoDC, ToggleButton, Button, \
-    TextCtrl, ToggleButton, StaticText, StaticBox, CheckListBox, ColourSelect
+from gui_core.wrap import (
+    Window,
+    SpinCtrl,
+    PseudoDC,
+    ToggleButton,
+    Button,
+    TextCtrl,
+    Slider,
+    StaticText,
+    StaticBox,
+    CheckListBox,
+    ColourSelect,
+)
 from core.debug import Debug
 from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
     wxUpdateLight, wxUpdateCPlane
@@ -2972,14 +2983,11 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(label, pos=(4, 0),
                       flag=wx.ALIGN_CENTER_VERTICAL)
         # sliders
-        for i, coord in enumerate(('x1', 'x2')):
-            slider = wx.Slider(
-                parent=panel,
-                id=wx.ID_ANY,
-                minValue=0,
-                maxValue=100,
-                value=0)
-            self.win['volume']['slice']['slider_' + coord] = slider.GetId()
+        for i, coord in enumerate(("x1", "x2")):
+            slider = Slider(
+                parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
+            )
+            self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
             slider.Bind(wx.EVT_SPIN, self.OnSlicePositionChange)
             slider.Bind(
                 wx.EVT_SCROLL_THUMBRELEASE,
@@ -2987,14 +2995,11 @@ class NvizToolWindow(FN.FlatNotebook):
             gridSizer.Add(slider, pos=(1, i + 1),
                           flag=wx.ALIGN_CENTER | wx.EXPAND)
 
-        for i, coord in enumerate(('y1', 'y2')):
-            slider = wx.Slider(
-                parent=panel,
-                id=wx.ID_ANY,
-                minValue=0,
-                maxValue=100,
-                value=0)
-            self.win['volume']['slice']['slider_' + coord] = slider.GetId()
+        for i, coord in enumerate(("y1", "y2")):
+            slider = Slider(
+                parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
+            )
+            self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
             slider.Bind(wx.EVT_SPIN, self.OnSlicePositionChange)
             slider.Bind(
                 wx.EVT_SCROLL_THUMBRELEASE,
@@ -3002,14 +3007,11 @@ class NvizToolWindow(FN.FlatNotebook):
             gridSizer.Add(slider, pos=(2, i + 1),
                           flag=wx.ALIGN_CENTER | wx.EXPAND)
 
-        for i, coord in enumerate(('z1', 'z2')):
-            slider = wx.Slider(
-                parent=panel,
-                id=wx.ID_ANY,
-                minValue=0,
-                maxValue=100,
-                value=0)
-            self.win['volume']['slice']['slider_' + coord] = slider.GetId()
+        for i, coord in enumerate(("z1", "z2")):
+            slider = Slider(
+                parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
+            )
+            self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
             slider.Bind(wx.EVT_SPIN, self.OnSlicePositionChange)
             slider.Bind(
                 wx.EVT_SCROLL_THUMBRELEASE,
@@ -3070,7 +3072,7 @@ class NvizToolWindow(FN.FlatNotebook):
         if floatSlider:
             slider = FloatSlider(**kwargs)
         else:
-            slider = wx.Slider(**kwargs)
+            slider = Slider(**kwargs)
 
         slider.SetName('slider')
         if bind[0]:
@@ -5080,14 +5082,14 @@ class NvizToolWindow(FN.FlatNotebook):
         self.pageChanging = True
         Debug.msg(1, "NvizToolWindow.UpdatePage(): %s", pageId)
 
-        if pageId == 'view':
-            self.SetPage('view')
-            hmin = self.mapWindow.iview['height']['min']
-            hmax = self.mapWindow.iview['height']['max']
-            hval = self.mapWindow.iview['height']['value']
-            zmin = self.mapWindow.view['z-exag']['min']
-            zmax = self.mapWindow.view['z-exag']['max']
-            zval = self.mapWindow.view['z-exag']['value']
+        if pageId == "view":
+            self.SetPage("view")
+            hmin = int(self.mapWindow.iview["height"]["min"])
+            hmax = int(self.mapWindow.iview["height"]["max"])
+            hval = int(self.mapWindow.iview["height"]["value"])
+            zmin = int(self.mapWindow.view["z-exag"]["min"])
+            zmax = self.mapWindow.view["z-exag"]["max"]
+            zval = self.mapWindow.view["z-exag"]["value"]
 
             for control in ('slider', 'text'):
                 try:
@@ -5748,8 +5750,8 @@ class PositionWindow(Window):
             y = y * h
         self.pdc.Clear()
         self.pdc.BeginDrawing()
-        self.pdc.DrawLine(w / 2, h / 2, x, y)
-        self.pdc.DrawCircle(x, y, 5)
+        self.pdc.DrawLine(w // 2, h // 2, int(x), int(y))
+        self.pdc.DrawCircle(int(x), int(y), 5)
         self.pdc.EndDrawing()
 
     def OnPaint(self, event):
