@@ -94,6 +94,7 @@ from core.debug import Debug
 from gui_core.wrap import (
     Button,
     SearchCtrl,
+    Slider,
     StaticText,
     StaticBox,
     TextCtrl,
@@ -426,12 +427,12 @@ class NumTextCtrl(TextCtrl):
         pass
 
 
-class FloatSlider(wx.Slider):
+class FloatSlider(Slider):
     """Class derived from wx.Slider for floats"""
 
     def __init__(self, **kwargs):
         Debug.msg(1, "FloatSlider.__init__()")
-        wx.Slider.__init__(self, **kwargs)
+        Slider.__init__(self, **kwargs)
         self.coef = 1.0
         # init range
         self.minValueOrig = 0
@@ -516,7 +517,7 @@ class SymbolButton(BitmapTextButton):
     def DrawRecord(self, dc, size):
         """Draw record symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
-        dc.DrawCircle(size[0] / 2, size[1] / 2, size[0] / 2)
+        dc.DrawCircle(size[0] // 2, size[1] // 2, size[0] // 2)
 
     def DrawStop(self, dc, size):
         """Draw stop symbol"""
@@ -526,14 +527,14 @@ class SymbolButton(BitmapTextButton):
     def DrawPlay(self, dc, size):
         """Draw play symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0)))
-        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
+        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] // 2))
         dc.DrawPolygon(points)
 
     def DrawPause(self, dc, size):
         """Draw pause symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
-        dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
-        dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
+        dc.DrawRectangle(0, 0, 2 * size[0] // 5, size[1])
+        dc.DrawRectangle(3 * size[0] // 5, 0, 2 * size[0] // 5, size[1])
 
 
 class StaticWrapText(GenStaticText):
@@ -1672,14 +1673,14 @@ class PictureComboBox(OwnerDrawnComboBox):
         # for painting the items in the popup
         bitmap = self.GetPictureBitmap(self.GetString(item))
         if bitmap:
-            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
+            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) // 2)
             width = bitmap.GetWidth() + 10
         else:
             width = 0
         dc.DrawText(
             self.GetString(item),
             r.x + width,
-            (r.y + 0) + (r.height - dc.GetCharHeight()) / 2,
+            (r.y + 0) + (r.height - dc.GetCharHeight()) // 2,
         )
 
     def OnMeasureItem(self, item):
