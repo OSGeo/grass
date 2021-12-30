@@ -86,8 +86,7 @@ class ChBItem:
 
 
 class ChBRender(ChBItem):
-    """Checkbox to enable and disable auto-rendering.
-    """
+    """Checkbox to enable and disable auto-rendering."""
 
     @property
     def name(self):
@@ -152,8 +151,7 @@ class ChBAlignExtent(ChBItem):
 
 
 class ChBResolution(ChBItem):
-    """Checkbox to select used display resolution.
-    """
+    """Checkbox to select used display resolution."""
 
     def __init__(self, parent, giface, mapWindowProperties):
         ChBItem.__init__(self, parent, mapWindowProperties)
@@ -198,8 +196,7 @@ class ChBResolution(ChBItem):
 
 
 class ChBShowRegion(ChBItem):
-    """Checkbox to enable and disable showing of computational region.
-    """
+    """Checkbox to enable and disable showing of computational region."""
 
     def __init__(self, parent, giface, mapWindowProperties):
         ChBItem.__init__(self, parent, mapWindowProperties)
@@ -258,7 +255,12 @@ class MapDisplayPreferencesDialog(PreferencesBaseDialog):
     """Map Display preferences dialog"""
 
     def __init__(
-        self, parent, giface, properties, title=_("Map Display Settings"), settings=UserSettings
+        self,
+        parent,
+        giface,
+        properties,
+        title=_("Map Display Settings"),
+        settings=UserSettings,
     ):
         PreferencesBaseDialog.__init__(
             self, parent=parent, giface=giface, title=title, settings=settings
