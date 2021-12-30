@@ -666,7 +666,7 @@ int main(int argc, char *argv[])
 	    if (!shpt || shpt[strlen(shpt) - 1] != 'Z') {
 		G_warning(_("Vector map <%s> is 3D. "
 			    "Use format specific layer creation options SHPT (parameter 'lco') "
-			    "or '-z' flag to export in 3D rather than 2D (default)"),
+			    "to export in 3D rather than 2D (default)"),
 			  options.input->answer);
 	    }
 	}
