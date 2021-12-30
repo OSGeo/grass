@@ -64,6 +64,9 @@ class ChBItem:
     def _mapWindowPropertyChanged(self):
         pass
 
+    def GetId(self):
+        return self.checkbox.GetId()
+
     def SetValue(self, value):
         self.checkbox.SetValue(value)
 
@@ -246,7 +249,7 @@ class ChBShowRegion(ChBItem):
 
     def SetValue(self, value):
         self._disconnect()
-        self.mapWindowProperty(value)
+        self.mapWindowProperty = value
         ChBItem.SetValue(self, value)
         self._connect()
 
@@ -288,14 +291,26 @@ class MapDisplayPreferencesDialog(PreferencesBaseDialog):
 
         # Align extent to display size
         alignExtent = ChBAlignExtent(panel, self.mapWindowProperties)
+        alignExtent.SetValue(
+            self.settings.Get(group="display", key="alignExtent", subkey="enabled")
+        )
+        self.winId["display:alignExtent:enabled"] = alignExtent.GetId()
         gridSizer.Add(alignExtent.checkbox, pos=(0, 0), span=(1, 2))
 
         # Use computation resolution
         compResolution = ChBResolution(panel, self.giface, self.mapWindowProperties)
+        compResolution.SetValue(
+            self.settings.Get(group="display", key="compResolution", subkey="enabled")
+        )
+        self.winId["display:compResolution:enabled"] = compResolution.GetId()
         gridSizer.Add(compResolution.checkbox, pos=(1, 0), span=(1, 2))
 
         # Show computation extent
         showCompExtent = ChBShowRegion(panel, self.giface, self.mapWindowProperties)
+        showCompExtent.SetValue(
+            self.settings.Get(group="display", key="showCompExtent", subkey="enabled")
+        )
+        self.winId["display:showCompExtent:enabled"] = showCompExtent.GetId()
         gridSizer.Add(showCompExtent.checkbox, pos=(2, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
