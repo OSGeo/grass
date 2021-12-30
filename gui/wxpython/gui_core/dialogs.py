@@ -59,6 +59,7 @@ from gui_core.wrap import (
     HyperlinkCtrl,
     Menu,
     NewId,
+    Slider,
     SpinCtrl,
     StaticBox,
     StaticText,
@@ -1817,7 +1818,7 @@ class SetOpacityDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(vgap=5, hgap=5)
-        self.value = wx.Slider(
+        self.value = Slider(
             panel,
             id=wx.ID_ANY,
             value=int(self.opacity * 100),

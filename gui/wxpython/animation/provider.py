@@ -851,7 +851,7 @@ def createNoDataBitmap(imageWidth, imageHeight, text="No data"):
         )
     )
     tw, th = dc.GetTextExtent(text)
-    dc.DrawText(text, (imageWidth - tw) / 2, (imageHeight - th) / 2)
+    dc.DrawText(text, (imageWidth - tw) // 2, (imageHeight - th) // 2)
     dc.SelectObject(wx.NullBitmap)
     return bitmap
 

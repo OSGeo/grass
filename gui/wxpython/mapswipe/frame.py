@@ -23,6 +23,7 @@ import grass.script as grass
 
 from gui_core.mapdisp import DoubleMapPanel, FrameMixin
 from gui_core.dialogs import GetImageHandlers
+from gui_core.wrap import Slider
 from mapwin.base import MapWindowProperties
 from core.render import Map
 from mapdisp import statusbar as sb
@@ -64,8 +65,8 @@ class SwipeMapPanel(DoubleMapPanel):
         #
         self.splitter = MapSplitter(parent=self, id=wx.ID_ANY)
 
-        self.sliderH = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
-        self.sliderV = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_VERTICAL)
+        self.sliderH = Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
+        self.sliderV = Slider(self, id=wx.ID_ANY, style=wx.SL_VERTICAL)
 
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
@@ -684,10 +685,10 @@ class SwipeMapPanel(DoubleMapPanel):
         # hide/show slider
         if self.splitter.GetSplitMode() == wx.SPLIT_HORIZONTAL:
             self._mgr.GetPane("sliderV").Show(mode == "swipe")
-            size = self.splitter.GetSize()[1] / 2
+            size = self.splitter.GetSize()[1] // 2
         else:
             self._mgr.GetPane("sliderH").Show(mode == "swipe")
-            size = self.splitter.GetSize()[0] / 2
+            size = self.splitter.GetSize()[0] // 2
         # set sash in the middle
         self.splitter.SetSashPosition(size)
         self.slider.SetValue(size)
