@@ -303,13 +303,25 @@ def get_addon_path():
     if addon_base:
         # addons_paths.json is file created during install extension
         # check get_addons_paths() function in the g.extension.py file
-        addons_paths = os.path.join(addon_base, "addons_paths.json")
-        if os.path.exists(addons_paths):
-            with open(addons_paths) as f:
-                addons_paths = json.load(f)
-            for addon in addons_paths["tree"]:
-                if pgm == pathlib.Path(addon["path"]).name:
-                    return addon["path"]
+        addons_file = "addons_paths.json"
+        addons_paths = os.path.join(addon_base, addons_file)
+        if not os.path.exists(addons_paths):
+            # Compiled addon has own dir e.g. ~/.grass8/addons/db.join/
+            # with bin/ docs/ etc/ scripts/ subdir, required for compilation
+            # addons on osgeo lxd container server and generation of
+            # modules.xml file (build-xml.py script), when addons_paths.json
+            # file is stored one level dir up
+            addons_paths = os.path.join(
+                os.path.abspath(os.path.join(addon_base, "..")),
+                addons_file,
+            )
+            if not os.path.exists(addons_paths):
+                return
+        with open(addons_paths) as f:
+            addons_paths = json.load(f)
+        for addon in addons_paths["tree"]:
+            if pgm == pathlib.Path(addon["path"]).name:
+                return addon["path"]
 
 
 # process header
