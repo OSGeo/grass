@@ -48,7 +48,6 @@ from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
     MapValidator
 from core.settings import UserSettings
 from core.debug import Debug
-from core.utils import is_shell_running
 from gui_core.wrap import (
     Button,
     CheckListBox,
