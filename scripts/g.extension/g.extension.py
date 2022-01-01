@@ -237,7 +237,7 @@ def urlopen(url, *args, **kwargs):
     except URLError:
         gscript.fatal(
             _(
-                "Download file from <{url}>, "
+                "Download file <{url}>, "
                 "failed. File not on server or check internet connection.".format(
                     url=url,
                 ),
