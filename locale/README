@@ -133,7 +133,7 @@ GENERAL TRANSLATION PROCEDURE (no programming required)
 
 [4] Updated po files are taken from Transifex and merged into GRASS GIS source repo 
     (MO files are generated when compiling GRASS GIS)
-    Script: https://github.com/OSGeo/grass-addons/blob/master/tools/transifex_merge.sh
+    Script: https://github.com/OSGeo/grass-addons/blob/grass8/utils/transifex_merge.sh
 
     # trim disconnected=obsolete translations
     POFILE=grassYXZ_LANG.po
