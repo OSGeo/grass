@@ -232,17 +232,6 @@ def urlopen(url, *args, **kwargs):
     ability to define headers.
     """
     request = urlrequest.Request(url, headers=HEADERS)
-    try:
-        urlrequest.urlopen(request, *args, **kwargs)
-    except URLError:
-        gscript.fatal(
-            _(
-                "Download file <{url}>, "
-                "failed. File not on server or check internet connection.".format(
-                    url=url,
-                ),
-            ),
-        )
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
@@ -391,7 +380,18 @@ def etree_fromfile(filename):
 
 def etree_fromurl(url):
     """Create XML element tree from a given URL"""
-    file_ = urlopen(url)
+    try:
+        file_ = urlopen(url)
+    except URLError:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>,"
+                " failed. File is not on the server or"
+                " check your internet connection.".format(
+                    url=url,
+                ),
+            ),
+        )
     return etree.fromstring(file_.read())
 
 
