@@ -232,6 +232,17 @@ def urlopen(url, *args, **kwargs):
     ability to define headers.
     """
     request = urlrequest.Request(url, headers=HEADERS)
+    try:
+        urlrequest.urlopen(request, *args, **kwargs)
+    except URLError:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>, "
+                "failed. File not on server or check internet connection.".format(
+                    url=url,
+                ),
+            ),
+        )
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
