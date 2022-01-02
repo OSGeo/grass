@@ -28,29 +28,20 @@ from core.settings import UserSettings
 from gui_core.preferences import PreferencesBaseDialog
 
 
-class ChBItem:
+class ChBItem(wx.CheckBox):
     """Base class for checkbox settings items"""
 
-    def __init__(self, parent, mapWindowProperties):
+    def __init__(self, parent, mapWindowProperties, label, tooltip):
+        wx.CheckBox.__init__(self, parent=parent,
+                            id=wx.ID_ANY,
+                            label=label,
+                            name="IsChecked")
         self._properties = mapWindowProperties
-        self.checkbox = wx.CheckBox(parent=parent, id=wx.ID_ANY, label=self.label)
-        self.checkbox.SetValue(self.mapWindowProperty)
-        self.checkbox.SetToolTip(wx.ToolTip(self.tooltip))
+        self._setValue(self.mapWindowProperty)
+        self.SetToolTip(wx.ToolTip(tooltip))
 
         self._connect()
-        self.checkbox.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
-
-    @property
-    def name(self):
-        pass
-
-    @property
-    def label(self):
-        pass
-
-    @property
-    def tooltip(self):
-        pass
+        self.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
 
     @property
     def mapWindowProperty(self):
@@ -61,23 +52,23 @@ class ChBItem:
         pass
 
     @property
-    def _mapWindowPropertyChanged(self):
+    def mapWindowPropertyChanged(self):
         pass
 
-    def GetId(self):
-        return self.checkbox.GetId()
+    def _setValue(self, value):
+        self.SetValue(value)
 
     def SetValue(self, value):
-        self.checkbox.SetValue(value)
-
-    def GetValue(self):
-        return self.checkbox.GetValue()
+        self._disconnect()
+        self.mapWindowProperty = value
+        wx.CheckBox.SetValue(self, value)
+        self._connect()
 
     def _connect(self):
-        self._mapWindowPropertyChanged.connect(self.SetValue)
+        self.mapWindowPropertyChanged.connect(self._setValue)
 
     def _disconnect(self):
-        self._mapWindowPropertyChanged.disconnect(self.SetValue)
+        self.mapWindowPropertyChanged.disconnect(self._setValue)
 
     def _onToggleCheckBox(self, event):
         self._disconnect()
@@ -88,17 +79,10 @@ class ChBItem:
 class ChBRender(ChBItem):
     """Checkbox to enable and disable auto-rendering."""
 
-    @property
-    def name(self):
-        return "render"
-
-    @property
-    def label(self):
-        return _("Render")
-
-    @property
-    def tooltip(self):
-        return _("Enable/disable auto-rendering")
+    def __init__(self, parent, mapWindowProperties):
+        label = _("Enable auto-rendering")
+        tooltip = _("Enable/disable auto-rendering")
+        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
 
     @property
     def mapWindowProperty(self):
@@ -109,7 +93,7 @@ class ChBRender(ChBItem):
         self._properties.autoRender = value
 
     @property
-    def _mapWindowPropertyChanged(self):
+    def mapWindowPropertyChanged(self):
         return self._properties.autoRenderChanged
 
 
@@ -119,23 +103,14 @@ class ChBAlignExtent(ChBItem):
     Used by BufferedWindow (through MapFrame property).
     See tooltip for explanation.
     """
-
-    @property
-    def name(self):
-        return "alignExtent"
-
-    @property
-    def label(self):
-        return _("Align region extent based on display size")
-
-    @property
-    def tooltip(self):
-        return _(
-            "Align region extent based on display "
-            "size from center point. "
-            "Default value for new map displays can "
-            "be set up in 'User GUI settings' dialog."
-        )
+    def __init__(self, parent, mapWindowProperties):
+        label = _("Align region extent based on display size")
+        tooltip = _(
+                "Align region extent based on display "
+                "size from center point. "
+                "Default value for new map displays can "
+                "be set up in 'User GUI settings' dialog.")
+        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
 
     @property
     def mapWindowProperty(self):
@@ -146,33 +121,22 @@ class ChBAlignExtent(ChBItem):
         self._properties.alignExtent = value
 
     @property
-    def _mapWindowPropertyChanged(self):
+    def mapWindowPropertyChanged(self):
         return self._properties.alignExtentChanged
 
 
 class ChBResolution(ChBItem):
     """Checkbox to select used display resolution."""
-
     def __init__(self, parent, giface, mapWindowProperties):
-        ChBItem.__init__(self, parent, mapWindowProperties)
         self.giface = giface
-
-    @property
-    def name(self):
-        return "resolution"
-
-    @property
-    def label(self):
-        return _("Constrain display resolution to computational settings")
-
-    @property
-    def tooltip(self):
-        return _(
-            "Constrain display resolution "
-            "to computational region settings. "
-            "Default value for new map displays can "
-            "be set up in 'User GUI settings' dialog."
-        )
+        label = _("Constrain display resolution to computational settings")
+        tooltip = _(
+                "Constrain display resolution "
+                "to computational region settings. "
+                "Default value for new map displays can "
+                "be set up in 'User GUI settings' dialog."
+                )
+        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
 
     @property
     def mapWindowProperty(self):
@@ -183,7 +147,7 @@ class ChBResolution(ChBItem):
         self._properties.resolution = value
 
     @property
-    def _mapWindowPropertyChanged(self):
+    def mapWindowPropertyChanged(self):
         return self._properties.resolutionChanged
 
     def _onToggleCheckBox(self, event):
@@ -197,29 +161,18 @@ class ChBResolution(ChBItem):
 
 class ChBShowRegion(ChBItem):
     """Checkbox to enable and disable showing of computational region."""
-
     def __init__(self, parent, giface, mapWindowProperties):
-        ChBItem.__init__(self, parent, mapWindowProperties)
         self.giface = giface
-
-    @property
-    def name(self):
-        return "region"
-
-    @property
-    def label(self):
-        return _("Show computational extent")
-
-    @property
-    def tooltip(self):
-        return _(
-            "Show/hide computational "
-            "region extent (set with g.region). "
-            "Display region drawn as a blue box inside the "
-            "computational region, "
-            "computational region inside a display region "
-            "as a red box)."
-        )
+        label = _("Show computational extent")
+        tooltip = _(
+                "Show/hide computational "
+                "region extent (set with g.region). "
+                "Display region drawn as a blue box inside the "
+                "computational region, "
+                "computational region inside a display region "
+                "as a red box)."
+                )
+        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
 
     @property
     def mapWindowProperty(self):
@@ -230,7 +183,7 @@ class ChBShowRegion(ChBItem):
         self._properties.showRegion = value
 
     @property
-    def _mapWindowPropertyChanged(self):
+    def mapWindowPropertyChanged(self):
         return self._properties.showRegionChanged
 
     def _onToggleCheckBox(self, event):
@@ -243,12 +196,6 @@ class ChBShowRegion(ChBItem):
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
             self.giface.updateMap.emit(render=False)
-
-    def SetValue(self, value):
-        self._disconnect()
-        self.mapWindowProperty = value
-        ChBItem.SetValue(self, value)
-        self._connect()
 
 
 class MapDisplayPreferencesDialog(PreferencesBaseDialog):
@@ -289,31 +236,27 @@ class MapDisplayPreferencesDialog(PreferencesBaseDialog):
         )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+        gridSizer = wx.GridBagSizer(hgap=4, vgap=4)
+
+        # Auto-rendering
+        autoRendering = ChBRender(panel, self.mapWindowProperties)
+        self.winId["display:autoRendering:enabled"] = autoRendering.GetId()
+        gridSizer.Add(autoRendering, pos=(0, 0), span=(1, 2))
 
         # Align extent to display size
         alignExtent = ChBAlignExtent(panel, self.mapWindowProperties)
-        alignExtent.SetValue(
-            self.settings.Get(group="display", key="alignExtent", subkey="enabled")
-        )
         self.winId["display:alignExtent:enabled"] = alignExtent.GetId()
-        gridSizer.Add(alignExtent.checkbox, pos=(0, 0), span=(1, 2))
+        gridSizer.Add(alignExtent, pos=(1, 0), span=(1, 2))
 
         # Use computation resolution
         compResolution = ChBResolution(panel, self.giface, self.mapWindowProperties)
-        compResolution.SetValue(
-            self.settings.Get(group="display", key="compResolution", subkey="enabled")
-        )
         self.winId["display:compResolution:enabled"] = compResolution.GetId()
-        gridSizer.Add(compResolution.checkbox, pos=(1, 0), span=(1, 2))
+        gridSizer.Add(compResolution, pos=(2, 0), span=(1, 2))
 
         # Show computation extent
         showCompExtent = ChBShowRegion(panel, self.giface, self.mapWindowProperties)
-        showCompExtent.SetValue(
-            self.settings.Get(group="display", key="showCompExtent", subkey="enabled")
-        )
         self.winId["display:showCompExtent:enabled"] = showCompExtent.GetId()
-        gridSizer.Add(showCompExtent.checkbox, pos=(2, 0), span=(1, 2))
+        gridSizer.Add(showCompExtent, pos=(3, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)

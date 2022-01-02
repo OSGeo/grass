@@ -151,13 +151,19 @@ class MapPanel(SingleMapPanel):
                 sb.SbCoordinates,
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
+                sb.SbShowRegion,
+                sb.SbAlignExtent,
+                sb.SbResolution,
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
                 sb.SbProjection,
             ]
             self.statusbarItemsHiddenInNviz = (
+                sb.SbAlignExtent,
                 sb.SbDisplayGeometry,
+                sb.SbShowRegion,
+                sb.SbResolution,
                 sb.SbMapScale,
             )
             self.statusbar = self.CreateStatusbar(statusbarItems)
