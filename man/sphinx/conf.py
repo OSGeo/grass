@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'GRASS 7.8 Documentation'
-copyright = u'2019, GRASS Development Team'
+copyright = u'2022, GRASS Development Team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -248,7 +248,7 @@ texinfo_documents = [
 epub_title = u'GRASS 7.8 Documentation'
 epub_author = u'GRASS Development Team'
 epub_publisher = u'GRASS Development Team'
-epub_copyright = u'2017, GRASS Development Team'
+epub_copyright = u'2022, GRASS Development Team'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

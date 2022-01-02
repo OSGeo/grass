@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2021 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2022 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
