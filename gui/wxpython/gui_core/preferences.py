@@ -1835,7 +1835,12 @@ class PreferencesDialog(PreferencesBaseDialog):
                 size = mapdisp.GetSize()
 
                 # window size must be larger than zero, not minimized
-                if not mapdisp.IsIconized() and (size[0] > 0 and size[1] > 0):
+                # when mapdisp is inside single window (panel has no IsIconized), don't save dim
+                if (
+                    hasattr(mapdisp, "IsIconized")
+                    and not mapdisp.IsIconized()
+                    and (size[0] > 0 and size[1] > 0)
+                ):
                     dim += ",%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
 
             self.settings.Set(
