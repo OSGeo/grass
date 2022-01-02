@@ -30,7 +30,7 @@ from gui_core.preferences import PreferencesBaseDialog
 
 
 class ChBItem(wx.CheckBox):
-    """Base class for checkbox settings items"""
+    """Base class for Map Display settings checkboxes that use property signals"""
 
     def __init__(self, parent, mapWindowProperties, label, tooltip):
         wx.CheckBox.__init__(
@@ -51,8 +51,8 @@ class ChBItem(wx.CheckBox):
     def mapWindowProperty(self, value):
         pass
 
-    @property
     def mapWindowPropertyChanged(self):
+        """Returns signal from MapWindowProperties."""
         pass
 
     def _setValue(self, value):
@@ -65,10 +65,10 @@ class ChBItem(wx.CheckBox):
         self._connect()
 
     def _connect(self):
-        self.mapWindowPropertyChanged.connect(self._setValue)
+        self.mapWindowPropertyChanged().connect(self._setValue)
 
     def _disconnect(self):
-        self.mapWindowPropertyChanged.disconnect(self._setValue)
+        self.mapWindowPropertyChanged().disconnect(self._setValue)
 
     def _onToggleCheckBox(self, event):
         self._disconnect()
@@ -79,8 +79,7 @@ class ChBItem(wx.CheckBox):
 class ChBRender(ChBItem):
     """Checkbox to enable and disable auto-rendering."""
 
-    def __init__(self, parent, mapWindowProperties):
-        label = _("Enable auto-rendering")
+    def __init__(self, parent, mapWindowProperties, label=_("Enable auto-rendering")):
         tooltip = _("Enable/disable auto-rendering")
         ChBItem.__init__(self, parent, mapWindowProperties, label, tooltip)
 
@@ -92,7 +91,6 @@ class ChBRender(ChBItem):
     def mapWindowProperty(self, value):
         self._properties.autoRender = value
 
-    @property
     def mapWindowPropertyChanged(self):
         return self._properties.autoRenderChanged
 
@@ -104,8 +102,12 @@ class ChBAlignExtent(ChBItem):
     See tooltip for explanation.
     """
 
-    def __init__(self, parent, mapWindowProperties):
-        label = _("Align region extent based on display size")
+    def __init__(
+        self,
+        parent,
+        mapWindowProperties,
+        label=_("Align region extent based on display size"),
+    ):
         tooltip = _(
             "Align region extent based on display "
             "size from center point. "
@@ -122,7 +124,6 @@ class ChBAlignExtent(ChBItem):
     def mapWindowProperty(self, value):
         self._properties.alignExtent = value
 
-    @property
     def mapWindowPropertyChanged(self):
         return self._properties.alignExtentChanged
 
@@ -130,9 +131,14 @@ class ChBAlignExtent(ChBItem):
 class ChBResolution(ChBItem):
     """Checkbox to select used display resolution."""
 
-    def __init__(self, parent, giface, mapWindowProperties):
+    def __init__(
+        self,
+        parent,
+        giface,
+        mapWindowProperties,
+        label=_("Constrain display resolution to computational settings"),
+    ):
         self.giface = giface
-        label = _("Constrain display resolution to computational settings")
         tooltip = _(
             "Constrain display resolution "
             "to computational region settings. "
@@ -149,7 +155,6 @@ class ChBResolution(ChBItem):
     def mapWindowProperty(self, value):
         self._properties.resolution = value
 
-    @property
     def mapWindowPropertyChanged(self):
         return self._properties.resolutionChanged
 
@@ -165,9 +170,10 @@ class ChBResolution(ChBItem):
 class ChBShowRegion(ChBItem):
     """Checkbox to enable and disable showing of computational region."""
 
-    def __init__(self, parent, giface, mapWindowProperties):
+    def __init__(
+        self, parent, giface, mapWindowProperties, label=_("Show computational extent")
+    ):
         self.giface = giface
-        label = _("Show computational extent")
         tooltip = _(
             "Show/hide computational "
             "region extent (set with g.region). "
@@ -186,7 +192,6 @@ class ChBShowRegion(ChBItem):
     def mapWindowProperty(self, value):
         self._properties.showRegion = value
 
-    @property
     def mapWindowPropertyChanged(self):
         return self._properties.showRegionChanged
 
