@@ -4,6 +4,7 @@
 @brief Classes for map display settings management
 
 Classes:
+ - settings::ChBItem
  - settings::ChBRender
  - settings::ChBShowRegion
  - settings::ChBAlignExtent
@@ -32,10 +33,9 @@ class ChBItem(wx.CheckBox):
     """Base class for checkbox settings items"""
 
     def __init__(self, parent, mapWindowProperties, label, tooltip):
-        wx.CheckBox.__init__(self, parent=parent,
-                            id=wx.ID_ANY,
-                            label=label,
-                            name="IsChecked")
+        wx.CheckBox.__init__(
+            self, parent=parent, id=wx.ID_ANY, label=label, name="IsChecked"
+        )
         self._properties = mapWindowProperties
         self._setValue(self.mapWindowProperty)
         self.SetToolTip(wx.ToolTip(tooltip))
@@ -82,7 +82,7 @@ class ChBRender(ChBItem):
     def __init__(self, parent, mapWindowProperties):
         label = _("Enable auto-rendering")
         tooltip = _("Enable/disable auto-rendering")
-        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
+        ChBItem.__init__(self, parent, mapWindowProperties, label, tooltip)
 
     @property
     def mapWindowProperty(self):
@@ -103,14 +103,16 @@ class ChBAlignExtent(ChBItem):
     Used by BufferedWindow (through MapFrame property).
     See tooltip for explanation.
     """
+
     def __init__(self, parent, mapWindowProperties):
         label = _("Align region extent based on display size")
         tooltip = _(
-                "Align region extent based on display "
-                "size from center point. "
-                "Default value for new map displays can "
-                "be set up in 'User GUI settings' dialog.")
-        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
+            "Align region extent based on display "
+            "size from center point. "
+            "Default value for new map displays can "
+            "be set up in 'User GUI settings' dialog."
+        )
+        ChBItem.__init__(self, parent, mapWindowProperties, label, tooltip)
 
     @property
     def mapWindowProperty(self):
@@ -127,16 +129,17 @@ class ChBAlignExtent(ChBItem):
 
 class ChBResolution(ChBItem):
     """Checkbox to select used display resolution."""
+
     def __init__(self, parent, giface, mapWindowProperties):
         self.giface = giface
         label = _("Constrain display resolution to computational settings")
         tooltip = _(
-                "Constrain display resolution "
-                "to computational region settings. "
-                "Default value for new map displays can "
-                "be set up in 'User GUI settings' dialog."
-                )
-        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
+            "Constrain display resolution "
+            "to computational region settings. "
+            "Default value for new map displays can "
+            "be set up in 'User GUI settings' dialog."
+        )
+        ChBItem.__init__(self, parent, mapWindowProperties, label, tooltip)
 
     @property
     def mapWindowProperty(self):
@@ -161,18 +164,19 @@ class ChBResolution(ChBItem):
 
 class ChBShowRegion(ChBItem):
     """Checkbox to enable and disable showing of computational region."""
+
     def __init__(self, parent, giface, mapWindowProperties):
         self.giface = giface
         label = _("Show computational extent")
         tooltip = _(
-                "Show/hide computational "
-                "region extent (set with g.region). "
-                "Display region drawn as a blue box inside the "
-                "computational region, "
-                "computational region inside a display region "
-                "as a red box)."
-                )
-        ChBItem.__init__(self, parent, mapWindowProperties, label , tooltip)
+            "Show/hide computational "
+            "region extent (set with g.region). "
+            "Display region drawn as a blue box inside the "
+            "computational region, "
+            "computational region inside a display region "
+            "as a red box)."
+        )
+        ChBItem.__init__(self, parent, mapWindowProperties, label, tooltip)
 
     @property
     def mapWindowProperty(self):
