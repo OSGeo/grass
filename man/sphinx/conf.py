@@ -38,7 +38,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "GRASS GIS 8.0 Documentation"
-copyright = "2021, GRASS Development Team"
+copyright = "2022, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -259,7 +259,7 @@ texinfo_documents = [
 epub_title = "GRASS GIS 8.0 Documentation"
 epub_author = "GRASS Development Team"
 epub_publisher = "GRASS Development Team"
-epub_copyright = "2021, GRASS Development Team"
+epub_copyright = "2022, GRASS Development Team"
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
