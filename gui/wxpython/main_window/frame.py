@@ -155,8 +155,8 @@ class GMFrame(wx.Frame):
 
         # set pane sizes according to the full screen size of the primary monitor
         size = wx.Display().GetGeometry().GetSize()
-        self.PANE_BEST_SIZE = tuple(t / 3 for t in size)
-        self.PANE_MIN_SIZE = tuple(t / 5 for t in size)
+        self.PANE_BEST_SIZE = tuple(t // 3 for t in size)
+        self.PANE_MIN_SIZE = tuple(t // 5 for t in size)
 
         # create widgets and build panes
         self.CreateMenuBar()

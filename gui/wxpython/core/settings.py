@@ -153,6 +153,7 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
+                "singleWindow": {"enabled": False},
             },
             #
             # datacatalog

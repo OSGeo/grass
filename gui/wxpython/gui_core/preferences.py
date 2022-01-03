@@ -405,6 +405,19 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
         row = 0
+        singleWindow = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Use single-window mode (experimental, requires GUI restart)"),
+            name="IsChecked",
+        )
+        singleWindow.SetValue(
+            self.settings.Get(group="general", key="singleWindow", subkey="enabled")
+        )
+        self.winId["general:singleWindow:enabled"] = singleWindow.GetId()
+        gridSizer.Add(singleWindow, pos=(row, 0), span=(1, 2))
+
+        row += 1
         posDisplay = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
@@ -1822,7 +1835,12 @@ class PreferencesDialog(PreferencesBaseDialog):
                 size = mapdisp.GetSize()
 
                 # window size must be larger than zero, not minimized
-                if not mapdisp.IsIconized() and (size[0] > 0 and size[1] > 0):
+                # when mapdisp is inside single window (panel has no IsIconized), don't save dim
+                if (
+                    hasattr(mapdisp, "IsIconized")
+                    and not mapdisp.IsIconized()
+                    and (size[0] > 0 and size[1] > 0)
+                ):
                     dim += ",%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
 
             self.settings.Set(
