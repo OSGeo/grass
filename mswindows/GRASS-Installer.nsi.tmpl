@@ -758,7 +758,7 @@ Section "GRASS" SecGRASS
 	Push 'config_projshare = "$INSTDIR\share\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
 
-        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(BU)" "Execute"                 
+        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(S-1-5-32-545)" "GenericRead + GenericExecute"                 
 SectionEnd
 
 ;--------------------------------------------------------------------------
