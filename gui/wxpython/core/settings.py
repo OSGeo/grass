@@ -189,9 +189,7 @@ class Settings:
                 "menustyle": {"selection": 1},
                 "gSelectPopupHeight": {"value": 200},
                 "iconTheme": {"type": "grass"},
-                "commandNotebook": {
-                    "selection": 0 if sys.platform in ("win32", "darwin") else 1
-                },
+                "commandNotebook": {"selection": 0},
             },
             #
             # language
