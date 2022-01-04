@@ -1564,7 +1564,7 @@ class MapPanel(SingleMapPanel):
 
     def OnMapDisplayPreferences(self, event):
         """Show Map Display Preferences dialog"""
-        from mapdisp.settings import MapDisplayPreferencesDialog
+        from mapdisp.preferences import MapDisplayPreferencesDialog
 
         dlg = MapDisplayPreferencesDialog(
             parent=self, giface=self._giface, properties=self.mapWindowProperties
