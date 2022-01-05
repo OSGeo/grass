@@ -1818,6 +1818,7 @@ class SetOpacityDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(vgap=5, hgap=5)
+        box.AddGrowableCol(0)
         self.value = Slider(
             panel,
             id=wx.ID_ANY,
@@ -1825,10 +1826,9 @@ class SetOpacityDialog(wx.Dialog):
             style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_TOP | wx.SL_LABELS,
             minValue=0,
             maxValue=100,
-            size=(350, -1),
         )
 
-        box.Add(self.value, flag=wx.ALIGN_CENTRE, pos=(0, 0), span=(1, 2))
+        box.Add(self.value, flag=wx.EXPAND, pos=(0, 0), span=(1, 2))
         box.Add(
             StaticText(parent=panel, id=wx.ID_ANY, label=_("transparent")), pos=(1, 0)
         )
@@ -1863,7 +1863,10 @@ class SetOpacityDialog(wx.Dialog):
         panel.SetSizer(sizer)
         sizer.Fit(panel)
 
-        self.SetSize(self.GetBestSize())
+        w, h = self.GetBestSize()
+        self.SetSize(wx.Size(w, h))
+        self.SetMaxSize(wx.Size(-1, h))
+        self.SetMinSize(wx.Size(w, h))
 
         self.Layout()
 
