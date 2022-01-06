@@ -65,9 +65,6 @@ class ChBItem:
         self.mapWindowProperty = self.widget.GetValue()
         self._connect()
 
-    def _onMouseOver(self, event):
-        self.widget.SetToolTip(wx.ToolTip(self.tooltip))
-
 
 class ChBRender(ChBItem):
     """Checkbox to enable and disable auto-rendering."""
@@ -79,10 +76,9 @@ class ChBRender(ChBItem):
             parent=parent, id=wx.ID_ANY, label=_("Enable auto-rendering")
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.tooltip = _("Enable/disable auto-rendering")
+        self.widget.SetToolTip(wx.ToolTip(_("Enable/disable auto-rendering")))
 
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
-        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
@@ -113,15 +109,18 @@ class ChBAlignExtent(ChBItem):
             label=_("Align region extent based on display size"),
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.tooltip = _(
-            "Align region extent based on display "
-            "size from center point. "
-            "Default value for new map displays can "
-            "be set up in 'User GUI settings' dialog."
+        self.widget.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Align region extent based on display "
+                    "size from center point. "
+                    "Default value for new map displays can "
+                    "be set up in 'User GUI settings' dialog."
+                )
+            )
         )
 
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
-        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
@@ -149,15 +148,18 @@ class ChBResolution(ChBItem):
             label=_("Constrain display resolution to computational settings"),
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.tooltip = _(
-            "Constrain display resolution "
-            "to computational region settings. "
-            "Default value for new map displays can "
-            "be set up in 'User GUI settings' dialog."
+        self.widget.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Constrain display resolution "
+                    "to computational region settings. "
+                    "Default value for new map displays can "
+                    "be set up in 'User GUI settings' dialog."
+                )
+            )
         )
 
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
-        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
@@ -191,16 +193,19 @@ class ChBShowRegion(ChBItem):
             parent=parent, id=wx.ID_ANY, label=_("Show computational extent")
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.tooltip = _(
-            "Show/hide computational "
-            "region extent (set with g.region). "
-            "Display region drawn as a blue box inside the "
-            "computational region, "
-            "computational region inside a display region "
-            "as a red box)."
+        self.widget.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Show/hide computational "
+                    "region extent (set with g.region). "
+                    "Display region drawn as a blue box inside the "
+                    "computational region, "
+                    "computational region inside a display region "
+                    "as a red box)."
+                )
+            )
         )
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
-        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
@@ -289,22 +294,22 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(hgap=4, vgap=4)
 
         # Auto-rendering
-        self.autoRendering = ChBRender(panel, self.mapWindowProperties)
+        self.autoRendering = ChBRender(box, self.mapWindowProperties)
         gridSizer.Add(self.autoRendering.GetWidget(), pos=(0, 0), span=(1, 2))
 
         # Align extent to display size
-        self.alignExtent = ChBAlignExtent(panel, self.mapWindowProperties)
+        self.alignExtent = ChBAlignExtent(box, self.mapWindowProperties)
         gridSizer.Add(self.alignExtent.GetWidget(), pos=(1, 0), span=(1, 2))
 
         # Use computation resolution
         self.compResolution = ChBResolution(
-            panel, self.giface, self.mapWindowProperties
+            box, self.giface, self.mapWindowProperties
         )
         gridSizer.Add(self.compResolution.GetWidget(), pos=(2, 0), span=(1, 2))
 
         # Show computation extent
         self.showCompExtent = ChBShowRegion(
-            panel, self.giface, self.mapWindowProperties
+            box, self.giface, self.mapWindowProperties
         )
         gridSizer.Add(self.showCompExtent.GetWidget(), pos=(3, 0), span=(1, 2))
 
