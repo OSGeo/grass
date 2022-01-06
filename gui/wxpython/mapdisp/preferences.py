@@ -286,36 +286,30 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         border = wx.BoxSizer(wx.VERTICAL)
 
         # General settings
-        box = StaticBox(
-            parent=panel, id=wx.ID_ANY, label=" %s " % _("Customize Map Display")
-        )
-        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-
         gridSizer = wx.GridBagSizer(hgap=4, vgap=4)
 
         # Auto-rendering
-        self.autoRendering = ChBRender(box, self.mapWindowProperties)
+        self.autoRendering = ChBRender(panel, self.mapWindowProperties)
         gridSizer.Add(self.autoRendering.GetWidget(), pos=(0, 0), span=(1, 2))
 
         # Align extent to display size
-        self.alignExtent = ChBAlignExtent(box, self.mapWindowProperties)
+        self.alignExtent = ChBAlignExtent(panel, self.mapWindowProperties)
         gridSizer.Add(self.alignExtent.GetWidget(), pos=(1, 0), span=(1, 2))
 
         # Use computation resolution
         self.compResolution = ChBResolution(
-            box, self.giface, self.mapWindowProperties
+            panel, self.giface, self.mapWindowProperties
         )
         gridSizer.Add(self.compResolution.GetWidget(), pos=(2, 0), span=(1, 2))
 
         # Show computation extent
         self.showCompExtent = ChBShowRegion(
-            box, self.giface, self.mapWindowProperties
+            panel, self.giface, self.mapWindowProperties
         )
         gridSizer.Add(self.showCompExtent.GetWidget(), pos=(3, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
-        sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
-        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        border.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
 
         panel.SetSizer(border)
 
