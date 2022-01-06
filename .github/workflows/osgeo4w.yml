@@ -43,3 +43,6 @@ jobs:
 
       - name: Run tests
         run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass80.bat' 'C:\OSGeo4W\bin\python3'
+
+      - name: Print installed versions
+        run: C:\msys64\usr\bin\bash.exe .github/workflows/print_versions.sh
