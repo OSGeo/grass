@@ -31,8 +31,6 @@ class ChBItem:
 
     def __init__(self, mapWindowProperties):
         self._properties = mapWindowProperties
-        self.old_value = self.mapWindowProperty
-        self.state = 0
 
     @property
     def mapWindowProperty(self):
@@ -49,6 +47,13 @@ class ChBItem:
     def _setValue(self, value):
         self.widget.SetValue(value)
 
+    def GetWidget(self):
+        """Returns underlaying widget.
+
+        :return: widget or None if doesn't exist
+        """
+        return self.widget
+
     def _connect(self):
         self.mapWindowPropertyChanged().connect(self._setValue)
 
@@ -58,12 +63,6 @@ class ChBItem:
     def _onToggleCheckBox(self, event):
         self._disconnect()
         self.mapWindowProperty = self.widget.GetValue()
-        self._connect()
-        self.state = 1
-
-    def returnToOrigin(self):
-        self._disconnect()
-        self.mapWindowProperty = self.old_value
         self._connect()
 
 
@@ -79,8 +78,8 @@ class ChBRender(ChBItem):
         self.widget.SetValue(self.mapWindowProperty)
         self.widget.SetToolTip(wx.ToolTip(_("Enable/disable auto-rendering")))
 
-        self._connect()
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self._connect()
 
     @property
     def mapWindowProperty(self):
@@ -120,8 +119,8 @@ class ChBAlignExtent(ChBItem):
                 )
             )
         )
-        self._connect()
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self._connect()
 
     @property
     def mapWindowProperty(self):
@@ -158,13 +157,8 @@ class ChBResolution(ChBItem):
                 )
             )
         )
-        self._connect()
-
-        # redraw map if auto-rendering is enabled
-        if self._properties.autoRender:
-            self.giface.updateMap.emit()
-
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self._connect()
 
     @property
     def mapWindowProperty(self):
@@ -180,14 +174,6 @@ class ChBResolution(ChBItem):
     def _onToggleCheckBox(self, event):
         """Update display when toggle display mode"""
         super()._onToggleCheckBox(event)
-
-        # redraw map if auto-rendering is enabled
-        if self._properties.autoRender:
-            self.giface.updateMap.emit()
-
-    def returnToOrigin(self):
-        """Return to original map window property value and render map display"""
-        super().returnToOrigin()
 
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
@@ -217,13 +203,8 @@ class ChBShowRegion(ChBItem):
                 )
             )
         )
-        self._connect()
-
-        # redraw map if auto-rendering is enabled
-        if self._properties.autoRender:
-            self.giface.updateMap.emit()
-
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self._connect()
 
     @property
     def mapWindowProperty(self):
@@ -246,14 +227,6 @@ class ChBShowRegion(ChBItem):
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
             self.giface.updateMap.emit(render=False)
-
-    def returnToOrigin(self):
-        """Return to original map window property value and render map display"""
-        super().returnToOrigin()
-
-        # redraw map if auto-rendering is enabled
-        if self._properties.autoRender:
-            self.giface.updateMap.emit()
 
 
 class MapDisplayPreferencesDialog(wx.Dialog):
@@ -281,16 +254,8 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         # create notebook pages
         self._createDisplayPage(parent=self.notebook)
 
-        # buttons
-        self.btnOk = Button(self, wx.ID_OK)
-        self.btnOk.SetDefault()
-        self.btnOk.SetToolTip(_("Apply properties"))
-
-        self.btnCancel = Button(self, wx.ID_CANCEL)
-        self.btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-        self.btnCancel.SetToolTip(_("Close dialog and ignore changes"))
-
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.btnCancel = Button(self, wx.ID_CANCEL, label="Close")
+        self.btnCancel.SetToolTip(_("Close dialog"))
 
         self._layout()
 
@@ -298,7 +263,6 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         """Layout window"""
         # sizers
         btnStdSizer = wx.StdDialogButtonSizer()
-        btnStdSizer.AddButton(self.btnOk)
         btnStdSizer.AddButton(self.btnCancel)
         btnStdSizer.Realize()
 
@@ -329,23 +293,23 @@ class MapDisplayPreferencesDialog(wx.Dialog):
 
         # Auto-rendering
         self.autoRendering = ChBRender(panel, self.mapWindowProperties)
-        gridSizer.Add(self.autoRendering.widget, pos=(0, 0), span=(1, 2))
+        gridSizer.Add(self.autoRendering.GetWidget(), pos=(0, 0), span=(1, 2))
 
         # Align extent to display size
         self.alignExtent = ChBAlignExtent(panel, self.mapWindowProperties)
-        gridSizer.Add(self.alignExtent.widget, pos=(1, 0), span=(1, 2))
+        gridSizer.Add(self.alignExtent.GetWidget(), pos=(1, 0), span=(1, 2))
 
         # Use computation resolution
         self.compResolution = ChBResolution(
             panel, self.giface, self.mapWindowProperties
         )
-        gridSizer.Add(self.compResolution.widget, pos=(2, 0), span=(1, 2))
+        gridSizer.Add(self.compResolution.GetWidget(), pos=(2, 0), span=(1, 2))
 
         # Show computation extent
         self.showCompExtent = ChBShowRegion(
             panel, self.giface, self.mapWindowProperties
         )
-        gridSizer.Add(self.showCompExtent.widget, pos=(3, 0), span=(1, 2))
+        gridSizer.Add(self.showCompExtent.GetWidget(), pos=(3, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
@@ -354,23 +318,3 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         panel.SetSizer(border)
 
         return panel
-
-    def _returnToOrigin(self):
-        if self.autoRendering.state == 1:
-            self.autoRendering.returnToOrigin()
-        if self.alignExtent.state == 1:
-            self.alignExtent.returnToOrigin()
-        if self.compResolution.state == 1:
-            self.compResolution.returnToOrigin()
-        if self.showCompExtent.state == 1:
-            self.showCompExtent.returnToOrigin()
-
-    def OnCloseWindow(self, event):
-        event.Skip()
-        self._returnToOrigin()
-        self.Destroy()
-
-    def OnCancel(self, event):
-        """Button 'Cancel' pressed"""
-        self._returnToOrigin()
-        self.Close()
