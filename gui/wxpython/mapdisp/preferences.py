@@ -65,6 +65,9 @@ class ChBItem:
         self.mapWindowProperty = self.widget.GetValue()
         self._connect()
 
+    def _onMouseOver(self, event):
+        self.widget.SetToolTip(wx.ToolTip(self.tooltip))
+
 
 class ChBRender(ChBItem):
     """Checkbox to enable and disable auto-rendering."""
@@ -76,9 +79,10 @@ class ChBRender(ChBItem):
             parent=parent, id=wx.ID_ANY, label=_("Enable auto-rendering")
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.widget.SetToolTip(wx.ToolTip(_("Enable/disable auto-rendering")))
+        self.tooltip = _("Enable/disable auto-rendering")
 
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
@@ -109,17 +113,15 @@ class ChBAlignExtent(ChBItem):
             label=_("Align region extent based on display size"),
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.widget.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Align region extent based on display "
-                    "size from center point. "
-                    "Default value for new map displays can "
-                    "be set up in 'User GUI settings' dialog."
-                )
-            )
+        self.tooltip = _(
+            "Align region extent based on display "
+            "size from center point. "
+            "Default value for new map displays can "
+            "be set up in 'User GUI settings' dialog."
         )
+
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
@@ -147,17 +149,15 @@ class ChBResolution(ChBItem):
             label=_("Constrain display resolution to computational settings"),
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.widget.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Constrain display resolution "
-                    "to computational region settings. "
-                    "Default value for new map displays can "
-                    "be set up in 'User GUI settings' dialog."
-                )
-            )
+        self.tooltip = _(
+            "Constrain display resolution "
+            "to computational region settings. "
+            "Default value for new map displays can "
+            "be set up in 'User GUI settings' dialog."
         )
+
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
@@ -191,19 +191,16 @@ class ChBShowRegion(ChBItem):
             parent=parent, id=wx.ID_ANY, label=_("Show computational extent")
         )
         self.widget.SetValue(self.mapWindowProperty)
-        self.widget.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Show/hide computational "
-                    "region extent (set with g.region). "
-                    "Display region drawn as a blue box inside the "
-                    "computational region, "
-                    "computational region inside a display region "
-                    "as a red box)."
-                )
-            )
+        self.tooltip = _(
+            "Show/hide computational "
+            "region extent (set with g.region). "
+            "Display region drawn as a blue box inside the "
+            "computational region, "
+            "computational region inside a display region "
+            "as a red box)."
         )
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_MOTION, self._onMouseOver)
         self._connect()
 
     @property
