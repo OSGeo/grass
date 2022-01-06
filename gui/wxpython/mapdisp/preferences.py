@@ -119,7 +119,6 @@ class ChBAlignExtent(ChBItem):
                 )
             )
         )
-
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
         self._connect()
 
@@ -158,7 +157,6 @@ class ChBResolution(ChBItem):
                 )
             )
         )
-
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
         self._connect()
 
