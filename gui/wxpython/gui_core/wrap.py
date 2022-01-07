@@ -23,6 +23,7 @@ import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as scrolled
 from wx.lib import expando
 from wx.lib import buttons
+from wx.lib.agw.aui import tabart
 
 try:
     import wx.lib.agw.customtreectrl as CT
@@ -944,3 +945,38 @@ class ComboBox(wx.ComboBox):
             wx.ComboBox.SetToolTip(self, tipString=tip)
         else:
             wx.ComboBox.SetToolTipString(self, tip)
+
+
+class SimpleTabArt(tabart.AuiDefaultTabArt):
+    """A class simplifying the appearance of AUI notebook tabs."""
+
+    def __init__(self):
+        """Default class constructor."""
+        tabart.AuiDefaultTabArt.__init__(self)
+
+    def SetDefaultColours(self, base_colour=None):
+        """
+        Overrides AuiDefaultTabArt.SetDefaultColours
+        to get rid of gradient and to look more like
+        flatnotebook tabs.
+        """
+
+        if base_colour is None:
+            base_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)
+
+        self.SetBaseColour(base_colour)
+        tab_color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+
+        self._border_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)
+        self._border_pen = wx.Pen(self._border_colour)
+        self._background_top_colour = base_colour
+        self._background_bottom_colour = base_colour
+        self._tab_top_colour = tab_color
+        self._tab_bottom_colour = tab_color
+        self._tab_gradient_highlight_colour = tab_color
+        self._tab_inactive_top_colour = base_colour
+        self._tab_inactive_bottom_colour = base_colour
+        self._tab_text_colour = lambda page: page.text_colour
+        self._tab_disabled_text_colour = wx.SystemSettings.GetColour(
+            wx.SYS_COLOUR_GRAYTEXT
+        )
