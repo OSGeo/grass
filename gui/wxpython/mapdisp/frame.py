@@ -984,7 +984,7 @@ class MapPanel(SingleMapPanel):
             pgnum_dict = self.canCloseDisplayCallback(
                 askIfSaveWorkspace=askIfSaveWorkspace
             )
-            if pgnum_dict["display"] is not None:
+            if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["display"] > -1:
                     self.closingDisplay.emit(pgnum_dict=pgnum_dict)
