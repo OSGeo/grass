@@ -981,11 +981,13 @@ class MapPanel(SingleMapPanel):
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseDisplayCallback:
-            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
-            if pgnum is not None:
+            pgnum_dict = self.canCloseDisplayCallback(
+                askIfSaveWorkspace=askIfSaveWorkspace
+            )
+            if pgnum_dict["display"] is not None:
                 self.CleanUp()
-                if pgnum > -1:
-                    self.closingDisplay.emit(page_index=pgnum)
+                if pgnum_dict["display"] > -1:
+                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()

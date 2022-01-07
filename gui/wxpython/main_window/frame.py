@@ -463,14 +463,17 @@ class GMFrame(wx.Frame):
         page = self.currentPage
 
         def CanCloseDisplay(askIfSaveWorkspace):
-            """Callback to check if user wants to close display"""
-            pgnum = self.notebookLayers.GetPageIndex(page)
-            name = self.notebookLayers.GetPageText(pgnum)
+            """Callback to check if user wants to close display.
+            Map Display index can be different from index in Display tab."""
+            pgnum_dict = {}
+            pgnum_dict["display"] = self.notebookLayers.GetPageIndex(page)
+            pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
+            name = self.notebookLayers.GetPageText(pgnum_dict["display"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
-                return pgnum
+                return pgnum_dict
             return None
 
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
@@ -919,13 +922,13 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
-    def _closePageNoEvent(self, page_index):
+    def _closePageNoEvent(self, pgnum_dict):
         """Close page and destroy map display without
         generating notebook page closing event"""
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
-        self.notebookLayers.DeletePage(page_index)
+        self.notebookLayers.DeletePage(pgnum_dict["display"])
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
-        self.mapnotebook.DeletePage(page_index)
+        self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
