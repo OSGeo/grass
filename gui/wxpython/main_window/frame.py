@@ -290,6 +290,10 @@ class GMFrame(wx.Frame):
             aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
             lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit(),
         )
+        self.mapnotebook.Bind(
+            aui.EVT_AUINOTEBOOK_PAGE_CLOSE,
+            self.OnMapNotebookClose,
+        )
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -2304,3 +2308,9 @@ class GMFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
         return dlg
+
+    def OnMapNotebookClose(self, event):
+        """Page of map notebook is being closed"""
+        display = self.GetMapDisplay(onlyCurrent=True)
+        display.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        event.Veto()
