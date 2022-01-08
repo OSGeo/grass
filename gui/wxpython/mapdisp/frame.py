@@ -986,7 +986,7 @@ class MapPanel(SingleMapPanel):
             )
             if pgnum_dict is not None:
                 self.CleanUp()
-                if pgnum_dict["display"] > -1:
+                if pgnum_dict["layers"] > -1:
                     self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:

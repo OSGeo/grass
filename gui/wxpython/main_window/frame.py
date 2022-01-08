@@ -463,12 +463,20 @@ class GMFrame(wx.Frame):
         page = self.currentPage
 
         def CanCloseDisplay(askIfSaveWorkspace):
-            """Callback to check if user wants to close display.
-            Map Display index can be different from index in Display tab."""
+            """Callback to check if user wants to close display. Map
+            Display index can be different from index in Display tab.
+
+            :return dict/None pgnum_dict: dict "layers" key represent map
+                                          display notebook layer tree
+                                          page index and "mapnotebook"
+                                          key represent map display
+                                          notebook page index (single
+                                          window mode)
+            """
             pgnum_dict = {}
-            pgnum_dict["display"] = self.notebookLayers.GetPageIndex(page)
+            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
             pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
-            name = self.notebookLayers.GetPageText(pgnum_dict["display"])
+            name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
@@ -923,16 +931,20 @@ class GMFrame(wx.Frame):
         event.Skip()
 
     def _closePageNoEvent(self, pgnum_dict):
-        """Close page and destroy map display without
-        generating notebook page closing event
+        """Close page and destroy map display without generating notebook
+        page closing event.
 
-        :param dict pgnum_dict: "display" key represent map display
-        notebook layer tree page index and "mapnotebook" key represent
-        map display notebook page index (single window mode)
+        :param dict pgnum_dict: dict "layers" key represent map display
+                                notebook layer tree page index and
+                                "mapnotebook" key represent map display
+                                notebook page index (single window mode)
         """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
-        self.notebookLayers.DeletePage(pgnum_dict["display"])
-        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+        self.notebookLayers.DeletePage(pgnum_dict["layers"])
+        self.notebookLayers.Bind(
+            FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
+            self.OnCBPageClosing,
+        )
         self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
 
     def RunSpecialCmd(self, command):
