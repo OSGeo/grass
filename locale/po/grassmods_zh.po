@@ -4685,9 +4685,8 @@ msgid "Apriori Omega (pitch) standard deviation"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
-#, fuzzy
 msgid "Apriori Phi (roll) standard deviation"
-msgstr "标准偏差"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
 msgid "Apriori Kappa (yaw) standard deviation"
