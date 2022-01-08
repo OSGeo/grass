@@ -518,7 +518,7 @@ class GMFrame(wx.Frame):
             """Callback to check if user wants to close display.
 
             :param dict pgnum_dict: dict "layers" key represent map display
-                                    notebook layer tree page index
+                                    notebook layers tree page index
             """
             pgnum_dict = {}
             pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)

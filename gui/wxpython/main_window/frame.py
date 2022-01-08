@@ -467,7 +467,7 @@ class GMFrame(wx.Frame):
             Display index can be different from index in Display tab.
 
             :return dict/None pgnum_dict: dict "layers" key represent map
-                                          display notebook layer tree
+                                          display notebook layers tree
                                           page index and "mapnotebook"
                                           key represent map display
                                           notebook page index (single
@@ -935,7 +935,7 @@ class GMFrame(wx.Frame):
         page closing event.
 
         :param dict pgnum_dict: dict "layers" key represent map display
-                                notebook layer tree page index and
+                                notebook layers tree page index and
                                 "mapnotebook" key represent map display
                                 notebook page index (single window mode)
         """
