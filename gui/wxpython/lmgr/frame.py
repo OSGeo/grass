@@ -516,13 +516,14 @@ class GMFrame(wx.Frame):
 
         def CanCloseDisplay(askIfSaveWorkspace):
             """Callback to check if user wants to close display"""
-            pgnum = self.notebookLayers.GetPageIndex(page)
-            name = self.notebookLayers.GetPageText(pgnum)
+            pgnum_dict = {}
+            pgnum_dict["display"] = self.notebookLayers.GetPageIndex(page)
+            name = self.notebookLayers.GetPageText(pgnum_dict["display"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
-                return pgnum
+                return pgnum_dict
             return None
 
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
@@ -851,12 +852,19 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
-    def _closePageNoEvent(self, page_index):
+    def _closePageNoEvent(self, pgnum_dict):
         """Close page and destroy map display without
-        generating notebook page closing event"""
+        generating notebook page closing event
+
+        :param dict pgnum_dict: "display" key represent map display
+        notebook layer tree page index
+        """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
-        self.notebookLayers.DeletePage(page_index)
-        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+        self.notebookLayers.DeletePage(pgnum_dict["display"])
+        self.notebookLayers.Bind(
+            FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
+            self.OnCBPageClosing,
+        )
 
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
