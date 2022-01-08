@@ -4405,18 +4405,17 @@ msgid "Name of target mapset for ortho-rectification"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access target location/mapset %s/%s"
-msgstr "Kann die Location <%s>: %s nicht erstellen."
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
 msgid "Target locations with XY (unreferenced) are not supported"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:92
-#, fuzzy
 msgid "Target locations with lon/lat are not supported"
-msgstr "Lat/Long Location wird nicht unterstützt"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:97
 #, c-format
@@ -4691,14 +4690,12 @@ msgid "Initial Camera Kappa (yaw) degrees"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:107
-#, fuzzy
 msgid "Apriori Omega (pitch) standard deviation"
-msgstr "Farben unter Verwendung der Standardabweichung"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
-#, fuzzy
 msgid "Apriori Phi (roll) standard deviation"
-msgstr "Farben unter Verwendung der Standardabweichung"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
 msgid "Apriori Kappa (yaw) standard deviation"
