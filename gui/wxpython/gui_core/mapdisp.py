@@ -81,7 +81,7 @@ class MapPanelBase(wx.Panel):
 
         self.parent = parent
 
-        wx.Panel.__init__(self, parent, id, **kwargs)
+        wx.Panel.__init__(self, parent, id, name=name, **kwargs)
 
         # toolbars
         self.toolbars = {}
