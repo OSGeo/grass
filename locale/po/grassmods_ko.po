@@ -4395,9 +4395,9 @@ msgid "Name of target mapset for ortho-rectification"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access target location/mapset %s/%s"
-msgstr "로케이션 <%s>를 생성할 수 없습니다: %s"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
 msgid "Target locations with XY (unreferenced) are not supported"
@@ -59492,11 +59492,11 @@ msgstr "임시 파일을 초기화할 수 없습니다"
 msgid "eading the input map -%s- and -%s- and creating some temporary files..."
 msgstr "입력 지도 -%s-와 -%s-를 읽으면서 임시 파일을 생성하는 중입니다..."
 
+msgid "Can not read control points for group <%s>"
+msgstr "그룹 <%s>를 위한 제어점을 읽을 수 없습니다"
+
 #~ msgid "<%s> not found"
 #~ msgstr "<%s>를 찾을 수 없습니다"
-
-#~ msgid "Can not read control points for group <%s>"
-#~ msgstr "그룹 <%s>를 위한 제어점을 읽을 수 없습니다"
 
 #~ msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
 #~ msgstr "각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
