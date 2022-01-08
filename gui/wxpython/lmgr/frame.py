@@ -857,7 +857,7 @@ class GMFrame(wx.Frame):
         generating notebook page closing event
 
         :param dict pgnum_dict: "display" key represent map display
-        notebook layer tree page index
+        notebook layers tree page index
         """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
         self.notebookLayers.DeletePage(pgnum_dict["display"])

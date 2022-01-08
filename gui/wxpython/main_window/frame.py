@@ -924,7 +924,12 @@ class GMFrame(wx.Frame):
 
     def _closePageNoEvent(self, pgnum_dict):
         """Close page and destroy map display without
-        generating notebook page closing event"""
+        generating notebook page closing event
+
+        :param dict pgnum_dict: "display" key represent map display
+        notebook layer tree page index and "mapnotebook" key represent
+        map display notebook page index (single window mode)
+        """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
         self.notebookLayers.DeletePage(pgnum_dict["display"])
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
