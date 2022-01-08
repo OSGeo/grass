@@ -517,8 +517,9 @@ class GMFrame(wx.Frame):
         def CanCloseDisplay(askIfSaveWorkspace):
             """Callback to check if user wants to close display.
 
-            :param dict pgnum_dict: dict "layers" key represent map display
-                                    notebook layers tree page index
+            :return dict/None pgnum_dict/None: dict "layers" key represent
+                                               map display notebook layers
+                                               tree page index
             """
             pgnum_dict = {}
             pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
@@ -857,8 +858,8 @@ class GMFrame(wx.Frame):
         event.Skip()
 
     def _closePageNoEvent(self, pgnum_dict):
-        """Close page and destroy map display without
-        generating notebook page closing event
+        """Close page and destroy map display without generating notebook
+        page closing event.
 
         :param dict pgnum_dict: dict "layers" key represent map display
                                 notebook layers tree page index
