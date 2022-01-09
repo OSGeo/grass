@@ -254,9 +254,8 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         # create notebook pages
         self._createDisplayPage(parent=self.notebook)
 
-        self.btnCancel = Button(self, wx.ID_CANCEL, label="Close")
-        self.btnCancel.SetDefault()
-        self.btnCancel.SetToolTip(_("Close dialog"))
+        self.btnClose = Button(self, wx.ID_CLOSE)
+        self.SetEscapeId(wx.ID_CLOSE)
 
         self._layout()
 
@@ -264,7 +263,7 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         """Layout window"""
         # sizers
         btnStdSizer = wx.StdDialogButtonSizer()
-        btnStdSizer.AddButton(self.btnCancel)
+        btnStdSizer.AddButton(self.btnClose)
         btnStdSizer.Realize()
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
