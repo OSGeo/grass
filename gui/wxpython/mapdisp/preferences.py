@@ -286,23 +286,43 @@ class MapDisplayPreferencesDialog(wx.Dialog):
 
         # Auto-rendering
         self.autoRendering = ChBRender(panel, self.mapWindowProperties)
-        sizer.Add(self.autoRendering.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            self.autoRendering.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
         # Align extent to display size
         self.alignExtent = ChBAlignExtent(panel, self.mapWindowProperties)
-        sizer.Add(self.alignExtent.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            self.alignExtent.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
         # Use computation resolution
         self.compResolution = ChBResolution(
             panel, self.giface, self.mapWindowProperties
         )
-        sizer.Add(self.compResolution.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            self.compResolution.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
         # Show computation extent
         self.showCompExtent = ChBShowRegion(
             panel, self.giface, self.mapWindowProperties
         )
-        sizer.Add(self.showCompExtent.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            self.showCompExtent.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
         panel.SetSizer(sizer)
 
