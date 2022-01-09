@@ -290,7 +290,7 @@ class MapDisplayPreferencesDialog(wx.Dialog):
             self.autoRendering.GetWidget(),
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
-            border=5,
+            border=3,
         )
 
         # Align extent to display size
@@ -299,7 +299,7 @@ class MapDisplayPreferencesDialog(wx.Dialog):
             self.alignExtent.GetWidget(),
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
-            border=5,
+            border=3,
         )
 
         # Use computation resolution
@@ -310,7 +310,7 @@ class MapDisplayPreferencesDialog(wx.Dialog):
             self.compResolution.GetWidget(),
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
-            border=5,
+            border=3,
         )
 
         # Show computation extent
@@ -321,7 +321,7 @@ class MapDisplayPreferencesDialog(wx.Dialog):
             self.showCompExtent.GetWidget(),
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
-            border=5,
+            border=3,
         )
 
         panel.SetSizer(sizer)
