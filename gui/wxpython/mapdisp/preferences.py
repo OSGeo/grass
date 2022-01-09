@@ -48,7 +48,7 @@ class ChBItem:
         self.widget.SetValue(value)
 
     def GetWidget(self):
-        """Returns underlaying widget.
+        """Returns underlying widget.
 
         :return: widget or None if doesn't exist
         """
