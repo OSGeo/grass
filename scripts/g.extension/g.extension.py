@@ -197,10 +197,11 @@ GIT_URL = "https://github.com/OSGeo/grass-addons"
 # GRASS Makefile are type of GNU Make and not BSD Make
 # On FreeBSD (and other BSD and maybe unix) we have to
 # use GNU Make program often "gmake" to distinct with the (bsd) "make"
-if sys.platform.startswith('freebsd'):
+if sys.platform.startswith("freebsd"):
     MAKE = "gmake"
 else:
     MAKE = "make"
+
 
 def replace_shebang_win(python_file):
     """
