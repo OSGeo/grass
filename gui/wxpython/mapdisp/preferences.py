@@ -255,6 +255,7 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         self._createDisplayPage(parent=self.notebook)
 
         self.btnCancel = Button(self, wx.ID_CANCEL, label="Close")
+        self.btnCancel.SetDefault()
         self.btnCancel.SetToolTip(_("Close dialog"))
 
         self._layout()
@@ -281,34 +282,29 @@ class MapDisplayPreferencesDialog(wx.Dialog):
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         parent.AddPage(page=panel, text=_("General"))
 
-        border = wx.BoxSizer(wx.VERTICAL)
-
         # General settings
-        gridSizer = wx.GridBagSizer(hgap=4, vgap=4)
+        sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Auto-rendering
         self.autoRendering = ChBRender(panel, self.mapWindowProperties)
-        gridSizer.Add(self.autoRendering.GetWidget(), pos=(0, 0), span=(1, 2))
+        sizer.Add(self.autoRendering.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         # Align extent to display size
         self.alignExtent = ChBAlignExtent(panel, self.mapWindowProperties)
-        gridSizer.Add(self.alignExtent.GetWidget(), pos=(1, 0), span=(1, 2))
+        sizer.Add(self.alignExtent.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         # Use computation resolution
         self.compResolution = ChBResolution(
             panel, self.giface, self.mapWindowProperties
         )
-        gridSizer.Add(self.compResolution.GetWidget(), pos=(2, 0), span=(1, 2))
+        sizer.Add(self.compResolution.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         # Show computation extent
         self.showCompExtent = ChBShowRegion(
             panel, self.giface, self.mapWindowProperties
         )
-        gridSizer.Add(self.showCompExtent.GetWidget(), pos=(3, 0), span=(1, 2))
+        sizer.Add(self.showCompExtent.GetWidget(), proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
-        gridSizer.AddGrowableCol(0)
-        border.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
-
-        panel.SetSizer(border)
+        panel.SetSizer(sizer)
 
         return panel
