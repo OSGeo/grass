@@ -1,5 +1,5 @@
 """
-@package mapdisp.settings
+@package mapdisp.preferences
 
 @brief Classes for map display settings management
 
