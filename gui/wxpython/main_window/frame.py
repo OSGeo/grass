@@ -76,7 +76,7 @@ from lmgr.giface import (
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
-from gui_core.wrap import Menu, TextEntryDialog
+from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
 from startup.guiutils import (
     can_switch_mapset_interactive,
     switch_mapset_interactively,
@@ -284,7 +284,7 @@ class GMFrame(wx.Frame):
             wx.Size(430, 200),
             agwStyle=notebook_style,
         )
-        self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
+        self.mapnotebook.SetArtProvider(SimpleTabArt())
         # bindings
         self.mapnotebook.Bind(
             aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
@@ -521,7 +521,7 @@ class GMFrame(wx.Frame):
 
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
-
+        self._auimgr.SetAutoNotebookTabArt(SimpleTabArt())
         # initialize all main widgets
         self._createMapNotebook()
         self._createDataCatalog(parent=self)
