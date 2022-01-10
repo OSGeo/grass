@@ -186,7 +186,7 @@ class MapToolbar(BaseToolbar):
                 (
                     "showMapSettings",
                     BaseIcons["settings"],
-                    self.parent.OnMapDisplayPreferences,
+                    self.parent.OnMapDisplayProperties,
                 ),
             )
         )

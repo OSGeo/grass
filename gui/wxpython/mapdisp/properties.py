@@ -1,15 +1,15 @@
 """
-@package mapdisp.preferences
+@package mapdisp.properties
 
-@brief Classes for map display settings management
+@brief Classes for map display properties management
 
 Classes:
- - settings::ChBItem
- - settings::ChBRender
- - settings::ChBShowRegion
- - settings::ChBAlignExtent
- - settings::ChBResolution
- - settings::MapDisplayPreferencesDialog
+ - properties::PropertyItem
+ - properties::ChBRender
+ - properties::ChBShowRegion
+ - properties::ChBAlignExtent
+ - properties::ChBResolution
+ - properties::MapDisplayPropertiesDialog
 
 (C) 2021 by the GRASS Development Team
 
@@ -26,8 +26,8 @@ import wx.lib.scrolledpanel as SP
 from gui_core.wrap import Button
 
 
-class ChBItem:
-    """Base class for Map Display settings widgets that use property signals"""
+class PropertyItem:
+    """Base class for Map Display properties widgets that use property signals"""
 
     def __init__(self, mapWindowProperties):
         self._properties = mapWindowProperties
@@ -66,11 +66,11 @@ class ChBItem:
         self._connect()
 
 
-class ChBRender(ChBItem):
+class ChBRender(PropertyItem):
     """Checkbox to enable and disable auto-rendering."""
 
     def __init__(self, parent, mapWindowProperties):
-        ChBItem.__init__(self, mapWindowProperties)
+        PropertyItem.__init__(self, mapWindowProperties)
         self.name = "render"
         self.widget = wx.CheckBox(
             parent=parent, id=wx.ID_ANY, label=_("Enable auto-rendering")
@@ -93,7 +93,7 @@ class ChBRender(ChBItem):
         return self._properties.autoRenderChanged
 
 
-class ChBAlignExtent(ChBItem):
+class ChBAlignExtent(PropertyItem):
     """Checkbox to select zoom behavior.
 
     Used by BufferedWindow (through MapFrame property).
@@ -101,7 +101,7 @@ class ChBAlignExtent(ChBItem):
     """
 
     def __init__(self, parent, mapWindowProperties):
-        ChBItem.__init__(self, mapWindowProperties)
+        PropertyItem.__init__(self, mapWindowProperties)
         self.name = "alignExtent"
         self.widget = wx.CheckBox(
             parent=parent,
@@ -134,11 +134,11 @@ class ChBAlignExtent(ChBItem):
         return self._properties.alignExtentChanged
 
 
-class ChBResolution(ChBItem):
+class ChBResolution(PropertyItem):
     """Checkbox to select used display resolution."""
 
     def __init__(self, parent, giface, mapWindowProperties):
-        ChBItem.__init__(self, mapWindowProperties)
+        PropertyItem.__init__(self, mapWindowProperties)
         self.giface = giface
         self.name = "resolution"
         self.widget = wx.CheckBox(
@@ -180,11 +180,11 @@ class ChBResolution(ChBItem):
             self.giface.updateMap.emit()
 
 
-class ChBShowRegion(ChBItem):
+class ChBShowRegion(PropertyItem):
     """Checkbox to enable and disable showing of computational region."""
 
     def __init__(self, parent, giface, mapWindowProperties):
-        ChBItem.__init__(self, mapWindowProperties)
+        PropertyItem.__init__(self, mapWindowProperties)
         self.giface = giface
         self.name = "region"
         self.widget = wx.CheckBox(
@@ -229,8 +229,8 @@ class ChBShowRegion(ChBItem):
             self.giface.updateMap.emit(render=False)
 
 
-class MapDisplayPreferencesDialog(wx.Dialog):
-    """Map Display preference dialog"""
+class MapDisplayPropertiesDialog(wx.Dialog):
+    """Map Display properties dialog"""
 
     def __init__(
         self,
