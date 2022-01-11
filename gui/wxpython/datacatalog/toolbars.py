@@ -56,44 +56,50 @@ icons = {
 class DataCatalogToolbar(BaseToolbar):
     """Main data catalog toolbar"""
 
-    def __init__(self, parent):
-        """Main toolbar constructor"""
+    def __init__(self, parent, showTools=True, showFilter=True):
+        """Main toolbar constructor
+
+        :param bool showTools: show/hide toolbar tools
+        :param bool showFilter: show/hide toolbar SearchCtrl widget (filter)
+        """
 
         BaseToolbar.__init__(self, parent)
 
-        self.InitToolbar(self._toolbarData())
-        self.filter_element = None
-        self.filter = SearchCtrl(parent=self)
-        self.filter.SetDescriptiveText(_("Search"))
-        self.filter.ShowCancelButton(True)
-        self.filter.SetSize((150, self.filter.GetBestSize()[1]))
-        self.filter.Bind(
-            wx.EVT_TEXT,
-            lambda event: self.parent.Filter(
-                self.filter.GetValue(), self.filter_element
-            ),
-        )
-        self.filter.Bind(
-            wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.parent.Filter("")
-        )
-        self.AddControl(self.filter)
-        filterMenu = wx.Menu()
-        item = filterMenu.AppendRadioItem(-1, "All")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        item = filterMenu.AppendRadioItem(-1, "Raster maps")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        item = filterMenu.AppendRadioItem(-1, "Vector maps")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        item = filterMenu.AppendRadioItem(-1, "3D raster maps")
-        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        self.filter.SetMenu(filterMenu)
-        help = _(
-            "Type to search database by map type or name. "
-            "Use Python regular expressions to refine your search."
-        )
-        self.SetToolShortHelp(self.filter.GetId(), help)
-        # realize the toolbar
-        self.Realize()
+        if showTools:
+            self.InitToolbar(self._toolbarData())
+            # realize the toolbar
+            self.Realize()
+        if showFilter:
+            self.filter_element = None
+            self.filter = SearchCtrl(parent=self)
+            self.filter.SetDescriptiveText(_("Search"))
+            self.filter.ShowCancelButton(True)
+            self.filter.SetSize((150, self.filter.GetBestSize()[1]))
+            self.filter.Bind(
+                wx.EVT_TEXT,
+                lambda event: self.parent.Filter(
+                    self.filter.GetValue(), self.filter_element
+                ),
+            )
+            self.filter.Bind(
+                wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.parent.Filter("")
+            )
+            self.AddControl(self.filter)
+            filterMenu = wx.Menu()
+            item = filterMenu.AppendRadioItem(-1, "All")
+            self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+            item = filterMenu.AppendRadioItem(-1, "Raster maps")
+            self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+            item = filterMenu.AppendRadioItem(-1, "Vector maps")
+            self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+            item = filterMenu.AppendRadioItem(-1, "3D raster maps")
+            self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+            self.filter.SetMenu(filterMenu)
+            help = _(
+                "Type to search database by map type or name. "
+                "Use Python regular expressions to refine your search."
+            )
+            self.SetToolShortHelp(self.filter.GetId(), help)
 
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""

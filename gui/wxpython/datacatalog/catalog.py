@@ -63,8 +63,16 @@ class DataCatalog(wx.Panel):
 
         Debug.msg(1, "DataCatalog.__init__()")
 
+        self._single_win_mode = UserSettings.Get(
+            group="general", key="singleWindow", subkey="enabled"
+        )
+
         # toolbar
-        self.toolbar = DataCatalogToolbar(parent=self)
+        if self._single_win_mode:
+            self.toolbar = DataCatalogToolbar(parent=self, showFilter=False)
+            self.toolbar1 = DataCatalogToolbar(parent=self, showTools=False)
+        else:
+            self.toolbar = DataCatalogToolbar(parent=self)
 
         # tree with layers
         self.tree = DataCatalogTree(self, giface=giface)
@@ -106,6 +114,8 @@ class DataCatalog(wx.Panel):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
+        if self._single_win_mode:
+            sizer.Add(self.toolbar1, proportion=0, flag=wx.EXPAND)
         sizer.Add(self.infoBar, proportion=0, flag=wx.EXPAND)
         sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
 
