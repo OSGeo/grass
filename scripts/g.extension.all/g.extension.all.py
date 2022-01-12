@@ -169,9 +169,9 @@ def find_addon_name(addons):
     for r.info.iso module is return wx.metadata addon name
     etc.
 
+    :param list addons: list of individual addons modules to reinstall
 
-    :return set result: set of unique addons names to
-                        reinstall
+    :return set result: set of unique addons names to reinstall
     """
     grass_version = os.getenv("GRASS_VERSION", "unknown")
     if grass_version != "unknown":
