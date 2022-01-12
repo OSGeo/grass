@@ -108,19 +108,34 @@ def create_token(type, value, production=None):
 
 class PreprocessorParser(object):
     def __init__(self, options, cparser):
-        self.defines = ["inline=", "__inline__=", "__extension__=",
-                        "_Bool=uint8_t", "__const=const", "__asm__(x)=",
-                        "__asm(x)=", "CTYPESGEN=1",
-			"__attribute__(x)=", "__aligned(x)=", "_Noreturn="]
+        self.defines = [
+            "inline=",
+            "__inline__=",
+            "__extension__=",
+            "_Bool=uint8_t",
+            "__const=const",
+            "__asm__(x)=",
+            "__asm(x)=",
+            "CTYPESGEN=1",
+            "__attribute__(x)=",
+            "__aligned(x)=",
+            "_Noreturn=",
+        ]
 
         # On OSX, explicitly add these defines to keep from getting syntax
         # errors in the OSX standard headers.
         if sys.platform == "darwin":
-            self.defines += ["__uint16_t=uint16_t", "__uint32_t=uint32_t", "__uint64_t=uint64_t"]
+            self.defines += [
+                "__uint16_t=uint16_t",
+                "__uint32_t=uint32_t",
+                "__uint64_t=uint64_t",
+            ]
 
         self.matches = []
         self.output = []
-        optimize = options.optimize_lexer if hasattr(options, "optimize_lexer") else False
+        optimize = (
+            options.optimize_lexer if hasattr(options, "optimize_lexer") else False
+        )
         self.lexer = lex.lex(
             cls=PreprocessorLexer,
             optimize=optimize,
@@ -223,7 +238,8 @@ class PreprocessorParser(object):
 
         if self.options.save_preprocessed_headers:
             self.cparser.handle_status(
-                "Saving preprocessed headers to %s." % self.options.save_preprocessed_headers
+                "Saving preprocessed headers to %s."
+                % self.options.save_preprocessed_headers
             )
             try:
                 with open(self.options.save_preprocessed_headers, "w") as f:
@@ -242,4 +258,6 @@ class PreprocessorParser(object):
                 else:
                     break
         except LexError as e:
-            self.cparser.handle_error("{}; {}".format(e, e.text.partition("\n")[0]), filename, 0)
+            self.cparser.handle_error(
+                "{}; {}".format(e, e.text.partition("\n")[0]), filename, 0
+            )
