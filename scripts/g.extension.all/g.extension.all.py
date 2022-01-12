@@ -37,7 +37,6 @@
 # % end
 from __future__ import print_function
 import http
-import json
 import os
 import re
 import sys
