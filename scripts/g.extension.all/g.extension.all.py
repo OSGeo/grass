@@ -124,7 +124,7 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
         if response_format not in response.getheader("Content-Type"):
             gscript.fatal(
                 _(
-                    "Wrong downloaded file format. "
+                    "Wrong file format downloaded. "
                     "Check url <{url}>. Allowed file format is "
                     "{response_format}.".format(
                         url=url,
@@ -167,8 +167,8 @@ def find_addon_name(addons):
     Examples:
     - for the g.gui.cswbrowser module the wx.metadata addon name is
     returned
-    - for the i.sentinel.download module the i.sentinel.download addon
-    name is returned
+    - for the i.sentinel.download module the i.sentinel addon name is
+    returned
     etc.
 
     :param list addons: list of individual addon modules to be reinstalled
