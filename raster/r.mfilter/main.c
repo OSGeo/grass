@@ -5,9 +5,10 @@
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               Roberto Flor <flor itc.it>, Markus Neteler <neteler itc.it>
  *               Glynn Clements <glynn gclements.plus.com>, Jachym Cepicky <jachym les-ejk.cz>,
- *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
+ *               Jan-Oliver Wagner <jan intevation.de>,
+ *               Aaron Saw Min Sern
+ * PURPOSE:      Performs raster map matrix filter
+ * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -63,6 +64,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("filter"));
+    G_add_keyword(_("parallel"));
+
     module->description = _("Performs raster map matrix filter.");
 
     /* Define the different options */
