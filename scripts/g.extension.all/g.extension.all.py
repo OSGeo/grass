@@ -140,7 +140,7 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
             gscript.fatal(
                 _(
                     "The download of the modules.xml file "
-                    "from the server grass.osgeo.org was not successful. "
+                    "from the server was not successful. "
                     "File on the server <{url}> doesn't "
                     "exists.".format(url=url),
                 ),
