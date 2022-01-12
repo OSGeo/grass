@@ -140,9 +140,9 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
             gscript.fatal(
                 _(
                     "The download of the modules.xml file "
-                    "from the osgeo server wasn't successful. "
-                    " File on the server <{url}> doesn't  "
-                    " exists.".format(url=url),
+                    "from the server grass.osgeo.org was not successful. "
+                    "File on the server <{url}> doesn't "
+                    "exists.".format(url=url),
                 ),
             )
         else:
@@ -162,16 +162,19 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
 
 
 def find_addon_name(addons):
-    """Find correct addon name if addon is complex type addon
-    e.g. wx.metadata has multiple modules g.gui.cswbrowser etc.
+    """Find correct addon name if addon is a multi-addon
+    e.g. wx.metadata contains multiple modules g.gui.cswbrowser etc.
 
-    for g.gui.cswbrowser module is return wx.metadata addon name
-    for r.info.iso module is return wx.metadata addon name
+    Examples:
+    - for the g.gui.cswbrowser module the wx.metadata addon name is
+    returned
+    - for the i.sentinel.download module the i.sentinel.download addon
+    name is returned
     etc.
 
-    :param list addons: list of individual addons modules to reinstall
+    :param list addons: list of individual addon modules to be reinstalled
 
-    :return set result: set of unique addons names to reinstall
+    :return set result: set of unique addon names to be reinstalled
     """
     grass_version = os.getenv("GRASS_VERSION", "unknown")
     if grass_version != "unknown":
