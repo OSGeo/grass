@@ -45,7 +45,7 @@ copyright = "2022, GRASS Development Team"
 # built documents.
 #
 # The short X.Y version.
-version = "8.0"
+version = "8.1"
 # The full version, including alpha/beta/rc tags.
 release = "dev"
 
