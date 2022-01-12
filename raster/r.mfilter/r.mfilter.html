@@ -22,7 +22,7 @@ below, under FILTERS.
 The <b>repeat</b> parameter defines the number of times the <em>filter</em>
 is to be applied to the <em>input</em> data.
 
-<h2>FILTERS</h2>
+<h3>FILTERS</h3>
 
 The <em>filter</em> file is a normal UNIX ASCII file designed by the user.
 It has the following format:
@@ -83,7 +83,7 @@ For example, the following describes two filters:
 </dl>
 
 
-<h2>EXAMPLE FILTER FILE</h2>
+<h3>EXAMPLE FILTER FILE</h3>
 
 <div class="code"><pre>
       TITLE     3x3 average, non-null data only, followed by 5x5 average
@@ -104,7 +104,7 @@ For example, the following describes two filters:
      TYPE      P
 </pre></div>
 
-<h2>HOW THE FILTER WORKS</h2>
+<h3>HOW THE FILTER WORKS</h3>
 
 The filter process produces a new category value for each cell
 in the input raster map layer by multiplying the category values of the
@@ -127,7 +127,7 @@ produce another intermediate result;  and so on, until the
 final filter is applied.  Then the output cell is written.
 
 
-<h2>PERFORMANCE</h2>
+<h3>PERFORMANCE</h3>
 <p>By specifying the number of parallel processes with <b>nprocs</b> option,
 <em>r.mfilter</em> can run significantly faster, see benchmarks below.
 
@@ -164,10 +164,10 @@ is set properly.
 
 <h2>AUTHOR</h2>
 
-Aaron Saw Min Sern (OpenMP support),
 Glynn Clements.
 Based upon r.mfilter, by Michael Shapiro,
-U.S.Army Construction Engineering Research Laboratory
+U.S.Army Construction Engineering Research Laboratory.<br>
+Aaron Saw Min Sern (OpenMP support).
 
 <!--
 <p>
