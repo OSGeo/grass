@@ -73,7 +73,7 @@ void Init()
     G_debug(1, "(CellCount):%d", CellCount);
 
     sscanf(Distance->answer, "%lf", &MaxDist);
-    if (!(MaxDist > 0.0))
+    if (MaxDist <= 0.0)
 	G_fatal_error(_("Distance must be > 0.0"));
     
     G_debug(3, "(MaxDist):%.12lf", MaxDist);
