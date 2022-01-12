@@ -238,7 +238,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         giface,
         properties,
         title=_("Map Display Settings"),
-        size=(-1, 200),
+        size=(-1, 250),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
