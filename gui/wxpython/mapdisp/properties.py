@@ -24,6 +24,7 @@ This program is free software under the GNU General Public License
 import wx
 import wx.lib.scrolledpanel as SP
 from gui_core.wrap import Button
+from core.settings import UserSettings
 
 
 class PropertyItem:
@@ -229,6 +230,50 @@ class ChBShowRegion(PropertyItem):
             self.giface.updateMap.emit(render=False)
 
 
+class ChBProjection:
+    """Checkbox to enable user defined projection"""
+
+    def __init__(self, parent, statusBarProperties):
+        self.properties = statusBarProperties
+        self.name = "projection"
+        self.label = _("Projection")
+        self.defaultLabel = _("Use defined projection")
+        self.widget = wx.CheckBox(parent=parent, id=wx.ID_ANY, label=self.defaultLabel)
+        self.widget.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Reproject coordinates displayed "
+                    "in the statusbar. Projection can be "
+                    "defined in GUI preferences dialog "
+                    "(tab 'Projection')"
+                )
+            )
+        )
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+
+    def GetValue(self, value):
+        self.widget.GetValue(value)
+
+    def GetWidget(self):
+        """Returns underlying widget.
+
+        :return: widget or None if doesn't exist
+        """
+        return self.widget
+
+    def _onToggleCheckBox(self, event):
+        self.properties.useDefinedProjection = self.widget.GetValue()
+        epsg = self.properties.epsg
+        if epsg:
+            label = "%s (EPSG: %s)" % (self.defaultLabel, epsg)
+            self.widget.SetLabel(label)
+        else:
+            self.widget.SetLabel(self.defaultLabel)
+
+        # disable long help
+        # self.mapFrame.StatusbarEnableLongHelp(False)
+
+
 class MapDisplayPropertiesDialog(wx.Dialog):
     """Map Display properties dialog"""
 
@@ -236,7 +281,8 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self,
         parent,
         giface,
-        properties,
+        mapDispProperties,
+        statusBarProperties,
         title=_("Map Display Settings"),
         size=(-1, 250),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
@@ -247,12 +293,14 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.title = title
         self.size = size
         self.giface = giface
-        self.mapWindowProperties = properties
+        self.mapWindowProperties = mapDispProperties
+        self.statusBarProperties = statusBarProperties
 
         # notebook
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         # create notebook pages
         self._createDisplayPage(parent=self.notebook)
+        self._createStatusBarPage(parent=self.notebook)
 
         self.btnClose = Button(self, wx.ID_CLOSE)
         self.SetEscapeId(wx.ID_CLOSE)
@@ -327,3 +375,22 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         panel.SetSizer(sizer)
 
         return panel
+
+    def _createStatusBarPage(self, parent):
+        """Create notebook page for statusbar settings"""
+
+        panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        parent.AddPage(page=panel, text=_("Status bar"))
+
+        # General settings
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        # Auto-rendering
+        self.projection = ChBProjection(panel, self.statusBarProperties)
+        sizer.Add(
+            self.projection.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=3,
+        )

@@ -95,6 +95,23 @@ class MapWindowProperties(object):
             self.alignExtentChanged.emit(value=value)
 
 
+class StatusBarProperties(object):
+    def __init__(self):
+        self._useDefinedProjection = False
+
+    @property
+    def useDefinedProjection(self):
+        return self._useDefinedProjection
+
+    @useDefinedProjection.setter
+    def useDefinedProjection(self, value):
+        self._useDefinedProjection = value
+
+    @property
+    def epsg(self):
+        return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+
 class MapWindowBase(object):
     """Abstract map display window class
 
