@@ -28,4 +28,4 @@ FILTER *get_filter(char *, int *, char *);
 int perform_filter(const char *, const char *, FILTER *, int, int);
 
 /* execute.c */
-int execute_filter(ROWIO *, int, FILTER *, DCELL *);
+int execute_filter(ROWIO *, int *, FILTER *, DCELL **);
