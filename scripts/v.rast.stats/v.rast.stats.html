@@ -31,8 +31,10 @@ in the use of the column prefix when using DBF as any additional characters
 will be chopped off.
 <p>If a MASK is present, it will be restored after the script finished.
 The script changes temporarily to the resolution of the given raster map.
-<p>If some vectors overlap, only one category will be kept during the
-rasterization process. Statistics for these vectors will thus be partial.
+<p>If an area has several categories in the selected layer (equivalent
+to overlapping polygons in Simple Features), only one category will be
+kept during the rasterization process. Statistics for the skipped
+categories will thus be partial.
 <p><!-- r.univar limitation -->
 Large amounts of system memory can be used when extended statistics
 (<em>first_quartile,median,third_quartile,percentile </em>) are being requested
