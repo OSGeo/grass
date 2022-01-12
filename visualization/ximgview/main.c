@@ -248,7 +248,7 @@ static int read_bmp_header(const unsigned char *p)
 
 static void map_file(const char *filename)
 {
-    char header[HEADER_SIZE];
+    unsigned char header[HEADER_SIZE];
     size_t size;
     void *ptr;
     int fd;

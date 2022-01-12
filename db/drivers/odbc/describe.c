@@ -18,7 +18,7 @@ int db__driver_describe_table(table_name, table)
     SQLRETURN ret;
     cursor *c;
     char s[100];
-    char msg[OD_MSG];
+    SQLCHAR msg[OD_MSG];
 
     /* allocate cursor */
     c = alloc_cursor();
@@ -31,7 +31,7 @@ int db__driver_describe_table(table_name, table)
 
     sprintf(s, "select * from %s", name);
 
-    ret = SQLExecDirect(c->stmt, s, SQL_NTS);
+    ret = SQLExecDirect(c->stmt, (SQLCHAR *)s, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
 	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
 		      sizeof(msg), NULL);
@@ -69,7 +69,7 @@ int describe_table(stmt, table)
     dbColumn *column;
     int col;
     SQLLEN intval;
-    SQLUSMALLINT ncols;
+    SQLSMALLINT ncols;
     SQLRETURN ret;
     SQLCHAR charval[100];
 
@@ -92,12 +92,12 @@ int describe_table(stmt, table)
 
 	SQLColAttribute(stmt, col + 1, SQL_COLUMN_NAME, charval,
 			sizeof(charval), NULL, NULL);
-	db_set_column_name(column, charval);
+	db_set_column_name(column, (const char *)charval);
 
 	/* label(title) is not description, but I did not found better attribute and it can say something about column */
 	SQLColAttribute(stmt, col + 1, SQL_COLUMN_LABEL, charval,
 			sizeof(charval), NULL, NULL);
-	db_set_column_description(column, charval);
+	db_set_column_description(column, (const char *)charval);
 
 	SQLColAttribute(stmt, col + 1, SQL_COLUMN_LENGTH, NULL, 0, NULL,
 			&intval);

@@ -27,7 +27,7 @@ cursor *alloc_cursor()
 {
     cursor *c;
     SQLRETURN ret;
-    char msg[OD_MSG];
+    SQLCHAR msg[OD_MSG];
     SQLINTEGER err;
 
     /* allocate the cursor */

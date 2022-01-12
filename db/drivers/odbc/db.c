@@ -8,7 +8,7 @@
 
 int db__driver_open_database(dbHandle * handle)
 {
-    char msg[OD_MSG];
+    SQLCHAR msg[OD_MSG];
     const char *name;
     SQLRETURN ret;
     SQLINTEGER err;
