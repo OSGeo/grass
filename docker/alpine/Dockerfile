@@ -169,13 +169,13 @@ RUN echo "  => Configure and compile grass" && \
     ldconfig /etc/ld.so.conf.d
 
 # Reduce the image size - Remove unnecessary grass files
-RUN cp /usr/local/grass80/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass80/demolocation; \
-    rm -rf /usr/local/grass80/fonts; \
-    rm -rf /usr/local/grass80/gui; \
-    rm -rf /usr/local/grass80/share; \
-    mkdir -p /usr/local/grass80/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass80/gui/wxpython/xml/module_items.xml;
+RUN cp /usr/local/grass81/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass81/demolocation; \
+    rm -rf /usr/local/grass81/fonts; \
+    rm -rf /usr/local/grass81/gui; \
+    rm -rf /usr/local/grass81/share; \
+    mkdir -p /usr/local/grass81/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass81/gui/wxpython/xml/module_items.xml;
 
 
 FROM common as grass

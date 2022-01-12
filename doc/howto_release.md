@@ -309,7 +309,7 @@ Software pages:
 
 #### Only in case of new major release
 
-- update cronjob '[cron_grass_HEAD_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/master/utils/cronjobs_osgeo_lxd)' on grass.osgeo.org to next
+- update cronjob '[cron_grass_HEAD_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd)' on grass.osgeo.org to next
   but one release tag for the differences
 - wiki updates, only when new major release:
     - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>

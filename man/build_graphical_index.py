@@ -100,7 +100,7 @@ index_items = [
     ("wxGUI_graphical.html", std_img_name("gui"), "GUI"),
     ("wxGUI.nviz.html", std_img_name("3dview"), "3D view"),
     (
-        "https://grass.osgeo.org/grass80/manuals/libpython/index.html",
+        "https://grass.osgeo.org/grass81/manuals/libpython/index.html",
         std_img_name("python"),
         "Python",
     ),
