@@ -223,7 +223,7 @@ void #N_write_array_2d_to_rast (N_array_2d * array, char *name);
 
 <P>
 <b>Example implementation:</b><br>
-The GRASS module <a href="https://grass.osgeo.org/grass81/manuals/r.gwflow.html">r.gwflow</a>
+The GRASS module <a href="https://grass.osgeo.org/grass-devel/manuals/r.gwflow.html">r.gwflow</a>
 implements numerical calculation program for transient,
 confined and unconfined groundwater flow in two dimensions.
 

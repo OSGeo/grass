@@ -6,7 +6,7 @@
 # PURPOSE:      Test GRASS GIS using the test framework
 #               Documentation:
 #                 https://trac.osgeo.org/grass/wiki/GSoC/2014/TestingFrameworkForGRASS
-#                 https://grass.osgeo.org/grass81/manuals/libpython/gunittest_running_tests.html#example-bash-script-to-run-be-used-as-a-cron-job
+#                 https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_running_tests.html#example-bash-script-to-run-be-used-as-a-cron-job
 #
 #               Data:
 #                 We use the full NC dataset (nc_spm_full_v2_alpha.tar.gz)

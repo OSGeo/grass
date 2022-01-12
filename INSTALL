@@ -55,7 +55,7 @@ GRASS source code is currently distributed in 2 forms:
   (*.tar.gz package) of the GitHub repository. The snapshot name
   contains the date when the snapshot was created (checked out from
   the GitHub repository), e.g. grass-8.1.git_src_snapshot_2022_01_12.tar.gz
-  from https://grass.osgeo.org/grass81/source/snapshot/
+  from https://grass.osgeo.org/grass-devel/source/snapshot/
   Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
 
