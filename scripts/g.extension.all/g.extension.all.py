@@ -200,7 +200,7 @@ def find_addon_name(addons):
         if not found:
             gscript.warning(
                 _(
-                    "The {} addon cannot be reinstalled. "
+                    "The <{}> addon cannot be reinstalled. "
                     "Addon wasn't found among the official "
                     "addons.".format(addon)
                 ),
