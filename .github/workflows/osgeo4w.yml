@@ -36,10 +36,10 @@ jobs:
         run: C:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') (Get-Location)
 
       - name: Test executing of the grass command
-        run: .github/workflows/test_simple.bat 'C:\OSGeo4W\opt\grass\grass80.bat'
+        run: .github/workflows/test_simple.bat 'C:\OSGeo4W\opt\grass\grass81.bat'
 
       - name: Test executing of the grass command in bash
         run: C:\msys64\usr\bin\bash.exe .github/workflows/test_simple.sh
 
       - name: Run tests
-        run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass80.bat' 'C:\OSGeo4W\bin\python3'
+        run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass81.bat' 'C:\OSGeo4W\bin\python3'
