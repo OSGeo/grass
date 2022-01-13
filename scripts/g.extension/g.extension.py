@@ -1273,6 +1273,63 @@ def install_extension_xml(edict):
     return None
 
 
+def filter_multi_addon_addons(mlist):
+    """Filter out list of multi-addon addons which contains
+    and installs only *.html manual page, without source/binary
+    excutable module and doesn't need to check metadata.
+
+    e.g. i.sentinel multi-addon install i.sentinel addon which
+    install only i.sentinel.html file.
+
+    :param list mlist: list of individual multi-addon addons
+
+    :return list mlist: list of individual multi-addon addons
+                        without addons which install only *.html
+                        manual page
+    """
+    # Make a list of unique addons
+    mlist = list(set(mlist))
+    all_addon_dirs = []
+    addon_dirs_with_source_module = []  # *.py, *.c file
+    pattern = re.compile(r".*.py$|.*.c$")
+
+    addons_paths_file = os.path.join(
+        options["prefix"],
+        get_addons_paths.json_file,
+    )
+    if not os.path.exists(addons_paths_file):
+        get_addons_paths(gg_addons_base_dir=options["prefix"])
+    with open(addons_paths_file) as f:
+        addons_paths = json.loads(f.read())
+
+    for addon in addons_paths["tree"]:
+        if (
+            re.match(r".*{}".format(options["extension"]), addon["path"])
+            and addon["type"] == "blob"
+        ):
+            if not re.match(pattern, addon["path"]):
+                # Add addon dirs which contains source module *.py, *.c file
+                addon_dirs_with_source_module.append(
+                    os.path.dirname(addon["path"]),
+                )
+        elif (
+            re.match(r".*{}".format(options["extension"]), addon["path"])
+            and addon["type"] == "tree"
+        ):
+            # Add all addon dirs
+            all_addon_dirs.append(addon["path"])
+
+    # Filters out add-ons that only contain the *.html man page,
+    # e.g. multi-addon i.sentinel (root directory) contains only
+    # the *.html manual page for installation, it does not need
+    # to check if metadata is available if there is no executable module.
+    for subaddon in set(all_addon_dirs) ^ set(addon_dirs_with_source_module):
+        addon = os.path.basename(subaddon)
+        if addon in mlist:
+            mlist.pop(mlist.index(addon))
+    return mlist
+
+
 def install_module_xml(mlist):
     """Update XML files with metadata about installed modules and toolbox
     of an private addon
@@ -1286,6 +1343,10 @@ def install_module_xml(mlist):
 
     # read XML file
     tree = etree_fromfile(xml_file)
+
+    # Filter multi-addon addons
+    if len(mlist) > 1:
+        mlist = filter_multi_addon_addons(mlist)
 
     # update tree
     for name in mlist:
