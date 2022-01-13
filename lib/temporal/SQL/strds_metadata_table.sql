@@ -18,7 +18,7 @@ CREATE TABLE  strds_metadata (
   ewres_min DOUBLE PRECISION,   -- The lowest east-west resolution of the registered raster maps
   ewres_max DOUBLE PRECISION,   -- The highest east-west resolution of the registered raster maps
   aggregation_type VARCHAR,     -- The aggregation type of the dataset (mean, min, max, ...) set by aggregation modules
-  number_of_bands INTEGER,       -- The number of registered bands
+  number_of_semantic_labels INTEGER,       -- The number of registered semantic labels
   title VARCHAR,                -- Title of the space-time raster dataset
   description VARCHAR,          -- Detailed description of the space-time raster dataset
   command VARCHAR,              -- The command that was used to create the space time raster dataset

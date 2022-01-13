@@ -22843,7 +22843,7 @@ msgstr "Vhodni sloj vsebuje linije."
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:13
 msgid ""
 "Vector points map where each point is used as training sample. Handling of "
-"missing values in training data can be choosen later."
+"missing values in training data can be chosen later."
 msgstr ""
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:15
@@ -24723,7 +24723,7 @@ msgid "Interpolation command string"
 msgstr "Interpolacijska metoda, ki jo želite uporabiti"
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:36
-msgid "Additional settings for choosen interpolation (see manual)"
+msgid "Additional settings for chosen interpolation (see manual)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:38
@@ -64842,7 +64842,7 @@ msgstr ""
 
 #: ../scripts/r.in.wms/r.in.wms.py:250
 msgid ""
-"The proxy will be ignored by the choosen GRASS driver. It is only used with "
+"The proxy will be ignored by the chosen GRASS driver. It is only used with "
 "the GDAL driver."
 msgstr ""
 

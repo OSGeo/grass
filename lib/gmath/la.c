@@ -90,7 +90,7 @@ int G_matrix_zero(mat_struct * A)
     if (!A->vals)
 	return 0;
 
-    memset(A->vals, 0, sizeof(A->vals));
+    memset(A->vals, 0, (A->ldim * A->cols) * sizeof(doublereal));
 
     return 1;
 }

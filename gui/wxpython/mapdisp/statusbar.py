@@ -380,7 +380,7 @@ class SbItem:
         return self.position
 
     def GetWidget(self):
-        """Returns underlaying winget.
+        """Returns underlying widget.
 
         :return: widget or None if doesn't exist
         """

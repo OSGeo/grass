@@ -193,6 +193,15 @@ HEADERS = {
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 GIT_URL = "https://github.com/OSGeo/grass-addons"
 
+# MAKE command
+# GRASS Makefile are type of GNU Make and not BSD Make
+# On FreeBSD (and other BSD and maybe unix) we have to
+# use GNU Make program often "gmake" to distinct with the (bsd) "make"
+if sys.platform.startswith("freebsd"):
+    MAKE = "gmake"
+else:
+    MAKE = "make"
+
 
 def replace_shebang_win(python_file):
     """
@@ -380,14 +389,25 @@ def etree_fromfile(filename):
 
 def etree_fromurl(url):
     """Create XML element tree from a given URL"""
-    file_ = urlopen(url)
+    try:
+        file_ = urlopen(url)
+    except URLError:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>,"
+                " failed. File is not on the server or"
+                " check your internet connection.".format(
+                    url=url,
+                ),
+            ),
+        )
     return etree.fromstring(file_.read())
 
 
 def check_progs():
     """Check if the necessary programs are available"""
     # git to be tested once supported instead of `svn`
-    for prog in ("make", "gcc", "svn"):
+    for prog in (MAKE, "gcc", "svn"):
         if not grass.find_program(prog, "--help"):
             grass.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
 
@@ -1753,7 +1773,7 @@ def install_extension_std_platforms(name, source, url, branch):
     }
 
     make_cmd = [
-        "make",
+        MAKE,
         "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
         "RUN_GISRC=%s" % os.environ["GISRC"],
         "BIN=%s" % dirs["bin"],
@@ -1767,7 +1787,7 @@ def install_extension_std_platforms(name, source, url, branch):
     ]
 
     install_cmd = [
-        "make",
+        MAKE,
         "MODULE_TOPDIR=%s" % gisbase,
         "ARCH_DISTDIR=%s" % os.path.join(TMPDIR, name),
         "INST_DIR=%s" % options["prefix"],

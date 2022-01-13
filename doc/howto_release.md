@@ -17,7 +17,7 @@ Check examples if still compiling
 ### Fix typos in source code with
 
 ```bash
-tools/fix_typos.sh
+utils/fix_typos.sh
 ```
 
 ### i18N: sync from Transifex
@@ -29,7 +29,7 @@ master .po files
 
 ```bash
 cd locale
-sh ~/software/grass-addons/tools/transifex_merge.sh
+sh ~/software/grass-addons/utils/transifex_merge.sh
 make
 make verify
 # ... then fix .po files as needed.
@@ -121,7 +121,7 @@ Example:
 
 Preparation:
 
-### Changelog and tagging etc
+### Changelog and tagging etc preparations
 
 ```bash
 # update from GH
@@ -171,10 +171,22 @@ wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
-Create Changelog file on release branch:
+### Changelog from GitHub for GH release notes
+
+Using GH API here, see also
+- https://cli.github.com/manual/gh_api
+- https://docs.github.com/en/rest/reference/repos#generate-release-notes-content-for-a-release
 
 ```bash
-python3 tools/gitlog2changelog.py
+gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.0.0" -f previous_tag_name=7.8.6 -f target_commitish=releasebranch_8_0 -q .body
+```
+
+Importantly, these notes need to be manually sorted into the various categories.
+
+### Changelog file for upload
+
+```bash
+python3 utils/gitlog2changelog.py
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
@@ -215,9 +227,9 @@ Note: grasslxd only reachable via jumphost - https://wiki.osgeo.org/wiki/SAC_Ser
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=grass.lxd
+SERVER1=grasslxd
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
-SERVER2=upload.osgeo.org
+SERVER2=download.osgeo.org
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
 echo $SERVER1:$SERVER1DIR
 echo $SERVER2:$SERVER2DIR
@@ -247,9 +259,9 @@ vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
 vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
 # update addons - major/minor release only
-vim grass-addons/tools/addons/grass-addons-publish.sh
-vim grass-addons/tools/addons/grass-addons-build.sh
-vim grass-addons/tools/addons/grass-addons.sh
+vim grass-addons/utils/addons/grass-addons-publish.sh
+vim grass-addons/utils/addons/grass-addons-build.sh
+vim grass-addons/utils/addons/grass-addons.sh
 ```
 
 # update addon builder
@@ -297,7 +309,7 @@ Software pages:
 
 #### Only in case of new major release
 
-- update cronjob '[cron_grass_HEAD_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd)' on grass.osgeo.org to next
+- update cronjob '[cron_grass_HEAD_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd)' on grass.osgeo.org to next
   but one release tag for the differences
 - wiki updates, only when new major release:
     - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>

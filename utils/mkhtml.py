@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2021 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2022 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -23,6 +23,7 @@ import re
 from datetime import datetime
 import locale
 import json
+import pathlib
 
 try:
     # Python 2 import
@@ -78,8 +79,13 @@ pgm = sys.argv[1]
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-trunk_url = "https://github.com/OSGeo/grass/tree/main/"
-addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
+grass_version = os.getenv("VERSION_NUMBER", "unknown")
+trunk_url = ""
+addons_url = ""
+if grass_version != "unknown":
+    major, minor, patch = grass_version.split(".")
+    trunk_url = "https://github.com/OSGeo/grass/tree/main/"
+    addons_url = f"https://github.com/OSGeo/grass-addons/tree/grass{major}/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -288,28 +294,34 @@ def update_toc(data):
     return "\n".join(ret_data)
 
 
-def get_addon_path(pgm):
-    """Check if pgm is in addons list and get addon path
+def get_addon_path():
+    """Check if pgm is in the addons list and get addon path
 
-    :param pgm str: pgm
-
-    :return tuple: (True, path) if pgm is addon else (None, None)
+    return: pgm path if pgm is addon else None
     """
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if addon_base:
-        """'addons_paths.json' is file created during install extension
-        check get_addons_paths() function in the g.extension.py file
-        """
-        addons_paths = os.path.join(addon_base, "addons_paths.json")
-        if os.path.exists(addons_paths):
-            with open(addons_paths, "r") as f:
-                addons_paths = json.load(f)
-            for addon in addons_paths["tree"]:
-                split_path = addon["path"].split("/")
-                root_dir, module_dir = split_path[0], split_path[-1]
-                if "grass8" == root_dir and pgm == module_dir:
-                    return True, addon["path"]
-    return None, None
+        # addons_paths.json is file created during install extension
+        # check get_addons_paths() function in the g.extension.py file
+        addons_file = "addons_paths.json"
+        addons_paths = os.path.join(addon_base, addons_file)
+        if not os.path.exists(addons_paths):
+            # Compiled addon has own dir e.g. ~/.grass8/addons/db.join/
+            # with bin/ docs/ etc/ scripts/ subdir, required for compilation
+            # addons on osgeo lxd container server and generation of
+            # modules.xml file (build-xml.py script), when addons_paths.json
+            # file is stored one level dir up
+            addons_paths = os.path.join(
+                os.path.abspath(os.path.join(addon_base, "..")),
+                addons_file,
+            )
+            if not os.path.exists(addons_paths):
+                return
+        with open(addons_paths) as f:
+            addons_paths = json.load(f)
+        for addon in addons_paths["tree"]:
+            if pgm == pathlib.Path(addon["path"]).name:
+                return addon["path"]
 
 
 # process header
@@ -420,7 +432,6 @@ else:
     index_name = index_names.get(mod_class, "")
     index_name_cap = index_titles.get(mod_class, "")
 
-grass_version = os.getenv("VERSION_NUMBER", "unknown")
 year = os.getenv("VERSION_DATE")
 if not year:
     year = str(datetime.now().year)
@@ -437,38 +448,40 @@ else:
     pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
 url_source = ""
 if os.getenv("SOURCE_URL", ""):
-    # addons
-    for prefix in index_names.keys():
-        cwd = os.getcwd()
-        idx = cwd.find("{0}{1}.".format(os.path.sep, prefix))
-        if idx > -1:
-            pgmname = cwd[idx + 1 :]
-            classname = index_names[prefix]
+    addon_path = get_addon_path()
+    if addon_path:
+        # Addon is installed from the local dir
+        if os.path.exists(os.getenv("SOURCE_URL")):
             url_source = urlparse.urljoin(
-                "{0}{1}/".format(os.environ["SOURCE_URL"], classname), pgmname
+                addons_url,
+                addon_path,
             )
-            break
+        else:
+            url_source = urlparse.urljoin(
+                os.environ["SOURCE_URL"].split("src")[0],
+                addon_path,
+            )
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
 if index_name:
-    tree = "grass/tree"
-    commits = "grass/commits"
-    is_addon, addon_path = get_addon_path(pgm=pgm)
-    if is_addon:
-        # Fix gui/wxpython addon url path
-        url_source = urlparse.urljoin(
-            os.environ["SOURCE_URL"],
-            addon_path.split("/", 1)[1],
-        )
-        tree = "grass-addons/tree"
-        commits = "grass-addons/commits"
+    branches = "branches"
+    tree = "tree"
+    commits = "commits"
+
+    if branches in url_source:
+        url_log = url_source.replace(branches, commits)
+        url_source = url_source.replace(branches, tree)
+    else:
+        url_log = url_source.replace(tree, commits)
 
     sys.stdout.write(
         sourcecode.substitute(
-            URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(tree, commits)
+            URL_SOURCE=url_source,
+            PGM=pgm,
+            URL_LOG=url_log,
         )
     )
     sys.stdout.write(

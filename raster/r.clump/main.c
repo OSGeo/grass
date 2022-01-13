@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
     char name[GNAME_MAX];
     char *OUTPUT;
     char *INPUT;
+    RASTER_MAP_TYPE map_type;
     struct GModule *module;
     struct Option *opt_in;
     struct Option *opt_out;
@@ -106,17 +107,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-#if defined(int64_t)
-    G_message("have int64_t");
-#endif
-#if defined(_int64_t)
-    G_message("have _int64_t");
-#endif
-#if defined(__int64_t)
-    G_message("have __int64_t");
-#endif
-
-
     threshold = atof(opt_thresh->answer);
     if (threshold < 0 || threshold >= 1)
 	G_fatal_error(_("Valid range for option <%s> is 0 <= value < 1"),
@@ -130,8 +120,12 @@ int main(int argc, char *argv[])
 
     in_fd = G_malloc(sizeof(int) * n);
 
-    for (i = 0; i < n; i++)
+    map_type = CELL_TYPE;
+    for (i = 0; i < n; i++) {
 	in_fd[i] = Rast_open_old(opt_in->answers[i], "");
+	if (Rast_get_map_type(in_fd[i]) != CELL_TYPE)
+	    map_type = Rast_get_map_type(in_fd[i]);
+    }
 
     INPUT = opt_in->answers[0];
     strcpy(name, INPUT);
@@ -143,7 +137,7 @@ int main(int argc, char *argv[])
 	out_fd = Rast_open_c_new(OUTPUT);
     }
 
-    if (n == 1 && threshold == 0)
+    if (n == 1 && threshold == 0 && map_type == CELL_TYPE)
 	clump(in_fd, out_fd, flag_diag->answer, minsize);
     else
 	clump_n(in_fd, opt_in->answers, n, threshold, out_fd,

@@ -94,6 +94,7 @@ from core.debug import Debug
 from gui_core.wrap import (
     Button,
     SearchCtrl,
+    Slider,
     StaticText,
     StaticBox,
     TextCtrl,
@@ -426,12 +427,12 @@ class NumTextCtrl(TextCtrl):
         pass
 
 
-class FloatSlider(wx.Slider):
+class FloatSlider(Slider):
     """Class derived from wx.Slider for floats"""
 
     def __init__(self, **kwargs):
         Debug.msg(1, "FloatSlider.__init__()")
-        wx.Slider.__init__(self, **kwargs)
+        Slider.__init__(self, **kwargs)
         self.coef = 1.0
         # init range
         self.minValueOrig = 0
@@ -516,7 +517,7 @@ class SymbolButton(BitmapTextButton):
     def DrawRecord(self, dc, size):
         """Draw record symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
-        dc.DrawCircle(size[0] / 2, size[1] / 2, size[0] / 2)
+        dc.DrawCircle(size[0] // 2, size[1] // 2, size[0] // 2)
 
     def DrawStop(self, dc, size):
         """Draw stop symbol"""
@@ -526,14 +527,14 @@ class SymbolButton(BitmapTextButton):
     def DrawPlay(self, dc, size):
         """Draw play symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0)))
-        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
+        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] // 2))
         dc.DrawPolygon(points)
 
     def DrawPause(self, dc, size):
         """Draw pause symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
-        dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
-        dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
+        dc.DrawRectangle(0, 0, 2 * size[0] // 5, size[1])
+        dc.DrawRectangle(3 * size[0] // 5, 0, 2 * size[0] // 5, size[1])
 
 
 class StaticWrapText(GenStaticText):
@@ -1202,7 +1203,7 @@ class SearchModuleWidget(wx.Panel):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY, **kwargs)
 
         #        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
-        # label = " %s " % _("Find module - (press Enter for next match)"))
+        # label = " %s " % _("Find tool - (press Enter for next match)"))
 
         if sys.platform == "win32":
             self._search = TextCtrl(
@@ -1214,7 +1215,7 @@ class SearchModuleWidget(wx.Panel):
             )
             self._search.SetDescriptiveText(_("Fulltext search"))
             self._search.SetToolTip(
-                _("Type to search in all modules. Press Enter for next match.")
+                _("Type to search in all tools. Press Enter for next match.")
             )
 
         self._search.Bind(wx.EVT_TEXT, self.OnSearchModule)
@@ -1222,7 +1223,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
-                parent=self, id=wx.ID_ANY, label="Choose a module", size=(-1, 35)
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
             )
 
         if self._showChoice:
@@ -1287,7 +1288,7 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
-        label = _("%d modules match") % len(commands)
+        label = _("%d tools match") % len(commands)
         if self._showTip:
             self._searchTip.SetLabel(label)
 
@@ -1330,7 +1331,7 @@ class SearchModuleWidget(wx.Panel):
         """Reset widget"""
         self._search.SetValue("")
         if self._showTip:
-            self._searchTip.SetLabel("Choose a module")
+            self._searchTip.SetLabel("Choose a tool")
 
 
 class ManageSettingsWidget(wx.Panel):
@@ -1672,14 +1673,14 @@ class PictureComboBox(OwnerDrawnComboBox):
         # for painting the items in the popup
         bitmap = self.GetPictureBitmap(self.GetString(item))
         if bitmap:
-            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
+            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) // 2)
             width = bitmap.GetWidth() + 10
         else:
             width = 0
         dc.DrawText(
             self.GetString(item),
             r.x + width,
-            (r.y + 0) + (r.height - dc.GetCharHeight()) / 2,
+            (r.y + 0) + (r.height - dc.GetCharHeight()) // 2,
         )
 
     def OnMeasureItem(self, item):
