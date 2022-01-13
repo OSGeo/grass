@@ -193,7 +193,7 @@ def find_addon_name(addons):
         found = False
         for i in tree:
             for f in i.findall(".//binary/file"):
-                if re.match(".*.{}$".format(addon), f.text):
+                if re.match(r".*{}$".format(addon), f.text):
                     result.append(i.attrib["name"])
                     found = True
                     break
