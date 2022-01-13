@@ -367,6 +367,23 @@ def get_tgis_db_version():
     global tgis_db_version
     return tgis_db_version
 
+
+def get_tgis_db_version_from_metadata(metadata=None):
+    """Get the version number of the temporal database from metadata
+
+    :param list metadata: list of metadata items or None
+    :returns: The version number of the temporal database as integer
+    """
+    if metadata is None:
+        metadata = get_tgis_metadata()
+    for entry in metadata:
+        if "tgis_db_version" in entry:
+            return int(entry[1])
+
+    # return supported version if not possible to get from metadata
+    return get_tgis_db_version()
+
+
 ###############################################################################
 
 
@@ -650,21 +667,29 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = "The format of your actual temporal database is not " \
-                   "supported any more.\nSolution: You need to export it by " \
-                   "restoring the GRASS GIS version used for creating this DB"\
-                   ". From there, create a backup of your temporal database "\
-                   "to avoid the loss of your temporal data.\nNotes: Use " \
-                   "t.rast.export and t.vect.export to make a backup of your" \
-                   " existing space time datasets.To safe the timestamps of" \
-                   " your existing maps and space time datasets, use " \
-                   "t.rast.list, t.vect.list and t.rast3d.list. "\
-                   "You can register the existing time stamped maps easily if"\
-                   " you export columns=id,start_time,end_time into text "\
-                   "files and use t.register to register them again in new" \
-                   " created space time datasets (t.create). After the backup"\
-                   " remove the existing temporal database, a new one will be"\
-                   " created automatically.\n"
+    if tgis_db_version == 2:
+        backup_howto = _(
+            "Run t.downgrade command to downgrade your temporal database.\n"
+            "Consider creating a backup of your temporal database to avoid "
+            "loosing data in case something goes wrong.\n"
+        )
+    else:
+        backup_howto = _(
+            "You need to export it by "
+            "restoring the GRASS GIS version used for creating this DB"
+            ". From there, create a backup of your temporal database "
+            "to avoid the loss of your temporal data.\nNotes: Use "
+            "t.rast.export and t.vect.export to make a backup of your"
+            " existing space time datasets. To save the timestamps of"
+            " your existing maps and space time datasets, use "
+            "t.rast.list, t.vect.list and t.rast3d.list. "
+            "You can register the existing time stamped maps easily if"
+            " you export columns=id,start_time,end_time into text "
+            "files and use t.register to register them again in new"
+            " created space time datasets (t.create). After the backup"
+            " remove the existing temporal database, a new one will be"
+            " created automatically.\n"
+        )
 
     if db_exists is True:
         dbif.close()
@@ -688,13 +713,28 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                              "%(info)s") % ({"backup": backup_howto,
                                              "api": get_tgis_version(),
                                              "info": get_database_info_string()}))
-            if "tgis_db_version" in entry and entry[1] != str(get_tgis_db_version()):
-                msgr.fatal(_("Unsupported temporal database: version mismatch."
-                             "\n %(backup)sSupported temporal database version"
-                             " is: %(tdb)i\nCurrent temporal database info:"
-                             "%(info)s") % ({"backup": backup_howto,
-                                             "tdb": get_tgis_version(),
-                                             "info": get_database_info_string()}))
+        # temporal database version check
+        tgis_db_version_meta = get_tgis_db_version_from_metadata(metadata)
+        if tgis_db_version_meta != tgis_db_version:
+            message = _(
+                "Temporal database version mismatch detected.\n{backup}"
+                "Supported temporal database version is: {tdb}\n"
+                "Your existing temporal database version: {ctdb}\n"
+                "Current temporal database info: {info}".format(
+                    backup=backup_howto,
+                    tdb=tgis_db_version,
+                    ctdb=tgis_db_version_meta,
+                    info=get_database_info_string(),
+                )
+            )
+
+            msgr.fatal(
+                _(
+                    "The format of your existing temporal database is "
+                    "not supported.\n{m}".format(m=message)
+                )
+            )
+
         return
 
     create_temporal_database(dbif)
