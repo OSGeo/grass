@@ -61,7 +61,7 @@ Usage: crosscompile.sh [OPTIONS]
                              (default: /usr/include/freetype2)
     --update                 update the current branch
     --package                package the cross-compiled build as
-                             grass80-x86_64-w64-mingw32-YYYYMMDD.zip
+                             grass81-x86_64-w64-mingw32-YYYYMMDD.zip
 EOT
 		exit
 		;;
