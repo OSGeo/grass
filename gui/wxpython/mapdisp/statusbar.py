@@ -14,7 +14,6 @@ Classes:
  - statusbar::SbMapScale
  - statusbar::SbGoTo
  - statusbar::SbProjection
- - statusbar::SbMask
  - statusbar::SbTextItem
  - statusbar::SbDisplayGeometry
  - statusbar::SbCoordinates
@@ -281,9 +280,7 @@ class SbManager:
                 w, h = rect.width, rect.height + 1
                 if win == self.progressbar.GetWidget():
                     wWin = rect.width - 6
-                if idx == 2:  # mask
-                    x += 5
-                elif idx == 3:  # render
+                if idx == 2:  # render
                     x += 5
             win.SetPosition((x, y))
             win.SetSize((w, h))
@@ -890,50 +887,6 @@ class SbProjection(SbItem):
 
         # disable long help
         self.mapFrame.StatusbarEnableLongHelp(False)
-
-
-class SbMask(SbItem):
-    """Button to show whether mask is activated and remove mask with
-    left mouse click
-    """
-
-    def __init__(self, mapframe, statusbar, position=0):
-        SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = "mask"
-
-        self.widget = Button(
-            parent=self.statusbar, id=wx.ID_ANY, label=_("MASK"), style=wx.NO_BORDER
-        )
-        self.widget.Bind(wx.EVT_BUTTON, self.OnRemoveMask)
-        self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
-        self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
-        self.widget.Hide()
-
-    def Update(self):
-        if grass.find_file(
-            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
-        )["name"]:
-            self.Show()
-        else:
-            self.Hide()
-
-    def OnRemoveMask(self, event):
-        if grass.find_file(
-            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
-        )["name"]:
-
-            dlg = wx.MessageDialog(
-                self.mapFrame,
-                message=_("Are you sure that you want to remove the MASK?"),
-                caption=_("Remove MASK"),
-                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
-            )
-            if dlg.ShowModal() != wx.ID_YES:
-                dlg.Destroy()
-                return
-            RunCommand("r.mask", flags="r")
-            self.Hide()
-            self.mapFrame.OnRender(event=None)
 
 
 class SbTextItem(SbItem):

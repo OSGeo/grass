@@ -62,6 +62,7 @@ from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
+from lmgr.statusbar import SbMask
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import (
@@ -152,7 +153,7 @@ class GMFrame(wx.Frame):
 
         # create widgets
         self._createMenuBar()
-        self.statusbar = self.CreateStatusBar(number=1)
+        self._createStatusbar()
         self.notebook = self._createNotebook()
         self._createDataCatalog(self.notebook)
         self._createDisplay(self.notebook)
@@ -199,12 +200,30 @@ class GMFrame(wx.Frame):
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
+
+        # Add statusbar
+        self._auimgr.AddPane(
+            self.statusbar,
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
+        self._giface.updateMap.connect(self.RefreshMask)
         self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # minimal frame size
@@ -329,6 +348,23 @@ class GMFrame(wx.Frame):
             return self._auimgr.GetPane(name).IsShown()
         return False
 
+    def _createStatusbar(self):
+        """Create statusbar (default items)."""
+        # create main window statusbar
+        self.statusbar = wx.StatusBar(self, id=wx.ID_ANY)
+        self.statusbar.SetMinHeight(24)
+        self.statusbar.SetFieldsCount(2)
+        self.statusbar.SetStatusWidths([-5, -2])
+        self.mask = SbMask(self.statusbar, self._giface)
+        rect1 = self.statusbar.GetFieldRect(1)
+        rect1.x += 1
+        rect1.y += 1
+        self.mask.GetWidget().SetRect(rect1)
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.statusbar.SetStatusText(*args)
+
     def _createNotebook(self):
         """Initialize notebook widget"""
         if sys.platform == "win32":
@@ -392,6 +428,7 @@ class GMFrame(wx.Frame):
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
+        self._gconsole.mapCreated.connect(self.RefreshMask)
         self._gconsole.Bind(
             EVT_IGNORED_CMD_RUN, lambda event: self.RunSpecialCmd(event.cmd)
         )
@@ -675,6 +712,15 @@ class GMFrame(wx.Frame):
         ):
             self._auimgr.GetPane(toolbar).Row(1).Position(pos)
         self._auimgr.Update()
+
+    def RefreshMask(self):
+        """Show mask in the statusbar if mask file found"""
+        if grass.find_file(
+            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
+        )["name"]:
+            self.mask.Show()
+        else:
+            self.mask.Hide()
 
     def OnLocationWizard(self, event):
         """Launch location wizard"""
