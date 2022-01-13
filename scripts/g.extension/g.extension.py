@@ -1278,14 +1278,15 @@ def filter_multi_addon_addons(mlist):
     and installs only *.html manual page, without source/binary
     excutable module and doesn't need to check metadata.
 
-    e.g. i.sentinel multi-addon install i.sentinel addon which
-    install only i.sentinel.html file.
+    e.g. the i.sentinel multi-addon consists of several full i.sentinel.*
+    addons along with a i.sentinel.html overview file.
 
-    :param list mlist: list of individual multi-addon addons
 
-    :return list mlist: list of individual multi-addon addons
-                        without addons which install only *.html
-                        manual page
+    :param list mlist: list of multi-addons (groups of addons
+                       with respective addon overview HTML pages)
+
+    :return list mlist: list of individual multi-addons without respective
+                        addon overview HTML pages
     """
     # Make a list of unique addons
     mlist = list(set(mlist))
