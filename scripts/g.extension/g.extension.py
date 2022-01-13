@@ -1308,7 +1308,7 @@ def filter_multi_addon_addons(mlist):
             re.match(r".*{}".format(options["extension"]), addon["path"])
             and addon["type"] == "blob"
         ):
-            if not re.match(pattern, addon["path"]):
+            if re.match(pattern, addon["path"]):
                 # Add addon dirs which contains source module *.py, *.c file
                 addon_dirs_with_source_module.append(
                     os.path.dirname(addon["path"]),
