@@ -1292,7 +1292,8 @@ def filter_multi_addon_addons(mlist):
     mlist = list(set(mlist))
     all_addon_dirs = []
     addon_dirs_with_source_module = []  # *.py, *.c file
-    pattern = re.compile(r".*.py$|.*.c$")
+    addon_pattern = re.compile(r".*{}".format(options["extension"]))
+    addon_src_file_pattern = re.compile(r".*.py$|.*.c$")
 
     addons_paths_file = os.path.join(
         options["prefix"],
@@ -1304,19 +1305,13 @@ def filter_multi_addon_addons(mlist):
         addons_paths = json.loads(f.read())
 
     for addon in addons_paths["tree"]:
-        if (
-            re.match(r".*{}".format(options["extension"]), addon["path"])
-            and addon["type"] == "blob"
-        ):
-            if re.match(pattern, addon["path"]):
+        if re.match(addon_pattern, addon["path"]) and addon["type"] == "blob":
+            if re.match(addon_src_file_pattern, addon["path"]):
                 # Add addon dirs which contains source module *.py, *.c file
                 addon_dirs_with_source_module.append(
                     os.path.dirname(addon["path"]),
                 )
-        elif (
-            re.match(r".*{}".format(options["extension"]), addon["path"])
-            and addon["type"] == "tree"
-        ):
+        elif re.match(addon_pattern, addon["path"]) and addon["type"] == "tree":
             # Add all addon dirs
             all_addon_dirs.append(addon["path"])
 
