@@ -192,7 +192,6 @@ HEADERS = {
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 GIT_URL = "https://github.com/OSGeo/grass-addons"
-ADDONS_PATHS_JSON_FILE = "addons_paths.json"
 
 # MAKE command
 # GRASS Makefile are type of GNU Make and not BSD Make
@@ -1298,7 +1297,7 @@ def filter_multi_addon_addons(mlist):
 
     addons_paths_file = os.path.join(
         options["prefix"],
-        ADDONS_PATHS_JSON_FILE,
+        get_addons_paths.json_file,
     )
     if not os.path.exists(addons_paths_file):
         get_addons_paths(gg_addons_base_dir=options["prefix"])
@@ -2539,16 +2538,20 @@ def get_addons_paths(gg_addons_base_dir):
     in the $GRASS_ADDON_BASE dir. The file serves as a list of all addons,
     and their paths (mkhmtl.py tool)
     """
+    get_addons_paths.json_file = "addons_paths.json"
     # Define branch to fetch from (latest or current version)
     addons_branch = get_version_branch(version[0])
     url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
+
     response = download_addons_paths_file(
         url=url,
         response_format="application/json",
     )
     if response:
         addons_paths = json.loads(gscript.decode(response.read()))
-        with open(os.path.join(gg_addons_base_dir, ADDONS_PATHS_JSON_FILE), "w") as f:
+        with open(
+            os.path.join(gg_addons_base_dir, get_addons_paths.json_file), "w"
+        ) as f:
             json.dump(addons_paths, f)
 
 
