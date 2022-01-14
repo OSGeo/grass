@@ -2538,7 +2538,6 @@ def get_addons_paths(gg_addons_base_dir):
     in the $GRASS_ADDON_BASE dir. The file serves as a list of all addons,
     and their paths (mkhmtl.py tool)
     """
-    get_addons_paths.json_file = "addons_paths.json"
     # Define branch to fetch from (latest or current version)
     addons_branch = get_version_branch(version[0])
     url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
@@ -2553,6 +2552,9 @@ def get_addons_paths(gg_addons_base_dir):
             os.path.join(gg_addons_base_dir, get_addons_paths.json_file), "w"
         ) as f:
             json.dump(addons_paths, f)
+
+
+get_addons_paths.json_file = "addons_paths.json"
 
 
 def main():
