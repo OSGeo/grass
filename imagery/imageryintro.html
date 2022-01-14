@@ -88,17 +88,18 @@ data.
 
 <h3>Semantic label information</h3>
 
-Semantic labels are a description like band names for satellite imagery
-which can be stored as metadata. <a href="r.semantic.label.html">r.semantic.label</a>
-allows assigning a semantic label information to a single raster map
-or to a list of specified raster maps.
-To print available semantic labels used for multispectral data, use
-<a href="i.band.library.html">i.band.library</a>.
-Specific band reference can be assigned to a raster map as a semantic
-label by the modules <em><a href="r.semantic.label.html">r.semantic.label</a></em>
-or <em><a href="r.support.html">r.support</a></em>. Semantic labels
-are supported by <a href="temporalintro.html">temporal</a> GRASS modules
-and are used in signature files of imagery classification tools.
+Semantic labels are a description which can be stored as metadata.
+To print available semantic labels relevant for multispectral satellite
+data, use <a href="i.band.library.html">i.band.library</a>.
+<a href="r.semantic.label.html">r.semantic.label</a> allows assigning of
+these satellite imagery band references as defined in
+<a href="i.band.library.html">i.band.library</a>. Semantic labels are
+also used in signature files of imagery classification tools.
+
+With <a href="r.support.html">r.support</a></em> any sort of semantic label
+the user wishes may be added. Semantic labels are supported also by the
+<a href="temporalintro.html">temporal</a> GRASS modules.
+
 <h3>Image processing operations</h3>
 
 GRASS raster/imagery map processing is always performed in the current
