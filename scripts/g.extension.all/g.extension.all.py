@@ -36,7 +36,9 @@
 # % label: Force operation (required for removal)
 # % end
 from __future__ import print_function
+import http
 import os
+import re
 import sys
 
 try:
@@ -44,8 +46,16 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree  # Python <= 2.4
 
+from six.moves.urllib import request as urlrequest
+from six.moves.urllib.error import HTTPError, URLError
+
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+}
+HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
 def get_extensions():
@@ -77,6 +87,128 @@ def get_extensions():
     return ret
 
 
+def urlopen(url, *args, **kwargs):
+    """Wrapper around urlopen. Same function as 'urlopen', but with the
+    ability to define headers.
+    """
+    request = urlrequest.Request(url, headers=HEADERS)
+    return urlrequest.urlopen(request, *args, **kwargs)
+
+
+def download_modules_xml_file(url, response_format, *args, **kwargs):
+    """Generates JSON file containing the download URLs of the official
+    Addons
+
+    :param str url: url address
+    :param str response_format: content type
+
+    :return response: urllib.request.urlopen response object or None
+    """
+    try:
+        response = urlopen(url, *args, **kwargs)
+
+        if not response.code == 200:
+            index = HTTP_STATUS_CODES.index(response.code)
+            desc = HTTP_STATUS_CODES[index].description
+            gscript.fatal(
+                _(
+                    "Download file from <{url}>, "
+                    "return status code {code}, "
+                    "{desc}".format(
+                        url=url,
+                        code=response.code,
+                        desc=desc,
+                    ),
+                ),
+            )
+        if response_format not in response.getheader("Content-Type"):
+            gscript.fatal(
+                _(
+                    "Wrong file format downloaded. "
+                    "Check url <{url}>. Allowed file format is "
+                    "{response_format}.".format(
+                        url=url,
+                        response_format=response_format,
+                    ),
+                ),
+            )
+        return response
+
+    except HTTPError as err:
+        if err.code == 404:
+            gscript.fatal(
+                _(
+                    "The download of the modules.xml file "
+                    "from the server was not successful. "
+                    "File on the server <{url}> doesn't "
+                    "exists.".format(url=url),
+                ),
+            )
+        else:
+            return download_modules_xml_file(
+                url=url,
+                response_format=response_format,
+            )
+    except URLError:
+        gscript.fatal(
+            _(
+                "Download file from <{url}>, "
+                "failed. Check internet connection.".format(
+                    url=url,
+                ),
+            ),
+        )
+
+
+def find_addon_name(addons):
+    """Find correct addon name if addon is a multi-addon
+    e.g. wx.metadata contains multiple modules g.gui.cswbrowser etc.
+
+    Examples:
+    - for the g.gui.cswbrowser module the wx.metadata addon name is
+    returned
+    - for the i.sentinel.download module the i.sentinel addon name is
+    returned
+    etc.
+
+    :param list addons: list of individual addon modules to be reinstalled
+
+    :return set result: set of unique addon names to be reinstalled
+    """
+    grass_version = os.getenv("GRASS_VERSION", "unknown")
+    if grass_version != "unknown":
+        major, minor, patch = grass_version.split(".")
+    else:
+        gscript.fatal(_("Unable to get GRASS GIS version."))
+    url = "https://grass.osgeo.org/addons/grass{major}/modules.xml".format(
+        major=major,
+    )
+    response = download_modules_xml_file(
+        url=url,
+        response_format="application/xml",
+    )
+    tree = etree.fromstring(response.read())
+    result = []
+    for addon in addons:
+        found = False
+        addon_pattern = re.compile(r".*{}$".format(addon))
+        for i in tree:
+            for f in i.findall(".//binary/file"):
+                if re.match(addon_pattern, f.text):
+                    result.append(i.attrib["name"])
+                    found = True
+                    break
+        if not found:
+            gscript.warning(
+                _(
+                    "The <{}> addon cannot be reinstalled. "
+                    "Addon wasn't found among the official "
+                    "addons.".format(addon)
+                ),
+            )
+    return set(result)
+
+
 def main():
     remove = options["operation"] == "remove"
     if remove or flags["f"]:
@@ -103,7 +235,7 @@ def main():
         )
         return 0
 
-    for ext in extensions:
+    for ext in find_addon_name(addons=extensions):
         gscript.message("-" * 60)
         if remove:
             gscript.message(_("Removing extension <%s>...") % ext)
