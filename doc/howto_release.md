@@ -154,6 +154,9 @@ To be done in GH interface:
 
 <https://github.com/OSGeo/grass/releases/new>
 
+- select release_branch first, then
+- write into "Create tag" field:
+
 Tag version | target (examples):
   8.0.0RC1  | releasebranch_8_0
 
