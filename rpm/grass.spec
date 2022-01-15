@@ -283,9 +283,6 @@ do
 	iconv -f iso8859-1 -t utf8 $man > %{buildroot}%{_mandir}/man1/$(basename $man)"%{name}"
 done
 
-# create symlink to unversioned name
-ln -s %{_bindir}/%{name}%{shortver} %{buildroot}%{_bindir}/%{name}
-
 # symlink docs from GISBASE to standard system location
 mkdir -p %{buildroot}%{_docdir}
 # append shortver to destination since man pages are unversioned
@@ -366,8 +363,11 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Wed Nov 10 2021 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
-- New upstream version GRASS GIS 8.0.0
+* Sat Jan 15 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
+- New upstream version GRASS GIS 8.0.0RC2
+
+* Thu Nov 11 2021 Sandro Mani <manisandro@gmail.com> - 7.8.6-3
+- Rebuild (gdal)
 
 * Sun Nov 07 2021 Björn Esser <besser82@fedoraproject.org> - 7.8.6-2
 - Add patch to fix installation path in pkgconfig file
@@ -408,16 +408,16 @@ fi
 * Tue Dec 22 2020 Markus Neteler <neteler@mundialis.de> - 7.8.5-1
 - New upstream version GRASS GIS 7.8.5
 
-* Tue Nov 24 20:59:37 CET 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-6
+* Tue Nov 24 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-6
 - Clean up proj-datumgrid requires < f34+
 
-* Fri Nov 20 15:59:37 CET 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-5
+* Fri Nov 20 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-5
 - Drop proj-datumgrid requires on f34+
 
-* Fri Nov  6 22:26:41 CET 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-4
+* Fri Nov  6 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-4
 - Rebuild (proj, gdal)
 
-* Wed Nov  4 18:22:40 CET 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-3
+* Wed Nov  4 2020 Sandro Mani <manisandro@gmail.com> - 7.8.4-3
 - Rebuild (PDAL)
 
 * Sat Oct 17 2020 Markus Neteler <neteler@mundialis.de> - 7.8.4-2
