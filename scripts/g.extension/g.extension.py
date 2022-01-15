@@ -2538,11 +2538,13 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
 
 def get_addons_paths(gg_addons_base_dir):
-    """Get and save extensions paths as 'extensions_paths.json' json file
-    in the $GRASS_ADDON_BASE dir. The file serves as a list of all addons,
-    and their paths (mkhmtl.py tool)
+    """Get and save addons paths from GRASS GIS Addons GitHub repo API
+    as 'addons_paths.json' file in the gg_addons_base_dir. The file
+    serves as a list of all addons, and their paths (required for
+    mkhmtl.py tool)
+
+    :param str gg_addons_base_dir: dir path where addons are installed
     """
-    get_addons_paths.json_file = "addons_paths.json"
     # Define branch to fetch from (latest or current version)
     addons_branch = get_version_branch(version[0])
     url = "https://api.github.com/repos/OSGeo/grass-addons/git/trees/{}?recursive=1".format(
@@ -2559,6 +2561,9 @@ def get_addons_paths(gg_addons_base_dir):
             os.path.join(gg_addons_base_dir, get_addons_paths.json_file), "w"
         ) as f:
             json.dump(addons_paths, f)
+
+
+get_addons_paths.json_file = "addons_paths.json"
 
 
 def main():
