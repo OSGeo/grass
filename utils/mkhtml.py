@@ -189,7 +189,6 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
     git_log = {"commit": unknown, "date": unknown}
     cwd = os.getcwd()
     year = datetime.now().year
-    unknown = "unknown"
     grass_modules_url = (
         "https://api.github.com/repos/osgeo/grass/commits?path={path}"
         "&page=1&per_page=1&sha=main".format(path=src_dir)
