@@ -1351,7 +1351,9 @@ def install_module_xml(mlist):
 
     # Filter multi-addon addons
     if len(mlist) > 1:
-        mlist = filter_multi_addon_addons(mlist)
+        mlist = filter_multi_addon_addons(
+            mlist.copy()
+        )  # mlist.copy() keep the original list of add-ons
 
     # update tree
     for name in mlist:
