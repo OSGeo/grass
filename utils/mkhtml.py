@@ -16,6 +16,7 @@
 #
 #############################################################################
 
+import http
 import sys
 import os
 import string
@@ -24,7 +25,8 @@ from datetime import datetime
 import locale
 import json
 import pathlib
-from subprocess import check_output
+import shutil
+import subprocess
 
 try:
     # Python 2 import
@@ -32,10 +34,25 @@ try:
 except ImportError:
     # Python 3 import
     from html.parser import HTMLParser
+
+from six.moves.urllib import request as urlrequest
+from six.moves.urllib.error import HTTPError, URLError
+
 try:
     import urlparse
 except ImportError:
     import urllib.parse as urlparse
+
+try:
+    import grass.script as gs
+except ImportError:
+    # During compilation GRASS GIS
+    gs = None
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+}
+HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 if sys.version_info[0] == 2:
     PY2 = True
@@ -45,6 +62,15 @@ else:
 
 if not PY2:
     unicode = str
+
+
+grass_version = os.getenv("VERSION_NUMBER", "unknown")
+trunk_url = ""
+addons_url = ""
+if grass_version != "unknown":
+    major, minor, patch = grass_version.split(".")
+    trunk_url = "https://github.com/OSGeo/grass/tree/main/"
+    addons_url = f"https://github.com/OSGeo/grass-addons/tree/grass{major}/"
 
 
 def _get_encoding():
@@ -69,29 +95,143 @@ def decode(bytes_):
     return unicode(bytes_)
 
 
-def get_last_commit_git(src_dir):
-    gitlog_dict = {}
-    cwd = os.getcwd()
-    # If git is not available we might try API but remember requests limit there
-    # trunk_api_url = f"https://api.github.com/repos/osgeo/grass/commits?path={{path}}&page=1&per_page=1
-    # addons_uapi_url = f"https://api.github.com/repos/osgeo/grass/commits?path={{path}}&page=1&per_page=1
-    # commits = urllib.request.urlopen(trunk_api_url)
-    # json.loads(commits.read().decode())
+def urlopen(url, *args, **kwargs):
+    """Wrapper around urlopen. Same function as 'urlopen', but with the
+    ability to define headers.
+    """
+    request = urlrequest.Request(url, headers=HEADERS)
+    return urlrequest.urlopen(request, *args, **kwargs)
+
+
+def set_proxy():
+    """Set proxy"""
+    proxy = os.getenv("GRASS_PROXY")
+    if proxy:
+        proxies = {}
+        for ptype, purl in (p.split("=") for p in proxy.split(",")):
+            proxies[ptype] = purl
+        urlrequest.install_opener(
+            urlrequest.build_opener(urlrequest.ProxyHandler(proxies))
+        )
+
+
+set_proxy()
+
+
+def download_git_commit(url, response_format, *args, **kwargs):
+    """Download module/addon last commit from GitHub API
+
+    :param str url: url address
+    :param str response_format: content type
+
+    :return urllib.request.urlopen or None response: response object or
+                                                     None
+    """
     try:
-        os.chdir(src_dir)
-        gitlog = decode(check_output(["git", "log", "-1"])).split("\n")
-        print("src_dir: ", src_dir, "gitlog: ", gitlog)
-        gitlog_dict = {
-            "commit": gitlog[0].split(" ")[1],
-            "date": gitlog[2].lstrip("Date:").strip(),
-        }
-    except RuntimeError:
-        gitlog_dict = {
-            "commit": "unknown",
-            "date": "unknown",
-        }
-    os.chdir(cwd)
-    return gitlog_dict
+        response = urlopen(url, *args, **kwargs)
+        if not response.code == 200:
+            index = HTTP_STATUS_CODES.index(response.code)
+            desc = HTTP_STATUS_CODES[index].description
+            gs.fatal(
+                _(
+                    "Download commit from <{url}>, return status code "
+                    "{code}, {desc}".format(
+                        url=url,
+                        code=response.code,
+                        desc=desc,
+                    ),
+                ),
+            )
+        if response_format not in response.getheader("Content-Type"):
+            gs.fatal(
+                _(
+                    "Wrong downloaded commit file format. "
+                    "Check url <{url}>. Allowed file format is "
+                    "{response_format}.".format(
+                        url=url,
+                        response_format=response_format,
+                    ),
+                ),
+            )
+        return response
+    except HTTPError as err:
+        gs.warning(
+            _(
+                "The download of the commit from the GitHub API "
+                "server wasn't successful, <{}>. Commit and commit "
+                "date will not be included in the <{}> html manual "
+                "page.".format(err.msg, pgm)
+            ),
+        )
+    except URLError:
+        gs.fatal(
+            _(
+                "Download file from <{url}>, "
+                "failed. Check internet connection.".format(
+                    url=url,
+                ),
+            ),
+        )
+
+
+def get_last_git_commit(src_dir, is_addon, addon_path):
+    """Get last module/addon git commit
+
+    :param str src_dir: module/addon source dir
+    :param bool is_addon: True if it is addon
+    :param str addon_path: addon path
+
+    :return dict git_log: dict with key commit and date, if not
+                          possible download commit from GitHub API server
+                          values of keys have "unknown" string
+    """
+    unknown = "unknown"
+    git_log = {"commit": unknown, "date": unknown}
+    cwd = os.getcwd()
+    year = datetime.now().year
+    unknown = "unknown"
+    grass_modules_url = (
+        "https://api.github.com/repos/osgeo/grass/commits?path={path}"
+        "&page=1&per_page=1&sha=main".format(path=src_dir)
+    )  # sha=git_branch_name
+    grass_addons_url = (
+        "https://api.github.com/repos/osgeo/grass-addons/commits?path={path}"
+        "&page=1&per_page=1&sha=grass{major}".format(
+            path=addon_path,
+            major=major,
+        )
+    )  # sha=git_branch_name
+
+    if shutil.which("git"):
+        if os.path.exists(src_dir):
+            os.chdir(src_dir)
+        stdout, stderr = subprocess.Popen(
+            args=["git", "log", "-1"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ).communicate()
+        stdout = decode(stdout)
+        stderr = decode(stderr)
+        os.chdir(cwd)
+
+        if stderr and "fatal: not a git repository" in stderr:
+            response = download_git_commit(
+                url=grass_addons_url if is_addon else grass_modules_url,
+                response_format="",
+            )
+            if response:
+                commit = json.loads(response.read())
+                git_log["commit"] = commit[0]["sha"]
+                git_log["date"] = datetime.strptime(
+                    commit[0]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ"
+                ).strftime("%A %b %m %H:%M:%S %Y")
+        else:
+            if stdout:
+                commit = stdout.splitlines()
+                git_log["commit"] = commit[0].split(" ")[-1]
+                commit_date = commit[2].lstrip("Date:").strip()
+                git_log["date"] = commit_date[: len(commit_date) + len(str(year))]
+    return git_log
 
 
 html_page_footer_pages_path = (
@@ -104,14 +244,6 @@ pgm = sys.argv[1]
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
-
-grass_version = os.getenv("VERSION_NUMBER", "unknown")
-trunk_url = ""
-addons_url = ""
-if grass_version != "unknown":
-    major, minor, patch = grass_version.split(".")
-    trunk_url = "https://github.com/OSGeo/grass/tree/main/"
-    addons_url = f"https://github.com/OSGeo/grass-addons/tree/grass{major}/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -476,6 +608,7 @@ else:
     source_url = addons_url
     pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
 url_source = ""
+addon_path = None
 if os.getenv("SOURCE_URL", ""):
     addon_path = get_addon_path()
     if addon_path:
@@ -506,15 +639,19 @@ if index_name:
     else:
         url_log = url_source.replace(tree, commits)
 
-    git_commit_log = get_last_commit_git(curdir)
+    git_commit = get_last_git_commit(
+        src_dir=curdir,
+        addon_path=addon_path if addon_path else None,
+        is_addon=True if addon_path else False,
+    )
 
     sys.stdout.write(
         sourcecode.substitute(
             URL_SOURCE=url_source,
             PGM=pgm,
             URL_LOG=url_log,
-            COMMIT_DATE=git_commit_log["date"],
-            COMMIT=git_commit_log["commit"],
+            COMMIT_DATE=git_commit["date"],
+            COMMIT=git_commit["commit"],
         )
     )
     sys.stdout.write(
