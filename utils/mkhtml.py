@@ -24,6 +24,7 @@ from datetime import datetime
 import locale
 import json
 import pathlib
+from subprocess import check_output
 
 try:
     # Python 2 import
@@ -66,6 +67,31 @@ def decode(bytes_):
         enc = _get_encoding()
         return bytes_.decode(enc)
     return unicode(bytes_)
+
+
+def get_last_commit_git(src_dir):
+    gitlog_dict = {}
+    cwd = os.getcwd()
+    # If git is not available we might try API but remember requests limit there
+    # trunk_api_url = f"https://api.github.com/repos/osgeo/grass/commits?path={{path}}&page=1&per_page=1
+    # addons_uapi_url = f"https://api.github.com/repos/osgeo/grass/commits?path={{path}}&page=1&per_page=1
+    # commits = urllib.request.urlopen(trunk_api_url)
+    # json.loads(commits.read().decode())
+    try:
+        os.chdir(src_dir)
+        gitlog = decode(check_output(["git", "log", "-1"])).split("\n")
+        print("src_dir: ", src_dir, "gitlog: ", gitlog)
+        gitlog_dict = {
+            "commit": gitlog[0].split(" ")[1],
+            "date": gitlog[2].lstrip("Date:").strip(),
+        }
+    except RuntimeError:
+        gitlog_dict = {
+            "commit": "unknown",
+            "date": "unknown",
+        }
+    os.chdir(cwd)
+    return gitlog_dict
 
 
 html_page_footer_pages_path = (
@@ -120,6 +146,9 @@ sourcecode = string.Template(
   Available at:
   <a href="${URL_SOURCE}">${PGM} source code</a>
   (<a href="${URL_LOG}">history</a>)
+</p>
+<p>
+  Latest change: ${COMMIT_DATE} in commit: ${COMMIT}
 </p>
 """
 )
@@ -477,11 +506,15 @@ if index_name:
     else:
         url_log = url_source.replace(tree, commits)
 
+    git_commit_log = get_last_commit_git(curdir)
+
     sys.stdout.write(
         sourcecode.substitute(
             URL_SOURCE=url_source,
             PGM=pgm,
             URL_LOG=url_log,
+            COMMIT_DATE=git_commit_log["date"],
+            COMMIT=git_commit_log["commit"],
         )
     )
     sys.stdout.write(
