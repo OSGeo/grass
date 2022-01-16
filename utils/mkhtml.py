@@ -216,7 +216,7 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
         if stderr and "fatal: not a git repository" in stderr:
             response = download_git_commit(
                 url=grass_addons_url if is_addon else grass_modules_url,
-                response_format="",
+                response_format="application/json",
             )
             if response:
                 commit = json.loads(response.read())
