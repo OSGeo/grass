@@ -657,8 +657,7 @@ if index_name:
             URL_SOURCE=url_source,
             PGM=pgm,
             URL_LOG=url_log,
-            COMMIT_DATE=git_commit["date"],
-            COMMIT=git_commit["commit"],
+            DATE_TAG=date_tag,
         )
     )
     sys.stdout.write(
