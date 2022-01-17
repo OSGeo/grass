@@ -220,10 +220,11 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
             )
             if response:
                 commit = json.loads(response.read())
-                git_log["commit"] = commit[0]["sha"]
-                git_log["date"] = datetime.strptime(
-                    commit[0]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ"
-                ).strftime("%A %b %m %H:%M:%S %Y")
+                if commit:
+                    git_log["commit"] = commit[0]["sha"]
+                    git_log["date"] = datetime.strptime(
+                        commit[0]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ"
+                    ).strftime("%A %b %m %H:%M:%S %Y")
         else:
             if stdout:
                 commit = stdout.splitlines()
