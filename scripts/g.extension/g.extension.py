@@ -1422,24 +1422,16 @@ def install_module_xml(mlist):
 def install_extension_win(name):
     """Install extension on MS Windows"""
     grass.message(
-        _("Downloading precompiled GRASS Addons <%s>...") % options["extension"]
+        _("Downloading precompiled GRASS Addons <{}>...").format(options["extension"])
     )
 
     # build base URL
-    if build_platform == "x86_64":
-        platform = build_platform
-    else:
-        platform = "x86"
     base_url = (
         "http://wingrass.fsv.cvut.cz/"
-        "grass%(major)s%(minor)s/%(platform)s/addons/"
-        "grass-%(major)s.%(minor)s.%(patch)s"
-        % {
-            "platform": platform,
-            "major": version[0],
-            "minor": version[1],
-            "patch": version[2],
-        }
+        "grass{major}{minor}/addons/"
+        "grass-{major}.{minor}.{patch}".format(
+            major=version[0], minor=version[1], patch=version[2]
+        )
     )
 
     # resolve ZIP URL
@@ -2646,7 +2638,5 @@ if __name__ == "__main__":
 
     grass_version = grass.version()
     version = grass_version["version"].split(".")
-
-    build_platform = grass_version["build_platform"].split("-", 1)[0]
 
     sys.exit(main())
