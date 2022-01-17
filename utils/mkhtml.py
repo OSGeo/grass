@@ -27,6 +27,7 @@ import json
 import pathlib
 import shutil
 import subprocess
+import time
 
 try:
     # Python 2 import
@@ -204,6 +205,7 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
     if shutil.which("git"):
         if os.path.exists(src_dir):
             os.chdir(src_dir)
+            git_log["date"] = time.ctime(os.path.getmtime(src_dir))
         stdout, stderr = subprocess.Popen(
             args=["git", "log", "-1"],
             stdout=subprocess.PIPE,
@@ -280,7 +282,7 @@ sourcecode = string.Template(
   (<a href="${URL_LOG}">history</a>)
 </p>
 <p>
-  Latest change: ${COMMIT_DATE} in commit: ${COMMIT}
+  ${DATE_TAG}
 </p>
 """
 )
@@ -644,7 +646,12 @@ if index_name:
         addon_path=addon_path if addon_path else None,
         is_addon=True if addon_path else False,
     )
-
+    if git_commit["commit"] == "unknown":
+        date_tag = "Accessed: {date}".format(date=git_commit["date"])
+    else:
+        date_tag = "Latest change: {date} in commit: {commit}".format(
+            date=git_commit["date"], commit=git_commit["commit"]
+        )
     sys.stdout.write(
         sourcecode.substitute(
             URL_SOURCE=url_source,
