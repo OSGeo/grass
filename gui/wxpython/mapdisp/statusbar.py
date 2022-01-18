@@ -303,7 +303,7 @@ class SbManager:
     def OnToggleStatus(self, event):
         """Toggle status text"""
         self.Update()
-        if event.GetSelection() == 3:  # use something better than magic numbers
+        if event.GetSelection() == 3 and self.HasProperty("region"):
             # show computation region extent by default
             self.statusbarItems["region"].SetValue(True)
             # redraw map if auto-rendering is enabled
