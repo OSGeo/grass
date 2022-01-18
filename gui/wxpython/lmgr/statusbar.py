@@ -20,7 +20,7 @@ import wx
 
 from core.gcmd import RunCommand
 from gui_core.wrap import Button
-
+from grass.script import core as grass
 
 class SbMask:
     """Button to show whether mask is activated and remove mask with
@@ -62,6 +62,15 @@ class SbMask:
         :return: widget or None if doesn't exist
         """
         return self.widget
+
+    def RefreshMask(self):
+        """Show mask in the statusbar if mask file found"""
+        if grass.find_file(
+            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
+        )["name"]:
+            self.Show()
+        else:
+            self.Hide()
 
     def OnRemoveMask(self, event):
         dlg = wx.MessageDialog(

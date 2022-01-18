@@ -223,7 +223,7 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
-        self._giface.updateMap.connect(self.RefreshMask)
+        self._giface.updateMap.connect(self.mask.RefreshMask)
         self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # minimal frame size
@@ -428,7 +428,7 @@ class GMFrame(wx.Frame):
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
-        self._gconsole.mapCreated.connect(self.RefreshMask)
+        self._gconsole.mapCreated.connect(self.mask.RefreshMask)
         self._gconsole.Bind(
             EVT_IGNORED_CMD_RUN, lambda event: self.RunSpecialCmd(event.cmd)
         )
@@ -712,15 +712,6 @@ class GMFrame(wx.Frame):
         ):
             self._auimgr.GetPane(toolbar).Row(1).Position(pos)
         self._auimgr.Update()
-
-    def RefreshMask(self):
-        """Show mask in the statusbar if mask file found"""
-        if grass.find_file(
-            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
-        )["name"]:
-            self.mask.Show()
-        else:
-            self.mask.Hide()
 
     def OnLocationWizard(self, event):
         """Launch location wizard"""
