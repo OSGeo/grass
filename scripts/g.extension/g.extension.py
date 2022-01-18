@@ -2224,6 +2224,8 @@ def update_manual_page(module):
     # fix logo URL
     pattern = r'''<a href="([^"]+)"><img src="grass_logo.png"'''
     for match in re.finditer(pattern, shtml):
+        if match.group(1)[:4] == "http":
+            continue
         pos.append(match.start(1))
 
     # find URIs
