@@ -5615,8 +5615,8 @@ msgstr[1] "%d primitives référencées"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%jd vertices registered"
-msgstr[0] "Un sommet référencé"
-msgstr[1] "%jd sommets référencés"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_nat.c:132
 msgid "Building areas..."

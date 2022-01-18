@@ -11589,9 +11589,8 @@ msgid "Neighborhood points"
 msgstr "Benachbarte Punkte"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
-#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Weist für jeden Zellenkategoriewert eine Funktion der umgebenden Kategoriewerte basierend auf einer Fenstergrösse zu und erstellt neue Zellenwerte in einer Ausgabe-Rasterkarte."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:337
@@ -15580,23 +15579,20 @@ msgid "Attribute table manager"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Datenkatalog"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "Datenkatalog"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2018
-#, fuzzy
 msgid "Interactive editing and digitization of vector maps."
-msgstr "Interaktives Verwalten der Vektorfarbtabelle"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2023
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1974

@@ -5592,8 +5592,8 @@ msgstr[1] "%d primitivas registradas"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%jd vertices registered"
-msgstr[0] "Um vértice registrado"
-msgstr[1] "%jd vértices registrados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_nat.c:132
 msgid "Building areas..."
@@ -10137,14 +10137,14 @@ msgstr "não consegui obter informações da camada"
 msgid "invalid color name"
 msgstr "nome de cor inválido"
 
+msgid "Temporal database is up-to-date. Operation canceled"
+msgstr "O banco de dados temporal está atualizado. Operação cancelada"
+
+msgid "Unsupported TGIS DB downgrade scenario: from version %s to %s"
+msgstr "Cenário de downgrade do TGIS DB não suportado: da versão %s para %s"
+
+msgid "Downgrading temporal database <%s> from version %s to %s..."
+msgstr "Fazendo downgrade do banco de dados temporal <%s> da versão %s para %s..."
+
 #~ msgid "Invalid value <%s> for parameter <%s>"
 #~ msgstr "Valor inválido <%s> para o parâmetro <%s>"
-
-#~ msgid "Temporal database is up-to-date. Operation canceled"
-#~ msgstr "O banco de dados temporal está atualizado. Operação cancelada"
-
-#~ msgid "Unsupported TGIS DB downgrade scenario: from version %s to %s"
-#~ msgstr "Cenário de downgrade do TGIS DB não suportado: da versão %s para %s"
-
-#~ msgid "Downgrading temporal database <%s> from version %s to %s..."
-#~ msgstr "Fazendo downgrade do banco de dados temporal <%s> da versão %s para %s..."

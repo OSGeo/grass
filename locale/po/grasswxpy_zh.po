@@ -10585,9 +10585,8 @@ msgid "Manage maps"
 msgstr "地图管理"
 
 #: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:1193
-#, fuzzy
 msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
-msgstr "将用户当前地图集搜索路径下可用数据文件拷贝到用户当前的地图集。"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:172 ../gui/wxpython/menustrings.py:966
 #: ../gui/wxpython/menustrings.py:1194 ../gui/wxpython/menustrings.py:1911
@@ -11528,9 +11527,8 @@ msgid "Neighborhood points"
 msgstr "近邻点"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
-#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "对一个像元周围的像元值进行函数计算，将得到的值赋予该像元或其中心点，并将新的像元值存储在输出栅格图层中。"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:337
@@ -15523,9 +15521,8 @@ msgid "Data Catalog"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "启动ps.map对话框"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
@@ -20828,7 +20825,7 @@ msgid "Start &GRASS"
 msgstr "启动 &GRASS"
 
 msgid "&Create mapset"
-msgstr "创建地图集(&C)"
+msgstr ""
 
 msgid "&Location wizard"
 msgstr "地点向导(&L)"

@@ -15477,9 +15477,8 @@ msgid "Attribute table manager"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Veri uzunluğu"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
 msgid "Launch Data Catalog."

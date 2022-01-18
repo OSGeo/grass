@@ -11454,9 +11454,8 @@ msgid "Neighborhood points"
 msgstr "จุดรอบข้าง"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
-#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:337
