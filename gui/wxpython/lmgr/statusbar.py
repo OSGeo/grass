@@ -37,7 +37,7 @@ class SbMask:
         self.widget.Bind(wx.EVT_BUTTON, self.OnRemoveMask)
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
         self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
-        self.widget.Hide()
+        self.Refresh()
 
     def Show(self):
         """Invokes showing of underlying widget.
@@ -63,7 +63,7 @@ class SbMask:
         """
         return self.widget
 
-    def RefreshMask(self):
+    def Refresh(self):
         """Show mask in the statusbar if mask file found"""
         if grass.find_file(
             name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]

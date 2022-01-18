@@ -166,7 +166,7 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
-        self._giface.updateMap.connect(self.mask.RefreshMask)
+        self._giface.updateMap.connect(self.mask.Refresh)
         self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # use default window layout ?
@@ -369,7 +369,7 @@ class GMFrame(wx.Frame):
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
-        self._gconsole.updateMap.connect(self.mask.RefreshMask)
+        self._gconsole.updateMap.connect(self.mask.Refresh)
         self._gconsole.Bind(
             EVT_IGNORED_CMD_RUN, lambda event: self.RunSpecialCmd(event.cmd)
         )

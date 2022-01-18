@@ -223,7 +223,7 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
-        self._giface.updateMap.connect(self.mask.RefreshMask)
+        self._giface.updateMap.connect(self.mask.Refresh)
         self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # minimal frame size
@@ -428,7 +428,7 @@ class GMFrame(wx.Frame):
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
-        self._gconsole.mapCreated.connect(self.mask.RefreshMask)
+        self._gconsole.mapCreated.connect(self.mask.Refresh)
         self._gconsole.Bind(
             EVT_IGNORED_CMD_RUN, lambda event: self.RunSpecialCmd(event.cmd)
         )
