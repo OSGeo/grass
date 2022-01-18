@@ -22,6 +22,7 @@ from core.gcmd import RunCommand
 from gui_core.wrap import Button
 from grass.script import core as grass
 
+
 class SbMask:
     """Button to show whether mask is activated and remove mask with
     left mouse click
@@ -84,4 +85,3 @@ class SbMask:
             return
         RunCommand("r.mask", flags="r")
         self.giface.updateMap.emit(render=False)
-

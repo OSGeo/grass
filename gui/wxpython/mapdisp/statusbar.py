@@ -36,9 +36,7 @@ import wx
 from core import utils
 from core.gcmd import RunCommand
 from core.settings import UserSettings
-from gui_core.wrap import Button, TextCtrl
-
-from grass.script import core as grass
+from gui_core.wrap import TextCtrl
 
 from grass.pydispatch.signal import Signal
 
