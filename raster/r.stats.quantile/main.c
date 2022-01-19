@@ -27,13 +27,14 @@ struct bin
 
 struct basecat
 {
-    unsigned int *slots;
-    unsigned long total;
-    int num_values;
+    size_t *slots;
+    size_t total;
+    size_t num_values;
     DCELL min, max, slot_size;
     int num_slots;
     unsigned char *slot_bins;
-    int num_bins;
+    int num_bins_alloc;
+    int num_bins_used;
     struct bin *bins;
     DCELL *values;
     DCELL *quants;
@@ -66,12 +67,38 @@ static inline int get_slot(struct basecat *bc, DCELL c)
     return i;
 }
 
+/* get zero-based rank for quantile */
+/* generic formula for one-based rank
+ * rank = quant * (N + 1 - 2C) + C
+ * with quant = quantile, N = number of values, C = constant
+ * common values for C:
+ * C = 0
+ *   rank = quant * (N + 1)
+ *   recommended by NIST (National Institute of Standards and Technology)
+ *   https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm
+ * C = 0.5
+ *   rank = quant * N + 0.5
+ *   Matlab
+ * C = 1
+ *   rank = quant * (N - 1) + 1
+ *   numpy, R, MS Excel, ...
+ *   Noted as an alternative by NIST */
 static inline double get_quantile(struct basecat *bc, int n)
 {
-    if (n >= num_quants)
-	return (double)bc->total + bc->total;
+    double rnk;
 
-    return (double)bc->total * quants[n];
+    if (n >= num_quants) {
+	/* stop condition for initialize_bins() */
+	return (double)bc->total + bc->total;
+    }
+
+    rnk = quants[n] * (bc->total - 1);
+    if (rnk < 0)
+	rnk = 0;
+    if (rnk > bc->total - 1)
+	rnk = bc->total - 1;
+
+    return rnk;
 }
 
 static void get_slot_counts(int basefile, int coverfile)
@@ -179,23 +206,32 @@ static void initialize_bins(void)
 	double next;
 	int num_values = 0;
 	int bin = 0;
-	unsigned long accum = 0;
+	size_t accum = 0;
 	int quant = 0;
+	int use_next_slot = 0;
 
 	if (bc->num_slots == 0)
 	    continue;
 
-	bc->bins = G_calloc(num_quants, sizeof(struct bin));
+	bc->num_bins_alloc = num_quants * 2;
+	bc->bins = G_calloc(bc->num_bins_alloc, sizeof(struct bin));
 	bc->slot_bins = G_calloc(bc->num_slots, sizeof(unsigned char));
 
 	next = get_quantile(bc, quant);
 
-	for (slot = 0; slot < bc->num_slots; slot++) {
-	    unsigned int count = bc->slots[slot];
-	    unsigned long accum2 = accum + count;
+	/* for a given quantile, two bins might be needed
+	 * if the index for this quantile is
+	 * > accumulated count of current bin
+	 * and
+	 * < accumulated count of next bin */
 
-	    if (accum2 > next ||
-	        (slot == bc->num_slots - 1 && accum2 == next)) {
+	for (slot = 0; slot < bc->num_slots; slot++) {
+	    size_t count = bc->slots[slot];
+	    size_t accum2 = accum + count;
+
+	    if (count > 0 &&
+	        (accum2 > next || use_next_slot) &&
+	        bin < bc->num_bins_alloc) {
 		struct bin *b = &bc->bins[bin];
 
 		bc->slot_bins[slot] = ++bin;
@@ -204,8 +240,15 @@ static void initialize_bins(void)
 		b->base = num_values;
 		b->count = 0;
 
-		while (accum2 > next)
-		    next = get_quantile(bc, ++quant);
+		use_next_slot = 0;
+
+		if (accum2 - next < 1) {
+		    use_next_slot = 1;
+		}
+		else {
+		    while (accum2 > next)
+			next = get_quantile(bc, ++quant);
+		}
 
 		num_values += count;
 	    }
@@ -214,7 +257,7 @@ static void initialize_bins(void)
 	}
 
 	bc->num_values = num_values;
-	bc->num_bins = bin;
+	bc->num_bins_used = bin;
 
 	G_free(bc->slots);
 
@@ -295,7 +338,7 @@ static void sort_bins(void)
 
 	G_free(bc->slot_bins);
 
-	for (bin = 0; bin < bc->num_bins; bin++) {
+	for (bin = 0; bin < bc->num_bins_used; bin++) {
 	    struct bin *b = &bc->bins[bin];
 
 	    qsort(&bc->values[b->base], b->count, sizeof(DCELL), compare_dcell);
@@ -649,7 +692,7 @@ int main(int argc, char *argv[])
     if (print) {
 	/* get field separator */
 	fs = G_option_to_separator(opt.fs);
-	
+
 	print_quantiles(fs, opt.file->answer, flag.t->answer);
     }
     else if (reclass)
