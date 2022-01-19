@@ -1393,6 +1393,8 @@ class GMFrame(wx.Frame):
             # close current workspace and create new one
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
+        # refresh mask
+        self.mask.Refresh()
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
