@@ -160,17 +160,16 @@ def download_git_commit(url, response_format, *args, **kwargs):
             _(
                 "The download of the commit from the GitHub API "
                 "server wasn't successful, <{}>. Commit and commit "
-                "date will not be included in the <{}> html manual "
+                "date will not be included in the <{}> addon html manual "
                 "page.".format(err.msg, pgm)
             ),
         )
     except URLError:
-        gs.fatal(
+        gs.warning(
             _(
-                "Download file from <{url}>, "
-                "failed. Check internet connection.".format(
-                    url=url,
-                ),
+                "Download file from <{url}>, failed. Check internet "
+                "connection. Commit and commit date will not be included "
+                "in the <{pgm}> addon manual page.".format(url=url, pgm=pgm)
             ),
         )
 
