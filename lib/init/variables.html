@@ -234,7 +234,12 @@ PERMANENT
   <dt>GRASS_PERL</dt>
   <dd>[used during install process for generating man pages]<br>
     set Perl with path.</dd>
-  
+
+  <dt>GRASS_PROXY</dt>
+  <dd>[used during addon install/reinstall process for generating man
+    pages (download commit from GitHub API server and remote modules.xml file)]<br>
+    set the proxy with: <tt>GRASS_PROXY="http=&lt;value&gt;,ftp=&lt;value&gt;"</tt>.</dd>
+
   <dt>GRASS_SKIP_MAPSET_OWNER_CHECK</dt>
   <dd>By default it is not possible to work with MAPSETs that are
     not owned by current user. Setting this variable to any non-empty value

@@ -354,7 +354,6 @@ def download_addons_paths_file(url, response_format, *args, **kwargs):
                 ),
             )
         return response
-
     except HTTPError as err:
         if err.code == 403 and err.msg == "rate limit exceeded":
             gscript.warning(
@@ -2589,6 +2588,8 @@ def main():
         proxy = urlrequest.ProxyHandler(PROXIES)
         opener = urlrequest.build_opener(proxy)
         urlrequest.install_opener(opener)
+        # Required for mkhtml.py script (get addon git commit from GitHub API server)
+        os.environ["GRASS_PROXY"] = options["proxy"]
 
     # define path
     options["prefix"] = resolve_install_prefix(
