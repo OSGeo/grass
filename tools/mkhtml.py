@@ -60,7 +60,6 @@ if sys.version_info[0] == 2:
 else:
     PY2 = False
 
-
 if not PY2:
     unicode = str
 
@@ -70,8 +69,13 @@ trunk_url = ""
 addons_url = ""
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
-    trunk_url = "https://github.com/OSGeo/grass/tree/main/"
-    addons_url = f"https://github.com/OSGeo/grass-addons/tree/grass{major}/"
+    base_url = "https://github.com/OSGeo"
+    trunk_url = "{base_url}/grass/tree/releasebranch_{major}_{minor}/".format(
+        base_url=base_url, major=major, minor=minor
+    )
+    addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
+        base_url=base_url, major=major
+    )
 
 
 def _get_encoding():
