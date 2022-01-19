@@ -1263,23 +1263,13 @@ def install_extension_xml(edict):
     return None
 
 
-def filter_multi_addon_addons(mlist):
-    """Filter out list of multi-addon addons which contains
-    and installs only *.html manual page, without source/binary
-    excutable module and doesn't need to check metadata.
+def get_multi_addon_addons_which_install_only_html_man_page():
+    """Get multi-addon addons which install only manual html page
 
-    e.g. the i.sentinel multi-addon consists of several full i.sentinel.*
-    addons along with a i.sentinel.html overview file.
-
-
-    :param list mlist: list of multi-addons (groups of addons
-                       with respective addon overview HTML pages)
-
-    :return list mlist: list of individual multi-addons without respective
-                        addon overview HTML pages
+    :return list addons: list of multi-addon addons which install
+                         only manual html page
     """
-    # Make a list of unique addons
-    mlist = list(set(mlist))
+    addons = []
     all_addon_dirs = []
     addon_dirs_with_source_module = []  # *.py, *.c file
     addon_pattern = re.compile(r".*{}".format(options["extension"]))
@@ -1305,12 +1295,31 @@ def filter_multi_addon_addons(mlist):
             # Add all addon dirs
             all_addon_dirs.append(addon["path"])
 
+    for addon in set(all_addon_dirs) ^ set(addon_dirs_with_source_module):
+        addons.append(os.path.basename(addon))
+    return addons
+
+
+def filter_multi_addon_addons(mlist):
+    """Filter out list of multi-addon addons which contains
+    and installs only *.html manual page, without source/binary
+    excutable module and doesn't need to check metadata.
+
+    e.g. the i.sentinel multi-addon consists of several full i.sentinel.*
+    addons along with a i.sentinel.html overview file.
+
+
+    :param list mlist: list of multi-addons (groups of addons
+                       with respective addon overview HTML pages)
+
+    :return list mlist: list of individual multi-addons without respective
+                        addon overview HTML pages
+    """
     # Filters out add-ons that only contain the *.html man page,
     # e.g. multi-addon i.sentinel (root directory) contains only
     # the *.html manual page for installation, it does not need
     # to check if metadata is available if there is no executable module.
-    for subaddon in set(all_addon_dirs) ^ set(addon_dirs_with_source_module):
-        addon = os.path.basename(subaddon)
+    for addon in get_multi_addon_addons_which_install_only_html_man_page():
         if addon in mlist:
             mlist.pop(mlist.index(addon))
     return mlist
@@ -1332,7 +1341,9 @@ def install_module_xml(mlist):
 
     # Filter multi-addon addons
     if len(mlist) > 1:
-        mlist = filter_multi_addon_addons(mlist)
+        mlist = filter_multi_addon_addons(
+            mlist.copy()
+        )  # mlist.copy() keep the original list of add-ons
 
     # update tree
     for name in mlist:
@@ -1784,7 +1795,8 @@ def install_extension_std_platforms(name, source, url, branch):
                             try:
                                 modulename = line.split("=")[1].strip()
                                 if modulename:
-                                    module_list.append(modulename)
+                                    if modulename not in module_list:
+                                        module_list.append(modulename)
                                 else:
                                     grass.fatal(pgm_not_found_message)
                             except IndexError:
@@ -2202,11 +2214,19 @@ def update_manual_page(module):
     # fix logo URL
     pattern = r'''<a href="([^"]+)"><img src="grass_logo.png"'''
     for match in re.finditer(pattern, shtml):
+        if match.group(1)[:4] == "http":
+            continue
         pos.append(match.start(1))
 
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
+    # Multi-addon
+    if len(addons) > 1:
+        for a in get_multi_addon_addons_which_install_only_html_man_page():
+            # Add multi-addon addons which install only manual html page
+            addons.append(a)
+
     for match in re.finditer(pattern, shtml):
         if match.group(1)[:4] == "http":
             continue
