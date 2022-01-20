@@ -15642,23 +15642,20 @@ msgid "Attribute table manager"
 msgstr "Gerenciador de tabela de atributos"
 
 #: ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Catálogo de dados"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "Catálogo de dados"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2018
-#, fuzzy
 msgid "Interactive editing and digitization of vector maps."
-msgstr "gestão interativa de tabelas de cores de vetores."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2023
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1974

@@ -15459,9 +15459,8 @@ msgid "Attribute table manager"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Extensão de dados"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
 msgid "Launch Data Catalog."

@@ -19571,9 +19571,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "база данных"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"

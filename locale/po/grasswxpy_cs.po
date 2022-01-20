@@ -11544,9 +11544,8 @@ msgid "Neighborhood points"
 msgstr "Analýza okolí"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
-#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Hodnota každé buňky v novém rastru bude funkcí hodnot kategorii sousedních buněk a bude uložena jako hodnota ve výstupní rastrové mapě."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:337
@@ -15535,23 +15534,20 @@ msgid "Attribute table manager"
 msgstr "Správce atributových tabulek"
 
 #: ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Datová délka"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "Spustí nástroj pro animace"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2018
-#, fuzzy
 msgid "Interactive editing and digitization of vector maps."
-msgstr "Interaktivní správa vektorové tabulky barev"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2023
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1974

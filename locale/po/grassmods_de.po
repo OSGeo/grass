@@ -11483,9 +11483,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Selektion"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 #, fuzzy
@@ -14357,9 +14356,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "Strahlung"
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -16872,9 +16870,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.null.all_to_translate.c:5
 #: ../locale/scriptstrings/r.mask_to_translate.c:5
-#, fuzzy
 msgid "no-data"
-msgstr "Keine Daten"
+msgstr ""
 
 #: ../locale/scriptstrings/r.null.all_to_translate.c:6
 #: ../raster/r.null/main.c:86
@@ -20111,9 +20108,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "Keine Daten"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -24525,9 +24521,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "Gebe Ausgabe Metadaten aus"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"

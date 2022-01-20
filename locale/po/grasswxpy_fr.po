@@ -10745,9 +10745,8 @@ msgid "Manage maps"
 msgstr "Gérer les cartes"
 
 #: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:1193
-#, fuzzy
 msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
-msgstr "Copier les fichiers de données disponibles dans le chemin de recherche du jeu de cartes courant vers le jeu de cartes de l'utilisateur courant."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:172 ../gui/wxpython/menustrings.py:966
 #: ../gui/wxpython/menustrings.py:1194 ../gui/wxpython/menustrings.py:1911
@@ -11688,9 +11687,8 @@ msgid "Neighborhood points"
 msgstr "Points voisins"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
-#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "OUtil d'analyse de voisinnage pour des cartes vecteurs de points. Défini la valeur de chaque cellule en fonction des valeurs d'attributs des points ou centroids voisins, et enregistre les nouvelles valeurs de cellule dans une carte raster."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:337
@@ -15679,24 +15677,20 @@ msgid "Attribute table manager"
 msgstr "Gestionnaire de table attributaire"
 
 #: ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Catalogue de données"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "Catalogue de données"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
-#, fuzzy
 msgid "Managing GCPs for 3D correction"
-msgstr "Gérer les points de correction 3D"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2018
-#, fuzzy
 msgid "Interactive editing and digitization of vector maps."
-msgstr "Gestion interactive des tables de couleur vecteur."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2023
 #: ../gui/wxpython/image2target/ii2t_menustrings.py:1974
