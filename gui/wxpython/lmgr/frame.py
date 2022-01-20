@@ -220,6 +220,7 @@ class GMFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
@@ -348,17 +349,24 @@ class GMFrame(wx.Frame):
         return False
 
     def _createStatusbar(self):
-        """Create statusbar (default items)."""
-        # create main window statusbar
+        """Create main window statusbar"""
         self.statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         self.statusbar.SetMinHeight(24)
         self.statusbar.SetFieldsCount(2)
-        self.statusbar.SetStatusWidths([-5, -2])
+        self.statusbar.SetStatusWidths([-1, 100])
         self.mask = SbMask(self.statusbar, self._giface)
+        self._repositionStatusbar()
+
+    def _repositionStatusbar(self):
+        """Reposition widgets in main window statusbar"""
         rect1 = self.statusbar.GetFieldRect(1)
         rect1.x += 1
         rect1.y += 1
         self.mask.GetWidget().SetRect(rect1)
+
+    def OnSize(self, event):
+        """Adjust main window statusbar on changing size"""
+        self._repositionStatusbar()
 
     def SetStatusText(self, *args):
         """Overide wx.StatusBar method"""

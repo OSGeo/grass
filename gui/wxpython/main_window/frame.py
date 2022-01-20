@@ -97,7 +97,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=globalvar.GM_WINDOW_SIZE,
+        size=wx.Display().GetGeometry().GetSize(),
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -108,6 +108,7 @@ class GMFrame(wx.Frame):
             self.baseTitle = _("GRASS GIS")
 
         self.iconsize = (16, 16)
+        self.size = size
 
         self.displayIndex = 0  # index value for map displays and layer trees
         self.currentPage = None  # currently selected page for layer tree notebook
@@ -155,9 +156,8 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"] = list()
 
         # set pane sizes according to the full screen size of the primary monitor
-        size = wx.Display().GetGeometry().GetSize()
-        self.PANE_BEST_SIZE = tuple(t // 3 for t in size)
-        self.PANE_MIN_SIZE = tuple(t // 5 for t in size)
+        self.PANE_BEST_SIZE = tuple(t // 3 for t in self.size)
+        self.PANE_MIN_SIZE = tuple(t // 5 for t in self.size)
 
         # create widgets and build panes
         self.CreateMenuBar()
@@ -271,17 +271,24 @@ class GMFrame(wx.Frame):
         return False
 
     def _createStatusbar(self):
-        """Create statusbar (default items)."""
-        # create main window statusbar
+        """Create main window statusbar"""
         self.statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         self.statusbar.SetMinHeight(24)
         self.statusbar.SetFieldsCount(2)
-        self.statusbar.SetStatusWidths([-5, -2])
+        self.statusbar.SetStatusWidths([-1, 100])
         self.mask = SbMask(self.statusbar, self._giface)
+        self._repositionStatusbar()
+
+    def _repositionStatusbar(self):
+        """Reposition widgets in main window statusbar"""
         rect1 = self.statusbar.GetFieldRect(1)
         rect1.x += 1
         rect1.y += 1
         self.mask.GetWidget().SetRect(rect1)
+
+    def OnSize(self, event):
+        """Adjust main window statusbar on changing size"""
+        self._repositionStatusbar()
 
     def SetStatusText(self, *args):
         """Overide wx.StatusBar method"""
@@ -700,6 +707,7 @@ class GMFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
