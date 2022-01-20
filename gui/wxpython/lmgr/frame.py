@@ -223,7 +223,6 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
-        self._giface.updateMap.connect(self.mask.Refresh)
         self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # minimal frame size
@@ -428,7 +427,7 @@ class GMFrame(wx.Frame):
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
-        self._gconsole.mapCreated.connect(self.mask.Refresh)
+        self._gconsole.updateMap.connect(self.mask.Refresh)
         self._gconsole.Bind(
             EVT_IGNORED_CMD_RUN, lambda event: self.RunSpecialCmd(event.cmd)
         )
@@ -1329,8 +1328,6 @@ class GMFrame(wx.Frame):
             # close current workspace and create new one
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
-        # refresh mask
-        self.mask.Refresh()
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory

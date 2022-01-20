@@ -166,7 +166,6 @@ class GMFrame(wx.Frame):
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)
-        self._giface.updateMap.connect(self.mask.Refresh)
         self._giface.currentMapsetChanged.connect(self.OnMapsetChanged)
 
         # use default window layout ?
@@ -1393,8 +1392,6 @@ class GMFrame(wx.Frame):
             # close current workspace and create new one
             self.OnWorkspaceClose()
             self.OnWorkspaceNew()
-        # refresh mask
-        self.mask.Refresh()
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
