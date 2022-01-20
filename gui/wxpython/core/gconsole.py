@@ -787,7 +787,6 @@ class GConsole(wx.EvtHandler):
                                 map=lname.split("@")[0],
                                 element=prompt,
                             )
-
         if name == "r.mask":
             self.updateMap.emit()
             action = "new"
