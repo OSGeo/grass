@@ -155,10 +155,13 @@ To be done in GH interface:
 <https://github.com/OSGeo/grass/releases/new>
 
 - select release_branch first, then
-- write into "Create tag" field:
+- fill in "Release Title" (e.g., GRASS GIS 7.8.7RC1)
+- fill in "Create tag" field:
 
 Tag version | target (examples):
   7.8.7RC1  | releasebranch_7_8
+
+- click on "Create new tag: ... on publish"
 
 Add release desciption (re-use existing texts as possible, from
 <https://github.com/OSGeo/grass/releases>)
@@ -189,7 +192,7 @@ Importantly, these notes need to be manually sorted into the various categories.
 ### Changelog file for upload
 
 ```bash
-python3 utils/gitlog2changelog.py
+python3 tools/gitlog2changelog.py
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
