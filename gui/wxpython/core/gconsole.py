@@ -791,7 +791,7 @@ class GConsole(wx.EvtHandler):
             self.updateMap.emit()
             action = "new"
             for p in task.get_options()["flags"]:
-                if p.get("name") == "r" and p.get("value") is True:
+                if p.get("name") == "r" and p.get("value"):
                     action = "delete"
             gisenv = grass.gisenv()
             self._giface.grassdbChanged.emit(
