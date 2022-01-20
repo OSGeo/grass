@@ -187,7 +187,13 @@ Using GH API here, see also
 gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.0.0" -f previous_tag_name=7.8.6 -f target_commitish=releasebranch_8_0 -q .body
 ```
 
-Importantly, these notes need to be manually sorted into the various categories.
+If this fails, also a date may be used (that of the last release):
+
+```bash
+git log --oneline --after="2021-10-10" | cut -d' ' -f2- | sed 's+^+* +g' | sed 's+(#+https://github.com/OSGeo/grass/pull/+g' | sed 's+)$++g' | sort -u
+```
+
+Importantly, these notes need to be manually sorted into the various categories (modules, wxGUI, library, docker, ...).
 
 ### Changelog file for upload
 
