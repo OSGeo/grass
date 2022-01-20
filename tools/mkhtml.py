@@ -69,9 +69,13 @@ trunk_url = ""
 addons_url = ""
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
+    grass_git_branch = "releasebranch_{major}_{minor}".format(
+        major=major,
+        minor=minor,
+    )
     base_url = "https://github.com/OSGeo"
-    trunk_url = "{base_url}/grass/tree/releasebranch_{major}_{minor}/".format(
-        base_url=base_url, major=major, minor=minor
+    trunk_url = "{base_url}/grass/tree/{branch}/".format(
+        base_url=base_url, branch=grass_git_branch
     )
     addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
         base_url=base_url, major=major
@@ -191,32 +195,37 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
     """
     unknown = "unknown"
     git_log = {"commit": unknown, "date": unknown}
-    cwd = os.getcwd()
     datetime_format = "%A %b %d %H:%M:%S %Y"  # e.g. Sun Jan 16 23:09:35 2022
-    grass_modules_url = (
-        "https://api.github.com/repos/osgeo/grass/commits?path={path}"
-        "&page=1&per_page=1&sha=main".format(path=src_dir)
-    )  # sha=git_branch_name
-    grass_addons_url = (
-        "https://api.github.com/repos/osgeo/grass-addons/commits?path={path}"
-        "&page=1&per_page=1&sha=grass{major}".format(
-            path=addon_path,
-            major=major,
+    if is_addon:
+        grass_addons_url = (
+            "https://api.github.com/repos/osgeo/grass-addons/commits?path={path}"
+            "&page=1&per_page=1&sha=grass{major}".format(
+                path=addon_path,
+                major=major,
+            )
+        )  # sha=git_branch_name
+    else:
+        core_module_path = os.path.join(
+            *(set(src_dir.split(os.path.sep)) ^ set(topdir.split(os.path.sep)))
         )
-    )  # sha=git_branch_name
+        grass_modules_url = (
+            "https://api.github.com/repos/osgeo/grass/commits?path={path}"
+            "&page=1&per_page=1&sha={branch}".format(
+                branch=grass_git_branch,
+                path=core_module_path,
+            )
+        )  # sha=git_branch_name
 
     if shutil.which("git"):
         if os.path.exists(src_dir):
-            os.chdir(src_dir)
             git_log["date"] = time.ctime(os.path.getmtime(src_dir))
         stdout, stderr = subprocess.Popen(
-            args=["git", "log", "-1"],
+            args=["git", "log", "-1", src_dir],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()
         stdout = decode(stdout)
         stderr = decode(stderr)
-        os.chdir(cwd)
 
         if stderr and "fatal: not a git repository" in stderr:
             response = download_git_commit(
@@ -228,7 +237,8 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
                 if commit:
                     git_log["commit"] = commit[0]["sha"]
                     git_log["date"] = datetime.strptime(
-                        commit[0]["commit"]["author"]["date"], "%Y-%m-%dT%H:%M:%SZ"
+                        commit[0]["commit"]["author"]["date"],
+                        "%Y-%m-%dT%H:%M:%SZ",
                     ).strftime(datetime_format)
         else:
             if stdout:
