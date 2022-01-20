@@ -154,8 +154,11 @@ To be done in GH interface:
 
 <https://github.com/OSGeo/grass/releases/new>
 
+- select release_branch first, then
+- write into "Create tag" field:
+
 Tag version | target (examples):
-  7.8.1RC1  | releasebranch_7_8
+  7.8.7RC1  | releasebranch_7_8
 
 Add release desciption (re-use existing texts as possible, from
 <https://github.com/OSGeo/grass/releases>)
@@ -171,10 +174,22 @@ wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
-Create Changelog file on release branch:
+### Changelog from GitHub for GH release notes
+
+Using GH API here, see also
+- https://cli.github.com/manual/gh_api
+- https://docs.github.com/en/rest/reference/repos#generate-release-notes-content-for-a-release
 
 ```bash
-python3 tools/gitlog2changelog.py
+gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="7.8.7" -f previous_tag_name=7.8.6 -f target_commitish=releasebranch_7_8 -q .body
+```
+
+Importantly, these notes need to be manually sorted into the various categories.
+
+### Changelog file for upload
+
+```bash
+python3 utils/gitlog2changelog.py
 mv ChangeLog ChangeLog_$VERSION
 head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
@@ -191,8 +206,8 @@ Example:
 ```bash
 7
 8
-1dev
-2019
+7dev
+2022
 ```
 
 Commit as "back to dev"
@@ -215,9 +230,9 @@ Note: grasslxd only reachable via jumphost - https://wiki.osgeo.org/wiki/SAC_Ser
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=grass.lxd
+SERVER1=grasslxd
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
-SERVER2=upload.osgeo.org
+SERVER2=download.osgeo.org
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
 echo $SERVER1:$SERVER1DIR
 echo $SERVER2:$SERVER2DIR
@@ -261,6 +276,7 @@ vim grass-addons/tools/addons/grass-addons.sh
 
 Release is done.
 
+
 ### Advertise the new release
 
 #### Write trac Wiki release page
@@ -271,10 +287,10 @@ To easily generate the entries for the trac Wiki release page, use the `git log`
 ```
 # get date of previous release from https://github.com/OSGeo/grass/releases
 # verify
-git log --oneline --after="2020-10-05" | tac
+git log --oneline --after="2021-10-10" | tac
 
 # prepare for trac Wiki release page (incl. PR trac macro)
-git log --oneline --after="2020-10-05" | cut -d' ' -f2- | sed 's+^+ * G78:+g' | sed 's+(#+(PR:+g' | sort -u
+git log --oneline --after="2021-10-10" | cut -d' ' -f2- | sed 's+^+ * G78:+g' | sed 's+(#+(PR:+g' | sort -u
 ```
 
 - store changelog entries in trac, by section:
@@ -296,7 +312,7 @@ Software pages:
 
 #### Only in case of new major release
 
-- update cronjob '[cron_grass_HEAD_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd)' on grass.osgeo.org to next
+- update cronjob '[cron_grass78_src_relbr78_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd/)' on grass.osgeo.org to next
   but one release tag for the differences
 - wiki updates, only when new major release:
     - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
@@ -307,7 +323,7 @@ Software pages:
         - also: Retarget associated open tickets to milestone 7.8.x
     - Batch modify tickets, set to next milestone (update this query
       accordingly: two entries to change):
-        - <https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.8.0&milestone=7.8.1&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority>
+        - <https://trac.osgeo.org/grass/query?status=assigned&status=new&status=reopened&milestone=7.8.0&milestone=7.8.1&milestone=7.8.2&milestone=7.8.3&milestone=7.8.4&milestone=7.8.5&milestone=7.8.6&milestone=7.8.7&group=status&col=id&col=summary&col=owner&col=type&col=priority&col=component&col=version&order=priority>
     - Set max items to 1000, then select all shown tickets via Status:
       assigned/new/reopened sections
     - Scroll down to "Batch modify": under the "Comment" section, add Field
@@ -324,19 +340,19 @@ Software pages:
 ```
      set MAJOR=7
      set MINOR=8
-     set PATCH=0RC1
+     set PATCH=7RC1
 ```
 
 - Update addons (grass_addons.sh) rules, eg.
 
 ```
-     compile $GIT_PATH/grass7 $GISBASE_PATH/grass780RC1   $ADDON_PATH/grass780RC1/addons
+     compile $GIT_PATH/grass7 $GISBASE_PATH/grass787RC1   $ADDON_PATH/grass787RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
 ```
-     copy_addon 781RC1 7.8.1RC1
+     copy_addon 787RC1 7.8.7RC1
 ```
 
 #### Launchpad notes
@@ -365,18 +381,10 @@ Software pages:
     - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- DebianGIS: <debian-gis@lists.debian.org> - send only small note
 - FreeGIS: <freegis-list@intevation.de>
 - Geowanking: <geowanking@geowanking.org>
-- OSGeo.org: <news_item@osgeo.org>
-
-Via Email:
-
-- info@osgeo.org
-- <http://www.gis-news.de/>  (franz-josef.behr@gismngt.de)
-- mfeilner@linuxnewmedia.de
-- info@harzer.de
-- editor-geo@geoconnexion.com
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
+- Geo Connexion: <editor-geo@geoconnexion.com>
 
 Via Web:
 
