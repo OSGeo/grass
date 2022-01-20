@@ -150,6 +150,8 @@ static void get_slot_counts(int basefile, int coverfile)
 	G_fatal_error(_("No cells found where both base and cover are not NULL"));
 
     for (i = 0; i < num_cats; i++) {
+	int num_slots_max;
+
 	bc = &basecats[i];
 
 	bc->num_slots = 0;
@@ -158,9 +160,12 @@ static void get_slot_counts(int basefile, int coverfile)
 	if (bc->max <= bc->min)
 	    continue;
 
-	bc->num_slots = 1;
-	if (bc->total * 10 > (unsigned long) num_slots)
-	    bc->num_slots = num_slots;
+	num_slots_max = bc->total / 1000;
+	if (num_slots_max < 1)
+	    num_slots_max = 1;
+	if (bc->num_slots > num_slots_max) {
+	    bc->num_slots = num_slots_max;
+	}
 
 	bc->slots = G_calloc(bc->num_slots, sizeof(unsigned int));
 	bc->slot_size = (bc->max - bc->min) / bc->num_slots;
