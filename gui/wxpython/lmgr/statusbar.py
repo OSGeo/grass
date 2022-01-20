@@ -30,10 +30,11 @@ class SbMask:
 
     def __init__(self, parent, giface):
         self.name = "mask"
+        self.mask_layer = "MASK"
         self.parent = parent
         self.giface = giface
         self.widget = Button(
-            parent=parent, id=wx.ID_ANY, label=_("MASK"), style=wx.NO_BORDER
+            parent=parent, id=wx.ID_ANY, label=_(self.mask_layer), style=wx.NO_BORDER
         )
         self.widget.Bind(wx.EVT_BUTTON, self.OnRemoveMask)
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
@@ -44,7 +45,7 @@ class SbMask:
         self.Refresh()
 
     def _dbChanged(self, map=None, newname=None):
-        if map == "MASK" or newname == "MASK":
+        if map == self.mask_layer or newname == self.mask_layer:
             self.Refresh()
 
     def Show(self):
@@ -74,7 +75,7 @@ class SbMask:
     def Refresh(self):
         """Show mask in the statusbar if mask file found"""
         if grass.find_file(
-            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
+            name=self.mask_layer, element="cell", mapset=grass.gisenv()["MAPSET"]
         )["name"]:
             self.Show()
         else:
@@ -96,7 +97,7 @@ class SbMask:
             grassdb=grass.gisenv()["GISDBASE"],
             location=grass.gisenv()["LOCATION_NAME"],
             mapset=grass.gisenv()["MAPSET"],
-            map="MASK",
+            map=self.mask_layer,
             action="delete",
             element="raster",
         )
