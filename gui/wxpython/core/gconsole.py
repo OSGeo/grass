@@ -787,8 +787,22 @@ class GConsole(wx.EvtHandler):
                                 map=lname.split("@")[0],
                                 element=prompt,
                             )
+
         if name == "r.mask":
             self.updateMap.emit()
+            action = "new"
+            for p in task.get_options()["flags"]:
+                if p.get("name") == "r" and p.get("value") is True:
+                    action = "delete"
+            gisenv = grass.gisenv()
+            self._giface.grassdbChanged.emit(
+                grassdb=gisenv["GISDBASE"],
+                location=gisenv["LOCATION_NAME"],
+                mapset=gisenv["MAPSET"],
+                action=action,
+                map="MASK",
+                element="raster",
+            )
 
         event.Skip()
 

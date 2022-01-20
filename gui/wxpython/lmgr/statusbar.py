@@ -92,3 +92,11 @@ class SbMask:
             return
         RunCommand("r.mask", flags="r")
         self.giface.updateMap.emit(render=False)
+        self.giface.grassdbChanged.emit(
+                grassdb=grass.gisenv()["GISDBASE"],
+                location=grass.gisenv()["LOCATION_NAME"],
+                mapset=grass.gisenv()["MAPSET"],
+                map="MASK",
+                action="delete",
+                element="raster",
+            )
