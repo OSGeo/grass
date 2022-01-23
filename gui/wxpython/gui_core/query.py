@@ -133,8 +133,9 @@ class QueryDialog(wx.Dialog):
         else:
             label1 = nodes[0].label
             texts.append((_("Copy '%s'" % self._cutLabel(label1)), label1))
-            if nodes[0].data and nodes[0].data[self._colNames[1]]:
-                label2 = nodes[0].data[self._colNames[1]]
+            col1 = self._colNames[1]
+            if nodes[0].data and col1 in nodes[0].data and nodes[0].data[col1]:
+                label2 = nodes[0].data[col1]
                 texts.insert(0, (_("Copy '%s'" % self._cutLabel(label2)), label2))
                 texts.append((_("Copy line"), label1 + ": " + label2))
 
