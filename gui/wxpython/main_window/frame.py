@@ -349,6 +349,9 @@ class GMFrame(wx.Frame):
         self.goutput.showNotification.connect(
             lambda message: self.SetStatusText(message)
         )
+        self.goutput.contentChanged.connect(
+            lambda notification: self._switchPage(notification)
+        )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
         self._gconsole.Bind(
@@ -946,6 +949,23 @@ class GMFrame(wx.Frame):
             self.OnCBPageClosing,
         )
         self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
+
+    def _switchPage(self, notification):
+        """Manages @c 'output' notebook page according to event notification."""
+        if (
+            notification == Notification.HIGHLIGHT
+            or notification == Notification.MAKE_VISIBLE
+            or notification == Notification.RAISE_WINDOW
+        ):
+            self.FocusPage("Console")
+
+    def FocusPage(self, page_text):
+        """Focus the page if part of any of aui notebooks"""
+        notebooks = self._auimgr.GetNotebooks()
+        for notebook in notebooks:
+            for i in range(notebook.GetPageCount()):
+                if notebook.GetPageText(i) == page_text:
+                    notebook.SetSelection(i)
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
