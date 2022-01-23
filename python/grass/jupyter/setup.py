@@ -1,15 +1,18 @@
 # MODULE:    grass.jupyter.setup
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+#            Vaclav Petras <wenzeslaus gmail com>
 #
 # PURPOSE:   This module contains functions for launching a GRASS session
-#           in Jupyter Notebooks
+#            in Jupyter Notebooks
 #
-# COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
 #
-#           This program is free software under the GNU General Public
-#           License (>=v2). Read the file COPYING that comes with GRASS
-#           for details.
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+
+"""Initialization GRASS GIS session and its finalization"""
 
 import os
 import weakref
@@ -19,7 +22,8 @@ import grass.script.setup as gsetup
 
 
 def _set_notebook_defaults():
-    """
+    """Set defaults appropriate for Jupyter Notebooks.
+
     This function sets several GRASS environment variables that are
     important for GRASS to run smoothly in Jupyter.
 
@@ -53,7 +57,7 @@ class _JupyterGlobalSession:
     def __init__(self):
         self._finalizer = weakref.finalize(self, gsetup.finish)
 
-    def switch_mapset(self, arg):
+    def switch_mapset(self, path, location=None, mapset=None):
         """Switch to a mapset provided as a name or path.
 
         The *arg* positional-only parameter can be either name of a mapset in the
@@ -64,28 +68,29 @@ class _JupyterGlobalSession:
         invalid).
         """
         # The method could be a function, but this is more general (would work even for
-        # a non-global session) and users need to keep the reference anyway.
+        # a non-global session).
         # pylint: disable=no-self-use
         # Functions needed only here.
         # pylint: disable=import-outside-toplevel
-        from grass.grassdb.checks import mapset_exists
-        from grass.grassdb.manage import split_mapset_path
+        from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
+        from grass.grassdb.manage import resolve_mapset_path
 
-        if mapset_exists(arg):
-            path, location, mapset = split_mapset_path(arg)
-            # This requires direct session file modification using g.gisenv because
-            # g.mapset locks the mapset which is not how init and finish behave.
-            gs.run_command("g.gisenv", set=f"GISDBASE={path}")
-            gs.run_command("g.gisenv", set=f"LOCATION_NAME={location}")
-            gs.run_command("g.gisenv", set=f"MAPSET={mapset}")
-            return
-        gisenv = gs.gisenv()
-        if mapset_exists(
-            path=gisenv["GISDBASE"], location=gisenv["LOCATION_NAME"], mapset=arg
-        ):
-            gs.run_command("g.gisenv", set=f"MAPSET={arg}")
-            return
-        raise ValueError(_("Mapset '{}' does not exist").format(arg))
+        mapset_path = resolve_mapset_path(path=path, location=location, mapset=mapset)
+        if not is_mapset_valid(mapset_path):
+            raise ValueError(
+                _("Mapset {path} is not valid: {reason}").format(
+                    path=mapset_path.path,
+                    reason=get_mapset_invalid_reason(
+                        mapset_path.directory, mapset_path.location, mapset_path.mapset
+                    ),
+                )
+            )
+        # This requires direct session file modification using g.gisenv because
+        # g.mapset locks the mapset which is not how init and finish behave.
+        # For code simplicity, we just change all even when only mapset is changed.
+        gs.run_command("g.gisenv", set=f"GISDBASE={mapset_path.directory}")
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={mapset_path.location}")
+        gs.run_command("g.gisenv", set=f"MAPSET={mapset_path.mapset}")
 
     def finish(self):
         """Close the session, i.e., close the opened mapset.
@@ -97,6 +102,14 @@ class _JupyterGlobalSession:
         is destroyed.
         """
         self._finalizer()
+
+    @property
+    def active(self):
+        """True unless the session was finalized (e.g., with the *finish* function)"""
+        return self._finalizer.alive
+
+
+_global_session_handle = None
 
 
 def init(path, location=None, mapset=None, grass_path=None):
@@ -128,8 +141,13 @@ def init(path, location=None, mapset=None, grass_path=None):
     :param str location: name of GRASS location
     :param str mapset: name of mapset within location
     """
-    # Create a GRASS GIS session.
-    gsetup.init(path, location=location, mapset=mapset, grass_path=grass_path)
-    # Set GRASS env. variables
-    _set_notebook_defaults()
-    return _JupyterGlobalSession()
+    global _global_session_handle  # pylint: disable=global-statement
+    if not _global_session_handle or not _global_session_handle.active:
+        # Create a GRASS GIS session.
+        gsetup.init(path, location=location, mapset=mapset, grass_path=grass_path)
+        # Set GRASS env. variables
+        _set_notebook_defaults()
+        _global_session_handle = _JupyterGlobalSession()
+    else:
+        _global_session_handle.switch_mapset(path, location=location, mapset=mapset)
+    return _global_session_handle
