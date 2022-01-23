@@ -77,11 +77,23 @@ class MainToolbar(BaseToolbar):
         icons = ganimIcons
         return self._getToolbarData(
             (
-                ("addAnimation", icons["addAnimation"], self.parent.OnAddAnimation),
-                ("editAnimation", icons["editAnimation"], self.parent.OnEditAnimation),
-                ("reload", BaseIcons["render"], self.parent.Reload),
                 (
-                    "exportAnimation",
+                    ("addAnimation", _("Add animation")),
+                    icons["addAnimation"],
+                    self.parent.OnAddAnimation,
+                ),
+                (
+                    ("editAnimation", _("Edit animation")),
+                    icons["editAnimation"],
+                    self.parent.OnEditAnimation,
+                ),
+                (
+                    ("reload", _("Reload animation")),
+                    BaseIcons["render"],
+                    self.parent.Reload,
+                ),
+                (
+                    ("exportAnimation", _("Export animation")),
                     icons["exportAnimation"],
                     self.parent.OnExportAnimation,
                 ),
