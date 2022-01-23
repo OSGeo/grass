@@ -65,53 +65,61 @@ class MainToolbar(BaseToolbar):
 
         tools = [
             (
-                "add_scatt",
+                ("add_scatt", _("Add scatter plot")),
                 icons["add_scatt_pl"],
                 lambda event: self.scatt_mgr.AddScattPlot(),
             ),
             (None,),
             (
-                "cats_mgr",
+                ("cats_mgr", _("Show/hide class manager")),
                 icons["cats_mgr"],
                 lambda event: self.parent.ShowCategoryPanel(event.IsChecked()),
                 wx.ITEM_CHECK,
             ),
             (None,),
             (
-                "pan",
+                ("pan", _("Pan")),
                 icons["pan"],
                 lambda event: self.SetPloltsMode(event, "pan"),
                 wx.ITEM_CHECK,
             ),
             (
-                "zoom",
+                ("zoom", _("Zoom in")),
                 icons["zoomIn"],
                 lambda event: self.SetPloltsMode(event, "zoom"),
                 wx.ITEM_CHECK,
             ),
             (
-                "zoom_extend",
+                ("zoom_extend", _("Zoom to extent")),
                 icons["zoomExtent"],
                 lambda event: self.SetPloltsMode(event, "zoom_extend"),
                 wx.ITEM_CHECK,
             ),
             (None,),
             (
-                "sel_pol_mode",
+                ("sel_pol_mode", _("Select area with polygon")),
                 icons["selCatPol"],
                 self.ActivateSelectionPolygonMode,
                 wx.ITEM_CHECK,
             ),
             (None,),
-            ("settings", icons["settings"], self.OnSettings),
-            ("help", icons["help"], self.OnHelp),
+            (
+                ("settings", _("Settings")),
+                icons["settings"],
+                self.OnSettings,
+            ),
+            (
+                ("help", _("Help")),
+                icons["help"],
+                self.OnHelp,
+            ),
         ]
 
         if self.opt_tools and "add_group" in self.opt_tools:
             tools.insert(
                 0,
                 (
-                    "selectGroup",
+                    ("selectGroup", _("Select imagery group")),
                     icons["selectGroup"],
                     lambda event: self.scatt_mgr.SetData(),
                 ),
@@ -227,42 +235,42 @@ class EditingToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    "sel_add",
+                    ("sel_add", _("Include selected area to class")),
                     self.icons["sel_add"],
                     lambda event: self.scatt_mgr.ProcessSelectionPolygons("add"),
                 ),
                 (
-                    "sel_remove",
+                    ("sel_remove", _("Exclude selected area from class")),
                     self.icons["sel_remove"],
                     lambda event: self.scatt_mgr.ProcessSelectionPolygons("remove"),
                 ),
                 (None,),
                 (
-                    "add_vertex",
+                    ("add_vertex", _("Create selection polygon")),
                     self.icons["editLine"],
                     lambda event: self.SetMode(event, "add_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "add_boundary_vertex",
+                    ("add_boundary_vertex", _("Add new vertex")),
                     self.icons["addVertex"],
                     lambda event: self.SetMode(event, "add_boundary_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "move_vertex",
+                    ("move_vertex", _("Move vertex")),
                     self.icons["moveVertex"],
                     lambda event: self.SetMode(event, "move_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "delete_vertex",
+                    ("delete_vertex", _("Delete vertex")),
                     self.icons["removeVertex"],
                     lambda event: self.SetMode(event, "delete_vertex"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "remove_polygon",
+                    ("remove_polygon", _("Remove polygon")),
                     self.icons["delete"],
                     lambda event: self.SetMode(event, "remove_polygon"),
                     wx.ITEM_CHECK,
@@ -329,12 +337,12 @@ class CategoryToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    "add_class",
+                    ("add_class", _("Add class")),
                     self.icons["add_class"],
                     lambda event: self.cats_mgr.AddCategory(),
                 ),
                 (
-                    "remove_class",
+                    ("remove_class", _("Remove class")),
                     self.icons["remove_class"],
                     lambda event: self.cats_list.DeleteCategory(),
                 ),
