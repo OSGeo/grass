@@ -71,26 +71,94 @@ class ModelerToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("new", icons["new"], self.parent.OnModelNew),
-                ("open", icons["open"], self.parent.OnModelOpen),
-                ("save", icons["save"], self.parent.OnModelSave),
-                ("image", icons["toImage"], self.parent.OnExportImage),
-                ("python", icons["toPython"], self.parent.OnExportPython),
+                (
+                    ("new", _("Create new model")),
+                    icons["new"],
+                    self.parent.OnModelNew,
+                ),
+                (
+                    ("open", _("Load model")),
+                    icons["open"],
+                    self.parent.OnModelOpen,
+                ),
+                (
+                    ("save", _("Save current model")),
+                    icons["save"],
+                    self.parent.OnModelSave,
+                ),
+                (
+                    ("image", _("Export model to image")),
+                    icons["toImage"],
+                    self.parent.OnExportImage,
+                ),
+                (
+                    ("python", _("Export model to Python script")),
+                    icons["toPython"],
+                    self.parent.OnExportPython,
+                ),
                 (None,),
-                ("action", icons["actionAdd"], self.parent.OnAddAction),
-                ("data", icons["dataAdd"], self.parent.OnAddData),
-                ("relation", icons["relation"], self.parent.OnDefineRelation),
-                ("loop", icons["loop"], self.parent.OnDefineLoop),
-                ("comment", icons["comment"], self.parent.OnAddComment),
+                (
+                    ("action", _("Add GRASS tool (module) to model")),
+                    icons["actionAdd"],
+                    self.parent.OnAddAction,
+                ),
+                (
+                    ("data", _("Add data to model")),
+                    icons["dataAdd"],
+                    self.parent.OnAddData,
+                ),
+                (
+                    ("relation", _("Relation between data and commands")),
+                    icons["relation"],
+                    self.parent.OnDefineRelation,
+                ),
+                (
+                    ("loop", _("Add loop/series to model")),
+                    icons["loop"],
+                    self.parent.OnDefineLoop,
+                ),
+                (
+                    ("comment", _("Add comment to model")),
+                    icons["comment"],
+                    self.parent.OnAddComment,
+                ),
                 (None,),
-                ("redraw", icons["redraw"], self.parent.OnCanvasRefresh),
-                ("validate", icons["validate"], self.parent.OnValidateModel),
-                ("run", icons["run"], self.parent.OnRunModel),
+                (
+                    ("redraw", _("Redraw model")),
+                    icons["redraw"],
+                    self.parent.OnCanvasRefresh,
+                ),
+                (
+                    ("validate", _("Validate model")),
+                    icons["validate"],
+                    self.parent.OnValidateModel,
+                ),
+                (
+                    ("run", _("Run model")),
+                    icons["run"],
+                    self.parent.OnRunModel,
+                ),
                 (None,),
-                ("variables", icons["variables"], self.parent.OnVariables),
-                ("settings", icons["settings"], self.parent.OnPreferences),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
+                (
+                    ("variables", _("Model variables")),
+                    icons["variables"],
+                    self.parent.OnVariables,
+                ),
+                (
+                    ("settings", _("Settings")),
+                    icons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", _("Help")),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
                 (None,),
-                ("quit", icons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("quit", _("Quit")),
+                    icons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )
