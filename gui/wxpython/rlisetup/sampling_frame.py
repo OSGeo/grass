@@ -519,20 +519,29 @@ class RLiSetupToolbar(BaseToolbar):
         if self.parent.samplingtype == SamplingType.VECT:
             return self._getToolbarData(
                 (
-                    ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
                     (
-                        "zoomIn",
+                        ("pan", _("Pan")),
+                        BaseIcons["pan"],
+                        self.parent.OnPan,
+                        wx.ITEM_CHECK,
+                    ),
+                    (
+                        ("zoomIn", _("Zoom in")),
                         BaseIcons["zoomIn"],
                         self.parent.OnZoomIn,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        "zoomOut",
+                        ("zoomOut", _("Zoom out")),
                         BaseIcons["zoomOut"],
                         self.parent.OnZoomOut,
                         wx.ITEM_CHECK,
                     ),
-                    ("zoomExtent", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
+                    (
+                        ("zoomExtent", _("Zoom to extent")),
+                        BaseIcons["zoomExtent"],
+                        self.parent.OnZoomToMap,
+                    ),
                 )
             )
         else:
@@ -540,19 +549,28 @@ class RLiSetupToolbar(BaseToolbar):
                 (
                     drawTool,
                     (None,),
-                    ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
                     (
-                        "zoomIn",
+                        ("pan", _("Pan")),
+                        BaseIcons["pan"],
+                        self.parent.OnPan,
+                        wx.ITEM_CHECK,
+                    ),
+                    (
+                        ("zoomIn", _("Zoom in")),
                         BaseIcons["zoomIn"],
                         self.parent.OnZoomIn,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        "zoomOut",
+                        ("zoomOut", _("Zoom out")),
                         BaseIcons["zoomOut"],
                         self.parent.OnZoomOut,
                         wx.ITEM_CHECK,
                     ),
-                    ("zoomExtent", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
+                    (
+                        ("zoomExtent", _("Zoom to extent")),
+                        BaseIcons["zoomExtent"],
+                        self.parent.OnZoomToMap,
+                    ),
                 )
             )
