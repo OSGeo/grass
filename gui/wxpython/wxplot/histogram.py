@@ -288,19 +288,63 @@ class HistogramPlotToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("addraster", BaseIcons["addRast"], self.parent.OnSelectRaster),
+                (
+                    ("addraster", _("Add raster")),
+                    BaseIcons["addRast"],
+                    self.parent.OnSelectRaster,
+                ),
                 (None,),
-                ("draw", PlotIcons["draw"], self.parent.OnCreateHist),
-                ("erase", BaseIcons["erase"], self.parent.OnErase),
-                ("drag", BaseIcons["pan"], self.parent.OnDrag),
-                ("zoom", BaseIcons["zoomIn"], self.parent.OnZoom),
-                ("unzoom", BaseIcons["zoomExtent"], self.parent.OnRedraw),
+                (
+                    ("draw", _("Draw")),
+                    PlotIcons["draw"],
+                    self.parent.OnCreateHist,
+                ),
+                (
+                    ("erase", _("Erase")),
+                    BaseIcons["erase"],
+                    self.parent.OnErase,
+                ),
+                (
+                    ("drag", _("Pan")),
+                    BaseIcons["pan"],
+                    self.parent.OnDrag,
+                ),
+                (
+                    ("zoom", _("Zoom in")),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoom,
+                ),
+                (
+                    ("unzoom", _("Zoom out")),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnRedraw,
+                ),
                 (None,),
-                ("statistics", PlotIcons["statistics"], self.parent.OnStats),
-                ("image", BaseIcons["saveFile"], self.parent.SaveToFile),
-                ("print", BaseIcons["print"], self.parent.PrintMenu),
+                (
+                    ("statistics", _("Show statistics")),
+                    PlotIcons["statistics"],
+                    self.parent.OnStats,
+                ),
+                (
+                    ("image", _("Save image")),
+                    BaseIcons["saveFile"],
+                    self.parent.SaveToFile,
+                ),
+                (
+                    ("print", _("Print")),
+                    BaseIcons["print"],
+                    self.parent.PrintMenu,
+                ),
                 (None,),
-                ("settings", PlotIcons["options"], self.parent.PlotOptionsMenu),
-                ("quit", PlotIcons["quit"], self.parent.OnQuit),
+                (
+                    ("settings", _("Settings")),
+                    PlotIcons["options"],
+                    self.parent.PlotOptionsMenu,
+                ),
+                (
+                    ("quit", _("Quit")),
+                    PlotIcons["quit"],
+                    self.parent.OnQuit,
+                ),
             )
         )
