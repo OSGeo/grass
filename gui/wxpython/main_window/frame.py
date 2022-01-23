@@ -350,7 +350,7 @@ class GMFrame(wx.Frame):
             lambda message: self.SetStatusText(message)
         )
         self.goutput.contentChanged.connect(
-            lambda notification: self._switchPage(notification)
+            lambda notification: self._focusPage(notification)
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
@@ -950,8 +950,8 @@ class GMFrame(wx.Frame):
         )
         self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
 
-    def _switchPage(self, notification):
-        """Manages @c 'output' notebook page according to event notification."""
+    def _focusPage(self, notification):
+        """Focus the 'Console' notebook page according to event notification."""
         if (
             notification == Notification.HIGHLIGHT
             or notification == Notification.MAKE_VISIBLE
