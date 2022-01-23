@@ -135,8 +135,14 @@ class BaseToolbar(ToolBar):
         """
         bmpDisabled = wx.NullBitmap
         tool = -1
+
+        if isinstance(label, tuple):
+            internal_label, label = label[0], label[1]
+        else:
+            internal_label = label
+
         if label:
-            tool = vars(self)[label] = NewId()
+            tool = vars(self)[internal_label] = NewId()
             Debug.msg(
                 3, "CreateTool(): tool=%d, label=%s bitmap=%s" % (tool, label, bitmap)
             )
@@ -162,13 +168,20 @@ class BaseToolbar(ToolBar):
         :param enable: True for enable otherwise disable
         """
         for tool in self._data:
-            if tool[0] == "":  # separator
-                continue
-
-            if enable:
-                self.SetToolLongHelp(vars(self)[tool[0]], tool[4])
+            if isinstance(tool[0], tuple):
+                if tool[0][0] == "":  # separator
+                    continue
+                else:
+                    internal_label = tool[0][0]
             else:
-                self.SetToolLongHelp(vars(self)[tool[0]], "")
+                if tool[0] == "":  # separator
+                    continue
+                else:
+                    internal_label = tool[0]
+            if enable:
+                self.SetToolLongHelp(vars(self)[internal_label], tool[4])
+            else:
+                self.SetToolLongHelp(vars(self)[internal_label], "")
 
     def OnTool(self, event):
         """Tool selected"""
