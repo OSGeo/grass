@@ -60,20 +60,40 @@ class _JupyterGlobalSession:
     def switch_mapset(self, path, location=None, mapset=None):
         """Switch to a mapset provided as a name or path.
 
-        The *arg* positional-only parameter can be either name of a mapset in the
-        current location or a full path to a mapset.
+        The mapset can be provided as a name, as a path,
+        or as database, location, and mapset.
+        Specifically, the *path* positional-only parameter can be either
+        name of a mapset in the current location or a full path to a mapset.
+        When location and mapset are provided using the additional parameters,
+        the *path* parameter is path to a database.
 
-        Raises ValueError if the mapset does not exist or CalledModuleError if
-        call to the underlying the g.mapset module fails (e.g., when mapset is
-        invalid).
+        Raises ValueError if the mapset does not exist (e.g., when the name is
+        misspelled or the mapset is invalid).
         """
         # The method could be a function, but this is more general (would work even for
         # a non-global session).
         # pylint: disable=no-self-use
         # Functions needed only here.
         # pylint: disable=import-outside-toplevel
-        from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
+        from grass.grassdb.checks import (
+            get_mapset_invalid_reason,
+            is_mapset_valid,
+            mapset_exists,
+        )
         from grass.grassdb.manage import resolve_mapset_path
+
+        # For only one parameter, try if it is a mapset in the current location to
+        # support switching only by its name.
+        gisenv = gs.gisenv()
+        if (
+            not location
+            and not mapset
+            and mapset_exists(
+                path=gisenv["GISDBASE"], location=gisenv["LOCATION_NAME"], mapset=path
+            )
+        ):
+            gs.run_command("g.gisenv", set=f"MAPSET={path}")
+            return
 
         mapset_path = resolve_mapset_path(path=path, location=location, mapset=mapset)
         if not is_mapset_valid(mapset_path):
@@ -93,10 +113,10 @@ class _JupyterGlobalSession:
         gs.run_command("g.gisenv", set=f"MAPSET={mapset_path.mapset}")
 
     def finish(self):
-        """Close the session, i.e., close the opened mapset.
+        """Close the session, i.e., close the open mapset.
 
         Subsequent calls to GRASS GIS modules will fail because there will be
-        no current (opened) mapset anymore.
+        no current (open) mapset anymore.
 
         The finish procedure is done automatically when process finishes or the object
         is destroyed.
@@ -113,39 +133,36 @@ _global_session_handle = None
 
 
 def init(path, location=None, mapset=None, grass_path=None):
-    """
-    This function initiates a GRASS session and sets GRASS
-    environment variables.
+    """Initiates a GRASS session and sets GRASS environment variables.
 
     Calling this function returns an object which represents the session.
 
     >>> import grass.jupyter as gj
     >>> session = gj.init(...)
 
-    When the object is destroyed, the session is ended. Therefore, it is necessary
-    to keep a reference to the object as long as the session should remain active.
-    In a notebook, this is normally achieved by simply assigning the function return
-    value to a variable. If you see ``GISRC - variable not set`` after calling
-    a GRASS module, you know you have forgot to assign the result to a variable.
-
-    Since the clean up happens when the object is garbadge-collected, it may or may
-    not happen immediately. When you forget to assign the result to a variable, your
-    code may still work even if you don't assign it. However, you need to assign it
-    to ensure that your code always works.
+    The session is ended when `session.finish` is called or when the object is
+    destroyed when kernel ends or restarts. This function returns a copy of an
+    internally kept reference, so the return value can be safely ignored when not
+    needed.
 
     The returned object can be used to switch to another mapset:
 
     >>> session.switch_mapset("mapset_name")
 
-    :param str path: path to grass databases
-    :param str location: name of GRASS location
+    Subsequent calls to the *init* function result in switching the mapset if
+    a session is active and result in creation of new session if it is not active.
+    On the other hand, if you see ``GISRC - variable not set`` after calling
+    a GRASS module, you know you don't have an active GRASS session.
+
+    :param str path: path to GRASS mapset or database
+    :param str location: name of GRASS location within the database
     :param str mapset: name of mapset within location
     """
     global _global_session_handle  # pylint: disable=global-statement
     if not _global_session_handle or not _global_session_handle.active:
-        # Create a GRASS GIS session.
+        # Create a GRASS session.
         gsetup.init(path, location=location, mapset=mapset, grass_path=grass_path)
-        # Set GRASS env. variables
+        # Set defaults for environmental variables and library.
         _set_notebook_defaults()
         _global_session_handle = _JupyterGlobalSession()
     else:
