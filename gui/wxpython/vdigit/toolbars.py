@@ -247,97 +247,139 @@ class VDigitToolbar(BaseToolbar):
             data.append((None,))
         if not self.tools or "addPoint" in self.tools:
             data.append(
-                ("addPoint", self.icons["addPoint"], self.OnAddPoint, wx.ITEM_CHECK)
+                (
+                    ("addPoint", _("Digitize new point")),
+                    self.icons["addPoint"],
+                    self.OnAddPoint,
+                    wx.ITEM_CHECK,
+                )
             )
         if not self.tools or "addLine" in self.tools:
             data.append(
-                ("addLine", self.icons["addLine"], self.OnAddLine, wx.ITEM_CHECK)
+                (
+                    ("addLine", _("Digitize new line")),
+                    self.icons["addLine"],
+                    self.OnAddLine,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "addArea" in self.tools:
             data.append(
-                ("addArea", self.icons["addArea"], self.OnAddAreaTool, wx.ITEM_CHECK)
+                (
+                    ("addArea", _("Digitize new area")),
+                    self.icons["addArea"],
+                    self.OnAddAreaTool,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "deleteLine" in self.tools:
             data.append(
                 (
-                    "deleteLine",
+                    ("deleteLine", _("Delete selected feature(s)")),
                     self.icons["deleteLine"],
                     self.OnDeleteLine,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "deleteArea" in self.tools:
             data.append(
                 (
-                    "deleteArea",
+                    ("deleteArea", _("Delete selected area(s)")),
                     self.icons["deleteArea"],
                     self.OnDeleteArea,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "moveVertex" in self.tools:
             data.append(
                 (
-                    "moveVertex",
+                    ("moveVertex", _("Move selected vertex")),
                     self.icons["moveVertex"],
                     self.OnMoveVertex,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "addVertex" in self.tools:
             data.append(
-                ("addVertex", self.icons["addVertex"], self.OnAddVertex, wx.ITEM_CHECK)
+                (
+                    ("addVertex", _("Add new vertex to line or boundary")),
+                    self.icons["addVertex"],
+                    self.OnAddVertex,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "removeVertex" in self.tools:
             data.append(
                 (
-                    "removeVertex",
+                    ("removeVertex", _("Remove selected vertex")),
                     self.icons["removeVertex"],
                     self.OnRemoveVertex,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "editLine" in self.tools:
             data.append(
-                ("editLine", self.icons["editLine"], self.OnEditLine, wx.ITEM_CHECK)
+                (
+                    ("editLine", _("Edit selected line/boundary")),
+                    self.icons["editLine"],
+                    self.OnEditLine,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "moveLine" in self.tools:
             data.append(
-                ("moveLine", self.icons["moveLine"], self.OnMoveLine, wx.ITEM_CHECK)
+                (
+                    ("moveLine", _("Move selected feature(s)")),
+                    self.icons["moveLine"],
+                    self.OnMoveLine,
+                    wx.ITEM_CHECK,
+                ),
             )
         if not self.tools or "displayCats" in self.tools:
             data.append(
                 (
-                    "displayCats",
+                    ("displayCats", _("Display/update categories")),
                     self.icons["displayCats"],
                     self.OnDisplayCats,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "displayAttr" in self.tools:
             data.append(
                 (
-                    "displayAttr",
+                    ("displayAttr", _("Display/update attributes")),
                     self.icons["displayAttr"],
                     self.OnDisplayAttr,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "additionalSelf.Tools" in self.tools:
             data.append(
                 (
-                    "additionalTools",
+                    ("additionalTools", _("Additional tools")),
                     self.icons["additionalTools"],
                     self.OnAdditionalToolMenu,
                     wx.ITEM_CHECK,
-                )
+                ),
             )
         if not self.tools or "undo" in self.tools or "redo" in self.tools:
             data.append((None,))
         if not self.tools or "undo" in self.tools:
-            data.append(("undo", self.icons["undo"], self.OnUndo))
+            data.append(
+                (
+                    ("undo", _("Undo previous changes")),
+                    self.icons["undo"],
+                    self.OnUndo,
+                ),
+            )
         if not self.tools or "redo" in self.tools:
-            data.append(("redo", self.icons["redo"], self.OnRedo))
+            data.append(
+                (
+                    ("redo", _("Redo previous changes")),
+                    self.icons["redo"],
+                    self.OnRedo,
+                ),
+            )
         if (
             not self.tools
             or "settings" in self.tools
@@ -346,11 +388,29 @@ class VDigitToolbar(BaseToolbar):
         ):
             data.append((None,))
         if not self.tools or "settings" in self.tools:
-            data.append(("settings", self.icons["settings"], self.OnSettings))
+            data.append(
+                (
+                    ("settings", _("Settings")),
+                    self.icons["settings"],
+                    self.OnSettings,
+                ),
+            )
         if not self.tools or "help" in self.tools:
-            data.append(("help", self.icons["help"], self.OnHelp))
+            data.append(
+                (
+                    ("help", _("Help")),
+                    self.icons["help"],
+                    self.OnHelp,
+                ),
+            )
         if not self.tools or "quit" in self.tools:
-            data.append(("quit", self.icons["quit"], self.OnExit))
+            data.append(
+                (
+                    ("quit", _("Quit")),
+                    self.icons["quit"],
+                    self.OnExit,
+                ),
+            )
 
         return self._getToolbarData(data)
 
