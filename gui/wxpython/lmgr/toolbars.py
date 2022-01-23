@@ -54,9 +54,21 @@ class LMWorkspaceToolbar(BaseToolbar):
         }
         return self._getToolbarData(
             (
-                ("workspaceNew", icons["workspaceNew"], self.parent.OnWorkspaceNew),
-                ("workspaceOpen", icons["workspaceOpen"], self.parent.OnWorkspaceOpen),
-                ("workspaceSave", icons["workspaceSave"], self.parent.OnWorkspaceSave),
+                (
+                    ("workspaceNew", _("New workspace")),
+                    icons["workspaceNew"],
+                    self.parent.OnWorkspaceNew,
+                ),
+                (
+                    ("workspaceOpen", _("Open workspace")),
+                    icons["workspaceOpen"],
+                    self.parent.OnWorkspaceOpen,
+                ),
+                (
+                    ("workspaceSave", _("Save workspace")),
+                    icons["workspaceSave"],
+                    self.parent.OnWorkspaceSave,
+                ),
             )
         )
 
@@ -112,19 +124,63 @@ class DisplayPanelToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("addMulti", icons["addMulti"], self.parent.OnAddMaps),
-                ("addrast", icons["addRast"], self.parent.OnAddRaster),
-                ("rastmisc", icons["rastMisc"], self.parent.OnAddRasterMisc),
-                ("addvect", icons["addVect"], self.parent.OnAddVector),
-                ("vectmisc", icons["vectMisc"], self.parent.OnAddVectorMisc),
-                ("addovl", icons["addOverlay"], self.parent.OnAddOverlay),
-                ("addWS", icons["addWS"], self.parent.OnAddWS),
+                (
+                    ("addMulti", _("Add multiple map layers")),
+                    icons["addMulti"],
+                    self.parent.OnAddMaps,
+                ),
+                (
+                    ("addrast", _("Add raster")),
+                    icons["addRast"],
+                    self.parent.OnAddRaster,
+                ),
+                (
+                    ("rastmisc", _("Add various raster")),
+                    icons["rastMisc"],
+                    self.parent.OnAddRasterMisc,
+                ),
+                (
+                    ("addvect", _("Add vector")),
+                    icons["addVect"],
+                    self.parent.OnAddVector,
+                ),
+                (
+                    ("vectmisc", _("Add various vector")),
+                    icons["vectMisc"],
+                    self.parent.OnAddVectorMisc,
+                ),
+                (
+                    ("addovl", _("Add overlay")),
+                    icons["addOverlay"],
+                    self.parent.OnAddOverlay,
+                ),
+                (
+                    ("addWS", _("Add web service")),
+                    icons["addWS"],
+                    self.parent.OnAddWS,
+                ),
                 (None,),
-                ("addgrp", icons["addGroup"], self.parent.OnAddGroup),
-                ("delcmd", icons["delCmd"], self.parent.OnDeleteLayer),
+                (
+                    ("addgrp", _("Add group")),
+                    icons["addGroup"],
+                    self.parent.OnAddGroup,
+                ),
+                (
+                    ("delcmd", _("Delete map layer")),
+                    icons["delCmd"],
+                    self.parent.OnDeleteLayer,
+                ),
                 (None,),
-                ("vdigit", icons["vdigit"], self.parent.OnVDigit),
-                ("attribute", icons["attrTable"], self.parent.OnShowAttributeTable),
+                (
+                    ("vdigit", _("Vector digitizer")),
+                    icons["vdigit"],
+                    self.parent.OnVDigit,
+                ),
+                (
+                    ("attribute", _("Attribute table")),
+                    icons["attrTable"],
+                    self.parent.OnShowAttributeTable,
+                ),
             )
         )
 
@@ -162,15 +218,43 @@ class LMToolsToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
+                (
+                    ("newdisplay", _("New display")),
+                    icons["newdisplay"],
+                    self.parent.OnNewDisplay,
+                ),
                 (None,),
-                ("mapCalc", icons["mapcalc"], self.parent.OnMapCalculator),
-                ("georect", icons["georectify"], self.parent.OnGCPManager),
-                ("modeler", icons["modeler"], self.parent.OnGModeler),
-                ("mapOutput", icons["composer"], self.parent.OnPsMap),
+                (
+                    ("mapCalc", _("Raster Map Calculator")),
+                    icons["mapcalc"],
+                    self.parent.OnMapCalculator,
+                ),
+                (
+                    ("georect", _("Georectifier")),
+                    icons["georectify"],
+                    self.parent.OnGCPManager,
+                ),
+                (
+                    ("modeler", _("Graphical Modeler")),
+                    icons["modeler"],
+                    self.parent.OnGModeler,
+                ),
+                (
+                    ("mapOutput", _("Cartographic Composer")),
+                    icons["composer"],
+                    self.parent.OnPsMap,
+                ),
                 (None,),
-                ("script-load", icons["script-load"], self.parent.OnRunScript),
-                ("python", icons["python"], self.parent.OnSimpleEditor),
+                (
+                    ("script-load", _("Launch user-defined script")),
+                    icons["script-load"],
+                    self.parent.OnRunScript,
+                ),
+                (
+                    ("python", _("Python code editor")),
+                    icons["python"],
+                    self.parent.OnSimpleEditor,
+                ),
             )
         )
 
@@ -235,10 +319,22 @@ class LMNvizToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("nvizCmd", icons["cmd"], self.OnNvizCmd),
+                (
+                    ("nvizCmd", _("Generate command for m.nviz.image")),
+                    icons["cmd"],
+                    self.OnNvizCmd,
+                ),
                 (None,),
-                ("settings", icons["settings"], self.parent.OnNvizPreferences),
-                ("help", icons["help"], self.OnHelp),
+                (
+                    ("settings", _("3D view settings")),
+                    icons["settings"],
+                    self.parent.OnNvizPreferences,
+                ),
+                (
+                    ("help", _("3D view help")),
+                    icons["help"],
+                    self.OnHelp,
+                ),
             )
         )
 
