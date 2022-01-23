@@ -64,24 +64,28 @@ class PointListToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    "insertPoint",
+                    ("insertPoint", _("Insert points")),
                     icons["insertPoint"],
                     self.OnEditPointMode,  # TODO self.list.dialog
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "snapping",
+                    ("snapping", _("Activate snapping to nodes")),
                     icons["snapping"],
                     lambda event: self.vnet_mgr.Snapping(event.IsChecked()),
                     wx.ITEM_CHECK,
                 ),
                 (None,),
                 (
-                    "pointAdd",
+                    ("pointAdd", _("Add new point")),
                     icons["pointAdd"],
                     lambda event: self.vnet_pts_mgr.AddPoint(),
                 ),
-                ("pointDelete", icons["pointDelete"], self.OnDeletePoint),
+                (
+                    ("pointDelete", _("Delete selected point")),
+                    icons["pointDelete"],
+                    self.OnDeletePoint,
+                ),
                 (None,)  # ,
                 # ('isec_turn_edit', icons['isec_turn_edit'],
                 # self.dialog.OnDefIsecTurnCosts,
@@ -133,22 +137,50 @@ class MainToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("run", icons["run"], self.parent.OnAnalyze),
-                (None,),
-                ("undo", icons["undo"], self.parent.OnUndo),
-                ("redo", icons["redo"], self.parent.OnRedo),
+                (
+                    ("run", _("Execute analysis")),
+                    icons["run"],
+                    self.parent.OnAnalyze,
+                ),
                 (None,),
                 (
-                    "showResult",
+                    ("undo", _("Previous analysis result")),
+                    icons["undo"],
+                    self.parent.OnUndo,
+                ),
+                (
+                    ("redo", _("Next analysis result")),
+                    icons["redo"],
+                    self.parent.OnRedo,
+                ),
+                (None,),
+                (
+                    ("showResult", _("Show result")),
                     icons["showResult"],
                     self.parent.OnShowResult,
                     wx.ITEM_CHECK,
                 ),
-                ("saveTempLayer", icons["saveTempLayer"], self.parent.OnSaveTmpLayer),
+                (
+                    ("saveTempLayer", _("Save temporary result")),
+                    icons["saveTempLayer"],
+                    self.parent.OnSaveTmpLayer,
+                ),
                 (None,),
-                ("settings", icons["settings"], self.parent.OnSettings),
-                ("help", icons["help"], self.OnHelp),
-                ("quit", BaseIcons["quit"], self.parent.OnCloseDialog),
+                (
+                    ("settings", _("Settings")),
+                    icons["settings"],
+                    self.parent.OnSettings,
+                ),
+                (
+                    ("help", _("Help")),
+                    icons["help"],
+                    self.OnHelp,
+                ),
+                (
+                    ("quit", _("Quit")),
+                    BaseIcons["quit"],
+                    self.parent.OnCloseDialog,
+                ),
             )
         )
 
