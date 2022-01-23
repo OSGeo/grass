@@ -2829,13 +2829,12 @@ class SignatureSelect(wx.ComboBox):
                 _("Unable to import C imagery library functions: %s\n") % e
             )
             return
-        sig_type = None
         # Extend here if a new signature type is introduced
         if element == "signatures/sig":
             sig_type = I_SIGFILE_TYPE_SIG
         elif element == "signatures/sigset":
             sig_type = I_SIGFILE_TYPE_SIGSET
-        if sig_type is None:
+        else:
             return
         list_ptr = ctypes.POINTER(ctypes.c_char_p)
         sig_list = list_ptr()
