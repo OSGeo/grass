@@ -114,33 +114,45 @@ class RDigitToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    "area",
+                    ("area", _("Digitize area")),
                     rdigitIcons["area"],
                     lambda event: self._controller.SelectType("area"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "line",
+                    ("line", _("Digitize line")),
                     rdigitIcons["line"],
                     lambda event: self._controller.SelectType("line"),
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "point",
+                    ("point", _("Digitize point")),
                     rdigitIcons["point"],
                     lambda event: self._controller.SelectType("point"),
                     wx.ITEM_CHECK,
                 ),
                 (None,),
                 (None,),
-                ("undo", rdigitIcons["undo"], lambda event: self._controller.Undo()),
-                ("save", rdigitIcons["save"], lambda event: self._controller.Save()),
                 (
-                    "help",
+                    ("undo", _("Undo")),
+                    rdigitIcons["undo"],
+                    lambda event: self._controller.Undo(),
+                ),
+                (
+                    ("save", _("Save raster map")),
+                    rdigitIcons["save"],
+                    lambda event: self._controller.Save(),
+                ),
+                (
+                    ("help", _("Raster Digitizer manual")),
                     rdigitIcons["help"],
                     lambda event: self._giface.Help("wxGUI.rdigit"),
                 ),
-                ("quit", rdigitIcons["quit"], lambda event: self._controller.Stop()),
+                (
+                    ("quit", _("Quit raster digitizer")),
+                    rdigitIcons["quit"],
+                    lambda event: self._controller.Stop(),
+                ),
             )
         )
 
