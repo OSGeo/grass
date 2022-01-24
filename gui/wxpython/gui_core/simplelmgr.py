@@ -441,13 +441,33 @@ class SimpleLmgrToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         data = [
-            ("edit", icons["edit"], self.parent.OnLayerChangeProperties),
-            ("remove", icons["remove"], self.parent.OnRemove),
+            (
+                ("edit", _("Edit layer properties")),
+                icons["edit"],
+                self.parent.OnLayerChangeProperties,
+            ),
+            (
+                ("remove", _("Remove selected map(s) from list")),
+                icons["remove"],
+                self.parent.OnRemove,
+            ),
             (None,),
-            ("up", icons["up"], self.parent.OnLayerUp),
-            ("down", icons["down"], self.parent.OnLayerDown),
+            (
+                ("up", _("Move selected layer(s) up")),
+                icons["up"],
+                self.parent.OnLayerUp,
+            ),
+            (
+                ("down", _("Move selected layer(s) down")),
+                icons["down"],
+                self.parent.OnLayerDown,
+            ),
             (None,),
-            ("opacity", icons["opacity"], self.parent.OnLayerChangeOpacity),
+            (
+                ("opacity", _("Change layer opacity")),
+                icons["opacity"],
+                self.parent.OnLayerChangeOpacity,
+            ),
         ]
         if self._style & SIMPLE_LMGR_RASTER3D:
             data.insert(0, ("addRaster3d", icons["addRast3d"], self.parent.OnAddRast3d))
