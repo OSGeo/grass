@@ -98,10 +98,15 @@ class BaseToolbar(ToolBar):
                 self.Realize()
 
             def _toolbarData(self):
-                return self._getToolbarData((("help", Icons["help"],
-                                              self.parent.OnHelp),
-                                              ))
-
+                # e.g. ("help", _("Help")) tool short label (triangle/arrow
+                # at the right side of the toolbar)
+                return self._getToolbarData(
+                    (
+                        ("help", _("Help")),
+                        Icons["help"],
+                        self.parent.OnHelp
+                    ),
+                )
     """
 
     def __init__(
