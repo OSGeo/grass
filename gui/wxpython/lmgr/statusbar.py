@@ -39,7 +39,6 @@ class SbMask:
         self.widget.Bind(wx.EVT_BUTTON, self.OnRemoveMask)
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
         self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
-        self.giface.updateMap.connect(self.Refresh)
         self.giface.currentMapsetChanged.connect(self.Refresh)
         self.giface.grassdbChanged.connect(self._dbChanged)
         self.Refresh()
@@ -92,7 +91,6 @@ class SbMask:
             dlg.Destroy()
             return
         RunCommand("r.mask", flags="r")
-        self.giface.updateMap.emit(render=False)
         self.giface.grassdbChanged.emit(
             grassdb=grass.gisenv()["GISDBASE"],
             location=grass.gisenv()["LOCATION_NAME"],
