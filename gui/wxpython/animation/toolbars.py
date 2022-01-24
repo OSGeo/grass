@@ -123,25 +123,46 @@ class AnimationToolbar(BaseToolbar):
         icons = ganimIcons
         return self._getToolbarData(
             (
-                ("playBack", icons["playBack"], self.OnPlayBack),
-                ("playForward", icons["playForward"], self.OnPlayForward),
-                ("pause", icons["pause"], self.OnPause, wx.ITEM_CHECK),
-                ("stop", icons["stop"], self.OnStop),
+                (
+                    ("playBack", _("Play back")),
+                    icons["playBack"],
+                    self.OnPlayBack,
+                ),
+                (
+                    ("playForward", _("Play forward")),
+                    icons["playForward"],
+                    self.OnPlayForward,
+                ),
+                (
+                    ("pause", _("Pause")),
+                    icons["pause"],
+                    self.OnPause,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("stop", _("Stop")),
+                    icons["stop"],
+                    self.OnStop,
+                ),
                 (None,),
                 (
-                    "oneDirectionReplay",
+                    ("oneDirectionReplay", _("Repeat")),
                     icons["oneDirectionReplay"],
                     self.OnOneDirectionReplay,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "bothDirectionReplay",
+                    ("bothDirectionReplay", _("Play back and forward")),
                     icons["bothDirectionReplay"],
                     self.OnBothDirectionReplay,
                     wx.ITEM_CHECK,
                 ),
                 (None,),
-                ("adjustSpeed", icons["speed"], self.parent.OnAdjustSpeed),
+                (
+                    ("adjustSpeed", _("Change animation speed")),
+                    icons["speed"],
+                    self.parent.OnAdjustSpeed,
+                ),
             )
         )
 
@@ -240,9 +261,21 @@ class MiscToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("settings", BaseIcons["settings"], self.parent.OnPreferences),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", BaseIcons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("settings", _("Settings")),
+                    BaseIcons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", _("Show manual")),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", _("Quit")),
+                    BaseIcons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )
 
