@@ -60,19 +60,60 @@ class SwipeMapToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("rendermap", icons["render"], self.parent.OnRender),
-                ("pointer", icons["pointer"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("query", swipeIcons["query"], self.parent.OnQuery, wx.ITEM_CHECK),
-                ("pan", icons["pan"], self.parent.OnPan, wx.ITEM_CHECK),  # toggle tool
-                ("zoomIn", icons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomOut", icons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                (None,),
-                ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
-                (None,),
-                ("saveFile", icons["saveFile"], self.parent.SaveToFile),
                 (
-                    "mapDispSettings",
+                    ("rendermap", _("Render map")),
+                    icons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("pointer", _("Pointer")),
+                    icons["pointer"],
+                    self.parent.OnPointer,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("query", _("Query map(s)")),
+                    swipeIcons["query"],
+                    self.parent.OnQuery,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("pan", _("Pan")),
+                    icons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),  # toggle tool
+                (
+                    ("zoomIn", _("Zoom in")),
+                    icons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", _("Zoom out")),
+                    icons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (None,),
+                (
+                    ("zoomBack", _("Return to previous zoom")),
+                    icons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomToMap", _("Zoom to computational region extent")),
+                    icons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
+                (None,),
+                (
+                    ("saveFile", _("Save display to file")),
+                    icons["saveFile"],
+                    self.parent.SaveToFile,
+                ),
+                (
+                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
                     BaseIcons["mapDispSettings"],
                     self.parent.OnMapDisplayProperties,
                 ),
@@ -120,9 +161,17 @@ class SwipeMainToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("addRaster", swipeIcons["addRast"], self.parent.OnSelectLayers),
+                (
+                    ("addRaster", _("Add raster map layer")),
+                    swipeIcons["addRast"],
+                    self.parent.OnSelectLayers,
+                ),
                 (None,),
-                ("tools", swipeIcons["tools"], self.OnToolMenu),
+                (
+                    ("tools", _("Tools")),
+                    swipeIcons["tools"],
+                    self.OnToolMenu,
+                ),
             )
         )
 
@@ -177,8 +226,20 @@ class SwipeMiscToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("settings", BaseIcons["settings"], self.parent.OnPreferences),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", swipeIcons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("settings", _("Settings")),
+                    BaseIcons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", _("Show manual")),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", _("Quit")),
+                    swipeIcons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )
