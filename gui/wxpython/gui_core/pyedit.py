@@ -679,19 +679,39 @@ class PyEditToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("open", self.icons["open"], self.parent.OnOpen),
-                ("save", self.icons["save"], self.parent.OnSave),
-                (None,),
-                ("run", self.icons["run"], self.parent.OnRun),
                 (
-                    "overwrite",
+                    ("open", _("Open")),
+                    self.icons["open"],
+                    self.parent.OnOpen,
+                ),
+                (
+                    ("save", _("Save")),
+                    self.icons["save"],
+                    self.parent.OnSave,
+                ),
+                (None,),
+                (
+                    ("run", _("Run")),
+                    self.icons["run"],
+                    self.parent.OnRun,
+                ),
+                (
+                    ("overwrite", _("Overwrite")),
                     self.icons["overwriteTrue"],
                     self.OnSetOverwrite,
                     wx.ITEM_CHECK,
                 ),
                 (None,),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", self.icons["quit"], self.parent.OnClose),
+                (
+                    ("help", _("Help")),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", _("Quit")),
+                    self.icons["quit"],
+                    self.parent.OnClose,
+                ),
             )
         )
 
