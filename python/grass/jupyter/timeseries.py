@@ -13,13 +13,14 @@
 
 import tempfile
 import os
+import datetime
 import grass.script as gs
 from .display import GrassRenderer
 #from grass.animation import temporal_manager as tm
 #import grass.temporal as tgis
 
 from .region import RegionManagerFor2D, RegionManagerFor3D
-import ipywidgets as widgets
+
 
 
 class timeseries:
@@ -30,50 +31,34 @@ class timeseries:
         self.timeseries = timeseries
         self.basemap = basemap
         self.overlay = overlay
-        self.etype = type # element type - convention from temporal manager
+        self._legend = False
+        self.type = type
+        self._legend_kwargs = None
+        self._filenames = None
 
         # Check that map is time space dataset
-        #self.validateTimeseriesName()
         test = gs.read_command("t.list", where=f"name LIKE '{timeseries}'")
         if not test:
-             raise AttributeError(_(f"Could not find space time raster or vector dataset named {timeseries}"))
+             raise NameError(_(f"Could not find space time raster or vector dataset named {timeseries}"))
+
+        # Check datatype
 
         # Create a temporary directory for our PNG images
         self._tmpdir = tempfile.TemporaryDirectory()
         print(self._tmpdir.name)
 
-    #def d_legend(self, **kwargs):
-        # this function should construct a legend command that can
-        # be called in the render_layers loop below
+    def d_legend(self, **kwargs):
+        self._legend = True
+        self._legend_kwargs = kwargs
 
-    # THIS IS FROM gui/wxpython/animation/util.py but I couldn't figure out how
-    # to import that...
-    # CANNOT IMPORT grass.temporal
-    # def validateTimeseriesName(self):
-    #     """Check if space time dataset exists and completes missing mapset.
-    #
-    #     Raises GException if dataset doesn't exist."""
-    #     trastDict = tgis.tlist_grouped(self.etype)
-    #     if self.timeseries.find("@") >= 0:
-    #         nameShort, mapset = self.timeseries.split("@", 1)
-    #         if nameShort in trastDict[mapset]:
-    #             return self.timeseries
-    #         else:
-    #             raise GException(_(f"Space time dataset {self.timeseries} not found."))
-    #
-    #     mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-    #     for mapset in mapsets:
-    #         if mapset in trastDict.keys():
-    #             if self.timeseries in trastDict[mapset]:
-    #                 return self.timeseries + "@" + mapset
-    #     raise GException(_(f"Space time dataset {self.timeseries} not found."))
 
     def render_layers(self):
-        # NOT SURE IF THIS WILL ALWAYS WORK
-        # The maps key is found in the command history of the t.info output
-        # If, somehow, there was no "t.register" with map list in the command history,
-        # I think this would fail.
-        renderlist = gs.parse_command("t.info", input=self.timeseries, flags="h")["maps"][1:-1].split(",")
+        if self.type == "strds":
+            renderlist = gs.read_command("t.rast.list", input=self.timeseries, columns="name", flags="u").strip().split("\n")
+        elif self.type == "stvds":
+            renderlist = gs.read_command("t.vect.list", input=self.timeseries, columns="name", flags="u").strip().split("\n")
+        else:
+            raise NameError(_(f"Dataset {self.timeseries} is not data type 'strds' or 'stvds'"))
 
         filenames = []
         for name in renderlist:
@@ -82,42 +67,37 @@ class timeseries:
             img = GrassRenderer(filename=filename)
             if self.basemap:
                 img.d_rast(map=self.basemap)
-            # THIS IS A BAD WAY OF DOING THIS
-            try:
+            if self.type == "strds":
+                print(name)
                 img.d_rast(map=name)
-            except CalledModuleError:
-                img.d._vect(map=name)
+            elif self.type == "stvds":
+                img.d_vect(map=name)
             if self.overlay:
                 img.d_vect(map=self.overlay)
-            # THIS SHOULD CHANGE WITH d_legend completion
-            info = gs.parse_command("t.info", input="precip_sum", flags="g")
-            min_min = info["min_min"]
-            max_max = info["max_max"]
-            img.d_legend(raster=name, range=f"{min_min}, {max_max}")
+            # Add legend if called
+            if self._legend:
+                info = gs.parse_command("t.info", input="precip_sum", flags="g")
+                min_min = info["min_min"]
+                max_max = info["max_max"]
+                img.d_legend(raster=name, range=f"{min_min}, {max_max}", **self._legend_kwargs)
+
+        self._filenames = filenames
 
     def timeslider(self):
+        # Lazy Imports
+        import ipywidgets as widgets
+        from IPython.display import Image
 
         # create list of date/times for labels
-        dates = []
+        if self.type == "strds":
+            dates = gs.read_command("t.rast.list", input=self.timeseries, columns="start_time", flags="u").strip().split("\n")
+        elif self.type == "stvds":
+            dates = gs.read_command("t.vect.list", input=self.timeseries, columns="start_time", flags="u").strip().split("\n")
 
-        # Create slider
-        slider = widgets.SelectionSlider(
-            options=dates,
-            value=dates,
-            continuous_update=False,
-            disabled=False
-        )
+        value_dict = {dates[i]: self._filenames[i] for i in range(len(dates))}
 
-        output_map = widgets.Output()
+        def view_image(date):
+            return Image(value_dict[date])
 
-        def react_with_slider(change):
-            output_map.clear_output(wait=True)
-            with output_map:
-                draw_map(change.new)
-
-        slider.observe(react_with_slider, names='value')
-
-        display(output_map)
-        display(slider)
-
+        widgets.interact(view_image, date=dates)
 
