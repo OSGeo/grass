@@ -50,15 +50,43 @@ class GCPManToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("gcpAdd", icons["gcpAdd"], self.parent.AddGCP),
-                ("gcpDelete", icons["gcpDelete"], self.parent.DeleteGCP),
-                ("gcpClear", icons["gcpClear"], self.parent.ClearGCP),
+                (
+                    ("gcpAdd", _("Add new GCP to the list")),
+                    icons["gcpAdd"],
+                    self.parent.AddGCP,
+                ),
+                (
+                    ("gcpDelete", _("Delete selected GCP")),
+                    icons["gcpDelete"],
+                    self.parent.DeleteGCP,
+                ),
+                (
+                    ("gcpClear", _("Clear selected GCP")),
+                    icons["gcpClear"],
+                    self.parent.ClearGCP,
+                ),
                 (None,),
-                ("rms", icons["gcpRms"], self.parent.OnRMS),
-                ("georect", icons["georectify"], self.parent.OnGeorect),
+                (
+                    ("rms", _("Recalculate RMS error")),
+                    icons["gcpRms"],
+                    self.parent.OnRMS,
+                ),
+                (
+                    ("georect", _("Georectify")),
+                    icons["georectify"],
+                    self.parent.OnGeorect,
+                ),
                 (None,),
-                ("gcpSave", icons["gcpSave"], self.parent.SaveGCPs),
-                ("gcpReload", icons["gcpReload"], self.parent.ReloadGCPs),
+                (
+                    ("gcpSave", _("Save GCPs to file")),
+                    icons["gcpSave"],
+                    self.parent.SaveGCPs,
+                ),
+                (
+                    ("gcpReload", _("Reload GCPs from file")),
+                    icons["gcpReload"],
+                    self.parent.ReloadGCPs,
+                ),
             )
         )
 
@@ -113,28 +141,84 @@ class GCPDisplayToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("displaymap", BaseIcons["display"], self.parent.OnDraw),
-                ("rendermap", BaseIcons["render"], self.parent.OnRender),
-                ("erase", BaseIcons["erase"], self.parent.OnErase),
-                (None,),
-                ("gcpset", icons["gcpSet"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
-                ("zoomin", BaseIcons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomout", BaseIcons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                ("zoommenu", BaseIcons["zoomMenu"], self.parent.OnZoomMenuGCP),
-                (None,),
-                ("zoomback", BaseIcons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomtomap", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
+                (
+                    ("displaymap", _("Display map")),
+                    BaseIcons["display"],
+                    self.parent.OnDraw,
+                ),
+                (
+                    ("rendermap", _("Render map")),
+                    BaseIcons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("erase", _("Erase display")),
+                    BaseIcons["erase"],
+                    self.parent.OnErase,
+                ),
                 (None,),
                 (
-                    "mapDispSettings",
+                    ("gcpset", _("Update GCP coordinates")),
+                    icons["gcpSet"],
+                    self.parent.OnPointer,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("pan", _("Pan")),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomin", _("Zoom in")),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomout", _("Zoom out")),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoommenu", _("Various zoom options")),
+                    BaseIcons["zoomMenu"],
+                    self.parent.OnZoomMenuGCP,
+                ),
+                (None,),
+                (
+                    ("zoomback", _("Return to previous zoom")),
+                    BaseIcons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomtomap", _("Zoom to selected map layer(s)")),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
+                (None,),
+                (
+                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
                     BaseIcons["mapDispSettings"],
                     self.parent.OnMapDisplayProperties,
                 ),
                 (None,),
-                ("settings", icons["settings"], self.parent.OnSettings),
-                ("help", icons["help"], self.parent.OnHelp),
+                (
+                    ("settings", _("Settings")),
+                    icons["settings"],
+                    self.parent.OnSettings,
+                ),
+                (
+                    ("help", _("Show manual")),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
                 (None,),
-                ("quit", icons["quit"], self.parent.OnQuit),
+                (
+                    ("quit", _("Quit")),
+                    icons["quit"],
+                    self.parent.OnQuit,
+                ),
             )
         )
