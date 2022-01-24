@@ -4,6 +4,7 @@
 @brief Classes for main window statusbar management
 
 Classes:
+ - statusbar::SbMain
  - statusbar::SbMask
 
 (C) 2022 by the GRASS Development Team
@@ -21,6 +22,46 @@ import wx
 from core.gcmd import RunCommand
 from gui_core.wrap import Button
 from grass.script import core as grass
+
+
+class SbMain:
+    """Statusbar for main window."""
+
+    def __init__(self, parent, giface):
+        self.parent = parent
+        self.giface = giface
+        self.widget = wx.StatusBar(self.parent, id=wx.ID_ANY)
+        self.widget.SetMinHeight(24)
+        self.widget.SetFieldsCount(2)
+        self.widget.SetStatusWidths([-1, 100])
+        self.mask = SbMask(self.widget, self.giface)
+        self._repositionStatusbar()
+
+    def GetWidget(self):
+        """Returns underlying widget.
+
+        :return: widget or None if doesn't exist
+        """
+        return self.widget
+
+    def _repositionStatusbar(self):
+        """Reposition widgets in main window statusbar"""
+        rect1 = self.GetWidget().GetFieldRect(1)
+        rect1.x += 1
+        rect1.y += 1
+        self.mask.GetWidget().SetRect(rect1)
+
+    def Refresh(self):
+        """Refresh statusbar. So far it refreshes just a mask."""
+        self.mask.Refresh()
+
+    def OnSize(self, event):
+        """Adjust main window statusbar on changing size"""
+        self._repositionStatusbar()
+
+    def SetStatusText(self, *args):
+        """Overide wx.StatusBar method"""
+        self.GetWidget().SetStatusText(*args)
 
 
 class SbMask:

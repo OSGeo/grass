@@ -67,7 +67,7 @@ from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
-from lmgr.statusbar import SbMask
+from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import (
@@ -270,28 +270,8 @@ class GMFrame(wx.Frame):
             return self._auimgr.GetPane(name).IsShown()
         return False
 
-    def _createStatusbar(self):
-        """Create main window statusbar"""
-        self.statusbar = wx.StatusBar(self, id=wx.ID_ANY)
-        self.statusbar.SetMinHeight(24)
-        self.statusbar.SetFieldsCount(2)
-        self.statusbar.SetStatusWidths([-1, 100])
-        self.mask = SbMask(self.statusbar, self._giface)
-        self._repositionStatusbar()
-
-    def _repositionStatusbar(self):
-        """Reposition widgets in main window statusbar"""
-        rect1 = self.statusbar.GetFieldRect(1)
-        rect1.x += 1
-        rect1.y += 1
-        self.mask.GetWidget().SetRect(rect1)
-
-    def OnSize(self, event):
-        """Adjust main window statusbar on changing size"""
-        self._repositionStatusbar()
-
     def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
+        """Overide SbMain statusbar method"""
         self.statusbar.SetStatusText(*args)
 
     def _createMapNotebook(self):
@@ -375,7 +355,7 @@ class GMFrame(wx.Frame):
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
-        self._gconsole.updateMap.connect(self.mask.Refresh)
+        self._gconsole.updateMap.connect(self.statusbar.Refresh)
         self._gconsole.Bind(
             EVT_IGNORED_CMD_RUN, lambda event: self.RunSpecialCmd(event.cmd)
         )
@@ -548,7 +528,7 @@ class GMFrame(wx.Frame):
         """Build panes - toolbars as well as panels"""
         self._auimgr.SetAutoNotebookTabArt(SimpleTabArt())
         # initialize all main widgets
-        self._createStatusbar()
+        self.statusbar = SbMain(parent=self, giface=self._giface)
         self._createMapNotebook()
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
@@ -601,7 +581,7 @@ class GMFrame(wx.Frame):
         )
 
         self._auimgr.AddPane(
-            self.statusbar,
+            self.statusbar.GetWidget(),
             aui.AuiPaneInfo()
             .Bottom()
             .MinSize(30, 30)
@@ -707,7 +687,7 @@ class GMFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_SIZE, self.statusbar.OnSize)
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
