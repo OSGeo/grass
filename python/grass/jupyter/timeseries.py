@@ -35,7 +35,8 @@ class TimeSeries:
         if not test:
             raise NameError(
                 _(
-                    f"Could not find space time raster or vector dataset named {timeseries}"
+                    f"Could not find space time raster or vector"
+                    f"dataset named {timeseries}"
                 )
             )
 
