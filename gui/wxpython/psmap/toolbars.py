@@ -111,31 +111,126 @@ class PsMapToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("loadFile", icons["scriptLoad"], self.parent.OnLoadFile),
-                ("instructionFile", icons["scriptSave"], self.parent.OnInstructionFile),
+                (
+                    (
+                        "loadFile",
+                        _("Load text file with mapping instructions"),
+                    ),
+                    icons["scriptLoad"],
+                    self.parent.OnLoadFile,
+                ),
+                (
+                    (
+                        "instructionFile",
+                        _("Generate text file with mapping instructions"),
+                    ),
+                    icons["scriptSave"],
+                    self.parent.OnInstructionFile,
+                ),
                 (None,),
-                ("pagesetup", icons["pageSetup"], self.parent.OnPageSetup),
+                (
+                    (
+                        "pagesetup",
+                        _("Specify paper size, margins and orientation"),
+                    ),
+                    icons["pageSetup"],
+                    self.parent.OnPageSetup,
+                ),
                 (None,),
-                ("pointer", BaseIcons["pointer"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
-                ("zoomin", BaseIcons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomout", BaseIcons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                ("zoomAll", icons["fullExtent"], self.parent.OnZoomAll),
+                (
+                    ("pointer", _("Pointer")),
+                    BaseIcons["pointer"],
+                    self.parent.OnPointer,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("pan", _("Pan")),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomin", _("Zoom in")),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomout", _("Zoom out")),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomAll", _("Zoom to full extent")),
+                    icons["fullExtent"],
+                    self.parent.OnZoomAll,
+                ),
                 (None,),
-                ("addMap", icons["addMap"], self.parent.OnAddMap, wx.ITEM_CHECK),
-                ("addRaster", BaseIcons["addRast"], self.parent.OnAddRaster),
-                ("addVector", BaseIcons["addVect"], self.parent.OnAddVect),
-                ("overlaysAdd", icons["overlaysAdd"], self.OnAddOverlays),
-                ("delete", icons["deleteObj"], self.parent.OnDelete),
-                ("dec", BaseIcons["overlay"], self.OnDecoration),
-                ("drawGraphics", icons["pointAdd"], self.OnDrawGraphics, wx.ITEM_CHECK),
+                (
+                    ("addMap", _("Map frame")),
+                    icons["addMap"],
+                    self.parent.OnAddMap,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("addRaster", _("Add raster map layer")),
+                    BaseIcons["addRast"],
+                    self.parent.OnAddRaster,
+                ),
+                (
+                    ("addVector", _("Add vector map layer")),
+                    BaseIcons["addVect"],
+                    self.parent.OnAddVect,
+                ),
+                (
+                    ("overlaysAdd", _("Add overlays")),
+                    icons["overlaysAdd"],
+                    self.OnAddOverlays,
+                ),
+                (
+                    ("delete", _("Delete selected object")),
+                    icons["deleteObj"],
+                    self.parent.OnDelete,
+                ),
+                (
+                    ("dec", _("Add map elements")),
+                    BaseIcons["overlay"],
+                    self.OnDecoration,
+                ),
+                (
+                    ("drawGraphics", _("Point")),
+                    icons["pointAdd"],
+                    self.OnDrawGraphics,
+                    wx.ITEM_CHECK,
+                ),
                 (None,),
-                ("preview", icons["preview"], self.parent.OnPreview),
-                ("generatePS", icons["psExport"], self.parent.OnPSFile),
-                ("generatePDF", icons["pdfExport"], self.parent.OnPDFFile),
+                (
+                    ("preview", _("Show preview")),
+                    icons["preview"],
+                    self.parent.OnPreview,
+                ),
+                (
+                    ("generatePS", _("Generate PostScript output")),
+                    icons["psExport"],
+                    self.parent.OnPSFile,
+                ),
+                (
+                    ("generatePDF", _("Generate PDF output")),
+                    icons["pdfExport"],
+                    self.parent.OnPDFFile,
+                ),
                 (None,),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", icons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("help", _("Show manual")),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", _("Quit")),
+                    icons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )
 
