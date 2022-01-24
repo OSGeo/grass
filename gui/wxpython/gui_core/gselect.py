@@ -59,12 +59,6 @@ import wx.lib.filebrowsebutton as filebrowse
 import grass.script as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
-from grass.lib.imagery import (
-    I_SIGFILE_TYPE_SIG,
-    I_SIGFILE_TYPE_SIGSET,
-    I_signatures_list_by_type,
-    I_free_signatures_list,
-)
 from grass.pygrass.utils import decode
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
@@ -2813,23 +2807,35 @@ class SignatureSelect(wx.ComboBox):
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
 
-        sig_type = None
+        items = []
+        if mapsets:
+            for mapset in mapsets:
+                self._append_mapset_signatures(mapset, element, items)
+        else:
+            self._append_mapset_signatures(None, element, items)
+        self.SetItems(items)
+        self.SetValue("")
+
+    def _append_mapset_signatures(self, mapset, element, items):
+        try:
+            from grass.lib.imagery import (
+                I_SIGFILE_TYPE_SIG,
+                I_SIGFILE_TYPE_SIGSET,
+                I_signatures_list_by_type,
+                I_free_signatures_list,
+            )
+        except ImportError as e:
+            sys.stderr.write(
+                _("Unable to import C imagery library functions: %s\n") % e
+            )
+            return
         # Extend here if a new signature type is introduced
         if element == "signatures/sig":
             sig_type = I_SIGFILE_TYPE_SIG
         elif element == "signatures/sigset":
             sig_type = I_SIGFILE_TYPE_SIGSET
-        items = []
-        if sig_type is not None:
-            if mapsets:
-                for mapset in mapsets:
-                    self._append_mapset_signatures(mapset, sig_type, items)
-            else:
-                self._append_mapset_signatures(None, sig_type, items)
-        self.SetItems(items)
-        self.SetValue("")
-
-    def _append_mapset_signatures(self, mapset, sig_type, items):
+        else:
+            return
         list_ptr = ctypes.POINTER(ctypes.c_char_p)
         sig_list = list_ptr()
         count = I_signatures_list_by_type(sig_type, mapset, ctypes.byref(sig_list))
