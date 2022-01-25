@@ -287,12 +287,20 @@ def init(path, location=None, mapset=None, grass_path=None):
         # end the session
         gs.setup.finish()
 
+    The returned object is a context manager, so the ``with`` statement can be used to
+    ensure that the session is finished (closed) at the end::
+
+        # ... setup sys.path before import
+        import grass.script as gs
+        with gs.setup.init("~/grassdata/nc_spm_08/user1")
+            # ... use GRASS modules here
+
     :param path: path to GRASS database
     :param location: location name
     :param mapset: mapset within given location (default: 'PERMANENT')
     :param grass_path: path to GRASS installation or executable
 
-    :returns: path to ``gisrc`` file (may change in future versions)
+    :returns: reference to a session handle object which is a context manager
     """
     grass_path = get_install_path(grass_path)
     if not grass_path:
@@ -331,88 +339,76 @@ def init(path, location=None, mapset=None, grass_path=None):
     os.environ["GISRC"] = write_gisrc(
         mapset_path.directory, mapset_path.location, mapset_path.mapset
     )
-    return os.environ["GISRC"]
+    return SessionHandle()
 
 
 class SessionHandle():
-    """Object used to manage grass sessions.
+    """Object used to manage GRASS sessions.
+
+    Do not create objects of this class directly. Use the *init* function
+    to get a session object.
 
     Basic usage::
 
-        # ... setup GISBASE and sys.path before import
+        # ... setup sys.path before import as needed
+
         import grass.script as gs
-        gsession = gs.setup.SessionHandle(
-            "~/grassdata/nc_spm_08/user1",
-            grass_path="/usr/lib/grass",
-        )
-        gsession.open()
+        import grass.script.setup
+
+        session = gs.setup.init("~/grassdata/nc_spm_08/user1")
 
         # ... use GRASS modules here
+
         # end the session
-        gsession.close()
+        session.finish()
 
     Context manager usage::
 
-        # ... setup GISBASE and sys.path before import
+        # ... setup sys.path before import as needed
+
         import grass.script as gs
-        with gs.setup.SessionHandle(
-            "~/grassdata/nc_spm_08/user1",
-            grass_path="/usr/lib/grass",
-        ):
+        import grass.script.setup
+
+        with gs.setup.init("~/grassdata/nc_spm_08/user1"):
             # ... use GRASS modules here
-        # session ended automatically
-
-        Both `open()` and the context manager usage
-        return `gisrc`, but this may change in future versions.
-
+        # session ends automatically here
     """
 
-    def __init__(self, path=None, location=None, mapset=None, grass_path=None):
-        """Creates a Sessionhandle object to handle the GRASS session
+    def __init__(self, active=True):
+        self._active = active
 
-        Can be used as a context manager, for use with the "with" keyword,
-        or with the open() and close() functions.
-
-        See `grass.script.setup.init` for details on parameters.
-
-        """
-        self.path = path
-        self.location = location
-        self.mapset = mapset
-        self.grass_path = grass_path
-        self.gisrc = None
+    @property
+    def active(self):
+        """True if session is active (not finished)"""
+        return self._active
 
     def __enter__(self):
+        """Enter the context manager context.
+
+        Notably, the session is activated using the *init* function.
+
+        :returns: reference to the object (self)
         """
-        :returns: path to ``gisrc`` file (may change in future versions)
-        """
-        return self.open()
+        if not self.active:
+            raise ValueError(
+                "Attempt to use inactive (finished) session as a context manager"
+            )
+        return self
 
     def __exit__(self, type, value, traceback):
-        self.close()
+        """Exit the context manager context.
 
-    def open(self):
-        """Opens session with arguments specified in class instantiation.
-
-        Close should be called afterwards to cleanup.
-
-        This function is called automatically when class is used as a
-        context manager.
-
-        :returns: path to ``gisrc`` file (may change in future versions)
+        Finishes the existing session.
         """
-        self.gisrc = init(
-            self.path,
-            self.location,
-            self.mapset,
-            self.grass_path
-        )
+        self.finish()
 
-        return self.gisrc
+    def finish(self):
+        """Finish the session.
 
-    def close(self):
-        """ Cleans up session after you're done using grass modules.
+        If not used as a context manager, call explicitly to clean and close the mapset
+        and finish the session. No GRASS modules can be called afterwards.
         """
+        self._active = False
         finish()
 
 
