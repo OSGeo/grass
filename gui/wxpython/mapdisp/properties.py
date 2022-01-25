@@ -277,7 +277,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self,
         parent,
         giface,
-        mapDispProperties,
+        properties,
         title=_("Map Display Settings"),
         size=(-1, 250),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
@@ -288,7 +288,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.title = title
         self.size = size
         self.giface = giface
-        self.mapWindowProperties = mapDispProperties
+        self.mapWindowProperties = properties
 
         # notebook
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
