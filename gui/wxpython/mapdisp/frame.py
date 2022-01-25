@@ -1560,7 +1560,7 @@ class MapPanel(SingleMapPanel):
         from mapdisp.properties import MapDisplayPropertiesDialog
 
         dlg = MapDisplayPropertiesDialog(
-            parent=self, giface=self._giface, mapDispProperties=self.mapWindowProperties
+            parent=self, giface=self._giface, properties=self.mapWindowProperties
         )
         dlg.CenterOnParent()
         dlg.Show()
