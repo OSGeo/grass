@@ -889,7 +889,7 @@ int main(int argc, char **argv)
 
     /* draw the x-axis label */
     if ((strcmp(title[0]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        *xlabel = '\0';
+        xlabel =  G_store("");
     else
         G_asprintf(&xlabel, "X: %s %s", title[0]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
@@ -1001,7 +1001,7 @@ int main(int argc, char **argv)
 
     /* draw the y-axis label */
     if ((strcmp(title[1]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        *xlabel = '\0';
+        xlabel = G_store("");
     else
         G_asprintf(&xlabel, "Y: %s %s", title[1]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;

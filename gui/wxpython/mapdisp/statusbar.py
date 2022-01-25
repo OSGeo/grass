@@ -37,7 +37,7 @@ import wx
 from core import utils
 from core.gcmd import RunCommand
 from core.settings import UserSettings
-from gui_core.wrap import StaticText, TextCtrl
+from gui_core.wrap import Button, TextCtrl
 
 from grass.script import core as grass
 
@@ -283,7 +283,6 @@ class SbManager:
                     wWin = rect.width - 6
                 if idx == 2:  # mask
                     x += 5
-                    y += 4
                 elif idx == 3:  # render
                     x += 5
             win.SetPosition((x, y))
@@ -304,7 +303,7 @@ class SbManager:
     def OnToggleStatus(self, event):
         """Toggle status text"""
         self.Update()
-        if event.GetSelection() == 3:  # use something better than magic numbers
+        if event.GetSelection() == 3 and self.HasProperty("region"):
             # show computation region extent by default
             self.statusbarItems["region"].SetValue(True)
             # redraw map if auto-rendering is enabled
@@ -381,7 +380,7 @@ class SbItem:
         return self.position
 
     def GetWidget(self):
-        """Returns underlaying winget.
+        """Returns underlying widget.
 
         :return: widget or None if doesn't exist
         """
@@ -894,14 +893,20 @@ class SbProjection(SbItem):
 
 
 class SbMask(SbItem):
-    """StaticText to show whether mask is activated."""
+    """Button to show whether mask is activated and remove mask with
+    left mouse click
+    """
 
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = "mask"
 
-        self.widget = StaticText(parent=self.statusbar, id=wx.ID_ANY, label=_("MASK"))
+        self.widget = Button(
+            parent=self.statusbar, id=wx.ID_ANY, label=_("MASK"), style=wx.NO_BORDER
+        )
+        self.widget.Bind(wx.EVT_BUTTON, self.OnRemoveMask)
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
+        self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
         self.widget.Hide()
 
     def Update(self):
@@ -911,6 +916,24 @@ class SbMask(SbItem):
             self.Show()
         else:
             self.Hide()
+
+    def OnRemoveMask(self, event):
+        if grass.find_file(
+            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
+        )["name"]:
+
+            dlg = wx.MessageDialog(
+                self.mapFrame,
+                message=_("Are you sure that you want to remove the MASK?"),
+                caption=_("Remove MASK"),
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
+            if dlg.ShowModal() != wx.ID_YES:
+                dlg.Destroy()
+                return
+            RunCommand("r.mask", flags="r")
+            self.Hide()
+            self.mapFrame.OnRender(event=None)
 
 
 class SbTextItem(SbItem):

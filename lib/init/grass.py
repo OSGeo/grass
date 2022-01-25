@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2022 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -55,6 +55,7 @@ import locale
 import uuid
 import unicodedata
 import argparse
+import json
 
 
 # mechanism meant for debugging this script (only)
@@ -91,13 +92,15 @@ else:
     os.environ["GISBASE"] = GISBASE
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
+GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
+GRASS_VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
 CONFIG_PROJSHARE = os.environ.get("GRASS_PROJSHARE", "@CONFIG_PROJSHARE@")
 
 # Get the system name
-WINDOWS = sys.platform == "win32"
-CYGWIN = "cygwin" in sys.platform
-MACOSX = "darwin" in sys.platform
+WINDOWS = sys.platform.startswith("win")
+CYGWIN = sys.platform.startswith("cygwin")
+MACOS = sys.platform.startswith("darwin")
 
 
 def decode(bytes_, encoding=ENCODING):
@@ -439,8 +442,8 @@ def get_grass_config_dir():
     Configuration directory is for example used for grass env file
     (the one which caries mapset settings from session to session).
     """
-    if sys.platform == "win32":
-        grass_config_dirname = "GRASS8"
+    if WINDOWS:
+        grass_config_dirname = f"GRASS{GRASS_VERSION_MAJOR}"
         win_conf_path = os.getenv("APPDATA")
         # this can happen with some strange settings
         if not win_conf_path:
@@ -459,7 +462,7 @@ def get_grass_config_dir():
             )
         directory = os.path.join(win_conf_path, grass_config_dirname)
     else:
-        grass_config_dirname = ".grass8"
+        grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
         directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
     if not os.path.isdir(directory):
         try:
@@ -489,10 +492,9 @@ def create_tmp(user, gis_lock):
     if not tmp:
         tmp = tempfile.gettempdir()
 
+    tmpdir_name = f"grass{GRASS_VERSION_MAJOR}-{user}-{gis_lock}"
     if tmp:
-        tmpdir = os.path.join(
-            tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
-        )
+        tmpdir = os.path.join(tmp, tmpdir_name)
         try:
             os.mkdir(tmpdir, 0o700)
         except:  # noqa: E722
@@ -501,9 +503,7 @@ def create_tmp(user, gis_lock):
     if not tmp:
         for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
             tmp = ttmp
-            tmpdir = os.path.join(
-                tmp, "grass8-%(user)s-%(lock)s" % {"user": user, "lock": gis_lock}
-            )
+            tmpdir = os.path.join(tmp, tmpdir_name)
             try:
                 os.mkdir(tmpdir, 0o700)
             except:  # noqa: E722
@@ -513,11 +513,9 @@ def create_tmp(user, gis_lock):
 
     if not tmp:
         fatal(
-            _(
-                "Unable to create temporary directory <grass8-%(user)s-"
-                "%(lock)s>! Exiting."
+            _("Unable to create temporary directory <{tmpdir_name}>! Exiting.").format(
+                tmpdir_name=tmpdir_name
             )
-            % {"user": user, "lock": gis_lock}
         )
 
     # promoting the variable even if it was not defined before
@@ -715,7 +713,13 @@ def set_paths(grass_config_dir):
     # addons (base)
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if not addon_base:
-        addon_base = os.path.join(grass_config_dir, "addons")
+        if MACOS:
+            version = f"{GRASS_VERSION_MAJOR}.{GRASS_VERSION_MINOR}"
+            addon_base = os.path.join(
+                os.getenv("HOME"), "Library", "GRASS", version, "Addons"
+            )
+        else:
+            addon_base = os.path.join(grass_config_dir, "addons")
         os.environ["GRASS_ADDON_BASE"] = addon_base
     if not WINDOWS:
         path_prepend(os.path.join(addon_base, "scripts"), "PATH")
@@ -816,7 +820,7 @@ def set_browser():
     # GRASS_HTML_BROWSER
     browser = os.getenv("GRASS_HTML_BROWSER")
     if not browser:
-        if MACOSX:
+        if MACOS:
             # OSX doesn't execute browsers from the shell PATH - route through a
             # script
             browser = gpath("etc", "html_browser_mac.sh")
@@ -851,7 +855,7 @@ def set_browser():
                     browser = b
                     break
 
-    elif MACOSX:
+    elif MACOS:
         # OSX doesn't execute browsers from the shell PATH - route through a
         # script
         os.environ["GRASS_HTML_BROWSER_MACOSX"] = "-b %s" % browser
@@ -885,7 +889,7 @@ MAPSET: <UNKNOWN>
 def check_gui(expected_gui):
     grass_gui = expected_gui
     # Check if we are running X windows by checking the DISPLAY variable
-    if os.getenv("DISPLAY") or WINDOWS or MACOSX:
+    if os.getenv("DISPLAY") or WINDOWS or MACOS:
         # Check if python is working properly
         if expected_gui in ("wxpython", "gtext"):
             nul = open(os.devnull, "w")
@@ -1369,29 +1373,26 @@ def set_language(grass_config_dir):
     # See discussion for Windows not following its own documentation and
     # not accepting ISO codes as valid locale identifiers
     # http://bugs.python.org/issue10466
-    language = "None"  # Such string sometimes is present in wx file
+    # As this code relies heavily on various locale calls, it is necessary
+    # to track related python changes:
+    # https://bugs.python.org/issue43557
     encoding = None
 
     # Override value is stored in wxGUI preferences file.
-    # As it's the only thing required, we'll just grep it out.
     try:
-        fd = open(os.path.join(grass_config_dir, "wx"), "r")
-    except:
-        # Even if there is no override, we still need to set locale.
-        pass
-    else:
-        for line in fd:
-            if re.search("^language", line):
-                line = line.rstrip(" %s" % os.linesep)
-                language = "".join(line.split(";")[-1:])
-                break
-        fd.close()
+        with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
+            try:
+                language = json.load(json_file)["language"]["locale"]["lc_all"]
+            except KeyError:
+                language = None
+    except FileNotFoundError:
+        language = None
 
     # Backwards compatibility with old wx preferences files
     if language == "C":
         language = "en"
 
-    if language == "None" or language == "" or not language:
+    if not language:
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
@@ -1658,7 +1659,7 @@ def get_shell():
 
     # cygwin has many problems with the shell setup
     # below, so i hardcoded everything here.
-    if sys.platform == "cygwin":
+    if CYGWIN:
         sh = "CYGWIN"
         shellname = "GNU Bash (Cygwin)"
         os.environ["SHELL"] = "/usr/bin/bash.exe"
@@ -1930,7 +1931,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == "bash":
         # set bash history to record an unlimited command history
-        sh_history_limit = "-1"  # unlimited
+        sh_history_limit = ""  # unlimited
         os.environ["HISTSIZE"] = sh_history_limit
         os.environ["HISTFILESIZE"] = sh_history_limit
         sh_history = ".bash_history"
@@ -2065,7 +2066,7 @@ PROMPT_COMMAND=grass_prompt\n""".format(
         for line in readfile(env_file).splitlines():
             # Bug related to OS X "SIP", see
             # https://trac.osgeo.org/grass/ticket/3462#comment:13
-            if MACOSX or not line.startswith("export"):
+            if MACOS or not line.startswith("export"):
                 f.write(line + "\n")
 
     f.write('export PATH="%s"\n' % os.getenv("PATH"))
@@ -2135,9 +2136,18 @@ def io_is_interactive():
 
 
 def print_params(params):
-    """Write compile flags and other configuration to stderr"""
+    """Write compile flags and other configuration to stdout"""
     if not params:
-        params = ["arch", "build", "compiler", "path", "revision", "version", "date"]
+        params = [
+            "arch",
+            "build",
+            "compiler",
+            "path",
+            "python_path",
+            "revision",
+            "version",
+            "date",
+        ]
 
     # check if we are dealing with parameters which require dev files
     dev_params = ["arch", "compiler", "build", "date"]
@@ -2153,6 +2163,8 @@ def print_params(params):
     for arg in params:
         if arg == "path":
             sys.stdout.write("%s\n" % GISBASE)
+        elif arg in ["python_path", "python-path"]:
+            sys.stdout.write("%s\n" % gpath("etc", "python"))
         elif arg == "arch":
             val = grep("ARCH", linesplat)
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())

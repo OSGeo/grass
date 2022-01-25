@@ -22,19 +22,15 @@ SetCompressorDictSize 128
 
 ;Version variables
 
-!if "@GRASS_VERSION_SVN@" == ""
-    !define SVN_REVISION "0"
+!if "@GRASS_VERSION_GIT@" == ""
+    !define GIT_REVISION "0"
 !else
-    !define SVN_REVISION "@GRASS_VERSION_SVN@"
+    !define GIT_REVISION "@GRASS_VERSION_GIT@"
 !endif
 !define BINARY_REVISION "1"
 !define VERSION_NUMBER "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"
 !define GRASS_BASE "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
-!if ${INSTALLER_TYPE} == "Release"
-        !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
-!else
-        !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@svn"
-!endif
+!define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
@@ -42,13 +38,8 @@ SetCompressorDictSize 128
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
-!if "@ARCH@" == "x86_64-w64-mingw32"
-    !define PLATFORM   "x86_64"
-    InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
-!else
-    !define PLATFORM   "x86"
-    InstallDir "$PROGRAMFILES32\${GRASS_BASE}"
-!endif
+!define PLATFORM   "x86_64"
+InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
@@ -68,13 +59,13 @@ SetCompressorDictSize 128
 
 !define PACKAGE_FOLDER ".\GRASS-@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@-Package"
 !if ${INSTALLER_TYPE} == "Release"
-	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup-${PLATFORM}.exe"
-	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${BINARY_REVISION} (${PLATFORM})"
+	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup.exe"
+	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${BINARY_REVISION}"
 	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@"
 !else
-	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${SVN_REVISION}-${BINARY_REVISION}-Setup-${PLATFORM}.exe"
-	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${SVN_REVISION}-${BINARY_REVISION} (${PLATFORM})"
-	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ SVN"
+	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}-Setup.exe"
+	!define DISPLAYED_NAME "GRASS GIS ${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}"
+	!define CHECK_INSTALL_NAME "GRASS GIS @GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@ GIT"
 !endif
 
 ;Define the source path of the demolocation files
@@ -184,7 +175,7 @@ FunctionEnd
 ;call the uninstaller of the currently installed GRASS release
 ;if the uninstall procedure succeeded, call the current installer asking for the install PATH
 
-;the currently installed release of GRASS is defined by the variable $INSTALLED_VERSION = $INSTALLED_SVN_REVISION + $INSTALLED_BINARY_REVISION 
+;the currently installed release of GRASS is defined by the variable $INSTALLED_VERSION = $INSTALLED_GIT_REVISION + $INSTALLED_BINARY_REVISION
 
 Function .onInit
 
@@ -195,7 +186,7 @@ Function .onInit
 	Var /GLOBAL INSTALL_PATH
 	
 	Var /GLOBAL INSTALLED_VERSION_NUMBER
-	Var /GLOBAL INSTALLED_SVN_REVISION
+	Var /GLOBAL INSTALLED_GIT_REVISION
 	Var /GLOBAL INSTALLED_BINARY_REVISION
 	
 	Var /GLOBAL INSTALLED_VERSION
@@ -210,10 +201,10 @@ Function .onInit
 	ReadRegStr $UNINSTALL_STRING HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString"
 	ReadRegStr $INSTALL_PATH HKLM "Software\${GRASS_BASE}" "InstallPath"
 	ReadRegStr $INSTALLED_VERSION_NUMBER HKLM "Software\${GRASS_BASE}" "VersionNumber"
-	ReadRegStr $INSTALLED_SVN_REVISION HKLM "Software\${GRASS_BASE}" "SvnRevision"
+	ReadRegStr $INSTALLED_GIT_REVISION HKLM "Software\${GRASS_BASE}" "GitRevision"
 	
-	${If} $INSTALLED_SVN_REVISION == ""
-		ReadRegStr $INSTALLED_SVN_REVISION HKLM "Software\${GRASS_BASE}" "Revision"
+	${If} $INSTALLED_GIT_REVISION == ""
+		ReadRegStr $INSTALLED_GIT_REVISION HKLM "Software\${GRASS_BASE}" "Revision"
 	${EndIf}	
 	
 	ReadRegStr $INSTALLED_BINARY_REVISION HKLM "Software\${GRASS_BASE}" "BinaryRevision"
@@ -228,7 +219,7 @@ Function .onInit
 			StrCpy $DISPLAYED_INSTALLED_VERSION "$INSTALLED_VERSION_NUMBER-$INSTALLED_BINARY_REVISION"
 		${EndIf}
 	!else
-		StrCpy $DISPLAYED_INSTALLED_VERSION "$INSTALLED_VERSION_NUMBER-$INSTALLED_SVN_REVISION-$INSTALLED_BINARY_REVISION"
+		StrCpy $DISPLAYED_INSTALLED_VERSION "$INSTALLED_VERSION_NUMBER-$INSTALLED_GIT_REVISION-$INSTALLED_BINARY_REVISION"
 	!endif
 	
 	StrCpy $MESSAGE_0_ "$MESSAGE_0_The installed release is $DISPLAYED_INSTALLED_VERSION$\r$\n"
@@ -250,11 +241,11 @@ Function .onInit
 	StrCpy $MESSAGE_3_ "$MESSAGE_3_$\r$\n"
 	StrCpy $MESSAGE_3_ "$MESSAGE_3_Press OK to reinstall ${DISPLAYED_NAME} or Cancel to quit."
 	
-	IntOp $INSTALLED_SVN_REVISION $INSTALLED_SVN_REVISION * 1
+	IntOp $INSTALLED_GIT_REVISION $INSTALLED_GIT_REVISION * 1
 	IntOp $INSTALLED_BINARY_REVISION $INSTALLED_BINARY_REVISION * 1
-	IntOp $INSTALLED_VERSION $INSTALLED_SVN_REVISION + $INSTALLED_BINARY_REVISION
+	IntOp $INSTALLED_VERSION $INSTALLED_GIT_REVISION + $INSTALLED_BINARY_REVISION
 	
-	!define /math VERSION ${SVN_REVISION} + ${BINARY_REVISION}
+	!define /math VERSION ${GIT_REVISION} + ${BINARY_REVISION}
 	
 	${If} $INSTALLED_VERSION_NUMBER == ""
 	${Else}
@@ -490,14 +481,6 @@ FunctionEnd
 ;Declares the variables for optional Sample Data Sections
 Var /GLOBAL HTTP_PATH
 Var /GLOBAL ARCHIVE_NAME
-;Var /GLOBAL ARCHIVE_NAME2005
-Var /GLOBAL ARCHIVE_NAME2008
-Var /GLOBAL ARCHIVE_NAME2010
-!if ${PLATFORM} == "x86_64"
-    Var /GLOBAL ARCHIVE_NAME2012
-!endif
-Var /GLOBAL ARCHIVE_NAME2013
-Var /GLOBAL ARCHIVE_NAME2015
 Var /GLOBAL EXTENDED_ARCHIVE_NAME
 Var /GLOBAL ORIGINAL_UNTAR_FOLDER
 Var /GLOBAL CUSTOM_UNTAR_FOLDER
@@ -627,16 +610,16 @@ Section "GRASS" SecGRASS
 	
 	;HKEY_LOCAL_MACHINE Install entries
 	;Set the Name, Version and Revision of GRASS + PublisherInfo + InstallPath
-	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE} (${PLATFORM})"
+	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "VersionNumber" "${VERSION_NUMBER}"
-	WriteRegStr HKLM "Software\${GRASS_BASE}" "SvnRevision" "${SVN_REVISION}"
+	WriteRegStr HKLM "Software\${GRASS_BASE}" "GitRevision" "${GIT_REVISION}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "BinaryRevision" "${BINARY_REVISION}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "Publisher" "${PUBLISHER}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "WebSite" "${WEB_SITE}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "InstallPath" "$INSTALL_DIR"
 	
 	;HKEY_LOCAL_MACHINE Uninstall entries
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@ (${PLATFORM})"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString" "$INSTALL_DIR\Uninstall-GRASS.exe"
 	
 	!if ${INSTALLER_TYPE} == "Release"
@@ -644,7 +627,7 @@ Section "GRASS" SecGRASS
 		"DisplayVersion" "${VERSION_NUMBER}-${BINARY_REVISION}"
 	!else
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}"\
-		"DisplayVersion" "${VERSION_NUMBER}-${SVN_REVISION}-${BINARY_REVISION}"
+		"DisplayVersion" "${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}"
 	!endif
 	
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayIcon" "$INSTALL_DIR\gui\icons\grass.ico"
@@ -775,7 +758,8 @@ Section "GRASS" SecGRASS
 	Push 'config_projshare = "$INSTDIR\share\proj"' ; string to replace whole line with
 	Call ReplaceLineStr
 
-        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(BU)" "Execute"                 
+	;replace BU with numeric group name for local users
+        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(S-1-5-32-545)" "GenericRead + GenericExecute"                 
 SectionEnd
 
 ;--------------------------------------------------------------------------
@@ -810,16 +794,6 @@ Function DownloadInstallMSRuntime
 	SetShellVarContext current	
 	InitPluginsDir
 	NSISdl::download "$HTTP_PATH/$ARCHIVE_NAME" "$TEMP\$ARCHIVE_NAME"
-        ;!if ${PLATFORM} == "x86"
-        ;    NSISdl::download "$HTTP_PATH/msvcrt2005/$ARCHIVE_NAME2005" "$TEMP\$ARCHIVE_NAME2005"
-        ;!endif
-	NSISdl::download "$HTTP_PATH/msvcrt2008/$ARCHIVE_NAME2008" "$TEMP\$ARCHIVE_NAME2008"
-	NSISdl::download "$HTTP_PATH/msvcrt2010/$ARCHIVE_NAME2010" "$TEMP\$ARCHIVE_NAME2010"
-        !if ${PLATFORM} == "x86_64"
-            NSISdl::download "$HTTP_PATH/msvcrt2012/$ARCHIVE_NAME2012" "$TEMP\$ARCHIVE_NAME2012"
-        !endif
-	NSISdl::download "$HTTP_PATH/msvcrt2013/$ARCHIVE_NAME2013" "$TEMP\$ARCHIVE_NAME2013"
-	NSISdl::download "$HTTP_PATH/msvcrt2015/$ARCHIVE_NAME2015" "$TEMP\$ARCHIVE_NAME2015"
 
 	Pop $0
 	StrCmp $0 "success" download_ok download_failed
@@ -827,16 +801,6 @@ Function DownloadInstallMSRuntime
 	download_ok:	
 	InitPluginsDir
 	untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME"
-        ;!if ${PLATFORM} == "x86"
-        ;    untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2005"
-        ;!endif
-        untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2008"
-        untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2010"
-        !if ${PLATFORM} == "x86_64"
-            untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2012"
-        !endif
-        untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2013"
-        untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME2015"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
 	
@@ -854,31 +818,6 @@ Function DownloadInstallMSRuntime
 
 	untar_ok:
 	DetailPrint "Archive successfully unzipped."
-        !if ${PLATFORM} == "x86"     
-            ; seems to be not needed, see #2996
-            ;DetailPrint "Installing vcredist_2005_x86.exe ..."
-	    ;ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2005_x86.exe" /q'
-            DetailPrint "Installing vcredist_2008_x86.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe" /q'	
-	    DetailPrint "Installing vcredist_2010_x86.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe" /q' 
-	    DetailPrint "Installing vcredist_2013_x86.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2013_x86.exe" /q'
-	    DetailPrint "Installing vcredist_2015_x86.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2015_x86.exe" /q'
-        !else
-            DetailPrint "Installing vcredist_2008_x64.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2008-sp1-x64.exe" /q'
-	    DetailPrint "Installing vcredist_2010_x64.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2010-x64.exe" /q' 
-            ; msvcrt2012 package contains dll files
-	    ;DetailPrint "Installing vcredist_2012_x64.exe ..."
-	    ;ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2012-x64.exe" /q' 
-	    DetailPrint "Installing vcredist_2013_x64.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist-2013-x64.exe" /q'
-	    DetailPrint "Installing vcredist_2015_x64.exe ..."
-	    ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2015_x64.exe" /q'
-        !endif
 	DetailPrint "Copying runtime files ..."
 	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTALL_DIR\extrabin"
 	DetailPrint "MS runtime files installed."
@@ -891,27 +830,13 @@ FunctionEnd
 Section "Important Microsoft Runtime DLLs" SecMSRuntime
 
 	;Set the size (in KB)  of the archive file
-	StrCpy $ARCHIVE_SIZE_KB 18512
+	StrCpy $ARCHIVE_SIZE_KB 833
 	
 	;Set the size (in KB) of the unpacked archive file
 	AddSize 13500
 	
-	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/${PLATFORM}/release/msvcrt/"
-        !if ${PLATFORM} == "x86_64"
-            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-9.tar.bz2"
-            StrCpy $ARCHIVE_NAME2008 "msvcrt2008-1.0.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2010 "msvcrt2010-1.0.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2012 "msvcrt2012-1.0.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2013 "msvcrt2013-1.0.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2015 "msvcrt2015-1.0-1.tar.bz2"
-        !else
-            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-14.tar.bz2"
-            ;StrCpy $ARCHIVE_NAME2005 "msvcrt2005-1.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2008 "msvcrt2008-1.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2010 "msvcrt2010-1.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2013 "msvcrt2013-1.0-1.tar.bz2"
-            StrCpy $ARCHIVE_NAME2015 "msvcrt2015-1.0-1.tar.bz2"
-        !endif
+	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/v2/${PLATFORM}/release/msvcrt2019/"
+        StrCpy $ARCHIVE_NAME "msvcrt2019-14.2-1.tar.bz2"
 	StrCpy $EXTENDED_ARCHIVE_NAME "Microsoft Visual C++ Redistributable Packages"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "install_msruntime"
 	
@@ -921,11 +846,12 @@ SectionEnd
 
 Function DownloadDataSet
 
-	IntOp $ARCHIVE_SIZE_MB $ARCHIVE_SIZE_KB / 1024
+	; IntOp $ARCHIVE_SIZE_MB $ARCHIVE_SIZE_KB / 1024
 	
 	StrCpy $DOWNLOAD_MESSAGE_ "The installer will download the $EXTENDED_ARCHIVE_NAME sample data set.$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
-	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_MB MB and may take"
+	; StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_MB MB and may take"
+        StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_KB KB and may take"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ several minutes to download.$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The $EXTENDED_ARCHIVE_NAME dataset will be copied to:$\r$\n"

@@ -3,7 +3,6 @@ Functions to use GRASS 2D and 3D rasters with NumPy.
 
 Usage:
 
->>> from __future__ import print_function
 >>> import grass.script as gs
 >>> from grass.script import array as garray
 >>>
@@ -102,7 +101,7 @@ Usage:
 ... map3d_2.write(mapname="map3d_2", overwrite=True)
 0
 
-(C) 2010-2012 by Glynn Clements and the GRASS Development Team
+(C) 2010-2021 by Glynn Clements and the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -111,7 +110,6 @@ for details.
 """
 
 from __future__ import absolute_import
-import sys
 
 import numpy
 
@@ -182,55 +180,6 @@ class array(numpy.memmap):
         self.filename = tempfile.filename
         self._env = env
         return self
-
-    def read(self, mapname, null=None):
-        """Read raster map into array
-
-        :param str mapname: name of raster map to be read
-        :param null: null value
-
-        :return: 0 on success
-        :return: non-zero code on failure
-
-        .. deprecated:: 7.1
-        Instead reading the map after creating the array,
-        pass the map name in the array constructor.
-        """
-        if sys.platform == "win32":
-            gcore.warning(
-                _(
-                    "grass.script.array.read is deprecated and does not"
-                    " work on MS Windows, pass raster name in the constructor"
-                )
-            )
-        kind = self.dtype.kind
-        size = self.dtype.itemsize
-
-        if kind == "f":
-            flags = "f"
-        elif kind in "biu":
-            flags = "i"
-        else:
-            raise ValueError(_("Invalid kind <%s>") % kind)
-
-        if size not in [1, 2, 4, 8]:
-            raise ValueError(_("Invalid size <%d>") % size)
-
-        try:
-            gcore.run_command(
-                "r.out.bin",
-                flags=flags,
-                input=mapname,
-                output=self.filename,
-                bytes=size,
-                null=null,
-                quiet=True,
-                overwrite=True,
-            )
-        except CalledModuleError:
-            return 1
-        else:
-            return 0
 
     def write(self, mapname, title=None, null=None, overwrite=None, quiet=None):
         """Write array into raster map
@@ -341,55 +290,6 @@ class array3d(numpy.memmap):
         self._env = env
 
         return self
-
-    def read(self, mapname, null=None):
-        """Read 3D raster map into array
-
-        :param str mapname: name of 3D raster map to be read
-        :param null: null value
-
-        :return: 0 on success
-        :return: non-zero code on failure
-
-        .. deprecated:: 7.1
-        Instead reading the map after creating the array,
-        pass the map name in the array constructor.
-        """
-        if sys.platform == "win32":
-            gcore.warning(
-                _(
-                    "grass.script.array3d.read is deprecated and does not"
-                    " work on MS Windows, pass 3D raster name in the constructor"
-                )
-            )
-        kind = self.dtype.kind
-        size = self.dtype.itemsize
-
-        if kind == "f":
-            flags = None  # default is double
-        elif kind in "biu":
-            flags = "i"
-        else:
-            raise ValueError(_("Invalid kind <%s>") % kind)
-
-        if size not in [1, 2, 4, 8]:
-            raise ValueError(_("Invalid size <%d>") % size)
-
-        try:
-            gcore.run_command(
-                "r3.out.bin",
-                flags=flags,
-                input=mapname,
-                output=self.filename,
-                bytes=size,
-                null=null,
-                quiet=True,
-                overwrite=True,
-            )
-        except CalledModuleError:
-            return 1
-        else:
-            return 0
 
     def write(self, mapname, null=None, overwrite=None, quiet=None):
         """Write array into 3D raster map

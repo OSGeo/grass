@@ -94,6 +94,7 @@ from core.debug import Debug
 from gui_core.wrap import (
     Button,
     SearchCtrl,
+    Slider,
     StaticText,
     StaticBox,
     TextCtrl,
@@ -131,26 +132,26 @@ class NotebookController:
         """Binds page changed event."""
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """Add a new page"""
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
-        self.classObject.AddPage(self.widget, **kwargs)
+        self.classObject.AddPage(self.widget, *args, **kwargs)
 
-    def InsertPage(self, **kwargs):
+    def InsertPage(self, *args, **kwargs):
         """Insert a new page"""
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
         try:
-            self.classObject.InsertPage(self.widget, **kwargs)
+            self.classObject.InsertPage(self.widget, *args, **kwargs)
         except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
-            self.classObject.InsertPage(self.widget, **kwargs)
+            self.classObject.InsertPage(self.widget, *args, **kwargs)
 
     def DeletePage(self, page):
         """Delete page
@@ -264,7 +265,7 @@ class FlatNotebookController(NotebookController):
 
         return self.classObject.GetPageIndex(self.widget, self.notebookPages[page])
 
-    def InsertPage(self, **kwargs):
+    def InsertPage(self, *args, **kwargs):
         """Insert a new page"""
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
@@ -272,14 +273,14 @@ class FlatNotebookController(NotebookController):
 
         kwargs["indx"] = kwargs["index"]
         del kwargs["index"]
-        self.classObject.InsertPage(self.widget, **kwargs)
+        self.classObject.InsertPage(self.widget, *args, **kwargs)
 
 
 class GNotebook(FN.FlatNotebook):
     """Generic notebook widget.
 
     Enables advanced style settings.
-    Problems with hidden tabs and does not respect system colors (native look).
+    Problems with hidden tabs. Uses system colours for active tabs.
     """
 
     def __init__(self, parent, style, **kwargs):
@@ -293,14 +294,18 @@ class GNotebook(FN.FlatNotebook):
         self.controller = FlatNotebookController(
             classObject=FN.FlatNotebook, widget=self
         )
+        self.SetActiveTabColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
+        self.SetActiveTabTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        )
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertNBPage(self, **kwargs):
+    def InsertNBPage(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -328,13 +333,13 @@ class FormNotebook(wx.Notebook):
         wx.Notebook.__init__(self, parent, id=wx.ID_ANY, style=style)
         self.controller = NotebookController(classObject=wx.Notebook, widget=self)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertNBPage(self, **kwargs):
+    def InsertNBPage(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeleteNBPage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -362,13 +367,13 @@ class FormListbook(wx.Listbook):
         wx.Listbook.__init__(self, parent, id=wx.ID_ANY, style=style)
         self.controller = NotebookController(classObject=wx.Listbook, widget=self)
 
-    def AddPage(self, **kwargs):
+    def AddPage(self, *args, **kwargs):
         """@copydoc NotebookController::AddPage()"""
-        self.controller.AddPage(**kwargs)
+        self.controller.AddPage(*args, **kwargs)
 
-    def InsertPage_(self, **kwargs):
+    def InsertPage_(self, *args, **kwargs):
         """@copydoc NotebookController::InsertPage()"""
-        self.controller.InsertPage(**kwargs)
+        self.controller.InsertPage(*args, **kwargs)
 
     def DeletePage(self, page):
         """@copydoc NotebookController::DeletePage()"""
@@ -422,12 +427,12 @@ class NumTextCtrl(TextCtrl):
         pass
 
 
-class FloatSlider(wx.Slider):
+class FloatSlider(Slider):
     """Class derived from wx.Slider for floats"""
 
     def __init__(self, **kwargs):
         Debug.msg(1, "FloatSlider.__init__()")
-        wx.Slider.__init__(self, **kwargs)
+        Slider.__init__(self, **kwargs)
         self.coef = 1.0
         # init range
         self.minValueOrig = 0
@@ -512,7 +517,7 @@ class SymbolButton(BitmapTextButton):
     def DrawRecord(self, dc, size):
         """Draw record symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
-        dc.DrawCircle(size[0] / 2, size[1] / 2, size[0] / 2)
+        dc.DrawCircle(size[0] // 2, size[1] // 2, size[0] // 2)
 
     def DrawStop(self, dc, size):
         """Draw stop symbol"""
@@ -522,14 +527,14 @@ class SymbolButton(BitmapTextButton):
     def DrawPlay(self, dc, size):
         """Draw play symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0)))
-        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
+        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] // 2))
         dc.DrawPolygon(points)
 
     def DrawPause(self, dc, size):
         """Draw pause symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
-        dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
-        dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
+        dc.DrawRectangle(0, 0, 2 * size[0] // 5, size[1])
+        dc.DrawRectangle(3 * size[0] // 5, 0, 2 * size[0] // 5, size[1])
 
 
 class StaticWrapText(GenStaticText):
@@ -1198,7 +1203,7 @@ class SearchModuleWidget(wx.Panel):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY, **kwargs)
 
         #        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
-        # label = " %s " % _("Find module - (press Enter for next match)"))
+        # label = " %s " % _("Find tool - (press Enter for next match)"))
 
         if sys.platform == "win32":
             self._search = TextCtrl(
@@ -1210,7 +1215,7 @@ class SearchModuleWidget(wx.Panel):
             )
             self._search.SetDescriptiveText(_("Fulltext search"))
             self._search.SetToolTip(
-                _("Type to search in all modules. Press Enter for next match.")
+                _("Type to search in all tools. Press Enter for next match.")
             )
 
         self._search.Bind(wx.EVT_TEXT, self.OnSearchModule)
@@ -1218,7 +1223,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
-                parent=self, id=wx.ID_ANY, label="Choose a module", size=(-1, 35)
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
             )
 
         if self._showChoice:
@@ -1283,7 +1288,7 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
-        label = _("%d modules match") % len(commands)
+        label = _("%d tools match") % len(commands)
         if self._showTip:
             self._searchTip.SetLabel(label)
 
@@ -1326,7 +1331,7 @@ class SearchModuleWidget(wx.Panel):
         """Reset widget"""
         self._search.SetValue("")
         if self._showTip:
-            self._searchTip.SetLabel("Choose a module")
+            self._searchTip.SetLabel("Choose a tool")
 
 
 class ManageSettingsWidget(wx.Panel):
@@ -1668,14 +1673,14 @@ class PictureComboBox(OwnerDrawnComboBox):
         # for painting the items in the popup
         bitmap = self.GetPictureBitmap(self.GetString(item))
         if bitmap:
-            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) / 2)
+            dc.DrawBitmap(bitmap, r.x, r.y + (r.height - bitmap.GetHeight()) // 2)
             width = bitmap.GetWidth() + 10
         else:
             width = 0
         dc.DrawText(
             self.GetString(item),
             r.x + width,
-            (r.y + 0) + (r.height - dc.GetCharHeight()) / 2,
+            (r.y + 0) + (r.height - dc.GetCharHeight()) // 2,
         )
 
     def OnMeasureItem(self, item):

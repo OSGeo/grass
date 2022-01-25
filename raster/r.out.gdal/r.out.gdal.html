@@ -180,6 +180,10 @@ Cloud Optimized GeoTIFFs (COG) can be created with the creation options
 <em>gdaladdo</em> to build overviews.
 -->
 
+<h3>Offset/scale parameters</h3>
+
+Offset is only relevant if not zero. Scale is only relevant if not 1.
+
 <h2>EXAMPLES</h2>
 
 <h3>Export the integer raster basin_50K map to GeoTIFF format</h3>
@@ -323,6 +327,34 @@ g.region raster=elevation -p
 r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
 </pre></div>
 
+<h3>Export raster map with offset/scale assigned</h3>
+
+An offset value can be assigned to output raster data by <b>offset</b>
+parameter. Similarly a scale value can be assigned by <b>scale</b>
+parameter.
+
+<div class="code"><pre>
+# produce raster map
+g.region n=100 s=0 e=100 w=0 res=1
+r.random.cells output=random distance=1.0
+r.info -r random
+
+# export raster data with offset/scale assigned
+r.out.gdal input=random output=random.tif offset=100 scale=0.01
+</pre></div>
+
+Check result by <em>gdalinfo</em> command line tool:
+
+<div class="code"><pre>
+gdalinfo random.tif
+...
+Band 1 Block=100x40 Type=UInt16, ColorInterp=Palette
+  Description = random
+    Computed Min/Max=1.000,3661.000
+  NoData Value=65535
+  Offset: 100,   Scale:0.01
+...
+</pre></div>
 
 <h2>GDAL RELATED ERROR MESSAGES</h2>
 

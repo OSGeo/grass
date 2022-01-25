@@ -1,12 +1,17 @@
+#if defined(_OPENMP)
+    #include <omp.h>
+#endif
+
 #include <unistd.h>
 #include <grass/rowio.h>
 #include <grass/raster.h>
 #include "glob.h"
 #include "filter.h"
 
-int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
+int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
 {
     int i;
+    int t;
     int count;
     int size;
     int row, rcount;
@@ -14,12 +19,25 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
     int startx, starty;
     int dx, dy;
     int mid;
-    DCELL **bufs, **box, *cp;
+    int old_nprocs = 0;
+    DCELL ***bufs, ***box, *cp;
+
+    if (nprocs > 1 && filter->type == SEQUENTIAL) {
+        /* disable parallel temporarily */
+        old_nprocs = nprocs;
+        nprocs = 1;
+    }
+
 
     size = filter->size;
     mid = size / 2;
-    bufs = (DCELL **) G_malloc(size * sizeof(DCELL *));
-    box = (DCELL **) G_malloc(size * sizeof(DCELL *));
+    bufs = (DCELL ***) G_malloc(nprocs * sizeof(DCELL **));
+    box = (DCELL ***) G_malloc(nprocs * sizeof(DCELL **));
+
+    for (t = 0; t < nprocs; t++) {
+        bufs[t] = (DCELL **) G_malloc(size * sizeof(DCELL *));
+        box[t] = (DCELL **) G_malloc(size * sizeof(DCELL *));
+    }
 
     switch (filter->start) {
     case UR:
@@ -56,65 +74,93 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
     ccount = ncols - (size - 1);
 
     /* rewind output */
-    lseek(out, 0L, 0);
+    lseek(out[MASTER], 0L, SEEK_SET);
 
     /* copy border rows to output */
     row = starty;
     for (i = 0; i < mid; i++) {
-	cp = (DCELL *) Rowio_get(r, row);
-	write(out, cp, buflen);
-	row += dy;
+        cp = (DCELL *) Rowio_get(&r[MASTER], row);
+        if (write(out[MASTER], cp, buflen) < 0) 
+            G_fatal_error("Error writing temporary file");
+        row += dy;
     }
 
     /* for each row */
-    for (count = 0; count < rcount; count++) {
-	G_percent(count, rcount, 2);
+    int id = MASTER;
+    int start =  0;
+    int end = rcount;
+    int work = 0;
+    DCELL* cellp = cell[MASTER];
+
+    #pragma omp parallel firstprivate(starty, id, start, end, cellp) private(i, count, row, col, cp) if(nprocs > 1)
+    {
+    #if defined(_OPENMP)
+    if (nprocs > 1) {
+        id = omp_get_thread_num();
+        start = rcount * id/nprocs;
+        end = rcount * (id+1)/nprocs;
+        cellp = cell[id];
+        starty += start * dy;
+        lseek(out[id], (off_t) buflen * (mid + start), SEEK_SET);
+    }
+    #endif
+
+    for (count = start; count < end; count++) {
+	G_percent(work, rcount, 2);
 	row = starty;
 	starty += dy;
 	/* get "size" rows */
 	for (i = 0; i < size; i++) {
-	    bufs[i] = (DCELL *) Rowio_get(r, row);
-	    box[i] = bufs[i] + startx;
+	    bufs[id][i] = (DCELL *) Rowio_get(&r[id], row);
+	    box[id][i] = bufs[id][i] + startx;
 	    row += dy;
 	}
 	if (filter->type == SEQUENTIAL)
-	    cell = bufs[mid];
+	    cellp = bufs[id][mid];
 	/* copy border */
-	cp = cell;
+	cp = cellp;
 	for (i = 0; i < mid; i++)
-	    *cp++ = bufs[mid][i];
+	    *cp++ = bufs[id][mid][i];
 
 	/* filter row */
 	col = ccount;
 	while (col--) {
-	    if (null_only) {
-		if (Rast_is_d_null_value(&box[mid][mid]))
-		    *cp++ = apply_filter(filter, box);
-		else
-		    *cp++ = box[mid][mid];
-	    }
-	    else {
-		*cp++ = apply_filter(filter, box);
+	    if (null_only && !Rast_is_d_null_value(&box[id][mid][mid])) {
+		    *cp++ = box[id][mid][mid];
+	    } else {
+            *cp++ = apply_filter(filter, box[id]);
 	    }
 	    for (i = 0; i < size; i++)
-		box[i] += dx;
+		box[id][i] += dx;
 	}
 
 	/* copy border */
 	for (i = ncols - mid; i < ncols; i++)
-	    *cp++ = bufs[mid][i];
+	    *cp++ = bufs[id][mid][i];
 
 	/* write row */
-	write(out, cell, buflen);
+	write(out[id], cellp, buflen);
+    #pragma omp atomic update
+    work++;
     }
-    G_percent(count, rcount, 2);
+    }
+    G_percent(work, rcount, 2);
+    starty = rcount * dy;
+    lseek(out[MASTER], (off_t) buflen * (mid + rcount), SEEK_SET);
 
     /* copy border rows to output */
     row = starty + mid * dy;
     for (i = 0; i < mid; i++) {
-	cp = (DCELL *) Rowio_get(r, row);
-	write(out, cp, buflen);
+	cp = (DCELL *) Rowio_get(&r[MASTER], row);
+        if (write(out[MASTER], cp, buflen) < 0)
+            G_fatal_error("Error writing temporary file");
 	row += dy;
+    }
+
+    if (old_nprocs != 0) {
+        /* restore parallel execution */
+        nprocs = old_nprocs;
+        old_nprocs = 0;
     }
 
     return 0;

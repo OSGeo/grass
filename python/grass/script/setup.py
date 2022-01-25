@@ -24,57 +24,41 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass8bin = 'grass'
-    if sys.platform.startswith('win'):
+    grass8bin = "grass"
+    if sys.platform.startswith("win"):
         # MS Windows
-        grass8bin = r'C:\OSGeo4W\bin\grass.bat'
+        grass8bin = r"C:\OSGeo4W\bin\grass.bat"
         # uncomment when using standalone WinGRASS installer
         # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.0.0\grass.bat'
         # this can be avoided if GRASS executable is added to PATH
-    elif sys.platform == 'darwin':
+    elif sys.platform == "darwin":
         # Mac OS X
-        # TODO: this have to be checked, maybe unix way is good enough
-        grass8bin = '/Applications/GRASS/GRASS-8.0.app/'
+        grass8bin = "/Applications/GRASS-8.0.app/Contents/Resources/bin/grass"
 
-    # query GRASS GIS itself for its GISBASE
-    startcmd = [grass8bin, '--config', 'path']
-    try:
-        p = subprocess.Popen(startcmd, shell=False,
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-    except OSError as error:
-        sys.exit("ERROR: Cannot find GRASS GIS start script"
-                 " {cmd}: {error}".format(cmd=startcmd[0], error=error))
-    if p.returncode != 0:
-        sys.exit("ERROR: Issues running GRASS GIS start script"
-                 " {cmd}: {error}"
-                 .format(cmd=' '.join(startcmd), error=err))
-    gisbase = out.strip(os.linesep)
-
-    # set GISBASE environment variable
-    os.environ['GISBASE'] = gisbase
+    # query GRASS GIS itself for its Python package path
+    grass_cmd = [grass8bin, "--config", "python_path"]
+    process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 
     # define GRASS-Python environment
-    grass_pydir = os.path.join(gisbase, "etc", "python")
-    sys.path.append(grass_pydir)
+    sys.path.append(process.stdout.strip())
 
     # import (some) GRASS Python bindings
     import grass.script as gs
     import grass.script.setup as gsetup
 
     # launch session
-    rcfile = gsetup.init(gisdb, location, mapset, grass_path=gisbase)
+    rcfile = gsetup.init(gisdb, location, mapset)
 
     # example calls
-    gs.message('Current GRASS GIS 8 environment:')
+    gs.message("Current GRASS GIS 8 environment:")
     print(gs.gisenv())
 
-    gs.message('Available raster maps:')
-    for rast in gs.list_strings(type='raster'):
+    gs.message("Available raster maps:")
+    for rast in gs.list_strings(type="raster"):
         print(rast)
 
-    gs.message('Available vector maps:')
-    for vect in gs.list_strings(type='vector'):
+    gs.message("Available vector maps:")
+    for vect in gs.list_strings(type="vector"):
         print(vect)
 
     # clean up at the end
@@ -103,7 +87,11 @@ import subprocess
 import sys
 import tempfile as tmpfile
 
-windows = sys.platform == "win32"
+WINDOWS = sys.platform.startswith("win")
+MACOS = sys.platform.startswith("darwin")
+
+VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
+VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 
 
 def write_gisrc(dbase, location, mapset):
@@ -163,7 +151,7 @@ def get_install_path(path=None):
     if path and shutil.which(path):
         # The path was provided by the user and it is an executable
         # (on path or provided with full path), so raise exception on failure.
-        ask_executable(path)
+        return ask_executable(path)
 
     # Presumably directory was provided.
     if path:
@@ -179,7 +167,7 @@ def get_install_path(path=None):
     # at this point (to be re-evaluated).
     grass_bin = os.environ.get("GRASSBIN")
     if grass_bin and shutil.which(grass_bin):
-        ask_executable(grass_bin)
+        return ask_executable(grass_bin)
 
     # Derive the path from path to this file (Python module).
     # This is the standard way when there is no user-provided settings.
@@ -190,7 +178,7 @@ def get_install_path(path=None):
     bin_path = install_path / "bin"
     lib_path = install_path / "lib"
     if bin_path.is_dir() and lib_path.is_dir():
-        path = install_path
+        return install_path
 
     # As a last resort, try running grass command if it exists.
     # This is less likely give the right result than the relative path on systems
@@ -198,7 +186,7 @@ def get_install_path(path=None):
     # However, it allows for non-standard installations with standard command.
     grass_bin = "grass"
     if grass_bin and shutil.which(grass_bin):
-        ask_executable(grass_bin)
+        return ask_executable(grass_bin)
 
     return None
 
@@ -208,28 +196,39 @@ def setup_runtime_env(gisbase):
 
     Modifies the global environment (os.environ) so that GRASS modules can run.
     """
+    # Accept Path objects.
+    gisbase = os.fspath(gisbase)
     # Set GISBASE
     os.environ["GISBASE"] = gisbase
-    mswin = sys.platform.startswith("win")
-    # define PATH
-    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "bin")
-    os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "scripts")
-    if mswin:  # added for winGRASS
-        os.environ["PATH"] += os.pathsep + os.path.join(gisbase, "extrabin")
 
-    # add addons to the PATH
+    # define PATH
+    path_addition = os.pathsep + os.path.join(gisbase, "bin")
+    path_addition += os.pathsep + os.path.join(gisbase, "scripts")
+    if WINDOWS:
+        path_addition += os.pathsep + os.path.join(gisbase, "extrabin")
+
+    # add addons to the PATH, use GRASS_ADDON_BASE if set
     # copied and simplified from lib/init/grass.py
-    if mswin:
-        config_dirname = "GRASS8"
-        config_dir = os.path.join(os.getenv("APPDATA"), config_dirname)
-    else:
-        config_dirname = ".grass8"
-        config_dir = os.path.join(os.getenv("HOME"), config_dirname)
-    addon_base = os.path.join(config_dir, "addons")
-    os.environ["GRASS_ADDON_BASE"] = addon_base
-    if not mswin:
-        os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "scripts")
-    os.environ["PATH"] += os.pathsep + os.path.join(addon_base, "bin")
+    addon_base = os.getenv("GRASS_ADDON_BASE")
+    if not addon_base:
+        if WINDOWS:
+            config_dirname = f"GRASS{VERSION_MAJOR}"
+            addon_base = os.path.join(os.getenv("APPDATA"), config_dirname, "addons")
+        elif MACOS:
+            version = f"{VERSION_MAJOR}.{VERSION_MINOR}"
+            addon_base = os.path.join(
+                os.getenv("HOME"), "Library", "GRASS", version, "Addons"
+            )
+        else:
+            config_dirname = f".grass{VERSION_MAJOR}"
+            addon_base = os.path.join(os.getenv("HOME"), config_dirname, "addons")
+        os.environ["GRASS_ADDON_BASE"] = addon_base
+
+    if not WINDOWS:
+        path_addition += os.pathsep + os.path.join(addon_base, "scripts")
+    path_addition += os.pathsep + os.path.join(addon_base, "bin")
+
+    os.environ["PATH"] = path_addition + os.pathsep + os.getenv("PATH")
 
     # define LD_LIBRARY_PATH
     if "@LD_LIBRARY_PATH_VAR@" not in os.environ:
@@ -238,7 +237,7 @@ def setup_runtime_env(gisbase):
 
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
     if not os.getenv("GRASS_PYTHON"):
-        if sys.platform == "win32":
+        if WINDOWS:
             os.environ["GRASS_PYTHON"] = "python3.exe"
         else:
             os.environ["GRASS_PYTHON"] = "python3"
@@ -312,11 +311,13 @@ def init(path, location=None, mapset=None, grass_path=None):
     from grass.grassdb.checks import get_mapset_invalid_reason, is_mapset_valid
     from grass.grassdb.manage import resolve_mapset_path
 
+    # Support ~ in the path for user home directory.
+    path = Path(path).expanduser()
     # A simple existence test. The directory, whatever it is, should exist.
-    if not Path(path).exists():
+    if not path.exists():
         raise ValueError(_("Path '{path}' does not exist").format(path=path))
     # A specific message when it exists, but it is a file.
-    if Path(path).is_file():
+    if path.is_file():
         raise ValueError(
             _("Path '{path}' is a file, but a directory is needed").format(path=path)
         )
@@ -440,7 +441,7 @@ def clean_default_db():
 
 def call(cmd, **kwargs):
     """Wrapper for subprocess.call to deal with platform-specific issues"""
-    if windows:
+    if WINDOWS:
         kwargs["shell"] = True
     return subprocess.call(cmd, **kwargs)
 

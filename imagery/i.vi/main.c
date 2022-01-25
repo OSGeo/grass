@@ -36,6 +36,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+double c_i(double bluechan, double redchan); 
 double s_r(double redchan, double nirchan);
 double nd_vi(double redchan, double nirchan);
 double nd_wi(double greenchan, double nirchan);
@@ -107,9 +108,10 @@ int main(int argc, char *argv[])
     opt.viname->description = _("Type of vegetation index");
     desc = NULL;
     G_asprintf(&desc,
-	       "arvi;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
+	       "arvi;%s;ci;%s;dvi;%s;evi;%s;evi2;%s;gvi;%s;gari;%s;gemi;%s;ipvi;%s;msavi;%s;"
 	       "msavi2;%s;ndvi;%s;ndwi;%s;pvi;%s;savi;%s;sr;%s;vari;%s;wdvi;%s",
 	       _("Atmospherically Resistant Vegetation Index"),
+	       _("Crust Index"),
 	       _("Difference Vegetation Index"),
 	       _("Enhanced Vegetation Index"),
 	       _("Enhanced Vegetation Index 2"),
@@ -127,7 +129,7 @@ int main(int argc, char *argv[])
 	       _("Visible Atmospherically Resistant Index"),
 	       _("Weighted Difference Vegetation Index"));
     opt.viname->descriptions = desc;
-    opt.viname->options = "arvi,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,ndwi,pvi,savi,sr,vari,wdvi";
+    opt.viname->options = "arvi,ci,dvi,evi,evi2,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,ndwi,pvi,savi,sr,vari,wdvi";
     opt.viname->answer = "ndvi";
     opt.viname->key_desc = _("type");
 
@@ -231,6 +233,9 @@ int main(int argc, char *argv[])
         dnbits = atof(opt.bits->answer);
     result = opt.output->answer;
     G_verbose_message(_("Calculating %s..."), viflag);
+
+    if (!strcasecmp(viflag, "ci") && (!(opt.blue->answer) || !(opt.red->answer)) )
+	G_fatal_error(_("ci index requires blue and red maps"));
 
     if (!strcasecmp(viflag, "sr") && (!(opt.red->answer) || !(opt.nir->answer)) )
 	G_fatal_error(_("sr index requires red and nir maps"));
@@ -468,6 +473,10 @@ int main(int argc, char *argv[])
 		Rast_set_f_null_value(&outrast[col], 1);
 	    }
 	    else {
+		/* calculate crust_index        */
+		if (!strcasecmp(viflag, "ci"))
+		    outrast[col] = c_i(d_bluechan, d_redchan);
+
 		/* calculate simple_ratio        */
 		if (!strcasecmp(viflag, "sr"))
 		    outrast[col] = s_r(d_redchan, d_nirchan);

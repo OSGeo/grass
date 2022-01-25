@@ -17,7 +17,8 @@ void c_quant(DCELL * result, DCELL * values, int n, const void *closure)
 	return;
     }
 
-    k = n * quant;
+    /* algorithm type 7 of Hyndman and Fan (1996), default in R */
+    k = quant * (n - 1);
     i0 = (int)floor(k);
     i1 = (int)ceil(k);
 

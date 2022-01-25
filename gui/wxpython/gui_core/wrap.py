@@ -23,6 +23,7 @@ import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel as scrolled
 from wx.lib import expando
 from wx.lib import buttons
+from wx.lib.agw.aui import tabart
 
 try:
     import wx.lib.agw.customtreectrl as CT
@@ -56,6 +57,27 @@ if wxPythonPhoenix and CheckWxVersion([4, 0, 3, 0]):
     from wx import NewIdRef as NewId
 else:
     from wx import NewId  # noqa: F401
+
+
+def convertToInt(argsOrKwargs, roundVal=False):
+    """Convert args, kwargs float value to int
+
+    :param tuple/list/dict argsOrKwargs: args or kwargs
+    :param bool roundVal: True if you want round float value
+
+    return list or dict
+    """
+    result = {} if isinstance(argsOrKwargs, dict) else []
+    j = None
+    for i in argsOrKwargs:
+        if isinstance(result, dict):
+            i, j = argsOrKwargs[i], i
+        if isinstance(i, float):
+            if roundVal:
+                i = round(i)
+            i = int(i)
+        result.update({j: i}) if j else result.append(i)
+    return result
 
 
 def IsDark():
@@ -143,6 +165,23 @@ class Panel(wx.Panel):
             wx.Panel.SetToolTipString(self, tip)
 
 
+class Slider(wx.Slider):
+    """Wrapper around wx.Slider to have more control
+    over the widget on different platforms/wxpython versions"""
+
+    def __init__(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args)
+        kwargs = convertToInt(argsOrKwargs=kwargs)
+
+        wx.Slider.__init__(self, *args, **kwargs)
+
+    def SetRange(self, minValue, maxValue):
+        wx.Slider.SetRange(self, int(minValue), int(maxValue))
+
+    def SetValue(self, value):
+        wx.Slider.SetValue(self, int(value))
+
+
 class SpinCtrl(wx.SpinCtrl):
     """Wrapper around wx.SpinCtrl to have more control
     over the widget on different platforms"""
@@ -150,6 +189,8 @@ class SpinCtrl(wx.SpinCtrl):
     gtk3MinSize = 130
 
     def __init__(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args)
+        kwargs = convertToInt(argsOrKwargs=kwargs)
         if gtk3:
             if "size" in kwargs:
                 kwargs["size"] = wx.Size(
@@ -600,11 +641,13 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def __init__(self, *args, **kwargs):
         super(PseudoDC, self).__init__(*args, **kwargs)
 
-    def DrawLinePoint(self, pt1, pt2):
+    def DrawLinePoint(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
         if wxPythonPhoenix:
-            super(PseudoDC, self).DrawLine(pt1, pt2)
+            super(PseudoDC, self).DrawLine(*args, **kwargs)
         else:
-            super(PseudoDC, self).DrawLinePoint(pt1, pt2)
+            super(PseudoDC, self).DrawLinePoint(*args, **kwargs)
 
     def DrawRectangleRect(self, rect):
         if wxPythonPhoenix:
@@ -619,6 +662,21 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     def EndDrawing(self):
         if not wxPythonPhoenix:
             super(PseudoDC, self).EndDrawing()
+
+    def DrawRectangle(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawRectangle(*args, **kwargs)
+
+    def DrawBitmap(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawBitmap(*args, **kwargs)
+
+    def DrawCircle(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args, roundVal=True)
+        kwargs = convertToInt(argsOrKwargs=kwargs, roundVal=True)
+        super(PseudoDC, self).DrawCircle(*args, **kwargs)
 
 
 class ClientDC(wx.ClientDC):
@@ -640,13 +698,15 @@ class Rect(wx.Rect):
     over the widget on different platforms/wxpython versions"""
 
     def __init__(self, *args, **kwargs):
+        args = convertToInt(argsOrKwargs=args)
+        kwargs = convertToInt(argsOrKwargs=kwargs)
         wx.Rect.__init__(self, *args, **kwargs)
 
     def ContainsXY(self, x, y):
         if wxPythonPhoenix:
-            return wx.Rect.Contains(self, x=x, y=y)
+            return wx.Rect.Contains(self, x=int(x), y=int(y))
         else:
-            return wx.Rect.ContainsXY(self, x, y)
+            return wx.Rect.ContainsXY(self, int(x), int(y))
 
     def ContainsRect(self, rect):
         if wxPythonPhoenix:
@@ -656,9 +716,9 @@ class Rect(wx.Rect):
 
     def OffsetXY(self, dx, dy):
         if wxPythonPhoenix:
-            return wx.Rect.Offset(self, dx, dy)
+            return wx.Rect.Offset(self, int(dx), int(dy))
         else:
-            return wx.Rect.OffsetXY(self, dx, dy)
+            return wx.Rect.OffsetXY(self, int(dx), int(dy))
 
 
 class CheckBox(wx.CheckBox):
@@ -885,3 +945,38 @@ class ComboBox(wx.ComboBox):
             wx.ComboBox.SetToolTip(self, tipString=tip)
         else:
             wx.ComboBox.SetToolTipString(self, tip)
+
+
+class SimpleTabArt(tabart.AuiDefaultTabArt):
+    """A class simplifying the appearance of AUI notebook tabs."""
+
+    def __init__(self):
+        """Default class constructor."""
+        tabart.AuiDefaultTabArt.__init__(self)
+
+    def SetDefaultColours(self, base_colour=None):
+        """
+        Overrides AuiDefaultTabArt.SetDefaultColours
+        to get rid of gradient and to look more like
+        flatnotebook tabs.
+        """
+
+        if base_colour is None:
+            base_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE)
+
+        self.SetBaseColour(base_colour)
+        tab_color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+
+        self._border_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)
+        self._border_pen = wx.Pen(self._border_colour)
+        self._background_top_colour = base_colour
+        self._background_bottom_colour = base_colour
+        self._tab_top_colour = tab_color
+        self._tab_bottom_colour = tab_color
+        self._tab_gradient_highlight_colour = tab_color
+        self._tab_inactive_top_colour = base_colour
+        self._tab_inactive_bottom_colour = base_colour
+        self._tab_text_colour = lambda page: page.text_colour
+        self._tab_disabled_text_colour = wx.SystemSettings.GetColour(
+            wx.SYS_COLOUR_GRAYTEXT
+        )

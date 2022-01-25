@@ -29,6 +29,7 @@ from .reporters import (
 )
 from .utils import silent_rmtree, ensure_dir
 
+import grass.script as gs
 from grass.script.utils import decode, _get_encoding
 
 try:
@@ -117,13 +118,10 @@ class GrassTestFilesInvoker(object):
         :param loader.GrassTestPythonModule module:
         """
         # TODO: use g.mapset -c, no need to duplicate functionality
-        # using path.sep but also / and \ for cases when it is confused
-        # (namely the case of Unix path on MS Windows)
-        # replace . to get rid of unclean path
-        # TODO: clean paths
-        # note that backslash cannot be at the end of raw string
-        dir_as_name = module.tested_dir.translate(maketrans(r"/\.", "___"))
-        mapset = dir_as_name + "_" + module.name
+        # All path characters such as slash, backslash and dot are replaced.
+        dir_as_name = gs.legalize_vector_name(module.tested_dir, fallback_prefix=None)
+        # Multiple processes can run the same test in the same location.
+        mapset = gs.append_node_pid(f"{dir_as_name}_{module.name}")
         # TODO: use grass module to do this? but we are not in the right gisdbase
         mapset_dir = os.path.join(gisdbase, location, mapset)
         if self.clean_before:
@@ -132,7 +130,6 @@ class GrassTestFilesInvoker(object):
         # TODO: default region in mapset will be what?
         # copy DEFAULT_WIND file from PERMANENT to WIND
         # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
-        # TODO: are premisions an issue here?
         shutil.copy(
             os.path.join(gisdbase, location, "PERMANENT", "DEFAULT_WIND"),
             os.path.join(mapset_dir, "WIND"),

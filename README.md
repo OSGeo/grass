@@ -5,6 +5,7 @@
 [![Ubuntu](https://github.com/OSGeo/grass/workflows/Ubuntu/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AUbuntu)
 [![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AOSGeo4W)
 [![CentOS](https://github.com/OSGeo/grass/workflows/CentOS/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACentOS)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5176030.svg)](https://doi.org/10.5281/zenodo.5176030)
 
 # GRASS GIS Repository
 
@@ -74,7 +75,7 @@ docker run -it --rm --user=$(id -u):$(id -g) \
 ```
 
 Note: If you compiled locally before building the Docker image, you may
-encounter problems as the local configuration and locally compiled file
+encounter problems as the local configuration and the locally compiled files
 are copied to and used in the Docker image. To make sure you don't have
 this issue, clean all the compiled files from the source code:
 
@@ -84,7 +85,7 @@ make distclean
 
 ## How to generate the 'Programmer's Manual'
 
-You can generate locally the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming8/).
+You can locally generate the [GRASS GIS Programmer's Manual](https://grass.osgeo.org/programming8/).
 
 This needs doxygen (<http://www.doxygen.org>) and optionally
 Graphviz dot (<http://www.research.att.com/sw/tools/graphviz/>).
@@ -95,14 +96,14 @@ To build the GRASS programmer's documentation, run
 make htmldocs
 ```
 
-or to generate documentation as single html file
+Or to generate documentation as single html file
 (recommended for simple reading)
 
 ```
 make htmldocs-single
 ```
 
-here. This takes quite some time. The result is in `lib/html/index.html`
+This takes quite some time. The result is in `lib/html/index.html`
 which refers to further document repositories in
 
 ```
@@ -112,7 +113,7 @@ lib/gis/html/index.html
 ```
 
 The master file is: `./grasslib.dox` where all sub-documents have to
-be linked into.
+be linked to.
 
 To generate the documents in PDF format, run
 
