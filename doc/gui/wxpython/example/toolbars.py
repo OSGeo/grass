@@ -1,4 +1,4 @@
-"""!
+"""
 @package example.toolbars
 
 @brief Example toolbars and icons.
@@ -47,16 +47,51 @@ class ExampleMapToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("displaymap", icons["display"], self.parent.OnDraw),
-                ("rendermap", icons["render"], self.parent.OnRender),
-                ("erase", icons["erase"], self.parent.OnErase),
+                (
+                    ("displaymap", _("Display map")),
+                    icons["display"],
+                    self.parent.OnDraw,
+                ),
+                (
+                    ("rendermap", _("Render map")),
+                    icons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("erase", _("Erase display")),
+                    icons["erase"],
+                    self.parent.OnErase,
+                ),
                 (None,),  # creates separator
-                ("pan", icons["pan"], self.parent.OnPan, wx.ITEM_CHECK),  # toggle tool
-                ("zoomIn", icons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomOut", icons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
+                (
+                    ("pan", _("Pan")),
+                    icons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),  # toggle tool
+                (
+                    ("zoomIn", _("Zoom in")),
+                    icons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", _("Zoom out")),
+                    icons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
                 (None,),
-                ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
+                (
+                    ("zoomBack", _("Return to previous zoom")),
+                    icons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomToMap", _("Zoom to selected map layer(s)")),
+                    icons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
             )
         )
 
@@ -76,7 +111,11 @@ class ExampleMainToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data"""
         return self._getToolbarData(
-            (("addRaster", BaseIcons["addRast"], self.parent.OnSelectRaster),)
+            (
+                ("addRaster", _("Add raster map layer")),
+                BaseIcons["addRast"],
+                self.parent.OnSelectRaster,
+            ),
         )
 
 
@@ -96,7 +135,13 @@ class ExampleMiscToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData(
             (
-                ("help", icons["help"], self.parent.OnHelp),
-                ("quit", icons["quit"], self.parent.OnCloseWindow),
-            )
+                ("help", _("Show manual")),
+                icons["help"],
+                self.parent.OnHelp,
+            ),
+            (
+                ("quit", _("Quit")),
+                icons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )
