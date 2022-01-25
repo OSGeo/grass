@@ -325,12 +325,12 @@ class ScatterToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("draw", _("Draw")),
+                    ("draw", _("Draw/re-draw plot")),
                     PlotIcons["draw"],
                     self.parent.OnCreateScatter,
                 ),
                 (
-                    ("erase", _("Erase")),
+                    ("erase", _("Erase display")),
                     BaseIcons["erase"],
                     self.parent.OnErase,
                 ),
@@ -351,17 +351,17 @@ class ScatterToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("statistics", _("Show statistics")),
+                    ("statistics", _("Plot statistics")),
                     PlotIcons["statistics"],
                     self.parent.OnRegression,
                 ),
                 (
-                    ("image", _("Save image")),
+                    ("image", _("Save display to file")),
                     BaseIcons["saveFile"],
                     self.parent.SaveToFile,
                 ),
                 (
-                    ("print", _("Print")),
+                    ("print", _("Print display")),
                     BaseIcons["print"],
                     self.parent.PrintMenu,
                 ),
