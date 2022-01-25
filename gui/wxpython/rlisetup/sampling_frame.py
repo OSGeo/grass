@@ -495,21 +495,21 @@ class RLiSetupToolbar(BaseToolbar):
         """Toolbar data"""
         if self.parent.samplingtype == SamplingType.REGIONS:
             drawTool = (
-                "digitizeregion",
+                ("digitizeregion", _("Draw sampling region")),
                 icons["digitizeregion"],
                 self.parent.OnDigitizeRegion,
                 wx.ITEM_CHECK,
             )
         elif self.parent.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
             drawTool = (
-                "digitizeunit",
+                ("digitizeunit", _("Draw sampling rectangle")),
                 icons["digitizeunit"],
                 self.parent.OnDraw,
                 wx.ITEM_CHECK,
             )
         elif self.parent.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
             drawTool = (
-                "digitizeunitc",
+                ("digitizeunitc", _("Draw sampling circle")),
                 icons["digitizeunitc"],
                 self.parent.OnDrawRadius,
                 wx.ITEM_CHECK,
