@@ -408,6 +408,8 @@ class SessionHandle:
         If not used as a context manager, call explicitly to clean and close the mapset
         and finish the session. No GRASS modules can be called afterwards.
         """
+        if not self.active:
+            raise ValueError("Attempt to finish an already finished session")
         self._active = False
         finish()
 
