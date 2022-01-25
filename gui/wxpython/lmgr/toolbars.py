@@ -279,8 +279,16 @@ class LMMiscToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("settings", icons["settings"], self.parent.OnPreferences),
-                ("help", icons["help"], self.parent.OnHelp),
+                (
+                    ("settings", _("GUI settings")),
+                    icons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", _("GRASS manual")),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
             )
         )
 
