@@ -35,6 +35,7 @@ class SbMain:
         self.widget.SetFieldsCount(2)
         self.widget.SetStatusWidths([-1, 100])
         self.mask = SbMask(self.widget, self.giface)
+        self.parent.Bind(wx.EVT_SIZE, self.OnSize)
         self._repositionStatusbar()
 
     def GetWidget(self):

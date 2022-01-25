@@ -220,7 +220,6 @@ class GMFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        self.Bind(wx.EVT_SIZE, self.statusbar.OnSize)
 
         self._giface.mapCreated.connect(self.OnMapCreated)
         self._giface.updateMap.connect(self._updateCurrentMap)

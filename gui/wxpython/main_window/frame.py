@@ -686,7 +686,6 @@ class GMFrame(wx.Frame):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
-        self.Bind(wx.EVT_SIZE, self.statusbar.OnSize)
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
