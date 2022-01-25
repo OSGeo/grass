@@ -355,7 +355,6 @@ class GMFrame(wx.Frame):
         )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
-        self._gconsole.updateMap.connect(self.statusbar.Refresh)
         self._gconsole.Bind(
             EVT_IGNORED_CMD_RUN, lambda event: self.RunSpecialCmd(event.cmd)
         )

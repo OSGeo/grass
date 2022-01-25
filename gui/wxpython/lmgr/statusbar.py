@@ -87,6 +87,7 @@ class SbMask:
     def _dbChanged(self, map=None, newname=None):
         if map == self.mask_layer or newname == self.mask_layer:
             self.Refresh()
+            self.giface.updateMap.emit()
 
     def Show(self):
         """Invokes showing of underlying widget.
