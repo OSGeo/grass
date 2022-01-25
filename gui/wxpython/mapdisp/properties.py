@@ -232,8 +232,8 @@ class ChBShowRegion(PropertyItem):
 class ChBProjection:
     """Checkbox to enable user defined projection"""
 
-    def __init__(self, parent, statusBarProperties):
-        self.properties = statusBarProperties
+    def __init__(self, parent, mapWindowProperties):
+        self.properties = mapWindowProperties
         self.name = "projection"
         self.label = _("Projection")
         self.defaultLabel = _("Use defined projection")
@@ -269,9 +269,6 @@ class ChBProjection:
         else:
             self.widget.SetLabel(self.defaultLabel)
 
-        # disable long help
-        # self.mapFrame.StatusbarEnableLongHelp(False)
-
 
 class MapDisplayPropertiesDialog(wx.Dialog):
     """Map Display properties dialog"""
@@ -281,7 +278,6 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         parent,
         giface,
         mapDispProperties,
-        statusBarProperties,
         title=_("Map Display Settings"),
         size=(-1, 250),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
@@ -293,7 +289,6 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.size = size
         self.giface = giface
         self.mapWindowProperties = mapDispProperties
-        self.statusBarProperties = statusBarProperties
 
         # notebook
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
@@ -386,7 +381,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         # Auto-rendering
-        self.projection = ChBProjection(panel, self.statusBarProperties)
+        self.projection = ChBProjection(panel, self.mapWindowProperties)
         sizer.Add(
             self.projection.GetWidget(),
             proportion=0,

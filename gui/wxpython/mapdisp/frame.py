@@ -37,7 +37,7 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from mapwin.base import MapWindowProperties, StatusBarProperties
+from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
@@ -134,8 +134,6 @@ class MapPanel(SingleMapPanel):
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
 
-        # Statusbar properties
-        self.statusBarProperties = StatusBarProperties()
         #
         # Add toolbars
         #
@@ -1564,8 +1562,7 @@ class MapPanel(SingleMapPanel):
         dlg = MapDisplayPropertiesDialog(
             parent=self,
             giface=self._giface,
-            mapDispProperties=self.mapWindowProperties,
-            statusBarProperties=self.statusBarProperties,
+            mapDispProperties=self.mapWindowProperties
         )
         dlg.CenterOnParent()
         dlg.Show()

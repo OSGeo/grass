@@ -163,14 +163,14 @@ class MapPanelBase(wx.Panel):
         if self.HasProperty("projection"):
             self.statusbarManager.SetProperty(name, value)
         else:
-            self.statusBarProperties.useDefinedProjection = value
+            self.mapWindowProperties.useDefinedProjection = value
 
     def GetProperty(self, name):
         """Returns property"""
         if self.HasProperty("projection"):
             return self.statusbarManager.GetProperty(name)
         else:
-            return self.statusBarProperties.useDefinedProjection
+            return self.mapWindowProperties.useDefinedProjection
 
     def HasProperty(self, name):
         """Checks whether object has property"""
