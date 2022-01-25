@@ -75,7 +75,7 @@ BaseIcons = {
         label=_("Add map elements"),
         desc=_("Overlay elements like scale and legend onto map"),
     ),
-    "histogramD": MetaIcon(
+    "histogram": MetaIcon(
         img="layer-raster-histogram", label=_("Create histogram with d.histogram")
     ),
     "settings": MetaIcon(img="settings", label=_("Settings")),
