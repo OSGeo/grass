@@ -342,7 +342,7 @@ def init(path, location=None, mapset=None, grass_path=None):
     return SessionHandle()
 
 
-class SessionHandle():
+class SessionHandle:
     """Object used to manage GRASS sessions.
 
     Do not create objects of this class directly. Use the *init* function
