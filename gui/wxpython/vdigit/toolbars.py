@@ -398,7 +398,7 @@ class VDigitToolbar(BaseToolbar):
         if not self.tools or "help" in self.tools:
             data.append(
                 (
-                    ("help", _("Help")),
+                    ("help", _("Show manual")),
                     self.icons["help"],
                     self.OnHelp,
                 ),
