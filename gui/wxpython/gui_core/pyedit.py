@@ -703,7 +703,7 @@ class PyEditToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("help", _("Help")),
+                    ("help", _("Show manual")),
                     BaseIcons["help"],
                     self.parent.OnHelp,
                 ),
