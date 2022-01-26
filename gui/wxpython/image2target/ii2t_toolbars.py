@@ -182,7 +182,7 @@ class GCPDisplayToolbar(BaseToolbar):
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("zoommenu", _("Zoom menu")),
+                    ("zoommenu", _("Various zoom options")),
                     BaseIcons["zoomMenu"],
                     self.parent.OnZoomMenuGCP,
                 ),
