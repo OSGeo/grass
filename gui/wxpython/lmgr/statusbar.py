@@ -19,9 +19,10 @@ This program is free software under the GNU General Public License
 
 import wx
 
+import grass.script as gs
+
 from core.gcmd import RunCommand
 from gui_core.wrap import Button
-from grass.script import core as grass
 
 
 class SbMain:
