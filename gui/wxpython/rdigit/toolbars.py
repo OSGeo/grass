@@ -144,12 +144,12 @@ class RDigitToolbar(BaseToolbar):
                     lambda event: self._controller.Save(),
                 ),
                 (
-                    ("help", _("Raster Digitizer manual")),
+                    ("help", _("Show manual")),
                     rdigitIcons["help"],
                     lambda event: self._giface.Help("wxGUI.rdigit"),
                 ),
                 (
-                    ("quit", _("Quit raster digitizer")),
+                    ("quit", _("Quit")),
                     rdigitIcons["quit"],
                     lambda event: self._controller.Stop(),
                 ),
