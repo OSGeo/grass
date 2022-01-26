@@ -470,13 +470,41 @@ class SimpleLmgrToolbar(BaseToolbar):
             ),
         ]
         if self._style & SIMPLE_LMGR_RASTER3D:
-            data.insert(0, ("addRaster3d", icons["addRast3d"], self.parent.OnAddRast3d))
+            data.insert(
+                0,
+                (
+                    ("addRaster3d", _("Add 3D raster map layer")),
+                    icons["addRast3d"],
+                    self.parent.OnAddRast3d,
+                ),
+            )
         if self._style & SIMPLE_LMGR_RGB:
-            data.insert(0, ("addRGB", icons["addRGB"], self.parent.OnAddRGB))
+            data.insert(
+                0,
+                (
+                    ("addRGB", _("Add RGB map layer")),
+                    icons["addRGB"],
+                    self.parent.OnAddRGB,
+                ),
+            )
         if self._style & SIMPLE_LMGR_VECTOR:
-            data.insert(0, ("addVector", BaseIcons["addVect"], self.parent.OnAddVector))
+            data.insert(
+                0,
+                (
+                    ("addVector", _("Add vector map layer")),
+                    BaseIcons["addVect"],
+                    self.parent.OnAddVector,
+                ),
+            )
         if self._style & SIMPLE_LMGR_RASTER:
-            data.insert(0, ("addRaster", BaseIcons["addRast"], self.parent.OnAddRaster))
+            data.insert(
+                0,
+                (
+                    ("addRaster", _("Add raster map layer")),
+                    BaseIcons["addRast"],
+                    self.parent.OnAddRaster,
+                ),
+            )
 
         return data
 
