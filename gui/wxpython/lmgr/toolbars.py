@@ -150,7 +150,7 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnAddVectorMisc,
                 ),
                 (
-                    ("addovl", _("Add overlay")),
+                    ("addovl", _("Add various overlays")),
                     icons["addOverlay"],
                     self.parent.OnAddOverlay,
                 ),
@@ -177,7 +177,10 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnVDigit,
                 ),
                 (
-                    ("attribute", _("Attribute table")),
+                    (
+                        "attribute",
+                        _("Show attribute data for selected vector map"),
+                    ),
                     icons["attrTable"],
                     self.parent.OnShowAttributeTable,
                 ),
