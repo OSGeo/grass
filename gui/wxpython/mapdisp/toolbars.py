@@ -319,7 +319,7 @@ class MapToolbar(BaseToolbar):
                 (MapIcons["profile"], self.parent.OnProfile),
                 (MapIcons["scatter"], self.parent.OnScatterplot),
                 (MapIcons["histogram"], self.parent.OnHistogramPyPlot),
-                (BaseIcons["histogramD"], self.parent.OnHistogram),
+                (BaseIcons["histogram"], self.parent.OnHistogram),
                 (MapIcons["vnet"], self.parent.OnVNet),
             )
         )
