@@ -47,6 +47,9 @@ class PropertyItem:
     def _setValue(self, value):
         self.widget.SetValue(value)
 
+    def GetValue(self):
+        return self.widget.GetValue()
+
     def GetWidget(self):
         """Returns underlying widget.
 
@@ -62,7 +65,7 @@ class PropertyItem:
 
     def _onToggleCheckBox(self, event):
         self._disconnect()
-        self.mapWindowProperty = self.widget.GetValue()
+        self.mapWindowProperty = self.GetValue()
         self._connect()
 
 
@@ -229,11 +232,11 @@ class ChBShowRegion(PropertyItem):
             self.giface.updateMap.emit(render=False)
 
 
-class ChBProjection:
+class ChBProjection(PropertyItem):
     """Checkbox to enable user defined projection"""
 
     def __init__(self, parent, mapWindowProperties):
-        self.properties = mapWindowProperties
+        PropertyItem.__init__(self, mapWindowProperties)
         self.name = "projection"
         self.label = _("Projection")
         self.defaultLabel = _("Use defined projection")
@@ -250,19 +253,17 @@ class ChBProjection:
         )
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
 
-    def GetValue(self, value):
-        self.widget.GetValue(value)
+    @property
+    def mapWindowProperty(self):
+        return self._properties.useDefinedProjection
 
-    def GetWidget(self):
-        """Returns underlying widget.
-
-        :return: widget or None if doesn't exist
-        """
-        return self.widget
+    @mapWindowProperty.setter
+    def mapWindowProperty(self, value):
+        self._properties.useDefinedProjection = value
 
     def _onToggleCheckBox(self, event):
-        self.properties.useDefinedProjection = self.widget.GetValue()
-        epsg = self.properties.epsg
+        self.mapWindowProperty = self.GetValue()
+        epsg = self._properties.epsg
         if epsg:
             label = "%s (EPSG: %s)" % (self.defaultLabel, epsg)
             self.widget.SetLabel(label)
@@ -368,8 +369,6 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         panel.SetSizer(sizer)
 
-        return panel
-
     def _createStatusBarPage(self, parent):
         """Create notebook page for statusbar settings"""
 
@@ -388,3 +387,5 @@ class MapDisplayPropertiesDialog(wx.Dialog):
             flag=wx.EXPAND | wx.ALL,
             border=3,
         )
+
+        panel.SetSizer(sizer)
