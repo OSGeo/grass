@@ -109,7 +109,7 @@ class MainToolbar(BaseToolbar):
                 self.OnSettings,
             ),
             (
-                ("help", _("Help")),
+                ("help", _("Show manual")),
                 icons["help"],
                 self.OnHelp,
             ),
