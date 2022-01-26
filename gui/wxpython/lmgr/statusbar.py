@@ -117,8 +117,8 @@ class SbMask:
 
     def Refresh(self):
         """Show mask in the statusbar if mask file found"""
-        if grass.find_file(
-            name=self.mask_layer, element="cell", mapset=grass.gisenv()["MAPSET"]
+        if gs.find_file(
+            name=self.mask_layer, element="cell", mapset=gs.gisenv()["MAPSET"]
         )["name"]:
             self.Show()
         else:
@@ -135,10 +135,11 @@ class SbMask:
             dlg.Destroy()
             return
         RunCommand("r.mask", flags="r")
+        gisenv=gs.gisenv()
         self.giface.grassdbChanged.emit(
-            grassdb=grass.gisenv()["GISDBASE"],
-            location=grass.gisenv()["LOCATION_NAME"],
-            mapset=grass.gisenv()["MAPSET"],
+            grassdb=gisenv["GISDBASE"],
+            location=gisenv["LOCATION_NAME"],
+            mapset=gisenv["MAPSET"],
             map=self.mask_layer,
             action="delete",
             element="raster",
