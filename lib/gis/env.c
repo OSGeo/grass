@@ -342,7 +342,7 @@ const char *G_getenv(const char *name)
     if (value)
 	return value;
 
-    G_fatal_error(_("Variable '%s' not set"), name);
+    G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"), name);
     return NULL;
 }
 
@@ -368,7 +368,7 @@ const char *G_getenv2(const char *name, int loc)
     if (value)
 	return value;
 
-    G_fatal_error(_("Variable '%s' not set"), name);
+    G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"), name);
     return NULL;
 }
 
