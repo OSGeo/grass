@@ -78,7 +78,7 @@ class GCPManToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("gcpSave", _("Save GCPs")),
+                    ("gcpSave", _("Save GCPs to file")),
                     icons["gcpSave"],
                     self.parent.SaveGCPs,
                 ),
@@ -152,7 +152,7 @@ class GCPDisplayToolbar(BaseToolbar):
                     self.parent.OnRender,
                 ),
                 (
-                    ("erase", _("Erase")),
+                    ("erase", _("Erase display")),
                     BaseIcons["erase"],
                     self.parent.OnErase,
                 ),
@@ -188,12 +188,12 @@ class GCPDisplayToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("zoomback", _("Previous zoom")),
+                    ("zoomback", _("Return to previous zoom")),
                     BaseIcons["zoomBack"],
                     self.parent.OnZoomBack,
                 ),
                 (
-                    ("zoomtomap", _("Zoom to map extent")),
+                    ("zoomtomap", _("Zoom to selected map layer(s)")),
                     BaseIcons["zoomExtent"],
                     self.parent.OnZoomToMap,
                 ),
@@ -210,7 +210,7 @@ class GCPDisplayToolbar(BaseToolbar):
                     self.parent.OnSettings,
                 ),
                 (
-                    ("help", _("Help")),
+                    ("help", _("Show manual")),
                     icons["help"],
                     self.parent.OnHelp,
                 ),
