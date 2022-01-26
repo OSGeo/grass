@@ -135,7 +135,7 @@ class SbMask:
             dlg.Destroy()
             return
         RunCommand("r.mask", flags="r")
-        gisenv=gs.gisenv()
+        gisenv = gs.gisenv()
         self.giface.grassdbChanged.emit(
             grassdb=gisenv["GISDBASE"],
             location=gisenv["LOCATION_NAME"],
