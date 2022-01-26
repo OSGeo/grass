@@ -402,4 +402,10 @@
     <description>Interactive editing and digitization of vector maps.</description>
     <keywords>general,gui,vector,editing,digitizer</keywords>
   </wxgui-item>
+  <wxgui-item name="RDigit">
+    <label>Raster digitizer</label>
+    <command>g.gui.rdigit</command>
+    <description>Interactive editing and digitization of raster maps.</description>
+    <keywords>general,gui,raster,editing,digitizer</keywords>
+  </wxgui-item>
 </wxgui-items>
