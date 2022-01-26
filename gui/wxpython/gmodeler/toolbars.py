@@ -150,7 +150,7 @@ class ModelerToolbar(BaseToolbar):
                     self.parent.OnPreferences,
                 ),
                 (
-                    ("help", _("Help")),
+                    ("help", _("Show manual")),
                     BaseIcons["help"],
                     self.parent.OnHelp,
                 ),
