@@ -3,7 +3,7 @@
 
   \brief GIS library - environment routines
   
-  (C) 2001-2014 by the GRASS Development Team
+  (C) 2001-2022 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -310,7 +310,8 @@ static FILE *open_env(const char *mode, int loc)
 	    st->gisrc = getenv("GISRC");
 
 	if (!st->gisrc) {
-	    G_fatal_error(_("GISRC - variable not set"));
+            G_fatal_error(_("No active GRASS session: "
+                            "GISRC environment variable not set"));
 	    return NULL;
 	}
 	strcpy(buf, st->gisrc);
