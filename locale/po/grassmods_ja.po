@@ -4407,9 +4407,9 @@ msgid "Name of target mapset for ortho-rectification"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access target location/mapset %s/%s"
-msgstr "ベクトルマップ <%s> を作成できません"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
 msgid "Target locations with XY (unreferenced) are not supported"
@@ -4692,14 +4692,12 @@ msgid "Initial Camera Kappa (yaw) degrees"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:107
-#, fuzzy
 msgid "Apriori Omega (pitch) standard deviation"
-msgstr "標準偏差バンドを使うカラー"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
-#, fuzzy
 msgid "Apriori Phi (roll) standard deviation"
-msgstr "標準偏差バンドを使うカラー"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
 msgid "Apriori Kappa (yaw) standard deviation"
@@ -20845,7 +20843,7 @@ msgid "Vector map with training samples"
 msgstr "指定したベクトルマップはラインを含む"
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:13
-msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be choosen later."
+msgid "Vector points map where each point is used as training sample. Handling of missing values in training data can be chosen later."
 msgstr ""
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:15
@@ -22559,7 +22557,7 @@ msgid "Interpolation command string"
 msgstr "補間方法 "
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:36
-msgid "Additional settings for choosen interpolation (see manual)"
+msgid "Additional settings for chosen interpolation (see manual)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:38
@@ -58117,7 +58115,7 @@ msgid "%s driver supports only '%s' parameter in '%s'. Other parameters are igno
 msgstr ""
 
 #: ../scripts/r.in.wms/r.in.wms.py:250
-msgid "The proxy will be ignored by the choosen GRASS driver. It is only used with the GDAL driver."
+msgid "The proxy will be ignored by the chosen GRASS driver. It is only used with the GDAL driver."
 msgstr ""
 
 #: ../scripts/r.in.wms/r.in.wms.py:255

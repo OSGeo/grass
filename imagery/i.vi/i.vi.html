@@ -4,7 +4,8 @@
 parameters.
 
 <ul>
-  <li>ARVI: atmospherically resistant vegetation indices</li>
+  <li>ARVI: Atmospherically Resistant Vegetation Index</li>
+  <li>CI: Crust Index</li>
   <li>DVI: Difference Vegetation Index</li>
   <li>EVI: Enhanced Vegetation Index</li>
   <li>EVI2: Enhanced Vegetation Index 2</li>
@@ -77,6 +78,23 @@ arvi( redchan, nirchan, bluechan )
 
 ARVI = (nirchan - (2.0*redchan - bluechan)) / 
        ( nirchan + (2.0*redchan - bluechan))
+</pre></div>
+
+<b>CI: Crust Index</b> 
+<p>
+Advantage is taken of a unique spectral feature of soil biogenic crust
+containing cyanobacteria. It has been shown that the special phycobilin
+pigment in cyanobacteria contributes in producing a relatively higher
+reflectance in the blue spectral region than the same type of substrate
+without the biogenic crust. The spectral crust index (CI) is based on
+the normalized difference between the RED and the BLUE spectral values
+(Karnieli, 1997, DOI: 10.1080/014311697218368).
+
+<div class="code"><pre>
+ci ( bluechan, redchan )
+
+CI = 1 - (redchan - bluechan) / 
+       (redchan + bluechan)
 </pre></div>
 
 <p>

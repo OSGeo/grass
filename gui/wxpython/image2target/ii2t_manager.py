@@ -9,7 +9,8 @@ Classes:
  - manager::LocationPage
  - manager::GroupPage
  - manager::DispMapPage
- - manager::GCP
+ - manager::GCPPanel
+ - manager::GCPDisplay
  - manager::GCPList
  - manager::VectGroup
  - manager::EditGCP
@@ -57,9 +58,10 @@ from core import utils
 from core.render import Map
 from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog
+from gui_core.mapdisp import FrameMixin
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
-from gcp.mapdisplay import MapFrame
+from gcp.mapdisplay import MapPanel
 from core.giface import Notification
 from gui_core.wrap import (
     SpinCtrl,
@@ -296,22 +298,30 @@ class GCPWizard(object):
             #
             # start GCP Manager
             #
-            self.gcpmgr = GCP(
-                self.parent,
+            # create superior Map Display frame
+            mapframe = wx.Frame(
+                parent=None,
+                id=wx.ID_ANY,
+                size=globalvar.MAP_WINDOW_SIZE,
+                style=wx.DEFAULT_FRAME_STYLE,
+                title=name,
+            )
+            gcpmgr = GCPDisplay(
+                parent=mapframe,
                 giface=self._giface,
                 grwiz=self,
-                size=globalvar.MAP_WINDOW_SIZE,
-                toolbars=["gcpdisp"],
+                id=wx.ID_ANY,
                 Map=self.SrcMap,
                 lmgr=self.parent,
+                title=name,
             )
 
             # load GCPs
-            self.gcpmgr.InitMapDisplay()
-            self.gcpmgr.CenterOnScreen()
-            self.gcpmgr.Show()
+            gcpmgr.InitMapDisplay()
+            gcpmgr.CenterOnScreen()
+            gcpmgr.Show()
             # need to update AUI here for wingrass
-            self.gcpmgr._mgr.Update()
+            gcpmgr._mgr.Update()
         else:
             self.Cleanup()
 
@@ -990,7 +1000,7 @@ class DispMapPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
 
-class GCP(MapFrame, ColumnSorterMixin):
+class GCPPanel(MapPanel, ColumnSorterMixin):
     """
     Manages ground control points for georectifying. Calculates RMS statistics.
     Calls i.ortho.rectify or v.rectify to georectify map.
@@ -1018,7 +1028,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.show_target = True
 
         # wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
-        MapFrame.__init__(
+        MapPanel.__init__(
             self,
             parent=parent,
             giface=self._giface,
@@ -1209,7 +1219,6 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
-        self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         self.SetSettings()
 
@@ -1701,7 +1710,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapFrame?
+        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
 
@@ -2291,7 +2300,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Adjust Map Windows after GCP Map Display has been resized"""
         # re-render image on idle
         self.resize = grass.clock()
-        super(MapFrame, self).OnSize(event)
+        super(MapPanel, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows"""
@@ -2312,6 +2321,43 @@ class GCP(MapFrame, ColumnSorterMixin):
             elif self.resize:
                 event.RequestMore()
         pass
+
+
+class GCPDisplay(FrameMixin, GCPPanel):
+    """Map display for wrapping map panel with frame methods"""
+
+    def __init__(self, parent, giface, grwiz, id, lmgr, Map, title, **kwargs):
+        # init map panel
+        GCPPanel.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            grwiz=grwiz,
+            id=id,
+            lmgr=lmgr,
+            Map=Map,
+            title=title,
+            **kwargs,
+        )
+        # set system icon
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # bind to frame
+        parent.Bind(wx.EVT_CLOSE, self.OnQuit)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
 
 
 class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):

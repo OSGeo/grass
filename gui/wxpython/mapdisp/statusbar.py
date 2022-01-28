@@ -14,7 +14,6 @@ Classes:
  - statusbar::SbMapScale
  - statusbar::SbGoTo
  - statusbar::SbProjection
- - statusbar::SbMask
  - statusbar::SbTextItem
  - statusbar::SbDisplayGeometry
  - statusbar::SbCoordinates
@@ -37,9 +36,7 @@ import wx
 from core import utils
 from core.gcmd import RunCommand
 from core.settings import UserSettings
-from gui_core.wrap import StaticText, TextCtrl
-
-from grass.script import core as grass
+from gui_core.wrap import TextCtrl
 
 from grass.pydispatch.signal import Signal
 
@@ -281,10 +278,7 @@ class SbManager:
                 w, h = rect.width, rect.height + 1
                 if win == self.progressbar.GetWidget():
                     wWin = rect.width - 6
-                if idx == 2:  # mask
-                    x += 5
-                    y += 4
-                elif idx == 3:  # render
+                if idx == 2:  # render
                     x += 5
             win.SetPosition((x, y))
             win.SetSize((w, h))
@@ -304,7 +298,7 @@ class SbManager:
     def OnToggleStatus(self, event):
         """Toggle status text"""
         self.Update()
-        if event.GetSelection() == 3:  # use something better than magic numbers
+        if event.GetSelection() == 3 and self.HasProperty("region"):
             # show computation region extent by default
             self.statusbarItems["region"].SetValue(True)
             # redraw map if auto-rendering is enabled
@@ -381,7 +375,7 @@ class SbItem:
         return self.position
 
     def GetWidget(self):
-        """Returns underlaying winget.
+        """Returns underlying widget.
 
         :return: widget or None if doesn't exist
         """
@@ -891,26 +885,6 @@ class SbProjection(SbItem):
 
         # disable long help
         self.mapFrame.StatusbarEnableLongHelp(False)
-
-
-class SbMask(SbItem):
-    """StaticText to show whether mask is activated."""
-
-    def __init__(self, mapframe, statusbar, position=0):
-        SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = "mask"
-
-        self.widget = StaticText(parent=self.statusbar, id=wx.ID_ANY, label=_("MASK"))
-        self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
-        self.widget.Hide()
-
-    def Update(self):
-        if grass.find_file(
-            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
-        )["name"]:
-            self.Show()
-        else:
-            self.Hide()
 
 
 class SbTextItem(SbItem):

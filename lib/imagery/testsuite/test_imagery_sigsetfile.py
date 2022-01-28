@@ -21,7 +21,7 @@ from grass.pygrass import utils
 from grass.pygrass.gis import Mapset
 
 from grass.lib.gis import G_mapset_path
-from grass.lib.raster import Rast_write_bandref
+from grass.lib.raster import Rast_write_semantic_label
 from grass.lib.imagery import (
     SigSet,
     I_InitSigSet,
@@ -29,14 +29,14 @@ from grass.lib.imagery import (
     I_NewSubSig,
     I_WriteSigSet,
     I_ReadSigSet,
-    I_SortSigSetByBandref,
+    I_SortSigSetBySemanticLabel,
     I_fopen_sigset_file_new,
     I_fopen_sigset_file_old,
     Ref,
     I_init_group_ref,
     I_add_file_to_group_ref,
     I_free_group_ref,
-    String,
+    ReturnString,
 )
 
 
@@ -57,9 +57,9 @@ class SigSetFileTestCase(TestCase):
         sigfile = I_fopen_sigset_file_old(tempname(10))
         self.assertFalse(sigfile)
 
-    def test_roundtrip_sigset_v1_one_band(self):
+    def test_roundtrip_sigset_v1_one_label(self):
         """Test writing and reading back sigset file (v1)
-        with a single band and fully qualified sigfile name"""
+        with a single label and fully qualified sigfile name"""
 
         # Create signature struct
         So = SigSet()
@@ -71,11 +71,11 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
-        So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
+        So.title = ReturnString("Signature title")
+        So.semantic_labels[0] = ctypes.create_string_buffer(b"The_Doors")
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -96,8 +96,10 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(ret, 1)
         self.assertEqual(utils.decode(Sn.title), "Signature title")
         self.assertEqual(Sn.nbands, 1)
-        bandref = utils.decode(ctypes.cast(Sn.bandrefs[0], ctypes.c_char_p).value)
-        self.assertEqual(bandref, "The_Doors")
+        semantic_label = utils.decode(
+            ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label, "The_Doors")
         self.assertEqual(Sn.nclasses, 1)
         self.assertEqual(Sn.ClassSig[0].nsubclasses, 1)
         self.assertEqual(Sn.ClassSig[0].used, 1)
@@ -111,8 +113,8 @@ class SigSetFileTestCase(TestCase):
 
         # SigSet does not have free function
 
-    def test_read_fail_sigset_v1_one_band(self):
-        """Reading back should fail as band reference exceeds limit"""
+    def test_read_fail_sigset_v1_one_label(self):
+        """Reading back should fail as semantic label length exceeds limit"""
 
         # Create signature struct
         So = SigSet()
@@ -124,11 +126,11 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
-        So.bandrefs[0] = ctypes.create_string_buffer(tempname(252).encode())
+        So.title = ReturnString("Signature title")
+        So.semantic_labels[0] = ctypes.create_string_buffer(tempname(252).encode())
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -150,8 +152,8 @@ class SigSetFileTestCase(TestCase):
 
         # SigSet does not have free function
 
-    def test_roundtrip_sigset_v1_two_bands(self):
-        """Test writing and reading back sigset (v1) with two bands"""
+    def test_roundtrip_sigset_v1_two_labels(self):
+        """Test writing and reading back sigset (v1) with two labels"""
 
         # Create signature struct
         So = SigSet()
@@ -163,12 +165,12 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(So.ClassSig[0].nsubclasses, 1)
 
         # Fill sigset struct with data
-        So.title = String("Signature title")
-        So.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
-        So.bandrefs[1] = ctypes.create_string_buffer(b"The_Who")
+        So.title = ReturnString("Signature title")
+        So.semantic_labels[0] = ctypes.create_string_buffer(b"The_Doors")
+        So.semantic_labels[1] = ctypes.create_string_buffer(b"The_Who")
         So.ClassSig[0].used = 1
         So.ClassSig[0].classnum = 2
-        So.ClassSig[0].title = String("1st class")
+        So.ClassSig[0].title = ReturnString("1st class")
         So.ClassSig[0].type = 1
         So.ClassSig[0].SubSig[0].pi = 3.14
         So.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -192,10 +194,14 @@ class SigSetFileTestCase(TestCase):
         self.assertEqual(ret, 1)
         self.assertEqual(utils.decode(Sn.title), "Signature title")
         self.assertEqual(Sn.nbands, 2)
-        bandref = utils.decode(ctypes.cast(Sn.bandrefs[0], ctypes.c_char_p).value)
-        self.assertEqual(bandref, "The_Doors")
-        bandref = utils.decode(ctypes.cast(Sn.bandrefs[1], ctypes.c_char_p).value)
-        self.assertEqual(bandref, "The_Who")
+        semantic_label = utils.decode(
+            ctypes.cast(Sn.semantic_labels[0], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label, "The_Doors")
+        semantic_label = utils.decode(
+            ctypes.cast(Sn.semantic_labels[1], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label, "The_Who")
         self.assertEqual(Sn.nclasses, 1)
         self.assertEqual(Sn.ClassSig[0].nsubclasses, 1)
         self.assertEqual(Sn.ClassSig[0].used, 1)
@@ -214,23 +220,23 @@ class SigSetFileTestCase(TestCase):
         # SigSet does not have free function
 
 
-class SortSigSetByBandrefTest(TestCase):
+class SortSigSetBySemanticLabelTest(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
-        cls.bandref1 = "The_Doors"
+        cls.semantic_label1 = "The_Doors"
         cls.map2 = tempname(10)
-        cls.bandref2 = "The_Who"
+        cls.semantic_label2 = "The_Who"
         cls.map3 = tempname(10)
         cls.use_temp_region()
         cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
         cls.runModule("r.mapcalc", expression=f"{cls.map1} = 1")
         cls.runModule("r.mapcalc", expression=f"{cls.map2} = 1")
         cls.runModule("r.mapcalc", expression=f"{cls.map3} = 1")
-        Rast_write_bandref(cls.map1, cls.bandref1)
-        Rast_write_bandref(cls.map2, cls.bandref2)
+        Rast_write_semantic_label(cls.map1, cls.semantic_label1)
+        Rast_write_semantic_label(cls.map2, cls.semantic_label2)
 
     @classmethod
     def tearDownClass(cls):
@@ -254,18 +260,18 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
-        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
+        S.title = ReturnString("Signature title")
+        S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Troggs")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
         # This should result in two error strings in ret
-        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
@@ -299,18 +305,18 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
-        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Troggs")
+        S.title = ReturnString("Signature title")
+        S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Troggs")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
         # This should result in two error strings in ret
-        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
@@ -326,7 +332,7 @@ class SortSigSetByBandrefTest(TestCase):
                 self.libc.free(ret[1])
         self.libc.free(ret)
 
-    def test_missing_bandref(self):
+    def test_missing_label(self):
         # Prepare imagery group reference struct
         R = Ref()
         I_init_group_ref(ctypes.byref(R))
@@ -345,28 +351,28 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
-        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
+        S.title = ReturnString("Signature title")
+        S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Who")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
         # This should result in two error strings in ret
-        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertTrue(bool(ret))
         sig_err = utils.decode(ctypes.cast(ret[0], ctypes.c_char_p).value)
         ref_err = utils.decode(ctypes.cast(ret[1], ctypes.c_char_p).value)
         self.assertEqual(
             sig_err,
-            "<band reference missing>,<band reference missing>,"
-            + "<band reference missing>,<band reference missing>,"
-            + "<band reference missing>,<band reference missing>,"
-            + "<band reference missing>,<band reference missing>,"
-            + "<band reference missing>",
+            "<semantic label missing>,<semantic label missing>,"
+            + "<semantic label missing>,<semantic label missing>,"
+            + "<semantic label missing>,<semantic label missing>,"
+            + "<semantic label missing>,<semantic label missing>,"
+            + "<semantic label missing>",
         )
         self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 
@@ -394,21 +400,23 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
-        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Doors")
+        S.title = ReturnString("Signature title")
+        S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
         S.ClassSig[0].SubSig[0].R[0][0] = 69.69
 
         # This should result in returning NULL
-        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
-        bandref = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
-        self.assertEqual(bandref, "The_Doors")
+        semantic_label = utils.decode(
+            ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label, "The_Doors")
         self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
         self.assertEqual(S.ClassSig[0].SubSig[0].means[0], 42.42)
         self.assertEqual(S.ClassSig[0].SubSig[0].R[0][0], 69.69)
@@ -439,12 +447,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
-        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
-        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+        S.title = ReturnString("Signature title")
+        S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Who")
+        S.semantic_labels[1] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -455,16 +463,20 @@ class SortSigSetByBandrefTest(TestCase):
         S.ClassSig[0].SubSig[0].R[1][1] = -96.96
 
         # This should result in returning NULL
-        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
-        # Band references and sig items should be swapped
+        # Semantic labels and sig items should be swapped
         # Static items
         self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
         # Reordered items
-        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
-        self.assertEqual(bandref1, "The_Doors")
-        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
-        self.assertEqual(bandref2, "The_Who")
+        semantic_label1 = utils.decode(
+            ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label1, "The_Doors")
+        semantic_label2 = utils.decode(
+            ctypes.cast(S.semantic_labels[1], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label2, "The_Who")
         self.assertEqual(S.ClassSig[0].SubSig[0].means[0], 24.24)
         self.assertEqual(S.ClassSig[0].SubSig[0].means[1], 42.42)
         self.assertEqual(S.ClassSig[0].SubSig[0].R[0][0], -96.96)
@@ -498,12 +510,12 @@ class SortSigSetByBandrefTest(TestCase):
         self.assertEqual(S.nclasses, 1)
         I_NewSubSig(ctypes.byref(S), ctypes.byref(S.ClassSig[0]))
         self.assertEqual(S.ClassSig[0].nsubclasses, 1)
-        S.title = String("Signature title")
-        S.bandrefs[0] = ctypes.create_string_buffer(b"The_Who")
-        S.bandrefs[1] = ctypes.create_string_buffer(b"The_Doors")
+        S.title = ReturnString("Signature title")
+        S.semantic_labels[0] = ctypes.create_string_buffer(b"The_Who")
+        S.semantic_labels[1] = ctypes.create_string_buffer(b"The_Doors")
         S.ClassSig[0].used = 1
         S.ClassSig[0].classnum = 2
-        S.ClassSig[0].title = String("1st class")
+        S.ClassSig[0].title = ReturnString("1st class")
         S.ClassSig[0].type = 1
         S.ClassSig[0].SubSig[0].pi = 3.14
         S.ClassSig[0].SubSig[0].means[0] = 42.42
@@ -514,16 +526,20 @@ class SortSigSetByBandrefTest(TestCase):
         S.ClassSig[0].SubSig[0].R[1][1] = -96.96
 
         # This should result in returning NULL
-        ret = I_SortSigSetByBandref(ctypes.byref(S), ctypes.byref(R))
+        ret = I_SortSigSetBySemanticLabel(ctypes.byref(S), ctypes.byref(R))
         self.assertFalse(bool(ret))
-        # Band references and sig items should not be swapped
+        # Semantic labels and sig items should not be swapped
         # Static items
         self.assertEqual(S.ClassSig[0].SubSig[0].pi, 3.14)
         # Reordered items
-        bandref1 = utils.decode(ctypes.cast(S.bandrefs[0], ctypes.c_char_p).value)
-        self.assertEqual(bandref1, "The_Who")
-        bandref2 = utils.decode(ctypes.cast(S.bandrefs[1], ctypes.c_char_p).value)
-        self.assertEqual(bandref2, "The_Doors")
+        semantic_label1 = utils.decode(
+            ctypes.cast(S.semantic_labels[0], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label1, "The_Who")
+        semantic_label2 = utils.decode(
+            ctypes.cast(S.semantic_labels[1], ctypes.c_char_p).value
+        )
+        self.assertEqual(semantic_label2, "The_Doors")
         self.assertEqual(S.ClassSig[0].SubSig[0].means[0], 42.42)
         self.assertEqual(S.ClassSig[0].SubSig[0].means[1], 24.24)
         self.assertEqual(S.ClassSig[0].SubSig[0].R[0][0], 69.69)

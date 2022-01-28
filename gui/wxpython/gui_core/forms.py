@@ -68,10 +68,6 @@ from threading import Thread
 
 import wx
 
-try:
-    import wx.lib.agw.flatnotebook as FN
-except ImportError:
-    import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
@@ -115,7 +111,6 @@ from gui_core.widgets import (
     FloatValidator,
     FormListbook,
     FormNotebook,
-    GNotebook,
     PlacementValidator,
 )
 from core.giface import Notification, StandaloneGrassInterface
@@ -575,7 +570,6 @@ class TaskFrame(wx.Frame):
         self._gconsole = self.notebookpanel._gconsole
         if self._gconsole:
             self._gconsole.mapCreated.connect(self.OnMapCreated)
-            self._gconsole.updateMap.connect(lambda: self._giface.updateMap.emit())
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
             self.goutput.showNotification.connect(
@@ -1053,13 +1047,7 @@ class CmdPanel(wx.Panel):
         elif style == 1:  # basic left
             self.notebook = FormNotebook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 2:  # fancy green
-            self.notebook = GNotebook(
-                self, style=globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON
-            )
-            self.notebook.SetTabAreaColour(globalvar.FNPageColor)
-            self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
-        elif style == 3:
+        elif style == 2:  # list left
             self.notebook = FormListbook(self, style=wx.BK_LEFT)
             self.notebook.Bind(wx.EVT_LISTBOOK_PAGE_CHANGED, self.OnPageChange)
         self.notebook.Refresh()
@@ -1428,8 +1416,8 @@ class CmdPanel(wx.Panel):
                         which_sizer.Add(win, proportion=0, flag=style, border=5)
 
                 elif p.get("type", "") == "integer":
-                    minValue = -1e9
-                    maxValue = 1e9
+                    minValue = int(-1e9)
+                    maxValue = int(1e9)
                     value = self._getValue(p)
 
                     win = SpinCtrl(

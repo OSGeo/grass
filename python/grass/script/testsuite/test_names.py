@@ -51,13 +51,14 @@ class TestUnique(TestCase):
 
     def test_append_random_total(self):
         base_name = "tmp_abc"
-        size = 10
+        size = 20
         full_name = utils.append_random(base_name, total_length=size)
         self.assertIn(base_name, full_name)
         self.assertGreater(len(full_name), len(base_name))
         self.assertEqual(len(full_name), size)
         self.assertTrue(legal_name(full_name))
         full_name2 = utils.append_random(base_name, total_length=size)
+        # There is a low chance of collision.
         self.assertNotEqual(full_name, full_name2)
 
     def test_append_random_one_arg(self):
@@ -69,6 +70,7 @@ class TestUnique(TestCase):
         self.assertGreaterEqual(len(full_name), len(base_name) + size)
         self.assertTrue(legal_name(full_name))
         full_name2 = utils.append_random(base_name, size)
+        # There is a low chance of collision.
         self.assertNotEqual(full_name, full_name2)
 
     def test_append_random_two_args(self):

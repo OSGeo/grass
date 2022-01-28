@@ -295,4 +295,5 @@
 /* define if langinfo.h exists */
 /* #undef HAVE_LANGINFO_H */
 
+#define HAVE_PROJ_H 1
 #endif /* _config_h */

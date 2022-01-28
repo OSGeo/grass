@@ -76,7 +76,7 @@ class SwipeMapToolbar(BaseToolbar):
 
     def SetActiveMap(self, index):
         """Set currently selected map.
-        Unused, needed because of DoubleMapFrame API.
+        Unused, needed because of DoubleMapPanel API.
         """
         pass
 
