@@ -67,6 +67,7 @@ from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
+from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import (
@@ -96,7 +97,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=globalvar.GM_WINDOW_SIZE,
+        size=wx.Display().GetGeometry().GetSize(),
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -107,6 +108,7 @@ class GMFrame(wx.Frame):
             self.baseTitle = _("GRASS GIS")
 
         self.iconsize = (16, 16)
+        self.size = size
 
         self.displayIndex = 0  # index value for map displays and layer trees
         self.currentPage = None  # currently selected page for layer tree notebook
@@ -154,13 +156,11 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"] = list()
 
         # set pane sizes according to the full screen size of the primary monitor
-        size = wx.Display().GetGeometry().GetSize()
-        self.PANE_BEST_SIZE = tuple(t // 3 for t in size)
-        self.PANE_MIN_SIZE = tuple(t // 5 for t in size)
+        self.PANE_BEST_SIZE = tuple(t // 3 for t in self.size)
+        self.PANE_MIN_SIZE = tuple(t // 5 for t in self.size)
 
         # create widgets and build panes
         self.CreateMenuBar()
-        self.CreateStatusBar(number=1)
         self.BuildPanes()
         self.BindEvents()
 
@@ -269,6 +269,10 @@ class GMFrame(wx.Frame):
         if self._auimgr.GetPane(name).IsOk():
             return self._auimgr.GetPane(name).IsShown()
         return False
+
+    def SetStatusText(self, *args):
+        """Overide SbMain statusbar method"""
+        self.statusbar.SetStatusText(*args)
 
     def _createMapNotebook(self):
         """Create Map Display notebook"""
@@ -526,6 +530,7 @@ class GMFrame(wx.Frame):
         """Build panes - toolbars as well as panels"""
         self._auimgr.SetAutoNotebookTabArt(SimpleTabArt())
         # initialize all main widgets
+        self.statusbar = SbMain(parent=self, giface=self._giface)
         self._createMapNotebook()
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
@@ -575,6 +580,21 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(
             self.mapnotebook,
             aui.AuiPaneInfo().Name("map display content").CenterPane().PaneBorder(True),
+        )
+
+        self._auimgr.AddPane(
+            self.statusbar.GetWidget(),
+            aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
         )
 
         self._auimgr.AddPane(

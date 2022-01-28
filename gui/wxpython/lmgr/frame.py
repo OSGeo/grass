@@ -62,6 +62,7 @@ from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
+from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
 from lmgr.giface import (
@@ -152,7 +153,7 @@ class GMFrame(wx.Frame):
 
         # create widgets
         self._createMenuBar()
-        self.statusbar = self.CreateStatusBar(number=1)
+        self.statusbar = SbMain(parent=self, giface=self._giface)
         self.notebook = self._createNotebook()
         self._createDataCatalog(self.notebook)
         self._createDisplay(self.notebook)
@@ -199,6 +200,23 @@ class GMFrame(wx.Frame):
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
+
+        # Add statusbar
+        self._auimgr.AddPane(
+            self.statusbar.GetWidget(),
+            wx.aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
@@ -328,6 +346,10 @@ class GMFrame(wx.Frame):
         if self._auimgr.GetPane(name).IsOk():
             return self._auimgr.GetPane(name).IsShown()
         return False
+
+    def SetStatusText(self, *args):
+        """Overide SbMain statusbar method"""
+        self.statusbar.SetStatusText(*args)
 
     def _createNotebook(self):
         """Initialize notebook widget"""
