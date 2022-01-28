@@ -21,6 +21,7 @@ from .core import (
     get_sql_template_path,
     get_tgis_metadata,
     get_current_mapset,
+    get_tgis_db_version_from_metadata,
 )
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .temporal_granularity import (
