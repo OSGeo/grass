@@ -552,39 +552,39 @@ class HistogramToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("histogram", _("Create histogram with d.histogram")),
+                    ("histogram", BaseIcons["histogram"].label),
                     BaseIcons["histogram"],
                     self.parent.OnOptions,
                 ),
                 (
-                    ("render", _("Display map")),
+                    ("render", BaseIcons["display"].label),
                     BaseIcons["display"],
                     self.parent.OnRender,
                 ),
                 (
-                    ("erase", _("Erase display")),
+                    ("erase", BaseIcons["erase"].label),
                     BaseIcons["erase"],
                     self.parent.OnErase,
                 ),
                 (
-                    ("font", _("Select font")),
+                    ("font", BaseIcons["font"].label),
                     BaseIcons["font"],
                     self.parent.SetHistFont,
                 ),
                 (None,),
                 (
-                    ("save", _("Save display to file")),
+                    ("save", BaseIcons["saveFile"].label),
                     BaseIcons["saveFile"],
                     self.parent.SaveToFile,
                 ),
                 (
-                    ("hprint", _("Print display")),
+                    ("hprint", BaseIcons["print"].label),
                     BaseIcons["print"],
                     self.parent.PrintMenu,
                 ),
                 (None,),
                 (
-                    ("quit", _("Quit")),
+                    ("quit", BaseIcons["quit"].label),
                     BaseIcons["quit"],
                     self.parent.OnQuit,
                 ),

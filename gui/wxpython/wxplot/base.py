@@ -38,10 +38,10 @@ PlotIcons = {
         img="layer-raster-profile",
         label=_("Draw transect in map display window to profile"),
     ),
-    "options": MetaIcon(img="settings", label=_("Plot options")),
+    "options": BaseIcons["settings"],
     "statistics": MetaIcon(img="stats", label=_("Plot statistics")),
     "save": MetaIcon(img="save", label=_("Save profile data to CSV file")),
-    "quit": BaseIcons["quit"].SetLabel(_("Quit plot tool")),
+    "quit": BaseIcons["quit"],
 }
 
 

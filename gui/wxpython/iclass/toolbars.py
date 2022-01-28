@@ -101,57 +101,57 @@ class IClassMapToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("displaymap", _("Display map")),
+                    ("displaymap", icons["display"].label),
                     icons["display"],
                     self.parent.OnDraw,
                 ),
                 (
-                    ("rendermap", _("Render map")),
+                    ("rendermap", icons["render"].label),
                     icons["render"],
                     self.parent.OnRender,
                 ),
                 (
-                    ("erase", _("Erase display")),
+                    ("erase", icons["erase"].label),
                     icons["erase"],
                     self.parent.OnErase,
                 ),
                 (None,),
                 (
-                    ("pan", _("Pan")),
+                    ("pan", icons["pan"].label),
                     icons["pan"],
                     self.parent.OnPan,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("zoomIn", _("Zoom in")),
+                    ("zoomIn", icons["zoomIn"].label),
                     icons["zoomIn"],
                     self.parent.OnZoomIn,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("zoomOut", _("Zoom out")),
+                    ("zoomOut", icons["zoomOut"].label),
                     icons["zoomOut"],
                     self.parent.OnZoomOut,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("zoomRegion", _("Zoom to computational region extent")),
+                    ("zoomRegion", icons["zoomRegion"].label),
                     icons["zoomRegion"],
                     self.parent.OnZoomToWind,
                 ),
                 (
-                    ("zoomMenu", _("Various zoom options")),
+                    ("zoomMenu", icons["zoomMenu"].label),
                     icons["zoomMenu"],
                     self.parent.OnZoomMenu,
                 ),
                 (None,),
                 (
-                    ("zoomBack", _("Return to previous zoom")),
+                    ("zoomBack", icons["zoomBack"].label),
                     icons["zoomBack"],
                     self.parent.OnZoomBack,
                 ),
                 (
-                    ("zoomToMap", _("Zoom to selected map layer(s)")),
+                    ("zoomToMap", icons["zoomExtent"].label),
                     icons["zoomExtent"],
                     self.parent.OnZoomToMap,
                 ),
@@ -207,35 +207,35 @@ class IClassToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("selectGroup", _("Select imagery group")),
+                    ("selectGroup", icons["selectGroup"].label),
                     icons["selectGroup"],
                     lambda event: self.parent.AddBands(),
                 ),
                 (None,),
                 (
-                    ("classManager", _("Class manager")),
+                    ("classManager", icons["classManager"].label),
                     icons["classManager"],
                     self.parent.OnCategoryManager,
                 ),
                 (None,),
                 (
-                    ("runAnalysis", _("Run analysis")),
+                    ("runAnalysis", icons["run"].label),
                     icons["run"],
                     self.parent.OnRunAnalysis,
                 ),
                 (None,),
                 (
-                    ("importAreas", _("Import training areas")),
+                    ("importAreas", icons["importAreas"].label),
                     icons["importAreas"],
                     self.parent.OnImportAreas,
                 ),
                 (
-                    ("exportAreas", _("Export training areas")),
+                    ("exportAreas", icons["exportAreas"].label),
                     icons["exportAreas"],
                     self.parent.OnExportAreas,
                 ),
                 (
-                    ("sigFile", _("Save signature file for i.maxlik")),
+                    ("sigFile", icons["sigFile"].label),
                     icons["sigFile"],
                     self.parent.OnSaveSigFile,
                 ),
@@ -372,22 +372,22 @@ class IClassMapManagerToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("addRast", _("Add raster map layer")),
+                    ("addRast", BaseIcons["addRast"].label),
                     BaseIcons["addRast"],
                     self.OnAddRast,
                 ),
                 (
-                    ("addRgb", _("Add RGB map layer")),
+                    ("addRgb", iClassIcons["addRgb"].label),
                     iClassIcons["addRgb"],
                     self.OnAddRGB,
                 ),
                 (
-                    ("delRast", _("Remove selected map layer")),
+                    ("delRast", iClassIcons["delCmd"].label),
                     iClassIcons["delCmd"],
                     self.OnDelRast,
                 ),
                 (
-                    ("setOpacity", _("Set opacity level")),
+                    ("setOpacity", iClassIcons["opacity"].label),
                     iClassIcons["opacity"],
                     self.OnSetOpacity,
                 ),
@@ -447,12 +447,12 @@ class IClassMiscToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("help", _("Show manual")),
+                    ("help", icons["help"].label),
                     icons["help"],
                     self.parent.OnHelp,
                 ),
                 (
-                    ("quit", _("Quit")),
+                    ("quit", icons["quit"].label),
                     icons["quit"],
                     self.parent.OnCloseWindow,
                 ),

@@ -115,53 +115,53 @@ class DataCatalogToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("reloadTree", _("Reload tree")),
+                    ("reloadTree", icons["reloadTree"].label),
                     icons["reloadTree"],
                     self.parent.OnReloadTree,
                 ),
                 (
-                    ("reloadMapset", _("Reload mapset")),
+                    ("reloadMapset", icons["reloadMapset"].label),
                     icons["reloadMapset"],
                     self.parent.OnReloadCurrentMapset,
                 ),
                 (
-                    ("lock", _("Lock")),
+                    ("lock", icons["locked"].label),
                     icons["locked"],
                     self.OnSetRestriction,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("addGrassDB", _("Add GRASS GIS database")),
+                    ("addGrassDB", icons["addGrassDB"].label),
                     icons["addGrassDB"],
                     self.parent.OnAddGrassDB,
                 ),
                 (
-                    ("addLocation", _("Add location")),
+                    ("addLocation", icons["addLocation"].label),
                     icons["addLocation"],
                     self.parent.OnCreateLocation,
                 ),
                 (
-                    ("downloadLocation", _("Download location")),
+                    ("downloadLocation", icons["downloadLocation"].label),
                     icons["downloadLocation"],
                     self.parent.OnDownloadLocation,
                 ),
                 (
-                    ("addMapset", _("Add mapset")),
+                    ("addMapset", icons["addMapset"].label),
                     icons["addMapset"],
                     self.parent.OnCreateMapset,
                 ),
                 (
-                    ("importRaster", _("Import raster")),
+                    ("importRaster", icons["importRaster"].label),
                     icons["importRaster"],
                     self.parent.OnImportGdalLayers,
                 ),
                 (
-                    ("importVector", _("Import vector")),
+                    ("importVector", icons["importVector"].label),
                     icons["importVector"],
                     self.parent.OnImportOgrLayers,
                 ),
                 (
-                    ("importLayer", _("Import layer")),
+                    ("importLayer", icons["importLayer"].label),
                     icons["importLayer"],
                     self.parent.OnImportMenu,
                 ),

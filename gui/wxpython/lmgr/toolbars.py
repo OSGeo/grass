@@ -130,22 +130,22 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnAddMaps,
                 ),
                 (
-                    ("addrast", _("Add raster")),
+                    ("addrast", _("Add raster map")),
                     icons["addRast"],
                     self.parent.OnAddRaster,
                 ),
                 (
-                    ("rastmisc", _("Add various raster")),
+                    ("rastmisc", _("Add various raster map")),
                     icons["rastMisc"],
                     self.parent.OnAddRasterMisc,
                 ),
                 (
-                    ("addvect", _("Add vector")),
+                    ("addvect", _("Add vector map")),
                     icons["addVect"],
                     self.parent.OnAddVector,
                 ),
                 (
-                    ("vectmisc", _("Add various vector")),
+                    ("vectmisc", _("Add various vector map")),
                     icons["vectMisc"],
                     self.parent.OnAddVectorMisc,
                 ),
@@ -155,13 +155,13 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnAddOverlay,
                 ),
                 (
-                    ("addWS", _("Add web service")),
+                    ("addWS", _("Add web service map")),
                     icons["addWS"],
                     self.parent.OnAddWS,
                 ),
                 (None,),
                 (
-                    ("addgrp", _("Add group")),
+                    ("addgrp", icons["addGroup"].label),
                     icons["addGroup"],
                     self.parent.OnAddGroup,
                 ),
@@ -172,15 +172,12 @@ class DisplayPanelToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("vdigit", _("Vector digitizer")),
+                    ("vdigit", icons["vdigit"].label),
                     icons["vdigit"],
                     self.parent.OnVDigit,
                 ),
                 (
-                    (
-                        "attribute",
-                        _("Show attribute data for selected vector map"),
-                    ),
+                    ("attribute", icons["attrTable"].label),
                     icons["attrTable"],
                     self.parent.OnShowAttributeTable,
                 ),
@@ -228,28 +225,28 @@ class LMToolsToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("mapCalc", _("Raster Map Calculator")),
+                    ("mapCalc", icons["mapcalc"].label),
                     icons["mapcalc"],
                     self.parent.OnMapCalculator,
                 ),
                 (
-                    ("georect", _("Georectifier")),
+                    ("georect", icons["georectify"].label),
                     icons["georectify"],
                     self.parent.OnGCPManager,
                 ),
                 (
-                    ("modeler", _("Graphical Modeler")),
+                    ("modeler", icons["modeler"].label),
                     icons["modeler"],
                     self.parent.OnGModeler,
                 ),
                 (
-                    ("mapOutput", _("Cartographic Composer")),
+                    ("mapOutput", icons["composer"].label),
                     icons["composer"],
                     self.parent.OnPsMap,
                 ),
                 (None,),
                 (
-                    ("script-load", _("Launch user-defined script")),
+                    ("script-load", icons["script-load"].label),
                     icons["script-load"],
                     self.parent.OnRunScript,
                 ),
@@ -283,12 +280,12 @@ class LMMiscToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("settings", _("GUI settings")),
+                    ("settings", icons["settings"].label),
                     icons["settings"],
                     self.parent.OnPreferences,
                 ),
                 (
-                    ("help", _("GRASS manual")),
+                    ("help", icons["help"].label),
                     icons["help"],
                     self.parent.OnHelp,
                 ),
@@ -331,18 +328,18 @@ class LMNvizToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("nvizCmd", _("Generate command for m.nviz.image")),
+                    ("nvizCmd", icons["cmd"].label),
                     icons["cmd"],
                     self.OnNvizCmd,
                 ),
                 (None,),
                 (
-                    ("settings", _("3D view settings")),
+                    ("settings", icons["settings"].label),
                     icons["settings"],
                     self.parent.OnNvizPreferences,
                 ),
                 (
-                    ("help", _("3D view help")),
+                    ("help", icons["help"].label),
                     icons["help"],
                     self.OnHelp,
                 ),

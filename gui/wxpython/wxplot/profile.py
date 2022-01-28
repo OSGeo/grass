@@ -495,70 +495,70 @@ class ProfileToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("addraster", _("Add raster map layer")),
+                    ("addraster", BaseIcons["addRast"].label),
                     BaseIcons["addRast"],
                     self.parent.OnSelectRaster,
                 ),
                 (
-                    ("transect", _("Draw transect to profile")),
+                    ("transect", PlotIcons["transect"].label),
                     PlotIcons["transect"],
                     self.parent.OnDrawTransect,
                 ),
                 (None,),
                 (
-                    ("draw", _("Draw/re-draw plot")),
+                    ("draw", PlotIcons["draw"].label),
                     PlotIcons["draw"],
                     self.parent.OnCreateProfile,
                 ),
                 (
-                    ("erase", _("Erase display")),
+                    ("erase", BaseIcons["erase"].label),
                     BaseIcons["erase"],
                     self.parent.OnErase,
                 ),
                 (
-                    ("drag", _("Pan")),
+                    ("drag", BaseIcons["pan"].label),
                     BaseIcons["pan"],
                     self.parent.OnDrag,
                 ),
                 (
-                    ("zoom", _("Zoom in")),
+                    ("zoom", BaseIcons["zoomIn"].label),
                     BaseIcons["zoomIn"],
                     self.parent.OnZoom,
                 ),
                 (
-                    ("unzoom", _("Return to previous zoom")),
+                    ("unzoom", BaseIcons["zoomBack"].label),
                     BaseIcons["zoomBack"],
                     self.parent.OnRedraw,
                 ),
                 (None,),
                 (
-                    ("statistics", _("Plot statistics")),
+                    ("statistics", PlotIcons["statistics"].label),
                     PlotIcons["statistics"],
                     self.parent.OnStats,
                 ),
                 (
-                    ("datasave", _("Save profile data to file")),
+                    ("datasave", PlotIcons["save"].label),
                     PlotIcons["save"],
                     self.parent.SaveProfileToFile,
                 ),
                 (
-                    ("image", _("Save display to file")),
+                    ("image", BaseIcons["saveFile"].label),
                     BaseIcons["saveFile"],
                     self.parent.SaveToFile,
                 ),
                 (
-                    ("print", _("Print display")),
+                    ("print", BaseIcons["print"].label),
                     BaseIcons["print"],
                     self.parent.PrintMenu,
                 ),
                 (None,),
                 (
-                    ("settings", _("Settings")),
+                    ("settings", PlotIcons["options"].label),
                     PlotIcons["options"],
                     self.parent.PlotOptionsMenu,
                 ),
                 (
-                    ("quit", _("Quit")),
+                    ("quit", PlotIcons["quit"].label),
                     PlotIcons["quit"],
                     self.parent.OnQuit,
                 ),

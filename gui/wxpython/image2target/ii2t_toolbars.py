@@ -51,39 +51,39 @@ class GCPManToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("gcpAdd", _("Add new GCP")),
+                    ("gcpAdd", icons["gcpAdd"].label),
                     icons["gcpAdd"],
                     self.parent.AddGCPm,
                 ),
                 (
-                    ("gcpDelete", _("Delete selected GCP")),
+                    ("gcpDelete", icons["gcpDelete"].label),
                     icons["gcpDelete"],
                     self.parent.DeleteGCP,
                 ),
                 (
-                    ("gcpClear", _("Clear selected GCP")),
+                    ("gcpClear", icons["gcpClear"].label),
                     icons["gcpClear"],
                     self.parent.ClearGCP,
                 ),
                 (None,),
                 (
-                    ("rms", _("Recalculate RMS error")),
+                    ("rms", icons["gcpRms"].label),
                     icons["gcpRms"],
                     self.parent.OnRMS,
                 ),
                 (
-                    ("georect", _("Georectify")),
+                    ("georect", icons["georectify"].label),
                     icons["georectify"],
                     self.parent.OnGeorect,
                 ),
                 (None,),
                 (
-                    ("gcpSave", _("Save GCPs to file")),
+                    ("gcpSave", icons["gcpSave"].label),
                     icons["gcpSave"],
                     self.parent.SaveGCPs,
                 ),
                 (
-                    ("gcpReload", _("Reload GCPs from file")),
+                    ("gcpReload", icons["gcpReload"].label),
                     icons["gcpReload"],
                     self.parent.ReloadGCPs,
                 ),
@@ -134,66 +134,66 @@ class GCPDisplayToolbar(BaseToolbar):
                 label=_("Update GCP coordinates"),
                 desc=_("Update GCP coordinates)"),
             ),
-            "quit": BaseIcons["quit"].SetLabel(_("Quit georectification tool")),
-            "settings": BaseIcons["settings"].SetLabel(_("Georectifier settings")),
-            "help": BaseIcons["help"].SetLabel(_("Georectifier manual")),
+            "quit": BaseIcons["quit"],
+            "settings": BaseIcons["settings"],
+            "help": BaseIcons["help"],
         }
 
         return self._getToolbarData(
             (
                 (
-                    ("displaymap", _("Display map")),
+                    ("displaymap", BaseIcons["display"].label),
                     BaseIcons["display"],
                     self.parent.OnDraw,
                 ),
                 (
-                    ("rendermap", _("Render map")),
+                    ("rendermap", BaseIcons["render"].label),
                     BaseIcons["render"],
                     self.parent.OnRender,
                 ),
                 (
-                    ("erase", _("Erase display")),
+                    ("erase", BaseIcons["erase"].label),
                     BaseIcons["erase"],
                     self.parent.OnErase,
                 ),
                 (None,),
                 (
-                    ("gcpset", _("Update GCP")),
+                    ("gcpset", icons["gcpSet"].label),
                     icons["gcpSet"],
                     self.parent.OnPointer,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("pan", _("Pan")),
+                    ("pan", BaseIcons["pan"].label),
                     BaseIcons["pan"],
                     self.parent.OnPan,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("zoomin", _("Zoom in")),
+                    ("zoomin", BaseIcons["zoomIn"].label),
                     BaseIcons["zoomIn"],
                     self.parent.OnZoomIn,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("zoomout", _("Zoom out")),
+                    ("zoomout", BaseIcons["zoomOut"].label),
                     BaseIcons["zoomOut"],
                     self.parent.OnZoomOut,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("zoommenu", _("Various zoom options")),
+                    ("zoommenu", BaseIcons["zoomMenu"].label),
                     BaseIcons["zoomMenu"],
                     self.parent.OnZoomMenuGCP,
                 ),
                 (None,),
                 (
-                    ("zoomback", _("Return to previous zoom")),
+                    ("zoomback", BaseIcons["zoomBack"].label),
                     BaseIcons["zoomBack"],
                     self.parent.OnZoomBack,
                 ),
                 (
-                    ("zoomtomap", _("Zoom to selected map layer(s)")),
+                    ("zoomtomap", BaseIcons["zoomExtent"].label),
                     BaseIcons["zoomExtent"],
                     self.parent.OnZoomToMap,
                 ),
@@ -205,18 +205,18 @@ class GCPDisplayToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("settings", _("Settings")),
+                    ("settings", icons["settings"].label),
                     icons["settings"],
                     self.parent.OnSettings,
                 ),
                 (
-                    ("help", _("Show manual")),
+                    ("help", icons["help"].label),
                     icons["help"],
                     self.parent.OnHelp,
                 ),
                 (None,),
                 (
-                    ("quit", _("Quit")),
+                    ("quit", icons["quit"].label),
                     icons["quit"],
                     self.parent.OnQuit,
                 ),

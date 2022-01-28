@@ -495,50 +495,55 @@ class RLiSetupToolbar(BaseToolbar):
         """Toolbar data"""
         if self.parent.samplingtype == SamplingType.REGIONS:
             drawTool = (
-                ("digitizeregion", _("Draw sampling region")),
+                ("digitizeregion", icons["digitizeregion"].label),
                 icons["digitizeregion"],
                 self.parent.OnDigitizeRegion,
                 wx.ITEM_CHECK,
             )
         elif self.parent.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
             drawTool = (
-                ("digitizeunit", _("Draw sampling rectangle")),
+                ("digitizeunit", icons["digitizeunit"].label),
                 icons["digitizeunit"],
                 self.parent.OnDraw,
                 wx.ITEM_CHECK,
             )
         elif self.parent.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
             drawTool = (
-                ("digitizeunitc", _("Draw sampling circle")),
+                ("digitizeunitc", icons["digitizeunitc"].label),
                 icons["digitizeunitc"],
                 self.parent.OnDrawRadius,
                 wx.ITEM_CHECK,
             )
         else:
-            drawTool = ("draw", icons["draw"], self.parent.OnDraw, wx.ITEM_CHECK)
+            drawTool = (
+                ("draw", icons["draw"].label),
+                icons["draw"],
+                self.parent.OnDraw,
+                wx.ITEM_CHECK,
+            )
         if self.parent.samplingtype == SamplingType.VECT:
             return self._getToolbarData(
                 (
                     (
-                        ("pan", _("Pan")),
+                        ("pan", BaseIcons["pan"].label),
                         BaseIcons["pan"],
                         self.parent.OnPan,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        ("zoomIn", _("Zoom in")),
+                        ("zoomIn", BaseIcons["zoomIn"].label),
                         BaseIcons["zoomIn"],
                         self.parent.OnZoomIn,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        ("zoomOut", _("Zoom out")),
+                        ("zoomOut", BaseIcons["zoomOut"].label),
                         BaseIcons["zoomOut"],
                         self.parent.OnZoomOut,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        ("zoomExtent", _("Zoom to extent")),
+                        ("zoomExtent", BaseIcons["zoomExtent"].label),
                         BaseIcons["zoomExtent"],
                         self.parent.OnZoomToMap,
                     ),
@@ -550,25 +555,25 @@ class RLiSetupToolbar(BaseToolbar):
                     drawTool,
                     (None,),
                     (
-                        ("pan", _("Pan")),
+                        ("pan", BaseIcons["pan"].label),
                         BaseIcons["pan"],
                         self.parent.OnPan,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        ("zoomIn", _("Zoom in")),
+                        ("zoomIn", BaseIcons["zoomIn"].label),
                         BaseIcons["zoomIn"],
                         self.parent.OnZoomIn,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        ("zoomOut", _("Zoom out")),
+                        ("zoomOut", BaseIcons["zoomOut"].label),
                         BaseIcons["zoomOut"],
                         self.parent.OnZoomOut,
                         wx.ITEM_CHECK,
                     ),
                     (
-                        ("zoomExtent", _("Zoom to extent")),
+                        ("zoomExtent", BaseIcons["zoomExtent"].label),
                         BaseIcons["zoomExtent"],
                         self.parent.OnZoomToMap,
                     ),

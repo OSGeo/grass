@@ -663,7 +663,8 @@ class PyEditToolbar(BaseToolbar):
             # TODO: better icons for overwrite modes
             "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
             "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
-            "quit": MetaIcon(img="quit", label=_("Quit Simple Python Editor")),
+            "help": BaseIcons["help"],
+            "quit": BaseIcons["quit"],
         }
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
@@ -680,35 +681,35 @@ class PyEditToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("open", _("Open")),
+                    ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
                     self.icons["open"],
                     self.parent.OnOpen,
                 ),
                 (
-                    ("save", _("Save")),
+                    ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
                     self.icons["save"],
                     self.parent.OnSave,
                 ),
                 (None,),
                 (
-                    ("run", _("Run")),
+                    ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
                     self.icons["run"],
                     self.parent.OnRun,
                 ),
                 (
-                    ("overwrite", _("Overwrite")),
+                    ("overwrite", self.icons["overwriteTrue"].label),
                     self.icons["overwriteTrue"],
                     self.OnSetOverwrite,
                     wx.ITEM_CHECK,
                 ),
                 (None,),
                 (
-                    ("help", _("Show manual")),
-                    BaseIcons["help"],
+                    ("help", self.icons["help"].label),
+                    self.icons["help"],
                     self.parent.OnHelp,
                 ),
                 (
-                    ("quit", _("Quit")),
+                    ("quit", self.icons["quit"].label),
                     self.icons["quit"],
                     self.parent.OnClose,
                 ),

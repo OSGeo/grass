@@ -442,29 +442,29 @@ class SimpleLmgrToolbar(BaseToolbar):
         """Toolbar data"""
         data = [
             (
-                ("edit", _("Edit layer properties")),
+                ("edit", icons["edit"].label),
                 icons["edit"],
                 self.parent.OnLayerChangeProperties,
             ),
             (
-                ("remove", _("Remove selected map(s) from list")),
+                ("remove", icons["remove"].label),
                 icons["remove"],
                 self.parent.OnRemove,
             ),
             (None,),
             (
-                ("up", _("Move selected layer(s) up")),
+                ("up", icons["up"].label),
                 icons["up"],
                 self.parent.OnLayerUp,
             ),
             (
-                ("down", _("Move selected layer(s) down")),
+                ("down", icons["down"].label),
                 icons["down"],
                 self.parent.OnLayerDown,
             ),
             (None,),
             (
-                ("opacity", _("Change layer opacity")),
+                ("opacity", icons["opacity"].label),
                 icons["opacity"],
                 self.parent.OnLayerChangeOpacity,
             ),
@@ -473,7 +473,7 @@ class SimpleLmgrToolbar(BaseToolbar):
             data.insert(
                 0,
                 (
-                    ("addRaster3d", _("Add 3D raster map layer")),
+                    ("addRaster3d", icons["addRast3d"].label),
                     icons["addRast3d"],
                     self.parent.OnAddRast3d,
                 ),
@@ -482,7 +482,7 @@ class SimpleLmgrToolbar(BaseToolbar):
             data.insert(
                 0,
                 (
-                    ("addRGB", _("Add RGB map layer")),
+                    ("addRGB", icons["addRGB"].label),
                     icons["addRGB"],
                     self.parent.OnAddRGB,
                 ),
@@ -491,7 +491,7 @@ class SimpleLmgrToolbar(BaseToolbar):
             data.insert(
                 0,
                 (
-                    ("addVector", _("Add vector map layer")),
+                    ("addVector", BaseIcons["addVect"].label),
                     BaseIcons["addVect"],
                     self.parent.OnAddVector,
                 ),
@@ -500,7 +500,7 @@ class SimpleLmgrToolbar(BaseToolbar):
             data.insert(
                 0,
                 (
-                    ("addRaster", _("Add raster map layer")),
+                    ("addRaster", BaseIcons["addRast"].label),
                     BaseIcons["addRast"],
                     self.parent.OnAddRaster,
                 ),

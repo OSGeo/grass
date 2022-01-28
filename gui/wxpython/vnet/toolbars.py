@@ -64,25 +64,25 @@ class PointListToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 (
-                    ("insertPoint", _("Insert points")),
+                    ("insertPoint", icons["insertPoint"].label),
                     icons["insertPoint"],
                     self.OnEditPointMode,  # TODO self.list.dialog
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("snapping", _("Activate snapping to nodes")),
+                    ("snapping", icons["snapping"].label),
                     icons["snapping"],
                     lambda event: self.vnet_mgr.Snapping(event.IsChecked()),
                     wx.ITEM_CHECK,
                 ),
                 (None,),
                 (
-                    ("pointAdd", _("Add new point")),
+                    ("pointAdd", icons["pointAdd"].label),
                     icons["pointAdd"],
                     lambda event: self.vnet_pts_mgr.AddPoint(),
                 ),
                 (
-                    ("pointDelete", _("Delete selected point")),
+                    ("pointDelete", icons["pointDelete"].label),
                     icons["pointDelete"],
                     self.OnDeletePoint,
                 ),
@@ -129,16 +129,15 @@ class MainToolbar(BaseToolbar):
             "saveTempLayer": MetaIcon(
                 img="map-export", label=_("Save temporary result")
             ),
-            "settings": BaseIcons["settings"].SetLabel(
-                _("Vector network analysis settings")
-            ),
-            "help": MetaIcon(img="help", label=_("Show manual")),
+            "settings": BaseIcons["settings"],
+            "help": BaseIcons["help"],
+            "quit": BaseIcons["quit"],
         }
 
         return self._getToolbarData(
             (
                 (
-                    ("run", _("Execute analysis")),
+                    ("run", icons["run"].label),
                     icons["run"],
                     self.parent.OnAnalyze,
                 ),
@@ -155,30 +154,30 @@ class MainToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
-                    ("showResult", _("Show result")),
+                    ("showResult", icons["showResult"].label),
                     icons["showResult"],
                     self.parent.OnShowResult,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    ("saveTempLayer", _("Save temporary result")),
+                    ("saveTempLayer", icons["saveTempLayer"].label),
                     icons["saveTempLayer"],
                     self.parent.OnSaveTmpLayer,
                 ),
                 (None,),
                 (
-                    ("settings", _("Settings")),
+                    ("settings", icons["settings"].label),
                     icons["settings"],
                     self.parent.OnSettings,
                 ),
                 (
-                    ("help", _("Help")),
+                    ("help", icons["help"].label),
                     icons["help"],
                     self.OnHelp,
                 ),
                 (
-                    ("quit", _("Quit")),
-                    BaseIcons["quit"],
+                    ("quit", icons["quit"].label),
+                    icons["quit"],
                     self.parent.OnCloseDialog,
                 ),
             )

@@ -102,7 +102,7 @@ class BaseToolbar(ToolBar):
                 # at the right side of the toolbar)
                 return self._getToolbarData(
                     (
-                        ("help", _("Help")),
+                        ("help", Icons["help"].label),
                         Icons["help"],
                         self.parent.OnHelp
                     ),
