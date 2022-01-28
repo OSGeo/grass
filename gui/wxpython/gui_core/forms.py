@@ -570,7 +570,6 @@ class TaskFrame(wx.Frame):
         self._gconsole = self.notebookpanel._gconsole
         if self._gconsole:
             self._gconsole.mapCreated.connect(self.OnMapCreated)
-            self._gconsole.updateMap.connect(lambda: self._giface.updateMap.emit())
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
             self.goutput.showNotification.connect(

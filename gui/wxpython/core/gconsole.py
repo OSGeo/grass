@@ -371,8 +371,6 @@ class GConsole(wx.EvtHandler):
         # Signal when some map is created or updated by a module.
         # attributes: name: map name, ltype: map type,
         self.mapCreated = Signal("GConsole.mapCreated")
-        # emitted when map display should be re-render
-        self.updateMap = Signal("GConsole.updateMap")
         # emitted when log message should be written
         self.writeLog = Signal("GConsole.writeLog")
         # emitted when command log message should be written
@@ -788,7 +786,19 @@ class GConsole(wx.EvtHandler):
                                 element=prompt,
                             )
         if name == "r.mask":
-            self.updateMap.emit()
+            action = "new"
+            for p in task.get_options()["flags"]:
+                if p.get("name") == "r" and p.get("value"):
+                    action = "delete"
+            gisenv = grass.gisenv()
+            self._giface.grassdbChanged.emit(
+                grassdb=gisenv["GISDBASE"],
+                location=gisenv["LOCATION_NAME"],
+                mapset=gisenv["MAPSET"],
+                action=action,
+                map="MASK",
+                element="raster",
+            )
 
         event.Skip()
 

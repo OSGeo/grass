@@ -321,8 +321,8 @@ class MapPanelBase(wx.Panel):
         # create statusbar and its manager
         statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         statusbar.SetMinHeight(24)
-        statusbar.SetFieldsCount(4)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
@@ -330,10 +330,7 @@ class MapPanelBase(wx.Panel):
             statusbarItems, mapframe=self, statusbar=statusbar
         )
         self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
+            sb.SbRender(self, statusbar=statusbar, position=2)
         )
         self.statusbarManager.Update()
         return statusbar
