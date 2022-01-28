@@ -158,17 +158,10 @@ int D_open_driver(void)
 
 /*!
   \brief Close display driver
-
-  If GRASS_NOTIFY is defined, run notifier.
 */
 void D_close_driver(void)
 {
-    const char *cmd = getenv("GRASS_NOTIFY");
-
     COM_Graph_close();
-
-    if (cmd)
-	system(cmd);
 }
 
 /*!
