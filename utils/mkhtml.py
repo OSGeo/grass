@@ -48,7 +48,13 @@ try:
     import grass.script as gs
 except ImportError:
     # During compilation GRASS GIS
-    gs = None
+    class gs:
+        def warning(self, message):
+            pass
+
+        def fatal(self, message):
+            print(message, file=sys.stderr)
+
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
