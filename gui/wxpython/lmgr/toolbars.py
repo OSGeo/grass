@@ -135,7 +135,7 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnAddRaster,
                 ),
                 (
-                    ("rastmisc", _("Add various raster map")),
+                    ("rastmisc", _("Add various raster maps")),
                     icons["rastMisc"],
                     self.parent.OnAddRasterMisc,
                 ),
@@ -145,7 +145,7 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnAddVector,
                 ),
                 (
-                    ("vectmisc", _("Add various vector map")),
+                    ("vectmisc", _("Add various vector maps")),
                     icons["vectMisc"],
                     self.parent.OnAddVectorMisc,
                 ),
