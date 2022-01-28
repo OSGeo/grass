@@ -87,6 +87,7 @@ find . -name '__pycache__' | xargs -r rm -r
 rm -f python/grass/ctypes/ctypesgencore/parser/lextab.py
 rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc \
   gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
+rm -f include/version.h
 chmod -R a+r *
 ```
 
@@ -115,13 +116,15 @@ Example:
 2021
 ```
 
+Commit with version message, e.g. "GRASS GIS 8.0.0RC1".
+
 ### Create release tag
 
-(see <https://help.github.com/en/articles/creating-releases>)
+(For background, see <https://help.github.com/en/articles/creating-releases>)
 
 Preparation:
 
-### Changelog and tagging etc preparations
+#### Changelog and tagging etc preparations
 
 ```bash
 # update from GH
@@ -144,7 +147,7 @@ RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
 echo $RELEASETAG
 ```
 
-### Tag release (on GitHub)
+#### Tag release (on GitHub)
 
 ```bash
 echo "$VERSION"
@@ -270,7 +273,7 @@ vim wingrass-maintenance-scripts/grass_addons.sh
 vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
 vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
-# update addons - major/minor release only
+# update addons - major/minor release only <<-- outdated?!
 vim grass-addons/utils/addons/grass-addons-publish.sh
 vim grass-addons/utils/addons/grass-addons-build.sh
 vim grass-addons/utils/addons/grass-addons.sh
