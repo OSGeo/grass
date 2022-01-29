@@ -48,12 +48,14 @@ try:
     import grass.script as gs
 except ImportError:
     # During compilation GRASS GIS
+    _ = str
+
     class gs:
-        def warning(self, message):
+        def warning(message):
             pass
 
-        def fatal(self, message):
-            print(message, file=sys.stderr)
+        def fatal(message):
+            pass
 
 
 HEADERS = {
