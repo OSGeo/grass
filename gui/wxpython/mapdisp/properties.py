@@ -238,20 +238,21 @@ class ChBProjection(PropertyItem):
     def __init__(self, parent, mapWindowProperties):
         PropertyItem.__init__(self, mapWindowProperties)
         self.name = "projection"
-        self.label = _("Projection")
-        self.defaultLabel = _("Use defined projection")
+        self.defaultLabel = _("Display coordinates in different CRS")
         self.widget = wx.CheckBox(parent=parent, id=wx.ID_ANY, label=self.defaultLabel)
+        self.widget.SetValue(self.mapWindowProperty)
         self.widget.SetToolTip(
             wx.ToolTip(
                 _(
                     "Reproject coordinates displayed "
-                    "in the statusbar. Projection can be "
-                    "defined in GUI preferences dialog "
+                    "in the statusbar. Coordinate reference system can be "
+                    "specified in GUI preferences dialog "
                     "(tab 'Projection')"
                 )
             )
         )
         self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self._connect()
 
     @property
     def mapWindowProperty(self):
@@ -261,11 +262,16 @@ class ChBProjection(PropertyItem):
     def mapWindowProperty(self, value):
         self._properties.useDefinedProjection = value
 
+    def mapWindowPropertyChanged(self):
+        return self._properties.useDefinedProjectionChanged
+
     def _onToggleCheckBox(self, event):
-        self.mapWindowProperty = self.GetValue()
+        super()._onToggleCheckBox(event)
         epsg = self._properties.epsg
         if epsg:
-            label = "%s (EPSG: %s)" % (self.defaultLabel, epsg)
+            label = _("{label} (EPSG: {epsg})").format(
+                label=self.defaultLabel, epsg=epsg
+            )
             self.widget.SetLabel(label)
         else:
             self.widget.SetLabel(self.defaultLabel)

@@ -41,6 +41,7 @@ class MapWindowProperties(object):
         self._alignExtent = None
         self.alignExtentChanged = Signal("MapWindowProperties.alignExtentChanged")
         self._useDefinedProjection = False
+        self.useDefinedProjectionChanged = Signal("MapWindowProperties._useDefinedProjectionChanged")
 
     def setValuesFromUserSettings(self):
         """Convenient function to get values from user settings into this object."""
