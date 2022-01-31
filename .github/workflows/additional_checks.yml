@@ -20,3 +20,6 @@ jobs:
 
       - name: Check for CRLF endings
         uses: erclu/check-crlf@v1
+        with:
+          # Ignore all test data, Windows-specific directories and scripts.
+          exclude: mswindows .*\.bat .*/testsuite/data/.*
