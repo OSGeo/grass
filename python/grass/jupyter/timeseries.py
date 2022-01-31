@@ -121,12 +121,24 @@ class TimeSeries:
                 .strip()
                 .split("\n")
             )
+
         # Dictionary of dates and associated image filename
         value_dict = {dates[i]: self._filenames[i] for i in range(len(dates))}
+
+        slider = widgets.SelectionSlider(
+            options=dates,
+            value=dates[0],
+            description='Date/Time',
+            disabled=False,
+            continuous_update=True,
+            orientation='horizontal',
+            readout=True,
+            layout=widgets.Layout(width='80%')
+        )
 
         def view_image(date):
             return Image(value_dict[date])
 
-        # This creates a dropdown menu for dates since they are a string
-        # In the future, it should create a SelectionSlider instead
-        widgets.interact(view_image, date=dates)
+        out = widgets.interact(view_image, date=slider)
+
+        return out
