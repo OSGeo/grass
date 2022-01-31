@@ -47,6 +47,9 @@ class PropertyItem:
     def _setValue(self, value):
         self.widget.SetValue(value)
 
+    def GetValue(self):
+        return self.widget.GetValue()
+
     def GetWidget(self):
         """Returns underlying widget.
 
@@ -62,7 +65,7 @@ class PropertyItem:
 
     def _onToggleCheckBox(self, event):
         self._disconnect()
-        self.mapWindowProperty = self.widget.GetValue()
+        self.mapWindowProperty = self.GetValue()
         self._connect()
 
 
@@ -229,6 +232,51 @@ class ChBShowRegion(PropertyItem):
             self.giface.updateMap.emit(render=False)
 
 
+class ChBProjection(PropertyItem):
+    """Checkbox to enable user defined projection"""
+
+    def __init__(self, parent, mapWindowProperties):
+        PropertyItem.__init__(self, mapWindowProperties)
+        self.name = "projection"
+        self.defaultLabel = _("Display coordinates in different CRS")
+        self.widget = wx.CheckBox(parent=parent, id=wx.ID_ANY, label=self.defaultLabel)
+        self.widget.SetValue(self.mapWindowProperty)
+        self.widget.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Reproject coordinates displayed "
+                    "in the statusbar. Coordinate reference system can be "
+                    "specified in GUI preferences dialog "
+                    "(tab 'Projection')"
+                )
+            )
+        )
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self._connect()
+
+    @property
+    def mapWindowProperty(self):
+        return self._properties.useDefinedProjection
+
+    @mapWindowProperty.setter
+    def mapWindowProperty(self, value):
+        self._properties.useDefinedProjection = value
+
+    def mapWindowPropertyChanged(self):
+        return self._properties.useDefinedProjectionChanged
+
+    def _onToggleCheckBox(self, event):
+        super()._onToggleCheckBox(event)
+        epsg = self._properties.epsg
+        if epsg:
+            label = _("{label} (EPSG: {epsg})").format(
+                label=self.defaultLabel, epsg=epsg
+            )
+            self.widget.SetLabel(label)
+        else:
+            self.widget.SetLabel(self.defaultLabel)
+
+
 class MapDisplayPropertiesDialog(wx.Dialog):
     """Map Display properties dialog"""
 
@@ -253,6 +301,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
         # create notebook pages
         self._createDisplayPage(parent=self.notebook)
+        self._createStatusBarPage(parent=self.notebook)
 
         self.btnClose = Button(self, wx.ID_CLOSE)
         self.SetEscapeId(wx.ID_CLOSE)
@@ -326,4 +375,23 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         panel.SetSizer(sizer)
 
-        return panel
+    def _createStatusBarPage(self, parent):
+        """Create notebook page for statusbar settings"""
+
+        panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        parent.AddPage(page=panel, text=_("Status bar"))
+
+        # General settings
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        # Auto-rendering
+        self.projection = ChBProjection(panel, self.mapWindowProperties)
+        sizer.Add(
+            self.projection.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=3,
+        )
+
+        panel.SetSizer(sizer)

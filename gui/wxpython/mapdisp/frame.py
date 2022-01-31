@@ -154,7 +154,6 @@ class MapPanel(SingleMapPanel):
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
-                sb.SbProjection,
             ]
             self.statusbarItemsHiddenInNviz = (
                 sb.SbDisplayGeometry,
