@@ -1,0 +1,22 @@
+name: Additional Checks
+
+# Checks which are not in standardized tools such as custom checks by scripts
+# in the source code or 3rd party checks without large projects behind them.
+# Number of disconnected, but simple checks can be combined into one workflow
+# (and job) to reduce the number of jobs.
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  additional-black:
+    name: Additional checks
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repository contents
+        uses: actions/checkout@v2
+
+      - name: Check for CRLF endings
+        uses: erclu/check-crlf@v1
