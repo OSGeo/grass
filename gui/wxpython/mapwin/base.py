@@ -40,6 +40,10 @@ class MapWindowProperties(object):
         self.showRegionChanged = Signal("MapWindowProperties.showRegionChanged")
         self._alignExtent = None
         self.alignExtentChanged = Signal("MapWindowProperties.alignExtentChanged")
+        self._useDefinedProjection = False
+        self.useDefinedProjectionChanged = Signal(
+            "MapWindowProperties.useDefinedProjectionChanged"
+        )
 
     def setValuesFromUserSettings(self):
         """Convenient function to get values from user settings into this object."""
@@ -93,6 +97,18 @@ class MapWindowProperties(object):
         if value != self._alignExtent:
             self._alignExtent = value
             self.alignExtentChanged.emit(value=value)
+
+    @property
+    def useDefinedProjection(self):
+        return self._useDefinedProjection
+
+    @useDefinedProjection.setter
+    def useDefinedProjection(self, value):
+        self._useDefinedProjection = value
+
+    @property
+    def epsg(self):
+        return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
 
 
 class MapWindowBase(object):
