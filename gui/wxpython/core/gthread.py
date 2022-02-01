@@ -58,7 +58,7 @@ class gThread(threading.Thread, wx.EvtHandler):
         else:
             self.resultQ = resultQ
 
-        self.setDaemon(True)
+        self.daemon = True
 
         self.Bind(EVT_CMD_DONE, self.OnDone)
         self.Bind(EVT_THD_TERMINATE, self.OnTerminate)

@@ -87,7 +87,7 @@ class CmdThread(threading.Thread):
         else:
             self.resultQ = resultQ
 
-        self.setDaemon(True)
+        self.daemon = True
 
         self.requestCmd = None
 
