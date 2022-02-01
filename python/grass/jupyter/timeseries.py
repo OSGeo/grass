@@ -21,14 +21,16 @@ class TimeSeries:
     """timeseries creates visualization of time-space raster and
     vector dataset in Jupyter Notebooks"""
 
-    def __init__(self, timeseries, type="strds", basemap=None, overlay=None):
+    def __init__(self, timeseries, etype="strds", basemap=None, overlay=None):
         self.timeseries = timeseries
         self.basemap = basemap
         self.overlay = overlay
         self._legend = False
-        self.type = type
+        self._etype = etype  # element type, borrowing convention from tgis
         self._legend_kwargs = None
-        self._filenames = None
+        self._filenames = []
+        self._file_date_dict = {}
+        self._date_file_dict = {}
 
         # Check that map is time space dataset
         test = gs.read_command("t.list", where=f"name LIKE '{timeseries}'")
@@ -43,12 +45,37 @@ class TimeSeries:
         # Create a temporary directory for our PNG images
         self._tmpdir = tempfile.TemporaryDirectory()
 
+        # create list of date/times
+        if self._etype == "strds":
+            self._dates = (
+                gs.read_command(
+                    "t.rast.list",
+                    input=self.timeseries,
+                    columns="start_time",
+                    flags="u",
+                )
+                .strip()
+                .split("\n")
+            )
+        elif self._etype == "stvds":
+            self._dates = (
+                gs.read_command(
+                    "t.vect.list",
+                    input=self.timeseries,
+                    columns="start_time",
+                    flags="u",
+                )
+                .strip()
+                .split("\n")
+            )
+
     def d_legend(self, **kwargs):
         self._legend = True
         self._legend_kwargs = kwargs
 
     def render_layers(self):
-        if self.type == "strds":
+        # Create List of layers to Render
+        if self._etype == "strds":
             renderlist = (
                 gs.read_command(
                     "t.rast.list", input=self.timeseries, columns="name", flags="u"
@@ -56,7 +83,7 @@ class TimeSeries:
                 .strip()
                 .split("\n")
             )
-        elif self.type == "stvds":
+        elif self._etype == "stvds":
             renderlist = (
                 gs.read_command(
                     "t.vect.list", input=self.timeseries, columns="name", flags="u"
@@ -66,19 +93,23 @@ class TimeSeries:
             )
         else:
             raise NameError(
-                _(f"Dataset {self.timeseries} is not data type 'strds' or 'stvds'")
+                _(f"Dataset {self.timeseries} is not element type 'strds' or 'stvds'")
             )
 
-        filenames = []
+        i = 0
         for name in renderlist:
+            # Create image file
             filename = os.path.join(self._tmpdir.name, "{}.png".format(name))
-            filenames.append(filename)
+            self._filenames.append(filename)
+            self._file_date_dict[self._dates[i]] = filename
+            self._date_file_dict[filename] = self._dates[i]
+            # Render image
             img = GrassRenderer(filename=filename)
             if self.basemap:
                 img.d_rast(map=self.basemap)
-            if self.type == "strds":
+            if self._etype == "strds":
                 img.d_rast(map=name)
-            elif self.type == "stvds":
+            elif self._etype == "stvds":
                 img.d_vect(map=name)
             if self.overlay:
                 img.d_vect(map=self.overlay)
@@ -90,55 +121,73 @@ class TimeSeries:
                 img.d_legend(
                     raster=name, range=f"{min_min}, {max_max}", **self._legend_kwargs
                 )
+            i = i + 1
 
-        self._filenames = filenames
-
-    def TimeSlider(self):
+    def time_slider(self):
         # Lazy Imports
         import ipywidgets as widgets
         from IPython.display import Image
 
-        # create list of date/times for labels
-        if self.type == "strds":
-            dates = (
-                gs.read_command(
-                    "t.rast.list",
-                    input=self.timeseries,
-                    columns="start_time",
-                    flags="u",
-                )
-                .strip()
-                .split("\n")
-            )
-        elif self.type == "stvds":
-            dates = (
-                gs.read_command(
-                    "t.vect.list",
-                    input=self.timeseries,
-                    columns="start_time",
-                    flags="u",
-                )
-                .strip()
-                .split("\n")
-            )
-
-        # Dictionary of dates and associated image filename
-        value_dict = {dates[i]: self._filenames[i] for i in range(len(dates))}
-
         slider = widgets.SelectionSlider(
-            options=dates,
-            value=dates[0],
-            description='Date/Time',
+            options=self._dates,
+            value=self._dates[0],
+            description="Date/Time",
             disabled=False,
             continuous_update=True,
-            orientation='horizontal',
+            orientation="horizontal",
             readout=True,
-            layout=widgets.Layout(width='80%')
+            layout=widgets.Layout(width="80%"),
         )
 
         def view_image(date):
-            return Image(value_dict[date])
+            return Image(self._file_date_dict[date])
 
-        out = widgets.interact(view_image, date=slider)
+        widgets.interact(view_image, date=slider)
 
-        return out
+    def animate(
+        self,
+        duration=500,
+        label=True,
+        font="DejaVuSans.ttf",
+        text_size=12,
+        text_color="gray",
+    ):
+        """
+        param int duration: time to display each frame; milliseconds
+        param bool label: include date/time stamp on each frame
+        param str font: font file
+        param int text_size: size of date/time text
+        param str text_color: color to use for the text. See
+                              https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
+                              for list of available color formats
+        """
+        # Create a GIF from the PNG images
+        from PIL import Image
+        from PIL import ImageFont
+        from PIL import ImageDraw
+        from IPython.display import Image as ipyImage
+
+        # filepath
+        fp_out = os.path.join(self._tmpdir.name, "image.gif")
+
+        imgs = []
+        for f in self._filenames:
+            date = self._date_file_dict[f]
+            img = Image.open(f)
+            draw = ImageDraw.Draw(img)
+            if label:
+                font_settings = ImageFont.truetype(font, text_size)
+                draw.text((0, 0), date, fill=text_color, font=font_settings)
+            imgs.append(img)
+
+        img.save(
+            fp=fp_out,
+            format="GIF",
+            append_images=imgs[:-1],
+            save_all=True,
+            duration=duration,
+            loop=0,
+        )
+
+        # Display the GIF
+        return ipyImage(fp_out)
