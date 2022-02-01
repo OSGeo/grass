@@ -62,7 +62,7 @@ class NvizThread(Thread):
 
         self._display = None
 
-        self.setDaemon(True)
+        self.daemon = True
 
     def run(self):
         self._display = wxnviz.Nviz(self.log, self.progressbar)

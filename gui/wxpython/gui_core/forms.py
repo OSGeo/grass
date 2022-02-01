@@ -168,7 +168,7 @@ class UpdateThread(Thread):
         self.event = event
         self.eventId = eventId
         self.task = task
-        self.setDaemon(True)
+        self.daemon = True
 
         # list of functions which updates the dialog
         self.data = {}
@@ -434,7 +434,7 @@ class UpdateQThread(Thread):
         Thread.__init__(self, **kwds)
 
         self.parent = parent  # cmdPanel
-        self.setDaemon(True)
+        self.daemon = True
 
         self.requestQ = requestQ
         self.resultQ = resultQ
