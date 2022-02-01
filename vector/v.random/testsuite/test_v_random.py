@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 
+"""
 Name:      v.random test
 Purpose:   Tests v.random and its flags/options.
 Authors:   Josef Pudil (original draft)
