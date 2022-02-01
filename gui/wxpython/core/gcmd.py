@@ -541,7 +541,7 @@ class CommandThread(Thread):
         self._want_abort = False
         self.aborted = False
 
-        self.setDaemon(True)
+        self.daemon = True
 
         # set message formatting
         self.message_format = os.getenv("GRASS_MESSAGE_FORMAT")
