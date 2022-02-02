@@ -74,7 +74,6 @@ v.db.connect map=vectormap table=table layer=2 key=ID
 </pre></div>
 
 
-
 <h3>Connect vector map to database (SQLite driver)</h3>
 
 Very similar to DBF driver example above.
@@ -86,7 +85,6 @@ v.db.connect map=vectormap table=table driver=sqlite \
              database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 v.db.connect -p map=vectormap
 </pre></div>
-
 
 
 <h3>Connect vector map to database (MySQL driver)</h3>
@@ -103,7 +101,6 @@ db.tables -p
 v.db.connect map=my_map table=my_mysql_table key=baz layer=2
 v.db.connect -p my_map
 </pre></div>
-
 
 <h3>Connect vector map to database (PostgreSQL driver)</h3>
 
@@ -153,7 +150,6 @@ to use <a href="v.in.db.html">v.in.db</a> on this view, then connect the origina
 table to the geometry. This will be faster if the original table
 is very large.
 
-
 <h3>Store geometry in GRASS but attributes in PostGIS</h3>
 
 This example illustrated a mixed data storage with possibility
@@ -187,7 +183,6 @@ v.db.connect map=mytable driver=pg database="host=localhost,dbname=meteo" \
 # Now the geometry is stored in GRASS while the attributes are stored
 # in PostGIS.
 </pre></div>
-
 
 <h2>SEE ALSO</h2>
 

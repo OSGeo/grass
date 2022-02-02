@@ -169,7 +169,6 @@ or thousands of GCPs. In these cases thin plate spline coordinate
 transformation is recommended, either before import with 
 <b>gdalwarp -tps</b> or after import with <b>i.rectify -t</b>.
 
-
 <h3>Map names: Management of offset and leading zeros</h3>
 
 The <b>offset</b> parameter allows adding an offset to band number(s) which
@@ -179,7 +178,6 @@ across different input files.
 The <b>num_digits</b> parameter allows defining the number of  leading zeros
 (zero padding) in case of band numbers (e.g., to turn <tt>band.1</tt> into
 <tt>band.001</tt>).
-
 
 <h2>NOTES</h2>
 
@@ -293,7 +291,6 @@ The <b>-l</b> flag should <i>only</i> be used if you know the projection
 is correct but the internal georeferencing has gotten lost, and you know
 the what the map's bounds and resolution should be beforehand.
 
-
 <h2>EXAMPLES</h2>
 
 <h3>ECAD Data</h3>
@@ -346,7 +343,6 @@ r.in.gdal -o input=tg_0.25deg_reg_1980-1994_v12.0.nc output=temperatur_mean num_
 r.in.gdal -o input=tg_0.25deg_reg_1995-2015_v12.0.nc output=temperatur_mean num_digits=5 offset=16436
 </pre></div>
 
-
 <h3>GTOPO30 DEM</h3>
 
 To avoid the GTOPO30 data being read incorrectly, you can add a new line
@@ -354,7 +350,6 @@ To avoid the GTOPO30 data being read incorrectly, you can add a new line
 signed rather than unsigned integers. Then the .DEM file can be imported.
 Finally, e.g. the 'terrain' color table can be assigned to the imported map
 with <em>r.colors</em>.
-
 
 <h3>GLOBE DEM</h3>
 
@@ -435,7 +430,6 @@ GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org/</a>
 
 <p>
 GRASS GIS Wiki page: Import of <a href="https://grasswiki.osgeo.org/wiki/Global_datasets">Global datasets</a>
-
 
 <h2>AUTHOR</h2>
 

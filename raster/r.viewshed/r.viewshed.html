@@ -97,7 +97,6 @@ the amount of memory used by the program by setting the
 <b>memory</b> to the number of MB of memory they would like to
 be used.
 
-
 <h3>Memory mode</h3>
 
 The algorithm can run in two modes: in internal memory, which
@@ -114,7 +113,6 @@ the memory may result in <em>r.viewshed</em> running in external mode
 instead of internal, which is slower. Overestimating the amount of
 free memory may result in <em>r.viewshed</em> running in internal mode
 and using virtual memory, which is slower than the external mode.
-
 
 <h3>The algorithm</h3>
 
@@ -176,7 +174,6 @@ REFERENCES below.
   </tr> 
 </table>
 
-
 <h2>EXAMPLES</h2>
 
 Using the North Carolina dataset:  Compute viewshed from a observation 
@@ -215,7 +212,6 @@ of a mountain:
 g.region raster=elevation.10m
 r.viewshed input=elevation.10m output=viewshed coordinates=598869,4916642 memory=800
 </pre></div>
-
 
 <h2>REFERENCES</h2>
 

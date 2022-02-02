@@ -51,8 +51,8 @@ Xu (1994).
 <p>Options <tt>spot_dist</tt>, <tt>w_speed</tt> and <tt>f_mois</tt> must all
 be given if the <tt>-s</tt> (spotting) flag is used.
 
-
 <h2>EXAMPLE</h2>
+
 Assume we have inputs, the following simulates a spotting- involved wildfire
 and generates three raster maps to contain spread
 time, backlink information in UTM northing and easting coordinates:
@@ -64,8 +64,8 @@ r.spread -s max=my_ros.max dir=my_ros.maxdir base=my_ros.base \
     x_output=my_spread.x y_output=my_spread.y
 </pre></div>
 
-
 <h2>NOTES</h2>
+
 1. <em>r.spread</em> is a specific implementation of the shortest path
 algorithm. <em><a href="r.cost.html">r.cost</a></em> module served
 as the starting point for the development of <em>r.spread</em>.

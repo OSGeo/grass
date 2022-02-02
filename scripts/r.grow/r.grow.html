@@ -13,6 +13,7 @@ If <b>radius</b> is negative,<em>r.grow</em> shrinks areas by removing
 cells around the perimeters of all areas.
 
 <h2>NOTES</h2>
+
 The user has the option of specifying three different metrics which
 control the geometry in which grown cells are created, (controlled by
 the <b>metric</b> parameter): <i>Euclidean</i>, <i>Manhattan</i>, and 
@@ -70,7 +71,6 @@ g.region raster=lakes -p
 # the lake raster map pixel resolution is 10m
 r.grow input=lakes output=lakes_shrunk_100m radius=-10
 </pre></div>
-
 
 <h2>SEE ALSO</h2>
 

@@ -72,7 +72,6 @@ and in the history file for <em>result</em>.
 is entering input to <em>r3.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
 
-
 <h3>Operators and order of precedence</h3>
 
 The following operators are supported:
@@ -114,7 +113,6 @@ applied before those with lower precedence.
 Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
 <p><p>
-
 
 <h3>3D Grid names</h3>
 
@@ -166,7 +164,6 @@ result = x@PERMANENT / y@SOILS
 GRASS commands, not just <em>r3.mapcalc</em>.)
 <p>
 
-
 <h3>The neighborhood modifier</h3>
 
 3D grids are data base files stored in voxel format, i.e., three-dimensional
@@ -182,7 +179,6 @@ to the left and one level below of the current cell, and <em>map[0,1,0]</em>
 refers to the cell one column to the right of the current cell. This syntax
 permits the development of neighborhood-type filters within a single 3D
 grid or across multiple 3D grids.
-
 
 <h3>Functions</h3>
 
@@ -261,7 +257,6 @@ Internal variables:
 </pre></div>
 Note, that the row(), col() and depth() indexing starts with 1. 
 
-
 <h3>Floating point values in the expression</h3>
 
 Floating point numbers are allowed in the expression. A floating point
@@ -285,7 +280,6 @@ produce a floating-point result, as will using float():
 <div class="code"><pre>
       r3.mapcalc "ratio = float(soil.4 - soil.3) / soil.3)"
 </pre></div>
-
 
 <h3>NULL support</h3>
 
@@ -387,7 +381,6 @@ The behaviour makes sense if the user considers NULL as representing an
 unknown quantity. E.g. if x and y are both unknown, then the values of
 "x == y" and "x != y" are also unknown; if they both have unknown
 values, the user doesn't know whether or not they both have the same value.
-
 
 <h2>NOTES</h2>
 
@@ -503,6 +496,7 @@ such as a pseudo-random number generator given an explicit seed.
 the <b>seed</b> option nor the <b>-s</b> flag are given.
 
 <h2>EXAMPLES</h2>
+
 To compute the average of two 3D grids
 <em>a</em> and <em>b</em>:
 <div class="code"><pre>
@@ -556,7 +550,6 @@ X (map) values supplied and y (newmap) values returned:
 100, 50
 </pre></div>
 
-
 <h2>KNOWN ISSUES</h2>
 
 The <em>result</em> variable on the left hand side of the equation should not
@@ -593,7 +586,6 @@ separable by white space.
 <p><em>r3.mapcalc</em> does not print a warning in case of operations on
 NULL cells. It is left to the user to utilize the <tt>isnull()</tt> function.
 
-
 <h2>REFERENCES</h2>
 
 <b><a href="https://grass.osgeo.org/gdp/raster/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
@@ -609,7 +601,6 @@ Neteler, M. (2001): Volume modelling of soils using GRASS GIS 3D tools. - in:
 Brovelli, M. (ed.)(2001): The Geomatics Workbook N. 2. Politecnico di Milano,
 Italy (ISSN 1591-092X) (<a href="http://geomatica.como.polimi.it/workbooks/n2/articoli/mn2.pdf">PDF</a>)
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -618,8 +609,8 @@ Italy (ISSN 1591-092X) (<a href="http://geomatica.como.polimi.it/workbooks/n2/ar
 <a href="r.mapcalc.html">r.mapcalc</a>
 </em>
 
-
 <h2>AUTHORS</h2>
+
 Tomas Paudits &amp; Jaro Hofierka, funded by GeoModel s.r.o., Slovakia
 <br><a href="mailto:tpaudits@mailbox.sk">tpaudits@mailbox.sk</a>,
 <a href="MAILTO:hofierka@geomodel.sk">hofierka@geomodel.sk</a>

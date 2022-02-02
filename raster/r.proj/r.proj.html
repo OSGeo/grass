@@ -144,7 +144,6 @@ methods for the local interpolation step are provided.
 <p><em>r.proj</em> supports general datum transformations, making use of
 the <em>PROJ</em> co-ordinate system translation library.
 
-
 <h2>NOTES</h2>
 
 If <b>output</b> is not specified it is set to be the same as input map
@@ -195,7 +194,6 @@ map-trimming with the <b>-n</b> flag. Trimming is not useful here
 because the module has the whole map in memory anyway. Besides that,
 world "edges" are hard (or impossible) to find in projections other
 than latitude-longitude so results may be odd with trimming.
-
 
 <h2>EXAMPLES</h2>
 
@@ -282,7 +280,6 @@ r.proj input=elevation.dem output=elevation.dem.reproj \
 location=source_location_name mapset=PERMANENT res=5 method=bicubic
 </pre></div>
 
-
 <h2>REFERENCES</h2>
 
 <ol>
@@ -325,6 +322,7 @@ The 'gdalwarp' and 'gdal_translate' utilities are available from the
 <a href="https://www.gdal.org">GDAL</a> project.
   
 <h2>AUTHORS</h2>
+
   
 Martin Schroeder, University of Heidelberg, Germany<br>
 Man page text from S.J.D. Cox, AGCRC, CSIRO Exploration &amp; Mining, Nedlands, WA<br>

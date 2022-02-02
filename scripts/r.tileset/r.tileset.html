@@ -5,7 +5,6 @@ cover a region in this projection with adequate resolution. By default
 the current region and its resolution are used, the bounds and
 resolution of another region can be used via the region option.
 
-
 <h2>NOTES</h2>
 
 <em>r.tileset</em> does not make "optimal" tilings (as few tiles of
@@ -22,7 +21,6 @@ carry over to the source region and generated tiles may have cells of
 strange aspect ratios. This might be a problem for some map request
 services presenting data in an inappropriate projection or with strict
 constraints on cell aspect ratio.
-
 
 <h2>OUTPUT FORMAT</h2>
 
@@ -56,7 +54,6 @@ bbox=5,125,45,175&amp;width=80&amp;height=100
 <dd>This is output in a format convenient for requesting data from some
 http services.
 </dl>
-
 
 <h2>EXAMPLES</h2>
 
@@ -93,7 +90,6 @@ r.tileset sourceproj="`g.proj -j location=IrishGrid`" maxrows=400 maxcols=300 ov
 <li><em>r.tileset</em> does not know about meridians that
 "wrap-around" in projections.</li>
 </ul>
-
 
 <h2>AUTHORS</h2>
 

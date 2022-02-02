@@ -23,7 +23,6 @@ Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "raster="
 options if you need to realign the region settings to match the original
 map's before export.
 
-
 <h2>SUPPORTED RASTER FORMATS</h2>
 
 The set of <a href="http://www.gdal.org/formats_list.html">supported 
@@ -56,7 +55,6 @@ GDAL installation, printed with the <em>-l</em> flag. Available may be
   XPM: X11 PixMap Format
 </pre></div>
 
-
 <h2>NOTES</h2>
 
 <p>Out of the GDAL data types, the closest match for GRASS CELL, FCELL and
@@ -73,7 +71,6 @@ format vendor's documentation, and e.g. the Wikipedia article
 <em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">
 Typical boundaries of primitive integral types</a></em>
 for details.
-
 
 <h3>Ranges of GDAL data types</h3>
 <div class="code"><pre>
@@ -211,7 +208,6 @@ g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
 </pre></div>
 
-
 <h3>Export a raster map in "Deflate" compressed GeoTIFF format</h3>
 
 <div class="code"><pre>
@@ -250,7 +246,6 @@ r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
   createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
 
-
 <h3>Export group of image maps as multi-band file</h3>
 <div class="code"><pre>
 g.list group
@@ -260,7 +255,6 @@ g.region raster=tm7_10 -p
 r.out.gdal tm7 output=lsat_multiband.tif
 gdalinfo lsat_multiband.tif
 </pre></div>
-
 
 <h3>Export RGB with alpha channel that encodes NULL cells</h3>
 
@@ -316,7 +310,6 @@ gdalinfo $OUTNAME
 </pre></div>
 
 The resulting GeoTIFF file can be used e.g. for Web server applications.
-
 
 <h3>Export the floating point raster elevation map to ERDAS/IMG format</h3>
 

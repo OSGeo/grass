@@ -13,6 +13,7 @@
 <h1>MySQL embedded driver in GRASS</h1>
 
 <h2>KEYWORDS</h2>
+
 database, attribute table, driver
 
 <h2>DESCRIPTION</h2>
@@ -22,6 +23,7 @@ attributes in MySQL embedded database without necessity
 to run MySQL server.
 
 <h2>Driver and database name</h2>
+
 GRASS modules require 2 parameters to connect to a database.
 Those parameters are 'driver' and 'database'. For MySQL embedded 
 driver the parameter 'driver' should be set to value 'mesql'.
@@ -44,15 +46,18 @@ db.connect driver=mesql database=/home/user1/db
 </pre></div>
 
 <h2>Data types, indexes</h2>
+
 For more information about supported data types and indexes
 see the documentation for <a href="grass-mysql.html">MySQL (mysql) driver</a>.
 
 <h2>Database type</h2>
+
 Because database closing was found very slow if InnoDB was used,
 the InnoDB storage is disabled by default (hardcoded 
 '--skip-innodb' server option).
 
 <h2>Note</h2>
+
 The embedded server is started with hardcoded '--bootstrap'
 option to avoid warning about missing 
 "mysql.time_zone_leap_second table". This can be fixed in future.

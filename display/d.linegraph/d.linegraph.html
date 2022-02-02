@@ -3,7 +3,6 @@
 <em>d.linegraph</em> is a module to draw simple x,y line graphs
 (plots) based on numerical data contained in separate files.
 
-
 <h3>Data format</h3>
 
 The X and Y data files for the graph are essentially a column of numbers in
@@ -19,7 +18,6 @@ according to that Y scale. Therefore, if multiple Y data inputs are used
 with dissimilar units, the graph produced comparing the two will be
 deceptive.
 
-
 <h3>File inputs</h3>
 
 If the <b>directory</b> option is provided, the paths to files can (and
@@ -32,7 +30,6 @@ line:
 <div class="code"><pre>
 d.linegraph directory=/home/john/data x_file=x.txt y_file=y1.txt,y2.txt
 </pre></div>
-
 
 <h3>Managing colors</h3>
 
@@ -84,7 +81,6 @@ auto-generated description. In the case of graphs with multiple lines
 placement using the <em><a href="d.text.html">d.text</a></em> or
 <em><a href="v.label.html">v.label</a></em> programs.
 
-
 <h2>NOTES</h2>
 
 For historical reasons, the <em>d.linegraph</em> module accepts
@@ -111,7 +107,6 @@ to use a 3rd party tool such as xgraph, gnuplot, Matplotlib in Python,
 or R instead of <em>d.linegraph</em>.
 For a more general solution for plotting in GRASS GIS, the user is
 advised to use the <em><a href="d.graph.html">d.graph</a></em> module.
-
 
 <h2>EXAMPLE</h2>
 
@@ -159,8 +154,8 @@ d.linegraph x_file=x.txt y_file=y1.txt,y2.txt
 d.mon stop=cairo
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="d.frame.html">d.frame</a>,
 <a href="d.text.html">d.text</a>,
@@ -168,7 +163,6 @@ d.mon stop=cairo
 <a href="d.graph.html">d.graph</a>,
 <a href="d.histogram.html">d.histogram</a>
 </em>
-
 
 <h2>AUTHOR</h2>
 

@@ -7,7 +7,6 @@ number of vector overlays, text labels, decorations, and other spatial data.
 <p>A file of mapping instructions that describes the various spatial and textual
 information to be printed must be prepared prior to running <em>ps.map</em>.
 
-
 <h2>NOTES</h2> 
 
 The order of commands is generally unimportant but may affect how some layers
@@ -100,7 +99,6 @@ additional instructions and are terminated with an <i>end</i> instruction.
 <a href="#end">end</a>
 ]
 
-
 <h3>Common instructions</h3>
 Instructions that may be included in the subsection under several
 different main instructions are:
@@ -182,7 +180,6 @@ override it.
 </dl>
 <p><br>
 
-
 <h3>Command usage</h3>
 
 <a name="border"></a>
@@ -255,7 +252,6 @@ main command will be treated as a single line instruction.
 See also the <a href="#vlegend">vlegend</a> command for creating vector map
 legends.
 
-
 <h3>Categorical (CELL) Maps</h3>
 
 Adding the <b>nodata N</b> instruction will prevent the "no data" box 
@@ -270,7 +266,6 @@ to force a continuous color gradient legend.
 <p>
 Be aware that the color table only includes categories which
 have a label. You can use the <em>r.category</em> module to add labels.
-
 
 <h3>Floating point (FCELL and DCELL) Maps</h3>
 
@@ -1623,6 +1618,7 @@ help site.
 <p>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="g.gui.psmap.html">g.gui.psmap</a>,
 <a href="g.region.html">g.region</a>,

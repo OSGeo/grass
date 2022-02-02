@@ -1,4 +1,5 @@
 <h2>DESCRIPTION</h2>
+
  
 <em>v.db.reconnect.all</em> changes database connection of all layers
 of all vector maps in the current mapset from the source
@@ -19,6 +20,7 @@ also tries to create an index on key column (usually &quot;cat&quot;
 column).
  
 <h2>NOTES</h2>
+
  
 The value of the <b>old_database</b> option needs to be the exact
 string which appears as the fourth field printed by
@@ -91,7 +93,6 @@ To automatically remove original DBF attribute tables after
 reconnecting the vector maps use <b>-d</b> flag. Note that attribute
 tables will be deleted <i>permanently</i> from the source
 database. This option should be used very carefully!
-
 
 <h3>Convert GRASS 6 vector map to GRASS 7 including attribute transfer from DBF to SQLite</h3>
 

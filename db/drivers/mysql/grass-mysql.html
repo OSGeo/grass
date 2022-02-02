@@ -20,6 +20,7 @@ mysql> CREATE DATABASE mydb;
 See the MySQL manual for details.
 
 <h2>Driver and database name</h2>
+
 GRASS modules require 2 parameters to connect to a database.
 Those parameters are 'driver' and 'database'. For MySQL driver 
 the parameter 'driver' should be set to value 'mysql'.
@@ -42,6 +43,7 @@ Examples of connection parameters:
 </pre>
 
 <h2>Data types</h2>
+
 GRASS supports almost all MySQL data types with following limitations:
 <ul>
     <li> Binary columns (BINARY, VARBINARY, TINYBLOB, MEDIUMBLOB,
@@ -61,12 +63,14 @@ GRASS supports almost all MySQL data types with following limitations:
 </ul>
 
 <h2>Indexes</h2>
+
 GRASS modules automatically create index on key column of vector
 attributes table. The index on key column is important 
 for performance of modules which update the attribute table,
 for example v.to.db, v.distance and v.what.rast.
 
 <h2>Privileges</h2>
+
 Because MySQL does not support groups of users and because 
 only MySQL 'root' can grant privileges to other users
 GRASS cannot automatically grant select privileges on created
@@ -83,6 +87,7 @@ mysql&gt; GRANT SELECT ON mydb.* TO ''@'%';
 </pre>
 
 <h2>Schemas</h2>
+
 Because MySQL does not support database schemas the parameter 
 'schema' of module db.connect should never be set to any
 value. If you set that parameter for MySQL driver GRASS will 
@@ -90,6 +95,7 @@ try to write tables to the specified schema which will result
 in errors.
 
 <h2>Groups</h2>
+
 MySQL does not support user groups. Any settings specified 
 by 'group' parameter of module db.connect are ignored by
 GRASS for MySQL driver.

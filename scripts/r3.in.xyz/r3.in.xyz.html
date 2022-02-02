@@ -18,7 +18,6 @@ column for the data values to bin into the voxels. This alternate
 data column can be both filtered by range and have a scaling
 factor applied to it.
 
-
 <h2>NOTES</h2>
 
 The 2D and 3D horizontal region resolutions must match. See the
@@ -38,7 +37,6 @@ belong to the top-most slice.
 <p>
 The script is expected to be nearly as efficient as if it was fully
 written in C.
-
 
 <h2>EXAMPLE</h2>
 
@@ -65,12 +63,10 @@ into voxels in instead of the z-value:
      method=mean x=1 y=2 z=3 val=5 separator=space type=float
 </pre></div>
 
-
 <h2>KNOWN ISSUES</h2>
 
 <em>r.to.rast3</em> always creates a <tt>double</tt> output map
 regardless of input.
-
 
 <h2>SEE ALSO</h2>
 
@@ -79,7 +75,6 @@ regardless of input.
 <a href="r.in.xyz.html">r.in.xyz</a>,
 <a href="r.to.rast3.html">r.to.rast3</a>
 </em>
-
 
 <h2>AUTHOR</h2>
 

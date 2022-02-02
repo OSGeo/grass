@@ -16,6 +16,7 @@ generalized, and the options <b>cats</b>, <b>where</b>, and
 <b>layer</b> will be used to select areas. 
 
 <h2>NOTES</h2>
+
 (Line) simplification is a process of reducing the complexity of vector 
 features. The module transforms a line into another line consisting of 
 fewer vertices, that still approximate the original line. Most of the 
@@ -43,7 +44,6 @@ Lines/boundaries collapsing to a point are written out as points,
 boundaries violating topology are written out as boundaries. The 
 <em>error</em> map can be overlaid over the generalized map to 
 understand why some features were not generalized.
-
 
 <h3>SIMPLIFICATION</h3>
 
@@ -123,7 +123,6 @@ v.generalize input=boundary_county output=boundary_county_dp_red0_30 \
 </pre></div>
 
 is that 'out' contains approximately only 30% of points of 'in'.
-
 
 <h3>SMOOTHING</h3>
 
@@ -243,7 +242,6 @@ between the lines are resolved. Good starting points for values of
 The lines affected by the algorithm can be specified by the <b>layer</b>,
 <b>cats</b> and <b>where</b> parameters.
 
-
 <h3>NETWORK GENERALIZATION</h3>
 
 Used for selecting "the most important" part of the network. This is based
@@ -282,7 +280,6 @@ case, the algorithm selects only the lines which meet each criterion.
 <p>Also, the outputed network may not be connected if the value of 
 <b>betweeness_thresh</b> is too large.
 
-
 <h2>EXAMPLES</h2>
 
 <h3>SIMPLIFICATION EXAMPLE</h3>
@@ -301,7 +298,6 @@ v.generalize input=boundary_county output=boundary_county_dp20 \
 <i>Figure: Vector simplification example (spatial subset:
    original map shown in black, simplified map with 26% remaining vertices shown in red)</i>
 </div>
-
 
 <h3>SMOOTHING EXAMPLE</h3>
 
@@ -357,7 +353,6 @@ v.generalize input=xxx output=xxx_yyy method=... \
 </em>
 <p>
 <a href="https://grasswiki.osgeo.org/wiki/V.generalize_tutorial">v.generalize Tutorial</a> (GRASS-Wiki)
-
 
 <h2>AUTHORS</h2>
 
