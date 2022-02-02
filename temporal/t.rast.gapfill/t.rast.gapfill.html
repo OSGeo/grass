@@ -7,6 +7,7 @@ of the gaps will be identified and used to linear interpolate the raster
 map between them.
 
 <h2>NOTES</h2>
+
 This module uses <a href="r.series.interp.html">r.series.interp</a> to
 perform the interpolation for each gap independently. Hence several
 interpolation processes can be run in parallel.
@@ -15,7 +16,7 @@ Each gap is re-sampled by the space time raster dataset granularity.
 Therefore several time stamped raster map layers will be interpolated 
 if the gap is larger than the STRDS granularity.
 
-<h2>Examples</h2>
+<h2>EXAMPLES</h2>
 
 In this example we will create 3 raster maps and register them in the
 temporal database an then in the newly created space time raster dataset.
