@@ -13,7 +13,6 @@ with the <b>-b</b> flag. Raster maps so created can be used to create
 binary filters for use in <em>i.ifft</em> (inverse Fourier transformations;
 apply filter with <em>r.mask</em>).
 
-
 <h2>EXAMPLES</h2>
 
 Generate a raster circle at current map center with a radius of 300m and outwardly
@@ -34,8 +33,8 @@ NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
 r.circle -b output=circle coordinate=${EASTCENTER},${NORTHCENTER} min=500 max=1000
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="g.region.html">g.region</a>,
 <a href="g.remove.html">g.remove</a>, 
@@ -45,12 +44,7 @@ r.circle -b output=circle coordinate=${EASTCENTER},${NORTHCENTER} min=500 max=10
 <a href="r.mask.html">r.mask</a>
 </em>
 
+<h2>AUTHORS</h2>
 
-<h2>AUTHOR</h2>
 Bill Brown, U.S. Army Construction Engineering Research Laboratory<br>
 Additional flag/min/max parameter by Markus Neteler, University of Hannover
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

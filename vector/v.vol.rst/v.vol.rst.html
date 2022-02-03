@@ -61,7 +61,6 @@ must be larger than <b>segmax</b> and less than 700. This limit of 700 was
 selected to ensure the numerical stability and efficiency of the
 algorithm. 
 
-
 <h3>SQL support</h3>
 
 Using the <b>where</b> parameter, the interpolation can be limited to use
@@ -71,7 +70,6 @@ only a subset of the input vectors.
 # preparation as in above example
 v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange > 3"
 </pre></div>
-
 
 <h3>Cross validation procedure</h3>
 
@@ -113,6 +111,7 @@ result, especially when the density of data are insufficient. Then
 the optimal result found by CV is an oversmoothed surface.
 
 <h2>NOTES</h2>
+
 The vector points map must be a 3D vector map (x, y, z as geometry).
 The module <a href="v.in.db.html">v.in.db</a> can be used to generate
 a 3D vector map from a table containing x,y,z columns.
@@ -160,7 +159,6 @@ chosen (e.g. defaults) are appropriate.
 
 <p>The user must run <em>g.region</em> before the program to set the
 3D region for interpolation. 
-
 
 <h2>EXAMPLES</h2>
 
@@ -223,9 +221,11 @@ paraview --data=volume.vtk
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>
+
 <b>deviations</b> file is written as 2D and deviations are not written as attributes.
 
 <h2>REFERENCES</h2>
+
 <p>Hofierka J., Parajka J., Mitasova H., Mitas L., 2002, Multivariate
 Interpolation of Precipitation Using Regularized Spline with Tension.
 Transactions in
@@ -305,8 +305,3 @@ Jaro Hofierka, Department of Geography and Regional Development,
 University of Presov, Presov, Slovakia,
 <a href="mailto:hofierka@fhpv.unipo.sk">hofierka@fhpv.unipo.sk</a>,
 <a href="http://www.geomodel.sk">http://www.geomodel.sk</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
---> 
