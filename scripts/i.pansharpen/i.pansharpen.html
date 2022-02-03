@@ -59,6 +59,7 @@ imagery with high resolution panchromatic bands, and lower resolution spectral
 bands include Landsat 7 ETM, QuickBird, and SPOT.
 <br>
 <h2>NOTES</h2>
+
 The module works for 2-bit to 30-bit images. All images are rescaled to 8-bit
 for processing. By default, the entire possible range for the selected bit depth is
 rescaled to 8-bit. For example, the range of 0-65535 for a 16-bit image is
@@ -144,7 +145,6 @@ d.rgb b=lsat7_2002_15m_ihs_blue g=lsat7_2002_15m_ihs_green r=lsat7_2002_15m_ihs_
 g.gui.mapswipe
 </pre></div>
 
-
 <h3>Pan sharpening comparison example</h3>
 
 Pan sharpening of a Landsat image from Boulder, Colorado, USA
@@ -209,17 +209,6 @@ d.rgb b=ihs542_blue g=ihs542_green r=ihs542_red
 </center>
 <br>
 
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="i.his.rgb.html">i.his.rgb</a>,
-<a href="i.rgb.his.html">i.rgb.his</a>,
-<a href="i.pca.html">i.pca</a>,
-<a href="d.rgb.html">d.rgb</a>,
-<a href="r.composite.html">r.composite</a>
-</em>
-
-
 <h2>REFERENCES</h2>
 
 <ul>
@@ -252,15 +241,18 @@ d.rgb b=ihs542_blue g=ihs542_green r=ihs542_red
     sensing: concepts, methods and application. Int. J. of Rem. Sens., 19, 823-854.
 </ul>
 
+<h2>SEE ALSO</h2>
 
+<em>
+<a href="i.his.rgb.html">i.his.rgb</a>,
+<a href="i.rgb.his.html">i.rgb.his</a>,
+<a href="i.pca.html">i.pca</a>,
+<a href="d.rgb.html">d.rgb</a>,
+<a href="r.composite.html">r.composite</a>
+</em>
 
 <h2>AUTHORS</h2>
 
 Michael Barton (Arizona State University, USA)<br>
 with contributions from Markus Neteler (ITC-irst, Italy); Glynn Clements;
 Luca Delucchi (Fondazione E. Mach, Italy); Markus Metz; and Hamish Bowman.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

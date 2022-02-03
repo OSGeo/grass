@@ -1,4 +1,5 @@
 <h2>DESCRIPTION</h2>
+
 Module <em>d.legend.vect</em> draws vector legend of currently displayed vector maps.
 <p>
 Parameter <b>at</b> defines the screen position of upper-left legend corner.
@@ -41,6 +42,7 @@ file will be saved to, <b>input</b> defines the input file which
 the vector legend will be based on (input file must have correct format).
 
 <h2>NOTES</h2>
+
 Module <em>d.legend.vect</em> draws vector legend based on legend file defined
 in shell environment variable GRASS_LEGEND_FILE.
 This file is automatically created and updated whenever
@@ -71,6 +73,7 @@ water bodies|legend/area_curved|5|lf|none|30:144:255|1|area|27764
  src="d_legend_vect_subheadings.png">
 
 <h2>EXAMPLES</h2>
+
 Open cairo monitor to render to file:
 <div class="code"><pre>
 g.region vector=nc_state
@@ -98,12 +101,7 @@ d.legend.vect -b at=2,40 title="Hospitals in North Carolina" symbol_size=26 font
 Check also Python module from
 AddOns: <em><a href="https://grass.osgeo.org/grass8/manuals/addons/d.vect.thematic2.html">d.vect.thematic2</a></em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Adam Laza, during GSoC 2016
 Mentors: Anna Petrasova, Vaclav Petras, Martin Landa
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

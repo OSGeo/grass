@@ -31,7 +31,6 @@ In geospatial analysis often involves combining data from various sources
 multiple users
 -->
 
-
 <h3>GRASS GIS Database</h3>
 
 All data for GRASS GIS must be in GRASS GIS Database which is a directory
@@ -52,7 +51,6 @@ From user point of view, GRASS GIS Database with all its data in it
 is similar to, e.g. PostGIS, database, as it stores all information
 inside in a specific format and is accessible by specific tools.
 GRASS GIS Databases is in GRASS GIS often called GISDBASE or DATABASE.
-
 
 <h3>GRASS Locations</h3>
 
@@ -79,7 +77,6 @@ which would be equivalent to GRASS GIS Database. Mapsets in a Locations
 are like namespaces or schemas inside a database.
 
 <!-- TODO: naming limitations and best practices -->
-
 
 <h3>GRASS Mapsets</h3>
 
@@ -133,7 +130,6 @@ or <a href="v.proj.html"><em>v.proj</em></a> to reproject the data.
 The files and directories should not be moved or modified directly,
 but only using GRASS GIS tools.
 
-
 <h3>The role of the PERMANENT Mapset</h3>
 
 When creating a new Location, GRASS GIS automatically creates a special
@@ -160,7 +156,6 @@ the default computational region's extent and resolution values
 for the Location (which all Mapsets will inherit when they are created).
 Users have the option of switching back to the default region at any time.
 
-
 <h3>Importing, exporting and linking data</h3>
 
 GRASS GIS works only with data which are imported into a GRASS Database,
@@ -185,7 +180,6 @@ as standard raster maps. Similarly for newly created maps,
 <a href="r.external.out.html"><em>r.external.out</em></a>
 setups a format and directory where the actual data will be stored,
 however in GRASS Database the data will be created as standard maps.
-
 
 <h3>Starting GRASS GIS using GUI</h3>
 
@@ -214,7 +208,6 @@ The startup windows provides these functions:
         menu system, map visualization tool, digitizer, and more.
 </ol>
 
-
 <h3>Starting GRASS GIS using command line</h3>
 
 GRASS GIS can be started with given Database, Location and Mapset
@@ -242,7 +235,6 @@ grass -c EPSG:5514:3 D:\grassdata\mylocation
 </pre></div>
 
 See <a href="grass.html"><em>grass</em></a> command manual for more details.
-
 
 <h3>Creating a New Location with the Location Wizard</h3>
 
@@ -282,7 +274,6 @@ More data can be imported into the Location, e.g. using import options in
 the <em>File</em> menu in <em>Layer Manager</em> or
 <a href="r.import.html"><em>r.import</em></a>.
 
-
 <h2>See also</h2>
 
 <em>
@@ -299,8 +290,3 @@ the <em>File</em> menu in <em>Layer Manager</em> or
 <a href="r.proj.html">r.proj</a>,
 <a href="v.proj.html">v.proj</a>,
 </em>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -2,8 +2,7 @@
 
 <em>t.rast.algebra</em> performs temporal and spatial map algebra operations on
 space time raster datasets (STRDS) using the temporal raster algebra.
-
-<h3>PROGRAM USE</h3>
+<p>
 The module expects an <b>expression</b> as input parameter in the 
 following form:
 <p>
@@ -100,7 +99,7 @@ overlaps          A ------
 over              both overlaps and overlapped
 </pre></div>
 
-<!- TODO: fix formatting of next sentence to become readable! ->
+<!-- TODO: fix formatting of next sentence to become readable! -->
 The relations must be read as: A is related to B, like - A equals B - A
 is during B - A contains B.
 <p>
@@ -561,7 +560,6 @@ and temporal operators:
 C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -616,9 +614,3 @@ Related publications:
 <h2>AUTHORS</h2>
 
 Thomas Leppelt, S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-
