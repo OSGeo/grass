@@ -112,6 +112,11 @@ class IClassMapToolbar(BaseToolbar):
                 (None,),
                 ("zoomBack", icons["zoomBack"], self.parent.OnZoomBack),
                 ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
+                (
+                    "showMapSettings",
+                    icons["settings"],
+                    self.parent.OnMapDisplayProperties,
+                ),
             )
         )
 

@@ -83,6 +83,8 @@ class ExampleMapPanel(SingleMapPanel):
             self, parent=parent, title=title, name=name, Map=Map(), **kwargs
         )
 
+        self._giface = giface
+
         # Place debug message where appropriate
         # and set debug level from 1 to 5 (higher to lower level functions).
         # To enable debug mode write:
@@ -114,13 +116,9 @@ class ExampleMapPanel(SingleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
-            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
 

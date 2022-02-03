@@ -105,11 +105,8 @@ class MapPanel(SingleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
-            sb.SbProjection,
             sbgcp.SbGoToGCP,
             sbgcp.SbRMSError,
         ]

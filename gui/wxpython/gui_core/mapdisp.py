@@ -160,17 +160,30 @@ class MapPanelBase(wx.Panel):
 
     def SetProperty(self, name, value):
         """Sets property"""
-        if self.HasProperty("projection"):
-            self.statusbarManager.SetProperty(name, value)
-        else:
+        if not self.HasProperty("projection"):
             self.mapWindowProperties.useDefinedProjection = value
+        elif not self.HasProperty("resolution"):
+            self.mapWindowProperties.resolution = value
+        elif not self.HasProperty("alignExtent"):
+            self.mapWindowProperties.alignExtent = value
+        elif not self.HasProperty("region"):
+            self.mapWindowProperties.showRegion = value
+        else:
+            self.statusbarManager.SetProperty(name, value)
 
     def GetProperty(self, name):
         """Returns property"""
-        if self.HasProperty("projection"):
-            return self.statusbarManager.GetProperty(name)
-        else:
+        if not self.HasProperty("projection"):
             return self.mapWindowProperties.useDefinedProjection
+        elif not self.HasProperty("resolution"):
+            return self.mapWindowProperties.resolution
+        elif not self.HasProperty("alignExtent"):
+            return self.mapWindowProperties.alignExtent
+        elif not self.HasProperty("region"):
+            return self.mapWindowProperties.region
+        else:
+            print("bla")
+            return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -483,6 +496,16 @@ class MapPanelBase(wx.Panel):
     def OnZoomToDefault(self, event):
         """Set display geometry to match default region settings"""
         self.MapWindow.ZoomToDefault()
+
+    def OnMapDisplayProperties(self, event):
+        """Show Map Display Properties dialog"""
+        from mapdisp.properties import MapDisplayPropertiesDialog
+
+        dlg = MapDisplayPropertiesDialog(
+            parent=self, giface=self._giface, properties=self.mapWindowProperties
+        )
+        dlg.CenterOnParent()
+        dlg.Show()
 
 
 class SingleMapPanel(MapPanelBase):

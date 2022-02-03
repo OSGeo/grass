@@ -109,9 +109,9 @@ class IClassMapPanel(DoubleMapPanel):
             **kwargs,
         )
         if giface:
-            self.giface = giface
+            self._giface = giface
         else:
-            self.giface = StandaloneMapDisplayGrassInterface(self)
+            self._giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
@@ -120,13 +120,13 @@ class IClassMapPanel(DoubleMapPanel):
 
         self.firstMapWindow = IClassVDigitWindow(
             parent=self,
-            giface=self.giface,
+            giface=self._giface,
             properties=self.mapWindowProperties,
             map=self.firstMap,
         )
         self.secondMapWindow = BufferedMapWindow(
             parent=self,
-            giface=self.giface,
+            giface=self._giface,
             properties=self.mapWindowProperties,
             Map=self.secondMap,
         )
@@ -188,20 +188,16 @@ class IClassMapPanel(DoubleMapPanel):
         self.dialogs["category"] = None
 
         # PyPlot init
-        self.plotPanel = PlotPanel(self, giface=self.giface, stats_data=self.stats_data)
+        self.plotPanel = PlotPanel(self, giface=self._giface, stats_data=self.stats_data)
 
         # statusbar items
         statusbarItems = [
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
-            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()
@@ -239,7 +235,7 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnHelp(self, event):
         """Show help page"""
-        self.giface.Help(entry="wxGUI.iclass")
+        self._giface.Help(entry="wxGUI.iclass")
 
     def _getTempVectorName(self):
         """Return new name for temporary vector map (training areas)"""
@@ -374,7 +370,7 @@ class IClassMapPanel(DoubleMapPanel):
                     toolSwitcher=self._toolSwitcher,
                     MapWindow=self.GetFirstWindow(),
                     digitClass=IClassVDigit,
-                    giface=self.giface,
+                    giface=self._giface,
                     tools=[
                         "addArea",
                         "moveVertex",

@@ -1555,16 +1555,6 @@ class MapPanel(SingleMapPanel):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
 
-    def OnMapDisplayProperties(self, event):
-        """Show Map Display Properties dialog"""
-        from mapdisp.properties import MapDisplayPropertiesDialog
-
-        dlg = MapDisplayPropertiesDialog(
-            parent=self, giface=self._giface, properties=self.mapWindowProperties
-        )
-        dlg.CenterOnParent()
-        dlg.Show()
-
     def SetProperties(
         self,
         render=False,

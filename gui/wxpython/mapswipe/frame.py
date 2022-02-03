@@ -102,13 +102,9 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
-            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
