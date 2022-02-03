@@ -71,11 +71,7 @@ class SwipeMapToolbar(BaseToolbar):
                 ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
                 (None,),
                 ("saveFile", icons["saveFile"], self.parent.SaveToFile),
-                (
-                    "showMapSettings",
-                    icons["settings"],
-                    self.parent.OnMapDisplayProperties,
-                ),
+                ("mapDispSettings", BaseIcons["mapDispSettings"], self.parent.OnMapDisplayProperties),
             )
         )
 

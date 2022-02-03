@@ -79,6 +79,7 @@ BaseIcons = {
         img="layer-raster-histogram", label=_("Create histogram with d.histogram")
     ),
     "settings": MetaIcon(img="settings", label=_("Settings")),
+    "mapDispSettings": MetaIcon(img="map-settings", label=_("Map Display Settings")),
 }
 
 
