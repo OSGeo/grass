@@ -7,7 +7,6 @@ which is used to find adjacent polygons with identical attribute for common
 boundary dissolving. In this case the categories are not retained, only the
 values of the new key column. See the <em>v.reclass</em> help page for details.
 
-
 <h2>NOTES</h2>
 
 GRASS defines a vector area as composite entity consisting of a set of
@@ -24,7 +23,6 @@ more details.
 In fact, <em>v.dissolve</em> is simply a
 front-end to that module. The use of the <em>column</em> parameter
 adds a call to <em>v.reclass</em> before.
-
 
 <h2>EXAMPLES</h2>
 
@@ -59,7 +57,6 @@ v.clean clc2000_patched out=clc2000_clean tool=snap,break,rmdupl thresh=.01
 v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -69,14 +66,8 @@ v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
 <a href="v.reclass.html">v.reclass</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 module: M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
 Markus Neteler for column support<br>
 help page: Trevor Wiens
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

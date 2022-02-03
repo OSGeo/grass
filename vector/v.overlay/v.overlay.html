@@ -32,6 +32,7 @@ There are 3 links attached to features in output map,
 -->
 
 <h2>NOTES</h2>
+
 Currently only areas in <b>ainput</b> are supported for the operators 
 <em>or</em> and <em>xor</em>! See also <em><a href="v.select.html">v.select</a></em>.
 
@@ -70,7 +71,6 @@ connect the copied tables to the output map.-->
 
 <h2>EXAMPLES</h2>
 
-
 Preparation of example data (North Carolina sample dataset):
 
 <div class="code"><pre>
@@ -83,7 +83,6 @@ g.region vector=zipcodes_wake,box -p res=100 -a
 g.region n=n+1000 s=s-1000 w=w-1000 e=e+1000 -p
 d.mon wx0
 </pre></div>
-
 
 <h3>AND operator</h3>
 
@@ -101,7 +100,6 @@ d.vect map=v_overlay_AND
 <i>Figure: v.overlay with AND operator (selected polygons in grey color)</i>
 </center>
 
-
 <h3>OR operator</h3>
 
 Union example of areas:
@@ -117,7 +115,6 @@ d.vect map=v_overlay_OR
 <img src="v_overlay_op_or.png" alt="v.overlay with OR operator"><br>
 <i>Figure: v.overlay with OR operator (selected polygons in grey color)</i>
 </center>
-
 
 <h3>XOR operator</h3>
 
@@ -135,7 +132,6 @@ d.vect map=v_overlay_XOR
 <i>Figure: v.overlay with XOR operator (selected polygons in grey color)</i>
 </center>
 
-
 <h3>NOT operator</h3>
 
 Difference example:
@@ -151,7 +147,6 @@ d.vect map=v_overlay_NOT
 <img src="v_overlay_op_not.png" alt="v.overlay with NOT operator"><br>
 <i>Figure: v.overlay with NOT operator (selected polygon in grey color)</i>
 </center>
-
 
 <h3>Overlay operations: AND, OR, NOT, XOR</h3>
 
@@ -179,7 +174,6 @@ v.overlay ainput=poly1 binput=poly2 operator=xor output=poly_1_2_xor
 <br>
 <i>Figure: v.overlay results of AND, OR, NOT, XOR operations</i>
 </center>
-
 
 <h3>Polygons overlaid with polygons</h3>
 <div class="code"><pre>
@@ -260,7 +254,6 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh ope
 </table>
 </center>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -275,8 +268,3 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh ope
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Markus Metz<br>
 Speedup for large, complex input areas sponsored by <a href="https://www.mundialis.de">mundialis</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -7,7 +7,7 @@ written in the current working directory. The module is sensitive
 to mapset region settings (set with <em>g.region</em>) and the vertical unit settings
 of the 3D raster map. The vertical unit can be set with <a href="r3.support.html">r3.support</a>.
 
-<h2>Note</h2>
+<h2>NOTES</h2>
 
 The resulting netCDF file will have time as third dimension in case a temporal 
 vertical unit is specified for the input map, otherwise the third dimension is assumed as spatial.
@@ -35,7 +35,7 @@ to fill empty cell.
 <p>
 The netCDF library must be installed on the system and activated at configuration time to compile this module.
 
-<h2>Examples</h2> 
+<h2>EXAMPLES</h2>
 
 <div class="code"><pre>
 g.region s=-90 n=90 w=-180 e=180 b=0 t=5 res=10 res3=10 tbres=1 -p3
@@ -260,9 +260,5 @@ data:
 </em>
 
 <h2>AUTHORS</h2>
-S&ouml;ren Gebbert
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+S&ouml;ren Gebbert

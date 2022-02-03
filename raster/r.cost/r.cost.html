@@ -178,7 +178,6 @@ to be used by <em>r.cost</em> can be controlled with the <b>memory</b>
 option, default is 300 MB. For systems with less memory this value will 
 have to be set to a lower value.
 
-
 <h2>EXAMPLES</h2>
 
 <p>Consider the following example: 
@@ -257,6 +256,7 @@ used. The calculation is done with <em>r.cost</em> as follows
 
 <a name="move"></a>
 <h2>Movement Direction</h2>
+
 The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. This movement 
 direction surface can be used by <em><a href="r.path.html">r.path</a></em> 
@@ -282,7 +282,6 @@ cost raster map "costs":
 r.cost input=costs start_raster=sources output=costsurf nearest=costalloc
 </pre></div>
 
-
 <h3>Find the minimum cost path</h3>
 Once <em>r.cost</em> computes the cumulative cost map and an associated 
 movement direction map, <em><a href="r.path.html">r.path</a></em>
@@ -305,8 +304,3 @@ James Westervelt, U.S.Army Construction Engineering Research Laboratory<br>
 Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com)<br>
 Markus Metz<br>
 Multiple path directions sponsored by <a href="https://www.mundialis.de">mundialis</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -4,7 +4,6 @@
 layer format. Optionally, attributes can be converted to raster category
 labels.
 
-
 <h2>NOTES</h2>
 
 In order to avoid unexpected results, the type of vector features 
@@ -124,7 +123,6 @@ g.region vector=zipcodes_wake res=50 -ap
 v.to.rast input=zipcodes_wake output=myzipcodes use=attr attribute_column="ZIPNUM" label_column="NAME"
 </pre></div>
 
-
 <h3>Convert vector points to raster with raster cell binning</h3>
 
 In this example, the number of schools per raster cell are counted
@@ -160,6 +158,7 @@ Number of schools per raster cell
 </center>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="db.describe.html">db.describe</a>,
 <a href="v.category.html">v.category</a>
@@ -174,7 +173,3 @@ GRASS 6.0 updates: Radim Blazek, ITC-irst, Trento, Italy
 Stream directions: Jaro Hofierka and Helena Mitasova
 <br>
 GRASS 6.3 code cleanup and label support: Brad Douglas
-<p><!--
-<p>
-<i>Last changed: $Date$</i>
--->
