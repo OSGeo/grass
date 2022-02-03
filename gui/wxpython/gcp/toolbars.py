@@ -128,8 +128,8 @@ class GCPDisplayToolbar(BaseToolbar):
                 (None,),
                 ("settings", icons["settings"], self.parent.OnSettings),
                 (
-                    "showMapSettings",
-                    icons["settings"],
+                    "mapDispSettings",
+                    BaseIcons["mapDispSettings"],
                     self.parent.OnMapDisplayProperties,
                 ),
                 ("help", icons["help"], self.parent.OnHelp),
