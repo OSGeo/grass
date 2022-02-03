@@ -188,7 +188,9 @@ class IClassMapPanel(DoubleMapPanel):
         self.dialogs["category"] = None
 
         # PyPlot init
-        self.plotPanel = PlotPanel(self, giface=self._giface, stats_data=self.stats_data)
+        self.plotPanel = PlotPanel(
+            self, giface=self._giface, stats_data=self.stats_data
+        )
 
         # statusbar items
         statusbarItems = [

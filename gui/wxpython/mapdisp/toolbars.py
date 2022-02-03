@@ -183,7 +183,10 @@ class MapToolbar(BaseToolbar):
                 ("analyze", MapIcons["analyze"], self.OnAnalyze),
                 ("overlay", BaseIcons["overlay"], self.OnDecoration),
                 ("saveFile", BaseIcons["saveFile"], self.parent.SaveToFile),
-                ("mapDispSettings", BaseIcons["mapDispSettings"], self.parent.OnMapDisplayProperties,
+                (
+                    "mapDispSettings",
+                    BaseIcons["mapDispSettings"],
+                    self.parent.OnMapDisplayProperties,
                 ),
             )
         )
