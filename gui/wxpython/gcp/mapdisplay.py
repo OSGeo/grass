@@ -82,6 +82,7 @@ class MapPanel(SingleMapPanel):
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
         self.mapWindowProperties.alignExtent = True
+        self.mapWindowProperties.autoRenderChanged.connect(self.OnAutoRenderChanged)
 
         #
         # Add toolbars
@@ -374,19 +375,29 @@ class MapPanel(SingleMapPanel):
 
     def OnDraw(self, event):
         """Re-display current map composition"""
-        self.MapWindow.UpdateMap(render=False)
+        kwargs = {}
+        # Handle display map event (mouse click on toolbar Display map
+        # tool)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.MapWindow.UpdateMap(render=False, **kwargs)
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
+        kwargs = {}
+        # Handle re-render map event (mouse click on toolbar Render map
+        # tool, F5/Ctrl+R keyboard shortcut)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
         # FIXME: remove qlayer code or use RemoveQueryLayer() now in mapdisp.frame
         # delete tmp map layers (queries)
         qlayer = self.Map.GetListOfLayers(name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.Map.DeleteLayer(layer)
 
-        self.SrcMapWindow.UpdateMap(render=True)
+        self.SrcMapWindow.UpdateMap(render=True, **kwargs)
         if self.show_target:
-            self.TgtMapWindow.UpdateMap(render=True)
+            self.TgtMapWindow.UpdateMap(render=True, **kwargs)
 
         # update statusbar
         self.StatusbarUpdate()
@@ -426,6 +437,9 @@ class MapPanel(SingleMapPanel):
             win = self.SrcMapWindow
 
         win.EraseMap()
+
+    def OnAutoRenderChanged(self, value):
+        self.OnRender(event=None)
 
     def SaveToFile(self, event):
         """Save map to image"""
