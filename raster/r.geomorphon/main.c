@@ -183,7 +183,7 @@ int main(int argc, char **argv)
         par_profiledata->description =
             _("Profile output file name (\"-\" for stdout)");
         par_profiledata->guisection = _("Profile");
-        G_option_requires(par_profiledata, par_coords, NULL);
+        G_option_requires(par_profiledata, par_profileformat, par_coords, NULL);
 
         par_profileformat = G_define_option();
         par_profileformat->key = "profileformat";
@@ -193,7 +193,6 @@ int main(int argc, char **argv)
         par_profileformat->required = NO;
         par_profileformat->description = _("Profile output format");
         par_profileformat->guisection = _("Profile");
-        G_option_requires(par_profileformat, par_coords, NULL);
 
         if (G_parser(argc, argv))
             exit(EXIT_FAILURE);
