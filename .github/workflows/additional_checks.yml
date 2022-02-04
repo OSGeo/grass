@@ -10,7 +10,7 @@ on:
   - pull_request
 
 jobs:
-  additional-black:
+  additional-checks:
     name: Additional checks
     runs-on: ubuntu-20.04
 
