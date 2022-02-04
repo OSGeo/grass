@@ -47,7 +47,8 @@ GRASS GIS developer mailing list.
 * Create an account on GitHub.
 * Install Git on your computer.
 * Set up Git with your name and email.
-* Fork the repository.
+* Fork the repository (by clicking the `Fork` button in the upper right corner
+  of the GitHub interface).
 * Clone your fork (use SSH or HTTPS URL):
 
 ```
