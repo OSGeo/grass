@@ -42,13 +42,12 @@ int close_maps(void)
 		if (!Rast_is_d_null_value(&dvalue)) {
 		    if (abs_acc) {
 			dvalue = ABS(dvalue);
-			dbuf[c] = dvalue;
+			sum += dvalue;
 		    }
-		    else {
-			dbuf[c] = dvalue;
-			dvalue = ABS(dvalue);
-		    }
-		    sum += dvalue;
+		    else
+			sum += ABS(dvalue);
+
+		    dbuf[c] = dvalue;
 		    sum_sqr += dvalue * dvalue;
 		}
 	    }
