@@ -1156,7 +1156,7 @@ int Gs_update_attrange(geosurf * gs, int desc)
 		return (-1);
 	    }
 
-	    size = gs->rows * gs->cols;
+	    size = (long)gs->rows * gs->cols;
 	    p = (char *)tb->cb;
 	    SET_MINMAX(p, nm, size, min, max);
 	}

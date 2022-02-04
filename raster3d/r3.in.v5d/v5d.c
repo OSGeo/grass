@@ -2112,7 +2112,7 @@ int v5dReadGrid(v5dstruct * v, int time, int var, float data[])
 	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned char);
     }
     else if (v->CompressMode == 2) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned short);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned short);
     }
     else if (v->CompressMode == 4) {
 	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(float);
@@ -2511,7 +2511,7 @@ int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[])
 	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned char);
     }
     else if (v->CompressMode == 2) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned short);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned short);
     }
     else if (v->CompressMode == 4) {
 	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(float);
