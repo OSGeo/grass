@@ -34,34 +34,25 @@ int close_maps(void)
 	    G_message("Writing out only positive flow accumulation values.");
 	    G_message
 		("Cells with a likely underestimate for flow accumulation can no longer be identified.");
-	    for (r = 0; r < nrows; r++) {
-		Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
-		for (c = 0; c < ncols; c++) {
-		    dvalue = wat[SEG_INDEX(wat_seg, r, c)];
-		    if (Rast_is_d_null_value(&dvalue) == 0 && dvalue) {
-			dvalue = ABS(dvalue);
-			dbuf[c] = dvalue;
-			sum += dvalue;
-			sum_sqr += dvalue * dvalue;
-		    }
-		}
-		Rast_put_row(fd, dbuf, DCELL_TYPE);
-	    }
 	}
-	else {
-	    for (r = 0; r < nrows; r++) {
-		Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
-		for (c = 0; c < ncols; c++) {
-		    dvalue = wat[SEG_INDEX(wat_seg, r, c)];
-		    if (!Rast_is_d_null_value(&dvalue)) {
+	for (r = 0; r < nrows; r++) {
+	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+	    for (c = 0; c < ncols; c++) {
+		dvalue = wat[SEG_INDEX(wat_seg, r, c)];
+		if (!Rast_is_d_null_value(&dvalue)) {
+		    if (abs_acc) {
+			dvalue = ABS(dvalue);
+			dbuf[c] = dvalue;
+		    }
+		    else {
 			dbuf[c] = dvalue;
 			dvalue = ABS(dvalue);
-			sum += dvalue;
-			sum_sqr += dvalue * dvalue;
 		    }
+		    sum += dvalue;
+		    sum_sqr += dvalue * dvalue;
 		}
-		Rast_put_row(fd, dbuf, DCELL_TYPE);
 	    }
+	    Rast_put_row(fd, dbuf, DCELL_TYPE);
 	}
 	Rast_close(fd);
 
