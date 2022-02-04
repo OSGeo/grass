@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 #include "tinf.h"
 
 struct links
@@ -203,8 +205,12 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
     lseek(fe, 0, SEEK_SET);
     lseek(fb, 0, SEEK_SET);
     for (i = 0; i < nl; i += 1) {
-	read(fe, elev->b[1], elev->sz);
-	read(fb, basins->b[1], basins->sz);
+        if (read(fe, elev->b[1], elev->sz) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
+        if (read(fb, basins->b[1], basins->sz) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 	for (j = 0; j < basins->ns; j += 1) {
 	    ii = *((CELL *) basins->b[1] + j);
 	    if (ii <= 0)
@@ -213,7 +219,9 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
 	    memcpy(this_elev, get_max(this_elev, list[ii].pp), bpe());
 	}
 	lseek(fe, -elev->sz, SEEK_CUR);
-	write(fe, elev->b[1], elev->sz);
+        if (write(fe, elev->b[1], elev->sz) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
     }
 
     G_free(list);

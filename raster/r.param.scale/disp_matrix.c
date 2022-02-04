@@ -1,4 +1,6 @@
-
+/* This file and its content is not used. */
+/* Could be removed at some point.       */
+#if 0
 /****************************************************************/
 /* disp_matrix()        Function to display the contents of     */
 /*                      the three matrices used in solving      */
@@ -56,3 +58,4 @@ void disp_wind(CELL * z)
 
     fgets(dummy, 70, stdin);
 }
+#endif

@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -234,7 +235,8 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row += 1) {
-	fread(rast, Rast_cell_size(data_type), ncols, ft);
+	if (fread(rast, Rast_cell_size(data_type), ncols, ft) != ncols)
+            G_fatal_error(_("Read from file error: %s"), strerror(errno));
 	Rast_put_row(cf, rast, data_type);
 	G_fseek(ft, sz, SEEK_CUR);
     }

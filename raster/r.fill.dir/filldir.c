@@ -4,8 +4,10 @@
 #include <math.h>
 #include <limits.h>
 #include <float.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 #include "tinf.h"
 
 /* get the slope between two cells and return a slope direction */
@@ -153,7 +155,9 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
 	advance_band3(fe, bnd);
 	if (fill_row(nl, bnd->ns, bnd)) {
 	    lseek(fe, (off_t) i * bnd->sz, SEEK_SET);
-	    write(fe, bnd->b[1], bnd->sz);
+            if (write(fe, bnd->b[1], bnd->sz) < 0)
+                G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 	}
     }
     /* why on the last row? it's an outer row */
@@ -176,7 +180,9 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
     for (i = 0; i < nl; i += 1) {
 	advance_band3(fe, bnd);
 	build_one_row(i, nl, bnd->ns, bnd, dir);
-	write(fd, dir, bufsz);
+        if (write(fd, dir, bufsz) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
     }
     /* why this extra row ? */
 #if 0

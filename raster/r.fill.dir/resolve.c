@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -109,7 +110,9 @@ void resolve(int fd, int nl, struct band3 *bnd)
     /* select a direction when there are multiple non-flat links */
     lseek(fd, bnd->sz, SEEK_SET);
     for (i = 1; i < nl - 1; i += 1) {
-	read(fd, bnd->b[0], bnd->sz);
+        if (read(fd, bnd->b[0], bnd->sz) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 	for (j = 1; j < bnd->ns - 1; j += 1) {
 	    offset = j * isz;
 	    if (Rast_is_c_null_value((CELL *) (bnd->b[0] + offset)))
@@ -120,7 +123,9 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	    memcpy(bnd->b[0] + offset, &cvalue, isz);
 	}
 	lseek(fd, -bnd->sz, SEEK_CUR);
-	write(fd, bnd->b[0], bnd->sz);
+        if (write(fd, bnd->b[0], bnd->sz) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
     }
 
     pass = 0;
@@ -159,8 +164,9 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	    } while (goagain);
 
 	    lseek(fd, (off_t) i * bnd->sz, SEEK_SET);
-	    write(fd, bnd->b[1], bnd->sz);
-
+            if (write(fd, bnd->b[1], bnd->sz) < 0)
+                G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 	}
 
 	if (!activity) {
@@ -196,7 +202,9 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	    } while (goagain);
 
 	    lseek(fd, (off_t) i * bnd->sz, SEEK_SET);
-	    write(fd, bnd->b[1], bnd->sz);
+            if (write(fd, bnd->b[1], bnd->sz) < 0)
+                G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 	}
 
 	if (!activity) {

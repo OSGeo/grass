@@ -171,51 +171,61 @@ int start_mon(const char *name, const char *output, int select,
         out_file = start_wx(name, mon_path, width, height, x_only);
     else
         out_file = start(name, output, width, height, update);
-    
+
     /* create env file (environmental variables used for rendering) */
     G_debug(1, "Monitor name=%s, envfile=%s", name, env_file);
     fd = creat(env_file, 0666);
     if (fd < 0)
-	G_fatal_error(_("Unable to create file <%s>"), env_file);
+        G_fatal_error(_("Unable to create file <%s>"), env_file);
 
     if (G_strncasecmp(name, "wx", 2) == 0) {
-        sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings from wxGUI */
-        write(fd, buf, strlen(buf));
+        sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n");       /* TODO: read settings from wxGUI */
+        if (write(fd, buf, strlen(buf)) != strlen(buf))
+            G_fatal_error(_("Failed to write to file <%s>"), env_file);
         sprintf(buf, "GRASS_RENDER_FILE_READ=FALSE\n");
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) != strlen(buf))
+            G_fatal_error(_("Failed to write to file <%s>"), env_file);
         sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) != strlen(buf))
+            G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
     else {
         sprintf(buf, "GRASS_RENDER_IMMEDIATE=%s\n", name);
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) != strlen(buf))
+            G_fatal_error(_("Failed to write to file <%s>"), env_file);
         sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
-        write(fd, buf, strlen(buf));
-
+        if (write(fd, buf, strlen(buf)) != strlen(buf))
+            G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
     sprintf(buf, "GRASS_RENDER_FILE=%s\n", out_file);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) != strlen(buf))
+        G_fatal_error(_("Failed to write to file <%s>"), env_file);
     sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) != strlen(buf))
+        G_fatal_error(_("Failed to write to file <%s>"), env_file);
     sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) != strlen(buf))
+        G_fatal_error(_("Failed to write to file <%s>"), env_file);
     sprintf(buf, "GRASS_LEGEND_FILE=%s\n", leg_file);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) != strlen(buf))
+        G_fatal_error(_("Failed to write to file <%s>"), env_file);
 
 
     if (bgcolor) {
-	if (strcmp(bgcolor, "none") == 0)
-	    sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
-	else
-	    sprintf(buf, "GRASS_RENDER_BACKGROUNDCOLOR=%s\n", bgcolor);
-	write(fd, buf, strlen(buf));
+        if (strcmp(bgcolor, "none") == 0)
+            sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
+        else
+            sprintf(buf, "GRASS_RENDER_BACKGROUNDCOLOR=%s\n", bgcolor);
+        if (write(fd, buf, strlen(buf)) != strlen(buf))
+            G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
     if (truecolor) {
-	sprintf(buf, "GRASS_RENDER_TRUECOLOR=TRUE\n");
-	write(fd, buf, strlen(buf));
+        sprintf(buf, "GRASS_RENDER_TRUECOLOR=TRUE\n");
+        if (write(fd, buf, strlen(buf)) != strlen(buf))
+            G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
     close(fd);
-   
+
     /* create cmd file (list of GRASS display commands to render) */
     G_debug(1, "Monitor name=%s, cmdfile = %s", name, cmd_file);
     if (0 > creat(cmd_file, 0666))

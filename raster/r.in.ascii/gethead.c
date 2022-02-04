@@ -30,7 +30,10 @@ int getgrdhead(FILE * fd, struct Cell_head *cellhd)
     rewind(fd);
 
     /* read and check the flag on the first line */
-    fgets(grd_flag, sizeof(grd_flag), fd);
+    if (fgets(grd_flag, sizeof(grd_flag), fd) == NULL) {
+    	G_warning(_("failed to read the input file"));
+    	return 0;
+    }
     if (strncmp(gs_ascii_flag, grd_flag, strlen(gs_ascii_flag))) {
 	G_warning(_("input file is not a Surfer ascii grid file"));
 	return 0;

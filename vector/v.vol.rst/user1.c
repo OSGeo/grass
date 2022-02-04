@@ -393,7 +393,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 int OUTGR()
 {
     void *cf1, *cf2, *cf3, *cf4, *cf5, *cf6, *cf7;
-    int read_val;
+    size_t read_val;
     FCELL *cell;
     float *data;
     int i, iarc, cnt;
@@ -409,7 +409,11 @@ int OUTGR()
 	    G_fseek
 		(Tmp_fd_cell, ((off_t)(nsizr - 1 - i) * nsizc * sizeof(FCELL)),
 		 0);
-	    fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
+            read_val = fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
+            if (read_val != nsizc) {
+                clean();
+                G_fatal_error(_("Unable to read data from temp file"));
+            }
 	    Rast_put_f_row(fdcout, cell);
 	}
     }

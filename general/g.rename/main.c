@@ -118,7 +118,7 @@ void update_reclass_maps(const char *name, const char *mapset)
     for (; *rmaps; rmaps++) {
 	char buf1[256], buf2[256], buf3[256], *str;
 	FILE *fp;
-	int ptr, l;
+	off_t ptr, l;
 
 	G_message(" %s", *rmaps);
 	sprintf(buf3, "%s", *rmaps);
@@ -135,9 +135,12 @@ void update_reclass_maps(const char *name, const char *mapset)
 	if (fp == NULL)
 	    continue;
 
-	fgets(buf2, 255, fp);
-	fgets(buf2, 255, fp);
-	fgets(buf2, 255, fp);
+	if (fgets(buf2, 255, fp) == NULL)
+                continue;
+	if (fgets(buf2, 255, fp) == NULL)
+                continue;
+	if (fgets(buf2, 255, fp) == NULL)
+                continue;
 
 	ptr = G_ftell(fp);
 	G_fseek(fp, 0L, SEEK_END);
@@ -145,14 +148,18 @@ void update_reclass_maps(const char *name, const char *mapset)
 
 	str = (char *)G_malloc(l);
 	G_fseek(fp, ptr, SEEK_SET);
-	fread(str, l, 1, fp);
+	if (fread(str, l, 1, fp) != 1) {
+            if (ferror(fp))
+                G_fatal_error(_("Failed to read reclass maps file"));
+	}
 	fclose(fp);
 
 	fp = fopen(buf1, "w");
 	fprintf(fp, "reclass\n");
 	fprintf(fp, "name: %s\n", name);
 	fprintf(fp, "mapset: %s\n", mapset);
-	fwrite(str, l, 1, fp);
+	if (fwrite(str, l, 1, fp) < 1 & l > 0)
+            G_fatal_error(_("Failed to write full reclass maps file"));
 	G_free(str);
 	fclose(fp);
     }

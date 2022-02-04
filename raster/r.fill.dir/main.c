@@ -38,6 +38,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <errno.h>
 
 /* for using the "open" statement */
 #include <sys/types.h>
@@ -193,7 +194,9 @@ int main(int argc, char **argv)
     for (i = 0; i < nrows; i++) {
 	G_percent(i, nrows, 2);
 	get_row(map_id, in_buf, i);
-	write(fe, in_buf, bnd.sz);
+        if (write(fe, in_buf, bnd.sz) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
     }
     G_percent(1, 1, 1);
     Rast_close(map_id);
@@ -244,7 +247,9 @@ int main(int argc, char **argv)
 	bas_id = Rast_open_new(bas_name, CELL_TYPE);
 
 	for (i = 0; i < nrows; i++) {
-	    read(fm, out_buf, bufsz);
+            if (read(fm, out_buf, bufsz) < 0)
+                G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 	    Rast_put_row(bas_id, out_buf, CELL_TYPE);
 	}
 
@@ -259,10 +264,14 @@ int main(int argc, char **argv)
     G_important_message(_("Writing output raster maps..."));
     for (i = 0; i < nrows; i++) {
         G_percent(i, nrows, 5);
-	read(fe, in_buf, bnd.sz);
+        if (read(fe, in_buf, bnd.sz) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 	put_row(new_id, in_buf);
 
-	read(fd, out_buf, bufsz);
+        if (read(fd, out_buf, bufsz) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 
 	for (j = 0; j < ncols; j += 1)
 	    out_buf[j] = dir_type(type, out_buf[j]);

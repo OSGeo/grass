@@ -1,6 +1,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -103,10 +105,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 	    bas[i].offset = dir[i].offset = (off_t) rdline *bufsz;
 
 	    lseek(fm, bas[i].offset, SEEK_SET);
-	    read(fm, bas[i].p, bufsz);
+            if (read(fm, bas[i].p, bufsz) < 0)
+                G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 
 	    lseek(fd, dir[i].offset, SEEK_SET);
-	    read(fd, dir[i].p, bufsz);
+            if (read(fd, dir[i].p, bufsz) < 0)
+                G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 
 	    rdline++;
 	}
@@ -123,7 +129,9 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
 	    /* write one line */
 	    lseek(fm, bas[sline].offset, SEEK_SET);
-	    write(fm, bas[sline].p, bufsz);
+            if (write(fm, bas[sline].p, bufsz) < 0)
+                G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 
 	    /* If the bottom end of the buffers reach the bottom of the file, 
 	     * rotate the buffers and read new lines */
@@ -142,10 +150,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 		    (off_t) rdline *bufsz;
 
 		lseek(fm, bas[mxbuf - 1].offset, SEEK_SET);
-		read(fm, bas[mxbuf - 1].p, bufsz);
+                if (read(fm, bas[mxbuf - 1].p, bufsz) < 0)
+                    G_fatal_error(_("File reading error in %s() %d:%s"),
+                                  __func__, errno, strerror(errno));
 
 		lseek(fd, dir[mxbuf - 1].offset, SEEK_SET);
-		read(fd, dir[mxbuf - 1].p, bufsz);
+                if (read(fd, dir[mxbuf - 1].p, bufsz) < 0)
+                    G_fatal_error(_("File reading error in %s() %d:%s"),
+                                  __func__, errno, strerror(errno));
 
 		rdline++;
 	    }
@@ -165,10 +177,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 	    bas[i].offset = dir[i].offset = (off_t) rdline *bufsz;
 
 	    lseek(fm, bas[i].offset, SEEK_SET);
-	    read(fm, bas[i].p, bufsz);
+            if (read(fm, bas[i].p, bufsz) < 0)
+                G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 
 	    lseek(fd, dir[i].offset, SEEK_SET);
-	    read(fd, dir[i].p, bufsz);
+            if (read(fd, dir[i].p, bufsz) < 0)
+                G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 
 	    rdline--;
 	}
@@ -186,7 +202,9 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
 	    /* write one line */
 	    lseek(fm, bas[nline - 1].offset, SEEK_SET);
-	    write(fm, bas[nline - 1].p, bufsz);
+            if (write(fm, bas[nline - 1].p, bufsz) < 0)
+                G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
 
 	    /* Until the top of the buffers reach the top of the file, 
 	     * rotate the buffers and read new lines */
@@ -204,10 +222,14 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 		bas[0].offset = dir[0].offset = (off_t) rdline *bufsz;
 
 		lseek(fm, bas[0].offset, SEEK_SET);
-		read(fm, bas[0].p, bufsz);
+                if (read(fm, bas[0].p, bufsz) < 0)
+                    G_fatal_error(_("File reading error in %s() %d:%s"),
+                                  __func__, errno, strerror(errno));
 
 		lseek(fd, dir[0].offset, SEEK_SET);
-		read(fd, dir[0].p, bufsz);
+                if (read(fd, dir[0].p, bufsz) < 0)
+                    G_fatal_error(_("File reading error in %s() %d:%s"),
+                                  __func__, errno, strerror(errno));
 
 		rdline--;
 	    }

@@ -19,6 +19,7 @@
  
 #include <stdio.h>
 #include <math.h>
+#include <errno.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -72,7 +73,7 @@ int IL_output_2d(struct interp_params *params,
     FCELL *cell1;
     int cf1 = -1, cf2 = -1, cf3 = -1, cf4 = -1, cf5 = -1, cf6 = -1;
     int nrows, ncols;
-    int i, ii;
+    int i;
     double zstep;
     FCELL data1, data2;
     struct Colors colors;
@@ -132,13 +133,11 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_z, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z);
-	    /*
-	     * for(j=0;j<params->nsizc;j++) fprintf(stderr,"%f ",cell1[j]);
-	     * fprintf(stderr,"\n");
-	     */
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z)
+                != params->nsizc)
+                G_fatal_error(_("RST library temporary file reading error: %s"),
+                               strerror(errno));
 	    Rast_put_f_row(cf1, cell1);
-
 	}
     }
 
@@ -148,7 +147,10 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_dx, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx)
+                != params->nsizc)
+                G_fatal_error(_("RST library temporary file reading error: %s"),
+                               strerror(errno));
 	    Rast_put_f_row(cf2, cell1);
 	}
     }
@@ -159,7 +161,10 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_dy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy)
+                != params->nsizc)
+                G_fatal_error(_("RST library temporary file reading error: %s"),
+                               strerror(errno));
 	    Rast_put_f_row(cf3, cell1);
 	}
     }
@@ -170,7 +175,10 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_xx, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx)
+                != params->nsizc)
+                G_fatal_error(_("RST library temporary file reading error: %s"),
+                               strerror(errno));
 	    Rast_put_f_row(cf4, cell1);
 	}
     }
@@ -181,7 +189,10 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_yy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy)
+                != params->nsizc)
+                G_fatal_error(_("RST library temporary file reading error: %s"),
+                               strerror(errno));
 	    Rast_put_f_row(cf5, cell1);
 	}
     }
@@ -192,7 +203,10 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_xy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
+            if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy)
+                != params->nsizc)
+                G_fatal_error(_("RST library temporary file reading error: %s"),
+                               strerror(errno));
 	    Rast_put_f_row(cf6, cell1);
 	}
     }

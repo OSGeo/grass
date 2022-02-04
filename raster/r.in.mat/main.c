@@ -128,7 +128,8 @@ int main(int argc, char *argv[])
     have_n = have_s = have_e = have_w = 0;
 
     /* Check Endian State of File */
-    fread(&format_block, sizeof(int), 1, fp1);
+    if (fread(&format_block, sizeof(int), 1, fp1) != 1)
+        G_fatal_error(_("Error reading data"));
     G_fseek(fp1, 0, SEEK_SET);	/* frewind() */
 
     file_endianness = format_block / 1000;	/* 0=little, 1=big */
@@ -151,7 +152,8 @@ int main(int argc, char *argv[])
     while (!feof(fp1)) {
 
 	/* scan for needed array variables */
-	fread(&format_block, sizeof(int), 1, fp1);
+        if (fread(&format_block, sizeof(int), 1, fp1) != 1)
+            G_fatal_error(_("Error reading data"));
 
 	if (feof(fp1))
 	    break;
@@ -169,25 +171,30 @@ int main(int argc, char *argv[])
 
 
 	/* 4 byte number of rows & columns */
-	fread(&mrows, sizeof(int), 1, fp1);
-	fread(&ncols, sizeof(int), 1, fp1);
+        if (fread(&mrows, sizeof(int), 1, fp1) != 1)
+            G_fatal_error(_("Error reading data"));
+        if (fread(&ncols, sizeof(int), 1, fp1) != 1)
+            G_fatal_error(_("Error reading data"));
 	if (mrows < 1 || ncols < 1)
 	    G_fatal_error(_("Array contains no data"));
 
 	/* 4 byte real/imag flag   0=real vals only */
-	fread(&realflag, sizeof(int), 1, fp1);
+        if (fread(&realflag, sizeof(int), 1, fp1) != 1)
+            G_fatal_error(_("Error reading data"));
 	if (realflag != 0)
 	    G_fatal_error(_("Array contains imaginary data"));
 
 
 	/* length of array_name+1 */
-	fread(&name_len, sizeof(int), 1, fp1);
+        if (fread(&name_len, sizeof(int), 1, fp1) != 1)
+            G_fatal_error(_("Error reading data"));
 	if (name_len < 1)
 	    G_fatal_error(_("Invalid array name"));
 
 	/* array name */
 	for (i = 0; i < 64; i++) {
-	    fread(&c, sizeof(char), 1, fp1);
+            if (fread(&c, sizeof(char), 1, fp1) != 1)
+                G_fatal_error(_("Error reading data"));
 	    array_name[i] = c;
 	    if (c == '\0')
 		break;
@@ -205,10 +212,13 @@ int main(int argc, char *argv[])
 	    if (mrows != 1 || ncols > 64 || data_type != 1)
 		G_fatal_error(_("Invalid 'map_name' array"));
 
-	    if (data_format == 5)
-		fread(&map_name, sizeof(char), ncols, fp1);
+            if (data_format == 5) {
+                if (fread(&map_name, sizeof(char), ncols, fp1) != ncols)
+                    G_fatal_error(_("Error reading data"));
+            }
 	    else if (data_format == 0) {	/* sigh.. */
-		fread(&map_name_d, sizeof(double), ncols, fp1);
+                if (fread(&map_name_d, sizeof(double), ncols, fp1) != ncols)
+                    G_fatal_error(_("Error reading data"));
 		for (i = 0; i < ncols; i++)
 		    map_name[i] = (char)map_name_d[i];
 	    }
@@ -225,7 +235,8 @@ int main(int argc, char *argv[])
 	    if (mrows != 1 || ncols != 1 || data_format != 0 ||
 		data_type != 0)
 		G_fatal_error(_("Invalid 'map_northern_edge' array"));
-	    fread(&region.north, sizeof(double), 1, fp1);
+            if (fread(&region.north, sizeof(double), 1, fp1) != 1)
+                G_fatal_error(_("Error reading data"));
 	    G_debug(1, "northern edge=%f", region.north);
 	}
 
@@ -234,7 +245,8 @@ int main(int argc, char *argv[])
 	    if (mrows != 1 || ncols != 1 || data_format != 0 ||
 		data_type != 0)
 		G_fatal_error(_("Invalid 'map_southern_edge' array"));
-	    fread(&region.south, sizeof(double), 1, fp1);
+            if (fread(&region.south, sizeof(double), 1, fp1) != 1)
+                G_fatal_error(_("Error reading data"));
 	    G_debug(1, "southern edge=%f", region.south);
 	}
 
@@ -243,7 +255,8 @@ int main(int argc, char *argv[])
 	    if (mrows != 1 || ncols != 1 || data_format != 0 ||
 		data_type != 0)
 		G_fatal_error(_("Invalid 'map_eastern_edge' array"));
-	    fread(&region.east, sizeof(double), 1, fp1);
+            if (fread(&region.east, sizeof(double), 1, fp1) != 1)
+                G_fatal_error(_("Error reading data"));
 	    G_debug(1, "eastern edge=%f", region.east);
 	}
 
@@ -252,7 +265,8 @@ int main(int argc, char *argv[])
 	    if (mrows != 1 || ncols != 1 || data_format != 0 ||
 		data_type != 0)
 		G_fatal_error(_("Invalid 'map_western_edge' array"));
-	    fread(&region.west, sizeof(double), 1, fp1);
+            if (fread(&region.west, sizeof(double), 1, fp1) != 1)
+                G_fatal_error(_("Error reading data"));
 	    G_debug(1, "western edge=%f", region.west);
 	}
 
@@ -261,10 +275,13 @@ int main(int argc, char *argv[])
 	    if (mrows != 1 || ncols > 1023 || data_type != 1)
 		G_fatal_error(_("Invalid 'map_title' array"));
 
-	    if (data_format == 5)
-		fread(&map_title, sizeof(char), ncols, fp1);
+            if (data_format == 5) {
+                if (fread(&map_title, sizeof(char), ncols, fp1) != ncols)
+                    G_fatal_error(_("Error reading data"));
+            }
 	    else if (data_format == 0) {	/* sigh.. */
-		fread(&map_name_d, sizeof(double), ncols, fp1);	/* note reusing variable */
+                if (fread(&map_name_d, sizeof(double), ncols, fp1) != ncols) /* note reusing variable */
+                    G_fatal_error(_("Error reading data"));
 		for (i = 0; i < ncols; i++)
 		    map_title[i] = (char)map_name_d[i];
 	    }
@@ -291,21 +308,27 @@ int main(int argc, char *argv[])
 		map_type = DCELL_TYPE;
 		array_data =
 		    G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-		fread(array_data, sizeof(double), mrows * ncols, fp1);
+                if (fread(array_data, sizeof(double), mrows * ncols, fp1)
+                    != (mrows * ncols))
+                    G_fatal_error(_("Error reading data"));
 		break;
 	    case 1:
 		G_debug(1, " float map");
 		map_type = FCELL_TYPE;
 		array_data =
 		    G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-		fread(array_data, sizeof(float), mrows * ncols, fp1);
+                if (fread(array_data, sizeof(float), mrows * ncols, fp1)
+                    != (mrows * ncols))
+                    G_fatal_error(_("Error reading data"));
 		break;
 	    case 2:
 		G_debug(1, " int map");
 		map_type = CELL_TYPE;
 		array_data =
 		    G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
-		fread(array_data, sizeof(int), mrows * ncols, fp1);
+                if (fread(array_data, sizeof(int), mrows * ncols, fp1)
+                    != (mrows * ncols))
+                    G_fatal_error(_("Error reading data"));
 		break;
 	    default:
 		G_fatal_error(_("Please contact the GRASS development team"));

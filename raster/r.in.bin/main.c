@@ -90,12 +90,18 @@ static void read_gmt_header(struct GRD_HEADER *header, int swap_flag, FILE *fp)
     read_double(fp, swap_flag, &header->z_scale_factor);
     read_double(fp, swap_flag, &header->z_add_offset);
 
-    fread(&header->x_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
-    fread(&header->y_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
-    fread(&header->z_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
-    fread(&header->title,   sizeof(char[GRD_TITLE_LEN]),   1, fp);
-    fread(&header->command, sizeof(char[GRD_COMMAND_LEN]), 1, fp);
-    fread(&header->remark,  sizeof(char[GRD_REMARK_LEN]),  1, fp);
+    if (fread(&header->x_units, sizeof(char[GRD_UNIT_LEN]), 1, fp) != 1)
+        G_fatal_error(_("Error reading data"));
+    if (fread(&header->y_units, sizeof(char[GRD_UNIT_LEN]), 1, fp) != 1)
+        G_fatal_error(_("Error reading data"));
+    if (fread(&header->z_units, sizeof(char[GRD_UNIT_LEN]), 1, fp) != 1)
+        G_fatal_error(_("Error reading data"));
+    if (fread(&header->title, sizeof(char[GRD_TITLE_LEN]), 1, fp) != 1)
+        G_fatal_error(_("Error reading data"));
+    if (fread(&header->command, sizeof(char[GRD_COMMAND_LEN]), 1, fp) != 1)
+        G_fatal_error(_("Error reading data"));
+    if (fread(&header->remark, sizeof(char[GRD_REMARK_LEN]), 1, fp) != 1)
+        G_fatal_error(_("Error reading data"));
 }
 
 static void get_gmt_header(const struct GRD_HEADER *header, struct Cell_head *region)
