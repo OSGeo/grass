@@ -4,6 +4,14 @@ on:
   - push
   - pull_request
 
+# Cancel previous workflow runs for pull requests.
+# The concurrency group is workflow name and the branch name for pull requests,
+# but it is the commit hash for any other events, so the group is unique and no
+# runs jobs are canceled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: ${{ matrix.os }} build and tests
