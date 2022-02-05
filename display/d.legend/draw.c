@@ -50,7 +50,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     int x0, x1, y0, y1, xyTemp;
     int SigDigits;
     unsigned int MaxLabelLen;
-    char DispFormat[5];         /*  %.Xf\0  */
+    char DispFormat[6];         /*  %.Xf\0  */
     double maxCat;
     int horiz;
     char *units_bottom;
@@ -208,7 +208,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         /* figure out how long the category + label will be */
         if (use_catlist) {
             MaxLabelLen = 0;
-            maxCat = 0;         /* reset */
+            maxCat = 0.;         /* reset */
             for (i = 0, k = 0; i < catlistCount; i++) {
                 if ((catlist[i] < min_ind) || (catlist[i] > max_ind)) {
                     G_fatal_error(_("use=%s out of range [%d,%d] (extend with range= ?)"),
@@ -270,7 +270,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             sprintf(DispFormat, "%%d");
         else {
             if (maxCat > 0.0)
-                sprintf(DispFormat, "%%%dd", (int)(log10(fabs(maxCat))) + 1);
+                sprintf(DispFormat, "%%%dd", (unsigned char)(log10(fabs(maxCat))) + 1);
             else
                 sprintf(DispFormat, "%%2d");
         }
