@@ -381,17 +381,8 @@ Software pages:
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
 - FreeGIS: <freegis-list@intevation.de>
-- Geowanking: <geowanking@geowanking.org>
 - OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
-- Geo Connexion: <editor-geo@geoconnexion.com>
 
-Via Web:
+Via Web / Social media:
 
-- <http://linuxtoday.com/contribute.php3>
-- <https://joinup.ec.europa.eu/software/grassgis/home> (submit news, MN)
-- <http://www.directionsmag.com/pressreleases/> (News -> Submit Press Release)
-- <http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29>
-- <https://www.linux-apps.com/p/1128004/edit/> (MN)
-- <https://www.heise.de/download/product/grass-gis-7105> (update, MN)
-- See also: <https://grass.osgeo.org/wiki/Contact_Databases>
-- ... anywhere else? Please add here.
+- See: <https://grass.osgeo.org/wiki/Contact_Databases>
