@@ -256,7 +256,7 @@ int main(int argc, char **argv)
         sep = G_option_to_separator(opt_sep);
         file_name = opt_input->answer;
         if (!file_name)
-            G_fatal_error(_("Unable to open input file <%s>"), file_name);
+            G_fatal_error(_("Unable to open input legend file."));
     }
     else {
         sep = "|";
