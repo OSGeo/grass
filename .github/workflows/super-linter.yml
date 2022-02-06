@@ -7,6 +7,7 @@ on:
 jobs:
   super-linter:
     name: GitHub Super Linter
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
 
     runs-on: ubuntu-latest
 
