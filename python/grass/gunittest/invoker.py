@@ -205,7 +205,8 @@ class GrassTestFilesInvoker(object):
                 args,
                 cwd=cwd,
                 env=env,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 timeout=timeout,
                 check=False,
             )
