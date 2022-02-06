@@ -3,6 +3,10 @@ name: OSGeo4W
 on:
   - push
   - pull_request
+      paths-ignore:
+        - "**/*.html"
+        - "**/*.md"
+        - "**/*.txt"
 
 jobs:
   build:

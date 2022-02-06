@@ -3,6 +3,10 @@ name: Python Flake8 Code Quality
 on:
   - push
   - pull_request
+      paths-ignore:
+        - "**/*.html"
+        - "**/*.md"
+        - "**/*.txt"
 
 jobs:
   flake8:

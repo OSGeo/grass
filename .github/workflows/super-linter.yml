@@ -3,6 +3,10 @@ name: General linting
 on:
   - push
   - pull_request
+      paths-ignore:
+        - "**/*.html"
+        - "**/*.md"
+        - "**/*.txt"
 
 jobs:
   super-linter:
