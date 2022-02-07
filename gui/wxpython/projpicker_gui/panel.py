@@ -43,12 +43,18 @@ class ProjPickerToolbar(BaseToolbar):
         # realize the toolbar
         self.Realize()
 
+        self._default = self.pan
+        for tool in (self.pan, self.edit):
+            self.toolSwitcher.AddToolToGroup(group="mouseUse", toolbar=self, tool=tool)
+
+        self.EnableTool(self.pan, True)
+
     def _toolbarData(self):
         return self._getToolbarData(
             (
-                ("pan", self.icons["pan"], self.parent.on_grab),
+                ("pan", self.icons["pan"], self.parent.on_select_pan, wx.ITEM_CHECK),
                 (None,),
-                ("edit", self.icons["edit"], self.parent.on_draw),
+                ("edit", self.icons["edit"], self.parent.on_select_draw, wx.ITEM_CHECK),
                 (None,),
                 ("clear", self.icons["erase"], self.parent.on_clear_drawing),
             )
