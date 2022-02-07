@@ -104,7 +104,9 @@ class MapWindowProperties(object):
 
     @useDefinedProjection.setter
     def useDefinedProjection(self, value):
-        self._useDefinedProjection = value
+        if value != self._useDefinedProjection:
+            self._useDefinedProjection = value
+            self.useDefinedProjectionChanged.emit(value=value)
 
     @property
     def epsg(self):
