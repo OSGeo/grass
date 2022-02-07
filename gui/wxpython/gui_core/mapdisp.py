@@ -91,7 +91,7 @@ class MapPanelBase(wx.Panel):
         # properties are shared in other objects, so defining here
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
-        # update statusbar when using defined projection
+        # update statusbar when user-defined projection changed
         self.mapWindowProperties.useDefinedProjectionChanged.connect(
             self.StatusbarUpdate
         )
