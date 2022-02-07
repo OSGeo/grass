@@ -92,7 +92,9 @@ class MapPanelBase(wx.Panel):
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
         # update statusbar when using defined projection
-        self.mapWindowProperties.useDefinedProjectionChanged.connect(self.StatusbarUpdate)
+        self.mapWindowProperties.useDefinedProjectionChanged.connect(
+            self.StatusbarUpdate
+        )
 
         #
         # Fancy gui
