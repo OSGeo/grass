@@ -15,7 +15,7 @@ import sys
 
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseToolbar, BaseIcons, ToolSwitcher
 from icons.icon import MetaIcon
 
 from .gui_common import (
@@ -34,8 +34,8 @@ ItemDeselectedEvent, EVT_ITEM_DESELECTED = wx.lib.newevent.NewEvent()
 
 
 class ProjPickerToolbar(BaseToolbar):
-    def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+    def __init__(self, parent, toolSwitcher):
+        BaseToolbar.__init__(self, parent, toolSwitcher)
         self.icons = BaseIcons
         self.icons = {**self.icons, **self._add_icons()}
         self.InitToolbar(self._toolbarData())
@@ -72,6 +72,8 @@ class ProjPickerToolbar(BaseToolbar):
 class ProjPickerPanel(wx.Panel):
     def __init__(self, *args, filter_bbox=None, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self._toolSwitcher = ToolSwitcher()
 
         self.filter_bbox = filter_bbox
 
@@ -136,10 +138,8 @@ class ProjPickerPanel(wx.Panel):
             zoom,
         )
 
-        self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_grab)
-        self.map_canvas.Bind(wx.EVT_LEFT_UP, self.on_draw)
-        self.map_canvas.Bind(wx.EVT_RIGHT_UP, self.on_cancel_drawing)
-        self.map_canvas.Bind(wx.EVT_RIGHT_DCLICK, self.on_clear_drawing)
+        # self.map_canvas.Bind(wx.EVT_RIGHT_UP, self.on_cancel_drawing)
+        # self.map_canvas.Bind(wx.EVT_RIGHT_DCLICK, self.on_clear_drawing)
         self.map_canvas.Bind(wx.EVT_MOTION, self.on_move)
         self.map_canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_zoom)
         self.map_canvas.Bind(wx.EVT_SIZE, self.on_resize)
@@ -151,8 +151,9 @@ class ProjPickerPanel(wx.Panel):
 
         # Sizer so toolbar and coordinates are on same row
         toolbar_coors_box = wx.BoxSizer(wx.HORIZONTAL)
-        toolbar = ProjPickerToolbar(self)
-        toolbar_coors_box.Add(toolbar, 0, wx.EXPAND)
+        self.toolbar = ProjPickerToolbar(self, self._toolSwitcher)
+        self.toolbar.SelectDefault()
+        toolbar_coors_box.Add(self.toolbar, 0, wx.EXPAND)
 
         #######################
         # label for coordinates
@@ -255,8 +256,18 @@ class ProjPickerPanel(wx.Panel):
 
         self.SetSizer(main_box)
 
+    #! How to map left down to different tools when selected?
+    def on_select_pan(self, event):
+        self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_grab)
+
     def on_grab(self, event):
+        self.__id = event
+        # self.map_canvas.Unbind(wx.EVT_LEFT_DOWN)
         self.osm.grab(event.x, event.y)
+
+    def on_select_draw(self, event):
+        self.map_canvas.Unbind(wx.EVT_LEFT_DOWN, source=event, handler=self.map_canvas)
+        self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_draw)
 
     def on_draw(self, event):
         if self.dragging_bbox:
@@ -542,3 +553,6 @@ class ProjPickerPanel(wx.Panel):
         self.draw_geoms()
         self.crs_list.DeleteAllItems()
         self.post_item_deselected()
+
+    def test_tb(self, event):
+        pass
