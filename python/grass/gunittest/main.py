@@ -224,6 +224,7 @@ def main():
     invoker = GrassTestFilesInvoker(
         start_dir=start_dir,
         file_anonymizer=FileAnonymizer(paths_to_remove=[abs_start_dir]),
+        timeout=config.getfloat("timeout", None),
     )
     # TODO: remove also results dir from files
     # as an enhancemnt
