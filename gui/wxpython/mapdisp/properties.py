@@ -140,9 +140,9 @@ class ChBAlignExtent(PropertyItem):
 class ChBResolution(PropertyItem):
     """Checkbox to select used display resolution."""
 
-    def __init__(self, parent, giface, mapWindowProperties):
+    def __init__(self, parent, mapframe, mapWindowProperties):
         PropertyItem.__init__(self, mapWindowProperties)
-        self.giface = giface
+        self.mapFrame = mapframe
         self.name = "resolution"
         self.widget = wx.CheckBox(
             parent=parent,
@@ -180,15 +180,15 @@ class ChBResolution(PropertyItem):
 
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
-            self.giface.updateMap.emit()
+            self.mapFrame.GetWindow().UpdateMap()
 
 
 class ChBShowRegion(PropertyItem):
     """Checkbox to enable and disable showing of computational region."""
 
-    def __init__(self, parent, giface, mapWindowProperties):
+    def __init__(self, parent, mapframe, mapWindowProperties):
         PropertyItem.__init__(self, mapWindowProperties)
-        self.giface = giface
+        self.mapFrame = mapframe
         self.name = "region"
         self.widget = wx.CheckBox(
             parent=parent, id=wx.ID_ANY, label=_("Show computational extent")
@@ -229,7 +229,7 @@ class ChBShowRegion(PropertyItem):
 
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
-            self.giface.updateMap.emit(render=False)
+            self.mapFrame.GetWindow().UpdateMap(render=False)
 
 
 class ChBProjection(PropertyItem):
@@ -283,7 +283,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
     def __init__(
         self,
         parent,
-        giface,
+        mapframe,
         properties,
         title=_("Map Display Settings"),
         size=(-1, 250),
@@ -294,7 +294,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.parent = parent
         self.title = title
         self.size = size
-        self.giface = giface
+        self.mapframe = mapframe
         self.mapWindowProperties = properties
 
         # notebook
@@ -353,7 +353,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         # Use computation resolution
         self.compResolution = ChBResolution(
-            panel, self.giface, self.mapWindowProperties
+            panel, self.mapframe, self.mapWindowProperties
         )
         sizer.Add(
             self.compResolution.GetWidget(),
@@ -364,7 +364,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         # Show computation extent
         self.showCompExtent = ChBShowRegion(
-            panel, self.giface, self.mapWindowProperties
+            panel, self.mapframe, self.mapWindowProperties
         )
         sizer.Add(
             self.showCompExtent.GetWidget(),

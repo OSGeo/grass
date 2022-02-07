@@ -501,7 +501,7 @@ class MapPanelBase(wx.Panel):
         from mapdisp.properties import MapDisplayPropertiesDialog
 
         dlg = MapDisplayPropertiesDialog(
-            parent=self, giface=self._giface, properties=self.mapWindowProperties
+            parent=self, mapframe=self, properties=self.mapWindowProperties
         )
         dlg.CenterOnParent()
         dlg.Show()

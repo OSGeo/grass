@@ -1569,7 +1569,7 @@ class MapPanel(SingleMapPanel):
         if self.statusbarManager:
             self.statusbarManager.SetMode(mode)
             self.StatusbarUpdate()
-            self.SetProperty("projection", projection)
+        self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
