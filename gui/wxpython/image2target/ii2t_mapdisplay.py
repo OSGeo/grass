@@ -114,7 +114,7 @@ class MapPanel(SingleMapPanel):
         # create statusbar and its manager
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
-        self.statusbarManager.SetMode(8)  # goto GCP
+        self.statusbarManager.SetMode(5)  # goto GCP
 
         #
         # Init map display (buffered DC & set default cursor)
