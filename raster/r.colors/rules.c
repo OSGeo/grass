@@ -123,7 +123,9 @@ void rescale_colors(struct Colors *colors_tmp, struct Colors *colors,
     Rast_set_null_value_color(red, grn, blu, colors_tmp);
 
     rcount = Rast_colors_count(colors);
-    for (i = 0; i < rcount; i++) {
+    /* read the rules in reverse order,
+     * see lib/raster/color_write.c:write_rules() */
+    for (i = rcount - 1; i >= 0; i--) {
 
 	Rast_get_fp_color_rule(&dmin, &r1, &g1, &b1,
 			       &dmax, &r2, &g2, &b2,
