@@ -568,7 +568,7 @@ class SbGoTo(SbItem):
         """Go to position"""
         try:
             e, n = self.GetValue().split(";")
-            e, n = self.ReprojectENToMap(e, n, self.mapFrame.GetProperty("projection"))
+            e, n = self.ReprojectENToMap(e, n, self.mapFrame.GetProperty("useDefinedProjection"))
             self.mapFrame.GetWindow().GoTo(e, n)
             self.widget.SetFocus()
         except ValueError:
@@ -614,7 +614,7 @@ class SbGoTo(SbItem):
             group="projection", key="statusbar", subkey="proj4"
         )
 
-        if self.mapFrame.GetProperty("projection"):
+        if self.mapFrame.GetProperty("useDefinedProjection"):
             if not projection:
                 raise SbException(_("Projection not defined (check the settings)"))
             else:
@@ -744,7 +744,7 @@ class SbCoordinates(SbTextItem):
             UserSettings.Get(group="projection", key="format", subkey="precision")
         )
         format = UserSettings.Get(group="projection", key="format", subkey="ll")
-        projection = self.mapFrame.GetProperty("projection")
+        projection = self.mapFrame.GetProperty("useDefinedProjection")
         try:
             e, n = self.mapFrame.GetWindow().GetLastEN()
             self._basicValue = self.ReprojectENFromMap(
@@ -827,7 +827,7 @@ class SbRegionExtent(SbTextItem):
             UserSettings.Get(group="projection", key="format", subkey="precision")
         )
         format = UserSettings.Get(group="projection", key="format", subkey="ll")
-        projection = self.mapFrame.GetProperty("projection")
+        projection = self.mapFrame.GetProperty("useDefinedProjection")
         region = self._getRegion()
         try:
             regionReprojected = self.ReprojectRegionFromMap(

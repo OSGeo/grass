@@ -160,27 +160,15 @@ class MapPanelBase(wx.Panel):
 
     def SetProperty(self, name, value):
         """Sets property"""
-        if name == "projection":
-            self.mapWindowProperties.useDefinedProjection = value
-        elif name == "resolution":
-            self.mapWindowProperties.resolution = value
-        elif name == "alignExtent":
-            self.mapWindowProperties.alignExtent = value
-        elif name == "region":
-            self.mapWindowProperties.showRegion = value
+        if hasattr(self.mapWindowProperties, name):
+            setattr(self.mapWindowProperties, name, value)
         else:
             self.statusbarManager.SetProperty(name, value)
 
     def GetProperty(self, name):
         """Returns property"""
-        if name == "projection":
-            return self.mapWindowProperties.useDefinedProjection
-        elif name == "resolution":
-            return self.mapWindowProperties.resolution
-        elif name == "alignExtent":
-            return self.mapWindowProperties.alignExtent
-        elif name == "region":
-            return self.mapWindowProperties.showRegion
+        if hasattr(self.mapWindowProperties, name):
+            getattr(self.mapWindowProperties, name)
         else:
             return self.statusbarManager.GetProperty(name)
 

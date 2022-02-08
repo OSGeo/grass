@@ -189,7 +189,7 @@ class ChBShowRegion(PropertyItem):
     def __init__(self, parent, mapframe, mapWindowProperties):
         PropertyItem.__init__(self, mapWindowProperties)
         self.mapFrame = mapframe
-        self.name = "region"
+        self.name = "showRegion"
         self.widget = wx.CheckBox(
             parent=parent, id=wx.ID_ANY, label=_("Show computational extent")
         )
@@ -237,7 +237,7 @@ class ChBProjection(PropertyItem):
 
     def __init__(self, parent, mapWindowProperties):
         PropertyItem.__init__(self, mapWindowProperties)
-        self.name = "projection"
+        self.name = "useDefinedProjection"
         self.defaultLabel = _("Display coordinates in different CRS")
         self.widget = wx.CheckBox(parent=parent, id=wx.ID_ANY, label=self.defaultLabel)
         self.widget.SetValue(self.mapWindowProperty)
