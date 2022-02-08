@@ -1,7 +1,7 @@
 """
 GRASS Python testing framework module for running from command line
 
-Copyright (C) 2014 by the GRASS Development Team
+Copyright (C) 2014-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
@@ -17,14 +17,13 @@ from pathlib import Path
 
 from unittest.main import TestProgram
 
+import grass.script.core as gs
 
 from .loader import GrassTestLoader
 from .runner import GrassTestRunner, MultiTestResult, TextTestResult, KeyValueTestResult
 from .invoker import GrassTestFilesInvoker
 from .utils import silent_rmtree
 from .reporters import FileAnonymizer
-
-import grass.script.core as gcore
 
 
 class GrassTestProgram(TestProgram):
@@ -56,28 +55,27 @@ class GrassTestProgram(TestProgram):
         text_result = TextTestResult(
             stream=sys.stderr, descriptions=True, verbosity=verbosity
         )
-        keyval_file = open("test_keyvalue_result.txt", "w")
-        keyval_result = KeyValueTestResult(stream=keyval_file)
-        result = MultiTestResult(results=[text_result, keyval_result])
+        with open("test_keyvalue_result.txt", "w") as keyval_file:
+            keyval_result = KeyValueTestResult(stream=keyval_file)
+            result = MultiTestResult(results=[text_result, keyval_result])
 
-        grass_runner = GrassTestRunner(
-            verbosity=verbosity,
-            failfast=failfast,
-            buffer=buffer_stdout_stderr,
-            result=result,
-        )
-        super(GrassTestProgram, self).__init__(
-            module=module,
-            argv=unittest_argv,
-            testLoader=grass_loader,
-            testRunner=grass_runner,
-            exit=exit_at_end,
-            verbosity=verbosity,
-            failfast=failfast,
-            catchbreak=catchbreak,
-            buffer=buffer_stdout_stderr,
-        )
-        keyval_file.close()
+            grass_runner = GrassTestRunner(
+                verbosity=verbosity,
+                failfast=failfast,
+                buffer=buffer_stdout_stderr,
+                result=result,
+            )
+            super().__init__(
+                module=module,
+                argv=unittest_argv,
+                testLoader=grass_loader,
+                testRunner=grass_runner,
+                exit=exit_at_end,
+                verbosity=verbosity,
+                failfast=failfast,
+                catchbreak=catchbreak,
+                buffer=buffer_stdout_stderr,
+            )
 
 
 def test():
@@ -194,28 +192,20 @@ def main():
     gisdbase = args.gisdbase
     if gisdbase is None:
         # here we already rely on being in GRASS session
-        gisdbase = gcore.gisenv()["GISDBASE"]
+        gisdbase = gs.gisenv()["GISDBASE"]
     location = args.location
     location_type = args.location_type
 
     if not gisdbase:
-        sys.stderr.write(
-            "GISDBASE (grassdata directory)" " cannot be empty string\n" % gisdbase
-        )
-        sys.exit(1)
+        return "GISDBASE (grassdata directory) cannot be empty string\n"
     if not os.path.exists(gisdbase):
-        sys.stderr.write(
-            "GISDBASE (grassdata directory) <%s>" " does not exist\n" % gisdbase
-        )
-        sys.exit(1)
+
+        return f"GISDBASE (grassdata directory) <{gisdbase}> does not exist\n"
     if not os.path.exists(os.path.join(gisdbase, location)):
-        sys.stderr.write(
-            "GRASS Location <{loc}>"
-            " does not exist in GRASS Database <{db}>\n".format(
-                loc=location, db=gisdbase
-            )
+        return (
+            f"GRASS Location <{location}>"
+            f" does not exist in GRASS Database <{gisdbase}>\n"
         )
-        sys.exit(1)
     results_dir = args.output
     silent_rmtree(results_dir)  # TODO: too brute force?
 
@@ -230,7 +220,7 @@ def main():
         timeout=config.getfloat("timeout", None),
     )
     # TODO: remove also results dir from files
-    # as an enhancemnt
+    # as an enhancement
     # we can just iterate over all locations available in database
     # but the we don't know the right location type (category, label, shortcut)
     reporter = invoker.run_in_location(
