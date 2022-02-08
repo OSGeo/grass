@@ -37,7 +37,6 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
@@ -129,10 +128,6 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
-
-        # properties are shared in other objects, so defining here
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
 
         #
         # Add toolbars

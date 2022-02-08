@@ -25,7 +25,6 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.mapdisp import SingleMapPanel
 from gui_core.wrap import Menu
 from mapwin.buffered import BufferedMapWindow
-from mapwin.base import MapWindowProperties
 
 import mapdisp.statusbar as sb
 import gcp.statusbar as sbgcp
@@ -72,9 +71,7 @@ class MapPanel(SingleMapPanel):
         )
 
         self._giface = giface
-        # properties are shared in other objects, so defining here
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
+
         self.mapWindowProperties.alignExtent = True
 
         #

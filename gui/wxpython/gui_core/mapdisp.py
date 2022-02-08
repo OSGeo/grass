@@ -28,6 +28,7 @@ from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
 from mapdisp import statusbar as sb
+from mapwin.base import MapWindowProperties
 
 from grass.script import core as grass
 
@@ -86,6 +87,14 @@ class MapPanelBase(wx.Panel):
         # toolbars
         self.toolbars = {}
         self.iconsize = (16, 16)
+
+        # properties are shared in other objects, so defining here
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+        # update statusbar when user-defined projection changed
+        self.mapWindowProperties.useDefinedProjectionChanged.connect(
+            self.StatusbarUpdate
+        )
 
         #
         # Fancy gui
