@@ -12,9 +12,9 @@ _projpicker_verbose_env = "PROJPICKER_VERBOSE"
 # regular expression patterns
 # coordinate separator
 _coor_sep = ","
-_coor_sep_pat = f"[ \t]*[{_coor_sep} \t][ \t]*"
+_coor_sep_pat = fr"[ \t]*[{_coor_sep} \t][ \t]*"
 # positive float
-_pos_float_pat = "(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
+_pos_float_pat = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
 
 # bbox table schema
 _bbox_schema = """
@@ -47,19 +47,19 @@ CREATE TABLE bbox (
 
 # all column names in the bbox table
 _bbox_columns = re.sub(
-    "^ +| +$",
+    r"^ +| +$",
     "",
     re.sub(
-        "\n",
+        r"\n",
         " ",
         re.sub(
-            "(?:^[A-Z]| ).*",
+            r"(?:^[A-Z]| ).*",
             "",
             re.sub(
-                "\([^(]*\)",
+                r"\([^(]*\)",
                 "",
                 re.sub(
-                    "^(?:CREATE TABLE.*|\))$|^ *", "", _bbox_schema, flags=re.MULTILINE
+                    r"^(?:CREATE TABLE.*|\))$|^ *", "", _bbox_schema, flags=re.MULTILINE
                 ),
                 flags=re.DOTALL,
             ),

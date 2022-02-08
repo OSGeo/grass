@@ -72,9 +72,9 @@ _rx = 6378.1370
 # polar radius in km
 _ry = 6356.7523
 
-_geom_var_chars = "([a-zA-Z0-9_]+)"
+_geom_var_chars = r"([a-zA-Z0-9_]+)"
 _geom_var_re = re.compile(
-    f"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|" f":{_geom_var_chars})$"
+    fr"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|" f":{_geom_var_chars})$"
 )
 
 # geometry-bbox namedtuple class
@@ -176,7 +176,7 @@ def tidy_lines(lines):
                     and "'" not in words[0]
                 ):
                     # protect whitespaces in constraining directives
-                    m = re.match("""^([^ =]+=)([^"'].*)$""", lines[i])
+                    m = re.match(r"""^([^ =]+=)([^"'].*)$""", lines[i])
                     if m:
                         quote = "'" if '"' in m[2] else '"'
                         lines[i] = f"{m[1]}{quote}{m[2]}{quote}"
@@ -203,7 +203,7 @@ def normalize_lines(lines):
     n = len(lines)
     i = 0
     while i < n:
-        m = re.match("""^(|[a-z_]+=)(["'])(.*)$""", lines[i])
+        m = re.match(r"""^(|[a-z_]+=)(["'])(.*)$""", lines[i])
         if m:
             lines[i] = m[1] + m[3]
             quote = m[2]
@@ -212,7 +212,7 @@ def normalize_lines(lines):
             else:
                 for j in range(i + 1, n):
                     idx.append(j)
-                    m = re.match(f"^(.*){quote}$", lines[j])
+                    m = re.match(fr"^(.*){quote}$", lines[j])
                     if m:
                         lines[i] += f" {m[1]}"
                         break
@@ -518,15 +518,15 @@ def find_unit(proj_table, crs_auth, crs_code, proj_cur):
                   WHERE auth_name='{auth}' AND code='{code}'"""
         proj_cur.execute(sql)
         unit = re.sub(
-            '^.*"([^"]+)".*$',
+            r'^.*"([^"]+)".*$',
             r"\1",
             re.sub(
-                "[A-Z]*\[.*\[.*\],?",
+                r"A-Z]*\[.*\[.*\],?",
                 "",
                 re.sub(
-                    "UNIT\[([^]]+)\]",
+                    r"UNIT\[([^]]+)\]",
                     r"\1",
-                    re.sub("^PROJCS\[[^,]*,|\]$", "", proj_cur.fetchone()[0]),
+                    re.sub(r"^PROJCS\[[^,]*,|\]$", "", proj_cur.fetchone()[0]),
                 ),
             ),
         )
@@ -836,7 +836,7 @@ def read_bbox_db(bbox_db, unit="any", proj_table="any"):
     outbbox = []
     with sqlite3.connect(bbox_db) as bbox_con:
         bbox_cur = bbox_con.cursor()
-        sql = f"""SELECT *
+        sql = """SELECT *
                   FROM bbox
                   WHERE_UNIT_AND_PROJ_TABLE
                   ORDER BY area_sqkm,

@@ -337,7 +337,7 @@ class OpenStreetMap:
                 with urllib.request.urlopen(req) as f:
                     self.cached_tiles[tile_key] = CachedTile(f.read(), True)
                     self.message(f"{tile_url} downloaded")
-            except Exception as e:
+            except Exception:
                 self.message(f"{tile_url}: Failed to download")
         return tile_key
 
