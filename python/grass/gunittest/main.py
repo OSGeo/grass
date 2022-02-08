@@ -129,18 +129,28 @@ def discovery():
 CONFIG_FILENAME = ".gunittest.cfg"
 
 
-def get_config(start_directory):
-    """Read configuration if available, return empty dict if not"""
+def get_config(start_directory, config_file):
+    """Read configuration if available, return empty section proxy if not
+
+    If file is explicitly specified, it must exist.
+
+    Raises OSError if file is not accessible, e.g., if it exists,
+    but there is an issue with permissions.
+    """
     config_parser = configparser.ConfigParser()
-    config_file = Path(start_directory) / CONFIG_FILENAME
-    if config_file.is_file():
+    if config_file:
+        with open(config_file, encoding="utf-8") as file:
+            config_parser.read_file(file)
+    elif start_directory:
+        config_file = Path(start_directory) / CONFIG_FILENAME
+        # Does not check presence of the file
         config_parser.read(config_file)
     else:
-        # Create an empty section if file is not available.
+        raise ValueError("Either start_directory or config_file must be set")
+    if "gunittest" not in config_parser:
+        # Create an empty section if file is not available or section is not present.
         config_parser.read_dict({"gunittest": {}})
-    if "gunittest" in config_parser:
-        return config_parser["gunittest"]
-    return config_parser
+    return config_parser["gunittest"]
 
 
 def main():
@@ -188,6 +198,13 @@ def main():
             " than this will result in a non-zero return code; values 0-100)"
         ),
     )
+    parser.add_argument(
+        "--config",
+        dest="config",
+        action="store",
+        type=str,
+        help=f"Path to a configuration file (default: {CONFIG_FILENAME})",
+    )
     args = parser.parse_args()
     gisdbase = args.gisdbase
     if gisdbase is None:
@@ -212,7 +229,10 @@ def main():
     start_dir = "."
     abs_start_dir = os.path.abspath(start_dir)
 
-    config = get_config(start_dir)
+    try:
+        config = get_config(start_directory=start_dir, config_file=args.config)
+    except OSError as error:
+        return f"Error reading configuration: {error}"
 
     invoker = GrassTestFilesInvoker(
         start_dir=start_dir,
