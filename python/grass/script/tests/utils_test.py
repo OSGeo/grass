@@ -11,10 +11,12 @@ def test_named_separators():
     assert gs.separator("tab") == "\t"
     assert gs.separator("newline") == "\n"
 
+
 def test_backslash_separators():
     """Check that separtors specified as an escape sequence are correctly evaluated"""
     assert gs.separator(r"\t") == "\t"
     assert gs.separator(r"\n") == "\n"
+
 
 def test_unrecognized_separator():
     """Check that unknown strings are just passed through"""
