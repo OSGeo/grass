@@ -137,9 +137,12 @@ def get_config(start_directory):
     config_file = Path(start_directory) / CONFIG_FILENAME
     if config_file.is_file():
         config_parser.read(config_file)
+    else:
+        # Create an empty section if file is not available.
+        config_parser.read_dict({"gunittest": {}})
     if "gunittest" in config_parser:
         return config_parser["gunittest"]
-    return {}
+    return config_parser
 
 
 def main():
