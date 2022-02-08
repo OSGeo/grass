@@ -13,17 +13,13 @@
 
 import tempfile
 import os
-import platform
 import grass.script as gs
 from .display import GrassRenderer
 
+
 # Probably needs a better name
 def parse_csv_str(string):
-    if platform.system() == "Windows":
-        out = string.strip().split("\r\n")
-    else:
-        out = string.strip().split("\n")
-    return out
+    return string.strip().splitlines()
 
 
 class TimeSeries:
