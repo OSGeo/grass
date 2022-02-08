@@ -8,6 +8,7 @@ import threading
 import queue
 import textwrap
 import webbrowser
+import sys
 
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
