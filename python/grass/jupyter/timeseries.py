@@ -41,7 +41,8 @@ class TimeSeries:
         """Creates an instance of the TimeSeries visualizations class.
 
         :param str timeseries: name of space-time dataset
-        :param str etype: element type, strds (space-time raster dataset) or stvds (space-time vector dataset)
+        :param str etype: element type, strds (space-time raster dataset)
+                          or stvds (space-time vector dataset)
         :param str basemap: name of raster to use as basemap/background for visuals
         :param str overlay: name of vector to add to visuals
         """
