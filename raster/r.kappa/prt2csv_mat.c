@@ -20,7 +20,7 @@ void prn2csv_error_mat(int out_cols, int hdr)
     int first_col = 0, last_col = 0;
     int thisone;
     long t_row, t_col;
-    long t_rowcount, grand_count;
+    long t_rowcount;
     const char *mapone;
     FILE *fd;
 

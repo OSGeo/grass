@@ -77,7 +77,7 @@ void Rast__error_handler(void *p)
 
 static int init(void)
 {
-    char *zlib, *nulls, *cname;
+    char *nulls, *cname;
 
     Rast__init_window();
 

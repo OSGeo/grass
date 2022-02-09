@@ -971,7 +971,7 @@ save_io_vis_and_elev_to_GRASS(IOVisibilityGrid * visgrid, char *elevfname,
     }
 
     dimensionType i, j;
-    double elev = 0, viewshed_value;
+    double elev = 0;
 
     for (i = 0; i < Rast_window_rows(); i++) {
 

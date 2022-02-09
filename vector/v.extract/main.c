@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     
     struct Cat_index *ci;
     
-    int ucat_count, *ucat_array, prnd, seed, nrandom, nfeatures;
+    int ucat_count, *ucat_array, prnd, nrandom, nfeatures;
     char *dissolve_key;
 
     Fi = NULL;

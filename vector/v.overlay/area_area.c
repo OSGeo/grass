@@ -30,7 +30,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	      ATTRIBUTES * attr, struct ilist *BList, double snap)
 {
     int ret, input, line, nlines, area, nareas;
-    int in_area, in_centr, out_cat;
+    int in_centr, out_cat;
     struct line_pnts *Points;
     struct line_cats *Cats;
     CENTR *Centr;

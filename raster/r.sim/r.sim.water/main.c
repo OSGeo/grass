@@ -96,7 +96,6 @@
 /****************************************/
 int main(int argc, char *argv[])
 {
-    int ii;
     int threads;
     int ret_val;
     double x_orig, y_orig;

@@ -73,7 +73,6 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     int first_time = 1;
     CELL *cellmask;
     const char *mapsetm;
-    char buf[500];
     int cat, intval;
     struct field_info *Fi;
     dbDriver *Driver;

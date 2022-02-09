@@ -16,7 +16,6 @@ int check_stats(const char *name)
     struct Categories cats;
     struct Range range;
     struct FPRange fprange;
-    int i;
     int cats_ok;
     int max;
 
