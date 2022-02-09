@@ -1,0 +1,5 @@
+matplotlib
+numpy
+Pillow
+ply
+PyVirtualDisplay
