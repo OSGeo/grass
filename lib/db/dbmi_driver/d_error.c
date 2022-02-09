@@ -75,7 +75,8 @@ void db_d_append_error(const char *fmt, ...)
 	count = vfprintf(fp, fmt, ap);
 	if (count >= 0 && (work = G_calloc(count + 1, 1))) {
 	    rewind(fp);
-	    fread(work, 1, count, fp);
+	    if (fread(work, 1, count, fp) != count)
+                G_fatal_error(_("Error or EOF encountered during fread()"));
 	    db_append_string(st->errMsg, work);
 	    G_free(work);
 	}

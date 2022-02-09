@@ -168,7 +168,8 @@ void D_close_driver(void)
     COM_Graph_close();
 
     if (cmd)
-	system(cmd);
+	if (system(cmd) == -1)
+            G_warning(_("Error executing command: '%s'"), cmd);
 }
 
 /*!

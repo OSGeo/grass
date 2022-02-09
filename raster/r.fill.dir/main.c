@@ -193,7 +193,8 @@ int main(int argc, char **argv)
     for (i = 0; i < nrows; i++) {
 	G_percent(i, nrows, 2);
 	get_row(map_id, in_buf, i);
-	write(fe, in_buf, bnd.sz);
+	if (write(fe, in_buf, bnd.sz) <= 0)
+            G_warning(_("Error writing to file fd=%d\n"), fe);
     }
     G_percent(1, 1, 1);
     Rast_close(map_id);
@@ -244,7 +245,8 @@ int main(int argc, char **argv)
 	bas_id = Rast_open_new(bas_name, CELL_TYPE);
 
 	for (i = 0; i < nrows; i++) {
-	    read(fm, out_buf, bufsz);
+	    if (read(fm, out_buf, bufsz) < 0)
+                G_warning(_("Error reading from file fd=%d\n"), fm);
 	    Rast_put_row(bas_id, out_buf, CELL_TYPE);
 	}
 
@@ -259,10 +261,12 @@ int main(int argc, char **argv)
     G_important_message(_("Writing output raster maps..."));
     for (i = 0; i < nrows; i++) {
         G_percent(i, nrows, 5);
-	read(fe, in_buf, bnd.sz);
+	if (read(fe, in_buf, bnd.sz) < 0)
+            G_warning(_("Error reading from file fd=%d\n"), fe);
 	put_row(new_id, in_buf);
 
-	read(fd, out_buf, bufsz);
+	if (read(fd, out_buf, bufsz) < 0)
+            G_warning(_("Error reading from file fd=%d\n"), fd);
 
 	for (j = 0; j < ncols; j += 1)
 	    out_buf[j] = dir_type(type, out_buf[j]);

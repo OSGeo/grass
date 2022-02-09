@@ -90,12 +90,18 @@ static void read_gmt_header(struct GRD_HEADER *header, int swap_flag, FILE *fp)
     read_double(fp, swap_flag, &header->z_scale_factor);
     read_double(fp, swap_flag, &header->z_add_offset);
 
-    fread(&header->x_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
-    fread(&header->y_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
-    fread(&header->z_units, sizeof(char[GRD_UNIT_LEN]),    1, fp);
-    fread(&header->title,   sizeof(char[GRD_TITLE_LEN]),   1, fp);
-    fread(&header->command, sizeof(char[GRD_COMMAND_LEN]), 1, fp);
-    fread(&header->remark,  sizeof(char[GRD_REMARK_LEN]),  1, fp);
+    if (fread(&header->x_units, sizeof(char[GRD_UNIT_LEN]),    1, fp) != 1)
+        G_warning(_("Error reading x_units from file"));
+    if (fread(&header->y_units, sizeof(char[GRD_UNIT_LEN]),    1, fp) != 1)
+        G_warning(_("Error reading y_units from file"));
+    if (fread(&header->z_units, sizeof(char[GRD_UNIT_LEN]),    1, fp) != 1)
+        G_warning(_("Error reading z_units from file"));
+    if (fread(&header->title,   sizeof(char[GRD_TITLE_LEN]),   1, fp) != 1)
+        G_warning(_("Error reading title from file"));
+    if (fread(&header->command, sizeof(char[GRD_COMMAND_LEN]), 1, fp) != 1)
+        G_warning(_("Error reading command from file"));
+    if (fread(&header->remark,  sizeof(char[GRD_REMARK_LEN]),  1, fp) != 1)
+        G_warning(_("Error reading remarks from file"));
 }
 
 static void get_gmt_header(const struct GRD_HEADER *header, struct Cell_head *region)

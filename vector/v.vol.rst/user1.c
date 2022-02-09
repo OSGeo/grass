@@ -409,7 +409,8 @@ int OUTGR()
 	    G_fseek
 		(Tmp_fd_cell, ((off_t)(nsizr - 1 - i) * nsizc * sizeof(FCELL)),
 		 0);
-	    fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell);
+	    if (fread(cell, sizeof(FCELL), nsizc, Tmp_fd_cell) != nsizc)
+                G_warning(_("Error reading cell from file"));
 	    Rast_put_f_row(fdcout, cell);
 	}
     }

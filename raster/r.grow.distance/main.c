@@ -353,10 +353,14 @@ int main(int argc, char **argv)
 	    check(irow, col, 1, 1);
 	}
 
-	write(temp_fd, new_x_row, ncols * sizeof(CELL));
-	write(temp_fd, new_y_row, ncols * sizeof(CELL));
-	write(temp_fd, dist_row, ncols * sizeof(DCELL));
-	write(temp_fd, new_val_row, ncols * sizeof(DCELL));
+	if (write(temp_fd, new_x_row, ncols * sizeof(CELL)) <= 0)
+            G_warning(_("Error writing to file fd=%d\n"), temp_fd);
+	if (write(temp_fd, new_y_row, ncols * sizeof(CELL)) <= 0)
+            G_warning(_("Error writing to file fd=%d\n"), temp_fd);
+	if (write(temp_fd, dist_row, ncols * sizeof(DCELL)) <= 0)
+            G_warning(_("Error writing to file fd=%d\n"), temp_fd);
+	if (write(temp_fd, new_val_row, ncols * sizeof(DCELL)) <= 0)
+            G_warning(_("Error writing to file fd=%d\n"), temp_fd);
 
 	swap_rows();
     }
@@ -378,10 +382,14 @@ int main(int argc, char **argv)
 
 	lseek(temp_fd, offset, SEEK_SET);
 
-	read(temp_fd, new_x_row, ncols * sizeof(CELL));
-	read(temp_fd, new_y_row, ncols * sizeof(CELL));
-	read(temp_fd, dist_row, ncols * sizeof(DCELL));
-	read(temp_fd, new_val_row, ncols * sizeof(DCELL));
+	if (read(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
+            G_warning(_("Error reading from file fd=%d\n"), temp_fd);
+	if (read(temp_fd, new_y_row, ncols * sizeof(CELL)) < 0)
+            G_warning(_("Error reading from file fd=%d\n"), temp_fd);
+	if (read(temp_fd, dist_row, ncols * sizeof(DCELL)) < 0)
+            G_warning(_("Error reading from file fd=%d\n"), temp_fd);
+	if (read(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
+            G_warning(_("Error reading from file fd=%d\n"), temp_fd);
 
 	for (col = 0; col < ncols; col++) {
 	    check(row, col, -1, -1);

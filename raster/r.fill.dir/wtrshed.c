@@ -103,10 +103,12 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 	    bas[i].offset = dir[i].offset = (off_t) rdline *bufsz;
 
 	    lseek(fm, bas[i].offset, SEEK_SET);
-	    read(fm, bas[i].p, bufsz);
+	    if (read(fm, bas[i].p, bufsz) < 0)
+                G_warning(_("Error reading from file fd=%d\n"), fm);
 
 	    lseek(fd, dir[i].offset, SEEK_SET);
-	    read(fd, dir[i].p, bufsz);
+	    if (read(fd, dir[i].p, bufsz) < 0)
+                G_warning(_("Error reading from file fd=%d\n"), fd);
 
 	    rdline++;
 	}
@@ -123,7 +125,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
 	    /* write one line */
 	    lseek(fm, bas[sline].offset, SEEK_SET);
-	    write(fm, bas[sline].p, bufsz);
+	    if (write(fm, bas[sline].p, bufsz) <= 0)
+                G_warning(_("Error writing to file fd=%d\n"), fm);
 
 	    /* If the bottom end of the buffers reach the bottom of the file, 
 	     * rotate the buffers and read new lines */
@@ -142,10 +145,12 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 		    (off_t) rdline *bufsz;
 
 		lseek(fm, bas[mxbuf - 1].offset, SEEK_SET);
-		read(fm, bas[mxbuf - 1].p, bufsz);
+		if (read(fm, bas[mxbuf - 1].p, bufsz) < 0)
+                    G_warning(_("Error reading from file fd=%d\n"), fm);
 
 		lseek(fd, dir[mxbuf - 1].offset, SEEK_SET);
-		read(fd, dir[mxbuf - 1].p, bufsz);
+		if (read(fd, dir[mxbuf - 1].p, bufsz) < 0)
+                    G_warning(_("Error reading from file fd=%d\n"), fd);
 
 		rdline++;
 	    }
@@ -165,10 +170,12 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 	    bas[i].offset = dir[i].offset = (off_t) rdline *bufsz;
 
 	    lseek(fm, bas[i].offset, SEEK_SET);
-	    read(fm, bas[i].p, bufsz);
+	    if (read(fm, bas[i].p, bufsz) < 0)
+                G_warning(_("Error reading from file fd=%d\n"), fm);
 
 	    lseek(fd, dir[i].offset, SEEK_SET);
-	    read(fd, dir[i].p, bufsz);
+	    if (read(fd, dir[i].p, bufsz) < 0)
+                G_warning(_("Error reading from file fd=%d\n"), fd);
 
 	    rdline--;
 	}
@@ -186,7 +193,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
 	    /* write one line */
 	    lseek(fm, bas[nline - 1].offset, SEEK_SET);
-	    write(fm, bas[nline - 1].p, bufsz);
+	    if (write(fm, bas[nline - 1].p, bufsz) < 0)
+                G_warning(_("Error writing to file fd=%d\n"), fm);
 
 	    /* Until the top of the buffers reach the top of the file, 
 	     * rotate the buffers and read new lines */
@@ -204,10 +212,12 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 		bas[0].offset = dir[0].offset = (off_t) rdline *bufsz;
 
 		lseek(fm, bas[0].offset, SEEK_SET);
-		read(fm, bas[0].p, bufsz);
+		if (read(fm, bas[0].p, bufsz) < 0)
+                    G_warning(_("Error reading from file fd=%d\n"), fm);
 
 		lseek(fd, dir[0].offset, SEEK_SET);
-		read(fd, dir[0].p, bufsz);
+		if (read(fd, dir[0].p, bufsz) < 0)
+                    G_warning(_("Error reading from file fd=%d\n"), fd);
 
 		rdline--;
 	    }

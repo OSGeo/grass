@@ -53,7 +53,8 @@ int dopolys(int fd, int fm, int nl, int ns)
 
     lseek(fd, bufsz, SEEK_SET);
     for (i = 1; i < nl - 1; i += 1) {
-	read(fd, dir, bufsz);
+	if (read(fd, dir, bufsz) < 0)
+            G_warning(_("Error reading from file fd=%d\n"), fd);
 	for (j = 1; j < ns - 1; j += 1) {
 	    if (Rast_is_c_null_value(&dir[j]) || dir[j] >= 0)
 		continue;
@@ -94,7 +95,8 @@ int dopolys(int fd, int fm, int nl, int ns)
 	    dir[cells[cnt + 1]] = cells[cnt + 2];
 	    cnt += 3;
 	}
-	write(fm, dir, bufsz);
+	if (write(fm, dir, bufsz) <= 0)
+            G_warning(_("Error writing to file fd=%d\n"), fm);
     }
 
     G_free(cells);
