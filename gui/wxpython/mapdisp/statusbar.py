@@ -568,7 +568,9 @@ class SbGoTo(SbItem):
         """Go to position"""
         try:
             e, n = self.GetValue().split(";")
-            e, n = self.ReprojectENToMap(e, n, self.mapFrame.GetProperty("useDefinedProjection"))
+            e, n = self.ReprojectENToMap(
+                e, n, self.mapFrame.GetProperty("useDefinedProjection")
+            )
             self.mapFrame.GetWindow().GoTo(e, n)
             self.widget.SetFocus()
         except ValueError:
