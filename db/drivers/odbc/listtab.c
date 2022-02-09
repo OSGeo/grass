@@ -30,7 +30,7 @@ int db__driver_list_tables(tlist, tcount, system)
     else
 	sprintf(ttype, "TABLE, VIEW");
 
-    ret = SQLTables(c->stmt, NULL, 0, NULL, 0, NULL, 0, ttype, sizeof(ttype));
+    ret = SQLTables(c->stmt, NULL, 0, NULL, 0, NULL, 0, (SQLCHAR *)ttype, sizeof(ttype));
 
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
 	db_d_append_error("SQLTables()");
