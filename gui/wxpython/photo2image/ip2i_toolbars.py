@@ -126,6 +126,12 @@ class GCPDisplayToolbar(BaseToolbar):
                 ("zoomback", BaseIcons["zoomBack"], self.parent.OnZoomBack),
                 ("zoomtomap", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
                 (None,),
+                (
+                    "mapDispSettings",
+                    BaseIcons["mapDispSettings"],
+                    self.parent.OnMapDisplayProperties,
+                ),
+                (None,),
                 ("settings", icons["settings"], self.parent.OnSettings),
                 ("help", icons["help"], self.parent.OnHelp),
                 (None,),

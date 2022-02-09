@@ -1550,16 +1550,6 @@ class MapPanel(SingleMapPanel):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
 
-    def OnMapDisplayProperties(self, event):
-        """Show Map Display Properties dialog"""
-        from mapdisp.properties import MapDisplayPropertiesDialog
-
-        dlg = MapDisplayPropertiesDialog(
-            parent=self, giface=self._giface, properties=self.mapWindowProperties
-        )
-        dlg.CenterOnParent()
-        dlg.Show()
-
     def SetProperties(
         self,
         render=False,
@@ -1574,7 +1564,7 @@ class MapPanel(SingleMapPanel):
         if self.statusbarManager:
             self.statusbarManager.SetMode(mode)
             self.StatusbarUpdate()
-            self.SetProperty("projection", projection)
+        self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes

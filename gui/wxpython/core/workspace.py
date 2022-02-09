@@ -950,7 +950,7 @@ class WriteWorkspaceFile(object):
                 )
             )
             # projection statusbar info
-            if mapdisp.GetProperty("projection") and UserSettings.Get(
+            if mapdisp.GetProperty("useDefinedProjection") and UserSettings.Get(
                 group="display", key="projection", subkey="proj4"
             ):
                 self.indent += 4
