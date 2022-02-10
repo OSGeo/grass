@@ -129,7 +129,7 @@ class Grass3dRenderer:
                 _(
                     "Screen backend '{}' does not exist. "
                     "See documentation for the list of supported backends."
-                ).format(grass_module)
+                ).format(screen_backend)
             )
 
         self.overlay = GrassRenderer(
