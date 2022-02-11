@@ -1,9 +1,7 @@
 name: Generate PGMS last commit json file
 
 on:
-  push:
-    branches:
-      - "main"
+  - push
 
 jobs:
   build:
