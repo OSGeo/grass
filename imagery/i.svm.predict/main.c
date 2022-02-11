@@ -165,8 +165,8 @@ int main(int argc, char *argv[])
     semantic_labels_group = G_malloc(group_ref.nfiles * sizeof(char *));
     for (int n = 0; n < group_ref.nfiles; n++) {
         semantic_labels_group[n] =
-            Rast_read_semantic_label(group_ref.file[n].name,
-                                     group_ref.file[n].mapset);
+            Rast_read_semantic_label_or_name(group_ref.file[n].name,
+                                             group_ref.file[n].mapset);
         if (!semantic_labels_group[n])
             G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
@@ -199,7 +199,8 @@ int main(int argc, char *argv[])
         bool found = false;
 
         for (int n = 0; n < group_ref.nfiles; n++) {
-            if (semantic_label && strcmp(semantic_label, semantic_labels_group[n]) == 0) {
+            if (semantic_label &&
+                strcmp(semantic_label, semantic_labels_group[n]) == 0) {
                 semantic_label_match_count++;
                 found = true;
                 names_ordered[n] = group_ref.file[n].name;
@@ -216,7 +217,8 @@ int main(int argc, char *argv[])
         semantic_label_match_count != group_ref.nfiles) {
         G_fatal_error(_("Unable to match all signature file bands to imagery group bands. "
                        "Signature band count: %d, imagery group band count: %d, band match count: %d."),
-                      semantic_label_count, group_ref.nfiles, semantic_label_match_count);
+                      semantic_label_count, group_ref.nfiles,
+                      semantic_label_match_count);
     }
 
     /* Pass libsvm messages through GRASS */

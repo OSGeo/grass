@@ -357,8 +357,8 @@ int main(int argc, char *argv[])
     semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
     for (int n = 0; n < group_ref.nfiles; n++) {
         semantic_labels[n] =
-            Rast_read_semantic_label(group_ref.file[n].name,
-                                     group_ref.file[n].mapset);
+            Rast_read_semantic_label_or_name(group_ref.file[n].name,
+                                             group_ref.file[n].mapset);
         if (!semantic_labels[n])
             G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
