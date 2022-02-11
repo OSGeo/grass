@@ -127,7 +127,7 @@ int db__driver_drop_table(dbString * name)
     char cmd[200];
     cursor *c;
     SQLRETURN ret;
-    char msg[OD_MSG];
+    SQLCHAR msg[OD_MSG];
     SQLINTEGER err;
     SQLCHAR ttype[50], *tname;
     SQLLEN nrow = 0;
@@ -138,7 +138,7 @@ int db__driver_drop_table(dbString * name)
     if (c == NULL)
 	return DB_FAILED;
 
-    tname = db_get_string(name);
+    tname = (SQLCHAR *)db_get_string(name);
 
     ret = SQLTables(c->stmt, NULL, 0, NULL, 0, tname, sizeof(tname), NULL, 0);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
@@ -166,10 +166,10 @@ int db__driver_drop_table(dbString * name)
     ret = SQLFetchScroll(c->stmt, SQL_FETCH_NEXT, 0);
     ret = SQLGetData(c->stmt, 4, SQL_C_CHAR, ttype, sizeof(ttype), NULL);
 
-    if (strcmp(ttype, "TABLE") == 0) {
+    if (strcmp((const char *)ttype, "TABLE") == 0) {
 	sprintf(cmd, "DROP TABLE %s", tname);
     }
-    else if (strcmp(ttype, "VIEW") == 0) {
+    else if (strcmp((const char *)ttype, "VIEW") == 0) {
 	sprintf(cmd, "DROP VIEW %s", tname);
     }
     else {
@@ -182,7 +182,7 @@ int db__driver_drop_table(dbString * name)
 
     SQLCloseCursor(c->stmt);
 
-    ret = SQLExecDirect(c->stmt, cmd, SQL_NTS);
+    ret = SQLExecDirect(c->stmt, (SQLCHAR *)cmd, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
 	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
 		      sizeof(msg), NULL);

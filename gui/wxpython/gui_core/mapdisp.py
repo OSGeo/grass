@@ -28,6 +28,7 @@ from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
 from mapdisp import statusbar as sb
+from mapwin.base import MapWindowProperties
 
 from grass.script import core as grass
 
@@ -86,6 +87,14 @@ class MapPanelBase(wx.Panel):
         # toolbars
         self.toolbars = {}
         self.iconsize = (16, 16)
+
+        # properties are shared in other objects, so defining here
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+        # update statusbar when user-defined projection changed
+        self.mapWindowProperties.useDefinedProjectionChanged.connect(
+            self.StatusbarUpdate
+        )
 
         #
         # Fancy gui
@@ -160,17 +169,17 @@ class MapPanelBase(wx.Panel):
 
     def SetProperty(self, name, value):
         """Sets property"""
-        if self.HasProperty("projection"):
-            self.statusbarManager.SetProperty(name, value)
+        if hasattr(self.mapWindowProperties, name):
+            setattr(self.mapWindowProperties, name, value)
         else:
-            self.mapWindowProperties.useDefinedProjection = value
+            self.statusbarManager.SetProperty(name, value)
 
     def GetProperty(self, name):
         """Returns property"""
-        if self.HasProperty("projection"):
-            return self.statusbarManager.GetProperty(name)
+        if hasattr(self.mapWindowProperties, name):
+            return getattr(self.mapWindowProperties, name)
         else:
-            return self.mapWindowProperties.useDefinedProjection
+            return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -483,6 +492,16 @@ class MapPanelBase(wx.Panel):
     def OnZoomToDefault(self, event):
         """Set display geometry to match default region settings"""
         self.MapWindow.ZoomToDefault()
+
+    def OnMapDisplayProperties(self, event):
+        """Show Map Display Properties dialog"""
+        from mapdisp.properties import MapDisplayPropertiesDialog
+
+        dlg = MapDisplayPropertiesDialog(
+            parent=self, mapframe=self, properties=self.mapWindowProperties
+        )
+        dlg.CenterOnParent()
+        dlg.Show()
 
 
 class SingleMapPanel(MapPanelBase):

@@ -30,7 +30,6 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from gui_core.mapdisp import SingleMapPanel
 from gui_core.wrap import Menu
 from mapwin.buffered import BufferedMapWindow
-from mapwin.base import MapWindowProperties
 
 import mapdisp.statusbar as sb
 import gcp.statusbar as sbgcp
@@ -78,9 +77,7 @@ class MapPanel(SingleMapPanel):
         )
 
         self._giface = giface
-        # properties are shared in other objects, so defining here
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
+
         self.mapWindowProperties.alignExtent = True
 
         #
@@ -105,11 +102,8 @@ class MapPanel(SingleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
-            sb.SbProjection,
             sbgcp.SbGoToGCP,
             sbgcp.SbRMSError,
         ]
@@ -117,7 +111,7 @@ class MapPanel(SingleMapPanel):
         # create statusbar and its manager
         self.statusbar = self.CreateStatusbar(statusbarItems)
 
-        self.statusbarManager.SetMode(8)  # goto GCP
+        self.statusbarManager.SetMode(5)  # goto GCP
 
         #
         # Init map display (buffered DC & set default cursor)

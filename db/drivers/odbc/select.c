@@ -9,7 +9,8 @@ int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
     cursor *c;
     SQLRETURN ret;
     SQLINTEGER err;
-    char *sql, msg[OD_MSG];
+    char *sql;
+    SQLCHAR msg[OD_MSG];
     dbTable *table;
     int nrows;
 
@@ -23,7 +24,7 @@ int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 
     sql = db_get_string(sel);
 
-    ret = SQLExecDirect(c->stmt, sql, SQL_NTS);
+    ret = SQLExecDirect(c->stmt, (SQLCHAR *)sql, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
 	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
 		      sizeof(msg), NULL);
