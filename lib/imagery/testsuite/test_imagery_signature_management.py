@@ -807,7 +807,6 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertEqual(ret, 0)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 
-
     def test_sig_in_different_mapset(self):
         # Should return 0 signatures from a different mapset
         # Sig type
