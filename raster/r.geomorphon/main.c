@@ -193,8 +193,6 @@ int main(int argc, char **argv)
         par_profileformat->description = _("Profile output format");
         par_profileformat->guisection = _("Profile");
 
-        G_option_requires(par_coords, par_profiledata, par_profileformat, NULL);
-
         if (G_parser(argc, argv))
             exit(EXIT_FAILURE);
     }
