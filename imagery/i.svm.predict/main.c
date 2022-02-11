@@ -51,9 +51,9 @@ int main(int argc, char *argv[])
 
     struct Ref group_ref;
     char **names_ordered, **mapsets_ordered;
-    const char **bandrefs_group, **bandrefs_svm;
-    char bandref[GNAME_MAX];
-    int bandref_count = 0, bandref_match_count = 0;
+    const char **semantic_labels_group, **semantic_labels_svm;
+    char semantic_label[GNAME_MAX];
+    int semantic_label_count = 0, semantic_label_match_count = 0;
 
     struct svm_model *model;
 
@@ -162,13 +162,13 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
     }
-    bandrefs_group = G_malloc(group_ref.nfiles * sizeof(char *));
+    semantic_labels_group = G_malloc(group_ref.nfiles * sizeof(char *));
     for (int n = 0; n < group_ref.nfiles; n++) {
-        bandrefs_group[n] =
-            Rast_read_bandref(group_ref.file[n].name,
-                              group_ref.file[n].mapset);
-        if (!bandrefs_group[n])
-            G_fatal_error(_("Raster map <%s@%s> lacks band reference"),
+        semantic_labels_group[n] =
+            Rast_read_semantic_label(group_ref.file[n].name,
+                                     group_ref.file[n].mapset);
+        if (!semantic_labels_group[n])
+            G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
     }
 
@@ -188,19 +188,19 @@ int main(int argc, char *argv[])
 
     /* Reorder group items to match order from the signature file */
     misc_file =
-        G_fopen_old_misc(sigfile_dir, "bandref", name_sigfile,
+        G_fopen_old_misc(sigfile_dir, "semantic_label", name_sigfile,
                          mapset_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
     names_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
     mapsets_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
-    while (fscanf(misc_file, "%" XSTR(GNAME_MAX) "s", bandref) == 1) {
-        bandref_count++;
+    while (fscanf(misc_file, "%" XSTR(GNAME_MAX) "s", semantic_label) == 1) {
+        semantic_label_count++;
         bool found = false;
 
         for (int n = 0; n < group_ref.nfiles; n++) {
-            if (bandref && strcmp(bandref, bandrefs_group[n]) == 0) {
-                bandref_match_count++;
+            if (semantic_label && strcmp(semantic_label, semantic_labels_group[n]) == 0) {
+                semantic_label_match_count++;
                 found = true;
                 names_ordered[n] = group_ref.file[n].name;
                 mapsets_ordered[n] = group_ref.file[n].mapset;
@@ -208,15 +208,15 @@ int main(int argc, char *argv[])
             }
         }
         if (!found)
-            G_fatal_error(_("Imagery group does not contain a raster with a band reference '%s'"),
-                          bandref);
+            G_fatal_error(_("Imagery group does not contain a raster with a semantic label '%s'"),
+                          semantic_label);
     }
     fclose(misc_file);
-    if (bandref_match_count != bandref_count ||
-        bandref_match_count != group_ref.nfiles) {
+    if (semantic_label_match_count != semantic_label_count ||
+        semantic_label_match_count != group_ref.nfiles) {
         G_fatal_error(_("Unable to match all signature file bands to imagery group bands. "
                        "Signature band count: %d, imagery group band count: %d, band match count: %d."),
-                      bandref_count, group_ref.nfiles, bandref_match_count);
+                      semantic_label_count, group_ref.nfiles, semantic_label_match_count);
     }
 
     /* Pass libsvm messages through GRASS */

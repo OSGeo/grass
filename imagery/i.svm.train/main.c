@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     char in_path[GPATH_MAX], out_path[GPATH_MAX];
 
     struct Ref group_ref;
-    const char **bandrefs;
+    const char **semantic_labels;
 
     struct svm_parameter parameters;
     const char *parameters_error;
@@ -354,13 +354,13 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
     }
-    bandrefs = G_malloc(group_ref.nfiles * sizeof(char *));
+    semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
     for (int n = 0; n < group_ref.nfiles; n++) {
-        bandrefs[n] =
-            Rast_read_bandref(group_ref.file[n].name,
-                              group_ref.file[n].mapset);
-        if (!bandrefs[n])
-            G_fatal_error(_("Raster map <%s@%s> lacks band reference"),
+        semantic_labels[n] =
+            Rast_read_semantic_label(group_ref.file[n].name,
+                                     group_ref.file[n].mapset);
+        if (!semantic_labels[n])
+            G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
     }
 
@@ -407,15 +407,15 @@ int main(int argc, char *argv[])
     }
     svm_free_and_destroy_model(&model);
     /* Write out band reference info */
-    misc_file = G_fopen_new_misc(sigfile_dir, "bandref", name_sigfile);
+    misc_file = G_fopen_new_misc(sigfile_dir, "semantic_label", name_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to write trained model to file '%s'."),
                       name_sigfile);
     for (int n = 0; n < group_ref.nfiles; n++) {
-        fprintf(misc_file, "%s\n", bandrefs[n]);
+        fprintf(misc_file, "%s\n", semantic_labels[n]);
     }
     fclose(misc_file);
-    G_free(bandrefs);
+    G_free(semantic_labels);
 
     /* Copy CATs file. Will be used for prediction result maps */
     G_verbose_message("Copying category information");

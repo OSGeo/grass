@@ -44,7 +44,7 @@ from grass.lib.imagery import (
 H_DIRSEP = HOST_DIRSEP.decode("utf-8")
 
 
-class GetSignaturesElementTestCase(TestCase):
+class GetSignaturesDirTestCase(TestCase):
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIG)
@@ -57,11 +57,11 @@ class GetSignaturesElementTestCase(TestCase):
 
     def test_get_libsvm(self):
         elem = ctypes.create_string_buffer(GNAME_MAX)
-        I__get_signatures_element(elem, I_SIGFILE_TYPE_LIBSVM)
+        I_get_signatures_dir(elem, I_SIGFILE_TYPE_LIBSVM)
         self.assertEqual(utils.decode(elem.value), f"signatures{H_DIRSEP}libsvm")
 
 
-class MakeSignaturesElementTestCase(TestCase):
+class MakeSignaturesDirTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.org_mapset = Mapset()
@@ -99,12 +99,12 @@ class MakeSignaturesElementTestCase(TestCase):
         )
 
     def test_make_libsvm(self):
-        I__make_signatures_element(I_SIGFILE_TYPE_LIBSVM)
+        I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "libsvm"))
         )
         # There should not be any side effects of calling function multiple times
-        I__make_signatures_element(I_SIGFILE_TYPE_SIGSET)
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "libsvm"))
         )
@@ -302,9 +302,11 @@ class SignaturesRemoveTestCase(TestCase):
         open(sigfile_name2, "a").close()
         self.sigdirs.append(sig_dir2)
         sig_name3 = tempname(10)
-        sigfile_name3 = f"{self.mpath}/signatures/sig/{sig_name3}"
+        sig_dir3 = f"{self.mpath}/signatures/sig/{sig_name3}"
+        os.makedirs(sig_dir3)
+        sigfile_name3 = f"{sig_dir3}/sig"
         open(sigfile_name3, "a").close()
-        self.sigfiles.append(sigfile_name3)
+        self.sigdirs.append(sig_dir3)
         # Try to remove with wrong type
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
         self.assertEqual(ret, 1)
@@ -335,9 +337,11 @@ class SignaturesRemoveTestCase(TestCase):
     def test_remove_nonexisting_libsvm(self):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
-        sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
+        sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
+        os.makedirs(sig_dir1)
+        sigfile_name1 = f"{sig_dir1}/sig"
         open(sigfile_name1, "a").close()
-        self.sigfiles.append(sigfile_name1)
+        self.sigdirs.append(sig_dir1)
         sig_name2 = tempname(10)
         # Do not create sig_name2 matching file
         sig_name3 = tempname(10)

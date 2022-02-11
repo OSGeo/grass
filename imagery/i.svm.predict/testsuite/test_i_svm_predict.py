@@ -48,7 +48,7 @@ class IOValidationTest(TestCase):
         cls.runModule("r.mapcalc", expression=f"{cls.rastt}=1", quiet=True)
         cls.tmp_rasts.append(cls.rastt)
         cls.runModule("r.colors", _map=cls.rastt, color="grey", quiet=True)
-        cls.runModule("r.support", _map=cls.rastt, bandref="GRASS_RNDT", quiet=True)
+        cls.runModule("r.support", _map=cls.rastt, semantic_label="GRASS_RNDT", quiet=True)
         # A raster without a band reference
         cls.rast1 = grass.tempname(10)
         cls.runModule("r.mapcalc", expression=f"{cls.rast1}=1", quiet=True)
@@ -58,11 +58,11 @@ class IOValidationTest(TestCase):
         cls.rast2 = grass.tempname(10)
         cls.runModule("r.mapcalc", expression=f"{cls.rast2}=1", quiet=True)
         cls.tmp_rasts.append(cls.rast2)
-        cls.runModule("r.support", _map=cls.rast2, bandref="GRASS_RND1", quiet=True)
+        cls.runModule("r.support", _map=cls.rast2, semantic_label="GRASS_RND1", quiet=True)
         cls.rast3 = grass.tempname(10)
         cls.runModule("r.mapcalc", expression=f"{cls.rast3}=1", quiet=True)
         cls.tmp_rasts.append(cls.rast3)
-        cls.runModule("r.support", _map=cls.rast3, bandref="GRASS_RND2", quiet=True)
+        cls.runModule("r.support", _map=cls.rast3, semantic_label="GRASS_RND2", quiet=True)
         # An empty imagery group
         cls.group1 = grass.tempname(10)
         cls.runModule("i.group", group=cls.group1, _input=(cls.rast1,), quiet=True)
@@ -130,8 +130,8 @@ class IOValidationTest(TestCase):
         self.assertIn(self.group1, isvm.outputs.stderr)
 
     @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
-    def test_rast_no_bandref(self):
-        """One of imagery group rasters lacks band reference"""
+    def test_rast_no_semantic_label(self):
+        """One of imagery group rasters lacks semantic label"""
         rast = grass.tempname(10)
         isvm = SimpleModule(
             "i.svm.predict",
@@ -146,8 +146,8 @@ class IOValidationTest(TestCase):
         self.assertIn(self.rast1, isvm.outputs.stderr)
 
     @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
-    def test_bandref_mismatch1(self):
-        """There are more band references in the signature file than in the group"""
+    def test_semantic_label_mismatch1(self):
+        """There are more semantic labels in the signature file than in the group"""
         rast = grass.tempname(10)
         isvm = SimpleModule(
             "i.svm.predict",
@@ -167,8 +167,8 @@ class IOValidationTest(TestCase):
         )
 
     @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
-    def test_bandref_mismatch1(self):
-        """There are more band references in the group than in the signature file"""
+    def test_semantic_label_mismatch1(self):
+        """There are more semantic labels in the group than in the signature file"""
         rast = grass.tempname(10)
         isvm = SimpleModule(
             "i.svm.predict",
