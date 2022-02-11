@@ -180,48 +180,39 @@ int start_mon(const char *name, const char *output, int select,
 
     if (G_strncasecmp(name, "wx", 2) == 0) {
         sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings from wxGUI */
-        if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+        write(fd, buf, strlen(buf));
         sprintf(buf, "GRASS_RENDER_FILE_READ=FALSE\n");
-        if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+        write(fd, buf, strlen(buf));
         sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
-        if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+        write(fd, buf, strlen(buf));
     }
     else {
         sprintf(buf, "GRASS_RENDER_IMMEDIATE=%s\n", name);
-        if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+        write(fd, buf, strlen(buf));
         sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
-        if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+        write(fd, buf, strlen(buf));
+
     }
     sprintf(buf, "GRASS_RENDER_FILE=%s\n", out_file);
-    if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+    write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
-    if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+    write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
-    if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+    write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_LEGEND_FILE=%s\n", leg_file);
-    if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+    write(fd, buf, strlen(buf));
+
 
     if (bgcolor) {
 	if (strcmp(bgcolor, "none") == 0)
 	    sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
 	else
 	    sprintf(buf, "GRASS_RENDER_BACKGROUNDCOLOR=%s\n", bgcolor);
-	if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+	write(fd, buf, strlen(buf));
     }
     if (truecolor) {
 	sprintf(buf, "GRASS_RENDER_TRUECOLOR=TRUE\n");
-	if (write(fd, buf, strlen(buf)) < 0)
-            G_warning(_("Unable to write string '%s' to file."), buf);
+	write(fd, buf, strlen(buf));
     }
     close(fd);
    

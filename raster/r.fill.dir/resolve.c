@@ -109,8 +109,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
     /* select a direction when there are multiple non-flat links */
     lseek(fd, bnd->sz, SEEK_SET);
     for (i = 1; i < nl - 1; i += 1) {
-	if (read(fd, bnd->b[0], bnd->sz) < 0)
-            G_warning(_("Error reading from file fd=%d\n"), fd);
+	read(fd, bnd->b[0], bnd->sz);
 	for (j = 1; j < bnd->ns - 1; j += 1) {
 	    offset = j * isz;
 	    if (Rast_is_c_null_value((CELL *) (bnd->b[0] + offset)))
@@ -121,8 +120,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	    memcpy(bnd->b[0] + offset, &cvalue, isz);
 	}
 	lseek(fd, -bnd->sz, SEEK_CUR);
-	if (write(fd, bnd->b[0], bnd->sz) <= 0)
-            G_warning(_("Error writing to file fd=%d\n"), fd);
+	write(fd, bnd->b[0], bnd->sz);
     }
 
     pass = 0;
@@ -161,8 +159,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	    } while (goagain);
 
 	    lseek(fd, (off_t) i * bnd->sz, SEEK_SET);
-	    if (write(fd, bnd->b[1], bnd->sz) <= 0)
-                G_warning(_("Error writing to file fd=%d\n"), fd);
+	    write(fd, bnd->b[1], bnd->sz);
 
 	}
 
@@ -199,8 +196,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
 	    } while (goagain);
 
 	    lseek(fd, (off_t) i * bnd->sz, SEEK_SET);
-	    if (write(fd, bnd->b[1], bnd->sz) <= 0)
-                G_warning(_("Error writing to file fd=%d\n"), fd);
+	    write(fd, bnd->b[1], bnd->sz);
 	}
 
 	if (!activity) {

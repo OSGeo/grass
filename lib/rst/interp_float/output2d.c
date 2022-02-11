@@ -148,7 +148,7 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_dx, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
+	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
 	    Rast_put_f_row(cf2, cell1);
 	}
     }
@@ -159,7 +159,7 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_dy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
+	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
 	    Rast_put_f_row(cf3, cell1);
 	}
     }
@@ -170,7 +170,7 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_xx, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
+	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
 	    Rast_put_f_row(cf4, cell1);
 	}
     }
@@ -181,7 +181,7 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_yy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
+	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
 	    Rast_put_f_row(cf5, cell1);
 	}
     }
@@ -192,7 +192,7 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_xy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
+	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
 	    Rast_put_f_row(cf6, cell1);
 	}
     }

@@ -135,12 +135,9 @@ void update_reclass_maps(const char *name, const char *mapset)
 	if (fp == NULL)
 	    continue;
 
-	if (fgets(buf2, 255, fp) == NULL)
-            G_warning(_("Unable to read data into variable."));
-	if (fgets(buf2, 255, fp) == NULL)
-            G_warning(_("Unable to read data into variable."));
-	if (fgets(buf2, 255, fp) == NULL)
-            G_warning(_("Unable to read data into variable."));
+	fgets(buf2, 255, fp);
+	fgets(buf2, 255, fp);
+	fgets(buf2, 255, fp);
 
 	ptr = G_ftell(fp);
 	G_fseek(fp, 0L, SEEK_END);
@@ -148,8 +145,7 @@ void update_reclass_maps(const char *name, const char *mapset)
 
 	str = (char *)G_malloc(l);
 	G_fseek(fp, ptr, SEEK_SET);
-	if (fread(str, l, 1, fp) != 1)
-            G_warning(_("Error encountered reading from file."));
+	fread(str, l, 1, fp);
 	fclose(fp);
 
 	fp = fopen(buf1, "w");

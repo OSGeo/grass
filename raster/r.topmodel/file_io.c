@@ -10,8 +10,7 @@ void get_line(FILE * fp, char *buffer)
     char *str;
 
     buffer[0] = 0;
-    if (fscanf(fp, "%[^\n]", buffer) == EOF)
-        G_warning(_("Error reading from file"));
+    fscanf(fp, "%[^\n]", buffer);
     getc(fp);
 
     if ((str = (char *)strchr(buffer, '#')))

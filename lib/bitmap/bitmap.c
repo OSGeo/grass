@@ -322,24 +322,20 @@ struct BM *BM_file_read(FILE * fp)
     if (NULL == (map = (struct BM *)malloc(sizeof(struct BM))))
 	return (NULL);
 
-    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char))
-        return NULL;
-
+    fread(&c, sizeof(char), sizeof(char), fp);
     if (c != BM_MAGIC)
 	return NULL;
 
-    if (fread(buf, BM_TEXT_LEN, sizeof(char), fp) != sizeof(char))
-        return NULL;
+    fread(buf, BM_TEXT_LEN, sizeof(char), fp);
 
-    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char))
-        return NULL;
+    fread(&c, sizeof(char), sizeof(char), fp);
     map->sparse = c;
 
 
-    if (fread(&(map->rows), sizeof(map->rows), sizeof(char), fp) != sizeof(char))
-        return NULL;
-    if (fread(&(map->cols), sizeof(map->cols), sizeof(char), fp) != sizeof(char))
-        return NULL;
+    fread(&(map->rows), sizeof(map->rows), sizeof(char), fp);
+
+    fread(&(map->cols), sizeof(map->cols), sizeof(char), fp);
+
     map->bytes = (map->cols + 7) / 8;
 
     if (map->sparse == BM_SPARSE)
@@ -369,8 +365,7 @@ struct BM *BM_file_read(FILE * fp)
 
     for (y = 0; y < map->rows; y++) {
 	/* first get number of links */
-	if (fread(&i, sizeof(i), sizeof(char), fp) != sizeof(char))
-            return NULL;
+	fread(&i, sizeof(i), sizeof(char), fp);
 	cnt = i;
 
 
@@ -387,12 +382,10 @@ struct BM *BM_file_read(FILE * fp)
 		p = p2;
 	    }
 
-	    if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char))
-                return NULL;
+	    fread(&n, sizeof(n), sizeof(char), fp);
 	    p->count = n;
 
-	    if (fread(&n, sizeof(n), sizeof(char), fp) != sizeof(char))
-                return NULL;
+	    fread(&n, sizeof(n), sizeof(char), fp);
 	    p->val = n;
 	    p->next = NULL;
 	}

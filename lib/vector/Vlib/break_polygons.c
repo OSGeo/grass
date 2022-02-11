@@ -226,8 +226,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 	    if (fpoint > 0) {	/* Found */
 		/* read point */
 		lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2), SEEK_SET);
-		if (read(xpntfd, &XPnt, sizeof(XPNT2)) <= 0)
-                    G_warning(_("Error or no bytes returned on read()"));
+		read(xpntfd, &XPnt, sizeof(XPNT2));
 		if (XPnt.cross == 1)
 		    continue;	/* already marked */
 
@@ -237,8 +236,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 		    nmarks++;
 		    /* write point */
 		    lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2), SEEK_SET);
-		    if (write(xpntfd, &XPnt, sizeof(XPNT2)) <= 0)
-                        G_warning(_("Error or no bytes written on write()"));
+		    write(xpntfd, &XPnt, sizeof(XPNT2));
 		}
 		else {
 		    G_debug(3, "a1 = %f xa1 = %f a2 = %f xa2 = %f", a1,
@@ -252,8 +250,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 			nmarks++;
 			/* write point */
 			lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2), SEEK_SET);
-			if (write(xpntfd, &XPnt, sizeof(XPNT2)) <= 0)
-                            G_warning(_("Error or no bytes written on write()"));
+			write(xpntfd, &XPnt, sizeof(XPNT2));
 		    }
 		}
 	    }
@@ -274,8 +271,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 		}
 		/* write point */
 		lseek(xpntfd, (off_t) (npoints - 1) * sizeof(XPNT2), SEEK_SET);
-		if (write(xpntfd, &XPnt, sizeof(XPNT2)) <= 0)
-                    G_warning(_("Error or no bytes written on write()"));
+		write(xpntfd, &XPnt, sizeof(XPNT2));
 
 		npoints++;
 	    }
@@ -333,8 +329,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 
 	    /* read point */
 	    lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2), SEEK_SET);
-	    if (read(xpntfd, &XPnt, sizeof(XPNT2)) <= 0)
-                G_warning(_("Error or no bytes read on read()"));
+	    read(xpntfd, &XPnt, sizeof(XPNT2));
 
 	    /* break or write last segment of broken line */
 	    if ((j == (Points->n_points - 1) && broken) ||
@@ -368,8 +363,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *E
 			XPnt.used = 1;
 			/* write point */
 			lseek(xpntfd, (off_t) (fpoint - 1) * sizeof(XPNT2), SEEK_SET);
-			if (write(xpntfd, &XPnt, sizeof(XPNT2)) <= 0)
-                            G_warning(_("Error or no bytes returned on write()"));
+			write(xpntfd, &XPnt, sizeof(XPNT2));
 		    }
 		}
 

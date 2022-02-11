@@ -6,7 +6,6 @@
 #include <float.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/glocale.h>
 #include "tinf.h"
 
 /* get the slope between two cells and return a slope direction */
@@ -154,8 +153,7 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
 	advance_band3(fe, bnd);
 	if (fill_row(nl, bnd->ns, bnd)) {
 	    lseek(fe, (off_t) i * bnd->sz, SEEK_SET);
-	    if (write(fe, bnd->b[1], bnd->sz) <= 0)
-                G_warning(_("Error writing to file fd=%d\n"), fe);
+	    write(fe, bnd->b[1], bnd->sz);
 	}
     }
     /* why on the last row? it's an outer row */
@@ -163,8 +161,7 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
     advance_band3(0, bnd);
     if (fill_row(nl, bnd->ns, bnd)) {
 	lseek(fe, (off_t) i * bnd->sz, SEEK_SET);
-	if (write(fe, bnd->b[1], bnd->sz) <= 0)
-            G_warning(_("Error writing to file fd=%d\n"), fe);
+	write(fe, bnd->b[1], bnd->sz);
     }
 #endif
     /* determine the flow direction in each cell.  On outer rows and columns
@@ -179,15 +176,13 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
     for (i = 0; i < nl; i += 1) {
 	advance_band3(fe, bnd);
 	build_one_row(i, nl, bnd->ns, bnd, dir);
-	if (write(fd, dir, bufsz) <= 0)
-            G_warning(_("Error writing to file fd=%d\n"), fd);
+	write(fd, dir, bufsz);
     }
     /* why this extra row ? */
 #if 0
     advance_band3(fe, bnd);
     build_one_row(i, nl, bnd->ns, bnd, dir);
-    if (write(fd, dir, bufsz) <= 0)
-        G_warning(_("Error writing to file fd=%d\n"), fd);
+    write(fd, dir, bufsz);
 #endif
 
     G_free(dir);

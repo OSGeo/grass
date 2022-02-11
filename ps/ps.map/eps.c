@@ -19,8 +19,7 @@ int eps_bbox(char *eps, double *llx, double *lly, double *urx, double *ury)
 	return (0);
     }
     /* test if first row contains '%!PS-Adobe-m.n EPSF-m.n' string */
-    if (fgets(buf, 200, fp) == NULL)
-        G_warning(_("Error reading from file"));
+    fgets(buf, 200, fp);
     if (sscanf(buf, "%%!PS-Adobe-%d.%d EPSF-%d.%d", &v1, &v2, &v3, &v4) < 4) {
 	fprintf(stderr, "file <%s> is not in EPS format\n", eps);
 	fclose(fp);

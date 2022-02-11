@@ -229,8 +229,7 @@ int input_proj4(char *proj4params)
      *       OSRImportFromWkt  */
     if (strcmp(proj4params, "-") == 0) {
 	infd = stdin;
-	if (fgets(buff, sizeof(buff), infd) == NULL)
-            G_warning(_("Unable to read from file."));
+	fgets(buff, sizeof(buff), infd);
     }
     else
 	strcpy(buff, proj4params);

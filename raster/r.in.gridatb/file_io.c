@@ -15,13 +15,11 @@ void rdwr_gridatb(void)
     fp = fopen(file, "r");
 
     buf[0] = 0;
-    if (fscanf(fp, "%[^\n]", buf) == EOF)
-        G_warning(_("Unable to read from file"));
+    fscanf(fp, "%[^\n]", buf);
     if (!buf[0])
 	getc(fp);
 
-    if (fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res) == EOF)
-        G_warning(_("Unable to read from file"));
+    fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res);
     cellhd.ew_res = cellhd.ns_res;
     cellhd.south = 0;
     cellhd.north = cellhd.south + cellhd.ns_res * cellhd.rows;
@@ -54,8 +52,7 @@ void rdwr_gridatb(void)
 
 	for (j = 0; j < cellhd.cols; j++) {
 	    idx = 9999.0;
-	    if (fscanf(fp, "%f", &idx) == EOF)
-                G_warning(_("Unable to read from file"));
+	    fscanf(fp, "%f", &idx);
 	    if (idx >= 9999.0) {
 		Rast_set_f_null_value(&(cell[j]), 1);
 	    }
