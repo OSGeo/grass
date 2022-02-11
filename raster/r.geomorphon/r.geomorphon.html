@@ -52,8 +52,8 @@ impact of very high distance (in meters) of search radius which may not
 detect elevation difference if this is at very far distance. Important
 especially with low resolution DEMS.
 
-
 <h2>OPTIONS</h2>
+
 <DL>
 <DT><b>-m</b></DT>
 <DD>All distance parameters (search, skip, flat distances) are supplied as meters instead of cells (default). To avoid situation when supplied distances is smaller than one cell program first check if supplied distance is longer than one cell in both NS and WE directions. For LatLong projection only NS distance checked, because in latitude angular unit comprise always bigger or equal distance than longitude one. If distance is supplied in cells, For all projections is recalculated into meters according formula: <code>number_of_cells*resolution_along_NS_direction</code>. It is important if geomorphons are calculated for large areas in LatLong projection.</DD>
@@ -122,7 +122,6 @@ parameters, as well as its intermediate and final results.</DD>
 <DD>returns length of the shorter side of the bounding box rectangle calculated for geomorphon rotated to fit least square line.</DD>
 </DL>
 
-
 <h2>NOTES</h2>
 
 From computational point of view there are no limitations of input DEM and
@@ -164,7 +163,6 @@ r.category eu_dem_25m_geomorph
 <img src="r_geomorphon.png" border="0" alt="Geomorphon calculation example using the EU DEM 25m (with search=11)"><br>
 </center>
 
-
 <h3>Extraction of peaks</h3>
 
 Using the resulting terrestrial landforms map, single landforms can
@@ -181,13 +179,6 @@ v.info input=eu_dem_25m_peaks
 <img src="r_geomorphon_peaks.png" border="0" alt="Extraction of peaks from EU DEM 25m (with search=11)"><br>
 </center>
 
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.param.scale.html">r.param.scale</a>
-</em>
-
-
 <h2>REFERENCES</h2>
 
 <ul>
@@ -200,11 +191,12 @@ recognition approach to classification and mapping of landforms,
 Geomorphology, vol. 182, 147-156 (DOI: <a href="http://dx.doi.org/10.1016/j.geomorph.2012.11.005">10.1016/j.geomorph.2012.11.005</a>)</li>
 </ul>
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.param.scale.html">r.param.scale</a>
+</em>
 
 <h2>AUTHORS</h2>
-Jarek Jasiewicz, Tomek Stepinski (merit contribution)
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Jarek Jasiewicz, Tomek Stepinski (merit contribution)

@@ -34,11 +34,6 @@
 #include "sortutils.h"
 
 
-/* frequency; used to print progress dots */
-static const int DOT_CYCLE = 50;
-static const int PQSIZE_CYCLE = 100;
-
-
 /* globals in common.H
 
 extern statsRecorder *stats;       stats file 

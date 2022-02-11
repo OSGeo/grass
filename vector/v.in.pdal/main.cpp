@@ -234,50 +234,6 @@ int main(int argc, char *argv[])
               " or WKT definition");
     input_srs_opt->guisection = _("Projection");
 
-    Option *max_ground_window_opt = G_define_option();
-    max_ground_window_opt->key = "max_ground_window_size";
-    max_ground_window_opt->type = TYPE_DOUBLE;
-    max_ground_window_opt->required = NO;
-    max_ground_window_opt->answer = G_store("33");
-    max_ground_window_opt->description =
-        _("Maximum window size for ground filter");
-    max_ground_window_opt->guisection = _("Ground filter");
-
-    Option *ground_slope_opt = G_define_option();
-    ground_slope_opt->key = "ground_slope";
-    ground_slope_opt->type = TYPE_DOUBLE;
-    ground_slope_opt->required = NO;
-    ground_slope_opt->answer = G_store("1.0");
-    ground_slope_opt->description = _("Slope for ground filter");
-    ground_slope_opt->guisection = _("Ground filter");
-
-    Option *max_ground_distance_opt = G_define_option();
-    max_ground_distance_opt->key = "max_ground_distance";
-    max_ground_distance_opt->type = TYPE_DOUBLE;
-    max_ground_distance_opt->required = NO;
-    max_ground_distance_opt->answer = G_store("2.5");
-    max_ground_distance_opt->description =
-        _("Maximum distance for ground filter");
-    max_ground_distance_opt->guisection = _("Ground filter");
-
-    Option *init_ground_distance_opt = G_define_option();
-    init_ground_distance_opt->key = "initial_ground_distance";
-    init_ground_distance_opt->type = TYPE_DOUBLE;
-    init_ground_distance_opt->required = NO;
-    init_ground_distance_opt->answer = G_store("0.15");
-    init_ground_distance_opt->description =
-        _("Initial distance for ground filter");
-    init_ground_distance_opt->guisection = _("Ground filter");
-
-    Option *ground_cell_size_opt = G_define_option();
-    ground_cell_size_opt->key = "ground_cell_size";
-    ground_cell_size_opt->type = TYPE_DOUBLE;
-    ground_cell_size_opt->required = NO;
-    ground_cell_size_opt->answer = G_store("1");
-    ground_cell_size_opt->description =
-        _("Initial distance for ground filter");
-    ground_cell_size_opt->guisection = _("Ground filter");
-
     Flag *nocats_flag = G_define_flag();
     nocats_flag->key = 'c';
     nocats_flag->label =
@@ -292,41 +248,8 @@ int main(int argc, char *argv[])
     region_flag->guisection = _("Selection");
     region_flag->description = _("Limit import to the current region");
 
-    Flag *extract_ground_flag = G_define_flag();
-    extract_ground_flag->key = 'j';
-    extract_ground_flag->label =
-        _("Classify and extract ground points");
-    extract_ground_flag->description =
-        _("This assignes class 2 to the groud points");
-    extract_ground_flag->guisection = _("Ground filter");
-
-    // TODO: by inverting class filter and choosing 2 we can select non-groud points
-    // this can be done as a separate flag (generally useful?)
-    // or this flag can be changed (only ground is classified anyway)
-    // and it would Classify ground and extract non-ground
-    // probably better if only one step is required to get ground and non-ground
-    Flag *classify_ground_flag = G_define_flag();
-    classify_ground_flag->key = 'k';
-    classify_ground_flag->description = _("Classify ground points");
-    classify_ground_flag->guisection = _("Ground filter");
-
-    Flag *height_filter_flag = G_define_flag();
-    height_filter_flag->key = 'h';
-    height_filter_flag->label =
-        _("Compute height for points as a difference from ground");
-    height_filter_flag->description =
-        _("This requires points to have class 2");
-    height_filter_flag->guisection = _("Transform");
-
-    Flag *approx_ground_flag = G_define_flag();
-    approx_ground_flag->key = 'm';
-    approx_ground_flag->description =
-        _("Use approximate algorithm in ground filter");
-    approx_ground_flag->guisection = _("Ground filter");
-
     G_option_exclusive(spatial_opt, region_flag, NULL);
     G_option_exclusive(reproject_flag, over_flag, NULL);
-    G_option_exclusive(extract_ground_flag, classify_ground_flag, NULL);
     G_option_exclusive(nocats_flag, id_layer_opt, NULL);
     G_option_requires(return_layer_opt, id_layer_opt, nocats_flag, NULL);
     G_option_requires(class_layer_opt, id_layer_opt, nocats_flag, NULL);
@@ -435,53 +358,6 @@ int main(int argc, char *argv[])
         last_stage = &reprojection_filter;
     }
 
-    if (extract_ground_flag->answer || classify_ground_flag->answer) {
-        if (extract_ground_flag->answer)
-            G_message(_("Extracting ground points"));
-        if (classify_ground_flag->answer)
-            G_message(_("Classifying ground points"));
-        pdal::Options groundOptions;
-        groundOptions.add<double>("max_window_size",
-                                  atof(max_ground_window_opt->answer));
-        groundOptions.add<double>("slope",
-                                  atof(ground_slope_opt->answer));
-        groundOptions.add<double>("max_distance",
-                                  atof(max_ground_distance_opt->answer));
-        groundOptions.add<double>("initial_distance",
-                                  atof(init_ground_distance_opt->answer));
-        groundOptions.add<double>("cell_size",
-                                  atof(ground_cell_size_opt->answer));
-        groundOptions.add<bool>("classify",
-                                classify_ground_flag->answer);
-        groundOptions.add<bool>("extract",
-                                extract_ground_flag->answer);
-        groundOptions.add<bool>("approximate",
-                                approx_ground_flag->answer);
-        groundOptions.add<bool>("debug", false);
-        groundOptions.add<uint32_t>("verbose", 0);
-
-        // TODO: free this or change pointer type to shared
-        pdal::Stage * ground_stage(factory.createStage("filters.ground"));
-        if (!ground_stage)
-            G_fatal_error(_("Ground filter is not available"
-                            " (PDAL probably compiled without PCL)"));
-        ground_stage->setOptions(groundOptions);
-        ground_stage->setInput(*last_stage);
-        last_stage = ground_stage;
-    }
-
-    if (height_filter_flag->answer) {
-        // TODO: we should test with if (point_layout->hasDim(Id::Classification))
-        // but we don't have the info yet
-        // TODO: free this or change pointer type to shared
-        pdal::Stage * height_stage(factory.createStage("filters.height"));
-        if (!height_stage)
-            G_fatal_error(_("Height above ground filter is not available"
-                            " (PDAL probably compiled without PCL)"));
-        height_stage->setInput(*last_stage);
-        last_stage = height_stage;
-    }
-
     pdal::StreamCallbackFilter stream_filter;
     stream_filter.setInput(*last_stage);
     // there is no difference between 1 and 10k points in memory
@@ -562,15 +438,6 @@ int main(int argc, char *argv[])
     if (Vect_open_new(&output_vector, out_opt->answer, 1) < 0)
         G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
     Vect_hist_command(&output_vector);
-
-    // height is stored as a new attribute
-    if (height_filter_flag->answer) {
-        // TODO: This needs to be reviewed on Height vs Elevation
-        dim_to_use_as_z = point_layout->findDim("Height");
-        if (dim_to_use_as_z == pdal::Dimension::Id::Unknown)
-            G_fatal_error(_("Cannot identify the height dimension"
-                            " (probably something changed in PDAL)"));
-    }
 
     // this is just for sure, we test the individual dimensions before
     // TODO: should we test Z explicitly as well?

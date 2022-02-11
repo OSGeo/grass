@@ -19,6 +19,8 @@ import tempfile
 import grass.script as gs
 from grass.jupyter import GrassRenderer
 
+from .region import RegionManagerFor3D
+
 
 class Grass3dRenderer:
     """Creates and displays 3D visualization using GRASS GIS 3D rendering engine NVIZ.
@@ -52,6 +54,8 @@ class Grass3dRenderer:
         font: str = "sans",
         text_size: float = 12,
         renderer2d: str = "cairo",
+        use_region: bool = False,
+        saved_region: str = None,
     ):
         """Checks screen_backend and creates a temporary directory for rendering.
 
@@ -64,6 +68,10 @@ class Grass3dRenderer:
         :param font: font to use in 2D rendering
         :param text_size: default text size in 2D rendering, usually overwritten
         :param renderer2d: GRASS 2D renderer driver (options: cairo, png)
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
 
         When *resolution_fine* is 1, rasters are used in the resolution according
         to the computational region as usual in GRASS GIS.
@@ -131,7 +139,11 @@ class Grass3dRenderer:
             font=font,
             text_size=text_size,
             renderer=renderer2d,
+            use_region=use_region,
+            saved_region=saved_region,
         )
+        # rendering region setting
+        self._region_manager = RegionManagerFor3D(use_region, saved_region)
 
     @property
     def filename(self):
@@ -142,6 +154,11 @@ class Grass3dRenderer:
         file is guaranteed to exist as long as the object exists.
         """
         return self._filename
+
+    @property
+    def region_manager(self):
+        """Region manager object"""
+        return self._region_manager
 
     def render(self, **kwargs):
         """Run rendering using *m.nviz.image*.
@@ -185,10 +202,15 @@ class Grass3dRenderer:
                 if has_env_copy:
                     env = display.env()
                 else:
-                    env = os.environ
+                    env = os.environ.copy()
+                self._region_manager.set_region_from_command(env=env, **kwargs)
+                self.overlay.region_manager.set_region_from_env(env)
                 gs.run_command(module, env=env, **kwargs)
         else:
-            gs.run_command(module, **kwargs)
+            env = os.environ.copy()
+            self._region_manager.set_region_from_command(env=env, **kwargs)
+            self.overlay.region_manager.set_region_from_env(env)
+            gs.run_command(module, env=env, **kwargs)
 
         # Lazy import to avoid an import-time dependency on PIL.
         from PIL import Image  # pylint: disable=import-outside-toplevel

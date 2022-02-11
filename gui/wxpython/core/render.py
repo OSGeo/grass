@@ -869,7 +869,7 @@ class Map(object):
         projinfo = dict()
         if not grass.find_program("g.proj", "--help"):
             sys.exit(
-                _("GRASS module '%s' not found. Unable to start map " "display window.")
+                _("GRASS tool '%s' not found. Unable to start map " "display window.")
                 % "g.proj"
             )
         env = os.environ.copy()
@@ -1018,9 +1018,6 @@ class Map(object):
             self.width = int(size[0])
             self.height = int(size[1])
             if self.width < 1 or self.height < 1:
-                sys.stderr.write(
-                    _("Invalid map size %d,%d\n") % (self.width, self.height)
-                )
                 raise ValueError
         except ValueError:
             self.width = 640

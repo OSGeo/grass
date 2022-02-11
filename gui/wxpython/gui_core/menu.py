@@ -166,17 +166,17 @@ class SearchModuleWindow(wx.Panel):
             self, id=wx.ID_ANY, label=_("Adva&nced search...")
         )
         self._btnAdvancedSearch.SetToolTip(
-            _("Do advanced search using %s module") % "g.search.module"
+            _("Do advanced search using %s tool") % "g.search.module"
         )
         # tree
         self._tree = CTreeView(model=model, parent=self)
-        self._tree.SetToolTip(_("Double-click to run selected module"))
+        self._tree.SetToolTip(_("Double-click to run selected tool"))
 
         # buttons
         self._btnRun = Button(self, id=wx.ID_OK, label=_("&Run..."))
-        self._btnRun.SetToolTip(_("Run selected module from the tree"))
+        self._btnRun.SetToolTip(_("Run selected tool from the tree"))
         self._btnHelp = Button(self, id=wx.ID_ANY, label=_("H&elp"))
-        self._btnHelp.SetToolTip(_("Show manual for selected module from the tree"))
+        self._btnHelp.SetToolTip(_("Show manual for selected tool from the tree"))
 
         # bindings
         self._search.Bind(wx.EVT_TEXT, lambda evt: self.Filter(evt.GetString()))

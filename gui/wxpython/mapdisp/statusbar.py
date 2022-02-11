@@ -8,13 +8,8 @@ Classes:
  - statusbar::SbManager
  - statusbar::SbItem
  - statusbar::SbRender
- - statusbar::SbShowRegion
- - statusbar::SbAlignExtent
- - statusbar::SbResolution
  - statusbar::SbMapScale
  - statusbar::SbGoTo
- - statusbar::SbProjection
- - statusbar::SbMask
  - statusbar::SbTextItem
  - statusbar::SbDisplayGeometry
  - statusbar::SbCoordinates
@@ -37,9 +32,7 @@ import wx
 from core import utils
 from core.gcmd import RunCommand
 from core.settings import UserSettings
-from gui_core.wrap import StaticText, TextCtrl
-
-from grass.script import core as grass
+from gui_core.wrap import TextCtrl
 
 from grass.pydispatch.signal import Signal
 
@@ -281,10 +274,7 @@ class SbManager:
                 w, h = rect.width, rect.height + 1
                 if win == self.progressbar.GetWidget():
                     wWin = rect.width - 6
-                if idx == 2:  # mask
-                    x += 5
-                    y += 4
-                elif idx == 3:  # render
+                if idx == 2:  # render
                     x += 5
             win.SetPosition((x, y))
             win.SetSize((w, h))
@@ -304,12 +294,6 @@ class SbManager:
     def OnToggleStatus(self, event):
         """Toggle status text"""
         self.Update()
-        if event.GetSelection() == 3:  # use something better than magic numbers
-            # show computation region extent by default
-            self.statusbarItems["region"].SetValue(True)
-            # redraw map if auto-rendering is enabled
-            if self.mapFrame.IsAutoRendered():
-                self.mapFrame.GetWindow().UpdateMap(render=False)
 
     def SetMode(self, modeIndex):
         """Sets current mode
@@ -381,7 +365,7 @@ class SbItem:
         return self.position
 
     def GetWidget(self):
-        """Returns underlaying winget.
+        """Returns underlying widget.
 
         :return: widget or None if doesn't exist
         """
@@ -438,172 +422,6 @@ class SbRender(SbItem):
 
     def Update(self):
         self.Show()
-
-
-class SbShowRegion(SbItem):
-    """Checkbox to enable and disable showing of computational region.
-
-    Requires MapFrame.OnRender, MapFrame.IsAutoRendered, MapFrame.GetWindow.
-    """
-
-    def __init__(self, mapframe, statusbar, position=0):
-        SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = "region"
-        self.label = _("Show comp. extent")
-        self._properties = mapframe.mapWindowProperties
-
-        self.widget = wx.CheckBox(
-            parent=self.statusbar, id=wx.ID_ANY, label=_("Show computational extent")
-        )
-        self.widget.SetValue(self._properties.showRegion)
-        self.widget.Hide()
-        self.widget.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Show/hide computational "
-                    "region extent (set with g.region). "
-                    "Display region drawn as a blue box inside the "
-                    "computational region, "
-                    "computational region inside a display region "
-                    "as a red box)."
-                )
-            )
-        )
-        self.widget.Bind(wx.EVT_CHECKBOX, self.OnToggleShowRegion)
-        self._connectShowRegion()
-
-    def _setValue(self, value):
-        self.widget.SetValue(value)
-
-    def _connectShowRegion(self):
-        self._properties.showRegionChanged.connect(self._setValue)
-
-    def _disconnectShowRegion(self):
-        self._properties.showRegionChanged.disconnect(self._setValue)
-
-    def OnToggleShowRegion(self, event):
-        """Shows/Hides extent (comp. region) in map canvas.
-
-        Shows or hides according to checkbox value.
-
-        .. todo::
-            needs refactoring
-        """
-        self._disconnectShowRegion()
-        self._properties.showRegion = self.widget.GetValue()
-        self._connectShowRegion()
-
-        # redraw map if auto-rendering is enabled
-        if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetWindow().UpdateMap(render=False)
-
-    def SetValue(self, value):
-        self._disconnectShowRegion()
-        self._properties.showRegion = value
-        SbItem.SetValue(self, value)
-        self._connectShowRegion()
-
-
-class SbAlignExtent(SbItem):
-    """Checkbox to select zoom behavior.
-
-    Used by BufferedWindow (through MapFrame property).
-    See tooltip for explanation.
-    """
-
-    def __init__(self, mapframe, statusbar, position=0):
-        SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = "alignExtent"
-        self.label = _("Display mode")
-        self._properties = mapframe.mapWindowProperties
-
-        self.widget = wx.CheckBox(
-            parent=self.statusbar,
-            id=wx.ID_ANY,
-            label=_("Align region extent based on display size"),
-        )
-        self.widget.SetValue(self._properties.alignExtent)
-        self.widget.Hide()
-        self.widget.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Align region extent based on display "
-                    "size from center point. "
-                    "Default value for new map displays can "
-                    "be set up in 'User GUI settings' dialog."
-                )
-            )
-        )
-        self._connectAlignExtent()
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onCheckbox)
-
-    # TODO: these four methods are in many stitems
-    # some generalization?
-    # passing properties as stings and set/get attr would work, but it is nice?
-    def _setValue(self, value):
-        self.widget.SetValue(value)
-
-    def _connectAlignExtent(self):
-        self._properties.alignExtentChanged.connect(self._setValue)
-
-    def _disconnectAlignExtent(self):
-        self._properties.alignExtentChanged.disconnect(self._setValue)
-
-    def _onCheckbox(self, event):
-        self._disconnectAlignExtent()
-        self._properties.alignExtent = self.widget.GetValue()
-        self._connectAlignExtent()
-
-
-class SbResolution(SbItem):
-    """Checkbox to select used display resolution.
-
-    Requires MapFrame.OnRender method.
-    """
-
-    def __init__(self, mapframe, statusbar, position=0):
-        SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = "resolution"
-        self.label = _("Display resolution")
-        self._properties = self.mapFrame.mapWindowProperties
-        self.widget = wx.CheckBox(
-            parent=self.statusbar,
-            id=wx.ID_ANY,
-            label=_("Constrain display resolution to computational settings"),
-        )
-        self.widget.SetValue(self._properties.resolution)
-        self.widget.Hide()
-        self.widget.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Constrain display resolution "
-                    "to computational region settings. "
-                    "Default value for new map displays can "
-                    "be set up in 'User GUI settings' dialog."
-                )
-            )
-        )
-
-        self.widget.Bind(wx.EVT_CHECKBOX, self.OnToggleUpdateMap)
-        self._connectResolutionChange()
-
-    def _setValue(self, value):
-        self.widget.SetValue(value)
-
-    def _connectResolutionChange(self):
-        self._properties.resolutionChanged.connect(self._setValue)
-
-    def _disconnectResolutionChange(self):
-        self._properties.resolutionChanged.disconnect(self._setValue)
-
-    def OnToggleUpdateMap(self, event):
-        """Update display when toggle display mode"""
-        self._disconnectResolutionChange()
-        self._properties.resolution = self.widget.GetValue()
-        self._connectResolutionChange()
-        # redraw map if auto-rendering is enabled
-        if self.mapFrame.IsAutoRendered():
-            self.mapFrame.GetWindow().UpdateMap()
 
 
 class SbMapScale(SbItem):
@@ -750,7 +568,9 @@ class SbGoTo(SbItem):
         """Go to position"""
         try:
             e, n = self.GetValue().split(";")
-            e, n = self.ReprojectENToMap(e, n, self.mapFrame.GetProperty("projection"))
+            e, n = self.ReprojectENToMap(
+                e, n, self.mapFrame.GetProperty("useDefinedProjection")
+            )
             self.mapFrame.GetWindow().GoTo(e, n)
             self.widget.SetFocus()
         except ValueError:
@@ -796,7 +616,7 @@ class SbGoTo(SbItem):
             group="projection", key="statusbar", subkey="proj4"
         )
 
-        if self.mapFrame.GetProperty("projection"):
+        if self.mapFrame.GetProperty("useDefinedProjection"):
             if not projection:
                 raise SbException(_("Projection not defined (check the settings)"))
             else:
@@ -845,72 +665,6 @@ class SbGoTo(SbItem):
 
         # disable long help
         self.mapFrame.StatusbarEnableLongHelp(False)
-
-
-class SbProjection(SbItem):
-    """Checkbox to enable user defined projection (can be set in settings)"""
-
-    def __init__(self, mapframe, statusbar, position=0):
-        SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = "projection"
-        self.label = _("Projection")
-
-        self.defaultLabel = _("Use defined projection")
-
-        self.widget = wx.CheckBox(
-            parent=self.statusbar, id=wx.ID_ANY, label=self.defaultLabel
-        )
-
-        self.widget.SetValue(False)
-
-        # necessary?
-        size = self.widget.GetSize()
-        self.widget.SetMinSize((size[0] + 150, size[1]))
-
-        self.widget.Hide()
-        self.widget.SetToolTip(
-            wx.ToolTip(
-                _(
-                    "Reproject coordinates displayed "
-                    "in the statusbar. Projection can be "
-                    "defined in GUI preferences dialog "
-                    "(tab 'Projection')"
-                )
-            )
-        )
-
-    def Update(self):
-        self.statusbar.SetStatusText("")
-        epsg = UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
-        if epsg:
-            label = "%s (EPSG: %s)" % (self.defaultLabel, epsg)
-            self.widget.SetLabel(label)
-        else:
-            self.widget.SetLabel(self.defaultLabel)
-        self.Show()
-
-        # disable long help
-        self.mapFrame.StatusbarEnableLongHelp(False)
-
-
-class SbMask(SbItem):
-    """StaticText to show whether mask is activated."""
-
-    def __init__(self, mapframe, statusbar, position=0):
-        SbItem.__init__(self, mapframe, statusbar, position)
-        self.name = "mask"
-
-        self.widget = StaticText(parent=self.statusbar, id=wx.ID_ANY, label=_("MASK"))
-        self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
-        self.widget.Hide()
-
-    def Update(self):
-        if grass.find_file(
-            name="MASK", element="cell", mapset=grass.gisenv()["MAPSET"]
-        )["name"]:
-            self.Show()
-        else:
-            self.Hide()
 
 
 class SbTextItem(SbItem):
@@ -992,7 +746,7 @@ class SbCoordinates(SbTextItem):
             UserSettings.Get(group="projection", key="format", subkey="precision")
         )
         format = UserSettings.Get(group="projection", key="format", subkey="ll")
-        projection = self.mapFrame.GetProperty("projection")
+        projection = self.mapFrame.GetProperty("useDefinedProjection")
         try:
             e, n = self.mapFrame.GetWindow().GetLastEN()
             self._basicValue = self.ReprojectENFromMap(
@@ -1075,7 +829,7 @@ class SbRegionExtent(SbTextItem):
             UserSettings.Get(group="projection", key="format", subkey="precision")
         )
         format = UserSettings.Get(group="projection", key="format", subkey="ll")
-        projection = self.mapFrame.GetProperty("projection")
+        projection = self.mapFrame.GetProperty("useDefinedProjection")
         region = self._getRegion()
         try:
             regionReprojected = self.ReprojectRegionFromMap(

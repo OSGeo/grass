@@ -9,6 +9,7 @@ MODULES = \
 	setup \
 	display \
 	interact_display \
+	region \
 	render3d \
 	utils
 

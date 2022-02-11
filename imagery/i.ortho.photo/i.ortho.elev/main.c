@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *group_opt, *loc_opt, *mapset_opt, *elev_opt;
     struct Option *math_opt, *unit_opt, *nd_opt;
-    struct Flag *list_flag, *print_flag;
+    struct Flag *print_flag;
 
     char location[GMAPSET_MAX];
     char mapset[GMAPSET_MAX];
@@ -56,7 +56,6 @@ int main(int argc, char *argv[])
 
     char buf[GPATH_MAX];
     int stat;
-    int overwrite;
 
     G_gisinit(argv[0]);
 

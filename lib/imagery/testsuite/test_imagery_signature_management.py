@@ -41,22 +41,24 @@ from grass.lib.imagery import (
     I_make_signatures_dir,
 )
 
+H_DIRSEP = HOST_DIRSEP.decode("utf-8")
+
 
 class GetSignaturesElementTestCase(TestCase):
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIG)
-        self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sig")
+        self.assertEqual(utils.decode(cdir.value), f"signatures{H_DIRSEP}sig")
 
     def test_get_sigset(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIGSET)
-        self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sigset")
+        self.assertEqual(utils.decode(cdir.value), f"signatures{H_DIRSEP}sigset")
 
     def test_get_libsvm(self):
         elem = ctypes.create_string_buffer(GNAME_MAX)
         I__get_signatures_element(elem, I_SIGFILE_TYPE_LIBSVM)
-        self.assertEqual(utils.decode(elem.value), f"signatures{HOST_DIRSEP}libsvm")
+        self.assertEqual(utils.decode(elem.value), f"signatures{H_DIRSEP}libsvm")
 
 
 class MakeSignaturesElementTestCase(TestCase):
@@ -800,6 +802,7 @@ class SignaturesListByTypeTestCase(TestCase):
         )
         self.assertEqual(ret, 0)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
+
 
     def test_sig_in_different_mapset(self):
         # Should return 0 signatures from a different mapset

@@ -49,7 +49,7 @@ class ModelerToolbar(BaseToolbar):
                 img="python-export", label=_("Export model to Python script")
             ),
             "actionAdd": MetaIcon(
-                img="module-add", label=_("Add command (GRASS module) to model")
+                img="module-add", label=_("Add GRASS tool (module) to model")
             ),
             "dataAdd": MetaIcon(img="data-add", label=_("Add data to model")),
             "relation": MetaIcon(

@@ -17,7 +17,7 @@
 /*!
    \brief Create signature file
 
-   Returns a pointer to FILE for writting signature file.
+   Returns a pointer to FILE for writing signature file.
    Use fclose on the pointer to close after use.
 
    \param name signature filename

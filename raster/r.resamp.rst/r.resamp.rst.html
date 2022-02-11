@@ -52,7 +52,6 @@ The user can define the width of overlap (in number of cells) with
 the <i>overlap</i> option. The default value is 3.
 <br>
 
-
 <h2>NOTES</h2>
 
 <i>r.resamp.rst</i> uses regularized spline with tension for interpolation
@@ -119,6 +118,22 @@ g.region raster=elev15 -p
 r.univar elev15 -g
 </pre></div>
 
+<h2>REFERENCES</h2>
+
+Mitas, L., Mitasova, H., 1999, Spatial Interpolation. In: P.Longley, M.F.
+Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information Systems:
+Principles, Techniques, Management and Applications, Wiley, 481-492.
+<p>Mitasova, H. and Mitas, L., 1993. Interpolation by regularized spline
+with tension: I. Theory and implementation, Mathematical Geology No.25
+p.641-656.
+<p>Mitasova, H. and Hofierka, L., 1993. Interpolation by regularized spline
+with tension: II. Application to terrain modeling and surface geometry
+analysis, Mathematical Geology No.25 p.657-667.
+<p>Talmi, A. and Gilat, G., 1977. Method for smooth approximation
+of data, Journal of Computational Physics , 23, pp 93-123.
+<p>Wahba, G., 1990. Spline models for observational data, CNMS-NSF Regional
+Conference series in applied mathematics, 59, SIAM, Philadelphia, Pennsylvania.
+
 <h2>SEE ALSO</h2>
 
 <a href="g.region.html">g.region</a>,
@@ -140,23 +155,3 @@ Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation
 procedure):</i>
 <br>Irina Kosinovsky, US Army CERL.
 <br>Dave Gerdes, US Army CERL.
-
-<h2>REFERENCES</h2>
-
-Mitas, L., Mitasova, H., 1999, Spatial Interpolation. In: P.Longley, M.F.
-Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information Systems:
-Principles, Techniques, Management and Applications, Wiley, 481-492.
-<p>Mitasova, H. and Mitas, L., 1993. Interpolation by regularized spline
-with tension: I. Theory and implementation, Mathematical Geology No.25
-p.641-656.
-<p>Mitasova, H. and Hofierka, L., 1993. Interpolation by regularized spline
-with tension: II. Application to terrain modeling and surface geometry
-analysis, Mathematical Geology No.25 p.657-667.
-<p>Talmi, A. and Gilat, G., 1977. Method for smooth approximation
-of data, Journal of Computational Physics , 23, pp 93-123.
-<p>Wahba, G., 1990. Spline models for observational data, CNMS-NSF Regional
-Conference series in applied mathematics, 59, SIAM, Philadelphia, Pennsylvania.
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

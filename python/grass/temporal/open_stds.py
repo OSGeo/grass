@@ -44,23 +44,23 @@ def open_old_stds(name, type, dbif=None):
     """
     msgr = get_tgis_message_interface()
 
-    # Check if the dataset name contains the mapset and the band reference as well
+    # Check if the dataset name contains the mapset and the semantic label as well
     if name.find("@") < 0:
         mapset = get_current_mapset()
     else:
         name, mapset = name.split("@")
-    band_ref = None
+    semantic_label = None
     if name.find(".") > -1:
         try:
-            name, band_ref = name.split(".")
+            name, semantic_label = name.split(".")
         except ValueError:
             msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
     id = name + "@" + mapset
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
-        if band_ref:
-            sp.set_band_reference(band_ref)
+        if semantic_label:
+            sp.set_semantic_label(semantic_label)
     elif (
         type == "str3ds"
         or type == "raster3d"
@@ -124,7 +124,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
 
     if type == "strds" or type == "rast" or type == "raster":
         if name.find(".") > -1:
-            # a dot is used as a separator for band reference filtering
+            # a dot is used as a separator for semantic label filtering
             msgr.fatal(
                 _("Illegal dataset name <{}>. " "Character '.' not allowed.").format(
                     name

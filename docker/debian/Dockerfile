@@ -174,14 +174,14 @@ RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
   --with-cxx \
   --enable-largefile \
-  --with-proj --with-proj-share=/usr/share/proj \
+  --with-proj-share=/usr/share/proj \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
   --with-sqlite \
   --with-cairo --with-cairo-ldflags=-lfontconfig \
   --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
   --with-fftw \
-  --with-postgres=yes --with-postgres-includes="/usr/include/postgresql" \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
   --with-netcdf \
   --with-zstd \
   --with-bzlib \
@@ -189,7 +189,6 @@ RUN /src/grass_build/configure \
   --without-mysql \
   --without-odbc \
   --without-openmp \
-  --without-ffmpeg \
   --without-opengl \
     && make -j $NUMTHREADS \
     && make install && ldconfig
@@ -210,7 +209,7 @@ ENV LC_ALL "en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass80 /usr/local/grass
+RUN ln -sf /usr/local/grass81 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \

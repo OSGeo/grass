@@ -153,6 +153,7 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
+                "singleWindow": {"enabled": False},
             },
             #
             # datacatalog
@@ -189,9 +190,7 @@ class Settings:
                 "menustyle": {"selection": 1},
                 "gSelectPopupHeight": {"value": 200},
                 "iconTheme": {"type": "grass"},
-                "commandNotebook": {
-                    "selection": 0 if sys.platform in ("win32", "darwin") else 1
-                },
+                "commandNotebook": {"selection": 0},
             },
             #
             # language
@@ -800,8 +799,8 @@ class Settings:
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
-            _("Combined (labels and module names)"),
-            _("Expert (module names only)"),
+            _("Combined (labels and tool names)"),
+            _("Expert (tool names only)"),
         )
         self.internalSettings["appearance"]["gSelectPopupHeight"]["min"] = 50
         # there is also maxHeight given to TreeCtrlComboPopup.GetAdjustedSize
@@ -809,7 +808,6 @@ class Settings:
         self.internalSettings["appearance"]["commandNotebook"]["choices"] = (
             _("Basic top"),
             _("Basic left"),
-            _("Fancy green"),
             _("List left"),
         )
 
