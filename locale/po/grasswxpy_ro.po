@@ -16351,16 +16351,16 @@ msgid "EPSG code:"
 msgstr "Codul EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "Proj.4 string (required):"
-msgstr "Șirul Proj.4 (obligatoriu)"
+msgid "PROJ string (required):"
+msgstr "Șirul PROJ (obligatoriu)"
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
 msgstr "Fișier EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
-msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
-msgstr "Încărcați codurile EPSG (fi rabdător), introduceți codul EPSG sau inserați direct șirul Proj.4."
+msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
+msgstr "Încărcați codurile EPSG (fi rabdător), introduceți codul EPSG sau inserați direct șirul PROJ."
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"
