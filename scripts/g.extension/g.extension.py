@@ -356,14 +356,65 @@ def download_addons_paths_file(url, response_format, *args, **kwargs):
         return response
     except HTTPError as err:
         if err.code == 403 and err.msg == "rate limit exceeded":
-            gscript.warning(
-                _(
-                    "The download of the json file with add-ons paths "
-                    "from the github server wasn't successful, "
-                    "{}. The previous downloaded json file "
-                    " will be used if exists.".format(err.msg)
-                ),
+            from datetime import datetime
+
+            addons_paths_file = os.path.join(
+                options["prefix"],
+                get_addons_paths.json_file,
             )
+            base_message = (
+                "The download of the JSON file with add-ons paths "
+                "from the GitHub REST API server wasn't successful, "
+                "{}, 60 requests per hour per your computer IP "
+                "address.".format(err.msg)
+            )
+            rate_limit_freed_datetime = datetime.fromtimestamp(
+                int(err.headers.get("X-RateLimit-Reset"))
+            ).strftime("%A %b %d %H:%M:%S %Y")
+            if os.path.exists(addons_paths_file):
+                if flags["j"]:
+                    gscript.fatal(
+                        _(
+                            "{base_message} You can try it again on "
+                            "{datetime}.".format(
+                                base_message=base_message,
+                                datetime=rate_limit_freed_datetime,
+                            ),
+                        ),
+                    )
+                else:
+                    gscript.warning(
+                        _(
+                            "{base_message} The previous downloaded JSON "
+                            "file will be used or you can try it again on "
+                            "{datetime}.".format(
+                                base_message=base_message,
+                                datetime=rate_limit_freed_datetime,
+                            ),
+                        ),
+                    )
+            else:
+                if flags["j"]:
+                    gscript.fatal(
+                        _(
+                            "{base_message} You can try it again on "
+                            "{datetime}.".format(
+                                base_message=base_message,
+                                datetime=rate_limit_freed_datetime,
+                            ),
+                        ),
+                    )
+                else:
+                    gscript.fatal(
+                        _(
+                            "{base_message} The previous downloaded JSON "
+                            "file will not be used, because does not exists. "
+                            "You can try it again on {datetime}.".format(
+                                base_message=base_message,
+                                datetime=rate_limit_freed_datetime,
+                            )
+                        ),
+                    )
         else:
             return download_addons_paths_file(
                 url=url.replace("main", "master"),
