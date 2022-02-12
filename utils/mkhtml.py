@@ -150,7 +150,7 @@ def download_git_commit(url, response_format, *args, **kwargs):
             gs.fatal(
                 _(
                     "Download commit from <{url}>, return status code "
-                    "{code}, {desc}".format(
+                    "{code}, {desc}.".format(
                         url=url,
                         code=response.code,
                         desc=desc,
@@ -170,14 +170,32 @@ def download_git_commit(url, response_format, *args, **kwargs):
             )
         return response
     except HTTPError as err:
-        gs.warning(
-            _(
-                "The download of the commit from the GitHub API "
-                "server wasn't successful, <{}>. Commit and commit "
-                "date will not be included in the <{}> addon html manual "
-                "page.".format(err.msg, pgm)
-            ),
-        )
+        if err.code == 403 and err.msg == "rate limit exceeded":
+            rate_limit_freed_datetime = datetime.fromtimestamp(
+                int(err.headers.get("X-RateLimit-Reset"))
+            ).strftime("%A %b %d %H:%M:%S %Y")
+            gs.warning(
+                _(
+                    "The download of the commit from the GitHub REST API "
+                    "server wasn't successful, {err}, 60 requests per hour "
+                    "per your computer IP address. Commit and commit date "
+                    "will not be included in the <{pgm}> addon html manual "
+                    "page or you can try it again on {datetime}.".format(
+                        err=err.msg,
+                        pgm=pgm,
+                        datetime=rate_limit_freed_datetime,
+                    )
+                ),
+            )
+        else:
+            gs.warning(
+                _(
+                    "The download of the commit from the GitHub REST API "
+                    "server wasn't successful, {err}. Commit and commit "
+                    "date will not be included in the <{pgm}> addon html "
+                    "manual page.".format(err=err.msg, pgm=pgm)
+                ),
+            )
     except URLError:
         gs.warning(
             _(
