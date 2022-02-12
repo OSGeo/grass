@@ -59,12 +59,12 @@ Now check if configure still works.
 If yes, submit to git:
 
 ```bash
-git checkout -b config_sub_update_r80
+git checkout -b config_sub_update
 git add config.guess config.sub configure
 git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
 # test by running ./configure
 
-git push origin config_sub_update_r80
+git push origin config_sub_update
 # open PR and merge
 ```
 
@@ -87,7 +87,6 @@ find . -name '__pycache__' | xargs -r rm -r
 rm -f python/grass/ctypes/ctypesgencore/parser/lextab.py
 rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc \
   gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
-rm -f include/version.h
 chmod -R a+r *
 ```
 
@@ -112,11 +111,11 @@ Example:
 ```bash
 8
 0
-0RC1
-2021
+1RC1
+2022
 ```
 
-Commit with version message, e.g. "GRASS GIS 8.0.0RC1".
+Commit with version message, e.g. "GRASS GIS 8.0.1RC1".
 
 ### Create release tag
 
@@ -158,11 +157,11 @@ To be done in GH interface:
 <https://github.com/OSGeo/grass/releases/new>
 
 - select release_branch first, then
-- fill in "Release Title" (e.g., GRASS GIS 8.0.0RC1)
-- fill in "Create tag" field:
+- fill in "Release Title" (e.g., GRASS GIS 8.0.1RC1)
+- fill in "Create tag" field: 8.0.1RC1
 
 Tag version | target (examples):
-  8.0.0RC1  | releasebranch_8_0
+  8.0.1RC1  | releasebranch_8_0
 
 - click on "Create new tag: ... on publish"
 
@@ -172,14 +171,6 @@ Add release desciption (re-use existing texts as possible, from
 If RC, then check
 [x] This is a pre-release
 
-### Packaging of source code tarball
-
-```bash
-# fetch tarball from GitHub
-wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
-md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
-```
-
 ### Changelog from GitHub for GH release notes
 
 Using GH API here, see also
@@ -187,13 +178,17 @@ Using GH API here, see also
 - https://docs.github.com/en/rest/reference/repos#generate-release-notes-content-for-a-release
 
 ```bash
-gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.0.0" -f previous_tag_name=7.8.6 -f target_commitish=releasebranch_8_0 -q .body
+gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.0.1" -f previous_tag_name=8.0.0 -f target_commitish=releasebranch_8_0 -q .body
 ```
 
 If this fails, also a date may be used (that of the last release):
 
 ```bash
-git log --oneline --after="2021-10-10" | cut -d' ' -f2- | sed 's+^+* +g' | sed 's+(#+https://github.com/OSGeo/grass/pull/+g' | sed 's+)$++g' | sort -u
+# GitHub style
+git log --pretty=format:"* %s by %an" --after="2022-01-28" | sort
+
+# trac style
+git log --oneline --after="2022-01-28" | cut -d' ' -f2- | sed 's+^+* +g' | sed 's+(#+https://github.com/OSGeo/grass/pull/+g' | sed 's+)$++g' | sort -u
 ```
 
 Importantly, these notes need to be manually sorted into the various categories (modules, wxGUI, library, docker, ...).
@@ -233,6 +228,14 @@ Reset local copy to GH:
 #  - remote repo as "upstream"
 git fetch --all --prune && git checkout releasebranch_8_0 && \
  git merge upstream/releasebranch_8_0 && git push origin releasebranch_8_0
+```
+
+### Getting the source code tarball for upload on OSGeo server
+
+```bash
+# fetch tarball from GitHub
+wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
+md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
 ### Upload source code tarball to OSGeo servers
@@ -291,7 +294,7 @@ Release is done.
 
 ### Advertise the new release
 
-#### Write trac Wiki release page
+#### Write trac Wiki release page (probably to be dropped)
 
 To easily generate the entries for the trac Wiki release page, use the `git log` approach:
 - extract entries from oneline git log and prepare for trac Wiki copy-paste:
@@ -299,10 +302,10 @@ To easily generate the entries for the trac Wiki release page, use the `git log`
 ```
 # get date of previous release from https://github.com/OSGeo/grass/releases
 # verify
-git log --oneline --after="2021-10-10" | tac
+git log --oneline --after="2022-01-28" | tac
 
 # prepare for trac Wiki release page (incl. PR trac macro)
-git log --oneline --after="2021-10-10" | cut -d' ' -f2- | sed 's+^+ * G80:+g' | sed 's+(#+(PR:+g' | sort -u
+git log --oneline --after="2022-01-28" | cut -d' ' -f2- | sed 's+^+ * G80:+g' | sed 's+(#+(PR:+g' | sort -u
 ```
 
 - store changelog entries in trac, by section:
@@ -339,19 +342,19 @@ Software pages:
 ```
      set MAJOR=8
      set MINOR=0
-     set PATCH=0RC1
+     set PATCH=1RC1
 ```
 
 - Update addons (grass_addons.sh) rules, eg.
 
 ```
-     compile $GIT_PATH/grass8 $GISBASE_PATH/grass800RC1  $ADDON_PATH/grass800RC1/addons
+     compile $GIT_PATH/grass8 $GISBASE_PATH/grass801RC1  $ADDON_PATH/grass801RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
 ```
-     copy_addon 800RC1 8.0.0RC1
+     copy_addon 801RC1 8.0.1RC1
 ```
 
 #### Launchpad notes
