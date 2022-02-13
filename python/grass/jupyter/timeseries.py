@@ -17,9 +17,56 @@ import grass.script as gs
 from .display import GrassRenderer
 
 
-# Probably needs a better name
-def parse_csv_str(string):
-    return string.strip().splitlines()
+def collect_lyr_dates(timeseries, etype):
+    """Create lists of layer names and start_times for a
+    space-time raster or vector dataset.
+
+    For datasets with variable timesteps, makes step regular with
+    "gran" method for t.rast.list or t.vect.list then fills in
+    missing layers with previous timestep layer. If first time step
+    is missing, uses the first available layer.
+    """
+    if etype == "strds":
+        rows = gs.read_command(
+            "t.rast.list", method="gran", input=timeseries
+        ).splitlines()
+    elif etype == "stvds":
+        rows = gs.read_command(
+            "t.vect.list", method="gran", input=timeseries
+        ).splitlines()
+    else:
+        raise NameError(
+            _("Dataset {} must be element type 'strds' or 'stvds'").format(timeseries)
+        )
+
+    # Parse string
+    new_rows = [row.split("|") for row in rows]
+    new_array = [list(row) for row in zip(*new_rows)]
+
+    # Collect layer name and start time
+    for column in new_array:
+        if column[0] == "name":
+            names = column[1:]
+        if column[0] == "start_time":
+            dates = column[1:]
+
+    # For variable timestep datasets, fill in None values with
+    # previous time step value. If first time step is missing data,
+    # use the next non-None value
+    for i, name in enumerate(names):
+        if name == "None":
+            if i > 0:
+                names[i] = names[i - 1]
+            else:
+                search_count = 1
+                while name[i + search_count] == "None":
+                    search_count += 1
+                names[i] = name[i + 1]
+        else:
+            pass
+
+    print(names, dates)
+    return names, dates
 
 
 class TimeSeries:
@@ -49,10 +96,11 @@ class TimeSeries:
         self.timeseries = timeseries
         self._legend = False
         self._etype = etype  # element type, borrowing convention from tgis
+        self._renderlist = []
         self._legend_kwargs = None
-        self._filenames = []
-        self._file_date_dict = {}
-        self._date_file_dict = {}
+        # self._filenames = []
+        # self._file_date_dict = {}
+        self._date_name_dict = {}
 
         # TODO: Improve basemap and overlay method
         # Currently does not support multiple basemaps or overlays
@@ -62,37 +110,22 @@ class TimeSeries:
         self.overlay = overlay
 
         # Check that map is time space dataset
-        test = gs.read_command("t.list", where=f"name LIKE '{timeseries}'")
+        test = gs.read_command("t.list", where=f"name='{timeseries}'")
         if not test:
             raise NameError(
                 _(
-                    f"Could not find space time raster or vector"
-                    f"dataset named {timeseries}"
-                )
+                    "Could not find space time raster or vector " "dataset named {}"
+                ).format(timeseries)
             )
 
         # Create a temporary directory for our PNG images
         self._tmpdir = tempfile.TemporaryDirectory()
 
-        # create list of date/times
-        if self._etype == "strds":
-            self._dates = parse_csv_str(
-                gs.read_command(
-                    "t.rast.list",
-                    input=self.timeseries,
-                    columns="start_time",
-                    flags="u",
-                )
-            )
-        elif self._etype == "stvds":
-            self._dates = parse_csv_str(
-                gs.read_command(
-                    "t.vect.list",
-                    input=self.timeseries,
-                    columns="start_time",
-                    flags="u",
-                )
-            )
+        # create list of layers to render and date/times
+        self._renderlist, self._dates = collect_lyr_dates(self.timeseries, self._etype)
+        self._date_name_dict = {
+            self._dates[i]: self._renderlist[i] for i in range(len(self._dates))
+        }
 
     def d_legend(self, **kwargs):
         """Wrapper for d.legend. Passes keyword arguments to d.legend in
@@ -109,32 +142,12 @@ class TimeSeries:
 
         Can be time-consuming to run with large space-time datasets.
         """
-        # Create List of layers to Render
-        if self._etype == "strds":
-            renderlist = parse_csv_str(
-                gs.read_command(
-                    "t.rast.list", input=self.timeseries, columns="name", flags="u"
-                )
-            )
-        elif self._etype == "stvds":
-            renderlist = parse_csv_str(
-                gs.read_command(
-                    "t.vect.list", input=self.timeseries, columns="name", flags="u"
-                )
-            )
-        else:
-            raise NameError(
-                _(f"Dataset {self.timeseries} is not element type 'strds' or 'stvds'")
-            )
 
-        # Start counter for matching datetime stamp with filename
-        i = 0
-        for name in renderlist:
+        for name in self._renderlist:
             # Create image file
             filename = os.path.join(self._tmpdir.name, "{}.png".format(name))
-            self._filenames.append(filename)
-            self._file_date_dict[self._dates[i]] = filename
-            self._date_file_dict[filename] = self._dates[i]
+            # self._filenames.append(filename)
+
             # Render image
             img = GrassRenderer(filename=filename)
             if self.basemap:
@@ -153,8 +166,6 @@ class TimeSeries:
                 img.d_legend(
                     raster=name, range=f"{min_min}, {max_max}", **self._legend_kwargs
                 )
-            # Add 1 to counter
-            i = i + 1
 
     def time_slider(self, slider_width="60%"):
         """
@@ -181,7 +192,10 @@ class TimeSeries:
 
         # Display image associated with datetime
         def view_image(date):
-            return Image(self._file_date_dict[date])
+            # Look up raster name for date
+            name = self._date_name_dict[date]
+            filename = os.path.join(self._tmpdir.name, "{}.png".format(name))
+            return Image(filename)
 
         # Return interact widget with image and slider
         widgets.interact(view_image, date=slider)
@@ -213,9 +227,10 @@ class TimeSeries:
         fp_out = os.path.join(self._tmpdir.name, "image.gif")
 
         imgs = []
-        for f in self._filenames:
-            date = self._date_file_dict[f]
-            img = Image.open(f)
+        for date in self._dates:
+            name = self._date_name_dict[date]
+            filename = os.path.join(self._tmpdir.name, "{}.png".format(name))
+            img = Image.open(filename)
             draw = ImageDraw.Draw(img)
             if label:
                 font_settings = ImageFont.truetype(font, text_size)
