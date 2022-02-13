@@ -15,8 +15,11 @@ import sys
 import tempfile
 import weakref
 from pathlib import Path
+
 import grass.script as gs
+
 from .display import GrassRenderer
+from .region import RegionManagerForInteractiveMap
 from .utils import (
     estimate_resolution,
     get_location_proj_string,
@@ -24,7 +27,6 @@ from .utils import (
     reproject_region,
     setup_location,
 )
-from .region import RegionManagerForInteractiveMap
 
 
 class InteractiveMap:
