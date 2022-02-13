@@ -64,8 +64,6 @@ def collect_lyr_dates(timeseries, etype):
                 names[i] = name[i + 1]
         else:
             pass
-
-    print(names, dates)
     return names, dates
 
 
