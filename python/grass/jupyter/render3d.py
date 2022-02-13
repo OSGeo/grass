@@ -15,6 +15,7 @@
 
 import os
 import tempfile
+import weakref
 
 import grass.script as gs
 from grass.jupyter import GrassRenderer

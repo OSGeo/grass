@@ -14,6 +14,7 @@
 import os
 import shutil
 import tempfile
+import weakref
 import grass.script as gs
 
 from .region import RegionManagerFor2D
