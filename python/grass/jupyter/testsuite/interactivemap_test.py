@@ -29,7 +29,7 @@ from grass.gunittest.main import test
 def can_import_folium():
     """Test folium import to see if test can be run."""
     try:
-        import folium
+        import folium  # noqa
 
         return True
     except ImportError:
