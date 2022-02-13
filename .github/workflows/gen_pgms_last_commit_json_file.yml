@@ -23,10 +23,8 @@ jobs:
         working-directory: ./utils
         run: |
           python gen_pgms_last_commit.py ../
-          git add ../pgms_with_last_commit.json
-          git diff --cached > ../pgms_with_last_commit.patch
 
       - uses: actions/upload-artifact@v2
         with:
-          name: pgms-with-last-commit-patch-file
-          path: pgms_with_last_commit.patch
+          name: pgms-with-last-commit-json-file
+          path: pgms_with_last_commit.json
