@@ -48,15 +48,7 @@ try:
     import grass.script as gs
 except ImportError:
     # During compilation GRASS GIS
-    _ = str
-
-    class gs:
-        def warning(message):
-            pass
-
-        def fatal(message):
-            pass
-
+    gs = None
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
@@ -199,6 +191,12 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
                           possible download commit from GitHub API server
                           values of keys have "unknown" string
     """
+
+    def parse_commit():
+        git_log["commit"] = commit[0].split(" ")[-1]
+        commit_date = commit[2].lstrip("Date:").strip()
+        git_log["date"] = commit_date.rsplit(" ", 1)[0]
+
     unknown = "unknown"
     git_log = {"commit": unknown, "date": unknown}
     datetime_format = "%A %b %d %H:%M:%S %Y"  # e.g. Sun Jan 16 23:09:35 2022
@@ -234,24 +232,34 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
         stderr = decode(stderr)
 
         if stderr and "fatal: not a git repository" in stderr:
-            response = download_git_commit(
-                url=grass_addons_url if is_addon else grass_modules_url,
-                response_format="application/json",
-            )
-            if response:
-                commit = json.loads(response.read())
-                if commit:
-                    git_log["commit"] = commit[0]["sha"]
-                    git_log["date"] = datetime.strptime(
-                        commit[0]["commit"]["author"]["date"],
-                        "%Y-%m-%dT%H:%M:%SZ",
-                    ).strftime(datetime_format)
+            if gs:
+                response = download_git_commit(
+                    url=grass_addons_url if is_addon else grass_modules_url,
+                    response_format="application/json",
+                )
+                if response:
+                    commit = json.loads(response.read())
+                    if commit:
+                        git_log["commit"] = commit[0]["sha"]
+                        git_log["date"] = datetime.strptime(
+                            commit[0]["commit"]["author"]["date"],
+                            "%Y-%m-%dT%H:%M:%SZ",
+                        ).strftime(datetime_format)
+            else:
+                pgms_with_last_commit = os.path.join(
+                    topdir,
+                    "pgms_with_last_commit.json",
+                )
+                if os.path.exists(pgms_with_last_commit):
+                    with open(pgms_with_last_commit) as f:
+                        pgms_with_last_commit = json.load(f)
+                    if pgm in pgms_with_last_commit:
+                        commit = pgms_with_last_commit[pgm]["commit"].splitlines()
+                        parse_commit()
         else:
             if stdout:
                 commit = stdout.splitlines()
-                git_log["commit"] = commit[0].split(" ")[-1]
-                commit_date = commit[2].lstrip("Date:").strip()
-                git_log["date"] = commit_date.rsplit(" ", 1)[0]
+                parse_commit()
     return git_log
 
 
