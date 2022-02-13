@@ -19,9 +19,10 @@
 """Test of 3D renderer"""
 
 import os
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test

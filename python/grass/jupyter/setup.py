@@ -129,7 +129,8 @@ class _JupyterGlobalSession:
         return self._finalizer.alive
 
 
-_global_session_handle = None
+# Pylint 2.12.2 identifies this a constant (although it is not), so it wants uppercase.
+_global_session_handle = None  # pylint: disable=invalid-name
 
 
 def init(path, location=None, mapset=None, grass_path=None):
@@ -158,7 +159,7 @@ def init(path, location=None, mapset=None, grass_path=None):
     :param str location: name of GRASS location within the database
     :param str mapset: name of mapset within location
     """
-    global _global_session_handle  # pylint: disable=global-statement
+    global _global_session_handle  # pylint: disable=global-statement,invalid-name
     if not _global_session_handle or not _global_session_handle.active:
         # Create a GRASS session.
         gsetup.init(path, location=location, mapset=mapset, grass_path=grass_path)
