@@ -18,8 +18,8 @@ import tempfile
 import weakref
 
 import grass.script as gs
-from grass.jupyter import GrassRenderer
 
+from .display import GrassRenderer
 from .region import RegionManagerFor3D
 
 

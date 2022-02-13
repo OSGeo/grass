@@ -11,10 +11,13 @@
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 
+"""2D rendering and display functionality"""
+
 import os
 import shutil
 import tempfile
 import weakref
+
 import grass.script as gs
 
 from .region import RegionManagerFor2D
@@ -169,6 +172,7 @@ class GrassRenderer:
 
     def show(self):
         """Displays a PNG image of map"""
-        from IPython.display import Image
+        # Lazy import to avoid an import-time dependency on IPython.
+        from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         return Image(self._filename)

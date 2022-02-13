@@ -14,8 +14,8 @@
 
 """Basic functions for benchmarking modules"""
 
-import shutil
 import random
+import shutil
 from types import SimpleNamespace
 
 import grass.script as gs
