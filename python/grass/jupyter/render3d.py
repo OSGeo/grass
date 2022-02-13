@@ -95,11 +95,20 @@ class Grass3dRenderer:
         self._resolution_fine = resolution_fine
 
         # Temporary dir and files
-        self._tmpdir = tempfile.TemporaryDirectory()
+
         if filename:
             self._filename = filename
         else:
+            # Resource managed by weakref.finalize.
+            self._tmpdir = (
+                tempfile.TemporaryDirectory()
+            )  # pylint: disable=consider-using-with
             self._filename = os.path.join(self._tmpdir.name, "map.png")
+
+            def cleanup(tmpdir):
+                tmpdir.cleanup()
+
+            weakref.finalize(self, cleanup, self._tmpdir)
 
         # Screen backend
         try:
