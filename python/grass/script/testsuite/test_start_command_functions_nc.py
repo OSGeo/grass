@@ -1,11 +1,11 @@
 """Tests of start_command function family in nc location"""
 
-LOCATION = "nc"
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 from grass.script.core import start_command, PIPE
+
+LOCATION = "nc"
 
 
 class TestPythonKeywordsInParameters(TestCase):
