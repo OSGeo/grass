@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
     struct History history;
     FILE *misc_file;
     int sigfile_version;
+    double *rescale, r;
+    int rescale_count = 0;
 
     G_gisinit(argv[0]);
 
@@ -165,8 +167,8 @@ int main(int argc, char *argv[])
     semantic_labels_group = G_malloc(group_ref.nfiles * sizeof(char *));
     for (int n = 0; n < group_ref.nfiles; n++) {
         semantic_labels_group[n] =
-            Rast_read_semantic_label_or_name(group_ref.file[n].name,
-                                             group_ref.file[n].mapset);
+            Rast_get_semantic_label_or_name(group_ref.file[n].name,
+                                            group_ref.file[n].mapset);
         if (!semantic_labels_group[n])
             G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
@@ -219,6 +221,23 @@ int main(int argc, char *argv[])
                        "Signature band count: %d, imagery group band count: %d, band match count: %d."),
                       semantic_label_count, group_ref.nfiles,
                       semantic_label_match_count);
+    }
+
+    /* Read rescaling parameter */
+    rescale = G_malloc(group_ref.nfiles * sizeof(double));
+    misc_file =
+        G_fopen_old_misc(sigfile_dir, "rescale", name_sigfile,
+                         mapset_sigfile);
+    while (fscanf(misc_file, "%lf", &r) == 1) {
+        if (rescale_count == group_ref.nfiles) {
+            G_fatal_error(_("Invalid signature file"));
+        }
+        rescale[rescale_count] = r;
+        rescale_count++;
+    }
+    fclose(misc_file);
+    if (rescale_count < group_ref.nfiles) {
+        G_fatal_error(_("Invalid signature file"));
     }
 
     /* Pass libsvm messages through GRASS */
@@ -280,7 +299,7 @@ int main(int argc, char *argv[])
                     if (Rast_is_d_null_value(&buf_bands[band][col]))
                         continue;
                     nodes[band].index = band;
-                    nodes[band].value = buf_bands[band][col] / 255;
+                    nodes[band].value = buf_bands[band][col] / rescale[band];
                 }
 
                 /* All values where NULLs */
@@ -317,7 +336,7 @@ int main(int argc, char *argv[])
                     if (Rast_is_d_null_value(&buf_bands[band][col]))
                         continue;
                     nodes[band].index = band;
-                    nodes[band].value = buf_bands[band][col] / 255;
+                    nodes[band].value = buf_bands[band][col] / rescale[band];
                 }
 
                 /* All values where NULLs */
@@ -344,6 +363,7 @@ int main(int argc, char *argv[])
         G_free(buf_bands[band]);
     }
     G_free(nodes);
+    G_free(rescale);
 
     /* Try to give full history */
     G_verbose_message("Writing out history");

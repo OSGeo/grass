@@ -19,6 +19,6 @@
 #define SIZE_INCREMENT 64;
 
 void fill_problem(const char *, const char *, struct Ref, const char *,
-                  struct svm_problem *);
+                  double *, struct svm_problem *);
 
 #endif // FILL_H

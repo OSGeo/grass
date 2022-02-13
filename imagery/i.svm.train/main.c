@@ -66,7 +66,12 @@ int main(int argc, char *argv[])
     struct Categories cats;
     struct History history;
     FILE *misc_file;
-    int i;
+    int i, ret;
+    double *rescale;
+    struct Range crange;
+    struct FPRange fprange;
+    int cmin, cmax;
+    double dmin, dmax;
 
     G_gisinit(argv[0]);
 
@@ -355,13 +360,40 @@ int main(int argc, char *argv[])
                           name_group, mapset_group);
     }
     semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
+    rescale = G_malloc(group_ref.nfiles * sizeof(double));
     for (int n = 0; n < group_ref.nfiles; n++) {
         semantic_labels[n] =
-            Rast_read_semantic_label_or_name(group_ref.file[n].name,
-                                             group_ref.file[n].mapset);
+            Rast_get_semantic_label_or_name(group_ref.file[n].name,
+                                            group_ref.file[n].mapset);
         if (!semantic_labels[n])
             G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
+        /* Use raster range for value rescaling */
+        ret = Rast_read_range(group_ref.file[n].name,
+                              group_ref.file[n].mapset, &crange);
+        if (ret == 1) {
+            Rast_get_range_min_max(&crange, &cmin, &cmax);
+            rescale[n] = (double)(cmax - cmin);
+        }
+        else if (ret == 3) {
+            ret = Rast_read_fp_range(group_ref.file[n].name,
+                                     group_ref.file[n].mapset, &fprange);
+            if (ret != 1) {
+                G_fatal_error(_("Unable to get value range for raster map <%s@%s>"),
+                              group_ref.file[n].name,
+                              group_ref.file[n].mapset);
+            }
+            Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
+            rescale[n] = dmax - dmin;
+        }
+        else {
+            G_fatal_error(_("Unable to get value range for raster map <%s@%s>"),
+                          group_ref.file[n].name, group_ref.file[n].mapset);
+        }
+        if (rescale[n] < GRASS_EPSILON) {
+            G_fatal_error(_("Invalid value range for raster map <%s@%s>"),
+                          group_ref.file[n].name, group_ref.file[n].mapset);
+        }
     }
 
     /* Pass libsvm messages through GRASS */
@@ -370,7 +402,7 @@ int main(int argc, char *argv[])
     /* Fill svm_problem struct with training data */
     G_message(_("Reading training data"));
     fill_problem(name_labels, mapset_labels, group_ref, mapset_group,
-                 &problem);
+                 rescale, &problem);
 
     /* svm_check_parameter needs filled svm_problem struct thus checking only now */
     G_verbose_message("Checking SVM parametrization");
@@ -406,7 +438,7 @@ int main(int argc, char *argv[])
                       out_path, out_status);
     }
     svm_free_and_destroy_model(&model);
-    /* Write out band reference info */
+    /* Write out semantic label info */
     misc_file = G_fopen_new_misc(sigfile_dir, "semantic_label", name_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to write trained model to file '%s'."),
@@ -416,6 +448,18 @@ int main(int argc, char *argv[])
     }
     fclose(misc_file);
     G_free(semantic_labels);
+
+    /* Write out rescaling value as the same value has to be used for prediction */
+    G_verbose_message("Writing out rescaling value");
+    misc_file = G_fopen_new_misc(sigfile_dir, "rescale", name_sigfile);
+    if (!misc_file)
+        G_fatal_error(_("Unable to write trained model to file '%s'."),
+                      name_sigfile);
+    for (int n = 0; n < group_ref.nfiles; n++) {
+        fprintf(misc_file, "%lf\n", rescale[n]);
+    }
+    fclose(misc_file);
+    G_free(rescale);
 
     /* Copy CATs file. Will be used for prediction result maps */
     G_verbose_message("Copying category information");

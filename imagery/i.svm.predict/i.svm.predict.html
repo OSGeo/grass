@@ -5,6 +5,9 @@ and stores them in a raster file. Predictions are based on a signature file
 generated with <a href="i.svm.train.html">i.svm.train</a>.
 </p>
 
+<p>Internally the module performs input value rescaling of each of imagery
+group rasters by minimum and maximum range determined during training.</p>
+
 <h2>NOTES</h2>
 
 <p><em>i.svm.train</em> internally is using the libsvm. For introduction

@@ -5,6 +5,10 @@ and stores them in a signature file for later usage by
 <a href="i.svm.predict.html">i.svm.predict</a>.
 </p>
 
+<p>Internally the module performs input value rescaling of each of imagery
+group rasters by its minimum and maximum value. Rescaling parameters are
+written into the signature file for use during prediction.</p>
+
 <h2>NOTES</h2>
 
 <p><em>i.svm.train</em> internally is using the libsvm. For introduction

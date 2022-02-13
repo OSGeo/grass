@@ -9,13 +9,14 @@
  *
  */
 #include <grass/raster.h>
+#include <grass/glocale.h>
 
 #include "fill.h"
 
 
 void fill_problem(const char *name_labels, const char *mapset_labels,
                   struct Ref band_refs, const char *mapset_group,
-                  struct svm_problem *problem)
+                  double *rescale, struct svm_problem *problem)
 {
     int label_num, label_max;
     int value_num, value_max;
@@ -50,7 +51,6 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
             Rast_open_old(band_refs.file[band].name,
                           band_refs.file[band].mapset);
     }
-
 
     for (row = 0; row < nrows; row++) {
         G_percent(row, nrows, 10);
@@ -87,7 +87,7 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
                 }
                 problem->x[label_num][value_num].index = band;
                 problem->x[label_num][value_num].value =
-                    buf_bands[band][col] / 255;
+                    buf_bands[band][col] / rescale[band];
                 value_num++;
             }
             /* If label has no data */
