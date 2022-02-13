@@ -251,8 +251,18 @@ def get_version_branch(major_version):
     version_branch = f"grass{major_version}"
     try:
         urlrequest.urlopen(f"{GIT_URL}/tree/{version_branch}/src")
+    except HTTPError as err:
+        if err.code == 404:  # Not Found
+            version_branch = "grass{}".format(int(major_version) - 1)
+        else:
+            grass.fatal(_(err))
     except URLError:
-        version_branch = "grass{}".format(int(major_version) - 1)
+        grass.fatal(
+            _(
+                "You are not connected to the internet. Check your "
+                " internet connection."
+            )
+        )
     return version_branch
 
 
@@ -388,16 +398,31 @@ def etree_fromfile(filename):
 
 def etree_fromurl(url):
     """Create XML element tree from a given URL"""
+    base_message = "Download file from <{url}> failed".format(url=url)
     try:
         file_ = urlopen(url)
+    except HTTPError as err:
+        if err.code == 404:
+            gscript.fatal(
+                _(
+                    "{base_message}. File not found on the"
+                    " server.".format(base_message=base_message)
+                ),
+            )
+        else:
+            gscript.fatal(
+                _(
+                    "{base_message}, {err}. ".format(
+                        base_message=base_message,
+                        err=err,
+                    ),
+                ),
+            )
     except URLError:
         gscript.fatal(
             _(
-                "Download file from <{url}>,"
-                " failed. File is not on the server or"
-                " check your internet connection.".format(
-                    url=url,
-                ),
+                "{base_message}. Check your internet"
+                " connection.".format(base_message=base_message)
             ),
         )
     return etree.fromstring(file_.read())
