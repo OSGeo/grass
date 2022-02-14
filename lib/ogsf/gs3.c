@@ -1086,7 +1086,7 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
  */
 int Gs_update_attrange(geosurf * gs, int desc)
 {
-    long size;
+    size_t size;
     float min, max;
     typbuff *tb;
     struct BM *nm;
@@ -1115,7 +1115,7 @@ int Gs_update_attrange(geosurf * gs, int desc)
 	if (tb->ib) {
 	    int *p;
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = tb->ib;
 	    INIT_MINMAX(p, nm, size, min, max, found);
 
@@ -1124,14 +1124,14 @@ int Gs_update_attrange(geosurf * gs, int desc)
 		return (-1);
 	    }
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = tb->ib;
 	    SET_MINMAX(p, nm, size, min, max);
 	}
 	else if (tb->sb) {
 	    short *p;
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = tb->sb;
 	    INIT_MINMAX(p, nm, size, min, max, found);
 
@@ -1140,14 +1140,14 @@ int Gs_update_attrange(geosurf * gs, int desc)
 		return (-1);
 	    }
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = tb->sb;
 	    SET_MINMAX(p, nm, size, min, max);
 	}
 	else if (tb->cb) {
 	    char *p;
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = (char *)tb->cb;
 	    INIT_MINMAX(p, nm, size, min, max, found);
 
@@ -1156,14 +1156,14 @@ int Gs_update_attrange(geosurf * gs, int desc)
 		return (-1);
 	    }
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = (char *)tb->cb;
 	    SET_MINMAX(p, nm, size, min, max);
 	}
 	else if (tb->fb) {
 	    float *p;
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = tb->fb;
 	    INIT_MINMAX(p, nm, size, min, max, found);
 
@@ -1172,7 +1172,7 @@ int Gs_update_attrange(geosurf * gs, int desc)
 		return (-1);
 	    }
 
-	    size = gs->rows * gs->cols;
+	    size = (size_t)gs->rows * gs->cols;
 	    p = tb->fb;
 	    SET_MINMAX(p, nm, size, min, max);
 	}

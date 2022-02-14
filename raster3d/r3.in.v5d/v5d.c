@@ -2109,13 +2109,13 @@ int v5dReadGrid(v5dstruct * v, int time, int var, float data[])
 
     /* allocate compdata buffer */
     if (v->CompressMode == 1) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned char);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned char);
     }
     else if (v->CompressMode == 2) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned short);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned short);
     }
     else if (v->CompressMode == 4) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(float);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(float);
     }
     compdata = (void *)G_malloc(bytes);
     if (!compdata) {
@@ -2508,13 +2508,13 @@ int v5dWriteGrid(v5dstruct * v, int time, int var, const float data[])
 
     /* allocate compdata buffer */
     if (v->CompressMode == 1) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned char);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned char);
     }
     else if (v->CompressMode == 2) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(unsigned short);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(unsigned short);
     }
     else if (v->CompressMode == 4) {
-	bytes = v->Nr * v->Nc * v->Nl[var] * sizeof(float);
+	bytes = v->Nr * v->Nc * v->Nl[var] * (int)sizeof(float);
     }
     compdata = (void *)G_malloc(bytes);
     if (!compdata) {
