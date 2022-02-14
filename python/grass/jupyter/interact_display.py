@@ -173,6 +173,7 @@ class Raster:
     def __init__(self, name, title=None, use_region=False, saved_region=None, **kwargs):
         """Not sure"""
         import folium
+
         self._folium = folium
 
         # Make temporary folder for all our files
@@ -206,6 +207,7 @@ class Vector:
     def __init__(self, name, title=None, use_region=False, saved_region=None, **kwargs):
         """Not sure"""
         import folium
+
         self._folium = folium
 
         # Make temporary folder for all our files
@@ -327,7 +329,7 @@ class InteractiveMap:
         fig = self._folium.Figure(width=self.width, height=self.height)
         # Add map to figure
         fig.add_child(self.map)
-        #self.map.fit_bounds(self._region_manager.bbox)
+        # self.map.fit_bounds(self._region_manager.bbox)
 
         return fig
 
