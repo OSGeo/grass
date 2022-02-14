@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 
     {                           /* calculate parameters */
         int num_outputs = 0;
-        double search_radius, skip_radius, start_radius, step_radius;
+        double search_radius, skip_radius;
         double ns_resolution;
 
         if (!strcmp(par_comparison->answer, "anglev1"))

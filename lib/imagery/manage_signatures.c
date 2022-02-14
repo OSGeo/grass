@@ -73,7 +73,6 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     char dir[GNAME_MAX];
-    int ret = 0;
 
     G_debug(1, "I_signatures_remove(%d, %s);", type, name);
 

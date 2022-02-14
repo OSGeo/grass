@@ -8,7 +8,7 @@ int db__driver_list_databases(dbString *dbpath, int npaths, dbHandle **dblist, i
 {
     int i, count = 0;
     dbHandle *list;
-    char dsn[SQL_MAX_DSN_LENGTH], desc[100];
+    SQLCHAR dsn[SQL_MAX_DSN_LENGTH], desc[100];
     SQLUSMALLINT next;
 
     *dblist = NULL;
@@ -36,7 +36,7 @@ int db__driver_list_databases(dbString *dbpath, int npaths, dbHandle **dblist, i
     while (SQLDataSources(ODenvi, next, dsn, sizeof(dsn),
 			  NULL, desc, sizeof(desc), NULL) == SQL_SUCCESS) {
 	db_init_handle(&list[i]);
-	if (db_set_handle(&list[i], dsn, desc) != DB_OK) {
+	if (db_set_handle(&list[i], (const char *)dsn, (const char *)desc) != DB_OK) {
 	    db_d_append_error(_("Unable to set handle"));
 	    db_d_report_error();
 	    db_free_handle_array(list, count);
