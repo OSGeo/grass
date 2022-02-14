@@ -16,12 +16,43 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install
+      - name: Install non-Python dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install -r .github/workflows/python_requirements.txt
           pip install pylint==2.12.2
+
+      - name: Create installation directory
+        run: |
+          mkdir $HOME/install
+
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+
+      - name: Build
+        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+
+      - name: Add the bin directory to PATH
+        run: |
+          echo "$HOME/install/bin" >> $GITHUB_PATH
+
+      - name: Test executing of the grass command
+        run: .github/workflows/test_simple.sh
 
       - name: Run Pylint
         run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           cd python
           pylint --persistent=no --py-version=3.6 --jobs=$(nproc) grass
