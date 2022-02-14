@@ -456,6 +456,8 @@ int main(int argc, char *argv[])
     gpoint_count n_class_filtered = 0;
 
     int cat = 1;
+    // TODO: category number needs to be checked
+    // bool cat_max_reached = false;
 
     // define callback
     // Capture all values for reading by value, except for the ones
