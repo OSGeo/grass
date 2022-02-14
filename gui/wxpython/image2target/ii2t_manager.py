@@ -1303,7 +1303,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             ]
         )  # backward error
 
-        if self.statusbarManager.GetMode() == 8:  # go to
+        if self.statusbarManager.GetMode() == 5:  # go to
             self.StatusbarUpdate()
 
     def DeleteGCP(self, event):
@@ -1347,7 +1347,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.UpdateColours()
 
-        if self.statusbarManager.GetMode() == 8:  # go to
+        if self.statusbarManager.GetMode() == 5:  # go to
             self.StatusbarUpdate()
             if self.list.selectedkey > 0:
                 self.statusbarManager.SetProperty("gotoGCP", self.list.selectedkey)

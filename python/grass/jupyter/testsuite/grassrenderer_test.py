@@ -17,9 +17,10 @@
 #############################################################################
 
 import os
-import unittest
 import sys
+import unittest
 from pathlib import Path
+
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -28,7 +29,7 @@ from grass.gunittest.main import test
 def can_import_ipython():
     """Test folium import to see if test can be run."""
     try:
-        import IPython
+        import IPython  # noqa
 
         return True
     except ImportError:

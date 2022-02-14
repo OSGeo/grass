@@ -24,3 +24,7 @@ jobs:
       - name: Run Flake8
         run: |
           flake8 --count --statistics --show-source --jobs=$(nproc) .
+
+      - name: Run Flake8 on additional files
+        run: |
+          flake8 --count --statistics --show-source --jobs=$(nproc) python/grass/{script,jupyter}/testsuite/
