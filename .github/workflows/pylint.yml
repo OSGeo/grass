@@ -42,7 +42,7 @@ jobs:
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
       - name: Build
-        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install
 
       - name: Add the bin directory to PATH
         run: |
