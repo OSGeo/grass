@@ -16,6 +16,7 @@
 import os
 import shutil
 import tempfile
+import weakref
 
 import grass.script as gs
 
@@ -94,7 +95,15 @@ class GrassRenderer:
         # temporary directory that we can delete later. We need
         # this temporary directory for the legend anyways so we'll
         # make it now
-        self._tmpdir = tempfile.TemporaryDirectory()
+        # Resource managed by weakref.finalize.
+        self._tmpdir = (
+            tempfile.TemporaryDirectory()
+        )  # pylint: disable=consider-using-with
+
+        def cleanup(tmpdir):
+            tmpdir.cleanup()
+
+        weakref.finalize(self, cleanup, self._tmpdir)
 
         if filename:
             self._filename = filename
