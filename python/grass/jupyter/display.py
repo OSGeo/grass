@@ -97,8 +97,8 @@ class GrassRenderer:
         # make it now
         # Resource managed by weakref.finalize.
         self._tmpdir = (
-            tempfile.TemporaryDirectory()
-        )  # pylint: disable=consider-using-with
+            tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
+        )
 
         def cleanup(tmpdir):
             tmpdir.cleanup()
