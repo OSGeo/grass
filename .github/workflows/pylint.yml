@@ -11,7 +11,19 @@ on:
 
 jobs:
   pylint:
-    runs-on: ubuntu-20.04
+    name: "Pylint ${{ matrix.pylint-version }}"
+
+    # Using matrix just to get variables which are not environmental variables
+    # and also to sync with other workflows which use matrix.
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            python-version: "3.10"
+            min-python-version: "3.6"
+            pylint-version: "2.12.2"
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +31,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install non-Python dependencies
         run: |
@@ -33,7 +45,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pylint==2.12.2
+          pip install pylint==${{ matrix.pylint-version }}
 
       - name: Create installation directory
         run: |
@@ -48,7 +60,7 @@ jobs:
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
       - name: Build
-        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install
+        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
       - name: Add the bin directory to PATH
         run: |
@@ -57,8 +69,14 @@ jobs:
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
-      - name: Run Pylint
+      - name: Run Pylint on grass package
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           cd python
-          pylint --persistent=no --py-version=3.6 --jobs=$(nproc) grass
+          pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) grass
+
+      - name: Run Pylint on wxGUI
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          cd gui/wxpython
+          pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
