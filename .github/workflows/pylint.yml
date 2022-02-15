@@ -2,6 +2,9 @@ name: Python Pylint Code Quality
 
 on:
   push:
+    branches:
+    - main
+    - releasebranch_*
   pull_request:
 
 jobs:
