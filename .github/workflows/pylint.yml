@@ -5,6 +5,8 @@ on:
     branches:
     - main
     - releasebranch_*
+    tags:
+      - "*.*.*"
   pull_request:
 
 jobs:
