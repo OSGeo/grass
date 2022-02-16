@@ -124,7 +124,7 @@ def mapcalc(
     """
 
     if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2 ** 32)
+        seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
@@ -177,7 +177,7 @@ def mapcalc_start(
     """
 
     if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2 ** 32)
+        seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)

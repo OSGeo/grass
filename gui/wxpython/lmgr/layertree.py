@@ -515,15 +515,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU, self.OnPopupProperties, id=self.popupID["properties"]
                 )
 
-                if (
-                    ltype
-                    in (
-                        "raster",
-                        "vector",
-                        "raster_3d",
-                    )
-                    and self.mapdisplay.IsPaneShown("3d")
-                ):
+                if ltype in (
+                    "raster",
+                    "vector",
+                    "raster_3d",
+                ) and self.mapdisplay.IsPaneShown("3d"):
                     self.popupMenu.Append(self.popupID["nviz"], _("3D view properties"))
                     self.Bind(
                         wx.EVT_MENU, self.OnNvizProperties, id=self.popupID["nviz"]
