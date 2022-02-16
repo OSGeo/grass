@@ -80,3 +80,9 @@ jobs:
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           cd gui/wxpython
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
+
+      - name: Run Pylint on other files using pytest
+        run: |
+          pip install pytest pytest-pylint
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          pytest --pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) --pylint-ignore-patterns="python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,scripts/d.rast.edit/d.rast.edit.py"
