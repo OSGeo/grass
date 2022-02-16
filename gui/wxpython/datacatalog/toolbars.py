@@ -53,30 +53,18 @@ icons = {
 }
 
 
-class DataCatalogToolbar(BaseToolbar):
-    """Main data catalog toolbar"""
-
-    def __init__(self, parent):
-        """Main toolbar constructor"""
-
-        BaseToolbar.__init__(self, parent)
-
-        self.InitToolbar(self._toolbarData())
+class DataCatalogSearch(SearchCtrl):
+    def __init__(self, parent, filter_function):
+        super().__init__(parent)
+        self.filter_function = filter_function
         self.filter_element = None
-        self.filter = SearchCtrl(parent=self)
-        self.filter.SetDescriptiveText(_("Search"))
-        self.filter.ShowCancelButton(True)
-        self.filter.SetSize((150, self.filter.GetBestSize()[1]))
-        self.filter.Bind(
+        self.SetDescriptiveText(_("Search"))
+        self.ShowCancelButton(True)
+        self.Bind(
             wx.EVT_TEXT,
-            lambda event: self.parent.Filter(
-                self.filter.GetValue(), self.filter_element
-            ),
+            lambda event: self.filter_function(self.GetValue(), self.filter_element),
         )
-        self.filter.Bind(
-            wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.parent.Filter("")
-        )
-        self.AddControl(self.filter)
+        self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.filter_function(""))
         filterMenu = wx.Menu()
         item = filterMenu.AppendRadioItem(-1, "All")
         self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
@@ -86,12 +74,37 @@ class DataCatalogToolbar(BaseToolbar):
         self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
         item = filterMenu.AppendRadioItem(-1, "3D raster maps")
         self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
-        self.filter.SetMenu(filterMenu)
-        help = _(
+        self.SetMenu(filterMenu)
+        helpTip = _(
             "Type to search database by map type or name. "
             "Use Python regular expressions to refine your search."
         )
-        self.SetToolShortHelp(self.filter.GetId(), help)
+        self.SetToolTip(helpTip)
+
+    def OnFilterMenu(self, event):
+        """Decide the element to filter by"""
+        filterMenu = self.GetMenu().GetMenuItems()
+        self.filter_element = None
+        if filterMenu[1].IsChecked():
+            self.filter_element = "raster"
+        elif filterMenu[2].IsChecked():
+            self.filter_element = "vector"
+        elif filterMenu[3].IsChecked():
+            self.filter_element = "raster_3d"
+        # trigger filter on change
+        if self.GetValue():
+            self.filter_function(self.GetValue(), self.filter_element)
+
+
+class DataCatalogToolbar(BaseToolbar):
+    """Main data catalog toolbar"""
+
+    def __init__(self, parent):
+        """Main toolbar constructor"""
+
+        BaseToolbar.__init__(self, parent)
+
+        self.InitToolbar(self._toolbarData())
         # realize the toolbar
         self.Realize()
 
@@ -121,20 +134,6 @@ class DataCatalogToolbar(BaseToolbar):
                 ("importLayer", icons["importLayer"], self.parent.OnImportMenu),
             )
         )
-
-    def OnFilterMenu(self, event):
-        """Decide the element to filter by"""
-        filterMenu = self.filter.GetMenu().GetMenuItems()
-        self.filter_element = None
-        if filterMenu[1].IsChecked():
-            self.filter_element = "raster"
-        elif filterMenu[2].IsChecked():
-            self.filter_element = "vector"
-        elif filterMenu[3].IsChecked():
-            self.filter_element = "raster_3d"
-        # trigger filter on change
-        if self.filter.GetValue():
-            self.parent.Filter(self.filter.GetValue(), self.filter_element)
 
     def OnSetRestriction(self, event):
         if self.GetToolState(self.lock):
