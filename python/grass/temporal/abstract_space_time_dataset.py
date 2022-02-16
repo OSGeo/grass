@@ -1538,7 +1538,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 else:
                     return "{0:02d}".format(int(value))
             except ValueError:
-                return value
+                return None
 
             return None
 
@@ -1550,8 +1550,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # be case-insensitive
         if "_" in self.semantic_label:
-            # fully-qualified semantic label
-            where += "semantic_label IN ('{}'".format(self.semantic_label.upper())
+            # fully-qualified semantic label, do not modify
+            where += "semantic_label IN ('{}'".format(self.semantic_label)
 
             # be zero-padding less sensitive
             shortcut, identifier = self.semantic_label.split("_", -1)
