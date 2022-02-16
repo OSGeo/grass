@@ -1538,7 +1538,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 else:
                     return "{0:02d}".format(int(value))
             except ValueError:
-                return value
+                return None
 
             return None
 
