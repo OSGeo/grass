@@ -40,7 +40,7 @@ int close_maps(void)
 	    for (c = 0; c < ncols; c++) {
 		/* dseg_get(&wat, &dvalue, r, c); */
 		dvalue = wabuf[c].wat;
-		if (Rast_is_d_null_value(&dvalue) == 0 && dvalue) {
+		if (!Rast_is_d_null_value(&dvalue)) {
 		    if (abs_acc) {
 			dvalue = fabs(dvalue);
 			sum += dvalue;
