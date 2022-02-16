@@ -476,7 +476,6 @@ if CheckWxVersion([4, 1, 0]):
             self.EnableCheckBoxes(True)
             self.AssignImageList(wx.ImageList(16, 16), wx.IMAGE_LIST_SMALL)
 
-
 else:
     import wx.lib.mixins.listctrl as listmix
 
