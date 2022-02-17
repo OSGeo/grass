@@ -267,7 +267,9 @@ class InteractiveMap:
         # Set LayerControl default
         self.layer_control = False
 
-        self.renderer = ReprojectionRenderer(use_region=use_region, saved_region=saved_region)
+        self.renderer = ReprojectionRenderer(
+            use_region=use_region, saved_region=saved_region
+        )
 
     def add_vector(self, name, title=None, **kwargs):
         """Imports vector into temporary WGS84 location,
@@ -285,9 +287,7 @@ class InteractiveMap:
             title = name
 
         # Import GeoJSON to folium and add to map
-        self._folium.GeoJson(
-            str(filename), name=title, **kwargs
-        ).add_to(self.map)
+        self._folium.GeoJson(str(filename), name=title, **kwargs).add_to(self.map)
 
         return self.map
 
