@@ -187,6 +187,9 @@ def main():
             overwrite=overwrite,
             dbif=dbif,
         )
+        semantic_label = map.metadata.get_semantic_label()
+        if semantic_label is not None:
+            new_map.set_semantic_label(semantic_label)
         new_maps.append(new_map)
 
         mod = copy.deepcopy(neighbor_module)
