@@ -75,18 +75,19 @@ class SbManager:
         self.mapFrame = mapframe
         self.statusbar = statusbar
 
-        self.choice = wx.Choice(self.statusbar, wx.ID_ANY)
-
-        self.choice.Bind(wx.EVT_CHOICE, self.OnToggleStatus)
-
         self.statusbarItems = dict()
 
         self._postInitialized = False
         self._modeIndexSet = False
+        self._mode = 0
+        self.shownWidgetInStatusbar = None
 
         self.progressbar = SbProgress(self.mapFrame, self.statusbar, self)
         self.progressbar.progressShown.connect(self._progressShown)
         self.progressbar.progressHidden.connect(self._progressHidden)
+
+        self.shownWidgetInStatusbarChanged = Signal("SbManager.shownWidgetInStatusbarChanged")
+        self.shownWidgetInStatusbarChanged.connect(self.ShowItem)
 
         self._oldStatus = ""
 
@@ -126,8 +127,6 @@ class SbManager:
         :func:`AddStatusbarItemsByClass`
         """
         self.statusbarItems[item.name] = item
-        if item.GetPosition() == 0:
-            self.choice.Append(item.label, clientData=item)  # attrError?
 
     def AddStatusbarItemsByClass(self, itemClasses, **kwargs):
         """Adds items to statusbar
@@ -187,37 +186,41 @@ class SbManager:
 
         :func:`Update`
         """
-        if (
-            self.statusbarItems[itemName].GetPosition() != 0
-            or not self.progressbar.IsShown()
-        ):
+        for item in self.statusbarItems.values():
+            if item.GetPosition() == 0:
+                if item.name != itemName and not self.progressbar.IsShown():
+                    item.Hide()
+            else:
+                item.Update()
             self.statusbarItems[itemName].Show()
+        self.shownWidgetInStatusbar = list(self.statusbarItems.keys()).index(itemName)
 
-    def _postInit(self):
-        """Post-initialization method
-
-        It sets internal user settings,
-        set choice's selection (from user settings) and does reposition.
-        It needs choice filled by items.
-        it is called automatically.
-        """
-        UserSettings.Set(
-            group="display",
-            key="statusbarMode",
-            subkey="choices",
-            value=self.choice.GetItems(),
-            settings_type="internal",
-        )
-
-        if not self._modeIndexSet:
-            self.choice.SetSelection(
-                UserSettings.Get(
-                    group="display", key="statusbarMode", subkey="selection"
-                )
-            )
-        self.Reposition()
-
-        self._postInitialized = True
+#    def _postInit(self):
+#        """Post-initialization method
+#
+#        It sets internal user settings,
+#        set choice's selection (from user settings) and does reposition.
+#        It needs choice filled by items.
+#        it is called automatically.
+#        """
+#        print(self.choice.GetItems())
+#        UserSettings.Set(
+#            group="display",
+#            key="statusbarMode",
+#            subkey="choices",
+#            value=self.choice.GetItems(),
+#            settings_type="internal",
+#        )
+#
+#        if not self._modeIndexSet:
+#            self.choice.SetSelection(
+#                UserSettings.Get(
+#                    group="display", key="statusbarMode", subkey="selection"
+#                )
+#            )
+#        self.Reposition()
+#
+#        self._postInitialized = True
 
     def Update(self):
         """Updates statusbar
@@ -226,20 +229,21 @@ class SbManager:
         """
         self.progressbar.Update()
 
-        if not self._postInitialized:
-            self._postInit()
+#        if not self._postInitialized:
+#            self._postInit()
         for item in self.statusbarItems.values():
             if item.GetPosition() == 0:
                 if not self.progressbar.IsShown():
                     item.Hide()
             else:
-                item.Update()  # mask, render
+                item.Update()  # render
 
-        if self.progressbar.IsShown():
-            pass
-        elif self.choice.GetCount() > 0:
-            item = self.choice.GetClientData(self.choice.GetSelection())
-            item.Update()
+#        self.statusbarItems.values()
+#        if self.progressbar.IsShown():
+#            pass
+#        elif self.choice.GetCount() > 0:
+#            item = self.choice.GetClientData(self.choice.GetSelection())
+#            item.Update()
 
     def Reposition(self):
         """Reposition items in statusbar
@@ -252,7 +256,6 @@ class SbManager:
         for item in self.statusbarItems.values():
             widgets.append((item.GetPosition(), item.GetWidget()))
 
-        widgets.append((1, self.choice))
         widgets.append((1, self.progressbar.GetWidget()))
 
         for idx, win in widgets:
@@ -285,11 +288,11 @@ class SbManager:
 
     def _progressShown(self):
         self._oldStatus = self.statusbar.GetStatusText(0)
-        self.choice.GetClientData(self.choice.GetSelection()).Hide()
+        #self.choice.GetClientData(self.choice.GetSelection()).Hide()
 
     def _progressHidden(self):
         self.statusbar.SetStatusText(self._oldStatus, 0)
-        self.choice.GetClientData(self.choice.GetSelection()).Show()
+        #self.choice.GetClientData(self.choice.GetSelection()).Show()
 
     def OnToggleStatus(self, event):
         """Toggle status text"""
@@ -300,12 +303,11 @@ class SbManager:
 
         Mode is usually driven by user through choice.
         """
-        self._modeIndexSet = True
-        self.choice.SetSelection(modeIndex)
+        self._mode = modeIndex
 
     def GetMode(self):
         """Returns current mode"""
-        return self.choice.GetSelection()
+        return self._mode
 
     def SetProgress(self, range, value, text):
         """Update progress."""
@@ -513,7 +515,7 @@ class SbGoTo(SbItem):
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = "goto"
-        self.label = _("Go to")
+        self.label = _("Go to XY coordinates")
 
         self.widget = TextCtrl(
             parent=self.statusbar,
@@ -822,7 +824,7 @@ class SbRegionExtent(SbTextItem):
     def __init__(self, mapframe, statusbar, position=0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
         self.name = "displayRegion"
-        self.label = _("Extent")
+        self.label = _("Display extent")
 
     def Show(self):
         precision = int(
