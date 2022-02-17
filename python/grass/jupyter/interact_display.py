@@ -267,21 +267,31 @@ class InteractiveMap:
         # Set LayerControl default
         self.layer_control = False
 
-    def add_vector(self, name):
+        self.renderer = ReprojectionRenderer(use_region=use_region, saved_region=saved_region)
+
+    def add_vector(self, name, title=None, **kwargs):
         """Imports vector into temporary WGS84 location,
         re-formats to a GeoJSON and adds to folium map.
 
         :param str name: name of vector to be added to map;
                          positional-only parameter
+        :param str title: vector name for layer control
         """
 
+        # Reproject vector and write to Geojson
+        filename, tmp_dir = self.renderer.render_vector(name)
+
+        if not title:
+            title = name
+
         # Import GeoJSON to folium and add to map
-        Vector(
-            name, use_region=self._use_region, saved_region=self._saved_region
+        self._folium.GeoJson(
+            str(filename), name=title, **kwargs
         ).add_to(self.map)
+
         return self.map
 
-    def add_raster(self, name, opacity=0.8):
+    def add_raster(self, name, title=None, **kwargs):
         """Imports raster into temporary WGS84 location,
         exports as png and overlays on folium map.
 
@@ -294,17 +304,26 @@ class InteractiveMap:
         then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
+        :param str title: raster name for layer control
         :param float opacity: raster opacity, number between
                               0 (transparent) and 1 (opaque)
         """
 
+        # Reproject vector and write to Geojson
+        filename, bounds, tmp_dir = self.renderer.render_raster(name)
+
+        if not title:
+            title = name
+
+        img = self._folium.raster_layers.ImageOverlay(
+            image=filename,
+            bounds=bounds,
+            name=title,
+            **kwargs,
+        )
+
         # Add image to map
-        Raster(
-            name,
-            opacity=opacity,
-            use_region=self._use_region,
-            saved_region=self._saved_region,
-        ).add_to(self.map)
+        img.add_to(self.map)
 
         return self.map
 
@@ -329,7 +348,7 @@ class InteractiveMap:
         fig = self._folium.Figure(width=self.width, height=self.height)
         # Add map to figure
         fig.add_child(self.map)
-        # self.map.fit_bounds(self._region_manager.bbox)
+        self.map.fit_bounds(self.renderer._region_manager.bbox)
 
         return fig
 
