@@ -1,7 +1,9 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
-# PURPOSE:   RE-WRITE
+# PURPOSE:   ReprojectionRenderer writes PNGs and geoJSONs that are importable by
+#            folium. Reprojects rasters to Pseudo-Mercator and vectors to WGS84.
+#            Exports reprojected rasters and vectors to PNGs and geoJSONs, respectively.
 #
 # COPYRIGHT: (C) 2022 Caitlin Haedrich, and by the GRASS Development Team
 #
