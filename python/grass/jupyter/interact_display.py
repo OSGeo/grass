@@ -145,11 +145,27 @@ class InteractiveMap:
     >>> m.show()
     """
 
-    def __init__(self, width=400, height=400, use_region=False, saved_region=None):
+    def __init__(
+        self,
+        width=400,
+        height=400,
+        tiles="CartoDB positron",
+        use_region=False,
+        saved_region=None,
+    ):
         """Creates a blank folium map centered on g.region.
+
+        tiles parameter is passed directly to folium.Map() which supports several
+        built-in tilesets (including "OpenStreetMap", "Stamen Toner", "Stamen Terrain",
+        "Stamen Watercolor", "Mapbox Bright", "Mapbox Control Room", "CartoDB positron",
+        "CartoDB dark_matter") as well as custom tileset URL (i.e.
+        "http://{s}.yourtiles.com/{z}/{x}/{y}.png"). For more information, visit
+        folium documentation:
+        https://python-visualization.github.io/folium/modules.html
 
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
+        :param str tiles: map tileset to use
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
         """
@@ -169,7 +185,7 @@ class InteractiveMap:
         self.map = self._folium.Map(
             width=self.width,
             height=self.height,
-            tiles="cartodbpositron",
+            tiles=tiles,
         )
         # Set LayerControl default
         self.layer_control = False
