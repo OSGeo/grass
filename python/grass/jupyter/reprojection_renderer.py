@@ -9,8 +9,8 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""Reprojects rasters to Pseudo-Mercator and vectors to WGS84.
-Exports reprojected rasters and vectors to PNGs and geoJSONs, respectively."""
+"""Reprojects rasters to Pseudo-Mercator and vectors to WGS84. Exports reprojected
+ rasters and vectors to PNGs and geoJSONs, respectively."""
 
 import os
 import tempfile
@@ -29,18 +29,18 @@ from .region import RegionManagerForInteractiveMap
 
 
 class ReprojectionRenderer:
-    """This class reprojects rasters and vectors to folium-compatible
-    temporary location and projection.
+    """This class reprojects rasters and vectors to folium-compatible temporary location
+     and projection.
 
-    In preparation to displaying with folium, it saves vectors to geoJSON and rasters
-    to PNG images.
+    In preparation to displaying with folium, it saves vectors to geoJSON and rasters to
+    PNG images.
     """
 
     def __init__(self, use_region=False, saved_region=None, work_dir=None):
-        """Creates Pseudo-Mercator and WGS84 locations. If no working directory provided,
-        also creates temporary working directory to contain locations.
+        """Creates Pseudo-Mercator and WGS84 locations. If no work_dir provided, also
+        creates temporary working directory to contain locations.
 
-        param bool use_region: use computational region of current mapset (default False)
+        param bool use_region: use computational region of current mapset
         param str saved_region: name of saved computation region to use
         param work_dir: path to directory where locations, files should be written
         """
@@ -48,7 +48,8 @@ class ReprojectionRenderer:
         if not work_dir:
             # Resource managed by weakref.finalize.
             self._tmp_dir = (
-                tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
+                # pylint: disable=consider-using-with
+                tempfile.TemporaryDirectory()
             )
 
             def cleanup(tmpdir):

@@ -40,7 +40,7 @@ class Raster:
         param bool use_region: use computational region of current mapset
         param str saved_region: name of saved computation region
         param renderer: instance of ReprojectionRenderer
-        **kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay() method
+        **kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay()
         """
         import folium  # pylint: disable=import-outside-toplevel
 
@@ -99,15 +99,15 @@ class Vector:
         renderer=None,
         **kwargs,
     ):
-        """Reproject GRASS vector and export to folium-ready PNG.
-        Also computes bounding box for PNG overlay in folium map.
+        """Reproject GRASS vector and export to folium-ready PNG. Also computes bounding
+        box for PNG overlay in folium map.
 
         param str name: vector name
         param str title: title of vector to display in layer control legend
-        param bool use_region: use computational region of current mapset (default False)
+        param bool use_region: use computational region of current mapset
         param str saved_region: name of saved computation region
         renderer: instance of ReprojectionRenderer
-        **kwargs: keyword arguments passed to folium.GeoJson() method
+        **kwargs: keyword arguments passed to folium.GeoJson()
         """
         import folium  # pylint: disable=import-outside-toplevel
 
@@ -150,8 +150,8 @@ class InteractiveMap:
 
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
-        param bool use_region: use computational region of current mapset
-        param str saved_region: name of saved computation region
+        :param bool use_region: use computational region of current mapset
+        :param str saved_region: name of saved computation region
         """
         import folium  # pylint: disable=import-outside-toplevel
 
@@ -180,13 +180,13 @@ class InteractiveMap:
         )
 
     def add_vector(self, name, title=None, **kwargs):
-        """Imports vector into temporary WGS84 location,
-        re-formats to a GeoJSON and adds to folium map.
+        """Imports vector into temporary WGS84 location, re-formats to a GeoJSON and
+        adds to folium map.
 
         :param str name: name of vector to be added to map;
                          positional-only parameter
         :param str title: vector name for layer control
-        :**kwargs: keyword arguments passed to folium.GeoJson() method
+        :**kwargs: keyword arguments passed to folium.GeoJson()
         """
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
@@ -204,7 +204,7 @@ class InteractiveMap:
 
         :param str name: name of raster to add to display; positional-only parameter
         :param str title: raster name for layer control
-        :**kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay() method
+        :**kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay()
         """
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
