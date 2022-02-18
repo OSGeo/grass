@@ -48,8 +48,8 @@ class ReprojectionRenderer:
         if not work_dir:
             # Resource managed by weakref.finalize.
             self._tmp_dir = (
-                tempfile.TemporaryDirectory()
-            )  # pylint: disable=consider-using-with
+                tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
+            )
 
             def cleanup(tmpdir):
                 tmpdir.cleanup()
@@ -116,12 +116,10 @@ class ReprojectionRenderer:
         )
         # Write raster to png file with GrassRenderer
         region_info = gs.region(env=self._src_env)
-        png_width = region_info["cols"]
-        png_height = region_info["rows"]
         filename = os.path.join(self._tmp_dir.name, f"{tgt_name}.png")
         img = GrassRenderer(
-            width=png_width,
-            height=png_height,
+            width=region_info["cols"],
+            height=region_info["rows"],
             env=self._psmerc_env,
             filename=filename,
             use_region=True,
