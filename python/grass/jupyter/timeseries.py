@@ -10,6 +10,7 @@
 #           This program is free software under the GNU General Public
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
+"Create and display visualizations for space-time datasets."
 
 import tempfile
 import os
@@ -101,10 +102,10 @@ class TimeSeries:
         # self._file_date_dict = {}
         self._date_name_dict = {}
 
-        # TODO: Improve basemap and overlay method
         # Currently does not support multiple basemaps or overlays
         # (i.e. if you wanted to have two vectors rendered, like
         # roads and streams, this isn't possible - you can only have one
+        # We should be put a better method here someday
         self.basemap = basemap
         self.overlay = overlay
 
@@ -152,7 +153,7 @@ class TimeSeries:
 
         for name in self._renderlist:
             # Create image file
-            filename = os.path.join(self._tmpdir.name, "{}.png".format(name))
+            filename = os.path.join(self._tmpdir.name, f"{name}.png")
             # self._filenames.append(filename)
 
             # Render image
@@ -182,8 +183,8 @@ class TimeSeries:
                                 percentage (%) or pixels (px)
         """
         # Lazy Imports
-        import ipywidgets as widgets
-        from IPython.display import Image
+        import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
+        from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         # Datetime selection slider
         slider = widgets.SelectionSlider(
@@ -201,7 +202,7 @@ class TimeSeries:
         def view_image(date):
             # Look up raster name for date
             name = self._date_name_dict[date]
-            filename = os.path.join(self._tmpdir.name, "{}.png".format(name))
+            filename = os.path.join(self._tmpdir.name, f"{name}.png")
             return Image(filename)
 
         # Return interact widget with image and slider
@@ -214,38 +215,51 @@ class TimeSeries:
         font="DejaVuSans.ttf",
         text_size=12,
         text_color="gray",
+        filename=None,
     ):
         """
+        Creates a GIF animation of rendered layers.
+
+        Text color must be in a format accepted by PIL ImageColor module. For supported
+        formats, visit:
+        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
+
         param int duration: time to display each frame; milliseconds
         param bool label: include date/time stamp on each frame
         param str font: font file
         param int text_size: size of date/time text
-        param str text_color: color to use for the text. See
-                              https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
-                              for list of available color formats
+        param str text_color: color to use for the text.
+        param str filename: name of output GIF file
         """
         # Create a GIF from the PNG images
-        from PIL import Image
-        from PIL import ImageFont
-        from PIL import ImageDraw
-        from IPython.display import Image as ipyImage
+        from PIL import Image  # pylint: disable=import-outside-toplevel
+        from PIL import ImageFont  # pylint: disable=import-outside-toplevel
+        from PIL import ImageDraw  # pylint: disable=import-outside-toplevel
+        from IPython.display import (  # pylint: disable=import-outside-toplevel
+            Image as ipyImage,
+        )
 
         # filepath
-        fp_out = os.path.join(self._tmpdir.name, "image.gif")
+        if not filename:
+            filename = os.path.join(self._tmpdir.name, "image.gif")
 
         imgs = []
         for date in self._dates:
             name = self._date_name_dict[date]
-            filename = os.path.join(self._tmpdir.name, "{}.png".format(name))
-            img = Image.open(filename)
+            img_path = os.path.join(self._tmpdir.name, f"{name}.png")
+            img = Image.open(img_path)
             draw = ImageDraw.Draw(img)
             if label:
-                font_settings = ImageFont.truetype(font, text_size)
-                draw.text((0, 0), date, fill=text_color, font=font_settings)
+                draw.text(
+                    (0, 0),
+                    date,
+                    fill=text_color,
+                    font=ImageFont.truetype(font, text_size),
+                )
             imgs.append(img)
 
         img.save(
-            fp=fp_out,
+            fp=filename,
             format="GIF",
             append_images=imgs[:-1],
             save_all=True,
@@ -254,4 +268,4 @@ class TimeSeries:
         )
 
         # Display the GIF
-        return ipyImage(fp_out)
+        return ipyImage(filename)
