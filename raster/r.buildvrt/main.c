@@ -219,6 +219,8 @@ int main(int argc, char *argv[])
     	}
 	num_inputs = j;
     }
+    if (num_inputs == 0)
+	G_fatal_error(_("All input maps only contain NULL, cannot continue"));
 
     qsort(inputs, num_inputs, sizeof(struct input), cmp_wnd);
 
