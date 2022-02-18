@@ -310,7 +310,6 @@ int init_vars(int argc, char *argv[])
 
     /* read elevation input and mark NULL/masked cells */
     G_message("SECTION 1a: Mark masked and NULL cells");
-    MASK_flag = 0;
     do_points = (GW_LARGE_INT) nrows *ncols;
 
     for (r = 0; r < nrows; r++) {
