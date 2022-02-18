@@ -296,8 +296,9 @@ class RBShowInStatusbar:
             style=wx.RA_SPECIFY_COLS,
         )
         self.names = self._getAttributes(attrType="name")
-        if self.statusbarManager.shownWidgetInStatusbar:
-            self._setValue(self.statusbarManager.shownWidgetInStatusbar)
+        if self.statusbarManager.shownWidgetInStatusbar in self.names:
+            value = [self.names.index(x) for x in self.names if x in self.statusbarManager.shownWidgetInStatusbar][0]
+            self._setValue(value)
         else:
             self._setValue(self.statusbarManager.GetMode())
 
@@ -326,9 +327,16 @@ class RBShowInStatusbar:
                     attributes.append(value.name)
         return attributes
 
+    def _connect(self):
+        self.statusbarManager.shownWidgetInStatusbarChanged.connect(self._setValue)
+
+    def _disconnect(self):
+        self.statusbarManager.shownWidgetInStatusbarChanged.disconnect(self._setValue)
+
     def _onToggle(self, event):
-        name = self._getAttributes(attrType="name")[self.GetValue()]
-        self.statusbarManager.shownWidgetInStatusbarChanged.emit(itemName=name)
+        self._disconnect()
+        self.statusbarManager.shownWidgetInStatusbar = self.names[self.GetValue()]
+        self._connect()
 
 
 class MapDisplayPropertiesDialog(wx.Dialog):

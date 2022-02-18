@@ -80,7 +80,7 @@ class SbManager:
         self._postInitialized = False
         self._modeIndexSet = False
         self._mode = 0
-        self.shownWidgetInStatusbar = None
+        self._shownWidgetInStatusbar = None
 
         self.progressbar = SbProgress(self.mapFrame, self.statusbar, self)
         self.progressbar.progressShown.connect(self._progressShown)
@@ -92,6 +92,16 @@ class SbManager:
         self._oldStatus = ""
 
         self._hiddenItems = {}
+
+    @property
+    def shownWidgetInStatusbar(self):
+        return self._shownWidgetInStatusbar
+
+    @shownWidgetInStatusbar.setter
+    def shownWidgetInStatusbar(self, name):
+        if name != self._shownWidgetInStatusbar:
+            self._shownWidgetInStatusbar = name
+            self.shownWidgetInStatusbarChanged.emit(itemName=name)
 
     def SetProperty(self, name, value):
         """Sets property represented by one of contained SbItems
@@ -193,7 +203,6 @@ class SbManager:
             else:
                 item.Update()
             self.statusbarItems[itemName].Show()
-        self.shownWidgetInStatusbar = list(self.statusbarItems.keys()).index(itemName)
 
 #    def _postInit(self):
 #        """Post-initialization method
