@@ -219,6 +219,8 @@ int main(int argc, char *argv[])
     	}
 	num_inputs = j;
     }
+    if (num_inputs == 0)
+	G_fatal_error(_("All input maps only contain NULL, cannot continue"));
 
     qsort(inputs, num_inputs, sizeof(struct input), cmp_wnd);
 
@@ -261,7 +263,7 @@ int main(int argc, char *argv[])
 	if (strcmp(nsresstr, tnsresstr) != 0)
 	    G_warning(_("Input ns resolutions are different"));
 	if (strcmp(ewresstr, tewresstr) != 0)
-	    G_warning(_("Input ns resolutions are different"));
+	    G_warning(_("Input ew resolutions are different"));
 
 	if (cellhd.north < p->cellhd.north)
 	    cellhd.north = p->cellhd.north;
