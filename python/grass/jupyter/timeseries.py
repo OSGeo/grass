@@ -13,6 +13,7 @@
 
 import tempfile
 import os
+import weakref
 import grass.script as gs
 from .display import GrassRenderer
 
@@ -117,7 +118,15 @@ class TimeSeries:
             )
 
         # Create a temporary directory for our PNG images
-        self._tmpdir = tempfile.TemporaryDirectory()
+        self._tmpdir = (
+            # pylint: disable=consider-using-with
+            tempfile.TemporaryDirectory()
+        )
+
+        def cleanup(tmpdir):
+            tmpdir.cleanup()
+
+        weakref.finalize(self, cleanup, self._tmpdir)
 
         # create list of layers to render and date/times
         self._renderlist, self._dates = collect_lyr_dates(self.timeseries, self._etype)
