@@ -140,7 +140,7 @@ class TimeSeries:
 
     def d_legend(self, **kwargs):
         """Wrapper for d.legend. Passes keyword arguments to d.legend in render_layers
-         ethod.
+        ethod.
         """
         self._legend = True
         self._legend_kwargs = kwargs
