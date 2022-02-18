@@ -10,7 +10,7 @@
 #           This program is free software under the GNU General Public
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
-"Create and display visualizations for space-time datasets."
+"""Create and display visualizations for space-time datasets."""
 
 import tempfile
 import os
@@ -27,6 +27,9 @@ def collect_lyr_dates(timeseries, etype):
     "gran" method for t.rast.list or t.vect.list then fills in
     missing layers with previous timestep layer. If first time step
     is missing, uses the first available layer.
+
+    :param str timeseries: name of space-time dataset
+    :param str etype: element type, "stvds" or "strds"
     """
     if etype == "strds":
         rows = gs.read_command(
@@ -70,8 +73,8 @@ def collect_lyr_dates(timeseries, etype):
 
 
 class TimeSeries:
-    """Creates visualizations of time-space raster and
-    vector datasets in Jupyter Notebooks
+    """Creates visualizations of time-space raster and vector datasets in Jupyter
+    Notebooks.
 
     Basic usage::
     >>> img = TimeSeries("series_name")
@@ -80,8 +83,8 @@ class TimeSeries:
     >>> img.time_slider() #Create TimeSlider
     >>> img.animate()
 
-    This class of grass.jupyter is experimental and under development.
-    The API can change at anytime.
+    This class of grass.jupyter is experimental and under development. The API can
+    change at anytime.
     """
 
     def __init__(self, timeseries, etype="strds", basemap=None, overlay=None):
@@ -136,8 +139,8 @@ class TimeSeries:
         }
 
     def d_legend(self, **kwargs):
-        """Wrapper for d.legend. Passes keyword arguments to d.legend in
-        render_layers method.
+        """Wrapper for d.legend. Passes keyword arguments to d.legend in render_layers
+         ethod.
         """
         self._legend = True
         self._legend_kwargs = kwargs
