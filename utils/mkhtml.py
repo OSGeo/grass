@@ -180,6 +180,103 @@ def download_git_commit(url, response_format, *args, **kwargs):
         )
 
 
+def parse_git_commit(commit, git_log, datetime_format):
+    """Parse Git commit
+
+    :param str commit: commit message
+    :param dict git_log: dict which store last commit and commnit
+                         date
+    :param str datetime_format: output commit datetime format
+
+    :return dict git_log: dict which store last commit and commnit date
+    """
+    git_log["commit"], commit_date = commit.split(",")
+    git_log["date"] = format_git_commit_date_from_local_git(
+        commit_datetime=commit_date,
+        datetime_format=datetime_format,
+    )
+    return git_log
+
+
+def get_git_commit_from_file(git_log, json_file_path, datetime_format):
+    """Get Git commit from JSON file
+
+    :param dict git_log: dict which store last commit and commnit date
+    :param str json_file_path: JSON file path which include last Git
+                               commits for all core modules
+    :param str datetime_format: output commit datetime format
+
+    :return dict git_log: dict which store last commit and commnit date
+    """
+    if os.path.exists(json_file_path):
+        with open(json_file_path) as f:
+            core_modules_with_last_commit = json.load(f)
+        if pgm in core_modules_with_last_commit:
+            core_module = core_modules_with_last_commit[pgm]
+            git_log["commit"] = core_module["commit"]
+            git_log["date"] = format_git_commit_date_from_local_git(
+                commit_datetime=core_module["date"],
+                datetime_format=datetime_format,
+            )
+            return git_log
+    return git_log
+
+
+def get_git_commit_from_rest_api(
+    grass_addons_api_url,
+    git_log,
+    datetime_format,
+):
+    """Get Git commit from remote GitHub REST API
+
+    :param str grass_addons_api_url: GRASS GIS Addons repo REST API URL
+    :param dict git_log: dict which store last commit and commnit date
+    :param str datetime_format: output commit datetime format
+
+    :return dict git_log: dict which store last commit and commnit date
+    """
+    response = download_git_commit(
+        url=grass_addons_api_url,
+        response_format="application/json",
+    )
+    if response:
+        commit = json.loads(response.read())
+        if commit:
+            git_log["commit"] = commit[0]["sha"]
+            git_log["date"] = format_git_commit_date_from_rest_api(
+                commit_datetime=commit[0]["commit"]["author"]["date"],
+                datetime_format=datetime_format,
+            )
+    return git_log
+
+
+def format_git_commit_date_from_rest_api(commit_datetime, datetime_format):
+    """Format datetime from remote GitHub REST API
+
+    :param str commit_datetime: commit datetime
+    :param str datetime_format: output commit datetime format
+
+    :return str: output formatted commit datetime
+    """
+    return datetime.strptime(
+        commit_datetime,
+        "%Y-%m-%dT%H:%M:%SZ",  # ISO 8601 YYYY-MM-DDTHH:MM:SSZ
+    ).strftime(datetime_format)
+
+
+def format_git_commit_date_from_local_git(commit_datetime, datetime_format):
+    """Format datetime from local Git or JSON file
+
+    :param str commit_datetime: commit datetime
+    :param str datetime_format: output commit datetime format
+
+    :return str: output formatted commit datetime
+    """
+    return datetime.fromtimestamp(
+        int(commit_datetime.replace("\n", "").replace("\r", "")),
+    ).strftime(datetime_format)
+
+
 def get_last_git_commit(src_dir, is_addon, addon_path):
     """Get last module/addon git commit
 
@@ -188,78 +285,57 @@ def get_last_git_commit(src_dir, is_addon, addon_path):
     :param str addon_path: addon path
 
     :return dict git_log: dict with key commit and date, if not
-                          possible download commit from GitHub API server
-                          values of keys have "unknown" string
+                          possible download commit from GitHub REST API
+                          server values of keys have "unknown" string
     """
-
-    def parse_commit():
-        git_log["commit"] = commit[0].split(" ")[-1]
-        commit_date = commit[2].lstrip("Date:").strip()
-        git_log["date"] = commit_date.rsplit(" ", 1)[0]
-
     unknown = "unknown"
     git_log = {"commit": unknown, "date": unknown}
-    datetime_format = "%A %b %d %H:%M:%S %Y"  # e.g. Sun Jan 16 23:09:35 2022
+    commit_datetime_format = "%A %b %d %H:%M:%S %Y"  # e.g. Sun Jan 16 23:09:35 2022
+    core_modules_with_last_commit = os.path.join(
+        topdir,
+        "core_modules_with_last_commit.json",
+    )
+
     if is_addon:
         grass_addons_url = (
-            "https://api.github.com/repos/osgeo/grass-addons/commits?path={path}"
-            "&page=1&per_page=1&sha=grass{major}".format(
+            "https://api.github.com/repos/osgeo/grass-addons/commits?"
+            "path={path}&page=1&per_page=1&sha=grass{major}".format(
                 path=addon_path,
                 major=major,
-            )
-        )  # sha=git_branch_name
-    else:
-        core_module_path = os.path.join(
-            *(set(src_dir.split(os.path.sep)) ^ set(topdir.split(os.path.sep)))
-        )
-        grass_modules_url = (
-            "https://api.github.com/repos/osgeo/grass/commits?path={path}"
-            "&page=1&per_page=1&sha={branch}".format(
-                branch=grass_git_branch,
-                path=core_module_path,
             )
         )  # sha=git_branch_name
 
     if shutil.which("git"):
         if os.path.exists(src_dir):
             git_log["date"] = time.ctime(os.path.getmtime(src_dir))
-        stdout, stderr = subprocess.Popen(
-            args=["git", "log", "-1", src_dir],
-            stdout=subprocess.PIPE,
+        has_src_code_git = subprocess.run(
+            ["git", "log", "-1", "--format=%H,%at", src_dir],
             stderr=subprocess.PIPE,
-        ).communicate()
-        stdout = decode(stdout)
-        stderr = decode(stderr)
-
-        if stderr and "fatal: not a git repository" in stderr:
-            if gs:
-                response = download_git_commit(
-                    url=grass_addons_url if is_addon else grass_modules_url,
-                    response_format="application/json",
-                )
-                if response:
-                    commit = json.loads(response.read())
-                    if commit:
-                        git_log["commit"] = commit[0]["sha"]
-                        git_log["date"] = datetime.strptime(
-                            commit[0]["commit"]["author"]["date"],
-                            "%Y-%m-%dT%H:%M:%SZ",
-                        ).strftime(datetime_format)
-            else:
-                pgms_with_last_commit = os.path.join(
-                    topdir,
-                    "pgms_with_last_commit.json",
-                )
-                if os.path.exists(pgms_with_last_commit):
-                    with open(pgms_with_last_commit) as f:
-                        pgms_with_last_commit = json.load(f)
-                    if pgm in pgms_with_last_commit:
-                        commit = pgms_with_last_commit[pgm]["commit"].splitlines()
-                        parse_commit()
-        else:
+            stdout=subprocess.PIPE,
+        )  # --format=%H,%at commit hash,author date (UNIX timestamp)
+        if has_src_code_git.returncode == 0:
+            stdout = has_src_code_git.stdout.decode()
             if stdout:
-                commit = stdout.splitlines()
-                parse_commit()
+                return parse_git_commit(
+                    git_log=git_log,
+                    commit=stdout,
+                    datetime_format=commit_datetime_format,
+                )
+        else:
+            if gs:
+                # Addons
+                return get_git_commit_from_rest_api(
+                    grass_addons_api_url=grass_addons_url,
+                    git_log=git_log,
+                    datetime_format=commit_datetime_format,
+                )
+            # During compilation
+            else:
+                return get_git_commit_from_file(
+                    git_log=git_log,
+                    json_file_path=core_modules_with_last_commit,
+                    datetime_format=commit_datetime_format,
+                )
     return git_log
 
 
