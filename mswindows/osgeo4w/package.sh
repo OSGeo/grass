@@ -112,6 +112,7 @@ DLLS="
 	/mingw64/bin/libiconv-2.dll
 	/mingw64/bin/libexpat-1.dll
 	/mingw64/bin/libfontconfig-1.dll
+	/mingw64/bin/libgfortran-5.dll
 	/mingw64/bin/libbrotlidec.dll
 	/mingw64/bin/libbrotlicommon.dll
 	/mingw64/bin/libintl-8.dll
@@ -124,6 +125,7 @@ DLLS="
 	/mingw64/bin/libfreetype-6.dll
 	/mingw64/bin/libharfbuzz-0.dll
 	/mingw64/bin/libglib-2.0-0.dll
+	/mingw64/bin/libgomp-1.dll
 	/mingw64/bin/libgraphite2.dll
 	/mingw64/bin/libpcre-1.dll
 	/mingw64/bin/libstdc++-6.dll
@@ -132,6 +134,7 @@ DLLS="
 	/mingw64/bin/libblas.dll
 	/mingw64/bin/liblapack.dll
 	/mingw64/bin/libomp.dll
+	/mingw64/bin/libquadmath-0.dll
 "
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then

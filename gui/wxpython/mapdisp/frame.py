@@ -37,7 +37,6 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
@@ -130,10 +129,6 @@ class MapPanel(SingleMapPanel):
         # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
 
-        # properties are shared in other objects, so defining here
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
-
         #
         # Add toolbars
         #
@@ -154,7 +149,6 @@ class MapPanel(SingleMapPanel):
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
-                sb.SbProjection,
             ]
             self.statusbarItemsHiddenInNviz = (
                 sb.SbDisplayGeometry,
@@ -1556,16 +1550,6 @@ class MapPanel(SingleMapPanel):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
 
-    def OnMapDisplayProperties(self, event):
-        """Show Map Display Properties dialog"""
-        from mapdisp.properties import MapDisplayPropertiesDialog
-
-        dlg = MapDisplayPropertiesDialog(
-            parent=self, giface=self._giface, properties=self.mapWindowProperties
-        )
-        dlg.CenterOnParent()
-        dlg.Show()
-
     def SetProperties(
         self,
         render=False,
@@ -1580,7 +1564,7 @@ class MapPanel(SingleMapPanel):
         if self.statusbarManager:
             self.statusbarManager.SetMode(mode)
             self.StatusbarUpdate()
-            self.SetProperty("projection", projection)
+        self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes
