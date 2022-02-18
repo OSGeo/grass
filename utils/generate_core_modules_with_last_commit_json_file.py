@@ -29,6 +29,16 @@ import shutil
 import sys
 
 
+def contains_html_file(files):
+    """Contains HTML file
+
+    :param list files: list of files
+
+    :return bool: True if *.html file found
+    """
+    return ".html" in ",".join(files)
+
+
 def get_last_commit(src_dir):
     """Generate core modules JSON object with the following structure
 
@@ -49,22 +59,22 @@ def get_last_commit(src_dir):
     if not shutil.which("git"):
         sys.exit("Git command was not found. Please install it.")
     for root, dirs, files in os.walk(src_dir):
-        for f in files:
-            if f.endswith(".html"):
-                rel_path = os.path.relpath(root)
-                process_result = subprocess.run(
-                    ["git", "log", "-1", "--format=%H,%at", rel_path],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )  # --format=%H,%at commit hash,author date (UNIX timestamp)
-                if process_result.returncode == 0:
-                    commit, date = process_result.stdout.decode().split(",")
-                    result[os.path.basename(rel_path)] = {
-                        "commit": commit,
-                        "date": date.replace("\n", "").replace("\r", ""),
-                    }
-                else:
-                    sys.exit(process_result.stderr.decode())
+        if not contains_html_file(files):
+            continue
+        rel_path = os.path.relpath(root)
+        process_result = subprocess.run(
+            ["git", "log", "-1", "--format=%H,%at", rel_path],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )  # --format=%H,%at commit hash,author date (UNIX timestamp)
+        if process_result.returncode == 0:
+            commit, date = process_result.stdout.decode().split(",")
+            result[os.path.basename(rel_path)] = {
+                "commit": commit,
+                "date": date.replace("\n", "").replace("\r", ""),
+            }
+        else:
+            sys.exit(process_result.stderr.decode())
     return result
 
 
