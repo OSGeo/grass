@@ -180,34 +180,42 @@ def download_git_commit(url, response_format, *args, **kwargs):
         )
 
 
-def parse_git_commit(commit, git_log, datetime_format):
+def parse_git_commit(
+    commit,
+    git_log={"commit": "unknown", "date": "unknown"},
+):
     """Parse Git commit
 
     :param str commit: commit message
     :param dict git_log: dict which store last commit and commnit
                          date
-    :param str datetime_format: output commit datetime format
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    git_log["commit"], commit_date = commit.split(",")
+    git_log["commit"], commit_date = commit.strip().split(",")
     git_log["date"] = format_git_commit_date_from_local_git(
         commit_datetime=commit_date,
-        datetime_format=datetime_format,
     )
     return git_log
 
 
-def get_git_commit_from_file(git_log, json_file_path, datetime_format):
+def get_git_commit_from_file(
+    src_dir,
+    git_log={"commit": "unknown", "date": "unknown"},
+):
     """Get Git commit from JSON file
 
+    :param str src_dir: addon source dir
     :param dict git_log: dict which store last commit and commnit date
-    :param str json_file_path: JSON file path which include last Git
-                               commits for all core modules
-    :param str datetime_format: output commit datetime format
 
     :return dict git_log: dict which store last commit and commnit date
     """
+    # Accessed date time if getting commit from JSON file wasn't successfull
+    git_log["date"] = time.ctime(os.path.getmtime(src_dir))
+    json_file_path = os.path.join(
+        topdir,
+        "core_modules_with_last_commit.json",
+    )
     if os.path.exists(json_file_path):
         with open(json_file_path) as f:
             core_modules_with_last_commit = json.load(f)
@@ -216,27 +224,35 @@ def get_git_commit_from_file(git_log, json_file_path, datetime_format):
             git_log["commit"] = core_module["commit"]
             git_log["date"] = format_git_commit_date_from_local_git(
                 commit_datetime=core_module["date"],
-                datetime_format=datetime_format,
             )
-            return git_log
     return git_log
 
 
-def get_git_commit_from_rest_api(
-    grass_addons_api_url,
-    git_log,
-    datetime_format,
+def get_git_commit_from_rest_api_for_addon_repo(
+    addon_path,
+    src_dir,
+    git_log={"commit": "unknown", "date": "unknown"},
 ):
-    """Get Git commit from remote GitHub REST API
+    """Get Git commit from remote GitHub REST API for addon repository
 
-    :param str grass_addons_api_url: GRASS GIS Addons repo REST API URL
+    :param str addon_path: addon path
+    :param str src_dir: addon source dir
     :param dict git_log: dict which store last commit and commnit date
-    :param str datetime_format: output commit datetime format
 
     :return dict git_log: dict which store last commit and commnit date
     """
+    # Accessed date time if getting commit from GitHub REST API wasn't successfull
+    git_log["date"] = time.ctime(os.path.getmtime(src_dir))
+    grass_addons_url = (
+        "https://api.github.com/repos/osgeo/grass-addons/commits?"
+        "path={path}&page=1&per_page=1&sha=grass{major}".format(
+            path=addon_path,
+            major=major,
+        )
+    )  # sha=git_branch_name
+
     response = download_git_commit(
-        url=grass_addons_api_url,
+        url=grass_addons_url,
         response_format="application/json",
     )
     if response:
@@ -245,16 +261,18 @@ def get_git_commit_from_rest_api(
             git_log["commit"] = commit[0]["sha"]
             git_log["date"] = format_git_commit_date_from_rest_api(
                 commit_datetime=commit[0]["commit"]["author"]["date"],
-                datetime_format=datetime_format,
             )
     return git_log
 
 
-def format_git_commit_date_from_rest_api(commit_datetime, datetime_format):
+def format_git_commit_date_from_rest_api(
+    commit_datetime, datetime_format="%A %b %d %H:%M:%S %Y"
+):
     """Format datetime from remote GitHub REST API
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
+                                e.g. Sun Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
@@ -264,79 +282,67 @@ def format_git_commit_date_from_rest_api(commit_datetime, datetime_format):
     ).strftime(datetime_format)
 
 
-def format_git_commit_date_from_local_git(commit_datetime, datetime_format):
+def format_git_commit_date_from_local_git(
+    commit_datetime, datetime_format="%A %b %d %H:%M:%S %Y"
+):
     """Format datetime from local Git or JSON file
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
+                                e.g. Sun Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
     return datetime.fromtimestamp(
-        int(commit_datetime.replace("\n", "").replace("\r", "")),
+        int(commit_datetime),
     ).strftime(datetime_format)
 
 
-def get_last_git_commit(src_dir, is_addon, addon_path):
+def has_src_code_git(src_dir):
+    """Has core module or addon source code Git
+
+    :param str src_dir: core module or addon root directory
+
+    :return subprocess.CompletedProcess or None: subprocess.CompletedProcess
+                                                 if core module or addon
+                                                 source code has Git
+    """
+    try:
+        process_result = subprocess.run(
+            ["git", "log", "-1", "--format=%H,%at", src_dir],
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )  # --format=%H,%at commit hash,author date (UNIX timestamp)
+        return process_result if process_result.returncode == 0 else None
+    except FileNotFoundError:
+        return None
+
+
+def get_last_git_commit(src_dir, addon_path):
     """Get last module/addon git commit
 
     :param str src_dir: module/addon source dir
-    :param bool is_addon: True if it is addon
     :param str addon_path: addon path
 
     :return dict git_log: dict with key commit and date, if not
                           possible download commit from GitHub REST API
                           server values of keys have "unknown" string
     """
-    unknown = "unknown"
-    git_log = {"commit": unknown, "date": unknown}
-    commit_datetime_format = "%A %b %d %H:%M:%S %Y"  # e.g. Sun Jan 16 23:09:35 2022
-    core_modules_with_last_commit = os.path.join(
-        topdir,
-        "core_modules_with_last_commit.json",
-    )
-
-    if is_addon:
-        grass_addons_url = (
-            "https://api.github.com/repos/osgeo/grass-addons/commits?"
-            "path={path}&page=1&per_page=1&sha=grass{major}".format(
-                path=addon_path,
-                major=major,
+    process_result = has_src_code_git(src_dir=src_dir)
+    if process_result:
+        stdout = process_result.stdout.decode()
+        if stdout:
+            return parse_git_commit(commit=stdout)
+    else:
+        if gs:
+            # Addons installation
+            return get_git_commit_from_rest_api_for_addon_repo(
+                addon_path=addon_path,
+                src_dir=src_dir,
             )
-        )  # sha=git_branch_name
-
-    if shutil.which("git"):
-        if os.path.exists(src_dir):
-            git_log["date"] = time.ctime(os.path.getmtime(src_dir))
-        has_src_code_git = subprocess.run(
-            ["git", "log", "-1", "--format=%H,%at", src_dir],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-        )  # --format=%H,%at commit hash,author date (UNIX timestamp)
-        if has_src_code_git.returncode == 0:
-            stdout = has_src_code_git.stdout.decode()
-            if stdout:
-                return parse_git_commit(
-                    git_log=git_log,
-                    commit=stdout,
-                    datetime_format=commit_datetime_format,
-                )
+        # During GRASS GIS compilation from source code without Git
         else:
-            if gs:
-                # Addons
-                return get_git_commit_from_rest_api(
-                    grass_addons_api_url=grass_addons_url,
-                    git_log=git_log,
-                    datetime_format=commit_datetime_format,
-                )
-            # During compilation
-            else:
-                return get_git_commit_from_file(
-                    git_log=git_log,
-                    json_file_path=core_modules_with_last_commit,
-                    datetime_format=commit_datetime_format,
-                )
-    return git_log
+            return get_git_commit_from_file(src_dir=src_dir)
 
 
 html_page_footer_pages_path = (
@@ -747,7 +753,6 @@ if index_name:
     git_commit = get_last_git_commit(
         src_dir=curdir,
         addon_path=addon_path if addon_path else None,
-        is_addon=True if addon_path else False,
     )
     if git_commit["commit"] == "unknown":
         date_tag = "Accessed: {date}".format(date=git_commit["date"])

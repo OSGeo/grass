@@ -17,7 +17,7 @@ date key value is author date (UNIX timestamp)
 
 Usage:
 
-python utils/generate_core_modules_with_last_commit_json_file.py .
+python utils/generate_last_commit_file.py .
 
 @author Tomas Zigo <tomas.zigo slovanet.sk>
 """
@@ -27,16 +27,6 @@ import os
 import subprocess
 import shutil
 import sys
-
-
-def contains_html_file(files):
-    """Contains HTML file
-
-    :param list files: list of files
-
-    :return bool: True if *.html file found
-    """
-    return ".html" in ",".join(files)
 
 
 def get_last_commit(src_dir):
@@ -59,7 +49,7 @@ def get_last_commit(src_dir):
     if not shutil.which("git"):
         sys.exit("Git command was not found. Please install it.")
     for root, dirs, files in os.walk(src_dir):
-        if not contains_html_file(files):
+        if ".html" not in ",".join(files):
             continue
         rel_path = os.path.relpath(root)
         process_result = subprocess.run(
@@ -68,10 +58,10 @@ def get_last_commit(src_dir):
             stderr=subprocess.PIPE,
         )  # --format=%H,%at commit hash,author date (UNIX timestamp)
         if process_result.returncode == 0:
-            commit, date = process_result.stdout.decode().split(",")
+            commit, date = process_result.stdout.decode().strip().split(",")
             result[os.path.basename(rel_path)] = {
                 "commit": commit,
-                "date": date.replace("\n", "").replace("\r", ""),
+                "date": date,
             }
         else:
             sys.exit(process_result.stderr.decode())
