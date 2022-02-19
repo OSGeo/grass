@@ -55,7 +55,8 @@ def get_last_commit(src_dir):
         rel_path = os.path.relpath(root)
         process_result = subprocess.run(
             ["git", "log", "-1", "--format=%H,%at", rel_path],
-            capture_output=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )  # --format=%H,%at commit hash,author date (UNIX timestamp)
         if process_result.returncode == 0:
             commit, date = process_result.stdout.decode().strip().split(",")

@@ -309,7 +309,8 @@ def has_src_code_git(src_dir):
     try:
         process_result = subprocess.run(
             ["git", "log", "-1", "--format=%H,%at", src_dir],
-            capture_output=True,
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
         )  # --format=%H,%at commit hash,author date (UNIX timestamp)
         return process_result if process_result.returncode == 0 else None
     except FileNotFoundError:
