@@ -25,7 +25,6 @@ from datetime import datetime
 import locale
 import json
 import pathlib
-import shutil
 import subprocess
 import time
 
