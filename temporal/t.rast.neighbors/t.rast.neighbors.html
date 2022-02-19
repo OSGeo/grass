@@ -16,8 +16,10 @@ processing using a SQL WHERE statement. The number of CPU's to be used
 for parallel processing can be specified with the <em>nprocs</em>
 option to speedup the computation on multi-core system.
 <p>
-Semantic labels present in the input dataset will be transferred to
-the output dataset.
+Semantic labels are needed to relate output raster maps to input raster
+maps. E.g. with <em>method=stddev</em>, the user needs to know the
+spatial extent, the time stamp and the semantic label to determine
+which stddev map corresponds to which input map.
 
 <h2>EXAMPLE</h2>
 
