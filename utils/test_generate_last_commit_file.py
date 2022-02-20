@@ -20,7 +20,6 @@ pytest utils/test_generate_last_commit_file.py
 import os
 import json
 import subprocess
-import sys
 
 import pytest
 
