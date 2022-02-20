@@ -218,11 +218,14 @@ class BaseToolbar(ToolBar):
     def Enable(self, tool, enable=True):
         """Enable/Disable defined tool
 
-        :param tool: name
+        :param str/tuple tool: name
         :param enable: True to enable otherwise disable tool
         """
         try:
-            id = getattr(self, tool)
+            if isinstance(tool, tuple):
+                id = getattr(self, tool[0])
+            else:
+                id = getattr(self, tool)
         except AttributeError:
             # TODO: test everything that this is not raised
             # this error was ignored for a long time
