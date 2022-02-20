@@ -286,7 +286,7 @@ class RBShowInStatusbar:
         self.name = "showInStatusbar"
         self.statusbarManager = sbmanager
 
-        choices = self._getAttributes(attrType="label")
+        choices = self._getChoices()
         self.widget = wx.RadioBox(
             parent=parent,
             id=wx.ID_ANY,
@@ -295,7 +295,6 @@ class RBShowInStatusbar:
             majorDimension=1,
             style=wx.RA_SPECIFY_COLS,
         )
-        self.names = self._getAttributes(attrType="name")
         self._setValue(self.statusbarManager.GetMode())
 
         self.widget.Bind(wx.EVT_RADIOBOX, self._onToggle)
@@ -314,14 +313,11 @@ class RBShowInStatusbar:
         """
         return self.widget
 
-    def _getAttributes(self, attrType):
+    def _getChoices(self):
         attributes = []
         for value in self.statusbarManager.statusbarItems.values():
-            if value.GetPosition()==0:
-                if attrType=="label":
-                    attributes.append(value.label)
-                elif attrType=="name":
-                    attributes.append(value.name)
+            if value.GetPosition() == 0:
+                attributes.append(value.label)
         return attributes
 
     def _connect(self):
@@ -338,6 +334,7 @@ class RBShowInStatusbar:
 
 class MapDisplayPropertiesDialog(wx.Dialog):
     """Map Display properties dialog."""
+
     def __init__(
         self,
         parent,
@@ -444,7 +441,9 @@ class MapDisplayPropertiesDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.shownInStatusbar = RBShowInStatusbar(parent=panel, sbmanager=self.statusbarManager)
+        self.shownInStatusbar = RBShowInStatusbar(
+            parent=panel, sbmanager=self.statusbarManager
+        )
         sizer.Add(
             self.shownInStatusbar.GetWidget(),
             proportion=0,

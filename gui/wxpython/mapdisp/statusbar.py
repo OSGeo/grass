@@ -85,7 +85,9 @@ class SbManager:
         self.progressbar.progressShown.connect(self._progressShown)
         self.progressbar.progressHidden.connect(self._progressHidden)
 
-        self.shownWidgetInStatusbarChanged = Signal("SbManager.shownWidgetInStatusbarChanged")
+        self.shownWidgetInStatusbarChanged = Signal(
+            "SbManager.shownWidgetInStatusbarChanged"
+        )
         self.shownWidgetInStatusbarChanged.connect(self.Update)
 
         self._oldStatus = ""
@@ -195,9 +197,9 @@ class SbManager:
 
     def _postInit(self):
         """Post-initialization method"""
-        
+
         self.Reposition()
-        
+
         self._postInitialized = True
 
     def Update(self):
@@ -206,7 +208,7 @@ class SbManager:
         It always updates mask.
         """
         self.progressbar.Update()
-        
+
         if not self._postInitialized:
             self._postInit()
 
@@ -219,7 +221,6 @@ class SbManager:
 
         item = list(self.statusbarItems.values())[self.GetMode()]
         item.Update()
-            
 
     def Reposition(self):
         """Reposition items in statusbar
