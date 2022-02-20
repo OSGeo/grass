@@ -211,7 +211,6 @@ class SbManager:
 
         if not self._postInitialized:
             self._postInit()
-
         for item in self.statusbarItems.values():
             if item.GetPosition() == 0:
                 if not self.progressbar.IsShown():
@@ -275,6 +274,7 @@ class SbManager:
         Mode is usually driven by user through choice.
         """
         self._mode = modeIndex
+        self._modeIndexSet = True
         self.shownWidgetInStatusbarChanged.emit(value=modeIndex)
 
     def GetMode(self):

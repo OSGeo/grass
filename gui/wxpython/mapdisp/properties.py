@@ -333,7 +333,7 @@ class RBShowInStatusbar:
 
 
 class MapDisplayPropertiesDialog(wx.Dialog):
-    """Map Display properties dialog."""
+    """Map Display properties dialog"""
 
     def __init__(
         self,
