@@ -205,10 +205,10 @@ def main():
                 new_map.set_semantic_label(semantic_label)
         elif new_labels == "method":
             if semantic_label is not None:
-                semantic_label = "%s_%s" % (semantic_label, method)
+                semantic_label = f"{semantic_label}_{method}"
             else:
                 semantic_label = method
-                new_map.set_semantic_label(semantic_label)
+            new_map.set_semantic_label(semantic_label)
         new_maps.append(new_map)
 
         mod = copy.deepcopy(neighbor_module)
