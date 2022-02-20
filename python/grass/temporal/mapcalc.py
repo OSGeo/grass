@@ -288,6 +288,11 @@ def dataset_mapcalculator(
                 start, end, unit = sample_map_list[i].get_relative_time()
                 new_map.set_relative_time(start, end, unit)
 
+            # Set the semantic label
+            semantic_label = sample_map_list[i].metadata.get_semantic_label()
+            if semantic_label is not None:
+                new_map.set_semantic_label(semantic_label)
+
             # Parse the temporal expressions
             expr = _operator_parser(expr, sample_map_list[0], sample_map_list[i])
             # Add the output map name
