@@ -50,7 +50,7 @@ def get_last_commit(src_dir):
     if not shutil.which("git"):
         sys.exit("Git command was not found. Please install it.")
     for root, _, files in os.walk(src_dir):
-        if ".html," not in join_sep.join(files) + join_sep:
+        if ".html{}".format(join_sep) not in join_sep.join(files) + join_sep:
             continue
         rel_path = os.path.relpath(root)
         process_result = subprocess.run(

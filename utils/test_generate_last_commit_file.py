@@ -59,7 +59,12 @@ def test_core_modules_in_json_file(read_json_file, core_module_path):
     assert core_module in read_json_file
 
 
-@pytest.mark.depends(on=["test_json_file_is_not_empty"])
+@pytest.mark.depends(
+    on=[
+        "test_json_file_is_not_empty",
+        "test_core_modules_in_json_file",
+    ]
+)
 @pytest.mark.parametrize(
     "core_module_path",
     [
@@ -73,15 +78,10 @@ def test_compare_json_file_data(read_json_file, core_module_path):
         ["git", "log", "-1", "--format=%H,%at", core_module_path],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        check=True,
     )  # --format=%H,%at commit hash,author date (UNIX timestamp)
-    if process_result.returncode == 0:
-        commit, date = process_result.stdout.decode().strip().split(",")
-    else:
-        sys.exit(process_result.stderr.decode())
+    commit, date = process_result.stdout.decode().strip().split(",")
     core_module = os.path.basename(core_module_path)
-    if core_module in read_json_file:
-        # Compare commit and commit date
-        assert (
-            read_json_file[core_module]["commit"] == commit
-            and read_json_file[core_module]["date"] == date
-        )
+    # Compare commit and commit date
+    assert read_json_file[core_module]["commit"] == commit
+    assert read_json_file[core_module]["date"] == date

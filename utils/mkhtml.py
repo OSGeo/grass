@@ -179,28 +179,48 @@ def download_git_commit(url, response_format, *args, **kwargs):
         )
 
 
+def get_default_git_log(src_dir):
+    """Get default Git commit and commit date, when getting commit from
+    local Git, local JSON file and remote GitHub REST API server wasn't
+    successfull.
+
+    :param str src_dir: addon source dir
+
+    :return dict: dict which store last commit and commnit date
+    """
+    return {
+        "commit": "unknown",
+        "date": time.ctime(os.path.getmtime(src_dir)),
+    }
+
+
 def parse_git_commit(
     commit,
-    git_log={"commit": "unknown", "date": "unknown"},
+    src_dir,
+    git_log=None,
 ):
     """Parse Git commit
 
     :param str commit: commit message
+    :param str src_dir: addon source dir
     :param dict git_log: dict which store last commit and commnit
                          date
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    git_log["commit"], commit_date = commit.strip().split(",")
-    git_log["date"] = format_git_commit_date_from_local_git(
-        commit_datetime=commit_date,
-    )
+    if not git_log:
+        git_log = get_default_git_log(src_dir=src_dir)
+    if commit:
+        git_log["commit"], commit_date = commit.strip().split(",")
+        git_log["date"] = format_git_commit_date_from_local_git(
+            commit_datetime=commit_date,
+        )
     return git_log
 
 
 def get_git_commit_from_file(
     src_dir,
-    git_log={"commit": "unknown", "date": "unknown"},
+    git_log=None,
 ):
     """Get Git commit from JSON file
 
@@ -210,7 +230,8 @@ def get_git_commit_from_file(
     :return dict git_log: dict which store last commit and commnit date
     """
     # Accessed date time if getting commit from JSON file wasn't successfull
-    git_log["date"] = time.ctime(os.path.getmtime(src_dir))
+    if not git_log:
+        git_log = get_default_git_log(src_dir=src_dir)
     json_file_path = os.path.join(
         topdir,
         "core_modules_with_last_commit.json",
@@ -230,7 +251,7 @@ def get_git_commit_from_file(
 def get_git_commit_from_rest_api_for_addon_repo(
     addon_path,
     src_dir,
-    git_log={"commit": "unknown", "date": "unknown"},
+    git_log=None,
 ):
     """Get Git commit from remote GitHub REST API for addon repository
 
@@ -241,7 +262,8 @@ def get_git_commit_from_rest_api_for_addon_repo(
     :return dict git_log: dict which store last commit and commnit date
     """
     # Accessed date time if getting commit from GitHub REST API wasn't successfull
-    git_log["date"] = time.ctime(os.path.getmtime(src_dir))
+    if not git_log:
+        git_log = get_default_git_log(src_dir=src_dir)
     grass_addons_url = (
         "https://api.github.com/repos/osgeo/grass-addons/commits?"
         "path={path}&page=1&per_page=1&sha=grass{major}".format(
@@ -297,41 +319,52 @@ def format_git_commit_date_from_local_git(
     ).strftime(datetime_format)
 
 
-def has_src_code_git(src_dir):
+def has_src_code_git(src_dir, is_addon):
     """Has core module or addon source code Git
 
     :param str src_dir: core module or addon root directory
+    :param bool is_addon: True if it is addon
 
     :return subprocess.CompletedProcess or None: subprocess.CompletedProcess
                                                  if core module or addon
                                                  source code has Git
     """
+    actual_dir = os.getcwd()
+    if is_addon:
+        os.chdir(src_dir)
+    else:
+        os.chdir(topdir)
     try:
+
         process_result = subprocess.run(
             ["git", "log", "-1", "--format=%H,%at", src_dir],
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,
         )  # --format=%H,%at commit hash,author date (UNIX timestamp)
+        os.chdir(actual_dir)
         return process_result if process_result.returncode == 0 else None
     except FileNotFoundError:
+        os.chdir(actual_dir)
         return None
 
 
-def get_last_git_commit(src_dir, addon_path):
+def get_last_git_commit(src_dir, addon_path, is_addon):
     """Get last module/addon git commit
 
     :param str src_dir: module/addon source dir
     :param str addon_path: addon path
+    :param bool is_addon: True if it is addon
 
     :return dict git_log: dict with key commit and date, if not
                           possible download commit from GitHub REST API
                           server values of keys have "unknown" string
     """
-    process_result = has_src_code_git(src_dir=src_dir)
+    process_result = has_src_code_git(src_dir=src_dir, is_addon=is_addon)
     if process_result:
-        stdout = process_result.stdout.decode()
-        if stdout:
-            return parse_git_commit(commit=stdout)
+        return parse_git_commit(
+            commit=process_result.stdout.decode(),
+            src_dir=src_dir,
+        )
     else:
         if gs:
             # Addons installation
@@ -752,6 +785,7 @@ if index_name:
     git_commit = get_last_git_commit(
         src_dir=curdir,
         addon_path=addon_path if addon_path else None,
+        is_addon=True if addon_path else False,
     )
     if git_commit["commit"] == "unknown":
         date_tag = "Accessed: {date}".format(date=git_commit["date"])
