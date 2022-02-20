@@ -296,13 +296,10 @@ class RBShowInStatusbar:
             style=wx.RA_SPECIFY_COLS,
         )
         self.names = self._getAttributes(attrType="name")
-        if self.statusbarManager.shownWidgetInStatusbar in self.names:
-            value = [self.names.index(x) for x in self.names if x in self.statusbarManager.shownWidgetInStatusbar][0]
-            self._setValue(value)
-        else:
-            self._setValue(self.statusbarManager.GetMode())
+        self._setValue(self.statusbarManager.GetMode())
 
         self.widget.Bind(wx.EVT_RADIOBOX, self._onToggle)
+        self._connect()
 
     def _setValue(self, value):
         self.widget.SetSelection(value)
@@ -335,7 +332,7 @@ class RBShowInStatusbar:
 
     def _onToggle(self, event):
         self._disconnect()
-        self.statusbarManager.shownWidgetInStatusbar = self.names[self.GetValue()]
+        self.statusbarManager.SetMode(self.GetValue())
         self._connect()
 
 

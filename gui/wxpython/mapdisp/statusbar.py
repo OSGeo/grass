@@ -80,28 +80,17 @@ class SbManager:
         self._postInitialized = False
         self._modeIndexSet = False
         self._mode = 0
-        self._shownWidgetInStatusbar = None
 
         self.progressbar = SbProgress(self.mapFrame, self.statusbar, self)
         self.progressbar.progressShown.connect(self._progressShown)
         self.progressbar.progressHidden.connect(self._progressHidden)
 
         self.shownWidgetInStatusbarChanged = Signal("SbManager.shownWidgetInStatusbarChanged")
-        self.shownWidgetInStatusbarChanged.connect(self.ShowItem)
+        self.shownWidgetInStatusbarChanged.connect(self.Update)
 
         self._oldStatus = ""
 
         self._hiddenItems = {}
-
-    @property
-    def shownWidgetInStatusbar(self):
-        return self._shownWidgetInStatusbar
-
-    @shownWidgetInStatusbar.setter
-    def shownWidgetInStatusbar(self, name):
-        if name != self._shownWidgetInStatusbar:
-            self._shownWidgetInStatusbar = name
-            self.shownWidgetInStatusbarChanged.emit(itemName=name)
 
     def SetProperty(self, name, value):
         """Sets property represented by one of contained SbItems
@@ -204,32 +193,12 @@ class SbManager:
                 item.Update()
             self.statusbarItems[itemName].Show()
 
-#    def _postInit(self):
-#        """Post-initialization method
-#
-#        It sets internal user settings,
-#        set choice's selection (from user settings) and does reposition.
-#        It needs choice filled by items.
-#        it is called automatically.
-#        """
-#        print(self.choice.GetItems())
-#        UserSettings.Set(
-#            group="display",
-#            key="statusbarMode",
-#            subkey="choices",
-#            value=self.choice.GetItems(),
-#            settings_type="internal",
-#        )
-#
-#        if not self._modeIndexSet:
-#            self.choice.SetSelection(
-#                UserSettings.Get(
-#                    group="display", key="statusbarMode", subkey="selection"
-#                )
-#            )
-#        self.Reposition()
-#
-#        self._postInitialized = True
+    def _postInit(self):
+        """Post-initialization method"""
+        
+        self.Reposition()
+        
+        self._postInitialized = True
 
     def Update(self):
         """Updates statusbar
@@ -237,9 +206,10 @@ class SbManager:
         It always updates mask.
         """
         self.progressbar.Update()
+        
+        if not self._postInitialized:
+            self._postInit()
 
-#        if not self._postInitialized:
-#            self._postInit()
         for item in self.statusbarItems.values():
             if item.GetPosition() == 0:
                 if not self.progressbar.IsShown():
@@ -247,12 +217,9 @@ class SbManager:
             else:
                 item.Update()  # render
 
-#        self.statusbarItems.values()
-#        if self.progressbar.IsShown():
-#            pass
-#        elif self.choice.GetCount() > 0:
-#            item = self.choice.GetClientData(self.choice.GetSelection())
-#            item.Update()
+        item = list(self.statusbarItems.values())[self.GetMode()]
+        item.Update()
+            
 
     def Reposition(self):
         """Reposition items in statusbar
@@ -297,15 +264,9 @@ class SbManager:
 
     def _progressShown(self):
         self._oldStatus = self.statusbar.GetStatusText(0)
-        #self.choice.GetClientData(self.choice.GetSelection()).Hide()
 
     def _progressHidden(self):
         self.statusbar.SetStatusText(self._oldStatus, 0)
-        #self.choice.GetClientData(self.choice.GetSelection()).Show()
-
-    def OnToggleStatus(self, event):
-        """Toggle status text"""
-        self.Update()
 
     def SetMode(self, modeIndex):
         """Sets current mode
@@ -313,6 +274,7 @@ class SbManager:
         Mode is usually driven by user through choice.
         """
         self._mode = modeIndex
+        self.shownWidgetInStatusbarChanged.emit(value=modeIndex)
 
     def GetMode(self):
         """Returns current mode"""
