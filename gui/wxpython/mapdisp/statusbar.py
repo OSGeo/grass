@@ -204,8 +204,25 @@ class SbManager:
             self.statusbarItems[itemName].Show()
 
     def _postInit(self):
-        """Post-initialization method"""
-
+        """Post-initialization method
+        
+        It sets internal user settings,
+        set selection (from map display settings) and does reposition.
+        It is called automatically.
+        """
+        UserSettings.Set(
+            group="display",
+            key="statusbarMode",
+            subkey="choices",
+            value=self.statusbarItems.values(),
+            settings_type="internal"
+        )
+        if not self._modeIndexSet:
+            self.SetMode(
+                    UserSettings.Get(
+                            group="display", key="statusbarMode", subkey="selection"
+                    )
+            )
         self.Reposition()
 
         self._postInitialized = True
