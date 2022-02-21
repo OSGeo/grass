@@ -205,7 +205,7 @@ class SbManager:
 
     def _postInit(self):
         """Post-initialization method
-        
+
         It sets internal user settings,
         set selection (from map display settings) and does reposition.
         It is called automatically.
@@ -215,13 +215,13 @@ class SbManager:
             key="statusbarMode",
             subkey="choices",
             value=self.statusbarItems.values(),
-            settings_type="internal"
+            settings_type="internal",
         )
         if not self._modeIndexSet:
             self.SetMode(
-                    UserSettings.Get(
-                            group="display", key="statusbarMode", subkey="selection"
-                    )
+                UserSettings.Get(
+                    group="display", key="statusbarMode", subkey="selection"
+                )
             )
         self.Reposition()
 
