@@ -182,6 +182,14 @@ class SbManager:
             if item.__class__ in itemClasses:
                 self.choice.Insert(item.label, pos, item)
 
+    def GetItemLabels(self):
+        """Get list of item labels"""
+        attributes = []
+        for value in self.statusbarItems.values():
+            if value.GetPosition() == 0:
+                attributes.append(value.label)
+        return attributes
+
     def ShowItem(self, itemName):
         """Invokes showing of particular item
 

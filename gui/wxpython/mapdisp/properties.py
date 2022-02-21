@@ -286,7 +286,7 @@ class RBShowInStatusbar:
         self.name = "showInStatusbar"
         self.statusbarManager = sbmanager
 
-        choices = self._getChoices()
+        choices = self.statusbarManager.GetItemLabels()
         self.widget = wx.RadioBox(
             parent=parent,
             id=wx.ID_ANY,
@@ -312,13 +312,6 @@ class RBShowInStatusbar:
         :return: widget or None if doesn't exist
         """
         return self.widget
-
-    def _getChoices(self):
-        attributes = []
-        for value in self.statusbarManager.statusbarItems.values():
-            if value.GetPosition() == 0:
-                attributes.append(value.label)
-        return attributes
 
     def _connect(self):
         self.statusbarManager.shownWidgetInStatusbarChanged.connect(self._setValue)
