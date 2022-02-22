@@ -1480,18 +1480,23 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if row["key"] == "tgis_db_version":
                     db_version = int(float(row["value"]))
 
-        if db_version >= 1:
-            has_bt_columns = True
-            columns = "id,start_time,end_time, west,east,south,north,bottom,top"
-        else:
-            has_bt_columns = False
-            columns = "id,start_time,end_time, west,east,south,north"
-
-        rows = self.get_registered_maps(columns, where, order, dbif)
+        # use all columns
+        rows = self.get_registered_maps(None, where, order, dbif)
 
         if rows is not None:
+            row = rows[0]
+            has_bt_columns = False
+            has_semantic_label = False
+            # check keys in first row
+            # note that 'if "bottom" in row' does not work
+            # because row is not a dict but some db backend object
+            if "bottom" in row.keys() and "top" in row.keys():
+                has_bt_columns = True
+            if "semantic_label" in row.keys():
+                has_semantic_label = True
             for row in rows:
                 map = self.get_new_map_instance(row["id"])
+                # time
                 if self.is_time_absolute():
                     map.set_absolute_time(row["start_time"], row["end_time"])
                 elif self.is_time_relative():
@@ -1500,6 +1505,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         row["end_time"],
                         self.get_relative_time_unit(),
                     )
+                # space
                 # The fast way
                 if has_bt_columns:
                     map.set_spatial_extent_from_values(
@@ -1513,6 +1519,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 # The slow work around
                 else:
                     map.spatial_extent.select(dbif)
+
+                # labels
+                if has_semantic_label and row["semantic_label"] is not None \
+                   and row["semantic_label"] != "None":
+                    map.metadata.set_semantic_label(row["semantic_label"])
 
                 obj_list.append(copy.copy(map))
 
