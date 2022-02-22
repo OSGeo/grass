@@ -1521,8 +1521,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     map.spatial_extent.select(dbif)
 
                 # labels
-                if has_semantic_label and row["semantic_label"] is not None \
-                   and row["semantic_label"] != "None":
+                if (
+                    has_semantic_label
+                    and row["semantic_label"] is not None
+                    and row["semantic_label"] != "None"
+                ):
                     map.metadata.set_semantic_label(row["semantic_label"])
 
                 obj_list.append(copy.copy(map))
