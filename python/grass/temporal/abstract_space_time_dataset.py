@@ -1484,17 +1484,20 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         rows = self.get_registered_maps(None, where, order, dbif)
 
         if rows is not None:
-            row = rows[0]
             has_bt_columns = False
             has_semantic_label = False
-            # check keys in first row
-            # note that 'if "bottom" in row' does not work
-            # because row is not a dict but some db backend object
-            if "bottom" in row.keys() and "top" in row.keys():
-                has_bt_columns = True
-            if "semantic_label" in row.keys():
-                has_semantic_label = True
+            first_row = True
             for row in rows:
+                if first_row:
+                    first_row = False
+                    # check keys in first row
+                    # note that 'if "bottom" in row' does not work
+                    # because row is not a dict but some db backend object
+                    if "bottom" in row.keys() and "top" in row.keys():
+                        has_bt_columns = True
+                    if "semantic_label" in row.keys():
+                        has_semantic_label = True
+
                 map = self.get_new_map_instance(row["id"])
                 # time
                 if self.is_time_absolute():
