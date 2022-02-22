@@ -8,6 +8,7 @@
 /****************************************************************/
 
 #include "param.h"
+#include <grass/glocale.h>
 
 void disp_matrix(double **a, double *x, double *z, int n)
 			/* Displays matrices used to solve a 
@@ -37,7 +38,8 @@ void disp_matrix(double **a, double *x, double *z, int n)
     }
     fprintf(stdout, "\n\n");
 
-    fgets(dummy, 70, stdin);
+    if (fgets(dummy, 70, stdin) == NULL)
+        G_fatal_error(_("Error reading data from stdin"));
 }
 
 void disp_wind(CELL * z)
@@ -54,5 +56,6 @@ void disp_wind(CELL * z)
 	fprintf(stdout, "\n");
     }
 
-    fgets(dummy, 70, stdin);
+    if (fgets(dummy, 70, stdin) == NULL)
+        G_fatal_error(_("Error reading data from stdin"));
 }

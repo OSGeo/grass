@@ -229,7 +229,8 @@ int input_proj4(char *proj4params)
      *       OSRImportFromWkt  */
     if (strcmp(proj4params, "-") == 0) {
 	infd = stdin;
-	fgets(buff, sizeof(buff), infd);
+	if (fgets(buff, sizeof(buff), infd) == NULL)
+            G_fatal_error(_("Unable to get input or input empty"));
     }
     else
 	strcpy(buff, proj4params);

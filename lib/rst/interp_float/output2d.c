@@ -133,6 +133,8 @@ int IL_output_2d(struct interp_params *params,
 	    G_fseek(params->Tmp_fd_z, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
 	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z);
+            if (ii != params->nsizc)
+                G_fatal_error(_("Error reading elevation file"));
 	    /*
 	     * for(j=0;j<params->nsizc;j++) fprintf(stderr,"%f ",cell1[j]);
 	     * fprintf(stderr,"\n");
@@ -148,7 +150,9 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_dx, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
+	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx);
+            if (ii != params->nsizc)
+                G_fatal_error(_("Error reading slope file"));
 	    Rast_put_f_row(cf2, cell1);
 	}
     }
@@ -159,7 +163,9 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_dy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
+	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy);
+            if (ii != params->nsizc)
+                G_fatal_error(_("Error reading aspect file"));
 	    Rast_put_f_row(cf3, cell1);
 	}
     }
@@ -170,7 +176,9 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_xx, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
+	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx);
+            if (ii != params->nsizc)
+                G_fatal_error(_("Error reading pcurv file"));
 	    Rast_put_f_row(cf4, cell1);
 	}
     }
@@ -181,7 +189,9 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_yy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
+	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy);
+            if (ii != params->nsizc)
+                G_fatal_error(_("Error reading tcurv file"));
 	    Rast_put_f_row(cf5, cell1);
 	}
     }
@@ -192,7 +202,9 @@ int IL_output_2d(struct interp_params *params,
 	    /* seek to the right row */
 	    G_fseek(params->Tmp_fd_xy, (off_t) (params->nsizr - 1 - i) *
 		    params->nsizc * sizeof(FCELL), 0);
-	    fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
+	    ii = fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy);
+            if (ii != params->nsizc)
+                G_fatal_error(_("Error reading mcurv file"));
 	    Rast_put_f_row(cf6, cell1);
 	}
     }

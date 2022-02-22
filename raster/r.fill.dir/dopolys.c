@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <grass/gis.h>
@@ -53,7 +54,8 @@ int dopolys(int fd, int fm, int nl, int ns)
 
     lseek(fd, bufsz, SEEK_SET);
     for (i = 1; i < nl - 1; i += 1) {
-	read(fd, dir, bufsz);
+	if (read(fd, dir, bufsz) == -1)
+            G_fatal_error(_("Error #%d reading record from file"), errno);
 	for (j = 1; j < ns - 1; j += 1) {
 	    if (Rast_is_c_null_value(&dir[j]) || dir[j] >= 0)
 		continue;
@@ -94,7 +96,8 @@ int dopolys(int fd, int fm, int nl, int ns)
 	    dir[cells[cnt + 1]] = cells[cnt + 2];
 	    cnt += 3;
 	}
-	write(fm, dir, bufsz);
+	if (write(fm, dir, bufsz) == -1)
+            G_fatal_error(_("Error #%d writing to file"), errno);
     }
 
     G_free(cells);

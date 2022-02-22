@@ -96,7 +96,9 @@ void cairo_read_bmp(void)
 	G_fatal_error(_("Cairo: Invalid BMP header for <%s>"),
 		      ca.file_name);
 
-    fread(ca.grid, ca.stride, ca.height, input);
+    if (fread(ca.grid, ca.stride, ca.height, input) != ca.height)
+    if (ferror(input))
+        G_fatal_error(_("Cairo: invalid input grid"));
 
     fclose(input);
 }

@@ -14,8 +14,10 @@
  * \date 1999-2014
  */
 
+#include <errno.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 
 /**
@@ -58,7 +60,8 @@ void G_write_zeros(int fd, size_t n)
 	else
 	    i = n;		/* this is ok here */
 
-	write(fd, zeros, i);
+	if (write(fd, zeros, i) == -1)
+            G_fatal_error(_("Error #%d writing zeros to file fd=%d"), errno, fd);
 	n -= i;
     }
 }

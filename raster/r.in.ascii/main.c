@@ -234,7 +234,8 @@ int main(int argc, char *argv[])
     }
 
     for (row = 0; row < nrows; row += 1) {
-	fread(rast, Rast_cell_size(data_type), ncols, ft);
+	if (fread(rast, Rast_cell_size(data_type), ncols, ft) != ncols)
+            G_fatal_error(_("Unable to read raster data from file"));
 	Rast_put_row(cf, rast, data_type);
 	G_fseek(ft, sz, SEEK_CUR);
     }

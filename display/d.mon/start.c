@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <libgen.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/spawn.h>
 #include <grass/display.h>
@@ -180,27 +181,36 @@ int start_mon(const char *name, const char *output, int select,
 
     if (G_strncasecmp(name, "wx", 2) == 0) {
         sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings from wxGUI */
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) == -1)
+            G_fatal_error(_("Error #%d writing to file."), errno);
         sprintf(buf, "GRASS_RENDER_FILE_READ=FALSE\n");
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) == -1)
+            G_fatal_error(_("Error #%d writing to file."), errno);
         sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) == -1)
+            G_fatal_error(_("Error #%d writing to file."), errno);
     }
     else {
         sprintf(buf, "GRASS_RENDER_IMMEDIATE=%s\n", name);
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) == -1)
+            G_fatal_error(_("Error #%d writing to file."), errno);
         sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
-        write(fd, buf, strlen(buf));
+        if (write(fd, buf, strlen(buf)) == -1)
+            G_fatal_error(_("Error #%d writing to file."), errno);
 
     }
     sprintf(buf, "GRASS_RENDER_FILE=%s\n", out_file);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) == -1)
+        G_fatal_error(_("Error #%d writing to file."), errno);
     sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) == -1)
+        G_fatal_error(_("Error #%d writing to file."), errno);
     sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) == -1)
+        G_fatal_error(_("Error #%d writing to file."), errno);
     sprintf(buf, "GRASS_LEGEND_FILE=%s\n", leg_file);
-    write(fd, buf, strlen(buf));
+    if (write(fd, buf, strlen(buf)) == -1)
+        G_fatal_error(_("Error #%d writing to file."), errno);
 
 
     if (bgcolor) {
@@ -208,11 +218,14 @@ int start_mon(const char *name, const char *output, int select,
 	    sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
 	else
 	    sprintf(buf, "GRASS_RENDER_BACKGROUNDCOLOR=%s\n", bgcolor);
-	write(fd, buf, strlen(buf));
+	if (write(fd, buf, strlen(buf)) == -1)
+            G_fatal_error(_("Error #%d writing to file."), errno);
+
     }
     if (truecolor) {
 	sprintf(buf, "GRASS_RENDER_TRUECOLOR=TRUE\n");
-	write(fd, buf, strlen(buf));
+	if (write(fd, buf, strlen(buf)) == -1)
+            G_fatal_error(_("Error #%d writing to file."), errno);
     }
     close(fd);
    

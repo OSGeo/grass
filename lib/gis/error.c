@@ -341,7 +341,8 @@ static void log_error(const char *msg, int fatal)
     clock = time(NULL);
 
     /* get current working directory */
-    getcwd(cwd, sizeof(cwd));
+    if (getcwd(cwd, sizeof(cwd)) == NULL)
+        write_error("Error getting current working directory", fatal, clock, cwd);
 
     /* write the error log file */
     if ((gisbase = G_gisbase()))

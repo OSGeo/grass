@@ -315,26 +315,34 @@ struct BM *BM_file_read(FILE * fp)
     struct BM *map;
     char c;
     char buf[BM_TEXT_LEN + 1];
-    int i, y, n;
+    int i, y, n, rv;
     struct BMlink *p = NULL, *p2;
     int cnt;
 
     if (NULL == (map = (struct BM *)malloc(sizeof(struct BM))))
 	return (NULL);
 
-    fread(&c, sizeof(char), sizeof(char), fp);
-    if (c != BM_MAGIC)
+    rv = fread(&c, sizeof(char), sizeof(char), fp);
+    if (((rv != sizeof(char)) && ferror(fp)) || c != BM_MAGIC)
 	return NULL;
 
-    fread(buf, BM_TEXT_LEN, sizeof(char), fp);
+    rv = fread(buf, BM_TEXT_LEN, sizeof(char), fp);
+    if (rv != sizeof(char) && ferror(fp))
+        return NULL;
 
-    fread(&c, sizeof(char), sizeof(char), fp);
+    rv = fread(&c, sizeof(char), sizeof(char), fp);
+    if (rv != sizeof(char) && ferror(fp))
+        return NULL;
     map->sparse = c;
 
 
-    fread(&(map->rows), sizeof(map->rows), sizeof(char), fp);
+    rv = fread(&(map->rows), sizeof(map->rows), sizeof(char), fp);
+    if (rv != sizeof(char) && ferror(fp))
+        return NULL;
 
-    fread(&(map->cols), sizeof(map->cols), sizeof(char), fp);
+    rv = fread(&(map->cols), sizeof(map->cols), sizeof(char), fp);
+    if (rv != sizeof(char) && ferror(fp))
+        return NULL;
 
     map->bytes = (map->cols + 7) / 8;
 
@@ -365,7 +373,9 @@ struct BM *BM_file_read(FILE * fp)
 
     for (y = 0; y < map->rows; y++) {
 	/* first get number of links */
-	fread(&i, sizeof(i), sizeof(char), fp);
+	rv = fread(&i, sizeof(i), sizeof(char), fp);
+        if (rv != sizeof(char) && ferror(fp))
+            return NULL;
 	cnt = i;
 
 
@@ -382,10 +392,14 @@ struct BM *BM_file_read(FILE * fp)
 		p = p2;
 	    }
 
-	    fread(&n, sizeof(n), sizeof(char), fp);
+	    rv = fread(&n, sizeof(n), sizeof(char), fp);
+            if (rv != sizeof(char) && ferror(fp))
+                return NULL;
 	    p->count = n;
 
-	    fread(&n, sizeof(n), sizeof(char), fp);
+	    rv = fread(&n, sizeof(n), sizeof(char), fp);
+            if (rv != sizeof(char) && ferror(fp))
+                return NULL;
 	    p->val = n;
 	    p->next = NULL;
 	}

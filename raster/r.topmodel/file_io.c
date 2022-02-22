@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <grass/raster.h>
@@ -10,7 +11,9 @@ void get_line(FILE * fp, char *buffer)
     char *str;
 
     buffer[0] = 0;
-    fscanf(fp, "%[^\n]", buffer);
+    if (fscanf(fp, "%[^\n]", buffer) == EOF)
+    if (ferror(fp))
+        G_fatal_error(_("Unable to read input from file"));
     getc(fp);
 
     if ((str = (char *)strchr(buffer, '#')))

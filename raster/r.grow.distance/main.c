@@ -23,6 +23,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -353,10 +354,14 @@ int main(int argc, char **argv)
 	    check(irow, col, 1, 1);
 	}
 
-	write(temp_fd, new_x_row, ncols * sizeof(CELL));
-	write(temp_fd, new_y_row, ncols * sizeof(CELL));
-	write(temp_fd, dist_row, ncols * sizeof(DCELL));
-	write(temp_fd, new_val_row, ncols * sizeof(DCELL));
+	if (write(temp_fd, new_x_row, ncols * sizeof(CELL)) == -1)
+            G_fatal_error(_("Error #%d writing x_row"), errno);
+	if (write(temp_fd, new_y_row, ncols * sizeof(CELL)) == -1)
+            G_fatal_error(_("Error #%d writing y_row"), errno);
+	if (write(temp_fd, dist_row, ncols * sizeof(DCELL)) == -1)
+            G_fatal_error(_("Error #%d writing dist_row"), errno);
+	if (write(temp_fd, new_val_row, ncols * sizeof(DCELL)) == -1)
+            G_fatal_error(_("Error #%d writing val_row"), errno);
 
 	swap_rows();
     }
@@ -378,10 +383,14 @@ int main(int argc, char **argv)
 
 	lseek(temp_fd, offset, SEEK_SET);
 
-	read(temp_fd, new_x_row, ncols * sizeof(CELL));
-	read(temp_fd, new_y_row, ncols * sizeof(CELL));
-	read(temp_fd, dist_row, ncols * sizeof(DCELL));
-	read(temp_fd, new_val_row, ncols * sizeof(DCELL));
+	if (read(temp_fd, new_x_row, ncols * sizeof(CELL)) == -1)
+            G_fatal_error(_("Error #%d reading x_row"), errno);
+	if (read(temp_fd, new_y_row, ncols * sizeof(CELL)) == -1)
+            G_fatal_error(_("Error #%d reading y_row"), errno);
+	if (read(temp_fd, dist_row, ncols * sizeof(DCELL)) == -1)
+            G_fatal_error(_("Error #%d reading dist_row"), errno);
+	if (read(temp_fd, new_val_row, ncols * sizeof(DCELL)) == -1)
+            G_fatal_error(_("Error #%d reading val_row"), errno);
 
 	for (col = 0; col < ncols; col++) {
 	    check(row, col, -1, -1);

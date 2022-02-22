@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -15,11 +17,15 @@ void rdwr_gridatb(void)
     fp = fopen(file, "r");
 
     buf[0] = 0;
-    fscanf(fp, "%[^\n]", buf);
+    if (fscanf(fp, "%[^\n]", buf) == EOF)
+    if (ferror(fp))
+        G_fatal_error(_("Error #%d reading input from file"), errno);
     if (!buf[0])
 	getc(fp);
 
-    fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res);
+    if (fscanf(fp, "%d %d %lf\n", &cellhd.cols, &cellhd.rows, &cellhd.ns_res) == EOF)
+    if (ferror(fp))
+        G_fatal_error(_("Error #%d reading input from file"), errno);
     cellhd.ew_res = cellhd.ns_res;
     cellhd.south = 0;
     cellhd.north = cellhd.south + cellhd.ns_res * cellhd.rows;
@@ -52,7 +58,10 @@ void rdwr_gridatb(void)
 
 	for (j = 0; j < cellhd.cols; j++) {
 	    idx = 9999.0;
-	    fscanf(fp, "%f", &idx);
+	    if (fscanf(fp, "%f", &idx) == EOF)
+            if (ferror(fp))
+                G_fatal_error(_("Error #%d reading input from file"), errno);
+
 	    if (idx >= 9999.0) {
 		Rast_set_f_null_value(&(cell[j]), 1);
 	    }
