@@ -296,15 +296,20 @@ class RBShowInStatusbar:
             style=wx.RA_SPECIFY_COLS,
         )
         self._setValue(self.statusbarManager.GetMode())
+        self._hideItems(self.statusbarManager.hiddenItems)
 
         self.widget.Bind(wx.EVT_RADIOBOX, self._onToggleRadioBox)
-        self._connect()
 
     def _setValue(self, value):
         self.widget.SetSelection(value)
 
     def GetValue(self):
         return self.widget.GetSelection()
+
+    def _hideItems(self, items, show=False):
+        """Shows or hides a radiobox options"""
+        for item in items:
+            self.widget.ShowItem(item=item, show=show)
 
     def GetWidget(self):
         """Returns underlying widget.
@@ -313,16 +318,8 @@ class RBShowInStatusbar:
         """
         return self.widget
 
-    def _connect(self):
-        self.statusbarManager.shownWidgetInStatusbarChanged.connect(self._setValue)
-
-    def _disconnect(self):
-        self.statusbarManager.shownWidgetInStatusbarChanged.disconnect(self._setValue)
-
     def _onToggleRadioBox(self, event):
-        self._disconnect()
         self.statusbarManager.SetMode(self.GetValue())
-        self._connect()
 
 
 class MapDisplayPropertiesDialog(wx.Dialog):

@@ -85,14 +85,13 @@ class SbManager:
         self.progressbar.progressShown.connect(self._progressShown)
         self.progressbar.progressHidden.connect(self._progressHidden)
 
-        self.shownWidgetInStatusbarChanged = Signal(
-            "SbManager.shownWidgetInStatusbarChanged"
+        self.widgetsInStatusbarShown = Signal(
+            "SbManager.widgetsInStatusbarShown"
         )
-        self.shownWidgetInStatusbarChanged.connect(self.Update)
 
         self._oldStatus = ""
 
-        self._hiddenItems = {}
+        self.hiddenItems = []
 
     def SetProperty(self, name, value):
         """Sets property represented by one of contained SbItems
@@ -141,7 +140,7 @@ class SbManager:
             item = Item(**kwargs)
             self.AddStatusbarItem(item)
 
-    def HideStatusbarChoiceItemsByClass(self, itemClasses):
+    def HideStatusbarItemsByClass(self, itemClasses):
         """Hides items showed in choice
 
         Hides items with position 0 (items showed in choice) by removing
@@ -154,33 +153,11 @@ class SbManager:
         .. todo::
             consider adding similar function which would take item names
         """
-        index = []
         for itemClass in itemClasses:
-            for i in range(0, self.choice.GetCount() - 1):
-                item = self.choice.GetClientData(i)
+            for i in range(0, len(self.statusbarItems.values())):
+                item = list(self.statusbarItems.values())[i]
                 if item.__class__ == itemClass:
-                    index.append(i)
-                    self._hiddenItems[i] = item
-        # must be sorted in reverse order to be removed correctly
-        for i in sorted(index, reverse=True):
-            self.choice.Delete(i)
-
-    def ShowStatusbarChoiceItemsByClass(self, itemClasses):
-        """Shows items showed in choice
-
-        Shows items with position 0 (items showed in choice) by adding
-        them to choice.
-        Items are restored in their old positions.
-
-        :param itemClasses list of classes of items to be showed
-
-        :func:`HideStatusbarChoiceItemsByClass`
-        """
-        # must be sorted to be inserted correctly
-        for pos in sorted(self._hiddenItems.keys()):
-            item = self._hiddenItems[pos]
-            if item.__class__ in itemClasses:
-                self.choice.Insert(item.label, pos, item)
+                    self.hiddenItems.append(i)
 
     def GetItemLabels(self):
         """Get list of item labels"""
@@ -273,7 +250,7 @@ class SbManager:
                 # else:
                 x, y = rect.x + 3, rect.y - 1
                 w, h = wWin, rect.height + 2
-            else:  # choice || auto-rendering
+            else:  # auto-rendering
                 x, y = rect.x, rect.y
                 w, h = rect.width, rect.height + 1
                 if win == self.progressbar.GetWidget():
@@ -296,11 +273,11 @@ class SbManager:
     def SetMode(self, modeIndex):
         """Sets current mode
 
-        Mode is usually driven by user through choice.
+        Mode is usually driven by user through map display settings.
         """
         self._mode = modeIndex
         self._modeIndexSet = True
-        self.shownWidgetInStatusbarChanged.emit(value=modeIndex)
+        self.Update()
 
     def GetMode(self):
         """Returns current mode"""

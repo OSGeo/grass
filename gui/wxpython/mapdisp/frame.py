@@ -448,7 +448,7 @@ class MapPanel(SingleMapPanel):
         )
         # update status bar
 
-        self.statusbarManager.HideStatusbarChoiceItemsByClass(
+        self.statusbarManager.HideStatusbarItemsByClass(
             self.statusbarItemsHiddenInNviz
         )
         self.statusbarManager.SetMode(0)
@@ -548,9 +548,7 @@ class MapPanel(SingleMapPanel):
             pass
 
         # update status bar
-        self.statusbarManager.ShowStatusbarChoiceItemsByClass(
-            self.statusbarItemsHiddenInNviz
-        )
+        self.statusbarManager.hiddenItems = []
         self.statusbarManager.SetMode(
             UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
         )
