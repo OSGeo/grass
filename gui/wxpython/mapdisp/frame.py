@@ -448,9 +448,7 @@ class MapPanel(SingleMapPanel):
         )
         # update status bar
 
-        self.statusbarManager.HideStatusbarItemsByClass(
-            self.statusbarItemsHiddenInNviz
-        )
+        self.statusbarManager.HideStatusbarItemsByClass(self.statusbarItemsHiddenInNviz)
         self.statusbarManager.SetMode(0)
 
         # erase map window

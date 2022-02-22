@@ -85,10 +85,6 @@ class SbManager:
         self.progressbar.progressShown.connect(self._progressShown)
         self.progressbar.progressHidden.connect(self._progressHidden)
 
-        self.widgetsInStatusbarShown = Signal(
-            "SbManager.widgetsInStatusbarShown"
-        )
-
         self._oldStatus = ""
 
         self.hiddenItems = []
@@ -161,7 +157,11 @@ class SbManager:
 
     def GetItemLabels(self):
         """Get list of item labels"""
-        return [value.label for value in self.statusbarItems.values() if value.GetPosition()==0]
+        return [
+            value.label
+            for value in self.statusbarItems.values()
+            if value.GetPosition() == 0
+        ]
 
     def ShowItem(self, itemName):
         """Invokes showing of particular item
