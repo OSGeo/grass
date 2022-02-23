@@ -206,8 +206,7 @@ RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
 
 # Test addon installation
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.bioclim
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml
+RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml2
 
 
 FROM grass as final
