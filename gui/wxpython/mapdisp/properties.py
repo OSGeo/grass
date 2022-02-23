@@ -320,6 +320,7 @@ class RBShowInStatusbar:
 
     def _onToggleRadioBox(self, event):
         self.statusbarManager.SetMode(self.GetValue())
+        self.statusbarManager.Update()
 
 
 class MapDisplayPropertiesDialog(wx.Dialog):

@@ -217,10 +217,7 @@ class SbManager:
             pass
         else:
             item = list(self.statusbarItems.values())[self.GetMode()]
-            try:
-                item.Update()
-            except:
-                item.Show()
+            item.Update()
 
     def Reposition(self):
         """Reposition items in statusbar
@@ -276,7 +273,6 @@ class SbManager:
         """
         self._mode = modeIndex
         self._modeIndexSet = True
-        self.Update()
 
     def GetMode(self):
         """Returns current mode"""
