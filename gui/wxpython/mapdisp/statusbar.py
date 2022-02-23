@@ -52,8 +52,8 @@ class SbManager:
     """Statusbar manager for wx.Statusbar and SbItems.
 
     Statusbar manager manages items added by AddStatusbarItem method.
-    Provides progress bar (SbProgress) and choice (wx.Choice).
-    Items with position 0 are shown according to choice selection.
+    Provides progress bar (SbProgress).
+    Items with position 0 are shown according to selection in Map Display settings dialog.
     Only one item of the same class is supposed to be in statusbar.
     Manager user have to create statusbar on his own, add items to manager
     and call Update method to show particular widgets.
@@ -70,7 +70,7 @@ class SbManager:
     def __init__(self, mapframe, statusbar):
         """Connects manager to statusbar
 
-        Creates choice and progress bar.
+        Creates progress bar.
         """
         self.mapFrame = mapframe
         self.statusbar = statusbar
@@ -116,12 +116,7 @@ class SbManager:
         return False
 
     def AddStatusbarItem(self, item):
-        """Adds item to statusbar
-
-        If item position is 0, item is managed by choice.
-
-        :func:`AddStatusbarItemsByClass`
-        """
+        """Adds item to statusbar"""
         self.statusbarItems[item.name] = item
 
     def AddStatusbarItemsByClass(self, itemClasses, **kwargs):
@@ -137,17 +132,9 @@ class SbManager:
             self.AddStatusbarItem(item)
 
     def HideStatusbarItemsByClass(self, itemClasses):
-        """Hides items showed in choice
-
-        Hides items with position 0 (items showed in choice) by removing
-        them from choice.
+        """Fill list of item indexes that are hidden.
 
         :param itemClasses list of classes of items to be hided
-
-        :func:`ShowStatusbarChoiceItemsByClass`
-
-        .. todo::
-            consider adding similar function which would take item names
         """
         for itemClass in itemClasses:
             for i in range(0, len(self.statusbarItems.values())):
@@ -352,7 +339,7 @@ class SbItem:
         self.mapFrame.StatusbarEnableLongHelp(longHelp)
 
     def Update(self):
-        """Called when statusbar action is activated (e.g. through wx.Choice)."""
+        """Called when statusbar action is activated (e.g. through Map Display settings)."""
         self._update(longHelp=False)
 
 
