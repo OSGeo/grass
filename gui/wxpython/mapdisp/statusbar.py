@@ -201,10 +201,7 @@ class SbManager:
         self._postInitialized = True
 
     def Update(self):
-        """Updates statusbar
-
-        It always updates mask.
-        """
+        """Updates statusbar"""
         self.progressbar.Update()
 
         if not self._postInitialized:
@@ -216,8 +213,14 @@ class SbManager:
             else:
                 item.Update()  # render
 
-        item = list(self.statusbarItems.values())[self.GetMode()]
-        item.Update()
+        if self.progressbar.IsShown():
+            pass
+        else:
+            item = list(self.statusbarItems.values())[self.GetMode()]
+            try:
+                item.Update()
+            except:
+                item.Show()
 
     def Reposition(self):
         """Reposition items in statusbar
