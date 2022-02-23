@@ -918,8 +918,8 @@ DBFAddNativeFieldType(DBFHandle psDBF, const char * pszFieldName,
     for( i = 0; i < 32; i++ )
         pszFInfo[i] = '\0';
 
-    if( i = strlen(pszFieldName) < 10 )
-        strncpy( pszFInfo, pszFieldName, i);
+    if( (int) strlen(pszFieldName) < 10 )
+        strncpy( pszFInfo, pszFieldName, strlen(pszFieldName));
     else
         strncpy( pszFInfo, pszFieldName, 10);
 
@@ -2098,8 +2098,8 @@ DBFAlterFieldDefn( DBFHandle psDBF, int iField, const char * pszFieldName,
     for( i = 0; i < 32; i++ )
         pszFInfo[i] = '\0';
 
-    if( i = strlen(pszFieldName) < 10 )
-        strncpy( pszFInfo, pszFieldName, i);
+    if( (int) strlen(pszFieldName) < 10 )
+        strncpy( pszFInfo, pszFieldName, strlen(pszFieldName));
     else
         strncpy( pszFInfo, pszFieldName, 10);
 
