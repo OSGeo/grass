@@ -174,7 +174,7 @@ class SbManager:
             group="display",
             key="statusbarMode",
             subkey="choices",
-            value=self.statusbarItems.values(),
+            value=self.GetItemLabels(),
             settings_type="internal",
         )
         if not self._modeIndexSet:
