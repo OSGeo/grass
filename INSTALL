@@ -45,7 +45,8 @@ GRASS source code is currently distributed in 2 forms:
   The Full source code version contains all the GRASS source code
   required for compilation. It is distributed as one file (*.tar.gz
   package) and the version is composed of 3 numbers, e.g. 8.0.0, 8.0.1
-  etc.
+  etc. See
+  https://github.com/OSGeo/grass/releases
 
 2) Snapshots of source code (generated from GitHub)
 
@@ -53,8 +54,8 @@ GRASS source code is currently distributed in 2 forms:
   repository (https://github.com/OSGeo/grass/) or as a auto-generated snapshot
   (*.tar.gz package) of the GitHub repository. The snapshot name
   contains the date when the snapshot was created (checked out from
-  the GitHub repository), e.g. grass-8.0.git_src_snapshot_2021_06_12.tar.gz
-  from https://grass.osgeo.org/grass80/source/snapshot/
+  the GitHub repository), e.g. grass-8.1.git_src_snapshot_2022_01_12.tar.gz
+  from https://grass.osgeo.org/grass-devel/source/snapshot/
   Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
 
@@ -276,7 +277,7 @@ https://grasswiki.osgeo.org/wiki/GRASS_Debugging
 
 (K) LARGE FILE SUPPORT (for raster maps)
 
-GRASS >= 7.0.0 includes improved support for reading and writing large files
+GRASS GIS includes improved support for reading and writing large files
 (> 2GB) if it is possible in your operating system. If you compile with
   configure [...] --enable-largefile
 you should be able to have raster and vector maps which are larger than 2GB.
@@ -310,9 +311,9 @@ Please see ./SUBMITTING in this directory, or better,
 https://trac.osgeo.org/grass/wiki/Submitting
 
 
-(O) DRAFT TUTORIAL
+(O) TUTORIALS
 
-https://grass.osgeo.org/documentation/first-time-users/
+https://grass.osgeo.org/learn/newcomers/
 
 ------------------
 (C) 1999-2022 by The GRASS Development Team

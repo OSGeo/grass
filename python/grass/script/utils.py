@@ -48,7 +48,7 @@ def float_or_dms(s):
     """
     if s[-1] in ["E", "W", "N", "S"]:
         s = s[:-1]
-    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(":")))
+    return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
 
 def separator(sep):

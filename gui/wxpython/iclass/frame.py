@@ -49,7 +49,6 @@ from core.render import Map
 from core.gcmd import RunCommand, GMessage, GError
 from gui_core.dialogs import SetOpacityDialog
 from gui_core.wrap import Menu
-from mapwin.base import MapWindowProperties
 from dbmgr.vinfo import VectorDBInfo
 
 from iclass.digit import IClassVDigitWindow, IClassVDigit
@@ -113,8 +112,7 @@ class IClassMapPanel(DoubleMapPanel):
         else:
             self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
+
         # show computation region by defaut
         self.mapWindowProperties.showRegion = True
 
@@ -195,13 +193,9 @@ class IClassMapPanel(DoubleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
-            sb.SbShowRegion,
-            sb.SbAlignExtent,
-            sb.SbResolution,
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
-            sb.SbProjection,
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()

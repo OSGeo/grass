@@ -37,7 +37,6 @@ from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
 from core.settings import UserSettings
 from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from mapwin.base import MapWindowProperties
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
@@ -130,10 +129,6 @@ class MapPanel(SingleMapPanel):
         # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
 
-        # properties are shared in other objects, so defining here
-        self.mapWindowProperties = MapWindowProperties()
-        self.mapWindowProperties.setValuesFromUserSettings()
-
         #
         # Add toolbars
         #
@@ -151,19 +146,12 @@ class MapPanel(SingleMapPanel):
                 sb.SbCoordinates,
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
-                sb.SbShowRegion,
-                sb.SbAlignExtent,
-                sb.SbResolution,
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
                 sb.SbGoTo,
-                sb.SbProjection,
             ]
             self.statusbarItemsHiddenInNviz = (
-                sb.SbAlignExtent,
                 sb.SbDisplayGeometry,
-                sb.SbShowRegion,
-                sb.SbResolution,
                 sb.SbMapScale,
             )
             self.statusbar = self.CreateStatusbar(statusbarItems)
@@ -981,11 +969,13 @@ class MapPanel(SingleMapPanel):
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseDisplayCallback:
-            pgnum = self.canCloseDisplayCallback(askIfSaveWorkspace=askIfSaveWorkspace)
-            if pgnum is not None:
+            pgnum_dict = self.canCloseDisplayCallback(
+                askIfSaveWorkspace=askIfSaveWorkspace
+            )
+            if pgnum_dict is not None:
                 self.CleanUp()
-                if pgnum > -1:
-                    self.closingDisplay.emit(page_index=pgnum)
+                if pgnum_dict["layers"] > -1:
+                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
@@ -1574,7 +1564,7 @@ class MapPanel(SingleMapPanel):
         if self.statusbarManager:
             self.statusbarManager.SetMode(mode)
             self.StatusbarUpdate()
-            self.SetProperty("projection", projection)
+        self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
         self.mapWindowProperties.resolution = constrainRes

@@ -28,6 +28,7 @@ from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
 from mapdisp import statusbar as sb
+from mapwin.base import MapWindowProperties
 
 from grass.script import core as grass
 
@@ -81,11 +82,19 @@ class MapPanelBase(wx.Panel):
 
         self.parent = parent
 
-        wx.Panel.__init__(self, parent, id, **kwargs)
+        wx.Panel.__init__(self, parent, id, name=name, **kwargs)
 
         # toolbars
         self.toolbars = {}
         self.iconsize = (16, 16)
+
+        # properties are shared in other objects, so defining here
+        self.mapWindowProperties = MapWindowProperties()
+        self.mapWindowProperties.setValuesFromUserSettings()
+        # update statusbar when user-defined projection changed
+        self.mapWindowProperties.useDefinedProjectionChanged.connect(
+            self.StatusbarUpdate
+        )
 
         #
         # Fancy gui
@@ -160,11 +169,17 @@ class MapPanelBase(wx.Panel):
 
     def SetProperty(self, name, value):
         """Sets property"""
-        self.statusbarManager.SetProperty(name, value)
+        if hasattr(self.mapWindowProperties, name):
+            setattr(self.mapWindowProperties, name, value)
+        else:
+            self.statusbarManager.SetProperty(name, value)
 
     def GetProperty(self, name):
         """Returns property"""
-        return self.statusbarManager.GetProperty(name)
+        if hasattr(self.mapWindowProperties, name):
+            return getattr(self.mapWindowProperties, name)
+        else:
+            return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -321,8 +336,8 @@ class MapPanelBase(wx.Panel):
         # create statusbar and its manager
         statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         statusbar.SetMinHeight(24)
-        statusbar.SetFieldsCount(4)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
@@ -330,10 +345,7 @@ class MapPanelBase(wx.Panel):
             statusbarItems, mapframe=self, statusbar=statusbar
         )
         self.statusbarManager.AddStatusbarItem(
-            sb.SbMask(self, statusbar=statusbar, position=2)
-        )
-        self.statusbarManager.AddStatusbarItem(
-            sb.SbRender(self, statusbar=statusbar, position=3)
+            sb.SbRender(self, statusbar=statusbar, position=2)
         )
         self.statusbarManager.Update()
         return statusbar
@@ -480,6 +492,16 @@ class MapPanelBase(wx.Panel):
     def OnZoomToDefault(self, event):
         """Set display geometry to match default region settings"""
         self.MapWindow.ZoomToDefault()
+
+    def OnMapDisplayProperties(self, event):
+        """Show Map Display Properties dialog"""
+        from mapdisp.properties import MapDisplayPropertiesDialog
+
+        dlg = MapDisplayPropertiesDialog(
+            parent=self, mapframe=self, properties=self.mapWindowProperties
+        )
+        dlg.CenterOnParent()
+        dlg.Show()
 
 
 class SingleMapPanel(MapPanelBase):

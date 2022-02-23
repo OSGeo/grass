@@ -572,7 +572,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
 	    G_important_message(_("Found %d possible transformations"), op_count);
 	    for (i = 0; i < op_count; i++) {
-		const char *str;
 		const char *area_of_use, *projstr;
 		double e, w, s, n;
 		PJ_PROJ_INFO pj_info;
@@ -609,7 +608,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 					pj_info.accuracy);
 		}
 #if PROJ_VERSION_NUM >= 6020000
-		str = proj_get_remarks(op);
+		const char *str = proj_get_remarks(op);
 		if (str && *str) {
 		    G_important_message(" ");
 		    G_important_message(_("Remarks: %s"), str);

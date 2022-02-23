@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 88
-target-version = ['py36', 'py37', 'py38', 'py39']
+target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -19,10 +19,17 @@ exclude = '''
         | dist\..*
     )/
     | python/libgrass_interface_generator/
-    # Bug in Black related to r-string prefix capitalization reformats
-    # a line in this file unnecessarily. File is however fully Black-formatted
-    # at the time of writing.
-    # https://github.com/psf/black/issues/1244
-    | python/grass/pygrass/utils.py
 )
 '''
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+python_files = "*/tests/*_test.py"
+addopts = """
+    --ignore-glob='dist.*'
+    --ignore-glob='bin.*'
+    --ignore-glob='*/tests/data/*'
+    --ignore-glob='*/grass/pygrass/tests/*'
+    --doctest-glob='*doctest*.txt'
+    --ignore='raster/r.category/test_rcategory_doctest.txt'
+"""

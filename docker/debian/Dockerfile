@@ -209,7 +209,7 @@ ENV LC_ALL "en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass80 /usr/local/grass
+RUN ln -sf /usr/local/grass81 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \

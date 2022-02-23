@@ -15,10 +15,11 @@
 
 import os
 import tempfile
+import weakref
 
 import grass.script as gs
-from grass.jupyter import GrassRenderer
 
+from .display import GrassRenderer
 from .region import RegionManagerFor3D
 
 
@@ -95,7 +96,16 @@ class Grass3dRenderer:
         self._resolution_fine = resolution_fine
 
         # Temporary dir and files
-        self._tmpdir = tempfile.TemporaryDirectory()
+        # Resource managed by weakref.finalize.
+        self._tmpdir = (
+            tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
+        )
+
+        def cleanup(tmpdir):
+            tmpdir.cleanup()
+
+        weakref.finalize(self, cleanup, self._tmpdir)
+
         if filename:
             self._filename = filename
         else:

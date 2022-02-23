@@ -11,9 +11,13 @@
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 
+"""2D rendering and display functionality"""
+
 import os
 import shutil
 import tempfile
+import weakref
+
 import grass.script as gs
 
 from .region import RegionManagerFor2D
@@ -91,7 +95,15 @@ class GrassRenderer:
         # temporary directory that we can delete later. We need
         # this temporary directory for the legend anyways so we'll
         # make it now
-        self._tmpdir = tempfile.TemporaryDirectory()
+        # Resource managed by weakref.finalize.
+        self._tmpdir = (
+            tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
+        )
+
+        def cleanup(tmpdir):
+            tmpdir.cleanup()
+
+        weakref.finalize(self, cleanup, self._tmpdir)
 
         if filename:
             self._filename = filename
@@ -160,6 +172,7 @@ class GrassRenderer:
 
     def show(self):
         """Displays a PNG image of map"""
-        from IPython.display import Image
+        # Lazy import to avoid an import-time dependency on IPython.
+        from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         return Image(self._filename)

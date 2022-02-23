@@ -4414,18 +4414,17 @@ msgid "Name of target mapset for ortho-rectification"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:83
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access target location/mapset %s/%s"
-msgstr "No se puede crear la localización <%s>: %s"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:90
 msgid "Target locations with XY (unreferenced) are not supported"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:92
-#, fuzzy
 msgid "Target locations with lon/lat are not supported"
-msgstr "Localizaciones Lat/Long no están soportadas por este módulo"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.target/main.c:97
 #, c-format
@@ -4688,28 +4687,24 @@ msgid "Apriori Z-coordinate standard deviation"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:92
-#, fuzzy
 msgid "Initial Camera Omega (pitch) degrees"
-msgstr "Grados Phi iniciales de Cámara (cabeceo, pitch)"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:97
-#, fuzzy
 msgid "Initial Camera Phi (roll) degrees"
-msgstr "Grados omega iniciales de cámara (balanceo, roll)"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:102
 msgid "Initial Camera Kappa (yaw) degrees"
 msgstr "Grados Kappa iniciales de Cámara (desvío, yaw)"
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:107
-#, fuzzy
 msgid "Apriori Omega (pitch) standard deviation"
-msgstr "desviación estándar"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:112
-#, fuzzy
 msgid "Apriori Phi (roll) standard deviation"
-msgstr "desviación estándar"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.init/main.c:117
 msgid "Apriori Kappa (yaw) standard deviation"
@@ -61447,6 +61442,15 @@ msgstr "No se puede inicializar archivo temporal"
 msgid "eading the input map -%s- and -%s- and creating some temporary files..."
 msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales..."
 
+msgid "Can not read control points for group <%s>"
+msgstr "No se puede leer puntos de control para el grupo <%s>"
+
+msgid "Initial Camera Omega (roll) degrees"
+msgstr "Grados omega iniciales de cámara (balanceo, roll)"
+
+msgid "Initial Camera Phi (pitch) degrees"
+msgstr "Grados Phi iniciales de Cámara (cabeceo, pitch)"
+
 #~ msgid "<%s> not found"
 #~ msgstr "<%s> no encontrado"
 
@@ -61459,9 +61463,6 @@ msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales
 #~ msgstr ""
 #~ "Puede cambiar el histórico mediante comandos:\n"
 #~ "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
-
-#~ msgid "Can not read control points for group <%s>"
-#~ msgstr "No se puede leer puntos de control para el grupo <%s>"
 
 #~ msgid "Key columns differ"
 #~ msgstr "Diferencia de columnas clave"
@@ -61487,14 +61488,11 @@ msgstr "leyendo mapa de entrada -%s y -%s- y creando algunos archivos temporales
 #~ msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
 #~ msgstr "Hace que el valor de cada celda sea una función de los valores de los atributos asignados a los puntos vectoriales o centroides a su alrededor, y guarda los nuevos valores de celda en una capa de mapa ráster de salida."
 
-#~ msgid "Initial Camera Omega (roll) degrees"
-#~ msgstr "Grados omega iniciales de cámara (balanceo, roll)"
-
-#~ msgid "Initial Camera Phi (pitch) degrees"
-#~ msgstr "Grados Phi iniciales de Cámara (cabeceo, pitch)"
-
 #~ msgid "The input band number should be 15"
 #~ msgstr "El número de banda de entrada debería ser 15"
 
 #~ msgid "%s=%s,%s: files are the same, no copy required"
 #~ msgstr "%s=%s,%s: los archivos son los mismos, no se requiere ninguna copia"
+
+#~ msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export <in 3D rather than 2D (default)."
+#~ msgstr "El mapa vectorial <%s> es 3D. Use opciones de creación de capa específicas (parámetro 'Ico') para exportar en 3D en vez de 2D (predeterminado)."

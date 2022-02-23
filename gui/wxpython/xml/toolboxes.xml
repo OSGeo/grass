@@ -2023,6 +2023,7 @@
       <wxgui-item name="TplotTool"/>
       <wxgui-item name="TimelineTool"/>
       <wxgui-item name="VDigit"/>
+      <wxgui-item name="RDigit"/>
     </items>
   </toolbox>
 </toolboxes>
