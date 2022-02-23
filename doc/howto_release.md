@@ -115,13 +115,15 @@ Example:
 2022
 ```
 
+Commit with version message, e.g. "GRASS GIS 7.8.7RC1".
+
 ### Create release tag
 
-(see <https://help.github.com/en/articles/creating-releases>)
+(For background, see <https://help.github.com/en/articles/creating-releases>)
 
 Preparation:
 
-### Changelog and tagging etc
+#### Changelog and tagging etc preparations
 
 ```bash
 # update from GH
@@ -144,7 +146,7 @@ RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
 echo $RELEASETAG
 ```
 
-### Tag release (on GitHub)
+#### Tag release (on GitHub)
 
 ```bash
 echo "$VERSION"
@@ -156,7 +158,7 @@ To be done in GH interface:
 
 - select release_branch first, then
 - fill in "Release Title" (e.g., GRASS GIS 7.8.7RC1)
-- fill in "Create tag" field:
+- fill in "Create tag" field: 7.8.7RC1
 
 Tag version | target (examples):
   7.8.7RC1  | releasebranch_7_8
@@ -168,14 +170,6 @@ Add release desciption (re-use existing texts as possible, from
 
 If RC, then check
 [x] This is a pre-release
-
-### Packaging of source code tarball
-
-```bash
-# fetch tarball from GitHub
-wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
-md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
-```
 
 ### Changelog from GitHub for GH release notes
 
@@ -190,7 +184,11 @@ gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="7.8.7" -f previous
 If this fails, also a date may be used (that of the last release):
 
 ```bash
-git log --oneline --after="2021-10-10" | cut -d' ' -f2- | sed 's+^+* +g' | sed 's+(#+https://github.com/OSGeo/grass/pull/+g' | sed 's+)$++g' | sort -u
+# GitHub style
+git log --pretty=format:"* %s by %an" --after="2022-01-28" | sort
+
+# trac style
+git log --oneline --after="2022-01-28" | cut -d' ' -f2- | sed 's+^+* +g' | sed 's+(#+https://github.com/OSGeo/grass/pull/+g' | sed 's+)$++g' | sort -u
 ```
 
 Importantly, these notes need to be manually sorted into the various categories (modules, wxGUI, library, docker, ...).
@@ -230,6 +228,13 @@ Reset local copy to GH:
 #  - remote repo as "upstream"
 git fetch --all --prune && git checkout releasebranch_7_8 && \
  git merge upstream/releasebranch_7_8 && git push origin releasebranch_7_8
+
+### Getting the source code tarball for upload on OSGeo server
+
+```bash
+# fetch tarball from GitHub
+wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
+md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
 ### Upload source code tarball to OSGeo servers
@@ -270,7 +275,7 @@ vim wingrass-maintenance-scripts/grass_addons.sh
 vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
 vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
-# update addons - major/minor release only
+# update addons - major/minor release only <<-- outdated?!
 vim grass-addons/tools/addons/grass-addons-publish.sh
 vim grass-addons/tools/addons/grass-addons-build.sh
 vim grass-addons/tools/addons/grass-addons.sh
@@ -288,7 +293,7 @@ Release is done.
 
 ### Advertise the new release
 
-#### Write trac Wiki release page
+#### Write trac Wiki release page (probably to be dropped)
 
 To easily generate the entries for the trac Wiki release page, use the `git log` approach:
 - extract entries from oneline git log and prepare for trac Wiki copy-paste:
@@ -296,10 +301,10 @@ To easily generate the entries for the trac Wiki release page, use the `git log`
 ```
 # get date of previous release from https://github.com/OSGeo/grass/releases
 # verify
-git log --oneline --after="2021-10-10" | tac
+git log --oneline --after="2022-01-28" | tac
 
 # prepare for trac Wiki release page (incl. PR trac macro)
-git log --oneline --after="2021-10-10" | cut -d' ' -f2- | sed 's+^+ * G78:+g' | sed 's+(#+(PR:+g' | sort -u
+git log --oneline --after="2022-01-28" | cut -d' ' -f2- | sed 's+^+ * G78:+g' | sed 's+(#+(PR:+g' | sort -u
 ```
 
 - store changelog entries in trac, by section:
@@ -391,22 +396,8 @@ Software pages:
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
 - FreeGIS: <freegis-list@intevation.de>
-- Geowanking: <geowanking@geowanking.org>
 - OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
-- Geo Connexion: <editor-geo@geoconnexion.com>
 
-Via Web:
+Via Web / Social media:
 
-- <http://linuxtoday.com/contribute.php3>
-- <https://joinup.ec.europa.eu/software/grassgis/home> (submit news, MN)
-- <http://www.macnn.com/contact/newstips/1>
-- <http://www10.giscafe.com/submit_material/submit_options.php#Press> (MN) -->
-  Press releases
-- <http://www.directionsmag.com/pressreleases/> (News -> Submit Press Release)
-- <http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29>
-- <https://www.linux-apps.com/p/1128004/edit/> (MN)
-- <https://news.eoportal.org/web/eoportal/share-your-news> (MN) -> Share your
-  news with the EO community
-- <https://www.heise.de/download/product/grass-gis-7105> (update, MN)
-- See also: <https://grass.osgeo.org/wiki/Contact_Databases>
-- ... anywhere else? Please add here.
+- See: <https://grass.osgeo.org/wiki/Contact_Databases>
