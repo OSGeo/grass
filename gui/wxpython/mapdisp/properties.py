@@ -296,7 +296,7 @@ class RBShowInStatusbar:
             style=wx.RA_SPECIFY_COLS,
         )
         self._setValue(self.statusbarManager.GetMode())
-        self._hideItems(self.statusbarManager.hiddenItems)
+        self._disableItems()
 
         self.widget.Bind(wx.EVT_RADIOBOX, self._onToggleRadioBox)
 
@@ -306,10 +306,10 @@ class RBShowInStatusbar:
     def GetValue(self):
         return self.widget.GetSelection()
 
-    def _hideItems(self, items, show=False):
-        """Shows or hides a radiobox options"""
-        for item in items:
-            self.widget.ShowItem(item=item, show=show)
+    def _disableItems(self):
+        """Disables a radiobox options"""
+        for item in self.statusbarManager.disabledItems.keys():
+            self.widget.EnableItem(n=item, enable=False)
 
     def GetWidget(self):
         """Returns underlying widget.

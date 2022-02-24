@@ -87,7 +87,7 @@ class SbManager:
 
         self._oldStatus = ""
 
-        self.hiddenItems = []
+        self.disabledItems = {}
 
     def SetProperty(self, name, value):
         """Sets property represented by one of contained SbItems
@@ -131,16 +131,16 @@ class SbManager:
             item = Item(**kwargs)
             self.AddStatusbarItem(item)
 
-    def HideStatusbarItemsByClass(self, itemClasses):
-        """Fill list of item indexes that are hidden.
+    def DisableStatusbarItemsByClass(self, itemClasses):
+        """Fill list of item indexes that are disabled.
 
-        :param itemClasses list of classes of items to be hided
+        :param itemClasses list of classes of items to be disabled
         """
         for itemClass in itemClasses:
             for i in range(0, len(self.statusbarItems.values())):
                 item = list(self.statusbarItems.values())[i]
                 if item.__class__ == itemClass:
-                    self.hiddenItems.append(i)
+                    self.disabledItems[i] = item
 
     def GetItemLabels(self):
         """Get list of item labels"""
