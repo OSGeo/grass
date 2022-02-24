@@ -679,7 +679,8 @@ class GMFrame(wx.Frame):
 
         # Set the size for automatic notebook
         pane = self._auimgr.GetPane(notebook)
-        pane.BestSize(self.PANE_MIN_SIZE)
+        pane.BestSize(self.PANE_BEST_SIZE)
+        pane.MinSize(self.PANE_MIN_SIZE)
 
         wx.CallAfter(self.datacatalog.LoadItems)
 
