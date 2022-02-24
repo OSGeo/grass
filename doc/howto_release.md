@@ -93,7 +93,7 @@ chmod -R a+r *
 Double check:
 
 ```bash
-git status
+git status --ignored
 ```
 
 ### Create release branch (only if not yet existing)
@@ -181,13 +181,13 @@ Using GH API here, see also
 gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.0.1" -f previous_tag_name=8.0.0 -f target_commitish=releasebranch_8_0 -q .body
 ```
 
-If this fails, also a date may be used (that of the last release):
+If this fails or is incomplete, also a date may be used (that of the last release):
 
 ```bash
-# GitHub style
+# GitHub style (this works best)
 git log --pretty=format:"* %s by %an" --after="2022-01-28" | sort
 
-# trac style
+# trac style (no longer really needed)
 git log --oneline --after="2022-01-28" | cut -d' ' -f2- | sed 's+^+* +g' | sed 's+(#+https://github.com/OSGeo/grass/pull/+g' | sed 's+)$++g' | sort -u
 ```
 
@@ -254,12 +254,12 @@ echo $SERVER2:$SERVER2DIR
 
 # upload along with associated files:
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING $USER@$SERVER1:$SERVER1DIR
+  INSTALL REQUIREMENTS.html SUBMITTING CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
 
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING $USER@$SERVER2:$SERVER2DIR
+  INSTALL REQUIREMENTS.html SUBMITTING CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
 
-# Only at full release!
+# Only at full release (i.e., not for RCs)!
 # generate link to "latest" source code
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
