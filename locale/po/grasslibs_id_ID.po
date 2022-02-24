@@ -1245,9 +1245,9 @@ msgid "error in datum table file, line %d"
 msgstr ""
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "Tidak dapat mengubah nama %s"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
 #, c-format
@@ -3791,9 +3791,9 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr "Kesalahan format: berkas ('%s') baris (%d) - %s"
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr "Salin %s <%s> ke current mapset sebagai <%s>"
+msgstr ""
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
@@ -6241,14 +6241,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "Tidak dapat menghapus %s"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "Tidak dapat menghapus peta vektor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -9286,9 +9284,9 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr "Tidak dapat memindahkan peta raster sementara <%s>  ke peta raster 3D <%s>"
+msgstr ""
 
 #: ../lib/raster/get_cellhd.c:78
 #, c-format
@@ -10124,5 +10122,5 @@ msgstr ""
 msgid "Unbale to open raster <%s>"
 msgstr "Tidak dapat membuka raster <%s>"
 
-#~ msgid "Copy %s <%s> to current mapset as <%s>"
-#~ msgstr "Salin %s <%s> ke current mapset sebagai <%s>"
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Salin %s <%s> ke current mapset sebagai <%s>"

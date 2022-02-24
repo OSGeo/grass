@@ -503,9 +503,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:49
-#, fuzzy
 msgid "Data Catalog - GRASS GIS"
-msgstr "தகவல் அட்டவணை"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:25
 msgid "Reload GRASS locations"
@@ -554,9 +553,8 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/toolbars.py:72
 #: ../gui/wxpython/modules/extensions.py:74
 #: ../gui/wxpython/gui_core/menu.py:152
-#, fuzzy
 msgid "Search"
-msgstr "தேடு:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:91
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
@@ -838,24 +836,20 @@ msgid "&Switch mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
-#, fuzzy
 msgid "&Delete mapset"
-msgstr "வரைபடத்தை நீக்கவும்"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
-#, fuzzy
 msgid "&Rename mapset"
-msgstr "புதிய வரைபடத்தொகுப்பு"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
-#, fuzzy
 msgid "&Create mapset"
-msgstr "புதிய வரைபடத்தொகுப்பு"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
-#, fuzzy
 msgid "&Delete location"
-msgstr "தேர்ந்தெடுக்கப்பட்டுள்ளதை அழி"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
 msgid "&Rename location"
@@ -878,14 +872,12 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
-#, fuzzy
 msgid "&Delete locations"
-msgstr "தேர்ந்தெடுக்கப்பட்டுள்ளதை அழி"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
-#, fuzzy
 msgid "&Delete mapsets"
-msgstr "வரைபடத்தை நீக்கவும்"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -950,9 +942,8 @@ msgid "More options..."
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "தகவல் அட்டவணை"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:47
 msgid "Close GRASS GIS Data Catalog"
@@ -6470,9 +6461,8 @@ msgid "Show 3D view mode manual"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:94
-#, fuzzy
 msgid "GRASS GIS"
-msgstr "GRASS உதவி"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:129
 msgid "There were some issues when loading menu or Modules tab:"
@@ -13500,9 +13490,8 @@ msgid "Attribute table manager"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "தகவல் அட்டவணை"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
@@ -13847,9 +13836,8 @@ msgid "Abort download"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:80
-#, fuzzy
 msgid "Invalid mapset name"
-msgstr "தவறான வரைபட அளவு %d, %d\n"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -13866,9 +13854,8 @@ msgid "Name for the new mapset:"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:186
-#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:212
 msgid "Do you want to import {}to the newly created location?"
@@ -13890,9 +13877,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:269
-#, fuzzy
 msgid "Unable to rename selected mapset"
-msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:280
 #: ../gui/wxpython/startup/guiutils.py:334
@@ -13903,12 +13889,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:294
-#, fuzzy
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "{}"
-msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:319
 #, python-brace-format
@@ -13942,9 +13927,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
-#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:430
 #, python-brace-format
@@ -13957,9 +13941,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:435
-#, fuzzy
 msgid "Delete selected mapsets"
-msgstr "தேர்ந்தெடுக்கப்பட்டுள்ளதை அழி"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:448
 msgid "Error when deleting mapsets"
@@ -14000,9 +13983,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:520
-#, fuzzy
 msgid "Delete selected locations"
-msgstr "தேர்ந்தெடுக்கப்பட்டுள்ளதை அழி"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:533
 msgid "Error when deleting locations"
@@ -14043,9 +14025,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
-#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr "தேர்ந்தெடுக்கப்பட்டுள்ளதை அழி"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14073,9 +14054,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:641
-#, fuzzy
 msgid "Mapset is in use"
-msgstr "வரைபடத்தொகுப்பு: %s"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:653
 msgid "Error when removing lock file"
@@ -18701,8 +18681,8 @@ msgstr ""
 msgid "Cartographic Composer - GRASS GIS"
 msgstr ""
 
-#~ msgid "GRASS GIS Data Catalog"
-#~ msgstr "GRASS GIS தகவல் அட்டவணை"
+msgid "GRASS GIS Data Catalog"
+msgstr "GRASS GIS தகவல் அட்டவணை"
 
-#~ msgid "Search:"
-#~ msgstr "தேடு:"
+msgid "Search:"
+msgstr "தேடு:"

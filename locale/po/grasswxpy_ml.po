@@ -526,9 +526,8 @@ msgid "Add existing or create new database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
-#, fuzzy
 msgid "Create new mapset in current location"
-msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
 msgid "Create new location in current GRASS database"
@@ -539,14 +538,12 @@ msgid "Download sample location to current GRASS database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:49
-#, fuzzy
 msgid "Import raster data  [r.import]"
-msgstr "തിരഞ്ഞെടുക്കപെട്ട raster ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:52
-#, fuzzy
 msgid "Import vector data  [v.import]"
-msgstr "തിരഞ്ഞെടുക്കപെട്ട vector ലയെറുകളെ ഇറക്കുമതി ചെയ്യുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:55
 msgid "Select another import option"
@@ -555,9 +552,8 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/toolbars.py:72
 #: ../gui/wxpython/modules/extensions.py:74
 #: ../gui/wxpython/gui_core/menu.py:152
-#, fuzzy
 msgid "Search"
-msgstr "മൊട്യൂൾ തിരയുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:91
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
@@ -647,9 +643,9 @@ msgid "{name}  (owner: {owner})"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:237
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name}"
-msgstr "നാമം മാറ്റുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:791
 #, python-brace-format
@@ -694,9 +690,8 @@ msgid "Rename map"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1064
-#, fuzzy
 msgid "Cannot rename mapset"
-msgstr "മാപ്പ്സെറ്റ് പേർ മാറ്റാൻ മാറ്റുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1074
 #, python-brace-format
@@ -704,12 +699,8 @@ msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1084
-#, fuzzy
 msgid "Cannot rename location"
 msgstr ""
-"ലൊക്കെഷൻ പേർ മാറ്റാൻ പറ്റുനില്ല\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/datacatalog/tree.py:1093
 #, python-brace-format
@@ -845,39 +836,32 @@ msgid "&Switch mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
-#, fuzzy
 msgid "&Delete mapset"
-msgstr "മാപ്പ്സെറ്റ് എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
-#, fuzzy
 msgid "&Rename mapset"
-msgstr "മാപ്പ്സെറ്റ് പേർ മാറ്റാൻ മാറ്റുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
-#, fuzzy
 msgid "&Create mapset"
-msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
-#, fuzzy
 msgid "&Delete location"
-msgstr "ലൊക്കെഷൻ എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
-#, fuzzy
 msgid "&Rename location"
-msgstr "ലൊക്കെഷൻ പേർ മാറ്റുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
-#, fuzzy
 msgid "&Create new location"
-msgstr "പുതിയ ലൊക്കെഷൻ എഴുതുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
-#, fuzzy
 msgid "&Download sample location"
-msgstr "ലൊക്കെഷൻ പേർ മാറ്റുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
@@ -888,14 +872,12 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
-#, fuzzy
 msgid "&Delete locations"
-msgstr "ലൊക്കെഷൻ എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
-#, fuzzy
 msgid "&Delete mapsets"
-msgstr "മാപ്പ്സെറ്റ് എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -911,14 +893,12 @@ msgid "Choose GRASS data directory:"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:112
-#, fuzzy
 msgid "Do you want to create a location?"
-msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കാൻ പറ്റുനില്ല: %s"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:115
-#, fuzzy
 msgid "Create location?"
-msgstr "ലൊക്കെഷൻ എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:199
 msgid "Link external raster data  [r.external]"
@@ -1991,9 +1971,8 @@ msgid "Use saved region:"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:575
-#, fuzzy
 msgid "Animate region change"
-msgstr "മുൻപ് വരുത്തിയ മാറ്റങ്ങൾ ഇല്ലാതാക്കുക"
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:581
 msgid "End region:"
@@ -2851,9 +2830,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/timeline/g.gui.timeline.py:63
-#, fuzzy
 msgid "Timeline Tool - GRASS GIS"
-msgstr "ഗ്രാസ്സ് ജിസ്സിലെക്ക് സ്വാഗതം"
+msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:38
 #, python-brace-format
@@ -3798,9 +3776,8 @@ msgid "This option is required"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
-#, fuzzy
 msgid "(optional)"
-msgstr "ഐച്ഛിക"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:216
 msgid "Name of location directory in GIS Data Directory"
@@ -3851,9 +3828,8 @@ msgid "Read CRS from a georeferenced data file"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:354
-#, fuzzy
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr "പ്രൊജെക്റ്റ് ഇരിക്കുന്ന സ്ഥലം"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 #: ../gui/wxpython/location_wizard/wizard.py:1437
@@ -3965,9 +3941,8 @@ msgid "Enter WKT parameters string:"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1498
-#, fuzzy
 msgid "Select CRS from a list"
-msgstr "അക്ഷരം തിരഞ്ഞെടുക്കുക"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1514
 msgid "Filter by EPSG code or description:"
@@ -4855,9 +4830,8 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:168
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
-#, fuzzy
 msgid "Temporal Plot Tool - GRASS GIS"
-msgstr "ഗ്രാസ്സ് ജിസ്സിലെക്ക് സ്വാഗതം"
+msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -6496,9 +6470,8 @@ msgid "Show 3D view mode manual"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:94
-#, fuzzy
 msgid "GRASS GIS"
-msgstr "പുറത്ത് കടക്കുക"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:129
 msgid "There were some issues when loading menu or Modules tab:"
@@ -6782,9 +6755,9 @@ msgid "Unable to start Temporal Plot Tool."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2083
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Map Display {number}"
-msgstr "മാപ്പ് ലയെറുകൾ"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2179
 msgid "Add selected map layers into layer tree"
@@ -7834,9 +7807,8 @@ msgid "Thematic mapping for vector map in 3D view"
 msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
-#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr "രാസ്റ്റെർ മാപ്പ് ലെയെർ ചേർക്കുക"
+msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -8588,9 +8560,8 @@ msgid "WARNING"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:114
-#, fuzzy
 msgid "Setup for r.li modules"
-msgstr "മൊട്യൂൾ തിരയുക"
+msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:131
 msgid "Available sampling area configuration files"
@@ -13879,9 +13850,8 @@ msgid "Abort download"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:80
-#, fuzzy
 msgid "Invalid mapset name"
-msgstr "ധര്‍മ്മ്യമായ അണിയണിയായി നിറുത്തുക"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -13898,9 +13868,8 @@ msgid "Name for the new mapset:"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:186
-#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കാൻ പറ്റുനില്ല: %s"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:212
 msgid "Do you want to import {}to the newly created location?"
@@ -13922,32 +13891,23 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:269
-#, fuzzy
 msgid "Unable to rename selected mapset"
-msgstr "മാപ്പ്സെറ്റ് എടുത്തുകളയാൻ പറ്റുനില്ല"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:280
 #: ../gui/wxpython/startup/guiutils.py:334
-#, fuzzy
 msgid ""
 "Current name: {}\n"
 "\n"
 "Enter new name:"
 msgstr ""
-"ഇപ്പൊഴുള്ള പേർ: %s\n"
-"\n"
-"പുതിയ പേർ:"
 
 #: ../gui/wxpython/startup/guiutils.py:294
-#, fuzzy
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "{}"
 msgstr ""
-"മാപ്പ്സെറ്റ് പേർ മാറ്റാൻ പറ്റുനില്ല\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:319
 #, python-brace-format
@@ -13960,20 +13920,15 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:323
-#, fuzzy
 msgid "Unable to rename selected location"
-msgstr "ലൊക്കെഷൻ എടുത്തുകളയാൻ പറ്റുനില്ല"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:347
-#, fuzzy
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "{}"
 msgstr ""
-"ലൊക്കെഷൻ പേർ മാറ്റാൻ പറ്റുനില്ല\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:410
 #, python-brace-format
@@ -13986,12 +13941,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
-#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr "മാപ്പ്സെറ്റ് എടുത്തുകളയാൻ പറ്റുനില്ല"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:430
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following mapsets?\n"
 "\n"
@@ -13999,14 +13953,10 @@ msgid ""
 "\n"
 "All maps included in these mapsets will be permanently deleted!"
 msgstr ""
-"നിങ്ങൾ തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് <%(mapset)s> ലോക്കേഷനിൽ <%(location)s> നിന്നും എടുത്തുകളയണമോ ?\n"
-"\n"
-"എല്ലാ മാപ്പുകളും സ്തിരമയി എടുത്തുകളയുന്നതാണ്!!"
 
 #: ../gui/wxpython/startup/guiutils.py:435
-#, fuzzy
 msgid "Delete selected mapsets"
-msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:448
 msgid "Error when deleting mapsets"
@@ -14033,12 +13983,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:499
-#, fuzzy
 msgid "Unable to delete selected locations"
-msgstr "ലൊക്കെഷൻ എടുത്തുകളയാൻ പറ്റുനില്ല"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:515
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following locations?\n"
 "\n"
@@ -14046,19 +13995,14 @@ msgid ""
 "\n"
 "All mapsets included in these locations will be permanently deleted!"
 msgstr ""
-"നിങ്ങൾ തിരഞ്ഞെടുത്ത ലൊക്കെഷൻ എടുത്തുകളയണമോ <%s>?\n"
-"\n"
-"എല്ലാ മാപ്പുകളും സ്തിരമയി എടുത്തുകളയുന്നതാണ്!!"
 
 #: ../gui/wxpython/startup/guiutils.py:520
-#, fuzzy
 msgid "Delete selected locations"
-msgstr "തിരഞ്ഞെടുത്ത ലൊക്കെഷൻ എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:533
-#, fuzzy
 msgid "Error when deleting locations"
-msgstr "ലൊക്കെഷൻ പേർ മാറ്റുക"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:535
 #, python-brace-format
@@ -14081,9 +14025,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:572
-#, fuzzy
 msgid "Unable to delete selected GRASS database"
-msgstr "ലൊക്കെഷൻ എടുത്തുകളയാൻ പറ്റുനില്ല"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:580
 #, python-brace-format
@@ -14096,9 +14039,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
-#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് എടുത്തുകളയുക"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14134,15 +14076,12 @@ msgid "Error when removing lock file"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:654
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to remove {lockpath}.\n"
 "\n"
 " Details: {error}."
 msgstr ""
-"ലൊക്കെഷൻ പേർ മാറ്റാൻ പറ്റുനില്ല\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:693
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:593
@@ -14159,14 +14098,12 @@ msgid "Data file <%(name)s> imported successfully. The location's default region
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:717
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Current GRASS database is <%(dbase)s>.\n"
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
-"എപ്പൊളത്തെ ലൊക്കെഷൻ <%(loc)s.\n"
-" എപ്പൊളത്തെ മാപ്പ്സെറ്റ് <%(mapset)s>."
 
 #: ../gui/wxpython/startup/guiutils.py:743
 #, python-format
@@ -14765,9 +14702,8 @@ msgid "Dbf driver does not support usage of SQL functions."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:78
-#, fuzzy
 msgid "Attribute Table Manager"
-msgstr "ലയെർ നടത്തിപ്പുകാരൻ"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:81
 #, python-brace-format
@@ -16700,9 +16636,8 @@ msgid "Double-click to run selected module"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:164
-#, fuzzy
 msgid "&Run..."
-msgstr "ഓടുക"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:165
 msgid "Run selected module from the tree"
@@ -17219,9 +17154,8 @@ msgid "Not enough points for line"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:67
-#, fuzzy
 msgid "Vector Digitizer - GRASS GIS"
-msgstr "ഗ്രാസ്സ് ജിസ്സിലെക്ക് സ്വാഗതം"
+msgstr ""
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:83
 #, python-format

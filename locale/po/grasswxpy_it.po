@@ -514,9 +514,8 @@ msgstr ""
 "La stampante è impostata correttamente?"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:49
-#, fuzzy
 msgid "Data Catalog - GRASS GIS"
-msgstr "Catalogo dei dati"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:25
 msgid "Reload GRASS locations"
@@ -527,61 +526,50 @@ msgid "Reload current GRASS mapset only"
 msgstr "Ricarica solo il mapset corrente di GRASS"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:31
-#, fuzzy
 msgid "Restrict edits to the current mapset only"
-msgstr "Cliccare per restringere le modifiche solo al mapset corrente"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:34
-#, fuzzy
 msgid "Allow edits outside of the current mapset"
-msgstr "Fare una copia nel mapset attuale"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:37
-#, fuzzy
 msgid "Add existing or create new database"
-msgstr "Impossibile creare il nuovo Database di GRASS"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
-#, fuzzy
 msgid "Create new mapset in current location"
-msgstr "Crea un nuovo Mapset nella Location selezionata"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
-#, fuzzy
 msgid "Create new location in current GRASS database"
-msgstr "Impossibile creare il nuovo Database di GRASS"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:46
-#, fuzzy
 msgid "Download sample location to current GRASS database"
-msgstr "Scarica location di esempio"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:49
-#, fuzzy
 msgid "Import raster data  [r.import]"
-msgstr "Importa mappa raster"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:52
-#, fuzzy
 msgid "Import vector data  [v.import]"
-msgstr "Importa mappa vettoriale"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:55
-#, fuzzy
 msgid "Select another import option"
-msgstr "Seleziona da un'altra mappa"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:72
 #: ../gui/wxpython/modules/extensions.py:74
 #: ../gui/wxpython/gui_core/menu.py:152
-#, fuzzy
 msgid "Search"
-msgstr "Ricerca:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:91
-#, fuzzy
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
-msgstr "Digitare per effettuare una ricerca nel database in base al tipo di mappa o nome. Usare il prefisso 'r:', 'v:' e 'r3:' per visualizzare rispettivamente solo i dati raster, vettoriali o raster 3D. Utilizzare le normali espressioni di Python per affinare la ricerca."
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/dialogs.py:33
 #: ../gui/wxpython/modules/import_export.py:909
@@ -645,9 +633,8 @@ msgid "Overwrite?"
 msgstr "Sovrascrivi?"
 
 #: ../gui/wxpython/datacatalog/tree.py:224
-#, fuzzy
 msgid "name unknown"
-msgstr "sconosciuto"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:226
 #, python-brace-format
@@ -670,9 +657,9 @@ msgid "{name}  (owner: {owner})"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:237
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name}"
-msgstr "Rinomina"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:791
 #, python-brace-format
@@ -717,9 +704,8 @@ msgid "Rename map"
 msgstr "Rinomina mappa"
 
 #: ../gui/wxpython/datacatalog/tree.py:1064
-#, fuzzy
 msgid "Cannot rename mapset"
-msgstr "Crea un nuovo mapset"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1074
 #, python-brace-format
@@ -727,9 +713,8 @@ msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1084
-#, fuzzy
 msgid "Cannot rename location"
-msgstr "Crea nuova location"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1093
 #, python-brace-format
@@ -814,9 +799,8 @@ msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "Per muovere o copiare mappe in altri mapset, sbloccare la modifica di altri mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1490
-#, fuzzy
 msgid "To move or copy maps to other location, please drag them to a mapset in the destination location"
-msgstr "Per muovere o copiare mappe in altri mapset, sbloccare la modifica di altri mapset"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1714
 msgid "&Cut"
@@ -866,58 +850,48 @@ msgid "&Switch mapset"
 msgstr "&Cambia mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
-#, fuzzy
 msgid "&Delete mapset"
-msgstr "Elimina mappa"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
-#, fuzzy
 msgid "&Rename mapset"
-msgstr "Rinomina mappa"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
-#, fuzzy
 msgid "&Create mapset"
-msgstr "Crea un nuovo mapset"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
-#, fuzzy
 msgid "&Delete location"
-msgstr "Elimina la location selezionata"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
-#, fuzzy
 msgid "&Rename location"
-msgstr "Rinomina la location selezionata"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
-#, fuzzy
 msgid "&Create new location"
-msgstr "Crea nuova location"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
-#, fuzzy
 msgid "&Download sample location"
-msgstr "Scarica location di esempio"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1842
-#, fuzzy
 msgid "&Delete GRASS database from disk"
-msgstr "1. Scegli la cartella dei dati GRASS GIS"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
-#, fuzzy
 msgid "&Delete locations"
-msgstr "Elimina la location selezionata"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
-#, fuzzy
 msgid "&Delete mapsets"
-msgstr "Elimina mappa"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -933,49 +907,40 @@ msgid "Choose GRASS data directory:"
 msgstr "Scegli la cartella dei dati GRASS:"
 
 #: ../gui/wxpython/datacatalog/catalog.py:112
-#, fuzzy
 msgid "Do you want to create a location?"
-msgstr "Vuoi creare la GRASS location <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:115
-#, fuzzy
 msgid "Create location?"
-msgstr "Crea nuova location?"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:199
-#, fuzzy
 msgid "Link external raster data  [r.external]"
-msgstr "Collega a un raster esterno"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:203
-#, fuzzy
 msgid "Link external vector data  [v.external]"
-msgstr "Collega a un vettoriale esterno"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:209
-#, fuzzy
 msgid "Set raster output format  [r.external.out]"
-msgstr "Imposta il formato di output per i raster"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:213
-#, fuzzy
 msgid "Set vector output format  [v.external.out]"
-msgstr "Imposta il formato di output per i vettoriali"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:220
-#, fuzzy
 msgid "Unpack GRASS raster map  [r.unpack]"
-msgstr "Estrai mappa raster di GRASS"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:224
-#, fuzzy
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr "Estrai mappa vettoriale di GRASS"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:230
-#, fuzzy
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
-msgstr "Crea raster da file ASCII poligonale/lineare/puntuale"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:234
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
@@ -987,14 +952,12 @@ msgid "Link external data"
 msgstr "Collega dati esterni"
 
 #: ../gui/wxpython/datacatalog/catalog.py:242
-#, fuzzy
 msgid "More options..."
-msgstr "Imposta opzioni..."
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Catalogo dei dati"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:47
 msgid "Close GRASS GIS Data Catalog"
@@ -1523,11 +1486,11 @@ msgid "circle"
 msgstr "cerchio"
 
 #: ../gui/wxpython/core/settings.py:1054
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to read settings file <{path}>:\n"
 "{err}"
-msgstr "Impossibile leggere il file delle impostazioni <%s>\n"
+msgstr ""
 
 #: ../gui/wxpython/core/settings.py:1069
 #, python-format
@@ -1844,9 +1807,8 @@ msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= e %s= si escludono a vicenda."
 
 #: ../gui/wxpython/animation/g.gui.animation.py:134
-#, fuzzy
 msgid "Animation Tool - GRASS GIS"
-msgstr "Barra degli strumenti per l'animazione"
+msgstr ""
 
 #: ../gui/wxpython/animation/temporal_manager.py:110
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
@@ -2055,14 +2017,12 @@ msgid "Set spatial extent in 2D view"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:565
-#, fuzzy
 msgid "Use saved region:"
-msgstr "Salva region:"
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:575
-#, fuzzy
 msgid "Animate region change"
-msgstr "Cambiamento della regione dell'animazione (solo nella vista 2D)"
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:581
 msgid "End region:"
@@ -2442,9 +2402,8 @@ msgid "Invalid"
 msgstr "Invalido"
 
 #: ../gui/wxpython/animation/frame.py:51
-#, fuzzy
 msgid "Animation Tool"
-msgstr "Strumento per animazione"
+msgstr ""
 
 #: ../gui/wxpython/animation/frame.py:157 ../gui/wxpython/mapswipe/frame.py:290
 msgid "Main Toolbar"
@@ -2850,9 +2809,8 @@ msgid "Classes"
 msgstr "Classi"
 
 #: ../gui/wxpython/iscatt/frame.py:169
-#, fuzzy
 msgid "Interactive Scatter Plot Tool"
-msgstr "Strumento Scatter Plot Interattivo di GRASS GIS"
+msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:401
 msgid "scatter plot"
@@ -2951,9 +2909,8 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/timeline/g.gui.timeline.py:63
-#, fuzzy
 msgid "Timeline Tool - GRASS GIS"
-msgstr "Strumento Timelina"
+msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:38
 #, python-brace-format
@@ -2961,9 +2918,8 @@ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some
 msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:71
-#, fuzzy
 msgid "Timeline Tool"
-msgstr "Strumento Timelina"
+msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:134 ../gui/wxpython/tplot/frame.py:353
 #: ../gui/wxpython/nviz/preferences.py:405 ../gui/wxpython/nviz/tools.py:847
@@ -3535,9 +3491,8 @@ msgid "Yes"
 msgstr "Si"
 
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:55
-#, fuzzy
 msgid "Graphical Modeler - GRASS GIS"
-msgstr "Modellizzatore Grafico"
+msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:78 ../gui/wxpython/lmgr/toolbars.py:155
 #: ../gui/wxpython/gui_core/forms.py:1458
@@ -3914,9 +3869,8 @@ msgid "Define new GRASS Location"
 msgstr "Definisci la nuova GRASS location"
 
 #: ../gui/wxpython/location_wizard/wizard.py:186
-#, fuzzy
 msgid "Change"
-msgstr "intervallo"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:202
 #: ../gui/wxpython/gui_core/forms.py:1142
@@ -3924,28 +3878,24 @@ msgid "This option is required"
 msgstr "Questa opzione è richiesta"
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
-#, fuzzy
 msgid "(optional)"
-msgstr "Opzionale"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:216
 msgid "Name of location directory in GIS Data Directory"
 msgstr "Nome della location nella directory GIS Data"
 
 #: ../gui/wxpython/location_wizard/wizard.py:237
-#, fuzzy
 msgid "Description of location directory in GIS Data Directory"
-msgstr "Nome della location nella directory GIS Data"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:253
-#, fuzzy
 msgid "Location will be created in GRASS database:"
-msgstr "La location esiste già nel Database GRASS"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:277
-#, fuzzy
 msgid "Name '{}' is not a valid name for location. Please use only ASCII characters excluding characters {} and space."
-msgstr "Il nome <%(name)s> non è un nome valido per la location. Si prega di usare solo caratteri ASCII %(chars)s and spazi."
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:280
 #: ../gui/wxpython/modules/import_export.py:248
@@ -3967,25 +3917,21 @@ msgid "Title of the location is limited only to one line and 256 characters. The
 msgstr "Il titolo della location è limitato ad una sola linea e 256 caratteri. Il resto del testo sarà ignorato"
 
 #: ../gui/wxpython/location_wizard/wizard.py:335
-#, fuzzy
 msgid "Select Coordinate Reference System (CRS)"
-msgstr "Seleziona il codice EPSG del sistema di coordinate"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
-#, fuzzy
 msgid "Select CRS from a list by EPSG or description"
-msgstr "Seleziona dalla lista dei datum"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:352
 #: ../gui/wxpython/location_wizard/wizard.py:1358
-#, fuzzy
 msgid "Read CRS from a georeferenced data file"
-msgstr "Leggi proiezioni e datum da un file georiferito"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:354
-#, fuzzy
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr "Crea un sistema di coordinate cartesiane generico (XY) "
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 #: ../gui/wxpython/location_wizard/wizard.py:1437
@@ -4003,9 +3949,8 @@ msgid "Define custom CRS"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:374
-#, fuzzy
 msgid "Additional methods:"
-msgstr "Opzioni addizionali:"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:500
 #: ../gui/wxpython/location_wizard/wizard.py:1018
@@ -4094,23 +4039,20 @@ msgid "Select georeferenced file"
 msgstr "Seleziona file georeferenziato"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1450
-#, fuzzy
 msgid "Enter WKT parameters string:"
-msgstr "Inserisci la stringa dei parametri PROJ.4:"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1498
-#, fuzzy
 msgid "Select CRS from a list"
-msgstr "Seleziona font "
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1514
 msgid "Filter by EPSG code or description:"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1517
-#, fuzzy
 msgid "Find more information at:"
-msgstr "Stampa informazione del sistema"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1531
 #: ../gui/wxpython/location_wizard/wizard.py:1744
@@ -4835,9 +4777,8 @@ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) packa
 msgstr "Lo Strumento Grafici Temporali ha bisogno che il pacchetto \"matplotlib\" (python-matplotlib) sia installato. {0}"
 
 #: ../gui/wxpython/tplot/frame.py:98
-#, fuzzy
 msgid "Temporal Plot Tool"
-msgstr "Strumento rappresentazioni temporali"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:184
 msgid ""
@@ -4856,9 +4797,8 @@ msgid "Coordinates can be obtained for example by right-clicking on Map Display.
 msgstr "Le coordinate possono essere ottenute ad esempio cliccando col tasto destro sul Visualizzatore Mappa"
 
 #: ../gui/wxpython/tplot/frame.py:209 ../gui/wxpython/tplot/frame.py:264
-#, fuzzy
 msgid "Show simple linear regression line"
-msgstr "Regressione lineare"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:226
 msgid "STRDS"
@@ -5018,9 +4958,8 @@ msgstr "Con stvds bisogna usare l'opzione 'coordinate' o 'cats'"
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:168
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
-#, fuzzy
 msgid "Temporal Plot Tool - GRASS GIS"
-msgstr "Strumento rappresentazioni temporali"
+msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -6042,9 +5981,8 @@ msgid "Edit point"
 msgstr "Modifica punto"
 
 #: ../gui/wxpython/vnet/dialogs.py:74
-#, fuzzy
 msgid "Vector Network Analysis Tool"
-msgstr "Strumento per l'analisi di reti vettoriali"
+msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:193
 msgid "Point list toolbar"
@@ -6424,19 +6362,16 @@ msgid "Overwrite map"
 msgstr "Sovrascrivi mappa"
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:90
-#, fuzzy
 msgid "Raster Digitizer - GRASS GIS"
-msgstr "Digitalizzatore raster"
+msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:158
-#, fuzzy
 msgid "Raster map <{}> not found in current mapset."
-msgstr "Raster <%s> non trovato"
+msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:174
-#, fuzzy
 msgid "Base raster map <{}> not found in current mapset."
-msgstr "Raster 3D <%s> non trovato"
+msgstr ""
 
 #: ../gui/wxpython/rdigit/toolbars.py:27
 msgid "Digitize area"
@@ -6668,9 +6603,8 @@ msgid "Show 3D view mode manual"
 msgstr "Mostra il manuale della visualizzazione 3D"
 
 #: ../gui/wxpython/lmgr/frame.py:94
-#, fuzzy
 msgid "GRASS GIS"
-msgstr "Esci da GRASS GIS"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:129
 msgid "There were some issues when loading menu or Modules tab:"
@@ -6697,9 +6631,8 @@ msgid "3D view Toolbar"
 msgstr "Barra degli strumenti di visualizzazione 3D"
 
 #: ../gui/wxpython/lmgr/frame.py:302
-#, fuzzy
 msgid "Rename current Map Display"
-msgstr "Rinomina Map Display"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:362
 #: ../gui/wxpython/gui_core/preferences.py:322
@@ -6960,9 +6893,9 @@ msgid "Unable to start Temporal Plot Tool."
 msgstr "Impossibile avviare lo Strumento Grafico Temporale"
 
 #: ../gui/wxpython/lmgr/frame.py:2083
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Map Display {number}"
-msgstr "Visualizzatore di mappe"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2179
 msgid "Add selected map layers into layer tree"
@@ -7461,14 +7394,14 @@ msgid "Import settings"
 msgstr "Impostazione dell'import"
 
 #: ../gui/wxpython/modules/import_export.py:240
-#, fuzzy, python-format
+#, python-format
 msgid "Output map names %(names)s exist. "
-msgstr "La mappa di output <%s> esiste già."
+msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:245
-#, fuzzy, python-format
+#, python-format
 msgid "Output map name <%(name)s> exist. "
-msgstr "La mappa di output <%s> esiste già."
+msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:412
 #: ../gui/wxpython/menustrings.py:161 ../gui/wxpython/menustrings.py:1183
@@ -7569,9 +7502,8 @@ msgid "Reproject selected layers"
 msgstr "Riproietta i layers selezionati"
 
 #: ../gui/wxpython/modules/histogram.py:296
-#, fuzzy
 msgid "Histogram Tool  [d.histogram]"
-msgstr "GRASS GIS Strumento Istogramma (d.histogram)"
+msgstr ""
 
 #: ../gui/wxpython/modules/histogram.py:436
 msgid "Select font for histogram text"
@@ -8013,9 +7945,8 @@ msgid "Thematic mapping for vector map in 3D view"
 msgstr "Mappatura tematica per mappa vettoriale in visualizzazione 3D"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
-#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr "Calcolatore per raster map algebra"
+msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -8747,9 +8678,8 @@ msgid "Draw sampling region by polygon. Right Double click to end drawing"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/g.gui.rlisetup.py:47
-#, fuzzy
 msgid "Setup for r.li modules - GRASS GIS"
-msgstr "GRASS GIS Setup per i moduli r.li"
+msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:23
 msgid "Modify the configuration file"
@@ -8774,9 +8704,8 @@ msgid "WARNING"
 msgstr "ATTENZIONE"
 
 #: ../gui/wxpython/rlisetup/frame.py:114
-#, fuzzy
 msgid "Setup for r.li modules"
-msgstr "GRASS GIS Setup per i moduli r.li"
+msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:131
 msgid "Available sampling area configuration files"
@@ -8936,27 +8865,24 @@ msgid "Remove text"
 msgstr "Rimuove testo"
 
 #: ../gui/wxpython/mapwin/decorations.py:203
-#, fuzzy
 msgid "Text properties"
-msgstr "Proprietà dell'oggetto"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:226
 msgid "Remove scale bar"
 msgstr "Rimuove barra della scala"
 
 #: ../gui/wxpython/mapwin/decorations.py:227
-#, fuzzy
 msgid "Scale bar properties"
-msgstr "Proprietà dei dati"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:239
 msgid "Remove north arrow"
 msgstr "Rimuove freccia del nord"
 
 #: ../gui/wxpython/mapwin/decorations.py:240
-#, fuzzy
 msgid "North arrow properties"
-msgstr "Impostazioni Freccia del Nord"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:252
 #: ../gui/wxpython/mapwin/decorations.py:265
@@ -8964,14 +8890,12 @@ msgid "Remove legend"
 msgstr "Rimuove legenda"
 
 #: ../gui/wxpython/mapwin/decorations.py:253
-#, fuzzy
 msgid "Vector legend properties"
-msgstr "Legenda dei vettoriali"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:266
-#, fuzzy
 msgid "Raster legend properties"
-msgstr "Legenda dei raster"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:259
 msgid "Copy coordinates to clipboard"
@@ -8994,9 +8918,8 @@ msgid "Show statusbar"
 msgstr "Mostra barra dello stato"
 
 #: ../gui/wxpython/mapwin/buffered.py:295
-#, fuzzy
 msgid "Resize and move legend"
-msgstr "Ridimensiona legenda"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:711
 msgid "Please wait, exporting image..."
@@ -9154,9 +9077,8 @@ msgid "Statistics for Profile(s)"
 msgstr "Statistiche del profilo(i)"
 
 #: ../gui/wxpython/wxplot/histogram.py:43
-#, fuzzy
 msgid "Histogram Tool"
-msgstr "Istogramma di"
+msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:51
 msgid "Histogram of"
@@ -9657,9 +9579,8 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/iclass/frame.py:76
-#, fuzzy
 msgid "Supervised Classification Tool"
-msgstr "GRASS GIS Strumento Classificazione Supervisionata"
+msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:315
 msgid "IClass Toolbar"
@@ -9807,9 +9728,8 @@ msgid "Subgroup <%s> not found"
 msgstr "Sotto gruppo <%s> non trovato"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:114
-#, fuzzy
 msgid "Supervised Classification Tool - GRASS GIS"
-msgstr "GRASS GIS Strumento Classificazione Supervisionata"
+msgstr ""
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:121
 #, python-format
@@ -11078,9 +10998,8 @@ msgid "Neighborhood points"
 msgstr "Punti più vicini"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
-#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Assegna alla categoria di ogni cella una funzione della categoria delle celle adiacenti e salva i valori delle celle in una nuova mappa raster."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 msgid "Overlay rasters"
@@ -13745,18 +13664,16 @@ msgid "Attribute table manager"
 msgstr "Gestore Tabella degli Attributi"
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "Catalogo dei dati"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2018
-#, fuzzy
 msgid "Interactive editing and digitization of vector maps."
-msgstr "Gestione interattiva della tabella dei colori per vettoriale"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2023
 msgid "Create new model"
@@ -14081,9 +13998,8 @@ msgid "Location named <%s> already exists, rename it first"
 msgstr "La location <%s> esiste già, prima rinominarla"
 
 #: ../gui/wxpython/startup/locdownload.py:563
-#, fuzzy
 msgid "Location Download"
-msgstr "GRASS GIS Scaricemento  dellaLocation"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:611
 msgid "Do you want to cancel location download?"
@@ -14094,9 +14010,8 @@ msgid "Abort download"
 msgstr "Scaricamento annullato"
 
 #: ../gui/wxpython/startup/guiutils.py:80
-#, fuzzy
 msgid "Invalid mapset name"
-msgstr "Nome invalido"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -14113,9 +14028,8 @@ msgid "Name for the new mapset:"
 msgstr "Nome per il nuovo mapset:"
 
 #: ../gui/wxpython/startup/guiutils.py:186
-#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr "Impossibile creare il nuovo mapset: %s"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:212
 #, fuzzy
@@ -14138,32 +14052,23 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:269
-#, fuzzy
 msgid "Unable to rename selected mapset"
-msgstr "Impossibile eliminare il mapset"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:280
 #: ../gui/wxpython/startup/guiutils.py:334
-#, fuzzy
 msgid ""
 "Current name: {}\n"
 "\n"
 "Enter new name:"
 msgstr ""
-"Nome attuale: %s\n"
-"\n"
-"Inserisci il nuovo nome:"
 
 #: ../gui/wxpython/startup/guiutils.py:294
-#, fuzzy
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "{}"
 msgstr ""
-"Impossibile rinominare il mapset.\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:319
 #, python-brace-format
@@ -14176,20 +14081,15 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:323
-#, fuzzy
 msgid "Unable to rename selected location"
-msgstr "Impossibile creare la location"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:347
-#, fuzzy
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "{}"
 msgstr ""
-"Impossibile rinominare la location.\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:410
 #, python-brace-format
@@ -14202,12 +14102,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
-#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr "Impossibile eliminare il mapset"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:430
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following mapsets?\n"
 "\n"
@@ -14215,19 +14114,14 @@ msgid ""
 "\n"
 "All maps included in these mapsets will be permanently deleted!"
 msgstr ""
-"Vuoi continuare eliminando il mapset <%(mapset)s> dalla location <%(location)s>?\n"
-"\n"
-"TUTTE LE MAPPE incluse in questo mapset saranno ELIMINATE DEFINITIVAMENTE!"
 
 #: ../gui/wxpython/startup/guiutils.py:435
-#, fuzzy
 msgid "Delete selected mapsets"
-msgstr "Elimina il mapset selezionato"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:448
-#, fuzzy
 msgid "Error when deleting mapsets"
-msgstr "Errore leggendo il file '%s'."
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:450
 #, python-brace-format
@@ -14250,12 +14144,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:499
-#, fuzzy
 msgid "Unable to delete selected locations"
-msgstr "Impossibile eliminare la location"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:515
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following locations?\n"
 "\n"
@@ -14263,19 +14156,14 @@ msgid ""
 "\n"
 "All mapsets included in these locations will be permanently deleted!"
 msgstr ""
-"Vuoi continuare eliminando la location <%s>?\n"
-"\n"
-"TUTTE LE MAPPE incluse in questo mapset saranno ELIMINATE DEFINITIVAMENTE!"
 
 #: ../gui/wxpython/startup/guiutils.py:520
-#, fuzzy
 msgid "Delete selected locations"
-msgstr "Elimina la location selezionata"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:533
-#, fuzzy
 msgid "Error when deleting locations"
-msgstr "Errore leggendo il file '%s'."
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:535
 #, python-brace-format
@@ -14298,9 +14186,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:572
-#, fuzzy
 msgid "Unable to delete selected GRASS database"
-msgstr "Impossibile creare il nuovo Database di GRASS"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:580
 #, python-brace-format
@@ -14313,9 +14200,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
-#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr "Elimina il mapset selezionato"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14332,7 +14218,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:631
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "User {user} is already running GRASS in selected mapset <{mapset}>\n"
 " (file {lockpath} created {timestamp} found).\n"
@@ -14341,33 +14227,22 @@ msgid ""
 "\n"
 "Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
 msgstr ""
-"GRASS è già in esecuzione nel mapset <%(mapset)s> selezionato\n"
-"(File %(lock)s trovato).\n"
-"\n"
-"Uso concorrente non è permesso.\n"
-"\n"
-"Vuoi rimuovere .gislock (bisogna avere il permesso per questa operazione) e continuare?"
 
 #: ../gui/wxpython/startup/guiutils.py:641
-#, fuzzy
 msgid "Mapset is in use"
-msgstr "Accesso al mapset"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:653
-#, fuzzy
 msgid "Error when removing lock file"
-msgstr "Errore leggendo il file '%s'."
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:654
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to remove {lockpath}.\n"
 "\n"
 " Details: {error}."
 msgstr ""
-"Impossibile scrivere il file '{filePath}'.\n"
-"\n"
-"Dettagli: {error}"
 
 #: ../gui/wxpython/startup/guiutils.py:693
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:593
@@ -14386,14 +14261,12 @@ msgid "Data file <%(name)s> imported successfully. The location's default region
 msgstr "Il file dei dati <%(name)s> è stato importato correttamente. La regione di default della location è stata impostata dalla mappa importata."
 
 #: ../gui/wxpython/startup/guiutils.py:717
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Current GRASS database is <%(dbase)s>.\n"
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
-"Location corrente è <%(loc)s>.\n"
-"Mapset corrente è <%(mapset)s>."
 
 #: ../gui/wxpython/startup/guiutils.py:743
 #, python-format
@@ -14531,9 +14404,8 @@ msgid "Table"
 msgstr "Tabella"
 
 #: ../gui/wxpython/dbmgr/base.py:1154 ../gui/wxpython/dbmgr/base.py:2277
-#, fuzzy
 msgid " (read-only)"
-msgstr "(sola lettura)"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:1168
 msgid "SQL Query"
@@ -15015,14 +14887,13 @@ msgid "Dbf driver does not support usage of SQL functions."
 msgstr "Il driver DBF non supporta l'utilizzo di funzioni SQL."
 
 #: ../gui/wxpython/dbmgr/manager.py:78
-#, fuzzy
 msgid "Attribute Table Manager"
-msgstr "Gestore Tabella degli Attributi"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:81
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{document} (read-only)"
-msgstr "(sola lettura)"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:100
 #, python-format
@@ -15120,9 +14991,8 @@ msgid "Loading attribute data for vector map <%s>..."
 msgstr "Caricando gli attributi per il vettoriale <%s> ..."
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:56
-#, fuzzy
 msgid "Attribute Table Manager - GRASS GIS"
-msgstr "GRASS GIS Gestore Tabella degli Attributi -"
+msgstr ""
 
 #: ../gui/wxpython/web_services/widgets.py:136
 msgid " Requested data settings "
@@ -15582,9 +15452,8 @@ msgid "Permission denied <{}>. Please change file permission for reading."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:303
-#, fuzzy
 msgid "Couldn't read file <{}>."
-msgstr "Impossibile leggere il file %s."
+msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:323
 msgid "Permission denied <{}>. Please change file permission for writting.{}"
@@ -15647,9 +15516,8 @@ msgid "Deactive overwrite"
 msgstr "Disattiva la sovrascrittura "
 
 #: ../gui/wxpython/gui_core/pyedit.py:638
-#, fuzzy
 msgid "Quit Simple Python Editor"
-msgstr "Semplice editor di Python"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:126
 msgid "Command prompt"
@@ -16780,9 +16648,8 @@ msgid "Template:"
 msgstr "Template:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2000
-#, fuzzy
 msgid "SQL Query Utility"
-msgstr "GRASS GIS Strumento Interrogazione SQL"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2016
 msgid " SQL statement "
@@ -16805,9 +16672,8 @@ msgid "Do you want to quit GRASS GIS including shell or just close the GUI?"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2369
-#, fuzzy
 msgid "Do you want to quit GRASS GIS?"
-msgstr "Vuoi creare la GRASS location <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2448
 msgid "Select font:"
@@ -16983,9 +16849,8 @@ msgid "Double-click to run selected module"
 msgstr "Doppio click o Ctrl-Enter per eseguire il modulo selezionato"
 
 #: ../gui/wxpython/gui_core/menu.py:164
-#, fuzzy
 msgid "&Run..."
-msgstr "&Esegui"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:165
 msgid "Run selected module from the tree"
@@ -17005,9 +16870,8 @@ msgid "Documentation for %s is now open in the web browser"
 msgstr "La documentazione per %s è ora aperta nel browser web"
 
 #: ../gui/wxpython/gui_core/menu.py:356
-#, fuzzy
 msgid "&Recent Files"
-msgstr "File di testo"
+msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:39
 #, python-format
@@ -17510,9 +17374,8 @@ msgid "Not enough points for line"
 msgstr "Non ci sono abbastanza punti per linea"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:67
-#, fuzzy
 msgid "Vector Digitizer - GRASS GIS"
-msgstr "Digitalizzatore vettoriale"
+msgstr ""
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:83
 #, python-format
@@ -19119,9 +18982,8 @@ msgid "labels: "
 msgstr "etichette:"
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:51
-#, fuzzy
 msgid "Cartographic Composer - GRASS GIS"
-msgstr "Compositore Cartografico"
+msgstr ""
 
 msgid "Fetching list of modules from GRASS-Addons SVN (be patient)..."
 msgstr "Controllando la lista dei moduli dal SVN GRASS-Addons (attendere)..."
@@ -19454,290 +19316,290 @@ msgstr "Fornire il valore dell'ordine (1 se 4 punti fiduciali, 2 se 8 punti fidu
 msgid "Animation already axists"
 msgstr "Animazione già esistente"
 
-#~ msgid "GRASS GIS Raster Map Calculator"
-#~ msgstr "GRASS GIS Calcolatore per Raster Map Algebra"
+msgid "GRASS GIS Raster Map Calculator"
+msgstr "GRASS GIS Calcolatore per Raster Map Algebra"
 
-#~ msgid "GRASS GIS 3D Raster Map Calculator"
-#~ msgstr "GRASS GIS Calcolatore per Raster 3D Map Algebra"
+msgid "GRASS GIS 3D Raster Map Calculator"
+msgstr "GRASS GIS Calcolatore per Raster 3D Map Algebra"
 
-#~ msgid "GRASS GIS Histogramming Tool"
-#~ msgstr "GRASS GIS Strumento Istogramma"
+msgid "GRASS GIS Histogramming Tool"
+msgstr "GRASS GIS Strumento Istogramma"
 
-#~ msgid "Define GRASS Database and Location Name"
-#~ msgstr "Definisci il nome del GRASS Database e della Location"
+msgid "Define GRASS Database and Location Name"
+msgstr "Definisci il nome del GRASS Database e della Location"
 
-#~ msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
-#~ msgstr "Questa opzione permette di impostare la regione computazionale di default subito dopo aver creato una nuova location. La regione computazionale di default può essere definita anche più tardi utilizzando g.region basato sui dati importati."
+msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
+msgstr "Questa opzione permette di impostare la regione computazionale di default subito dopo aver creato una nuova location. La regione computazionale di default può essere definita anche più tardi utilizzando g.region basato sui dati importati."
 
-#~ msgid "Create user mapset"
-#~ msgstr "Crea il mapset dell'utente"
+msgid "Create user mapset"
+msgstr "Crea il mapset dell'utente"
 
-#~ msgid "GIS Data Directory:"
-#~ msgstr "Cartella del Database GIS:"
+msgid "GIS Data Directory:"
+msgstr "Cartella del Database GIS:"
 
-#~ msgid "Project Location"
-#~ msgstr "Location del progetto"
+msgid "Project Location"
+msgstr "Location del progetto"
 
-#~ msgid "Location Title"
-#~ msgstr "Nome della Location"
+msgid "Location Title"
+msgstr "Nome della Location"
 
-#~ msgid "Optional location title, you can leave this field blank."
-#~ msgstr "Titolo della location opzionale, si può lasciare questo campo bianco."
+msgid "Optional location title, you can leave this field blank."
+msgstr "Titolo della location opzionale, si può lasciare questo campo bianco."
 
-#~ msgid "Choose method for creating a new location"
-#~ msgstr "Scegli il metodo per creare una nuova location"
+msgid "Choose method for creating a new location"
+msgstr "Scegli il metodo per creare una nuova location"
 
-#~ msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
-#~ msgstr "Leggi proiezione e datum da un Well Known Text (WKT) .prj file"
+msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
+msgstr "Leggi proiezione e datum da un Well Known Text (WKT) .prj file"
 
-#~ msgid "Select coordinate system parameters from a list"
-#~ msgstr "Seleziona il sistema di coordinate da una lista"
+msgid "Select coordinate system parameters from a list"
+msgstr "Seleziona il sistema di coordinate da una lista"
 
-#~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
-#~ msgstr "Specifica proiezione e datum utilizzando parametri PROJ.4"
+msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+msgstr "Specifica proiezione e datum utilizzando parametri PROJ.4"
 
-#~ msgid "Simple methods:"
-#~ msgstr "Metodi semplici:"
+msgid "Simple methods:"
+msgstr "Metodi semplici:"
 
-#~ msgid "Advanced methods:"
-#~ msgstr "Metodi avanzati:"
+msgid "Advanced methods:"
+msgstr "Metodi avanzati:"
 
-#~ msgid "Choose projection"
-#~ msgstr "Scegli la proiezione"
+msgid "Choose projection"
+msgstr "Scegli la proiezione"
 
-#~ msgid "Select Well Known Text (WKT) .prj file"
-#~ msgstr "Seleziona il file .prj Well Known Text (WKT)"
+msgid "Select Well Known Text (WKT) .prj file"
+msgstr "Seleziona il file .prj Well Known Text (WKT)"
 
-#~ msgid "WKT .prj file:"
-#~ msgstr "File WTK .prj:"
+msgid "WKT .prj file:"
+msgstr "File WTK .prj:"
 
-#~ msgid "Choose EPSG Code"
-#~ msgstr "Scegli codice EPSG"
+msgid "Choose EPSG Code"
+msgstr "Scegli codice EPSG"
 
-#~ msgid "Path to the EPSG-codes file:"
-#~ msgstr "Percorso al file dei codici EPSG"
+msgid "Path to the EPSG-codes file:"
+msgstr "Percorso al file dei codici EPSG"
 
-#~ msgid "Choose EPSG codes file"
-#~ msgstr "Scegli file dei codici EPSG"
+msgid "Choose EPSG codes file"
+msgstr "Scegli file dei codici EPSG"
 
-#~ msgid "Choose method of specifying georeferencing parameters"
-#~ msgstr "Scegli metodo per specificare i parametri di georeferenziazione"
+msgid "Choose method of specifying georeferencing parameters"
+msgstr "Scegli metodo per specificare i parametri di georeferenziazione"
 
-#~ msgid "Location Title:"
-#~ msgstr "Nome della Location:"
+msgid "Location Title:"
+msgstr "Nome della Location:"
 
-#~ msgid "Location wizard canceled. Location not created."
-#~ msgstr "Location wizard cancellato. Location non creato"
+msgid "Location wizard canceled. Location not created."
+msgstr "Location wizard cancellato. Location non creato"
 
-#~ msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
-#~ msgstr "Location <%(loc)s> sarà creata nella cartella dei dati GIS <%(dir)s>. Dovrai cambiare la cartella dei dati GIS nella schermata di avvio di GRASS."
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
+msgstr "Location <%(loc)s> sarà creata nella cartella dei dati GIS <%(dir)s>. Dovrai cambiare la cartella dei dati GIS nella schermata di avvio di GRASS."
 
-#~ msgid "New GIS data directory"
-#~ msgstr "Nuova cartella del Database GIS"
+msgid "New GIS data directory"
+msgstr "Nuova cartella del Database GIS"
 
-#~ msgid "Common formats import"
-#~ msgstr "Formati comuni di importazione"
+msgid "Common formats import"
+msgstr "Formati comuni di importazione"
 
-#~ msgid "Import of common formats with reprojection"
-#~ msgstr "Importa formati comuni affettuando riproiezione"
+msgid "Import of common formats with reprojection"
+msgstr "Importa formati comuni affettuando riproiezione"
 
-#~ msgid "Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly."
-#~ msgstr "Importa dati raster in una mappa raster di GRASS usando la libreria GDAL e riproiettando al volo"
+msgid "Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly."
+msgstr "Importa dati raster in una mappa raster di GRASS usando la libreria GDAL e riproiettando al volo"
 
-#~ msgid "Imports a raster map as GRASS GIS specific archive file (packed with r.pack)"
-#~ msgstr "Importa una mappa raster come un file di archivio specifico per GRASS GIS (creato con r.pack)"
+msgid "Imports a raster map as GRASS GIS specific archive file (packed with r.pack)"
+msgstr "Importa una mappa raster come un file di archivio specifico per GRASS GIS (creato con r.pack)"
 
-#~ msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
-#~ msgstr "Importa dati raster in una mappa vettoriale di GRASS usando la libreria OGR e riproiettando al volo"
+msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
+msgstr "Importa dati raster in una mappa vettoriale di GRASS usando la libreria OGR e riproiettando al volo"
 
-#~ msgid "Imports a vector map as GRASS GIS specific archive file (packed with v.pack)"
-#~ msgstr "Importa una mappa vettoriale da un file archivio specifico di GRASS GIS (creato con v.pack)"
+msgid "Imports a vector map as GRASS GIS specific archive file (packed with v.pack)"
+msgstr "Importa una mappa vettoriale da un file archivio specifico di GRASS GIS (creato con v.pack)"
 
-#~ msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
-#~ msgstr "Esporta un vettoriale in tutti i formati supportati da OGR. Di default un vettoriale è esportato nel formato Esri Shapefile"
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
+msgstr "Esporta un vettoriale in tutti i formati supportati da OGR. Di default un vettoriale è esportato nel formato Esri Shapefile"
 
-#~ msgid "Creates a Voronoi diagram in current region from an input vector map containing points or centroids."
-#~ msgstr "Crea un diagramma di Voronoi nella regione attuale da un vettoriale contenente punti o centroidi."
+msgid "Creates a Voronoi diagram in current region from an input vector map containing points or centroids."
+msgstr "Crea un diagramma di Voronoi nella regione attuale da un vettoriale contenente punti o centroidi."
 
-#~ msgid "Reports and Statistics"
-#~ msgstr "Report e statistiche"
+msgid "Reports and Statistics"
+msgstr "Report e statistiche"
 
-#~ msgid "GRASS GIS Vector Digitizer"
-#~ msgstr "GRASS GIS Digitalizzatore vettoriale"
+msgid "GRASS GIS Vector Digitizer"
+msgstr "GRASS GIS Digitalizzatore vettoriale"
 
-#~ msgid "Documents"
-#~ msgstr "Documenti"
+msgid "Documents"
+msgstr "Documenti"
 
-#~ msgid "My Documents"
-#~ msgstr "Miei Documenti"
+msgid "My Documents"
+msgstr "Miei Documenti"
 
-#~ msgid "GRASS GIS Simple Python Editor"
-#~ msgstr "GRASS GIS semplice editor di Python"
+msgid "GRASS GIS Simple Python Editor"
+msgstr "GRASS GIS semplice editor di Python"
 
-#~ msgid "Click here to show search module engine"
-#~ msgstr "Clicca qui per visualizzare il modulo di ricerca"
+msgid "Click here to show search module engine"
+msgstr "Clicca qui per visualizzare il modulo di ricerca"
 
-#~ msgid "Click here to hide search module engine"
-#~ msgstr "Clicca qui per nascondere il modulo di ricerca"
+msgid "Click here to hide search module engine"
+msgstr "Clicca qui per nascondere il modulo di ricerca"
 
-#~ msgid "GRASS GIS Cartographic Composer"
-#~ msgstr "GRASS GIS Compositore Cartografico"
+msgid "GRASS GIS Cartographic Composer"
+msgstr "GRASS GIS Compositore Cartografico"
 
-#~ msgid "GRASS GIS Map Swipe"
-#~ msgstr "GRASS GIS Map Swipe "
+msgid "GRASS GIS Map Swipe"
+msgstr "GRASS GIS Map Swipe "
 
-#~ msgid "GRASS GIS Animation tool"
-#~ msgstr "GRASS GIS Strumento Animazione"
+msgid "GRASS GIS Animation tool"
+msgstr "GRASS GIS Strumento Animazione"
 
-#~ msgid "Start region:"
-#~ msgstr "Regione di partenza:"
+msgid "Start region:"
+msgstr "Regione di partenza:"
 
-#~ msgid "GRASS GIS Temporal Plot Tool"
-#~ msgstr "Strumento Grafico Temporale di GRASS GIS"
+msgid "GRASS GIS Temporal Plot Tool"
+msgstr "Strumento Grafico Temporale di GRASS GIS"
 
-#~ msgid "Import/link raster or vector data"
-#~ msgstr "Importa/connetti dati raster/vettoriali"
+msgid "Import/link raster or vector data"
+msgstr "Importa/connetti dati raster/vettoriali"
 
-#~ msgid "GRASS GIS %s Layer Manager"
-#~ msgstr "GRASS GIS %s Layer Manager"
+msgid "GRASS GIS %s Layer Manager"
+msgstr "GRASS GIS %s Layer Manager"
 
-#~ msgid ""
-#~ "Location <%s> created.\n"
-#~ "\n"
-#~ "Do you want to switch to the new location?"
-#~ msgstr ""
-#~ "Location <%s> creata.\n"
-#~ "\n"
-#~ "Volete spostarvi nella nuova location?"
+msgid ""
+"Location <%s> created.\n"
+"\n"
+"Do you want to switch to the new location?"
+msgstr ""
+"Location <%s> creata.\n"
+"\n"
+"Volete spostarvi nella nuova location?"
 
-#~ msgid "Switch to new location?"
-#~ msgstr "Spostarsi nella nuova location?"
+msgid "Switch to new location?"
+msgstr "Spostarsi nella nuova location?"
 
-#~ msgid "Do you want to set the default region extents and resolution now?"
-#~ msgstr "Vuoi impostare l'estensione e la risoluzione della region di default ora?"
+msgid "Do you want to set the default region extents and resolution now?"
+msgstr "Vuoi impostare l'estensione e la risoluzione della region di default ora?"
 
-#~ msgid "Location <%s> created"
-#~ msgstr "Location <%s> creata!"
+msgid "Location <%s> created"
+msgstr "Location <%s> creata!"
 
-#~ msgid "Unable to exit GRASS shell: unknown PID"
-#~ msgstr "Impossibile uscire dalla shell di GRASS: PID sconosciuto"
+msgid "Unable to exit GRASS shell: unknown PID"
+msgstr "Impossibile uscire dalla shell di GRASS: PID sconosciuto"
 
-#~ msgid "Remove vector legend"
-#~ msgstr "Rimuove legenda vettoriale"
+msgid "Remove vector legend"
+msgstr "Rimuove legenda vettoriale"
 
-#~ msgid "GRASS GIS Vector Network Analysis Tool"
-#~ msgstr "GRASS GIS Strumento Analisi di Reti Vettoriali"
+msgid "GRASS GIS Vector Network Analysis Tool"
+msgstr "GRASS GIS Strumento Analisi di Reti Vettoriali"
 
-#~ msgid "Click to allow editing other mapsets"
-#~ msgstr "Cliccare per permettere le modifiche in altri mapset"
+msgid "Click to allow editing other mapsets"
+msgstr "Cliccare per permettere le modifiche in altri mapset"
 
-#~ msgid "GRASS GIS Data Catalog"
-#~ msgstr "Catalogo Dati di GRASS GIS"
+msgid "GRASS GIS Data Catalog"
+msgstr "Catalogo Dati di GRASS GIS"
 
-#~ msgid "GRASS locations in {0}"
-#~ msgstr "Le Location di GRASS in {0}"
+msgid "GRASS locations in {0}"
+msgstr "Le Location di GRASS in {0}"
 
-#~ msgid "Editing {name}"
-#~ msgstr "Modifica in corso {name}"
+msgid "Editing {name}"
+msgstr "Modifica in corso {name}"
 
-#~ msgid "GRASS GIS Attribute Table Manager"
-#~ msgstr "GRASS GIS Gestore Tabella degli Attributi"
+msgid "GRASS GIS Attribute Table Manager"
+msgstr "GRASS GIS Gestore Tabella degli Attributi"
 
-#~ msgid "READONLY - "
-#~ msgstr "SOLA LETTURA -"
+msgid "READONLY - "
+msgstr "SOLA LETTURA -"
 
-#~ msgid "Inconsistent number of columns in the table <%(table)s>."
-#~ msgstr "Numero di colonne inconsistente nella tabella <%(table)s>."
+msgid "Inconsistent number of columns in the table <%(table)s>."
+msgstr "Numero di colonne inconsistente nella tabella <%(table)s>."
 
-#~ msgid "GRASS GIS Graphical Modeler"
-#~ msgstr "GRASS GIS Modeler Grafico"
+msgid "GRASS GIS Graphical Modeler"
+msgstr "GRASS GIS Modeler Grafico"
 
-#~ msgid "GRASS GIS Timeline Tool"
-#~ msgstr "GRASS GIS Strumento Timeline"
+msgid "GRASS GIS Timeline Tool"
+msgstr "GRASS GIS Strumento Timeline"
 
-#~ msgid "GRASS GIS - Map display"
-#~ msgstr "GRASS GIS - Map display"
+msgid "GRASS GIS - Map display"
+msgstr "GRASS GIS - Map display"
 
-#~ msgid "Maximum number of animations is %s."
-#~ msgstr "Numero massimo di animazioni è %s."
+msgid "Maximum number of animations is %s."
+msgstr "Numero massimo di animazioni è %s."
 
-#~ msgid "Animate region change (2D view only)"
-#~ msgstr "Cambiamento della regione dell'animazione (solo nella vista 2D)"
+msgid "Animate region change (2D view only)"
+msgstr "Cambiamento della regione dell'animazione (solo nella vista 2D)"
 
-#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
-#~ msgstr "GRASS GIS Strumento Istogramma (d.histogram)"
+msgid "GRASS GIS Histogramming Tool (d.histogram)"
+msgstr "GRASS GIS Strumento Istogramma (d.histogram)"
 
-#~ msgid "Generates a raster map containing distances to nearest raster features."
-#~ msgstr "Genera un raster della distanza dagli elementi del layer di input."
+msgid "Generates a raster map containing distances to nearest raster features."
+msgstr "Genera un raster della distanza dagli elementi del layer di input."
 
-#~ msgid "Attaches, deletes or reports vector categories to map geometry."
-#~ msgstr "Attacca, elimina o visualizza le categorie di un vettore per geometrie della mappa."
+msgid "Attaches, deletes or reports vector categories to map geometry."
+msgstr "Attacca, elimina o visualizza le categorie di un vettore per geometrie della mappa."
 
-#~ msgid "GRASS GIS Location Download"
-#~ msgstr "GRASS GIS Scaricemento  dellaLocation"
+msgid "GRASS GIS Location Download"
+msgstr "GRASS GIS Scaricemento  dellaLocation"
 
-#~ msgid "GRASS GIS Interactive Scatter Plot Tool"
-#~ msgstr "Strumento Scatter Plot Interattivo di GRASS GIS"
+msgid "GRASS GIS Interactive Scatter Plot Tool"
+msgstr "Strumento Scatter Plot Interattivo di GRASS GIS"
 
-#~ msgid "GRASS GIS Supervised Classification Tool"
-#~ msgstr "GRASS GIS Strumento Classificazione Supervisionata"
+msgid "GRASS GIS Supervised Classification Tool"
+msgstr "GRASS GIS Strumento Classificazione Supervisionata"
 
-#~ msgid "Unpack GRASS raster map"
-#~ msgstr "Estrai mappa raster di GRASS"
+msgid "Unpack GRASS raster map"
+msgstr "Estrai mappa raster di GRASS"
 
-#~ msgid "Set raster output format"
-#~ msgstr "Imposta il formato di output per i raster"
+msgid "Set raster output format"
+msgstr "Imposta il formato di output per i raster"
 
-#~ msgid "Unpack GRASS vector map"
-#~ msgstr "Estrai mappa vettoriale di GRASS"
+msgid "Unpack GRASS vector map"
+msgstr "Estrai mappa vettoriale di GRASS"
 
-#~ msgid "Set vector output format"
-#~ msgstr "Imposta il formato di output per i vettoriali"
+msgid "Set vector output format"
+msgstr "Imposta il formato di output per i vettoriali"
 
-#~ msgid "Click to restrict editing to current mapset only"
-#~ msgstr "Cliccare per restringere le modifiche solo al mapset corrente"
+msgid "Click to restrict editing to current mapset only"
+msgstr "Cliccare per restringere le modifiche solo al mapset corrente"
 
-#~ msgid "Search:"
-#~ msgstr "Ricerca:"
+msgid "Search:"
+msgstr "Ricerca:"
 
-#~ msgid "Type to search database by map type or name. Use prefix 'r:', 'v:' and 'r3:'to show only raster, vector or 3D raster data, respectively. Use Python regular expressions to refine your search."
-#~ msgstr "Digitare per effettuare una ricerca nel database in base al tipo di mappa o nome. Usare il prefisso 'r:', 'v:' e 'r3:' per visualizzare rispettivamente solo i dati raster, vettoriali o raster 3D. Utilizzare le normali espressioni di Python per affinare la ricerca."
+msgid "Type to search database by map type or name. Use prefix 'r:', 'v:' and 'r3:'to show only raster, vector or 3D raster data, respectively. Use Python regular expressions to refine your search."
+msgstr "Digitare per effettuare una ricerca nel database in base al tipo di mappa o nome. Usare il prefisso 'r:', 'v:' e 'r3:' per visualizzare rispettivamente solo i dati raster, vettoriali o raster 3D. Utilizzare le normali espressioni di Python per affinare la ricerca."
 
-#~ msgid " (readonly)"
-#~ msgstr "(sola lettura)"
+msgid " (readonly)"
+msgstr "(sola lettura)"
 
-#~ msgid "GRASS GIS Attribute Table Manager - "
-#~ msgstr "GRASS GIS Gestore Tabella degli Attributi -"
+msgid "GRASS GIS Attribute Table Manager - "
+msgstr "GRASS GIS Gestore Tabella degli Attributi -"
 
-#~ msgid "GRASS GIS Setup for r.li modules"
-#~ msgstr "GRASS GIS Setup per i moduli r.li"
+msgid "GRASS GIS Setup for r.li modules"
+msgstr "GRASS GIS Setup per i moduli r.li"
 
-#~ msgid "Resize legend"
-#~ msgstr "Ridimensiona legenda"
+msgid "Resize legend"
+msgstr "Ridimensiona legenda"
 
-#~ msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
-#~ msgstr "Il nome <%(name)s> non è un nome valido per la location. Si prega di usare solo caratteri ASCII %(chars)s and spazi."
+msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
+msgstr "Il nome <%(name)s> non è un nome valido per la location. Si prega di usare solo caratteri ASCII %(chars)s and spazi."
 
-#~ msgid "Unable to create location"
-#~ msgstr "Impossibile creare la location"
+msgid "Unable to create location"
+msgstr "Impossibile creare la location"
 
-#~ msgid "Select EPSG code of spatial reference system"
-#~ msgstr "Seleziona il codice EPSG del sistema di coordinate"
+msgid "Select EPSG code of spatial reference system"
+msgstr "Seleziona il codice EPSG del sistema di coordinate"
 
-#~ msgid "Read projection and datum terms from a georeferenced data file"
-#~ msgstr "Leggi proiezioni e datum da un file georiferito"
+msgid "Read projection and datum terms from a georeferenced data file"
+msgstr "Leggi proiezioni e datum da un file georiferito"
 
-#~ msgid "Create a generic Cartesian coordinate system (XY)"
-#~ msgstr "Crea un sistema di coordinate cartesiane generico (XY) "
+msgid "Create a generic Cartesian coordinate system (XY)"
+msgstr "Crea un sistema di coordinate cartesiane generico (XY) "
 
-#~ msgid "Do you want to create GRASS location <%s>?"
-#~ msgstr "Vuoi creare la GRASS location <%s>?"
+msgid "Do you want to create GRASS location <%s>?"
+msgstr "Vuoi creare la GRASS location <%s>?"
 
-#~ msgid "Create new location?"
-#~ msgstr "Crea nuova location?"
+msgid "Create new location?"
+msgstr "Crea nuova location?"
 
-#~ msgid "GRASS GIS SQL Query Utility"
-#~ msgstr "GRASS GIS Strumento Interrogazione SQL"
+msgid "GRASS GIS SQL Query Utility"
+msgstr "GRASS GIS Strumento Interrogazione SQL"
 
-#~ msgid "Double-click or Ctrl-Enter to run selected module"
-#~ msgstr "Doppio click o Ctrl-Enter per eseguire il modulo selezionato"
+msgid "Double-click or Ctrl-Enter to run selected module"
+msgstr "Doppio click o Ctrl-Enter per eseguire il modulo selezionato"
