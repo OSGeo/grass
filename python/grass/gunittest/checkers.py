@@ -577,7 +577,7 @@ def check_text_ellipsis_doctest(reference, actual):
 
 
 # optimal size depends on file system and maybe on hasher.block_size
-_BUFFER_SIZE = 2 ** 16
+_BUFFER_SIZE = 2**16
 
 
 # TODO: accept also open file object
