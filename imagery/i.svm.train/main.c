@@ -365,9 +365,6 @@ int main(int argc, char *argv[])
         semantic_labels[n] =
             Rast_get_semantic_label_or_name(group_ref.file[n].name,
                                             group_ref.file[n].mapset);
-        if (!semantic_labels[n])
-            G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
-                          group_ref.file[n].name, group_ref.file[n].mapset);
         /* Use raster range for value rescaling */
         ret = Rast_read_range(group_ref.file[n].name,
                               group_ref.file[n].mapset, &crange);

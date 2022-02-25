@@ -169,9 +169,6 @@ int main(int argc, char *argv[])
         semantic_labels_group[n] =
             Rast_get_semantic_label_or_name(group_ref.file[n].name,
                                             group_ref.file[n].mapset);
-        if (!semantic_labels_group[n])
-            G_fatal_error(_("Raster map <%s@%s> lacks semantic label"),
-                          group_ref.file[n].name, group_ref.file[n].mapset);
     }
 
     I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);

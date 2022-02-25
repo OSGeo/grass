@@ -44,27 +44,35 @@ class IOValidationTest(TestCase):
         cls.mapset_name = Mapset().name
         # Small region for small testing rasters
         cls.use_temp_region()
-        cls.runModule("g.region", n=1, s=0, e=1, w=0, res=1)
-        # A raster without a band reference
+        cls.runModule("g.region", n=10, s=0, e=10, w=0, res=1)
+        # A raster without a semantic label
         cls.rast1 = grass.tempname(10)
-        cls.runModule("r.mapcalc", expression=f"{cls.rast1}=1", quiet=True)
+        cls.runModule(
+            "r.mapcalc", expression=f"{cls.rast1}=rand(0.0,1)", seed=1, quiet=True
+        )
         cls.tmp_rasts.append(cls.rast1)
         cls.runModule("r.colors", _map=cls.rast1, color="grey", quiet=True)
-        # A raster with a band reference
+        # A raster with a semantic label
         cls.rast2 = grass.tempname(10)
-        cls.runModule("r.mapcalc", expression=f"{cls.rast2}=1", quiet=True)
+        cls.runModule(
+            "r.mapcalc", expression=f"{cls.rast2}=rand(0.0,1)", seed=1, quiet=True
+        )
         cls.tmp_rasts.append(cls.rast2)
         cls.runModule(
             "r.support", _map=cls.rast2, semantic_label="GRASS_RND1", quiet=True
         )
         cls.rast3 = grass.tempname(10)
-        cls.runModule("r.mapcalc", expression=f"{cls.rast3}=1", quiet=True)
+        cls.runModule(
+            "r.mapcalc", expression=f"{cls.rast3}=rand(0.0,1)", seed=1, quiet=True
+        )
         cls.tmp_rasts.append(cls.rast3)
         cls.runModule(
             "r.support", _map=cls.rast3, semantic_label="GRASS_RND2", quiet=True
         )
         cls.rast4 = grass.tempname(10)
-        cls.runModule("r.mapcalc", expression=f"{cls.rast4}=1", quiet=True)
+        cls.runModule(
+            "r.mapcalc", expression=f"{cls.rast4}=rand(0.0,1)", seed=1, quiet=True
+        )
         cls.tmp_rasts.append(cls.rast4)
         cls.runModule(
             "r.support", _map=cls.rast4, semantic_label="GRASS_RND3", quiet=True
@@ -76,10 +84,6 @@ class IOValidationTest(TestCase):
         cls.runModule(
             "i.group", flags="r", group=cls.group1, _input=(cls.rast1,), quiet=True
         )
-        # An imagery group with raster lacking band reference
-        cls.group2 = grass.tempname(10)
-        cls.runModule("i.group", group=cls.group2, _input=(cls.rast1,), quiet=True)
-        cls.tmp_groups.append(cls.group2)
         # A good imagery group
         cls.group3 = grass.tempname(10)
         cls.runModule(
@@ -112,21 +116,6 @@ class IOValidationTest(TestCase):
         self.assertModuleFail(isvm)
         self.assertTrue(isvm.outputs.stderr)
         self.assertIn(self.group1, isvm.outputs.stderr)
-
-    @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
-    def test_rast_no_semantic_label(self):
-        """One of imagery group rasters lacks semantic_label"""
-        sigfile = grass.tempname(10)
-        isvm = SimpleModule(
-            "i.svm.train",
-            group=self.group2,
-            _input=self.rast1,
-            signaturefile=sigfile,
-            quiet=True,
-        )
-        self.assertModuleFail(isvm)
-        self.assertTrue(isvm.outputs.stderr)
-        self.assertIn(self.rast1, isvm.outputs.stderr)
 
     @unittest.skipIf(shutil_which("i.svm.train") is None, "i.svm.train not found.")
     def test_wrong_sigfile_mapset(self):
