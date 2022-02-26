@@ -1571,12 +1571,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             where += "semantic_label IN ('{}'".format(self.semantic_label)
 
             # be zero-padding less sensitive
-            shortcut, identifier = self.semantic_label.split("_", -1)
-            identifier_zp = leading_zero(identifier)
-            if identifier_zp:
-                where += ", '{fl}_{zp}'".format(
-                    fl=shortcut.upper(), zp=identifier_zp.upper()
-                )
+            try:
+                shortcut, identifier = self.semantic_label.split("_", -1)
+                identifier_zp = leading_zero(identifier)
+                if identifier_zp:
+                    where += ", '{fl}_{zp}'".format(
+                        fl=shortcut.upper(), zp=identifier_zp.upper()
+                    )
+            except ValueError:
+                # any number of "_" is allowed in semantic labels
+                pass
 
             # close WHERE statement
             where += ")"
