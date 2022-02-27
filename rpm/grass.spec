@@ -363,8 +363,11 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
-* Sat Jan 15 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
-- New upstream version GRASS GIS 8.0.0RC2
+* Fri Jan 28 2022 Markus Neteler <neteler@mundialis.de> - 8.0.0-1
+- New upstream version GRASS GIS 8.0.0
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 7.8.6-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
 * Thu Nov 11 2021 Sandro Mani <manisandro@gmail.com> - 7.8.6-3
 - Rebuild (gdal)

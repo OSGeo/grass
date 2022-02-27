@@ -21,7 +21,7 @@ import os
 
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
-from datacatalog.toolbars import DataCatalogToolbar
+from datacatalog.toolbars import DataCatalogToolbar, DataCatalogSearch
 from gui_core.infobar import InfoBar
 from datacatalog.infomanager import DataCatalogInfoManager
 from gui_core.wrap import Menu
@@ -66,6 +66,9 @@ class DataCatalog(wx.Panel):
         # toolbar
         self.toolbar = DataCatalogToolbar(parent=self)
 
+        # search
+        self.search = DataCatalogSearch(parent=self, filter_function=self.Filter)
+
         # tree with layers
         self.tree = DataCatalogTree(self, giface=giface)
         self.tree.showNotification.connect(self.showNotification)
@@ -106,6 +109,12 @@ class DataCatalog(wx.Panel):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
+        sizer.Add(
+            self.search,
+            proportion=0,
+            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+            border=5,
+        )
         sizer.Add(self.infoBar, proportion=0, flag=wx.EXPAND)
         sizer.Add(self.tree.GetControl(), proportion=1, flag=wx.EXPAND)
 

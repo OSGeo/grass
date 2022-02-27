@@ -168,7 +168,7 @@ class UpdateThread(Thread):
         self.event = event
         self.eventId = eventId
         self.task = task
-        self.setDaemon(True)
+        self.daemon = True
 
         # list of functions which updates the dialog
         self.data = {}
@@ -434,7 +434,7 @@ class UpdateQThread(Thread):
         Thread.__init__(self, **kwds)
 
         self.parent = parent  # cmdPanel
-        self.setDaemon(True)
+        self.daemon = True
 
         self.requestQ = requestQ
         self.resultQ = resultQ
@@ -570,7 +570,6 @@ class TaskFrame(wx.Frame):
         self._gconsole = self.notebookpanel._gconsole
         if self._gconsole:
             self._gconsole.mapCreated.connect(self.OnMapCreated)
-            self._gconsole.updateMap.connect(lambda: self._giface.updateMap.emit())
         self.goutput = self.notebookpanel.goutput
         if self.goutput:
             self.goutput.showNotification.connect(

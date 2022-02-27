@@ -46,6 +46,7 @@ class WrapperPrinter:
 
         self.file = open(outpath, "w") if outpath else sys.stdout
         self.options = options
+        self.has_unnamed_struct_member = False
 
         if self.options.strip_build_path and self.options.strip_build_path[-1] != os.path.sep:
             self.options.strip_build_path += os.path.sep
@@ -82,8 +83,13 @@ class WrapperPrinter:
         self.print_group(self.options.inserted_files, "inserted files", self.insert_file)
         self.strip_prefixes()
 
-    def __del__(self):
+        if self.has_unnamed_struct_member and outpath:
+            self._add_remove_zero_bitfields()
+
         self.file.close()
+
+        if self.has_unnamed_struct_member and outpath and sys.executable:
+            os.system("{0} {1}".format(sys.executable, outpath))
 
     def print_group(self, list, name, function):
         if list:
@@ -231,6 +237,7 @@ class WrapperPrinter:
             mem = list(struct.members[mi])
             if mem[0] is None:
                 while True:
+                    self.has_unnamed_struct_member = True
                     name = "%s%i" % (anon_prefix, n)
                     n += 1
                     if name not in names:
@@ -243,7 +250,10 @@ class WrapperPrinter:
 
         self.file.write("%s_%s.__slots__ = [\n" % (struct.variety, struct.tag))
         for name, ctype in struct.members:
-            self.file.write("    '%s',\n" % name)
+            skip_unnamed = (
+                "#unnamedbitfield_{0} ".format(struct.tag) if name.startswith(anon_prefix) else ""
+            )
+            self.file.write("    {0}'{1}',\n".format(skip_unnamed, name))
         self.file.write("]\n")
 
         if len(unnamed_fields) > 0:
@@ -255,9 +265,15 @@ class WrapperPrinter:
         self.file.write("%s_%s._fields_ = [\n" % (struct.variety, struct.tag))
         for name, ctype in struct.members:
             if isinstance(ctype, CtypesBitfield):
+                skip_unnamed = (
+                    "#unnamedbitfield_{0} ".format(struct.tag)
+                    if name.startswith(anon_prefix)
+                    else ""
+                )
                 self.file.write(
-                    "    ('%s', %s, %s),\n"
-                    % (name, ctype.py_string(), ctype.bitfield.py_string(False))
+                    "    {0}('{1}', {2}, {3}),\n".format(
+                        skip_unnamed, name, ctype.py_string(), ctype.bitfield.py_string(False)
+                    )
                 )
             else:
                 self.file.write("    ('%s', %s),\n" % (name, ctype.py_string()))
@@ -458,3 +474,57 @@ class WrapperPrinter:
         )
 
         inserted_file.close()
+
+    def _add_remove_zero_bitfields(self):
+        self.file.write(
+            "#REMOVE_START\n"
+            "def main():\n"
+            "    zero_bitfield_list = list()\n"
+            "    filename = os.path.abspath(__file__)\n"
+            "\n"
+            '    with open(filename, "r") as f:\n'
+            "        regex = re.compile(\n"
+            r'            r"([\s]*)(\#unnamedbitfield)_"'
+            "\n"
+            r'            r"(?P<struct_name>[a-zA-Z_].[a-zA-Z0-9_]*)\s(?P<expr>.*)\,"'
+            "\n"
+            "        )\n"
+            "        for line in f:\n"
+            "            m = regex.match(line)\n"
+            "            if m:\n"
+            '                struct_name = m.group("struct_name")\n'
+            '                bitfield_expression = tuple(eval(m.group("expr")))\n'
+            "\n"
+            "                if len(bitfield_expression) == 3 and bitfield_expression[2] == 0:\n"
+            "                    member = bitfield_expression[0]\n"
+            "                    zero_bitfield_list.append((struct_name, member))\n"
+            "\n"
+            '    with open(filename, "r+") as f:\n'
+            "        filedata = f.read()\n"
+            "\n"
+            "        for (struct_name, member) in zero_bitfield_list:\n"
+            "            pat = re.compile(\n"
+            r"""                r"( *)#unnamedbitfield_{0}( '| \('){1}.*\n".format("""
+            "\n"
+            "                    struct_name, member\n"
+            "                )\n"
+            "            )\n"
+            '            filedata = pat.sub("", filedata)\n'
+            "\n"
+            r'        regex = re.compile(r"#REMOVE_START.*#REMOVE_END\n", re.DOTALL)'
+            "\n"
+            '        filedata = regex.sub("", filedata)\n'
+            "\n"
+            r"""        regex = re.compile(r"#unnamedbitfield_[^'\(]*")"""
+            "\n"
+            '        filedata = regex.sub("", filedata)\n'
+            "\n"
+            "        f.seek(0)\n"
+            "        f.write(filedata)\n"
+            "        f.truncate()\n"
+            "\n"
+            "\n"
+            'if __name__ == "__main__":\n'
+            "    main()\n"
+            "#REMOVE_END\n"
+        )
