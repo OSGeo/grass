@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
+    bufrows = atoi(memory->answer) * (((1 << 20) / out_cell_size) / ncols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > nrows) {
         bufrows = nrows;
