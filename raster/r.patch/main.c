@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("patching"));
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("series"));
+    G_add_keyword(_("parallel"));
     module->description =
         _("Creates a composite raster map layer by using "
           "known category values from one (or more) map layer(s) "
