@@ -45,6 +45,7 @@ if sys.version_info.major >= 3:
 test_vector_name = "table_doctest_map"
 
 DRIVERS = ("sqlite", "pg")
+UNSUPPORTED_DRIVERS = ("ogr", "dbf")
 
 
 def get_path(path, vect_name=None):
@@ -714,10 +715,18 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver not in ("sqlite", "pg"):
-            str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
-            raise TypeError(str_err)
-        self.c_fieldinfo.contents.driver = ReturnString(driver)
+        if driver in DRIVERS:
+            self.c_fieldinfo.contents.driver = ReturnString(driver)
+        elif driver in UNSUPPORTED_DRIVERS:
+            raise NotImplementedError(
+                "The database driver %s is not supported by PyGRASS, "
+                "use: %s." % (driver, ", ".join(DRIVERS))
+            )
+        else:
+            raise ValueError(
+                "The database driver %s is not known to PyGRASS, "
+                "use: %s." % (driver, ", ".join(DRIVERS))
+            )
 
     driver = property(
         fget=_get_driver,
