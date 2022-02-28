@@ -390,7 +390,7 @@ def help_message(default_gui):
             gui_detail=_("and set as default"),
             config=_("print GRASS configuration parameters"),
             config_detail=_(
-                "options: arch,build,compiler,date,path,revision,svn_revision,version"
+                "options: arch,build,compiler,date,path,python_path,revision,version"
             ),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
