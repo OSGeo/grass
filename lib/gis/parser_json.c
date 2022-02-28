@@ -188,7 +188,6 @@ char *G__json(void)
     FILE *fp = stdout;
 
     /*FILE *fp = NULL; */
-    char *type;
     char *file_name = NULL;
     int c;
     int random_int = rand();

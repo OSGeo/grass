@@ -18,10 +18,18 @@ for details.
 """
 from __future__ import absolute_import
 import os
+import sys
 
 from .utils import parse_key_val
-from .core import *
-from grass.exceptions import CalledModuleError
+from .core import (
+    run_command,
+    read_command,
+    error,
+    fatal,
+    debug,
+)
+
+from grass.exceptions import CalledModuleError, ScriptError
 
 unicode = str
 

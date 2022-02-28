@@ -394,7 +394,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:1516
 msgid "Building user fontcap..."
-msgstr ""
+msgstr "Construindo o fontcap do usuário..."
 
 #: ../lib/init/grass.py:1577
 msgid "The SHELL variable is not set"
@@ -729,7 +729,7 @@ msgstr "Registro no banco de dados para categoria %d não encontrado"
 
 #: ../lib/rst/interp_float/vinput2d.c:192
 msgid "Negative value of smoothing detected: sm must be >= 0"
-msgstr ""
+msgstr "Valor negativo de suavização detectado: sm deve ser >= 0"
 
 #: ../lib/rst/interp_float/vinput2d.c:256
 msgid "Strip exists with insufficient data"
@@ -757,7 +757,7 @@ msgstr "Não existem pontos na região atual"
 #: ../lib/rst/interp_float/vinput2d.c:287
 #, c-format
 msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
-msgstr ""
+msgstr "Parâmetros de segmentação definidos com valores inválidos: npmin= %d, segmax= %dpara conexão suave de segmentos, npmin > segmax (consulte o manual)"
 
 #: ../lib/rst/interp_float/vinput2d.c:293
 #, c-format
@@ -1319,7 +1319,7 @@ msgstr "Não foi possível abrir arquivo de saída <%s>: %s"
 #: ../lib/gis/key_value3.c:39
 #, c-format
 msgid "Error closing output file <%s>: %s"
-msgstr "Erro fechando arquivo de saída <%s>: %s"
+msgstr "Erro ao fechar arquivo de saída <%s>: %s"
 
 #: ../lib/gis/get_ellipse.c:263 ../lib/proj/ellipse.c:243
 #, c-format
@@ -1993,7 +1993,7 @@ msgstr "Erro lendo arquivo <%s>: %s"
 #: ../lib/gis/key_value3.c:67
 #, c-format
 msgid "Error closing input file <%s>: %s"
-msgstr "Erro fechando arquivo de entrada <%s>: %s"
+msgstr "Erro ao fechar arquivo de entrada <%s>: %s"
 
 #: ../lib/gis/cmprbzip.c:97 ../lib/gis/cmprbzip.c:176
 msgid "GRASS needs to be compiled with BZIP2 for BZIP2 compression"
@@ -2052,7 +2052,7 @@ msgstr "Não foi possível escrever %d bytes: %s"
 
 #: ../lib/gis/token.c:169
 msgid "parse error"
-msgstr "erro de análise"
+msgstr "erro de interpretação"
 
 #: ../lib/gis/env.c:311
 msgid "GISRC - variable not set"
@@ -2615,7 +2615,7 @@ msgstr "O método de compactação usado no mapa raster3d de saída"
 
 #: ../lib/gis/parser_standard_options.c:474
 msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
-msgstr "As dimensões dos tiles usados ​​no mapa raster3d de saída (XxYxZ ou padrão: 16x16x8)"
+msgstr "As dimensões dos mosaicos usados ​​no mapa raster3d de saída (XxYxZ ou padrão: 16x16x8)"
 
 #: ../lib/gis/parser_standard_options.c:484
 msgid "Name of input vector map"
@@ -4137,17 +4137,17 @@ msgstr ""
 #: ../lib/vector/vedit/delete.c:72
 #, c-format
 msgid "No area found for centroid %d"
-msgstr "Nenhuma área encontrada para o centróide %d"
+msgstr "Nenhuma área encontrada para o centroide %d"
 
 #: ../lib/vector/vedit/delete.c:76
 #, c-format
 msgid "Duplicate centroid %d, unable to delete area"
-msgstr "Centróide %d duplicado, não é possível excluir área"
+msgstr "Centroide %d duplicado, não é possível excluir área"
 
 #: ../lib/vector/vedit/delete.c:105
 #, c-format
 msgid "Area %d without centroid"
-msgstr "Área %d sem centróide"
+msgstr "Área %d sem centroide"
 
 #: ../lib/vector/vedit/delete.c:121
 #, c-format
@@ -4161,11 +4161,11 @@ msgstr "Não é possível definir a categoria %d para (ID da feição %d)"
 
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
-msgstr ""
+msgstr "Ferramenta de consulta desconhecida"
 
 #: ../lib/vector/neta/spanningtree.c:109
 msgid "Computing minimum spanning tree..."
-msgstr ""
+msgstr "Calculando a árvore de recobrimento mínima..."
 
 #: ../lib/vector/neta/timetables.c:46 ../lib/vector/neta/timetables.c:203
 #: ../lib/vector/neta/timetables.c:244 ../lib/vector/neta/timetables.c:286
@@ -4298,7 +4298,7 @@ msgstr "Não é possível construir o centroide para a área %d. Ignorado."
 #: ../lib/vector/Vlib/read_sfa.c:95
 #, c-format
 msgid "Centroid %d: invalid area %d"
-msgstr "Centróide%d: área inválida%d"
+msgstr "Centroide%d: área inválida%d"
 
 #: ../lib/vector/Vlib/read_sfa.c:117 ../lib/vector/Vlib/read_pg.c:192
 #, c-format
@@ -4432,7 +4432,7 @@ msgstr "Número de fronteiras: %d"
 #: ../lib/vector/Vlib/build.c:906
 #, c-format
 msgid "Number of centroids: %d"
-msgstr "Número de centróides: %d"
+msgstr "Número de centroides: %d"
 
 #: ../lib/vector/Vlib/build.c:909
 #, c-format
@@ -4457,12 +4457,12 @@ msgstr "Número de ilhas: %d"
 #: ../lib/vector/Vlib/build.c:964
 #, c-format
 msgid "Number of areas without centroid: %d"
-msgstr "Número de áreas sem centróide: %d"
+msgstr "Número de áreas sem centroide: %d"
 
 #: ../lib/vector/Vlib/build.c:969
 #, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
-msgstr "O número de centróides excede o número de áreas: %d > %d"
+msgstr "O número de centroides excede o número de áreas: %d > %d"
 
 #: ../lib/vector/Vlib/build.c:973
 #, c-format
@@ -4472,12 +4472,12 @@ msgstr "Número de fronteiras incorretas: %d"
 #: ../lib/vector/Vlib/build.c:977
 #, c-format
 msgid "Number of centroids outside area: %d"
-msgstr "Número de centróides fora da área: %d"
+msgstr "Número de centroides fora da área: %d"
 
 #: ../lib/vector/Vlib/build.c:981
 #, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr "Número de centróides duplicados: %d"
+msgstr "Número de centroides duplicados: %d"
 
 #: ../lib/vector/Vlib/build.c:985
 msgid "Number of areas: -"
@@ -4849,7 +4849,7 @@ msgstr "Linha ignorada (tipo de feição de saída: %s)"
 #: ../lib/vector/Vlib/write_pg.c:1266
 #, c-format
 msgid "Centroid skipped (output feature type: %s)"
-msgstr "Centróide ignorado (tipo de feição de saída: %s)"
+msgstr "Centroide ignorado (tipo de feição de saída: %s)"
 
 #: ../lib/vector/Vlib/write_pg.c:1273
 #, c-format
@@ -5357,7 +5357,7 @@ msgstr "Extensão PostGIS Topology não encontrada no banco de dados <%s>"
 
 #: ../lib/vector/Vlib/open_pg.c:667
 msgid "Empty bounding box"
-msgstr ""
+msgstr "Retângulo envolvente vazio"
 
 #: ../lib/vector/Vlib/open_pg.c:768
 #, c-format
@@ -5381,7 +5381,7 @@ msgstr "Ilha %d sem fronteira detectada"
 
 #: ../lib/vector/Vlib/open_pg.c:1128
 msgid "Unable to get map bounding box from topology"
-msgstr ""
+msgstr "Não foi possível obter o retângulo envolvente do mapa da topologia"
 
 #: ../lib/vector/Vlib/open_pg.c:1135
 #, c-format
@@ -5389,6 +5389,8 @@ msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
 msgstr ""
+"Não é possível analisar o retângulo envolvente do mapa:\n"
+"%s"
 
 #: ../lib/vector/Vlib/open_pg.c:1159
 #, c-format
@@ -5422,7 +5424,7 @@ msgstr "Inconsistência na topologia: número de linhas %d (deveria ser %d)"
 #: ../lib/vector/Vlib/open_pg.c:1668
 #, c-format
 msgid "Inconsistency in topology: number of centroids %d (should be %d)"
-msgstr "Inconsistência na topologia: número de centróides %d (deveria ser %d)"
+msgstr "Inconsistência na topologia: número de centroides %d (deveria ser %d)"
 
 #: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
@@ -5478,7 +5480,7 @@ msgstr "%d novas linhas e fronteiras"
 
 #: ../lib/vector/Vlib/write_sfa.c:117
 msgid "Unable to calculate centroid for area"
-msgstr "Não foi possível calcular centróide para área"
+msgstr "Não foi possível calcular centroide para área"
 
 #: ../lib/vector/Vlib/write_sfa.c:219
 msgid "Attempt to delete dead feature"
@@ -5616,16 +5618,16 @@ msgstr "Não foi possível ler o mapa vetorial"
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Uma primitiva registrada"
+msgstr[1] "%d primitivas registradas"
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
-#, c-format
+#, fuzzy, c-format
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Um vértice registrado"
+msgstr[1] "%jd vértices registrados"
 
 #: ../lib/vector/Vlib/build_nat.c:133
 msgid "Building areas..."
@@ -5635,15 +5637,15 @@ msgstr "Construindo áreas..."
 #, c-format
 msgid "One area built"
 msgid_plural "%d areas built"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Uma área construída"
+msgstr[1] "%d áreas construídas"
 
 #: ../lib/vector/Vlib/build_nat.c:158
 #, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Uma ilha construída"
+msgstr[1] "%d ilhas construídas"
 
 #: ../lib/vector/Vlib/build_nat.c:169
 msgid "Attaching islands..."
@@ -5651,7 +5653,7 @@ msgstr "Anexando ilhas..."
 
 #: ../lib/vector/Vlib/build_nat.c:189
 msgid "Attaching centroids..."
-msgstr "Anexando centróides..."
+msgstr "Anexando centroides..."
 
 #: ../lib/vector/Vlib/graph.c:138
 msgid "Unable to add network arc"
@@ -6017,7 +6019,7 @@ msgstr "Acesso aleatório não suportado. Chave primária não definida."
 
 #: ../lib/vector/Vlib/read_pg.c:652
 msgid "Inconsistency in topology: detected centroid (should be point)"
-msgstr "Inconsistência na topologia: centróide detectado (deveria ser ponto)"
+msgstr "Inconsistência na topologia: centroide detectado (deveria ser ponto)"
 
 #: ../lib/vector/Vlib/read_pg.c:662
 msgid "Inconsistency in topology: detected boundary (should be line)"
@@ -6054,7 +6056,7 @@ msgstr "Dados corrompidos"
 #: ../lib/vector/Vlib/read_pg.c:1252
 #, c-format
 msgid "Unable to parse '%s'"
-msgstr "Não foi possível analisar '%s'"
+msgstr "Não foi possível interpretar '%s'"
 
 #: ../lib/vector/Vlib/read_pg.c:1420 ../lib/vector/Vlib/close_pg.c:66
 #, c-format
@@ -6125,8 +6127,8 @@ msgstr "Não é possível selecionar registros da tabela <%s>"
 #, c-format
 msgid "One category loaded"
 msgid_plural "%d categories loaded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Uma categoria carregada"
+msgstr[1] "%d categorias carregadas"
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -6141,7 +6143,7 @@ msgstr "%d erros na opção '%s'"
 #: ../lib/vector/Vlib/build_sfa.c:279 ../lib/vector/Vlib/build_sfa.c:546
 #, c-format
 msgid "Unable to calculate centroid for area %d"
-msgstr "Não foi possível calcular centróide para área %d"
+msgstr "Não foi possível calcular centroide para área %d"
 
 #: ../lib/vector/Vlib/build_sfa.c:305
 #, c-format
@@ -6158,8 +6160,8 @@ msgstr "Tipo de feição OGR %d não é suportada"
 #, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Uma feição sem geometria ignorada"
+msgstr[1] "%d feições sem geometria ignoradas"
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
@@ -6168,7 +6170,7 @@ msgstr "%s: Formato nativo não suportado"
 
 #: ../lib/vector/Vlib/build_sfa.c:751
 msgid "Feature index is built only for non-native formats. Nothing to dump."
-msgstr ""
+msgstr "O índice de feições é criado apenas para formatos não nativos. Nada para descartar."
 
 #: ../lib/vector/Vlib/box.c:264
 #, c-format
@@ -6198,12 +6200,12 @@ msgstr "Topologia não disponível para mapa vetorial <%s>. Registrando primitiv
 #: ../lib/vector/Vlib/break_lines.c:574
 #, c-format
 msgid "Intersections: %d"
-msgstr ""
+msgstr "Intersecções: %d"
 
 #: ../lib/vector/Vlib/color_write.c:71 ../lib/raster/color_write.c:81
 #, c-format
 msgid "Qualified name <%s> doesn't match mapset <%s>"
-msgstr ""
+msgstr "O nome qualificado <%s> não corresponde ao mapset <%s>"
 
 #: ../lib/vector/Vlib/color_write.c:91 ../lib/raster/color_write.c:96
 #, c-format
@@ -6221,7 +6223,7 @@ msgstr "%d áreas de tamanho total %g removidas"
 
 #: ../lib/vector/Vlib/remove_areas.c:395
 msgid "Could not delete line from coor"
-msgstr ""
+msgstr "Não foi possível excluir linha de coor"
 
 #: ../lib/vector/Vlib/remove_areas.c:458
 msgid "dissolve_neighbour > 0, failed to build new area"
@@ -6373,7 +6375,7 @@ msgstr "Segmento fora da linha, nenhum segmento criado"
 
 #: ../lib/vector/Vlib/net_build.c:101 ../lib/vector/Vlib/net_build.c:727
 msgid "Building graph..."
-msgstr ""
+msgstr "Construindo gráfico..."
 
 #: ../lib/vector/Vlib/net_build.c:143 ../lib/vector/Vlib/net_build.c:775
 msgid "Unable to build network graph"
@@ -6398,11 +6400,11 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:988
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
-msgstr ""
+msgstr "Tipo de dados da coluna <%s> não suportado (deve ser numérico)"
 
 #: ../lib/vector/Vlib/net_build.c:202 ../lib/vector/Vlib/net_build.c:967
 msgid "Setting node costs..."
-msgstr ""
+msgstr "Definindo custos de nó..."
 
 #: ../lib/vector/Vlib/net_build.c:277 ../lib/vector/Vlib/net_build.c:1032
 #, c-format
@@ -6411,7 +6413,7 @@ msgstr "Registro do banco de dados para o nó %d (cat = %d) não encontrado (cos
 
 #: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
 msgid "Cannot add network arc for virtual node connection."
-msgstr ""
+msgstr "Não é possível adicionar arco de rede para conexão de nó virtual."
 
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
@@ -6419,6 +6421,8 @@ msgid ""
 "There exists more than one point of node <%d> with unique category field  <%d>.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
+"Existe mais de um ponto de nó <%d> com campo de categoria exclusivo <%d>.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
 #: ../lib/vector/Vlib/net_build.c:393
 #, c-format
@@ -6427,6 +6431,9 @@ msgid ""
 "Cost for the intersection was set to 0.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
+"Não foi possível encontrar o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
+"O custo da interseção foi definido como 0.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
 #: ../lib/vector/Vlib/net_build.c:407
 #, c-format
@@ -6435,6 +6442,9 @@ msgid ""
 "Cost for the intersection was set to 0.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
+"Não foi possível encontrar o nó para o ponto que representa a interseção <%d> no campo de categorias exclusivas <%d>.\n"
+"O custo da interseção foi definido como 0.\n"
+"A camada de categorias exclusivas não é válida, portanto, você provavelmente obterá resultados incorretos."
 
 #: ../lib/vector/Vlib/net_build.c:432
 #, c-format
@@ -6514,7 +6524,7 @@ msgstr ""
 #: ../lib/vector/Vlib/snap.c:527 ../lib/vector/Vlib/snap.c:890
 #, c-format
 msgid "New vertices: %d"
-msgstr ""
+msgstr "Novos vértices: %d"
 
 #: ../lib/vector/Vlib/snap.c:917
 msgid "Reading features..."
@@ -6591,7 +6601,7 @@ msgstr "Atualizando dados TopoGeometry..."
 #: ../lib/vector/Vlib/build_pg.c:464
 #, c-format
 msgid "Unsupported topo geometry type %d"
-msgstr ""
+msgstr "Tipo de geometria %d de topologia não suportado "
 
 #: ../lib/vector/Vlib/build_pg.c:493
 #, c-format
@@ -6600,7 +6610,7 @@ msgstr "Não foi possível criar <%s.%s>"
 
 #: ../lib/vector/Vlib/build_pg.c:644
 msgid "Unable to write nodes, offset array mismatch"
-msgstr ""
+msgstr "Não foi possível escrever nós, incompatibilidade de array de deslocamento"
 
 #: ../lib/vector/Vlib/build_pg.c:673
 msgid "Unable to write nodes"
@@ -6618,7 +6628,7 @@ msgstr "Não foi possível escrever linhas"
 #: ../lib/vector/Vlib/build_pg.c:792
 #, c-format
 msgid "Topology for centroid %d not available. Area %d skipped"
-msgstr "Topologia para centróide %d não disponível. Área %d ignorada"
+msgstr "Topologia para centroide %d não disponível. Área %d ignorada"
 
 #: ../lib/vector/Vlib/build_pg.c:1002
 msgid "Create simple features topology from topogeometry data..."
@@ -6791,7 +6801,7 @@ msgstr "Não foi possível ler arquivo de entrada <%s>"
 #: ../lib/cairodriver/read_xid.c:20
 #, c-format
 msgid "Unable to parse input file <%s>"
-msgstr "Não foi possível analisar o arquivo de entrada <%s>"
+msgstr "Não foi possível interpretar o arquivo de entrada <%s>"
 
 #: ../lib/cairodriver/raster.c:109
 msgid "Failed to create cairo surface"
@@ -7080,7 +7090,7 @@ msgstr "Leia o mapa g3d <%s> na memória"
 
 #: ../lib/gpde/n_arrays_io.c:364 ../lib/gpde/n_arrays_io.c:464
 msgid "Error closing g3d file"
-msgstr "Erro fechando arquivo g3d"
+msgstr "Erro ao fechar arquivo g3d"
 
 #: ../lib/gpde/n_arrays_io.c:420
 #, c-format
@@ -7657,7 +7667,7 @@ msgstr "Formato de granulação incorreto: %s"
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1866
 #, python-format
 msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
-msgstr "Não foi possível ajustar o conjunto de dados <%(ds)s> do tipo %(type)s no banco de dados temporal. O mapset do conjunto de dados não corresponde ao  mapset atual"
+msgstr "Não foi possível ligar o conjunto de dados <%(ds)s> do tipo %(type)s ao banco de dados temporal. O mapset do conjunto de dados não corresponde ao  mapset atual"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1968
 #, python-format
@@ -8099,7 +8109,7 @@ msgstr "Fusos horários não são suportados"
 #: ../lib/python/temporal/datetime_math.py:811
 #, python-format
 msgid "Unable to parse time string: %s"
-msgstr "Não foi possível analisar string <%s>"
+msgstr "Não foi possível interpretar string <%s>"
 
 #: ../lib/python/temporal/sampling.py:93 ../lib/python/temporal/sampling.py:98
 #, python-format
@@ -8589,7 +8599,7 @@ msgstr ""
 #: ../lib/python/script/task.py:527
 #, python-brace-format
 msgid "Cannot parse interface description of<{name}> module: {error}"
-msgstr "Não é possível analisar a descrição da interface do módulo <{name}>: {error}"
+msgstr "Não é possível interpretar a descrição da interface do módulo <{name}>: {error}"
 
 #: ../lib/python/script/raster3d.py:93
 #, python-format
@@ -8603,7 +8613,7 @@ msgstr "Não é possível encontrar o executável {0}"
 
 #: ../lib/python/script/core.py:318
 #, python-format
-msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr "Para executar o módulo <%s>, adicione underscore no final da opção <%s> para evitar conflito com palavras-chave Python. O underscore no início é obsoleto no GRASS GIS 7.0 e será removido na versão 7.1."
 
 #: ../lib/python/script/core.py:385
@@ -8781,12 +8791,12 @@ msgstr ""
 #: ../lib/raster3d/range.c:88
 #, c-format
 msgid "Error reading range file for [%s in %s]"
-msgstr ""
+msgstr "Erro ao ler arquivo de intervalo para [%s in %s]"
 
 #: ../lib/raster3d/range.c:150
 #, c-format
 msgid "Unable to open range file for <%s>"
-msgstr ""
+msgstr "Não foi possível abrir o arquivo de intervalo para <%s>"
 
 #: ../lib/raster3d/close.c:47
 #, c-format
@@ -8800,11 +8810,11 @@ msgstr "Não foi possível mover o mapa raster temporário <%s> para o mapa rast
 
 #: ../lib/raster3d/close.c:79
 msgid "Unable to flush all tiles"
-msgstr ""
+msgstr "Não foi possível limpar todos os mosaicos"
 
 #: ../lib/raster3d/close.c:84
 msgid "Unable to flush index"
-msgstr ""
+msgstr "Não foi possível limpar o índice"
 
 #: ../lib/raster3d/close.c:94
 msgid "Unable to position file"
@@ -9375,7 +9385,7 @@ msgstr "Erro ao ler linha nula %d para <%s>"
 #: ../lib/raster/close.c:56
 #, c-format
 msgid "Unable to flush file %s for raster map %s: %s"
-msgstr ""
+msgstr "Não foi possível limpar o arquivo %s para o mapa raster %s: %s"
 
 #: ../lib/raster/close.c:64
 #, c-format
@@ -9506,12 +9516,12 @@ msgstr "Suporte de cor para <%s@%s> %s"
 #: ../lib/raster/open.c:192
 #, c-format
 msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
-msgstr ""
+msgstr "Não foi possível abrir o mapa raster <%s@%s> uma vez que é uma reclassificaçãao do mapa raster <%s@%s> que não existe"
 
 #: ../lib/raster/open.c:197
 #, c-format
 msgid "Error reading reclass file for raster map <%s>"
-msgstr ""
+msgstr "Erro ao ler arquivo de reclassificação para mapa raster <%s>"
 
 #: ../lib/raster/open.c:208
 #, c-format
@@ -9757,7 +9767,7 @@ msgstr "O driver <%s> não suporta escrita direta. Usando o driver MEM para um c
 
 #: ../lib/raster/gdal.c:513
 msgid "Unable to get in-memory raster driver"
-msgstr ""
+msgstr "Não foi possível obter o driver de raster na memória"
 
 #: ../lib/raster/gdal.c:520
 #, c-format
@@ -9880,12 +9890,12 @@ msgstr "Rast_set_null_value: tipo de dados errado!"
 #: ../lib/raster/reclass.c:168
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
-msgstr ""
+msgstr "Muitas categorias de reclassificação para <%s@%s>"
 
 #: ../lib/raster/reclass.c:171
 #, c-format
 msgid "Illegal reclass format in header file for <%s@%s>"
-msgstr ""
+msgstr "Formato de reclassificação ilegal no arquivo de cabeçalho para <%s@%s>"
 
 #: ../lib/raster/reclass.c:273
 msgid "Illegal reclass request"
@@ -10168,7 +10178,7 @@ msgstr "Erro no arquivo da tabela de dados <%s>, linha %d"
 
 #: ../lib/proj/convert.c:194
 msgid "Unable parse GRASS PROJ_INFO file"
-msgstr "Não foi possível analisar o arquivo GRASS PROJ_INFO"
+msgstr "Não foi possível interpretar o arquivo GRASS PROJ_INFO"
 
 #: ../lib/proj/convert.c:201
 msgid "Unable get PROJ.4-style parameter string"
@@ -10177,7 +10187,7 @@ msgstr "Não é possível obter string de parâmetro com estilo PROJ.4"
 #: ../lib/proj/convert.c:219
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr "O OGR não consegue analisar a string de parâmetros no estilo PROJ.4: %s (o código de erro OGR era %d)"
+msgstr "O OGR não consegue interpretar a string de parâmetros no estilo PROJ.4: %s (o código de erro OGR era %d)"
 
 #: ../lib/proj/convert.c:232
 #, c-format
@@ -10461,3 +10471,12 @@ msgstr "nome de cor inválido"
 
 #~ msgid "Downgrading temporal database <%s> from version %s to %s..."
 #~ msgstr "Fazendo downgrade do banco de dados temporal <%s> da versão %s para %s..."
+
+#~ msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
+#~ msgstr "Não foi possível ler o arquivo de cabeçalho do mapa raster <%s@%s>. É uma reclassificação do mapa raster <%s@%s> %s"
+
+#~ msgid "which is missing."
+#~ msgstr "que está faltando."
+
+#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+#~ msgstr "Para executar o módulo <%s>, adicione underscore no final da opção <%s> para evitar conflito com palavras-chave Python. O underscore no início é obsoleto no GRASS GIS 7.0 e será removido na versão 7.1."

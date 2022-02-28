@@ -1,0 +1,12 @@
+north: 18
+south:  0
+east:  18
+west:   0
+rows:   3
+cols:   3
+null:   n
+type:   float
+
+n 2.3426 1.7489
+1.7000 3.3726 0.6666
+0.2923 n 5.6666

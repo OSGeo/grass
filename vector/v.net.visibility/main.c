@@ -94,8 +94,10 @@ int main(int argc, char *argv[])
     count(&in, &num_points, &num_lines);
 
     /* modify the number if we have new points to add */
-    if (coor->answers != NULL)
-	num_points += count_new(coor->answers);
+    if (coor->answers != NULL) {
+	n = count_new(coor->answers);
+	num_points += n;
+    }
 
     /* and allocate */
     points = G_malloc(num_points * sizeof(struct Point));

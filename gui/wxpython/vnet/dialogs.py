@@ -541,7 +541,6 @@ class VNETDialog(wx.Dialog):
         self.inpDbMgrData["browse"] = self.inpDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.inpDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateInputDbMgrPage(self, show):
         """Show or hide input tables tab"""
@@ -562,7 +561,6 @@ class VNETDialog(wx.Dialog):
         self.resultDbMgrData["browse"] = self.resultDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.resultDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateResultDbMgrPage(self):
         """Show or Hide Result tables tab"""
@@ -582,9 +580,9 @@ class VNETDialog(wx.Dialog):
                 name="resultDbMgr",
             )
         elif not haveDbMgr:
-            self.notebook.RemovePage(
-                page=self.notebook.GetPageIndexByName("resultDbMgr")
-            )
+            page = self.notebook.GetPageIndexByName("resultDbMgr")
+            if page != -1:
+                self.notebook.RemovePage(page=page)
 
     def OnPageChanged(self, event):
         """Tab switched"""
@@ -611,7 +609,7 @@ class VNETDialog(wx.Dialog):
         self.Layout()
 
     def _updateDbMgrData(self):
-        """Updates input/result tables page """
+        """Updates input/result tables page"""
         if self.notebook.GetSelection() == self.notebook.GetPageIndexByName(
             "inputDbMgr"
         ):
@@ -1099,7 +1097,7 @@ class VNETDialog(wx.Dialog):
 
 class PtsList(PointsList):
     def __init__(self, parent, vnet_mgr, id=wx.ID_ANY):
-        """ List with points for analysis"""
+        """List with points for analysis"""
         self.updateMap = True
         self.vnet_mgr = vnet_mgr
         self.pts_data = self.vnet_mgr.GetPointsManager()

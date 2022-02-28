@@ -324,9 +324,6 @@ static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
  *
  *****************************************************************************/
 
-#define TRUE 1
-#define FALSE 0
-
 
 /************************** BumpPixel() ********************************/
 /*

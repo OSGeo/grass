@@ -1,4 +1,11 @@
-CHANGES current GRASS GIS 7.x compared to previous GRASS GIS 7.x
+CHANGES in GRASS GIS 8.x compared to GRASS GIS 7.x
+
+Efforts have concentrated on making the user experience even better,
+providing many new useful additional functionalities to modules and
+further improving the graphical user interface. The new graphical user
+interface with entirely rewritten startup sequence.
+
+https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures80
 
 See list of releases with changelog at
 https://trac.osgeo.org/grass/wiki/Release

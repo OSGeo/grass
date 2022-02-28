@@ -8579,7 +8579,7 @@ msgstr ""
 
 #: ../lib/python/script/core.py:318
 #, python-format
-msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."
 
 #: ../lib/python/script/core.py:385
@@ -10669,3 +10669,6 @@ msgstr "No ha sido posible buscar"
 
 #~ msgid "Copy %s <%s> to current mapset as <%s>"
 #~ msgstr "Copiar %s <%s> al Directorio de mapas actual con el nombre <%s>"
+
+#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+#~ msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."

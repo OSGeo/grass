@@ -48,7 +48,7 @@ def float_or_dms(s):
     """
     if s[-1] in ["E", "W", "N", "S"]:
         s = s[:-1]
-    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(":")))
+    return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
 
 def separator(sep):
@@ -108,7 +108,7 @@ def try_remove(path):
     """
     try:
         os.remove(path)
-    except:
+    except Exception:
         pass
 
 
@@ -120,7 +120,7 @@ def try_rmdir(path):
     """
     try:
         os.rmdir(path)
-    except:
+    except Exception:
         shutil.rmtree(path, ignore_errors=True)
 
 

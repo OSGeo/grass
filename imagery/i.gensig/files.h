@@ -18,5 +18,5 @@ int read_training_map(CELL *, int, int, struct files *);
 
 #ifdef _l_parms_h
 void read_training_labels(struct parms *, struct files *);
-int openfiles(struct parms *, struct files *);
+int openfiles(struct parms *, struct files *, struct Signature *);
 #endif

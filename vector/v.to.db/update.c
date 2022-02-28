@@ -10,7 +10,7 @@ static int srch();
 int update(struct Map_info *Map)
 {
     int i, *catexst, *cex, upd, fcat;
-    char buf1[2000], buf2[2000], left[20], right[20];
+    char buf1[2000], buf2[2500], left[20], right[20];
     struct field_info *qFi, *Fi;
     dbString stmt, strval;
     dbDriver *driver;

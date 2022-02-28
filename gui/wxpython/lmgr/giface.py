@@ -234,6 +234,9 @@ class LayerManagerGrassInterface(object):
     def WriteError(self, text):
         self.lmgr._gconsole.WriteError(text=text)
 
+    def GetLog(self, err=False):
+        return self.lmgr._gconsole.GetLog(err=err)
+
     def GetLayerTree(self):
         return self.lmgr.GetLayerTree()
 
@@ -257,23 +260,6 @@ class LayerManagerGrassInterface(object):
 
     def UpdateCmdHistory(self, cmd):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
-
-    def ShowStatusbar(self, show=True):
-        self.lmgr.GetMapDisplay().statusbarManager.Show(show)
-
-    def IsStatusbarShown(self):
-        return self.lmgr.GetMapDisplay().statusbarManager.IsShown()
-
-    def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.lmgr.GetMapDisplay().RemoveToolbar
-        else:
-            action = self.lmgr.GetMapDisplay().AddToolbar
-        for toolbar in self.lmgr.GetMapDisplay().GetToolbarNames():
-            action(toolbar)
-
-    def AreAllToolbarsShown(self):
-        return self.lmgr.GetMapDisplay().GetMapToolbar().IsShown()
 
 
 class LayerManagerGrassInterfaceForMapDisplay(object):

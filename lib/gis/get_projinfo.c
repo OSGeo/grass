@@ -195,7 +195,14 @@ char *G_get_projwkt(void)
     if (fclose(fp) != 0)
 	G_fatal_error(_("Error closing output file <%s>: %s"), path, strerror(errno));
 
-    return G_chop(wktstring);
+    if (wktstring && *wktstring)
+	G_chop(wktstring);
+    if (wktstring && *wktstring == '\0') {
+	G_free(wktstring);
+	wktstring = NULL;
+    }
+
+    return wktstring;
 }
 
 /*!
@@ -310,5 +317,12 @@ char *G_get_projsrid(void)
     if (fclose(fp) != 0)
 	G_fatal_error(_("Error closing output file <%s>: %s"), path, strerror(errno));
 
-    return G_chop(sridstring);
+    if (sridstring && *sridstring)
+	G_chop(sridstring);
+    if (sridstring && *sridstring == '\0') {
+	G_free(sridstring);
+	sridstring = NULL;
+    }
+
+    return sridstring;
 }

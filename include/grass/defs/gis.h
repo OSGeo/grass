@@ -171,10 +171,6 @@ int G_vfaprintf(FILE *, const char *, va_list);
 int G_vsaprintf(char *, const char *, va_list);
 int G_vsnaprintf(char *, size_t, const char *, va_list);
 
-/* bands.c */
-int G__read_band_reference(FILE *, struct Key_Value **);
-int G__write_band_reference(FILE *, const char *, const char *);
-
 /* basename.c */
 char *G_basename(char *, const char *);
 size_t G_get_num_decimals(const char *);
@@ -546,6 +542,9 @@ char *G_mapset_path(void);
 /* mapset_msc.c */
 int G_make_mapset_element(const char *);
 int G_make_mapset_element_tmp(const char *);
+int G_make_mapset_object_group(const char *);
+int G_make_mapset_dir_object(const char *, const char *);
+int G_make_mapset_object_group_tmp(const char *);
 int G__make_mapset_element_misc(const char *, const char *);
 int G_mapset_permissions(const char *);
 int G_mapset_permissions2(const char *, const char *, const char *);

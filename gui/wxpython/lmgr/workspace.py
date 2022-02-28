@@ -90,7 +90,7 @@ class WorkspaceManager:
 
         # delete all decorations
         for display in self.lmgr.GetAllMapDisplays():
-            for overlayId in display.decorations.keys():
+            for overlayId in list(display.decorations):
                 display.RemoveOverlay(overlayId)
 
         self.workspaceFile = None
@@ -262,7 +262,7 @@ class WorkspaceManager:
                     region["n"], region["s"], region["e"], region["w"]
                 )
             if "showStatusbar" in display and not display["showStatusbar"]:
-                mapdisp.statusbarManager.Show(False)
+                mapdisp.ShowStatusbar(False)
             if "showToolbars" in display and not display["showToolbars"]:
                 for toolbar in mapdisp.GetToolbarNames():
                     mapdisp.RemoveToolbar(toolbar)
@@ -473,7 +473,7 @@ class WorkspaceManager:
                     if not self.workspaceFile:
                         self.SaveAs()
                     else:
-                        self.SaveToFile()
+                        self.SaveToFile(self.workspaceFile)
                 elif ret == wx.ID_CANCEL:
                     return False
         return True

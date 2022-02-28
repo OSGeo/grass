@@ -20,9 +20,11 @@ for details.
 """
 from __future__ import absolute_import
 
+import os
+import time
 import string
 
-from .core import *
+from .core import read_command, write_command, fatal
 from .utils import float_or_dms, parse_key_val
 from grass.exceptions import CalledModuleError
 
@@ -82,7 +84,7 @@ def mapcalc3d(
     """
 
     if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2 ** 32)
+        seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)

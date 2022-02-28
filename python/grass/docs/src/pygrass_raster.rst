@@ -4,8 +4,8 @@ Introduction to Raster classes
 ==============================
 
 Details about the GRASS GIS raster architecture can be found in the
-`GRASS GIS 7 Programmer's Manual: GRASS Raster Library
-<https://grass.osgeo.org/programming7/rasterlib.html>`_.
+`GRASS GIS 8 Programmer's Manual: GRASS Raster Library
+<https://grass.osgeo.org/programming8/rasterlib.html>`_.
 
 PyGRASS uses 3 different raster classes, that respect the 3 different
 approaches of GRASS-C API. The classes use a standardized interface to
@@ -225,6 +225,6 @@ Similarly, writing to a map uses two methods: ``put_row()`` to write a row and
     >>> elev.remove()
 
 
-.. _Raster library: https://grass.osgeo.org/programming7/rasterlib.html
-.. _RowIO library: https://grass.osgeo.org/programming7/rowiolib.html
-.. _Segmentation library: https://grass.osgeo.org/programming7/segmentlib.html
+.. _Raster library: https://grass.osgeo.org/programming8/rasterlib.html
+.. _RowIO library: https://grass.osgeo.org/programming8/rowiolib.html
+.. _Segmentation library: https://grass.osgeo.org/programming8/segmentlib.html

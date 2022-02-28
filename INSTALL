@@ -40,12 +40,13 @@ Installation order:
 
 GRASS source code is currently distributed in 2 forms:
 
-1) Officially released source code (e.g. grass-7.9.0.tar.gz or later)
+1) Officially released source code (e.g. grass-8.0.0.tar.gz or later)
 
   The Full source code version contains all the GRASS source code
   required for compilation. It is distributed as one file (*.tar.gz
-  package) and the version is composed of 3 numbers, e.g. 7.9.0, 7.9.1
-  etc.
+  package) and the version is composed of 3 numbers, e.g. 8.0.0, 8.0.1
+  etc. See
+  https://github.com/OSGeo/grass/releases
 
 2) Snapshots of source code (generated from GitHub)
 
@@ -53,8 +54,8 @@ GRASS source code is currently distributed in 2 forms:
   repository (https://github.com/OSGeo/grass/) or as a auto-generated snapshot
   (*.tar.gz package) of the GitHub repository. The snapshot name
   contains the date when the snapshot was created (checked out from
-  the GitHub repository), e.g. grass-7.9.git_src_snapshot_2019_07_11.tar.gz
-  from https://grass.osgeo.org/grass79/source/snapshot/
+  the GitHub repository), e.g. grass-8.1.git_src_snapshot_2022_01_12.tar.gz
+  from https://grass.osgeo.org/grass-devel/source/snapshot/
   Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
 
@@ -68,7 +69,10 @@ The command,
    ./configure --help 
 
 explains the options used to disable the compilation of non-mandatory
-GRASS modules. See REQUIREMENTS.html for details.
+GRASS modules. See REQUIREMENTS.html for details on dependencies.
+Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux 
+distributions, FreeBSD, AIX, etc) are available at:
+https://grasswiki.osgeo.org/wiki/Compile_and_Install
   
 First step of the compilation (-g for debugging, or -O2 for optimization):
 
@@ -97,11 +101,7 @@ Explanation of make targets:
 
 Next step is the compilation itself:
 
-    make       
-
-Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux distros,
-FreeBSD, AIX, etc) are available at:
-https://grasswiki.osgeo.org/wiki/Compile_and_Install
+    make
 
 Note for Solaris users (see also Wiki page above):
 
@@ -151,16 +151,16 @@ See also CODE OPTIMIZATION below.
 
 After compilation, the resulting code is stored in the directory
     ./dist.$ARCH
-and the scripts (grass79, ...) in
+and the scripts (grass, ...) in
     ./bin.$ARCH
 
 To run GRASS, simply start
-    ./bin.$ARCH/grass79
+    ./bin.$ARCH/grass
 
 or run
 
     make install
-    grass79
+    grass
 
 
 (E) INSTALLATION ON MACOSX
@@ -189,9 +189,9 @@ GitHub, you have to perform a few steps. In general:
 
 In detail:
 
-    cd /where/your/grass7sourcecode/lives/
+    cd /where/your/grass-source-code/lives/
     git fetch --all
-    git merge upstream/master
+    git merge upstream/main
     ./configure ...
     make
     make install
@@ -212,9 +212,9 @@ the main source code directory or locally with
     "INST_NOW=y make"
 
 You may want to define an alias for this:
-    alias gmake7='INST_NOW=y make'
+    alias gmake='INST_NOW=y make'
 Then simply compile/install the current module with
-    gmake7
+    gmake
 
 Note: If you keep your module source code outside the standard GRASS
 source code directory structure, you will have to change the relative
@@ -249,7 +249,7 @@ by the local machine at GCC runtime including -mtune.
 To find out optional CFLAGS for your platform, enter:
   gcc -dumpspecs
 
-See also: http://gcc.gnu.org/
+See also: https://gcc.gnu.org/
 
 A real fast GRASS version (and small binaries) will be created with
 LDFLAGS set to "stripping" (but this disables debugging):
@@ -277,7 +277,7 @@ https://grasswiki.osgeo.org/wiki/GRASS_Debugging
 
 (K) LARGE FILE SUPPORT (for raster maps)
 
-GRASS >= 7.0.0 includes improved support for reading and writing large files
+GRASS GIS includes improved support for reading and writing large files
 (> 2GB) if it is possible in your operating system. If you compile with
   configure [...] --enable-largefile
 you should be able to have raster and vector maps which are larger than 2GB.
@@ -303,7 +303,7 @@ developers mailing list. See https://grass.osgeo.org/development/
 
 The Programmer's manual is generated with doxygen from the source code.
 Please see the README file and the files at:
-https://grass.osgeo.org/programming7/
+https://grass.osgeo.org/programming8/
 
 (N) CONTRIBUTING CODE AND PATCHES
 
@@ -311,9 +311,9 @@ Please see ./SUBMITTING in this directory, or better,
 https://trac.osgeo.org/grass/wiki/Submitting
 
 
-(O) DRAFT TUTORIAL
+(O) TUTORIALS
 
-https://grass.osgeo.org/documentation/first-time-users/
+https://grass.osgeo.org/learn/newcomers/
 
 ------------------
-(C) 1999-2021 by The GRASS Development Team
+(C) 1999-2022 by The GRASS Development Team

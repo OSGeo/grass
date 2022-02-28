@@ -27,14 +27,6 @@
 #define DEGREE2RAD(a) ((a)/(180/PI))
 #define RAD2DEGREE(a) ((a)*(180/PI))
 
-#ifndef MAX
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
-#endif
-
-#ifndef MIN
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#endif
-
 /* Number of cardinal directions. */
 #define NUM_DIRS 8
 
@@ -83,7 +75,6 @@ GLOBAL int skip_cells;
 GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
-GLOBAL int cell_step;
 /* Zenith/nadir comparison modes. */
 GLOBAL enum
 {
@@ -98,6 +89,8 @@ int shift_buffers(int row);
 int free_map(FCELL ** map, int n);
 int write_form_cat_colors(char *raster);
 int write_contrast_colors(char *);
+const char *form_short_name(const FORMS);
+const char *form_long_name(const FORMS);
 
 /* pattern */
 int calc_pattern(PATTERN * pattern, int row, int cur_row, int col, const int);

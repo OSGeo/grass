@@ -147,27 +147,23 @@ class VDigitError:
 
 
 class IVDigit:
-    def __init__(self, mapwindow, driver=DisplayDriver):
+    def __init__(self, giface, mapwindow, driver=DisplayDriver):
         """Base class for vector digitizer (ctypes interface)
 
         :param mapwindow: reference to a map window
         """
         self.poMapInfo = None  # pointer to Map_info
         self.mapWindow = mapwindow
+        self._giface = giface
 
         # background map
         self.bgMapInfo = Map_info()
         self.poBgMapInfo = self.popoBgMapInfo = None
-
-        # TODO: replace this by using giface
-        if not mapwindow.parent.IsStandalone():
-            goutput = mapwindow.parent.GetLayerManager().GetLogWindow()
-            log = goutput.GetLog(err=True)
-            progress = mapwindow.parent._giface.GetProgress()
-        else:
-            log = sys.stderr
+        try:
+            progress = self._giface.GetProgress()
+        except NotImplementedError:
             progress = None
-
+        log = self._giface.GetLog(err=True)
         self.toolbar = mapwindow.parent.toolbars["vdigit"]
 
         self._error = VDigitError(parent=self.mapWindow)

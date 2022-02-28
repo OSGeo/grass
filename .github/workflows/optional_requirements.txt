@@ -1,0 +1,3 @@
+folium
+jupyter
+PyVirtualDisplay

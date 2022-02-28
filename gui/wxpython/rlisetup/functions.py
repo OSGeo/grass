@@ -50,10 +50,10 @@ def checkValue(value):
 def retRLiPath():
     """Return the directory of configuration files for r.li"""
     if sys.platform == "win32":
-        grass_config_dirname = "GRASS7"
+        grass_config_dirname = "GRASS8"
         grass_config_dir = os.path.join(os.getenv("APPDATA"), grass_config_dirname)
     else:
-        grass_config_dirname = ".grass7"
+        grass_config_dirname = ".grass8"
         grass_config_dir = os.path.join(os.getenv("HOME"), grass_config_dirname)
 
     rlipath = os.path.join(grass_config_dir, "r.li")

@@ -1,0 +1,25 @@
+# Format Python code with Black
+1aab3bbcff76c12d422e7dffd9aba8277f91cd86
+0d9e966dd289753cca91886529e65711eaf863eb
+57cb2d4bbe6ce71a8b97fce42dd4da736c18e636
+6d4d14afb3845a8ecdcef391f3375d97af4a6a84
+7e03dcd6a8d7d96ead53d0f72e57735050dc6c7a
+feff8e340f5fec1b52ce066360904f72501e76ce
+fd86f50e9a4c9ab37cf501290349790377846b59
+ff2c2290d1469972504753e5d1415eba5568e196
+e9dfbc4eee6fa14af2f0a8a5e1a7c723b34254db
+02bfae03d5db8c80a93a0e340ff3cdcd509a2785
+0111b11e8b3aae2c55f20eb1ceea3dc4ee86cee9
+# Major C formatting in 2008
+8868d4b6868e05345c93032704b7304de04c1daf
+# Per-file or per-directory C code formatting
+c08f63b1b604acbba275c144b543c5164bc9f432
+8eaef1f4e6e9497f469cbb7ab91fe03389a6b49b
+f6a73088a9c17b6cce7102c5c3107ab4b41f3b2c
+# parser: Use #-space-% to allow writing PEP8-compliant Python code (#1287)
+635224115c5ee9c29a9356210c3b03e5511ef6dc
+# Format shell/Bash scripts
+80bcf7a290a6a1249604b2c8a236154f13e25bfa
+a0ccdb551e004a0f68192fb65cfc9be61b2880ed
+# Format YAML in GH workflows (#1367)
+567fa0643d0ab48de590ffbf0e286a288d359312

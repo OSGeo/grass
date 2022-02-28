@@ -54,7 +54,7 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
     }
     else {
 	for (i = 0; i < list[n].nelem; i++) {
-	    G_make_mapset_element(list[n].element[i]);
+	    G_make_mapset_object_group(list[n].element[i]);
 	    G_file_name(path, list[n].element[i], old, mapset);
 	    if (access(path, 0) != 0) {
 		G_remove(list[n].element[i], new);
@@ -76,9 +76,11 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
 
     /* special case: remove (yes, remove) the secondary color table, if it exists */
     if (G_strcasecmp(list[n].element[0], "cell") == 0) {
-	char colr2[GNAME_MAX];
+	char colr2[6 + GMAPSET_MAX];
 
-	sprintf(colr2, "colr2/%s", G_mapset());
+	if (snprintf(colr2, 6 + GMAPSET_MAX, "colr2/%s", G_mapset()) >=
+	    6 + GMAPSET_MAX)
+	    G_warning(_("String for secondary color table has been truncated"));
 	G_remove(colr2, new);
     }
     M__hold_signals(0);

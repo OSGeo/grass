@@ -20,11 +20,6 @@
 #include <grass/glocale.h>
 #include "kdtree.h"
 
-#ifdef MAX
-#undef MAX
-#endif
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
 #define KD_BTOL 7
 
 #ifdef KD_DEBUG

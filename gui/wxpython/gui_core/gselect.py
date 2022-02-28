@@ -47,6 +47,7 @@ import os
 import sys
 import glob
 import six
+import ctypes
 
 import wx
 
@@ -1412,7 +1413,7 @@ class FormatSelect(wx.Choice):
             ftype = "gdal"
 
         formats = list()
-        for f in GetFormats()[ftype][srcType].values():
+        for f in GetFormats()[ftype][srcType].items():
             formats += f
         self.SetItems(formats)
 
@@ -1594,8 +1595,8 @@ class GdalSelect(wx.Panel):
         self.dirWidgets["browse"] = browse
         formatSelect = wx.Choice(parent=self.dirPanel)
         self.dirWidgets["format"] = formatSelect
-        fileFormats = GetFormats(writableOnly=dest)[fType]["file"]
-        formatSelect.SetItems(sorted(list(fileFormats)))
+        self.fileFormats = GetFormats(writableOnly=dest)[fType]["file"]
+        formatSelect.SetItems(sorted(list(self.fileFormats.values())))
         formatSelect.Bind(
             wx.EVT_CHOICE,
             lambda evt: self.SetExtension(
@@ -1612,19 +1613,20 @@ class GdalSelect(wx.Panel):
         self.dirWidgets["options"] = TextCtrl(parent=self.dirPanel)
         if self.ogr:
             shapefile = "ESRI Shapefile"
-            if shapefile in fileFormats:
+            if shapefile in self.fileFormats:
                 formatSelect.SetStringSelection(shapefile)
                 self.SetExtension(shapefile)
         else:
             tiff = "GeoTIFF"
-            if tiff in fileFormats:
+            if tiff in self.fileFormats:
                 formatSelect.SetStringSelection(tiff)
                 self.SetExtension(tiff)
 
         # database
         self.dbPanel = wx.Panel(parent=self)
+
         self.dbFormats = GetFormats(writableOnly=dest)[fType]["database"]
-        dbChoice = wx.Choice(parent=self.dbPanel, choices=self.dbFormats)
+        dbChoice = wx.Choice(parent=self.dbPanel, choices=list(self.dbFormats.values()))
         dbChoice.Bind(
             wx.EVT_CHOICE,
             lambda evt: self.SetDatabase(db=dbChoice.GetStringSelection()),
@@ -1681,8 +1683,10 @@ class GdalSelect(wx.Panel):
 
         # protocol
         self.protocolPanel = wx.Panel(parent=self)
-        protocolFormats = GetFormats(writableOnly=self.dest)[fType]["protocol"]
-        protocolChoice = wx.Choice(parent=self.protocolPanel, choices=protocolFormats)
+        self.protocolFormats = GetFormats(writableOnly=self.dest)[fType]["protocol"]
+        protocolChoice = wx.Choice(
+            parent=self.protocolPanel, choices=list(self.protocolFormats.values())
+        )
         self.protocolWidgets["format"] = protocolChoice
 
         self.protocolWidgets["text"] = TextCtrl(parent=self.protocolPanel)
@@ -1705,7 +1709,7 @@ class GdalSelect(wx.Panel):
             )
             if current["format"] == "native":
                 sourceType = "native"
-            elif current["format"] in GetFormats()["ogr"]["database"]:
+            elif current["format"] in GetFormats()["ogr"]["database"].values():
                 sourceType = "db"
             else:
                 sourceType = "dir"
@@ -1971,6 +1975,18 @@ class GdalSelect(wx.Panel):
 
         return formatToExt.get(name, "")
 
+    def _getFormatAbbreviation(self, formats, formatName):
+        """Get format abbreviation
+
+        :param dict formats: {formatAbbreviation: formatLongName}
+        :param str formatName: long format name
+
+        return str: return format abbreviation
+        """
+        for key, value in formats.items():
+            if formatName == value:
+                return key
+
     def SetSourceType(self, sourceType):
         """Set source type (db, file, dir, ...).
         Does not switch radioboxes."""
@@ -1984,9 +2000,9 @@ class GdalSelect(wx.Panel):
         self.changingSizer.Layout()
 
         if sourceType == "db":
-            self.dbWidgets["format"].SetItems(self.dbFormats)
+            self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
-                if "PostgreSQL" in self.dbFormats:
+                if "PostgreSQL" in self.dbFormats.values():
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL")
                 else:
                     self.dbWidgets["format"].SetSelection(0)
@@ -2274,14 +2290,34 @@ class GdalSelect(wx.Panel):
         """Get source type"""
         return self._sourceType
 
-    def GetFormat(self):
+    def GetFormat(self, getFormatAbbreviation=False):
         """Get format as string"""
-        if self._sourceType == "dir":
+
+        def _getFormat(getFormatAbbreviation, format_group):
+            """Get format long name or format abbreviation
+
+            :param bool getFormatAbbreviation: get format abbreviation
+            :param dict format_group: formats dict {formatAbbreviation: formatLongName}
+            for 'file', 'protocol', 'database' group
+
+            return str: long format name or format abbreviation
+            """
             format = self.dirWidgets["format"].GetStringSelection()
+            if getFormatAbbreviation:
+                return self._getFormatAbbreviation(
+                    formats=self.fileFormats,
+                    formatName=format,
+                )
+            return format
+
+        if self._sourceType == "dir":
+            format = _getFormat(getFormatAbbreviation, format_group=self.fileFormats)
         elif self._sourceType == "pro":
-            format = self.protocolWidgets["format"].GetStringSelection()
+            format = _getFormat(
+                getFormatAbbreviation, format_group=self.protocolFormats
+            )
         elif self._sourceType == "db":
-            format = self.dbWidgets["format"].GetStringSelection()
+            format = _getFormat(getFormatAbbreviation, format_group=self.dbFormats)
         else:
             format = ""
 
@@ -2662,7 +2698,7 @@ class VectorCategorySelect(wx.Panel):
         return True
 
     def _chckMap(self):
-        """Check if selected map in 'input' widget is the same as selected map in lmgr """
+        """Check if selected map in 'input' widget is the same as selected map in lmgr"""
         if self._isMapSelected():
             layerList = self.giface.GetLayerList()
             layerSelected = layerList.GetSelectedLayer()
@@ -2763,43 +2799,48 @@ class SignatureSelect(wx.ComboBox):
         self,
         parent,
         element,
+        mapsets,
         id=wx.ID_ANY,
         size=globalvar.DIALOG_GSELECT_SIZE,
         **kwargs,
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
-        self.element = element
-        self.SetName("SignatureSelect")
 
-    def Insert(self, group, subgroup=None):
-        """Insert signatures for defined group/subgroup
-
-        :param group: group name (can be fully-qualified)
-        :param subgroup: non fully-qualified name of subgroup
-        """
-        if not group:
-            return
-        gisenv = grass.gisenv()
-        try:
-            name, mapset = group.split("@", 1)
-        except ValueError:
-            name = group
-            mapset = gisenv["MAPSET"]
-
-        path = os.path.join(
-            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], mapset, "group", name
-        )
-
-        if subgroup:
-            path = os.path.join(path, "subgroup", subgroup)
-        try:
-            items = list()
-            for element in os.listdir(os.path.join(path, self.element)):
-                items.append(element)
-            self.SetItems(items)
-        except OSError:
-            self.SetItems([])
+        items = []
+        if mapsets:
+            for mapset in mapsets:
+                self._append_mapset_signatures(mapset, element, items)
+        else:
+            self._append_mapset_signatures(None, element, items)
+        self.SetItems(items)
         self.SetValue("")
+
+    def _append_mapset_signatures(self, mapset, element, items):
+        try:
+            from grass.lib.imagery import (
+                I_SIGFILE_TYPE_SIG,
+                I_SIGFILE_TYPE_SIGSET,
+                I_signatures_list_by_type,
+                I_free_signatures_list,
+            )
+        except ImportError as e:
+            sys.stderr.write(
+                _("Unable to import C imagery library functions: %s\n") % e
+            )
+            return
+        # Extend here if a new signature type is introduced
+        if element == "signatures/sig":
+            sig_type = I_SIGFILE_TYPE_SIG
+        elif element == "signatures/sigset":
+            sig_type = I_SIGFILE_TYPE_SIGSET
+        else:
+            return
+        list_ptr = ctypes.POINTER(ctypes.c_char_p)
+        sig_list = list_ptr()
+        count = I_signatures_list_by_type(sig_type, mapset, ctypes.byref(sig_list))
+        for n in range(count):
+            items.append(grass.decode(sig_list[n]))
+        I_free_signatures_list(count, ctypes.byref(sig_list))
 
 
 class SeparatorSelect(wx.ComboBox):

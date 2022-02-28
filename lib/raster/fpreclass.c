@@ -246,11 +246,6 @@
 
 /*--------------------------------------------------------------------------*/
 
-#undef MIN
-#undef MAX
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
-
 #define NO_DEFAULT_RULE (! r->defaultDRuleSet)
 #define NO_LEFT_INFINITE_RULE (! r->infiniteLeftSet)
 #define NO_RIGHT_INFINITE_RULE (! r->infiniteRightSet)

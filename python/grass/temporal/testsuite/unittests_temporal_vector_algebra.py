@@ -157,7 +157,7 @@ class TestTemporalVectorAlgebra(TestCase):
         cls.del_temp_region()
 
     def test_temporal_select(self):
-        """Testing the temporal select operator. """
+        """Testing the temporal select operator."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(expression="R = A : A", basename="r", overwrite=True)
 
@@ -175,7 +175,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "1 day")
 
     def test_temporal_extent1(self):
-        """Testing the temporal extent operators. """
+        """Testing the temporal extent operators."""
         ta = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         ta.parse(expression="R = A {:,during,r} C", basename="r", overwrite=True)
 
@@ -192,7 +192,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.get_granularity(), "2 days")
 
     def test_temporal_select_operators(self):
-        """Testing the temporal select operator. Including temporal relations. """
+        """Testing the temporal select operator. Including temporal relations."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(expression="R = A {:,during} C", basename="r", overwrite=True)
 

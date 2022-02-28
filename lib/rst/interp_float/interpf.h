@@ -92,7 +92,7 @@ struct interp_params
     FILE *Tmp_fd_z, *Tmp_fd_dx,
 	*Tmp_fd_dy, *Tmp_fd_xx,
 	*Tmp_fd_yy, *Tmp_fd_xy;	/**< temp files for writing interp. values */
-    FILE *fddevi;		/**< pointer to deviations file */
+    bool create_devi;		/**< create deviations file? */
 
     grid_calc_fn *grid_calc;	/**< calculates grid for given segm */
     matrix_create_fn *matrix_create;	/**< creates matrix for a given segm */
@@ -118,7 +118,7 @@ void IL_init_params_2d(struct interp_params *, FILE *, int, int, double,
 		       double, int, int, int, int, double,
 		       char *, char *, char *, char *, char *, char *,
 		       double, double, double, int, double, double,
-		       FILE *, FILE *, FILE *, FILE *, FILE *, FILE *, FILE *,
+		       FILE *, FILE *, FILE *, FILE *, FILE *, FILE *, bool,
 		       struct TimeStamp *, int, const char *);
 
 void IL_init_func_2d(struct interp_params *, grid_calc_fn *,

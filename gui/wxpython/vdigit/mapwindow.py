@@ -689,7 +689,8 @@ class VDigitWindow(BufferedMapWindow):
                     else:
                         # unselect
                         self.digit.GetDisplay().SetSelected([])
-                        del self.moveInfo
+                        if hasattr(self, "moveInfo"):
+                            del self.moveInfo
 
                     self.UpdateMap(render=False)
 
@@ -1091,7 +1092,7 @@ class VDigitWindow(BufferedMapWindow):
                     fid,
                 ]
             )
-        elif action in ("copyCats", "copyAttrs"):
+        elif action in ("copyCats", "copyAttrs") and hasattr(self, "copyCatsIds"):
             if action == "copyCats":
                 if (
                     self.digit.CopyCats(
@@ -1235,9 +1236,10 @@ class VDigitWindow(BufferedMapWindow):
                     self.DrawLines(pdc=self.pdcTmp)
 
                 if action == "editLine":
-                    self.MouseDraw(
-                        pdc=self.pdcTmp, begin=self.Cell2Pixel(self.polycoords[-1])
-                    )
+                    if self.polycoords:
+                        self.MouseDraw(
+                            pdc=self.pdcTmp, begin=self.Cell2Pixel(self.polycoords[-1])
+                        )
 
             self.Refresh()  # TODO: use RefreshRect()
             self.mouse["begin"] = self.mouse["end"]

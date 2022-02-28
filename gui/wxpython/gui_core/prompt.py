@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton <michael.barton@asu.edu>
 @author Vaclav Petras <wenzeslaus gmail.com> (copy&paste customization)
+@author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
 import os
@@ -70,6 +71,11 @@ class GPrompt(object):
         # list of traced commands
         self.commands = list()
 
+        # reload map lists when needed
+        if giface:
+            giface.currentMapsetChanged.connect(self._reloadListOfMaps)
+            giface.grassdbChanged.connect(self._reloadListOfMaps)
+
     def _readHistory(self):
         """Get list of commands from history file"""
         hist = list()
@@ -80,7 +86,7 @@ class GPrompt(object):
                     env["GISDBASE"],
                     env["LOCATION_NAME"],
                     env["MAPSET"],
-                    ".bash_history",
+                    ".wxgui_history",
                 ),
                 encoding="utf-8",
                 mode="r",
@@ -109,6 +115,9 @@ class GPrompt(object):
         result["vector"] = grass.list_strings("vector")
 
         return result
+
+    def _reloadListOfMaps(self):
+        self.mapList = self._getListOfMaps()
 
     def _runCmd(self, cmdString):
         """Run command

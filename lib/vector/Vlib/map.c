@@ -163,9 +163,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     }
 
     /* Copy the directory */
-    G_make_mapset_element(GV_DIRECTORY);
-    sprintf(buf, "%s/%s", GV_DIRECTORY, out);
-    G_make_mapset_element(buf);
+    G_make_mapset_dir_object(GV_DIRECTORY, out);
 
     i = 0;
     while (files[i]) {
@@ -493,7 +491,13 @@ int Vect__delete(const char *map, int is_tmp)
             (strcmp(ent->d_name, "..") == 0))
             continue;
         
-        sprintf(path_buf, "%s/%s", path, ent->d_name);
+        ret = snprintf(path_buf, GPATH_MAX, "%s/%s", path, ent->d_name);
+        if (ret >= GPATH_MAX) {
+            G_warning(_("Filepath '%s/%s' exceeds max length"), path,
+                      ent->d_name);
+            closedir(dir);
+            return -1;
+        }
         G_debug(3, "delete file '%s'", path_buf);
         ret = unlink(path_buf);
         if (ret == -1) {
