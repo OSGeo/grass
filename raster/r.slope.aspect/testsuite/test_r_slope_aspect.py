@@ -92,6 +92,7 @@ class TestSlopeAspect(TestCase):
             slope=self.slope_threaded,
             aspect=self.aspect_threaded,
             format="percent",
+            nprocs=8,
         )
         self.assertRasterMinMax(
             map=self.slope,
