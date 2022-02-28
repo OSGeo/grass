@@ -45,8 +45,8 @@ def collect_lyr_dates(timeseries, etype):
         )
 
     # Parse string
-    new_rows = [row.split("|") for row in rows]
-    new_array = [list(row) for row in zip(*new_rows)]
+    new_rows = [row.split("|") for row in rows] # split row by pipe separator
+    new_array = [list(row) for row in zip(*new_rows)] # transpose into columns where the first value is the name of the column
 
     # Collect layer name and start time
     for column in new_array:
@@ -122,6 +122,7 @@ class TimeSeries:
             )
 
         # Create a temporary directory for our PNG images
+        # Resource managed by weakref.finalize.
         self._tmpdir = (
             # pylint: disable=consider-using-with
             tempfile.TemporaryDirectory()
@@ -157,7 +158,6 @@ class TimeSeries:
         for name in self._renderlist:
             # Create image file
             filename = os.path.join(self._tmpdir.name, f"{name}.png")
-            # self._filenames.append(filename)
 
             # Render image
             img = GrassRenderer(filename=filename)
@@ -193,7 +193,7 @@ class TimeSeries:
         slider = widgets.SelectionSlider(
             options=self._dates,
             value=self._dates[0],
-            description="Date/Time",
+            description=_("Date/Time"),
             disabled=False,
             continuous_update=True,
             orientation="horizontal",
@@ -235,12 +235,8 @@ class TimeSeries:
         param str filename: name of output GIF file
         """
         # Create a GIF from the PNG images
-        from PIL import Image  # pylint: disable=import-outside-toplevel
-        from PIL import ImageFont  # pylint: disable=import-outside-toplevel
-        from PIL import ImageDraw  # pylint: disable=import-outside-toplevel
-        from IPython.display import (  # pylint: disable=import-outside-toplevel
-            Image as ipyImage,
-        )
+        import PIL  # pylint: disable=import-outside-toplevel
+        import IPython.display  # pylint: disable=import-outside-toplevel
 
         # filepath
         if not filename:
@@ -250,25 +246,25 @@ class TimeSeries:
         for date in self._dates:
             name = self._date_name_dict[date]
             img_path = os.path.join(self._tmpdir.name, f"{name}.png")
-            img = Image.open(img_path)
-            draw = ImageDraw.Draw(img)
+            img = PIL.Image.open(img_path)
+            draw = PIL.ImageDraw.Draw(img)
             if label:
                 draw.text(
                     (0, 0),
                     date,
                     fill=text_color,
-                    font=ImageFont.truetype(font, text_size),
+                    font=PIL.ImageFont.truetype(font, text_size),
                 )
             imgs.append(img)
 
-        img.save(
+        imgs[0].save(
             fp=filename,
             format="GIF",
-            append_images=imgs[:-1],
+            append_images=imgs[1:],
             save_all=True,
             duration=duration,
             loop=0,
         )
 
         # Display the GIF
-        return ipyImage(filename)
+        return IPython.display.Image(filename)
