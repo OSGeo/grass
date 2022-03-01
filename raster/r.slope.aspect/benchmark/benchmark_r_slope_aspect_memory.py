@@ -34,7 +34,6 @@ def benchmark(memory, label, results, reference):
     pcurv = "benchmark_pcurv"
     tcurv = "benchmark_tcurv"
 
-
     module = Module(
         "r.slope.aspect",
         elevation=reference,
