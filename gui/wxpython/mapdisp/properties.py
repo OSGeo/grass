@@ -300,8 +300,8 @@ class RBShowInStatusbar:
 
         self.widget.Bind(wx.EVT_RADIOBOX, self._onToggleRadioBox)
 
-    def _setValue(self, value):
-        self.widget.SetSelection(value)
+    def _setValue(self, mode):
+        self.widget.SetSelection(mode)
 
     def GetValue(self):
         return self.widget.GetSelection()

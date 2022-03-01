@@ -251,12 +251,12 @@ class SbManager:
     def _progressHidden(self):
         self.statusbar.SetStatusText(self._oldStatus, 0)
 
-    def SetMode(self, modeIndex):
+    def SetMode(self, mode):
         """Sets current mode
 
         Mode is usually driven by user through map display settings.
         """
-        self._mode = modeIndex
+        self._mode = mode
         self._modeIndexSet = True
 
     def GetMode(self):
