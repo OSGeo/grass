@@ -45,8 +45,10 @@ def collect_lyr_dates(timeseries, etype):
         )
 
     # Parse string
-    new_rows = [row.split("|") for row in rows] # split row by pipe separator
-    new_array = [list(row) for row in zip(*new_rows)] # transpose into columns where the first value is the name of the column
+    # Create list of list
+    new_rows = [row.split("|") for row in rows]
+    # Transpose into columns where the first value is the name of the column
+    new_array = [list(row) for row in zip(*new_rows)]
 
     # Collect layer name and start time
     for column in new_array:
@@ -101,9 +103,8 @@ class TimeSeries:
         self._etype = etype  # element type, borrowing convention from tgis
         self._renderlist = []
         self._legend_kwargs = None
-        # self._filenames = []
-        # self._file_date_dict = {}
         self._date_name_dict = {}
+        self._render_check = False
 
         # Currently does not support multiple basemaps or overlays
         # (i.e. if you wanted to have two vectors rendered, like
@@ -145,6 +146,8 @@ class TimeSeries:
         """
         self._legend = True
         self._legend_kwargs = kwargs
+        # If d_legend has been called, we need to re-render layers
+        self._render_check = False
 
     def render_layers(self):
         """Renders map for each time-step in space-time dataset and save to PNG
@@ -178,6 +181,8 @@ class TimeSeries:
                     raster=name, range=f"{min_min}, {max_max}", **self._legend_kwargs
                 )
 
+        self._render_check = True
+
     def time_slider(self, slider_width="60%"):
         """
         Create interactive timeline slider.
@@ -188,6 +193,10 @@ class TimeSeries:
         # Lazy Imports
         import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
         from IPython.display import Image  # pylint: disable=import-outside-toplevel
+
+        # Render images if they have not been already
+        if not self._render_check:
+            self.render_layers()
 
         # Datetime selection slider
         slider = widgets.SelectionSlider(
@@ -235,8 +244,14 @@ class TimeSeries:
         param str filename: name of output GIF file
         """
         # Create a GIF from the PNG images
-        import PIL  # pylint: disable=import-outside-toplevel
+        import PIL.Image  # pylint: disable=import-outside-toplevel
+        import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
+        import PIL.ImageFont  # pylint: disable=import-outside-toplevel
         import IPython.display  # pylint: disable=import-outside-toplevel
+
+        # Render images if they have not been already
+        if not self._render_check:
+            self.render_layers()
 
         # filepath
         if not filename:
