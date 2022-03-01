@@ -1,6 +1,7 @@
 """Benchmarking of r.slope aspect
 
 @author Aaron Saw Min Sern
+@author Anna Petrasova
 """
 
 from grass.exceptions import CalledModuleError
@@ -13,23 +14,27 @@ import grass.benchmark as bm
 def main():
     results = []
 
-    # Users can add more or modify existing reference maps
-    benchmark(7071, "r.slope.aspect_50M", results)
-    benchmark(10000, "r.slope.aspect_100M", results)
-    benchmark(14142, "r.slope.aspect_200M", results)
-    benchmark(20000, "r.slope.aspect_400M", results)
-
-    bm.nprocs_plot(results, filename="r_slope_aspect_benchmark_size.svg")
-
-
-def benchmark(size, label, results):
     reference = "r_slope_aspect_reference_map"
+    generate_map(rows=10000, cols=10000, fname=reference)
+    # Users can add more or modify existing reference maps
+    benchmark(0, "r.slope.aspect_0MB", results, reference)
+    benchmark(5, "r.slope.aspect_5MB", results, reference)
+    benchmark(10, "r.slope.aspect_10MB", results, reference)
+    benchmark(100, "r.slope.aspect_100MB", results, reference)
+    benchmark(300, "r.slope.aspect_300MB", results, reference)
+
+    Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
+    bm.nprocs_plot(results, filename="r_slope_aspect_benchmark_memory.svg")
+
+
+def benchmark(memory, label, results, reference):
+
     slope = "benchmark_slope"
     aspect = "benchmark_aspect"
     pcurv = "benchmark_pcurv"
     tcurv = "benchmark_tcurv"
 
-    generate_map(rows=size, cols=size, fname=reference)
+
     module = Module(
         "r.slope.aspect",
         elevation=reference,
@@ -41,8 +46,8 @@ def benchmark(size, label, results):
         stdout_=DEVNULL,
         overwrite=True,
     )
-    results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=16, repeat=3))
-    Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
+    results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=20, repeat=10))
+
     Module("g.remove", quiet=True, flags="f", type="raster", name=slope)
     Module("g.remove", quiet=True, flags="f", type="raster", name=aspect)
     Module("g.remove", quiet=True, flags="f", type="raster", name=pcurv)
