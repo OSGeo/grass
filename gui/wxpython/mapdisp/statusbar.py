@@ -155,12 +155,10 @@ class SbManager:
 
         :func:`Update`
         """
-        for item in self.statusbarItems.values():
-            if item.GetPosition() == 0:
-                if item.name != itemName and not self.progressbar.IsShown():
-                    item.Hide()
-            else:
-                item.Update()
+        if (
+            self.statusbarItems[itemName].GetPosition() != 0
+            or not self.progressbar.IsShown()
+        ):
             self.statusbarItems[itemName].Show()
 
     def _postInit(self):
