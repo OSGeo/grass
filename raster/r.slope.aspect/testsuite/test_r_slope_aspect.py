@@ -403,5 +403,285 @@ class TestExtremes(TestCase):
         )
 
 
+class TestSlopeAspectEdge(TestCase):
+    """Test -e flag on slope. Only tests results didn't change between
+    serial and parallelized version.
+    """
+
+    # precision for comparisons
+    precision = 0.0001
+    slope = "elevation_slope"
+    slope_threaded = "elevation_slope_threaded"
+    slope_edge = "elevation_slope_edge"
+    slope_threaded_edge = "elevation_slope_threaded_edge"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.elevation = "elevation@PERMANENT"
+        call_module("g.region", raster=cls.elevation)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=[
+                cls.slope,
+                cls.slope_threaded,
+                cls.slope_edge,
+                cls.slope_threaded_edge,
+            ],
+        )
+
+    def test_slope(self):
+        self.assertModule("r.slope.aspect", elevation=self.elevation, slope=self.slope)
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            slope=self.slope_threaded,
+            nprocs=8,
+        )
+        values = "null_cells=5696\nmean=3.86452"
+        self.assertRasterFitsUnivar(
+            raster=self.slope, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.slope_threaded, reference=values, precision=self.precision
+        )
+        # check we have expected values
+        self.assertModule(
+            "r.slope.aspect", elevation=self.elevation, slope=self.slope_edge, flags="e"
+        )
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            slope=self.slope_threaded_edge,
+            flags="e",
+            nprocs=8,
+        )
+        values = "null_cells=0\nmean=3.86119"
+        self.assertRasterFitsUnivar(
+            raster=self.slope_edge, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.slope_threaded_edge, reference=values, precision=self.precision
+        )
+
+
+class TestSlopeAspectAllOutputs(TestCase):
+    """Test all outputs. Only tests results didn't change between
+    serial and parallelized version.
+    """
+
+    # precision for comparisons
+    precision = 0.0001
+    slope = "elevation_slope"
+    slope_threaded = "elevation_slope_threaded"
+    aspect = "elevation_aspect"
+    aspect_threaded = "elevation_aspect_threaded"
+    pcurvature = "elevation_pcurvature"
+    pcurvature_threaded = "elevation_pcurvature_threaded"
+    tcurvature = "elevation_tcurvature"
+    tcurvature_threaded = "elevation_tcurvature_threaded"
+    dx = "elevation_dx"
+    dx_threaded = "elevation_dx_threaded"
+    dy = "elevation_dy"
+    dy_threaded = "elevation_dy_threaded"
+    dxx = "elevation_dxx"
+    dxx_threaded = "elevation_dxx_threaded"
+    dyy = "elevation_dyy"
+    dyy_threaded = "elevation_dyy_threaded"
+    dxy = "elevation_dxy"
+    dxy_threaded = "elevation_dxy_threaded"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.elevation = "elevation@PERMANENT"
+        call_module("g.region", raster=cls.elevation)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=[
+                cls.slope,
+                cls.slope_threaded,
+                cls.aspect,
+                cls.aspect_threaded,
+                cls.pcurvature,
+                cls.pcurvature_threaded,
+                cls.tcurvature,
+                cls.tcurvature_threaded,
+                cls.dx,
+                cls.dx_threaded,
+                cls.dy,
+                cls.dy_threaded,
+                cls.dxx,
+                cls.dxx_threaded,
+                cls.dyy,
+                cls.dyy_threaded,
+                cls.dxy,
+                cls.dxy_threaded,
+            ],
+        )
+
+    def test_slope(self):
+        self.assertModule("r.slope.aspect", elevation=self.elevation, slope=self.slope)
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            slope=self.slope_threaded,
+            nprocs=8,
+        )
+        values = "mean=3.86452240667335\nrange=38.6893920898438"
+        self.assertRasterFitsUnivar(
+            raster=self.slope, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.slope_threaded, reference=values, precision=self.precision
+        )
+
+    def test_aspect(self):
+        self.assertModule(
+            "r.slope.aspect", elevation=self.elevation, aspect=self.aspect
+        )
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            aspect=self.aspect_threaded,
+            nprocs=8,
+        )
+        values = "mean=190.022878119363\nrange=360"
+        self.assertRasterFitsUnivar(
+            raster=self.aspect, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.aspect_threaded, reference=values, precision=self.precision
+        )
+
+    def test_pcurvature(self):
+        self.assertModule(
+            "r.slope.aspect", elevation=self.elevation, pcurvature=self.pcurvature
+        )
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            pcurvature=self.pcurvature_threaded,
+            nprocs=8,
+        )
+        values = "mean=-8.11389945677247e-06\nrange=0.18258623033762"
+        self.assertRasterFitsUnivar(
+            raster=self.pcurvature, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.pcurvature_threaded, reference=values, precision=self.precision
+        )
+
+    def test_tcurvature(self):
+        self.assertModule(
+            "r.slope.aspect", elevation=self.elevation, tcurvature=self.tcurvature
+        )
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            tcurvature=self.tcurvature_threaded,
+            nprocs=8,
+        )
+        values = "mean=9.98676512087167e-06\nrange=0.173980213701725"
+        self.assertRasterFitsUnivar(
+            raster=self.tcurvature, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.tcurvature_threaded, reference=values, precision=self.precision
+        )
+
+    def test_dx(self):
+        self.assertModule("r.slope.aspect", elevation=self.elevation, dx=self.dx)
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            dx=self.dx_threaded,
+            nprocs=8,
+        )
+        values = "mean=0.00298815584231336\nrange=1.22372794151306"
+        self.assertRasterFitsUnivar(
+            raster=self.dx, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.dx_threaded, reference=values, precision=self.precision
+        )
+
+    def test_dy(self):
+        self.assertModule("r.slope.aspect", elevation=self.elevation, dy=self.dy)
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            dy=self.dy_threaded,
+            nprocs=8,
+        )
+        values = "mean=-0.000712442231985616\nrange=1.43247389793396"
+        self.assertRasterFitsUnivar(
+            raster=self.dy, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.dy_threaded, reference=values, precision=self.precision
+        )
+
+    def test_dxx(self):
+        self.assertModule("r.slope.aspect", elevation=self.elevation, dxx=self.dxx)
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            dxx=self.dxx_threaded,
+            nprocs=8,
+        )
+        values = "mean=1.3698233535033e-06\nrange=0.211458221077919"
+        self.assertRasterFitsUnivar(
+            raster=self.dxx, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.dxx_threaded, reference=values, precision=self.precision
+        )
+
+    def test_dyy(self):
+        self.assertModule("r.slope.aspect", elevation=self.elevation, dyy=self.dyy)
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            dyy=self.dyy_threaded,
+            nprocs=8,
+        )
+        values = "mean=1.58118857641799e-06\nrange=0.217463649809361"
+        self.assertRasterFitsUnivar(
+            raster=self.dyy, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.dyy_threaded, reference=values, precision=self.precision
+        )
+
+    def test_dxy(self):
+        self.assertModule("r.slope.aspect", elevation=self.elevation, dxy=self.dxy)
+        self.assertModule(
+            "r.slope.aspect",
+            elevation=self.elevation,
+            dxy=self.dxy_threaded,
+            nprocs=8,
+        )
+        values = "mean=2.07370162614472e-07\nrange=0.0772973857820034"
+        self.assertRasterFitsUnivar(
+            raster=self.dxy, reference=values, precision=self.precision
+        )
+        self.assertRasterFitsUnivar(
+            raster=self.dxy_threaded, reference=values, precision=self.precision
+        )
+
+
 if __name__ == "__main__":
     test()
