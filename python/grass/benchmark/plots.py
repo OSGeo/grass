@@ -71,6 +71,12 @@ def nprocs_plot(results, filename=None, title=None):
     # ticks when there is a lot of x values.
     if len(x_ticks) < 10:
         axes.set(xticks=sorted(x_ticks))
+    else:
+        from matplotlib.ticker import (  # pylint: disable=import-outside-toplevel
+            MaxNLocator,
+        )
+
+        axes.xaxis.set_major_locator(MaxNLocator(integer=True))
     plt.xlabel("Number of processing elements (cores, threads, processes)")
     plt.ylabel("Time [s]")
     if title:
