@@ -72,6 +72,7 @@ def nprocs_plot(results, filename=None, title=None):
     if len(x_ticks) < 10:
         axes.set(xticks=sorted(x_ticks))
     else:
+        # pylint: disable=import-outside-toplevel
         from matplotlib.ticker import MaxNLocator
 
         axes.xaxis.set_major_locator(MaxNLocator(integer=True))
