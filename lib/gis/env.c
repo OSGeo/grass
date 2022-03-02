@@ -114,6 +114,22 @@ void G__read_gisrc_env(void)
     force_read_env(G_VAR_GISRC);
 }
 
+/*!
+ * \brief Read or read again the GISRC (session) environment variable
+ *
+ * The GISRC environment variable will be read and its value
+ * stored, ignoring if it was read before.
+ *
+ * Calls G_fatal_error when the GISRC variable is not set.
+ */
+void G__read_gisrc_path(){
+    st->gisrc = getenv("GISRC");
+    if (!st->gisrc) {
+        G_fatal_error(_("No active GRASS session: "
+                        "GISRC environment variable not set"));
+    }
+}
+
 static void parse_env(FILE *fd, int loc)
 {
     /* Account for long lines up to GPATH_MAX. 
@@ -307,11 +323,9 @@ static FILE *open_env(const char *mode, int loc)
 
     if (loc == G_VAR_GISRC) {
 	if (!st->gisrc)
-	    st->gisrc = getenv("GISRC");
+	    G__read_gisrc_path();
 
 	if (!st->gisrc) {
-            G_fatal_error(_("No active GRASS session: "
-                            "GISRC environment variable not set"));
 	    return NULL;
 	}
 	strcpy(buf, st->gisrc);
