@@ -498,7 +498,10 @@ class MapPanelBase(wx.Panel):
         from mapdisp.properties import MapDisplayPropertiesDialog
 
         dlg = MapDisplayPropertiesDialog(
-            parent=self, mapframe=self, properties=self.mapWindowProperties
+            parent=self,
+            mapframe=self,
+            properties=self.mapWindowProperties,
+            sbmanager=self.statusbarManager,
         )
         dlg.CenterOnParent()
         dlg.Show()
