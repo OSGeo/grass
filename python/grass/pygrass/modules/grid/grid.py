@@ -14,6 +14,7 @@ import subprocess as sub
 import shutil as sht
 
 from grass.script.setup import write_gisrc
+from grass.script import append_node_pid, legalize_vector_name
 
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
@@ -434,6 +435,11 @@ class GridModule(object):
     ...                  elevation='elevation',
     ...                  slope='slope', aspect='aspect', overwrite=True)
     >>> grd.run()
+
+    Temporary mapsets created start with a generated prefix which is unique for each
+    process (includes PID and node name). If more instances of this class are used in
+    parallel from one process with the same module, a custom *mapset_prefix* needs to
+    be provided.
     """
 
     def __init__(
@@ -490,9 +496,10 @@ class GridModule(object):
             region=region, width=width, height=height, overlap=overlap
         )
         if mapset_prefix:
-            self.msetstr = mapset_prefix + "_%03d_%03d"
+            self.mapset_prefix = mapset_prefix
         else:
-            self.msetstr = cmd.replace(".", "") + "_%03d_%03d"
+            self.mapset_prefix = append_node_pid("grid_" + legalize_vector_name(cmd))
+        self.msetstr = self.mapset_prefix + "_%03d_%03d"
         self.inlist = None
         if split:
             self.split()
@@ -514,7 +521,7 @@ class GridModule(object):
                 self.n_mset.current()
             location = Location()
 
-        mapsets = location.mapsets(self.msetstr.split("_")[0] + "_*")
+        mapsets = location.mapsets(self.mapset_prefix + "_*")
         for mset in mapsets:
             Mapset(mset).delete()
         if self.n_mset and self.n_mset.is_current():
