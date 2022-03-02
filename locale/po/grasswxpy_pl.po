@@ -16333,16 +16333,16 @@ msgid "EPSG code:"
 msgstr "Kod EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "Proj.4 string (required):"
-msgstr "Ciąg Proj.4 (wymagane):"
+msgid "PROJ string (required):"
+msgstr "Ciąg PROJ (wymagane):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
 msgstr "Plik EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
-msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
-msgstr "Wczytaj kody EPSG (bądź cierpliwy), wpisz kod EPSG lub podaj bezpośrednio ciąg Proj.4"
+msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
+msgstr "Wczytaj kody EPSG (bądź cierpliwy), wpisz kod EPSG lub podaj bezpośrednio ciąg PROJ"
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"
