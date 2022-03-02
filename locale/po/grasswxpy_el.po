@@ -16197,16 +16197,16 @@ msgid "EPSG code:"
 msgstr "Κωδικός EPSG"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "Proj.4 string (required):"
-msgstr "Proj.4 ορισμός (απαιτείται)"
+msgid "PROJ string (required):"
+msgstr "PROJ ορισμός (απαιτείται)"
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
 msgstr "Αρχείο EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
-msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
-msgstr "Φόρτωση κωδικών EPSG (αναμείνατε), εισάγετε κωδικό EPSG ή απευθείας ορισμό Proj.4 "
+msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
+msgstr "Φόρτωση κωδικών EPSG (αναμείνατε), εισάγετε κωδικό EPSG ή απευθείας ορισμό PROJ "
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"

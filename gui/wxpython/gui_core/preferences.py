@@ -1701,7 +1701,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         # proj
         row += 1
         label = StaticText(
-            parent=panel, id=wx.ID_ANY, label=_("Proj.4 string (required):")
+            parent=panel, id=wx.ID_ANY, label=_("PROJ string (required):")
         )
         projString = TextCtrl(
             parent=panel,
@@ -1742,7 +1742,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             id=wx.ID_ANY,
             label=_(
                 "Load EPSG codes (be patient), enter EPSG code or "
-                "insert Proj.4 string directly."
+                "insert PROJ string directly."
             ),
         )
         gridSizer.Add(note, span=(1, 2), pos=(row, 0))
