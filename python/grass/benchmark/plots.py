@@ -73,6 +73,7 @@ def nprocs_plot(results, filename=None, title=None):
         axes.set(xticks=sorted(x_ticks))
     else:
         from matplotlib.ticker import MaxNLocator
+
         axes.xaxis.set_major_locator(MaxNLocator(integer=True))
     plt.xlabel("Number of processing elements (cores, threads, processes)")
     plt.ylabel("Time [s]")
