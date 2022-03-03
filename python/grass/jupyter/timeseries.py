@@ -20,6 +20,7 @@ from .display import GrassRenderer
 
 
 def fill_none_values(names):
+    """Replace `None` values in array with previous item"""
     for i, name in enumerate(names):
         if name == "None":
             names[i] = names[i - 1]
@@ -154,6 +155,10 @@ class TimeSeries:
         }
 
     def set_background_color(self, color):
+        """Set background color of images.
+
+        Passed to d.rast and d.erase. Either a standard color name or R:G:B triplet.
+        Default is White."""
         self._bgcolor = color
         self._layers_rendered = False
 
@@ -167,6 +172,7 @@ class TimeSeries:
         self._layers_rendered = False
 
     def render_blank_layer(self, filename):
+        """Write blank image for gaps in time series"""
         # Render image
         img = GrassRenderer(filename=filename)
         if self._element_type == "strds":
