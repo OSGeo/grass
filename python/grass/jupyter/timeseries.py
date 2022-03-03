@@ -107,13 +107,13 @@ class TimeSeries:
         :param str overlay: name of vector to add to visuals
         """
         self.timeseries = timeseries
-        self._legend = False
+        self._legend = {"legend": False, "kwargs": {}}
         self._element_type = (
             element_type  # element type, borrowing convention from tgis
         )
         self._fill_gaps = fill_gaps
         self._render_list = []
-        self._legend_kwargs = None
+        #self._legend_kwargs = None
         self._date_name_dict = {}
         self._layers_rendered = False
         self._bgcolor = "white"
@@ -166,8 +166,8 @@ class TimeSeries:
         """Wrapper for d.legend. Passes keyword arguments to d.legend in render_layers
         method.
         """
-        self._legend = True
-        self._legend_kwargs = kwargs
+        self._legend["legend"] = True
+        self._legend["kwargs"] = kwargs
         # If d_legend has been called, we need to re-render layers
         self._layers_rendered = False
 
@@ -183,14 +183,14 @@ class TimeSeries:
         # Ensures image is the same size/background as other images in time series
         img.d_erase(bgcolor=self._bgcolor)
 
-        if self._legend:
+        if self._legend["legend"]:
             info = gs.parse_command("t.info", input=self.timeseries, flags="g")
             min_min = info["min_min"]
             max_max = info["max_max"]
             img.d_legend(
                 raster=self._render_list[0],
                 range=f"{min_min}, {max_max}",
-                **self._legend_kwargs,
+                **self._legend["kwargs"],
             )
 
     def render_layers(self):
@@ -222,14 +222,14 @@ class TimeSeries:
                 if self.overlay:
                     img.d_vect(map=self.overlay)
                 # Add legend if called
-                if self._legend:
+                if self._legend["legend"]:
                     info = gs.parse_command("t.info", input=self.timeseries, flags="g")
                     min_min = info["min_min"]
                     max_max = info["max_max"]
                     img.d_legend(
                         raster=name,
                         range=f"{min_min}, {max_max}",
-                        **self._legend_kwargs,
+                        **self._legend["kwargs"],
                     )
 
         self._layers_rendered = True
