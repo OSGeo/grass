@@ -113,7 +113,6 @@ class TimeSeries:
         )
         self._fill_gaps = fill_gaps
         self._render_list = []
-        #self._legend_kwargs = None
         self._date_name_dict = {}
         self._layers_rendered = False
         self._bgcolor = "white"
