@@ -19,23 +19,32 @@ import grass.script as gs
 from .display import GrassRenderer
 
 
-def collect_lyr_dates(timeseries, etype):
+def fill_none_values(names):
+    for i, name in enumerate(names):
+        if name == "None":
+            names[i] = names[i - 1]
+        else:
+            pass
+    return names
+
+
+def collect_layers(timeseries, element_type, fill_gaps):
     """Create lists of layer names and start_times for a
     space-time raster or vector dataset.
 
-    For datasets with variable timesteps, makes step regular with
+    For datasets with variable time steps, makes step regular with
     "gran" method for t.rast.list or t.vect.list then fills in
-    missing layers with previous timestep layer. If first time step
-    is missing, uses the first available layer.
+    missing layers with previous time step layer.
 
     :param str timeseries: name of space-time dataset
-    :param str etype: element type, "stvds" or "strds"
+    :param str element_type: element type, "stvds" or "strds"
+    :param bool fill_gaps: fill empty time steps with data from previous step
     """
-    if etype == "strds":
+    if element_type == "strds":
         rows = gs.read_command(
             "t.rast.list", method="gran", input=timeseries
         ).splitlines()
-    elif etype == "stvds":
+    elif element_type == "stvds":
         rows = gs.read_command(
             "t.vect.list", method="gran", input=timeseries
         ).splitlines()
@@ -57,20 +66,11 @@ def collect_lyr_dates(timeseries, etype):
         if column[0] == "start_time":
             dates = column[1:]
 
-    # For variable timestep datasets, fill in None values with
-    # previous time step value. If first time step is missing data,
-    # use the next non-None value
-    for i, name in enumerate(names):
-        if name == "None":
-            if i > 0:
-                names[i] = names[i - 1]
-            else:
-                search_count = 1
-                while name[i + search_count] == "None":
-                    search_count += 1
-                names[i] = name[i + 1]
-        else:
-            pass
+    # For datasets with variable time steps, fill in gaps with
+    # previous time step value, if fill_gaps==True.
+    if fill_gaps:
+        names = fill_none_values(names)
+
     return names, dates
 
 
@@ -81,7 +81,6 @@ class TimeSeries:
     Basic usage::
     >>> img = TimeSeries("series_name")
     >>> img.d_legend() #Add legend
-    >>> img.render_layers() #Render Layers
     >>> img.time_slider() #Create TimeSlider
     >>> img.animate()
 
@@ -89,24 +88,36 @@ class TimeSeries:
     change at anytime.
     """
 
-    def __init__(self, timeseries, etype="strds", basemap=None, overlay=None):
+    def __init__(
+        self,
+        timeseries,
+        element_type="strds",
+        fill_gaps=False,
+        basemap=None,
+        overlay=None,
+    ):
         """Creates an instance of the TimeSeries visualizations class.
 
         :param str timeseries: name of space-time dataset
-        :param str etype: element type, strds (space-time raster dataset)
+        :param str element_type: element type, strds (space-time raster dataset)
                           or stvds (space-time vector dataset)
+        :param bool fill_gaps: fill empty time steps with data from previous step
         :param str basemap: name of raster to use as basemap/background for visuals
         :param str overlay: name of vector to add to visuals
         """
         self.timeseries = timeseries
         self._legend = False
-        self._etype = etype  # element type, borrowing convention from tgis
-        self._renderlist = []
+        self._element_type = (
+            element_type  # element type, borrowing convention from tgis
+        )
+        self._fill_gaps = fill_gaps
+        self._render_list = []
         self._legend_kwargs = None
         self._date_name_dict = {}
-        self._render_check = False
+        self._layers_rendered = False
+        self._bgcolor = "white"
 
-        # Currently does not support multiple basemaps or overlays
+        # Currently, this does not support multiple basemaps or overlays
         # (i.e. if you wanted to have two vectors rendered, like
         # roads and streams, this isn't possible - you can only have one
         # We should be put a better method here someday
@@ -135,19 +146,46 @@ class TimeSeries:
         weakref.finalize(self, cleanup, self._tmpdir)
 
         # create list of layers to render and date/times
-        self._renderlist, self._dates = collect_lyr_dates(self.timeseries, self._etype)
+        self._render_list, self._dates = collect_layers(
+            self.timeseries, self._element_type, self._fill_gaps
+        )
         self._date_name_dict = {
-            self._dates[i]: self._renderlist[i] for i in range(len(self._dates))
+            self._dates[i]: self._render_list[i] for i in range(len(self._dates))
         }
+
+    def set_background_color(self, color):
+        self._bgcolor = color
+        self._layers_rendered = False
 
     def d_legend(self, **kwargs):
         """Wrapper for d.legend. Passes keyword arguments to d.legend in render_layers
-        ethod.
+        method.
         """
         self._legend = True
         self._legend_kwargs = kwargs
         # If d_legend has been called, we need to re-render layers
-        self._render_check = False
+        self._layers_rendered = False
+
+    def render_blank_layer(self, filename):
+        # Render image
+        img = GrassRenderer(filename=filename)
+        if self._element_type == "strds":
+            img.d_rast(map=self._render_list[0])
+        elif self._element_type == "stvds":
+            img.d_vect(map=self._render_list[0])
+        # Then clear the contents
+        # Ensures image is the same size/background as other images in time series
+        img.d_erase(bgcolor=self._bgcolor)
+
+        if self._legend:
+            info = gs.parse_command("t.info", input=self.timeseries, flags="g")
+            min_min = info["min_min"]
+            max_max = info["max_max"]
+            img.d_legend(
+                raster=self._render_list[0],
+                range=f"{min_min}, {max_max}",
+                **self._legend_kwargs,
+            )
 
     def render_layers(self):
         """Renders map for each time-step in space-time dataset and save to PNG
@@ -158,30 +196,37 @@ class TimeSeries:
         Can be time-consuming to run with large space-time datasets.
         """
 
-        for name in self._renderlist:
-            # Create image file
-            filename = os.path.join(self._tmpdir.name, f"{name}.png")
+        for name in self._render_list:
+            if name == "None":
+                filename = os.path.join(self._tmpdir.name, "None.png")
+                self.render_blank_layer(filename)
+            else:
+                # Create image file
+                filename = os.path.join(self._tmpdir.name, f"{name}.png")
 
-            # Render image
-            img = GrassRenderer(filename=filename)
-            if self.basemap:
-                img.d_rast(map=self.basemap)
-            if self._etype == "strds":
-                img.d_rast(map=name)
-            elif self._etype == "stvds":
-                img.d_vect(map=name)
-            if self.overlay:
-                img.d_vect(map=self.overlay)
-            # Add legend if called
-            if self._legend:
-                info = gs.parse_command("t.info", input="precip_sum", flags="g")
-                min_min = info["min_min"]
-                max_max = info["max_max"]
-                img.d_legend(
-                    raster=name, range=f"{min_min}, {max_max}", **self._legend_kwargs
-                )
+                # Render image
+                img = GrassRenderer(filename=filename)
+                img.d_erase(bgcolor=self._bgcolor)
+                if self.basemap:
+                    img.d_rast(map=self.basemap, bgcolor=self._bgcolor)
+                if self._element_type == "strds":
+                    img.d_rast(map=name, bgcolor=self._bgcolor)
+                elif self._element_type == "stvds":
+                    img.d_vect(map=name)
+                if self.overlay:
+                    img.d_vect(map=self.overlay)
+                # Add legend if called
+                if self._legend:
+                    info = gs.parse_command("t.info", input=self.timeseries, flags="g")
+                    min_min = info["min_min"]
+                    max_max = info["max_max"]
+                    img.d_legend(
+                        raster=name,
+                        range=f"{min_min}, {max_max}",
+                        **self._legend_kwargs,
+                    )
 
-        self._render_check = True
+        self._layers_rendered = True
 
     def time_slider(self, slider_width="60%"):
         """
@@ -195,7 +240,7 @@ class TimeSeries:
         from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
-        if not self._render_check:
+        if not self._layers_rendered:
             self.render_layers()
 
         # Datetime selection slider
@@ -250,18 +295,19 @@ class TimeSeries:
         import IPython.display  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
-        if not self._render_check:
+        if not self._layers_rendered:
             self.render_layers()
 
         # filepath
         if not filename:
             filename = os.path.join(self._tmpdir.name, "image.gif")
 
-        imgs = []
+        images = []
         for date in self._dates:
             name = self._date_name_dict[date]
             img_path = os.path.join(self._tmpdir.name, f"{name}.png")
             img = PIL.Image.open(img_path)
+            img = img.convert("RGBA", dither=None)
             draw = PIL.ImageDraw.Draw(img)
             if label:
                 draw.text(
@@ -270,12 +316,12 @@ class TimeSeries:
                     fill=text_color,
                     font=PIL.ImageFont.truetype(font, text_size),
                 )
-            imgs.append(img)
+            images.append(img)
 
-        imgs[0].save(
+        images[0].save(
             fp=filename,
             format="GIF",
-            append_images=imgs[1:],
+            append_images=images[1:],
             save_all=True,
             duration=duration,
             loop=0,
