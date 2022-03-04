@@ -954,7 +954,6 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
     const char *mapset;
     struct G_3dview v;
     int ret = -1;
-    float pt[3];
 
     mapset = G_find_file2("3d.view", vname, "");
 
@@ -974,6 +973,7 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
 
 	/* Set To and FROM positions */
 	/* TO */
+        float pt[3];
 	pt[0] = (v.from_to[TO][X] - w->west) - w->ew_res / 2.;
 	pt[1] = (v.from_to[TO][Y] - w->south) - w->ns_res / 2.;
 	pt[2] = v.from_to[TO][Z];
