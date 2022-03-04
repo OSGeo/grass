@@ -368,7 +368,6 @@ int BM_file_write_sparse(FILE * fp, struct BM *map)
     char c;
     int i, y;
     struct BMlink *p;
-    int cnt;
 
     c = BM_MAGIC;
     fwrite(&c, sizeof(char), sizeof(char), fp);
@@ -385,7 +384,7 @@ int BM_file_write_sparse(FILE * fp, struct BM *map)
     for (y = 0; y < map->rows; y++) {
 	/* first count number of links */
 	p = ((struct BMlink **)(map->data))[y];
-	cnt = 0;
+	int cnt = 0;
 	while (p != NULL) {
 	    cnt++;
 	    p = p->next;
