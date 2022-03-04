@@ -9,6 +9,10 @@ import grass.script as gs
 import grass.script.setup as grass_setup
 
 
+# All init tests change the global environment, but when it really matters,
+# we use a separate process.
+# Ideally, the functions would support env parameter and the test
+# would mostly use that.
 def run_in_subprocess(function):
     """Run function in a separate process
 
