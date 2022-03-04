@@ -549,7 +549,7 @@ unsigned long solve_in_memory(AMI_STREAM < AEvent > *eventList,
 			      AMI_STREAM < AEvent > *enterBndEvents,
 			      double start_angle, double end_angle,
 			      IOVisibilityGrid * visgrid, GridHeader *hd,
-			      Viewpoint * vp, ViewOptions viewOptions)
+			      Viewpoint * vp, const ViewOptions &viewOptions)
 {
 
     assert(eventList && visgrid && vp);

@@ -84,7 +84,7 @@ typedef struct rbtree_
 
 
 
-RBTree *create_tree(TreeValue tv);
+RBTree *create_tree(const TreeValue &tv);
 void delete_tree(RBTree * t);
 void destroy_sub_tree(TreeNode * node);
 void insert_into(RBTree * rbt, const TreeValue &value);
