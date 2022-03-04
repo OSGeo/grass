@@ -131,7 +131,6 @@ int G_make_location_epsg(const char *location_name,
 			 const struct Key_Value *proj_epsg)
 {
     int ret;
-    char path[GPATH_MAX];
 
     ret = G_make_location(location_name, wind, proj_info, proj_units);
 
@@ -140,6 +139,7 @@ int G_make_location_epsg(const char *location_name,
 
     /* Write out the PROJ_EPSG if available. */
     if (proj_epsg != NULL) {
+        char path[GPATH_MAX];
 	G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
 	G_write_key_value_file(path, proj_epsg);
     }
