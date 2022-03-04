@@ -51,8 +51,11 @@ struct BM *BM_create_sparse(int x, int y)
     map->bytes = (x + 7) / 8;
 
     if (NULL == (map->data = (unsigned char *)
-		 malloc(sizeof(struct BMlink *) * y)))
+		 malloc(sizeof(struct BMlink *) * y))) 
+    {
+        free(map);
 	return (NULL);
+    }
 
     map->rows = y;
     map->cols = x;
