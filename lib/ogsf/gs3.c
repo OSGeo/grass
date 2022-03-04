@@ -949,7 +949,7 @@ int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
    \return 1
  */
 int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
-		   struct Cell_head *w, geosurf * defsurf)
+		   struct Cell_head *w, const geosurf * defsurf)
 {
     const char *mapset;
     struct G_3dview v;
