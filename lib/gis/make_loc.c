@@ -462,7 +462,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 
 	    if (!l_2)
 		return -11;
-	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+	    if (fabs(atof(l_1) - atof(l_2)) > 0.000001) {
 		return -11;
 	    }
 	}
@@ -480,7 +480,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 
 	    if (!l_2)
 		return -11;
-	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+	    if (fabs(atof(l_1) - atof(l_2)) > 0.000001) {
 		return -11;
 	    }
 	}
