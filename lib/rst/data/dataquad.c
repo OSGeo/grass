@@ -102,12 +102,12 @@ int quad_compare(struct triple *point, struct quaddata *data)
     int cond1, cond2, cond3, cond4, rows, cols;
     double ew_res, ns_res;
 
+    if (data == NULL)
+	return -1;
+    
     ew_res = (data->xmax - data->x_orig) / data->n_cols;
     ns_res = (data->ymax - data->y_orig) / data->n_rows;
 
-
-    if (data == NULL)
-	return -1;
     if (data->n_rows % 2 == 0) {
 	rows = data->n_rows / 2;
     }
