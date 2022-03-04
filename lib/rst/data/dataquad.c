@@ -144,18 +144,16 @@ int quad_compare(struct triple *point, struct quaddata *data)
  */
 int quad_add_data(struct triple *point, struct quaddata *data, double dmin)
 {
-    int n, i, cond;
-    double xx, yy, r;
 
-    cond = 1;
+    int cond = 1;
     if (data == NULL) {
 	fprintf(stderr, "add_data: data is NULL \n");
 	return -5;
     }
-    for (i = 0; i < data->n_points; i++) {
-	xx = data->points[i].x - point->x;
-	yy = data->points[i].y - point->y;
-	r = xx * xx + yy * yy;
+    for (int i = 0; i < data->n_points; i++) {
+	double xx = data->points[i].x - point->x;
+	double yy = data->points[i].y - point->y;
+	double r = xx * xx + yy * yy;
 	if (r <= dmin) {
 	    cond = 0;
 	    break;
@@ -163,7 +161,7 @@ int quad_add_data(struct triple *point, struct quaddata *data, double dmin)
     }
 
     if (cond) {
-	n = (data->n_points)++;
+	int n = (data->n_points)++;
 	data->points[n].x = point->x;
 	data->points[n].y = point->y;
 	data->points[n].z = point->z;
