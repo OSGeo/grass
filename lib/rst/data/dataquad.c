@@ -79,8 +79,10 @@ struct quaddata *quad_data_new(double x_or, double y_or, double xmax,
     data->n_points = n_points;
     data->points =
 	(struct triple *)malloc(sizeof(struct triple) * (kmax + 1));
-    if (!data->points)
+    if (!data->points) {
+        free(data);
 	return NULL;
+    }
     for (i = 0; i <= kmax; i++) {
 	data->points[i].x = 0.;
 	data->points[i].y = 0.;
