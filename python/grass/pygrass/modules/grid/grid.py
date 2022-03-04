@@ -22,7 +22,7 @@ from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
 from grass.pygrass.modules.grid.split import split_region_tiles
-from grass.pygrass.modules.grid.patch import rpatch_map
+from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_no_overlap
 
 
 def select(parms, ptype):
@@ -665,16 +665,28 @@ class GridModule(object):
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == "raster" and otm.value:
-                rpatch_map(
-                    otm.value,
-                    self.mset.name,
-                    self.msetstr,
-                    bboxes,
-                    self.module.flags.overwrite,
-                    self.start_row,
-                    self.start_col,
-                    self.out_prefix,
-                )
+                if self.overlap:
+                    rpatch_map(
+                        otm.value,
+                        self.mset.name,
+                        self.msetstr,
+                        bboxes,
+                        self.module.flags.overwrite,
+                        self.start_row,
+                        self.start_col,
+                        self.out_prefix,
+                    )
+                else:
+                    rpatch_map_no_overlap(
+                        otm.value,
+                        self.msetstr,
+                        bboxes,
+                        self.module.flags.overwrite,
+                        self.start_row,
+                        self.start_col,
+                        self.out_prefix,
+                        self.processes,
+                    )
                 noutputs += 1
         if noutputs < 1:
             msg = "No raster output option defined for <{}>".format(self.module.name)
