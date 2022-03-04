@@ -24,7 +24,7 @@ static int dcmp(const void *aa, const void *bb)
 
 static double mode(double *value, int argc)
 {
-    double mode_v;
+    double mode_v = 0.0;
     int mode_n = 0;
     int i;
 
