@@ -1087,7 +1087,8 @@ int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
 int Gs_update_attrange(geosurf * gs, int desc)
 {
     size_t size;
-    float min, max;
+    float min = 0.0;
+    float max = 0.0;
     typbuff *tb;
     struct BM *nm;
     int found;
