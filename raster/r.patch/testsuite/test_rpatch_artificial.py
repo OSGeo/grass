@@ -128,6 +128,7 @@ class TestSmallDataNoOverlap(TestCase):
     cell_1 = "rpatch_small_test_cell_1"
     cell_2 = "rpatch_small_test_cell_2"
     cell_patched = "rpatch_small_test_cell_patched"
+    cell_patched_threaded = "rpatch_small_test_cell_patched_threaded"
     cell_patched_ref = "rpatch_small_test_cell_patched_ref"
 
     @classmethod
@@ -158,7 +159,14 @@ class TestSmallDataNoOverlap(TestCase):
         self.assertModule(
             "r.patch", input=(self.cell_1, self.cell_2), output=self.cell_patched
         )
+        self.assertModule(
+            "r.patch",
+            input=(self.cell_1, self.cell_2),
+            nprocs=8,
+            output=self.cell_patched_threaded,
+        )
         self.to_remove.append(self.cell_patched)
+        self.to_remove.append(self.cell_patched_threaded)
         self.runModule(
             "r.in.ascii",
             input="-",
@@ -168,6 +176,9 @@ class TestSmallDataNoOverlap(TestCase):
         self.to_remove.append(self.cell_patched_ref)
         self.assertRastersNoDifference(
             self.cell_patched, self.cell_patched_ref, precision=0
+        )
+        self.assertRastersNoDifference(
+            self.cell_patched_threaded, self.cell_patched_ref, precision=0
         )
 
 
@@ -180,7 +191,9 @@ class TestSmallDataOverlap(TestCase):
     cell_ab = "rpatch_small_test_cell_ab_reference"
     cell_ba = "rpatch_small_test_cell_ba_reference"
     cell_ab_result = "rpatch_small_test_cell_ab_result"
+    cell_ab_result_threaded = "rpatch_small_test_cell_ab_result_threaded"
     cell_ba_result = "rpatch_small_test_cell_ba_result"
+    cell_ba_result_threaded = "rpatch_small_test_cell_ba_result_threaded"
 
     @classmethod
     def setUpClass(cls):
@@ -221,9 +234,21 @@ class TestSmallDataOverlap(TestCase):
             output=self.cell_ab_result,
             flags="z",
         )
+        self.assertModule(
+            "r.patch",
+            input=(self.cell_a, self.cell_b),
+            output=self.cell_ab_result_threaded,
+            flags="z",
+            nprocs=8,
+        )
         self.assertRasterExists(self.cell_ab_result)
+        self.assertRasterExists(self.cell_ab_result_threaded)
         self.to_remove.append(self.cell_ab_result)
+        self.to_remove.append(self.cell_ab_result_threaded)
         self.assertRastersNoDifference(self.cell_ab_result, self.cell_ab, precision=0)
+        self.assertRastersNoDifference(
+            self.cell_ab_result_threaded, self.cell_ab, precision=0
+        )
 
     def test_patch_oder_ba_cell(self):
         """Test patching two overlapping CELL raster maps (watching order)"""
@@ -233,9 +258,21 @@ class TestSmallDataOverlap(TestCase):
             output=self.cell_ba_result,
             flags="z",
         )
+        self.assertModule(
+            "r.patch",
+            input=(self.cell_b, self.cell_a),
+            flags="z",
+            output=self.cell_ba_result_threaded,
+            nprocs=8,
+        )
         self.assertRasterExists(self.cell_ba_result)
+        self.assertRasterExists(self.cell_ba_result_threaded)
         self.to_remove.append(self.cell_ba_result)
+        self.to_remove.append(self.cell_ba_result_threaded)
         self.assertRastersNoDifference(self.cell_ba_result, self.cell_ba, precision=0)
+        self.assertRastersNoDifference(
+            self.cell_ba_result_threaded, self.cell_ba, precision=0
+        )
 
 
 if __name__ == "__main__":

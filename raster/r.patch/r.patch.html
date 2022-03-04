@@ -161,6 +161,23 @@ using the option <b>input</b>. In that case,
 <em><a href="r.series.html">r.series</a></em> can be used instead of
 <em>r.patch</em>.
 
+<h3>PERFORMANCE</h3>
+<p>By specifying the number of parallel processes with <b>nprocs</b> option,
+<em>r.patch</em> can run significantly faster, see benchmarks below.
+
+<div align="center" style="margin: 10px">
+     <img src="r_patch_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <img src="r_patch_benchmark_memory.png" alt="benchmark for memory size" border="0">
+     <br>
+     <i>Figure: Benchmark on the left shows execution time for different
+     number of cells, benchmark on the right shows execution time
+     for different memory size for 5000x5000 raster. See benchmark scripts in source code.
+     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
+     </div>
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
+
 <h2>EXAMPLES</h2>
 
 <h3>Example with three maps</h3>
@@ -209,4 +226,6 @@ r.patch input=$MAPS output=maps_mosaic
 Michael Shapiro, 
 U.S. Army Construction Engineering Research Laboratory
 <br>
--z flag and performance improvement by Huidae Cho
+Huidae Cho (-z flag and performance improvement)
+<br>
+Aaron Saw Min Sern (OpenMP support).
