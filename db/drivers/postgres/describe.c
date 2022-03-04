@@ -203,6 +203,13 @@ int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
     case PG_TYPE_VARCHAR:
 	*sqltype = DB_SQL_TYPE_CHARACTER;
 	*size = PQfmod(res, col) - 4;	/* Looks strange but works, something better? */
+	/* special case for character varying without length modifier:
+	 * treat as text, do not truncate */
+	if (*size < 0) {
+	    *gpgtype = PG_TYPE_TEXT;
+	    *sqltype = DB_SQL_TYPE_TEXT;
+	    *size = 1000;
+	}
 	break;
 
     case PG_TYPE_TEXT:
