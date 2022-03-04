@@ -436,7 +436,6 @@ int G_compare_projections(const struct Key_Value *proj_info1,
     /*      Do they have the same center latitude?                          */
     /* -------------------------------------------------------------------- */
 
-	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_0", proj_info1);
 	l_2 = G_find_key_value("lat_0", proj_info2);
 
@@ -450,7 +449,6 @@ int G_compare_projections(const struct Key_Value *proj_info1,
     /*      Do they have the same standard parallels?                       */
     /* -------------------------------------------------------------------- */
 
-	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_1", proj_info1);
 	l_2 = G_find_key_value("lat_1", proj_info2);
 
@@ -469,7 +467,6 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 	    }
 	}
 
-	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_2", proj_info1);
 	l_2 = G_find_key_value("lat_2", proj_info2);
 
