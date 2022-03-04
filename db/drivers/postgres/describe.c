@@ -131,9 +131,10 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
 		       "some data may be damaged"), fname);
 
 	if (gpgtype == PG_TYPE_VARCHAR && fsize < 0) {
-	    G_warning(_("Column '%s' : type character varying is stored as varchar(250) "
-		       "some data may be lost"), fname);
-	    fsize = 250;
+	    /* character varying without length modifier: treat as text */
+	    gpgtype = PG_TYPE_TEXT;
+	    sqltype = DB_SQL_TYPE_TEXT;
+	    fsize = 1000;
 	}
 
 	if (gpgtype == PG_TYPE_BOOL)
@@ -203,13 +204,6 @@ int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
     case PG_TYPE_VARCHAR:
 	*sqltype = DB_SQL_TYPE_CHARACTER;
 	*size = PQfmod(res, col) - 4;	/* Looks strange but works, something better? */
-	/* special case for character varying without length modifier:
-	 * treat as text, do not truncate */
-	if (*size < 0) {
-	    *gpgtype = PG_TYPE_TEXT;
-	    *sqltype = DB_SQL_TYPE_TEXT;
-	    *size = 1000;
-	}
 	break;
 
     case PG_TYPE_TEXT:
