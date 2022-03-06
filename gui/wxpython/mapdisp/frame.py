@@ -451,7 +451,8 @@ class MapPanel(SingleMapPanel):
         self.statusbarManager.DisableStatusbarItemsByClass(
             self.statusbarItemsDisabledInNviz
         )
-        self.statusbarManager.SetMode(0)
+        self.statusbarManager.SetModeWithUpdate(0)
+        self.mapWindowProperties.sbItem = 0
 
         # erase map window
         self.MapWindow.EraseMap()
@@ -549,11 +550,13 @@ class MapPanel(SingleMapPanel):
 
         # update status bar
         self.statusbarManager.disabledItems = {}
-        self.statusbarManager.SetMode(
+        self.statusbarManager.SetModeWithUpdate(
             UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
         )
+        self.mapWindowProperties.sbItem = UserSettings.Get(
+            group="display", key="statusbarMode", subkey="selection"
+        )
         self.SetStatusText(_("Please wait, unloading data..."), 0)
-        self.statusbarManager.Update()
 
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
@@ -1562,8 +1565,7 @@ class MapPanel(SingleMapPanel):
         """Set properties of map display window"""
         self.mapWindowProperties.autoRender = render
         if self.statusbarManager:
-            self.statusbarManager.SetMode(mode)
-            self.StatusbarUpdate()
+            self.statusbarManager.SetModeWithUpdate(mode)
         self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent

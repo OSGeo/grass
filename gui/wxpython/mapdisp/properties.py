@@ -287,7 +287,9 @@ class RBShowInStatusbar(PropertyItem):
         self.name = "showInStatusbar"
         self.statusbarManager = sbmanager
 
-        choices = self.statusbarManager.GetItemLabels()
+        choices = self.statusbarManager.GetItemLabels(
+            self.statusbarManager.statusbarItems
+        )
         self.widget = wx.RadioBox(
             parent=parent,
             id=wx.ID_ANY,
@@ -296,7 +298,6 @@ class RBShowInStatusbar(PropertyItem):
             majorDimension=1,
             style=wx.RA_SPECIFY_COLS,
         )
-        self._setValue(self.statusbarManager.GetMode())
         self._setValue(self.mapWindowProperty)
         self._disableItems()
 
