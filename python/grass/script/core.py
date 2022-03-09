@@ -534,7 +534,7 @@ def run_command(*args, **kwargs):
             stdout = _make_unicode(stdout, encoding)
             stderr = _make_unicode(stderr, encoding)
         returncode = ps.poll()
-        if returncode:
+        if returncode and stderr:
             sys.stderr.write(stderr)
     else:
         returncode = ps.wait()
@@ -601,7 +601,9 @@ def read_command(*args, **kwargs):
         stdout = _make_unicode(stdout, encoding)
         stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
-    if _capture_stderr and returncode:
+    if returncode and _capture_stderr and stderr:
+        # Print only when we are capturing it and there was some output.
+        # (User can request ignoring the subprocess stderr and then we get only None.)
         sys.stderr.write(stderr)
     return handle_errors(returncode, stdout, args, kwargs)
 
@@ -689,7 +691,7 @@ def write_command(*args, **kwargs):
         unused = _make_unicode(unused, encoding)
         stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
-    if _capture_stderr and returncode:
+    if returncode and _capture_stderr and stderr:
         sys.stderr.write(stderr)
     return handle_errors(returncode, None, args, kwargs)
 
@@ -854,8 +856,8 @@ def set_capture_stderr(capture=True):
 
     .. note::
 
-        This is advantages for interactive shells such as the one in GUI
-        and interactive notebooks such as Jupyer Notebook.
+        This is advantageous for interactive shells such as the one in GUI
+        and interactive notebooks such as Jupyter Notebook.
 
     The capturing can be applied only in certain cases, for example
     in case of run_command() it is applied because run_command() nor
