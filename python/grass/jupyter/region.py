@@ -215,3 +215,50 @@ class RegionManagerFor3D:
                 env["GRASS_REGION"] = gs.region_env(raster=elev, env=env)
             except CalledModuleError:
                 return
+
+
+class RegionManagerForTimeSeries:
+    """Region manager for TimeSeries visualizations."""
+
+    def __init__(self, use_region, saved_region, env):
+        """Manages region during rendering.
+
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
+        :param env: environment for rendering
+        """
+        self._env = env
+        self._use_region = use_region
+        self._saved_region = saved_region
+
+    def set_region_from_timeseries(self, timeseries):
+        """Sets computational region for rendering.
+
+        This function sets the computation region from the extent of
+        a space-time dataset by using its bounding box and resolution.
+
+        If user specified the name of saved region during object's initialization,
+        the provided region is used. If it's not specified
+        and use_region=True, current region is used.
+        """
+        if self._saved_region:
+            self._env["GRASS_REGION"] = gs.region_env(
+                region=self._saved_region, env=self._env
+            )
+            return
+        if self._use_region:
+            # use current
+            return
+        # Get extent, resolution from space time dataset
+        info = gs.parse_command("t.info", input=timeseries, flags="g", env=self._env)
+        # Set grass region from extent
+        self._env["GRASS_REGION"] = gs.region_env(
+            n=info["north"],
+            s=info["south"],
+            e=info["east"],
+            w=info["west"],
+            nsres=info["nsres_min"],
+            ewres=info["ewres_min"],
+        )

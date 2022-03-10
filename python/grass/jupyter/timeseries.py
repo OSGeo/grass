@@ -15,8 +15,11 @@
 import tempfile
 import os
 import weakref
+import shutil
 import grass.script as gs
+
 from .display import GrassRenderer
+from .region import RegionManagerForTimeSeries
 
 
 def fill_none_values(names):
@@ -75,6 +78,34 @@ def collect_layers(timeseries, element_type, fill_gaps):
     return names, dates
 
 
+class MethodCallCollector:
+    """Records lists of GRASS modules calls to hand to GrassRenderer.run().
+
+    Used for base layers and overlays in TimeSeries visualizations."""
+
+    def __init__(self):
+        """Create list of GRASS display module calls"""
+        self.calls = []
+
+    def __getattr__(self, name):
+        """Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """
+        # Check to make sure format is correct
+        if not name.startswith("d_"):
+            raise AttributeError(_("Module must begin with 'd_'"))
+        # Reformat string
+        grass_module = name.replace("_", ".")
+        # Assert module exists
+        if not shutil.which(grass_module):
+            raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
+
+        def wrapper(**kwargs):
+            self.calls.append((grass_module, kwargs))
+
+        return wrapper
+
+
 class TimeSeries:
     """Creates visualizations of time-space raster and vector datasets in Jupyter
     Notebooks.
@@ -88,14 +119,17 @@ class TimeSeries:
     This class of grass.jupyter is experimental and under development. The API can
     change at anytime.
     """
+    # pylint: disable=too-many-instance-attributes
+    # Need more attributes to build timeseries visuals
 
     def __init__(
         self,
         timeseries,
         element_type="strds",
         fill_gaps=False,
-        basemap=None,
-        overlay=None,
+        env=None,
+        use_region=False,
+        saved_region=None,
     ):
         """Creates an instance of the TimeSeries visualizations class.
 
@@ -104,25 +138,36 @@ class TimeSeries:
                           or stvds (space-time vector dataset)
         :param bool fill_gaps: fill empty time steps with data from previous step
         :param str basemap: name of raster to use as basemap/background for visuals
-        :param str overlay: name of vector to add to visuals
         """
-        self.timeseries = timeseries
-        self._legend = {"legend": False, "kwargs": {}}
-        self._element_type = (
-            element_type  # element type, borrowing convention from tgis
-        )
-        self._fill_gaps = fill_gaps
-        self._render_list = []
-        self._date_name_dict = {}
-        self._layers_rendered = False
-        self._bgcolor = "white"
 
-        # Currently, this does not support multiple basemaps or overlays
-        # (i.e. if you wanted to have two vectors rendered, like
-        # roads and streams, this isn't possible - you can only have one
-        # We should be put a better method here someday
-        self.basemap = basemap
-        self.overlay = overlay
+        # Copy Environment
+        if env:
+            self._env = env.copy()
+        else:
+            self._env = os.environ.copy()
+
+        self.timeseries = timeseries
+        self._element_type = element_type
+        self._fill_gaps = fill_gaps
+        self._bgcolor = "white"
+        self._legend = None
+        self._baselayers = MethodCallCollector()
+        self._overlays = MethodCallCollector()
+        self._layers_rendered = False
+
+        self._layers = None
+        self._dates = None
+
+        self._date_layer_dict = {}
+        self._date_filename_dict = {}
+
+        # create list of layers to render and date/times
+        self._layers, self._dates = collect_layers(
+            self.timeseries, self._element_type, self._fill_gaps
+        )
+        self._date_layer_dict = {
+            self._dates[i]: self._layers[i] for i in range(len(self._dates))
+        }
 
         # Check that map is time space dataset
         test = gs.read_command("t.list", where=f"name='{timeseries}'")
@@ -145,13 +190,21 @@ class TimeSeries:
 
         weakref.finalize(self, cleanup, self._tmpdir)
 
-        # create list of layers to render and date/times
-        self._render_list, self._dates = collect_layers(
-            self.timeseries, self._element_type, self._fill_gaps
-        )
-        self._date_name_dict = {
-            self._dates[i]: self._render_list[i] for i in range(len(self._dates))
-        }
+        # Handle Regions
+        region_manager = RegionManagerForTimeSeries(use_region, saved_region, self._env)
+        region_manager.set_region_from_timeseries(self.timeseries)
+
+    @property
+    def overlay(self):
+        """Add overlay to TimeSeries visualization"""
+        self._layers_rendered = False
+        return self._overlays
+
+    @property
+    def baselayer(self):
+        """Add base layer to TimeSeries visualization"""
+        self._layers_rendered = False
+        return self._baselayers
 
     def set_background_color(self, color):
         """Set background color of images.
@@ -165,34 +218,34 @@ class TimeSeries:
         """Wrapper for d.legend. Passes keyword arguments to d.legend in render_layers
         method.
         """
-        self._legend["legend"] = True
-        self._legend["kwargs"] = kwargs
+        self._legend = kwargs
         # If d_legend has been called, we need to re-render layers
         self._layers_rendered = False
 
-    def render_blank_layer(self, filename):
+    def _render_legend(self, img):
+        """Add legend to GrassRenderer instance"""
+        info = gs.parse_command(
+            "t.info", input=self.timeseries, flags="g", env=self._env
+        )
+        min_min = info["min_min"]
+        max_max = info["max_max"]
+        img.d_legend(
+            raster=self._layers[0],
+            range=f"{min_min}, {max_max}",
+            **self._legend,
+        )
+
+    def _render_blank_layer(self, filename):
         """Write blank image for gaps in time series"""
         # Render image
-        img = GrassRenderer(filename=filename)
-        if self._element_type == "strds":
-            img.d_rast(map=self._render_list[0])
-        elif self._element_type == "stvds":
-            img.d_vect(map=self._render_list[0])
-        # Then clear the contents
-        # Ensures image is the same size/background as other images in time series
+        img = GrassRenderer(filename=filename, use_region=True, env=self._env)
+        # Write blank image
         img.d_erase(bgcolor=self._bgcolor)
+        # Add legend if needed
+        if self._legend:
+            self._render_legend(img)
 
-        if self._legend["legend"]:
-            info = gs.parse_command("t.info", input=self.timeseries, flags="g")
-            min_min = info["min_min"]
-            max_max = info["max_max"]
-            img.d_legend(
-                raster=self._render_list[0],
-                range=f"{min_min}, {max_max}",
-                **self._legend["kwargs"],
-            )
-
-    def render_layers(self):
+    def render(self):
         """Renders map for each time-step in space-time dataset and save to PNG
         image in temporary directory.
 
@@ -201,36 +254,31 @@ class TimeSeries:
         Can be time-consuming to run with large space-time datasets.
         """
 
-        for name in self._render_list:
-            if name == "None":
+        # Render each layer
+        for date, layer in self._date_layer_dict.items():
+            if layer == "None":
                 filename = os.path.join(self._tmpdir.name, "None.png")
-                self.render_blank_layer(filename)
+                self._date_filename_dict[date] = filename
+                self._render_blank_layer(filename)
             else:
                 # Create image file
-                filename = os.path.join(self._tmpdir.name, f"{name}.png")
-
+                filename = os.path.join(self._tmpdir.name, f"{layer}.png")
+                self._date_filename_dict[date] = filename
                 # Render image
-                img = GrassRenderer(filename=filename)
+                img = GrassRenderer(filename=filename, use_region=True, env=self._env)
+                # Fill image background
                 img.d_erase(bgcolor=self._bgcolor)
-                if self.basemap:
-                    img.d_rast(map=self.basemap, bgcolor=self._bgcolor)
+                for grass_module, kwargs in self._baselayers.calls:
+                    img.run(grass_module, **kwargs)
                 if self._element_type == "strds":
-                    img.d_rast(map=name, bgcolor=self._bgcolor)
+                    img.d_rast(map=layer)
                 elif self._element_type == "stvds":
-                    img.d_vect(map=name)
-                if self.overlay:
-                    img.d_vect(map=self.overlay)
+                    img.d_vect(map=layer)
+                for grass_module, kwargs in self._overlays.calls:
+                    img.run(grass_module, **kwargs)
                 # Add legend if called
-                if self._legend["legend"]:
-                    info = gs.parse_command("t.info", input=self.timeseries, flags="g")
-                    min_min = info["min_min"]
-                    max_max = info["max_max"]
-                    img.d_legend(
-                        raster=name,
-                        range=f"{min_min}, {max_max}",
-                        **self._legend["kwargs"],
-                    )
-
+                if self._legend:
+                    self._render_legend(img)
         self._layers_rendered = True
 
     def time_slider(self, slider_width="60%"):
@@ -246,7 +294,7 @@ class TimeSeries:
 
         # Render images if they have not been already
         if not self._layers_rendered:
-            self.render_layers()
+            self.render()
 
         # Datetime selection slider
         slider = widgets.SelectionSlider(
@@ -262,9 +310,8 @@ class TimeSeries:
 
         # Display image associated with datetime
         def view_image(date):
-            # Look up raster name for date
-            name = self._date_name_dict[date]
-            filename = os.path.join(self._tmpdir.name, f"{name}.png")
+            # Look up layer name for date
+            filename = self._date_filename_dict[date]
             return Image(filename)
 
         # Return interact widget with image and slider
@@ -301,16 +348,15 @@ class TimeSeries:
 
         # Render images if they have not been already
         if not self._layers_rendered:
-            self.render_layers()
+            self.render()
 
-        # filepath
+        # filepath to output GIF
         if not filename:
             filename = os.path.join(self._tmpdir.name, "image.gif")
 
         images = []
         for date in self._dates:
-            name = self._date_name_dict[date]
-            img_path = os.path.join(self._tmpdir.name, f"{name}.png")
+            img_path = self._date_filename_dict[date]
             img = PIL.Image.open(img_path)
             img = img.convert("RGBA", dither=None)
             draw = PIL.ImageDraw.Draw(img)
