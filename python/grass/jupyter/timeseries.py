@@ -119,6 +119,7 @@ class TimeSeries:
     This class of grass.jupyter is experimental and under development. The API can
     change at anytime.
     """
+
     # pylint: disable=too-many-instance-attributes
     # Need more attributes to build timeseries visuals
 
