@@ -150,7 +150,7 @@ class MapPanel(SingleMapPanel):
                 sb.SbMapScale,
                 sb.SbGoTo,
             ]
-            self.statusbarItemsHiddenInNviz = (
+            self.statusbarItemsDisabledInNviz = (
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
             )
@@ -448,8 +448,8 @@ class MapPanel(SingleMapPanel):
         )
         # update status bar
 
-        self.statusbarManager.HideStatusbarChoiceItemsByClass(
-            self.statusbarItemsHiddenInNviz
+        self.statusbarManager.DisableStatusbarItemsByClass(
+            self.statusbarItemsDisabledInNviz
         )
         self.statusbarManager.SetMode(0)
 
@@ -548,13 +548,13 @@ class MapPanel(SingleMapPanel):
             pass
 
         # update status bar
-        self.statusbarManager.ShowStatusbarChoiceItemsByClass(
-            self.statusbarItemsHiddenInNviz
-        )
+        self.statusbarManager.disabledItems = {}
         self.statusbarManager.SetMode(
             UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
         )
         self.SetStatusText(_("Please wait, unloading data..."), 0)
+        self.statusbarManager.Update()
+
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
             _("Switching back to 2D view mode..."),

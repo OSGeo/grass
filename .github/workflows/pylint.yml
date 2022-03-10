@@ -20,7 +20,7 @@ jobs:
         include:
           - os: ubuntu-20.04
             python-version: "3.10"
-            min-python-version: "3.6"
+            min-python-version: "3.7"
             pylint-version: "2.12.2"
 
     runs-on: ${{ matrix.os }}
@@ -55,10 +55,6 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - name: Set LD_LIBRARY_PATH for compilation
-        run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
-
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -72,12 +68,14 @@ jobs:
       - name: Run Pylint on grass package
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
           cd python
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) grass
 
       - name: Run Pylint on wxGUI
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
           cd gui/wxpython
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
 
@@ -85,4 +83,5 @@ jobs:
         run: |
           pip install pytest pytest-pylint
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          pytest --pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) --pylint-ignore-patterns="python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,scripts/d.rast.edit/d.rast.edit.py"
+          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
+          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) --pylint-ignore-patterns="python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,scripts/d.rast.edit/d.rast.edit.py"
