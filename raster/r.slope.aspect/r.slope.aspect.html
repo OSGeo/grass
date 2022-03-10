@@ -176,6 +176,26 @@ Only when using integer elevation models, the aspect is biased in 0,
 of aspect categories is very uneven, with peaks at 0, 45,..., 360 categories.
 When working with floating point elevation models, no such aspect bias occurs.
 
+<h3>PERFORMANCE</h3>
+To enable parallel processing, the user can specify the number of threads to be
+used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
+(default 300) can also be provided to determine the size of the buffer for 
+computation.
+
+<div align="center" style="margin: 10px">
+     <img src="r_slope_aspect_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <img src="r_slope_aspect_benchmark_memory.png" alt="benchmark for memory size" border="0">
+     <br>
+     <i>Figure: Benchmark on the left shows execution time for different
+     number of cells, benchmark on the right shows execution time
+     for different memory size for 5000x5000 raster. See benchmark scripts in source code.
+     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
+     </div>
+
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
+
 <h2>EXAMPLES</h2>
 
 <h3>Calculation of slope, aspect, profile and tangential curvature</h3>

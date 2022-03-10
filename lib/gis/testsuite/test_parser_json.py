@@ -33,6 +33,8 @@ class TestParserJson(TestCase):
             {"param": "precision", "value": "FCELL"},
             {"param": "zscale", "value": "1.0"},
             {"param": "min_slope", "value": "0.0"},
+            {"param": "nprocs", "value": "1"},
+            {"param": "memory", "value": "300"},
         ]
 
         outputs = [
@@ -52,7 +54,7 @@ class TestParserJson(TestCase):
         print(stdout)
         json_code = json.loads(decode(stdout))
         self.assertEqual(json_code["module"], "r.slope.aspect")
-        self.assertEqual(len(json_code["inputs"]), 5)
+        self.assertEqual(len(json_code["inputs"]), 7)
         self.assertEqual(json_code["inputs"], inputs)
         self.assertEqual(json_code["outputs"], outputs)
 
