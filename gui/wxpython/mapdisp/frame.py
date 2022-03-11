@@ -451,7 +451,6 @@ class MapPanel(SingleMapPanel):
         self.statusbarManager.DisableStatusbarItemsByClass(
             self.statusbarItemsDisabledInNviz
         )
-        self.statusbarManager.SetModeWithUpdate(0)
         self.mapWindowProperties.sbItem = 0
 
         # erase map window
@@ -550,9 +549,6 @@ class MapPanel(SingleMapPanel):
 
         # update status bar
         self.statusbarManager.disabledItems = {}
-        self.statusbarManager.SetModeWithUpdate(
-            UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
-        )
         self.mapWindowProperties.sbItem = UserSettings.Get(
             group="display", key="statusbarMode", subkey="selection"
         )
