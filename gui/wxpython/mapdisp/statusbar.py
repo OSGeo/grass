@@ -145,9 +145,21 @@ class SbManager:
                 if item.__class__ == itemClass:
                     self.disabledItems[i] = item
 
-    def GetItemLabels(self, items):
+    def GetItemLabels(self):
         """Get list of item labels"""
-        return [value.label for value in items.values() if value.GetPosition() == 0]
+        return [
+            value.label
+            for value in self.statusbarItems.values()
+            if value.GetPosition() == 0
+        ]
+
+    def GetDisabledItemLabels(self):
+        """Get list of disabled item labels"""
+        return [
+            value.label
+            for value in self.disabledItems.values()
+            if value.GetPosition() == 0
+        ]
 
     def ShowItem(self, itemName):
         """Invokes showing of particular item
@@ -171,7 +183,7 @@ class SbManager:
             group="display",
             key="statusbarMode",
             subkey="choices",
-            value=self.GetItemLabels(self.statusbarItems),
+            value=self.GetItemLabels(),
             settings_type="internal",
         )
         if not self._modeIndexSet:
@@ -287,7 +299,7 @@ class SbManager:
             return self.mapFrame.mapWindowProperties.sbItem
 
         menu = Menu()
-        for i, label in enumerate(self.GetItemLabels(self.statusbarItems)):
+        for i, label in enumerate(self.GetItemLabels()):
             wxid = NewId()
             self.statusbar.Bind(
                 wx.EVT_MENU,
@@ -298,7 +310,7 @@ class SbManager:
             item = menu.FindItem(wxid)[0]
             if i == getSbItemProperty():
                 item.Check(item.IsChecked() is False)
-            if label in (self.GetItemLabels(self.disabledItems)):
+            if label in (self.GetDisabledItemLabels()):
                 item.Enable(enable=False)
 
         # show the popup menu
