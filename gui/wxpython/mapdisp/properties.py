@@ -9,6 +9,8 @@ Classes:
  - properties::ChBShowRegion
  - properties::ChBAlignExtent
  - properties::ChBResolution
+ - properties::ChBProjection
+ - properties::RBShowInStatusbar
  - properties::MapDisplayPropertiesDialog
 
 (C) 2021 by the GRASS Development Team
@@ -277,6 +279,50 @@ class ChBProjection(PropertyItem):
             self.widget.SetLabel(self.defaultLabel)
 
 
+class RBShowInStatusbar:
+    """Radiobox managing widgets in statusbar."""
+
+    def __init__(self, parent, sbmanager):
+        self.name = "showInStatusbar"
+        self.statusbarManager = sbmanager
+
+        choices = self.statusbarManager.GetItemLabels()
+        self.widget = wx.RadioBox(
+            parent=parent,
+            id=wx.ID_ANY,
+            label="Displayed content",
+            choices=choices,
+            majorDimension=1,
+            style=wx.RA_SPECIFY_COLS,
+        )
+        self._setValue(self.statusbarManager.GetMode())
+        self._disableItems()
+
+        self.widget.Bind(wx.EVT_RADIOBOX, self._onToggleRadioBox)
+
+    def _setValue(self, mode):
+        self.widget.SetSelection(mode)
+
+    def GetValue(self):
+        return self.widget.GetSelection()
+
+    def _disableItems(self):
+        """Disables a radiobox options"""
+        for item in self.statusbarManager.disabledItems.keys():
+            self.widget.EnableItem(n=item, enable=False)
+
+    def GetWidget(self):
+        """Returns underlying widget.
+
+        :return: widget or None if doesn't exist
+        """
+        return self.widget
+
+    def _onToggleRadioBox(self, event):
+        self.statusbarManager.SetMode(self.GetValue())
+        self.statusbarManager.Update()
+
+
 class MapDisplayPropertiesDialog(wx.Dialog):
     """Map Display properties dialog"""
 
@@ -285,8 +331,9 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         parent,
         mapframe,
         properties,
+        sbmanager,
         title=_("Map Display Settings"),
-        size=(-1, 250),
+        size=(-1, 300),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
@@ -296,6 +343,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.size = size
         self.mapframe = mapframe
         self.mapWindowProperties = properties
+        self.statusbarManager = sbmanager
 
         # notebook
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
@@ -382,10 +430,19 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         parent.AddPage(page=panel, text=_("Status bar"))
 
-        # General settings
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        # Auto-rendering
+        self.shownInStatusbar = RBShowInStatusbar(
+            parent=panel, sbmanager=self.statusbarManager
+        )
+        sizer.Add(
+            self.shownInStatusbar.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=3,
+        )
+
+        # Display coordinates in different CRS
         self.projection = ChBProjection(panel, self.mapWindowProperties)
         sizer.Add(
             self.projection.GetWidget(),
