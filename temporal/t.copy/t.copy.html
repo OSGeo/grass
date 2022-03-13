@@ -23,7 +23,7 @@ mapset <em>modis_lst</em> included, copy the space-time raster dataset
 
 <div class="code"><pre>
 g.mapsets mapset=modis_lst operation=add
-t.copy input=LST_Day_monthly type=strds output=LST_Day_monthly
+t.copy input=LST_Day_monthly@modis_lst type=strds output=LST_Day_monthly
 </pre></div>
 
 <h2>SEE ALSO</h2>
