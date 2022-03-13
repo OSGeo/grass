@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-
-import ctypes, re, os
-from ..ctypedescs import *
-from ..messages import *
-from .operations import *
-from .dependencies import find_dependencies
-
 """
 A brief explanation of the processing steps:
 1. The dependencies module builds a dependency graph for the descriptions.
@@ -38,6 +30,24 @@ the errors that print_errors_encountered() has flagged.
 
 """
 
+from ctypesgen.descriptions import MacroDescription
+from ctypesgen.messages import (
+    error_message,
+    status_message,
+    warning_message,
+)
+from ctypesgen.processor.dependencies import find_dependencies
+from ctypesgen.processor.operations import (
+    automatically_typedef_structs,
+    filter_by_regexes_exclude,
+    filter_by_regexes_include,
+    find_source_libraries,
+    fix_conflicting_names,
+    remove_descriptions_in_system_headers,
+    remove_macros,
+    remove_NULL,
+)
+
 
 def process(data, options):
     status_message("Processing description list.")
@@ -61,18 +71,16 @@ def process(data, options):
 
 
 def calculate_final_inclusion(data, opts):
-    """calculate_final_inclusion() calculates which descriptions will be included in the
-    output library.
+    """Calculates which descriptions will be included in the output library.
 
     An object with include_rule="never" is never included.
-    An object with include_rule="yes" is included if its requirements can be
-        included.
-    An object with include_rule="if_needed" is included if an object to be
-        included requires it and if its requirements can be included.
+    An object with include_rule="yes" is included if its requirements can be included.
+    An object with include_rule="if_needed" is included if an object to be included
+        requires it and if its requirements can be included.
     """
 
     def can_include_desc(desc):
-        if desc.can_include == None:
+        if desc.can_include is None:
             if desc.include_rule == "no":
                 desc.can_include = False
             elif desc.include_rule == "yes" or desc.include_rule == "if_needed":
