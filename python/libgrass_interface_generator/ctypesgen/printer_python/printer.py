@@ -1,43 +1,19 @@
-#!/usr/bin/env python
+import os
+import os.path
+import sys
+import time
+import shutil
 
-import os, sys, time, glob, re
-from ..descriptions import *
-from ..ctypedescs import *
-from ..messages import *
-from .. import expressions
-
-from .. import libraryloader  # So we can get the path to it
-from . import test  # So we can find the path to local files in the printer package
-
-
-def path_to_local_file(name, known_local_module=test):
-    basedir = os.path.dirname(known_local_module.__file__)
-    return os.path.join(basedir, name)
+from ctypesgen.ctypedescs import CtypesBitfield, CtypesStruct
+from ctypesgen.expressions import ExpressionNode
+from ctypesgen.messages import error_message, status_message
 
 
 THIS_DIR = os.path.dirname(__file__)
-PREAMBLE_PATH = os.path.join(THIS_DIR, "preamble", "[0-9]_[0-9].py")
-
-
-def get_preamble(major=None, minor=None):
-    """get the available preambles"""
-    preambles = dict()
-    for fp in glob.glob(PREAMBLE_PATH):
-        m = re.search("(\d)_(\d).py$", fp)
-        if not m:
-            continue
-        preambles[(int(m.group(1)), int(m.group(2)))] = fp
-
-    if None not in (major, minor):
-        v = (int(major), int(minor))
-    else:
-        L = sorted(preambles.keys())
-        v = L[0]
-        for vi in L[1:]:
-            if vi > sys.version_info[:2]:
-                break
-            v = vi
-    return preambles[v], v
+CTYPESGEN_DIR = os.path.join(THIS_DIR, os.path.pardir)
+PREAMBLE_PATH = os.path.join(THIS_DIR, "preamble.py")
+DEFAULTHEADER_PATH = os.path.join(THIS_DIR, "defaultheader.py")
+LIBRARYLOADER_PATH = os.path.join(CTYPESGEN_DIR, "libraryloader.py")
 
 
 class WrapperPrinter:
@@ -50,6 +26,9 @@ class WrapperPrinter:
 
         if self.options.strip_build_path and self.options.strip_build_path[-1] != os.path.sep:
             self.options.strip_build_path += os.path.sep
+
+        if not self.options.embed_preamble and outpath:
+            self._copy_preamble_loader_files(outpath)
 
         self.print_header()
         self.file.write("\n")
@@ -104,7 +83,7 @@ class WrapperPrinter:
         self.file.write("\n")
 
     def srcinfo(self, src):
-        if src == None:
+        if src is None:
             self.file.write("\n")
         else:
             filename, lineno = src
@@ -149,8 +128,7 @@ class WrapperPrinter:
                 )
 
         if not template_file:
-            path = path_to_local_file("defaultheader.py")
-            template_file = open(path, "r")
+            template_file = open(DEFAULTHEADER_PATH, "r")
 
         template_subs = self.template_subs()
         self.file.write(template_file.read() % template_subs)
@@ -158,26 +136,71 @@ class WrapperPrinter:
         template_file.close()
 
     def print_preamble(self):
-        m = re.match("py((?P<major>[0-9])(?P<minor>[0-9]))?", self.options.output_language)
-        path, v = get_preamble(**m.groupdict())
+        self.file.write("# Begin preamble for Python\n\n")
+        if self.options.embed_preamble:
+            with open(PREAMBLE_PATH, "r") as preamble_file:
+                preamble_file_content = preamble_file.read()
+                filecontent = preamble_file_content.replace("# ~POINTER~", "")
+                self.file.write(filecontent)
+        else:
+            self.file.write("from .ctypes_preamble import *\n")
+            self.file.write("from .ctypes_preamble import _variadic_function\n")
 
-        self.file.write("# Begin preamble for Python v{}\n\n".format(v))
-        self.file.write("from .ctypes_preamble import *\n")
-        self.file.write("from .ctypes_preamble import _variadic_function\n")
-        # preamble_file = open(path, "r")
-        # self.file.write(preamble_file.read())
-        # preamble_file.close()
         self.file.write("\n# End preamble\n")
+
+    def _copy_preamble_loader_files(self, path):
+        if os.path.isfile(path):
+            abspath = os.path.abspath(path)
+            dst = os.path.dirname(abspath)
+        else:
+            error_message(
+                "Cannot copy preamble and loader files",
+                cls="missing-file",
+            )
+            return
+
+        c_preamblefile = f"{dst}/ctypes_preamble.py"
+        if os.path.isfile(c_preamblefile):
+            return
+
+        pointer = """def POINTER(obj):
+    p = ctypes.POINTER(obj)
+
+    # Convert None to a real NULL pointer to work around bugs
+    # in how ctypes handles None on 64-bit platforms
+    if not isinstance(p.from_param, classmethod):
+
+        def from_param(cls, x):
+            if x is None:
+                return cls()
+            else:
+                return x
+
+        p.from_param = classmethod(from_param)
+
+    return p
+
+"""
+
+        with open(PREAMBLE_PATH) as preamble_file:
+            preamble_file_content = preamble_file.read()
+            filecontent = preamble_file_content.replace("# ~POINTER~", pointer)
+
+        with open(c_preamblefile, "w") as f:
+            f.write(filecontent)
+
+        shutil.copy(LIBRARYLOADER_PATH, f"{dst}")
+        os.rename(f"{dst}/libraryloader.py", f"{dst}/ctypes_loader.py")
 
     def print_loader(self):
         self.file.write("_libs = {}\n")
         self.file.write("_libdirs = %s\n\n" % self.options.compile_libdirs)
         self.file.write("# Begin loader\n\n")
-        self.file.write("from .ctypes_loader import *\n")        
-        # path = path_to_local_file("libraryloader.py", libraryloader)
-        # loader_file = open(path, "r")
-        # self.file.write(loader_file.read())
-        # loader_file.close()
+        if self.options.embed_preamble:
+            with open(LIBRARYLOADER_PATH, "r") as loader_file:
+                self.file.write(loader_file.read())
+        else:
+            self.file.write("from .ctypes_loader import *\n")
         self.file.write("\n# End loader\n\n")
         self.file.write(
             "add_library_search_dirs([%s])"
@@ -223,7 +246,7 @@ class WrapperPrinter:
             aligned = struct.attrib.get("aligned", [1])
             assert len(aligned) == 1, "cgrammar gave more than one arg for aligned attribute"
             aligned = aligned[0]
-            if isinstance(aligned, expressions.ExpressionNode):
+            if isinstance(aligned, ExpressionNode):
                 # TODO: for non-constant expression nodes, this will fail:
                 aligned = aligned.evaluate(None)
             self.file.write("{}_{}._pack_ = {}\n".format(struct.variety, struct.tag, aligned))
