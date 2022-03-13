@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# vim: ts=2:sw=2:tw=80:nowrap
 
 from subprocess import Popen, PIPE
 import os
@@ -19,7 +18,7 @@ def version_tuple(v):
         if len(vs) > 2:
             t += (int(vs[2]),)
         return t
-    except:
+    except Exception:
         return (-1, -1, -1, v)
 
 
@@ -39,11 +38,11 @@ def version():
         if p.returncode:
             raise RuntimeError("no version defined?")
         return out.strip().decode()
-    except:
+    except Exception:
         # failover is to try VERSION_FILE instead
         try:
             return read_file_version()
-        except:
+        except Exception:
             return DEFAULT_PREFIX + "-0.0.0"
 
 
@@ -70,7 +69,7 @@ VERSION_NUMBER = version_number()
 
 
 if __name__ == "__main__":
-    import sys, argparse
+    import argparse
 
     p = argparse.ArgumentParser()
     p.add_argument("--save", action="store_true", help="Store version to " + VERSION_FILE)

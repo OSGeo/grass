@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 ctypesgen.messages contains functions to display status, error, or warning
 messages to the user. Warning and error messages are also associated
@@ -20,7 +18,6 @@ Warning classes are:
 'other' - catchall.
 """
 
-import sys
 import logging
 
 __all__ = ["error_message", "warning_message", "status_message"]

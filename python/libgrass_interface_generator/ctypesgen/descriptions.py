@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 ctypesgen.descriptions contains classes to represent a description of a
 struct, union, enum, function, constant, variable, or macro. All the
