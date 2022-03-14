@@ -296,7 +296,7 @@ class RBShowInStatusbar(PropertyItem):
             majorDimension=1,
             style=wx.RA_SPECIFY_COLS,
         )
-        self._setValue(self.mapWindowProperty)
+        self._setValue(self._getMode())
         self._disableItems()
 
         self.widget.Bind(wx.EVT_RADIOBOX, self._onToggle)
@@ -307,6 +307,11 @@ class RBShowInStatusbar(PropertyItem):
 
     def GetValue(self):
         return self.widget.GetSelection()
+
+    def _getMode(self):
+        if self.mapWindowProperty != self.statusbarManager.GetMode():
+            return self.statusbarManager.GetMode()
+        return self.mapWindowProperty
 
     def _disableItems(self):
         """Disables a radiobox options"""
