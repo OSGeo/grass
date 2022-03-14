@@ -548,11 +548,11 @@ class MapPanel(SingleMapPanel):
             pass
 
         # update status bar
+        self.SetStatusText(_("Please wait, unloading data..."), 0)
         self.statusbarManager.disabledItems = {}
         self.mapWindowProperties.sbItem = UserSettings.Get(
             group="display", key="statusbarMode", subkey="selection"
         )
-        self.SetStatusText(_("Please wait, unloading data..."), 0)
 
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
