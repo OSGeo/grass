@@ -12,7 +12,7 @@
 | Debian 10.1  | stable-debian   | 8.0 branch | 5.2.0 | 2.4.0 | 1.8.0 | 3.7.3  | 1.16 GB    |
 | Alpine 3.12  | stable-alpine   | 8.0 branch | 7.0.1 | 3.1.4 | 2.1.0 | 3.8.10 |  186 MB    |
 
-Last update: 15 Mar 2022 (source:  https://github.com/OSGeo/grass/actions/workflows/docker.yml and https://hub.docker.com/r/mundialis/grass-py3-pdal/tags)
+Last update: 15 Mar 2022 (source: https://github.com/OSGeo/grass/actions/workflows/docker.yml and https://hub.docker.com/r/mundialis/grass-py3-pdal/tags)
 
 # Requirements
 
