@@ -127,5 +127,5 @@ t.rast.list  separator=" | " method=gran      input=precip_abs0
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="8 months"
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="13 days"
 
-#t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-#t.remove type=strds input=precip_abs0
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.remove type=strds input=precip_abs0
