@@ -26,12 +26,24 @@ def run_in_subprocess(file):
 def test_init_finish(tmp_path):
     """Check that init function works with an explicit session finish"""
     location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    session = gj.init(tmp_path / location)
-    gs.run_command("g.region", flags="p")
-    session_file = os.environ["GISRC"]
-    session.finish()
-    assert not os.path.exists(session_file)
+    script = f"""
+import os
+import grass.script as gs
+import grass.jupyter as gj
+gs.core._create_location_xy("{tmp_path}", "{location}")
+session = gj.init("{tmp_path / location}")
+gs.read_command("g.region", flags="p")
+print(os.environ["GISRC"])
+session.finish()
+"""
+    file = tmp_path / "script.py"
+    file.write_text(script)
+    session_file = run_in_subprocess(file)
+    assert session_file, "Expected something from the subprocess"
+    session_file = session_file.strip()
+    assert "\n" not in session_file, "Expected a file name from the subprocess"
+    assert not os.path.exists(session_file), f"Session file {session_file} not deleted"
+
 
 
 def test_init_with_auto_finish(tmp_path):
