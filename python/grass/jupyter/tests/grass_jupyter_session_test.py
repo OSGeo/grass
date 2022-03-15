@@ -4,9 +4,6 @@ import subprocess
 import os
 import sys
 
-import grass.script as gs
-import grass.jupyter as gj
-
 
 # All init tests change the global environment, but we use a separate process
 # only when it is necessary.
@@ -43,7 +40,6 @@ session.finish()
     session_file = session_file.strip()
     assert "\n" not in session_file, "Expected a file name from the subprocess"
     assert not os.path.exists(session_file), f"Session file {session_file} not deleted"
-
 
 
 def test_init_with_auto_finish(tmp_path):
