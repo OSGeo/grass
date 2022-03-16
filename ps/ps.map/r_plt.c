@@ -8,7 +8,7 @@
 
 int read_point(double e, double n)
 {
-    char buf[1024], symb[1024];
+    char buf[2048], symb[1024];
     int r, g, b;
     int color_R, color_G, color_B;
     int fcolor_R, fcolor_G, fcolor_B;

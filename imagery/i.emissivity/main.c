@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
     char *result1;    /*output raster name */
     int infd, outfd;    /*File Descriptors */ 
     char *ndvi;
-    char *emissivity;
     void *inr;
     DCELL * outr;
 

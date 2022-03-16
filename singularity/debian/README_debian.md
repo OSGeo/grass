@@ -16,13 +16,7 @@ cd grass
 __Build the singularity with__:
 
 ```bash
-sudo singularity build grass_master.simg singularity/debian/singularity_debian
-```
-
-The image can be used as:
-
-```bash
-singularity exec containers/grass_7.8.simg grass --version
+sudo singularity build grass_development.simg singularity/debian/singularity_debian
 ```
 
 __To build a stable version__:
@@ -37,4 +31,10 @@ and build and enter with:
 
 ```bash
 sudo singularity build grass_7_8.simg singularity/debian/singularity_debian
+```
+
+The image can be used as:
+
+```bash
+singularity exec containers/grass_7.8.simg grass --version
 ```

@@ -1,11 +1,11 @@
 #include <string.h>
 #include <stdlib.h>
-#include <grass/imagery.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/imagery.h>
 
 static int gettag(FILE *, char *);
-static int get_bandrefs(FILE *, struct SigSet *);
+static int get_semantic_labels(FILE *, struct SigSet *);
 static int get_title(FILE *, struct SigSet *);
 static int get_class(FILE *, struct SigSet *);
 static int get_classnum(FILE *, struct ClassSig *);
@@ -24,7 +24,7 @@ static double **alloc_matrix(int rows, int cols)
     m = (double **)G_calloc(rows, sizeof(double *));
     m[0] = (double *)G_calloc(rows * cols, sizeof(double));
     for (i = 1; i < rows; i++)
-	m[i] = m[i - 1] + cols;
+        m[i] = m[i - 1] + cols;
 
     return m;
 }
@@ -34,15 +34,15 @@ int I_SigSetNClasses(struct SigSet *S)
     int i, count;
 
     for (i = 0, count = 0; i < S->nclasses; i++)
-	if (S->ClassSig[i].used)
-	    count++;
+        if (S->ClassSig[i].used)
+            count++;
 
     return count;
 }
 
 
 struct ClassData *I_AllocClassData(struct SigSet *S,
-				   struct ClassSig *C, int npixels)
+                                   struct ClassSig *C, int npixels)
 {
     struct ClassData *Data;
 
@@ -65,9 +65,9 @@ struct ClassData *I_AllocClassData(struct SigSet *S,
 int I_InitSigSet(struct SigSet *S, int nbands)
 {
     S->nbands = nbands;
-    S->bandrefs = (char **)G_malloc(nbands * sizeof(char **));
+    S->semantic_labels = (char **)G_malloc(nbands * sizeof(char **));
     for (int i = 0; i < nbands; i++)
-        S->bandrefs[i] = NULL;
+        S->semantic_labels[i] = NULL;
     S->nclasses = 0;
     S->ClassSig = NULL;
     S->title = NULL;
@@ -80,11 +80,11 @@ struct ClassSig *I_NewClassSig(struct SigSet *S)
     struct ClassSig *Sp;
 
     if (S->nclasses == 0)
-	S->ClassSig = (struct ClassSig *)G_malloc(sizeof(struct ClassSig));
+        S->ClassSig = (struct ClassSig *)G_malloc(sizeof(struct ClassSig));
     else
-	S->ClassSig = (struct ClassSig *)G_realloc((char *)S->ClassSig,
-						   sizeof(struct ClassSig) *
-						   (S->nclasses + 1));
+        S->ClassSig = (struct ClassSig *)G_realloc((char *)S->ClassSig,
+                                                   sizeof(struct ClassSig) *
+                                                   (S->nclasses + 1));
 
     Sp = &S->ClassSig[S->nclasses++];
     Sp->classnum = 0;
@@ -101,22 +101,22 @@ struct SubSig *I_NewSubSig(struct SigSet *S, struct ClassSig *C)
     int i;
 
     if (C->nsubclasses == 0)
-	C->SubSig = (struct SubSig *)G_malloc(sizeof(struct SubSig));
+        C->SubSig = (struct SubSig *)G_malloc(sizeof(struct SubSig));
     else
-	C->SubSig = (struct SubSig *)G_realloc((char *)C->SubSig,
-					       sizeof(struct SubSig) *
-					       (C->nsubclasses + 1));
+        C->SubSig = (struct SubSig *)G_realloc((char *)C->SubSig,
+                                               sizeof(struct SubSig) *
+                                               (C->nsubclasses + 1));
 
     Sp = &C->SubSig[C->nsubclasses++];
     Sp->used = 1;
     Sp->R = (double **)G_calloc(S->nbands, sizeof(double *));
     Sp->R[0] = (double *)G_calloc(S->nbands * S->nbands, sizeof(double));
     for (i = 1; i < S->nbands; i++)
-	Sp->R[i] = Sp->R[i - 1] + S->nbands;
+        Sp->R[i] = Sp->R[i - 1] + S->nbands;
     Sp->Rinv = (double **)G_calloc(S->nbands, sizeof(double *));
     Sp->Rinv[0] = (double *)G_calloc(S->nbands * S->nbands, sizeof(double));
     for (i = 1; i < S->nbands; i++)
-	Sp->Rinv[i] = Sp->Rinv[i - 1] + S->nbands;
+        Sp->Rinv[i] = Sp->Rinv[i - 1] + S->nbands;
     Sp->means = (double *)G_calloc(S->nbands, sizeof(double));
     Sp->N = 0;
     Sp->pi = 0;
@@ -157,52 +157,76 @@ int I_ReadSigSet(FILE * fd, struct SigSet *S)
 
     I_InitSigSet(S, 0);
     while (gettag(fd, tag)) {
-	if (eq(tag, "title:"))
-	    if (get_title(fd, S) != 0)
-            return -1;
-	if (eq(tag, "bandrefs:"))
-        if (get_bandrefs(fd, S) != 0)
-            return -1;
-    if (eq(tag, "class:"))
-	    if (get_class(fd, S) != 0)
-            return -1;
+        if (eq(tag, "title:"))
+            if (get_title(fd, S) != 0)
+                return -1;
+        if (eq(tag, "semantic_labels:"))
+            if (get_semantic_labels(fd, S) != 0)
+                return -1;
+        if (eq(tag, "class:"))
+            if (get_class(fd, S) != 0)
+                return -1;
     }
-    return 1;			/* for now assume success */
+    return 1;                   /* for now assume success */
 }
 
 static int gettag(FILE * fd, char *tag)
 {
     if (fscanf(fd, "%255s", tag) != 1)
-	return 0;
+        return 0;
     G_strip(tag);
     return 1;
 }
 
-static int get_bandrefs(FILE * fd, struct SigSet *S)
+static int get_semantic_labels(FILE * fd, struct SigSet *S)
 {
-    char **bandrefs;
-    char *bandrefs_str;
+    int n, pos;
+    char c, prev;
+    char semantic_label[GNAME_MAX];
 
-    if (fscanf(fd, "%m[^\n]", &bandrefs_str) != 1) {
-        G_warning(_("Error reading band references from sigset file"));
-        return -1;
+    /* Read semantic labels and count them to set nbands */
+    n = 0;
+    pos = 0;
+    S->semantic_labels = (char **)G_realloc(S->semantic_labels, (n + 1) * sizeof(char **));
+    while ((c = (char)fgetc(fd)) != EOF) {
+        if (c == '\n') {
+            if (prev != ' ') {
+                semantic_label[pos] = '\0';
+                if (strlen(semantic_label) > 0) {
+                    S->semantic_labels[n] = G_store(semantic_label);
+                    n++;
+                }
+            }
+            S->nbands = n;
+            break;
+        }
+        if (c == ' ') {
+            semantic_label[pos] = '\0';
+            if (strlen(semantic_label) > 0) {
+                S->semantic_labels[n] = G_store(semantic_label);
+                n++;
+                /* [n] is 0 based thus: (n + 1) */
+                S->semantic_labels =
+                    (char **)G_realloc(S->semantic_labels,
+                                       (n + 1) * sizeof(char **));
+            }
+            pos = 0;
+            prev = c;
+            continue;
+        }
+        /* Semantic labels are limited to GNAME_MAX - 1 + \0 in length;
+         * n is 0-based */
+        if (pos == (GNAME_MAX - 2)) {
+            G_warning(_("Invalid signature file: semantic label length limit exceeded"));
+            return -1;
+        }
+        semantic_label[pos] = c;
+        pos++;
+        prev = c;
     }
-
-    G_strip(bandrefs_str);
-    bandrefs = G_tokenize(bandrefs_str, " ");
-    S->nbands = G_number_of_tokens(bandrefs);
     if (!(S->nbands > 0)) {
         G_warning(_("Signature file does not contain bands"));
         return -1;
-    }
-    S->bandrefs = (char **)G_realloc(S->bandrefs, S->nbands * sizeof(char **));
-    for (unsigned int i = S->nbands; i--;) {
-        if (strlen(bandrefs[i]) > (GNAME_MAX - 1)) {
-            G_warning(_("Invalid sigset file: band reference length limit exceeded"));
-            return -1;
-        }
-        S->bandrefs[i] = (char *)G_malloc(GNAME_MAX * sizeof(char *));
-        strcpy(S->bandrefs[i], bandrefs[i]);
     }
 
     return 0;
@@ -228,20 +252,20 @@ static int get_class(FILE * fd, struct SigSet *S)
 
     C = I_NewClassSig(S);
     while (gettag(fd, tag)) {
-	if (eq(tag, "endclass:"))
-	    break;
-	if (eq(tag, "classnum:"))
-	    if (get_classnum(fd, C) != 0)
-            return -1;
-	if (eq(tag, "classtype:"))
-	    if (get_classtype(fd, C) != 0)
-            return -1;
-	if (eq(tag, "classtitle:"))
-	    if (get_classtitle(fd, C) != 0)
-            return -1;
-	if (eq(tag, "subclass:"))
-	    if (get_subclass(fd, S, C) != 0)
-            return -1;
+        if (eq(tag, "endclass:"))
+            break;
+        if (eq(tag, "classnum:"))
+            if (get_classnum(fd, C) != 0)
+                return -1;
+        if (eq(tag, "classtype:"))
+            if (get_classtype(fd, C) != 0)
+                return -1;
+        if (eq(tag, "classtitle:"))
+            if (get_classtitle(fd, C) != 0)
+                return -1;
+        if (eq(tag, "subclass:"))
+            if (get_subclass(fd, S, C) != 0)
+                return -1;
     }
 
     return 0;
@@ -284,17 +308,17 @@ static int get_subclass(FILE * fd, struct SigSet *S, struct ClassSig *C)
     Sp = I_NewSubSig(S, C);
 
     while (gettag(fd, tag)) {
-	if (eq(tag, "endsubclass:"))
-	    break;
-	if (eq(tag, "pi:"))
-	    if (get_subclass_pi(fd, Sp) != 0)
-            return -1;
-	if (eq(tag, "means:"))
-	    if (get_subclass_means(fd, Sp, S->nbands) != 0)
-            return -1;
-	if (eq(tag, "covar:"))
-	    if (get_subclass_covar(fd, Sp, S->nbands) != 0)
-            return -1;
+        if (eq(tag, "endsubclass:"))
+            break;
+        if (eq(tag, "pi:"))
+            if (get_subclass_pi(fd, Sp) != 0)
+                return -1;
+        if (eq(tag, "means:"))
+            if (get_subclass_means(fd, Sp, S->nbands) != 0)
+                return -1;
+        if (eq(tag, "covar:"))
+            if (get_subclass_covar(fd, Sp, S->nbands) != 0)
+                return -1;
     }
 
     return 0;
@@ -313,8 +337,8 @@ static int get_subclass_means(FILE * fd, struct SubSig *Sp, int nbands)
     int i;
 
     for (i = 0; i < nbands; i++)
-	if (fscanf(fd, "%lf", &Sp->means[i]) != 1)
-        return -1;
+        if (fscanf(fd, "%lf", &Sp->means[i]) != 1)
+            return -1;
 
     return 0;
 }
@@ -324,9 +348,9 @@ static int get_subclass_covar(FILE * fd, struct SubSig *Sp, int nbands)
     int i, j;
 
     for (i = 0; i < nbands; i++)
-	for (j = 0; j < nbands; j++)
-	    if (fscanf(fd, "%lf", &Sp->R[i][j]) != 1)
-            return -1;
+        for (j = 0; j < nbands; j++)
+            if (fscanf(fd, "%lf", &Sp->R[i][j]) != 1)
+                return -1;
 
     return 0;
 }
@@ -334,9 +358,9 @@ static int get_subclass_covar(FILE * fd, struct SubSig *Sp, int nbands)
 int I_SetSigTitle(struct SigSet *S, const char *title)
 {
     if (title == NULL)
-	title = "";
+        title = "";
     if (S->title)
-	free(S->title);
+        free(S->title);
     S->title = G_store(title);
 
     return 0;
@@ -345,17 +369,17 @@ int I_SetSigTitle(struct SigSet *S, const char *title)
 const char *I_GetSigTitle(const struct SigSet *S)
 {
     if (S->title)
-	return S->title;
+        return S->title;
     else
-	return "";
+        return "";
 }
 
 int I_SetClassTitle(struct ClassSig *C, const char *title)
 {
     if (title == NULL)
-	title = "";
+        title = "";
     if (C->title)
-	free(C->title);
+        free(C->title);
     C->title = G_store(title);
 
     return 0;
@@ -364,9 +388,9 @@ int I_SetClassTitle(struct ClassSig *C, const char *title)
 const char *I_GetClassTitle(const struct ClassSig *C)
 {
     if (C->title)
-	return C->title;
+        return C->title;
     else
-	return "";
+        return "";
 }
 
 int I_WriteSigSet(FILE * fd, const struct SigSet *S)
@@ -378,40 +402,40 @@ int I_WriteSigSet(FILE * fd, const struct SigSet *S)
     /* This is version 1 sigset file format */
     fprintf(fd, "1\n");
     fprintf(fd, "title: %s\n", I_GetSigTitle(S));
-    fprintf(fd, "bandrefs: ");
+    fprintf(fd, "semantic_labels: ");
     for (i = 0; i < S->nbands; i++) {
-        fprintf(fd, "%s ", S->bandrefs[i]);
+        fprintf(fd, "%s ", S->semantic_labels[i]);
     }
     fprintf(fd, "\n");
     for (i = 0; i < S->nclasses; i++) {
-	Cp = &S->ClassSig[i];
-	if (!Cp->used)
-	    continue;
-	if (Cp->nsubclasses <= 0)
-	    continue;
-	fprintf(fd, "class:\n");
-	fprintf(fd, " classnum: %ld\n", Cp->classnum);
-	fprintf(fd, " classtitle: %s\n", I_GetClassTitle(Cp));
-	fprintf(fd, " classtype: %d\n", Cp->type);
+        Cp = &S->ClassSig[i];
+        if (!Cp->used)
+            continue;
+        if (Cp->nsubclasses <= 0)
+            continue;
+        fprintf(fd, "class:\n");
+        fprintf(fd, " classnum: %ld\n", Cp->classnum);
+        fprintf(fd, " classtitle: %s\n", I_GetClassTitle(Cp));
+        fprintf(fd, " classtype: %d\n", Cp->type);
 
-	for (j = 0; j < Cp->nsubclasses; j++) {
-	    Sp = &Cp->SubSig[j];
-	    fprintf(fd, " subclass:\n");
-	    fprintf(fd, "  pi: %g\n", Sp->pi);
-	    fprintf(fd, "  means:");
-	    for (b1 = 0; b1 < S->nbands; b1++)
-		fprintf(fd, " %g", Sp->means[b1]);
-	    fprintf(fd, "\n");
-	    fprintf(fd, "  covar:\n");
-	    for (b1 = 0; b1 < S->nbands; b1++) {
-		fprintf(fd, "   ");
-		for (b2 = 0; b2 < S->nbands; b2++)
-		    fprintf(fd, " %g", Sp->R[b1][b2]);
-		fprintf(fd, "\n");
-	    }
-	    fprintf(fd, " endsubclass:\n");
-	}
-	fprintf(fd, "endclass:\n");
+        for (j = 0; j < Cp->nsubclasses; j++) {
+            Sp = &Cp->SubSig[j];
+            fprintf(fd, " subclass:\n");
+            fprintf(fd, "  pi: %g\n", Sp->pi);
+            fprintf(fd, "  means:");
+            for (b1 = 0; b1 < S->nbands; b1++)
+                fprintf(fd, " %g", Sp->means[b1]);
+            fprintf(fd, "\n");
+            fprintf(fd, "  covar:\n");
+            for (b1 = 0; b1 < S->nbands; b1++) {
+                fprintf(fd, "   ");
+                for (b2 = 0; b2 < S->nbands; b2++)
+                    fprintf(fd, " %g", Sp->R[b1][b2]);
+                fprintf(fd, "\n");
+            }
+            fprintf(fd, " endsubclass:\n");
+        }
+        fprintf(fd, "endclass:\n");
     }
 
     return 0;
@@ -420,23 +444,23 @@ int I_WriteSigSet(FILE * fd, const struct SigSet *S)
 /*!
  * \brief Reorder struct SigSet to match imagery group member order
  *
- * The function will check for band reference match between sigset struct
+ * The function will check for semantic label match between sigset struct
  * and imagery group.
  *
- * In the case of a complete band reference match, values of passed in
+ * In the case of a complete semantic label match, values of passed in
  * struct SigSet are reordered to match the order of imagery group items.
  * This reordering is done only for items present in the sigset file.
  * Thus reordering should be done only after calling I_ReadSigSet.
  *
- * If all band references are not identical (in
+ * If all semantic labels are not identical (in
  * arbitrary order), function will return two dimensional array with
  * comma separated list of:
- *      - [0] band references present in the signature struct but
+ *      - [0] semantic labels present in the signature struct but
  * absent in the imagery group
- *      - [1] band references present in the imagery group but
+ *      - [1] semantic labels present in the imagery group but
  * absent in the signature struct
  *
- * If no mismatch of band references for signatures or imagery group are
+ * If no mismatch of semantic labels for signatures or imagery group are
  * detected (== all are present in the other list), a NULL value will be
  * returned in the particular list of mismatches (not an empty string).
  * For example:
@@ -448,21 +472,23 @@ int I_WriteSigSet(FILE * fd, const struct SigSet *S)
  * \return NULL successfully sorted
  * \return err_array two comma separated lists of mismatches
  */
-char **I_SortSigSetByBandref(struct SigSet *S, const struct Ref *R) {
+char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
+{
     unsigned int total, complete;
     unsigned int *match1, *match2, mc1, mc2, *new_order;
     double ***new_means, ****new_vars;
-    char **group_bandrefs, **mismatches, **new_bandrefs;
+    char **group_semantic_labels, **mismatches, **new_semantic_labels;
 
     /* Safety measure. Untranslated as this should not happen in production! */
     if (S->nbands < 1 || R->nfiles < 1)
         G_fatal_error("Programming error. Invalid length structs passed to "
-                      "I_sort_signatures_by_bandref(%d, %d);", S->nbands,  R->nfiles);
+                      "I_sort_signatures_by_semantic_label(%d, %d);", S->nbands,
+                      R->nfiles);
 
-    /* Obtain group band references */
-    group_bandrefs = (char **)G_malloc(R->nfiles * sizeof(char *));
+    /* Obtain group semantic labels */
+    group_semantic_labels = (char **)G_malloc(R->nfiles * sizeof(char *));
     for (unsigned int j = R->nfiles; j--;) {
-        group_bandrefs[j] = Rast_read_bandref(R->file[j].name, R->file[j].mapset);
+        group_semantic_labels[j] = Rast_get_semantic_label_or_name(R->file[j].name, R->file[j].mapset);
     }
 
     /* If lengths are not equal, there will be a mismatch */
@@ -474,40 +500,46 @@ char **I_SortSigSetByBandref(struct SigSet *S, const struct Ref *R) {
     match2 = (unsigned int *)G_calloc(R->nfiles, sizeof(unsigned int));
 
     /* Allocate memory for temporary storage of sorted values */
-    new_bandrefs = (char **)G_malloc(S->nbands * sizeof(char *));
+    new_semantic_labels = (char **)G_malloc(S->nbands * sizeof(char *));
     new_means = (double ***)G_malloc(S->nclasses * sizeof(double **));
     // new_vars[S.ClassSig[x]][.SubSig[y]][R[band1]][R[band1]]
     new_vars = (double ****)G_malloc(S->nclasses * sizeof(double ***));
     for (unsigned int c = S->nclasses; c--;) {
-        new_means[c] = (double **)G_malloc(S->ClassSig[c].nsubclasses * sizeof(double *));
-        new_vars[c] = (double ***)G_malloc(S->ClassSig[c].nsubclasses * sizeof(double **));
+        new_means[c] =
+            (double **)G_malloc(S->ClassSig[c].nsubclasses *
+                                sizeof(double *));
+        new_vars[c] =
+            (double ***)G_malloc(S->ClassSig[c].nsubclasses *
+                                 sizeof(double **));
         for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
             new_means[c][s] = (double *)G_malloc(S->nbands * sizeof(double));
-            new_vars[c][s] = (double **)G_malloc(S->nbands * sizeof(double *));
+            new_vars[c][s] =
+                (double **)G_malloc(S->nbands * sizeof(double *));
             for (unsigned int i = S->nbands; i--;)
-                new_vars[c][s][i] = (double *)G_malloc(S->nbands * sizeof(double));
+                new_vars[c][s][i] =
+                    (double *)G_malloc(S->nbands * sizeof(double));
         }
     }
 
     /* Obtain order of matching items */
     for (unsigned int j = R->nfiles; j--;) {
         for (unsigned int i = S->nbands; i--;) {
-            if (S->bandrefs[i] && group_bandrefs[j] &&
-                !strcmp(S->bandrefs[i], group_bandrefs[j])) {
-                    if (complete) {
-                        /* Reorder pointers to existing strings only */
-                        new_bandrefs[j] = S->bandrefs[i];
-                        new_order[i] = j;
-                    }
-                    /* Keep a track of matching items for error reporting */
-                    match1[i] = 1;
-                    match2[j] = 1;
-                    break;
+            if (S->semantic_labels[i] && group_semantic_labels[j] &&
+                !strcmp(S->semantic_labels[i], group_semantic_labels[j])) {
+                if (complete) {
+                    /* Reorder pointers to existing strings only */
+                    new_semantic_labels[j] = S->semantic_labels[i];
+                    new_order[i] = j;
+                }
+                /* Keep a track of matching items for error reporting */
+                match1[i] = 1;
+                match2[j] = 1;
+                break;
             }
         }
     }
 
-    /* Check for band reference mismatch */
+    /* Check for semantic label mismatch */
     mc1 = mc2 = 0;
     mismatches = (char **)G_malloc(2 * sizeof(char **));
     mismatches[0] = NULL;
@@ -515,19 +547,20 @@ char **I_SortSigSetByBandref(struct SigSet *S, const struct Ref *R) {
     total = 1;
     for (unsigned int i = 0; i < S->nbands; i++) {
         if (!match1[i]) {
-            if (S->bandrefs[i])
-                total = total + strlen(S->bandrefs[i]);
+            if (S->semantic_labels[i])
+                total = total + strlen(S->semantic_labels[i]);
             else
                 total = total + 24;
-            mismatches[0] = (char *)G_realloc(mismatches[0], total * sizeof(char *));
+            mismatches[0] =
+                (char *)G_realloc(mismatches[0], total * sizeof(char *));
             if (mc1)
                 strcat(mismatches[0], ",");
             else
                 mismatches[0][0] = '\0';
-            if (S->bandrefs[i])
-                strcat(mismatches[0], S->bandrefs[i]);
+            if (S->semantic_labels[i])
+                strcat(mismatches[0], S->semantic_labels[i]);
             else
-                strcat(mismatches[0], "<band reference missing>");
+                strcat(mismatches[0], "<semantic label missing>");
             mc1++;
             total = total + 1;
         }
@@ -535,19 +568,20 @@ char **I_SortSigSetByBandref(struct SigSet *S, const struct Ref *R) {
     total = 1;
     for (unsigned int j = 0; j < R->nfiles; j++) {
         if (!match2[j]) {
-            if (group_bandrefs[j])
-                total = total + strlen(group_bandrefs[j]);
+            if (group_semantic_labels[j])
+                total = total + strlen(group_semantic_labels[j]);
             else
                 total = total + 24;
-            mismatches[1] = (char *)G_realloc(mismatches[1], total * sizeof(char *));
+            mismatches[1] =
+                (char *)G_realloc(mismatches[1], total * sizeof(char *));
             if (mc2)
                 strcat(mismatches[1], ",");
             else
                 mismatches[1][0] = '\0';
-            if (group_bandrefs[j])
-                strcat(mismatches[1], group_bandrefs[j]);
+            if (group_semantic_labels[j])
+                strcat(mismatches[1], group_semantic_labels[j]);
             else
-                strcat(mismatches[1], "<band reference missing>");
+                strcat(mismatches[1], "<semantic label missing>");
             mc2++;
             total = total + 1;
         }
@@ -558,33 +592,37 @@ char **I_SortSigSetByBandref(struct SigSet *S, const struct Ref *R) {
         for (unsigned int c = S->nclasses; c--;) {
             for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
                 for (unsigned int b1 = 0; b1 < S->nbands; b1++) {
-                    new_means[c][s][new_order[b1]] = S->ClassSig[c].SubSig[s].means[b1];
+                    new_means[c][s][new_order[b1]] =
+                        S->ClassSig[c].SubSig[s].means[b1];
                     for (unsigned int b2 = 0; b2 < S->nbands; b2++) {
-                        new_vars[c][s][new_order[b1]][new_order[b2]] = S->ClassSig[c].SubSig[s].R[b1][b2];
+                        new_vars[c][s][new_order[b1]][new_order[b2]] =
+                            S->ClassSig[c].SubSig[s].R[b1][b2];
                     }
                 }
             }
         }
 
         /* Replace values in struct with ordered ones */
-        memcpy(S->bandrefs, new_bandrefs, S->nbands * sizeof(char **));
+        memcpy(S->semantic_labels, new_semantic_labels, S->nbands * sizeof(char **));
         for (unsigned int c = S->nclasses; c--;) {
             for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
-                memcpy(S->ClassSig[c].SubSig[s].means, new_means[c][s], S->nbands * sizeof(double));
+                memcpy(S->ClassSig[c].SubSig[s].means, new_means[c][s],
+                       S->nbands * sizeof(double));
                 for (unsigned int i = S->nbands; i--;)
-                    memcpy(S->ClassSig[c].SubSig[s].R[i], new_vars[c][s][i], S->nbands * sizeof(double));
+                    memcpy(S->ClassSig[c].SubSig[s].R[i], new_vars[c][s][i],
+                           S->nbands * sizeof(double));
             }
         }
     }
 
     /* Clean up */
     for (unsigned int j = R->nfiles; j--;)
-        free(group_bandrefs[j]);
-    free(group_bandrefs);
+        free(group_semantic_labels[j]);
+    free(group_semantic_labels);
     free(new_order);
     free(match1);
     free(match2);
-    free(new_bandrefs);
+    free(new_semantic_labels);
     for (unsigned int c = S->nclasses; c--;) {
         for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
             free(new_means[c][s]);

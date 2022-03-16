@@ -71,12 +71,17 @@ class SwipeMapToolbar(BaseToolbar):
                 ("zoomToMap", icons["zoomExtent"], self.parent.OnZoomToMap),
                 (None,),
                 ("saveFile", icons["saveFile"], self.parent.SaveToFile),
+                (
+                    "mapDispSettings",
+                    BaseIcons["mapDispSettings"],
+                    self.parent.OnMapDisplayProperties,
+                ),
             )
         )
 
     def SetActiveMap(self, index):
         """Set currently selected map.
-        Unused, needed because of DoubleMapFrame API.
+        Unused, needed because of DoubleMapPanel API.
         """
         pass
 

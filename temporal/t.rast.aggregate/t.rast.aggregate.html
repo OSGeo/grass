@@ -54,7 +54,6 @@ specified parallel processes (<em>nprocs</em>) and the number of
 intervals to aggregate.
 <p>
 
-
 <h2>EXAMPLES</h2>
 
 <h3>Aggregation of monthly data into yearly data</h3>
@@ -195,8 +194,10 @@ yearly_avg_temp_2004|climate|2004-01-01 00:00:00|2005-01-01 00:00:00
 </pre></div>
 
 <h4>Weighted aggregation</h4>
+
 In this example, we create a STRDS of fictional temperature values for
 a weekly interval:
+
 <div class="code"><pre>
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7 map_8 map_9 map_10"
 for map in ${MAPS} ; do
@@ -217,14 +218,15 @@ We can now use the <b>-w</b> flag and the <b>sampling=related</b> option
 to calculate the 10-daily average temperature. The values of each 10-days
 granule are calculated weighted by relative temporal coverage of the input
 granules.
+
 <div class="code"><pre>
 t.rast.aggregate input=temperature_weekly output=temperature_10daily_weighted \
   basename=tendaily_temp_weighted method=average granularity="10 days" \
   sampling=related -w
 </pre></div>
+
 This is especially useful when harmonizing STRDS with granules that are not
 integer multiplications of each other.
-
 
 <h2>SEE ALSO</h2>
 
@@ -239,12 +241,6 @@ integer multiplications of each other.
 <p>
 <a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing">Temporal data processing Wiki</a>
 
-
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

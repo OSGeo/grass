@@ -16,6 +16,14 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+# Adding -Werror to make's CFLAGS is a workaround for configuring with
+# an old version of configure, which issues compiler warnings and
+# errors out. This may be removed with upgraded configure.in file.
+makecmd="make"
+if [[ "$#" -eq 2 ]]; then
+    makecmd="make CFLAGS='$CFLAGS $2' CXXFLAGS='$CXXFLAGS $2'"
+fi
+
 # non-existent variables as an errors
 set -u
 
@@ -42,5 +50,5 @@ export INSTALL_PREFIX=$1
     --with-fftw \
     --with-netcdf
 
-make
+eval $makecmd
 make install

@@ -34,7 +34,7 @@ class SbGoToGCP(SbItem):
     def __init__(self, mapframe, statusbar, position=0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = "gotoGCP"
-        self.label = _("Go to GCP No.")
+        self.label = _("Pan to GCP by number")
 
         self.widget = SpinCtrl(parent=self.statusbar, id=wx.ID_ANY, value="", min=0)
         self.widget.Hide()

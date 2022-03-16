@@ -16,18 +16,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 #include "dgraph.h"
 #include "e_intersect.h"
 
 #define LENGTH(DX, DY) (sqrt((DX*DX)+(DY*DY)))
-#ifndef MIN
-#define MIN(X,Y) ((X<Y)?X:Y)
-#endif
-#ifndef MAX
-#define MAX(X,Y) ((X>Y)?X:Y)
-#endif
 #define PI M_PI
 
 struct intersection_point

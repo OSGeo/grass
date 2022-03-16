@@ -27,9 +27,9 @@ from math import sin, cos, pi, sqrt
 import wx
 
 try:
-    import wx.lib.agw.flatnotebook as fnb
+    import wx.lib.agw.flatnotebook as FN
 except ImportError:
-    import wx.lib.flatnotebook as fnb
+    import wx.lib.flatnotebook as FN
 
 import grass.script as grass
 
@@ -41,6 +41,7 @@ from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings
 from core.utils import PilImageToWxImage
 from gui_core.forms import GUI
+from gui_core.widgets import GNotebook
 from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
 from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
@@ -151,7 +152,7 @@ class PsMapFrame(wx.Frame):
         self.openDialogs = dict()
 
         self.pageId = NewId()
-        # current page of flatnotebook
+        # current page of GNotebook
         self.currentPage = 0
         # canvas for draft mode
         self.canvas = PsMapBufferedWindow(
@@ -199,7 +200,7 @@ class PsMapFrame(wx.Frame):
         # workaround for http://trac.wxwidgets.org/ticket/13628
         self.SetSize(self.GetBestSize())
 
-        self.Bind(fnb.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
 
@@ -220,15 +221,8 @@ class PsMapFrame(wx.Frame):
     def _layout(self):
         """Do layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        if globalvar.hasAgw:
-            self.book = fnb.FlatNotebook(
-                parent=self, id=wx.ID_ANY, agwStyle=globalvar.FNPageDStyle
-            )
-        else:
-            self.book = fnb.FlatNotebook(
-                parent=self, id=wx.ID_ANY, style=globalvar.FNPageDStyle
-            )
 
+        self.book = GNotebook(parent=self, style=globalvar.FNPageDStyle)
         self.book.AddPage(self.canvas, "Draft mode")
         self.book.AddPage(self.previewCanvas, "Preview")
         self.book.SetSelection(0)
@@ -422,7 +416,8 @@ class PsMapFrame(wx.Frame):
                     "-dSAFER",
                     "-dCompatibilityLevel=1.4",
                     "-c",
-                    ".setpdfwrite",
+                    "30000000",
+                    "setvmthreshold",
                     "-f",
                     event.userData["filename"],
                 ]
@@ -974,7 +969,7 @@ class PsMapFrame(wx.Frame):
         """creates a wx.Font object from selected postscript font. To be
         used for estimating bounding rectangle of text"""
 
-        fontsize = textDict["fontsize"] * self.canvas.currScale
+        fontsize = round(textDict["fontsize"] * self.canvas.currScale)
         fontface = textDict["font"].split("-")[0]
         try:
             fontstyle = textDict["font"].split("-")[1]
@@ -1299,7 +1294,7 @@ class PsMapFrame(wx.Frame):
                     self.deleteObject(id)
 
     def OnPageChanged(self, event):
-        """Flatnotebook page has changed"""
+        """GNotebook page has changed"""
         self.currentPage = self.book.GetPageIndex(self.book.GetCurrentPage())
         if self.currentPage == 1:
             self.SetStatusText(
@@ -1464,8 +1459,9 @@ class PsMapBufferedWindow(wx.Window):
             units.convert(value=(rect.GetY() - pRecty), fromUnit=fromU, toUnit=toU)
             * scale
         )
-
-        return Rect2D(X, Y, Width, Height)
+        if canvasToPaper:
+            return Rect2D(X, Y, Width, Height)
+        return Rect2D(int(X), int(Y), int(Width), int(Height))
 
     def SetPage(self):
         """Sets and changes page, redraws paper"""
@@ -1486,7 +1482,7 @@ class PsMapBufferedWindow(wx.Window):
 
         x = cW / 2 - pW / 2
         y = cH / 2 - pH / 2
-        self.DrawPaper(Rect(x, y, pW, pH))
+        self.DrawPaper(Rect(int(x), int(y), int(pW), int(pH)))
 
     def modifyRectangle(self, r):
         """Recalculates rectangle not to have negative size"""
@@ -2352,7 +2348,7 @@ class PsMapBufferedWindow(wx.Window):
             bounds = self.pdcPaper.GetIdBounds(self.pageId)
         else:
             bounds = self.pdcImage.GetIdBounds(self.imageId)
-        zoomP = bounds.Inflate(bounds.width / 20, bounds.height / 20)
+        zoomP = bounds.Inflate(round(bounds.width / 20), round(bounds.height / 20))
         zoomFactor, view = self.ComputeZoom(zoomP)
         self.Zoom(zoomFactor, view)
 
@@ -2405,7 +2401,7 @@ class PsMapBufferedWindow(wx.Window):
             text = "\n".join(self.itemLabels[drawid])
             w, h, lh = dc.GetFullMultiLineTextExtent(text)
             textExtent = (w, h)
-            textRect = Rect(0, 0, *textExtent).CenterIn(bb)
+            textRect = Rect(0, 0, *textExtent).CenterIn(Rect(*bb))
             r = map(int, bb)
             while not Rect(*r).ContainsRect(textRect) and size >= 8:
                 size -= 2
@@ -2413,7 +2409,7 @@ class PsMapBufferedWindow(wx.Window):
                 dc.SetFont(font)
                 pdc.SetFont(font)
                 textExtent = dc.GetTextExtent(text)
-                textRect = Rect(0, 0, *textExtent).CenterIn(bb)
+                textRect = Rect(0, 0, *textExtent).CenterIn(Rect(*bb))
             pdc.SetTextForeground(wx.Colour(100, 100, 100, 200))
             pdc.SetBackgroundMode(wx.TRANSPARENT)
             pdc.DrawLabel(text=text, rect=textRect)
@@ -2422,9 +2418,9 @@ class PsMapBufferedWindow(wx.Window):
             pdc.DrawCircle(x=bb[0] + bb[2] / 2, y=bb[1] + bb[3] / 2, radius=bb[2] / 2)
 
         elif pdctype == "line":
-            pdc.DrawLinePoint(lineCoords[0], lineCoords[1])
+            pdc.DrawLinePoint(*lineCoords[0], *lineCoords[1])
 
-        pdc.SetIdBounds(drawid, bb)
+        pdc.SetIdBounds(drawid, Rect(*bb))
         pdc.EndDrawing()
         self.Refresh()
 
@@ -2570,7 +2566,7 @@ class PsMapBufferedWindow(wx.Window):
 
         self.pdcPaper.SetPen(self.pen["margins"])
         self.pdcPaper.SetBrush(self.brush["margins"])
-        self.pdcPaper.DrawRectangle(x, y, w, h)
+        self.pdcPaper.DrawRectangle(int(x), int(y), int(w), int(h))
 
         self.pdcPaper.SetIdBounds(self.pageId, rect)
         self.pdcPaper.EndDrawing()
@@ -2587,7 +2583,7 @@ class PsMapBufferedWindow(wx.Window):
         iH = iH * self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
-        imageRect = Rect(x, y, iW, iH)
+        imageRect = Rect(int(x), int(y), int(iW), int(iH))
 
         return imageRect
 
@@ -2721,8 +2717,8 @@ class PsMapBufferedWindow(wx.Window):
     def ScaleRect(self, rect, scale):
         """Scale rectangle"""
         return Rect(
-            rect.GetLeft() * scale,
-            rect.GetTop() * scale,
-            rect.GetSize()[0] * scale,
-            rect.GetSize()[1] * scale,
+            int(rect.GetLeft() * scale),
+            int(rect.GetTop() * scale),
+            int(rect.GetSize()[0] * scale),
+            int(rect.GetSize()[1] * scale),
         )

@@ -548,7 +548,6 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    struct pj_info iproj;	/* input map proj parameters  */
 	    struct pj_info oproj;	/* output map proj parameters  */
 	    struct pj_info tproj;	/* transformation parameters  */
-	    char buff[100], dum[100];
 	    int r, c;
 
 	    /* read current projection info */
@@ -573,6 +572,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 	    G_set_key_value("proj", "ll", out_proj_info);
 
 #if PROJ_VERSION_MAJOR < 6
+            char buff[100], dum[100];
+
 	    /* PROJ6+ has its own datum transformation parameters */
 	    if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
 		G_fatal_error(_("WGS84 output not possible as this location does not contain "

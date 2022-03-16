@@ -494,12 +494,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	break;
     case USE_CAT:
 	{
-	    int row, rows, fd;
-	    void *rowbuf;
-	    struct Cell_stats stats;
-	    CELL n;
 	    RASTER_MAP_TYPE map_type;
-	    long count;
 
 	    map_type = Rast_map_type(rast_name, G_mapset());
 
@@ -601,7 +596,13 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		 * -> skip */
 
 #if 0
-		fd = Rast_open_old(rast_name, G_mapset());
+                int row, rows, fd;
+                void *rowbuf;
+                struct Cell_stats stats;
+                CELL n;
+                long count;
+                
+                fd = Rast_open_old(rast_name, G_mapset());
 		rowbuf = Rast_allocate_buf(map_type);
 		Rast_init_cell_stats(&stats);
 		rows = Rast_window_rows();
