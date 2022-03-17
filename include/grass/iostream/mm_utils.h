@@ -45,6 +45,6 @@ void  LOG_avail_memo();
 
 size_t getAvailableMemory();
 
-void  MEMORY_LOG(std::string str);
+void  MEMORY_LOG(const std::string &str);
 
 #endif
