@@ -24,6 +24,11 @@ static int dcmp(const void *aa, const void *bb)
 
 static double mode(double *value, int argc)
 {
+    /* Nota:
+     * It might be safer for to return nan or inf in case the input is empty,
+     * but it is a misuse of the function, so the return value is sort of
+     * undefined in that case.
+     */
     double mode_v = 0.0;
     int mode_n = 0;
     int i;
