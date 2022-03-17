@@ -131,7 +131,6 @@ int G_make_location_epsg(const char *location_name,
 			 const struct Key_Value *proj_epsg)
 {
     int ret;
-    char path[GPATH_MAX];
 
     ret = G_make_location(location_name, wind, proj_info, proj_units);
 
@@ -140,6 +139,7 @@ int G_make_location_epsg(const char *location_name,
 
     /* Write out the PROJ_EPSG if available. */
     if (proj_epsg != NULL) {
+        char path[GPATH_MAX];
 	G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
 	G_write_key_value_file(path, proj_epsg);
     }
@@ -436,7 +436,6 @@ int G_compare_projections(const struct Key_Value *proj_info1,
     /*      Do they have the same center latitude?                          */
     /* -------------------------------------------------------------------- */
 
-	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_0", proj_info1);
 	l_2 = G_find_key_value("lat_0", proj_info2);
 
@@ -450,7 +449,6 @@ int G_compare_projections(const struct Key_Value *proj_info1,
     /*      Do they have the same standard parallels?                       */
     /* -------------------------------------------------------------------- */
 
-	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_1", proj_info1);
 	l_2 = G_find_key_value("lat_1", proj_info2);
 
@@ -464,12 +462,11 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 
 	    if (!l_2)
 		return -11;
-	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+	    if (fabs(atof(l_1) - atof(l_2)) > 0.000001) {
 		return -11;
 	    }
 	}
 
-	l_1 = l_2 = NULL;
 	l_1 = G_find_key_value("lat_2", proj_info1);
 	l_2 = G_find_key_value("lat_2", proj_info2);
 
@@ -483,7 +480,7 @@ int G_compare_projections(const struct Key_Value *proj_info1,
 
 	    if (!l_2)
 		return -11;
-	    if (l_1 && l_2 && (fabs(atof(l_1) - atof(l_2)) > 0.000001)) {
+	    if (fabs(atof(l_1) - atof(l_2)) > 0.000001) {
 		return -11;
 	    }
 	}

@@ -42,6 +42,6 @@ enum InputMask
 /* Assuming input value between 0 and 1
 if rad is true, idn should first be converted to a reflectance value
 returns adjusted value also between 0 and 1 */
-extern double transform(const TransformInput ti, InputMask imask, double idn);
+extern double transform(const TransformInput &ti, InputMask imask, double idn);
 
 #endif /* TRANSFORM_H */

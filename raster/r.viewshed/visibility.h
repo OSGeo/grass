@@ -211,7 +211,7 @@ void set_viewpoint_elev(Viewpoint * vp, float elev);
 /* ------------------------------------------------------------ */
 /* MemoryVisibilityGrid functions */
 
-MemoryVisibilityGrid *create_inmem_visibilitygrid(GridHeader hd,
+MemoryVisibilityGrid *create_inmem_visibilitygrid(const GridHeader &hd,
 						  Viewpoint vp);
 
 void free_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid);
@@ -230,7 +230,7 @@ void save_inmem_visibilitygrid(MemoryVisibilityGrid * vigrid,
 /* IOVisibilityGrid functions */
 
 /*create grid from given header and viewpoint */
-IOVisibilityGrid *init_io_visibilitygrid(GridHeader hd, Viewpoint vp);
+IOVisibilityGrid *init_io_visibilitygrid(const GridHeader &hd, Viewpoint vp);
 
 /*frees a visibility grid */
 void free_io_visibilitygrid(IOVisibilityGrid * grid);

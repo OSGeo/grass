@@ -51,8 +51,11 @@ struct BM *BM_create_sparse(int x, int y)
     map->bytes = (x + 7) / 8;
 
     if (NULL == (map->data = (unsigned char *)
-		 malloc(sizeof(struct BMlink *) * y)))
+		 malloc(sizeof(struct BMlink *) * y))) 
+    {
+        free(map);
 	return (NULL);
+    }
 
     map->rows = y;
     map->cols = x;
@@ -129,7 +132,7 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
 {
     struct BMlink *p, *p2, *prev;
     int cur_x = 0;
-    int Tcount, Tval;
+    int Tval;
     int dist_a, dist_b;
 
     val = !(!val);		/* set val == 1 or 0 */
@@ -141,7 +144,6 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
 	    if (p->val == val)	/* no change */
 		return 0;
 
-	    Tcount = p->count;	/* save current state */
 	    Tval = p->val;
 
 	    /* if x is on edge, then we probably want to merge it with 
@@ -366,7 +368,6 @@ int BM_file_write_sparse(FILE * fp, struct BM *map)
     char c;
     int i, y;
     struct BMlink *p;
-    int cnt;
 
     c = BM_MAGIC;
     fwrite(&c, sizeof(char), sizeof(char), fp);
@@ -383,7 +384,7 @@ int BM_file_write_sparse(FILE * fp, struct BM *map)
     for (y = 0; y < map->rows; y++) {
 	/* first count number of links */
 	p = ((struct BMlink **)(map->data))[y];
-	cnt = 0;
+	int cnt = 0;
 	while (p != NULL) {
 	    cnt++;
 	    p = p->next;

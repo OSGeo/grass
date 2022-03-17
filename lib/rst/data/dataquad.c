@@ -79,8 +79,10 @@ struct quaddata *quad_data_new(double x_or, double y_or, double xmax,
     data->n_points = n_points;
     data->points =
 	(struct triple *)malloc(sizeof(struct triple) * (kmax + 1));
-    if (!data->points)
+    if (!data->points) {
+        free(data);
 	return NULL;
+    }
     for (i = 0; i <= kmax; i++) {
 	data->points[i].x = 0.;
 	data->points[i].y = 0.;
@@ -100,12 +102,12 @@ int quad_compare(struct triple *point, struct quaddata *data)
     int cond1, cond2, cond3, cond4, rows, cols;
     double ew_res, ns_res;
 
+    if (data == NULL)
+	return -1;
+    
     ew_res = (data->xmax - data->x_orig) / data->n_cols;
     ns_res = (data->ymax - data->y_orig) / data->n_rows;
 
-
-    if (data == NULL)
-	return -1;
     if (data->n_rows % 2 == 0) {
 	rows = data->n_rows / 2;
     }
@@ -142,18 +144,16 @@ int quad_compare(struct triple *point, struct quaddata *data)
  */
 int quad_add_data(struct triple *point, struct quaddata *data, double dmin)
 {
-    int n, i, cond;
-    double xx, yy, r;
 
-    cond = 1;
+    int cond = 1;
     if (data == NULL) {
 	fprintf(stderr, "add_data: data is NULL \n");
 	return -5;
     }
-    for (i = 0; i < data->n_points; i++) {
-	xx = data->points[i].x - point->x;
-	yy = data->points[i].y - point->y;
-	r = xx * xx + yy * yy;
+    for (int i = 0; i < data->n_points; i++) {
+	double xx = data->points[i].x - point->x;
+	double yy = data->points[i].y - point->y;
+	double r = xx * xx + yy * yy;
 	if (r <= dmin) {
 	    cond = 0;
 	    break;
@@ -161,7 +161,7 @@ int quad_add_data(struct triple *point, struct quaddata *data, double dmin)
     }
 
     if (cond) {
-	n = (data->n_points)++;
+	int n = (data->n_points)++;
 	data->points[n].x = point->x;
 	data->points[n].y = point->y;
 	data->points[n].z = point->z;

@@ -84,10 +84,10 @@ typedef struct rbtree_
 
 
 
-RBTree *create_tree(TreeValue tv);
+RBTree *create_tree(const TreeValue &tv);
 void delete_tree(RBTree * t);
 void destroy_sub_tree(TreeNode * node);
-void insert_into(RBTree * rbt, TreeValue value);
+void insert_into(RBTree * rbt, const TreeValue &value);
 void delete_from(RBTree * rbt, double key);
 TreeNode *search_for_node_with_key(RBTree * rbt, double key);
 
@@ -135,7 +135,7 @@ char compare_values(TreeValue * v1, TreeValue * v2);
 char compare_double(double a, double b);
 
 /*create a tree node */
-TreeNode *create_tree_node(TreeValue value);
+TreeNode *create_tree_node(const TreeValue &value);
 
 /*create node with its value set to the value given
    //and insert the node into the tree */

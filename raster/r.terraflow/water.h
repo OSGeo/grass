@@ -319,7 +319,7 @@ public:
 		bfs_depth_type gdepth=DEPTH_INITIAL) :
     waterWindowBaseType(gel, gdir, gdepth), label(glabel) {
   }
-  waterGridType(elevation_type gel, waterType w) :
+  waterGridType(elevation_type gel, const waterType &w) :
     waterWindowBaseType(gel, w.dir, w.depth), label(w.label) {}
   
   cclabel_type getLabel() const { return label; };

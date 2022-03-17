@@ -237,7 +237,7 @@ class TICache
 
     }
 
-    void add(TransformInput ti, double alt, double vis)
+    void add(const TransformInput &ti, double alt, double vis)
     {
 	struct RBitem insert_ti = set_alt_vis(alt, vis);
 

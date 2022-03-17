@@ -69,9 +69,12 @@ struct BM *BM_create(int x, int y)
 
     map->bytes = (x + 7) / 8;
 
-    if (NULL ==
-	(map->data = (unsigned char *)calloc(map->bytes * y, sizeof(char))))
+    void *tmp_map_data = (unsigned char *)calloc(map->bytes * y, sizeof(char));
+    if (tmp_map_data == NULL){
+        free(map);
 	return (NULL);
+    }
+    map->data = tmp_map_data;
 
     map->rows = y;
     map->cols = x;
@@ -324,7 +327,10 @@ struct BM *BM_file_read(FILE * fp)
 
     fread(&c, sizeof(char), sizeof(char), fp);
     if (c != BM_MAGIC)
+    {
+        free(map);
 	return NULL;
+    }
 
     fread(buf, BM_TEXT_LEN, sizeof(char), fp);
 
@@ -341,8 +347,11 @@ struct BM *BM_file_read(FILE * fp)
     if (map->sparse == BM_SPARSE)
 	goto readsparse;
 
-    if (NULL == (map->data = (unsigned char *)malloc(map->bytes * map->rows)))
+    if (NULL == (map->data = (unsigned char *)malloc(map->bytes * map->rows))) 
+    {
+        free(map);
 	return (NULL);
+    }
 
 
     for (i = 0; i < map->rows; i++)

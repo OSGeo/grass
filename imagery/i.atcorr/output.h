@@ -19,7 +19,7 @@ public:
 	}
 
 	/* print a string */
-	static void Print(std::string x)			
+	static void Print(const std::string &x)
 	{ 
 		pos += x.length();
         fprintf(stderr, "%s", x.c_str());
@@ -51,7 +51,7 @@ public:
 	}
 
 	/* write a s after cnt spaces */
-	static void WriteLn(int cnt, std::string s)
+	static void WriteLn(int cnt, const std::string &s)
 	{
 		Begin();
 		Repeat(cnt,' ');
