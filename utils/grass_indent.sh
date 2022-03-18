@@ -16,12 +16,12 @@
 # TODO: replace short flags by long ones to improve readability
 
 case "$(uname)" in 
-  Darwin | *BSD*)
-    INDENT=$(which gindent)
-    ;;
-  *)
-    INDENT=$(which indent)
-    ;;
+ Darwin | *BSD*)
+  INDENT=$(which gindent)
+  ;;
+ *)
+  INDENT=$(which indent)
+  ;;
 esac
 
 if [ -z "$INDENT" ]; then
