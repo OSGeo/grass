@@ -24287,9 +24287,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "Öznitelik bilgisini yazdır"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -30009,9 +30008,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "<%s> vektör haritasının geçmiş dosyası açılamıyor"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35356,9 +35355,8 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:284
-#, fuzzy
 msgid "All points fall outside of the current computational region"
-msgstr "Kaynak noktası geçerli bölge dışındadır"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:285
 msgid "Input vector and computational region do not overlap"
@@ -36420,9 +36418,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr "dosyaları mevcut dosyaya ekle (mevcut dosyalara yazma aktif olmalıdır)"
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Kayıp tablo"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -36430,9 +36428,9 @@ msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
 #: ../vector/v.patch/main.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
-msgstr "Sütun sayısı farklı"
+msgstr ""
 
 #: ../vector/v.patch/main.c:289
 #, c-format
@@ -37629,9 +37627,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Satır sayısı"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42432,24 +42430,24 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "<%s> - grubu henüz mevcut değil. Oluşturuluyor..."
+msgstr ""
 
 #: ../general/g.copy/main.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s=%s,%s: files are the same, no copy required. Skipping."
-msgstr "%s=%s,%s: dosyaları aynı, kopyalamaya gerek yok"
+msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "<%s> raster haritası zaten mevcut ve üzerine yazılacak"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> uygun olmayan bir addır"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -54016,9 +54014,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Yükselti için ölçek faktörü"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54106,9 +54103,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "renk okunamıyor"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -55823,9 +55819,8 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Sorgulanacak koordinatlar"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
@@ -55837,14 +55832,13 @@ msgid "Profile output file name (\"-\" for stdout)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Çıktı biçimi"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed parsing <%s>"
-msgstr "Dışa aktarılıyor <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:302
 #, c-format
@@ -55852,14 +55846,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "Son nokta koordinatları geçerli bölge ayarları dışındadır"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "<%s> çıktı dosyası açılamıyor"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -57346,9 +57339,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "<%s> harita takımı bulunamadı"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57363,14 +57355,12 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "<%s> raster haritasıgeçerli harita takımında bulunamadı"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "İstenen <%s> parametresi ayarlanamadı"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
@@ -58209,9 +58199,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Coğrafi dönüşüm ayarlanamıyor"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -59874,20 +59863,20 @@ msgstr "pj_do_proj5 da hata"
 msgid "Error in pj_do_proj6"
 msgstr "pj_do_proj6 da hata"
 
-#~ msgid "<%s> not found"
-#~ msgstr "<%s> bulunamadı"
+msgid "<%s> not found"
+msgstr "<%s> bulunamadı"
 
-#~ msgid "Key columns differ"
-#~ msgstr "Anahtar sütunlar farklı"
+msgid "Key columns differ"
+msgstr "Anahtar sütunlar farklı"
 
-#~ msgid "Column types differ"
-#~ msgstr "Sütun tipleri farklı"
+msgid "Column types differ"
+msgstr "Sütun tipleri farklı"
 
-#~ msgid "Missing table"
-#~ msgstr "Kayıp tablo"
+msgid "Missing table"
+msgstr "Kayıp tablo"
 
-#~ msgid "Number of columns differ"
-#~ msgstr "Sütun sayısı farklı"
+msgid "Number of columns differ"
+msgstr "Sütun sayısı farklı"
 
-#~ msgid "%s=%s,%s: files are the same, no copy required"
-#~ msgstr "%s=%s,%s: dosyaları aynı, kopyalamaya gerek yok"
+msgid "%s=%s,%s: files are the same, no copy required"
+msgstr "%s=%s,%s: dosyaları aynı, kopyalamaya gerek yok"

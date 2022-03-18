@@ -1,15 +1,21 @@
-#!/usr/bin/env python
-
 """
 The operations module contains various functions to process the
 DescriptionCollection and prepare it for output.
 ctypesgen.processor.pipeline calls the operations module.
 """
 
-import ctypes, re, os, sys, keyword
-from ..descriptions import *
-from ..messages import *
-from .. import libraryloader
+import re
+import os
+import keyword
+
+from ctypesgen import libraryloader
+from ctypesgen.descriptions import (
+    EnumDescription,
+    StructDescription,
+    TypedefDescription,
+)
+from ctypesgen.messages import warning_message
+
 
 # Processor functions
 
@@ -31,7 +37,7 @@ def automatically_typedef_structs(data, options):
 
 def remove_NULL(data, options):
     """remove_NULL() removes any NULL definitions from the C headers because
-ctypesgen supplies its own NULL definition."""
+    ctypesgen supplies its own NULL definition."""
 
     for macro in data.macros:
         if macro.name == "NULL":
@@ -45,7 +51,7 @@ def remove_descriptions_in_system_headers(data, opts):
     known_headers = [os.path.basename(x) for x in opts.headers]
 
     for description in data.all:
-        if description.src != None:
+        if description.src is not None:
             if description.src[0] == "<command line>":
                 description.include_rule = "if_needed"
             elif description.src[0] == "<built-in>":
@@ -260,7 +266,7 @@ def find_source_libraries(data, opts):
     for library_name in opts.libraries:
         try:
             library = libraryloader.load_library(library_name)
-        except ImportError as e:
+        except ImportError:
             warning_message(
                 'Could not load library "%s". Okay, I\'ll '
                 "try to load it at runtime instead. " % (library_name),
@@ -268,6 +274,6 @@ def find_source_libraries(data, opts):
             )
             continue
         for symbol in all_symbols:
-            if symbol.source_library == None:
+            if symbol.source_library is None:
                 if hasattr(library, symbol.c_name()):
                     symbol.source_library = library_name

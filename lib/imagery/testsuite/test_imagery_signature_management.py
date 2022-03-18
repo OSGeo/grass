@@ -41,19 +41,17 @@ from grass.lib.imagery import (
     I_make_signatures_dir,
 )
 
-H_DIRSEP = HOST_DIRSEP.decode("utf-8")
-
 
 class GetSignaturesDirTestCase(TestCase):
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIG)
-        self.assertEqual(utils.decode(cdir.value), f"signatures{H_DIRSEP}sig")
+        self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sig")
 
     def test_get_sigset(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIGSET)
-        self.assertEqual(utils.decode(cdir.value), f"signatures{H_DIRSEP}sigset")
+        self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sigset")
 
     def test_get_libsvm(self):
         elem = ctypes.create_string_buffer(GNAME_MAX)

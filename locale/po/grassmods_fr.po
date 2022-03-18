@@ -11518,9 +11518,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Sélection"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 msgid "Name of band reference identifier (example: S2_1)"
@@ -14401,9 +14400,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "distance"
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -14843,9 +14841,8 @@ msgstr ""
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:4
 #: ../locale/scriptstrings/g.copyall_to_translate.c:2
 #: ../general/g.copy/main.c:44
-#, fuzzy
 msgid "copy"
-msgstr "copie"
+msgstr ""
 
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:7
 #, fuzzy
@@ -16911,9 +16908,8 @@ msgstr "valeur nulle"
 #: ../locale/scriptstrings/r.mask_to_translate.c:5
 #: ../raster3d/r3.mask/main.c:136 ../raster3d/r3.null/main.c:183
 #: ../raster/r.null/main.c:63
-#, fuzzy
 msgid "no-data"
-msgstr "Pas de données"
+msgstr ""
 
 #: ../locale/scriptstrings/r.null.all_to_translate.c:6
 #: ../raster/r.null/main.c:88
@@ -20156,9 +20152,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "Pas de données"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -24588,9 +24583,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "Affiche l'information attributaire"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -30326,9 +30320,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Impossible d'écrire la carte vecteur <%s>"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35633,9 +35627,8 @@ msgid "Neighborhood analysis tool for vector point maps."
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:134
-#, fuzzy
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Rend la catégorie de chaque cellule une fontion des valeurs de catégorie des cellules voisines, et enregistre la nouvelle valeur dans une carte raster de sortie."
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:160
 msgid "Method for aggregate statistics (count if non given)"
@@ -35659,9 +35652,8 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:284
-#, fuzzy
 msgid "All points fall outside of the current computational region"
-msgstr "Point de départ en dehors de la région courante"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:285
 msgid "Input vector and computational region do not overlap"
@@ -36723,9 +36715,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr ""
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Table manquante"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -36733,9 +36725,9 @@ msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
 #: ../vector/v.patch/main.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
-msgstr "Nombre de colonnes dans la nouvelle région"
+msgstr ""
 
 #: ../vector/v.patch/main.c:289
 #, c-format
@@ -37932,9 +37924,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Nombre de lignes"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42301,9 +42293,8 @@ msgid "Cleaning up temporary files..."
 msgstr ""
 
 #: ../general/g.mapset/main.c:208
-#, fuzzy
 msgid "Mapset switched."
-msgstr "Jeu de données : %s"
+msgstr ""
 
 #: ../general/g.mapset/main.c:211
 msgid "Mapset switched. Your shell continues to use the history for the old mapset"
@@ -42733,14 +42724,14 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "Le jeu de cartes <%s> n'existe pas"
+msgstr ""
 
 #: ../general/g.copy/main.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s=%s,%s: files are the same, no copy required. Skipping."
-msgstr "%s=%s,%s : les fichiers peuvent être les mêmes, pas de renommage possible"
+msgstr ""
 
 #: ../general/g.copy/main.c:79
 #, c-format
@@ -42748,9 +42739,9 @@ msgid "<%s> already exists and overwrite is not enabled. Skipping."
 msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> est un nom de fichier illégal"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -49478,24 +49469,24 @@ msgid "<%s> is a virtual raster map - can't (un)compress"
 msgstr ""
 
 #: ../raster/r.compress/main.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "DONE: uncompressed file is %lu %s (%.2f%%) smaller"
-msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus petit"
+msgstr ""
 
 #: ../raster/r.compress/main.c:220
-#, fuzzy, c-format
+#, c-format
 msgid "DONE: compressed file is %lu %s (%.2f%%) smaller"
-msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus petit"
+msgstr ""
 
 #: ../raster/r.compress/main.c:224
-#, fuzzy, c-format
+#, c-format
 msgid "DONE: uncompressed file is %lu %s (%.2f%%) larger"
-msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus grand"
+msgstr ""
 
 #: ../raster/r.compress/main.c:225
-#, fuzzy, c-format
+#, c-format
 msgid "DONE: compressed file is %lu %s (%.2f%%) larger"
-msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus grand"
+msgstr ""
 
 #: ../raster/r.compress/main.c:228
 msgid "same size"
@@ -54364,9 +54355,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Facteur d'échelle pour l'altitude"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54454,9 +54444,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Impossible d'ouvrir le fichier de script"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -56173,30 +56162,26 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Coordonnées pour la requête"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
-#, fuzzy
 msgid "Profile"
-msgstr "profil"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "Nom du fichier en sortie (utilisez output=- pour le flux de sortie stdout)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Format de sortie"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed parsing <%s>"
-msgstr "Re-compression de <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:302
 #, c-format
@@ -56204,14 +56189,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "Les points des extrémités sont en dehors des paramètres de la région courante"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "Impossible d'ouvrir le fichier de sortie <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -56239,14 +56223,12 @@ msgid "Unknown output data type"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:653
-#, fuzzy
 msgid "Profile data has been written"
-msgstr "Écrire les données en entiers"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:655
-#, fuzzy
 msgid "Failed writing profile data"
-msgstr "Échec de l'écriture du fichier V5D"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:751
 msgid "Failed to profile the computation, please check the parameters"
@@ -57700,9 +57682,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "Jeu de cartes <%s> non trouvé"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57717,14 +57698,12 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "Carte raster <%s> non trouvée dans le jeu de cartes courant"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "Le paramètre <%s> est requis mais non défini"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
@@ -58563,9 +58542,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Impossible de créer le fichier segment"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -60516,17 +60494,17 @@ msgstr "Impossible de ré-ouvrir le fichier segment"
 msgid "dseg_open(): unable to create segment file"
 msgstr "dseg_open() : impossible de créer le fichier segment"
 
-#~ msgid "Missing table"
-#~ msgstr "Table manquante"
+msgid "Missing table"
+msgstr "Table manquante"
 
-#~ msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
-#~ msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus petit"
+msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
+msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus petit"
 
-#~ msgid "DONE: compressed file is %lu %s (%.2f%) smaller"
-#~ msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus petit"
+msgid "DONE: compressed file is %lu %s (%.2f%) smaller"
+msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus petit"
 
-#~ msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
-#~ msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus grand"
+msgid "DONE: uncompressed file is %lu %s (%.2f%) larger"
+msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus grand"
 
-#~ msgid "DONE: compressed file is %lu %s (%.2f%) larger"
-#~ msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus grand"
+msgid "DONE: compressed file is %lu %s (%.2f%) larger"
+msgstr "FAIT : le fichier compressé est %lu %s (%.2f%) plus grand"
