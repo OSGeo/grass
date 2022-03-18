@@ -45,6 +45,7 @@ int G_copy_file(const char *infile, const char *outfile)
     outfp = fopen(outfile, "w");
     if (outfp == NULL) {
 	G_warning("Cannot open %s for writing: %s", outfile, strerror(errno));
+        fclose(infp);
 	return 0;
     }
 
@@ -54,6 +55,8 @@ int G_copy_file(const char *infile, const char *outfile)
 	outchar = putc(inchar, outfp);
 	if (outchar != inchar) {
 	    G_warning("Error writing to %s", outfile);
+            fclose(infp);
+            fclose(outfp);
 	    return 0;
 	}
     }
