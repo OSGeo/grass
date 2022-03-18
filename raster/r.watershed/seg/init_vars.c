@@ -24,7 +24,6 @@ int init_vars(int argc, char *argv[])
     WAT_ALT wa, *wabuf;
     ASP_FLAG af, af_nbr, *afbuf;
     A_TANB sca_tanb;
-    char MASK_flag;
     void *elebuf, *ptr, *watbuf, *watptr;
     int ele_map_type, wat_map_type;
     size_t ele_size, wat_size;
@@ -310,7 +309,6 @@ int init_vars(int argc, char *argv[])
 
     /* read elevation input and mark NULL/masked cells */
     G_message("SECTION 1a: Mark masked and NULL cells");
-    MASK_flag = 0;
     do_points = (GW_LARGE_INT) nrows *ncols;
 
     for (r = 0; r < nrows; r++) {
@@ -401,8 +399,6 @@ int init_vars(int argc, char *argv[])
 	Rast_close(wat_fd);
 	G_free(watbuf);
     }
-
-    MASK_flag = (do_points < nrows * ncols);
 
     /* read retention map to adjust flow distribution (AG) */
     if (rtn_flag) {
