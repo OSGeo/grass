@@ -92,6 +92,7 @@ _popen_args = [
     "universal_newlines",
     "startupinfo",
     "creationflags",
+    "encoding",
 ]
 
 
@@ -464,11 +465,6 @@ def start_command(
 
     :return: Popen object
     """
-    if "encoding" in kwargs.keys():
-        # This variable was never used for anything.
-        # See https://github.com/OSGeo/grass/issues/1521
-        encoding = kwargs.pop("encoding")  # noqa: F841
-
     options = {}
     popts = {}
     for opt, val in kwargs.items():
@@ -538,7 +534,7 @@ def run_command(*args, **kwargs):
             stdout = _make_unicode(stdout, encoding)
             stderr = _make_unicode(stderr, encoding)
         returncode = ps.poll()
-        if returncode:
+        if returncode and stderr:
             sys.stderr.write(stderr)
     else:
         returncode = ps.wait()
@@ -605,7 +601,9 @@ def read_command(*args, **kwargs):
         stdout = _make_unicode(stdout, encoding)
         stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
-    if _capture_stderr and returncode:
+    if returncode and _capture_stderr and stderr:
+        # Print only when we are capturing it and there was some output.
+        # (User can request ignoring the subprocess stderr and then we get only None.)
         sys.stderr.write(stderr)
     return handle_errors(returncode, stdout, args, kwargs)
 
@@ -693,7 +691,7 @@ def write_command(*args, **kwargs):
         unused = _make_unicode(unused, encoding)
         stderr = _make_unicode(stderr, encoding)
     returncode = process.poll()
-    if _capture_stderr and returncode:
+    if returncode and _capture_stderr and stderr:
         sys.stderr.write(stderr)
     return handle_errors(returncode, None, args, kwargs)
 
@@ -858,8 +856,8 @@ def set_capture_stderr(capture=True):
 
     .. note::
 
-        This is advantages for interactive shells such as the one in GUI
-        and interactive notebooks such as Jupyer Notebook.
+        This is advantageous for interactive shells such as the one in GUI
+        and interactive notebooks such as Jupyter Notebook.
 
     The capturing can be applied only in certain cases, for example
     in case of run_command() it is applied because run_command() nor
@@ -936,7 +934,7 @@ def parser():
     "flags" are Python booleans.
 
     Overview table of parser standard options:
-    https://grass.osgeo.org/grass80/manuals/parser_standard_options.html
+    https://grass.osgeo.org/grass-devel/manuals/parser_standard_options.html
     """
     if not os.getenv("GISBASE"):
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)

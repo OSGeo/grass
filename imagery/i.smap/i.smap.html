@@ -23,7 +23,6 @@ classification which classifies each pixel separately,
 but requires somewhat less computation. This mode is selected with
 the <b>-m</b> flag (see <a href="#mflag.html">below</a>).
 
-
 <h2>OPTIONS</h2>
 
 <h3>Flags:</h3>
@@ -135,7 +134,6 @@ using e.g. r.mapcalc:
 r.mapcalc "MASKed_map = classification_results"
 </pre></div>
 
-
 <h2>EXAMPLE</h2>
 
 Supervised classification of LANDSAT scene (complete NC location)
@@ -176,22 +174,22 @@ The signature file obtained in the example above will allow
 to classify the current imagery group only (lsat7_2002).
 If the user would like to re-use the signature file for the
 classification of different imagery group(s), they can set
-band references for each group member beforehand, i.e.,
+semantic labels for each group member beforehand, i.e.,
 before generating the signature files.
-Band references are set by means of <em>r.support</em>
+Semantic labels are set by means of <em>r.support</em>
 as shown below:
 
 <div class="code"><pre>
-# Define band references for all LANDSAT bands
-r.support map=lsat7_2002_10 bandref=TM7_1
-r.support map=lsat7_2002_20 bandref=TM7_2
-r.support map=lsat7_2002_30 bandref=TM7_3
-r.support map=lsat7_2002_40 bandref=TM7_4
-r.support map=lsat7_2002_50 bandref=TM7_5
-r.support map=lsat7_2002_61 bandref=TM7_61
-r.support map=lsat7_2002_62 bandref=TM7_62
-r.support map=lsat7_2002_70 bandref=TM7_7
-r.support map=lsat7_2002_80 bandref=TM7_8
+# Define semantic labels for all LANDSAT bands
+r.support map=lsat7_2002_10 semantic_label=TM7_1
+r.support map=lsat7_2002_20 semantic_label=TM7_2
+r.support map=lsat7_2002_30 semantic_label=TM7_3
+r.support map=lsat7_2002_40 semantic_label=TM7_4
+r.support map=lsat7_2002_50 semantic_label=TM7_5
+r.support map=lsat7_2002_61 semantic_label=TM7_61
+r.support map=lsat7_2002_62 semantic_label=TM7_62
+r.support map=lsat7_2002_70 semantic_label=TM7_7
+r.support map=lsat7_2002_80 semantic_label=TM7_8
 </pre></div>
 
 <h2>REFERENCES</h2>
@@ -212,11 +210,10 @@ pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
 <em>IEEE Trans. on Geoscience and Remote Sensing, 33(6): 1313-1316.</em>
 </ul>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.support.html">r.support</a></em> for setting band references,
+<a href="r.support.html">r.support</a></em> for setting semantic labels,
 <br>
 <em>
 <a href="i.group.html">i.group</a></em> for creating groups and subgroups
@@ -233,7 +230,6 @@ to generate the signature file required by this program
 <a href="r.kappa.html">r.kappa</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 <a href="https://engineering.purdue.edu/~bouman/software/segmentation/">Charles Bouman, 
@@ -243,10 +239,5 @@ Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
 <br>
-Band reference support: Maris Nartiss,
+Semantic label support: Maris Nartiss,
 University of Latvia
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

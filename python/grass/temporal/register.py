@@ -80,9 +80,11 @@ def register_maps_in_space_time_dataset(
     """
     start_time_in_file = False
     end_time_in_file = False
-    band_reference_in_file = False
+    semantic_label_in_file = False
 
     msgr = get_tgis_message_interface()
+
+    msgr.debug(1, "register_maps_in_space_time_dataset()")
 
     # Make sure the arguments are of type string
     if start != "" and start is not None:
@@ -118,6 +120,13 @@ def register_maps_in_space_time_dataset(
     mapset = get_current_mapset()
     dbif, connection_state_changed = init_dbif(None)
 
+    # create new stds only in the current mapset
+    # remove all connections to any other mapsets
+    # ugly hack !
+    currcon = {}
+    currcon[mapset] = dbif.connections[mapset]
+    dbif.connections = currcon
+
     # The name of the space time dataset is optional
     if name:
         sp = open_old_stds(name, type, dbif)
@@ -147,7 +156,13 @@ def register_maps_in_space_time_dataset(
         # Build the map list again with the ids
         for count in range(len(maplist)):
             row = {}
-            mapid = AbstractMapDataset.build_id(maplist[count], mapset, None)
+            mapname = maplist[count]
+            map_mapset = mapset
+            if "@" not in mapname:
+                found = gscript.find_file(element=type, name=mapname)
+                if found["mapset"] is not None and len(found["mapset"]) > 0:
+                    map_mapset = found["mapset"]
+            mapid = AbstractMapDataset.build_id(mapname, map_mapset, None)
 
             row["id"] = mapid
             maplist[count] = row
@@ -167,29 +182,29 @@ def register_maps_in_space_time_dataset(
 
             line_list = line.split(fs)
 
-            # Detect start and end time (and band reference)
+            # Detect start and end time (and semantic label)
             if len(line_list) == 2:
                 start_time_in_file = True
                 end_time_in_file = False
-                band_reference_in_file = False
+                semantic_label_in_file = False
             elif len(line_list) == 3:
                 start_time_in_file = True
-                # Check if last column is an end time or a band reference
+                # Check if last column is an end time or a semantic label
                 time_object = check_datetime_string(line_list[2])
                 if not sp.is_time_relative() and isinstance(time_object, datetime):
                     end_time_in_file = True
-                    band_reference_in_file = False
+                    semantic_label_in_file = False
                 else:
                     end_time_in_file = False
-                    band_reference_in_file = True
+                    semantic_label_in_file = True
             elif len(line_list) == 4:
                 start_time_in_file = True
                 end_time_in_file = True
-                band_reference_in_file = True
+                semantic_label_in_file = True
             else:
                 start_time_in_file = False
                 end_time_in_file = False
-                band_reference_in_file = False
+                semantic_label_in_file = False
 
             mapname = line_list[0].strip()
             row = {}
@@ -201,12 +216,17 @@ def register_maps_in_space_time_dataset(
             if start_time_in_file and not end_time_in_file:
                 row["start"] = line_list[1].strip()
 
-            if band_reference_in_file:
+            if semantic_label_in_file:
                 idx = 3 if end_time_in_file else 2
                 # case-sensitive, the user decides on the band name
-                row["band_reference"] = line_list[idx].strip()
+                row["semantic_label"] = line_list[idx].strip()
 
-            row["id"] = AbstractMapDataset.build_id(mapname, mapset)
+            map_mapset = mapset
+            if "@" not in mapname:
+                found = gscript.find_file(element=type, name=mapname)
+                if found["mapset"] is not None and len(found["mapset"]) > 0:
+                    map_mapset = found["mapset"]
+            row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
 
             maplist.append(row)
 
@@ -233,7 +253,7 @@ def register_maps_in_space_time_dataset(
     # Store the ids of datasets that must be updated
     datatsets_to_modify = {}
 
-    msgr.message(_("Gathering map information..."))
+    msgr.debug(2, "Gathering map information...")
 
     for count in range(len(maplist)):
         if count % 50 == 0:
@@ -254,16 +274,16 @@ def register_maps_in_space_time_dataset(
         if "end" in maplist[count]:
             end = maplist[count]["end"]
 
-        # Use the band reference from file
-        if "band_reference" in maplist[count]:
-            band_reference = maplist[count]["band_reference"]
+        # Use the semantic label from file
+        if "semantic_label" in maplist[count]:
+            semantic_label = maplist[count]["semantic_label"]
         else:
-            band_reference = None
+            semantic_label = None
 
         is_in_db = False
 
-        # Put the map into the database
-        if not map.is_in_db(dbif):
+        # Put the map into the database of the current mapset
+        if not map.is_in_db(dbif, mapset):
             # Break in case no valid time is provided
             if (start == "" or start is None) and not map.has_grass_timestamp():
                 dbif.close()
@@ -402,15 +422,15 @@ def register_maps_in_space_time_dataset(
                 interval=interval,
             )
 
-        # Set the band reference (only raster type supported)
-        if band_reference:
-            # Band reference defined in input file
+        # Set the semantic label (only raster type supported)
+        if semantic_label:
+            # semantic label defined in input file
             # -> update raster metadata
             # -> write band identifier to GRASS data base
-            map.set_band_reference(band_reference)
+            map.set_semantic_label(semantic_label)
         else:
-            # Try to read band reference from GRASS data base if defined
-            map.read_band_reference_from_grass()
+            # Try to read semantic label from GRASS data base if defined
+            map.read_semantic_label_from_grass()
 
         if is_in_db:
             #  Gather the SQL update statement
@@ -434,14 +454,12 @@ def register_maps_in_space_time_dataset(
     msgr.percent(num_maps, num_maps, 1)
 
     if statement is not None and statement != "":
-        msgr.message(_("Registering maps in the temporal database..."))
         dbif.execute_transaction(statement)
 
     # Finally Register the maps in the space time dataset
     if name and map_object_list:
         count = 0
         num_maps = len(map_object_list)
-        msgr.message(_("Registering maps in the space time dataset..."))
         for map in map_object_list:
             if count % 50 == 0:
                 msgr.percent(count, num_maps, 1)
@@ -450,7 +468,6 @@ def register_maps_in_space_time_dataset(
 
     # Update the space time tables
     if name and map_object_list:
-        msgr.message(_("Updating space time dataset..."))
         sp.update_from_registered_maps(dbif)
         if update_cmd_list is True:
             sp.update_command_string(dbif=dbif)

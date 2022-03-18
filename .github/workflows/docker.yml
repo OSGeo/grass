@@ -18,7 +18,11 @@ name: Docker
 
 on:
   push:
-    branches: [main, releasebranch_7_8]
+    branches:
+      - 'main'
+      - 'releasebranch_*'
+      - '!releasebranch_7_*'
+      - 'releasebranch_7_8'
     tags: ['*.*.*']
     paths-ignore: ['doc/**']
   release:

@@ -50,7 +50,7 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
 
     I_init_signatures(sigs, refer->nfiles);
     for (unsigned int i = refer->nfiles; i--;) {
-        sigs->bandrefs[i] = Rast_get_bandref_or_name(refer->file[i].name, refer->file[i].mapset);
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(refer->file[i].name, refer->file[i].mapset);
     }
 
     return 1;

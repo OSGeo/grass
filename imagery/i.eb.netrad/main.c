@@ -26,25 +26,20 @@ double r_net(double bbalb, double ndvi, double tempk, double dtair,
 	      double sunzangle);
 int main(int argc, char *argv[]) 
 {
-    struct Cell_head cellhd;	/*region+header info */
-    char *mapset;		/*mapset name */
     int nrows, ncols;
     int row, col;
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *input5;
     struct Option *input6, *input7, *input8, *input9, *output1;
-    struct Flag *flag1;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
-    char *name;			/*input raster name */
     char *result;		/*output raster name */
     int infd_albedo, infd_ndvi, infd_tempk, infd_time, infd_dtair;
     int infd_emissivity, infd_tsw, infd_doy, infd_sunzangle;
     int outfd;
     char *albedo, *ndvi, *tempk, *time, *dtair, *emissivity;
     char *tsw, *doy, *sunzangle;
-    int i = 0, j = 0;
-    void *inrast_albedo, *inrast_ndvi, *inrast_tempk, *inrast_rnet;
+    void *inrast_albedo, *inrast_ndvi, *inrast_tempk;
     void *inrast_time, *inrast_dtair, *inrast_emissivity, *inrast_tsw;
     void *inrast_doy, *inrast_sunzangle;
     DCELL * outrast;

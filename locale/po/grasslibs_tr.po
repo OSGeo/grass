@@ -1247,14 +1247,14 @@ msgid "error in datum table file, line %d"
 msgstr "Datum tablo dosyasında hata, satır %d"
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "'%s' bulunamadı"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse string specifier: %s"
-msgstr "<%s> için aralık dosyası açılamıyor"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:343
 #, c-format
@@ -1347,19 +1347,19 @@ msgid "Other Projection"
 msgstr "Diğer projeksiyon"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value: %g"
-msgstr "Uygun olmayan kuzey-güney çözünürlük değeri"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal number of rows: %d (resolution is %g)"
-msgstr "Uygun olmayan kuzey-güney çözünürlük değeri"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value: %g"
-msgstr "Uygun olmayan doğu-batı çözünürlük değeri"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
 #, c-format
@@ -1367,28 +1367,27 @@ msgid "Illegal number of columns: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
-msgstr "Kuzey güneyin kuzeyinde olmalıdır"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
-#, fuzzy, c-format
+#, c-format
 msgid "North must be larger than South, but %g (north) <= %g (south"
-msgstr "Kuzey güneyden büyük olmalıdır"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "East must be larger than West, but %g (east) <= %g (west)"
-msgstr "Doğu batıdan büyük olmalıdır"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
 msgid "Invalid coordinates: negative number of columns"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
-#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr "Geçersiz koordinatlar"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
 msgid "NS resolution has been changed"
@@ -1403,9 +1402,9 @@ msgid "NS and EW resolutions are different"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
-msgstr "Uygun olmayan kuzey-güney çözünürlük değeri"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:184
 #, c-format
@@ -1413,9 +1412,9 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
-msgstr "Uygun olmayan doğu-batı çözünürlük değeri"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:202
 #, c-format
@@ -1423,19 +1422,19 @@ msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr "Uygun olmayan tepe-dip3 çözünürlük değeri"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal depths value: %d"
-msgstr "Uygun olmayan derinlik değeri"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:236
-#, fuzzy, c-format
+#, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
-msgstr "Tepe dipten büyük olmalıdır"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:283
 msgid "Invalid coordinates: negative number of depths"
@@ -3794,9 +3793,9 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr ""
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr "<%s> harita takımındaki <%s>"
+msgstr ""
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
@@ -6250,14 +6249,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "<%s> vektör haritası silinemiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "'%s' dosyası silinemiyor"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -9294,9 +9291,9 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr "<%s> raster haritasının kategori dosyası okunamıyor"
+msgstr ""
 
 #: ../lib/raster/get_cellhd.c:78
 #, c-format
@@ -10206,53 +10203,53 @@ msgstr "Takip eden parametreler,  PROJ.4 ile başlamak için yetersiz:"
 msgid "The error message: %s"
 msgstr "Hata mesajı:%s"
 
-#~ msgid "which is missing."
-#~ msgstr "kayıp olan"
+msgid "which is missing."
+msgstr "kayıp olan"
 
-#~ msgid "whose header file can't be opened."
-#~ msgstr "üstbilgi dosyası açılamayan"
+msgid "whose header file can't be opened."
+msgstr "üstbilgi dosyası açılamayan"
 
-#~ msgid "Illegal row value"
-#~ msgstr "Uygun olmayan satır değeri"
+msgid "Illegal row value"
+msgstr "Uygun olmayan satır değeri"
 
-#~ msgid "Illegal col value"
-#~ msgstr "Uygun olmayan sütun değeri"
+msgid "Illegal col value"
+msgstr "Uygun olmayan sütun değeri"
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "Uygun olmayan kuzey-güney3 çözünürlük değeri"
+msgid "Illegal n-s3 resolution value"
+msgstr "Uygun olmayan kuzey-güney3 çözünürlük değeri"
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "Uygun olmayan satır3 değeri"
+msgid "Illegal row3 value"
+msgstr "Uygun olmayan satır3 değeri"
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "Uygun olmayan doğu-batı3 çözünürlük değeri"
+msgid "Illegal e-w3 resolution value"
+msgstr "Uygun olmayan doğu-batı3 çözünürlük değeri"
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "Uygun olmayan  sütun3 değeri"
+msgid "Illegal col3 value"
+msgstr "Uygun olmayan  sütun3 değeri"
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "Uygun olmayan doğu-batı çözünürlük değeri"
+msgid "Illegal e-w resolution value"
+msgstr "Uygun olmayan doğu-batı çözünürlük değeri"
 
-#~ msgid "North must be north of South"
-#~ msgstr "Kuzey güneyin kuzeyinde olmalıdır"
+msgid "North must be north of South"
+msgstr "Kuzey güneyin kuzeyinde olmalıdır"
 
-#~ msgid "North must be larger than South"
-#~ msgstr "Kuzey güneyden büyük olmalıdır"
+msgid "North must be larger than South"
+msgstr "Kuzey güneyden büyük olmalıdır"
 
-#~ msgid "East must be larger than West"
-#~ msgstr "Doğu batıdan büyük olmalıdır"
+msgid "East must be larger than West"
+msgstr "Doğu batıdan büyük olmalıdır"
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "Geçersiz koordinatlar"
+msgid "Invalid coordinates"
+msgstr "Geçersiz koordinatlar"
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "Uygun olmayan kuzey-güney çözünürlük değeri"
+msgid "Illegal n-s resolution value"
+msgstr "Uygun olmayan kuzey-güney çözünürlük değeri"
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "Uygun olmayan tepe-dip3 çözünürlük değeri"
+msgid "Illegal t-b3 resolution value"
+msgstr "Uygun olmayan tepe-dip3 çözünürlük değeri"
 
-#~ msgid "Illegal depths value"
-#~ msgstr "Uygun olmayan derinlik değeri"
+msgid "Illegal depths value"
+msgstr "Uygun olmayan derinlik değeri"
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "Tepe dipten büyük olmalıdır"
+msgid "Top must be larger than Bottom"
+msgstr "Tepe dipten büyük olmalıdır"

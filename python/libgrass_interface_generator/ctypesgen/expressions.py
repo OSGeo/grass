@@ -1,15 +1,18 @@
-#!/usr/bin/env python
-
 """
 The expressions module contains classes to represent an expression. The main
 class is ExpressionNode. ExpressionNode's most useful method is py_string(),
 which returns a Python string representing that expression.
 """
 
-import sys
-
-from .ctypedescs import *
+import warnings
 import keyword
+
+from ctypesgen.ctypedescs import (
+    CtypesPointer,
+    CtypesSimple,
+    CtypesStruct,
+    CtypesType,
+)
 
 # Right now, the objects in this module are all oriented toward evaluation.
 # However, they don't have to be, since ctypes objects are mutable. For example,
@@ -27,15 +30,10 @@ import keyword
 
 
 class EvaluationContext(object):
-    """Interface for evaluating expression nodes.
-    """
+    """Interface for evaluating expression nodes."""
 
     def evaluate_identifier(self, name):
         warnings.warn('Attempt to evaluate identifier "%s" failed' % name)
-        return 0
-
-    def evaluate_sizeof(self, type):
-        warnings.warn('Attempt to evaluate sizeof "%s" failed' % str(type))
         return 0
 
     def evaluate_sizeof(self, object):
@@ -67,20 +65,21 @@ class ExpressionNode(object):
 
 
 class ConstantExpressionNode(ExpressionNode):
-    def __init__(self, value):
+    def __init__(self, value, is_literal=False):
         ExpressionNode.__init__(self)
         self.value = value
+        self.is_literal = is_literal
 
     def evaluate(self, context):
         return self.value
 
     def py_string(self, can_be_ctype):
-        if sys.platform != "win32" or (sys.platform == "win32" and sys.version_info >= (2, 6)):
-            # Windows python did not get infinity support until 2.6
-            if self.value == float("inf"):
-                return "float('inf')"
-            elif self.value == float("-inf"):
-                return "float('-inf')"
+        if self.is_literal:
+            return self.value
+        if self.value == float("inf"):
+            return "float('inf')"
+        elif self.value == float("-inf"):
+            return "float('-inf')"
         return repr(self.value)
 
 
@@ -308,7 +307,7 @@ class TypeCastExpressionNode(ExpressionNode):
             # c_char can take integer or byte types, but the others can *only*
             # take non-char arguments.
             # ord_if_char must be provided by preambles
-            if isinstance(self.ctype, CtypesSimple) and (self.ctype.name, self.ctype.signed) == (
+            if isinstance(self.ctype, CtypesSimple) and (self.ctype.name, self.ctype.signed,) == (
                 "char",
                 True,
             ):
@@ -321,7 +320,9 @@ class TypeCastExpressionNode(ExpressionNode):
                 ord_if_char = "ord_if_char"
 
             return "({to} ({ord_if_char}({frm}))).value".format(
-                to=self.ctype.py_string(), ord_if_char=ord_if_char, frm=self.base.py_string(False)
+                to=self.ctype.py_string(),
+                ord_if_char=ord_if_char,
+                frm=self.base.py_string(False),
             )
 
 

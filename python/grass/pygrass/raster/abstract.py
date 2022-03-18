@@ -162,31 +162,31 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
-    def _get_bandref(self):
-        """Get band reference identifier.
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
 
-        :return str: band identifier (eg. S2_1) or None
+        :return str: semantic label (eg. S2_1) or None
         """
 
-        bandref = libraster.Rast_read_bandref(self.name, self.mapset)
-        if bandref:
-            return utils.decode(bandref)
+        semantic_label = libraster.Rast_read_semantic_label(self.name, self.mapset)
+        if semantic_label:
+            return utils.decode(semantic_label)
         return None
 
     @must_be_in_current_mapset
-    def _set_bandref(self, bandref):
-        """Set/Unset band reference identifier.
+    def _set_semantic_label(self, semantic_label):
+        """Set/Unset semantic label identifier.
 
-        :param str bandref: band reference to assign or None to remove (unset)
+        :param str semantic_label: semantic label to assign or None to remove (unset)
         """
-        if bandref:
-            if libraster.Rast_legal_bandref(bandref) is False:
-                raise ValueError(_("Invalid band reference"))
-            libraster.Rast_write_bandref(self.name, bandref)
+        if semantic_label:
+            if libraster.Rast_legal_semantic_label(semantic_label) is False:
+                raise ValueError(_("Invalid semantic label"))
+            libraster.Rast_write_semantic_label(self.name, semantic_label)
         else:
-            libgis.G_remove_misc("cell_misc", "bandref", self.name)
+            libgis.G_remove_misc("cell_misc", "semantic_label", self.name)
 
-    bandref = property(_get_bandref, _set_bandref)
+    semantic_label = property(_get_semantic_label, _set_semantic_label)
 
     def _get_units(self):
         units = libraster.Rast_read_units(self.name, self.mapset)

@@ -61,7 +61,7 @@ Maintainer: M. Neteler
         * Apache Server with hugo
     * for migration details (7/2020), see https://github.com/OSGeo/grass-website/issues/180
     * ssh login: via osgeo jumphost
-    * deployment via cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
+    * deployment via cronjob: https://github.com/OSGeo/grass-addons/tree/master/utils/cronjobs_osgeo_lxd
 * https://old.grass.osgeo.org (CMSMS, replaced in 2020 by hugo based solution)
     * Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
    (server: osgeo6.osgeo.osuosl.org)
@@ -228,8 +228,8 @@ Maintainer: Martin Landa and Markus Neteler
 
 Details:
 
-- Windows-addons: grass-addons/tools/addons/README.txt
-- Addon manual pages cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
+- Windows-addons: grass-addons/utils/addons/README.txt
+- Addon manual pages cronjob: https://github.com/OSGeo/grass-addons/tree/master/utils/cronjobs_osgeo_lxd
 - Rendered manuals: https://grass.osgeo.org/grass8/manuals/addons/
 
 The redirect to the latest grass7x directory is defined on grass.osgeo.org:
@@ -249,7 +249,7 @@ Procedure of granting write access to Addons repo:
 * Confirm request in grass-psc and give instructions concerning code style etc (see archive for examples)
 
 XML file for g.extension: https://grass.osgeo.org/addons/grass7/modules.xml
-* generated in grass-addons/tools/addons/grass-addons-publish.sh
+* generated in grass-addons/utils/addons/grass-addons-publish.sh
 
 ## GRASS Travis CI
 
@@ -258,7 +258,7 @@ Maintainer: Martin Landa
 * https://travis-ci.org/GRASS-GIS
 * https://github.com/OSGeo/grass
 * OLD: https://github.com/GRASS-GIS/grass-ci
-* https://github.com/OSGeo/grass-addons/tree/master/tools/grass-ci/
+* https://github.com/OSGeo/grass-addons/tree/master/utils/grass-ci/
 
 Travis CI control files:
  trunk/.travis/
@@ -267,7 +267,7 @@ Travis CI control files:
    linux.script.sh
 
 Maintenance script:
-* https://github.com/OSGeo/grass-addons/tree/master/tools/grass-ci/grass-ci.sh
+* https://github.com/OSGeo/grass-addons/tree/master/utils/grass-ci/grass-ci.sh
 
 The github update is run as a cronjob on server "geo102" (CTU, CZ).
 

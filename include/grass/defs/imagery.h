@@ -163,7 +163,7 @@ int I_free_signatures(struct Signature *);
 int I_read_one_signature(FILE *, struct Signature *);
 int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
-char **I_sort_signatures_by_bandref(struct Signature *, const struct Ref *);
+char **I_sort_signatures_by_semantic_label(struct Signature *, const struct Ref *);
 
 /* sigfile.c */
 FILE *I_fopen_signature_file_new(const char *);
@@ -181,7 +181,7 @@ const char *I_GetSigTitle(const struct SigSet *);
 int I_SetClassTitle(struct ClassSig *, const char *);
 const char *I_GetClassTitle(const struct ClassSig *);
 int I_WriteSigSet(FILE *, const struct SigSet *);
-char **I_SortSigSetByBandref(struct SigSet *, const struct Ref *);
+char **I_SortSigSetBySemanticLabel(struct SigSet *, const struct Ref *);
 
 /* sigsetfile.c */
 FILE *I_fopen_sigset_file_new(const char *);

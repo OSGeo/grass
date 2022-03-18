@@ -38,7 +38,7 @@ class VDigitSettingsDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
 
         self._giface = giface
-        self.parent = parent  # MapFrame
+        self.parent = parent  # MapPanel
         self.digit = self.parent.MapWindow.digit
 
         # notebook

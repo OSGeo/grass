@@ -138,7 +138,7 @@ public:
 
 
 char *
-verbosedir(std::string s) {
+verbosedir(const std::string &s) {
   static char buf[BUFSIZ];
   sprintf(buf, "dump/%s", s.c_str());
   return buf;
@@ -537,7 +537,7 @@ assignFinalDirections(AMI_STREAM<plateauStats> *statstr,
 class directionElevationMerger {
 public:
   waterGridType operator()(elevation_type el, direction_type dir, 
-			   waterType p) { 
+			   const waterType &p) { 
     /* check that no (boundary) nodata values got in here */
     assert(el != nodataType::ELEVATION_BOUNDARY);
     assert(!is_nodata(el));		/* p should be a valid grid cell */

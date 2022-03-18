@@ -107,7 +107,7 @@ def dataset_mapcalculator(
     input_name_list_uniq = []
     for input_name in input_name_list:
         ds = open_old_stds(input_name, type, dbif)
-        ds_name = ds.get_name(band_reference=False)
+        ds_name = ds.get_name(semantic_label=False)
         if ds_name not in input_name_list_uniq:
             input_name_list_uniq.append(ds_name)
     do_sampling = len(input_name_list_uniq) > 1
@@ -287,6 +287,11 @@ def dataset_mapcalculator(
             else:
                 start, end, unit = sample_map_list[i].get_relative_time()
                 new_map.set_relative_time(start, end, unit)
+
+            # Set the semantic label
+            semantic_label = sample_map_list[i].metadata.get_semantic_label()
+            if semantic_label is not None:
+                new_map.set_semantic_label(semantic_label)
 
             # Parse the temporal expressions
             expr = _operator_parser(expr, sample_map_list[0], sample_map_list[i])

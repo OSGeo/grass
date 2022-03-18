@@ -10,18 +10,22 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
+"""Manage computational or display region settings for display (render) classes."""
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+
 from .utils import (
     get_location_proj_string,
+    get_map_name_from_d_command,
     get_region,
     reproject_region,
-    get_map_name_from_d_command,
 )
 
 
 class RegionManagerForInteractiveMap:
+    """Region manager for an interactive map (gets region from raster and vector)"""
+
     def __init__(self, use_region, saved_region, src_env, tgt_env):
         """Manages region during rendering for interactive map.
 
@@ -40,9 +44,7 @@ class RegionManagerForInteractiveMap:
 
     @property
     def bbox(self):
-        """Bbox property for accessing maximum
-        bounding box of all rendered layers.
-        """
+        """Bbox property for accessing maximum bounding box of all rendered layers."""
         return self._bbox
 
     def set_region_from_raster(self, raster):
@@ -91,21 +93,23 @@ class RegionManagerForInteractiveMap:
 
     def _set_bbox(self, env):
         bbox = gs.parse_command("g.region", flags="bg", env=env)
-        s = float(bbox["ll_s"])
-        w = float(bbox["ll_w"])
-        n = float(bbox["ll_n"])
-        e = float(bbox["ll_e"])
-        if self._bbox[0][0] > s:
-            self._bbox[0][0] = s
-        if self._bbox[0][1] > w:
-            self._bbox[0][1] = w
-        if self._bbox[1][0] < n:
-            self._bbox[1][0] = n
-        if self._bbox[1][1] < e:
-            self._bbox[1][1] = e
+        south = float(bbox["ll_s"])
+        west = float(bbox["ll_w"])
+        north = float(bbox["ll_n"])
+        east = float(bbox["ll_e"])
+        if self._bbox[0][0] > south:
+            self._bbox[0][0] = south
+        if self._bbox[0][1] > west:
+            self._bbox[0][1] = west
+        if self._bbox[1][0] < north:
+            self._bbox[1][0] = north
+        if self._bbox[1][1] < east:
+            self._bbox[1][1] = east
 
 
 class RegionManagerFor2D:
+    """Region manager for 2D displays (gets region from display commands)"""
+
     def __init__(self, use_region, saved_region, env):
         """Manages region during rendering.
 
@@ -124,7 +128,8 @@ class RegionManagerFor2D:
     def set_region_from_env(self, env):
         """Copies GRASS_REGION from provided environment
         to local environment to set the computational region"""
-        self._env["GRASS_REGION"] = env["GRASS_REGION"]
+        if "GRASS_REGION" in env:
+            self._env["GRASS_REGION"] = env["GRASS_REGION"]
 
     def set_region_from_command(self, module, **kwargs):
         """Sets computational region for rendering.
@@ -175,6 +180,8 @@ class RegionManagerFor2D:
 
 
 class RegionManagerFor3D:
+    """Region manager for 3D displays (gets region from m.nviz.image command)"""
+
     def __init__(self, use_region, saved_region):
         """Manages region during rendering.
 
@@ -185,7 +192,6 @@ class RegionManagerFor3D:
         """
         self._use_region = use_region
         self._saved_region = saved_region
-        self._region_set = False
 
     def set_region_from_command(self, env, **kwargs):
         """Sets computational region for rendering.
@@ -199,17 +205,13 @@ class RegionManagerFor3D:
         """
         if self._saved_region:
             env["GRASS_REGION"] = gs.region_env(region=self._saved_region, env=env)
-            self._region_set = True
             return
         if self._use_region:
             # use current
-            return
-        if self._region_set:
             return
         if "elevation_map" in kwargs:
             elev = kwargs["elevation_map"].split(",")[0]
             try:
                 env["GRASS_REGION"] = gs.region_env(raster=elev, env=env)
-                self._region_set = True
             except CalledModuleError:
                 return

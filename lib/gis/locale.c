@@ -24,7 +24,6 @@
 void G_init_locale(void)
 {
     static int initialized;
-    const char *gisbase;
 
     if (G_is_initialized(&initialized))
 	return;
@@ -35,8 +34,7 @@ void G_init_locale(void)
 #ifdef LC_MESSAGES
     setlocale(LC_MESSAGES, "");
 #endif
-
-    gisbase = getenv("GISBASE");
+    const char *gisbase = getenv("GISBASE");
     if (gisbase && *gisbase) {
 	char localedir[GPATH_MAX];
 

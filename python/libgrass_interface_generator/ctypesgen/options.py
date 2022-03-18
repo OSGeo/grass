@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 All of the components of ctypegencore require an argument called "options".
 In command-line usage, this would be an optparser.Values object. However, if
@@ -8,7 +6,8 @@ would be a pain. So this module exists to provide a "default" options object
 for convenience.
 """
 
-import optparse, copy
+import optparse
+import copy
 
 default_values = {
     "other_headers": [],
@@ -17,6 +16,7 @@ default_values = {
     "compile_libdirs": [],
     "runtime_libdirs": [],
     "cpp": "gcc -E",
+    "allow_gnu_c": False,
     "cpp_defines": [],
     "cpp_undefines": [],
     "save_preprocessed_headers": None,
@@ -40,6 +40,7 @@ default_values = {
     "no_python_types": False,
     "debug_level": 0,
     "strip_prefixes": [],
+    "embed_preamble": True,
 }
 
 

@@ -175,7 +175,7 @@ class ModelSearchDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-        """Graphical modeler module search window
+        """Graphical modeler tool search window
 
         :param parent: parent window
         :param id: window id
@@ -315,7 +315,7 @@ class ModelSearchDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "'%s' is not a GRASS module.\n\n"
+                    "'%s' is not a GRASS tool.\n\n"
                     "Unable to add new action to the model."
                 )
                 % cmd[0],
