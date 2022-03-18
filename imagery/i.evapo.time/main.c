@@ -26,7 +26,6 @@
 int main(int argc, char *argv[])
 {
     struct Cell_head cellhd;	/*region+header info */
-    char *mapset;		/*mapset name */
     int nrows, ncols;
     int row, col;
     struct GModule *module;
@@ -65,9 +64,9 @@ int main(int argc, char *argv[])
     DCELL *outrast;
     CELL val1, val2;
     
-    RASTER_MAP_TYPE in_data_type[MAXFILES];	/* ETa */
-    RASTER_MAP_TYPE in_data_type1[MAXFILES];	/* DOY of ETa */
-    RASTER_MAP_TYPE in_data_type2[MAXFILES];	/* ETo */
+    /* RASTER_MAP_TYPE in_data_type[MAXFILES];  */	/* ETa */
+    /* RASTER_MAP_TYPE in_data_type1[MAXFILES]; */	/* DOY of ETa */
+    /* RASTER_MAP_TYPE in_data_type2[MAXFILES]; */	/* ETo */
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE;
 
     /************************************/

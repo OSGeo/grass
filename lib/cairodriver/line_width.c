@@ -12,13 +12,10 @@
   \author Glynn Clements  
 */
 
+#include <grass/gis.h>
 #include "cairodriver.h"
 
 #define MIN_WIDTH 1
-
-#ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
-#endif
 
 static double previous_width = -1;
 

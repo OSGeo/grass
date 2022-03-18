@@ -110,7 +110,7 @@ int IL_check_at_points_2d(struct interp_params *params,
 	else
 	    inside = 0;
 
-	if (params->fddevi != NULL) {
+	if (params->create_devi) {
 
 	    if (inside) {	/* if the point is inside the region */
 		Vect_reset_line(Pnts);

@@ -76,9 +76,6 @@ class DisplayPanelToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         icons = {
-            "newdisplay": MetaIcon(
-                img="monitor-create", label=_("Start new map display")
-            ),
             "addMulti": MetaIcon(
                 img="layer-open",
                 label=_("Add multiple raster or vector map layers (Ctrl+Shift+L)"),
@@ -115,8 +112,6 @@ class DisplayPanelToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
-                (None,),
                 ("addMulti", icons["addMulti"], self.parent.OnAddMaps),
                 ("addrast", icons["addRast"], self.parent.OnAddRaster),
                 ("rastmisc", icons["rastMisc"], self.parent.OnAddRasterMisc),
@@ -148,6 +143,9 @@ class LMToolsToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         icons = {
+            "newdisplay": MetaIcon(
+                img="monitor-create", label=_("Start new map display")
+            ),
             "mapcalc": MetaIcon(
                 img="raster-calculator", label=_("Raster Map Calculator")
             ),
@@ -164,6 +162,8 @@ class LMToolsToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
+                ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
+                (None,),
                 ("mapCalc", icons["mapcalc"], self.parent.OnMapCalculator),
                 ("georect", icons["georectify"], self.parent.OnGCPManager),
                 ("modeler", icons["modeler"], self.parent.OnGModeler),

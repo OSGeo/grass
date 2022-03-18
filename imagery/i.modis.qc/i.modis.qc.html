@@ -170,7 +170,6 @@ Added MOD09GA support in 2016, it follows MOD09A1 and its StateQA, but does not 
  <li>[1]= class 1: Snow</li>
 </ul>
 
-
 <h3>MOD11A1</h3>
 <pre>
 <em>MOD11A1: Mandatory QA Flags bits=[0-1]</em>
@@ -491,8 +490,8 @@ bits[0-3][4-7][8-11][12-15][16-19][20-23][24-27]<br>
  <li>[1111]= class 15: Fill Value</li>
 </ul>
 
-
 <h2>NOTES</h2>
+
 In MOD09A1: It seems that cloud related info is not filled properly in the
 standard QC (MOD09A1 in this module) since version 3, State-QA 500m images
 (MOD09A1s in this module) should be used (see Vermote et al., 2008).
@@ -508,15 +507,9 @@ back to zero (i.e.: <tt>r.null map=QC_band null=0</tt>) or just edit the metadat
 utilities before importing into GRASS GIS. This is a known issue for MOD11A2 
 (8-day LST product), but other MODIS products might be affected as well.
 
-
 <h2>TODO</h2>
+
 Add more daily products.
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="i.vi.html">i.vi</a>
-</em>
 
 <h2>REFERENCES</h2>
 
@@ -527,10 +520,12 @@ Add more daily products.
  <a href="http://modis-sr.ltdri.org">Homepage</a>
 </ul>
 
-<h2>AUTHOR</h2>
-Yann Chemin
+<h2>SEE ALSO</h2>
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+<em>
+<a href="i.vi.html">i.vi</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Yann Chemin

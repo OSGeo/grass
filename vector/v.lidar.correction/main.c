@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     int nsubregion_col, nsubregion_row;
     int subregion = 0, nsubregions = 0;
     const char *dvr, *db, *mapset;
-    char table_name[GNAME_MAX];
+    char table_name[GNAME_MAX + 64];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     double lambda, mean, stepN, stepE, HighThresh,
 	LowThresh;

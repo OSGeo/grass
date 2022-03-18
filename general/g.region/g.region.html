@@ -13,7 +13,6 @@ specified mapset;  i.e., GRASS programs that respect the
 geographic region settings will use the current geographic
 region settings.
 
-
 <h2>DEFINITIONS</h2>
 
 <dl>
@@ -84,7 +83,6 @@ these mapsets are included in the user's mapset search
 path or the '@' operator is used (<tt>region_name@mapset</tt>).
 </dl>
 
-
 <h2>NOTES</h2>
 
 After all updates have been applied, the current region's
@@ -125,7 +123,7 @@ with the UNIX eval command, "<tt>eval `g.region -g`</tt>".
 <p>With <b>-u</b> flag current region is not updated even if one or more
 options for changing region is used (<b>res=</b>, <b>raster=</b>, etc).
 This can be used for example to print modified region values for further use
-without actually modifing the current region.
+without actually modifying the current region.
 Similarly, <b>-o</b> flag forces to update current region file even when e.g., only
 printing was specified. Flag <b>-o</b> was added in GRASS GIS version 8 to simulate
 <em>g.region</em> behavior in prior versions when current region file was
@@ -159,7 +157,6 @@ nearest cell in the named raster map - not to the named
 map's edges.  To perform the latter function, use the
 <b>raster=</b><em>name</em> option.
 </dl>
-
 
 <h2>EXAMPLES</h2>
 
@@ -460,8 +457,6 @@ gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
 Here the input raster map does not have to match the location
 projection since it is reprojected on the fly.
 
-
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -472,14 +467,8 @@ projection since it is reprojected on the fly.
 Environment variables: <a href="variables.html#internal">GRASS_REGION and WIND_OVERRIDE</a>
 </em>
 
-
 <h2>AUTHOR</h2>
 
 Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

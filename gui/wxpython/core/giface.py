@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 
 import grass.script as grass
 
@@ -139,6 +140,10 @@ class GrassInterface:
 
     def WriteError(self, text):
         """Writes error message for the user."""
+        raise NotImplementedError()
+
+    def GetLog(self, err=False):
+        """Returns file-like object for writing."""
         raise NotImplementedError()
 
     def GetLayerTree(self):
@@ -312,6 +317,11 @@ class StandaloneGrassInterface(GrassInterface):
         os.environ["GRASS_MESSAGE_FORMAT"] = "standard"
         function(text)
         os.environ["GRASS_MESSAGE_FORMAT"] = orig
+
+    def GetLog(self, err=False):
+        if err:
+            return sys.stdout
+        return sys.stderr
 
     def GetLayerList(self):
         return []

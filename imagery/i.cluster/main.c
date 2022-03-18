@@ -39,7 +39,8 @@ int mcs;
 char *group;
 char *subgroup;
 struct Ref ref;
-char *outsigfile;
+char **semantic_labels;
+char outsigfile[GNAME_MAX + GMAPSET_MAX];
 char *insigfile;
 char *reportfile;
 DCELL **cell;
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     DCELL *x;
     struct Cell_head window;
     FILE *fd;
+    char xmapset[GMAPSET_MAX];
 
     struct GModule *module;
     struct
@@ -91,7 +93,7 @@ int main(int argc, char *argv[])
     parm.out_sig->type = TYPE_STRING;
     parm.out_sig->key_desc = "name";
     parm.out_sig->required = YES;
-    parm.out_sig->gisprompt = "new,sig,sigfile";
+    parm.out_sig->gisprompt = "new,signatures/sig,sigfile";
     parm.out_sig->description = _("Name for output file containing result signatures");
 
     parm.class = G_define_option();
@@ -107,7 +109,7 @@ int main(int argc, char *argv[])
     parm.seed_sig->required = NO;
     parm.seed_sig->type = TYPE_STRING;
     parm.seed_sig->key_desc = "name";
-    parm.seed_sig->gisprompt = "old,sig,sigfile";
+    parm.seed_sig->gisprompt = "old,signatures/sig,sigfile";
     parm.seed_sig->description = _("Name of file containing initial signatures");
 
     parm.sample_interval = G_define_option();
@@ -162,7 +164,6 @@ int main(int argc, char *argv[])
 
     group = parm.group_name->answer;	/* a required parameter */
     subgroup = parm.subgroup_name->answer;	/* required */
-    outsigfile = parm.out_sig->answer;
     
     /* check all the inputs */
     if (!I_find_group(group)) {
@@ -171,14 +172,12 @@ int main(int argc, char *argv[])
     if (!I_find_subgroup(group, subgroup)) {
         G_fatal_error(_("Subgroup <%s> in group <%s> not found"), subgroup, group);
     }
-    
-    /* GRASS parser fails to detect existing signature files as
-     * detection needs answers from other parameters as group and subgroup.
-     * Thus check is performed only now. */
-    if (!G_get_overwrite() && I_find_signature_file(group, subgroup, "sig", outsigfile)) {
-        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
-                        parm.out_sig->key, parm.out_sig->answer);
-    }
+
+    if (G_unqualified_name(parm.out_sig->answer, G_mapset(), outsigfile, xmapset) < 0)
+        G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
+
+    if (G_legal_filename(outsigfile) < 0)
+        G_fatal_error(_("<%s> is an illegal file name"), outsigfile);
 
     G_get_window(&window);
     nrows = Rast_window_rows();
@@ -333,7 +332,9 @@ int main(int argc, char *argv[])
     print_class_means(report, &C);
 
     if ((fd =
-	 I_fopen_signature_file_new(group, subgroup, outsigfile)) != NULL) {
+	 I_fopen_signature_file_new(outsigfile)) != NULL) {
+        for (unsigned int i = C.S.nbands; i--;)
+            C.S.semantic_labels[i] = semantic_labels[i];
 	I_write_signatures(fd, &C.S);
 	fclose(fd);
     }

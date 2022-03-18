@@ -47,6 +47,7 @@ class VDigitToolbar(BaseToolbar):
         self.editingStopped = Signal("VDigitToolbar.editingStopped")
         self.editingBgMap = Signal("VDigitToolbar.editingBgMap")
         self.quitDigitizer = Signal("VDigitToolbar.quitDigitizer")
+        self.openATM = Signal("VDigitToolbar.openATM")
         layerTree = self._giface.GetLayerTree()
         if layerTree:
             self.editingStarted.connect(layerTree.StartEditing)
@@ -353,6 +354,21 @@ class VDigitToolbar(BaseToolbar):
 
         return self._getToolbarData(data)
 
+    def _noVMapOpenForEditingErrDlg(self):
+        """Show error message dialog if no vector map is open for editing
+
+        :return: True if no vector map is open for editing else None
+        """
+        if not self.digit:
+            GError(
+                _(
+                    "No vector map is open for editing. Please select first"
+                    "a vector map from the combo box."
+                ),
+                self.parent,
+            )
+            return True
+
     def OnTool(self, event):
         """Tool selected -> untoggles previusly selected tool in
         toolbar"""
@@ -593,7 +609,7 @@ class VDigitToolbar(BaseToolbar):
         if self.digit is None:
             try:
                 self.digit = self.MapWindow.digit = self.digitClass(
-                    mapwindow=self.MapWindow
+                    giface=self._giface, mapwindow=self.MapWindow
                 )
             except SystemExit:
                 self.digit = self.MapWindow.digit = None
@@ -686,8 +702,7 @@ class VDigitToolbar(BaseToolbar):
 
     def OnCopy(self, event):
         """Copy selected features from (background) vector map"""
-        if not self.digit:
-            GError(_("No vector map open for editing."), self.parent)
+        if self._noVMapOpenForEditingErrDlg():
             return
 
         # select background map
@@ -846,6 +861,8 @@ class VDigitToolbar(BaseToolbar):
 
     def OnZBulk(self, event):
         """Z bulk-labeling selected lines/boundaries"""
+        if self._noVMapOpenForEditingErrDlg():
+            return
         if not self.digit.IsVector3D():
             GError(
                 parent=self.parent,
@@ -915,13 +932,10 @@ class VDigitToolbar(BaseToolbar):
 
                 # create table ?
                 if dlg.IsChecked("table"):
-                    # TODO: replace this by signal
-                    # also note that starting of tools such as atm, iclass,
+                    # TODO: starting of tools such as atm, iclass,
                     # plots etc. should be handled in some better way
                     # than starting randomly from mapdisp and lmgr
-                    lmgr = self.parent.GetLayerManager()
-                    if lmgr:
-                        lmgr.OnShowAttributeTable(None, selection="table")
+                    self.openATM.emit(selection="table")
                 dlg.Destroy()
             else:
                 self.combo.SetValue(_("Select vector map"))
@@ -1004,7 +1018,9 @@ class VDigitToolbar(BaseToolbar):
             )
 
         self.MapWindow.pdcVector = PseudoDC()
-        self.digit = self.MapWindow.digit = self.digitClass(mapwindow=self.MapWindow)
+        self.digit = self.MapWindow.digit = self.digitClass(
+            giface=self._giface, mapwindow=self.MapWindow
+        )
 
         self.mapLayer = mapLayer
         # open vector map (assume that 'hidden' map layer is temporary vector

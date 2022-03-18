@@ -28,12 +28,6 @@
 #include "local_proto.h"
 
 #define PI M_PI
-#ifndef MIN
-#define MIN(X,Y) ((X<Y)?X:Y)
-#endif
-#ifndef MAX
-#define MAX(X,Y) ((X>Y)?X:Y)
-#endif
 
 /* returns 1 if unit_tolerance is adjusted, 0 otherwise */
 int adjust_tolerance(double *tolerance)

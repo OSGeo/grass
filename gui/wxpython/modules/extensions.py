@@ -110,11 +110,11 @@ class InstallExtensionWindow(wx.Frame):
 
         # self.btnFetch = Button(parent=self.panel, id=wx.ID_ANY,
         #                        label=_("&Fetch"))
-        # self.btnFetch.SetToolTip(_("Fetch list of available modules "
+        # self.btnFetch.SetToolTip(_("Fetch list of available tools "
         #                            "from GRASS Addons repository"))
         self.btnClose = Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnInstall = Button(parent=self.panel, id=wx.ID_ANY, label=_("&Install"))
-        self.btnInstall.SetToolTip(_("Install selected add-ons GRASS module"))
+        self.btnInstall.SetToolTip(_("Install selected add-ons GRASS tool"))
         self.btnInstall.Enable(False)
         self.btnHelp = Button(parent=self.panel, id=wx.ID_HELP)
         self.btnHelp.SetToolTip(_("Show g.extension manual page"))
@@ -209,7 +209,7 @@ class InstallExtensionWindow(wx.Frame):
         """Fetch list of available extensions"""
         wx.BeginBusyCursor()
         self.SetStatusText(
-            _("Fetching list of modules from GRASS-Addons (be patient)..."), 0
+            _("Fetching list of tools from GRASS-Addons (be patient)..."), 0
         )
         try:
             self.thread.Run(

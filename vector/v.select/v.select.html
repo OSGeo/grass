@@ -35,7 +35,6 @@ belongs to. The boundary only needs a cat number if it will hold its
 own attributes, such as road name or pavement form. A centroid in each
 paddock holds the information with respect to ownership, area, etc.
 
-
 <h2>EXAMPLES</h2>
 
 Preparation of example data (North Carolina sample dataset):
@@ -51,7 +50,6 @@ g.region vector=zipcodes_wake,boxgrid -p res=100 -a
 g.region n=n+1000 s=s-1000 w=w-1000 e=e+1000 -p
 d.mon wx0
 </pre></div>
-
 
 <h3>OVERLAP: features partially or completely overlap (using GRASS)</h3>
 
@@ -86,7 +84,6 @@ d.vect map=zipcodes_wake type=boundary color=255:255:50
 v.select with OVERLAPS operator: selected grid boxes shown in yellow (using GEOS method)
 </center>
 
-
 <h3>DISJOINT: features do not spatially intersect (using GEOS)</h3>
 
 Select grid boxes (North Carolina sample dataset):
@@ -103,7 +100,6 @@ d.vect map=zipcodes_wake type=boundary color=255:255:50
 <img src="v_select_op_disjoint.png" alt="v.select with DISJOINT operator"><br>
 v.select with DISJOINT operator: selected grid boxes shown in yellow
 </center>
-
 
 <h3>EQUALS: features are spatially equals (using GEOS)</h3>
 
@@ -122,7 +118,6 @@ d.vect map=zipcodes_wake type=boundary color=255:255:50
 v.select with EQUALS operator: selected grid boxes shown in yellow
 </center>
 
-
 <h3>INTERSECTS: features spatially intersect (using GEOS)</h3>
 
 Select zipcode polygons (North Carolina sample dataset):
@@ -140,7 +135,6 @@ d.vect map=boxgrid type=boundary color=255:255:50
 v.select with INTERSECTS operator: selected grid boxes shown in yellow
 </center>
 
-
 <h3>TOUCHES: features spatially touches (using GEOS)</h3>
 
 Select polygons (North Carolina sample dataset):
@@ -157,7 +151,6 @@ d.vect map=zipcodes_wake type=boundary color=255:255:50
 <img src="v_select_op_touches.png" alt="v.select with TOUCHES operator"><br>
 v.select with TOUCHES operator: selected polygons shown in yellow (blue: input polygon)
 </center>
-
 
 <h3>CROSSES: features spatially crosses (using GEOS)</h3>
 
@@ -177,7 +170,6 @@ d.vect map=busroute1 color=200:27:27 width=3
 v.select with CROSSES operator: selected polygons shown in yellow (red: input lines)
 </center>
 
-
 <h3>WITHIN feature A is completely inside feature B (using GEOS)</h3>
 
 Select zipcode polygons (North Carolina sample dataset):
@@ -193,7 +185,6 @@ d.vect map=v_select_WITHIN
 <img src="v_select_op_within.png" alt="v.select with WITHIN operator"><br>
 v.select with WITHIN operator: selected polygons shown in yellow (blue: input polygons)
 </center>
-
 
 <h3>CONTAINS feature B is completely inside feature A (using GEOS)</h3>
 
@@ -230,7 +221,6 @@ d.vect map=hospitals fill_color=195:31:31 icon=basic/cross3 size=10
 v.select with CONTAINS operator: selected polygons shown in yellow (red: input points)
 </center>
 
-
 <h3>RELATE feature A is spatially related to feature B (using GEOS)</h3>
 
 This operator additionally requires the <b>relate</b> parameter (in other
@@ -255,7 +245,6 @@ above in the example 'TOUCHES'.
 
 See the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE-9IM</a> page
 for related operators and their definition.
-
 
 <h3>Extraction of points falling into a polygon</h3>
 
@@ -293,6 +282,7 @@ v.select ainput=zipcodes_wake binput=railroads_buf20m \
 
 <!-- 2015: still an issue?
 <h2>TODO</h2>
+
  
 Processing areas with GEOS is currently incredibly slow. Significant
 speed-up is desired.
@@ -314,12 +304,5 @@ speed-up is desired.
 <h2>AUTHORS</h2>
 
 Radim Blazek<br>
-
 GEOS support by Martin Landa, Czech Technical University in Prague, Czech Republic<br>
-
 ZIP code examples by Carol X. Garzon-Lopez, Trento, Italy
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

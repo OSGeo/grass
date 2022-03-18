@@ -19,7 +19,7 @@ CREATE TABLE  raster_metadata (
   ewres DOUBLE PRECISION NOT NULL,
   min DOUBLE PRECISION,
   max DOUBLE PRECISION,
-  band_reference VARCHAR,
+  semantic_label VARCHAR,
   PRIMARY KEY (id)
 );
 

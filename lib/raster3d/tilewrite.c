@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <grass/gis.h>
 #include <grass/raster.h>
 #include "raster3d_intern.h"
 
@@ -275,12 +276,6 @@ int Rast3d_flush_tile(RASTER3D_Map * map, int tileIndex)
 }
 
 /*---------------------------------------------------------------------------*/
-
-#ifndef MIN
-#define MIN(a,b) (a < b ? a : b)
-#define MAX(a,b) (a > b ? a : b)
-#endif
-
 
 /*!
  * \brief 
