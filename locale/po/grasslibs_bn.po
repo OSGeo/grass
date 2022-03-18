@@ -1245,9 +1245,9 @@ msgid "error in datum table file, line %d"
 msgstr ""
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "%sপুনঃনামকরন করতে অক্ষম"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
 #, c-format
@@ -6247,14 +6247,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "%sঅপসারণ করতে অক্ষম"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "ভেক্টর ম্যাপ মুছতে অপারগ"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"

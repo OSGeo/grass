@@ -11251,9 +11251,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Valinta"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 msgid "Name of band reference identifier (example: S2_1)"
@@ -53280,9 +53279,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Kursoria ei voida avata"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -56513,9 +56511,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "OGR tasoa <%s> ei löytynyt"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57374,9 +57371,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Indeksiä ei voida luoda:"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format

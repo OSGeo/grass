@@ -1247,14 +1247,14 @@ msgid "error in datum table file, line %d"
 msgstr ""
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "Không thể đặt lại tên %s"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse string specifier: %s"
-msgstr "Không thể phân tách tập tin đầu vào <%s>"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:343
 #, c-format
@@ -3793,9 +3793,9 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr "Lỗi định dạng: tập tin ('%s') dòng (%d) - %s"
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr "Chép %s < %s> vào bộ bản độ hiện tại thành <%s>"
+msgstr ""
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
@@ -4663,9 +4663,8 @@ msgid "No connection defined"
 msgstr "Không có kết nối nào được định nghĩa"
 
 #: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
-#, fuzzy
 msgid "Invalid offset (%"
-msgstr "Độ lệch không hợp lệ (%ld)"
+msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:348 ../lib/vector/Vlib/write_ogr.c:140
 msgid "Unable to delete feature"
@@ -6252,14 +6251,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "Không thể ghi lại đối tượng %d"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "Không thể xóa đối tượng"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -9296,9 +9293,9 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr "Không thể tạo tập tin đề mục cho bản đồ vector <%s>"
+msgstr ""
 
 #: ../lib/raster/get_cellhd.c:78
 #, c-format
@@ -10214,8 +10211,8 @@ msgstr "Không thể lấy hàng"
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr "G_oldsite_new_struct: # kích thước hoặc trường không hợp lệ"
 
-#~ msgid "Invalid offset (%ld)"
-#~ msgstr "Độ lệch không hợp lệ (%ld)"
+msgid "Invalid offset (%ld)"
+msgstr "Độ lệch không hợp lệ (%ld)"
 
-#~ msgid "Copy %s <%s> to current mapset as <%s>"
-#~ msgstr "Chép %s < %s> vào bộ bản độ hiện tại thành <%s>"
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Chép %s < %s> vào bộ bản độ hiện tại thành <%s>"

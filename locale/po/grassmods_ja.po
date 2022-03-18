@@ -11470,9 +11470,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "選択"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 #, fuzzy
@@ -14321,9 +14320,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "ネットワークメンテナンス "
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -14765,9 +14763,8 @@ msgstr ""
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:4
 #: ../locale/scriptstrings/g.copyall_to_translate.c:2
 #: ../general/g.copy/main.c:44
-#, fuzzy
 msgid "copy"
-msgstr "コピーライト "
+msgstr ""
 
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:7
 #, fuzzy
@@ -16824,9 +16821,8 @@ msgstr "データなし"
 #: ../locale/scriptstrings/r.mask_to_translate.c:5
 #: ../raster3d/r3.mask/main.c:136 ../raster3d/r3.null/main.c:183
 #: ../raster/r.null/main.c:63
-#, fuzzy
 msgid "no-data"
-msgstr "データなし"
+msgstr ""
 
 #: ../locale/scriptstrings/r.null.all_to_translate.c:6
 #: ../raster/r.null/main.c:88
@@ -20040,9 +20036,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "メタデータ"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -24411,9 +24406,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "属性の情報を出力"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -30136,9 +30130,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "ベクトルマップ <%s> の履歴ファイルを開けません"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35453,9 +35447,8 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:284
-#, fuzzy
 msgid "All points fall outside of the current computational region"
-msgstr "シードポイントが現在の領域外です"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:285
 msgid "Input vector and computational region do not overlap"
@@ -36503,9 +36496,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr ""
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "<%s> の統計値の更新中 "
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -36513,9 +36506,9 @@ msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
 #: ../vector/v.patch/main.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
-msgstr "新規領域における列数"
+msgstr ""
 
 #: ../vector/v.patch/main.c:289
 #, c-format
@@ -37711,9 +37704,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "行数 "
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42502,24 +42495,24 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "グループ <%s> はまだ存在しません。作成中..."
+msgstr ""
 
 #: ../general/g.copy/main.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s=%s,%s: files are the same, no copy required. Skipping."
-msgstr "%s=%s,%s: ファイルは同じです、 コピーは必要ありません"
+msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "ラスターマップ <%s> は存在します。上書きされます"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> は不正なファイル名です"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -54121,9 +54114,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "標高のスケールファクター"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54211,9 +54203,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "色を読み込めません"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -55925,25 +55916,21 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "検索する座標"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
-#, fuzzy
 msgid "Profile"
-msgstr "プロファイル"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "出力するファイル 名（'output=-' で標準出力）"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "出力する形式はサポートされていません"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
 #, c-format
@@ -55956,14 +55943,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "終了点の座標が現在の領域設定外です"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "出力するファイルが開けません <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -55991,23 +55977,21 @@ msgid "Unknown output data type"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:653
-#, fuzzy
 msgid "Profile data has been written"
-msgstr "整数値としてデータを出力"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:655
-#, fuzzy
 msgid "Failed writing profile data"
-msgstr "ファイルをコピーできませんでした"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:751
 msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
 
 #: ../raster/r.geomorphon/pattern.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "Internal error in %s()"
-msgstr "内部エラー"
+msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:92 ../raster/r.proj/bordwalk.c:139
 #, c-format
@@ -57448,9 +57432,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "マップセット <%s> 見つかりませんでした"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57466,14 +57449,12 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr "基準の表データベースを読めません"
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "ラスターマップ <%s> が現在ののマップセットにありません "
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "必須パラメータ <%s> がありません"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
@@ -58312,9 +58293,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "カテゴリーリスト <%s> を取得できません"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -60314,15 +60294,15 @@ msgstr "OGR と GDAL のどちらを使用しても地理参照ファイル %s �
 msgid "Random seed (SEED_MIN >= value >= SEED_MAX) (default [random])"
 msgstr "乱数シード (SEED_MIN >= value >= SEED_MAX) (デフォルト [random])"
 
-#~ msgid "<%s> not found"
-#~ msgstr "<%s>は見つかりません"
+msgid "<%s> not found"
+msgstr "<%s>は見つかりません"
 
-#~ msgid ""
-#~ "You can switch the history by commands:\n"
-#~ "history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
-#~ msgstr ""
-#~ "コマンドで履歴を切り換えられます:\n"
-#~ "履歴 -w; 履歴 -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgid ""
+"You can switch the history by commands:\n"
+"history -w; history -r %s/.bash_history; HISTFILE=%s/.bash_history"
+msgstr ""
+"コマンドで履歴を切り換えられます:\n"
+"履歴 -w; 履歴 -r %s/.bash_history; HISTFILE=%s/.bash_history"
 
-#~ msgid "%s=%s,%s: files are the same, no copy required"
-#~ msgstr "%s=%s,%s: ファイルは同じです、 コピーは必要ありません"
+msgid "%s=%s,%s: files are the same, no copy required"
+msgstr "%s=%s,%s: ファイルは同じです、 コピーは必要ありません"

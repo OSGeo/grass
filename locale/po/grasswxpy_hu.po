@@ -506,9 +506,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:49
-#, fuzzy
 msgid "Data Catalog - GRASS GIS"
-msgstr "Adat katalógus"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:25
 msgid "Reload GRASS locations"
@@ -519,55 +518,46 @@ msgid "Reload current GRASS mapset only"
 msgstr "Csak az aktuális GRASS térképcsoport újra betöltése"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:31
-#, fuzzy
 msgid "Restrict edits to the current mapset only"
-msgstr "Csak az aktuális GRASS térképcsoport újra betöltése"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:34
 msgid "Allow edits outside of the current mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:37
-#, fuzzy
 msgid "Add existing or create new database"
-msgstr "Nem tudok új GRASS adatbázist létrehozni"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
-#, fuzzy
 msgid "Create new mapset in current location"
-msgstr "Új térképcsoport létrehozása a kiválasztott helyen"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
-#, fuzzy
 msgid "Create new location in current GRASS database"
-msgstr "Nem tudok új GRASS adatbázist létrehozni"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:46
-#, fuzzy
 msgid "Download sample location to current GRASS database"
-msgstr "Minta hely letöltése"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:49
-#, fuzzy
 msgid "Import raster data  [r.import]"
-msgstr "Raszter adat import"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:52
-#, fuzzy
 msgid "Import vector data  [v.import]"
-msgstr "Vektor adat import"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:55
-#, fuzzy
 msgid "Select another import option"
-msgstr "Válasszon kategóriát a szerkesztéshez."
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:72
 #: ../gui/wxpython/modules/extensions.py:74
 #: ../gui/wxpython/gui_core/menu.py:152
-#, fuzzy
 msgid "Search"
-msgstr "Keresés:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:91
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
@@ -633,9 +623,8 @@ msgid "Overwrite?"
 msgstr "Felülírhatom?"
 
 #: ../gui/wxpython/datacatalog/tree.py:224
-#, fuzzy
 msgid "name unknown"
-msgstr "ismeretlen"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:226
 #, python-brace-format
@@ -658,9 +647,9 @@ msgid "{name}  (owner: {owner})"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:237
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name}"
-msgstr "Átnevezés"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:791
 #, python-brace-format
@@ -705,9 +694,8 @@ msgid "Rename map"
 msgstr "Térkép átnevezés"
 
 #: ../gui/wxpython/datacatalog/tree.py:1064
-#, fuzzy
 msgid "Cannot rename mapset"
-msgstr "Új térképcsoport létrehozás"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1074
 #, python-brace-format
@@ -715,9 +703,8 @@ msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1084
-#, fuzzy
 msgid "Cannot rename location"
-msgstr "Új hely létrehozása"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1093
 #, python-brace-format
@@ -853,58 +840,48 @@ msgid "&Switch mapset"
 msgstr "Térképcsoport váltás"
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
-#, fuzzy
 msgid "&Delete mapset"
-msgstr "Térkép törlés"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
-#, fuzzy
 msgid "&Rename mapset"
-msgstr "Térkép átnevezés"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
-#, fuzzy
 msgid "&Create mapset"
-msgstr "Új térképcsoport létrehozás"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
-#, fuzzy
 msgid "&Delete location"
-msgstr "Kiválasztott hely törlése"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
-#, fuzzy
 msgid "&Rename location"
-msgstr "Kiválasztott hely átnevezése"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
-#, fuzzy
 msgid "&Create new location"
-msgstr "Új hely létrehozása"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
-#, fuzzy
 msgid "&Download sample location"
-msgstr "Minta hely letöltése"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1842
-#, fuzzy
 msgid "&Delete GRASS database from disk"
-msgstr "1. Válasszon GRASS GIS adatbázis könyvtárat"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
-#, fuzzy
 msgid "&Delete locations"
-msgstr "Kiválasztott hely törlése"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
-#, fuzzy
 msgid "&Delete mapsets"
-msgstr "Térkép törlés"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -920,14 +897,12 @@ msgid "Choose GRASS data directory:"
 msgstr "GRASS adat könyvtár:"
 
 #: ../gui/wxpython/datacatalog/catalog.py:112
-#, fuzzy
 msgid "Do you want to create a location?"
-msgstr "Létre akar hozni egy GRASS helyet <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:115
-#, fuzzy
 msgid "Create location?"
-msgstr "Új hely létrehozása?"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:199
 msgid "Link external raster data  [r.external]"
@@ -938,24 +913,20 @@ msgid "Link external vector data  [v.external]"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:209
-#, fuzzy
 msgid "Set raster output format  [r.external.out]"
-msgstr "Raszter output formátum beállítás"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:213
-#, fuzzy
 msgid "Set vector output format  [v.external.out]"
-msgstr "Vektor output formátum beállítás"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:220
-#, fuzzy
 msgid "Unpack GRASS raster map  [r.unpack]"
-msgstr "GRASS raszter térkép kicsomagolása"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:224
-#, fuzzy
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr "GRASS vektor térkép kicsomagolás"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:230
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
@@ -971,14 +942,12 @@ msgid "Link external data"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:242
-#, fuzzy
 msgid "More options..."
-msgstr "Beálítások"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "Adat katalógus"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:47
 msgid "Close GRASS GIS Data Catalog"
@@ -1494,11 +1463,11 @@ msgid "circle"
 msgstr ""
 
 #: ../gui/wxpython/core/settings.py:1054
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to read settings file <{path}>:\n"
 "{err}"
-msgstr "Nem tudom létrehozni a fájlt <%s>"
+msgstr ""
 
 #: ../gui/wxpython/core/settings.py:1069
 #, python-format
@@ -1799,9 +1768,8 @@ msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= és %s= kölcsönösen kizáróak."
 
 #: ../gui/wxpython/animation/g.gui.animation.py:134
-#, fuzzy
 msgid "Animation Tool - GRASS GIS"
-msgstr "Animáció eszközssor"
+msgstr ""
 
 #: ../gui/wxpython/animation/temporal_manager.py:110
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
@@ -2008,14 +1976,12 @@ msgid "Set spatial extent in 2D view"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:565
-#, fuzzy
 msgid "Use saved region:"
-msgstr "Régió mentés:"
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:575
-#, fuzzy
 msgid "Animate region change"
-msgstr "Területváltozás animálása (csak 2D nézet)"
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:581
 msgid "End region:"
@@ -2395,9 +2361,8 @@ msgid "Invalid"
 msgstr "Hibás"
 
 #: ../gui/wxpython/animation/frame.py:51
-#, fuzzy
 msgid "Animation Tool"
-msgstr "Animáció eszközssor"
+msgstr ""
 
 #: ../gui/wxpython/animation/frame.py:157 ../gui/wxpython/mapswipe/frame.py:290
 msgid "Main Toolbar"
@@ -2781,9 +2746,8 @@ msgid "Classes"
 msgstr "Osztályok"
 
 #: ../gui/wxpython/iscatt/frame.py:169
-#, fuzzy
 msgid "Interactive Scatter Plot Tool"
-msgstr "Interaktív beszúrás"
+msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:401
 msgid "scatter plot"
@@ -2878,9 +2842,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/timeline/g.gui.timeline.py:63
-#, fuzzy
 msgid "Timeline Tool - GRASS GIS"
-msgstr "Idővonal eszközök"
+msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:38
 #, python-brace-format
@@ -2888,9 +2851,8 @@ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some
 msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:71
-#, fuzzy
 msgid "Timeline Tool"
-msgstr "Idővonal eszközök"
+msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:134 ../gui/wxpython/tplot/frame.py:353
 #: ../gui/wxpython/nviz/preferences.py:405 ../gui/wxpython/nviz/tools.py:847
@@ -3448,9 +3410,8 @@ msgid "Yes"
 msgstr "Igen"
 
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:55
-#, fuzzy
 msgid "Graphical Modeler - GRASS GIS"
-msgstr "Grfikus modellező"
+msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:78 ../gui/wxpython/lmgr/toolbars.py:155
 #: ../gui/wxpython/gui_core/forms.py:1458
@@ -3821,9 +3782,8 @@ msgid "Define new GRASS Location"
 msgstr "Új GRASS hely definiálása"
 
 #: ../gui/wxpython/location_wizard/wizard.py:186
-#, fuzzy
 msgid "Change"
-msgstr "tartomány"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:202
 #: ../gui/wxpython/gui_core/forms.py:1142
@@ -3831,9 +3791,8 @@ msgid "This option is required"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
-#, fuzzy
 msgid "(optional)"
-msgstr "Opcionális"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:216
 msgid "Name of location directory in GIS Data Directory"
@@ -3844,14 +3803,12 @@ msgid "Description of location directory in GIS Data Directory"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:253
-#, fuzzy
 msgid "Location will be created in GRASS database:"
-msgstr "A hely már létezik a GRASS adatbázisban"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:277
-#, fuzzy
 msgid "Name '{}' is not a valid name for location. Please use only ASCII characters excluding characters {} and space."
-msgstr "<%(name)s> név nem megfelelő egy helyhez vagy egy térképcsoporthoz. Csak az ASCII karaktereket használja kivéve %(chars)s és szóköz."
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:280
 #: ../gui/wxpython/modules/import_export.py:248
@@ -3873,25 +3830,21 @@ msgid "Title of the location is limited only to one line and 256 characters. The
 msgstr "Hely címét egy sorra és 256 karakterre korlátozzuk. A szöveg többi részét figyelmen kívül hagyjuk."
 
 #: ../gui/wxpython/location_wizard/wizard.py:335
-#, fuzzy
 msgid "Select Coordinate Reference System (CRS)"
-msgstr "Válasszon EPSG kódot a vetülethez"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
-#, fuzzy
 msgid "Select CRS from a list by EPSG or description"
-msgstr "Válasszon  dátum transzformációk listájából"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:352
 #: ../gui/wxpython/location_wizard/wizard.py:1358
-#, fuzzy
 msgid "Read CRS from a georeferenced data file"
-msgstr "Olvass be a vetületet és a dátumot egy georeferált adatfájlból"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:354
-#, fuzzy
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr "Hozzon létre egy általános derékszögű koordináta-rendszert (XY)"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 #: ../gui/wxpython/location_wizard/wizard.py:1437
@@ -3909,9 +3862,8 @@ msgid "Define custom CRS"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:374
-#, fuzzy
 msgid "Additional methods:"
-msgstr "További beállítások"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:500
 #: ../gui/wxpython/location_wizard/wizard.py:1018
@@ -4000,14 +3952,12 @@ msgid "Select georeferenced file"
 msgstr "Válaszon georeferált fájlt"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1450
-#, fuzzy
 msgid "Enter WKT parameters string:"
-msgstr "Adja meg a PROJ.! paraméter szövegláncot:"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1498
-#, fuzzy
 msgid "Select CRS from a list"
-msgstr "Betűkészlet"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1514
 msgid "Filter by EPSG code or description:"
@@ -4730,9 +4680,8 @@ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) packa
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:98
-#, fuzzy
 msgid "Temporal Plot Tool"
-msgstr "GRASS GIS időbeli rajz eszköz"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:184
 msgid ""
@@ -4908,9 +4857,8 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:168
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
-#, fuzzy
 msgid "Temporal Plot Tool - GRASS GIS"
-msgstr "GRASS GIS időbeli rajz eszköz"
+msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -5929,9 +5877,8 @@ msgid "Edit point"
 msgstr "Végpont"
 
 #: ../gui/wxpython/vnet/dialogs.py:74
-#, fuzzy
 msgid "Vector Network Analysis Tool"
-msgstr "Vektor hálózat elemző eszköz"
+msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:193
 msgid "Point list toolbar"
@@ -6309,19 +6256,16 @@ msgid "Overwrite map"
 msgstr "Térkép felülírása"
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:90
-#, fuzzy
 msgid "Raster Digitizer - GRASS GIS"
-msgstr "Raszter digitalizáló"
+msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:158
-#, fuzzy
 msgid "Raster map <{}> not found in current mapset."
-msgstr "<%s> rasztertérképet nem találom"
+msgstr ""
 
 #: ../gui/wxpython/rdigit/g.gui.rdigit.py:174
-#, fuzzy
 msgid "Base raster map <{}> not found in current mapset."
-msgstr "<%s> 3D raszter térképet nem találom"
+msgstr ""
 
 #: ../gui/wxpython/rdigit/toolbars.py:27
 msgid "Digitize area"
@@ -6553,9 +6497,8 @@ msgid "Show 3D view mode manual"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:94
-#, fuzzy
 msgid "GRASS GIS"
-msgstr "Kilépés GRASS GIS-ből"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:129
 msgid "There were some issues when loading menu or Modules tab:"
@@ -7453,9 +7396,8 @@ msgid "Reproject selected layers"
 msgstr "Kiválasztott rétegek átvetítése"
 
 #: ../gui/wxpython/modules/histogram.py:296
-#, fuzzy
 msgid "Histogram Tool  [d.histogram]"
-msgstr "Hisztogram létrehozása d.histogram paranccsal"
+msgstr ""
 
 #: ../gui/wxpython/modules/histogram.py:436
 msgid "Select font for histogram text"
@@ -7897,9 +7839,8 @@ msgid "Thematic mapping for vector map in 3D view"
 msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
-#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr "Raszter térkép kalkulátor"
+msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -8627,9 +8568,8 @@ msgid "Draw sampling region by polygon. Right Double click to end drawing"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/g.gui.rlisetup.py:47
-#, fuzzy
 msgid "Setup for r.li modules - GRASS GIS"
-msgstr "GRASS GIS beállítás az r.li modulhoz"
+msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:23
 msgid "Modify the configuration file"
@@ -8652,9 +8592,8 @@ msgid "WARNING"
 msgstr "FIGYELMEZTETÉS"
 
 #: ../gui/wxpython/rlisetup/frame.py:114
-#, fuzzy
 msgid "Setup for r.li modules"
-msgstr "GRASS GIS beállítás az r.li modulhoz"
+msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:131
 msgid "Available sampling area configuration files"
@@ -8814,27 +8753,24 @@ msgid "Remove text"
 msgstr "Szöveg eltávolítás"
 
 #: ../gui/wxpython/mapwin/decorations.py:203
-#, fuzzy
 msgid "Text properties"
-msgstr "Elem tulajdonságok"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:226
 msgid "Remove scale bar"
 msgstr "Léptékvonalzó eltávolítás"
 
 #: ../gui/wxpython/mapwin/decorations.py:227
-#, fuzzy
 msgid "Scale bar properties"
-msgstr "Adat tulajdonságok"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:239
 msgid "Remove north arrow"
 msgstr "Észak nyíl eltávolítás"
 
 #: ../gui/wxpython/mapwin/decorations.py:240
-#, fuzzy
 msgid "North arrow properties"
-msgstr "Észak nyíl beállítások"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:252
 #: ../gui/wxpython/mapwin/decorations.py:265
@@ -8842,14 +8778,12 @@ msgid "Remove legend"
 msgstr "Jelmagyarázat eltávolítás"
 
 #: ../gui/wxpython/mapwin/decorations.py:253
-#, fuzzy
 msgid "Vector legend properties"
-msgstr "Vektor jelmagyarázat"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/decorations.py:266
-#, fuzzy
 msgid "Raster legend properties"
-msgstr "Raszter jelmagyarázat"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:259
 msgid "Copy coordinates to clipboard"
@@ -8872,9 +8806,8 @@ msgid "Show statusbar"
 msgstr "Állapotsor megjelenítés"
 
 #: ../gui/wxpython/mapwin/buffered.py:295
-#, fuzzy
 msgid "Resize and move legend"
-msgstr "Jelmagyarázat átméretezés"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:711
 msgid "Please wait, exporting image..."
@@ -9032,9 +8965,8 @@ msgid "Statistics for Profile(s)"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:43
-#, fuzzy
 msgid "Histogram Tool"
-msgstr "Hisztogram"
+msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:51
 msgid "Histogram of"
@@ -13612,9 +13544,8 @@ msgid "Attribute table manager"
 msgstr "Attribútum tábla kezelő"
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "Adat katalógus"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
@@ -13947,9 +13878,8 @@ msgid "Location named <%s> already exists, rename it first"
 msgstr "<%s> nevű hely már létezik, előbb nevezze át"
 
 #: ../gui/wxpython/startup/locdownload.py:563
-#, fuzzy
 msgid "Location Download"
-msgstr "GRASS GIS hely letöltés"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:611
 msgid "Do you want to cancel location download?"
@@ -13960,9 +13890,8 @@ msgid "Abort download"
 msgstr "Letöltés megszakítás"
 
 #: ../gui/wxpython/startup/guiutils.py:80
-#, fuzzy
 msgid "Invalid mapset name"
-msgstr "Hibás név"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -13979,9 +13908,8 @@ msgid "Name for the new mapset:"
 msgstr "Név az új térképcsoporthoz:"
 
 #: ../gui/wxpython/startup/guiutils.py:186
-#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr "Nem  tudok új térképcsoportot létrehozni: %s"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:212
 #, fuzzy
@@ -14004,32 +13932,23 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:269
-#, fuzzy
 msgid "Unable to rename selected mapset"
-msgstr "Nem tudom törölni a térképcsoportot"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:280
 #: ../gui/wxpython/startup/guiutils.py:334
-#, fuzzy
 msgid ""
 "Current name: {}\n"
 "\n"
 "Enter new name:"
 msgstr ""
-"Aktuális név: %s\n"
-"\n"
-"Új név:"
 
 #: ../gui/wxpython/startup/guiutils.py:294
-#, fuzzy
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "{}"
 msgstr ""
-"Nem tudom átnevezni a térképcsoportot.\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:319
 #, python-brace-format
@@ -14042,20 +13961,15 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:323
-#, fuzzy
 msgid "Unable to rename selected location"
-msgstr "Nem tudom létrehozni a helyet"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:347
-#, fuzzy
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "{}"
 msgstr ""
-"Nem tudom átnevezni a helyet.\n"
-"\n"
-"%s"
 
 #: ../gui/wxpython/startup/guiutils.py:410
 #, python-brace-format
@@ -14068,9 +13982,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
-#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr "Nem tudom törölni a térképcsoportot"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:430
 #, python-brace-format
@@ -14083,14 +13996,12 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:435
-#, fuzzy
 msgid "Delete selected mapsets"
-msgstr "Kiválasztott térképcsoport törlése"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:448
-#, fuzzy
 msgid "Error when deleting mapsets"
-msgstr "Hiba a '%s' fájl olvasása közben."
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:450
 #, python-brace-format
@@ -14113,12 +14024,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:499
-#, fuzzy
 msgid "Unable to delete selected locations"
-msgstr "Nem tudom törölni a helyet"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:515
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following locations?\n"
 "\n"
@@ -14126,19 +14036,14 @@ msgid ""
 "\n"
 "All mapsets included in these locations will be permanently deleted!"
 msgstr ""
-"Folytani akarja a hely törlését <%s>?\n"
-"\n"
-"Minden a helyhez tartozó térképet véglegesen törlök!"
 
 #: ../gui/wxpython/startup/guiutils.py:520
-#, fuzzy
 msgid "Delete selected locations"
-msgstr "Kiválasztott hely törlése"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:533
-#, fuzzy
 msgid "Error when deleting locations"
-msgstr "Hiba a '%s' fájl olvasása közben."
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:535
 #, python-brace-format
@@ -14161,9 +14066,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:572
-#, fuzzy
 msgid "Unable to delete selected GRASS database"
-msgstr "Nem tudok új GRASS adatbázist létrehozni"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:580
 #, python-brace-format
@@ -14176,9 +14080,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
-#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr "Kiválasztott térképcsoport törlése"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14206,25 +14109,20 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:641
-#, fuzzy
 msgid "Mapset is in use"
-msgstr "Térképcsoport: %s"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:653
-#, fuzzy
 msgid "Error when removing lock file"
-msgstr "Hiba a '%s' fájl olvasása közben."
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:654
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to remove {lockpath}.\n"
 "\n"
 " Details: {error}."
 msgstr ""
-"Nem tudom írni a '{filePath}' fájlt.\n"
-"\n"
-"Részletek: {error}"
 
 #: ../gui/wxpython/startup/guiutils.py:693
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:593
@@ -14383,9 +14281,8 @@ msgid "Table"
 msgstr "Tábla"
 
 #: ../gui/wxpython/dbmgr/base.py:1154 ../gui/wxpython/dbmgr/base.py:2277
-#, fuzzy
 msgid " (read-only)"
-msgstr "(csak olvasható)"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:1168
 msgid "SQL Query"
@@ -14851,14 +14748,13 @@ msgid "Dbf driver does not support usage of SQL functions."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:78
-#, fuzzy
 msgid "Attribute Table Manager"
-msgstr "Attribútum tábla kezelő"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:81
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{document} (read-only)"
-msgstr "(csak olvasható)"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:100
 #, python-format
@@ -14954,9 +14850,8 @@ msgid "Loading attribute data for vector map <%s>..."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:56
-#, fuzzy
 msgid "Attribute Table Manager - GRASS GIS"
-msgstr "GRASS GIS attribútum tábla kezelő -"
+msgstr ""
 
 #: ../gui/wxpython/web_services/widgets.py:136
 msgid " Requested data settings "
@@ -15410,9 +15305,8 @@ msgid "Permission denied <{}>. Please change file permission for reading."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:303
-#, fuzzy
 msgid "Couldn't read file <{}>."
-msgstr "Sikertelen fájl olvasás %s."
+msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:323
 msgid "Permission denied <{}>. Please change file permission for writting.{}"
@@ -15475,9 +15369,8 @@ msgid "Deactive overwrite"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:638
-#, fuzzy
 msgid "Quit Simple Python Editor"
-msgstr "Egyszerű Python szerkesztő"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:126
 msgid "Command prompt"
@@ -16603,9 +16496,8 @@ msgid "Template:"
 msgstr "Sablon:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2000
-#, fuzzy
 msgid "SQL Query Utility"
-msgstr "SQL lekérdezés"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2016
 msgid " SQL statement "
@@ -16628,9 +16520,8 @@ msgid "Do you want to quit GRASS GIS including shell or just close the GUI?"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2369
-#, fuzzy
 msgid "Do you want to quit GRASS GIS?"
-msgstr "Létre akar hozni egy GRASS helyet <%s>?"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2448
 msgid "Select font:"
@@ -16805,9 +16696,8 @@ msgid "Double-click to run selected module"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:164
-#, fuzzy
 msgid "&Run..."
-msgstr "Futtatás"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:165
 msgid "Run selected module from the tree"
@@ -16827,9 +16717,8 @@ msgid "Documentation for %s is now open in the web browser"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/menu.py:356
-#, fuzzy
 msgid "&Recent Files"
-msgstr "Szöveg fájlok"
+msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:39
 #, python-format
@@ -17327,9 +17216,8 @@ msgid "Not enough points for line"
 msgstr "Nincs elég pont avonalhoz"
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:67
-#, fuzzy
 msgid "Vector Digitizer - GRASS GIS"
-msgstr "Vektor digitalizáló"
+msgstr ""
 
 #: ../gui/wxpython/vdigit/g.gui.vdigit.py:83
 #, python-format
@@ -18918,9 +18806,8 @@ msgid "labels: "
 msgstr "címkék:"
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:51
-#, fuzzy
 msgid "Cartographic Composer - GRASS GIS"
-msgstr "Kilépés a kartográfiai szerkesztőből"
+msgstr ""
 
 msgid "Availiable analyses"
 msgstr "Elérhető elemzések"
@@ -18931,209 +18818,209 @@ msgstr "Nem sikerült a réteget megjeleníteni: nincs az aktuális térképcsop
 msgid "Animation already axists"
 msgstr "Animáció már létezik"
 
-#~ msgid "GRASS GIS Raster Map Calculator"
-#~ msgstr "GRASS GIS raszter térkép kalkulátor"
+msgid "GRASS GIS Raster Map Calculator"
+msgstr "GRASS GIS raszter térkép kalkulátor"
 
-#~ msgid "GRASS GIS 3D Raster Map Calculator"
-#~ msgstr "GRASS GIS 3D raszter térkép kalkulátor"
+msgid "GRASS GIS 3D Raster Map Calculator"
+msgstr "GRASS GIS 3D raszter térkép kalkulátor"
 
-#~ msgid "Define GRASS Database and Location Name"
-#~ msgstr "GRASS adatbázis és hely név megadása"
+msgid "Define GRASS Database and Location Name"
+msgstr "GRASS adatbázis és hely név megadása"
 
-#~ msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
-#~ msgstr "Ez a beállítás lehetővé teszi az alapértelmezett számítási régió azonnali beállítását a hely létrehozása után. Az alapértelmezett számítási régió később beállítható az importált adatok alapján a g.region használatával."
+msgid "This option allows setting default computation region immediately after new location is created. Default computation region can be defined later using g.region based on imported data."
+msgstr "Ez a beállítás lehetővé teszi az alapértelmezett számítási régió azonnali beállítását a hely létrehozása után. Az alapértelmezett számítási régió később beállítható az importált adatok alapján a g.region használatával."
 
-#~ msgid "Create user mapset"
-#~ msgstr "Felhasználói térképcsoport létrehozás"
+msgid "Create user mapset"
+msgstr "Felhasználói térképcsoport létrehozás"
 
-#~ msgid "This option allows creating user mapset immediately after new location is created. Note that GRASS always creates PERMANENT mapset."
-#~ msgstr "Ez  a beállítás lehetővé teszi felhasználói térképcsoportok azonnali létrehozását a hely létrehozása után. Vegye észre, hogy a GRASS mindig létrehozza a PERMANENT térképcsoportot."
+msgid "This option allows creating user mapset immediately after new location is created. Note that GRASS always creates PERMANENT mapset."
+msgstr "Ez  a beállítás lehetővé teszi felhasználói térképcsoportok azonnali létrehozását a hely létrehozása után. Vegye észre, hogy a GRASS mindig létrehozza a PERMANENT térképcsoportot."
 
-#~ msgid "GIS Data Directory:"
-#~ msgstr "GISadat könyvtár:"
+msgid "GIS Data Directory:"
+msgstr "GISadat könyvtár:"
 
-#~ msgid "Project Location"
-#~ msgstr "Projekt hely"
+msgid "Project Location"
+msgstr "Projekt hely"
 
-#~ msgid "Location Title"
-#~ msgstr "Hely név"
+msgid "Location Title"
+msgstr "Hely név"
 
-#~ msgid "Choose method for creating a new location"
-#~ msgstr "Válasszon módszert az új hely létrehozásához"
+msgid "Choose method for creating a new location"
+msgstr "Válasszon módszert az új hely létrehozásához"
 
-#~ msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
-#~ msgstr "Olvass be a vetületet és a dátumot egy Well Known Text (WKT) .prj fájlból"
+msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
+msgstr "Olvass be a vetületet és a dátumot egy Well Known Text (WKT) .prj fájlból"
 
-#~ msgid "Select coordinate system parameters from a list"
-#~ msgstr "Válassza ki a koordináta-rendszer paramétereit egy listából"
+msgid "Select coordinate system parameters from a list"
+msgstr "Válassza ki a koordináta-rendszer paramétereit egy listából"
 
-#~ msgid "Simple methods:"
-#~ msgstr "Egyszerű módszerek:"
+msgid "Simple methods:"
+msgstr "Egyszerű módszerek:"
 
-#~ msgid "Advanced methods:"
-#~ msgstr "Haladó módszerek:"
+msgid "Advanced methods:"
+msgstr "Haladó módszerek:"
 
-#~ msgid "Choose projection"
-#~ msgstr "Válasszon vetületet"
+msgid "Choose projection"
+msgstr "Válasszon vetületet"
 
-#~ msgid "Select Well Known Text (WKT) .prj file"
-#~ msgstr "Válasszon Well Known Text (WKT) .prj fájlt"
+msgid "Select Well Known Text (WKT) .prj file"
+msgstr "Válasszon Well Known Text (WKT) .prj fájlt"
 
-#~ msgid "WKT .prj file:"
-#~ msgstr "WKT .prj fáll:"
+msgid "WKT .prj file:"
+msgstr "WKT .prj fáll:"
 
-#~ msgid "Choose EPSG Code"
-#~ msgstr "Válasszon EPSG kódot"
+msgid "Choose EPSG Code"
+msgstr "Válasszon EPSG kódot"
 
-#~ msgid "Path to the EPSG-codes file:"
-#~ msgstr "Elérési út az EPSG kódok fájlhoz:"
+msgid "Path to the EPSG-codes file:"
+msgstr "Elérési út az EPSG kódok fájlhoz:"
 
-#~ msgid "Choose EPSG codes file"
-#~ msgstr "Válasszon EPSG kódok fájlt"
+msgid "Choose EPSG codes file"
+msgstr "Válasszon EPSG kódok fájlt"
 
-#~ msgid "Location Title:"
-#~ msgstr "Hely név:"
+msgid "Location Title:"
+msgstr "Hely név:"
 
-#~ msgid "Location wizard canceled. Location not created."
-#~ msgstr "a hely varázsló futása megszakadt. A helyet nem hoztam létre."
+msgid "Location wizard canceled. Location not created."
+msgstr "a hely varázsló futása megszakadt. A helyet nem hoztam létre."
 
-#~ msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
-#~ msgstr "<%(loc)s> helyet a <%(dir)s> GIS adat könyvtárban hoztam létre. Meg kell változtatnia az alapértelmezett GIS adat könyvtárat a GRASS induló képernyőjén."
+msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
+msgstr "<%(loc)s> helyet a <%(dir)s> GIS adat könyvtárban hoztam létre. Meg kell változtatnia az alapértelmezett GIS adat könyvtárat a GRASS induló képernyőjén."
 
-#~ msgid "New GIS data directory"
-#~ msgstr "Új GIS adatkönyvtár"
+msgid "New GIS data directory"
+msgstr "Új GIS adatkönyvtár"
 
-#~ msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
-#~ msgstr "Vektor térkép réteg export bármelyik támogatott OGR vektor formátumba. Alapértelmezés szerint a vektor térkép réteget ESRI shape fájl formátumba exportáljuk."
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
+msgstr "Vektor térkép réteg export bármelyik támogatott OGR vektor formátumba. Alapértelmezés szerint a vektor térkép réteget ESRI shape fájl formátumba exportáljuk."
 
-#~ msgid "Reports and Statistics"
-#~ msgstr "Jelentések és statisztikák"
+msgid "Reports and Statistics"
+msgstr "Jelentések és statisztikák"
 
-#~ msgid "GRASS GIS Vector Digitizer"
-#~ msgstr "GRASS GIS vektor dgitalizáló"
+msgid "GRASS GIS Vector Digitizer"
+msgstr "GRASS GIS vektor dgitalizáló"
 
-#~ msgid "Documents"
-#~ msgstr "Dokumentációk"
+msgid "Documents"
+msgstr "Dokumentációk"
 
-#~ msgid "My Documents"
-#~ msgstr "Dokumentumaim"
+msgid "My Documents"
+msgstr "Dokumentumaim"
 
-#~ msgid "GRASS GIS Simple Python Editor"
-#~ msgstr "GRASS GIS Egyszerű Python szerkesztő"
+msgid "GRASS GIS Simple Python Editor"
+msgstr "GRASS GIS Egyszerű Python szerkesztő"
 
-#~ msgid "GRASS GIS Cartographic Composer"
-#~ msgstr "GRASS GIS kartográfiai szerkesztő"
+msgid "GRASS GIS Cartographic Composer"
+msgstr "GRASS GIS kartográfiai szerkesztő"
 
-#~ msgid "GRASS GIS Animation tool"
-#~ msgstr "GRASS GIS animáció eszköz"
+msgid "GRASS GIS Animation tool"
+msgstr "GRASS GIS animáció eszköz"
 
-#~ msgid "Start region:"
-#~ msgstr "Kezdő régió:"
+msgid "Start region:"
+msgstr "Kezdő régió:"
 
-#~ msgid "GRASS GIS %s Layer Manager"
-#~ msgstr "GRASS GIS %s réteg kezelő"
+msgid "GRASS GIS %s Layer Manager"
+msgstr "GRASS GIS %s réteg kezelő"
 
-#~ msgid "Switch to new location?"
-#~ msgstr "Váltás az új helyre?"
+msgid "Switch to new location?"
+msgstr "Váltás az új helyre?"
 
-#~ msgid "Do you want to set the default region extents and resolution now?"
-#~ msgstr "Be akarja állítani az alapértelmezett régió terjedelmét és a felbontást most?"
+msgid "Do you want to set the default region extents and resolution now?"
+msgstr "Be akarja állítani az alapértelmezett régió terjedelmét és a felbontást most?"
 
-#~ msgid "Location <%s> created"
-#~ msgstr "<%s> helyet létrehoztam"
+msgid "Location <%s> created"
+msgstr "<%s> helyet létrehoztam"
 
-#~ msgid "Unable to exit GRASS shell: unknown PID"
-#~ msgstr "Nem tudok kilépni a GRASS burokból: ismeretlen PID"
+msgid "Unable to exit GRASS shell: unknown PID"
+msgstr "Nem tudok kilépni a GRASS burokból: ismeretlen PID"
 
-#~ msgid "Remove vector legend"
-#~ msgstr "Vektor jelmagyarázat eltávolítás"
+msgid "Remove vector legend"
+msgstr "Vektor jelmagyarázat eltávolítás"
 
-#~ msgid "GRASS GIS Vector Network Analysis Tool"
-#~ msgstr "GRASS GIS vektor hálózat elemzés eszköz"
+msgid "GRASS GIS Vector Network Analysis Tool"
+msgstr "GRASS GIS vektor hálózat elemzés eszköz"
 
-#~ msgid "Click to allow editing other mapsets"
-#~ msgstr "Kattintson más térképcsoportok szerkesztésének az engedélyezéséhez"
+msgid "Click to allow editing other mapsets"
+msgstr "Kattintson más térképcsoportok szerkesztésének az engedélyezéséhez"
 
-#~ msgid "GRASS GIS Attribute Table Manager"
-#~ msgstr "GRASS GIS attribútum tábla kezelő"
+msgid "GRASS GIS Attribute Table Manager"
+msgstr "GRASS GIS attribútum tábla kezelő"
 
-#~ msgid "GRASS GIS Graphical Modeler"
-#~ msgstr "GRASS GIS Grafikus Modellező"
+msgid "GRASS GIS Graphical Modeler"
+msgstr "GRASS GIS Grafikus Modellező"
 
-#~ msgid "Maximum number of animations is %s."
-#~ msgstr "Az animációk maximális száma %s."
+msgid "Maximum number of animations is %s."
+msgstr "Az animációk maximális száma %s."
 
-#~ msgid "Animate region change (2D view only)"
-#~ msgstr "Területváltozás animálása (csak 2D nézet)"
+msgid "Animate region change (2D view only)"
+msgstr "Területváltozás animálása (csak 2D nézet)"
 
-#~ msgid "GRASS GIS Temporal Plot Tool"
-#~ msgstr "GRASS GIS időbeli rajz eszköz"
+msgid "GRASS GIS Temporal Plot Tool"
+msgstr "GRASS GIS időbeli rajz eszköz"
 
-#~ msgid "GRASS GIS Location Download"
-#~ msgstr "GRASS GIS hely letöltés"
+msgid "GRASS GIS Location Download"
+msgstr "GRASS GIS hely letöltés"
 
-#~ msgid "Unpack GRASS raster map"
-#~ msgstr "GRASS raszter térkép kicsomagolása"
+msgid "Unpack GRASS raster map"
+msgstr "GRASS raszter térkép kicsomagolása"
 
-#~ msgid "Set raster output format"
-#~ msgstr "Raszter output formátum beállítás"
+msgid "Set raster output format"
+msgstr "Raszter output formátum beállítás"
 
-#~ msgid "Unpack GRASS vector map"
-#~ msgstr "GRASS vektor térkép kicsomagolás"
+msgid "Unpack GRASS vector map"
+msgstr "GRASS vektor térkép kicsomagolás"
 
-#~ msgid "Set vector output format"
-#~ msgstr "Vektor output formátum beállítás"
+msgid "Set vector output format"
+msgstr "Vektor output formátum beállítás"
 
-#~ msgid ""
-#~ "Location <%s> created.\n"
-#~ "\n"
-#~ "Do you want to switch to the new location?"
-#~ msgstr ""
-#~ "<%s> helyet létrehoztam.\n"
-#~ "\n"
-#~ "Át akar váltani az új helyre?"
+msgid ""
+"Location <%s> created.\n"
+"\n"
+"Do you want to switch to the new location?"
+msgstr ""
+"<%s> helyet létrehoztam.\n"
+"\n"
+"Át akar váltani az új helyre?"
 
-#~ msgid "Search:"
-#~ msgstr "Keresés:"
+msgid "Search:"
+msgstr "Keresés:"
 
-#~ msgid "GRASS locations in {0}"
-#~ msgstr "GRASS hely ebben {0}"
+msgid "GRASS locations in {0}"
+msgstr "GRASS hely ebben {0}"
 
-#~ msgid " (readonly)"
-#~ msgstr "(csak olvasható)"
+msgid " (readonly)"
+msgstr "(csak olvasható)"
 
-#~ msgid "GRASS GIS Attribute Table Manager - "
-#~ msgstr "GRASS GIS attribútum tábla kezelő -"
+msgid "GRASS GIS Attribute Table Manager - "
+msgstr "GRASS GIS attribútum tábla kezelő -"
 
-#~ msgid "GRASS GIS Setup for r.li modules"
-#~ msgstr "GRASS GIS beállítás az r.li modulhoz"
+msgid "GRASS GIS Setup for r.li modules"
+msgstr "GRASS GIS beállítás az r.li modulhoz"
 
-#~ msgid "Resize legend"
-#~ msgstr "Jelmagyarázat átméretezés"
+msgid "Resize legend"
+msgstr "Jelmagyarázat átméretezés"
 
-#~ msgid "Optional location title, you can leave this field blank."
-#~ msgstr "Opcionális hely cím, ezt a mezőt üresen hagyhatja."
+msgid "Optional location title, you can leave this field blank."
+msgstr "Opcionális hely cím, ezt a mezőt üresen hagyhatja."
 
-#~ msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
-#~ msgstr "<%(name)s> név nem megfelelő név egy helyhez. Csak az ASCII karaktereket használja kivéve %(chars)s és a szóközt."
+msgid "Name <%(name)s> is not a valid name for location. Please use only ASCII characters excluding %(chars)s and space."
+msgstr "<%(name)s> név nem megfelelő név egy helyhez. Csak az ASCII karaktereket használja kivéve %(chars)s és a szóközt."
 
-#~ msgid "Unable to create location"
-#~ msgstr "Nem tudom létrehozni a helyet"
+msgid "Unable to create location"
+msgstr "Nem tudom létrehozni a helyet"
 
-#~ msgid "Select EPSG code of spatial reference system"
-#~ msgstr "Válasszon EPSG kódot a vetülethez"
+msgid "Select EPSG code of spatial reference system"
+msgstr "Válasszon EPSG kódot a vetülethez"
 
-#~ msgid "Read projection and datum terms from a georeferenced data file"
-#~ msgstr "Olvass be a vetületet és a dátumot egy georeferált adatfájlból"
+msgid "Read projection and datum terms from a georeferenced data file"
+msgstr "Olvass be a vetületet és a dátumot egy georeferált adatfájlból"
 
-#~ msgid "Create a generic Cartesian coordinate system (XY)"
-#~ msgstr "Hozzon létre egy általános derékszögű koordináta-rendszert (XY)"
+msgid "Create a generic Cartesian coordinate system (XY)"
+msgstr "Hozzon létre egy általános derékszögű koordináta-rendszert (XY)"
 
-#~ msgid "Do you want to create GRASS location <%s>?"
-#~ msgstr "Létre akar hozni egy GRASS helyet <%s>?"
+msgid "Do you want to create GRASS location <%s>?"
+msgstr "Létre akar hozni egy GRASS helyet <%s>?"
 
-#~ msgid "Create new location?"
-#~ msgstr "Új hely létrehozása?"
+msgid "Create new location?"
+msgstr "Új hely létrehozása?"
 
-#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
-#~ msgstr "GRASS GIS hisztogram eszköz (d.histogram)"
+msgid "GRASS GIS Histogramming Tool (d.histogram)"
+msgstr "GRASS GIS hisztogram eszköz (d.histogram)"

@@ -37040,9 +37040,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Số mẫu ô vuông"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -55190,9 +55190,8 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Tọa độ của (các) điểm bắt đầu (Đ,B)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
@@ -55204,9 +55203,8 @@ msgid "Profile output file name (\"-\" for stdout)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Tiền tố dùng cho (các) bản đồ raster đầu ra"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
 #, c-format
@@ -56708,9 +56706,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "Không tìm thấy tập tin: %s"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57569,9 +57566,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Không thể đoán định dạng site_list"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format

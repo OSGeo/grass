@@ -526,9 +526,8 @@ msgid "Add existing or create new database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
-#, fuzzy
 msgid "Create new mapset in current location"
-msgstr "GRASS 로케이션 내의 지도 세트를 선택하세요"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:43
 msgid "Create new location in current GRASS database"
@@ -539,19 +538,16 @@ msgid "Download sample location to current GRASS database"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:49
-#, fuzzy
 msgid "Import raster data  [r.import]"
-msgstr "래스터 자료 가져오기"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:52
-#, fuzzy
 msgid "Import vector data  [v.import]"
-msgstr "벡터 자료 가져오기"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:55
-#, fuzzy
 msgid "Select another import option"
-msgstr "재투영과 동시에 단순화된 래스터 가져오기"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:72
 #: ../gui/wxpython/modules/extensions.py:74
@@ -623,9 +619,8 @@ msgid "Overwrite?"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:224
-#, fuzzy
 msgid "name unknown"
-msgstr "알려지지 않은"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:226
 #, python-brace-format
@@ -648,9 +643,9 @@ msgid "{name}  (owner: {owner})"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:237
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{name}"
-msgstr "이름 바꾸기"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:791
 #, python-brace-format
@@ -704,9 +699,8 @@ msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1084
-#, fuzzy
 msgid "Cannot rename location"
-msgstr "지도 틀 옵션:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1093
 #, python-brace-format
@@ -842,58 +836,48 @@ msgid "&Switch mapset"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
-#, fuzzy
 msgid "&Delete mapset"
-msgstr "지도를 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
-#, fuzzy
 msgid "&Rename mapset"
-msgstr "이름 바꾸기(&R)"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
-#, fuzzy
 msgid "&Create mapset"
-msgstr "데이터베이스 생성"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
-#, fuzzy
 msgid "&Delete location"
-msgstr "선택된 로케이션을 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
-#, fuzzy
 msgid "&Rename location"
-msgstr "이름 바꾸기(&R)"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
-#, fuzzy
 msgid "&Create new location"
-msgstr "선택된 로케이션을 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
-#, fuzzy
 msgid "&Download sample location"
-msgstr "선택된 로케이션을 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1842
-#, fuzzy
 msgid "&Delete GRASS database from disk"
-msgstr "1. GRASS GIS 데이터베이스 디렉토리를 선택하세요"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
-#, fuzzy
 msgid "&Delete locations"
-msgstr "선택된 로케이션을 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
-#, fuzzy
 msgid "&Delete mapsets"
-msgstr "지도를 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -909,24 +893,20 @@ msgid "Choose GRASS data directory:"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:112
-#, fuzzy
 msgid "Do you want to create a location?"
-msgstr "모델의 변경 사항을 저장하시겠습니까?"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:115
-#, fuzzy
 msgid "Create location?"
-msgstr "선택된 로케이션을 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:199
-#, fuzzy
 msgid "Link external raster data  [r.external]"
-msgstr "외부 래스터 자료 연결"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:203
-#, fuzzy
 msgid "Link external vector data  [v.external]"
-msgstr "외부 벡터 자료 연결"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:209
 msgid "Set raster output format  [r.external.out]"
@@ -937,14 +917,12 @@ msgid "Set vector output format  [v.external.out]"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:220
-#, fuzzy
 msgid "Unpack GRASS raster map  [r.unpack]"
-msgstr "래스터 지도 풀기"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:224
-#, fuzzy
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr "벡터 지도 풀기"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:230
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
@@ -960,14 +938,12 @@ msgid "Link external data"
 msgstr "외부 자료 연결"
 
 #: ../gui/wxpython/datacatalog/catalog.py:242
-#, fuzzy
 msgid "More options..."
-msgstr "지도 틀 옵션:"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:31 ../gui/wxpython/menustrings.py:1999
-#, fuzzy
 msgid "Data Catalog"
-msgstr "GRASS GIS 자료 목록"
+msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:47
 msgid "Close GRASS GIS Data Catalog"
@@ -1787,9 +1763,8 @@ msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
 
 #: ../gui/wxpython/animation/g.gui.animation.py:134
-#, fuzzy
 msgid "Animation Tool - GRASS GIS"
-msgstr "애니메이션 도구 모음"
+msgstr ""
 
 #: ../gui/wxpython/animation/temporal_manager.py:110
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
@@ -2000,9 +1975,8 @@ msgid "Use saved region:"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:575
-#, fuzzy
 msgid "Animate region change"
-msgstr "애니메이션 %d"
+msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:581
 msgid "End region:"
@@ -2379,9 +2353,8 @@ msgid "Invalid"
 msgstr "무효합니다"
 
 #: ../gui/wxpython/animation/frame.py:51
-#, fuzzy
 msgid "Animation Tool"
-msgstr "애니메이션 도구"
+msgstr ""
 
 #: ../gui/wxpython/animation/frame.py:157 ../gui/wxpython/mapswipe/frame.py:290
 msgid "Main Toolbar"
@@ -2771,9 +2744,8 @@ msgid "Classes"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:169
-#, fuzzy
 msgid "Interactive Scatter Plot Tool"
-msgstr "GRASS GIS 대화식 산점도 도구"
+msgstr ""
 
 #: ../gui/wxpython/iscatt/frame.py:401
 msgid "scatter plot"
@@ -2877,9 +2849,8 @@ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some
 msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:71
-#, fuzzy
 msgid "Timeline Tool"
-msgstr "GRASS GIS 시간선 도구"
+msgstr ""
 
 #: ../gui/wxpython/timeline/frame.py:134 ../gui/wxpython/tplot/frame.py:353
 #: ../gui/wxpython/nviz/preferences.py:405 ../gui/wxpython/nviz/tools.py:847
@@ -3434,9 +3405,8 @@ msgid "Yes"
 msgstr "예"
 
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:55
-#, fuzzy
 msgid "Graphical Modeler - GRASS GIS"
-msgstr "GRASS GIS 그래픽 모델러"
+msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:78 ../gui/wxpython/lmgr/toolbars.py:155
 #: ../gui/wxpython/gui_core/forms.py:1458
@@ -3825,9 +3795,8 @@ msgid "Description of location directory in GIS Data Directory"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:253
-#, fuzzy
 msgid "Location will be created in GRASS database:"
-msgstr "GRASS 데이터베이스 안에 로케이션이 이미 존재합니다."
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:277
 msgid "Name '{}' is not a valid name for location. Please use only ASCII characters excluding characters {} and space."
@@ -3853,9 +3822,8 @@ msgid "Title of the location is limited only to one line and 256 characters. The
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:335
-#, fuzzy
 msgid "Select Coordinate Reference System (CRS)"
-msgstr "공간 참조 체계의 EPSG 코드를 선택하세요"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
 msgid "Select CRS from a list by EPSG or description"
@@ -3886,9 +3854,8 @@ msgid "Define custom CRS"
 msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:374
-#, fuzzy
 msgid "Additional methods:"
-msgstr "추가 옵션:"
+msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:500
 #: ../gui/wxpython/location_wizard/wizard.py:1018
@@ -4697,9 +4664,8 @@ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) packa
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:98
-#, fuzzy
 msgid "Temporal Plot Tool"
-msgstr "GRASS GIS 시간 도표 도구"
+msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:184
 msgid ""
@@ -4875,9 +4841,8 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/g.gui.tplot.py:168
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:84
-#, fuzzy
 msgid "Temporal Plot Tool - GRASS GIS"
-msgstr "GRASS GIS 시간 도표 도구"
+msgstr ""
 
 #: ../gui/wxpython/nviz/wxnviz.py:35
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (http://numpy.scipy.org) for information on downloading source or binaries."
@@ -5896,9 +5861,8 @@ msgid "Edit point"
 msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:74
-#, fuzzy
 msgid "Vector Network Analysis Tool"
-msgstr "벡터 네트워크 분석 도구"
+msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:193
 msgid "Point list toolbar"
@@ -6517,9 +6481,8 @@ msgid "Show 3D view mode manual"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:94
-#, fuzzy
 msgid "GRASS GIS"
-msgstr "GRASS GIS 종료"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:129
 msgid "There were some issues when loading menu or Modules tab:"
@@ -6546,9 +6509,8 @@ msgid "3D view Toolbar"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:302
-#, fuzzy
 msgid "Rename current Map Display"
-msgstr "모든 지도 디스플레이 표시"
+msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:362
 #: ../gui/wxpython/gui_core/preferences.py:322
@@ -7417,9 +7379,8 @@ msgid "Reproject selected layers"
 msgstr ""
 
 #: ../gui/wxpython/modules/histogram.py:296
-#, fuzzy
 msgid "Histogram Tool  [d.histogram]"
-msgstr "GRASS GIS 주상도 도구 (d.histogram)"
+msgstr ""
 
 #: ../gui/wxpython/modules/histogram.py:436
 msgid "Select font for histogram text"
@@ -7858,9 +7819,8 @@ msgid "Thematic mapping for vector map in 3D view"
 msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
-#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr "래스터 지도 계산기"
+msgstr ""
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -8592,9 +8552,8 @@ msgid "Draw sampling region by polygon. Right Double click to end drawing"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/g.gui.rlisetup.py:47
-#, fuzzy
 msgid "Setup for r.li modules - GRASS GIS"
-msgstr "r.li 모듈을 위한 GRASS GIS 설정"
+msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:23
 msgid "Modify the configuration file"
@@ -8617,9 +8576,8 @@ msgid "WARNING"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:114
-#, fuzzy
 msgid "Setup for r.li modules"
-msgstr "r.li 모듈을 위한 GRASS GIS 설정"
+msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:131
 msgid "Available sampling area configuration files"
@@ -8828,9 +8786,8 @@ msgid "Show statusbar"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:295
-#, fuzzy
 msgid "Resize and move legend"
-msgstr "범례를 제거합니다"
+msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:711
 msgid "Please wait, exporting image..."
@@ -8986,9 +8943,8 @@ msgid "Statistics for Profile(s)"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:43
-#, fuzzy
 msgid "Histogram Tool"
-msgstr "GRASS GIS 주상도 도구"
+msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:51
 msgid "Histogram of"
@@ -9483,9 +9439,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:76
-#, fuzzy
 msgid "Supervised Classification Tool"
-msgstr "GRASS GIS 감독 분류 도구"
+msgstr ""
 
 #: ../gui/wxpython/iclass/frame.py:315
 msgid "IClass Toolbar"
@@ -9631,9 +9586,8 @@ msgid "Subgroup <%s> not found"
 msgstr ""
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:114
-#, fuzzy
 msgid "Supervised Classification Tool - GRASS GIS"
-msgstr "GRASS GIS 감독 분류 도구"
+msgstr ""
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:121
 #, python-format
@@ -10249,9 +10203,8 @@ msgid "Manage maps"
 msgstr "지도 관리"
 
 #: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:1193
-#, fuzzy
 msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
-msgstr "지도 세트 검색 경로에서 가능한 파일을 현재 사용자 지도 세트로 복사합니다."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:172 ../gui/wxpython/menustrings.py:966
 #: ../gui/wxpython/menustrings.py:1194 ../gui/wxpython/menustrings.py:1911
@@ -10903,9 +10856,8 @@ msgid "Neighborhood points"
 msgstr "이웃 점"
 
 #: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1290
-#, fuzzy
 msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1291
 msgid "Overlay rasters"
@@ -13570,9 +13522,8 @@ msgid "Attribute table manager"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2000
-#, fuzzy
 msgid "Launch Data Catalog."
-msgstr "GRASS GIS 자료 목록"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:2007
 msgid "Managing GCPs for 3D correction"
@@ -13905,9 +13856,8 @@ msgid "Location named <%s> already exists, rename it first"
 msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:563
-#, fuzzy
 msgid "Location Download"
-msgstr "GRASS GIS 로케이션 내려받기"
+msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:611
 msgid "Do you want to cancel location download?"
@@ -13918,9 +13868,8 @@ msgid "Abort download"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:80
-#, fuzzy
 msgid "Invalid mapset name"
-msgstr "무효한 이름"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:106
 msgid "Invalid location name"
@@ -13937,9 +13886,8 @@ msgid "Name for the new mapset:"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:186
-#, fuzzy
 msgid "Unable to create new mapset: {}"
-msgstr "지도 세트를 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:212
 #, fuzzy
@@ -13962,9 +13910,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:269
-#, fuzzy
 msgid "Unable to rename selected mapset"
-msgstr "지도 세트를 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:280
 #: ../gui/wxpython/startup/guiutils.py:334
@@ -13975,12 +13922,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:294
-#, fuzzy
 msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "{}"
-msgstr "지도 세트를 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:319
 #, python-brace-format
@@ -13993,17 +13939,15 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:323
-#, fuzzy
 msgid "Unable to rename selected location"
-msgstr "로케이션을 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:347
-#, fuzzy
 msgid ""
 "Unable to rename location.\n"
 "\n"
 "{}"
-msgstr "로케이션을 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:410
 #, python-brace-format
@@ -14016,12 +13960,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:414
-#, fuzzy
 msgid "Unable to delete selected mapsets"
-msgstr "지도 세트를 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:430
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following mapsets?\n"
 "\n"
@@ -14029,14 +13972,10 @@ msgid ""
 "\n"
 "All maps included in these mapsets will be permanently deleted!"
 msgstr ""
-"로케이션 <%(location)s>로부터 지도 세트 <%(mapset)s>의 삭제를 진행할까요?\n"
-"\n"
-"이 지도 세트에 포함된 모든 지도들이 영구히 삭제될 것입니다!"
 
 #: ../gui/wxpython/startup/guiutils.py:435
-#, fuzzy
 msgid "Delete selected mapsets"
-msgstr "선택된 지도 세트를 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:448
 msgid "Error when deleting mapsets"
@@ -14063,12 +14002,11 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:499
-#, fuzzy
 msgid "Unable to delete selected locations"
-msgstr "로케이션을 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:515
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Do you want to continue with deleting one or more of the following locations?\n"
 "\n"
@@ -14076,14 +14014,10 @@ msgid ""
 "\n"
 "All mapsets included in these locations will be permanently deleted!"
 msgstr ""
-"로케이션 <%s>의 삭제를 진행할까요?\n"
-"\n"
-"이 로케이션에 포함된 모든 지도들이 영구히 삭제될 것입니다!"
 
 #: ../gui/wxpython/startup/guiutils.py:520
-#, fuzzy
 msgid "Delete selected locations"
-msgstr "선택된 로케이션을 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:533
 msgid "Error when deleting locations"
@@ -14110,9 +14044,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:572
-#, fuzzy
 msgid "Unable to delete selected GRASS database"
-msgstr "로케이션을 삭제할 수 없습니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:580
 #, python-brace-format
@@ -14125,9 +14058,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:585
-#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr "선택된 지도 세트를 삭제합니다"
+msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:597
 msgid "Error when deleting GRASS database"
@@ -14144,7 +14076,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:631
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "User {user} is already running GRASS in selected mapset <{mapset}>\n"
 " (file {lockpath} created {timestamp} found).\n"
@@ -14153,11 +14085,6 @@ msgid ""
 "\n"
 "Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
 msgstr ""
-"GRASS가 이미 선택된 지도 세트 <%(mapset)s>에서 실행 중입니다 (파일 %(lock)s를 찾았습니다).\n"
-"\n"
-"동시 실행은 허락되지 않습니다.\n"
-"\n"
-".gislock 제거를 시도하고 (이 조작을 위한 허가가 필요합니다) 계속하시겠습니까?"
 
 #: ../gui/wxpython/startup/guiutils.py:641
 msgid "Mapset is in use"
@@ -14168,15 +14095,12 @@ msgid "Error when removing lock file"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:654
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unable to remove {lockpath}.\n"
 "\n"
 " Details: {error}."
 msgstr ""
-"'%(lock)s'를 제거할 수 없습니다.\n"
-"\n"
-"세부 사항: %(reason)s"
 
 #: ../gui/wxpython/startup/guiutils.py:693
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:593
@@ -14800,9 +14724,8 @@ msgid "Dbf driver does not support usage of SQL functions."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:78
-#, fuzzy
 msgid "Attribute Table Manager"
-msgstr "GRASS GIS 속성 테이블 관리자"
+msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:81
 #, python-brace-format
@@ -14903,9 +14826,8 @@ msgid "Loading attribute data for vector map <%s>..."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:56
-#, fuzzy
 msgid "Attribute Table Manager - GRASS GIS"
-msgstr "GRASS GIS 속성 테이블 관리자"
+msgstr ""
 
 #: ../gui/wxpython/web_services/widgets.py:136
 msgid " Requested data settings "
@@ -15423,9 +15345,8 @@ msgid "Deactive overwrite"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:638
-#, fuzzy
 msgid "Quit Simple Python Editor"
-msgstr "GRASS GIS 단순한 파이썬 편집기"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:126
 msgid "Command prompt"
@@ -16544,9 +16465,8 @@ msgid "Template:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2000
-#, fuzzy
 msgid "SQL Query Utility"
-msgstr "GRASS GIS SQL 질의 유틸리티"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2016
 msgid " SQL statement "
@@ -16565,9 +16485,8 @@ msgid "Symbol name:"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2364
-#, fuzzy
 msgid "Do you want to quit GRASS GIS including shell or just close the GUI?"
-msgstr "셸 프롬프트와 함께 GRASS를 종료할까요? 아니면 GUI만 닫을까요?"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:2369
 msgid "Do you want to quit GRASS GIS?"
@@ -18821,9 +18740,8 @@ msgid "labels: "
 msgstr ""
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:51
-#, fuzzy
 msgid "Cartographic Composer - GRASS GIS"
-msgstr "지도 작성자"
+msgstr ""
 
 msgid "Due to the limitations of your operating system, the script path cannot contain certain non-ascii characters. Please rename the script or move it to a different location."
 msgstr "운영 체계의 한계 때문에 스크립트의 경로는 특정 ASCII가 아닌 문자를 포함할 수 없습니다. 스크립트의 이름을 바꾸거나 다른 장소로 이동하세요."
@@ -18834,107 +18752,107 @@ msgstr "로케이션 <{loc}> 내 지도세트 <{mapset}>으로부터 <{etype}> �
 msgid "Animation already axists"
 msgstr "애니메이션이 이미 존재합니다"
 
-#~ msgid "GRASS GIS Raster Map Calculator"
-#~ msgstr "GRASS GIS 래스터 지도 계산기"
+msgid "GRASS GIS Raster Map Calculator"
+msgstr "GRASS GIS 래스터 지도 계산기"
 
-#~ msgid "GRASS GIS 3D Raster Map Calculator"
-#~ msgstr "GRASS GIS 3차원 래스터 지도 계산기"
+msgid "GRASS GIS 3D Raster Map Calculator"
+msgstr "GRASS GIS 3차원 래스터 지도 계산기"
 
-#~ msgid "Common formats import"
-#~ msgstr "일반적인 포맷 가져오기"
+msgid "Common formats import"
+msgstr "일반적인 포맷 가져오기"
 
-#~ msgid "Allocates subnets for nearest centers (direction from center). center node must be opened (costs >= 0). Costs of center node are used in calculation"
-#~ msgstr "최근접 중심을 위한 서브넷을 할당합니다 (중심으로부터의 방향). 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
+msgid "Allocates subnets for nearest centers (direction from center). center node must be opened (costs >= 0). Costs of center node are used in calculation"
+msgstr "최근접 중심을 위한 서브넷을 할당합니다 (중심으로부터의 방향). 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
 
-#~ msgid "Reports and Statistics"
-#~ msgstr "보고 및 통계"
+msgid "Reports and Statistics"
+msgstr "보고 및 통계"
 
-#~ msgid "GRASS GIS Vector Digitizer"
-#~ msgstr "GRASS GIS 벡터 디지타이저"
+msgid "GRASS GIS Vector Digitizer"
+msgstr "GRASS GIS 벡터 디지타이저"
 
-#~ msgid "GRASS GIS Cartographic Composer"
-#~ msgstr "GRASS GIS 지도 작성자"
+msgid "GRASS GIS Cartographic Composer"
+msgstr "GRASS GIS 지도 작성자"
 
-#~ msgid "GRASS GIS Map Swipe"
-#~ msgstr "GRASS GIS 지도 밀기"
+msgid "GRASS GIS Map Swipe"
+msgstr "GRASS GIS 지도 밀기"
 
-#~ msgid "GRASS GIS Animation tool"
-#~ msgstr "GRASS GIS 애니메이션 도구"
+msgid "GRASS GIS Animation tool"
+msgstr "GRASS GIS 애니메이션 도구"
 
-#~ msgid "GRASS GIS %s Layer Manager"
-#~ msgstr "GRASS GIS %s 레이어 관리자"
+msgid "GRASS GIS %s Layer Manager"
+msgstr "GRASS GIS %s 레이어 관리자"
 
-#~ msgid "Unable to exit GRASS shell: unknown PID"
-#~ msgstr "GRASS 셸을 종료할 수 없습니다: 알려지지 않은 PID"
+msgid "Unable to exit GRASS shell: unknown PID"
+msgstr "GRASS 셸을 종료할 수 없습니다: 알려지지 않은 PID"
 
-#~ msgid "Remove vector legend"
-#~ msgstr "벡터 범례를 제거합니다"
+msgid "Remove vector legend"
+msgstr "벡터 범례를 제거합니다"
 
-#~ msgid "GRASS GIS Vector Network Analysis Tool"
-#~ msgstr "GRASS GIS 벡터 네트워크 분석 도구"
+msgid "GRASS GIS Vector Network Analysis Tool"
+msgstr "GRASS GIS 벡터 네트워크 분석 도구"
 
-#~ msgid "GRASS GIS - Map display"
-#~ msgstr "GRASS GIS - 지도 디스플레이"
+msgid "GRASS GIS - Map display"
+msgstr "GRASS GIS - 지도 디스플레이"
 
-#~ msgid "GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s"
-#~ msgstr "GRASS GIS 지도 디스플레이: %(name)s - %(loc)s/%(mapset)s"
+msgid "GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s"
+msgstr "GRASS GIS 지도 디스플레이: %(name)s - %(loc)s/%(mapset)s"
 
-#~ msgid "Maximum number of animations is %s."
-#~ msgstr "애니메이션의 최대 개수는 %s입니다"
+msgid "Maximum number of animations is %s."
+msgstr "애니메이션의 최대 개수는 %s입니다"
 
-#~ msgid "GRASS GIS Temporal Plot Tool"
-#~ msgstr "GRASS GIS 시간 도표 도구"
+msgid "GRASS GIS Temporal Plot Tool"
+msgstr "GRASS GIS 시간 도표 도구"
 
-#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
-#~ msgstr "GRASS GIS 주상도 도구 (d.histogram)"
+msgid "GRASS GIS Histogramming Tool (d.histogram)"
+msgstr "GRASS GIS 주상도 도구 (d.histogram)"
 
-#~ msgid "Copies available data files in the current mapset search path to the user's current mapset."
-#~ msgstr "지도 세트 검색 경로에서 가능한 파일을 현재 사용자 지도 세트로 복사합니다."
+msgid "Copies available data files in the current mapset search path to the user's current mapset."
+msgstr "지도 세트 검색 경로에서 가능한 파일을 현재 사용자 지도 세트로 복사합니다."
 
-#~ msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
-#~ msgstr "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgstr "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
 
-#~ msgid "Attaches, deletes or reports vector categories to map geometry."
-#~ msgstr "지도 지형의 벡터 범주를 부착, 삭제, 또는 보고합니다."
+msgid "Attaches, deletes or reports vector categories to map geometry."
+msgstr "지도 지형의 벡터 범주를 부착, 삭제, 또는 보고합니다."
 
-#~ msgid "GRASS GIS Location Download"
-#~ msgstr "GRASS GIS 로케이션 내려받기"
+msgid "GRASS GIS Location Download"
+msgstr "GRASS GIS 로케이션 내려받기"
 
-#~ msgid "GRASS GIS Interactive Scatter Plot Tool"
-#~ msgstr "GRASS GIS 대화식 산점도 도구"
+msgid "GRASS GIS Interactive Scatter Plot Tool"
+msgstr "GRASS GIS 대화식 산점도 도구"
 
-#~ msgid "GRASS GIS Histogramming Tool"
-#~ msgstr "GRASS GIS 주상도 도구"
+msgid "GRASS GIS Histogramming Tool"
+msgstr "GRASS GIS 주상도 도구"
 
-#~ msgid "GRASS GIS Supervised Classification Tool"
-#~ msgstr "GRASS GIS 감독 분류 도구"
+msgid "GRASS GIS Supervised Classification Tool"
+msgstr "GRASS GIS 감독 분류 도구"
 
-#~ msgid "GRASS GIS Timeline Tool"
-#~ msgstr "GRASS GIS 시간선 도구"
+msgid "GRASS GIS Timeline Tool"
+msgstr "GRASS GIS 시간선 도구"
 
-#~ msgid "GRASS GIS Data Catalog"
-#~ msgstr "GRASS GIS 자료 목록"
+msgid "GRASS GIS Data Catalog"
+msgstr "GRASS GIS 자료 목록"
 
-#~ msgid "GRASS GIS Attribute Table Manager"
-#~ msgstr "GRASS GIS 속성 테이블 관리자"
+msgid "GRASS GIS Attribute Table Manager"
+msgstr "GRASS GIS 속성 테이블 관리자"
 
-#~ msgid "GRASS GIS Attribute Table Manager - "
-#~ msgstr "GRASS GIS 속성 테이블 관리자"
+msgid "GRASS GIS Attribute Table Manager - "
+msgstr "GRASS GIS 속성 테이블 관리자"
 
-#~ msgid "GRASS GIS Graphical Modeler"
-#~ msgstr "GRASS GIS 그래픽 모델러"
+msgid "GRASS GIS Graphical Modeler"
+msgstr "GRASS GIS 그래픽 모델러"
 
-#~ msgid "GRASS GIS Setup for r.li modules"
-#~ msgstr "r.li 모듈을 위한 GRASS GIS 설정"
+msgid "GRASS GIS Setup for r.li modules"
+msgstr "r.li 모듈을 위한 GRASS GIS 설정"
 
-#~ msgid "Select EPSG code of spatial reference system"
-#~ msgstr "공간 참조 체계의 EPSG 코드를 선택하세요"
+msgid "Select EPSG code of spatial reference system"
+msgstr "공간 참조 체계의 EPSG 코드를 선택하세요"
 
-#~ msgid "GRASS GIS Simple Python Editor"
-#~ msgstr "GRASS GIS 단순한 파이썬 편집기"
+msgid "GRASS GIS Simple Python Editor"
+msgstr "GRASS GIS 단순한 파이썬 편집기"
 
-#~ msgid "GRASS GIS SQL Query Utility"
-#~ msgstr "GRASS GIS SQL 질의 유틸리티"
+msgid "GRASS GIS SQL Query Utility"
+msgstr "GRASS GIS SQL 질의 유틸리티"
 
-#~ msgid "Do you want to quit GRASS including shell prompt or just close the GUI?"
-#~ msgstr "셸 프롬프트와 함께 GRASS를 종료할까요? 아니면 GUI만 닫을까요?"
+msgid "Do you want to quit GRASS including shell prompt or just close the GUI?"
+msgstr "셸 프롬프트와 함께 GRASS를 종료할까요? 아니면 GUI만 닫을까요?"

@@ -169,9 +169,8 @@ msgid "created in a temporary directory and deleted at exit"
 msgstr ""
 
 #: ../lib/init/grass.py:401
-#, fuzzy
 msgid "create temporary mapset (use with the --exec flag)"
-msgstr "créer un Secteur temporaire (utiliser avec l'option --exec)"
+msgstr ""
 
 #: ../lib/init/grass.py:402
 msgid "created in the specified location and deleted at exit"
@@ -211,44 +210,28 @@ msgid "GUI <%s> not supported in this version"
 msgstr "Interface <%s> non supportée par cette version"
 
 #: ../lib/init/grass.py:806
-#, fuzzy
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
 msgstr ""
-"La commande python ne fonctionne pas comme prévu !\n"
-"Merci de vérifier votre variable d'environnement GRASS_PYTHON.\n"
-"Utilisez l'option -help pour plus de détails.\n"
 
 #: ../lib/init/grass.py:810
 msgid "GRASS GUI not found. Please check your installation."
 msgstr "GRASS GUI non trouvée. Merci de vérifier votre installation."
 
 #: ../lib/init/grass.py:812
-#, fuzzy
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
-"{}\n"
-"Bascule vers l'interface en mode texte.\n"
-"\n"
-"Appuyez sur ENTRÉE pour continuer.\n"
 
 #: ../lib/init/grass.py:819
-#, fuzzy
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
 "(DISPLAY variable is not set.)\n"
 "Switching to text based interface mode."
 msgstr ""
-"Il semblerait que le système X Xindows ne soit pas ac(if.\n"
-"L'interface graphique utilisateur n'est pas supportée.\n"
-"(DISPLAY n'est pas défini.)\n"
-"Bascule vers une interface en mode texte.\n"
-"\n"
-"Appuyez sur ENTRER pour continuer.\n"
 
 #: ../lib/init/grass.py:891
 #, python-brace-format
@@ -275,9 +258,8 @@ msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of th
 msgstr ""
 
 #: ../lib/init/grass.py:977
-#, fuzzy
 msgid "Mapset <{}> already exists."
-msgstr "La carte <%s> est déjà référencée."
+msgstr ""
 
 #: ../lib/init/grass.py:985
 msgid "A new mapset can be created using '-c' flag."
@@ -553,9 +535,8 @@ msgid "Flag -e requires also flag -c"
 msgstr "L'option -e nécessite également l'option -c"
 
 #: ../lib/init/grass.py:2232
-#, fuzzy
 msgid "Flag -c requires name of location or mapset"
-msgstr "L'option -e nécessite également l'option -c"
+msgstr ""
 
 #: ../lib/init/grass.py:2235
 msgid "Either --tmp-location or --tmp-mapset can be used, not both"
@@ -1309,14 +1290,14 @@ msgid "error in datum table file, line %d"
 msgstr "erreur dans la table du fichier de datums, ligne %d"
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "Échec au lancement du shell '%s'"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse string specifier: %s"
-msgstr "Impossible d'analyser la chaine de temps : %s"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:343
 #, c-format
@@ -1409,19 +1390,19 @@ msgid "Other Projection"
 msgstr "Autre projection"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value: %g"
-msgstr "Valeur de résolution n-s illégale"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal number of rows: %d (resolution is %g)"
-msgstr "Valeur <%lf> de résolution n-s illégale"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value: %g"
-msgstr "Valeur de résolution e-o illégale"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
 #, c-format
@@ -1429,28 +1410,27 @@ msgid "Illegal number of columns: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
-msgstr "Le Nord doit être au nord du Sud"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
-#, fuzzy, c-format
+#, c-format
 msgid "North must be larger than South, but %g (north) <= %g (south"
-msgstr "Le Nord doit être plus grand que le Sud"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "East must be larger than West, but %g (east) <= %g (west)"
-msgstr "L'Est doit être plus grand que l'Ouest"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
 msgid "Invalid coordinates: negative number of columns"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
-#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr "Coordonnées invalides"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
 msgid "NS resolution has been changed"
@@ -1465,9 +1445,9 @@ msgid "NS and EW resolutions are different"
 msgstr "Les résolutions NS et EO sont différentes"
 
 #: ../lib/gis/adj_cellhd.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
-msgstr "Valeur de résolution n-s illégale"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:184
 #, c-format
@@ -1475,9 +1455,9 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
-msgstr "Valeur de résolution e-o illégale"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:202
 #, c-format
@@ -1485,19 +1465,19 @@ msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr "Valeur de résolution h-b 3D illégale"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal depths value: %d"
-msgstr "Valeur de profondeur illégale"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:236
-#, fuzzy, c-format
+#, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
-msgstr "Le haut doit être plus grand que le bas"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:283
 msgid "Invalid coordinates: negative number of depths"
@@ -3900,9 +3880,9 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr "Erreur de format : fichier ('%s') ligne (%d) - %s"
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr "Copie %s <%s> vers <%s> dans le jeu de cartes courant"
+msgstr ""
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
@@ -4770,9 +4750,8 @@ msgid "No connection defined"
 msgstr "Pas de connexion définie"
 
 #: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
-#, fuzzy
 msgid "Invalid offset (%"
-msgstr "Offset invalide (%d)"
+msgstr "Décalage invalide (%"
 
 #: ../lib/vector/Vlib/write_pg.c:348 ../lib/vector/Vlib/write_ogr.c:140
 msgid "Unable to delete feature"
@@ -5634,14 +5613,12 @@ msgid "Unable to open coor file for vector map <%s>"
 msgstr "Impossible d'ouvrir le fichier coor pour la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/open_nat.c:152
-#, fuzzy
 msgid "Coor file of vector map <%s@%s> is larger than it should be (%"
-msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus grand qu'il ne devrait (%ld bytes en trop)"
+msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:156
-#, fuzzy
 msgid "Coor file of vector <%s@%s> is shorter than it should be (%"
-msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait (%ld bytes en moins)"
+msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:339
 #: ../lib/vector/Vlib/build_sfa.c:632
@@ -5662,11 +5639,11 @@ msgstr[1] "%d primitives référencées"
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
-#, fuzzy, c-format
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
-msgstr[0] "Un sommet référencé"
-msgstr[1] "%jd sommets référencés"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_nat.c:133
 msgid "Building areas..."
@@ -6380,14 +6357,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr "Impossible d'écrire l'objet dans la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "Impossible de restaurer l'entité/décalage %"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "Impossible de restaurer l'entité/décalage %"
+msgstr "Impossible de supprimer l'entité/décalage %"
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -9488,14 +9463,14 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr "Impossible de lire le fichier header de la carte raster <%s@%s>. II s'agit d'une reclassification de <%s@%s> %s"
+msgstr ""
 
 #: ../lib/raster/get_cellhd.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
-msgstr "Impossible de lire le fichier header de la carte raster <%s@%s>. II s'agit d'une reclassification de <%s@%s> %s"
+msgstr ""
 
 #: ../lib/raster/interp.c:211
 #, c-format
@@ -10767,142 +10742,142 @@ msgstr ""
 msgid "Unable to seek"
 msgstr "Recherche impossible"
 
-#~ msgid "which is missing."
-#~ msgstr "qui est manquant."
+msgid "which is missing."
+msgstr "qui est manquant."
 
-#~ msgid "whose header file can't be opened."
-#~ msgstr "dont le fichier d'en-tête ne peut être ouvert."
+msgid "whose header file can't be opened."
+msgstr "dont le fichier d'en-tête ne peut être ouvert."
 
-#~ msgid "Unable to open header file for raster map <%s@%s>"
-#~ msgstr "Impossible d'ouvrir le fichier d'en-tête de la carte raster <%s@%s>"
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "Impossible d'ouvrir le fichier d'en-tête de la carte raster <%s@%s>"
 
-#~ msgid "shell script to be processed as batch job"
-#~ msgstr "script shell à exécuter par lot"
+msgid "shell script to be processed as batch job"
+msgstr "script shell à exécuter par lot"
 
-#~ msgid "Mapset <{}> already exists. Ignoring the request to create it. Note that this warning may become an error in future versions."
-#~ msgstr "Le jeux de carte <{}> existe déjà. Requête de création ignorée. Cet avertissement pourra devenir une erreur dans les versions futures."
+msgid "Mapset <{}> already exists. Ignoring the request to create it. Note that this warning may become an error in future versions."
+msgstr "Le jeux de carte <{}> existe déjà. Requête de création ignorée. Cet avertissement pourra devenir une erreur dans les versions futures."
 
-#~ msgid ""
-#~ "Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
-#~ "\n"
-#~ "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
-#~ msgstr ""
-#~ "Un fichier de tâches <%s> a été défini dans la variable 'GRASS_BATCH_JOB' mais n'est pas trouvé. Fermeture.\n"
-#~ "\n"
-#~ "Utiliser 'réinitialiser GRASS_BATCH_JOB' pour désactiver la liste de tâches de calcul."
+msgid ""
+"Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
+"\n"
+"Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
+msgstr ""
+"Un fichier de tâches <%s> a été défini dans la variable 'GRASS_BATCH_JOB' mais n'est pas trouvé. Fermeture.\n"
+"\n"
+"Utiliser 'réinitialiser GRASS_BATCH_JOB' pour désactiver la liste de tâches de calcul."
 
-#~ msgid "Change file permission to 'executable' for <%s>"
-#~ msgstr "Modifier les permissions du fichier vers 'exécutable' pour <%s>"
+msgid "Change file permission to 'executable' for <%s>"
+msgstr "Modifier les permissions du fichier vers 'exécutable' pour <%s>"
 
-#~ msgid "Illegal row value"
-#~ msgstr "Valeur de ligne illégale"
+msgid "Illegal row value"
+msgstr "Valeur de ligne illégale"
 
-#~ msgid "Illegal col value"
-#~ msgstr "Valeur de colonne illégale"
+msgid "Illegal col value"
+msgstr "Valeur de colonne illégale"
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "Valeur de résolution n-s 3D illégale"
+msgid "Illegal n-s3 resolution value"
+msgstr "Valeur de résolution n-s 3D illégale"
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "Valeur de ligne 3D illégale"
+msgid "Illegal row3 value"
+msgstr "Valeur de ligne 3D illégale"
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "Valeur de résolution e-o 3D illégale"
+msgid "Illegal e-w3 resolution value"
+msgstr "Valeur de résolution e-o 3D illégale"
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "Valeur de colonne 3D illégale"
+msgid "Illegal col3 value"
+msgstr "Valeur de colonne 3D illégale"
 
-#~ msgid "Unable to rewrite feature/offset %lu in vector map <%s>"
-#~ msgstr "Impossible de réécrire l'entité/décalage %lu dans la carte vecteur <%s>"
+msgid "Unable to rewrite feature/offset %lu in vector map <%s>"
+msgstr "Impossible de réécrire l'entité/décalage %lu dans la carte vecteur <%s>"
 
-#~ msgid "Unable to delete feature/offset %lu from vector map <%s>"
-#~ msgstr "Impossible de supprimer l'entité/décalage %lu dans la carte vecteur <%s>"
+msgid "Unable to delete feature/offset %lu from vector map <%s>"
+msgstr "Impossible de supprimer l'entité/décalage %lu dans la carte vecteur <%s>"
 
-#~ msgid "Invalid offset (%ld)"
-#~ msgstr "Décalage invalide (%ld)"
+msgid "Invalid offset (%ld)"
+msgstr "Décalage invalide (%ld)"
 
-#~ msgid "Illegal n-s resolution value <%lf>"
-#~ msgstr "Valeur <%lf> de résolution n-s illégale"
+msgid "Illegal n-s resolution value <%lf>"
+msgstr "Valeur <%lf> de résolution n-s illégale"
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "Valeur de résolution e-o illégale"
+msgid "Illegal e-w resolution value"
+msgstr "Valeur de résolution e-o illégale"
 
-#~ msgid "North must be north of South"
-#~ msgstr "Le Nord doit être au nord du Sud"
+msgid "North must be north of South"
+msgstr "Le Nord doit être au nord du Sud"
 
-#~ msgid "North must be larger than South"
-#~ msgstr "Le Nord doit être plus grand que le Sud"
+msgid "North must be larger than South"
+msgstr "Le Nord doit être plus grand que le Sud"
 
-#~ msgid "East must be larger than West"
-#~ msgstr "L'Est doit être plus grand que l'Ouest"
+msgid "East must be larger than West"
+msgstr "L'Est doit être plus grand que l'Ouest"
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "Coordonnées invalides"
+msgid "Invalid coordinates"
+msgstr "Coordonnées invalides"
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "Valeur de résolution n-s illégale"
+msgid "Illegal n-s resolution value"
+msgstr "Valeur de résolution n-s illégale"
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "Valeur de résolution h-b 3D illégale"
+msgid "Illegal t-b3 resolution value"
+msgstr "Valeur de résolution h-b 3D illégale"
 
-#~ msgid "Illegal depths value"
-#~ msgstr "Valeur de profondeur illégale"
+msgid "Illegal depths value"
+msgstr "Valeur de profondeur illégale"
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "Le haut doit être plus grand que le bas"
+msgid "Top must be larger than Bottom"
+msgstr "Le haut doit être plus grand que le bas"
 
-#~ msgid ""
-#~ "The python command does not work as expected!\n"
-#~ "Please check your GRASS_PYTHON environment variable.\n"
-#~ "Use the -help option for details.\n"
-#~ msgstr ""
-#~ "La commande python ne fonctionne pas comme prévu !\n"
-#~ "Merci de vérifier votre variable d'environnement GRASS_PYTHON.\n"
-#~ "Utilisez l'option -help pour plus de détails.\n"
+msgid ""
+"The python command does not work as expected!\n"
+"Please check your GRASS_PYTHON environment variable.\n"
+"Use the -help option for details.\n"
+msgstr ""
+"La commande python ne fonctionne pas comme prévu !\n"
+"Merci de vérifier votre variable d'environnement GRASS_PYTHON.\n"
+"Utilisez l'option -help pour plus de détails.\n"
 
-#~ msgid ""
-#~ "{}\n"
-#~ "Switching to text based interface mode.\n"
-#~ "\n"
-#~ "Hit RETURN to continue.\n"
-#~ msgstr ""
-#~ "{}\n"
-#~ "Bascule vers l'interface en mode texte.\n"
-#~ "\n"
-#~ "Appuyez sur ENTRÉE pour continuer.\n"
+msgid ""
+"{}\n"
+"Switching to text based interface mode.\n"
+"\n"
+"Hit RETURN to continue.\n"
+msgstr ""
+"{}\n"
+"Bascule vers l'interface en mode texte.\n"
+"\n"
+"Appuyez sur ENTRÉE pour continuer.\n"
 
-#~ msgid ""
-#~ "It appears that the X Windows system is not active.\n"
-#~ "A graphical based user interface is not supported.\n"
-#~ "(DISPLAY variable is not set.)\n"
-#~ "Switching to text based interface mode.\n"
-#~ "\n"
-#~ "Hit RETURN to continue.\n"
-#~ msgstr ""
-#~ "Il semblerait que le système X Xindows ne soit pas ac(if.\n"
-#~ "L'interface graphique utilisateur n'est pas supportée.\n"
-#~ "(DISPLAY n'est pas défini.)\n"
-#~ "Bascule vers une interface en mode texte.\n"
-#~ "\n"
-#~ "Appuyez sur ENTRER pour continuer.\n"
+msgid ""
+"It appears that the X Windows system is not active.\n"
+"A graphical based user interface is not supported.\n"
+"(DISPLAY variable is not set.)\n"
+"Switching to text based interface mode.\n"
+"\n"
+"Hit RETURN to continue.\n"
+msgstr ""
+"Il semblerait que le système X Xindows ne soit pas ac(if.\n"
+"L'interface graphique utilisateur n'est pas supportée.\n"
+"(DISPLAY n'est pas défini.)\n"
+"Bascule vers une interface en mode texte.\n"
+"\n"
+"Appuyez sur ENTRER pour continuer.\n"
 
-#~ msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
-#~ msgstr "Le jeu de cartes <{mapset}> n'existe pas dans le secteur GRASS <{loc}>. Il est possible de créer un nouveau jeu de cartes avec l'option '-c'."
+msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
+msgstr "Le jeu de cartes <{mapset}> n'existe pas dans le secteur GRASS <{loc}>. Il est possible de créer un nouveau jeu de cartes avec l'option '-c'."
 
-#~ msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
-#~ msgstr "Impossible de lire le fichier header de la carte raster <%s@%s>. II s'agit d'une reclassification de <%s@%s> %s"
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
+msgstr "Impossible de lire le fichier header de la carte raster <%s@%s>. II s'agit d'une reclassification de <%s@%s> %s"
 
-#~ msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
-#~ msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus grand qu'il ne devrait (%ld bytes en trop)"
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus grand qu'il ne devrait (%ld bytes en trop)"
 
-#~ msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
-#~ msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait (%ld bytes en moins)"
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait (%ld bytes en moins)"
 
-#~ msgid "Copy %s <%s> to current mapset as <%s>"
-#~ msgstr "Copie %s <%s> vers <%s> dans le jeu de cartes courant"
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Copie %s <%s> vers <%s> dans le jeu de cartes courant"
+
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr "Pour exécuter le module <%s>, ajouter un tiret-bas à la fin de l'option <%s> pour éviter un conflit avec les mots-clefs Python. Le tiret-bas est obsolète dans GRASS 7.0 et sera supprimé dans la version 7.1."
 
 #~ msgid "Invalid value <%s> for parameter <%s>"
 #~ msgstr "Valeur <%s> manquante pour le paramètre <%s>"
-
-#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
-#~ msgstr "Pour exécuter le module <%s>, ajouter un tiret-bas à la fin de l'option <%s> pour éviter un conflit avec les mots-clefs Python. Le tiret-bas est obsolète dans GRASS 7.0 et sera supprimé dans la version 7.1."

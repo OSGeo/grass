@@ -11425,9 +11425,8 @@ msgstr "차이"
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "선택"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 msgid "Name of band reference identifier (example: S2_1)"
@@ -14242,9 +14241,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "거리"
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -14683,9 +14681,8 @@ msgstr ""
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:4
 #: ../locale/scriptstrings/g.copyall_to_translate.c:2
 #: ../general/g.copy/main.c:44
-#, fuzzy
 msgid "copy"
-msgstr "복사"
+msgstr ""
 
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:7
 msgid "Input group for signature file to copy"
@@ -16719,9 +16716,8 @@ msgstr "널 자료"
 #: ../locale/scriptstrings/r.mask_to_translate.c:5
 #: ../raster3d/r3.mask/main.c:136 ../raster3d/r3.null/main.c:183
 #: ../raster/r.null/main.c:63
-#, fuzzy
 msgid "no-data"
-msgstr "값이 없는 자료"
+msgstr ""
 
 #: ../locale/scriptstrings/r.null.all_to_translate.c:6
 #: ../raster/r.null/main.c:88
@@ -19897,9 +19893,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "값이 없는 자료"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -24205,9 +24200,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "확장 메타자료를 셸 스크립트 형식으로 출력합니다"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -29895,9 +29889,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "벡터 지도 <%s>를 위한 히스토리 파일을 열 수 없습니다"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35158,9 +35152,8 @@ msgid "Neighborhood analysis tool for vector point maps."
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:134
-#, fuzzy
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:160
 msgid "Method for aggregate statistics (count if non given)"
@@ -36233,9 +36226,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr ""
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "테이블 <%s>를 삭제하는 중입니다..."
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -36243,9 +36236,9 @@ msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
 #: ../vector/v.patch/main.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
-msgstr "새 영역 내 열의 개수"
+msgstr ""
 
 #: ../vector/v.patch/main.c:289
 #, c-format
@@ -37441,9 +37434,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "면의 개수:"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42230,24 +42223,24 @@ msgid "copied"
 msgstr "복사"
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "래스터 지도 <%s>가 존재합니다. 넘어갑니다."
+msgstr ""
 
 #: ../general/g.copy/main.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s=%s,%s: files are the same, no copy required. Skipping."
-msgstr "%s=%s,%s: 파일이 똑같아서 복사할 필요가 없습니다"
+msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "래스터 지도 <%s>가 이미 존재하지만 덮어 씁니다"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s>는 잘못된 파일 이름입니다"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -43338,9 +43331,9 @@ msgid "OGR driver: column '%s', OGR type %d is not supported"
 msgstr ""
 
 #: ../db/drivers/ogr/execute.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "\tOGR failed to write feature fid=%lld to layer <%s>"
-msgstr "<%s>를 위한 피처 유형을 결정할 수 없습니다"
+msgstr ""
 
 #: ../db/drivers/ogr/select.c:50
 msgid "Unable to select: \n"
@@ -53887,9 +53880,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "스크립트 파일을 열 수 없습니다"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -55599,9 +55591,8 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "질의를 위한 좌표"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
@@ -55609,14 +55600,12 @@ msgid "Profile"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "출력 파일을 위한 이름 (생략하거나 \"-\"이면 표준출력)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "지원되지 않는 출력 포맷"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
 #, c-format
@@ -55633,9 +55622,9 @@ msgid "The coordinates are outside of the computational region"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "출력 파일 <%s>를 열 수 없습니다"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -55663,23 +55652,21 @@ msgid "Unknown output data type"
 msgstr "알려지지 않은 출력 자료형"
 
 #: ../raster/r.geomorphon/main.c:653
-#, fuzzy
 msgid "Profile data has been written"
-msgstr "정보를 정수로 씁니다"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:655
-#, fuzzy
 msgid "Failed writing profile data"
-msgstr "V5D 파일을 쓸 수 없습니다"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:751
 msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
 
 #: ../raster/r.geomorphon/pattern.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "Internal error in %s()"
-msgstr "내부 오류"
+msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:92 ../raster/r.proj/bordwalk.c:139
 #, c-format
@@ -57123,9 +57110,8 @@ msgid "No band reference assigned to <{}>"
 msgstr "레이어 <%s>에 할당된 테이블이 없습니다"
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "지도 세트 <%s>를 찾을 수 없습니다"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57141,9 +57127,8 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr "OGR 공간 참조를 생성할 수 없습니다"
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "현재 지도 세트 안에서 그룹 <%s>를 찾을 수 없습니다"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
 msgid "Operation {}: required parameter <{}> not set"
@@ -57992,9 +57977,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "지형 변환을 설정할 수 없습니다"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -59495,11 +59479,11 @@ msgstr "입력 지도 -%s-와 -%s-를 읽으면서 임시 파일을 생성하는
 msgid "Can not read control points for group <%s>"
 msgstr "그룹 <%s>를 위한 제어점을 읽을 수 없습니다"
 
-#~ msgid "<%s> not found"
-#~ msgstr "<%s>를 찾을 수 없습니다"
+msgid "<%s> not found"
+msgstr "<%s>를 찾을 수 없습니다"
 
-#~ msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
-#~ msgstr "각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
+msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgstr "각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
 
-#~ msgid "%s=%s,%s: files are the same, no copy required"
-#~ msgstr "%s=%s,%s: 파일이 똑같아서 복사할 필요가 없습니다"
+msgid "%s=%s,%s: files are the same, no copy required"
+msgstr "%s=%s,%s: 파일이 똑같아서 복사할 필요가 없습니다"

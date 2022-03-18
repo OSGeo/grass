@@ -11471,9 +11471,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Selekcja"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 msgid "Name of band reference identifier (example: S2_1)"
@@ -14309,9 +14308,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "promieniowanie"
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -20003,9 +20001,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "Metadane"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -24363,9 +24360,8 @@ msgid "Band reference search pattern (examples: L, S2, .*_2, S2_1)"
 msgstr ""
 
 #: ../locale/scriptstrings/g.bands_to_translate.c:8
-#, fuzzy
 msgid "Print extended metadata information"
-msgstr "Wyświetl informacje atrybutowe"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.csv_to_translate.c:1
 msgid "Import a CSV file using pyproj for CRS transformation"
@@ -30111,9 +30107,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Nie można otworzyć pliku historii mapy wektorej <%s>"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35539,9 +35535,8 @@ msgid "Neighborhood analysis tool for vector point maps."
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:134
-#, fuzzy
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Czyni wartość kategorii każdej komórki rastra funkcją wartości kategorii przypisanych do komórek dookoła niej, i zachowuje nową wartość komórki w wyjściowej wastwie mapy rastrowej"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:160
 msgid "Method for aggregate statistics (count if non given)"
@@ -35565,9 +35560,8 @@ msgid "points_column <%s> of points vector <%s> must be numeric"
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:284
-#, fuzzy
 msgid "All points fall outside of the current computational region"
-msgstr "Punkt poza bieżącym regionem"
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:285
 msgid "Input vector and computational region do not overlap"
@@ -36657,9 +36651,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr ""
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Brakuje tabeli"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -36667,9 +36661,9 @@ msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
 #: ../vector/v.patch/main.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
-msgstr "Liczba kolumn różni się"
+msgstr ""
 
 #: ../vector/v.patch/main.c:289
 #, c-format
@@ -37868,9 +37862,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Liczba rzędów"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42700,9 +42694,9 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "Grupa <%s> jeszcze nie istnieje. Tworzenie w toku..."
+msgstr ""
 
 #: ../general/g.copy/main.c:74
 #, c-format
@@ -42710,14 +42704,14 @@ msgid "%s=%s,%s: files are the same, no copy required. Skipping."
 msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "Mapa rastrowa <%s> już istnieje i zostanie nadpisana"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> is an illegal file name. Skipping."
-msgstr "<%s> jest niedozwoloną nazwą pliku"
+msgstr ""
 
 #: ../general/g.copy/main.c:99
 msgid "All inputs had to be skipped. Nothing to copy. See the warning messages above for details."
@@ -54304,9 +54298,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Współczynnik skali dla wysokości"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54394,9 +54387,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Nie można odczytać koloru"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -56113,9 +56105,8 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Współrzędne do zapytania"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
@@ -56123,19 +56114,17 @@ msgid "Profile"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:261
-#, fuzzy
 msgid "Profile output file name (\"-\" for stdout)"
-msgstr "Nazwa dla pliku wyjściowego (użyj output=- dla stdout)"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Format wyjściowy"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Failed parsing <%s>"
-msgstr "Eksport <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:302
 #, c-format
@@ -56143,14 +56132,13 @@ msgid "At least one output is required, e.g. %s"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:325
-#, fuzzy
 msgid "The coordinates are outside of the computational region"
-msgstr "Współrzędne końca leżą bieżącym regionem"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "Nie można otworzyć pliku wyjściowego <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -56182,9 +56170,8 @@ msgid "Profile data has been written"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:655
-#, fuzzy
 msgid "Failed writing profile data"
-msgstr "Nie udało się zapisać pliku V5D"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:751
 msgid "Failed to profile the computation, please check the parameters"
@@ -57646,9 +57633,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "MAPSET <%s> nie został znaleziony"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57663,14 +57649,12 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "Mapa rastrowa <%s> nie została znaleziona w bieżącym mapsecie"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "Wymagany parameter <%s> nie jest ustawiony"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
@@ -58509,9 +58493,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Nie można ustawić projekcji"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -60284,14 +60267,14 @@ msgstr "Błąd w pj_do_proj (projekcja wejściowej pary współrzędnych"
 msgid "Error in pj_do_transform"
 msgstr "Błąd w pj_do_transform"
 
-#~ msgid "<%s> not found"
-#~ msgstr "<%s> nie znaleziono"
+msgid "<%s> not found"
+msgstr "<%s> nie znaleziono"
 
-#~ msgid "Column types differ"
-#~ msgstr "Typy kolumn różnią się"
+msgid "Column types differ"
+msgstr "Typy kolumn różnią się"
 
-#~ msgid "Missing table"
-#~ msgstr "Brakuje tabeli"
+msgid "Missing table"
+msgstr "Brakuje tabeli"
 
-#~ msgid "Number of columns differ"
-#~ msgstr "Liczba kolumn różni się"
+msgid "Number of columns differ"
+msgstr "Liczba kolumn różni się"

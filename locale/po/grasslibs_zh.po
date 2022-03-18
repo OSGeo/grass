@@ -1347,19 +1347,19 @@ msgid "Other Projection"
 msgstr "其它投影"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value: %g"
-msgstr "非法的南北向分辨率值"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal number of rows: %d (resolution is %g)"
-msgstr "非法的南北向分辨率值"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value: %g"
-msgstr "非法的东西向分辨率值"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
 #, c-format
@@ -1367,28 +1367,27 @@ msgid "Illegal number of columns: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
-msgstr "北必须在南的北边"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
-#, fuzzy, c-format
+#, c-format
 msgid "North must be larger than South, but %g (north) <= %g (south"
-msgstr "北纬值必须比南纬值大"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "East must be larger than West, but %g (east) <= %g (west)"
-msgstr "东经值必须比西经值大"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
 msgid "Invalid coordinates: negative number of columns"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
-#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr "无效的坐标"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
 msgid "NS resolution has been changed"
@@ -1403,9 +1402,9 @@ msgid "NS and EW resolutions are different"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
-msgstr "非法的南北向分辨率值"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:184
 #, c-format
@@ -1413,9 +1412,9 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
-msgstr "非法的东西向分辨率值"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:202
 #, c-format
@@ -1423,19 +1422,19 @@ msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr "非法的3D顶到底的分辨率值"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal depths value: %d"
-msgstr "非法的深度值"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:236
-#, fuzzy, c-format
+#, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
-msgstr "顶部的值必须比底部的值大"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:283
 msgid "Invalid coordinates: negative number of depths"
@@ -3800,9 +3799,9 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr ""
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr "<%s>在地图集<%s>中"
+msgstr ""
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
@@ -4664,9 +4663,8 @@ msgid "No connection defined"
 msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
-#, fuzzy
 msgid "Invalid offset (%"
-msgstr "无法将目录改变到%s"
+msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:348 ../lib/vector/Vlib/write_ogr.c:140
 msgid "Unable to delete feature"
@@ -6251,14 +6249,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "无法将目录改变到%s"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "无法将目录改变到%s"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -10213,47 +10209,47 @@ msgstr "无法使用以下的参数表对PROJ.4进行初始化："
 msgid "The error message: %s"
 msgstr "错误信息： %s"
 
-#~ msgid "Illegal row value"
-#~ msgstr "非法的行值"
+msgid "Illegal row value"
+msgstr "非法的行值"
 
-#~ msgid "Illegal col value"
-#~ msgstr "非法的列值"
+msgid "Illegal col value"
+msgstr "非法的列值"
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "非法的3D南北向分辨率值"
+msgid "Illegal n-s3 resolution value"
+msgstr "非法的3D南北向分辨率值"
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "非法的3D的行值"
+msgid "Illegal row3 value"
+msgstr "非法的3D的行值"
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "非法的3D东西向分辨率值"
+msgid "Illegal e-w3 resolution value"
+msgstr "非法的3D东西向分辨率值"
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "非法的3D的列值"
+msgid "Illegal col3 value"
+msgstr "非法的3D的列值"
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "非法的东西向分辨率值"
+msgid "Illegal e-w resolution value"
+msgstr "非法的东西向分辨率值"
 
-#~ msgid "North must be north of South"
-#~ msgstr "北必须在南的北边"
+msgid "North must be north of South"
+msgstr "北必须在南的北边"
 
-#~ msgid "North must be larger than South"
-#~ msgstr "北纬值必须比南纬值大"
+msgid "North must be larger than South"
+msgstr "北纬值必须比南纬值大"
 
-#~ msgid "East must be larger than West"
-#~ msgstr "东经值必须比西经值大"
+msgid "East must be larger than West"
+msgstr "东经值必须比西经值大"
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "无效的坐标"
+msgid "Invalid coordinates"
+msgstr "无效的坐标"
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "非法的南北向分辨率值"
+msgid "Illegal n-s resolution value"
+msgstr "非法的南北向分辨率值"
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "非法的3D顶到底的分辨率值"
+msgid "Illegal t-b3 resolution value"
+msgstr "非法的3D顶到底的分辨率值"
 
-#~ msgid "Illegal depths value"
-#~ msgstr "非法的深度值"
+msgid "Illegal depths value"
+msgstr "非法的深度值"
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "顶部的值必须比底部的值大"
+msgid "Top must be larger than Bottom"
+msgstr "顶部的值必须比底部的值大"

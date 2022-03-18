@@ -226,29 +226,18 @@ msgid "GRASS GUI not found. Please check your installation."
 msgstr "No se encontró la GUI de GRASS. Por favor revise su instalación."
 
 #: ../lib/init/grass.py:812
-#, fuzzy
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
-"{}\n"
-"Cambiando al modo de interfaz basada en texto.\n"
-"\n"
-"De Enter para continuar.\n"
 
 #: ../lib/init/grass.py:819
-#, fuzzy
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
 "(DISPLAY variable is not set.)\n"
 "Switching to text based interface mode."
 msgstr ""
-"Al parecer el sistema X de Windows no está activo.\n"
-"No se puede soportar una interfaz gráfica de usuario.\n"
-"Cambiando al modo de interfaz basada en texto.\n"
-"\n"
-"Presione RETURN para continuar"
 
 #: ../lib/init/grass.py:891
 #, python-brace-format
@@ -275,9 +264,8 @@ msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of th
 msgstr ""
 
 #: ../lib/init/grass.py:977
-#, fuzzy
 msgid "Mapset <{}> already exists."
-msgstr "Mapa <%s> ya registrado."
+msgstr ""
 
 #: ../lib/init/grass.py:985
 msgid "A new mapset can be created using '-c' flag."
@@ -542,9 +530,8 @@ msgid "Flag -e requires also flag -c"
 msgstr "La bandera -e requiere también de la bandera -c"
 
 #: ../lib/init/grass.py:2232
-#, fuzzy
 msgid "Flag -c requires name of location or mapset"
-msgstr "La bandera -e requiere también de la bandera -c"
+msgstr ""
 
 #: ../lib/init/grass.py:2235
 msgid "Either --tmp-location or --tmp-mapset can be used, not both"
@@ -1289,14 +1276,14 @@ msgid "error in datum table file, line %d"
 msgstr "Error en el archivo de tabla de datum, línea %d."
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "Ha fallado el iniciar la consola de comandos '%s'"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse string specifier: %s"
-msgstr "No ha sido posible parsear cadena de tiempo: %s"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:343
 #, c-format
@@ -1389,19 +1376,19 @@ msgid "Other Projection"
 msgstr "Otra proyección."
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value: %g"
-msgstr "Valor de resolución norte-sur (n-s) no admitido"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal number of rows: %d (resolution is %g)"
-msgstr "Valor de resolución norte-sur (n-s)  <%If> no admitido"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value: %g"
-msgstr "Valor de resolución este-oeste (e-w) no admitido"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
 #, c-format
@@ -1409,28 +1396,27 @@ msgid "Illegal number of columns: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
-msgstr "La coordenada Norte debe estar al norte de la coordenada Sur."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
-#, fuzzy, c-format
+#, c-format
 msgid "North must be larger than South, but %g (north) <= %g (south"
-msgstr "El valor de la coordenada Norte debe ser mayor que el valor de la coordenada Sur."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "East must be larger than West, but %g (east) <= %g (west)"
-msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
 msgid "Invalid coordinates: negative number of columns"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
-#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr "Coordenadas no válidas."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
 msgid "NS resolution has been changed"
@@ -1445,9 +1431,9 @@ msgid "NS and EW resolutions are different"
 msgstr "Las resoluciones N-S y E-O, son diferentes."
 
 #: ../lib/gis/adj_cellhd.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
-msgstr "Valor de resolución norte-sur (n-s) no admitido"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:184
 #, c-format
@@ -1455,9 +1441,9 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
-msgstr "Valor de resolución este-oeste (e-w) no admitido"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:202
 #, c-format
@@ -1465,19 +1451,19 @@ msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr "El valor de la resolución cima - fondo 3D (t-b3) no es admisible."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal depths value: %d"
-msgstr "Valor de profundidad no admitido"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:236
-#, fuzzy, c-format
+#, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
-msgstr "El valor del límite superior, debe ser mayor que el del límite inferior."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:283
 msgid "Invalid coordinates: negative number of depths"
@@ -3842,9 +3828,9 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr "Error de formato: archivo ('% s') línea (% d) -% s"
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr "Copiar %s <%s> al Directorio de mapas actual con el nombre <%s>"
+msgstr ""
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
@@ -4708,9 +4694,8 @@ msgid "No connection defined"
 msgstr "No se ha definido la conexión"
 
 #: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
-#, fuzzy
 msgid "Invalid offset (%"
-msgstr "El nombre del mapa vectorial <%s> no es válido"
+msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:348 ../lib/vector/Vlib/write_ogr.c:140
 msgid "Unable to delete feature"
@@ -5572,14 +5557,12 @@ msgid "Unable to open coor file for vector map <%s>"
 msgstr "No ha sido posible abrir archivo de coordenadas del mapa vectorial <%s>"
 
 #: ../lib/vector/Vlib/open_nat.c:152
-#, fuzzy
 msgid "Coor file of vector map <%s@%s> is larger than it should be (%"
-msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es mayor de lo que debiera (%ld bytes sobrantes)"
+msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:156
-#, fuzzy
 msgid "Coor file of vector <%s@%s> is shorter than it should be (%"
-msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es menor de lo que debería ser (faltan %ld bytes)."
+msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:339
 #: ../lib/vector/Vlib/build_sfa.c:632
@@ -6316,14 +6299,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr "No ha sido posible escribir elemento en el mapa vectorial <%s>"
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "No se puede reescribir el el objeto espacial %d"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "No ha sido posible eliminar elemento"
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -9411,14 +9392,14 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr "No ha sido posible leer archivo de encabezado para mapa ráster <%s@%s>. Es un mapa de reclasificación del mapa ráster <%s@%s> %s"
+msgstr ""
 
 #: ../lib/raster/get_cellhd.c:78
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
-msgstr "No ha sido posible leer archivo de encabezado para mapa ráster <%s@%s>. Es un mapa de reclasificación del mapa ráster <%s@%s> %s"
+msgstr ""
 
 #: ../lib/raster/interp.c:211
 #, c-format
@@ -10581,94 +10562,94 @@ msgstr ""
 msgid "Unable to seek"
 msgstr "No ha sido posible buscar"
 
-#~ msgid "which is missing."
-#~ msgstr "el cual no se ha encontrado."
+msgid "which is missing."
+msgstr "el cual no se ha encontrado."
 
-#~ msgid "whose header file can't be opened."
-#~ msgstr "cuyo archivo de encabezado no se puede abrir."
+msgid "whose header file can't be opened."
+msgstr "cuyo archivo de encabezado no se puede abrir."
 
-#~ msgid "Unable to open header file for raster map <%s@%s>"
-#~ msgstr "No ha sido posible abrir el archivo de encabezado para mapa ráster <%s@%s>"
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "No ha sido posible abrir el archivo de encabezado para mapa ráster <%s@%s>"
 
-#~ msgid "shell script to be processed as batch job"
-#~ msgstr "script de shell a ser procesado como trabajo en lote"
+msgid "shell script to be processed as batch job"
+msgstr "script de shell a ser procesado como trabajo en lote"
 
-#~ msgid "Change file permission to 'executable' for <%s>"
-#~ msgstr "Cambie los permisos del archivo a 'ejecutable' para <%s>"
+msgid "Change file permission to 'executable' for <%s>"
+msgstr "Cambie los permisos del archivo a 'ejecutable' para <%s>"
 
-#~ msgid "Illegal row value"
-#~ msgstr "Valor de fila no admitido"
+msgid "Illegal row value"
+msgstr "Valor de fila no admitido"
 
-#~ msgid "Illegal col value"
-#~ msgstr "Valor de columna no admitido"
+msgid "Illegal col value"
+msgstr "Valor de columna no admitido"
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "Valor de la resolución norte-sur 3D (n-s3) no admitido"
+msgid "Illegal n-s3 resolution value"
+msgstr "Valor de la resolución norte-sur 3D (n-s3) no admitido"
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "Valor de fila 3D (row3) no admitido"
+msgid "Illegal row3 value"
+msgstr "Valor de fila 3D (row3) no admitido"
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "Valor de resolución este-oeste 3D (e-w3) no admitido"
+msgid "Illegal e-w3 resolution value"
+msgstr "Valor de resolución este-oeste 3D (e-w3) no admitido"
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "Valor de columna 3D (col3) no admitido"
+msgid "Illegal col3 value"
+msgstr "Valor de columna 3D (col3) no admitido"
 
-#~ msgid "Illegal n-s resolution value <%lf>"
-#~ msgstr "Valor de resolución norte-sur (n-s)  <%If> no admitido"
+msgid "Illegal n-s resolution value <%lf>"
+msgstr "Valor de resolución norte-sur (n-s)  <%If> no admitido"
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "Valor de resolución este-oeste (e-w) no admitido"
+msgid "Illegal e-w resolution value"
+msgstr "Valor de resolución este-oeste (e-w) no admitido"
 
-#~ msgid "North must be north of South"
-#~ msgstr "La coordenada Norte debe estar al norte de la coordenada Sur."
+msgid "North must be north of South"
+msgstr "La coordenada Norte debe estar al norte de la coordenada Sur."
 
-#~ msgid "North must be larger than South"
-#~ msgstr "El valor de la coordenada Norte debe ser mayor que el valor de la coordenada Sur."
+msgid "North must be larger than South"
+msgstr "El valor de la coordenada Norte debe ser mayor que el valor de la coordenada Sur."
 
-#~ msgid "East must be larger than West"
-#~ msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
+msgid "East must be larger than West"
+msgstr "El valor de la coordenada Este debe ser mayor que el valor de la coordenada Oeste."
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "Coordenadas no válidas."
+msgid "Invalid coordinates"
+msgstr "Coordenadas no válidas."
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "Valor de resolución norte-sur (n-s) no admitido"
+msgid "Illegal n-s resolution value"
+msgstr "Valor de resolución norte-sur (n-s) no admitido"
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "El valor de la resolución cima - fondo 3D (t-b3) no es admisible."
+msgid "Illegal t-b3 resolution value"
+msgstr "El valor de la resolución cima - fondo 3D (t-b3) no es admisible."
 
-#~ msgid "Illegal depths value"
-#~ msgstr "Valor de profundidad no admitido"
+msgid "Illegal depths value"
+msgstr "Valor de profundidad no admitido"
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "El valor del límite superior, debe ser mayor que el del límite inferior."
+msgid "Top must be larger than Bottom"
+msgstr "El valor del límite superior, debe ser mayor que el del límite inferior."
 
-#~ msgid ""
-#~ "{}\n"
-#~ "Switching to text based interface mode.\n"
-#~ "\n"
-#~ "Hit RETURN to continue.\n"
-#~ msgstr ""
-#~ "{}\n"
-#~ "Cambiando al modo de interfaz basada en texto.\n"
-#~ "\n"
-#~ "De Enter para continuar.\n"
+msgid ""
+"{}\n"
+"Switching to text based interface mode.\n"
+"\n"
+"Hit RETURN to continue.\n"
+msgstr ""
+"{}\n"
+"Cambiando al modo de interfaz basada en texto.\n"
+"\n"
+"De Enter para continuar.\n"
 
-#~ msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
-#~ msgstr "No elexiste el Directorio de mapas <{mapset}> en la Localización <{loc}>. Es posible crear un nuevo Direx¿ctorio de mapas usando '-c'"
+msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
+msgstr "No elexiste el Directorio de mapas <{mapset}> en la Localización <{loc}>. Es posible crear un nuevo Direx¿ctorio de mapas usando '-c'"
 
-#~ msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
-#~ msgstr "No ha sido posible leer archivo de encabezado para mapa ráster <%s@%s>. Es un mapa de reclasificación del mapa ráster <%s@%s> %s"
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
+msgstr "No ha sido posible leer archivo de encabezado para mapa ráster <%s@%s>. Es un mapa de reclasificación del mapa ráster <%s@%s> %s"
 
-#~ msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
-#~ msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es mayor de lo que debiera (%ld bytes sobrantes)"
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es mayor de lo que debiera (%ld bytes sobrantes)"
 
-#~ msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
-#~ msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es menor de lo que debería ser (faltan %ld bytes)."
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr "El archivo de coordenadas del mapa vectorial <%s@%s> es menor de lo que debería ser (faltan %ld bytes)."
 
-#~ msgid "Copy %s <%s> to current mapset as <%s>"
-#~ msgstr "Copiar %s <%s> al Directorio de mapas actual con el nombre <%s>"
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Copiar %s <%s> al Directorio de mapas actual con el nombre <%s>"
 
-#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
-#~ msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgstr "Para correr el módulo <%s> añada guión bajo al final de la opción <%s> para evitar conflicto con las palabras reservadas de Python. El guión bajo al inicio es despreciado en GRASS 7.0 y será removido en la versión 7.1."

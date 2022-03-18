@@ -11404,9 +11404,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:5
 #: ../locale/scriptstrings/g.bands_to_translate.c:5
-#, fuzzy
 msgid "image collections"
-msgstr "Selectare"
+msgstr ""
 
 #: ../locale/scriptstrings/i.band_to_translate.c:6
 msgid "Name of band reference identifier (example: S2_1)"
@@ -14212,9 +14211,8 @@ msgstr ""
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:98
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:100
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:102
-#, fuzzy
 msgid "Maintenance"
-msgstr "distanță"
+msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:97
 msgid "Alpha coefficient to assess the maintenance costs"
@@ -14641,9 +14639,8 @@ msgstr ""
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:4
 #: ../locale/scriptstrings/g.copyall_to_translate.c:2
 #: ../general/g.copy/main.c:44
-#, fuzzy
 msgid "copy"
-msgstr "drepturi de autor"
+msgstr ""
 
 #: ../locale/scriptstrings/i.signature.copy_to_translate.c:7
 msgid "Input group for signature file to copy"
@@ -19831,9 +19828,8 @@ msgid "Get GRASS Location from an URL or file path"
 msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:4
-#, fuzzy
 msgid "data"
-msgstr "metadata"
+msgstr ""
 
 #: ../locale/scriptstrings/g.download.location_to_translate.c:7
 msgid "URL of the archive with a location to be downloaded"
@@ -29827,9 +29823,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Imposibil de deschis harta vectorială <%s>"
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -35211,9 +35207,8 @@ msgid "Neighborhood analysis tool for vector point maps."
 msgstr ""
 
 #: ../vector/v.neighbors/main.c:134
-#, fuzzy
 msgid "Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
-msgstr "Face fiecare valoare a celulei în funcție de valorile de categorii atribuite celulelor din jurul ei și stochează valorile celulei într-o hartă raster de ieșire."
+msgstr ""
 
 #: ../vector/v.neighbors/main.c:160
 msgid "Method for aggregate statistics (count if non given)"
@@ -36314,9 +36309,9 @@ msgid "Append files to existing file (overwriting existing files must be activat
 msgstr ""
 
 #: ../vector/v.patch/main.c:248
-#, fuzzy, c-format
+#, c-format
 msgid "Missing table for <%s>"
-msgstr "Folosirea vectorului temporar <%s>"
+msgstr ""
 
 #: ../vector/v.patch/main.c:253
 #, c-format
@@ -37524,9 +37519,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Număr de rânduri"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -42342,19 +42337,19 @@ msgid "copied"
 msgstr ""
 
 #: ../general/g.copy/main.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> does not exist. Skipping."
-msgstr "Stratul OGR <%s> nu există\n"
+msgstr ""
 
 #: ../general/g.copy/main.c:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s=%s,%s: files are the same, no copy required. Skipping."
-msgstr "%s=%s,%s: fișierele sunt la fel, nici o copiere nu este necesară"
+msgstr ""
 
 #: ../general/g.copy/main.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> already exists and overwrite is not enabled. Skipping."
-msgstr "Harta raster <%s> există deja și va fi suprascrisă"
+msgstr ""
 
 #: ../general/g.copy/main.c:84
 #, c-format
@@ -53932,9 +53927,8 @@ msgid "New value = (old value + offset) * scale"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:147
-#, fuzzy
 msgid "Scale for color rule values"
-msgstr "Valori sursă"
+msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:284 ../raster/r.colors/edit_colors.c:318
 #, c-format
@@ -54022,9 +54016,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Imposibil de deschis %s"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -55749,9 +55742,8 @@ msgid "Profile output file name (\"-\" for stdout)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Format de ieșiere neacceptat"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
 #, c-format
@@ -55768,9 +55760,9 @@ msgid "The coordinates are outside of the computational region"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open output file <%s>: %d (%s)"
-msgstr "Imposibil de deschis fișierul de ieșire <%s>"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:354
 msgid "Search radius size must cover at least 1 cell"
@@ -55810,9 +55802,9 @@ msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
 
 #: ../raster/r.geomorphon/pattern.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "Internal error in %s()"
-msgstr "eroare internă"
+msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:92 ../raster/r.proj/bordwalk.c:139
 #, c-format
@@ -57261,9 +57253,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "Mapset-ul <%s> nu a fost găsit"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -57278,9 +57269,8 @@ msgid "Unable to assign/dissociate band reference. {}"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "Harta raster <%s> nu a fost găsită în mapset-ul curent"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
 msgid "Operation {}: required parameter <{}> not set"
@@ -58123,9 +58113,8 @@ msgid "Unable to get monitor info. %s"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:104
-#, fuzzy
 msgid "Unable to get monitor info"
-msgstr "Imposibil de obținut informații despre proiecție pentru harta de intrare"
+msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:196
 #, python-format
@@ -59451,8 +59440,8 @@ msgstr "Numărul de puncte trebuie să fie > 0 (%d dat)"
 msgid "Unable create DBF database: %s"
 msgstr "Imposibil de creat baza de date DBF: %s"
 
-#~ msgid "<%s> not found"
-#~ msgstr "<%s> nu a fost găsit"
+msgid "<%s> not found"
+msgstr "<%s> nu a fost găsit"
 
-#~ msgid "%s=%s,%s: files are the same, no copy required"
-#~ msgstr "%s=%s,%s: fișierele sunt la fel, nici o copiere nu este necesară"
+msgid "%s=%s,%s: files are the same, no copy required"
+msgstr "%s=%s,%s: fișierele sunt la fel, nici o copiere nu este necesară"

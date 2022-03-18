@@ -29532,9 +29532,9 @@ msgid "Reading features from vector map..."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history for vector map <%s>"
-msgstr "Αδυναμία δημιουργίας raster χάρτη <%s>."
+msgstr ""
 
 #: ../vector/v.what.rast/main.c:274
 #, c-format
@@ -37136,9 +37136,9 @@ msgid "Number of columns: %d"
 msgstr ""
 
 #: ../vector/v.in.ascii/main.c:296
-#, fuzzy, c-format
+#, c-format
 msgid "Number of data rows: %d"
-msgstr "Όνομα του δεύτερου ράστερ χάρτη για blending"
+msgstr ""
 
 #: ../vector/v.in.ascii/main.c:300 ../vector/v.in.ascii/main.c:304
 #: ../vector/v.in.ascii/main.c:309 ../vector/v.in.ascii/main.c:314
@@ -53603,9 +53603,8 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.colors/rules.c:81
-#, fuzzy
 msgid "Unable to open color rule"
-msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
+msgstr ""
 
 #: ../raster/r.colors/rules.c:179
 #, c-format
@@ -55316,9 +55315,8 @@ msgid "Use extended form correction"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:250
-#, fuzzy
 msgid "Coordinates to profile"
-msgstr "Όνομα εισαγώμενου ράστερ χάρτη "
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:251 ../raster/r.geomorphon/main.c:262
 #: ../raster/r.geomorphon/main.c:272
@@ -55330,9 +55328,8 @@ msgid "Profile output file name (\"-\" for stdout)"
 msgstr ""
 
 #: ../raster/r.geomorphon/main.c:271
-#, fuzzy
 msgid "Profile output format"
-msgstr "Όνομα εξαγόμενου ράστερ χάρτη"
+msgstr ""
 
 #: ../raster/r.geomorphon/main.c:292
 #, c-format
@@ -56838,9 +56835,8 @@ msgid "No band reference assigned to <{}>"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:66
-#, fuzzy
 msgid "Map <{}> not found"
-msgstr "Ο χάρτης raster  <%s> δεν βρέθηκε."
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:81
 msgid "Band reference <{}> assigned to raster map <{}>"
@@ -56859,9 +56855,8 @@ msgid "Map <{}> not found in current mapset"
 msgstr ""
 
 #: ../scripts/i.band/i.band.py:101
-#, fuzzy
 msgid "Operation {}: required parameter <{}> not set"
-msgstr "Οι απαιτούμενες παράμετροι <%s> δεν έχουν δοθεί"
+msgstr ""
 
 #: ../scripts/i.band/i.band.py:106
 msgid "Number of maps differs from number of bands"
