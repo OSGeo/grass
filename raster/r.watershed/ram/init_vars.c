@@ -190,7 +190,6 @@ int init_vars(int argc, char *argv[])
 
     /* read elevation input and mark NULL/masked cells */
     /* initialize accumulation and drainage direction */
-    MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {
 	Rast_get_row(fd, elebuf, r, ele_map_type);
@@ -243,8 +242,7 @@ int init_vars(int argc, char *argv[])
     }
     Rast_close(fd);
     G_free(elebuf);
-    if (do_points < nrows * ncols)
-	MASK_flag = 1;
+    MASK_flag = (do_points < nrows * ncols);
 
     /* read flow accumulation from input map flow: amount of overland flow per cell */
     if (run_flag) {
@@ -253,12 +251,12 @@ int init_vars(int argc, char *argv[])
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_d_row(fd, dbuf, r);
 	    for (c = 0; c < ncols; c++) {
-		if (MASK_flag) {
+		if (Rast_is_d_null_value(&dbuf[c]))
+		    wat[SEG_INDEX(wat_seg, r, c)] = 0.0;
+		else if (MASK_flag) {
 		    block_value = FLAG_GET(worked, r, c);
 		    if (!block_value)
 			wat[SEG_INDEX(wat_seg, r, c)] = dbuf[c];
-		    else
-			wat[SEG_INDEX(wat_seg, r, c)] = 0.0;
 		}
 		else
 		    wat[SEG_INDEX(wat_seg, r, c)] = dbuf[c];
