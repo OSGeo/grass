@@ -16,16 +16,17 @@
 #include "macros.h"
 
 /*!
-  \brief Drop column
+   \brief Drop column
 
-  \param driver db driver
-  \param tableName table name
-  \param columnName column name to be dropped
+   \param driver db driver
+   \param tableName table name
+   \param columnName column name to be dropped
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_drop_column(dbDriver * driver, dbString * tableName, dbString * columnName)
+int db_drop_column(dbDriver * driver, dbString * tableName,
+    dbString * columnName)
 {
     int ret_code;
 
@@ -41,7 +42,7 @@ int db_drop_column(dbDriver * driver, dbString * tableName, dbString * columnNam
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code;        /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;

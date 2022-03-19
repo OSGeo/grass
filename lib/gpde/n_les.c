@@ -182,27 +182,27 @@ N_les *N_alloc_les_param(int cols, int rows, int type, int parts)
     int i;
 
     if (type == N_SPARSE_LES)
-	G_debug(2,
-		"Allocate memory for a sparse linear equation system with %i rows\n",
-		rows);
+        G_debug(2,
+            "Allocate memory for a sparse linear equation system with %i rows\n",
+            rows);
     else
-	G_debug(2,
-		"Allocate memory for a regular linear equation system with %i rows\n",
-		rows);
+        G_debug(2,
+            "Allocate memory for a regular linear equation system with %i rows\n",
+            rows);
 
     les = (N_les *) G_calloc(1, sizeof(N_les));
 
     if (parts > 0) {
-	les->x = (double *)G_calloc(cols, sizeof(double));
-	for (i = 0; i < cols; i++)
-	    les->x[i] = 0.0;
+        les->x = (double *)G_calloc(cols, sizeof(double));
+        for (i = 0; i < cols; i++)
+            les->x[i] = 0.0;
     }
 
 
     if (parts > 1) {
-	les->b = (double *)G_calloc(cols, sizeof(double));
-	for (i = 0; i < cols; i++)
-	    les->b[i] = 0.0;
+        les->b = (double *)G_calloc(cols, sizeof(double));
+        for (i = 0; i < cols; i++)
+            les->b[i] = 0.0;
     }
 
     les->A = NULL;
@@ -210,17 +210,17 @@ N_les *N_alloc_les_param(int cols, int rows, int type, int parts)
     les->rows = rows;
     les->cols = cols;
     if (rows == cols)
-	les->quad = 1;
+        les->quad = 1;
     else
-	les->quad = 0;
+        les->quad = 0;
 
     if (type == N_SPARSE_LES) {
-	les->Asp = G_math_alloc_spmatrix(rows);
-	les->type = N_SPARSE_LES;
+        les->Asp = G_math_alloc_spmatrix(rows);
+        les->type = N_SPARSE_LES;
     }
     else {
-	les->A = G_alloc_matrix(rows, cols);
-	les->type = N_NORMAL_LES;
+        les->A = G_alloc_matrix(rows, cols);
+        les->type = N_NORMAL_LES;
     }
 
     return les;
@@ -255,39 +255,39 @@ void N_print_les(N_les * les)
 
 
     if (les->type == N_SPARSE_LES) {
-	for (i = 0; i < les->rows; i++) {
-	    for (j = 0; j < les->cols; j++) {
-		out = 0;
-		for (k = 0; k < les->Asp[i]->cols; k++) {
-		    if (les->Asp[i]->index[k] == j) {
-			fprintf(stdout, "%4.5f ", les->Asp[i]->values[k]);
-			out = 1;
-		    }
-		}
-		if (!out)
-		    fprintf(stdout, "%4.5f ", 0.0);
-	    }
-	    if (les->x)
-		fprintf(stdout, "  *  %4.5f", les->x[i]);
-	    if (les->b)
-		fprintf(stdout, " =  %4.5f ", les->b[i]);
+        for (i = 0; i < les->rows; i++) {
+            for (j = 0; j < les->cols; j++) {
+                out = 0;
+                for (k = 0; k < les->Asp[i]->cols; k++) {
+                    if (les->Asp[i]->index[k] == j) {
+                        fprintf(stdout, "%4.5f ", les->Asp[i]->values[k]);
+                        out = 1;
+                    }
+                }
+                if (!out)
+                    fprintf(stdout, "%4.5f ", 0.0);
+            }
+            if (les->x)
+                fprintf(stdout, "  *  %4.5f", les->x[i]);
+            if (les->b)
+                fprintf(stdout, " =  %4.5f ", les->b[i]);
 
-	    fprintf(stdout, "\n");
-	}
+            fprintf(stdout, "\n");
+        }
     }
     else {
 
-	for (i = 0; i < les->rows; i++) {
-	    for (j = 0; j < les->cols; j++) {
-		fprintf(stdout, "%4.5f ", les->A[i][j]);
-	    }
-	    if (les->x)
-		fprintf(stdout, "  *  %4.5f", les->x[i]);
-	    if (les->b)
-		fprintf(stdout, " =  %4.5f ", les->b[i]);
+        for (i = 0; i < les->rows; i++) {
+            for (j = 0; j < les->cols; j++) {
+                fprintf(stdout, "%4.5f ", les->A[i][j]);
+            }
+            if (les->x)
+                fprintf(stdout, "  *  %4.5f", les->x[i]);
+            if (les->b)
+                fprintf(stdout, " =  %4.5f ", les->b[i]);
 
-	    fprintf(stdout, "\n");
-	}
+            fprintf(stdout, "\n");
+        }
 
     }
     return;
@@ -304,31 +304,31 @@ void N_print_les(N_les * les)
 void N_free_les(N_les * les)
 {
     if (les->type == N_SPARSE_LES)
-	G_debug(2, "Releasing memory of a sparse linear equation system\n");
+        G_debug(2, "Releasing memory of a sparse linear equation system\n");
     else
-	G_debug(2, "Releasing memory of a regular linear equation system\n");
+        G_debug(2, "Releasing memory of a regular linear equation system\n");
 
     if (les) {
 
-	if (les->x)
-	    G_free(les->x);
-	if (les->b)
-	    G_free(les->b);
+        if (les->x)
+            G_free(les->x);
+        if (les->b)
+            G_free(les->b);
 
-	if (les->type == N_SPARSE_LES) {
+        if (les->type == N_SPARSE_LES) {
 
-	    if (les->Asp) {
-		G_math_free_spmatrix(les->Asp, les->rows);
-	    }
-	}
-	else {
+            if (les->Asp) {
+                G_math_free_spmatrix(les->Asp, les->rows);
+            }
+        }
+        else {
 
-	    if (les->A) {
-		G_free_matrix(les->A);
-	    }
-	}
+            if (les->A) {
+                G_free_matrix(les->A);
+            }
+        }
 
-	free(les);
+        free(les);
     }
 
     return;

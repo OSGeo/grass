@@ -24,5 +24,4 @@ int seg_seek_slow(const SEGMENT *, int, int);
 /* setup.c */
 int seg_setup(SEGMENT *);
 
-#endif /* Segment_LOCAL_H */
-
+#endif                          /* Segment_LOCAL_H */

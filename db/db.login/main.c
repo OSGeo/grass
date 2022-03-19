@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     struct Option *driver, *database, *user, *password, *host, *port;
     struct Flag *print;
     struct GModule *module;
-    
+
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
@@ -41,15 +41,15 @@ int main(int argc, char *argv[])
     G_add_keyword(_("connection settings"));
     module->description = _("Sets user/password for DB driver/database.");
     module->overwrite = TRUE;
-    
+
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     driver->required = YES;
-    driver->answer = (char *) db_get_default_driver_name();
+    driver->answer = (char *)db_get_default_driver_name();
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     database->required = YES;
-    database->answer = (char *) db_get_default_database_name();
+    database->answer = (char *)db_get_default_database_name();
 
     user = G_define_option();
     user->key = "user";
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     user->multiple = NO;
     user->description = _("Username");
     user->guisection = _("Settings");
-    
+
     password = G_define_option();
     password->key = "password";
     password->type = TYPE_STRING;
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     print->key = 'p';
     print->description = _("Print connection settings and exit");
     print->guisection = _("Print");
-    
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -100,14 +100,14 @@ int main(int argc, char *argv[])
     }
 
     if (db_set_login2(driver->answer, database->answer, user->answer,
-                      password->answer, host->answer, port->answer,
-                      G_get_overwrite()) == DB_FAILED) {
+            password->answer, host->answer, port->answer,
+            G_get_overwrite()) == DB_FAILED) {
         G_fatal_error(_("Unable to set user/password"));
     }
-    
+
     if (password->answer)
-	G_important_message(_("The password was stored in file (%s%cdblogin)"),
-                            G_config_path(), HOST_DIRSEP);
-    
+        G_important_message(_("The password was stored in file (%s%cdblogin)"),
+            G_config_path(), HOST_DIRSEP);
+
     exit(EXIT_SUCCESS);
 }

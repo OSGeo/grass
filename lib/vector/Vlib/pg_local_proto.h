@@ -42,7 +42,7 @@
     temp = data[3];                                               \
     data[3] = data[4];                                            \
     data[4] = temp;                                               \
-}                                                                    
+}
 
 #define LSBWORD32(x)      (x)
 #define MSBWORD32(x)      SWAP32(x)
@@ -51,23 +51,23 @@
  * about lines in cache) */
 struct feat_parts
 {
-    int             a_parts; /* number of allocated items */
-    int             n_parts; /* number of parts which forms given feature */
-    SF_FeatureType *ftype;   /* simple feature type */
-    int            *nlines;  /* number of lines used in cache */
-    int            *idx;     /* index in cache where to start */
+    int a_parts;                /* number of allocated items */
+    int n_parts;                /* number of parts which forms given feature */
+    SF_FeatureType *ftype;      /* simple feature type */
+    int *nlines;                /* number of lines used in cache */
+    int *idx;                   /* index in cache where to start */
 };
 
 /* area_pg.c */
-int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int, struct line_pnts *);
+int Vect__get_area_points_pg(const struct Map_info *, const plus_t *, int,
+    struct line_pnts *);
 
 /* build_pg.c */
 int Vect__clean_grass_db_topo(struct Format_info_pg *);
 
 /* read_pg.c */
 SF_FeatureType Vect__cache_feature_pg(const char *, int, int,
-                                      struct Format_info_cache *,
-                                      struct feat_parts *);
+    struct Format_info_cache *, struct feat_parts *);
 int Vect__open_cursor_next_line_pg(struct Format_info_pg *, int, int);
 int Vect__open_cursor_line_pg(struct Format_info_pg *, int, int);
 int Vect__close_cursor_pg(struct Format_info_pg *);
@@ -79,10 +79,9 @@ void Vect__reallocate_cache(struct Format_info_cache *, int, int);
 /* write_pg.c */
 off_t V2__write_node_pg(struct Map_info *, const struct line_pnts *);
 off_t V2__write_area_pg(struct Map_info *, const struct line_pnts **, int,
-                        const struct line_cats *);
-int V2__update_area_pg(struct Map_info *, const struct line_pnts **, int,
-                       int);
-int Vect__define_topo_relation(const struct Format_info_pg *, int, int);    
+    const struct line_cats *);
+int V2__update_area_pg(struct Map_info *, const struct line_pnts **, int, int);
+int Vect__define_topo_relation(const struct Format_info_pg *, int, int);
 
 int Vect__insert_face_pg(struct Map_info *, int);
 
@@ -94,6 +93,6 @@ int Vect__open_topo_pg(struct Map_info *, int, int);
 int Vect__load_map_nodes_pg(struct Map_info *, int);
 int Vect__load_map_lines_pg(struct Map_info *);
 
-#endif /* HAVE_POSTGRES */
+#endif                          /* HAVE_POSTGRES */
 
-#endif /* __PG_LOCAL_PROTO_H__ */
+#endif                          /* __PG_LOCAL_PROTO_H__ */

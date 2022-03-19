@@ -27,9 +27,9 @@ struct ClassFilter
 };
 
 int return_filter_is_out(struct ReturnFilter *return_filter, int return_n,
-                         int n_returns);
+    int n_returns);
 void class_filter_create_from_strings(struct ClassFilter *class_filter,
-                                      char **classes);
+    char **classes);
 int class_filter_is_out(struct ClassFilter *class_filter, int class_n);
 
-#endif /* __FILTERS_H__ */
+#endif                          /* __FILTERS_H__ */

@@ -65,7 +65,7 @@ static struct menu menu[] = {
 };
 
 static RASTER_MAP_TYPE output_type(RASTER_MAP_TYPE input_type, int weighted,
-                                   int mode)
+    int mode)
 {
     switch (mode) {
     case T_FLOAT:
@@ -132,8 +132,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("aggregation"));
     module->label = _("Neighborhood analysis tool for vector point maps.");
     module->description = _("Makes each cell value a "
-                            "function of the attribute values assigned to the vector points or centroids "
-                            "in a radius around it, and stores new cell values in an output raster map.");
+        "function of the attribute values assigned to the vector points or centroids "
+        "in a radius around it, and stores new cell values in an output raster map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -200,8 +200,7 @@ int main(int argc, char *argv[])
                 break;
         if (!p) {
             G_warning(_("<%s=%s> unknown %s"),
-                      method_opt->key, method_opt->answer,
-                      method_opt->answer);
+                method_opt->key, method_opt->answer, method_opt->answer);
             G_usage();
             exit(EXIT_FAILURE);
         }
@@ -219,8 +218,7 @@ int main(int argc, char *argv[])
     pcat_list = NULL;
     if (field > 0)
         pcat_list = Vect_cats_set_constraint(&In, field,
-                                             point_where_opt->answer,
-                                             point_cats_opt->answer);
+            point_where_opt->answer, point_cats_opt->answer);
 
     imap_type = CELL_TYPE;
 
@@ -228,12 +226,12 @@ int main(int argc, char *argv[])
         Fi = Vect_get_field(&In, field);
         if (Fi == NULL)
             G_fatal_error(_("Database connection not defined for layer %d"),
-                          field);
+                field);
 
         driver = db_start_driver_open_database(Fi->driver, Fi->database);
         if (driver == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                          Fi->database, Fi->driver);
+                Fi->database, Fi->driver);
 
         /* check if point column exists */
         db_get_column(driver, Fi->table, column_opt->answer, &column);
@@ -243,7 +241,7 @@ int main(int argc, char *argv[])
         }
         else {
             G_fatal_error(_("Column <%s> not found in table <%s>"),
-                          column_opt->answer, Fi->table);
+                column_opt->answer, Fi->table);
         }
 
         /* Check column type */
@@ -251,7 +249,7 @@ int main(int argc, char *argv[])
 
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(_("points_column <%s> of points vector <%s> must be numeric"),
-                          column_opt->answer, Fi->table);
+                column_opt->answer, Fi->table);
 
         /* Determine raster type equivalent of ctype */
         switch (ctype) {
@@ -265,7 +263,7 @@ int main(int argc, char *argv[])
 
         db_CatValArray_init(&cvarr);
         nrec = db_select_CatValArray(driver, Fi->table, Fi->key,
-                                     column_opt->answer, NULL, &cvarr);
+            column_opt->answer, NULL, &cvarr);
         G_debug(1, "selected values = %d", nrec);
 
         db_close_database_shutdown_driver(driver);
@@ -289,7 +287,7 @@ int main(int argc, char *argv[])
     dia = sqrt(region.ns_res * region.ns_res + region.ew_res * region.ew_res);
     if (radius * 2.0 < dia) {
         G_warning(_("The search diameter %g is smaller than cell diagonal %g: some points could not be detected"),
-                  radius * 2, dia);
+            radius * 2, dia);
     }
 
     nrows = Rast_window_rows();
@@ -351,7 +349,7 @@ int main(int argc, char *argv[])
 
 
                 if (Vect_points_distance(x, y, 0.0, Points->x[0],
-                                         Points->y[0], 0.0, 0) <= radius) {
+                        Points->y[0], 0.0, 0) <= radius) {
 
                     count++;
 
@@ -359,7 +357,7 @@ int main(int argc, char *argv[])
 
                         if (Cats->n_cats > 1)
                             G_warning(_("Several cat values found for point %d. Using only first"),
-                                      List->id[i]);
+                                List->id[i]);
                         tmp_cat = Cats->cat[0];
                         /* find cat in array */
                         db_CatValArray_get_value(&cvarr, tmp_cat, &catval);
@@ -380,8 +378,7 @@ int main(int argc, char *argv[])
                                 npvalcatsalloc += 10;
                                 pvalcats =
                                     (double *)G_realloc(pvalcats,
-                                                        npvalcatsalloc
-                                                        * sizeof(double));
+                                    npvalcatsalloc * sizeof(double));
                             }
                         }
                     }

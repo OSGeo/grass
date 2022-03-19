@@ -22,7 +22,7 @@
 static int set_max(int *which, int new_max)
 {
     if (2 > new_max || new_max > MAXCARD)
-	return 0;
+        return 0;
     *which = new_max;
     return 1;
 }
@@ -31,14 +31,17 @@ int RTreeSetNodeMax(int new_max, struct RTree *t)
 {
     return set_max(&(t->nodecard), new_max);
 }
+
 int RTreeSetLeafMax(int new_max, struct RTree *t)
 {
     return set_max(&(t->leafcard), new_max);
 }
+
 int RTreeGetNodeMax(struct RTree *t)
 {
     return t->nodecard;
 }
+
 int RTreeGetLeafMax(struct RTree *t)
 {
     return t->leafcard;

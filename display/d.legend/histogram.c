@@ -14,8 +14,8 @@
 #include "local_proto.h"
 
 double histogram(const char *map_name, int x0, int y0, int width,
-                 int height, int color, int flip, int horiz, int map_type,
-                 int is_fp, struct FPRange render_range, int drawh)
+    int height, int color, int flip, int horiz, int map_type,
+    int is_fp, struct FPRange render_range, int drawh)
 {
     int i, nsteps, ystep;
     long cell_count = 0;
@@ -69,8 +69,8 @@ double histogram(const char *map_name, int x0, int y0, int width,
             nsteps = (int)(0.5 + (map_range * (height - 3) / user_range));
 
         G_debug(1,
-                "number of steps for r.stats = %d, height-3=%d  width-3=%d",
-                nsteps, height - 3, width - 3);
+            "number of steps for r.stats = %d, height-3=%d  width-3=%d",
+            nsteps, height - 3, width - 3);
 
         /* need to know the % of the MAP range where user range starts and stops.
          *   note that MAP range can be fully inside user range, in which case
@@ -79,22 +79,19 @@ double histogram(const char *map_name, int x0, int y0, int width,
         if (render_range.min > map_min) {
             crop_min_perc = (render_range.min - map_min) / map_range;
             G_debug(3, "min: %.02f vs. %.02f (%.02f) ... %.02f%%",
-                    render_range.min, map_min, map_range,
-                    100 * crop_min_perc);
+                render_range.min, map_min, map_range, 100 * crop_min_perc);
         }
 
         if (render_range.max > map_max) {
             crop_max_perc = 1.0 - ((render_range.max - map_max) / user_range);
             G_debug(3, "max: %.02f vs. %.02f (%.02f) ... %.02f%%",
-                    map_max, render_range.max, map_range,
-                    100 * crop_max_perc);
+                map_max, render_range.max, map_range, 100 * crop_max_perc);
         }
 
         if (render_range.min < map_min) {
             pad_min_perc = (map_min - render_range.min) / user_range;
             G_debug(3, "Min: %.02f vs. %.02f (%.02f) ... %.02f%%",
-                    map_min, render_range.min, user_range,
-                    100 * pad_min_perc);
+                map_min, render_range.min, user_range, 100 * pad_min_perc);
         }
 
 #ifdef amplify_gain
@@ -113,7 +110,7 @@ double histogram(const char *map_name, int x0, int y0, int width,
     /* TODO */
     if (!is_fp && render_range.first_time) {
         G_warning(_("Histogram constrained by range not yet implemented for "
-                    "categorical rasters"));
+                "categorical rasters"));
         return max;
     }
 
@@ -145,8 +142,7 @@ double histogram(const char *map_name, int x0, int y0, int width,
     }
 
 
-    G_debug(3, "mincat=%ld  maxcat=%ld", dist_stats.mincat,
-            dist_stats.maxcat);
+    G_debug(3, "mincat=%ld  maxcat=%ld", dist_stats.mincat, dist_stats.maxcat);
 
     for (i = dist_stats.mincat, ystep = 0; i <= dist_stats.maxcat; i++) {
         cell_count = 0;
@@ -158,8 +154,7 @@ double histogram(const char *map_name, int x0, int y0, int width,
             break;
 
         /* jump out if user range goes beyond max of map data */
-        if (((double)ystep / ((horiz ? width : height) - 3.0)) >
-            crop_max_perc)
+        if (((double)ystep / ((horiz ? width : height) - 3.0)) > crop_max_perc)
             break;
         /* TODO if (!is_fp && i > render_range.max)
            break;
@@ -203,7 +198,7 @@ double histogram(const char *map_name, int x0, int y0, int width,
         }
 
         G_debug(5, "i=%d  ptr->cat=%ld  cell_count=%ld", i, ptr->cat,
-                cell_count);
+            cell_count);
 
         if (!cell_count)
             continue;
@@ -234,26 +229,26 @@ double histogram(const char *map_name, int x0, int y0, int width,
                 if (horiz) {
                     if (flip)
                         D_box_abs(x0 + width + y0_adjust + ((i - 2) * dy),
-                                  y0 - 1,
-                                  x0 + width + y0_adjust + 1 + ((i - 1) * dy),
-                                  y0 - 1 - dx);
+                            y0 - 1,
+                            x0 + width + y0_adjust + 1 + ((i - 1) * dy),
+                            y0 - 1 - dx);
                     else
                         D_box_abs(x0 + y0_adjust + ((i - 2) * dy),
-                                  y0 - 1,
-                                  x0 - 1 + y0_adjust + ((i - 1) * dy), y0 - 1 - dx);
+                            y0 - 1,
+                            x0 - 1 + y0_adjust + ((i - 1) * dy), y0 - 1 - dx);
                 }
                 else {          /* vertical */
 
                     if (flip)
                         /* GRASS_EPSILON fudge around D_box_abs() weirdness + PNG driver */
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
-                                  y0 + height + y0_adjust + ((i - 2) * dy),
-                                  x0 - 1 - dx,
-                                  y0 + height + y0_adjust + 1 + ((i - 1) * dy));
+                            y0 + height + y0_adjust + ((i - 2) * dy),
+                            x0 - 1 - dx,
+                            y0 + height + y0_adjust + 1 + ((i - 1) * dy));
                     else
                         D_box_abs(x0 - 1 - GRASS_EPSILON * 10,
-                                  y0 + y0_adjust + ((i - 2) * dy),
-                                  x0 - 1 - dx, y0 + y0_adjust - 1 + ((i - 1) * dy));
+                            y0 + y0_adjust + ((i - 2) * dy),
+                            x0 - 1 - dx, y0 + y0_adjust - 1 + ((i - 1) * dy));
                 }
             }
         }

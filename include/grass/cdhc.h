@@ -3,4 +3,4 @@
 
 #include <grass/defs/cdhc.h>
 
-#endif /* CDHC_H */
+#endif                          /* CDHC_H */

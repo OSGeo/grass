@@ -2,7 +2,8 @@
 #include <grass/gis.h>
 #include <grass/manage.h>
 
-enum {
+enum
+{
     TYPE_RAST,
     TYPE_RAST3D,
     TYPE_VECT,
@@ -16,6 +17,6 @@ struct elist
     char *mapset;
 };
 
-void make_list(struct elist **, int *, int *, const struct list *, const char *,
-	       const struct Cell_head *);
+void make_list(struct elist **, int *, int *, const struct list *,
+    const char *, const struct Cell_head *);
 void print_list(FILE *, struct elist *, int, const char *, int, int);

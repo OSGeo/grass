@@ -8,7 +8,8 @@ void read_input(void);
 void write_output(void);
 
 /* topmodel.c */
-void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats);
+void create_topidxstats(char *topidx, int ntopidxclasses,
+    char *outtopidxstats);
 double calculate_lambda(void);
 void initialize(void);
 void calculate_flows(void);
@@ -96,7 +97,7 @@ struct misc
     double *Ad;
     /* input.ntimestep's */
     double *Qt;
-    double *qs;			/* spatially constant? */
+    double *qs;                 /* spatially constant? */
     double *S_mean;
     double *f;
     double *fex;

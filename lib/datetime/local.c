@@ -41,7 +41,7 @@ int datetime_get_local_timezone(int *minutes)
     local = localtime(&clock);
 
     datetime_set_type(&dtl, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
-		      0);
+        0);
 
     /* now put current {year,month,day,hour,minute,second} into local */
     datetime_set_year(&dtl, (int)local->tm_year + 1900);
@@ -54,7 +54,7 @@ int datetime_get_local_timezone(int *minutes)
     gm = gmtime(&clock);
 
     datetime_set_type(&dtg, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
-		      0);
+        0);
 
     /* now put current {year,month,day,hour,minute,second} into gmt */
     datetime_set_year(&dtg, (int)gm->tm_year + 1900);
@@ -65,7 +65,7 @@ int datetime_get_local_timezone(int *minutes)
     datetime_set_second(&dtg, (double)gm->tm_sec);
 
     datetime_set_type(&dtdiff, DATETIME_RELATIVE,
-		      DATETIME_DAY, DATETIME_SECOND, 0);
+        DATETIME_DAY, DATETIME_SECOND, 0);
     datetime_difference(&dtl, &dtg, &dtdiff);
     datetime_change_from_to(&dtdiff, DATETIME_MINUTE, DATETIME_MINUTE, 0);
 
@@ -91,7 +91,7 @@ void datetime_get_local_time(DateTime * dt)
 
     /* first set dt to absolute full date */
     datetime_set_type(dt, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
-		      0);
+        0);
 
     /* get the current date/time */
     time(&clock);

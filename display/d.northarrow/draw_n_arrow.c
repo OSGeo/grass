@@ -13,8 +13,7 @@
 #include "options.h"
 
 int draw_n_arrow(double east, double north, double rotation, char *lbl,
-                 int rot_with_text, double fontsize, char *n_arrow_num,
-                 double line_width)
+    int rot_with_text, double fontsize, char *n_arrow_num, double line_width)
 {
     double x_pos, y_pos;
     double t, b, l, r;
@@ -52,52 +51,52 @@ int draw_n_arrow(double east, double north, double rotation, char *lbl,
         switch (n_arrow_num[0]) {
         case '1':
             D_pos_abs(x_pos - sin(rotation) * 50 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 50 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 50 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case '3':
             D_pos_abs(x_pos - sin(rotation) * 60 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 60 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 60 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case '4':
             D_pos_abs(x_pos - sin(rotation) * 45 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 45 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 45 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case '7':
             D_pos_abs(x_pos - sin(rotation) * 70 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 70 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 70 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case '8':
             D_pos_abs(x_pos - sin(rotation) * 60 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 60 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 60 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case '9':
             D_pos_abs(x_pos - sin(rotation) * 55 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 55 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 55 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case 'f':
             D_pos_abs(x_pos - sin(rotation) * 55 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 55 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 55 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case 'b':
             D_pos_abs(x_pos - sin(rotation) * 48.5 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 48.5 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 48.5 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case 'a':
             D_pos_abs(x_pos - sin(rotation) * 50 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 50 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 50 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case 's':
             D_pos_abs(x_pos - sin(rotation) * 50 - (tr + tl) / 2,
-                      y_pos - cos(rotation) * 50 - (tb + tt) / 2);
+                y_pos - cos(rotation) * 50 - (tb + tt) / 2);
             D_text(lbl);
             break;
         case '2':

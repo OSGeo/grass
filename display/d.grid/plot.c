@@ -10,8 +10,8 @@
 
 
 int plot_grid(double grid_size, double east, double north, int do_text,
-              int gcolor, int tcolor, int bgcolor, int fontsize,
-              int mark_type, double line_width, int direction)
+    int gcolor, int tcolor, int bgcolor, int fontsize,
+    int mark_type, double line_width, int direction)
 {
     double x, y, y0;
     double e1, e2;
@@ -127,12 +127,13 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                    fontsize*.81 = actual text width FOR DEFAULT FONT (NOT FreeType)
                  */
                 D_pos_abs(x + 4.5 * D_get_d_to_u_xconv(), D_get_u_south()
-                          - D_get_d_to_u_yconv() * (strlen(text)
-                          * fontsize * 0.81 + 7.5));
+                    - D_get_d_to_u_yconv() * (strlen(text)
+                        * fontsize * 0.81 + 7.5));
 
                 tx = x + 4.5 * D_get_d_to_u_xconv();
                 ty = D_get_u_south() -
-                    D_get_d_to_u_yconv() * (strlen(text) * fontsize * 0.81 + 7.5);
+                    D_get_d_to_u_yconv() * (strlen(text) * fontsize * 0.81 +
+                    7.5);
 
                 if (bgcolor != 0) {
                     D_get_text_box(text, &bt, &bb, &bl, &br);
@@ -141,17 +142,17 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 
                     if (w > 0)
                         w += 0.2 * fontsize * fabs(D_get_d_to_u_xconv());
-                    else  /* D_text() does not draw " ". */
+                    else        /* D_text() does not draw " ". */
                         w = 0.8 * fontsize * fabs(D_get_d_to_u_xconv());
                     if (h > 0)
                         h += 0.2 * fontsize * fabs(D_get_d_to_u_yconv());
-                    else  /* D_text() does not draw " ". */
+                    else        /* D_text() does not draw " ". */
                         h = 0.8 * fontsize * fabs(D_get_d_to_u_yconv());
 
-                    bl = tx - w/2;
-                    bt = ty + h/10;
-                    br = tx + w + w/2;
-                    bb = ty - h - h/10;
+                    bl = tx - w / 2;
+                    bt = ty + h / 10;
+                    br = tx + w + w / 2;
+                    bb = ty - h - h / 10;
 
                     D_use_color(bgcolor);
                     D_box_abs(bl, bt, br, bb);
@@ -162,7 +163,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                 D_text(text);
                 x += grid_size;
             }
-            D_text_rotation(0.0);   /* reset */
+            D_text_rotation(0.0);       /* reset */
         }
     }
 
@@ -186,14 +187,13 @@ int plot_grid(double grid_size, double east, double north, int do_text,
                    y: 4 pixels above each grid line, +.5 rounding.
                  */
                 D_pos_abs(D_get_u_east()
-                          -
-                          D_get_d_to_u_xconv() * (strlen(text) * fontsize *
-                                                  0.81 + 7.5),
-                          y - D_get_d_to_u_yconv() * 4.5);
+                    -
+                    D_get_d_to_u_xconv() * (strlen(text) * fontsize *
+                        0.81 + 7.5), y - D_get_d_to_u_yconv() * 4.5);
 
                 tx = D_get_u_east() -
-                     D_get_d_to_u_xconv() * (strlen(text) * fontsize * 0.81 +
-                                             7.5);
+                    D_get_d_to_u_xconv() * (strlen(text) * fontsize * 0.81 +
+                    7.5);
                 ty = y - D_get_d_to_u_yconv() * 4.5;
 
                 if (bgcolor != 0) {
@@ -203,17 +203,17 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 
                     if (w > 0)
                         w += 0.2 * fontsize * fabs(D_get_d_to_u_xconv());
-                    else  /* D_text() does not draw " ". */
+                    else        /* D_text() does not draw " ". */
                         w = 0.8 * fontsize * fabs(D_get_d_to_u_xconv());
                     if (h > 0)
                         h += 0.2 * fontsize * fabs(D_get_d_to_u_yconv());
-                    else  /* D_text() does not draw " ". */
+                    else        /* D_text() does not draw " ". */
                         h = 0.8 * fontsize * fabs(D_get_d_to_u_yconv());
 
-                    bl = tx - w/10;
-                    bt = ty + h + h/2;
-                    br = tx + w + w/10;
-                    bb = ty - h/2;
+                    bl = tx - w / 10;
+                    bt = ty + h + h / 2;
+                    br = tx + w + w / 10;
+                    bb = ty - h / 2;
                     D_use_color(bgcolor);
                     D_box_abs(bl, bt, br, bb);
                 }
@@ -232,10 +232,10 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 }
 
 
-int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
-                 struct pj_info *info_trans, int do_text, int gcolor, 
-		 int tcolor, int bgcolor, int fontsize, int mark_type,
-		 double line_width, int direction)
+int plot_geogrid(double size, struct pj_info *info_in,
+    struct pj_info *info_out, struct pj_info *info_trans, int do_text,
+    int gcolor, int tcolor, int bgcolor, int fontsize, int mark_type,
+    double line_width, int direction)
 {
     double g;
     double e1, e2, n1, n2;
@@ -264,7 +264,8 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
 
     /* get lat long min max */
     /* probably need something like boardwalk ?? */
-    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out, info_trans);
+    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out,
+        info_trans);
 
     G_debug(3, "REGION BOUNDS N=%f S=%f E=%f W=%f", north, south, east, west);
 
@@ -284,18 +285,20 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
             n1 = n2 = g;
             e1 = west + (ll * ((east - west) / SEGS));
             e2 = e1 + ((east - west) / SEGS);
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-			      &e1, &n1, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                    &e1, &n1, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
-            check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out, info_trans);
+            check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out,
+                info_trans);
             e1 = lon;
             n1 = lat;
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-			      &e2, &n2, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                    &e2, &n2, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
-            check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out, info_trans);
+            check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out,
+                info_trans);
             e2 = lon;
             n2 = lat;
             if (start_coord == -9999.) {
@@ -311,7 +314,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
 
             D_line_width(0);
         }
-        }
+    }
 
     /* Lines of Longitude */
     g = floor(east / size) * size;
@@ -333,18 +336,20 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
                n1 = south + (ll *((north - south)/SEGS));
                n2 = n1 + ((north - south)/SEGS);
              */
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-			      &e1, &n1, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                    &e1, &n1, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
-            check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out, info_trans);
+            check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out,
+                info_trans);
             e1 = lon;
             n1 = lat;
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-			      &e2, &n2, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                    &e2, &n2, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
-            check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out, info_trans);
+            check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out,
+                info_trans);
             e2 = lon;
             n2 = lat;
 
@@ -370,7 +375,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
 
             D_line_width(0);
         }
-        }
+    }
     D_text_rotation(0.0);       /* reset */
 
     /* draw marks not grid lines */
@@ -409,7 +414,8 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
 
     /* get lat long min max */
     /* probably need something like boardwalk ?? */
-    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out, info_trans);
+    get_ll_bounds(&west, &east, &south, &north, window, info_in, info_out,
+        info_trans);
 
     G_debug(3, "REGION BOUNDS N=%f S=%f E=%f W=%f", north, south, east, west);
 
@@ -428,18 +434,20 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
                 n1 = n2 = g;
                 e1 = west + (ll * ((east - west) / SEGS));
                 e2 = e1 + ((east - west) / SEGS);
-		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-				  &e1, &n1, NULL) < 0)
-		    G_fatal_error(_("Error in GPJ_transform()"));
+                if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                        &e1, &n1, NULL) < 0)
+                    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out, info_trans);
+                check_coords(e1, n1, &lon, &lat, 1, window, info_in, info_out,
+                    info_trans);
                 e1 = lon;
                 n1 = lat;
-		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-				  &e2, &n2, NULL) < 0)
-		    G_fatal_error(_("Error in GPJ_transform()"));
+                if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                        &e2, &n2, NULL) < 0)
+                    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out, info_trans);
+                check_coords(e2, n2, &lon, &lat, 1, window, info_in, info_out,
+                    info_trans);
                 e2 = lon;
                 n2 = lat;
                 if (start_coord == -9999.) {
@@ -458,10 +466,10 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
                 D_get_text_box(text, &bt, &bb, &bl, &br);
                 w = br - bl;
                 h = bt - bb;
-                bl = tx - w/10;
-                bt = ty + h + h/2;
-                br = tx + w + w/10;
-                bb = ty - h/2;
+                bl = tx - w / 10;
+                bt = ty + h + h / 2;
+                br = tx + w + w / 10;
+                bb = ty - h / 2;
                 D_use_color(bgcolor);
                 D_box_abs(bl, bt, br, bb);
             }
@@ -488,18 +496,20 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
                 n1 = north - (ll * ((north - south) / SEGS));
                 n2 = n1 - ((north - south) / SEGS);
 
-		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-				  &e1, &n1, NULL) < 0)
-		    G_fatal_error(_("Error in GPJ_transform()"));
+                if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                        &e1, &n1, NULL) < 0)
+                    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out, info_trans);
+                check_coords(e1, n1, &lon, &lat, 2, window, info_in, info_out,
+                    info_trans);
                 e1 = lon;
                 n1 = lat;
-		if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-				  &e2, &n2, NULL) < 0)
-		    G_fatal_error(_("Error in GPJ_transform()"));
+                if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                        &e2, &n2, NULL) < 0)
+                    G_fatal_error(_("Error in GPJ_transform()"));
 
-                check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out, info_trans);
+                check_coords(e2, n2, &lon, &lat, 2, window, info_in, info_out,
+                    info_trans);
                 e2 = lon;
                 n2 = lat;
 
@@ -513,7 +523,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
                             sin((font_angle - 270) * M_PI / 180) * fontsize;
                         if (D_u_to_d_row(n1) - D_get_d_north() <
                             extra_y_off + grid_off)
-                            start_coord = -9999.;   /* wait until the next point south */
+                            start_coord = -9999.;       /* wait until the next point south */
                     }
                 }
             }
@@ -523,16 +533,16 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
             D_text_size(fontsize, fontsize);
             tx = start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5);
             ty = D_get_u_north() + D_get_d_to_u_yconv() * (border_off +
-                                                           extra_y_off);
+                extra_y_off);
 
             if (bgcolor != 0) {
                 D_get_text_box(text, &bt, &bb, &bl, &br);
                 w = br - bl;
                 h = bt - bb;
-                bl = tx - w/2;
-                bt = ty + h/10;
-                br = tx + w + w/2;
-                bb = ty - h - h/10;
+                bl = tx - w / 2;
+                bt = ty + h / 10;
+                br = tx + w + w / 2;
+                bb = ty - h - h / 10;
                 D_use_color(bgcolor);
                 D_box_abs(bl, bt, br, bb);
             }
@@ -541,7 +551,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
             D_pos_abs(tx, ty);
             D_text(text);
         }
-        D_text_rotation(0.0);       /* reset */
+        D_text_rotation(0.0);   /* reset */
     }
 
     return 0;
@@ -551,8 +561,8 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
 /******************************************************
  * initialze projection stuff and return proj structures
 ********************************************************/
-void init_proj(struct pj_info *info_in, struct pj_info *info_out, 
-               struct pj_info *info_trans, int wgs84)
+void init_proj(struct pj_info *info_in, struct pj_info *info_out,
+    struct pj_info *info_trans, int wgs84)
 {
     struct Key_Value *in_proj_info, *in_unit_info;
 
@@ -566,7 +576,7 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
     /* Out Info for ll projection */
     info_out->pj = NULL;
     if (wgs84) {
-	struct Key_Value *out_proj_info, *out_unit_info;
+        struct Key_Value *out_proj_info, *out_unit_info;
 
         out_proj_info = G_create_key_value();
         out_unit_info = G_create_key_value();
@@ -577,10 +587,10 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
 #if PROJ_VERSION_MAJOR < 6
         char buff[256], dum[256];
 
-	/* PROJ6+ has its own datum transformation parameters */
+        /* PROJ6+ has its own datum transformation parameters */
         if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
             G_fatal_error(_("WGS84 grid output not possible as this location does not contain\n"
-                           "datum transformation parameters. Try running g.setproj."));
+                    "datum transformation parameters. Try running g.setproj."));
         else
 #endif
             G_set_key_value("datum", "wgs84", out_proj_info);
@@ -595,8 +605,8 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
         if (pj_get_kv(info_out, out_proj_info, out_unit_info) < 0)
             G_fatal_error(_("Unable to set up lat/long projection parameters"));
 
-	G_free_key_value(out_proj_info);
-	G_free_key_value(out_unit_info);
+        G_free_key_value(out_proj_info);
+        G_free_key_value(out_unit_info);
     }
     /* else the latlong equivalent is generated by GPJ_init_transform() */
 
@@ -606,7 +616,7 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
     info_trans->def = NULL;
 
     if (GPJ_init_transform(info_in, info_out, info_trans) < 0)
-	G_fatal_error(_("Unable to initialize coordinate transformation"));
+        G_fatal_error(_("Unable to initialize coordinate transformation"));
 
     return;
 
@@ -616,9 +626,9 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out,
  * Use Proj to get min max bounds of region in lat long
 ********************************************************/
 void get_ll_bounds(double *w, double *e, double *s, double *n,
-                   struct Cell_head window,
-                   struct pj_info *info_in, struct pj_info *info_out,
-		   struct pj_info *info_trans)
+    struct Cell_head window,
+    struct pj_info *info_in, struct pj_info *info_out,
+    struct pj_info *info_trans)
 {
     double east, west, north, south;
     double e1, w1, n1, s1;
@@ -647,7 +657,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
         e1 = ew;
         n1 = window.north;
         if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
-	                  &e1, &n1, NULL) < 0)
+                &e1, &n1, NULL) < 0)
             G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             north = n1;
@@ -664,7 +674,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
         e1 = ew;
         s1 = window.south;
         if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
-	                  &e1, &s1, NULL) < 0)
+                &e1, &s1, NULL) < 0)
             G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             south = s1;
@@ -682,7 +692,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
         e1 = window.east;
         n1 = ns;
         if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
-	                  &e1, &n1, NULL) < 0)
+                &e1, &n1, NULL) < 0)
             G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             east = e1;
@@ -700,7 +710,7 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
         w1 = window.west;
         n1 = ns;
         if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
-	                  &w1, &n1, NULL) < 0)
+                &w1, &n1, NULL) < 0)
             G_fatal_error(_("Error in GPJ_transform()"));
         if (!first) {
             west = w1;
@@ -726,14 +736,13 @@ void get_ll_bounds(double *w, double *e, double *s, double *n,
 ********************************************************/
 void
 check_coords(double e,
-             double n,
-             double *lon,
-             double *lat,
-             int par,
-             struct Cell_head w,
-             struct pj_info *info_in,
-	     struct pj_info *info_out,
-	     struct pj_info *info_trans)
+    double n,
+    double *lon,
+    double *lat,
+    int par,
+    struct Cell_head w,
+    struct pj_info *info_in,
+    struct pj_info *info_out, struct pj_info *info_trans)
 {
     double x, y;
     int proj = 0;
@@ -761,20 +770,20 @@ check_coords(double e,
     if (proj) {
         /* convert original coords to ll */
         if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
-	                  &e, &n, NULL) < 0)
+                &e, &n, NULL) < 0)
             G_fatal_error(_("Error in GPJ_transform()"));
 
         if (par == 1) {
             /* lines of latitude -- const. northing */
             /* convert correct UTM to ll */
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
-			      &x, &y, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+                    &x, &y, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
             /* convert new ll back to coords */
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-			      &x, &n, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                    &x, &n, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
             *lat = n;
             *lon = x;
@@ -782,14 +791,14 @@ check_coords(double e,
         if (par == 2) {
             /* lines of longitude -- const. easting */
             /* convert correct UTM to ll */
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
-			      &x, &y, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_FWD,
+                    &x, &y, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
             /* convert new ll back to coords */
-	    if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
-			      &e, &y, NULL) < 0)
-		G_fatal_error(_("Error in GPJ_transform()"));
+            if (GPJ_transform(info_in, info_out, info_trans, PJ_INV,
+                    &e, &y, NULL) < 0)
+                G_fatal_error(_("Error in GPJ_transform()"));
 
             *lat = y;
             *lon = e;

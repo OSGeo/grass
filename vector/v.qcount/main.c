@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       v.qcount
@@ -44,11 +45,11 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *input, *field, *output, *n, *r;
+        struct Option *input, *field, *output, *n, *r;
     } parm;
     struct
     {
-	struct Flag *g;
+        struct Flag *g;
     } flag;
     COOR *quads;
 
@@ -60,16 +61,17 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("point pattern"));
-    module->description = _("Indices for quadrat counts of vector point lists.");
+    module->description =
+        _("Indices for quadrat counts of vector point lists.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
 
     parm.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    
+
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.output->required = NO;
     parm.output->description =
-	_("Name for output quadrat centers map (number of points is written as category)");
+        _("Name for output quadrat centers map (number of points is written as category)");
 
     parm.n = G_define_option();
     parm.n->key = "nquadrats";
@@ -88,7 +90,7 @@ int main(int argc, char **argv)
     flag.g->description = _("Print results in shell script style");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     sscanf(parm.n->answer, "%d", &nquads);
     sscanf(parm.r->answer, "%lf", &radius);
@@ -98,7 +100,7 @@ int main(int argc, char **argv)
     /* Open input */
     Vect_set_open_level(2);
     if (Vect_open_old2(&Map, parm.input->answer, "", parm.field->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
 
     /* Get the quadrats */
     G_message(_("Finding quadrats..."));
@@ -110,79 +112,73 @@ int main(int argc, char **argv)
 
     counts = (int *)G_malloc(nquads * (sizeof(int)));
     count_sites(quads, nquads, counts, radius, &Map,
-		Vect_get_field_number(&Map, parm.field->answer));
+        Vect_get_field_number(&Map, parm.field->answer));
 
     Vect_close(&Map);
 
     /* output if requested */
     if (parm.output->answer) {
-	struct Map_info Out;
-	struct line_pnts *Points;
-	struct line_cats *Cats;
+        struct Map_info Out;
+        struct line_pnts *Points;
+        struct line_cats *Cats;
 
-	Points = Vect_new_line_struct();
-	Cats = Vect_new_cats_struct();
+        Points = Vect_new_line_struct();
+        Cats = Vect_new_cats_struct();
 
-	if (Vect_open_new(&Out, parm.output->answer, 0) < 0)
-	    G_fatal_error(_("Unable to create vector map <%s>"),
-			    parm.output->answer);
+        if (Vect_open_new(&Out, parm.output->answer, 0) < 0)
+            G_fatal_error(_("Unable to create vector map <%s>"),
+                parm.output->answer);
 
-	Vect_hist_command(&Out);
+        Vect_hist_command(&Out);
 
-	for (i = 0; i < nquads; i++) {
-	    Vect_reset_line(Points);
-	    Vect_reset_cats(Cats);
+        for (i = 0; i < nquads; i++) {
+            Vect_reset_line(Points);
+            Vect_reset_cats(Cats);
 
-	    Vect_append_point(Points, quads[i].x, quads[i].y, 0.0);
-	    Vect_cat_set(Cats, 1, counts[i]);
+            Vect_append_point(Points, quads[i].x, quads[i].y, 0.0);
+            Vect_cat_set(Cats, 1, counts[i]);
 
-	    Vect_write_line(&Out, GV_POINT, Points, Cats);
-	}
+            Vect_write_line(&Out, GV_POINT, Points, Cats);
+        }
 
-	Vect_build(&Out);
-	Vect_close(&Out);
+        Vect_build(&Out);
+        Vect_close(&Out);
 
     }
 
     /* Indices if requested */
     qindices(counts, nquads, &fisher, &david, &douglas, &lloyd, &lloydip,
-	     &morisita);
+        &morisita);
 
     if (!flag.g->answer) {
-	fprintf(stdout,
-		"-----------------------------------------------------------\n");
-	fprintf(stdout,
-		"Index                                           Realization\n");
-	fprintf(stdout,
-		"-----------------------------------------------------------\n");
-	fprintf(stdout,
-		"Fisher el al (1922) Relative Variance            %g\n",
-		fisher);
-	fprintf(stdout,
-		"David & Moore (1954) Index of Cluster Size       %g\n",
-		david);
-	fprintf(stdout,
-		"Douglas (1975) Index of Cluster Frequency        %g\n",
-		douglas);
-	fprintf(stdout,
-		"Lloyd (1967) \"mean crowding\"                     %g\n",
-		lloyd);
-	fprintf(stdout,
-		"Lloyd (1967) Index of patchiness                 %g\n",
-		lloydip);
-	fprintf(stdout,
-		"Morisita's (1959) I (variability b/n patches)    %g\n",
-		morisita);
-	fprintf(stdout,
-		"-----------------------------------------------------------\n");
+        fprintf(stdout,
+            "-----------------------------------------------------------\n");
+        fprintf(stdout,
+            "Index                                           Realization\n");
+        fprintf(stdout,
+            "-----------------------------------------------------------\n");
+        fprintf(stdout,
+            "Fisher el al (1922) Relative Variance            %g\n", fisher);
+        fprintf(stdout,
+            "David & Moore (1954) Index of Cluster Size       %g\n", david);
+        fprintf(stdout,
+            "Douglas (1975) Index of Cluster Frequency        %g\n", douglas);
+        fprintf(stdout,
+            "Lloyd (1967) \"mean crowding\"                     %g\n", lloyd);
+        fprintf(stdout,
+            "Lloyd (1967) Index of patchiness                 %g\n", lloydip);
+        fprintf(stdout,
+            "Morisita's (1959) I (variability b/n patches)    %g\n", morisita);
+        fprintf(stdout,
+            "-----------------------------------------------------------\n");
     }
     else {
-	fprintf(stdout, "fisher=%g\n", fisher);
-	fprintf(stdout, "david=%g\n", david);
-	fprintf(stdout, "douglas=%g\n", douglas);
-	fprintf(stdout, "lloyd=%g\n", lloyd);
-	fprintf(stdout, "lloydip=%g\n", lloydip);
-	fprintf(stdout, "morisita=%g\n", morisita);
+        fprintf(stdout, "fisher=%g\n", fisher);
+        fprintf(stdout, "david=%g\n", david);
+        fprintf(stdout, "douglas=%g\n", douglas);
+        fprintf(stdout, "lloyd=%g\n", lloyd);
+        fprintf(stdout, "lloydip=%g\n", lloydip);
+        fprintf(stdout, "morisita=%g\n", morisita);
     }
 
 

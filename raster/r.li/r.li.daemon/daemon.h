@@ -128,7 +128,8 @@ struct area_entry
  * \return RLI_ERRORE error occurs in calculating index
  * \return RLI_OK  otherwise
  */
-typedef int rli_func(int fd, char **par, struct area_entry *ad, double *result);
+typedef int rli_func(int fd, char **par, struct area_entry *ad,
+    double *result);
 
 
 /**
@@ -147,8 +148,8 @@ typedef int rli_func(int fd, char **par, struct area_entry *ad, double *result);
  * common usage of this function in r.li modules.
  */
 
-int calculateIndex(char *file, rli_func *f,
-		   char **parameters, char *raster, char *output);
+int calculateIndex(char *file, rli_func * f,
+    char **parameters, char *raster, char *output);
 
 /**
  * \description parses the setup file and populates the list of areas
@@ -214,8 +215,7 @@ int error_Output(int out, msg m);
  * \param f the function used for index computing
  * \param result where to put the result of index computing
  */
-void worker_init(char *raster, rli_func *f,
-		 char **parameters);
+void worker_init(char *raster, rli_func * f, char **parameters);
 void worker_process(msg * ret, msg * m);
 void worker_end(void);
 
@@ -246,7 +246,7 @@ int raster_Output(int fd, int aid, struct g_area *g, double res);
   * \param result where to return result
   * \return 0 on error, 1 otherwise
   */
-int simple_index(int fd, char **par, struct area_entry * ad, double *result);
+int simple_index(int fd, char **par, struct area_entry *ad, double *result);
 
  /**
   * \brief copy the content of regular file random access 
@@ -264,7 +264,7 @@ int write_raster(int mv_fd, int random_access, struct g_area *g);
   * \param row identifier of row to get
   * \param ad area descriptor of current sample area
   */
-CELL *RLI_get_cell_raster_row(int fd, int row, struct area_entry * ad);
+CELL *RLI_get_cell_raster_row(int fd, int row, struct area_entry *ad);
 
  /**
   * \brief get a dcell raster row using the memory menager
@@ -272,7 +272,7 @@ CELL *RLI_get_cell_raster_row(int fd, int row, struct area_entry * ad);
   * \param row identifier of row to get
   * \param ad area descriptor of current sample area
   */
-DCELL *RLI_get_dcell_raster_row(int fd, int row, struct area_entry * ad);
+DCELL *RLI_get_dcell_raster_row(int fd, int row, struct area_entry *ad);
 
  /**
   * \brief get a fcell raster row using the memory menager
@@ -280,5 +280,4 @@ DCELL *RLI_get_dcell_raster_row(int fd, int row, struct area_entry * ad);
   * \param row identifier of row to get
   * \param ad area descriptor of current sample area
   */
-FCELL *RLI_get_fcell_raster_row(int fd, int row, struct area_entry * ad);
-
+FCELL *RLI_get_fcell_raster_row(int fd, int row, struct area_entry *ad);

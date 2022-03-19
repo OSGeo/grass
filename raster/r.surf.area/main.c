@@ -61,8 +61,9 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct {
-	struct Option *surf, *vscale, *units;
+    struct
+    {
+        struct Option *surf, *vscale, *units;
     } opt;
     DCELL *cell_buf[2];
     int row;
@@ -77,10 +78,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("surface"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("area estimation"));
-    module->description = _("Prints estimation of surface area for raster map.");
+    module->description =
+        _("Prints estimation of surface area for raster map.");
 
     opt.surf = G_define_standard_option(G_OPT_R_MAP);
-    
+
     opt.vscale = G_define_option();
     opt.vscale->key = "vscale";
     opt.vscale->type = TYPE_DOUBLE;
@@ -88,24 +90,25 @@ int main(int argc, char *argv[])
     opt.vscale->multiple = NO;
     opt.vscale->description = _("Vertical scale");
     opt.vscale->answer = "1.0";
-    
+
     opt.units = G_define_standard_option(G_OPT_M_UNITS);
     opt.units->label = _("Output units");
     opt.units->description = _("Default: square map units");
-    
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     sz = atof(opt.vscale->answer);
     if (opt.units->answer) {
-	units = G_units(opt.units->answer);
-	G_verbose_message(_("Output in '%s'"), G_get_units_name(units, TRUE, TRUE));
+        units = G_units(opt.units->answer);
+        G_verbose_message(_("Output in '%s'"), G_get_units_name(units, TRUE,
+                TRUE));
     }
     else {
-	units = U_UNDEFINED;
-	G_verbose_message(_("Output in 'square map units'"));
+        units = U_UNDEFINED;
+        G_verbose_message(_("Output in 'square map units'"));
     }
-    
+
     G_get_set_window(&w);
 
     /* open raster map for reading */
@@ -115,26 +118,25 @@ int main(int argc, char *argv[])
     cell_buf[1] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
 
     {
-	DCELL *top, *bottom;
+        DCELL *top, *bottom;
 
-	minarea = maxarea = nullarea = 0.0;
-	for (row = 0; row < w.rows - 1; row++) {
-	    if (!row) {
-		Rast_get_row(cellfile, cell_buf[1], 0, DCELL_TYPE);
-		top = cell_buf[1];
-	    }
-	    Rast_get_row(cellfile, cell_buf[row % 2], row + 1,
-			     DCELL_TYPE);
-	    bottom = cell_buf[row % 2];
-	    add_row_area(top, bottom, sz, &w, &minarea, &maxarea);
-	    add_null_area(top, &w, &nullarea);
-	    top = bottom;
-	    G_percent(row, w.rows, 10);
-	}
+        minarea = maxarea = nullarea = 0.0;
+        for (row = 0; row < w.rows - 1; row++) {
+            if (!row) {
+                Rast_get_row(cellfile, cell_buf[1], 0, DCELL_TYPE);
+                top = cell_buf[1];
+            }
+            Rast_get_row(cellfile, cell_buf[row % 2], row + 1, DCELL_TYPE);
+            bottom = cell_buf[row % 2];
+            add_row_area(top, bottom, sz, &w, &minarea, &maxarea);
+            add_null_area(top, &w, &nullarea);
+            top = bottom;
+            G_percent(row, w.rows, 10);
+        }
 
-	/* Get last null row area */
-	if (w.rows > 1)
-	    add_null_area(top, &w, &nullarea);
+        /* Get last null row area */
+        if (w.rows > 1)
+            add_null_area(top, &w, &nullarea);
     }
 
 
@@ -142,30 +144,28 @@ int main(int argc, char *argv[])
     G_free(cell_buf[1]);
     Rast_close(cellfile);
 
-    {	/* report */
-	double reg_area, flat_area, estavg;
+    {                           /* report */
+        double reg_area, flat_area, estavg;
 
-	flat_area = (w.cols - 1) * (w.rows - 1) * w.ns_res * w.ew_res;
-	reg_area = w.cols * w.rows * w.ns_res * w.ew_res;
-	estavg = (minarea + maxarea) / 2.0;
+        flat_area = (w.cols - 1) * (w.rows - 1) * w.ns_res * w.ew_res;
+        reg_area = w.cols * w.rows * w.ns_res * w.ew_res;
+        estavg = (minarea + maxarea) / 2.0;
 
-	fprintf(stdout, "%s %f\n",
-		_("Null value area ignored in calculation:"),
-		conv_value(nullarea, units));
-	fprintf(stdout, "%s %f\n", _("Plan area used in calculation:"),
-		conv_value(flat_area, units));
-	fprintf(stdout, "%s\n\t%f %f %f\n",
-		_("Surface area calculation(low, high, avg):"),
-		conv_value(minarea, units),
-		conv_value(maxarea, units),
-		conv_value(estavg, units));
+        fprintf(stdout, "%s %f\n",
+            _("Null value area ignored in calculation:"),
+            conv_value(nullarea, units));
+        fprintf(stdout, "%s %f\n", _("Plan area used in calculation:"),
+            conv_value(flat_area, units));
+        fprintf(stdout, "%s\n\t%f %f %f\n",
+            _("Surface area calculation(low, high, avg):"),
+            conv_value(minarea, units),
+            conv_value(maxarea, units), conv_value(estavg, units));
 
-	fprintf(stdout, "%s %f\n", _("Current region plan area:"),
-		conv_value(reg_area, units));
-	fprintf(stdout, "%s %f\n", _("Estimated region Surface Area:"),
-		flat_area > 0 ?
-			conv_value(reg_area * estavg / flat_area, units) :
-			0);
+        fprintf(stdout, "%s %f\n", _("Current region plan area:"),
+            conv_value(reg_area, units));
+        fprintf(stdout, "%s %f\n", _("Estimated region Surface Area:"),
+            flat_area > 0 ?
+            conv_value(reg_area * estavg / flat_area, units) : 0);
     }
 
     exit(EXIT_SUCCESS);

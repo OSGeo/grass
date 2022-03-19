@@ -64,8 +64,7 @@ char **I_list_subgroups(const char *group, int *subgs_num)
  * \return array of subgroup names
  */
 
-char **I_list_subgroups2(const char *group, const char *mapset,
-                         int *subgs_num)
+char **I_list_subgroups2(const char *group, const char *mapset, int *subgs_num)
 {
     return list_subgroups(group, mapset, subgs_num);
 }
@@ -80,7 +79,7 @@ char **I_list_subgroups2(const char *group, const char *mapset,
  * \return 0
  */
 int I_list_subgroup(const char *group, const char *subgroup,
-                    const struct Ref *ref, FILE * fd)
+    const struct Ref *ref, FILE * fd)
 {
     char buf[80];
     int i;
@@ -89,7 +88,7 @@ int I_list_subgroup(const char *group, const char *subgroup,
 
     if (ref->nfiles <= 0) {
         fprintf(fd, _("subgroup <%s> of group <%s> is empty\n"),
-                subgroup, group);
+            subgroup, group);
         return 0;
     }
     max = 0;
@@ -100,8 +99,8 @@ int I_list_subgroup(const char *group, const char *subgroup,
             max = len;
     }
     fprintf(fd,
-            _("subgroup <%s> of group <%s> references the following raster maps\n"),
-            subgroup, group);
+        _("subgroup <%s> of group <%s> references the following raster maps\n"),
+        subgroup, group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {

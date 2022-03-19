@@ -11,11 +11,11 @@ mat_struct *G_matrix_add(mat_struct *, mat_struct *);
 mat_struct *G_matrix_subtract(mat_struct *, mat_struct *);
 mat_struct *G_matrix_scale(mat_struct *, const double);
 mat_struct *G__matrix_add(mat_struct *, mat_struct *, const double,
-			  const double);
+    const double);
 mat_struct *G_matrix_product(mat_struct *, mat_struct *);
 mat_struct *G_matrix_transpose(mat_struct *);
 int G_matrix_LU_solve(const mat_struct *, mat_struct **, const mat_struct *,
-		      mat_type);
+    mat_type);
 mat_struct *G_matrix_inverse(mat_struct *);
 void G_matrix_free(mat_struct *);
 void G_matrix_print(mat_struct *);
@@ -39,7 +39,7 @@ int G_vector_set(vec_struct *, int, int, vtype, int);
 double G_vector_norm_euclid(vec_struct *);
 double G_vector_norm_maxval(vec_struct *, int);
 vec_struct *G_vector_copy(const vec_struct *, int);
-vec_struct *G_vector_product (vec_struct *, vec_struct *, vec_struct *);
+vec_struct *G_vector_product(vec_struct *, vec_struct *, vec_struct *);
 
 /* Matrix and vector routines corresponding to ?? */
 
@@ -52,4 +52,4 @@ int G_matrix_eigen_sort(vec_struct *, mat_struct *);
 mat_struct *G_matrix_scalar_mul(double, mat_struct *, mat_struct *);
 mat_struct *G_matrix_resize(mat_struct *, int, int);
 
-#endif /* GRASS_LADEFS_H */
+#endif                          /* GRASS_LADEFS_H */

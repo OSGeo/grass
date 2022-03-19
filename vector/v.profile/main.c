@@ -47,7 +47,7 @@
  * or so as there's nothing more permanent than a temporary solution.)
  * 2017-11-19
  */
-static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
+static int ring2pts(const GEOSGeometry * geom, struct line_pnts *Points)
 {
     int i, ncoords;
     double x, y, z;
@@ -57,47 +57,48 @@ static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 
     Vect_reset_line(Points);
     if (!geom) {
-	G_warning(_("Invalid GEOS geometry!"));
-	return 0;
+        G_warning(_("Invalid GEOS geometry!"));
+        return 0;
     }
     z = 0.0;
     ncoords = GEOSGetNumCoordinates(geom);
     if (!ncoords) {
-	G_warning(_("No coordinates in GEOS geometry (can be ok for negative distance)!"));
-	return 0;
+        G_warning(_("No coordinates in GEOS geometry (can be ok for negative distance)!"));
+        return 0;
     }
     seq = GEOSGeom_getCoordSeq(geom);
     for (i = 0; i < ncoords; i++) {
-	GEOSCoordSeq_getX(seq, i, &x);
-	GEOSCoordSeq_getY(seq, i, &y);
-	if (x != x || x > DBL_MAX || x < -DBL_MAX)
-	    G_fatal_error(_("Invalid x coordinate %f"), x);
-	if (y != y || y > DBL_MAX || y < -DBL_MAX)
-	    G_fatal_error(_("Invalid y coordinate %f"), y);
-	Vect_append_point(Points, x, y, z);
+        GEOSCoordSeq_getX(seq, i, &x);
+        GEOSCoordSeq_getY(seq, i, &y);
+        if (x != x || x > DBL_MAX || x < -DBL_MAX)
+            G_fatal_error(_("Invalid x coordinate %f"), x);
+        if (y != y || y > DBL_MAX || y < -DBL_MAX)
+            G_fatal_error(_("Invalid y coordinate %f"), y);
+        Vect_append_point(Points, x, y, z);
     }
 
     return 1;
 }
 
 /* Helper for converting multipoligons to GRASS poligons */
-static void add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer) {
+static void add_poly(const GEOSGeometry * OGeom, struct line_pnts *Buffer)
+{
     const GEOSGeometry *geom2;
     static struct line_pnts *gPoints;
     int i, nrings;
-    
+
     gPoints = Vect_new_line_struct();
-    
+
     geom2 = GEOSGetExteriorRing(OGeom);
     if (!ring2pts(geom2, gPoints)) {
         G_fatal_error(_("Corrupt GEOS geometry"));
     }
-    
+
     Vect_append_points(Buffer, gPoints, GV_FORWARD);
     Vect_reset_line(gPoints);
-    
+
     nrings = GEOSGetNumInteriorRings(OGeom);
-    
+
     for (i = 0; i < nrings; i++) {
         geom2 = GEOSGetInteriorRingN(OGeom, i);
         if (!ring2pts(geom2, gPoints)) {
@@ -269,14 +270,15 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-    
+
 #if HAVE_GEOS
 #if (GEOS_VERSION_MAJOR < 3 || (GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR < 3))
     G_fatal_error("This module requires GEOS >= 3.3");
 #endif
     initGEOS(G_message, G_fatal_error);
 #else
-    G_fatal_error("GRASS native buffering functions are known to return incorrect results.\n"
+    G_fatal_error
+        ("GRASS native buffering functions are known to return incorrect results.\n"
         "Till those errors are fixed, this module requires GRASS to be compiled with GEOS support.");
 #endif
 
@@ -302,7 +304,7 @@ int main(int argc, char *argv[])
     if (new_map->answer != NULL)
         if (Vect_legal_filename(new_map->answer) < 1)
             G_fatal_error(_("<%s> is not a valid vector map name"),
-                          new_map->answer);
+                new_map->answer);
 
     /* inline_where has no use if inline_map has been not provided */
     if (inline_where->answer != NULL && inline_map->answer == NULL)
@@ -311,11 +313,11 @@ int main(int argc, char *argv[])
     /* Currently only one profile input method is supported */
     if (inline_map->answer != NULL && coords_opt->answer != NULL)
         G_fatal_error(_("Profile input coordinates and vector map are provided. "
-                       "Please provide only one of them"));
+                "Please provide only one of them"));
 
     if (inline_map->answer == NULL && coords_opt->answer == NULL)
         G_fatal_error(_("No profile input coordinates nor vector map are provided. "
-                       "Please provide one of them"));
+                "Please provide one of them"));
 
     /* Where to put module output */
     if (file_opt->answer) {
@@ -383,8 +385,7 @@ int main(int argc, char *argv[])
     if (!Fi && where_opt->answer != NULL) {
         Vect_close(&In);
         G_fatal_error(_("No database connection defined for map <%s> layer %d, "
-                       "but WHERE condition is provided"), old_map->answer,
-                      layer);
+                "but WHERE condition is provided"), old_map->answer, layer);
     }
 
     /* Get profile line from an existing vector map */
@@ -392,15 +393,15 @@ int main(int argc, char *argv[])
         /* If we get here, pro_mapset is inicialized */
         if (1 > Vect_open_old(&Pro, inline_map->answer, pro_mapset))
             G_fatal_error(_("Unable to open vector map <%s>"),
-                          inline_map->answer);
+                inline_map->answer);
         if (inline_where->answer != NULL) {
             Fpro = Vect_get_field(&Pro, pro_layer);
             if (!Fpro) {
                 Vect_close(&In);
                 Vect_close(&Pro);
                 G_fatal_error(_("No database connection defined for map <%s> layer %d, "
-                               "but WHERE condition is provided"),
-                              inline_map->answer, pro_layer);
+                        "but WHERE condition is provided"), inline_map->answer,
+                    pro_layer);
             }
             /* Prepeare strings for use in db_* calls */
             db_init_string(&dbsql);
@@ -408,9 +409,9 @@ int main(int argc, char *argv[])
             db_init_string(&table_name);
             db_init_handle(&handle);
             G_debug(1,
-                    "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>",
-                    Fpro->number, Fpro->name, Fpro->driver, Fpro->database,
-                    Fpro->table, Fpro->key);
+                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>",
+                Fpro->number, Fpro->name, Fpro->driver, Fpro->database,
+                Fpro->table, Fpro->key);
 
             /* Prepearing database for use */
             driver = db_start_driver(Fpro->driver);
@@ -424,20 +425,19 @@ int main(int argc, char *argv[])
                 Vect_close(&In);
                 Vect_close(&Pro);
                 G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                              Fpro->database, Fpro->driver);
+                    Fpro->database, Fpro->driver);
             }
             db_set_string(&table_name, Fpro->table);
             if (db_describe_table(driver, &table_name, &table) != DB_OK) {
                 Vect_close(&In);
                 Vect_close(&Pro);
-                G_fatal_error(_("Unable to describe table <%s>"),
-                              Fpro->table);
+                G_fatal_error(_("Unable to describe table <%s>"), Fpro->table);
             }
             ncols = db_get_table_number_of_columns(table);
 
             ncats =
                 db_select_int(driver, Fpro->table, Fpro->key,
-                              inline_where->answer, &cats);
+                inline_where->answer, &cats);
             if (ncats < 1) {
                 Vect_close(&In);
                 Vect_close(&Pro);
@@ -447,7 +447,7 @@ int main(int argc, char *argv[])
                 Vect_close(&In);
                 Vect_close(&Pro);
                 G_fatal_error(_("Your query matches more than one record in input profiling map. "
-                               "Currently it's not supported. Enhance WHERE conditions to get only one line."));
+                        "Currently it's not supported. Enhance WHERE conditions to get only one line."));
             }
             if (!(Catlist = Vect_new_list())) {
                 Vect_close(&In);
@@ -460,7 +460,7 @@ int main(int argc, char *argv[])
                 Vect_close(&In);
                 Vect_close(&Pro);
                 G_fatal_error(_("Your query matches more than one record in input profiling map. "
-                               "Currently it's not supported. Enhance WHERE conditions to get only one line."));
+                        "Currently it's not supported. Enhance WHERE conditions to get only one line."));
             }
             if (Vect_read_line(&Pro, Profil, NULL, Catlist->value[0]) !=
                 GV_LINE) {
@@ -479,7 +479,7 @@ int main(int argc, char *argv[])
                 Vect_close(&In);
                 Vect_close(&Pro);
                 G_fatal_error(_("Your input profile map contains more than one line. "
-                               "Currently it's not supported. Provide WHERE conditions to get only one line."));
+                        "Currently it's not supported. Provide WHERE conditions to get only one line."));
             }
         }
     }
@@ -487,30 +487,32 @@ int main(int argc, char *argv[])
     /* Create a buffer around profile line for point sampling 
        Tolerance is calculated in such way that buffer will have flat end and no cap. */
     /* Native buffering is known to fail.
-    Vect_line_buffer(Profil, bufsize, 1 - (bufsize * cos((2 * M_PI) / 2)),
-                     Buffer);
-    */
+       Vect_line_buffer(Profil, bufsize, 1 - (bufsize * cos((2 * M_PI) / 2)),
+       Buffer);
+     */
 #ifdef HAVE_GEOS
     /* Code lifted from v.buffer geos.c (with modifications) */
     GEOSGeometry *IGeom;
     GEOSGeometry *OGeom = NULL;
     const GEOSGeometry *geom2 = NULL;
-    
+
     IGeom = Vect_line_to_geos(Profil, GV_LINE, 0);
     if (!IGeom) {
         G_fatal_error(_("Failed to convert GRASS line to GEOS line"));
     }
-    
-    GEOSBufferParams* geos_params = GEOSBufferParams_create();
+
+    GEOSBufferParams *geos_params = GEOSBufferParams_create();
+
     GEOSBufferParams_setEndCapStyle(geos_params, GEOSBUF_CAP_FLAT);
     OGeom = GEOSBufferWithParams(IGeom, geos_params, bufsize);
     GEOSBufferParams_destroy(geos_params);
     if (!OGeom) {
         G_fatal_error(_("Buffering failed"));
     }
-    
+
     if (GEOSGeomTypeId(OGeom) == GEOS_MULTIPOLYGON) {
         int ngeoms = GEOSGetNumGeometries(OGeom);
+
         for (i = 0; i < ngeoms; i++) {
             geom2 = GEOSGetGeometryN(OGeom, i);
             add_poly(geom2, Buffer);
@@ -519,14 +521,14 @@ int main(int argc, char *argv[])
     else {
         add_poly(OGeom, Buffer);
     }
-    
+
     if (IGeom)
         GEOSGeom_destroy(IGeom);
     if (OGeom)
         GEOSGeom_destroy(OGeom);
     finishGEOS();
 #endif
-    
+
     Vect_cat_set(Cats, 1, 1);
 
     /* Should we store used buffer for later examination? */
@@ -535,7 +537,7 @@ int main(int argc, char *argv[])
         if (0 > Vect_open_new(&Out, new_map->answer, WITHOUT_Z)) {
             Vect_close(&In);
             G_fatal_error(_("Unable to create vector map <%s>"),
-                          new_map->answer);
+                new_map->answer);
         }
 
         /* Write profile line and it's buffer into new vector map */
@@ -554,7 +556,7 @@ int main(int argc, char *argv[])
         field_index = Vect_cidx_get_field_index(&In, layer);
         if (field_index < 0) {
             G_fatal_error(_("Vector map <%s> does not have cat's defined on layer %d"),
-                          old_map->answer, layer);
+                old_map->answer, layer);
         }
 
         /* Prepeare strings for use in db_* calls */
@@ -564,9 +566,9 @@ int main(int argc, char *argv[])
         db_init_handle(&handle);
 
         G_debug(1,
-                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>",
-                Fi->number, Fi->name, Fi->driver, Fi->database, Fi->table,
-                Fi->key);
+            "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>",
+            Fi->number, Fi->name, Fi->driver, Fi->database, Fi->table,
+            Fi->key);
 
         /* Prepearing database for use */
         driver = db_start_driver(Fi->driver);
@@ -578,7 +580,7 @@ int main(int argc, char *argv[])
         if (db_open_database(driver, &handle) != DB_OK) {
             Vect_close(&In);
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                          Fi->database, Fi->driver);
+                Fi->database, Fi->driver);
         }
         db_set_string(&table_name, Fi->table);
         if (db_describe_table(driver, &table_name, &table) != DB_OK) {
@@ -591,12 +593,12 @@ int main(int argc, char *argv[])
         if (where_opt->answer != NULL) {
             ncats =
                 db_select_int(driver, Fi->table, Fi->key, where_opt->answer,
-                              &cats);
+                &cats);
             if (ncats < 1)
                 G_fatal_error(_("No features match Your query"));
             for (i = 0; i < ncats; i++) {
                 c = Vect_cidx_find_next(&In, field_index, cats[i],
-                                        otype, 0, &type, &id);
+                    otype, 0, &type, &id);
                 /* Crunch over all points/lines, that match specified CAT */
                 while (c >= 0) {
                     c++;
@@ -605,7 +607,7 @@ int main(int argc, char *argv[])
                         case GV_POINT:
                             Vect_cat_get(Cats, layer, &cat);
                             proc_point(Points, Profil, Buffer, cat,
-                                       &rescount, open3d);
+                                &rescount, open3d);
                             break;
                         case GV_LINE:
                             Vect_reset_line(Ipoints);
@@ -613,7 +615,7 @@ int main(int argc, char *argv[])
                                 (Profil, Points, Ipoints, open3d) > 0) {
                                 Vect_cat_get(Cats, layer, &cat);
                                 proc_line(Ipoints, Profil, cat, &rescount,
-                                          open3d);
+                                    open3d);
                             }
                             break;
                         }
@@ -622,7 +624,7 @@ int main(int argc, char *argv[])
                         G_fatal_error
                             ("Error in Vect_cidx_find_next function! Report a bug.");
                     c = Vect_cidx_find_next(&In, field_index, cats[i], otype,
-                                            c, &type, &id);
+                        c, &type, &id);
                 }
             }
         }
@@ -674,14 +676,14 @@ int main(int argc, char *argv[])
             fprintf(ascii, "%s%.*f", fs, dp, resultset[j].z);
         if (Fi != NULL) {
             sprintf(sql, "select * from %s where %s=%d", Fi->table, Fi->key,
-                    resultset[j].cat);
+                resultset[j].cat);
             G_debug(2, "SQL: \"%s\"", sql);
             db_set_string(&dbsql, sql);
             /* driver IS initialized here in case if Fi != NULL */
             if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL)
                 != DB_OK)
                 G_warning(_("Unabale to get attribute data for cat %d"),
-                          resultset[j].cat);
+                    resultset[j].cat);
             else {
                 nrows = db_get_num_rows(&cursor);
                 G_debug(1, "Result count: %d", nrows);
@@ -690,14 +692,13 @@ int main(int argc, char *argv[])
                 if (nrows > 0) {
                     if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
                         G_warning(_("Error while retreiving database record for cat %d"),
-                                  resultset[j].cat);
+                            resultset[j].cat);
                     }
                     else {
                         for (col = 0; col < ncols; col++) {
                             /* Column description retreiving is fast, as they live in provided table structure */
                             column = db_get_table_column(table, col);
-                            db_convert_column_value_to_string(column,
-                                                              &valstr);
+                            db_convert_column_value_to_string(column, &valstr);
                             type = db_get_column_sqltype(column);
 
                             /* Those values should be quoted */
@@ -709,10 +710,10 @@ int main(int argc, char *argv[])
                                 type == DB_SQL_TYPE_TEXT ||
                                 type == DB_SQL_TYPE_SERIAL)
                                 fprintf(ascii, "%s\"%s\"", fs,
-                                        db_get_string(&valstr));
+                                    db_get_string(&valstr));
                             else
                                 fprintf(ascii, "%s%s", fs,
-                                        db_get_string(&valstr));
+                                    db_get_string(&valstr));
                         }
                     }
                 }

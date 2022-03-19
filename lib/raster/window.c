@@ -28,8 +28,8 @@ void Rast_get_window(struct Cell_head *window)
     Rast__init_window();
 
     if (R__.split_window)
-	G_fatal_error(_("Internal error: Rast_get_window() called with split window."
-			" Use Rast_get_input_window() or Rast_get_output_window() instead."));
+        G_fatal_error(_("Internal error: Rast_get_window() called with split window."
+                " Use Rast_get_input_window() or Rast_get_output_window() instead."));
 
     *window = R__.wr_window;
 }
@@ -67,17 +67,17 @@ void Rast_get_output_window(struct Cell_head *window)
  * Before raster files can be read or written, it is necessary to
  * known how many rows are in the active window. For example:
  \code  
-int nrows, cols;
-int row, col;
+ int nrows, cols;
+ int row, col;
 
-nrows = Rast_window_rows();
-ncols = Rast_window_cols();
-for (row = 0; row < nrows; row++) {
-    // read row ...
-    for (col = 0; col < ncols; col++) {
-        // process col ...
-    }
-}
+ nrows = Rast_window_rows();
+ ncols = Rast_window_cols();
+ for (row = 0; row < nrows; row++) {
+ // read row ...
+ for (col = 0; col < ncols; col++) {
+ // process col ...
+ }
+ }
  \endcode 
  *
  * \return number of rows
@@ -87,8 +87,8 @@ int Rast_window_rows(void)
     Rast__init_window();
 
     if (R__.split_window)
-	G_fatal_error(_("Internal error: Rast_window_rows() called with split window."
-			" Use Rast_input_window_rows() or Rast_output_window_rows() instead."));
+        G_fatal_error(_("Internal error: Rast_window_rows() called with split window."
+                " Use Rast_input_window_rows() or Rast_output_window_rows() instead."));
 
     return R__.wr_window.rows;
 }
@@ -102,17 +102,17 @@ int Rast_window_rows(void)
  * the active region. For example:
  *
  \code  
-int nrows, cols;
-int row, col;
+ int nrows, cols;
+ int row, col;
 
-nrows = Rast_window_rows();
-ncols = Rast_window_cols();
-for (row = 0; row < nrows; row++) {
-    // read row ...
-    for (col = 0; col < ncols; col++) {
-        // process col ...
-    }
-}
+ nrows = Rast_window_rows();
+ ncols = Rast_window_cols();
+ for (row = 0; row < nrows; row++) {
+ // read row ...
+ for (col = 0; col < ncols; col++) {
+ // process col ...
+ }
+ }
  \endcode 
  *
  * \return number of columns
@@ -122,8 +122,8 @@ int Rast_window_cols(void)
     Rast__init_window();
 
     if (R__.split_window)
-	G_fatal_error(_("Internal error: Rast_window_cols() called with split window."
-			" Use Rast_input_window_cols() or Rast_output_window_cols() instead."));
+        G_fatal_error(_("Internal error: Rast_window_cols() called with split window."
+                " Use Rast_input_window_cols() or Rast_output_window_cols() instead."));
 
     return R__.wr_window.cols;
 }
@@ -265,4 +265,3 @@ double Rast_col_to_easting(double col, const struct Cell_head *window)
 {
     return window->west + col * window->ew_res;
 }
-

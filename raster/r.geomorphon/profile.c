@@ -51,7 +51,7 @@ static unsigned char overflow;
 static unsigned stack_size;
 
 static void prof_int_internal(const toktype type, const char *key,
-                              const int val)
+    const int val)
 {
     if (size == MAX_TOKENS) {
         overflow = 1;
@@ -74,7 +74,7 @@ void prof_bln(const char *key, const int val)
 }
 
 static void prof_dbl_internal(const toktype type, const char *key,
-                              const double val)
+    const double val)
 {
     if (size == MAX_TOKENS) {
         overflow = 1;

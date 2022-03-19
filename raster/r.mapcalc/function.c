@@ -34,8 +34,10 @@ void print_function_names(void)
 
     fprintf(stderr, _("Known functions:"));
     for (i = 0; calc_func_descs[i].name; i++)
-	fprintf(stderr, "%c%-10s", i % 7 ? ' ' : '\n', calc_func_descs[i].name);
+        fprintf(stderr, "%c%-10s", i % 7 ? ' ' : '\n',
+            calc_func_descs[i].name);
     for (i = 0; local_func_descs[i].name; i++)
-	fprintf(stderr, "%c%-10s", i % 7 ? ' ' : '\n', local_func_descs[i].name);
+        fprintf(stderr, "%c%-10s", i % 7 ? ' ' : '\n',
+            local_func_descs[i].name);
     fprintf(stderr, "\n");
 }

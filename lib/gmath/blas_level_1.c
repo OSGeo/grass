@@ -53,11 +53,11 @@ void G_math_d_x_dot_y(double *x, double *y, double *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += x[i] * y[i];
+        s += x[i] * y[i];
     }
 #pragma omp single
     {
-	*value = s;
+        *value = s;
     }
     return;
 }
@@ -85,11 +85,11 @@ void G_math_d_euclid_norm(double *x, double *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += x[i] * x[i];
+        s += x[i] * x[i];
     }
 #pragma omp single
     {
-	*value = sqrt(s);
+        *value = sqrt(s);
     }
     return;
 }
@@ -117,11 +117,11 @@ void G_math_d_asum_norm(double *x, double *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += fabs(x[i]);
+        s += fabs(x[i]);
     }
 #pragma omp single
     {
-	*value = s;
+        *value = s;
     }
     return;
 }
@@ -147,8 +147,8 @@ void G_math_d_max_norm(double *x, double *value, int rows)
 
     max = fabs(x[rows - 1]);
     for (i = rows - 2; i >= 0; i--) {
-	if (max < fabs(x[i]))
-	    max = fabs(x[i]);
+        if (max < fabs(x[i]))
+            max = fabs(x[i]);
     }
 
     *value = max;
@@ -171,52 +171,52 @@ void G_math_d_max_norm(double *x, double *value, int rows)
  * 
  * */
 void G_math_d_ax_by(double *x, double *y, double *z, double a, double b,
-		    int rows)
+    int rows)
 {
     int i;
 
     /*find specific cases */
     if (b == 0.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i];
+        }
     }
     else if ((a == 1.0) && (b == 1.0)) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = x[i] + y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = x[i] + y[i];
+        }
     }
     else if ((a == 1.0) && (b == -1.0)) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = x[i] - y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = x[i] - y[i];
+        }
     }
     else if (a == b) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * (x[i] + y[i]);
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * (x[i] + y[i]);
+        }
     }
     else if (b == -1.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] - y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] - y[i];
+        }
     }
     else if (b == 1.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] + y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] + y[i];
+        }
     }
     else {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] + b * y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] + b * y[i];
+        }
     }
 
     return;
@@ -269,11 +269,11 @@ void G_math_f_x_dot_y(float *x, float *y, float *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += x[i] * y[i];
+        s += x[i] * y[i];
     }
 #pragma omp single
     {
-	*value = s;
+        *value = s;
     }
     return;
 }
@@ -301,11 +301,11 @@ void G_math_f_euclid_norm(float *x, float *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += x[i] * x[i];
+        s += x[i] * x[i];
     }
 #pragma omp single
     {
-	*value = sqrt(s);
+        *value = sqrt(s);
     }
     return;
 }
@@ -335,12 +335,12 @@ void G_math_f_asum_norm(float *x, float *value, int rows)
 
 #pragma omp parallel for schedule (static) private(i) reduction(+:s, count)
     for (i = 0; i < rows; i++) {
-	s += fabs(x[i]);
-	count++;
+        s += fabs(x[i]);
+        count++;
     }
 #pragma omp single
     {
-	*value = s;
+        *value = s;
     }
     return;
 }
@@ -366,8 +366,8 @@ void G_math_f_max_norm(float *x, float *value, int rows)
 
     max = fabs(x[rows - 1]);
     for (i = rows - 2; i >= 0; i--) {
-	if (max < fabs(x[i]))
-	    max = fabs(x[i]);
+        if (max < fabs(x[i]))
+            max = fabs(x[i]);
     }
     *value = max;
     return;
@@ -396,45 +396,45 @@ void G_math_f_ax_by(float *x, float *y, float *z, float a, float b, int rows)
     /*find specific cases */
     if (b == 0.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i];
+        }
     }
     else if ((a == 1.0) && (b == 1.0)) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = x[i] + y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = x[i] + y[i];
+        }
     }
     else if ((a == 1.0) && (b == -1.0)) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = x[i] - y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = x[i] - y[i];
+        }
     }
     else if (a == b) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * (x[i] + y[i]);
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * (x[i] + y[i]);
+        }
     }
     else if (b == -1.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] - y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] - y[i];
+        }
     }
     else if (b == 1.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] + y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] + y[i];
+        }
     }
     else {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] + b * y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] + b * y[i];
+        }
     }
 
     return;
@@ -487,11 +487,11 @@ void G_math_i_x_dot_y(int *x, int *y, double *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += x[i] * y[i];
+        s += x[i] * y[i];
     }
 #pragma omp single
     {
-	*value = s;
+        *value = s;
     }
     return;
 }
@@ -519,11 +519,11 @@ void G_math_i_euclid_norm(int *x, double *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += x[i] * x[i];
+        s += x[i] * x[i];
     }
 #pragma omp single
     {
-	*value = sqrt(s);
+        *value = sqrt(s);
     }
     return;
 }
@@ -551,11 +551,11 @@ void G_math_i_asum_norm(int *x, double *value, int rows)
 
 #pragma omp parallel for schedule (static) reduction(+:s)
     for (i = rows - 1; i >= 0; i--) {
-	s += (double)abs(x[i]);
+        s += (double)abs(x[i]);
     }
 #pragma omp single
     {
-	*value = s;
+        *value = s;
     }
     return;
 }
@@ -581,8 +581,8 @@ void G_math_i_max_norm(int *x, int *value, int rows)
 
     max = abs(x[rows - 1]);
     for (i = rows - 2; i >= 0; i--) {
-	if (max < abs(x[i]))
-	    max = abs(x[i]);
+        if (max < abs(x[i]))
+            max = abs(x[i]);
     }
 
     *value = max;
@@ -611,45 +611,45 @@ void G_math_i_ax_by(int *x, int *y, int *z, int a, int b, int rows)
     /*find specific cases */
     if (b == 0.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i];
+        }
     }
     else if ((a == 1.0) && (b == 1.0)) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = x[i] + y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = x[i] + y[i];
+        }
     }
     else if ((a == 1.0) && (b == -1.0)) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = x[i] - y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = x[i] - y[i];
+        }
     }
     else if (a == b) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * (x[i] + y[i]);
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * (x[i] + y[i]);
+        }
     }
     else if (b == -1.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] - y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] - y[i];
+        }
     }
     else if (b == 1.0) {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] + y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] + y[i];
+        }
     }
     else {
 #pragma omp for schedule (static)
-	for (i = rows - 1; i >= 0; i--) {
-	    z[i] = a * x[i] + b * y[i];
-	}
+        for (i = rows - 1; i >= 0; i--) {
+            z[i] = a * x[i] + b * y[i];
+        }
     }
 
     return;

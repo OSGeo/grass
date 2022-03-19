@@ -16,7 +16,7 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  */
 
-#define _GNU_SOURCE		/* enable asprintf */
+#define _GNU_SOURCE             /* enable asprintf */
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -49,22 +49,22 @@ int G_vasprintf(char **out, const char *fmt, va_list ap)
     int count;
 
     for (;;) {
-	/* BUG: according to man vsnprintf,
-	 * va_start() should be called immediately before vsnprintf(),
-	 * and va_end() immediately after vsnprintf()
-	 * otherwise there will be memory corruption */
-	count = vsnprintf(buf, size, fmt, ap);
-	if (count >= 0 && count < size)
-	    break;
-	size *= 2;
-	buf = G_realloc(buf, size);
+        /* BUG: according to man vsnprintf,
+         * va_start() should be called immediately before vsnprintf(),
+         * and va_end() immediately after vsnprintf()
+         * otherwise there will be memory corruption */
+        count = vsnprintf(buf, size, fmt, ap);
+        if (count >= 0 && count < size)
+            break;
+        size *= 2;
+        buf = G_realloc(buf, size);
     }
 
     buf = G_realloc(buf, count + 1);
     *out = buf;
 
     return count;
-#endif /* HAVE_ASPRINTF */
+#endif                          /* HAVE_ASPRINTF */
 }
 
 int G_asprintf(char **out, const char *fmt, ...)
@@ -79,7 +79,7 @@ int G_asprintf(char **out, const char *fmt, ...)
     return count;
 }
 
-#endif /* G_asprintf */
+#endif                          /* G_asprintf */
 
 /**
  * \brief Reallocating version of <i>asprintf()</i>.
@@ -106,22 +106,22 @@ int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
     size_t osize = *size;
 
     if (osize < strlen(fmt) + 50) {
-	osize = strlen(fmt) + 50;
-	buf = G_realloc(buf, osize);
+        osize = strlen(fmt) + 50;
+        buf = G_realloc(buf, osize);
     }
 
     for (;;) {
-	va_start(ap, fmt);
-	count = vsnprintf(buf, osize, fmt, ap);
-	va_end(ap);
-	if (count >= 0 && count < osize)
-	    break;
-	if (count > -1)
-	    osize = count + 1;
-	else
-	    osize *= 2;
-	
-	buf = G_realloc(buf, osize);
+        va_start(ap, fmt);
+        count = vsnprintf(buf, osize, fmt, ap);
+        va_end(ap);
+        if (count >= 0 && count < osize)
+            break;
+        if (count > -1)
+            osize = count + 1;
+        else
+            osize *= 2;
+
+        buf = G_realloc(buf, osize);
     }
 
     *out = buf;

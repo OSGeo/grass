@@ -7,7 +7,7 @@
 typedef struct
 {
     double x, y;
-    struct line_cats *cat[2];	/* category in map a and b */
+    struct line_cats *cat[2];   /* category in map a and b */
     char valid;
 } CENTR;
 
@@ -31,10 +31,10 @@ typedef struct
 ATTR *find_attr(ATTRIBUTES * attributes, int cat);
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
-              struct Map_info *Out, struct field_info *Fi,
-	      dbDriver * driver, int operator, int *ofield,
-	      ATTRIBUTES * attr, struct ilist *BList, double snap_thresh);
+    struct Map_info *Out, struct field_info *Fi,
+    dbDriver * driver, int operator, int *ofield,
+    ATTRIBUTES * attr, struct ilist *BList, double snap_thresh);
 int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
-              struct Map_info *Out, struct field_info *Fi,
-	      dbDriver * driver, int operator, int *ofield,
-	      ATTRIBUTES * attr, struct ilist *BList);
+    struct Map_info *Out, struct field_info *Fi,
+    dbDriver * driver, int operator, int *ofield,
+    ATTRIBUTES * attr, struct ilist *BList);

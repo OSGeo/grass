@@ -1,16 +1,16 @@
 /*!
-  \file cairodriver/cairodriver.h
+   \file cairodriver/cairodriver.h
 
-  \brief GRASS cairo display driver - header file
+   \brief GRASS cairo display driver - header file
 
-  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-  \author Glynn Clements  
-*/
+   (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+   \author Glynn Clements  
+ */
 
 #ifndef __CAIRODRIVER_H__
 #define __CAIRODRIVER_H__
@@ -61,7 +61,8 @@
 extern cairo_surface_t *surface;
 extern cairo_t *cairo;
 
-struct cairo_state {
+struct cairo_state
+{
     char *file_name;
     int file_type;
     int width, height, stride;
@@ -93,8 +94,8 @@ extern void Cairo_Color(int, int, int);
 extern void Cairo_Erase(void);
 extern void Cairo_begin_raster(int, int[2][2], double[2][2]);
 extern int Cairo_raster(int, int,
-			const unsigned char *, const unsigned char *,
-			const unsigned char *, const unsigned char *);
+    const unsigned char *, const unsigned char *,
+    const unsigned char *, const unsigned char *);
 extern void Cairo_end_raster(void);
 extern void Cairo_Begin(void);
 extern void Cairo_Move(double, double);
@@ -105,7 +106,8 @@ extern void Cairo_Fill(void);
 extern void Cairo_Point(double, double);
 extern void Cairo_Line_width(double);
 extern void Cairo_Text(const char *);
-extern void Cairo_text_box(const char *, double *, double *, double *, double *);
+extern void Cairo_text_box(const char *, double *, double *, double *,
+    double *);
 extern void Cairo_set_font(const char *);
 extern void Cairo_font_list(char ***, int *);
 extern void Cairo_font_info(char ***, int *);
@@ -122,4 +124,4 @@ extern void cairo_write_ppm(void);
 extern void cairo_write_bmp(void);
 extern void cairo_write_xid(void);
 
-#endif /* __CAIRODRIVER_H__ */
+#endif                          /* __CAIRODRIVER_H__ */

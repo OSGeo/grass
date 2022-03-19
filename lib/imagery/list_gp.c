@@ -41,8 +41,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
         if (len > max)
             max = len;
     }
-    fprintf(fd, _("group <%s> references the following raster maps\n"),
-            group);
+    fprintf(fd, _("group <%s> references the following raster maps\n"), group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {

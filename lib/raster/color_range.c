@@ -24,12 +24,12 @@
 void Rast_set_c_color_range(CELL min, CELL max, struct Colors *colors)
 {
     if (min < max) {
-	colors->cmin = (DCELL) min;
-	colors->cmax = (DCELL) max;
+        colors->cmin = (DCELL) min;
+        colors->cmax = (DCELL) max;
     }
     else {
-	colors->cmin = (DCELL) max;
-	colors->cmax = (DCELL) min;
+        colors->cmin = (DCELL) max;
+        colors->cmax = (DCELL) min;
     }
 }
 
@@ -42,12 +42,12 @@ void Rast_set_c_color_range(CELL min, CELL max, struct Colors *colors)
 void Rast_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
 {
     if (min < max) {
-	colors->cmin = min;
-	colors->cmax = max;
+        colors->cmin = min;
+        colors->cmax = max;
     }
     else {
-	colors->cmin = max;
-	colors->cmax = min;
+        colors->cmin = max;
+        colors->cmax = min;
     }
 }
 
@@ -62,15 +62,15 @@ void Rast_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
    \param colors pointer to Colors structure which holds color info
  */
 void Rast_get_c_color_range(CELL * min, CELL * max,
-			    const struct Colors *colors)
+    const struct Colors *colors)
 {
     if (!colors->is_float) {
-	*min = (CELL) floor(colors->cmin);
-	*max = (CELL) ceil(colors->cmax);
+        *min = (CELL) floor(colors->cmin);
+        *max = (CELL) ceil(colors->cmax);
     }
     else {
-	*min = -255 * 255 * 255;
-	*max = 255 * 255 * 255;
+        *min = -255 * 255 * 255;
+        *max = 255 * 255 * 255;
     }
 }
 
@@ -85,7 +85,7 @@ void Rast_get_c_color_range(CELL * min, CELL * max,
    \param colors pointer to Colors structure which holds color info
  */
 void Rast_get_d_color_range(DCELL * min, DCELL * max,
-			    const struct Colors *colors)
+    const struct Colors *colors)
 {
     *min = colors->cmin;
     *max = colors->cmax;

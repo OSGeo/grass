@@ -24,12 +24,12 @@ static struct Counter unique;
 static int initialized;
 
 /*!
-  \brief Initialize environment for creating tempfiles.
-*/
+   \brief Initialize environment for creating tempfiles.
+ */
 void G_init_tempfile(void)
 {
     if (G_is_initialized(&initialized))
-	return;
+        return;
 
     G_init_counter(&unique, 0);
 
@@ -79,18 +79,19 @@ char *G_tempfile_pid(int pid)
     char element[100];
 
     if (pid <= 0)
-	pid = getpid();
+        pid = getpid();
     G_temp_element(element);
     G_init_tempfile();
     do {
-	int uniq = G_counter_next(&unique);
-	sprintf(name, "%d.%d", pid, uniq);
-	G_file_name(path, element, name, G_mapset());
+        int uniq = G_counter_next(&unique);
+
+        sprintf(name, "%d.%d", pid, uniq);
+        G_file_name(path, element, name, G_mapset());
     }
     while (access(path, F_OK) == 0);
 
     G_debug(2, "G_tempfile_pid(): %s", path);
-    
+
     return G_store(path);
 }
 
@@ -117,14 +118,14 @@ void G__temp_element(char *element, int tmp)
     strcpy(element, ".tmp");
     machine = G__machine_name();
     if (machine != NULL && *machine != 0) {
-	strcat(element, "/");
-	strcat(element, machine);
+        strcat(element, "/");
+        strcat(element, machine);
     }
-    
+
     if (!tmp)
         G_make_mapset_object_group(element);
     else
         G_make_mapset_object_group_tmp(element);
-    
+
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }

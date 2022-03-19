@@ -25,7 +25,7 @@
 
 /* Get error corrected sum */
 double get_sum(void *sum_array, void *c_array,
-               int row, int cols, int col, RASTER_MAP_TYPE rtype)
+    int row, int cols, int col, RASTER_MAP_TYPE rtype)
 {
     size_t offset = ((size_t)row * cols + col) * Rast_cell_size(rtype);
     double sum = Rast_get_d_value(((char *)sum_array) + offset, rtype);
@@ -36,7 +36,7 @@ double get_sum(void *sum_array, void *c_array,
 
 
 void write_sum(void *raster_row, void *sum_array, void *c_array,
-               int row, int cols, RASTER_MAP_TYPE rtype)
+    int row, int cols, RASTER_MAP_TYPE rtype)
 {
     int col;
     void *ptr = raster_row;
@@ -51,8 +51,7 @@ void write_sum(void *raster_row, void *sum_array, void *c_array,
 
 
 void write_variance(void *raster_row, void *n_array, void *mean_array,
-                    void *m2_array, int row, int cols,
-                    RASTER_MAP_TYPE rtype, int method)
+    void *m2_array, int row, int cols, RASTER_MAP_TYPE rtype, int method)
 {
     double variance;
     int col;
@@ -90,7 +89,7 @@ void write_variance(void *raster_row, void *n_array, void *mean_array,
 
 
 void write_median(struct BinIndex *bin_index, void *raster_row,
-                  void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
 {
     int n;
     int j;
@@ -119,8 +118,7 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 
             if (n == 1)         /* only one point, use that */
                 Rast_set_d_value(ptr,
-                                 ((struct z_node *)bin_index->
-                                  nodes)[head_id].z, rtype);
+                    ((struct z_node *)bin_index->nodes)[head_id].z, rtype);
             else if (n % 2 != 0) {      /* odd number of points: median_i = (n + 1) / 2 */
                 n = (n + 1) / 2;
                 node_id = head_id;
@@ -129,8 +127,7 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
                         ((struct z_node *)bin_index->nodes)[node_id].next;
 
                 Rast_set_d_value(ptr,
-                                 ((struct z_node *)bin_index->
-                                  nodes)[node_id].z, rtype);
+                    ((struct z_node *)bin_index->nodes)[node_id].z, rtype);
             }
             else {              /* even number of points: median = (val_below + val_above) / 2 */
 
@@ -142,9 +139,10 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
                         ((struct z_node *)bin_index->nodes)[node_id].next;
 
                 z = (((struct z_node *)bin_index->nodes)[node_id].z +
-                     ((struct z_node *)
-                      bin_index->nodes)[((struct z_node *)bin_index->
-                                         nodes)[node_id].next].z) / 2;
+                    ((struct z_node *)
+                        bin_index->
+                        nodes)[((struct z_node *)bin_index->nodes)[node_id].
+                        next].z) / 2;
                 Rast_set_d_value(ptr, z, rtype);
             }
         }
@@ -154,7 +152,7 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 
 
 void write_mode(struct BinIndex *bin_index, void *raster_row,
-                void *index_array, int row, int cols)
+    void *index_array, int row, int cols)
 {
     int col;
     int node_id;
@@ -174,16 +172,14 @@ void write_mode(struct BinIndex *bin_index, void *raster_row,
             while (node_id != -1) {
                 if (mode_node == -1)
                     mode_node = node_id;
-                else if (((struct cnt_node *)bin_index->
-                          nodes)[node_id].count >
-                         ((struct cnt_node *)bin_index->
-                          nodes)[mode_node].count)
+                else if (((struct cnt_node *)bin_index->nodes)[node_id].count >
+                    ((struct cnt_node *)bin_index->nodes)[mode_node].count)
                     mode_node = node_id;
                 node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
             }
             Rast_set_c_value(ptr,
-                             ((struct cnt_node *)bin_index->
-                              nodes)[mode_node].value, CELL_TYPE);
+                ((struct cnt_node *)bin_index->nodes)[mode_node].value,
+                CELL_TYPE);
         }
         ptr = G_incr_void_ptr(ptr, Rast_cell_size(CELL_TYPE));
     }
@@ -191,8 +187,7 @@ void write_mode(struct BinIndex *bin_index, void *raster_row,
 
 
 void write_percentile(struct BinIndex *bin_index, void *raster_row,
-                      void *index_array, int row, int cols,
-                      RASTER_MAP_TYPE rtype, int pth)
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype, int pth)
 {
     int n;
     int j;
@@ -247,8 +242,7 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 
 
 void write_skewness(struct BinIndex *bin_index, void *raster_row,
-                    void *index_array, int row, int cols,
-                    RASTER_MAP_TYPE rtype)
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
 {
     int n;
     double z;
@@ -307,8 +301,7 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
 
 
 void write_trimmean(struct BinIndex *bin_index, void *raster_row,
-                    void *index_array, int row, int cols,
-                    RASTER_MAP_TYPE rtype, double trim)
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype, double trim)
 {
     int n;
     int j, k;
@@ -379,7 +372,7 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 
 
 void write_sidn(struct BinIndex *bin_index, void *raster_row,
-                void *index_array, int row, int cols, int min)
+    void *index_array, int row, int cols, int min)
 {
     int col;
     int node_id;
@@ -405,8 +398,8 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row,
                     count =
                         ((struct cnt_node *)bin_index->nodes)[node_id].count;
                 else if (!min &&
-                         ((struct cnt_node *)bin_index->
-                          nodes)[node_id].count > count)
+                    ((struct cnt_node *)bin_index->nodes)[node_id].count >
+                    count)
                     count =
                         ((struct cnt_node *)bin_index->nodes)[node_id].count;
                 node_id = ((struct cnt_node *)bin_index->nodes)[node_id].next;
@@ -419,7 +412,7 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row,
 
 
 void write_ev(struct BinIndex *bin_index, void *raster_row, void *index_array,
-              int row, int cols, RASTER_MAP_TYPE rtype, int method)
+    int row, int cols, RASTER_MAP_TYPE rtype, int method)
 {
     void *ptr = raster_row;
     double **cov_matrix = G_alloc_matrix(3, 3);

@@ -55,10 +55,9 @@
  * \return: 0 in case map not found, -1 in case the color mode is incorrect, 1 on success
  * 
  */
-int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
+int Rast_map_to_img_str(char *name, int color_mode, unsigned char *result)
 {
-    unsigned char *set = NULL, *red = NULL, *green = NULL, 
-                  *blue = NULL;
+    unsigned char *set = NULL, *red = NULL, *green = NULL, *blue = NULL;
     unsigned char alpha;
     const char *mapset = NULL;
     CELL *cell_buf = NULL;
@@ -68,19 +67,19 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     int rtype, row, col;
     size_t i;
     int map = 0;
-    
+
     struct Colors colors;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
 
-    if(color_mode > 3 || color_mode < 1)
-        return(-1);
+    if (color_mode > 3 || color_mode < 1)
+        return (-1);
 
     mapset = G_find_raster2(name, "");
-    
-    if(!mapset)
-        return(0);
-    
+
+    if (!mapset)
+        return (0);
+
     map = Rast_open_old(name, "");
 
     cell_buf = Rast_allocate_c_buf();
@@ -90,7 +89,7 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     red = G_malloc(cols);
     green = G_malloc(cols);
     blue = G_malloc(cols);
-    set  = G_malloc(cols);
+    set = G_malloc(cols);
 
     Rast_read_colors(name, mapset, &colors);
 
@@ -103,16 +102,15 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
         voidc = (DCELL *) dcell_buf;
 
     i = 0;
-    
-    if(color_mode == 1 || color_mode == 2) {/* 32BIT ARGB COLOR IMAGE with transparency */
+
+    if (color_mode == 1 || color_mode == 2) {   /* 32BIT ARGB COLOR IMAGE with transparency */
         for (row = 0; row < rows; row++) {
             Rast_get_row(map, (void *)voidc, row, rtype);
             Rast_lookup_colors((void *)voidc, red, green, blue, set,
-                               cols, &colors, rtype);
-                               
+                cols, &colors, rtype);
+
             alpha = (unsigned char)255;
-            if ( color_mode == 1 && Rast_is_null_value( voidc, rtype ) )
-            {
+            if (color_mode == 1 && Rast_is_null_value(voidc, rtype)) {
                 alpha = (unsigned char)0;
             }
             for (col = 0; col < cols; col++) {
@@ -132,25 +130,24 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
             }
         }
     }
-    else {/* GREYSCALE IMAGE */
+    else {                      /* GREYSCALE IMAGE */
         for (row = 0; row < rows; row++) {
             Rast_get_row(map, (void *)voidc, row, rtype);
             Rast_lookup_colors((void *)voidc, red, green, blue, set,
-                               cols, &colors, rtype);
-            
-            if(color_mode == 3) {
+                cols, &colors, rtype);
+
+            if (color_mode == 3) {
                 for (col = 0; col < cols; col++) {
                     /*.33R+ .5G+ .17B */
-                    result[i++] = ((red[col])   * 11 + 
-                                   (green[col]) * 16 +
-                                   (blue[col])  * 5) >> 5;
+                    result[i++] = ((red[col]) * 11 +
+                        (green[col]) * 16 + (blue[col]) * 5) >> 5;
                 }
-            } else {
+            }
+            else {
                 for (col = 0; col < cols; col++) {
                     /*NTSC Y equation: .30R+ .59G+ .11B */
-                    result[i++] = ((red[col])   * 19 + 
-                                   (green[col]) * 38 + 
-                                   (blue[col])  * 7) >> 6;
+                    result[i++] = ((red[col]) * 19 +
+                        (green[col]) * 38 + (blue[col]) * 7) >> 6;
                 }
             }
         }
@@ -166,6 +163,6 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     G_free(blue);
     G_free(set);
     Rast_close(map);
-    
-    return(1);
+
+    return (1);
 }

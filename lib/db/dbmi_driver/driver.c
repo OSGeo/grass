@@ -29,12 +29,12 @@
 extern char *getenv();
 
 /*!
-  \brief Get driver (?)
+   \brief Get driver (?)
 
-  \param argc, argv arguments
+   \param argc, argv arguments
 
-  \return 0 on success
-  \return 1 on failure
+   \return 0 on success
+   \return 1 on failure
  */
 int db_driver(int argc, char *argv[])
 {
@@ -47,18 +47,18 @@ int db_driver(int argc, char *argv[])
 
     /* Read and set environment variables, see dbmi_client/start.c */
     if ((modestr = getenv("GRASS_DB_DRIVER_GISRC_MODE"))) {
-	int mode;
+        int mode;
 
-	mode = atoi(modestr);
+        mode = atoi(modestr);
 
-	if (mode == G_GISRC_MODE_MEMORY) {
-	    G_set_gisrc_mode(G_GISRC_MODE_MEMORY);
-	    G_setenv_nogisrc("DEBUG", getenv("DEBUG"));
-	    G_setenv_nogisrc("GISDBASE", getenv("GISDBASE"));
-	    G_setenv_nogisrc("LOCATION_NAME", getenv("LOCATION_NAME"));
-	    G_setenv_nogisrc("MAPSET", getenv("MAPSET"));
-	    G_debug(3, "Driver GISDBASE set to '%s'", G_getenv("GISDBASE"));
-	}
+        if (mode == G_GISRC_MODE_MEMORY) {
+            G_set_gisrc_mode(G_GISRC_MODE_MEMORY);
+            G_setenv_nogisrc("DEBUG", getenv("DEBUG"));
+            G_setenv_nogisrc("GISDBASE", getenv("GISDBASE"));
+            G_setenv_nogisrc("LOCATION_NAME", getenv("LOCATION_NAME"));
+            G_setenv_nogisrc("MAPSET", getenv("MAPSET"));
+            G_debug(3, "Driver GISDBASE set to '%s'", G_getenv("GISDBASE"));
+        }
     }
 
 #ifdef __MINGW32__
@@ -75,19 +75,19 @@ int db_driver(int argc, char *argv[])
      */
 
     {
-	int err_count = 0;
-	int cfd = 3;
+        int err_count = 0;
+        int cfd = 3;
 
-	while (1) {
-	    if (close(cfd) == -1)
-		err_count++;
+        while (1) {
+            if (close(cfd) == -1)
+                err_count++;
 
-	    /* no good reason for 10 */
-	    if (err_count > 10)
-		break;
+            /* no good reason for 10 */
+            if (err_count > 10)
+                break;
 
-	    cfd++;
-	}
+            cfd++;
+        }
     }
 
     _setmode(_fileno(stdin), _O_BINARY);
@@ -101,19 +101,19 @@ int db_driver(int argc, char *argv[])
 
 /**********************************************/
     if (argc == 3) {
-	rfd = wfd = -1;
-	sscanf(argv[1], "%d", &rfd);
-	sscanf(argv[2], "%d", &wfd);
-	send = fdopen(wfd, "w");
-	if (send == NULL) {
-	    db_syserror(argv[1]);
-	    exit(1);
-	}
-	recv = fdopen(rfd, "r");
-	if (recv == NULL) {
-	    db_syserror(argv[2]);
-	    exit(1);
-	}
+        rfd = wfd = -1;
+        sscanf(argv[1], "%d", &rfd);
+        sscanf(argv[2], "%d", &wfd);
+        send = fdopen(wfd, "w");
+        if (send == NULL) {
+            db_syserror(argv[1]);
+            exit(1);
+        }
+        recv = fdopen(rfd, "r");
+        if (recv == NULL) {
+            db_syserror(argv[2]);
+            exit(1);
+        }
     }
 
 /**********************************************/
@@ -130,36 +130,35 @@ int db_driver(int argc, char *argv[])
     db__set_protocol_fds(send, recv);
 
     if (db_driver_init(argc, argv) == DB_OK)
-	db__send_success();
+        db__send_success();
     else {
-	db__send_failure();
-	exit(1);
+        db__send_failure();
+        exit(1);
     }
 
     stat = DB_OK;
     /* get the procedure number */
     while (db__recv_procnum(&procnum) == DB_OK) {
-	if (procnum == DB_PROC_SHUTDOWN_DRIVER) {
-	    db__send_procedure_ok(procnum);
-	    break;
-	}
-	db_clear_error();
+        if (procnum == DB_PROC_SHUTDOWN_DRIVER) {
+            db__send_procedure_ok(procnum);
+            break;
+        }
+        db_clear_error();
 
-	/* find this procedure */
-	for (i = 0; procedure[i].routine; i++)
-	    if (procedure[i].procnum == procnum)
-		break;
+        /* find this procedure */
+        for (i = 0; procedure[i].routine; i++)
+            if (procedure[i].procnum == procnum)
+                break;
 
-	/* if found, call it */
-	if (procedure[i].routine) {
-	    if ((stat = db__send_procedure_ok(procnum)) != DB_OK)
-		break;		/* while loop */
-	    if ((stat = (*procedure[i].routine) ()) != DB_OK)
-		break;
-	}
-	else if ((stat =
-		  db__send_procedure_not_implemented(procnum)) != DB_OK)
-	    break;
+        /* if found, call it */
+        if (procedure[i].routine) {
+            if ((stat = db__send_procedure_ok(procnum)) != DB_OK)
+                break;          /* while loop */
+            if ((stat = (*procedure[i].routine) ()) != DB_OK)
+                break;
+        }
+        else if ((stat = db__send_procedure_not_implemented(procnum)) != DB_OK)
+            break;
     }
 
     db_driver_finish();

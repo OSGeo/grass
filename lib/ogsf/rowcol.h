@@ -39,4 +39,4 @@
 #define VROW2Y(gs,vrow)      (gs->yrange - ((vrow) * gs->yres * gs->y_mod))
 #define VCOL2X(gs,vcol)      ((vcol) * gs->xres * gs->x_mod)
 
-#endif /* _ROWCOL_H */
+#endif                          /* _ROWCOL_H */

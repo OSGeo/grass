@@ -50,19 +50,19 @@ inline double point_dist2(POINT a)
 }
 
 inline void point_assign(struct line_pnts *Points, int index, int with_z,
-			 POINT * res, int is_loop)
+    POINT * res, int is_loop)
 {
     if (is_loop) {
-	while (index >= Points->n_points - 1)
-	    index -= Points->n_points - 1;
+        while (index >= Points->n_points - 1)
+            index -= Points->n_points - 1;
     }
     res->x = Points->x[index];
     res->y = Points->y[index];
     if (with_z) {
-	res->z = Points->z[index];
+        res->z = Points->z[index];
     }
     else {
-	res->z = 0;
+        res->z = 0;
     }
     return;
 }
@@ -89,13 +89,13 @@ inline void points_copy_last(struct line_pnts *Points, int pos)
 inline double point_dist(POINT a, POINT b)
 {
     return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) +
-		(a.z - b.z) * (a.z - b.z));
+        (a.z - b.z) * (a.z - b.z));
 }
 
 inline double point_dist_square(POINT a, POINT b)
 {
     return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) +
-	(a.z - b.z) * (a.z - b.z);
+        (a.z - b.z) * (a.z - b.z);
 }
 
 inline double point_angle_between(POINT a, POINT b, POINT c)
@@ -111,8 +111,7 @@ inline double point_dist_segment_square(POINT a, POINT b, POINT c, int with_z)
     int status;
 
     return dig_distance2_point_to_line(a.x, a.y, a.z, b.x, b.y, b.z,
-				       c.x, c.y, c.z, with_z, &px, &py, &pz,
-				       &pdist, &status);
+        c.x, c.y, c.z, with_z, &px, &py, &pz, &pdist, &status);
 }
 
 POINT_LIST *point_list_new(POINT p)
@@ -146,22 +145,22 @@ int point_list_copy_to_line_pnts(POINT_LIST l, struct line_pnts *Points)
     length = 0;
 
     while (cur != NULL) {
-	length++;
-	cur = cur->next;
+        length++;
+        cur = cur->next;
     }
 
     if (length != Points->n_points)
-	if (0 > dig_alloc_points(Points, length))
-	    return (-1);
+        if (0 > dig_alloc_points(Points, length))
+            return (-1);
 
     Points->n_points = length;
 
     cur = l.next;
     for (i = 0; i < length; i++) {
-	Points->x[i] = cur->p.x;
-	Points->y[i] = cur->p.y;
-	Points->z[i] = cur->p.z;
-	cur = cur->next;
+        Points->x[i] = cur->p.x;
+        Points->y[i] = cur->p.y;
+        Points->z[i] = cur->p.z;
+        cur = cur->next;
     }
 
     return 0;
@@ -173,9 +172,9 @@ void point_list_free(POINT_LIST l)
 
     p = l.next;
     while (p != NULL) {
-	n = p->next;
-	G_free(p);
-	p = n;
+        n = p->next;
+        G_free(p);
+        p = n;
     }
 }
 

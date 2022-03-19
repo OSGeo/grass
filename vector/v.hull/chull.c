@@ -48,9 +48,9 @@ struct tVertexStructure
 {
     double v[3];
     int vnum;
-    tEdge duplicate;		/* pointer to incident cone edge (or NULL) */
-    bool onhull;		/* T iff point on hull. */
-    bool mark;			/* T iff point already processed. */
+    tEdge duplicate;            /* pointer to incident cone edge (or NULL) */
+    bool onhull;                /* T iff point on hull. */
+    bool mark;                  /* T iff point already processed. */
     tVertex next, prev;
 };
 
@@ -58,8 +58,8 @@ struct tEdgeStructure
 {
     tFace adjface[2];
     tVertex endpts[2];
-    tFace newface;		/* pointer to incident cone face. */
-    bool delete;		/* T iff edge should be delete. */
+    tFace newface;              /* pointer to incident cone face. */
+    bool delete;                /* T iff edge should be delete. */
     tEdge next, prev;
 };
 
@@ -67,7 +67,7 @@ struct tFaceStructure
 {
     tEdge edge[3];
     tVertex vertex[3];
-    bool visible;		/* T iff face visible from new point. */
+    bool visible;               /* T iff face visible from new point. */
     tFace next, prev;
 };
 
@@ -111,32 +111,32 @@ bool Collinear(tVertex a, tVertex b, tVertex c);
  */
 void freeMem(void)
 {
-    tEdge e;			/* Primary index into edge list. */
-    tFace f;			/* Primary pointer into face list. */
+    tEdge e;                    /* Primary index into edge list. */
+    tFace f;                    /* Primary pointer into face list. */
     tVertex v;
-    tEdge te;			/* Temporary edge pointer. */
-    tFace tf;			/* Temporary face pointer. */
-    tVertex tv;			/* Temporary vertex pointer. */
+    tEdge te;                   /* Temporary edge pointer. */
+    tFace tf;                   /* Temporary face pointer. */
+    tVertex tv;                 /* Temporary vertex pointer. */
 
     e = edges;
     do {
-	te = e;
-	e = e->next;
-	DELETE(edges, te);
+        te = e;
+        e = e->next;
+        DELETE(edges, te);
     } while (e != edges);
 
     f = faces;
     do {
-	tf = f;
-	f = f->next;
-	DELETE(faces, tf);
+        tf = f;
+        f = f->next;
+        DELETE(faces, tf);
     } while (f != faces);
 
     v = vertices;
     do {
-	tv = v;
-	v = v->next;
-	DELETE(vertices, tv);
+        tv = v;
+        v = v->next;
+        DELETE(vertices, tv);
     } while (v != vertices);
 
     FREE(te);
@@ -156,7 +156,7 @@ void freeMem(void)
 
 /*-------------------------------------------------------------------*/
 int make3DHull(double *px, double *py, double *pz, int num_points,
-	       struct Map_info *Map)
+    struct Map_info *Map)
 {
     int error;
 
@@ -164,8 +164,8 @@ int make3DHull(double *px, double *py, double *pz, int num_points,
 
     error = DoubleTriangle();
     if (error < 0) {
-	G_fatal_error
-	    ("All points of 3D input map are in the same plane.\n  Cannot create a 3D hull.");
+        G_fatal_error
+            ("All points of 3D input map are in the same plane.\n  Cannot create a 3D hull.");
     }
 
     ConstructHull();
@@ -207,12 +207,12 @@ void ReadVertices(double *px, double *py, double *pz, int num_points)
 
     G_important_message(_("Reading 3D vertices..."));
     for (i = 0; i < num_points; i++) {
-	v = MakeNullVertex();
-	v->v[X] = px[i];
-	v->v[Y] = py[i];
-	v->v[Z] = pz[i];
-	v->vnum = vnum++;
-	G_percent(i, (num_points - 1), 1);
+        v = MakeNullVertex();
+        v->v[X] = px[i];
+        v->v[Y] = py[i];
+        v->v[Z] = pz[i];
+        v->vnum = vnum++;
+        G_percent(i, (num_points - 1), 1);
     }
     fflush(stdout);
 }
@@ -253,42 +253,42 @@ void writeVertices(struct Map_info *Map)
 
     do {
 
-	num_faces++;
+        num_faces++;
 
-	/* write one triangular face */
-	px[0] = ((double)(f->vertex[0]->v[X]));
-	py[0] = ((double)(f->vertex[0]->v[Y]));
-	pz[0] = ((double)(f->vertex[0]->v[Z]));
+        /* write one triangular face */
+        px[0] = ((double)(f->vertex[0]->v[X]));
+        py[0] = ((double)(f->vertex[0]->v[Y]));
+        pz[0] = ((double)(f->vertex[0]->v[Z]));
 
-	px[1] = ((double)(f->vertex[1]->v[X]));
-	py[1] = ((double)(f->vertex[1]->v[Y]));
-	pz[1] = ((double)(f->vertex[1]->v[Z]));
+        px[1] = ((double)(f->vertex[1]->v[X]));
+        py[1] = ((double)(f->vertex[1]->v[Y]));
+        pz[1] = ((double)(f->vertex[1]->v[Z]));
 
-	px[2] = ((double)(f->vertex[2]->v[X]));
-	py[2] = ((double)(f->vertex[2]->v[Y]));
-	pz[2] = ((double)(f->vertex[2]->v[Z]));
+        px[2] = ((double)(f->vertex[2]->v[X]));
+        py[2] = ((double)(f->vertex[2]->v[Y]));
+        pz[2] = ((double)(f->vertex[2]->v[Z]));
 
-	px[3] = ((double)(f->vertex[0]->v[X]));
-	py[3] = ((double)(f->vertex[0]->v[Y]));
-	pz[3] = ((double)(f->vertex[0]->v[Z]));
+        px[3] = ((double)(f->vertex[0]->v[X]));
+        py[3] = ((double)(f->vertex[0]->v[Y]));
+        pz[3] = ((double)(f->vertex[0]->v[Z]));
 
-	/* kernel position: 1st get 3D center of this face */
-	fx = (px[0] + px[1] + px[2]) / 3.0;
-	fy = (py[0] + py[1] + py[2]) / 3.0;
-	fz = (pz[0] + pz[1] + pz[2]) / 3.0;
+        /* kernel position: 1st get 3D center of this face */
+        fx = (px[0] + px[1] + px[2]) / 3.0;
+        fy = (py[0] + py[1] + py[2]) / 3.0;
+        fz = (pz[0] + pz[1] + pz[2]) / 3.0;
 
-	/* kernel position: now add this to kernel coordinates */
-	kx = kx + fx;
-	ky = ky + fy;
-	kz = kz + fz;
+        /* kernel position: now add this to kernel coordinates */
+        kx = kx + fx;
+        ky = ky + fy;
+        kz = kz + fz;
 
-	/* write out face */
-	Vect_copy_xyz_to_pnts(Points, px, py, pz, 4);
-	cat++;
-	Vect_cat_set(Cats, 1, cat);
-	Vect_write_line(Map, GV_FACE, Points, Cats);
+        /* write out face */
+        Vect_copy_xyz_to_pnts(Points, px, py, pz, 4);
+        cat++;
+        Vect_cat_set(Cats, 1, cat);
+        Vect_write_line(Map, GV_FACE, Points, Cats);
 
-	f = f->next;
+        f = f->next;
 
     } while (f != faces);
 
@@ -334,10 +334,10 @@ int DoubleTriangle(void)
     /* Find 3 noncollinear points. */
     v0 = vertices;
     while (Collinear(v0, v0->next, v0->next->next)) {
-	if ((v0 = v0->next) == vertices) {
-	    G_warning("DoubleTriangle:  All points are collinear!\n");
-	    return (-1);
-	}
+        if ((v0 = v0->next) == vertices) {
+            G_warning("DoubleTriangle:  All points are collinear!\n");
+            return (-1);
+        }
     }
     v1 = v0->next;
     v2 = v1->next;
@@ -363,11 +363,11 @@ int DoubleTriangle(void)
     v3 = v2->next;
     vol = VolumeSign(f0, v3);
     while (!vol) {
-	if ((v3 = v3->next) == v0) {
-	    G_warning("DoubleTriangle:  All points are coplanar!\n");
-	    return (-2);
-	}
-	vol = VolumeSign(f0, v3);
+        if ((v3 = v3->next) == v0) {
+            G_warning("DoubleTriangle:  All points are coplanar!\n");
+            return (-2);
+        }
+        vol = VolumeSign(f0, v3);
     }
 
     /* Insure that v3 will be the first added. */
@@ -384,7 +384,7 @@ vertices are those in the list marked as onhull.
 void ConstructHull(void)
 {
     tVertex v, vnext;
-    bool changed;		/* T if addition changes hull; not used. */
+    bool changed;               /* T if addition changes hull; not used. */
     int i;
     int numVertices;
 
@@ -394,25 +394,25 @@ void ConstructHull(void)
     v = vertices;
     i = 0;
     do {
-	vnext = v->next;
-	v = vnext;
-	i++;
+        vnext = v->next;
+        v = vnext;
+        i++;
     } while (v != vertices);
     numVertices = i;
 
     v = vertices;
     i = 0;
     do {
-	vnext = v->next;
-	if (!v->mark) {
-	    v->mark = PROCESSED;
-	    changed = AddOne(v);
-	    CleanUp();
-	}
-	v = vnext;
-	i++;
+        vnext = v->next;
+        if (!v->mark) {
+            v->mark = PROCESSED;
+            changed = AddOne(v);
+            CleanUp();
+        }
+        v = vnext;
+        i++;
 
-	G_percent(i, numVertices, 1);
+        G_percent(i, numVertices, 1);
 
     } while (v != vertices);
 
@@ -438,33 +438,33 @@ bool AddOne(tVertex p)
     /* Mark faces visible from p. */
     f = faces;
     do {
-	vol = VolumeSign(f, p);
+        vol = VolumeSign(f, p);
 
-	if (vol < 0) {
-	    f->visible = VISIBLE;
-	    vis = true;
-	}
-	f = f->next;
+        if (vol < 0) {
+            f->visible = VISIBLE;
+            vis = true;
+        }
+        f = f->next;
     } while (f != faces);
 
     /* If no faces are visible from p, then p is inside the hull. */
     if (!vis) {
-	p->onhull = !ONHULL;
-	return false;
+        p->onhull = !ONHULL;
+        return false;
     }
 
     /* Mark edges in interior of visible region for deletion.
        Erect a newface based on each border edge. */
     e = edges;
     do {
-	temp = e->next;
-	if (e->adjface[0]->visible && e->adjface[1]->visible)
-	    /* e interior: mark for deletion. */
-	    e->delete = REMOVED;
-	else if (e->adjface[0]->visible || e->adjface[1]->visible)
-	    /* e border: make a new face. */
-	    e->newface = MakeConeFace(e, p);
-	e = temp;
+        temp = e->next;
+        if (e->adjface[0]->visible && e->adjface[1]->visible)
+            /* e interior: mark for deletion. */
+            e->delete = REMOVED;
+        else if (e->adjface[0]->visible || e->adjface[1]->visible)
+            /* e border: make a new face. */
+            e->newface = MakeConeFace(e, p);
+        e = temp;
     } while (e != edges);
     return true;
 }
@@ -492,16 +492,16 @@ int VolumeSign(tFace f, tVertex p)
     cz = f->vertex[2]->v[Z] - p->v[Z];
 
     vol = ax * (by * cz - bz * cy)
-	+ ay * (bz * cx - bx * cz)
-	+ az * (bx * cy - by * cx);
+        + ay * (bz * cx - bx * cz)
+        + az * (bx * cy - by * cx);
 
     /* The volume should be an integer. */
     if (vol > 0.0)
-	return 1;
+        return 1;
     else if (vol < -0.0)
-	return -1;
+        return -1;
     else
-	return 0;
+        return 0;
 }
 
 
@@ -518,14 +518,14 @@ tFace MakeConeFace(tEdge e, tVertex p)
 
     /* Make two new edges (if don't already exist). */
     for (i = 0; i < 2; ++i)
-	/* If the edge exists, copy it into new_edge. */
-	if (!(new_edge[i] = e->endpts[i]->duplicate)) {
-	    /* Otherwise (duplicate is NULL), MakeNullEdge. */
-	    new_edge[i] = MakeNullEdge();
-	    new_edge[i]->endpts[0] = e->endpts[i];
-	    new_edge[i]->endpts[1] = p;
-	    e->endpts[i]->duplicate = new_edge[i];
-	}
+        /* If the edge exists, copy it into new_edge. */
+        if (!(new_edge[i] = e->endpts[i]->duplicate)) {
+            /* Otherwise (duplicate is NULL), MakeNullEdge. */
+            new_edge[i] = MakeNullEdge();
+            new_edge[i]->endpts[0] = e->endpts[i];
+            new_edge[i]->endpts[1] = p;
+            e->endpts[i]->duplicate = new_edge[i];
+        }
 
     /* Make the new face. */
     new_face = MakeNullFace();
@@ -536,12 +536,12 @@ tFace MakeConeFace(tEdge e, tVertex p)
 
     /* Set the adjacent face pointers. */
     for (i = 0; i < 2; ++i)
-	for (j = 0; j < 2; ++j)
-	    /* Only one NULL link should be set to new_face. */
-	    if (!new_edge[i]->adjface[j]) {
-		new_edge[i]->adjface[j] = new_face;
-		break;
-	    }
+        for (j = 0; j < 2; ++j)
+            /* Only one NULL link should be set to new_face. */
+            if (!new_edge[i]->adjface[j]) {
+                new_edge[i]->adjface[j] = new_face;
+                break;
+            }
 
     return new_face;
 }
@@ -553,27 +553,27 @@ order as in the visible face.  The third vertex is always p.
 ---------------------------------------------------------------------*/
 void MakeCcw(tFace f, tEdge e, tVertex p)
 {
-    tFace fv;			/* The visible face adjacent to e */
-    int i;			/* Index of e->endpoint[0] in fv. */
-    tEdge s;			/* Temporary, for swapping */
+    tFace fv;                   /* The visible face adjacent to e */
+    int i;                      /* Index of e->endpoint[0] in fv. */
+    tEdge s;                    /* Temporary, for swapping */
 
     if (e->adjface[0]->visible)
-	fv = e->adjface[0];
+        fv = e->adjface[0];
     else
-	fv = e->adjface[1];
+        fv = e->adjface[1];
 
     /* Set vertex[0] & [1] of f to have the same orientation
        as do the corresponding vertices of fv. */
     for (i = 0; fv->vertex[i] != e->endpts[0]; ++i) ;
     /* Orient f the same as fv. */
     if (fv->vertex[(i + 1) % 3] != e->endpts[1]) {
-	f->vertex[0] = e->endpts[1];
-	f->vertex[1] = e->endpts[0];
+        f->vertex[0] = e->endpts[1];
+        f->vertex[1] = e->endpts[0];
     }
     else {
-	f->vertex[0] = e->endpts[0];
-	f->vertex[1] = e->endpts[1];
-	SWAP(s, f->edge[1], f->edge[2]);
+        f->vertex[0] = e->endpts[0];
+        f->vertex[1] = e->endpts[1];
+        SWAP(s, f->edge[1], f->edge[2]);
     }
     /* This swap is tricky. e is edge[0]. edge[1] is based on endpt[0],
        edge[2] on endpt[1].  So if e is oriented "forwards," we
@@ -610,8 +610,8 @@ tFace MakeNullFace(void)
 
     NEW(f, tsFace);
     for (i = 0; i < 3; ++i) {
-	f->edge[i] = NULL;
-	f->vertex[i] = NULL;
+        f->edge[i] = NULL;
+        f->vertex[i] = NULL;
     }
     f->visible = !VISIBLE;
     ADD(faces, f);
@@ -629,14 +629,14 @@ tFace MakeFace(tVertex v0, tVertex v1, tVertex v2, tFace fold)
 
     /* Create edges of the initial triangle. */
     if (!fold) {
-	e0 = MakeNullEdge();
-	e1 = MakeNullEdge();
-	e2 = MakeNullEdge();
+        e0 = MakeNullEdge();
+        e1 = MakeNullEdge();
+        e2 = MakeNullEdge();
     }
-    else {			/* Copy from fold, in reverse order. */
-	e0 = fold->edge[2];
-	e1 = fold->edge[1];
-	e2 = fold->edge[0];
+    else {                      /* Copy from fold, in reverse order. */
+        e0 = fold->edge[2];
+        e1 = fold->edge[1];
+        e2 = fold->edge[0];
     }
     e0->endpts[0] = v0;
     e0->endpts[1] = v1;
@@ -679,37 +679,37 @@ visible face and NULL out newface. It also deletes so marked edges.
 ---------------------------------------------------------------------*/
 void CleanEdges(void)
 {
-    tEdge e;			/* Primary index into edge list. */
-    tEdge t;			/* Temporary edge pointer. */
+    tEdge e;                    /* Primary index into edge list. */
+    tEdge t;                    /* Temporary edge pointer. */
 
     /* Integrate the newface's into the data structure. */
     /* Check every edge. */
     e = edges;
     do {
-	if (e->newface) {
-	    if (e->adjface[0]->visible)
-		e->adjface[0] = e->newface;
-	    else
-		e->adjface[1] = e->newface;
-	    e->newface = NULL;
-	}
-	e = e->next;
+        if (e->newface) {
+            if (e->adjface[0]->visible)
+                e->adjface[0] = e->newface;
+            else
+                e->adjface[1] = e->newface;
+            e->newface = NULL;
+        }
+        e = e->next;
     } while (e != edges);
 
     /* Delete any edges marked for deletion. */
     while (edges && edges->delete) {
-	e = edges;
-	DELETE(edges, e);
+        e = edges;
+        DELETE(edges, e);
     }
     e = edges->next;
     do {
-	if (e->delete) {
-	    t = e;
-	    e = e->next;
-	    DELETE(edges, t);
-	}
-	else
-	    e = e->next;
+        if (e->delete) {
+            t = e;
+            e = e->next;
+            DELETE(edges, t);
+        }
+        else
+            e = e->next;
     } while (e != edges);
 }
 
@@ -718,23 +718,23 @@ CleanFaces runs through the face list and deletes any face marked visible.
 ---------------------------------------------------------------------*/
 void CleanFaces(void)
 {
-    tFace f;			/* Primary pointer into face list. */
-    tFace t;			/* Temporary pointer, for deleting. */
+    tFace f;                    /* Primary pointer into face list. */
+    tFace t;                    /* Temporary pointer, for deleting. */
 
 
     while (faces && faces->visible) {
-	f = faces;
-	DELETE(faces, f);
+        f = faces;
+        DELETE(faces, f);
     }
     f = faces->next;
     do {
-	if (f->visible) {
-	    t = f;
-	    f = f->next;
-	    DELETE(faces, t);
-	}
-	else
-	    f = f->next;
+        if (f->visible) {
+            t = f;
+            f = f->next;
+            DELETE(faces, t);
+        }
+        else
+            f = f->next;
     } while (f != faces);
 }
 
@@ -751,33 +751,33 @@ void CleanVertices(void)
     /* Mark all vertices incident to some undeleted edge as on the hull. */
     e = edges;
     do {
-	e->endpts[0]->onhull = e->endpts[1]->onhull = ONHULL;
-	e = e->next;
+        e->endpts[0]->onhull = e->endpts[1]->onhull = ONHULL;
+        e = e->next;
     } while (e != edges);
 
     /* Delete all vertices that have been processed but
        are not on the hull. */
     while (vertices && vertices->mark && !vertices->onhull) {
-	v = vertices;
-	DELETE(vertices, v);
+        v = vertices;
+        DELETE(vertices, v);
     }
     v = vertices->next;
     do {
-	if (v->mark && !v->onhull) {
-	    t = v;
-	    v = v->next;
-	    DELETE(vertices, t)
-	}
-	else
-	    v = v->next;
+        if (v->mark && !v->onhull) {
+            t = v;
+            v = v->next;
+            DELETE(vertices, t)
+        }
+        else
+            v = v->next;
     } while (v != vertices);
 
     /* Reset flags. */
     v = vertices;
     do {
-	v->duplicate = NULL;
-	v->onhull = !ONHULL;
-	v = v->next;
+        v->duplicate = NULL;
+        v->onhull = !ONHULL;
+        v = v->next;
     } while (v != vertices);
 }
 
@@ -788,10 +788,10 @@ by checking to see if each element of the cross product is zero.
 bool Collinear(tVertex a, tVertex b, tVertex c)
 {
     return
-	(c->v[Z] - a->v[Z]) * (b->v[Y] - a->v[Y]) -
-	(b->v[Z] - a->v[Z]) * (c->v[Y] - a->v[Y]) == 0
-	&& (b->v[Z] - a->v[Z]) * (c->v[X] - a->v[X]) -
-	(b->v[X] - a->v[X]) * (c->v[Z] - a->v[Z]) == 0
-	&& (b->v[X] - a->v[X]) * (c->v[Y] - a->v[Y]) -
-	(b->v[Y] - a->v[Y]) * (c->v[X] - a->v[X]) == 0;
+        (c->v[Z] - a->v[Z]) * (b->v[Y] - a->v[Y]) -
+        (b->v[Z] - a->v[Z]) * (c->v[Y] - a->v[Y]) == 0
+        && (b->v[Z] - a->v[Z]) * (c->v[X] - a->v[X]) -
+        (b->v[X] - a->v[X]) * (c->v[Z] - a->v[Z]) == 0
+        && (b->v[X] - a->v[X]) * (c->v[Y] - a->v[Y]) -
+        (b->v[Y] - a->v[Y]) * (c->v[X] - a->v[X]) == 0;
 }

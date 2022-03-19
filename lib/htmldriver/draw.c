@@ -34,4 +34,3 @@ void HTML_Stroke(void)
 {
     path_reset(&path);
 }
-

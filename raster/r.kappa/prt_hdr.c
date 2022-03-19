@@ -13,10 +13,10 @@ void prn_header(void)
     FILE *fd;
 
     if (output == NULL)
-	fd = stdout;
+        fd = stdout;
     else if ((fd = fopen(output, "w")) == NULL) {
-	G_fatal_error(_("Cannot open file <%s> to write header"), output);
-	return;
+        G_fatal_error(_("Cannot open file <%s> to write header"), output);
+        return;
     }
 
     /* print header */
@@ -24,7 +24,7 @@ void prn_header(void)
     sprintf(buf, "LOCATION: %s\t\t\t\t%s", G_location(), G_date());
     fprintf(fd, "%s\n", buf);
     if ((mask = maskinfo()))
-	sprintf(buf, "MASK: %s", mask);
+        sprintf(buf, "MASK: %s", mask);
 
     fprintf(fd, "%s\n", buf);
     fprintf(fd, "MAPS: ");
@@ -32,16 +32,16 @@ void prn_header(void)
     len = strlen(label);
 
     for (i = 0; i < nlayers; i++) {
-	titles = Rast_get_cats_title(&(layers[i].labels));
-	if (titles)
-	    G_strip(titles);
-	if (titles == NULL || *titles == 0)
-	    titles = "(untitled)";
-	sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label,
-		i + 1, titles, layers[i].name, layers[i].mapset);
-	fprintf(fd, "%s\n", buf);
+        titles = Rast_get_cats_title(&(layers[i].labels));
+        if (titles)
+            G_strip(titles);
+        if (titles == NULL || *titles == 0)
+            titles = "(untitled)";
+        sprintf(buf, "%*s%-*s%d = %s (%s in %s)", i * 6, "", len, label,
+            i + 1, titles, layers[i].name, layers[i].mapset);
+        fprintf(fd, "%s\n", buf);
     }
 
     if (output != NULL)
-	fclose(fd);
+        fclose(fd);
 }

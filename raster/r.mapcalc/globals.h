@@ -10,4 +10,4 @@ extern int region_approach;
 extern int current_depth, current_row;
 extern int depths, rows, columns;
 
-#endif /* __GLOBALS_H_ */
+#endif                          /* __GLOBALS_H_ */

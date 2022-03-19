@@ -58,4 +58,4 @@ int make_support_files(const char *, const char *);
 /* write_map.c */
 int write_output_map(const char *, int);
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

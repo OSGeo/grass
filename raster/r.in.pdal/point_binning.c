@@ -26,16 +26,15 @@
 
 
 void *get_cell_ptr(void *array, int cols, int row, int col,
-                   RASTER_MAP_TYPE map_type)
+    RASTER_MAP_TYPE map_type)
 {
     return G_incr_void_ptr(array,
-                           ((row * (size_t)cols) +
-                            col) * Rast_cell_size(map_type));
+        ((row * (size_t)cols) + col) * Rast_cell_size(map_type));
 }
 
 
 int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
-                int value)
+    int value)
 {
     /* flood fill initialize the array to either 0 or NULL */
     /*  "value" can be either 0 (for 0.0) or -1 (for NULL) */
@@ -72,7 +71,7 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
 
 
 void point_binning_set(struct PointBinning *point_binning, char *method,
-                       char *percentile, char *trim)
+    char *percentile, char *trim)
 {
     /* figure out what maps we need in memory */
     /*  n               n
@@ -205,7 +204,7 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
 
 
 void point_binning_allocate(struct PointBinning *point_binning, int rows,
-                            int cols, RASTER_MAP_TYPE rtype)
+    int cols, RASTER_MAP_TYPE rtype)
 {
     if (point_binning->bin_n) {
         G_debug(2, "allocating n_array");
@@ -257,7 +256,7 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
 
 
 void point_binning_free(struct PointBinning *point_binning,
-                        struct BinIndex *bin_index_nodes)
+    struct BinIndex *bin_index_nodes)
 {
     if (point_binning->bin_n)
         G_free(point_binning->n_array);
@@ -286,8 +285,8 @@ void point_binning_free(struct PointBinning *point_binning,
 
 
 void write_values(struct PointBinning *point_binning,
-                  struct BinIndex *bin_index_nodes, void *raster_row, int row,
-                  int cols, RASTER_MAP_TYPE rtype)
+    struct BinIndex *bin_index_nodes, void *raster_row, int row,
+    int cols, RASTER_MAP_TYPE rtype)
 {
     void *ptr = NULL;
     int col;
@@ -295,41 +294,37 @@ void write_values(struct PointBinning *point_binning,
     switch (point_binning->method) {
     case METHOD_N:             /* n is a straight copy */
         Rast_raster_cpy(raster_row,
-                        ((char *)point_binning->n_array) +
-                        ((size_t)row * cols * Rast_cell_size(CELL_TYPE)),
-                        cols, CELL_TYPE);
+            ((char *)point_binning->n_array) +
+            ((size_t)row * cols * Rast_cell_size(CELL_TYPE)), cols, CELL_TYPE);
         break;
 
     case METHOD_MIN:
         Rast_raster_cpy(raster_row,
-                        ((char *)point_binning->min_array) +
-                        ((size_t)row * cols * Rast_cell_size(rtype)), cols,
-                        rtype);
+            ((char *)point_binning->min_array) +
+            ((size_t)row * cols * Rast_cell_size(rtype)), cols, rtype);
         break;
 
     case METHOD_MAX:
         Rast_raster_cpy(raster_row,
-                        ((char *)point_binning->max_array) +
-                        ((size_t)row * cols * Rast_cell_size(rtype)), cols,
-                        rtype);
+            ((char *)point_binning->max_array) +
+            ((size_t)row * cols * Rast_cell_size(rtype)), cols, rtype);
         break;
 
     case METHOD_SUM:
         write_sum(raster_row, point_binning->sum_array,
-                  point_binning->c_array, row, cols, rtype);
+            point_binning->c_array, row, cols, rtype);
         break;
 
     case METHOD_RANGE:         /* (max-min) */
         ptr = raster_row;
         for (col = 0; col < cols; col++) {
-            size_t offset =
-                ((size_t)row * cols + col) * Rast_cell_size(rtype);
+            size_t offset = ((size_t)row * cols + col) * Rast_cell_size(rtype);
             double min =
                 Rast_get_d_value(((char *)point_binning->min_array) + offset,
-                                 rtype);
+                rtype);
             double max =
                 Rast_get_d_value(((char *)point_binning->max_array) + offset,
-                                 rtype);
+                rtype);
 
             Rast_set_d_value(ptr, max - min, rtype);
             ptr = G_incr_void_ptr(ptr, Rast_cell_size(rtype));
@@ -343,10 +338,10 @@ void write_values(struct PointBinning *point_binning,
                 ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
             int n =
                 Rast_get_c_value(((char *)point_binning->n_array) + n_offset,
-                                 CELL_TYPE);
+                CELL_TYPE);
             double sum =
                 get_sum(point_binning->sum_array, point_binning->c_array,
-                        row, cols, col, rtype);
+                row, cols, col, rtype);
 
             if (n == 0)
                 Rast_set_null_value(ptr, 1, rtype);
@@ -361,52 +356,50 @@ void write_values(struct PointBinning *point_binning,
     case METHOD_VARIANCE:      /*  (sumsq - sum*sum/n)/n */
     case METHOD_COEFF_VAR:     /*  100 * stdev / mean    */
         write_variance(raster_row, point_binning->n_array,
-                       point_binning->mean_array, point_binning->m2_array,
-                       row, cols, rtype, point_binning->method);
+            point_binning->mean_array, point_binning->m2_array,
+            row, cols, rtype, point_binning->method);
         break;
 
     case METHOD_MEDIAN:        /* median, if only one point in cell we will use that */
         write_median(bin_index_nodes, raster_row, point_binning->index_array,
-                     row, cols, rtype);
+            row, cols, rtype);
         break;
 
     case METHOD_MODE:
         write_mode(bin_index_nodes, raster_row, point_binning->index_array,
-                   row, cols);
+            row, cols);
         break;
 
     case METHOD_PERCENTILE:    /* rank = (pth*(n+1))/100; interpolate linearly */
         write_percentile(bin_index_nodes, raster_row,
-                         point_binning->index_array, row, cols, rtype,
-                         point_binning->pth);
+            point_binning->index_array, row, cols, rtype, point_binning->pth);
         break;
 
     case METHOD_SKEWNESS:      /* skewness = sum(xi-mean)^3/(N-1)*s^3 */
         write_skewness(bin_index_nodes, raster_row,
-                       point_binning->index_array, row, cols, rtype);
+            point_binning->index_array, row, cols, rtype);
         break;
 
     case METHOD_TRIMMEAN:
         write_trimmean(bin_index_nodes, raster_row,
-                       point_binning->index_array, row, cols, rtype,
-                       point_binning->trim);
+            point_binning->index_array, row, cols, rtype, point_binning->trim);
         break;
 
     case METHOD_SIDNMAX:
         write_sidn(bin_index_nodes, raster_row, point_binning->index_array,
-                   row, cols, 0);
+            row, cols, 0);
         break;
 
     case METHOD_SIDNMIN:
         write_sidn(bin_index_nodes, raster_row, point_binning->index_array,
-                   row, cols, 1);
+            row, cols, 1);
         break;
 
     case METHOD_EV1:
     case METHOD_EV2:
     case METHOD_EV3:
         write_ev(bin_index_nodes, raster_row, point_binning->index_array,
-                 row, cols, rtype, point_binning->method);
+            row, cols, rtype, point_binning->method);
         break;
 
     default:
@@ -416,31 +409,28 @@ void write_values(struct PointBinning *point_binning,
 
 
 void update_value(struct PointBinning *point_binning,
-                  struct BinIndex *bin_index_nodes, int cols, int arr_row,
-                  int arr_col, RASTER_MAP_TYPE rtype, double x, double y,
-                  double z)
+    struct BinIndex *bin_index_nodes, int cols, int arr_row,
+    int arr_col, RASTER_MAP_TYPE rtype, double x, double y, double z)
 {
     if (point_binning->bin_n)
         update_n(point_binning->n_array, cols, arr_row, arr_col);
     if (point_binning->bin_min)
-        update_min(point_binning->min_array, cols, arr_row, arr_col, rtype,
-                   z);
+        update_min(point_binning->min_array, cols, arr_row, arr_col, rtype, z);
     if (point_binning->bin_max)
-        update_max(point_binning->max_array, cols, arr_row, arr_col, rtype,
-                   z);
+        update_max(point_binning->max_array, cols, arr_row, arr_col, rtype, z);
     if (point_binning->bin_sum)
         update_sum(point_binning->sum_array, point_binning->c_array, cols,
-                   arr_row, arr_col, rtype, z);
+            arr_row, arr_col, rtype, z);
     if (point_binning->bin_m2)
         update_m2(point_binning->n_array, point_binning->mean_array,
-                  point_binning->m2_array, cols, arr_row, arr_col, rtype, z);
+            point_binning->m2_array, cols, arr_row, arr_col, rtype, z);
     if (point_binning->bin_z_index)
         update_bin_z_index(bin_index_nodes, point_binning->index_array, cols,
-                           arr_row, arr_col, z);
+            arr_row, arr_col, z);
     if (point_binning->bin_cnt_index)
         update_bin_cnt_index(bin_index_nodes, point_binning->index_array,
-                             cols, arr_row, arr_col, z);
+            cols, arr_row, arr_col, z);
     if (point_binning->bin_eigenvalues)
         update_bin_com_index(bin_index_nodes, point_binning->index_array,
-                             cols, arr_row, arr_col, x, y, z);
+            cols, arr_row, arr_col, x, y, z);
 }

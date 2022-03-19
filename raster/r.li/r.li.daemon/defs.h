@@ -14,4 +14,4 @@
 #define RLI_ERRORE 0
 #define RLI_OK 1
 
-#endif /* _INDEXHEADER_H_ */
+#endif                          /* _INDEXHEADER_H_ */

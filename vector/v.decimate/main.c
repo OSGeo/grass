@@ -35,8 +35,7 @@ struct DecimationContext
 
 
 static int if_add_point(struct DecimationPoint *point, void *point_data,
-                        struct DecimationPoint **point_list, size_t npoints,
-                        void *context)
+    struct DecimationPoint **point_list, size_t npoints, void *context)
 {
     /* according to cat (which could be cluster, return or class) */
     struct DecimationContext *dc = context;
@@ -64,12 +63,13 @@ struct WriteContext
 
 
 static void write_point(struct WriteContext *context, int cat, double x,
-                        double y, double z, struct line_cats *cats)
+    double y, double z, struct line_cats *cats)
 {
     if (Vect_append_point(context->line, x, y, z) != 1)
         G_fatal_error
             ("Unable to create a point in vector map (probably out of memory)");
     struct line_cats *cats_to_write = context->cats;
+
     /* only when writing cats use the ones from parameter, otherwise
      * use the default (which is assumed to be empty) */
     if (context->write_cats && cats)
@@ -79,10 +79,11 @@ static void write_point(struct WriteContext *context, int cat, double x,
 }
 
 
-static void on_add_point(struct DecimationPoint *point, void *point_data, void *context)
+static void on_add_point(struct DecimationPoint *point, void *point_data,
+    void *context)
 {
     write_point((struct WriteContext *)context, point->cat, point->x, point->y,
-                point->z, (struct line_cats *)point_data);
+        point->z, (struct line_cats *)point_data);
 }
 
 /* TODO: these have overlap with vector lib, really needed? */
@@ -96,7 +97,7 @@ static int point_in_region_2d(struct Cell_head *region, double x, double y)
 
 
 static int point_in_region_3d(struct Cell_head *region, double x, double y,
-                              double z)
+    double z)
 {
     if (x > region->east || x < region->west || y < region->south ||
         y > region->north || z > region->top || z < region->bottom)
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
 
     module->label = _("Decimates a point cloud");
     module->description = _("Copies points from one vector to another"
-                            " while applying different decimations");
+        " while applying different decimations");
 
     map_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -162,7 +163,7 @@ int main(int argc, char **argv)
     skip_opt->label = _("Throw away every n-th point");
     skip_opt->description =
         _("For example, 5 will import 80 percent of points. "
-          "If not specified, all points are copied");
+        "If not specified, all points are copied");
     skip_opt->guisection = _("Count");
 
     preserve_opt = G_define_option();
@@ -173,7 +174,7 @@ int main(int argc, char **argv)
     preserve_opt->label = _("Preserve only every n-th point");
     preserve_opt->description =
         _("For example, 4 will import 25 percent of points. "
-          "If not specified, all points are copied");
+        "If not specified, all points are copied");
     preserve_opt->guisection = _("Count");
 
     offset_opt = G_define_option();
@@ -251,14 +252,13 @@ int main(int argc, char **argv)
 
     /* here we have different decimations but also selections/filters */
     G_option_required(skip_opt, preserve_opt, offset_opt, limit_opt,
-                      grid_decimation_flg, zrange_opt, cats_opt, NULL);
+        grid_decimation_flg, zrange_opt, cats_opt, NULL);
     /* this doesn't play well with GUI dialog unless we add defaults to options
      * the default values would solve it but looks strange in the manual 
      * this we use explicit check in the code */
     /* G_option_exclusive(skip_opt, preserve_opt, NULL); */
     G_option_requires(grid_decimation_flg, first_point_flg,
-                      limit_per_cell_opt, use_z_flg, zdiff_opt,
-                      cat_in_grid_flg, NULL);
+        limit_per_cell_opt, use_z_flg, zdiff_opt, cat_in_grid_flg, NULL);
     G_option_requires(first_point_flg, grid_decimation_flg, NULL);
     G_option_requires(limit_per_cell_opt, grid_decimation_flg, NULL);
     G_option_requires(use_z_flg, grid_decimation_flg, NULL);
@@ -270,7 +270,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
 
     Vect_check_input_output_name(map_opt->answer, voutput_opt->answer,
-                                 G_FATAL_EXIT);
+        G_FATAL_EXIT);
 
     if (Vect_open_old2(&vinput, map_opt->answer, "", field_opt->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
@@ -278,14 +278,14 @@ int main(int argc, char **argv)
 
     if (layer < 1 && (cats_opt->answer || cat_in_grid_flg->answer))
         G_fatal_error(_("Input layer must be set to a particular layer"
-                        ", not <%s>, when using <%s> option or <-%c> flag"),
-                      field_opt->answer, cats_opt->key, cat_in_grid_flg->key);
+                ", not <%s>, when using <%s> option or <-%c> flag"),
+            field_opt->answer, cats_opt->key, cat_in_grid_flg->key);
 
     struct cat_list *allowed_cats = NULL;
 
     if (layer > 0)
         allowed_cats = Vect_cats_set_constraint(&vinput, layer, NULL,
-                                                cats_opt->answer);
+            cats_opt->answer);
 
     struct line_pnts *line = Vect_new_line_struct();
     struct line_cats *cats = Vect_new_cats_struct();
@@ -342,8 +342,8 @@ int main(int argc, char **argv)
     struct CountDecimationControl count_decimation_control;
 
     count_decimation_init_from_str(&count_decimation_control,
-                                   skip_opt->answer, preserve_opt->answer,
-                                   offset_opt->answer, limit_opt->answer);
+        skip_opt->answer, preserve_opt->answer,
+        offset_opt->answer, limit_opt->answer);
     if (!count_decimation_is_valid(&count_decimation_control))
         G_fatal_error(_("Settings for count-based decimation are not valid"));
     /* TODO: implement count_decimation_is_invalid_reason() */
@@ -352,9 +352,10 @@ int main(int argc, char **argv)
         !grid_decimation_flg->answer && !zrange_opt->answer &&
         !cats_opt->answer)
         G_fatal_error(_("Settings for count-based decimation would cause it"
-                        " to do nothing and no other options has been set."));
+                " to do nothing and no other options has been set."));
 
     struct Cell_head comp_region;
+
     Rast_get_window(&comp_region);
     if (use_zrange) {
         comp_region.bottom = zrange_min;
@@ -393,7 +394,7 @@ int main(int argc, char **argv)
 
     if (Vect_open_new(&voutput, voutput_opt->answer, Vect_is_3d(&vinput)) < 0)
         G_fatal_error(_("Unable to create vector map <%s>"),
-                      voutput_opt->answer);
+            voutput_opt->answer);
 
     /* some constraints can be set on the map */
     Vect_set_constraint_type(&vinput, GV_POINT);
@@ -412,6 +413,7 @@ int main(int argc, char **argv)
             break;              /* end of the map */
 
         double x, y, z;
+
         Vect_line_get_point(line, 0, &x, &y, &z);
 
         /* selections/filters */
@@ -436,33 +438,33 @@ int main(int argc, char **argv)
          * - some points miss category (not handled)
          * Here we assume that only one cat has meaning for grid decimation.
          * If no layer available, cat contains junk and shouldn't be used.
-	 * 
-	 * TODO done
+         * 
+         * TODO done
          */
-	cat = -1;
+        cat = -1;
         if (layer > 0) {
-	    if (allowed_cats) {
-		int i;
+            if (allowed_cats) {
+                int i;
 
-		for (i = 0; i < cats->n_cats; i++) {
-		    if (cats->field[i] == layer &&
-			Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
-			cat = cats->cat[i];
-			break;
-		    }
-		}
-		return 0;
-	    }
-	    else
-		Vect_cat_get(cats, layer, &cat);
-	    if (cat < 0)
-		continue;
-	}
+                for (i = 0; i < cats->n_cats; i++) {
+                    if (cats->field[i] == layer &&
+                        Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
+                        cat = cats->cat[i];
+                        break;
+                    }
+                }
+                return 0;
+            }
+            else
+                Vect_cat_get(cats, layer, &cat);
+            if (cat < 0)
+                continue;
+        }
 
         /* using callback when using grid, direct call otherwise */
         if (do_grid_decimation)
             grid_decimation_try_add_point(&grid_decimation, cat, x, y, z,
-                                          cats);
+                cats);
         else
             write_point(&write_context, cat, x, y, z, cats);
 
@@ -481,9 +483,9 @@ int main(int argc, char **argv)
     Vect_close(&vinput);
     if (!notopo_flag->answer) {
         Vect_build(&voutput);
-	if (write_context.write_cats == TRUE && !notab_flag->answer) {
-	    copy_tabs(&vinput, &voutput);
-	}
+        if (write_context.write_cats == TRUE && !notab_flag->answer) {
+            copy_tabs(&vinput, &voutput);
+        }
     }
     Vect_close(&voutput);
 

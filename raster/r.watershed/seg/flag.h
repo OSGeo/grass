@@ -25,4 +25,4 @@
 
 #define FLAG_GET(flag,bitno) ((flag) & (1 << (bitno)))
 
-#endif /* __FLAG_H__ */
+#endif                          /* __FLAG_H__ */

@@ -101,4 +101,4 @@ struct g_area
  * \param gen area generator to use
  * \param msg next area message
  */
-int next(struct g_area *gen, msg *toReturn);
+int next(struct g_area *gen, msg * toReturn);

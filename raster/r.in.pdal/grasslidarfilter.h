@@ -79,8 +79,7 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
         dim_to_import_ = dim_to_import;
     }
 
-    void set_spatial_filter(double xmin, double xmax,
-                            double ymin, double ymax)
+    void set_spatial_filter(double xmin, double xmax, double ymin, double ymax)
     {
         use_spatial_filter_ = true;
         xmin_ = xmin;
@@ -123,7 +122,7 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
         n_class_filtered_ = 0;
     }
     void set_base_raster(SEGMENT * base_segment,
-                         struct Cell_head *region, RASTER_MAP_TYPE rtype)
+        struct Cell_head *region, RASTER_MAP_TYPE rtype)
     {
         base_segment_ = base_segment;
         input_region_ = region;
@@ -230,4 +229,4 @@ class GrassLidarFilter:public pdal::Filter, public pdal::Streamable
 };
 
 
-#endif // GRASSLIDARFILTER_H
+#endif                          // GRASSLIDARFILTER_H

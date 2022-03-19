@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:	r.terraflow
@@ -24,9 +25,8 @@
 #include "water.h"
 
 void
-computeFlowAccumulation(AMI_STREAM<waterWindowBaseType>* fillStream,
-			AMI_STREAM<sweepOutput> *& outstr);
+computeFlowAccumulation(AMI_STREAM < waterWindowBaseType > *fillStream,
+    AMI_STREAM < sweepOutput > *&outstr);
 
 
 #endif
-

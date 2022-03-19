@@ -24,7 +24,7 @@
 
 
 int spatial_filter_from_option(struct Option *option, double *xmin,
-                               double *ymin, double *xmax, double *ymax)
+    double *ymin, double *xmax, double *ymax)
 {
     if (option->answer)
         return FALSE;
@@ -49,7 +49,7 @@ int spatial_filter_from_option(struct Option *option, double *xmin,
 }
 
 int spatial_filter_from_current_region(double *xmin, double *ymin,
-                                       double *xmax, double *ymax)
+    double *xmax, double *ymax)
 {
     struct Cell_head region;
 
@@ -66,7 +66,7 @@ int range_filter_from_option(struct Option *option, double *min, double *max)
     if (option->answer != NULL) {
         if (option->answers[0] == NULL || option->answers[1] == NULL)
             G_fatal_error(_("Invalid range <%s> for option <%s>"),
-                          option->answer, option->key);
+                option->answer, option->key);
         sscanf(option->answers[0], "%lf", min);
         sscanf(option->answers[1], "%lf", max);
         /* for convenience, switch order to make valid input */
@@ -82,7 +82,7 @@ int range_filter_from_option(struct Option *option, double *min, double *max)
 }
 
 int return_filter_create_from_string(struct ReturnFilter *return_filter,
-                                     const char *name)
+    const char *name)
 {
     return_filter->filter = LAS_ALL;
     if (name) {
@@ -102,7 +102,7 @@ int return_filter_create_from_string(struct ReturnFilter *return_filter,
 }
 
 int return_filter_is_out(struct ReturnFilter *return_filter, int return_n,
-                         int n_returns)
+    int n_returns)
 {
     if (return_filter->filter == LAS_ALL)
         return FALSE;
@@ -128,7 +128,7 @@ int return_filter_is_out(struct ReturnFilter *return_filter, int return_n,
 }
 
 int class_filter_create_from_strings(struct ClassFilter *class_filter,
-                                     char **classes)
+    char **classes)
 {
     class_filter->str_classes = classes;
     if (classes)

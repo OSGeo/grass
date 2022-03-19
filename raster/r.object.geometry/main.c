@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
         double area, perimeter, x, y;
         int min_row, max_row, min_col, max_col; /* bounding box */
         int num;
-    } *obj_geos;
+    }      *obj_geos;
     double unit_area;
     int n_objects;
     int planimetric, compute_areas;
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     if (opt_out->answer != NULL && strcmp(opt_out->answer, "-") != 0) {
         if (!(out_fp = fopen(opt_out->answer, "w")))
             G_fatal_error(_("Unable to open file <%s> for writing"),
-                          opt_out->answer);
+                opt_out->answer);
     }
     else {
         out_fp = stdout;
@@ -202,11 +202,10 @@ int main(int argc, char *argv[])
 
                     /* could be optimized */
                     perimeter = G_distance(cellhd.west + col * cellhd.ew_res,
-                                           Rast_row_to_northing(row, &cellhd),
-                                           cellhd.west + (col +
-                                                          1) * cellhd.ew_res,
-                                           Rast_row_to_northing(row,
-                                                                &cellhd));
+                        Rast_row_to_northing(row, &cellhd),
+                        cellhd.west + (col +
+                            1) * cellhd.ew_res,
+                        Rast_row_to_northing(row, &cellhd));
 
                     if (!cur_null)
                         obj_geos[cur - min].perimeter += perimeter;
@@ -226,11 +225,10 @@ int main(int argc, char *argv[])
 
                     /* could be optimized */
                     perimeter = G_distance(cellhd.west + col * cellhd.ew_res,
-                                           Rast_row_to_northing(row, &cellhd),
-                                           cellhd.west +
-                                           (col) * cellhd.ew_res,
-                                           Rast_row_to_northing(row + 1,
-                                                                &cellhd));
+                        Rast_row_to_northing(row, &cellhd),
+                        cellhd.west +
+                        (col) * cellhd.ew_res,
+                        Rast_row_to_northing(row + 1, &cellhd));
 
                     if (!cur_null)
                         obj_geos[cur - min].perimeter += perimeter;
@@ -251,9 +249,8 @@ int main(int argc, char *argv[])
             double perimeter;
 
             perimeter = G_distance(cellhd.east,
-                                   Rast_row_to_northing(row, &cellhd),
-                                   cellhd.east,
-                                   Rast_row_to_northing(row + 1, &cellhd));
+                Rast_row_to_northing(row, &cellhd),
+                cellhd.east, Rast_row_to_northing(row + 1, &cellhd));
             if (!cur_null)
                 obj_geos[cur - min].perimeter += perimeter;
         }
@@ -279,9 +276,9 @@ int main(int argc, char *argv[])
 
             /* could be optimized */
             perimeter = G_distance(cellhd.west + col * cellhd.ew_res,
-                                   Rast_row_to_northing(row, &cellhd),
-                                   cellhd.west + (col + 1) * cellhd.ew_res,
-                                   Rast_row_to_northing(row, &cellhd));
+                Rast_row_to_northing(row, &cellhd),
+                cellhd.west + (col + 1) * cellhd.ew_res,
+                Rast_row_to_northing(row, &cellhd));
 
             if (!top_null)
                 obj_geos[top - min].perimeter += perimeter;
@@ -320,14 +317,13 @@ int main(int argc, char *argv[])
         fprintf(out_fp, "%f%s", obj_geos[i].area, sep);
         fprintf(out_fp, "%f%s", obj_geos[i].perimeter, sep);
         fprintf(out_fp, "%f%s",
-                4 * sqrt(obj_geos[i].area) / obj_geos[i].perimeter, sep);
+            4 * sqrt(obj_geos[i].area) / obj_geos[i].perimeter, sep);
         fprintf(out_fp, "%f%s",
-                obj_geos[i].perimeter / (2 * sqrt(M_PI * obj_geos[i].area)),
-                sep);
+            obj_geos[i].perimeter / (2 * sqrt(M_PI * obj_geos[i].area)), sep);
         /* log 1 = 0, so avoid that by always adding 0.001 to the area: */
         fprintf(out_fp, "%f%s",
-                2 * log(obj_geos[i].perimeter) / log(obj_geos[i].area +
-                                                     0.001), sep);
+            2 * log(obj_geos[i].perimeter) / log(obj_geos[i].area +
+                0.001), sep);
         if (!flag_m->answer)
             obj_geos[i].num = obj_geos[i].area;
         fprintf(out_fp, "%f%s", obj_geos[i].x / obj_geos[i].num, sep);

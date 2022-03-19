@@ -55,7 +55,7 @@ static int read_row(int file, void *buf, int row, int buf_len);
 CELL *get_a_row(int row)
 {
     if (row < 0 || row >= n_rows)
-	return (NULL);
+        return (NULL);
     return ((CELL *) Rowio_get(&row_io, row));
 }
 
@@ -93,9 +93,9 @@ int open_file(char *name)
     cell_file = Rast_open_old(name, "");
 
     if (Rast_is_reclass(name, "", rname, rmapset) <= 0 &&
-	Rast_get_map_type(cell_file) != CELL_TYPE) {
-	Rast_close(cell_file);
-	G_fatal_error(_("Input raster must be of type CELL."));
+        Rast_get_map_type(cell_file) != CELL_TYPE) {
+        Rast_close(cell_file);
+        G_fatal_error(_("Input raster must be of type CELL."));
     }
 
     n_rows = Rast_window_rows();
@@ -118,40 +118,43 @@ int open_file(char *name)
     /* create the file and then open it for read and write */
     close(creat(work_file_name, 0666));
     if ((work_file = open(work_file_name, 2)) < 0) {
-	unlink(work_file_name);
-	G_fatal_error(_("Unable to create temporary file <%s> -- errno = %d"),
-		      work_file_name, errno);
+        unlink(work_file_name);
+        G_fatal_error(_("Unable to create temporary file <%s> -- errno = %d"),
+            work_file_name, errno);
     }
     buf_len = n_cols * sizeof(CELL);
     buf = (CELL *) G_malloc(buf_len);
     Rast_set_c_null_value(buf, n_cols);
     for (i = 0; i < PAD; i++) {
-	if (write(work_file, buf, buf_len) != buf_len) {
-	    unlink(work_file_name);
-	    G_fatal_error(_("Error writing temporary file <%s>"), work_file_name);
-	}
+        if (write(work_file, buf, buf_len) != buf_len) {
+            unlink(work_file_name);
+            G_fatal_error(_("Error writing temporary file <%s>"),
+                work_file_name);
+        }
     }
     for (row = 0; row < n_rows; row++) {
-	Rast_get_c_row(cell_file, buf + PAD, row);
-	if (write(work_file, buf, buf_len) != buf_len) {
-	    unlink(work_file_name);
-	    G_fatal_error(_("Error writing temporary file <%s>"), work_file_name);
-	}
+        Rast_get_c_row(cell_file, buf + PAD, row);
+        if (write(work_file, buf, buf_len) != buf_len) {
+            unlink(work_file_name);
+            G_fatal_error(_("Error writing temporary file <%s>"),
+                work_file_name);
+        }
     }
 
     Rast_set_c_null_value(buf, n_cols);
 
     for (i = 0; i < PAD; i++) {
-	if (write(work_file, buf, buf_len) != buf_len) {
-	    unlink(work_file_name);
-	    G_fatal_error(_("Error writing temporary file <%s>"), work_file_name);
-	}
+        if (write(work_file, buf, buf_len) != buf_len) {
+            unlink(work_file_name);
+            G_fatal_error(_("Error writing temporary file <%s>"),
+                work_file_name);
+        }
     }
     n_rows += (PAD << 1);
     G_free(buf);
     Rast_close(cell_file);
     Rowio_setup(&row_io, work_file, MAX_ROW, n_cols * sizeof(CELL), read_row,
-		write_row);
+        write_row);
 
     return 0;
 }
@@ -178,17 +181,19 @@ int close_file(char *name)
     G_free(tmpstr2);
 
     /* GTC Count of window rows */
-    G_asprintf(&tmpstr1, n_("%d row", "%d rows", Rast_window_rows()), Rast_window_rows());
+    G_asprintf(&tmpstr1, n_("%d row", "%d rows", Rast_window_rows()),
+        Rast_window_rows());
     /* GTC Count of window columns */
-    G_asprintf(&tmpstr2, n_("%d column", "%d columns", Rast_window_cols()), Rast_window_cols());
+    G_asprintf(&tmpstr2, n_("%d column", "%d columns", Rast_window_cols()),
+        Rast_window_cols());
     /* GTC %s will be replaced with number of rows and columns */
     G_message(_("Window %s X %s"), tmpstr1, tmpstr2);
     G_free(tmpstr1);
     G_free(tmpstr2);
 
     for (row = 0, k = PAD; row < row_count; row++, k++) {
-	buf = get_a_row(k);
-	Rast_put_row(cell_file, buf + PAD, CELL_TYPE);
+        buf = get_a_row(k);
+        Rast_put_row(cell_file, buf + PAD, CELL_TYPE);
     }
     Rast_close(cell_file);
     Rowio_flush(&row_io);

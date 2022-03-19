@@ -34,7 +34,8 @@
 
 #define POINT       struct points
 POINT {
-    int r, c; /* , downr, downc */
+    int r, c;                   /* , downr, downc */
+
     /* int nxt; */
 };
 
@@ -75,12 +76,17 @@ extern char ele_name[GNAME_MAX], pit_name[GNAME_MAX];
 extern char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 extern char ril_name[GNAME_MAX], rtn_name[GNAME_MAX], dep_name[GNAME_MAX];
 extern const char *this_mapset;
-extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
-extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
-extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX], spi_name[GNAME_MAX];
+extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
+    thr_name[8];
+extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
+    sg_name[GNAME_MAX];
+extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX],
+    spi_name[GNAME_MAX];
 extern char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
-extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag, rtn_flag;
-extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag, spi_flag, atanb_flag;
+extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag,
+    rtn_flag;
+extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag,
+    spi_flag, atanb_flag;
 extern char bas_flag, seg_flag, haf_flag, er_flag;
 extern char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
 extern FILE *fp;
@@ -141,4 +147,4 @@ CELL split_stream(int, int, int[], int[], int, CELL, double, CELL);
 void usage(char *);
 
 
-#endif /* __G_WATER_H__ */
+#endif                          /* __G_WATER_H__ */

@@ -34,4 +34,4 @@ int renumber(int, int);
 /* store.c */
 int store_reclass(CELL, int, CELL *);
 
-#endif /* __R_CROSS_LOCAL_PROTO_H__ */
+#endif                          /* __R_CROSS_LOCAL_PROTO_H__ */

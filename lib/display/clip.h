@@ -24,4 +24,3 @@ void D__cull_path(struct path *, const struct path *, const struct clip *);
 void D__clip_path(struct path *, const struct path *, const struct clip *);
 
 #endif
-

@@ -35,7 +35,7 @@ void MakeBigF(void);
 
 /* makepp.c */
 double MakePP(int Row, int Col, int OutRows, int OutCols,
-	      double **Randoms, BIGF BigF);
+    double **Randoms, BIGF BigF);
 /* random.c */
 double ran1(void);
 

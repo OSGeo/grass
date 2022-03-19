@@ -2,18 +2,21 @@
 #ifndef DRIVERLIB_PATH_H
 #define DRIVERLIB_PATH_H
 
-enum path_mode {
+enum path_mode
+{
     P_MOVE,
     P_CONT,
     P_CLOSE,
 };
 
-struct vertex {
+struct vertex
+{
     double x, y;
     int mode;
 };
 
-struct path {
+struct path
+{
     struct vertex *vertices;
     int count;
     int alloc;
@@ -33,4 +36,3 @@ void path_close(struct path *);
 void path_stroke(struct path *, void (*)(double, double, double, double));
 
 #endif
-

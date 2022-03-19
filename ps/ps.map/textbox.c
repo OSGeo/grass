@@ -15,8 +15,7 @@
  * because text_box_path() is called repeatedly with identical 
  * font name, size, and color */
 int
-text_box_path(double x, double y, int xref, int yref, char *text,
-	      float rotate)
+text_box_path(double x, double y, int xref, int yref, char *text, float rotate)
 {
     /* get relative box coordinates */
     fprintf(PS.fp, "ZB (%s) PB\n", text);
@@ -33,32 +32,32 @@ text_box_path(double x, double y, int xref, int yref, char *text,
 
     switch (xref) {
     case LEFT:
-	fprintf(PS.fp, "LTX");
-	break;
+        fprintf(PS.fp, "LTX");
+        break;
     case RIGHT:
-	fprintf(PS.fp, "RTX");
-	break;
+        fprintf(PS.fp, "RTX");
+        break;
     case CENTER:
     default:
-	fprintf(PS.fp, "CTX");
-	break;
+        fprintf(PS.fp, "CTX");
+        break;
     }
 
     fprintf(PS.fp, " 0 ");
 
     switch (yref) {
     case UPPER:
-	fprintf(PS.fp, "UTY");
-	break;
+        fprintf(PS.fp, "UTY");
+        break;
 
     case LOWER:
-	fprintf(PS.fp, "LTY");
-	break;
+        fprintf(PS.fp, "LTY");
+        break;
 
     case CENTER:
     default:
-	fprintf(PS.fp, "CTY");
-	break;
+        fprintf(PS.fp, "CTY");
+        break;
     }
     fprintf(PS.fp, " TR TB\n");
 

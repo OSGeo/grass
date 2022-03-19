@@ -42,7 +42,7 @@ int I_SigSetNClasses(struct SigSet *S)
 
 
 struct ClassData *I_AllocClassData(struct SigSet *S,
-                                   struct ClassSig *C, int npixels)
+    struct ClassSig *C, int npixels)
 {
     struct ClassData *Data;
 
@@ -83,8 +83,7 @@ struct ClassSig *I_NewClassSig(struct SigSet *S)
         S->ClassSig = (struct ClassSig *)G_malloc(sizeof(struct ClassSig));
     else
         S->ClassSig = (struct ClassSig *)G_realloc((char *)S->ClassSig,
-                                                   sizeof(struct ClassSig) *
-                                                   (S->nclasses + 1));
+            sizeof(struct ClassSig) * (S->nclasses + 1));
 
     Sp = &S->ClassSig[S->nclasses++];
     Sp->classnum = 0;
@@ -104,8 +103,7 @@ struct SubSig *I_NewSubSig(struct SigSet *S, struct ClassSig *C)
         C->SubSig = (struct SubSig *)G_malloc(sizeof(struct SubSig));
     else
         C->SubSig = (struct SubSig *)G_realloc((char *)C->SubSig,
-                                               sizeof(struct SubSig) *
-                                               (C->nsubclasses + 1));
+            sizeof(struct SubSig) * (C->nsubclasses + 1));
 
     Sp = &C->SubSig[C->nsubclasses++];
     Sp->used = 1;
@@ -187,7 +185,8 @@ static int get_semantic_labels(FILE * fd, struct SigSet *S)
     /* Read semantic labels and count them to set nbands */
     n = 0;
     pos = 0;
-    S->semantic_labels = (char **)G_realloc(S->semantic_labels, (n + 1) * sizeof(char **));
+    S->semantic_labels =
+        (char **)G_realloc(S->semantic_labels, (n + 1) * sizeof(char **));
     while ((c = (char)fgetc(fd)) != EOF) {
         if (c == '\n') {
             if (prev != ' ') {
@@ -208,7 +207,7 @@ static int get_semantic_labels(FILE * fd, struct SigSet *S)
                 /* [n] is 0 based thus: (n + 1) */
                 S->semantic_labels =
                     (char **)G_realloc(S->semantic_labels,
-                                       (n + 1) * sizeof(char **));
+                    (n + 1) * sizeof(char **));
             }
             pos = 0;
             prev = c;
@@ -482,13 +481,15 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
     /* Safety measure. Untranslated as this should not happen in production! */
     if (S->nbands < 1 || R->nfiles < 1)
         G_fatal_error("Programming error. Invalid length structs passed to "
-                      "I_sort_signatures_by_semantic_label(%d, %d);", S->nbands,
-                      R->nfiles);
+            "I_sort_signatures_by_semantic_label(%d, %d);", S->nbands,
+            R->nfiles);
 
     /* Obtain group semantic labels */
     group_semantic_labels = (char **)G_malloc(R->nfiles * sizeof(char *));
     for (unsigned int j = R->nfiles; j--;) {
-        group_semantic_labels[j] = Rast_get_semantic_label_or_name(R->file[j].name, R->file[j].mapset);
+        group_semantic_labels[j] =
+            Rast_get_semantic_label_or_name(R->file[j].name,
+            R->file[j].mapset);
     }
 
     /* If lengths are not equal, there will be a mismatch */
@@ -506,15 +507,13 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
     new_vars = (double ****)G_malloc(S->nclasses * sizeof(double ***));
     for (unsigned int c = S->nclasses; c--;) {
         new_means[c] =
-            (double **)G_malloc(S->ClassSig[c].nsubclasses *
-                                sizeof(double *));
+            (double **)G_malloc(S->ClassSig[c].nsubclasses * sizeof(double *));
         new_vars[c] =
             (double ***)G_malloc(S->ClassSig[c].nsubclasses *
-                                 sizeof(double **));
+            sizeof(double **));
         for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
             new_means[c][s] = (double *)G_malloc(S->nbands * sizeof(double));
-            new_vars[c][s] =
-                (double **)G_malloc(S->nbands * sizeof(double *));
+            new_vars[c][s] = (double **)G_malloc(S->nbands * sizeof(double *));
             for (unsigned int i = S->nbands; i--;)
                 new_vars[c][s][i] =
                     (double *)G_malloc(S->nbands * sizeof(double));
@@ -603,14 +602,15 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
         }
 
         /* Replace values in struct with ordered ones */
-        memcpy(S->semantic_labels, new_semantic_labels, S->nbands * sizeof(char **));
+        memcpy(S->semantic_labels, new_semantic_labels,
+            S->nbands * sizeof(char **));
         for (unsigned int c = S->nclasses; c--;) {
             for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
                 memcpy(S->ClassSig[c].SubSig[s].means, new_means[c][s],
-                       S->nbands * sizeof(double));
+                    S->nbands * sizeof(double));
                 for (unsigned int i = S->nbands; i--;)
                     memcpy(S->ClassSig[c].SubSig[s].R[i], new_vars[c][s][i],
-                           S->nbands * sizeof(double));
+                        S->nbands * sizeof(double));
             }
         }
     }

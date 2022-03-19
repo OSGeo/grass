@@ -39,12 +39,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("distance"));
     module->description =
-	_("Locates the closest points between objects in two raster maps.");
+        _("Locates the closest points between objects in two raster maps.");
 
     parse(argc, argv, &parms);
     if (parms.labels) {
-	read_labels(&parms.map1);
-	read_labels(&parms.map2);
+        read_labels(&parms.map1);
+        read_labels(&parms.map2);
     }
 
     find_edge_cells(&parms.map1, parms.null);

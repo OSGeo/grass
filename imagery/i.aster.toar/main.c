@@ -45,7 +45,7 @@ double gain_aster(int band_number, int gain_code);
 #define PI M_PI
 
 double rad2ref_aster(double radiance, double doy, double sun_elevation,
-                     double k_exo);
+    double k_exo);
 
 int main(int argc, char *argv[])
 {
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     DCELL *outrast[MAXFILES];
     RASTER_MAP_TYPE in_data_type[MAXFILES];
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE; /* 0=numbers  1=text */
-    double gain[MAXFILES]; /* , offset[MAXFILES]; */
+    double gain[MAXFILES];      /* , offset[MAXFILES]; */
     double kexo[MAXFILES];
     double doy, sun_elevation;
 
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
     for (; *ptr != NULL; ptr++) {
         if (nfiles == MAXFILES)
             G_fatal_error(_("Too many input maps. Only %d allowed."),
-                          MAXFILES);
+                MAXFILES);
         name = *ptr;
         /* Allocate input buffer */
         in_data_type[nfiles] = Rast_map_type(name, "");

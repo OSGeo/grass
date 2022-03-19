@@ -49,7 +49,7 @@ extern double point_dist2(POINT a);
  * if with z = 0 then res.z = 0  
  */
 extern void point_assign(struct line_pnts *Points, int index,
-                                int with_z, POINT * res, int is_loop);
+    int with_z, POINT * res, int is_loop);
 /* assign point Points[index] to the res
  * if with z = 0 then res.z = 0  
  * loop to infinite
@@ -71,8 +71,8 @@ extern double point_dist_square(POINT a, POINT b);
 extern double point_angle_between(POINT a, POINT b, POINT c);
 
 /* distance squared between a and segment bc */
-extern double point_dist_segment_square(POINT a, POINT b, POINT c,
-					       int with_z);
+extern double point_dist_segment_square(POINT a, POINT b, POINT c, int with_z);
+
 /* creates empty list of points */
 extern POINT_LIST *point_list_new(POINT p);
 
@@ -83,7 +83,7 @@ extern void point_list_add(POINT_LIST * l, POINT p);
  * return 0 on success, -1 on out of memory 
  */
 extern int point_list_copy_to_line_pnts(POINT_LIST l,
-					struct line_pnts *Points);
+    struct line_pnts *Points);
 /*free the momory occupied by the list at l.next */
 extern void point_list_free(POINT_LIST l);
 

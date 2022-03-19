@@ -29,19 +29,19 @@ struct ClassFilter
 struct Option;
 
 int spatial_filter_from_option(struct Option *option, double *xmin,
-                               double *ymin, double *xmax, double *ymax);
+    double *ymin, double *xmax, double *ymax);
 int spatial_filter_from_current_region(double *xmin, double *ymin,
-                                       double *xmax, double *ymax);
+    double *xmax, double *ymax);
 
 int zrange_filter_from_option(struct Option *option,
-                              double *zmin, double *zmax);
+    double *zmin, double *zmax);
 
 int return_filter_create_from_string(struct ReturnFilter *return_filter,
-                                     const char *name);
+    const char *name);
 int return_filter_is_out(struct ReturnFilter *return_filter, int return_n,
-                         int n_returns);
+    int n_returns);
 int class_filter_create_from_strings(struct ClassFilter *class_filter,
-                                     char **classes);
+    char **classes);
 int class_filter_is_out(struct ClassFilter *class_filter, int class_n);
 
-#endif /* __FILTERS_H__ */
+#endif                          /* __FILTERS_H__ */

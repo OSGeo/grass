@@ -37,10 +37,10 @@ unsigned char CELL_OUT_SIZE;
 unsigned char CELL_OUT_PTR_SIZE;
 unsigned char CELL_ERR_SIZE;
 
-void (*WRITE_CELL_VAL) (void *, void *);
-void (*WRITE_DOUBLE_VAL) (void *, double);
-int (*IS_NULL) (void *);
-void (*SET_NULL) (void *, unsigned long);
+void (*WRITE_CELL_VAL)(void *, void *);
+void (*WRITE_DOUBLE_VAL)(void *, double);
+int (*IS_NULL)(void *);
+void (*SET_NULL)(void *, unsigned long);
 
 /*
  * Write cell values.
@@ -48,19 +48,19 @@ void (*SET_NULL) (void *, unsigned long);
 void write_cell_value_c(void *cell_output, void *cell_input)
 {
     Rast_set_c_value(cell_output, Rast_get_c_value(cell_input, IN_TYPE),
-                     OUT_TYPE);
+        OUT_TYPE);
 }
 
 void write_cell_value_f(void *cell_output, void *cell_input)
 {
     Rast_set_f_value(cell_output, Rast_get_f_value(cell_input, IN_TYPE),
-                     OUT_TYPE);
+        OUT_TYPE);
 }
 
 void write_cell_value_d(void *cell_output, void *cell_input)
 {
     Rast_set_d_value(cell_output, Rast_get_d_value(cell_input, IN_TYPE),
-                     OUT_TYPE);
+        OUT_TYPE);
 }
 
 

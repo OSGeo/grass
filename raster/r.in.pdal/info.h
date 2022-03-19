@@ -27,8 +27,8 @@ extern "C"
 }
 
 void get_extent(struct StringList *, double *, double *,
-                double *, double *, double *, double *);
+    double *, double *, double *, double *);
 void print_extent(struct StringList *);
 void print_lasinfo(struct StringList *);
 
-#endif // INFO_H
+#endif                          // INFO_H

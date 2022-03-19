@@ -34,7 +34,7 @@ static void EmbedGivenNulls(void *, char *, RASTER_MAP_TYPE, int);
    \param ncols number of columns
  */
 void EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
-		     int ncols)
+    int ncols)
 {
     CELL *c;
     FCELL *f;
@@ -46,24 +46,24 @@ void EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
     d = (DCELL *) cell;
 
     for (i = 0; i < ncols; i++) {
-	if (nulls[i]) {
-	    switch (map_type) {
-	    case CELL_TYPE:
-		Rast_set_c_null_value((CELL *) (c + i), 1);
-		break;
+        if (nulls[i]) {
+            switch (map_type) {
+            case CELL_TYPE:
+                Rast_set_c_null_value((CELL *) (c + i), 1);
+                break;
 
-	    case FCELL_TYPE:
-		Rast_set_f_null_value((FCELL *) (f + i), 1);
-		break;
+            case FCELL_TYPE:
+                Rast_set_f_null_value((FCELL *) (f + i), 1);
+                break;
 
-	    case DCELL_TYPE:
-		Rast_set_d_null_value((DCELL *) (d + i), 1);
-		break;
+            case DCELL_TYPE:
+                Rast_set_d_null_value((DCELL *) (d + i), 1);
+                break;
 
-	    default:
-		G_warning(_("EmbedGivenNulls: wrong data type"));
-	    }
-	}
+            default:
+                G_warning(_("EmbedGivenNulls: wrong data type"));
+            }
+        }
     }
 }
 
@@ -78,11 +78,11 @@ void EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
    \param data_type type of raster - CELL, FCELL, DCELL
  */
 void Rast__set_null_value(void *rast, int numVals, int null_is_zero,
-			  RASTER_MAP_TYPE data_type)
+    RASTER_MAP_TYPE data_type)
 {
     if (null_is_zero) {
-	G_zero((char *)rast, numVals * Rast_cell_size(data_type));
-	return;
+        G_zero((char *)rast, numVals * Rast_cell_size(data_type));
+        return;
     }
 
     Rast_set_null_value(rast, numVals, data_type);
@@ -99,19 +99,19 @@ void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
 {
     switch (data_type) {
     case CELL_TYPE:
-	Rast_set_c_null_value((CELL *) buf, numVals);
-	break;
+        Rast_set_c_null_value((CELL *) buf, numVals);
+        break;
 
     case FCELL_TYPE:
-	Rast_set_f_null_value((FCELL *) buf, numVals);
-	break;
+        Rast_set_f_null_value((FCELL *) buf, numVals);
+        break;
 
     case DCELL_TYPE:
-	Rast_set_d_null_value((DCELL *) buf, numVals);
-	break;
+        Rast_set_d_null_value((DCELL *) buf, numVals);
+        break;
 
     default:
-	G_warning(_("Rast_set_null_value: wrong data type!"));
+        G_warning(_("Rast_set_null_value: wrong data type!"));
     }
 }
 
@@ -123,10 +123,10 @@ void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
  */
 void Rast_set_c_null_value(CELL * cellVals, int numVals)
 {
-    int i;			/* counter */
+    int i;                      /* counter */
 
     for (i = 0; i < numVals; i++)
-	cellVals[i] = (int)0x80000000;
+        cellVals[i] = (int)0x80000000;
 }
 
 /*!
@@ -138,12 +138,12 @@ void Rast_set_c_null_value(CELL * cellVals, int numVals)
 void Rast_set_f_null_value(FCELL * fcellVals, int numVals)
 {
     static const unsigned char null_bits[4] = {
-	0xFF, 0xFF, 0xFF, 0xFF
+        0xFF, 0xFF, 0xFF, 0xFF
     };
     int i;
 
     for (i = 0; i < numVals; i++)
-	memcpy(&fcellVals[i], null_bits, sizeof(null_bits));
+        memcpy(&fcellVals[i], null_bits, sizeof(null_bits));
 }
 
 /*!
@@ -155,12 +155,12 @@ void Rast_set_f_null_value(FCELL * fcellVals, int numVals)
 void Rast_set_d_null_value(DCELL * dcellVals, int numVals)
 {
     static const unsigned char null_bits[8] = {
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     };
     int i;
 
     for (i = 0; i < numVals; i++)
-	memcpy(&dcellVals[i], null_bits, sizeof(null_bits));
+        memcpy(&dcellVals[i], null_bits, sizeof(null_bits));
 }
 
 /*!
@@ -180,17 +180,17 @@ int Rast_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
 {
     switch (data_type) {
     case CELL_TYPE:
-	return (Rast_is_c_null_value((CELL *) rast));
+        return (Rast_is_c_null_value((CELL *) rast));
 
     case FCELL_TYPE:
-	return (Rast_is_f_null_value((FCELL *) rast));
+        return (Rast_is_f_null_value((FCELL *) rast));
 
     case DCELL_TYPE:
-	return (Rast_is_d_null_value((DCELL *) rast));
+        return (Rast_is_d_null_value((DCELL *) rast));
 
     default:
-	G_warning("Rast_is_null_value: wrong data type!");
-	return FALSE;
+        G_warning("Rast_is_null_value: wrong data type!");
+        return FALSE;
     }
 }
 
@@ -277,7 +277,7 @@ int Rast_is_d_null_value(const DCELL * dcellVal)
    \param data_type type of raster - CELL, FCELL, DCELL
  */
 void Rast_insert_null_values(void *rast, char *null_row, int ncols,
-			     RASTER_MAP_TYPE data_type)
+    RASTER_MAP_TYPE data_type)
 {
     EmbedGivenNulls(rast, null_row, data_type, ncols);
 }
@@ -342,8 +342,9 @@ int Rast__check_null_bit(const unsigned char *flags, int bit_num, int n)
 
     /* check that bit_num is in range */
     if (bit_num < 0 || bit_num >= n)
-	G_fatal_error("Rast__check_null_bit: index %d out of range (size = %d).",
-		      bit_num, n);
+        G_fatal_error
+            ("Rast__check_null_bit: index %d out of range (size = %d).",
+            bit_num, n);
 
 
     /* find the index of the unsigned char in which this bit appears */
@@ -372,7 +373,7 @@ int Rast__check_null_bit(const unsigned char *flags, int bit_num, int n)
    \return 1
  */
 int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
-				int col, int n, int ncols)
+    int col, int n, int ncols)
 {
     unsigned char v;
     int count;
@@ -380,32 +381,32 @@ int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
     int i, k;
 
     if (col == 0 && n == ncols) {
-	Rast__convert_01_flags(zero_ones, flags, n);
-	return 0;
+        Rast__convert_01_flags(zero_ones, flags, n);
+        return 0;
     }
 
     count = 0;
     size = Rast__null_bitstream_size(ncols);
 
     for (i = 0; i < size; i++) {
-	v = 0;
-	k = 8;
+        v = 0;
+        k = 8;
 
-	while (k-- > 0) {
-	    if (count >= col && count < (col + n)) {
-		v = v | ((unsigned char)zero_ones[count - col] << k);
-	    }
-	    else if (count < ncols) {
-		v = v |
-		    ((unsigned char)Rast__check_null_bit(flags, count, ncols)
-		     << k);
-	    }
+        while (k-- > 0) {
+            if (count >= col && count < (col + n)) {
+                v = v | ((unsigned char)zero_ones[count - col] << k);
+            }
+            else if (count < ncols) {
+                v = v |
+                    ((unsigned char)Rast__check_null_bit(flags, count, ncols)
+                    << k);
+            }
 
-	    /* otherwise  keep this bit the same as it was */
-	    count++;
-	}
+            /* otherwise  keep this bit the same as it was */
+            count++;
+        }
 
-	flags[i] = v;
+        flags[i] = v;
     }
 
     return 1;
@@ -420,8 +421,7 @@ int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
    \param flags
    \param n
  */
-void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags,
-			    int n)
+void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
 {
     unsigned char *v;
     int count;
@@ -434,18 +434,18 @@ void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags,
     count = 0;
 
     for (i = 0; i < size; i++) {
-	*v = 0;
-	k = 8;
+        *v = 0;
+        k = 8;
 
-	while (k-- > 0) {
-	    if (count < n) {
-		*v = *v | ((unsigned char)zero_ones[count] << k);
-	    }
+        while (k-- > 0) {
+            if (count < n) {
+                *v = *v | ((unsigned char)zero_ones[count] << k);
+            }
 
-	    count++;
-	}
+            count++;
+        }
 
-	v++;
+        v++;
     }
 }
 
@@ -458,8 +458,7 @@ void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags,
    \param flags
    \param n
  */
-void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags,
-			    int n)
+void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
 {
     const unsigned char *v;
     int count;
@@ -471,16 +470,16 @@ void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags,
     size = Rast__null_bitstream_size(n);
 
     for (i = 0; i < size; i++) {
-	k = 8;
+        k = 8;
 
-	while (k-- > 0) {
-	    if (count < n) {
-		zero_ones[count] = ((*v & ((unsigned char)1 << k)) != 0);
-		count++;
-	    }
-	}
+        while (k-- > 0) {
+            if (count < n) {
+                zero_ones[count] = ((*v & ((unsigned char)1 << k)) != 0);
+                count++;
+            }
+        }
 
-	v++;
+        v++;
     }
 }
 
@@ -503,13 +502,13 @@ void Rast__init_null_bits(unsigned char *flags, int cols)
     size = Rast__null_bitstream_size(cols);
 
     for (i = 0; i < size; i++) {
-	if ((i + 1) * 8 <= cols) {
-	    *v = (unsigned char)255;
-	}
-	else {
-	    *v = (unsigned char)255 << ((i + 1) * 8 - cols);
-	}
+        if ((i + 1) * 8 <= cols) {
+            *v = (unsigned char)255;
+        }
+        else {
+            *v = (unsigned char)255 << ((i + 1) * 8 - cols);
+        }
 
-	v++;
+        v++;
     }
 }

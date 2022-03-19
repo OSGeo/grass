@@ -38,7 +38,7 @@ struct PointBinning3D
 
 /* TODO: do this in some more efficient way, perhaps function in the lib */
 static void raster3d_set_value_float(RASTER3D_Map * raster,
-                                     RASTER3D_Region * region, float value)
+    RASTER3D_Region * region, float value)
 {
     int col, row, depth;
 
@@ -50,7 +50,7 @@ static void raster3d_set_value_float(RASTER3D_Map * raster,
 
 /* c = a / b */
 static void raster3d_divide(RASTER3D_Map * a, RASTER3D_Map * b,
-                            RASTER3D_Map * c, RASTER3D_Region * region)
+    RASTER3D_Map * c, RASTER3D_Region * region)
 {
     int col, row, depth;
     double tmp;
@@ -74,13 +74,12 @@ static void raster3d_divide(RASTER3D_Map * a, RASTER3D_Map * b,
             }
         }
     }
-    G_percent(1, 1, 1);    /* flush */
+    G_percent(1, 1, 1);         /* flush */
 }
 
 /* c = a / b where b has depth 1 */
 static void raster3d_divide_by_flat(RASTER3D_Map * a, RASTER3D_Map * b,
-                                    RASTER3D_Map * c,
-                                    RASTER3D_Region * region)
+    RASTER3D_Map * c, RASTER3D_Region * region)
 {
     int col, row, depth;
     double tmp;
@@ -105,7 +104,7 @@ static void raster3d_divide_by_flat(RASTER3D_Map * a, RASTER3D_Map * b,
             }
         }
     }
-    G_percent(1, 1, 1);    /* flush */
+    G_percent(1, 1, 1);         /* flush */
 }
 
 /* initialize raster pointers */
@@ -117,7 +116,7 @@ void binning_init(struct PointBinning3D *binning)
 }
 
 void binning_add_point(struct PointBinning3D *binning, int row, int col,
-                       int depth, double value)
+    int depth, double value)
 {
     double tmp;                 /* TODO: check if these should be in binning struct */
 
@@ -179,7 +178,8 @@ int main(int argc, char *argv[])
     file_list_opt = G_define_standard_option(G_OPT_F_INPUT);
     file_list_opt->key = "file";
     file_list_opt->label = _("File containing names of LAS input files");
-    file_list_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
+    file_list_opt->description =
+        _("LiDAR input files in LAS format (*.las or *.laz)");
     file_list_opt->required = NO;
     file_list_opt->guisection = _("Input");
 
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
         _("3D raster map of proportional point count");
     prop_count_output_opt->description =
         _("Point count per 3D cell divided by point count per vertical"
-          " column");
+        " column");
     prop_count_output_opt->guisection = _("Proportional output");
 
     prop_sum_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
         _("3D raster map of proportional sum of values");
     prop_sum_output_opt->description =
         _("Sum of values per 3D cell divided by sum of values per"
-          " vertical column");
+        " vertical column");
     prop_sum_output_opt->guisection = _("Proportional output");
 
     filter_opt = G_define_option();
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
     class_opt->required = NO;
     class_opt->label = _("Only import points of selected class(es)");
     class_opt->description = _("Input is comma separated integers. "
-                               "If not specified, all points are imported.");
+        "If not specified, all points are imported.");
     class_opt->guisection = _("Selection");
 
     base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
     only_valid_flag->label = _("Use only valid points");
     only_valid_flag->description =
         _("Points invalid according to APSRS LAS specification will be"
-          " filtered out");
+        " filtered out");
     only_valid_flag->guisection = _("Selection");
 
     over_flag = G_define_flag();
@@ -304,15 +304,17 @@ int main(int argc, char *argv[])
 
     shell_style = G_define_flag();
     shell_style->key = 'g';
-    shell_style->description = _("In scan mode, print using shell script style");
+    shell_style->description =
+        _("In scan mode, print using shell script style");
 
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
     G_option_required(count_output_opt, sum_output_opt, mean_output_opt,
-                      prop_count_output_opt, prop_sum_output_opt,
-                      print_flag, scan_flag, shell_style, NULL);
+        prop_count_output_opt, prop_sum_output_opt,
+        print_flag, scan_flag, shell_style, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
-    G_option_requires_all(mean_output_opt, count_output_opt, sum_output_opt, NULL);
+    G_option_requires_all(mean_output_opt, count_output_opt, sum_output_opt,
+        NULL);
     G_option_requires_all(prop_count_output_opt, count_output_opt, NULL);
     G_option_requires_all(prop_sum_output_opt, sum_output_opt, NULL);
 
@@ -326,10 +328,12 @@ int main(int argc, char *argv[])
     /* check intensity range and extent relation */
     if (scan_flag->answer) {
         if (irange_opt->answer)
-            G_warning(_("%s will not be taken into account during scan"), irange_opt->key);
+            G_warning(_("%s will not be taken into account during scan"),
+                irange_opt->key);
     }
 
     int only_valid = FALSE;
+
     if (only_valid_flag->answer)
         only_valid = TRUE;
 
@@ -337,7 +341,8 @@ int main(int argc, char *argv[])
 
     if (file_list_opt->answer) {
         if (access(file_list_opt->answer, F_OK) != 0)
-            G_fatal_error(_("File <%s> does not exist"), file_list_opt->answer);
+            G_fatal_error(_("File <%s> does not exist"),
+                file_list_opt->answer);
         string_list_from_file(&infiles, file_list_opt->answer);
     }
     else {
@@ -346,6 +351,7 @@ int main(int argc, char *argv[])
 
     double zscale = 1.0;
     double iscale = 1.0;
+
     if (zscale_opt->answer)
         zscale = atof(zscale_opt->answer);
     if (iscale_opt->answer)
@@ -360,6 +366,7 @@ int main(int argc, char *argv[])
     const char *projstr;
     struct Cell_head current_region;
     struct Cell_head file_region;
+
     G_get_set_window(&current_region);
 
     /* extent for all data */
@@ -367,18 +374,19 @@ int main(int argc, char *argv[])
 
     long unsigned header_count = 0;
     int i;
+
     for (i = 0; i < infiles.num_items; i++) {
         infile = infiles.items[i];
         /* don't if file not found */
         if (access(infile, F_OK) != 0)
             G_fatal_error(_("Input file <%s> does not exist"), infile);
-        /* Open LAS file*/
+        /* Open LAS file */
         LAS_reader = LASReader_Create(infile);
         if (LAS_reader == NULL)
             G_fatal_error(_("Unable to open file <%s> as a LiDAR point cloud"),
-                          infile);
+                infile);
         LAS_header = LASReader_GetHeader(LAS_reader);
-        if  (LAS_header == NULL) {
+        if (LAS_header == NULL) {
             G_fatal_error(_("Unable to read LAS header of <%s>"), infile);
         }
 
@@ -396,12 +404,12 @@ int main(int argc, char *argv[])
             /* report that we are checking more files */
             if (i == 1)
                 G_message(_("First file's projection checked,"
-                            " checking projection of the other files..."));
+                        " checking projection of the other files..."));
             /* Fetch input map projection in GRASS form. */
             projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
             /* we are printing the non-warning messages only for first file */
             projection_check_wkt(file_region, current_region, projstr,
-                                 over_flag->answer, shell_style->answer || i);
+                over_flag->answer, shell_style->answer || i);
             /* if there is a problem in some other file, first OK message
              * is printed but than a warning, this is not ideal but hopefully
              * not so confusing when importing multiple files */
@@ -409,7 +417,7 @@ int main(int argc, char *argv[])
         if (scan_flag->answer) {
             /* we assign to the first one (i==0) but update for the rest */
             scan_bounds(LAS_reader, shell_style->answer, FALSE, i,
-                        zscale, &data_region);
+                zscale, &data_region);
         }
         /* number of estimated point across all files */
         /* TODO: this should be ull which won't work with percent report */
@@ -435,7 +443,7 @@ int main(int argc, char *argv[])
     struct ReturnFilter return_filter_struct;
     int use_return_filter =
         return_filter_create_from_string(&return_filter_struct,
-                                         filter_opt->answer);
+        filter_opt->answer);
     struct ClassFilter class_filter;
     int use_class_filter =
         class_filter_create_from_strings(&class_filter, class_opt->answers);
@@ -461,7 +469,7 @@ int main(int argc, char *argv[])
             Rast_get_input_window(&input_region);
         }
         rast_segment_open(&base_segment, base_raster_opt->answer,
-                          &base_raster_data_type);
+            &base_raster_data_type);
     }
 
     struct PointBinning3D binning;
@@ -479,62 +487,59 @@ int main(int argc, char *argv[])
     if (count_output_opt->answer) {
         binning.count_raster =
             Rast3d_open_new_opt_tile_size(count_output_opt->answer, cache,
-                                          &binning.region, type, max_tile_size);
+            &binning.region, type, max_tile_size);
         if (!binning.count_raster)
             Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                               count_output_opt->answer);
+                count_output_opt->answer);
     }
     if (sum_output_opt->answer) {
         binning.sum_raster =
             Rast3d_open_new_opt_tile_size(sum_output_opt->answer, cache,
-                                          &binning.region, type,
-                                          max_tile_size);
+            &binning.region, type, max_tile_size);
         if (!binning.sum_raster)
             Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                               sum_output_opt->answer);
+                sum_output_opt->answer);
     }
     if (mean_output_opt->answer) {
         binning.mean_raster =
             Rast3d_open_new_opt_tile_size(mean_output_opt->answer, cache,
-                                          &binning.region, type, max_tile_size);
+            &binning.region, type, max_tile_size);
         if (!binning.mean_raster)
             Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                               mean_output_opt->answer);
+                mean_output_opt->answer);
     }
     if (prop_count_output_opt->answer) {
         binning.prop_count_raster =
             Rast3d_open_new_opt_tile_size(prop_count_output_opt->answer, cache,
-                                          &binning.region, type, max_tile_size);
+            &binning.region, type, max_tile_size);
         if (!binning.prop_count_raster)
             Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                               prop_count_output_opt->answer);
+                prop_count_output_opt->answer);
     }
     if (prop_sum_output_opt->answer) {
         binning.prop_sum_raster =
             Rast3d_open_new_opt_tile_size(prop_sum_output_opt->answer, cache,
-                                          &binning.region, type, max_tile_size);
+            &binning.region, type, max_tile_size);
         if (!binning.prop_sum_raster)
             Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                               prop_sum_output_opt->answer);
+                prop_sum_output_opt->answer);
     }
     if (prop_count_output_opt->answer) {
         binning.count_flat_raster =
             Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_sum_flat", cache,
-                                          &binning.flat_region, type,
-                                          max_tile_size);
-    
+            &binning.flat_region, type, max_tile_size);
+
         if (!binning.count_flat_raster)
             Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                               count_output_opt->answer);
+                count_output_opt->answer);
     }
     if (prop_sum_output_opt->answer) {
         binning.sum_flat_raster =
             Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_count_flat", cache,
-                                          &binning.flat_region, type,
-                                          max_tile_size);
+            &binning.flat_region, type, max_tile_size);
         if (!binning.sum_flat_raster)
             Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
-                               count_output_opt->answer);
+                count_output_opt->answer);
     }
 
     G_verbose_message(_("Preparing the maps..."));
@@ -547,13 +552,13 @@ int main(int argc, char *argv[])
         raster3d_set_value_float(binning.sum_raster, &binning.region, 0);
     G_percent(50, 100, 1);
     if (binning.count_flat_raster)
-        raster3d_set_value_float(binning.count_flat_raster, &binning.flat_region,
-                                 0);
+        raster3d_set_value_float(binning.count_flat_raster,
+            &binning.flat_region, 0);
     G_percent(75, 100, 1);
     if (binning.sum_flat_raster)
         raster3d_set_value_float(binning.sum_flat_raster, &binning.flat_region,
-                                 0);
-    G_percent(1, 1, 1);    /* flush */
+            0);
+    G_percent(1, 1, 1);         /* flush */
 
     LASPointH LAS_point;
     double east, north, top;
@@ -580,8 +585,8 @@ int main(int argc, char *argv[])
         /* we already know file is there, so just do basic checks */
         LAS_reader = LASReader_Create(infile);
         while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
-            if (counter == 100000) {        /* report only some for speed */
-                if (inside < header_count)  /* TODO: inside can greatly underestimate */
+            if (counter == 100000) {    /* report only some for speed */
+                if (inside < header_count)      /* TODO: inside can greatly underestimate */
                     G_percent(inside, header_count, 3);
                 counter = 0;
             }
@@ -597,13 +602,16 @@ int main(int argc, char *argv[])
             if (use_return_filter) {
                 int return_n = LASPoint_GetReturnNumber(LAS_point);
                 int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
-                if (return_filter_is_out(&return_filter_struct, return_n, n_returns)) {
+
+                if (return_filter_is_out(&return_filter_struct, return_n,
+                        n_returns)) {
                     n_return_filtered++;
                     continue;
                 }
             }
             if (use_class_filter) {
-                int point_class = (int) LASPoint_GetClassification(LAS_point);
+                int point_class = (int)LASPoint_GetClassification(LAS_point);
+
                 if (class_filter_is_out(&class_filter, point_class)) {
                     n_class_filtered++;
                     continue;
@@ -623,8 +631,7 @@ int main(int argc, char *argv[])
 
             if (use_segment) {
                 if (rast_segment_get_value_xy(&base_segment, &input_region,
-                                              base_raster_data_type, east, north,
-                                              &base_z)) {
+                        base_raster_data_type, east, north, &base_z)) {
                     top -= base_z;
                 }
                 else {
@@ -634,8 +641,8 @@ int main(int argc, char *argv[])
                 }
             }
 
-            Rast3d_location2coord(&binning.region, north, east, top, &col, &row,
-                                  &depth);
+            Rast3d_location2coord(&binning.region, north, east, top, &col,
+                &row, &depth);
             if (col >= binning.region.cols || row >= binning.region.rows ||
                 depth >= binning.region.depths || col < 0 || row < 0 ||
                 depth < 0) {
@@ -650,32 +657,33 @@ int main(int argc, char *argv[])
     }
     /* end of loop for all input files */
 
-    G_percent(1, 1, 1);    /* flush */
+    G_percent(1, 1, 1);         /* flush */
 
     if (binning.prop_count_raster) {
         G_verbose_message(_("Computing proportional count map..."));
-        raster3d_divide_by_flat(binning.count_raster, binning.count_flat_raster,
-                                binning.prop_count_raster, &binning.region);
+        raster3d_divide_by_flat(binning.count_raster,
+            binning.count_flat_raster, binning.prop_count_raster,
+            &binning.region);
     }
     if (binning.prop_sum_raster) {
         G_verbose_message(_("Computing proportional sum map..."));
         raster3d_divide_by_flat(binning.sum_raster, binning.sum_flat_raster,
-                                binning.prop_sum_raster, &binning.region);
+            binning.prop_sum_raster, &binning.region);
     }
     if (binning.mean_raster) {
         G_verbose_message(_("Computing mean map..."));
         raster3d_divide(binning.sum_raster, binning.count_raster,
-                        binning.mean_raster, &binning.region);
+            binning.mean_raster, &binning.region);
     }
 
     G_verbose_message(_("Closing the maps..."));
 
     G_percent_reset();
     if (binning.sum_flat_raster)
-        Rast3d_close(binning.sum_flat_raster);      /* TODO: delete */
+        Rast3d_close(binning.sum_flat_raster);  /* TODO: delete */
     G_percent(1, 7, 1);
     if (binning.count_flat_raster)
-        Rast3d_close(binning.count_flat_raster);    /* TODO: delete */
+        Rast3d_close(binning.count_flat_raster);        /* TODO: delete */
     G_percent(2, 7, 1);
     if (binning.prop_sum_raster)
         Rast3d_close(binning.prop_sum_raster);
@@ -700,21 +708,24 @@ int main(int argc, char *argv[])
     if (use_segment)
         G_message
             ("Number of points outside or in base raster NULL cells: %lu",
-             outside + in_nulls);
+            outside + in_nulls);
     else
         G_message("Number of points outside: %lu", outside);
     if (n_invalid && only_valid)
         G_message(_("%lu input points were not valid and filtered out"),
-                  n_invalid);
+            n_invalid);
     if (n_return_filtered)
-        G_message(_("%lu input points were filtered out by return number"), n_return_filtered);
+        G_message(_("%lu input points were filtered out by return number"),
+            n_return_filtered);
     if (n_class_filtered)
-        G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
+        G_message(_("%lu input points were filtered out by class number"),
+            n_class_filtered);
     if (irange_filtered)
-        G_message(_("%lu input points had intensity out of range"), irange_filtered);
+        G_message(_("%lu input points had intensity out of range"),
+            irange_filtered);
     if (n_invalid && !only_valid)
         G_message(_("%lu input points were not valid, use -%c flag to filter"
-                    " them out"), n_invalid, only_valid_flag->key);
+                " them out"), n_invalid, only_valid_flag->key);
 
     exit(EXIT_SUCCESS);
 }

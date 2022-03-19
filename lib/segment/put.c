@@ -47,15 +47,16 @@ int Segment_put(SEGMENT * SEG, const void *buf, off_t row, off_t col)
     int index, n, i;
 
     if (SEG->cache) {
-	memcpy(SEG->cache + ((size_t)row * SEG->ncols + col) * SEG->len, buf, SEG->len);
-	
-	return 1;
+        memcpy(SEG->cache + ((size_t)row * SEG->ncols + col) * SEG->len, buf,
+            SEG->len);
+
+        return 1;
     }
 
     SEG->address(SEG, row, col, &n, &index);
     if ((i = seg_pagein(SEG, n)) < 0) {
-	G_warning("segment lib: put: pagein failed");
-	return -1;
+        G_warning("segment lib: put: pagein failed");
+        return -1;
     }
 
     SEG->scb[i].dirty = 1;

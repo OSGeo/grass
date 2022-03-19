@@ -23,7 +23,7 @@
 #include "rast_segment.h"
 
 static void rast_segment_load(SEGMENT * segment, int rowio,
-                              RASTER_MAP_TYPE map_type)
+    RASTER_MAP_TYPE map_type)
 {
     void *raster_row = Rast_allocate_input_buf(map_type);
     int row;
@@ -38,7 +38,7 @@ static void rast_segment_load(SEGMENT * segment, int rowio,
 /* TODO: close function */
 
 void rast_segment_open(SEGMENT * segment, const char *name,
-                       RASTER_MAP_TYPE * map_type)
+    RASTER_MAP_TYPE * map_type)
 {
     /* TODO: check if not passing the mapset is OK */
     int rowio = Rast_open_old(name, "");
@@ -51,8 +51,8 @@ void rast_segment_open(SEGMENT * segment, const char *name,
     int segments_in_memory = 4;
 
     if (Segment_open(segment, G_tempfile(), Rast_input_window_rows(),
-                     Rast_input_window_cols(), segment_rows, segment_cols,
-                     Rast_cell_size(*map_type), segments_in_memory) != 1)
+            Rast_input_window_cols(), segment_rows, segment_cols,
+            Rast_cell_size(*map_type), segments_in_memory) != 1)
         G_fatal_error(_("Cannot create temporary file with segments of a raster map"));
     rast_segment_load(segment, rowio, *map_type);
     Rast_close(rowio);          /* we won't need the raster again */
@@ -61,9 +61,8 @@ void rast_segment_open(SEGMENT * segment, const char *name,
 
 /* 0 on out of region or NULL, 1 on success */
 int rast_segment_get_value_xy(SEGMENT * base_segment,
-                              struct Cell_head *input_region,
-                              RASTER_MAP_TYPE rtype, double x, double y,
-                              double *value)
+    struct Cell_head *input_region,
+    RASTER_MAP_TYPE rtype, double x, double y, double *value)
 {
     /* Rast gives double, Segment needs off_t */
     off_t base_row = Rast_northing_to_row(y, input_region);

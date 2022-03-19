@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #ifdef __CYGWIN__
- #include <w32api/wtypes.h>
+#include <w32api/wtypes.h>
 #endif
 #include <grass/gis.h>
 #include <grass/ogsf.h>
@@ -60,14 +60,14 @@ int GS_write_tif(const char *name)
     unsigned char *pixbuf;
 
     if (0 == gsd_getimage(&pixbuf, &xsize, &ysize)) {
-	G_warning(_("Unable to get image of current GL screen"));
-	return (1);
+        G_warning(_("Unable to get image of current GL screen"));
+        return (1);
     }
 
     out = TIFFOpen(name, "w");
     if (out == NULL) {
-	G_warning(_("Unable to open file <%s> for writing"), name);
-	return (1);
+        G_warning(_("Unable to open file <%s> for writing"), name);
+        return (1);
     }
 
     /* Write out TIFF Tags */
@@ -81,39 +81,39 @@ int GS_write_tif(const char *name)
     mapsize = 1 << 24;
 
     TIFFSetField(out, TIFFTAG_PHOTOMETRIC, 24 > 8 ?
-		 PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK);
+        PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK);
 
     linebytes = ((xsize * ysize + 15) >> 3) & ~1;
 
     if (TIFFScanlineSize(out) > linebytes) {
-	buf = (unsigned char *)G_malloc(linebytes);
+        buf = (unsigned char *)G_malloc(linebytes);
     }
     else {
-	buf = (unsigned char *)G_malloc(TIFFScanlineSize(out));
+        buf = (unsigned char *)G_malloc(TIFFScanlineSize(out));
     }
 
     if (rowsperstrip != (unsigned short)-1) {
-	rowsperstrip = (unsigned short)(8 * 1024 / linebytes);
+        rowsperstrip = (unsigned short)(8 * 1024 / linebytes);
     }
 
     TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
-		 rowsperstrip == 0 ? 1 : rowsperstrip);
+        rowsperstrip == 0 ? 1 : rowsperstrip);
 
     /* Done with Header Info */
     for (y = 0; y < ysize; y++) {
-	unsigned int yy = ysize - y - 1;
+        unsigned int yy = ysize - y - 1;
 
-	tmpptr = buf;
+        tmpptr = buf;
 
-	for (x = 0; x < (xsize); x++) {
-	    *tmpptr++ = pixbuf[(yy * xsize + x) * 4 + 0];
-	    *tmpptr++ = pixbuf[(yy * xsize + x) * 4 + 1];
-	    *tmpptr++ = pixbuf[(yy * xsize + x) * 4 + 2];
-	}
+        for (x = 0; x < (xsize); x++) {
+            *tmpptr++ = pixbuf[(yy * xsize + x) * 4 + 0];
+            *tmpptr++ = pixbuf[(yy * xsize + x) * 4 + 1];
+            *tmpptr++ = pixbuf[(yy * xsize + x) * 4 + 2];
+        }
 
-	if (TIFFWriteScanline(out, buf, y, 0) < 0) {
-	    break;
-	}
+        if (TIFFWriteScanline(out, buf, y, 0) < 0) {
+            break;
+        }
     }
 
     G_free((void *)pixbuf);
@@ -122,4 +122,4 @@ int GS_write_tif(const char *name)
     return (0);
 }
 
-#endif /* HAVE_TIFF */
+#endif                          /* HAVE_TIFF */

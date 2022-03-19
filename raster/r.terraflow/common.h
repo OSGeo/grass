@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:	r.terraflow
@@ -27,17 +28,18 @@
 
 #include "stats.h"
 #include "option.h"
-#include "types.h" /* for dimension_type */
-extern "C" {
+#include "types.h"              /* for dimension_type */
+extern "C"
+{
 #include <grass/gis.h>
 #include <grass/glocale.h>
 }
 
 
 
-extern statsRecorder *stats;     /* stats file */
-extern userOptions *opt;          /* command-line options */
-extern struct  Cell_head *region; /* header of the region */
+extern statsRecorder *stats;    /* stats file */
+extern userOptions *opt;        /* command-line options */
+extern struct Cell_head *region;        /* header of the region */
 extern dimension_type nrows, ncols;
 
 
@@ -50,16 +52,16 @@ size_t parse_number(const char *s);
 
 #ifdef USE_LARGEMEM
 
-class LargeMemory {
-  static void *ptr[LM_HIST];
-  static size_t len[LM_HIST];
-  static int next;
-public:
-  static void *alloc(size_t);
-  static void free(void *);
+class LargeMemory
+{
+    static void *ptr[LM_HIST];
+    static size_t len[LM_HIST];
+    static int next;
+  public:
+    static void *alloc(size_t);
+    static void free(void *);
 };
 
-#endif /* USE_LARGEMEM */
+#endif                          /* USE_LARGEMEM */
 
 #endif
-

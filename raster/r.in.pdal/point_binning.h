@@ -107,10 +107,9 @@ void point_binning_free(struct PointBinning *, struct BinIndex *);
 
 
 void write_values(struct PointBinning *,
-                  struct BinIndex *, void *, int, int, RASTER_MAP_TYPE);
+    struct BinIndex *, void *, int, int, RASTER_MAP_TYPE);
 void update_value(struct PointBinning *,
-                  struct BinIndex *, int, int,
-                  int, RASTER_MAP_TYPE, double, double, double);
+    struct BinIndex *, int, int, int, RASTER_MAP_TYPE, double, double, double);
 
 
-#endif /* __POINT_BINNING_H__ */
+#endif                          /* __POINT_BINNING_H__ */

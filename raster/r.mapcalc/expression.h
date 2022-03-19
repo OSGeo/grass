@@ -61,11 +61,11 @@ typedef struct expression
     void *buf;
     union
     {
-	expr_data_const con;
-	expr_data_var var;
-	expr_data_map map;
-	expr_data_func func;
-	expr_data_bind bind;
+        expr_data_const con;
+        expr_data_var var;
+        expr_data_map map;
+        expr_data_func func;
+        expr_data_bind bind;
     } data;
     void *worker;
 } expression;
@@ -88,12 +88,12 @@ extern expression *constant_float(float x);
 extern expression *constant_double(double x);
 extern expression *variable(const char *name);
 extern expression *mapname(const char *name, int mod, int row, int col,
-			   int depth);
+    int depth);
 extern expression *operator(const char *name, const char *oper, int prec,
-			    expr_list * args);
+    expr_list * args);
 extern expression *function(const char *name, expr_list * args);
 extern expression *binding(const char *var, expression * val);
 
 extern func_desc local_func_descs[];
 
-#endif /* __EXPRESSION_H_ */
+#endif                          /* __EXPRESSION_H_ */

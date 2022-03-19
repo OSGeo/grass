@@ -5,4 +5,4 @@ int print_priv(char *, int);
 int print_column_definition(dbColumn *);
 int print_table_definition(dbDriver *, dbTable *);
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

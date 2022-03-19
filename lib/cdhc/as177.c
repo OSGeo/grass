@@ -32,15 +32,15 @@ void Cdhc_nscor1(double s[], int n, int n2, double work[], int *ifault)
 
     *ifault = 3;
     if (n2 != n / 2)
-	return;
+        return;
 
     *ifault = 1;
     if (n <= 1)
-	return;
+        return;
 
     *ifault = 0;
     if (n > 2000)
-	*ifault = 2;
+        *ifault = 2;
 
     /* calculate the natural log of factorial(n) */
     c1 = Cdhc_alnfac(n);
@@ -48,14 +48,14 @@ void Cdhc_nscor1(double s[], int n, int n2, double work[], int *ifault)
 
     /* accumulate ordinates for calculation of integral for rankits */
     for (i = 0; i < n2; ++i) {
-	ani = (double)n - i - 1;
-	c = c1 - d;
-	for (scor = 0.0, j = 0; j < NSTEP; ++j)
-	    scor += work[0 * NSTEP + j] *
-		exp(work[1 * NSTEP + j] + work[2 * NSTEP + j] * i
-		    + work[3 * NSTEP + j] * ani + c);
-	s[i] = scor * H;
-	d += log((double)(i + 1.0) / ani);
+        ani = (double)n - i - 1;
+        c = c1 - d;
+        for (scor = 0.0, j = 0; j < NSTEP; ++j)
+            scor += work[0 * NSTEP + j] *
+                exp(work[1 * NSTEP + j] + work[2 * NSTEP + j] * i
+                + work[3 * NSTEP + j] * ani + c);
+        s[i] = scor * H;
+        d += log((double)(i + 1.0) / ani);
     }
 
     return;
@@ -71,11 +71,11 @@ void init(double work[])
 
     /* set up arrays for calculation of integral */
     for (i = 0; i < NSTEP; ++i) {
-	work[0 * NSTEP + i] = xx;
-	work[1 * NSTEP + i] = pi2 - xx * xx * 0.5;
-	work[2 * NSTEP + i] = log(Cdhc_alnorm(xx, 1));
-	work[3 * NSTEP + i] = log(Cdhc_alnorm(xx, 0));
-	xx = xstart + H * (i + 1.0);
+        work[0 * NSTEP + i] = xx;
+        work[1 * NSTEP + i] = pi2 - xx * xx * 0.5;
+        work[2 * NSTEP + i] = log(Cdhc_alnorm(xx, 1));
+        work[3 * NSTEP + i] = log(Cdhc_alnorm(xx, 0));
+        xx = xstart + H * (i + 1.0);
     }
 
     return;
@@ -88,20 +88,20 @@ void init(double work[])
 static double Cdhc_alnfac(int j)
 {
     static double r[7] = { 0.0, 0.0, 0.69314718056, 1.79175946923,
-	3.17805383035, 4.78749174278, 6.57925121101
+        3.17805383035, 4.78749174278, 6.57925121101
     };
     double w, z;
 
     if (j == 1)
-	return (double)1.0;
+        return (double)1.0;
     else if (j <= 7)
-	return r[j];
+        return r[j];
 
     w = (double)j + 1;
     z = 1.0 / (w * w);
 
     return (w - 0.5) * log(w) - w + 0.918938522305 +
-	(((4.0 - 3.0 * z) * z - 14.0) * z + 420.0) / (5040.0 * w);
+        (((4.0 - 3.0 * z) * z - 14.0) * z + 420.0) / (5040.0 * w);
 }
 
 
@@ -121,41 +121,42 @@ void Cdhc_nscor2(double s[], int n, int n2, int *ifault)
 
     *ifault = 3;
     if (n2 != n / 2)
-	return;
+        return;
 
     *ifault = 1;
     if (n <= 1)
-	return;
+        return;
 
     *ifault = 0;
     if (n > 2000)
-	*ifault = 2;
+        *ifault = 2;
 
     s[0] = b1;
     if (n == 2)
-	return;
+        return;
 
     /* calculate normal areas for 3 largest rankits */
     k = (n2 < 3) ? n2 : 3;
     for (i = 0; i < k; ++i) {
-	e1 = (1.0 + i - eps[i]) / (n + gam[i]);
-	e2 = pow(e1, lam[i]);
-	s[i] = e1 + e2 * (dl1[i] + e2 * dl2[i]) / n - Cdhc_correc(1 + i, n);
+        e1 = (1.0 + i - eps[i]) / (n + gam[i]);
+        e2 = pow(e1, lam[i]);
+        s[i] = e1 + e2 * (dl1[i] + e2 * dl2[i]) / n - Cdhc_correc(1 + i, n);
     }
 
     if (n2 != k) {
-	/* calculate normal areas for remaining rankits */
-	for (i = 3; i < n2; ++i) {
-	    l1 = lam[3] + bb / (1.0 + i + d);
-	    e1 = (1.0 + i - eps[3]) / (n + gam[3]);
-	    e2 = pow(e1, l1);
-	    s[i] = e1 + e2 * (dl1[3] + e2 * dl2[3]) / n - Cdhc_correc(1 + i, n);
-	}
+        /* calculate normal areas for remaining rankits */
+        for (i = 3; i < n2; ++i) {
+            l1 = lam[3] + bb / (1.0 + i + d);
+            e1 = (1.0 + i - eps[3]) / (n + gam[3]);
+            e2 = pow(e1, l1);
+            s[i] =
+                e1 + e2 * (dl1[3] + e2 * dl2[3]) / n - Cdhc_correc(1 + i, n);
+        }
     }
 
     /* convert normal tail areas to normal deviates */
     for (i = 0; i < n2; ++i)
-	s[i] = -ppnd16(s[i]);
+        s[i] = -ppnd16(s[i]);
 
     return;
 }
@@ -169,23 +170,23 @@ static double Cdhc_correc(int i, int n)
 {
     static double c1[7] = { 9.5, 28.7, 1.9, 0.0, -7.0, -6.2, -1.6 };
     static double c2[7] = { -6.195e3, -9.569e3, -6.728e3, -17.614e3,
-	-8.278e3, -3.570e3, 1.075e3
+        -8.278e3, -3.570e3, 1.075e3
     };
     static double c3[7] = { 9.338e4, 1.7516e5, 4.1040e5, 2.157e6,
-	2.376e6, 2.065e6, 2.065e6
+        2.376e6, 2.065e6, 2.065e6
     };
     static double mic = 1.0e-6, c14 = 1.9e-5;
     double an;
 
     if (i * n == 4)
-	return c14;
+        return c14;
 
     if (i < 1 || i > 7)
-	return 0.0;
+        return 0.0;
     else if (i != 4 && n > 20)
-	return 0.0;
+        return 0.0;
     else if (i == 4 && n > 40)
-	return 0.0;
+        return 0.0;
 
     /* else */
     an = 1.0 / (double)(n * n);

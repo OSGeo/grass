@@ -23,8 +23,8 @@
    1 - intersect at one point
    <pre>
    \  /    \  /  \  /
-    \/      \/    \/
-    /\             \
+   \/      \/    \/
+   /\             \
    /  \             \
    2 - partial overlap         ( \/                      )
    ------      a          (    distance < threshold )
@@ -75,7 +75,7 @@
 /* function prototypes */
 static int cmp_cross(const void *pa, const void *pb);
 static void add_cross(int asegment, double adistance, int bsegment,
-		      double bdistance, double x, double y);
+    double bdistance, double x, double y);
 static double dist2(double x1, double y1, double x2, double y2);
 
 static int debug_level = -1;
@@ -107,10 +107,10 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg);
  * \return 5 - identical
  */
 int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
-			      double ay2, double az2, double bx1, double by1,
-			      double bz1, double bx2, double by2, double bz2,
-			      double *x1, double *y1, double *z1, double *x2,
-			      double *y2, double *z2, int with_z)
+    double ay2, double az2, double bx1, double by1,
+    double bz1, double bx2, double by2, double bz2,
+    double *x1, double *y1, double *z1, double *x2,
+    double *y2, double *z2, int with_z)
 {
     static int first_3d = 1;
     double d, d1, d2, r1, dtol, t;
@@ -125,8 +125,8 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
     /* TODO 3D */
     if (with_z && first_3d) {
-	G_warning(_("3D not supported by Vect_segment_intersection()"));
-	first_3d = 0;
+        G_warning(_("3D not supported by Vect_segment_intersection()"));
+        first_3d = 0;
     }
 
     *x1 = 0;
@@ -140,95 +140,95 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
      *   MUST happen before D, D1, D2 are calculated */
     switched = 0;
     if (bx2 < bx1)
-	switched = 1;
+        switched = 1;
     else if (bx2 == bx1) {
-	if (by2 < by1)
-	    switched = 1;
+        if (by2 < by1)
+            switched = 1;
     }
 
     if (switched) {
-	t = bx1;
-	bx1 = bx2;
-	bx2 = t;
-	t = by1;
-	by1 = by2;
-	by2 = t;
-	t = bz1;
-	bz1 = bz2;
-	bz2 = t;
+        t = bx1;
+        bx1 = bx2;
+        bx2 = t;
+        t = by1;
+        by1 = by2;
+        by2 = t;
+        t = bz1;
+        bz1 = bz2;
+        bz2 = t;
     }
 
     switched = 0;
     if (ax2 < ax1)
-	switched = 1;
+        switched = 1;
     else if (ax2 == ax1) {
-	if (ay2 < ay1)
-	    switched = 1;
+        if (ay2 < ay1)
+            switched = 1;
     }
 
     if (switched) {
-	t = ax1;
-	ax1 = ax2;
-	ax2 = t;
-	t = ay1;
-	ay1 = ay2;
-	ay2 = t;
-	t = az1;
-	az1 = az2;
-	az2 = t;
+        t = ax1;
+        ax1 = ax2;
+        ax2 = t;
+        t = ay1;
+        ay1 = ay2;
+        ay2 = t;
+        t = az1;
+        az1 = az2;
+        az2 = t;
     }
 
     /* Check for identical segments */
     if (ax1 == bx1 && ay1 == by1 && ax2 == bx2 && ay2 == by2) {
-	G_debug(2, " -> identical segments");
-	*x1 = ax1;
-	*y1 = ay1;
-	*z1 = az1;
-	*x2 = ax2;
-	*y2 = ay2;
-	*z2 = az2;
-	return 5;
+        G_debug(2, " -> identical segments");
+        *x1 = ax1;
+        *y1 = ay1;
+        *z1 = az1;
+        *x2 = ax2;
+        *y2 = ay2;
+        *z2 = az2;
+        return 5;
     }
 
     /*  'Sort' segments by x, y: make sure a <= b
      *   MUST happen before D, D1, D2 are calculated */
     switched = 0;
     if (bx1 < ax1)
-	switched = 1;
+        switched = 1;
     else if (bx1 == ax1) {
-	if (bx2 < ax2)
-	    switched = 1;
-	else if (bx2 == ax2) {
-	    if (by1 < ay1)
-		switched = 1;
-	    else if (by1 == ay1) {
-		if (by2 < ay2)
-		    switched = 1;
-	    }
-	}
+        if (bx2 < ax2)
+            switched = 1;
+        else if (bx2 == ax2) {
+            if (by1 < ay1)
+                switched = 1;
+            else if (by1 == ay1) {
+                if (by2 < ay2)
+                    switched = 1;
+            }
+        }
     }
 
     if (switched) {
-	t = ax1;
-	ax1 = bx1;
-	bx1 = t;
-	t = ax2;
-	ax2 = bx2;
-	bx2 = t;
+        t = ax1;
+        ax1 = bx1;
+        bx1 = t;
+        t = ax2;
+        ax2 = bx2;
+        bx2 = t;
 
-	t = ay1;
-	ay1 = by1;
-	by1 = t;
-	t = ay2;
-	ay2 = by2;
-	by2 = t;
+        t = ay1;
+        ay1 = by1;
+        by1 = t;
+        t = ay2;
+        ay2 = by2;
+        by2 = t;
 
-	t = az1;
-	az1 = bz1;
-	bz1 = t;
-	t = az2;
-	az2 = bz2;
-	bz2 = t;
+        t = az1;
+        az1 = bz1;
+        bz1 = t;
+        t = az2;
+        az2 = bz2;
+        bz2 = t;
     }
 
     d = D;
@@ -236,28 +236,28 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     d2 = D2;
 
     G_debug(2, "Vect_segment_intersection(): d = %f, d1 = %f, d2 = %f", d, d1,
-	    d2);
+        d2);
 
     end_points = 0;
     if (ax1 == bx1 && ay1 == by1) {
-	end_points = 1;
-	*x1 = ax1;
-	*y1 = ay1;
+        end_points = 1;
+        *x1 = ax1;
+        *y1 = ay1;
     }
     if (ax1 == bx2 && ay1 == by2) {
-	end_points = 1;
-	*x1 = ax1;
-	*y1 = ay1;
+        end_points = 1;
+        *x1 = ax1;
+        *y1 = ay1;
     }
     if (ax2 == bx1 && ay2 == by1) {
-	end_points = 2;
-	*x1 = ax2;
-	*y1 = ay2;
+        end_points = 2;
+        *x1 = ax2;
+        *y1 = ay2;
     }
     if (ax2 == bx2 && ay2 == by2) {
-	end_points = 2;
-	*x1 = ax2;
-	*y1 = ay2;
+        end_points = 2;
+        *x1 = ax2;
+        *y1 = ay2;
     }
 
     /* TODO: dtol was originally set to 1.0e-10, which was usually working but not always. 
@@ -265,55 +265,60 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     dtol = 0.0;
     if (fabs(d) > dtol) {
 
-	G_debug(2, " -> not parallel/collinear: d1 = %f, d2 = %f", d1, d2);
-	if (d > 0) {
-	    if (d1 < 0 || d1 > d || d2 < 0 || d2 > d) {
-		if (end_points) {
-		    G_debug(2, "  -> fp error, but intersection at end points %f, %f", *x1, *y1);
+        G_debug(2, " -> not parallel/collinear: d1 = %f, d2 = %f", d1, d2);
+        if (d > 0) {
+            if (d1 < 0 || d1 > d || d2 < 0 || d2 > d) {
+                if (end_points) {
+                    G_debug(2,
+                        "  -> fp error, but intersection at end points %f, %f",
+                        *x1, *y1);
 
-		    return 1;
-		}
-		else {
-		    G_debug(2, "  -> no intersection");
+                    return 1;
+                }
+                else {
+                    G_debug(2, "  -> no intersection");
 
-		    return 0;
-		}
-	    }
-	}
-	else {
-	    if (d1 < d || d1 > 0 || d2 < d || d2 > 0) {
-		if (end_points) {
-		    G_debug(2, "  -> fp error, but intersection at end points %f, %f", *x1, *y1);
+                    return 0;
+                }
+            }
+        }
+        else {
+            if (d1 < d || d1 > 0 || d2 < d || d2 > 0) {
+                if (end_points) {
+                    G_debug(2,
+                        "  -> fp error, but intersection at end points %f, %f",
+                        *x1, *y1);
 
-		    return 1;
-		}
-		else {
-		    G_debug(2, "  -> no intersection");
+                    return 1;
+                }
+                else {
+                    G_debug(2, "  -> no intersection");
 
-		    return 0;
-		}
-	    }
-	}
+                    return 0;
+                }
+            }
+        }
 
-	r1 = d1 / d;
+        r1 = d1 / d;
 
-	*x1 = ax1 + r1 * (ax2 - ax1);
-	*y1 = ay1 + r1 * (ay2 - ay1);
-	*z1 = 0;
+        *x1 = ax1 + r1 * (ax2 - ax1);
+        *y1 = ay1 + r1 * (ay2 - ay1);
+        *z1 = 0;
 
-	G_debug(2, "  -> intersection %f, %f", *x1, *y1);
-	return 1;
+        G_debug(2, "  -> intersection %f, %f", *x1, *y1);
+        return 1;
     }
 
     /* segments are parallel or collinear */
     G_debug(3, " -> parallel/collinear");
 
-    if (d1 || d2) {		/* lines are parallel */
-	G_debug(2, "  -> parallel");
-	if (end_points)
-	    G_debug(2, "Segments are apparently parallel, but connected at end points -> collinear");
-	else
-	    return 0;
+    if (d1 || d2) {             /* lines are parallel */
+        G_debug(2, "  -> parallel");
+        if (end_points)
+            G_debug(2,
+                "Segments are apparently parallel, but connected at end points -> collinear");
+        else
+            return 0;
     }
 
     /* segments are colinear. check for overlap */
@@ -322,92 +327,92 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     /* original code assumed lines were not both vertical
      *  so there is a special case if they are */
     if (ax1 == ax2) {
-	G_debug(2, "  -> collinear vertical");
-	if (ay1 > by2 || ay2 < by1) {
-	    G_debug(2, "   -> no intersection");
-	    return 0;
-	}
+        G_debug(2, "  -> collinear vertical");
+        if (ay1 > by2 || ay2 < by1) {
+            G_debug(2, "   -> no intersection");
+            return 0;
+        }
 
-	/* end points */
-	if (ay1 == by2) {
-	    G_debug(2, "   -> connected by end points");
-	    *x1 = ax1;
-	    *y1 = ay1;
-	    *z1 = 0;
+        /* end points */
+        if (ay1 == by2) {
+            G_debug(2, "   -> connected by end points");
+            *x1 = ax1;
+            *y1 = ay1;
+            *z1 = 0;
 
-	    return 1;		/* endpoints only */
-	}
-	if (ay2 == by1) {
-	    G_debug(2, "    -> connected by end points");
-	    *x1 = ax2;
-	    *y1 = ay2;
-	    *z1 = 0;
+            return 1;           /* endpoints only */
+        }
+        if (ay2 == by1) {
+            G_debug(2, "    -> connected by end points");
+            *x1 = ax2;
+            *y1 = ay2;
+            *z1 = 0;
 
-	    return 1;		/* endpoints only */
-	}
+            return 1;           /* endpoints only */
+        }
 
-	/* general overlap */
-	G_debug(3, "   -> vertical overlap");
-	/* a contains b */
-	if (ay1 <= by1 && ay2 >= by2) {
-	    G_debug(2, "    -> a contains b");
-	    *x1 = bx1;
-	    *y1 = by1;
-	    *z1 = 0;
-	    *x2 = bx2;
-	    *y2 = by2;
-	    *z2 = 0;
+        /* general overlap */
+        G_debug(3, "   -> vertical overlap");
+        /* a contains b */
+        if (ay1 <= by1 && ay2 >= by2) {
+            G_debug(2, "    -> a contains b");
+            *x1 = bx1;
+            *y1 = by1;
+            *z1 = 0;
+            *x2 = bx2;
+            *y2 = by2;
+            *z2 = 0;
 
-	    return 3;
-	}
-	/* b contains a */
-	if (ay1 >= by1 && ay2 <= by2) {
-	    G_debug(2, "    -> b contains a");
-	    *x1 = ax1;
-	    *y1 = ay1;
-	    *z1 = 0;
-	    *x2 = ax2;
-	    *y2 = ay2;
-	    *z2 = 0;
+            return 3;
+        }
+        /* b contains a */
+        if (ay1 >= by1 && ay2 <= by2) {
+            G_debug(2, "    -> b contains a");
+            *x1 = ax1;
+            *y1 = ay1;
+            *z1 = 0;
+            *x2 = ax2;
+            *y2 = ay2;
+            *z2 = 0;
 
-	    return 4;
-	}
+            return 4;
+        }
 
-	/* general overlap, 2 intersection points */
-	G_debug(2, "    -> partial overlap");
-	if (by1 > ay1 && by1 < ay2) {	/* b1 in a */
-	    G_debug(2, "    -> b1 in a");
-	    *x1 = bx1;
-	    *y1 = by1;
-	    *z1 = 0;
-	    *x2 = ax2;
-	    *y2 = ay2;
-	    *z2 = 0;
+        /* general overlap, 2 intersection points */
+        G_debug(2, "    -> partial overlap");
+        if (by1 > ay1 && by1 < ay2) {   /* b1 in a */
+            G_debug(2, "    -> b1 in a");
+            *x1 = bx1;
+            *y1 = by1;
+            *z1 = 0;
+            *x2 = ax2;
+            *y2 = ay2;
+            *z2 = 0;
 
-	    return 2;
-	}
-	if (by2 > ay1 && by2 < ay2) {	/* b2 in a */
-	    G_debug(2, "    -> b2 in a");
-	    *x1 = ax1;
-	    *y1 = ay1;
-	    *z1 = 0;
-	    *x2 = bx2;
-	    *y2 = by2;
-	    *z2 = 0;
+            return 2;
+        }
+        if (by2 > ay1 && by2 < ay2) {   /* b2 in a */
+            G_debug(2, "    -> b2 in a");
+            *x1 = ax1;
+            *y1 = ay1;
+            *z1 = 0;
+            *x2 = bx2;
+            *y2 = by2;
+            *z2 = 0;
 
-	    return 2;
-	}
+            return 2;
+        }
 
-	/* should not be reached */
-	G_warning(_("Vect_segment_intersection() ERROR (collinear vertical segments)"));
-	G_warning("a");
-	G_warning("%.15g %.15g", ax1, ay1);
-	G_warning("%.15g %.15g", ax2, ay2);
-	G_warning("b");
-	G_warning("%.15g %.15g", bx1, by1);
-	G_warning("%.15g %.15g", bx2, by2);
+        /* should not be reached */
+        G_warning(_("Vect_segment_intersection() ERROR (collinear vertical segments)"));
+        G_warning("a");
+        G_warning("%.15g %.15g", ax1, ay1);
+        G_warning("%.15g %.15g", ax2, ay2);
+        G_warning("b");
+        G_warning("%.15g %.15g", bx1, by1);
+        G_warning("%.15g %.15g", bx2, by2);
 
-	return 0;
+        return 0;
     }
 
     /* Collinear non vertical */
@@ -416,9 +421,9 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
     /* b is to the left or right of a */
     if ((bx1 > ax2) || (bx2 < ax1)) {
-	/* should not happen if segments are selected from rtree */
-	G_debug(2, "   -> no intersection");
-	return 0;
+        /* should not happen if segments are selected from rtree */
+        G_debug(2, "   -> no intersection");
+        return 0;
     }
 
     /* there is overlap or connected end points */
@@ -426,70 +431,70 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 
     /* end points */
     if (ax1 == bx2 && ay1 == by2) {
-	G_debug(2, "    -> connected by end points");
-	*x1 = ax1;
-	*y1 = ay1;
-	*z1 = 0;
+        G_debug(2, "    -> connected by end points");
+        *x1 = ax1;
+        *y1 = ay1;
+        *z1 = 0;
 
-	return 1;
+        return 1;
     }
     if (ax2 == bx1 && ay2 == by1) {
-	G_debug(2, "    -> connected by end points");
-	*x1 = ax2;
-	*y1 = ay2;
-	*z1 = 0;
+        G_debug(2, "    -> connected by end points");
+        *x1 = ax2;
+        *y1 = ay2;
+        *z1 = 0;
 
-	return 1;
+        return 1;
     }
 
     /* a contains b */
     if (ax1 <= bx1 && ax2 >= bx2) {
-	G_debug(2, "    -> a contains b");
-	*x1 = bx1;
-	*y1 = by1;
-	*z1 = 0;
-	*x2 = bx2;
-	*y2 = by2;
-	*z2 = 0;
+        G_debug(2, "    -> a contains b");
+        *x1 = bx1;
+        *y1 = by1;
+        *z1 = 0;
+        *x2 = bx2;
+        *y2 = by2;
+        *z2 = 0;
 
-	return 3;
+        return 3;
     }
     /* b contains a */
     if (ax1 >= bx1 && ax2 <= bx2) {
-	G_debug(2, "    -> b contains a");
-	*x1 = ax1;
-	*y1 = ay1;
-	*z1 = 0;
-	*x2 = ax2;
-	*y2 = ay2;
-	*z2 = 0;
+        G_debug(2, "    -> b contains a");
+        *x1 = ax1;
+        *y1 = ay1;
+        *z1 = 0;
+        *x2 = ax2;
+        *y2 = ay2;
+        *z2 = 0;
 
-	return 4;
+        return 4;
     }
 
     /* general overlap, 2 intersection points (lines are not vertical) */
     G_debug(2, "    -> partial overlap");
-    if (bx1 > ax1 && bx1 < ax2) {	/* b1 is in a */
-	G_debug(2, "    -> b1 in a");
-	*x1 = bx1;
-	*y1 = by1;
-	*z1 = 0;
-	*x2 = ax2;
-	*y2 = ay2;
-	*z2 = 0;
+    if (bx1 > ax1 && bx1 < ax2) {       /* b1 is in a */
+        G_debug(2, "    -> b1 in a");
+        *x1 = bx1;
+        *y1 = by1;
+        *z1 = 0;
+        *x2 = ax2;
+        *y2 = ay2;
+        *z2 = 0;
 
-	return 2;
+        return 2;
     }
-    if (bx2 > ax1 && bx2 < ax2) {	/* b2 is in a */
-	G_debug(2, "    -> b2 in a");
-	*x1 = ax1;
-	*y1 = ay1;
-	*z1 = 0;
-	*x2 = bx2;
-	*y2 = by2;
-	*z2 = 0;
+    if (bx2 > ax1 && bx2 < ax2) {       /* b2 is in a */
+        G_debug(2, "    -> b2 in a");
+        *x1 = ax1;
+        *y1 = ay1;
+        *z1 = 0;
+        *x2 = bx2;
+        *y2 = by2;
+        *z2 = 0;
 
-	return 2;
+        return 2;
     }
 
     /* should not be reached */
@@ -505,15 +510,15 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 }
 
 typedef struct
-{				/* in arrays 0 - A line , 1 - B line */
-    int segment[2];		/* segment number, start from 0 for first */
+{                               /* in arrays 0 - A line , 1 - B line */
+    int segment[2];             /* segment number, start from 0 for first */
     double distance[2];
     double x, y, z;
 } CROSS;
 
 /* Current line in arrays is for some functions like cmp() set by: */
 static int current;
-static int second;		/* line which is not current */
+static int second;              /* line which is not current */
 
 static int a_cross = 0;
 static int n_cross;
@@ -521,22 +526,21 @@ static CROSS *cross = NULL;
 static int *use_cross = NULL;
 
 static void add_cross(int asegment, double adistance, int bsegment,
-		      double bdistance, double x, double y)
+    double bdistance, double x, double y)
 {
     if (n_cross == a_cross) {
-	/* Must be space + 1, used later for last line point, do it better */
-	cross =
-	    (CROSS *) G_realloc((void *)cross,
-				(a_cross + 101) * sizeof(CROSS));
-	use_cross =
-	    (int *)G_realloc((void *)use_cross,
-			     (a_cross + 101) * sizeof(int));
-	a_cross += 100;
+        /* Must be space + 1, used later for last line point, do it better */
+        cross =
+            (CROSS *) G_realloc((void *)cross,
+            (a_cross + 101) * sizeof(CROSS));
+        use_cross =
+            (int *)G_realloc((void *)use_cross, (a_cross + 101) * sizeof(int));
+        a_cross += 100;
     }
 
     G_debug(5,
-	    "  add new cross: aseg/dist = %d/%f bseg/dist = %d/%f, x = %f y = %f",
-	    asegment, adistance, bsegment, bdistance, x, y);
+        "  add new cross: aseg/dist = %d/%f bseg/dist = %d/%f, x = %f y = %f",
+        asegment, adistance, bsegment, bdistance, x, y);
     cross[n_cross].segment[0] = asegment;
     cross[n_cross].distance[0] = adistance;
     cross[n_cross].segment[1] = bsegment;
@@ -552,14 +556,14 @@ static int cmp_cross(const void *pa, const void *pb)
     CROSS *p2 = (CROSS *) pb;
 
     if (p1->segment[current] < p2->segment[current])
-	return -1;
+        return -1;
     if (p1->segment[current] > p2->segment[current])
-	return 1;
+        return 1;
     /* the same segment */
     if (p1->distance[current] < p2->distance[current])
-	return -1;
+        return -1;
     if (p1->distance[current] > p2->distance[current])
-	return 1;
+        return 1;
     return 0;
 }
 
@@ -581,7 +585,7 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
     dx = x2 - x1;
     dy = y2 - y1;
     if ((dx * dx + dy * dy) <= thresh * thresh)
-	return 1;
+        return 1;
 
     return 0;
 }
@@ -602,30 +606,29 @@ static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
     /* Note: -1 to make up for the +1 when data was inserted */
 
     ret = Vect_segment_intersection(APnts->x[i], APnts->y[i], APnts->z[i],
-				    APnts->x[i + 1], APnts->y[i + 1],
-				    APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
-				    BPnts->z[j], BPnts->x[j + 1],
-				    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
-				    &y1, &z1, &x2, &y2, &z2, 0);
+        APnts->x[i + 1], APnts->y[i + 1],
+        APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
+        BPnts->z[j], BPnts->x[j + 1],
+        BPnts->y[j + 1], BPnts->z[j + 1], &x1, &y1, &z1, &x2, &y2, &z2, 0);
 
     /* add ALL (including end points and duplicates), clean later */
     if (ret > 0) {
-	G_debug(2, "  -> %d x %d: intersection type = %d", i, j, ret);
-	if (ret == 1) {		/* one intersection on segment A */
-	    G_debug(3, "    in %f, %f ", x1, y1);
-	    add_cross(i, 0.0, j, 0.0, x1, y1);
-	}
-	else if (ret == 2 || ret == 3 || ret == 4 || ret == 5) {
-	    /*  partial overlap; a broken in one, b broken in one
-	     *  or a contains b; a is broken in 2 points (but 1 may be end)
-	     *  or b contains a; b is broken in 2 points (but 1 may be end) 
-	     *  or identical */
-	    G_debug(3, "    in %f, %f; %f, %f", x1, y1, x2, y2);
-	    add_cross(i, 0.0, j, 0.0, x1, y1);
-	    add_cross(i, 0.0, j, 0.0, x2, y2);
-	}
+        G_debug(2, "  -> %d x %d: intersection type = %d", i, j, ret);
+        if (ret == 1) {         /* one intersection on segment A */
+            G_debug(3, "    in %f, %f ", x1, y1);
+            add_cross(i, 0.0, j, 0.0, x1, y1);
+        }
+        else if (ret == 2 || ret == 3 || ret == 4 || ret == 5) {
+            /*  partial overlap; a broken in one, b broken in one
+             *  or a contains b; a is broken in 2 points (but 1 may be end)
+             *  or b contains a; b is broken in 2 points (but 1 may be end) 
+             *  or identical */
+            G_debug(3, "    in %f, %f; %f, %f", x1, y1, x2, y2);
+            add_cross(i, 0.0, j, 0.0, x1, y1);
+            add_cross(i, 0.0, j, 0.0, x2, y2);
+        }
     }
-    return 1;			/* keep going */
+    return 1;                   /* keep going */
 }
 
 /*!
@@ -648,12 +651,11 @@ static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
  */
 int
 Vect_line_intersection(struct line_pnts *APoints,
-		       struct line_pnts *BPoints,
-		       struct bound_box *ABox,
-		       struct bound_box *BBox,
-		       struct line_pnts ***ALines,
-		       struct line_pnts ***BLines,
-		       int *nalines, int *nblines, int with_z)
+    struct line_pnts *BPoints,
+    struct bound_box *ABox,
+    struct bound_box *BBox,
+    struct line_pnts ***ALines,
+    struct line_pnts ***BLines, int *nalines, int *nblines, int with_z)
 {
     int i, j, k, l, last_seg, seg, last;
     int n_alive_cross;
@@ -661,28 +663,28 @@ Vect_line_intersection(struct line_pnts *APoints,
     double x, y, rethresh;
     struct line_pnts **XLines, *Points;
     struct RTree *MyRTree;
-    struct line_pnts *Points1, *Points2;	/* first, second points */
+    struct line_pnts *Points1, *Points2;        /* first, second points */
     int seg1, seg2, vert1, vert2;
     static struct RTree_Rect rect;
     static int rect_init = 0;
     struct bound_box box, abbox;
 
     if (debug_level == -1) {
-	const char *dstr = G_getenv_nofatal("DEBUG");
+        const char *dstr = G_getenv_nofatal("DEBUG");
 
-	if (dstr != NULL)
-	    debug_level = atoi(dstr);
-	else
-	    debug_level = 0;
+        if (dstr != NULL)
+            debug_level = atoi(dstr);
+        else
+            debug_level = 0;
     }
 
     if (!rect_init) {
-	rect.boundary = G_malloc(6 * sizeof(RectReal));
-	rect_init = 6;
+        rect.boundary = G_malloc(6 * sizeof(RectReal));
+        rect_init = 6;
     }
 
     n_cross = 0;
-    rethresh = 0.000001;	/* TODO */
+    rethresh = 0.000001;        /* TODO */
     APnts = APoints;
     BPnts = BPoints;
 
@@ -747,24 +749,24 @@ Vect_line_intersection(struct line_pnts *APoints,
      *  in bound box */
 
     if (!Vect_box_overlap(ABox, BBox)) {
-	*nalines = 0;
-	*nblines = 0;
-	return 0;
+        *nalines = 0;
+        *nblines = 0;
+        return 0;
     }
-    
+
     abbox = *BBox;
     if (abbox.N > ABox->N)
-	abbox.N = ABox->N;
+        abbox.N = ABox->N;
     if (abbox.S < ABox->S)
-	abbox.S = ABox->S;
+        abbox.S = ABox->S;
     if (abbox.E > ABox->E)
-	abbox.E = ABox->E;
+        abbox.E = ABox->E;
     if (abbox.W < ABox->W)
-	abbox.W = ABox->W;
+        abbox.W = ABox->W;
     if (abbox.T > ABox->T)
-	abbox.T = ABox->T;
+        abbox.T = ABox->T;
     if (abbox.B < ABox->B)
-	abbox.B = ABox->B;
+        abbox.B = ABox->B;
 
     abbox.N += rethresh;
     abbox.S -= rethresh;
@@ -772,87 +774,87 @@ Vect_line_intersection(struct line_pnts *APoints,
     abbox.W -= rethresh;
     abbox.T += rethresh;
     abbox.B -= rethresh;
-    
+
     /* Create rtree for B line */
     MyRTree = RTreeCreateTree(-1, 0, 2);
     RTreeSetOverflow(MyRTree, 0);
     for (i = 0; i < BPoints->n_points - 1; i++) {
-	if (BPoints->x[i] <= BPoints->x[i + 1]) {
-	    rect.boundary[0] = BPoints->x[i];
-	    rect.boundary[3] = BPoints->x[i + 1];
-	}
-	else {
-	    rect.boundary[0] = BPoints->x[i + 1];
-	    rect.boundary[3] = BPoints->x[i];
-	}
+        if (BPoints->x[i] <= BPoints->x[i + 1]) {
+            rect.boundary[0] = BPoints->x[i];
+            rect.boundary[3] = BPoints->x[i + 1];
+        }
+        else {
+            rect.boundary[0] = BPoints->x[i + 1];
+            rect.boundary[3] = BPoints->x[i];
+        }
 
-	if (BPoints->y[i] <= BPoints->y[i + 1]) {
-	    rect.boundary[1] = BPoints->y[i];
-	    rect.boundary[4] = BPoints->y[i + 1];
-	}
-	else {
-	    rect.boundary[1] = BPoints->y[i + 1];
-	    rect.boundary[4] = BPoints->y[i];
-	}
+        if (BPoints->y[i] <= BPoints->y[i + 1]) {
+            rect.boundary[1] = BPoints->y[i];
+            rect.boundary[4] = BPoints->y[i + 1];
+        }
+        else {
+            rect.boundary[1] = BPoints->y[i + 1];
+            rect.boundary[4] = BPoints->y[i];
+        }
 
-	if (BPoints->z[i] <= BPoints->z[i + 1]) {
-	    rect.boundary[2] = BPoints->z[i];
-	    rect.boundary[5] = BPoints->z[i + 1];
-	}
-	else {
-	    rect.boundary[2] = BPoints->z[i + 1];
-	    rect.boundary[5] = BPoints->z[i];
-	}
+        if (BPoints->z[i] <= BPoints->z[i + 1]) {
+            rect.boundary[2] = BPoints->z[i];
+            rect.boundary[5] = BPoints->z[i + 1];
+        }
+        else {
+            rect.boundary[2] = BPoints->z[i + 1];
+            rect.boundary[5] = BPoints->z[i];
+        }
 
-	box.W = rect.boundary[0] - rethresh;
-	box.S = rect.boundary[1] - rethresh;
-	box.B = rect.boundary[2] - rethresh;
-	box.E = rect.boundary[3] + rethresh;
-	box.N = rect.boundary[4] + rethresh;
-	box.T = rect.boundary[5] + rethresh;
+        box.W = rect.boundary[0] - rethresh;
+        box.S = rect.boundary[1] - rethresh;
+        box.B = rect.boundary[2] - rethresh;
+        box.E = rect.boundary[3] + rethresh;
+        box.N = rect.boundary[4] + rethresh;
+        box.T = rect.boundary[5] + rethresh;
 
-	if (Vect_box_overlap(&abbox, &box)) {
-	    RTreeInsertRect(&rect, i + 1, MyRTree);	/* B line segment numbers in rtree start from 1 */
-	}
+        if (Vect_box_overlap(&abbox, &box)) {
+            RTreeInsertRect(&rect, i + 1, MyRTree);     /* B line segment numbers in rtree start from 1 */
+        }
     }
 
     /* Break segments in A by segments in B */
     for (i = 0; i < APoints->n_points - 1; i++) {
-	if (APoints->x[i] <= APoints->x[i + 1]) {
-	    rect.boundary[0] = APoints->x[i];
-	    rect.boundary[3] = APoints->x[i + 1];
-	}
-	else {
-	    rect.boundary[0] = APoints->x[i + 1];
-	    rect.boundary[3] = APoints->x[i];
-	}
+        if (APoints->x[i] <= APoints->x[i + 1]) {
+            rect.boundary[0] = APoints->x[i];
+            rect.boundary[3] = APoints->x[i + 1];
+        }
+        else {
+            rect.boundary[0] = APoints->x[i + 1];
+            rect.boundary[3] = APoints->x[i];
+        }
 
-	if (APoints->y[i] <= APoints->y[i + 1]) {
-	    rect.boundary[1] = APoints->y[i];
-	    rect.boundary[4] = APoints->y[i + 1];
-	}
-	else {
-	    rect.boundary[1] = APoints->y[i + 1];
-	    rect.boundary[4] = APoints->y[i];
-	}
-	if (APoints->z[i] <= APoints->z[i + 1]) {
-	    rect.boundary[2] = APoints->z[i];
-	    rect.boundary[5] = APoints->z[i + 1];
-	}
-	else {
-	    rect.boundary[2] = APoints->z[i + 1];
-	    rect.boundary[5] = APoints->z[i];
-	}
-	box.W = rect.boundary[0] - rethresh;
-	box.S = rect.boundary[1] - rethresh;
-	box.B = rect.boundary[2] - rethresh;
-	box.E = rect.boundary[3] + rethresh;
-	box.N = rect.boundary[4] + rethresh;
-	box.T = rect.boundary[5] + rethresh;
+        if (APoints->y[i] <= APoints->y[i + 1]) {
+            rect.boundary[1] = APoints->y[i];
+            rect.boundary[4] = APoints->y[i + 1];
+        }
+        else {
+            rect.boundary[1] = APoints->y[i + 1];
+            rect.boundary[4] = APoints->y[i];
+        }
+        if (APoints->z[i] <= APoints->z[i + 1]) {
+            rect.boundary[2] = APoints->z[i];
+            rect.boundary[5] = APoints->z[i + 1];
+        }
+        else {
+            rect.boundary[2] = APoints->z[i + 1];
+            rect.boundary[5] = APoints->z[i];
+        }
+        box.W = rect.boundary[0] - rethresh;
+        box.S = rect.boundary[1] - rethresh;
+        box.B = rect.boundary[2] - rethresh;
+        box.E = rect.boundary[3] + rethresh;
+        box.N = rect.boundary[4] + rethresh;
+        box.T = rect.boundary[5] + rethresh;
 
-	if (Vect_box_overlap(&abbox, &box)) {
-	    j = RTreeSearch(MyRTree, &rect, cross_seg, &i);	/* A segment number from 0 */
-	}
+        if (Vect_box_overlap(&abbox, &box)) {
+            j = RTreeSearch(MyRTree, &rect, cross_seg, &i);     /* A segment number from 0 */
+        }
     }
 
     /* Free RTree */
@@ -861,352 +863,356 @@ Vect_line_intersection(struct line_pnts *APoints,
     G_debug(2, "n_cross = %d", n_cross);
     /* Lines do not cross each other */
     if (n_cross == 0) {
-	*nalines = 0;
-	*nblines = 0;
-	return 0;
+        *nalines = 0;
+        *nblines = 0;
+        return 0;
     }
 
     /* Snap breaks to nearest vertices within RE threshold */
     /* Calculate distances along segments */
     for (i = 0; i < n_cross; i++) {
 
-	/* 1. of A seg */
-	seg = cross[i].segment[0];
-	curdist =
-	    dist2(cross[i].x, cross[i].y, APoints->x[seg], APoints->y[seg]);
-	x = APoints->x[seg];
-	y = APoints->y[seg];
+        /* 1. of A seg */
+        seg = cross[i].segment[0];
+        curdist =
+            dist2(cross[i].x, cross[i].y, APoints->x[seg], APoints->y[seg]);
+        x = APoints->x[seg];
+        y = APoints->y[seg];
 
-	cross[i].distance[0] = curdist;
+        cross[i].distance[0] = curdist;
 
-	/* 2. of A seg */
-	dist =
-	    dist2(cross[i].x, cross[i].y, APoints->x[seg + 1],
-		  APoints->y[seg + 1]);
-	if (dist < curdist) {
-	    curdist = dist;
-	    x = APoints->x[seg + 1];
-	    y = APoints->y[seg + 1];
-	}
+        /* 2. of A seg */
+        dist =
+            dist2(cross[i].x, cross[i].y, APoints->x[seg + 1],
+            APoints->y[seg + 1]);
+        if (dist < curdist) {
+            curdist = dist;
+            x = APoints->x[seg + 1];
+            y = APoints->y[seg + 1];
+        }
 
-	/* 1. of B seg */
-	seg = cross[i].segment[1];
-	dist =
-	    dist2(cross[i].x, cross[i].y, BPoints->x[seg], BPoints->y[seg]);
-	cross[i].distance[1] = dist;
+        /* 1. of B seg */
+        seg = cross[i].segment[1];
+        dist = dist2(cross[i].x, cross[i].y, BPoints->x[seg], BPoints->y[seg]);
+        cross[i].distance[1] = dist;
 
-	if (dist < curdist) {
-	    curdist = dist;
-	    x = BPoints->x[seg];
-	    y = BPoints->y[seg];
-	}
-	/* 2. of B seg */
-	dist = dist2(cross[i].x, cross[i].y, BPoints->x[seg + 1], BPoints->y[seg + 1]);
-	if (dist < curdist) {
-	    curdist = dist;
-	    x = BPoints->x[seg + 1];
-	    y = BPoints->y[seg + 1];
-	}
-	if (curdist < rethresh * rethresh) {
-	    cross[i].x = x;
-	    cross[i].y = y;
+        if (dist < curdist) {
+            curdist = dist;
+            x = BPoints->x[seg];
+            y = BPoints->y[seg];
+        }
+        /* 2. of B seg */
+        dist =
+            dist2(cross[i].x, cross[i].y, BPoints->x[seg + 1],
+            BPoints->y[seg + 1]);
+        if (dist < curdist) {
+            curdist = dist;
+            x = BPoints->x[seg + 1];
+            y = BPoints->y[seg + 1];
+        }
+        if (curdist < rethresh * rethresh) {
+            cross[i].x = x;
+            cross[i].y = y;
 
-	    /* Update distances along segments */
-	    seg = cross[i].segment[0];
-	    cross[i].distance[0] =
-		dist2(APoints->x[seg], APoints->y[seg], cross[i].x, cross[i].y);
-	    seg = cross[i].segment[1];
-	    cross[i].distance[1] =
-		dist2(BPoints->x[seg], BPoints->y[seg], cross[i].x, cross[i].y);
-	}
+            /* Update distances along segments */
+            seg = cross[i].segment[0];
+            cross[i].distance[0] =
+                dist2(APoints->x[seg], APoints->y[seg], cross[i].x,
+                cross[i].y);
+            seg = cross[i].segment[1];
+            cross[i].distance[1] =
+                dist2(BPoints->x[seg], BPoints->y[seg], cross[i].x,
+                cross[i].y);
+        }
     }
 
     /* l = 1 ~ line A, l = 2 ~ line B */
     for (l = 1; l < 3; l++) {
-	for (i = 0; i < n_cross; i++)
-	    use_cross[i] = 1;
+        for (i = 0; i < n_cross; i++)
+            use_cross[i] = 1;
 
-	/* Create array of lines */
-	XLines = G_malloc((n_cross + 1) * sizeof(struct line_pnts *));
+        /* Create array of lines */
+        XLines = G_malloc((n_cross + 1) * sizeof(struct line_pnts *));
 
-	if (l == 1) {
-	    G_debug(2, "Clean and create array for line A");
-	    Points = APoints;
-	    Points1 = APoints;
-	    Points2 = BPoints;
-	    current = 0;
-	    second = 1;
-	}
-	else {
-	    G_debug(2, "Clean and create array for line B");
-	    Points = BPoints;
-	    Points1 = BPoints;
-	    Points2 = APoints;
-	    current = 1;
-	    second = 0;
-	}
+        if (l == 1) {
+            G_debug(2, "Clean and create array for line A");
+            Points = APoints;
+            Points1 = APoints;
+            Points2 = BPoints;
+            current = 0;
+            second = 1;
+        }
+        else {
+            G_debug(2, "Clean and create array for line B");
+            Points = BPoints;
+            Points1 = BPoints;
+            Points2 = APoints;
+            current = 1;
+            second = 0;
+        }
 
-	/* Sort points along lines */
-	qsort((void *)cross, sizeof(char) * n_cross, sizeof(CROSS),
-	      cmp_cross);
+        /* Sort points along lines */
+        qsort((void *)cross, sizeof(char) * n_cross, sizeof(CROSS), cmp_cross);
 
-	/* Print all (raw) breaks */
-	/* avoid loop when not debugging */
-	if (debug_level > 2) {
-	    for (i = 0; i < n_cross; i++) {
-		G_debug(3,
-			"  cross = %d seg1/dist1 = %d/%f seg2/dist2 = %d/%f x = %f y = %f",
-			i, cross[i].segment[current],
-			sqrt(cross[i].distance[current]),
-			cross[i].segment[second], sqrt(cross[i].distance[second]),
-			cross[i].x, cross[i].y);
-	    }
-	}
+        /* Print all (raw) breaks */
+        /* avoid loop when not debugging */
+        if (debug_level > 2) {
+            for (i = 0; i < n_cross; i++) {
+                G_debug(3,
+                    "  cross = %d seg1/dist1 = %d/%f seg2/dist2 = %d/%f x = %f y = %f",
+                    i, cross[i].segment[current],
+                    sqrt(cross[i].distance[current]),
+                    cross[i].segment[second], sqrt(cross[i].distance[second]),
+                    cross[i].x, cross[i].y);
+            }
+        }
 
-	/* Remove breaks on first/last line vertices */
-	for (i = 0; i < n_cross; i++) {
-	    if (use_cross[i] == 1) {
-		j = Points1->n_points - 1;
+        /* Remove breaks on first/last line vertices */
+        for (i = 0; i < n_cross; i++) {
+            if (use_cross[i] == 1) {
+                j = Points1->n_points - 1;
 
-		/* Note: */
-		if ((cross[i].segment[current] == 0 &&
-		     cross[i].x == Points1->x[0] &&
-		     cross[i].y == Points1->y[0]) ||
-		    (cross[i].segment[current] == j - 1 &&
-		     cross[i].x == Points1->x[j] &&
-		     cross[i].y == Points1->y[j])) {
-		    use_cross[i] = 0;	/* first/last */
-		    G_debug(3, "cross %d deleted (first/last point)", i);
-		}
-	    }
-	}
+                /* Note: */
+                if ((cross[i].segment[current] == 0 &&
+                        cross[i].x == Points1->x[0] &&
+                        cross[i].y == Points1->y[0]) ||
+                    (cross[i].segment[current] == j - 1 &&
+                        cross[i].x == Points1->x[j] &&
+                        cross[i].y == Points1->y[j])) {
+                    use_cross[i] = 0;   /* first/last */
+                    G_debug(3, "cross %d deleted (first/last point)", i);
+                }
+            }
+        }
 
-	/* Remove breaks with collinear previous and next segments on 1 and 2 */
-	/* Note: breaks with collinear previous and nex must be remove duplicates,
-	 *        otherwise some cross may be lost. Example (+ is vertex):
-	 *             B          first cross intersections: A/B  segment:
-	 *             |               0/0, 0/1, 1/0, 1/1 - collinear previous and next
-	 *     AB -----+----+--- A     0/4, 0/5, 1/4, 1/5 - OK        
-	 *              \___|                   
-	 *                B                    
-	 *  This should not inluence that break is always on first segment, see below (I hope)
-	 */
-	/* TODO: this doesn't find identical with breaks on revious/next */
-	for (i = 0; i < n_cross; i++) {
-	    if (use_cross[i] == 0)
-		continue;
-	    G_debug(3, "  is %d between colinear?", i);
+        /* Remove breaks with collinear previous and next segments on 1 and 2 */
+        /* Note: breaks with collinear previous and nex must be remove duplicates,
+         *        otherwise some cross may be lost. Example (+ is vertex):
+         *             B          first cross intersections: A/B  segment:
+         *             |               0/0, 0/1, 1/0, 1/1 - collinear previous and next
+         *     AB -----+----+--- A     0/4, 0/5, 1/4, 1/5 - OK        
+         *              \___|                   
+         *                B                    
+         *  This should not inluence that break is always on first segment, see below (I hope)
+         */
+        /* TODO: this doesn't find identical with breaks on revious/next */
+        for (i = 0; i < n_cross; i++) {
+            if (use_cross[i] == 0)
+                continue;
+            G_debug(3, "  is %d between colinear?", i);
 
-	    seg1 = cross[i].segment[current];
-	    seg2 = cross[i].segment[second];
+            seg1 = cross[i].segment[current];
+            seg2 = cross[i].segment[second];
 
-	    /* Is it vertex on 1, which? */
-	    if (cross[i].x == Points1->x[seg1] &&
-		cross[i].y == Points1->y[seg1]) {
-		vert1 = seg1;
-	    }
-	    else if (cross[i].x == Points1->x[seg1 + 1] &&
-		     cross[i].y == Points1->y[seg1 + 1]) {
-		vert1 = seg1 + 1;
-	    }
-	    else {
-		G_debug(3, "  -> is not vertex on 1. line");
-		continue;
-	    }
+            /* Is it vertex on 1, which? */
+            if (cross[i].x == Points1->x[seg1] &&
+                cross[i].y == Points1->y[seg1]) {
+                vert1 = seg1;
+            }
+            else if (cross[i].x == Points1->x[seg1 + 1] &&
+                cross[i].y == Points1->y[seg1 + 1]) {
+                vert1 = seg1 + 1;
+            }
+            else {
+                G_debug(3, "  -> is not vertex on 1. line");
+                continue;
+            }
 
-	    /* Is it vertex on 2, which? */
-	    /* For 1. line it is easy, because breaks on vertex are always at end vertex
-	     *  for 2. line we need to find which vertex is on break if any (vert2 starts from 0) */
-	    if (cross[i].x == Points2->x[seg2] &&
-		cross[i].y == Points2->y[seg2]) {
-		vert2 = seg2;
-	    }
-	    else if (cross[i].x == Points2->x[seg2 + 1] &&
-		     cross[i].y == Points2->y[seg2 + 1]) {
-		vert2 = seg2 + 1;
-	    }
-	    else {
-		G_debug(3, "  -> is not vertex on 2. line");
-		continue;
-	    }
-	    G_debug(3, "    seg1/vert1 = %d/%d  seg2/ver2 = %d/%d", seg1,
-		    vert1, seg2, vert2);
+            /* Is it vertex on 2, which? */
+            /* For 1. line it is easy, because breaks on vertex are always at end vertex
+             *  for 2. line we need to find which vertex is on break if any (vert2 starts from 0) */
+            if (cross[i].x == Points2->x[seg2] &&
+                cross[i].y == Points2->y[seg2]) {
+                vert2 = seg2;
+            }
+            else if (cross[i].x == Points2->x[seg2 + 1] &&
+                cross[i].y == Points2->y[seg2 + 1]) {
+                vert2 = seg2 + 1;
+            }
+            else {
+                G_debug(3, "  -> is not vertex on 2. line");
+                continue;
+            }
+            G_debug(3, "    seg1/vert1 = %d/%d  seg2/ver2 = %d/%d", seg1,
+                vert1, seg2, vert2);
 
-	    /* Check if the second vertex is not first/last */
-	    if (vert2 == 0 || vert2 == Points2->n_points - 1) {
-		G_debug(3, "  -> vertex 2 (%d) is first/last", vert2);
-		continue;
-	    }
+            /* Check if the second vertex is not first/last */
+            if (vert2 == 0 || vert2 == Points2->n_points - 1) {
+                G_debug(3, "  -> vertex 2 (%d) is first/last", vert2);
+                continue;
+            }
 
-	    /* Are there first vertices of this segment identical */
-	    if (!((Points1->x[vert1 - 1] == Points2->x[vert2 - 1] &&
-		   Points1->y[vert1 - 1] == Points2->y[vert2 - 1] &&
-		   Points1->x[vert1 + 1] == Points2->x[vert2 + 1] &&
-		   Points1->y[vert1 + 1] == Points2->y[vert2 + 1]) ||
-		  (Points1->x[vert1 - 1] == Points2->x[vert2 + 1] &&
-		   Points1->y[vert1 - 1] == Points2->y[vert2 + 1] &&
-		   Points1->x[vert1 + 1] == Points2->x[vert2 - 1] &&
-		   Points1->y[vert1 + 1] == Points2->y[vert2 - 1])
-		)
-		) {
-		G_debug(3, "  -> previous/next are not identical");
-		continue;
-	    }
+            /* Are there first vertices of this segment identical */
+            if (!((Points1->x[vert1 - 1] == Points2->x[vert2 - 1] &&
+                        Points1->y[vert1 - 1] == Points2->y[vert2 - 1] &&
+                        Points1->x[vert1 + 1] == Points2->x[vert2 + 1] &&
+                        Points1->y[vert1 + 1] == Points2->y[vert2 + 1]) ||
+                    (Points1->x[vert1 - 1] == Points2->x[vert2 + 1] &&
+                        Points1->y[vert1 - 1] == Points2->y[vert2 + 1] &&
+                        Points1->x[vert1 + 1] == Points2->x[vert2 - 1] &&
+                        Points1->y[vert1 + 1] == Points2->y[vert2 - 1])
+                )
+                ) {
+                G_debug(3, "  -> previous/next are not identical");
+                continue;
+            }
 
-	    use_cross[i] = 0;
+            use_cross[i] = 0;
 
-	    G_debug(3, "    -> collinear -> remove");
-	}
+            G_debug(3, "    -> collinear -> remove");
+        }
 
-	/* Remove duplicates, i.e. merge all identical breaks to one.
-	 *  We must be careful because two points with identical coordinates may be distant if measured along
-	 *  the line:
-	 *       |         Segments b0 and b1 overlap, b0 runs up, b1 down.
-	 *       |         Two inersections may be merged for a, because they are identical,
-	 *  -----+---- a   but cannot be merged for b, because both b0 and b1 must be broken. 
-	 *       |         I.e. Breaks on b have identical coordinates, but there are not identical
-	 *       b0 | b1      if measured along line b.
-	 *                 
-	 *      -> Breaks may be merged as identical if lay on the same segment, or on vertex connecting
-	 *      2 adjacent segments the points lay on
-	 *      
-	 *  Note: if duplicate is on a vertex, the break is removed from next segment =>
-	 *        break on vertex is always on first segment of this vertex (used below) 
-	 */
-	last = -1;
-	for (i = 0; i < n_cross; i++) {
-	    if (use_cross[i] == 0)
-		continue;
-	    if (last == -1) {	/* set first alive */
-		last = i;
-		continue;
-	    }
-	    seg = cross[i].segment[current];
-	    /* compare with last */
-	    G_debug(3, "  duplicate ?: cross = %d seg = %d dist = %f", i,
-		    cross[i].segment[current], cross[i].distance[current]);
-	    if ((cross[i].segment[current] == cross[last].segment[current] &&
-		 cross[i].distance[current] == cross[last].distance[current])
-		|| (cross[i].segment[current] ==
-		    cross[last].segment[current] + 1 &&
-		    cross[i].distance[current] == 0 &&
-		    cross[i].x == cross[last].x &&
-		    cross[i].y == cross[last].y)) {
-		G_debug(3, "  cross %d identical to last -> removed", i);
-		use_cross[i] = 0;	/* identical */
-	    }
-	    else {
-		last = i;
-	    }
-	}
+        /* Remove duplicates, i.e. merge all identical breaks to one.
+         *  We must be careful because two points with identical coordinates may be distant if measured along
+         *  the line:
+         *       |         Segments b0 and b1 overlap, b0 runs up, b1 down.
+         *       |         Two inersections may be merged for a, because they are identical,
+         *  -----+---- a   but cannot be merged for b, because both b0 and b1 must be broken. 
+         *       |         I.e. Breaks on b have identical coordinates, but there are not identical
+         *       b0 | b1      if measured along line b.
+         *                 
+         *      -> Breaks may be merged as identical if lay on the same segment, or on vertex connecting
+         *      2 adjacent segments the points lay on
+         *      
+         *  Note: if duplicate is on a vertex, the break is removed from next segment =>
+         *        break on vertex is always on first segment of this vertex (used below) 
+         */
+        last = -1;
+        for (i = 0; i < n_cross; i++) {
+            if (use_cross[i] == 0)
+                continue;
+            if (last == -1) {   /* set first alive */
+                last = i;
+                continue;
+            }
+            seg = cross[i].segment[current];
+            /* compare with last */
+            G_debug(3, "  duplicate ?: cross = %d seg = %d dist = %f", i,
+                cross[i].segment[current], cross[i].distance[current]);
+            if ((cross[i].segment[current] == cross[last].segment[current] &&
+                    cross[i].distance[current] ==
+                    cross[last].distance[current])
+                || (cross[i].segment[current] ==
+                    cross[last].segment[current] + 1 &&
+                    cross[i].distance[current] == 0 &&
+                    cross[i].x == cross[last].x &&
+                    cross[i].y == cross[last].y)) {
+                G_debug(3, "  cross %d identical to last -> removed", i);
+                use_cross[i] = 0;       /* identical */
+            }
+            else {
+                last = i;
+            }
+        }
 
-	/* Create array of new lines */
-	/* Count alive crosses */
-	n_alive_cross = 0;
-	G_debug(3, "  alive crosses:");
-	for (i = 0; i < n_cross; i++) {
-	    if (use_cross[i] == 1) {
-		G_debug(3, "  %d", i);
-		n_alive_cross++;
-	    }
-	}
+        /* Create array of new lines */
+        /* Count alive crosses */
+        n_alive_cross = 0;
+        G_debug(3, "  alive crosses:");
+        for (i = 0; i < n_cross; i++) {
+            if (use_cross[i] == 1) {
+                G_debug(3, "  %d", i);
+                n_alive_cross++;
+            }
+        }
 
-	k = 0;
-	if (n_alive_cross > 0) {
-	    /* Add last line point at the end of cross array (cross alley) */
-	    use_cross[n_cross] = 1;
-	    j = Points->n_points - 1;
-	    cross[n_cross].x = Points->x[j];
-	    cross[n_cross].y = Points->y[j];
-	    cross[n_cross].segment[current] = Points->n_points - 2;
+        k = 0;
+        if (n_alive_cross > 0) {
+            /* Add last line point at the end of cross array (cross alley) */
+            use_cross[n_cross] = 1;
+            j = Points->n_points - 1;
+            cross[n_cross].x = Points->x[j];
+            cross[n_cross].y = Points->y[j];
+            cross[n_cross].segment[current] = Points->n_points - 2;
 
-	    last_seg = 0;
-	    last_x = Points->x[0];
-	    last_y = Points->y[0];
-	    last_z = Points->z[0];
-	    /* Go through all cross (+last line point) and create for each new line 
-	     *  starting at last_* and ending at cross (last point) */
-	    for (i = 0; i <= n_cross; i++) {	/* i.e. n_cross + 1 new lines */
-		seg = cross[i].segment[current];
-		G_debug(2, "%d seg = %d dist = %f", i, seg,
-			cross[i].distance[current]);
-		if (use_cross[i] == 0) {
-		    G_debug(3, "   removed -> next");
-		    continue;
-		}
+            last_seg = 0;
+            last_x = Points->x[0];
+            last_y = Points->y[0];
+            last_z = Points->z[0];
+            /* Go through all cross (+last line point) and create for each new line 
+             *  starting at last_* and ending at cross (last point) */
+            for (i = 0; i <= n_cross; i++) {    /* i.e. n_cross + 1 new lines */
+                seg = cross[i].segment[current];
+                G_debug(2, "%d seg = %d dist = %f", i, seg,
+                    cross[i].distance[current]);
+                if (use_cross[i] == 0) {
+                    G_debug(3, "   removed -> next");
+                    continue;
+                }
 
-		G_debug(2, " New line:");
-		XLines[k] = Vect_new_line_struct();
-		/* add last intersection or first point first */
-		Vect_append_point(XLines[k], last_x, last_y, last_z);
-		G_debug(2, "   append last vert: %f %f", last_x, last_y);
+                G_debug(2, " New line:");
+                XLines[k] = Vect_new_line_struct();
+                /* add last intersection or first point first */
+                Vect_append_point(XLines[k], last_x, last_y, last_z);
+                G_debug(2, "   append last vert: %f %f", last_x, last_y);
 
-		/* add first points of segments between last and current seg */
-		for (j = last_seg + 1; j <= seg; j++) {
-		    G_debug(2, "  segment j = %d", j);
-		    /* skipp vertex identical to last break */
-		    if ((j == last_seg + 1) && Points->x[j] == last_x &&
-			Points->y[j] == last_y) {
-			G_debug(2, "   -> skip (identical to last break)");
-			continue;
-		    }
-		    Vect_append_point(XLines[k], Points->x[j], Points->y[j],
-				      Points->z[j]);
-		    G_debug(2, "   append first of seg: %f %f", Points->x[j],
-			    Points->y[j]);
-		}
+                /* add first points of segments between last and current seg */
+                for (j = last_seg + 1; j <= seg; j++) {
+                    G_debug(2, "  segment j = %d", j);
+                    /* skipp vertex identical to last break */
+                    if ((j == last_seg + 1) && Points->x[j] == last_x &&
+                        Points->y[j] == last_y) {
+                        G_debug(2, "   -> skip (identical to last break)");
+                        continue;
+                    }
+                    Vect_append_point(XLines[k], Points->x[j], Points->y[j],
+                        Points->z[j]);
+                    G_debug(2, "   append first of seg: %f %f", Points->x[j],
+                        Points->y[j]);
+                }
 
-		last_seg = seg;
-		last_x = cross[i].x;
-		last_y = cross[i].y;
-		last_z = 0;
-		/* calculate last_z */
-		if (Points->z[last_seg] == Points->z[last_seg + 1]) {
-		    last_z = Points->z[last_seg + 1];
-		}
-		else if (last_x == Points->x[last_seg] &&
-		    last_y == Points->y[last_seg]) {
-		    last_z = Points->z[last_seg];
-		}
-		else if (last_x == Points->x[last_seg + 1] &&
-		    last_y == Points->y[last_seg + 1]) {
-		    last_z = Points->z[last_seg + 1];
-		}
-		else {
-		    dist = dist2(Points->x[last_seg],
-		                 Points->x[last_seg + 1],
-				 Points->y[last_seg],
-				 Points->y[last_seg + 1]);
-		    last_z = (Points->z[last_seg] * sqrt(cross[i].distance[current]) +
-			      Points->z[last_seg + 1] * (sqrt(dist) - sqrt(cross[i].distance[current]))) /
-			      sqrt(dist);
-		}
+                last_seg = seg;
+                last_x = cross[i].x;
+                last_y = cross[i].y;
+                last_z = 0;
+                /* calculate last_z */
+                if (Points->z[last_seg] == Points->z[last_seg + 1]) {
+                    last_z = Points->z[last_seg + 1];
+                }
+                else if (last_x == Points->x[last_seg] &&
+                    last_y == Points->y[last_seg]) {
+                    last_z = Points->z[last_seg];
+                }
+                else if (last_x == Points->x[last_seg + 1] &&
+                    last_y == Points->y[last_seg + 1]) {
+                    last_z = Points->z[last_seg + 1];
+                }
+                else {
+                    dist = dist2(Points->x[last_seg],
+                        Points->x[last_seg + 1],
+                        Points->y[last_seg], Points->y[last_seg + 1]);
+                    last_z =
+                        (Points->z[last_seg] *
+                        sqrt(cross[i].distance[current]) + Points->z[last_seg +
+                            1] * (sqrt(dist) -
+                            sqrt(cross[i].distance[current]))) / sqrt(dist);
+                }
 
-		/* add current cross or end point */
-		Vect_append_point(XLines[k], cross[i].x, cross[i].y, last_z);
-		G_debug(2, "   append cross / last point: %f %f", cross[i].x,
-			cross[i].y);
+                /* add current cross or end point */
+                Vect_append_point(XLines[k], cross[i].x, cross[i].y, last_z);
+                G_debug(2, "   append cross / last point: %f %f", cross[i].x,
+                    cross[i].y);
 
-		/* Check if line is degenerate */
-		if (dig_line_degenerate(XLines[k]) > 0) {
-		    G_debug(2, "   line is degenerate -> skipped");
-		    Vect_destroy_line_struct(XLines[k]);
-		}
-		else {
-		    k++;
-		}
-	    }
-	}
-	if (l == 1) {
-	    *nalines = k;
-	    *ALines = XLines;
-	}
-	else {
-	    *nblines = k;
-	    *BLines = XLines;
-	}
+                /* Check if line is degenerate */
+                if (dig_line_degenerate(XLines[k]) > 0) {
+                    G_debug(2, "   line is degenerate -> skipped");
+                    Vect_destroy_line_struct(XLines[k]);
+                }
+                else {
+                    k++;
+                }
+            }
+        }
+        if (l == 1) {
+            *nalines = k;
+            *ALines = XLines;
+        }
+        else {
+            *nblines = k;
+            *BLines = XLines;
+        }
     }
-    
+
     /* clean up */
 
     return 1;
@@ -1214,7 +1220,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 
 static struct line_pnts *APnts, *BPnts, *IPnts;
 
-static int cross_found;		/* set by find_cross() */
+static int cross_found;         /* set by find_cross() */
 
 /* break segments (called by rtree search) */
 static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
@@ -1228,35 +1234,34 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
     /* Note: -1 to make up for the +1 when data was inserted */
 
     ret = Vect_segment_intersection(APnts->x[i], APnts->y[i], APnts->z[i],
-				    APnts->x[i + 1], APnts->y[i + 1],
-				    APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
-				    BPnts->z[j], BPnts->x[j + 1],
-				    BPnts->y[j + 1], BPnts->z[j + 1], &x1,
-				    &y1, &z1, &x2, &y2, &z2, 0);
+        APnts->x[i + 1], APnts->y[i + 1],
+        APnts->z[i + 1], BPnts->x[j], BPnts->y[j],
+        BPnts->z[j], BPnts->x[j + 1],
+        BPnts->y[j + 1], BPnts->z[j + 1], &x1, &y1, &z1, &x2, &y2, &z2, 0);
 
     switch (ret) {
     case 0:
     case 5:
-	break;
+        break;
     case 1:
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
-	    G_warning(_("Error while adding point to array. Out of memory"));
-	break;
+        if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+            G_warning(_("Error while adding point to array. Out of memory"));
+        break;
     case 2:
     case 3:
     case 4:
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
-	    G_warning(_("Error while adding point to array. Out of memory"));
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x2, &y2, &z2, 1))
-	    G_warning(_("Error while adding point to array. Out of memory"));
-	break;
+        if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+            G_warning(_("Error while adding point to array. Out of memory"));
+        if (0 > Vect_copy_xyz_to_pnts(IPnts, &x2, &y2, &z2, 1))
+            G_warning(_("Error while adding point to array. Out of memory"));
+        break;
     }
     /* add ALL (including end points and duplicates), clean later */
     if (ret > 0) {
-	cross_found = 1;
-	return 0;
+        cross_found = 1;
+        return 0;
     }
-    return 1;			/* keep going */
+    return 1;                   /* keep going */
 }
 
 /*!
@@ -1273,7 +1278,7 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
  */
 int
 Vect_line_check_intersection(struct line_pnts *APoints,
-			     struct line_pnts *BPoints, int with_z)
+    struct line_pnts *BPoints, int with_z)
 {
     int i;
     double dist, rethresh;
@@ -1282,79 +1287,76 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     static int rect_init = 0;
 
     if (!rect_init) {
-	rect.boundary = G_malloc(6 * sizeof(RectReal));
-	rect_init = 6;
+        rect.boundary = G_malloc(6 * sizeof(RectReal));
+        rect_init = 6;
     }
 
-    rethresh = 0.000001;	/* TODO */
+    rethresh = 0.000001;        /* TODO */
     APnts = APoints;
     BPnts = BPoints;
 
     /* TODO: 3D, RE (representation error) threshold, GV_POINTS (line x point) */
 
     if (!IPnts)
-	IPnts = Vect_new_line_struct();
+        IPnts = Vect_new_line_struct();
     Vect_reset_line(IPnts);
 
     /* If one or both are point (Points->n_points == 1) */
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
-	if (APoints->x[0] == BPoints->x[0] && APoints->y[0] == BPoints->y[0]) {
-	    if (!with_z) {
-		if (0 >
-		    Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
-					  &APoints->y[0], NULL, 1))
-		    G_warning(_("Error while adding point to array. Out of memory"));
-		return 1;
-	    }
-	    else {
-		if (APoints->z[0] == BPoints->z[0]) {
-		    if (0 >
-			Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
-					      &APoints->y[0], &APoints->z[0],
-					      1))
-			G_warning(_("Error while adding point to array. Out of memory"));
-		    return 1;
-		}
-		else
-		    return 0;
-	    }
-	}
-	else {
-	    return 0;
-	}
+        if (APoints->x[0] == BPoints->x[0] && APoints->y[0] == BPoints->y[0]) {
+            if (!with_z) {
+                if (0 >
+                    Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
+                        &APoints->y[0], NULL, 1))
+                    G_warning(_("Error while adding point to array. Out of memory"));
+                return 1;
+            }
+            else {
+                if (APoints->z[0] == BPoints->z[0]) {
+                    if (0 >
+                        Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
+                            &APoints->y[0], &APoints->z[0], 1))
+                        G_warning(_("Error while adding point to array. Out of memory"));
+                    return 1;
+                }
+                else
+                    return 0;
+            }
+        }
+        else {
+            return 0;
+        }
     }
 
     if (APoints->n_points == 1) {
-	Vect_line_distance(BPoints, APoints->x[0], APoints->y[0],
-			   APoints->z[0], with_z, NULL, NULL, NULL, &dist,
-			   NULL, NULL);
+        Vect_line_distance(BPoints, APoints->x[0], APoints->y[0],
+            APoints->z[0], with_z, NULL, NULL, NULL, &dist, NULL, NULL);
 
-	if (dist <= rethresh) {
-	    if (0 >
-		Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
-				      &APoints->z[0], 1))
-		G_warning(_("Error while adding point to array. Out of memory"));
-	    return 1;
-	}
-	else {
-	    return 0;
-	}
+        if (dist <= rethresh) {
+            if (0 >
+                Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
+                    &APoints->z[0], 1))
+                G_warning(_("Error while adding point to array. Out of memory"));
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 
     if (BPoints->n_points == 1) {
-	Vect_line_distance(APoints, BPoints->x[0], BPoints->y[0],
-			   BPoints->z[0], with_z, NULL, NULL, NULL, &dist,
-			   NULL, NULL);
+        Vect_line_distance(APoints, BPoints->x[0], BPoints->y[0],
+            BPoints->z[0], with_z, NULL, NULL, NULL, &dist, NULL, NULL);
 
-	if (dist <= rethresh) {
-	    if (0 >
-		Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
-				      &BPoints->z[0], 1))
-		G_warning(_("Error while adding point to array. Out of memory"));
-	    return 1;
-	}
-	else
-	    return 0;
+        if (dist <= rethresh) {
+            if (0 >
+                Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
+                    &BPoints->z[0], 1))
+                G_warning(_("Error while adding point to array. Out of memory"));
+            return 1;
+        }
+        else
+            return 0;
     }
 
     /* Take each segment from A and find if intersects any segment from B. */
@@ -1368,71 +1370,71 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     MyRTree = RTreeCreateTree(-1, 0, 2);
     RTreeSetOverflow(MyRTree, 0);
     for (i = 0; i < BPoints->n_points - 1; i++) {
-	if (BPoints->x[i] <= BPoints->x[i + 1]) {
-	    rect.boundary[0] = BPoints->x[i];
-	    rect.boundary[3] = BPoints->x[i + 1];
-	}
-	else {
-	    rect.boundary[0] = BPoints->x[i + 1];
-	    rect.boundary[3] = BPoints->x[i];
-	}
+        if (BPoints->x[i] <= BPoints->x[i + 1]) {
+            rect.boundary[0] = BPoints->x[i];
+            rect.boundary[3] = BPoints->x[i + 1];
+        }
+        else {
+            rect.boundary[0] = BPoints->x[i + 1];
+            rect.boundary[3] = BPoints->x[i];
+        }
 
-	if (BPoints->y[i] <= BPoints->y[i + 1]) {
-	    rect.boundary[1] = BPoints->y[i];
-	    rect.boundary[4] = BPoints->y[i + 1];
-	}
-	else {
-	    rect.boundary[1] = BPoints->y[i + 1];
-	    rect.boundary[4] = BPoints->y[i];
-	}
+        if (BPoints->y[i] <= BPoints->y[i + 1]) {
+            rect.boundary[1] = BPoints->y[i];
+            rect.boundary[4] = BPoints->y[i + 1];
+        }
+        else {
+            rect.boundary[1] = BPoints->y[i + 1];
+            rect.boundary[4] = BPoints->y[i];
+        }
 
-	if (BPoints->z[i] <= BPoints->z[i + 1]) {
-	    rect.boundary[2] = BPoints->z[i];
-	    rect.boundary[5] = BPoints->z[i + 1];
-	}
-	else {
-	    rect.boundary[2] = BPoints->z[i + 1];
-	    rect.boundary[5] = BPoints->z[i];
-	}
+        if (BPoints->z[i] <= BPoints->z[i + 1]) {
+            rect.boundary[2] = BPoints->z[i];
+            rect.boundary[5] = BPoints->z[i + 1];
+        }
+        else {
+            rect.boundary[2] = BPoints->z[i + 1];
+            rect.boundary[5] = BPoints->z[i];
+        }
 
-	RTreeInsertRect(&rect, i + 1, MyRTree);	/* B line segment numbers in rtree start from 1 */
+        RTreeInsertRect(&rect, i + 1, MyRTree); /* B line segment numbers in rtree start from 1 */
     }
 
     /* Find intersection */
     cross_found = 0;
 
     for (i = 0; i < APoints->n_points - 1; i++) {
-	if (APoints->x[i] <= APoints->x[i + 1]) {
-	    rect.boundary[0] = APoints->x[i];
-	    rect.boundary[3] = APoints->x[i + 1];
-	}
-	else {
-	    rect.boundary[0] = APoints->x[i + 1];
-	    rect.boundary[3] = APoints->x[i];
-	}
+        if (APoints->x[i] <= APoints->x[i + 1]) {
+            rect.boundary[0] = APoints->x[i];
+            rect.boundary[3] = APoints->x[i + 1];
+        }
+        else {
+            rect.boundary[0] = APoints->x[i + 1];
+            rect.boundary[3] = APoints->x[i];
+        }
 
-	if (APoints->y[i] <= APoints->y[i + 1]) {
-	    rect.boundary[1] = APoints->y[i];
-	    rect.boundary[4] = APoints->y[i + 1];
-	}
-	else {
-	    rect.boundary[1] = APoints->y[i + 1];
-	    rect.boundary[4] = APoints->y[i];
-	}
-	if (APoints->z[i] <= APoints->z[i + 1]) {
-	    rect.boundary[2] = APoints->z[i];
-	    rect.boundary[5] = APoints->z[i + 1];
-	}
-	else {
-	    rect.boundary[2] = APoints->z[i + 1];
-	    rect.boundary[5] = APoints->z[i];
-	}
+        if (APoints->y[i] <= APoints->y[i + 1]) {
+            rect.boundary[1] = APoints->y[i];
+            rect.boundary[4] = APoints->y[i + 1];
+        }
+        else {
+            rect.boundary[1] = APoints->y[i + 1];
+            rect.boundary[4] = APoints->y[i];
+        }
+        if (APoints->z[i] <= APoints->z[i + 1]) {
+            rect.boundary[2] = APoints->z[i];
+            rect.boundary[5] = APoints->z[i + 1];
+        }
+        else {
+            rect.boundary[2] = APoints->z[i + 1];
+            rect.boundary[5] = APoints->z[i];
+        }
 
-	RTreeSearch(MyRTree, &rect, find_cross, &i);	/* A segment number from 0 */
+        RTreeSearch(MyRTree, &rect, find_cross, &i);    /* A segment number from 0 */
 
-	if (cross_found) {
-	    break;
-	}
+        if (cross_found) {
+            break;
+        }
     }
 
     /* Free RTree */
@@ -1456,8 +1458,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
  */
 int
 Vect_line_get_intersections(struct line_pnts *APoints,
-			    struct line_pnts *BPoints,
-			    struct line_pnts *IPoints, int with_z)
+    struct line_pnts *BPoints, struct line_pnts *IPoints, int with_z)
 {
     int ret;
 

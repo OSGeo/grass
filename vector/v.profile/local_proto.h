@@ -15,8 +15,8 @@ void add_point(const int, const double, const double, size_t *, const int);
 
 /* Check if point is on profile line (inside buffer) and calculate distance to it */
 void proc_point(struct line_pnts *, struct line_pnts *,
-                struct line_pnts *, const int, size_t *, const int);
+    struct line_pnts *, const int, size_t *, const int);
 
 /* Process all two line intersection points */
 void proc_line(struct line_pnts *, struct line_pnts *,
-               const int, size_t *, const int);
+    const int, size_t *, const int);

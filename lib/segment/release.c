@@ -38,10 +38,10 @@ int Segment_release(SEGMENT * SEG)
     int i;
 
     if (SEG->open != 1)
-	return -1;
+        return -1;
 
     for (i = 0; i < SEG->nseg; i++)
-	G_free(SEG->scb[i].buf);
+        G_free(SEG->scb[i].buf);
     G_free(SEG->scb);
 
     G_free(SEG->freeslot);

@@ -22,11 +22,12 @@
 static int test_put_get_value_dcell(void);
 static int test_put_get_value_fcell(void);
 static int test_put_get_value_resampling(void);
-static int test_get_value_region(RASTER3D_Map *map, int cols, int rows, int depths);
-static int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double
-                                 top, int col, int row, int depth, int fact);
-static int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double
-                                 top, int col, int row, int depth, int fact);
+static int test_get_value_region(RASTER3D_Map * map, int cols, int rows,
+    int depths);
+static int test_resampling_dcell(RASTER3D_Map * map, double north, double east,
+    double top, int col, int row, int depth, int fact);
+static int test_resampling_fcell(RASTER3D_Map * map, double north, double east,
+    double top, int col, int row, int depth, int fact);
 
 /* *************************************************************** */
 /* Perform the put-get value tests ******************************* */
@@ -43,9 +44,10 @@ int unit_test_put_get_value()
 
 
     if (sum > 0)
-    G_warning("\n-- raster3d put/get value unit tests failure --");
+        G_warning("\n-- raster3d put/get value unit tests failure --");
     else
-    G_message("\n-- raster3d put/get value unit tests finished successfully --");
+        G_message
+            ("\n-- raster3d put/get value unit tests finished successfully --");
 
     return sum;
 }
@@ -83,39 +85,41 @@ int test_put_get_value_dcell(void)
 
     Rast3d_adjust_region(&region);
 
-    map = Rast3d_open_new_opt_tile_size("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+    map =
+        Rast3d_open_new_opt_tile_size("test_put_get_value_dcell",
+        RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
 
     /* The window is the same as the map region ... of course */
     Rast3d_set_window_map(map, &region);
     /*
-     ROWS
-  1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6000 6500 7000 7500 8000 8500 north
-    |....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
-   15   14   13   12   11   10    9    8    7    6    5    4    3    2    1    0 region
+       ROWS
+       1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6000 6500 7000 7500 8000 8500 north
+       |....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+       15   14   13   12   11   10    9    8    7    6    5    4    3    2    1    0 region
 
-    COLS
-  5000 5500 6000 6500 7000 7500 8000 8500 9000 9500 10000 east
-    |....|....|....|....|....|....|....|....|....|....|
-    0    1    2    3    4    5    6    7    8    9   10 region
+       COLS
+       5000 5500 6000 6500 7000 7500 8000 8500 9000 9500 10000 east
+       |....|....|....|....|....|....|....|....|....|....|
+       0    1    2    3    4    5    6    7    8    9   10 region
 
-    DEPTHS
-    0   200  400  600  800  1000  top
-    |....|....|....|....|....|
-    0    1    2    3    4    5 region
-    */
+       DEPTHS
+       0   200  400  600  800  1000  top
+       |....|....|....|....|....|
+       0    1    2    3    4    5 region
+     */
 
-    for(z = 0; z < region.depths; z++) {
-        for(y = 0; y < region.rows; y++) { /* From the north to the south */
-            for(x = 0; x < region.cols; x++) {
+    for (z = 0; z < region.depths; z++) {
+        for (y = 0; y < region.rows; y++) {     /* From the north to the south */
+            for (x = 0; x < region.cols; x++) {
                 value = -1;
                 Rast3d_put_value(map, x, y, z, &value, DCELL_TYPE);
             }
         }
     }
 
-    for(z = 0; z < region.depths; z++) {
-        for(y = 0; y < region.rows; y++) { /* From the north to the south */
-            for(x = 0; x < region.cols; x++) {
+    for (z = 0; z < region.depths; z++) {
+        for (y = 0; y < region.rows; y++) {     /* From the north to the south */
+            for (x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
                 Rast3d_put_value(map, x, y, z, &value, DCELL_TYPE);
@@ -161,7 +165,9 @@ int test_put_get_value_dcell(void)
     /* Write everything to the disk and reopen the map */
     Rast3d_flush_all_tiles(map);
     Rast3d_close(map);
-    map = Rast3d_open_cell_old("test_put_get_value_dcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    map =
+        Rast3d_open_cell_old("test_put_get_value_dcell", G_mapset(), &region,
+        DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
 
     G_message("Get the value of x == 9 y == 14 z == 4 -> x + y + z = 27");
@@ -189,11 +195,11 @@ int test_put_get_value_dcell(void)
     /* Rast3d_get_value_region does not work with coordinates outside the region */
     printf("Value %g == %g\n", value, value_ref);
 
-    if(value == 0 || value < 0 || value > 0) {
+    if (value == 0 || value < 0 || value > 0) {
         G_message("Error in Rast3d_get_region_value");
         sum++;
     }
-    if(value_ref == 0 || value_ref < 0 || value_ref > 0) {
+    if (value_ref == 0 || value_ref < 0 || value_ref > 0) {
         G_message("Error in Rast3d_get_value");
         sum++;
     }
@@ -209,7 +215,7 @@ int test_put_get_value_dcell(void)
 
 int test_put_get_value_fcell(void)
 {
-     int sum = 0;
+    int sum = 0;
     int x, y, z;
     FCELL value;
     FCELL value_ref;
@@ -238,14 +244,16 @@ int test_put_get_value_fcell(void)
 
     Rast3d_adjust_region(&region);
 
-    map = Rast3d_open_new_opt_tile_size("test_put_get_value_fcell", RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
+    map =
+        Rast3d_open_new_opt_tile_size("test_put_get_value_fcell",
+        RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
 
     /* The window is the same as the map region ... of course */
     Rast3d_set_window_map(map, &region);
 
-    for(z = 0; z < region.depths; z++) {
-        for(y = 0; y < region.rows; y++) {
-            for(x = 0; x < region.cols; x++) {
+    for (z = 0; z < region.depths; z++) {
+        for (y = 0; y < region.rows; y++) {
+            for (x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
                 Rast3d_put_value(map, x, y, z, &value, FCELL_TYPE);
@@ -257,9 +265,11 @@ int test_put_get_value_fcell(void)
     Rast3d_flush_all_tiles(map);
     Rast3d_close(map);
 
-    map = Rast3d_open_cell_old("test_put_get_value_fcell", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    map =
+        Rast3d_open_cell_old("test_put_get_value_fcell", G_mapset(), &region,
+        DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
-       /* Reread the map and compare the expected results */
+    /* Reread the map and compare the expected results */
 
     G_message("Get the value of the lower left corner -> 0");
 
@@ -315,11 +325,11 @@ int test_put_get_value_fcell(void)
     /* Rast3d_get_value_region does not work with coordinates outside the region */
     printf("Value %g == %g\n", value, value_ref);
 
-    if(value == 0 || value < 0 || value > 0) {
+    if (value == 0 || value < 0 || value > 0) {
         G_message("Error in Rast3d_get_region_value");
         sum++;
     }
-    if(value_ref == 0 || value_ref < 0 || value_ref > 0) {
+    if (value_ref == 0 || value_ref < 0 || value_ref > 0) {
         G_message("Error in Rast3d_get_value");
         sum++;
     }
@@ -364,32 +374,34 @@ int test_put_get_value_resampling(void)
 
     Rast3d_adjust_region(&region);
 
-    map = Rast3d_open_new_opt_tile_size("test_put_get_value_resample", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+    map =
+        Rast3d_open_new_opt_tile_size("test_put_get_value_resample",
+        RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     /*
-     ROWS
-  1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6000 6500 7000 7500 8000 8500 north
-    |....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
-   15   14   13   12   11   10    9    8    7    6    5    4    3    2    1    0 region
-    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-   30   28   26   24   22   20   18   16   14   12   10    8    6    4    2    0 window
+       ROWS
+       1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6000 6500 7000 7500 8000 8500 north
+       |....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|
+       15   14   13   12   11   10    9    8    7    6    5    4    3    2    1    0 region
+       |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+       30   28   26   24   22   20   18   16   14   12   10    8    6    4    2    0 window
 
-    COLS
-  5000 5500 6000 6500 7000 7500 8000 8500 9000 9500 10000 east
-    |....|....|....|....|....|....|....|....|....|....|
-    0    1    2    3    4    5    6    7    8    9   10 region
-    |    |    |    |    |    |    |    |    |    |    |
-    0    2    4    6    8   10   12   14   16   18   20 window
-    DEPTHS
-    0   200  400  600  800  1000 top
-    |....|....|....|....|....|
-    0    1    2    3    4    5 region
-    |    |    |    |    |    |
-    0    2    4    6    8   10 window
-    */
+       COLS
+       5000 5500 6000 6500 7000 7500 8000 8500 9000 9500 10000 east
+       |....|....|....|....|....|....|....|....|....|....|
+       0    1    2    3    4    5    6    7    8    9   10 region
+       |    |    |    |    |    |    |    |    |    |    |
+       0    2    4    6    8   10   12   14   16   18   20 window
+       DEPTHS
+       0   200  400  600  800  1000 top
+       |....|....|....|....|....|
+       0    1    2    3    4    5 region
+       |    |    |    |    |    |
+       0    2    4    6    8   10 window
+     */
 
-    for(z = 0; z < region.depths; z++) {
-        for(y = 0; y < region.rows; y++) {  /* North to south */
-            for(x = 0; x < region.cols; x++) {
+    for (z = 0; z < region.depths; z++) {
+        for (y = 0; y < region.rows; y++) {     /* North to south */
+            for (x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
                 Rast3d_put_double(map, x, y, z, value);
@@ -411,7 +423,9 @@ int test_put_get_value_resampling(void)
 
     Rast3d_adjust_region(&window);
 
-    map = Rast3d_open_cell_old("test_put_get_value_resample", G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
+    map =
+        Rast3d_open_cell_old("test_put_get_value_resample", G_mapset(),
+        &region, DCELL_TYPE, RASTER3D_USE_CACHE_XY);
 
     /* The window has the 8x resolution as the map region */
     Rast3d_set_window_map(map, &window);
@@ -470,7 +484,8 @@ int test_put_get_value_resampling(void)
 
 /* *************************************************************** */
 
-int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double top, int col, int row, int depth, int fact)
+int test_resampling_dcell(RASTER3D_Map * map, double north, double east,
+    double top, int col, int row, int depth, int fact)
 {
     int sum = 0;
     DCELL value;
@@ -480,23 +495,25 @@ int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double t
 
     Rast3d_get_region_value(map, north, east, top, &value, DCELL_TYPE);
     Rast3d_get_window_value(map, north, east, top, &value_win, DCELL_TYPE);
-    Rast3d_get_value(map, col * fact, row * fact, depth * fact, &value_ref, DCELL_TYPE);
+    Rast3d_get_value(map, col * fact, row * fact, depth * fact, &value_ref,
+        DCELL_TYPE);
     Rast3d_get_value_region(map, col, row, depth, &value_reg, DCELL_TYPE);
-    printf("Value %g == %g == %g == %g\n", value, value_win, value_ref, value_reg);
+    printf("Value %g == %g == %g == %g\n", value, value_win, value_ref,
+        value_reg);
 
-    if(value != col + row + depth) {
+    if (value != col + row + depth) {
         G_message("Error in Rast3d_get_region_value");
         sum++;
     }
-    if(value_win != col + row + depth) {
+    if (value_win != col + row + depth) {
         G_message("Error in Rast3d_get_window_value");
         sum++;
     }
-    if(value_ref != col + row + depth) {
+    if (value_ref != col + row + depth) {
         G_message("Error in Rast3d_get_value");
         sum++;
     }
-    if(value_reg != col + row + depth) {
+    if (value_reg != col + row + depth) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
@@ -506,7 +523,8 @@ int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double t
 
 /* *************************************************************** */
 
-int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double top, int col, int row, int depth, int fact)
+int test_resampling_fcell(RASTER3D_Map * map, double north, double east,
+    double top, int col, int row, int depth, int fact)
 {
     int sum = 0;
     FCELL value;
@@ -516,23 +534,25 @@ int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double t
 
     Rast3d_get_region_value(map, north, east, top, &value, FCELL_TYPE);
     Rast3d_get_window_value(map, north, east, top, &value_win, FCELL_TYPE);
-    Rast3d_get_value(map, col * fact, row * fact, depth * fact, &value_ref, FCELL_TYPE);
+    Rast3d_get_value(map, col * fact, row * fact, depth * fact, &value_ref,
+        FCELL_TYPE);
     Rast3d_get_value_region(map, col, row, depth, &value_reg, FCELL_TYPE);
-    printf("Value %g == %g == %g == %g\n", value, value_win, value_ref, value_reg);
+    printf("Value %g == %g == %g == %g\n", value, value_win, value_ref,
+        value_reg);
 
-    if(value != col + row + depth) {
+    if (value != col + row + depth) {
         G_message("Error in Rast3d_get_region_value");
         sum++;
     }
-    if(value_win != col + row + depth) {
+    if (value_win != col + row + depth) {
         G_message("Error in Rast3d_get_window_value");
         sum++;
     }
-    if(value_ref != col + row + depth) {
+    if (value_ref != col + row + depth) {
         G_message("Error in Rast3d_get_value");
         sum++;
     }
-    if(value_reg != col + row + depth) {
+    if (value_reg != col + row + depth) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
@@ -542,7 +562,7 @@ int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double t
 
 /* *************************************************************** */
 
-int test_get_value_region(RASTER3D_Map *map, int cols, int rows, int depths)
+int test_get_value_region(RASTER3D_Map * map, int cols, int rows, int depths)
 {
     int sum = 0;
     FCELL fvalue1 = 0.0;
@@ -557,19 +577,19 @@ int test_get_value_region(RASTER3D_Map *map, int cols, int rows, int depths)
     Rast3d_get_value_region(map, cols, rows, depths, &dvalue2, DCELL_TYPE);
     printf("Value %g == %g == %g == %g\n", fvalue1, fvalue2, dvalue1, dvalue2);
 
-    if(!Rast_is_f_null_value(&fvalue1)) {
+    if (!Rast_is_f_null_value(&fvalue1)) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
-    if(!Rast_is_f_null_value(&fvalue2)) {
+    if (!Rast_is_f_null_value(&fvalue2)) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
-    if(!Rast_is_d_null_value(&dvalue1)) {
+    if (!Rast_is_d_null_value(&dvalue1)) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
-    if(!Rast_is_d_null_value(&dvalue2)) {
+    if (!Rast_is_d_null_value(&dvalue2)) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }

@@ -33,26 +33,26 @@ INPUT {
 };
 
 CAT {
-    int num_cat;		/* num of cells */
+    int num_cat;                /* num of cells */
     CELL cat_val;
     CAT *nxt;
 };
 
 BASIN {
-    CAT first_cat;		/* linked list of cats with num */
-    double sum_values;		/* summation */
+    CAT first_cat;              /* linked list of cats with num */
+    double sum_values;          /* summation */
 };
 
 MAP {
     char *name, *mapset;
-    BASIN *basins;		/* array of basins */
+    BASIN *basins;              /* array of basins */
     struct Categories cats;
     char do_cats;
 };
 
 OUTPUT {
-    MAP *maps;			/* map layers of output stuff */
-    B_FACTS *basin_facts;	/* basin information array */
+    MAP *maps;                  /* map layers of output stuff */
+    B_FACTS *basin_facts;       /* basin information array */
     FILE *out_file;
     struct Cell_head window;
     int num_maps, num_basins;
@@ -62,8 +62,7 @@ OUTPUT {
 };
 
 B_FACTS {
-    double str_length, str_slope, accum_length, accum_slope, easting,
-	northing;
+    double str_length, str_slope, accum_length, accum_slope, easting, northing;
     int num_cells, down_basin, valid;
 };
 
@@ -104,4 +103,4 @@ int read_basins(char *, OUTPUT *);
 int valid_basins(char *, OUTPUT *);
 
 
-#endif /* __WATERSHED_H__ */
+#endif                          /* __WATERSHED_H__ */

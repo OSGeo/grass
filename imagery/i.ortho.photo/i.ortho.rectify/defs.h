@@ -14,7 +14,7 @@
 #define HI(i) ((i)>>(L2BDIM))
 #define LO(i) ((i)&((BDIM)-1))
 
-typedef DCELL block[BDIM][BDIM];   /* FCELL sufficient ? */
+typedef DCELL block[BDIM][BDIM];        /* FCELL sufficient ? */
 
 struct cache
 {
@@ -26,7 +26,8 @@ struct cache
     int *refs;
 };
 
-typedef void (*func) (struct cache *, void *, int, double *, double *, struct Cell_head *);
+typedef void (*func)(struct cache *, void *, int, double *, double *,
+    struct Cell_head *);
 
 #define BKIDX(c,y,x) ((y) * (c)->stride + (x))
 #define BKPTR(c,y,x) ((c)->grid[BKIDX((c),(y),(x))])
@@ -35,8 +36,7 @@ typedef void (*func) (struct cache *, void *, int, double *, double *, struct Ce
 
 struct menu
 {
-    func method;		/* routine to interpolate new value      */
-    char *name;			/* method name                           */
-    char *text;			/* menu display - full description       */
+    func method;                /* routine to interpolate new value      */
+    char *name;                 /* method name                           */
+    char *text;                 /* menu display - full description       */
 };
-

@@ -45,4 +45,3 @@ typedef struct
 extern int render;
 
 #endif
-

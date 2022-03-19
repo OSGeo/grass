@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       v.in.lidar
@@ -18,4 +19,4 @@
 
 void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs);
 
-#endif /* LIDAR_INFO_H */
+#endif                          /* LIDAR_INFO_H */

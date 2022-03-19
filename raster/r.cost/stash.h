@@ -32,4 +32,4 @@ struct start_pt *process_start_coords(char **, struct start_pt *);
 int process_stop_coords(char **answers);
 int time_to_stop(int, int);
 
-#endif /* __STASH_H__ */
+#endif                          /* __STASH_H__ */

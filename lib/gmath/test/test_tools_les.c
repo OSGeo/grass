@@ -1,3 +1,4 @@
+
 /*****************************************************************************
  *
  * MODULE:       Grass Gmath Library
@@ -32,7 +33,7 @@
  * */
 G_math_les *G_math_alloc_nquad_les(int rows, int cols, int type)
 {
-	return G_math_alloc_les_param(rows, cols, type, 2);
+    return G_math_alloc_les_param(rows, cols, type, 2);
 }
 
 /*!
@@ -48,7 +49,7 @@ G_math_les *G_math_alloc_nquad_les(int rows, int cols, int type)
  * */
 G_math_les *G_math_alloc_nquad_les_Ax(int rows, int cols, int type)
 {
-	return G_math_alloc_les_param(rows, cols, type, 1);
+    return G_math_alloc_les_param(rows, cols, type, 1);
 }
 
 /*!
@@ -64,7 +65,7 @@ G_math_les *G_math_alloc_nquad_les_Ax(int rows, int cols, int type)
  * */
 G_math_les *G_math_alloc_nquad_les_A(int rows, int cols, int type)
 {
-	return G_math_alloc_les_param(rows, cols, type, 0);
+    return G_math_alloc_les_param(rows, cols, type, 0);
 }
 
 /*!
@@ -80,7 +81,7 @@ G_math_les *G_math_alloc_nquad_les_A(int rows, int cols, int type)
  * */
 G_math_les *G_math_alloc_nquad_les_Ax_b(int rows, int cols, int type)
 {
-	return G_math_alloc_les_param(rows, cols, type, 2);
+    return G_math_alloc_les_param(rows, cols, type, 2);
 }
 
 /*!
@@ -95,7 +96,7 @@ G_math_les *G_math_alloc_nquad_les_Ax_b(int rows, int cols, int type)
  * */
 G_math_les *G_math_alloc_les(int rows, int type)
 {
-	return G_math_alloc_les_param(rows, rows, type, 2);
+    return G_math_alloc_les_param(rows, rows, type, 2);
 }
 
 /*!
@@ -110,7 +111,7 @@ G_math_les *G_math_alloc_les(int rows, int type)
  * */
 G_math_les *G_math_alloc_les_Ax(int rows, int type)
 {
-	return G_math_alloc_les_param(rows, rows, type, 1);
+    return G_math_alloc_les_param(rows, rows, type, 1);
 }
 
 /*!
@@ -125,7 +126,7 @@ G_math_les *G_math_alloc_les_Ax(int rows, int type)
  * */
 G_math_les *G_math_alloc_les_A(int rows, int type)
 {
-	return G_math_alloc_les_param(rows, rows, type, 0);
+    return G_math_alloc_les_param(rows, rows, type, 0);
 }
 
 /*!
@@ -140,7 +141,7 @@ G_math_les *G_math_alloc_les_A(int rows, int type)
  * */
 G_math_les *G_math_alloc_les_Ax_b(int rows, int type)
 {
-	return G_math_alloc_les_param(rows, rows, type, 2);
+    return G_math_alloc_les_param(rows, rows, type, 2);
 }
 
 /*!
@@ -172,114 +173,105 @@ G_math_les *G_math_alloc_les_Ax_b(int rows, int type)
  * */
 G_math_les *G_math_alloc_les_param(int rows, int cols, int type, int parts)
 {
-	G_math_les *les;
+    G_math_les *les;
 
-	if (type == G_MATH_SPARSE_LES)
-		G_debug(
-				2,
-				"Allocate memory for a sparse linear equation system with %i rows\n",
-				rows);
-	else
-		G_debug(
-				2,
-				"Allocate memory for a regular linear equation system with %i rows and %i cols\n",
-				rows, cols);
+    if (type == G_MATH_SPARSE_LES)
+        G_debug(2,
+            "Allocate memory for a sparse linear equation system with %i rows\n",
+            rows);
+    else
+        G_debug(2,
+            "Allocate memory for a regular linear equation system with %i rows and %i cols\n",
+            rows, cols);
 
-	les = (G_math_les *) G_calloc(1, sizeof(G_math_les));
-	les->x = NULL;
-	les->b = NULL;
+    les = (G_math_les *) G_calloc(1, sizeof(G_math_les));
+    les->x = NULL;
+    les->b = NULL;
 
-	if (parts > 0)
-	{
-		les->x = (double *)G_calloc(cols, sizeof(double));
-	}
+    if (parts > 0) {
+        les->x = (double *)G_calloc(cols, sizeof(double));
+    }
 
-	if (parts > 1)
-	{
-		les->b = (double *)G_calloc(cols, sizeof(double));
-	}
+    if (parts > 1) {
+        les->b = (double *)G_calloc(cols, sizeof(double));
+    }
 
-	les->A = NULL;
-	les->data = NULL;
-	les->Asp = NULL;
-	les->rows = rows;
-	les->cols = cols;
-	les->symm = 0;
-	les->bandwidth = cols;
-	if (rows == cols)
-		les->quad = 1;
-	else
-		les->quad = 0;
+    les->A = NULL;
+    les->data = NULL;
+    les->Asp = NULL;
+    les->rows = rows;
+    les->cols = cols;
+    les->symm = 0;
+    les->bandwidth = cols;
+    if (rows == cols)
+        les->quad = 1;
+    else
+        les->quad = 0;
 
-	if (type == G_MATH_SPARSE_LES)
-	{
-		les->Asp = (G_math_spvector **) G_calloc(rows,
-				sizeof(G_math_spvector *));
-		les->type = G_MATH_SPARSE_LES;
-	}
-	else
-	{
-		les->A = G_alloc_matrix(rows, cols);
-		/*save the start pointer of the matrix*/
-		les->data = les->A[0];
-		les->type = G_MATH_NORMAL_LES;
-	}
+    if (type == G_MATH_SPARSE_LES) {
+        les->Asp = (G_math_spvector **) G_calloc(rows,
+            sizeof(G_math_spvector *));
+        les->type = G_MATH_SPARSE_LES;
+    }
+    else {
+        les->A = G_alloc_matrix(rows, cols);
+        /*save the start pointer of the matrix */
+        les->data = les->A[0];
+        les->type = G_MATH_NORMAL_LES;
+    }
 
-	return les;
+    return les;
 }
 
 /***************** Floating point version ************************/
 
 G_math_f_les *G_math_alloc_f_les(int rows, int type)
 {
-	return G_math_alloc_f_les_param(rows, rows, type, 2);
+    return G_math_alloc_f_les_param(rows, rows, type, 2);
 }
 
 G_math_f_les *G_math_alloc_f_nquad_les_A(int rows, int cols, int type)
 {
-	return G_math_alloc_f_les_param(rows, cols, type, 0);
+    return G_math_alloc_f_les_param(rows, cols, type, 0);
 }
 
 G_math_f_les *G_math_alloc_f_les_param(int rows, int cols, int type, int parts)
 {
-	G_math_f_les *les;
+    G_math_f_les *les;
 
-	G_debug(
-			2,
-			"Allocate memory for a regular float linear equation system with %i rows\n",
-			rows);
+    G_debug(2,
+        "Allocate memory for a regular float linear equation system with %i rows\n",
+        rows);
 
-	les = (G_math_f_les *) G_calloc(1, sizeof(G_math_f_les));
-	les->x = NULL;
-	les->b = NULL;
+    les = (G_math_f_les *) G_calloc(1, sizeof(G_math_f_les));
+    les->x = NULL;
+    les->b = NULL;
 
-	if (parts > 0)
-	{
-		les->x = (float *)G_calloc(cols, sizeof(float));
-	}
+    if (parts > 0) {
+        les->x = (float *)G_calloc(cols, sizeof(float));
+    }
 
-	if (parts > 1)
-	{
-		les->b = (float *)G_calloc(cols, sizeof(float));
-	}
+    if (parts > 1) {
+        les->b = (float *)G_calloc(cols, sizeof(float));
+    }
 
-	les->A = NULL;
-	les->data = NULL;
-	les->rows = rows;
-	les->cols = cols;
-	les->symm = 0;
-	les->bandwidth = cols;
-	if (rows == cols)
-		les->quad = 1;
-	else
-		les->quad = 0;
+    les->A = NULL;
+    les->data = NULL;
+    les->rows = rows;
+    les->cols = cols;
+    les->symm = 0;
+    les->bandwidth = cols;
+    if (rows == cols)
+        les->quad = 1;
+    else
+        les->quad = 0;
 
-	les->A = G_alloc_fmatrix(rows, cols);
-	/*save the start pointer of the matrix*/
-	les->data = les->A[0];
-	les->type = G_MATH_NORMAL_LES;
+    les->A = G_alloc_fmatrix(rows, cols);
+    /*save the start pointer of the matrix */
+    les->data = les->A[0];
+    les->type = G_MATH_NORMAL_LES;
 
-	return les;
+    return les;
 }
 
 /*!
@@ -294,32 +286,28 @@ G_math_f_les *G_math_alloc_f_les_param(int rows, int cols, int type, int parts)
  *
  * */
 int G_math_add_spvector_to_les(G_math_les * les, G_math_spvector * spvector,
-		int row)
+    int row)
 {
 
-	if (les != NULL)
-	{
-		if (les->type != G_MATH_SPARSE_LES)
-			return -1;
+    if (les != NULL) {
+        if (les->type != G_MATH_SPARSE_LES)
+            return -1;
 
-		if (les->rows > row)
-		{
-			G_debug(
-					5,
-					"Add sparse vector %p to the sparse linear equation system at row %i\n",
-					spvector, row);
-			les->Asp[row] = spvector;
-		}
-		else
-			return -1;
+        if (les->rows > row) {
+            G_debug(5,
+                "Add sparse vector %p to the sparse linear equation system at row %i\n",
+                spvector, row);
+            les->Asp[row] = spvector;
+        }
+        else
+            return -1;
 
-	}
-	else
-	{
-		return -1;
-	}
+    }
+    else {
+        return -1;
+    }
 
-	return 1;
+    return 1;
 }
 
 /*!
@@ -333,12 +321,12 @@ int G_math_add_spvector_to_les(G_math_les * les, G_math_spvector * spvector,
  * <p>
  * Example
  \verbatim
- 
+
  2 1 1 1 * 2 = 0.1
  1 2 0 0 * 3 = 0.2
  1 0 2 0 * 3 = 0.2
  1 0 0 2 * 2 = 0.1
- 
+
  \endverbatim
  *
  * \param les G_math_les * 
@@ -347,53 +335,45 @@ int G_math_add_spvector_to_les(G_math_les * les, G_math_spvector * spvector,
  * */
 void G_math_print_les(G_math_les * les)
 {
-	int i, j, k, out;
+    int i, j, k, out;
 
-        if (les->type == G_MATH_SPARSE_LES)
-	{
-		for (i = 0; i < les->rows; i++)
-		{
-			for (j = 0; j < les->cols; j++)
-			{
-				out = 0;
-				for (k = 0; k < les->Asp[i]->cols; k++)
-				{
-					if (les->Asp[i]->index[k] == j)
-					{
-						fprintf(stdout, "%4.5f ", les->Asp[i]->values[k]);
-						out = 1;
-					}
-				}
-				if (!out)
-					fprintf(stdout, "%4.5f ", 0.0);
-			}
-			if (les->x)
-				fprintf(stdout, "  *  %4.5f", les->x[i]);
-			if (les->b)
-				fprintf(stdout, " =  %4.5f ", les->b[i]);
+    if (les->type == G_MATH_SPARSE_LES) {
+        for (i = 0; i < les->rows; i++) {
+            for (j = 0; j < les->cols; j++) {
+                out = 0;
+                for (k = 0; k < les->Asp[i]->cols; k++) {
+                    if (les->Asp[i]->index[k] == j) {
+                        fprintf(stdout, "%4.5f ", les->Asp[i]->values[k]);
+                        out = 1;
+                    }
+                }
+                if (!out)
+                    fprintf(stdout, "%4.5f ", 0.0);
+            }
+            if (les->x)
+                fprintf(stdout, "  *  %4.5f", les->x[i]);
+            if (les->b)
+                fprintf(stdout, " =  %4.5f ", les->b[i]);
 
-			fprintf(stdout, "\n");
-		}
-	}
-	else
-	{
+            fprintf(stdout, "\n");
+        }
+    }
+    else {
 
-		for (i = 0; i < les->rows; i++)
-		{
-			for (j = 0; j < les->cols; j++)
-			{
-				fprintf(stdout, "%4.5f ", les->A[i][j]);
-			}
-			if (les->x)
-				fprintf(stdout, "  *  %4.5f", les->x[i]);
-			if (les->b)
-				fprintf(stdout, " =  %4.5f ", les->b[i]);
+        for (i = 0; i < les->rows; i++) {
+            for (j = 0; j < les->cols; j++) {
+                fprintf(stdout, "%4.5f ", les->A[i][j]);
+            }
+            if (les->x)
+                fprintf(stdout, "  *  %4.5f", les->x[i]);
+            if (les->b)
+                fprintf(stdout, " =  %4.5f ", les->b[i]);
 
-			fprintf(stdout, "\n");
-		}
+            fprintf(stdout, "\n");
+        }
 
-	}
-	return;
+    }
+    return;
 }
 
 /*!
@@ -406,45 +386,41 @@ void G_math_print_les(G_math_les * les)
 
 void G_math_free_les(G_math_les * les)
 {
-	int i;
+    int i;
 
-	if (les->type == G_MATH_SPARSE_LES)
-		G_debug(2, "Releasing memory of a sparse linear equation system\n");
-	else
-		G_debug(2, "Releasing memory of a regular linear equation system\n");
+    if (les->type == G_MATH_SPARSE_LES)
+        G_debug(2, "Releasing memory of a sparse linear equation system\n");
+    else
+        G_debug(2, "Releasing memory of a regular linear equation system\n");
 
-	if (les)
-	{
+    if (les) {
 
-		if (les->x)
-			G_free(les->x);
-		if (les->b)
-			G_free(les->b);
+        if (les->x)
+            G_free(les->x);
+        if (les->b)
+            G_free(les->b);
 
-		if (les->type == G_MATH_SPARSE_LES)
-		{
+        if (les->type == G_MATH_SPARSE_LES) {
 
-			if (les->Asp)
-			{
-				for (i = 0; i < les->rows; i++)
-					if (les->Asp[i])
-						G_math_free_spvector(les->Asp[i]);
+            if (les->Asp) {
+                for (i = 0; i < les->rows; i++)
+                    if (les->Asp[i])
+                        G_math_free_spvector(les->Asp[i]);
 
-				G_free(les->Asp);
-			}
-		}
-		else
-		{
-			/*We don't know if the rows have been changed by pivoting, 
-			 * so we restore the data pointer*/
-			les->A[0] = les->data;
-			G_free_matrix(les->A);
-		}
+                G_free(les->Asp);
+            }
+        }
+        else {
+            /*We don't know if the rows have been changed by pivoting, 
+             * so we restore the data pointer*/
+            les->A[0] = les->data;
+            G_free_matrix(les->A);
+        }
 
-		free(les);
-	}
+        free(les);
+    }
 
-	return;
+    return;
 }
 
 /*!
@@ -457,23 +433,22 @@ void G_math_free_les(G_math_les * les)
 
 void G_math_free_f_les(G_math_f_les * les)
 {
-	G_debug(2, "Releasing memory of a regular float linear equation system\n");
+    G_debug(2, "Releasing memory of a regular float linear equation system\n");
 
-	if (les)
-	{
+    if (les) {
 
-		if (les->x)
-			G_free(les->x);
-		if (les->b)
-			G_free(les->b);
+        if (les->x)
+            G_free(les->x);
+        if (les->b)
+            G_free(les->b);
 
-		/*We don't know if the rows have been changed by pivoting, 
-		 * so we restore the data pointer*/
-		les->A[0] = les->data;
-		G_free_fmatrix(les->A);
+        /*We don't know if the rows have been changed by pivoting, 
+         * so we restore the data pointer*/
+        les->A[0] = les->data;
+        G_free_fmatrix(les->A);
 
-		free(les);
-	}
+        free(les);
+    }
 
-	return;
+    return;
 }

@@ -16,7 +16,8 @@ int add_rule(RULE **, CELL, CELL, CELL);
 int parse(const char *, RULE **, RULE **, struct Categories *);
 
 /* reclass.c */
-int reclass(const char *, const char *, const char *, RULE *, struct Categories *, const char *);
+int reclass(const char *, const char *, const char *, RULE *,
+    struct Categories *, const char *);
 
 /* input.c */
 int input(FILE *, int, const char *);

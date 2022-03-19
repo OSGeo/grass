@@ -75,6 +75,7 @@ GLOBAL int skip_cells;
 GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
+
 /* Zenith/nadir comparison modes. */
 GLOBAL enum
 {
@@ -110,7 +111,7 @@ float exposition(float *elevation);
 float range(float *elevation);
 float variance(float *elevation, int n);
 int shape(PATTERN * pattern, int pattern_size, float *azimuth,
-          float *elongation, float *width);
+    float *elongation, float *width);
 float extends(PATTERN * pattern);
 double octa_perimeter(const PATTERN *);
 double octa_area(const PATTERN *);

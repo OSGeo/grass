@@ -20,5 +20,5 @@ typedef struct CoppiaPesata
 typedef CoppiaPesata *Coppie;
 
 int addCoppia(Coppie * cc, generic_cell c1, generic_cell c2, double p,
-	      long tc, long *siz);
+    long tc, long *siz);
 int updateCoppia(Coppie * cc, generic_cell c1, generic_cell c2, long tc);

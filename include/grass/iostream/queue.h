@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:     iostream
@@ -39,95 +40,103 @@
 #include <assert.h>
 #include <iostream>
 
-template<class T> 
-class queue {
-private:
-  T *data;
-  int size;
-  int head;  // first valid location (if data)
-  int tail;  // next free location
-  int len;
-  void grow();
-public:
-  queue(int size=4096);
-  ~queue();
-  bool enqueue(T &);
-  bool dequeue(T *);
-  bool peek(int offset, T *);
-  bool isEmpty() const { return len==0; };
-  //int length() const { return len; };
-  unsigned int length() const { return (unsigned int)len; };
+template < class T > class queue {
+  private:
+    T * data;
+    int size;
+    int head;                   // first valid location (if data)
+    int tail;                   // next free location
+    int len;
+    void grow();
+
+  public:
+    queue(int size = 4096);
+
+    ~queue();
+    bool enqueue(T &);
+    bool dequeue(T *);
+    bool peek(int offset, T *);
+    bool isEmpty() const
+    {
+        return len == 0;
+    };
+
+    //int length() const { return len; };
+    unsigned int length() const
+    {
+        return (unsigned int)len;
+    };
 };
 
 
-template<class T> 
-queue<T>::queue(int vsize) : size(vsize) {
+template < class T > queue < T >::queue(int vsize):size(vsize)
+{
 
-  if(size <= 0) size = 64;		/* default */
+    if (size <= 0)
+        size = 64;              /* default */
 
-  data = new T[size];
-  head = 0;
-  tail = 0;
-  len = 0;
+    data = new T[size];
+    head = 0;
+    tail = 0;
+    len = 0;
 }
 
 
-template<class T> 
-queue<T>::~queue() {
-  delete [] data;
+template < class T > queue < T >::~queue()
+{
+    delete[]data;
 }
 
 
-template<class T> 
-bool
-queue<T>::enqueue(T &elt) {
-  if(len==size) grow();
-  assert(len<size);
-  data[tail] = elt;
-  tail = (tail+1)%size;
-  len++;
-  return true;
+template < class T > bool queue < T >::enqueue(T & elt)
+{
+    if (len == size)
+        grow();
+    assert(len < size);
+    data[tail] = elt;
+    tail = (tail + 1) % size;
+    len++;
+    return true;
 }
 
-template<class T> 
-bool 
-queue<T>::dequeue(T *elt) {
-  if(len>0) {
-	*elt = data[head];	  
-	head = (head+1)%size;
-	len--;
-	return true;
-  } 
-  return false;
-}
-
-
-template<class T> 
-bool 
-queue<T>::peek(int offset, T *elt) {
-  if(len>offset) {
-	int pos = (head+offset)%size;
-	*elt = data[pos];	  
-	return true;
-  } 
-  return false;
-}
-
-template<class T> 
-void
-queue<T>::grow() {
-  T *data2 = new T[size*2];
-  int k=head;
-  for(int i=0; i<len; i++) {
-	data2[i] = data[k];
-	k = (k+1)%size;
-  }
-  head = 0;
-  tail = len;
-  delete [] data;
-  data = data2;
-  size *= 2;
+template < class T > bool queue < T >::dequeue(T * elt)
+{
+    if (len > 0) {
+        *elt = data[head];
+        head = (head + 1) % size;
+        len--;
+        return true;
+    }
+    return false;
 }
 
 
-#endif // QUEUE_H
+template < class T > bool queue < T >::peek(int offset, T * elt)
+{
+    if (len > offset) {
+        int pos = (head + offset) % size;
+
+        *elt = data[pos];
+        return true;
+    }
+    return false;
+}
+
+template < class T > void queue < T >::grow()
+{
+    T *data2 = new T[size * 2];
+    int k = head;
+
+    for (int i = 0; i < len; i++) {
+        data2[i] = data[k];
+        k = (k + 1) % size;
+    }
+    head = 0;
+    tail = len;
+    delete[]data;
+    data = data2;
+    size *= 2;
+}
+
+
+#endif                          // QUEUE_H

@@ -108,7 +108,8 @@ char *Rast_read_semantic_label(const char *name, const char *mapset)
  *
  * \return  string representing semantic label or map name
  */
-char *Rast_get_semantic_label_or_name(const char *name, const char *mapset) {
+char *Rast_get_semantic_label_or_name(const char *name, const char *mapset)
+{
     char *buff;
 
     buff = Rast_read_semantic_label(name, mapset);
@@ -164,12 +165,13 @@ bool Rast_legal_semantic_label(const char *semantic_label)
 
     s = semantic_label;
     while (*s) {
-	if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
-	      (*s >= '0' && *s <= '9') || *s == '_'  || *s == '-')) {
-	    G_warning(_("Character '%c' not allowed in a semantic label."), *s);
-	    return false;
-	}
-	s++;
+        if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
+                (*s >= '0' && *s <= '9') || *s == '_' || *s == '-')) {
+            G_warning(_("Character '%c' not allowed in a semantic label."),
+                *s);
+            return false;
+        }
+        s++;
     }
 
     return true;
@@ -187,7 +189,7 @@ bool Rast_legal_semantic_label(const char *semantic_label)
  * \return NULL on error
  */
 static char *misc_read_line(const char *elem,
-			    const char *name, const char *mapset)
+    const char *name, const char *mapset)
 {
     char buff[GNAME_MAX];
     FILE *fp;
@@ -195,22 +197,22 @@ static char *misc_read_line(const char *elem,
     buff[0] = '\0';
 
     if (G_find_file2_misc("cell_misc", elem, name, mapset) == NULL)
-	return NULL;
+        return NULL;
 
     fp = G_fopen_old_misc("cell_misc", elem, name, mapset);
     if (!fp) {
-	G_warning(_("Unable to read <%s> for raster map <%s@%s>"),
-		  elem, name, mapset);
-	return NULL;
+        G_warning(_("Unable to read <%s> for raster map <%s@%s>"),
+            elem, name, mapset);
+        return NULL;
     }
     if (G_getl2(buff, sizeof(buff) - 1, fp) == 0) {
-	/* file is empty */
-	*buff = '\0';
+        /* file is empty */
+        *buff = '\0';
     }
 
     if (fclose(fp) != 0)
-	G_fatal_error(_("Error closing <%s> metadata file for raster map <%s@%s>"),
-		      elem, name, mapset);
+        G_fatal_error(_("Error closing <%s> metadata file for raster map <%s@%s>"), elem,
+            name, mapset);
 
     return *buff ? G_store(buff) : NULL;
 }
@@ -226,7 +228,8 @@ static char *misc_read_line(const char *elem,
  * \param name
  * \param *str  string containing data to be written
  */
-static void misc_write_line(const char *elem, const char *name, const char *str)
+static void misc_write_line(const char *elem, const char *name,
+    const char *str)
 {
     FILE *fp;
 
@@ -234,7 +237,7 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
     if (!fp) {
         G_fatal_error(_("Unable to create <%s> metadata file for raster map <%s@%s>"),
             elem, name, G_mapset());
-    } /* This else block is unnecessary but helps to silence static code analysis tools */
+    }                           /* This else block is unnecessary but helps to silence static code analysis tools */
     else {
         fprintf(fp, "%s\n", str);
 
@@ -243,4 +246,3 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
                 elem, name, G_mapset());
     }
 }
-

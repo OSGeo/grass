@@ -49,9 +49,7 @@
 /* distribution sweep: write results to visgrid.
  */
 IOVisibilityGrid *distribute_and_sweep(char *inputfname,
-				       GridHeader * hd,
-				       Viewpoint * vp,
-				       const ViewOptions &viewOptions);
+    GridHeader * hd, Viewpoint * vp, const ViewOptions & viewOptions);
 
 
 
@@ -70,10 +68,10 @@ IOVisibilityGrid *distribute_and_sweep(char *inputfname,
    returns the number of visible cells.
  */
 unsigned long distribute_sector(AMI_STREAM < AEvent > *eventList,
-				AMI_STREAM < AEvent > *enterBndEvents,
-				double start_angle, double end_angle,
-				IOVisibilityGrid * visgrid, Viewpoint * vp,
-				GridHeader *hd, const ViewOptions &viewOptions);
+    AMI_STREAM < AEvent > *enterBndEvents,
+    double start_angle, double end_angle,
+    IOVisibilityGrid * visgrid, Viewpoint * vp,
+    GridHeader * hd, const ViewOptions & viewOptions);
 
 /* bndEvents is a stream of events that cross into the sector's
    (first) boundary; they must be distributed to the boundary streams
@@ -83,10 +81,9 @@ unsigned long distribute_sector(AMI_STREAM < AEvent > *eventList,
    vp.  
  */
 void distribute_bnd_events(AMI_STREAM < AEvent > *bndEvents,
-			   AMI_STREAM < AEvent > *SectorBnd, int nsect,
-			   Viewpoint * vp, double start_angle,
-			   double end_angle, double *high, long *insert,
-			   long *drop);
+    AMI_STREAM < AEvent > *SectorBnd, int nsect,
+    Viewpoint * vp, double start_angle,
+    double end_angle, double *high, long *insert, long *drop);
 
 
 /* same as above, but does it inemory. it is called when sector fits
@@ -98,10 +95,10 @@ void distribute_bnd_events(AMI_STREAM < AEvent > *bndEvents,
    visible/invisible cells must be written. The sector is solved by
    switching to radial sweep.  Returns the number of visible cells. */
 unsigned long solve_in_memory(AMI_STREAM < AEvent > *eventList,
-			      AMI_STREAM < AEvent > *enterBndEvents,
-			      double start_angle, double end_angle,
-			      IOVisibilityGrid * visgrid, GridHeader *hd,
-			      Viewpoint * vp, const ViewOptions &viewOptions);
+    AMI_STREAM < AEvent > *enterBndEvents,
+    double start_angle, double end_angle,
+    IOVisibilityGrid * visgrid, GridHeader * hd,
+    Viewpoint * vp, const ViewOptions & viewOptions);
 
 
 /*returns 1 if enter angle is within epsilon from boundary angle */
@@ -109,7 +106,7 @@ int is_almost_on_boundary(double angle, double boundary_angle);
 
 /* returns 1 if angle is within epsilon the boundaries of sector s */
 int is_almost_on_boundary(double angle, int s, double start_angle,
-			  double end_angle, int nsect);
+    double end_angle, int nsect);
 
 /* computes the number of sector for the distribution sweep;
    technically M/B */
@@ -121,7 +118,7 @@ int is_inside(int s, int nsect);
 /* compute the sector that contains this angle; there are nsect
    sectors that span the angle interval [sstartAngle, sendAngle] */
 int get_event_sector(double angle, double sstartAngle, double sendAngle,
-		     int nsect);
+    int nsect);
 
 
 /* insert event in this sector */
@@ -129,13 +126,12 @@ void insert_event_in_sector(AMI_STREAM < AEvent > *str, AEvent * e);
 
 /* insert event e into sector if it is not occluded by high_s */
 void insert_event_in_sector(AEvent * e, int s, AMI_STREAM < AEvent > *str,
-			    double high_s, Viewpoint * vp, long *insert,
-			    long *drop);
+    double high_s, Viewpoint * vp, long *insert, long *drop);
 
 /**********************************************************************
  insert event e into sector, no occlusion check */
 void insert_event_in_sector_no_drop(AEvent * e, int s,
-				    AMI_STREAM < AEvent > *str, long *insert);
+    AMI_STREAM < AEvent > *str, long *insert);
 
 
 
@@ -150,24 +146,23 @@ void print_dropped(AEvent * e, Viewpoint * vp, double high);
 
 /* prints how many events were inserted and dropped in each sector */
 void print_sector_stats(off_t nevents, int nsect, double *high, long *total,
-			long *insert, long *drop,
-			AMI_STREAM < AEvent > *sector,
-			AMI_STREAM < AEvent > *bndSector, long *bndInsert,
-			long longEvents, double start_angle,
-			double end_angle);
+    long *insert, long *drop,
+    AMI_STREAM < AEvent > *sector,
+    AMI_STREAM < AEvent > *bndSector, long *bndInsert,
+    long longEvents, double start_angle, double end_angle);
 
 
 /* the event e spans sectors from start_s to end_s; Action: update
    high[] for each spanned sector.
  */
 void process_long_cell(int start_s, int end_s, int nsect,
-		       Viewpoint * vp, AEvent * e, double *high);
+    Viewpoint * vp, AEvent * e, double *high);
 
 
 /* return the start angle of the i-th sector. Assuming that
    [start..end] is split into nsectors */
 double get_sector_start(int i, double start_angle, double end_angle,
-			int nsect);
+    int nsect);
 
 
 /* return the start angle of the i-th sector. Assuming that

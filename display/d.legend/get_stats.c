@@ -7,7 +7,7 @@
 
 
 void run_stats(const char *mapname, int nsteps, const char *tempfile,
-               int map_type)
+    int map_type)
 {
     char buf[32];
     const char *argv[12];
@@ -39,7 +39,7 @@ void run_stats(const char *mapname, int nsteps, const char *tempfile,
 
 /* linked list of stats */
 void get_stats(const char *mapname, struct stat_list *dist_stats, int nsteps,
-               int map_type)
+    int map_type)
 {
     char buf[1024];             /* input buffer for reading stats */
     int done = FALSE;

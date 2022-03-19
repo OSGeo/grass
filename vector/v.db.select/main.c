@@ -30,7 +30,8 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
-enum OutputFormat {
+enum OutputFormat
+{
     PLAIN,
     JSON,
     CSV,
@@ -38,23 +39,21 @@ enum OutputFormat {
 };
 
 void fatal_error_option_value_excludes_flag(struct Option *option,
-                                            struct Flag *excluded,
-                                            const char *because)
+    struct Flag *excluded, const char *because)
 {
     if (!excluded->answer)
         return;
     G_fatal_error(_("The flag -%c is not allowed with %s=%s. %s"),
-                  excluded->key, option->key, option->answer, because);
+        excluded->key, option->key, option->answer, because);
 }
 
 void fatal_error_option_value_excludes_option(struct Option *option,
-                                              struct Option *excluded,
-                                              const char *because)
+    struct Option *excluded, const char *because)
 {
     if (!excluded->answer)
         return;
     G_fatal_error(_("The option %s is not allowed with %s=%s. %s"),
-                  excluded->key, option->key, option->answer, because);
+        excluded->key, option->key, option->answer, because);
 }
 
 int main(int argc, char **argv)
@@ -192,7 +191,7 @@ int main(int argc, char **argv)
     if (options.file->answer && strcmp(options.file->answer, "-") != 0) {
         if (NULL == freopen(options.file->answer, "w", stdout))
             G_fatal_error(_("Unable to open file <%s> for writing"),
-                          options.file->answer);
+                options.file->answer);
     }
 
     if (strcmp(options.format->answer, "csv") == 0)
@@ -205,17 +204,17 @@ int main(int argc, char **argv)
         format = PLAIN;
     if (format == JSON) {
         fatal_error_option_value_excludes_flag(options.format, flags.escape,
-                                               _("Escaping is based on the format"));
+            _("Escaping is based on the format"));
         fatal_error_option_value_excludes_flag(options.format, flags.colnames,
-                                               _("Column names are always included"));
+            _("Column names are always included"));
         fatal_error_option_value_excludes_option(options.format, options.fsep,
-                                                 _("Separator is part of the format"));
-        fatal_error_option_value_excludes_option(options.format, options.nullval,
-                                                 _("Null value is part of the format"));
+            _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(options.format,
+            options.nullval, _("Null value is part of the format"));
     }
     if (format != VERTICAL) {
         fatal_error_option_value_excludes_option(options.format, options.vsep,
-                                                 _("Only vertical output can use vertical separator"));
+            _("Only vertical output can use vertical separator"));
     }
 
     min_box = line_box = NULL;
@@ -242,12 +241,12 @@ int main(int argc, char **argv)
         }
         else if (format == PLAIN || format == VERTICAL) {
             if (flags.region->answer)
-               fsep = G_store("=");
+                fsep = G_store("=");
             else
-               fsep = G_store("|");
+                fsep = G_store("|");
         }
         else
-            fsep = NULL;  /* Something like a separator is part of the format. */
+            fsep = NULL;        /* Something like a separator is part of the format. */
     }
     if (options.vsep->answer)
         vsep = G_option_to_separator(options.vsep);
@@ -263,19 +262,19 @@ int main(int argc, char **argv)
     /* open input vector */
     if (flags.region->answer || flags.features->answer) {
         if (2 > Vect_open_old2(&Map, options.map->answer, "",
-                               options.field->answer)) {
+                options.field->answer)) {
             Vect_close(&Map);
             G_fatal_error(_("Unable to open vector map <%s> at topology level. "
-                           "Flag '%c' requires topology level."),
-                          options.map->answer, flags.region->key);
+                    "Flag '%c' requires topology level."), options.map->answer,
+                flags.region->key);
         }
         field_number = Vect_get_field_number(&Map, options.field->answer);
     }
     else {
         if (Vect_open_old_head2(&Map, options.map->answer, "",
-                                options.field->answer) < 0)
+                options.field->answer) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"),
-                          options.map->answer);
+                options.map->answer);
         /* field_number won't be used, but is initialized to suppress compiler
          * warnings. */
         field_number = -1;
@@ -283,13 +282,13 @@ int main(int argc, char **argv)
 
     if ((Fi = Vect_get_field2(&Map, options.field->answer)) == NULL)
         G_fatal_error(_("Database connection not defined for layer <%s>"),
-                      options.field->answer);
+            options.field->answer);
 
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
 
     if (!driver)
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                      Fi->database, Fi->driver);
+            Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
     if (options.cols->answer)
@@ -350,7 +349,7 @@ int main(int argc, char **argv)
     while (1) {
         if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
             G_fatal_error(_("Unable to fetch data from table <%s>"),
-                          Fi->table);
+                Fi->table);
 
         if (!more)
             break;
@@ -376,7 +375,7 @@ int main(int argc, char **argv)
 
             if (flags.features->answer) {
                 Vect_cidx_find_all(&Map, field_number, ~GV_AREA, cat,
-                                   list_lines);
+                    list_lines);
                 /* if no features are found for this category, don't print
                  * anything. */
                 if (list_lines->n_values == 0)
@@ -422,9 +421,9 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\t", "\\t");
                     if (format == JSON && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
-                    if (strchr(str, '\f'))  /* form feed, somewhat unlikely */
+                    if (strchr(str, '\f'))      /* form feed, somewhat unlikely */
                         str = G_str_replace(str, "\f", "\\f");
-                    if (strchr(str, '\b'))  /* backspace, quite unlikely */
+                    if (strchr(str, '\b'))      /* backspace, quite unlikely */
                         str = G_str_replace(str, "\b", "\\b");
                 }
                 /* Common CSV does not escape, but doubles quotes (and we quote all
@@ -468,12 +467,11 @@ int main(int argc, char **argv)
                 if (Vect_get_line_type(&Map, line) == GV_CENTROID) {
                     area = Vect_get_centroid_area(&Map, line);
                     if (area > 0 && !Vect_get_area_box(&Map, area, line_box))
-                        G_fatal_error(_("Unable to get bounding box of area %d"),
-                                      area);
+                        G_fatal_error(_("Unable to get bounding box of area %d"), area);
                 }
                 else if (!Vect_get_line_box(&Map, line, line_box))
                     G_fatal_error(_("Unable to get bounding box of line %d"),
-                                  line);
+                        line);
                 if (init_box) {
                     Vect_box_copy(min_box, line_box);
                     init_box = false;
@@ -506,9 +504,10 @@ int main(int argc, char **argv)
             }
             fprintf(stdout, "\n");
             fprintf(stdout, "%f%s%f%s%f%s%f", min_box->N, fsep, min_box->S,
-                    fsep, min_box->W, fsep, min_box->E);
+                fsep, min_box->W, fsep, min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, "%s%f%s%f", fsep, min_box->T, fsep, min_box->B);
+                fprintf(stdout, "%s%f%s%f", fsep, min_box->T, fsep,
+                    min_box->B);
             }
             fprintf(stdout, "\n");
         }

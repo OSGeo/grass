@@ -6,17 +6,16 @@ NODE *add_in(int r, int c, int rr, int cc, NODE * zero, int *node_ct)
 
     FLAG_SET(seen, rr, cc);
     if (rr < minr)
-	minr = rr;
+        minr = rr;
     if (rr > maxr)
-	maxr = rr;
+        maxr = rr;
     if (cc < minc)
-	minc = cc;
+        minc = cc;
     if (cc > maxc)
-	maxc = cc;
+        maxc = cc;
     if (*node_ct == array_size) {
-	zero = (NODE *) G_realloc(zero, (array_size + AR_INCR) *
-				  sizeof(NODE));
-	array_size += AR_INCR;
+        zero = (NODE *) G_realloc(zero, (array_size + AR_INCR) * sizeof(NODE));
+        array_size += AR_INCR;
     }
     dor = ABS(rr - r);
     doc = ABS(cc - c);

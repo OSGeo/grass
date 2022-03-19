@@ -45,9 +45,9 @@ int G_mkdir(const char *path)
 int G_is_dirsep(char c)
 {
     if (c == GRASS_DIRSEP || c == HOST_DIRSEP)
-	return 1;
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 /**
@@ -63,12 +63,12 @@ int G_is_absolute_path(const char *path)
 {
     if (G_is_dirsep(path[0])
 #ifdef __MINGW32__
-	|| (isalpha(path[0]) && (path[1] == ':') && G_is_dirsep(path[2]))
+        || (isalpha(path[0]) && (path[1] == ':') && G_is_dirsep(path[2]))
 #endif
-	)
-	return 1;
+        )
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 /**
@@ -85,8 +85,8 @@ char *G_convert_dirseps_to_host(char *path)
     char *i;
 
     for (i = path; *i; i++) {
-	if (*i == GRASS_DIRSEP)
-	    *i = HOST_DIRSEP;
+        if (*i == GRASS_DIRSEP)
+            *i = HOST_DIRSEP;
     }
 
     return path;
@@ -107,8 +107,8 @@ char *G_convert_dirseps_from_host(char *path)
     char *i;
 
     for (i = path; *i; i++) {
-	if (*i == HOST_DIRSEP)
-	    *i = GRASS_DIRSEP;
+        if (*i == HOST_DIRSEP)
+            *i = GRASS_DIRSEP;
     }
 
     return path;
@@ -187,37 +187,35 @@ int G_owner(const char *path)
     PSECURITY_DESCRIPTOR pSD = NULL;
 
     /* Get the handle of the file object. */
-    hFile = CreateFile(
-                      TEXT(path),		/* lpFileName */
-		      GENERIC_READ,		/* dwDesiredAccess */
-		      FILE_SHARE_READ,		/* dwShareMode */
-		      NULL,			/* lpSecurityAttributes */
-		      OPEN_EXISTING,		/* dwCreationDisposition */
-		      FILE_ATTRIBUTE_NORMAL,	/* dwFlagsAndAttributes */
-		      NULL			/* hTemplateFile */
-		      );
-    
+    hFile = CreateFile(TEXT(path),      /* lpFileName */
+        GENERIC_READ,           /* dwDesiredAccess */
+        FILE_SHARE_READ,        /* dwShareMode */
+        NULL,                   /* lpSecurityAttributes */
+        OPEN_EXISTING,          /* dwCreationDisposition */
+        FILE_ATTRIBUTE_NORMAL,  /* dwFlagsAndAttributes */
+        NULL                    /* hTemplateFile */
+        );
+
     if (hFile == INVALID_HANDLE_VALUE) {
-	G_fatal_error(_("Unable to open file <%s> for reading"), path);
+        G_fatal_error(_("Unable to open file <%s> for reading"), path);
     }
-    
+
     /* Get the owner SID of the file. */
-    dwRtnCode = GetSecurityInfo(
-		      hFile,				/* handle */
-		      SE_FILE_OBJECT,			/* ObjectType */
-		      OWNER_SECURITY_INFORMATION,	/* SecurityInfo */
-		      &pSidOwner,			/* ppsidOwner */
-		      NULL,				/* ppsidGroup */
-		      NULL,				/* ppDacl */
-		      NULL,				/* ppSacl */
-		      &pSD				/* ppSecurityDescriptor */
-		      );
-    
+    dwRtnCode = GetSecurityInfo(hFile,  /* handle */
+        SE_FILE_OBJECT,         /* ObjectType */
+        OWNER_SECURITY_INFORMATION,     /* SecurityInfo */
+        &pSidOwner,             /* ppsidOwner */
+        NULL,                   /* ppsidGroup */
+        NULL,                   /* ppDacl */
+        NULL,                   /* ppSacl */
+        &pSD                    /* ppSecurityDescriptor */
+        );
+
     if (dwRtnCode != ERROR_SUCCESS) {
-	G_fatal_error(_("Unable to fetch security info for <%s>"), path);
+        G_fatal_error(_("Unable to fetch security info for <%s>"), path);
     }
     CloseHandle(hFile);
-    
+
     return (int)pSidOwner;
 #endif
 }

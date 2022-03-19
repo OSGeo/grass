@@ -66,9 +66,9 @@ int main(int argc, char **argv)
     G_add_keyword("HIS");
     G_add_keyword("IHS");
     module->description =
-	_("Displays the result obtained by combining "
-	  "hue, intensity, and saturation (HIS) values "
-	  "from user-specified input raster map layers.");
+        _("Displays the result obtained by combining "
+        "hue, intensity, and saturation (HIS) values "
+        "from user-specified input raster map layers.");
 
     opt_h = G_define_option();
     opt_h->key = "hue";
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     nulldraw->description = _("Respect NULL values while drawing");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
 
     /* it's not truly the percentage to brighten,
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     /* Do screen initializing stuff */
 
     D_open_driver();
-    
+
     /* Prepare the raster cell drawing functions */
     D_setup(0);
     D_set_overlay_mode(nulldraw->answer ? 1 : 0);
@@ -136,42 +136,42 @@ int main(int argc, char **argv)
 
     /* Reading color lookup table */
     if (Rast_read_colors(name_h, "", &hue_colors) == -1)
-	G_fatal_error(_("Color file for <%s> not available"), name_h);
+        G_fatal_error(_("Color file for <%s> not available"), name_h);
 
     int_used = 0;
 
     if (opt_i->answer != NULL) {
-	/* Get name of layer to be used for intensity */
-	name_i = opt_i->answer;
-	int_used = 1;
+        /* Get name of layer to be used for intensity */
+        name_i = opt_i->answer;
+        int_used = 1;
 
-	/* Make sure map is available */
-	int_file = Rast_open_old(name_i, "");
+        /* Make sure map is available */
+        int_file = Rast_open_old(name_i, "");
 
-	int_r = G_malloc(window.cols);
-	int_n = G_malloc(window.cols);
+        int_r = G_malloc(window.cols);
+        int_n = G_malloc(window.cols);
 
-	/* Reading color lookup table */
-	if (Rast_read_colors(name_i, "", &int_colors) == -1)
-	    G_fatal_error(_("Color file for <%s> not available"), name_i);
+        /* Reading color lookup table */
+        if (Rast_read_colors(name_i, "", &int_colors) == -1)
+            G_fatal_error(_("Color file for <%s> not available"), name_i);
     }
 
     sat_used = 0;
 
     if (opt_s->answer != NULL) {
-	/* Get name of layer to be used for saturation */
-	name_s = opt_s->answer;
-	sat_used = 1;
+        /* Get name of layer to be used for saturation */
+        name_s = opt_s->answer;
+        sat_used = 1;
 
-	/* Make sure map is available */
-	sat_file = Rast_open_old(name_s, "");
+        /* Make sure map is available */
+        sat_file = Rast_open_old(name_s, "");
 
-	sat_r = G_malloc(window.cols);
-	sat_n = G_malloc(window.cols);
+        sat_r = G_malloc(window.cols);
+        sat_n = G_malloc(window.cols);
 
-	/* Reading color lookup table */
-	if (Rast_read_colors(name_s, "", &sat_colors) == -1)
-	    G_fatal_error(_("Color file for <%s> not available"), name_s);
+        /* Reading color lookup table */
+        if (Rast_read_colors(name_s, "", &sat_colors) == -1)
+            G_fatal_error(_("Color file for <%s> not available"), name_s);
     }
 
     r_array = Rast_allocate_c_buf();
@@ -182,73 +182,74 @@ int main(int argc, char **argv)
     make_gray_scale(&gray_colors);
 
     /* Now do the work */
-    intensity = 255;		/* default is to not change intensity */
-    saturation = 255;		/* default is to not change saturation */
+    intensity = 255;            /* default is to not change intensity */
+    saturation = 255;           /* default is to not change saturation */
 
     D_raster_draw_begin();
 
     next_row = 0;
     for (atrow = 0; atrow < window.rows;) {
-	G_percent(atrow, window.rows, 2);
+        G_percent(atrow, window.rows, 2);
 
-	Rast_get_row_colors
-	    (hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b, hue_n);
+        Rast_get_row_colors
+            (hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b, hue_n);
 
-	if (int_used)
-	    Rast_get_row_colors(int_file, atrow, &int_colors, int_r, dummy, dummy, int_n);
+        if (int_used)
+            Rast_get_row_colors(int_file, atrow, &int_colors, int_r, dummy,
+                dummy, int_n);
 
-	if (sat_used)
-	    Rast_get_row_colors(sat_file, atrow, &sat_colors, sat_r, dummy, dummy, sat_n);
+        if (sat_used)
+            Rast_get_row_colors(sat_file, atrow, &sat_colors, sat_r, dummy,
+                dummy, sat_n);
 
-	for (atcol = 0; atcol < window.cols; atcol++) {
-	    if (nulldraw->answer) {
-		if (hue_n[atcol]
-		    || (int_used && int_n[atcol])
-		    || (sat_used && sat_n[atcol])) {
-		    Rast_set_c_null_value(&r_array[atcol], 1);
-		    Rast_set_c_null_value(&g_array[atcol], 1);
-		    Rast_set_c_null_value(&b_array[atcol], 1);
-		    continue;
-		}
-	    }
+        for (atcol = 0; atcol < window.cols; atcol++) {
+            if (nulldraw->answer) {
+                if (hue_n[atcol]
+                    || (int_used && int_n[atcol])
+                    || (sat_used && sat_n[atcol])) {
+                    Rast_set_c_null_value(&r_array[atcol], 1);
+                    Rast_set_c_null_value(&g_array[atcol], 1);
+                    Rast_set_c_null_value(&b_array[atcol], 1);
+                    continue;
+                }
+            }
 
-	    if (int_used)
-		intensity = (int)(int_r[atcol] * bright_mult);
+            if (int_used)
+                intensity = (int)(int_r[atcol] * bright_mult);
 
-	    if (sat_used)
-		saturation = sat_r[atcol];
+            if (sat_used)
+                saturation = sat_r[atcol];
 
-	    HIS_to_RGB(hue_r[atcol], hue_g[atcol], hue_b[atcol],
-		       intensity, saturation,
-		       &r_array[atcol], &g_array[atcol], &b_array[atcol]);
-	}
+            HIS_to_RGB(hue_r[atcol], hue_g[atcol], hue_b[atcol],
+                intensity, saturation,
+                &r_array[atcol], &g_array[atcol], &b_array[atcol]);
+        }
 
-	if (atrow == next_row)
-	    next_row = D_draw_raster_RGB(next_row,
-					 r_array, g_array, b_array,
-					 &gray_colors, &gray_colors,
-					 &gray_colors, CELL_TYPE, CELL_TYPE,
-					 CELL_TYPE);
+        if (atrow == next_row)
+            next_row = D_draw_raster_RGB(next_row,
+                r_array, g_array, b_array,
+                &gray_colors, &gray_colors,
+                &gray_colors, CELL_TYPE, CELL_TYPE, CELL_TYPE);
 
-	if (next_row > 0)
-	    atrow = next_row;
-	else
-	    break;
+        if (next_row > 0)
+            atrow = next_row;
+        else
+            break;
     }
     G_percent(window.rows, window.rows, 5);
     D_raster_draw_end();
 
     D_save_command(G_recreate_command());
-    
+
     /* Close down connection to display driver */
     D_close_driver();
 
     /* Close the raster maps */
     Rast_close(hue_file);
     if (int_used)
-	Rast_close(int_file);
+        Rast_close(int_file);
     if (sat_used)
-	Rast_close(sat_file);
+        Rast_close(sat_file);
 
     exit(EXIT_SUCCESS);
 }

@@ -21,8 +21,7 @@
 #define F2I(map_type) \
 	(map_type == CELL_TYPE ? 0 : (map_type == FCELL_TYPE ? 1 : 2))
 
-static const int type_size[3] =
-    { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
+static const int type_size[3] = { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
 
 /*!
  * \brief Returns size of a raster cell in bytes.
@@ -135,7 +134,7 @@ char *Rast_allocate_null_buf(void)
 unsigned char *Rast__allocate_null_bits(int cols)
 {
     return (unsigned char *)G_calloc(Rast__null_bitstream_size(cols) + 1,
-				     sizeof(unsigned char));
+        sizeof(unsigned char));
 }
 
 /*!
@@ -148,8 +147,8 @@ unsigned char *Rast__allocate_null_bits(int cols)
 int Rast__null_bitstream_size(int cols)
 {
     if (cols <= 0)
-	G_fatal_error(_("Rast__null_bitstream_size: cols (%d) is negative"),
-		      cols);
+        G_fatal_error(_("Rast__null_bitstream_size: cols (%d) is negative"),
+            cols);
 
     return (cols + 7) / 8;
 }

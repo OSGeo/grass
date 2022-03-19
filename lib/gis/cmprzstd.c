@@ -70,8 +70,7 @@
 #include <grass/glocale.h>
 
 
-int
-G_zstd_compress_bound(int src_sz)
+int G_zstd_compress_bound(int src_sz)
 {
     /* ZSTD has a fast version if destLen is large enough 
      * to hold a worst case result
@@ -85,8 +84,7 @@ G_zstd_compress_bound(int src_sz)
 }
 
 int
-G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz)
+G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int err, nbytes, buf_sz;
     unsigned char *buf;
@@ -98,61 +96,62 @@ G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
 
     /* Catch errors early */
     if (src == NULL || dst == NULL) {
-	if (src == NULL)
-	    G_warning(_("No source buffer"));
-	
-	if (dst == NULL)
-	    G_warning(_("No destination buffer"));
-	return -1;
+        if (src == NULL)
+            G_warning(_("No source buffer"));
+
+        if (dst == NULL)
+            G_warning(_("No destination buffer"));
+        return -1;
     }
 
     /* Don't do anything if either of these are true */
     if (src_sz <= 0 || dst_sz <= 0) {
-	if (src_sz <= 0)
-	    G_warning(_("Invalid source buffer size %d"), src_sz);
-	if (dst_sz <= 0)
-	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
-	return 0;
+        if (src_sz <= 0)
+            G_warning(_("Invalid source buffer size %d"), src_sz);
+        if (dst_sz <= 0)
+            G_warning(_("Invalid destination buffer size %d"), dst_sz);
+        return 0;
     }
 
     /* Output buffer has to be larger for single pass compression */
     buf = dst;
     buf_sz = G_zstd_compress_bound(src_sz);
     if (buf_sz > dst_sz) {
-	G_warning("G_zstd_compress(): programmer error, destination is too small");
-	if (NULL == (buf = (unsigned char *)
-		     G_calloc(buf_sz, sizeof(unsigned char))))
-	    return -1;
+        G_warning
+            ("G_zstd_compress(): programmer error, destination is too small");
+        if (NULL == (buf = (unsigned char *)
+                G_calloc(buf_sz, sizeof(unsigned char))))
+            return -1;
     }
     else
-	buf_sz = dst_sz;
+        buf_sz = dst_sz;
 
     /* Do single pass compression */
     err = ZSTD_compress((char *)buf, buf_sz, (char *)src, src_sz, 3);
 
     if (err <= 0 || ZSTD_isError(err)) {
-	G_warning(_("ZSTD compression error %d: %s"),
-	          err, ZSTD_getErrorName(err));
-	if (buf != dst)
-	    G_free(buf);
-	return -1;
+        G_warning(_("ZSTD compression error %d: %s"),
+            err, ZSTD_getErrorName(err));
+        if (buf != dst)
+            G_free(buf);
+        return -1;
     }
     if (err >= src_sz) {
-	/* compression not possible */
-	if (buf != dst)
-	    G_free(buf);
-	return -2;
+        /* compression not possible */
+        if (buf != dst)
+            G_free(buf);
+        return -2;
     }
-    
+
     /* bytes of compressed data is return value */
     nbytes = err;
 
     if (buf != dst) {
-	/* Copy the data from buf to dst */
-	for (err = 0; err < nbytes; err++)
-	    dst[err] = buf[err];
+        /* Copy the data from buf to dst */
+        for (err = 0; err < nbytes; err++)
+            dst[err] = buf[err];
 
-	G_free(buf);
+        G_free(buf);
     }
 
     return nbytes;
@@ -160,8 +159,7 @@ G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
 }
 
 int
-G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz)
+G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int err, nbytes;
 
@@ -172,39 +170,40 @@ G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
 
     /* Catch error condition */
     if (src == NULL || dst == NULL) {
-	if (src == NULL)
-	    G_warning(_("No source buffer"));
-	
-	if (dst == NULL)
-	    G_warning(_("No destination buffer"));
-	return -2;
+        if (src == NULL)
+            G_warning(_("No source buffer"));
+
+        if (dst == NULL)
+            G_warning(_("No destination buffer"));
+        return -2;
     }
 
     /* Don't do anything if either of these are true */
     if (src_sz <= 0 || dst_sz <= 0) {
-	if (src_sz <= 0)
-	    G_warning(_("Invalid source buffer size %d"), src_sz);
-	if (dst_sz <= 0)
-	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
-	return 0;
+        if (src_sz <= 0)
+            G_warning(_("Invalid source buffer size %d"), src_sz);
+        if (dst_sz <= 0)
+            G_warning(_("Invalid destination buffer size %d"), dst_sz);
+        return 0;
     }
 
     /* Do single pass decompress */
     err = ZSTD_decompress((char *)dst, dst_sz, (char *)src, src_sz);
 
     if (err <= 0 || ZSTD_isError(err)) {
-	G_warning(_("ZSTD compression error %d: %s"),
-	          err, ZSTD_getErrorName(err));
-    	return -1;
+        G_warning(_("ZSTD compression error %d: %s"),
+            err, ZSTD_getErrorName(err));
+        return -1;
     }
 
     /* Number of bytes inflated to output stream is return value */
     nbytes = err;
 
     if (nbytes != dst_sz) {
-	/* TODO: it is not an error if destination is larger than needed */
-	G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes, dst_sz);
-	return -1;
+        /* TODO: it is not an error if destination is larger than needed */
+        G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes,
+            dst_sz);
+        return -1;
     }
 
     return nbytes;

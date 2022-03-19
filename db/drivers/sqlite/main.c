@@ -40,16 +40,17 @@ int sqlite_busy_callback(void *arg, int n_calls)
 
     /* do something here while waiting? */
     if (n_calls > 0 && last_sec > -1) {
-	time(&curr_time);
-	sec = (curr_time - start_time);
-	if (sec > 1 && sec > last_sec && sec % 10 == 0) {
-	    last_sec = sec;
-	    G_warning(_("Busy SQLITE db, already waiting for %d seconds..."), sec);
-	}
+        time(&curr_time);
+        sec = (curr_time - start_time);
+        if (sec > 1 && sec > last_sec && sec % 10 == 0) {
+            last_sec = sec;
+            G_warning(_("Busy SQLITE db, already waiting for %d seconds..."),
+                sec);
+        }
     }
     else {
-	time(&start_time);
-	last_sec = 0;
+        time(&start_time);
+        last_sec = 0;
     }
 
     return 1;

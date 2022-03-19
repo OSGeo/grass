@@ -29,9 +29,9 @@ int read_border(void)
     int ret;
 
     static char *help[] = {
-	"color    name",
-	"width    #",
-	""
+        "color    name",
+        "width    #",
+        ""
     };
 
     G_debug(1, "Reading border settings ..");
@@ -40,38 +40,38 @@ int read_border(void)
     color_r = color_g = color_b = 0.;
 
     while (input(2, buf, help)) {
-	if (!key_data(buf, &key, &data))
-	    continue;
+        if (!key_data(buf, &key, &data))
+            continue;
 
-	if (KEY("color")) {
-	    ret = G_str_to_color(data, &r, &g, &b);
-	    if (ret == 1) {
-		color_r = r / 255.;
-		color_g = g / 255.;
-		color_b = b / 255.;
-	    }
-	    else if (ret == 2)	/* i.e. "none" */
-		color_r = color_g = color_b = -1.;
-	    else
-		error(key, data, "illegal border color request");
+        if (KEY("color")) {
+            ret = G_str_to_color(data, &r, &g, &b);
+            if (ret == 1) {
+                color_r = r / 255.;
+                color_g = g / 255.;
+                color_b = b / 255.;
+            }
+            else if (ret == 2)  /* i.e. "none" */
+                color_r = color_g = color_b = -1.;
+            else
+                error(key, data, "illegal border color request");
 
-	    continue;
-	}
+            continue;
+        }
 
-	if (KEY("width")) {
-	    ch = ' ';
-	    if (sscanf(data, "%lf%c", &width, &ch) < 1 || width < 0.) {
-		width = 1.;
-		error(key, data, "illegal border width request");
-	    }
-	    /* if asked for in inches */
-	    if (ch == 'i')
-		width = width * 72.;
+        if (KEY("width")) {
+            ch = ' ';
+            if (sscanf(data, "%lf%c", &width, &ch) < 1 || width < 0.) {
+                width = 1.;
+                error(key, data, "illegal border width request");
+            }
+            /* if asked for in inches */
+            if (ch == 'i')
+                width = width * 72.;
 
-	    continue;
-	}
+            continue;
+        }
 
-	error(key, data, "illegal border sub-request");
+        error(key, data, "illegal border sub-request");
     }
 
     brd.r = color_r;

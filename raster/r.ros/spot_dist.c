@@ -76,32 +76,32 @@ double B[14] = { 0, -1.21, -1.32, -1.19, -1.05, -0.92, -0.94,
  * @return maximum spotting distance
  */
 int spot_dist(int fuel, float maxros, int speed, float angle, int row0,
-	      int col0)
+    int col0)
 {
     /* variables in Chase (1984) (use h0 for z0 which for e0 + h0) */
-    double h0;			/* initial firebrand height (m) */
-    double E;			/* thermal strength (Btu/ft) */
-    double I;			/* mean fire intensity (Btu/ft/s) */
-    double U;			/* mean windspeed at 6 meter (km/h) */
+    double h0;                  /* initial firebrand height (m) */
+    double E;                   /* thermal strength (Btu/ft) */
+    double I;                   /* mean fire intensity (Btu/ft/s) */
+    double U;                   /* mean windspeed at 6 meter (km/h) */
 
     /* variables in Rothermel (1991) */
-    float R;			/* forward rate of spread (ROS) (ft/s) */
+    float R;                    /* forward rate of spread (ROS) (ft/s) */
 
     /* other variables */
-    extern CELL *map_elev;	/* elevation map array */
+    extern CELL *map_elev;      /* elevation map array */
     extern int nrows, ncols;
     extern struct Cell_head window;
-    double z0;			/* initial firebrand elevation (m) */
-    double z;			/* firebrand height (m) */
-    int row, col;		/* a cell under a spotting trajatory */
-    int S;			/* spotting distance on an terrain (m) */
-    double sqrd;		/* distance from cell0 to cell */
-    double sin_a, cos_a;	/* of the wind angle */
-    double sqr_ns, sqr_ew;	/* square resolutions for speed */
-    int i;			/* for advance a step */
+    double z0;                  /* initial firebrand elevation (m) */
+    double z;                   /* firebrand height (m) */
+    int row, col;               /* a cell under a spotting trajatory */
+    int S;                      /* spotting distance on an terrain (m) */
+    double sqrd;                /* distance from cell0 to cell */
+    double sin_a, cos_a;        /* of the wind angle */
+    double sqr_ns, sqr_ew;      /* square resolutions for speed */
+    int i;                      /* for advance a step */
 
-    if (fuel == 8)		/* no spotting from closed timber litter */
-	return (0);
+    if (fuel == 8)              /* no spotting from closed timber litter */
+        return (0);
 
     /* get I from Byram's equation, I = R*w*h, cited in Rothermel (1991) */
     R = maxros / 60.0;
@@ -110,11 +110,11 @@ int spot_dist(int fuel, float maxros, int speed, float angle, int row0,
     /* get h0 (originally z0) and z0 (e0 + h0) from Chase (1984) */
     U = 2 * speed / 88.0;
     if (U == 0.0)
-	E = 0.0;		/* to avoid domain error in pow() */
+        E = 0.0;                /* to avoid domain error in pow() */
     else
-	E = I * A[fuel] * pow(0.474 * U, B[fuel]);
+        E = I * A[fuel] * pow(0.474 * U, B[fuel]);
     h0 = 0.3048 * (1.055 * sqrt(E));
-    U *= 1.609;			/* change units to metric */
+    U *= 1.609;                 /* change units to metric */
     z0 = DATA(map_elev, row0, col0) + h0;
 
     sin_a = sin(angle * DEG2RAD), cos_a = cos(angle * DEG2RAD);
@@ -124,43 +124,41 @@ int spot_dist(int fuel, float maxros, int speed, float angle, int row0,
     /* vertical change using F=1.3*U*(dz)^.5, simplified from Chase (1984) */
     S = 0;
     row = row0 - cos_a + 0.5, col = col0 + sin_a + 0.5;
-    if (row < 0 || row >= nrows || col < 0 || col >= ncols)	/* outside */
-	return (S);
+    if (row < 0 || row >= nrows || col < 0 || col >= ncols)     /* outside */
+        return (S);
 
     i = 1;
     while (1) {
-	if (row < 0 || row >= nrows)	/* outside the region */
-	    break;
-	if (col < 0 || col >= ncols)	/* outside the region */
-	    break;
-	sqrd = (row - row0) * (row - row0) * sqr_ns
-	    + (col - col0) * (col - col0) * sqr_ew;
-	z = z0 - sqrd / (1.69 * U * U);
+        if (row < 0 || row >= nrows)    /* outside the region */
+            break;
+        if (col < 0 || col >= ncols)    /* outside the region */
+            break;
+        sqrd = (row - row0) * (row - row0) * sqr_ns
+            + (col - col0) * (col - col0) * sqr_ew;
+        z = z0 - sqrd / (1.69 * U * U);
 
-	/* actual target elevation is higher then the potential one */
-	if (DATA(map_elev, row, col) > z) {
+        /* actual target elevation is higher then the potential one */
+        if (DATA(map_elev, row, col) > z) {
 #ifdef DEBUG
-	    printf
-		("\nA return: m%d U=%d(m/h) h0=%d(m) e0(%d,%d)=%d z=%d(m) e(%d,%d)=%d s=%d(m)",
-		 (int)fuel, (int)U, (int)h0, row0, col0, DATA(map_elev, row0,
-							      col0), (int)z,
-		 row, col, DATA(map_elev, row, col), S);
+            printf
+                ("\nA return: m%d U=%d(m/h) h0=%d(m) e0(%d,%d)=%d z=%d(m) e(%d,%d)=%d s=%d(m)",
+                (int)fuel, (int)U, (int)h0, row0, col0, DATA(map_elev, row0,
+                    col0), (int)z, row, col, DATA(map_elev, row, col), S);
 #endif
-	    return (S);
-	}
-	/* advance a step, increase the spotting distance */
-	S = sqrt((double)sqrd);
+            return (S);
+        }
+        /* advance a step, increase the spotting distance */
+        S = sqrt((double)sqrd);
 #ifdef DEBUG
-	printf
-	    ("\nm%d U=%d(m/h) h0=%d(m) e0(%d,%d)=%d z=%d(m) e(%d,%d)=%d s=%d(m)",
-	     (int)fuel, (int)U, (int)h0, row0, col0, DATA(map_elev, row0,
-							  col0), (int)z, row,
-	     col, DATA(map_elev, row, col), S);
+        printf
+            ("\nm%d U=%d(m/h) h0=%d(m) e0(%d,%d)=%d z=%d(m) e(%d,%d)=%d s=%d(m)",
+            (int)fuel, (int)U, (int)h0, row0, col0, DATA(map_elev, row0,
+                col0), (int)z, row, col, DATA(map_elev, row, col), S);
 #endif
-	i++;
-	row = row0 - i * cos_a + 0.5, col = col0 + i * sin_a + 0.5;
-	if (row < 0 || row >= nrows || col < 0 || col >= ncols)
-	    return (S);		/* outside the region */
+        i++;
+        row = row0 - i * cos_a + 0.5, col = col0 + i * sin_a + 0.5;
+        if (row < 0 || row >= nrows || col < 0 || col >= ncols)
+            return (S);         /* outside the region */
     }
 
     return S;

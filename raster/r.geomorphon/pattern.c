@@ -17,10 +17,9 @@ const char *dirname[NUM_DIRS] = { "NE", "N", "NW", "W", "SW", "S", "SE", "E" };
  * is a tie. Each angle must be non-negative.
  */
 static int compare_multi(const double nadir_angle, const double zenith_angle,
-                         const double nadir_threshold,
-                         const double zenith_threshold,
-                         const double nadir_distance,
-                         const double zenith_distance)
+    const double nadir_threshold,
+    const double zenith_threshold,
+    const double nadir_distance, const double zenith_distance)
 {
     const unsigned char
         nadir_over = nadir_angle > nadir_threshold,
@@ -68,7 +67,7 @@ static int compare_multi(const double nadir_angle, const double zenith_angle,
 }
 
 int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
-                 const int oneoff)
+    const int oneoff)
 {
     /* calculate parameters of geomorphons and store it in the struct pattern */
     int i, j, pattern_size = 0;
@@ -115,7 +114,7 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
             Rast_col_to_easting(col + j * nextc[i] + 0.5, &window);
         cur_distance =
             G_distance(cur_easting, cur_northing, target_easting,
-                       target_northing);
+            target_northing);
 
         if (oneoff) {
             zenith_northing = nadir_northing = target_northing;
@@ -156,18 +155,17 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
             if (oneoff) {
                 char step_name[32];
 
-                snprintf(step_name, sizeof(step_name), "step_%u",
-                         (unsigned)j);
+                snprintf(step_name, sizeof(step_name), "step_%u", (unsigned)j);
                 prof_dbl(step_name, height);
             }
-            j++; /* go to the next cell */
+            j++;                /* go to the next cell */
             target_northing =
                 Rast_row_to_northing(row + j * nextr[i] + 0.5, &window);
             target_easting =
                 Rast_col_to_easting(col + j * nextc[i] + 0.5, &window);
             cur_distance =
                 G_distance(cur_easting, cur_northing, target_easting,
-                           target_northing);
+                target_northing);
         }                       /* end line of sight */
         if (oneoff)
             prof_eso();
@@ -193,15 +191,13 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
          */
         /* this is used to lower flat threshold if distance exceed flat_distance parameter */
         zenith_threshold = (flat_distance > 0 &&
-                            flat_distance <
-                            zenith_distance) ? atan2(flat_threshold_height,
-                                                     zenith_distance) :
-            flat_threshold;
+            flat_distance <
+            zenith_distance) ? atan2(flat_threshold_height,
+            zenith_distance) : flat_threshold;
         nadir_threshold = (flat_distance > 0 &&
-                           flat_distance <
-                           nadir_distance) ? atan2(flat_threshold_height,
-                                                   nadir_distance) :
-            flat_threshold;
+            flat_distance <
+            nadir_distance) ? atan2(flat_threshold_height,
+            nadir_distance) : flat_threshold;
 
         if (zenith_angle > zenith_threshold)
             pattern->positives += i;
@@ -218,13 +214,13 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
             case ANGLEV2:
                 pattern->pattern[i] =
                     compare_multi(fabs(nadir_angle), fabs(zenith_angle),
-                                  nadir_threshold, zenith_threshold, 0, 0);
+                    nadir_threshold, zenith_threshold, 0, 0);
                 break;
             case ANGLEV2_DISTANCE:
                 pattern->pattern[i] =
                     compare_multi(fabs(nadir_angle), fabs(zenith_angle),
-                                  nadir_threshold, zenith_threshold,
-                                  nadir_distance, zenith_distance);
+                    nadir_threshold, zenith_threshold,
+                    nadir_distance, zenith_distance);
                 break;
             default:
                 G_fatal_error(_("Internal error in %s()"), __func__);

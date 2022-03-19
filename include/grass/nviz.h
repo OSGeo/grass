@@ -5,36 +5,36 @@
 
 /*** Windows headers ***/
 #if defined(OPENGL_WINDOWS)
-#  define WIN32_LEAN_AND_MEAN
-#  include <windows.h>
-#  undef WIN32_LEAN_AND_MEAN
-#  include <winnt.h>
-#  include <GL/gl.h>
-#  include <GL/glext.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
+#include <winnt.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
 
 /*** X Window System headers ***/
 #elif defined(OPENGL_X11)
-#  include <X11/Xlib.h>
-#  include <X11/Xutil.h>
-#  include <X11/Xatom.h>	/* for XA_RGB_DEFAULT_MAP atom */
-#  define GL_GLEXT_PROTOTYPES
-#  include <GL/glx.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>          /* for XA_RGB_DEFAULT_MAP atom */
+#define GL_GLEXT_PROTOTYPES
+#include <GL/glx.h>
 
 /*** Mac headers ***/
 #elif defined(OPENGL_AQUA)
-#  if defined(OPENGL_AGL)
-#    define Cursor QDCursor
-#    include <AGL/agl.h>
-#    undef Cursor
-#  else
-#    include <OpenGL/CGLTypes.h>
-#    include <OpenGL/CGLCurrent.h>
-#    include <OpenGL/OpenGL.h>
-#  endif
-#  include <ApplicationServices/ApplicationServices.h>
+#if defined(OPENGL_AGL)
+#define Cursor QDCursor
+#include <AGL/agl.h>
+#undef Cursor
+#else
+#include <OpenGL/CGLTypes.h>
+#include <OpenGL/CGLCurrent.h>
+#include <OpenGL/OpenGL.h>
+#endif
+#include <ApplicationServices/ApplicationServices.h>
 
-#else /* make sure only one platform defined */
-#  error Unsupported platform, or confused platform defines...
+#else                           /* make sure only one platform defined */
+#error Unsupported platform, or confused platform defines...
 #endif
 
 #include <grass/ogsf.h>
@@ -71,31 +71,31 @@ typedef struct
     int id;
     float brt;
     float r, g, b;
-    float ar, ag, ab;		/* ambient rgb */
-    float x, y, z, w;		/* position */
+    float ar, ag, ab;           /* ambient rgb */
+    float x, y, z, w;           /* position */
 } light_data;
 
 struct fringe_data
 {
-    int           id;
+    int id;
     unsigned long color;
-    float         elev;
-    int           where[4];
+    float elev;
+    int where[4];
 };
 
 struct arrow_data
 {
     unsigned long color;
-    float	  size;
-    float	  where[3];
+    float size;
+    float where[3];
 };
 
 struct scalebar_data
 {
-    int           id;
+    int id;
     unsigned long color;
-    float	  size;
-    float	  where[3];
+    float size;
+    float where[3];
 };
 
 typedef struct
@@ -111,7 +111,7 @@ typedef struct
 
     /* light */
     light_data light[MAX_LIGHTS];
-    
+
     /* fringe */
     int num_fringes;
     struct fringe_data **fringe;
@@ -119,11 +119,11 @@ typedef struct
     /* north arrow */
     int draw_arrow;
     struct arrow_data *arrow;
-    
+
     /* scalebar */
     int num_scalebars;
     struct scalebar_data **scalebar;
-    
+
     /* background color */
     int bgcolor;
 
@@ -132,8 +132,8 @@ typedef struct
 struct render_window
 {
 #if defined(OPENGL_X11)
-    Display *displayId;		/* display connection */
-    GLXContext contextId;	/* GLX rendering context */
+    Display *displayId;         /* display connection */
+    GLXContext contextId;       /* GLX rendering context */
     Pixmap pixmap;
     GLXPixmap windowId;
 #elif defined(OPENGL_AQUA)
@@ -145,12 +145,12 @@ struct render_window
     CGLContextObj contextId;
 #endif
 #elif defined(OPENGL_WINDOWS)
-    HDC displayId;		/* display context */
-    HGLRC contextId;		/* rendering context */
+    HDC displayId;              /* display context */
+    HGLRC contextId;            /* rendering context */
 #endif
     int width, height;
 };
 
 #include <grass/defs/nviz.h>
 
-#endif /* GRASS_NVIZ_H */
+#endif                          /* GRASS_NVIZ_H */

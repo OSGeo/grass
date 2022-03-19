@@ -7,16 +7,16 @@
 
 /* range limits */
 /*
-  GDAL data type               minimum          maximum
+   GDAL data type               minimum          maximum
 
-  Byte                               0              255
-  UInt16                             0           65,535
-  Int16, CInt16                -32,768           32,767
-  UInt32                             0    4,294,967,295
-  Int32, CInt32         -2,147,483,648    2,147,483,647
-  Float32, CFloat32            -3.4E38           3.4E38
-  Float64, CFloat64          -1.79E308         1.79E308
-*/
+   Byte                               0              255
+   UInt16                             0           65,535
+   Int16, CInt16                -32,768           32,767
+   UInt32                             0    4,294,967,295
+   Int32, CInt32         -2,147,483,648    2,147,483,647
+   Float32, CFloat32            -3.4E38           3.4E38
+   Float64, CFloat64          -1.79E308         1.79E308
+ */
 
 /* copied from limits.h, checked against gdal-1.6.0/gcore/gdalrasterband.cpp */
 #define TYPE_BYTE_MIN		0
@@ -55,18 +55,17 @@
 #define TYPE_FLOAT64_MAX	((1 + (1 - pow(2, -52))) * pow(2, 1023))
 #endif
 
-#define GRASS_MAX_COLORS TYPE_UINT16_MAX    /* ok? */
+#define GRASS_MAX_COLORS TYPE_UINT16_MAX        /* ok? */
 
 /* export_band.c */
-int export_band(GDALDatasetH, int, const char *, 
-		const char *, struct Cell_head *, RASTER_MAP_TYPE, 
-		double, int, int, int, double, double);
+int export_band(GDALDatasetH, int, const char *,
+    const char *, struct Cell_head *, RASTER_MAP_TYPE,
+    double, int, int, int, double, double);
 int exact_checks(GDALDataType, const char *, const char *,
-                 struct Cell_head *, RASTER_MAP_TYPE, double,
-		 const char *, int);
+    struct Cell_head *, RASTER_MAP_TYPE, double, const char *, int);
 
 /* attr.c */
-int export_attr(GDALDatasetH, int, const char *, 
-		const char *, RASTER_MAP_TYPE);
+int export_attr(GDALDatasetH, int, const char *,
+    const char *, RASTER_MAP_TYPE);
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

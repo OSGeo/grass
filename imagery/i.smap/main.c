@@ -27,8 +27,8 @@
 
 int main(int argc, char *argv[])
 {
-    struct parms parms;		/* command line parms */
-    struct files files;		/* file descriptors, io, buffers */
+    struct parms parms;         /* command line parms */
+    struct files files;         /* file descriptors, io, buffers */
     struct SigSet S;
     struct GModule *module;
 
@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("segmentation"));
     G_add_keyword(_("SMAP"));
     module->description =
-	_("Performs contextual image classification "
-	  "using sequential maximum a posteriori (SMAP) estimation.");
+        _("Performs contextual image classification "
+        "using sequential maximum a posteriori (SMAP) estimation.");
 
     parse(argc, argv, &parms);
     openfiles(&parms, &files, &S);
@@ -53,6 +53,6 @@ int main(int argc, char *argv[])
     closefiles(&parms, &files);
 
     G_done_msg(" ");
-    
+
     exit(EXIT_SUCCESS);
 }

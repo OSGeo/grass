@@ -32,20 +32,20 @@
 DCELL aspect_fly(DCELL * n, DCELL * c, DCELL * s, double d)
 {
     double xslope = ((n[-1] + c[-1] + c[-1] + s[-1]) -
-		     (n[1] + c[1] + c[1] + s[1])) / (8 * d);
+        (n[1] + c[1] + c[1] + s[1])) / (8 * d);
     double yslope = ((s[-1] + s[0] + s[0] + s[1]) -
-		     (n[-1] + n[0] + n[0] + n[1])) / (8 * region.ns_res);
+        (n[-1] + n[0] + n[0] + n[1])) / (8 * region.ns_res);
     double asp;
 
     if (!yslope)
-	if (!xslope)
-	    asp = UNDEF;
-	else if (xslope > 0)
-	    asp = parm.up ? 270. : 90.;
-	else
-	    asp = parm.up ? 90. : 270.;
+        if (!xslope)
+            asp = UNDEF;
+        else if (xslope > 0)
+            asp = parm.up ? 270. : 90.;
+        else
+            asp = parm.up ? 90. : 270.;
     else if ((asp = atan2(xslope, yslope) / DEG2RAD) < 0.)
-	asp += 360.;
+        asp += 360.;
 
     return asp;
 }

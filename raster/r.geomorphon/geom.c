@@ -1,5 +1,5 @@
 #include "local_proto.h"
-/* static double dirs[NUM_DIRS] = { 0.7854, 0., 5.4978, 4.7124, 3.9270, 3.1416, 2.3562, 1.5708 };*/	/* radians */
+                                                                                                        /* static double dirs[NUM_DIRS] = { 0.7854, 0., 5.4978, 4.7124, 3.9270, 3.1416, 2.3562, 1.5708 }; *//* radians */
 static double sins[NUM_DIRS] = { 0.7071067812, 0, -0.7071067812, -1, -0.7071067812, 0, 0.7071067812, 1 };       /* sinus */
 static double coss[NUM_DIRS] = { 0.7071067812, 1, 0.7071067812, 0, -0.7071067812, -1, -0.7071067812, 0 };       /* cosinus */
 
@@ -88,14 +88,14 @@ int form_deviation(const unsigned num_minus, const unsigned num_plus)
     const int dev[9][9] = {
         /* minus ------------- plus ---------------- */
         /*       0   1   2   3   4   5   6   7   8  */
-        /* 0 */ {0,  1,  2,  0,  1,  1,  0,  1,  0},
-        /* 1 */ {1,  2,  2,  1,  2,  2,  1,  2, -1},
-        /* 2 */ {2,  2,  2,  1,  2,  1,  2, -1, -1},
-        /* 3 */ {0,  1,  1,  0,  1,  0, -1, -1, -1},
-        /* 4 */ {1,  2,  2,  1,  2, -1, -1, -1, -1},
-        /* 5 */ {1,  2,  1,  0, -1, -1, -1, -1, -1},
-        /* 6 */ {0,  1,  2, -1, -1, -1, -1, -1, -1},
-        /* 7 */ {1,  2, -1, -1, -1, -1, -1, -1, -1},
+        /* 0 */ {0, 1, 2, 0, 1, 1, 0, 1, 0},
+        /* 1 */ {1, 2, 2, 1, 2, 2, 1, 2, -1},
+        /* 2 */ {2, 2, 2, 1, 2, 1, 2, -1, -1},
+        /* 3 */ {0, 1, 1, 0, 1, 0, -1, -1, -1},
+        /* 4 */ {1, 2, 2, 1, 2, -1, -1, -1, -1},
+        /* 5 */ {1, 2, 1, 0, -1, -1, -1, -1, -1},
+        /* 6 */ {0, 1, 2, -1, -1, -1, -1, -1, -1},
+        /* 7 */ {1, 2, -1, -1, -1, -1, -1, -1, -1},
         /* 8 */ {0, -1, -1, -1, -1, -1, -1, -1, -1},
     };
 
@@ -248,7 +248,7 @@ float extends(PATTERN * pattern)
 }
 
 static double distance_3d(const double x1, const double y1, const double z1,
-                          const double x2, const double y2, const double z2)
+    const double x2, const double y2, const double z2)
 {
     const double dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
 
@@ -281,7 +281,7 @@ double mesh_perimeter(const PATTERN * p)
     for (i = 0, j = 1; i < NUM_DIRS; ++i, ++j) {
         j = j < NUM_DIRS ? j : 0;
         ret += distance_3d(p->x[i], p->y[i], p->elevation[i],
-                           p->x[j], p->y[j], p->elevation[j]);
+            p->x[j], p->y[j], p->elevation[j]);
     }
     return ret;
 }
@@ -302,7 +302,7 @@ double mesh_area(const PATTERN * p)
         a = distance_3d(0, 0, 0, p->x[i], p->y[i], p->elevation[i]);
         b = distance_3d(0, 0, 0, p->x[j], p->y[j], p->elevation[j]);
         c = distance_3d(p->x[i], p->y[i], p->elevation[i],
-                        p->x[j], p->y[j], p->elevation[j]);
+            p->x[j], p->y[j], p->elevation[j]);
         s = (a + b + c) / 2.0;
         /* Ready for the Heron's formula. */
         ret += sqrt(s * (s - a) * (s - b) * (s - c));
@@ -311,7 +311,7 @@ double mesh_area(const PATTERN * p)
 }
 
 int shape(PATTERN * pattern, int pattern_size, float *azimuth,
-          float *elongation, float *width)
+    float *elongation, float *width)
 {
     /* calculates azimuth, elongation and width of geomorphon's polygon */
     int i;

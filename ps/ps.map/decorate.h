@@ -28,4 +28,3 @@ struct scalebar
 };
 
 extern struct scalebar sb;
-

@@ -29,4 +29,4 @@ int print_d_label(double);
 int scan_cats(const char *, long *, long *);
 int scan_vals(const char *, double *);
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

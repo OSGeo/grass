@@ -37,8 +37,8 @@ typedef struct
 } TRANS;
 
 extern int cat;
-extern int n_elements;		/* number of processed elements (only low level elements) */
-extern int n_skipped;		/* number of skipped low level elements (different layer name) */
+extern int n_elements;          /* number of processed elements (only low level elements) */
+extern int n_skipped;           /* number of skipped low level elements (different layer name) */
 extern struct Map_info Map;
 extern dbDriver *driver;
 extern dbString sql;
@@ -50,10 +50,10 @@ extern char *Txt;
 extern char *Block;
 extern struct field_info *Fi;
 extern AD_DB_HANDLE dwghandle;
-extern TRANS *Trans;		/* transformation */
-extern int atrans;		/* number of allocated levels */
+extern TRANS *Trans;            /* transformation */
+extern int atrans;              /* number of allocated levels */
 extern struct Option *layers_opt;
 extern struct Flag *invert_flag;
 
 void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
-	      int circle_as_point);
+    int circle_as_point);

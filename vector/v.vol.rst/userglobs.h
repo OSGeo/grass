@@ -13,8 +13,7 @@ extern double /* PRISP */ fi, rsm, fstar2, alphat, betat;
 
 extern double /* out */ *b, *w;
 extern double /* orig */ x0utm, y0utm, z0utm;
-extern double /* gcmax */ gmin, gmax, c1min, c1max, c2min, c2max, c3min,
-    c3max;
+extern double /* gcmax */ gmin, gmax, c1min, c1max, c2min, c2max, c3min, c3max;
 extern double /* gcmax */ a1min, a1max, a2min, a2max;
 extern float *zero_array1, *zero_array2, *zero_array3, *zero_array4,
     *zero_array5, *zero_array6, *zero_array7;
@@ -25,7 +24,7 @@ extern double z_orig_in, tb_res_in;
 extern int cursegm;
 extern int totsegm;
 extern int iw2;
-extern int n_rows_in;		/* fix by JH 04/24/02 */
+extern int n_rows_in;           /* fix by JH 04/24/02 */
 extern int cv;
 extern int sig1;
 

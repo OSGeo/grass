@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.in.Lidar
@@ -62,20 +63,15 @@ int update_sumsq(void *, int, int, int, RASTER_MAP_TYPE, double);
 
 /* projection.c */
 void projection_mismatch_report(struct Cell_head cellhd,
-                                struct Cell_head loc_wind,
-                                struct Key_Value *loc_proj_info,
-                                struct Key_Value *loc_proj_units,
-                                struct Key_Value *proj_info,
-                                struct Key_Value *proj_units,
-                                int err);
+    struct Cell_head loc_wind,
+    struct Key_Value *loc_proj_info,
+    struct Key_Value *loc_proj_units,
+    struct Key_Value *proj_info, struct Key_Value *proj_units, int err);
 void projection_check_wkt(struct Cell_head cellhd,
-                          struct Cell_head loc_wind,
-                          const char *projstr,
-                          int override,
-                          int verbose);
+    struct Cell_head loc_wind, const char *projstr, int override, int verbose);
 /* raster reading */
 int row_array_get_value_row_col(void *array, int arr_row, int arr_col,
-                                int cols, RASTER_MAP_TYPE rtype, double *value);
+    int cols, RASTER_MAP_TYPE rtype, double *value);
 
 /* multiple files */
 
@@ -90,4 +86,4 @@ void string_list_from_file(struct StringList *string_list, char *filename);
 void string_list_from_one_item(struct StringList *string_list, char *item);
 void string_list_free(struct StringList *string_list);
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

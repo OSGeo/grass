@@ -78,4 +78,3 @@ func_desc calc_func_descs[] = {
 
     {NULL, NULL, NULL}
 };
-

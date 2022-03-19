@@ -19,8 +19,8 @@ int allocate_bufs(void)
 
     ncb.buf = (DCELL **) G_malloc(ncb.nsize * sizeof(DCELL *));
     for (i = 0; i < ncb.nsize; i++) {
-	ncb.buf[i] = (DCELL *) G_malloc(bufsize);
-	Rast_set_d_null_value(ncb.buf[i], Rast_window_cols() + 2 * ncb.dist);
+        ncb.buf[i] = (DCELL *) G_malloc(bufsize);
+        Rast_set_d_null_value(ncb.buf[i], Rast_window_cols() + 2 * ncb.dist);
     }
 
     return 0;
@@ -34,7 +34,7 @@ int rotate_bufs(void)
     temp = ncb.buf[0];
 
     for (i = 1; i < ncb.nsize; i++)
-	ncb.buf[i - 1] = ncb.buf[i];
+        ncb.buf[i - 1] = ncb.buf[i];
 
     ncb.buf[ncb.nsize - 1] = temp;
 

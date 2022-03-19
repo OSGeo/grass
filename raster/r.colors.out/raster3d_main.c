@@ -24,22 +24,22 @@
 
 /* Run in raster3d mode */
 int main(int argc, char **argv)
-{    
+{
     struct GModule *module;
     struct
     {
-	struct Option *map, *file;
+        struct Option *map, *file;
     } opt;
     struct
     {
-	struct Flag *p;
+        struct Flag *p;
     } flag;
 
     const char *file;
-    FILE * fp;
+    FILE *fp;
     struct Colors colors;
     struct FPRange range;
-    
+
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -47,10 +47,10 @@ int main(int argc, char **argv)
     G_add_keyword(_("color table"));
     G_add_keyword(_("export"));
     module->description =
-	_("Exports the color table associated with a 3D raster map.");
+        _("Exports the color table associated with a 3D raster map.");
 
     opt.map = G_define_standard_option(G_OPT_R3_MAP);
-    
+
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
     opt.file->label = _("Path to output rules file");
@@ -62,26 +62,26 @@ int main(int argc, char **argv)
     flag.p->description = _("Output values as percentages");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     file = opt.file->answer;
-    
+
     if (Rast3d_read_colors(opt.map->answer, "", &colors) < 0)
         G_fatal_error(_("Unable to read color table for raster3d map <%s>"),
-		      opt.map->answer);
-    
+            opt.map->answer);
+
     Rast3d_read_range(opt.map->answer, "", &range);
-    
+
     if (!file || strcmp(file, "-") == 0)
-	fp = stdout;
+        fp = stdout;
     else {
-	fp = fopen(file, "w");
-	if (!fp)
-	    G_fatal_error(_("Unable to open output file <%s>"), file);
+        fp = fopen(file, "w");
+        if (!fp)
+            G_fatal_error(_("Unable to open output file <%s>"), file);
     }
-    
+
     Rast_print_colors(&colors, range.min, range.max, fp,
-		      flag.p->answer ? 1 : 0);
-    
+        flag.p->answer ? 1 : 0);
+
     exit(EXIT_SUCCESS);
 }

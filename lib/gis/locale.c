@@ -26,7 +26,7 @@ void G_init_locale(void)
     static int initialized;
 
     if (G_is_initialized(&initialized))
-	return;
+        return;
 
     setlocale(LC_CTYPE, "");
 
@@ -35,14 +35,15 @@ void G_init_locale(void)
     setlocale(LC_MESSAGES, "");
 #endif
     const char *gisbase = getenv("GISBASE");
+
     if (gisbase && *gisbase) {
-	char localedir[GPATH_MAX];
+        char localedir[GPATH_MAX];
 
-	strcpy(localedir, gisbase);
-	strcat(localedir, "/locale");
+        strcpy(localedir, gisbase);
+        strcat(localedir, "/locale");
 
-	bindtextdomain("grasslibs", localedir);
-	bindtextdomain("grassmods", localedir);
+        bindtextdomain("grasslibs", localedir);
+        bindtextdomain("grassmods", localedir);
     }
 #endif
 
@@ -79,7 +80,8 @@ char *G_gettext(const char *package, const char *msgid)
  * \retval char * Pointer to string
  */
 
-char *G_ngettext(const char *package, const char *msgids, const char *msgidp, unsigned long int n)
+char *G_ngettext(const char *package, const char *msgids, const char *msgidp,
+    unsigned long int n)
 {
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
     G_init_locale();

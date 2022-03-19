@@ -99,46 +99,46 @@ void gsd_colormode(int cm)
     switch (cm) {
     case CM_COLOR:
 
-	glDisable(GL_COLOR_MATERIAL);
-	glDisable(GL_LIGHTING);
+        glDisable(GL_COLOR_MATERIAL);
+        glDisable(GL_LIGHTING);
 
-	break;
+        break;
     case CM_EMISSION:
 
-	glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_LIGHTING);
+        glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
+        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHTING);
 
-	break;
+        break;
     case CM_DIFFUSE:
 
-	glColorMaterial(GL_FRONT, GL_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_LIGHTING);
+        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHTING);
 
-	break;
+        break;
     case CM_AD:
 
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_LIGHTING);
+        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHTING);
 
-	break;
+        break;
     case CM_NULL:
 
-	/* OGLXXX
-	 * lmcolor: if LMC_NULL,  use:
-	 * glDisable(GL_COLOR_MATERIAL);
-	 * LMC_NULL: use glDisable(GL_COLOR_MATERIAL);
-	 */
-	glDisable(GL_COLOR_MATERIAL);
-	glEnable(GL_LIGHTING);
+        /* OGLXXX
+         * lmcolor: if LMC_NULL,  use:
+         * glDisable(GL_COLOR_MATERIAL);
+         * LMC_NULL: use glDisable(GL_COLOR_MATERIAL);
+         */
+        glDisable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHTING);
 
-	break;
+        break;
     default:
 
-	glDisable(GL_COLOR_MATERIAL);
-	break;
+        glDisable(GL_COLOR_MATERIAL);
+        break;
     }
 
     return;
@@ -209,16 +209,16 @@ void gsd_sphere(float *center, float siz)
     static GLUquadricObj *QOsphere;
 
     if (first) {
-	QOsphere = gluNewQuadric();
+        QOsphere = gluNewQuadric();
 
-	if (QOsphere) {
-	    gluQuadricNormals(QOsphere, GLU_SMOOTH);	/* default */
-	    gluQuadricTexture(QOsphere, GL_FALSE);	/* default */
-	    gluQuadricOrientation(QOsphere, GLU_OUTSIDE);	/* default */
-	    gluQuadricDrawStyle(QOsphere, GLU_FILL);
-	}
+        if (QOsphere) {
+            gluQuadricNormals(QOsphere, GLU_SMOOTH);    /* default */
+            gluQuadricTexture(QOsphere, GL_FALSE);      /* default */
+            gluQuadricOrientation(QOsphere, GLU_OUTSIDE);       /* default */
+            gluQuadricDrawStyle(QOsphere, GLU_FILL);
+        }
 
-	first = 0;
+        first = 0;
     }
 
     glPushMatrix();
@@ -420,10 +420,10 @@ void gsd_shademodel(int shade)
     Shade = shade;
 
     if (shade) {
-	glShadeModel(GL_SMOOTH);
+        glShadeModel(GL_SMOOTH);
     }
     else {
-	glShadeModel(GL_FLAT);
+        glShadeModel(GL_FLAT);
     }
 
     return;
@@ -551,7 +551,7 @@ void gsd_translate(float dx, float dy, float dz)
    \param projMatrix projection matrix
  */
 void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
-		   double *projMatrix)
+    double *projMatrix)
 {
     gsd_pushmatrix();
     gsd_do_scale(1);
@@ -583,20 +583,19 @@ void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
    \return 1
  */
 int gsd_checkpoint(float pt[4],
-		   int window[4],
-		   int viewport[4],
-		   double modelMatrix[16], double projMatrix[16])
+    int window[4],
+    int viewport[4], double modelMatrix[16], double projMatrix[16])
 {
     GLdouble fx, fy, fz;
 
     gluProject((GLdouble) pt[X], (GLdouble) pt[Y], (GLdouble) pt[Z],
-	       modelMatrix, projMatrix, viewport, &fx, &fy, &fz);
+        modelMatrix, projMatrix, viewport, &fx, &fy, &fz);
 
     if (fx < window[2] || fx > window[3]
-	|| fy < window[1] || fy > window[0])
-	return 1;
+        || fy < window[1] || fy > window[0])
+        return 1;
     else
-	return 0;
+        return 0;
 
 }
 
@@ -616,33 +615,33 @@ void gsd_rot(float angle, char axis)
     case 'x':
     case 'X':
 
-	x = 1.0;
-	y = 0.0;
-	z = 0.0;
+        x = 1.0;
+        y = 0.0;
+        z = 0.0;
 
-	break;
+        break;
     case 'y':
     case 'Y':
 
-	x = 0.0;
-	y = 1.0;
-	z = 0.0;
+        x = 0.0;
+        y = 1.0;
+        z = 0.0;
 
-	break;
+        break;
     case 'z':
     case 'Z':
 
-	x = 0.0;
-	y = 0.0;
-	z = 1.0;
+        x = 0.0;
+        y = 0.0;
+        z = 1.0;
 
-	break;
+        break;
     default:
 
-	G_warning(_("gsd_rot(): %c is an invalid axis "
-		    "specification. Rotation ignored. "
-		    "Please advise GRASS developers of this error"), axis);
-	return;
+        G_warning(_("gsd_rot(): %c is an invalid axis "
+                "specification. Rotation ignored. "
+                "Please advise GRASS developers of this error"), axis);
+        return;
     }
 
     glRotatef((GLfloat) angle, x, y, z);
@@ -727,7 +726,7 @@ void gsd_init_lightmodel(void)
     /* normal vector renormalization */
 #ifdef USE_GL_NORMALIZE
     {
-	glEnable(GL_NORMALIZE);
+        glEnable(GL_NORMALIZE);
     }
 #endif
 
@@ -804,27 +803,27 @@ void gsd_init_lightmodel(void)
    \param emcolor packed colors to use for emission
  */
 void gsd_set_material(int set_shin, int set_emis, float sh, float em,
-		      int emcolor)
+    int emcolor)
 {
     if (set_shin) {
-	ogl_mat_spec[0] = sh;
-	ogl_mat_spec[1] = sh;
-	ogl_mat_spec[2] = sh;
-	ogl_mat_spec[3] = sh;
+        ogl_mat_spec[0] = sh;
+        ogl_mat_spec[1] = sh;
+        ogl_mat_spec[2] = sh;
+        ogl_mat_spec[3] = sh;
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, ogl_mat_spec);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, ogl_mat_spec);
 
-	ogl_mat_shin = 60. + (int)(sh * 68.);
+        ogl_mat_shin = 60. + (int)(sh * 68.);
 
-	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, ogl_mat_shin);
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, ogl_mat_shin);
     }
 
     if (set_emis) {
-	ogl_mat_emis[0] = (em * (emcolor & 0x0000FF)) / 255.;
-	ogl_mat_emis[1] = (em * ((emcolor & 0x00FF00) >> 8)) / 255.;
-	ogl_mat_emis[2] = (em * ((emcolor & 0xFF0000) >> 16)) / 255.;
+        ogl_mat_emis[0] = (em * (emcolor & 0x0000FF)) / 255.;
+        ogl_mat_emis[1] = (em * ((emcolor & 0x00FF00) >> 8)) / 255.;
+        ogl_mat_emis[2] = (em * ((emcolor & 0xFF0000) >> 16)) / 255.;
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, ogl_mat_emis);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, ogl_mat_emis);
     }
 
     return;
@@ -839,33 +838,33 @@ void gsd_set_material(int set_shin, int set_emis, float sh, float em,
 void gsd_deflight(int num, struct lightdefs *vals)
 {
     if (num > 0 && num <= MAX_LIGHTS) {
-	ogl_light_pos[num - 1][0] = vals->position[X];
-	ogl_light_pos[num - 1][1] = vals->position[Y];
-	ogl_light_pos[num - 1][2] = vals->position[Z];
-	ogl_light_pos[num - 1][3] = vals->position[W];
+        ogl_light_pos[num - 1][0] = vals->position[X];
+        ogl_light_pos[num - 1][1] = vals->position[Y];
+        ogl_light_pos[num - 1][2] = vals->position[Z];
+        ogl_light_pos[num - 1][3] = vals->position[W];
 
-	glLightfv(GL_LIGHT0 + num, GL_POSITION, ogl_light_pos[num - 1]);
+        glLightfv(GL_LIGHT0 + num, GL_POSITION, ogl_light_pos[num - 1]);
 
-	ogl_light_diff[num - 1][0] = vals->color[0];
-	ogl_light_diff[num - 1][1] = vals->color[1];
-	ogl_light_diff[num - 1][2] = vals->color[2];
-	ogl_light_diff[num - 1][3] = .3;
+        ogl_light_diff[num - 1][0] = vals->color[0];
+        ogl_light_diff[num - 1][1] = vals->color[1];
+        ogl_light_diff[num - 1][2] = vals->color[2];
+        ogl_light_diff[num - 1][3] = .3;
 
-	glLightfv(GL_LIGHT0 + num, GL_DIFFUSE, ogl_light_diff[num - 1]);
+        glLightfv(GL_LIGHT0 + num, GL_DIFFUSE, ogl_light_diff[num - 1]);
 
-	ogl_light_amb[num - 1][0] = vals->ambient[0];
-	ogl_light_amb[num - 1][1] = vals->ambient[1];
-	ogl_light_amb[num - 1][2] = vals->ambient[2];
-	ogl_light_amb[num - 1][3] = .3;
+        ogl_light_amb[num - 1][0] = vals->ambient[0];
+        ogl_light_amb[num - 1][1] = vals->ambient[1];
+        ogl_light_amb[num - 1][2] = vals->ambient[2];
+        ogl_light_amb[num - 1][3] = .3;
 
-	glLightfv(GL_LIGHT0 + num, GL_AMBIENT, ogl_light_amb[num - 1]);
+        glLightfv(GL_LIGHT0 + num, GL_AMBIENT, ogl_light_amb[num - 1]);
 
-	ogl_light_spec[num - 1][0] = vals->color[0];
-	ogl_light_spec[num - 1][1] = vals->color[1];
-	ogl_light_spec[num - 1][2] = vals->color[2];
-	ogl_light_spec[num - 1][3] = .3;
+        ogl_light_spec[num - 1][0] = vals->color[0];
+        ogl_light_spec[num - 1][1] = vals->color[1];
+        ogl_light_spec[num - 1][2] = vals->color[2];
+        ogl_light_spec[num - 1][3] = .3;
 
-	glLightfv(GL_LIGHT0 + num, GL_SPECULAR, ogl_light_spec[num - 1]);
+        glLightfv(GL_LIGHT0 + num, GL_SPECULAR, ogl_light_spec[num - 1]);
     }
 
     return;
@@ -884,10 +883,10 @@ void gsd_switchlight(int num, int on)
     defin = on ? num : 0;
 
     if (defin) {
-	glEnable(GL_LIGHT0 + num);
+        glEnable(GL_LIGHT0 + num);
     }
     else {
-	glDisable(GL_LIGHT0 + num);
+        glDisable(GL_LIGHT0 + num);
     }
 
     return;
@@ -903,7 +902,7 @@ void gsd_switchlight(int num, int on)
    \return 1 on success
  */
 int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
-		 unsigned int *ysize)
+    unsigned int *ysize)
 {
     GLuint l, r, b, t;
 
@@ -923,12 +922,12 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
     *ysize = t - b + 1;
 
     if (!*xsize || !*ysize)
-	return (0);
+        return (0);
 
-    *pixbuf = (unsigned char *)G_malloc((*xsize) * (*ysize) * 4);	/* G_fatal_error */
+    *pixbuf = (unsigned char *)G_malloc((*xsize) * (*ysize) * 4);       /* G_fatal_error */
 
     if (!*pixbuf)
-	return (0);
+        return (0);
 
 #if !defined(OPENGL_FBO)
     glReadBuffer(GL_FRONT);
@@ -936,7 +935,7 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
 
     /* OGLXXX lrectread: see man page for glReadPixels */
     glReadPixels(l, b, (r) - (l) + 1, (t) - (b) + 1, GL_RGBA,
-		 GL_UNSIGNED_BYTE, *pixbuf);
+        GL_UNSIGNED_BYTE, *pixbuf);
 
     return (1);
 }
@@ -969,13 +968,13 @@ int gsd_getViewport(GLint tmp[4], GLint num[2])
    \return 1 on success
  */
 int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
-		  unsigned int ysize)
+    unsigned int ysize)
 {
 
     /* Malloc Buffer for image */
-    *pixbuf = (unsigned char *)G_malloc(xsize * ysize * 4);	/* G_fatal_error */
+    *pixbuf = (unsigned char *)G_malloc(xsize * ysize * 4);     /* G_fatal_error */
     if (!*pixbuf) {
-	return (0);
+        return (0);
     }
 
 #if !defined(OPENGL_FBO)
@@ -996,12 +995,12 @@ int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
 void gsd_blend(int yesno)
 {
     if (yesno) {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     else {
-	glDisable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ZERO);
+        glDisable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ZERO);
     }
 
     return;
@@ -1019,16 +1018,16 @@ void gsd_def_clipplane(int num, double *params)
 
     /* OGLXXX see man page for glClipPlane equation */
     if (glIsEnabled(GL_CLIP_PLANE0 + (num))) {
-	wason = 1;
+        wason = 1;
     }
 
     glClipPlane(GL_CLIP_PLANE0 + (num), params);
 
     if (wason) {
-	glEnable(GL_CLIP_PLANE0 + (num));
+        glEnable(GL_CLIP_PLANE0 + (num));
     }
     else {
-	glDisable(GL_CLIP_PLANE0 + (num));
+        glDisable(GL_CLIP_PLANE0 + (num));
     }
 
     return;
@@ -1044,10 +1043,10 @@ void gsd_set_clipplane(int num, int able)
 {
     /* OGLXXX see man page for glClipPlane equation */
     if (able) {
-	glEnable(GL_CLIP_PLANE0 + (num));
+        glEnable(GL_CLIP_PLANE0 + (num));
     }
     else {
-	glDisable(GL_CLIP_PLANE0 + (num));
+        glDisable(GL_CLIP_PLANE0 + (num));
     }
 
     return;
@@ -1098,23 +1097,23 @@ int gsd_makelist(void)
     int i;
 
     if (numobjs) {
-	if (numobjs < MAX_OBJS) {
-	    numobjs++;
+        if (numobjs < MAX_OBJS) {
+            numobjs++;
 
-	    return (numobjs);
-	}
+            return (numobjs);
+        }
 
-	return (-1);
+        return (-1);
     }
     else {
-	ObjList[0] = glGenLists(MAX_OBJS);
+        ObjList[0] = glGenLists(MAX_OBJS);
 
-	for (i = 1; i < MAX_OBJS; i++) {
-	    ObjList[i] = ObjList[0] + i;
-	}
-	numobjs = 1;
+        for (i = 1; i < MAX_OBJS; i++) {
+            ObjList[i] = ObjList[0] + i;
+        }
+        numobjs = 1;
 
-	return (numobjs);
+        return (numobjs);
     }
 
 }
@@ -1128,10 +1127,10 @@ int gsd_makelist(void)
 void gsd_bgnlist(int listno, int do_draw)
 {
     if (do_draw) {
-	glNewList(ObjList[listno], GL_COMPILE_AND_EXECUTE);
+        glNewList(ObjList[listno], GL_COMPILE_AND_EXECUTE);
     }
     else {
-	glNewList(ObjList[listno], GL_COMPILE);
+        glNewList(ObjList[listno], GL_COMPILE);
     }
 
     return;
@@ -1158,13 +1157,13 @@ void gsd_deletelist(GLuint listno, int range)
     unsigned int i;
 
     for (i = 1; i < MAX_OBJS; i++) {
-	if (i == listno) {
-	    glDeleteLists(ObjList[i], 1);
-	    numobjs--;
-	    if (numobjs < 1)
-		numobjs = 1;
-	    return;
-	}
+        if (i == listno) {
+            glDeleteLists(ObjList[i], 1);
+            numobjs--;
+            if (numobjs < 1)
+                numobjs = 1;
+            return;
+        }
     }
 }
 
@@ -1192,8 +1191,8 @@ void gsd_calllists(int listno)
 
     gsd_pushmatrix();
     for (i = 1; i < MAX_OBJS; i++) {
-	glCallList(ObjList[i]);
-	glFlush();
+        glCallList(ObjList[i]);
+        glFlush();
     }
     gsd_popmatrix();
 

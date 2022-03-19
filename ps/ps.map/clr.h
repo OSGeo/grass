@@ -3,7 +3,7 @@
 
 typedef struct
 {
-    int none;			/* 1: no color */
+    int none;                   /* 1: no color */
     int r, g, b;
     double fr, fg, fb;
 } PSCOLOR;

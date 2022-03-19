@@ -13,46 +13,46 @@
 * fopen old group files anywhere
 *******************************************************/
 
-FILE *fopen_group_file_old(const char *group, const char *mapset, const char *file)
+FILE *fopen_group_file_old(const char *group, const char *mapset,
+    const char *file)
 {
     FILE *fd;
-    
+
     if (mapset == NULL || *mapset == 0)
         mapset = G_mapset();
 
     /* find file first */
     if (!I_find_group_file2(group, mapset, file)) {
-	G_warning(_("Unable to find file [%s] of group [%s in %s]"),
-		  file, group, mapset);
+        G_warning(_("Unable to find file [%s] of group [%s in %s]"),
+            file, group, mapset);
 
-	return ((FILE *) NULL);
+        return ((FILE *) NULL);
     }
 
     fd = G_fopen_old_misc("group", file, group, mapset);
     if (!fd)
-	G_warning(_("Unable to open file [%s] of group [%s in %s]"),
-		  file, group, mapset);
+        G_warning(_("Unable to open file [%s] of group [%s in %s]"),
+            file, group, mapset);
 
     return fd;
 }
 
 
 FILE *fopen_subgroup_file_old(const char *group,
-				const char *subgroup, const char *mapset,
-                const char *file)
+    const char *subgroup, const char *mapset, const char *file)
 {
     FILE *fd;
     char element[GNAME_MAX * 2];
-    
+
     if (mapset == NULL || *mapset == 0)
         mapset = G_mapset();
 
     /* find file first */
     if (!I_find_subgroup_file2(group, subgroup, mapset, file)) {
-	G_warning(_("Unable to find file [%s] for subgroup [%s] of group [%s in %s]"),
-		  file, subgroup, group, mapset);
+        G_warning(_("Unable to find file [%s] for subgroup [%s] of group [%s in %s]"),
+            file, subgroup, group, mapset);
 
-	return ((FILE *) NULL);
+        return ((FILE *) NULL);
     }
 
     /* get subgroup element name */
@@ -60,8 +60,8 @@ FILE *fopen_subgroup_file_old(const char *group,
 
     fd = G_fopen_old_misc("group", element, group, mapset);
     if (!fd)
-	G_warning(_("Unable to open file [%s] for subgroup [%s] of group [%s in %s]"),
-		  file, subgroup, group, mapset);
+        G_warning(_("Unable to open file [%s] for subgroup [%s] of group [%s in %s]"),
+            file, subgroup, group, mapset);
 
     return fd;
 }
@@ -73,8 +73,8 @@ FILE *I_fopen_group_file_new(const char *group, const char *file)
 
     fd = G_fopen_new_misc("group", file, group);
     if (!fd)
-	G_warning(_("Unable to create file [%s] of group [%s in %s]"),
-		  file, group, G_mapset());
+        G_warning(_("Unable to create file [%s] of group [%s in %s]"),
+            file, group, G_mapset());
 
     return fd;
 }
@@ -86,8 +86,8 @@ FILE *I_fopen_group_file_append(const char *group, const char *file)
 
     fd = G_fopen_append_misc("group", file, group);
     if (!fd)
-	G_warning(_("Unable to open file [%s] of group [%s in %s]"),
-		  file, group, G_mapset());
+        G_warning(_("Unable to open file [%s] of group [%s in %s]"),
+            file, group, G_mapset());
 
     return fd;
 }
@@ -118,14 +118,15 @@ FILE *I_fopen_group_file_old(const char *group, const char *file)
  * \param file
  * \return FILE *
  */
-FILE *I_fopen_group_file_old2(const char *group, const char *mapset, const char *file)
+FILE *I_fopen_group_file_old2(const char *group, const char *mapset,
+    const char *file)
 {
     return fopen_group_file_old(group, mapset, file);
 }
 
 
 FILE *I_fopen_subgroup_file_new(const char *group,
-				const char *subgroup, const char *file)
+    const char *subgroup, const char *file)
 {
     FILE *fd;
     char element[GNAME_MAX * 2];
@@ -139,15 +140,15 @@ FILE *I_fopen_subgroup_file_new(const char *group,
 
     fd = G_fopen_new_misc("group", element, group);
     if (!fd)
-	G_warning(_("Unable to create file [%s] for subgroup [%s] of group [%s in %s]"),
-		  file, subgroup, group, G_mapset());
+        G_warning(_("Unable to create file [%s] for subgroup [%s] of group [%s in %s]"),
+            file, subgroup, group, G_mapset());
 
     return fd;
 }
 
 
 FILE *I_fopen_subgroup_file_append(const char *group,
-				   const char *subgroup, const char *file)
+    const char *subgroup, const char *file)
 {
     FILE *fd;
     char element[GNAME_MAX * 2];
@@ -161,22 +162,21 @@ FILE *I_fopen_subgroup_file_append(const char *group,
 
     fd = G_fopen_append_misc("group", element, group);
     if (!fd)
-	G_warning(_("Unable to open file [%s] for subgroup [%s] of group [%s in %s]"),
-		  file, subgroup, group, G_mapset());
+        G_warning(_("Unable to open file [%s] for subgroup [%s] of group [%s in %s]"),
+            file, subgroup, group, G_mapset());
 
     return fd;
 }
 
 
 FILE *I_fopen_subgroup_file_old(const char *group,
-				const char *subgroup, const char *file)
+    const char *subgroup, const char *file)
 {
     return fopen_subgroup_file_old(group, subgroup, NULL, file);
 }
 
 FILE *I_fopen_subgroup_file_old2(const char *group,
-				const char *subgroup, const char *mapset,
-                const char *file)
+    const char *subgroup, const char *mapset, const char *file)
 {
     return fopen_subgroup_file_old(group, subgroup, mapset, file);
 }

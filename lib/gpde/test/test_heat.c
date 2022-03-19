@@ -36,9 +36,9 @@ int integration_test_heatflow(void)
     G_message("\t 2. testing 3d heat flow");
 
     if (sum > 0)
-	G_warning("\n-- heat flow integration tests failure --");
+        G_warning("\n-- heat flow integration tests failure --");
     else
-	G_message("\n-- heat flow integration tests finished successfully --");
+        G_message("\n-- heat flow integration tests finished successfully --");
 
     return sum;
 }

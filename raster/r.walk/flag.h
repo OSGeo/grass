@@ -61,4 +61,4 @@ int flag_destroy(FLAG *);
 int flag_clear_all(FLAG *);
 
 
-#endif /* __FLAG_H__ */
+#endif                          /* __FLAG_H__ */

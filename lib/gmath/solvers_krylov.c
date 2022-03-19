@@ -25,14 +25,14 @@
 #include <grass/glocale.h>
 
 static G_math_spvector **create_diag_precond_matrix(double **A,
-						    G_math_spvector ** Asp,
-						    int rows, int prec);
+    G_math_spvector ** Asp, int rows, int prec);
 static int solver_pcg(double **A, G_math_spvector ** Asp, double *x,
-		      double *b, int rows, int maxit, double err, int prec, int has_band, int bandwidth);
+    double *b, int rows, int maxit, double err, int prec, int has_band,
+    int bandwidth);
 static int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
-		     int rows, int maxit, double err, int has_band, int bandwidth);
+    int rows, int maxit, double err, int has_band, int bandwidth);
 static int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x,
-			   double *b, int rows, int maxit, double err);
+    double *b, int rows, int maxit, double err);
 
 
 /*!
@@ -58,7 +58,7 @@ static int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x,
  * 
  * */
 int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
-		      double err, int prec)
+    double err, int prec)
 {
 
     return solver_pcg(A, NULL, x, b, rows, maxit, err, prec, 0, 0);
@@ -89,8 +89,8 @@ int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
  * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
-int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows, int bandwidth, int maxit,
-		      double err, int prec)
+int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows,
+    int bandwidth, int maxit, double err, int prec)
 {
     G_fatal_error("Preconditioning of band matrics is not implemented yet");
     return solver_pcg(A, NULL, x, b, rows, maxit, err, prec, 1, bandwidth);
@@ -120,14 +120,14 @@ int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows, int band
  * 
  * */
 int G_math_solver_sparse_pcg(G_math_spvector ** Asp, double *x, double *b,
-			     int rows, int maxit, double err, int prec)
+    int rows, int maxit, double err, int prec)
 {
 
     return solver_pcg(NULL, Asp, x, b, rows, maxit, err, prec, 0, 0);
 }
 
 int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
-	       int rows, int maxit, double err, int prec, int has_band, int bandwidth)
+    int rows, int maxit, double err, int prec, int has_band, int bandwidth)
 {
     double *r, *z;
 
@@ -162,22 +162,22 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
      */
 #pragma omp parallel
     {
-	if (Asp)
-	    G_math_Ax_sparse(Asp, x, v, rows);
-	else if(has_band)
-	    G_math_Ax_sband(A, x, v, rows, bandwidth);
-	else
-	    G_math_d_Ax(A, x, v, rows, rows);
+        if (Asp)
+            G_math_Ax_sparse(Asp, x, v, rows);
+        else if (has_band)
+            G_math_Ax_sband(A, x, v, rows, bandwidth);
+        else
+            G_math_d_Ax(A, x, v, rows, rows);
 
-	G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
-	/*performe the preconditioning */
-	G_math_Ax_sparse(M, r, p, rows);
+        G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
+        /*performe the preconditioning */
+        G_math_Ax_sparse(M, r, p, rows);
 
-	/* scalar product */
+        /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s)
-	for (i = 0; i < rows; i++) {
-	    s += p[i] * r[i];
-	}
+        for (i = 0; i < rows; i++) {
+            s += p[i] * r[i];
+        }
     }
 
     a0 = s;
@@ -188,91 +188,90 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
     /* ******************* */
     for (m = 0; m < maxit; m++) {
 #pragma omp parallel default(shared)
-	{
-	    if (Asp)
-		G_math_Ax_sparse(Asp, p, v, rows);
-	    else if(has_band)
-		G_math_Ax_sband(A, p, v, rows, bandwidth);
-	    else
-		G_math_d_Ax(A, p, v, rows, rows);
+        {
+            if (Asp)
+                G_math_Ax_sparse(Asp, p, v, rows);
+            else if (has_band)
+                G_math_Ax_sband(A, p, v, rows, bandwidth);
+            else
+                G_math_d_Ax(A, p, v, rows, rows);
 
 
 
-	    /* scalar product */
+            /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s)
-	    for (i = 0; i < rows; i++) {
-		s += v[i] * p[i];
-	    }
+            for (i = 0; i < rows; i++) {
+                s += v[i] * p[i];
+            }
 
-	    /* barrier */
+            /* barrier */
 #pragma omp single
-	    {
-		tmp = s;
-		mygamma = a0 / tmp;
-		s = 0.0;
-	    }
+            {
+                tmp = s;
+                mygamma = a0 / tmp;
+                s = 0.0;
+            }
 
-	    G_math_d_ax_by(p, x, x, mygamma, 1.0, rows);
+            G_math_d_ax_by(p, x, x, mygamma, 1.0, rows);
 
-	    if (m % 50 == 1) {
-		if (Asp)
-		    G_math_Ax_sparse(Asp, x, v, rows);
-		else if(has_band)
-		    G_math_Ax_sband(A, x, v, rows, bandwidth);
-		else
-		    G_math_d_Ax(A, x, v, rows, rows);
+            if (m % 50 == 1) {
+                if (Asp)
+                    G_math_Ax_sparse(Asp, x, v, rows);
+                else if (has_band)
+                    G_math_Ax_sband(A, x, v, rows, bandwidth);
+                else
+                    G_math_d_Ax(A, x, v, rows, rows);
 
-		G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
-	    }
-	    else {
-		G_math_d_ax_by(r, v, r, 1.0, -1.0 * mygamma, rows);
-	    }
+                G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
+            }
+            else {
+                G_math_d_ax_by(r, v, r, 1.0, -1.0 * mygamma, rows);
+            }
 
-	    /*performe the preconditioning */
-	    G_math_Ax_sparse(M, r, z, rows);
+            /*performe the preconditioning */
+            G_math_Ax_sparse(M, r, z, rows);
 
 
-	    /* scalar product */
+            /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s)
-	    for (i = 0; i < rows; i++) {
-		s += z[i] * r[i];
-	    }
+            for (i = 0; i < rows; i++) {
+                s += z[i] * r[i];
+            }
 
-	    /* barrier */
+            /* barrier */
 #pragma omp single
-	    {
-		a1 = s;
-		tmp = a1 / a0;
-		a0 = a1;
-		s = 0.0;
+            {
+                a1 = s;
+                tmp = a1 / a0;
+                a0 = a1;
+                s = 0.0;
 
-		if (a1 < 0 || a1 == 0 || a1 > 0) {
-		    ;
-		}
-		else {
-		    G_warning(_
-			      ("Unable to solve the linear equation system"));
-		    error_break = 1;
-		}
-	    }
-	    G_math_d_ax_by(p, z, p, tmp, 1.0, rows);
-	}
+                if (a1 < 0 || a1 == 0 || a1 > 0) {
+                    ;
+                }
+                else {
+                    G_warning(_("Unable to solve the linear equation system"));
+                    error_break = 1;
+                }
+            }
+            G_math_d_ax_by(p, z, p, tmp, 1.0, rows);
+        }
 
-	if (Asp != NULL)
-	    G_message(_("Sparse PCG -- iteration %i error  %g\n"), m, a0);
-	else
-	    G_message(_("PCG -- iteration %i error  %g\n"), m, a0);
+        if (Asp != NULL)
+            G_message(_("Sparse PCG -- iteration %i error  %g\n"), m, a0);
+        else
+            G_message(_("PCG -- iteration %i error  %g\n"), m, a0);
 
-	if (error_break == 1) {
-	    finished = -1;
-	    break;
-	}
+        if (error_break == 1) {
+            finished = -1;
+            break;
+        }
 
 
-	if (a0 < err) {
-	    finished = 1;
-	    break;
-	}
+        if (a0 < err) {
+            finished = 1;
+            break;
+        }
     }
 
     G_free(r);
@@ -307,7 +306,7 @@ int solver_pcg(double **A, G_math_spvector ** Asp, double *x, double *b,
  * 
  * */
 int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
-		     double err)
+    double err)
 {
     return solver_cg(A, NULL, x, b, rows, maxit, err, 0, 0);
 }
@@ -334,7 +333,8 @@ int G_math_solver_cg(double **A, double *x, double *b, int rows, int maxit,
  * \return (int) -- 1 - success, 2 - not finished but success, 0 - matrix singular, -1 - could not solve the les
  * 
  * */
-int G_math_solver_cg_sband(double **A, double *x, double *b, int rows, int bandwidth, int maxit, double err)
+int G_math_solver_cg_sband(double **A, double *x, double *b, int rows,
+    int bandwidth, int maxit, double err)
 {
     return solver_cg(A, NULL, x, b, rows, maxit, err, 1, bandwidth);
 }
@@ -362,14 +362,14 @@ int G_math_solver_cg_sband(double **A, double *x, double *b, int rows, int bandw
  * 
  * */
 int G_math_solver_sparse_cg(G_math_spvector ** Asp, double *x, double *b,
-			    int rows, int maxit, double err)
+    int rows, int maxit, double err)
 {
     return solver_cg(NULL, Asp, x, b, rows, maxit, err, 0, 0);
 }
 
 
 int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
-	      int rows, int maxit, double err, int has_band, int bandwidth)
+    int rows, int maxit, double err, int has_band, int bandwidth)
 {
     double *r;
 
@@ -397,21 +397,21 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
      */
 #pragma omp parallel
     {
-	if (Asp)
-	    G_math_Ax_sparse(Asp, x, v, rows);
-	else if(has_band)
-	    G_math_Ax_sband(A, x, v, rows, bandwidth);
-	else
-	    G_math_d_Ax(A, x, v, rows, rows);
+        if (Asp)
+            G_math_Ax_sparse(Asp, x, v, rows);
+        else if (has_band)
+            G_math_Ax_sband(A, x, v, rows, bandwidth);
+        else
+            G_math_d_Ax(A, x, v, rows, rows);
 
-	G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
-	G_math_d_copy(r, p, rows);
+        G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
+        G_math_d_copy(r, p, rows);
 
-	/* scalar product */
+        /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s)
-	for (i = 0; i < rows; i++) {
-	    s += r[i] * r[i];
-	}
+        for (i = 0; i < rows; i++) {
+            s += r[i] * r[i];
+        }
     }
 
     a0 = s;
@@ -422,84 +422,83 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
     /* ******************* */
     for (m = 0; m < maxit; m++) {
 #pragma omp parallel default(shared)
-	{
-	    if (Asp)
-		G_math_Ax_sparse(Asp, p, v, rows);
-	    else if(has_band)
-		G_math_Ax_sband(A, p, v, rows, bandwidth);
-	    else
-		G_math_d_Ax(A, p, v, rows, rows);
+        {
+            if (Asp)
+                G_math_Ax_sparse(Asp, p, v, rows);
+            else if (has_band)
+                G_math_Ax_sband(A, p, v, rows, bandwidth);
+            else
+                G_math_d_Ax(A, p, v, rows, rows);
 
-	    /* scalar product */
+            /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s)
-	    for (i = 0; i < rows; i++) {
-		s += v[i] * p[i];
-	    }
+            for (i = 0; i < rows; i++) {
+                s += v[i] * p[i];
+            }
 
-	    /* barrier */
+            /* barrier */
 #pragma omp single
-	    {
-		tmp = s;
-		mygamma = a0 / tmp;
-		s = 0.0;
-	    }
+            {
+                tmp = s;
+                mygamma = a0 / tmp;
+                s = 0.0;
+            }
 
-	    G_math_d_ax_by(p, x, x, mygamma, 1.0, rows);
+            G_math_d_ax_by(p, x, x, mygamma, 1.0, rows);
 
-	    if (m % 50 == 1) {
-		if (Asp)
-		    G_math_Ax_sparse(Asp, x, v, rows);
-		else if(has_band)
-		    G_math_Ax_sband(A, x, v, rows, bandwidth);
-		else
-		    G_math_d_Ax(A, x, v, rows, rows);
+            if (m % 50 == 1) {
+                if (Asp)
+                    G_math_Ax_sparse(Asp, x, v, rows);
+                else if (has_band)
+                    G_math_Ax_sband(A, x, v, rows, bandwidth);
+                else
+                    G_math_d_Ax(A, x, v, rows, rows);
 
-		G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
-	    }
-	    else {
-		G_math_d_ax_by(r, v, r, 1.0, -1.0 * mygamma, rows);
-	    }
+                G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
+            }
+            else {
+                G_math_d_ax_by(r, v, r, 1.0, -1.0 * mygamma, rows);
+            }
 
-	    /* scalar product */
+            /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s)
-	    for (i = 0; i < rows; i++) {
-		s += r[i] * r[i];
-	    }
+            for (i = 0; i < rows; i++) {
+                s += r[i] * r[i];
+            }
 
-	    /* barrier */
+            /* barrier */
 #pragma omp single
-	    {
-		a1 = s;
-		tmp = a1 / a0;
-		a0 = a1;
-		s = 0.0;
+            {
+                a1 = s;
+                tmp = a1 / a0;
+                a0 = a1;
+                s = 0.0;
 
-		if (a1 < 0 || a1 == 0 || a1 > 0) {
-		    ;
-		}
-		else {
-		    G_warning(_
-			      ("Unable to solve the linear equation system"));
-		    error_break = 1;
-		}
-	    }
-	    G_math_d_ax_by(p, r, p, tmp, 1.0, rows);
-	}
+                if (a1 < 0 || a1 == 0 || a1 > 0) {
+                    ;
+                }
+                else {
+                    G_warning(_("Unable to solve the linear equation system"));
+                    error_break = 1;
+                }
+            }
+            G_math_d_ax_by(p, r, p, tmp, 1.0, rows);
+        }
 
-	if (Asp != NULL)
-	    G_message(_("Sparse CG -- iteration %i error  %g\n"), m, a0);
-	else
-	    G_message(_("CG -- iteration %i error  %g\n"), m, a0);
+        if (Asp != NULL)
+            G_message(_("Sparse CG -- iteration %i error  %g\n"), m, a0);
+        else
+            G_message(_("CG -- iteration %i error  %g\n"), m, a0);
 
-	if (error_break == 1) {
-	    finished = -1;
-	    break;
-	}
+        if (error_break == 1) {
+            finished = -1;
+            break;
+        }
 
-	if (a0 < err) {
-	    finished = 1;
-	    break;
-	}
+        if (a0 < err) {
+            finished = 1;
+            break;
+        }
     }
 
     G_free(r);
@@ -533,7 +532,7 @@ int solver_cg(double **A, G_math_spvector ** Asp, double *x, double *b,
  * 
  * */
 int G_math_solver_bicgstab(double **A, double *x, double *b, int rows,
-			   int maxit, double err)
+    int maxit, double err)
 {
     return solver_bicgstab(A, NULL, x, b, rows, maxit, err);
 }
@@ -560,14 +559,14 @@ int G_math_solver_bicgstab(double **A, double *x, double *b, int rows,
  * 
  * */
 int G_math_solver_sparse_bicgstab(G_math_spvector ** Asp, double *x,
-				  double *b, int rows, int maxit, double err)
+    double *b, int rows, int maxit, double err)
 {
     return solver_bicgstab(NULL, Asp, x, b, rows, maxit, err);
 }
 
 
 int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
-		    int rows, int maxit, double err)
+    int rows, int maxit, double err)
 {
     double *r;
 
@@ -602,14 +601,14 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
 
 #pragma omp parallel
     {
-	if (Asp)
-	    G_math_Ax_sparse(Asp, x, v, rows);
-	else
-	    G_math_d_Ax(A, x, v, rows, rows);
+        if (Asp)
+            G_math_Ax_sparse(Asp, x, v, rows);
+        else
+            G_math_d_Ax(A, x, v, rows, rows);
 
-	G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
-	G_math_d_copy(r, r0, rows);
-	G_math_d_copy(r, p, rows);
+        G_math_d_ax_by(b, v, r, 1.0, -1.0, rows);
+        G_math_d_copy(r, r0, rows);
+        G_math_d_copy(r, p, rows);
     }
 
     s1 = s2 = s3 = 0.0;
@@ -620,92 +619,91 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
     for (m = 0; m < maxit; m++) {
 
 #pragma omp parallel default(shared)
-	{
-	    if (Asp)
-		G_math_Ax_sparse(Asp, p, v, rows);
-	    else
-		G_math_d_Ax(A, p, v, rows, rows);
+        {
+            if (Asp)
+                G_math_Ax_sparse(Asp, p, v, rows);
+            else
+                G_math_d_Ax(A, p, v, rows, rows);
 
-	    /* scalar product */
+            /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s1, s2, s3)
-	    for (i = 0; i < rows; i++) {
-		s1 += r[i] * r[i];
-		s2 += r[i] * r0[i];
-		s3 += v[i] * r0[i];
-	    }
+            for (i = 0; i < rows; i++) {
+                s1 += r[i] * r[i];
+                s2 += r[i] * r0[i];
+                s3 += v[i] * r0[i];
+            }
 
 #pragma omp single
-	    {
-		error = s1;
+            {
+                error = s1;
 
-		if (error < 0 || error == 0 || error > 0) {
-		    ;
-		}
-		else {
-		    G_warning(_
-			      ("Unable to solve the linear equation system"));
-		    error_break = 1;
-		}
+                if (error < 0 || error == 0 || error > 0) {
+                    ;
+                }
+                else {
+                    G_warning(_("Unable to solve the linear equation system"));
+                    error_break = 1;
+                }
 
-		rr0 = s2;
-		alpha = rr0 / s3;
-		s1 = s2 = s3 = 0.0;
-	    }
+                rr0 = s2;
+                alpha = rr0 / s3;
+                s1 = s2 = s3 = 0.0;
+            }
 
-	    G_math_d_ax_by(r, v, s, 1.0, -1.0 * alpha, rows);
-	    if (Asp)
-		G_math_Ax_sparse(Asp, s, t, rows);
-	    else
-		G_math_d_Ax(A, s, t, rows, rows);
+            G_math_d_ax_by(r, v, s, 1.0, -1.0 * alpha, rows);
+            if (Asp)
+                G_math_Ax_sparse(Asp, s, t, rows);
+            else
+                G_math_d_Ax(A, s, t, rows, rows);
 
-	    /* scalar product */
+            /* scalar product */
 #pragma omp for schedule (static) private(i) reduction(+:s1, s2)
-	    for (i = 0; i < rows; i++) {
-		s1 += t[i] * s[i];
-		s2 += t[i] * t[i];
-	    }
+            for (i = 0; i < rows; i++) {
+                s1 += t[i] * s[i];
+                s2 += t[i] * t[i];
+            }
 
 #pragma omp single
-	    {
-		omega = s1 / s2;
-		s1 = s2 = 0.0;
-	    }
+            {
+                omega = s1 / s2;
+                s1 = s2 = 0.0;
+            }
 
-	    G_math_d_ax_by(p, s, r, alpha, omega, rows);
-	    G_math_d_ax_by(x, r, x, 1.0, 1.0, rows);
-	    G_math_d_ax_by(s, t, r, 1.0, -1.0 * omega, rows);
+            G_math_d_ax_by(p, s, r, alpha, omega, rows);
+            G_math_d_ax_by(x, r, x, 1.0, 1.0, rows);
+            G_math_d_ax_by(s, t, r, 1.0, -1.0 * omega, rows);
 
 #pragma omp for schedule (static) private(i) reduction(+:s1)
-	    for (i = 0; i < rows; i++) {
-		s1 += r[i] * r0[i];
-	    }
+            for (i = 0; i < rows; i++) {
+                s1 += r[i] * r0[i];
+            }
 
 #pragma omp single
-	    {
-		beta = alpha / omega * s1 / rr0;
-		s1 = s2 = s3 = 0.0;
-	    }
+            {
+                beta = alpha / omega * s1 / rr0;
+                s1 = s2 = s3 = 0.0;
+            }
 
-	    G_math_d_ax_by(p, v, p, 1.0, -1.0 * omega, rows);
-	    G_math_d_ax_by(p, r, p, beta, 1.0, rows);
-	}
+            G_math_d_ax_by(p, v, p, 1.0, -1.0 * omega, rows);
+            G_math_d_ax_by(p, r, p, beta, 1.0, rows);
+        }
 
 
-	if (Asp != NULL)
-	    G_message(_("Sparse BiCGStab -- iteration %i error  %g\n"), m,
-		      error);
-	else
-	    G_message(_("BiCGStab -- iteration %i error  %g\n"), m, error);
+        if (Asp != NULL)
+            G_message(_("Sparse BiCGStab -- iteration %i error  %g\n"), m,
+                error);
+        else
+            G_message(_("BiCGStab -- iteration %i error  %g\n"), m, error);
 
-	if (error_break == 1) {
-	    finished = -1;
-	    break;
-	}
+        if (error_break == 1) {
+            finished = -1;
+            break;
+        }
 
-	if (error < err) {
-	    finished = 1;
-	    break;
-	}
+        if (error < err) {
+            finished = 1;
+            break;
+        }
     }
 
     G_free(r);
@@ -729,8 +727,7 @@ int solver_bicgstab(double **A, G_math_spvector ** Asp, double *x, double *b,
  *
  * */
 G_math_spvector **create_diag_precond_matrix(double **A,
-					     G_math_spvector ** Asp, int rows,
-					     int prec)
+    G_math_spvector ** Asp, int rows, int prec)
 {
     G_math_spvector **Msp;
 
@@ -742,65 +739,65 @@ G_math_spvector **create_diag_precond_matrix(double **A,
 
     if (A != NULL) {
 #pragma omp parallel for schedule (static) private(i, j, sum) shared(A, Msp, rows, cols, prec)
-	for (i = 0; i < rows; i++) {
-	    G_math_spvector *spvect = G_math_alloc_spvector(1);
+        for (i = 0; i < rows; i++) {
+            G_math_spvector *spvect = G_math_alloc_spvector(1);
 
-	    switch (prec) {
-	    case G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION:
-		sum = 0;
-		for (j = 0; j < cols; j++)
-		    sum += A[i][j] * A[i][j];
-		spvect->values[0] = 1.0 / sqrt(sum);
-		break;
-	    case G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION:
-		sum = 0;
-		for (j = 0; j < cols; j++)
-		    sum += fabs(A[i][j]);
-		spvect->values[0] = 1.0 / (sum);
-		break;
-	    case G_MATH_DIAGONAL_PRECONDITION:
-	    default:
-		spvect->values[0] = 1.0 / A[i][i];
-		break;
-	    }
+            switch (prec) {
+            case G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION:
+                sum = 0;
+                for (j = 0; j < cols; j++)
+                    sum += A[i][j] * A[i][j];
+                spvect->values[0] = 1.0 / sqrt(sum);
+                break;
+            case G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION:
+                sum = 0;
+                for (j = 0; j < cols; j++)
+                    sum += fabs(A[i][j]);
+                spvect->values[0] = 1.0 / (sum);
+                break;
+            case G_MATH_DIAGONAL_PRECONDITION:
+            default:
+                spvect->values[0] = 1.0 / A[i][i];
+                break;
+            }
 
 
-	    spvect->index[0] = i;
-	    spvect->cols = 1;;
-	    G_math_add_spvector(Msp, spvect, i);
+            spvect->index[0] = i;
+            spvect->cols = 1;;
+            G_math_add_spvector(Msp, spvect, i);
 
-	}
+        }
     }
     else {
 #pragma omp parallel for schedule (static) private(i, j, sum) shared(Asp, Msp, rows, cols, prec)
-	for (i = 0; i < rows; i++) {
-	    G_math_spvector *spvect = G_math_alloc_spvector(1);
+        for (i = 0; i < rows; i++) {
+            G_math_spvector *spvect = G_math_alloc_spvector(1);
 
-	    switch (prec) {
-	    case G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION:
-		sum = 0;
-		for (j = 0; j < Asp[i]->cols; j++)
-		    sum += Asp[i]->values[j] * Asp[i]->values[j];
-		spvect->values[0] = 1.0 / sqrt(sum);
-		break;
-	    case G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION:
-		sum = 0;
-		for (j = 0; j < Asp[i]->cols; j++)
-		    sum += fabs(Asp[i]->values[j]);
-		spvect->values[0] = 1.0 / (sum);
-		break;
-	    case G_MATH_DIAGONAL_PRECONDITION:
-	    default:
-		for (j = 0; j < Asp[i]->cols; j++)
-		    if (i == Asp[i]->index[j])
-			spvect->values[0] = 1.0 / Asp[i]->values[j];
-		break;
-	    }
+            switch (prec) {
+            case G_MATH_ROWSCALE_EUKLIDNORM_PRECONDITION:
+                sum = 0;
+                for (j = 0; j < Asp[i]->cols; j++)
+                    sum += Asp[i]->values[j] * Asp[i]->values[j];
+                spvect->values[0] = 1.0 / sqrt(sum);
+                break;
+            case G_MATH_ROWSCALE_ABSSUMNORM_PRECONDITION:
+                sum = 0;
+                for (j = 0; j < Asp[i]->cols; j++)
+                    sum += fabs(Asp[i]->values[j]);
+                spvect->values[0] = 1.0 / (sum);
+                break;
+            case G_MATH_DIAGONAL_PRECONDITION:
+            default:
+                for (j = 0; j < Asp[i]->cols; j++)
+                    if (i == Asp[i]->index[j])
+                        spvect->values[0] = 1.0 / Asp[i]->values[j];
+                break;
+            }
 
-	    spvect->index[0] = i;
-	    spvect->cols = 1;;
-	    G_math_add_spvector(Msp, spvect, i);
-	}
+            spvect->index[0] = i;
+            spvect->cols = 1;;
+            G_math_add_spvector(Msp, spvect, i);
+        }
     }
     return Msp;
 }

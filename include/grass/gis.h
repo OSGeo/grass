@@ -38,7 +38,7 @@
 #define __attribute__(x)
 #endif
 
-static const char *GRASS_copyright __attribute__ ((unused))
+static const char *GRASS_copyright __attribute__((unused))
     = "GRASS GNU GPL licensed Software";
 
 /* GRASS version, GRASS date, git short hash of last change in GRASS headers
@@ -72,21 +72,21 @@ static const char *GRASS_copyright __attribute__ ((unused))
 /*! \brief Cross-platform Newline Character */
 #define NEWLINE     '\n'
 #ifdef __MINGW32__
-#  define HOST_NEWLINE "\r\n"
+#define HOST_NEWLINE "\r\n"
 #else
-#  define HOST_NEWLINE "\n"
+#define HOST_NEWLINE "\n"
 #endif
 
 /*! \brief Generate warning if function return value is unused */
 #if __GNUC__ && (__GNUC__ >= 3 && __GNUC_MINOR__ >= 4)
-#   define WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
+#define WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
 #else
-#   define WARN_UNUSED_RESULT
+#define WARN_UNUSED_RESULT
 #endif
 
 /*!
-  \brief List of units
-*/
+   \brief List of units
+ */
 #define U_UNDEFINED    -1
 #define U_UNKNOWN       0
 #define U_ACRES		1
@@ -141,13 +141,13 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
 /* define PI and friends */
 #undef M_PI
-#define M_PI    3.14159265358979323846	/* pi */
+#define M_PI    3.14159265358979323846  /* pi */
 
 #undef M_PI_2
-#define M_PI_2  1.57079632679489661923	/* pi/2 */
+#define M_PI_2  1.57079632679489661923  /* pi/2 */
 
 #undef M_PI_4
-#define M_PI_4  0.78539816339744830962	/* pi/4 */
+#define M_PI_4  0.78539816339744830962  /* pi/4 */
 
 #undef M_R2D
 #define M_R2D  57.295779513082320877    /* 180/pi */
@@ -163,8 +163,8 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define G_VAR_MAPSET   1
 
 /* Where to find/store variables */
-#define G_GISRC_MODE_FILE     0	/* files */
-#define G_GISRC_MODE_MEMORY   1	/* memory only */
+#define G_GISRC_MODE_FILE     0 /* files */
+#define G_GISRC_MODE_MEMORY   1 /* memory only */
 
 /* for G_parser() */
 #define TYPE_INTEGER  1
@@ -217,93 +217,93 @@ static const char *GRASS_copyright __attribute__ ((unused))
 /* Cross-platform Directory Separator Character and null device stuff */
 #define GRASS_DIRSEP '/'
 #ifdef __MINGW32__
-#  define HOST_DIRSEP '\\'
-#  define G_DEV_NULL "NUL:"
+#define HOST_DIRSEP '\\'
+#define G_DEV_NULL "NUL:"
 #else
-#  define HOST_DIRSEP '/'
-#  define G_DEV_NULL "/dev/null"
+#define HOST_DIRSEP '/'
+#define G_DEV_NULL "/dev/null"
 #endif
 
 /*!
-  \typedef STD_OPT
-  \brief Standard option identifiers (enum)
+   \typedef STD_OPT
+   \brief Standard option identifiers (enum)
 
-  Identifies of all recognized standard options.
+   Identifies of all recognized standard options.
 
-  The term <em>old</em> in the descriptions means existing map which
-  is supposed to exist before the module is called.
-  On the other hand, the term <em>new</em> in the descriptions means
-  that the map is not supposed to exist and that module will create one.
+   The term <em>old</em> in the descriptions means existing map which
+   is supposed to exist before the module is called.
+   On the other hand, the term <em>new</em> in the descriptions means
+   that the map is not supposed to exist and that module will create one.
 
-  Used by the G_parser() system.
+   Used by the G_parser() system.
 
-  IMPORTANT NOTE: when adding new item to STD_OPT you should also
-  update STD_OPT_STRINGS array in general/g.parser/standard_option.c.
+   IMPORTANT NOTE: when adding new item to STD_OPT you should also
+   update STD_OPT_STRINGS array in general/g.parser/standard_option.c.
 
-*/
+ */
 typedef enum
 {
     G_OPT_UNDEFINED,
-    G_OPT_DB_SQL,		/*!< SQL statements */
-    G_OPT_DB_WHERE,		/*!< SQL where conditions */
-    G_OPT_DB_TABLE,		/*!< table name */
-    G_OPT_DB_DRIVER,		/*!< driver name */
-    G_OPT_DB_DATABASE,		/*!< database name */
+    G_OPT_DB_SQL,               /*!< SQL statements */
+    G_OPT_DB_WHERE,             /*!< SQL where conditions */
+    G_OPT_DB_TABLE,             /*!< table name */
+    G_OPT_DB_DRIVER,            /*!< driver name */
+    G_OPT_DB_DATABASE,          /*!< database name */
     G_OPT_DB_SCHEMA,            /*!< database schema */
-    G_OPT_DB_COLUMN,		/*!< one attr column */
-    G_OPT_DB_COLUMNS,		/*!< one or more attr columns */
+    G_OPT_DB_COLUMN,            /*!< one attr column */
+    G_OPT_DB_COLUMNS,           /*!< one or more attr columns */
     G_OPT_DB_KEYCOLUMN,         /*!< key column */
 
-    G_OPT_I_GROUP,		/*!< old input imagery group */
-    G_OPT_I_SUBGROUP,		/*!< old input imagery subgroup */
+    G_OPT_I_GROUP,              /*!< old input imagery group */
+    G_OPT_I_SUBGROUP,           /*!< old input imagery subgroup */
 
-    G_OPT_MEMORYMB,		/*!< Maximum memory to be used (in MB): cache size for raster rows */
-    G_OPT_R_INPUT,		/*!< old input raster map */
-    G_OPT_R_INPUTS,		/*!< old input raster maps */
-    G_OPT_R_OUTPUT,		/*!< new output raster map */
-    G_OPT_R_OUTPUTS,		/*!< new output raster maps */
-    G_OPT_R_MAP,		/*!< old input raster map */
-    G_OPT_R_MAPS,		/*!< old input rasters map */
-    G_OPT_R_BASE,		/*!< old input base raster map */
-    G_OPT_R_COVER,		/*!< old input cover raster map */
-    G_OPT_R_ELEV,		/*!< old input elevation raster map */
-    G_OPT_R_ELEVS,		/*!< old input elevation raster maps */
+    G_OPT_MEMORYMB,             /*!< Maximum memory to be used (in MB): cache size for raster rows */
+    G_OPT_R_INPUT,              /*!< old input raster map */
+    G_OPT_R_INPUTS,             /*!< old input raster maps */
+    G_OPT_R_OUTPUT,             /*!< new output raster map */
+    G_OPT_R_OUTPUTS,            /*!< new output raster maps */
+    G_OPT_R_MAP,                /*!< old input raster map */
+    G_OPT_R_MAPS,               /*!< old input rasters map */
+    G_OPT_R_BASE,               /*!< old input base raster map */
+    G_OPT_R_COVER,              /*!< old input cover raster map */
+    G_OPT_R_ELEV,               /*!< old input elevation raster map */
+    G_OPT_R_ELEVS,              /*!< old input elevation raster maps */
     G_OPT_R_TYPE,               /*!< raster map type */
     G_OPT_R_INTERP_TYPE,        /*!< interpolation type */
     G_OPT_R_BASENAME_INPUT,     /*!< old input basename raster maps */
     G_OPT_R_BASENAME_OUTPUT,    /*!< new output basename raster maps */
 
-    G_OPT_R3_INPUT,		/*!< old input raster3d map */
-    G_OPT_R3_INPUTS,		/*!< old input raster3d maps */
-    G_OPT_R3_OUTPUT,		/*!< new output raster3d map */
-    G_OPT_R3_MAP,		/*!< old input raster3d map */
-    G_OPT_R3_MAPS,		/*!< old input raster3d maps */
+    G_OPT_R3_INPUT,             /*!< old input raster3d map */
+    G_OPT_R3_INPUTS,            /*!< old input raster3d maps */
+    G_OPT_R3_OUTPUT,            /*!< new output raster3d map */
+    G_OPT_R3_MAP,               /*!< old input raster3d map */
+    G_OPT_R3_MAPS,              /*!< old input raster3d maps */
     G_OPT_R3_TYPE,              /*!< Type (FCELL or DCELL) of a new created raster3d map */
     G_OPT_R3_PRECISION,         /*!< The precision of the new generated raster3d map */
     G_OPT_R3_TILE_DIMENSION,    /*!< The tile dimension of a new generated raster3d map */
     G_OPT_R3_COMPRESSION,       /*!< The kind of compression of a new created raster3d map */
 
-    G_OPT_V_INPUT,		/*!< old input vector map */
-    G_OPT_V_INPUTS,		/*!< old input vector maps */
-    G_OPT_V_OUTPUT,		/*!< new output vector map */
-    G_OPT_V_MAP,		/*!< old input vector map */
-    G_OPT_V_MAPS,		/*!< old input vector maps */
-    G_OPT_V_TYPE,		/*!< primitive type */
-    G_OPT_V3_TYPE,		/*!< primitive type, 2D and 3D */
-    G_OPT_V_FIELD,		/*!< layer number (layers used to be called fields) */
-    G_OPT_V_FIELD_ALL,		/*!< layer number (layers used to be called fields) */
-    G_OPT_V_CAT,		/*!< one category */
-    G_OPT_V_CATS,		/*!< more categories */
-    G_OPT_V_ID, 		/*!< one feature id */
-    G_OPT_V_IDS,		/*!< more feature ids */
+    G_OPT_V_INPUT,              /*!< old input vector map */
+    G_OPT_V_INPUTS,             /*!< old input vector maps */
+    G_OPT_V_OUTPUT,             /*!< new output vector map */
+    G_OPT_V_MAP,                /*!< old input vector map */
+    G_OPT_V_MAPS,               /*!< old input vector maps */
+    G_OPT_V_TYPE,               /*!< primitive type */
+    G_OPT_V3_TYPE,              /*!< primitive type, 2D and 3D */
+    G_OPT_V_FIELD,              /*!< layer number (layers used to be called fields) */
+    G_OPT_V_FIELD_ALL,          /*!< layer number (layers used to be called fields) */
+    G_OPT_V_CAT,                /*!< one category */
+    G_OPT_V_CATS,               /*!< more categories */
+    G_OPT_V_ID,                 /*!< one feature id */
+    G_OPT_V_IDS,                /*!< more feature ids */
 
-    G_OPT_F_INPUT,		/*!< old input file */
-    G_OPT_F_BIN_INPUT,		/*!< old binary input file */
-    G_OPT_F_OUTPUT,		/*!< new output file */
-    G_OPT_F_SEP,		/*!< data field separator */
+    G_OPT_F_INPUT,              /*!< old input file */
+    G_OPT_F_BIN_INPUT,          /*!< old binary input file */
+    G_OPT_F_OUTPUT,             /*!< new output file */
+    G_OPT_F_SEP,                /*!< data field separator */
 
-    G_OPT_C,			/*!< color */
-    G_OPT_CN,			/*!< color or none */
+    G_OPT_C,                    /*!< color */
+    G_OPT_CN,                   /*!< color or none */
 
     G_OPT_M_UNITS,              /*!< units */
     G_OPT_M_DATATYPE,           /*!< datatype */
@@ -336,28 +336,28 @@ typedef enum
     G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
-    G_OPT_T_SAMPLE             /*!< Temporal sample methods */
-
+    G_OPT_T_SAMPLE              /*!< Temporal sample methods */
 } STD_OPT;
 
 /*!
-  \typedef STD_FLG
-  \brief  Standard flag identifiers (enum)
+   \typedef STD_FLG
+   \brief  Standard flag identifiers (enum)
 
-  Identifies of all recognized standard flags.
+   Identifies of all recognized standard flags.
 
-  Used by the G_parser() system.
-*/
+   Used by the G_parser() system.
+ */
 
-/**/ typedef enum
+ /**/ typedef enum
 {
     G_FLG_UNDEFINED,
-    G_FLG_V_TABLE,		/*!< do not create attribute table */
-    G_FLG_V_TOPO               /*!< do not build topology */
+    G_FLG_V_TABLE,              /*!< do not create attribute table */
+    G_FLG_V_TOPO                /*!< do not build topology */
 } STD_FLG;
 
 /* Parser rules for G__option_rule() */
-enum rule_type {
+enum rule_type
+{
     RULE_EXCLUSIVE,
     RULE_REQUIRED,
     RULE_REQUIRES,
@@ -367,10 +367,10 @@ enum rule_type {
 };
 
 /* Message format */
-#define G_INFO_FORMAT_STANDARD 0	/* GRASS_MESSAGE_FORMAT=standard or not defined */
-#define G_INFO_FORMAT_GUI      1	/* GRASS_MESSAGE_FORMAT=gui */
-#define G_INFO_FORMAT_SILENT   2	/* GRASS_MESSAGE_FORMAT=silent */
-#define G_INFO_FORMAT_PLAIN    3	/* GRASS_MESSAGE_FORMAT=plain */
+#define G_INFO_FORMAT_STANDARD 0        /* GRASS_MESSAGE_FORMAT=standard or not defined */
+#define G_INFO_FORMAT_GUI      1        /* GRASS_MESSAGE_FORMAT=gui */
+#define G_INFO_FORMAT_SILENT   2        /* GRASS_MESSAGE_FORMAT=silent */
+#define G_INFO_FORMAT_PLAIN    3        /* GRASS_MESSAGE_FORMAT=plain */
 
 /* Icon types */
 #define G_ICON_CROSS  0
@@ -394,45 +394,45 @@ enum rule_type {
 
 /* for vector maps */
 /*!
-  \brief Name of default key column
-*/
+   \brief Name of default key column
+ */
 #define GV_KEY_COLUMN    "cat"
 
 /*!
-  \brief Element types identifiers (enum)
+   \brief Element types identifiers (enum)
 
-  Identifies various element types. Element can be raster map,
-  vector map, etc.
-*/
+   Identifies various element types. Element can be raster map,
+   vector map, etc.
+ */
 enum
-{				/* Dir */
-    G_ELEMENT_RASTER = 1,	/*!< raster */
-    G_ELEMENT_RASTER3D = 2,	/*!< 3d raster */
-    G_ELEMENT_VECTOR = 3,	/*!< vector */
-    G_ELEMENT_ASCIIVECTOR = 4,	/*!< ASCII vector */
-    G_ELEMENT_LABEL = 5,	/*!< labels */
-    G_ELEMENT_REGION = 6,	/*!< region */
-    G_ELEMENT_GROUP = 7		/*!< group */
+{                               /* Dir */
+    G_ELEMENT_RASTER = 1,       /*!< raster */
+    G_ELEMENT_RASTER3D = 2,     /*!< 3d raster */
+    G_ELEMENT_VECTOR = 3,       /*!< vector */
+    G_ELEMENT_ASCIIVECTOR = 4,  /*!< ASCII vector */
+    G_ELEMENT_LABEL = 5,        /*!< labels */
+    G_ELEMENT_REGION = 6,       /*!< region */
+    G_ELEMENT_GROUP = 7         /*!< group */
 };
 
 /*=========================== Typedefs/Structures ==========================*/
 
 /*!
-  \brief 2D/3D raster map header (used also for region)
-*/
+   \brief 2D/3D raster map header (used also for region)
+ */
 struct Cell_head
 {
     /*! \brief Max number of bytes per raster data value minus 1 (raster header only)
 
-     Note: -1 for FP raster maps
-    */
+       Note: -1 for FP raster maps
+     */
     int format;
     /*! \brief Compression mode (raster header only)
 
-      - 0: uncompressed
-      - 1: compressed
-      - -1: pre GRASS 3.0
-    */
+       - 0: uncompressed
+       - 1: compressed
+       - -1: pre GRASS 3.0
+     */
     int compressed;
     /*! \brief Number of rows for 2D data */
     int rows;
@@ -446,11 +446,11 @@ struct Cell_head
     int depths;
     /*! \brief Projection code
 
-      - PROJECTION_XY
-      - PROJECTION_UTM
-      - PROJECTION_SP
-      - PROJECTION_LL
-      - PROJECTION_OTHER
+       - PROJECTION_XY
+       - PROJECTION_UTM
+       - PROJECTION_SP
+       - PROJECTION_LL
+       - PROJECTION_OTHER
      */
     int proj;
     /*! \brief Projection zone (UTM) */
@@ -473,7 +473,7 @@ struct Cell_head
     double east;
     /*! \brief Extent coordinates (west) */
     double west;
-    /*! \brief Extent coordinates (top) - 3D data*/
+    /*! \brief Extent coordinates (top) - 3D data */
     double top;
     /*! \brief Extent coordinates (bottom) - 3D data */
     double bottom;
@@ -484,26 +484,26 @@ struct Cell_head
  */
 struct G_3dview
 {
-    char pgm_id[40];		/* user-provided identifier */
-    float from_to[2][3];	/* eye position & lookat position */
-    float fov;			/* field of view */
-    float twist;		/* right_hand rotation about from_to */
-    float exag;			/* terrain elevation exageration */
-    int mesh_freq;		/* cells per grid line */
-    int poly_freq;		/* cells per polygon */
-    int display_type;		/* 1 for mesh, 2 for poly, 3 for both */
-    int lightson;		/* boolean */
-    int dozero;			/* boolean */
-    int colorgrid;		/* boolean */
-    int shading;		/* boolean */
-    int fringe;			/* boolean */
-    int surfonly;		/* boolean */
-    int doavg;			/* boolean */
-    char grid_col[40];		/* colors */
-    char bg_col[40];		/* colors */
-    char other_col[40];		/* colors */
-    float lightpos[4];		/* east, north, height, 1.0 for local 0.0 infin */
-    float lightcol[3];		/* values between 0.0 to 1.0 for red, grn, blu */
+    char pgm_id[40];            /* user-provided identifier */
+    float from_to[2][3];        /* eye position & lookat position */
+    float fov;                  /* field of view */
+    float twist;                /* right_hand rotation about from_to */
+    float exag;                 /* terrain elevation exageration */
+    int mesh_freq;              /* cells per grid line */
+    int poly_freq;              /* cells per polygon */
+    int display_type;           /* 1 for mesh, 2 for poly, 3 for both */
+    int lightson;               /* boolean */
+    int dozero;                 /* boolean */
+    int colorgrid;              /* boolean */
+    int shading;                /* boolean */
+    int fringe;                 /* boolean */
+    int surfonly;               /* boolean */
+    int doavg;                  /* boolean */
+    char grid_col[40];          /* colors */
+    char bg_col[40];            /* colors */
+    char other_col[40];         /* colors */
+    float lightpos[4];          /* east, north, height, 1.0 for local 0.0 infin */
+    float lightcol[3];          /* values between 0.0 to 1.0 for red, grn, blu */
     float ambient;
     float shine;
     struct Cell_head vwin;
@@ -518,94 +518,96 @@ struct Key_Value
 };
 
 /*!
-  \brief Structure that stores option information
+   \brief Structure that stores option information
 
-  The descriptions member contains pairs of option and option
-  descriptions separated by semicolon ';'.
-  For example, when options member is set using:
-  \code
-  opt->options = "break,rmdupl"
-  \endcode
-  the descriptions member should be set to:
-  \verbatim
-  "break;break lines on intersections;"
-  "rmdupl;remove duplicates"
-  \endverbatim
+   The descriptions member contains pairs of option and option
+   descriptions separated by semicolon ';'.
+   For example, when options member is set using:
+   \code
+   opt->options = "break,rmdupl"
+   \endcode
+   the descriptions member should be set to:
+   \verbatim
+   "break;break lines on intersections;"
+   "rmdupl;remove duplicates"
+   \endverbatim
 
-  Parsed descriptions are stored in the same order as options.
+   Parsed descriptions are stored in the same order as options.
 
-  GUI dependency is a list of options (separated by commas) to be updated
-  if the value is changed.
+   GUI dependency is a list of options (separated by commas) to be updated
+   if the value is changed.
 
-  Used by the G_parser() system.
-*/
+   Used by the G_parser() system.
+ */
 struct Option
 {
-    const char *key;		/*!< Key word used on command line */
-    int type;			/*!< Option type */
-    int required;		/*!< REQUIRED or OPTIONAL */
-    int multiple;		/*!< Multiple entries OK */
-    const char *options;	/*!< Approved values or range or NULL */
-    const char **opts;		/*!< NULL or NULL terminated array of parsed options */
-    const char *key_desc;	/*!< one word describing the key */
-    const char *label;		/*!< Optional short label, used in GUI as item label */
-    const char *description;	/*!< String describing option */
-    const char *descriptions;	/*!< ';' separated pairs of option and option descriptions */
-    const char **descs;		/*!< parsed descriptions, array of either NULL or string */
-    char *answer;		/*!< Option answer */
-    const char *def;		/*!< Where original answer gets saved */
-    char **answers;		/*!< Option answers (for multiple=YES) */
-    struct Option *next_opt;	/*!< Pointer to next option struct */
-    const char *gisprompt;	/*!< Interactive prompt guidance */
-    const char *guisection;	/*!< GUI Layout guidance: ';' delimited hierarchical tree position */
+    const char *key;            /*!< Key word used on command line */
+    int type;                   /*!< Option type */
+    int required;               /*!< REQUIRED or OPTIONAL */
+    int multiple;               /*!< Multiple entries OK */
+    const char *options;        /*!< Approved values or range or NULL */
+    const char **opts;          /*!< NULL or NULL terminated array of parsed options */
+    const char *key_desc;       /*!< one word describing the key */
+    const char *label;          /*!< Optional short label, used in GUI as item label */
+    const char *description;    /*!< String describing option */
+    const char *descriptions;   /*!< ';' separated pairs of option and option descriptions */
+    const char **descs;         /*!< parsed descriptions, array of either NULL or string */
+    char *answer;               /*!< Option answer */
+    const char *def;            /*!< Where original answer gets saved */
+    char **answers;             /*!< Option answers (for multiple=YES) */
+    struct Option *next_opt;    /*!< Pointer to next option struct */
+    const char *gisprompt;      /*!< Interactive prompt guidance */
+    const char *guisection;     /*!< GUI Layout guidance: ';' delimited hierarchical tree position */
     const char *guidependency;  /*!< GUI dependency */
-    int (*checker)(const char *);/*!< Routine to check answer or NULL  */
+    int (*checker)(const char *);       /*!< Routine to check answer or NULL  */
     int count;
 };
 
 /*!
-  \brief Structure that stores flag info
+   \brief Structure that stores flag info
 
-  Used by the G_parser() system.
-*/
+   Used by the G_parser() system.
+ */
 struct Flag
 {
-    char key;			/*!< Key char used on command line */
-    char answer;		/*!< Stores flag state: 0/1 */
-    char suppress_required;	/*!< Suppresses checking of required options */
-    char suppress_overwrite;	/*!< Suppresses checking of existing output */
-    const char *label;		/*!< Optional short label, used in GUI as item label */
-    const char *description;	/*!< String describing flag meaning   */
-    const char *guisection;	/*!< GUI Layout guidance: ';' delimited hierarchical tree position */
-    struct Flag *next_flag;	/*!< Pointer to next flag struct */
+    char key;                   /*!< Key char used on command line */
+    char answer;                /*!< Stores flag state: 0/1 */
+    char suppress_required;     /*!< Suppresses checking of required options */
+    char suppress_overwrite;    /*!< Suppresses checking of existing output */
+    const char *label;          /*!< Optional short label, used in GUI as item label */
+    const char *description;    /*!< String describing flag meaning   */
+    const char *guisection;     /*!< GUI Layout guidance: ';' delimited hierarchical tree position */
+    struct Flag *next_flag;     /*!< Pointer to next flag struct */
 };
 
 /*!
-  \brief Structure that stores module info
+   \brief Structure that stores module info
 
-  Used by the G_parser() system.
-*/
+   Used by the G_parser() system.
+ */
 struct GModule
 {
-    const char *label;		/*!< Optional short description for GUI */
-    const char *description;	/*!< String describing module */
-    const char **keywords;	/*!< Keywords describing module */
+    const char *label;          /*!< Optional short description for GUI */
+    const char *description;    /*!< String describing module */
+    const char **keywords;      /*!< Keywords describing module */
     /* further items are possible: author(s), version, year */
-    int overwrite;		/*!< overwrite old files */
-    int verbose;		/*!< print all information about progress and so on */
+    int overwrite;              /*!< overwrite old files */
+    int verbose;                /*!< print all information about progress and so on */
 };
 
 struct TimeStamp
 {
-    DateTime dt[2];		/* two datetimes */
+    DateTime dt[2];             /* two datetimes */
     int count;
 };
 
-struct Counter {
+struct Counter
+{
     int value;
 };
 
-struct Popen {
+struct Popen
+{
     FILE *fp;
     int pid;
 };
@@ -653,21 +655,21 @@ struct _Color_Info_
 
     struct
     {
-	unsigned char *red;
-	unsigned char *grn;
-	unsigned char *blu;
-	unsigned char *set;
-	int nalloc;
-	int active;
+        unsigned char *red;
+        unsigned char *grn;
+        unsigned char *blu;
+        unsigned char *set;
+        int nalloc;
+        int active;
     } lookup;
 
     struct
     {
-	DCELL *vals;
-	/* pointers to color rules corresponding to the intervals btwn vals */
-	struct _Color_Rule_ **rules;
-	int nalloc;
-	int active;
+        DCELL *vals;
+        /* pointers to color rules corresponding to the intervals btwn vals */
+        struct _Color_Rule_ **rules;
+        int nalloc;
+        int active;
     } fp_lookup;
 
     DCELL min, max;
@@ -675,15 +677,15 @@ struct _Color_Info_
 
 struct Colors
 {
-    int version;		/* set by read_colors: -1=old,1=new */
+    int version;                /* set by read_colors: -1=old,1=new */
     DCELL shift;
     int invert;
-    int is_float;		/* defined on floating point raster data? */
-    int null_set;		/* the colors for null are set? */
+    int is_float;               /* defined on floating point raster data? */
+    int null_set;               /* the colors for null are set? */
     unsigned char null_red;
     unsigned char null_grn;
     unsigned char null_blu;
-    int undef_set;		/* the colors for cells not in range are set? */
+    int undef_set;              /* the colors for cells not in range are set? */
     unsigned char undef_red;
     unsigned char undef_grn;
     unsigned char undef_blu;
@@ -695,21 +697,21 @@ struct Colors
 };
 
 /*!
-  \brief List of integers
-*/
+   \brief List of integers
+ */
 struct ilist
 {
     /*!
-      \brief Array of values
-    */
+       \brief Array of values
+     */
     int *value;
     /*!
-      \brief Number of values in the list
-    */
+       \brief Number of values in the list
+     */
     int n_values;
     /*!
-      \brief Allocated space for values
-    */
+       \brief Allocated space for values
+     */
     int alloc_values;
 };
 
@@ -719,4 +721,4 @@ struct ilist
 /* in the file gisdefs.h */
 #include <grass/defs/gis.h>
 
-#endif /* GRASS_GIS_H */
+#endif                          /* GRASS_GIS_H */

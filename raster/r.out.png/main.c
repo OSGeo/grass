@@ -4,7 +4,7 @@
  * MODULE:       r.out.png
  * AUTHOR(S):    Bill Brown - USA-CERL
  *               Alex Shevlakov - sixote@yahoo.com
- *		 Hamish Bowman
+ *               Hamish Bowman
  * PURPOSE:      Export GRASS raster as non-georeferenced PNG image.
  * COPYRIGHT:    (C) 2000-2010 by the GRASS Development Team
  *
@@ -33,7 +33,7 @@
 #include <png.h>
 #include "pngfunc.h"
 /* #include <pnm.h> this is already included from pngfunc.h */
-#endif /* _MYINCLUDE_H */
+#endif                          /* _MYINCLUDE_H */
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -50,7 +50,7 @@ static int write_wld(const char *, const struct Cell_head *);
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *rast, *png_file, *compr; /* , *bgcolor; */
+    struct Option *rast, *png_file, *compr;     /* , *bgcolor; */
     struct Flag *alpha, *wld_flag;
     char *rastermap;
     char *basename = NULL, *outfile = NULL;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
      * thanks to Greg Roelofs <newt@pobox.com> for contributions and bug-fixes
      *
      * Copyright (C) 1995-1998 by Alexander Lehmann <alex@hal.rhein-main.de>
-     *  		      and Willem van Schaik <willem@schaik.com>
+     *                        and Willem van Schaik <willem@schaik.com>
      *
      * Permission to use, copy, modify, and distribute this software and its
      * documentation for any purpose and without fee is hereby granted, provided
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("output"));
     G_add_keyword("PNG");
     module->description =
-	_("Export a GRASS raster map as a non-georeferenced PNG image.");
+        _("Export a GRASS raster map as a non-georeferenced PNG image.");
 
     rast = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     compr->description = _("(0 = none, 1 = fastest, 9 = best)");
     compr->answer = "6";
 
-/*    bgcolor = G_define_standard_option(G_OPT_C_BG); */
+    /*    bgcolor = G_define_standard_option(G_OPT_C_BG); */
 
     alpha = G_define_flag();
     alpha->key = 't';
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
      */
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
 
     rastermap = rast->answer;
@@ -157,14 +157,14 @@ int main(int argc, char *argv[])
     do_alpha = alpha->answer ? TRUE : FALSE;
 
     if (strcmp(png_file->answer, "-") != 0)
-	basename = G_store(png_file->answer);
+        basename = G_store(png_file->answer);
     else
-	do_stdout = TRUE;
+        do_stdout = TRUE;
 
     if (basename) {
-	G_basename(basename, "png");
-	outfile = G_malloc(strlen(basename) + 5);
-	sprintf(outfile, "%s.png", basename);
+        G_basename(basename, "png");
+        outfile = G_malloc(strlen(basename) + 5);
+        sprintf(outfile, "%s.png", basename);
     }
 
     png_compr = atoi(compr->answer);
@@ -173,10 +173,10 @@ int main(int argc, char *argv[])
     /* ... if at all */
     ret = G_str_to_color(bgcolor->answer, &def_red, &def_grn, &def_blu);
     if (ret == 0)
-	G_fatal_error(_("[%s]: No such color"), bgcolor->answer);
-    else if (ret == 2) {  /* (ret==2) is "none" */
-	if(!do_alpha)
-	    do_alpha = TRUE;
+        G_fatal_error(_("[%s]: No such color"), bgcolor->answer);
+    else if (ret == 2) {        /* (ret==2) is "none" */
+        if (!do_alpha)
+            do_alpha = TRUE;
     }
 #else
     ret = G_str_to_color(DEFAULT_BG_COLOR, &def_red, &def_grn, &def_blu);
@@ -197,37 +197,36 @@ int main(int argc, char *argv[])
     ored = G_malloc(win.cols);
     ogrn = G_malloc(win.cols);
     oblu = G_malloc(win.cols);
-    set  = G_malloc(win.cols);
+    set = G_malloc(win.cols);
 
     /* open png file for writing */
     if (do_stdout)
-	fp = stdout;
+        fp = stdout;
     else if (NULL == (fp = fopen(outfile, "w")))
-	G_fatal_error(_("Unable to open output file <%s>"), outfile);
+        G_fatal_error(_("Unable to open output file <%s>"), outfile);
 
 
     png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
-				      &pnmtopng_jmpbuf_struct,
-				      pnmtopng_error_handler, NULL);
+        &pnmtopng_jmpbuf_struct, pnmtopng_error_handler, NULL);
     if (png_ptr == NULL) {
-	fclose(fp);
-	G_fatal_error("cannot allocate LIBPNG structure");
+        fclose(fp);
+        G_fatal_error("cannot allocate LIBPNG structure");
     }
 
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL) {
-	png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
-	fclose(fp);
-	G_fatal_error("cannot allocate LIBPNG structure");
+        png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
+        fclose(fp);
+        G_fatal_error("cannot allocate LIBPNG structure");
     }
 
     if (setjmp(pnmtopng_jmpbuf_struct.jmpbuf)) {
-	png_destroy_write_struct(&png_ptr, &info_ptr);
-	fclose(fp);
-	G_fatal_error("setjmp returns error condition (1)");
+        png_destroy_write_struct(&png_ptr, &info_ptr);
+        fclose(fp);
+        G_fatal_error("setjmp returns error condition (1)");
     }
 
-    depth = 8;			/*really??? */
+    depth = 8;                  /*really??? */
 
 #ifdef OLDPNG
     png_write_init(png_ptr);
@@ -236,112 +235,113 @@ int main(int argc, char *argv[])
     png_init_io(png_ptr, fp);
 
     png_set_IHDR(png_ptr, info_ptr, win.cols, win.rows, depth,
-		 do_alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB,
-		 PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
-		 PNG_FILTER_TYPE_DEFAULT);
+        do_alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB,
+        PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
+        PNG_FILTER_TYPE_DEFAULT);
 
     /* explicit filter-type (or none) required */
     if ((filter >= 0) && (filter <= 4)) {
-	png_set_filter(png_ptr, 0, filter);
+        png_set_filter(png_ptr, 0, filter);
     }
 
     png_set_compression_level(png_ptr, png_compr);
 
     if (do_alpha) {
-	png_color_16 background_color;
-	background_color.red = (png_uint_16)def_red;
-	background_color.green = (png_uint_16)def_grn;
-	background_color.blue = (png_uint_16)def_blu;
-	png_set_bKGD(png_ptr, info_ptr, &background_color);
+        png_color_16 background_color;
+
+        background_color.red = (png_uint_16) def_red;
+        background_color.green = (png_uint_16) def_grn;
+        background_color.blue = (png_uint_16) def_blu;
+        png_set_bKGD(png_ptr, info_ptr, &background_color);
     }
 
     G_verbose_message(_("Converting <%s>..."), rast->answer);
 
     {
-	struct Colors colors;
+        struct Colors colors;
 
-	Rast_read_colors(rast->answer, "", &colors);
+        Rast_read_colors(rast->answer, "", &colors);
 
-	rtype = Rast_get_map_type(cellfile);
-	if (rtype == CELL_TYPE)
-	    voidc = (CELL *) cell_buf;
-	else if (rtype == FCELL_TYPE)
-	    voidc = (FCELL *) fcell_buf;
-	else if (rtype == DCELL_TYPE)
-	    voidc = (DCELL *) dcell_buf;
-	else
-	    G_fatal_error(_("Raster <%s> type mismatch"), rast->answer);
+        rtype = Rast_get_map_type(cellfile);
+        if (rtype == CELL_TYPE)
+            voidc = (CELL *) cell_buf;
+        else if (rtype == FCELL_TYPE)
+            voidc = (FCELL *) fcell_buf;
+        else if (rtype == DCELL_TYPE)
+            voidc = (DCELL *) dcell_buf;
+        else
+            G_fatal_error(_("Raster <%s> type mismatch"), rast->answer);
 
-	rsize = Rast_cell_size(rtype);
+        rsize = Rast_cell_size(rtype);
 
-	/*if(!gscale->answer){ *//* 24BIT COLOR IMAGE */
+        /*if(!gscale->answer){ *//* 24BIT COLOR IMAGE */
 
-	if (TRUE) {
-	    /* write the png-info struct */
-	    png_write_info(png_ptr, info_ptr);
+        if (TRUE) {
+            /* write the png-info struct */
+            png_write_info(png_ptr, info_ptr);
 
-	    /* let libpng take care of, e.g., bit-depth conversions */
-	    png_set_packing(png_ptr);
+            /* let libpng take care of, e.g., bit-depth conversions */
+            png_set_packing(png_ptr);
 
-	    /* max: 3 color channels, one alpha channel, 16-bit */
-	    line = (png_byte *) G_malloc(win.cols * 8 * sizeof(char));
+            /* max: 3 color channels, one alpha channel, 16-bit */
+            line = (png_byte *) G_malloc(win.cols * 8 * sizeof(char));
 
-	    for (row = 0; row < win.rows; row++) {
+            for (row = 0; row < win.rows; row++) {
 
-		G_percent(row, win.rows, 5);
-		Rast_get_row(cellfile, (void *)voidc, row, rtype);
-		Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set,
-				   win.cols, &colors, rtype);
+                G_percent(row, win.rows, 5);
+                Rast_get_row(cellfile, (void *)voidc, row, rtype);
+                Rast_lookup_colors((void *)voidc, ored, ogrn, oblu, set,
+                    win.cols, &colors, rtype);
 
-		pp = line;
+                pp = line;
 
-		for (col = 0; col < win.cols; col++) {
+                for (col = 0; col < win.cols; col++) {
 
-		    if (set[col]) {
-			*pp++ = ored[col];
-			*pp++ = ogrn[col];
-			*pp++ = oblu[col];
-			if (do_alpha) {
-			    if (Rast_is_null_value(
-				   G_incr_void_ptr(voidc, col * rsize), rtype))
-				*pp++ = 0;
-			    else
-				*pp++ = 255;
-			}
-		    }
-		    else {
-			if (do_alpha) {
-			    *pp++ = ored[col];
-			    *pp++ = ogrn[col];
-			    *pp++ = oblu[col];
-			    *pp++ = 0;
-			}
-			else {
-			    *pp++ = (unsigned char)def_red;
-			    *pp++ = (unsigned char)def_grn;
-			    *pp++ = (unsigned char)def_blu;
-			}
-		    }
-		}
+                    if (set[col]) {
+                        *pp++ = ored[col];
+                        *pp++ = ogrn[col];
+                        *pp++ = oblu[col];
+                        if (do_alpha) {
+                            if (Rast_is_null_value(G_incr_void_ptr(voidc,
+                                        col * rsize), rtype))
+                                *pp++ = 0;
+                            else
+                                *pp++ = 255;
+                        }
+                    }
+                    else {
+                        if (do_alpha) {
+                            *pp++ = ored[col];
+                            *pp++ = ogrn[col];
+                            *pp++ = oblu[col];
+                            *pp++ = 0;
+                        }
+                        else {
+                            *pp++ = (unsigned char)def_red;
+                            *pp++ = (unsigned char)def_grn;
+                            *pp++ = (unsigned char)def_blu;
+                        }
+                    }
+                }
 
-		png_write_row(png_ptr, line);
+                png_write_row(png_ptr, line);
 
-	    }
-	    G_percent(row, win.rows, 5); /* finish it off */
-	}
-	else {			/* GREYSCALE IMAGE */
+            }
+            G_percent(row, win.rows, 5);        /* finish it off */
+        }
+        else {                  /* GREYSCALE IMAGE */
 
-	    /*    
-	     * info_ptr->color_type = PNG_COLOR_TYPE_GRAY;
-	     * 
-	     */
+            /*    
+             * info_ptr->color_type = PNG_COLOR_TYPE_GRAY;
+             * 
+             */
 
 
-	    /* pm_message ("don't know yet how to write grey - yumm!!"); */
-	    G_warning("don't know how to write grey scale!");
-	}
+            /* pm_message ("don't know yet how to write grey - yumm!!"); */
+            G_warning("don't know how to write grey scale!");
+        }
 
-	Rast_free_colors(&colors);
+        Rast_free_colors(&colors);
 
     }
 
@@ -362,23 +362,23 @@ int main(int argc, char *argv[])
     fflush(stdout);
     /* G_free (png_ptr); */
     /* G_free (info_ptr); */
-    png_destroy_write_struct(&png_ptr, &info_ptr);	/* al 11/2000 */
+    png_destroy_write_struct(&png_ptr, &info_ptr);      /* al 11/2000 */
 
     fclose(fp);
 
     if (wld_flag->answer) {
-	if(do_stdout)
-	    outfile = G_store("png_map.wld");
-	else
-	    sprintf(outfile, "%s.wld", basename);
+        if (do_stdout)
+            outfile = G_store("png_map.wld");
+        else
+            sprintf(outfile, "%s.wld", basename);
 
-	write_wld(outfile, &win);
+        write_wld(outfile, &win);
     }
 
-    if(basename)
-	G_free(basename);
-    if(outfile)
-	G_free(outfile);
+    if (basename)
+        G_free(basename);
+    if (outfile)
+        G_free(outfile);
 
     exit(EXIT_SUCCESS);
 }
@@ -388,8 +388,8 @@ int main(int argc, char *argv[])
 static void pnmtopng_error_handler(png_structp png_ptr, png_const_charp msg)
 #else
 static void pnmtopng_error_handler(png_ptr, msg)
-     png_structp png_ptr;
-     png_const_charp msg;
+        png_structp png_ptr;
+        png_const_charp msg;
 #endif
 {
     jmpbuf_wrapper *jmpbuf_ptr;
@@ -406,9 +406,9 @@ static void pnmtopng_error_handler(png_ptr, msg)
     G_warning("pnmtopng:  fatal libpng error: [%s]", msg);
 
     jmpbuf_ptr = png_get_error_ptr(png_ptr);
-    if (jmpbuf_ptr == NULL) {	/* we are completely hosed now */
-	G_fatal_error
-	    ("pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.");
+    if (jmpbuf_ptr == NULL) {   /* we are completely hosed now */
+        G_fatal_error
+            ("pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.");
     }
 
     longjmp(jmpbuf_ptr->jmpbuf, 1);
@@ -423,11 +423,11 @@ static int write_wld(const char *fname, const struct Cell_head *win)
     G_verbose_message(_("Writing world file"));
 
     if (fname == NULL)
-	G_fatal_error(_("Got null file name"));
+        G_fatal_error(_("Got null file name"));
     if (win == NULL)
-	G_fatal_error(_("Got null region struct"));
+        G_fatal_error(_("Got null region struct"));
     if ((ofile = fopen(fname, "w")) == NULL)
-	G_fatal_error(_("Unable to open world file for writing"));
+        G_fatal_error(_("Unable to open world file for writing"));
 
     fprintf(ofile, "%36.*f \n", width, win->ew_res);
     fprintf(ofile, "%36.*f \n", width, 0.0);

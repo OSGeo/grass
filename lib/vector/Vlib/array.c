@@ -42,17 +42,17 @@ struct varray *Vect_new_varray(int size)
 {
     struct varray *p;
 
-    p = (struct varray *) G_malloc(sizeof(struct varray));
+    p = (struct varray *)G_malloc(sizeof(struct varray));
 
     if (p == NULL)
-	return NULL;
+        return NULL;
 
     p->size = size;
     p->c = (int *)G_calloc(sizeof(char) * size + 1, sizeof(int));
 
     if (p->c == NULL) {
-	G_free(p);
-	return NULL;
+        G_free(p);
+        return NULL;
     }
 
     return p;
@@ -80,8 +80,7 @@ struct varray *Vect_new_varray(int size)
  */
 int
 Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
-				const char *cstring, int type, int value,
-				struct varray * varray)
+    const char *cstring, int type, int value, struct varray *varray)
 {
     int ret;
     struct cat_list *Clist;
@@ -93,12 +92,12 @@ Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
     ret = Vect_str_to_cat_list(cstring, Clist);
 
     if (ret > 0)
-	G_warning(_("%d errors in category string"), ret);
+        G_warning(_("%d errors in category string"), ret);
 
     G_debug(4, "  %d ranges in clist", Clist->n_ranges);
 
     ret =
-	Vect_set_varray_from_cat_list(Map, field, Clist, type, value, varray);
+        Vect_set_varray_from_cat_list(Map, field, Clist, type, value, varray);
 
     Vect_destroy_cat_list(Clist);
 
@@ -127,69 +126,68 @@ Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
  */
 int
 Vect_set_varray_from_cat_list(const struct Map_info *Map, int field,
-			      struct cat_list *clist, int type, int value,
-			      struct varray * varray)
+    struct cat_list *clist, int type, int value, struct varray *varray)
 {
     int i, n, centr, cat;
-    int ni = 0;			/* number of items set */
-    int ltype;			/* line type */
+    int ni = 0;                 /* number of items set */
+    int ltype;                  /* line type */
     struct line_cats *Cats;
 
     G_debug(4, "Vect_set_varray_from_cat_list(): field = %d", field);
 
     /* Check type */
     if ((type & GV_AREA) && (type & (GV_POINTS | GV_LINES))) {
-	G_warning(_("Mixed area and other type requested for vector array"));
-	return 0;
+        G_warning(_("Mixed area and other type requested for vector array"));
+        return 0;
     }
 
     Cats = Vect_new_cats_struct();
 
-    if (type & GV_AREA) {	/* Areas */
-	n = Vect_get_num_areas(Map);
+    if (type & GV_AREA) {       /* Areas */
+        n = Vect_get_num_areas(Map);
 
-	if (n > varray->size) {	/* not enough space */
-	    G_warning(_("Not enough space in vector array"));
-	    return 0;
-	}
+        if (n > varray->size) { /* not enough space */
+            G_warning(_("Not enough space in vector array"));
+            return 0;
+        }
 
-	for (i = 1; i <= n; i++) {
-	    centr = Vect_get_area_centroid(Map, i);
-	    if (centr <= 0)
-		continue;	/* No centroid */
+        for (i = 1; i <= n; i++) {
+            centr = Vect_get_area_centroid(Map, i);
+            if (centr <= 0)
+                continue;       /* No centroid */
 
-	    Vect_read_line(Map, NULL, Cats, centr);
-	    if (!Vect_cat_get(Cats, field, &cat))
-		continue;	/* No such field */
+            Vect_read_line(Map, NULL, Cats, centr);
+            if (!Vect_cat_get(Cats, field, &cat))
+                continue;       /* No such field */
 
-	    if (Vect_cat_in_cat_list(cat, clist)) {	/* cat is in list */
-		varray->c[i] = value;
-		ni++;
-	    }
-	}
+            if (Vect_cat_in_cat_list(cat, clist)) {     /* cat is in list */
+                varray->c[i] = value;
+                ni++;
+            }
+        }
     }
-    else {			/* Lines */
-	n = Vect_get_num_lines(Map);
+    else {                      /* Lines */
+        n = Vect_get_num_lines(Map);
 
-	if (n > varray->size) {	/* not enough space */
-	    G_warning(_("Not enough space in vector array"));
-	    return 0;
-	}
+        if (n > varray->size) { /* not enough space */
+            G_warning(_("Not enough space in vector array"));
+            return 0;
+        }
 
-	for (i = 1; i <= n; i++) {
-	    ltype = Vect_read_line(Map, NULL, Cats, i);
+        for (i = 1; i <= n; i++) {
+            ltype = Vect_read_line(Map, NULL, Cats, i);
 
-	    if (!(ltype & type))
-		continue;	/* is not specified type */
+            if (!(ltype & type))
+                continue;       /* is not specified type */
 
-	    if (!Vect_cat_get(Cats, field, &cat))
-		continue;	/* No such field */
+            if (!Vect_cat_get(Cats, field, &cat))
+                continue;       /* No such field */
 
-	    if (Vect_cat_in_cat_list(cat, clist)) {	/* cat is in list */
-		varray->c[i] = value;
-		ni++;
-	    }
-	}
+            if (Vect_cat_in_cat_list(cat, clist)) {     /* cat is in list */
+                varray->c[i] = value;
+                ni++;
+            }
+        }
 
     }
 
@@ -205,9 +203,9 @@ static int cmp(const void *pa, const void *pb)
     int *p2 = (int *)pb;
 
     if (*p1 < *p2)
-	return -1;
+        return -1;
     if (*p1 > *p2)
-	return 1;
+        return 1;
     return 0;
 }
 
@@ -219,7 +217,7 @@ static int in_array(int *cats, size_t ncats, int cat)
     p = (int *)bsearch((void *)&cat, cats, ncats, sizeof(int), cmp);
 
     if (p == NULL)
-	return 0;
+        return 0;
 
     return 1;
 }
@@ -246,26 +244,26 @@ static int in_array(int *cats, size_t ncats, int cat)
    \return -1 on error
  */
 int
-Vect_set_varray_from_db(const struct Map_info *Map, int field, const char *where,
-			int type, int value, struct varray * varray)
+Vect_set_varray_from_db(const struct Map_info *Map, int field,
+    const char *where, int type, int value, struct varray *varray)
 {
     int i, n, c, centr, *cats;
     int ncats;
-    int ni = 0;			/* number of items set */
-    int ltype;			/* line type */
+    int ni = 0;                 /* number of items set */
+    int ltype;                  /* line type */
     struct line_cats *Cats;
     struct field_info *Fi;
     dbDriver *driver;
 
     G_debug(4, "Vect_set_varray_from_db(): field = %d where = '%s'", field,
-	    where);
+        where);
 
     /* Note: use category index once available */
 
     /* Check type */
     if ((type & GV_AREA) && (type & (GV_POINTS | GV_LINES))) {
-	G_warning(_("Mixed area and other type requested for vector array"));
-	return 0;
+        G_warning(_("Mixed area and other type requested for vector array"));
+        return 0;
     }
 
     Cats = Vect_new_cats_struct();
@@ -273,15 +271,15 @@ Vect_set_varray_from_db(const struct Map_info *Map, int field, const char *where
     /* Select categories from DB to array */
     Fi = Vect_get_field(Map, field);
     if (Fi == NULL) {
-	G_warning(_("Database connection not defined for layer %d"), field);
-	return -1;
+        G_warning(_("Database connection not defined for layer %d"), field);
+        return -1;
     }
 
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL) {
-	G_warning(_("Unable to open database <%s> by driver <%s>"),
-		  Fi->database, Fi->driver);
-	return -1;
+        G_warning(_("Unable to open database <%s> by driver <%s>"),
+            Fi->database, Fi->driver);
+        return -1;
     }
 
     ncats = db_select_int(driver, Fi->table, Fi->key, where, &cats);
@@ -289,76 +287,76 @@ Vect_set_varray_from_db(const struct Map_info *Map, int field, const char *where
     db_close_database_shutdown_driver(driver);
 
     if (ncats == -1) {
-	G_warning(_("Unable to select record from table <%s> (key %s, where %s)"),
-		  Fi->table, Fi->key, where);
-	return -1;
+        G_warning(_("Unable to select record from table <%s> (key %s, where %s)"),
+            Fi->table, Fi->key, where);
+        return -1;
     }
 
-    if (type & GV_AREA) {	/* Areas */
-	n = Vect_get_num_areas(Map);
+    if (type & GV_AREA) {       /* Areas */
+        n = Vect_get_num_areas(Map);
 
         /* IMHO varray should be allocated only when it's required AND only as large as required
-        as WHERE will create a small subset of all vector features and thus on large datasets
-        it's waste of memory to allocate it for all features. */
-	if (n > varray->size) {	/* not enough space */
-	    G_warning(_("Not enough space in vector array"));
-	    return 0;
-	}
+           as WHERE will create a small subset of all vector features and thus on large datasets
+           it's waste of memory to allocate it for all features. */
+        if (n > varray->size) { /* not enough space */
+            G_warning(_("Not enough space in vector array"));
+            return 0;
+        }
 
-	for (i = 1; i <= n; i++) {
-	    centr = Vect_get_area_centroid(Map, i);
-	    if (centr <= 0)
-		continue;	/* No centroid */
+        for (i = 1; i <= n; i++) {
+            centr = Vect_get_area_centroid(Map, i);
+            if (centr <= 0)
+                continue;       /* No centroid */
 
-	    Vect_read_line(Map, NULL, Cats, centr);
-	    /*if ( !Vect_cat_get(Cats, field, &cat) ) continue; No such field */
-	    for (c = 0; c < Cats->n_cats; c++) {
-		if (Cats->field[c] == field &&
-		    in_array(cats, ncats, Cats->cat[c])) {
-		    varray->c[i] = value;
-		    ni++;
-		    break;
-		}
-	    }
+            Vect_read_line(Map, NULL, Cats, centr);
+            /*if ( !Vect_cat_get(Cats, field, &cat) ) continue; No such field */
+            for (c = 0; c < Cats->n_cats; c++) {
+                if (Cats->field[c] == field &&
+                    in_array(cats, ncats, Cats->cat[c])) {
+                    varray->c[i] = value;
+                    ni++;
+                    break;
+                }
+            }
 
-	    /*
-	       if ( in_array ( cats, ncats, cat ) ) {
-	       varray->c[i] = value;
-	       ni++;
-	       }
-	     */
-	}
+            /*
+               if ( in_array ( cats, ncats, cat ) ) {
+               varray->c[i] = value;
+               ni++;
+               }
+             */
+        }
     }
-    else {			/* Lines */
-	n = Vect_get_num_lines(Map);
+    else {                      /* Lines */
+        n = Vect_get_num_lines(Map);
 
-	if (n > varray->size) {	/* not enough space */
-	    G_warning(_("Not enough space in vector array"));
-	    return 0;
-	}
+        if (n > varray->size) { /* not enough space */
+            G_warning(_("Not enough space in vector array"));
+            return 0;
+        }
 
-	for (i = 1; i <= n; i++) {
-	    ltype = Vect_read_line(Map, NULL, Cats, i);
+        for (i = 1; i <= n; i++) {
+            ltype = Vect_read_line(Map, NULL, Cats, i);
 
-	    if (!(ltype & type))
-		continue;	/* is not specified type */
+            if (!(ltype & type))
+                continue;       /* is not specified type */
 
-	    /* if ( !Vect_cat_get(Cats, field, &cat) ) continue;  No such field */
-	    for (c = 0; c < Cats->n_cats; c++) {
-		if (Cats->field[c] == field &&
-		    in_array(cats, ncats, Cats->cat[c])) {
-		    varray->c[i] = value;
-		    ni++;
-		    break;
-		}
-	    }
-	    /*
-	       if ( in_array ( cats, ncats, cat ) ) {
-	       varray->c[i] = value;
-	       ni++;
-	       }
-	     */
-	}
+            /* if ( !Vect_cat_get(Cats, field, &cat) ) continue;  No such field */
+            for (c = 0; c < Cats->n_cats; c++) {
+                if (Cats->field[c] == field &&
+                    in_array(cats, ncats, Cats->cat[c])) {
+                    varray->c[i] = value;
+                    ni++;
+                    break;
+                }
+            }
+            /*
+               if ( in_array ( cats, ncats, cat ) ) {
+               varray->c[i] = value;
+               ni++;
+               }
+             */
+        }
 
     }
 

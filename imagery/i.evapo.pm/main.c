@@ -58,19 +58,21 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evapotranspiration"));
     module->description =
-	_("Computes potential evapotranspiration calculation with hourly Penman-Monteith.");
+        _("Computes potential evapotranspiration calculation with hourly Penman-Monteith.");
 
     /* Define different options */
     input_DEM = G_define_standard_option(G_OPT_R_ELEV);
-    input_DEM->description = _("Name of input elevation raster map [m a.s.l.]");
-    
+    input_DEM->description =
+        _("Name of input elevation raster map [m a.s.l.]");
+
     input_T = G_define_standard_option(G_OPT_R_INPUT);
     input_T->key = "temperature";
     input_T->description = _("Name of input temperature raster map [C]");
 
     input_RH = G_define_standard_option(G_OPT_R_INPUT);
     input_RH->key = "relativehumidity";
-    input_RH->description = _("Name of input relative humidity raster map [%]");
+    input_RH->description =
+        _("Name of input relative humidity raster map [%]");
 
     input_u2 = G_define_standard_option(G_OPT_R_INPUT);
     input_u2->key = "windspeed";
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
     input_Rn = G_define_standard_option(G_OPT_R_INPUT);
     input_Rn->key = "netradiation";
     input_Rn->description =
-	_("Name of input net solar radiation raster map [MJ/m2/h]");
+        _("Name of input net solar radiation raster map [MJ/m2/h]");
 
     input_hc = G_define_standard_option(G_OPT_R_INPUT);
     input_hc->key = "cropheight";
@@ -97,7 +99,7 @@ int main(int argc, char *argv[])
     day->description = _("Use Night-time");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* get entered parameters */
     T = input_T->answer;
@@ -109,10 +111,10 @@ int main(int argc, char *argv[])
     hc = input_hc->answer;
 
     if (day->answer) {
-	d_night = TRUE;
+        d_night = TRUE;
     }
     else {
-	d_night = FALSE;
+        d_night = FALSE;
     }
 
     infd_T = Rast_open_old(T, "");
@@ -146,41 +148,41 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < nrows; row++) {
 
-	/* read a line input maps into buffers */
-	Rast_get_d_row(infd_T, inrast_T, row);
-	Rast_get_d_row(infd_RH, inrast_RH, row);
-	Rast_get_d_row(infd_u2, inrast_u2, row);
-	Rast_get_d_row(infd_Rn, inrast_Rn, row);
-	Rast_get_d_row(infd_DEM, inrast_DEM, row);
-	Rast_get_d_row(infd_hc, inrast_hc, row);
+        /* read a line input maps into buffers */
+        Rast_get_d_row(infd_T, inrast_T, row);
+        Rast_get_d_row(infd_RH, inrast_RH, row);
+        Rast_get_d_row(infd_u2, inrast_u2, row);
+        Rast_get_d_row(infd_Rn, inrast_Rn, row);
+        Rast_get_d_row(infd_DEM, inrast_DEM, row);
+        Rast_get_d_row(infd_hc, inrast_hc, row);
 
-	/* read every cell in the line buffers */
-	for (col = 0; col < ncols; col++) {
-	    d_T = ((DCELL *) inrast_T)[col];
-	    d_RH = ((DCELL *) inrast_RH)[col];
-	    d_u2 = ((DCELL *) inrast_u2)[col];
-	    d_Rn = ((DCELL *) inrast_Rn)[col];
-	    d_Z = ((DCELL *) inrast_DEM)[col];
-	    d_hc = ((DCELL *) inrast_hc)[col];
+        /* read every cell in the line buffers */
+        for (col = 0; col < ncols; col++) {
+            d_T = ((DCELL *) inrast_T)[col];
+            d_RH = ((DCELL *) inrast_RH)[col];
+            d_u2 = ((DCELL *) inrast_u2)[col];
+            d_Rn = ((DCELL *) inrast_Rn)[col];
+            d_Z = ((DCELL *) inrast_DEM)[col];
+            d_hc = ((DCELL *) inrast_hc)[col];
 
-	    /* calculate evapotranspiration */
-	    if (d_hc < 0) {
-		/* calculate evaporation */
-		d_EPo =
-		    calc_openwaterETp(d_T, d_Z, d_u2, d_Rn, d_night, d_RH,
-				      d_hc);
-	    }
-	    else {
-		/* calculate evapotranspiration */
-		d_EPo = calc_ETp(d_T, d_Z, d_u2, d_Rn, d_night, d_RH, d_hc);
-	    }
+            /* calculate evapotranspiration */
+            if (d_hc < 0) {
+                /* calculate evaporation */
+                d_EPo =
+                    calc_openwaterETp(d_T, d_Z, d_u2, d_Rn, d_night, d_RH,
+                    d_hc);
+            }
+            else {
+                /* calculate evapotranspiration */
+                d_EPo = calc_ETp(d_T, d_Z, d_u2, d_Rn, d_night, d_RH, d_hc);
+            }
 
-	    if (zero->answer && d_EPo < 0)
-		d_EPo = 0;
+            if (zero->answer && d_EPo < 0)
+                d_EPo = 0;
 
-	    ((DCELL *) outrast)[col] = d_EPo;
-	}
-	Rast_put_d_row(outfd, outrast);
+            ((DCELL *) outrast)[col] = d_EPo;
+        }
+        Rast_put_d_row(outfd, outrast);
     }
     G_free(inrast_T);
     G_free(inrast_RH);

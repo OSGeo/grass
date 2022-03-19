@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       v.decimate
@@ -18,7 +19,8 @@
 /* TODO: change int to ul/ull */
 /* TODO: revise names (now partially on some vars in v.in.lidar code) */
 
-struct CountDecimationControl {
+struct CountDecimationControl
+{
     int offset_n;
     int offset_n_counter;
     int skip_every;
@@ -30,14 +32,13 @@ struct CountDecimationControl {
 };
 
 void count_decimation_init(struct CountDecimationControl *control,
-                           int *skip, int *preserve,
-                           int *offset, int *limit);
+    int *skip, int *preserve, int *offset, int *limit);
 int count_decimation_is_valid(struct CountDecimationControl *control);
 int count_decimation_is_noop(struct CountDecimationControl *control);
 void count_decimation_init_from_str(struct CountDecimationControl *control,
-                                    const char *skip, const char *preserve,
-                                    const char *offset, const char *limit);
+    const char *skip, const char *preserve,
+    const char *offset, const char *limit);
 int count_decimation_is_out(struct CountDecimationControl *control);
 int count_decimation_is_end(struct CountDecimationControl *control);
 
-#endif /* GRASS_COUNT_DECIMATION_H */
+#endif                          /* GRASS_COUNT_DECIMATION_H */

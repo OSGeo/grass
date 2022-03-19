@@ -4,4 +4,4 @@
 
 extern struct Cell_head current_region2;
 
-#endif /* __GLOBALS2_H_ */
+#endif                          /* __GLOBALS2_H_ */

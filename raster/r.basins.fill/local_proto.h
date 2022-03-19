@@ -23,4 +23,4 @@
 CELL *read_map(const char *, int, int, int);
 
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

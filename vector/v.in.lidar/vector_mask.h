@@ -19,7 +19,8 @@
 struct Map_info;
 struct bound_box;
 
-struct VectorMask {
+struct VectorMask
+{
     struct Map_info *map_info;
     struct bound_box *map_bbox;
     struct bound_box *area_bboxes;
@@ -27,8 +28,9 @@ struct VectorMask {
     int inverted;
 };
 
-void VectorMask_init(struct VectorMask *vector_mask, const char *name, const char *layer, int invert_mask);
+void VectorMask_init(struct VectorMask *vector_mask, const char *name,
+    const char *layer, int invert_mask);
 void VectorMask_destroy(struct VectorMask *vector_mask);
 int VectorMask_point_in(struct VectorMask *vector_mask, double x, double y);
 
-#endif /* VECTOR_MASK_H */
+#endif                          /* VECTOR_MASK_H */

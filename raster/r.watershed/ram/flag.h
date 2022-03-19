@@ -74,4 +74,4 @@ int flag_set(FLAG *, int, int);
 int flag_unset(FLAG *, int, int);
 
 
-#endif /* __FLAG_H__ */
+#endif                          /* __FLAG_H__ */

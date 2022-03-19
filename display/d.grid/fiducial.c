@@ -10,14 +10,13 @@
 void plot_cross(double easting, double northing, int color, double rotation)
 {
     plot_symbol(easting, northing, color, rotation, "basic/cross1",
-                MARK_CROSS);
+        MARK_CROSS);
 }
 
-void plot_fiducial(double easting, double northing, int color,
-                   double rotation)
+void plot_fiducial(double easting, double northing, int color, double rotation)
 {
     plot_symbol(easting, northing, color, rotation + 45.0, "extra/fiducial",
-                MARK_FIDUCIAL);
+        MARK_FIDUCIAL);
 }
 
 void plot_dot(double easting, double northing, int color)
@@ -26,7 +25,7 @@ void plot_dot(double easting, double northing, int color)
 }
 
 void plot_symbol(double easting, double northing, int color, double rotation,
-                 char *symbol_name, int mark_type)
+    char *symbol_name, int mark_type)
 {
     SYMBOL *Symb;
     RGBA_Color *line_color, *fill_color;

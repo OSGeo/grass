@@ -35,10 +35,13 @@ void update_rast_history(struct parms *parm)
 
     /* write command line to history */
     Rast_short_history(parm->outrast->answer, "raster", &hist);
-    Rast_append_format_history(&hist, "%s version %.2f", G_program_name(), APP_VERSION);
+    Rast_append_format_history(&hist, "%s version %.2f", G_program_name(),
+        APP_VERSION);
     Rast_append_format_history(&hist, "stream width: %.2f", parm->swidth * 2);
-    Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file: %s", parm->inrast->answer);
-    Rast_format_history(&hist, HIST_DATSRC_2, "vector stream file: %s", parm->invect->answer);
+    Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file: %s",
+        parm->inrast->answer);
+    Rast_format_history(&hist, HIST_DATSRC_2, "vector stream file: %s",
+        parm->invect->answer);
     Rast_command_history(&hist);
     Rast_write_history(parm->outrast->answer, &hist);
 }

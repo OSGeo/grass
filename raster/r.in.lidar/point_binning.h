@@ -60,34 +60,28 @@ struct PointBinning
 
 int check_rows_cols_fit_to_size_t(int rows, int cols);
 void point_binning_memory_test(struct PointBinning *point_binning, int rows,
-                               int cols, RASTER_MAP_TYPE rtype);
+    int cols, RASTER_MAP_TYPE rtype);
 
 void point_binning_set(struct PointBinning *point_binning, char *method,
-                       char *percentile, char *trim, int coordinates);
+    char *percentile, char *trim, int coordinates);
 void point_binning_allocate(struct PointBinning *point_binning, int rows,
-                            int cols, RASTER_MAP_TYPE rtype);
+    int cols, RASTER_MAP_TYPE rtype);
 
 void point_binning_free(struct PointBinning *point_binning,
-                        struct BinIndex *bin_index_nodes);
+    struct BinIndex *bin_index_nodes);
 
 int update_bin_index(struct BinIndex *bin_index, void *index_array,
-                     int cols, int row, int col,
-                     RASTER_MAP_TYPE map_type, double value);
+    int cols, int row, int col, RASTER_MAP_TYPE map_type, double value);
 void write_variance(void *raster_row, void *n_array, void *sum_array,
-                    void *sumsq_array, int row, int cols,
-                    RASTER_MAP_TYPE rtype, int method);
+    void *sumsq_array, int row, int cols, RASTER_MAP_TYPE rtype, int method);
 void write_median(struct BinIndex *bin_index, void *raster_row,
-                  void *index_array, int row, int cols,
-                  RASTER_MAP_TYPE rtype);
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype);
 void write_percentile(struct BinIndex *bin_index, void *raster_row,
-                      void *index_array, int row, int cols,
-                      RASTER_MAP_TYPE rtype, int pth);
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype, int pth);
 void write_skewness(struct BinIndex *bin_index, void *raster_row,
-                    void *index_array, int row, int cols,
-                    RASTER_MAP_TYPE rtype);
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype);
 void write_trimmean(struct BinIndex *bin_index, void *raster_row,
-                    void *index_array, int row, int cols,
-                    RASTER_MAP_TYPE rtype, double trim);
+    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype, double trim);
 
 /* forward declarations */
 struct Map_info;
@@ -107,13 +101,11 @@ struct VectorWriter
 };
 
 void write_values(struct PointBinning *point_binning,
-                  struct BinIndex *bin_index_nodes, void *raster_row, int row,
-                  int cols, RASTER_MAP_TYPE rtype,
-                  struct VectorWriter *vector_writer);
+    struct BinIndex *bin_index_nodes, void *raster_row, int row,
+    int cols, RASTER_MAP_TYPE rtype, struct VectorWriter *vector_writer);
 void update_value(struct PointBinning *point_binning,
-                  struct BinIndex *bin_index_nodes, int cols, int arr_row,
-                  int arr_col, RASTER_MAP_TYPE rtype, double x, double y,
-                  double z);
+    struct BinIndex *bin_index_nodes, int cols, int arr_row,
+    int arr_col, RASTER_MAP_TYPE rtype, double x, double y, double z);
 
 
-#endif /* __POINT_BINNING_H__ */
+#endif                          /* __POINT_BINNING_H__ */

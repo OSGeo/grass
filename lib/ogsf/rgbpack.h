@@ -16,4 +16,4 @@
 #define CONST_COLS 45
 #define COLUMNS     9
 
-#endif /* _RGBPACK_H */
+#endif                          /* _RGBPACK_H */

@@ -18,7 +18,7 @@ double *Cdhc_kolmogorov_smirnov(double *x, int n)
 #ifdef NOISY
     fprintf(stdout, "  TEST10 KSD(N) =%10.4f\n", y[0]);
     fprintf(stdout, "  TEST11 KSD    =%10.4f\n", y[1]);
-#endif /* NOISY */
+#endif                          /* NOISY */
 
     return y;
 }

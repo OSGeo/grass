@@ -61,7 +61,7 @@ static int seek_only(int, off_t);
  */
 
 int Segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
-		   int len)
+    int len)
 {
     return seg_format(fd, nrows, ncols, srows, scols, len, 1);
 }
@@ -98,75 +98,76 @@ int Segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
  * \return -3 if illegal parameters are passed
  */
 
-int Segment_format_nofill(int fd, off_t nrows, off_t ncols, int srows, int scols,
-			  int len)
+int Segment_format_nofill(int fd, off_t nrows, off_t ncols, int srows,
+    int scols, int len)
 {
     return seg_format(fd, nrows, ncols, srows, scols, len, 0);
 }
 
 
 static int seg_format(int fd, off_t nrows, off_t ncols,
-		      int srows, int scols, int len, int fill)
+    int srows, int scols, int len, int fill)
 {
     off_t nbytes;
     int spr, size;
 
     if (nrows <= 0 || ncols <= 0 || len <= 0 || srows <= 0 || scols <= 0) {
-	G_warning("Segment_format(fd,%"PRI_OFF_T",%"PRI_OFF_T",%d,%d,%d): illegal value(s)",
-		  nrows, ncols, srows, scols, len);
-	return -3;
+        G_warning("Segment_format(fd,%" PRI_OFF_T ",%" PRI_OFF_T
+            ",%d,%d,%d): illegal value(s)", nrows, ncols, srows, scols, len);
+        return -3;
     }
 
     spr = ncols / scols;
     if (ncols % scols)
-	spr++;
+        spr++;
 
     size = srows * scols * len;
 
     if (sizeof(off_t) == 4 && sizeof(double) >= 8) {
-	double d_size;
-	off_t o_size;
+        double d_size;
+        off_t o_size;
 
-	/* calculate total number of segments */
-	d_size = (double) spr * ((nrows + srows - 1) / srows);
-	/* multiply with segment size */
-	d_size *= size;
+        /* calculate total number of segments */
+        d_size = (double)spr *((nrows + srows - 1) / srows);
 
-	/* add header */
-	d_size += 2 * sizeof(off_t) + 3 * sizeof(int);
+        /* multiply with segment size */
+        d_size *= size;
 
-	o_size = (off_t) d_size;
+        /* add header */
+        d_size += 2 * sizeof(off_t) + 3 * sizeof(int);
 
-	/* this test assumes that all off_t values can be exactly 
-	 * represented as double if sizeof(off_t) = 4 and sizeof(double) >= 8 */
-	if ((double) o_size != d_size) {
-	    G_warning(_("Segment format: file size too large"));
-	    G_warning(_("Please recompile with Large File Support (LFS)"));
-	    return -1;
-	}
+        o_size = (off_t) d_size;
+
+        /* this test assumes that all off_t values can be exactly 
+         * represented as double if sizeof(off_t) = 4 and sizeof(double) >= 8 */
+        if ((double)o_size != d_size) {
+            G_warning(_("Segment format: file size too large"));
+            G_warning(_("Please recompile with Large File Support (LFS)"));
+            return -1;
+        }
     }
 
-    if (lseek(fd, 0L, SEEK_SET) == (off_t) -1) {
-	int err = errno;
+    if (lseek(fd, 0L, SEEK_SET) == (off_t) - 1) {
+        int err = errno;
 
-	G_warning("Segment_format(): Unable to seek (%s)", strerror(err));
-	return -1;
+        G_warning("Segment_format(): Unable to seek (%s)", strerror(err));
+        return -1;
     }
 
     if (!write_off_t(fd, nrows) || !write_off_t(fd, ncols)
-	|| !write_int(fd, srows) || !write_int(fd, scols)
-	|| !write_int(fd, len))
-	return -1;
+        || !write_int(fd, srows) || !write_int(fd, scols)
+        || !write_int(fd, len))
+        return -1;
 
     /* calculate total number of segments */
     nbytes = spr * ((nrows + srows - 1) / srows);
     nbytes *= size;
 
     if (!fill) {
-	/* only seek and write a zero byte to the end */ 
-	if (seek_only(fd, nbytes) < 0)
-	    return -1;
-	return 1;
+        /* only seek and write a zero byte to the end */
+        if (seek_only(fd, nbytes) < 0)
+            return -1;
+        return 1;
     }
 
     /* fill segment file with zeros */
@@ -176,7 +177,7 @@ static int seg_format(int fd, off_t nrows, off_t ncols,
      * with holes that read as zeros.
      */
     if (zero_fill(fd, nbytes) < 0)
-	return -1;
+        return -1;
 
     return 1;
 }
@@ -186,13 +187,14 @@ static int write_int(int fd, int n)
 {
     errno = 0;
     if (write(fd, &n, sizeof(int)) != sizeof(int)) {
-	int err = errno;
+        int err = errno;
 
-	if (err)
-	    G_warning("Segment format: Unable to write (%s)", strerror(err));
-	else
-	    G_warning("Segment format: Unable to write (insufficient disk space?)");
-	return 0;
+        if (err)
+            G_warning("Segment format: Unable to write (%s)", strerror(err));
+        else
+            G_warning
+                ("Segment format: Unable to write (insufficient disk space?)");
+        return 0;
     }
 
     return 1;
@@ -202,13 +204,14 @@ static int write_off_t(int fd, off_t n)
 {
     errno = 0;
     if (write(fd, &n, sizeof(off_t)) != sizeof(off_t)) {
-	int err = errno;
+        int err = errno;
 
-	if (err)
-	    G_warning("Segment format: Unable to write (%s)", strerror(err));
-	else
-	    G_warning("Segment format: Unable to write (insufficient disk space?)");
-	return 0;
+        if (err)
+            G_warning("Segment format: Unable to write (%s)", strerror(err));
+        else
+            G_warning
+                ("Segment format: Unable to write (insufficient disk space?)");
+        return 0;
     }
 
     return 1;
@@ -225,21 +228,23 @@ static int zero_fill(int fd, off_t nbytes)
     n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
     b = buf;
     while (n-- > 0)
-	*b++ = 0;
+        *b++ = 0;
 
     while (nbytes > 0) {
-	n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
-	errno = 0;
-	if (write(fd, buf, n) != n) {
-	    int err = errno;
+        n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+        errno = 0;
+        if (write(fd, buf, n) != n) {
+            int err = errno;
 
-	    if (err)
-		G_warning("segment zero_fill(): Unable to write (%s)", strerror(err));
-	    else
-		G_warning("segment zero_fill(): Unable to write (insufficient disk space?)");
-	    return -1;
-	}
-	nbytes -= n;
+            if (err)
+                G_warning("segment zero_fill(): Unable to write (%s)",
+                    strerror(err));
+            else
+                G_warning
+                    ("segment zero_fill(): Unable to write (insufficient disk space?)");
+            return -1;
+        }
+        nbytes -= n;
     }
     return 1;
 #else
@@ -261,20 +266,22 @@ static int seek_only(int fd, off_t nbytes)
     G_debug(3, "Using new segmentation code...");
     errno = 0;
     if (lseek(fd, nbytes - 1, SEEK_CUR) < 0) {
-	int err = errno;
+        int err = errno;
 
-	G_warning("segment zero_fill(): Unable to seek (%s)", strerror(err));
-	return -1;
+        G_warning("segment zero_fill(): Unable to seek (%s)", strerror(err));
+        return -1;
     }
     errno = 0;
     if (write(fd, buf, 1) != 1) {
-	int err = errno;
+        int err = errno;
 
-	if (err)
-	    G_warning("segment zero_fill(): Unable to write (%s)", strerror(err));
-	else
-	    G_warning("segment zero_fill(): Unable to write (insufficient disk space?)");
-	return -1;
+        if (err)
+            G_warning("segment zero_fill(): Unable to write (%s)",
+                strerror(err));
+        else
+            G_warning
+                ("segment zero_fill(): Unable to write (insufficient disk space?)");
+        return -1;
     }
 
     return 1;

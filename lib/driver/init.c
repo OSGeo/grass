@@ -1,16 +1,16 @@
 /*!
-  \file lib/driver/init.c
+   \file lib/driver/init.c
 
-  \brief Display Driver - initialization
+   \brief Display Driver - initialization
 
-  (C) 2006-2011 by the GRASS Development Team
+   (C) 2006-2011 by the GRASS Development Team
 
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
-  \author Glynn Clements <glynn gclements.plus.com> (original contributor)
-  \author Huidae Cho <grass4u gmail.com>
-*/
+   \author Glynn Clements <glynn gclements.plus.com> (original contributor)
+   \author Huidae Cho <grass4u gmail.com>
+ */
 
 #include <grass/config.h>
 
@@ -40,10 +40,10 @@ double text_cosrot;
 int matrix_valid;
 
 /*!
-  \brief Initialize display driver
+   \brief Initialize display driver
 
-  \param drv pointer to driver structure
-*/
+   \param drv pointer to driver structure
+ */
 void LIB_init(const struct driver *drv)
 {
     const char *p;
@@ -59,7 +59,7 @@ void LIB_init(const struct driver *drv)
     screen_height = (p && atoi(p)) ? atoi(p) : DEF_HEIGHT;
 
     if (COM_Graph_set() < 0)
-	exit(1);
+        exit(1);
 
     COM_Set_window(0, screen_height, 0, screen_width);
 }

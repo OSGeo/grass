@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:     iostream
@@ -37,8 +38,8 @@
 
 #ifndef _QUICKSORT_H
 #define _QUICKSORT_H
- 
-#include <stdlib.h> //for random()
+
+#include <stdlib.h>             //for random()
 
 
 // The class represented by CMPR, must have a member function called
@@ -51,12 +52,13 @@
 // less that or equal to everything above it.  Furthermore, it will
 // not be 0 since this will leave us to recurse on the whole array
 // again.
-template<class T, class CMPR>
-void partition(T *data, size_t n, size_t &pivot, CMPR &cmp) {
+template < class T, class CMPR >
+    void partition(T * data, size_t n, size_t &pivot, CMPR & cmp)
+{
     T *ptpart, tpart;
     T *p, *q;
     T t0;
-    
+
     // Try to get a good partition value and avoid being bitten by already
     // sorted input.
     //ptpart = data + (random() % n);
@@ -69,25 +71,26 @@ void partition(T *data, size_t n, size_t &pivot, CMPR &cmp) {
     tpart = *ptpart;
     *ptpart = data[0];
     data[0] = tpart;
-    
+
     // Walk through the array and partition it.
-    for (p = data - 1, q = data + n; ; ) {
-      
-      do {
-	q--;
-      } while (cmp.compare(*q, tpart) > 0);
-      do {
-	p++;
-      } while (cmp.compare(*p, tpart) < 0);
-      
-      if (p < q) {
-	t0 = *p;
-	*p = *q;
-	*q = t0;
-      } else {
-	pivot = q - data;            
-	break;
-      }
+    for (p = data - 1, q = data + n;;) {
+
+        do {
+            q--;
+        } while (cmp.compare(*q, tpart) > 0);
+        do {
+            p++;
+        } while (cmp.compare(*p, tpart) < 0);
+
+        if (p < q) {
+            t0 = *p;
+            *p = *q;
+            *q = t0;
+        }
+        else {
+            pivot = q - data;
+            break;
+        }
     }
 }
 
@@ -95,87 +98,44 @@ void partition(T *data, size_t n, size_t &pivot, CMPR &cmp) {
 
 
 /* ---------------------------------------------------------------------- */
-template<class T, class CMPR>
-void insertionsort(T *data, size_t n, CMPR &cmp) {
-  T *p, *q, test;
-  
-  for (p = data + 1; p < data + n; p++) {
-    for (q = p - 1, test = *p; (cmp.compare(*q, test) > 0); q--) {
-      *(q+1) = *q;
-      if (q==data) {
-	q--; // to make assignment below correct
-	break;
-      }
+template < class T, class CMPR >
+    void insertionsort(T * data, size_t n, CMPR & cmp)
+{
+    T *p, *q, test;
+
+    for (p = data + 1; p < data + n; p++) {
+        for (q = p - 1, test = *p; (cmp.compare(*q, test) > 0); q--) {
+            *(q + 1) = *q;
+            if (q == data) {
+                q--;            // to make assignment below correct
+                break;
+            }
+        }
+        *(q + 1) = test;
     }
-    *(q+1) = test;
-  }
 }
 
 
 
 
 /* ---------------------------------------------------------------------- */
-template<class T, class CMPR>
-void quicksort(T *data, size_t n, CMPR &cmp, size_t min_len = 20)  {
+template < class T, class CMPR >
+    void quicksort(T * data, size_t n, CMPR & cmp, size_t min_len = 20)
+{
 
-  size_t pivot;
-  if (n < min_len) {
-    insertionsort(data, n, cmp);
-    return;
-  }
-  //else
-  partition(data, n, pivot, cmp);
-  quicksort(data, pivot + 1, cmp, min_len);
-  quicksort(data + pivot + 1, n - pivot - 1, cmp, min_len);
+    size_t pivot;
+
+    if (n < min_len) {
+        insertionsort(data, n, cmp);
+        return;
+    }
+    //else
+    partition(data, n, pivot, cmp);
+    quicksort(data, pivot + 1, cmp, min_len);
+    quicksort(data + pivot + 1, n - pivot - 1, cmp, min_len);
 }
 
 
 
 
-#endif // _QUICKSORT_H 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif                          // _QUICKSORT_H

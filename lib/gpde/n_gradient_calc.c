@@ -33,21 +33,20 @@ void N_calc_gradient_field_2d_stats(N_gradient_field_2d * field)
     double sumx, sumy;
     int nonullx, nonully;
 
-    G_debug(3,
-	    "N_calc_gradient_field_2d_stats: compute gradient field stats");
+    G_debug(3, "N_calc_gradient_field_2d_stats: compute gradient field stats");
 
     N_calc_array_2d_stats(field->x_array, &minx, &maxx, &sumx, &nonullx, 0);
     N_calc_array_2d_stats(field->y_array, &miny, &maxy, &sumy, &nonully, 0);
 
     if (minx < miny)
-	field->min = minx;
+        field->min = minx;
     else
-	field->min = miny;
+        field->min = miny;
 
     if (maxx > maxy)
-	field->max = maxx;
+        field->max = maxx;
     else
-	field->max = maxy;
+        field->max = maxy;
 
     field->sum = sumx + sumy;
     field->nonull = nonullx + nonully;
@@ -103,11 +102,8 @@ void N_calc_gradient_field_2d_stats(N_gradient_field_2d * field)
  *
  * */
 N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
-						 N_array_2d * weight_x,
-						 N_array_2d * weight_y,
-						 N_geom_data * geom,
-						 N_gradient_field_2d *
-						 gradfield)
+    N_array_2d * weight_x,
+    N_array_2d * weight_y, N_geom_data * geom, N_gradient_field_2d * gradfield)
 {
     int i, j;
     int rows, cols;
@@ -116,16 +112,16 @@ N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
 
 
     if (pot->cols != weight_x->cols || pot->cols != weight_y->cols)
-	G_fatal_error
-	    ("N_compute_gradient_field_2d: the arrays are not of equal size");
+        G_fatal_error
+            ("N_compute_gradient_field_2d: the arrays are not of equal size");
 
     if (pot->rows != weight_x->rows || pot->rows != weight_y->rows)
-	G_fatal_error
-	    ("N_compute_gradient_field_2d: the arrays are not of equal size");
+        G_fatal_error
+            ("N_compute_gradient_field_2d: the arrays are not of equal size");
 
     if (pot->cols != geom->cols || pot->rows != geom->rows)
-	G_fatal_error
-	    ("N_compute_gradient_field_2d: array sizes and geometry data are different");
+        G_fatal_error
+            ("N_compute_gradient_field_2d: array sizes and geometry data are different");
 
 
     G_debug(3, "N_compute_gradient_field_2d: compute gradient field");
@@ -136,64 +132,64 @@ N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
     dy = geom->dy;
 
     if (field == NULL) {
-	field = N_alloc_gradient_field_2d(cols, rows);
+        field = N_alloc_gradient_field_2d(cols, rows);
     }
     else {
-	if (field->cols != geom->cols || field->rows != geom->rows)
-	    G_fatal_error
-		("N_compute_gradient_field_2d: gradient field sizes and geometry data are different");
+        if (field->cols != geom->cols || field->rows != geom->rows)
+            G_fatal_error
+                ("N_compute_gradient_field_2d: gradient field sizes and geometry data are different");
     }
 
 
     for (j = 0; j < rows; j++)
-	for (i = 0; i < cols - 1; i++) {
-	    grad = 0;
-	    mean = 0;
+        for (i = 0; i < cols - 1; i++) {
+            grad = 0;
+            mean = 0;
 
-	    /* Only compute if the arrays are not null */
-	    if (!N_is_array_2d_value_null(pot, i, j) &&
-		!N_is_array_2d_value_null(pot, i + 1, j)) {
-		p1 = N_get_array_2d_d_value(pot, i, j);
-		p2 = N_get_array_2d_d_value(pot, i + 1, j);
-		grad = (p1 - p2) / dx;	/* gradient */
-	    }
-	    if (!N_is_array_2d_value_null(weight_x, i, j) &&
-		!N_is_array_2d_value_null(weight_x, i + 1, j)) {
-		r1 = N_get_array_2d_d_value(weight_x, i, j);
-		r2 = N_get_array_2d_d_value(weight_x, i + 1, j);
-		mean = N_calc_harmonic_mean(r1, r2);	/*harmonical mean */
-	    }
+            /* Only compute if the arrays are not null */
+            if (!N_is_array_2d_value_null(pot, i, j) &&
+                !N_is_array_2d_value_null(pot, i + 1, j)) {
+                p1 = N_get_array_2d_d_value(pot, i, j);
+                p2 = N_get_array_2d_d_value(pot, i + 1, j);
+                grad = (p1 - p2) / dx;  /* gradient */
+            }
+            if (!N_is_array_2d_value_null(weight_x, i, j) &&
+                !N_is_array_2d_value_null(weight_x, i + 1, j)) {
+                r1 = N_get_array_2d_d_value(weight_x, i, j);
+                r2 = N_get_array_2d_d_value(weight_x, i + 1, j);
+                mean = N_calc_harmonic_mean(r1, r2);    /*harmonical mean */
+            }
 
-	    res = mean * grad;
+            res = mean * grad;
 
-	    N_put_array_2d_d_value(field->x_array, i + 1, j, res);
+            N_put_array_2d_d_value(field->x_array, i + 1, j, res);
 
-	}
+        }
 
     for (j = 0; j < rows - 1; j++)
-	for (i = 0; i < cols; i++) {
-	    grad = 0;
-	    mean = 0;
+        for (i = 0; i < cols; i++) {
+            grad = 0;
+            mean = 0;
 
-	    /* Only compute if the arrays are not null */
-	    if (!N_is_array_2d_value_null(pot, i, j) &&
-		!N_is_array_2d_value_null(pot, i, j + 1)) {
-		p1 = N_get_array_2d_d_value(pot, i, j);
-		p2 = N_get_array_2d_d_value(pot, i, j + 1);
-		grad = (p1 - p2) / dy;	/* gradient */
-	    }
-	    if (!N_is_array_2d_value_null(weight_y, i, j) &&
-		!N_is_array_2d_value_null(weight_y, i, j + 1)) {
-		r1 = N_get_array_2d_d_value(weight_y, i, j);
-		r2 = N_get_array_2d_d_value(weight_y, i, j + 1);
-		mean = N_calc_harmonic_mean(r1, r2);	/*harmonical mean */
-	    }
+            /* Only compute if the arrays are not null */
+            if (!N_is_array_2d_value_null(pot, i, j) &&
+                !N_is_array_2d_value_null(pot, i, j + 1)) {
+                p1 = N_get_array_2d_d_value(pot, i, j);
+                p2 = N_get_array_2d_d_value(pot, i, j + 1);
+                grad = (p1 - p2) / dy;  /* gradient */
+            }
+            if (!N_is_array_2d_value_null(weight_y, i, j) &&
+                !N_is_array_2d_value_null(weight_y, i, j + 1)) {
+                r1 = N_get_array_2d_d_value(weight_y, i, j);
+                r2 = N_get_array_2d_d_value(weight_y, i, j + 1);
+                mean = N_calc_harmonic_mean(r1, r2);    /*harmonical mean */
+            }
 
-	    res = -1 * mean * grad;
+            res = -1 * mean * grad;
 
-	    N_put_array_2d_d_value(field->y_array, i, j + 1, res);
+            N_put_array_2d_d_value(field->y_array, i, j + 1, res);
 
-	}
+        }
 
     /*Compute gradient field statistics */
     N_calc_gradient_field_2d_stats(field);
@@ -241,8 +237,7 @@ N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
  * */
 void
 N_compute_gradient_field_components_2d(N_gradient_field_2d * field,
-				       N_array_2d * x_comp,
-				       N_array_2d * y_comp)
+    N_array_2d * x_comp, N_array_2d * y_comp)
 {
     int i, j;
 
@@ -258,38 +253,38 @@ N_compute_gradient_field_components_2d(N_gradient_field_2d * field,
 
 
     if (!x)
-	G_fatal_error("N_compute_gradient_components_2d: x array is empty");
+        G_fatal_error("N_compute_gradient_components_2d: x array is empty");
     if (!y)
-	G_fatal_error("N_compute_gradient_components_2d: y array is empty");
+        G_fatal_error("N_compute_gradient_components_2d: y array is empty");
 
     cols = field->x_array->cols;
     rows = field->x_array->rows;
 
     /*Check the array sizes */
     if (x->cols != cols || x->rows != rows)
-	G_fatal_error
-	    ("N_compute_gradient_components_2d: the size of the x array doesn't fit the gradient field size");
+        G_fatal_error
+            ("N_compute_gradient_components_2d: the size of the x array doesn't fit the gradient field size");
     if (y->cols != cols || y->rows != rows)
-	G_fatal_error
-	    ("N_compute_gradient_components_2d: the size of the y array doesn't fit the gradient field size");
+        G_fatal_error
+            ("N_compute_gradient_components_2d: the size of the y array doesn't fit the gradient field size");
 
     for (j = 0; j < rows; j++)
-	for (i = 0; i < cols; i++) {
-	    N_get_gradient_2d(field, &grad, i, j);
+        for (i = 0; i < cols; i++) {
+            N_get_gradient_2d(field, &grad, i, j);
 
-	    /* in case a gradient is zero, we expect a no flow boundary */
-	    if (grad.WC == 0.0 || grad.EC == 0.0)
-		vx = (grad.WC + grad.EC);
-	    else
-		vx = (grad.WC + grad.EC) / 2;
-	    if (grad.NC == 0.0 || grad.SC == 0.0)
-		vy = (grad.NC + grad.SC);
-	    else
-		vy = (grad.NC + grad.SC) / 2;
+            /* in case a gradient is zero, we expect a no flow boundary */
+            if (grad.WC == 0.0 || grad.EC == 0.0)
+                vx = (grad.WC + grad.EC);
+            else
+                vx = (grad.WC + grad.EC) / 2;
+            if (grad.NC == 0.0 || grad.SC == 0.0)
+                vy = (grad.NC + grad.SC);
+            else
+                vy = (grad.NC + grad.SC) / 2;
 
-	    N_put_array_2d_d_value(x, i, j, vx);
-	    N_put_array_2d_d_value(y, i, j, vy);
-	}
+            N_put_array_2d_d_value(x, i, j, vx);
+            N_put_array_2d_d_value(y, i, j, vy);
+        }
 
     return;
 }
@@ -312,26 +307,25 @@ void N_calc_gradient_field_3d_stats(N_gradient_field_3d * field)
 
     int nonullx, nonully, nonullz;
 
-    G_debug(3,
-	    "N_calc_gradient_field_3d_stats: compute gradient field stats");
+    G_debug(3, "N_calc_gradient_field_3d_stats: compute gradient field stats");
 
     N_calc_array_3d_stats(field->x_array, &minx, &maxx, &sumx, &nonullx, 0);
     N_calc_array_3d_stats(field->y_array, &miny, &maxy, &sumy, &nonully, 0);
     N_calc_array_3d_stats(field->z_array, &minz, &maxz, &sumz, &nonullz, 0);
 
     if (minx <= minz && minx <= miny)
-	field->min = minx;
+        field->min = minx;
     if (miny <= minz && miny <= minx)
-	field->min = miny;
+        field->min = miny;
     if (minz <= minx && minz <= miny)
-	field->min = minz;
+        field->min = minz;
 
     if (maxx >= maxz && maxx >= maxy)
-	field->max = maxx;
+        field->max = maxx;
     if (maxy >= maxz && maxy >= maxx)
-	field->max = maxy;
+        field->max = maxy;
     if (maxz >= maxx && maxz >= maxy)
-	field->max = maxz;
+        field->max = maxz;
 
     field->sum = sumx + sumy + sumz;
     field->nonull = nonullx + nonully + nonullz;
@@ -392,12 +386,9 @@ void N_calc_gradient_field_3d_stats(N_gradient_field_3d * field)
  *
  * */
 N_gradient_field_3d *N_compute_gradient_field_3d(N_array_3d * pot,
-						 N_array_3d * weight_x,
-						 N_array_3d * weight_y,
-						 N_array_3d * weight_z,
-						 N_geom_data * geom,
-						 N_gradient_field_3d *
-						 gradfield)
+    N_array_3d * weight_x,
+    N_array_3d * weight_y,
+    N_array_3d * weight_z, N_geom_data * geom, N_gradient_field_3d * gradfield)
 {
     int i, j, k;
 
@@ -409,24 +400,24 @@ N_gradient_field_3d *N_compute_gradient_field_3d(N_array_3d * pot,
 
 
     if (pot->cols != weight_x->cols || pot->cols != weight_y->cols ||
-	pot->cols != weight_z->cols)
-	G_fatal_error
-	    ("N_compute_gradient_field_3d: the arrays are not of equal size");
+        pot->cols != weight_z->cols)
+        G_fatal_error
+            ("N_compute_gradient_field_3d: the arrays are not of equal size");
 
     if (pot->rows != weight_x->rows || pot->rows != weight_y->rows ||
-	pot->rows != weight_z->rows)
-	G_fatal_error
-	    ("N_compute_gradient_field_3d: the arrays are not of equal size");
+        pot->rows != weight_z->rows)
+        G_fatal_error
+            ("N_compute_gradient_field_3d: the arrays are not of equal size");
 
     if (pot->depths != weight_x->depths || pot->depths != weight_y->depths ||
-	pot->depths != weight_z->depths)
-	G_fatal_error
-	    ("N_compute_gradient_field_3d: the arrays are not of equal size");
+        pot->depths != weight_z->depths)
+        G_fatal_error
+            ("N_compute_gradient_field_3d: the arrays are not of equal size");
 
     if (pot->cols != geom->cols || pot->rows != geom->rows ||
-	pot->depths != geom->depths)
-	G_fatal_error
-	    ("N_compute_gradient_field_3d: array sizes and geometry data are different");
+        pot->depths != geom->depths)
+        G_fatal_error
+            ("N_compute_gradient_field_3d: array sizes and geometry data are different");
 
     G_debug(3, "N_compute_gradient_field_3d: compute gradient field");
 
@@ -438,105 +429,105 @@ N_gradient_field_3d *N_compute_gradient_field_3d(N_array_3d * pot,
     dz = geom->dz;
 
     if (gradfield == NULL) {
-	field = N_alloc_gradient_field_3d(cols, rows, depths);
+        field = N_alloc_gradient_field_3d(cols, rows, depths);
     }
     else {
-	if (field->cols != geom->cols || field->rows != geom->rows ||
-	    field->depths != geom->depths)
-	    G_fatal_error
-		("N_compute_gradient_field_3d: gradient field sizes and geometry data are different");
+        if (field->cols != geom->cols || field->rows != geom->rows ||
+            field->depths != geom->depths)
+            G_fatal_error
+                ("N_compute_gradient_field_3d: gradient field sizes and geometry data are different");
     }
 
     for (k = 0; k < depths; k++)
-	for (j = 0; j < rows; j++)
-	    for (i = 0; i < cols - 1; i++) {
-		grad = 0;
-		mean = 0;
+        for (j = 0; j < rows; j++)
+            for (i = 0; i < cols - 1; i++) {
+                grad = 0;
+                mean = 0;
 
-		/*Only compute if the arrays are not null */
-		if (!N_is_array_3d_value_null(pot, i, j, k) &&
-		    !N_is_array_3d_value_null(pot, i + 1, j, k)) {
-		    p1 = N_get_array_3d_d_value(pot, i, j, k);
-		    p2 = N_get_array_3d_d_value(pot, i + 1, j, k);
-		    grad = (p1 - p2) / dx;	/* gradient */
-		}
-		if (!N_is_array_3d_value_null(weight_x, i, j, k) &&
-		    !N_is_array_3d_value_null(weight_x, i + 1, j, k)) {
-		    r1 = N_get_array_3d_d_value(weight_x, i, j, k);
-		    r2 = N_get_array_3d_d_value(weight_x, i + 1, j, k);
-		    mean = N_calc_harmonic_mean(r1, r2);	/*harmonical mean */
-		}
+                /*Only compute if the arrays are not null */
+                if (!N_is_array_3d_value_null(pot, i, j, k) &&
+                    !N_is_array_3d_value_null(pot, i + 1, j, k)) {
+                    p1 = N_get_array_3d_d_value(pot, i, j, k);
+                    p2 = N_get_array_3d_d_value(pot, i + 1, j, k);
+                    grad = (p1 - p2) / dx;      /* gradient */
+                }
+                if (!N_is_array_3d_value_null(weight_x, i, j, k) &&
+                    !N_is_array_3d_value_null(weight_x, i + 1, j, k)) {
+                    r1 = N_get_array_3d_d_value(weight_x, i, j, k);
+                    r2 = N_get_array_3d_d_value(weight_x, i + 1, j, k);
+                    mean = N_calc_harmonic_mean(r1, r2);        /*harmonical mean */
+                }
 
-		res = mean * grad;
+                res = mean * grad;
 
-		G_debug(6,
-			"N_compute_gradient_field_3d: X-direction insert value %6.5g at %i %i %i ",
-			res, k, j, i + 1);
+                G_debug(6,
+                    "N_compute_gradient_field_3d: X-direction insert value %6.5g at %i %i %i ",
+                    res, k, j, i + 1);
 
-		N_put_array_3d_d_value(field->x_array, i + 1, j, k, res);
+                N_put_array_3d_d_value(field->x_array, i + 1, j, k, res);
 
-	    }
+            }
 
     for (k = 0; k < depths; k++)
-	for (j = 0; j < rows - 1; j++)
-	    for (i = 0; i < cols; i++) {
-		grad = 0;
-		mean = 0;
+        for (j = 0; j < rows - 1; j++)
+            for (i = 0; i < cols; i++) {
+                grad = 0;
+                mean = 0;
 
-		/* Only compute if the arrays are not null */
-		if (!N_is_array_3d_value_null(pot, i, j, k) &&
-		    !N_is_array_3d_value_null(pot, i, j + 1, k)) {
-		    p1 = N_get_array_3d_d_value(pot, i, j, k);
-		    p2 = N_get_array_3d_d_value(pot, i, j + 1, k);
-		    grad = (p1 - p2) / dy;	/* gradient */
-		}
-		if (!N_is_array_3d_value_null(weight_y, i, j, k) &&
-		    !N_is_array_3d_value_null(weight_y, i, j + 1, k)) {
-		    r1 = N_get_array_3d_d_value(weight_y, i, j, k);
-		    r2 = N_get_array_3d_d_value(weight_y, i, j + 1, k);
-		    mean = N_calc_harmonic_mean(r1, r2);	/*harmonical mean */
-		}
+                /* Only compute if the arrays are not null */
+                if (!N_is_array_3d_value_null(pot, i, j, k) &&
+                    !N_is_array_3d_value_null(pot, i, j + 1, k)) {
+                    p1 = N_get_array_3d_d_value(pot, i, j, k);
+                    p2 = N_get_array_3d_d_value(pot, i, j + 1, k);
+                    grad = (p1 - p2) / dy;      /* gradient */
+                }
+                if (!N_is_array_3d_value_null(weight_y, i, j, k) &&
+                    !N_is_array_3d_value_null(weight_y, i, j + 1, k)) {
+                    r1 = N_get_array_3d_d_value(weight_y, i, j, k);
+                    r2 = N_get_array_3d_d_value(weight_y, i, j + 1, k);
+                    mean = N_calc_harmonic_mean(r1, r2);        /*harmonical mean */
+                }
 
-		res = -1 * mean * grad;	/*invert the direction, because we count from north to south,
-					 * but the gradient is defined in y direction */
+                res = -1 * mean * grad; /*invert the direction, because we count from north to south,
+                                         * but the gradient is defined in y direction */
 
-		G_debug(6,
-			"N_compute_gradient_field_3d: Y-direction insert value %6.5g at %i %i %i ",
-			res, k, j + 1, i);
+                G_debug(6,
+                    "N_compute_gradient_field_3d: Y-direction insert value %6.5g at %i %i %i ",
+                    res, k, j + 1, i);
 
-		N_put_array_3d_d_value(field->y_array, i, j + 1, k, res);
+                N_put_array_3d_d_value(field->y_array, i, j + 1, k, res);
 
-	    }
+            }
 
     for (k = 0; k < depths - 1; k++)
-	for (j = 0; j < rows; j++)
-	    for (i = 0; i < cols; i++) {
-		grad = 0;
-		mean = 0;
+        for (j = 0; j < rows; j++)
+            for (i = 0; i < cols; i++) {
+                grad = 0;
+                mean = 0;
 
-		/* Only compute if the arrays are not null */
-		if (!N_is_array_3d_value_null(pot, i, j, k) &&
-		    !N_is_array_3d_value_null(pot, i, j, k + 1)) {
-		    p1 = N_get_array_3d_d_value(pot, i, j, k);
-		    p2 = N_get_array_3d_d_value(pot, i, j, k + 1);
-		    grad = (p1 - p2) / dz;	/* gradient */
-		}
-		if (!N_is_array_3d_value_null(weight_z, i, j, k) &&
-		    !N_is_array_3d_value_null(weight_z, i, j, k + 1)) {
-		    r1 = N_get_array_3d_d_value(weight_z, i, j, k);
-		    r2 = N_get_array_3d_d_value(weight_z, i, j, k + 1);
-		    mean = N_calc_harmonic_mean(r1, r2);	/*harmonical mean */
-		}
+                /* Only compute if the arrays are not null */
+                if (!N_is_array_3d_value_null(pot, i, j, k) &&
+                    !N_is_array_3d_value_null(pot, i, j, k + 1)) {
+                    p1 = N_get_array_3d_d_value(pot, i, j, k);
+                    p2 = N_get_array_3d_d_value(pot, i, j, k + 1);
+                    grad = (p1 - p2) / dz;      /* gradient */
+                }
+                if (!N_is_array_3d_value_null(weight_z, i, j, k) &&
+                    !N_is_array_3d_value_null(weight_z, i, j, k + 1)) {
+                    r1 = N_get_array_3d_d_value(weight_z, i, j, k);
+                    r2 = N_get_array_3d_d_value(weight_z, i, j, k + 1);
+                    mean = N_calc_harmonic_mean(r1, r2);        /*harmonical mean */
+                }
 
-		res = mean * grad;
+                res = mean * grad;
 
-		G_debug(6,
-			"N_compute_gradient_field_3d: Z-direction insert value %6.5g at %i %i %i ",
-			res, k + 1, j, i);
+                G_debug(6,
+                    "N_compute_gradient_field_3d: Z-direction insert value %6.5g at %i %i %i ",
+                    res, k + 1, j, i);
 
-		N_put_array_3d_d_value(field->z_array, i, j, k + 1, res);
+                N_put_array_3d_d_value(field->z_array, i, j, k + 1, res);
 
-	    }
+            }
 
     /*Compute gradient field statistics */
     N_calc_gradient_field_3d_stats(field);
@@ -588,9 +579,7 @@ N_gradient_field_3d *N_compute_gradient_field_3d(N_array_3d * pot,
  * */
 void
 N_compute_gradient_field_components_3d(N_gradient_field_3d * field,
-				       N_array_3d * x_comp,
-				       N_array_3d * y_comp,
-				       N_array_3d * z_comp)
+    N_array_3d * x_comp, N_array_3d * y_comp, N_array_3d * z_comp)
 {
     int i, j, k;
 
@@ -608,11 +597,11 @@ N_compute_gradient_field_components_3d(N_gradient_field_3d * field,
 
 
     if (!x)
-	G_fatal_error("N_compute_gradient_components_3d: x array is empty");
+        G_fatal_error("N_compute_gradient_components_3d: x array is empty");
     if (!y)
-	G_fatal_error("N_compute_gradient_components_3d: y array is empty");
+        G_fatal_error("N_compute_gradient_components_3d: y array is empty");
     if (!z)
-	G_fatal_error("N_compute_gradient_components_3d: z array is empty");
+        G_fatal_error("N_compute_gradient_components_3d: z array is empty");
 
     cols = field->x_array->cols;
     rows = field->x_array->rows;
@@ -620,37 +609,37 @@ N_compute_gradient_field_components_3d(N_gradient_field_3d * field,
 
     /*Check the array sizes */
     if (x->cols != cols || x->rows != rows || x->depths != depths)
-	G_fatal_error
-	    ("N_compute_gradient_components_3d: the size of the x array doesn't fit the gradient field size");
+        G_fatal_error
+            ("N_compute_gradient_components_3d: the size of the x array doesn't fit the gradient field size");
     if (y->cols != cols || y->rows != rows || y->depths != depths)
-	G_fatal_error
-	    ("N_compute_gradient_components_3d: the size of the y array doesn't fit the gradient field size");
+        G_fatal_error
+            ("N_compute_gradient_components_3d: the size of the y array doesn't fit the gradient field size");
     if (z->cols != cols || z->rows != rows || z->depths != depths)
-	G_fatal_error
-	    ("N_compute_gradient_components_3d: the size of the z array doesn't fit the gradient field size");
+        G_fatal_error
+            ("N_compute_gradient_components_3d: the size of the z array doesn't fit the gradient field size");
 
     for (k = 0; k < depths; k++)
-	for (j = 0; j < rows; j++)
-	    for (i = 0; i < cols; i++) {
-		N_get_gradient_3d(field, &grad, i, j, k);
-		/* in case a gradient is zero, we expect a no flow boundary */
-		if (grad.WC == 0.0 || grad.EC == 0.0)
-		    vx = (grad.WC + grad.EC);
-		else
-		    vx = (grad.WC + grad.EC) / 2;
-		if (grad.NC == 0.0 || grad.SC == 0.0)
-		    vy = (grad.NC + grad.SC);
-		else
-		    vy = (grad.NC + grad.SC) / 2;
-		if (grad.TC == 0.0 || grad.BC == 0.0)
-		    vz = (grad.TC + grad.BC);
-		else
-		    vz = (grad.TC + grad.BC) / 2;
+        for (j = 0; j < rows; j++)
+            for (i = 0; i < cols; i++) {
+                N_get_gradient_3d(field, &grad, i, j, k);
+                /* in case a gradient is zero, we expect a no flow boundary */
+                if (grad.WC == 0.0 || grad.EC == 0.0)
+                    vx = (grad.WC + grad.EC);
+                else
+                    vx = (grad.WC + grad.EC) / 2;
+                if (grad.NC == 0.0 || grad.SC == 0.0)
+                    vy = (grad.NC + grad.SC);
+                else
+                    vy = (grad.NC + grad.SC) / 2;
+                if (grad.TC == 0.0 || grad.BC == 0.0)
+                    vz = (grad.TC + grad.BC);
+                else
+                    vz = (grad.TC + grad.BC) / 2;
 
-		N_put_array_3d_d_value(x, i, j, k, vx);
-		N_put_array_3d_d_value(y, i, j, k, vy);
-		N_put_array_3d_d_value(z, i, j, k, vz);
-	    }
+                N_put_array_3d_d_value(x, i, j, k, vx);
+                N_put_array_3d_d_value(y, i, j, k, vy);
+                N_put_array_3d_d_value(z, i, j, k, vz);
+            }
 
 
     return;

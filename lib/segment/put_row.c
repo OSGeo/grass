@@ -51,9 +51,10 @@ int Segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     off_t col;
 
     if (SEG->cache) {
-	memcpy(SEG->cache + ((size_t)row * SEG->ncols) * SEG->len, buf, SEG->len * SEG->ncols);
-	
-	return 1;
+        memcpy(SEG->cache + ((size_t)row * SEG->ncols) * SEG->len, buf,
+            SEG->len * SEG->ncols);
+
+        return 1;
     }
 
     ncols = SEG->ncols - SEG->spill;
@@ -62,32 +63,32 @@ int Segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     /*      printf("Segment_put_row ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",ncols,scols,size,col,row, SEG->fd); */
 
     for (col = 0; col < ncols; col += scols) {
-	SEG->address(SEG, row, col, &n, &index);
-	SEG->seek(SEG, n, index);
+        SEG->address(SEG, row, col, &n, &index);
+        SEG->seek(SEG, n, index);
 
-	if ((result = write(SEG->fd, buf, size)) != size) {
-	    G_warning("Segment_put_row write error %s", strerror(errno));
-	    /*      printf("Segment_put_row result = %d. ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",result,ncols,scols,size,col,row, SEG->fd); */
-	    return -1;
-	}
+        if ((result = write(SEG->fd, buf, size)) != size) {
+            G_warning("Segment_put_row write error %s", strerror(errno));
+            /*      printf("Segment_put_row result = %d. ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",result,ncols,scols,size,col,row, SEG->fd); */
+            return -1;
+        }
 
-	/* The buf variable is a void pointer and thus points to anything. */
-	/* Therefore, it's size is unknown and thus, it cannot be used for */
-	/* pointer arithmetic (some compilers treat this as an error - SGI */
-	/* MIPSPro compiler for one). Since the read command is reading in */
-	/* "size" bytes, cast the buf variable to char * before incrementing */
-	buf = ((const char *)buf) + size;
+        /* The buf variable is a void pointer and thus points to anything. */
+        /* Therefore, it's size is unknown and thus, it cannot be used for */
+        /* pointer arithmetic (some compilers treat this as an error - SGI */
+        /* MIPSPro compiler for one). Since the read command is reading in */
+        /* "size" bytes, cast the buf variable to char * before incrementing */
+        buf = ((const char *)buf) + size;
     }
 
     if ((size = SEG->spill * SEG->len)) {
-	SEG->address(SEG, row, col, &n, &index);
-	SEG->seek(SEG, n, index);
+        SEG->address(SEG, row, col, &n, &index);
+        SEG->seek(SEG, n, index);
 
-	if (write(SEG->fd, buf, size) != size) {
-	    G_warning("Segment_put_row final write error: %s",
-		      strerror(errno));
-	    return -1;
-	}
+        if (write(SEG->fd, buf, size) != size) {
+            G_warning("Segment_put_row final write error: %s",
+                strerror(errno));
+            return -1;
+        }
     }
 
     return 1;

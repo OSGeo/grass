@@ -21,4 +21,4 @@ int BM_dump_map_sparse(struct BM *);
 int BM_dump_map_row_sparse(struct BM *, int);
 int BM_file_write_sparse(FILE *, struct BM *);
 
-#endif /*  GRASS_BITMAPDEFS_H  */
+#endif                          /*  GRASS_BITMAPDEFS_H  */

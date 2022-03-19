@@ -49,4 +49,4 @@ int update_sum(void *, int, int, int, RASTER_MAP_TYPE, double);
 int update_sumsq(void *, int, int, int, RASTER_MAP_TYPE, double);
 
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

@@ -53,33 +53,27 @@ int plot_border(double grid_size, double east, double north, int direction)
 
                 if (loop == 0) {
                     D_line_abs(x + i,
-                               window.south + (window.north -
-                                               window.south) / longmark,
-                               x + i, window.south);
+                        window.south + (window.north -
+                            window.south) / longmark, x + i, window.south);
                     D_line_abs(x + i, window.north, x + i,
-                               window.north - row_dist - (window.north -
-                                                          window.south) /
-                               longmark);
+                        window.north - row_dist - (window.north -
+                            window.south) / longmark);
                 }
                 if (loop == 5) {
                     D_line_abs(x + i,
-                               window.south + (window.north -
-                                               window.south) / middlemark,
-                               x + i, window.south);
+                        window.south + (window.north -
+                            window.south) / middlemark, x + i, window.south);
                     D_line_abs(x + i, window.north, x + i,
-                               window.north - row_dist - (window.north -
-                                                          window.south) /
-                               middlemark);
+                        window.north - row_dist - (window.north -
+                            window.south) / middlemark);
                 }
                 else {
                     D_line_abs(x + i,
-                               window.south + (window.north -
-                                               window.south) / shortmark,
-                               x + i, window.south);
+                        window.south + (window.north -
+                            window.south) / shortmark, x + i, window.south);
                     D_line_abs(x + i, window.north, x + i,
-                               window.north - row_dist - (window.north -
-                                                          window.south) /
-                               shortmark);
+                        window.north - row_dist - (window.north -
+                            window.south) / shortmark);
                 }
                 loop++;
             }
@@ -106,29 +100,27 @@ int plot_border(double grid_size, double east, double north, int direction)
 
                 if (loop == 0) {
                     D_line_abs(window.west, y + i,
-                               window.west + (window.east -
-                                              window.west) / longmark, y + i);
+                        window.west + (window.east -
+                            window.west) / longmark, y + i);
                     D_line_abs(window.east -
-                               (window.east - window.west) / longmark, y + i,
-                               window.east, y + i);
+                        (window.east - window.west) / longmark, y + i,
+                        window.east, y + i);
                 }
                 if (loop == 5) {
                     D_line_abs(window.west, y + i,
-                               window.west + (window.east -
-                                              window.west) / middlemark,
-                               y + i);
+                        window.west + (window.east -
+                            window.west) / middlemark, y + i);
                     D_line_abs(window.east -
-                               (window.east - window.west) / middlemark,
-                               y + i, window.east, y + i);
+                        (window.east - window.west) / middlemark,
+                        y + i, window.east, y + i);
                 }
                 else {
                     D_line_abs(window.west, y + i,
-                               window.west + (window.east -
-                                              window.west) / shortmark,
-                               y + i);
+                        window.west + (window.east -
+                            window.west) / shortmark, y + i);
                     D_line_abs(window.east -
-                               (window.east - window.west) / shortmark, y + i,
-                               window.east, y + i);
+                        (window.east - window.west) / shortmark, y + i,
+                        window.east, y + i);
                 }
                 loop++;
             }

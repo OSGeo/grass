@@ -81,16 +81,15 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
 
 #ifdef HAVE_FFTW3_H
     plan = fftw_plan_dft_2d(dimr, dimc, data, data,
-			    (i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
-			    FFTW_ESTIMATE);
+        (i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD, FFTW_ESTIMATE);
 
     fftw_execute(plan);
 
     fftw_destroy_plan(plan);
 #else
     plan = fftw2d_create_plan(dimc, dimr,
-			      (i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
-			      FFTW_ESTIMATE | FFTW_IN_PLACE);
+        (i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
+        FFTW_ESTIMATE | FFTW_IN_PLACE);
 
     fftwnd_one(plan, data, data);
 
@@ -98,8 +97,8 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
 #endif
 
     for (i = 0; i < NN; i++) {
-	data[i][0] *= norm;
-	data[i][1] *= norm;
+        data[i][0] *= norm;
+        data[i][1] *= norm;
     }
 
     return 0;
@@ -132,15 +131,15 @@ int fft(int i_sign, double *DATA[2], int NN, int dimc, int dimr)
     data = (fftw_complex *) G_malloc(NN * sizeof(fftw_complex));
 
     for (i = 0; i < NN; i++) {
-	c_re(data[i]) = DATA[0][i];
-	c_im(data[i]) = DATA[1][i];
+        c_re(data[i]) = DATA[0][i];
+        c_im(data[i]) = DATA[1][i];
     }
 
     fft2(i_sign, data, NN, dimc, dimr);
 
     for (i = 0; i < NN; i++) {
-	DATA[0][i] = c_re(data[i]);
-	DATA[1][i] = c_im(data[i]);
+        DATA[0][i] = c_re(data[i]);
+        DATA[1][i] = c_im(data[i]);
     }
 
     G_free(data);
@@ -148,4 +147,4 @@ int fft(int i_sign, double *DATA[2], int NN, int dimc, int dimr)
     return 0;
 }
 
-#endif /* HAVE_FFT */
+#endif                          /* HAVE_FFT */

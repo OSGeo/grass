@@ -12,8 +12,8 @@
  */
 
 int support(char **names, struct Cell_stats *statf, int nfiles,
-            struct Categories *cats, int *cats_ok, struct Colors *colr,
-            int *colr_ok, RASTER_MAP_TYPE out_type)
+    struct Categories *cats, int *cats_ok, struct Colors *colr,
+    int *colr_ok, RASTER_MAP_TYPE out_type)
 {
     int i;
     struct Categories pcats;
@@ -48,15 +48,16 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                 if (n && !Rast_find_cell_stat(n, &count, statf)) {
                     if (do_cats) {
                         Rast_update_cell_stats(&n, 1, statf);
-                        Rast_set_c_cat(
-                            &n, &n, Rast_get_c_cat((CELL *) &n, &pcats), cats);
+                        Rast_set_c_cat(&n, &n, Rast_get_c_cat((CELL *) & n,
+                                &pcats), cats);
                     }
                     if (do_colr) {
                         Rast_get_c_color(&n, &red, &grn, &blu, &pcolr);
                         Rast_set_c_color(n, red, grn, blu, colr);
                     }
                 }
-        } else {
+        }
+        else {
             /* the color would be the color of the first map,
              * possibly not covering the range of the other maps */
             *colr_ok = 0;

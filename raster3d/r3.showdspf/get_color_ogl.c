@@ -26,8 +26,8 @@ r, g, & b are integer 0 <= r, g, b <= 255,
 number of lines in table N <= 100.
 ******************************************************************************/
 int get_color_table(file, ctable)
-     char *file;
-     struct color_entry ctable[];
+        char *file;
+        struct color_entry ctable[];
 {
     FILE *fp;
     int tmp = 0;
@@ -35,28 +35,28 @@ int get_color_table(file, ctable)
 
     fp = fopen(file, "r");
     if (!fp) {
-	fprintf(stderr, "Unable to open color file for reading\n");
-	return (-1);
+        fprintf(stderr, "Unable to open color file for reading\n");
+        return (-1);
     }
 
     for (i = 0; i < 100 && EOF != tmp; i++) {
-	tmp = fscanf(fp, "%f:%hd:%hd:%hd",
-		     &(ctable[i].data),
-		     &(ctable[i].color[0]),
-		     &(ctable[i].color[1]), &(ctable[i].color[2]));
-	if (tmp != EOF && tmp != 4) {
-	    fclose(fp);
-	    fprintf(stderr, "Unable to read colortable file <%s>\n", file);
-	    return (-1);
-	}
+        tmp = fscanf(fp, "%f:%hd:%hd:%hd",
+            &(ctable[i].data),
+            &(ctable[i].color[0]),
+            &(ctable[i].color[1]), &(ctable[i].color[2]));
+        if (tmp != EOF && tmp != 4) {
+            fclose(fp);
+            fprintf(stderr, "Unable to read colortable file <%s>\n", file);
+            return (-1);
+        }
 
     }
     if (i == 100 && tmp != EOF) {
-	fprintf(stderr, "Number of colortable entries may not exceed 100.\n");
-	fprintf(stderr, "First 100 entries will be used.\n");
+        fprintf(stderr, "Number of colortable entries may not exceed 100.\n");
+        fprintf(stderr, "First 100 entries will be used.\n");
     }
     else
-	i--;
+        i--;
 
     ctable[i].data = 0.0;
     ctable[i].color[0] = -1;
@@ -65,9 +65,9 @@ int get_color_table(file, ctable)
 
     fclose(fp);
     if (!i) {
-	fprintf(stderr,
-		"Colortable file is empty, using default colortable\n");
-	get_default_table(&Headfax, ctable);
+        fprintf(stderr,
+            "Colortable file is empty, using default colortable\n");
+        get_default_table(&Headfax, ctable);
     }
     return (0);
 }
@@ -77,9 +77,9 @@ get_cat_color (cat, ctable, color):
 fills color array with color value for cat calculated from values in ctable.
 ******************************************************************************/
 void get_cat_color(cat, ctable, color)
-     float cat;
-     struct color_entry ctable[];
-     short color[3];
+        float cat;
+        struct color_entry ctable[];
+        short color[3];
 {
     int curr;
     float cat1, cat2;
@@ -100,30 +100,30 @@ void get_cat_color(cat, ctable, color)
     cat1 = ctable[0].data;
 
     if (ctable[0].color[0] < 0) {
-	return;
+        return;
     }
     /* all cat < the first color table entry use the first color */
     else if ((cat < cat1) || (ctable[1].color[0] < 0)) {
-	color[0] = color1[0];
-	color[1] = color1[1];
-	color[2] = color1[2];
-	return;
+        color[0] = color1[0];
+        color[1] = color1[1];
+        color[2] = color1[2];
+        return;
     }
     /* find the categories in the color table above & below 
        this cat & interpolate the color values *** */
 
     for (curr = 1; ctable[curr].color[0] >= 0; curr++) {
-	cat2 = ctable[curr].data;
-	color2 = ctable[curr].color;
-	if (cat2 > cat) {
-	    delta = (cat - cat1) / (cat2 - cat1);
-	    color[0] = delta * color2[0] + (1 - delta) * color1[0];
-	    color[1] = delta * color2[1] + (1 - delta) * color1[1];
-	    color[2] = delta * color2[2] + (1 - delta) * color1[2];
-	    return;
-	}
-	cat1 = cat2;
-	color1 = color2;
+        cat2 = ctable[curr].data;
+        color2 = ctable[curr].color;
+        if (cat2 > cat) {
+            delta = (cat - cat1) / (cat2 - cat1);
+            color[0] = delta * color2[0] + (1 - delta) * color1[0];
+            color[1] = delta * color2[1] + (1 - delta) * color1[1];
+            color[2] = delta * color2[2] + (1 - delta) * color1[2];
+            return;
+        }
+        cat1 = cat2;
+        color1 = color2;
 
     }
     /* for any thresholds greater than last color table entry, use last entry * */
@@ -141,21 +141,21 @@ prints error message & uses original (per threshold) color table
 ******************************************************************************/
 
 int new_color_file(file, cfile, D_spec)
-     char *file, *cfile;
-     struct dspec *D_spec;
+        char *file, *cfile;
+        struct dspec *D_spec;
 {
     if (D_spec->cfile != NULL)
-	fclose(D_spec->cfile);
+        fclose(D_spec->cfile);
     D_spec->cfile = fopen(file, "r");
     if (D_spec->cfile == NULL) {
-	fprintf(stderr, "Unable to open <%s>\n", file);
-	return (-1);
+        fprintf(stderr, "Unable to open <%s>\n", file);
+        return (-1);
     }
     else if (0 > get_color_table(cfile, D_spec->ctable)) {
-	fprintf(stderr, "Unable to read color table\n");
-	fclose(D_spec->cfile);
-	D_spec->cfile = NULL;
-	return (-1);
+        fprintf(stderr, "Unable to read color table\n");
+        fclose(D_spec->cfile);
+        D_spec->cfile = NULL;
+        return (-1);
     }
     return (0);
 
@@ -170,15 +170,15 @@ If unable to open cfile (colortable file), prints error message
 and uses default color table.
 ******************************************************************************/
 void no_color_file(D_spec, cfile)
-     struct dspec *D_spec;
-     char *cfile;
+        struct dspec *D_spec;
+        char *cfile;
 {
     if (D_spec->cfile != NULL)
-	fclose(D_spec->cfile);
+        fclose(D_spec->cfile);
     D_spec->cfile = NULL;
     if (0 > get_color_table(cfile, D_spec->ctable)) {
-	fprintf(stderr, "Using default color table\n");
-	get_default_table(&Headfax, D_spec->ctable);
+        fprintf(stderr, "Using default color table\n");
+        get_default_table(&Headfax, D_spec->ctable);
     }
 }
 
@@ -188,8 +188,8 @@ Calculates values for ctable to produce a rainbow color table from
 range of  threshold values  stored in head.
 ******************************************************************************/
 void get_default_table(head, ctable)
-     file_info *head;
-     struct color_entry ctable[];
+        file_info *head;
+        struct color_entry ctable[];
 {
     float min, max;
 
@@ -226,8 +226,8 @@ get_min_max (head, min, max)
 assigns min & max the minimum & maximum threshold values stored in head.
 ******************************************************************************/
 void get_min_max(head, min, max)
-     file_info *head;
-     float *min, *max;
+        file_info *head;
+        float *min, *max;
 {
 
     int i;
@@ -236,22 +236,22 @@ void get_min_max(head, min, max)
     *min = HUGE_VAL;
 
     for (i = 0; i < head->linefax.nthres; i++) {
-	if (head->linefax.tvalue[i] < *min)
-	    *min = head->linefax.tvalue[i];
-	if (head->linefax.tvalue[i] > *max)
-	    *max = head->linefax.tvalue[i];
+        if (head->linefax.tvalue[i] < *min)
+            *min = head->linefax.tvalue[i];
+        if (head->linefax.tvalue[i] > *max)
+            *max = head->linefax.tvalue[i];
     }
 }
 
 void change_spec(spec)
-     float spec;
+        float spec;
 {
     static float material[] = {
-	GL_SPECULAR, 1.0, 1.0, 1.0,
-	GL_DIFFUSE, 0.8, 0.8, 0.8,
-	GL_AMBIENT, 0.8, 0.8, 0.8,
-	GL_SHININESS, 10,
-	0
+        GL_SPECULAR, 1.0, 1.0, 1.0,
+        GL_DIFFUSE, 0.8, 0.8, 0.8,
+        GL_AMBIENT, 0.8, 0.8, 0.8,
+        GL_SHININESS, 10,
+        0
     };
     material[1] = material[2] = material[3] = spec;
     glNewList(Material_1_Dlist, GL_COMPILE);

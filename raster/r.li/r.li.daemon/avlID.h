@@ -9,8 +9,8 @@
 
 typedef struct avlID_node
 {
-    long id;			/*key field */
-    long counter;		/*data */
+    long id;                    /*key field */
+    long counter;               /*data */
     struct avlID_node *father;
     struct avlID_node *right_child;
     struct avlID_node *left_child;

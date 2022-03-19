@@ -6,7 +6,8 @@
 #define TOOL_TURNTABLE    5
 
 
-struct opt {
+struct opt
+{
     struct Option *input, *points;
     struct Option *output;
     struct Option *action;
@@ -17,24 +18,20 @@ struct opt {
 };
 
 /* arcs.c */
-int create_arcs(FILE *, struct Map_info *,
-		struct Map_info *, int, int);
+int create_arcs(FILE *, struct Map_info *, struct Map_info *, int, int);
 
 /* argc.c */
 void define_options(struct opt *);
-void parse_arguments(const struct opt *,
-		     int *, int *, double *, int *);
+void parse_arguments(const struct opt *, int *, int *, double *, int *);
 
 /* connect.c */
 int connect_arcs(struct Map_info *, struct Map_info *,
-		 struct Map_info *, int, int, double, int);
+    struct Map_info *, int, int, double, int);
 
 /* nodes.c */
-int nodes(struct Map_info *, struct Map_info *, int,
-	  int);
+int nodes(struct Map_info *, struct Map_info *, int, int);
 
 /* report.c */
-int report(struct Map_info *, int, int,
-	   int);
+int report(struct Map_info *, int, int, int);
 
 void turntable(struct opt *);

@@ -13,4 +13,4 @@
 #define KILOMETERS_TO_METERS 1000.0
 
 
-#endif /* __DISTANCE_H__ */
+#endif                          /* __DISTANCE_H__ */

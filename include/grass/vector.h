@@ -13,4 +13,4 @@ typedef struct GEOSCoordSeq_t GEOSCoordSequence;
 
 #include <grass/defs/vector.h>
 
-#endif /* GRASS_VECTOR_H */
+#endif                          /* GRASS_VECTOR_H */

@@ -49,9 +49,8 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
     }
 
     void set_binning(struct Cell_head *region,
-                     struct PointBinning *point_binning,
-                     struct BinIndex *bin_index_nodes,
-                     RASTER_MAP_TYPE rtype, int cols)
+        struct PointBinning *point_binning,
+        struct BinIndex *bin_index_nodes, RASTER_MAP_TYPE rtype, int cols)
     {
         region_ = region;
         point_binning_ = point_binning;
@@ -71,7 +70,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
     }
 
     void set_base_raster(SEGMENT * base_segment,
-                         struct Cell_head *region, RASTER_MAP_TYPE rtype)
+        struct Cell_head *region, RASTER_MAP_TYPE rtype)
     {
         base_segment_ = base_segment;
         input_region_ = region;
@@ -100,7 +99,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
             double base_z;
 
             rast_segment_get_value_xy(base_segment_, input_region_,
-                                      base_raster_data_type_, x, y, &base_z);
+                base_raster_data_type_, x, y, &base_z);
             z -= base_z;
         }
 
@@ -118,7 +117,7 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
         }
 
         update_value(point_binning_, bin_index_nodes_, cols_,
-                     arr_row, arr_col, rtype_, x, y, z);
+            arr_row, arr_col, rtype_, x, y, z);
         n_processed++;
         return true;
     }
@@ -140,4 +139,4 @@ class GrassRasterWriter:public pdal::Writer, public pdal::Streamable
     RASTER_MAP_TYPE base_raster_data_type_;
 };
 
-#endif // GRASSRASTERWRITER_H
+#endif                          // GRASSRASTERWRITER_H

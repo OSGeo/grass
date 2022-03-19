@@ -2,7 +2,7 @@
 
 struct labels
 {
-    int count;			/* number of labels files */
+    int count;                  /* number of labels files */
     char *name[MAXLABELS];
     char *mapset[MAXLABELS];
     char *font[MAXLABELS];

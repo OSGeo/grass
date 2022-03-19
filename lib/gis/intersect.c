@@ -78,112 +78,112 @@
 #define SWAP(x,y) {double t; t=x; x=y; y=t;}
 
 int G_intersect_line_segments(double ax1, double ay1, double ax2, double ay2,
-			      double bx1, double by1, double bx2, double by2,
-			      double *ra, double *rb, double *x, double *y)
+    double bx1, double by1, double bx2, double by2,
+    double *ra, double *rb, double *x, double *y)
 {
     double d;
 
     if (ax1 > ax2 || (ax1 == ax2 && ay1 > ay2)) {
-	SWAP(ax1, ax2)
-	SWAP(ay1, ay2)
+        SWAP(ax1, ax2)
+            SWAP(ay1, ay2)
     }
 
     if (bx1 > bx2 || (bx1 == bx2 && by1 > by2)) {
-	SWAP(bx1, bx2)
-	SWAP(by1, by2)
+        SWAP(bx1, bx2)
+            SWAP(by1, by2)
     }
 
     d = D;
 
-    if (d) {			/* lines are not parallel */
-	*ra = D1 / d;
-	*rb = D2 / d;
+    if (d) {                    /* lines are not parallel */
+        *ra = D1 / d;
+        *rb = D2 / d;
 
-	*x = ax1 + (*ra) * (ax2 - ax1);
-	*y = ay1 + (*ra) * (ay2 - ay1);
-	return (*ra >= 0.0 && *ra <= 1.0 && *rb >= 0.0 && *rb <= 1.0);
+        *x = ax1 + (*ra) * (ax2 - ax1);
+        *y = ay1 + (*ra) * (ay2 - ay1);
+        return (*ra >= 0.0 && *ra <= 1.0 && *rb >= 0.0 && *rb <= 1.0);
     }
 
     /* lines are parallel */
     if (D1 || D2) {
-	return -1;
+        return -1;
     }
 
     /* segments are colinear. check for overlap */
 
     /* Collinear vertical */
     if (ax1 == ax2) {
-	if (ay1 > by2) {
-	    *x = ax1;
-	    *y = ay1;
-	    return 0;		/* extensions overlap */
-	}
-	if (ay2 < by1) {
-	    *x = ax2;
-	    *y = ay2;
-	    return 0;		/* extensions overlap */
-	}
+        if (ay1 > by2) {
+            *x = ax1;
+            *y = ay1;
+            return 0;           /* extensions overlap */
+        }
+        if (ay2 < by1) {
+            *x = ax2;
+            *y = ay2;
+            return 0;           /* extensions overlap */
+        }
 
-	/* there is overlap */
+        /* there is overlap */
 
-	if (ay1 == by2) {
-	    *x = ax1;
-	    *y = ay1;
-	    return 1;		/* endpoints only */
-	}
-	if (ay2 == by1) {
-	    *x = ax2;
-	    *y = ay2;
-	    return 1;		/* endpoints only */
-	}
+        if (ay1 == by2) {
+            *x = ax1;
+            *y = ay1;
+            return 1;           /* endpoints only */
+        }
+        if (ay2 == by1) {
+            *x = ax2;
+            *y = ay2;
+            return 1;           /* endpoints only */
+        }
 
-	/* overlap, no single intersection point */
-	if (ay1 > by1 && ay1 < by2) {
-	    *x = ax1;
-	    *y = ay1;
-	}
-	else {
-	    *x = ax2;
-	    *y = ay2;
-	}
-	return 2;
+        /* overlap, no single intersection point */
+        if (ay1 > by1 && ay1 < by2) {
+            *x = ax1;
+            *y = ay1;
+        }
+        else {
+            *x = ax2;
+            *y = ay2;
+        }
+        return 2;
     }
     else {
-	if (ax1 > bx2) {
-	    *x = ax1;
-	    *y = ay1;
-	    return 0;		/* extensions overlap */
-	}
-	if (ax2 < bx1) {
-	    *x = ax2;
-	    *y = ay2;
-	    return 0;		/* extensions overlap */
-	}
+        if (ax1 > bx2) {
+            *x = ax1;
+            *y = ay1;
+            return 0;           /* extensions overlap */
+        }
+        if (ax2 < bx1) {
+            *x = ax2;
+            *y = ay2;
+            return 0;           /* extensions overlap */
+        }
 
-	/* there is overlap */
+        /* there is overlap */
 
-	if (ax1 == bx2) {
-	    *x = ax1;
-	    *y = ay1;
-	    return 1;		/* endpoints only */
-	}
-	if (ax2 == bx1) {
-	    *x = ax2;
-	    *y = ay2;
-	    return 1;		/* endpoints only */
-	}
-	
-	/* overlap, no single intersection point */
-	if (ax1 > bx1 && ax1 < bx2) {
-	    *x = ax1;
-	    *y = ay1;
-	}
-	else {
-	    *x = ax2;
-	    *y = ay2;
-	}
-	return 2;
+        if (ax1 == bx2) {
+            *x = ax1;
+            *y = ay1;
+            return 1;           /* endpoints only */
+        }
+        if (ax2 == bx1) {
+            *x = ax2;
+            *y = ay2;
+            return 1;           /* endpoints only */
+        }
+
+        /* overlap, no single intersection point */
+        if (ax1 > bx1 && ax1 < bx2) {
+            *x = ax1;
+            *y = ay1;
+        }
+        else {
+            *x = ax2;
+            *y = ay2;
+        }
+        return 2;
     }
 
-    return 0; /* should not be reached */
+    return 0;                   /* should not be reached */
 }

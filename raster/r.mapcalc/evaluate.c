@@ -23,20 +23,20 @@ static int max_maps = 0;
 
 /****************************************************************************/
 
-static void extract_maps(expression *e);
-static void initialize(expression *e);
-static void evaluate(expression *e);
-static int append_map(expression *e);
+static void extract_maps(expression * e);
+static void initialize(expression * e);
+static void evaluate(expression * e);
+static int append_map(expression * e);
 
 /****************************************************************************/
 
-int append_map(expression *e)
+int append_map(expression * e)
 {
     /* \brief Append a map to the global map list and reallocate if necessary
      */
     if (num_maps >= max_maps) {
         max_maps += 10;
-        map_list = G_realloc(map_list, max_maps * sizeof(struct expression*));
+        map_list = G_realloc(map_list, max_maps * sizeof(struct expression *));
     }
 
     map_list[num_maps] = e;
@@ -50,18 +50,18 @@ void extract_maps(expression * e)
     int i;
 
     switch (e->type) {
-        case expr_type_map:
-            G_debug(1, "Found map %s", e->data.map.name);
-            append_map(e);
-            break;
-        case expr_type_function:
-            for (i = 1; i <= e->data.func.argc; i++) {
-                extract_maps(e->data.func.args[i]);
-            }
-            break;
-        case expr_type_binding:
-            extract_maps(e->data.bind.val);
-            break;
+    case expr_type_map:
+        G_debug(1, "Found map %s", e->data.map.name);
+        append_map(e);
+        break;
+    case expr_type_function:
+        for (i = 1; i <= e->data.func.argc; i++) {
+            extract_maps(e->data.func.args[i]);
+        }
+        break;
+    case expr_type_binding:
+        extract_maps(e->data.bind.val);
+        break;
     }
 }
 
@@ -94,7 +94,7 @@ static void initialize_map(expression * e)
     allocate_buf(e);
 
     e->data.map.idx = open_map(e->data.map.name, e->data.map.mod,
-                               e->data.map.row, e->data.map.col);
+        e->data.map.row, e->data.map.col);
 }
 
 static void initialize_function(expression * e)
@@ -122,23 +122,23 @@ static void initialize(expression * e)
 {
 
     switch (e->type) {
-        case expr_type_constant:
-            initialize_constant(e);
-            break;
-        case expr_type_variable:
-            initialize_variable(e);
-            break;
-        case expr_type_map:
-            initialize_map(e);
-            break;
-        case expr_type_function:
-            initialize_function(e);
-            break;
-        case expr_type_binding:
-            initialize_binding(e);
-            break;
-        default:
-            G_fatal_error(_("Unknown type: %d"), e->type);
+    case expr_type_constant:
+        initialize_constant(e);
+        break;
+    case expr_type_variable:
+        initialize_variable(e);
+        break;
+    case expr_type_map:
+        initialize_map(e);
+        break;
+    case expr_type_function:
+        initialize_function(e);
+        break;
+    case expr_type_binding:
+        initialize_binding(e);
+        break;
+    default:
+        G_fatal_error(_("Unknown type: %d"), e->type);
     }
 }
 
@@ -146,7 +146,7 @@ static void initialize(expression * e)
 
 static void do_evaluate(void *p)
 {
-    evaluate((struct expression *) p);
+    evaluate((struct expression *)p);
 }
 
 static void begin_evaluate(struct expression *e)
@@ -196,10 +196,9 @@ static void evaluate_variable(expression * e)
 static void evaluate_map(expression * e)
 {
     get_map_row(e->data.map.idx,
-                e->data.map.mod,
-                current_depth + e->data.map.depth,
-                current_row + e->data.map.row,
-                e->data.map.col, e->buf, e->res_type);
+        e->data.map.mod,
+        current_depth + e->data.map.depth,
+        current_row + e->data.map.row, e->data.map.col, e->buf, e->res_type);
 }
 
 static void evaluate_function(expression * e)
@@ -208,47 +207,46 @@ static void evaluate_function(expression * e)
     int res;
 
     if (e->data.func.argc > 1 && e->data.func.func != f_eval) {
-	for (i = 1; i <= e->data.func.argc; i++)
-	    begin_evaluate(e->data.func.args[i]);
+        for (i = 1; i <= e->data.func.argc; i++)
+            begin_evaluate(e->data.func.args[i]);
 
-	for (i = 1; i <= e->data.func.argc; i++)
-	    end_evaluate(e->data.func.args[i]);
+        for (i = 1; i <= e->data.func.argc; i++)
+            end_evaluate(e->data.func.args[i]);
     }
     else
-	for (i = 1; i <= e->data.func.argc; i++)
-	    evaluate(e->data.func.args[i]);
+        for (i = 1; i <= e->data.func.argc; i++)
+            evaluate(e->data.func.args[i]);
 
     res = (*e->data.func.func) (e->data.func.argc,
-				e->data.func.argt, e->data.func.argv);
+        e->data.func.argt, e->data.func.argv);
 
     switch (res) {
     case E_ARG_LO:
-	G_fatal_error(_("Too few arguments for function '%s'"),
-		      e->data.func.name);
-	break;
+        G_fatal_error(_("Too few arguments for function '%s'"),
+            e->data.func.name);
+        break;
     case E_ARG_HI:
-	G_fatal_error(_("Too many arguments for function '%s'"),
-		      e->data.func.name);
-	break;
+        G_fatal_error(_("Too many arguments for function '%s'"),
+            e->data.func.name);
+        break;
     case E_ARG_TYPE:
-	G_fatal_error(_("Invalid argument type for function '%s'"),
-		      e->data.func.name);
-	break;
+        G_fatal_error(_("Invalid argument type for function '%s'"),
+            e->data.func.name);
+        break;
     case E_RES_TYPE:
-	G_fatal_error(_("Invalid return type for function '%s'"),
-		      e->data.func.name);
-	break;
+        G_fatal_error(_("Invalid return type for function '%s'"),
+            e->data.func.name);
+        break;
     case E_INV_TYPE:
-	G_fatal_error(_("Unknown type for function '%s'"), e->data.func.name);
-	break;
+        G_fatal_error(_("Unknown type for function '%s'"), e->data.func.name);
+        break;
     case E_ARG_NUM:
-	G_fatal_error(_("Number of arguments for function '%s'"),
-		      e->data.func.name);
-	break;
+        G_fatal_error(_("Number of arguments for function '%s'"),
+            e->data.func.name);
+        break;
     case E_WTF:
-	G_fatal_error(_("Unknown error for function '%s'"),
-		      e->data.func.name);
-	break;
+        G_fatal_error(_("Unknown error for function '%s'"), e->data.func.name);
+        break;
     }
 }
 
@@ -262,23 +260,23 @@ static void evaluate_binding(expression * e)
 static void evaluate(expression * e)
 {
     switch (e->type) {
-        case expr_type_constant:
-            evaluate_constant(e);
-            break;
-        case expr_type_variable:
-            evaluate_variable(e);
-            break;
-        case expr_type_map:
-            evaluate_map(e);
-            break;
-        case expr_type_function:
-            evaluate_function(e);
-            break;
-        case expr_type_binding:
-            evaluate_binding(e);
-            break;
-        default:
-            G_fatal_error(_("Unknown type: %d"), e->type);
+    case expr_type_constant:
+        evaluate_constant(e);
+        break;
+    case expr_type_variable:
+        evaluate_variable(e);
+        break;
+    case expr_type_map:
+        evaluate_map(e);
+        break;
+    case expr_type_function:
+        evaluate_function(e);
+        break;
+    case expr_type_binding:
+        evaluate_binding(e);
+        break;
+    default:
+        G_fatal_error(_("Unknown type: %d"), e->type);
     }
 }
 
@@ -316,7 +314,7 @@ void execute(expr_list * ee)
 
         if (e->type != expr_type_binding && e->type != expr_type_function)
             G_fatal_error("internal error: execute: invalid type: %d",
-                  e->type);
+                e->type);
 
         if (e->type != expr_type_binding)
             continue;
@@ -325,16 +323,17 @@ void execute(expr_list * ee)
 
         if (!overwrite_flag && check_output_map(var))
             G_fatal_error(_("output map <%s> exists. To overwrite, "
-                            "use the --overwrite flag"), var);
+                    "use the --overwrite flag"), var);
     }
 
     /* Parse each expression and extract all raster maps */
     for (l = ee; l; l = l->next) {
         expression *e = l->exp;
+
         extract_maps(e);
     }
 
-    /* Set the region from the input maps*/
+    /* Set the region from the input maps */
     if (region_approach == 2)
         prepare_region_from_maps_union(map_list, num_maps);
     if (region_approach == 3)
@@ -368,19 +367,19 @@ void execute(expr_list * ee)
     for (current_depth = 0; current_depth < depths; current_depth++) {
         for (current_row = 0; current_row < rows; current_row++) {
             if (verbose)
-		G_percent(n, count, 2);
+                G_percent(n, count, 2);
 
             for (l = ee; l; l = l->next) {
-		expression *e = l->exp;
-		int fd;
+                expression *e = l->exp;
+                int fd;
 
-		evaluate(e);
+                evaluate(e);
 
-		if (e->type != expr_type_binding)
-		    continue;
+                if (e->type != expr_type_binding)
+                    continue;
 
-		fd = e->data.bind.fd;
-		put_map_row(fd, e->buf, e->res_type);
+                fd = e->data.bind.fd;
+                put_map_row(fd, e->buf, e->res_type);
             }
 
             n++;
@@ -390,7 +389,7 @@ void execute(expr_list * ee)
     G_finish_workers();
 
     if (verbose)
-	G_percent(n, count, 2);
+        G_percent(n, count, 2);
 
     close_maps();
 
@@ -412,20 +411,20 @@ void execute(expr_list * ee)
 
         if (val->type == expr_type_map) {
             if (val->data.map.mod == 'M') {
-		copy_cats(var, val->data.map.idx);
-		copy_colors(var, val->data.map.idx);
+                copy_cats(var, val->data.map.idx);
+                copy_colors(var, val->data.map.idx);
             }
 
             copy_history(var, val->data.map.idx);
         }
         else
-	    create_history(var, val);
+            create_history(var, val);
     }
 
     G_unset_error_routine();
 }
 
-void describe_maps(FILE *fp, expr_list *ee)
+void describe_maps(FILE * fp, expr_list * ee)
 {
     expr_list *l;
 
@@ -437,7 +436,7 @@ void describe_maps(FILE *fp, expr_list *ee)
 
         if (e->type != expr_type_binding && e->type != expr_type_function)
             G_fatal_error("internal error: execute: invalid type: %d",
-                  e->type);
+                e->type);
 
         initialize(e);
 
@@ -445,7 +444,7 @@ void describe_maps(FILE *fp, expr_list *ee)
             continue;
 
         var = e->data.bind.var;
-            fprintf(fp, "%s%s", l != ee ? "," : "", var);
+        fprintf(fp, "%s%s", l != ee ? "," : "", var);
     }
 
     fprintf(fp, "\n");

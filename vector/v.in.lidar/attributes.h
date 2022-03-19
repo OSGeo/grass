@@ -20,13 +20,11 @@ struct field_info;
 struct dbDriver;                /* TODO: is this correct forward declaration? */
 
 void create_table_for_lidar(struct Map_info *vector_map, const char *name,
-                            int layer, dbDriver ** db_driver,
-                            struct field_info **finfo, int have_time,
-                            int have_color);
+    int layer, dbDriver ** db_driver,
+    struct field_info **finfo, int have_time, int have_color);
 
 void las_point_to_attributes(struct field_info *Fi, dbDriver * driver,
-                             int cat, LASPointH LAS_point, double x,
-                             double y, double z, int have_time,
-                             int have_color);
+    int cat, LASPointH LAS_point, double x,
+    double y, double z, int have_time, int have_color);
 
-#endif /* GRASS_LIDAR_TO_ATTRIBUTES_H */
+#endif                          /* GRASS_LIDAR_TO_ATTRIBUTES_H */

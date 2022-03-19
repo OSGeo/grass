@@ -39,14 +39,14 @@
 
 /* function prototypes */
 static void P__transform(int num_vert, float (*in)[4],
-			 float (*out)[4], float (*c)[4]);
-static void P_matrix_copy(float (*from)[4], float (*to)[4], int size);
+    float(*out)[4], float(*c)[4]);
+static void P_matrix_copy(float (*from)[4], float(*to)[4], int size);
 
 
 /* global variables */
-static float c_stack[MAX_STACK][4][4];	/* matrix stack */
-static int stack_ptr = -1;	/* index of curr matrix depth */
-static float d[4][4];		/* tmp matrix */
+static float c_stack[MAX_STACK][4][4];  /* matrix stack */
+static int stack_ptr = -1;      /* index of curr matrix depth */
+static float d[4][4];           /* tmp matrix */
 
 #define NPI M_PI
 
@@ -114,7 +114,7 @@ void P_scale(float x, float y, float z)
    \param in
    \param out
  */
-void P_transform(int num_vert, float (*in)[4], float (*out)[4])
+void P_transform(int num_vert, float (*in)[4], float(*out)[4])
 {
     P__transform(num_vert, in, out, trans_mat);
 
@@ -133,19 +133,19 @@ void P_transform(int num_vert, float (*in)[4], float (*out)[4])
    \param in
    \param out
  */
-static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
-			 float (*c)[4])
+static void P__transform(int num_vert, float (*in)[4], float(*out)[4],
+    float(*c)[4])
 {
     register int k, j, i;
 
     for (i = 0; i < num_vert; i++) {
-	for (j = 0; j < 4; j++) {
-	    out[i][j] = 0.;
+        for (j = 0; j < 4; j++) {
+            out[i][j] = 0.;
 
-	    for (k = 0; k < 4; k++) {
-		out[i][j] += in[i][k] * c[k][j];
-	    }
-	}
+            for (k = 0; k < 4; k++) {
+                out[i][j] += in[i][k] * c[k][j];
+            }
+        }
     }
 
     return;
@@ -158,14 +158,14 @@ static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
    \param to 'to' matrix
    \param size number of rows (ncols=4)
  */
-static void P_matrix_copy(float (*from)[4], float (*to)[4], int size)
+static void P_matrix_copy(float (*from)[4], float(*to)[4], int size)
 {
     register int i, j;
 
     for (i = 0; i < size; i++) {
-	for (j = 0; j < 4; j++) {
-	    to[i][j] = from[i][j];
-	}
+        for (j = 0; j < 4; j++) {
+            to[i][j] = from[i][j];
+        }
     }
 
     return;
@@ -177,9 +177,9 @@ static void P_matrix_copy(float (*from)[4], float (*to)[4], int size)
 int P_pushmatrix(void)
 {
     if (stack_ptr >= MAX_STACK) {
-	G_warning("P_pushmatrix(): %s", _("Out of matrix stack space"));
+        G_warning("P_pushmatrix(): %s", _("Out of matrix stack space"));
 
-	return (-1);
+        return (-1);
     }
 
     stack_ptr++;
@@ -197,9 +197,9 @@ int P_pushmatrix(void)
 int P_popmatrix(void)
 {
     if (stack_ptr < 0) {
-	G_warning("P_popmatrix(): %s", _("Tried to pop an empty stack"));
+        G_warning("P_popmatrix(): %s", _("Tried to pop an empty stack"));
 
-	return (-1);
+        return (-1);
     }
 
     P_matrix_copy(c_stack[stack_ptr], trans_mat, 4);
@@ -220,36 +220,36 @@ void P_rot(float angle, char axis)
 
     P_matrix_copy(ident, d, 4);
 
-    theta = (NPI / 180.) * angle;	/* convert to radians */
+    theta = (NPI / 180.) * angle;       /* convert to radians */
 
     /* optimize to handle rotations of mutliples of 90 deg */
     switch (axis) {
     case 'X':
     case 'x':
 
-	d[1][1] = cos(theta);
-	d[1][2] = sin(theta);
-	d[2][1] = -sin(theta);
-	d[2][2] = cos(theta);
+        d[1][1] = cos(theta);
+        d[1][2] = sin(theta);
+        d[2][1] = -sin(theta);
+        d[2][2] = cos(theta);
 
-	break;
+        break;
     case 'Y':
     case 'y':
 
-	d[0][0] = cos(theta);
-	d[0][2] = -sin(theta);
-	d[2][0] = sin(theta);
-	d[2][2] = cos(theta);
-	break;
+        d[0][0] = cos(theta);
+        d[0][2] = -sin(theta);
+        d[2][0] = sin(theta);
+        d[2][2] = cos(theta);
+        break;
     case 'Z':
     case 'z':
 
-	d[0][0] = cos(theta);
-	d[0][1] = sin(theta);
-	d[1][0] = -sin(theta);
-	d[1][1] = cos(theta);
+        d[0][0] = cos(theta);
+        d[0][1] = sin(theta);
+        d[1][0] = -sin(theta);
+        d[1][1] = cos(theta);
 
-	break;
+        break;
     }
 
     P_pushmatrix();

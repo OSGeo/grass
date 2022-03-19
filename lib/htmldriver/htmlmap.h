@@ -10,10 +10,10 @@
 
 #define INITIAL_TEXT 1000
 
-#define APACHE 0		/* write output in apache/ncsa server image map format */
-#define NCSA   0		/* write output in apache/ncsa server image map format */
-#define CLIENT 1		/* write output in netscape client side image map format */
-#define RAW    2		/* write output in raw format */
+#define APACHE 0                /* write output in apache/ncsa server image map format */
+#define NCSA   0                /* write output in apache/ncsa server image map format */
+#define CLIENT 1                /* write output in netscape client side image map format */
+#define RAW    2                /* write output in raw format */
 
 struct MapPoly
 {

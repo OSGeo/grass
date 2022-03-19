@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:     iostream
@@ -43,55 +44,54 @@
 #include <cstring>
 #include <iostream>
 
-template<class T>
-class MEM_STREAM {
-private:
-  T *data;
-  T *curr;
-  T *dataend;
-  int len;
+template < class T > class MEM_STREAM {
+  private:
+    T * data;
+    T *curr;
+    T *dataend;
+    int len;
 
-public:
-  MEM_STREAM(T *data, int len);
-  ~MEM_STREAM(void);
+  public:
+    MEM_STREAM(T * data, int len);
+    ~MEM_STREAM(void);
 
-  // Read and write elements.
-  AMI_err read_item(T **elt);
+    // Read and write elements.
+    AMI_err read_item(T ** elt);
 
-  AMI_err write_item(const T &elt);
+    AMI_err write_item(const T & elt);
 
-  // Return the number of items in the stream.
-  off_t stream_len(void);
+    // Return the number of items in the stream.
+    off_t stream_len(void);
 
-  // Return the path name of this stream.
-  AMI_err name(char **stream_name);
+    // Return the path name of this stream.
+    AMI_err name(char **stream_name);
 
-  // Move to a specific item in the stream.
-  AMI_err seek(off_t offset);
+    // Move to a specific item in the stream.
+    AMI_err seek(off_t offset);
 
-  char *sprint();
+    char *sprint();
 };
 
 
 /**********************************************************************/
 
-template<class T>
-MEM_STREAM<T>::MEM_STREAM(T *datap, int lenv) {
+template < class T > MEM_STREAM < T >::MEM_STREAM(T * datap, int lenv)
+{
 
-  data = datap;
-  dataend = data + lenv;
-  curr = datap;
-  len = lenv;
+    data = datap;
+    dataend = data + lenv;
+    curr = datap;
+    len = lenv;
 
 }
 
 
 /**********************************************************************/
 // Return the number of items in the stream.
-template<class T>
-off_t MEM_STREAM<T>::stream_len(void) {
+template < class T > off_t MEM_STREAM < T >::stream_len(void)
+{
 
-  return len;
+    return len;
 
 }
 
@@ -99,51 +99,52 @@ off_t MEM_STREAM<T>::stream_len(void) {
 
 /**********************************************************************/
 // Return the path name of this stream.
-template<class T>
-AMI_err MEM_STREAM<T>::name(char **stream_name)  {
+template < class T > AMI_err MEM_STREAM < T >::name(char **stream_name)
+{
 
-  const char *path = "dummy";
+    const char *path = "dummy";
 
-  *stream_name = new char [strlen(path) + 1];
-  strcpy(*stream_name, path);
+    *stream_name = new char[strlen(path) + 1];
 
-  return AMI_ERROR_NO_ERROR;
+    strcpy(*stream_name, path);
+
+    return AMI_ERROR_NO_ERROR;
 }
 
 
 /**********************************************************************/
 // Move to a specific offset within the (sub)stream.
-template<class T>
-AMI_err MEM_STREAM<T>::seek(off_t offset) {
+template < class T > AMI_err MEM_STREAM < T >::seek(off_t offset)
+{
 
-  assert(offset <= len);
+    assert(offset <= len);
 
-  curr = data + offset;
+    curr = data + offset;
 
-  return AMI_ERROR_NO_ERROR;
+    return AMI_ERROR_NO_ERROR;
 }
 
 
 
 /**********************************************************************/
-template<class T>
-MEM_STREAM<T>::~MEM_STREAM(void)  {
+template < class T > MEM_STREAM < T >::~MEM_STREAM(void)
+{
 }
 
 
 
 /**********************************************************************/
-template<class T>
-AMI_err MEM_STREAM<T>::read_item(T **elt)  {
+template < class T > AMI_err MEM_STREAM < T >::read_item(T ** elt)
+{
 
-  assert(data);
+    assert(data);
 
-  if(curr == dataend) {
-    return AMI_ERROR_END_OF_STREAM;
-  }
-  *elt = curr;
-  curr++;
-  return AMI_ERROR_NO_ERROR;
+    if (curr == dataend) {
+        return AMI_ERROR_END_OF_STREAM;
+    }
+    *elt = curr;
+    curr++;
+    return AMI_ERROR_NO_ERROR;
 }
 
 
@@ -151,17 +152,17 @@ AMI_err MEM_STREAM<T>::read_item(T **elt)  {
 
 /**********************************************************************/
 
-template<class T>
-AMI_err MEM_STREAM<T>::write_item(const T &elt) {
+template < class T > AMI_err MEM_STREAM < T >::write_item(const T & elt)
+{
 
-  assert(data);
+    assert(data);
 
-  if(curr == dataend) {
-    return AMI_ERROR_END_OF_STREAM;
-  }
-  *curr = elt;
-  curr++;
-  return AMI_ERROR_NO_ERROR;
+    if (curr == dataend) {
+        return AMI_ERROR_END_OF_STREAM;
+    }
+    *curr = elt;
+    curr++;
+    return AMI_ERROR_NO_ERROR;
 }
 
 
@@ -172,11 +173,12 @@ AMI_err MEM_STREAM<T>::write_item(const T &elt) {
 // This function gives easy access to the file name, length.
 // It is not reentrant, but this should not be too much of a problem 
 // if you are careful.
-template<class T>
-char *MEM_STREAM<T>::sprint()  {
-  static char buf[BUFSIZ];
-  sprintf(buf, "[MEM_STREAM %d]", stream_len());
-  return buf;
+template < class T > char *MEM_STREAM < T >::sprint()
+{
+    static char buf[BUFSIZ];
+
+    sprintf(buf, "[MEM_STREAM %d]", stream_len());
+    return buf;
 }
 
-#endif // _MEM_STREAM_H 
+#endif                          // _MEM_STREAM_H

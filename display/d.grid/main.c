@@ -42,7 +42,7 @@ int main(int argc, char **argv)
         *direction, *bgcolor;
     struct Flag *noborder, *notext, *geogrid, *nogrid, *wgs84, *cross,
         *fiducial, *dot, *align;
-    struct pj_info info_in, info_out, info_trans;     /* Proj structures */
+    struct pj_info info_in, info_out, info_trans;       /* Proj structures */
     struct Cell_head wind;
 
     /* Initialize the GIS calls */
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("grid"));
     module->description =
         _("Overlays a user-specified grid "
-          "in the active display frame on the graphics monitor.");
+        "in the active display frame on the graphics monitor.");
 
     opt2 = G_define_option();
     opt2->key = "size";
@@ -65,8 +65,7 @@ int main(int argc, char **argv)
     opt2->label = _("Size of grid to be drawn (in map units)");
     opt2->description =
         _("0 for north-south resolution of the current region. "
-          "In map units or DDD:MM:SS format. "
-          "Example: \"1000\" or \"0:10\"");
+        "In map units or DDD:MM:SS format. " "Example: \"1000\" or \"0:10\"");
 
     opt3 = G_define_standard_option(G_OPT_M_COORDS);
     opt3->key = "origin";
@@ -255,15 +254,14 @@ int main(int argc, char **argv)
         /* get grid easting start */
         if (!G_scan_easting(opt3->answers[0], &east, G_projection())) {
             G_usage();
-            G_fatal_error(_("Illegal east coordinate <%s>"),
-                          opt3->answers[0]);
+            G_fatal_error(_("Illegal east coordinate <%s>"), opt3->answers[0]);
         }
 
         /* get grid northing start */
         if (!G_scan_northing(opt3->answers[1], &north, G_projection())) {
             G_usage();
             G_fatal_error(_("Illegal north coordinate <%s>"),
-                          opt3->answers[1]);
+                opt3->answers[1]);
         }
     }
 
@@ -288,13 +286,13 @@ int main(int argc, char **argv)
             /* initialzie proj stuff */
             init_proj(&info_in, &info_out, &info_trans, wgs84->answer);
             plot_geogrid(gsize, &info_in, &info_out, &info_trans,
-	                 do_text, colorg, colort, colorbg, fontsize,
-			 mark_type, line_width, dirn);
+                do_text, colorg, colort, colorbg, fontsize,
+                mark_type, line_width, dirn);
         }
         else {
             /* Do the grid plotting */
             plot_grid(size, east, north, do_text, colorg, colort, colorbg,
-                      fontsize, mark_type, line_width, dirn);
+                fontsize, mark_type, line_width, dirn);
         }
     }
 

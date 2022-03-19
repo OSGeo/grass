@@ -21,19 +21,18 @@
 
 
 DCELL feature(double *coeff)
-{				/* Set of six quadratic coefficients.      */
+{                               /* Set of six quadratic coefficients.      */
 
     /* Quadratic function in the form of
 
        z = ax^2 + by^2 + cxy + dx + ey +f                       */
 
-    double a = C_A * zscale,	/* Scale parameters if necessary.       */
-	b = C_B * zscale,
-	c = C_C * zscale, d = C_D * zscale, e = C_E * zscale;
+    double a = C_A * zscale,    /* Scale parameters if necessary.       */
+        b = C_B * zscale, c = C_C * zscale, d = C_D * zscale, e = C_E * zscale;
 
-    double maxic, minic,	/* Minimium and maximum curvature.      */
-      slope,			/* Slope.                               */
-      crosc;			/* Cross-sectional curvature.           */
+    double maxic, minic,        /* Minimium and maximum curvature.      */
+           slope,               /* Slope.                               */
+           crosc;               /* Cross-sectional curvature.           */
 
     minic = (-a - b - sqrt((a - b) * (a - b) + c * c));
     maxic = (-a - b + sqrt((a - b) * (a - b) + c * c));
@@ -64,46 +63,46 @@ DCELL feature(double *coeff)
        channel, ridge or planar.                                   */
 
     if (slope > slope_tol) {
-	if (crosc > curve_tol) {
-	    return (RIDGE);
-	}
-	else if (crosc < -curve_tol) {
-	    return (CHANNEL);
-	}
-	else {
-	    return (FLAT);
-	}
+        if (crosc > curve_tol) {
+            return (RIDGE);
+        }
+        else if (crosc < -curve_tol) {
+            return (CHANNEL);
+        }
+        else {
+            return (FLAT);
+        }
     }
     else {
 
 
-	/* Case 2: Surface has (approximately) vertical slope normal. Feature
-	   can be of any type.                                        */
+        /* Case 2: Surface has (approximately) vertical slope normal. Feature
+           can be of any type.                                        */
 
-	if (maxic > curve_tol) {
-	    if (minic > curve_tol) {
-		return (PEAK);
-	    }
-	    else if (minic < -curve_tol) {
-		return (PASS);
-	    }
-	    else {
-		return (RIDGE);
-	    }
-	}
-	else if (maxic < -curve_tol) {
-	    if (minic < -curve_tol) {
-		return (PIT);
-	    }
-	}
-	else {
-	    if (minic < -curve_tol) {
-		return (CHANNEL);
-	    }
-	    else if (minic > curve_tol && minic < -curve_tol) {
-		return (FLAT);
-	    }
-	}
+        if (maxic > curve_tol) {
+            if (minic > curve_tol) {
+                return (PEAK);
+            }
+            else if (minic < -curve_tol) {
+                return (PASS);
+            }
+            else {
+                return (RIDGE);
+            }
+        }
+        else if (maxic < -curve_tol) {
+            if (minic < -curve_tol) {
+                return (PIT);
+            }
+        }
+        else {
+            if (minic < -curve_tol) {
+                return (CHANNEL);
+            }
+            else if (minic > curve_tol && minic < -curve_tol) {
+                return (FLAT);
+            }
+        }
     }
     return (FLAT);
 }

@@ -30,4 +30,4 @@ extern int spotting;
 extern int time_lag;
 extern int x_out;
 extern int y_out;
-#endif /* CMD_LINE_H */
+#endif                          /* CMD_LINE_H */

@@ -37,14 +37,14 @@ int Rast3d_mask_close()
 {
     /* No Idea if this is correct return value */
     if (!Rast3d_maskMapExistsVar)
-	return 1;
+        return 1;
 
     Rast3d_maskMapExistsVar = 0;
 
     if (!Rast3d_close(Rast3d_maskMap)) {
-	Rast3d_error("Rast3d_mask_close: error closing mask");
+        Rast3d_error("Rast3d_mask_close: error closing mask");
 
-	return 0;
+        return 0;
     }
 
     return 1;
@@ -63,7 +63,8 @@ int Rast3d_mask_close()
 
 int Rast3d_mask_file_exists(void)
 {
-    return G_find_file_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, RASTER3D_MASK_MAP, G_mapset()) != NULL;
+    return G_find_file_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT,
+        RASTER3D_MASK_MAP, G_mapset()) != NULL;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -76,20 +77,19 @@ int Rast3d_mask_open_old(void)
 
     /* No Idea if this is correct return value */
     if (Rast3d_maskMapExistsVar)
-	return 1;
+        return 1;
 
     Rast3d_maskMapExistsVar = Rast3d_mask_file_exists();
 
     if (!Rast3d_maskMapExistsVar)
-	return 1;
+        return 1;
 
     if ((Rast3d_maskMap = Rast3d_open_cell_old(RASTER3D_MASK_MAP, G_mapset(),
-				       RASTER3D_DEFAULT_WINDOW, FCELL_TYPE,
-				       maskOpenOldCacheDefault))
-	== NULL) {
-	Rast3d_error("Rast3d_mask_open_old: cannot open mask");
+                RASTER3D_DEFAULT_WINDOW, FCELL_TYPE, maskOpenOldCacheDefault))
+        == NULL) {
+        Rast3d_error("Rast3d_mask_open_old: cannot open mask");
 
-	return 0;
+        return 0;
     }
 
     Rast3d_get_region_struct_map(Rast3d_maskMap, &region);
@@ -106,13 +106,14 @@ static float Rast3d_getMaskFloat(RASTER3D_Map * map, int x, int y, int z)
     float value;
 
     north = ((double)map->window.rows - y - 0.5) / (double)map->window.rows *
-	(map->window.north - map->window.south) + map->window.south;
+        (map->window.north - map->window.south) + map->window.south;
     east = ((double)x + 0.5) / (double)map->window.cols *
-	(map->window.east - map->window.west) + map->window.west;
+        (map->window.east - map->window.west) + map->window.west;
     top = ((double)z + 0.5) / (double)map->window.depths *
-	(map->window.top - map->window.bottom) + map->window.bottom;
+        (map->window.top - map->window.bottom) + map->window.bottom;
 
-    Rast3d_get_region_value(Rast3d_maskMap, north, east, top, &value, FCELL_TYPE);
+    Rast3d_get_region_value(Rast3d_maskMap, north, east, top, &value,
+        FCELL_TYPE);
     return value;
 }
 
@@ -136,19 +137,19 @@ int Rast3d_mask_reopen(int cache)
     int tmp;
 
     if (Rast3d_maskMapExistsVar)
-	if (!Rast3d_mask_close()) {
-	    Rast3d_error("Rast3d_mask_reopen: error closing mask");
+        if (!Rast3d_mask_close()) {
+            Rast3d_error("Rast3d_mask_reopen: error closing mask");
 
-	    return 0;
-	}
+            return 0;
+        }
 
     tmp = maskOpenOldCacheDefault;
     maskOpenOldCacheDefault = cache;
 
     if (!Rast3d_mask_open_old()) {
-	Rast3d_error("Rast3d_mask_reopen: error opening mask");
+        Rast3d_error("Rast3d_mask_reopen: error opening mask");
 
-	return 0;
+        return 0;
     }
 
     maskOpenOldCacheDefault = tmp;
@@ -173,7 +174,7 @@ int Rast3d_mask_reopen(int cache)
 int Rast3d_is_masked(RASTER3D_Map * map, int x, int y, int z)
 {
     if (!Rast3d_maskMapExistsVar)
-	return 0;
+        return 0;
 
     RASTER3D_MASKNUMmaskValue = Rast3d_getMaskFloat(map, x, y, z);
     return (Rast3d_is_null_value_num(&RASTER3D_MASKNUMmaskValue, FCELL_TYPE));
@@ -197,10 +198,11 @@ int Rast3d_is_masked(RASTER3D_Map * map, int x, int y, int z)
  *  \return void
  */
 
-void Rast3d_mask_num(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
+void Rast3d_mask_num(RASTER3D_Map * map, int x, int y, int z, void *value,
+    int type)
 {
     if (!Rast3d_maskMapExistsVar)
-	return;
+        return;
     RASTER3D_MASKNUM(map, x, y, z, value, type);
 }
 
@@ -222,7 +224,7 @@ void Rast3d_mask_num(RASTER3D_Map * map, int x, int y, int z, void *value, int t
 void Rast3d_mask_float(RASTER3D_Map * map, int x, int y, int z, float *value)
 {
     if (!Rast3d_maskMapExistsVar)
-	return;
+        return;
     RASTER3D_MASKNUM(map, x, y, z, value, FCELL_TYPE);
 }
 
@@ -244,7 +246,7 @@ void Rast3d_mask_float(RASTER3D_Map * map, int x, int y, int z, float *value)
 void Rast3d_mask_double(RASTER3D_Map * map, int x, int y, int z, double *value)
 {
     if (!Rast3d_maskMapExistsVar)
-	return;
+        return;
     RASTER3D_MASKNUM(map, x, y, z, value, DCELL_TYPE);
 }
 
@@ -274,25 +276,23 @@ void Rast3d_mask_tile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
     int x, y, z, xLength, yLength, dx, dy, dz, length;
 
     if (!Rast3d_maskMapExistsVar)
-	return;
+        return;
 
     nofNum = Rast3d_compute_clipped_tile_dimensions(map, tileIndex,
-					      &rows, &cols, &depths,
-					      &xRedundant, &yRedundant,
-					      &zRedundant);
+        &rows, &cols, &depths, &xRedundant, &yRedundant, &zRedundant);
     Rast3d_tile_index_origin(map, tileIndex, &x, &y, &z);
 
     if (nofNum == map->tileSize) {
-	 /*AV*/
-	    /* BEGIN OF ORIGINAL CODE */
-	    /*
-	     *    Rast3d_get_tile_dimensions_map (map, &rows, &cols, &depths);
-	     */
-	     /*AV*/
-	    /* BEGIN OF MY CODE */
-	    Rast3d_get_tile_dimensions_map(map, &cols, &rows, &depths);
-	/* END OF MY CODE */
-	xRedundant = yRedundant = 0;
+         /*AV*/
+            /* BEGIN OF ORIGINAL CODE */
+            /*
+             *    Rast3d_get_tile_dimensions_map (map, &rows, &cols, &depths);
+             */
+             /*AV*/
+            /* BEGIN OF MY CODE */
+            Rast3d_get_tile_dimensions_map(map, &cols, &rows, &depths);
+        /* END OF MY CODE */
+        xRedundant = yRedundant = 0;
     }
 
     rows += y;
@@ -303,15 +303,15 @@ void Rast3d_mask_tile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
     yLength = map->tileX * yRedundant * length;
 
     for (dz = z; dz < depths; dz++) {
-	for (dy = y; dy < rows; dy++) {
-	    for (dx = x; dx < cols; dx++) {
-		RASTER3D_MASKNUM(map, dx, dy, dz, tile, type);
-		tile += length;
-	    }
+        for (dy = y; dy < rows; dy++) {
+            for (dx = x; dx < cols; dx++) {
+                RASTER3D_MASKNUM(map, dx, dy, dz, tile, type);
+                tile += length;
+            }
 
-	    tile += xLength;
-	}
-	tile += yLength;
+            tile += xLength;
+        }
+        tile += yLength;
     }
 }
 

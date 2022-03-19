@@ -33,7 +33,7 @@
 #include <grass/raster.h>
 #include <grass/display.h>
 
-int D__overlay_mode = 0;	/* external for now, but to be fixed later */
+int D__overlay_mode = 0;        /* external for now, but to be fixed later */
 
 
 /*!
@@ -132,7 +132,7 @@ int D_f_color(FCELL val, struct Colors *colors)
  */
 
 int D_color_of_type(const void *raster,
-		    struct Colors *colors, RASTER_MAP_TYPE data_type)
+    struct Colors *colors, RASTER_MAP_TYPE data_type)
 {
     int r, g, b;
 

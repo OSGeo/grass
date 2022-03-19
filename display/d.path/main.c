@@ -31,7 +31,7 @@
 int main(int argc, char **argv)
 {
     struct Option *map, *afield_opt, *nfield_opt, *afcol, *abcol, *ncol,
-	*type_opt;
+        *type_opt;
     struct Option *color_opt, *hcolor_opt, *bgcolor_opt, *coor_opt;
     struct Flag *geo_f, *bold_f;
     struct GModule *module;
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("network"));
     G_add_keyword(_("shortest path"));
     module->description =
-	_("Finds shortest path for selected starting and ending node.");
+        _("Finds shortest path for selected starting and ending node.");
 
     map = G_define_standard_option(G_OPT_V_MAP);
 
@@ -78,7 +78,8 @@ int main(int argc, char **argv)
     afcol->key = "arc_column";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description = _("Arc forward/both direction(s) cost column (number)");
+    afcol->description =
+        _("Arc forward/both direction(s) cost column (number)");
 
     abcol = G_define_option();
     abcol->key = "arc_backward_column";
@@ -119,7 +120,7 @@ int main(int argc, char **argv)
     geo_f = G_define_flag();
     geo_f->key = 'g';
     geo_f->description =
-	_("Use geodesic calculation for longitude-latitude locations");
+        _("Use geodesic calculation for longitude-latitude locations");
 
     bold_f = G_define_flag();
     bold_f->key = 'b';
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
 
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
 
     type = Vect_option_to_types(type_opt);
@@ -137,57 +138,57 @@ int main(int argc, char **argv)
 
 
     if (coor_opt->answers[0] == NULL)
-	G_fatal_error(_("No coordinates given"));
+        G_fatal_error(_("No coordinates given"));
 
     if (!G_scan_easting(coor_opt->answers[0], &x1, G_projection()))
-	G_fatal_error(_("%s - illegal x value"), coor_opt->answers[0]);
+        G_fatal_error(_("%s - illegal x value"), coor_opt->answers[0]);
     if (!G_scan_northing(coor_opt->answers[1], &y1, G_projection()))
-	G_fatal_error(_("%s - illegal y value"), coor_opt->answers[1]);
+        G_fatal_error(_("%s - illegal y value"), coor_opt->answers[1]);
     if (!G_scan_easting(coor_opt->answers[2], &x2, G_projection()))
-	G_fatal_error(_("%s - illegal x value"), coor_opt->answers[2]);
+        G_fatal_error(_("%s - illegal x value"), coor_opt->answers[2]);
     if (!G_scan_northing(coor_opt->answers[3], &y2, G_projection()))
-	G_fatal_error(_("%s - illegal y value"), coor_opt->answers[3]);
+        G_fatal_error(_("%s - illegal y value"), coor_opt->answers[3]);
 
 
     D_open_driver();
-    
+
     color = G_standard_color_rgb(BLACK);
     if (G_str_to_color(color_opt->answer, &r, &g, &b)) {
-	color.r = r;
-	color.g = g;
-	color.b = b;
+        color.r = r;
+        color.g = g;
+        color.b = b;
     }
 
     hcolor = G_standard_color_rgb(RED);
     if (G_str_to_color(hcolor_opt->answer, &r, &g, &b)) {
-	hcolor.r = r;
-	hcolor.g = g;
-	hcolor.b = b;
+        hcolor.r = r;
+        hcolor.g = g;
+        hcolor.b = b;
     }
 
     bgcolor = G_standard_color_rgb(WHITE);
     if (G_str_to_color(bgcolor_opt->answer, &r, &g, &b)) {
-	bgcolor.r = r;
-	bgcolor.g = g;
-	bgcolor.b = b;
+        bgcolor.r = r;
+        bgcolor.g = g;
+        bgcolor.b = b;
     }
 
     if (geo_f->answer) {
-	geo = 1;
-	if (G_projection() != PROJECTION_LL)
-	    G_fatal_error(_("The current projection is not longitude-latitude"));
+        geo = 1;
+        if (G_projection() != PROJECTION_LL)
+            G_fatal_error(_("The current projection is not longitude-latitude"));
     }
     else
-	geo = 0;
+        geo = 0;
 
     Vect_set_open_level(2);
     if (Vect_open_old(&Map, map->answer, "") < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
 
     D_setup(0);
 
     Vect_net_build_graph(&Map, type, afield, nfield, afcol->answer,
-			 abcol->answer, ncol->answer, geo, 0);
+        abcol->answer, ncol->answer, geo, 0);
 
     coor_path(&Map, &hcolor, bold_f->answer, x1, y1, x2, y2);
 

@@ -18,10 +18,7 @@ struct buf_contours_pts
 
 #ifdef HAVE_GEOS
 int geos_buffer(struct Map_info *, struct Map_info *,
-                struct Map_info *, int, int, double,
-		struct spatial_index *,
-		struct line_cats *,
-		struct buf_contours **,
-		int *, int *, int, int);
+    struct Map_info *, int, int, double,
+    struct spatial_index *,
+    struct line_cats *, struct buf_contours **, int *, int *, int, int);
 #endif
-

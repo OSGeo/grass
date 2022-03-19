@@ -48,7 +48,7 @@ int initialize_cell_stats(int n)
     /* empty the has table */
     hashtable = (struct Node **)G_malloc(HASHSIZE * sizeof(struct Node *));
     for (i = 0; i < HASHSIZE; i++)
-	hashtable[i] = NULL;
+        hashtable[i] = NULL;
 
     return 0;
 }
@@ -67,17 +67,17 @@ struct Node *NewNode(double area)
     struct Node *node;
 
     if (node_pool_count <= 0)
-	node_pool = (struct Node *)G_calloc(node_pool_count =
-					    NODE_INCR, sizeof(struct Node));
+        node_pool = (struct Node *)G_calloc(node_pool_count =
+            NODE_INCR, sizeof(struct Node));
     node = &node_pool[--node_pool_count];
     node->count = 1;
     node->area = area;
     node->values = values;
 
     if (--value_pool_count <= 0)
-	allocate_values();
+        allocate_values();
     else
-	values += nfiles;
+        values += nfiles;
 
     node->left = node->right = NULL;
     node->list = node_list;
@@ -95,12 +95,12 @@ struct Node *NewNode(double area)
  *  low and high values are inclusive.
  *  Therefore the quantized max FP cell gets put in the nsteps+1'th bin
  *  and we need to manually place it back in the previous bin. */
-void fix_max_fp_val(CELL *cell, int ncols)
+void fix_max_fp_val(CELL * cell, int ncols)
 {
     while (ncols-- > 0) {
-	if (cell[ncols] > nsteps)
-	    cell[ncols] = (CELL)nsteps;
-	    /* { G_debug(5, ". resetting %d to %d", cell[ncols], nsteps); } */
+        if (cell[ncols] > nsteps)
+            cell[ncols] = (CELL) nsteps;
+        /* { G_debug(5, ". resetting %d to %d", cell[ncols], nsteps); } */
     }
     return;
 }
@@ -109,11 +109,11 @@ void fix_max_fp_val(CELL *cell, int ncols)
 /* we can't compute hash on null values, so we change all
  *  nulls to max+1, set NULL_CELL to max+1, and later compare
  *  with NULL_CELL to chack for nulls */
-void reset_null_vals(CELL *cell, int ncols)
+void reset_null_vals(CELL * cell, int ncols)
 {
     while (ncols-- > 0) {
-	if (Rast_is_c_null_value(&cell[ncols]))
-	    cell[ncols] = NULL_CELL;
+        if (Rast_is_c_null_value(&cell[ncols]))
+            cell[ncols] = NULL_CELL;
     }
     return;
 }
@@ -127,54 +127,54 @@ int update_cell_stats(CELL ** cell, int ncols, double area)
     register int dir = 0;
 
     while (ncols-- > 0) {
-	/* copy this cell to an array, compute hash */
+        /* copy this cell to an array, compute hash */
 
-	hash = values[0] = cell[0][ncols];
+        hash = values[0] = cell[0][ncols];
 
-	for (i = 1; i < nfiles; i++)
-	    hash = hash * HASHMOD + (values[i] = cell[i][ncols]);
+        for (i = 1; i < nfiles; i++)
+            hash = hash * HASHMOD + (values[i] = cell[i][ncols]);
 
-	if (hash < 0)
-	    hash = -hash;
+        if (hash < 0)
+            hash = -hash;
 
-	hash %= HASHSIZE;
+        hash %= HASHSIZE;
 
-	/* look it up and update/insert */
-	if ((q = hashtable[hash]) == NULL) {
-	    hashtable[hash] = NewNode(area);
-	}
-	else {
-	    while (1) {
-		for (i = 0; i < nfiles; i++) {
-		    if (values[i] < q->values[i]) {
-			dir = -1;
-			p = q->left;
-			break;
-		    }
-		    if (values[i] > q->values[i]) {
-			dir = 1;
-			p = q->right;
-			break;
-		    }
-		}
+        /* look it up and update/insert */
+        if ((q = hashtable[hash]) == NULL) {
+            hashtable[hash] = NewNode(area);
+        }
+        else {
+            while (1) {
+                for (i = 0; i < nfiles; i++) {
+                    if (values[i] < q->values[i]) {
+                        dir = -1;
+                        p = q->left;
+                        break;
+                    }
+                    if (values[i] > q->values[i]) {
+                        dir = 1;
+                        p = q->right;
+                        break;
+                    }
+                }
 
-		if (i == nfiles) {	/* match */
-		    q->count++;
-		    q->area += area;
-		    total_count++;
-		    break;
-		}
-		else if (p == NULL) {
-		    if (dir < 0)
-			q->left = NewNode(area);
-		    else
-			q->right = NewNode(area);
-		    break;
-		}
-		else
-		    q = p;
-	    }
-	}
+                if (i == nfiles) {      /* match */
+                    q->count++;
+                    q->area += area;
+                    total_count++;
+                    break;
+                }
+                else if (p == NULL) {
+                    if (dir < 0)
+                        q->left = NewNode(area);
+                    else
+                        q->right = NewNode(area);
+                    break;
+                }
+                else
+                    q = p;
+            }
+        }
     }
 
     return 0;
@@ -189,11 +189,11 @@ static int node_compare(const void *pp, const void *qq)
     a = (*p)->values;
     b = (*q)->values;
     for (i = nfiles; --i >= 0;) {
-	if (*a < *b)
-	    return -1;
-	else if (*a > *b)
-	    return 1;
-	a++, b++;
+        if (*a < *b)
+            return -1;
+        else if (*a > *b)
+            return 1;
+        a++, b++;
     }
 
     return 0;
@@ -203,12 +203,12 @@ static int node_compare_count_asc(const void *pp, const void *qq)
 {
     struct Node *const *p = pp, *const *q = qq;
     long a, b;
-    
+
     a = (*p)->count;
     b = (*q)->count;
 
     if (a < b)
-	return -1;
+        return -1;
     return (a > b);
 }
 
@@ -216,12 +216,12 @@ static int node_compare_count_desc(const void *pp, const void *qq)
 {
     struct Node *const *p = pp, *const *q = qq;
     long a, b;
-    
+
     a = (*p)->count;
     b = (*q)->count;
 
     if (a > b)
-	return -1;
+        return -1;
     return (a < b);
 }
 
@@ -230,19 +230,21 @@ int sort_cell_stats(int do_sort)
     struct Node **q, *p;
 
     if (node_count <= 0)
-	return 0;
+        return 0;
 
-    G_free(hashtable); /* make a bit more room */
+    G_free(hashtable);          /* make a bit more room */
     sorted_list = (struct Node **)G_calloc(node_count, sizeof(struct Node *));
     for (q = sorted_list, p = node_list; p; p = p->list)
-	*q++ = p;
+        *q++ = p;
 
     if (do_sort == SORT_DEFAULT)
         qsort(sorted_list, node_count, sizeof(struct Node *), node_compare);
     else if (do_sort == SORT_ASC)
-        qsort(sorted_list, node_count, sizeof(struct Node *), node_compare_count_asc);
+        qsort(sorted_list, node_count, sizeof(struct Node *),
+            node_compare_count_asc);
     else if (do_sort == SORT_DESC)
-        qsort(sorted_list, node_count, sizeof(struct Node *), node_compare_count_desc);
+        qsort(sorted_list, node_count, sizeof(struct Node *),
+            node_compare_count_desc);
 
     return 0;
 }
@@ -255,7 +257,7 @@ int print_node_count(void)
 }
 
 int print_cell_stats(char *fmt, int with_percents, int with_counts,
-		 int with_areas, int with_labels, char *fs)
+    int with_areas, int with_labels, char *fs)
 {
     int i, n, nulls_found;
     struct Node *node;
@@ -264,111 +266,111 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
     char str1[50], str2[50];
 
     if (no_nulls)
-	total_count -= sorted_list[node_count - 1]->count;
+        total_count -= sorted_list[node_count - 1]->count;
 
     Rast_set_c_null_value(&null_cell, 1);
     if (node_count <= 0) {
-	fprintf(stdout, "0");
-	for (i = 1; i < nfiles; i++)
-	    fprintf(stdout, "%s%s", fs, no_data_str);
-	if (with_areas)
-	    fprintf(stdout, "%s0.0", fs);
-	if (with_counts)
-	    fprintf(stdout, "%s0", fs);
-	if (with_percents)
-	    fprintf(stdout, "%s0.00%%", fs);
-	if (with_labels)
-	    fprintf(stdout, "%s%s", fs, Rast_get_c_cat(&null_cell, &labels[i]));
-	fprintf(stdout, "\n");
+        fprintf(stdout, "0");
+        for (i = 1; i < nfiles; i++)
+            fprintf(stdout, "%s%s", fs, no_data_str);
+        if (with_areas)
+            fprintf(stdout, "%s0.0", fs);
+        if (with_counts)
+            fprintf(stdout, "%s0", fs);
+        if (with_percents)
+            fprintf(stdout, "%s0.00%%", fs);
+        if (with_labels)
+            fprintf(stdout, "%s%s", fs, Rast_get_c_cat(&null_cell,
+                    &labels[i]));
+        fprintf(stdout, "\n");
     }
     else {
-	for (n = 0; n < node_count; n++) {
-	    node = sorted_list[n];
+        for (n = 0; n < node_count; n++) {
+            node = sorted_list[n];
 
-	    if (no_nulls || no_nulls_all) {
-		nulls_found = 0;
-		for (i = 0; i < nfiles; i++)
-		    /*
-		       if (node->values[i] || (!raw_output && is_fp[i]))
-		       break;
-		     */
-		    if (node->values[i] == NULL_CELL)
-			nulls_found++;
+            if (no_nulls || no_nulls_all) {
+                nulls_found = 0;
+                for (i = 0; i < nfiles; i++)
+                    /*
+                       if (node->values[i] || (!raw_output && is_fp[i]))
+                       break;
+                     */
+                    if (node->values[i] == NULL_CELL)
+                        nulls_found++;
 
-		if (nulls_found == nfiles)
-		    continue;
+                if (nulls_found == nfiles)
+                    continue;
 
-		if (no_nulls && nulls_found)
-		    continue;
-	    }
+                if (no_nulls && nulls_found)
+                    continue;
+            }
 
-	    for (i = 0; i < nfiles; i++) {
-		if (node->values[i] == NULL_CELL) {
-		    fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
-		    if (with_labels && !(raw_output && is_fp[i]))
-			fprintf(stdout, "%s%s", fs,
-				Rast_get_c_cat(&null_cell, &labels[i]));
-		}
-		else if (raw_output || !is_fp[i] || as_int) {
-		    fprintf(stdout, "%s%ld", i ? fs : "",
-			    (long)node->values[i]);
-		    if (with_labels && !is_fp[i])
-			fprintf(stdout, "%s%s", fs,
-				Rast_get_c_cat((CELL*) &(node->values[i]),
-					  &labels[i]));
-		}
-		else {		/* find out which floating point range to print */
+            for (i = 0; i < nfiles; i++) {
+                if (node->values[i] == NULL_CELL) {
+                    fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
+                    if (with_labels && !(raw_output && is_fp[i]))
+                        fprintf(stdout, "%s%s", fs,
+                            Rast_get_c_cat(&null_cell, &labels[i]));
+                }
+                else if (raw_output || !is_fp[i] || as_int) {
+                    fprintf(stdout, "%s%ld", i ? fs : "",
+                        (long)node->values[i]);
+                    if (with_labels && !is_fp[i])
+                        fprintf(stdout, "%s%s", fs,
+                            Rast_get_c_cat((CELL *) & (node->values[i]),
+                                &labels[i]));
+                }
+                else {          /* find out which floating point range to print */
 
-		    if (cat_ranges)
-			Rast_quant_get_ith_rule(&labels[i].q, node->values[i],
-					     &dLow, &dHigh, &tmp_cell,
-					     &tmp_cell);
-		    else {
-			dLow = (DMAX[i] - DMIN[i]) / nsteps *
-			    (double)(node->values[i] - 1) + DMIN[i];
-			dHigh = (DMAX[i] - DMIN[i]) / nsteps *
-			    (double)node->values[i] + DMIN[i];
-		    }
-		    if (averaged) {
-			/* print averaged values */
-			sprintf(str1, "%10f", (dLow + dHigh) / 2.0);
-			G_trim_decimal(str1);
-			G_strip(str1);
-			fprintf(stdout, "%s%s", i ? fs : "", str1);
-		    }
-		    else {
-			/* print intervals */
-			sprintf(str1, "%10f", dLow);
-			sprintf(str2, "%10f", dHigh);
-			G_trim_decimal(str1);
-			G_trim_decimal(str2);
-			G_strip(str1);
-			G_strip(str2);
-			fprintf(stdout, "%s%s-%s", i ? fs : "", str1, str2);
-		    }
-		    if (with_labels) {
-			if (cat_ranges)
-			    fprintf(stdout, "%s%s", fs,
-				    labels[i].labels[node->values[i]]);
-			else
-			    fprintf(stdout, "%sfrom %s to %s", fs,
-				    Rast_get_d_cat(&dLow, &labels[i]),
-				    Rast_get_d_cat(&dHigh, &labels[i]));
-		    }
-		}
+                    if (cat_ranges)
+                        Rast_quant_get_ith_rule(&labels[i].q, node->values[i],
+                            &dLow, &dHigh, &tmp_cell, &tmp_cell);
+                    else {
+                        dLow = (DMAX[i] - DMIN[i]) / nsteps *
+                            (double)(node->values[i] - 1) + DMIN[i];
+                        dHigh = (DMAX[i] - DMIN[i]) / nsteps *
+                            (double)node->values[i] + DMIN[i];
+                    }
+                    if (averaged) {
+                        /* print averaged values */
+                        sprintf(str1, "%10f", (dLow + dHigh) / 2.0);
+                        G_trim_decimal(str1);
+                        G_strip(str1);
+                        fprintf(stdout, "%s%s", i ? fs : "", str1);
+                    }
+                    else {
+                        /* print intervals */
+                        sprintf(str1, "%10f", dLow);
+                        sprintf(str2, "%10f", dHigh);
+                        G_trim_decimal(str1);
+                        G_trim_decimal(str2);
+                        G_strip(str1);
+                        G_strip(str2);
+                        fprintf(stdout, "%s%s-%s", i ? fs : "", str1, str2);
+                    }
+                    if (with_labels) {
+                        if (cat_ranges)
+                            fprintf(stdout, "%s%s", fs,
+                                labels[i].labels[node->values[i]]);
+                        else
+                            fprintf(stdout, "%sfrom %s to %s", fs,
+                                Rast_get_d_cat(&dLow, &labels[i]),
+                                Rast_get_d_cat(&dHigh, &labels[i]));
+                    }
+                }
 
-	    }
-	    if (with_areas) {
-		fprintf(stdout, "%s", fs);
-		fprintf(stdout, fmt, node->area);
-	    }
-	    if (with_counts)
-		fprintf(stdout, "%s%ld", fs, (long)node->count);
-	    if (with_percents)
-		fprintf(stdout, "%s%.2f%%", fs,
-			(double)100 * node->count / total_count);
-	    fprintf(stdout, "\n");
-	}
+            }
+            if (with_areas) {
+                fprintf(stdout, "%s", fs);
+                fprintf(stdout, fmt, node->area);
+            }
+            if (with_counts)
+                fprintf(stdout, "%s%ld", fs, (long)node->count);
+            if (with_percents)
+                fprintf(stdout, "%s%.2f%%", fs,
+                    (double)100 * node->count / total_count);
+            fprintf(stdout, "\n");
+        }
     }
 
     return 0;

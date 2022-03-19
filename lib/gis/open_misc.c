@@ -32,8 +32,7 @@
 #include "gis_local_proto.h"
 
 static int G__open_misc(const char *dir,
-			const char *element,
-			const char *name, const char *mapset, int mode)
+    const char *element, const char *name, const char *mapset, int mode)
 {
     int fd;
     char path[GPATH_MAX];
@@ -44,53 +43,53 @@ static int G__open_misc(const char *dir,
 
     /* READ */
     if (mode == 0) {
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (*mapset && strcmp(xmapset, mapset) != 0) {
- 		G_warning(_("G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"),
- 			  mapset, xmapset);
-		return -1;
-	    }
-	    name = xname;
-	    mapset = xmapset;
-	}
+        if (G_name_is_fully_qualified(name, xname, xmapset)) {
+            if (*mapset && strcmp(xmapset, mapset) != 0) {
+                G_warning(_("G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"),
+                    mapset, xmapset);
+                return -1;
+            }
+            name = xname;
+            mapset = xmapset;
+        }
 
-	mapset = G_find_file2_misc(dir, element, name, mapset);
+        mapset = G_find_file2_misc(dir, element, name, mapset);
 
-	if (!mapset)
-	    return -1;
+        if (!mapset)
+            return -1;
 
-	G_file_name_misc(path, dir, element, name, mapset);
+        G_file_name_misc(path, dir, element, name, mapset);
 
-	if ((fd = open(path, 0)) < 0)
-	    G_warning("G__open_misc(read): Unable to open '%s': %s",
-	              path, strerror(errno));
-	return fd;
+        if ((fd = open(path, 0)) < 0)
+            G_warning("G__open_misc(read): Unable to open '%s': %s",
+                path, strerror(errno));
+        return fd;
     }
     /* WRITE */
     if (mode == 1 || mode == 2) {
-	mapset = G_mapset();
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (strcmp(xmapset, mapset) != 0) {
- 		G_warning(_("G__open_misc(write): xmapset <%s> != G_mapset() <%s>"),
-			  xmapset, mapset);
-		return -1;
-	    }
-	    name = xname;
-	}
+        mapset = G_mapset();
+        if (G_name_is_fully_qualified(name, xname, xmapset)) {
+            if (strcmp(xmapset, mapset) != 0) {
+                G_warning(_("G__open_misc(write): xmapset <%s> != G_mapset() <%s>"),
+                    xmapset, mapset);
+                return -1;
+            }
+            name = xname;
+        }
 
-	if (G_legal_filename(name) == -1)
-	    return -1;
+        if (G_legal_filename(name) == -1)
+            return -1;
 
-	G_file_name_misc(path, dir, element, name, mapset);
-	if (mode == 1 || access(path, 0) != 0) {
-	    G__make_mapset_element_misc(dir, name);
-	    close(creat(path, 0666));
-	}
+        G_file_name_misc(path, dir, element, name, mapset);
+        if (mode == 1 || access(path, 0) != 0) {
+            G__make_mapset_element_misc(dir, name);
+            close(creat(path, 0666));
+        }
 
-	if ((fd = open(path, mode)) < 0)
-	    G_warning("G__open_misc(write): Unable to open '%s': %s",
-	              path, strerror(errno));
-	return fd;
+        if ((fd = open(path, mode)) < 0)
+            G_warning("G__open_misc(write): Unable to open '%s': %s",
+                path, strerror(errno));
+        return fd;
     }
     return -1;
 }
@@ -132,7 +131,7 @@ int G_open_new_misc(const char *dir, const char *element, const char *name)
  */
 
 int G_open_old_misc(const char *dir, const char *element, const char *name,
-		    const char *mapset)
+    const char *mapset)
 {
     return G__open_misc(dir, element, name, mapset, 0);
 }
@@ -158,7 +157,7 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
 
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd >= 0)
-	lseek(fd, 0L, SEEK_END);
+        lseek(fd, 0L, SEEK_END);
 
     return fd;
 }
@@ -185,7 +184,7 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
 
     fd = G__open_misc(dir, element, name, G_mapset(), 1);
     if (fd < 0)
-	return (FILE *) 0;
+        return (FILE *) 0;
 
     return fdopen(fd, "w");
 }
@@ -208,38 +207,38 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
  */
 
 FILE *G_fopen_old_misc(const char *dir, const char *element, const char *name,
-		       const char *mapset)
+    const char *mapset)
 {
     int fd;
 
     fd = G__open_misc(dir, element, name, mapset, 0);
     if (fd < 0)
-	return (FILE *) 0;
+        return (FILE *) 0;
 
     return fdopen(fd, "r");
 }
 
 FILE *G_fopen_append_misc(const char *dir, const char *element,
-			  const char *name)
+    const char *name)
 {
     int fd;
 
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
-	return (FILE *) 0;
+        return (FILE *) 0;
     lseek(fd, 0L, SEEK_END);
 
     return fdopen(fd, "a");
 }
 
 FILE *G_fopen_modify_misc(const char *dir, const char *element,
-			  const char *name)
+    const char *name)
 {
     int fd;
 
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
-	return (FILE *) 0;
+        return (FILE *) 0;
     lseek(fd, 0L, SEEK_END);
 
     return fdopen(fd, "r+");

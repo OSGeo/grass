@@ -24,7 +24,8 @@
 #include <grass/glocale.h>
 
 /* structs */
-typedef struct {
+typedef struct
+{
     struct Option *input, *output, *decimals, *null_val;
     struct Flag *header;
     struct Flag *row;
@@ -39,7 +40,8 @@ static void setParams();
 static void getParams(char **input, char **output, int *decim);
 static void writeHeaderString(FILE * fp, char *valueString, double value);
 static void writeHeaderString2(FILE * fp, char *valueString, int value);
-static void writeHeaderString3(FILE * fp, char *valueString, const char* value);
+static void writeHeaderString3(FILE * fp, char *valueString,
+    const char *value);
 static FILE *openAscii(char *asciiFile, RASTER3D_Region region);
 static void G3dToascii(FILE * fp, RASTER3D_Region region, int decim);
 
@@ -100,19 +102,23 @@ void setParams()
 
     param.row = G_define_flag();
     param.row->key = 'r';
-    param.row->description = _("Switch the row order in output from north->south to south->north");
+    param.row->description =
+        _("Switch the row order in output from north->south to south->north");
 
     param.depth = G_define_flag();
     param.depth->key = 'd';
-    param.depth->description = _("Switch the depth order in output from bottom->top to top->bottom");
+    param.depth->description =
+        _("Switch the depth order in output from bottom->top to top->bottom");
 
     param.grass6 = G_define_flag();
     param.grass6->key = 'c';
-    param.grass6->description = _("Print grass6 compatible format. Flags -d and -r are ignored.");
+    param.grass6->description =
+        _("Print grass6 compatible format. Flags -d and -r are ignored.");
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use 3D raster mask (if exists) with input map");
+    param.mask->description =
+        _("Use 3D raster mask (if exists) with input map");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -151,7 +157,7 @@ void writeHeaderString2(FILE * fp, char *valueString, int value)
 }
 
 /*---------------------------------------------------------------------------*/
-void writeHeaderString3(FILE * fp, char *valueString, const char* value)
+void writeHeaderString3(FILE * fp, char *valueString, const char *value)
 {
     static char format[100];
 
@@ -177,11 +183,12 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region region)
             G_usage();
             exit(EXIT_FAILURE);
         }
-    } else
+    }
+    else
         fp = stdout;
 
     if (!param.header->answer) {
-        
+
         /* Do not print the new header in grass compatibility mode */
         if (!param.grass6->answer) {
             /* Write the version information */
@@ -214,7 +221,7 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region region)
 /*---------------------------------------------------------------------------*/
 /* This function does all the work.  Basically, we just output the
  * source G3d file one layer at a time.
- *//* * */
+    *//* * */
 
 void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
 {
@@ -232,7 +239,7 @@ void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
 
     for (z = 0; z < depths; z++) {
         G_percent(z, depths, 1);
-        for (y = 0; y < rows; y++) { /* g3d rows count from south to north */
+        for (y = 0; y < rows; y++) {    /* g3d rows count from south to north */
             for (x = 0; x < cols; x++) {
 
                 /* From west to east */
@@ -255,17 +262,20 @@ void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
                 /* Get the data and resample if nessessary */
 
                 if (typeIntern == FCELL_TYPE) {
-                    
-                    Rast3d_get_value(map, col, row, depth, &fvalue, FCELL_TYPE);
-                    
+
+                    Rast3d_get_value(map, col, row, depth, &fvalue,
+                        FCELL_TYPE);
+
                     if (Rast3d_is_null_value_num(&fvalue, FCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);
                     else
                         fprintf(fp, "%.*f ", decim, fvalue);
-                } else {
-                    
-                    Rast3d_get_value(map, col, row, depth, &dvalue, DCELL_TYPE);
-                    
+                }
+                else {
+
+                    Rast3d_get_value(map, col, row, depth, &dvalue,
+                        DCELL_TYPE);
+
                     if (Rast3d_is_null_value_num(&dvalue, DCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);
                     else
@@ -331,7 +341,7 @@ int main(int argc, char *argv[])
 
     /* Open the map and use XY cache mode */
     map = Rast3d_open_cell_old(input, G_find_raster3d(input, ""), &region,
-                          RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), input);

@@ -53,4 +53,4 @@ int print_percent(double);
 int row_total(int, int, long *, double *);
 int col_total(int, int, long *, double *);
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

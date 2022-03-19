@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       test.gpde.lib
@@ -24,21 +25,23 @@
 #include "grass/gmath.h"
 
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct {
+typedef struct
+{
     struct Option *unit, *integration, *solverbenchmark, *blasbenchmark, *rows;
     struct Flag *full, *testunit, *testint;
 } paramType;
 
-paramType param; /*Parameters */
+paramType param;                /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void); /*Fill the paramType structure */
+static void set_params(void);   /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 
 /* ************************************************************************* */
-void set_params(void) {
+void set_params(void)
+{
     param.unit = G_define_option();
     param.unit->key = "unit";
     param.unit->type = TYPE_STRING;
@@ -58,7 +61,8 @@ void set_params(void) {
     param.rows->type = TYPE_INTEGER;
     param.rows->required = NO;
     param.rows->answer = "1000";
-    param.rows->description = _("The size of the matrices and vectors for benchmarking");
+    param.rows->description =
+        _("The size of the matrices and vectors for benchmarking");
 
     param.solverbenchmark = G_define_option();
     param.solverbenchmark->key = "solverbench";
@@ -73,7 +77,7 @@ void set_params(void) {
     param.blasbenchmark->required = NO;
     param.blasbenchmark->options = "blas2,blas3";
     param.blasbenchmark->description = _("Choose blas benchmark");
-    
+
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
     param.testunit->description = _("Run all unit tests");
@@ -92,7 +96,8 @@ void set_params(void) {
 /* ************************************************************************* */
 
 /* ************************************************************************* */
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     struct GModule *module;
     int returnstat = 0, i;
     int rows = 3000;
@@ -103,7 +108,8 @@ int main(int argc, char *argv[]) {
 
     module = G_define_module();
     module->description
-            = _("Performs benchmarks, unit and integration tests for the gmath library");
+        =
+        _("Performs benchmarks, unit and integration tests for the gmath library");
 
     /* Get parameters from user */
     set_params();
@@ -190,7 +196,7 @@ int main(int argc, char *argv[]) {
 
             i++;
         }
-    
+
     if (returnstat != 0)
         G_warning("Errors detected while testing the gmath lib");
     else

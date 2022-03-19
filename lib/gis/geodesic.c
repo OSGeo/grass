@@ -31,14 +31,15 @@
 static void adjust_lat(double *);
 static void adjust_lon(double *);
 
-static struct state {
+static struct state
+{
     double A, B;
 } state;
 
 static struct state *st = &state;
 
 int G_begin_geodesic_equation(double lon1, double lat1, double lon2,
-			      double lat2)
+    double lat2)
 {
     double sin21, tan1, tan2;
 
@@ -47,13 +48,18 @@ int G_begin_geodesic_equation(double lon1, double lat1, double lon2,
     adjust_lat(&lat1);
     adjust_lat(&lat2);
     if (lon1 > lon2) {
-	double temp;
-	temp = lon1; lon1 = lon2; lon2 = temp;
-	temp = lat1; lat1 = lat2; lat2 = temp;
+        double temp;
+
+        temp = lon1;
+        lon1 = lon2;
+        lon2 = temp;
+        temp = lat1;
+        lat1 = lat2;
+        lat2 = temp;
     }
     if (lon1 == lon2) {
-	st->A = st->B = 0.0;
-	return 0;
+        st->A = st->B = 0.0;
+        return 0;
     }
     lon1 = Radians(lon1);
     lon2 = Radians(lon2);
@@ -83,15 +89,15 @@ double G_geodesic_lat_from_lon(double lon)
 static void adjust_lon(double *lon)
 {
     while (*lon > 180.0)
-	*lon -= 360.0;
+        *lon -= 360.0;
     while (*lon < -180.0)
-	*lon += 360.0;
+        *lon += 360.0;
 }
 
 static void adjust_lat(double *lat)
 {
     if (*lat > 90.0)
-	*lat = 90.0;
+        *lat = 90.0;
     if (*lat < -90.0)
-	*lat = -90.0;
+        *lat = -90.0;
 }

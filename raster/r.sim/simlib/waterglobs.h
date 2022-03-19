@@ -47,13 +47,13 @@ extern struct seed seed;
 
 struct _points
 {
-    double *x; /* x coor for each point */
-    double *y; /* y coor for each point*/
-    int *cats; /* Category for each point */
-    int npoints; /* Number of observation points */
-    int npoints_alloc; /* Number of allocated points */
-    FILE *output; /* Output file descriptor */
-    int is_open; /* Set to 1 if open, 0 if closed */
+    double *x;                  /* x coor for each point */
+    double *y;                  /* y coor for each point */
+    int *cats;                  /* Category for each point */
+    int npoints;                /* Number of observation points */
+    int npoints_alloc;          /* Number of allocated points */
+    FILE *output;               /* Output file descriptor */
+    int is_open;                /* Set to 1 if open, 0 if closed */
 };
 
 struct point2D
@@ -110,7 +110,7 @@ extern double rwalk, bresx, bresy, xrand, yrand;
 extern double stepx, stepy, xp0, yp0;
 extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
 extern double eps;
-extern int maxwab, nstack; 
+extern int maxwab, nstack;
 extern int iterout, mx2o, my2o;
 extern int miter, nwalka;
 extern double timec;
@@ -120,6 +120,6 @@ extern double rain_val;
 extern double manin_val;
 extern double infil_val;
 
-extern struct History history;	/* holds meta-data (title, comments,..) */
+extern struct History history;  /* holds meta-data (title, comments,..) */
 
-#endif /* __WATERGLOBS_H__ */
+#endif                          /* __WATERGLOBS_H__ */

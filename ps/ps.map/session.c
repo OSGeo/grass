@@ -20,18 +20,18 @@ int add_to_session(int indent, char *buf)
 int accept(void)
 {
     if (sessionfile == NULL) {
-	*cur = 0;
-	sessionfile = G_tempfile();
-	fd = fopen(sessionfile, "w");
-	if (fd == NULL) {
-	    error("session file", "", "can't open");
-	    return 1;
-	}
+        *cur = 0;
+        sessionfile = G_tempfile();
+        fd = fopen(sessionfile, "w");
+        if (fd == NULL) {
+            error("session file", "", "can't open");
+            return 1;
+        }
     }
     if (fd != NULL && *cur) {
-	fprintf(fd, "%s\n", cur);
-	fflush(fd);
-	*cur = 0;
+        fprintf(fd, "%s\n", cur);
+        fflush(fd);
+        *cur = 0;
     }
 
     return 0;
@@ -50,15 +50,15 @@ int print_session(FILE * out)
     char buf[1024];
 
     if (sessionfile == NULL)
-	return 1;
+        return 1;
     if (fd != NULL)
-	fflush(fd);
+        fflush(fd);
     if ((in = fopen(sessionfile, "r")) == NULL) {
-	error("session file", "", "can't open");
-	return 1;
+        error("session file", "", "can't open");
+        return 1;
     }
     while (fgets(buf, sizeof buf, in))
-	fprintf(out, "%s", buf);
+        fprintf(out, "%s", buf);
     fclose(in);
 
     return 0;

@@ -48,7 +48,7 @@ extern int map_type(const char *name, int mod);
 extern int open_map(const char *name, int mod, int row, int col);
 extern void setup_maps(void);
 extern void get_map_row(int idx, int mod, int depth, int row, int col,
-			void *buf, int res_type);
+    void *buf, int res_type);
 extern void close_maps(void);
 extern void list_maps(FILE *, const char *);
 
@@ -68,4 +68,4 @@ extern void prepare_region_from_maps_intersect(expression **, int);
 
 /****************************************************************************/
 
-#endif /* _MAPCALC_H_ */
+#endif                          /* _MAPCALC_H_ */

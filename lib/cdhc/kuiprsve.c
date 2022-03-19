@@ -17,7 +17,7 @@ double *Cdhc_kuipers_v_exp(double *x, int n)
 
 #ifdef NOISY
     fprintf(stdout, "  TEST18 KV(E)  =%10.4f\n", y[0]);
-#endif /* NOISY */
+#endif                          /* NOISY */
 
     return y;
 }

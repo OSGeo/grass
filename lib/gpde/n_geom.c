@@ -50,7 +50,7 @@ N_geom_data *N_alloc_geom_data(void)
 void N_free_geom_data(N_geom_data * geom)
 {
     if (geom->area != NULL)
-	G_free(geom->area);
+        G_free(geom->area);
 
     G_free(geom);
     return;
@@ -70,7 +70,8 @@ void N_free_geom_data(N_geom_data * geom)
  *
  * \return N_geom_data *
  * */
-N_geom_data *N_init_geom_data_3d(RASTER3D_Region * region3d, N_geom_data * geodata)
+N_geom_data *N_init_geom_data_3d(RASTER3D_Region * region3d,
+    N_geom_data * geodata)
 {
     N_geom_data *geom = geodata;
     struct Cell_head region2d;
@@ -78,19 +79,18 @@ N_geom_data *N_init_geom_data_3d(RASTER3D_Region * region3d, N_geom_data * geoda
 #pragma omp critical
     {
 
-	G_debug(2,
-		"N_init_geom_data_3d: initializing the geometry structure");
+        G_debug(2, "N_init_geom_data_3d: initializing the geometry structure");
 
-	if (geom == NULL)
-	    geom = N_alloc_geom_data();
+        if (geom == NULL)
+            geom = N_alloc_geom_data();
 
-	geom->dz = region3d->tb_res * G_database_units_to_meters_factor();	/*this function is not thread safe */
-	geom->depths = region3d->depths;
-	geom->dim = 3;
+        geom->dz = region3d->tb_res * G_database_units_to_meters_factor();      /*this function is not thread safe */
+        geom->depths = region3d->depths;
+        geom->dim = 3;
 
-	/*convert the 3d into a 2d region and begin the area calculation */
-	G_get_set_window(&region2d);	/*this function is not thread safe */
-	Rast3d_region_to_cell_head(region3d, &region2d);
+        /*convert the 3d into a 2d region and begin the area calculation */
+        G_get_set_window(&region2d);    /*this function is not thread safe */
+        Rast3d_region_to_cell_head(region3d, &region2d);
     }
 
     return N_init_geom_data_2d(&region2d, geom);
@@ -111,8 +111,8 @@ N_geom_data *N_init_geom_data_3d(RASTER3D_Region * region3d, N_geom_data * geoda
  *
  * \return N_geom_data *
  * */
-N_geom_data *N_init_geom_data_2d(struct Cell_head * region,
-				 N_geom_data * geodata)
+N_geom_data *N_init_geom_data_2d(struct Cell_head *region,
+    N_geom_data * geodata)
 {
     N_geom_data *geom = geodata;
     struct Cell_head backup;
@@ -124,53 +124,52 @@ N_geom_data *N_init_geom_data_2d(struct Cell_head * region,
     /*create an openmp lock to assure that only one thread at a time will access this function */
 #pragma omp critical
     {
-	G_debug(2,
-		"N_init_geom_data_2d: initializing the geometry structure");
+        G_debug(2, "N_init_geom_data_2d: initializing the geometry structure");
 
-	/*make a backup from this region */
-	G_get_set_window(&backup);	/*this function is not thread safe */
-	/*set the current region */
-	Rast_set_window(region);	/*this function is not thread safe */
+        /*make a backup from this region */
+        G_get_set_window(&backup);      /*this function is not thread safe */
+        /*set the current region */
+        Rast_set_window(region);        /*this function is not thread safe */
 
-	if (geom == NULL)
-	    geom = N_alloc_geom_data();
+        if (geom == NULL)
+            geom = N_alloc_geom_data();
 
-	meters = G_database_units_to_meters_factor();	/*this function is not thread safe */
+        meters = G_database_units_to_meters_factor();   /*this function is not thread safe */
 
-	/*set the dim to 2d if it was not initiated with 3, that's a bit ugly :( */
-	if (geom->dim != 3)
-	    geom->dim = 2;
+        /*set the dim to 2d if it was not initiated with 3, that's a bit ugly :( */
+        if (geom->dim != 3)
+            geom->dim = 2;
 
-	geom->planimetric = 1;
-	geom->rows = region->rows;
-	geom->cols = region->cols;
-	geom->dx = region->ew_res * meters;
-	geom->dy = region->ns_res * meters;
-	geom->Az = geom->dy * geom->dx;	/*square meters in planimetric proj */
-	/*depths and dz are initialized with a 3d region */
+        geom->planimetric = 1;
+        geom->rows = region->rows;
+        geom->cols = region->cols;
+        geom->dx = region->ew_res * meters;
+        geom->dy = region->ns_res * meters;
+        geom->Az = geom->dy * geom->dx; /*square meters in planimetric proj */
+        /*depths and dz are initialized with a 3d region */
 
-	/*Begin the area calculation */
-	ll = G_begin_cell_area_calculations();	/*this function is not thread safe */
+        /*Begin the area calculation */
+        ll = G_begin_cell_area_calculations();  /*this function is not thread safe */
 
-	/*if the projection is not planimetric, calc the area for each row */
-	if (ll == 2) {
-	    G_debug(2,
-		    "N_init_geom_data_2d: calculating the areas for non parametric projection");
-	    geom->planimetric = 0;
+        /*if the projection is not planimetric, calc the area for each row */
+        if (ll == 2) {
+            G_debug(2,
+                "N_init_geom_data_2d: calculating the areas for non parametric projection");
+            geom->planimetric = 0;
 
-	    if (geom->area != NULL)
-		G_free(geom->area);
-	    else
-		geom->area = G_calloc(geom->rows, sizeof(double));
+            if (geom->area != NULL)
+                G_free(geom->area);
+            else
+                geom->area = G_calloc(geom->rows, sizeof(double));
 
-	    /*fill the area vector */
-	    for (i = 0; i < geom->rows; i++) {
-		geom->area[i] = G_area_of_cell_at_row(i);	/*square meters */
-	    }
-	}
+            /*fill the area vector */
+            for (i = 0; i < geom->rows; i++) {
+                geom->area[i] = G_area_of_cell_at_row(i);       /*square meters */
+            }
+        }
 
-	/*restore the old region */
-	Rast_set_window(&backup);	/*this function is not thread safe */
+        /*restore the old region */
+        Rast_set_window(&backup);       /*this function is not thread safe */
     }
 
     return geom;
@@ -192,12 +191,12 @@ N_geom_data *N_init_geom_data_2d(struct Cell_head * region,
 double N_get_geom_data_area_of_cell(N_geom_data * geom, int row)
 {
     if (geom->planimetric) {
-	G_debug(6, "N_get_geom_data_area_of_cell: %g", geom->Az);
-	return geom->Az;
+        G_debug(6, "N_get_geom_data_area_of_cell: %g", geom->Az);
+        return geom->Az;
     }
     else {
-	G_debug(6, "N_get_geom_data_area_of_cell: %g", geom->area[row]);
-	return geom->area[row];
+        G_debug(6, "N_get_geom_data_area_of_cell: %g", geom->area[row]);
+        return geom->area[row];
     }
 
     return 0.0;

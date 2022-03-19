@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:	r.terraflow
@@ -30,28 +31,29 @@
 /* ********************************************************************** */
 /* deletes input stream *str and replaces it by the sorted stream */
 
-template<class T, class FUN>
-void
-sort(AMI_STREAM<T> **str, FUN fo) {
-  Rtimer rt;
-  AMI_STREAM<T> *sortedStr;
+template < class T, class FUN > void sort(AMI_STREAM < T > **str, FUN fo)
+{
+    Rtimer rt;
 
-  if (stats)
-    stats->recordLength("pre-sort", *str);
-  rt_start(rt);
+    AMI_STREAM < T > *sortedStr;
 
-  /* let AMI_sort create its output stream and delete the inout stream */
-  int eraseInputStream = 1;
-  AMI_sort(*str,&sortedStr, &fo, eraseInputStream);
-  rt_stop(rt);
+    if (stats)
+        stats->recordLength("pre-sort", *str);
+    rt_start(rt);
 
-  if (stats) {
-      stats->recordLength("sort", sortedStr);
-      stats->recordTime("sort", rt);
-  }
+    /* let AMI_sort create its output stream and delete the inout stream */
+    int eraseInputStream = 1;
 
-  sortedStr->seek(0);
-  *str = sortedStr;
+    AMI_sort(*str, &sortedStr, &fo, eraseInputStream);
+    rt_stop(rt);
+
+    if (stats) {
+        stats->recordLength("sort", sortedStr);
+        stats->recordTime("sort", rt);
+    }
+
+    sortedStr->seek(0);
+    *str = sortedStr;
 
 }
 
@@ -62,28 +64,28 @@ sort(AMI_STREAM<T> **str, FUN fo) {
 /* ********************************************************************** */
 
 /* warning - creates a new stream and returns it !! */
-template<class T, class FUN>
-AMI_STREAM<T> *
-sort(AMI_STREAM<T> *strIn, FUN fo) {
-  Rtimer rt;
-  AMI_STREAM<T> *strOut;
+template < class T, class FUN >
+    AMI_STREAM < T > *sort(AMI_STREAM < T > *strIn, FUN fo)
+{
+    Rtimer rt;
 
-  if (stats)
-    stats->recordLength("pre-sort", strIn);
-  rt_start(rt);
+    AMI_STREAM < T > *strOut;
 
-  AMI_sort(strIn, &strOut, &fo);
-  assert(strOut);
+    if (stats)
+        stats->recordLength("pre-sort", strIn);
+    rt_start(rt);
 
-  rt_stop(rt);
-  if (stats) {
-      stats->recordLength("sort", strOut);
-      stats->recordTime("sort", rt);
-  }
+    AMI_sort(strIn, &strOut, &fo);
+    assert(strOut);
 
-  strOut->seek(0);
-  return strOut;
+    rt_stop(rt);
+    if (stats) {
+        stats->recordLength("sort", strOut);
+        stats->recordTime("sort", rt);
+    }
+
+    strOut->seek(0);
+    return strOut;
 }
 
 #endif
-

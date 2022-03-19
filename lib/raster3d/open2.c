@@ -39,12 +39,11 @@
 
 
 void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
-		       RASTER3D_Region * region, int type, int compression,
-		       int precision, int tileX, int tileY, int tileZ)
+    RASTER3D_Region * region, int type, int compression,
+    int precision, int tileX, int tileY, int tileZ)
 {
     void *map;
-    int oldCompress, oldPrecision, oldTileX, oldTileY,
-	oldTileZ;
+    int oldCompress, oldPrecision, oldTileX, oldTileY, oldTileZ;
     int oldType;
 
     Rast3d_init_defaults();
@@ -95,7 +94,8 @@ void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
  */
 
 
-void *Rast3d_open_new_opt_tile_size(const char *name, int cache, RASTER3D_Region * region, int type, int maxSize)
+void *Rast3d_open_new_opt_tile_size(const char *name, int cache,
+    RASTER3D_Region * region, int type, int maxSize)
 {
     void *map;
     int oldTileX, oldTileY, oldTileZ, oldType;
@@ -106,7 +106,8 @@ void *Rast3d_open_new_opt_tile_size(const char *name, int cache, RASTER3D_Region
 
     Rast3d_get_tile_dimension(&oldTileX, &oldTileY, &oldTileZ);
 
-    Rast3d_compute_optimal_tile_dimension(region, type, &tileX, &tileY, &tileZ, maxSize);
+    Rast3d_compute_optimal_tile_dimension(region, type, &tileX, &tileY, &tileZ,
+        maxSize);
 
     G_debug(1, "New tile dimension X %i Y %i Z %i\n", tileX, tileY, tileZ);
 
@@ -115,7 +116,8 @@ void *Rast3d_open_new_opt_tile_size(const char *name, int cache, RASTER3D_Region
     oldType = Rast3d_get_file_type();
     Rast3d_set_file_type(type);
 
-    map = Rast3d_open_cell_new(name, RASTER3D_TILE_SAME_AS_FILE, cache, region);
+    map =
+        Rast3d_open_cell_new(name, RASTER3D_TILE_SAME_AS_FILE, cache, region);
 
     Rast3d_set_tile_dimension(oldTileX, oldTileY, oldTileZ);
     Rast3d_set_file_type(oldType);

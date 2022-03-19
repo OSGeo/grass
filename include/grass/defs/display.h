@@ -7,7 +7,8 @@ void D_fit_d_to_u(void);
 void D_fit_u_to_d(void);
 void D_show_conversions(void);
 
-void D_do_conversions(const struct Cell_head *, double, double, double, double);
+void D_do_conversions(const struct Cell_head *, double, double, double,
+    double);
 
 int D_is_lat_lon(void);
 
@@ -48,9 +49,9 @@ void D_get_grid(int *, int *, int *, int *);
 void D_set_dst(double, double, double, double);
 void D_get_dst(double *, double *, double *, double *);
 
-void D_get_u(double [2][2]);
-void D_get_a(int [2][2]);
-void D_get_d(double [2][2]);
+void D_get_u(double[2][2]);
+void D_get_a(int[2][2]);
+void D_get_d(double[2][2]);
 
 double D_d_to_a_row(double);
 double D_d_to_a_col(double);
@@ -109,8 +110,8 @@ int D_draw_f_raster(int, const FCELL *, struct Colors *);
 int D_draw_c_raster(int, const CELL *, struct Colors *);
 void D_raster_draw_begin(void);
 int D_draw_raster_RGB(int, const void *, const void *, const void *,
-		      struct Colors *, struct Colors *, struct Colors *,
-		      RASTER_MAP_TYPE, RASTER_MAP_TYPE, RASTER_MAP_TYPE);
+    struct Colors *, struct Colors *, struct Colors *,
+    RASTER_MAP_TYPE, RASTER_MAP_TYPE, RASTER_MAP_TYPE);
 void D_raster_draw_end(void);
 
 /* raster2.c */
@@ -128,9 +129,9 @@ void D_setup2(int, int, double, double, double, double);
 
 /* symbol.c */
 void D_symbol(const SYMBOL *, double, double, const RGBA_Color *,
-	      const RGBA_Color *);
+    const RGBA_Color *);
 void D_symbol2(const SYMBOL *, double, double, const RGBA_Color *,
-	       const RGBA_Color *);
+    const RGBA_Color *);
 
 /* tran_colr.c */
 int D_translate_color(const char *);
@@ -168,4 +169,4 @@ void D_set_clip_window_to_screen_window(void);
 
 const char *D_get_file(void);
 
-#endif /* GRASS_DISPLAYDEFS_H */
+#endif                          /* GRASS_DISPLAYDEFS_H */

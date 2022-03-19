@@ -11,6 +11,7 @@
 #if GDAL_VERSION_NUM >= 2020000
 typedef GDALDatasetH ds_t;
 typedef GDALDriverH dr_t;
+
 #define get_driver_by_name		GDALGetDriverByName
 #define get_driver			GDALGetDriver
 #define ds_getlayerbyindex(ds, i)	GDALDatasetGetLayer((ds), (i))
@@ -18,6 +19,7 @@ typedef GDALDriverH dr_t;
 #else
 typedef OGRDataSourceH ds_t;
 typedef OGRSFDriverH dr_t;
+
 #define get_driver_by_name		OGRGetDriverByName
 #define get_driver			OGRGetDriver
 #define ds_getlayerbyindex(ds, i)	OGR_DS_GetLayer((ds), (i))
@@ -28,24 +30,24 @@ typedef OGRSFDriverH dr_t;
 #define SQL_BUFFER_SIZE 2000
 
 
-struct Options {
+struct Options
+{
     struct Option *input, *dsn, *layer, *type, *format,
-	*field, *dsco, *lco, *otype;
+        *field, *dsco, *lco, *otype;
 };
 
-struct Flags {
+struct Flags
+{
     struct Flag *cat, *esristyle, *update, *nocat, *new, *append,
-                *force2d, *multi, *list;
+        *force2d, *multi, *list;
 };
 
 /* args.c */
-void parse_args(int, char **,
-		struct Options*, struct Flags *);
+void parse_args(int, char **, struct Options *, struct Flags *);
 
 /* attributes.c */
 int mk_att(int, struct field_info *, dbDriver *,
-	   int, int *, const char **, int, int,
-	   OGRFeatureH, int *);
+    int, int *, const char **, int, int, OGRFeatureH, int *);
 
 /* dsn.c */
 char *get_datasource_name(const char *, int);
@@ -57,20 +59,18 @@ char *default_driver(void);
 
 /* create.c */
 void create_ogr_layer(const char *, const char *, const char *,
-		      unsigned int, char **, char **);
+    unsigned int, char **, char **);
 OGRwkbGeometryType get_multi_wkbtype(OGRwkbGeometryType);
 OGRwkbGeometryType get_wkbtype(int, int);
 
 /* export_lines.c */
 int export_lines(struct Map_info *, int, int, int, int, int,
-                 OGRFeatureDefnH, OGRLayerH,
-                 struct field_info *, dbDriver *, int, int *, 
-                 const char **, int, int,
-                 int *, int *);
+    OGRFeatureDefnH, OGRLayerH,
+    struct field_info *, dbDriver *, int, int *,
+    const char **, int, int, int *, int *);
 
 /* export_areas.c */
-int export_areas(struct Map_info *, int, int, int, 
-                 OGRFeatureDefnH, OGRLayerH,
-                 struct field_info *, dbDriver *, int, int *, 
-                 const char **, int, int,
-                 int *, int *, int);
+int export_areas(struct Map_info *, int, int, int,
+    OGRFeatureDefnH, OGRLayerH,
+    struct field_info *, dbDriver *, int, int *,
+    const char **, int, int, int *, int *, int);

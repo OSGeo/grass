@@ -33,11 +33,10 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     res = mysql_list_tables(connection, NULL);
 
     if (res == NULL) {
-	db_d_append_error("%s\%s",
-			  _("Unable get list of tables:"),
-			  mysql_error(connection));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error("%s\%s",
+            _("Unable get list of tables:"), mysql_error(connection));
+        db_d_report_error();
+        return DB_FAILED;
     }
     mysql_store_result(connection);
 
@@ -46,8 +45,8 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 
     i = 0;
     while ((row = mysql_fetch_row(res)) != NULL) {
-	db_set_string(&list[i], row[0]);
-	i++;
+        db_set_string(&list[i], row[0]);
+        i++;
     }
 
     mysql_free_result(res);

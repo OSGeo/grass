@@ -32,10 +32,12 @@
  * must use the GDAL version, not the OGR version */
 #if GDAL_VERSION_NUM >= 2020000
 typedef GDALDatasetH ds_t;
+
 #define ds_getlayerbyindex(ds, i)	GDALDatasetGetLayer((ds), (i))
 #define ds_close(ds)			GDALClose(ds)
 #else
 typedef OGRDataSourceH ds_t;
+
 #define ds_getlayerbyindex(ds, i)	OGR_DS_GetLayer((ds), (i))
 #define ds_close(ds)			OGR_DS_Destroy(ds)
 #endif
@@ -53,4 +55,4 @@ typedef struct
 } CENTR;
 
 
-#endif /* __GLOBAL_H__ */
+#endif                          /* __GLOBAL_H__ */

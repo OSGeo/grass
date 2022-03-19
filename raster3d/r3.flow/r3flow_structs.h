@@ -12,7 +12,8 @@ struct Seed
     int flowaccum;
 };
 
-enum flowdir {FLOWDIR_UP, FLOWDIR_DOWN, FLOWDIR_BOTH};
+enum flowdir
+{ FLOWDIR_UP, FLOWDIR_DOWN, FLOWDIR_BOTH };
 
 struct Integration
 {
@@ -37,4 +38,4 @@ struct Gradient_info
     int initialized;
 };
 
-#endif // R3FLOW_STRUCTS_H
+#endif                          // R3FLOW_STRUCTS_H

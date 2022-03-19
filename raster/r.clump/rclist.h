@@ -17,4 +17,3 @@ void rclist_init(struct rclist *);
 void rclist_add(struct rclist *, int, int);
 int rclist_drop(struct rclist *, struct rc *);
 void rclist_destroy(struct rclist *);
-

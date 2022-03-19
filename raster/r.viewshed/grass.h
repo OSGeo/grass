@@ -58,8 +58,7 @@ extern "C"
    unchanged. 
  */
 float adjust_for_curvature(Viewpoint vp, double row,
-			   double col, float h,
-			   ViewOptions viewOptions);
+    double col, float h, ViewOptions viewOptions);
 
 
 /* helper function to deal with GRASS writing to a row buffer */
@@ -73,8 +72,8 @@ GridHeader *read_header(char *rastName, Cell_head * region);
 
 /* calculate ENTER and EXIT event elevation */
 surface_type calculate_event_elevation(AEvent e, int nrows, int ncols,
-                                       dimensionType vprow, dimensionType vpcol,
-				       G_SURFACE_T **inrast, RASTER_MAP_TYPE data_type);
+    dimensionType vprow, dimensionType vpcol,
+    G_SURFACE_T ** inrast, RASTER_MAP_TYPE data_type);
 
 
 /*  ************************************************************ */
@@ -87,9 +86,9 @@ surface_type calculate_event_elevation(AEvent e, int nrows, int ncols,
    memory, so the AEvent* should fit in memory.  */
 size_t
 init_event_list_in_memory(AEvent * eventList, char *rastName,
-				Viewpoint * vp, GridHeader * hd,
-				ViewOptions viewOptions, surface_type ***data,
-				MemoryVisibilityGrid * visgrid);
+    Viewpoint * vp, GridHeader * hd,
+    ViewOptions viewOptions, surface_type *** data,
+    MemoryVisibilityGrid * visgrid);
 
 
 
@@ -103,10 +102,9 @@ init_event_list_in_memory(AEvent * eventList, char *rastName,
    the same row as the viewpoint. 
  */
 AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
-					     GridHeader * hd,
-					     ViewOptions viewOptions,
-					     surface_type ***data,
-					     IOVisibilityGrid * visgrid);
+    GridHeader * hd,
+    ViewOptions viewOptions,
+    surface_type *** data, IOVisibilityGrid * visgrid);
 
 
 /* ************************************************************ */
@@ -114,7 +112,7 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
    in row-column order and writes fun(x) to file. */
 void
 save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
-		   OutputMode mode);
+    OutputMode mode);
 
 
 /* ************************************************************ */
@@ -126,7 +124,7 @@ save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
 
 void
 save_vis_elev_to_GRASS(Grid * visgrid, char *elevfname, char *visfname,
-		       float vp_elev);
+    float vp_elev);
 
 
 /* ************************************************************ */
@@ -135,9 +133,8 @@ save_vis_elev_to_GRASS(Grid * visgrid, char *elevfname, char *visfname,
    for each value x it writes to grass fun(x) */
 void
 save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
-				char *outfname, RASTER_MAP_TYPE type,
-				float (*fun) (float),
-				OutputMode mode);
+    char *outfname, RASTER_MAP_TYPE type,
+    float (*fun)(float), OutputMode mode);
 
 
 
@@ -150,6 +147,6 @@ save_io_visibilitygrid_to_GRASS(IOVisibilityGrid * visgrid,
    (i,j) order. */
 void
 save_io_vis_and_elev_to_GRASS(IOVisibilityGrid * visgrid, char *elevfname,
-			      char *visfname, float vp_elev);
+    char *visfname, float vp_elev);
 
 #endif/*_GRASS_H*/

@@ -15,24 +15,24 @@ int eps_bbox(char *eps, double *llx, double *lly, double *urx, double *ury)
 
     /* test if file is really eps and find bbox */
     if ((fp = fopen(eps, "r")) == NULL) {
-	G_warning(_("Can't open eps file <%s>"), eps);
-	return (0);
+        G_warning(_("Can't open eps file <%s>"), eps);
+        return (0);
     }
     /* test if first row contains '%!PS-Adobe-m.n EPSF-m.n' string */
     fgets(buf, 200, fp);
     if (sscanf(buf, "%%!PS-Adobe-%d.%d EPSF-%d.%d", &v1, &v2, &v3, &v4) < 4) {
-	fprintf(stderr, "file <%s> is not in EPS format\n", eps);
-	fclose(fp);
-	return (0);
+        fprintf(stderr, "file <%s> is not in EPS format\n", eps);
+        fclose(fp);
+        return (0);
     }
     /* looking for bbox */
     while (fgets(buf, 200, fp) != NULL) {
-	if (sscanf
-	    (buf, "%%%%BoundingBox: %lf %lf %lf %lf", llx, lly, urx,
-	     ury) == 4) {
-	    fclose(fp);
-	    return (1);
-	}
+        if (sscanf
+            (buf, "%%%%BoundingBox: %lf %lf %lf %lf", llx, lly, urx,
+                ury) == 4) {
+            fclose(fp);
+            return (1);
+        }
     }
     G_warning(_("Bounding box in eps file <%s> was not found"), eps);
     fclose(fp);
@@ -43,8 +43,7 @@ int eps_bbox(char *eps, double *llx, double *lly, double *urx, double *ury)
  * rotate is in degrees
  */
 int eps_trans(double llx, double lly, double urx, double ury,
-	      double x, double y, double scale, double rotate,
-	      double *xt, double *yt)
+    double x, double y, double scale, double rotate, double *xt, double *yt)
 {
     double xc, yc, angle;
 
@@ -65,11 +64,11 @@ int eps_save(FILE * fp, char *epsf, char *name)
     FILE *epsfp;
 
     if ((epsfp = fopen(epsf, "r")) == NULL)
-	return (0);
+        return (0);
 
     fprintf(fp, "\n/%s {\n", name);
     while (fgets(buf, 1024, epsfp) != NULL)
-	fprintf(fp, "%s", buf);
+        fprintf(fp, "%s", buf);
     fprintf(fp, "} def\n");
     fclose(epsfp);
 
@@ -77,8 +76,7 @@ int eps_save(FILE * fp, char *epsf, char *name)
 }
 
 /* draw EPS file saved by eps_save */
-int eps_draw_saved(char *name, double x, double y, double scale,
-		   double rotate)
+int eps_draw_saved(char *name, double x, double y, double scale, double rotate)
 {
     fprintf(PS.fp, "\nBeginEPSF\n");
     fprintf(PS.fp, "%.5f %.5f translate\n", x, y);
@@ -97,13 +95,13 @@ int eps_draw_saved(char *name, double x, double y, double scale,
 
 /* write EPS file into PS file */
 int eps_draw(FILE * fp, char *eps, double x, double y, double scale,
-	     double rotate)
+    double rotate)
 {
     char buf[1024];
     FILE *epsfp;
 
     if ((epsfp = fopen(eps, "r")) == NULL)
-	return (0);
+        return (0);
 
     fprintf(PS.fp, "\nBeginEPSF\n");
     fprintf(PS.fp, "%.5f %.5f translate\n", x, y);
@@ -112,7 +110,7 @@ int eps_draw(FILE * fp, char *eps, double x, double y, double scale,
     fprintf(PS.fp, "%%BeginDocument: %s\n", eps);
 
     while (fgets(buf, 1024, epsfp) != NULL)
-	fprintf(fp, "%s", buf);
+        fprintf(fp, "%s", buf);
 
     fprintf(PS.fp, "%%EndDocument\n");
     fprintf(PS.fp, "EndEPSF\n");
@@ -129,14 +127,14 @@ int pat_save(FILE * fp, char *epsf, char *name)
     FILE *epsfp;
 
     if ((epsfp = fopen(epsf, "r")) == NULL)
-	return (0);
+        return (0);
 
     fprintf(fp, "\n/%s {\n", name);
     while (fgets(buf, 1024, epsfp) != NULL) {
-	if (strncmp(buf, "%!PS-Adobe", 10) == 0 ||
-	    strncmp(buf, "%%BoundingBox", 13) == 0)
-	    continue;
-	fprintf(fp, "%s", buf);
+        if (strncmp(buf, "%!PS-Adobe", 10) == 0 ||
+            strncmp(buf, "%%BoundingBox", 13) == 0)
+            continue;
+        fprintf(fp, "%s", buf);
     }
     fprintf(fp, "} def\n");
     fclose(epsfp);

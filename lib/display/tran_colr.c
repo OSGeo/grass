@@ -43,36 +43,36 @@ static int translate_or_add_color(const char *str)
     G_tolcase(lowerstr);
 
     for (i = 0; i < num_names; i++) {
-	const struct color_name *name = G_standard_color_name(i);
+        const struct color_name *name = G_standard_color_name(i);
 
-	if (G_strcasecmp(str, name->name) == 0)
-	    return name->number;
+        if (G_strcasecmp(str, name->name) == 0)
+            return name->number;
     }
 
     if (!nalloc) {
-	ncolors = G_num_standard_colors();
-	nalloc = 2 * ncolors;
-	colors = G_malloc(nalloc * sizeof(struct color_rgb));
-	for (i = 0; i < ncolors; i++)
-	    colors[i] = G_standard_color_rgb(i);
+        ncolors = G_num_standard_colors();
+        nalloc = 2 * ncolors;
+        colors = G_malloc(nalloc * sizeof(struct color_rgb));
+        for (i = 0; i < ncolors; i++)
+            colors[i] = G_standard_color_rgb(i);
     }
 
     ret = G_str_to_color(str, &red, &grn, &blu);
 
     /* None color */
     if (ret == 2)
-	return 0;
+        return 0;
 
     if (ret != 1)
-	return -1;
+        return -1;
 
     for (i = 1; i < ncolors; i++)
-	if (colors[i].r == red && colors[i].g == grn && colors[i].b == blu)
-	    return i;
+        if (colors[i].r == red && colors[i].g == grn && colors[i].b == blu)
+            return i;
 
     if (ncolors >= nalloc) {
-	nalloc *= 2;
-	colors = G_realloc(colors, nalloc * sizeof(struct color_rgb));
+        nalloc *= 2;
+        colors = G_realloc(colors, nalloc * sizeof(struct color_rgb));
     }
 
     index = ncolors++;
@@ -104,9 +104,9 @@ int D_parse_color(const char *str, int none_acceptable)
 
     color = translate_or_add_color(str);
     if (color == -1)
-	G_fatal_error(_("[%s]: No such color"), str);
+        G_fatal_error(_("[%s]: No such color"), str);
     if (color == 0 && !none_acceptable)
-	G_fatal_error(_("[%s]: No such color"), str);
+        G_fatal_error(_("[%s]: No such color"), str);
     return color;
 }
 
@@ -143,18 +143,18 @@ int D_translate_color(const char *str)
 int D_use_color(int color)
 {
     if (color <= 0)
-	return 0;
+        return 0;
 
     if (color < G_num_standard_colors()) {
-	COM_Standard_color(color);
-	return 1;
+        COM_Standard_color(color);
+        return 1;
     }
 
     if (color < ncolors) {
-	const struct color_rgb *c = &colors[color];
+        const struct color_rgb *c = &colors[color];
 
-	D_RGB_color(c->r, c->g, c->b);
-	return 1;
+        D_RGB_color(c->r, c->g, c->b);
+        return 1;
     }
 
     return 0;
@@ -182,31 +182,31 @@ int D_color_number_to_RGB(int color, int *r, int *g, int *b)
     const struct color_rgb *c;
 
     if (color <= 0)
-	return 0;
+        return 0;
 
     if (color < G_num_standard_colors()) {
-	struct color_rgb col = G_standard_color_rgb(color);
+        struct color_rgb col = G_standard_color_rgb(color);
 
-	if (r)
-	    *r = col.r;
-	if (g)
-	    *g = col.g;
-	if (b)
-	    *b = col.b;
+        if (r)
+            *r = col.r;
+        if (g)
+            *g = col.g;
+        if (b)
+            *b = col.b;
 
-	return 1;
+        return 1;
     }
 
     if (color >= ncolors)
-	return 0;
+        return 0;
 
     c = &colors[color];
     if (r)
-	*r = c->r;
+        *r = c->r;
     if (g)
-	*g = c->g;
+        *g = c->g;
     if (b)
-	*b = c->b;
+        *b = c->b;
 
     return 1;
 }
@@ -215,4 +215,3 @@ void D_RGB_color(int red, int grn, int blu)
 {
     COM_Color_RGB(red, grn, blu);
 }
-

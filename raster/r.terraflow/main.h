@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:	r.terraflow
@@ -19,14 +20,15 @@
 #ifndef _main_h
 #define _main_h
 
-typedef struct {
-  char* elev_grid;     /* name of input elevation grid */
-  char* filled_grid;   /* name of output filled elevation grid */
-  char* dir_grid;      /* name of direction grid */
-  char* stats;         /* stats file */
-  int   d8;            /* 1 if d8 flow model, 0 otherwise */ 
-  int   mem;           /* main memory, in MB */
-  int verbose;         /* 1 if verbose, 0 otherwise */
+typedef struct
+{
+    char *elev_grid;            /* name of input elevation grid */
+    char *filled_grid;          /* name of output filled elevation grid */
+    char *dir_grid;             /* name of direction grid */
+    char *stats;                /* stats file */
+    int d8;                     /* 1 if d8 flow model, 0 otherwise */
+    int mem;                    /* main memory, in MB */
+    int verbose;                /* 1 if verbose, 0 otherwise */
 } user_options;
 
 

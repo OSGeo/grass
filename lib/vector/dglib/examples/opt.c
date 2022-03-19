@@ -34,35 +34,35 @@ static int _ParseLongOption(GnoOption_s * pOpt, char *pszArg)
 
 
     if (pOpt->pszLong == NULL) {
-	return 0;
+        return 0;
     }
 
     pszLong = strdup(pOpt->pszLong);
 
     if ((pszPar = strchr(pszArg, '=')) != NULL) {
-	*pszPar = 0;
+        *pszPar = 0;
     }
     pszMatch = strdup(pszArg);
     if (pszPar)
-	*pszPar++ = '=';
+        *pszPar++ = '=';
 
     if (strcmp(pszLong, pszMatch + 2) == 0) {
 
-	/* * mandatory parameter not found
-	 * */
-	if (pszPar == NULL) {
-	    nret = -1;
-	    goto free_and_exit;
-	}
+        /* * mandatory parameter not found
+         * */
+        if (pszPar == NULL) {
+            nret = -1;
+            goto free_and_exit;
+        }
 
-	if (pOpt->ppszValue) {
-	    if (pOpt->ppszValue[0])
-		free(pOpt->ppszValue[0]);
-	    pOpt->ppszValue[0] = strdup(pszPar);
-	}
+        if (pOpt->ppszValue) {
+            if (pOpt->ppszValue[0])
+                free(pOpt->ppszValue[0]);
+            pOpt->ppszValue[0] = strdup(pszPar);
+        }
 
-	nret = 1;
-	goto free_and_exit;
+        nret = 1;
+        goto free_and_exit;
     }
 
     nret = 0;
@@ -79,14 +79,14 @@ static int _ParseLongSwitch(GnoOption_s * pOpt, char *pszArg)
 {
 
     if (pOpt->pszLong == NULL) {
-	return 0;
+        return 0;
     }
 
     if (strcmp(pOpt->pszLong, pszArg + 2) == 0) {
-	if (pOpt->pfValue)
-	    *pOpt->pfValue = True;
+        if (pOpt->pfValue)
+            *pOpt->pfValue = True;
 
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -99,34 +99,34 @@ static int _ParseShortOption(GnoOption_s * pOpt, char *pszArg, char *pszPar)
     int ich;
 
     if (pOpt->pszShort == NULL)
-	return 0;
+        return 0;
 
     pszShort = strdup(pOpt->pszShort);
 
     for (ich = 1; pszArg[ich]; ich++) {
-	if (pszShort[0] == pszArg[ich]) {
-	    if (pszPar == NULL || pszPar[0] == 0) {
-		free(pszShort);
+        if (pszShort[0] == pszArg[ich]) {
+            if (pszPar == NULL || pszPar[0] == 0) {
+                free(pszShort);
 
-		return -1;
-	    }
+                return -1;
+            }
 
-	    if (pszPar[0] == '-' && pszPar[1] != 0) {
-		free(pszShort);
+            if (pszPar[0] == '-' && pszPar[1] != 0) {
+                free(pszShort);
 
-		return -1;
-	    }
+                return -1;
+            }
 
-	    if (pOpt->ppszValue) {
-		if (pOpt->ppszValue[0])
-		    free(pOpt->ppszValue[0]);
-		pOpt->ppszValue[0] = strdup(pszPar);
-	    }
+            if (pOpt->ppszValue) {
+                if (pOpt->ppszValue[0])
+                    free(pOpt->ppszValue[0]);
+                pOpt->ppszValue[0] = strdup(pszPar);
+            }
 
-	    free(pszShort);
+            free(pszShort);
 
-	    return 2;
-	}
+            return 2;
+        }
     }
 
     free(pszShort);
@@ -139,15 +139,15 @@ static int _ParseShortSwitch(GnoOption_s * pOpt, char *pszArg)
     int ich;
 
     if (pOpt->pszShort == NULL)
-	return 0;
+        return 0;
 
     for (ich = 1; pszArg[ich]; ich++) {
-	if (pOpt->pszShort[0] == pszArg[ich]) {
-	    if (pOpt->pfValue)
-		*pOpt->pfValue = True;
+        if (pOpt->pszShort[0] == pszArg[ich]) {
+            if (pOpt->pfValue)
+                *pOpt->pfValue = True;
 
-	    return 1;
-	}
+            return 1;
+        }
     }
 
     return 0;
@@ -196,113 +196,111 @@ int GnoParse(int argc, char **argv, GnoOption_s * pOpt)
      * * to make life easier when freeing the field
      * */
     for (iOpt = 0; pOpt[iOpt].pszShort || pOpt[iOpt].pszLong; iOpt++) {
-	if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
-	    if (pOpt[iOpt].pfValue) {
-		pOpt[iOpt].pfValue[0] = pOpt[iOpt].fDef;
-	    }
-	}
-	else {
-	    if (pOpt[iOpt].pszDef) {
-		if (pOpt[iOpt].ppszValue) {
-		    pOpt[iOpt].ppszValue[0] = strdup(pOpt[iOpt].pszDef);
-		}
-	    }
-	    else {
-		if (pOpt[iOpt].ppszValue) {
-		    pOpt[iOpt].ppszValue[0] = NULL;
-		}
-	    }
-	}
+        if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
+            if (pOpt[iOpt].pfValue) {
+                pOpt[iOpt].pfValue[0] = pOpt[iOpt].fDef;
+            }
+        }
+        else {
+            if (pOpt[iOpt].pszDef) {
+                if (pOpt[iOpt].ppszValue) {
+                    pOpt[iOpt].ppszValue[0] = strdup(pOpt[iOpt].pszDef);
+                }
+            }
+            else {
+                if (pOpt[iOpt].ppszValue) {
+                    pOpt[iOpt].ppszValue[0] = NULL;
+                }
+            }
+        }
     }
 
     /* * for each arg in argv lookup the matching options
      * */
     for (iArg = 0, pszArgv = NULL;
-	 iArg < argc && (pszArgv = strdup(argv[iArg])) != NULL;
-	 iArg++, free(pszArgv), pszArgv = NULL) {
+        iArg < argc && (pszArgv = strdup(argv[iArg])) != NULL;
+        iArg++, free(pszArgv), pszArgv = NULL) {
 
-	if (pszArgv[0] == '-' && pszArgv[1] == '-' && pszArgv[2]) {	/* long style */
-	    for (iOpt = 0;
-		 (pOpt[iOpt].pszShort || pOpt[iOpt].pszLong) && argv[iArg];
-		 iOpt++) {
-		if (pOpt[iOpt].pszLong) {
-		    if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
-			nret = _ParseLongSwitch(&pOpt[iOpt], pszArgv);
-		    }
-		    else {
-			nret = _ParseLongOption(&pOpt[iOpt], pszArgv);
-		    }
+        if (pszArgv[0] == '-' && pszArgv[1] == '-' && pszArgv[2]) {     /* long style */
+            for (iOpt = 0;
+                (pOpt[iOpt].pszShort || pOpt[iOpt].pszLong) && argv[iArg];
+                iOpt++) {
+                if (pOpt[iOpt].pszLong) {
+                    if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
+                        nret = _ParseLongSwitch(&pOpt[iOpt], pszArgv);
+                    }
+                    else {
+                        nret = _ParseLongOption(&pOpt[iOpt], pszArgv);
+                    }
 
-		    if (nret < 0) {
-			fprintf(stderr,
-				"parse option: syntax error at <%s>\n",
-				pszArgv);
-			fParseError = True;
-		    }
+                    if (nret < 0) {
+                        fprintf(stderr,
+                            "parse option: syntax error at <%s>\n", pszArgv);
+                        fParseError = True;
+                    }
 
-		    if (nret == 1) {
-			argv[iArg] = NULL;
-		    }
-		}
-	    }
+                    if (nret == 1) {
+                        argv[iArg] = NULL;
+                    }
+                }
+            }
 
-	    if (argv[iArg]) {
-		fprintf(stderr, "parse option: <%s> is out of scope\n",
-			pszArgv);
-		fParseError = True;
-	    }
-	}
-	else if (argv[iArg][0] == '-' && argv[iArg][1]) {	/* short style */
-	    if (iArg + 1 < argc) {
-		pszArgvNxt = strdup(argv[iArg + 1]);
-	    }
-	    else {
-		pszArgvNxt = NULL;
-	    }
+            if (argv[iArg]) {
+                fprintf(stderr, "parse option: <%s> is out of scope\n",
+                    pszArgv);
+                fParseError = True;
+            }
+        }
+        else if (argv[iArg][0] == '-' && argv[iArg][1]) {       /* short style */
+            if (iArg + 1 < argc) {
+                pszArgvNxt = strdup(argv[iArg + 1]);
+            }
+            else {
+                pszArgvNxt = NULL;
+            }
 
-	    for (cret = iOpt = 0;
-		 pOpt[iOpt].pszShort || pOpt[iOpt].pszLong; iOpt++) {
-		if (pOpt[iOpt].pszShort) {
-		    if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
-			nret = _ParseShortSwitch(&pOpt[iOpt], pszArgv);
-		    }
-		    else {
-			nret =
-			    _ParseShortOption(&pOpt[iOpt], pszArgv,
-					      pszArgvNxt);
-		    }
-		    if (nret < 0) {
-			fprintf(stderr,
-				"parse option: syntax error at <%s>\n",
-				pszArgv);
-			fParseError = True;
-		    }
-		    else {
-			cret = (nret > cret) ? nret : cret;
-		    }
-		}
-	    }
+            for (cret = iOpt = 0;
+                pOpt[iOpt].pszShort || pOpt[iOpt].pszLong; iOpt++) {
+                if (pOpt[iOpt].pszShort) {
+                    if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
+                        nret = _ParseShortSwitch(&pOpt[iOpt], pszArgv);
+                    }
+                    else {
+                        nret =
+                            _ParseShortOption(&pOpt[iOpt], pszArgv,
+                            pszArgvNxt);
+                    }
+                    if (nret < 0) {
+                        fprintf(stderr,
+                            "parse option: syntax error at <%s>\n", pszArgv);
+                        fParseError = True;
+                    }
+                    else {
+                        cret = (nret > cret) ? nret : cret;
+                    }
+                }
+            }
 
-	    if (pszArgvNxt) {
-		free(pszArgvNxt);
-	    }
+            if (pszArgvNxt) {
+                free(pszArgvNxt);
+            }
 
-	    if (cret == 1) {
-		argv[iArg] = NULL;
-	    }
-	    else if (cret == 2) {
-		argv[iArg++] = NULL;
-		argv[iArg] = NULL;
-	    }
+            if (cret == 1) {
+                argv[iArg] = NULL;
+            }
+            else if (cret == 2) {
+                argv[iArg++] = NULL;
+                argv[iArg] = NULL;
+            }
 
-	}
-	else {
-	    cOrphan++;
-	}
+        }
+        else {
+            cOrphan++;
+        }
     }
 
     if (pszArgv)
-	free(pszArgv);
+        free(pszArgv);
 
     return (fParseError == True) ? -1 : cOrphan;
 }
@@ -322,12 +320,12 @@ void GnoFree(GnoOption_s * pOpt)
     int iOpt;
 
     for (iOpt = 0; pOpt[iOpt].pszShort || pOpt[iOpt].pszLong; iOpt++) {
-	if (pOpt[iOpt].ppszValue) {
-	    if (pOpt[iOpt].ppszValue[0]) {
-		free(pOpt[iOpt].ppszValue[0]);
-		pOpt[iOpt].ppszValue[0] = NULL;
-	    }
-	}
+        if (pOpt[iOpt].ppszValue) {
+            if (pOpt[iOpt].ppszValue[0]) {
+                free(pOpt[iOpt].ppszValue[0]);
+                pOpt[iOpt].ppszValue[0] = NULL;
+            }
+        }
     }
 
 }
@@ -351,34 +349,34 @@ void GnoHelp(char *pszHead, GnoOption_s * pOpt)
 
     for (iOpt = 0; pOpt[iOpt].pszShort || pOpt[iOpt].pszLong; iOpt++) {
 
-	if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
-	    if (pOpt[iOpt].pszShort) {
-		fprintf(stderr, "-%s ", pOpt[iOpt].pszShort);
-	    }
+        if (pOpt[iOpt].nFlg & GNO_FLG_SWITCH) {
+            if (pOpt[iOpt].pszShort) {
+                fprintf(stderr, "-%s ", pOpt[iOpt].pszShort);
+            }
 
-	    if (pOpt[iOpt].pszLong) {
-		fprintf(stderr, "--%s", pOpt[iOpt].pszLong);
-	    }
+            if (pOpt[iOpt].pszLong) {
+                fprintf(stderr, "--%s", pOpt[iOpt].pszLong);
+            }
 
-	    fprintf(stderr, "\n\t%s\n", (pOpt[iOpt].pszDescr)
-		    ? pOpt[iOpt].pszDescr : "No description available.");
-	}
-	else {
-	    if (pOpt[iOpt].pszShort) {
-		fprintf(stderr, "-%s ", pOpt[iOpt].pszShort);
+            fprintf(stderr, "\n\t%s\n", (pOpt[iOpt].pszDescr)
+                ? pOpt[iOpt].pszDescr : "No description available.");
+        }
+        else {
+            if (pOpt[iOpt].pszShort) {
+                fprintf(stderr, "-%s ", pOpt[iOpt].pszShort);
 
-		fprintf(stderr, "<value> ");
-	    }
+                fprintf(stderr, "<value> ");
+            }
 
-	    if (pOpt[iOpt].pszLong) {
-		fprintf(stderr, "--%s", pOpt[iOpt].pszLong);
+            if (pOpt[iOpt].pszLong) {
+                fprintf(stderr, "--%s", pOpt[iOpt].pszLong);
 
-		fprintf(stderr, "=<value>");
-	    }
+                fprintf(stderr, "=<value>");
+            }
 
-	    fprintf(stderr, "\n\t%s\n", (pOpt[iOpt].pszDescr)
-		    ? pOpt[iOpt].pszDescr : "No description available.");
-	}
+            fprintf(stderr, "\n\t%s\n", (pOpt[iOpt].pszDescr)
+                ? pOpt[iOpt].pszDescr : "No description available.");
+        }
     }
 
 }

@@ -56,7 +56,7 @@ int open_map(MAPS * rast)
     if (window.ew_res + 1e-10 < cellhd.ew_res ||
         window.ns_res + 1e-10 < cellhd.ns_res)
         G_warning(_("Region resolution shoudn't be lesser than map %s resolution. Run g.region raster=%s to set proper resolution"),
-                  rast->elevname, rast->elevname);
+            rast->elevname, rast->elevname);
 
     tmp_buf = Rast_allocate_buf(rast->raster_type);
     rast->elev = (FCELL **) G_malloc((row_buffer_size + 1) * sizeof(FCELL *));
@@ -73,7 +73,7 @@ int open_map(MAPS * rast)
 }
 
 static int get_cell(int col, float *buf_row, void *buf,
-                    RASTER_MAP_TYPE raster_type)
+    RASTER_MAP_TYPE raster_type)
 {
 
     switch (raster_type) {
@@ -118,11 +118,11 @@ int shift_buffers(int row)
 
     elevation.elev[row_buffer_size] = tmp_elev_buf;
     Rast_get_row(elevation.fd, tmp_buf, row + row_radius_size + 1,
-                 elevation.raster_type);
+        elevation.raster_type);
 
     for (col = 0; col < ncols; ++col)
         get_cell(col, elevation.elev[row_buffer_size], tmp_buf,
-                 elevation.raster_type);
+            elevation.raster_type);
 
     G_free(tmp_buf);
     return 0;
@@ -148,8 +148,7 @@ int write_form_cat_colors(char *raster)
 
     for (i = FL; i <= PT; ++i)
         Rast_add_color_rule(&i, ccolors[i].r, ccolors[i].g, ccolors[i].b,
-                            &i, ccolors[i].r, ccolors[i].g, ccolors[i].b,
-                            &colors, CELL_TYPE);
+            &i, ccolors[i].r, ccolors[i].g, ccolors[i].b, &colors, CELL_TYPE);
     Rast_write_colors(raster, G_mapset(), &colors);
     Rast_free_colors(&colors);
     Rast_init_cats("Forms", &cats);
@@ -183,9 +182,8 @@ int write_contrast_colors(char *raster)
 
     for (i = 0; i < 8; ++i)
         Rast_add_d_color_rule(&fcolors[i].cat, fcolors[i].r, fcolors[i].g,
-                              fcolors[i].b, &fcolors[i + 1].cat,
-                              fcolors[i + 1].r, fcolors[i + 1].g,
-                              fcolors[i + 1].b, &colors);
+            fcolors[i].b, &fcolors[i + 1].cat,
+            fcolors[i + 1].r, fcolors[i + 1].g, fcolors[i + 1].b, &colors);
     Rast_write_colors(raster, G_mapset(), &colors);
     Rast_free_colors(&colors);
     /*

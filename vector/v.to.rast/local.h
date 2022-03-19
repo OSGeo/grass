@@ -24,15 +24,15 @@
 
 /* do_areas.c */
 int do_areas(struct Map_info *, struct line_pnts *, dbCatValArray *, int,
-	     int, double, int);
+    int, double, int);
 int sort_areas(struct Map_info *, struct line_pnts *, int, struct cat_list *);
 
 /* do_lines.c */
 int do_lines(struct Map_info *, struct line_pnts *, dbCatValArray *, int, int,
-	     struct cat_list *, int, double, int, int, int *, int);
+    struct cat_list *, int, double, int, int, int *, int);
 
 void plot_line_dense(double, double, double, double);
-void setup_plot(double, double, double, double, int (*dot) (int, int));
+void setup_plot(double, double, double, double, int (*dot)(int, int));
 
 
 /* raster.c */
@@ -43,12 +43,14 @@ int set_dcat(DCELL);
 
 /* support.c */
 int update_hist(const char *, const char *, long);
-int update_dbcolors(const char *, const char *, int, const char *, int, const char *);
-int update_labels(const char *, const char *, int, const char *, int, int, const char *);
+int update_dbcolors(const char *, const char *, int, const char *, int,
+    const char *);
+int update_labels(const char *, const char *, int, const char *, int, int,
+    const char *);
 int update_cats(const char *);
 
 /* vect2rast.c */
-int vect_to_rast(const char *, const char *, const char *, const char *, int, int,
-		 double, int, const char *, const char *, int, char *, char *, int);
+int vect_to_rast(const char *, const char *, const char *, const char *, int,
+    int, double, int, const char *, const char *, int, char *, char *, int);
 
 #endif

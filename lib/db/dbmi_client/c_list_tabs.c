@@ -36,7 +36,8 @@ static int cmp_dbstr(const void *pa, const void *pb)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_list_tables(dbDriver * driver, dbString ** names, int *count, int system)
+int db_list_tables(dbDriver * driver, dbString ** names, int *count,
+    int system)
 {
     int ret_code;
 
@@ -51,7 +52,7 @@ int db_list_tables(dbDriver * driver, dbString ** names, int *count, int system)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code;        /* ret_code SHOULD == DB_FAILED */
 
     /* results */
     DB_RECV_STRING_ARRAY(names, count);

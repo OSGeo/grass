@@ -1,3 +1,4 @@
+
 /****************************************************************************
  * 
  *  MODULE:	r.terraflow
@@ -40,86 +41,119 @@ int is_nodata(float x);
 int is_void(elevation_type el);
 
 
-class nodataType : public ijBaseType {
-public: /* struct, so members public */
-  cclabel_type label;
-  bool valid;
-  static elevation_type ELEVATION_BOUNDARY; /* means this cell is on	
-					     * the grid boundary, 
-					     * directly, or via
-					     * connect nodata cells */
+class nodataType:public ijBaseType
+{
+  public:                      /* struct, so members public */
+    cclabel_type label;
+    bool valid;
+    static elevation_type ELEVATION_BOUNDARY;   /* means this cell is on    
+                                                 * the grid boundary, 
+                                                 * directly, or via
+                                                 * connect nodata cells */
 
-  static elevation_type ELEVATION_NODATA; /* means we have no data for	
-					   * this cell */
-public:
-  nodataType(dimension_type gi, dimension_type gj, cclabel_type glab) :
-	ijBaseType(gi,gj), label(glab), valid(true) {};
-  nodataType() : valid(false) {};
-  void invalidate() { valid = false; }
-  elevation_type getElevation() {
-	return (label == LABEL_BOUNDARY ? ELEVATION_BOUNDARY : ELEVATION_NODATA);
-  }
+    static elevation_type ELEVATION_NODATA;     /* means we have no data for  
+                                                 * this cell */
+  public:
+         
+         
+         
+         
+         
+         nodataType(dimension_type gi, dimension_type gj, cclabel_type glab):
+        ijBaseType(gi, gj), label(glab), valid(true)
+    {
+    };
 
-  static char *printLabel(const nodataType &p) {
-	static char buf[8];
-	sprintf(buf, CCLABEL_FMT, p.label);
-	return buf;
-  }
+  nodataType():valid(false) {
+    };
+    void invalidate()
+    {
+        valid = false;
+    }
+    elevation_type getElevation()
+    {
+        return (label ==
+            LABEL_BOUNDARY ? ELEVATION_BOUNDARY : ELEVATION_NODATA);
+    }
 
-  static void init(elevation_type nodata) {
-	/*  somewhat of a hack... */
-	ELEVATION_NODATA = nodata;
-	ELEVATION_BOUNDARY = nodata+1;
-	/* ELEVATION_BOUNDARY = ELEVATION_MIN; */
-	/* assert(ELEVATION_NODATA != ELEVATION_MIN); */
-  }
-  
-  /* LAURA: i added this polymorph because Terraflow has now a FIXED
-     internal value for nodata; it does not read GRASS nodata value */
-  static void init() {
-	/* somewhat of a hack... */
-	ELEVATION_NODATA = TERRAFLOW_INTERNAL_NODATA_VALUE;
-	ELEVATION_BOUNDARY = TERRAFLOW_INTERNAL_NODATA_VALUE + 1;
-	/* ELEVATION_BOUNDARY = ELEVATION_MIN; */
-	/* assert(ELEVATION_NODATA != ELEVATION_MIN); */
-  }
-  
-  friend ostream& operator << (ostream& s, const nodataType &p) {
-	if(p.valid) {
-	  return s << "[" << p.i << "," << p.j 
-			   << "; lbl=" << p.label << "]";
-	} else {
-	  return s << "[invalid]";
-	}
-  }
-  
+    static char *printLabel(const nodataType & p)
+    {
+        static char buf[8];
+
+        sprintf(buf, CCLABEL_FMT, p.label);
+        return buf;
+    }
+
+    static void init(elevation_type nodata)
+    {
+        /*  somewhat of a hack... */
+        ELEVATION_NODATA = nodata;
+        ELEVATION_BOUNDARY = nodata + 1;
+        /* ELEVATION_BOUNDARY = ELEVATION_MIN; */
+        /* assert(ELEVATION_NODATA != ELEVATION_MIN); */
+    }
+
+    /* LAURA: i added this polymorph because Terraflow has now a FIXED
+       internal value for nodata; it does not read GRASS nodata value */
+    static void init()
+    {
+        /* somewhat of a hack... */
+        ELEVATION_NODATA = TERRAFLOW_INTERNAL_NODATA_VALUE;
+        ELEVATION_BOUNDARY = TERRAFLOW_INTERNAL_NODATA_VALUE + 1;
+        /* ELEVATION_BOUNDARY = ELEVATION_MIN; */
+        /* assert(ELEVATION_NODATA != ELEVATION_MIN); */
+    }
+
+    friend ostream & operator <<(ostream & s, const nodataType & p)
+    {
+        if (p.valid) {
+            return s << "[" << p.i << "," << p.j << "; lbl=" << p.label << "]";
+        }
+        else {
+            return s << "[invalid]";
+        }
+    }
+
 };
 
-class nodataType2elevation_type {
-public:
-  elevation_type operator()(nodataType n) { return n.getElevation(); }
-  elevation_type operator()(elevation_type n) { return n; }
+class nodataType2elevation_type
+{
+  public:
+    elevation_type operator() (nodataType n)
+    {
+        return n.getElevation();
+    }
+    elevation_type operator() (elevation_type n)
+    {
+        return n;
+    }
 };
 
-class labelCmpNodataType {
-public:
-  static int compare(const nodataType &a, const nodataType &b) {
-	if(a.label < b.label) return -1;
-	if(a.label > b.label) return 1;
-	return 0;
-  }
+class labelCmpNodataType
+{
+  public:
+    static int compare(const nodataType & a, const nodataType & b)
+    {
+        if (a.label < b.label)
+            return -1;
+        if (a.label > b.label)
+            return 1;
+        return 0;
+    }
 };
 
-class ijCmpNodataType {
-public:
-  static int compare(const nodataType &a, const nodataType &b) {
-	return ijBaseType::compare(a, b);
-  }
+class ijCmpNodataType
+{
+  public:
+    static int compare(const nodataType & a, const nodataType & b)
+    {
+        return ijBaseType::compare(a, b);
+    }
 };
 
 
-AMI_STREAM<elevation_type> *
-classifyNodata(AMI_STREAM<elevation_type> *elstr);
-			   
+AMI_STREAM < elevation_type > *classifyNodata(AMI_STREAM < elevation_type >
+    *elstr);
+
 
 #endif

@@ -14,7 +14,7 @@
  */
 
 void read_sites(const char *name, const char *field_name, const char *col,
-                int noindex)
+    int noindex)
 {
     extern long npoints;
     int nrec, ctype = 0, type, field, with_z;
@@ -36,10 +36,10 @@ void read_sites(const char *name, const char *field_name, const char *col,
     if (!col) {
         if (!with_z)
             G_important_message(_("Input vector map <%s> is 2D - using categories to interpolate"),
-                                Vect_get_full_name(&Map));
+                Vect_get_full_name(&Map));
         else
             G_important_message(_("Input vector map <%s> is 3D - using z-coordinates to interpolate"),
-                                Vect_get_full_name(&Map));
+                Vect_get_full_name(&Map));
 
     }
 
@@ -49,16 +49,16 @@ void read_sites(const char *name, const char *field_name, const char *col,
         Fi = Vect_get_field(&Map, field);
         if (Fi == NULL)
             G_fatal_error(_("Database connection not defined for layer %s"),
-                          field_name);
+                field_name);
 
         Driver = db_start_driver_open_database(Fi->driver, Fi->database);
         if (Driver == NULL)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                          Fi->database, Fi->driver);
+                Fi->database, Fi->driver);
 
         nrec =
             db_select_CatValArray(Driver, Fi->table, Fi->key, col, NULL,
-                                  &cvarr);
+            &cvarr);
         G_debug(3, "nrec = %d", nrec);
 
         ctype = cvarr.ctype;
@@ -69,8 +69,8 @@ void read_sites(const char *name, const char *field_name, const char *col,
             G_fatal_error(_("Unable to select data from table"));
 
         G_verbose_message(n_
-                          ("One record selected from table",
-                           "%d records selected from table", nrec), nrec);
+            ("One record selected from table",
+                "%d records selected from table", nrec), nrec);
 
         db_close_database_shutdown_driver(Driver);
     }

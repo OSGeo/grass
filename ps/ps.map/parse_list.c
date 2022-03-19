@@ -30,32 +30,32 @@ int parse_val_list(char *buf, DCELL ** list)
     count = 0;
     lp = (DCELL *) G_malloc(sizeof(DCELL));
     while (*buf) {
-	while (*buf == ' ' || *buf == '\t' || *buf == '\n' || *buf == ',')
-	    buf++;
-	if (sscanf(buf, "%lf-%lf", &a, &b) == 2) {
-	    if (a > b) {
-		DCELL t;
+        while (*buf == ' ' || *buf == '\t' || *buf == '\n' || *buf == ',')
+            buf++;
+        if (sscanf(buf, "%lf-%lf", &a, &b) == 2) {
+            if (a > b) {
+                DCELL t;
 
-		t = a;
-		a = b;
-		b = t;
-	    }
+                t = a;
+                a = b;
+                b = t;
+            }
 
-	    lp = (DCELL *) G_realloc(lp, (count + 2) * sizeof(DCELL));
-	    lp[count++] = a;
-	    lp[count++] = b;
-	}
-	else if (sscanf(buf, "%lf", &a) == 1) {
-	    lp = (DCELL *) G_realloc(lp, (count + 2) * sizeof(DCELL));
-	    lp[count++] = a;
-	    lp[count++] = a;
-	}
-	else {
-	    G_free(lp);
-	    return -1;
-	}
-	while (*buf && (*buf != ','))
-	    buf++;
+            lp = (DCELL *) G_realloc(lp, (count + 2) * sizeof(DCELL));
+            lp[count++] = a;
+            lp[count++] = b;
+        }
+        else if (sscanf(buf, "%lf", &a) == 1) {
+            lp = (DCELL *) G_realloc(lp, (count + 2) * sizeof(DCELL));
+            lp[count++] = a;
+            lp[count++] = a;
+        }
+        else {
+            G_free(lp);
+            return -1;
+        }
+        while (*buf && (*buf != ','))
+            buf++;
     }
     *list = lp;
     return count;

@@ -19,7 +19,7 @@
 #include <grass/gis.h>
 
 int return_filter_is_out(struct ReturnFilter *return_filter, int return_n,
-                         int n_returns)
+    int n_returns)
 {
     if (return_filter->filter == LAS_ALL)
         return FALSE;
@@ -45,7 +45,7 @@ int return_filter_is_out(struct ReturnFilter *return_filter, int return_n,
 }
 
 void class_filter_create_from_strings(struct ClassFilter *class_filter,
-                                      char **classes)
+    char **classes)
 {
     class_filter->str_classes = classes;
 }

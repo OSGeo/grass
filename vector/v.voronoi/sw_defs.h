@@ -125,9 +125,8 @@ int voronoi(struct Site *(*)(void));
 
 /* vo_extend.c */
 int extend_line(double, double, double, double, double, double, double,
-		double, double, double *, double *, int);
+    double, double, double *, double *, int);
 
 /* vo_write.c */
 int vo_write(void);
 int write_ep(struct Edge *);
-

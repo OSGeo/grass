@@ -54,12 +54,12 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *map, *ref, *output, *titles;
+        struct Option *map, *ref, *output, *titles;
     } parms;
 
     struct
     {
-	struct Flag *m, *w, *h;
+        struct Flag *m, *w, *h;
     } flags;
 
     G_gisinit(argv[0]);
@@ -69,23 +69,23 @@ int main(int argc, char **argv)
     G_add_keyword(_("statistics"));
     G_add_keyword(_("classification"));
     module->description =
-	_("Calculates error matrix and kappa "
-	  "parameter for accuracy assessment of classification result.");
+        _("Calculates error matrix and kappa "
+        "parameter for accuracy assessment of classification result.");
 
     parms.map = G_define_standard_option(G_OPT_R_INPUT);
     parms.map->key = "classification";
     parms.map->description =
-	_("Name of raster map containing classification result");
+        _("Name of raster map containing classification result");
 
     parms.ref = G_define_standard_option(G_OPT_R_INPUT);
     parms.ref->key = "reference";
     parms.ref->description =
-	_("Name of raster map containing reference classes");
+        _("Name of raster map containing reference classes");
 
     parms.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parms.output->required = NO;
     parms.output->label =
-	_("Name for output file containing error matrix and kappa");
+        _("Name for output file containing error matrix and kappa");
     parms.output->description = _("If not given write to standard output");
     parms.output->guisection = _("Output settings");
 
@@ -114,14 +114,14 @@ int main(int argc, char **argv)
     flags.m->guisection = _("Output settings");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     G_get_window(&window);
 
     maps[0] = parms.ref->answer;
     maps[1] = parms.map->answer;
     for (i = 0; i < 2; i++)
-	layer(maps[i]);
+        layer(maps[i]);
 
     output = parms.output->answer;
 
@@ -130,13 +130,11 @@ int main(int argc, char **argv)
     /* run r.stats to obtain statistics of map layers */
     stats();
 
-    if(flags.m->answer)
-    {
+    if (flags.m->answer) {
         /* prepare the data for calculation */
         prn2csv_error_mat(2048, flags.h->answer);
-    } 
-    else 
-    {
+    }
+    else {
         /* print header of the output */
         if (!flags.h->answer)
             prn_header();
@@ -159,7 +157,7 @@ static void layer(const char *s)
 
     strcpy(name, s);
     if ((mapset = G_find_raster2(name, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), s);
+        G_fatal_error(_("Raster map <%s> not found"), s);
 
     n = nlayers++;
     layers = (LAYER *) G_realloc(layers, 2 * sizeof(LAYER));

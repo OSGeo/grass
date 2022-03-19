@@ -16,7 +16,7 @@ FILE *I_fopen_cam_file_new(char *camera)
 
     fd = G_fopen_new("camera", camera);
     if (!fd)
-	error(camera, "can't create ", "");
+        error(camera, "can't create ", "");
     return fd;
 }
 
@@ -26,7 +26,7 @@ FILE *I_fopen_cam_file_append(char *camera)
 
     fd = G_fopen_append("camera", camera);
     if (!fd)
-	error(camera, "unable to open ", "");
+        error(camera, "unable to open ", "");
     return fd;
 }
 
@@ -36,7 +36,7 @@ FILE *I_fopen_cam_file_old(char *camera)
 
     fd = G_fopen_old("camera", camera, G_mapset());
     if (!fd)
-	error(camera, "can't open ", "");
+        error(camera, "can't open ", "");
     return fd;
 }
 
@@ -45,7 +45,7 @@ static int error(char *camera, char *msga, char *msgb)
     char buf[100];
 
     sprintf(buf, "%s camera file [%s] in [%s %s] %s",
-	    msga, camera, G_location(), G_mapset(), msgb);
+        msga, camera, G_location(), G_mapset(), msgb);
     G_warning("%s", buf);
 
     return 0;

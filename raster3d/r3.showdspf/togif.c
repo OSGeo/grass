@@ -18,11 +18,11 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include "togif.h"
-#define GIFGAMMA	(1.5)	/* smaller makes output image darker */
+#define GIFGAMMA	(1.5)   /* smaller makes output image darker */
 #define MAXCOLORS 256
 #define CBITS    12
 
-typedef int (*ifunptr) (int x, int y, vgl_GIFWriter * dataPtr);
+typedef int (*ifunptr)(int x, int y, vgl_GIFWriter * dataPtr);
 
 
 /***************************************************************************
@@ -31,11 +31,11 @@ typedef int (*ifunptr) (int x, int y, vgl_GIFWriter * dataPtr);
  */
 static int getgifpix2(int x, int y, vgl_GIFWriter * dataPtr);
 static void getrow2(unsigned long *buffer, short *row, unsigned short width,
-		    unsigned short rownum, unsigned short comp);
+    unsigned short rownum, unsigned short comp);
 static void gammawarp(short *sbuf, float gam, int n, vgl_GIFWriter * dataPtr);
 static short **makedittab(int levels, int mult, int add);
 static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
-		     short *wp, int n, int y, vgl_GIFWriter * dataPtr);
+    short *wp, int n, int y, vgl_GIFWriter * dataPtr);
 
 /******************************************************************************
  * GIF black box routines
@@ -44,8 +44,8 @@ static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
 static void BumpPixel(vgl_GIFWriter * dataPtr);
 static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter * dataPtr);
 static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
-		     int Background, int BitsPerPixel, int Red[], int Green[],
-		     int Blue[], ifunptr GetPixel, vgl_GIFWriter * dataPtr);
+    int Background, int BitsPerPixel, int Red[], int Green[],
+    int Blue[], ifunptr GetPixel, vgl_GIFWriter * dataPtr);
 static void Putword(int w, FILE * fp);
 
 /******************************************************************************
@@ -53,7 +53,7 @@ static void Putword(int w, FILE * fp);
  ******************************************************************************
  */
 static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
-		     vgl_GIFWriter * dataPtr);
+    vgl_GIFWriter * dataPtr);
 static void output(code_int code, vgl_GIFWriter * dataPtr);
 static void cl_block(vgl_GIFWriter * dataPtr);
 static void cl_hash(register count_int hsize, vgl_GIFWriter * dataPtr);
@@ -79,8 +79,7 @@ void vgl_GIFWriterEnd(vgl_GIFWriter * gifwriter)
 
 /********************** vgl_GIFWriterWriteGIFFile() ****************************/
 void vgl_GIFWriterWriteGIFFile(vgl_GIFWriter * gifwriter,
-			       unsigned long *buffer, int xsize, int ysize,
-			       int bwflag, FILE * outf)
+    unsigned long *buffer, int xsize, int ysize, int bwflag, FILE * outf)
 {
     short r, g, b;
     int i;
@@ -91,8 +90,8 @@ void vgl_GIFWriterWriteGIFFile(vgl_GIFWriter * gifwriter,
     int bmap[MAXCOLORS];
 
     memset(gifwriter, '\0', sizeof(vgl_GIFWriter));
-    gifwriter->maxbits = CBITS;	/* user settable max # bits/code */
-    gifwriter->maxmaxcode = (code_int) 1 << CBITS;	/* should NEVER generate this code */
+    gifwriter->maxbits = CBITS; /* user settable max # bits/code */
+    gifwriter->maxmaxcode = (code_int) 1 << CBITS;      /* should NEVER generate this code */
     gifwriter->hsize = HSIZE;
     gifwriter->in_count = 1;
 
@@ -101,31 +100,31 @@ void vgl_GIFWriterWriteGIFFile(vgl_GIFWriter * gifwriter,
     gifwriter->iscolor = !bwflag;
     gifwriter->buffer = buffer;
     if (gifwriter->iscolor) {
-	gifcolors = 256;
-	bpp = 8;
-	for (i = 0; i < gifcolors; i++) {
-	    r = (i >> 0) & 0x7;
-	    g = (i >> 3) & 0x7;
-	    b = (i >> 6) & 0x3;
-	    rmap[i] = (255 * r) / 7;
-	    gmap[i] = (255 * g) / 7;
-	    bmap[i] = (255 * b) / 3;
-	}
+        gifcolors = 256;
+        bpp = 8;
+        for (i = 0; i < gifcolors; i++) {
+            r = (i >> 0) & 0x7;
+            g = (i >> 3) & 0x7;
+            b = (i >> 6) & 0x3;
+            rmap[i] = (255 * r) / 7;
+            gmap[i] = (255 * g) / 7;
+            bmap[i] = (255 * b) / 3;
+        }
     }
     else {
-	gifcolors = 16;
-	bpp = 4;
-	for (i = 0; i < gifcolors; i++) {
-	    rmap[i] = (255 * i) / (gifcolors - 1);
-	    gmap[i] = (255 * i) / (gifcolors - 1);
-	    bmap[i] = (255 * i) / (gifcolors - 1);
-	}
+        gifcolors = 16;
+        bpp = 4;
+        for (i = 0; i < gifcolors; i++) {
+            rmap[i] = (255 * i) / (gifcolors - 1);
+            gmap[i] = (255 * i) / (gifcolors - 1);
+            bmap[i] = (255 * i) / (gifcolors - 1);
+        }
     }
 
 
     gifwriter->currow = -1;
     GIFEncode(outf, xsize, ysize, 1, 0, bpp, rmap, gmap, bmap, getgifpix2,
-	      gifwriter);
+        gifwriter);
 
 }
 
@@ -135,66 +134,66 @@ static int getgifpix2(int x, int y, vgl_GIFWriter * dataPtr)
     int pix;
 
     if (dataPtr->iscolor) {
-	if (dataPtr->currow != y) {
-	    getrow2(dataPtr->buffer, dataPtr->rbuf, dataPtr->xsize,
-		    dataPtr->ysize - 1 - y, 0);
-	    gammawarp(dataPtr->rbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
-	    getrow2(dataPtr->buffer, dataPtr->gbuf, dataPtr->xsize,
-		    dataPtr->ysize - 1 - y, 1);
-	    gammawarp(dataPtr->gbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
-	    getrow2(dataPtr->buffer, dataPtr->bbuf, dataPtr->xsize,
-		    dataPtr->ysize - 1 - y, 2);
-	    gammawarp(dataPtr->bbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
-	    ditherrow((unsigned short *)(dataPtr->rbuf),
-		      (unsigned short *)(dataPtr->gbuf),
-		      (unsigned short *)(dataPtr->bbuf), dataPtr->obuf,
-		      dataPtr->xsize, y, dataPtr);
-	    dataPtr->currow = y;
-	}
-	pix = dataPtr->obuf[x];
+        if (dataPtr->currow != y) {
+            getrow2(dataPtr->buffer, dataPtr->rbuf, dataPtr->xsize,
+                dataPtr->ysize - 1 - y, 0);
+            gammawarp(dataPtr->rbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
+            getrow2(dataPtr->buffer, dataPtr->gbuf, dataPtr->xsize,
+                dataPtr->ysize - 1 - y, 1);
+            gammawarp(dataPtr->gbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
+            getrow2(dataPtr->buffer, dataPtr->bbuf, dataPtr->xsize,
+                dataPtr->ysize - 1 - y, 2);
+            gammawarp(dataPtr->bbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
+            ditherrow((unsigned short *)(dataPtr->rbuf),
+                (unsigned short *)(dataPtr->gbuf),
+                (unsigned short *)(dataPtr->bbuf), dataPtr->obuf,
+                dataPtr->xsize, y, dataPtr);
+            dataPtr->currow = y;
+        }
+        pix = dataPtr->obuf[x];
     }
     else {
-	if (dataPtr->currow != y) {
-	    getrow2(dataPtr->buffer, dataPtr->rbuf, dataPtr->xsize,
-		    dataPtr->ysize - 1 - y, 0);
-	    gammawarp(dataPtr->rbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
-	    ditherrow((unsigned short *)(dataPtr->rbuf),
-		      (unsigned short *)(dataPtr->rbuf),
-		      (unsigned short *)(dataPtr->rbuf), dataPtr->obuf,
-		      dataPtr->xsize, y, dataPtr);
-	    dataPtr->currow = y;
-	}
-	pix = dataPtr->obuf[x] & 0xf;
+        if (dataPtr->currow != y) {
+            getrow2(dataPtr->buffer, dataPtr->rbuf, dataPtr->xsize,
+                dataPtr->ysize - 1 - y, 0);
+            gammawarp(dataPtr->rbuf, 1.0 / GIFGAMMA, dataPtr->xsize, dataPtr);
+            ditherrow((unsigned short *)(dataPtr->rbuf),
+                (unsigned short *)(dataPtr->rbuf),
+                (unsigned short *)(dataPtr->rbuf), dataPtr->obuf,
+                dataPtr->xsize, y, dataPtr);
+            dataPtr->currow = y;
+        }
+        pix = dataPtr->obuf[x] & 0xf;
     }
     return pix;
 }
 
 /************************** getrow2() ********************************/
 static void getrow2(unsigned long *buffer, short *row, unsigned short width,
-		    unsigned short rownum, unsigned short comp)
+    unsigned short rownum, unsigned short comp)
 {
     unsigned short i;
     unsigned long *ptr = buffer + width * rownum;
 
     switch (comp) {
     case 0:
-	for (i = 0; i < width; i++) {
-	    row[i] = *ptr & 0xff;
-	    ptr++;
-	}
-	break;
+        for (i = 0; i < width; i++) {
+            row[i] = *ptr & 0xff;
+            ptr++;
+        }
+        break;
     case 1:
-	for (i = 0; i < width; i++) {
-	    row[i] = (*ptr >> 8) & 0xff;
-	    ptr++;
-	}
-	break;
+        for (i = 0; i < width; i++) {
+            row[i] = (*ptr >> 8) & 0xff;
+            ptr++;
+        }
+        break;
     case 2:
-	for (i = 0; i < width; i++) {
-	    row[i] = (*ptr >> 16) & 0xff;
-	    ptr++;
-	}
-	break;
+        for (i = 0; i < width; i++) {
+            row[i] = (*ptr >> 16) & 0xff;
+            ptr++;
+        }
+        break;
     }
 }
 
@@ -205,13 +204,13 @@ static void gammawarp(short *sbuf, float gam, int n, vgl_GIFWriter * dataPtr)
     float f;
 
     if (gam != dataPtr->curgamma) {
-	for (i = 0; i < 256; i++)
-	    dataPtr->gamtab[i] = 255 * pow(i / 255.0, gam) + 0.5;
-	dataPtr->curgamma = gam;
+        for (i = 0; i < 256; i++)
+            dataPtr->gamtab[i] = 255 * pow(i / 255.0, gam) + 0.5;
+        dataPtr->curgamma = gam;
     }
     while (n--) {
-	*sbuf = dataPtr->gamtab[*sbuf];
-	sbuf++;
+        *sbuf = dataPtr->gamtab[*sbuf];
+        sbuf++;
     }
 }
 
@@ -243,64 +242,64 @@ static short **makedittab(int levels, int mult, int add)
     nshades = XSIZE * YSIZE * (levels - 1) + 1;
     tab = (short **)G_malloc(YSIZE * sizeof(short *));
     for (j = 0; j < YSIZE; j++) {
-	tab[j] = (short *)G_malloc(XSIZE * 256 * sizeof(short));
-	for (i = 0; i < XSIZE; i++) {
-	    matval = dithmat[i][j];
-	    for (k = 0; k < 256; k++) {
-		val = (nshades * k) / 255;
-		if (val == nshades)
-		    val = nshades - 1;
-		if ((val % TOTAL) > matval)
-		    tabval = (val / TOTAL) + 1;
-		else
-		    tabval = (val / TOTAL);
-		tabval *= mult;
-		tabval += add;
-		tab[j][256 * i + k] = tabval;
-	    }
-	}
+        tab[j] = (short *)G_malloc(XSIZE * 256 * sizeof(short));
+        for (i = 0; i < XSIZE; i++) {
+            matval = dithmat[i][j];
+            for (k = 0; k < 256; k++) {
+                val = (nshades * k) / 255;
+                if (val == nshades)
+                    val = nshades - 1;
+                if ((val % TOTAL) > matval)
+                    tabval = (val / TOTAL) + 1;
+                else
+                    tabval = (val / TOTAL);
+                tabval *= mult;
+                tabval += add;
+                tab[j][256 * i + k] = tabval;
+            }
+        }
     }
     return tab;
 }
 
 /************************** ditherrow() ********************************/
 static int ditherrow(unsigned short *r, unsigned short *g, unsigned short *b,
-		     short *wp, int n, int y, vgl_GIFWriter * dataPtr)
+    short *wp, int n, int y, vgl_GIFWriter * dataPtr)
 {
     short *rbase;
     short *gbase;
     short *bbase;
 
     if (!dataPtr->rtab) {
-	if (dataPtr->iscolor) {
-	    dataPtr->rtab = makedittab(8, 1, 0);
-	    dataPtr->gtab = makedittab(8, 8, 0);
-	    dataPtr->btab = makedittab(4, 64, 0);
-	}
-	else {
-	    dataPtr->rtab = makedittab(16, 1, 0);
-	    dataPtr->gtab = makedittab(2, 16, 0);
-	    dataPtr->btab = makedittab(2, 32, 0);
-	}
+        if (dataPtr->iscolor) {
+            dataPtr->rtab = makedittab(8, 1, 0);
+            dataPtr->gtab = makedittab(8, 8, 0);
+            dataPtr->btab = makedittab(4, 64, 0);
+        }
+        else {
+            dataPtr->rtab = makedittab(16, 1, 0);
+            dataPtr->gtab = makedittab(2, 16, 0);
+            dataPtr->btab = makedittab(2, 32, 0);
+        }
     }
     rbase = dataPtr->rtab[WRAPY(y)];
     gbase = dataPtr->gtab[WRAPY(y)];
     bbase = dataPtr->btab[WRAPY(y)];
     while (n) {
-	if (n >= XSIZE) {
-	    *wp++ = rbase[*r++ + 0] + gbase[*g++ + 0] + bbase[*b++ + 0];
-	    *wp++ = rbase[*r++ + 256] + gbase[*g++ + 256] + bbase[*b++ + 256];
-	    *wp++ = rbase[*r++ + 512] + gbase[*g++ + 512] + bbase[*b++ + 512];
-	    *wp++ = rbase[*r++ + 768] + gbase[*g++ + 768] + bbase[*b++ + 768];
-	    n -= XSIZE;
-	}
-	else {
-	    *wp++ = rbase[*r++] + gbase[*g++] + bbase[*b++];
-	    rbase += 256;
-	    gbase += 256;
-	    bbase += 256;
-	    n--;
-	}
+        if (n >= XSIZE) {
+            *wp++ = rbase[*r++ + 0] + gbase[*g++ + 0] + bbase[*b++ + 0];
+            *wp++ = rbase[*r++ + 256] + gbase[*g++ + 256] + bbase[*b++ + 256];
+            *wp++ = rbase[*r++ + 512] + gbase[*g++ + 512] + bbase[*b++ + 512];
+            *wp++ = rbase[*r++ + 768] + gbase[*g++ + 768] + bbase[*b++ + 768];
+            n -= XSIZE;
+        }
+        else {
+            *wp++ = rbase[*r++] + gbase[*g++] + bbase[*b++];
+            rbase += 256;
+            gbase += 256;
+            bbase += 256;
+            n--;
+        }
     }
     return 1;
 }
@@ -333,38 +332,38 @@ static void BumpPixel(vgl_GIFWriter * dataPtr)
 {
     dataPtr->curx++;
     if (dataPtr->curx == dataPtr->xsize) {
-	dataPtr->curx = 0;
-	if (!dataPtr->interlace) {
-	    dataPtr->cury++;
-	}
-	else {
-	    switch (dataPtr->pass) {
-	    case 0:
-		dataPtr->cury += 8;
-		if (dataPtr->cury >= dataPtr->ysize) {
-		    dataPtr->pass++;
-		    dataPtr->cury = 4;
-		}
-		break;
-	    case 1:
-		dataPtr->cury += 8;
-		if (dataPtr->cury >= dataPtr->ysize) {
-		    dataPtr->pass++;
-		    dataPtr->cury = 2;
-		}
-		break;
-	    case 2:
-		dataPtr->cury += 4;
-		if (dataPtr->cury >= dataPtr->ysize) {
-		    dataPtr->pass++;
-		    dataPtr->cury = 1;
-		}
-		break;
-	    case 3:
-		dataPtr->cury += 2;
-		break;
-	    }
-	}
+        dataPtr->curx = 0;
+        if (!dataPtr->interlace) {
+            dataPtr->cury++;
+        }
+        else {
+            switch (dataPtr->pass) {
+            case 0:
+                dataPtr->cury += 8;
+                if (dataPtr->cury >= dataPtr->ysize) {
+                    dataPtr->pass++;
+                    dataPtr->cury = 4;
+                }
+                break;
+            case 1:
+                dataPtr->cury += 8;
+                if (dataPtr->cury >= dataPtr->ysize) {
+                    dataPtr->pass++;
+                    dataPtr->cury = 2;
+                }
+                break;
+            case 2:
+                dataPtr->cury += 4;
+                if (dataPtr->cury >= dataPtr->ysize) {
+                    dataPtr->pass++;
+                    dataPtr->cury = 1;
+                }
+                break;
+            case 3:
+                dataPtr->cury += 2;
+                break;
+            }
+        }
     }
 }
 
@@ -377,7 +376,7 @@ static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter * dataPtr)
     int r;
 
     if (dataPtr->countDown == 0)
-	return EOF;
+        return EOF;
     dataPtr->countDown--;
     r = (*getpixel) (dataPtr->curx, dataPtr->cury, dataPtr);
     BumpPixel(dataPtr);
@@ -389,8 +388,8 @@ static int GIFNextPixel(ifunptr getpixel, vgl_GIFWriter * dataPtr)
  * public GIFEncode
  */
 static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
-		     int Background, int BitsPerPixel, int Red[], int Green[],
-		     int Blue[], ifunptr GetPixel, vgl_GIFWriter * dataPtr)
+    int Background, int BitsPerPixel, int Red[], int Green[],
+    int Blue[], ifunptr GetPixel, vgl_GIFWriter * dataPtr)
 {
     int B;
     int RWidth, RHeight;
@@ -412,23 +411,23 @@ static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
     dataPtr->countDown = (long)(dataPtr->xsize) * (long)(dataPtr->ysize);
     dataPtr->pass = 0;
     if (BitsPerPixel <= 1)
-	InitCodeSize = 2;
+        InitCodeSize = 2;
     else
-	InitCodeSize = BitsPerPixel;
+        InitCodeSize = BitsPerPixel;
     dataPtr->curx = dataPtr->cury = 0;
     fwrite("GIF87a", 1, 6, fp);
     Putword(RWidth, fp);
     Putword(RHeight, fp);
-    B = 0x80;			/* Yes, there is a color map */
+    B = 0x80;                   /* Yes, there is a color map */
     B |= (Resolution - 1) << 5;
     B |= (BitsPerPixel - 1);
     fputc(B, fp);
     fputc(Background, fp);
     fputc(0, fp);
     for (i = 0; i < ColorMapSize; i++) {
-	fputc(Red[i], fp);
-	fputc(Green[i], fp);
-	fputc(Blue[i], fp);
+        fputc(Red[i], fp);
+        fputc(Green[i], fp);
+        fputc(Blue[i], fp);
     }
     fputc(',', fp);
     Putword(LeftOfs, fp);
@@ -436,9 +435,9 @@ static int GIFEncode(FILE * fp, int GWidth, int GHeight, int GInterlace,
     Putword(dataPtr->xsize, fp);
     Putword(dataPtr->ysize, fp);
     if (dataPtr->interlace)
-	fputc(0x40, fp);
+        fputc(0x40, fp);
     else
-	fputc(0x00, fp);
+        fputc(0x00, fp);
     fputc(InitCodeSize, fp);
     compress(InitCodeSize + 1, fp, GetPixel, dataPtr);
     fputc(0, fp);
@@ -488,7 +487,7 @@ static void Putword(int w, FILE * fp)
 
 #define ARGVAL() (*++(*argv) || (--argc && *++argv))
 
-# define MAXCODE(n_bits)        (((code_int) 1 << (n_bits)) - 1)
+#define MAXCODE(n_bits)        (((code_int) 1 << (n_bits)) - 1)
 
 #define HashTabOf(i)    dataPtr->htab[i]
 #define CodeTabOf(i)    dataPtr->codetab[i]
@@ -524,7 +523,7 @@ static void Putword(int w, FILE * fp)
  * questions about this implementation to ames!jaw.
  */
 static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
-		     vgl_GIFWriter * dataPtr)
+    vgl_GIFWriter * dataPtr)
 {
     register long fcode;
     register code_int i = 0;
@@ -555,44 +554,44 @@ static void compress(int init_bits, FILE * outfile, ifunptr ReadValue,
     ent = GIFNextPixel(ReadValue, dataPtr);
     hshift = 0;
     for (fcode = (long)(dataPtr->hsize); fcode < 65536L; fcode *= 2L)
-	hshift++;
-    hshift = 8 - hshift;	/* set hash code range bound */
+        hshift++;
+    hshift = 8 - hshift;        /* set hash code range bound */
     hsize_reg = dataPtr->hsize;
-    cl_hash((count_int) hsize_reg, dataPtr);	/* clear hash table */
+    cl_hash((count_int) hsize_reg, dataPtr);    /* clear hash table */
     output((code_int) (dataPtr->clearCode), dataPtr);
     while ((c = GIFNextPixel(ReadValue, dataPtr)) != EOF) {
-	dataPtr->in_count++;
-	fcode = (long)(((long)c << dataPtr->maxbits) + ent);
-	/* i = (((code_int)c << hshift) ~ ent);  */
-	i = (((code_int) c << hshift) ^ ent);	/* xor hashing */
-	if (HashTabOf(i) == fcode) {
-	    ent = CodeTabOf(i);
-	    continue;
-	}
-	else if ((long)HashTabOf(i) < 0)	/* empty slot */
-	    goto nomatch;
-	disp = hsize_reg - i;	/* secondary hash (after G. Knott) */
-	if (i == 0)
-	    disp = 1;
+        dataPtr->in_count++;
+        fcode = (long)(((long)c << dataPtr->maxbits) + ent);
+        /* i = (((code_int)c << hshift) ~ ent);  */
+        i = (((code_int) c << hshift) ^ ent);   /* xor hashing */
+        if (HashTabOf(i) == fcode) {
+            ent = CodeTabOf(i);
+            continue;
+        }
+        else if ((long)HashTabOf(i) < 0)        /* empty slot */
+            goto nomatch;
+        disp = hsize_reg - i;   /* secondary hash (after G. Knott) */
+        if (i == 0)
+            disp = 1;
       probe:
-	if ((i -= disp) < 0)
-	    i += hsize_reg;
-	if (HashTabOf(i) == fcode) {
-	    ent = CodeTabOf(i);
-	    continue;
-	}
-	if ((long)HashTabOf(i) > 0)
-	    goto probe;
+        if ((i -= disp) < 0)
+            i += hsize_reg;
+        if (HashTabOf(i) == fcode) {
+            ent = CodeTabOf(i);
+            continue;
+        }
+        if ((long)HashTabOf(i) > 0)
+            goto probe;
       nomatch:
-	output((code_int) ent, dataPtr);
-	dataPtr->out_count++;
-	ent = c;
-	if (dataPtr->free_ent < dataPtr->maxmaxcode) {
-	    CodeTabOf(i) = dataPtr->free_ent++;	/* code -> hashtable */
-	    HashTabOf(i) = fcode;
-	}
-	else
-	    cl_block(dataPtr);
+        output((code_int) ent, dataPtr);
+        dataPtr->out_count++;
+        ent = c;
+        if (dataPtr->free_ent < dataPtr->maxmaxcode) {
+            CodeTabOf(i) = dataPtr->free_ent++; /* code -> hashtable */
+            HashTabOf(i) = fcode;
+        }
+        else
+            cl_block(dataPtr);
     }
     /*
      * Put out the final code.
@@ -630,14 +629,14 @@ static void output(code_int code, vgl_GIFWriter * dataPtr)
 {
     dataPtr->cur_accum &= masks[dataPtr->cur_bits];
     if (dataPtr->cur_bits > 0)
-	dataPtr->cur_accum |= ((long)code << dataPtr->cur_bits);
+        dataPtr->cur_accum |= ((long)code << dataPtr->cur_bits);
     else
-	dataPtr->cur_accum = code;
+        dataPtr->cur_accum = code;
     dataPtr->cur_bits += dataPtr->n_bits;
     while (dataPtr->cur_bits >= 8) {
-	char_out((unsigned int)(dataPtr->cur_accum & 0xff), dataPtr);
-	dataPtr->cur_accum >>= 8;
-	dataPtr->cur_bits -= 8;
+        char_out((unsigned int)(dataPtr->cur_accum & 0xff), dataPtr);
+        dataPtr->cur_accum >>= 8;
+        dataPtr->cur_bits -= 8;
     }
 
     /*
@@ -645,32 +644,31 @@ static void output(code_int code, vgl_GIFWriter * dataPtr)
      * then increase it, if possible.
      */
     if (dataPtr->free_ent > dataPtr->maxcode || dataPtr->clear_flg) {
-	if (dataPtr->clear_flg) {
-	    dataPtr->maxcode = MAXCODE(dataPtr->n_bits =
-				       dataPtr->g_init_bits);
-	    dataPtr->clear_flg = 0;
-	}
-	else {
-	    dataPtr->n_bits++;
-	    if (dataPtr->n_bits == dataPtr->maxbits)
-		dataPtr->maxcode = dataPtr->maxmaxcode;
-	    else
-		dataPtr->maxcode = MAXCODE(dataPtr->n_bits);
-	}
+        if (dataPtr->clear_flg) {
+            dataPtr->maxcode = MAXCODE(dataPtr->n_bits = dataPtr->g_init_bits);
+            dataPtr->clear_flg = 0;
+        }
+        else {
+            dataPtr->n_bits++;
+            if (dataPtr->n_bits == dataPtr->maxbits)
+                dataPtr->maxcode = dataPtr->maxmaxcode;
+            else
+                dataPtr->maxcode = MAXCODE(dataPtr->n_bits);
+        }
     }
     if (code == dataPtr->EOFCode) {
-	/*
-	 * At EOF, write the rest of the buffer.
-	 */
-	while (dataPtr->cur_bits > 0) {
-	    char_out((unsigned int)(dataPtr->cur_accum & 0xff), dataPtr);
-	    dataPtr->cur_accum >>= 8;
-	    dataPtr->cur_bits -= 8;
-	}
-	flush_char(dataPtr);
-	fflush(dataPtr->g_outfile);
-	if (ferror(dataPtr->g_outfile))
-	    writeerr();
+        /*
+         * At EOF, write the rest of the buffer.
+         */
+        while (dataPtr->cur_bits > 0) {
+            char_out((unsigned int)(dataPtr->cur_accum & 0xff), dataPtr);
+            dataPtr->cur_accum >>= 8;
+            dataPtr->cur_bits -= 8;
+        }
+        flush_char(dataPtr);
+        fflush(dataPtr->g_outfile);
+        if (ferror(dataPtr->g_outfile))
+            writeerr();
     }
 }
 
@@ -697,27 +695,27 @@ static void cl_hash(register count_int hsize, vgl_GIFWriter * dataPtr)
     htab_p = dataPtr->htab + hsize;
 
     i = hsize - 16;
-    do {			/* might use Sys V memset(3) here */
-	*(htab_p - 16) = m1;
-	*(htab_p - 15) = m1;
-	*(htab_p - 14) = m1;
-	*(htab_p - 13) = m1;
-	*(htab_p - 12) = m1;
-	*(htab_p - 11) = m1;
-	*(htab_p - 10) = m1;
-	*(htab_p - 9) = m1;
-	*(htab_p - 8) = m1;
-	*(htab_p - 7) = m1;
-	*(htab_p - 6) = m1;
-	*(htab_p - 5) = m1;
-	*(htab_p - 4) = m1;
-	*(htab_p - 3) = m1;
-	*(htab_p - 2) = m1;
-	*(htab_p - 1) = m1;
-	htab_p -= 16;
+    do {                        /* might use Sys V memset(3) here */
+        *(htab_p - 16) = m1;
+        *(htab_p - 15) = m1;
+        *(htab_p - 14) = m1;
+        *(htab_p - 13) = m1;
+        *(htab_p - 12) = m1;
+        *(htab_p - 11) = m1;
+        *(htab_p - 10) = m1;
+        *(htab_p - 9) = m1;
+        *(htab_p - 8) = m1;
+        *(htab_p - 7) = m1;
+        *(htab_p - 6) = m1;
+        *(htab_p - 5) = m1;
+        *(htab_p - 4) = m1;
+        *(htab_p - 3) = m1;
+        *(htab_p - 2) = m1;
+        *(htab_p - 1) = m1;
+        htab_p -= 16;
     } while ((i -= 16) >= 0);
     for (i += 16; i > 0; i--)
-	*--htab_p = m1;
+        *--htab_p = m1;
 }
 
 /********************** writeerr() ***************************/
@@ -753,7 +751,7 @@ static void char_out(int c, vgl_GIFWriter * dataPtr)
 {
     dataPtr->accum[dataPtr->a_count++] = c;
     if (dataPtr->a_count >= 254)
-	flush_char(dataPtr);
+        flush_char(dataPtr);
 }
 
 /********************** flush_char() ***************************/
@@ -763,9 +761,9 @@ static void char_out(int c, vgl_GIFWriter * dataPtr)
 static void flush_char(vgl_GIFWriter * dataPtr)
 {
     if (dataPtr->a_count > 0) {
-	fputc(dataPtr->a_count, dataPtr->g_outfile);
-	fwrite(dataPtr->accum, 1, dataPtr->a_count, dataPtr->g_outfile);
-	dataPtr->a_count = 0;
+        fputc(dataPtr->a_count, dataPtr->g_outfile);
+        fwrite(dataPtr->accum, 1, dataPtr->a_count, dataPtr->g_outfile);
+        dataPtr->a_count = 0;
     }
 }
 

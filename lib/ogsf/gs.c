@@ -66,10 +66,10 @@ geosurf *gs_get_surf(int id)
     G_debug(5, "gs_get_surf():");
 
     for (gs = Surf_top; gs; gs = gs->next) {
-	if (gs->gsurf_id == id) {
-	    G_debug(5, "  id=%d", id);
-	    return (gs);
-	}
+        if (gs->gsurf_id == id) {
+            G_debug(5, "  id=%d", id);
+            return (gs);
+        }
     }
 
     return (NULL);
@@ -90,9 +90,9 @@ geosurf *gs_get_prev_surface(int id)
     G_debug(5, "gs_get_prev_surface");
 
     for (ps = Surf_top; ps; ps = ps->next) {
-	if (ps->gsurf_id == id - 1) {
-	    return (ps);
-	}
+        if (ps->gsurf_id == id - 1) {
+            return (ps);
+        }
     }
 
     return (NULL);
@@ -111,7 +111,7 @@ int gs_getall_surfaces(geosurf ** gsurfs)
     int i;
 
     for (i = 0, gs = Surf_top; gs; gs = gs->next, i++) {
-	gsurfs[i] = gs;
+        gsurfs[i] = gs;
     }
 
     G_debug(5, "gs_num_surfaces(): num=%d", i);
@@ -151,14 +151,14 @@ int gs_att_is_set(geosurf * surf, IFLAG att)
     geosurf *gs;
 
     if (surf) {
-	return (NOTSET_ATT != surf->att[att].att_src);
+        return (NOTSET_ATT != surf->att[att].att_src);
     }
 
     /* if surf == NULL, look at all surfs */
     for (gs = Surf_top; gs; gs = gs->next) {
-	if (NOTSET_ATT != gs->att[att].att_src) {
-	    return (1);
-	}
+        if (NOTSET_ATT != gs->att[att].att_src) {
+            return (1);
+        }
     }
 
     return (0);
@@ -174,7 +174,7 @@ geosurf *gs_get_last_surface(void)
     geosurf *ls;
 
     if (!Surf_top) {
-	return (NULL);
+        return (NULL);
     }
 
     for (ls = Surf_top; ls->next; ls = ls->next) ;
@@ -194,18 +194,18 @@ geosurf *gs_get_new_surface(void)
 {
     geosurf *ns, *ls;
 
-    ns = (geosurf *) G_malloc(sizeof(geosurf));	/* G_fatal_error */
+    ns = (geosurf *) G_malloc(sizeof(geosurf)); /* G_fatal_error */
     if (!ns) {
-	return (NULL);
+        return (NULL);
     }
 
     if ((ls = gs_get_last_surface())) {
-	ls->next = ns;
-	ns->gsurf_id = ls->gsurf_id + 1;
+        ls->next = ns;
+        ns->gsurf_id = ls->gsurf_id + 1;
     }
     else {
-	Surf_top = ns;
-	ns->gsurf_id = FIRST_SURF_ID;
+        Surf_top = ns;
+        ns->gsurf_id = FIRST_SURF_ID;
     }
 
     ns->next = NULL;
@@ -230,27 +230,27 @@ geosurf *gs_get_new_surface(void)
    \return 0 on success
  */
 int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
-		 double xres, double yres)
+    double xres, double yres)
 {
     geosurf *ps;
     int i;
 
     if (!gs) {
-	return (-1);
+        return (-1);
     }
 
     G_debug(5, "gs_init_surf() id=%d", gs->gsurf_id);
 
     /* default attributes */
     for (i = 0; i < MAX_ATTS; i++) {
-	gs->att[i].att_src = NOTSET_ATT;
-	gs->att[i].att_type = ATTY_INT;
-	gs->att[i].hdata = -1;
-	gs->att[i].user_func = NULL;
-	gs->att[i].constant = 0.;
-	gs->att[i].lookup = NULL;
-	gs->att[i].min_nz = gs->att[i].max_nz = gs->att[i].range_nz = 0;
-	gs->att[i].default_null = 0.;
+        gs->att[i].att_src = NOTSET_ATT;
+        gs->att[i].att_type = ATTY_INT;
+        gs->att[i].hdata = -1;
+        gs->att[i].user_func = NULL;
+        gs->att[i].constant = 0.;
+        gs->att[i].lookup = NULL;
+        gs->att[i].min_nz = gs->att[i].max_nz = gs->att[i].range_nz = 0;
+        gs->att[i].default_null = 0.;
     }
 
     /* default values */
@@ -285,11 +285,11 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
 
     /* default z_exag value */
     if (gs->gsurf_id == FIRST_SURF_ID) {
-	gs->z_exag = 1.0;
+        gs->z_exag = 1.0;
     }
     else {
-	ps = gs_get_prev_surface(gs->gsurf_id);
-	gs->z_exag = ps->z_exag;
+        ps = gs_get_prev_surface(gs->gsurf_id);
+        gs->z_exag = ps->z_exag;
     }
 
     return (0);
@@ -308,18 +308,18 @@ int gs_init_normbuff(geosurf * gs)
     long size;
 
     if (!gs) {
-	return (0);
+        return (0);
     }
 
     if (gs->norms) {
-	G_free(gs->norms);
+        G_free(gs->norms);
     }
 
     size = gs->rows * gs->cols * sizeof(unsigned long);
 
-    gs->norms = (unsigned long *)G_malloc(size);	/* G_fatal_error */
+    gs->norms = (unsigned long *)G_malloc(size);        /* G_fatal_error */
     if (!gs->norms) {
-	return (-1);
+        return (-1);
     }
 
     gs->norm_needupdate = 1;
@@ -337,7 +337,7 @@ int gs_init_normbuff(geosurf * gs)
 void print_frto(float (*ft)[4])
 {
     fprintf(stderr, "FROM: %f, %f, %f\n", ft[FROM][X], ft[FROM][Y],
-	    ft[FROM][Z]);
+        ft[FROM][Z]);
     fprintf(stderr, "TO: %f, %f, %f\n", ft[TO][X], ft[TO][Y], ft[TO][Z]);
 
     return;
@@ -369,11 +369,11 @@ void print_256lookup(int *buff)
     int i;
 
     for (i = 0; i < 256; i++) {
-	if (!(i % 8)) {
-	    fprintf(stderr, "\n");
-	}
+        if (!(i % 8)) {
+            fprintf(stderr, "\n");
+        }
 
-	fprintf(stderr, "%x ", buff[i]);
+        fprintf(stderr, "%x ", buff[i]);
     }
 
     fprintf(stderr, "\n");
@@ -398,13 +398,11 @@ void print_surf_fields(geosurf * s)
     fprintf(stderr, "xres: %lf yres: %lf\n", s->xres, s->yres);
     fprintf(stderr, "z_exag: %f \n", s->z_exag);
     fprintf(stderr, "x_trans: %f y_trans: %f z_trans: %f\n",
-	    s->x_trans, s->y_trans, s->z_trans);
-    fprintf(stderr, "xmin: %f ymin: %f zmin: %f\n",
-	    s->xmin, s->ymin, s->zmin);
-    fprintf(stderr, "xmax: %f ymax: %f zmax: %f\n",
-	    s->xmax, s->ymax, s->zmax);
+        s->x_trans, s->y_trans, s->z_trans);
+    fprintf(stderr, "xmin: %f ymin: %f zmin: %f\n", s->xmin, s->ymin, s->zmin);
+    fprintf(stderr, "xmax: %f ymax: %f zmax: %f\n", s->xmax, s->ymax, s->zmax);
     fprintf(stderr, "x_mod: %d y_mod: %d x_modw: %d y_modw: %d\n",
-	    s->x_mod, s->y_mod, s->x_modw, s->y_modw);
+        s->x_mod, s->y_mod, s->x_modw, s->y_modw);
 
     return;
 }
@@ -425,7 +423,7 @@ void print_view_fields(geoview * gv)
     fprintf(stderr, "twist: %d fov: %d\n", gv->twist, gv->fov);
     fprintf(stderr, "incl: %d look: %d\n", gv->incl, gv->look);
     fprintf(stderr, "real_to: %f %f %f\n",
-	    gv->real_to[X], gv->real_to[Y], gv->real_to[Z]);
+        gv->real_to[X], gv->real_to[Y], gv->real_to[Z]);
     fprintf(stderr, "vert_exag: %f scale: %f \n", gv->vert_exag, gv->scale);
 
     return;
@@ -445,11 +443,11 @@ void gs_set_defaults(geosurf * gs, float *defs, float *null_defs)
     G_debug(5, "gs_set_defaults(): id=%d", gs->gsurf_id);
 
     for (i = 0; i < MAX_ATTS; i++) {
-	gs->att[i].constant = defs[i];
-	gs->att[i].default_null = null_defs[i];
-	gs->att[i].lookup = NULL;
-	gs->att[i].hdata = -1;
-	gs->att[i].att_src = NOTSET_ATT;
+        gs->att[i].constant = defs[i];
+        gs->att[i].default_null = null_defs[i];
+        gs->att[i].lookup = NULL;
+        gs->att[i].hdata = -1;
+        gs->att[i].att_src = NOTSET_ATT;
     }
 
     return;
@@ -469,7 +467,7 @@ void gs_delete_surf(int id)
     fs = gs_get_surf(id);
 
     if (fs) {
-	gs_free_surf(fs);
+        gs_free_surf(fs);
     }
 
     return;
@@ -492,54 +490,54 @@ int gs_free_surf(geosurf * fs)
     G_debug(5, "gs_free_surf");
 
     if (Surf_top) {
-	if (fs == Surf_top) {
-	    if (Surf_top->next) {
-		/* can't free top if last */
-		found = 1;
-		Surf_top = fs->next;
-	    }
-	    else {
-		gs_free_unshared_buffs(fs);
+        if (fs == Surf_top) {
+            if (Surf_top->next) {
+                /* can't free top if last */
+                found = 1;
+                Surf_top = fs->next;
+            }
+            else {
+                gs_free_unshared_buffs(fs);
 
-		if (fs->curmask) {
-		    G_free(fs->curmask);
-		}
+                if (fs->curmask) {
+                    G_free(fs->curmask);
+                }
 
-		if (fs->norms) {
-		    G_free(fs->norms);
-		}
+                if (fs->norms) {
+                    G_free(fs->norms);
+                }
 
-		G_free(fs);
-		Surf_top = NULL;
-	    }
-	}
-	else {
-	    for (gs = Surf_top; gs && !found; gs = gs->next) {
-		if (gs->next) {
-		    if (gs->next == fs) {
-			found = 1;
-			gs->next = fs->next;
-		    }
-		}
-	    }
-	}
+                G_free(fs);
+                Surf_top = NULL;
+            }
+        }
+        else {
+            for (gs = Surf_top; gs && !found; gs = gs->next) {
+                if (gs->next) {
+                    if (gs->next == fs) {
+                        found = 1;
+                        gs->next = fs->next;
+                    }
+                }
+            }
+        }
 
-	if (found) {
-	    gs_free_unshared_buffs(fs);
+        if (found) {
+            gs_free_unshared_buffs(fs);
 
-	    if (fs->curmask) {
-		G_free(fs->curmask);
-	    }
+            if (fs->curmask) {
+                G_free(fs->curmask);
+            }
 
-	    if (fs->norms) {
-		G_free(fs->norms);
-	    }
+            if (fs->norms) {
+                G_free(fs->norms);
+            }
 
-	    G_free(fs);
-	    fs = NULL;
-	}
+            G_free(fs);
+            fs = NULL;
+        }
 
-	return (found);
+        return (found);
     }
 
     return (-1);
@@ -566,22 +564,22 @@ void gs_free_unshared_buffs(geosurf * fs)
        if !same, free buff   
      */
     for (i = 0; i < MAX_ATTS; i++) {
-	same = 0;
+        same = 0;
 
-	if (0 < (old_datah = fs->att[i].hdata)) {
-	    /* for ea att of all other surfs */
-	    for (gs = Surf_top; gs; gs = gs->next) {
-		for (j = 0; j < MAX_ATTS; j++) {
-		    if ((old_datah == gs->att[j].hdata) && (fs != gs)) {
-			same = 1;
-		    }
-		}
-	    }
+        if (0 < (old_datah = fs->att[i].hdata)) {
+            /* for ea att of all other surfs */
+            for (gs = Surf_top; gs; gs = gs->next) {
+                for (j = 0; j < MAX_ATTS; j++) {
+                    if ((old_datah == gs->att[j].hdata) && (fs != gs)) {
+                        same = 1;
+                    }
+                }
+            }
 
-	    if (!same) {
-		gsds_free_datah(old_datah);
-	    }
-	}
+            if (!same) {
+                gsds_free_datah(old_datah);
+            }
+        }
     }
 
     return;
@@ -608,11 +606,11 @@ int gs_num_datah_reused(int dh)
     ref = 0;
 
     for (gs = Surf_top; gs; gs = gs->next) {
-	for (j = 0; j < MAX_ATTS; j++) {
-	    if (dh == gs->att[j].hdata) {
-		ref++;
-	    }
-	}
+        for (j = 0; j < MAX_ATTS; j++) {
+            if (dh == gs->att[j].hdata) {
+                ref++;
+            }
+        }
     }
 
     return (ref);
@@ -632,13 +630,13 @@ int gs_get_att_type(geosurf * gs, int desc)
     G_debug(5, "gs_get_att_type");
 
     if (!LEGAL_ATT(desc)) {
-	return (-1);
+        return (-1);
     }
 
     if (gs) {
-	if (gs->att[desc].att_src != NOTSET_ATT) {
-	    return (gs->att[desc].att_type);
-	}
+        if (gs->att[desc].att_src != NOTSET_ATT) {
+            return (gs->att[desc].att_type);
+        }
     }
 
     return (-1);
@@ -656,13 +654,13 @@ int gs_get_att_type(geosurf * gs, int desc)
 int gs_get_att_src(geosurf * gs, int desc)
 {
     if (gs)
-	G_debug(5, "gs_get_att_src(): id=%d, desc=%d", gs->gsurf_id, desc);
+        G_debug(5, "gs_get_att_src(): id=%d, desc=%d", gs->gsurf_id, desc);
     if (!LEGAL_ATT(desc)) {
-	return (-1);
+        return (-1);
     }
 
     if (gs) {
-	return (gs->att[desc].att_src);
+        return (gs->att[desc].att_src);
     }
 
     return (-1);
@@ -684,21 +682,21 @@ typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
     geosurf *gsref;
 
     if (gs) {
-	G_debug(5, "gs_get_att_typbuff(): id=%d desc=%d to_write=%d",
-		gs->gsurf_id, desc, to_write);
-	if ((tb = gsds_get_typbuff(gs->att[desc].hdata, to_write))) {
-	    tb->tfunc = NULL;
+        G_debug(5, "gs_get_att_typbuff(): id=%d desc=%d to_write=%d",
+            gs->gsurf_id, desc, to_write);
+        if ((tb = gsds_get_typbuff(gs->att[desc].hdata, to_write))) {
+            tb->tfunc = NULL;
 
-	    if (desc == ATT_TOPO) {
-		gsref = gsdiff_get_SDref();
+            if (desc == ATT_TOPO) {
+                gsref = gsdiff_get_SDref();
 
-		if (gsref && gsref != gs) {
-		    tb->tfunc = gsdiff_do_SD;
-		}
-	    }
+                if (gsref && gsref != gs) {
+                    tb->tfunc = gsdiff_do_SD;
+                }
+            }
 
-	    return (tb);
-	}
+            return (tb);
+        }
     }
 
     return (NULL);
@@ -721,14 +719,14 @@ size_t gs_malloc_att_buff(geosurf * gs, int desc, int type)
     G_debug(5, "gs_malloc_att_buff");
 
     if (gs) {
-	if (0 < (hdata = gs->att[desc].hdata)) {
-	    dims[0] = gs->rows;
-	    dims[1] = gs->cols;
-	    ndims = 2;
-	    gs_set_att_type(gs, desc, type);
+        if (0 < (hdata = gs->att[desc].hdata)) {
+            dims[0] = gs->rows;
+            dims[1] = gs->cols;
+            ndims = 2;
+            gs_set_att_type(gs, desc, type);
 
-	    return (gsds_alloc_typbuff(hdata, dims, ndims, type));
-	}
+            return (gsds_alloc_typbuff(hdata, dims, ndims, type));
+        }
     }
 
     return 0;
@@ -750,40 +748,40 @@ int gs_malloc_lookup(geosurf * gs, int desc)
     G_debug(5, "gs_malloc_lookup");
 
     if (gs) {
-	if (gs->att[desc].lookup) {
-	    G_free(gs->att[desc].lookup);
-	    gs->att[desc].lookup = NULL;
-	}
+        if (gs->att[desc].lookup) {
+            G_free(gs->att[desc].lookup);
+            gs->att[desc].lookup = NULL;
+        }
 
-	switch (gs->att[desc].att_type) {
-	case (ATTY_SHORT):
-	    size = 32768 * sizeof(int);
+        switch (gs->att[desc].att_type) {
+        case (ATTY_SHORT):
+            size = 32768 * sizeof(int);
 
-	    /* positive integers only, because use as array index */
-	    gs->att[desc].lookup = (int *)G_malloc(size);	/* G_fatal_error */
-	    if (!gs->att[desc].lookup) {
-		return (-1);
-	    }
+            /* positive integers only, because use as array index */
+            gs->att[desc].lookup = (int *)G_malloc(size);       /* G_fatal_error */
+            if (!gs->att[desc].lookup) {
+                return (-1);
+            }
 
-	    break;
-	case (ATTY_CHAR):
-	    size = 256 * sizeof(int);
+            break;
+        case (ATTY_CHAR):
+            size = 256 * sizeof(int);
 
-	    /* unsigned char */
-	    gs->att[desc].lookup = (int *)G_malloc(size);
-	    if (!gs->att[desc].lookup) {
-		return (-1);
-	    }
+            /* unsigned char */
+            gs->att[desc].lookup = (int *)G_malloc(size);
+            if (!gs->att[desc].lookup) {
+                return (-1);
+            }
 
-	    break;
-	default:
-	    G_warning("bad type: gs_malloc_lookup");
-	    return (-1);
-	}
+            break;
+        default:
+            G_warning("bad type: gs_malloc_lookup");
+            return (-1);
+        }
 
-	if (gs->att[desc].lookup) {
-	    return (0);
-	}
+        if (gs->att[desc].lookup) {
+            return (0);
+        }
 
     }
 
@@ -806,9 +804,9 @@ int gs_set_att_type(geosurf * gs, int desc, int type)
     G_debug(5, "gs_set_att_type(): desc=%d, type=%d", desc, type);
 
     if (gs && LEGAL_TYPE(type)) {
-	gs->att[desc].att_type = type;
+        gs->att[desc].att_type = type;
 
-	return (0);
+        return (0);
     }
 
     return (-1);
@@ -827,31 +825,31 @@ int gs_set_att_type(geosurf * gs, int desc, int type)
 int gs_set_att_src(geosurf * gs, int desc, int src)
 {
     if (gs)
-	G_debug(5, "gs_set_att_src(): id=%d desc=%d src=%d",
-		gs->gsurf_id, desc, src);
+        G_debug(5, "gs_set_att_src(): id=%d desc=%d src=%d",
+            gs->gsurf_id, desc, src);
 
     /* check if old source was MAP_ATT, free buff */
     if (MAP_ATT == gs_get_att_src(gs, desc)) {
-	if (1 == gs_num_datah_reused(gs->att[desc].hdata)) {
-	    /* only reference */
-	    G_debug(5, "gs_set_att_src(): replacing existing map");
-	    gsds_free_datah(gs->att[desc].hdata);
-	}
+        if (1 == gs_num_datah_reused(gs->att[desc].hdata)) {
+            /* only reference */
+            G_debug(5, "gs_set_att_src(): replacing existing map");
+            gsds_free_datah(gs->att[desc].hdata);
+        }
 
-	if (ATT_TOPO == desc) {
-	    if (gs->norms) {
-		G_free(gs->norms);
-	    }
+        if (ATT_TOPO == desc) {
+            if (gs->norms) {
+                G_free(gs->norms);
+            }
 
-	    gs->norms = NULL;
-	    gs->norm_needupdate = 0;
-	}
+            gs->norms = NULL;
+            gs->norm_needupdate = 0;
+        }
     }
 
     if (gs && LEGAL_SRC(src)) {
-	gs->att[desc].att_src = src;
+        gs->att[desc].att_src = src;
 
-	return (0);
+        return (0);
     }
 
     return (-1);
@@ -873,20 +871,20 @@ int gs_set_att_const(geosurf * gs, int desc, float constant)
 {
 
     if (gs) {
-	G_debug(5, "gs_set_att_const(): id=%d, desc=%d, const=%f",
-		gs->gsurf_id, desc, constant);
-	gs->att[desc].constant = constant;
+        G_debug(5, "gs_set_att_const(): id=%d, desc=%d, const=%f",
+            gs->gsurf_id, desc, constant);
+        gs->att[desc].constant = constant;
 
-	if (ATT_MASK == desc) {
-	    gs->mask_needupdate = 1;
-	}
-	else {
-	    gs_set_att_src(gs, desc, CONST_ATT);
-	}
+        if (ATT_MASK == desc) {
+            gs->mask_needupdate = 1;
+        }
+        else {
+            gs_set_att_src(gs, desc, CONST_ATT);
+        }
 
-	Gs_update_attrange(gs, desc);
+        Gs_update_attrange(gs, desc);
 
-	return (0);
+        return (0);
     }
 
     return (-1);
@@ -937,19 +935,19 @@ int gs_masked(typbuff * tb, int col, int row, int offset)
     ret = 1;
 
     if (tb->bm) {
-	ret = BM_get(tb->bm, col, row);
+        ret = BM_get(tb->bm, col, row);
     }
     else if (tb->cb) {
-	ret = tb->cb[offset];
+        ret = tb->cb[offset];
     }
     else if (tb->sb) {
-	ret = tb->sb[offset];
+        ret = tb->sb[offset];
     }
     else if (tb->ib) {
-	ret = tb->ib[offset];
+        ret = tb->ib[offset];
     }
     else if (tb->fb) {
-	ret = tb->fb[offset];
+        ret = tb->fb[offset];
     }
 
     return (Invertmask ? ret : !ret);
@@ -969,9 +967,9 @@ int gs_masked(typbuff * tb, int col, int row, int offset)
 int gs_mapcolor(typbuff * cobuff, gsurf_att * coloratt, int offset)
 {
     if (coloratt->lookup) {
-	/* for now, but may add larger color lookup capabilities later,
-	   so would have to use GET_MAPATT */
-	return (coloratt->lookup[cobuff->cb[offset]]);
+        /* for now, but may add larger color lookup capabilities later,
+           so would have to use GET_MAPATT */
+        return (coloratt->lookup[cobuff->cb[offset]]);
     }
 
     return (cobuff->ib[offset]);
@@ -1056,21 +1054,21 @@ int gs_get_zrange0(float *min, float *max)
     geosurf *gs;
 
     if (Surf_top) {
-	*min = Surf_top->zmin;
-	*max = Surf_top->zmax;
+        *min = Surf_top->zmin;
+        *max = Surf_top->zmax;
     }
     else {
-	return (-1);
+        return (-1);
     }
 
     for (gs = Surf_top->next; gs; gs = gs->next) {
-	if (gs->zmin < *min) {
-	    *min = gs->zmin;
-	}
+        if (gs->zmin < *min) {
+            *min = gs->zmin;
+        }
 
-	if (gs->zmax > *max) {
-	    *max = gs->zmax;
-	}
+        if (gs->zmax > *max) {
+            *max = gs->zmax;
+        }
     }
 
     return (1);
@@ -1091,24 +1089,24 @@ int gs_get_zrange(float *min, float *max)
     float tmin, tmax, tmid;
 
     if (Surf_top) {
-	gs_get_zextents(Surf_top, &tmin, &tmax, &tmid);
-	*min = tmin;
-	*max = tmax;
+        gs_get_zextents(Surf_top, &tmin, &tmax, &tmid);
+        *min = tmin;
+        *max = tmax;
     }
     else {
-	return (-1);
+        return (-1);
     }
 
     for (gs = Surf_top->next; gs; gs = gs->next) {
-	gs_get_zextents(gs, &tmin, &tmax, &tmid);
+        gs_get_zextents(gs, &tmin, &tmax, &tmid);
 
-	if (tmin < *min) {
-	    *min = tmin;
-	}
+        if (tmin < *min) {
+            *min = tmin;
+        }
 
-	if (tmax > *max) {
-	    *max = tmax;
-	}
+        if (tmax > *max) {
+            *max = tmax;
+        }
     }
 
     return (1);
@@ -1129,24 +1127,24 @@ int gs_get_xrange(float *min, float *max)
     float tmin, tmax;
 
     if (Surf_top) {
-	gs_get_xextents(Surf_top, &tmin, &tmax);
-	*min = tmin;
-	*max = tmax;
+        gs_get_xextents(Surf_top, &tmin, &tmax);
+        *min = tmin;
+        *max = tmax;
     }
     else {
-	return (-1);
+        return (-1);
     }
 
     for (gs = Surf_top->next; gs; gs = gs->next) {
-	gs_get_xextents(gs, &tmin, &tmax);
+        gs_get_xextents(gs, &tmin, &tmax);
 
-	if (tmin < *min) {
-	    *min = tmin;
-	}
+        if (tmin < *min) {
+            *min = tmin;
+        }
 
-	if (tmax > *max) {
-	    *max = tmax;
-	}
+        if (tmax > *max) {
+            *max = tmax;
+        }
     }
 
     return (1);
@@ -1167,24 +1165,24 @@ int gs_get_yrange(float *min, float *max)
     float tmin, tmax;
 
     if (Surf_top) {
-	gs_get_yextents(Surf_top, &tmin, &tmax);
-	*min = tmin;
-	*max = tmax;
+        gs_get_yextents(Surf_top, &tmin, &tmax);
+        *min = tmin;
+        *max = tmax;
     }
     else {
-	return (-1);
+        return (-1);
     }
 
     for (gs = Surf_top->next; gs; gs = gs->next) {
-	gs_get_yextents(gs, &tmin, &tmax);
+        gs_get_yextents(gs, &tmin, &tmax);
 
-	if (tmin < *min) {
-	    *min = tmin;
-	}
+        if (tmin < *min) {
+            *min = tmin;
+        }
 
-	if (tmax > *max) {
-	    *max = tmax;
-	}
+        if (tmax > *max) {
+            *max = tmax;
+        }
     }
 
     return (1);
@@ -1209,13 +1207,13 @@ int gs_get_data_avg_zmax(float *azmax)
     zmax = *azmax = 0.0;
 
     if (Surf_top) {
-	for (i = 0, gs = Surf_top; gs; i++, gs = gs->next) {
-	    zmax += (gs->zmax + gs->z_trans);
-	}
+        for (i = 0, gs = Surf_top; gs; i++, gs = gs->next) {
+            zmax += (gs->zmax + gs->z_trans);
+        }
 
-	*azmax = zmax / i;
+        *azmax = zmax / i;
 
-	return (1);
+        return (1);
     }
 
     return (-1);
@@ -1235,44 +1233,44 @@ int gs_get_datacenter(float *cen)
     geosurf *gs;
 
     if (Surf_top) {
-	zmin = Surf_top->zmin;
-	zmax = Surf_top->zmax;
-	ymin = Surf_top->ymin;
-	ymax = Surf_top->ymax;
-	xmin = Surf_top->xmin;
-	xmax = Surf_top->xmax;
+        zmin = Surf_top->zmin;
+        zmax = Surf_top->zmax;
+        ymin = Surf_top->ymin;
+        ymax = Surf_top->ymax;
+        xmin = Surf_top->xmin;
+        xmax = Surf_top->xmax;
 
-	for (gs = Surf_top->next; gs; gs = gs->next) {
-	    if (gs->zmin < zmin) {
-		zmin = gs->zmin;
-	    }
+        for (gs = Surf_top->next; gs; gs = gs->next) {
+            if (gs->zmin < zmin) {
+                zmin = gs->zmin;
+            }
 
-	    if (gs->zmax > zmax) {
-		zmax = gs->zmax;
-	    }
+            if (gs->zmax > zmax) {
+                zmax = gs->zmax;
+            }
 
-	    if (gs->ymin < ymin) {
-		ymin = gs->ymin;
-	    }
+            if (gs->ymin < ymin) {
+                ymin = gs->ymin;
+            }
 
-	    if (gs->ymax > ymax) {
-		ymax = gs->ymax;
-	    }
+            if (gs->ymax > ymax) {
+                ymax = gs->ymax;
+            }
 
-	    if (gs->xmin < xmin) {
-		xmin = gs->xmin;
-	    }
+            if (gs->xmin < xmin) {
+                xmin = gs->xmin;
+            }
 
-	    if (gs->xmax > xmax) {
-		xmax = gs->xmax;
-	    }
-	}
+            if (gs->xmax > xmax) {
+                xmax = gs->xmax;
+            }
+        }
 
-	cen[X] = (xmin + xmax) / 2. - xmin;
-	cen[Y] = (ymin + ymax) / 2. - ymin;
-	cen[Z] = (zmin + zmax) / 2.;
+        cen[X] = (xmin + xmax) / 2. - xmin;
+        cen[Y] = (ymin + ymax) / 2. - ymin;
+        cen[Z] = (zmin + zmax) / 2.;
 
-	return (1);
+        return (1);
     }
 
     cen[X] = cen[Y] = cen[Z] = 0.0;
@@ -1292,14 +1290,14 @@ int gs_setall_norm_needupdate(void)
     geosurf *gs;
 
     if (Surf_top) {
-	Surf_top->norm_needupdate = 1;
+        Surf_top->norm_needupdate = 1;
     }
     else {
-	return (-1);
+        return (-1);
     }
 
     for (gs = Surf_top->next; gs; gs = gs->next) {
-	gs->norm_needupdate = 1;
+        gs->norm_needupdate = 1;
     }
 
     return (1);
@@ -1321,7 +1319,7 @@ int gs_point_is_masked(geosurf * gs, float *pt)
     float p2[2];
 
     if (!gs->curmask) {
-	return (0);
+        return (0);
     }
 
     vrow = Y2VROW(gs, pt[Y]);
@@ -1329,47 +1327,47 @@ int gs_point_is_masked(geosurf * gs, float *pt)
 
     /* check right & bottom edges */
     if (pt[X] == VCOL2X(gs, VCOLS(gs))) {
-	/* right edge */
-	vcol -= 1;
+        /* right edge */
+        vcol -= 1;
     }
 
     if (pt[Y] == VROW2Y(gs, VROWS(gs))) {
-	/* bottom edge */
-	vrow -= 1;
+        /* bottom edge */
+        vrow -= 1;
     }
 
     drow = VROW2DROW(gs, vrow);
     dcol = VCOL2DCOL(gs, vcol);
 
     if (BM_get(gs->curmask, dcol, drow)) {
-	retmask |= MASK_TL;
-	npts++;
+        retmask |= MASK_TL;
+        npts++;
     }
 
     dcol = VCOL2DCOL(gs, vcol + 1);
 
     if (BM_get(gs->curmask, dcol, drow)) {
-	retmask |= MASK_TR;
-	npts++;
+        retmask |= MASK_TR;
+        npts++;
     }
 
     drow = VROW2DROW(gs, vrow + 1);
 
     if (BM_get(gs->curmask, dcol, drow)) {
-	retmask |= MASK_BR;
-	npts++;
+        retmask |= MASK_BR;
+        npts++;
     }
 
     dcol = VCOL2DCOL(gs, vcol);
 
     if (BM_get(gs->curmask, dcol, drow)) {
-	retmask |= MASK_BL;
-	npts++;
+        retmask |= MASK_BL;
+        npts++;
     }
 
     if (npts != 1) {
-	/* zero or masked */
-	return (retmask | npts);
+        /* zero or masked */
+        return (retmask | npts);
     }
 
     p2[X] = VCOL2X(gs, vcol);
@@ -1377,25 +1375,25 @@ int gs_point_is_masked(geosurf * gs, float *pt)
 
     switch (retmask) {
     case MASK_TL:
-	if ((pt[X] - p2[X]) / VXRES(gs) > (pt[Y] - p2[Y]) / VYRES(gs)) {
-	    /* lower triangle */
-	    return (0);
-	}
+        if ((pt[X] - p2[X]) / VXRES(gs) > (pt[Y] - p2[Y]) / VYRES(gs)) {
+            /* lower triangle */
+            return (0);
+        }
 
-	return (retmask | npts);
+        return (retmask | npts);
     case MASK_TR:
 
-	return (retmask | npts);
+        return (retmask | npts);
     case MASK_BR:
-	if ((pt[X] - p2[X]) / VXRES(gs) <= (pt[Y] - p2[Y]) / VYRES(gs)) {
-	    /* upper triangle */
-	    return (0);
-	}
+        if ((pt[X] - p2[X]) / VXRES(gs) <= (pt[Y] - p2[Y]) / VYRES(gs)) {
+            /* upper triangle */
+            return (0);
+        }
 
-	return (retmask | npts);
+        return (retmask | npts);
     case MASK_BL:
 
-	return (retmask | npts);
+        return (retmask | npts);
     }
 
     /* Assume that if we get here it is an error */
@@ -1415,37 +1413,37 @@ int gs_point_is_masked(geosurf * gs, float *pt)
    \return 1 on success
  */
 int gs_distance_onsurf(geosurf * gs, float *p1, float *p2, float *dist,
-		       int use_exag)
+    int use_exag)
 {
     Point3 *tmp;
     int np, i;
     float exag, length;
 
     if (in_vregion(gs, p1) && in_vregion(gs, p2)) {
-	if (NULL == (tmp = gsdrape_get_segments(gs, p1, p2, &np))) {
-	    return (0);
-	}
+        if (NULL == (tmp = gsdrape_get_segments(gs, p1, p2, &np))) {
+            return (0);
+        }
 
-	length = 0.;
+        length = 0.;
 
-	if (use_exag) {
-	    exag = GS_global_exag();
-	    tmp[0][Z] *= exag;
+        if (use_exag) {
+            exag = GS_global_exag();
+            tmp[0][Z] *= exag;
 
-	    for (i = 0; i < (np - 1); i++) {
-		tmp[i + 1][Z] *= exag;
-		length += GS_distance(tmp[i], tmp[i + 1]);
-	    }
-	}
-	else {
-	    for (i = 0; i < (np - 1); i++) {
-		length += GS_distance(tmp[i], tmp[i + 1]);
-	    }
-	}
+            for (i = 0; i < (np - 1); i++) {
+                tmp[i + 1][Z] *= exag;
+                length += GS_distance(tmp[i], tmp[i + 1]);
+            }
+        }
+        else {
+            for (i = 0; i < (np - 1); i++) {
+                length += GS_distance(tmp[i], tmp[i + 1]);
+            }
+        }
 
-	*dist = length;
+        *dist = length;
 
-	return (1);
+        return (1);
     }
 
     return (0);

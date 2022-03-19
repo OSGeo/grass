@@ -50,6 +50,6 @@ int execute_random(struct rr_state *);
 /* support.c */
 int make_support(struct rr_state *, int, double, long);
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

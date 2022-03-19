@@ -39,8 +39,7 @@ extern void PS_Color(int, int, int);
 extern void PS_Bitmap(int, int, int, const unsigned char *);
 extern void PS_begin_raster(int, int[2][2], double[2][2]);
 extern int PS_raster(int, int, const unsigned char *,
-		     const unsigned char *, const unsigned char *,
-		     const unsigned char *);
+    const unsigned char *, const unsigned char *, const unsigned char *);
 extern void PS_end_raster(void);
 extern void PS_Begin(void);
 extern void PS_Move(double, double);
@@ -50,4 +49,4 @@ extern void PS_Stroke(void);
 extern void PS_Fill(void);
 extern void PS_Point(double, double);
 
-#endif /* __PSDRIVER_H__ */
+#endif                          /* __PSDRIVER_H__ */

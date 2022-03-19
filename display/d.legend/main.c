@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("legend"));
     module->description =
         _("Displays a legend for a 2D or 3D raster map in the active frame "
-          "of the graphics monitor.");
+        "of the graphics monitor.");
 
     opt_rast2d = G_define_standard_option(G_OPT_R_MAP);
     opt_rast2d->key = "raster";
@@ -131,8 +131,7 @@ int main(int argc, char **argv)
     opt_units->key = "units";
     opt_units->type = TYPE_STRING;
     opt_units->required = NO;
-    opt_units->description =
-            _("Units to display after labels (e.g. meters)");
+    opt_units->description = _("Units to display after labels (e.g. meters)");
     opt_units->guisection = _("Advanced");
 
     opt_labelnum = G_define_option();
@@ -177,7 +176,7 @@ int main(int argc, char **argv)
     opt_at->options = "0-100";
     opt_at->label =
         _("Size and placement as percentage of screen coordinates "
-          "(0,0 is lower left)");
+        "(0,0 is lower left)");
     opt_at->description = opt_at->key_desc;
     opt_at->answer = NULL;
 
@@ -471,20 +470,20 @@ int main(int argc, char **argv)
 
     if (show_bg)
         draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
-             hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth,
-             cats, colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin,
-             UserRangeMax, catlist, catlistCount, use_catlist, ticksCount,
-             fontsize, tit_fontsize, title, tick_values, t_step, colorb,
-             colorbg, opt_use, opt_at, opt_fontsize, opt_tstep,
-             opt_range, histo, hidestr, log_scale, 0, digits, units);
+            hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth,
+            cats, colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin,
+            UserRangeMax, catlist, catlistCount, use_catlist, ticksCount,
+            fontsize, tit_fontsize, title, tick_values, t_step, colorb,
+            colorbg, opt_use, opt_at, opt_fontsize, opt_tstep,
+            opt_range, histo, hidestr, log_scale, 0, digits, units);
 
     draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
-         hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth, cats,
-         colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax,
-         catlist, catlistCount, use_catlist, ticksCount, fontsize,
-         tit_fontsize, title, tick_values, t_step, colorb, colorbg, opt_use,
-         opt_at, opt_fontsize, opt_tstep, opt_range, histo,
-         hidestr, log_scale, 1, digits, units);
+        hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth, cats,
+        colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax,
+        catlist, catlistCount, use_catlist, ticksCount, fontsize,
+        tit_fontsize, title, tick_values, t_step, colorb, colorbg, opt_use,
+        opt_at, opt_fontsize, opt_tstep, opt_range, histo,
+        hidestr, log_scale, 1, digits, units);
 
     D_save_command(G_recreate_command());
     D_close_driver();

@@ -10,14 +10,14 @@ double *Cdhc_geary_test(double *x, int n)
 
     y[0] = 0.0;
     for (i = 0; i < n; ++i)
-	mean += x[i];
+        mean += x[i];
 
     mean /= n;
 
     for (i = 0; i < n; ++i) {
-	diff = x[i] - mean;
-	y[0] += fabs(diff);
-	s += diff * diff;
+        diff = x[i] - mean;
+        y[0] += fabs(diff);
+        s += diff * diff;
     }
 
     s *= n;
@@ -26,7 +26,7 @@ double *Cdhc_geary_test(double *x, int n)
 
 #ifdef NOISY
     fprintf(stdout, "  TEST2  GTN    =%10.4f   Z(GTN) =%10.4f\n", y[0], y[1]);
-#endif /* NOISY */
+#endif                          /* NOISY */
 
     return y;
 }

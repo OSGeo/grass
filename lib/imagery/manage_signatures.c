@@ -79,8 +79,7 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
     /* Remove only if file is in the current mapset */
     if (G_name_is_fully_qualified(name, xname, xmapset) &&
         strcmp(xmapset, G_mapset()) != 0) {
-        G_warning(_("%s is not in the current mapset (%s)"), name,
-                  G_mapset());
+        G_warning(_("%s is not in the current mapset (%s)"), name, G_mapset());
         return 1;
     }
     if (I_find_signature2(type, name, G_mapset())) {
@@ -110,7 +109,7 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
  * \return 1 on failure
  */
 int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
-                      const char *old_mapset, const char *new_name)
+    const char *old_mapset, const char *new_name)
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX],
         xmapset[GMAPSET_MAX];
@@ -119,13 +118,13 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
     char old_path[GPATH_MAX], new_path[GPATH_MAX];
 
     G_debug(1, "I_signatures_copy(%d, %s@%s, %s);", type, old_name,
-            old_mapset, new_name);
+        old_mapset, new_name);
 
     /* Copy only if mapset of new name is the current mapset */
     if (G_name_is_fully_qualified(new_name, tname, tmapset)) {
         if (strcmp(tmapset, G_mapset()) != 0) {
             G_warning(_("%s is not in the current mapset (%s)"), new_name,
-                      G_mapset());
+                G_mapset());
             return 1;
         }
     }
@@ -149,7 +148,7 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
 
     if (G_recursive_copy(old_path, new_path) != 0) {
         G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-                  G_fully_qualified_name(old_name, smapset), tname);
+            G_fully_qualified_name(old_name, smapset), tname);
         return 1;
     }
     return 0;
@@ -168,7 +167,7 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
  * \return 1 on failure
  */
 int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
-                        const char *new_name)
+    const char *new_name)
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX];
     char dir[GNAME_MAX];
@@ -181,7 +180,7 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
     if (G_name_is_fully_qualified(old_name, sname, tmapset)) {
         if (strcmp(tmapset, G_mapset()) != 0) {
             G_warning(_("%s is not in the current mapset (%s)"), old_name,
-                      G_mapset());
+                G_mapset());
             return 1;
         }
     }
@@ -190,7 +189,7 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
     if (G_name_is_fully_qualified(new_name, tname, tmapset)) {
         if (strcmp(tmapset, G_mapset()) != 0) {
             G_warning(_("%s is not in the current mapset (%s)"), new_name,
-                      G_mapset());
+                G_mapset());
             return 1;
         }
     }
@@ -233,7 +232,7 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
  * \return count of signature strings in the array
  */
 int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset,
-                              char ***out_list)
+    char ***out_list)
 {
     int base = 0;
 
@@ -269,7 +268,7 @@ void I_free_signatures_list(int count, char ***list)
 }
 
 static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
-                        char ***out_list)
+    char ***out_list)
 {
     int count = 0;
     char path[GPATH_MAX];
@@ -290,12 +289,11 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
     /* Make items fully qualified names */
     int mapset_len = strlen(mapset);
 
-    *out_list =
-        (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
+    *out_list = (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
     for (int i = 0; i < count; i++) {
         (*out_list)[base + i] =
             (char *)G_malloc((strlen(dirlist[i]) + 1 + mapset_len + 1) *
-                             sizeof(char));
+            sizeof(char));
         sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
     }
 

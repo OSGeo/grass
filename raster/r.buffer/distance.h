@@ -58,4 +58,4 @@ extern int count_rows_with_data;
 #define NAUT_MILES_TO_METERS 1852.0
 #define KILOMETERS_TO_METERS 1000.0
 
-#endif /* __DISTANCE_H__ */
+#endif                          /* __DISTANCE_H__ */

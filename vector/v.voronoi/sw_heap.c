@@ -12,10 +12,10 @@ int PQinsert(struct Halfedge *he, struct Site *v, double offset)
     he->ystar = v->coord.y + offset;
     last = &PQhash[PQbucket(he)];
     while ((next = last->PQnext) != (struct Halfedge *)NULL &&
-	   (he->ystar > next->ystar ||
-	    (he->ystar == next->ystar && v->coord.x > next->vertex->coord.x)))
+        (he->ystar > next->ystar ||
+            (he->ystar == next->ystar && v->coord.x > next->vertex->coord.x)))
     {
-	last = next;
+        last = next;
     }
     he->PQnext = last->PQnext;
     last->PQnext = he;
@@ -28,13 +28,13 @@ int PQdelete(struct Halfedge *he)
     struct Halfedge *last;
 
     if (he->vertex != (struct Site *)NULL) {
-	last = &PQhash[PQbucket(he)];
-	while (last->PQnext != he)
-	    last = last->PQnext;
-	last->PQnext = he->PQnext;
-	PQcount--;
-	deref(he->vertex);
-	he->vertex = (struct Site *)NULL;
+        last = &PQhash[PQbucket(he)];
+        while (last->PQnext != he)
+            last = last->PQnext;
+        last->PQnext = he->PQnext;
+        PQcount--;
+        deref(he->vertex);
+        he->vertex = (struct Site *)NULL;
     }
     return 0;
 }
@@ -45,11 +45,11 @@ int PQbucket(struct Halfedge *he)
 
     bucket = (he->ystar - ymin) / deltay * PQhashsize;
     if (bucket < 0)
-	bucket = 0;
+        bucket = 0;
     if (bucket >= PQhashsize)
-	bucket = PQhashsize - 1;
+        bucket = PQhashsize - 1;
     if (bucket < PQmin)
-	PQmin = bucket;
+        PQmin = bucket;
     return (bucket);
 }
 
@@ -66,7 +66,7 @@ struct Point PQ_min(void)
     struct Point answer;
 
     while (PQhash[PQmin].PQnext == (struct Halfedge *)NULL) {
-	PQmin++;
+        PQmin++;
     }
     answer.x = PQhash[PQmin].PQnext->vertex->coord.x;
     answer.y = PQhash[PQmin].PQnext->ystar;
@@ -94,7 +94,7 @@ int PQinitialize(void)
     PQhashsize = 4 * sqrt_nsites;
     PQhash = (struct Halfedge *)G_malloc(PQhashsize * sizeof(struct Halfedge));
     for (i = 0; i < PQhashsize; i++)
-	PQhash[i].PQnext = (struct Halfedge *)NULL;
+        PQhash[i].PQnext = (struct Halfedge *)NULL;
 
     return 0;
 }

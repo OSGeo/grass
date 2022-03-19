@@ -70,8 +70,7 @@
 #include <grass/glocale.h>
 
 
-int
-G_bz2_compress_bound(int src_sz)
+int G_bz2_compress_bound(int src_sz)
 {
     /* from the documentation:
      * To guarantee that the compressed data will fit in its buffer, 
@@ -85,8 +84,7 @@ G_bz2_compress_bound(int src_sz)
 }
 
 int
-G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz)
+G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int err;
     int i, buf_sz;
@@ -100,74 +98,74 @@ G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
 
     /* Catch errors early */
     if (src == NULL || dst == NULL) {
-	if (src == NULL)
-	    G_warning(_("No source buffer"));
-	
-	if (dst == NULL)
-	    G_warning(_("No destination buffer"));
-	return -1;
+        if (src == NULL)
+            G_warning(_("No source buffer"));
+
+        if (dst == NULL)
+            G_warning(_("No destination buffer"));
+        return -1;
     }
 
     /* Don't do anything if either of these are true */
     if (src_sz <= 0 || dst_sz <= 0) {
-	if (src_sz <= 0)
-	    G_warning(_("Invalid source buffer size %d"), src_sz);
-	if (dst_sz <= 0)
-	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
-	return 0;
+        if (src_sz <= 0)
+            G_warning(_("Invalid source buffer size %d"), src_sz);
+        if (dst_sz <= 0)
+            G_warning(_("Invalid destination buffer size %d"), dst_sz);
+        return 0;
     }
 
     /* Output buffer has to be 1% + 600 bytes bigger for single pass compression */
     buf = dst;
     buf_sz = G_bz2_compress_bound(src_sz);
     if (buf_sz > dst_sz) {
-	G_warning("G_bz2_compress(): programmer error, destination is too small");
-	if (NULL == (buf = (unsigned char *)
-		     G_calloc(buf_sz, sizeof(unsigned char))))
-	    return -1;
+        G_warning
+            ("G_bz2_compress(): programmer error, destination is too small");
+        if (NULL == (buf = (unsigned char *)
+                G_calloc(buf_sz, sizeof(unsigned char))))
+            return -1;
     }
     else
-	buf_sz = dst_sz;
+        buf_sz = dst_sz;
 
     /* Do single pass compression */
     nbytes = buf_sz;
-    err = BZ2_bzBuffToBuffCompress((char *)buf, &nbytes, /* destination */
-                                   (char *)src, src_sz,  /* source */
-				   9,			 /* blockSize100k */ 
-				   0,                    /* verbosity */
-				   100);                 /* workFactor */
+    err = BZ2_bzBuffToBuffCompress((char *)buf, &nbytes,        /* destination */
+        (char *)src, src_sz,    /* source */
+        9,                      /* blockSize100k */
+        0,                      /* verbosity */
+        100);                   /* workFactor */
 
     if (err != BZ_OK) {
-	G_warning(_("BZIP2 version %s compression error %d"),
-	          BZ2_bzlibVersion(), err);
-	if (buf != dst)
-	    G_free(buf);
-	return -1;
+        G_warning(_("BZIP2 version %s compression error %d"),
+            BZ2_bzlibVersion(), err);
+        if (buf != dst)
+            G_free(buf);
+        return -1;
     }
 
     /* updated buf_sz is bytes of compressed data */
     if (nbytes >= (unsigned int)src_sz) {
-	/* compression not possible */
-	if (buf != dst)
-	    G_free(buf);
-	return -2;
+        /* compression not possible */
+        if (buf != dst)
+            G_free(buf);
+        return -2;
     }
 
     if (buf != dst) {
-	/* Copy the data from buf to dst */
-	for (i = 0; i < nbytes; i++)
-	    dst[i] = buf[i];
+        /* Copy the data from buf to dst */
+        for (i = 0; i < nbytes; i++)
+            dst[i] = buf[i];
 
-	G_free(buf);
+        G_free(buf);
     }
 
     return nbytes;
 #endif
-}				/* G_bz2_compress() */
+}                               /* G_bz2_compress() */
 
 int
-G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz)
+G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int err;
     unsigned int nbytes;
@@ -179,35 +177,35 @@ G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
 
     /* Catch error condition */
     if (src == NULL || dst == NULL) {
-	if (src == NULL)
-	    G_warning(_("No source buffer"));
-	
-	if (dst == NULL)
-	    G_warning(_("No destination buffer"));
-	return -2;
+        if (src == NULL)
+            G_warning(_("No source buffer"));
+
+        if (dst == NULL)
+            G_warning(_("No destination buffer"));
+        return -2;
     }
 
     /* Don't do anything if either of these are true */
     if (src_sz <= 0 || dst_sz <= 0) {
-	if (src_sz <= 0)
-	    G_warning(_("Invalid source buffer size %d"), src_sz);
-	if (dst_sz <= 0)
-	    G_warning(_("Invalid destination buffer size %d"), dst_sz);
-	return 0;
+        if (src_sz <= 0)
+            G_warning(_("Invalid source buffer size %d"), src_sz);
+        if (dst_sz <= 0)
+            G_warning(_("Invalid destination buffer size %d"), dst_sz);
+        return 0;
     }
 
 
     /* Do single pass decompression */
     nbytes = dst_sz;
-    err = BZ2_bzBuffToBuffDecompress((char *)dst, &nbytes,  /* destination */
-                                     (char *)src, src_sz,   /* source */
-				     0,                     /* small */
-				     0);                    /* verbosity */
+    err = BZ2_bzBuffToBuffDecompress((char *)dst, &nbytes,      /* destination */
+        (char *)src, src_sz,    /* source */
+        0,                      /* small */
+        0);                     /* verbosity */
 
     if (err != BZ_OK) {
-	G_warning(_("BZIP2 version %s decompression error %d"),
-	          BZ2_bzlibVersion(), err);
-	return -1;
+        G_warning(_("BZIP2 version %s decompression error %d"),
+            BZ2_bzlibVersion(), err);
+        return -1;
     }
 
     /* Number of bytes inflated to output stream is
@@ -215,9 +213,10 @@ G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
      */
 
     if (nbytes != dst_sz) {
-	/* TODO: it is not an error if destination is larger than needed */
-	G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes, dst_sz);
-	return -1;
+        /* TODO: it is not an error if destination is larger than needed */
+        G_warning(_("Got uncompressed size %d, expected %d"), (int)nbytes,
+            dst_sz);
+        return -1;
     }
 
     return nbytes;

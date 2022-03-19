@@ -75,4 +75,4 @@ int print_percent(double);
 int row_total(int, int, long *, double *);
 int col_total(int, int, long *, double *);
 
-#endif /* __COIN_H__ */
+#endif                          /* __COIN_H__ */

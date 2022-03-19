@@ -13,4 +13,4 @@ int Segment_put(SEGMENT *, const void *, off_t, off_t);
 int Segment_put_row(const SEGMENT *, const void *, off_t);
 int Segment_release(SEGMENT *);
 
-#endif /* GRASS_SEGMENTDEFS_H */
+#endif                          /* GRASS_SEGMENTDEFS_H */

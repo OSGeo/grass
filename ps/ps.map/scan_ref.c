@@ -26,33 +26,33 @@ int scan_ref(char *buf, int *xref, int *yref)
     *xref = *yref = CENTER;
     switch (sscanf(buf, "%s%s", word1, word2)) {
     case 2:
-	lowercase(word2);
-	if (!(xmatch(word2, xref) || ymatch(word2, yref)))
-	    return 0;
+        lowercase(word2);
+        if (!(xmatch(word2, xref) || ymatch(word2, yref)))
+            return 0;
     case 1:
-	lowercase(word1);
-	if (xmatch(word1, xref) || ymatch(word1, yref))
-	    return 1;
+        lowercase(word1);
+        if (xmatch(word1, xref) || ymatch(word1, yref))
+            return 1;
     default:
-	return 0;
+        return 0;
     }
 }
 
 static int xmatch(char *word, int *xref)
 {
     if (strcmp(word, "center") == 0)
-	return 1;
+        return 1;
     if (strcmp(word, "middle") == 0)
-	return 1;
+        return 1;
     if (xok)
-	return 0;
+        return 0;
 
     if (strcmp(word, "left") == 0)
-	*xref = LEFT;
+        *xref = LEFT;
     else if (strcmp(word, "right") == 0)
-	*xref = RIGHT;
+        *xref = RIGHT;
     else
-	return 0;
+        return 0;
     xok = 1;
     return 1;
 }
@@ -60,22 +60,22 @@ static int xmatch(char *word, int *xref)
 static int ymatch(char *word, int *yref)
 {
     if (strcmp(word, "center") == 0)
-	return 1;
+        return 1;
     if (strcmp(word, "middle") == 0)
-	return 1;
+        return 1;
     if (yok)
-	return 0;
+        return 0;
 
     if (strcmp(word, "upper") == 0)
-	*yref = UPPER;
+        *yref = UPPER;
     else if (strcmp(word, "top") == 0)
-	*yref = UPPER;
+        *yref = UPPER;
     else if (strcmp(word, "lower") == 0)
-	*yref = LOWER;
+        *yref = LOWER;
     else if (strcmp(word, "bottom") == 0)
-	*yref = LOWER;
+        *yref = LOWER;
     else
-	return 0;
+        return 0;
     yok = 1;
     return 1;
 }
@@ -83,8 +83,8 @@ static int ymatch(char *word, int *yref)
 int lowercase(register char *s)
 {
     for (; *s; s++)
-	if (*s >= 'A' && *s <= 'Z')
-	    *s += 'a' - 'A';
+        if (*s >= 'A' && *s <= 'Z')
+            *s += 'a' - 'A';
 
     return 0;
 }

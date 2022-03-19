@@ -15,10 +15,10 @@ void do_lights()
 
 
     static float material[] = {
-	GL_SPECULAR, 1.0, 1.0, 1.0,
-	GL_DIFFUSE, 0.8, 0.8, 0.8,
-	GL_AMBIENT, 0.8, 0.8, 0.8,
-	GL_SHININESS, 10,
+        GL_SPECULAR, 1.0, 1.0, 1.0,
+        GL_DIFFUSE, 0.8, 0.8, 0.8,
+        GL_AMBIENT, 0.8, 0.8, 0.8,
+        GL_SHININESS, 10,
     };
     /*
        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
@@ -53,13 +53,13 @@ void do_lights()
 /************************************  make_matcolors  ************************/
 /* this code came from GRASS color code written by M.Shapiro USACERL */
 void draw_colortable(D_spec, Headfax, Window)
-     struct dspec *D_spec;
-     file_info *Headfax;
-     long Window[];
+        struct dspec *D_spec;
+        file_info *Headfax;
+        long Window[];
 {
     short t;
     short x1, x2, y1, y2;
-    short vert[4][2];		/* the vertices of the colorsquares */
+    short vert[4][2];           /* the vertices of the colorsquares */
     int yadd;
     short color[3];
 
@@ -72,28 +72,28 @@ void draw_colortable(D_spec, Headfax, Window)
 
     /* draw the colortable */
     for (t = 0; t < Headfax->linefax.nthres; t++) {
-	y1 = y2;
-	y2 += yadd;
+        y1 = y2;
+        y2 += yadd;
 
-	vert[0][0] = x1;
-	vert[0][1] = y1;
-	vert[1][0] = x2;
-	vert[1][1] = y1;
-	vert[2][0] = x2;
-	vert[2][1] = y2;
-	vert[3][0] = x1;
-	vert[3][1] = y2;
+        vert[0][0] = x1;
+        vert[0][1] = y1;
+        vert[1][0] = x2;
+        vert[1][1] = y1;
+        vert[2][0] = x2;
+        vert[2][1] = y2;
+        vert[3][0] = x1;
+        vert[3][1] = y2;
 
-	get_cat_color(Headfax->linefax.tvalue[t], D_spec->ctable, color);
+        get_cat_color(Headfax->linefax.tvalue[t], D_spec->ctable, color);
 
-	glColor3ub(color[0], color[1], color[2]);
+        glColor3ub(color[0], color[1], color[2]);
 
 
-	glBegin(GL_POLYGON);
-	glVertex2sv(vert[0]);
-	glVertex2sv(vert[1]);
-	glVertex2sv(vert[2]);
-	glVertex2sv(vert[3]);
-	glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2sv(vert[0]);
+        glVertex2sv(vert[1]);
+        glVertex2sv(vert[2]);
+        glVertex2sv(vert[3]);
+        glEnd();
     }
 }

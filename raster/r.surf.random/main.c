@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     i_flag->description = _("Create an integer raster map");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     min_value = atof(min->answer);
     max_value = atof(max->answer);
@@ -122,8 +122,7 @@ int main(int argc, char *argv[])
         /* showing the not parsed numbers to show exactly what user
          * provided and to avoid any issues with formating %f vs %d */
         G_fatal_error(_("Minimum %s should be higher than maximum %s,"
-                        " but %s > %s"),
-                        min->key, max->key, min->answer, max->answer);
+                " but %s > %s"), min->key, max->key, min->answer, max->answer);
     }
 
     randsurf(out->answer, min_value, max_value, i_flag->answer);

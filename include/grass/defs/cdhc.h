@@ -32,4 +32,4 @@ double *Cdhc_mod_maxlik_ratio(double *, int);
 double *Cdhc_coeff_variation(double *, int);
 double *Cdhc_kotz_families(double *, int);
 
-#endif /* CDHCDEFS_H */
+#endif                          /* CDHCDEFS_H */

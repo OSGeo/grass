@@ -19,18 +19,18 @@ struct stat_list
     struct stat_node *ptr;      /* pointer to first stat_node in list */
     long int count,             /* number of stat_nodes in list 
                                    (not counting null cells) */
-      null_stat,                /* stats for null cell */
-      maxstat,                  /* max. statistic in list */
-      minstat,                  /* min. statistic in list */
-      sumstat,                  /* sum of all statistics in list */
-      maxcat,                   /* max. cell-file category value in list */
-      mincat;                   /* min. cell-file category value in list */
+        null_stat,              /* stats for null cell */
+        maxstat,                /* max. statistic in list */
+        minstat,                /* min. statistic in list */
+        sumstat,                /* sum of all statistics in list */
+        maxcat,                 /* max. cell-file category value in list */
+        mincat;                 /* min. cell-file category value in list */
 };
 
 
 /* histogram.c */
 double histogram(const char *, int, int, int, int, int, int, int, int,
-                 int, struct FPRange, int);
+    int, struct FPRange, int);
 
 /* get_stats.c */
 void get_stats(const char *, struct stat_list *, int, int);
@@ -38,8 +38,8 @@ void run_stats(const char *, int, const char *, int);
 
 /* draw.c */
 void draw(const char *, int, int, int, int, int, int, int, int, int, int, int,
-          int, struct Categories, struct Colors, double, double, double,
-          double, int, int, double, double, double *, int, int, int, double,
-          double, const char *, double *, double, int, int, struct Option *,
-          struct Option *, struct Option *, struct Option *, struct Option *,
-          struct Flag *, struct Flag *, int, int, int, char *);
+    int, struct Categories, struct Colors, double, double, double,
+    double, int, int, double, double, double *, int, int, int, double,
+    double, const char *, double *, double, int, int, struct Option *,
+    struct Option *, struct Option *, struct Option *, struct Option *,
+    struct Flag *, struct Flag *, int, int, int, char *);

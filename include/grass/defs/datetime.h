@@ -12,7 +12,7 @@ void datetime_copy(DateTime * src, const DateTime * dst);
 
 /* diff.c */
 int datetime_difference(const DateTime * a, const DateTime * b,
-			DateTime * result);
+    DateTime * result);
 
 /* error.c */
 int datetime_error(int code, char *msg);
@@ -32,7 +32,7 @@ int datetime_check_increment(const DateTime * src, const DateTime * incr);
 
 /* incr3.c */
 int datetime_get_increment_type(const DateTime * dt, int *mode, int *from,
-				int *to, int *fracsec);
+    int *to, int *fracsec);
 int datetime_set_increment_type(const DateTime * src, DateTime * incr);
 
 /* local.c */
@@ -60,7 +60,7 @@ void datetime_invert_sign(DateTime * dt);
 /* type.c */
 int datetime_set_type(DateTime * dt, int mode, int from, int to, int fracsec);
 int datetime_get_type(const DateTime * dt, int *mode, int *from, int *to,
-		      int *fracsec);
+    int *fracsec);
 int datetime_is_valid_type(const DateTime * dt);
 int datetime_check_type(const DateTime * dt);
 int datetime_in_interval_year_month(int x);
@@ -103,4 +103,4 @@ int datetime_set_second(DateTime * dt, double second);
 int datetime_get_fracsec(const DateTime * dt, int *fracsec);
 int datetime_set_fracsec(DateTime * dt, int fracsec);
 
-#endif /* GRASS_DATETIMEDEFS_H */
+#endif                          /* GRASS_DATETIMEDEFS_H */

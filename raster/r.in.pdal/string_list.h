@@ -36,4 +36,4 @@ void string_list_from_file(struct StringList *string_list, char *filename);
 void string_list_from_one_item(struct StringList *string_list, char *item);
 void string_list_free(struct StringList *string_list);
 
-#endif /* __STRING_LIST_H__ */
+#endif                          /* __STRING_LIST_H__ */

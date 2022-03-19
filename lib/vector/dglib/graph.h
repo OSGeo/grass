@@ -33,7 +33,7 @@
 /*
  * Graph State bitmask - returned by dglGet_State() function
  */
-#define DGL_GS_FLAT			0x1	/* otherwise is TREE */
+#define DGL_GS_FLAT			0x1     /* otherwise is TREE */
 
 /*
  * Graph Family
@@ -57,15 +57,15 @@
 /*
  * Node Status bitmask - returned by dglNodeGet_Status()
  */
-#define DGL_NS_HEAD			0x1	/* node exists as at least one edge's head (static) */
-#define DGL_NS_TAIL			0x2	/* node exists as at least one edge's tail (static) */
-#define DGL_NS_ALONE		0x4	/* node is a component */
+#define DGL_NS_HEAD			0x1     /* node exists as at least one edge's head (static) */
+#define DGL_NS_TAIL			0x2     /* node exists as at least one edge's tail (static) */
+#define DGL_NS_ALONE		0x4     /* node is a component */
 
 
 /*
  * Edge Status bitmask - returned by dglEdgeGet_Status()
  */
-#define DGL_ES_DIRECTED		0x1	/* force edge to be directed */
+#define DGL_ES_DIRECTED		0x1     /* force edge to be directed */
 
 
 /*
@@ -184,10 +184,10 @@ typedef struct _dglGraph
 
     /* so far statistics are only computed by dglAddEdge() */
 #ifdef DGL_STATS
-    clock_t clkAddEdge;		/* cycles spent during the last addedge execution */
-    int cAddEdge;		/* # of calls to dglAddEdge() */
-    clock_t clkNodeTree;	/* cycles spent in accessing the node binary tree */
-    int cNodeTree;		/* # of probes in the node tree */
+    clock_t clkAddEdge;         /* cycles spent during the last addedge execution */
+    int cAddEdge;               /* # of calls to dglAddEdge() */
+    clock_t clkNodeTree;        /* cycles spent in accessing the node binary tree */
+    int cNodeTree;              /* # of probes in the node tree */
 #endif
 }
 dglGraph_s;
@@ -195,15 +195,14 @@ dglGraph_s;
 /*
  * Shortest Path clip function type
  */
-typedef int (*dglSPClip_fn) (dglGraph_s *, dglSPClipInput_s *,
-			     dglSPClipOutput_s *, void *);
+typedef int (*dglSPClip_fn)(dglGraph_s *, dglSPClipInput_s *,
+    dglSPClipOutput_s *, void *);
 
 /*
  * Spanning clip function type
  */
-typedef int (*dglSpanClip_fn) (dglGraph_s *, dglGraph_s *,
-			       dglSpanClipInput_s *, dglSpanClipOutput_s *,
-			       void *);
+typedef int (*dglSpanClip_fn)(dglGraph_s *, dglGraph_s *,
+    dglSpanClipInput_s *, dglSpanClipOutput_s *, void *);
 
 /*
  * An ARC defined as : from-node, to-node, edge pointer, to-node-distance (from the path starting node)
@@ -308,8 +307,7 @@ typedef struct
  * graph context management
  */
 int dglInitialize(dglGraph_s * pGraph, dglByte_t Version,
-		  dglInt32_t NodeAttrSize, dglInt32_t EdgeAttrSize,
-		  dglInt32_t * pOpaqueSet);
+    dglInt32_t NodeAttrSize, dglInt32_t EdgeAttrSize, dglInt32_t * pOpaqueSet);
 int dglRelease(dglGraph_s * pGraph);
 int dglUnflatten(dglGraph_s * pGraph);
 int dglFlatten(dglGraph_s * pGraph);
@@ -320,7 +318,7 @@ void dglResetStats(dglGraph_s * pgraph);
  */
 dglInt32_t *dglGetNode(dglGraph_s * pGraph, dglInt32_t nNodeId);
 int dglAddNode(dglGraph_s * pGraph,
-	       dglInt32_t nNodeId, void *pvNodeAttr, dglInt32_t nFlags);
+    dglInt32_t nNodeId, void *pvNodeAttr, dglInt32_t nFlags);
 int dglDelNode(dglGraph_s * pGraph, dglInt32_t nNodeId);
 dglInt32_t dglNodeGet_Id(dglGraph_s * pGraph, dglInt32_t * pnNode);
 dglInt32_t *dglNodeGet_OutEdgeset(dglGraph_s * pGraph, dglInt32_t * pnNode);
@@ -328,7 +326,7 @@ dglInt32_t *dglNodeGet_InEdgeset(dglGraph_s * pGraph, dglInt32_t * pnNode);
 dglInt32_t dglNodeGet_Status(dglGraph_s * pGraph, dglInt32_t * pnNode);
 dglInt32_t *dglNodeGet_Attr(dglGraph_s * pGraph, dglInt32_t * pnNode);
 void dglNodeSet_Attr(dglGraph_s * pGraph, dglInt32_t * pnNode,
-		     dglInt32_t * pnAttr);
+    dglInt32_t * pnAttr);
 int dglNodeGet_InDegree(dglGraph_s * pGraph, dglInt32_t * pnNode);
 int dglNodeGet_OutDegree(dglGraph_s * pGraph, dglInt32_t * pnNode);
 int dglNodeGet_Valence(dglGraph_s * pGraph, dglInt32_t * pnNode);
@@ -337,7 +335,7 @@ int dglNodeGet_Valence(dglGraph_s * pGraph, dglInt32_t * pnNode);
  * edge management
  */
 dglInt32_t dglEdgesetGet_EdgeCount(dglGraph_s * pGraph,
-				   dglInt32_t * pnOutEdgeset);
+    dglInt32_t * pnOutEdgeset);
 
 dglInt32_t dglEdgeGet_Id(dglGraph_s * pGraph, dglInt32_t * pnEdge);
 dglInt32_t dglEdgeGet_Cost(dglGraph_s * pGraph, dglInt32_t * pnEdge);
@@ -345,23 +343,21 @@ dglInt32_t *dglEdgeGet_Head(dglGraph_s * pGraph, dglInt32_t * pnEdge);
 dglInt32_t *dglEdgeGet_Tail(dglGraph_s * pGraph, dglInt32_t * pnEdge);
 dglInt32_t *dglEdgeGet_Attr(dglGraph_s * pGraph, dglInt32_t * pnEdge);
 int dglEdgeSet_Attr(dglGraph_s * pGraph, dglInt32_t * pnAttr,
-		    dglInt32_t * pnEdge);
+    dglInt32_t * pnEdge);
 
 dglInt32_t *dglGetEdge(dglGraph_s * pGraph, dglInt32_t nEdgeId);
 
 int dglDelEdge(dglGraph_s * pGraph, dglInt32_t nEdgeId);
 
 int dglAddEdge(dglGraph_s * pGraph,
-	       dglInt32_t nHead,
-	       dglInt32_t nTail, dglInt32_t nCost, dglInt32_t nEdge);
+    dglInt32_t nHead, dglInt32_t nTail, dglInt32_t nCost, dglInt32_t nEdge);
 
 int dglAddEdgeX(dglGraph_s * pGraph,
-		dglInt32_t nHead,
-		dglInt32_t nTail,
-		dglInt32_t nCost,
-		dglInt32_t nEdge,
-		void *pvFnodeAttr,
-		void *pvTnodeAttr, void *pvEdgeAttr, dglInt32_t nFlags);
+    dglInt32_t nHead,
+    dglInt32_t nTail,
+    dglInt32_t nCost,
+    dglInt32_t nEdge,
+    void *pvFnodeAttr, void *pvTnodeAttr, void *pvEdgeAttr, dglInt32_t nFlags);
 
 
 /*
@@ -378,7 +374,7 @@ typedef struct
     int cb;
     int ib;
     unsigned char *pb;
-    unsigned char ab[118];	/* 118 = graph header size */
+    unsigned char ab[118];      /* 118 = graph header size */
 } dglIOContext_s;
 
 int dglIOContextInitialize(dglGraph_s *, dglIOContext_s *);
@@ -387,8 +383,8 @@ void dglIOContextRelease(dglIOContext_s *);
 /*
  * Chunked Write callback function type
  */
-typedef int (*dglWriteChunk_fn) (dglGraph_s *, unsigned char *pbChunk,
-				 int cbChunk, void *pvArg);
+typedef int (*dglWriteChunk_fn)(dglGraph_s *, unsigned char *pbChunk,
+    int cbChunk, void *pvArg);
 
 int dglWriteChunk(dglIOContext_s *, dglWriteChunk_fn, void *pvArg);
 int dglReadChunk(dglIOContext_s *, dglByte_t * pbChunk, int cbChunk);
@@ -399,48 +395,41 @@ int dglReadChunk(dglIOContext_s *, dglByte_t * pbChunk, int cbChunk);
  * Algorithms
  */
 int dglShortestPath(dglGraph_s * pGraph,
-		    dglSPReport_s ** ppReport,
-		    dglInt32_t nStartNode,
-		    dglInt32_t nDestinationNode,
-		    dglSPClip_fn fnClip,
-		    void *pvClipArg, dglSPCache_s * pCache);
+    dglSPReport_s ** ppReport,
+    dglInt32_t nStartNode,
+    dglInt32_t nDestinationNode,
+    dglSPClip_fn fnClip, void *pvClipArg, dglSPCache_s * pCache);
 int dglShortestPathGraph(dglGraph_s * pGraph,
-			 dglGraph_s * pGraphOut,
-			 dglInt32_t nStartNode,
-			 dglInt32_t nDestinationNode,
-			 dglSPClip_fn fnClip,
-			 void *pvClipArg, dglSPCache_s * pCache);
+    dglGraph_s * pGraphOut,
+    dglInt32_t nStartNode,
+    dglInt32_t nDestinationNode,
+    dglSPClip_fn fnClip, void *pvClipArg, dglSPCache_s * pCache);
 int dglShortestDistance(dglGraph_s * pGraph,
-			dglInt32_t * pnDistance,
-			dglInt32_t nStartNode,
-			dglInt32_t nDestinationNode,
-			dglSPClip_fn fnClip,
-			void *pvClipArg, dglSPCache_s * pCache);
+    dglInt32_t * pnDistance,
+    dglInt32_t nStartNode,
+    dglInt32_t nDestinationNode,
+    dglSPClip_fn fnClip, void *pvClipArg, dglSPCache_s * pCache);
 int dglShortestDistanceGraph(dglGraph_s * pGraph,
-			     dglGraph_s * pGraphOut,
-			     dglInt32_t nStartNode,
-			     dglInt32_t nDestinationNode,
-			     dglSPClip_fn fnClip,
-			     void *pvClipArg, dglSPCache_s * pCache);
+    dglGraph_s * pGraphOut,
+    dglInt32_t nStartNode,
+    dglInt32_t nDestinationNode,
+    dglSPClip_fn fnClip, void *pvClipArg, dglSPCache_s * pCache);
 
 int dglInitializeSPCache(dglGraph_s * pgraph, dglSPCache_s * pCache);
 void dglReleaseSPCache(dglGraph_s * pgraph, dglSPCache_s * pCache);
 void dglFreeSPReport(dglGraph_s * pGraph, dglSPReport_s * pSPReport);
 
 int dglDepthSpanning(dglGraph_s * pgraphInput,
-		     dglGraph_s * pgraphOutput,
-		     dglInt32_t nVertexNode,
-		     dglSpanClip_fn fnClip, void *pvClipArg);
+    dglGraph_s * pgraphOutput,
+    dglInt32_t nVertexNode, dglSpanClip_fn fnClip, void *pvClipArg);
 
 int dglDepthComponents(dglGraph_s * pgraphInput,
-		       dglGraph_s * pgraphComponents,
-		       int cgraphComponents,
-		       dglSpanClip_fn fnClip, void *pvClipArg);
+    dglGraph_s * pgraphComponents,
+    int cgraphComponents, dglSpanClip_fn fnClip, void *pvClipArg);
 
 int dglMinimumSpanning(dglGraph_s * pgraphInput,
-		       dglGraph_s * pgraphOutput,
-		       dglInt32_t nVertexNode,
-		       dglSpanClip_fn fnClip, void *pvClipArg);
+    dglGraph_s * pgraphOutput,
+    dglInt32_t nVertexNode, dglSpanClip_fn fnClip, void *pvClipArg);
 
 /*
  * error management
@@ -479,22 +468,21 @@ dglNodePrioritizer_s *dglGet_NodePrioritizer(dglGraph_s * pGraph);
 /*
  * node traverser
  */
-int dglNode_T_Initialize(dglNodeTraverser_s * pTraverser,
-			 dglGraph_s * pGraph);
+int dglNode_T_Initialize(dglNodeTraverser_s * pTraverser, dglGraph_s * pGraph);
 void dglNode_T_Release(dglNodeTraverser_s * pTraverser);
 dglInt32_t *dglNode_T_First(dglNodeTraverser_s * pTraverser);
 dglInt32_t *dglNode_T_Last(dglNodeTraverser_s * pTraverser);
 dglInt32_t *dglNode_T_Next(dglNodeTraverser_s * pTraverser);
 dglInt32_t *dglNode_T_Prev(dglNodeTraverser_s * pTraverser);
 dglInt32_t *dglNode_T_Find(dglNodeTraverser_s * pTraverser,
-			   dglInt32_t nNodeId);
+    dglInt32_t nNodeId);
 
 
 /*
  * edgeset traverser
  */
 int dglEdgeset_T_Initialize(dglEdgesetTraverser_s * pTraverser,
-			    dglGraph_s * pGraph, dglInt32_t * pnEdgeset);
+    dglGraph_s * pGraph, dglInt32_t * pnEdgeset);
 void dglEdgeset_T_Release(dglEdgesetTraverser_s * pTraverser);
 dglInt32_t *dglEdgeset_T_First(dglEdgesetTraverser_s * pTraverser);
 dglInt32_t *dglEdgeset_T_Next(dglEdgesetTraverser_s * pTraverser);
@@ -504,8 +492,7 @@ dglInt32_t *dglEdgeset_T_Next(dglEdgesetTraverser_s * pTraverser);
  * edge traverser
  */
 int dglEdge_T_Initialize(dglEdgeTraverser_s * pTraverser,
-			 dglGraph_s * pGraph,
-			 dglEdgePrioritizer_s * pEdgePrioritizer);
+    dglGraph_s * pGraph, dglEdgePrioritizer_s * pEdgePrioritizer);
 void dglEdge_T_Release(dglEdgeTraverser_s * pTraverser);
 dglInt32_t *dglEdge_T_First(dglEdgeTraverser_s * pTraverser);
 dglInt32_t *dglEdge_T_Next(dglEdgeTraverser_s * pTraverser);

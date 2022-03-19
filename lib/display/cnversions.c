@@ -39,14 +39,14 @@ struct rect
 };
 
 /* Bounding rectangles */
-static struct rect D;	/* Display coordinates, pixels, (0,0) towards NW */
-static struct rect A;	/* Map array coordinates, integers, (0,0) towards NW */
-static struct rect U;	/* UTM coordinates, meters, (0,0) towards SW */
+static struct rect D;           /* Display coordinates, pixels, (0,0) towards NW */
+static struct rect A;           /* Map array coordinates, integers, (0,0) towards NW */
+static struct rect U;           /* UTM coordinates, meters, (0,0) towards SW */
 
 /* Conversion factors */
-static struct vector D_to_A_conv;	/* Display to Array */
-static struct vector A_to_U_conv;	/* Array to UTM     */
-static struct vector U_to_D_conv;	/* UTM to Display   */
+static struct vector D_to_A_conv;       /* Display to Array */
+static struct vector A_to_U_conv;       /* Array to UTM     */
+static struct vector U_to_D_conv;       /* UTM to Display   */
 
 /* others */
 static int is_lat_lon;
@@ -54,12 +54,12 @@ static int is_lat_lon;
 
 static void calc_size(struct rect *rect)
 {
-    rect->size.x = rect->east  - rect->west;
+    rect->size.x = rect->east - rect->west;
     rect->size.y = rect->south - rect->north;
 }
 
-static void calc_conv(struct vector *conv, 
-		      const struct vector *src, const struct vector *dst)
+static void calc_conv(struct vector *conv,
+    const struct vector *src, const struct vector *dst)
 {
     conv->x = dst->x / src->x;
     conv->y = dst->y / src->y;
@@ -73,20 +73,20 @@ static void fit_aspect(struct rect *rect, const struct rect *ref)
     calc_conv(&conv, &rect->size, &ref->size);
 
     if (fabs(conv.y) > fabs(conv.x)) {
-	scale = fabs(conv.y) / fabs(conv.x);
-	size = rect->size.x / scale;
-	delta = rect->size.x - size;
-	rect->west += delta/2;
-	rect->east -= delta/2;
-	rect->size.x = size;
+        scale = fabs(conv.y) / fabs(conv.x);
+        size = rect->size.x / scale;
+        delta = rect->size.x - size;
+        rect->west += delta / 2;
+        rect->east -= delta / 2;
+        rect->size.x = size;
     }
     else {
-	scale = fabs(conv.x) / fabs(conv.y);
-	size = rect->size.y / scale;
-	delta = rect->size.y - size;
-	rect->north += delta/2;
-	rect->south -= delta/2;
-	rect->size.y = size;
+        scale = fabs(conv.x) / fabs(conv.y);
+        size = rect->size.y / scale;
+        delta = rect->size.y - size;
+        rect->north += delta / 2;
+        rect->south -= delta / 2;
+        rect->size.y = size;
     }
 }
 
@@ -110,28 +110,25 @@ void D_fit_u_to_d(void)
 void D_show_conversions(void)
 {
     fprintf(stderr,
-	    " D_w %10.1f  D_e %10.1f  D_s %10.1f  D_n %10.1f\n",
-	    D.west, D.east, D.south, D.north);
+        " D_w %10.1f  D_e %10.1f  D_s %10.1f  D_n %10.1f\n",
+        D.west, D.east, D.south, D.north);
     fprintf(stderr,
-	    " A_w %10.1f  A_e %10.1f  A_s %10.1f  A_n %10.1f\n",
-	    A.west, A.east, A.south, A.north);
+        " A_w %10.1f  A_e %10.1f  A_s %10.1f  A_n %10.1f\n",
+        A.west, A.east, A.south, A.north);
     fprintf(stderr,
-	    " U_w %10.1f  U_e %10.1f  U_s %10.1f  U_n %10.1f\n",
-	    U.west, U.east, U.south, U.north);
+        " U_w %10.1f  U_e %10.1f  U_s %10.1f  U_n %10.1f\n",
+        U.west, U.east, U.south, U.north);
 
-    fprintf(stderr,
-	    " D_x %10.1f  D_y %10.1f\n" "\n", D.size.x, D.size.y);
-    fprintf(stderr,
-	    " A_x %10.1f  A_y %10.1f\n" "\n", A.size.x, A.size.y);
-    fprintf(stderr,
-	    " U_x %10.1f  U_y %10.1f\n" "\n", U.size.x, U.size.y);
+    fprintf(stderr, " D_x %10.1f  D_y %10.1f\n" "\n", D.size.x, D.size.y);
+    fprintf(stderr, " A_x %10.1f  A_y %10.1f\n" "\n", A.size.x, A.size.y);
+    fprintf(stderr, " U_x %10.1f  U_y %10.1f\n" "\n", U.size.x, U.size.y);
 
     fprintf(stderr, " D_to_A_conv.x %10.1f D_to_A_conv.y %10.1f \n",
-	    D_to_A_conv.x, D_to_A_conv.y);
+        D_to_A_conv.x, D_to_A_conv.y);
     fprintf(stderr, " A_to_U_conv.x %10.1f A_to_U_conv.y %10.1f \n",
-	    A_to_U_conv.x, A_to_U_conv.y);
+        A_to_U_conv.x, A_to_U_conv.y);
     fprintf(stderr, " U_to_D_conv.x %10.1f U_to_D_conv.y %10.1f \n",
-	    U_to_D_conv.x, U_to_D_conv.y);
+        U_to_D_conv.x, U_to_D_conv.y);
 }
 
 /*!
@@ -150,7 +147,7 @@ void D_show_conversions(void)
  *  \return none
  */
 void D_do_conversions(const struct Cell_head *window,
-		      double t, double b, double l, double r)
+    double t, double b, double l, double r)
 {
     D_set_region(window);
     D_set_dst(t, b, l, r);
@@ -158,42 +155,144 @@ void D_do_conversions(const struct Cell_head *window,
     D_update_conversions();
 #ifdef DEBUG
     D_show_conversions();
-#endif /* DEBUG */
+#endif                          /* DEBUG */
 }
 
 
-int D_is_lat_lon(void)			{    return (is_lat_lon);		}
+int D_is_lat_lon(void)
+{
+    return (is_lat_lon);
+}
 
-double D_get_d_to_a_xconv(void)		{    return (D_to_A_conv.x);		}
-double D_get_d_to_a_yconv(void)		{    return (D_to_A_conv.y);		}
-double D_get_d_to_u_xconv(void)		{    return (1/U_to_D_conv.x);		}
-double D_get_d_to_u_yconv(void)		{    return (1/U_to_D_conv.y);		}
-double D_get_a_to_u_xconv(void)		{    return (A_to_U_conv.x);		}
-double D_get_a_to_u_yconv(void)		{    return (A_to_U_conv.y);		}
-double D_get_a_to_d_xconv(void)		{    return (1/D_to_A_conv.x);		}
-double D_get_a_to_d_yconv(void)		{    return (1/D_to_A_conv.y);		}
-double D_get_u_to_d_xconv(void)		{    return (U_to_D_conv.x);		}
-double D_get_u_to_d_yconv(void)		{    return (U_to_D_conv.y);		}
-double D_get_u_to_a_xconv(void)		{    return (1/A_to_U_conv.x);		}
-double D_get_u_to_a_yconv(void)		{    return (1/A_to_U_conv.y);		}
+double D_get_d_to_a_xconv(void)
+{
+    return (D_to_A_conv.x);
+}
 
-double D_get_ns_resolution(void)	{    return D_get_a_to_u_yconv();	}
-double D_get_ew_resolution(void)	{    return D_get_a_to_u_xconv();	}
+double D_get_d_to_a_yconv(void)
+{
+    return (D_to_A_conv.y);
+}
 
-double D_get_u_west(void)		{    return (U.west);			}
-double D_get_u_east(void)		{    return (U.east);			}
-double D_get_u_north(void)		{    return (U.north);			}
-double D_get_u_south(void)		{    return (U.south);			}
+double D_get_d_to_u_xconv(void)
+{
+    return (1 / U_to_D_conv.x);
+}
 
-double D_get_a_west(void)		{    return (A.west);			}
-double D_get_a_east(void)		{    return (A.east);			}
-double D_get_a_north(void)		{    return (A.north);			}
-double D_get_a_south(void)		{    return (A.south);			}
+double D_get_d_to_u_yconv(void)
+{
+    return (1 / U_to_D_conv.y);
+}
 
-double D_get_d_west(void)		{    return (D.west);			}
-double D_get_d_east(void)		{    return (D.east);			}
-double D_get_d_north(void)		{    return (D.north);			}
-double D_get_d_south(void)		{    return (D.south);			}
+double D_get_a_to_u_xconv(void)
+{
+    return (A_to_U_conv.x);
+}
+
+double D_get_a_to_u_yconv(void)
+{
+    return (A_to_U_conv.y);
+}
+
+double D_get_a_to_d_xconv(void)
+{
+    return (1 / D_to_A_conv.x);
+}
+
+double D_get_a_to_d_yconv(void)
+{
+    return (1 / D_to_A_conv.y);
+}
+
+double D_get_u_to_d_xconv(void)
+{
+    return (U_to_D_conv.x);
+}
+
+double D_get_u_to_d_yconv(void)
+{
+    return (U_to_D_conv.y);
+}
+
+double D_get_u_to_a_xconv(void)
+{
+    return (1 / A_to_U_conv.x);
+}
+
+double D_get_u_to_a_yconv(void)
+{
+    return (1 / A_to_U_conv.y);
+}
+
+double D_get_ns_resolution(void)
+{
+    return D_get_a_to_u_yconv();
+}
+
+double D_get_ew_resolution(void)
+{
+    return D_get_a_to_u_xconv();
+}
+
+double D_get_u_west(void)
+{
+    return (U.west);
+}
+
+double D_get_u_east(void)
+{
+    return (U.east);
+}
+
+double D_get_u_north(void)
+{
+    return (U.north);
+}
+
+double D_get_u_south(void)
+{
+    return (U.south);
+}
+
+double D_get_a_west(void)
+{
+    return (A.west);
+}
+
+double D_get_a_east(void)
+{
+    return (A.east);
+}
+
+double D_get_a_north(void)
+{
+    return (A.north);
+}
+
+double D_get_a_south(void)
+{
+    return (A.south);
+}
+
+double D_get_d_west(void)
+{
+    return (D.west);
+}
+
+double D_get_d_east(void)
+{
+    return (D.east);
+}
+
+double D_get_d_north(void)
+{
+    return (D.north);
+}
+
+double D_get_d_south(void)
+{
+    return (D.south);
+}
 
 void D_set_region(const struct Cell_head *window)
 {
@@ -206,8 +305,8 @@ void D_set_src(double t, double b, double l, double r)
 {
     U.north = t;
     U.south = b;
-    U.west  = l;
-    U.east  = r;
+    U.west = l;
+    U.east = r;
     calc_size(&U);
 }
 
@@ -235,8 +334,8 @@ void D_set_grid(int t, int b, int l, int r)
 {
     A.north = t;
     A.south = b;
-    A.west  = l;
-    A.east  = r;
+    A.west = l;
+    A.east = r;
     calc_size(&A);
 }
 
@@ -252,8 +351,8 @@ void D_set_dst(double t, double b, double l, double r)
 {
     D.north = t;
     D.south = b;
-    D.west  = l;
-    D.east  = r;
+    D.west = l;
+    D.east = r;
     calc_size(&D);
 }
 

@@ -37,4 +37,4 @@ struct BMlink
 
 #include <grass/defs/bitmap.h>
 
-#endif /*  GRASS_BITMAP_H  */
+#endif                          /*  GRASS_BITMAP_H  */

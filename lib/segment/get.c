@@ -41,14 +41,15 @@ int Segment_get(SEGMENT * SEG, void *buf, off_t row, off_t col)
     int index, n, i;
 
     if (SEG->cache) {
-	memcpy(buf, SEG->cache + ((size_t)row * SEG->ncols + col) * SEG->len, SEG->len);
-	
-	return 1;
+        memcpy(buf, SEG->cache + ((size_t)row * SEG->ncols + col) * SEG->len,
+            SEG->len);
+
+        return 1;
     }
 
     SEG->address(SEG, row, col, &n, &index);
     if ((i = seg_pagein(SEG, n)) < 0)
-	return -1;
+        return -1;
 
     memcpy(buf, &SEG->scb[i].buf[index], SEG->len);
 

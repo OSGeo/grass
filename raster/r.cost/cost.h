@@ -7,6 +7,7 @@
 /*      point structure containing various attributes of       */
 /*      a grid cell.                                           */
 /*                                                             */
+
 /***************************************************************/
 
 #ifndef __COST_H__
@@ -27,4 +28,4 @@ int delete(struct cost *);
 int init_heap(void);
 int free_heap(void);
 
-#endif /* __COST_H__ */
+#endif                          /* __COST_H__ */

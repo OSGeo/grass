@@ -38,8 +38,8 @@
 #include <grass/bitmap.h>
 
 
-#define BM_col_to_byte(x)  ((x) >> 3)  /* x / 8 */
-#define BM_col_to_bit(x)   ((x) & 7)   /* x % 8 */
+#define BM_col_to_byte(x)  ((x) >> 3)   /* x / 8 */
+#define BM_col_to_bit(x)   ((x) & 7)    /* x % 8 */
 
 static int Mode = BM_FLAT;
 static int Size = 1;
@@ -62,17 +62,18 @@ struct BM *BM_create(int x, int y)
     struct BM *map;
 
     if (Mode == BM_SPARSE)
-	return BM_create_sparse(x, y);
+        return BM_create_sparse(x, y);
 
     if (NULL == (map = (struct BM *)malloc(sizeof(struct BM))))
-	return (NULL);
+        return (NULL);
 
     map->bytes = (x + 7) / 8;
 
     void *tmp_map_data = (unsigned char *)calloc(map->bytes * y, sizeof(char));
-    if (tmp_map_data == NULL){
+
+    if (tmp_map_data == NULL) {
         free(map);
-	return (NULL);
+        return (NULL);
     }
     map->data = tmp_map_data;
 
@@ -93,7 +94,7 @@ struct BM *BM_create(int x, int y)
 int BM_destroy(struct BM *map)
 {
     if (map->sparse)
-	return BM_destroy_sparse(map);
+        return BM_destroy_sparse(map);
 
     free(map->data);
     free(map);
@@ -156,18 +157,18 @@ int BM_set_mode(int mode, int size)
     switch (mode) {
     case BM_FLAT:
     case BM_SPARSE:
-	Mode = mode;
+        Mode = mode;
     default:
-	fprintf(stderr, "BM_set_mode:  Unknown mode: %d\n", mode);
-	ret--;
+        fprintf(stderr, "BM_set_mode:  Unknown mode: %d\n", mode);
+        ret--;
     }
 
     if (size != 1) {
-	fprintf(stderr, "BM_set_mode:  Bad size: %d\n", size);
-	ret--;
+        fprintf(stderr, "BM_set_mode:  Bad size: %d\n", size);
+        ret--;
     }
     else
-	Size = size;
+        Size = size;
 
     return ret;
 }
@@ -192,16 +193,16 @@ int BM_set(struct BM *map, int x, int y, int val)
     unsigned char byte;
 
     if (x < 0 || x >= map->cols || y < 0 || y >= map->rows)
-	return 0;
+        return 0;
 
     if (map->sparse)
-	return BM_set_sparse(map, x, y, val);
+        return BM_set_sparse(map, x, y, val);
 
     byte = 0x01 << BM_col_to_bit(x);
     if (val)
-	map->data[BM_col_to_byte(x) + y * map->bytes] |= byte;
+        map->data[BM_col_to_byte(x) + y * map->bytes] |= byte;
     else
-	map->data[BM_col_to_byte(x) + y * map->bytes] &= ~byte;
+        map->data[BM_col_to_byte(x) + y * map->bytes] &= ~byte;
 
     return 0;
 }
@@ -225,10 +226,10 @@ int BM_get(struct BM *map, int x, int y)
     unsigned char byte;
 
     if (x < 0 || x >= map->cols || y < 0 || y >= map->rows)
-	return -1;
+        return -1;
 
     if (map->sparse)
-	return BM_get_sparse(map, x, y);
+        return BM_get_sparse(map, x, y);
 
     byte = map->data[BM_col_to_byte(x) + y * map->bytes];
 
@@ -248,9 +249,9 @@ int BM_get(struct BM *map, int x, int y)
 size_t BM_get_map_size(struct BM *map)
 {
     if (map->sparse)
-	return BM_get_map_size_sparse(map);
+        return BM_get_map_size_sparse(map);
 
-    return (size_t) map->bytes * map->rows;
+    return (size_t)map->bytes * map->rows;
 }
 
 
@@ -275,7 +276,7 @@ int BM_file_write(FILE * fp, struct BM *map)
     int i;
 
     if (map->sparse)
-	return BM_file_write_sparse(fp, map);
+        return BM_file_write_sparse(fp, map);
 
     c = BM_MAGIC;
     fwrite(&c, sizeof(char), sizeof(char), fp);
@@ -290,10 +291,9 @@ int BM_file_write(FILE * fp, struct BM *map)
     fwrite(&(map->cols), sizeof(map->cols), sizeof(char), fp);
 
     for (i = 0; i < map->rows; i++)
-	if (map->bytes !=
-	    fwrite(&(map->data[i * map->bytes]), sizeof(char), map->bytes,
-		   fp))
-	    return -1;
+        if (map->bytes !=
+            fwrite(&(map->data[i * map->bytes]), sizeof(char), map->bytes, fp))
+            return -1;
     fflush(fp);
 
     return 0;
@@ -323,13 +323,12 @@ struct BM *BM_file_read(FILE * fp)
     int cnt;
 
     if (NULL == (map = (struct BM *)malloc(sizeof(struct BM))))
-	return (NULL);
+        return (NULL);
 
     fread(&c, sizeof(char), sizeof(char), fp);
-    if (c != BM_MAGIC)
-    {
+    if (c != BM_MAGIC) {
         free(map);
-	return NULL;
+        return NULL;
     }
 
     fread(buf, BM_TEXT_LEN, sizeof(char), fp);
@@ -345,19 +344,18 @@ struct BM *BM_file_read(FILE * fp)
     map->bytes = (map->cols + 7) / 8;
 
     if (map->sparse == BM_SPARSE)
-	goto readsparse;
+        goto readsparse;
 
-    if (NULL == (map->data = (unsigned char *)malloc(map->bytes * map->rows))) 
-    {
+    if (NULL == (map->data = (unsigned char *)malloc(map->bytes * map->rows))) {
         free(map);
-	return (NULL);
+        return (NULL);
     }
 
 
     for (i = 0; i < map->rows; i++)
-	if (map->bytes !=
-	    fread(&(map->data[i * map->bytes]), sizeof(char), map->bytes, fp))
-	    return NULL;
+        if (map->bytes !=
+            fread(&(map->data[i * map->bytes]), sizeof(char), map->bytes, fp))
+            return NULL;
 
 
     return map;
@@ -369,35 +367,35 @@ struct BM *BM_file_read(FILE * fp)
 
 
     if (NULL == (map->data = (unsigned char *)
-		 malloc(sizeof(struct BMlink *) * map->rows)))
-	return (NULL);
+            malloc(sizeof(struct BMlink *) * map->rows)))
+        return (NULL);
 
     for (y = 0; y < map->rows; y++) {
-	/* first get number of links */
-	fread(&i, sizeof(i), sizeof(char), fp);
-	cnt = i;
+        /* first get number of links */
+        fread(&i, sizeof(i), sizeof(char), fp);
+        cnt = i;
 
 
-	/* then read them in */
-	for (i = 0; i < cnt; i++) {
-	    p2 = (struct BMlink *)link_new(map->token);
+        /* then read them in */
+        for (i = 0; i < cnt; i++) {
+            p2 = (struct BMlink *)link_new(map->token);
 
-	    if (i == 0) {
-		((struct BMlink **)(map->data))[y] = p2;
-		p = p2;
-	    }
-	    else {
-		p->next = p2;
-		p = p2;
-	    }
+            if (i == 0) {
+                ((struct BMlink **)(map->data))[y] = p2;
+                p = p2;
+            }
+            else {
+                p->next = p2;
+                p = p2;
+            }
 
-	    fread(&n, sizeof(n), sizeof(char), fp);
-	    p->count = n;
+            fread(&n, sizeof(n), sizeof(char), fp);
+            p->count = n;
 
-	    fread(&n, sizeof(n), sizeof(char), fp);
-	    p->val = n;
-	    p->next = NULL;
-	}
+            fread(&n, sizeof(n), sizeof(char), fp);
+            p->val = n;
+            p->next = NULL;
+        }
     }
 
     return map;

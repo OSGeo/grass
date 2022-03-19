@@ -32,34 +32,35 @@
 
 /*---------------------------------------------------------------------------------------*/
 int edge_detection(struct Cell_head, /**/
-		   struct bound_box, /**/
-		   double *, /**/
-		   double, /**/
-		   double, /**/
-		   double *, /**/
-		   double, /**/ double, /**/ double, /**/ double /**/);
+    struct bound_box, /**/
+    double *, /**/
+    double, /**/
+    double, /**/
+    double *, /**/ double, /**/ double, /**/ double, /**/ double /**/);
 
 int Get_Gradient(struct Cell_head, /**/
-		     double, /**/ double, /**/ double *, /**/ double *);
+    double, /**/ double, /**/ double *, /**/ double *);
 
 void classification(struct Map_info *, /**/
-		    struct Cell_head, /**/
-		    struct bound_box, /**/
-		    struct bound_box, /**/
-		    double **, /**/
-		    double *, /**/
-		    double *, /**/
-		    double, /**/
-		    double, /**/
-		    double, /**/
-		    double, /**/
-		    double, /**/
-		    int *, /**/ int, /**/ dbDriver *, /**/ char *, /**/ char *);
+    struct Cell_head, /**/
+    struct bound_box, /**/
+    struct bound_box, /**/
+    double **, /**/
+    double *, /**/
+    double *, /**/
+    double, /**/
+    double, /**/
+    double, /**/
+    double, /**/
+    double, /**/ int *, /**/ int, /**/ dbDriver *, /**/ char *, /**/ char *);
 
-int Insert(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver *, /**/ char *);
+int Insert(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver *,
+    /**/ char *);
 
-int UpDate(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver *, /**/ char *);
+int UpDate(double, /**/ double, /**/ double, /**/ int, /**/ dbDriver *,
+    /**/ char *);
 
-int Select(double *, /**/ double *, /**/ double *, /**/ int, /**/ dbDriver *, /**/ char *);
+int Select(double *, /**/ double *, /**/ double *, /**/ int, /**/ dbDriver *,
+    /**/ char *);
 
 int Insert_Interpolation(double, int, dbDriver *, char *);

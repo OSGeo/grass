@@ -23,11 +23,12 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-/*    struct Option *opt_input, *opt_sep; */
+
+    /*    struct Option *opt_input, *opt_sep; */
     struct Option *opt_at, *opt_cols, *opt_font, *opt_fontsize,
-            *opt_fontcolor, *opt_title, *opt_tit_font, *opt_tit_fontsize, *opt_sub_font,
-            *opt_sub_fontsize, *opt_bcolor, *opt_bgcolor, *opt_symb_size,
-            *opt_bg_width, *opt_output, *opt_input, *opt_sep;
+        *opt_fontcolor, *opt_title, *opt_tit_font, *opt_tit_fontsize,
+        *opt_sub_font, *opt_sub_fontsize, *opt_bcolor, *opt_bgcolor,
+        *opt_symb_size, *opt_bg_width, *opt_output, *opt_input, *opt_sep;
     struct Flag *fl_bg;
 
     double LL, LT;
@@ -52,8 +53,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("legend"));
     module->description =
-    _("Displays a vector legend "
-      "in the active graphics frame.");
+        _("Displays a vector legend " "in the active graphics frame.");
 
     opt_at = G_define_option();
     opt_at->key = "at";
@@ -63,15 +63,14 @@ int main(int argc, char **argv)
     opt_at->answer = "10,40";
     opt_at->required = NO;
     opt_at->description =
-    _("Screen position of legend to be drawn (percentage, [0,0] is lower left)");
+        _("Screen position of legend to be drawn (percentage, [0,0] is lower left)");
 
     opt_cols = G_define_option();
     opt_cols->key = "columns";
     opt_cols->type = TYPE_INTEGER;
     opt_cols->answer = "1";
     opt_cols->required = NO;
-    opt_cols->description =
-    _("Number of legend columns");
+    opt_cols->description = _("Number of legend columns");
     opt_cols->guisection = _("Layout");
 
     opt_title = G_define_option();
@@ -180,7 +179,7 @@ int main(int argc, char **argv)
     opt_output = G_define_standard_option(G_OPT_F_OUTPUT);
     opt_output->label = _("Output csv file");
     opt_output->description = _("Path to output file or '-' "
-                                "for standard output");
+        "for standard output");
     opt_output->required = NO;
     opt_output->guisection = _("In/Out");
 
@@ -249,7 +248,7 @@ int main(int argc, char **argv)
     else
         sub_size = fontsize;
 
-    fontcolor = D_parse_color(opt_fontcolor->answer, FALSE); /*default color: black */
+    fontcolor = D_parse_color(opt_fontcolor->answer, FALSE);    /*default color: black */
 
     /* I/O */
     if (opt_input->answer) {
@@ -267,7 +266,7 @@ int main(int argc, char **argv)
 
 
     if (opt_output->answer) {
-        if (strcmp(opt_output->answer,"-") == 0) {
+        if (strcmp(opt_output->answer, "-") == 0) {
             source = fopen(file_name, "r");
             if (!source)
                 G_fatal_error(_("Unable to open input file <%s>"), file_name);
@@ -283,10 +282,14 @@ int main(int argc, char **argv)
 
     /* Pre-calculate the layout */
     if (do_bg)
-        draw(file_name, LL, LT, title, cols, bgcolor, bcolor, bg_width, 1, tit_font, tit_size, sub_font, sub_size, font, fontsize, fontcolor, symb_size, sep);
+        draw(file_name, LL, LT, title, cols, bgcolor, bcolor, bg_width, 1,
+            tit_font, tit_size, sub_font, sub_size, font, fontsize, fontcolor,
+            symb_size, sep);
 
     /* Draw legend */
-    draw(file_name, LL, LT, title, cols, bgcolor, bcolor, bg_width, 0, tit_font, tit_size, sub_font, sub_size, font, fontsize, fontcolor, symb_size, sep);
+    draw(file_name, LL, LT, title, cols, bgcolor, bcolor, bg_width, 0,
+        tit_font, tit_size, sub_font, sub_size, font, fontsize, fontcolor,
+        symb_size, sep);
 
     D_close_driver();
 

@@ -27,4 +27,4 @@ int check_stats(const char *);
 int do_histogram(const char *);
 
 
-#endif /* __LOCAL_PROTO_H__ */
+#endif                          /* __LOCAL_PROTO_H__ */

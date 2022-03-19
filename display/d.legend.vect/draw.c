@@ -16,9 +16,10 @@
 #include <grass/colors.h>
 #include "local_proto.h"
 
-void draw(char *file_name, double LL, double LT, char *title, int cols, int bgcolor,
-          int bcolor, int bg_width, int do_bg, char* tit_font, int tit_size, char *sub_font,
-          int sub_size, char *font, int fontsize, int fontcolor, int symb_size, char *sep)
+void draw(char *file_name, double LL, double LT, char *title, int cols,
+    int bgcolor, int bcolor, int bg_width, int do_bg, char *tit_font,
+    int tit_size, char *sub_font, int sub_size, char *font, int fontsize,
+    int fontcolor, int symb_size, char *sep)
 {
     double db, dt, dl, dr;
     double bb, bt, bl, br;
@@ -29,7 +30,8 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
     char buf[BUFFSIZE];
     int got_new;
     SYMBOL *Symb;
-    char *symb_name, *line_color_str, *fill_color_str, *label, *type_str, *color_type;
+    char *symb_name, *line_color_str, *fill_color_str, *label, *type_str,
+        *color_type;
     double size, line_width;
     double row_w, text_h, title_h, title_w;
     RGBA_Color *line_color, *fill_color;
@@ -56,7 +58,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
         margin = 10;
         title_h = bb - bt + margin;
         title_w = br - bl;
-        if (! do_bg) {
+        if (!do_bg) {
             x = x0;
             y = y0 + title_h;
             D_pos_abs(x, y);
@@ -67,11 +69,12 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
 
     file_in = fopen(file_name, "r");
     sub_delim = G_malloc(GNAME_MAX);
-    snprintf(sub_delim, sizeof(GNAME_MAX), "%s%s%s%s%s%s", sep, sep, sep, sep, sep, sep);
+    snprintf(sub_delim, sizeof(GNAME_MAX), "%s%s%s%s%s%s", sep, sep, sep, sep,
+        sep, sep);
     if (!file_in)
         G_fatal_error(_("Unable to open input file <%s>"), file_name);
 
-    /* Get number of legend row(item) and the biggest symbol*/
+    /* Get number of legend row(item) and the biggest symbol */
     item_count = 0;
     def_symb_w = symb_size;
 
@@ -87,7 +90,8 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
             G_free_tokens(tokens);
 
             /* Symbol */
-            if (((strcmp(type_str,"point") != 0) && (strcmp(type_str, "centroid") != 0)) || size < 0) {
+            if (((strcmp(type_str, "point") != 0) &&
+                    (strcmp(type_str, "centroid") != 0)) || size < 0) {
                 size = symb_size;
             }
             symb_w = size;
@@ -115,13 +119,13 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
     G_strip(buf);
 
     while (got_new) {
-        if (item < it_per_col){
+        if (item < it_per_col) {
             row_ind = 5;
             item++;
         }
         else {
             if (bg_h < offs_y)
-                bg_h = offs_y + def_symb_h/2.;
+                bg_h = offs_y + def_symb_h / 2.;
             offs_x += maxlblw + margin;
             offs_y = title_h + row_ind;
             maxlblw = 0;
@@ -141,11 +145,11 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
             row_w = br - bl;
             offs_y += text_h + row_ind;
             if (bg_h < offs_y)
-                bg_h = offs_y + def_symb_h/2.;
+                bg_h = offs_y + def_symb_h / 2.;
             if (row_w > maxlblw)
                 maxlblw = row_w;
 
-            if (! do_bg) {
+            if (!do_bg) {
                 x = x0 + offs_x;
                 y = y0 + offs_y;
                 D_pos_abs(x, y);
@@ -170,7 +174,8 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
             G_free_tokens(tokens);
 
             /* Symbol */
-            if (((strcmp(type_str,"point") != 0) && (strcmp(type_str, "centroid") != 0)) || size < 0) {
+            if (((strcmp(type_str, "point") != 0) &&
+                    (strcmp(type_str, "centroid") != 0)) || size < 0) {
                 size = symb_size;
             }
             Symb = S_read(symb_name);
@@ -220,15 +225,15 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
                 offs_y += text_h + row_ind;
 
             if (bg_h <= offs_y)
-                bg_h = offs_y + symb_h/2.;
+                bg_h = offs_y + symb_h / 2.;
             if (row_w > maxlblw)
                 maxlblw = row_w;
 
-            if (! do_bg) {
-                x = x0 + offs_x + def_symb_w/2.;
-                y = y0 + offs_y - symb_h/2;
+            if (!do_bg) {
+                x = x0 + offs_x + def_symb_w / 2.;
+                y = y0 + offs_y - symb_h / 2;
                 D_line_width(line_width);
-                /* lf - line, fill (as in d.vect)*/
+                /* lf - line, fill (as in d.vect) */
                 if (strcmp(color_type, "lf") == 0)
                     D_symbol(Symb, x, y, line_color, fill_color);
                 /* ps - primary, secondary (as in d.vect.thematic) */
@@ -236,11 +241,11 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
                     D_symbol2(Symb, x, y, line_color, fill_color);
                 else {
                     G_warning(_("Invalid value for color type in legend file. "
-                                "Use one of 'lf' or 'ps'."));
+                            "Use one of 'lf' or 'ps'."));
                     D_symbol(Symb, x, y, line_color, fill_color);
                 }
                 x = x0 + offs_x + def_symb_w + sym_lbl_space;
-                y = y0 + offs_y - symb_h/2. + text_h/2.;
+                y = y0 + offs_y - symb_h / 2. + text_h / 2.;
                 D_pos_abs(x, y);
                 D_use_color(fontcolor);
                 D_text(label);
@@ -256,6 +261,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols, int bgco
     /* Draw background */
     if (do_bg) {
         double x0bg, y0bg, x1bg, y1bg;
+
         if (title_w > offs_x + maxlblw)
             bg_w = title_w;
         else

@@ -1,3 +1,4 @@
+
 /***************************************************************
  *
  * MODULE:       v.delaunay
@@ -51,7 +52,7 @@
  *  Construct an edge from vertices v1, v2 and add it to rings of edges e1, e2
  */
 struct edge *join(struct edge *e1, struct vertex *v1,
-		  struct edge *e2, struct vertex *v2, int side)
+    struct edge *e2, struct vertex *v2, int side)
 {
 
     struct edge *new_edge;
@@ -62,18 +63,18 @@ struct edge *join(struct edge *e1, struct vertex *v1,
     new_edge = create_edge(v1, v2);
 
     if (side == LEFT) {
-	if (ORG(e1) == v1)
-	    splice(OPREV(e1), new_edge, v1);
-	else
-	    splice(DPREV(e1), new_edge, v1);
-	splice(e2, new_edge, v2);
+        if (ORG(e1) == v1)
+            splice(OPREV(e1), new_edge, v1);
+        else
+            splice(DPREV(e1), new_edge, v1);
+        splice(e2, new_edge, v2);
     }
     else {
-	splice(e1, new_edge, v1);
-	if (ORG(e2) == v2)
-	    splice(OPREV(e2), new_edge, v2);
-	else
-	    splice(DPREV(e2), new_edge, v2);
+        splice(e1, new_edge, v1);
+        if (ORG(e2) == v2)
+            splice(OPREV(e2), new_edge, v2);
+        else
+            splice(DPREV(e2), new_edge, v2);
     }
     return new_edge;
 }
@@ -91,30 +92,30 @@ void delete_edge(struct edge *e)
 
     /* Set entry points. */
     if (u->entry_pt == e)
-	u->entry_pt = ONEXT(e);
+        u->entry_pt = ONEXT(e);
     if (v->entry_pt == e)
-	v->entry_pt = DNEXT(e);
+        v->entry_pt = DNEXT(e);
 
     /* Four edge references need adjustment */
     if (ORG(ONEXT(e)) == u)
-	OPREV(ONEXT(e)) = OPREV(e);
+        OPREV(ONEXT(e)) = OPREV(e);
     else
-	DPREV(ONEXT(e)) = OPREV(e);
+        DPREV(ONEXT(e)) = OPREV(e);
 
     if (ORG(OPREV(e)) == u)
-	ONEXT(OPREV(e)) = ONEXT(e);
+        ONEXT(OPREV(e)) = ONEXT(e);
     else
-	DNEXT(OPREV(e)) = ONEXT(e);
+        DNEXT(OPREV(e)) = ONEXT(e);
 
     if (ORG(DNEXT(e)) == v)
-	OPREV(DNEXT(e)) = DPREV(e);
+        OPREV(DNEXT(e)) = DPREV(e);
     else
-	DPREV(DNEXT(e)) = DPREV(e);
+        DPREV(DNEXT(e)) = DPREV(e);
 
     if (ORG(DPREV(e)) == v)
-	ONEXT(DPREV(e)) = DNEXT(e);
+        ONEXT(DPREV(e)) = DNEXT(e);
     else
-	DNEXT(DPREV(e)) = DNEXT(e);
+        DNEXT(DPREV(e)) = DNEXT(e);
 
     free_edge(e);
 }
@@ -129,26 +130,26 @@ void splice(struct edge *a, struct edge *b, struct vertex *v)
        ccw edge to b. */
 
     if (ORG(a) == v) {
-	next = ONEXT(a);
-	ONEXT(a) = b;
+        next = ONEXT(a);
+        ONEXT(a) = b;
     }
     else {
-	next = DNEXT(a);
-	DNEXT(a) = b;
+        next = DNEXT(a);
+        DNEXT(a) = b;
     }
 
     if (ORG(next) == v)
-	OPREV(next) = b;
+        OPREV(next) = b;
     else
-	DPREV(next) = b;
+        DPREV(next) = b;
 
     if (ORG(b) == v) {
-	ONEXT(b) = next;
-	OPREV(b) = a;
+        ONEXT(b) = next;
+        OPREV(b) = a;
     }
     else {
-	DNEXT(b) = next;
-	DPREV(b) = a;
+        DNEXT(b) = next;
+        DPREV(b) = a;
     }
 }
 
@@ -160,12 +161,12 @@ struct edge *create_edge(struct vertex *v1, struct vertex *v2)
     new_edge = get_edge();
 
     DNEXT(new_edge) = DPREV(new_edge) = ONEXT(new_edge) = OPREV(new_edge) =
-	new_edge;
+        new_edge;
     ORG(new_edge) = v1;
     DEST(new_edge) = v2;
     if (v1->entry_pt == NULL)
-	v1->entry_pt = new_edge;
+        v1->entry_pt = new_edge;
     if (v2->entry_pt == NULL)
-	v2->entry_pt = new_edge;
+        v2->entry_pt = new_edge;
     return new_edge;
 }

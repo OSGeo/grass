@@ -47,7 +47,7 @@ struct menu
     {c_reg_m, w_reg_m, DCELL_TYPE, "slope", "linear regression slope"},
     {c_reg_c, w_reg_c, DCELL_TYPE, "offset", "linear regression offset"},
     {c_reg_r2, w_reg_r2, DCELL_TYPE, "detcoeff",
-     "linear regression coefficient of determination"},
+        "linear regression coefficient of determination"},
     {c_reg_t, w_reg_t, DCELL_TYPE, "tvalue", "linear regression t-value"},
     {c_quart1, w_quart1, DCELL_TYPE, "quart1", "first quartile"},
     {c_quart3, w_quart3, DCELL_TYPE, "quart3", "third quartile"},
@@ -128,8 +128,8 @@ int main(int argc, char *argv[])
     struct History history;
     DCELL *values = NULL, *values_tmp = NULL;
 
-    DCELL(*values_w)[2];     /* list of values and weights */
-    DCELL(*values_w_tmp)[2]; /* list of values and weights */
+    DCELL(*values_w)[2];        /* list of values and weights */
+    DCELL(*values_w_tmp)[2];    /* list of values and weights */
     int have_weights;
     int nrows, ncols;
     int row, col;
@@ -144,8 +144,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("series"));
     module->description =
         _("Makes each output cell value a "
-          "function of the values assigned to the corresponding cells "
-          "in the input raster map layers.");
+        "function of the values assigned to the corresponding cells "
+        "in the input raster map layers.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUTS);
     parm.input->required = NO;
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     parm.file->key = "file";
     parm.file->description =
         _("Input file with one raster map name and optional one weight per "
-          "line, field separator between name and weight is |");
+        "line, field separator between name and weight is |");
     parm.file->required = NO;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -172,7 +172,8 @@ int main(int argc, char *argv[])
     parm.quantile->key = "quantile";
     parm.quantile->type = TYPE_DOUBLE;
     parm.quantile->required = NO;
-    parm.quantile->description = _("Quantile to calculate for method=quantile");
+    parm.quantile->description =
+        _("Quantile to calculate for method=quantile");
     parm.quantile->options = "0.0-1.0";
     parm.quantile->multiple = YES;
 
@@ -181,7 +182,7 @@ int main(int argc, char *argv[])
     parm.weights->type = TYPE_DOUBLE;
     parm.weights->required = NO;
     parm.weights->description = _("Weighting factor for each input map, "
-                                  "default value is 1.0 for each input map");
+        "default value is 1.0 for each input map");
     parm.weights->multiple = YES;
 
     parm.range = G_define_option();
@@ -201,8 +202,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    lo = -1.0 / 0.0; /* -inf */
-    hi = 1.0 / 0.0;  /* inf */
+    lo = -1.0 / 0.0;            /* -inf */
+    hi = 1.0 / 0.0;             /* inf */
     if (parm.range->answer) {
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);
@@ -210,11 +211,11 @@ int main(int argc, char *argv[])
 
     if (parm.input->answer && parm.file->answer)
         G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
-                      parm.file->key);
+            parm.file->key);
 
     if (!parm.input->answer && !parm.file->answer)
         G_fatal_error(_("Please specify %s= or %s="), parm.input->key,
-                      parm.file->key);
+            parm.file->key);
 
     have_weights = 0;
 
@@ -231,14 +232,14 @@ int main(int argc, char *argv[])
             in = fopen(parm.file->answer, "r");
             if (!in)
                 G_fatal_error(_("Unable to open input file <%s>"),
-                              parm.file->answer);
+                    parm.file->answer);
         }
 
         num_inputs = 0;
         max_inputs = 0;
 
         for (;;) {
-            char buf[GNAME_MAX + 50]; /* Name and weight */
+            char buf[GNAME_MAX + 50];   /* Name and weight */
             char tok_buf[GNAME_MAX + 50];
             char *name;
             int ntokens;
@@ -277,7 +278,7 @@ int main(int argc, char *argv[])
             p->name = G_store(name);
             p->weight = weight;
             G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                              p->name, p->weight);
+                p->name, p->weight);
             p->fd = Rast_open_old(p->name, "");
             if (p->fd < 0)
                 G_fatal_error(_("Unable to open input raster <%s>"), p->name);
@@ -297,7 +298,8 @@ int main(int argc, char *argv[])
             G_fatal_error(_("No raster map name found in input file"));
 
         fclose(in);
-    } else {
+    }
+    else {
         int num_weights;
 
         for (i = 0; parm.input->answers[i]; i++) ;
@@ -314,8 +316,7 @@ int main(int argc, char *argv[])
         }
 
         if (num_weights && num_weights != num_inputs)
-            G_fatal_error(
-                _("input= and weights= must have the same number of values"));
+            G_fatal_error(_("input= and weights= must have the same number of values"));
 
         inputs = G_malloc(num_inputs * sizeof(struct input));
 
@@ -336,7 +337,7 @@ int main(int argc, char *argv[])
             }
 
             G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                              p->name, p->weight);
+                p->name, p->weight);
             p->fd = Rast_open_old(p->name, "");
             if (p->fd < 0)
                 G_fatal_error(_("Unable to open input raster <%s>"), p->name);
@@ -359,8 +360,7 @@ int main(int argc, char *argv[])
 
     for (i = 0; parm.method->answers[i]; i++) ;
     if (num_outputs != i)
-        G_fatal_error(
-            _("output= and method= must have the same number of values"));
+        G_fatal_error(_("output= and method= must have the same number of values"));
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
 
@@ -381,22 +381,23 @@ int main(int argc, char *argv[])
                  * all other weighed versions: result as DCELL_TYPE */
                 if (menu[method].outtype == CELL_TYPE)
                     menu[method].outtype = DCELL_TYPE;
-            } else {
+            }
+            else {
                 G_warning(_("Method %s not compatible with weights, using "
-                            "unweighed version instead"),
-                          method_name);
+                        "unweighed version instead"), method_name);
 
                 out->method_fn = menu[method].method;
                 out->method_fn_w = NULL;
             }
-        } else {
+        }
+        else {
             out->method_fn = menu[method].method;
             out->method_fn_w = NULL;
         }
 
         out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
-                            ? atof(parm.quantile->answers[i])
-                            : 0;
+            ? atof(parm.quantile->answers[i])
+            : 0;
         out->buf = Rast_allocate_d_buf();
         if (menu[method].outtype == -1)
             out->fd = Rast_open_new(output_name, intype);
@@ -430,7 +431,8 @@ int main(int argc, char *argv[])
                 Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
                 Rast_close(inputs[i].fd);
             }
-        } else {
+        }
+        else {
             for (i = 0; i < num_inputs; i++)
                 Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
         }
@@ -462,13 +464,14 @@ int main(int argc, char *argv[])
                 else {
                     if (out->method_fn_w) {
                         memcpy(values_w_tmp, values_w,
-                               num_inputs * 2 * sizeof(DCELL));
-                        (*out->method_fn_w)(&out->buf[col], values_w_tmp,
-                                            num_inputs, &out->quantile);
-                    } else {
+                            num_inputs * 2 * sizeof(DCELL));
+                        (*out->method_fn_w) (&out->buf[col], values_w_tmp,
+                            num_inputs, &out->quantile);
+                    }
+                    else {
                         memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
-                        (*out->method_fn)(&out->buf[col], values_tmp,
-                                          num_inputs, &out->quantile);
+                        (*out->method_fn) (&out->buf[col], values_tmp,
+                            num_inputs, &out->quantile);
                     }
                 }
             }

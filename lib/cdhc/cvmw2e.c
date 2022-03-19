@@ -11,13 +11,13 @@ double *Cdhc_cramer_von_mises_exp(double *x, int n)
     int i;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in Cdhc_cramer_von_mises_exp\n");
-	exit(EXIT_FAILURE);
+        fprintf(stderr, "Memory error in Cdhc_cramer_von_mises_exp\n");
+        exit(EXIT_FAILURE);
     }
 
     for (i = 0; i < n; ++i) {
-	xcopy[i] = x[i];
-	mean += x[i];
+        xcopy[i] = x[i];
+        mean += x[i];
     }
     mean /= n;
 
@@ -30,9 +30,9 @@ double *Cdhc_cramer_von_mises_exp(double *x, int n)
     b = (2 * i + 1) * (xcopy[n-i-1] * (-1.0 / mean));
     sum3 += a + b;
     */
-	fx = 1 - exp(xcopy[i] * (-1.0 / mean));
-	fn2 = (double)(2.0 * i + 1) / (2 * n);
-	sum4 += (fx - fn2) * (fx - fn2);
+        fx = 1 - exp(xcopy[i] * (-1.0 / mean));
+        fn2 = (double)(2.0 * i + 1) / (2 * n);
+        sum4 += (fx - fn2) * (fx - fn2);
     }
 
   /*-
@@ -43,7 +43,7 @@ double *Cdhc_cramer_von_mises_exp(double *x, int n)
 
 #ifdef NOISY
     fprintf(stdout, "  TEST16 CVM(E) =%10.4f\n", y[0]);
-#endif /* NOISY */
+#endif                          /* NOISY */
 
     free(xcopy);
 

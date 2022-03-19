@@ -32,37 +32,37 @@ int Nviz_get_exag_height(double *val, double *min, double *max)
 
     surf_list = GS_get_surf_list(&nsurfs);
     if (nsurfs) {
-	GS_get_longdim(&longdim);
-	GS_get_zrange_nz(&hmin, &hmax);
+        GS_get_longdim(&longdim);
+        GS_get_zrange_nz(&hmin, &hmax);
 
-	exag = 0.0;
-	for (i = 0; i < nsurfs; i++) {
-	    if (GS_get_exag_guess(surf_list[i], &texag) > -1)
-		if (texag)
-		    exag = texag > exag ? texag : exag;
-	}
-	if (exag == 0.0)
-	    exag = 1.0;
+        exag = 0.0;
+        for (i = 0; i < nsurfs; i++) {
+            if (GS_get_exag_guess(surf_list[i], &texag) > -1)
+                if (texag)
+                    exag = texag > exag ? texag : exag;
+        }
+        if (exag == 0.0)
+            exag = 1.0;
 
-	fmin = hmin - (2. * longdim / exag);
-	fmax = hmin + (3 * longdim / exag);
+        fmin = hmin - (2. * longdim / exag);
+        fmax = hmin + (3 * longdim / exag);
     }
     else {
-	fmax = 10000.0;
-	fmin = 0.0;
+        fmax = 10000.0;
+        fmin = 0.0;
     }
 
     *val = fmin + (fmax - fmin) / 2.0;
 
     if (min)
-	*min = fmin;
+        *min = fmin;
 
     if (max)
-	*max = fmax;
+        *max = fmax;
 
     G_debug(1, "Nviz_get_exag_height(): value = %f min = %f max = %f",
-	    *val, min ? *min : 0.0 , max ? *max : 0.0);
-    
+        *val, min ? *min : 0.0, max ? *max : 0.0);
+
     return 1;
 }
 
@@ -82,17 +82,17 @@ double Nviz_get_exag()
 
     exag = 0.0;
     for (i = 0; i < nsurfs; i++) {
-	if (GS_get_exag_guess(surf_list[i], &texag) > -1) {
-	    if (texag)
-		exag = (texag > exag) ? texag : exag;
-	}
+        if (GS_get_exag_guess(surf_list[i], &texag) > -1) {
+            if (texag)
+                exag = (texag > exag) ? texag : exag;
+        }
     }
 
     if (exag == 0.0)
-	exag = 1.0;
+        exag = 1.0;
 
     if (nsurfs > 0)
-	G_free(surf_list);
+        G_free(surf_list);
 
     G_debug(1, "Nviz_get_exag(): value = %f", exag);
     return exag;

@@ -34,9 +34,9 @@ typedef struct _label_score label_score_t;
 struct _label_point
 {
 
-    double x;	  /**< The X coordinate */
+    double x;     /**< The X coordinate */
 
-    double y;	  /**< The Y coordinate */
+    double y;     /**< The Y coordinate */
 };
 
 /**
@@ -44,27 +44,27 @@ struct _label_point
 struct _label
 {
 
-    struct line_pnts *skyline;	/**< The skyline of the text, as an offest
+    struct line_pnts *skyline;  /**< The skyline of the text, as an offest
 				  *  from the label point */
     struct bound_box bb;
     double size;
 
-    double current_score;	  /**< The current score of the label. */
+    double current_score;         /**< The current score of the label. */
 
     label_candidate_t *candidates;  /**< A list of candidate positions */
 
-    int n_candidates;		 /**< The size of the candidates array */
+    int n_candidates;            /**< The size of the candidates array */
 
-    int current_candidate;	 /**< An index into the candidates array
+    int current_candidate;       /**< An index into the candidates array
 				   *  describing the currently selected candidate */
 
-    char *text;			 /**< The label text */
+    char *text;                  /**< The label text */
 
-    int cat;			     /**< the cat of the feature */
+    int cat;                         /**< the cat of the feature */
 
-    int type;			     /**< The feture type (point, line, area) */
+    int type;                        /**< The feture type (point, line, area) */
 
-    struct line_pnts *shape;	     /**< The points for the feature that this
+    struct line_pnts *shape;         /**< The points for the feature that this
 				       *  label belongs to */
 };
 
@@ -80,7 +80,7 @@ struct _label_candidate
     double score; /**< The base score of this position (sans overlap metric) */
     double lineover;
 
-    double rotation;	 /**< The mount the label is rotated in this position */
+    double rotation;     /**< The mount the label is rotated in this position */
 
     label_intersection_t *intersections;  /**< A list of all label candidate 
                                             *  positions which intersect with
@@ -98,7 +98,7 @@ struct _label_candidate
 struct _label_intersection
 {
 
-    label_t *label;	/**< A pointer to the #label_t structure */
+    label_t *label;     /**< A pointer to the #label_t structure */
 
     int candidate;     /**< The number of the candidate */
 };
@@ -177,9 +177,9 @@ void print_label(FILE * labelf, label_t * label, struct params *p);
  * skyline.
  */
 struct line_pnts *skyline_trans_rot(struct line_pnts *skyline,
-				    label_point_t * p, double angle);
+    label_point_t * p, double angle);
 
 struct GFONT_CAP *find_font_from_freetypecap(const char *font);
 void free_freetypecap(struct GFONT_CAP *ftcap);
 
-#endif /* _LABELS_H */
+#endif                          /* _LABELS_H */

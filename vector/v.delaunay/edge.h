@@ -1,3 +1,4 @@
+
 /***************************************************************
  *
  * MODULE:       v.delaunay
@@ -62,7 +63,7 @@
 #define RIGHT 1
 
 struct edge *join(struct edge *e1, struct vertex *v1,
-		  struct edge *e2, struct vertex *v2, int side);
+    struct edge *e2, struct vertex *v2, int side);
 void delete_edge(struct edge *e);
 void splice(struct edge *a, struct edge *b, struct vertex *v);
 struct edge *create_edge(struct vertex *v1, struct vertex *v2);

@@ -43,8 +43,9 @@ typedef int __g77_integer;
 typedef unsigned int __g77_uinteger;
 typedef long int __g77_longint;
 typedef unsigned long int __g77_ulongint;
+
 #include <g2c.h>
-#else /* for gcc4+ */
+#else                           /* for gcc4+ */
 typedef int integer;
 typedef unsigned int uinteger;
 typedef char *address;
@@ -70,24 +71,24 @@ typedef unsigned long ulongint;
 typedef int ftnlen;
 
 /* procedure parameter types for -A */
-typedef int (*U_fp) ();
+typedef int (*U_fp)();
 typedef shortint(*J_fp) ();
 typedef integer(*I_fp) ();
 typedef real(*R_fp) ();
 typedef doublereal(*D_fp) (), (*E_fp) ();
-typedef void (*C_fp) ();
-typedef void (*Z_fp) ();
+typedef void (*C_fp)();
+typedef void (*Z_fp)();
 typedef logical(*L_fp) ();
 typedef shortlogical(*K_fp) ();
-typedef void (*H_fp) ();
-typedef int (*S_fp) ();
+typedef void (*H_fp)();
+typedef int (*S_fp)();
 
 /* E_fp is for real functions when -R is not specified */
-typedef void C_f;		/* complex function                    */
-typedef void H_f;		/* character function                  */
-typedef void Z_f;		/* double complex function             */
-typedef doublereal E_f;		/* real function with -R not specified */
-#endif /* HAVE_G2C_H */
+typedef void C_f;               /* complex function                    */
+typedef void H_f;               /* character function                  */
+typedef void Z_f;               /* double complex function             */
+typedef doublereal E_f;         /* real function with -R not specified */
+#endif                          /* HAVE_G2C_H */
 
 /* The following may have to be selectively installed according
    to platform, at least partly
@@ -101,12 +102,12 @@ typedef doublereal E_f;		/* real function with -R not specified */
 
 /* Useful defines */
 
-#define MAX_POS          1	/* Indicates maximum value         */
-#define MAX_NEG         -1	/* Indicates minimum value         */
-#define MAX_ABS          0	/* Indicates absolute value        */
+#define MAX_POS          1      /* Indicates maximum value         */
+#define MAX_NEG         -1      /* Indicates minimum value         */
+#define MAX_ABS          0      /* Indicates absolute value        */
 
-#define DO_COMPACT       0	/* Eliminate unnecessary rows (cols) in matrix  */
-#define NO_COMPACT       1	/* ... or not                                    */
+#define DO_COMPACT       0      /* Eliminate unnecessary rows (cols) in matrix  */
+#define NO_COMPACT       1      /* ... or not                                    */
 
 
 /* define macros for fortran symbols (called directly). Needed because 
@@ -141,20 +142,20 @@ typedef enum
 typedef struct matrix_
 {
 
-    mat_spec type;		/* matrix, row vector or column vector? */
-    int v_indx;			/* If a vector, which row(column) is active?
-				 * If a matrix this is ignored. If value is < 0,
-				 * the first row(column) is assumed, ie. index 0.  */
-    int rows, cols;		/* Rows and columns of matrix */
-    int ldim;			/* Lead dimension of matrix. How many `rows' are
-				 * alloc'ed? May exceed real number of rows `rows' */
-    doublereal *vals;		/* The values (should be dimensioned to lda * cols */
-    int is_init;		/* Is  matrix initialised: values array
-				 * is allocated and parameters set ?               */
+    mat_spec type;              /* matrix, row vector or column vector? */
+    int v_indx;                 /* If a vector, which row(column) is active?
+                                 * If a matrix this is ignored. If value is < 0,
+                                 * the first row(column) is assumed, ie. index 0.  */
+    int rows, cols;             /* Rows and columns of matrix */
+    int ldim;                   /* Lead dimension of matrix. How many `rows' are
+                                 * alloc'ed? May exceed real number of rows `rows' */
+    doublereal *vals;           /* The values (should be dimensioned to lda * cols */
+    int is_init;                /* Is  matrix initialised: values array
+                                 * is allocated and parameters set ?               */
 } mat_struct;
 
 typedef mat_struct vec_struct;
 
 #include <grass/defs/la.h>
 
-#endif /* GRASS_LA_H */
+#endif                          /* GRASS_LA_H */

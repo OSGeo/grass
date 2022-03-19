@@ -45,7 +45,7 @@
 
 int del2g(double *img[2], int size, double w)
 {
-    double *g[2];		/* the filter function */
+    double *g[2];               /* the filter function */
 
     G_message(_("    taking FFT of image..."));
     fft(FORWARD, img, size * size, size, size);
@@ -69,4 +69,4 @@ int del2g(double *img[2], int size, double w)
     return 0;
 }
 
-#endif /* HAVE_FFTW */
+#endif                          /* HAVE_FFTW */

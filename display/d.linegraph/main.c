@@ -58,8 +58,7 @@ static double rem(long int x, long int y)
 /* TODO: remove constants */
 /* TODO: include X? (common fun for X and Y) */
 static void set_optimal_text_size(double text_width, double text_height,
-                                  const char *text, double *tt, double *tb,
-                                  double *tl, double *tr)
+    const char *text, double *tt, double *tb, double *tl, double *tr)
 {
     D_text_size(text_width, text_height);
     D_get_text_box(text, tt, tb, tl, tr);
@@ -423,7 +422,7 @@ int main(int argc, char **argv)
 
         if ((in[j].fp = fopen(in[j].full_name, "r")) == NULL)
             G_fatal_error(_("Unable to open input file <%s>"),
-                          in[j].full_name);
+                in[j].full_name);
 
         num_y_files++;
         if (num_y_files > 10)
@@ -485,25 +484,23 @@ int main(int argc, char **argv)
         /* S_read gives warning only */
         if (!point_symbol)
             G_fatal_error(_("Cannot find/open symbol: '%s'"),
-                          point_symbol_opt->answer);
+                point_symbol_opt->answer);
     }
     RGBA_Color primary_color;
     RGBA_Color secondary_color;
 
     if (draw_points) {
-        S_stroke(point_symbol, symbol_size, symbol_rotation,
-                 symbol_tolerance);
+        S_stroke(point_symbol, symbol_size, symbol_rotation, symbol_tolerance);
         primary_color.a = RGBA_COLOR_OPAQUE;
 
         if (point_color2_opt->answer) {
             int rgb_r, rgb_g, rgb_b;
-            int ret =
-                G_str_to_color(point_color2_opt->answer, &rgb_r, &rgb_g,
-                               &rgb_b);
+            int ret = G_str_to_color(point_color2_opt->answer, &rgb_r, &rgb_g,
+                &rgb_b);
+
             if (ret == 0)
                 G_fatal_error(_("Color <%s> cannot for option %s be parsed"),
-                              point_color2_opt->answer,
-                              point_color2_opt->key);
+                    point_color2_opt->answer, point_color2_opt->key);
             else if (ret == 2)
                 secondary_color.a = RGBA_COLOR_TRANSPARENT;
             else
@@ -540,7 +537,7 @@ int main(int argc, char **argv)
         /* TODO: repeat the colors if only one provided (as with width) */
         if (j - 1 < num_y_files)
             G_fatal_error(_("Only <%d> colors given for <%d> lines"),
-                          j - 1, num_y_files);
+                j - 1, num_y_files);
     }
     else if (color_table_opt->answer) {
         struct Colors colors;
@@ -557,7 +554,7 @@ int main(int argc, char **argv)
         for (i = 0; i < num_y_files; i++)
             values[i] = i + 1;
         Rast_lookup_c_colors(values, rbuf, gbuf, bbuf, set, num_y_files,
-                             &colors);
+            &colors);
         /* no need to check 'set' because we generated the range */
         for (i = 0; i < num_y_files; i++) {
             /* the in list is indexed from 1 */
@@ -584,8 +581,7 @@ int main(int argc, char **argv)
             /* we could relax this and just stop/warn reading as with the colors */
             if (i + 1 > num_y_files)
                 G_fatal_error(_("Number of widths (%d) is higher then"
-                                " the number of files (%d)"), i + 1,
-                              num_y_files);
+                        " the number of files (%d)"), i + 1, num_y_files);
             /* TODO: remove indexing from 1 in the whole file */
             in[i + 1].width = atof(line_width_opt->answers[i]);
             i++;
@@ -597,7 +593,7 @@ int main(int argc, char **argv)
         }
         else if (num_y_files != i)
             G_fatal_error(_("Number of widths (%d) is lower then"
-                            " the number of files (%d)"), i, num_y_files);
+                    " the number of files (%d)"), i, num_y_files);
     }
 
     /* get coordinates of current screen window, in pixels */
@@ -650,18 +646,18 @@ int main(int argc, char **argv)
         if ((i > 0) && (in[0].num_pnts != in[i].num_pnts)) {
             if (in[i].num_pnts < in[0].num_pnts) {
                 G_warning(_("Y input file <%s> contains fewer data points than the X input file"),
-                          in[i].name);
+                    in[i].name);
             }
             else {
                 G_warning(_("Y input file <%s> contains more data points than the X input file"),
-                          in[i].name);
+                    in[i].name);
             }
 
             if (in[i].num_pnts > in[0].num_pnts)
                 G_message(n_("The last point will be ignored",
-                             "The last %d points will be ignored",
-                             (in[i].num_pnts - in[0].num_pnts)),
-                          (in[i].num_pnts - in[0].num_pnts));
+                        "The last %d points will be ignored",
+                        (in[i].num_pnts - in[0].num_pnts)),
+                    (in[i].num_pnts - in[0].num_pnts));
         }
     }
 
@@ -713,7 +709,7 @@ int main(int argc, char **argv)
 
     if (tic_unit != 1 && scale_x_labels)
         G_fatal_error(_("Scale X labels cannot be used with this range"
-                        " of data (%f, %f)"), in[0].min, in[0].max);
+                " of data (%f, %f)"), in[0].min, in[0].max);
 
     /* open all the data files again */
 
@@ -721,7 +717,7 @@ int main(int argc, char **argv)
         if ((in[i].fp = fopen(in[i].full_name, "r")) == NULL) {
             D_close_driver();
             G_fatal_error(_("Unable to open input file <%s>"),
-                          in[i].full_name);
+                in[i].full_name);
         }
     }
 
@@ -755,7 +751,7 @@ int main(int argc, char **argv)
                 if ((in[i].num_pnts >= line) && (err != 1)) {
                     D_close_driver();
                     G_fatal_error(_("Problem reading <%s> data file at line %d"),
-                                  in[i].name, line);
+                        in[i].name, line);
                 }
 
                 /* in case the Y file has fewer lines than the X file, we will skip
@@ -775,11 +771,10 @@ int main(int argc, char **argv)
                 else {
                     if (in[i].value < 0)
                         new_y[i] = (yoffset - yscale * (-1 *
-                                                        (min_y -
-                                                         in[i].value)));
+                                (min_y - in[i].value)));
                     else
                         new_y[i] = (yoffset - yscale * (in[i].value +
-                                                        (min_y * -1)));
+                                (min_y * -1)));
                 }
 
                 new_x = xoffset + (line * xscale);
@@ -806,18 +801,18 @@ int main(int argc, char **argv)
                         int rgb_r, rgb_g, rgb_b;
 
                         D_color_number_to_RGB(in[i].color, &rgb_r, &rgb_g,
-                                              &rgb_b);
+                            &rgb_b);
                         primary_color.r = rgb_r;
                         primary_color.g = rgb_g;
                         primary_color.b = rgb_b;
                     }
                     D_line_width(symbol_line_width);
                     D_symbol2(point_symbol, prev_x, prev_y[i], &primary_color,
-                              &secondary_color);
+                        &secondary_color);
                     /* last point */
                     if (line == in[i].num_pnts - 1)
                         D_symbol2(point_symbol, new_x, new_y[i],
-                                  &primary_color, &secondary_color);
+                            &primary_color, &secondary_color);
                 }
                 prev_y[i] = new_y[i];
             }
@@ -863,7 +858,7 @@ int main(int argc, char **argv)
                 D_get_text_box(txt, &tt, &tb, &tl, &tr);
             }
             D_pos_abs((xoffset + (line * xscale - (tr - tl) / 2)),
-                      (b - XNUMS_Y * (b - t)));
+                (b - XNUMS_Y * (b - t)));
             D_text(txt);
         }
         else if (rem(line, tic_unit) == 0.0) {
@@ -889,7 +884,7 @@ int main(int argc, char **argv)
 
     /* draw the x-axis label */
     if ((strcmp(title[0]->answer, "") == 0) && (strcmp(tic_name, "") == 0))
-        xlabel =  G_store("");
+        xlabel = G_store("");
     else
         G_asprintf(&xlabel, "X: %s %s", title[0]->answer, tic_name);
     text_height = (b - t) * TEXT_HEIGHT;
@@ -936,9 +931,9 @@ int main(int argc, char **argv)
             text_width = (r - l) * TEXT_WIDTH;
             /* this would be useful, but with some other numbers */
             set_optimal_text_size(text_width, text_height, txt, &tt, &tb, &tl,
-                                  &tr);
+                &tr);
             D_pos_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
-                      yoffset - (yscale * val + 0.5 * (tt - tb)));
+                yoffset - (yscale * val + 0.5 * (tt - tb)));
             D_text(text);
         }
         /* no automatic tics comment */
@@ -962,7 +957,7 @@ int main(int argc, char **argv)
         }
         if (tic_unit != 1 && scale_y_labels)
             G_fatal_error(_("Scale Y labels cannot be used with this"
-                            " range of data (%f, %f)"), min_y, max_y);
+                    " range of data (%f, %f)"), min_y, max_y);
         /* Y-AXIS LOOP */
         for (i = (int)min_y; i <= (int)max_y; i += tic_unit) {
             if (rem(i, tic_every) == 0.0) {
@@ -983,9 +978,9 @@ int main(int argc, char **argv)
                 text_height = (b - t) * TEXT_HEIGHT;
                 text_width = (r - l) * TEXT_WIDTH;
                 set_optimal_text_size(text_width, text_height, txt, &tt, &tb,
-                                      &tl, &tr);
+                    &tl, &tr);
                 D_pos_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
-                          yoffset - (yscale * (i - min_y) + 0.5 * (tt - tb)));
+                    yoffset - (yscale * (i - min_y) + 0.5 * (tt - tb)));
                 D_text(txt);
             }
             else if (rem(i, tic_unit) == 0.0) {

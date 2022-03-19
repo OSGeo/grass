@@ -57,37 +57,39 @@ void bench_blas_level_3_double(int rows)
     fill_d_vector_range_1(x, 1, rows);
     fill_d_vector_range_1(y, 1, rows);
 
-    fill_d_vector_range_1(A[0], 1, rows*rows);
-    fill_d_vector_range_1(B[0], 1, rows*rows);
+    fill_d_vector_range_1(A[0], 1, rows * rows);
+    fill_d_vector_range_1(B[0], 1, rows * rows);
 
 
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
-{
-    G_math_d_aA_B(A, B, 4.0 , C, rows , rows);
-}
+    {
+        G_math_d_aA_B(A, B, 4.0, C, rows, rows);
+    }
     gettimeofday(&tend, NULL);
-    printf("Computation time G_math_d_aA_B: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_d_aA_B: %g\n",
+        compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
-{
-    G_math_d_AB(A, B, C, rows , rows , rows);
-}
+    {
+        G_math_d_AB(A, B, C, rows, rows, rows);
+    }
     gettimeofday(&tend, NULL);
-    printf("Computation time G_math_d_AB: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_d_AB: %g\n",
+        compute_time_difference(tstart, tend));
 
 
-    if(x)
-      G_free_vector(x);
-    if(y)
-      G_free_vector(y);
+    if (x)
+        G_free_vector(x);
+    if (y)
+        G_free_vector(y);
 
-    if(A)
-      G_free_matrix(A);
-    if(B)
-      G_free_matrix(B);
-    if(C)
-      G_free_matrix(C);
+    if (A)
+        G_free_matrix(A);
+    if (B)
+        G_free_matrix(B);
+    if (C)
+        G_free_matrix(C);
 
     return;
 }

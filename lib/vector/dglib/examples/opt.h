@@ -176,15 +176,15 @@ extern "C"
 
     typedef struct GnoOption
     {
-	int iArg;		/* returned argv option index */
-	int nFlg;		/* flags describing the option */
-	Boolean fDef;		/* default returned value for a boolean option */
-	char *pszDef;		/* default returned value for a parametric option */
-	char *pszShort;		/* short-option recogniser */
-	char *pszLong;		/* long-option recogniser */
-	Boolean *pfValue;	/* address to return a boolean option */
-	char **ppszValue;	/* address to return a parametric option */
-	char *pszDescr;		/* a brief option description */
+        int iArg;               /* returned argv option index */
+        int nFlg;               /* flags describing the option */
+        Boolean fDef;           /* default returned value for a boolean option */
+        char *pszDef;           /* default returned value for a parametric option */
+        char *pszShort;         /* short-option recogniser */
+        char *pszLong;          /* long-option recogniser */
+        Boolean *pfValue;       /* address to return a boolean option */
+        char **ppszValue;       /* address to return a parametric option */
+        char *pszDescr;         /* a brief option description */
 
     } GnoOption_s;
 
@@ -295,6 +295,6 @@ extern "C"
 }
 #endif
 
-#endif				/* top of file */
+#endif                          /* top of file */
 
 /***************************** END OF FILE ****************************/

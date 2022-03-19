@@ -45,38 +45,38 @@
 #define D_PI	180.
 #define D2_PI	360.
 #define DEG2RAD	M_D2R
-#define UNDEF	365.		/* change to undefined when available */
-#define UNDEFZ	0.		/* change to undefined when available */
-#define HORIZ	1		/* magic        */
-#define VERT	0		/*      numbers */
+#define UNDEF	365.            /* change to undefined when available */
+#define UNDEFZ	0.              /* change to undefined when available */
+#define HORIZ	1               /* magic        */
+#define VERT	0               /*      numbers */
 
 
 typedef struct
 {
-    char *elevin;		/* name of input elevation file         */
-    char *aspin;		/* name of input aspect file            */
-    char *barin;		/* name of barrier input file           */
-    char *flout;		/* name of output flowline file         */
-    char *lgout;		/* name of output length file           */
-    char *dsout;		/* name of output density file          */
-    int skip;			/* cells between flowlines output       */
-    int bound;			/* constant bound on path length        */
+    char *elevin;               /* name of input elevation file         */
+    char *aspin;                /* name of input aspect file            */
+    char *barin;                /* name of barrier input file           */
+    char *flout;                /* name of output flowline file         */
+    char *lgout;                /* name of output length file           */
+    char *dsout;                /* name of output density file          */
+    int skip;                   /* cells between flowlines output       */
+    int bound;                  /* constant bound on path length        */
     /*    double  offset;              magnitude of random grid offset      */
-    char up;			/* direction to compute lines           */
-    char l3d;			/* three-dimensional length             */
-    char mem;			/* always recompute aspect              */
-    char seg;			/* use segmented arrays                 */
+    char up;                    /* direction to compute lines           */
+    char l3d;                   /* three-dimensional length             */
+    char mem;                   /* always recompute aspect              */
+    char seg;                   /* use segmented arrays                 */
 }
 params;
 
 typedef struct
 {
-    DCELL **buf;		/* internal row storage                 */
-    SEGMENT *seg;		/* state for segment library            */
-    int sfd;			/* file descriptor for segment file     */
-    int row_offset,		/* border widths of buf (for            */
-      col_offset;		/*      extrapolating border data)      */
-    char *name;			/* for error messages                   */
+    DCELL **buf;                /* internal row storage                 */
+    SEGMENT *seg;               /* state for segment library            */
+    int sfd;                    /* file descriptor for segment file     */
+    int row_offset,             /* border widths of buf (for            */
+        col_offset;             /*      extrapolating border data)      */
+    char *name;                 /* for error messages                   */
 }
 layer;
 
@@ -92,4 +92,3 @@ extern double *ew_dist;
 extern double *epsilon[2];
 
 extern params parm;
-

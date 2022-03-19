@@ -56,26 +56,26 @@ static int read_off_t(int, off_t *);
  * \return -2 if out of memory
  */
 
-int Segment_init(SEGMENT *SEG, int fd, int nseg)
+int Segment_init(SEGMENT * SEG, int fd, int nseg)
 {
     SEG->open = 0;
     SEG->fd = fd;
     SEG->nseg = nseg;
 
     if (lseek(fd, 0L, SEEK_SET) < 0) {
-	int err = errno;
+        int err = errno;
 
-	G_warning("Segment_init: %s", strerror(err));
-	return -1;
+        G_warning("Segment_init: %s", strerror(err));
+        return -1;
     }
 
     /* read the header */
     if (!read_off_t(fd, &SEG->nrows)
-	|| !read_off_t(fd, &SEG->ncols)
-	|| !read_int(fd, &SEG->srows)
-	|| !read_int(fd, &SEG->scols)
-	|| !read_int(fd, &SEG->len))
-	return -1;
+        || !read_off_t(fd, &SEG->ncols)
+        || !read_int(fd, &SEG->srows)
+        || !read_int(fd, &SEG->scols)
+        || !read_int(fd, &SEG->len))
+        return -1;
 
     return seg_setup(SEG);
 }
@@ -86,19 +86,19 @@ static int read_int(int fd, int *n)
     int bytes_read;
 
     if ((bytes_read = read(fd, n, sizeof(int))) == -1)
-	G_warning("read_int: %s", strerror(errno));
+        G_warning("read_int: %s", strerror(errno));
 
     bytes_read = (bytes_read == sizeof(int));
 
     return bytes_read;
 }
 
-static int read_off_t(int fd, off_t *n)
+static int read_off_t(int fd, off_t * n)
 {
     int bytes_read;
 
     if ((bytes_read = read(fd, n, sizeof(off_t))) == -1)
-	G_warning("read_off_t: %s", strerror(errno));
+        G_warning("read_off_t: %s", strerror(errno));
 
     bytes_read = (bytes_read == sizeof(off_t));
 

@@ -1,3 +1,4 @@
+
 /*************************************************************
  *                          USAGE                            *
  *************************************************************
@@ -66,7 +67,7 @@
 #include <stddef.h>
 
 /* maximum RB Tree height */
-#define REGTREE_MAX_HEIGHT 64        /* should be more than enough */
+#define REGTREE_MAX_HEIGHT 64   /* should be more than enough */
 
 /* routine to compare data items
  * return -1 if rb_a < rb_b
@@ -75,46 +76,46 @@
  */
 struct reg_stats
 {
-    int id;		/* region ID */
-    int count;		/* number of cells of this region */
-    double *sum,	/* sum for each band */
-           *mean;	/* mean for each band = sum[b] / count */
+    int id;                     /* region ID */
+    int count;                  /* number of cells of this region */
+    double *sum,                /* sum for each band */
+          *mean;                /* mean for each band = sum[b] / count */
 
-	   /* unused; stddev and thus sumsq may be needed for 
-	    * eCognition-like multi-scale segmentation */
-	   /*
-	   *min,
-	   *max,
-	   *sumsq,
-	   *stddev;
-	   */
+    /* unused; stddev and thus sumsq may be needed for 
+     * eCognition-like multi-scale segmentation */
+    /*
+     *min,
+     *max,
+     *sumsq,
+     *stddev;
+     */
 };
 
 typedef int rg_compare_fn(struct reg_stats *rb_a, struct reg_stats *rb_b);
 
 struct RG_NODE
 {
-    unsigned char red;              /* 0 = black, 1 = red */
-    struct RG_NODE *link[2];        /* link to children: link[0] for smaller, link[1] for larger */
-    struct reg_stats data;           /* any kind of data */
+    unsigned char red;          /* 0 = black, 1 = red */
+    struct RG_NODE *link[2];    /* link to children: link[0] for smaller, link[1] for larger */
+    struct reg_stats data;      /* any kind of data */
 };
- 
+
 struct RG_TREE
 {
-    struct RG_NODE *root;           /* root node */
-    size_t datasize;                /* item size */
-    size_t count;                   /* number of items in tree. */
-    int nbands;			    /* number of bands */
-    rg_compare_fn *cmp;      /* function to compare data */
+    struct RG_NODE *root;       /* root node */
+    size_t datasize;            /* item size */
+    size_t count;               /* number of items in tree. */
+    int nbands;                 /* number of bands */
+    rg_compare_fn *cmp;         /* function to compare data */
 };
 
 struct RG_TRAV
 {
-    struct RG_TREE *tree;           /* tree being traversed */
-    struct RG_NODE *curr_node;      /* current node */
-    struct RG_NODE *up[REGTREE_MAX_HEIGHT];  /* stack of parent nodes */
-    int top;                        /* index for stack */
-    int first;                      /* little helper flag */
+    struct RG_TREE *tree;       /* tree being traversed */
+    struct RG_NODE *curr_node;  /* current node */
+    struct RG_NODE *up[REGTREE_MAX_HEIGHT];     /* stack of parent nodes */
+    int top;                    /* index for stack */
+    int first;                  /* little helper flag */
 };
 
 

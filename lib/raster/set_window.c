@@ -24,7 +24,7 @@ static void check_write_window(void);
 void Rast__init_window(void)
 {
     if (G_is_initialized(&R__.window_set))
-	return;
+        return;
 
     G__init_window();
 
@@ -45,7 +45,7 @@ void Rast_set_window(struct Cell_head *window)
     Rast__init();
 
     if (R__.split_window)
-	G_warning(_("Rast_set_window() called while window split"));
+        G_warning(_("Rast_set_window() called while window split"));
 
     check_write_window();
 
@@ -57,15 +57,17 @@ void Rast_set_window(struct Cell_head *window)
 
     update_window_mappings();
 }
+
 /*!
-  \brief Unset current window
-*/
+   \brief Unset current window
+ */
 void Rast_unset_window(void)
 {
     G_debug(4, "Rast_unset_window()");
 
     R__.window_set = 0;
 }
+
 /*!
  * \brief Establishes 'window' as the current working window for output.
  * 
@@ -121,24 +123,24 @@ static void update_window_mappings(void)
      */
     maskfd = R__.auto_mask > 0 ? R__.mask_fd : -1;
     for (i = 0; i < R__.fileinfo_count; i++) {
-	struct fileinfo *fcb = &R__.fileinfo[i];
+        struct fileinfo *fcb = &R__.fileinfo[i];
 
-	if (fcb->open_mode == OPEN_OLD) {
-	    if (fcb->cellhd.zone == R__.rd_window.zone &&
-		fcb->cellhd.proj == R__.rd_window.proj)
-		continue;
-	    if (i != maskfd)
-		G_fatal_error(_("Rast_set_read_window(): projection/zone differs from that of "
-				"currently open raster maps"));
-	}
+        if (fcb->open_mode == OPEN_OLD) {
+            if (fcb->cellhd.zone == R__.rd_window.zone &&
+                fcb->cellhd.proj == R__.rd_window.proj)
+                continue;
+            if (i != maskfd)
+                G_fatal_error(_("Rast_set_read_window(): projection/zone differs from that of "
+                        "currently open raster maps"));
+        }
     }
 
     /* close the mask */
     if (R__.auto_mask > 0) {
-	Rast_close(maskfd);
-	/* G_free (R__.mask_buf); */
-	R__.mask_fd = -1;
-	R__.auto_mask = -1;	/* turn off masking */
+        Rast_close(maskfd);
+        /* G_free (R__.mask_buf); */
+        R__.mask_fd = -1;
+        R__.auto_mask = -1;     /* turn off masking */
     }
 
     /* now for each possible open cell file, recreate the window mapping */
@@ -147,15 +149,16 @@ static void update_window_mappings(void)
      * cell files
      */
     for (i = 0; i < R__.fileinfo_count; i++) {
-	struct fileinfo *fcb = &R__.fileinfo[i];
+        struct fileinfo *fcb = &R__.fileinfo[i];
 
-	if (fcb->open_mode != OPEN_OLD &&
-	    fcb->open_mode != OPEN_NEW_UNCOMPRESSED &&
-	    fcb->open_mode != OPEN_NEW_COMPRESSED)
-	    continue;
+        if (fcb->open_mode != OPEN_OLD &&
+            fcb->open_mode != OPEN_NEW_UNCOMPRESSED &&
+            fcb->open_mode != OPEN_NEW_COMPRESSED)
+            continue;
 
-	if (fcb->open_mode == OPEN_OLD)
-	    G_fatal_error(_("Input window changed while maps are open for read. Map name <%s>"), fcb->name);
+        if (fcb->open_mode == OPEN_OLD)
+            G_fatal_error(_("Input window changed while maps are open for read. Map name <%s>"),
+                fcb->name);
     }
 
     /* turn masking (back) on if necessary */
@@ -167,11 +170,11 @@ static void check_write_window(void)
     int i;
 
     for (i = 0; i < R__.fileinfo_count; i++) {
-	struct fileinfo *fcb = &R__.fileinfo[i];
+        struct fileinfo *fcb = &R__.fileinfo[i];
 
-	if (fcb->open_mode == OPEN_NEW_UNCOMPRESSED ||
-	    fcb->open_mode == OPEN_NEW_COMPRESSED)
-	    G_fatal_error(_("Output window changed while maps are open for write. Map name <%s>"), fcb->name);
+        if (fcb->open_mode == OPEN_NEW_UNCOMPRESSED ||
+            fcb->open_mode == OPEN_NEW_COMPRESSED)
+            G_fatal_error(_("Output window changed while maps are open for write. Map name <%s>"),
+                fcb->name);
     }
 }
-

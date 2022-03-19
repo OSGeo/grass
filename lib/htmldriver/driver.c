@@ -23,7 +23,7 @@ const struct driver *HTML_Driver(void)
     static int initialized;
 
     if (initialized)
-	return &drv;
+        return &drv;
 
     drv.name = "html";
     drv.Box = HTML_Box;

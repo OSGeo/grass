@@ -22,7 +22,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#define NFILES 30		/* maximum number of layers */
+#define NFILES 30               /* maximum number of layers */
 
 extern int nfiles;
 extern int nrows;
@@ -39,4 +39,4 @@ typedef struct
 extern RECLASS *reclass;
 extern CELL *table;
 
-#endif /* __R_CROSS_GLOB_H__ */
+#endif                          /* __R_CROSS_GLOB_H__ */

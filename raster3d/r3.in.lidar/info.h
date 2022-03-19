@@ -22,4 +22,4 @@
 void print_lasinfo(LASHeaderH, LASSRSH);
 int scan_bounds(LASReaderH, int, int, int, double, struct Cell_head *);
 
-#endif /* __INFO_H__ */
+#endif                          /* __INFO_H__ */

@@ -7,7 +7,7 @@
 
 struct color_rgba
 {
-    unsigned char r, g, b, a;	/* red, green, blue, and alpha */
+    unsigned char r, g, b, a;   /* red, green, blue, and alpha */
 };
 
 typedef struct color_rgba RGBA_Color;
@@ -26,4 +26,4 @@ enum clip_mode
 
 #include <grass/defs/display.h>
 
-#endif /* GRASS_DISPLAY_H */
+#endif                          /* GRASS_DISPLAY_H */
