@@ -86,7 +86,7 @@ class SbManager:
         self.progressbar.progressHidden.connect(self._progressHidden)
 
         self.statusbar.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
-        self.mapFrame.mapWindowProperties.sbItemChanged.connect(self.SetModeWithUpdate)
+        self.mapFrame.mapWindowProperties.sbItemChanged.connect(self.SetMode)
 
         self._oldStatus = ""
 
@@ -266,16 +266,12 @@ class SbManager:
         self.statusbar.SetStatusText(self._oldStatus, 0)
 
     def SetMode(self, mode):
-        """Sets current mode
+        """Sets current mode and updates statusbar
 
         Mode is usually driven by user through map display settings.
         """
         self._mode = mode
         self._modeIndexSet = True
-
-    def SetModeWithUpdate(self, mode):
-        """Sets current mode and updates statusbar"""
-        self.SetMode(mode)
         self.Update()
 
     def GetMode(self):

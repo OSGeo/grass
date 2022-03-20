@@ -1561,7 +1561,7 @@ class MapPanel(SingleMapPanel):
         """Set properties of map display window"""
         self.mapWindowProperties.autoRender = render
         if self.statusbarManager:
-            self.statusbarManager.SetModeWithUpdate(mode)
+            self.statusbarManager.SetMode(mode)
         self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent
