@@ -292,8 +292,6 @@ class SbManager:
             self.mapFrame.mapWindowProperties.sbItem = idx
 
         def getSbItemProperty():
-            if self.mapFrame.mapWindowProperties.sbItem != self._mode:
-                return self._mode
             return self.mapFrame.mapWindowProperties.sbItem
 
         menu = Menu()
