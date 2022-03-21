@@ -347,7 +347,6 @@ class MapPanelBase(wx.Panel):
         self.statusbarManager.AddStatusbarItem(
             sb.SbRender(self, statusbar=statusbar, position=2)
         )
-        self.statusbarManager.Update()
         return statusbar
 
     def AddStatusbarPane(self):
