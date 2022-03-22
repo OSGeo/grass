@@ -1,6 +1,7 @@
 """Benchmarking of r.series
 
 @author Aaron Saw Min Sern
+@author Anna Petrasova
 """
 
 from grass.exceptions import CalledModuleError
@@ -13,20 +14,22 @@ import grass.benchmark as bm
 def main():
     results = []
 
-    # Users can add more or modify existing reference maps
-    benchmark(7071, "r.series_50M", results)
-    benchmark(14142, "r.series_200M", results)
-    benchmark(10000, "r.series_100M", results)
-    benchmark(20000, "r.series_400M", results)
-
-    bm.nprocs_plot(results, filename="r_series_benchmark_size.svg")
-
-
-def benchmark(size, label, results):
     reference = "r_series_reference_map"
+    generate_map(rows=10000, cols=10000, fname=reference)
+    # Users can add more or modify existing reference maps
+    benchmark(0, "r.series_0MB", results, reference)
+    benchmark(5, "r.series_5MB", results, reference)
+    benchmark(10, "r.series_10MB", results, reference)
+    benchmark(100, "r.series_100MB", results, reference)
+    benchmark(300, "r.series_300MB", results, reference)
+
+    Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
+    bm.nprocs_plot(results, filename="r_series_benchmark_memory.svg")
+
+
+def benchmark(memory, label, results, reference):
     output = "benchmark_r_series"
 
-    generate_map(rows=size, cols=size, fname=reference)
     module = Module(
         "r.series",
         input=[reference] * 8,
@@ -35,9 +38,10 @@ def benchmark(size, label, results):
         run_=False,
         stdout_=DEVNULL,
         overwrite=True,
+        memory=memory,
     )
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=16, repeat=3))
-    Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
+    
     Module("g.remove", quiet=True, flags="f", type="raster", name=output)
 
 
