@@ -43,7 +43,6 @@ ENV PACKAGES="\
       pdal \
       pdal-dev \
       postgresql \
-    #   proj-datumgrid \
       proj-util \
       sqlite \
       sqlite-libs \
@@ -216,6 +215,8 @@ FROM grass as final
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash"
+ENV PROJ_NETWORK="ON"
+
 
 # show installed version
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
