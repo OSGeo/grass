@@ -156,8 +156,8 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"] = list()
 
         # set pane sizes according to the full screen size of the primary monitor
-        self.PANE_BEST_SIZE = tuple(t // 3 for t in self.size)
-        self.PANE_MIN_SIZE = tuple(t // 5 for t in self.size)
+        self.PANE_BEST_SIZE = tuple(t // 5 for t in self.size)
+        self.PANE_MIN_SIZE = tuple(t // 8 for t in self.size)
 
         # create widgets and build panes
         self.CreateMenuBar()
@@ -183,8 +183,8 @@ class GMFrame(wx.Frame):
             self.Centre()
 
         self.Layout()
+        self.Fit()
         self.Show()
-        self.Maximize(True)
 
         # load workspace file if requested
         if workspace:
@@ -679,7 +679,8 @@ class GMFrame(wx.Frame):
 
         # Set the size for automatic notebook
         pane = self._auimgr.GetPane(notebook)
-        pane.MinSize(self.search.GetMinSize())
+        pane.BestSize(self.PANE_BEST_SIZE)
+        pane.MinSize(self.PANE_MIN_SIZE)
 
         wx.CallAfter(self.datacatalog.LoadItems)
 

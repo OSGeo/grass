@@ -7,14 +7,21 @@ on:
 
 jobs:
   build-and-test:
-    name: ${{ matrix.os }} tests
+    name: ${{ matrix.name }} tests
 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - ubuntu-18.04
-          - ubuntu-20.04
+        include:
+          - name: "20.04"
+            os: ubuntu-20.04
+            config: ubuntu-20.04
+          # This is without optional things but it still keeps things useful,
+          # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
+          # so that test pass even when these optional things are not present.
+          - name: "minimum config"
+            os: ubuntu-20.04
+            config: ubuntu-20.04_without_x
       fail-fast: false
 
     steps:
@@ -40,7 +47,7 @@ jobs:
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
       - name: Build
-        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install
 
       - name: Add the bin directory to PATH
         run: |
