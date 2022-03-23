@@ -41,7 +41,7 @@ def benchmark(memory, label, results, reference):
         memory=memory,
     )
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=16, repeat=3))
-    
+
     Module("g.remove", quiet=True, flags="f", type="raster", name=output)
 
 
