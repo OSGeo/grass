@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
     intype = -1;
 
     /* process the input maps from the file */
-    inputs = G_malloc(nprocs * sizeof *inputs);
+    inputs = G_calloc(nprocs, sizeof *inputs);
     if (parm.file->answer) {
         FILE *in;
         int max_inputs;
