@@ -34,7 +34,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         pdal::LasReader las_reader;
         las_reader.setOptions(las_opts);
         las_reader.prepare(table);
-        pdal::LasHeader las_header = las_reader.header();
+        const pdal::LasHeader& las_header = las_reader.header();
         if (first) {
             *min_x = las_header.minX();
             *min_y = las_header.minY();
@@ -95,7 +95,7 @@ void print_lasinfo(struct StringList *infiles)
         pdal::LasReader las_reader;
         las_reader.setOptions(las_opts);
         las_reader.prepare(table);
-        pdal::LasHeader las_header = las_reader.header();
+        const pdal::LasHeader& las_header = las_reader.header();
         pdal::PointLayoutPtr point_layout = table.layout();
         const pdal::Dimension::IdList & dims = point_layout->dims();
 
