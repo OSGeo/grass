@@ -481,7 +481,6 @@ class GridModule(object):
         self.out_prefix = out_prefix
         self.log = log
         self.move = move
-        self.patch_backend = patch_backend
         # by default RasterRow is used as previously
         # if overlap > 0, r.patch won't work properly
         if not patch_backend:
