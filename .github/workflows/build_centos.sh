@@ -24,6 +24,7 @@ export INSTALL_PREFIX=$1
 # Old versions of GCC on CentOS default to C89 although are C11 capable
 # This causes compilation to fail on >C89 code
 export CFLAGS="-O2 -std=gnu11"
+export CXXFLAGS="-std=gnu++11"
 
 ./configure \
     --prefix="$INSTALL_PREFIX/" \
