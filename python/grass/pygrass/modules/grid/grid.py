@@ -424,13 +424,16 @@ class GridModule(object):
     :type split: bool
     :param mapset_prefix: if specified created mapsets start with this prefix
     :type mapset_prefix: str
-    :param patch_backend: if "r.patch" and overlap == 0, use r.patch, otherwise
-                          use original RasterRow method
+    :param patch_backend: "r.patch", "RasterRow", or None for for default
     :type patch_backend: None or str
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
     :param kargs: give all the parameters to the command
+
+    When patch_backend is None, the RasterRow method is used for patching the result.
+    When patch_backend is "r.patch", r.patch is used with nprocs=processes.
+    r.patch can only be used when overlap is 0.
 
     >>> grd = GridModule('r.slope.aspect',
     ...                  width=500, height=500, overlap=2,
@@ -686,25 +689,25 @@ class GridModule(object):
             if otm.typedesc == "raster" and otm.value:
                 if self.patch_backend == "RasterRow":
                     rpatch_map(
-                        otm.value,
-                        self.mset.name,
-                        self.msetstr,
-                        bboxes,
-                        self.module.flags.overwrite,
-                        self.start_row,
-                        self.start_col,
-                        self.out_prefix,
+                        raster=otm.value,
+                        mapset=self.mset.name,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
                     )
                 else:
                     rpatch_map_r_patch_backend(
-                        otm.value,
-                        self.msetstr,
-                        bboxes,
-                        self.module.flags.overwrite,
-                        self.start_row,
-                        self.start_col,
-                        self.out_prefix,
-                        self.processes,
+                        raster=otm.value,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
+                        processes=self.processes,
                     )
                 noutputs += 1
         if noutputs < 1:
