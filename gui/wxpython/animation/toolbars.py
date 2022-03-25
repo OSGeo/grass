@@ -77,11 +77,23 @@ class MainToolbar(BaseToolbar):
         icons = ganimIcons
         return self._getToolbarData(
             (
-                ("addAnimation", icons["addAnimation"], self.parent.OnAddAnimation),
-                ("editAnimation", icons["editAnimation"], self.parent.OnEditAnimation),
-                ("reload", BaseIcons["render"], self.parent.Reload),
                 (
-                    "exportAnimation",
+                    ("addAnimation", icons["addAnimation"].label),
+                    icons["addAnimation"],
+                    self.parent.OnAddAnimation,
+                ),
+                (
+                    ("editAnimation", icons["editAnimation"].label),
+                    icons["editAnimation"],
+                    self.parent.OnEditAnimation,
+                ),
+                (
+                    ("reload", BaseIcons["render"].label),
+                    BaseIcons["render"],
+                    self.parent.Reload,
+                ),
+                (
+                    ("exportAnimation", icons["exportAnimation"].label),
                     icons["exportAnimation"],
                     self.parent.OnExportAnimation,
                 ),
@@ -111,25 +123,52 @@ class AnimationToolbar(BaseToolbar):
         icons = ganimIcons
         return self._getToolbarData(
             (
-                ("playBack", icons["playBack"], self.OnPlayBack),
-                ("playForward", icons["playForward"], self.OnPlayForward),
-                ("pause", icons["pause"], self.OnPause, wx.ITEM_CHECK),
-                ("stop", icons["stop"], self.OnStop),
+                (
+                    ("playBack", icons["playBack"].label),
+                    icons["playBack"],
+                    self.OnPlayBack,
+                ),
+                (
+                    ("playForward", icons["playForward"].label),
+                    icons["playForward"],
+                    self.OnPlayForward,
+                ),
+                (
+                    ("pause", icons["pause"].label),
+                    icons["pause"],
+                    self.OnPause,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("stop", icons["stop"].label),
+                    icons["stop"],
+                    self.OnStop,
+                ),
                 (None,),
                 (
-                    "oneDirectionReplay",
+                    (
+                        "oneDirectionReplay",
+                        icons["oneDirectionReplay"].label,
+                    ),
                     icons["oneDirectionReplay"],
                     self.OnOneDirectionReplay,
                     wx.ITEM_CHECK,
                 ),
                 (
-                    "bothDirectionReplay",
+                    (
+                        "bothDirectionReplay",
+                        icons["bothDirectionReplay"].label,
+                    ),
                     icons["bothDirectionReplay"],
                     self.OnBothDirectionReplay,
                     wx.ITEM_CHECK,
                 ),
                 (None,),
-                ("adjustSpeed", icons["speed"], self.parent.OnAdjustSpeed),
+                (
+                    ("adjustSpeed", icons["speed"].label),
+                    icons["speed"],
+                    self.parent.OnAdjustSpeed,
+                ),
             )
         )
 
@@ -228,9 +267,21 @@ class MiscToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("settings", BaseIcons["settings"], self.parent.OnPreferences),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", BaseIcons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("settings", BaseIcons["settings"].label),
+                    BaseIcons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", BaseIcons["help"].label),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", BaseIcons["quit"].label),
+                    BaseIcons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )
 
@@ -247,7 +298,12 @@ class AnimSimpleLmgrToolbar(SimpleLmgrToolbar):
         data = SimpleLmgrToolbar._toolbarData(self)
         if self._style & SIMPLE_LMGR_STDS:
             data.insert(
-                0, ("addSeries", simpleLmgrIcons["addSeries"], self.parent.OnAddStds)
+                0,
+                (
+                    ("addSeries", simpleLmgrIcons["addSeries"].label),
+                    simpleLmgrIcons["addSeries"],
+                    self.parent.OnAddStds,
+                ),
             )
         return data
 
