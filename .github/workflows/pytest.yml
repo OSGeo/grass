@@ -47,10 +47,6 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - name: Set LD_LIBRARY_PATH for compilation
-        run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
-
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -64,6 +60,7 @@ jobs:
       - name: Run pytest
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
           pytest .
 
       - name: Print installed versions
