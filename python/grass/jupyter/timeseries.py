@@ -16,7 +16,6 @@ import tempfile
 import os
 import weakref
 import shutil
-import json
 import grass.script as gs
 
 from .display import GrassRenderer
@@ -46,6 +45,7 @@ def collect_layers(timeseries, element_type, fill_gaps):
     :param bool fill_gaps: fill empty time steps with data from previous step
     """
     # NEW WAY: Comment in after PR 2258 is merged
+    # import json
     # if element_type == "strds":
     #     result = json.loads(
     #         gs.read_command(

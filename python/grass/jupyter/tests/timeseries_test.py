@@ -67,7 +67,7 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
     img.d_legend()
     # Render layers
     img.render()
-    # check files exist: MAY NEED PYLINT DISABLE for calling private attr
+    # check files exist:
     for (
         _date,
         filename,
