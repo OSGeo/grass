@@ -261,10 +261,9 @@ class TimeSeries:
 
     def _render_blank_layer(self, filename):
         """Write blank image for gaps in time series"""
-        # Render image
         img = GrassRenderer(filename=filename, use_region=True, env=self._env)
-        # Write blank image
-        img.d_erase(bgcolor=self._bgcolor)
+        for grass_module, kwargs in self._overlays.calls:
+            img.run(grass_module, **kwargs)
         # Add legend if needed
         if self._legend:
             self._render_legend(img)
@@ -278,29 +277,37 @@ class TimeSeries:
         Can be time-consuming to run with large space-time datasets.
         """
 
+        # Make base image (background and baselayers)
+        base_file = os.path.join(self._tmpdir.name, "base.png")
+        img = GrassRenderer(filename=base_file, use_region=True, env=self._env)
+        # Fill image background
+        img.d_erase(bgcolor=self._bgcolor)
+        # Add baselayers
+        for grass_module, kwargs in self._baselayers.calls:
+            img.run(grass_module, **kwargs)
+
         # Render each layer
         for date, layer in self._date_layer_dict.items():
             if layer == "None":
                 filename = os.path.join(self._tmpdir.name, "None.png")
                 self._date_filename_dict[date] = filename
-                self._render_blank_layer(filename)
+                if not os.path.exists(filename):
+                    shutil.copyfile(base_file, filename)
+                    self._render_blank_layer(filename)
             else:
                 # Create image file
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
+                shutil.copyfile(base_file, filename)
                 self._date_filename_dict[date] = filename
                 # Render image
                 img = GrassRenderer(filename=filename, use_region=True, env=self._env)
-                # Fill image background
-                img.d_erase(bgcolor=self._bgcolor)
-                for grass_module, kwargs in self._baselayers.calls:
-                    img.run(grass_module, **kwargs)
                 if self._element_type == "strds":
                     img.d_rast(map=layer)
                 elif self._element_type == "stvds":
                     img.d_vect(map=layer)
                 for grass_module, kwargs in self._overlays.calls:
                     img.run(grass_module, **kwargs)
-                # Add legend if called
+                # Add legend if needed
                 if self._legend:
                     self._render_legend(img)
         self._layers_rendered = True
