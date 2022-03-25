@@ -114,7 +114,7 @@ def rpatch_map(
     rast.close()
 
 
-def rpatch_map_no_overlap(
+def rpatch_map_r_patch_backend(
     raster,
     mset_str,
     bbox_list,

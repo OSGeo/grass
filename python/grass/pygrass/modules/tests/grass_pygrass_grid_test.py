@@ -171,3 +171,44 @@ def test_cleans(tmp_path, clean):
                     prefixed += int(item.name.startswith(mapset_prefix))
         if not clean:
             assert prefixed, "Not even one prefixed mapset"
+
+
+@pytest.mark.parametrize("patch_backend", [None, "r.patch", "RasterRow"])
+def test_patching_backend(tmp_path, patch_backend):
+    """Check patching backend works"""
+    location = "test"
+    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
+    with grass_setup.init(tmp_path / location):
+        gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
+
+        points = "points"
+        reference = "reference"
+        gs.run_command("v.random", output=points, npoints=100)
+        gs.run_command(
+            "v.to.rast", input=points, output=reference, type="point", use="cat"
+        )
+
+        def run_grid_module():
+            # modules/shortcuts calls get_commands which requires GISBASE.
+            # pylint: disable=import-outside-toplevel
+            from grass.pygrass.modules.grid import GridModule
+
+            grid = GridModule(
+                "v.to.rast",
+                width=10,
+                height=5,
+                overlap=0,
+                patch_backend=patch_backend,
+                processes=max_processes(),
+                input=points,
+                output="output",
+                type="point",
+                use="cat",
+            )
+            grid.run()
+
+        run_in_subprocess(run_grid_module)
+
+        mean_ref = float(gs.parse_command("r.univar", map=reference, flags="g")["mean"])
+        mean = float(gs.parse_command("r.univar", map="output", flags="g")["mean"])
+        assert abs(mean - mean_ref) < 0.0001

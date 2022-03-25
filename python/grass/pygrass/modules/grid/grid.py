@@ -22,7 +22,7 @@ from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
 from grass.pygrass.modules.grid.split import split_region_tiles
-from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_no_overlap
+from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
 def select(parms, ptype):
@@ -424,6 +424,9 @@ class GridModule(object):
     :type split: bool
     :param mapset_prefix: if specified created mapsets start with this prefix
     :type mapset_prefix: str
+    :param patch_backend: if "r.patch" and overlap == 0, use r.patch, otherwise
+                          use original RasterRow method
+    :type patch_backend: None or str
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
@@ -458,6 +461,7 @@ class GridModule(object):
         start_col=0,
         out_prefix="",
         mapset_prefix=None,
+        patch_backend=None,
         *args,
         **kargs,
     ):
@@ -474,6 +478,21 @@ class GridModule(object):
         self.out_prefix = out_prefix
         self.log = log
         self.move = move
+        self.patch_backend = patch_backend
+        # by default RasterRow is used as previously
+        # if overlap > 0, r.patch won't work properly
+        if not patch_backend:
+            self.patch_backend = "RasterRow"
+        elif patch_backend not in ("r.patch", "RasterRow"):
+            raise RuntimeError(
+                _("Parameter patch_backend must be 'r.patch' or 'RasterRow'")
+            )
+        elif patch_backend == "r.patch" and self.overlap:
+            raise RuntimeError(
+                _("Patching backend 'r.patch' doesn't work for overlap > 0")
+            )
+        else:
+            self.patch_backend = patch_backend
         self.gisrc_src = os.environ["GISRC"]
         self.n_mset, self.gisrc_dst = None, None
         if self.move:
@@ -665,7 +684,7 @@ class GridModule(object):
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == "raster" and otm.value:
-                if self.overlap:
+                if self.patch_backend == "RasterRow":
                     rpatch_map(
                         otm.value,
                         self.mset.name,
@@ -677,7 +696,7 @@ class GridModule(object):
                         self.out_prefix,
                     )
                 else:
-                    rpatch_map_no_overlap(
+                    rpatch_map_r_patch_backend(
                         otm.value,
                         self.msetstr,
                         bboxes,
