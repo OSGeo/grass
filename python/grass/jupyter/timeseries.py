@@ -16,6 +16,7 @@ import tempfile
 import os
 import weakref
 import shutil
+import json
 import grass.script as gs
 
 from .display import GrassRenderer
@@ -44,6 +45,28 @@ def collect_layers(timeseries, element_type, fill_gaps):
     :param str element_type: element type, "stvds" or "strds"
     :param bool fill_gaps: fill empty time steps with data from previous step
     """
+    # NEW WAY: Comment in after PR 2258 is merged
+    # if element_type == "strds":
+    #     result = json.loads(
+    #         gs.read_command(
+    #             "t.rast.list", method="gran", input=timeseries, format="json"
+    #         )
+    #     )
+    # elif element_type == "stvds":
+    #     result = json.loads(
+    #         gs.read_command(
+    #             "t.vect.list", method="gran", input=timeseries, format="json"
+    #         )
+    #     )
+    # else:
+    #     raise NameError(
+    #         _("Dataset {} must be element type 'strds' or 'stvds'").format(timeseries)
+    #     )
+    #
+    # # Get layer names and start time from json
+    # names = [item["name"] for item in result["data"]]
+    # dates = [item["start_time"] for item in result["data"]]
+
     if element_type == "strds":
         rows = gs.read_command(
             "t.rast.list", method="gran", input=timeseries
