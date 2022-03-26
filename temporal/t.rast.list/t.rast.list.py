@@ -196,7 +196,23 @@ def main():
             )
         if columns:
             columns_list = columns.split(",")
-            for column in ["interval_length", "distance_from_begin"]:
+            for column in [
+                "semantic_label",
+                "creator",
+                "temporal_type",
+                "creation_time",
+                "north",
+                "south",
+                "west",
+                "east",
+                "nsres",
+                "ewres",
+                "cols",
+                "rows",
+                "number_of_cells",
+                "min",
+                "max",
+            ]:
                 if column in columns_list:
                     gs.fatal(
                         message_option_value_excludes_option_value(

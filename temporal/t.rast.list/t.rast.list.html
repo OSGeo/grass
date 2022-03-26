@@ -18,6 +18,12 @@ gaps between map layer. The <i>gran</i> method allows the listing of
 map layer sampled by a user defined <b>granule</b>. As default the
 granularity of the space time raster dataset is used for sampling.
 <p>
+While method <i>list</i> supports all columns except for
+interval_length and distance_from_begin,
+methods <i>delta</i>, <i>deltagap</i>, and <i>gran</i> support only the following
+columns: id, name, mapset, start_time, end_time, interval_length, and distance_from_begin.
+The option <b>order</b> is only available with method <i>list</i>.
+<p>
 Methods <i>cols</i> and <i>comma</i> are depreciated.
 The <i>cols</i> method is replaced by the <i>plain</i> format and
 the <i>comma</i> method is replaced by the <i>line</i> format.

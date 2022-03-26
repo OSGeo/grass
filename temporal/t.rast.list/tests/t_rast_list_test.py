@@ -96,6 +96,73 @@ def test_csv(space_time_raster_dataset, separator, delimeter):
         assert len(row) == len(columns)
 
 
+def test_columns_list(space_time_raster_dataset):
+    """Check CSV can be parsed with different separators"""
+    # All relevant columns from the interface.
+    columns = [
+        "id",
+        "name",
+        "semantic_label",
+        "creator",
+        "mapset",
+        "temporal_type",
+        "creation_time",
+        "start_time",
+        "end_time",
+        "north",
+        "south",
+        "west",
+        "east",
+        "nsres",
+        "ewres",
+        "cols",
+        "rows",
+        "number_of_cells",
+        "min",
+        "max",
+    ]
+    result = json.loads(
+        gs.read_command(
+            "t.rast.list",
+            input=space_time_raster_dataset.name,
+            method="list",
+            columns=columns,
+            format="json",
+        )
+    )
+    data = result["data"]
+    assert len(data) == len(space_time_raster_dataset.raster_names)
+    for row in data:
+        assert len(row) == len(columns)
+
+
+def test_columns_delta_gran(space_time_raster_dataset):
+    """Check CSV can be parsed with different separators"""
+    # All relevant columns from the interface.
+    columns = [
+        "id",
+        "name",
+        "mapset",
+        "start_time",
+        "end_time",
+        "interval_length",
+        "distance_from_begin",
+    ]
+    result = json.loads(
+        gs.read_command(
+            "t.rast.list",
+            input=space_time_raster_dataset.name,
+            method="gran",
+            columns=columns,
+            format="json",
+        )
+    )
+    data = result["data"]
+    assert len(data) == len(space_time_raster_dataset.raster_names)
+    for row in data:
+        assert len(row) == len(columns)
+
+
 def test_json_empty_result(space_time_raster_dataset):
     """Check JSON is generated for no returned values"""
     result = json.loads(
