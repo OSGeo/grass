@@ -56,7 +56,7 @@ class GrassRenderer:
         renderer="cairo",
         use_region=False,
         saved_region=None,
-        overwrite=False,
+        read_file=False,
     ):
 
         """Creates an instance of the GrassRenderer class.
@@ -72,11 +72,12 @@ class GrassRenderer:
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
         :param use_region: if True, use either current or provided saved region,
-                          else derive region from rendered layers
+                        else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
-                            this region is then used for rendering
-        :param bool overwrite: if true, clear contents of filename with d.erase
-                               before rendering
+                        this region is then used for rendering
+        :param bool read_file: if False(default), erase filename before re-writing to
+                         clear contents. If True, read file without clearing contents
+                         first.
         """
 
         # Copy Environment
@@ -110,13 +111,12 @@ class GrassRenderer:
 
         if filename:
             self._filename = filename
+            if not read_file and os.path.exists(self._filename):
+                os.remove(self._filename)
         else:
             self._filename = os.path.join(self._tmpdir.name, "map.png")
         # Set environment var for file
         self._env["GRASS_RENDER_FILE"] = self._filename
-
-        if filename and overwrite:
-            gs.run_command("d.erase", env=self._env)
 
         # Create Temporary Legend File
         self._legend_file = os.path.join(self._tmpdir.name, "legend.txt")

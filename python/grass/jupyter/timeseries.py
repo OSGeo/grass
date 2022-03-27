@@ -161,7 +161,11 @@ class TimeSeries:
         :param str element_type: element type, strds (space-time raster dataset)
                           or stvds (space-time vector dataset)
         :param bool fill_gaps: fill empty time steps with data from previous step
-        :param str basemap: name of raster to use as basemap/background for visuals
+        :param str env: environment
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
         """
 
         # Copy Environment
@@ -233,14 +237,15 @@ class TimeSeries:
     def set_background_color(self, color):
         """Set background color of images.
 
-        Passed to d.rast and d.erase. Either a standard color name or R:G:B triplet.
-        Default is White."""
+        Passed to d.rast and d.erase. Either a standard color name, R:G:B triplet, or
+        Hex. Default is White. (add example with hex)"""
         self._bgcolor = color
         self._layers_rendered = False
 
     def d_legend(self, **kwargs):
-        """Wrapper for d.legend. Passes keyword arguments to d.legend in render_layers
-        method.
+        """Display legend.
+
+        Wraps d.legend and uses same keyword arguments.
         """
         self._legend = kwargs
         # If d_legend has been called, we need to re-render layers
@@ -260,8 +265,13 @@ class TimeSeries:
         )
 
     def _render_blank_layer(self, filename):
-        """Write blank image for gaps in time series"""
-        img = GrassRenderer(filename=filename, use_region=True, env=self._env)
+        """Write blank image for gaps in time series.
+
+        Adds overlays and legend to base map.
+        """
+        img = GrassRenderer(
+            filename=filename, use_region=True, env=self._env, read_file=True
+        )
         for grass_module, kwargs in self._overlays.calls:
             img.run(grass_module, **kwargs)
         # Add legend if needed
@@ -269,38 +279,47 @@ class TimeSeries:
             self._render_legend(img)
 
     def render(self):
-        """Renders map for each time-step in space-time dataset and save to PNG
-        image in temporary directory.
+        """Renders image for each time-step in space-time dataset.
 
-        Must be run before creating a visualization (i.e. time_slider or animate).
-
-        Can be time-consuming to run with large space-time datasets.
+        Save PNGs to temporary directory. Must be run before creating a visualization
+        (i.e. time_slider or animate). Can be time-consuming to run with large
+        space-time datasets.
         """
 
         # Make base image (background and baselayers)
-        base_file = os.path.join(self._tmpdir.name, "base.png")
-        img = GrassRenderer(filename=base_file, use_region=True, env=self._env)
+        random_name_base = gs.append_random("base", 8) + ".png"
+        base_file = os.path.join(self._tmpdir.name, random_name_base)
+        img = GrassRenderer(
+            filename=base_file, use_region=True, env=self._env, read_file=True
+        )
         # Fill image background
         img.d_erase(bgcolor=self._bgcolor)
         # Add baselayers
         for grass_module, kwargs in self._baselayers.calls:
             img.run(grass_module, **kwargs)
 
+        # Create name for empty layers
+        random_name_none = gs.append_random("none", 8) + ".png"
+
         # Render each layer
         for date, layer in self._date_layer_dict.items():
             if layer == "None":
-                filename = os.path.join(self._tmpdir.name, "None.png")
+                # Create file
+                filename = os.path.join(self._tmpdir.name, random_name_none)
                 self._date_filename_dict[date] = filename
+                # Render blank layer if it hasn't been done already
                 if not os.path.exists(filename):
                     shutil.copyfile(base_file, filename)
                     self._render_blank_layer(filename)
             else:
-                # Create image file
+                # Create file
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
                 shutil.copyfile(base_file, filename)
                 self._date_filename_dict[date] = filename
                 # Render image
-                img = GrassRenderer(filename=filename, use_region=True, env=self._env)
+                img = GrassRenderer(
+                    filename=filename, use_region=True, env=self._env, read_file=True
+                )
                 if self._element_type == "strds":
                     img.d_rast(map=layer)
                 elif self._element_type == "stvds":
@@ -312,9 +331,8 @@ class TimeSeries:
                     self._render_legend(img)
         self._layers_rendered = True
 
-    def time_slider(self, slider_width="60%"):
-        """
-        Create interactive timeline slider.
+    def time_slider(self, slider_width=None):
+        """Create interactive timeline slider.
 
         param str slider_width: width of datetime selection slider as a
                                 percentage (%) or pixels (px)
@@ -326,6 +344,10 @@ class TimeSeries:
         # Render images if they have not been already
         if not self._layers_rendered:
             self.render()
+
+        # Set default slider width
+        if not slider_width:
+            slider_width = "60%"
 
         # Datetime selection slider
         slider = widgets.SelectionSlider(

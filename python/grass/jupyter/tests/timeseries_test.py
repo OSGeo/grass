@@ -29,6 +29,9 @@ def test_collect_layers(space_time_raster_dataset):
     names, dates = gj.collect_layers(
         space_time_raster_dataset.name, fill_gaps=False, element_type="strds"
     )
+    # Test fill_gaps=False at empty time step
+    assert names[1] == "None"
+    assert dates[1] == '2001-02-01 00:00:00'
     # Remove the empty time step - see space_time_raster_dataset creation
     names.pop(1)
     dates.pop(1)
@@ -59,19 +62,15 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
     img = gj.TimeSeries(space_time_raster_dataset.name, fill_gaps=fill_gaps)
     # test baselayer, overlay and d_legend here too for efficiency (rendering is
     # time-intensive)
-    # Add first layer in space-time dataset as test baselayer
     img.baselayer.d_rast(map=space_time_raster_dataset.raster_names[0])
-    # test overlay with d_barscale
     img.overlay.d_barscale()
-    # test d_legend
     img.d_legend()
     # Render layers
     img.render()
-    # check files exist:
-    for (
-        _date,
-        filename,
-    ) in img._date_filename_dict.items():  # pylint: disable=protected-access
+    # check files exist
+    # We need to check values which are only in protected attributes
+    # pylint: disable=protected-access
+    for (_date, filename) in img._date_filename_dict.items():
         assert Path(filename).is_file()
 
 
@@ -80,8 +79,4 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
 def test_animate_time_slider(space_time_raster_dataset):
     """Test returns from animate and time_slider are correct object types"""
     img = gj.TimeSeries(space_time_raster_dataset.name)
-    assert isinstance(img.animate(), IPython.core.display.Image)
-    # This doesn't work
-    #  assert isinstance(img.time_slider(),
-    #                   (IPython.core.display.Image,
-    #                    ipywidgets.widgets.interaction.interactive))
+    assert isinstance(img.animate(), IPython.display.Image)
