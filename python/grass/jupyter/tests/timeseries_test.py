@@ -31,7 +31,7 @@ def test_collect_layers(space_time_raster_dataset):
     )
     # Test fill_gaps=False at empty time step
     assert names[1] == "None"
-    assert dates[1] == '2001-02-01 00:00:00'
+    assert dates[1] == "2001-02-01 00:00:00"
     # Remove the empty time step - see space_time_raster_dataset creation
     names.pop(1)
     dates.pop(1)
