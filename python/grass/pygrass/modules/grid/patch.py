@@ -15,6 +15,7 @@ from __future__ import (
 from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.utils import coor2pixel
+from grass.pygrass.modules import Module
 
 
 def get_start_end_index(bbox_list):
@@ -111,3 +112,47 @@ def rpatch_map(
             del rst
 
     rast.close()
+
+
+def rpatch_map_r_patch_backend(
+    raster,
+    mset_str,
+    bbox_list,
+    overwrite=False,
+    start_row=0,
+    start_col=0,
+    prefix="",
+    processes=1,
+):
+    """Patch raster using a r.patch. Only use with overlap=0.
+    Will be faster than rpatch_map, since r.patch is parallelized.
+
+    :param raster: the name of output raster
+    :type raster: str
+    :param mset_str:
+    :type mset_str: str
+    :param bbox_list: a list of BBox object to convert
+    :type bbox_list: list of BBox object
+    :param overwrite: overwrite existing raster
+    :type overwrite: bool
+    :param start_row: the starting row of original raster
+    :type start_row: int
+    :param start_col: the starting column of original raster
+    :type start_col: int
+    :param prefix: the prefix of output raster
+    :type prefix: str
+    :param processes: number of parallel process for r.patch
+    :type processes: int
+    """
+    rasts = []
+    for row, rbbox in enumerate(bbox_list):
+        for col in range(len(rbbox)):
+            mapset = mset_str % (start_row + row, start_col + col)
+            rasts.append(f"{raster}@{mapset}")
+    Module(
+        "r.patch",
+        input=rasts,
+        output=prefix + raster,
+        overwrite=overwrite,
+        nprocs=processes,
+    )
