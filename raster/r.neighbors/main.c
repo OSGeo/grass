@@ -186,6 +186,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("neighbor"));
     G_add_keyword(_("focal statistics"));
     G_add_keyword(_("filter"));
+    G_add_keyword(_("parallel"));
     module->description =
 	_("Makes each cell category value a "
 	  "function of the category values assigned to the cells "
