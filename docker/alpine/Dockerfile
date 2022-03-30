@@ -1,5 +1,4 @@
-FROM mundialis/docker-pdal:2.1.0 as pdal
-FROM alpine:3.12 as common
+FROM alpine:3.15 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -26,8 +25,10 @@ ENV PACKAGES="\
       geos \
       gnutls \
       jsoncpp \
+      laszip \
       libbz2 \
       libexecinfo \
+      libgeotiff \
       libjpeg-turbo \
       libpng \
       libunwind \
@@ -39,8 +40,9 @@ ENV PACKAGES="\
       py3-numpy \
       py3-pillow \
       py3-six \
+      pdal \
+      pdal-dev \
       postgresql \
-      proj-datumgrid \
       proj-util \
       sqlite \
       sqlite-libs \
@@ -70,13 +72,6 @@ RUN echo "Install Python";\
 RUN echo "Install main packages";\
     apk update; \
     apk add --no-cache $PACKAGES
-
-COPY --from=pdal /usr/bin/pdal* /usr/bin/
-COPY --from=pdal /usr/lib/libpdal* /usr/lib/
-COPY --from=pdal /usr/lib/pkgconfig/pdal.pc /usr/lib/pkgconfig/pdal.pc
-COPY --from=pdal /usr/include/pdal /usr/include/pdal
-COPY --from=pdal /usr/local/lib/liblaszip* /usr/local/lib/
-COPY --from=pdal /usr/local/include/laszip /usr/local/include/laszip
 
 
 FROM common as build
@@ -210,7 +205,7 @@ RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.in.pdal
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -s
 
 # Test addon installation
-RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml
+RUN grass --tmp-location EPSG:4326 --exec g.extension extension=r.learn.ml2
 
 
 FROM grass as final
@@ -220,6 +215,8 @@ FROM grass as final
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash"
+ENV PROJ_NETWORK="ON"
+
 
 # show installed version
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
