@@ -337,8 +337,13 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
     brows = atoi(parm.memory->answer) * ((1 << 20) / sizeof(DCELL)) / ncols;
+    /* set the output buffer rows to be at most covering the entire map */
     if (brows > nrows) {
         brows = nrows;
+    }
+    /* but at least the number of threads */
+    if (brows < ncb.threads) {
+        brows = ncb.threads;
     }
 
     /* open raster maps */
