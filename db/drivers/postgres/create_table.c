@@ -128,7 +128,7 @@ int db__driver_create_table(dbTable * table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	db_d_append_error("%s\n%s\%s",
+	db_d_append_error("%s\n%s\n%s",
 			  _("Unable to grant select on table:"),
 			  db_get_string(&sql),
 			  PQerrorMessage(pg_conn));
