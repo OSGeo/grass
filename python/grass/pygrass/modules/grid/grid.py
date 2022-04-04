@@ -12,6 +12,7 @@ import sys
 import multiprocessing as mltp
 import subprocess as sub
 import shutil as sht
+from math import ceil
 
 from grass.script.setup import write_gisrc
 from grass.script import append_node_pid, legalize_vector_name
@@ -497,6 +498,7 @@ class GridModule(object):
             self.patch_backend = patch_backend
         self.gisrc_src = os.environ["GISRC"]
         self.n_mset, self.gisrc_dst = None, None
+        self.estimate_tile_size()
         if self.move:
             self.n_mset = copy_mapset(self.mset, self.move)
             self.gisrc_dst = write_gisrc(
@@ -514,7 +516,7 @@ class GridModule(object):
             if groups:
                 copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
         self.bboxes = split_region_tiles(
-            region=region, width=width, height=height, overlap=overlap
+            region=region, width=self.width, height=self.height, overlap=overlap
         )
         if mapset_prefix:
             self.mapset_prefix = mapset_prefix
@@ -563,6 +565,30 @@ class GridModule(object):
             patt = "%s-*" % inm.value
             inlist[inm.value] = sorted(self.mset.glist(type="raster", pattern=patt))
         self.inlist = inlist
+
+    def estimate_tile_size(self):
+        """Estimates tile width and height based on number of processes.
+
+        Keeps width and height if provided by user. If one dimension
+        is provided the other is computed as the minimum number of tiles
+        to keep all requested processes working (initially).
+        If no dimensions are provided, tiling is 1 column x N rows
+        which speeds up patching.
+        """
+        region = Region()
+        if self.width and self.height:
+            return
+        if self.width:
+            n_tiles_x = ceil(region.cols / self.width)
+            n_tiles_y = ceil(self.processes / n_tiles_x)
+            self.height = ceil(region.rows / n_tiles_y)
+        elif self.height:
+            n_tiles_y = ceil(region.rows / self.height)
+            n_tiles_x = ceil(self.processes / n_tiles_y)
+            self.width = ceil(region.cols / n_tiles_x)
+        else:
+            self.width = region.cols
+            self.height = ceil(region.rows / self.processes)
 
     def get_works(self):
         """Return a list of tuble with the parameters for cmd_exe function"""
