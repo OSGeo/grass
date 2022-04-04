@@ -9,6 +9,8 @@ Classes:
  - properties::ChBShowRegion
  - properties::ChBAlignExtent
  - properties::ChBResolution
+ - properties::ChBProjection
+ - properties::RBShowInStatusbar
  - properties::MapDisplayPropertiesDialog
 
 (C) 2021 by the GRASS Development Team
@@ -63,7 +65,7 @@ class PropertyItem:
     def _disconnect(self):
         self.mapWindowPropertyChanged().disconnect(self._setValue)
 
-    def _onToggleCheckBox(self, event):
+    def _onToggle(self, event):
         self._disconnect()
         self.mapWindowProperty = self.GetValue()
         self._connect()
@@ -81,7 +83,7 @@ class ChBRender(PropertyItem):
         self.widget.SetValue(self.mapWindowProperty)
         self.widget.SetToolTip(wx.ToolTip(_("Enable/disable auto-rendering")))
 
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -122,7 +124,7 @@ class ChBAlignExtent(PropertyItem):
                 )
             )
         )
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -160,7 +162,7 @@ class ChBResolution(PropertyItem):
                 )
             )
         )
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -174,9 +176,9 @@ class ChBResolution(PropertyItem):
     def mapWindowPropertyChanged(self):
         return self._properties.resolutionChanged
 
-    def _onToggleCheckBox(self, event):
+    def _onToggle(self, event):
         """Update display when toggle display mode"""
-        super()._onToggleCheckBox(event)
+        super()._onToggle(event)
 
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
@@ -206,7 +208,7 @@ class ChBShowRegion(PropertyItem):
                 )
             )
         )
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -220,12 +222,12 @@ class ChBShowRegion(PropertyItem):
     def mapWindowPropertyChanged(self):
         return self._properties.showRegionChanged
 
-    def _onToggleCheckBox(self, event):
+    def _onToggle(self, event):
         """Shows/Hides extent (comp. region) in map canvas.
 
         Shows or hides according to checkbox value.
         """
-        super()._onToggleCheckBox(event)
+        super()._onToggle(event)
 
         # redraw map if auto-rendering is enabled
         if self._properties.autoRender:
@@ -251,7 +253,7 @@ class ChBProjection(PropertyItem):
                 )
             )
         )
-        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggleCheckBox)
+        self.widget.Bind(wx.EVT_CHECKBOX, self._onToggle)
         self._connect()
 
     @property
@@ -265,8 +267,8 @@ class ChBProjection(PropertyItem):
     def mapWindowPropertyChanged(self):
         return self._properties.useDefinedProjectionChanged
 
-    def _onToggleCheckBox(self, event):
-        super()._onToggleCheckBox(event)
+    def _onToggle(self, event):
+        super()._onToggle(event)
         epsg = self._properties.epsg
         if epsg:
             label = _("{label} (EPSG: {epsg})").format(
@@ -277,6 +279,52 @@ class ChBProjection(PropertyItem):
             self.widget.SetLabel(self.defaultLabel)
 
 
+class RBShowInStatusbar(PropertyItem):
+    """Radiobox managing widgets in statusbar."""
+
+    def __init__(self, parent, mapWindowProperties, sbmanager):
+        PropertyItem.__init__(self, mapWindowProperties)
+        self.name = "showInStatusbar"
+        self.statusbarManager = sbmanager
+
+        choices = self.statusbarManager.GetItemLabels()
+        self.widget = wx.RadioBox(
+            parent=parent,
+            id=wx.ID_ANY,
+            label="Displayed content",
+            choices=choices,
+            majorDimension=1,
+            style=wx.RA_SPECIFY_COLS,
+        )
+        self._setValue(self.mapWindowProperty)
+        self._disableItems()
+
+        self.widget.Bind(wx.EVT_RADIOBOX, self._onToggle)
+        self._connect()
+
+    def _setValue(self, mode):
+        self.widget.SetSelection(mode)
+
+    def GetValue(self):
+        return self.widget.GetSelection()
+
+    def _disableItems(self):
+        """Disables a radiobox options"""
+        for item in self.statusbarManager.disabledItems.keys():
+            self.widget.EnableItem(n=item, enable=False)
+
+    @property
+    def mapWindowProperty(self):
+        return self._properties.sbItem
+
+    @mapWindowProperty.setter
+    def mapWindowProperty(self, value):
+        self._properties.sbItem = value
+
+    def mapWindowPropertyChanged(self):
+        return self._properties.sbItemChanged
+
+
 class MapDisplayPropertiesDialog(wx.Dialog):
     """Map Display properties dialog"""
 
@@ -285,8 +333,9 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         parent,
         mapframe,
         properties,
+        sbmanager,
         title=_("Map Display Settings"),
-        size=(-1, 250),
+        size=(-1, 300),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
@@ -296,6 +345,7 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         self.size = size
         self.mapframe = mapframe
         self.mapWindowProperties = properties
+        self.statusbarManager = sbmanager
 
         # notebook
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
@@ -382,10 +432,21 @@ class MapDisplayPropertiesDialog(wx.Dialog):
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         parent.AddPage(page=panel, text=_("Status bar"))
 
-        # General settings
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        # Auto-rendering
+        self.shownInStatusbar = RBShowInStatusbar(
+            parent=panel,
+            mapWindowProperties=self.mapWindowProperties,
+            sbmanager=self.statusbarManager,
+        )
+        sizer.Add(
+            self.shownInStatusbar.GetWidget(),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=3,
+        )
+
+        # Display coordinates in different CRS
         self.projection = ChBProjection(panel, self.mapWindowProperties)
         sizer.Add(
             self.projection.GetWidget(),

@@ -78,8 +78,8 @@ def open_old_stds(name, type, dbif=None):
     if not sp.is_in_db(dbif):
         dbif.close()
         msgr.fatal(
-            _("Space time %(sp)s dataset <%(name)s> not found")
-            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+            _("Space time %(sp)s dataset <%(id)s> not found")
+            % {"sp": sp.get_new_map_instance(None).get_type(), "id": id}
         )
     # Read content from temporal database
     sp.select(dbif)

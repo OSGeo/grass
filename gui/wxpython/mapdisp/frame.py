@@ -150,7 +150,7 @@ class MapPanel(SingleMapPanel):
                 sb.SbMapScale,
                 sb.SbGoTo,
             ]
-            self.statusbarItemsHiddenInNviz = (
+            self.statusbarItemsDisabledInNviz = (
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
             )
@@ -448,10 +448,10 @@ class MapPanel(SingleMapPanel):
         )
         # update status bar
 
-        self.statusbarManager.HideStatusbarChoiceItemsByClass(
-            self.statusbarItemsHiddenInNviz
+        self.statusbarManager.DisableStatusbarItemsByClass(
+            self.statusbarItemsDisabledInNviz
         )
-        self.statusbarManager.SetMode(0)
+        self.mapWindowProperties.sbItem = 0
 
         # erase map window
         self.MapWindow.EraseMap()
@@ -548,13 +548,12 @@ class MapPanel(SingleMapPanel):
             pass
 
         # update status bar
-        self.statusbarManager.ShowStatusbarChoiceItemsByClass(
-            self.statusbarItemsHiddenInNviz
-        )
-        self.statusbarManager.SetMode(
-            UserSettings.Get(group="display", key="statusbarMode", subkey="selection")
-        )
         self.SetStatusText(_("Please wait, unloading data..."), 0)
+        self.statusbarManager.disabledItems = {}
+        self.mapWindowProperties.sbItem = UserSettings.Get(
+            group="display", key="statusbarMode", subkey="selection"
+        )
+
         # unloading messages from library cause highlight anyway
         self._giface.WriteCmdLog(
             _("Switching back to 2D view mode..."),
@@ -1563,7 +1562,6 @@ class MapPanel(SingleMapPanel):
         self.mapWindowProperties.autoRender = render
         if self.statusbarManager:
             self.statusbarManager.SetMode(mode)
-            self.StatusbarUpdate()
         self.mapWindowProperties.useDefinedProjection = projection
         self.mapWindowProperties.showRegion = showCompExtent
         self.mapWindowProperties.alignExtent = alignExtent

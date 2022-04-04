@@ -169,22 +169,84 @@ class MapToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("renderMap", BaseIcons["render"], self.parent.OnRender),
-                ("pointer", BaseIcons["pointer"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("select", MapIcons["select"], self.parent.OnSelect, wx.ITEM_CHECK),
-                ("query", MapIcons["query"], self.parent.OnQuery, wx.ITEM_CHECK),
-                ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
-                ("zoomIn", BaseIcons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomOut", BaseIcons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                ("zoomExtent", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
-                ("zoomRegion", BaseIcons["zoomRegion"], self.parent.OnZoomToWind),
-                ("zoomBack", BaseIcons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomMenu", BaseIcons["zoomMenu"], self.parent.OnZoomMenu),
-                ("analyze", MapIcons["analyze"], self.OnAnalyze),
-                ("overlay", BaseIcons["overlay"], self.OnDecoration),
-                ("saveFile", BaseIcons["saveFile"], self.parent.SaveToFile),
                 (
-                    "mapDispSettings",
+                    ("renderMap", BaseIcons["render"].label),
+                    BaseIcons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("pointer", BaseIcons["pointer"].label),
+                    BaseIcons["pointer"],
+                    self.parent.OnPointer,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("select", MapIcons["select"].label),
+                    MapIcons["select"],
+                    self.parent.OnSelect,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("query", MapIcons["query"].label),
+                    MapIcons["query"],
+                    self.parent.OnQuery,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("pan", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomIn", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", BaseIcons["zoomOut"].label),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomExtent", BaseIcons["zoomExtent"].label),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
+                (
+                    ("zoomRegion", BaseIcons["zoomRegion"].label),
+                    BaseIcons["zoomRegion"],
+                    self.parent.OnZoomToWind,
+                ),
+                (
+                    ("zoomBack", BaseIcons["zoomBack"].label),
+                    BaseIcons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomMenu", BaseIcons["zoomMenu"].label),
+                    BaseIcons["zoomMenu"],
+                    self.parent.OnZoomMenu,
+                ),
+                (
+                    ("analyze", MapIcons["analyze"].label),
+                    MapIcons["analyze"],
+                    self.OnAnalyze,
+                ),
+                (
+                    ("overlay", BaseIcons["overlay"].label),
+                    BaseIcons["overlay"],
+                    self.OnDecoration,
+                ),
+                (
+                    ("saveFile", BaseIcons["saveFile"].label),
+                    BaseIcons["saveFile"],
+                    self.parent.SaveToFile,
+                ),
+                (
+                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
                     BaseIcons["mapDispSettings"],
                     self.parent.OnMapDisplayProperties,
                 ),
@@ -257,7 +319,7 @@ class MapToolbar(BaseToolbar):
                 (MapIcons["profile"], self.parent.OnProfile),
                 (MapIcons["scatter"], self.parent.OnScatterplot),
                 (MapIcons["histogram"], self.parent.OnHistogramPyPlot),
-                (BaseIcons["histogramD"], self.parent.OnHistogram),
+                (BaseIcons["histogram"], self.parent.OnHistogram),
                 (MapIcons["vnet"], self.parent.OnVNet),
             )
         )

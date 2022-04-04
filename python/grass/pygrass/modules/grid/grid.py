@@ -14,6 +14,7 @@ import subprocess as sub
 import shutil as sht
 
 from grass.script.setup import write_gisrc
+from grass.script import append_node_pid, legalize_vector_name
 
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
@@ -21,7 +22,7 @@ from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
 from grass.pygrass.modules.grid.split import split_region_tiles
-from grass.pygrass.modules.grid.patch import rpatch_map
+from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
 def select(parms, ptype):
@@ -423,10 +424,16 @@ class GridModule(object):
     :type split: bool
     :param mapset_prefix: if specified created mapsets start with this prefix
     :type mapset_prefix: str
+    :param patch_backend: "r.patch", "RasterRow", or None for for default
+    :type patch_backend: None or str
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
     :param kargs: give all the parameters to the command
+
+    When patch_backend is None, the RasterRow method is used for patching the result.
+    When patch_backend is "r.patch", r.patch is used with nprocs=processes.
+    r.patch can only be used when overlap is 0.
 
     >>> grd = GridModule('r.slope.aspect',
     ...                  width=500, height=500, overlap=2,
@@ -434,6 +441,11 @@ class GridModule(object):
     ...                  elevation='elevation',
     ...                  slope='slope', aspect='aspect', overwrite=True)
     >>> grd.run()
+
+    Temporary mapsets created start with a generated prefix which is unique for each
+    process (includes PID and node name). If more instances of this class are used in
+    parallel from one process with the same module, a custom *mapset_prefix* needs to
+    be provided.
     """
 
     def __init__(
@@ -452,6 +464,7 @@ class GridModule(object):
         start_col=0,
         out_prefix="",
         mapset_prefix=None,
+        patch_backend=None,
         *args,
         **kargs,
     ):
@@ -468,6 +481,20 @@ class GridModule(object):
         self.out_prefix = out_prefix
         self.log = log
         self.move = move
+        # by default RasterRow is used as previously
+        # if overlap > 0, r.patch won't work properly
+        if not patch_backend:
+            self.patch_backend = "RasterRow"
+        elif patch_backend not in ("r.patch", "RasterRow"):
+            raise RuntimeError(
+                _("Parameter patch_backend must be 'r.patch' or 'RasterRow'")
+            )
+        elif patch_backend == "r.patch" and self.overlap:
+            raise RuntimeError(
+                _("Patching backend 'r.patch' doesn't work for overlap > 0")
+            )
+        else:
+            self.patch_backend = patch_backend
         self.gisrc_src = os.environ["GISRC"]
         self.n_mset, self.gisrc_dst = None, None
         if self.move:
@@ -490,9 +517,10 @@ class GridModule(object):
             region=region, width=width, height=height, overlap=overlap
         )
         if mapset_prefix:
-            self.msetstr = mapset_prefix + "_%03d_%03d"
+            self.mapset_prefix = mapset_prefix
         else:
-            self.msetstr = cmd.replace(".", "") + "_%03d_%03d"
+            self.mapset_prefix = append_node_pid("grid_" + legalize_vector_name(cmd))
+        self.msetstr = self.mapset_prefix + "_%03d_%03d"
         self.inlist = None
         if split:
             self.split()
@@ -514,7 +542,7 @@ class GridModule(object):
                 self.n_mset.current()
             location = Location()
 
-        mapsets = location.mapsets(self.msetstr.split("_")[0] + "_*")
+        mapsets = location.mapsets(self.mapset_prefix + "_*")
         for mset in mapsets:
             Mapset(mset).delete()
         if self.n_mset and self.n_mset.is_current():
@@ -658,16 +686,28 @@ class GridModule(object):
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == "raster" and otm.value:
-                rpatch_map(
-                    otm.value,
-                    self.mset.name,
-                    self.msetstr,
-                    bboxes,
-                    self.module.flags.overwrite,
-                    self.start_row,
-                    self.start_col,
-                    self.out_prefix,
-                )
+                if self.patch_backend == "RasterRow":
+                    rpatch_map(
+                        raster=otm.value,
+                        mapset=self.mset.name,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
+                    )
+                else:
+                    rpatch_map_r_patch_backend(
+                        raster=otm.value,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
+                        processes=self.processes,
+                    )
                 noutputs += 1
         if noutputs < 1:
             msg = "No raster output option defined for <{}>".format(self.module.name)

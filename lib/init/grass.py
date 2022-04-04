@@ -390,7 +390,7 @@ def help_message(default_gui):
             gui_detail=_("and set as default"),
             config=_("print GRASS configuration parameters"),
             config_detail=_(
-                "options: arch,build,compiler,date,path,revision,svn_revision,version"
+                "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
             ),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
@@ -1295,7 +1295,7 @@ def load_env(grass_env_file):
     # \1 and \2 are a variable name and its value, respectively.
     export_re = re.compile("^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
 
-    for line in readfile(grass_env_file).split(os.linesep):
+    for line in readfile(grass_env_file).splitlines():
         # match ^export lines
         m = export_re.match(line)
         # if not ^export lines, skip
@@ -1879,6 +1879,15 @@ def show_info(shellname, grass_gui, default_gui):
     message("")
 
 
+def start_shell():
+    if WINDOWS:
+        # "$ETC/run" doesn't work at all???
+        process = subprocess.Popen([os.getenv("SHELL")])
+    else:
+        process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
+    return process
+
+
 def csh_startup(location, grass_env_file):
     userhome = os.getenv("HOME")  # save original home
     home = location
@@ -1922,7 +1931,7 @@ def csh_startup(location, grass_env_file):
     f.close()
     writefile(tcshrc, readfile(cshrc))
 
-    process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
+    process = start_shell()
     os.environ["HOME"] = userhome
     return process
 
@@ -2075,22 +2084,15 @@ PROMPT_COMMAND=grass_prompt\n""".format(
     f.write('trap "exit" TERM\n')
     f.close()
 
-    process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
+    process = start_shell()
     os.environ["HOME"] = userhome
     return process
 
 
 def default_startup(location, location_name):
     """Start shell making no assumptions about what is supported in PS1"""
-    if WINDOWS:
-        os.environ["PS1"] = "GRASS > "
-        # "$ETC/run" doesn't work at all???
-        process = subprocess.Popen([os.getenv("SHELL")])
-    else:
-        os.environ["PS1"] = "GRASS > "
-        process = Popen([gpath("etc", "run"), os.getenv("SHELL")])
-
-    return process
+    os.environ["PS1"] = "GRASS > "
+    return start_shell()
 
 
 def done_message():

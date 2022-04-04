@@ -323,6 +323,7 @@ void G_create_alt_env(void);
 void G_switch_env(void);
 void G__read_mapset_env(void);
 void G__read_gisrc_env(void);
+void G__read_gisrc_path(void);
 
 /* error.c */
 #ifndef CTYPESGEN

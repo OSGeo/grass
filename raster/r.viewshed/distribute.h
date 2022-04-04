@@ -51,7 +51,7 @@
 IOVisibilityGrid *distribute_and_sweep(char *inputfname,
 				       GridHeader * hd,
 				       Viewpoint * vp,
-				       ViewOptions viewOptions);
+				       const ViewOptions &viewOptions);
 
 
 
@@ -73,7 +73,7 @@ unsigned long distribute_sector(AMI_STREAM < AEvent > *eventList,
 				AMI_STREAM < AEvent > *enterBndEvents,
 				double start_angle, double end_angle,
 				IOVisibilityGrid * visgrid, Viewpoint * vp,
-				GridHeader *hd, ViewOptions viewOptions);
+				GridHeader *hd, const ViewOptions &viewOptions);
 
 /* bndEvents is a stream of events that cross into the sector's
    (first) boundary; they must be distributed to the boundary streams
@@ -101,7 +101,7 @@ unsigned long solve_in_memory(AMI_STREAM < AEvent > *eventList,
 			      AMI_STREAM < AEvent > *enterBndEvents,
 			      double start_angle, double end_angle,
 			      IOVisibilityGrid * visgrid, GridHeader *hd,
-			      Viewpoint * vp, ViewOptions viewOptions);
+			      Viewpoint * vp, const ViewOptions &viewOptions);
 
 
 /*returns 1 if enter angle is within epsilon from boundary angle */

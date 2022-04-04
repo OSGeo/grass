@@ -44,6 +44,8 @@ class MapWindowProperties(object):
         self.useDefinedProjectionChanged = Signal(
             "MapWindowProperties.useDefinedProjectionChanged"
         )
+        self._sbItem = None
+        self.sbItemChanged = Signal("MapWindowProperties.sbItemChanged")
 
     def setValuesFromUserSettings(self):
         """Convenient function to get values from user settings into this object."""
@@ -111,6 +113,16 @@ class MapWindowProperties(object):
     @property
     def epsg(self):
         return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+    @property
+    def sbItem(self):
+        return self._sbItem
+
+    @sbItem.setter
+    def sbItem(self, mode):
+        if mode != self._sbItem:
+            self._sbItem = mode
+            self.sbItemChanged.emit(mode=mode)
 
 
 class MapWindowBase(object):
