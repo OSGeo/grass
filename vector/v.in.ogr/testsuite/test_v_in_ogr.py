@@ -94,7 +94,8 @@ skewness=1.45954"""
             precision=1e-8,
         )
 
-#class TestOgrImportFails(TestCase):
+
+# class TestOgrImportFails(TestCase):
 #    def test_error_handling_1(self):
 #        # Wrong type
 #        self.assertModuleFail(
