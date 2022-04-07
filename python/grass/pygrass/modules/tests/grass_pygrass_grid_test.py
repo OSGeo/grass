@@ -212,3 +212,44 @@ def test_patching_backend(tmp_path, patch_backend):
         mean_ref = float(gs.parse_command("r.univar", map=reference, flags="g")["mean"])
         mean = float(gs.parse_command("r.univar", map="output", flags="g")["mean"])
         assert abs(mean - mean_ref) < 0.0001
+
+
+@pytest.mark.parametrize(
+    "width, height, processes",
+    [
+        (None, None, max_processes()),
+        (10, None, max_processes()),
+        (None, 5, max_processes()),
+    ],
+)
+def test_tiling(tmp_path, width, height, processes):
+    """Check auto adjusted tile size based on processes"""
+    location = "test"
+    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
+    with grass_setup.init(tmp_path / location):
+        gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
+
+        surface = "surface"
+        gs.run_command("r.surf.fractal", output=surface)
+
+        def run_grid_module():
+            # modules/shortcuts calls get_commands which requires GISBASE.
+            # pylint: disable=import-outside-toplevel
+            from grass.pygrass.modules.grid import GridModule
+
+            grid = GridModule(
+                "r.slope.aspect",
+                width=width,
+                height=height,
+                overlap=2,
+                processes=processes,
+                elevation=surface,
+                slope="slope",
+                aspect="aspect",
+            )
+            grid.run()
+
+        run_in_subprocess(run_grid_module)
+
+        info = gs.raster_info("slope")
+        assert info["min"] > 0
