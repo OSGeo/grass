@@ -11,8 +11,9 @@ MODULES = \
 	interact_display \
 	region \
 	render3d \
-	utils \
-	reprojection_renderer
+    reprojection_renderer \
+	utils
+
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

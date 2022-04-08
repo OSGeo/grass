@@ -138,6 +138,7 @@ class InteractiveMap:
     """This class creates interative GRASS maps with folium.
 
     Basic Usage:
+
     >>> m = InteractiveMap()
     >>> m.add_vector("streams")
     >>> m.add_raster("elevation")
@@ -150,6 +151,8 @@ class InteractiveMap:
         width=400,
         height=400,
         tiles="CartoDB positron",
+        API_key=None,
+        zoom_start=None,
         use_region=False,
         saved_region=None,
     ):
@@ -166,16 +169,14 @@ class InteractiveMap:
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
         :param str tiles: map tileset to use
+        :param str API_key: API key for Mapbox or Cloudmade tiles
+        :param int zoom_start: initial zoom level for the map (default 10)
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
         """
         import folium  # pylint: disable=import-outside-toplevel
 
         self._folium = folium
-
-        # Store region settings
-        self._use_region = use_region
-        self._saved_region = saved_region
 
         # Store height and width
         self.width = width
@@ -186,13 +187,15 @@ class InteractiveMap:
             width=self.width,
             height=self.height,
             tiles=tiles,
+            API_key=API_key,
+            zoom_start=zoom_start if zoom_start else 10,
         )
         # Set LayerControl default
         self.layer_control = False
         self.layer_control_object = None
 
         self._renderer = ReprojectionRenderer(
-            use_region=self._use_region, saved_region=self._saved_region
+            use_region=use_region, saved_region=saved_region
         )
 
     def add_vector(self, name, title=None, **kwargs):
