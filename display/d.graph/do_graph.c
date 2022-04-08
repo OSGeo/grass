@@ -244,9 +244,7 @@ int check_alloc(int num)
     if (num < coors_allocated)
 	return 0;
 
-    to_alloc = coors_allocated;
-    if (num >= to_alloc)
-	to_alloc = num + CHUNK;
+    to_alloc = num + CHUNK;
 
     xarray = G_realloc(xarray, to_alloc * sizeof(double));
     yarray = G_realloc(yarray, to_alloc * sizeof(double));
