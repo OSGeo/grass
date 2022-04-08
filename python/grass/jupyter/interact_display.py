@@ -151,8 +151,7 @@ class InteractiveMap:
         width=400,
         height=400,
         tiles="CartoDB positron",
-        API_key=None,
-        zoom_start=None,
+        API_key=None,  # pylint: disable=invalid-name
         use_region=False,
         saved_region=None,
     ):
@@ -170,7 +169,6 @@ class InteractiveMap:
         :param int width: width in pixels of figure (default 400)
         :param str tiles: map tileset to use
         :param str API_key: API key for Mapbox or Cloudmade tiles
-        :param int zoom_start: initial zoom level for the map (default 10)
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
         """
@@ -187,8 +185,7 @@ class InteractiveMap:
             width=self.width,
             height=self.height,
             tiles=tiles,
-            API_key=API_key,
-            zoom_start=zoom_start if zoom_start else 10,
+            API_key=API_key,  # pylint: disable=invalid-name
         )
         # Set LayerControl default
         self.layer_control = False
