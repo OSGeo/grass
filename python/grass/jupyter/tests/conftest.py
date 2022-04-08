@@ -22,9 +22,7 @@ def simple_dataset(tmp_path_factory):
         # Vector
         vector_name = "point"
         full_vector_name = f"{vector_name}@PERMANENT"
-        gs.write_command(
-            "v.in.ascii", input="-", stdin="50|50", output=vector_name
-        )
+        gs.write_command("v.in.ascii", input="-", stdin="50|50", output=vector_name)
         # Random Raster
         raster_name = "precipitation"
         max_value = 100
