@@ -12,14 +12,16 @@
 char *get_path(const char *name, int fpath)
 {
     char tmpdir[GPATH_MAX];
+    char *buff = NULL;
     
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
     if (name) {
-        strcat(tmpdir, "/");
-        strcat(tmpdir, name);
+        G_asprintf(&buff, "%cMONITORS%c%s", HOST_DIRSEP, HOST_DIRSEP, name);
+    } else {
+        G_asprintf(&buff, "%cMONITORS", HOST_DIRSEP);
     }
+    strcat(tmpdir, buff);
+    G_free(buff);
 
     if (fpath) {
         char ret[GPATH_MAX];
@@ -130,13 +132,13 @@ void list_files(const char *name, FILE *fd_out)
     char tmpdir[GPATH_MAX], mon_path[GPATH_MAX];
     struct dirent *dp;
     DIR *dirp;
-    
+    char *buff = NULL;
+
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
-    strcat(tmpdir, "/");
-    strcat(tmpdir, name);
-    
+    G_asprintf(&buff, "%cMONITORS%c%s", HOST_DIRSEP, HOST_DIRSEP, name);
+    strcat(tmpdir, buff);
+    G_free(buff);
+
     G_file_name(mon_path, tmpdir, NULL, G_mapset());
     fprintf(fd_out, "path=%s\n", mon_path);
     

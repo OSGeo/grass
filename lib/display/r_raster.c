@@ -106,12 +106,12 @@ int D_open_driver(void)
             sprintf(progname, "%s", c);
         else { /* monitors managed by d.mon -> call default renderer */
             char element[GPATH_MAX];
-            
+            char *buff = NULL;
+
             G_temp_element(element);
-            strcat(element, "/");
-            strcat(element, "MONITORS");
-            strcat(element, "/");
-            strcat(element, m);
+            G_asprintf(&buff, "%cMONITORS%c%s", HOST_DIRSEP, HOST_DIRSEP, m);
+            strcat(element, buff);
+            G_free(buff);
             G_file_name(progname, element, "render.py", G_mapset());
         }
 

@@ -113,14 +113,17 @@ void G_temp_element(char *element)
 void G__temp_element(char *element, int tmp)
 {
     const char *machine;
+    char *buff = NULL;
 
-    strcpy(element, ".tmp");
     machine = G__machine_name();
     if (machine != NULL && *machine != 0) {
-	strcat(element, "/");
-	strcat(element, machine);
+        G_asprintf(&buff, ".tmp%c%s", HOST_DIRSEP, machine);
+        strcpy(element, buff);
+        G_free(buff);
+    } else {
+        strcpy(element, ".tmp");
     }
-    
+
     if (!tmp)
         G_make_mapset_object_group(element);
     else
