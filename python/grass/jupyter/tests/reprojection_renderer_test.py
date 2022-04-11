@@ -17,7 +17,6 @@ def test_render_raster(simple_dataset):
     """Check render_raster returns image and bbox"""
     renderer = gj.ReprojectionRenderer()
     filename, bbox = renderer.render_raster(simple_dataset.raster_name)
-    print(bbox)
     assert Path(filename).exists()
     # Test bounding box is correct
     # Raster is same extent as region so no need to test bbox for use_region=True
@@ -26,7 +25,7 @@ def test_render_raster(simple_dataset):
 
 # render_vector produces json
 def test_render_vector(simple_dataset):
-    """Check render_vector returns geojson"""
+    """Check render_vector returns file"""
     renderer = gj.ReprojectionRenderer()
     filename = renderer.render_vector(simple_dataset.vector_name)
     assert Path(filename).exists()
