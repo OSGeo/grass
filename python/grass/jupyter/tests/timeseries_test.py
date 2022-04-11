@@ -55,7 +55,7 @@ def test_default_init(space_time_raster_dataset):
     assert img.timeseries == space_time_raster_dataset.name
 
 
-@pytest.mark.parametrize("fill_gaps", ["False", "True"])
+@pytest.mark.parametrize("fill_gaps", [False, True])
 def test_render_layers(space_time_raster_dataset, fill_gaps):
     """Check that layers are rendered"""
     # create instance of TimeSeries
@@ -70,7 +70,7 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
     # check files exist
     # We need to check values which are only in protected attributes
     # pylint: disable=protected-access
-    for (_date, filename) in img._date_filename_dict.items():
+    for unused_date, filename in img._date_filename_dict.items():
         assert Path(filename).is_file()
 
 

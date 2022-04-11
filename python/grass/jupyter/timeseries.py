@@ -44,7 +44,7 @@ def collect_layers(timeseries, element_type, fill_gaps):
     :param str element_type: element type, "stvds" or "strds"
     :param bool fill_gaps: fill empty time steps with data from previous step
     """
-    # NEW WAY: Comment in after PR 2258 is merged
+    # NEW WAY: Comment in after json output for t.rast.list and t.vect.list is merged
     # import json
     # if element_type == "strds":
     #     result = json.loads(
@@ -134,9 +134,10 @@ class TimeSeries:
     Notebooks.
 
     Basic usage::
+
     >>> img = TimeSeries("series_name")
-    >>> img.d_legend() #Add legend
-    >>> img.time_slider() #Create TimeSlider
+    >>> img.d_legend()  # Add legend
+    >>> img.time_slider()  # Create TimeSlider
     >>> img.animate()
 
     This class of grass.jupyter is experimental and under development. The API can
@@ -238,7 +239,13 @@ class TimeSeries:
         """Set background color of images.
 
         Passed to d.rast and d.erase. Either a standard color name, R:G:B triplet, or
-        Hex. Default is White. (add example with hex)"""
+        Hex. Default is white.
+
+        >>> img = TimeSeries("series_name")
+        >>> img.set_background_color("#088B36")  # GRASS GIS green
+        >>> img.animate()
+
+        """
         self._bgcolor = color
         self._layers_rendered = False
 
@@ -278,6 +285,20 @@ class TimeSeries:
         if self._legend:
             self._render_legend(img)
 
+    def _render_layer(self, layer, filename):
+        img = GrassRenderer(
+            filename=filename, use_region=True, env=self._env, read_file=True
+        )
+        if self._element_type == "strds":
+            img.d_rast(map=layer)
+        elif self._element_type == "stvds":
+            img.d_vect(map=layer)
+        for grass_module, kwargs in self._overlays.calls:
+            img.run(grass_module, **kwargs)
+        # Add legend if needed
+        if self._legend:
+            self._render_legend(img)
+
     def render(self):
         """Renders image for each time-step in space-time dataset.
 
@@ -287,6 +308,7 @@ class TimeSeries:
         """
 
         # Make base image (background and baselayers)
+        # Random name needed to avoid potential conflict with layer names
         random_name_base = gs.append_random("base", 8) + ".png"
         base_file = os.path.join(self._tmpdir.name, random_name_base)
         img = GrassRenderer(
@@ -299,6 +321,7 @@ class TimeSeries:
             img.run(grass_module, **kwargs)
 
         # Create name for empty layers
+        # Random name needed to avoid potential conflict with layer names
         random_name_none = gs.append_random("none", 8) + ".png"
 
         # Render each layer
@@ -317,25 +340,17 @@ class TimeSeries:
                 shutil.copyfile(base_file, filename)
                 self._date_filename_dict[date] = filename
                 # Render image
-                img = GrassRenderer(
-                    filename=filename, use_region=True, env=self._env, read_file=True
-                )
-                if self._element_type == "strds":
-                    img.d_rast(map=layer)
-                elif self._element_type == "stvds":
-                    img.d_vect(map=layer)
-                for grass_module, kwargs in self._overlays.calls:
-                    img.run(grass_module, **kwargs)
-                # Add legend if needed
-                if self._legend:
-                    self._render_legend(img)
+                self._render_layer(layer, filename)
         self._layers_rendered = True
 
     def time_slider(self, slider_width=None):
         """Create interactive timeline slider.
 
-        param str slider_width: width of datetime selection slider as a
-                                percentage (%) or pixels (px)
+        param str slider_width: width of datetime selection slider
+
+        The slider_width parameter sets the width of the slider in the output cell.
+        It should be formantted as a percentage (%) of the cell width or in pixels (px).
+        slider_width is passed to ipywidgets in ipywidgets.Layout(width=slider_width).
         """
         # Lazy Imports
         import ipywidgets as widgets  # pylint: disable=import-outside-toplevel

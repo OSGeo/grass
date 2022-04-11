@@ -30,6 +30,7 @@ class GrassRenderer:
     Elements are added to the display by calling GRASS display modules.
 
     Basic usage::
+
     >>> m = GrassRenderer()
     >>> m.run("d.rast", map="elevation")
     >>> m.run("d.legend", raster="elevation")
@@ -39,10 +40,12 @@ class GrassRenderer:
     as a class method and replacing "." with "_" in the name.
 
     Shortcut usage::
+
     >>> m = GrassRenderer()
     >>> m.d_rast(map="elevation")
     >>> m.d_legend(raster="elevation")
     >>> m.show()
+
     """
 
     def __init__(
@@ -75,7 +78,7 @@ class GrassRenderer:
                         else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
                         this region is then used for rendering
-        :param bool read_file: if False(default), erase filename before re-writing to
+        :param bool read_file: if False (default), erase filename before re-writing to
                          clear contents. If True, read file without clearing contents
                          first.
         """
