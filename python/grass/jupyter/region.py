@@ -16,10 +16,8 @@ import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 from .utils import (
-    get_location_proj_string,
     get_map_name_from_d_command,
-    get_region,
-    reproject_region,
+    set_target_region,
 )
 
 
@@ -40,7 +38,17 @@ class RegionManagerForInteractiveMap:
         self._saved_region = saved_region
         self._src_env = src_env
         self._tgt_env = tgt_env
+        # [SW, NE]: inverted to easily expand based on data, see _set_bbox
         self._bbox = [[90, 180], [-90, -180]]
+        if self._use_region:
+            # tgt region already set
+            self._set_bbox(self._src_env)
+        if self._saved_region:
+            self._src_env["GRASS_REGION"] = gs.region_env(
+                region=self._saved_region, env=self._src_env
+            )
+            set_target_region(src_env=self._src_env, tgt_env=self._tgt_env)
+            self._set_bbox(self._src_env)
 
     @property
     def bbox(self):
@@ -59,34 +67,17 @@ class RegionManagerForInteractiveMap:
 
         Also enlarges bounding box based on the raster.
         """
-        if self._saved_region:
-            self._src_env["GRASS_REGION"] = gs.region_env(
-                region=self._saved_region, env=self._src_env
-            )
-        elif self._use_region:
-            # use current
-            self._set_bbox(self._src_env)
+        if self._use_region or self._saved_region:
+            # target region and bbox already set
             return
-        else:
-            self._src_env["GRASS_REGION"] = gs.region_env(
-                raster=raster, env=self._src_env
-            )
-        region = get_region(env=self._src_env)
-        from_proj = get_location_proj_string(self._src_env)
-        to_proj = get_location_proj_string(env=self._tgt_env)
-        new_region = reproject_region(region, from_proj, to_proj)
-        gs.run_command(
-            "g.region",
-            n=new_region["north"],
-            s=new_region["south"],
-            e=new_region["east"],
-            w=new_region["west"],
-            env=self._tgt_env,
-        )
+        self._src_env["GRASS_REGION"] = gs.region_env(raster=raster, env=self._src_env)
+        set_target_region(src_env=self._src_env, tgt_env=self._tgt_env)
         self._set_bbox(self._src_env)
 
     def set_bbox_vector(self, vector):
         """Enlarge bounding box based on vector"""
+        if self._saved_region or self._use_region:
+            return
         env = self._src_env.copy()
         env["GRASS_REGION"] = gs.region_env(vector=vector, env=env)
         self._set_bbox(env)
