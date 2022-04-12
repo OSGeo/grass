@@ -1,6 +1,8 @@
 # MODULE:    grass.jupyter
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+#            Vaclav Petras <wenzeslaus gmail com>
+#            Anna Petrasova <kratochanna gmail com>
 #
 # PURPOSE:   Display classes and setup functions for running GRASS GIS
 #            in Jupyter Notebooks
