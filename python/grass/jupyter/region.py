@@ -147,7 +147,9 @@ class RegionManagerFor2D:
             width, height = get_rendering_size(region, self._width, self._height)
             self._env["GRASS_RENDER_WIDTH"] = str(round(width))
             self._env["GRASS_RENDER_HEIGHT"] = str(round(height))
-            self._size_set = True
+            # only when extent is set you can disable future size setting
+            if self._extent_set:
+                self._size_set = True
 
     def set_region_from_command(self, module, **kwargs):
         """Sets computational region for rendering.
