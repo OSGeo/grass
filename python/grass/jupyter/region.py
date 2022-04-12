@@ -18,6 +18,7 @@ from grass.exceptions import CalledModuleError
 from .utils import (
     get_map_name_from_d_command,
     set_target_region,
+    get_rendering_size,
 )
 
 
@@ -101,26 +102,45 @@ class RegionManagerForInteractiveMap:
 class RegionManagerFor2D:
     """Region manager for 2D displays (gets region from display commands)"""
 
-    def __init__(self, use_region, saved_region, env):
+    def __init__(self, use_region, saved_region, width, height, env):
         """Manages region during rendering.
 
         :param use_region: if True, use either current or provided saved region,
                           else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
                             this region is then used for rendering
+        :param width: rendering width
+        :param height: rendering height
         :param env: environment for rendering
         """
         self._env = env
+        self._width = width
+        self._height = height
         self._use_region = use_region
         self._saved_region = saved_region
         self._extent_set = False
         self._resolution_set = False
+        self._size_set = False
 
     def set_region_from_env(self, env):
         """Copies GRASS_REGION from provided environment
         to local environment to set the computational region"""
         if "GRASS_REGION" in env:
             self._env["GRASS_REGION"] = env["GRASS_REGION"]
+
+    def adjust_rendering_size_from_region(self):
+        """Sets the environmental render width and height variables
+        based on the region dimensions. Only first call of this
+        method sets the variables, subsequent calls do not adjust them.
+        """
+        if not self._size_set:
+            region = gs.region(env=self._env)
+            width, height = get_rendering_size(region, self._width, self._height)
+            self._env["GRASS_RENDER_WIDTH"] = str(round(width))
+            self._env["GRASS_RENDER_HEIGHT"] = str(round(height))
+            # only when extent is set you can disable future size setting
+            if self._extent_set:
+                self._size_set = True
 
     def set_region_from_command(self, module, **kwargs):
         """Sets computational region for rendering.
