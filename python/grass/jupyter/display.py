@@ -118,7 +118,11 @@ class GrassRenderer:
 
         # rendering region setting
         self._region_manager = RegionManagerFor2D(
-            use_region, saved_region, width, height, self._env
+            use_region=use_region,
+            saved_region=saved_region,
+            width=width,
+            height=height,
+            env=self._env,
         )
 
     @property
