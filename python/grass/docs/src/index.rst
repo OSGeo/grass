@@ -27,11 +27,12 @@ at various levels:
 Contents:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    script_intro
    pygrass_index
    temporal_framework
+   grass.jupyter
    exceptions
    imaging
    gunittest_testing
