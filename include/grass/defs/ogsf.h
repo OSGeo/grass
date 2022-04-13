@@ -310,7 +310,7 @@ int Gs_get_cat_label(const char *, int, int, char *);
 int Gs_save_3dview(const char *, geoview *, geodisplay *, struct Cell_head *,
 		   geosurf *);
 int Gs_load_3dview(const char *, geoview *, geodisplay *, struct Cell_head *,
-		   geosurf *);
+		   const geosurf *);
 int Gs_update_attrange(geosurf *, int);
 
 /* Gv3.c */

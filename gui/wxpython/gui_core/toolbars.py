@@ -75,7 +75,7 @@ BaseIcons = {
         label=_("Add map elements"),
         desc=_("Overlay elements like scale and legend onto map"),
     ),
-    "histogramD": MetaIcon(
+    "histogram": MetaIcon(
         img="layer-raster-histogram", label=_("Create histogram with d.histogram")
     ),
     "settings": MetaIcon(img="settings", label=_("Settings")),
@@ -98,10 +98,15 @@ class BaseToolbar(ToolBar):
                 self.Realize()
 
             def _toolbarData(self):
-                return self._getToolbarData((("help", Icons["help"],
-                                              self.parent.OnHelp),
-                                              ))
-
+                # e.g. ("help", _("Help")) tool short label (triangle/arrow
+                # at the right side of the toolbar)
+                return self._getToolbarData(
+                    (
+                        ("help", Icons["help"].label),
+                        Icons["help"],
+                        self.parent.OnHelp
+                    ),
+                )
     """
 
     def __init__(
@@ -135,8 +140,14 @@ class BaseToolbar(ToolBar):
         """
         bmpDisabled = wx.NullBitmap
         tool = -1
+
+        if isinstance(label, tuple):
+            internal_label, label = label[0], label[1]
+        else:
+            internal_label = label
+
         if label:
-            tool = vars(self)[label] = NewId()
+            tool = vars(self)[internal_label] = NewId()
             Debug.msg(
                 3, "CreateTool(): tool=%d, label=%s bitmap=%s" % (tool, label, bitmap)
             )
@@ -162,13 +173,20 @@ class BaseToolbar(ToolBar):
         :param enable: True for enable otherwise disable
         """
         for tool in self._data:
-            if tool[0] == "":  # separator
-                continue
-
-            if enable:
-                self.SetToolLongHelp(vars(self)[tool[0]], tool[4])
+            if isinstance(tool[0], tuple):
+                if tool[0][0] == "":  # separator
+                    continue
+                else:
+                    internal_label = tool[0][0]
             else:
-                self.SetToolLongHelp(vars(self)[tool[0]], "")
+                if tool[0] == "":  # separator
+                    continue
+                else:
+                    internal_label = tool[0]
+            if enable:
+                self.SetToolLongHelp(vars(self)[internal_label], tool[4])
+            else:
+                self.SetToolLongHelp(vars(self)[internal_label], "")
 
     def OnTool(self, event):
         """Tool selected"""
@@ -200,11 +218,14 @@ class BaseToolbar(ToolBar):
     def Enable(self, tool, enable=True):
         """Enable/Disable defined tool
 
-        :param tool: name
+        :param str/tuple tool: name
         :param enable: True to enable otherwise disable tool
         """
         try:
-            id = getattr(self, tool)
+            if isinstance(tool, tuple):
+                id = getattr(self, tool[0])
+            else:
+                id = getattr(self, tool)
         except AttributeError:
             # TODO: test everything that this is not raised
             # this error was ignored for a long time

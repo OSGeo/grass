@@ -72,7 +72,7 @@ t.create type=strds temporaltype=absolute output=precip_abs0 title="A test with 
 
 # The @test
 t.register type=raster -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 month"
-t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.rast.list  separator=" | " method=comma     input=precip_abs0
 t.rast.list  input=precip_abs0
 t.rast.list  separator=" | " method=cols      input=precip_abs0
 t.rast.list  separator=" | " method=delta     input=precip_abs0
@@ -82,7 +82,7 @@ t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="2 months"
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="1 day"
 
 t.register type=raster input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 month"
-t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.rast.list  separator=" | " method=comma     input=precip_abs0
 t.rast.list  input=precip_abs0
 t.rast.list  separator=" | " method=cols      input=precip_abs0
 t.rast.list  separator=" | " method=delta     input=precip_abs0
@@ -91,8 +91,8 @@ t.rast.list  separator=" | " method=gran      input=precip_abs0
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="2 months"
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="6 days"
 
-t.register type=raster -i input=precip_abs0 file="${n2}" 
-t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.register type=raster input=precip_abs0 file="${n2}"
+t.rast.list  separator=" | " method=comma     input=precip_abs0
 t.rast.list  input=precip_abs0
 t.rast.list  separator=" | " method=cols      input=precip_abs0
 t.rast.list  separator=" | " method=delta     input=precip_abs0
@@ -101,24 +101,24 @@ t.rast.list  separator=" | " method=gran      input=precip_abs0
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="2 months"
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="6 days"
 
-t.register type=raster -i input=precip_abs0 file="${n3}"
-t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.register type=raster input=precip_abs0 file="${n3}"
+t.rast.list  separator=" | " method=comma     input=precip_abs0
 t.rast.list  separator=" | " method=delta     input=precip_abs0
 t.rast.list  separator=" | " method=deltagaps input=precip_abs0
 t.rast.list  separator=" | " method=gran      input=precip_abs0
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="2 months"
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="6 days"
 
-t.register type=raster -i input=precip_abs0 file="${n4}"
-t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.register type=raster input=precip_abs0 file="${n4}"
+t.rast.list  separator=" | " method=comma     input=precip_abs0
 t.rast.list  separator=" | " method=delta     input=precip_abs0
 t.rast.list  separator=" | " method=deltagaps input=precip_abs0
 t.rast.list  separator=" | " method=gran      input=precip_abs0
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="2 months"
 t.rast.list  separator=" | " method=gran      input=precip_abs0 gran="6 days"
 
-t.register type=raster -i input=precip_abs0 file="${n5}"
-t.rast.list    separator=" | " method=comma     input=precip_abs0
+t.register type=raster input=precip_abs0 file="${n5}"
+t.rast.list  separator=" | " method=comma     input=precip_abs0
 t.rast.list  input=precip_abs0
 t.rast.list  separator=" | " method=cols      input=precip_abs0
 t.rast.list  separator=" | " method=delta     input=precip_abs0

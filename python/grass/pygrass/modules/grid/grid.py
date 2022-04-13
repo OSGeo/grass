@@ -12,6 +12,7 @@ import sys
 import multiprocessing as mltp
 import subprocess as sub
 import shutil as sht
+from math import ceil
 
 from grass.script.setup import write_gisrc
 from grass.script import append_node_pid, legalize_vector_name
@@ -22,7 +23,7 @@ from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
 from grass.pygrass.modules.grid.split import split_region_tiles
-from grass.pygrass.modules.grid.patch import rpatch_map
+from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
 def select(parms, ptype):
@@ -424,10 +425,16 @@ class GridModule(object):
     :type split: bool
     :param mapset_prefix: if specified created mapsets start with this prefix
     :type mapset_prefix: str
+    :param patch_backend: "r.patch", "RasterRow", or None for for default
+    :type patch_backend: None or str
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
     :param kargs: give all the parameters to the command
+
+    When patch_backend is None, the RasterRow method is used for patching the result.
+    When patch_backend is "r.patch", r.patch is used with nprocs=processes.
+    r.patch can only be used when overlap is 0.
 
     >>> grd = GridModule('r.slope.aspect',
     ...                  width=500, height=500, overlap=2,
@@ -458,6 +465,7 @@ class GridModule(object):
         start_col=0,
         out_prefix="",
         mapset_prefix=None,
+        patch_backend=None,
         *args,
         **kargs,
     ):
@@ -474,8 +482,23 @@ class GridModule(object):
         self.out_prefix = out_prefix
         self.log = log
         self.move = move
+        # by default RasterRow is used as previously
+        # if overlap > 0, r.patch won't work properly
+        if not patch_backend:
+            self.patch_backend = "RasterRow"
+        elif patch_backend not in ("r.patch", "RasterRow"):
+            raise RuntimeError(
+                _("Parameter patch_backend must be 'r.patch' or 'RasterRow'")
+            )
+        elif patch_backend == "r.patch" and self.overlap:
+            raise RuntimeError(
+                _("Patching backend 'r.patch' doesn't work for overlap > 0")
+            )
+        else:
+            self.patch_backend = patch_backend
         self.gisrc_src = os.environ["GISRC"]
         self.n_mset, self.gisrc_dst = None, None
+        self.estimate_tile_size()
         if self.move:
             self.n_mset = copy_mapset(self.mset, self.move)
             self.gisrc_dst = write_gisrc(
@@ -493,7 +516,7 @@ class GridModule(object):
             if groups:
                 copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
         self.bboxes = split_region_tiles(
-            region=region, width=width, height=height, overlap=overlap
+            region=region, width=self.width, height=self.height, overlap=overlap
         )
         if mapset_prefix:
             self.mapset_prefix = mapset_prefix
@@ -542,6 +565,30 @@ class GridModule(object):
             patt = "%s-*" % inm.value
             inlist[inm.value] = sorted(self.mset.glist(type="raster", pattern=patt))
         self.inlist = inlist
+
+    def estimate_tile_size(self):
+        """Estimates tile width and height based on number of processes.
+
+        Keeps width and height if provided by user. If one dimension
+        is provided the other is computed as the minimum number of tiles
+        to keep all requested processes working (initially).
+        If no dimensions are provided, tiling is 1 column x N rows
+        which speeds up patching.
+        """
+        region = Region()
+        if self.width and self.height:
+            return
+        if self.width:
+            n_tiles_x = ceil(region.cols / self.width)
+            n_tiles_y = ceil(self.processes / n_tiles_x)
+            self.height = ceil(region.rows / n_tiles_y)
+        elif self.height:
+            n_tiles_y = ceil(region.rows / self.height)
+            n_tiles_x = ceil(self.processes / n_tiles_y)
+            self.width = ceil(region.cols / n_tiles_x)
+        else:
+            self.width = region.cols
+            self.height = ceil(region.rows / self.processes)
 
     def get_works(self):
         """Return a list of tuble with the parameters for cmd_exe function"""
@@ -665,16 +712,28 @@ class GridModule(object):
         for otmap in self.module.outputs:
             otm = self.module.outputs[otmap]
             if otm.typedesc == "raster" and otm.value:
-                rpatch_map(
-                    otm.value,
-                    self.mset.name,
-                    self.msetstr,
-                    bboxes,
-                    self.module.flags.overwrite,
-                    self.start_row,
-                    self.start_col,
-                    self.out_prefix,
-                )
+                if self.patch_backend == "RasterRow":
+                    rpatch_map(
+                        raster=otm.value,
+                        mapset=self.mset.name,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
+                    )
+                else:
+                    rpatch_map_r_patch_backend(
+                        raster=otm.value,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
+                        processes=self.processes,
+                    )
                 noutputs += 1
         if noutputs < 1:
             msg = "No raster output option defined for <{}>".format(self.module.name)

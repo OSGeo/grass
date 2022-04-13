@@ -150,3 +150,33 @@ def get_map_name_from_d_command(module, **kwargs):
     special = {"d.his": "hue", "d.legend": "raster", "d.rgb": "red", "d.shade": "shade"}
     parameter = special.get(module, "map")
     return kwargs.get(parameter, "")
+
+
+def get_rendering_size(region, width, height, default_width=600, default_height=400):
+    """Returns the rendering width and height based
+    on the region aspect ratio.
+
+    :param dict region: region dictionary
+    :param integer width: rendering width (can be None)
+    :param integer height: rendering height (can be None)
+    :param integer default_width: default rendering width (can be None)
+    :param integer default_height: default rendering height (can be None)
+
+    :return tuple (width, height): adjusted width and height
+
+    When both width and height are provided, values are returned without
+    adjustment. When one value is provided, the other is computed
+    based on the region aspect ratio. When no dimension is given,
+    the default width or height is used and the other dimension computed.
+    """
+    if width and height:
+        return (width, height)
+    region_width = region["e"] - region["w"]
+    region_height = region["n"] - region["s"]
+    if width:
+        return (width, round(width * region_height / region_width))
+    if height:
+        return (round(height * region_width / region_height), height)
+    if region_height > region_width:
+        return (round(default_height * region_width / region_height), default_height)
+    return (default_width, round(default_width * region_height / region_width))

@@ -231,6 +231,7 @@ int loadrect(char *name)
     if (NULL ==
 	(buffer = (unsigned long *)G_malloc(xsiz * ysiz * sizeof(long)))) {
 	fprintf(stderr, "Out of memory\n");
+	fclose(fp);
 	return -1;
     }
 
