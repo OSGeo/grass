@@ -11,7 +11,7 @@ MODULES = \
 	interact_display \
 	region \
 	render3d \
-  reprojection_renderer \
+	reprojection_renderer \
 	utils \
 	timeseries \
 	utils
