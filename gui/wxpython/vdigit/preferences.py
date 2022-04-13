@@ -528,9 +528,7 @@ class VDigitSettingsDialog(wx.Dialog):
         settings = ((_("Layer"), 1), (_("Category"), 1), (_("Mode"), _("Next to use")))
         # layer
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
-        self.layer = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, min=1, max=1e3
-        )
+        self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, min=1, max=1e3)
         self.layer.SetValue(
             int(UserSettings.Get(group="vdigit", key="layer", subkey="value"))
         )
