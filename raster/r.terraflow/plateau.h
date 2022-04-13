@@ -128,7 +128,6 @@ AMI_STREAM<plateauType> *
 findPlateaus(AMI_STREAM<elevation_type> *elstr,
 			 const dimension_type nrows, const dimension_type ncols,
 			 const elevation_type nodata_value,
-			 AMI_STREAM<ElevationWindow > *winstr,
 			 AMI_STREAM<direction_type> *dirStr,
 			 AMI_STREAM<plateauStats> *statStr);
 
