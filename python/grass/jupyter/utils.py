@@ -126,9 +126,15 @@ def setup_location(name, path, epsg, src_env):
     # Location and mapset
     gs.create_location(path, name, epsg=epsg, overwrite=True)
     # Reproject region
+    set_target_region(src_env, new_env)
+    return rcfile, new_env
+
+
+def set_target_region(src_env, tgt_env):
+    """Set target region based on source region"""
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
-    to_proj = get_location_proj_string(env=new_env)
+    to_proj = get_location_proj_string(env=tgt_env)
     new_region = reproject_region(region, from_proj, to_proj)
     # Set region to match original region extent
     gs.run_command(
@@ -137,9 +143,8 @@ def setup_location(name, path, epsg, src_env):
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
-        env=new_env,
+        env=tgt_env,
     )
-    return rcfile, new_env
 
 
 def get_map_name_from_d_command(module, **kwargs):
