@@ -67,6 +67,7 @@ def space_time_raster_dataset(tmp_path_factory):
             start_times=times,
         )
 
+
 @pytest.fixture(scope="module")
 def simple_dataset(tmp_path_factory):
     """Start a session and create a raster time series
