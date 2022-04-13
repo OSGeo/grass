@@ -363,8 +363,8 @@ class TimeSeries:
 
         The slider_width parameter sets the width of the slider in the output cell.
         It should be formatted as a percentage (%) between 0 and 100 of the cell width
-        or in pixels (px). Values should be formatted as strings and include the "%"%
-        or "px" suffix. For example, slider_width="80%" or slider_width="500px")
+        or in pixels (px). Values should be formatted as strings and include the "%"
+        or "px" suffix. For example, slider_width="80%" or slider_width="500px".
         slider_width is passed to ipywidgets in ipywidgets.Layout(width=slider_width).
         """
         # Lazy Imports

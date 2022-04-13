@@ -65,7 +65,7 @@ def space_time_raster_dataset(tmp_path_factory):
             raster_names=names,
             full_raster_names=full_names,
             start_times=times,
-
+        )
 
 @pytest.fixture(scope="module")
 def simple_dataset(tmp_path_factory):
