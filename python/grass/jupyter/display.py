@@ -30,6 +30,7 @@ class GrassRenderer:
     Elements are added to the display by calling GRASS display modules.
 
     Basic usage::
+
     >>> m = GrassRenderer()
     >>> m.run("d.rast", map="elevation")
     >>> m.run("d.legend", raster="elevation")
@@ -39,10 +40,12 @@ class GrassRenderer:
     as a class method and replacing "." with "_" in the name.
 
     Shortcut usage::
+
     >>> m = GrassRenderer()
     >>> m.d_rast(map="elevation")
     >>> m.d_legend(raster="elevation")
     >>> m.show()
+
     """
 
     def __init__(
@@ -56,6 +59,7 @@ class GrassRenderer:
         renderer="cairo",
         use_region=False,
         saved_region=None,
+        read_file=False,
     ):
 
         """Creates an instance of the GrassRenderer class.
@@ -71,9 +75,12 @@ class GrassRenderer:
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
         :param use_region: if True, use either current or provided saved region,
-                          else derive region from rendered layers
+                        else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
-                            this region is then used for rendering
+                        this region is then used for rendering
+        :param bool read_file: if False (default), erase filename before re-writing to
+                         clear contents. If True, read file without clearing contents
+                         first.
         """
 
         # Copy Environment
@@ -107,6 +114,8 @@ class GrassRenderer:
 
         if filename:
             self._filename = filename
+            if not read_file and os.path.exists(self._filename):
+                os.remove(self._filename)
         else:
             self._filename = os.path.join(self._tmpdir.name, "map.png")
         # Set environment var for file
