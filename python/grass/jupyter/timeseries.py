@@ -258,6 +258,11 @@ class TimeSeries:
         # If d_legend has been called, we need to re-render layers
         self._layers_rendered = False
 
+    def _render_baselayers(self, img):
+        """Add collected baselayers to GrassRenderer instance"""
+        for grass_module, kwargs in self._baselayers.calls:
+            img.run(grass_module, **kwargs)
+
     def _render_legend(self, img):
         """Add legend to GrassRenderer instance"""
         info = gs.parse_command(
@@ -271,6 +276,11 @@ class TimeSeries:
             **self._legend,
         )
 
+    def _render_overlays(self, img):
+        """Add collected overlays to GrassRenderer instance"""
+        for grass_module, kwargs in self._overlays.calls:
+            img.run(grass_module, **kwargs)
+
     def _render_blank_layer(self, filename):
         """Write blank image for gaps in time series.
 
@@ -279,13 +289,14 @@ class TimeSeries:
         img = GrassRenderer(
             filename=filename, use_region=True, env=self._env, read_file=True
         )
-        for grass_module, kwargs in self._overlays.calls:
-            img.run(grass_module, **kwargs)
+        # Add overlays
+        self._render_overlays(img)
         # Add legend if needed
         if self._legend:
             self._render_legend(img)
 
     def _render_layer(self, layer, filename):
+        """Render layer to file with overlays and legend"""
         img = GrassRenderer(
             filename=filename, use_region=True, env=self._env, read_file=True
         )
@@ -293,8 +304,8 @@ class TimeSeries:
             img.d_rast(map=layer)
         elif self._element_type == "stvds":
             img.d_vect(map=layer)
-        for grass_module, kwargs in self._overlays.calls:
-            img.run(grass_module, **kwargs)
+        # Add overlays
+        self._render_overlays(img)
         # Add legend if needed
         if self._legend:
             self._render_legend(img)
@@ -317,11 +328,12 @@ class TimeSeries:
         # Fill image background
         img.d_erase(bgcolor=self._bgcolor)
         # Add baselayers
-        for grass_module, kwargs in self._baselayers.calls:
-            img.run(grass_module, **kwargs)
+        self._render_baselayers(img)
 
         # Create name for empty layers
         # Random name needed to avoid potential conflict with layer names
+        # A new random_name_none is created each time the render function is run,
+        # and any existing random_name_none file will be ignored
         random_name_none = gs.append_random("none", 8) + ".png"
 
         # Render each layer
@@ -337,6 +349,7 @@ class TimeSeries:
             else:
                 # Create file
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
+                # Copying the base_file ensures that previous results are overwritten
                 shutil.copyfile(base_file, filename)
                 self._date_filename_dict[date] = filename
                 # Render image
@@ -349,7 +362,9 @@ class TimeSeries:
         param str slider_width: width of datetime selection slider
 
         The slider_width parameter sets the width of the slider in the output cell.
-        It should be formantted as a percentage (%) of the cell width or in pixels (px).
+        It should be formatted as a percentage (%) between 0 and 100 of the cell width
+        or in pixels (px). Values should be formatted as strings and include the "%"%
+        or "px" suffix. For example, slider_width="80%" or slider_width="500px")
         slider_width is passed to ipywidgets in ipywidgets.Layout(width=slider_width).
         """
         # Lazy Imports
