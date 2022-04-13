@@ -23,6 +23,8 @@ import subprocess
 
 import pytest
 
+from .generate_last_commit_file import COMMIT_DATE_FORMAT
+
 
 @pytest.fixture
 def json_file():
@@ -74,11 +76,17 @@ def test_core_modules_in_json_file(read_json_file, core_module_path):
 def test_compare_json_file_data(read_json_file, core_module_path):
     # Get Git commit and commit date from local Git
     process_result = subprocess.run(
-        ["git", "log", "-1", "--format=%H,%at", core_module_path],
+        [
+            "git",
+            "log",
+            "-1",
+            f"--format=%H,{COMMIT_DATE_FORMAT}",
+            core_module_path,
+        ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         check=True,
-    )  # --format=%H,%at commit hash,author date (UNIX timestamp)
+    )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
     commit, date = process_result.stdout.decode().strip().split(",")
     core_module = os.path.basename(core_module_path)
     # Compare commit and commit date

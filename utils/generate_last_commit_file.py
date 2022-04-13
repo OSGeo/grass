@@ -9,11 +9,11 @@ JSON file structure:
 
 "r.pack": {
     "commit": "547ff44e6aecfb4c9cbf6a4717fc14e521bec0be",
-    "date": "1643883006"
+    "date": "2022-02-20T09:34:17+01:00"
 },
 
 commit key value is commit hash
-date key value is author date (UNIX timestamp)
+date key value is author date
 
 Usage:
 
@@ -29,16 +29,20 @@ import shutil
 import sys
 
 
+# Strict ISO 8601 format
+COMMIT_DATE_FORMAT = "%aI"
+
+
 def get_last_commit(src_dir):
     """Generate core modules JSON object with the following structure
 
     "r.pack": {
         "commit": "547ff44e6aecfb4c9cbf6a4717fc14e521bec0be",
-        "date": "1643883006"
+        "date": "2022-02-20T09:34:17+01:00"
     },
 
     commit key value is commit hash
-    date key value is author date (UNIX timestamp)
+    date key value is author date
 
     :param str src_dir: root source code dir
 
@@ -54,10 +58,16 @@ def get_last_commit(src_dir):
             continue
         rel_path = os.path.relpath(root)
         process_result = subprocess.run(
-            ["git", "log", "-1", "--format=%H,%at", rel_path],
+            [
+                "git",
+                "log",
+                "-1",
+                f"--format=%H,{COMMIT_DATE_FORMAT}",
+                rel_path,
+            ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        )  # --format=%H,%at commit hash,author date (UNIX timestamp)
+        )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         if process_result.returncode == 0:
             commit, date = process_result.stdout.decode().strip().split(",")
             result[os.path.basename(rel_path)] = {

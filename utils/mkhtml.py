@@ -49,6 +49,8 @@ except ImportError:
     # During compilation GRASS GIS
     gs = None
 
+from generate_last_commit_file import COMMIT_DATE_FORMAT
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
@@ -314,8 +316,8 @@ def format_git_commit_date_from_local_git(
 
     :return str: output formatted commit datetime
     """
-    return datetime.fromtimestamp(
-        int(commit_datetime),
+    return datetime.fromisoformat(
+        commit_datetime,
     ).strftime(datetime_format)
 
 
@@ -337,10 +339,16 @@ def has_src_code_git(src_dir, is_addon):
     try:
 
         process_result = subprocess.run(
-            ["git", "log", "-1", "--format=%H,%at", src_dir],
+            [
+                "git",
+                "log",
+                "-1",
+                f"--format=%H,{COMMIT_DATE_FORMAT}",
+                src_dir,
+            ],
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE,
-        )  # --format=%H,%at commit hash,author date (UNIX timestamp)
+        )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         os.chdir(actual_dir)
         return process_result if process_result.returncode == 0 else None
     except FileNotFoundError:
