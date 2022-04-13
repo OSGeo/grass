@@ -10,29 +10,135 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-import os
-import sys
-import tempfile
-import weakref
-from pathlib import Path
+"""Interactive visualizations map with folium"""
 
-import grass.script as gs
+from .reprojection_renderer import ReprojectionRenderer
 
-from .display import GrassRenderer
-from .region import RegionManagerForInteractiveMap
-from .utils import (
-    estimate_resolution,
-    get_location_proj_string,
-    get_region,
-    reproject_region,
-    setup_location,
-)
+
+class Raster:
+    """Overlays rasters on folium maps.
+
+    Basic Usage:
+    >>> m = folium.Map()
+    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+    >>> m
+    """
+
+    def __init__(
+        self,
+        name,
+        title=None,
+        use_region=False,
+        saved_region=None,
+        renderer=None,
+        **kwargs,
+    ):
+        """Reproject GRASS raster, export to PNG, and compute bounding box.
+
+        param str name: raster name
+        param str title: title of raster to display in layer control legend
+        param bool use_region: use computational region of current mapset
+        param str saved_region: name of saved computation region
+        param renderer: instance of ReprojectionRenderer
+        **kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay()
+        """
+        import folium  # pylint: disable=import-outside-toplevel
+
+        self._folium = folium
+
+        self._name = name
+        self._overlay_kwargs = kwargs
+        self._title = title
+        if not self._title:
+            self._title = self._name
+
+        if not renderer:
+            self._renderer = ReprojectionRenderer(
+                use_region=use_region, saved_region=saved_region
+            )
+        else:
+            self._renderer = renderer
+        # Render overlay
+        # By doing this here instead of in add_to, we avoid rendering
+        # twice if added to multiple maps. This mimics the behavior
+        # folium.raster_layers.ImageOverlay()
+        self._filename, self._bounds = self._renderer.render_raster(name)
+
+    def add_to(self, folium_map):
+        """Add raster to folium map with folium.raster_layers.ImageOverlay()
+
+        A folium map is an instance of folium.Map.
+        """
+        # Overlay image on folium map
+        img = self._folium.raster_layers.ImageOverlay(
+            image=self._filename,
+            bounds=self._bounds,
+            name=self._title,
+            **self._overlay_kwargs,
+        )
+
+        # Add image to map
+        img.add_to(folium_map)
+
+
+class Vector:
+    """Adds vectors to a folium map.
+
+    Basic Usage:
+    >>> m = folium.Map()
+    >>> gj.Vector("roadsmajor").add_to(m)
+    >>> m
+    """
+
+    def __init__(
+        self,
+        name,
+        title=None,
+        use_region=False,
+        saved_region=None,
+        renderer=None,
+        **kwargs,
+    ):
+        """Reproject GRASS vector and export to folium-ready PNG. Also computes bounding
+        box for PNG overlay in folium map.
+
+        param str name: vector name
+        param str title: title of vector to display in layer control legend
+        param bool use_region: use computational region of current mapset
+        param str saved_region: name of saved computation region
+        renderer: instance of ReprojectionRenderer
+        **kwargs: keyword arguments passed to folium.GeoJson()
+        """
+        import folium  # pylint: disable=import-outside-toplevel
+
+        self._folium = folium
+
+        self._name = name
+        self._title = title
+        if not self._title:
+            self._title = self._name
+        self._geojson_kwargs = kwargs
+
+        if not renderer:
+            self._renderer = ReprojectionRenderer(
+                use_region=use_region, saved_region=saved_region
+            )
+        else:
+            self._renderer = renderer
+        self._filename = self._renderer.render_vector(name)
+
+    def add_to(self, folium_map):
+        """Add vector to folium map with folium.GeoJson()"""
+        self._folium.GeoJson(
+            str(self._filename), name=self._title, **self._geojson_kwargs
+        ).add_to(folium_map)
 
 
 class InteractiveMap:
     """This class creates interative GRASS maps with folium.
 
     Basic Usage:
+
     >>> m = InteractiveMap()
     >>> m.add_vector("streams")
     >>> m.add_raster("elevation")
@@ -40,113 +146,67 @@ class InteractiveMap:
     >>> m.show()
     """
 
-    def __init__(self, width=400, height=400, use_region=False, saved_region=None):
+    def __init__(
+        self,
+        width=400,
+        height=400,
+        tiles="CartoDB positron",
+        API_key=None,  # pylint: disable=invalid-name
+        use_region=False,
+        saved_region=None,
+    ):
         """Creates a blank folium map centered on g.region.
+
+        tiles parameter is passed directly to folium.Map() which supports several
+        built-in tilesets (including "OpenStreetMap", "Stamen Toner", "Stamen Terrain",
+        "Stamen Watercolor", "Mapbox Bright", "Mapbox Control Room", "CartoDB positron",
+        "CartoDB dark_matter") as well as custom tileset URL (i.e.
+        "http://{s}.yourtiles.com/{z}/{x}/{y}.png"). For more information, visit
+        folium documentation:
+        https://python-visualization.github.io/folium/modules.html
 
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
+        :param str tiles: map tileset to use
+        :param str API_key: API key for Mapbox or Cloudmade tiles
+        :param bool use_region: use computational region of current mapset
+        :param str saved_region: name of saved computation region
         """
-
-        import folium
+        import folium  # pylint: disable=import-outside-toplevel
 
         self._folium = folium
 
         # Store height and width
         self.width = width
         self.height = height
-        # Make temporary folder for all our files
-        self._tmp_dir = tempfile.TemporaryDirectory()
-
-        # Remember original environment; all environments used
-        # in this class are derived from this one
-        self._src_env = os.environ.copy()
-
-        # Set up temporary locations  in WGS84 and Pseudo-Mercator
-        # We need two because folium uses WGS84 for vectors and coordinates
-        # and Pseudo-Mercator for raster overlays
-        self.rcfile_psmerc, self._psmerc_env = setup_location(
-            "psmerc", self._tmp_dir.name, "3857", self._src_env
-        )
-        self.rcfile_wgs84, self._wgs84_env = setup_location(
-            "wgs84", self._tmp_dir.name, "4326", self._src_env
-        )
-
-        # Get Center of temporary GRASS regions
-        center = gs.parse_command("g.region", flags="cg", env=self._wgs84_env)
-        center = (float(center["center_northing"]), float(center["center_easting"]))
 
         # Create Folium Map
         self.map = self._folium.Map(
             width=self.width,
             height=self.height,
-            location=center,
-            tiles="cartodbpositron",
+            tiles=tiles,
+            API_key=API_key,  # pylint: disable=invalid-name
         )
         # Set LayerControl default
         self.layer_control = False
-        # region handling
-        self._region_manager = RegionManagerForInteractiveMap(
-            use_region, saved_region, self._src_env, self._psmerc_env
+        self.layer_control_object = None
+
+        self._renderer = ReprojectionRenderer(
+            use_region=use_region, saved_region=saved_region
         )
 
-        # Cleanup rcfiles with finalizer
-        def remove_if_exists(path):
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(path)
-                except FileNotFoundError:
-                    pass
-            else:
-                path.unlink(missing_ok=True)
-
-        def clean_up(paths):
-            for path in paths:
-                remove_if_exists(path)
-
-        self._finalizer = weakref.finalize(
-            self, clean_up, [Path(self.rcfile_psmerc), Path(self.rcfile_wgs84)]
-        )
-
-    def add_vector(self, name):
-        """Imports vector into temporary WGS84 location,
-        re-formats to a GeoJSON and adds to folium map.
+    def add_vector(self, name, title=None, **kwargs):
+        """Imports vector into temporary WGS84 location, re-formats to a GeoJSON and
+        adds to folium map.
 
         :param str name: name of vector to be added to map;
                          positional-only parameter
+        :param str title: vector name for layer control
+        :**kwargs: keyword arguments passed to folium.GeoJson()
         """
+        Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
-        # Find full name of vector
-        file_info = gs.find_file(name, element="vector")
-        full_name = file_info["fullname"]
-        name = file_info["name"]
-        mapset = file_info["mapset"]
-        new_name = full_name.replace("@", "_")
-        # set bbox
-        self._region_manager.set_bbox_vector(full_name)
-        # Reproject vector into WGS84 Location
-        env_info = gs.gisenv(env=self._src_env)
-        gs.run_command(
-            "v.proj",
-            input=name,
-            output=new_name,
-            mapset=mapset,
-            location=env_info["LOCATION_NAME"],
-            dbase=env_info["GISDBASE"],
-            env=self._wgs84_env,
-        )
-        # Convert to GeoJSON
-        json_file = Path(self._tmp_dir.name) / f"{new_name}.json"
-        gs.run_command(
-            "v.out.ogr",
-            input=new_name,
-            output=json_file,
-            format="GeoJSON",
-            env=self._wgs84_env,
-        )
-        # Import GeoJSON to folium and add to map
-        self._folium.GeoJson(str(json_file), name=name).add_to(self.map)
-
-    def add_raster(self, name, opacity=0.8):
+    def add_raster(self, name, title=None, **kwargs):
         """Imports raster into temporary WGS84 location,
         exports as png and overlays on folium map.
 
@@ -159,78 +219,15 @@ class InteractiveMap:
         then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
-        :param float opacity: raster opacity, number between
-                              0 (transparent) and 1 (opaque)
+        :param str title: raster name for layer control
+        :**kwargs: keyword arguments passed to folium.raster_layers.ImageOverlay()
         """
-
-        # Find full name of raster
-        file_info = gs.find_file(name, element="cell", env=self._src_env)
-        full_name = file_info["fullname"]
-        name = file_info["name"]
-        mapset = file_info["mapset"]
-
-        self._region_manager.set_region_from_raster(full_name)
-        # Reproject raster into WGS84/epsg3857 location
-        env_info = gs.gisenv(env=self._src_env)
-        resolution = estimate_resolution(
-            raster=name,
-            mapset=mapset,
-            location=env_info["LOCATION_NAME"],
-            dbase=env_info["GISDBASE"],
-            env=self._psmerc_env,
-        )
-        tgt_name = full_name.replace("@", "_")
-        gs.run_command(
-            "r.proj",
-            input=full_name,
-            output=tgt_name,
-            mapset=mapset,
-            location=env_info["LOCATION_NAME"],
-            dbase=env_info["GISDBASE"],
-            resolution=resolution,
-            env=self._psmerc_env,
-        )
-        # Write raster to png file with GrassRenderer
-        region_info = gs.region(env=self._src_env)
-        png_width = region_info["cols"]
-        png_height = region_info["rows"]
-        filename = os.path.join(self._tmp_dir.name, f"{tgt_name}.png")
-        m = GrassRenderer(
-            width=png_width,
-            height=png_height,
-            env=self._psmerc_env,
-            filename=filename,
-            use_region=True,
-        )
-        m.run("d.rast", map=tgt_name)
-
-        # Reproject bounds of raster for overlaying png
-        # Bounds need to be in WGS84
-        old_bounds = get_region(self._src_env)
-        from_proj = get_location_proj_string(env=self._src_env)
-        to_proj = get_location_proj_string(env=self._wgs84_env)
-        bounds = reproject_region(old_bounds, from_proj, to_proj)
-        new_bounds = [
-            [bounds["north"], bounds["west"]],
-            [bounds["south"], bounds["east"]],
-        ]
-
-        # Overlay image on folium map
-        img = self._folium.raster_layers.ImageOverlay(
-            image=filename,
-            name=name,
-            bounds=new_bounds,
-            opacity=opacity,
-            interactive=True,
-            cross_origin=False,
-        )
-        # Add image to map
-        img.add_to(self.map)
+        Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
 
     def add_layer_control(self, **kwargs):
         """Add layer control to display"
 
-        :param `**kwargs`: named arguments to be passed to folium.LayerControl()"""
+        Accepts keyword arguments to be passed to folium.LayerControl()"""
 
         self.layer_control = True
         self.layer_control_object = self._folium.LayerControl(**kwargs)
@@ -248,7 +245,7 @@ class InteractiveMap:
         fig = self._folium.Figure(width=self.width, height=self.height)
         # Add map to figure
         fig.add_child(self.map)
-        self.map.fit_bounds(self._region_manager.bbox)
+        self.map.fit_bounds(self._renderer.get_bbox())
 
         return fig
 

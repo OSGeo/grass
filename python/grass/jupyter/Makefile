@@ -11,8 +11,10 @@ MODULES = \
 	interact_display \
 	region \
 	render3d \
+  reprojection_renderer \
 	utils \
-	timeseries
+	timeseries \
+	utils
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

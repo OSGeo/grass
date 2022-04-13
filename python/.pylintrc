@@ -35,7 +35,7 @@ ignore-paths=grass/temporal/.*,
     grass/utils/.*,
     grass/exceptions/.*,
     grass/app/.*,
-    grass/jupyter/interact_display.py,
+
 
 # Files or directories matching the regex patterns are skipped. The regex
 # matches against base names, not paths.
