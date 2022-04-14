@@ -1,4 +1,4 @@
-# MODULE:    grass.jupyter.timeseries
+# MODULE:    grass.jupyter.timeseriesmap
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
@@ -18,7 +18,7 @@ import weakref
 import shutil
 import grass.script as gs
 
-from .display import GrassRenderer
+from .map import Map
 from .region import RegionManagerForTimeSeries
 
 
@@ -102,9 +102,9 @@ def collect_layers(timeseries, element_type, fill_gaps):
 
 
 class MethodCallCollector:
-    """Records lists of GRASS modules calls to hand to GrassRenderer.run().
+    """Records lists of GRASS modules calls to hand to Map.run().
 
-    Used for base layers and overlays in TimeSeries visualizations."""
+    Used for base layers and overlays in TimeSeriesMap visualizations."""
 
     def __init__(self):
         """Create list of GRASS display module calls"""
@@ -129,13 +129,13 @@ class MethodCallCollector:
         return wrapper
 
 
-class TimeSeries:
+class TimeSeriesMap:
     """Creates visualizations of time-space raster and vector datasets in Jupyter
     Notebooks.
 
     Basic usage::
 
-    >>> img = TimeSeries("series_name")
+    >>> img = TimeSeriesMap("series_name")
     >>> img.d_legend()  # Add legend
     >>> img.time_slider()  # Create TimeSlider
     >>> img.animate()
@@ -145,7 +145,7 @@ class TimeSeries:
     """
 
     # pylint: disable=too-many-instance-attributes
-    # Need more attributes to build timeseries visuals
+    # Need more attributes to build timeseriesmap visuals
 
     def __init__(
         self,
@@ -156,7 +156,7 @@ class TimeSeries:
         use_region=False,
         saved_region=None,
     ):
-        """Creates an instance of the TimeSeries visualizations class.
+        """Creates an instance of the TimeSeriesMap visualizations class.
 
         :param str timeseries: name of space-time dataset
         :param str element_type: element type, strds (space-time raster dataset)
@@ -225,13 +225,13 @@ class TimeSeries:
 
     @property
     def overlay(self):
-        """Add overlay to TimeSeries visualization"""
+        """Add overlay to TimeSeriesMap visualization"""
         self._layers_rendered = False
         return self._overlays
 
     @property
     def baselayer(self):
-        """Add base layer to TimeSeries visualization"""
+        """Add base layer to TimeSeriesMap visualization"""
         self._layers_rendered = False
         return self._baselayers
 
@@ -241,7 +241,7 @@ class TimeSeries:
         Passed to d.rast and d.erase. Either a standard color name, R:G:B triplet, or
         Hex. Default is white.
 
-        >>> img = TimeSeries("series_name")
+        >>> img = TimeSeriesMap("series_name")
         >>> img.set_background_color("#088B36")  # GRASS GIS green
         >>> img.animate()
 
@@ -259,12 +259,12 @@ class TimeSeries:
         self._layers_rendered = False
 
     def _render_baselayers(self, img):
-        """Add collected baselayers to GrassRenderer instance"""
+        """Add collected baselayers to Map instance"""
         for grass_module, kwargs in self._baselayers.calls:
             img.run(grass_module, **kwargs)
 
     def _render_legend(self, img):
-        """Add legend to GrassRenderer instance"""
+        """Add legend to Map instance"""
         info = gs.parse_command(
             "t.info", input=self.timeseries, flags="g", env=self._env
         )
@@ -277,7 +277,7 @@ class TimeSeries:
         )
 
     def _render_overlays(self, img):
-        """Add collected overlays to GrassRenderer instance"""
+        """Add collected overlays to Map instance"""
         for grass_module, kwargs in self._overlays.calls:
             img.run(grass_module, **kwargs)
 
@@ -286,7 +286,7 @@ class TimeSeries:
 
         Adds overlays and legend to base map.
         """
-        img = GrassRenderer(
+        img = Map(
             filename=filename, use_region=True, env=self._env, read_file=True
         )
         # Add overlays
@@ -297,7 +297,7 @@ class TimeSeries:
 
     def _render_layer(self, layer, filename):
         """Render layer to file with overlays and legend"""
-        img = GrassRenderer(
+        img = Map(
             filename=filename, use_region=True, env=self._env, read_file=True
         )
         if self._element_type == "strds":
@@ -322,7 +322,7 @@ class TimeSeries:
         # Random name needed to avoid potential conflict with layer names
         random_name_base = gs.append_random("base", 8) + ".png"
         base_file = os.path.join(self._tmpdir.name, random_name_base)
-        img = GrassRenderer(
+        img = Map(
             filename=base_file, use_region=True, env=self._env, read_file=True
         )
         # Fill image background

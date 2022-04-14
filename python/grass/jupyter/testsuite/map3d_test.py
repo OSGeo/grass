@@ -6,7 +6,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Test script for grass.jupyter's Grass3dRenderer
+# PURPOSE:   Test script for grass.jupyter's Map3D
 #
 # COPYRIGHT: (C) 2021 by Vaclav Petras and the GRASS Development Team
 #
@@ -50,8 +50,8 @@ def can_import_pyvirtualdisplay():
         return False
 
 
-class TestDisplay(TestCase):
-    """Test Grass3dRenderer"""
+class TestMap3D(TestCase):
+    """Test Map3D"""
 
     files = []
 
@@ -83,14 +83,14 @@ class TestDisplay(TestCase):
 
     def test_defaults(self):
         """Check that default settings work"""
-        renderer = gj.Grass3dRenderer()
+        renderer = gj.Map3D()
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertFileExists(renderer.filename)
 
     def test_filename(self):
         """Check that custom filename works"""
         custom_filename = "test_filename.png"
-        renderer = gj.Grass3dRenderer(filename=custom_filename)
+        renderer = gj.Map3D(filename=custom_filename)
         # Add files to self for cleanup later
         self.files.append(custom_filename)
         renderer.render(elevation_map="elevation", color_map="elevation")
@@ -98,13 +98,13 @@ class TestDisplay(TestCase):
 
     def test_hw(self):
         """Check that custom width and height works"""
-        renderer = gj.Grass3dRenderer(width=200, height=400)
+        renderer = gj.Map3D(width=200, height=400)
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertFileExists(renderer.filename)
 
     def test_overlay(self):
         """Check that overlay works"""
-        renderer = gj.Grass3dRenderer()
+        renderer = gj.Map3D()
         renderer.render(elevation_map="elevation", color_map="elevation")
         renderer.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
         self.assertFileExists(renderer.filename)
@@ -114,19 +114,19 @@ class TestDisplay(TestCase):
     )
     def test_pyvirtualdisplay_backend(self):
         """Check that pyvirtualdisplay backend works"""
-        renderer = gj.Grass3dRenderer(screen_backend="pyvirtualdisplay")
+        renderer = gj.Map3D(screen_backend="pyvirtualdisplay")
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertFileExists(renderer.filename)
 
     def test_shortcut_error(self):
         """Check that wrong screen backend fails"""
         with self.assertRaisesRegex(ValueError, "does_not_exist"):
-            gj.Grass3dRenderer(screen_backend="does_not_exist")
+            gj.Map3D(screen_backend="does_not_exist")
 
     @unittest.skipIf(not can_import_ipython(), "Cannot import IPython")
     def test_image_creation(self):
         """Check that show() works"""
-        renderer = gj.Grass3dRenderer()
+        renderer = gj.Map3D()
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertTrue(renderer.show(), "Failed to create IPython Image object")
 
