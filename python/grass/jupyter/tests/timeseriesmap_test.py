@@ -42,7 +42,8 @@ def test_collect_layers(space_time_raster_dataset):
 
 def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
-    img = gj.TimeSeriesMap(space_time_raster_dataset.name)
+    img = gj.TimeSeriesMap()
+    img.add_raster_series(space_time_raster_dataset.name)
     assert img.timeseries == space_time_raster_dataset.name
 
 
@@ -68,7 +69,9 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
 
 @pytest.mark.skipif(IPython is None, reason="IPython package not available")
 @pytest.mark.skipif(ipywidgets is None, reason="ipywidgets package not available")
-def test_animate_time_slider(space_time_raster_dataset):
+def test_save(space_time_raster_dataset):
     """Test returns from animate and time_slider are correct object types"""
-    img = gj.TimeSeriesMap(space_time_raster_dataset.name)
-    assert isinstance(img.animate(), IPython.display.Image)
+    img = gj.TimeSeriesMap()
+    img.add_raster_series(space_time_raster_dataset.name)
+    gif_file = img.save()
+    assert Path(gif_file).is_file()
