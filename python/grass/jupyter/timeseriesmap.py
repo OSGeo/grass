@@ -286,9 +286,7 @@ class TimeSeriesMap:
 
         Adds overlays and legend to base map.
         """
-        img = Map(
-            filename=filename, use_region=True, env=self._env, read_file=True
-        )
+        img = Map(filename=filename, use_region=True, env=self._env, read_file=True)
         # Add overlays
         self._render_overlays(img)
         # Add legend if needed
@@ -297,9 +295,7 @@ class TimeSeriesMap:
 
     def _render_layer(self, layer, filename):
         """Render layer to file with overlays and legend"""
-        img = Map(
-            filename=filename, use_region=True, env=self._env, read_file=True
-        )
+        img = Map(filename=filename, use_region=True, env=self._env, read_file=True)
         if self._element_type == "strds":
             img.d_rast(map=layer)
         elif self._element_type == "stvds":
@@ -322,9 +318,7 @@ class TimeSeriesMap:
         # Random name needed to avoid potential conflict with layer names
         random_name_base = gs.append_random("base", 8) + ".png"
         base_file = os.path.join(self._tmpdir.name, random_name_base)
-        img = Map(
-            filename=base_file, use_region=True, env=self._env, read_file=True
-        )
+        img = Map(filename=base_file, use_region=True, env=self._env, read_file=True)
         # Fill image background
         img.d_erase(bgcolor=self._bgcolor)
         # Add baselayers
