@@ -154,7 +154,6 @@ class TimeSeriesMap:
         self.timeseries = None
         self._element_type = None
         self._fill_gaps = None
-        self._bgcolor = "white"
         self._legend = None
         self._base_layer_calls = []
         self._overlay_calls = []
@@ -243,20 +242,6 @@ class TimeSeriesMap:
 
         return wrapper
 
-    def d_background(self, color):
-        """Set background color of images.
-
-        Passed to d.rast and d.erase. Either a standard color name, R:G:B triplet, or
-        Hex. Default is white.
-
-        >>> img = TimeSeriesMap("series_name")
-        >>> img.d_background("#088B36")  # GRASS GIS green
-        >>> img.show()
-
-        """
-        self._bgcolor = color
-        self._layers_rendered = False
-
     def d_legend(self, **kwargs):
         """Display legend.
 
@@ -332,8 +317,6 @@ class TimeSeriesMap:
         random_name_base = gs.append_random("base", 8) + ".png"
         base_file = os.path.join(self._tmpdir.name, random_name_base)
         img = Map(filename=base_file, use_region=True, env=self._env, read_file=True)
-        # Fill image background
-        img.d_erase(bgcolor=self._bgcolor)
         # Add baselayers
         self._render_baselayers(img)
 
