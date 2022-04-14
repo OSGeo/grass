@@ -40,15 +40,6 @@ def test_collect_layers(space_time_raster_dataset):
     assert len(names) == len(dates)
 
 
-def test_method_call_collector():
-    """Check that MethodCallCollector constructs and collects GRASS calls"""
-    mcc = gj.MethodCallCollector()
-    mcc.d_rast(map="elevation")
-    module, kwargs = mcc.calls[0]
-    assert module == "d.rast"
-    assert kwargs["map"] == "elevation"
-
-
 def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
     img = gj.TimeSeriesMap(space_time_raster_dataset.name)
