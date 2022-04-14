@@ -41,10 +41,10 @@ The objects in submodules and names of submodules may change in the future.
 .. versionadded:: 8.2
 """
 
-from .display import *
-from .interact_display import *
-from .render3d import *
-from .setup import *
-from .utils import *
-from .timeseries import *
+from .interactivemap import *
+from .map import *
+from .map3d import *
 from .reprojection_renderer import *
+from .setup import *
+from .timeseriesmap import *
+from .utils import *

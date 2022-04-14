@@ -19,21 +19,21 @@ import weakref
 
 import grass.script as gs
 
-from .display import GrassRenderer
+from .map import Map
 from .region import RegionManagerFor3D
 
 
-class Grass3dRenderer:
+class Map3D:
     """Creates and displays 3D visualization using GRASS GIS 3D rendering engine NVIZ.
 
     The 3D image is created using the *render* function which uses the *m.nviz.image*
     module in the background. Additional images can be
     placed on the image using the *overlay* attribute which is the 2D renderer, i.e.,
-    has interface of the *GrassRenderer* class.
+    has interface of the *Map* class.
 
     Basic usage::
 
-    >>> img = Grass3dRenderer()
+    >>> img = Map()
     >>> img.render(elevation_map="elevation", color_map="elevation", perspective=20)
     >>> img.overlay.d_legend(raster="elevation", at=(60, 97, 87, 92))
     >>> img.show()
@@ -142,7 +142,7 @@ class Grass3dRenderer:
                 ).format(screen_backend)
             )
 
-        self.overlay = GrassRenderer(
+        self.overlay = Map(
             height=height,
             width=width,
             filename=self._filename,
