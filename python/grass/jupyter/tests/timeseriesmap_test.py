@@ -1,4 +1,4 @@
-"""Test TimeSeries functions"""
+"""Test TimeSeriesMap functions"""
 
 
 from pathlib import Path
@@ -50,16 +50,16 @@ def test_method_call_collector():
 
 
 def test_default_init(space_time_raster_dataset):
-    """Check that TimeSeries init runs with default parameters"""
-    img = gj.TimeSeries(space_time_raster_dataset.name)
+    """Check that TimeSeriesMap init runs with default parameters"""
+    img = gj.TimeSeriesMap(space_time_raster_dataset.name)
     assert img.timeseries == space_time_raster_dataset.name
 
 
 @pytest.mark.parametrize("fill_gaps", [False, True])
 def test_render_layers(space_time_raster_dataset, fill_gaps):
     """Check that layers are rendered"""
-    # create instance of TimeSeries
-    img = gj.TimeSeries(space_time_raster_dataset.name, fill_gaps=fill_gaps)
+    # create instance of TimeSeriesMap
+    img = gj.TimeSeriesMap(space_time_raster_dataset.name, fill_gaps=fill_gaps)
     # test baselayer, overlay and d_legend here too for efficiency (rendering is
     # time-intensive)
     img.baselayer.d_rast(map=space_time_raster_dataset.raster_names[0])
@@ -78,5 +78,5 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
 @pytest.mark.skipif(ipywidgets is None, reason="ipywidgets package not available")
 def test_animate_time_slider(space_time_raster_dataset):
     """Test returns from animate and time_slider are correct object types"""
-    img = gj.TimeSeries(space_time_raster_dataset.name)
+    img = gj.TimeSeriesMap(space_time_raster_dataset.name)
     assert isinstance(img.animate(), IPython.display.Image)

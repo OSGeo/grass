@@ -1,4 +1,4 @@
-# MODULE:    grass.jupyter.display
+# MODULE:    grass.jupyter.map
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
@@ -23,15 +23,15 @@ import grass.script as gs
 from .region import RegionManagerFor2D
 
 
-class GrassRenderer:
-    """GrassRenderer creates and displays GRASS maps in
+class Map:
+    """Map creates and displays GRASS maps in
     Jupyter Notebooks.
 
     Elements are added to the display by calling GRASS display modules.
 
     Basic usage::
 
-    >>> m = GrassRenderer()
+    >>> m = Map()
     >>> m.run("d.rast", map="elevation")
     >>> m.run("d.legend", raster="elevation")
     >>> m.show()
@@ -41,7 +41,7 @@ class GrassRenderer:
 
     Shortcut usage::
 
-    >>> m = GrassRenderer()
+    >>> m = Map()
     >>> m.d_rast(map="elevation")
     >>> m.d_legend(raster="elevation")
     >>> m.show()
@@ -62,7 +62,7 @@ class GrassRenderer:
         read_file=False,
     ):
 
-        """Creates an instance of the GrassRenderer class.
+        """Creates an instance of the Map class.
 
         :param int height: height of map in pixels
         :param int width: width of map in pixels

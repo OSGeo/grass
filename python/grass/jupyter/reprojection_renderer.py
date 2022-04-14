@@ -19,7 +19,7 @@ import tempfile
 import weakref
 from pathlib import Path
 import grass.script as gs
-from .display import GrassRenderer
+from .map import Map
 from .utils import (
     estimate_resolution,
     get_location_proj_string,
@@ -117,10 +117,10 @@ class ReprojectionRenderer:
             resolution=resolution,
             env=self._psmerc_env,
         )
-        # Write raster to png file with GrassRenderer
+        # Write raster to png file with Map
         region_info = gs.region(env=self._src_env)
         filename = os.path.join(self._tmp_dir.name, f"{tgt_name}.png")
-        img = GrassRenderer(
+        img = Map(
             width=region_info["cols"],
             height=region_info["rows"],
             env=self._psmerc_env,

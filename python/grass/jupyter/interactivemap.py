@@ -1,7 +1,7 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
-# PURPOSE:   This module contains functions for interactive display
+# PURPOSE:   This module contains functions for interactive visualizations
 #            in Jupyter Notebooks.
 #
 # COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
