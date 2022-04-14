@@ -50,11 +50,12 @@ def test_default_init(space_time_raster_dataset):
 def test_render_layers(space_time_raster_dataset, fill_gaps):
     """Check that layers are rendered"""
     # create instance of TimeSeriesMap
-    img = gj.TimeSeriesMap(space_time_raster_dataset.name, fill_gaps=fill_gaps)
-    # test baselayer, overlay and d_legend here too for efficiency (rendering is
+    img = gj.TimeSeriesMap()
+    # test adding base layer and d_legend here too for efficiency (rendering is
     # time-intensive)
-    img.baselayer.d_rast(map=space_time_raster_dataset.raster_names[0])
-    img.overlay.d_barscale()
+    img.d_rast(map=space_time_raster_dataset.raster_names[0])
+    img.add_raster_series(space_time_raster_dataset.name, fill_gaps=fill_gaps)
+    img.d_barscale()
     img.d_legend()
     # Render layers
     img.render()
