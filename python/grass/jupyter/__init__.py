@@ -63,7 +63,8 @@ Static HTML versions of the example notebooks are available on GitHub_
 and interactive ones with live code are available on Binder:
 
 .. image:: https://mybinder.org/badge_logo.svg
-    :target: https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fbasic_example.ipynb
+    :target:
+        https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fbasic_example.ipynb
 
 There are also internal classes and functions which are not guaranteed to have
 as stable API, although they are available through their specific submodules.
