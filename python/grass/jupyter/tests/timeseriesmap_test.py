@@ -73,5 +73,5 @@ def test_save(space_time_raster_dataset):
     """Test returns from animate and time_slider are correct object types"""
     img = gj.TimeSeriesMap()
     img.add_raster_series(space_time_raster_dataset.name)
-    gif_file = img.save()
+    gif_file = img.save("image.gif")
     assert Path(gif_file).is_file()

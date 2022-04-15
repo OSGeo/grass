@@ -101,13 +101,13 @@ def collect_layers(timeseries, element_type, fill_gaps):
     return names, dates
 
 
-def check_timeseries_exists(timeseries):
+def check_timeseries_exists(timeseries, element_type):
     """Check that timeseries is time space dataset"""
-    test = gs.read_command("t.list", where=f"name='{timeseries}'")
+    test = gs.read_command("t.list", type=element_type, where=f"name='{timeseries}'")
     if not test:
         raise NameError(
-            _("Could not find space time raster or vector dataset named {}").format(
-                timeseries
+            _("Could not find space time dataset named {} of type {}").format(
+                timeseries, element_type
             )
         )
 
@@ -121,7 +121,7 @@ class TimeSeriesMap:
     >>> img = TimeSeriesMap("series_name")
     >>> img.d_legend()  # Add legend
     >>> img.show()  # Create TimeSlider
-    >>> img.save()
+    >>> img.save("image.gif")
 
     This class of grass.jupyter is experimental and under development. The API can
     change at anytime.
@@ -186,9 +186,9 @@ class TimeSeriesMap:
         :param str timeseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        check_timeseries_exists(timeseries)
-        self.timeseries = timeseries
         self._element_type = "strds"
+        check_timeseries_exists(timeseries, self._element_type)
+        self.timeseries = timeseries
         self._fill_gaps = fill_gaps
         self._timeseries_added = True
         # create list of layers to render and date/times
@@ -206,9 +206,9 @@ class TimeSeriesMap:
         :param str timeseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        check_timeseries_exists(timeseries)
-        self.timeseries = timeseries
         self._element_type = "stvds"
+        check_timeseries_exists(timeseries, self._element_type)
+        self.timeseries = timeseries
         self._fill_gaps = fill_gaps
         self._timeseries_added = True
         # create list of layers to render and date/times
@@ -317,6 +317,9 @@ class TimeSeriesMap:
         random_name_base = gs.append_random("base", 8) + ".png"
         base_file = os.path.join(self._tmpdir.name, random_name_base)
         img = Map(filename=base_file, use_region=True, env=self._env, read_file=True)
+        # We have to call d_erase to ensure the file is created. If there are no
+        # base layers, then there is nothing to render in random_base_name
+        img.d_erase()
         # Add baselayers
         self._render_baselayers(img)
 
@@ -392,7 +395,7 @@ class TimeSeriesMap:
 
     def save(
         self,
-        filename=None,
+        filename,
         duration=500,
         label=True,
         font="DejaVuSans.ttf",
@@ -423,10 +426,8 @@ class TimeSeriesMap:
             self.render()
 
         # filepath to output GIF
-        if filename:
-            assert filename.endswith(".gif"), "filename must end in '.gif'"
-        else:
-            filename = os.path.join(self._tmpdir.name, "image.gif")
+        if not filename.endswith(".gif"):
+            raise ValueError(_("filename must end in '.gif'"))
 
         images = []
         for date in self._dates:
