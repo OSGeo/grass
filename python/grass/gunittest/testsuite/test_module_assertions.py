@@ -1,3 +1,4 @@
+%%python
 import copy
 import subprocess
 
