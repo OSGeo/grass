@@ -186,6 +186,8 @@ class TimeSeriesMap:
         :param str timeseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
+        if self._timeseries_added and self.timeseries != timeseries:
+            raise AttributeError("Cannot add more than one space time dataset")
         self._element_type = "strds"
         check_timeseries_exists(timeseries, self._element_type)
         self.timeseries = timeseries
@@ -206,6 +208,8 @@ class TimeSeriesMap:
         :param str timeseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
+        if self._timeseries_added and self.timeseries != timeseries:
+            raise AttributeError("Cannot add more than one space time dataset")
         self._element_type = "stvds"
         check_timeseries_exists(timeseries, self._element_type)
         self.timeseries = timeseries
@@ -311,6 +315,13 @@ class TimeSeriesMap:
         (i.e. time_slider or animate). Can be time-consuming to run with large
         space-time datasets.
         """
+
+        if not self._timeseries_added:
+            raise RuntimeError(
+                "Cannot render space time dataset since none has been added."
+                "Use TimeSeriesMap.add_raster_series() or "
+                "TimeSeriesMap.add_vector_series() to add dataset"
+            )
 
         # Make base image (background and baselayers)
         # Random name needed to avoid potential conflict with layer names
