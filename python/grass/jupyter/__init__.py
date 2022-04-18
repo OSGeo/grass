@@ -44,7 +44,5 @@ The objects in submodules and names of submodules may change in the future.
 from .interactivemap import *
 from .map import *
 from .map3d import *
-from .reprojection_renderer import *
 from .setup import *
 from .timeseriesmap import *
-from .utils import *
