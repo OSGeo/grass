@@ -16,14 +16,14 @@
 """The *grass.jupyter* is a convenient GRASS GIS interface for Jupyter notebooks.
 
 Python is a great tool for data science and scientific computing. Jupyter_ is an
-environment with computational notebooks which makes it even better for tool for
+environment with computational notebooks which makes it even better tool for
 analysis and workflow prototyping. Computational notebooks are documents combining
 code, text, and results such as figures and tables. JupyterLab is an environment where
 you interact with all these parts. You can install it locally on your machine or
 use it online from some service provider.
 
 The *grass.jupyter* subpackage improves the integration of GRASS GIS and Jupyter
-notebooks comparing to the standard Python API. The original version was written
+notebooks compared to the standard Python API. The original version was written
 as part of Google Summer of Code in 2021 and experimental version was included in
 GRASS GIS 8.0. Since then, much more development happened adding better session
 handling and rendering of additional data types.
@@ -38,8 +38,8 @@ such as *gj*, like this::
 
 .. note::
     To import the package, you need to tell Python where the GRASS GIS Python package
-    is unless you manually set this on your system or in command line. Please, refer
-    to example notebooks linked below for an example of the full workflow.
+    is unless you manually set this on your system or in the command line. Please, refer
+    to the example notebooks linked below for an example of the full workflow.
 
 .. note::
     On Windows, there is no system Python and GRASS GIS needs to use its own Python.
