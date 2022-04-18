@@ -101,14 +101,129 @@ def collect_layers(timeseries, element_type, fill_gaps):
     return names, dates
 
 
-class MethodCallCollector:
-    """Records lists of GRASS modules calls to hand to Map.run().
+def check_timeseries_exists(timeseries, element_type):
+    """Check that timeseries is time space dataset"""
+    test = gs.read_command("t.list", type=element_type, where=f"name='{timeseries}'")
+    if not test:
+        raise NameError(
+            _("Could not find space time dataset named {} of type {}").format(
+                timeseries, element_type
+            )
+        )
 
-    Used for base layers and overlays in TimeSeriesMap visualizations."""
 
-    def __init__(self):
-        """Create list of GRASS display module calls"""
-        self.calls = []
+class TimeSeriesMap:
+    """Creates visualizations of time-space raster and vector datasets in Jupyter
+    Notebooks.
+
+    Basic usage::
+
+    >>> img = TimeSeriesMap("series_name")
+    >>> img.d_legend()  # Add legend
+    >>> img.show()  # Create TimeSlider
+    >>> img.save("image.gif")
+
+    This class of grass.jupyter is experimental and under development. The API can
+    change at anytime.
+    """
+
+    # pylint: disable=too-many-instance-attributes
+    # Need more attributes to build timeseriesmap visuals
+
+    def __init__(
+        self,
+        env=None,
+        use_region=False,
+        saved_region=None,
+    ):
+        """Creates an instance of the TimeSeriesMap visualizations class.
+
+        :param str env: environment
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
+        """
+
+        # Copy Environment
+        if env:
+            self._env = env.copy()
+        else:
+            self._env = os.environ.copy()
+
+        self.timeseries = None
+        self._element_type = None
+        self._fill_gaps = None
+        self._legend = None
+        self._base_layer_calls = []
+        self._overlay_calls = []
+        self._timeseries_added = False
+        self._layers_rendered = False
+        self._layers = None
+        self._dates = None
+        self._date_layer_dict = {}
+        self._date_filename_dict = {}
+
+        # Create a temporary directory for our PNG images
+        # Resource managed by weakref.finalize.
+        self._tmpdir = (
+            # pylint: disable=consider-using-with
+            tempfile.TemporaryDirectory()
+        )
+
+        def cleanup(tmpdir):
+            tmpdir.cleanup()
+
+        weakref.finalize(self, cleanup, self._tmpdir)
+
+        # Handle Regions
+        self._region_manager = RegionManagerForTimeSeries(
+            use_region, saved_region, self._env
+        )
+
+    def add_raster_series(self, timeseries, fill_gaps=False):
+        """
+        :param str timeseries: name of space-time dataset
+        :param bool fill_gaps: fill empty time steps with data from previous step
+        """
+        if self._timeseries_added and self.timeseries != timeseries:
+            raise AttributeError("Cannot add more than one space time dataset")
+        self._element_type = "strds"
+        check_timeseries_exists(timeseries, self._element_type)
+        self.timeseries = timeseries
+        self._fill_gaps = fill_gaps
+        self._timeseries_added = True
+        # create list of layers to render and date/times
+        self._layers, self._dates = collect_layers(
+            self.timeseries, self._element_type, self._fill_gaps
+        )
+        self._date_layer_dict = {
+            self._dates[i]: self._layers[i] for i in range(len(self._dates))
+        }
+        # Update Region
+        self._region_manager.set_region_from_timeseries(self.timeseries)
+
+    def add_vector_series(self, timeseries, fill_gaps=False):
+        """
+        :param str timeseries: name of space-time dataset
+        :param bool fill_gaps: fill empty time steps with data from previous step
+        """
+        if self._timeseries_added and self.timeseries != timeseries:
+            raise AttributeError("Cannot add more than one space time dataset")
+        self._element_type = "stvds"
+        check_timeseries_exists(timeseries, self._element_type)
+        self.timeseries = timeseries
+        self._fill_gaps = fill_gaps
+        self._timeseries_added = True
+        # create list of layers to render and date/times
+        self._layers, self._dates = collect_layers(
+            self.timeseries, self._element_type, self._fill_gaps
+        )
+        self._date_layer_dict = {
+            self._dates[i]: self._layers[i] for i in range(len(self._dates))
+        }
+        # Update Region
+        self._region_manager.set_region_from_timeseries(self.timeseries)
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
@@ -124,143 +239,30 @@ class MethodCallCollector:
             raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
 
         def wrapper(**kwargs):
-            self.calls.append((grass_module, kwargs))
+            if not self._timeseries_added:
+                self._base_layer_calls.append((grass_module, kwargs))
+            if self._timeseries_added:
+                self._overlay_calls.append((grass_module, kwargs))
 
         return wrapper
-
-
-class TimeSeriesMap:
-    """Creates visualizations of time-space raster and vector datasets in Jupyter
-    Notebooks.
-
-    Basic usage::
-
-    >>> img = TimeSeriesMap("series_name")
-    >>> img.d_legend()  # Add legend
-    >>> img.time_slider()  # Create TimeSlider
-    >>> img.animate()
-
-    This class of grass.jupyter is experimental and under development. The API can
-    change at anytime.
-    """
-
-    # pylint: disable=too-many-instance-attributes
-    # Need more attributes to build timeseriesmap visuals
-
-    def __init__(
-        self,
-        timeseries,
-        element_type="strds",
-        fill_gaps=False,
-        env=None,
-        use_region=False,
-        saved_region=None,
-    ):
-        """Creates an instance of the TimeSeriesMap visualizations class.
-
-        :param str timeseries: name of space-time dataset
-        :param str element_type: element type, strds (space-time raster dataset)
-                          or stvds (space-time vector dataset)
-        :param bool fill_gaps: fill empty time steps with data from previous step
-        :param str env: environment
-        :param use_region: if True, use either current or provided saved region,
-                          else derive region from rendered layers
-        :param saved_region: if name of saved_region is provided,
-                            this region is then used for rendering
-        """
-
-        # Copy Environment
-        if env:
-            self._env = env.copy()
-        else:
-            self._env = os.environ.copy()
-
-        self.timeseries = timeseries
-        self._element_type = element_type
-        self._fill_gaps = fill_gaps
-        self._bgcolor = "white"
-        self._legend = None
-        self._baselayers = MethodCallCollector()
-        self._overlays = MethodCallCollector()
-        self._layers_rendered = False
-
-        self._layers = None
-        self._dates = None
-
-        self._date_layer_dict = {}
-        self._date_filename_dict = {}
-
-        # create list of layers to render and date/times
-        self._layers, self._dates = collect_layers(
-            self.timeseries, self._element_type, self._fill_gaps
-        )
-        self._date_layer_dict = {
-            self._dates[i]: self._layers[i] for i in range(len(self._dates))
-        }
-
-        # Check that map is time space dataset
-        test = gs.read_command("t.list", where=f"name='{timeseries}'")
-        if not test:
-            raise NameError(
-                _(
-                    "Could not find space time raster or vector " "dataset named {}"
-                ).format(timeseries)
-            )
-
-        # Create a temporary directory for our PNG images
-        # Resource managed by weakref.finalize.
-        self._tmpdir = (
-            # pylint: disable=consider-using-with
-            tempfile.TemporaryDirectory()
-        )
-
-        def cleanup(tmpdir):
-            tmpdir.cleanup()
-
-        weakref.finalize(self, cleanup, self._tmpdir)
-
-        # Handle Regions
-        region_manager = RegionManagerForTimeSeries(use_region, saved_region, self._env)
-        region_manager.set_region_from_timeseries(self.timeseries)
-
-    @property
-    def overlay(self):
-        """Add overlay to TimeSeriesMap visualization"""
-        self._layers_rendered = False
-        return self._overlays
-
-    @property
-    def baselayer(self):
-        """Add base layer to TimeSeriesMap visualization"""
-        self._layers_rendered = False
-        return self._baselayers
-
-    def set_background_color(self, color):
-        """Set background color of images.
-
-        Passed to d.rast and d.erase. Either a standard color name, R:G:B triplet, or
-        Hex. Default is white.
-
-        >>> img = TimeSeriesMap("series_name")
-        >>> img.set_background_color("#088B36")  # GRASS GIS green
-        >>> img.animate()
-
-        """
-        self._bgcolor = color
-        self._layers_rendered = False
 
     def d_legend(self, **kwargs):
         """Display legend.
 
         Wraps d.legend and uses same keyword arguments.
         """
-        self._legend = kwargs
-        # If d_legend has been called, we need to re-render layers
-        self._layers_rendered = False
+        if "raster" in kwargs and not self._timeseries_added:
+            self._base_layer_calls.append(("d.legend", kwargs))
+        if "raster" in kwargs and self._timeseries_added:
+            self._overlay_calls.append(("d.legend", kwargs))
+        else:
+            self._legend = kwargs
+            # If d_legend has been called, we need to re-render layers
+            self._layers_rendered = False
 
     def _render_baselayers(self, img):
         """Add collected baselayers to Map instance"""
-        for grass_module, kwargs in self._baselayers.calls:
+        for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
     def _render_legend(self, img):
@@ -278,7 +280,7 @@ class TimeSeriesMap:
 
     def _render_overlays(self, img):
         """Add collected overlays to Map instance"""
-        for grass_module, kwargs in self._overlays.calls:
+        for grass_module, kwargs in self._overlay_calls:
             img.run(grass_module, **kwargs)
 
     def _render_blank_layer(self, filename):
@@ -314,13 +316,21 @@ class TimeSeriesMap:
         space-time datasets.
         """
 
+        if not self._timeseries_added:
+            raise RuntimeError(
+                "Cannot render space time dataset since none has been added."
+                "Use TimeSeriesMap.add_raster_series() or "
+                "TimeSeriesMap.add_vector_series() to add dataset"
+            )
+
         # Make base image (background and baselayers)
         # Random name needed to avoid potential conflict with layer names
         random_name_base = gs.append_random("base", 8) + ".png"
         base_file = os.path.join(self._tmpdir.name, random_name_base)
         img = Map(filename=base_file, use_region=True, env=self._env, read_file=True)
-        # Fill image background
-        img.d_erase(bgcolor=self._bgcolor)
+        # We have to call d_erase to ensure the file is created. If there are no
+        # base layers, then there is nothing to render in random_base_name
+        img.d_erase()
         # Add baselayers
         self._render_baselayers(img)
 
@@ -350,7 +360,7 @@ class TimeSeriesMap:
                 self._render_layer(layer, filename)
         self._layers_rendered = True
 
-    def time_slider(self, slider_width=None):
+    def show(self, slider_width=None):
         """Create interactive timeline slider.
 
         param str slider_width: width of datetime selection slider
@@ -394,14 +404,14 @@ class TimeSeriesMap:
         # Return interact widget with image and slider
         widgets.interact(view_image, date=slider)
 
-    def animate(
+    def save(
         self,
+        filename,
         duration=500,
         label=True,
         font="DejaVuSans.ttf",
         text_size=12,
         text_color="gray",
-        filename=None,
     ):
         """
         Creates a GIF animation of rendered layers.
@@ -410,26 +420,25 @@ class TimeSeriesMap:
         formats, visit:
         https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
 
+        param str filename: name of output GIF file
         param int duration: time to display each frame; milliseconds
         param bool label: include date/time stamp on each frame
         param str font: font file
         param int text_size: size of date/time text
         param str text_color: color to use for the text.
-        param str filename: name of output GIF file
         """
         # Create a GIF from the PNG images
         import PIL.Image  # pylint: disable=import-outside-toplevel
         import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
         import PIL.ImageFont  # pylint: disable=import-outside-toplevel
-        import IPython.display  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
         if not self._layers_rendered:
             self.render()
 
         # filepath to output GIF
-        if not filename:
-            filename = os.path.join(self._tmpdir.name, "image.gif")
+        if not filename.endswith(".gif"):
+            raise ValueError(_("filename must end in '.gif'"))
 
         images = []
         for date in self._dates:
@@ -456,4 +465,4 @@ class TimeSeriesMap:
         )
 
         # Display the GIF
-        return IPython.display.Image(filename)
+        return filename
