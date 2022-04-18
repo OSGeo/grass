@@ -740,7 +740,8 @@ def debug(msg, debug=1):
     """Display a debugging message using `g.message -d`
 
     :param str msg: debugging message to be displayed
-    :param str debug: debug level (0-5)
+    :param str debug: debug level (0-5) which is controlled by
+                      the ``DEBUG`` GRASS gisenv variable (set with `g.gisenv`)
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
