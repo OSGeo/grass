@@ -1269,7 +1269,6 @@ class CmdPanel(wx.Panel):
                             txt2 = SpinCtrl(
                                 parent=which_panel,
                                 id=wx.ID_ANY,
-                                size=globalvar.DIALOG_SPIN_SIZE,
                                 min=minValue,
                                 max=maxValue,
                             )
@@ -1423,7 +1422,6 @@ class CmdPanel(wx.Panel):
                     win = SpinCtrl(
                         parent=which_panel,
                         value=p.get("default", ""),
-                        size=globalvar.DIALOG_SPIN_SIZE,
                         min=minValue,
                         max=maxValue,
                     )
