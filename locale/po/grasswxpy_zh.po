@@ -16181,7 +16181,7 @@ msgstr "EPSG代码："
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
-msgstr "PROJ　字符串(必填)："
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
@@ -16189,7 +16189,7 @@ msgstr "EPSG文件："
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
 msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
-msgstr "装载EPSG代码列表(请耐心等待)，可直接输入EPSG代码或填写PROJ 字符串。"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"

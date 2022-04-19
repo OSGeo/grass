@@ -16181,7 +16181,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
-msgstr "PROJ szöveg (kötelező):"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
@@ -16189,7 +16189,7 @@ msgstr "EPSG fájl:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
 msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
-msgstr "EPSG kódok betöltése (legyen türelmes), vigye be az EPSG kódot vagy írja be közvetlenül a PROJ szöveget."
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"

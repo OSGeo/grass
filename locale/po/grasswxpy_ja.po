@@ -16232,7 +16232,7 @@ msgstr "EPSGコード："
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
-msgstr "PROJ文字列（必須）:"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
@@ -16240,7 +16240,7 @@ msgstr "EPSGファイル:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
 msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
-msgstr "ESPGコードの読み込み、ESPGコードの入力またはProj4ストリングを直接挿入する"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"

@@ -16200,7 +16200,7 @@ msgstr "Kód EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
-msgstr "Řetězec PROJ (vyžadováno):"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
 msgid "EPSG file:"
@@ -16208,7 +16208,7 @@ msgstr "Soubor s kódy EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
 msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
-msgstr "Načíst kódy EPSG (buďte trpěliví), vložit kód EPSG nebo vložit přímo řetězec PROJ."
+msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
 msgid "&Load EPSG codes"
