@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2021 by the GRASS Development Team
+(C) 2008-2022 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -737,11 +737,21 @@ def message(msg, flag=None):
 
 
 def debug(msg, debug=1):
-    """Display a debugging message using `g.message -d`
+    """Display a debugging message using `g.message -d`.
+
+    The visibility of a debug message at runtime is controlled by
+    setting the corresponding DEBUG level with `g.gisenv set="DEBUG=X"`
+    (with `X` set to the debug level specified in the function call).
 
     :param str msg: debugging message to be displayed
-    :param str debug: debug level (0-5) which is controlled by
-                      the ``DEBUG`` GRASS gisenv variable (set with `g.gisenv`)
+    :param str debug: debug level (0-5) with the following recommended levels:
+
+    ::
+
+        0 - silence
+        1 - message is printed once or few times per module
+        3 - each row (raster) or line (vector)
+        5 - each cell (raster) or point (vector)
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
