@@ -421,3 +421,6 @@ epub_exclude_files = ["search.html"]
 
 # If false, no index is generated.
 # epub_use_index = True
+
+# Where class documentation comes from (class or __init__ docstring).
+autoclass_content = "both"
