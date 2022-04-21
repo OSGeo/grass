@@ -90,8 +90,9 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     Optional *nprocs* is passed to the module if present.
 
     Returns an object with attributes *times* (list of average execution times),
-    *all_times* (list of lists of measured execution times), *efficiency* (parallel efficiency),
-    *nprocs* (list of *nprocs* values used), and *label* (the provided parameter as is).
+    *all_times* (list of lists of measured execution times),
+    *efficiency* (parallel efficiency), *nprocs* (list of *nprocs* values used),
+    and *label* (the provided parameter as is).
     """
     term_size = shutil.get_terminal_size()
     if hasattr(module, "get_bash"):
