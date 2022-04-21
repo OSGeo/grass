@@ -373,7 +373,6 @@ class TimeSeriesMap:
         """
         # Lazy Imports
         import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
-        from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
         if not self._layers_rendered:
@@ -394,15 +393,32 @@ class TimeSeriesMap:
             readout=True,
             layout=widgets.Layout(width=slider_width),
         )
+        play = widgets.Play(
+            interval=500,
+            value=0,
+            min=0,
+            max=len(self._dates) - 1,
+            step=1,
+            description="Press play",
+            disabled=False,
+        )
+        out_img = widgets.Image(value=b"", format="png")
+
+        def change_slider(change):
+            slider.value = slider.options[change.new]
+
+        play.observe(change_slider, names="value")
 
         # Display image associated with datetime
-        def view_image(date):
+        def change_image(date):
             # Look up layer name for date
             filename = self._date_filename_dict[date]
-            return Image(filename)
+            with open(filename, "rb") as f:
+                out_img.value = f.read()
 
         # Return interact widget with image and slider
-        widgets.interact(view_image, date=slider)
+        widgets.interactive_output(change_image, {"date": slider})
+        return widgets.VBox([widgets.HBox([play, slider]), out_img])
 
     def save(
         self,
