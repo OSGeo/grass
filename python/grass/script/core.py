@@ -745,13 +745,9 @@ def debug(msg, debug=1):
 
     :param str msg: debugging message to be displayed
     :param str debug: debug level (0-5) with the following recommended levels:
-
-    ::
-
-        0 - silence
-        1 - message is printed once or few times per module
-        3 - each row (raster) or line (vector)
-        5 - each cell (raster) or point (vector)
+        Use 1 for messages generated once of few times,
+        3 for messages generated for each raster row or vector line,
+        5 for messages generated for each raster cell or vector point.
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
