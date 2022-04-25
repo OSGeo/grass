@@ -5,7 +5,8 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
- *               Martin Wegmann <wegmann biozentrum.uni-wuerzburg.de>
+ *               Martin Wegmann <wegmann biozentrum.uni-wuerzburg.de>,
+ *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:      
  * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
  *
