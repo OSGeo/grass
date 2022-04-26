@@ -5,7 +5,7 @@
 # PURPOSE:   This module contains functions for visualizing raster and vector
 #            space-time datasets in Jupyter Notebooks
 #
-# COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2022 Caitlin Haedrich, and by the GRASS Development Team
 #
 #           This program is free software under the GNU General Public
 #           License (>=v2). Read the file COPYING that comes with GRASS

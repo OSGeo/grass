@@ -15,18 +15,19 @@ except ImportError:
     ipywidgets = None
 
 import grass.jupyter as gj
+from grass.jupyter.timeseriesmap import collect_layers, fill_none_values
 
 
 def test_fill_none_values():
     """Test that fill_none_values replaces None with previous value in list"""
     names = ["r1", "None", "r3"]
-    fill_names = gj.fill_none_values(names)
+    fill_names = fill_none_values(names)
     assert fill_names == ["r1", "r1", "r3"]
 
 
 def test_collect_layers(space_time_raster_dataset):
     """Check that collect layers returns list of layers and dates"""
-    names, dates = gj.collect_layers(
+    names, dates = collect_layers(
         space_time_raster_dataset.name, fill_gaps=False, element_type="strds"
     )
     # Test fill_gaps=False at empty time step

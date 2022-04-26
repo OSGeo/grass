@@ -4,7 +4,7 @@
 # PURPOSE:   This module contains functions for interactive visualizations
 #            in Jupyter Notebooks.
 #
-# COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
@@ -135,7 +135,7 @@ class Vector:
 
 
 class InteractiveMap:
-    """This class creates interative GRASS maps with folium.
+    """This class creates interactive GRASS maps with folium.
 
     Basic Usage:
 
