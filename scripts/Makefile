@@ -1,6 +1,7 @@
 MODULE_TOPDIR = ..
 
 SUBDIRS = \
+	d.background \
 	d.correlate \
 	d.frame \
 	d.out.file \

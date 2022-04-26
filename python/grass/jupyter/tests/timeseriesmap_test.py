@@ -40,18 +40,10 @@ def test_collect_layers(space_time_raster_dataset):
     assert len(names) == len(dates)
 
 
-def test_method_call_collector():
-    """Check that MethodCallCollector constructs and collects GRASS calls"""
-    mcc = gj.MethodCallCollector()
-    mcc.d_rast(map="elevation")
-    module, kwargs = mcc.calls[0]
-    assert module == "d.rast"
-    assert kwargs["map"] == "elevation"
-
-
 def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
-    img = gj.TimeSeriesMap(space_time_raster_dataset.name)
+    img = gj.TimeSeriesMap()
+    img.add_raster_series(space_time_raster_dataset.name)
     assert img.timeseries == space_time_raster_dataset.name
 
 
@@ -59,11 +51,12 @@ def test_default_init(space_time_raster_dataset):
 def test_render_layers(space_time_raster_dataset, fill_gaps):
     """Check that layers are rendered"""
     # create instance of TimeSeriesMap
-    img = gj.TimeSeriesMap(space_time_raster_dataset.name, fill_gaps=fill_gaps)
-    # test baselayer, overlay and d_legend here too for efficiency (rendering is
+    img = gj.TimeSeriesMap()
+    # test adding base layer and d_legend here too for efficiency (rendering is
     # time-intensive)
-    img.baselayer.d_rast(map=space_time_raster_dataset.raster_names[0])
-    img.overlay.d_barscale()
+    img.d_rast(map=space_time_raster_dataset.raster_names[0])
+    img.add_raster_series(space_time_raster_dataset.name, fill_gaps=fill_gaps)
+    img.d_barscale()
     img.d_legend()
     # Render layers
     img.render()
@@ -76,7 +69,9 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
 
 @pytest.mark.skipif(IPython is None, reason="IPython package not available")
 @pytest.mark.skipif(ipywidgets is None, reason="ipywidgets package not available")
-def test_animate_time_slider(space_time_raster_dataset):
+def test_save(space_time_raster_dataset):
     """Test returns from animate and time_slider are correct object types"""
-    img = gj.TimeSeriesMap(space_time_raster_dataset.name)
-    assert isinstance(img.animate(), IPython.display.Image)
+    img = gj.TimeSeriesMap()
+    img.add_raster_series(space_time_raster_dataset.name)
+    gif_file = img.save("image.gif")
+    assert Path(gif_file).is_file()
