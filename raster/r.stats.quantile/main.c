@@ -32,7 +32,7 @@ struct basecat
     size_t num_values;
     DCELL min, max, slot_size;
     int num_slots;
-    unsigned char *slot_bins;
+    unsigned short *slot_bins;
     int num_bins_alloc;
     int num_bins_used;
     struct bin *bins;
@@ -160,6 +160,8 @@ static void get_slot_counts(int basefile, int coverfile)
 	if (bc->max <= bc->min)
 	    continue;
 
+	bc->num_slots = num_slots;
+	/* minimum 1000 values per slot to reduce memory consumption */
 	num_slots_max = bc->total / 1000;
 	if (num_slots_max < 1)
 	    num_slots_max = 1;
@@ -167,7 +169,7 @@ static void get_slot_counts(int basefile, int coverfile)
 	    bc->num_slots = num_slots_max;
 	}
 
-	bc->slots = G_calloc(bc->num_slots, sizeof(unsigned int));
+	bc->slots = G_calloc(bc->num_slots, sizeof(size_t));
 	bc->slot_size = (bc->max - bc->min) / bc->num_slots;
     }
 
@@ -220,7 +222,7 @@ static void initialize_bins(void)
 
 	bc->num_bins_alloc = num_quants * 2;
 	bc->bins = G_calloc(bc->num_bins_alloc, sizeof(struct bin));
-	bc->slot_bins = G_calloc(bc->num_slots, sizeof(unsigned char));
+	bc->slot_bins = G_calloc(bc->num_slots, sizeof(unsigned short));
 
 	next = get_quantile(bc, quant);
 
