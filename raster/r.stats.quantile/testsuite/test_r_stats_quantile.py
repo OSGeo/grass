@@ -69,5 +69,6 @@ class TestStatsQuantile(TestCase):
             reference=output_str,
         )
 
+
 if __name__ == "__main__":
     test()
