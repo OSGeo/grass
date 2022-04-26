@@ -41,8 +41,8 @@ The objects in submodules and names of submodules may change in the future.
 .. versionadded:: 8.2
 """
 
-from .interactivemap import *
-from .map import *
-from .map3d import *
-from .setup import *
-from .timeseriesmap import *
+from .interactivemap import Raster, Vector, InteractiveMap
+from .map import Map
+from .map3d import Map3D
+from .setup import init
+from .timeseriesmap import TimeSeriesMap
