@@ -161,7 +161,7 @@ html_use_index = False
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "grass81Documentationdoc"
+htmlhelp_basename = "grass82Documentationdoc"
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -180,7 +180,7 @@ latex_elements = {
 latex_documents = [
     (
         "content",
-        "grass81Documentation.tex",
+        "grass82Documentation.tex",
         "GRASS GIS 8.1 Documentation",
         "GRASS Development Team",
         "manual",
@@ -215,7 +215,7 @@ latex_documents = [
 man_pages = [
     (
         "content",
-        "grass81documentation",
+        "grass82documentation",
         "GRASS GIS 8.1 Documentation",
         ["GRASS Development Team"],
         1,
@@ -234,10 +234,10 @@ man_pages = [
 texinfo_documents = [
     (
         "content",
-        "grass81Documentation",
+        "grass82Documentation",
         "GRASS GIS 8.1 Documentation",
         "GRASS Development Team",
-        "grass81Documentation",
+        "grass82Documentation",
         "One line description of project.",
         "Miscellaneous",
     ),
