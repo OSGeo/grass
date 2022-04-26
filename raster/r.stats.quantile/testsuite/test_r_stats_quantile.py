@@ -4,6 +4,7 @@ from grass.gunittest.gmodules import call_module
 
 # TODO: add verification of r.stats.quantile -p output
 
+
 class TestStatsQuantile(TestCase):
 
     base = "zipcodes"
