@@ -428,6 +428,11 @@ class TestNeighbors(TestCase):
                 reference=self.test_options[test_case][method],
                 precision=1e-5,
             )
+            self.assertRasterFitsUnivar(
+                raster="{}_threaded_raster_{}".format(test_case, method),
+                reference=self.test_options[test_case][method],
+                precision=1e-5,
+            )
 
     @classmethod
     def setUpClass(cls):
@@ -451,12 +456,24 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="elevation",
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -469,13 +486,26 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="elevation",
             output=",".join(outputs),
             method=["quantile"] * len(self.test_options[test_case]),
             quantile=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            output=",".join(outputs_threaded),
+            method=["quantile"] * len(self.test_options[test_case]),
+            quantile=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -487,7 +517,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             flags="c",
@@ -495,6 +530,15 @@ class TestNeighbors(TestCase):
             size=7,
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            flags="c",
+            input="elevation",
+            size=7,
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -505,7 +549,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         selection = "test_neighbors_selection"
         self.to_remove.append(selection)
         self.runModule(
@@ -519,6 +568,14 @@ class TestNeighbors(TestCase):
             selection=selection,
             method=list(self.test_options[test_case].keys()),
         )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            output=",".join(outputs_threaded),
+            selection=selection,
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
+        )
         self.check_univar(test_case)
 
     def test_weighting_function(self):
@@ -528,7 +585,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="elevation",
@@ -537,6 +599,16 @@ class TestNeighbors(TestCase):
             weighting_factor=2.0,
             output=",".join(outputs),
             method=list(self.test_options[test_case].keys()),
+        )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            size=7,
+            weighting_function="gaussian",
+            weighting_factor=2.0,
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            nprocs=4,
         )
         self.check_univar(test_case)
 
@@ -548,7 +620,12 @@ class TestNeighbors(TestCase):
             "{}_raster_{}".format(test_case, method)
             for method in self.test_options[test_case]
         ]
+        outputs_threaded = [
+            "{}_threaded_raster_{}".format(test_case, method)
+            for method in self.test_options[test_case]
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
 
         weights = tempfile()
         with open(weights, "w") as w:
@@ -563,6 +640,16 @@ class TestNeighbors(TestCase):
             method=list(self.test_options[test_case].keys()),
             weight=weights,
         )
+        self.assertModule(
+            "r.neighbors",
+            input="elevation",
+            size=5,
+            weighting_function="file",
+            output=",".join(outputs_threaded),
+            method=list(self.test_options[test_case].keys()),
+            weight=weights,
+            nprocs=4,
+        )
         self.check_univar(test_case)
 
         # Module fails with mutual exclusive options
@@ -576,6 +663,17 @@ class TestNeighbors(TestCase):
             method="sum",
             weight=weights,
         )
+        self.assertModuleFail(
+            "r.neighbors",
+            input="elevation",
+            flags="c",
+            size=5,
+            weighting_function="file",
+            output="{}_fails".format(test_case),
+            method="sum",
+            weight=weights,
+            nprocs=4,
+        )
 
     def test_standard_options_datatype(self):
         """Test if result is of integer or float data type depending on
@@ -586,14 +684,27 @@ class TestNeighbors(TestCase):
 
         methods = ["average", "variance", "diversity", "range", "mode"]
         outputs = ["{}_{}".format(test_case, method) for method in methods]
+        outputs_threaded = [
+            "{}_threaded_{}".format(test_case, method) for method in methods
+        ]
         self.to_remove.extend(outputs)
+        self.to_remove.extend(outputs_threaded)
         self.assertModule(
             "r.neighbors",
             input="landclass96",
             output=",".join(outputs),
             method=methods,
         )
-        for rmap in outputs:
+        self.assertModule(
+            "r.neighbors",
+            input="landclass96",
+            output=",".join(outputs_threaded),
+            method=methods,
+            nprocs=4,
+        )
+        from itertools import chain
+
+        for rmap in chain(outputs, outputs_threaded):
             rinfo = raster_info(rmap)
             self.assertTrue(
                 rinfo["datatype"] == "CELL"
