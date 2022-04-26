@@ -5,15 +5,6 @@
 
 ## HOWTO create a release
 
-### Preparations
-
-Check examples if still compiling
-
-```bash
-( cd doc/raster/r.example/ ; make clean ; make )
-( cd doc/vector/v.example/ ; make clean ; make )
-```
-
 ### Fix typos in source code with
 
 ```bash
@@ -68,34 +59,6 @@ git push origin config_sub_update
 # open PR and merge
 ```
 
-### Cleanup leftover rubbish files
-
-```bash
-rm -f locale/templates/*.pot
-rm -f locale/po/messages.mo
-rm -f demolocation/PERMANENT/.bash*
-find . -name '*~'     | xargs -r rm
-find . -name '*.bak'  | xargs -r rm
-find . -name '*.swp'  | xargs -r rm
-find . -name '.#*'    | xargs -r rm
-find . -name '*.orig' | xargs -r rm
-find . -name '*.rej'  | xargs -r rm
-find . -name '*.o'    | xargs -r rm
-find . -name '*.pyc'  | xargs -r rm
-find . -name 'OBJ.*'  | xargs -r rm -r
-find . -name '__pycache__' | xargs -r rm -r
-rm -f python/grass/ctypes/ctypesgencore/parser/lextab.py
-rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc \
-  gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
-chmod -R a+r *
-```
-
-Double check:
-
-```bash
-git status --ignored
-```
-
 ### Create release branch (only if not yet existing)
 
 .. see section below at end of file.
@@ -104,18 +67,18 @@ git status --ignored
 
 Directly edit VERSION file in GH interface:
 
-<https://github.com/OSGeo/grass/blob/releasebranch_8_0/include/VERSION>
+<https://github.com/OSGeo/grass/blob/releasebranch_8_2/include/VERSION>
 
 Example:
 
 ```bash
 8
-0
-1RC1
+2
+0RC1
 2022
 ```
 
-Commit with version message, e.g. "GRASS GIS 8.0.1RC1".
+Commit with version message, e.g. "GRASS GIS 8.2.0RC1".
 
 ### Create release tag
 
@@ -130,8 +93,8 @@ Preparation:
 #  assumptions:
 #  - own fork as "origin"
 #  - remote repo as "upstream"
-git fetch --all --prune && git checkout releasebranch_8_0 && \
- git merge upstream/releasebranch_8_0 && git push origin releasebranch_8_0
+git fetch --all --prune && git checkout releasebranch_8_2 && \
+ git merge upstream/releasebranch_8_2 && git push origin releasebranch_8_2
 
 # create version env var for convenience:
 MAJOR=`cat include/VERSION | head -1 | tail -1`
@@ -157,11 +120,11 @@ To be done in GH interface:
 <https://github.com/OSGeo/grass/releases/new>
 
 - select release_branch first, then
-- fill in "Release Title" (e.g., GRASS GIS 8.0.1RC1)
-- fill in "Create tag" field: 8.0.1RC1
+- fill in "Release Title" (e.g., GRASS GIS 8.2.0RC1)
+- fill in "Create tag" field: 8.2.0RC1
 
 Tag version | target (examples):
-  8.0.1RC1  | releasebranch_8_0
+  8.2.0RC1  | releasebranch_8_2
 
 - click on "Create new tag: ... on publish"
 
@@ -178,7 +141,7 @@ Using GH API here, see also
 - https://docs.github.com/en/rest/reference/repos#generate-release-notes-content-for-a-release
 
 ```bash
-gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.0.1" -f previous_tag_name=8.0.0 -f target_commitish=releasebranch_8_0 -q .body
+gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.2.0" -f previous_tag_name=8.2.0 -f target_commitish=releasebranch_8_2 -q .body
 ```
 
 If this fails or is incomplete, also a date may be used (that of the last release):
@@ -206,7 +169,7 @@ gzip ChangeLog_$VERSION
 
 Directly edit VERSION file in GH interface:
 
-<https://github.com/OSGeo/grass/blob/releasebranch_8_0/include/VERSION>
+<https://github.com/OSGeo/grass/blob/releasebranch_8_2/include/VERSION>
 
 Example:
 
@@ -226,8 +189,8 @@ Reset local copy to GH:
 #  assumptions:
 #  - own fork as "origin"
 #  - remote repo as "upstream"
-git fetch --all --prune && git checkout releasebranch_8_0 && \
- git merge upstream/releasebranch_8_0 && git push origin releasebranch_8_0
+git fetch --all --prune && git checkout releasebranch_8_2 && \
+ git merge upstream/releasebranch_8_2 && git push origin releasebranch_8_2
 ```
 
 ### Getting the source code tarball for upload on OSGeo server
@@ -270,16 +233,11 @@ ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJO
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 
 # update winGRASS related files: Update the winGRASS version
-# https://github.com/landam/wingrass-maintenance-scripts
+# https://github.com/landam/wingrass-maintenance-scripts/
 vim wingrass-maintenance-scripts/grass_packager_release.bat
 vim wingrass-maintenance-scripts/grass_addons.sh
 vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
 vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
-
-# update addons - major/minor release only <<-- outdated?!
-vim grass-addons/utils/addons/grass-addons-publish.sh
-vim grass-addons/utils/addons/grass-addons-build.sh
-vim grass-addons/utils/addons/grass-addons.sh
 ```
 
 # update addon builder
@@ -294,25 +252,11 @@ Release is done.
 
 ### Advertise the new release
 
-#### Write trac Wiki release page (probably to be dropped)
+#### Trac Wiki release page
 
-To easily generate the entries for the trac Wiki release page, use the `git log` approach:
-- extract entries from oneline git log and prepare for trac Wiki copy-paste:
+Add entry in https://trac.osgeo.org/grass/wiki/Release
 
-```
-# get date of previous release from https://github.com/OSGeo/grass/releases
-# verify
-git log --oneline --after="2022-01-28" | tac
-
-# prepare for trac Wiki release page (incl. PR trac macro)
-git log --oneline --after="2022-01-28" | cut -d' ' -f2- | sed 's+^+ * G80:+g' | sed 's+(#+(PR:+g' | sort -u
-```
-
-- store changelog entries in trac, by section:
-    - <https://trac.osgeo.org/grass/wiki/Release/8.0.x-News>
-    - <https://trac.osgeo.org/grass/wiki/Grass8/NewFeatures80>  <- add content of major changes only
-
-#### Update CMS web site to show new version (not for RCs!)
+#### Update Hugo web site to show new version (not for RCs!)
 
 Write announcement and publish it:
 - News section, https://github.com/OSGeo/grass-website/tree/master/content/news
@@ -341,27 +285,26 @@ Software pages:
 
 ```
      set MAJOR=8
-     set MINOR=0
-     set PATCH=1RC1
+     set MINOR=2
+     set PATCH=0RC1
 ```
 
 - Update addons (grass_addons.sh) rules, eg.
 
 ```
-     compile $GIT_PATH/grass8 $GISBASE_PATH/grass801RC1  $ADDON_PATH/grass801RC1/addons
+     compile $GIT_PATH/grass8 $GISBASE_PATH/grass820RC1  $ADDON_PATH/grass820RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
 ```
-     copy_addon 801RC1 8.0.1RC1
+     copy_addon 820RC1 8.2.0RC1
 ```
 
-#### Launchpad notes
+#### Ubuntu Launchpad notes
 
 - Create milestone and release: <https://launchpad.net/grass/+series>
 - Upload tarball for created release
-- Update daily recipe contents: <https://code.launchpad.net/~grass/+recipe/grass-trunk>
 
 #### Packaging notes
 
