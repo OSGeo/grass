@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("flow"));
     G_add_keyword(_("overland flow"));
     G_add_keyword(_("model"));
+    G_add_keyword(_("parallel"));
     module->description =
 	_("Overland flow hydrologic simulation using "
 	  "path sampling method (SIMWE).");

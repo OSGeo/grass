@@ -252,6 +252,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("solar"));
     G_add_keyword(_("sun energy"));
     G_add_keyword(_("shadow"));
+    G_add_keyword(_("parallel"));
     module->label = _("Solar irradiance and irradiation model.");
     module->description =
 	_("Computes direct (beam), diffuse and reflected solar irradiation raster "
