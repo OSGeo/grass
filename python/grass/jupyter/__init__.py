@@ -98,7 +98,7 @@ mentored by Vaclav Petras, Stephan Blumentrath, and Helena Mitasova.
 .. _GitHub: https://github.com/OSGeo/grass/blob/main/doc/notebooks/basic_example.ipynb
 """
 
-from .interactivemap import Raster, Vector, InteractiveMap
+from .interactivemap import InteractiveMap, Raster, Vector
 from .map import Map
 from .map3d import Map3D
 from .setup import init
