@@ -50,8 +50,8 @@ class Map:
 
     def __init__(
         self,
-        height=None,
         width=None,
+        height=None,
         filename=None,
         env=None,
         font="sans",

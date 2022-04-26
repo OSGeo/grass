@@ -132,12 +132,16 @@ class TimeSeriesMap:
 
     def __init__(
         self,
+        width=None,
+        height=None,
         env=None,
         use_region=False,
         saved_region=None,
     ):
         """Creates an instance of the TimeSeriesMap visualizations class.
 
+        :param int width: width of map in pixels
+        :param int height: height of map in pixels
         :param str env: environment
         :param use_region: if True, use either current or provided saved region,
                           else derive region from rendered layers
@@ -163,6 +167,8 @@ class TimeSeriesMap:
         self._dates = None
         self._date_layer_dict = {}
         self._date_filename_dict = {}
+        self._width = width
+        self._height = height
 
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.
@@ -288,7 +294,14 @@ class TimeSeriesMap:
 
         Adds overlays and legend to base map.
         """
-        img = Map(filename=filename, use_region=True, env=self._env, read_file=True)
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=filename,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
         # Add overlays
         self._render_overlays(img)
         # Add legend if needed
@@ -297,7 +310,14 @@ class TimeSeriesMap:
 
     def _render_layer(self, layer, filename):
         """Render layer to file with overlays and legend"""
-        img = Map(filename=filename, use_region=True, env=self._env, read_file=True)
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=filename,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
         if self._element_type == "strds":
             img.d_rast(map=layer)
         elif self._element_type == "stvds":
@@ -312,7 +332,7 @@ class TimeSeriesMap:
         """Renders image for each time-step in space-time dataset.
 
         Save PNGs to temporary directory. Must be run before creating a visualization
-        (i.e. time_slider or animate). Can be time-consuming to run with large
+        (i.e. show or save). Can be time-consuming to run with large
         space-time datasets.
         """
 
@@ -327,7 +347,14 @@ class TimeSeriesMap:
         # Random name needed to avoid potential conflict with layer names
         random_name_base = gs.append_random("base", 8) + ".png"
         base_file = os.path.join(self._tmpdir.name, random_name_base)
-        img = Map(filename=base_file, use_region=True, env=self._env, read_file=True)
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=base_file,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
         # We have to call d_erase to ensure the file is created. If there are no
         # base layers, then there is nothing to render in random_base_name
         img.d_erase()
@@ -373,7 +400,6 @@ class TimeSeriesMap:
         """
         # Lazy Imports
         import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
-        from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
         if not self._layers_rendered:
@@ -381,7 +407,7 @@ class TimeSeriesMap:
 
         # Set default slider width
         if not slider_width:
-            slider_width = "60%"
+            slider_width = "70%"
 
         # Datetime selection slider
         slider = widgets.SelectionSlider(
@@ -394,15 +420,35 @@ class TimeSeriesMap:
             readout=True,
             layout=widgets.Layout(width=slider_width),
         )
+        play = widgets.Play(
+            interval=500,
+            value=0,
+            min=0,
+            max=len(self._dates) - 1,
+            step=1,
+            description="Press play",
+            disabled=False,
+        )
+        out_img = widgets.Image(value=b"", format="png")
+
+        def change_slider(change):
+            slider.value = slider.options[change.new]
+
+        play.observe(change_slider, names="value")
 
         # Display image associated with datetime
-        def view_image(date):
+        def change_image(date):
             # Look up layer name for date
             filename = self._date_filename_dict[date]
-            return Image(filename)
+            with open(filename, "rb") as rfile:
+                out_img.value = rfile.read()
 
         # Return interact widget with image and slider
-        widgets.interact(view_image, date=slider)
+        widgets.interactive_output(change_image, {"date": slider})
+        layout = widgets.Layout(
+            width="100%", display="inline-flex", flex_flow="row wrap"
+        )
+        return widgets.HBox([play, slider, out_img], layout=layout)
 
     def save(
         self,
