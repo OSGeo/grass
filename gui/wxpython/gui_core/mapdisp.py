@@ -857,3 +857,9 @@ class FrameMixin:
 
     def Destroy(self):
         self.GetParent().Destroy()
+
+    def GetPosition(self):
+        return self.GetParent().GetPosition()
+
+    def SetPosition(self, pt):
+        self.GetParent().SetPosition(pt)
