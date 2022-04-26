@@ -12,10 +12,11 @@
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Radim Blazek <radim.blazek gmail.com>
+ *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:      generates raster maps of slope, aspect, curvatures and
  *               first and second order partial derivatives from a raster map
  *               of true elevation values
- * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -170,6 +171,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("aspect"));
     G_add_keyword(_("slope"));
     G_add_keyword(_("curvature"));
+    G_add_keyword(_("parallel"));
     module->label =
         _("Generates raster maps of slope, aspect, curvatures and "
           "partial derivatives from an elevation raster map.");
