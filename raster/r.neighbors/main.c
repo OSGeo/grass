@@ -6,12 +6,13 @@
  *               Markus Neteler <neteler itc.it>, Bob Covill <bcovill tekmap.ns.ca>,
  *               Brad Douglas <rez touchofmadness.com>, Glynn Clements <glynn gclements.plus.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Jan-Oliver Wagner <jan intevation.de>,
- *               Radim Blazek <radim.blazek gmail.com>
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Aaron Saw Min Sern (OpenMP parallelization)
  *
  * PURPOSE:      Makes each cell category value a function of the category values 
  *               assigned to the cells around it, and stores new cell values in an
  *               output raster map layer
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -527,7 +528,7 @@ int main(int argc, char *argv[])
                  * Thus original data start is shifted by ncb.dist! */
                 for (i = 0; i < num_outputs; i++)
                     outputs[i].buf[brow_idx * ncols + col] = ncb.buf[t][ncb.dist][col + ncb.dist];
-                    continue;
+                continue;
             }
 
             if (weights)
@@ -536,22 +537,22 @@ int main(int argc, char *argv[])
                 n = gather(values[t], col, t);
 
             for (i = 0; i < num_outputs; i++) {
-            struct output *out = &outputs[i];
-            DCELL *rp = &out->buf[brow_idx * ncols + col];
+                struct output *out = &outputs[i];
+                DCELL *rp = &out->buf[brow_idx * ncols + col];
 
-            if (n == 0) {
-                Rast_set_d_null_value(rp, 1);
-            }
-            else {
-                if (out->method_fn_w) {
-                    memcpy(values_w_tmp[t], values_w[t], sizeof(DCELL) * n * 2);
-                    (*out->method_fn_w)(rp, values_w_tmp[t], n, &out->quantile);
+                if (n == 0) {
+                    Rast_set_d_null_value(rp, 1);
                 }
                 else {
-                    memcpy(values_tmp[t], values[t], sizeof(DCELL) * n);
-                    (*out->method_fn)(rp, values_tmp[t], n, &out->quantile);
+                    if (out->method_fn_w) {
+                        memcpy(values_w_tmp[t], values_w[t], sizeof(DCELL) * n * 2);
+                        (*out->method_fn_w)(rp, values_w_tmp[t], n, &out->quantile);
+                    }
+                    else {
+                        memcpy(values_tmp[t], values[t], sizeof(DCELL) * n);
+                        (*out->method_fn)(rp, values_tmp[t], n, &out->quantile);
+                    }
                 }
-            }
             }
         }
             #pragma omp atomic update

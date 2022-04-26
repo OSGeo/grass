@@ -27,7 +27,3 @@ extern void read_weights(const char *);
 extern double gaussian(double, double);
 extern double exponential(double, double);
 extern void compute_weights(const char *, double);
-
-/* parallel.c */
-extern int segment_open(void);
-extern void segment_close(void);
