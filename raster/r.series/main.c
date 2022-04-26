@@ -3,17 +3,21 @@
  *
  * MODULE:       r.series
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
- *               Martin Wegmann <wegmann biozentrum.uni-wuerzburg.de>
+ *               Martin Wegmann <wegmann biozentrum.uni-wuerzburg.de>,
+ *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:      
- * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -114,22 +118,29 @@ int main(int argc, char *argv[])
     struct
     {
         struct Option *input, *file, *output, *method, *weights, *quantile,
-            *range;
+            *range, *nprocs, *memory;
     } parm;
     struct
     {
         struct Flag *nulls, *lazy;
     } flag;
-    int i;
+    int i, t;
+    int nprocs;
+    bool threaded;
     int num_inputs;
-    struct input *inputs = NULL;
+    struct input **inputs = NULL;
+    int bufrows;
+#if defined(_OPENMP)
+    omp_lock_t fd_lock;
+#endif
+
     int num_outputs;
     struct output *outputs = NULL;
     struct History history;
-    DCELL *values = NULL, *values_tmp = NULL;
+    DCELL **values = NULL, **values_tmp = NULL;
 
-    DCELL(*values_w)[2];     /* list of values and weights */
-    DCELL(*values_w_tmp)[2]; /* list of values and weights */
+    DCELL(**values_w)[2];     /* list of values and weights */
+    DCELL(**values_w_tmp)[2]; /* list of values and weights */
     int have_weights;
     int nrows, ncols;
     int row, col;
@@ -142,6 +153,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("aggregation"));
     G_add_keyword(_("series"));
+    G_add_keyword(_("parallel"));
     module->description =
         _("Makes each output cell value a "
           "function of the values assigned to the corresponding cells "
@@ -190,6 +202,9 @@ int main(int argc, char *argv[])
     parm.range->key_desc = "lo,hi";
     parm.range->description = _("Ignore values outside this range");
 
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
+
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
     flag.nulls->description = _("Propagate NULLs");
@@ -200,6 +215,20 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    sscanf(parm.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1) {
+      G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(nprocs);
+#else
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
+                    "threads setting."));
+    nprocs = 1;
+#endif
+    threaded = nprocs > 1;
 
     lo = -1.0 / 0.0; /* -inf */
     hi = 1.0 / 0.0;  /* inf */
@@ -221,6 +250,7 @@ int main(int argc, char *argv[])
     intype = -1;
 
     /* process the input maps from the file */
+    inputs = G_calloc(nprocs, sizeof *inputs);
     if (parm.file->answer) {
         FILE *in;
         int max_inputs;
@@ -270,27 +300,33 @@ int main(int argc, char *argv[])
 
             if (num_inputs >= max_inputs) {
                 max_inputs += 100;
-                inputs = G_realloc(inputs, max_inputs * sizeof(struct input));
+                for (t = 0; t < nprocs; t++)
+                    inputs[t] = G_realloc(inputs[t], max_inputs * sizeof(struct input));
             }
-            p = &inputs[num_inputs++];
 
-            p->name = G_store(name);
-            p->weight = weight;
-            G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                              p->name, p->weight);
-            p->fd = Rast_open_old(p->name, "");
-            if (p->fd < 0)
-                G_fatal_error(_("Unable to open input raster <%s>"), p->name);
-            maptype = Rast_get_map_type(p->fd);
-            if (intype == -1)
-                intype = maptype;
-            else {
-                if (intype != maptype)
-                    intype = DCELL_TYPE;
+            for (t = 0; t < nprocs; t++) {
+                p = &inputs[t][num_inputs];
+
+                p->name = G_store(name);
+                p->weight = weight;
+                G_verbose_message(_("Reading raster map <%s> using weight %f..."),
+                                  p->name, p->weight);
+                p->fd = Rast_open_old(p->name, "");
+                if (p->fd < 0)
+                    G_fatal_error(_("Unable to open input raster <%s>"), p->name);
+                maptype = Rast_get_map_type(p->fd);
+                if (intype == -1)
+                    intype = maptype;
+                else {
+                    if (intype != maptype)
+                        intype = DCELL_TYPE;
+                }
+                if (flag.lazy->answer)
+                    Rast_close(p->fd);
+                p->buf = Rast_allocate_d_buf();
             }
-            if (flag.lazy->answer)
-                Rast_close(p->fd);
-            p->buf = Rast_allocate_d_buf();
+
+            num_inputs++;
         }
 
         if (num_inputs < 1)
@@ -317,41 +353,64 @@ int main(int argc, char *argv[])
             G_fatal_error(
                 _("input= and weights= must have the same number of values"));
 
-        inputs = G_malloc(num_inputs * sizeof(struct input));
+        for (t = 0; t < nprocs; t++) {
+            inputs[t] = G_malloc(num_inputs * sizeof(struct input));
 
-        for (i = 0; i < num_inputs; i++) {
-            struct input *p = &inputs[i];
+            for (i = 0; i < num_inputs; i++) {
+                struct input *p = &inputs[t][i];
 
-            p->name = parm.input->answers[i];
-            p->weight = 1.0;
+                p->name = parm.input->answers[i];
+                p->weight = 1.0;
 
-            if (num_weights) {
-                p->weight = (DCELL) atof(parm.weights->answers[i]);
+                if (num_weights) {
+                    p->weight = (DCELL) atof(parm.weights->answers[i]);
 
-                if (p->weight < 0)
-                    G_fatal_error(_("Weights must be positive"));
+                    if (p->weight < 0)
+                        G_fatal_error(_("Weights must be positive"));
 
-                if (p->weight != 1)
-                    have_weights = 1;
+                    if (p->weight != 1)
+                        have_weights = 1;
+                }
+
+                G_verbose_message(_("Reading raster map <%s> using weight %f..."),
+                                  p->name, p->weight);
+                p->fd = Rast_open_old(p->name, "");
+                if (p->fd < 0)
+                    G_fatal_error(_("Unable to open input raster <%s>"), p->name);
+                maptype = Rast_get_map_type(p->fd);
+                if (intype == -1)
+                    intype = maptype;
+                else {
+                    if (intype != maptype)
+                        intype = DCELL_TYPE;
+                }
+                if (flag.lazy->answer)
+                    Rast_close(p->fd);
+                p->buf = Rast_allocate_d_buf();
             }
 
-            G_verbose_message(_("Reading raster map <%s> using weight %f..."),
-                              p->name, p->weight);
-            p->fd = Rast_open_old(p->name, "");
-            if (p->fd < 0)
-                G_fatal_error(_("Unable to open input raster <%s>"), p->name);
-            maptype = Rast_get_map_type(p->fd);
-            if (intype == -1)
-                intype = maptype;
-            else {
-                if (intype != maptype)
-                    intype = DCELL_TYPE;
-            }
-            if (flag.lazy->answer)
-                Rast_close(p->fd);
-            p->buf = Rast_allocate_d_buf();
         }
     }
+
+    nrows = Rast_window_rows();
+    ncols = Rast_window_cols();
+
+    bufrows = atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (bufrows > nrows) {
+        bufrows = nrows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < nprocs) {
+        bufrows = nprocs;
+    }
+
+    /* set the locks for lazily opening raster files */
+#if defined(_OPENMP)
+    if (flag.lazy->answer && threaded) {
+        omp_init_lock(&fd_lock);
+    }
+#endif
 
     /* process the output maps */
     for (i = 0; parm.output->answers[i]; i++) ;
@@ -397,7 +456,7 @@ int main(int argc, char *argv[])
         out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
                             ? atof(parm.quantile->answers[i])
                             : 0;
-        out->buf = Rast_allocate_d_buf();
+        out->buf = G_calloc((size_t) bufrows * ncols, sizeof(DCELL));
         if (menu[method].outtype == -1)
             out->fd = Rast_open_new(output_name, intype);
         else
@@ -405,80 +464,149 @@ int main(int argc, char *argv[])
     }
 
     /* initialise variables */
-    values = G_malloc(num_inputs * sizeof(DCELL));
-    values_tmp = G_malloc(num_inputs * sizeof(DCELL));
+    values = G_malloc(nprocs * sizeof *values);
+    values_tmp = G_malloc(nprocs * sizeof *values_tmp);
+    for (t = 0; t < nprocs; t++) {
+        values[t] = G_malloc(sizeof(DCELL) * num_inputs);
+        values_tmp[t] = G_malloc(sizeof(DCELL) * num_inputs);
+    }
     values_w = NULL;
     values_w_tmp = NULL;
     if (have_weights) {
-        values_w = (DCELL(*)[2]) G_malloc(num_inputs * 2 * sizeof(DCELL));
-        values_w_tmp = (DCELL(*)[2]) G_malloc(num_inputs * 2 * sizeof(DCELL));
+        values_w = G_malloc(nprocs * sizeof *values_w);
+        values_w_tmp = G_malloc(nprocs * sizeof *values_w_tmp);
+        for (t = 0; t < nprocs; t++) {
+            values_w[t] = (DCELL(*)[2]) G_malloc(sizeof(DCELL) * num_inputs * 2);
+            values_w_tmp[t] = (DCELL(*)[2]) G_malloc(sizeof(DCELL) * num_inputs * 2);
+        }
     }
-
-    nrows = Rast_window_rows();
-    ncols = Rast_window_cols();
 
     /* process the data */
     G_verbose_message(_("Percent complete..."));
 
-    for (row = 0; row < nrows; row++) {
-        G_percent(row, nrows, 2);
+    int computed = 0;
+    int written = 0;
 
-        if (flag.lazy->answer) {
-            /* Open the files only on run time */
-            for (i = 0; i < num_inputs; i++) {
-                inputs[i].fd = Rast_open_old(inputs[i].name, "");
-                Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
-                Rast_close(inputs[i].fd);
-            }
-        } else {
-            for (i = 0; i < num_inputs; i++)
-                Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
+    while (written < nrows) {
+        int range = bufrows;
+        if (range > nrows - written) {
+            range = nrows - written;
         }
+        int start = written;
+        int end = written + range;
 
-        for (col = 0; col < ncols; col++) {
-            int null = 0;
-
-            for (i = 0; i < num_inputs; i++) {
-                DCELL v = inputs[i].buf[col];
-
-                if (Rast_is_d_null_value(&v))
-                    null = 1;
-                else if (parm.range->answer && (v < lo || v > hi)) {
-                    Rast_set_d_null_value(&v, 1);
-                    null = 1;
-                }
-                values[i] = v;
-                if (have_weights) {
-                    values_w[i][0] = v;
-                    values_w[i][1] = inputs[i].weight;
-                }
+#pragma omp parallel if(threaded) private(row, col, i)
+        {
+            int t_id = 0;
+#if defined(_OPENMP)
+            t_id = omp_get_thread_num();
+#endif
+            struct input *in = inputs[t_id];
+            DCELL *val = values[t_id];
+            DCELL *val_tmp = values_tmp[t_id];
+            DCELL (*val_w)[2] = NULL;
+            DCELL (*val_w_tmp)[2] = NULL;
+            if (have_weights) {
+                val_w = values_w[t_id];
+                val_w_tmp = values_w_tmp[t_id];
             }
 
-            for (i = 0; i < num_outputs; i++) {
-                struct output *out = &outputs[i];
+#pragma omp for schedule(static)
+            for (row = start; row < end; row++) {
+                G_percent(computed, nrows, 2);
 
-                if (null && flag.nulls->answer)
-                    Rast_set_d_null_value(&out->buf[col], 1);
-                else {
-                    if (out->method_fn_w) {
-                        memcpy(values_w_tmp, values_w,
-                               num_inputs * 2 * sizeof(DCELL));
-                        (*out->method_fn_w)(&out->buf[col], values_w_tmp,
-                                            num_inputs, &out->quantile);
-                    } else {
-                        memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
-                        (*out->method_fn)(&out->buf[col], values_tmp,
-                                          num_inputs, &out->quantile);
+                if (flag.lazy->answer) {
+                    /* Open the files only on run time */
+                    for (i = 0; i < num_inputs; i++) {
+#if defined(_OPENMP)
+                        if(threaded) {
+                            omp_set_lock(&fd_lock);
+                            in[i].fd = Rast_open_old(in[i].name, "");
+                            omp_unset_lock(&fd_lock);
+
+                            Rast_get_d_row(in[i].fd, in[i].buf, row);
+
+                            omp_set_lock(&fd_lock);
+                            Rast_close(in[i].fd);
+                            omp_unset_lock(&fd_lock);
+                        } else {
+                            in[i].fd = Rast_open_old(in[i].name, "");
+                            Rast_get_d_row(in[i].fd, in[i].buf, row);
+                            Rast_close(in[i].fd);
+                        }
+#else
+                        in[i].fd = Rast_open_old(in[i].name, "");
+                        Rast_get_d_row(in[i].fd, in[i].buf, row);
+                        Rast_close(in[i].fd);
+#endif
+                    }
+                } else {
+                    for (i = 0; i < num_inputs; i++)
+                        Rast_get_d_row(in[i].fd, in[i].buf, row);
+                }
+
+                for (col = 0; col < ncols; col++) {
+                    int null = 0;
+                    size_t s = (size_t) (row - start) * ncols + col;
+
+                    for (i = 0; i < num_inputs; i++) {
+                        DCELL v = in[i].buf[col];
+
+                        if (Rast_is_d_null_value(&v))
+                            null = 1;
+                        else if (parm.range->answer && (v < lo || v > hi)) {
+                            Rast_set_d_null_value(&v, 1);
+                            null = 1;
+                        }
+                        values[t_id][i] = v;
+                        if (have_weights) {
+                            val_w[i][0] = v;
+                            val_w[i][1] = in[i].weight;
+                        }
+                    }
+
+                    for (i = 0; i < num_outputs; i++) {
+                        struct output *out = &outputs[i];
+
+                        if (null && flag.nulls->answer)
+                            Rast_set_d_null_value(&out->buf[s], 1);
+                        else {
+                            if (out->method_fn_w) {
+                                memcpy(val_w_tmp, val_w,
+                                       num_inputs * 2 * sizeof(DCELL));
+                                (*out->method_fn_w)(&out->buf[s], val_w_tmp,
+                                                    num_inputs, &out->quantile);
+                            } else {
+                                memcpy(val_tmp, val, num_inputs * sizeof(DCELL));
+                                (*out->method_fn)(&out->buf[s], val_tmp,
+                                                  num_inputs, &out->quantile);
+                            }
+                        }
                     }
                 }
-            }
+
+                computed++;
+            } /* end for loop */
+        } /* end parallel region */
+
+        /* write output buffer to disk */
+        for (i = 0; i < num_outputs; i++) {
+            struct output *out = &outputs[i];
+            for (row = start; row < end; row++)
+                Rast_put_d_row(out->fd, &out->buf[(size_t) (row - start) * ncols]);
         }
+        written = end;
 
-        for (i = 0; i < num_outputs; i++)
-            Rast_put_d_row(outputs[i].fd, outputs[i].buf);
+    } /* end while loop */
+
+    G_percent(nrows, nrows, 2);
+
+    /* destroy locks */
+#if defined(_OPENMP)
+    if (flag.lazy->answer && nprocs > 1) {
+        omp_destroy_lock(&fd_lock);
     }
-
-    G_percent(row, nrows, 2);
+#endif
 
     /* close output maps */
     for (i = 0; i < num_outputs; i++) {
@@ -491,10 +619,11 @@ int main(int argc, char *argv[])
         Rast_write_history(out->name, &history);
     }
 
-    /* Close input maps */
+    /* close input maps */
     if (!flag.lazy->answer) {
-        for (i = 0; i < num_inputs; i++)
-            Rast_close(inputs[i].fd);
+        for (t = 0; t < nprocs; t++)
+            for (i = 0; i < num_inputs; i++)
+                Rast_close(inputs[t][i].fd);
     }
 
     exit(EXIT_SUCCESS);
