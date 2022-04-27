@@ -1,0 +1,22 @@
+notes:
+  categories:
+    - title: Modules
+      regexp: '(r|r3|i|g|t|v|d|ps)\.[^ ]*: '
+
+    - title: Graphical User Interface
+      regexp: 'wxGUI.*: '
+
+    - title: Python
+      regexp: '(grass\.[^ ]*|libpython.*|pythonlib.*): '
+
+    - title: Documentation
+      regexp: '(doc|man|manual|[Ss]phinx): '
+
+    - title: Docker
+      regexp: '[Dd]ocker: '
+
+    - title: Singularity
+      regexp: '[Ss]ingularity: '
+
+    - title: Continuous Integration and Tests
+      regexp: '(CI|ci|tests|pytest): '
