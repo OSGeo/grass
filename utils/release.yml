@@ -19,7 +19,7 @@ notes:
       regexp: '(init|startup): '
 
     - title: Translations, Internationalization, and Localization
-      regexp: '(i18n|L10n|L10N|t9n|translations?): '
+      regexp: '(i18n|i18N|L10n|L10N|t9n|translations?): '
 
     - title: Windows
       regexp: '(winGRASS|win|[Ww]indows): '
@@ -36,6 +36,10 @@ notes:
     - title: Continuous Integration, Tests, Code Quality, and Checks
       regexp: '(CI|ci|[Tt]ests|[Cc]hecks|pytest): '
 
+    - title: Contributing and Management
+      regexp: '(contributing|CONTRIBUTING.md|contributors.csv): '
+
   exclude:
     regexp:
       - "[Hh]appy [Nn]ew [Yy]ear"
+      - "version: "
