@@ -23,6 +23,20 @@ PRETTY_TEMPLATE = (
 )
 
 
+def remove_excluded_changes(changes, exclude):
+    """Return a list of changes with excluded changes removed"""
+    result = []
+    for change in changes:
+        include = True
+        for expression in exclude["regexp"]:
+            if re.match(expression, change):
+                include = False
+                break
+        if include:
+            result.append(change)
+    return result
+
+
 def round_down_to_five(value):
     """Round down to the nearest multiple of five"""
     base = 5
@@ -102,7 +116,7 @@ def print_notes(
     print(binder_badge(end_tag))
 
 
-def notes_from_gh_api(start_tag, end_tag, branch, categories):
+def notes_from_gh_api(start_tag, end_tag, branch, categories, exclude):
     """Generate notes from GitHub API"""
     text = subprocess.run(
         [
@@ -132,7 +146,7 @@ def notes_from_gh_api(start_tag, end_tag, branch, categories):
             changes.append(change[2:])
         else:
             changes.append(change)
-
+    changes = remove_excluded_changes(changes=changes, exclude=exclude)
     print_notes(
         start_tag=start_tag,
         end_tag=end_tag,
@@ -153,7 +167,7 @@ def csv_to_dict(filename, key, value):
     return result
 
 
-def notes_from_git_log(start_tag, end_tag, categories):
+def notes_from_git_log(start_tag, end_tag, categories, exclude):
     """Generate notes from git log"""
     text = subprocess.run(
         ["git", "log", f"{start_tag}..{end_tag}", f"--pretty=format:{PRETTY_TEMPLATE}"],
@@ -196,6 +210,7 @@ def notes_from_git_log(start_tag, end_tag, categories):
                 except KeyError:
                     github_name = git_author
         lines.append(f"{commit['message']} by {github_name}")
+    lines = remove_excluded_changes(changes=lines, exclude=exclude)
     print_notes(
         start_tag=start_tag,
         end_tag=end_tag,
@@ -242,18 +257,22 @@ def main():
         ).stdout.strip()
 
     with open("release.yml", encoding="utf-8") as file:
-        categories = yaml.safe_load(file.read())["notes"]["categories"]
+        config = yaml.safe_load(file.read())["notes"]
 
     if args.backend == "api":
         notes_from_gh_api(
             start_tag=args.start_tag,
             end_tag=end_tag,
             branch=args.branch,
-            categories=categories,
+            categories=config["categories"],
+            exclude=config["exclude"],
         )
     else:
         notes_from_git_log(
-            start_tag=args.start_tag, end_tag=end_tag, categories=categories
+            start_tag=args.start_tag,
+            end_tag=end_tag,
+            categories=config["categories"],
+            exclude=config["exclude"],
         )
 
 

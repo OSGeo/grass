@@ -1,16 +1,31 @@
 notes:
   categories:
     - title: Modules
-      regexp: '(r|r3|i|g|t|v|d|ps)\.[^ ]*: '
+      regexp: '(d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*: |(modules|tools): '
 
     - title: Graphical User Interface
-      regexp: 'wxGUI.*: '
+      regexp: '(wxGUI.*|gui|GUI): '
 
     - title: Python
-      regexp: '(grass\.[^ ]*|libpython.*|pythonlib.*): '
+      regexp: '(grass\.[^ ]*|libpython.*|pythonlib.*|ctypesgen|ctypes|[Pp]ython|[Bb]inder): '
 
-    - title: Documentation
-      regexp: '(doc|man|manual|[Ss]phinx): '
+    - title: Documentation and Messages
+      regexp: '(docs?|man|manual|manual pages|[Ss]phinx|mkhtml|messages?): '
+
+    - title: Libraries and General Functionality
+      regexp: '(grass_|lib|TGIS|tgis)[^ ]*: '
+
+    - title: Startup, Initialization, and Environment
+      regexp: '(init|startup): '
+
+    - title: Translations, Internationalization, and Localization
+      regexp: '(i18n|L10n|L10N|t9n|translations?): '
+
+    - title: Windows
+      regexp: '(winGRASS|win|[Ww]indows): '
+
+    - title: Packaging, Configuration, Portability, and Compilation
+      regexp: '(pkg|rpm|deb|pkg-config|configure|config|[Mm]ake): '
 
     - title: Docker
       regexp: '[Dd]ocker: '
@@ -18,5 +33,9 @@ notes:
     - title: Singularity
       regexp: '[Ss]ingularity: '
 
-    - title: Continuous Integration and Tests
-      regexp: '(CI|ci|tests|pytest): '
+    - title: Continuous Integration, Tests, Code Quality, and Checks
+      regexp: '(CI|ci|[Tt]ests|[Cc]hecks|pytest): '
+
+  exclude:
+    regexp:
+      - "[Hh]appy [Nn]ew [Yy]ear"
