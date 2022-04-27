@@ -41,6 +41,23 @@ def this_year():
     return datetime.date.today().year
 
 
+def construct_version(version_info):
+    """Construct version string from version info"""
+    return f"{version_info.major}.{version_info.minor}.{version_info.micro}"
+
+
+def suggest_commit_from_version_file(action):
+    """Using information in the version file, suggest a commit message"""
+    version_file = read_version_file()
+    suggest_commit(action, construct_version(version_file))
+
+
+def suggest_commit(action, version):
+    """Suggest a commit message for action and version"""
+    print("message: Use the provided title as a commit message")
+    print(f"title: 'version: {action.capitalize()} {version}'")
+
+
 def release_candidate(args):
     """Switch to RC"""
     version_file = read_version_file()
@@ -55,13 +72,13 @@ def release_candidate(args):
             "Creating RC from a non-dev VERSION file "
             f"with micro '{micro}' is not possible"
         )
-
     write_version_file(
         major=version_file.major,
         minor=version_file.minor,
         micro=micro,
         year=this_year(),
     )
+    suggest_commit_from_version_file("mark")
 
 
 def release(_unused):
@@ -75,13 +92,13 @@ def release(_unused):
         micro = f"{micro}"
     else:
         sys.exit("Creating a release from a non-dev VERSION file is not possible")
-
     write_version_file(
         major=version_file.major,
         minor=version_file.minor,
         micro=micro,
         year=this_year(),
     )
+    suggest_commit_from_version_file("mark")
 
 
 def update_micro(_unused):
@@ -104,20 +121,29 @@ def update_micro(_unused):
                 "Release first before update."
             )
         sys.exit(f"Unknown micro version in VERSION file: '{micro}'")
-
     write_version_file(
         major=version_file.major,
         minor=version_file.minor,
         micro=micro,
         year=this_year(),
     )
+    suggest_commit_from_version_file("start")
 
 
-def update_minor(_unused):
+def update_minor(args):
     """Update to next minor version"""
     version_file = read_version_file()
     micro = version_file.micro
-    minor = int(version_file.minor) + 1
+    minor = int(version_file.minor)
+    if args.dev:
+        if not minor % 2:
+            sys.exit(
+                "Updating to a development-only version "
+                f"from an even minor version '{minor}' is not possible"
+            )
+        minor += 2
+    else:
+        minor += 1
     if micro.endswith("dev"):
         if minor % 2:
             # Odd is development-only, never released and without micro version.
@@ -130,6 +156,7 @@ def update_minor(_unused):
     write_version_file(
         major=version_file.major, minor=minor, micro=micro, year=this_year()
     )
+    suggest_commit_from_version_file("start")
 
 
 def update_major(_unused):
@@ -144,6 +171,7 @@ def update_major(_unused):
     minor = 0
     major = int(version_file.major) + 1
     write_version_file(major=major, minor=minor, micro=micro, year=this_year())
+    suggest_commit_from_version_file("start")
 
 
 def back_to_dev(_unused):
@@ -153,9 +181,11 @@ def back_to_dev(_unused):
     if "RC" in micro:
         micro = micro.split("RC")[0]
         micro = f"{micro}dev"
+        action = "back to"
     elif is_int(micro):
         micro = int(micro) + 1
         micro = f"{micro}dev"
+        action = "start"
     else:
         if micro.endswith("dev"):
             sys.exit(f"Already dev with micro '{micro}'")
@@ -169,6 +199,7 @@ def back_to_dev(_unused):
         micro=micro,
         year=this_year(),
     )
+    suggest_commit_from_version_file(action)
 
 
 def status(_unused):
@@ -179,7 +210,7 @@ def status(_unused):
     print(f"major: {version_file.major}")
     print(f"minor: {version_file.minor}")
     print(f"micro: {version_file.micro}")
-    print(f"version: {version_file.major}.{version_file.minor}.{version_file.micro}")
+    print(f"version: {construct_version(version_file)}")
 
 
 def main():
@@ -190,43 +221,46 @@ def main():
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    parser_foo = subparsers.add_parser(
+    subparser = subparsers.add_parser(
         "rc", help="switch to release candidate (no dev suffix)"
     )
-    parser_foo.add_argument(
+    subparser.add_argument(
         "number", type=int, help="RC number (number sequence not checked)"
     )
-    parser_foo.set_defaults(func=release_candidate)
+    subparser.set_defaults(func=release_candidate)
 
-    parser_bar = subparsers.add_parser(
+    subparser = subparsers.add_parser(
         "dev", help="switch to development state (attaches dev suffix)"
     )
-    parser_bar.set_defaults(func=back_to_dev)
+    subparser.set_defaults(func=back_to_dev)
 
-    parser_bar = subparsers.add_parser(
+    subparser = subparsers.add_parser(
         "release", help="switch to release version (no dev suffix)"
     )
-    parser_bar.set_defaults(func=release)
+    subparser.set_defaults(func=release)
 
-    parser_bar = subparsers.add_parser(
+    subparser = subparsers.add_parser(
         "major", help="increase major (X.y.z) version (attaches dev suffix)"
     )
-    parser_bar.set_defaults(func=update_major)
+    subparser.set_defaults(func=update_major)
 
-    parser_bar = subparsers.add_parser(
+    subparser = subparsers.add_parser(
         "minor", help="increase minor (x.Y.z) version (uses dev in micro)"
     )
-    parser_bar.set_defaults(func=update_minor)
+    subparser.add_argument(
+        "--dev", action="store_true", help="increase development-only version"
+    )
+    subparser.set_defaults(func=update_minor)
 
-    parser_bar = subparsers.add_parser(
+    subparser = subparsers.add_parser(
         "micro", help="increase micro (x.y.Z, aka patch) version (attaches dev suffix)"
     )
-    parser_bar.set_defaults(func=update_micro)
+    subparser.set_defaults(func=update_micro)
 
-    parser_bar = subparsers.add_parser(
+    subparser = subparsers.add_parser(
         "status", help="show status of VERSION file as YAML"
     )
-    parser_bar.set_defaults(func=status)
+    subparser.set_defaults(func=status)
 
     args = parser.parse_args()
     args.func(args)
