@@ -13,7 +13,7 @@ notes:
       regexp: '(docs?|man|manual|manual pages|[Ss]phinx|mkhtml|messages?): '
 
     - title: Libraries and General Functionality
-      regexp: '(grass_|lib|TGIS|tgis)[^ ]*: '
+      regexp: '(grass_|lib|TGIS|tgis|raster|vector)[^ ]*: '
 
     - title: Startup, Initialization, and Environment
       regexp: '(init|startup): '
