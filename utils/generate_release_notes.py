@@ -176,6 +176,8 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
         check=True,
     ).stdout
     commits = yaml.safe_load(text)
+    if not commits:
+        raise RuntimeError("No commits retrieved from git log (try different tags)")
 
     svn_name_by_git_author = csv_to_dict(
         "svn_name_git_author.csv", key="git_author", value="svn_name"
