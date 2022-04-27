@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository contents
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 31
 
       - name: Check for CRLF endings
         uses: erclu/check-crlf@v1
