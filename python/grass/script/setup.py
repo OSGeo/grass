@@ -29,11 +29,11 @@ Usage::
         # MS Windows
         grass8bin = r"C:\OSGeo4W\bin\grass.bat"
         # uncomment when using standalone WinGRASS installer
-        # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.0.0\grass.bat'
+        # grass8bin = r'C:\Program Files (x86)\GRASS GIS 8.2.0\grass.bat'
         # this can be avoided if GRASS executable is added to PATH
     elif sys.platform == "darwin":
         # Mac OS X
-        grass8bin = "/Applications/GRASS-8.0.app/Contents/Resources/bin/grass"
+        grass8bin = "/Applications/GRASS-8.2.app/Contents/Resources/bin/grass"
 
     # query GRASS GIS itself for its Python package path
     grass_cmd = [grass8bin, "--config", "python_path"]
