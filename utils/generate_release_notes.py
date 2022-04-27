@@ -164,13 +164,13 @@ def notes_from_git_log(start_tag, end_tag, categories):
     commits = yaml.safe_load(text)
 
     svn_name_by_git_author = csv_to_dict(
-        "AUTHORS.txt", key="git_author", value="svn_name"
+        "svn_name_git_author.csv", key="git_author", value="svn_name"
     )
     github_name_by_svn_name = csv_to_dict(
-        "svn2git_users.csv", key="svn_name", value="github_name"
+        "svn_name_github_name.csv", key="svn_name", value="github_name"
     )
     github_name_by_git_author = csv_to_dict(
-        "git2github.csv", key="git_author", value="github_name"
+        "git_author_github_name.csv", key="git_author", value="github_name"
     )
 
     lines = []
