@@ -10,6 +10,7 @@ import csv
 import json
 import re
 import subprocess
+import sys
 from collections import defaultdict
 
 import yaml
@@ -225,29 +226,8 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     )
 
 
-def main():
-    """Parse command line arguments and create release notes"""
-    parser = argparse.ArgumentParser(
-        description="Generate release notes from git log or GitHub API.",
-        epilog="Run in utils directory to access the helper files.",
-    )
-    parser.add_argument(
-        "backend", choices=["log", "api"], help="use git log or GitHub API"
-    )
-    parser.add_argument(
-        "branch", help="needed for the GitHub API when tag does not exist"
-    )
-    parser.add_argument("start_tag", help="old tag to compare against")
-    parser.add_argument(
-        "end_tag",
-        help=(
-            "new tag; "
-            "if not created yet, "
-            "an empty string for git log will use the current revision"
-        ),
-    )
-    args = parser.parse_args()
-
+def create_release_notes(args):
+    """Create release notes based on parsed command line parameters"""
     end_tag = args.end_tag
     if not end_tag:
         # git log has default, but the others do not.
@@ -276,6 +256,34 @@ def main():
             categories=config["categories"],
             exclude=config["exclude"],
         )
+
+
+def main():
+    """Parse command line arguments and create release notes"""
+    parser = argparse.ArgumentParser(
+        description="Generate release notes from git log or GitHub API.",
+        epilog="Run in utils directory to access the helper files.",
+    )
+    parser.add_argument(
+        "backend", choices=["log", "api"], help="use git log or GitHub API"
+    )
+    parser.add_argument(
+        "branch", help="needed for the GitHub API when tag does not exist"
+    )
+    parser.add_argument("start_tag", help="old tag to compare against")
+    parser.add_argument(
+        "end_tag",
+        help=(
+            "new tag; "
+            "if not created yet, "
+            "an empty string for git log will use the current revision"
+        ),
+    )
+    args = parser.parse_args()
+    try:
+        create_release_notes(args)
+    except subprocess.CalledProcessError as error:
+        sys.exit(f"Subprocess '{' '.join(error.cmd)}' failed with: {error.stderr}")
 
 
 if __name__ == "__main__":
