@@ -1,5 +1,4 @@
 from .core import (
-    message as messg,
     warning,
     error,
     fatal,
@@ -17,7 +16,7 @@ class Messenger(object):
         self.set_raise_on_error(raise_on_error)
 
     def message(self, message):
-        messg(message)
+        info(message)
 
     def verbose(self, message):
         verbose(message)
