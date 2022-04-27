@@ -19,6 +19,7 @@ from multiprocessing import Process, Lock, Pipe
 import grass.lib.gis as libgis
 
 from grass.exceptions import FatalError
+from grass.script.messages import Messenger as ScriptMessenger
 
 
 def message_server(lock, conn):
@@ -356,7 +357,7 @@ def get_msgr(
     False
     """
     if not _instance[0]:
-        _instance[0] = Messenger(*args, **kwargs)
+        _instance[0] = ScriptMessenger(*args, **kwargs)
     return _instance[0]
 
 
