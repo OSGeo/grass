@@ -68,14 +68,14 @@ jobs:
       - name: Run Pylint on grass package
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
           cd python
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) grass
 
       - name: Run Pylint on wxGUI
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
           cd gui/wxpython
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
 
@@ -83,7 +83,7 @@ jobs:
         run: |
           pip install pytest pytest-pylint
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
           pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) --pylint-ignore-patterns="python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,scripts/d.rast.edit/d.rast.edit.py"
 
       - name: Run Sphinx to check API documentation build
