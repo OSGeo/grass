@@ -39,9 +39,9 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 <!--
   original:
-  doc/grass8_arch.odg
+  doc/grass_arch.odg
 -->
-\image html "grass8_arch.png" "GRASS GIS 8 Architecture"
+\image html "grass_arch.png" "GRASS GIS Architecture"
 
 \section libsOverview Libraries
 
