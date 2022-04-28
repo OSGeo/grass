@@ -24,19 +24,20 @@ Usage::
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
-    grass_executable = "grass"
+    executable = "grass"
     if sys.platform.startswith("win"):
         # MS Windows
-        grass_executable = r"C:\OSGeo4W\bin\grass.bat"
+        executable = r"C:\OSGeo4W\bin\grass.bat"
         # uncomment when using standalone WinGRASS installer
-        # grass_executable = r'C:\Program Files (x86)\GRASS GIS <version>\grass.bat'
+        # executable = r'C:\Program Files (x86)\GRASS GIS <version>\grass.bat'
         # this can be skipped if GRASS executable is added to PATH
     elif sys.platform == "darwin":
         # Mac OS X
-        grass_executable = "/Applications/GRASS-<version>.app/Contents/Resources/bin/grass"
+        version = "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
+        executable = f"/Applications/GRASS-{version}.app/Contents/Resources/bin/grass"
 
     # query GRASS GIS itself for its Python package path
-    grass_cmd = [grass_executable, "--config", "python_path"]
+    grass_cmd = [executable, "--config", "python_path"]
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 
     # define GRASS-Python environment
