@@ -43,7 +43,14 @@ micro: 0dev
 version: 3.2.0dev
 ```
 
-Naturally, this also checks that the version if is accessible.
+Naturally, this also checks that the version if is accessible and fails otherwise.
+
+The _status_ command prints input for Bash _eval_ with `--bash`:
+
+```bash
+eval `./utils/update_version.py status --bash`
+echo $VERSION
+```
 
 ### Updating Minor Version
 

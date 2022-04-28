@@ -55,7 +55,7 @@ def suggest_commit_from_version_file(action):
 def suggest_commit(action, version):
     """Suggest a commit message for action and version"""
     print("message: Use the provided title as a commit message")
-    print(f"title: 'version: {action.capitalize()} {version}'")
+    print(f"title: 'version: {action} {version}'")
 
 
 def release_candidate(args):
@@ -78,7 +78,7 @@ def release_candidate(args):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("mark")
+    suggest_commit_from_version_file("GRASS GIS")
 
 
 def release(_unused):
@@ -98,7 +98,7 @@ def release(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("mark")
+    suggest_commit_from_version_file("GRASS GIS")
 
 
 def update_micro(_unused):
@@ -106,7 +106,7 @@ def update_micro(_unused):
     version_file = read_version_file()
     micro = version_file.micro
     if micro == "dev":
-        sys.exit("No micro version increases with development-only versions.")
+        sys.exit("The micro version does not increase with development-only versions.")
         # We could also add micro version when not present, but requested with:
         # micro = "0dev"
     elif micro.endswith("dev"):
@@ -127,7 +127,7 @@ def update_micro(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("start")
+    suggest_commit_from_version_file("Start")
 
 
 def update_minor(args):
@@ -156,7 +156,7 @@ def update_minor(args):
     write_version_file(
         major=version_file.major, minor=minor, micro=micro, year=this_year()
     )
-    suggest_commit_from_version_file("start")
+    suggest_commit_from_version_file("Start")
 
 
 def update_major(_unused):
@@ -171,7 +171,7 @@ def update_major(_unused):
     minor = 0
     major = int(version_file.major) + 1
     write_version_file(major=major, minor=minor, micro=micro, year=this_year())
-    suggest_commit_from_version_file("start")
+    suggest_commit_from_version_file("Start")
 
 
 def back_to_dev(_unused):
@@ -181,11 +181,11 @@ def back_to_dev(_unused):
     if "RC" in micro:
         micro = micro.split("RC")[0]
         micro = f"{micro}dev"
-        action = "back to"
+        action = "Back to"
     elif is_int(micro):
         micro = int(micro) + 1
         micro = f"{micro}dev"
-        action = "start"
+        action = "Start"
     else:
         if micro.endswith("dev"):
             sys.exit(f"Already dev with micro '{micro}'")
@@ -202,15 +202,43 @@ def back_to_dev(_unused):
     suggest_commit_from_version_file(action)
 
 
-def status(_unused):
+def status_as_yaml(version_info, today, version, tag):
+    """Print VERSION file and today's date as YAML"""
+    print(f"today: {today}")
+    print(f"year: {version_info.year}")
+    print(f"major: {version_info.major}")
+    print(f"minor: {version_info.minor}")
+    print(f"micro: {version_info.micro}")
+    print(f"version: {version}")
+    if tag:
+        print(f"tag: {version}")
+
+
+def status_as_bash(version_info, today, version, tag):
+    """Print VERSION file and today's date as Bash eval variables"""
+    print(f"TODAY={today}")
+    print(f"YEAR={version_info.year}")
+    print(f"MAJOR={version_info.major}")
+    print(f"MINOR={version_info.minor}")
+    print(f"MICRO={version_info.micro}")
+    print(f"VERSION={version}")
+    if tag:
+        print(f"TAG={version}")
+
+
+def status(args):
     """Print VERSION file and today's date"""
-    version_file = read_version_file()
-    print(f"today: {datetime.date.today().isoformat()}")
-    print(f"year: {version_file.year}")
-    print(f"major: {version_file.major}")
-    print(f"minor: {version_file.minor}")
-    print(f"micro: {version_file.micro}")
-    print(f"version: {construct_version(version_file)}")
+    version_info = read_version_file()
+    today = datetime.date.today().isoformat()
+    version = construct_version(version_info)
+    if not version_info.micro.endswith("dev"):
+        tag = version
+    else:
+        tag = None
+    if args.bash:
+        status_as_bash(version_info=version_info, today=today, version=version, tag=tag)
+    else:
+        status_as_yaml(version_info=version_info, today=today, version=version, tag=tag)
 
 
 def main():
@@ -258,7 +286,10 @@ def main():
     subparser.set_defaults(func=update_micro)
 
     subparser = subparsers.add_parser(
-        "status", help="show status of VERSION file as YAML"
+        "status", help="show status of VERSION file (as YAML by default)"
+    )
+    subparser.add_argument(
+        "--bash", action="store_true", help="format as Bash variables for eval"
     )
     subparser.set_defaults(func=status)
 
