@@ -5,60 +5,6 @@
 
 ## HOWTO create a release
 
-### Fix typos in source code with
-
-```bash
-utils/fix_typos.sh
-```
-
-### i18N: sync from Transifex
-
-See <https://www.transifex.com/grass-gis/grass7/dashboard/>
-
-Exception Latvian as Latvian is directly edited in git and then sync'ed from
-master .po files
-
-```bash
-cd locale
-sh ~/software/grass-addons/utils/transifex_merge.sh
-make
-make verify
-# ... then fix .po files as needed.
-#
-# requires https://trac.osgeo.org/grass/ticket/3539
-## after that push fixes to transifex:
-#cd locale/transifex/
-#tx --debug push -t
-```
-
-### Update of configure base files
-
-*Only allowed in RC cycle, not for final release!*
-
-Check that autoconf scripts are up-to-date:
-
-```bash
-rm -f config.guess config.sub
-wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
-wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-git diff config.guess config.sub
-autoconf2.69
-```
-
-Now check if configure still works.
-
-If yes, submit to git:
-
-```bash
-git checkout -b config_sub_update
-git add config.guess config.sub configure
-git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
-# test by running ./configure
-
-git push origin config_sub_update
-# open PR and merge
-```
-
 ### Create release branch (only if not yet existing)
 
 .. see section below at end of file.
@@ -217,10 +163,10 @@ echo $SERVER2:$SERVER2DIR
 
 # upload along with associated files:
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
+  INSTALL REQUIREMENTS.html CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
 
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
+  INSTALL REQUIREMENTS.html CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
 
 # Only at full release (i.e., not for RCs)!
 # generate link to "latest" source code
