@@ -18,7 +18,9 @@ Modify the VERSION file use the dedicated script, for RC1, e.g.:
 ./utils/update_version.py rc 1
 ```
 
-Commit with with the suggested commit message, e.g.:
+The script will compute the correct version string and print a message containing it into the terminal (e.g., "version: GRASS GIS 8.2.0RC1").
+
+Commit with a commit message suggested by the script, e.g.:
 
 ```bash
 git diff
@@ -107,7 +109,7 @@ head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
 ```
 
-### Reset include/VERSION file to git version
+### Reset include/VERSION file to git development version
 
 Use a dedicated script to edit the VERSION file, for RC1, e.g.:
 
@@ -117,7 +119,7 @@ Example:
 ./utils/update_version.py dev
 ```
 
-Commit with with the suggested commit message and push, e.g.:
+Commit with the suggested commit message and push, e.g.:
 
 ```bash
 git show
