@@ -11,20 +11,23 @@
 
 ### Update VERSION file to release version number
 
-Directly edit VERSION file in GH interface:
-
-<https://github.com/OSGeo/grass/blob/releasebranch_8_2/include/VERSION>
-
-Example:
+Modify the VERSION file use the dedicated script, for RC1, e.g.:
 
 ```bash
-8
-2
-0RC1
-2022
+./utils/update_version.py status
+./utils/update_version.py rc 1
 ```
 
-Commit with version message, e.g. "GRASS GIS 8.2.0RC1".
+The script will compute the correct version string and print a message containing it into the terminal (e.g., "version: GRASS GIS 8.2.0RC1").
+
+Commit with a commit message suggested by the script, e.g.:
+
+```bash
+git diff
+git commit -m "version: GRASS GIS 8.2.0RC1" include/VERSION
+git show
+git push upstream
+```
 
 ### Create release tag
 
@@ -43,22 +46,17 @@ git fetch --all --prune && git checkout releasebranch_8_2 && \
  git merge upstream/releasebranch_8_2 && git push origin releasebranch_8_2
 
 # create version env var for convenience:
-MAJOR=`cat include/VERSION | head -1 | tail -1`
-MINOR=`cat include/VERSION | head -2 | tail -1`
-RELEASE=`cat include/VERSION | head -3 | tail -1`
-VERSION=${MAJOR}.${MINOR}.${RELEASE}
-echo $VERSION
-
-# RELEASETAG variable not really needed any more:
-TODAY=`date +"%Y%m%d"`
-RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
-echo $RELEASETAG
+# Get VERSION and TAG as variables.
+eval `./update_version.py status --bash`
 ```
 
 #### Tag release (on GitHub)
 
+Version and tag are the same for all releases:
+
 ```bash
 echo "$VERSION"
+echo "$TAG"
 ```
 
 To be done in GH interface:
@@ -111,22 +109,23 @@ head ChangeLog_$VERSION
 gzip ChangeLog_$VERSION
 ```
 
-### Reset include/VERSION file to git version
+### Reset include/VERSION file to git development version
 
-Directly edit VERSION file in GH interface:
-
-<https://github.com/OSGeo/grass/blob/releasebranch_8_2/include/VERSION>
+Use a dedicated script to edit the VERSION file, for RC1, e.g.:
 
 Example:
 
 ```bash
-8
-0
-1dev
-2021
+./utils/update_version.py dev
 ```
 
-Commit as "back to dev"
+Commit with the suggested commit message and push, e.g.:
+
+```bash
+git show
+git commit include/VERSION -m "version: Back to 8.2.0dev"
+git push upstream
+```
 
 Reset local copy to GH:
 
