@@ -4,11 +4,12 @@ name: Ubuntu
 on:
   push:
     branches:
-    - main
-    - releasebranch_*
+      - main
+      - releasebranch_*
   pull_request:
-    - main
-    - releasebranch_*
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   build-and-test:

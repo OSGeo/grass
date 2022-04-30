@@ -3,11 +3,12 @@ name: Python Flake8 Code Quality
 on:
   push:
     branches:
-    - main
-    - releasebranch_*
+      - main
+      - releasebranch_*
   pull_request:
-    - main
-    - releasebranch_*
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   flake8:
