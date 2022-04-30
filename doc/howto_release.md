@@ -246,8 +246,11 @@ vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
 vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 ```
 
-## Update addon builder
+## Update addon builders
 
+Add the new version to repos which build or test addons:
+
+- https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml (currently new branches only)
 - https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line)
 
 ## Close milestone
@@ -264,15 +267,15 @@ When the above is done and the release notes are ready, publish the release at
 
 Release is done.
 
-## Advertise the new release
+## Create entries for the new release
 
-#### Trac Wiki release page
+### Trac Wiki release page
 
 Add entry in https://trac.osgeo.org/grass/wiki/Release
 
-#### Update Hugo web site to show new version (not for RCs!)
+### Update Hugo web site to show new version
 
-Write announcement and publish it:
+For a (final) release (not release candidate), write announcement and publish it:
 - News section, https://github.com/OSGeo/grass-website/tree/master/content/news
 
 Software pages:
@@ -283,7 +286,7 @@ Software pages:
 - Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
 
 
-#### Only in case of new major release
+### Only in case of new major release
 
 - update cronjob '[cron_grass8_main_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)' on grass.osgeo.org to next
   but one release tag for the differences
@@ -293,7 +296,9 @@ Software pages:
 - Add trac Wiki Macro definitions for manual pages G8X:modulename
     - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
-#### WinGRASS notes
+## Packaging notes
+
+### WinGRASS notes
 
 - Update grass_packager_release.bat, eg.
 
@@ -315,18 +320,18 @@ Software pages:
      copy_addon 820RC1 8.2.0RC1
 ```
 
-#### Ubuntu Launchpad notes
+### Ubuntu Launchpad notes
 
 - Create milestone and release: <https://launchpad.net/grass/+series>
 - Upload tarball for created release
 
-#### Packaging notes
+### Other notes
 
 - <https://trac.osgeo.org/grass/wiki/BuildHints>
     - <https://trac.osgeo.org/grass/wiki/DebianUbuntuPackaging>
     - <https://trac.osgeo.org/grass/wiki/CompileOnWindows>
 
-#### Marketing - tell others about release
+## Tell others about release
 
 - Notify all packagers (MN has email list)
 - If release candidate:
