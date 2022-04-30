@@ -2,9 +2,11 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [main, releasebranch_7_8]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
     paths-ignore:
       - "**/*.html"
       - "**/*.md"
