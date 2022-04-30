@@ -42,14 +42,14 @@ and optionally update your own fork:
 git merge upstream/releasebranch_8_2 && git push origin releasebranch_8_2
 ```
 
-Use _git log_ and _git show_ to verify the result:
+Use `git log` and `git show` to verify the result:
 
 ```bash
 git log --max-count=5
 git show
 ```
 
-Any time later, you can use _git log_ and _git show_ to see the latest
+Any time later, you can use `git log` and `git show` to see the latest
 commits and the last commit including the changes.
 
 ## Update VERSION file to release version number
