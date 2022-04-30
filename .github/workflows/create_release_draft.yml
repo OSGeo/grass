@@ -1,4 +1,4 @@
-name: Create new release draft
+name: Create a release draft
 
 on:
   push:
@@ -25,6 +25,7 @@ jobs:
           git diff --cached > core_modules_with_last_commit.patch
 
       - name: Create new release draft
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +37,7 @@ jobs:
             - First change
             - Second change
           draft: true
-          prerelease: false
+          prerelease: ${{ contains(github.ref, "RC") }}
 
       - name: Upload core_modules_with_last_commit.json file
         uses: actions/upload-release-asset@v1
@@ -57,3 +58,13 @@ jobs:
           asset_path: core_modules_with_last_commit.patch
           asset_name: core_modules_with_last_commit.patch
           asset_content_type: text/plain
+
+      - name: On failure, make the created files available
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: artifacts
+          path: |
+            core_modules_with_last_commit.*
+          if-no-files-found: warn
+          retention-days: 10
