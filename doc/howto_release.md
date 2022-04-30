@@ -78,7 +78,7 @@ For convenience, create Bash variables with the version update script:
 
 ```bash
 # Get VERSION and TAG as variables.
-eval $(./update_version.py status --bash)
+eval $(./utils/update_version.py status --bash)
 ```
 
 Version and tag are the same for all releases:
@@ -88,7 +88,7 @@ echo "$VERSION"
 echo "$TAG"
 ```
 
-If in doubt, run it without `eval $(...)` to see all the variables created.
+If in doubt, run the script without `eval $(...)` to see all the variables created.
 
 ## Create release tag
 
