@@ -6,8 +6,13 @@ name: Additional Checks
 # (and job) to reduce the number of jobs.
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+    - main
+    - releasebranch_*
+  pull_request:
+    - main
+    - releasebranch_*
 
 jobs:
   additional-checks:

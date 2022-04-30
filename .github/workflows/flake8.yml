@@ -1,8 +1,13 @@
 name: Python Flake8 Code Quality
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+    - main
+    - releasebranch_*
+  pull_request:
+    - main
+    - releasebranch_*
 
 jobs:
   flake8:

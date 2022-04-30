@@ -1,8 +1,13 @@
 name: OSGeo4W
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+    - main
+    - releasebranch_*
+  pull_request:
+    - main
+    - releasebranch_*
 
 jobs:
   build:
