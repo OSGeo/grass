@@ -5,9 +5,9 @@ on:
     branches:
     - main
     - releasebranch_*
-    tags:
-      - "*.*.*"
   pull_request:
+    - main
+    - releasebranch_*
 
 jobs:
   pylint:
