@@ -4,6 +4,7 @@
 
 - You have communicated with other developers, e.g., through grass-dev mailing list.
 - You have communicated with a development coordinator.
+- You have evaluated status of issues and PRs associated with the relevant milestone.
 - You have already cloned the repo with Git.
 - Your own fork is the remote called "origin".
 - The OSGeo repo is the remote called "upstream".
@@ -253,6 +254,8 @@ vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
 For a (final) release (not release candidate), close the related milestone at
 <https://github.com/OSGeo/grass/milestones>.
+If there are any open issues or PRs, move them to another milestone
+in the milestone view (all can be moved at once).
 
 ## Publish the release
 
