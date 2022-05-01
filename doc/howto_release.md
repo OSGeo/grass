@@ -333,7 +333,6 @@ Software pages:
 
 ## Tell others about release
 
-- Notify all packagers (MN has email list)
 - If release candidate:
     - <grass-announce@lists.osgeo.org>
     - <grass-dev@lists.osgeo.org>
