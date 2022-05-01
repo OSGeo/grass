@@ -305,7 +305,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Granularity can be of absolute time or relative time.
         In case of absolute time a string containing an integer
-        value and the time unit (years, months, days, hours, minuts,
+        value and the time unit (years, months, days, hours, minutes,
         seconds). In case of relative time an integer value is expected.
 
         :return: The granularity
@@ -321,7 +321,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         Granularity can be of absolute time or relative time.
         In case of absolute time a string containing an integer
-        value and the time unit (years, months, days, hours, minuts,
+        value and the time unit (years, months, days, hours, minutes,
         seconds). In case of relative time an integer value is expected.
 
         This method only modifies this object and does not commit

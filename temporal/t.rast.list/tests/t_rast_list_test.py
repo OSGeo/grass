@@ -69,9 +69,9 @@ def test_yaml(space_time_raster_dataset):
 
 
 @pytest.mark.parametrize(
-    "separator,delimeter", [(None, ","), (",", ","), (";", ";"), ("tab", "\t")]
+    "separator,delimiter", [(None, ","), (",", ","), (";", ";"), ("tab", "\t")]
 )
-def test_csv(space_time_raster_dataset, separator, delimeter):
+def test_csv(space_time_raster_dataset, separator, delimiter):
     """Check CSV can be parsed with different separators"""
     columns = ["name", "start_time"]
     text = gs.read_command(
@@ -84,7 +84,7 @@ def test_csv(space_time_raster_dataset, separator, delimeter):
     io_string = io.StringIO(text)
     reader = csv.DictReader(
         io_string,
-        delimiter=delimeter,
+        delimiter=delimiter,
         quotechar='"',
         doublequote=True,
         lineterminator="\n",
