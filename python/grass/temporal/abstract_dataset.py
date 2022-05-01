@@ -102,7 +102,7 @@ class AbstractDataset(
         """Check if the spatial and temporal topology was build
 
         :return: A dictionary with "spatial" and "temporal" as keys that
-                 have boolen values
+                 have boolean values
         """
         d = {}
         d["spatial"] = self.is_spatial_topology_build()

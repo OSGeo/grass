@@ -1402,7 +1402,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
             return None
 
     def get_semantic_labels(self):
-        """Get the distinct semantic lables of registered maps
+        """Get the distinct semantic labels of registered maps
            The distinct semantic labels are not stored in the metadata table
            and fetched on-the-fly
         :return: None if not found

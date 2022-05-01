@@ -82,7 +82,7 @@ def main():
     # In case of days, hours, minutes and seconds, a double number
     # is used to represent days and fracs of a day
 
-    # Space time voxel cubes with montly or yearly granularity can not be
+    # Space time voxel cubes with monthly or yearly granularity can not be
     # mixed with other temporal units
 
     # Compatible temporal units are : days, hours, minutes and seconds

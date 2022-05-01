@@ -228,7 +228,7 @@ def _write_csv(rows, column_names, separator, file=sys.stdout):
     # pylint: disable=import-outside-toplevel
     import csv
 
-    # Newlines handled by the CSV writter. Set according to the package doc.
+    # Newlines handled by the CSV writer. Set according to the package doc.
     with _open_output_file(file, newline="") as stream:
         spamwriter = csv.writer(
             stream,

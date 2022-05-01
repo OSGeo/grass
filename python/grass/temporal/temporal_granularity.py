@@ -1152,7 +1152,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
     """
 
     def _return(output, tounit, shell):
-        """Fuction to return the output"""
+        """Function to return the output"""
         if shell:
             return output
         else:
