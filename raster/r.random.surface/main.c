@@ -49,7 +49,8 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
 
-    int DoMap, DoFilter, MapSeed;
+    int DoMap, DoFilter, MapSeed, i, row;
+    char *Name;
 
     G_gisinit(argv[0]);
 
@@ -148,6 +149,58 @@ int main(int argc, char **argv)
 	}
 
 	SaveMap(DoMap, MapSeed);
+    }
+
+    /* Free Memory */
+    if (Norm != NULL)
+        G_free(Norm);
+    if (Seeds != NULL)
+        G_free(Seeds);
+    if (CatInfo.NumValue != NULL)
+        G_free(CatInfo.NumValue);
+    if (CatInfo.Average != NULL)
+        G_free(CatInfo.Average);
+    if (CatInfo.Min != NULL)
+        G_free(CatInfo.Min);
+    if (CatInfo.Max != NULL)
+        G_free(CatInfo.Max);
+    if (AllFilters != NULL)
+        G_free(AllFilters);
+    if (BigF.LowBF != NULL)
+        G_free(BigF.LowBF);
+    if (BigF.HihBF != NULL)
+        G_free(BigF.HihBF);
+    if (CellBuffer != NULL)
+        G_free(CellBuffer);
+    if (RSurface != NULL)
+    {
+        for (row = 0; row < Rs; row++)
+        {
+            if (RSurface[row] != NULL)
+                G_free(RSurface[row]);
+        }
+
+        G_free(RSurface);
+    }
+    if (OutNames != NULL)
+    {
+        for (i = 0; (Name = Output->answers[i]); i++)
+        {
+            if (OutNames[i] != NULL)
+                G_free(OutNames[i]);
+        }
+
+        G_free(OutNames);
+    }
+    if (BigF.F != NULL)
+    {
+        for (i = 0; i < BigF.NumR; i++)
+        {
+            if (BigF.F[i] != NULL)
+                G_free(BigF.F[i]);
+        }
+
+        G_free(BigF.F);
     }
 
     G_done_msg(" ");

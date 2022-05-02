@@ -136,5 +136,15 @@ void CalcSurface(void)
 	G_percent(1, 1, 1);
     }
 
-    G_free(Randoms);
+    /* Free memory */
+    if (Randoms != NULL)
+    {
+        for (Row = 0; Row < RanRows; Row++)
+        {
+            if (Randoms[Row] != NULL)
+                G_free(Randoms[Row]);
+        }
+
+        G_free(Randoms);
+    }
 }
