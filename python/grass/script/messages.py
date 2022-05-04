@@ -1,4 +1,5 @@
 from .core import (
+    message as script_message,
     warning,
     error,
     fatal,
@@ -16,13 +17,13 @@ class Messenger(object):
         self.set_raise_on_error(raise_on_error)
 
     def message(self, message):
-        info(message)
+        script_message(message)
 
     def verbose(self, message):
         verbose(message)
 
     def important(self, message):
-        self.message(message)
+        info(message)
 
     def warning(self, message):
         warning(message)
