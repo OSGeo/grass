@@ -13,13 +13,13 @@ for details.
 
 @author Soeren Gebbert
 """
+import os
 import sys
 from multiprocessing import Process, Lock, Pipe
 
 import grass.lib.gis as libgis
 
 from grass.exceptions import FatalError
-from grass.script.messages import Messenger as ScriptMessenger
 
 
 def message_server(lock, conn):
@@ -357,7 +357,12 @@ def get_msgr(
     False
     """
     if not _instance[0]:
-        _instance[0] = ScriptMessenger(*args, **kwargs)
+        if os.getenv("GRASS_SCRIPT_MESSANGER"):
+            from grass.script.messages import Messenger as ScriptMessenger
+
+            _instance[0] = ScriptMessenger(*args, **kwargs)
+        else:
+            _instance[0] = Messenger(*args, **kwargs)
     return _instance[0]
 
 
