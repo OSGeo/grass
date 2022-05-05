@@ -30,6 +30,7 @@ class Messenger(object):
     """Alternative implementation to PyGRASS.messages.Messanger
     to avoid invoking C library directly. Instead, it uses
     g.message wrappers from script.core."""
+
     def __init__(self, raise_on_error=False):
         self.set_raise_on_error(raise_on_error)
 
