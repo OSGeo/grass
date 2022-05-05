@@ -58,7 +58,7 @@ jobs:
 
       - name: Run tests
         env:
-          GRASS_SCRIPT_MESSANGER: 1
+          GRASS_SCRIPT_MESSENGER: 1
         run: .github/workflows/test_thorough.sh
 
       - name: Make HTML test report available

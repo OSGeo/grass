@@ -27,7 +27,7 @@ from .core import (
 
 
 class Messenger(object):
-    """Alternative implementation to PyGRASS.messages.Messanger
+    """Alternative implementation to PyGRASS.messages.Messenger
     to avoid invoking C library directly. Instead, it uses
     g.message wrappers from script.core."""
 

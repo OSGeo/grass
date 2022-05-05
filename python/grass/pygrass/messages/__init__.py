@@ -357,7 +357,7 @@ def get_msgr(
     False
     """
     if not _instance[0]:
-        if os.getenv("GRASS_SCRIPT_MESSANGER"):
+        if os.getenv("GRASS_SCRIPT_MESSENGER"):
             from grass.script.messages import Messenger as ScriptMessenger
 
             _instance[0] = ScriptMessenger(*args, **kwargs)
