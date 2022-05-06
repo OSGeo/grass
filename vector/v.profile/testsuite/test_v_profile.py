@@ -240,7 +240,7 @@ class TestProfiling(TestCase):
         vpro = SimpleModule(
             "v.profile",
             input=self.multiline,
-            coordinates=(2, 0, 2, 5),
+            coordinates=(0, 2, 5, 2),
             buffer=10,
         )
         vpro.run()
