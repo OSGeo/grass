@@ -22,9 +22,20 @@ the Semantic Versioning, i.e., _major_, _minor_, and _patch_
 with major for breaking changes, minor for backwards compatible
 features, and patch for fixes.
 
-For the versions 7.0 till 8.2, there was a distinction between even and odd minor versions.
+For the versions 7.0 till 8.2, there was a distinction between even
+and odd minor versions.
 Even minor versions were released, while odd minor versions marked development versions.
 These odd versions never had a patch number assigned and were never released.
+
+The practice of odd minor version denoting development versions and even minor versions
+denoting releases was introduced with 5.0.0 and was followed in various ways in the
+version 5 and 6 series.
+This odd-even practice followed the numbering scheme of the Linux kernel
+which abandoned the practice since then.
+
+The odd-even practice replaced a system where multiple numbered beta
+versions were released. Version 5.0beta10 was a last beta release before the first
+pre-release of 5.0.0.
 
 ## Motivation
 
