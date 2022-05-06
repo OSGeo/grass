@@ -86,7 +86,7 @@ static int ident(double x1, double y1, double x2, double y2, double thresh);
 static int cross_seg(int id, const struct RTree_Rect *rect, void *arg);
 static int find_cross(int id, const struct RTree_Rect *rect, void *arg);
 int line_check_intersection(struct line_pnts *APoints,
-			                struct line_pnts *BPoints, int with_z, int all);
+			                struct line_pnts *BPoints, int with_z);
 
 #define D  ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
 #define D1 ((bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2))
@@ -1217,6 +1217,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 static struct line_pnts *APnts, *BPnts, *IPnts;
 
 static int cross_found;		/* set by find_cross() */
+static int report_all;     /* should all crossings be reported or just first one */
 
 /* break segments (called by rtree search) */
 static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
@@ -1256,14 +1257,15 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
     /* add ALL (including end points and duplicates), clean later */
     if (ret > 0) {
 	cross_found = 1;
-	return 0;
+        if (!report_all)
+            return 0;
     }
     return 1;			/* keep going */
 }
 
 int
 line_check_intersection(struct line_pnts *APoints,
-			     struct line_pnts *BPoints, int with_z, int all)
+			     struct line_pnts *BPoints, int with_z)
 {
     int i;
     double dist, rethresh;
@@ -1290,7 +1292,7 @@ line_check_intersection(struct line_pnts *APoints,
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
 	if (APoints->x[0] == BPoints->x[0] && APoints->y[0] == BPoints->y[0]) {
 	    if (!with_z) {
-		if (all && 0 >
+		if (report_all && 0 >
 		    Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
 					  &APoints->y[0], NULL, 1))
 		    G_warning(_("Error while adding point to array. Out of memory"));
@@ -1298,7 +1300,7 @@ line_check_intersection(struct line_pnts *APoints,
 	    }
 	    else {
 		if (APoints->z[0] == BPoints->z[0]) {
-		    if (all && 0 >
+		    if (report_all && 0 >
 			Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
 					      &APoints->y[0], &APoints->z[0],
 					      1))
@@ -1320,7 +1322,7 @@ line_check_intersection(struct line_pnts *APoints,
 			   NULL, NULL);
 
 	if (dist <= rethresh) {
-	    if (all && 0 >
+	    if (report_all && 0 >
 		Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
 				      &APoints->z[0], 1))
 		G_warning(_("Error while adding point to array. Out of memory"));
@@ -1337,7 +1339,7 @@ line_check_intersection(struct line_pnts *APoints,
 			   NULL, NULL);
 
 	if (dist <= rethresh) {
-	    if (all && 0 >
+	    if (report_all && 0 >
 		Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
 				      &BPoints->z[0], 1))
 		G_warning(_("Error while adding point to array. Out of memory"));
@@ -1420,7 +1422,7 @@ line_check_intersection(struct line_pnts *APoints,
 
     RTreeSearch(MyRTree, &rect, find_cross, &i);	/* A segment number from 0 */
 
-	if (!all && cross_found) {
+	if (!report_all && cross_found) {
 	    break;
 	}
     }
@@ -1447,7 +1449,8 @@ int
 Vect_line_check_intersection(struct line_pnts *APoints,
 			     struct line_pnts *BPoints, int with_z)
 {
-    return line_check_intersection(APoints, BPoints, with_z, 0);
+    report_all = 0;
+    return line_check_intersection(APoints, BPoints, with_z);
 }
 
 /*!
@@ -1470,8 +1473,9 @@ Vect_line_get_intersections(struct line_pnts *APoints,
 {
     int ret;
 
+    report_all = 1;
     IPnts = IPoints;
-    ret = line_check_intersection(APoints, BPoints, with_z, 1);
+    ret = line_check_intersection(APoints, BPoints, with_z);
 
     return ret;
 }

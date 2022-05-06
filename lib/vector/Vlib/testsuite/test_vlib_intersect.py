@@ -137,6 +137,18 @@ class TestLineIntersect(TestCase):
         )
         self.assertEqual(ret, 1)
         self.assertEqual(c_lp_cps.contents.n_points, 3)
+        # Order of intersecting lines should not matter
+        ret = libvect.Vect_line_get_intersections(
+            self.c_lp_mcross, self.c_lp_snake, c_lp_cps, 0
+        )
+        self.assertEqual(ret, 1)
+        self.assertEqual(c_lp_cps.contents.n_points, 4)
+        libvect.Vect_reset_line(c_lp_cps)
+        ret = libvect.Vect_line_get_intersections(
+            self.c_lp_ssnake, self.c_lp_snake, c_lp_cps, 0
+        )
+        self.assertEqual(ret, 1)
+        self.assertEqual(c_lp_cps.contents.n_points, 3)
 
     def testNoFarCheckIntersection(self):
         """Both lines are far away"""
@@ -184,7 +196,6 @@ class TestLineIntersect(TestCase):
 
     def testMultiCheckIntersections(self):
         """Both lines intersect at multiple points"""
-        c_lp_cps = libvect.Vect_new_line_struct()
         ret = libvect.Vect_line_check_intersection(
             self.c_lp_snake, self.c_lp_mcross, 0
         )
@@ -314,6 +325,18 @@ class TestLineIntersect2(TestCase):
         )
         self.assertEqual(ret, 1)
         self.assertEqual(c_lp_cps.contents.n_points, 3)
+        # Order of intersecting lines should not matter
+        ret = libvect.Vect_line_get_intersections2(
+            self.c_lp_mcross, self.c_lp_snake, c_lp_cps, 0
+        )
+        self.assertEqual(ret, 1)
+        self.assertEqual(c_lp_cps.contents.n_points, 4)
+        libvect.Vect_reset_line(c_lp_cps)
+        ret = libvect.Vect_line_get_intersections2(
+            self.c_lp_ssnake, self.c_lp_snake, c_lp_cps, 0
+        )
+        self.assertEqual(ret, 1)
+        self.assertEqual(c_lp_cps.contents.n_points, 3)
 
     def testNoFarCheckIntersection2(self):
         """Both lines are far away"""
@@ -361,7 +384,6 @@ class TestLineIntersect2(TestCase):
 
     def testMultiCheckIntersections2(self):
         """Both lines intersect at multiple points"""
-        c_lp_cps = libvect.Vect_new_line_struct()
         ret = libvect.Vect_line_check_intersection2(
             self.c_lp_snake, self.c_lp_mcross, 0
         )
