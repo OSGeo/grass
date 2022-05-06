@@ -666,7 +666,9 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
  * intersection with B line. Points (Points->n_points == 1) are not
  * supported. If B line is NULL, A line is intersected with itself.
  * 
- * simplified Bentley–Ottmann Algorithm
+ * simplified Bentley–Ottmann Algorithm:
+ * similar to Vect_line_intersection(), but faster
+ * additionally, self-intersections of a line are handled more efficiently
  *
  * \param APoints first input line 
  * \param BPoints second input line or NULL
@@ -1277,6 +1279,9 @@ static int find_cross(int i, int j, int b)
  *
  * Points (Points->n_points == 1) are also supported.
  *
+ * simplified Bentley–Ottmann Algorithm:
+ * similar to Vect_line_check_intersection(), but faster
+ *
  * \param APoints first input line 
  * \param BPoints second input line 
  * \param with_z 3D, not supported (only if one or both are points)!
@@ -1554,7 +1559,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 /*!
  * \brief Get 2 lines intersection points.
  * 
- * A wrapper around Vect_line_check_intersection() function.
+ * A wrapper around Vect_line_check_intersection2() function.
  *
  * \param APoints first input line 
  * \param BPoints second input line 
