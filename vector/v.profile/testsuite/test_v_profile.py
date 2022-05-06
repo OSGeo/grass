@@ -4,7 +4,7 @@ Purpose:    Tests v.profile input parsing and simle output generation.
             Uses NC Basic data set.
 
 Author:     Maris Nartiss
-Copyright:  (C) 2017 by Maris Nartiss and the GRASS Development Team
+Copyright:  (C) 2017, 2022 by Maris Nartiss and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
             License (>=v2). Read the file COPYING that comes with GRASS
             for details.

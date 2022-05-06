@@ -56,7 +56,7 @@
    of limited number of decimal places and for different order of
    coordinates, the results would be different)
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2022 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.

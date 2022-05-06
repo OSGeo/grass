@@ -5,7 +5,7 @@ AUTHOR(S): Maris Nartiss
 
 PURPOSE:   Test functions related to line intersection
 
-COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
+COPYRIGHT: (C) 2022 Maris Nartiss, and by the GRASS Development Team
 
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
