@@ -101,7 +101,7 @@ class TestLineIntersect(TestCase):
         )
         self.assertEqual(ret, 1)
         self.assertEqual(c_lp_cps.contents.n_points, 1)
-        
+
     def testColinearIntersections(self):
         """Line overlap or continuation"""
         c_lp_cps = libvect.Vect_new_line_struct()
@@ -152,57 +152,39 @@ class TestLineIntersect(TestCase):
 
     def testNoFarCheckIntersection(self):
         """Both lines are far away"""
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_snake, self.c_lp_fmiss, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_snake, self.c_lp_fmiss, 0)
         self.assertEqual(ret, 0)
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_snake, self.c_lp_fmiss, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_snake, self.c_lp_fmiss, 0)
         self.assertEqual(ret, 0)
 
     def testNoNearCheckIntersection(self):
         """Second line is inside first bbox but do not cross"""
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_snake, self.c_lp_nmiss, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_snake, self.c_lp_nmiss, 0)
         self.assertEqual(ret, 0)
 
     def testSingleCheckIntersection(self):
         """Both lines have a single intersection point"""
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_snake, self.c_lp_scross, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_snake, self.c_lp_scross, 0)
         self.assertEqual(ret, 1)
 
     def testColinearCheckIntersections(self):
         """Line overlap or continuation"""
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_cont1, self.c_lp_mcross, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_cont1, self.c_lp_mcross, 0)
         self.assertEqual(ret, 0)
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_cont2, self.c_lp_mcross, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_cont2, self.c_lp_mcross, 0)
         self.assertEqual(ret, 0)
         ret = libvect.Vect_line_check_intersection(
             self.c_lp_scross, self.c_lp_mcross, 0
         )
         self.assertEqual(ret, 1)
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_cont2, self.c_lp_cont3, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_cont2, self.c_lp_cont3, 0)
         self.assertEqual(ret, 1)
 
     def testMultiCheckIntersections(self):
         """Both lines intersect at multiple points"""
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_snake, self.c_lp_mcross, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_snake, self.c_lp_mcross, 0)
         self.assertEqual(ret, 1)
-        ret = libvect.Vect_line_check_intersection(
-            self.c_lp_snake, self.c_lp_ssnake, 0
-        )
+        ret = libvect.Vect_line_check_intersection(self.c_lp_snake, self.c_lp_ssnake, 0)
         self.assertEqual(ret, 1)
 
 
@@ -289,7 +271,7 @@ class TestLineIntersect2(TestCase):
         )
         self.assertEqual(ret, 1)
         self.assertEqual(c_lp_cps.contents.n_points, 1)
-        
+
     def testColinearIntersections2(self):
         """Line overlap or continuation"""
         c_lp_cps = libvect.Vect_new_line_struct()
@@ -340,20 +322,14 @@ class TestLineIntersect2(TestCase):
 
     def testNoFarCheckIntersection2(self):
         """Both lines are far away"""
-        ret = libvect.Vect_line_check_intersection2(
-            self.c_lp_snake, self.c_lp_fmiss, 0
-        )
+        ret = libvect.Vect_line_check_intersection2(self.c_lp_snake, self.c_lp_fmiss, 0)
         self.assertEqual(ret, 0)
-        ret = libvect.Vect_line_check_intersection2(
-            self.c_lp_snake, self.c_lp_fmiss, 0
-        )
+        ret = libvect.Vect_line_check_intersection2(self.c_lp_snake, self.c_lp_fmiss, 0)
         self.assertEqual(ret, 0)
 
     def testNoNearCheckIntersection2(self):
         """Second line is inside first bbox but do not cross"""
-        ret = libvect.Vect_line_check_intersection2(
-            self.c_lp_snake, self.c_lp_nmiss, 0
-        )
+        ret = libvect.Vect_line_check_intersection2(self.c_lp_snake, self.c_lp_nmiss, 0)
         self.assertEqual(ret, 0)
 
     def testSingleCheckIntersection2(self):
@@ -377,9 +353,7 @@ class TestLineIntersect2(TestCase):
             self.c_lp_scross, self.c_lp_mcross, 0
         )
         self.assertEqual(ret, 1)
-        ret = libvect.Vect_line_check_intersection2(
-            self.c_lp_cont2, self.c_lp_cont3, 0
-        )
+        ret = libvect.Vect_line_check_intersection2(self.c_lp_cont2, self.c_lp_cont3, 0)
         self.assertEqual(ret, 2)
 
     def testMultiCheckIntersections2(self):
