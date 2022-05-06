@@ -23,8 +23,8 @@ with major for breaking changes, minor for backwards compatible
 features, and patch for fixes.
 
 For the versions 7.0 till 8.2, there was a distinction between even and odd minor versions.
-Even minor versions were released, while odd minor version marked development version.
-This odd versions never had a patch number assigned and were never released.
+Even minor versions were released, while odd minor versions marked development versions.
+These odd versions never had a patch number assigned and were never released.
 
 ## Motivation
 
@@ -34,12 +34,12 @@ When all version numbers refer to releases, previews (alphas, betas, daily build
 always need additional indication of the version being a preview.
 However, using odd version to mark the development versions requires
 still additional explanation, for example, download for 8.1 on the website
-said _preview_ anyway because the odd number does not indicate the
-development version.
+said _preview_ anyway because the odd number does not indicate a
+development version by itself, i.e., it's not self-explanatory.
 Hence, odd numbers for development versions do not bring any advantage.
 
 The branching and release procedure with even minor numbers for releases
-and odd numbers for development versions require that when new branch for
+and odd numbers for development versions require that when a new branch for
 a minor version is created, the branch needs to change all the mentions
 of the minor version number to the next even number and, at the same time,
 the _main_ branch needs to change to the next odd number.
@@ -56,23 +56,23 @@ development versions.
 
 ### Major
 
-In accordance with Semantic Versioning, major release must happen with
+In accordance with Semantic Versioning, a major release must happen with
 any backwards incompatible change in the API which includes
 both interface and behavior changes (API also defines what happens,
 not just names and signatures).
 
-Additionally, major feature additions which would require only minor release in terms of API stability,
-are strongly suggested to trigger major release as well.
+Additionally, major feature additions which would require only a minor release in terms of API stability,
+are strongly suggested to trigger a major release as well.
 This in turn helps to address the issue of outdated tutorials and small, but breaking, changes.
 
 Some major features such as changes in the GUI are fully backwards compatible
 (GUI API is not a public API in versions 7 and 8), but are heavily influencing tutorials and
-other teaching materials. In that sense, behavior linked to a particular interface is changed,
+other teaching materials. In that sense, the behavior linked to a particular interface is changed,
 so a major version is required.
 
 There is always a list of many small changes which are not backwards compatible,
-for example, a cleanup of depreciated functions. None of these changes alone does
-not seem worth a major release, but because it would require one, it is never done.
+for example, a cleanup of depreciated functions. None of these changes alone 
+seems worth a major release, but because it would require one, it is never done.
 With more common major releases, small changes can happen more often.
 
 ### Minor
@@ -88,11 +88,15 @@ If only backwards compatible bug fixes, i.e., fixes of incorrect behavior, are a
 a micro version can be released.
 
 The micro version is also known as _patch_ which is what Semantic Versioning is using
-and _point_ which is what was used in some GRASS GIS documents. The work _micro_ is used
+and _point_ which is what was used in some GRASS GIS documents. The word _micro_ is used
 to avoid collision with patch in the meaning of individual changeset or fix
 (release contain one or more of these changes). Point release (or _dot_ release)
-can generally apply to anything after the first dot, so minor or micro release.
-
+can generally apply to anything after the first dot, i.e., minor or micro release.
+Using minor and micro does not have that ambiguity.
+Minor and micro have potential for confusion between these two due to the
+similarity of the names, but minor is an established term in this context
+and minor is sometimes used in this context and other contexts it has
+the right connotations.
 ### Development Versions
 
 Development versions have the version number of the next release which will be released
@@ -113,7 +117,7 @@ which consists of identification of pre-release type, i.e., rc or RC, optional d
 and a release candidate number, e.g., 3.5.1-rc.2, 3.5.1-RC.2, 3.5.1-rc2, or 3.5.1-RC2.
 
 Daily builds and other builds of development versions other than release candidates
-are may use additional dashes to specify the actual source version, e.g.,
+may use additional dashes to specify the actual source version, e.g.,
 3.5.1-dev-05e5df2e7.
 
 Any version parsing or build system, must support both systems, the one without
@@ -134,7 +138,7 @@ and the form with plus.
 ## Relation to Other Documents
 
 * [RFC 4: Release Procedure](https://trac.osgeo.org/grass/wiki/RFC/4_ReleaseProcedure): No changes to release procedure, only the numbering is changed.
-* [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule#Externalreleaseschedules) (from  at Trac wiki under Release): The Release Schedule document describes schedule, branching, release maintenance, and numbering. The numbering is changed, specifically the use of odd version numbers for development.
+* [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule#Externalreleaseschedules) (at Trac wiki under Release): The Release Schedule document describes schedule, branching, release maintenance, and numbering. The numbering is changed, specifically the use of odd version numbers for development.
 * [Semantic Versioning](https://semver.org/) (version 2.0.0 at the time of writing): Semantic Versioning treatment of _major_, _minor_, and _micro_ numbers should be respected. The labeling of other versions does not comply with Semantic Versioning, but it is a desired state for the future.
 
 ## Other Projects
