@@ -18,7 +18,8 @@ i.e., there is no distinction between even and odd numbers.
 ## Background
 
 The increasing versions was always following the same ideas as in
-the Semantic Versioning, i.e., _major_, _minor_, and _patch_
+the [Semantic Versioning](https://semver.org/),
+i.e., _major_, _minor_, and _patch_,
 with major for breaking changes, minor for backwards compatible
 features, and patch for fixes.
 
@@ -33,7 +34,7 @@ version 5 and 6 series.
 This odd-even practice followed the numbering scheme of the Linux kernel
 which abandoned the practice since then.
 
-The odd-even practice replaced a system where multiple numbered beta
+At the time of version 5, the odd-even practice replaced a system where multiple numbered beta
 versions were released. Version 5.0beta10 was a last beta release before the first
 pre-release of 5.0.0.
 
@@ -82,7 +83,7 @@ other teaching materials. In that sense, the behavior linked to a particular int
 so a major version is required.
 
 There is always a list of many small changes which are not backwards compatible,
-for example, a cleanup of depreciated functions. None of these changes alone 
+for example, a cleanup of deprecated functions. None of these changes alone
 seems worth a major release, but because it would require one, it is never done.
 With more common major releases, small changes can happen more often.
 
@@ -99,15 +100,18 @@ If only backwards compatible bug fixes, i.e., fixes of incorrect behavior, are a
 a micro version can be released.
 
 The micro version is also known as _patch_ which is what Semantic Versioning is using
-and _point_ which is what was used in some GRASS GIS documents. The word _micro_ is used
-to avoid collision with patch in the meaning of individual changeset or fix
-(release contain one or more of these changes). Point release (or _dot_ release)
-can generally apply to anything after the first dot, i.e., minor or micro release.
-Using minor and micro does not have that ambiguity.
-Minor and micro have potential for confusion between these two due to the
-similarity of the names, but minor is an established term in this context
-and minor is sometimes used in this context and other contexts it has
-the right connotations.
+and _point_ which is what was used in some GRASS GIS documents.
+The word _micro_, rather than patch, is used
+to avoid collision with patch referring to an individual changeset or fix
+(a release contains one or more of these changes).
+A point release (or a _dot_ release) can generally apply to anything after
+the first dot, i.e., minor or micro release, while
+using minor and micro does not have that ambiguity.
+Although minor and micro have potential for confusion due to the
+similarity of their names, minor is an established term in this context
+and micro is sometimes used in this context and in other contexts,
+it has the right connotations.
+
 ### Development Versions
 
 Development versions have the version number of the next release which will be released
@@ -138,7 +142,7 @@ a dash and the one with dash.
 
 When build information is captured in the version number, Semantic Versioning
 prescribed plus sign as a separator, e.g., 3.5.1+1 or 3.5.1-RC1+1.
-However, filenames with a plus sign my not work well, so a dash as a separator
+However, filenames with a plus sign may not work well, so a dash as a separator
 is allowed too while keeping in mind that automated semantic version tools
 won't parse the version correctly. A suggested workaround is to use the dash
 only in a file name and elsewhere use plus.
