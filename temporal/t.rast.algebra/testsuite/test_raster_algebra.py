@@ -330,7 +330,6 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-
     def test_tmap_function1(self):
         """Testing the tmap function."""
 
@@ -406,7 +405,6 @@ class TestTRastAlgebra(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
-
 
     def test_raster_arithmetic_relation_1(self):
         """Arithmetic test with temporal intersection"""
