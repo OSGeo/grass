@@ -1951,7 +1951,7 @@ def sanitize_mapset_environment(env):
     return env
 
 
-def create_environment(gisdbase, location, mapset):
+def create_environment(gisdbase, location, mapset, env=None):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
     of this function is responsible for deleting the file."""
@@ -1960,11 +1960,116 @@ def create_environment(gisdbase, location, mapset):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    env = os.environ.copy()
+    if env:
+        env = env.copy()
+    else:
+        env = os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)
     return f.name, env
+
+
+class MapsetSession:
+    """Session in another mapset in the same location
+
+    By default, it assumes that the mapset exists and raises ValueError otherwise.
+    Use *create* to create a new mapset and add *overwrite* to delete an existing
+    one of the same name (with all the data in it) before the new one is created.
+    To use existing mapset if it exist and create if it does not, use *ensure*.
+
+    Note that *ensure* will not create a new mapset if the current is invalid.
+    Invalid mapset may mean corrupt data, so it is not clear what to do.
+    Using create with overwrite will work on an invalid mapset because
+    the existing mapset is always deleted.
+
+    Standard use of the object is create it an the with statement
+    and use its *env* property pass the environment variables for the session
+    to subprocesses:
+
+    >>> with MapsetSession(name, ensure=True) as session:
+    ...     run_command("r.surf.fractal", output="surface", env=session.env)
+
+    The name argument is positional-only.
+
+    .. versionadded:: 8.3
+    """
+
+    def __init__(self, name, *, create=False, overwrite=False, ensure=False, env=None):
+        """Starts the session and creates the mapset if requested"""
+        self._name = name
+        self._env = env
+        self._session_file = None
+        self._active = False
+        self._start(create=create, overwrite=overwrite, ensure=ensure)
+
+    @property
+    def active(self):
+        """True if session is active (i.e., not finished)"""
+        return self._active
+
+    @property
+    def env(self):
+        """Mapping object with environment variables"""
+        return self._env
+
+    @property
+    def name(self):
+        """Mapset name"""
+        return self._name
+
+    def _start(self, create, overwrite, ensure):
+        """Start the session and create the mapset if requested"""
+        from grass.grassdb.create import require_create_ensure_mapset
+
+        gis_env = gisenv(env=self._env)
+        require_create_ensure_mapset(
+            gis_env["GISDBASE"],
+            gis_env["LOCATION_NAME"],
+            self._name,
+            create=create,
+            overwrite=overwrite,
+            ensure=ensure,
+        )
+        self._session_file, self._env = create_environment(
+            gis_env["GISDBASE"],
+            gis_env["LOCATION_NAME"],
+            self._name,
+            env=self._env,
+        )
+        self._active = True
+
+    def finish(self):
+        """Finish the session.
+
+        If not used as a context manager, call explicitly to clean and close the mapset
+        and finish the session. No GRASS modules can be called afterwards with
+        the environment obtained from this object.
+        """
+        if not self.active:
+            raise ValueError("Attempt to finish an already finished session")
+        os.remove(self._session_file)
+        self._active = False
+
+    def __enter__(self):
+        """Enter the context manager context.
+
+        Notably, the session is activated in its *__init__* function.
+
+        :returns: reference to the object (self)
+        """
+        if not self.active:
+            raise ValueError(
+                "Attempt to use inactive (finished) session as a context manager"
+            )
+        return self
+
+    def __exit__(self, type, value, traceback):  # pylint: disable=redefined-builtin
+        """Exit the context manager context.
+
+        Finishes the existing session.
+        """
+        self.finish()
 
 
 if __name__ == "__main__":
