@@ -306,6 +306,10 @@
         <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
       <separator/>
+      <module-item name="r.in.wms">
+        <label>WMS/WMTS import</label>
+      </module-item>
+      <separator/>
       <module-item name="r.unpack">
         <label>Unpack raster map</label>
       </module-item>
