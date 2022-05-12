@@ -17,6 +17,7 @@ import os
 import shutil
 import tempfile
 import weakref
+from pathlib import Path
 
 import grass.script as gs
 
@@ -159,7 +160,7 @@ class Map:
         :param `**kwargs`: named arguments passed to run_command()"""
 
         # Check module is from display library then run
-        if module[0] == "d":
+        if module[0] == "d" or Path(module).is_file():
             self._region_manager.set_region_from_command(module, **kwargs)
             self._region_manager.adjust_rendering_size_from_region()
             gs.run_command(module, env=self._env, **kwargs)
