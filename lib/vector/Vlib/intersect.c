@@ -637,6 +637,9 @@ static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
  * intersection with B line. Points (Points->n_points == 1) are not
  * supported.
  *
+ * Superseded by the faster Vect_line_intersection2()
+ * Kept as reference implementation
+ *
  * \param APoints first input line 
  * \param BPoints second input line 
  * \param[out] ALines array of new lines created from original A line
@@ -1438,6 +1441,9 @@ line_check_intersection(struct line_pnts *APoints,
  *
  * Points (Points->n_points == 1) are also supported.
  *
+ * Superseded by the faster Vect_line_check_intersection2()
+ * Kept as reference implementation
+ *
  * \param APoints first input line 
  * \param BPoints second input line 
  * \param with_z 3D, not supported (only if one or both are points)!
@@ -1457,6 +1463,9 @@ Vect_line_check_intersection(struct line_pnts *APoints,
  * \brief Get 2 lines intersection points.
  * 
  * A wrapper around Vect_line_check_intersection() function.
+ *
+ * Superseded by the faster Vect_line_get_intersections2()
+ * Kept as reference implementation
  *
  * \param APoints first input line 
  * \param BPoints second input line 
