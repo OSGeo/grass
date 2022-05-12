@@ -93,7 +93,7 @@ chmod -R a+r *
 Double check:
 
 ```bash
-git status
+git status --ignored
 ```
 
 ### Create release branch (only if not yet existing)
@@ -239,26 +239,27 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
 ### Upload source code tarball to OSGeo servers
 
-Note: grasslxd only reachable via jumphost - https://wiki.osgeo.org/wiki/SAC_Service_Status#GRASS_GIS_server
+Note: servers 'grasslxd' and 'osgeo7-download' only reachable via
+      jumphost - see https://wiki.osgeo.org/wiki/SAC_Service_Status#GRASS_GIS_server
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
 SERVER1=grasslxd
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
-SERVER2=download.osgeo.org
+SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
 echo $SERVER1:$SERVER1DIR
 echo $SERVER2:$SERVER2DIR
 
 # upload along with associated files:
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING $USER@$SERVER1:$SERVER1DIR
+  INSTALL REQUIREMENTS.html SUBMITTING CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
 
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
-  INSTALL REQUIREMENTS.html SUBMITTING $USER@$SERVER2:$SERVER2DIR
+  INSTALL REQUIREMENTS.html SUBMITTING CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
 
-# Only at full release!
+# Only at full release (i.e., not for RCs)!
 # generate link to "latest" source code
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
