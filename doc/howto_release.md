@@ -239,13 +239,13 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
 ### Upload source code tarball to OSGeo servers
 
-Note: servers 'grasslxd' and 'osgeo7-download' only reachable via
-      jumphost - see https://wiki.osgeo.org/wiki/SAC_Service_Status#GRASS_GIS_server
+Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
+      jumphost (managed by OSGeo-SAC) - see https://wiki.osgeo.org/wiki/SAC_Service_Status#grass
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=grasslxd
+SERVER1=osgeo8-grass
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
