@@ -3,10 +3,18 @@
 <em>r.mfilter</em> filters the raster <em>input</em> to produce the
 raster <em>output</em> according to the matrix <em>filter</em> designed
 by the user (see <em>FILTERS</em> below).
+
+<center>
+<img src="r_mfilter.png">
+<p><em>Figure: Illustration for a custom 3x3 filter</em></p>
+</center>
+
+<p>
 The filter is applied <em>repeat</em> times (default <em>value</em> is 1).
 The <em>output</em> raster map layer can be given a <em>TITLE</em> if desired.
 (This TITLE should be put in quotes if it contains more than one word.)
 
+<p>
 With <b>-z</b> flag the filter is applied only to null values in
 the input raster map layer.  The non-null category values are not changed.
 Note that if there is more than one filter step, this rule is applied to the
