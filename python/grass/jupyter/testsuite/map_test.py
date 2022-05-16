@@ -101,7 +101,7 @@ class TestMap(TestCase):
         # Make sure image was created
         self.assertFileExists(grass_renderer.filename)
 
-    def test_filename_property(self):
+    def test_safe_file(self):
         """Test saving of file"""
         grass_renderer = gj.Map()
         # Add a vector and a raster to the map
