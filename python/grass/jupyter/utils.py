@@ -143,6 +143,8 @@ def set_target_region(src_env, tgt_env):
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
+        rows=new_region["rows"],
+        cols=new_region["cols"],
         env=tgt_env,
     )
 
