@@ -1,7 +1,7 @@
 # How the GRASS GIS Webserver and related infrastructure works
 
 written by M. Neteler
-Last changed: July 2020
+Last changed: May 2022
 
 Related Wiki documents:
 
