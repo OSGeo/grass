@@ -417,7 +417,10 @@ class SessionHandle:
 # clean-up functions when terminating a GRASS session
 # these fns can only be called within a valid GRASS session
 def clean_default_db():
-    # clean the default db if it is sqlite
+    """Clean the default db if it is SQLite"""
+    # Limiting usage of in other function by lazy-imports.
+    # pylint: disable=import-outside-toplevel
+    import grass.script as gs
     from grass.script import core as gcore
     from grass.script import db as gdb
 
@@ -429,13 +432,13 @@ def clean_default_db():
         database = database.replace("$GISDBASE", gisenv["GISDBASE"])
         database = database.replace("$LOCATION_NAME", gisenv["LOCATION_NAME"])
         database = database.replace("$MAPSET", gisenv["MAPSET"])
-        if os.path.exists(database):
-            gcore.message(_("Cleaning up default sqlite database ..."))
-            gcore.start_command("db.execute", sql="VACUUM")
-            # give it some time to start
-            import time
-
-            time.sleep(0.1)
+        database = Path(database)
+        small_db_size = 1e8  # 100 MB (not MiB) in bytes
+        if database.is_file() and database.stat().st_size > small_db_size:
+            process = gs.start_command("db.execute", sql="VACUUM")
+            gs.verbose(_("Cleaning up default SQLite database..."))
+            process.wait()
+            # Error handling is the same as errors="ignore".
 
 
 def call(cmd, **kwargs):
