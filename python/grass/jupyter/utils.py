@@ -131,7 +131,10 @@ def setup_location(name, path, epsg, src_env):
 
 
 def set_target_region(src_env, tgt_env):
-    """Set target region based on source region"""
+    """Set target region based on source region.
+
+    Number of rows and columns is preserved.
+    """
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
     to_proj = get_location_proj_string(env=tgt_env)

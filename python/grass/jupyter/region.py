@@ -91,14 +91,13 @@ class RegionManagerForInteractiveMap:
         # set resolution based on r.proj estimate
         env_info = gs.gisenv(env=self._src_env)
         name, mapset = raster.split("@")
-        resolution = estimate_resolution(
+        self._resolution = estimate_resolution(
             raster=name,
             mapset=mapset,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
             env=self._tgt_env,
         )
-        self._resolution = resolution
         self._set_bbox(self._src_env)
 
     def set_bbox_vector(self, vector):

@@ -165,6 +165,16 @@ class InteractiveMap:
         folium documentation:
         https://python-visualization.github.io/folium/modules.html
 
+        Raster and vector data are always reprojected to pseudomercator.
+        With use_region=True or saved_region=myregion region extent
+        is reprojected and the number of rows and columns of that region
+        is kept the same. This region is then used for reprojection.
+        By default use_region is False, resulting in
+        reprojecting entire raster in its native resolution,
+        the reprojected resolution is estimated with r.proj.
+        Vector data are always reprojected without any clipping,
+        i.e., region options don't do anything.
+
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
         :param str tiles: map tileset to use
