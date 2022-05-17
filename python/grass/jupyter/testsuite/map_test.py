@@ -82,7 +82,7 @@ class TestMap(TestCase):
     def test_filename(self):
         """Test that Map creates maps with unique filenames."""
         # Create map with unique filename
-        custom_filename = "test_filename.png"
+        custom_filename = "test_filename_provided.png"
         grass_renderer = gj.Map(filename=custom_filename)
         # Add files to self for cleanup later
         self.files.append(custom_filename)
@@ -100,6 +100,18 @@ class TestMap(TestCase):
         grass_renderer.run("d.rast", map="elevation")
         # Make sure image was created
         self.assertFileExists(grass_renderer.filename)
+
+    def test_save_file(self):
+        """Test saving of file"""
+        grass_renderer = gj.Map()
+        # Add a vector and a raster to the map
+        grass_renderer.run("d.rast", map="elevation")
+        custom_filename = "test_filename_save.png"
+        grass_renderer.save(custom_filename)
+        # Add files to self for cleanup later
+        self.files.append(custom_filename)
+        # Make sure image was created
+        self.assertFileExists(custom_filename)
 
     def test_hw(self):
         """Test that Map creates maps with custom height and widths."""
