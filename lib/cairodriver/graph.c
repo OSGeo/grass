@@ -373,7 +373,10 @@ static void init_cairo(void)
     }
 
     if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error(_("Failed to initialize Cairo surface"));
+        G_fatal_error(_("Failed to initialize Cairo surface"
+                        " (width: %d, height: %d): %s"),
+                      ca.width, ca.height,
+                      cairo_status_to_string(cairo_surface_status(surface)));
 
     cairo = cairo_create(surface);
 }
