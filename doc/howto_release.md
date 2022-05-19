@@ -109,8 +109,8 @@ python ./generate_release_notes.py log releasebranch_8_2 8.2.0 $VERSION
 The script sorts them into categories defined in _utils/release.yml_.
 However, these notes need to be manually edited to collapse related items into one.
 Additionally, a _Highlights_ section needs to be added with manually identified new
-major features for major and minor releases and for all releases, as _Major_ section
-may need to be added showing critical fixes or breaking changes.
+major features for major and minor releases. For all releases, a _Major_ section
+may need to be added showing critical fixes or breaking changes if there are any.
 
 ### Changelog file for upload
 
