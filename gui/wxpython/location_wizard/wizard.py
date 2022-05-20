@@ -19,7 +19,7 @@ Classes:
  - wizard::EPSGPage
  - wizard::IAUPage
  - wizard::CustomPage
- - wizard::PPIKPage
+ - wizard::ProjPickerPage
  - wizard::SummaryPage
  - wizard::LocationWizard
  - wizard::WizardWithHelpButton
@@ -364,7 +364,7 @@ class CoordinateSystemPage(TitledPage):
         global coordsys
 
         # toggles
-        self.radioPpik = wx.RadioButton(
+        self.radioProjPicker = wx.RadioButton(
             parent=self,
             id=wx.ID_ANY,
             label=_("Select CRS interactively in a map"),
@@ -400,7 +400,7 @@ class CoordinateSystemPage(TitledPage):
 
         # layout
         self.sizer.SetVGap(10)
-        self.sizer.Add(self.radioPpik, flag=wx.ALIGN_LEFT, pos=(1, 1))
+        self.sizer.Add(self.radioProjPicker, flag=wx.ALIGN_LEFT, pos=(1, 1))
         self.sizer.Add(self.radioEpsg, flag=wx.ALIGN_LEFT, pos=(2, 1))
         # self.sizer.Add(self.radioIau,
         #               flag=wx.ALIGN_LEFT, pos=(1, 1))
@@ -424,15 +424,15 @@ class CoordinateSystemPage(TitledPage):
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioSrs.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioProj.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioXy.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioPpik.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioProjPicker.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
     def OnEnterPage(self, event):
         global coordsys
 
         if not coordsys:
-            coordsys = "ppik"
-            self.radioPpik.SetValue(True)
+            coordsys = "projpicker"
+            self.radioProjPicker.SetValue(True)
         else:
             if coordsys == "proj":
                 self.radioSrs.SetValue(True)
@@ -448,8 +448,8 @@ class CoordinateSystemPage(TitledPage):
                 self.radioProj.SetValue(True)
             if coordsys == "xy":
                 self.radioXy.SetValue(True)
-            if coordsys == "ppik":
-                self.radioPpik.SetValue(True)
+            if coordsys == "projpicker":
+                self.radioProjPicker.SetValue(True)
 
         if event.GetDirection():
             if coordsys == "proj":
@@ -473,9 +473,9 @@ class CoordinateSystemPage(TitledPage):
             if coordsys == "xy":
                 self.SetNext(self.parent.sumpage)
                 self.parent.sumpage.SetPrev(self.parent.csystemspage)
-            if coordsys == "ppik":
-                self.SetNext(self.parent.ppikpage)
-                self.parent.sumpage.SetPrev(self.parent.ppikpage)
+            if coordsys == "projpicker":
+                self.SetNext(self.parent.projpickerpage)
+                self.parent.sumpage.SetPrev(self.parent.projpickerpage)
 
         if not wx.FindWindowById(wx.ID_FORWARD).IsEnabled():
             wx.FindWindowById(wx.ID_FORWARD).Enable()
@@ -511,10 +511,10 @@ class CoordinateSystemPage(TitledPage):
             coordsys = "xy"
             self.SetNext(self.parent.sumpage)
             self.parent.sumpage.SetPrev(self.parent.csystemspage)
-        elif event.GetId() == self.radioPpik.GetId():
-            coordsys = "ppik"
-            self.SetNext(self.parent.ppikpage)
-            self.parent.sumpage.SetPrev(self.parent.ppikpage)
+        elif event.GetId() == self.radioProjPicker.GetId():
+            coordsys = "projpicker"
+            self.SetNext(self.parent.projpickerpage)
+            self.parent.sumpage.SetPrev(self.parent.projpickerpage)
 
 
 class ProjectionsPage(TitledPage):
@@ -2189,7 +2189,7 @@ class CustomPage(TitledPage):
                 nextButton.Enable()
 
 
-class PPIKPage(TitledPage):
+class ProjPickerPage(TitledPage):
     """Wizard page for selecting CRS interactively in a map"""
 
     def __init__(self, wizard, parent):
@@ -2204,14 +2204,14 @@ class PPIKPage(TitledPage):
         self.epsgdesc = ""
 
         # EPSG only?
-        self.ppik = ProjPickerPanel(
+        self.projpicker = ProjPickerPanel(
             self, filter_bbox=lambda b: b.crs_auth_name == "EPSG"
         )
-        self.sizer.Add(self.ppik, 1, wx.EXPAND)
+        self.sizer.Add(self.projpicker, 1, wx.EXPAND)
 
         # events
-        self.ppik.Bind(EVT_ITEM_SELECTED, self.OnItemSelected)
-        self.ppik.Bind(EVT_ITEM_DESELECTED, self.OnItemDeselected)
+        self.projpicker.Bind(EVT_ITEM_SELECTED, self.OnItemSelected)
+        self.projpicker.Bind(EVT_ITEM_DESELECTED, self.OnItemDeselected)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
@@ -2391,13 +2391,13 @@ class SummaryPage(TitledPage):
         proj4string = self.parent.CreateProj4String()
         iauproj4string = self.parent.iaupage.epsgparams
         epsgcode = self.parent.epsgpage.epsgcode
-        epsgcode_ppik = self.parent.ppikpage.epsgcode
+        epsgcode_projpicker = self.parent.projpickerpage.epsgcode
         datum = self.parent.datumpage.datum
         dtrans = self.parent.datum_trans
         global coordsys
 
         # print coordsys,proj4string
-        if coordsys in ("proj", "epsg", "iau", "wkt", "file", "ppik"):
+        if coordsys in ("proj", "epsg", "iau", "wkt", "file", "projpicker"):
             extra_opts = {}
             extra_opts["location"] = "location"
             extra_opts["getErrorMsg"] = True
@@ -2442,11 +2442,11 @@ class SummaryPage(TitledPage):
                     stdin=self.parent.wktpage.wktstring,
                     **extra_opts,
                 )
-            elif coordsys == "ppik":
+            elif coordsys == "projpicker":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
                     flags="jft",
-                    epsg=epsgcode_ppik,
+                    epsg=epsgcode_projpicker,
                     datum_trans=dtrans,
                     **extra_opts,
                 )
@@ -2503,10 +2503,10 @@ class SummaryPage(TitledPage):
             self.lproj4string.SetLabel(
                 ("%s" % combo_str.replace(" +", os.linesep + "+"))
             )
-        elif coordsys == "ppik":
+        elif coordsys == "projpicker":
             label = "EPSG code %s (%s)" % (
-                self.parent.ppikpage.epsgcode,
-                self.parent.ppikpage.epsgdesc,
+                self.parent.projpickerpage.epsgcode,
+                self.parent.projpickerpage.epsgdesc,
             )
 
         self.lprojection.SetLabel(label)
@@ -2558,7 +2558,7 @@ class LocationWizard(wx.Object):
         self.wktpage = WKTPage(self.wizard, self)
         self.ellipsepage = EllipsePage(self.wizard, self)
         self.custompage = CustomPage(self.wizard, self)
-        self.ppikpage = PPIKPage(self.wizard, self)
+        self.projpickerpage = ProjPickerPage(self.wizard, self)
         self.sumpage = SummaryPage(self.wizard, self)
 
         #
@@ -2597,8 +2597,8 @@ class LocationWizard(wx.Object):
         self.custompage.SetPrev(self.csystemspage)
         self.custompage.SetNext(self.sumpage)
 
-        self.ppikpage.SetPrev(self.csystemspage)
-        self.ppikpage.SetNext(self.sumpage)
+        self.projpickerpage.SetPrev(self.csystemspage)
+        self.projpickerpage.SetNext(self.sumpage)
 
         self.sumpage.SetPrev(self.csystemspage)
 
@@ -2616,7 +2616,7 @@ class LocationWizard(wx.Object):
         self.wktpage.DoLayout()
         self.ellipsepage.DoLayout()
         self.custompage.DoLayout()
-        self.ppikpage.DoLayout()
+        self.projpickerpage.DoLayout()
         self.sumpage.DoLayout()
         self.wizard.FitToPage(self.datumpage)
         size = self.wizard.GetPageSize()
@@ -2882,14 +2882,14 @@ class LocationWizard(wx.Object):
                     wkt=self.wktpage.wktstring,
                     desc=self.startpage.locTitle,
                 )
-            elif coordsys == "ppik":
-                if not self.ppikpage.epsgcode:
+            elif coordsys == "projpicker":
+                if not self.projpickerpage.epsgcode:
                     return _("EPSG code missing.")
 
                 grass.create_location(
                     dbase=self.startpage.grassdatabase,
                     location=self.startpage.location,
-                    epsg=self.ppikpage.epsgcode,
+                    epsg=self.projpickerpage.epsgcode,
                     datum=self.datumpage.datum,
                     datum_trans=self.datum_trans,
                     desc=self.startpage.locTitle,
