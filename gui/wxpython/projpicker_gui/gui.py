@@ -363,9 +363,9 @@ def start(
             # deselected an existing crs
             item = list(set(prev_crs_items) - set(curr_crs_items))[0]
             del prev_crs_items[prev_crs_items.index(item)]
-            l = len(prev_crs_items)
-            if l > 0:
-                curr_crs_item = prev_crs_items[l - 1]
+            n = len(prev_crs_items)
+            if n > 0:
+                curr_crs_item = prev_crs_items[n - 1]
         elif curr_crs_items:
             prev_crs_items.clear()
             prev_crs_items.extend(curr_crs_items)
@@ -549,7 +549,7 @@ def start(
         draw_image,
         lambda data: wx.Image(io.BytesIO(data)),
         lambda image, tile, x, y: image.Paste(tile, x, y),
-        lambda tile, dz: tile.Scale(tile.Width * 2 ** dz, tile.Height * 2 ** dz),
+        lambda tile, dz: tile.Scale(tile.Width * 2**dz, tile.Height * 2**dz),
         map_canvas_width,
         map_canvas_height,
         lat,

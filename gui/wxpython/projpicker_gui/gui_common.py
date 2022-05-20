@@ -215,15 +215,15 @@ def create_crs_info(bbox, format_crs_info=None):
     """
     if format_crs_info is None:
         dic = bbox._asdict()
-        l = 0
+        n = 0
         for key in dic.keys():
-            if len(key) > l:
-                l = len(key)
-        l += 1
+            if len(key) > n:
+                n = len(key)
+        n += 1
         txt = ""
         for key in dic.keys():
             k = key + ":"
-            txt += f"{k:{l}} {dic[key]}\n"
+            txt += f"{k:{n}} {dic[key]}\n"
     else:
         txt = format_crs_info(bbox)
     return txt
