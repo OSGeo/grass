@@ -56,7 +56,7 @@
    of limited number of decimal places and for different order of
    coordinates, the results would be different)
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2022 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -85,6 +85,8 @@ static int ident(double x1, double y1, double x2, double y2, double thresh);
 #endif
 static int cross_seg(int id, const struct RTree_Rect *rect, void *arg);
 static int find_cross(int id, const struct RTree_Rect *rect, void *arg);
+int line_check_intersection(struct line_pnts *APoints,
+			                struct line_pnts *BPoints, int with_z);
 
 #define D  ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
 #define D1 ((bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2))
@@ -634,6 +636,9 @@ static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
  * Creates array of new lines created from original A line, by
  * intersection with B line. Points (Points->n_points == 1) are not
  * supported.
+ *
+ * Superseded by the faster Vect_line_intersection2()
+ * Kept as reference implementation
  *
  * \param APoints first input line 
  * \param BPoints second input line 
@@ -1215,6 +1220,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 static struct line_pnts *APnts, *BPnts, *IPnts;
 
 static int cross_found;		/* set by find_cross() */
+static int report_all;     /* should all crossings be reported or just first one */
 
 /* break segments (called by rtree search) */
 static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
@@ -1239,40 +1245,29 @@ static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
     case 5:
 	break;
     case 1:
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+	if (0 > Vect_append_point(IPnts, x1, y1, z1))
 	    G_warning(_("Error while adding point to array. Out of memory"));
 	break;
     case 2:
     case 3:
     case 4:
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+	if (0 > Vect_append_point(IPnts, x1, y1, z1))
 	    G_warning(_("Error while adding point to array. Out of memory"));
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x2, &y2, &z2, 1))
+	if (0 > Vect_append_point(IPnts, x2, y2, z2))
 	    G_warning(_("Error while adding point to array. Out of memory"));
 	break;
     }
     /* add ALL (including end points and duplicates), clean later */
     if (ret > 0) {
 	cross_found = 1;
-	return 0;
+        if (!report_all)
+            return 0;
     }
     return 1;			/* keep going */
 }
 
-/*!
- * \brief Check if 2 lines intersect.
- *
- * Points (Points->n_points == 1) are also supported.
- *
- * \param APoints first input line 
- * \param BPoints second input line 
- * \param with_z 3D, not supported (only if one or both are points)!
- *
- * \return 0 no intersection 
- * \return 1 intersection found
- */
 int
-Vect_line_check_intersection(struct line_pnts *APoints,
+line_check_intersection(struct line_pnts *APoints,
 			     struct line_pnts *BPoints, int with_z)
 {
     int i;
@@ -1300,7 +1295,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
 	if (APoints->x[0] == BPoints->x[0] && APoints->y[0] == BPoints->y[0]) {
 	    if (!with_z) {
-		if (0 >
+		if (report_all && 0 >
 		    Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
 					  &APoints->y[0], NULL, 1))
 		    G_warning(_("Error while adding point to array. Out of memory"));
@@ -1308,7 +1303,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 	    }
 	    else {
 		if (APoints->z[0] == BPoints->z[0]) {
-		    if (0 >
+		    if (report_all && 0 >
 			Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
 					      &APoints->y[0], &APoints->z[0],
 					      1))
@@ -1330,7 +1325,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 			   NULL, NULL);
 
 	if (dist <= rethresh) {
-	    if (0 >
+	    if (report_all && 0 >
 		Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
 				      &APoints->z[0], 1))
 		G_warning(_("Error while adding point to array. Out of memory"));
@@ -1347,7 +1342,7 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 			   NULL, NULL);
 
 	if (dist <= rethresh) {
-	    if (0 >
+	    if (report_all && 0 >
 		Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
 				      &BPoints->z[0], 1))
 		G_warning(_("Error while adding point to array. Out of memory"));
@@ -1428,9 +1423,9 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 	    rect.boundary[5] = APoints->z[i];
 	}
 
-	RTreeSearch(MyRTree, &rect, find_cross, &i);	/* A segment number from 0 */
+    RTreeSearch(MyRTree, &rect, find_cross, &i);	/* A segment number from 0 */
 
-	if (cross_found) {
+	if (!report_all && cross_found) {
 	    break;
 	}
     }
@@ -1442,9 +1437,35 @@ Vect_line_check_intersection(struct line_pnts *APoints,
 }
 
 /*!
+ * \brief Check if 2 lines intersect.
+ *
+ * Points (Points->n_points == 1) are also supported.
+ *
+ * Superseded by the faster Vect_line_check_intersection2()
+ * Kept as reference implementation
+ *
+ * \param APoints first input line 
+ * \param BPoints second input line 
+ * \param with_z 3D, not supported (only if one or both are points)!
+ *
+ * \return 0 no intersection 
+ * \return 1 intersection found
+ */
+int
+Vect_line_check_intersection(struct line_pnts *APoints,
+			     struct line_pnts *BPoints, int with_z)
+{
+    report_all = 0;
+    return line_check_intersection(APoints, BPoints, with_z);
+}
+
+/*!
  * \brief Get 2 lines intersection points.
  * 
  * A wrapper around Vect_line_check_intersection() function.
+ *
+ * Superseded by the faster Vect_line_get_intersections2()
+ * Kept as reference implementation
  *
  * \param APoints first input line 
  * \param BPoints second input line 
@@ -1461,8 +1482,9 @@ Vect_line_get_intersections(struct line_pnts *APoints,
 {
     int ret;
 
+    report_all = 1;
     IPnts = IPoints;
-    ret = Vect_line_check_intersection(APoints, BPoints, with_z);
+    ret = line_check_intersection(APoints, BPoints, with_z);
 
     return ret;
 }
