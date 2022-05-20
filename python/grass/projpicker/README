@@ -1,3 +1,10 @@
+https://github.com/HuidaeCho/projpicker
+
+ProjPicker (projection picker) is a Python module that allows the user to
+select all coordinate reference systems (CRSs) whose extent completely
+contains given points, polylines, polygons, and bounding boxes using
+set-theoretic logical operators in a postfix notation.
+
 projpicker.db is a SQLite database file that contains information about the
 extents of coordinate reference systems (CRSs). It holds one table called bbox
 whose schema is defined in _bbox_schema in common.py. This file can be
