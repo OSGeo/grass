@@ -58,16 +58,15 @@ char *Rast_mask_info(void)
  *
  * @return true if mask is present, false otherwise
  */
-bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass)
+bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
+                      char *reclass_name, char *reclass_mapset)
 {
     int present = Rast__mask_info(name, mapset);
 
-    if (is_mask_reclass) {
+    if (is_mask_reclass && reclass_name && reclass_mapset) {
         if (present) {
-            char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
-
             *is_mask_reclass =
-                Rast_is_reclass("MASK", G_mapset(), rname, rmapset) > 0;
+                Rast_is_reclass("MASK", G_mapset(), reclass_name, reclass_mapset) > 0;
         }
         else {
             *is_mask_reclass = false;

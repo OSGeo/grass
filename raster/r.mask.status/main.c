@@ -48,7 +48,7 @@ void parse_parameters(struct Parameters *params, int argc, char **argv)
 
     params->like_test = G_define_flag();
     params->like_test->key = 't';
-    params->like_test->lable =
+    params->like_test->label =
         _("Return code 0 when mask present, 1 otherwise");
     params->like_test->description =
         _("Behave like the test utility, 0 for true, 1 for false, no output");
@@ -84,12 +84,13 @@ int report_status(struct Parameters *params)
 
     char name[GNAME_MAX];
     char mapset[GMAPSET_MAX];
+    char reclass_name[GNAME_MAX];
+    char reclass_mapset[GMAPSET_MAX];
 
     bool is_mask_reclass;
     bool present =
-        Rast_mask_status(name, mapset, reclass_name, reclass_mapset,
-                         &is_mask_reclass);
-    bool present = Rast_mask_present(name, mapset);
+        Rast_mask_status(name, mapset, &is_mask_reclass, reclass_name, reclass_mapset);
+    // bool present = Rast_mask_present(name, mapset);  // This would check the map presence rather than the automasking state in the library.
 
     //printf("%s", Rast_mask_info());
 
