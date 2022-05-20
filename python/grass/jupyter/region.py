@@ -17,6 +17,7 @@ from grass.exceptions import CalledModuleError
 
 from .utils import (
     get_map_name_from_d_command,
+    estimate_resolution,
     set_target_region,
     get_rendering_size,
 )
@@ -39,22 +40,35 @@ class RegionManagerForInteractiveMap:
         self._saved_region = saved_region
         self._src_env = src_env
         self._tgt_env = tgt_env
+        self._resolution = None
         # [SW, NE]: inverted to easily expand based on data, see _set_bbox
         self._bbox = [[90, 180], [-90, -180]]
         if self._use_region:
-            # tgt region already set
+            # tgt region already set, set resolution
+            self._resolution = self._get_psmerc_region_resolution()
             self._set_bbox(self._src_env)
         if self._saved_region:
             self._src_env["GRASS_REGION"] = gs.region_env(
                 region=self._saved_region, env=self._src_env
             )
             set_target_region(src_env=self._src_env, tgt_env=self._tgt_env)
+            self._resolution = self._get_psmerc_region_resolution()
             self._set_bbox(self._src_env)
 
     @property
     def bbox(self):
         """Bbox property for accessing maximum bounding box of all rendered layers."""
         return self._bbox
+
+    @property
+    def resolution(self):
+        """Resolution to be used for reprojection."""
+        return self._resolution
+
+    def _get_psmerc_region_resolution(self):
+        """Get region resolution (average ns and ew) of psmerc mapset"""
+        reg = gs.region(env=self._tgt_env)
+        return (reg["nsres"] + reg["ewres"]) / 2
 
     def set_region_from_raster(self, raster):
         """Sets computational region for rendering.
@@ -71,8 +85,19 @@ class RegionManagerForInteractiveMap:
         if self._use_region or self._saved_region:
             # target region and bbox already set
             return
+        # set target location region extent
         self._src_env["GRASS_REGION"] = gs.region_env(raster=raster, env=self._src_env)
         set_target_region(src_env=self._src_env, tgt_env=self._tgt_env)
+        # set resolution based on r.proj estimate
+        env_info = gs.gisenv(env=self._src_env)
+        name, mapset = raster.split("@")
+        self._resolution = estimate_resolution(
+            raster=name,
+            mapset=mapset,
+            location=env_info["LOCATION_NAME"],
+            dbase=env_info["GISDBASE"],
+            env=self._tgt_env,
+        )
         self._set_bbox(self._src_env)
 
     def set_bbox_vector(self, vector):
