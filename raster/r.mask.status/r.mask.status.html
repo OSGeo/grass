@@ -1,0 +1,35 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.mask.status</em> reports presence or absence of a raster mask.
+
+<h2>NOTES</h2>
+
+<h2>EXAMPLES</h2>
+
+<h3>Generate JSON output</h3>
+
+<div class="code"><pre>
+r.mask.status format=json
+</pre></div>
+
+<h3>Use as the test utility</h3>
+
+The POSIX <em>test</em> utility uses return code 0 to indicate true
+and 1 to indicate false, so testing existence of a file with <code>test -f</code>
+gives return code 0 when the file exists. <em>r.mask.status</em> can be used
+in the same with the the <b>-t</b> flag:
+
+<div class="code"><pre>
+r.mask.status -t
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.mask.html">r.mask</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Vaclav Petras, NC State University, Center for Geospatial Analytics
