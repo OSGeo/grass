@@ -13,15 +13,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2014-08-13 11:57+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
-"Language-Team: German <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2022-03-20 12:12+0000\n"
+"Last-Translator: Stefan Blumentrath <stefan.blumentrath@nina.no>\n"
+"Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -3523,6 +3524,8 @@ msgid ""
 "\n"
 "++ Running ccmath wrapper unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für ccmath wrapper aus ++"
 
 #: ../lib/gmath/test/test_ccmath_wrapper.c:42
 msgid ""
@@ -3541,12 +3544,16 @@ msgid ""
 "\n"
 "++ Running direct solver benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für direct solver durch ++"
 
 #: ../lib/gmath/test/test_blas1.c:40
 msgid ""
 "\n"
 "++ Running blas level 1 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 1 aus ++"
 
 #: ../lib/gmath/test/test_blas1.c:47
 msgid ""
@@ -3603,18 +3610,24 @@ msgid ""
 "\n"
 "++ Running krylov solver benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für krylov solver durch ++"
 
 #: ../lib/gmath/test/bench_blas2.c:35
 msgid ""
 "\n"
 "++ Running blas level 2 benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für blas level 2 durch ++"
 
 #: ../lib/gmath/test/test_blas2.c:38
 msgid ""
 "\n"
 "++ Running blas level 2 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 2 aus ++"
 
 #: ../lib/gmath/test/test_blas2.c:44
 msgid ""
@@ -3633,12 +3646,16 @@ msgid ""
 "\n"
 "++ Running blas level 3 benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für blas level 3 durch ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:37
 msgid ""
 "\n"
 "++ Running matrix conversion unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Matrix-Konvertierung aus ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:42
 msgid ""
@@ -3657,6 +3674,8 @@ msgid ""
 "\n"
 "++ Running blas level 3 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 3 aus ++"
 
 #: ../lib/gmath/test/test_blas3.c:44
 msgid ""
@@ -4149,18 +4168,24 @@ msgid ""
 "\n"
 "++ Running basic unit tests ++"
 msgstr ""
+"\n"
+"++ Führe grundlegende Tests aus ++"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:48
 msgid ""
 "\n"
 "-- Basic rtree unit tests failure --"
 msgstr ""
+"\n"
+"++ Grundlegende Tests für btree fehlgeschlagen ++"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:50
 msgid ""
 "\n"
 "-- Basic rtree unit tests finished successfully --"
 msgstr ""
+"\n"
+"++ Grundlegende Tests für btree erfolgreich beendet ++"
 
 #: ../lib/vector/Vlib/geos.c:52
 msgid "vector map is not opened"
@@ -6805,6 +6830,8 @@ msgid ""
 "\n"
 "++ Running column unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Spalten aus ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:42
 msgid ""
@@ -6823,18 +6850,24 @@ msgid ""
 "\n"
 "++ Run test copy column ++"
 msgstr ""
+"\n"
+"++ Teste das Kopieren von Spalten ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:150
 msgid ""
 "\n"
 "++ Test copy column finished ++"
 msgstr ""
+"\n"
+"++ Tests für das Kopieren von Spalten beendet ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:38
 msgid ""
 "\n"
 "++ Running table unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Tabellen aus ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:43
 msgid ""

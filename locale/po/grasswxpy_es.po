@@ -11,17 +11,18 @@ msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2016-07-13 18:51-0500\n"
-"Last-Translator: \n"
-"Language-Team: Spanish <grass-translations@lists.osgeo.org>\n"
-"Language: es_ES\n"
+"PO-Revision-Date: 2022-03-22 12:12+0000\n"
+"Last-Translator: Veronica <veroandreo@gmail.com>\n"
+"Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/"
+"grasswxpy/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11.2\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
-"X-Generator: Lokalize 1.5\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:28
 #: ../gui/wxpython/mapswipe/toolbars.py:36
@@ -674,9 +675,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:797
-#, fuzzy
 msgid "Unable to display the map"
-msgstr "No es posible eliminar el Directorio de mapas"
+msgstr "No es posible mostrar el mapa"
 
 #: ../gui/wxpython/datacatalog/tree.py:903
 #, python-brace-format
@@ -839,7 +839,7 @@ msgstr "&Renombrar"
 
 #: ../gui/wxpython/datacatalog/tree.py:1749
 msgid "&Display layers"
-msgstr ""
+msgstr "&Mostrar capas"
 
 #: ../gui/wxpython/datacatalog/tree.py:1751
 msgid "&Display layer"
@@ -855,47 +855,47 @@ msgstr "&Cambiar Directorio de mapas"
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
 msgid "&Delete mapset"
-msgstr ""
+msgstr "&Borrar mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
 msgid "&Rename mapset"
-msgstr ""
+msgstr "&Renombrar mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
 msgid "&Create mapset"
-msgstr ""
+msgstr "&Crear mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
 msgid "&Delete location"
-msgstr ""
+msgstr "&Borrar Localización"
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
 msgid "&Rename location"
-msgstr ""
+msgstr "&Renombrar localización"
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
 msgid "&Create new location"
-msgstr ""
+msgstr "&Crear nueva Localización"
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
 msgid "&Download sample location"
-msgstr ""
+msgstr "&Descargar localización de muestra"
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
-msgstr ""
+msgstr "&Borrar la base de datos de GRASS del catálogo de datos"
 
 #: ../gui/wxpython/datacatalog/tree.py:1842
 msgid "&Delete GRASS database from disk"
-msgstr ""
+msgstr "&Borrar la base de datos de GRASS del disco"
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
 msgid "&Delete locations"
-msgstr ""
+msgstr "&Borrar localizaciones"
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
 msgid "&Delete mapsets"
-msgstr ""
+msgstr "&Borrar mapsets"
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -1139,25 +1139,19 @@ msgid "GRASS needs a directory (GRASS database) in which to store its data. Crea
 msgstr "GRASS necesita un directorio donde almacenar sus datos (base de datos GRASS). Por favor cree uno si todavía no lo ha hecho. Una elección popular es \"grassdata\", ubicado en su directorio home. Presione el botón Explorar para seleccionar el directorio."
 
 #: ../gui/wxpython/gis_set.py:570
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to rename mapset: %s"
-msgstr ""
-"No es posible renombrar el Directorio de mapas.\n"
-"\n"
-"%s"
+msgstr "No es posible renombrar el Directorio de mapas: %s"
 
 #: ../gui/wxpython/gis_set.py:587
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to rename location: %s"
-msgstr ""
-"No es posible renombrar la Localización.\n"
-"\n"
-"%s"
+msgstr "No es posible renombrar la Localización: %s"
 
 #: ../gui/wxpython/gis_set.py:613
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to delete location: %s"
-msgstr "No se puede eliminar la Localización"
+msgstr "No se puede eliminar la Localización: %s"
 
 #: ../gui/wxpython/gis_set.py:641
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:769
@@ -1815,7 +1809,7 @@ msgstr "%s=, %s=, %s= y %s= son mutuamente excluyentes."
 
 #: ../gui/wxpython/animation/g.gui.animation.py:134
 msgid "Animation Tool - GRASS GIS"
-msgstr ""
+msgstr "Herramienta de Animación - GRASS GIS"
 
 #: ../gui/wxpython/animation/temporal_manager.py:110
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
@@ -2305,7 +2299,7 @@ msgstr "Texto"
 #: ../gui/wxpython/animation/dialogs.py:1614
 #, python-brace-format
 msgid "Exported file directory '{base_dir}' does not exist."
-msgstr ""
+msgstr "El directorio exportado '{base_dir}' no existe."
 
 #: ../gui/wxpython/animation/dialogs.py:1618
 msgid "Export file is missing."
@@ -2410,7 +2404,7 @@ msgstr "No válido"
 
 #: ../gui/wxpython/animation/frame.py:51
 msgid "Animation Tool"
-msgstr ""
+msgstr "Herramienta de Animación"
 
 #: ../gui/wxpython/animation/frame.py:157 ../gui/wxpython/mapswipe/frame.py:290
 msgid "Main Toolbar"
@@ -3885,7 +3879,7 @@ msgstr "Esta opción es requerida"
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
 msgid "(optional)"
-msgstr ""
+msgstr "(opcional)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:216
 msgid "Name of location directory in GIS Data Directory"
@@ -7958,7 +7952,7 @@ msgstr "Mapeo temático para mapa vectorial en vista 3D"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
-msgstr ""
+msgstr "Calculadora de mapas ráster 3D"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -13932,7 +13926,7 @@ msgstr "Mostrar las páginas del manual HTML del Diseñador cartográfico"
 
 #: ../gui/wxpython/menustrings.py:2110
 msgid "About Cartographic Composer"
-msgstr "Acerca del diseñador cartográfico"
+msgstr "Acerca del Diseñador Cartográfico"
 
 #: ../gui/wxpython/menustrings.py:2111
 msgid "Display information about Cartographic Composer"
@@ -13983,11 +13977,11 @@ msgstr "La localización descargada no es válida"
 
 #: ../gui/wxpython/startup/locdownload.py:379
 msgid "Abort"
-msgstr ""
+msgstr "Cancelar"
 
 #: ../gui/wxpython/startup/locdownload.py:380
 msgid "Abort download location"
-msgstr ""
+msgstr "Cancelar descarga de Localización"
 
 #: ../gui/wxpython/startup/locdownload.py:384
 msgid "Select sample location to download:"
@@ -14062,9 +14056,8 @@ msgid "Unable to create new mapset: {}"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:212
-#, fuzzy
 msgid "Do you want to import {}to the newly created location?"
-msgstr "¿Quiere importar <%(name)s> a la Localización recientemente creada?"
+msgstr "¿Quiere importar {} a la Localización recientemente creada?"
 
 #: ../gui/wxpython/startup/guiutils.py:217
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:537
@@ -14435,7 +14428,7 @@ msgstr "Tabla"
 
 #: ../gui/wxpython/dbmgr/base.py:1154 ../gui/wxpython/dbmgr/base.py:2277
 msgid " (read-only)"
-msgstr ""
+msgstr " (solo-lectura)"
 
 #: ../gui/wxpython/dbmgr/base.py:1168
 msgid "SQL Query"
@@ -15576,7 +15569,7 @@ msgstr "Salvar contenido de ventana de salida en el archivo"
 
 #: ../gui/wxpython/gui_core/goutput.py:145
 msgid "Abort running command"
-msgstr "Abortar comando en ejecución"
+msgstr "Cancelar ejecución de comando"
 
 #: ../gui/wxpython/gui_core/goutput.py:149
 msgid "&Log file"
@@ -16885,13 +16878,12 @@ msgid "Do advanced search using %s module"
 msgstr "Búsqueda avanzada usando el módulo %s"
 
 #: ../gui/wxpython/gui_core/menu.py:161
-#, fuzzy
 msgid "Double-click to run selected module"
-msgstr "Doble click o Ctrl-Enter para ejecutar módulo seleccionado"
+msgstr "Doble click para ejecutar el módulo seleccionado"
 
 #: ../gui/wxpython/gui_core/menu.py:164
 msgid "&Run..."
-msgstr ""
+msgstr "&Ejecutar..."
 
 #: ../gui/wxpython/gui_core/menu.py:165
 msgid "Run selected module from the tree"
@@ -16912,7 +16904,7 @@ msgstr "Documentación de %s ha sido abierta en el explorador web"
 
 #: ../gui/wxpython/gui_core/menu.py:356
 msgid "&Recent Files"
-msgstr ""
+msgstr "&Archivos recientes"
 
 #: ../gui/wxpython/icons/icon.py:39
 #, python-format
@@ -19069,9 +19061,8 @@ msgstr "Conjunto de datos ráster temporales (strds)"
 msgid "GRASS GIS {version} Map Display: {name} - Location: {loc}"
 msgstr "GRASS GIS {version} Visualizador de mapas: {name} - Localización: {loc}"
 
-#, fuzzy
 msgid "The copied layer needs to be reprojected:"
-msgstr "Capa a eliminar"
+msgstr "La capa copiada necesita ser reproyectada:"
 
 msgid "Map <{layer}> marked for copying. You can paste it to the current mapset <{mapset}>."
 msgstr "Mapa <{layer}> marcada para ser copiada. Se la puede pegar en el Directorio de mapas actual <{mapset}>."
