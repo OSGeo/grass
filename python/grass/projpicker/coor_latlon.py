@@ -188,28 +188,29 @@ def parse_bbox(bbox):
         float, float, float, float: South, north, west, and east in decimal
         degrees.
     """
-    s = n = w = e = None
+    south = north = west = east = None
     typ = type(bbox)
     if typ == str:
         m = _latlon_bbox_re.match(bbox)
         if m:
-            b = parse_lat(m, 0)
-            t = parse_lat(m, 1)
-            l = parse_lon(m, 2)
-            r = parse_lon(m, 3)
-            if -90 <= b <= 90 and -90 <= t <= 90 and b <= t:
-                s = b
-                n = t
-            if -180 <= l <= 180:
-                w = l
-            if -180 <= r <= 180:
-                e = r
+            bottom = parse_lat(m, 0)
+            top = parse_lat(m, 1)
+            left = parse_lon(m, 2)
+            right = parse_lon(m, 3)
+
+            if -90 <= bottom <= 90 and -90 <= top <= 90 and bottom <= top:
+                south = bottom
+                north = top
+            if -180 <= left <= 180:
+                west = left
+            if -180 <= right <= 180:
+                east = right
     elif typ in (list, tuple) and len(bbox) == 4:
-        s = get_float(bbox[0])
-        n = get_float(bbox[1])
-        w = get_float(bbox[2])
-        e = get_float(bbox[3])
-    return [s, n, w, e]
+        south = get_float(bbox[0])
+        north = get_float(bbox[1])
+        west = get_float(bbox[2])
+        east = get_float(bbox[3])
+    return [south, north, west, east]
 
 
 ###############################################################################
@@ -228,31 +229,31 @@ def calc_poly_bbox(poly):
         float, float, float, float: South, north, west, and east in decimal
         degrees.
     """
-    s = n = w = e = None
+    south = north = west = east = None
 
     for point in poly:
         lat, lon = point
 
-        if s is None:
-            s = n = lat
-            w = e = lon
+        if south is None:
+            south = north = lat
+            west = east = lon
         else:
-            if lat < s:
-                s = lat
-            elif lat > n:
-                n = lat
-            if lon < w:
-                w = lon
-            elif lon > e:
-                e = lon
+            if lat < south:
+                south = lat
+            elif lat > north:
+                north = lat
+            if lon < west:
+                west = lon
+            elif lon > east:
+                east = lon
 
     # if crossing the antimeridian
-    while w < -180:
-        w += 360
-    while e > 180:
-        e -= 360
+    while west < -180:
+        west += 360
+    while east > 180:
+        east -= 360
 
-    return s, n, w, e
+    return south, north, west, east
 
 
 def is_point_within_bbox(point, bbox):
@@ -267,15 +268,15 @@ def is_point_within_bbox(point, bbox):
         bool: True if point is within bbox. Otherwise, False.
     """
     lat, lon = point
-    s = bbox.south_lat
-    n = bbox.north_lat
-    w = bbox.west_lon
-    e = bbox.east_lon
-    return s <= lat <= n and (
-        w == e
-        or (w == -180 and e == 180)
-        or (w < e and w <= lon <= e)
-        or (w > e and (-180 <= lon <= e or w <= lon <= 180))
+    south = bbox.south_lat
+    north = bbox.north_lat
+    west = bbox.west_lon
+    east = bbox.east_lon
+    return south <= lat <= north and (
+        west == east
+        or (west == -180 and east == 180)
+        or (west < east and west <= lon <= east)
+        or (west > east and (-180 <= lon <= east or west <= lon <= 180))
     )
 
 
@@ -291,30 +292,35 @@ def is_bbox_within_bbox(bbox1, bbox2):
     Returns:
         bool: True if bbox1 is within bbox2. Otherwise, False.
     """
-    s, n, w, e = bbox1
-    b = bbox2.south_lat
-    t = bbox2.north_lat
-    l = bbox2.west_lon
-    r = bbox2.east_lon
+    south, north, west, east = bbox1
+    bottom = bbox2.south_lat
+    top = bbox2.north_lat
+    left = bbox2.west_lon
+    right = bbox2.east_lon
     return (
-        b <= s <= t
-        and b <= n <= t
+        bottom <= south <= top
+        and bottom <= north <= top
         and (
-            l == r
-            or (l == -180 and r == 180)
-            or (l < r and w <= e and l <= w <= r and l <= e <= r)
+            left == right
+            or (left == -180 and right == 180)
             or (
-                l > r
+                left < right
+                and west <= east
+                and left <= west <= right
+                and left <= east <= right
+            )
+            or (
+                left > right
                 and (
                     (
-                        w <= e
+                        west <= east
                         and (
-                            (-180 <= w <= r and -180 <= e <= r)
-                            or l <= w <= 180
-                            and l <= e <= 180
+                            (-180 <= west <= right and -180 <= east <= right)
+                            or left <= west <= 180
+                            and left <= east <= 180
                         )
                     )
-                    or (w > e and -180 <= e <= r and l <= w <= 180)
+                    or (west > east and -180 <= east <= right and left <= west <= 180)
                 )
             )
         )
@@ -397,28 +403,28 @@ def query_bbox_using_cursor(
     Returns:
         list: List of queried BBox instances sorted by area.
     """
-    s, n, w, e = parse_bbox(bbox)
+    south, north, west, east = parse_bbox(bbox)
     # if west_lon >= east_lon, bbox crosses the antimeridian
     sql = f"""SELECT *
               FROM bbox
               WHERE {"NOT" if negate else ""}
-                    ({s} BETWEEN south_lat AND north_lat AND
-                     {n} BETWEEN south_lat AND north_lat AND
+                    ({south} BETWEEN south_lat AND north_lat AND
+                     {north} BETWEEN south_lat AND north_lat AND
                      (west_lon = east_lon OR
                       (west_lon = -180 AND east_lon = 180) OR
                       (west_lon < east_lon AND
-                       {w} <= {e} AND
-                       {w} BETWEEN west_lon AND east_lon AND
-                       {e} BETWEEN west_lon AND east_lon) OR
+                       {west} <= {east} AND
+                       {west} BETWEEN west_lon AND east_lon AND
+                       {east} BETWEEN west_lon AND east_lon) OR
                       (west_lon > east_lon AND
-                       (({w} <= {e} AND
-                         (({w} BETWEEN -180 AND east_lon AND
-                           {e} BETWEEN -180 AND east_lon) OR
-                          ({w} BETWEEN west_lon AND 180 AND
-                           {e} BETWEEN west_lon AND 180))) OR
-                        ({w} > {e} AND
-                         {e} BETWEEN -180 AND east_lon AND
-                         {w} BETWEEN west_lon AND 180))))
+                       (({west} <= {east} AND
+                         (({west} BETWEEN -180 AND east_lon AND
+                           {east} BETWEEN -180 AND east_lon) OR
+                          ({west} BETWEEN west_lon AND 180 AND
+                           {east} BETWEEN west_lon AND 180))) OR
+                        ({west} > {east} AND
+                         {east} BETWEEN -180 AND east_lon AND
+                         {west} BETWEEN west_lon AND 180))))
                      AND_UNIT AND_PROJ_TABLE)
               ORDER BY area_sqkm,
                        proj_table,

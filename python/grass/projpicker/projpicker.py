@@ -36,6 +36,18 @@ import math
 import json
 import pprint
 
+from .common import (
+    BBox,
+    _coor_sep,
+    _pos_float_pat,
+    _bbox_schema,
+    _bbox_columns,
+    get_float,
+)
+from . import coor_latlon
+from . import coor_xy
+
+
 has_gui = True
 try:
     from grass.script.setup import set_gui_path
@@ -44,18 +56,6 @@ try:
     from projpicker_gui import gui
 except Exception:
     has_gui = False
-
-from .common import (
-    BBox,
-    _coor_sep,
-    _pos_float_pat,
-    _bbox_schema,
-    _bbox_columns,
-    is_verbose,
-    get_float,
-)
-from . import coor_latlon
-from . import coor_xy
 
 # module path
 _module_path = os.path.dirname(__file__)
@@ -609,30 +609,35 @@ def transform_latlon_bbox(bbox, to_crs):
     """
     import pyproj
 
-    s, n, w, e = bbox
+    south, north, west, east = bbox
     try:
         trans = pyproj.Transformer.from_crs("EPSG:4326", to_crs, always_xy=True)
-        x = [w, w, e, e]
-        y = [s, n, s, n]
-        if s * n < 0:
-            x.extend([w, e])
+        x = [west, west, east, east]
+        y = [south, north, south, north]
+        if south * north < 0:
+            x.extend([west, east])
             y.extend([0, 0])
             inc_zero = True
         else:
             inc_zero = False
         x, y = trans.transform(x, y)
-        b = min(y[0], y[2])
-        t = max(y[1], y[3])
-        l = min(x[0], x[1])
-        r = max(x[2], x[3])
+        bottom = min(y[0], y[2])
+        top = max(y[1], y[3])
+        left = min(x[0], x[1])
+        right = max(x[2], x[3])
         if inc_zero:
-            l = min(l, x[4])
-            r = max(r, x[5])
-        if math.isinf(b) or math.isinf(t) or math.isinf(l) or math.isinf(r):
-            b = t = l = r = None
+            left = min(left, x[4])
+            right = max(right, x[5])
+        if (
+            math.isinf(bottom)
+            or math.isinf(top)
+            or math.isinf(left)
+            or math.isinf(right)
+        ):
+            bottom = top = left = right = None
     except pyproj.exceptions.ProjError:
-        b = t = l = r = None
-    return b, t, l, r
+        bottom = top = left = right = None
+    return bottom, top, left, right
 
 
 def create_projpicker_db(overwrite=False, projpicker_db=None, proj_db=None):

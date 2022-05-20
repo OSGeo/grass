@@ -4,7 +4,6 @@ the ProjPicker API.
 """
 
 import re
-import sqlite3
 
 from .common import _pos_float_pat, _coor_sep_pat, get_float, query_using_cursor
 
@@ -65,24 +64,24 @@ def parse_bbox(bbox):
     Returns:
         float, float, float, float: Bottom, top, left, and right floats.
     """
-    b = t = l = r = None
+    bottom = top = left = right = None
     typ = type(bbox)
     if typ == str:
         m = _xy_bbox_re.match(bbox)
         if m:
-            s = float(m[1])
-            n = float(m[2])
-            l = float(m[3])
-            r = float(m[4])
-            if s <= n:
-                b = s
-                t = n
+            south = float(m[1])
+            north = float(m[2])
+            left = float(m[3])
+            right = float(m[4])
+            if south <= north:
+                bottom = south
+                top = north
     elif typ in (list, tuple) and len(bbox) == 4:
-        b = get_float(bbox[0])
-        t = get_float(bbox[1])
-        l = get_float(bbox[2])
-        r = get_float(bbox[3])
-    return [b, t, l, r]
+        bottom = get_float(bbox[0])
+        top = get_float(bbox[1])
+        left = get_float(bbox[2])
+        right = get_float(bbox[3])
+    return [bottom, top, left, right]
 
 
 ###############################################################################
@@ -100,25 +99,25 @@ def calc_poly_bbox(poly):
     Returns:
         float, float, float, float: Bottom, top, left, and right.
     """
-    b = t = l = r = None
+    bottom = top = left = right = None
 
     for point in poly:
         x, y = point
 
-        if b is None:
-            b = t = y
-            l = r = x
+        if bottom is None:
+            bottom = top = y
+            left = right = x
         else:
-            if y < b:
-                b = y
-            elif y > t:
-                t = y
-            if x < l:
-                l = x
-            elif x > r:
-                r = x
+            if y < bottom:
+                bottom = y
+            elif y > top:
+                top = y
+            if x < left:
+                left = x
+            elif x > right:
+                right = x
 
-    return b, t, l, r
+    return bottom, top, left, right
 
 
 def is_point_within_bbox(point, bbox):
@@ -133,14 +132,14 @@ def is_point_within_bbox(point, bbox):
         bool: True if point is within bbox. Otherwise, False.
     """
     x, y = point
-    b = bbox.bottom
-    t = bbox.top
-    l = bbox.left
-    r = bbox.right
-    if None in (b, t, l, r):
+    bottom = bbox.bottom
+    top = bbox.top
+    left = bbox.left
+    right = bbox.right
+    if None in (bottom, top, left, right):
         # XXX: might be incorrect, but we cannot do better
         return False
-    return l <= x <= r and b <= y <= t
+    return left <= x <= right and bottom <= y <= top
 
 
 def is_bbox_within_bbox(bbox1, bbox2):
@@ -154,15 +153,20 @@ def is_bbox_within_bbox(bbox1, bbox2):
     Returns:
         bool: True if bbox1 is within bbox2. Otherwise, False.
     """
-    b, t, l, r = bbox1
-    s = bbox2.bottom
-    n = bbox2.top
-    w = bbox2.left
-    e = bbox2.right
-    if None in (s, n, w, e):
+    bottom, top, left, right = bbox1
+    south = bbox2.bottom
+    north = bbox2.top
+    west = bbox2.left
+    east = bbox2.right
+    if None in (south, north, west, east):
         # XXX: might be incorrect, but we cannot do better
         return False
-    return w <= l <= e and w <= r <= e and s <= b <= n and s <= t <= n
+    return (
+        west <= left <= east
+        and west <= right <= east
+        and south <= bottom <= north
+        and south <= top <= north
+    )
 
 
 ###############################################################################
