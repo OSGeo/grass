@@ -74,8 +74,12 @@ _ry = 6356.7523
 
 _geom_var_chars = r"([a-zA-Z0-9_]+)"
 _geom_var_re = re.compile(
-    fr"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|" f":{_geom_var_chars})$"
+    rf"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|" f":{_geom_var_chars})$"
 )
+
+coor_mod = point_re = parse_point = parse_bbox = None
+is_point_within_bbox = is_bbox_within_bbox = None
+query_point_using_cursor = query_bbox_using_cursor = calc_poly_bbox = None
 
 # geometry-bbox namedtuple class
 GeomBBox = collections.namedtuple("GeomBBox", "is_latlon type geom bbox")
@@ -212,7 +216,7 @@ def normalize_lines(lines):
             else:
                 for j in range(i + 1, n):
                     idx.append(j)
-                    m = re.match(fr"^(.*){quote}$", lines[j])
+                    m = re.match(rf"^(.*){quote}$", lines[j])
                     if m:
                         lines[i] += f" {m[1]}"
                         break
@@ -2159,11 +2163,11 @@ def query_geoms_using_bbox(
         raise ValueError(f"{geom_type}: Invalid geometry type")
 
     if geom_type == "point":
-        outbbox = query_points_using_bbox(prevbbox, geom, query_op, unit, proj_table)
+        outbbox = query_points_using_bbox(prevbbox, geoms, query_op, unit, proj_table)
     elif geom_type == "poly":
-        outbbox = query_polys_using_bbox(prevbbox, geom, query_op, unit, proj_table)
+        outbbox = query_polys_using_bbox(prevbbox, geoms, query_op, unit, proj_table)
     else:
-        outbbox = query_bboxes_using_bbox(prevbbox, geom, query_op, unit, proj_table)
+        outbbox = query_bboxes_using_bbox(prevbbox, geoms, query_op, unit, proj_table)
     return outbbox
 
 
@@ -2320,7 +2324,7 @@ def query_mixed_geoms(geoms, projpicker_db=None):
                         sav_geom_type = geom_type
                         geom_type = geom.type
                     else:
-                        save_geom_type = None
+                        sav_geom_type = None
                     geom = geom.geom
                 else:
                     g += 1

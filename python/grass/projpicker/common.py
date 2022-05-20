@@ -12,7 +12,7 @@ _projpicker_verbose_env = "PROJPICKER_VERBOSE"
 # regular expression patterns
 # coordinate separator
 _coor_sep = ","
-_coor_sep_pat = fr"[ \t]*[{_coor_sep} \t][ \t]*"
+_coor_sep_pat = rf"[ \t]*[{_coor_sep} \t][ \t]*"
 # positive float
 _pos_float_pat = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
 
