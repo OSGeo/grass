@@ -7,7 +7,7 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:   (C) 2000-2021 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2022 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -128,6 +128,16 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #else
 #define CONFIG_DIR ".grass8"
 #endif
+
+#ifdef MAX
+#undef MAX
+#endif
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+#ifdef MIN
+#undef MIN
+#endif
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 /* define PI and friends */
 #undef M_PI

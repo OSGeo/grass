@@ -32,11 +32,6 @@
 #include <gdal.h>
 #include <cpl_conv.h>
 
-#undef MIN
-#undef MAX
-#define MIN(a,b)      ((a) < (b) ? (a) : (b))
-#define MAX(a,b)      ((a) > (b) ? (a) : (b))
-
 void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
                       char *outloc, int create_only, int override,
 		      int check_only);

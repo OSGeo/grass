@@ -13,15 +13,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2014-08-13 11:57+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
-"Language-Team: German <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2022-03-20 12:12+0000\n"
+"Last-Translator: Stefan Blumentrath <stefan.blumentrath@nina.no>\n"
+"Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -259,9 +260,8 @@ msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of th
 msgstr ""
 
 #: ../lib/init/grass.py:977
-#, fuzzy
 msgid "Mapset <{}> already exists."
-msgstr "Mapset <%s> existiert nicht."
+msgstr ""
 
 #: ../lib/init/grass.py:985
 msgid "A new mapset can be created using '-c' flag."
@@ -1252,9 +1252,9 @@ msgid "error in datum table file, line %d"
 msgstr "Fehler in Datums-Tabelle in Zeile %d."
 
 #: ../lib/gis/aprintf.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to print %s"
-msgstr "Kann %s nicht umbenennen"
+msgstr ""
 
 #: ../lib/gis/aprintf.c:254
 #, c-format
@@ -1352,19 +1352,19 @@ msgid "Other Projection"
 msgstr "Andere Projektion"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value: %g"
-msgstr "Ungültige N-S Auflösung."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal number of rows: %d (resolution is %g)"
-msgstr "Ungültige N-S Auflösung."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:190
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value: %g"
-msgstr "Ungültige O-W Ausdehnung."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:73 ../lib/gis/adj_cellhd.c:198
 #, c-format
@@ -1372,28 +1372,27 @@ msgid "Illegal number of columns: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
-#, fuzzy, c-format
+#, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
-msgstr "Nordwert muss nördlich des Südwertes liegen."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
-#, fuzzy, c-format
+#, c-format
 msgid "North must be larger than South, but %g (north) <= %g (south"
-msgstr "Nordwert muss größer als der Südwert sein"
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:93 ../lib/gis/adj_cellhd.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "East must be larger than West, but %g (east) <= %g (west)"
-msgstr "Ostwert muss größer als der Westwert sein."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:114 ../lib/gis/adj_cellhd.c:277
 msgid "Invalid coordinates: negative number of columns"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
-#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr "Ungültige Koordinaten."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:124 ../lib/gis/adj_cellhd.c:290
 msgid "NS resolution has been changed"
@@ -1408,9 +1407,9 @@ msgid "NS and EW resolutions are different"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
-msgstr "Ungültige N-S Auflösung."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:184
 #, c-format
@@ -1418,9 +1417,9 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:193
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
-msgstr "Ungültige O-W Ausdehnung."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:202
 #, c-format
@@ -1428,19 +1427,19 @@ msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr "Ungültige t-b3 Auflösung."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal depths value: %d"
-msgstr "Ungültiger Tiefenwert."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:236
-#, fuzzy, c-format
+#, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
-msgstr "Top muss größer sein als Bottom."
+msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:283
 msgid "Invalid coordinates: negative number of depths"
@@ -3525,6 +3524,8 @@ msgid ""
 "\n"
 "++ Running ccmath wrapper unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für ccmath wrapper aus ++"
 
 #: ../lib/gmath/test/test_ccmath_wrapper.c:42
 msgid ""
@@ -3543,12 +3544,16 @@ msgid ""
 "\n"
 "++ Running direct solver benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für direct solver durch ++"
 
 #: ../lib/gmath/test/test_blas1.c:40
 msgid ""
 "\n"
 "++ Running blas level 1 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 1 aus ++"
 
 #: ../lib/gmath/test/test_blas1.c:47
 msgid ""
@@ -3605,18 +3610,24 @@ msgid ""
 "\n"
 "++ Running krylov solver benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für krylov solver durch ++"
 
 #: ../lib/gmath/test/bench_blas2.c:35
 msgid ""
 "\n"
 "++ Running blas level 2 benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für blas level 2 durch ++"
 
 #: ../lib/gmath/test/test_blas2.c:38
 msgid ""
 "\n"
 "++ Running blas level 2 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 2 aus ++"
 
 #: ../lib/gmath/test/test_blas2.c:44
 msgid ""
@@ -3635,12 +3646,16 @@ msgid ""
 "\n"
 "++ Running blas level 3 benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für blas level 3 durch ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:37
 msgid ""
 "\n"
 "++ Running matrix conversion unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Matrix-Konvertierung aus ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:42
 msgid ""
@@ -3659,6 +3674,8 @@ msgid ""
 "\n"
 "++ Running blas level 3 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 3 aus ++"
 
 #: ../lib/gmath/test/test_blas3.c:44
 msgid ""
@@ -3805,9 +3822,9 @@ msgid "Format error: file ('%s') line (%d) - %s"
 msgstr "Format-Fehler: Datei (\"%s\") Zeile (%d) - %s"
 
 #: ../lib/manage/do_copy.c:43
-#, fuzzy, c-format
+#, c-format
 msgid "Copying %s <%s> to current mapset as <%s>"
-msgstr "Kopiere %s <%s> in das aktuelle Mapset als <%s>"
+msgstr ""
 
 #: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, c-format
@@ -4151,18 +4168,24 @@ msgid ""
 "\n"
 "++ Running basic unit tests ++"
 msgstr ""
+"\n"
+"++ Führe grundlegende Tests aus ++"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:48
 msgid ""
 "\n"
 "-- Basic rtree unit tests failure --"
 msgstr ""
+"\n"
+"++ Grundlegende Tests für btree fehlgeschlagen ++"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:50
 msgid ""
 "\n"
 "-- Basic rtree unit tests finished successfully --"
 msgstr ""
+"\n"
+"++ Grundlegende Tests für btree erfolgreich beendet ++"
 
 #: ../lib/vector/Vlib/geos.c:52
 msgid "vector map is not opened"
@@ -4669,9 +4692,8 @@ msgid "No connection defined"
 msgstr "Keine Verbindung definiert"
 
 #: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
-#, fuzzy
 msgid "Invalid offset (%"
-msgstr "Kann nicht zum Verzeichnis %s wechseln."
+msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:348 ../lib/vector/Vlib/write_ogr.c:140
 msgid "Unable to delete feature"
@@ -6265,14 +6287,12 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:234
-#, fuzzy
 msgid "Unable to rewrite feature/offset %"
-msgstr "Kann Objekt %d nicht schreiben."
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:266
-#, fuzzy
 msgid "Unable to delete feature/offset %"
-msgstr "Kann Objekt %d nicht schreiben."
+msgstr ""
 
 #: ../lib/vector/Vlib/write.c:299
 msgid "Unable to restore feature/offset %"
@@ -6810,6 +6830,8 @@ msgid ""
 "\n"
 "++ Running column unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Spalten aus ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:42
 msgid ""
@@ -6828,18 +6850,24 @@ msgid ""
 "\n"
 "++ Run test copy column ++"
 msgstr ""
+"\n"
+"++ Teste das Kopieren von Spalten ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:150
 msgid ""
 "\n"
 "++ Test copy column finished ++"
 msgstr ""
+"\n"
+"++ Tests für das Kopieren von Spalten beendet ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:38
 msgid ""
 "\n"
 "++ Running table unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Tabellen aus ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:43
 msgid ""
@@ -9311,9 +9339,9 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
-msgstr "Kann die Rasterkarte <%s@%s> nicht öffnen, weil es eine Reklassifizierung der Rasterkarte <%s@%s> ist, welche nicht existiert."
+msgstr ""
 
 #: ../lib/raster/get_cellhd.c:78
 #, c-format
@@ -10260,59 +10288,59 @@ msgstr "BUG in Beschreibungen, Option '%s' in <%s> existiert nicht."
 msgid "Unable to seek"
 msgstr "Suchen unmöglich."
 
-#~ msgid "which is missing."
-#~ msgstr "welche fehlt."
+msgid "which is missing."
+msgstr "welche fehlt."
 
-#~ msgid "whose header file can't be opened."
-#~ msgstr "deren Header-Datei nicht geöffnet werden kann."
+msgid "whose header file can't be opened."
+msgstr "deren Header-Datei nicht geöffnet werden kann."
 
-#~ msgid "Illegal row value"
-#~ msgstr "Ungültiger Zeilenwert."
+msgid "Illegal row value"
+msgstr "Ungültiger Zeilenwert."
 
-#~ msgid "Illegal col value"
-#~ msgstr "Ungültiger Spaltenwert."
+msgid "Illegal col value"
+msgstr "Ungültiger Spaltenwert."
 
-#~ msgid "Illegal n-s3 resolution value"
-#~ msgstr "Ungültige N-S3 Auflösung."
+msgid "Illegal n-s3 resolution value"
+msgstr "Ungültige N-S3 Auflösung."
 
-#~ msgid "Illegal row3 value"
-#~ msgstr "Ungültiger row3-Wert."
+msgid "Illegal row3 value"
+msgstr "Ungültiger row3-Wert."
 
-#~ msgid "Illegal e-w3 resolution value"
-#~ msgstr "Ungültige E-W3 Auflösung."
+msgid "Illegal e-w3 resolution value"
+msgstr "Ungültige E-W3 Auflösung."
 
-#~ msgid "Illegal col3 value"
-#~ msgstr "Ungültiger col3-Wert."
+msgid "Illegal col3 value"
+msgstr "Ungültiger col3-Wert."
 
-#~ msgid "Illegal e-w resolution value"
-#~ msgstr "Ungültige O-W Ausdehnung."
+msgid "Illegal e-w resolution value"
+msgstr "Ungültige O-W Ausdehnung."
 
-#~ msgid "North must be north of South"
-#~ msgstr "Nordwert muss nördlich des Südwertes liegen."
+msgid "North must be north of South"
+msgstr "Nordwert muss nördlich des Südwertes liegen."
 
-#~ msgid "North must be larger than South"
-#~ msgstr "Nordwert muss größer als der Südwert sein"
+msgid "North must be larger than South"
+msgstr "Nordwert muss größer als der Südwert sein"
 
-#~ msgid "East must be larger than West"
-#~ msgstr "Ostwert muss größer als der Westwert sein."
+msgid "East must be larger than West"
+msgstr "Ostwert muss größer als der Westwert sein."
 
-#~ msgid "Invalid coordinates"
-#~ msgstr "Ungültige Koordinaten."
+msgid "Invalid coordinates"
+msgstr "Ungültige Koordinaten."
 
-#~ msgid "Illegal n-s resolution value"
-#~ msgstr "Ungültige N-S Auflösung."
+msgid "Illegal n-s resolution value"
+msgstr "Ungültige N-S Auflösung."
 
-#~ msgid "Illegal t-b3 resolution value"
-#~ msgstr "Ungültige t-b3 Auflösung."
+msgid "Illegal t-b3 resolution value"
+msgstr "Ungültige t-b3 Auflösung."
 
-#~ msgid "Illegal depths value"
-#~ msgstr "Ungültiger Tiefenwert."
+msgid "Illegal depths value"
+msgstr "Ungültiger Tiefenwert."
 
-#~ msgid "Top must be larger than Bottom"
-#~ msgstr "Top muss größer sein als Bottom."
+msgid "Top must be larger than Bottom"
+msgstr "Top muss größer sein als Bottom."
 
-#~ msgid "Unable to open header file for raster map <%s@%s>"
-#~ msgstr "Kann Header-Datei der Rasterkarte <%s@%s> nicht öffnen."
+msgid "Unable to open header file for raster map <%s@%s>"
+msgstr "Kann Header-Datei der Rasterkarte <%s@%s> nicht öffnen."
 
-#~ msgid "Copy %s <%s> to current mapset as <%s>"
-#~ msgstr "Kopiere %s <%s> in das aktuelle Mapset als <%s>"
+msgid "Copy %s <%s> to current mapset as <%s>"
+msgstr "Kopiere %s <%s> in das aktuelle Mapset als <%s>"

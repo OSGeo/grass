@@ -1,5 +1,6 @@
-numpy
+folium
 matplotlib
+numpy
 Pillow
 ply
-folium
+PyVirtualDisplay

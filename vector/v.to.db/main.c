@@ -167,65 +167,69 @@ int main(int argc, char *argv[])
 	/* check if columns exist */
 	create_col[0] = create_col[1] = create_col[2] = create_col[3] = 0;
 	create_cols = 0;
-	driver = db_start_driver_open_database(Fi->driver, Fi->database);
-	db_init_string(&table_name);
-	db_set_string(&table_name, Fi->table);
-	if (db_describe_table(driver, &table_name, &table) != DB_OK)
-	    G_fatal_error(_("Unable to describe table <%s>"),
-			  qFi->table);
+	/* does not work if the query column is not a column, but
+	 * e.g. count(x) or avg(x) */
+	if (options.option != O_QUERY) {
+	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	    db_init_string(&table_name);
+	    db_set_string(&table_name, Fi->table);
+	    if (db_describe_table(driver, &table_name, &table) != DB_OK)
+		G_fatal_error(_("Unable to describe table <%s>"),
+			      qFi->table);
 
-	fncols = db_get_table_number_of_columns(table);
-	for (col = 0; col < ncols; col++) {
-	    int col_exists = 0;
+	    fncols = db_get_table_number_of_columns(table);
+	    for (col = 0; col < ncols; col++) {
+		int col_exists = 0;
 
-	    if (options.col[col] == NULL)
-		G_fatal_error(_("Missing column name for input column number %d"), col + 1);
+		if (options.col[col] == NULL)
+		    G_fatal_error(_("Missing column name for input column number %d"), col + 1);
 
-	    for (icol = 0; icol < fncols; icol++) {
-		column = db_get_table_column(table, icol);
-		colname = db_get_column_name(column);
-		if (colname == NULL)
-		    G_fatal_error(_("Missing column name for table column number %d"), col + 1);
-		if (strcmp(options.col[col], colname) == 0) {
-		    int isqltype;
+		for (icol = 0; icol < fncols; icol++) {
+		    column = db_get_table_column(table, icol);
+		    colname = db_get_column_name(column);
+		    if (colname == NULL)
+			G_fatal_error(_("Missing column name for table column number %d"), col + 1);
+		    if (strcmp(options.col[col], colname) == 0) {
+			int isqltype;
 
-		    col_exists = 1;
-		    isqltype = db_get_column_sqltype(column);
+			col_exists = 1;
+			isqltype = db_get_column_sqltype(column);
 
-		    if (isqltype != col_sqltype[col]) {
-			int ctype1, ctype2;
+			if (isqltype != col_sqltype[col]) {
+			    int ctype1, ctype2;
 
-			ctype1 = db_sqltype_to_Ctype(isqltype);
-			ctype2 = db_sqltype_to_Ctype(col_sqltype[col]);
-			
-			if (ctype1 == ctype2) {
-			    G_warning(_("Existing column <%s> has a different but maybe compatible type"),
-					  options.col[col]);
+			    ctype1 = db_sqltype_to_Ctype(isqltype);
+			    ctype2 = db_sqltype_to_Ctype(col_sqltype[col]);
+			    
+			    if (ctype1 == ctype2) {
+				G_warning(_("Existing column <%s> has a different but maybe compatible type"),
+					      options.col[col]);
+			    }
+			    else {
+				G_fatal_error(_("Existing column <%s> has the wrong type"),
+					      options.col[col]);
+			    }
 			}
-			else {
-			    G_fatal_error(_("Existing column <%s> has the wrong type"),
-					  options.col[col]);
-			}
-		    }
 
-		    if (G_get_overwrite())
-			G_warning(_("Values in column <%s> will be overwritten"),
-				  options.col[col]);
-		    else
-			G_fatal_error(_("Column <%s> exists. To overwrite, use the --overwrite flag"),
+			if (G_get_overwrite())
+			    G_warning(_("Values in column <%s> will be overwritten"),
 				      options.col[col]);
+			else
+			    G_fatal_error(_("Column <%s> exists. To overwrite, use the --overwrite flag"),
+					  options.col[col]);
 
-		    break;
+			break;
+		    }
+		}
+		if (!col_exists) {
+		    create_col[col] = 1;
+		    create_cols = 1;
 		}
 	    }
-	    if (!col_exists) {
-		create_col[col] = 1;
-		create_cols = 1;
-	    }
+	    db_close_database_shutdown_driver(driver);
+	    driver = NULL;
+	    db_free_string(&table_name);
 	}
-	db_close_database_shutdown_driver(driver);
-	driver = NULL;
-	db_free_string(&table_name);
 
 	/* create columns if not existing */
 	if (create_cols) {

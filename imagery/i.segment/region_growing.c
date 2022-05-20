@@ -16,15 +16,6 @@
 
 #define EPSILON 1.0e-8
 
-#ifdef MAX
-#undef MAX
-#endif
-#define MAX(a,b) ( ((a) > (b)) ? (a) : (b) )
-#ifdef MIN
-#undef MIN
-#endif
-#define MIN(a,b) ( ((a) < (b)) ? (a) : (b) )
-
 struct idlist
 {
     int *ids;

@@ -16,7 +16,6 @@
 				/* programs. It sets up the necessary   */
 				/* prototypes for GRASS library calls.  */
 
-#define MAX(a,b) ((a)>(b) ? (a):(b))
 #define SWAP(a,b) tempr=(a); (a)=(b); (b) = tempr
 
 #define TWOPI 6.283185307179590	/* Constant value of 2 pi */

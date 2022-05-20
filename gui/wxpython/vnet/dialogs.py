@@ -285,7 +285,6 @@ class VNETDialog(wx.Dialog):
             id=wx.ID_ANY,
             min=0,
             max=maxValue,
-            size=(150, -1),
         )
         self.anSettings["max_dist"].Bind(wx.EVT_SPINCTRL, lambda event: self.MaxDist())
         self.anSettings["max_dist"].SetValue(100000)  # TODO init val
@@ -541,7 +540,6 @@ class VNETDialog(wx.Dialog):
         self.inpDbMgrData["browse"] = self.inpDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.inpDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateInputDbMgrPage(self, show):
         """Show or hide input tables tab"""
@@ -562,7 +560,6 @@ class VNETDialog(wx.Dialog):
         self.resultDbMgrData["browse"] = self.resultDbMgrData["dbMgr"].CreateDbMgrPage(
             parent=self.notebook, pageName="browse"
         )
-        self.resultDbMgrData["browse"].SetTabAreaColour(globalvar.FNPageColor)
 
     def _updateResultDbMgrPage(self):
         """Show or Hide Result tables tab"""
@@ -582,9 +579,9 @@ class VNETDialog(wx.Dialog):
                 name="resultDbMgr",
             )
         elif not haveDbMgr:
-            self.notebook.RemovePage(
-                page=self.notebook.GetPageIndexByName("resultDbMgr")
-            )
+            page = self.notebook.GetPageIndexByName("resultDbMgr")
+            if page != -1:
+                self.notebook.RemovePage(page=page)
 
     def OnPageChanged(self, event):
         """Tab switched"""

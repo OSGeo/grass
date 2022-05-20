@@ -88,6 +88,7 @@ static char *tcurv = NULL;
 static char *mcurv = NULL;
 static char *maskmap = NULL;
 static char *devi = NULL;
+static bool create_devi = false;
 static char *cvdev = NULL;
 static int sdisk, disk, ddisk, sddisk;
 static FILE *Tmp_fd_z = NULL;
@@ -151,6 +152,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("RST"));
     G_add_keyword(_("3D"));
     G_add_keyword(_("no-data filling"));
+    G_add_keyword(_("parallel"));
     module->label = _("Performs surface interpolation from vector points map by splines.");
     module->description =
 	_("Spatial approximation and topographic analysis from given "
@@ -631,6 +633,7 @@ int main(int argc, char *argv[])
 	}
 	db_begin_transaction(driver2);
 	count = 1;
+	create_devi = true;
 
     }
 
@@ -643,7 +646,7 @@ int main(int argc, char *argv[])
 		      SCIK1, SCIK2, SCIK3, rsm, elev, slope, aspect, pcurv,
 		      tcurv, mcurv, dmin, x_orig, y_orig, deriv, theta,
 		      scalex, Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy, Tmp_fd_xx,
-		      Tmp_fd_yy, Tmp_fd_xy, devi, NULL, cv,
+		      Tmp_fd_yy, Tmp_fd_xy, create_devi, NULL, cv,
 		      parm.wheresql->answer);
 
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,

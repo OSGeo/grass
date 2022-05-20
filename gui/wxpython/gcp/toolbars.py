@@ -50,15 +50,43 @@ class GCPManToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("gcpAdd", icons["gcpAdd"], self.parent.AddGCP),
-                ("gcpDelete", icons["gcpDelete"], self.parent.DeleteGCP),
-                ("gcpClear", icons["gcpClear"], self.parent.ClearGCP),
+                (
+                    ("gcpAdd", icons["gcpAdd"].label),
+                    icons["gcpAdd"],
+                    self.parent.AddGCP,
+                ),
+                (
+                    ("gcpDelete", icons["gcpDelete"].label),
+                    icons["gcpDelete"],
+                    self.parent.DeleteGCP,
+                ),
+                (
+                    ("gcpClear", icons["gcpClear"].label),
+                    icons["gcpClear"],
+                    self.parent.ClearGCP,
+                ),
                 (None,),
-                ("rms", icons["gcpRms"], self.parent.OnRMS),
-                ("georect", icons["georectify"], self.parent.OnGeorect),
+                (
+                    ("rms", icons["gcpRms"].label),
+                    icons["gcpRms"],
+                    self.parent.OnRMS,
+                ),
+                (
+                    ("georect", icons["georectify"].label),
+                    icons["georectify"],
+                    self.parent.OnGeorect,
+                ),
                 (None,),
-                ("gcpSave", icons["gcpSave"], self.parent.SaveGCPs),
-                ("gcpReload", icons["gcpReload"], self.parent.ReloadGCPs),
+                (
+                    ("gcpSave", icons["gcpSave"].label),
+                    icons["gcpSave"],
+                    self.parent.SaveGCPs,
+                ),
+                (
+                    ("gcpReload", icons["gcpReload"].label),
+                    icons["gcpReload"],
+                    self.parent.ReloadGCPs,
+                ),
             )
         )
 
@@ -106,29 +134,91 @@ class GCPDisplayToolbar(BaseToolbar):
                 label=_("Update GCP coordinates"),
                 desc=_("Update GCP coordinates)"),
             ),
-            "quit": BaseIcons["quit"].SetLabel(_("Quit georectification tool")),
-            "settings": BaseIcons["settings"].SetLabel(_("Georectifier settings")),
-            "help": BaseIcons["help"].SetLabel(_("Georectifier manual")),
+            "quit": BaseIcons["quit"],
+            "settings": BaseIcons["settings"],
+            "help": BaseIcons["help"],
         }
 
         return self._getToolbarData(
             (
-                ("displaymap", BaseIcons["display"], self.parent.OnDraw),
-                ("rendermap", BaseIcons["render"], self.parent.OnRender),
-                ("erase", BaseIcons["erase"], self.parent.OnErase),
+                (
+                    ("displaymap", BaseIcons["display"].label),
+                    BaseIcons["display"],
+                    self.parent.OnDraw,
+                ),
+                (
+                    ("rendermap", BaseIcons["render"].label),
+                    BaseIcons["render"],
+                    self.parent.OnRender,
+                ),
+                (
+                    ("erase", BaseIcons["erase"].label),
+                    BaseIcons["erase"],
+                    self.parent.OnErase,
+                ),
                 (None,),
-                ("gcpset", icons["gcpSet"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
-                ("zoomin", BaseIcons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomout", BaseIcons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                ("zoommenu", BaseIcons["zoomMenu"], self.parent.OnZoomMenuGCP),
+                (
+                    ("gcpset", icons["gcpSet"].label),
+                    icons["gcpSet"],
+                    self.parent.OnPointer,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("pan", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomin", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomout", BaseIcons["zoomOut"].label),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoommenu", BaseIcons["zoomMenu"].label),
+                    BaseIcons["zoomMenu"],
+                    self.parent.OnZoomMenuGCP,
+                ),
                 (None,),
-                ("zoomback", BaseIcons["zoomBack"], self.parent.OnZoomBack),
-                ("zoomtomap", BaseIcons["zoomExtent"], self.parent.OnZoomToMap),
+                (
+                    ("zoomback", BaseIcons["zoomBack"].label),
+                    BaseIcons["zoomBack"],
+                    self.parent.OnZoomBack,
+                ),
+                (
+                    ("zoomtomap", BaseIcons["zoomExtent"].label),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
                 (None,),
-                ("settings", icons["settings"], self.parent.OnSettings),
-                ("help", icons["help"], self.parent.OnHelp),
+                (
+                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
+                    BaseIcons["mapDispSettings"],
+                    self.parent.OnMapDisplayProperties,
+                ),
                 (None,),
-                ("quit", icons["quit"], self.parent.OnQuit),
+                (
+                    ("settings", icons["settings"].label),
+                    icons["settings"],
+                    self.parent.OnSettings,
+                ),
+                (
+                    ("help", icons["help"].label),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
+                (None,),
+                (
+                    ("quit", icons["quit"].label),
+                    icons["quit"],
+                    self.parent.OnQuit,
+                ),
             )
         )

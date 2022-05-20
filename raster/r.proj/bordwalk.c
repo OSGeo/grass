@@ -33,16 +33,6 @@
 #include <grass/glocale.h>
 #include "r.proj.h"
 
-#ifdef MIN
-#undef MIN
-#endif
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-
-#ifdef MAX
-#undef MAX
-#endif
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-
 static void debug(const char *name, const struct Cell_head *hd)
 {
     G_debug(3, "%s: xmin: %f; xmax: %f; ymin: %f; ymax: %f",

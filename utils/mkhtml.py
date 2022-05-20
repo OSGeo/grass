@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2021 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2022 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -16,6 +16,7 @@
 #
 #############################################################################
 
+import http
 import sys
 import os
 import string
@@ -23,6 +24,9 @@ import re
 from datetime import datetime
 import locale
 import json
+import pathlib
+import subprocess
+import time
 
 try:
     # Python 2 import
@@ -30,10 +34,27 @@ try:
 except ImportError:
     # Python 3 import
     from html.parser import HTMLParser
+
+from six.moves.urllib import request as urlrequest
+from six.moves.urllib.error import HTTPError, URLError
+
 try:
     import urlparse
 except ImportError:
     import urllib.parse as urlparse
+
+try:
+    import grass.script as gs
+except ImportError:
+    # During compilation GRASS GIS
+    gs = None
+
+from generate_last_commit_file import COMMIT_DATE_FORMAT
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+}
+HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 if sys.version_info[0] == 2:
     PY2 = True
@@ -43,6 +64,21 @@ else:
 
 if not PY2:
     unicode = str
+
+
+grass_version = os.getenv("VERSION_NUMBER", "unknown")
+trunk_url = ""
+addons_url = ""
+grass_git_branch = "main"
+if grass_version != "unknown":
+    major, minor, patch = grass_version.split(".")
+    base_url = "https://github.com/OSGeo"
+    trunk_url = "{base_url}/grass/tree/{branch}/".format(
+        base_url=base_url, branch=grass_git_branch
+    )
+    addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
+        base_url=base_url, major=major
+    )
 
 
 def _get_encoding():
@@ -67,6 +103,288 @@ def decode(bytes_):
     return unicode(bytes_)
 
 
+def urlopen(url, *args, **kwargs):
+    """Wrapper around urlopen. Same function as 'urlopen', but with the
+    ability to define headers.
+    """
+    request = urlrequest.Request(url, headers=HEADERS)
+    return urlrequest.urlopen(request, *args, **kwargs)
+
+
+def set_proxy():
+    """Set proxy"""
+    proxy = os.getenv("GRASS_PROXY")
+    if proxy:
+        proxies = {}
+        for ptype, purl in (p.split("=") for p in proxy.split(",")):
+            proxies[ptype] = purl
+        urlrequest.install_opener(
+            urlrequest.build_opener(urlrequest.ProxyHandler(proxies))
+        )
+
+
+set_proxy()
+
+
+def download_git_commit(url, response_format, *args, **kwargs):
+    """Download module/addon last commit from GitHub API
+
+    :param str url: url address
+    :param str response_format: content type
+
+    :return urllib.request.urlopen or None response: response object or
+                                                     None
+    """
+    try:
+        response = urlopen(url, *args, **kwargs)
+        if not response.code == 200:
+            index = HTTP_STATUS_CODES.index(response.code)
+            desc = HTTP_STATUS_CODES[index].description
+            gs.fatal(
+                _(
+                    "Download commit from <{url}>, return status code "
+                    "{code}, {desc}".format(
+                        url=url,
+                        code=response.code,
+                        desc=desc,
+                    ),
+                ),
+            )
+        if response_format not in response.getheader("Content-Type"):
+            gs.fatal(
+                _(
+                    "Wrong downloaded commit file format. "
+                    "Check url <{url}>. Allowed file format is "
+                    "{response_format}.".format(
+                        url=url,
+                        response_format=response_format,
+                    ),
+                ),
+            )
+        return response
+    except HTTPError as err:
+        gs.warning(
+            _(
+                "The download of the commit from the GitHub API "
+                "server wasn't successful, <{}>. Commit and commit "
+                "date will not be included in the <{}> addon html manual "
+                "page.".format(err.msg, pgm)
+            ),
+        )
+    except URLError:
+        gs.warning(
+            _(
+                "Download file from <{url}>, failed. Check internet "
+                "connection. Commit and commit date will not be included "
+                "in the <{pgm}> addon manual page.".format(url=url, pgm=pgm)
+            ),
+        )
+
+
+def get_default_git_log(src_dir):
+    """Get default Git commit and commit date, when getting commit from
+    local Git, local JSON file and remote GitHub REST API server wasn't
+    successfull.
+
+    :param str src_dir: addon source dir
+
+    :return dict: dict which store last commit and commnit date
+    """
+    return {
+        "commit": "unknown",
+        "date": time.ctime(os.path.getmtime(src_dir)),
+    }
+
+
+def parse_git_commit(
+    commit,
+    src_dir,
+    git_log=None,
+):
+    """Parse Git commit
+
+    :param str commit: commit message
+    :param str src_dir: addon source dir
+    :param dict git_log: dict which store last commit and commnit
+                         date
+
+    :return dict git_log: dict which store last commit and commnit date
+    """
+    if not git_log:
+        git_log = get_default_git_log(src_dir=src_dir)
+    if commit:
+        git_log["commit"], commit_date = commit.strip().split(",")
+        git_log["date"] = format_git_commit_date_from_local_git(
+            commit_datetime=commit_date,
+        )
+    return git_log
+
+
+def get_git_commit_from_file(
+    src_dir,
+    git_log=None,
+):
+    """Get Git commit from JSON file
+
+    :param str src_dir: addon source dir
+    :param dict git_log: dict which store last commit and commnit date
+
+    :return dict git_log: dict which store last commit and commnit date
+    """
+    # Accessed date time if getting commit from JSON file wasn't successfull
+    if not git_log:
+        git_log = get_default_git_log(src_dir=src_dir)
+    json_file_path = os.path.join(
+        topdir,
+        "core_modules_with_last_commit.json",
+    )
+    if os.path.exists(json_file_path):
+        with open(json_file_path) as f:
+            core_modules_with_last_commit = json.load(f)
+        if pgm in core_modules_with_last_commit:
+            core_module = core_modules_with_last_commit[pgm]
+            git_log["commit"] = core_module["commit"]
+            git_log["date"] = format_git_commit_date_from_local_git(
+                commit_datetime=core_module["date"],
+            )
+    return git_log
+
+
+def get_git_commit_from_rest_api_for_addon_repo(
+    addon_path,
+    src_dir,
+    git_log=None,
+):
+    """Get Git commit from remote GitHub REST API for addon repository
+
+    :param str addon_path: addon path
+    :param str src_dir: addon source dir
+    :param dict git_log: dict which store last commit and commnit date
+
+    :return dict git_log: dict which store last commit and commnit date
+    """
+    # Accessed date time if getting commit from GitHub REST API wasn't successfull
+    if not git_log:
+        git_log = get_default_git_log(src_dir=src_dir)
+    grass_addons_url = (
+        "https://api.github.com/repos/osgeo/grass-addons/commits?"
+        "path={path}&page=1&per_page=1&sha=grass{major}".format(
+            path=addon_path,
+            major=major,
+        )
+    )  # sha=git_branch_name
+
+    response = download_git_commit(
+        url=grass_addons_url,
+        response_format="application/json",
+    )
+    if response:
+        commit = json.loads(response.read())
+        if commit:
+            git_log["commit"] = commit[0]["sha"]
+            git_log["date"] = format_git_commit_date_from_rest_api(
+                commit_datetime=commit[0]["commit"]["author"]["date"],
+            )
+    return git_log
+
+
+def format_git_commit_date_from_rest_api(
+    commit_datetime, datetime_format="%A %b %d %H:%M:%S %Y"
+):
+    """Format datetime from remote GitHub REST API
+
+    :param str commit_datetime: commit datetime
+    :param str datetime_format: output commit datetime format
+                                e.g. Sun Jan 16 23:09:35 2022
+
+    :return str: output formatted commit datetime
+    """
+    return datetime.strptime(
+        commit_datetime,
+        "%Y-%m-%dT%H:%M:%SZ",  # ISO 8601 YYYY-MM-DDTHH:MM:SSZ
+    ).strftime(datetime_format)
+
+
+def format_git_commit_date_from_local_git(
+    commit_datetime, datetime_format="%A %b %d %H:%M:%S %Y"
+):
+    """Format datetime from local Git or JSON file
+
+    :param str commit_datetime: commit datetime
+    :param str datetime_format: output commit datetime format
+                                e.g. Sun Jan 16 23:09:35 2022
+
+    :return str: output formatted commit datetime
+    """
+    return datetime.fromisoformat(
+        commit_datetime,
+    ).strftime(datetime_format)
+
+
+def has_src_code_git(src_dir, is_addon):
+    """Has core module or addon source code Git
+
+    :param str src_dir: core module or addon root directory
+    :param bool is_addon: True if it is addon
+
+    :return subprocess.CompletedProcess or None: subprocess.CompletedProcess
+                                                 if core module or addon
+                                                 source code has Git
+    """
+    actual_dir = os.getcwd()
+    if is_addon:
+        os.chdir(src_dir)
+    else:
+        os.chdir(topdir)
+    try:
+
+        process_result = subprocess.run(
+            [
+                "git",
+                "log",
+                "-1",
+                f"--format=%H,{COMMIT_DATE_FORMAT}",
+                src_dir,
+            ],
+            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+        )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
+        os.chdir(actual_dir)
+        return process_result if process_result.returncode == 0 else None
+    except FileNotFoundError:
+        os.chdir(actual_dir)
+        return None
+
+
+def get_last_git_commit(src_dir, addon_path, is_addon):
+    """Get last module/addon git commit
+
+    :param str src_dir: module/addon source dir
+    :param str addon_path: addon path
+    :param bool is_addon: True if it is addon
+
+    :return dict git_log: dict with key commit and date, if not
+                          possible download commit from GitHub REST API
+                          server values of keys have "unknown" string
+    """
+    process_result = has_src_code_git(src_dir=src_dir, is_addon=is_addon)
+    if process_result:
+        return parse_git_commit(
+            commit=process_result.stdout.decode(),
+            src_dir=src_dir,
+        )
+    else:
+        if gs:
+            # Addons installation
+            return get_git_commit_from_rest_api_for_addon_repo(
+                addon_path=addon_path,
+                src_dir=src_dir,
+            )
+        # During GRASS GIS compilation from source code without Git
+        else:
+            return get_git_commit_from_file(src_dir=src_dir)
+
+
 html_page_footer_pages_path = (
     os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
     if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
@@ -77,9 +395,6 @@ pgm = sys.argv[1]
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
-
-trunk_url = "https://github.com/OSGeo/grass/tree/master/"
-addons_url = "https://github.com/OSGeo/grass-addons/tree/master/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -114,6 +429,9 @@ sourcecode = string.Template(
   Available at:
   <a href="${URL_SOURCE}">${PGM} source code</a>
   (<a href="${URL_LOG}">history</a>)
+</p>
+<p>
+  ${DATE_TAG}
 </p>
 """
 )
@@ -288,28 +606,34 @@ def update_toc(data):
     return "\n".join(ret_data)
 
 
-def get_addon_path(pgm):
-    """Check if pgm is in addons list and get addon path
+def get_addon_path():
+    """Check if pgm is in the addons list and get addon path
 
-    :param pgm str: pgm
-
-    :return tuple: (True, path) if pgm is addon else (None, None)
+    return: pgm path if pgm is addon else None
     """
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if addon_base:
-        """'addons_paths.json' is file created during install extension
-        check get_addons_paths() function in the g.extension.py file
-        """
-        addons_paths = os.path.join(addon_base, "addons_paths.json")
-        if os.path.exists(addons_paths):
-            with open(addons_paths, "r") as f:
-                addons_paths = json.load(f)
-            for addon in addons_paths["tree"]:
-                split_path = addon["path"].split("/")
-                root_dir, module_dir = split_path[0], split_path[-1]
-                if "grass8" == root_dir and pgm == module_dir:
-                    return True, addon["path"]
-    return None, None
+        # addons_paths.json is file created during install extension
+        # check get_addons_paths() function in the g.extension.py file
+        addons_file = "addons_paths.json"
+        addons_paths = os.path.join(addon_base, addons_file)
+        if not os.path.exists(addons_paths):
+            # Compiled addon has own dir e.g. ~/.grass8/addons/db.join/
+            # with bin/ docs/ etc/ scripts/ subdir, required for compilation
+            # addons on osgeo lxd container server and generation of
+            # modules.xml file (build-xml.py script), when addons_paths.json
+            # file is stored one level dir up
+            addons_paths = os.path.join(
+                os.path.abspath(os.path.join(addon_base, "..")),
+                addons_file,
+            )
+            if not os.path.exists(addons_paths):
+                return
+        with open(addons_paths) as f:
+            addons_paths = json.load(f)
+        for addon in addons_paths["tree"]:
+            if pgm == pathlib.Path(addon["path"]).name:
+                return addon["path"]
 
 
 # process header
@@ -420,7 +744,6 @@ else:
     index_name = index_names.get(mod_class, "")
     index_name_cap = index_titles.get(mod_class, "")
 
-grass_version = os.getenv("VERSION_NUMBER", "unknown")
 year = os.getenv("VERSION_DATE")
 if not year:
     year = str(datetime.now().year)
@@ -436,39 +759,54 @@ else:
     source_url = addons_url
     pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
 url_source = ""
+addon_path = None
 if os.getenv("SOURCE_URL", ""):
-    # addons
-    for prefix in index_names.keys():
-        cwd = os.getcwd()
-        idx = cwd.find("{0}{1}.".format(os.path.sep, prefix))
-        if idx > -1:
-            pgmname = cwd[idx + 1 :]
-            classname = index_names[prefix]
+    addon_path = get_addon_path()
+    if addon_path:
+        # Addon is installed from the local dir
+        if os.path.exists(os.getenv("SOURCE_URL")):
             url_source = urlparse.urljoin(
-                "{0}{1}/".format(os.environ["SOURCE_URL"], classname), pgmname
+                addons_url,
+                addon_path,
             )
-            break
+        else:
+            url_source = urlparse.urljoin(
+                os.environ["SOURCE_URL"].split("src")[0],
+                addon_path,
+            )
 else:
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
 if index_name:
-    tree = "grass/tree"
-    commits = "grass/commits"
-    is_addon, addon_path = get_addon_path(pgm=pgm)
-    if is_addon:
-        # Fix gui/wxpython addon url path
-        url_source = urlparse.urljoin(
-            os.environ["SOURCE_URL"],
-            addon_path.split("/", 1)[1],
-        )
-        tree = "grass-addons/tree"
-        commits = "grass-addons/commits"
+    branches = "branches"
+    tree = "tree"
+    commits = "commits"
 
+    if branches in url_source:
+        url_log = url_source.replace(branches, commits)
+        url_source = url_source.replace(branches, tree)
+    else:
+        url_log = url_source.replace(tree, commits)
+
+    git_commit = get_last_git_commit(
+        src_dir=curdir,
+        addon_path=addon_path if addon_path else None,
+        is_addon=True if addon_path else False,
+    )
+    if git_commit["commit"] == "unknown":
+        date_tag = "Accessed: {date}".format(date=git_commit["date"])
+    else:
+        date_tag = "Latest change: {date} in commit: {commit}".format(
+            date=git_commit["date"], commit=git_commit["commit"]
+        )
     sys.stdout.write(
         sourcecode.substitute(
-            URL_SOURCE=url_source, PGM=pgm, URL_LOG=url_source.replace(tree, commits)
+            URL_SOURCE=url_source,
+            PGM=pgm,
+            URL_LOG=url_log,
+            DATE_TAG=date_tag,
         )
     )
     sys.stdout.write(

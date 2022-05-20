@@ -25,7 +25,7 @@ The GitHub repositories are:
 
 Git usage:
 
-* https://github.com/OSGeo/grass/blob/master/CONTRIBUTING.md
+* [CONTRIBUTING.md file](../CONTRIBUTING.md)
 * https://trac.osgeo.org/grass/wiki/HowToGit
 
 Issues:
@@ -56,13 +56,13 @@ Statistics:
 Maintainer: M. Neteler
 
 * https://grass.osgeo.org
-    * grasslxd: LXD container on osgeo7 (https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo7)
+    * osgeo8-grass: LXD container on osgeo8 (https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo_8)
         * OS: Debian Buster
-        * Apache Server with hugo
+        * Apache Server with hugo (https://github.com/OSGeo/grass-website)
     * for migration details (7/2020), see https://github.com/OSGeo/grass-website/issues/180
-    * ssh login: via osgeo jumphost
-    * deployment via cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
-* https://old.grass.osgeo.org (CMSMS, replaced in 2020 by hugo based solution)
+    * ssh login: via jumphost hop.osgeo8.osgeo.org
+    * deployment via cronjob: https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/
+* https://old.grass.osgeo.org (CMSMS, replaced in 2020 by above hugo based solution)
     * Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
    (server: osgeo6.osgeo.osuosl.org)
     * Login: via OSGeo LDAP, there is a "grass" LDAP group
@@ -70,30 +70,29 @@ Maintainer: M. Neteler
         * OS: Debian Wheezy
         * Apache Server with PHP
     * Login: via OSGeo LDAP, there is a "grass" LDAP group
-* Backup:
-    * grasslxd container on osgeo7 is backup'ed, see http://wiki.osgeo.org/wiki/SAC:Backups
-    * Wiki backup, via rsync to http://josef.fsv.cvut.cz/WIKI/grass-osgeo/index.php/Main_Page
+* Backups:
+    * osgeo8-grass: container on osgeo8 is backup'ed, see http://wiki.osgeo.org/wiki/SAC:Backups
 * Mirrors:
-    * rsync, see https://grass.osgeo.org/contribute/
+    * rsync, see https://grass.osgeo.org/contribute/  --> Mirror
     * mirror list, see https://grass.osgeo.org/about/mirrors/
 * RSS feed: offered by hugo at https://grass.osgeo.org/index.xml, used at https://planet.osgeo.org
 
-* Weekly software snapshots (generated Saturday morning California time):
+* Weekly software snapshots (generated Saturday morning Portland (OR), US time):
     * Source code tarball of git (GitHub) https://github.com/OSGeo/grass
-    * Linux binary snapshot is compiled on grasslxd
+    * Linux binary snapshot is compiled on osgeo8-grass
         * GRASS is compiled with GDAL, PROJ, SQLite, MySQL, PostgreSQL, FFTW, C++ support
         * binary tar.gz and manuals are moved into Web space
 
 * GRASS user manual HTML:
-    * generated during compilation of weekly Linux binary snapshot on grasslxd
+    * generated during compilation of weekly Linux binary snapshot on osgeo8-grass
 
 * GRASS addons manual HTML:
-    * generated during compilation of weekly Linux binary snapshot on grasslxd
+    * generated during compilation of weekly Linux binary snapshot on osgeo8-grass
 
 * GRASS programmer's manual (https://grass.osgeo.org/programming8/)
-    * HTML: cronjob run Wednesday morning California time
-    * HTML: cronjob run Saturday morning California time
-    * disabled: PDF: cronjob run Saturday morning California time
+    * HTML: cronjob run Wednesday morning Portland (OR), US time
+    * HTML: cronjob run Saturday morning Portland (OR), US time
+    * disabled: PDF: cronjob run Saturday morning Portland (OR), US time
 
 * i18N translation statistics (https://grass.osgeo.org/development/translations/#statistics)
     * generated during compilation of Linux binary snapshot, stats of `(cd locale; make)` are extracted into text file
@@ -228,8 +227,8 @@ Maintainer: Martin Landa and Markus Neteler
 
 Details:
 
-- Windows-addons: grass-addons/tools/addons/README.txt
-- Addon manual pages cronjob: https://github.com/OSGeo/grass-addons/tree/master/tools/cronjobs_osgeo_lxd
+- Windows-addons: grass-addons/utils/addons/README.txt
+- Addon manual pages cronjob: https://github.com/OSGeo/grass-addons/tree/master/utils/cronjobs_osgeo_lxd
 - Rendered manuals: https://grass.osgeo.org/grass8/manuals/addons/
 
 The redirect to the latest grass7x directory is defined on grass.osgeo.org:
@@ -249,7 +248,7 @@ Procedure of granting write access to Addons repo:
 * Confirm request in grass-psc and give instructions concerning code style etc (see archive for examples)
 
 XML file for g.extension: https://grass.osgeo.org/addons/grass7/modules.xml
-* generated in grass-addons/tools/addons/grass-addons-publish.sh
+* generated in grass-addons/utils/addons/grass-addons-publish.sh
 
 ## GRASS Travis CI
 
@@ -258,7 +257,7 @@ Maintainer: Martin Landa
 * https://travis-ci.org/GRASS-GIS
 * https://github.com/OSGeo/grass
 * OLD: https://github.com/GRASS-GIS/grass-ci
-* https://github.com/OSGeo/grass-addons/tree/master/tools/grass-ci/
+* https://github.com/OSGeo/grass-addons/tree/master/utils/grass-ci/
 
 Travis CI control files:
  trunk/.travis/
@@ -267,7 +266,7 @@ Travis CI control files:
    linux.script.sh
 
 Maintenance script:
-* https://github.com/OSGeo/grass-addons/tree/master/tools/grass-ci/grass-ci.sh
+* https://github.com/OSGeo/grass-addons/tree/master/utils/grass-ci/grass-ci.sh
 
 The github update is run as a cronjob on server "geo102" (CTU, CZ).
 
@@ -307,6 +306,8 @@ i18N gettext messages:
     * https://www.transifex.com/grass-gis/grass7/content/
         * Menu: Resources
             * Use: "Auto update resources" button
+* Weblate: https://weblate.osgeo.org/
+
 
 ## OLD: GRASS Quality Control
 

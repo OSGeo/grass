@@ -451,7 +451,7 @@ int main(int argc, char *argv[])
 		      fi, MAXPOINTS, SCIK1, SCIK2, SCIK3, smc, elev, slope,
 		      aspect, pcurv, tcurv, mcurv, dmin, inp_x_orig,
 		      inp_y_orig, deriv, theta, scalex, Tmp_fd_z, Tmp_fd_dx,
-		      Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, NULL, NULL,
+		      Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, false, NULL,
 		      0, NULL);
 
     /*  In the above line, the penultimate argument is supposed to be a 
