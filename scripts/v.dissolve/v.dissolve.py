@@ -33,11 +33,34 @@
 # %end
 # %option G_OPT_V_OUTPUT
 # %end
+# %option G_OPT_DB_COLUMN
+# % key: aggregate_column
+# % description: Name of attribute columns to get aggregate statistics for
+# % multiple: yes
+# %end
+# %option
+# % key: aggregate_method
+# % label: Aggregate statistics method
+# % description: Default is all available basic statistics
+# % multiple: yes
+# %end
+# %option G_OPT_DB_COLUMN
+# % key: stats_column
+# % description: New attribute column name for aggregate statistics results
+# % description: Defaults to aggregate column name and statistics name
+# % multiple: yes
+# %end
+# %rules
+# % requires_all: aggregate_method,aggregate_column
+# % requires_all: stats_column,aggregate_method,aggregate_column
+# %end
 
 import os
 import atexit
+import json
 
 import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
@@ -60,6 +83,28 @@ def main():
     output = options["output"]
     layer = options["layer"]
     column = options["column"]
+
+    aggregate_columns = options["aggregate_column"]
+    if aggregate_columns:
+        aggregate_columns = aggregate_columns.split(",")
+    else:
+        aggregate_columns = None
+    aggregate_methods = options["aggregate_method"]
+    if aggregate_methods:
+        aggregate_methods = aggregate_methods.split(",")
+    stats_columns = options["stats_column"]
+    if stats_columns:
+        stats_columns = stats_columns.split(",")
+        if len(stats_columns) != len(aggregate_columns) * len(aggregate_methods):
+            gs.fatal(
+                _(
+                    "A column name is needed for each combination of aggregate_column "
+                    "({num_columns}) and aggregate_method ({num_methods})"
+                ).format(
+                    num_columns=len(aggregate_columns),
+                    num_methods=len(aggregate_methods),
+                )
+            )
 
     # setup temporary file
     tmp = str(os.getpid())
@@ -95,6 +140,10 @@ def main():
 
         if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
             grass.fatal(_("Key column must be of type integer or string"))
+        if coltype["type"] in ("CHARACTER", "TEXT"):
+            column_quote = True
+        else:
+            column_quote = False
 
         tmpfile = "%s_%s" % (output, tmp)
 
@@ -110,6 +159,67 @@ def main():
                 type="area",
                 layer=layer,
             )
+            records = json.loads(
+                gs.read_command(
+                    "v.db.select",
+                    map=input,
+                    columns=column,
+                    group=column,
+                    format="json",
+                )
+            )["records"]
+            unique_values = [record[column] for record in records]
+            for value in unique_values:
+                for i, aggregate_column in enumerate(aggregate_columns):
+                    if column_quote:
+                        where = f"{column}='{value}'"
+                    else:
+                        where = f"{column}={value}"
+                    stats = json.loads(
+                        gs.read_command(
+                            "v.db.univar",
+                            map=input,
+                            column=aggregate_column,
+                            format="json",
+                            where=where,
+                        )
+                    )["statistics"]
+                    if not aggregate_methods:
+                        aggregate_methods = stats.keys()
+                    if stats_columns:
+                        current_stats_columns = stats_columns[
+                            i
+                            * len(aggregate_methods) : (i + 1)
+                            * len(aggregate_methods)
+                        ]
+                    else:
+                        current_stats_columns = [
+                            f"{aggregate_column}_{method}"
+                            for method in aggregate_methods
+                        ]
+                    for stats_column, key in zip(
+                        current_stats_columns, aggregate_methods
+                    ):
+                        stats_value = stats[key]
+                        # if stats_columns:
+                        # stats_column = stats_columns[i * len(aggregate_methods) + j]
+                        if key == "n":
+                            stats_column_type = "INTEGER"
+                        else:
+                            stats_column_type = "DOUBLE"
+                        gs.run_command(
+                            "v.db.addcolumn",
+                            map=output,
+                            columns=f"{stats_column} {stats_column_type}",
+                        )
+                        # TODO: Confirm that there is only one record in the table for a given attribute value after dissolve.
+                        gs.run_command(
+                            "v.db.update",
+                            map=output,
+                            column=stats_column,
+                            value=stats_value,
+                            where=where,
+                        )
         except CalledModuleError as e:
             grass.fatal(
                 _(
