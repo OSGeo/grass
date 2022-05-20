@@ -8,24 +8,17 @@ import wx.lib.statbmp
 import io
 import threading
 import queue
-import textwrap
-import webbrowser
-import locale
 import sys
 
 import grass.projpicker as ppik
 from grass.getosm import OpenStreetMap
-from gui_core.toolbars import BaseToolbar, BaseIcons, ToolSwitcher
+from gui_core.toolbars import BaseToolbar, ToolSwitcher
 from icons.icon import MetaIcon
 
 from .gui_common import (
     get_latlon,
     get_zoom,
     get_dzoom,
-    parse_geoms,
-    adjust_lon,
-    calc_geoms_bbox,
-    create_crs_info,
     find_bbox,
 )
 
@@ -36,41 +29,36 @@ ItemDeselectedEvent, EVT_ITEM_DESELECTED = wx.lib.newevent.NewEvent()
 class ProjPickerToolbar(BaseToolbar):
     def __init__(self, parent, toolSwitcher):
         BaseToolbar.__init__(self, parent, toolSwitcher)
-        self.icons = BaseIcons
-        self.icons = {**self.icons, **self._add_icons()}
+
         self.InitToolbar(self._toolbarData())
-        parent.SetExtraStyle(wx.TB_NODIVIDER)
-        # realize the toolbar
         self.Realize()
 
         self._default = self.pan
         for tool in (self.pan, self.draw):
             self.toolSwitcher.AddToolToGroup(group="mouseUse", toolbar=self, tool=tool)
 
-        self.EnableTool(self.pan, True)
-
     def _toolbarData(self):
         return self._getToolbarData(
             (
-                ("pan", self.icons["pan"], self.parent.on_select_pan, wx.ITEM_CHECK),
-                ("draw", self.icons["draw"], self.parent.on_select_draw, wx.ITEM_CHECK),
-                ("clear", self.icons["clear"], self.parent.on_clear_drawing),
+                (
+                    "pan",
+                    MetaIcon(img="pan", label=_("Pan/Zoom")),
+                    self.parent.on_select_pan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    "draw",
+                    MetaIcon(img="edit", label=_("Draw bounding box")),
+                    self.parent.on_select_draw,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    "clear",
+                    MetaIcon(img="erase", label=_("Clear bounding box")),
+                    self.parent.on_clear_drawing,
+                ),
             )
         )
-
-    def _add_icons(self):
-        return {
-            "draw": MetaIcon(
-                img="edit",
-                label=_("Draw"),
-                desc=_("Draw bounding box"),
-            ),
-            "clear": MetaIcon(
-                img="erase",
-                label=_("Clear"),
-                desc=_("Clear bounding box"),
-            ),
-        }
 
 
 class ProjPickerPanel(wx.Panel):
@@ -128,7 +116,7 @@ class ProjPickerPanel(wx.Panel):
             self.draw_image,
             lambda data: wx.Image(io.BytesIO(data)),
             lambda image, tile, x, y: image.Paste(tile, x, y),
-            lambda tile, dz: tile.Scale(tile.Width * 2 ** dz, tile.Height * 2 ** dz),
+            lambda tile, dz: tile.Scale(tile.Width * 2**dz, tile.Height * 2**dz),
             map_canvas_width,
             map_canvas_height,
             lat,
@@ -138,25 +126,20 @@ class ProjPickerPanel(wx.Panel):
 
         self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_start)
         self.map_canvas.Bind(wx.EVT_LEFT_UP, self.on_complete)
-
-        # self.map_canvas.Bind(wx.EVT_LEFT_DCLICK, self.on_complete_drawing)
-        # self.map_canvas.Bind(wx.EVT_RIGHT_DCLICK, self.on_clear_drawing)
-
         self.map_canvas.Bind(wx.EVT_MOTION, self.on_move)
         self.map_canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_zoom)
         self.map_canvas.Bind(wx.EVT_SIZE, self.on_resize)
         self.map_canvas.Bind(wx.EVT_PAINT, self.on_paint)
         map_box.Add(self.map_canvas, 1, wx.EXPAND)
 
-        ###########
+        #########
         # toolbar
 
-        # Sizer so toolbar and coordinates are on same row
-        toolbar_coors_box = wx.BoxSizer(wx.HORIZONTAL)
+        # sizer for toolbar icons and coordinates
+        toolbar_box = wx.BoxSizer(wx.HORIZONTAL)
         self.toolbar = ProjPickerToolbar(self, self._toolSwitcher)
         self.toolbar.SelectDefault()
-        self.tool = "pan"
-        toolbar_coors_box.Add(self.toolbar, 0, wx.EXPAND)
+        toolbar_box.Add(self.toolbar, 0, wx.EXPAND)
 
         #######################
         # label for coordinates
@@ -168,8 +151,8 @@ class ProjPickerPanel(wx.Panel):
         # horizontal box sizer
         self.coor_label.box = wx.BoxSizer(wx.VERTICAL)
         self.coor_label.box.Add(self.coor_label, 0, wx.ALIGN_RIGHT)
-        toolbar_coors_box.Add(self.coor_label.box, 0, wx.EXPAND | wx.TOP, 10)
-        map_box.Add(toolbar_coors_box, 0, wx.EXPAND)
+        toolbar_box.Add(self.coor_label.box, 0, wx.EXPAND | wx.TOP, 10)
+        map_box.Add(toolbar_box, 0, wx.EXPAND)
 
         main_box.Add(map_box, 1, wx.EXPAND)
 
@@ -179,9 +162,7 @@ class ProjPickerPanel(wx.Panel):
 
         # list of CRSs
         crs_box = wx.BoxSizer(wx.VERTICAL)
-        self.crs_list = wx.ListCtrl(
-            self, style=wx.LC_REPORT | wx.LC_SINGLE_SEL
-        )
+        self.crs_list = wx.ListCtrl(self, style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
 
         self.crs_list.AppendColumn(_("ID"))
         self.crs_list.AppendColumn(_("Name"))
