@@ -215,7 +215,7 @@ class OpenStreetMap:
         """
         lat = min(max(lat, self.lat_min), self.lat_max)
         lat = math.radians(lat)
-        n = 2 ** z
+        n = 2**z
         x = (lon + 180) / 360 * n
         y = (1 - math.log(math.tan(lat) + (1 / math.cos(lat))) / math.pi) / 2 * n
         return x, y
@@ -237,7 +237,7 @@ class OpenStreetMap:
         Returns:
             float, float: Latitude and longitude in decimal degrees.
         """
-        n = 2 ** z
+        n = 2**z
         lat = math.degrees(math.atan(math.sinh(math.pi * (1 - 2 * y / n))))
         lon = x / n * 360 - 180
         return lat, lon
@@ -363,7 +363,7 @@ class OpenStreetMap:
             sessions to save data traffic and CPU time.
         """
         z = min(max(z, self.z_min), self.z_max)
-        ntiles = 2 ** z
+        ntiles = 2**z
 
         # calculate x,y offsets to lat,lon within width,height
         xc, yc = self.latlon_to_tile(lat, lon, z)
@@ -402,7 +402,6 @@ class OpenStreetMap:
                 if self.cancel:
                     self.message("download_map canceled")
                     break
-                tile_url = self.get_tile_url(xt, yi, z)
                 tile_key = self.download_tile(xt, yi, z)
                 tile_x = xoff + (xi - x) * 256
                 while tile_x <= -256:
@@ -701,8 +700,8 @@ class OpenStreetMap:
                     del self.rescaled_tiles[i]
                     continue
 
-                tile.x = self.width / 2 - 2 ** dz * (xc - tile.x)
-                tile.y = self.height / 2 - 2 ** dz * (yc - tile.y)
+                tile.x = self.width / 2 - 2**dz * (xc - tile.x)
+                tile.y = self.height / 2 - 2**dz * (yc - tile.y)
                 tile.dz = dz
                 tile_size = 2 ** (z - tile.z) * 256
 
@@ -711,12 +710,11 @@ class OpenStreetMap:
                     or tile.y + tile_size < 0
                     or tile.x >= self.width
                     or tile.y >= self.height
-                    or
+                    or z > tile.z + 6
                     # rescaling too fast can raise a memory exception:
                     # _tkinter.TclError: not enough free memory for image
                     # buffer; avoid rescaling more than 2**6 = 64 times; this
                     # number is experimental
-                    z > tile.z + 6
                 ):
                     del self.rescaled_tiles[i]
 
@@ -811,10 +809,10 @@ class OpenStreetMap:
         outxy = []
         if bbox:
             s, n, w, e = bbox
-            l, t = self.latlon_to_canvas(n, w)
-            r, b = self.latlon_to_canvas(s, e)
+            le, to = self.latlon_to_canvas(n, w)
+            ri, bo = self.latlon_to_canvas(s, e)
             if w > e:
-                l -= 256 * self.ntiles
-            xy = [[l, t], [r, b]]
+                le -= 256 * self.ntiles
+            xy = [[le, to], [ri, bo]]
             outxy.extend(self.repeat_xy(xy))
         return outxy
