@@ -44,7 +44,7 @@ class ProjPickerToolbar(BaseToolbar):
         self.Realize()
 
         self._default = self.pan
-        for tool in (self.pan, self.edit):
+        for tool in (self.pan, self.draw):
             self.toolSwitcher.AddToolToGroup(group="mouseUse", toolbar=self, tool=tool)
 
         self.EnableTool(self.pan, True)
@@ -53,24 +53,22 @@ class ProjPickerToolbar(BaseToolbar):
         return self._getToolbarData(
             (
                 ("pan", self.icons["pan"], self.parent.on_select_pan, wx.ITEM_CHECK),
-                (None,),
-                ("edit", self.icons["edit"], self.parent.on_select_draw, wx.ITEM_CHECK),
-                (None,),
-                ("clear", self.icons["erase"], self.parent.on_clear_drawing),
+                ("draw", self.icons["draw"], self.parent.on_select_draw, wx.ITEM_CHECK),
+                ("clear", self.icons["clear"], self.parent.on_clear_drawing),
             )
         )
 
     def _add_icons(self):
         return {
-            "edit": MetaIcon(
+            "draw": MetaIcon(
                 img="edit",
-                label=_("Edit"),
-                desc=_("Add bbox"),
+                label=_("Draw"),
+                desc=_("Draw bounding box"),
             ),
-            "erase": MetaIcon(
+            "clear": MetaIcon(
                 img="erase",
-                label=_("Erase"),
-                desc=_("Erase current geometry"),
+                label=_("Clear"),
+                desc=_("Clear bounding box"),
             ),
         }
 
@@ -92,9 +90,6 @@ class ProjPickerPanel(wx.Panel):
         self.zoomer_queue = queue.Queue()
         self.dzoom = get_dzoom()
 
-        self.dragged = False
-        self.dragging_bbox = False
-        self.dragged_bbox = []
         self.prev_xy = []
         self.bbox = []
         self.geoms = []
@@ -104,15 +99,12 @@ class ProjPickerPanel(wx.Panel):
         self.line_width = 2
         self.fill_alpha = 50
         self.geoms_color = "blue"
-        self.dragged_bbox_color = "green"
         self.sel_bbox_color = "red"
 
         width, height = kwargs.pop("size", (800, 800))
 
         width = min(width, self.Parent.Size.Width)
         height = min(height, self.Parent.Size.Height)
-
-        doc_url = "https://projpicker.readthedocs.io/"
 
         lat, lon = get_latlon()
         zoom = get_zoom()
@@ -144,8 +136,12 @@ class ProjPickerPanel(wx.Panel):
             zoom,
         )
 
-        # self.map_canvas.Bind(wx.EVT_RIGHT_UP, self.on_cancel_drawing)
+        self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_start)
+        self.map_canvas.Bind(wx.EVT_LEFT_UP, self.on_complete)
+
+        # self.map_canvas.Bind(wx.EVT_LEFT_DCLICK, self.on_complete_drawing)
         # self.map_canvas.Bind(wx.EVT_RIGHT_DCLICK, self.on_clear_drawing)
+
         self.map_canvas.Bind(wx.EVT_MOTION, self.on_move)
         self.map_canvas.Bind(wx.EVT_MOUSEWHEEL, self.on_zoom)
         self.map_canvas.Bind(wx.EVT_SIZE, self.on_resize)
@@ -159,13 +155,14 @@ class ProjPickerPanel(wx.Panel):
         toolbar_coors_box = wx.BoxSizer(wx.HORIZONTAL)
         self.toolbar = ProjPickerToolbar(self, self._toolSwitcher)
         self.toolbar.SelectDefault()
+        self.tool = "pan"
         toolbar_coors_box.Add(self.toolbar, 0, wx.EXPAND)
 
         #######################
         # label for coordinates
 
         # label=" "*40 hack to reserve enough space for coordinates
-        self.coor_label = wx.StaticText(self, label=" " * 40)
+        self.coor_label = wx.StaticText(self, label=" " * 50)
         # to avoid redrawing the entire map just to refresh coordinates; use a
         # vertical box sizer for right alignment, which is not allowed with a
         # horizontal box sizer
@@ -177,30 +174,13 @@ class ProjPickerPanel(wx.Panel):
         main_box.Add(map_box, 1, wx.EXPAND)
 
         ####################
-        # bottom/right frame
-        bottom_box = wx.BoxSizer(wx.HORIZONTAL)
-
-        mono_font = wx.Font(
-            9, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL
-        )
-
-        # bottom/right notebook
-        self.notebook = wx.Notebook(self)
-
-        # list of CRSs tab
-        self.crs_panel = wx.Panel(self.notebook)
-        self.crs_panel.page = self.notebook.PageCount
-        self.notebook.AddPage(self.crs_panel, _("CRS List"))
-
-        # help tab
-        help_panel = wx.Panel(self.notebook)
-        help_panel.page = self.notebook.PageCount
-        self.notebook.AddPage(help_panel, _("Help"))
+        # right frame
+        right_box = wx.BoxSizer(wx.HORIZONTAL)
 
         # list of CRSs
         crs_box = wx.BoxSizer(wx.VERTICAL)
         self.crs_list = wx.ListCtrl(
-            self.crs_panel, style=wx.LC_REPORT | wx.LC_SINGLE_SEL
+            self, style=wx.LC_REPORT | wx.LC_SINGLE_SEL
         )
 
         self.crs_list.AppendColumn(_("ID"))
@@ -211,142 +191,70 @@ class ProjPickerPanel(wx.Panel):
         crs_box.Add(self.crs_list, 1, wx.EXPAND)
 
         # text for search
-        self.search_text = wx.SearchCtrl(self.crs_panel, size=(40, 30))
+        self.search_text = wx.SearchCtrl(self, size=(40, 30))
         self.search_text.ShowCancelButton(True)
         self.search_text.Bind(wx.EVT_TEXT, lambda e: self.search())
         crs_box.Add(self.search_text, 0, wx.EXPAND)
 
-        self.crs_panel.SetSizer(crs_box)
-
-        ############
-        # help panel
-        help_box = wx.BoxSizer()
-
-        # text for help
-        help_text = wx.TextCtrl(
-            help_panel,
-            value=textwrap.dedent(
-                _(
-                    f"""\
-                Pan:               Left drag
-                Zoom:              Scroll
-                Zoom to bboxes:    Ctrl + scroll up
-                Zoom to the world: Ctrl + scroll down
-                Zoom to a bbox:    Ctrl + left drag
-                Draw a bbox:       Left click
-                Cancel drawing:    Right click
-                Clear:             Double right click
-
-                Search words can be a CRS ID or
-                separated by a semicolon to search
-                multiple fields using the logical AND
-                operator.
-
-                See {doc_url}
-                to learn more."""
-                )
-            ),
-            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL | wx.TE_AUTO_URL,
-        )
-        help_text.Bind(
-            wx.EVT_TEXT_URL,
-            lambda e: webbrowser.open(doc_url) if e.MouseEvent.LeftIsDown() else None,
-        )
-        help_text.SetFont(mono_font)
-        help_box.Add(help_text, 1, wx.EXPAND)
-        help_panel.SetSizer(help_box)
-
-        bottom_box.Add(self.notebook, 1, wx.EXPAND)
-
-        main_box.Add(bottom_box, 1, wx.EXPAND)
-
+        right_box.Add(crs_box, 1, wx.EXPAND)
+        main_box.Add(right_box, 1, wx.EXPAND)
         self.SetSizer(main_box)
 
-    #! How to map left down to different tools when selected?
     def on_select_pan(self, event):
-        self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_grab)
-
-    def on_grab(self, event):
-        self.__id = event
-        # self.map_canvas.Unbind(wx.EVT_LEFT_DOWN)
-        self.osm.grab(event.x, event.y)
+        self.tool = "pan"
 
     def on_select_draw(self, event):
-        self.map_canvas.Unbind(wx.EVT_LEFT_DOWN, source=event, handler=self.map_canvas)
-        self.map_canvas.Bind(wx.EVT_LEFT_DOWN, self.on_draw)
+        self.tool = "draw"
 
-    def on_draw(self, event):
-        if self.dragging_bbox:
-            ng = len(self.dragged_bbox)
-            s = min(self.dragged_bbox[0][0], self.dragged_bbox[ng - 1][0])
-            n = max(self.dragged_bbox[0][0], self.dragged_bbox[ng - 1][0])
-            w = self.dragged_bbox[0][1]
-            e = self.dragged_bbox[ng - 1][1]
+    def on_start(self, event):
+        if self.tool == "pan":
+            self.osm.grab(event.x, event.y)
+        else:
+            self.geoms.clear()
+            latlon = list(self.osm.canvas_to_latlon(event.x, event.y))
+            self.curr_geom.append(latlon)
+
+    def on_complete(self, event):
+        if self.tool == "draw":
+            query = ""
+            geom = []
+            latlon = list(self.osm.canvas_to_latlon(event.x, event.y))
+            self.curr_geom.append(latlon)
+            s = min(self.curr_geom[0][0], self.curr_geom[1][0])
+            n = max(self.curr_geom[0][0], self.curr_geom[1][0])
+            w = self.curr_geom[0][1]
+            e = self.curr_geom[1][1]
             if s == n:
                 n += 0.0001
             if w == e:
                 e += 0.0001
-            self.osm.zoom_to_bbox([s, n, w, e], False)
-            self.dragged_bbox.clear()
-            self.dragging_bbox = False
-            self.draw_map(event.x, event.y)
-        elif not self.dragged:
-            latlon = list(self.osm.canvas_to_latlon(event.x, event.y))
-            self.curr_geom.append(latlon)
-            if len(self.curr_geom) == 2:
-                query = ""
-                geom = []
-                if len(self.curr_geom) == 2:
-                    s = min(self.curr_geom[0][0], self.curr_geom[1][0])
-                    n = max(self.curr_geom[0][0], self.curr_geom[1][0])
-                    w = self.curr_geom[0][1]
-                    e = self.curr_geom[1][1]
-                    if s == n:
-                        n += 0.0001
-                    if w == e:
-                        e += 0.0001
-                    geom.extend(["bbox", [s, n, w, e]])
-                    query = f"bbox {s:.4f},{n:.4f},{w:.4f},{e:.4f}"
-                self.geoms.extend(geom)
-                self.curr_geom.clear()
-                self.prev_xy.clear()
-                if query:
-                    self.query()
-                    self.draw_geoms()
-        self.dragged = False
-
-    def on_cancel_drawing(self, event):
-        self.curr_geom.clear()
-        self.prev_xy.clear()
-        self.draw_geoms()
+            geom.extend(["bbox", [s, n, w, e]])
+            query = f"bbox {s:.4f},{n:.4f},{w:.4f},{e:.4f}"
+            self.geoms.extend(geom)
+            self.curr_geom.clear()
+            self.prev_xy.clear()
+            if query:
+                self.query()
+                self.draw_geoms()
 
     def on_clear_drawing(self, event):
         self.clear()
         self.geoms.clear()
 
     def on_move(self, event):
-        if event.ControlDown() and event.LeftIsDown() and event.Dragging():
-            latlon = self.osm.canvas_to_latlon(event.x, event.y)
-            if not self.dragging_bbox:
-                self.dragging_bbox = True
-                self.dragged_bbox.append(latlon)
+        if event.LeftIsDown() and event.Dragging():
+            if self.tool == "pan":
+                dx, dy = self.osm.drag(event.x, event.y)
+                if self.prev_xy:
+                    self.prev_xy[0] += dx
+                    self.prev_xy[1] += dy
             else:
-                if len(self.dragged_bbox) == 2:
-                    del self.dragged_bbox[1]
-                self.dragged_bbox.append(latlon)
-                self.map_canvas.Refresh()
-        elif event.LeftIsDown() and event.Dragging():
-            dx, dy = self.osm.drag(event.x, event.y)
-            if self.prev_xy:
-                self.prev_xy[0] += dx
-                self.prev_xy[1] += dy
-            self.dragged = True
-        else:
-            latlon = self.osm.canvas_to_latlon(event.x, event.y)
-            self.coor_label.SetLabel(f"{latlon[0]:.4f}, {latlon[1]:.4f} ")
-            self.coor_label.box.Layout()
-            if self.curr_geom:
-                self.draw_map(event.x, event.y)
+                if self.curr_geom:
+                    self.draw_map(event.x, event.y)
+
+        latlon = self.osm.canvas_to_latlon(event.x, event.y)
+        self.coor_label.SetLabel(f"{latlon[0]:.4f}, {latlon[1]:.4f}")
+        self.coor_label.box.Layout()
 
     def on_zoom(self, event):
         def zoom(x, y, dz, cancel_event):
@@ -361,39 +269,30 @@ class ProjPickerPanel(wx.Panel):
             else:
                 draw_map()
 
-        dz = event.WheelRotation / event.WheelDelta * self.dzoom
+        if self.tool == "pan":
+            dz = event.WheelRotation / event.WheelDelta * self.dzoom
 
-        if event.ControlDown():
-            if dz > 0:
-                geoms_bbox = calc_geoms_bbox(self.geoms)
-                if None not in geoms_bbox:
-                    self.osm.zoom_to_bbox(geoms_bbox, False)
+            if self.zoomer:
+                self.zoomer.cancel_event.set()
+                self.osm.cancel = True
+                self.zoomer.join()
+                self.osm.cancel = False
+                self.zoomer.checker.Stop()
+
+                cancel_event = self.zoomer.cancel_event
+                cancel_event.clear()
             else:
-                self.osm.zoom(event.x, event.y, self.osm.z_min - self.osm.z, False)
-            self.draw_map(event.x, event.y)
-            return
+                cancel_event = threading.Event()
 
-        if self.zoomer:
-            self.zoomer.cancel_event.set()
-            self.osm.cancel = True
-            self.zoomer.join()
-            self.osm.cancel = False
-            self.zoomer.checker.Stop()
-
-            cancel_event = self.zoomer.cancel_event
-            cancel_event.clear()
-        else:
-            cancel_event = threading.Event()
-
-        # if used without osm.draw(), it works; otherwise, only osm.draw()
-        # is visible; timing?
-        self.osm.rescale(event.x, event.y, dz)
-        self.zoomer = threading.Thread(
-            target=zoom, args=(event.x, event.y, dz, cancel_event)
-        )
-        self.zoomer.cancel_event = cancel_event
-        self.zoomer.checker = wx.CallLater(self.zoomer_delay, check_zoomer)
-        self.zoomer.start()
+            # if used without osm.draw(), it works; otherwise, only osm.draw()
+            # is visible; timing?
+            self.osm.rescale(event.x, event.y, dz)
+            self.zoomer = threading.Thread(
+                target=zoom, args=(event.x, event.y, dz, cancel_event)
+            )
+            self.zoomer.cancel_event = cancel_event
+            self.zoomer.checker = wx.CallLater(self.zoomer_delay, check_zoomer)
+            self.zoomer.start()
 
     def on_resize(self, event):
         if self.Parent.IsShown():
@@ -429,7 +328,6 @@ class ProjPickerPanel(wx.Panel):
 
         set_pen_brush(self.geoms_color)
 
-        geom_type = "bbox"
         g = 0
         ngeoms = len(self.all_geoms)
         while g < ngeoms:
@@ -443,19 +341,6 @@ class ProjPickerPanel(wx.Panel):
                     w, h = xy[1][0] - x, xy[1][1] - y
                     dc.DrawRectangle(x, y, w, h)
             g += 1
-
-        if self.dragged_bbox:
-            set_pen_brush(self.dragged_bbox_color)
-
-            s = self.dragged_bbox[1][0]
-            n = self.dragged_bbox[0][0]
-            w = self.dragged_bbox[0][1]
-            e = self.dragged_bbox[1][1]
-
-            for xy in self.osm.get_bbox_xy((s, n, w, e)):
-                x, y = xy[0]
-                w, h = xy[1][0] - x, xy[1][1] - y
-                dc.DrawRectangle(x, y, w, h)
 
         if self.sel_bbox:
             set_pen_brush(self.sel_bbox_color)
@@ -508,7 +393,6 @@ class ProjPickerPanel(wx.Panel):
             if w == e:
                 e += 0.0001
             self.all_geoms.extend(["bbox", [s, n, w, e]])
-
         self.map_canvas.Refresh()
 
     def create_image(self, width, height):
@@ -559,6 +443,3 @@ class ProjPickerPanel(wx.Panel):
         self.draw_geoms()
         self.crs_list.DeleteAllItems()
         self.post_item_deselected()
-
-    def test_tb(self, event):
-        pass
