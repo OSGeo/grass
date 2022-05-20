@@ -4,7 +4,6 @@ system for the ProjPicker API.
 """
 
 import re
-import sqlite3
 
 from .common import _coor_sep_pat, _pos_float_pat, get_float, query_using_cursor
 
