@@ -122,25 +122,35 @@ If the job fails, open an issue and see what you can do manually.
 
 ### Create release notes
 
-Using GH API here, see also
-- https://cli.github.com/manual/gh_api
-- https://docs.github.com/en/rest/reference/repos#generate-release-notes-content-for-a-release
+Generate a draft of release notes using a script. The script uses configuration files
+which are in the _utils_ directory and the script needs to run there,
+so change the current directory:
 
 ```bash
-gh api repos/OSGeo/grass/releases/generate-notes -f tag_name="8.2.0" -f previous_tag_name=8.2.0 -f target_commitish=releasebranch_8_2 -q .body
+cd utils
 ```
 
-If this fails or is incomplete, also a date may be used (that of the last release):
+For major and minor releases, GitHub API gives good results
+because it contains contributor handles and can identify new contributors,
+so use with the _api_ backend, e.g.:
 
 ```bash
-# GitHub style (this works best)
-git log --pretty=format:"* %s by %an" --after="2022-01-28" | sort
-
-# trac style (no longer really needed)
-git log --oneline --after="2022-01-28" | cut -d' ' -f2- | sed 's+^+* +g' | sed 's+(#+https://github.com/OSGeo/grass/pull/+g' | sed 's+)$++g' | sort -u
+python ./generate_release_notes.py api releasebranch_8_2 8.0.0 $VERSION
 ```
 
-Importantly, these notes need to be manually sorted into the various categories (modules, wxGUI, library, docker, ...).
+For micro releases, GitHub API does not give good results because it uses PRs
+while the backports are usually direct commits without PRs.
+The _git log_ command operates on commits, so use use the _log_ backend:
+
+```bash
+python ./generate_release_notes.py log releasebranch_8_2 8.2.0 $VERSION
+```
+
+The script sorts them into categories defined in _utils/release.yml_.
+However, these notes need to be manually edited to collapse related items into one.
+Additionally, a _Highlights_ section needs to be added with manually identified new
+major features for major and minor releases. For all releases, a _Major_ section
+may need to be added showing critical fixes or breaking changes if there are any.
 
 ### Modify the release draft
 
