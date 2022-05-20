@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
         for (col = 0; col < window.cols; col++) {
             east += window.ew_res;
             /* don't interpolate outside of the mask */
-            if (mask && mask[col] == 0) {
+            if (mask && (mask[col] == 0 || Rast_is_c_null_value(&mask[col]))) {
                 Rast_set_d_null_value(&dcell[col], 1);
                 continue;
             }
