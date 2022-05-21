@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2022-03-20 12:12+0000\n"
-"Last-Translator: Stefan Blumentrath <stefan.blumentrath@nina.no>\n"
+"PO-Revision-Date: 2022-05-22 05:04+0000\n"
+"Last-Translator: Helmut Kudrnovsky <hellik@web.de>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/de/>\n"
 "Language: de\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -204,7 +204,7 @@ msgstr ""
 #: ../lib/init/grass.py:543
 #, python-brace-format
 msgid "Empty RC file ({file})"
-msgstr ""
+msgstr "Leere RC Datei ({file})"
 
 #: ../lib/init/grass.py:606
 #, python-format
@@ -416,7 +416,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:1726
 msgid "GRASS GIS homepage:"
-msgstr ""
+msgstr "GRASS GIS Webseite"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1728
@@ -878,7 +878,7 @@ msgstr ""
 
 #: ../lib/gis/parser.c:347
 msgid "Bug in UI description. Missing module description"
-msgstr ""
+msgstr "Fehler in UI Beschreibung.  Fehlende Modul Beschreibung"
 
 #: ../lib/gis/parser.c:357
 msgid "Bug in UI description. Missing option key"
@@ -3797,11 +3797,11 @@ msgstr ""
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr ""
+msgstr "Raster"
 
 #: ../lib/manage/option.c:53
 msgid "Vector"
-msgstr ""
+msgstr "Vektor"
 
 #: ../lib/manage/option.c:55
 msgid "Region"
@@ -4462,7 +4462,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build.c:1234
 #, c-format
 msgid "%s is no longer supported"
-msgstr ""
+msgstr "%s nicht mehr unterstützt"
 
 #: ../lib/vector/Vlib/build.c:1257
 msgid "Spatial index not available, can not be saved"
@@ -5382,7 +5382,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
-msgstr ""
+msgstr "Geändert"
 
 #: ../lib/vector/Vlib/dangles.c:151
 msgid "Removed"
