@@ -7,17 +7,17 @@ import os
 import re
 import collections
 
-_projpicker_verbose_env = "PROJPICKER_VERBOSE"
+_PROJPICKER_VERBOSE_ENV = "PROJPICKER_VERBOSE"
 
 # regular expression patterns
 # coordinate separator
-_coor_sep = ","
-_coor_sep_pat = rf"[ \t]*[{_coor_sep} \t][ \t]*"
+_COOR_SEP = ","
+_COOR_SEP_PAT = rf"[ \t]*[{_COOR_SEP} \t][ \t]*"
 # positive float
-_pos_float_pat = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
+_POS_FLOAT_PAT = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
 
 # bbox table schema
-_bbox_schema = """
+_BBOX_SCHEMA = """
 CREATE TABLE bbox (
     proj_table TEXT NOT NULL CHECK (length(proj_table) >= 1),
     crs_name TEXT NOT NULL CHECK (length(crs_name) >= 2),
@@ -46,7 +46,7 @@ CREATE TABLE bbox (
 """
 
 # all column names in the bbox table
-_bbox_columns = re.sub(
+_BBOX_COLUMNS = re.sub(
     r"^ +| +$",
     "",
     re.sub(
@@ -59,7 +59,7 @@ _bbox_columns = re.sub(
                 r"\([^(]*\)",
                 "",
                 re.sub(
-                    r"^(?:CREATE TABLE.*|\))$|^ *", "", _bbox_schema, flags=re.MULTILINE
+                    r"^(?:CREATE TABLE.*|\))$|^ *", "", _BBOX_SCHEMA, flags=re.MULTILINE
                 ),
                 flags=re.DOTALL,
             ),
@@ -69,11 +69,17 @@ _bbox_columns = re.sub(
 ).split()
 
 # BBox namedtuple class
-BBox = collections.namedtuple("BBox", _bbox_columns)
+BBox = collections.namedtuple("BBox", _BBOX_COLUMNS)
 
 
 def is_verbose():
-    return os.environ.get(_projpicker_verbose_env, "NO") == "YES"
+    """
+    Check if the current session is in a verbose mode.
+
+    Returns:
+        bool: True if verbose, False otherwise.
+    """
+    return os.environ.get(_PROJPICKER_VERBOSE_ENV, "NO") == "YES"
 
 
 def get_float(x):
@@ -86,6 +92,7 @@ def get_float(x):
     Returns:
         float or None: Typecasted x in float if successful, None otherwise.
     """
+    # pylint: disable=invalid-name
     try:
         return float(x)
     except ValueError:

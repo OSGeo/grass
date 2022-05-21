@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 ###############################################################################
 # Project:  ProjPicker (Projection Picker)
 #           <https://github.com/HuidaeCho/projpicker>
@@ -26,6 +25,12 @@
 """
 This module implements the CLI and API of ProjPicker.
 """
+# pylint: disable=import-outside-toplevel, import-error
+# pylint: disable=too-many-lines, too-many-arguments, too-many-locals
+# pylint: disable=too-many-branches, too-many-nested-blocks
+# pylint: disable=too-many-boolean-expressions, too-many-statements
+# pylint: disable=broad-except, not-callable
+# pylint: disable=consider-using-enumerate, consider-using-with
 
 import collections
 import os
@@ -38,48 +43,50 @@ import pprint
 
 from .common import (
     BBox,
-    _coor_sep,
-    _pos_float_pat,
-    _bbox_schema,
-    _bbox_columns,
+    _COOR_SEP,
+    _POS_FLOAT_PAT,
+    _BBOX_SCHEMA,
+    _BBOX_COLUMNS,
     get_float,
 )
 from . import coor_latlon
 from . import coor_xy
 
 
-has_gui = True
+has_gui = True  # pylint: disable=invalid-name
 try:
     from grass.script.setup import set_gui_path
 
     set_gui_path()
     from projpicker_gui import gui
 except Exception:
-    has_gui = False
+    has_gui = False  # pylint: disable=invalid-name
 
 # module path
 _module_path = os.path.dirname(__file__)
 
 # environment variables for default paths
-_projpicker_db_env = "PROJPICKER_DB"
-_proj_db_env = "PROJ_DB"
+_PROJPICKER_DB_ENV = "PROJPICKER_DB"
+_PROJ_DB_ENV = "PROJ_DB"
 # https://proj.org/usage/environmentvars.html
-_proj_lib_env = "PROJ_LIB"
+_PROJ_LIB_ENV = "PROJ_LIB"
 
 # Earth parameters from https://en.wikipedia.org/wiki/Earth_radius#Global_radii
 # equatorial radius in km
-_rx = 6378.1370
+_RX = 6378.1370
 # polar radius in km
-_ry = 6356.7523
+_RY = 6356.7523
 
-_geom_var_chars = r"([a-zA-Z0-9_]+)"
+_GEOM_VAR_CHARS = r"([a-zA-Z0-9_]+)"
 _geom_var_re = re.compile(
-    rf"^(?:{_geom_var_chars}:|:{_geom_var_chars}:|" f":{_geom_var_chars})$"
+    rf"^(?:{_GEOM_VAR_CHARS}:|:{_GEOM_VAR_CHARS}:|" f":{_GEOM_VAR_CHARS})$"
 )
 
-coor_mod = point_re = parse_point = parse_bbox = None
-is_point_within_bbox = is_bbox_within_bbox = None
-query_point_using_cursor = query_bbox_using_cursor = calc_poly_bbox = None
+coor_mod = point_re = parse_point = parse_bbox = None  # pylint: disable=invalid-name
+is_point_within_bbox = is_bbox_within_bbox = None  # pylint: disable=invalid-name
+query_point_using_cursor = None  # pylint: disable=invalid-name
+query_bbox_using_cursor = None  # pylint: disable=invalid-name
+calc_poly_bbox = None  # pylint: disable=invalid-name
 
 # geometry-bbox namedtuple class
 GeomBBox = collections.namedtuple("GeomBBox", "is_latlon type geom bbox")
@@ -115,6 +122,7 @@ def read_file(infile="-"):
     Raises:
         FileNotFoundError: If infile does not exist.
     """
+    # pylint: disable=invalid-name
     if infile in (None, ""):
         infile = "-"
 
@@ -123,7 +131,7 @@ def read_file(infile="-"):
     elif not os.path.isfile(infile):
         raise FileNotFoundError(f"{infile}: No such file found")
     else:
-        f = open(infile)
+        f = open(infile, encoding="utf-8")
 
     lines = f.readlines()
 
@@ -144,6 +152,7 @@ def tidy_lines(lines):
     Args:
         lines (list): List of str lines.
     """
+    # pylint: disable=invalid-name
     for i in reversed(range(len(lines))):
         if lines[i].startswith("#"):
             del lines[i]
@@ -161,19 +170,19 @@ def tidy_lines(lines):
                 words = lines[i].split()
                 all_nums = True
                 for word in words:
-                    if not re.match(f"^[+-]?{_pos_float_pat}", word):
+                    if not re.match(f"^[+-]?{_POS_FLOAT_PAT}", word):
                         all_nums = False
                         break
                 n = len(words)
                 if (
                     all_nums
                     and n in (2, 4)
-                    and _coor_sep not in lines[i]
+                    and _COOR_SEP not in lines[i]
                     and "=" not in lines[i]
                 ):
                     # normalize lat lon to lat,lon for multiple geometries per
                     # line; avoid any constraining directives using =
-                    lines[i] = _coor_sep.join(words)
+                    lines[i] = _COOR_SEP.join(words)
                 elif (
                     words[0].startswith("unit=")
                     and '"' not in words[0]
@@ -203,6 +212,7 @@ def normalize_lines(lines):
     Args:
         lines (list): List of str lines.
     """
+    # pylint: disable=invalid-name
     idx = []
     n = len(lines)
     i = 0
@@ -220,8 +230,7 @@ def normalize_lines(lines):
                     if m:
                         lines[i] += f" {m[1]}"
                         break
-                    else:
-                        lines[i] += f" {lines[j]}"
+                    lines[i] += f" {lines[j]}"
                 i = j
         i += 1
     for i in reversed(idx):
@@ -240,10 +249,9 @@ def get_separator(separator):
     Returns:
         str: Separator character.
     """
-    sep_dic = {"pipe": "|", "comma": ",", "space": " ", "tab": "\t", "newline": "\n"}
-    if separator in sep_dic:
-        separator = sep_dic[separator]
-    return separator
+    return {"pipe": "|", "comma": ",", "space": " ", "tab": "\t", "newline": "\n"}.get(
+        separator, separator
+    )
 
 
 ###############################################################################
@@ -266,17 +274,18 @@ def calc_xy_at_lat_scaling(lat):
     Raises:
         ValueError: If lat is outside [-90, 90].
     """
+    # pylint: disable=invalid-name
     if not -90 <= lat <= 90:
         raise ValueError(f"{lat}: Invalid latitude")
 
-    # (x/_rx)**2 + (y/_ry)**2 = 1
-    # x = _rx*cos(theta2)
-    # y = _ry*sin(theta2)
-    # theta2 = atan2(_rx*tan(theta), _ry)
+    # (x/_RX)**2 + (y/_RY)**2 = 1
+    # x = _RX*cos(theta2)
+    # y = _RY*sin(theta2)
+    # theta2 = atan2(_RX*tan(theta), _RY)
     theta = lat / 180 * math.pi
-    theta2 = math.atan2(_rx * math.tan(theta), _ry)
-    x = _rx * math.cos(theta2)
-    y = _ry * math.sin(theta2)
+    theta2 = math.atan2(_RX * math.tan(theta), _RY)
+    x = _RX * math.cos(theta2)
+    y = _RY * math.sin(theta2)
     return x, y
 
 
@@ -294,7 +303,8 @@ def calc_xy_at_lat_noscaling(lat):
     Returns:
         float, float: x and y.
     """
-    # (x/_rx)**2+(y/_ry)**2 = (r*cos(theta)/_rx)**2+(r*sin(theta)/_ry)**2 = 1
+    # pylint: disable=invalid-name
+    # (x/_RX)**2+(y/_RY)**2 = (r*cos(theta)/_RX)**2+(r*sin(theta)/_RY)**2 = 1
     r = calc_radius_at_lat(lat)
     theta = lat / 180 * math.pi
     x = r * math.cos(theta)
@@ -332,13 +342,14 @@ def calc_radius_at_lat(lat):
     Raises:
         ValueError: If lat is outside [-90, 90].
     """
+    # pylint: disable=invalid-name
     if not -90 <= lat <= 90:
         raise ValueError(f"{lat}: Invalid latitude")
 
-    # (x/_rx)**2+(y/_ry)**2 = (r*cos(theta)/_rx)**2+(r*sin(theta)/_ry)**2 = 1
+    # (x/_RX)**2+(y/_RY)**2 = (r*cos(theta)/_RX)**2+(r*sin(theta)/_RY)**2 = 1
     theta = lat / 180 * math.pi
     r = math.sqrt(
-        (_rx * _ry) ** 2 / ((math.cos(theta) * _ry) ** 2 + (math.sin(theta) * _rx) ** 2)
+        (_RX * _RY) ** 2 / ((math.cos(theta) * _RY) ** 2 + (math.sin(theta) * _RX) ** 2)
     )
     return r
 
@@ -360,6 +371,7 @@ def calc_area(bbox):
     Raises:
         ValueError: If s or n is outside [-90, 90], or s is greater than n.
     """
+    # pylint: disable=invalid-name
     s, n, w, e = bbox
 
     if not -90 <= s <= 90:
@@ -407,7 +419,8 @@ def get_version():
     Returns:
         str: ProjPicker version.
     """
-    with open(os.path.join(_module_path, "VERSION")) as f:
+    # pylint: disable=invalid-name
+    with open(os.path.join(_module_path, "VERSION"), encoding="utf-8") as f:
         version = f.read().strip()
     return version
 
@@ -426,8 +439,8 @@ def get_projpicker_db(projpicker_db=None):
         str: projpicker.db path.
     """
     if projpicker_db is None:
-        if _projpicker_db_env in os.environ:
-            projpicker_db = os.environ[_projpicker_db_env]
+        if _PROJPICKER_DB_ENV in os.environ:
+            projpicker_db = os.environ[_PROJPICKER_DB_ENV]
         else:
             projpicker_db = os.path.join(_module_path, "projpicker.db")
     return projpicker_db
@@ -448,10 +461,10 @@ def get_proj_db(proj_db=None):
         str: proj.db path.
     """
     if proj_db is None:
-        if _proj_db_env in os.environ:
-            proj_db = os.environ[_proj_db_env]
+        if _PROJ_DB_ENV in os.environ:
+            proj_db = os.environ[_PROJ_DB_ENV]
         else:
-            proj_lib = os.environ.get(_proj_lib_env, "/usr/share/proj")
+            proj_lib = os.environ.get(_PROJ_LIB_ENV, "/usr/share/proj")
             proj_db = os.path.join(proj_lib, "proj.db")
     return proj_db
 
@@ -565,6 +578,7 @@ def transform_xy_point(point, from_crs):
     Returns:
         float, float: Latitude and longitude in decimal degrees.
     """
+    # pylint: disable=invalid-name
     import pyproj
 
     x, y = point
@@ -586,6 +600,7 @@ def transform_latlon_point(point, to_crs):
     Returns:
         float, float: x and y floats.
     """
+    # pylint: disable=invalid-name
     import pyproj
 
     lat, lon = point
@@ -611,6 +626,7 @@ def transform_latlon_bbox(bbox, to_crs):
         float, float, float, float: Bottom, top, left, and right in to_crs
         units or all Nones on failed transformation.
     """
+    # pylint: disable=invalid-name
     import pyproj
 
     south, north, west, east = bbox
@@ -658,6 +674,7 @@ def create_projpicker_db(overwrite=False, projpicker_db=None, proj_db=None):
     Raises:
         FileExistsError: If projpicker_db already exists.
     """
+    # pylint: disable=invalid-name, fixme
     projpicker_db = get_projpicker_db(projpicker_db)
     proj_db = get_proj_db(proj_db)
 
@@ -668,7 +685,7 @@ def create_projpicker_db(overwrite=False, projpicker_db=None, proj_db=None):
             raise FileExistsError(f"{projpicker_db}: File already exists")
 
     with sqlite3.connect(projpicker_db) as projpicker_con:
-        projpicker_con.execute(_bbox_schema)
+        projpicker_con.execute(_BBOX_SCHEMA)
         projpicker_con.commit()
         with sqlite3.connect(proj_db) as proj_con:
             proj_cur = proj_con.cursor()
@@ -785,7 +802,7 @@ def write_bbox_db(bbox, bbox_db, overwrite=False):
             raise FileExistsError(f"{bbox_db}: File already exists")
 
     with sqlite3.connect(bbox_db) as bbox_con:
-        bbox_con.execute(_bbox_schema)
+        bbox_con.execute(_BBOX_SCHEMA)
         bbox_con.commit()
 
         nrows = len(bbox)
@@ -889,6 +906,7 @@ def set_coordinate_system(coor_sys="latlon"):
     Raises:
         ValueError: If coor_sys is not one of "latlon" or "xy".
     """
+    # pylint: disable=redefined-outer-name, protected-access, possibly-unused-variable
     if coor_sys not in ("latlon", "xy"):
         raise ValueError(f"{coor_sys}: Invalid coordinate system")
 
@@ -960,6 +978,7 @@ def parse_points(points):
     Returns:
         list: List of lists of parsed point geometries in float.
     """
+    # pylint: disable=invalid-name
     outpoints = []
     for point in points:
         c1 = c2 = None
@@ -1000,6 +1019,7 @@ def parse_polys(polys):
     Returns:
         list: List of lists of lists of parsed point geometries in float.
     """
+    # pylint: disable=invalid-name
     outpolys = []
     poly = []
 
@@ -1060,6 +1080,7 @@ def parse_bboxes(bboxes):
     Returns:
         list: List of lists of four floats.
     """
+    # pylint: disable=invalid-name
     outbboxes = []
     for bbox in bboxes:
         s = n = w = e = None
@@ -1162,6 +1183,7 @@ def parse_mixed_geoms(geoms):
     Raises:
         SyntaxError: If syntax errors are encountered.
     """
+    # pylint: disable=invalid-name
 
     def parse_next_geom(g):
         if geom_type == "poly":
@@ -1170,7 +1192,7 @@ def parse_mixed_geoms(geoms):
                 i < ngeoms
                 and geoms[i] not in keywords
                 and not (
-                    type(geoms[i]) == str
+                    isinstance(geoms[i], str)
                     and (
                         geoms[i] == ""
                         or None in parse_point(geoms[i])
@@ -1194,7 +1216,7 @@ def parse_mixed_geoms(geoms):
             i < ngeoms
             and geoms[i] not in keywords
             and not (
-                type(geoms[i]) == str
+                isinstance(geoms[i], str)
                 and (
                     ("=" in geoms[i] and geoms[i].split("=")[0] in constraints)
                     or _geom_var_re.match(geoms[i])
@@ -1206,7 +1228,7 @@ def parse_mixed_geoms(geoms):
         g = i
         return ogeoms, g
 
-    if type(geoms) == str:
+    if isinstance(geoms, str):
         geoms = geoms.split("\n")
         tidy_lines(geoms)
 
@@ -1306,7 +1328,7 @@ def parse_mixed_geoms(geoms):
         if query_op == "postfix":
             if stack_size == 0:
                 raise SyntaxError("Nothing to return from postfix stack")
-            elif stack_size > 1:
+            if stack_size > 1:
                 raise SyntaxError(
                     f"{stack_size}: Excessive stack size for " "postfix operations"
                 )
@@ -1365,6 +1387,7 @@ def bbox_or(bbox1, bbox2):
         list: List of BBox instances resulting from the OR operation between
         bbox1 and bbox2.
     """
+    # pylint: disable=invalid-name
     outbbox = bbox1.copy()
     for b in bbox2:
         if b not in bbox1:
@@ -1384,6 +1407,7 @@ def bbox_xor(bbox1, bbox2):
         list: List of BBox instances resulting from the XOR operation between
         bbox1 and bbox2.
     """
+    # pylint: disable=invalid-name
     outbbox = []
     for b in bbox1 + bbox2:
         if (b in bbox1) + (b in bbox2) == 1:
@@ -1474,6 +1498,7 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
     Raises:
         SyntaxError: If syntax errors are encountered.
     """
+    # pylint: disable=invalid-name
 
     def find_matching_bbox(geom_latlon, geom, bbox):
         obbox = []
@@ -1530,9 +1555,7 @@ def match_geoms(gbbox1, gbbox2, match_max=0, match_tol=1):
     outbbox = gbbox1.bbox if gbbox2.is_latlon else gbbox2.bbox
 
     if gbbox1.type == "poly":
-        for i in range(len(geom1)):
-            g1 = geom1[i]
-            g2 = geom2[i]
+        for g1, g2 in zip(geom1, geom2):
             if gbbox1.is_latlon:
                 outbbox = find_matching_bbox(g1, g2, outbbox)
             else:
@@ -1604,8 +1627,8 @@ def query_point_using_bbox(prevbbox, point, unit="any", proj_table="any"):
     for i in range(len(prevbbox)):
         if (
             is_point_within_bbox(point, prevbbox[i])
-            and (unit == "any" or prevbbox[i].unit == unit)
-            and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+            and unit in ("any", prevbbox[i].unit)
+            and proj_table in ("any", prevbbox[i].proj_table)
         ):
             idx.append(i)
     outbbox = [prevbbox[i] for i in idx]
@@ -1638,6 +1661,7 @@ def query_points(
     Raises:
         ValueError: If query_op is not one of "and", "or", or "xor".
     """
+    # pylint: disable=invalid-name
     if query_op not in ("and", "or", "xor"):
         raise ValueError(f"{query_op}: Invalid query operator")
 
@@ -1717,8 +1741,8 @@ def query_points_using_bbox(
         for i in range(len(prevbbox)):
             if (
                 is_point_within_bbox(point, prevbbox[i])
-                and (unit == "any" or prevbbox[i].unit == unit)
-                and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+                and unit in ("any", prevbbox[i].unit)
+                and proj_table in ("any", prevbbox[i].proj_table)
             ):
                 if query_op != "xor" or i not in idx:
                     idx.append(i)
@@ -1726,7 +1750,8 @@ def query_points_using_bbox(
             prevbbox = [prevbbox[i] for i in idx]
             idx.clear()
     if query_op != "and":
-        prevbbox = sort_bbox([prevbbox[i] for i in idx])
+        prevbbox = [prevbbox[i] for i in idx]
+        sort_bbox(prevbbox)
 
     return prevbbox
 
@@ -1883,8 +1908,8 @@ def query_bbox_using_bbox(prevbbox, bbox, unit="any", proj_table="any"):
     for i in range(len(prevbbox)):
         if (
             is_bbox_within_bbox(bbox, prevbbox[i])
-            and (unit == "any" or prevbbox[i].unit == unit)
-            and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+            and unit in ("any", prevbbox[i].unit)
+            and proj_table in ("any", prevbbox[i].proj_table)
         ):
             idx.append(i)
     return [prevbbox[i] for i in idx]
@@ -1916,6 +1941,7 @@ def query_bboxes(
     Raises:
         ValueError: If query_op is not one of "and", "or", or "xor".
     """
+    # pylint: disable=invalid-name
     if query_op not in ("and", "or", "xor"):
         raise ValueError(f"{query_op}: Invalid query operator")
 
@@ -1993,8 +2019,8 @@ def query_bboxes_using_bbox(
         for i in range(len(prevbbox)):
             if (
                 is_bbox_within_bbox(bbox, prevbbox[i])
-                and (unit == "any" or prevbbox[i].unit == unit)
-                and (proj_table == "any" or prevbbox[i].proj_table == proj_table)
+                and unit in ("any", prevbbox[i].unit)
+                and proj_table in ("any", prevbbox[i].proj_table)
             ):
                 if query_op != "xor" or i not in idx:
                     idx.append(i)
@@ -2002,7 +2028,8 @@ def query_bboxes_using_bbox(
             prevbbox = [prevbbox[i] for i in idx]
             idx.clear()
     if query_op != "and":
-        prevbbox = sort_bbox([prevbbox[i] for i in idx])
+        prevbbox = [prevbbox[i] for i in idx]
+        sort_bbox(prevbbox)
 
     return prevbbox
 
@@ -2209,8 +2236,8 @@ def query_all_using_bbox(prevbbox, unit="any", proj_table="any"):
     """
     idx = []
     for i in range(len(prevbbox)):
-        if (unit == "any" or prevbbox[i].unit == unit) and (
-            proj_table == "any" or prevbbox[i].proj_table == proj_table
+        if unit in ("any", prevbbox[i].unit) and (
+            proj_table in ("any", prevbbox[i].proj_table)
         ):
             idx.append(i)
     outbbox = [prevbbox[i] for i in idx]
@@ -2251,6 +2278,7 @@ def query_mixed_geoms(geoms, projpicker_db=None):
     Raises:
         SyntaxError: If syntax errors are encountered.
     """
+    # pylint: disable=invalid-name
     geoms = parse_mixed_geoms(geoms)
 
     outbbox = []
@@ -2479,6 +2507,7 @@ def search_bbox(bbox, text, ignore_case=True, search_op="and"):
         list: List of BBox instances any of whose string field values contain
         text.
     """
+    # pylint: disable=invalid-name
 
     def compare_crs_id(crs_id, b):
         auth, code = crs_id.split(":")
@@ -2491,16 +2520,15 @@ def search_bbox(bbox, text, ignore_case=True, search_op="and"):
         return b_auth.endswith(auth) and b_code.startswith(code)
 
     def compare(word, item):
-        if type(item) == str:
+        if isinstance(item, str):
             if ignore_case:
                 word = word.lower()
                 item = item.lower()
             return word in item
-        else:
-            return False
+        return False
 
     outbbox = []
-    if type(text) == str:
+    if isinstance(text, str):
         text = [text]
 
     words = []
@@ -2556,11 +2584,11 @@ def stringify_bbox(bbox, header=True, separator="|"):
     """
     separator = get_separator(separator)
 
-    if type(bbox) == BBox:
+    if isinstance(bbox, BBox):
         bbox = [bbox]
 
     if header and bbox:
-        outstr = separator.join(_bbox_columns) + "\n"
+        outstr = separator.join(_BBOX_COLUMNS) + "\n"
     else:
         outstr = ""
     for row in bbox:
@@ -2578,7 +2606,7 @@ def dictify_bbox(bbox):
     Returns:
         list: List of bbox dicts.
     """
-    if type(bbox) == BBox:
+    if isinstance(bbox, BBox):
         bbox = [bbox]
 
     outdicts = []
@@ -2611,7 +2639,8 @@ def extract_srids(bbox):
     Returns:
         list: List of SRID strs.
     """
-    if type(bbox) == BBox:
+    # pylint: disable=invalid-name
+    if isinstance(bbox, BBox):
         is_single = True
         bbox = [bbox]
     else:
@@ -2660,7 +2689,7 @@ def print_srids(bbox, outfile=sys.stdout, separator="\n"):
     """
     separator = get_separator(separator)
 
-    if type(bbox) == BBox:
+    if isinstance(bbox, BBox):
         bbox = [bbox]
 
     first = True
@@ -2678,7 +2707,7 @@ def print_srids(bbox, outfile=sys.stdout, separator="\n"):
 
 
 def start(
-    geoms=[],
+    geoms=None,
     infile="-",
     outfile="-",
     fmt="plain",
@@ -2721,7 +2750,7 @@ def start(
     get_projpicker_db() or get_proj_db() is used, respectively.
 
     Args:
-        geoms (list): List of parsable geometries. Defaults to [].
+        geoms (list): List of parsable geometries. Defaults to None.
         infile (str): Input geometry file. Defaults to "-" for sys.stdin.
         outfile (str): Output file. None for no output file. Defaults to "-"
             for sys.stdout.
@@ -2763,8 +2792,12 @@ def start(
         FileNotFoundError: If proj_db does not exist when create is True,
             projpicker_db does not exist when create is False.
     """
+    # pylint: disable=invalid-name, exec-used
     projpicker_db = get_projpicker_db(projpicker_db)
     proj_db = get_proj_db(proj_db)
+
+    if geoms is None:
+        geoms = []
 
     if not has_gui:
         start_gui = None
@@ -2822,12 +2855,12 @@ def start(
             mode = "a"
             header = False
         elif fmt == "json":
-            with open(outfile) as f:
+            with open(outfile, encoding="utf-8") as f:
                 bbox_dict = json.load(f)
             bbox_dict.extend(dictify_bbox(bbox))
             bbox_json = json.dumps(bbox_dict)
         elif fmt == "pretty":
-            with open(outfile) as f:
+            with open(outfile, encoding="utf-8") as f:
                 # https://stackoverflow.com/a/65647108
                 lcls = locals()
                 exec("bbox_dict = " + f.read(), globals(), lcls)
@@ -2859,7 +2892,7 @@ def start(
         else:
             separator = "\n"
 
-    f = sys.stdout if outfile == "-" else open(outfile, mode)
+    f = sys.stdout if outfile == "-" else open(outfile, mode, encoding="utf-8")
     if fmt == "plain":
         print_bbox(bbox, f, header, separator)
     elif fmt == "json":

@@ -5,15 +5,15 @@ the ProjPicker API.
 
 import re
 
-from .common import _pos_float_pat, _coor_sep_pat, get_float, query_using_cursor
+from .common import _POS_FLOAT_PAT, _COOR_SEP_PAT, get_float, query_using_cursor
 
 # x,y
-_xy_pat = f"([+-]?{_pos_float_pat}){_coor_sep_pat}([+-]?{_pos_float_pat})"
+_XY_PAT = f"([+-]?{_POS_FLOAT_PAT}){_COOR_SEP_PAT}([+-]?{_POS_FLOAT_PAT})"
 
 # x,y
-_xy_re = re.compile(f"^{_xy_pat}$")
+_xy_re = re.compile(f"^{_XY_PAT}$")
 # xy bbox
-_xy_bbox_re = re.compile(f"^{_xy_pat}{_coor_sep_pat}{_xy_pat}$")
+_xy_bbox_re = re.compile(f"^{_XY_PAT}{_COOR_SEP_PAT}{_XY_PAT}$")
 
 
 ###############################################################################
@@ -35,6 +35,7 @@ def parse_point(point):
     Returns:
         float, float: Parsed x and y floats.
     """
+    # pylint: disable=invalid-name
     x = y = None
     typ = type(point)
     if typ == str:
@@ -64,24 +65,25 @@ def parse_bbox(bbox):
     Returns:
         float, float, float, float: Bottom, top, left, and right floats.
     """
-    bottom = top = left = right = None
+    # pylint: disable=invalid-name
+    b = t = l = r = None  # noqa: E741
     typ = type(bbox)
     if typ == str:
         m = _xy_bbox_re.match(bbox)
         if m:
-            south = float(m[1])
-            north = float(m[2])
-            left = float(m[3])
-            right = float(m[4])
-            if south <= north:
-                bottom = south
-                top = north
+            s = float(m[1])
+            n = float(m[2])
+            l = float(m[3])  # noqa: E741
+            r = float(m[4])
+            if s <= n:
+                b = s
+                t = n
     elif typ in (list, tuple) and len(bbox) == 4:
-        bottom = get_float(bbox[0])
-        top = get_float(bbox[1])
-        left = get_float(bbox[2])
-        right = get_float(bbox[3])
-    return [bottom, top, left, right]
+        b = get_float(bbox[0])
+        t = get_float(bbox[1])
+        l = get_float(bbox[2])  # noqa: E741
+        r = get_float(bbox[3])
+    return [b, t, l, r]
 
 
 ###############################################################################
@@ -99,25 +101,26 @@ def calc_poly_bbox(poly):
     Returns:
         float, float, float, float: Bottom, top, left, and right.
     """
-    bottom = top = left = right = None
+    # pylint: disable=invalid-name
+    b = t = l = r = None  # noqa: E741
 
     for point in poly:
         x, y = point
 
-        if bottom is None:
-            bottom = top = y
-            left = right = x
+        if b is None:
+            b = t = y
+            l = r = x  # noqa: E741
         else:
-            if y < bottom:
-                bottom = y
-            elif y > top:
-                top = y
-            if x < left:
-                left = x
-            elif x > right:
-                right = x
+            if y < b:
+                b = y
+            elif y > t:
+                t = y
+            if x < l:
+                l = x  # noqa: E741
+            elif x > r:
+                r = x
 
-    return bottom, top, left, right
+    return b, t, l, r
 
 
 def is_point_within_bbox(point, bbox):
@@ -131,15 +134,16 @@ def is_point_within_bbox(point, bbox):
     Returns:
         bool: True if point is within bbox. Otherwise, False.
     """
+    # pylint: disable=invalid-name, fixme
     x, y = point
-    bottom = bbox.bottom
-    top = bbox.top
-    left = bbox.left
-    right = bbox.right
-    if None in (bottom, top, left, right):
+    b = bbox.bottom
+    t = bbox.top
+    l = bbox.left  # noqa: E741
+    r = bbox.right
+    if None in (b, t, l, r):
         # XXX: might be incorrect, but we cannot do better
         return False
-    return left <= x <= right and bottom <= y <= top
+    return l <= x <= r and b <= y <= t  # noqa: E741
 
 
 def is_bbox_within_bbox(bbox1, bbox2):
@@ -153,20 +157,16 @@ def is_bbox_within_bbox(bbox1, bbox2):
     Returns:
         bool: True if bbox1 is within bbox2. Otherwise, False.
     """
-    bottom, top, left, right = bbox1
-    south = bbox2.bottom
-    north = bbox2.top
-    west = bbox2.left
-    east = bbox2.right
-    if None in (south, north, west, east):
+    # pylint: disable=invalid-name, fixme
+    b, t, l, r = bbox1
+    s = bbox2.bottom
+    n = bbox2.top
+    w = bbox2.left
+    e = bbox2.right
+    if None in (s, n, w, e):
         # XXX: might be incorrect, but we cannot do better
         return False
-    return (
-        west <= left <= east
-        and west <= right <= east
-        and south <= bottom <= north
-        and south <= top <= north
-    )
+    return w <= l <= e and w <= r <= e and s <= b <= n and s <= t <= n  # noqa: E741
 
 
 ###############################################################################
@@ -196,6 +196,7 @@ def query_point_using_cursor(
     Returns:
         list: List of queried BBox instances sorted by area.
     """
+    # pylint: disable=invalid-name
     x, y = parse_point(point)
     # if west_lon >= east_lon, bbox crosses the antimeridian
     sql = f"""SELECT *
@@ -235,6 +236,7 @@ def query_bbox_using_cursor(
     Returns:
         list: List of queried BBox instances sorted by area.
     """
+    # pylint: disable=invalid-name
     b, t, l, r = parse_bbox(bbox)
     sql = f"""SELECT *
               FROM bbox
