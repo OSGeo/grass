@@ -179,6 +179,9 @@ outside of the mask as if its value were NULL. The mask is only applied
 when <em>reading</em> an existing GRASS raster map, for example when used
 in a module as an input map.
 <p>
+Alternatively, <code>GRASS_MASK</code> environment variable can be used to specify
+the raster map which will be used as a mask.
+<p>
 The mask is read as an integer map. If MASK is actually a
 floating-point map, the values will be converted to integers using the
 map's quantisation rules (this defaults to round-to-nearest, but can
