@@ -1,6 +1,7 @@
 """
 This module implements common functions for the gui modules.
 """
+# pylint: disable=not-callable
 
 import os
 
@@ -79,7 +80,7 @@ def parse_geoms(geoms):
     for geom in geoms:
         if geom in ("point", "poly", "bbox"):
             line = geom_type = geom
-        elif type(geom) == str:
+        elif isinstance(geom, str):
             line = geom
         else:
             line = ""
@@ -144,7 +145,7 @@ def calc_geoms_bbox(geoms):
             geom_type = geom
             g += 1
             geom = geoms[g]
-        if type(geom) == list:
+        if isinstance(geom, list):
             if geom_type == "point":
                 lat, lon = geom
                 if s is None:

@@ -1,6 +1,7 @@
 """
 This module implements the ProjPicker GUI using wxPython.
 """
+# pylint: disable=too-many-locals, too-many-statements, no-member
 
 import wx.lib.statbmp
 import io
@@ -307,7 +308,7 @@ def start(
                 geom_type = geom
                 g += 1
                 geom = all_geoms[g]
-            if type(geom) == list:
+            if isinstance(geom, list):
                 if geom_type == "point":
                     for xy in osm.get_xy([geom]):
                         dc.DrawCircle(*xy[0], point_half_size)

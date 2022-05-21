@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 This module implements the ProjPickerPanel widget for wxPython.
 """
@@ -316,7 +315,7 @@ class ProjPickerPanel(wx.Panel):
             if geom == "bbox":
                 g += 1
                 geom = self.all_geoms[g]
-            if type(geom) == list:
+            if isinstance(geom, list):
                 for xy in self.osm.get_bbox_xy(geom):
                     x, y = xy[0]
                     w, h = xy[1][0] - x, xy[1][1] - y
