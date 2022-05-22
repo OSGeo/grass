@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2022-05-22 05:04+0000\n"
-"Last-Translator: Helmut Kudrnovsky <hellik@web.de>\n"
+"PO-Revision-Date: 2022-05-23 10:50+0000\n"
+"Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/de/>\n"
 "Language: de\n"
@@ -7083,9 +7083,8 @@ msgid "The self.c_mapinfo pointer must be correctly initiated"
 msgstr ""
 
 #: ../lib/python/pygrass/errors.py:40
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "Rasterkarte <%s> nicht im Mapset <%s> gefunden."
+msgstr "Karte <{}> nicht im aktuellen Mapset <%s> gefunden."
 
 #: ../lib/python/pygrass/vector/table.py:1042
 #, python-format
@@ -7353,9 +7352,8 @@ msgid "Space time datasets can only be created in the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/open_stds.py:120
-#, fuzzy
 msgid "Illegal dataset name <{}>. Character '.' not allowed."
-msgstr "Ungültiger Name der Vektorkarte <%s>. Zeichen '%c' ist nicht erlaubt."
+msgstr "Ungültiger Datensatz-Name <{}>. Zeichen '.' ist nicht erlaubt."
 
 #: ../lib/python/temporal/open_stds.py:134
 #, python-format
@@ -8405,14 +8403,14 @@ msgid "Mapset <{mapset}> is required for a valid location."
 msgstr ""
 
 #: ../lib/python/grassdb/checks.py:437
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Mapset <{mapset}> is the current mapset."
-msgstr "Rasterkarte <%s> ist nicht im aktuellen Mapset (%s)."
+msgstr "Mapset <{mapset}> ist das aktuellen Mapset."
 
 #: ../lib/python/grassdb/checks.py:441
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Mapset <{mapset}> is in use."
-msgstr "Mapset <%s> existiert nicht."
+msgstr "Mapset <{mapset}> ist in Gebrauch."
 
 #: ../lib/python/grassdb/checks.py:445
 #, python-brace-format
@@ -10183,13 +10181,12 @@ msgstr "Repariere subtilen Rundungsfehler der Eingabe der Westgrenze (%g>%g)."
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
 msgstr "Repariere subtilen Rundungsfehler der Eingabe der Ostgrenze (%g>%g)."
 
-#, fuzzy
 msgid "No centroid defined for area %d. Area not exported."
-msgstr "Die Datenbankverbindung für den Layer <%d> nicht definiert."
+msgstr "Kein Zentroid für Fläche %d definiert. Fläche nicht exportiert."
 
-#, fuzzy
 msgid "Unable to restore feature/offset %lu in vector map <%s>"
-msgstr "Kann Objekt %d der Vektorkarte <%s> nicht wiederherstellen."
+msgstr ""
+"Feature/Offset %lu in Vektorkarte <%s> kann nicht wiederhergestellt werden."
 
 msgid "Out of memmory"
 msgstr "Nicht genügend Arbeitsspeicher"
@@ -10206,17 +10203,14 @@ msgstr "Vektor Karte"
 msgid "Unable to fetch all. There is no temporal database connection defined for mapset <%(mapset)s>"
 msgstr "Vektor Karte"
 
-#, fuzzy
 msgid "Unable to find a temporary null file <%s>"
 msgstr "Kann keine temporäre NULL-Datei %s finden."
 
-#, fuzzy
 msgid "Unable to open null file <%s>"
-msgstr "G_spawn: Kann die Datei %s nicht öffnen."
+msgstr "Kann die NULL-Datei <%s> nicht öffnen."
 
-#, fuzzy
 msgid "ERROR: <%s> is not a valid GRASS location"
-msgstr "Tut mir leid, <%s> ist keine gültige Option\n"
+msgstr "FEHLER: <%s> ist keine gültige GRASS location"
 
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "FEHLER: Option <%s>: <%s> existiert bereits.\n"
@@ -10224,20 +10218,17 @@ msgstr "FEHLER: Option <%s>: <%s> existiert bereits.\n"
 msgid "Unable to open file '%s'"
 msgstr "Kann Datei '%s' nicht öffnen"
 
-#, fuzzy
 msgid "Hit RETURN to continue"
-msgstr "RETURN zum Weitermachen drücken -->"
+msgstr "RETURN zum Weitermachen drücken"
 
-#, fuzzy
 msgid "Vector map <%s> is not opened on topology level"
-msgstr "Vektorkarte <%s> ist nicht auf Level >= 2 geöffnet."
+msgstr "Vektorkarte <%s> ist nicht im Topologielevel geöffnet."
 
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#, fuzzy
 msgid "Removing empty 3D raster maps"
-msgstr "Name der Eingaberasterkarte."
+msgstr "Entfernen der leeren 3D Rasterkarte"
 
 #, fuzzy
 msgid "Mode type: {0} not supported."
