@@ -249,7 +249,8 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     alloc_options("type=crs");
 #endif
     pjc = proj_context_create();
-    if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
+    if ((info->srid && !(pj = proj_create(pjc, info->srid))) ||
+        (!info->srid && !(pj = proj_create_argv(pjc, nopt, opt_in)))) {
 #else
     /* Set finder function for locating datum conversion tables PK */
     pj_set_finder(FINDERFUNC);
