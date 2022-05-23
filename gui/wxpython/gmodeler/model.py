@@ -2825,10 +2825,7 @@ if __name__ == "__main__":
             if (
                 age == "new"
                 and not any(value in i for i in intermediates)
-                and (
-                    value != ""
-                    or param in parameterized_params["params"]
-                )
+                and (value != "" or param in item.GetParameterizedParams()["params"])
             ):
                 io_data = "outputs"
                 object_type = "ComplexOutput"
@@ -2895,10 +2892,7 @@ if __name__ == "__main__":
             if (
                 age == "new"
                 and not any(value in i for i in intermediates)
-                and (
-                    value != ""
-                    or param in item.GetParameterizedParams()["params"]
-                )
+                and (value != "" or param in item.GetParameterizedParams()["params"])
             ):
                 if param["prompt"] == "vector":
                     command = "v.out.ogr"
