@@ -2760,8 +2760,9 @@ if __name__ == "__main__":
         )
 
     def _write_input_outputs(self, item, intermediates):
-        # TODO: Default values
-        for flag in item.GetParameterizedParams()["flags"]:
+        parameterized_params = item.GetParameterizedParams()
+
+        for flag in parameterized_params["flags"]:
             if flag["label"]:
                 desc = flag["label"]
             else:
@@ -2788,7 +2789,7 @@ if __name__ == "__main__":
                 value,
             )
 
-        for param in item.GetParameterizedParams()["params"]:
+        for param in parameterized_params["params"]:
             desc = self._getParamDesc(param)
             value = self._getParamValue(param)
 
@@ -2819,7 +2820,16 @@ if __name__ == "__main__":
             value = param["value"]
             age = param["age"]
 
-            if age == "new" and not any(value in i for i in intermediates):
+            # ComplexOutput if: outputing a new non-intermediate layer and
+            # either not empty or parameterized
+            if (
+                age == "new"
+                and not any(value in i for i in intermediates)
+                and (
+                    value != ""
+                    or param in parameterized_params["params"]
+                )
+            ):
                 io_data = "outputs"
                 object_type = "ComplexOutput"
                 format_spec = "supported_formats=sup_formats"
@@ -2880,7 +2890,16 @@ if __name__ == "__main__":
             value = param["value"]
             age = param["age"]
 
-            if age == "new" and not any(value in i for i in intermediates):
+            # output if: outputing a new non-intermediate layer and
+            # either not empty or parameterized
+            if (
+                age == "new"
+                and not any(value in i for i in intermediates)
+                and (
+                    value != ""
+                    or param in item.GetParameterizedParams()["params"]
+                )
+            ):
                 if param["prompt"] == "vector":
                     command = "v.out.ogr"
                     format = '"GML"'
