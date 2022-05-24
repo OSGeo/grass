@@ -139,6 +139,13 @@ stored for annotated tags including a date; message is suggested by the version 
 git tag $TAG -a -m "GRASS GIS 8.2.0RC1"
 ```
 
+List all tags (annotated will be at the top of both lists):
+
+```bash
+git tag -n --sort=-creatordate
+git tag -n --sort=-taggerdate
+```
+
 Now push the tag upstream - this will trigger the automated workflows linked to tags:
 
 ```bash
@@ -158,9 +165,9 @@ so change the current directory:
 cd utils
 ```
 
-For major and minor releases, GitHub API gives good results
-because it contains contributor handles and can identify new contributors,
-so use with the _api_ backend, e.g.:
+For major and minor releases, GitHub API gives good results for the first
+release candidate because it contains contributor handles and can identify
+new contributors, so use with the _api_ backend, e.g.:
 
 ```bash
 python ./generate_release_notes.py api releasebranch_8_2 8.0.0 $VERSION
@@ -173,6 +180,16 @@ The _git log_ command operates on commits, so use use the _log_ backend:
 ```bash
 python ./generate_release_notes.py log releasebranch_8_2 8.2.0 $VERSION
 ```
+
+In between RCs and between last RC and final release, the _log_ backend is useful
+for showing updates since the last RC:
+
+```bash
+python ./generate_release_notes.py log releasebranch_8_2 8.2.0RC1 $VERSION
+```
+
+For the final release, the changes accumulated since the first RC need to be
+added manually to the result from the _api_ backend.
 
 The script sorts them into categories defined in _utils/release.yml_.
 However, these notes need to be manually edited to collapse related items into one.
@@ -188,7 +205,7 @@ cd ..
 
 ### Modify the release draft
 
-After the automated job completes, a new release draft will be available in the GitHub
+After the automated release job completes, a new release draft will be available in the GitHub
 web interface. You can copy-paste the created release notes to GitHub and further modify as needed.
 
 Older release description may or may not be a good inspiration:
@@ -224,7 +241,7 @@ After an RC, switch to development version:
 ./utils/update_version.py dev
 ```
 
-After a (final) release, switch to development version for the next micro, minor, or major
+After a final release, switch to development version for the next micro, minor, or major
 version, e.g., for micro version, use:
 
 ```bash
@@ -295,12 +312,12 @@ vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 
 Add the new version to repos which build or test addons:
 
-- https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml (currently new branches only)
-- https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line)
+- https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml (currently, for new branches only)
+- https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line for new branches and final releases)
 
 ## Close milestone
 
-For a (final) release (not release candidate), close the related milestone at
+For a final release (not release candidate), close the related milestone at
 <https://github.com/OSGeo/grass/milestones>.
 If there are any open issues or PRs, move them to another milestone
 in the milestone view (all can be moved at once).
