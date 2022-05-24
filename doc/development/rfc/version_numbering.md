@@ -10,8 +10,13 @@ Use version number in a format _major.minor.micro_ where
 - _major_ is for large additions or backwards incompatible changes,
 - _minor_ is for additions, and
 - _micro_ is for fixes.
+
 These numbers are assigned to releases. Development versions, pre-release,
 and builds are marked by additional labels as suffixes.
+
+Once a version number is assigned to a release, the associated source code cannot change,
+or in other words, version number is assigned to a particular state of the source code.
+
 All major and minor version numbers are used for releases,
 i.e., there is no distinction between even and odd numbers.
 
@@ -37,6 +42,9 @@ which abandoned the practice since then.
 At the time of version 5, the odd-even practice replaced a system where multiple numbered beta
 versions were released. Version 5.0beta10 was a last beta release before the first
 pre-release of 5.0.0.
+
+The beta version practice was shortly picked up again for 7.0.0 which had four
+beta releases before the first release candidate of 7.0.0.
 
 ## Motivation
 
@@ -121,7 +129,8 @@ Development versions of source code on each branch have a dev suffix,
 e.g., 3.5.1-dev.
 Transition to the Semantic Versioning style is strongly recommend
 which means including dash (hyphen) before dev, e.g., 3.5.1-dev.
-Notably, these are not unique and multiple versions are marked the same.
+Notably, these dev-suffixed version numbers are not unique, i.e.,
+multiple source code versions are marked the same.
 
 Release candidates (RCs) are pre-releases marked by appending RC and
 a release candidate number to the version, e.g., 3.5.1RC2.
