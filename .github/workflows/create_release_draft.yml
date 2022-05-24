@@ -2,8 +2,18 @@ name: Create a release draft
 
 on:
   push:
+    branches:
+      - main
+      - releasebranch_*
     tags:
       - '**'
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
+    paths:
+      - '.github/**'
+      - 'utils/**'
 
 jobs:
   build:
@@ -24,8 +34,9 @@ jobs:
           git add core_modules_with_last_commit.json
           git diff --cached > core_modules_with_last_commit.patch
 
-      - name: Create new release draft
+      - name: Create new release draft (for tags only)
         id: create_release
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,9 +48,10 @@ jobs:
             - First change
             - Second change
           draft: true
-          prerelease: ${{ contains(github.ref, "RC") }}
+          prerelease: ${{ contains(github.ref, 'RC') }}
 
-      - name: Upload core_modules_with_last_commit.json file
+      - name: Upload core_modules_with_last_commit.json file (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -49,7 +61,8 @@ jobs:
           asset_name: core_modules_with_last_commit.json
           asset_content_type: application/json
 
-      - name: Upload core_modules_with_last_commit.patch file
+      - name: Upload core_modules_with_last_commit.patch file (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -59,9 +72,9 @@ jobs:
           asset_name: core_modules_with_last_commit.patch
           asset_content_type: text/plain
 
-      - name: On failure, make the created files available
+      - name: Make the created files available
         uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: artifacts
           path: |
