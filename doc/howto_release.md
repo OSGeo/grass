@@ -22,7 +22,8 @@ Update your remotes and switch to branch:
 git fetch --all --prune && git checkout releasebranch_8_2
 ```
 
-Confirm that you are on the right branch and have no local changes:
+Confirm that you are on the right branch and have no local changes
+and that you have no local unpushed commits:
 
 ```bash
 # Should show no changes:
@@ -30,6 +31,7 @@ git status
 # Should give no output at all:
 git diff
 git diff --staged
+# Should give no output:
 git log upstream/releasebranch_8_2..HEAD
 # Should give the same as last commits visible on GitHub:
 git log --max-count=5
@@ -42,15 +44,22 @@ and optionally update your own fork:
 git merge upstream/releasebranch_8_2 && git push origin releasebranch_8_2
 ```
 
-Use `git log` and `git show` to verify the result:
+Verify the result:
+
+```bash
+# Should give no output:
+git log upstream/releasebranch_8_2..HEAD
+# Should give the same as last commits visible on GitHub:
+git log --max-count=5
+```
+
+Now or any time later, you can use `git log` and `git show` to see the latest
+commits and the last commit including the changes.
 
 ```bash
 git log --max-count=5
 git show
 ```
-
-Any time later, you can use `git log` and `git show` to see the latest
-commits and the last commit including the changes.
 
 ## Update VERSION file to release version number
 
@@ -67,8 +76,18 @@ Commit with a commit message suggested by the script, e.g.:
 
 ```bash
 git diff
-git commit -m "version: GRASS GIS 8.2.0RC1" include/VERSION
+git commit include/VERSION -m "version: GRASS GIS 8.2.0RC1"
+```
+
+Check that there is exactly one commit on your local branch and that it is the version change:
+
+```bash
+git status
 git show
+
+Push the tag to the upstream repo:
+
+```bash
 git push upstream
 ```
 
@@ -105,8 +124,16 @@ Check on GitHub or use GitHub CLI:
 gh run list --branch releasebranch_8_2
 ```
 
+Some time was needed to run the checks, so before getting back to creating the tag,
+confirm that you are on the right branch which is up to date:
+
+```bash
+git status
+git log --max-count=5
+```
+
 Create an annotated tag (a lightweight tag is okay too, but there is more metadata
-stored for annotated tags including a date):
+stored for annotated tags including a date; message is suggested by the version script):
 
 ```bash
 git tag $TAG -a -m "GRASS GIS 8.2.0RC1"
@@ -118,7 +145,8 @@ Now push the tag upstream - this will trigger the automated workflows linked to 
 git push upstream $TAG
 ```
 
-If the job fails, open an issue and see what you can do manually.
+If any of the tag-related jobs fails, open an issue and see what you can do manually
+so that you can continue in the release process.
 
 ### Create release notes
 
@@ -151,6 +179,12 @@ However, these notes need to be manually edited to collapse related items into o
 Additionally, a _Highlights_ section needs to be added with manually identified new
 major features for major and minor releases. For all releases, a _Major_ section
 may need to be added showing critical fixes or breaking changes if there are any.
+
+Change directory back to the root directory of the repo:
+
+```bash
+cd ..
+```
 
 ### Modify the release draft
 
