@@ -329,6 +329,15 @@ When the above is done and the release notes are ready, publish the release at
 
 Release is done.
 
+## Improve release description
+
+For final releases only, go to Zenodo a get a Markdown badge for the release
+which Zenodo creates with a DOI for the published released.
+
+For all releases, click the Binder badge to get Binder to build. Use it to test it and
+to cache the built image. Add more links to (or badges for) more notebooks if there
+are any which show well specific features added or updated in the release.
+
 ## Create entries for the new release
 
 ### Trac Wiki release page
