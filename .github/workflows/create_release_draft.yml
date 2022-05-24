@@ -1,4 +1,4 @@
-name: Create a release draft
+name: Create or check a release draft
 
 on:
   push:
