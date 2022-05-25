@@ -181,19 +181,19 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     if not commits:
         raise RuntimeError("No commits retrieved from git log (try different tags)")
 
-    support_directory = Path("utils")
+    config_directory = Path("utils")
     svn_name_by_git_author = csv_to_dict(
-        support_directory / "svn_name_git_author.csv",
+        config_directory / "svn_name_git_author.csv",
         key="git_author",
         value="svn_name",
     )
     github_name_by_svn_name = csv_to_dict(
-        support_directory / "svn_name_github_name.csv",
+        config_directory / "svn_name_github_name.csv",
         key="svn_name",
         value="github_name",
     )
     github_name_by_git_author = csv_to_dict(
-        support_directory / "git_author_github_name.csv",
+        config_directory / "git_author_github_name.csv",
         key="git_author",
         value="github_name",
     )
@@ -248,7 +248,8 @@ def create_release_notes(args):
             check=True,
         ).stdout.strip()
 
-    with open("release.yml", encoding="utf-8") as file:
+    config_directory = Path("utils")
+    with open(config_directory / "release.yml", encoding="utf-8") as file:
         config = yaml.safe_load(file.read())["notes"]
 
     if args.backend == "api":
