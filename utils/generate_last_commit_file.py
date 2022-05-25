@@ -69,7 +69,18 @@ def get_last_commit(src_dir):
             stderr=subprocess.PIPE,
         )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
         if process_result.returncode == 0:
-            commit, date = process_result.stdout.decode().strip().split(",")
+            try:
+                text = process_result.stdout.decode().strip()
+                if not text:
+                    # Non-versioned directories are picked by the filter, but git log
+                    # returns nothing which is fine, so silently skipping these.
+                    continue
+                commit, date = text.split(",")
+            except ValueError as error:
+                sys.exit(
+                    f"Cannot parse output from git log for '{rel_path}': "
+                    f"{text} because {error}"
+                )
             result[os.path.basename(rel_path)] = {
                 "commit": commit,
                 "date": date,
