@@ -425,7 +425,9 @@ int main(int argc, char *argv[])
 	print_flag |= PRINT_REG;
     }
 
-    if (!flag.dflt->answer)
+    if (flag.dflt->answer)
+	update_file = true;
+    else
 	G_get_window(&window);
 
     /* region= */
