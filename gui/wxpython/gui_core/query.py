@@ -261,6 +261,11 @@ def PrepareQueryResults(coordinates, result):
             else:
                 data.append({itemText: _("Nothing found")})
         else:
+            # remove often empty raster label and color pixel info
+            for key in part:
+                for empty_keys in ("label", "color"):
+                    if empty_keys in part[key] and not part[key][empty_keys]:
+                        del part[key][empty_keys]
             data.append(part)
     return data
 
