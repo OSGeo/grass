@@ -85,8 +85,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ChangeLog
-          asset_name: ChangeLog
+          asset_path: ChangeLog.gz
+          asset_name: ChangeLog.gz
           asset_content_type: application/gzip
 
       - name: Make the created files available
@@ -96,6 +96,6 @@ jobs:
           name: artifacts
           path: |
             core_modules_with_last_commit.*
-            ChangeLog
+            ChangeLog.gz
           if-no-files-found: warn
           retention-days: 10
