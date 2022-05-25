@@ -84,6 +84,7 @@ Check that there is exactly one commit on your local branch and that it is the v
 ```bash
 git status
 git show
+```
 
 Push the tag to the upstream repo:
 
@@ -157,13 +158,9 @@ so that you can continue in the release process.
 
 ### Create release notes
 
-Generate a draft of release notes using a script. The script uses configuration files
-which are in the _utils_ directory and the script needs to run there,
-so change the current directory:
-
-```bash
-cd utils
-```
+Generate a draft of release notes using a script. The script the script needs to
+run from the top directory and will expect its configuration files
+to be in the _utils_ directory.
 
 For major and minor releases, GitHub API gives good results for the first
 release candidate because it contains contributor handles and can identify
@@ -196,12 +193,6 @@ However, these notes need to be manually edited to collapse related items into o
 Additionally, a _Highlights_ section needs to be added with manually identified new
 major features for major and minor releases. For all releases, a _Major_ section
 may need to be added showing critical fixes or breaking changes if there are any.
-
-Change directory back to the root directory of the repo:
-
-```bash
-cd ..
-```
 
 ### Modify the release draft
 
