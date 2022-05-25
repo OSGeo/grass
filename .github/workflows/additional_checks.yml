@@ -43,9 +43,9 @@ jobs:
           cd utils
           # Git works without any special permissions.
           # Using current branch or the branch against the PR is open.
-          # Using last tag as start (works for release branches) or last 30 commits
-          # (for main and PRs). End is the current (latest) commit.
+          # Using the last 30 commits (for branches, tags, and PRs).
+          # End is the current (latest) commit.
           python ./generate_release_notes.py log \
               ${{ github.ref_name }} \
-              $(git describe --abbrev=0 --tags || git rev-parse HEAD~30) \
+              $(git rev-parse HEAD~30) \
               ""
