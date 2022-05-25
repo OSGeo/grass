@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2022-04-20 11:18+0000\n"
+"PO-Revision-Date: 2022-05-25 05:05+0000\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -3548,6 +3548,8 @@ msgid ""
 "\n"
 "++ Running blas level 1 unit tests ++"
 msgstr ""
+"\n"
+"++ BLAS 1 단계 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_blas1.c:47
 msgid ""
@@ -3610,12 +3612,16 @@ msgid ""
 "\n"
 "++ Running blas level 2 benchmark ++"
 msgstr ""
+"\n"
+"++ BLAS 2 단계 벤치마크를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_blas2.c:38
 msgid ""
 "\n"
 "++ Running blas level 2 unit tests ++"
 msgstr ""
+"\n"
+"++ BLAS 2 단계 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_blas2.c:44
 msgid ""
@@ -3634,6 +3640,8 @@ msgid ""
 "\n"
 "++ Running blas level 3 benchmark ++"
 msgstr ""
+"\n"
+"++ BLAS 3 단계 벤치마크를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:37
 msgid ""
@@ -3658,6 +3666,8 @@ msgid ""
 "\n"
 "++ Running blas level 3 unit tests ++"
 msgstr ""
+"\n"
+"++ BLAS 3 단계 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_blas3.c:44
 msgid ""
@@ -4144,6 +4154,8 @@ msgid ""
 "\n"
 "++ Running basic unit tests ++"
 msgstr ""
+"\n"
+"++ 기본 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:48
 msgid ""
