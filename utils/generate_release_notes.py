@@ -87,7 +87,7 @@ def print_by_category(changes, categories, file=None):
 def binder_badge(tag):
     """Get mybinder Binder badge from a given tag, hash, or branch"""
     binder_image_url = "https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667"  # noqa
-    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fbasic_example.ipynb"  # noqa
+    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
     return f"[![Binder]({binder_image_url})]({binder_url})"
 
 
