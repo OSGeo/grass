@@ -11,6 +11,11 @@ value equal to the average of the values
 appearing in its 3 x 3 cell "neighborhood" in the input
 layer. Note that the centre cell is also included in the calculation.
 
+<center>
+<img src="r_neighbors.png">
+<p><em>Figure: Illustration for an 3x3 average neighborhood</em></p>
+</center>
+
 <h3>OPTIONS</h3>
 
 The user must specify the names of the raster map layers to
@@ -410,6 +415,29 @@ note 2 above), quantiles (without interpolation).</li>
 <li> Output is integer for integer input and unweighted aggregate,
 otherwise float: sum.</li> 
 </ol> 
+
+
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads to be
+used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
+(default 300) can also be provided to determine the size of the buffer for
+computation.
+
+<div align="center" style="margin: 10px">
+     <img src="r_neighbors_benchmark_nprocs.png" alt="benchmark for number of cells" border="0">
+     <img src="r_neighbors_benchmark_size.png" alt="benchmark for neighborhood size" border="0">
+     <img src="r_neighbors_benchmark_memory.png" alt="benchmark for memory size" border="0">
+     <br>
+     <i>Figure: Benchmark on the left shows execution time for different
+     number of cells, benchmark in the middle shows execution time for different sizes of neighborhood
+     for a 10000x10000 raster and benchmark on the right shows execution time
+     for different memory size for a 10000x10000 raster. See benchmark scripts in source code.
+     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
+     </div>
+
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to be compiled with OpenMP enabled.
 
 <h2>EXAMPLES</h2>
 

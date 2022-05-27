@@ -32,7 +32,7 @@ import wx
 from core import utils
 from core.gcmd import RunCommand
 from core.settings import UserSettings
-from gui_core.wrap import TextCtrl
+from gui_core.wrap import TextCtrl, Menu, NewId
 
 from grass.pydispatch.signal import Signal
 
@@ -84,6 +84,9 @@ class SbManager:
         self.progressbar = SbProgress(self.mapFrame, self.statusbar, self)
         self.progressbar.progressShown.connect(self._progressShown)
         self.progressbar.progressHidden.connect(self._progressHidden)
+
+        self.statusbar.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
+        self.mapFrame.mapWindowProperties.sbItemChanged.connect(self.SetMode)
 
         self._oldStatus = ""
 
@@ -150,6 +153,14 @@ class SbManager:
             if value.GetPosition() == 0
         ]
 
+    def GetDisabledItemLabels(self):
+        """Get list of disabled item labels"""
+        return [
+            value.label
+            for value in self.disabledItems.values()
+            if value.GetPosition() == 0
+        ]
+
     def ShowItem(self, itemName):
         """Invokes showing of particular item
 
@@ -180,6 +191,9 @@ class SbManager:
                 UserSettings.Get(
                     group="display", key="statusbarMode", subkey="selection"
                 )
+            )
+            self.mapFrame.mapWindowProperties.sbItem = UserSettings.Get(
+                group="display", key="statusbarMode", subkey="selection"
             )
         self.Reposition()
 
@@ -252,12 +266,13 @@ class SbManager:
         self.statusbar.SetStatusText(self._oldStatus, 0)
 
     def SetMode(self, mode):
-        """Sets current mode
+        """Sets current mode and updates statusbar
 
         Mode is usually driven by user through map display settings.
         """
         self._mode = mode
         self._modeIndexSet = True
+        self.Update()
 
     def GetMode(self):
         """Returns current mode"""
@@ -269,6 +284,35 @@ class SbManager:
         self.progressbar.SetValue(value)
         if text:
             self.statusbar.SetStatusText(text)
+
+    def OnContextMenu(self, event):
+        """Popup context menu enabling to choose a widget that will be shown in statusbar."""
+
+        def setSbItemProperty(idx):
+            self.mapFrame.mapWindowProperties.sbItem = idx
+
+        def getSbItemProperty():
+            return self.mapFrame.mapWindowProperties.sbItem
+
+        menu = Menu()
+        for i, label in enumerate(self.GetItemLabels()):
+            wxid = NewId()
+            self.statusbar.Bind(
+                wx.EVT_MENU,
+                lambda evt, idx=i: setSbItemProperty(idx),
+                id=wxid,
+            )
+            menu.Append(wxid, label, kind=wx.ITEM_RADIO)
+            item = menu.FindItem(wxid)[0]
+            if i == getSbItemProperty():
+                item.Check(item.IsChecked() is False)
+            if label in (self.GetDisabledItemLabels()):
+                item.Enable(enable=False)
+
+        # show the popup menu
+        self.statusbar.PopupMenu(menu)
+        menu.Destroy()
+        event.Skip()
 
 
 class SbItem:

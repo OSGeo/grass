@@ -2,11 +2,11 @@
 
 ############################################################################
 #
-# NAME:      grassrenderer_test.py
+# NAME:      map_test.py
 #
 # AUTHOR:    Caitlin Haedrich (caitlin dot haedrich gmail com)
 #
-# PURPOSE:   This is a test script for grass.jupyter's GrassRenderer
+# PURPOSE:   This is a test script for grass.jupyter's Map
 #
 # COPYRIGHT: (C) 2021 by Caitlin Haedrich and the GRASS Development Team
 #
@@ -36,7 +36,7 @@ def can_import_ipython():
         return False
 
 
-class TestDisplay(TestCase):
+class TestMap(TestCase):
     # Setup variables
     files = []
 
@@ -70,9 +70,9 @@ class TestDisplay(TestCase):
                 f.unlink(missing_ok=True)
 
     def test_defaults(self):
-        """Test that GrassRenderer can create a map with default settings."""
+        """Test that Map can create a map with default settings."""
         # Create a map with default inputs
-        grass_renderer = gj.GrassRenderer()
+        grass_renderer = gj.Map()
         # Adding vectors and rasters to the map
         grass_renderer.run("d.rast", map="elevation")
         grass_renderer.run("d.vect", map="roadsmajor")
@@ -80,10 +80,10 @@ class TestDisplay(TestCase):
         self.assertFileExists(grass_renderer._filename)
 
     def test_filename(self):
-        """Test that GrassRenderer creates maps with unique filenames."""
+        """Test that Map creates maps with unique filenames."""
         # Create map with unique filename
-        custom_filename = "test_filename.png"
-        grass_renderer = gj.GrassRenderer(filename=custom_filename)
+        custom_filename = "test_filename_provided.png"
+        grass_renderer = gj.Map(filename=custom_filename)
         # Add files to self for cleanup later
         self.files.append(custom_filename)
         self.files.append(f"{custom_filename}.grass_vector_legend")
@@ -94,38 +94,50 @@ class TestDisplay(TestCase):
         self.assertFileExists(custom_filename)
 
     def test_filename_property(self):
-        """Test of GrassRenderer filename property."""
+        """Test of Map filename property."""
         # Create map with unique filename
-        grass_renderer = gj.GrassRenderer()
+        grass_renderer = gj.Map()
         grass_renderer.run("d.rast", map="elevation")
         # Make sure image was created
         self.assertFileExists(grass_renderer.filename)
 
+    def test_save_file(self):
+        """Test saving of file"""
+        grass_renderer = gj.Map()
+        # Add a vector and a raster to the map
+        grass_renderer.run("d.rast", map="elevation")
+        custom_filename = "test_filename_save.png"
+        grass_renderer.save(custom_filename)
+        # Add files to self for cleanup later
+        self.files.append(custom_filename)
+        # Make sure image was created
+        self.assertFileExists(custom_filename)
+
     def test_hw(self):
-        """Test that GrassRenderer creates maps with custom height and widths."""
+        """Test that Map creates maps with custom height and widths."""
         # Create map with height and width parameters
-        grass_renderer = gj.GrassRenderer(width=400, height=400)
+        grass_renderer = gj.Map(width=400, height=400)
         # Add just a vector (for variety here)
         grass_renderer.run("d.vect", map="roadsmajor")
 
     def test_env(self):
-        """Test that we can hand an environment to GrassRenderer."""
+        """Test that we can hand an environment to Map."""
         # Create map with environment parameter
-        grass_renderer = gj.GrassRenderer(env=os.environ.copy())
+        grass_renderer = gj.Map(env=os.environ.copy())
         # Add just a raster (again for variety)
         grass_renderer.run("d.rast", map="elevation")
 
     def test_text(self):
-        """Test that we can set a unique text_size in GrassRenderer."""
+        """Test that we can set a unique text_size in Map."""
         # Create map with unique text_size parameter
-        grass_renderer = gj.GrassRenderer(text_size=10)
+        grass_renderer = gj.Map(text_size=10)
         grass_renderer.run("d.vect", map="roadsmajor")
         grass_renderer.run("d.rast", map="elevation")
 
     def test_shortcut(self):
         """Test that we can use display shortcuts with __getattr__."""
         # Create map
-        grass_renderer = gj.GrassRenderer()
+        grass_renderer = gj.Map()
         # Use shortcut
         grass_renderer.d_rast(map="elevation")
         grass_renderer.d_vect(map="roadsmajor")
@@ -134,7 +146,7 @@ class TestDisplay(TestCase):
         """Test that passing an incorrect attribute raises
         appropriate error"""
         # Create map
-        grass_renderer = gj.GrassRenderer()
+        grass_renderer = gj.Map()
         # Pass bad shortcuts
         with self.assertRaisesRegex(AttributeError, "Module must begin with 'd_'"):
             grass_renderer.r_watersheds()
@@ -145,7 +157,7 @@ class TestDisplay(TestCase):
     def test_image_creation(self):
         """Test that show() returns an image object."""
         # Create map
-        grass_renderer = gj.GrassRenderer()
+        grass_renderer = gj.Map()
         grass_renderer.d_rast(map="elevation")
         self.assertTrue(grass_renderer.show(), "Failed to open PNG image")
 

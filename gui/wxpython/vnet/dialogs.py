@@ -285,7 +285,6 @@ class VNETDialog(wx.Dialog):
             id=wx.ID_ANY,
             min=0,
             max=maxValue,
-            size=(150, -1),
         )
         self.anSettings["max_dist"].Bind(wx.EVT_SPINCTRL, lambda event: self.MaxDist())
         self.anSettings["max_dist"].SetValue(100000)  # TODO init val

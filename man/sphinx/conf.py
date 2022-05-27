@@ -1,5 +1,5 @@
 #
-# GRASS GIS 8.1 Documentation documentation build configuration file, created by
+# GRASS GIS 8.3 Documentation documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug  9 17:16:28 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -37,7 +37,7 @@ source_suffix = ".txt"
 master_doc = "index"
 
 # General information about the project.
-project = "GRASS GIS 8.1 Documentation"
+project = "GRASS GIS 8.3 Documentation"
 copyright = "2022, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -45,7 +45,7 @@ copyright = "2022, GRASS Development Team"
 # built documents.
 #
 # The short X.Y version.
-version = "8.1"
+version = "8.3"
 # The full version, including alpha/beta/rc tags.
 release = "dev"
 
@@ -161,7 +161,7 @@ html_use_index = False
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "grass81Documentationdoc"
+htmlhelp_basename = "grass83Documentationdoc"
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -180,8 +180,8 @@ latex_elements = {
 latex_documents = [
     (
         "content",
-        "grass81Documentation.tex",
-        "GRASS GIS 8.1 Documentation",
+        "grass83Documentation.tex",
+        "GRASS GIS 8.3 Documentation",
         "GRASS Development Team",
         "manual",
     ),
@@ -215,8 +215,8 @@ latex_documents = [
 man_pages = [
     (
         "content",
-        "grass81documentation",
-        "GRASS GIS 8.1 Documentation",
+        "grass83documentation",
+        "GRASS GIS 8.3 Documentation",
         ["GRASS Development Team"],
         1,
     )
@@ -234,10 +234,10 @@ man_pages = [
 texinfo_documents = [
     (
         "content",
-        "grass81Documentation",
-        "GRASS GIS 8.1 Documentation",
+        "grass83Documentation",
+        "GRASS GIS 8.3 Documentation",
         "GRASS Development Team",
-        "grass81Documentation",
+        "grass83Documentation",
         "One line description of project.",
         "Miscellaneous",
     ),
@@ -256,7 +256,7 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = "GRASS GIS 8.1 Documentation"
+epub_title = "GRASS GIS 8.3 Documentation"
 epub_author = "GRASS Development Team"
 epub_publisher = "GRASS Development Team"
 epub_copyright = "2022, GRASS Development Team"

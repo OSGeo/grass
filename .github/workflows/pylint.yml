@@ -3,11 +3,12 @@ name: Python Pylint Code Quality
 on:
   push:
     branches:
-    - main
-    - releasebranch_*
-    tags:
-      - "*.*.*"
+      - main
+      - releasebranch_*
   pull_request:
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   pylint:
@@ -68,14 +69,14 @@ jobs:
       - name: Run Pylint on grass package
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
           cd python
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) grass
 
       - name: Run Pylint on wxGUI
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
           cd gui/wxpython
           pylint --persistent=no --py-version=${{ matrix.min-python-version }} --jobs=$(nproc) *
 
@@ -83,5 +84,24 @@ jobs:
         run: |
           pip install pytest pytest-pylint
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass81/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
           pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) --pylint-ignore-patterns="python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,scripts/d.rast.edit/d.rast.edit.py"
+
+      - name: Test compiling example modules
+        run: |
+          ( cd doc/raster/r.example/ && make )
+          ( cd doc/vector/v.example/ && make )
+
+      - name: Run Sphinx to check API documentation build
+        run: |
+          pip install sphinx
+          make sphinxdoclib
+          ARCH=$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)
+          cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
+
+      - name: Make Sphinx documentation available
+        uses: actions/upload-artifact@v3
+        with:
+          name: sphinx-grass
+          path: sphinx-grass
+          retention-days: 3

@@ -2,6 +2,12 @@
 
 <em>r.series</em> makes each output cell value a function of the values
 assigned to the corresponding cells in the input raster map layers.
+
+<center>
+<img src="r_series.png">
+<p><em>Figure: Illustration for an average of three input rasters</em></p>
+</center>
+
 <p>
 Following methods are available:
 
@@ -139,6 +145,26 @@ mutually exclusive: the former is a comma separated list of raster map
 names and the latter is a text file with a new line separated list of
 raster map names and optional weights. As separator between the map name
 and the weight the character "|" must be used.
+
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads to be
+used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
+(default 300 MB) can also be provided to determine the size of the buffer in MB for
+computation.
+
+<div align="center" style="margin: 10px">
+     <img src="r_series_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <img src="r_series_benchmark_memory.png" alt="benchmark for memory size" border="0">
+     <br>
+     <i>Figure: Benchmark on the left shows execution time for different
+     number of cells, benchmark on the right shows execution time
+     for different memory size for 10000x10000 raster. See benchmark scripts in source code.
+     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
+     </div>
+
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
 
 <h2>EXAMPLES</h2>
 

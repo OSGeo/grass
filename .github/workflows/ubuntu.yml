@@ -2,8 +2,14 @@ name: Ubuntu
 # Build and run tests on Ubuntu
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   build-and-test:
@@ -63,7 +69,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: testreport-${{ matrix.os }}
+          name: testreport-${{ matrix.config }}
           path: testreport
           retention-days: 3
 

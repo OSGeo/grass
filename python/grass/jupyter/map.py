@@ -1,11 +1,11 @@
-# MODULE:    grass.jupyter.display
+# MODULE:    grass.jupyter.map
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
 # PURPOSE:   This module contains functions for non-interactive display
 #            in Jupyter Notebooks
 #
-# COPYRIGHT: (C) 2021 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
 #
 #           This program is free software under the GNU General Public
 #           License (>=v2). Read the file COPYING that comes with GRASS
@@ -23,14 +23,15 @@ import grass.script as gs
 from .region import RegionManagerFor2D
 
 
-class GrassRenderer:
-    """GrassRenderer creates and displays GRASS maps in
+class Map:
+    """Map creates and displays GRASS maps in
     Jupyter Notebooks.
 
     Elements are added to the display by calling GRASS display modules.
 
     Basic usage::
-    >>> m = GrassRenderer()
+
+    >>> m = Map()
     >>> m.run("d.rast", map="elevation")
     >>> m.run("d.legend", raster="elevation")
     >>> m.show()
@@ -39,16 +40,18 @@ class GrassRenderer:
     as a class method and replacing "." with "_" in the name.
 
     Shortcut usage::
-    >>> m = GrassRenderer()
+
+    >>> m = Map()
     >>> m.d_rast(map="elevation")
     >>> m.d_legend(raster="elevation")
     >>> m.show()
+
     """
 
     def __init__(
         self,
-        height=400,
-        width=600,
+        width=None,
+        height=None,
         filename=None,
         env=None,
         font="sans",
@@ -56,9 +59,10 @@ class GrassRenderer:
         renderer="cairo",
         use_region=False,
         saved_region=None,
+        read_file=False,
     ):
 
-        """Creates an instance of the GrassRenderer class.
+        """Creates an instance of the Map class.
 
         :param int height: height of map in pixels
         :param int width: width of map in pixels
@@ -71,9 +75,12 @@ class GrassRenderer:
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
         :param use_region: if True, use either current or provided saved region,
-                          else derive region from rendered layers
+                        else derive region from rendered layers
         :param saved_region: if name of saved_region is provided,
-                            this region is then used for rendering
+                        this region is then used for rendering
+        :param bool read_file: if False (default), erase filename before re-writing to
+                         clear contents. If True, read file without clearing contents
+                         first.
         """
 
         # Copy Environment
@@ -82,8 +89,8 @@ class GrassRenderer:
         else:
             self._env = os.environ.copy()
         # Environment Settings
-        self._env["GRASS_RENDER_WIDTH"] = str(width)
-        self._env["GRASS_RENDER_HEIGHT"] = str(height)
+        self._env["GRASS_RENDER_WIDTH"] = str(width) if width else "600"
+        self._env["GRASS_RENDER_HEIGHT"] = str(height) if height else "400"
         self._env["GRASS_FONT"] = font
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
@@ -107,6 +114,8 @@ class GrassRenderer:
 
         if filename:
             self._filename = filename
+            if not read_file and os.path.exists(self._filename):
+                os.remove(self._filename)
         else:
             self._filename = os.path.join(self._tmpdir.name, "map.png")
         # Set environment var for file
@@ -117,7 +126,13 @@ class GrassRenderer:
         self._env["GRASS_LEGEND_FILE"] = str(self._legend_file)
 
         # rendering region setting
-        self._region_manager = RegionManagerFor2D(use_region, saved_region, self._env)
+        self._region_manager = RegionManagerFor2D(
+            use_region=use_region,
+            saved_region=saved_region,
+            width=width,
+            height=height,
+            env=self._env,
+        )
 
     @property
     def filename(self):
@@ -146,6 +161,7 @@ class GrassRenderer:
         # Check module is from display library then run
         if module[0] == "d":
             self._region_manager.set_region_from_command(module, **kwargs)
+            self._region_manager.adjust_rendering_size_from_region()
             gs.run_command(module, env=self._env, **kwargs)
         else:
             raise ValueError("Module must begin with letter 'd'.")
@@ -176,3 +192,7 @@ class GrassRenderer:
         from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         return Image(self._filename)
+
+    def save(self, filename):
+        """Saves a PNG image of map to the specified *filename*"""
+        shutil.copy(self._filename, filename)

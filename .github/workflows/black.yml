@@ -3,11 +3,12 @@ name: Python Black Formatting
 on:
   push:
     branches:
-    - main
-    - releasebranch_*
-    tags:
-      - "*.*.*"
+      - main
+      - releasebranch_*
   pull_request:
+    branches:
+      - main
+      - releasebranch_*
 
 jobs:
   run-black:
@@ -20,7 +21,7 @@ jobs:
         include:
           - os: ubuntu-20.04
             python-version: "3.10"
-            black-version: "22.1.0"
+            black-version: "22.3.0"
 
     runs-on: ${{ matrix.os }}
 

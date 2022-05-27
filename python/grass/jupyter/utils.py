@@ -66,7 +66,9 @@ def reproject_region(region, from_proj, to_proj):
     proc.stdin = None
     proj_output, stderr = proc.communicate()
     if proc.returncode:
-        raise RuntimeError("reprojecting region: m.proj error: " + stderr)
+        raise RuntimeError(
+            _("Encountered error while running m.proj: {}").format(stderr)
+        )
     enws = gs.decode(proj_output).split(os.linesep)
     elon, nlat, unused = enws[0].split(" ")
     wlon, slat, unused = enws[1].split(" ")
@@ -124,9 +126,18 @@ def setup_location(name, path, epsg, src_env):
     # Location and mapset
     gs.create_location(path, name, epsg=epsg, overwrite=True)
     # Reproject region
+    set_target_region(src_env, new_env)
+    return rcfile, new_env
+
+
+def set_target_region(src_env, tgt_env):
+    """Set target region based on source region.
+
+    Number of rows and columns is preserved.
+    """
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
-    to_proj = get_location_proj_string(env=new_env)
+    to_proj = get_location_proj_string(env=tgt_env)
     new_region = reproject_region(region, from_proj, to_proj)
     # Set region to match original region extent
     gs.run_command(
@@ -135,9 +146,10 @@ def setup_location(name, path, epsg, src_env):
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
-        env=new_env,
+        rows=new_region["rows"],
+        cols=new_region["cols"],
+        env=tgt_env,
     )
-    return rcfile, new_env
 
 
 def get_map_name_from_d_command(module, **kwargs):
@@ -150,3 +162,33 @@ def get_map_name_from_d_command(module, **kwargs):
     special = {"d.his": "hue", "d.legend": "raster", "d.rgb": "red", "d.shade": "shade"}
     parameter = special.get(module, "map")
     return kwargs.get(parameter, "")
+
+
+def get_rendering_size(region, width, height, default_width=600, default_height=400):
+    """Returns the rendering width and height based
+    on the region aspect ratio.
+
+    :param dict region: region dictionary
+    :param integer width: rendering width (can be None)
+    :param integer height: rendering height (can be None)
+    :param integer default_width: default rendering width (can be None)
+    :param integer default_height: default rendering height (can be None)
+
+    :return tuple (width, height): adjusted width and height
+
+    When both width and height are provided, values are returned without
+    adjustment. When one value is provided, the other is computed
+    based on the region aspect ratio. When no dimension is given,
+    the default width or height is used and the other dimension computed.
+    """
+    if width and height:
+        return (width, height)
+    region_width = region["e"] - region["w"]
+    region_height = region["n"] - region["s"]
+    if width:
+        return (width, round(width * region_height / region_width))
+    if height:
+        return (round(height * region_width / region_height), height)
+    if region_height > region_width:
+        return (round(default_height * region_width / region_height), default_height)
+    return (default_width, round(default_width * region_height / region_width))
