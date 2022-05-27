@@ -152,6 +152,10 @@ int main(int argc, char *argv[])
 
         Rast_get_cellhd(name, "", &cellhd[i]);
     }
+    if (!no_support && nprocs > 1 && out_type == CELL_TYPE) {
+        no_support = true;
+        G_warning(_("Creating support files (labels, color table) disabled for nprocs > 1"));
+    }
 
     out_cell_size = Rast_cell_size(out_type);
 
@@ -214,7 +218,7 @@ int main(int argc, char *argv[])
                 north_edge = Rast_row_to_northing(row, &window);
                 south_edge = north_edge - window.ns_res;
 
-                if (out_type == CELL_TYPE)
+                if (out_type == CELL_TYPE && !no_support)
                     Rast_update_cell_stats((CELL *) local_presult, ncols,
                                            &statf[0]);
                 for (i = 1; i < nfiles; i++) {
@@ -227,7 +231,7 @@ int main(int argc, char *argv[])
 
                     Rast_get_row(local_infd[i], local_patch, row, out_type);
                     if (!do_patch(local_presult, local_patch, &statf[i], ncols,
-                                  out_type, out_cell_size, use_zero))
+                                  out_type, out_cell_size, use_zero, no_support))
                         break;
                 }
                 void *p = G_incr_void_ptr(outbuf, out_cell_size *
