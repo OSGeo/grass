@@ -9,15 +9,16 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2015-03-29 10:08+0100\n"
-"Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
-"Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2022-05-23 10:50+0000\n"
+"Last-Translator: luca <lucadeluge@gmail.com>\n"
+"Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
+"grasswxpy/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:28
 #: ../gui/wxpython/mapswipe/toolbars.py:36
@@ -531,11 +532,11 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:34
 msgid "Allow edits outside of the current mapset"
-msgstr ""
+msgstr "Permetti modifiche al di fuori dell'attuale mapset"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:37
 msgid "Add existing or create new database"
-msgstr ""
+msgstr "Aggiungi un database esistente o creane uno nuovo"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:40
 msgid "Create new mapset in current location"
@@ -835,7 +836,7 @@ msgstr "&Rinomina"
 
 #: ../gui/wxpython/datacatalog/tree.py:1749
 msgid "&Display layers"
-msgstr ""
+msgstr "&Visualizza layers"
 
 #: ../gui/wxpython/datacatalog/tree.py:1751
 msgid "&Display layer"
@@ -851,47 +852,47 @@ msgstr "&Cambia mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1784
 msgid "&Delete mapset"
-msgstr ""
+msgstr "&Elimina mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1790
 msgid "&Rename mapset"
-msgstr ""
+msgstr "&Rinomina mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1803
 msgid "&Create mapset"
-msgstr ""
+msgstr "&Crea mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:1807
 msgid "&Delete location"
-msgstr ""
+msgstr "&Elimina location"
 
 #: ../gui/wxpython/datacatalog/tree.py:1813
 msgid "&Rename location"
-msgstr ""
+msgstr "&Rinomina location"
 
 #: ../gui/wxpython/datacatalog/tree.py:1828
 msgid "&Create new location"
-msgstr ""
+msgstr "&Crea nuova location"
 
 #: ../gui/wxpython/datacatalog/tree.py:1832
 msgid "&Download sample location"
-msgstr ""
+msgstr "&Scarica location di esempio"
 
 #: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "&Remove GRASS database from data catalog"
-msgstr ""
+msgstr "&Rimuovi il database di GRASS dal catalogo dei dati"
 
 #: ../gui/wxpython/datacatalog/tree.py:1842
 msgid "&Delete GRASS database from disk"
-msgstr ""
+msgstr "&Elimana di database di GRASS dal disco"
 
 #: ../gui/wxpython/datacatalog/tree.py:1868
 msgid "&Delete locations"
-msgstr ""
+msgstr "&Elimina locations"
 
 #: ../gui/wxpython/datacatalog/tree.py:1880
 msgid "&Delete mapsets"
-msgstr ""
+msgstr "&Elimina mapsets"
 
 #: ../gui/wxpython/datacatalog/tree.py:1892
 msgid "No available options"
@@ -3879,7 +3880,7 @@ msgstr "Questa opzione è richiesta"
 
 #: ../gui/wxpython/location_wizard/wizard.py:205
 msgid "(optional)"
-msgstr ""
+msgstr "(opzionale)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:216
 msgid "Name of location directory in GIS Data Directory"
@@ -3950,7 +3951,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:374
 msgid "Additional methods:"
-msgstr ""
+msgstr "Ulteriori metodi:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:500
 #: ../gui/wxpython/location_wizard/wizard.py:1018
@@ -7058,7 +7059,7 @@ msgstr "Imposta la regione computazionale dalla/e mappa/e selezionata/e"
 
 #: ../gui/wxpython/lmgr/layertree.py:544
 msgid "Align computational region to selected map"
-msgstr ""
+msgstr "Imposta la regione computazionale alla mappa selezionata"
 
 #: ../gui/wxpython/lmgr/layertree.py:558
 msgid "Export common formats"
@@ -14405,7 +14406,7 @@ msgstr "Tabella"
 
 #: ../gui/wxpython/dbmgr/base.py:1154 ../gui/wxpython/dbmgr/base.py:2277
 msgid " (read-only)"
-msgstr ""
+msgstr " (sola lettura)"
 
 #: ../gui/wxpython/dbmgr/base.py:1168
 msgid "SQL Query"
@@ -15558,9 +15559,9 @@ msgstr "Salva file come..."
 
 #: ../gui/wxpython/gui_core/goutput.py:373
 #: ../gui/wxpython/gui_core/goutput.py:468
-#, python-format
+#, fuzzy, python-format
 msgid "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
-msgstr ""
+msgstr "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
 
 #: ../gui/wxpython/gui_core/goutput.py:374
 #: ../gui/wxpython/gui_core/goutput.py:469
@@ -16698,15 +16699,15 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/wrap.py:210
 msgid "&Clear"
-msgstr ""
+msgstr "&Cancella"
 
 #: ../gui/wxpython/gui_core/wrap.py:223
 msgid "&Cancel"
-msgstr ""
+msgstr "&Cancella"
 
 #: ../gui/wxpython/gui_core/wrap.py:235
 msgid "&Close"
-msgstr ""
+msgstr "&Chiudi"
 
 #: ../gui/wxpython/gui_core/wrap.py:245
 msgid "Apply"
@@ -16850,7 +16851,7 @@ msgstr "Doppio click o Ctrl-Enter per eseguire il modulo selezionato"
 
 #: ../gui/wxpython/gui_core/menu.py:164
 msgid "&Run..."
-msgstr ""
+msgstr "&Esegui..."
 
 #: ../gui/wxpython/gui_core/menu.py:165
 msgid "Run selected module from the tree"
@@ -16871,7 +16872,7 @@ msgstr "La documentazione per %s è ora aperta nel browser web"
 
 #: ../gui/wxpython/gui_core/menu.py:356
 msgid "&Recent Files"
-msgstr ""
+msgstr "&File recenti"
 
 #: ../gui/wxpython/icons/icon.py:39
 #, python-format
