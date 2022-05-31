@@ -84,6 +84,7 @@ Check that there is exactly one commit on your local branch and that it is the v
 ```bash
 git status
 git show
+```
 
 Push the tag to the upstream repo:
 
@@ -219,18 +220,6 @@ If RC, mark it as a pre-release, check:
 
 Save the modified draft, but do not publish the release yet.
 
-## Changelog file for upload
-
-There is also a large changelog file we produce and publish,
-create it with a script (it takes several minutes to complete):
-
-```bash
-python3 utils/gitlog2changelog.py
-mv ChangeLog ChangeLog_$VERSION
-head ChangeLog_$VERSION
-gzip ChangeLog_$VERSION
-```
-
 ## Reset include/VERSION file to git development version
 
 Use a dedicated script to edit the VERSION file.
@@ -259,7 +248,50 @@ git commit include/VERSION -m "version: Back to 8.2.0dev"
 git push upstream
 ```
 
-## Get the source code tarball
+## Upload to OSGeo servers
+
+This part requires extra permissions and needs to be done by one of the development coordinators.
+
+### Get the tagged version
+
+For the automation, the tagged version of the source code is needed.
+First, update the repo to get the tag locally:
+
+```bash
+git fetch upstream
+```
+
+Get the tagged source code, e.g.:
+
+```bash
+git checkout 8.2.0RC1
+```
+
+Create the Bash variables for version numbers:
+
+```bash
+eval $(./utils/update_version.py status --bash)
+```
+
+Confirm the version (it should match exactly the tag specified above):
+
+```bash
+echo "$VERSION"
+```
+
+### Create a changelog file
+
+There is also a large changelog file we produce and publish,
+create it with a script (it takes several minutes to complete):
+
+```bash
+python3 utils/gitlog2changelog.py
+mv ChangeLog ChangeLog_$VERSION
+head ChangeLog_$VERSION
+gzip ChangeLog_$VERSION
+```
+
+### Get the source code tarball
 
 Fetch a tarball from GitHub we also publish on OSGeo servers:
 
@@ -268,7 +300,7 @@ wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
-## Upload source code tarball to OSGeo servers
+### Upload source code tarball to OSGeo servers
 
 Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
       jumphost (managed by OSGeo-SAC) - see https://wiki.osgeo.org/wiki/SAC_Service_Status#grass
@@ -299,9 +331,13 @@ ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJO
 
 # verify
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
+```
 
-# update winGRASS related files: Update the winGRASS version
-# https://github.com/landam/wingrass-maintenance-scripts/
+## Update winGRASS related files
+
+Update the winGRASS version at <https://github.com/landam/wingrass-maintenance-scripts/>:
+
+```bash
 vim wingrass-maintenance-scripts/grass_packager_release.bat
 vim wingrass-maintenance-scripts/grass_addons.sh
 vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
