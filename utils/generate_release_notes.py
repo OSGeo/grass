@@ -12,6 +12,7 @@ import re
 import subprocess
 import sys
 from collections import defaultdict
+from pathlib import Path
 
 import yaml
 
@@ -87,7 +88,7 @@ def print_by_category(changes, categories, file=None):
 def binder_badge(tag):
     """Get mybinder Binder badge from a given tag, hash, or branch"""
     binder_image_url = "https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667"  # noqa
-    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fbasic_example.ipynb"  # noqa
+    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
     return f"[![Binder]({binder_image_url})]({binder_url})"
 
 
@@ -180,14 +181,21 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     if not commits:
         raise RuntimeError("No commits retrieved from git log (try different tags)")
 
+    config_directory = Path("utils")
     svn_name_by_git_author = csv_to_dict(
-        "svn_name_git_author.csv", key="git_author", value="svn_name"
+        config_directory / "svn_name_git_author.csv",
+        key="git_author",
+        value="svn_name",
     )
     github_name_by_svn_name = csv_to_dict(
-        "svn_name_github_name.csv", key="svn_name", value="github_name"
+        config_directory / "svn_name_github_name.csv",
+        key="svn_name",
+        value="github_name",
     )
     github_name_by_git_author = csv_to_dict(
-        "git_author_github_name.csv", key="git_author", value="github_name"
+        config_directory / "git_author_github_name.csv",
+        key="git_author",
+        value="github_name",
     )
 
     lines = []
@@ -240,7 +248,8 @@ def create_release_notes(args):
             check=True,
         ).stdout.strip()
 
-    with open("release.yml", encoding="utf-8") as file:
+    config_directory = Path("utils")
+    with open(config_directory / "release.yml", encoding="utf-8") as file:
         config = yaml.safe_load(file.read())["notes"]
 
     if args.backend == "api":
