@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2014-08-13 11:44+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
-"Language-Team: German <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2022-05-23 10:50+0000\n"
+"Last-Translator: Markus <neteler@osgeo.org>\n"
+"Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:2
@@ -54599,7 +54599,7 @@ msgstr ""
 
 #: ../raster/r.profile/main.c:190
 msgid " RGB color"
-msgstr ""
+msgstr " RGB Farbe"
 
 #: ../raster/r.profile/main.c:201
 #, c-format
@@ -57754,7 +57754,7 @@ msgstr "Kann Datenbank für Referenztabelle nicht öffnen."
 
 #: ../scripts/i.band/i.band.py:92
 msgid "Map <{}> not found in current mapset"
-msgstr ""
+msgstr "Karte <{}> nicht im aktuellen Mapset <%s> gefunden."
 
 #: ../scripts/i.band/i.band.py:101
 msgid "Operation {}: required parameter <{}> not set"
