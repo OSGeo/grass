@@ -97,6 +97,11 @@ def sortfile(infile, outfile):
 
 
 def main():
+    # A more substantial rewrite of the code is needed, possibly to C or
+    # using Python packages such as statistics or NumPy,
+    # so ignoring the duplication of final computation of some statistics
+    # as well as pushing the limit of how long the function can be.
+    # pylint: disable=too-many-branches
     global tmp
     tmp = gscript.tempfile()
 
@@ -204,7 +209,7 @@ def main():
             result["n"] = N
             nan_value = None
             result["min"] = nan_value
-            result["max"]=nan_value
+            result["max"] = nan_value
             result["range"] = nan_value
             result["mean"] = nan_value
             result["mean_abs"] = nan_value
@@ -240,18 +245,20 @@ def main():
         result = {}
         result["n"] = N
         result["min"] = minv
-        result["max"]=maxv
-        result["range"] = (maxv - minv)
-        result["mean"] = (sum / N)
-        result["mean_abs"] = (sum3 / N)
+        result["max"] = maxv
+        result["range"] = maxv - minv
+        result["mean"] = sum / N
+        result["mean_abs"] = sum3 / N
         if not ((sum2 - sum * sum / N) / N) < 0:
-            result["variance"] = ((sum2 - sum * sum / N) / N)
-            result["stddev"] = (math.sqrt((sum2 - sum * sum / N) / N))
-            result["coeff_var"] = (math.sqrt((sum2 - sum * sum / N) / N)) / (math.sqrt(sum * sum) / N)
+            result["variance"] = (sum2 - sum * sum / N) / N
+            result["stddev"] = math.sqrt((sum2 - sum * sum / N) / N)
+            result["coeff_var"] = (math.sqrt((sum2 - sum * sum / N) / N)) / (
+                math.sqrt(sum * sum) / N
+            )
         else:
-            result["variance"]=0
-            result["stddev"]=0
-            result["coeff_var"]=0
+            result["variance"] = 0
+            result["stddev"] = 0
+            result["coeff_var"] = 0
         result["sum"] = sum
         if not extend:
             json.dump({"statistics": result}, sys.stdout)
@@ -326,7 +333,7 @@ def main():
 
     q50 = (q50a + q50b) / 2
 
-    if not shellstyle:
+    if output_format == "plain":
         sys.stdout.write("1st Quartile: %.15g\n" % q25)
         sys.stdout.write("Median (%s N): %.15g\n" % (eostr, q50))
         sys.stdout.write("3rd Quartile: %.15g\n" % q75)
@@ -356,8 +363,8 @@ def main():
         result["third_quartile"] = q75
         if options["percentile"]:
             percentiles = []
-            for str_percentile, value in zip(perc, pval):
-                percentiles.append({"percentile": str_percentile, "value": value})
+            for i, one_percentile in enumerate(perc):
+                percentiles.append({"percentile": one_percentile, "value": pval[i]})
         result["percentiles"] = percentiles
         json.dump({"statistics": result}, sys.stdout)
     else:
