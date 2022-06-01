@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checks-out repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -33,6 +35,12 @@ jobs:
           python utils/generate_last_commit_file.py .
           git add core_modules_with_last_commit.json
           git diff --cached > core_modules_with_last_commit.patch
+
+      - name: Generate ChangeLog file
+        run: |
+          sudo apt-get install -y gzip
+          python utils/gitlog2changelog.py
+          gzip ChangeLog
 
       - name: Create new release draft (for tags only)
         id: create_release
@@ -72,6 +80,17 @@ jobs:
           asset_name: core_modules_with_last_commit.patch
           asset_content_type: text/plain
 
+      - name: Upload ChangeLog file (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ChangeLog.gz
+          asset_name: ChangeLog.gz
+          asset_content_type: application/gzip
+
       - name: Make the created files available
         uses: actions/upload-artifact@v3
         if: always()
@@ -79,5 +98,6 @@ jobs:
           name: artifacts
           path: |
             core_modules_with_last_commit.*
+            ChangeLog.gz
           if-no-files-found: warn
           retention-days: 10
