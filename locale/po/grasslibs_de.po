@@ -13,15 +13,15 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2014-08-13 11:57+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
-"Language-Team: German <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2022-05-23 10:50+0000\n"
+"Last-Translator: Markus <neteler@osgeo.org>\n"
+"Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasslibs/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -203,7 +203,7 @@ msgstr ""
 #: ../lib/init/grass.py:543
 #, python-brace-format
 msgid "Empty RC file ({file})"
-msgstr ""
+msgstr "Leere RC Datei ({file})"
 
 #: ../lib/init/grass.py:606
 #, python-format
@@ -415,7 +415,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:1726
 msgid "GRASS GIS homepage:"
-msgstr ""
+msgstr "GRASS GIS Webseite"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1728
@@ -877,7 +877,7 @@ msgstr ""
 
 #: ../lib/gis/parser.c:347
 msgid "Bug in UI description. Missing module description"
-msgstr ""
+msgstr "Fehler in UI Beschreibung.  Fehlende Modul Beschreibung"
 
 #: ../lib/gis/parser.c:357
 msgid "Bug in UI description. Missing option key"
@@ -3523,6 +3523,8 @@ msgid ""
 "\n"
 "++ Running ccmath wrapper unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für ccmath wrapper aus ++"
 
 #: ../lib/gmath/test/test_ccmath_wrapper.c:42
 msgid ""
@@ -3541,12 +3543,16 @@ msgid ""
 "\n"
 "++ Running direct solver benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für direct solver durch ++"
 
 #: ../lib/gmath/test/test_blas1.c:40
 msgid ""
 "\n"
 "++ Running blas level 1 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 1 aus ++"
 
 #: ../lib/gmath/test/test_blas1.c:47
 msgid ""
@@ -3603,18 +3609,24 @@ msgid ""
 "\n"
 "++ Running krylov solver benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für krylov solver durch ++"
 
 #: ../lib/gmath/test/bench_blas2.c:35
 msgid ""
 "\n"
 "++ Running blas level 2 benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für blas level 2 durch ++"
 
 #: ../lib/gmath/test/test_blas2.c:38
 msgid ""
 "\n"
 "++ Running blas level 2 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 2 aus ++"
 
 #: ../lib/gmath/test/test_blas2.c:44
 msgid ""
@@ -3633,12 +3645,16 @@ msgid ""
 "\n"
 "++ Running blas level 3 benchmark ++"
 msgstr ""
+"\n"
+"++ Führe Benchmark für blas level 3 durch ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:37
 msgid ""
 "\n"
 "++ Running matrix conversion unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Matrix-Konvertierung aus ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:42
 msgid ""
@@ -3657,6 +3673,8 @@ msgid ""
 "\n"
 "++ Running blas level 3 unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für blas level 3 aus ++"
 
 #: ../lib/gmath/test/test_blas3.c:44
 msgid ""
@@ -3778,11 +3796,11 @@ msgstr ""
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr ""
+msgstr "Raster"
 
 #: ../lib/manage/option.c:53
 msgid "Vector"
-msgstr ""
+msgstr "Vektor"
 
 #: ../lib/manage/option.c:55
 msgid "Region"
@@ -4149,18 +4167,24 @@ msgid ""
 "\n"
 "++ Running basic unit tests ++"
 msgstr ""
+"\n"
+"++ Führe grundlegende Tests aus ++"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:48
 msgid ""
 "\n"
 "-- Basic rtree unit tests failure --"
 msgstr ""
+"\n"
+"++ Grundlegende Tests für btree fehlgeschlagen ++"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:50
 msgid ""
 "\n"
 "-- Basic rtree unit tests finished successfully --"
 msgstr ""
+"\n"
+"++ Grundlegende Tests für btree erfolgreich beendet ++"
 
 #: ../lib/vector/Vlib/geos.c:52
 msgid "vector map is not opened"
@@ -4437,7 +4461,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build.c:1234
 #, c-format
 msgid "%s is no longer supported"
-msgstr ""
+msgstr "%s nicht mehr unterstützt"
 
 #: ../lib/vector/Vlib/build.c:1257
 msgid "Spatial index not available, can not be saved"
@@ -5357,7 +5381,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
-msgstr ""
+msgstr "Geändert"
 
 #: ../lib/vector/Vlib/dangles.c:151
 msgid "Removed"
@@ -6805,6 +6829,8 @@ msgid ""
 "\n"
 "++ Running column unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Spalten aus ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:42
 msgid ""
@@ -6823,18 +6849,24 @@ msgid ""
 "\n"
 "++ Run test copy column ++"
 msgstr ""
+"\n"
+"++ Teste das Kopieren von Spalten ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:150
 msgid ""
 "\n"
 "++ Test copy column finished ++"
 msgstr ""
+"\n"
+"++ Tests für das Kopieren von Spalten beendet ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:38
 msgid ""
 "\n"
 "++ Running table unit tests ++"
 msgstr ""
+"\n"
+"++ Führe Tests für Tabellen aus ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:43
 msgid ""
@@ -7050,9 +7082,8 @@ msgid "The self.c_mapinfo pointer must be correctly initiated"
 msgstr ""
 
 #: ../lib/python/pygrass/errors.py:40
-#, fuzzy
 msgid "Map <{}> not found in current mapset"
-msgstr "Rasterkarte <%s> nicht im Mapset <%s> gefunden."
+msgstr "Karte <{}> nicht im aktuellen Mapset <%s> gefunden."
 
 #: ../lib/python/pygrass/vector/table.py:1042
 #, python-format
@@ -7320,9 +7351,8 @@ msgid "Space time datasets can only be created in the current mapset"
 msgstr ""
 
 #: ../lib/python/temporal/open_stds.py:120
-#, fuzzy
 msgid "Illegal dataset name <{}>. Character '.' not allowed."
-msgstr "Ungültiger Name der Vektorkarte <%s>. Zeichen '%c' ist nicht erlaubt."
+msgstr "Ungültiger Datensatz-Name <{}>. Zeichen '.' ist nicht erlaubt."
 
 #: ../lib/python/temporal/open_stds.py:134
 #, python-format
@@ -8372,14 +8402,14 @@ msgid "Mapset <{mapset}> is required for a valid location."
 msgstr ""
 
 #: ../lib/python/grassdb/checks.py:437
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Mapset <{mapset}> is the current mapset."
-msgstr "Rasterkarte <%s> ist nicht im aktuellen Mapset (%s)."
+msgstr "Mapset <{mapset}> ist das aktuellen Mapset."
 
 #: ../lib/python/grassdb/checks.py:441
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Mapset <{mapset}> is in use."
-msgstr "Mapset <%s> existiert nicht."
+msgstr "Mapset <{mapset}> ist in Gebrauch."
 
 #: ../lib/python/grassdb/checks.py:445
 #, python-brace-format
@@ -10150,13 +10180,11 @@ msgstr "Repariere subtilen Rundungsfehler der Eingabe der Westgrenze (%g>%g)."
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
 msgstr "Repariere subtilen Rundungsfehler der Eingabe der Ostgrenze (%g>%g)."
 
-#, fuzzy
 msgid "No centroid defined for area %d. Area not exported."
-msgstr "Die Datenbankverbindung für den Layer <%d> nicht definiert."
+msgstr "Kein Zentroid für Fläche %d definiert. Fläche nicht exportiert."
 
-#, fuzzy
 msgid "Unable to restore feature/offset %lu in vector map <%s>"
-msgstr "Kann Objekt %d der Vektorkarte <%s> nicht wiederherstellen."
+msgstr "Feature/Offset %lu in Vektorkarte <%s> kann nicht wiederhergestellt werden."
 
 msgid "Out of memmory"
 msgstr "Nicht genügend Arbeitsspeicher"
@@ -10173,17 +10201,14 @@ msgstr "Vektor Karte"
 msgid "Unable to fetch all. There is no temporal database connection defined for mapset <%(mapset)s>"
 msgstr "Vektor Karte"
 
-#, fuzzy
 msgid "Unable to find a temporary null file <%s>"
 msgstr "Kann keine temporäre NULL-Datei %s finden."
 
-#, fuzzy
 msgid "Unable to open null file <%s>"
-msgstr "G_spawn: Kann die Datei %s nicht öffnen."
+msgstr "Kann die NULL-Datei <%s> nicht öffnen."
 
-#, fuzzy
 msgid "ERROR: <%s> is not a valid GRASS location"
-msgstr "Tut mir leid, <%s> ist keine gültige Option\n"
+msgstr "FEHLER: <%s> ist keine gültige GRASS location"
 
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "FEHLER: Option <%s>: <%s> existiert bereits.\n"
@@ -10191,20 +10216,17 @@ msgstr "FEHLER: Option <%s>: <%s> existiert bereits.\n"
 msgid "Unable to open file '%s'"
 msgstr "Kann Datei '%s' nicht öffnen"
 
-#, fuzzy
 msgid "Hit RETURN to continue"
-msgstr "RETURN zum Weitermachen drücken -->"
+msgstr "RETURN zum Weitermachen drücken"
 
-#, fuzzy
 msgid "Vector map <%s> is not opened on topology level"
-msgstr "Vektorkarte <%s> ist nicht auf Level >= 2 geöffnet."
+msgstr "Vektorkarte <%s> ist nicht im Topologielevel geöffnet."
 
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#, fuzzy
 msgid "Removing empty 3D raster maps"
-msgstr "Name der Eingaberasterkarte."
+msgstr "Entfernen der leeren 3D Rasterkarte"
 
 #, fuzzy
 msgid "Mode type: {0} not supported."
