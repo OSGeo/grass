@@ -55,12 +55,16 @@
 # % requires_all: stats_column,aggregate_method,aggregate_column
 # %end
 
+"""Dissolve geometries and aggregate attribute values"""
+
 import os
 import atexit
 import json
 
 import grass.script as grass
-import grass.script as gs
+
+# To use new style of import without changing old code.
+import grass.script as gs  # pylint: disable=reimported
 from grass.exceptions import CalledModuleError
 
 
@@ -140,10 +144,7 @@ def main():
 
         if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
             grass.fatal(_("Key column must be of type integer or string"))
-        if coltype["type"] in ("CHARACTER", "TEXT"):
-            column_quote = True
-        else:
-            column_quote = False
+        column_quote = bool(coltype["type"] in ("CHARACTER", "TEXT"))
 
         tmpfile = "%s_%s" % (output, tmp)
 
@@ -169,9 +170,12 @@ def main():
                 )
             )["records"]
             unique_values = [record[column] for record in records]
+            created_columns = set()
             for value in unique_values:
                 for i, aggregate_column in enumerate(aggregate_columns):
-                    if column_quote:
+                    if value is None:
+                        where = f"{column} IS NULL"
+                    elif column_quote:
                         where = f"{column}='{value}'"
                     else:
                         where = f"{column}={value}"
@@ -203,16 +207,19 @@ def main():
                         stats_value = stats[key]
                         # if stats_columns:
                         # stats_column = stats_columns[i * len(aggregate_methods) + j]
-                        if key == "n":
-                            stats_column_type = "INTEGER"
-                        else:
-                            stats_column_type = "DOUBLE"
-                        gs.run_command(
-                            "v.db.addcolumn",
-                            map=output,
-                            columns=f"{stats_column} {stats_column_type}",
-                        )
-                        # TODO: Confirm that there is only one record in the table for a given attribute value after dissolve.
+                        if stats_column not in created_columns:
+                            if key == "n":
+                                stats_column_type = "INTEGER"
+                            else:
+                                stats_column_type = "DOUBLE"
+                            gs.run_command(
+                                "v.db.addcolumn",
+                                map=output,
+                                columns=f"{stats_column} {stats_column_type}",
+                            )
+                            created_columns.add(stats_column)
+                        # TODO: Confirm that there is only one record in the table
+                        # for a given attribute value after dissolve.
                         gs.run_command(
                             "v.db.update",
                             map=output,
