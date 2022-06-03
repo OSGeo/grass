@@ -362,7 +362,7 @@ Add the new version to repos which build or test addons:
   * <https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_job_list_grass>
   * Review other files in <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/>
   * update cronjob 'cron_grass8_main_src_snapshot.sh' on grass.osgeo.org to next but one release tag for the differences (what the second part of the sentence means?)
-- https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line for new branches and final releases)
+- <https://github.com/landam/wingrass-maintenance-scripts/> (for new branches and final releases; see instructions in the repo)
 
 ## Close milestone
 
