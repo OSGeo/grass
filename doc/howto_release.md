@@ -448,11 +448,10 @@ For major and minor releases:
 If final release, publish related announcement press release at:
 
 - Our main mailing lists:
-    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org> (who can post here?)
+    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org> (shortened release email to be sent by release manager)
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- FreeGIS: <freegis-list@intevation.de> (we need procedure for local mailing lists)
-- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (who can post here?)
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (shortened release email to be sent by release manager)
 
 Via Web / Social media:
 
