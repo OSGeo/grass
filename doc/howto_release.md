@@ -370,11 +370,7 @@ are any which show well specific features added or updated in the release.
 
 ## Create entries for the new release
 
-### Trac Wiki release page
-
-Add link to GitHub release page to <https://trac.osgeo.org/grass/wiki/Release>
-
-### Update Hugo web site to show new version
+### Update Hugo web site
 
 Update website only for final releases (not release candidates).
 
@@ -387,21 +383,27 @@ Software pages:
 Write announcement and publish it (a separate PR):
 - News section, https://github.com/OSGeo/grass-website/tree/master/content/news
 
-### Update GRASS Wiki to show new version
+### Update GRASS Wiki
 
-For final releases (not release candidates):
+For final releases (not release candidates), update the last version on the main page:
 
 - Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
+
+### Trac wiki
+
+For all releases:
+
+- Add link to GitHub release page to <https://trac.osgeo.org/grass/wiki/Release>
+
+For major and minor releases:
+
+- Add trac Wiki Macro definitions for manual pages G8X:modulename
+  * Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
 ### Only in case of new major release
 
 - update cronjob '[cron_grass8_main_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)' on grass.osgeo.org to next
   but one release tag for the differences
-- wiki updates, only when new major release:
-    - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
-    - update last version on main page
-- Add trac Wiki Macro definitions for manual pages G8X:modulename
-    - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
 ## Packaging notes
 
