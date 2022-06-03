@@ -460,14 +460,15 @@ For major and minor releases:
     - <grass-dev@lists.osgeo.org>
     - <grass-user@lists.osgeo.org>
 
-If final release, publish related announcement press release at:
+If final release, send out an announcement (press release)
+which is a shortened version of release desciption and website news item.
 
 - Our main mailing lists:
-    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org> (shortened release email to be sent by release manager)
+    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org> (ask a development coordinator to be added)
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (shortened release email to be sent by release manager)
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (send an email, then it will be approved)
 
-Via Web / Social media:
+Via web and social media:
 
 - See: <https://grass.osgeo.org/wiki/Contact_Databases>
