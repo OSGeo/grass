@@ -362,7 +362,6 @@ Add the new version to repos which build or test addons:
   * <https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_job_list_grass>
   * Review other files in <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/>
   * update cronjob 'cron_grass8_main_src_snapshot.sh' on grass.osgeo.org to next but one release tag for the differences (what the second part of the sentence means?)
-- <https://github.com/landam/wingrass-maintenance-scripts/> (for new branches and final releases; see instructions in the repo)
 
 ## Close milestone
 
@@ -423,30 +422,28 @@ For major and minor releases:
 
 ### WinGRASS notes
 
+For new branches and final releases (see additional instructions in the repo):
+
+- Go to <https://github.com/landam/wingrass-maintenance-scripts/>
 - Update grass_packager_release.bat, eg.
 
 ```
-     set MAJOR=8
-     set MINOR=2
-     set PATCH=0RC1
+set MAJOR=8
+set MINOR=2
+set PATCH=0RC1
 ```
 
 - Update addons (grass_addons.sh) rules, eg.
 
 ```
-     compile $GIT_PATH/grass8 $GISBASE_PATH/grass820RC1  $ADDON_PATH/grass820RC1/addons
+compile $GIT_PATH/grass8 $GISBASE_PATH/grass820RC1  $ADDON_PATH/grass820RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
 ```
-     copy_addon 820RC1 8.2.0RC1
+copy_addon 820RC1 8.2.0RC1
 ```
-
-### Ubuntu Launchpad notes
-
-- Create milestone and release: <https://launchpad.net/grass/+series>
-- Upload tarball for created release
 
 ### Other notes
 
