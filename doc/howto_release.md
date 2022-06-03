@@ -6,8 +6,8 @@
 - You have communicated with a development coordinator.
 - You have evaluated status of issues and PRs associated with the relevant milestone.
 - You have already cloned the repo with Git.
-- Your own fork is the remote called "origin".
 - The OSGeo repo is the remote called "upstream".
+- Your own fork is the remote called "origin" or "fork".
 - You don't have any local un-pushed or un-committed changes.
 - You are using Bash or a similar shell.
 
@@ -19,7 +19,7 @@
 Update your remotes and switch to branch:
 
 ```bash
-git fetch --all --prune && git checkout releasebranch_8_2
+git fetch --prune upstream && git checkout releasebranch_8_2
 ```
 
 Confirm that you are on the right branch and have no local changes
@@ -33,15 +33,16 @@ git diff
 git diff --staged
 # Should give no output:
 git log upstream/releasebranch_8_2..HEAD
-# Should give the same as last commits visible on GitHub:
+# There should be no commits which are not visible on GitHub:
 git log --max-count=5
 ```
 
-Now you can merge (or rebase) updates from the remote your local branch
-and optionally update your own fork:
+Now you can rebase updates from the remote your local branch.
+Above, you confirmed you have no local commits, so this should happen
+without rebasing any local commits, i.e., it should just add the new commits.
 
 ```bash
-git merge upstream/releasebranch_8_2 && git push origin releasebranch_8_2
+git rebase upstream/releasebranch_8_2
 ```
 
 Verify the result:
@@ -49,14 +50,16 @@ Verify the result:
 ```bash
 # Should give no output:
 git log upstream/releasebranch_8_2..HEAD
-# Should give the same as last commits visible on GitHub:
+git log HEAD..upstream/releasebranch_8_2
+# Should give exactly the same as last commits visible on GitHub:
 git log --max-count=5
 ```
 
-Now or any time later, you can use `git log` and `git show` to see the latest
-commits and the last commit including the changes.
+Now or any time later, you can use `git status`, `git log`, and `git show`
+to see a branch, latest commits and a last commit including the changes.
 
 ```bash
+git status
 git log --max-count=5
 git show
 ```
