@@ -456,8 +456,9 @@ For major and minor releases:
 
 ## Tell others about release
 
-- If release candidate:
+- If release candidate (just a short invitation to test):
     - <grass-dev@lists.osgeo.org>
+    - <grass-user@lists.osgeo.org>
 
 If final release, publish related announcement press release at:
 
