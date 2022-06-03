@@ -376,16 +376,22 @@ Add link to GitHub release page to <https://trac.osgeo.org/grass/wiki/Release>
 
 ### Update Hugo web site to show new version
 
-For a (final) release (not release candidate), write announcement and publish it:
-- News section, https://github.com/OSGeo/grass-website/tree/master/content/news
+Update website only for final releases (not release candidates).
 
 Software pages:
 - Linux: https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md
 - Windows: https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md
 - Mac: https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md
 - Releases: https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md
-- Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
 
+Write announcement and publish it (a separate PR):
+- News section, https://github.com/OSGeo/grass-website/tree/master/content/news
+
+### Update GRASS Wiki to show new version
+
+For final releases (not release candidates):
+
+- Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
 
 ### Only in case of new major release
 
@@ -435,18 +441,16 @@ Software pages:
 ## Tell others about release
 
 - If release candidate:
-    - <grass-announce@lists.osgeo.org>
     - <grass-dev@lists.osgeo.org>
-- If official release:
-    - publish related announcement press release at:
-- Our GRASS web site: /announces/
-    - Note: DON'T use relative links there
+
+If final release, publish related announcement press release at:
+
 - Our main mailing lists:
-    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org> (who can post here?)
     - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
     - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- FreeGIS: <freegis-list@intevation.de>
-- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
+- FreeGIS: <freegis-list@intevation.de> (we need procedure for local mailing lists)
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (who can post here?)
 
 Via Web / Social media:
 
