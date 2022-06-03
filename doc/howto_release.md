@@ -324,6 +324,23 @@ ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJO
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 ```
 
+### Update redirects
+
+For final minor and major releases (not release candidates and micro releases),
+update `grass-stable` redirect at `osgeo8-grass`:
+
+```bash
+sudo vim /etc/apache2/sites-enabled/000-default.conf`
+```
+
+Load the new configuration:
+
+```bash
+sudo systemctl reload apache2`
+```
+
+For new branches: Udpate `grass-devel` using the steps above.
+
 ## Update winGRASS related files
 
 Update the winGRASS version at <https://github.com/landam/wingrass-maintenance-scripts/>:
