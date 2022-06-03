@@ -352,14 +352,16 @@ vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
 vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 ```
 
-## Update addon builders
+## Update binary and addon builders
 
 Add the new version to repos which build or test addons:
 
 - https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml (currently, for new branches only)
-- Build binaries scripts and cron jobs (as one PR):
-  * https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_grass8_relbranch_build_binaries.sh (final major and minor releases)
-  * https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_job_list_grass
+- Build binaries scripts and cron jobs as one PR (final major and minor releases):
+  * <https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_grass8_relbranch_build_binaries.sh>
+  * <https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_job_list_grass>
+  * Review other files in <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/>
+  * update cronjob 'cron_grass8_main_src_snapshot.sh' on grass.osgeo.org to next but one release tag for the differences (what the second part of the sentence means?)
 - https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line for new branches and final releases)
 
 ## Close milestone
@@ -389,7 +391,7 @@ are any which show well specific features added or updated in the release.
 
 ### Update Hugo web site
 
-Update website only for final releases (not release candidates).
+Update website only for final releases (not release candidates) in one PR.
 
 Software pages:
 - Linux: https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md
@@ -397,7 +399,7 @@ Software pages:
 - Mac: https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md
 - Releases: https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md
 
-Write announcement and publish it (a separate PR):
+Write announcement and publish it:
 - News section, https://github.com/OSGeo/grass-website/tree/master/content/news
 
 ### Update GRASS Wiki
@@ -416,11 +418,6 @@ For major and minor releases:
 
 - Add trac Wiki Macro definitions for manual pages G8X:modulename
   * Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
-
-### Only in case of new major release
-
-- update cronjob '[cron_grass8_main_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)' on grass.osgeo.org to next
-  but one release tag for the differences
 
 ## Packaging notes
 
