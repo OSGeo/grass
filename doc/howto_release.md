@@ -340,7 +340,9 @@ vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 Add the new version to repos which build or test addons:
 
 - https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml (currently, for new branches only)
-- https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_grass8_relbranch_build_binaries.sh (final major and minor releases)
+- Build binaries scripts and cron jobs (as one PR):
+  * https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_grass8_relbranch_build_binaries.sh (final major and minor releases)
+  * https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_job_list_grass
 - https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line for new branches and final releases)
 
 ## Close milestone
