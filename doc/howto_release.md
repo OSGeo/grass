@@ -418,9 +418,7 @@ For major and minor releases:
 - Add trac Wiki Macro definitions for manual pages G8X:modulename
   * Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
-## Packaging notes
-
-### WinGRASS notes
+## WinGRASS notes
 
 For new branches and final releases (see additional instructions in the repo):
 
@@ -444,12 +442,6 @@ compile $GIT_PATH/grass8 $GISBASE_PATH/grass820RC1  $ADDON_PATH/grass820RC1/addo
 ```
 copy_addon 820RC1 8.2.0RC1
 ```
-
-### Other notes
-
-- <https://trac.osgeo.org/grass/wiki/BuildHints>
-    - <https://trac.osgeo.org/grass/wiki/DebianUbuntuPackaging>
-    - <https://trac.osgeo.org/grass/wiki/CompileOnWindows>
 
 ## Tell others about release
 
