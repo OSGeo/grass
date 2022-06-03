@@ -53,13 +53,13 @@ def dataset(tmp_path_factory):
     location = "test"
     point_map_name = "points"
     map_name = "areas"
-    dissolve_column_name = "int_value"
-    value_column_name = "double_value"
+    int_column_name = "int_value"
+    float_column_name = "double_value"
     str_column_name = "str_value"
 
     cats = [1, 2, 3, 4, 5, 6]
-    dissolve_values = [10, 10, 24, 5, 5, 5]
-    values = [100.78, 102.78, 109.78, 104.78, 103.78, 105.78]
+    int_values = [10, 10, 10, 5, 24, 5]
+    float_values = [100.78, 102.78, 109.78, 104.78, 103.78, 105.78]
     str_values = ["apples", "oranges", "oranges", "plumbs", "oranges", "plumbs"]
     num_points = len(cats)
 
@@ -72,24 +72,24 @@ def dataset(tmp_path_factory):
             "v.db.addtable",
             map=map_name,
             columns=[
-                f"{dissolve_column_name} integer",
-                f"{value_column_name} double precision",
+                f"{int_column_name} integer",
+                f"{float_column_name} double precision",
                 f"{str_column_name} text",
             ],
         )
         value_update_by_category(
             map_name=map_name,
             layer=1,
-            column_name=dissolve_column_name,
+            column_name=int_column_name,
             cats=cats,
-            values=dissolve_values,
+            values=int_values,
         )
         value_update_by_category(
             map_name=map_name,
             layer=1,
-            column_name=value_column_name,
+            column_name=float_column_name,
             cats=cats,
-            values=values,
+            values=float_values,
         )
         value_update_by_category(
             map_name=map_name,
@@ -100,10 +100,10 @@ def dataset(tmp_path_factory):
         )
         yield SimpleNamespace(
             vector_name=map_name,
-            dissolve_column_name=dissolve_column_name,
-            dissolve_values=dissolve_values,
-            value_column_name=value_column_name,
-            values=values,
+            int_column_name=int_column_name,
+            int_values=int_values,
+            float_column_name=float_column_name,
+            float_values=float_values,
             str_column_name=str_column_name,
             str_column_values=str_values,
         )
