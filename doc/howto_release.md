@@ -340,6 +340,7 @@ vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 Add the new version to repos which build or test addons:
 
 - https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml (currently, for new branches only)
+- https://github.com/OSGeo/grass-addons/blob/grass8/utils/cronjobs_osgeo_lxd/cron_grass8_relbranch_build_binaries.sh (final major and minor releases)
 - https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh (add new release related line for new branches and final releases)
 
 ## Close milestone
@@ -369,7 +370,7 @@ are any which show well specific features added or updated in the release.
 
 ### Trac Wiki release page
 
-Add entry in https://trac.osgeo.org/grass/wiki/Release
+Add link to GitHub release page to <https://trac.osgeo.org/grass/wiki/Release>
 
 ### Update Hugo web site to show new version
 
