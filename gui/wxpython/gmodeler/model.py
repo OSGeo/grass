@@ -2838,7 +2838,7 @@ if __name__ == "__main__":
                     item,
                     desc,
                     format_spec,
-                    self._getParamValue(param),
+                    ""
                 )
 
                 self.fd.write("\n")
