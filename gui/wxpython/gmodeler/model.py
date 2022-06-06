@@ -2737,6 +2737,7 @@ class Model(Process):
             if item.GetParameterizedParams()["flags"]:
                 self.fd.write(
                     r"""
+
 def getParameterizedFlags(paramFlags, itemFlags):
     fl = ""
     for i in [key for key, value in paramFlags.items() if value[0].data == "True"]:
@@ -2789,6 +2790,8 @@ if __name__ == "__main__":
                 value,
             )
 
+            self.fd.write("\n")
+
         for param in parameterized_params["params"]:
             desc = self._getParamDesc(param)
             value = self._getParamValue(param)
@@ -2812,7 +2815,7 @@ if __name__ == "__main__":
                 value,
             )
 
-        self.fd.write("\n")
+            self.fd.write("\n")
 
         # write ComplexOutputs
         for param in item.GetParams()["params"]:
@@ -2872,7 +2875,7 @@ if __name__ == "__main__":
         for item in self.model.GetItems():
             self._writeItem(item, variables=item.GetParameterizedParams())
 
-        self.fd.write("\n{}return response\n\n".format(" " * self.indent))
+        self.fd.write("\n{}return response\n".format(" " * self.indent))
 
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
