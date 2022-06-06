@@ -2835,13 +2835,7 @@ if __name__ == "__main__":
                 format_spec = "supported_formats=sup_formats"
 
                 self._write_input_output_object(
-                    io_data,
-                    object_type,
-                    param["name"],
-                    item,
-                    desc,
-                    format_spec,
-                    ""
+                    io_data, param["name"], item, desc, format_spec, ""
                 )
 
                 self.fd.write("\n")
