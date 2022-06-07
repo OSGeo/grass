@@ -36,7 +36,6 @@ This program is free software under the GNU General Public License
 
 import os
 import string
-import sys
 from copy import deepcopy
 
 import wx
