@@ -362,10 +362,11 @@ def main():
         result["median"] = q50
         result["third_quartile"] = q75
         if options["percentile"]:
-            percentiles = []
-            for i, one_percentile in enumerate(perc):
-                percentiles.append({"percentile": one_percentile, "value": pval[i]})
-        result["percentiles"] = percentiles
+            percentile_values = []
+            for i in range(len(perc)):
+                percentile_values.append(pval[i])
+        result["percentiles"] = perc
+        result["percentile_values"] = percentile_values
         json.dump({"statistics": result}, sys.stdout)
     else:
         sys.stdout.write("first_quartile=%.15g\n" % q25)

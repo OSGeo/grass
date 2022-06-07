@@ -115,7 +115,8 @@ def test_quartiles_default_percentile(simple_dataset):
         simple_dataset.values, percentiles=75, method="higher"
     )
     assert len(stats["percentiles"]) == 1
-    precentile_90 = stats["percentiles"][0]["value"]
+    assert len(stats["percentile_values"]) == 1
+    precentile_90 = stats["percentile_values"][0]
     assert precentile_90 == numpy_percentiles(
         simple_dataset.values, percentiles=90, method="lower"
     )
@@ -124,7 +125,7 @@ def test_quartiles_default_percentile(simple_dataset):
 @pytest.mark.skipif(np is None, reason="NumPy package not available")
 def test_percentiles(simple_dataset):
     """Test custom percentiles against NumPy"""
-    percentiles = range(10, 100, 10)
+    percentiles = list(range(10, 100, 10))
     data = json.loads(
         gs.read_command(
             "v.db.univar",
@@ -141,18 +142,16 @@ def test_percentiles(simple_dataset):
     assert stats["min"] == min(simple_dataset.values)
     assert stats["max"] == max(simple_dataset.values)
     # Test percentiles.
-    assert len(stats["percentiles"]) == len(percentiles)
+    assert percentiles == stats["percentiles"]
     ref_percentiles = numpy_percentiles(simple_dataset.values, percentiles)
-    assert len(stats["percentiles"]) == len(ref_percentiles)
-    for ref_percentile, percentile_result in zip(ref_percentiles, stats["percentiles"]):
-        assert percentile_result["percentile"]
-        # Same limitation as above: Works only for n=10.
-        assert percentile_result["value"] == ref_percentile
+    assert len(percentiles) == len(ref_percentiles), "Error in the test itself"
+    # Same limitation as above: Works only for numbers with n=10.
+    assert list(ref_percentiles) == stats["percentile_values"]
 
 
 def test_fixed_values(simple_dataset):
     """Test against hardcoded values"""
-    percentiles = range(10, 100, 20)
+    percentiles = list(range(10, 100, 20))
     data = json.loads(
         gs.read_command(
             "v.db.univar",
@@ -176,10 +175,7 @@ def test_fixed_values(simple_dataset):
     assert stats["variance"] == approx(8.25000000000291)
     assert stats["coeff_var"] == approx(0.0274570435261402)
     # Test percentiles.
-    assert len(stats["percentiles"]) == len(percentiles)
+    assert stats["percentiles"] == percentiles
     ref_percentiles = [100.11, 102.11, 104.11, 106.11, 108.11]
-    assert len(stats["percentiles"]) == len(ref_percentiles)
-    for ref_percentile, percentile_result in zip(ref_percentiles, stats["percentiles"]):
-        assert percentile_result["percentile"]
-        # Same limitation as above: Works only for n=10.
-        assert percentile_result["value"] == ref_percentile
+    assert len(stats["percentiles"]) == len(ref_percentiles), "Error in the test itself"
+    assert stats["percentile_values"] == ref_percentiles
