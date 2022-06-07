@@ -19,7 +19,7 @@ See also the official documentation for [The Jupyter Notebook](https://jupyter-n
 ## Thematic Jupyter notebooks:
 
    - Viewshed Analysis: [viewshed_analysis.ipynb](viewshed_analysis.ipynb)
-   - Spatio-Temporal Analysis with [grass.jupyter: temporal.ipynb](grass.jupyter: temporal.ipynb)
+   - Spatio-Temporal Analysis with grass.jupyter: [temporal.ipynb](temporal.ipynb)
    - Solar Energy Potential Analysis: [solar_potential.ipynb](solar_potential.ipynb)
    - GRASS GIS Scripting with Python: [scripting_example.ipynb](scripting_example.ipynb)
    - Hydrology with GRASS GIS: [hydrology.ipynb](hydrology.ipynb)
