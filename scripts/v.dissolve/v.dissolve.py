@@ -8,7 +8,7 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Dissolve common boundaries between areas with common cat
 #                 (frontend to v.extract -d)
-# COPYRIGHT:    (c) 2006-2014 Hamish Bowman, and the GRASS Development Team
+# COPYRIGHT:    (c) 2006-2022 Hamish Bowman, and the GRASS Development Team
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
@@ -66,6 +66,18 @@ import grass.script as grass
 # To use new style of import without changing old code.
 import grass.script as gs  # pylint: disable=reimported
 from grass.exceptions import CalledModuleError
+
+
+def updates_to_sql(table, updates):
+    """Create SQL from a list of dicts with column, value, where"""
+    sql = ["BEGIN TRANSACTION"]
+    for update in updates:
+        sql.append(
+            f"UPDATE {table} SET {update['column']} = {update['value']} "
+            f"WHERE {update['where']};"
+        )
+    sql.append("END TRANSACTION")
+    return "\n".join(sql)
 
 
 def cleanup():
@@ -241,22 +253,15 @@ def main():
                     map=output,
                     columns=",".join(add_columns),
                 )
-                db_info = gs.vector_db(output)[1]
-                table = db_info["table"]
-                database = db_info["database"]
-                driver = db_info["driver"]
-                sql = ["BEGIN TRANSACTION"]
-                for update in updates:
-                    sql.append(
-                        f"UPDATE {table} SET {update['column']} = {update['value']} WHERE {update['where']};"
-                    )
-                sql.append("END TRANSACTION")
+                output_layer = 1
+                db_info = gs.vector_db(output)[output_layer]
+                sql = updates_to_sql(table=db_info["table"], updates=updates)
                 gs.write_command(
                     "db.execute",
                     input="-",
-                    database=database,
-                    driver=driver,
-                    stdin="\n".join(sql),
+                    database=db_info["database"],
+                    driver=db_info["driver"],
+                    stdin=sql,
                 )
 
         except CalledModuleError as e:
