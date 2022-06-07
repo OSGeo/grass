@@ -7,7 +7,7 @@ server from the command line in the `doc/notebooks/` directory containing the `*
 `jupyter notebook`
 
 This will open a new browser tab or window with a list of the contents of the current
-working directory. Clicking on one of the `*.jpynb` files will start the notebook.
+working directory. Clicking on one of the `*.ipynb` files will start the notebook.
 
 See also the official documentation for [The Jupyter Notebook](https://jupyter-notebook.readthedocs.io/en/latest/).
 
