@@ -3,7 +3,7 @@
 ### Using the notebooks locally
 
 Clone this repository with `git clone` first. Then locally start the Jupyter notebook
-server from the command line in the `doc/notebooks/` directory containing the `*.jpynb` files with:
+server from the command line in the `doc/notebooks/` directory containing the `*.ipynb` files with:
 `jupyter notebook`
 
 This will open a new browser tab or window with a list of the contents of the current
