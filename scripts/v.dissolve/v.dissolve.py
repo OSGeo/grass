@@ -180,6 +180,8 @@ def main():
                 )["records"]
                 unique_values = [record[column] for record in records]
                 created_columns = set()
+                updates = []
+                add_columns = []
                 for value in unique_values:
                     for i, aggregate_column in enumerate(aggregate_columns):
                         if value is None:
@@ -221,21 +223,42 @@ def main():
                                     stats_column_type = "INTEGER"
                                 else:
                                     stats_column_type = "DOUBLE"
-                                gs.run_command(
-                                    "v.db.addcolumn",
-                                    map=output,
-                                    columns=f"{stats_column} {stats_column_type}",
+                                add_columns.append(
+                                    f"{stats_column} {stats_column_type}"
                                 )
                                 created_columns.add(stats_column)
                             # TODO: Confirm that there is only one record in the table
                             # for a given attribute value after dissolve.
-                            gs.run_command(
-                                "v.db.update",
-                                map=output,
-                                column=stats_column,
-                                value=stats_value,
-                                where=where,
+                            updates.append(
+                                {
+                                    "column": stats_column,
+                                    "value": stats_value,
+                                    "where": where,
+                                }
                             )
+                gs.run_command(
+                    "v.db.addcolumn",
+                    map=output,
+                    columns=",".join(add_columns),
+                )
+                db_info = gs.vector_db(output)[1]
+                table = db_info["table"]
+                database = db_info["database"]
+                driver = db_info["driver"]
+                sql = ["BEGIN TRANSACTION"]
+                for update in updates:
+                    sql.append(
+                        f"UPDATE {table} SET {update['column']} = {update['value']} WHERE {update['where']};"
+                    )
+                sql.append("END TRANSACTION")
+                gs.write_command(
+                    "db.execute",
+                    input="-",
+                    database=database,
+                    driver=driver,
+                    stdin="\n".join(sql),
+                )
+
         except CalledModuleError as e:
             grass.fatal(
                 _(
