@@ -15,13 +15,11 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
-import os
 import wx
-import string
 from math import ceil, floor, sin, cos, pi
 
 try:
-    from PIL import Image as PILImage
+    from PIL import Image as PILImage  # noqa
 
     havePILImage = True
 except ImportError:
