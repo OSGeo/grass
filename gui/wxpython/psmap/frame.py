@@ -404,8 +404,14 @@ class PsMapFrame(wx.Frame):
 
         if event.userData["pdfname"]:
             if sys.platform == "win32":
+                import platform
+
+                arch = platform.architecture()[0]
+                pdf_rendering_prog = "gswin64c"
+                if "32" in arch:
+                    pdf_rendering_prog = "gswin32c"
                 command = [
-                    "gswin32c",
+                    pdf_rendering_prog,
                     "-P-",
                     "-dSAFER",
                     "-dCompatibilityLevel=1.4",
@@ -427,14 +433,30 @@ class PsMapFrame(wx.Frame):
                     "-f",
                     event.userData["filename"],
                 ]
+                message = (
+                    "Program {} is not available."
+                    " You can donwload {} version here"
+                    " https://www.ghostscript.com/releases/gsdnld.html."
+                    " Please install it to create PDF.\n\n ".format(
+                        pdf_rendering_prog,
+                        arch,
+                    )
+                )
             else:
+                pdf_rendering_prog = "ps2pdf"
                 command = [
-                    "ps2pdf",
+                    pdf_rendering_prog,
                     "-dPDFSETTINGS=/prepress",
                     "-r1200",
                     event.userData["filename"],
                     event.userData["pdfname"],
                 ]
+                message = (
+                    "Program {} is not available."
+                    " Please install it to create PDF.\n\n ".format(
+                        pdf_rendering_prog,
+                    )
+                )
             try:
                 proc = grass.Popen(command)
                 ret = proc.wait()
@@ -447,13 +469,7 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.SetStatusText(_("PDF generated"), 0)
             except OSError as e:
-                GError(
-                    parent=self,
-                    message=_(
-                        "Program ps2pdf is not available. Please install it to create PDF.\n\n %s"
-                    )
-                    % e,
-                )
+                GError(parent=self, message=_(message + str(e)))
 
         elif not event.userData["temp"]:
             self.SetStatusText(_("PostScript file generated"), 0)
