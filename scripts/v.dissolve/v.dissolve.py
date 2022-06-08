@@ -50,6 +50,14 @@
 # % description: Defaults to aggregate column name and statistics name
 # % multiple: yes
 # %end
+# %option
+# % key: aggregate_backend
+# % label: Aggregate statistics method
+# % description: Default is all available basic statistics
+# % multiple: no
+# % required: no
+# % options: univar,sql
+# %end
 # %rules
 # % requires_all: aggregate_method,aggregate_column
 # % requires_all: stats_column,aggregate_method,aggregate_column
@@ -68,6 +76,82 @@ import grass.script as gs  # pylint: disable=reimported
 from grass.exceptions import CalledModuleError
 
 
+# Methods supported by v.db.univar by default.
+UNIVAR_METHODS = [
+    "n",
+    "min",
+    "max",
+    "range",
+    "mean",
+    "mean_abs",
+    "variance",
+    "stddev",
+    "coeff_var",
+    "sum",
+]
+
+# Basic SQL aggregate function common between SQLite and PostgreSQL
+# (and the SQL standard) using their proper names and order from
+# their documentation.
+# Notably, this does not include SQLite total which returns zero
+# when all values are NULL.
+STANDARD_SQL_FUNCTIONS = ["avg", "count", "max", "min", "sum"]
+
+
+def get_methods_and_backend(methods, backend):
+    """Get methods and backed based on user-provided methods and backend"""
+    if methods:
+        if not backend:
+            in_univar = False
+            neither_in_sql_nor_univar = False
+            for method in methods:
+                if method not in STANDARD_SQL_FUNCTIONS:
+                    if method in UNIVAR_METHODS:
+                        in_univar = True
+                    else:
+                        neither_in_sql_nor_univar = True
+            # If all the non-basic functions are available in univar, use it.
+            if in_univar and not neither_in_sql_nor_univar:
+                backend = "univar"
+    elif backend == "sql":
+        methods = STANDARD_SQL_FUNCTIONS
+    elif backend == "univar":
+        methods = UNIVAR_METHODS
+    else:
+        # This is the default SQL functions but using the univar names (and order).
+        methods = ["n", "min", "max", "mean", "sum"]
+        backend = "sql"
+    if not backend:
+        backend = "sql"
+    return methods, backend
+
+
+def modify_methods_for_backend(methods, backend):
+    """Modify list of methods to fit the backend if they do not
+
+    This allows for support of the same method names for both backends.
+    It works both ways.
+    """
+    new_methods = []
+    if backend == "sql":
+        for method in methods:
+            if method == "n":
+                new_methods.append("count")
+            elif method == "mean":
+                new_methods.append("avg")
+            else:
+                new_methods.append(method)
+    elif backend == "univar":
+        for method in methods:
+            if method == "count":
+                new_methods.append("n")
+            elif method == "avg":
+                new_methods.append("mean")
+            else:
+                new_methods.append(method)
+    return new_methods
+
+
 def updates_to_sql(table, updates):
     """Create SQL from a list of dicts with column, value, where"""
     sql = ["BEGIN TRANSACTION"]
@@ -80,50 +164,206 @@ def updates_to_sql(table, updates):
     return "\n".join(sql)
 
 
-def cleanup():
+def update_columns(output, output_layer, updates, add_columns):
+    """Update attribute values based on a list of updates"""
+    if add_columns:
+        gs.run_command(
+            "v.db.addcolumn",
+            map=output,
+            columns=",".join(add_columns),
+        )
+    db_info = gs.vector_db(output)[output_layer]
+    sql = updates_to_sql(table=db_info["table"], updates=updates)
+    gs.write_command(
+        "db.execute",
+        input="-",
+        database=db_info["database"],
+        driver=db_info["driver"],
+        stdin=sql,
+    )
+
+
+# TODO: Confirm that there is only one record in the table
+# for a given attribute value after dissolve.
+
+
+def aggregate_attributes_sql(
+    input_name,
+    column,
+    quote_column,
+    columns_to_aggregate,
+    methods,
+    result_columns,
+):
+    """Aggregate values in selected columns grouped by column using SQL backend"""
+    select_columns = [
+        f"{method}({agg_column})"
+        for method in methods
+        for agg_column in columns_to_aggregate
+    ]
+    column_types = []
+    for unused_agg_column in columns_to_aggregate:
+        for method in methods:
+            if method == "count":
+                column_types.append("INTEGER")
+            else:
+                column_types.append("DOUBLE")
+    records = json.loads(
+        gs.read_command(
+            "v.db.select",
+            map=input_name,
+            columns=",".join([column] + select_columns),
+            group=column,
+            format="json",
+        )
+    )["records"]
+    updates = []
+    add_columns = []
+    for stats_column, column_type in zip(result_columns, column_types):
+        add_columns.append(f"{stats_column} {column_type}")
+    for row in records:
+        value = row[column]
+        if value is None:
+            where = f"{column} IS NULL"
+        elif quote_column:
+            where = f"{column}='{value}'"
+        else:
+            where = f"{column}={value}"
+        for (
+            stats_column,
+            key,
+        ) in zip(result_columns, select_columns):
+            updates.append(
+                {
+                    "column": stats_column,
+                    "value": row[key],
+                    "where": where,
+                }
+            )
+    return updates, add_columns
+
+
+def aggregate_attributes_univar(
+    input_name,
+    column,
+    quote_column,
+    columns_to_aggregate,
+    methods,
+    result_columns,
+):
+    """Aggregate values in selected columns grouped by column using v.db.univar"""
+    records = json.loads(
+        gs.read_command(
+            "v.db.select",
+            map=input_name,
+            columns=column,
+            group=column,
+            format="json",
+        )
+    )["records"]
+    column_types = []
+    for unused_agg_column in columns_to_aggregate:
+        for method in methods:
+            if method == "n":
+                column_types.append("INTEGER")
+            else:
+                column_types.append("DOUBLE")
+    add_columns = []
+    for stats_column, column_type in zip(result_columns, column_types):
+        add_columns.append(f"{stats_column} {column_type}")
+    unique_values = [record[column] for record in records]
+    updates = []
+    for value in unique_values:
+        if value is None:
+            where = f"{column} IS NULL"
+        elif quote_column:
+            where = f"{column}='{value}'"
+        else:
+            where = f"{column}={value}"
+        for i, aggregate_column in enumerate(columns_to_aggregate):
+            stats = json.loads(
+                gs.read_command(
+                    "v.db.univar",
+                    map=input_name,
+                    column=aggregate_column,
+                    format="json",
+                    where=where,
+                )
+            )["statistics"]
+            current_result_columns = result_columns[
+                i * len(methods) : (i + 1) * len(methods)
+            ]
+            for stats_column, key in zip(current_result_columns, methods):
+                stats_value = stats[key]
+                updates.append(
+                    {
+                        "column": stats_column,
+                        "value": stats_value,
+                        "where": where,
+                    }
+                )
+    return updates, add_columns
+
+
+def cleanup(name):
+    """Remove temporary vector silently"""
     nuldev = open(os.devnull, "w")
     grass.run_command(
         "g.remove",
         flags="f",
         type="vector",
-        name="%s_%s" % (output, tmp),
+        name=name,
         quiet=True,
         stderr=nuldev,
     )
 
 
-def main():
-    global output, tmp
+def option_as_list(options, name):
+    """Get value of an option as a list"""
+    option = options[name]
+    if option:
+        return option.split(",")
+    return []
 
+
+def main():
+    """Run the dissolve operation based on command line parameters"""
+    options, unused_flags = grass.parser()
     input = options["input"]
     output = options["output"]
     layer = options["layer"]
     column = options["column"]
+    aggregate_backend = options["aggregate_backend"]
 
-    aggregate_columns = options["aggregate_column"]
-    if aggregate_columns:
-        aggregate_columns = aggregate_columns.split(",")
-    else:
-        aggregate_columns = None
-    aggregate_methods = options["aggregate_method"]
-    if aggregate_methods:
-        aggregate_methods = aggregate_methods.split(",")
-    stats_columns = options["stats_column"]
-    if stats_columns:
-        stats_columns = stats_columns.split(",")
-        if len(stats_columns) != len(aggregate_columns) * len(aggregate_methods):
+    columns_to_aggregate = option_as_list(options, "aggregate_column")
+    user_aggregate_methods = option_as_list(options, "aggregate_method")
+    user_aggregate_methods, aggregate_backend = get_methods_and_backend(
+        user_aggregate_methods, aggregate_backend
+    )
+    aggregate_methods = modify_methods_for_backend(
+        user_aggregate_methods, backend=aggregate_backend
+    )
+    result_columns = options["stats_column"]
+    if result_columns:
+        result_columns = result_columns.split(",")
+        if len(result_columns) != len(columns_to_aggregate) * len(
+            user_aggregate_methods
+        ):
             gs.fatal(
                 _(
                     "A column name is needed for each combination of aggregate_column "
                     "({num_columns}) and aggregate_method ({num_methods})"
                 ).format(
-                    num_columns=len(aggregate_columns),
-                    num_methods=len(aggregate_methods),
+                    num_columns=len(columns_to_aggregate),
+                    num_methods=len(user_aggregate_methods),
                 )
             )
-
-    # setup temporary file
-    tmp = str(os.getpid())
+    else:
+        result_columns = [
+            f"{aggregate_column}_{method}"
+            for aggregate_column in columns_to_aggregate
+            for method in user_aggregate_methods
+        ]
 
     # does map exist?
     if not grass.find_file(input, element="vector")["file"]:
@@ -157,16 +397,16 @@ def main():
         if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
             grass.fatal(_("Key column must be of type integer or string"))
         column_is_str = bool(coltype["type"] in ("CHARACTER", "TEXT"))
-        if aggregate_columns and not column_is_str:
+        if columns_to_aggregate and not column_is_str:
             grass.fatal(
                 _(
                     "Key column type must be string (text) "
                     "for aggregation method to work, not '{column_type}'"
                 ).format(column_type=coltype["type"])
             )
-        column_quote = column_is_str
 
-        tmpfile = "%s_%s" % (output, tmp)
+        tmpfile = gs.append_node_pid(output)
+        atexit.register(cleanup, tmpfile)
 
         try:
             grass.run_command(
@@ -180,88 +420,30 @@ def main():
                 type="area",
                 layer=layer,
             )
-            if aggregate_columns:
-                records = json.loads(
-                    gs.read_command(
-                        "v.db.select",
-                        map=input,
-                        columns=column,
-                        group=column,
-                        format="json",
+            if columns_to_aggregate:
+                if aggregate_backend == "sql":
+                    updates, add_columns = aggregate_attributes_sql(
+                        input_name=input,
+                        column=column,
+                        quote_column=column_is_str,
+                        columns_to_aggregate=columns_to_aggregate,
+                        methods=aggregate_methods,
+                        result_columns=result_columns,
                     )
-                )["records"]
-                unique_values = [record[column] for record in records]
-                created_columns = set()
-                updates = []
-                add_columns = []
-                for value in unique_values:
-                    for i, aggregate_column in enumerate(aggregate_columns):
-                        if value is None:
-                            where = f"{column} IS NULL"
-                        elif column_quote:
-                            where = f"{column}='{value}'"
-                        else:
-                            where = f"{column}={value}"
-                        stats = json.loads(
-                            gs.read_command(
-                                "v.db.univar",
-                                map=input,
-                                column=aggregate_column,
-                                format="json",
-                                where=where,
-                            )
-                        )["statistics"]
-                        if not aggregate_methods:
-                            aggregate_methods = stats.keys()
-                        if stats_columns:
-                            current_stats_columns = stats_columns[
-                                i
-                                * len(aggregate_methods) : (i + 1)
-                                * len(aggregate_methods)
-                            ]
-                        else:
-                            current_stats_columns = [
-                                f"{aggregate_column}_{method}"
-                                for method in aggregate_methods
-                            ]
-                        for stats_column, key in zip(
-                            current_stats_columns, aggregate_methods
-                        ):
-                            stats_value = stats[key]
-                            # if stats_columns:
-                            # stats_column = stats_columns[i * len(aggregate_methods) + j]
-                            if stats_column not in created_columns:
-                                if key == "n":
-                                    stats_column_type = "INTEGER"
-                                else:
-                                    stats_column_type = "DOUBLE"
-                                add_columns.append(
-                                    f"{stats_column} {stats_column_type}"
-                                )
-                                created_columns.add(stats_column)
-                            # TODO: Confirm that there is only one record in the table
-                            # for a given attribute value after dissolve.
-                            updates.append(
-                                {
-                                    "column": stats_column,
-                                    "value": stats_value,
-                                    "where": where,
-                                }
-                            )
-                gs.run_command(
-                    "v.db.addcolumn",
-                    map=output,
-                    columns=",".join(add_columns),
-                )
-                output_layer = 1
-                db_info = gs.vector_db(output)[output_layer]
-                sql = updates_to_sql(table=db_info["table"], updates=updates)
-                gs.write_command(
-                    "db.execute",
-                    input="-",
-                    database=db_info["database"],
-                    driver=db_info["driver"],
-                    stdin=sql,
+                else:
+                    updates, add_columns = aggregate_attributes_univar(
+                        input_name=input,
+                        column=column,
+                        quote_column=column_is_str,
+                        columns_to_aggregate=columns_to_aggregate,
+                        methods=aggregate_methods,
+                        result_columns=result_columns,
+                    )
+                update_columns(
+                    output=output,
+                    output_layer=1,
+                    updates=updates,
+                    add_columns=add_columns,
                 )
 
         except CalledModuleError as e:
@@ -279,6 +461,4 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
-    atexit.register(cleanup)
     main()
