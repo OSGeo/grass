@@ -448,12 +448,7 @@ class PsMapFrame(wx.Frame):
                     import numpy as np
                     im_array = np.array(im)
                     im = PILImage.fromarray(np.rot90(im_array, 3))
-
-                # hack for Windows, change method for loading EPS
-                if sys.platform == 'win32':
-                    import types
-                    im.load = types.MethodType(loadPSForWindows, im)
-                im.save(self.imgName, format='PNG')
+                im.save(self.imgName, format="PNG")
             except (IOError, OSError) as e:
                 del busy
                 dlg = HyperlinkDialog(
@@ -2337,11 +2332,6 @@ class PsMapBufferedWindow(wx.Window):
     def DrawBitmap(self, pdc, filePath, rotation, bbox):
         """Draw bitmap using PIL"""
         pImg = PILImage.open(filePath)
-        if sys.platform == 'win32' and \
-           'eps' in os.path.splitext(filePath)[1].lower():
-            import types
-            pImg.load = types.MethodType(loadPSForWindows, pImg)
-
         if rotation:
             # get rid of black background
             pImg = pImg.convert("RGBA")

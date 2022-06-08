@@ -36,7 +36,6 @@ This program is free software under the GNU General Public License
 
 import os
 import string
-import sys
 from copy import deepcopy
 
 import wx
@@ -6036,9 +6035,6 @@ class ImageDialog(PsmapDialog):
         if os.path.splitext(file)[1].lower() == '.eps':
             try:
                 pImg = PILImage.open(file)
-                if sys.platform == 'win32':
-                    import types
-                    pImg.load = types.MethodType(loadPSForWindows, pImg)
                 img = PilImageToWxImage(pImg)
             except IOError as e:
                 GError(message=_("Unable to read file %s") % file)
