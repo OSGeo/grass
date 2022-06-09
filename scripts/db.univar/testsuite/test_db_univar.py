@@ -17,7 +17,7 @@ class TestDbUnivar(TestCase):
     map_name = "samples"
 
     @classmethod
-    def setUpClass(cls):  # pylint: disable=invalid-name
+    def setUpClass(cls):
         """Generate vector points in extend larger than raster with values"""
         cls.use_temp_region()
         cls.runModule("g.region", raster="elevation")
@@ -26,17 +26,17 @@ class TestDbUnivar(TestCase):
         cls.runModule(
             "v.db.addtable",
             map=cls.map_name,
-            columns="{} double precision".format(cls.column_name),
+            columns=f"{cls.column_name} double precision",
         )
         cls.runModule(
             "v.what.rast", map=cls.map_name, raster="elevation", column=cls.column_name
         )
 
     @classmethod
-    def tearDownClass(cls):  # pylint: disable=invalid-name
+    def tearDownClass(cls):
         """Remove temporary region and vector"""
-        cls.del_temp_region()
         cls.runModule("g.remove", flags="f", type="vector", name=cls.map_name)
+        cls.del_temp_region()
 
     def test_calculate(self):
         """Check that db.univar runs"""

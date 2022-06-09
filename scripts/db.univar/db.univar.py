@@ -46,6 +46,14 @@
 # % options: 0-100
 # % multiple: yes
 # %end
+# %option
+# % key: format
+# % type: string
+# % multiple: no
+# % options: plain,json,shell
+# % label: Output format
+# % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval
+# %end
 # %flag
 # % key: e
 # % description: Extended statistics (quartiles and 90th percentile)
@@ -57,6 +65,7 @@
 
 import sys
 import atexit
+import json
 import math
 
 import grass.script as gscript
@@ -88,6 +97,11 @@ def sortfile(infile, outfile):
 
 
 def main():
+    # A more substantial rewrite of the code is needed, possibly to C or
+    # using Python packages such as statistics or NumPy,
+    # so ignoring the duplication of final computation of some statistics
+    # as well as pushing the limit of how long the function can be.
+    # pylint: disable=too-many-branches
     global tmp
     tmp = gscript.tempfile()
 
@@ -99,8 +113,19 @@ def main():
     driver = options["driver"]
     where = options["where"]
     perc = options["percentile"]
+    output_format = options["format"]
 
     perc = [float(p) for p in perc.split(",")]
+
+    if not output_format:
+        if shellstyle:
+            output_format = "shell"
+        else:
+            output_format = "plain"
+    elif shellstyle:
+        # This can be a message or warning in future versions.
+        # In version 9, -g may be removed.
+        gscript.verbose(_("The format option is used and -g flag ignored"))
 
     desc_table = gscript.db_describe(table, database=database, driver=driver)
     if not desc_table:
@@ -114,7 +139,7 @@ def main():
     if not found:
         gscript.fatal(_("Column <%s> not found in table <%s>") % (column, table))
 
-    if not shellstyle:
+    if output_format == "plain":
         gscript.verbose(
             _("Calculation for column <%s> of table <%s>...") % (column, table)
         )
@@ -145,11 +170,12 @@ def main():
     # check if result is empty
     tmpf = open(tmp)
     if tmpf.read(1) == "":
-        gscript.fatal(_("Table <%s> contains no data.") % table)
+        if output_format in ["plain", "shell"]:
+            gscript.fatal(_("Table <%s> contains no data.") % table)
         tmpf.close()
 
     # calculate statistics
-    if not shellstyle:
+    if output_format == "plain":
         gscript.verbose(_("Calculating statistics..."))
 
     N = 0
@@ -174,9 +200,27 @@ def main():
     tmpf.close()
 
     if N <= 0:
-        gscript.fatal(_("No non-null values found"))
+        if output_format in ["plain", "shell"]:
+            gscript.fatal(_("No non-null values found"))
+        else:
+            # We produce valid JSON with a value for n even when the query returned
+            # no rows or when all values are nulls.
+            result = {}
+            result["n"] = N
+            nan_value = None
+            result["min"] = nan_value
+            result["max"] = nan_value
+            result["range"] = nan_value
+            result["mean"] = nan_value
+            result["mean_abs"] = nan_value
+            result["variance"] = nan_value
+            result["stddev"] = nan_value
+            result["coeff_var"] = nan_value
+            result["sum"] = nan_value
+            json.dump({"statistics": result}, sys.stdout)
+            return
 
-    if not shellstyle:
+    if output_format == "plain":
         sys.stdout.write("Number of values: %d\n" % N)
         sys.stdout.write("Minimum: %.15g\n" % minv)
         sys.stdout.write("Maximum: %.15g\n" % maxv)
@@ -197,7 +241,28 @@ def main():
             sys.stdout.write("Standard deviation: 0\n")
             sys.stdout.write("Coefficient of variation: 0\n")
         sys.stdout.write("Sum: %.15g\n" % sum)
-    else:
+    elif output_format == "json":
+        result = {}
+        result["n"] = N
+        result["min"] = minv
+        result["max"] = maxv
+        result["range"] = maxv - minv
+        result["mean"] = sum / N
+        result["mean_abs"] = sum3 / N
+        if not ((sum2 - sum * sum / N) / N) < 0:
+            result["variance"] = (sum2 - sum * sum / N) / N
+            result["stddev"] = math.sqrt((sum2 - sum * sum / N) / N)
+            result["coeff_var"] = (math.sqrt((sum2 - sum * sum / N) / N)) / (
+                math.sqrt(sum * sum) / N
+            )
+        else:
+            result["variance"] = 0
+            result["stddev"] = 0
+            result["coeff_var"] = 0
+        result["sum"] = sum
+        if not extend:
+            json.dump({"statistics": result}, sys.stdout)
+    elif output_format == "shell":
         sys.stdout.write("n=%d\n" % N)
         sys.stdout.write("min=%.15g\n" % minv)
         sys.stdout.write("max=%.15g\n" % maxv)
@@ -216,6 +281,8 @@ def main():
             sys.stdout.write("stddev=0\n")
             sys.stdout.write("coeff_var=0\n")
         sys.stdout.write("sum=%.15g\n" % sum)
+    else:
+        raise ValueError(f"Unknown output format {output_format}")
 
     if not extend:
         return
@@ -266,7 +333,7 @@ def main():
 
     q50 = (q50a + q50b) / 2
 
-    if not shellstyle:
+    if output_format == "plain":
         sys.stdout.write("1st Quartile: %.15g\n" % q25)
         sys.stdout.write("Median (%s N): %.15g\n" % (eostr, q50))
         sys.stdout.write("3rd Quartile: %.15g\n" % q75)
@@ -290,6 +357,17 @@ def main():
                     )
             else:
                 sys.stdout.write("%.15g Percentile: %.15g\n" % (perc[i], pval[i]))
+    elif output_format == "json":
+        result["first_quartile"] = q25
+        result["median"] = q50
+        result["third_quartile"] = q75
+        if options["percentile"]:
+            percentile_values = []
+            for i in range(len(perc)):
+                percentile_values.append(pval[i])
+        result["percentiles"] = perc
+        result["percentile_values"] = percentile_values
+        json.dump({"statistics": result}, sys.stdout)
     else:
         sys.stdout.write("first_quartile=%.15g\n" % q25)
         sys.stdout.write("median=%.15g\n" % q50)
