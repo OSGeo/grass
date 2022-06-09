@@ -5,38 +5,15 @@ import json
 import grass.script as gs
 
 
-def test_dissolve_int(dataset):
-    """Dissolving works on integer column"""
-    dissolved_vector = "test_int"
-    gs.run_command(
-        "v.dissolve",
-        input=dataset.vector_name,
-        column=dataset.int_column_name,
-        output=dissolved_vector,
-    )
+def test_dissolve_discontinuous_str(discontinuous_dataset):
+    """Dissolving of discontinuous areas results in a single attribute record
 
-    vector_info = gs.vector_info(dissolved_vector)
-    assert vector_info["level"] == 2
-    assert vector_info["centroids"] == 3
-    assert vector_info["areas"] == 3
-    assert vector_info["num_dblinks"] == 0
-    # Reference values obtained by examining the result.
-    assert vector_info["north"] == 80
-    assert vector_info["south"] == 0
-    assert vector_info["east"] == 120
-    assert vector_info["west"] == 0
-    assert vector_info["nodes"] == 14
-    assert vector_info["points"] == 0
-    assert vector_info["lines"] == 0
-    assert vector_info["boundaries"] == 16
-    assert vector_info["islands"] == 1
-    assert vector_info["primitives"] == 19
-    assert vector_info["map3d"] == 0
-
-
-def test_dissolve_str(dataset):
-    """Dissolving works on string column and attributes are present"""
-    dissolved_vector = "test_str"
+    Even when the areas are discontinuous, there should be only one row
+    in the attribute table.
+    This behavior is assumed by the attribute aggregation functionality.
+    """
+    dataset = discontinuous_dataset
+    dissolved_vector = "test_discontinuous_str"
     gs.run_command(
         "v.dissolve",
         input=dataset.vector_name,
@@ -46,8 +23,8 @@ def test_dissolve_str(dataset):
 
     vector_info = gs.vector_info(dissolved_vector)
     assert vector_info["level"] == 2
-    assert vector_info["centroids"] == 3
-    assert vector_info["areas"] == 3
+    assert vector_info["centroids"] == 5
+    assert vector_info["areas"] == 5
     assert vector_info["num_dblinks"] == 1
     assert vector_info["attribute_primary_key"] == "cat"
     # Reference values obtained by examining the result.
@@ -55,12 +32,12 @@ def test_dissolve_str(dataset):
     assert vector_info["south"] == 0
     assert vector_info["east"] == 120
     assert vector_info["west"] == 0
-    assert vector_info["nodes"] == 13
+    assert vector_info["nodes"] == 14
     assert vector_info["points"] == 0
     assert vector_info["lines"] == 0
-    assert vector_info["boundaries"] == 15
+    assert vector_info["boundaries"] == 18
     assert vector_info["islands"] == 1
-    assert vector_info["primitives"] == 18
+    assert vector_info["primitives"] == 23
     assert vector_info["map3d"] == 0
 
     columns = gs.vector_columns(dissolved_vector)

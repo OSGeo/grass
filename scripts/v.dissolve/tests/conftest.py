@@ -170,3 +170,79 @@ def discontinuous_dataset(tmp_path_factory):
             str_column_name=str_column_name,
             str_column_values=str_values,
         )
+
+
+@pytest.fixture(scope="module")
+def dataset_layer_2(tmp_path_factory):
+    """Creates a session with a mapset which has vector with a float column"""
+    tmp_path = tmp_path_factory.mktemp("dataset_layer_2")
+    location = "test"
+    point_map_name = "points"
+    point_map_name_layer_2 = "points2"
+    map_name = "areas"
+    int_column_name = "int_value"
+    float_column_name = "double_value"
+    str_column_name = "str_value"
+
+    cats = [1, 2, 3, 4, 5, 6]
+    int_values = [10, 10, 10, 5, 24, 5]
+    float_values = [100.78, 102.78, 109.78, 104.78, 103.78, 105.78]
+    str_values = ["apples", "oranges", "oranges", "plumbs", "oranges", "plumbs"]
+    num_points = len(cats)
+
+    layer = 2
+
+    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
+    with grass_setup.init(tmp_path / location):
+        gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
+        gs.run_command("v.random", output=point_map_name, npoints=num_points, seed=42)
+        gs.run_command(
+            "v.category",
+            input=point_map_name,
+            layer=[1, layer],
+            output=point_map_name_layer_2,
+            option="transfer",
+        )
+        gs.run_command(
+            "v.voronoi", input=point_map_name_layer_2, layer=layer, output=map_name
+        )
+        gs.run_command(
+            "v.db.addtable",
+            map=map_name,
+            layer=layer,
+            columns=[
+                f"{int_column_name} integer",
+                f"{float_column_name} double precision",
+                f"{str_column_name} text",
+            ],
+        )
+        value_update_by_category(
+            map_name=map_name,
+            layer=layer,
+            column_name=int_column_name,
+            cats=cats,
+            values=int_values,
+        )
+        value_update_by_category(
+            map_name=map_name,
+            layer=layer,
+            column_name=float_column_name,
+            cats=cats,
+            values=float_values,
+        )
+        value_update_by_category(
+            map_name=map_name,
+            layer=layer,
+            column_name=str_column_name,
+            cats=cats,
+            values=str_values,
+        )
+        yield SimpleNamespace(
+            vector_name=map_name,
+            int_column_name=int_column_name,
+            int_values=int_values,
+            float_column_name=float_column_name,
+            float_values=float_values,
+            str_column_name=str_column_name,
+            str_column_values=str_values,
+        )

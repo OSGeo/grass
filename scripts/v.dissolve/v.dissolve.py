@@ -164,15 +164,16 @@ def updates_to_sql(table, updates):
     return "\n".join(sql)
 
 
-def update_columns(output, output_layer, updates, add_columns):
+def update_columns(output_name, output_layer, updates, add_columns):
     """Update attribute values based on a list of updates"""
     if add_columns:
         gs.run_command(
             "v.db.addcolumn",
-            map=output,
+            map=output_name,
+            layer=output_layer,
             columns=",".join(add_columns),
         )
-    db_info = gs.vector_db(output)[output_layer]
+    db_info = gs.vector_db(output_name)[int(output_layer)]
     sql = updates_to_sql(table=db_info["table"], updates=updates)
     gs.write_command(
         "db.execute",
@@ -207,6 +208,7 @@ def check_aggregate_methods_or_fatal(methods, backend):
 
 def aggregate_attributes_sql(
     input_name,
+    input_layer,
     column,
     quote_column,
     columns_to_aggregate,
@@ -226,6 +228,7 @@ def aggregate_attributes_sql(
         gs.read_command(
             "v.db.select",
             map=input_name,
+            layer=input_layer,
             columns=",".join([column] + select_columns),
             group=column,
             format="json",
@@ -253,6 +256,7 @@ def aggregate_attributes_sql(
 
 def aggregate_attributes_univar(
     input_name,
+    input_layer,
     column,
     quote_column,
     columns_to_aggregate,
@@ -264,6 +268,7 @@ def aggregate_attributes_univar(
         gs.read_command(
             "v.db.select",
             map=input_name,
+            layer=input_layer,
             columns=column,
             group=column,
             format="json",
@@ -421,6 +426,7 @@ def main():
                 if aggregate_backend == "sql":
                     updates, add_columns = aggregate_attributes_sql(
                         input_name=input,
+                        input_layer=layer,
                         column=column,
                         quote_column=column_is_str,
                         columns_to_aggregate=columns_to_aggregate,
@@ -430,6 +436,7 @@ def main():
                 else:
                     updates, add_columns = aggregate_attributes_univar(
                         input_name=input,
+                        input_layer=layer,
                         column=column,
                         quote_column=column_is_str,
                         columns_to_aggregate=columns_to_aggregate,
@@ -437,17 +444,17 @@ def main():
                         result_columns=result_columns,
                     )
                 update_columns(
-                    output=output,
-                    output_layer=1,
+                    output_name=output,
+                    output_layer=layer,
                     updates=updates,
                     add_columns=add_columns,
                 )
         except CalledModuleError as error:
             grass.fatal(
                 _(
-                    "Final extraction steps failed."
-                    " Check above error messages and"
-                    " see following details:\n{error}"
+                    "A processing step failed."
+                    " Check the above error messages and"
+                    " see the following details:\n{error}"
                 ).format(error=error)
             )
 
