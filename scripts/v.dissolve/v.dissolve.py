@@ -205,10 +205,6 @@ def check_aggregate_methods_or_fatal(methods, backend):
     # and open for SQLite depending on its extensions.
 
 
-# TODO: Confirm that there is only one record in the table
-# for a given attribute value after dissolve.
-
-
 def aggregate_attributes_sql(
     input_name,
     column,
