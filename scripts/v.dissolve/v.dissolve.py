@@ -102,14 +102,14 @@ def get_methods_and_backend(methods, backend):
     """Get methods and backed based on user-provided methods and backend"""
     if methods:
         if not backend:
-            in_univar = False
-            neither_in_sql_nor_univar = False
+            in_univar = 0
+            neither_in_sql_nor_univar = 0
             for method in methods:
                 if method not in STANDARD_SQL_FUNCTIONS:
                     if method in UNIVAR_METHODS:
-                        in_univar = True
+                        in_univar += 1
                     else:
-                        neither_in_sql_nor_univar = True
+                        neither_in_sql_nor_univar += 1
             # If all the non-basic functions are available in univar, use it.
             if in_univar and not neither_in_sql_nor_univar:
                 backend = "univar"
