@@ -1023,7 +1023,7 @@ class DbMgrNotebookBase(GNotebook):
         if layer not in self.layers:
             return False
 
-        GNotebook.DeleteNBPage(self, self.layers.index(layer))
+        GNotebook.DeletePage(self, self.layers.index(layer))
 
         self.layers.remove(layer)
         del self.layerPage[layer]
