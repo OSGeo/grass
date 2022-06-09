@@ -65,9 +65,9 @@
 
 """Dissolve geometries and aggregate attribute values"""
 
-import os
 import atexit
 import json
+import subprocess
 
 import grass.script as grass
 
@@ -183,6 +183,28 @@ def update_columns(output, output_layer, updates, add_columns):
     )
 
 
+def column_value_to_where(column, value, *, quote):
+    """Create SQL where clause without the where keyword for column and its value"""
+    if value is None:
+        return f"{column} IS NULL"
+    if quote:
+        return f"{column}='{value}'"
+    return f"{column}={value}"
+
+
+def check_aggregate_methods_or_fatal(methods, backend):
+    if backend == "univar":
+        for method in methods:
+            if method not in UNIVAR_METHODS:
+                gs.fatal(
+                    _(
+                        "Method <{method}> is not available for backend <{backend}>"
+                    ).format(method=method, backend=backend)
+                )
+    # We don't have a list of available SQL functions. It is long for PostgreSQL
+    # and open for SQLite depending on its extensions.
+
+
 # TODO: Confirm that there is only one record in the table
 # for a given attribute value after dissolve.
 
@@ -201,13 +223,9 @@ def aggregate_attributes_sql(
         for method in methods
         for agg_column in columns_to_aggregate
     ]
-    column_types = []
-    for unused_agg_column in columns_to_aggregate:
-        for method in methods:
-            if method == "count":
-                column_types.append("INTEGER")
-            else:
-                column_types.append("DOUBLE")
+    column_types = [
+        "INTEGER" if method == "count" else "DOUBLE" for method in methods
+    ] * len(columns_to_aggregate)
     records = json.loads(
         gs.read_command(
             "v.db.select",
@@ -219,23 +237,17 @@ def aggregate_attributes_sql(
     )["records"]
     updates = []
     add_columns = []
-    for stats_column, column_type in zip(result_columns, column_types):
-        add_columns.append(f"{stats_column} {column_type}")
+    for result_column, column_type in zip(result_columns, column_types):
+        add_columns.append(f"{result_column} {column_type}")
     for row in records:
-        value = row[column]
-        if value is None:
-            where = f"{column} IS NULL"
-        elif quote_column:
-            where = f"{column}='{value}'"
-        else:
-            where = f"{column}={value}"
+        where = column_value_to_where(column, row[column], quote=quote_column)
         for (
-            stats_column,
+            result_column,
             key,
         ) in zip(result_columns, select_columns):
             updates.append(
                 {
-                    "column": stats_column,
+                    "column": result_column,
                     "value": row[key],
                     "where": where,
                 }
@@ -261,25 +273,16 @@ def aggregate_attributes_univar(
             format="json",
         )
     )["records"]
-    column_types = []
-    for unused_agg_column in columns_to_aggregate:
-        for method in methods:
-            if method == "n":
-                column_types.append("INTEGER")
-            else:
-                column_types.append("DOUBLE")
+    column_types = [
+        "INTEGER" if method == "n" else "DOUBLE" for method in methods
+    ] * len(columns_to_aggregate)
     add_columns = []
-    for stats_column, column_type in zip(result_columns, column_types):
-        add_columns.append(f"{stats_column} {column_type}")
+    for result_column, column_type in zip(result_columns, column_types):
+        add_columns.append(f"{result_column} {column_type}")
     unique_values = [record[column] for record in records]
     updates = []
     for value in unique_values:
-        if value is None:
-            where = f"{column} IS NULL"
-        elif quote_column:
-            where = f"{column}='{value}'"
-        else:
-            where = f"{column}={value}"
+        where = column_value_to_where(column, value, quote=quote_column)
         for i, aggregate_column in enumerate(columns_to_aggregate):
             stats = json.loads(
                 gs.read_command(
@@ -293,12 +296,11 @@ def aggregate_attributes_univar(
             current_result_columns = result_columns[
                 i * len(methods) : (i + 1) * len(methods)
             ]
-            for stats_column, key in zip(current_result_columns, methods):
-                stats_value = stats[key]
+            for result_column, key in zip(current_result_columns, methods):
                 updates.append(
                     {
-                        "column": stats_column,
-                        "value": stats_value,
+                        "column": result_column,
+                        "value": stats[key],
                         "where": where,
                     }
                 )
@@ -307,14 +309,13 @@ def aggregate_attributes_univar(
 
 def cleanup(name):
     """Remove temporary vector silently"""
-    nuldev = open(os.devnull, "w")
     grass.run_command(
         "g.remove",
         flags="f",
         type="vector",
         name=name,
         quiet=True,
-        stderr=nuldev,
+        stderr=subprocess.DEVNULL,
     )
 
 
@@ -343,9 +344,9 @@ def main():
     aggregate_methods = modify_methods_for_backend(
         user_aggregate_methods, backend=aggregate_backend
     )
-    result_columns = options["stats_column"]
+    check_aggregate_methods_or_fatal(aggregate_methods, backend=aggregate_backend)
+    result_columns = option_as_list(options, "stats_column")
     if result_columns:
-        result_columns = result_columns.split(",")
         if len(result_columns) != len(columns_to_aggregate) * len(
             user_aggregate_methods
         ):
@@ -445,15 +446,13 @@ def main():
                     updates=updates,
                     add_columns=add_columns,
                 )
-
-        except CalledModuleError as e:
+        except CalledModuleError as error:
             grass.fatal(
                 _(
                     "Final extraction steps failed."
                     " Check above error messages and"
-                    " see following details:\n%s"
-                )
-                % e
+                    " see following details:\n{error}"
+                ).format(error=error)
             )
 
     # write cmd history:
