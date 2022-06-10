@@ -160,7 +160,7 @@ void I_free_signatures_list(int, char ***);
 int I_init_signatures(struct Signature *, int);
 int I_new_signature(struct Signature *);
 int I_free_signatures(struct Signature *);
-int I_read_one_signature(FILE *, struct Signature *);
+int I_read_one_signature(FILE *, int, struct Signature *);
 int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
 char **I_sort_signatures_by_semantic_label(struct Signature *, const struct Ref *);

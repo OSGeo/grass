@@ -58,6 +58,7 @@ struct One_Sig
     int status;		/* may be used to 'delete' a signature */
     float r, g, b;		/* color */
     int have_color;
+    int oclass;         /* original class value */
 };
 
 struct Signature
@@ -65,6 +66,7 @@ struct Signature
     int nbands;         /* band (imagery group member) count */
     char **semantic_labels;    /* list of semantic labels */
     int nsigs;          /* signature count */
+    int have_oclass;     /* is One_Sig.oclass filled with values? */
     char title[100];    /* not used? */
     struct One_Sig *sig;    /* array of one signature per class */
 };
