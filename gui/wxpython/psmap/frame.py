@@ -433,14 +433,11 @@ class PsMapFrame(wx.Frame):
                     "-f",
                     event.userData["filename"],
                 ]
-                message = (
-                    "Program {} is not available."
-                    " You can donwload {} version here"
+                message = _(
+                    f"Program {pdf_rendering_prog} is not available."
+                    f" You can download {arch} version here"
                     " https://www.ghostscript.com/releases/gsdnld.html."
-                    " Please install it to create PDF.\n\n ".format(
-                        pdf_rendering_prog,
-                        arch,
-                    )
+                    " Please install it to create PDF.\n\n "
                 )
             else:
                 pdf_rendering_prog = "ps2pdf"
@@ -451,11 +448,9 @@ class PsMapFrame(wx.Frame):
                     event.userData["filename"],
                     event.userData["pdfname"],
                 ]
-                message = (
-                    "Program {} is not available."
-                    " Please install it to create PDF.\n\n ".format(
-                        pdf_rendering_prog,
-                    )
+                message = _(
+                    f"Program {pdf_rendering_prog} is not available."
+                    " Please install it to create PDF.\n\n "
                 )
             try:
                 proc = grass.Popen(command)
@@ -469,7 +464,7 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.SetStatusText(_("PDF generated"), 0)
             except OSError as e:
-                GError(parent=self, message=_(message + str(e)))
+                GError(parent=self, message=message + str(e))
 
         elif not event.userData["temp"]:
             self.SetStatusText(_("PostScript file generated"), 0)
