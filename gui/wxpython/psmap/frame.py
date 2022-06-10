@@ -40,7 +40,6 @@ from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings
 from core.utils import PilImageToWxImage
 from gui_core.forms import GUI
-from gui_core.dialogs import HyperlinkDialog
 from gui_core.ghelp import ShowAboutDialog
 from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
 from psmap.menudata import PsMapMenuData
@@ -442,26 +441,13 @@ class PsMapFrame(wx.Frame):
                 _("Generating preview, wait please"),
                 parent=self)
             wx.GetApp().Yield()
-            try:
-                im = PILImage.open(event.userData['filename'])
-                if self.instruction[self.pageId]['Orientation'] == 'Landscape':
-                    import numpy as np
-                    im_array = np.array(im)
-                    im = PILImage.fromarray(np.rot90(im_array, 3))
-                im.save(self.imgName, format="PNG")
-            except (IOError, OSError) as e:
-                del busy
-                dlg = HyperlinkDialog(
-                    self, title=_("Preview not available"),
-                    message=_(
-                        "Preview is not available probably because Ghostscript is not installed or not on PATH."),
-                    hyperlink='http://trac.osgeo.org/grass/wiki/CompileOnWindows#Ghostscript',
-                    hyperlinkLabel=_(
-                        "Please follow instructions on GRASS Trac Wiki."))
-                dlg.ShowModal()
-                dlg.Destroy()
-                return
+            im = PILImage.open(event.userData["filename"])
+            if self.instruction[self.pageId]["Orientation"] == "Landscape":
+                import numpy as np
 
+                im_array = np.array(im)
+                im = PILImage.fromarray(np.rot90(im_array, 3))
+            im.save(self.imgName, format="PNG")
             rect = self.previewCanvas.ImageRect()
             self.previewCanvas.image = wx.Image(
                 self.imgName, wx.BITMAP_TYPE_PNG)
