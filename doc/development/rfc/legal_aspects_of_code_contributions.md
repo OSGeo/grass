@@ -69,14 +69,3 @@ GRASS Development Team at the following address:
 Internet:
   http://grass.osgeo.org/home/contact-us/
 
-Postal address:
-
-```
- GRASS Development Team
- c/o Dr Markus Neteler
- Fondazione E. Mach - Research and Innovation Centre
- GIS and Remote Sensing Unit
- 38010 S. Michele all'Adige
- Italy
- email: neteler AT osgeo.org
-```
