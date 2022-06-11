@@ -434,11 +434,11 @@ class PsMapFrame(wx.Frame):
                     event.userData["filename"],
                 ]
                 message = _(
-                    f"Program {pdf_rendering_prog} is not available."
-                    f" You can download {arch} version here"
+                    "Program {} is not available."
+                    " You can download {} version here"
                     " https://www.ghostscript.com/releases/gsdnld.html."
                     " Please install it to create PDF.\n\n "
-                )
+                ).format(pdf_rendering_prog, arch)
             else:
                 pdf_rendering_prog = "ps2pdf"
                 command = [
@@ -449,9 +449,9 @@ class PsMapFrame(wx.Frame):
                     event.userData["pdfname"],
                 ]
                 message = _(
-                    f"Program {pdf_rendering_prog} is not available."
+                    "Program {} is not available."
                     " Please install it to create PDF.\n\n "
-                )
+                ).format(pdf_rendering_prog)
             try:
                 proc = grass.Popen(command)
                 ret = proc.wait()
