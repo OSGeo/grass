@@ -1,4 +1,4 @@
-"""Test v.dissolve geometry info"""
+"""Test v.dissolve with more advanced geometry"""
 
 import json
 

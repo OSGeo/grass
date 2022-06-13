@@ -70,15 +70,16 @@ def test_aggregate_column_result(dataset, backend):
     """
     dissolved_vector = f"test_results_{backend}"
     stats = ["sum", "n", "min", "max", "mean"]
-    stats_columns = ["value_sum", "value_n", "value_min", "value_max", "value_mean"]
+    stats_columns = [f"value_{method}" for method in stats]
+    aggregate_columns = [dataset.float_column_name] * len(stats)
     gs.run_command(
         "v.dissolve",
         input=dataset.vector_name,
         column=dataset.str_column_name,
         output=dissolved_vector,
-        aggregate_column=dataset.float_column_name,
+        aggregate_column=aggregate_columns,
         aggregate_method=stats,
-        stats_column=stats_columns,
+        result_column=stats_columns,
         aggregate_backend=backend,
     )
 
@@ -246,8 +247,6 @@ def test_sqlite_agg_accepted(dataset):
 def test_int_fails(dataset):
     """An integer column fails with aggregates"""
     dissolved_vector = "test_int"
-    stats = ["sum", "n"]
-    stats_columns = ["value_sum", "value_n"]
     assert (
         gs.run_command(
             "v.dissolve",
@@ -255,8 +254,7 @@ def test_int_fails(dataset):
             column=dataset.int_column_name,
             output=dissolved_vector,
             aggregate_column=dataset.float_column_name,
-            aggregate_method=stats,
-            stats_column=stats_columns,
+            aggregate_method="n",
             errors="status",
         )
         != 0

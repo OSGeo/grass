@@ -1,9 +1,6 @@
-"""More trickier tests of v.dissolve"""
+"""Tests of v.dissolve with layer other than 1"""
 
 import json
-import statistics
-
-import pytest
 
 import grass.script as gs
 

@@ -7,6 +7,79 @@ which is used to find adjacent polygons with identical attribute for common
 boundary dissolving. In this case the categories are not retained, only the
 values of the new key column. See the <em>v.reclass</em> help page for details.
 
+<h3>Merging behavior</h3>
+
+Multiple areas with the same category or the same attribute value
+which are not adjacent are merged together into one entity
+which consists of multiple areas, i.e., a multipolygon.
+
+<h3>Attribute aggregation</h3>
+
+<p>
+Attributes of merged areas can be aggregated using various aggregation methods
+such as sum and mean. The specific methods available depend
+on the backend used for aggregation. Two backends are available,
+<em>univar</em> and <em>sql</em>. When <em>univar</em>
+is used, the methods available are the ones which <em>v.db.univar</em>
+uses by default, i.e., <em>n</em>, <em>min</em>, <em>max</em>, <em>range</em>,
+<em>mean</em>, <em>mean_abs</em>, <em>variance</em>, <em>stddev</em>,
+<em>coef_var</em>, and <em>sum</em>.
+When the <em>sql</em> backend is used, the methods in turn depends on the SQL
+database backend used for the attribute table of the input vector.
+For SQLite, it is at least the following
+<a href="https://www.sqlite.org/lang_aggfunc.html">build-in aggregate functions</a>:
+<em>count</em>, <em>min</em>, <em>max</em>,
+<em>avg</em>, <em>sum</em>, and <em>total</em>.
+For PostgreSQL, the list of
+<a href="https://www.postgresql.org/docs/current/functions-aggregate.html">aggregate functions</a>
+is much longer and includes, e.g., <em>count</em>, <em>min</em>, <em>max</em>,
+<em>avg</em>, <em>sum</em>, <em>stddev</em>, and <em>variance</em>.
+The <em>sql</em> aggregate backend, regardless of the underlying database,
+will typically perform significantly better than the <em>univar</em> backend.
+
+<p>
+The backend is, by default, determined automatically based on the requested
+methods. Specifically, the <em>sql</em> backend is used by default,
+but when a method is not one of the SQLite build-in aggregate functions
+and, at the same time, is available with the <em>univar</em> backend,
+the <em>univar</em> backed is used.
+The default behavior is intended for interactive use and testing.
+For scripting and other automated usage, specifying the backend explicitly
+is strongly recommended.
+
+<p>
+For convince, certain methods, namely <em>n</em>, <em>count</em>,
+<em>mean</em>, and <em>avg</em>, are converted to the name appropriate
+for the selected backend. However, for scripting, specifying the appropriate
+method (function) name for the backend is recommended because the conversion
+is a heuristic which may change in the future.
+
+<p>
+Type of the result column is determined based on the method selected.
+For <em>n</em> and <em>count</em>, the type is INTEGER and for all other
+methods, it is DOUBLE. Aggregate methods which don't produce other types
+are not supported unless the value automatically converts to one of these.
+
+<p>
+If only <b>aggregate_column</b> is provided, methods default to
+<em>n</em>, <em>min</em>, <em>max</em>, <em>mean</em>, and <em>sum</em>.
+If the <em>univar</em> backend is specified, all the available methods
+for the <em>univar</em> backend are used.
+
+<p>
+If the <b>result_column</b> is not provided, each method is applied to each
+specified column producing result columns for all combinations. These result
+columns have auto-generated names based on the aggregate column and method.
+If the <b>result_column</b> is provided, each method is applied only once
+to the matching column in the aggregate column list and the result will be
+available under the name of the matching result column. In other words, number
+of existing columns, methods, and new columns in <b>aggregate_column</b>,
+<b>aggregate_methods</b>, and <b>result_column</b> needs to match and no
+combinations are created on the fly.
+For scripting, it is recommended to specify all resulting column names,
+while for interactive use, automatically created combinations are expected
+to be beneficial, especially for exploratory analysis.
+
 <h2>NOTES</h2>
 
 GRASS defines a vector area as composite entity consisting of a set of
