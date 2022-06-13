@@ -7,6 +7,15 @@ which is used to find adjacent polygons with identical attribute for common
 boundary dissolving. In this case the categories are not retained, only the
 values of the new key column. See the <em>v.reclass</em> help page for details.
 
+<center>
+<img src="v_dissolve_zipcodes.png">
+<img src="v_dissolve_towns.png">
+<p><em>
+    Figure: Areas with the same attribute value (first image) are
+    merged into into one (second image)
+</em></p>
+</center>
+
 <h3>Merging behavior</h3>
 
 Multiple areas with the same category or the same attribute value
@@ -141,6 +150,7 @@ v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
 
 <h2>AUTHORS</h2>
 
-module: M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
-Markus Neteler for column support<br>
-help page: Trevor Wiens
+M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand (module)<br>
+Markus Neteler (column support)<br>
+Trevor Wiens (help page)<br>
+Vaclav Petras, NC State University, Center for Geospatial Analytics (aggregate statistics)
