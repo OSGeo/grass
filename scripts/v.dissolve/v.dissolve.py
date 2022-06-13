@@ -6,6 +6,7 @@
 #                 New Zealand
 #               Markus Neteler for column support
 #               Converted to Python by Glynn Clements
+#               Vaclav Petras <wenzeslaus gmail com> (aggregate statistics)
 # PURPOSE:      Dissolve common boundaries between areas with common cat
 #                 (frontend to v.extract -d)
 # COPYRIGHT:    (c) 2006-2022 Hamish Bowman, and the GRASS Development Team
@@ -35,7 +36,8 @@
 # %end
 # %option G_OPT_DB_COLUMN
 # % key: aggregate_column
-# % description: Name of attribute columns to get aggregate statistics for
+# % label: Name of attribute columns to get aggregate statistics for
+# % description: One column per method if result columns are specified
 # % multiple: yes
 # %end
 # %option
@@ -70,10 +72,7 @@ import json
 import subprocess
 from collections import defaultdict
 
-import grass.script as grass
-
-# To use new style of import without changing old code.
-import grass.script as gs  # pylint: disable=reimported
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
@@ -379,7 +378,7 @@ def aggregate_attributes_univar(
 
 def cleanup(name):
     """Remove temporary vector silently"""
-    grass.run_command(
+    gs.run_command(
         "g.remove",
         flags="f",
         type="vector",
@@ -399,8 +398,8 @@ def option_as_list(options, name):
 
 def main():
     """Run the dissolve operation based on command line parameters"""
-    options, unused_flags = grass.parser()
-    input = options["input"]
+    options, unused_flags = gs.parser()
+    input_vector = options["input"]
     output = options["output"]
     layer = options["layer"]
     column = options["column"]
@@ -427,22 +426,27 @@ def main():
     )
 
     # does map exist?
-    if not grass.find_file(input, element="vector")["file"]:
-        grass.fatal(_("Vector map <%s> not found") % input)
+    if not gs.find_file(input_vector, element="vector")["file"]:
+        gs.fatal(_("Vector map <%s> not found") % input_vector)
 
     if not column:
-        grass.warning(
+        gs.warning(
             _(
                 "No '%s' option specified. Dissolving based on category values from layer <%s>."
             )
             % ("column", layer)
         )
-        grass.run_command(
-            "v.extract", flags="d", input=input, output=output, type="area", layer=layer
+        gs.run_command(
+            "v.extract",
+            flags="d",
+            input=input_vector,
+            output=output,
+            type="area",
+            layer=layer,
         )
     else:
         if int(layer) == -1:
-            grass.warning(
+            gs.warning(
                 _(
                     "Invalid layer number (%d). "
                     "Parameter '%s' specified, assuming layer '1'."
@@ -451,15 +455,15 @@ def main():
             )
             layer = "1"
         try:
-            coltype = grass.vector_columns(input, layer)[column]
+            coltype = gs.vector_columns(input_vector, layer)[column]
         except KeyError:
-            grass.fatal(_("Column <%s> not found") % column)
+            gs.fatal(_("Column <%s> not found") % column)
 
         if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
-            grass.fatal(_("Key column must be of type integer or string"))
+            gs.fatal(_("Key column must be of type integer or string"))
         column_is_str = bool(coltype["type"] in ("CHARACTER", "TEXT"))
         if columns_to_aggregate and not column_is_str:
-            grass.fatal(
+            gs.fatal(
                 _(
                     "Key column type must be string (text) "
                     "for aggregation method to work, not '{column_type}'"
@@ -470,10 +474,14 @@ def main():
         atexit.register(cleanup, tmpfile)
 
         try:
-            grass.run_command(
-                "v.reclass", input=input, output=tmpfile, layer=layer, column=column
+            gs.run_command(
+                "v.reclass",
+                input=input_vector,
+                output=tmpfile,
+                layer=layer,
+                column=column,
             )
-            grass.run_command(
+            gs.run_command(
                 "v.extract",
                 flags="d",
                 input=tmpfile,
@@ -484,7 +492,7 @@ def main():
             if columns_to_aggregate:
                 if aggregate_backend == "sql":
                     updates, add_columns = aggregate_attributes_sql(
-                        input_name=input,
+                        input_name=input_vector,
                         input_layer=layer,
                         column=column,
                         quote_column=column_is_str,
@@ -494,7 +502,7 @@ def main():
                     )
                 else:
                     updates, add_columns = aggregate_attributes_univar(
-                        input_name=input,
+                        input_name=input_vector,
                         input_layer=layer,
                         column=column,
                         quote_column=column_is_str,
@@ -509,7 +517,7 @@ def main():
                     add_columns=add_columns,
                 )
         except CalledModuleError as error:
-            grass.fatal(
+            gs.fatal(
                 _(
                     "A processing step failed."
                     " Check the above error messages and"
@@ -518,7 +526,7 @@ def main():
             )
 
     # write cmd history:
-    grass.vector_history(output)
+    gs.vector_history(output)
 
 
 if __name__ == "__main__":
