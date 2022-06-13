@@ -461,7 +461,7 @@ def main():
 
         if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
             gs.fatal(_("Key column must be of type integer or string"))
-        column_is_str = bool(coltype["type"] in ("CHARACTER", "TEXT"))
+        column_is_str = coltype["type"] in ("CHARACTER", "TEXT")
         if columns_to_aggregate and not column_is_str:
             gs.fatal(
                 _(
