@@ -51,7 +51,7 @@ struct Control_Points
 
 struct One_Sig
 {
-    char desc[100];     /* name of target class */
+    char desc[256];     /* name of target class */
     int npoints;        /* cell count used to determine class parameters */
     double *mean;		/* one mean for each band */
     double **var;		/* covariance band-band   */
