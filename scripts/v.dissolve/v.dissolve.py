@@ -208,11 +208,24 @@ def check_aggregate_methods_or_fatal(methods, backend):
 
 
 def match_columns_and_methods(columns, methods):
-    """Return all combinations of columns and methods"""
+    """Return all combinations of columns and methods
+
+    If a column or a method is specified more than once, only the first occurrence
+    is used. This makes it suitable for interactive use which values convenience
+    over predictability.
+    """
     new_columns = []
     new_methods = []
+    used_columns = []
     for column in columns:
+        if column in used_columns:
+            continue
+        used_columns.append(column)
+        used_methods = []
         for method in methods:
+            if method in used_methods:
+                continue
+            used_methods.append(method)
             new_columns.append(column)
             new_methods.append(method)
     return new_columns, new_methods
