@@ -153,23 +153,18 @@ int main(int argc, char **argv)
     opt.input->description = _("Input file");
     opt.input->guisection = _("Input");
 
-    opt.fgcolor = G_define_option();
+    opt.fgcolor = G_define_standard_option(G_OPT_C);
     opt.fgcolor->key = "color";
-    opt.fgcolor->type = TYPE_STRING;
     opt.fgcolor->answer = DEFAULT_COLOR;
     opt.fgcolor->required = NO;
-    opt.fgcolor->description =
-	_("Text color, either a standard GRASS color or R:G:B triplet");
-    opt.fgcolor->gisprompt = "old_color,color,color";
+    opt.fgcolor->label = _("Text color");
     opt.fgcolor->guisection = _("Text");
 
-    opt.bgcolor = G_define_option();
+    opt.bgcolor = G_define_standard_option(G_OPT_CN);
     opt.bgcolor->key = "bgcolor";
-    opt.bgcolor->type = TYPE_STRING;
+    opt.bgcolor->answer = "none";
     opt.bgcolor->required = NO;
-    opt.bgcolor->description =
-        _("Text background color, either a standard GRASS color or R:G:B triplet");
-    opt.bgcolor->gisprompt = "old_color,color,color";
+    opt.bgcolor->label = _("Text background color");
     opt.bgcolor->guisection = _("Text");
 
     opt.rotation = G_define_option();
