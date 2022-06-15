@@ -62,7 +62,7 @@
 # %end
 # %rules
 # % requires_all: aggregate_method,aggregate_column
-# % requires_all: result_column,aggregate_method,aggregate_column
+# % requires_all: result_column,aggregate_column
 # %end
 
 """Dissolve geometries and aggregate attribute values"""
@@ -98,7 +98,7 @@ UNIVAR_METHODS = [
 STANDARD_SQL_FUNCTIONS = ["avg", "count", "max", "min", "sum"]
 
 
-def get_methods_and_backend(methods, backend):
+def get_methods_and_backend(methods, backend, provide_defaults):
     """Get methods and backed based on user-provided methods and backend"""
     if methods:
         if not backend:
@@ -113,14 +113,15 @@ def get_methods_and_backend(methods, backend):
             # If all the non-basic functions are available in univar, use it.
             if in_univar and not neither_in_sql_nor_univar:
                 backend = "univar"
-    elif backend == "sql":
-        methods = STANDARD_SQL_FUNCTIONS
-    elif backend == "univar":
-        methods = UNIVAR_METHODS
-    else:
-        # This is the default SQL functions but using the univar names (and order).
-        methods = ["n", "min", "max", "mean", "sum"]
-        backend = "sql"
+    elif provide_defaults:
+        if backend == "sql":
+            methods = STANDARD_SQL_FUNCTIONS
+        elif backend == "univar":
+            methods = UNIVAR_METHODS
+        else:
+            # This is the default SQL functions but using the univar names (and order).
+            methods = ["n", "min", "max", "mean", "sum"]
+            backend = "sql"
     if not backend:
         backend = "sql"
     return methods, backend
@@ -196,6 +197,13 @@ def column_value_to_where(column, value, *, quote):
 def check_aggregate_methods_or_fatal(methods, backend):
     """Check for known methods if possible or fail"""
     if backend == "univar":
+        if not methods:
+            gs.fatal(
+                _(
+                    "At least one method must be provided when backend "
+                    "<{backend}> is used"
+                ).format(backend=backend)
+            )
         for method in methods:
             if method not in UNIVAR_METHODS:
                 gs.fatal(
@@ -232,11 +240,11 @@ def match_columns_and_methods(columns, methods):
 
 
 def create_or_check_result_columns_or_fatal(
-    result_columns, columns_to_aggregate, methods
+    result_columns, columns_to_aggregate, methods, backend
 ):
     """Create result columns from input if not provided or check them"""
     if result_columns:
-        if len(columns_to_aggregate) != len(methods):
+        if methods and len(columns_to_aggregate) != len(methods):
             gs.fatal(
                 _(
                     "When result columns are specified, the number of "
@@ -258,7 +266,7 @@ def create_or_check_result_columns_or_fatal(
                     columns_to_aggregate=len(columns_to_aggregate),
                 )
             )
-        if len(result_columns) != len(methods):
+        if methods and len(result_columns) != len(methods):
             gs.fatal(
                 _(
                     "The number of result columns ({result_columns}) needs to be "
@@ -268,9 +276,27 @@ def create_or_check_result_columns_or_fatal(
                     methods=len(methods),
                 )
             )
+        if not methods:
+            if backend == "sql":
+                for column in result_columns:
+                    if " " not in column:
+                        gs.fatal(
+                            _(
+                                "Type of the result column '{column}' needs a type "
+                                "specified (using the syntax: 'name type') "
+                                "when no methods are provided"
+                            ).format(column=column)
+                        )
+            else:
+                gs.fatal(
+                    _(
+                        "Methods must be specified with {backend} backend "
+                        "and with result columns provided"
+                    ).format(backend=backend)
+                )
         return result_columns
     return [
-        f"{aggregate_column}_{method}"
+        f"{gs.legalize_vector_name(aggregate_column)}_{method}"
         for aggregate_column, method in zip(columns_to_aggregate, methods)
     ]
 
@@ -285,18 +311,30 @@ def aggregate_attributes_sql(
     result_columns,
 ):
     """Aggregate values in selected columns grouped by column using SQL backend"""
-    if len(columns_to_aggregate) != len(methods) != len(result_columns):
+    if len(columns_to_aggregate) != len(result_columns):
         raise ValueError(
-            "Number of columns_to_aggregate, methods, and result_columns "
-            "must be the same"
+            "Number of columns_to_aggregate and result_columns must be the same"
         )
-    select_columns = [
-        f"{method}({agg_column})"
-        for method, agg_column in zip(methods, columns_to_aggregate)
-    ]
-    column_types = [
-        "INTEGER" if method == "count" else "DOUBLE" for method in methods
-    ] * len(columns_to_aggregate)
+    if methods and len(columns_to_aggregate) != len(methods):
+        raise ValueError("Number of columns_to_aggregate and methods must be the same")
+    if not methods:
+        for result_column in result_columns:
+            if " " not in result_column:
+                raise ValueError(
+                    f"Column {result_column} from result_columns without type"
+                )
+    if methods:
+        select_columns = [
+            f"{method}({agg_column})"
+            for method, agg_column in zip(methods, columns_to_aggregate)
+        ]
+        column_types = [
+            "INTEGER" if method == "count" else "DOUBLE" for method in methods
+        ] * len(columns_to_aggregate)
+    else:
+        select_columns = columns_to_aggregate
+        column_types = None
+
     records = json.loads(
         gs.read_command(
             "v.db.select",
@@ -309,14 +347,20 @@ def aggregate_attributes_sql(
     )["records"]
     updates = []
     add_columns = []
-    for result_column, column_type in zip(result_columns, column_types):
-        add_columns.append(f"{result_column} {column_type}")
+    if column_types:
+        for result_column, column_type in zip(result_columns, column_types):
+            add_columns.append(f"{result_column} {column_type}")
+    else:
+        add_columns = result_columns.copy()
     for row in records:
         where = column_value_to_where(column, row[column], quote=quote_column)
         for (
             result_column,
             key,
         ) in zip(result_columns, select_columns):
+            if not column_types:
+                # Column types are part of the result column name list.
+                result_column = result_column.split(" ", maxsplit=1)[0]
             updates.append(
                 {
                     "column": result_column,
@@ -405,7 +449,7 @@ def option_as_list(options, name):
     """Get value of an option as a list"""
     option = options[name]
     if option:
-        return option.split(",")
+        return [value.strip() for value in option.split(",")]
     return []
 
 
@@ -420,10 +464,11 @@ def main():
 
     columns_to_aggregate = option_as_list(options, "aggregate_column")
     user_aggregate_methods = option_as_list(options, "aggregate_method")
-    user_aggregate_methods, aggregate_backend = get_methods_and_backend(
-        user_aggregate_methods, aggregate_backend
-    )
     result_columns = option_as_list(options, "result_column")
+
+    user_aggregate_methods, aggregate_backend = get_methods_and_backend(
+        user_aggregate_methods, aggregate_backend, provide_defaults=not result_columns
+    )
     if not result_columns:
         columns_to_aggregate, user_aggregate_methods = match_columns_and_methods(
             columns_to_aggregate, user_aggregate_methods
@@ -436,6 +481,7 @@ def main():
         result_columns=result_columns,
         columns_to_aggregate=columns_to_aggregate,
         methods=user_aggregate_methods,
+        backend=aggregate_backend,
     )
 
     # does map exist?

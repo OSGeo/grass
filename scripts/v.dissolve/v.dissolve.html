@@ -26,11 +26,12 @@ which consists of multiple areas, i.e., a multipolygon.
 
 <p>
 Attributes of merged areas can be aggregated using various aggregation methods
-such as sum and mean. The specific methods available depend
-on the backend used for aggregation. Two backends are available,
-<em>univar</em> and <em>sql</em>. When <em>univar</em>
-is used, the methods available are the ones which <em>v.db.univar</em>
-uses by default, i.e., <em>n</em>, <em>min</em>, <em>max</em>, <em>range</em>,
+such as <em>sum</em> and <em>mean</em>. The specific methods available depend
+on the backend used for aggregation. Two aggregate backends (specified in
+<b>aggregate_backend</b>) are available, <em>univar</em> and <em>sql</em>.
+When <em>univar</em> is used, the methods available are the ones
+which <em>v.db.univar</em> uses by default,
+i.e., <em>n</em>, <em>min</em>, <em>max</em>, <em>range</em>,
 <em>mean</em>, <em>mean_abs</em>, <em>variance</em>, <em>stddev</em>,
 <em>coef_var</em>, and <em>sum</em>.
 When the <em>sql</em> backend is used, the methods in turn depends on the SQL
@@ -45,6 +46,17 @@ is much longer and includes, e.g., <em>count</em>, <em>min</em>, <em>max</em>,
 <em>avg</em>, <em>sum</em>, <em>stddev</em>, and <em>variance</em>.
 The <em>sql</em> aggregate backend, regardless of the underlying database,
 will typically perform significantly better than the <em>univar</em> backend.
+
+<p>
+Aggregate methods are specified by name in <b>aggregate_method</b>
+or using SQL syntax in <b>aggregate_column</b>.
+If <b>result_column</b> is provided including type information
+and the <em>sql</em> backend is used,
+<b>aggregate_column</b> can contain SQL syntax specifying both columns
+and the functions applied, e.g.,
+<code>aggregate_column="sum(cows) / sum(animals)"</code>.
+In this case, <b>aggregate_methods</b> needs should be omitted.
+This provides the highest flexibility and it is suitable for scripting.
 
 <p>
 The backend is, by default, determined automatically based on the requested
@@ -64,12 +76,6 @@ method (function) name for the backend is recommended because the conversion
 is a heuristic which may change in the future.
 
 <p>
-Type of the result column is determined based on the method selected.
-For <em>n</em> and <em>count</em>, the type is INTEGER and for all other
-methods, it is DOUBLE. Aggregate methods which don't produce other types
-are not supported unless the value automatically converts to one of these.
-
-<p>
 If only <b>aggregate_column</b> is provided, methods default to
 <em>n</em>, <em>min</em>, <em>max</em>, <em>mean</em>, and <em>sum</em>.
 If the <em>univar</em> backend is specified, all the available methods
@@ -82,12 +88,22 @@ columns have auto-generated names based on the aggregate column and method.
 If the <b>result_column</b> is provided, each method is applied only once
 to the matching column in the aggregate column list and the result will be
 available under the name of the matching result column. In other words, number
-of existing columns, methods, and new columns in <b>aggregate_column</b>,
-<b>aggregate_methods</b>, and <b>result_column</b> needs to match and no
+of items in <b>aggregate_column</b>, <b>aggregate_method</b> (unless omitted),
+and <b>result_column</b> needs to match and no
 combinations are created on the fly.
 For scripting, it is recommended to specify all resulting column names,
 while for interactive use, automatically created combinations are expected
 to be beneficial, especially for exploratory analysis.
+
+<p>
+Type of the result column is determined based on the method selected.
+For <em>n</em> and <em>count</em>, the type is INTEGER and for all other
+methods, it is DOUBLE. Aggregate methods which produce other types
+require the type to be specified as part of the <b>result_column</b>.
+A type can be provided in <b>result_column</b> using the SQL syntax
+<code>name type</code>, e.g., <code>sum_of_values double precision</code>.
+Type specification is mandatory when SQL syntax is used in
+<b>aggregate_column</b> (and <b>aggregate_method</b> is omitted).
 
 <h2>NOTES</h2>
 
