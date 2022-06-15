@@ -235,7 +235,7 @@ class SignatureFileTestCase(TestCase):
         self.assertEqual(Sn.nbands, 0)
         self.assertEqual(Sn.nsigs, 0)
 
-    def test_roundtrip_signature_v1_norgb_two_labels_oclass(self):
+    def test_roundtrip_signature_v2_norgb_two_labels_oclass(self):
         """Test writing and reading back signature (v1) with two labels
         and original class values"""
 

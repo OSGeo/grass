@@ -82,7 +82,7 @@ int I_free_signatures(struct Signature *S)
     return 0;
 }
 
-int I_read_one_signature(FILE * fd, int have_oclass, struct Signature *S)
+int I_read_one_signature(FILE * fd, struct Signature *S)
 {
     int n;
     int i;
@@ -103,7 +103,7 @@ int I_read_one_signature(FILE * fd, int have_oclass, struct Signature *S)
     if (fscanf(fd, "%d", &s->npoints) != 1)
 	return -1;
 
-    if (have_oclass == 1 && fscanf(fd, "%d", &s->oclass) != 1)
+    if (S->have_oclass && fscanf(fd, "%d", &s->oclass) != 1)
 	return -1;
 
     for (i = 0; i < S->nbands; i++) {
@@ -209,12 +209,12 @@ int I_read_signatures(FILE * fd, struct Signature *S)
     }
 
     /* Read marker of original class value presence */
-    if (ver == 2 && fscanf(fd, "%d", &(S->have_oclass)) != 1) {
+    if (ver >= 2 && fscanf(fd, "%d", &S->have_oclass) != 1) {
         G_warning(_("Invalid signature file"));
         return -1;
     }
 
-    while ((n = I_read_one_signature(fd, (ver == 2 && S->have_oclass), S)) == 1) ;
+    while ((n = I_read_one_signature(fd, S)) == 1) ;
 
     if (n < 0)
 	return -1;
