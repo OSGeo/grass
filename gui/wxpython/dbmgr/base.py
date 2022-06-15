@@ -2639,9 +2639,12 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
         self.FindWindowById(self.layerPage[self.selLayer]["renameColTo"]).SetValue("")
+        cols = self.dbMgrData["mapDBInfo"].GetColumns(table)
         self.FindWindowById(
             self.pages["browse"].layerPage[self.selLayer]["whereColumn"]
-        ).SetItems(self.dbMgrData["mapDBInfo"].GetColumns(table))
+        ).SetItems(cols)
+        if self.pages["browse"].builder:
+            self.pages["browse"].builder.list_columns.Set(cols)
 
         event.Skip()
 
@@ -2811,9 +2814,12 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
+        cols = self.dbMgrData["mapDBInfo"].GetColumns(table)
         self.FindWindowById(
             self.pages["browse"].layerPage[self.selLayer]["whereColumn"]
-        ).SetItems(self.dbMgrData["mapDBInfo"].GetColumns(table))
+        ).SetItems(cols)
+        if self.pages["browse"].builder:
+            self.pages["browse"].builder.list_columns.Set(cols)
 
         event.Skip()
 
