@@ -2790,14 +2790,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             ).GetValue()
         )
 
-        # add item to the list of table columns
-        tlist = self.FindWindowById(self.layerPage[self.selLayer]["tableData"])
-
-        index = tlist.InsertItem(tlist.GetItemCount(), str(name))
-        tlist.SetItem(index, 0, str(name))
-        tlist.SetItem(index, 1, str(ctype))
-        tlist.SetItem(index, 2, str(length))
-
         self.AddColumn(name, ctype, length)
 
         # update widgets
