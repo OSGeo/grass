@@ -11,7 +11,7 @@ def test_simple_create(xy_session):
     """Session creates, starts, and finishes"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    with gs.MapsetSession(name, create=True) as session:
+    with gs.MapsetSession(name, create=True, env=xy_session.env) as session:
         gs.run_command("g.region", flags="p", env=session.env)
 
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
@@ -120,6 +120,36 @@ def test_ensure(xy_session):
     assert os.path.exists(session_file)
 
 
+def get_mapset_names(env):
+    return (
+        gs.read_command("g.mapsets", flags="l", separator=",", env=env)
+        .strip()
+        .split(",")
+    )
+
+
+def test_create_multiple(xy_session):
+    """Multiple mapsets are created and preserved while the top session is intact"""
+    create_names = ["test_mapset_1", "test_mapset_2", "test_mapset_3"]
+    collected = []
+    top_level_collected = []
+    original_mapsets = get_mapset_names(env=xy_session.env)
+    for name in create_names:
+        with gs.MapsetSession(name, create=True, env=xy_session.env) as session:
+            collected.append(
+                gs.read_command("g.mapset", flags="p", env=session.env).strip()
+            )
+            top_level_collected.append(
+                gs.read_command("g.mapset", flags="p", env=xy_session.env).strip()
+            )
+    assert sorted(collected) == sorted(create_names)
+    existing_mapsets = get_mapset_names(env=xy_session.env)
+    assert sorted(existing_mapsets) == sorted(create_names + original_mapsets)
+    assert (
+        len(set(top_level_collected)) == 1
+    ), f"Top level mapset changed: {top_level_collected}"
+
+
 def test_nested_top_env(xy_session):
     """Sessions can be nested with one top-level environment"""
     names = ["test_mapset_1", "test_mapset_2", "test_mapset_3"]
@@ -151,9 +181,16 @@ def test_nested_inherited_env(xy_session):
 
 
 @pytest.mark.parametrize("number", [1, 2, 3.1])
-def test_usage_in_fixture(xy_mapset_session, number):
-    """Fixture based on location with module scope and function scope mapset
+def test_usage_in_fixture_function_location(xy_mapset_non_permament, number):
+    """Test fixture based on location with function scope and function scope mapset
 
-    Multiple mapsets are created in one location.
+    Each test gets a unique location and the mapset is not PERMANENT.
     """
-    gs.run_command("r.mapcalc", expression=f"a = {number}", env=xy_mapset_session.env)
+    gs.run_command(
+        "r.mapcalc", expression=f"a = {number}", env=xy_mapset_non_permament.env
+    )
+    session_mapset = gs.read_command(
+        "g.mapset", flags="p", env=xy_mapset_non_permament.env
+    ).strip()
+    assert session_mapset != "PERMANENT"
+    assert xy_mapset_non_permament.name == session_mapset

@@ -54,3 +54,17 @@ def xy_mapset_session(
         f"test_{unique_id}", create=True, env=xy_session_for_module.env
     ) as session:
         yield session
+
+
+@pytest.fixture
+def xy_mapset_non_permament(xy_session):
+    """Active session in a mapset of an XY location
+
+    Mapset scope is function, while the location scope is module.
+
+    The mapset is not removed by this fixture and relies on the underlying cleanup
+    procedures which means that it can be examined in the temporary directories
+    pytest creates.
+    """
+    with gs.MapsetSession("test1", create=True, env=xy_session.env) as session:
+        yield session
