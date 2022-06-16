@@ -258,6 +258,15 @@ class PsMapFrame(wx.Frame):
         self.book.SetSelection(page_index)
         self.currentPage = page_index
 
+    def _getGhostscriptProgramName(self):
+        """Get Ghostscript program name
+
+        :return: Ghostscript program name
+        """
+        import platform
+
+        return "gswin64c" if "64" in platform.architecture()[0] else "gswin32c"
+
     def InstructionFile(self):
         """Creates mapping instructions"""
 
@@ -472,14 +481,20 @@ class PsMapFrame(wx.Frame):
                 im.save(self.imgName, format="PNG")
             except (IOError, OSError):
                 del busy
+                program = self._getGhostscriptProgramName()
                 dlg = HyperlinkDialog(
                     self,
                     title=_("Preview not available"),
                     message=_(
                         "Preview is not available probably because Ghostscript is not installed or not on PATH."
                     ),
-                    hyperlink="http://trac.osgeo.org/grass/wiki/CompileOnWindows#Ghostscript",
-                    hyperlinkLabel=_("Please follow instructions on GRASS Trac Wiki."),
+                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                    hyperlinkLabel=_(
+                        "You can donwload {program} {arch} version here."
+                    ).format(
+                        program=program,
+                        arch="64bit" if "64" in program else "32Bit",
+                    ),
                 )
                 dlg.ShowModal()
                 dlg.Destroy()
