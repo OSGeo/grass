@@ -82,6 +82,9 @@ int I_free_signatures(struct Signature *S)
     return 0;
 }
 
+/*!
+ * \brief Internal function for I_read_signatures
+ */
 int I_read_one_signature(FILE * fd, struct Signature *S)
 {
     int n;
