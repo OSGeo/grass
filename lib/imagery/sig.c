@@ -213,7 +213,7 @@ int I_read_signatures(FILE * fd, struct Signature *S)
 
     /* Read marker of original class value presence */
     if (ver >= 2 && fscanf(fd, "%d", &S->have_oclass) != 1) {
-        G_warning(_("Invalid signature file"));
+        G_warning(_("Invalid signature file: Original class value presence not readable"));
         return -1;
     }
 
