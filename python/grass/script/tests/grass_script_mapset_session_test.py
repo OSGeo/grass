@@ -121,6 +121,7 @@ def test_ensure(xy_session):
 
 
 def get_mapset_names(env):
+    """Get list of mapsets in the current location based on the environment"""
     return (
         gs.read_command("g.mapsets", flags="l", separator=",", env=env)
         .strip()

@@ -57,7 +57,7 @@ def xy_mapset_session(
 
 
 @pytest.fixture
-def xy_mapset_non_permament(xy_session):
+def xy_mapset_non_permament(xy_session):  # pylint: disable=redefined-outer-name
     """Active session in a mapset of an XY location
 
     Mapset scope is function, while the location scope is module.
