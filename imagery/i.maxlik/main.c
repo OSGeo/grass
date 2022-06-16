@@ -122,7 +122,8 @@ int main(int argc, char *argv[])
 	classify(class_cell, reject_cell, ncols);
     if (S.have_oclass) {
         for (int col = 0; col < ncols; col++) {
-            class_cell[col] = S.sig[class_cell[col]].oclass;
+            /* Predicted classes start at 1 but signature array is 0 based */
+            class_cell[col] = S.sig[class_cell[col] - 1].oclass;
         }
     }
     Rast_put_row(class_fd, class_cell, CELL_TYPE);
@@ -142,7 +143,7 @@ int main(int argc, char *argv[])
             cat = S.sig[i].oclass;
         else
             cat = i + 1;
-	    Rast_set_c_cat(&cat, &cat, S.sig[i].desc, &cats);
+        Rast_set_c_cat(&cat, &cat, S.sig[i].desc, &cats);
 	}
     }
     Rast_write_cats(class_name, &cats);
