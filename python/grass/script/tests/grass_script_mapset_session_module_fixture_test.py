@@ -5,8 +5,6 @@ a module because the sessions are global and would thus overlap with each other
 resulting in the second session ending with failure to access GISRC variable.
 """
 
-import os
-
 import pytest
 
 import grass.script as gs
