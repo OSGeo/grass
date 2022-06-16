@@ -12,7 +12,6 @@ Licence:   This program is free software under the GNU General Public
 import os
 import stat
 import ctypes
-import pathlib
 import shutil
 
 from grass.pygrass import utils
@@ -44,7 +43,7 @@ class SuccessTest(TestCase):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = "data"
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
 
