@@ -152,5 +152,8 @@ def test_nested_inherited_env(xy_session):
 
 @pytest.mark.parametrize("number", [1, 2, 3.1])
 def test_usage_in_fixture(xy_mapset_session, number):
-    """Fixture based on location with module scope and function scope mapset"""
+    """Fixture based on location with module scope and function scope mapset
+
+    Multiple mapsets are created in one location.
+    """
     gs.run_command("r.mapcalc", expression=f"a = {number}", env=xy_mapset_session.env)

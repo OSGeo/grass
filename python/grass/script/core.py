@@ -1976,16 +1976,17 @@ class MapsetSession:
     By default, it assumes that the mapset exists and raises ValueError otherwise.
     Use *create* to create a new mapset and add *overwrite* to delete an existing
     one of the same name (with all the data in it) before the new one is created.
-    To use existing mapset if it exist and create if it does not, use *ensure*.
+    To use an existing mapset if it exist and create it if it doesn't exist,
+    use *ensure*.
 
     Note that *ensure* will not create a new mapset if the current is invalid.
     Invalid mapset may mean corrupt data, so it is not clear what to do.
     Using create with overwrite will work on an invalid mapset because
-    the existing mapset is always deleted.
+    the existing mapset is always deleted with overwrite enabled.
 
-    Standard use of the object is create it an the with statement
-    and use its *env* property pass the environment variables for the session
-    to subprocesses:
+    Standard use of the object is to use it as a context manager, i.e., create it
+    using the ``with`` statement. Then use its *env* property to pass the environment
+    variables for the session to subprocesses:
 
     >>> with MapsetSession(name, ensure=True) as session:
     ...     run_command("r.surf.fractal", output="surface", env=session.env)
@@ -2010,7 +2011,10 @@ class MapsetSession:
 
     @property
     def env(self):
-        """Mapping object with environment variables"""
+        """Mapping object with environment variables
+
+        This is suitable for subprocess which should run this mapset.
+        """
         return self._env
 
     @property
