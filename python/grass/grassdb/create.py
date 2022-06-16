@@ -51,7 +51,8 @@ def require_create_ensure_mapset(
             delete_mapset(path.directory, path.location, path.mapset)
         else:
             raise ValueError(
-                f"Mapset {path.mapset} already exists, use overwrite or ensure"
+                f"Mapset '{path.mapset}' already exists, "
+                "use a different name, overwrite, or ensure"
             )
     if create or (ensure and not exists):
         create_mapset(path.directory, path.location, path.mapset)

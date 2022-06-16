@@ -2,6 +2,8 @@
 
 import os
 
+import pytest
+
 import grass.script as gs
 
 
@@ -146,3 +148,9 @@ def test_nested_inherited_env(xy_session):
                     ).strip()
                     assert name == session_mapset
     assert os.path.exists(xy_session.env["GISRC"])
+
+
+@pytest.mark.parametrize("number", [1, 2, 3.1])
+def test_usage_in_fixture(xy_mapset_session, number):
+    """Fixture based on location with module scope and function scope mapset"""
+    gs.run_command("r.mapcalc", expression=f"a = {number}", env=xy_mapset_session.env)
