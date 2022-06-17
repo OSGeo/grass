@@ -463,7 +463,7 @@ def stop_subprocesses():
 atexit.register(stop_subprocesses)
 
 
-def get_available_temporal_mapsets():
+def get_available_temporal_mapsets(only_current_mapset=False):
     """Return a list of of mapset names with temporal database driver and names
     that are accessible from the current mapset.
 
@@ -473,7 +473,10 @@ def get_available_temporal_mapsets():
     global c_library_interface
     global message_interface
 
-    mapsets = c_library_interface.available_mapsets()
+    if only_current_mapset:
+        mapsets = [get_current_mapset()]
+    else:
+        mapsets = c_library_interface.available_mapsets()
 
     tgis_mapsets = {}
 
@@ -1059,8 +1062,8 @@ def _create_tgis_metadata_table(content, dbif=None):
 
 
 class SQLDatabaseInterfaceConnection(object):
-    def __init__(self):
-        self.tgis_mapsets = get_available_temporal_mapsets()
+    def __init__(self, only_current_mapset=False):
+        self.tgis_mapsets = get_available_temporal_mapsets(only_current_mapset)
         self.current_mapset = get_current_mapset()
         self.connections = {}
         self.connected = False
