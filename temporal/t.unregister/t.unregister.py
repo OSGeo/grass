@@ -76,7 +76,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    # create new stds only in the current mapset
+    # modify a stds only if it is in the current mapset
     # remove all connections to any other mapsets
     # ugly hack !
     currcon = {}
