@@ -433,7 +433,8 @@ def clean_default_db():
         database = database.replace("$LOCATION_NAME", gisenv["LOCATION_NAME"])
         database = database.replace("$MAPSET", gisenv["MAPSET"])
         database = Path(database)
-        small_db_size = 1e8  # 100 MB (not MiB) in bytes
+        # Small size based on MEMORYMB (MiB) or its default.
+        small_db_size = int(gisenv.get("MEMORYMB", 300)) * (1 << 20)
         if database.is_file() and database.stat().st_size > small_db_size:
             process = gs.start_command("db.execute", sql="VACUUM")
             gs.verbose(_("Cleaning up default SQLite database..."))
