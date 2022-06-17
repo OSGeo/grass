@@ -24,17 +24,17 @@ __To build a stable version__:
 change to the releasebranch or tag you want to build:
 
 ```bash
-git checkout remotes/origin/releasebranch_7_8
+git checkout remotes/origin/releasebranch_8_2
 ```
 
 and build and enter with:
 
 ```bash
-sudo singularity build grass_7_8.simg singularity/debian/singularity_debian
+sudo singularity build grass_8_2.simg singularity/debian/singularity_debian
 ```
 
 The image can be used as:
 
 ```bash
-singularity exec containers/grass_7.8.simg grass --version
+singularity exec containers/grass_8.2.simg grass --version
 ```
