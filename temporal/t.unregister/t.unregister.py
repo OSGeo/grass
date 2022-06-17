@@ -50,7 +50,6 @@
 
 import grass.script as grass
 
-
 # lazy imports at the end of the file
 
 ############################################################################
@@ -76,6 +75,13 @@ def main():
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
+
+    # modify a stds only if it is in the current mapset
+    # remove all connections to any other mapsets
+    # ugly hack !
+    currcon = {}
+    currcon[mapset] = dbif.connections[mapset]
+    dbif.connections = currcon
 
     # In case a space time dataset is specified
     if input:
@@ -129,7 +135,7 @@ def main():
         map = tgis.dataset_factory(type, mapid)
 
         # Unregister map if in database
-        if map.is_in_db(dbif):
+        if map.is_in_db(dbif, mapset=mapset):
             # Unregister from a single dataset
             if input:
                 # Collect SQL statements
