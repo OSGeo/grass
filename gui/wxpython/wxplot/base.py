@@ -182,8 +182,6 @@ class BasePlotFrame(wx.Frame):
 
         self.zoom = False  # zooming disabled
         self.drag = False  # draging disabled
-        # vertical and horizontal scrollbars
-        self.client.showScrollbars = True
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)
