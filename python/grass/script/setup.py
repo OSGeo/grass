@@ -415,30 +415,6 @@ class SessionHandle:
         finish()
 
 
-# clean-up functions when terminating a GRASS session
-# these fns can only be called within a valid GRASS session
-def clean_default_db():
-    # clean the default db if it is sqlite
-    from grass.script import core as gcore
-    from grass.script import db as gdb
-
-    conn = gdb.db_connection()
-    if conn and conn["driver"] == "sqlite":
-        # check if db exists
-        gisenv = gcore.gisenv()
-        database = conn["database"]
-        database = database.replace("$GISDBASE", gisenv["GISDBASE"])
-        database = database.replace("$LOCATION_NAME", gisenv["LOCATION_NAME"])
-        database = database.replace("$MAPSET", gisenv["MAPSET"])
-        if os.path.exists(database):
-            gcore.message(_("Cleaning up default sqlite database ..."))
-            gcore.start_command("db.execute", sql="VACUUM")
-            # give it some time to start
-            import time
-
-            time.sleep(0.1)
-
-
 def call(cmd, **kwargs):
     """Wrapper for subprocess.call to deal with platform-specific issues"""
     if WINDOWS:
@@ -470,8 +446,6 @@ def finish():
     The function is not completely symmetrical with :func:`init` because it only
     closes the mapset, but doesn't undo the runtime environment setup.
     """
-
-    clean_default_db()
     clean_temp()
     # TODO: unlock the mapset?
     # unset the GISRC and delete the file

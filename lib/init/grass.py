@@ -2111,10 +2111,6 @@ def clean_temp():
 
 
 def clean_all():
-    from grass.script import setup as gsetup
-
-    # clean default sqlite db
-    gsetup.clean_default_db()
     # remove leftover temp files
     clean_temp()
     # save 'last used' GISRC after removing variables which shouldn't
