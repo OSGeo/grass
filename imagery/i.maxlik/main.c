@@ -120,7 +120,13 @@ int main(int argc, char *argv[])
 	    Rast_get_d_row(cellfd[band], cell[band], row);
 	
 	classify(class_cell, reject_cell, ncols);
-	Rast_put_row(class_fd, class_cell, CELL_TYPE);
+    if (S.have_oclass) {
+        for (int col = 0; col < ncols; col++) {
+            /* Predicted classes start at 1 but signature array is 0 based */
+            class_cell[col] = S.sig[class_cell[col] - 1].oclass;
+        }
+    }
+    Rast_put_row(class_fd, class_cell, CELL_TYPE);
 	if (reject_fd > 0)
 	    Rast_put_row(reject_fd, reject_cell, CELL_TYPE);
     }
@@ -133,8 +139,11 @@ int main(int argc, char *argv[])
     Rast_init_cats("Maximum Likelihood Classification", &cats);
     for (i = 0; i < S.nsigs; i++) {
 	if (*S.sig[i].desc) {
-	    cat = i + 1;
-	    Rast_set_c_cat(&cat, &cat, S.sig[i].desc, &cats);
+	    if (S.have_oclass)
+            cat = S.sig[i].oclass;
+        else
+            cat = i + 1;
+        Rast_set_c_cat(&cat, &cat, S.sig[i].desc, &cats);
 	}
     }
     Rast_write_cats(class_name, &cats);
