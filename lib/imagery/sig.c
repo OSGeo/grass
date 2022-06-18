@@ -18,6 +18,7 @@ int I_init_signatures(struct Signature *S, int nbands)
     for (int i = 0; i < nbands; i++)
         S->semantic_labels[i] = NULL;
     S->nsigs = 0;
+    S->have_oclass = 0;
     S->sig = NULL;
     S->title[0] = 0;
 
@@ -81,6 +82,9 @@ int I_free_signatures(struct Signature *S)
     return 0;
 }
 
+/*!
+ * \brief Internal function for I_read_signatures
+ */
 int I_read_one_signature(FILE * fd, struct Signature *S)
 {
     int n;
@@ -100,6 +104,9 @@ int I_read_one_signature(FILE * fd, struct Signature *S)
     G_strip(s->desc);
 
     if (fscanf(fd, "%d", &s->npoints) != 1)
+	return -1;
+
+    if (S->have_oclass && fscanf(fd, "%d", &s->oclass) != 1)
 	return -1;
 
     for (i = 0; i < S->nbands; i++) {
@@ -151,8 +158,8 @@ int I_read_signatures(FILE * fd, struct Signature *S)
         G_warning(_("Invalid signature file"));
         return -1;
     }
-    /* Current version number is 1 */
-    if (ver != 1) {
+    /* Current version number is 2 */
+    if (!(ver == 1 || ver == 2)) {
         G_warning(_("Invalid signature file version"));
         return -1;
     }
@@ -204,6 +211,12 @@ int I_read_signatures(FILE * fd, struct Signature *S)
         return -1;
     }
 
+    /* Read marker of original class value presence */
+    if (ver >= 2 && fscanf(fd, "%d", &S->have_oclass) != 1) {
+        G_warning(_("Invalid signature file: Original class value presence not readable"));
+        return -1;
+    }
+
     while ((n = I_read_one_signature(fd, S)) == 1) ;
 
     if (n < 0)
@@ -235,7 +248,7 @@ int I_write_signatures(FILE * fd, struct Signature *S)
     /* Version of signatures file structure.
      * Increment if file structure changes.
      */
-    fprintf(fd, "1\n");
+    fprintf(fd, "2\n");
     /* Title of signatures */
     fprintf(fd, "#%s\n", S->title);
     /* A list of space separated semantic labels for each
@@ -244,6 +257,8 @@ int I_write_signatures(FILE * fd, struct Signature *S)
         fprintf(fd, "%s ", S->semantic_labels[k]);
     }
     fprintf(fd, "\n");
+    /* Should reader look for original class values? */
+    fprintf(fd, "%d\n", S->have_oclass);
     /* A signature for each target class */
     for (k = 0; k < S->nsigs; k++) {
 	s = &S->sig[k];
@@ -253,6 +268,9 @@ int I_write_signatures(FILE * fd, struct Signature *S)
     fprintf(fd, "#%s\n", s->desc);
     /* Point count used to generate signature */
 	fprintf(fd, "%d\n", s->npoints);
+    /* The original value used for this class */
+    if (S->have_oclass)
+        fprintf(fd, "%d\n", s->oclass);
     /* Values are in the same order as semantic labels */
 	for (i = 0; i < S->nbands; i++)
 	    fprintf(fd, "%g ", s->mean[i]);
