@@ -36,9 +36,7 @@
 # % label: Force operation (required for removal)
 # % end
 
-import http
 import os
-import re
 import sys
 import xml.etree.ElementTree as etree
 
