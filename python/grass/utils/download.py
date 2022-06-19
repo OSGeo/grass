@@ -12,6 +12,7 @@
 
 """Download and extract various archives"""
 
+import http
 import os
 import shutil
 import tarfile
@@ -21,6 +22,12 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import urlretrieve
+from urllib import request as urlrequest
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+}
+HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
 def debug(*args, **kwargs):
@@ -206,3 +213,101 @@ def name_from_url(url):
         # Special treatment of .tar.gz extension.
         return os.path.splitext(name)[0]
     return name
+
+
+def urlopen(url, *args, **kwargs):
+    """Wrapper around urlopen. Same function as 'urlopen', but with the
+    ability to define headers.
+
+    :param str url: URL
+
+    :return: urllib.request.urlopen response object
+    """
+    proxy = kwargs.get("proxy")
+    if proxy:
+        del kwargs["proxy"]
+        PROXIES = {}
+        for ptype, purl in (p.split("=") for p in proxy.split(",")):
+            PROXIES[ptype] = purl
+        proxy = urlrequest.ProxyHandler(PROXIES)
+        opener = urlrequest.build_opener(proxy)
+        urlrequest.install_opener(opener)
+    request = urlrequest.Request(url, headers=HEADERS)
+    return urlrequest.urlopen(request, *args, **kwargs)
+
+
+def download_file(url, response_format, file_name, *args, **kwargs):
+    """Download file
+
+    :param str url: file URL address
+    :param str response_format: content type of downloaded file
+    :param str file_name: downloaded file name
+
+    :return: urllib.request.urlopen response object
+
+    >>> grass_version = os.getenv("GRASS_VERSION", "unknown")
+    >>> if grass_version != "unknown":
+    ...     major, minor, patch = grass_version.split(".")
+    ...     url = (
+    ...               "https://grass.osgeo.org/addons/grass{}/"
+    ...               "modules.xml".format(major)
+    ...     )
+    ...     response = download_file(
+    ...         url=url,
+    ...         response_format="application/xml",
+    ...         file_name=os.path.basename(urlparse(url).path),
+    ...     ) # doctest: +SKIP
+    ...     response.code # doctest: +SKIP
+    200
+    """
+    import grass.script as gs
+
+    try:
+        response = urlopen(url, *args, **kwargs)
+
+        if not response.code == 200:
+            index = HTTP_STATUS_CODES.index(response.code)
+            desc = HTTP_STATUS_CODES[index].description
+            gs.fatal(
+                _(
+                    "The download of the <{file_name}> file "
+                    " from the server <{url}> was not successful"
+                    " return status code {code},"
+                    " {desc}".format(
+                        file_name=file_name,
+                        url=url,
+                        code=response.code,
+                        desc=desc,
+                    ),
+                ),
+            )
+        if response_format not in response.getheader("Content-Type"):
+            gs.fatal(
+                _(
+                    "Wrong downloaded <{file_name}> format."
+                    " Check url <{url}>. Allowed file format is"
+                    " {response_format}.".format(
+                        file_name=file_name,
+                        url=url,
+                        response_format=response_format,
+                    ),
+                ),
+            )
+        return response
+    except (HTTPError, URLError) as err:
+        desc = ""
+        if hasattr(err, "code"):
+            index = HTTP_STATUS_CODES.index(err.code)
+            desc = ", {}".format(HTTP_STATUS_CODES[index].description)
+        gs.fatal(
+            _(
+                "The download of the <{file_name}> file"
+                " from the server <{url}> was not successful, "
+                " {err}{desc}.".format(
+                    file_name=file_name,
+                    url=url,
+                    err=err,
+                    desc=desc,
+                ),
+            ),
+        )
