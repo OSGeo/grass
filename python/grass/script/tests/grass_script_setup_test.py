@@ -6,7 +6,6 @@ import os
 import pytest
 
 import grass.script as gs
-import grass.script.setup as grass_setup
 
 
 # All init tests change the global environment, but when it really matters,
@@ -31,7 +30,7 @@ def test_init_as_context_manager(tmp_path):
     """Check that init function return value works as a context manager"""
     location = "test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location):
+    with gs.setup.init(tmp_path / location):
         gs.run_command("g.region", flags="p")
         session_file = os.environ["GISRC"]
     assert not os.path.exists(session_file)
@@ -41,7 +40,7 @@ def test_init_session_finish(tmp_path):
     """Check that init works with finish on the returned session object"""
     location = "test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    session = grass_setup.init(tmp_path / location)
+    session = gs.setup.init(tmp_path / location)
     gs.run_command("g.region", flags="p")
     session_file = os.environ["GISRC"]
     session.finish()
@@ -55,10 +54,10 @@ def test_init_finish_global_functions(tmp_path):
     """Check that init and finish global functions work"""
     location = "test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    grass_setup.init(tmp_path / location)
+    gs.setup.init(tmp_path / location)
     gs.run_command("g.region", flags="p")
     session_file = os.environ["GISRC"]
-    grass_setup.finish()
+    gs.setup.finish()
 
     assert not os.path.exists(session_file)
 
@@ -72,10 +71,10 @@ def test_init_finish_global_functions_capture_strerr(tmp_path):
         gs.core._create_location_xy(  # pylint: disable=protected-access
             tmp_path, location
         )
-        grass_setup.init(tmp_path / location)
+        gs.setup.init(tmp_path / location)
         gs.run_command("g.region", flags="p")
         queue.put(os.environ["GISRC"])
-        grass_setup.finish()
+        gs.setup.finish()
 
     session_file = run_in_subprocess(init_finish)
     assert session_file, "Expected file name from the subprocess"
