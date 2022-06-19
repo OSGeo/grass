@@ -37,15 +37,12 @@
 # % end
 from __future__ import print_function
 import os
-import re
 import sys
 
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
     import elementtree.ElementTree as etree  # Python <= 2.4
-
-from six.moves.urllib import request as urlrequest
 
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
