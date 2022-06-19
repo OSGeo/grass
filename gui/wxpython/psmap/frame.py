@@ -448,6 +448,8 @@ class PsMapFrame(wx.Frame):
                 im_array = np.array(im)
                 im = PILImage.fromarray(np.rot90(im_array, 3))
             im.save(self.imgName, format="PNG")
+            self.book.SetSelection(1)
+            self.currentPage = 1
             rect = self.previewCanvas.ImageRect()
             self.previewCanvas.image = wx.Image(
                 self.imgName, wx.BITMAP_TYPE_PNG)
@@ -455,8 +457,6 @@ class PsMapFrame(wx.Frame):
 
             del busy
             self.SetStatusText(_('Preview generated'), 0)
-            self.book.SetSelection(1)
-            self.currentPage = 1
 
         grass.try_remove(event.userData['instrFile'])
         if event.userData['temp']:
