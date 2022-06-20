@@ -89,7 +89,8 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    dbif = tgis.SQLDatabaseInterfaceConnection()
+    # only use the TGIS db of the current mapset
+    dbif = tgis.SQLDatabaseInterfaceConnection(only_current_mapset=True)
     dbif.connect()
 
     dataset_list = []
