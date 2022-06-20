@@ -73,15 +73,9 @@ def main():
 
     mapset = grass.gisenv()["MAPSET"]
 
-    dbif = tgis.SQLDatabaseInterfaceConnection()
-    dbif.connect()
-
     # modify a stds only if it is in the current mapset
-    # remove all connections to any other mapsets
-    # ugly hack !
-    currcon = {}
-    currcon[mapset] = dbif.connections[mapset]
-    dbif.connections = currcon
+    dbif = tgis.SQLDatabaseInterfaceConnection(only_current_mapset=True)
+    dbif.connect()
 
     # In case a space time dataset is specified
     if input:

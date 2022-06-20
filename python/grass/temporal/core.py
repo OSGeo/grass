@@ -1590,7 +1590,7 @@ class DBConnection(object):
 ###############################################################################
 
 
-def init_dbif(dbif):
+def init_dbif(dbif, only_current_mapset=False):
     """This method checks if the database interface connection exists,
     if not a new one will be created, connected and True will be returned.
     If the database interface exists but is not connected, the connection
@@ -1615,7 +1615,7 @@ def init_dbif(dbif):
     connection_state_changed = False
 
     if dbif is None:
-        dbif = SQLDatabaseInterfaceConnection()
+        dbif = SQLDatabaseInterfaceConnection(only_current_mapset=only_current_mapset)
         dbif.connect()
         connection_state_changed = True
     elif dbif.is_connected() is False:

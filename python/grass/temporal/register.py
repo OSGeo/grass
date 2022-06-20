@@ -118,14 +118,8 @@ def register_maps_in_space_time_dataset(
         msgr.fatal(_("Please specify %s= or %s=") % ("maps", "file"))
     # We may need the mapset
     mapset = get_current_mapset()
-    dbif, connection_state_changed = init_dbif(None)
-
-    # create new stds only in the current mapset
-    # remove all connections to any other mapsets
-    # ugly hack !
-    currcon = {}
-    currcon[mapset] = dbif.connections[mapset]
-    dbif.connections = currcon
+    # only use the TGIS db of the current mapset
+    dbif, connection_state_changed = init_dbif(None, only_current_mapset=True)
 
     # The name of the space time dataset is optional
     if name:
