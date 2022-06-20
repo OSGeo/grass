@@ -179,7 +179,7 @@ def test_aggregate_column_result(dataset, backend):
 
 
 def test_sqlite_agg_accepted(dataset):
-    """Numeric SQLite aggregate function are accepted
+    """Numeric SQLite aggregate functions are accepted
 
     Additionally, it checks:
     1. generated column names
@@ -242,6 +242,33 @@ def test_sqlite_agg_accepted(dataset):
     aggregate_n = [record[f"{dataset.float_column_name}_count"] for record in records]
     assert sum(aggregate_n) == gs.vector_info(dataset.vector_name)["areas"]
     assert sorted(aggregate_n) == [1, 2, 3]
+
+
+def test_sqlite_concat(dataset):
+    """SQLite concat text-returning aggregate function works"""
+    dissolved_vector = "test_sqlite_concat"
+    gs.run_command(
+        "v.dissolve",
+        input=dataset.vector_name,
+        column=dataset.str_column_name,
+        output=dissolved_vector,
+        aggregate_column=f"group_concat({dataset.int_column_name})",
+        result_column="concat_values text",
+        aggregate_backend="sql",
+    )
+    records = json.loads(
+        gs.read_command(
+            "v.db.select",
+            map=dissolved_vector,
+            format="json",
+        )
+    )["records"]
+    # Order of records is ignored - they are just sorted.
+    # Order within values of group_concat is defined as arbitrary by SQLite.
+    expected_integers = sorted(["10", "10,10,24", "5,5"])
+    actual_integers = sorted([record["concat_values"] for record in records])
+    for expected, actual in zip(expected_integers, actual_integers):
+        assert sorted(expected.split(",")) == sorted(actual.split(","))
 
 
 def test_duplicate_columns_and_methods_accepted(dataset):

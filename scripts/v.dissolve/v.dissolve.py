@@ -153,12 +153,33 @@ def modify_methods_for_backend(methods, backend):
     return new_methods
 
 
+def quote_from_type(column_type):
+    """Returns quote if column values need to be quoted based on their type
+
+    Defaults to quoting for unknown types and no quoting for falsely values,
+    i.e., unknown types are assumed to be in need of quoting while missing type
+    information is assumed to be associated with numbers which don't need quoting.
+    """
+    # Needs a general solution, e.g., https://github.com/OSGeo/grass/pull/1110
+    if not column_type or column_type.upper() in [
+        "INT",
+        "INTEGER",
+        "SMALLINT",
+        "REAL",
+        "DOUBLE",
+        "DOUBLE PRECISION",
+    ]:
+        return ""
+    return "'"
+
+
 def updates_to_sql(table, updates):
     """Create SQL from a list of dicts with column, value, where"""
     sql = ["BEGIN TRANSACTION"]
     for update in updates:
+        quote = quote_from_type(update.get("type", None))
         sql.append(
-            f"UPDATE {table} SET {update['column']} = {update['value']} "
+            f"UPDATE {table} SET {update['column']} = {quote}{update['value']}{quote} "
             f"WHERE {update['where']};"
         )
     sql.append("END TRANSACTION")
@@ -213,6 +234,27 @@ def check_aggregate_methods_or_fatal(methods, backend):
                 )
     # We don't have a list of available SQL functions. It is long for PostgreSQL
     # and open for SQLite depending on its extensions.
+
+
+def aggregate_columns_exist_or_fatal(vector, layer, columns):
+    """Check that all columns exist or end with fatal error"""
+    column_names = gs.vector_columns(vector, layer).keys()
+    for column in columns:
+        if column not in column_names:
+            if "(" in column:
+                gs.fatal(
+                    _(
+                        "Column <{column}> does not exist in vector <{vector}> "
+                        "(layer <{layer}>). Specify result columns if you are adding "
+                        "function calls to aggregate columns."
+                    ).format(vector=vector, layer=layer, column=column)
+                )
+            gs.fatal(
+                _(
+                    "Column <{column}> selected for aggregation does not exist "
+                    "in vector <{vector}> (layer <{layer}>)"
+                ).format(vector=vector, layer=layer, column=column)
+            )
 
 
 def match_columns_and_methods(columns, methods):
@@ -351,19 +393,26 @@ def aggregate_attributes_sql(
         for result_column, column_type in zip(result_columns, column_types):
             add_columns.append(f"{result_column} {column_type}")
     else:
-        add_columns = result_columns.copy()
+        # Column types are part of the result column name list.
+        add_columns = result_columns.copy()  # Ensure we have our own copy.
+        # Split column definitions into two lists.
+        result_columns = []
+        column_types = []
+        for definition in add_columns:
+            column_name, column_type = definition.split(" ", maxsplit=1)
+            result_columns.append(column_name)
+            column_types.append(column_type)
     for row in records:
         where = column_value_to_where(column, row[column], quote=quote_column)
         for (
             result_column,
+            column_type,
             key,
-        ) in zip(result_columns, select_columns):
-            if not column_types:
-                # Column types are part of the result column name list.
-                result_column = result_column.split(" ", maxsplit=1)[0]
+        ) in zip(result_columns, column_types, select_columns):
             updates.append(
                 {
                     "column": result_column,
+                    "type": column_type,
                     "value": row[key],
                     "where": where,
                 }
@@ -470,6 +519,7 @@ def main():
         user_aggregate_methods, aggregate_backend, provide_defaults=not result_columns
     )
     if not result_columns:
+        aggregate_columns_exist_or_fatal(input_vector, layer, columns_to_aggregate)
         columns_to_aggregate, user_aggregate_methods = match_columns_and_methods(
             columns_to_aggregate, user_aggregate_methods
         )
