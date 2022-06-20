@@ -2104,10 +2104,14 @@ def done_message():
 
 
 def clean_temp():
-    message(_("Cleaning up temporary files..."))
-    nul = open(os.devnull, "w")
-    call([gpath("etc", "clean_temp")], stdout=nul)
-    nul.close()
+    """Clean mapset temporary directory
+
+    Simple wrapper around the library function avoiding the need to solve imports at
+    the top level. This can hopefully be avoided in the future.
+    """
+    from grass.script import setup as gsetup
+
+    gsetup.clean_temp()
 
 
 def clean_all():

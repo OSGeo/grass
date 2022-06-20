@@ -447,13 +447,14 @@ def call(cmd, **kwargs):
 
 
 def clean_temp():
-    from grass.script import core as gcore
+    """Clean mapset temporary directory"""
+    # Lazy-importing to reduce dependencies (this can be eventually removed).
+    # pylint: disable=import-outside-toplevel
+    import grass.script as gs
 
-    gcore.message(_("Cleaning up temporary files..."))
-    nul = open(os.devnull, "w")
+    gs.verbose(_("Cleaning up temporary files..."))
     gisbase = os.environ["GISBASE"]
-    call([os.path.join(gisbase, "etc", "clean_temp")], stdout=nul)
-    nul.close()
+    call([os.path.join(gisbase, "etc", "clean_temp")], stdout=subprocess.DEVNULL)
 
 
 def finish():
