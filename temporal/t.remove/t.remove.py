@@ -86,6 +86,8 @@ def main():
     if datasets and file:
         grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
+    mapset = grass.gisenv()["MAPSET"]
+
     # Make sure the temporal database exists
     tgis.init()
 
@@ -150,7 +152,7 @@ def main():
             count = 1
             name_list = []
             for map in maps:
-                map.select(dbif)
+                map.select(dbif, mapset=mapset)
                 # We may have multiple layer for a single map, hence we need
                 # to avoid multiple deletation of the same map,
                 # but the database entries are still present and must be removed
@@ -165,7 +167,7 @@ def main():
                 count += 1
                 # Delete every 100 maps
                 if count % 100 == 0:
-                    dbif.execute_transaction(map_statement)
+                    dbif.execute_transaction(map_statement, mapset=mapset)
                     if clean:
                         if type == "strds":
                             remove(type="raster", name=name_list, run_=True)
@@ -177,7 +179,7 @@ def main():
                     name_list = []
 
             if map_statement:
-                dbif.execute_transaction(map_statement)
+                dbif.execute_transaction(map_statement, mapset=mapset)
             if clean and name_list:
                 if type == "strds":
                     remove(type="raster", name=name_list, run_=True)
@@ -197,7 +199,7 @@ def main():
         )
     else:
         # Execute the collected SQL statenents
-        dbif.execute_transaction(statement)
+        dbif.execute_transaction(statement, mapset=mapset)
         dbif.close()
 
 

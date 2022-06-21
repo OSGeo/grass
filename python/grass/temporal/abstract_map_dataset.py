@@ -990,7 +990,7 @@ class AbstractMapDataset(AbstractDataset):
 
         mapset = get_current_mapset()
 
-        dbif, connection_state_changed = init_dbif(dbif)
+        dbif, connection_state_changed = init_dbif(dbif, only_current_mapset=True)
         statement = ""
 
         if self.is_in_db(dbif, mapset=mapset):
@@ -1061,7 +1061,7 @@ class AbstractMapDataset(AbstractDataset):
         mapset = get_current_mapset()
 
         statement = ""
-        dbif, connection_state_changed = init_dbif(dbif)
+        dbif, connection_state_changed = init_dbif(dbif, only_current_mapset=True)
 
         # Get all datasets in which this map is registered
         datasets = self.get_registered_stds(dbif, mapset=mapset)
