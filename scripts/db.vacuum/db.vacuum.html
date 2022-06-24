@@ -1,0 +1,42 @@
+<h2>DESCRIPTION</h2>
+
+<em>db.vacuum</em> runs SQL VACUUM or sets up automatic vacuum procedures.
+
+<h2>NOTES</h2>
+
+<h2>EXAMPLES</h2>
+
+<div class="code"><pre>
+db.vacuum operation=vacuum
+db.vacuum operation=enable_auto_vacuum
+db.vacuum operation=disable_auto_vacuum
+db.vacuum operation=incremental_vacuum
+</pre></div>
+
+<div class="code"><pre>
+db.vacuum driver=sqlite database=/opt/sqlite.db
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="db.dropdb.html">db.dropdb</a>,
+<a href="db.dropcolumn.html">db.dropcolumn</a>,
+<a href="db.droptable.html">db.droptable</a>,
+<a href="v.db.droprow.html">v.db.droprow</a>,
+<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
+<a href="v.db.droptable.html">v.db.droptable</a>,
+<a href="db.login.html">db.login</a>,
+<a href="db.connect.html">db.connect</a>,
+<a href="db.tables.html">db.tables</a>,
+<a href="db.describe.html">db.describe</a>
+<a href="db.execute.html">db.execute</a>
+</em>
+
+<p>
+<a href="sql.html">GRASS SQL interface</a>
+
+<h2>AUTHORS</h2>
+
+Markus Neteler<br>
+Driver and database options added by Martin Landa, Czech Technical University in Prague, Czech Republic
