@@ -242,12 +242,13 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
     """
 
-    def __init__(self, table=None, ident=None):
+    def __init__(self, table=None, ident=None, tgis_mapset=None):
         """Constructor of this class
 
         :param table: The name of the table
         :param ident: The identifier (primary key) of this
                       object in the database table
+        :param tgis_mapset: the mapset of the tgis db to be used
         """
         DictSQLSerializer.__init__(self)
 
@@ -255,10 +256,13 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.ident = ident
         self.msgr = get_tgis_message_interface()
 
+        # set the mapset where the data are located
         if self.ident and self.ident.find("@") >= 0:
-            self.mapset = self.ident.split("@" "")[1]
+            self.data_mapset = self.ident.split("@" "")[1]
         else:
-            self.mapset = None
+            self.data_mapset = None
+        # set the mapset where the tgis db is located
+        self.tgis_mapset = tgis_mapset
 
     def get_table_name(self):
         """Return the name of the table in which the internal
@@ -326,9 +330,13 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         sql = self.get_is_in_db_statement()
 
-        # default: search temporal database in the mapset of the map
-        if mapset is None:
-            mapset = self.mapset
+        # determine correct mapset for the temporal database
+        if self.tgis_mapset:
+            mapset = self.tgis_mapset
+        elif self.data_mapset: 
+            mapset = self.data_mapset
+        else:
+            mapset = get_current_mapset()
 
         if dbif:
             dbif.execute(sql, mapset=mapset)
@@ -366,7 +374,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif = SQLDatabaseInterfaceConnection()
 
         return dbif.mogrify_sql_statement(
-            self.get_select_statement(), mapset=self.mapset
+            self.get_select_statement(), mapset=self.tgis_mapset
         )
 
     def select(self, dbif=None, mapset=None):
@@ -377,12 +385,14 @@ class SQLDatabaseInterface(DictSQLSerializer):
                      if None a temporary connection will be established
         """
         sql, args = self.get_select_statement()
-        # print(sql)
-        # print(args)
 
-        # default: use the temporal database in the mapset of this map
-        if mapset is None:
-            mapset = self.mapset
+        # determine correct mapset for the temporal database
+        if self.tgis_mapset:
+            mapset = self.tgis_mapset
+        elif self.data_mapset: 
+            mapset = self.data_mapset
+        else:
+            mapset = get_current_mapset()
 
         self.msgr.debug(2, "SQLDatabaseInterface.select() from mapset %s" % mapset)
 
@@ -442,8 +452,6 @@ class SQLDatabaseInterface(DictSQLSerializer):
                      if None a temporary connection will be established
         """
         sql, args = self.get_insert_statement()
-        # print(sql)
-        # print(args)
 
         # use the temporal database in the current mapset
         mapset = get_current_mapset()
@@ -649,7 +657,7 @@ class DatasetBase(SQLDatabaseInterface):
                           - "relative" Identifier for relative time
         """
 
-        SQLDatabaseInterface.__init__(self, table, ident)
+        SQLDatabaseInterface.__init__(self, table, ident, tgis_mapset)
 
         self.set_id(ident)
         if ident is not None and name is None and mapset is None:

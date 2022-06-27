@@ -88,6 +88,7 @@ def get_dataset_list(
 
     result = {}
 
+    # go through the tgis dbs of all available mapsets
     for mapset in mapsets.keys():
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
@@ -99,15 +100,15 @@ def get_dataset_list(
         else:
             sql = "SELECT * FROM " + table
 
+        # maps from mapset A can be registered in the tgis db in mapset B:
+        # do not restrict sql where to mapset = <tgis mapset>
         if where:
             sql += " WHERE " + where
-            sql += " AND mapset = '%s'" % (mapset)
-        else:
-            sql += " WHERE mapset = '%s'" % (mapset)
 
         if order:
             sql += " ORDER BY " + order
 
+        # only use the tgis db of mapset 'mapset'
         dbif.execute(sql, mapset=mapset)
         rows = dbif.fetchall(mapset=mapset)
 

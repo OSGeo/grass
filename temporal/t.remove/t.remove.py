@@ -162,7 +162,9 @@ def main():
                 if clean and force:
                     if map.get_name() not in name_list:
                         name_list.append(str(map.get_name()))
+                print("get delete statement...")
                 map_statement += map.delete(dbif=dbif, execute=False)
+                print("got delete statement")
 
                 count += 1
                 # Delete every 100 maps
