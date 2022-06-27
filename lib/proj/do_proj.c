@@ -118,8 +118,8 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	}
 	G_free(indef);
 
-	estep = (window.west + window.east) / 21.;
-	nstep = (window.north + window.south) / 21.;
+	estep = (window.east - window.west) / 21.;
+	nstep = (window.north - window.south) / 21.;
 	for (i = 0; i < 20; i++) {
 	    x[i] = window.west + estep * (i + 1);
 	    y[i] = window.north;
@@ -692,7 +692,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    proj_list_destroy(op_list);
 
 	/* try proj_create_crs_to_crs() */
+	/*
 	G_debug(1, "trying %s to %s", indef, outdef);
+	*/
 
 	/* proj_create_crs_to_crs() does not work because it calls
 	 * proj_create_crs_to_crs_from_pj() which calls
