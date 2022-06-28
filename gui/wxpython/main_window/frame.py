@@ -50,6 +50,7 @@ from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_she
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+from lmgr.recentfiles import RecentFilesMixin
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
@@ -87,7 +88,7 @@ from startup.guiutils import (
 from grass.grassdb.checks import is_first_time_user
 
 
-class GMFrame(wx.Frame):
+class GMFrame(wx.Frame, RecentFilesMixin):
     """Single Window Layout which will be parallelly developed next to the
     current Multi Window layout solution."""
 
@@ -161,6 +162,7 @@ class GMFrame(wx.Frame):
 
         # create widgets and build panes
         self.CreateMenuBar()
+        self._createWorkspaceRecentFilesMenu()
         self.BuildPanes()
         self.BindEvents()
 
@@ -190,6 +192,7 @@ class GMFrame(wx.Frame):
         if workspace:
             if self.workspace_manager.Load(workspace):
                 self._setTitle()
+                self.AddFileToHistory(file_path=workspace)
         else:
             # start default initial display
             self.NewDisplay(show=False)
@@ -1595,14 +1598,23 @@ class GMFrame(wx.Frame):
     def OnWorkspaceOpen(self, event=None):
         """Open file with workspace definition"""
         self.workspace_manager.Open()
+        self.AddFileToHistory(
+            file_path=self.workspace_manager.workspaceFile,
+        )
 
     def OnWorkspaceSave(self, event=None):
         """Save file with workspace definition"""
         self.workspace_manager.Save()
+        self.AddFileToHistory(
+            file_path=self.workspace_manager.workspaceFile,
+        )
 
     def OnWorkspaceSaveAs(self, event=None):
         """Save workspace definition to selected file"""
         self.workspace_manager.SaveAs()
+        self.AddFileToHistory(
+            file_path=self.workspace_manager.workspaceFile,
+        )
 
     def OnWorkspaceClose(self, event=None):
         """Close file with workspace definition"""
@@ -1617,6 +1629,10 @@ class GMFrame(wx.Frame):
         """Close all open map display windows (from menu)"""
         if not self.workspace_manager.CanClosePage(caption=_("Close all Map Displays")):
             return
+        else:
+            self.AddFileToHistory(
+                file_path=self.workspace_manager.workspaceFile,
+            )
         self.DisplayCloseAll()
 
     def DisplayCloseAll(self):
@@ -2322,7 +2338,10 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
-
+        else:
+            self.AddFileToHistory(
+                file_path=self.workspace_manager.workspaceFile,
+            )
         self.DisplayCloseAll()
 
         self._auimgr.UnInit()

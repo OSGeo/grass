@@ -45,6 +45,7 @@ from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_she
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+from lmgr.recentfiles import RecentFilesMixin
 from gui_core.widgets import GNotebook, FormNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
@@ -82,7 +83,7 @@ from startup.guiutils import (
 from grass.grassdb.checks import is_first_time_user
 
 
-class GMFrame(wx.Frame):
+class GMFrame(wx.Frame, RecentFilesMixin):
     """Layer Manager frame with notebook widget for controlling GRASS
     GIS. Includes command console page for typing GRASS (and other)
     commands, tree widget page for managing map layers.
@@ -153,6 +154,7 @@ class GMFrame(wx.Frame):
 
         # create widgets
         self._createMenuBar()
+        self._createWorkspaceRecentFilesMenu()
         self.statusbar = SbMain(parent=self, giface=self._giface)
         self.notebook = self._createNotebook()
         self._createDataCatalog(self.notebook)
@@ -267,6 +269,7 @@ class GMFrame(wx.Frame):
         if workspace:
             if self.workspace_manager.Load(workspace):
                 self._setTitle()
+                self.AddFileToHistory(file_path=workspace)
         else:
             # start default initial display
             self.NewDisplay(show=False)
@@ -550,6 +553,10 @@ class GMFrame(wx.Frame):
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
+                if askIfSaveWorkspace:
+                    self.AddFileToHistory(
+                        file_path=self.workspace_manager.workspaceFile,
+                    )
                 return pgnum_dict
             return None
 
@@ -870,6 +877,10 @@ class GMFrame(wx.Frame):
         if not self.workspace_manager.CanClosePage(caption):
             event.Veto()
             return
+        else:
+            self.AddFileToHistory(
+                file_path=self.workspace_manager.workspaceFile,
+            )
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
@@ -1510,14 +1521,23 @@ class GMFrame(wx.Frame):
     def OnWorkspaceOpen(self, event=None):
         """Open file with workspace definition"""
         self.workspace_manager.Open()
+        self.AddFileToHistory(
+            file_path=self.workspace_manager.workspaceFile,
+        )
 
     def OnWorkspaceSave(self, event=None):
         """Save file with workspace definition"""
         self.workspace_manager.Save()
+        self.AddFileToHistory(
+            file_path=self.workspace_manager.workspaceFile,
+        )
 
     def OnWorkspaceSaveAs(self, event=None):
         """Save workspace definition to selected file"""
         self.workspace_manager.SaveAs()
+        self.AddFileToHistory(
+            file_path=self.workspace_manager.workspaceFile,
+        )
 
     def OnWorkspaceClose(self, event=None):
         """Close file with workspace definition"""
@@ -1532,6 +1552,10 @@ class GMFrame(wx.Frame):
         """Close all open map display windows (from menu)"""
         if not self.workspace_manager.CanClosePage(caption=_("Close all Map Displays")):
             return
+        else:
+            self.AddFileToHistory(
+                file_path=self.workspace_manager.workspaceFile,
+            )
         self.DisplayCloseAll()
 
     def DisplayCloseAll(self):
@@ -2281,6 +2305,10 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+        else:
+            self.AddFileToHistory(
+                file_path=self.workspace_manager.workspaceFile,
+            )
 
         self.DisplayCloseAll()
 

@@ -6,6 +6,7 @@
 Classes:
  - menu::Menu
  - menu::SearchModuleWindow
+ - menu::RecentFilesMenu
 
 (C) 2010-2013 by the GRASS Development Team
 
@@ -315,13 +316,13 @@ class RecentFilesMenu:
 
 
     :param str app_name: required for group name of recent files path
-    written into the .recent_files file
+                         written into the .recent_files file
     :param obj parent_menu: menu widget instance where be inserted
-    recent files menu on the specified position
+                            recent files menu on the specified position
     :param int pos: position (index) where insert recent files menu in
-    the parent menu
+                    the parent menu
     :param int history_len: the maximum number of file paths written
-    into the .recent_files file to app name group
+                            into the .recent_files file to app name group
     """
 
     recent_files = ".recent_files"
