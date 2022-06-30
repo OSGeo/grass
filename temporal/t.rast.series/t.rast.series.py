@@ -160,7 +160,7 @@ def main():
                 method=method,
                 quantile=quantile,
                 memory=memory,
-                nprocs=nprocs
+                nprocs=nprocs,
             )
         except CalledModuleError:
             grass.fatal(_("%s failed. Check above error messages.") % "r.series")
