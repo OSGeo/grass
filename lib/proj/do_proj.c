@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 #include <grass/gis.h>
 #include <grass/gprojects.h>
@@ -118,8 +119,9 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	}
 	G_free(indef);
 
-	estep = (window.west + window.east) / 21.;
-	nstep = (window.north + window.south) / 21.;
+	/* inpired by gdal/ogr/ogrct.cpp OGRProjCT::ListCoordinateOperations() */
+	estep = (window.east - window.west) / 21.;
+	nstep = (window.north - window.south) / 21.;
 	for (i = 0; i < 20; i++) {
 	    x[i] = window.west + estep * (i + 1);
 	    y[i] = window.north;
@@ -162,6 +164,17 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 		*ymax = y[i];
 	}
 
+	/* The west longitude is generally lower than the east longitude,
+	 * except for areas of interest that go across the anti-meridian.
+	 */
+	if (x[80] > x[82] && x[81] > x[83]) {
+	    /* west > east, must be crossing the anti-meridian */
+	    double tmpx = *xmin;
+
+	    *xmin = *xmax;
+	    *xmax = tmpx;
+	}
+
 	G_debug(1, "input window north: %.8f", window.north);
 	G_debug(1, "input window south: %.8f", window.south);
 	G_debug(1, "input window east: %.8f", window.east);
@@ -171,6 +184,30 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	G_debug(1, "transformed xmax: %.8f", *xmax);
 	G_debug(1, "transformed ymin: %.8f", *ymin);
 	G_debug(1, "transformed ymax: %.8f", *ymax);
+
+	/* test valid values, as in
+	 * gdal/ogr/ogrct.cpp OGRCoordinateTransformationOptions::SetAreaOfInterest()
+	 */
+	if (fabs(*xmin) > 180) {
+	    G_warning(_("Invalid west longitude %g"), *xmin);
+	    return 0;
+	}
+	if (fabs(*xmax) > 180) {
+	    G_warning(_("Invalid east longitude %g"), *xmax);
+	    return 0;
+	}
+	if (fabs(*ymin) > 90) {
+	    G_warning(_("Invalid south latitude %g"), *ymin);
+	    return 0;
+	}
+	if (fabs(*ymax) > 90) {
+	    G_warning(_("Invalid north latitude %g"), *ymax);
+	    return 0;
+	}
+	if (*ymin > *ymax) {
+	    G_warning(_("South %g is larger than north %g"), *ymin, *ymax);
+	    return 0;
+	}
     }
     G_debug(1, "get_pj_area(): xmin %g, xmax %g, ymin %g, ymax %g",
             *xmin, *xmax, *ymin, *ymax);
@@ -506,6 +543,11 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    pj_area = proj_area_create();
 	    proj_area_set_bbox(pj_area, xmin, ymin, xmax, ymax);
 	}
+	else {
+	    G_warning(_("Unable to determine area of interest for '%s'"), info_in->def);
+
+	    return -1;
+	}
 
 	G_debug(1, "source proj string: %s", info_in->def);
 	G_debug(1, "source type: %s", get_pj_type_string(info_in->pj));
@@ -693,7 +735,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	    proj_list_destroy(op_list);
 
 	/* try proj_create_crs_to_crs() */
+	/*
 	G_debug(1, "trying %s to %s", indef, outdef);
+	*/
 
 	/* proj_create_crs_to_crs() does not work because it calls
 	 * proj_create_crs_to_crs_from_pj() which calls
