@@ -62,6 +62,15 @@
 # % answer: start_time
 # %end
 
+# %option G_OPT_M_NPROCS
+# % description: Number of cores for multiprocessing in r.series
+# % answer: 1
+# %end
+
+# %option G_OPT_MEMORYMB
+# % description: Maximum memory to be used (in MB) by r.series
+# %end
+
 # %option G_OPT_T_WHERE
 # %end
 
@@ -95,6 +104,8 @@ def main():
     method = options["method"]
     quantile = options["quantile"]
     order = options["order"]
+    memory = options["memory"]
+    nprocs = options["nprocs"]
     where = options["where"]
     add_time = flags["t"]
     nulls = flags["n"]
@@ -148,6 +159,8 @@ def main():
                 overwrite=grass.overwrite(),
                 method=method,
                 quantile=quantile,
+                memory=memory,
+                nprocs=nprocs
             )
         except CalledModuleError:
             grass.fatal(_("%s failed. Check above error messages.") % "r.series")
