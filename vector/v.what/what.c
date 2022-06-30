@@ -17,7 +17,7 @@ static int nlines = 50;
 
 static void F_generate(const char *drvname, const char *dbname,
 		       const char *tblname, const char *key, int keyval,
-		       int output, char **form)
+		       int output, char **form, char *columns)
 {
     int col, ncols, sqltype, more;
     char buf[5000];
@@ -59,7 +59,7 @@ static void F_generate(const char *drvname, const char *dbname,
      * application before F_generate() is called, because it may be correct
      * (connection defined in DB but table does not exist) */
 
-    sprintf(buf, "select * from %s where %s = %d", tblname, key, keyval);
+    sprintf(buf, "select %s from %s where %s = %d", columns, tblname, key, keyval);
     G_debug(2, "%s", buf);
     db_set_string(&sql, buf);
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
@@ -145,7 +145,7 @@ void coord2bbox(double east, double north, double maxdist,
 }
 
 void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
-		int showextra, int output)
+		int showextra, int output, char *columns)
 {
     int i, j;
     char *formbuf1;
@@ -204,7 +204,7 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
 		    break;
 		}
 		F_generate(Fi->driver, Fi->database, Fi->table,
-			   Fi->key, Cats->cat[i], output, &form);
+			   Fi->key, Cats->cat[i], output, &form, columns);
 
 		switch (output) {
 		case OUTPUT_SCRIPT:
@@ -232,7 +232,7 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
 
 void what(struct Map_info *Map, int nvects, char **vect, double east,
 	  double north, double maxdist, int qtype, int topo, int showextra,
-	  int output, int multiple, int *field)
+	  int output, int multiple, int *field, char *columns)
 {
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -625,7 +625,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 		}
 	    }			/* if height */
 
-	    write_cats(&Map[i], field[i], Cats, showextra, output);
+	    write_cats(&Map[i], field[i], Cats, showextra, output, columns);
 
 	    if (output == OUTPUT_JSON && multiple)
 		fprintf(stdout, "}");
@@ -770,7 +770,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
 	    if (centroid > 0)
 		Vect_read_line(&Map[i], Points, Cats, centroid);
 
-	    write_cats(&Map[i], field[i], Cats, showextra, output);
+	    write_cats(&Map[i], field[i], Cats, showextra, output, columns);
 
 	    if (output == OUTPUT_JSON && multiple)
 		fprintf(stdout, "}");

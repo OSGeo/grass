@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	struct Flag *print, *topo, *shell, *json, *multiple;
     } flag;
     struct {
-	struct Option *map, *field, *coords, *maxdist, *type;
+	struct Option *map, *field, *coords, *maxdist, *type, *cols;
     } opt;
     struct Cell_head window;
     struct GModule *module;
@@ -49,6 +49,7 @@ int main(int argc, char **argv)
     char buf[2000];
     int i, level, ret, type;
     int *field;
+    char *columns;
     double xval, yval, xres, yres, maxd, x;
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
     char nsres[30], ewres[30];
@@ -84,6 +85,10 @@ int main(int argc, char **argv)
     opt.maxdist->multiple = NO;
     opt.maxdist->description = _("Query threshold distance");
     opt.maxdist->guisection = _("Threshold");
+
+    opt.cols = G_define_standard_option(G_OPT_DB_COLUMNS);
+    opt.cols->label = _("Name of attribute column(s)");
+    opt.cols->description = _("Default: all columns");
 
     flag.topo = G_define_flag();
     flag.topo->key = 'd';
@@ -125,6 +130,27 @@ int main(int argc, char **argv)
 	vect = opt.map->answers;
     else
 	G_fatal_error(_("No input vector maps!"));
+
+    /* get specified column names */
+    if (opt.cols->answers && opt.cols->answers[0]) {
+	int col_alloc;
+	int new_len;
+
+	col_alloc = 1024;
+	columns = (char *)G_calloc(col_alloc, sizeof(char));
+	for (i = 0; opt.cols->answers[i]; i++) {
+	    new_len = strlen(columns) + strlen(opt.cols->answers[i]) + 1;
+	    if (new_len >= col_alloc) {
+		col_alloc = new_len + 1024;
+		columns = G_realloc(columns, col_alloc);
+	    }
+	    if (i > 0)
+		strcat(columns, ",");
+	    strcat(columns, opt.cols->answers[i]);
+	}
+    }
+    else
+	columns = "*";
 
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
@@ -196,7 +222,7 @@ int main(int argc, char **argv)
 	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
 		what(Map, nvects, vect, xval, yval, maxd, type,
 		     flag.topo->answer, flag.print->answer, output,
-		     flag.multiple->answer, field);
+		     flag.multiple->answer, field, columns);
 	    }
 	    else {
 		G_warning(_("Unknown input format, skipping: '%s'"), buf);
@@ -210,7 +236,7 @@ int main(int argc, char **argv)
 	    xval = atof(opt.coords->answers[i]);
 	    yval = atof(opt.coords->answers[i + 1]);
 	    what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
-		 flag.print->answer, output, flag.multiple->answer, field);
+		 flag.print->answer, output, flag.multiple->answer, field, columns);
 	}
     }
 
