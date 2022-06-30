@@ -201,10 +201,6 @@ int main(int argc, char *argv[])
     info_out.srid = G_get_projsrid();
     info_out.wkt = G_get_projwkt();
 
-    if (G_verbose() == G_verbose_max()) {
-	pj_print_proj_params(&info_in, &info_out);
-    }
-
     info_trans.def = NULL;
 #ifdef HAVE_PROJ_H
     if (pipeline->answer) {
@@ -278,6 +274,10 @@ int main(int argc, char *argv[])
 
 	info_in.srid = G_get_projsrid();
 	info_in.wkt = G_get_projwkt();
+
+	if (G_verbose() == G_verbose_max()) {
+	    pj_print_proj_params(&info_in, &info_out);
+	}
 
 	Vect_set_open_level(1);
 	G_debug(1, "Open old: location: %s mapset : %s", G_location_path(),
