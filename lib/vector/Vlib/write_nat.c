@@ -105,7 +105,7 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
     static struct line_pnts *old_points = NULL;
     static struct line_cats *old_cats = NULL;
 
-    G_debug(3, "V1_rewrite_line_nat(): offset = %"PRI_OFF_T,
+    G_debug(3, "V1_rewrite_line_nat(): offset = %" PRI_OFF_T,
 	    offset);
 
     /* First compare numbers of points and cats with tha old one */
@@ -241,7 +241,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     struct gvfile *dig_fp;
 
-    G_debug(3, "V1_delete_line_nat(): offset = %"PRI_OFF_T, offset);
+    G_debug(3, "V1_delete_line_nat(): offset = %" PRI_OFF_T, offset);
 
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -342,7 +342,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset, off_t line)
     char rhead;
     struct gvfile *dig_fp;
     
-    G_debug(3, "V1_restore_line_nat(): offset = %"PRI_OFF_T", line (not used) = %"PRI_OFF_T, offset, line);
+    G_debug(3, "V1_restore_line_nat(): offset = %" PRI_OFF_T ", line (not used) = %" PRI_OFF_T, offset, line);
     
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -392,10 +392,10 @@ int V2_restore_line_nat(struct Map_info *Map, off_t offset, off_t line)
     
     plus = &(Map->plus);
 
-    G_debug(3, "V2_restore_line_nat(): offset = %"PRI_OFF_T", line = %"PRI_OFF_T, offset, line);
+    G_debug(3, "V2_restore_line_nat(): offset = %" PRI_OFF_T ", line = %" PRI_OFF_T, offset, line);
 
     if (line < 1 || line > plus->n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%"PRI_OFF_T")"), line);
+        G_warning(_("Attempt to access feature with invalid id (%" PRI_OFF_T ")"), line);
         return -1;
     }
     
@@ -463,7 +463,7 @@ off_t V1__write_line_nat(struct Map_info *Map, off_t offset, int type,
 	    return -1;
 
 	offset = dig_ftell(&(Map->dig_fp));
-	G_debug(3, "V1__rewrite_line_nat(): offset = %lu", offset);
+	G_debug(3, "V1__rewrite_line_nat(): offset = %" PRI_OFF_T, offset);
 	if (offset == -1)
 	    return -1;
     }
@@ -885,7 +885,7 @@ int V2__add_line_to_topo_nat(struct Map_info *Map, off_t offset, int type,
 
     plus = &(Map->plus);
     
-    G_debug(3, "V2__add_line_to_topo_nat(): offset = %ld (build level = %d)", offset, plus->built);
+    G_debug(3, "V2__add_line_to_topo_nat(): offset = %" PRI_OFF_T " (build level = %d)", offset, plus->built);
 
     if (plus->built < GV_BUILD_BASE) /* nothing to build */
         return 0;

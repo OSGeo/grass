@@ -1029,8 +1029,8 @@ static double label_lineover(label_t * label, label_candidate_t * candidate,
 	    candidate->point.x, candidate->point.y);
     /*    trsk = skyline_trans_rot(label->skyline, &candidate->point,
        candidate->rotation); */
-    b.x = abs((label->bb.E - label->bb.W) * cos(candidate->rotation));
-    b.y = abs((label->bb.E - label->bb.W) * sin(candidate->rotation));
+    b.x = fabs((label->bb.E - label->bb.W) * cos(candidate->rotation));
+    b.y = fabs((label->bb.E - label->bb.W) * sin(candidate->rotation));
 
     trbb = box_trans_rot(&label->bb, &candidate->point, candidate->rotation);
     n = Vect_select_lines_by_polygon(&Map, trbb, 0, NULL, linetype, il);
@@ -1083,8 +1083,8 @@ static double label_lineover(label_t * label, label_candidate_t * candidate,
 	if (found > 1) {
 	    double cosvb;
 
-	    v.x = abs(v2.x - v1.x);
-	    v.y = abs(v2.y - v1.y);
+	    v.x = fabs(v2.x - v1.x);
+	    v.y = fabs(v2.y - v1.y);
 	    cosvb = ((b.x * v.x + b.y * v.y) /
 		     (sqrt(b.x * b.x + b.y * b.y) *
 		      sqrt(v.x * v.x + v.y * v.y)));

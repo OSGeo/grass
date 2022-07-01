@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.unregister
@@ -20,36 +20,35 @@
 #
 #############################################################################
 
-#%module
-#% description: Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: unregister
-#% keyword: time
-#%end
+# %module
+# % description: Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: unregister
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_INPUT
-#% required: no
-#%end
+# %option G_OPT_STDS_INPUT
+# % required: no
+# %end
 
-#%option G_OPT_F_INPUT
-#% key: file
-#% description: Input file with map names, one per line
-#% required: no
-#%end
+# %option G_OPT_F_INPUT
+# % key: file
+# % description: Input file with map names, one per line
+# % required: no
+# %end
 
-#%option G_OPT_MAP_TYPE
-#% guidependency: input,maps
-#%end
+# %option G_OPT_MAP_TYPE
+# % guidependency: input,maps
+# %end
 
 
-#%option G_OPT_MAP_INPUTS
-#% description: Name(s) of existing raster, vector or raster3d map(s) to unregister
-#% required: no
-#%end
+# %option G_OPT_MAP_INPUTS
+# % description: Name(s) of existing raster, vector or raster3d map(s) to unregister
+# % required: no
+# %end
 
 import grass.script as grass
-
 
 # lazy imports at the end of the file
 
@@ -67,8 +66,7 @@ def main():
     tgis.init()
 
     if maps and file:
-        grass.fatal(_(
-            "%s= and %s= are mutually exclusive") % ("input", "file"))
+        grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
     if not maps and not file:
         grass.fatal(_("%s= or %s= must be specified") % ("input", "file"))
@@ -77,6 +75,13 @@ def main():
 
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
+
+    # modify a stds only if it is in the current mapset
+    # remove all connections to any other mapsets
+    # ugly hack !
+    currcon = {}
+    currcon[mapset] = dbif.connections[mapset]
+    dbif.connections = currcon
 
     # In case a space time dataset is specified
     if input:
@@ -89,7 +94,9 @@ def main():
     # Map names as comma separated string
     if maps is not None and maps != "":
         if maps.find(",") == -1:
-            maplist = [maps, ]
+            maplist = [
+                maps,
+            ]
         else:
             maplist = maps.split(",")
 
@@ -122,18 +129,17 @@ def main():
     # Unregister already registered maps
     grass.message(_("Unregister maps"))
     for mapid in maplist:
-        if count%10 == 0:
+        if count % 10 == 0:
             grass.percent(count, num_maps, 1)
 
         map = tgis.dataset_factory(type, mapid)
 
         # Unregister map if in database
-        if map.is_in_db(dbif):
+        if map.is_in_db(dbif, mapset=mapset):
             # Unregister from a single dataset
             if input:
                 # Collect SQL statements
-                statement += sp.unregister_map(
-                    map=map, dbif=dbif, execute=False)
+                statement += sp.unregister_map(map=map, dbif=dbif, execute=False)
 
             # Unregister from temporal database
             else:
@@ -147,8 +153,12 @@ def main():
                 # Collect SQL statements
                 statement += map.delete(dbif=dbif, update=False, execute=False)
         else:
-            grass.warning(_("Unable to find %s map <%s> in temporal database" %
-                            (map.get_type(), map.get_id())))
+            grass.warning(
+                _(
+                    "Unable to find %s map <%s> in temporal database"
+                    % (map.get_type(), map.get_id())
+                )
+            )
 
         count += 1
 
@@ -160,7 +170,7 @@ def main():
 
     # Update space time datasets
     if input:
-        grass.message(_("Unregister maps from space time dataset <%s>"%(input)))
+        grass.message(_("Unregister maps from space time dataset <%s>" % (input)))
     else:
         grass.message(_("Unregister maps from the temporal database"))
 
@@ -177,6 +187,7 @@ def main():
             count += 1
 
     dbif.close()
+
 
 ###############################################################################
 

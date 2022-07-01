@@ -1,5 +1,5 @@
 all = [
-    'widgets',
-    'cap_interface',
-    'dialogs',
+    "widgets",
+    "cap_interface",
+    "dialogs",
 ]

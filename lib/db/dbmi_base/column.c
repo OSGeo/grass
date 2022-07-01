@@ -317,7 +317,7 @@ void db_set_column_length(dbColumn * column, int length)
 }
 
 /*!
-  \brief Set select privilages to be granted
+  \brief Set select privileges to be granted
 
   \param column pointer to dbColumn
 */
@@ -327,7 +327,7 @@ void db_set_column_select_priv_granted(dbColumn * column)
 }
 
 /*!
-  \brief Unset select privilages
+  \brief Unset select privileges
 
   \param column pointer to dbColumn
 */
@@ -337,11 +337,11 @@ void db_set_column_select_priv_not_granted(dbColumn * column)
 }
 
 /*!
-  \brief Get select privilages
+  \brief Get select privileges
 
   \param column pointer to dbColumn
 
-  \return privilages
+  \return privileges
 */
 int db_get_column_select_priv(dbColumn * column)
 {
@@ -349,7 +349,7 @@ int db_get_column_select_priv(dbColumn * column)
 }
 
 /*!
-  \brief Set update privilages to be granted
+  \brief Set update privileges to be granted
 
   \param column pointer to dbColumn
 */
@@ -359,7 +359,7 @@ void db_set_column_update_priv_granted(dbColumn * column)
 }
 
 /*!
-  \brief Unset update privilages
+  \brief Unset update privileges
 
   \param column pointer to dbColumn
 */
@@ -369,11 +369,11 @@ void db_set_column_update_priv_not_granted(dbColumn * column)
 }
 
 /*!
-  \brief Get update privilages
+  \brief Get update privileges
 
   \param column pointer to dbColumn
 
-  \return privilages
+  \return privileges
 */
 int db_get_column_update_priv(dbColumn * column)
 {

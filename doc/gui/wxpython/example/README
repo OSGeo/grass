@@ -51,14 +51,18 @@ a few more things to be done.
       <handler>OnExample</handler>
     </menuitem>
     
-6. Add folowing event handler to class GMFrame in ./gui/wxpython/lmgr/frame.py:
+6. Add following event handler to class GMFrame in ./gui/wxpython/lmgr/frame.py:
 
     def OnExample(self, event):
         """!Launch ExampleTool"""
-        from example.frame import ExampleMapFrame
-        win = ExampleMapFrame(parent=self, giface=self._giface)
+        from example.frame import ExampleMapDisplay
+
+        frame = wx.Frame(
+        parent=None, size=globalvar.MAP_WINDOW_SIZE, title=_("Example Tool")
+        )
+        win = ExampleMapDisplay(parent=frame, giface=self._giface)
         win.CentreOnScreen()
-        
+
         win.Show()
 
 7. Run make again.

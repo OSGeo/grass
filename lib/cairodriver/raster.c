@@ -15,15 +15,10 @@
 #include <math.h>
 
 #include "cairodriver.h"
+#include <grass/gis.h>
 #include <grass/glocale.h>
 
 #define MAX_IMAGE_SIZE 32767
-#ifndef MIN
-#define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
-#ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
-#endif
 
 static int src_t, src_b, src_l, src_r, src_w, src_h;
 static int dst_t, dst_b, dst_l, dst_r, dst_w, dst_h;

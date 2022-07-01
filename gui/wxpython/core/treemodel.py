@@ -16,7 +16,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 import six
-import weakref
+import copy
 
 from grass.script.utils import naturally_sort
 
@@ -153,6 +153,38 @@ class TreeModel(object):
         if node.children:
             naturally_sort(node.children, key=lambda node: node.label)
 
+    def Filtered(self, **kwargs):
+        """Filters model based on parameters in kwargs
+        that are passed to node's match function.
+        Copies tree and returns a filtered copy."""
+
+        def _filter(node):
+            if node.children:
+                to_remove = []
+                for child in node.children:
+                    match = _filter(child)
+                    if not match:
+                        to_remove.append(child)
+                for child in reversed(to_remove):
+                    fmodel.RemoveNode(child)
+                if node.children:
+                    return True
+            return node.match(**kwargs)
+
+        fmodel = copy.deepcopy(self)
+        _filter(fmodel.root)
+
+        return fmodel
+
+    def GetLeafCount(self, node):
+        """Returns the number of leaves in a node."""
+        if node.children:
+            count = 0
+            for child in node.children:
+                count += self.GetLeafCount(child)
+            return count
+        return 1
+
     def __str__(self):
         """Print tree."""
         text = []
@@ -185,12 +217,13 @@ class DictNode(object):
         return self._children
 
     def nprint(self, text, indent=0):
-        text.append(indent * ' ' + self.label)
+        text.append(indent * " " + self.label)
         if self.data:
             for key, value in six.iteritems(self.data):
                 text.append(
-                    "%(indent)s* %(key)s : %(value)s" %
-                    {'indent': (indent + 2) * ' ', 'key': key, 'value': value})
+                    "%(indent)s* %(key)s : %(value)s"
+                    % {"indent": (indent + 2) * " ", "key": key, "value": value}
+                )
 
         if self.children:
             for child in self.children:
@@ -212,7 +245,7 @@ class ModuleNode(DictNode):
 
     def __init__(self, label=None, data=None):
         super(ModuleNode, self).__init__(data=data)
-        self._label = label if label else ''
+        self._label = label if label else ""
         if not data:
             self.data = {}
 
@@ -225,27 +258,37 @@ class ModuleNode(DictNode):
         keywords or description."""
         if not self.data:
             return False
-        if key not in ('command', 'keywords', 'description'):
-            return False
-        try:
-            text = self.data[key]
-        except KeyError:
-            return False
-        if not text:
-            return False
-        if case_sensitive:
-            # start supported but unused, so testing last
-            return value in text or value == '*'
+        if isinstance(key, str):
+            keys = [key]
         else:
-            # this works fully only for English and requires accents
-            # to be exact match (even Python 3 casefold() does not help)
-            return value.lower() in text.lower() or value == '*'
+            keys = key
+
+        for key in keys:
+            if key not in ("command", "keywords", "description"):
+                return False
+            try:
+                text = self.data[key]
+            except KeyError:
+                continue
+            if not text:
+                continue
+            if case_sensitive:
+                # start supported but unused, so testing last
+                if value in text or value == "*":
+                    return True
+            else:
+                # this works fully only for English and requires accents
+                # to be exact match (even Python 3 casefold() does not help)
+                if value.lower() in text.lower() or value == "*":
+                    return True
+        return False
 
 
 def main():
     import doctest
+
     doctest.testmod()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

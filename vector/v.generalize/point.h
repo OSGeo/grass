@@ -34,44 +34,44 @@ typedef struct Point_list
 } POINT_LIST;
 
 /* res = a - b */
-extern inline void point_subtract(POINT a, POINT b, POINT * res);
+extern void point_subtract(POINT a, POINT b, POINT * res);
 
 /* res = a + b */
-extern inline void point_add(POINT a, POINT b, POINT * res);
+extern void point_add(POINT a, POINT b, POINT * res);
 
 /* dot product of two vectors: ax * bx + ay * by + az * bz */
 extern double point_dot(POINT a, POINT b);
 
 /* squared distance from the origin */
-extern inline double point_dist2(POINT a);
+extern double point_dist2(POINT a);
 
 /* assign point Points[index] to the res
  * if with z = 0 then res.z = 0  
  */
-extern inline void point_assign(struct line_pnts *Points, int index,
-				int with_z, POINT * res, int is_loop);
+extern void point_assign(struct line_pnts *Points, int index,
+                                int with_z, POINT * res, int is_loop);
 /* assign point Points[index] to the res
  * if with z = 0 then res.z = 0  
  * loop to infinite
  */
 
 /* res = k * a */
-extern inline void point_scalar(POINT a, double k, POINT * res);
+extern void point_scalar(POINT a, double k, POINT * res);
 
 /* copy the last point of Points to Points[pos] */
-extern inline void points_copy_last(struct line_pnts *Points, int pos);
+extern void points_copy_last(struct line_pnts *Points, int pos);
 
 /* distance between two points */
-extern inline double point_dist(POINT a, POINT b);
+extern double point_dist(POINT a, POINT b);
 
 /* squared distance between two points */
-extern inline double point_dist_square(POINT a, POINT b);
+extern double point_dist_square(POINT a, POINT b);
 
 /* angle in radians between vectors ab and bc */
-extern inline double point_angle_between(POINT a, POINT b, POINT c);
+extern double point_angle_between(POINT a, POINT b, POINT c);
 
 /* distance squared between a and segment bc */
-extern inline double point_dist_segment_square(POINT a, POINT b, POINT c,
+extern double point_dist_segment_square(POINT a, POINT b, POINT c,
 					       int with_z);
 /* creates empty list of points */
 extern POINT_LIST *point_list_new(POINT p);

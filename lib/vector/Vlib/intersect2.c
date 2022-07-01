@@ -56,7 +56,7 @@
    of limited number of decimal places and for different order of
    coordinates, the results would be different)
 
-   (C) 2001-2014 by the GRASS Development Team
+   (C) 2001-2014, 2022 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -89,7 +89,8 @@ static int snap_cross(int asegment, double *adistance, int bsegment,
 		      double *bdistance, double *xc, double *yc);
 static int cross_seg(int i, int j, int b);
 static int find_cross(int i, int j, int b);
-
+int line_check_intersection2(struct line_pnts *APoints,
+			      struct line_pnts *BPoints, int with_z, int all);
 
 typedef struct
 {				/* in arrays 0 - A line , 1 - B line */
@@ -107,7 +108,7 @@ static int n_cross;
 static CROSS *cross = NULL;
 static int *use_cross = NULL;
 
-static double rethresh = 0.000001;	/* TODO */
+/* static double rethresh = 0.000001; */	/* TODO */
 
 static double d_ulp(double a, double b)
 {
@@ -666,7 +667,9 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
  * intersection with B line. Points (Points->n_points == 1) are not
  * supported. If B line is NULL, A line is intersected with itself.
  * 
- * simplified Bentley–Ottmann Algorithm
+ * simplified Bentley–Ottmann Algorithm:
+ * similar to Vect_line_intersection(), but faster
+ * additionally, self-intersections of a line are handled more efficiently
  *
  * \param APoints first input line 
  * \param BPoints second input line or NULL
@@ -1198,7 +1201,7 @@ Vect_line_intersection2(struct line_pnts *APoints,
     return 1;
 }
 
-static int cross_found;		/* set by find_cross() */
+/* static int cross_found; */		/* set by find_cross() */
 
 /* find segment intersection, used by Vect_line_check_intersection2 */
 static int find_cross(int i, int j, int b)
@@ -1256,15 +1259,15 @@ static int find_cross(int i, int j, int b)
     case 5:
 	break;
     case 1:
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+	if (0 > Vect_append_point(IPnts, x1, y1, z1))
 	    G_warning(_("Error while adding point to array. Out of memory"));
 	break;
     case 2:
     case 3:
     case 4:
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x1, &y1, &z1, 1))
+	if (0 > Vect_append_point(IPnts, x1, y1, z1))
 	    G_warning(_("Error while adding point to array. Out of memory"));
-	if (0 > Vect_copy_xyz_to_pnts(IPnts, &x2, &y2, &z2, 1))
+	if (0 > Vect_append_point(IPnts, x2, y2, z2))
 	    G_warning(_("Error while adding point to array. Out of memory"));
 	break;
     }
@@ -1272,22 +1275,9 @@ static int find_cross(int i, int j, int b)
     return ret;
 }
 
-/*!
- * \brief Check if 2 lines intersect.
- *
- * Points (Points->n_points == 1) are also supported.
- *
- * \param APoints first input line 
- * \param BPoints second input line 
- * \param with_z 3D, not supported (only if one or both are points)!
- *
- * \return 0 no intersection 
- * \return 1 intersection
- * \return 2 end points only
- */
 int
-Vect_line_check_intersection2(struct line_pnts *APoints,
-			      struct line_pnts *BPoints, int with_z)
+line_check_intersection2(struct line_pnts *APoints,
+			      struct line_pnts *BPoints, int with_z, int all)
 {
     double dist;
     struct bound_box ABox, BBox, abbox;
@@ -1314,18 +1304,17 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
     if (APoints->n_points == 1 && BPoints->n_points == 1) {
 	if (APoints->x[0] == BPoints->x[0] && APoints->y[0] == BPoints->y[0]) {
 	    if (!with_z) {
-		if (0 >
-		    Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
-					  &APoints->y[0], NULL, 1))
+		if (all && 0 >
+		    Vect_append_point(IPnts, APoints->x[0],
+					  APoints->y[0], APoints->z[0]))
 		    G_warning(_("Error while adding point to array. Out of memory"));
 		return 1;
 	    }
 	    else {
 		if (APoints->z[0] == BPoints->z[0]) {
-		    if (0 >
-			Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0],
-					      &APoints->y[0], &APoints->z[0],
-					      1))
+		    if (all && 0 >
+			Vect_append_point(IPnts, APoints->x[0],
+					      APoints->y[0], APoints->z[0]))
 			G_warning(_("Error while adding point to array. Out of memory"));
 		    return 1;
 		}
@@ -1344,9 +1333,9 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 			   NULL, NULL);
 
 	if (dist <= d_ulp(APoints->x[0], APoints->y[0])) {
-	    if (0 >
-		Vect_copy_xyz_to_pnts(IPnts, &APoints->x[0], &APoints->y[0],
-				      &APoints->z[0], 1))
+	    if (all && 0 >
+		Vect_append_point(IPnts, APoints->x[0], APoints->y[0],
+				      APoints->z[0]))
 		G_warning(_("Error while adding point to array. Out of memory"));
 	    return 1;
 	}
@@ -1361,9 +1350,9 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 			   NULL, NULL);
 
 	if (dist <= d_ulp(BPoints->x[0], BPoints->y[0])) {
-	    if (0 >
-		Vect_copy_xyz_to_pnts(IPnts, &BPoints->x[0], &BPoints->y[0],
-				      &BPoints->z[0], 1))
+	    if (all && 0 >
+		Vect_append_point(IPnts, BPoints->x[0], BPoints->y[0],
+				      BPoints->z[0]))
 		G_warning(_("Error while adding point to array. Out of memory"));
 	    return 1;
 	}
@@ -1540,7 +1529,7 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 		    G_fatal_error("RB tree error!");
 	    }
 	}
-	if (intersect == 1) {
+	if (!all && intersect == 1) {
 	    break;
 	}
     }
@@ -1552,9 +1541,35 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
 }
 
 /*!
+ * \brief Check if 2 lines intersect.
+ *
+ * Points (Points->n_points == 1) are also supported.
+ *
+ * simplified Bentley–Ottmann Algorithm:
+ * similar to Vect_line_check_intersection(), but faster
+ *
+ * \param APoints first input line 
+ * \param BPoints second input line 
+ * \param with_z 3D, not supported (only if one or both are points)!
+ *
+ * \return 0 no intersection 
+ * \return 1 intersection
+ * \return 2 end points only
+ */
+int
+Vect_line_check_intersection2(struct line_pnts *APoints,
+			      struct line_pnts *BPoints, int with_z)
+{
+    return line_check_intersection2(APoints, BPoints, with_z, 0);
+}
+
+/*!
  * \brief Get 2 lines intersection points.
  * 
- * A wrapper around Vect_line_check_intersection() function.
+ * A wrapper around Vect_line_check_intersection2() function.
+ *
+ * simplified Bentley–Ottmann Algorithm:
+ * similar to Vect_line_get_intersections(), but faster
  *
  * \param APoints first input line 
  * \param BPoints second input line 
@@ -1572,7 +1587,7 @@ Vect_line_get_intersections2(struct line_pnts *APoints,
     int ret;
 
     IPnts = IPoints;
-    ret = Vect_line_check_intersection2(APoints, BPoints, with_z);
+    ret = line_check_intersection2(APoints, BPoints, with_z, 1);
 
     return ret;
 }

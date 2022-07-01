@@ -675,7 +675,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    if (datum == NULL) {
 		if (paramspresent < 2)
 		    /* Only give warning if no parameters present */
-		    G_warning(_("Datum <%s> not recognised by GRASS and no parameters found"),
+		    G_debug(1, "Datum <%s> not recognised by GRASS and no parameters found",
 			      pszDatumName);
 	    }
 	    else {
@@ -691,12 +691,12 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 			GPJ_get_default_datum_params_by_name(datum, &params);
 
 		    if (paramsets < 0)
-			G_warning(_("Datum <%s> apparently recognised by GRASS but no parameters found. "
-				   "You may want to look into this."), datum);
+			G_debug(1, "Datum <%s> apparently recognised by GRASS but no parameters found. "
+				   "You may want to look into this.", datum);
 		    else if (datumtrans > paramsets) {
 
-			G_warning(_("Invalid transformation number %d; valid range is 1 to %d. "
-				   "Leaving datum transform parameters unspecified."),
+			G_debug(1, "Invalid transformation number %d; valid range is 1 to %d. "
+				   "Leaving datum transform parameters unspecified.",
 				  datumtrans, paramsets);
 			datumtrans = 0;
 		    }
@@ -1062,8 +1062,12 @@ static const char *papszDatumEquiv[] = {
     "Militar_Geographische_Institut",
     "Potsdam_Datum_83",
     "Deutsches_Hauptdreiecksnetz",
+    "Rauenberg_Datum_83",
+    "Deutsches_Hauptdreiecksnetz",
     "South_American_1969",
     "South_American_Datum_1969",
+    "International_Terrestrial_Reference_Frame_1992",
+    "ITRF92",
     "ITRF_1992",
     "ITRF92",
     NULL

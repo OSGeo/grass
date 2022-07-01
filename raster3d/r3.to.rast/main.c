@@ -144,7 +144,6 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd,
                    int output_type, int use_coeffs, double coeff_a,
                    double coeff_b)
 {
-    CELL c1 = 0;
     FCELL f1 = 0;
     DCELL d1 = 0;
     int x, y, z;

@@ -206,14 +206,14 @@ int main(int argc, char **argv)
     driver_opt->required = NO;
     driver_opt->description = _("Driver name for reference system table");
     driver_opt->options = db_list_drivers();
-    driver_opt->answer = db_get_default_driver_name();
+    driver_opt->answer = (char *) db_get_default_driver_name();
 
     database_opt = G_define_option();
     database_opt->key = "rsdatabase";
     database_opt->type = TYPE_STRING;
     database_opt->required = NO;
     database_opt->description = _("Database name for reference system table");
-    database_opt->answer = db_get_default_database_name();
+    database_opt->answer = (char *) db_get_default_database_name();
 
     table_opt = G_define_option();
     table_opt->key = "rstable";
@@ -732,7 +732,7 @@ int main(int argc, char **argv)
 						 mposts[k + 1].end_off);
 			    if (ret > -1) {	/* start >= end */
 				G_warning(_("Start of 1. MP >= end of 2. MP for points' "
-					   "cats %[d], [%d]"), mposts[k].cat,
+					   "cats [%d], [%d]"), mposts[k].cat,
 					  mposts[k + 1].cat);
 				mposts[k].err = ERR_END_GT_START;
 				order = 0;

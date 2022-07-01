@@ -30,13 +30,16 @@ from grass.script.core import set_raise_on_error
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
+from core.settings import UserSettings
 
 import wx
+
 # import adv and html before wx.App is created, otherwise
 # we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
 # during start up, remove when not needed
 import wx.adv
 import wx.html
+
 try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
@@ -44,9 +47,8 @@ except ImportError:
 
 
 class GMApp(wx.App):
-
     def __init__(self, workspace=None):
-        """ Main GUI class.
+        """Main GUI class.
 
         :param workspace: path to the workspace file
         """
@@ -58,55 +60,43 @@ class GMApp(wx.App):
         self.locale = wx.Locale(language=wx.LANGUAGE_DEFAULT)
 
     def OnInit(self):
-        """ Initialize all available image handlers
+        """Initialize all available image handlers
 
         :return: True
         """
+        # Internal and display name of the app (if supported by/on platform)
+        self.SetAppName("GRASS GIS")
+        self.SetVendorName("The GRASS Development Team")
+
         # create splash screen
         introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
         introImage = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
         introBmp = introImage.ConvertToBitmap()
-        if SC and sys.platform != 'darwin':
-            # AdvancedSplash is buggy on the Mac as of 2.8.12.1
-            # and raises annoying (though seemingly harmless) errors everytime
-            # the GUI is started
-            splash = SC.AdvancedSplash(bitmap=introBmp,
-                                       timeout=2000, parent=None, id=wx.ID_ANY)
-            splash.SetText(_('Starting GRASS GUI...'))
-            splash.SetTextColour(wx.Colour(45, 52, 27))
-            splash.SetTextFont(
-                wx.Font(
-                    pointSize=15,
-                    family=wx.DEFAULT,
-                    style=wx.NORMAL,
-                    weight=wx.BOLD))
-            splash.SetTextPosition((150, 430))
-        else:
-            if globalvar.wxPythonPhoenix:
-                import wx.adv as wxadv
-                wxadv.SplashScreen(
-                    bitmap=introBmp,
-                    splashStyle=wxadv.SPLASH_CENTRE_ON_SCREEN | wxadv.SPLASH_TIMEOUT,
-                    milliseconds=2000,
-                    parent=None,
-                    id=wx.ID_ANY)
-            else:
-                wx.SplashScreen(
-                    bitmap=introBmp,
-                    splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                    milliseconds=2000,
-                    parent=None,
-                    id=wx.ID_ANY)
+        wx.adv.SplashScreen(
+            bitmap=introBmp,
+            splashStyle=wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_TIMEOUT,
+            milliseconds=3000,
+            parent=None,
+            id=wx.ID_ANY,
+        )
 
         wx.GetApp().Yield()
 
-        # create and show main frame
-        from lmgr.frame import GMFrame
-        mainframe = GMFrame(parent=None, id=wx.ID_ANY,
-                            workspace=self.workspaceFile)
+        def show_main_gui():
+            # create and show main frame
+            single = UserSettings.Get(
+                group="general", key="singleWindow", subkey="enabled"
+            )
+            if single:
+                from main_window.frame import GMFrame
+            else:
+                from lmgr.frame import GMFrame
 
-        mainframe.Show()
-        self.SetTopWindow(mainframe)
+            mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
+            mainframe.Show()
+            self.SetTopWindow(mainframe)
+
+        wx.CallAfter(show_main_gui)
 
         return True
 
@@ -117,7 +107,7 @@ class GMApp(wx.App):
 
 
 def printHelp():
-    """ Print program help"""
+    """Print program help"""
     print("Usage:", file=sys.stderr)
     print(" python wxgui.py [options]", file=sys.stderr)
     print("%sOptions:" % os.linesep, file=sys.stderr)
@@ -126,14 +116,14 @@ def printHelp():
 
 
 def process_opt(opts, args):
-    """ Process command-line arguments"""
+    """Process command-line arguments"""
     workspaceFile = None
     for o, a in opts:
         if o in ("-h", "--help"):
             printHelp()
 
         elif o in ("-w", "--workspace"):
-            if a != '':
+            if a != "":
                 workspaceFile = str(a)
             else:
                 workspaceFile = args.pop(0)
@@ -147,8 +137,7 @@ def main(argv=None):
         argv = sys.argv
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "hw:",
-                                       ["help", "workspace"])
+            opts, args = getopt.getopt(argv[1:], "hw:", ["help", "workspace"])
         except getopt.error as msg:
             raise Usage(msg)
     except Usage as err:
@@ -167,6 +156,7 @@ def main(argv=None):
     registerPid(os.getpid())
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     sys.exit(main())

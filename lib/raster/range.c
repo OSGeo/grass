@@ -120,6 +120,12 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 	Rast_update_fp_range(dcell2, drange);
 	close(fd);
     }
+    else {
+	/* "f_range" file does not exist */
+	G_warning(_("Missing fp range file for <%s> (run r.support -s)"),
+		  G_fully_qualified_name(name, mapset));
+	return -1;
+    }
 
     return 1;
 }
@@ -236,6 +242,12 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 		Rast_update_range((CELL) x[n], range);
 	}
 	fclose(fd);
+    }
+    else {
+	/* "range" file does not exist */
+	G_warning(_("Missing range file for <%s> (run r.support -s)"),
+		  G_fully_qualified_name(name, mapset));
+	return -1;
     }
 
     return 1;

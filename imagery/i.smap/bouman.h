@@ -1,6 +1,7 @@
 #include <math.h>
 #include <string.h>
 #include <grass/raster.h>
+#include <grass/imagery.h>
 
 #define LIKELIHOOD float
 
@@ -36,7 +37,7 @@ int parse(int, char *[], struct parms *);
 int closefiles(struct parms *, struct files *);
 
 /* openfiles.c */
-int openfiles(struct parms *, struct files *);
+int openfiles(struct parms *, struct files *, struct SigSet *);
 
 /* Suboutines in alpha_max.c */
 void alpha_max(double ***, double *, int, double);
@@ -60,9 +61,6 @@ int invert(double **, int);
 
 #ifdef GRASS_IMAGERY_H
 int segment(struct SigSet *, struct parms *, struct files *);
-
-/* read_sig.c */
-int read_signatures(struct parms *, struct SigSet *);
 
 /* labels.c */
 int create_output_labels(struct SigSet *, struct files *);

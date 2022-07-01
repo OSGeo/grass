@@ -23,9 +23,6 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
-#undef MAX
-#define MAX(a,b) (a > b ? a : b)
-
 /* structs */
 typedef struct {
     struct Option *input, *output, *decimals, *null_val;

@@ -113,7 +113,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
    \param [out] intersec pointer to intersection region of regions A B 
    			   (relevant params of the region are: south, north, east, west)
 
-   \return  0 if interection exists
+   \return  0 if interaction exists
    \return -1 if regions does not intersect
  */
 static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
@@ -168,7 +168,7 @@ static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
    \param [out] B_bounds rows and cols numbers of B stored in 
                 south, north, east, west, which defines intersection of A and B
 
-   \return  0 if interection exists
+   \return  0 if interaction exists
    \return -1 if regions do not intersect
    \return -2 resolution of regions is not same 
  */
@@ -181,14 +181,14 @@ static int get_rows_and_cols_bounds(struct Cell_head *A, struct Cell_head *B,
     struct Cell_head intersec;
 
     /* TODO is it right check? */
-    if (abs(A->ns_res - B->ns_res) > GRASS_EPSILON) {
+    if (fabs(A->ns_res - B->ns_res) > GRASS_EPSILON) {
 	G_warning(
 		"'get_rows_and_cols_bounds' ns_res does not fit, A->ns_res: %f B->ns_res: %f",
 		A->ns_res, B->ns_res);
 	return -2;
     }
 
-    if (abs(A->ew_res - B->ew_res) > GRASS_EPSILON) {
+    if (fabs(A->ew_res - B->ew_res) > GRASS_EPSILON) {
 	G_warning(
 		"'get_rows_and_cols_bounds' ew_res does not fit, A->ew_res: %f B->ew_res: %f",
 		A->ew_res, B->ew_res);
@@ -526,7 +526,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 			      ("Unable to read from category raster condition file."));
 		    return -1;
 		}
-		if (n_pixs != n_pixs) {
+		if (n_pixs != (row_size) / sizeof(unsigned char)) {
 		    G_free(rast_pixs);
 		    G_free(belongs_pix);
 		    G_warning(_

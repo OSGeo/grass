@@ -1,9 +1,9 @@
 all = [
-    'preferences',
-    'main',
-    'mapwindow',
-    'tools',
-    'wxnviz',
-    'workspace',
-    'animation',
+    "preferences",
+    "main",
+    "mapwindow",
+    "tools",
+    "wxnviz",
+    "workspace",
+    "animation",
 ]

@@ -388,14 +388,14 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
 	    nwrite++;
 
 	    if (write(fcb->data_fd, compressed_buf, nwrite) != nwrite)
-		G_fatal_error(_("Error writing compressed data for row %d of <%s>"),
-			      row, fcb->name);
+		G_fatal_error(_("Error writing compressed data for row %d of <%s>: %s"),
+			      row, fcb->name, strerror(errno));
 	}
 	else {
 	    nwrite = nbytes * n + 1;
 	    if (write(fcb->data_fd, work_buf, nwrite) != nwrite)
-		G_fatal_error(_("Error writing compressed data for row %d of <%s>"),
-			      row, fcb->name);
+		G_fatal_error(_("Error writing compressed data for row %d of <%s>: %s"),
+			      row, fcb->name, strerror(errno));
 	}
 
 	G_free(compressed_buf);
@@ -404,8 +404,8 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
 	nwrite = fcb->nbytes * n;
 
 	if (write(fcb->data_fd, work_buf, nwrite) != nwrite)
-	    G_fatal_error(_("Error writing uncompressed data for row %d of <%s>"),
-			  row, fcb->name);
+	    G_fatal_error(_("Error writing uncompressed data for row %d of <%s>: %s"),
+			  row, fcb->name, strerror(errno));
     }
 
     G_free(work_buf);
@@ -514,17 +514,17 @@ static void write_null_bits_compressed(const unsigned char *flags,
     compressed_buf = G_malloc(cmax);
 
     /* compress null bits file with LZ4, see lib/gis/compress.h */
-    nwrite = G_compress(flags, size, compressed_buf, cmax, 3);
+    nwrite = G_compress((unsigned char *)flags, size, compressed_buf, cmax, 3);
 
     if (nwrite > 0 && nwrite < size) {
 	if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
-	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>"),
-			  row, fcb->name);
+	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>: %s"),
+			  row, fcb->name, strerror(errno));
     }
     else {
 	if (write(fcb->null_fd, flags, size) != size)
-	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>"),
-			  row, fcb->name);
+	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>: %s"),
+			  row, fcb->name, strerror(errno));
     }
 
     G_free(compressed_buf);
@@ -557,10 +557,12 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
     offset = (off_t) size * row;
 
     if (lseek(fcb->null_fd, offset, SEEK_SET) < 0)
-	G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
+	G_fatal_error(_("Error writing null row %d of <%s>"),
+	              row, fcb->name);
 
     if (write(fcb->null_fd, flags, size) != size)
-	G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
+	G_fatal_error(_("Error writing null row %d of <%s>: %s"),
+	              row, fcb->name, strerror(errno));
 }
 
 static void convert_and_write_if(int fd, const void *vbuf)

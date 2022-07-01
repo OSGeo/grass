@@ -47,11 +47,9 @@ char *start(const char *name, const char *output, int width, int height, int upd
                 D_setup_unity(0);
                 D_erase("white");
             }
-            else {
-                D_close_driver();
+            else
                 G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
                               "output", output_name);
-            }
         }
         D_close_driver(); /* must be called after check because this
                            * function produces default map file */

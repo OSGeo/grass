@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.rast.extract
@@ -20,63 +20,63 @@
 #
 #############################################################################
 
-#%module
-#% description: Extracts a subset of a space time raster datasets.
-#% keyword: temporal
-#% keyword: extract
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Extracts a subset of a space time raster datasets.
+# % keyword: temporal
+# % keyword: extract
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: expression
-#% type: string
-#% description: r.mapcalc expression assigned to all extracted raster maps
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: expression
+# % type: string
+# % description: r.mapcalc expression assigned to all extracted raster maps
+# % required: no
+# % multiple: no
+# %end
 
-#%option G_OPT_STRDS_OUTPUT
-#%end
+# %option G_OPT_STRDS_OUTPUT
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: no
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: no
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.mapcalc processes to run in parallel
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.mapcalc processes to run in parallel
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register Null maps
-#%end
+# %flag
+# % key: n
+# % description: Register Null maps
+# %end
 
 
 import grass.script as grass
@@ -102,8 +102,18 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.extract_dataset(input, output, "raster", where, expression,
-                         base, time_suffix, nprocs, register_null)
+    tgis.extract_dataset(
+        input,
+        output,
+        "raster",
+        where,
+        expression,
+        base,
+        time_suffix,
+        nprocs,
+        register_null,
+    )
+
 
 ###############################################################################
 

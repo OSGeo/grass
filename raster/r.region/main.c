@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 	if (Vect_open_old(&Map, name, "") != 1)
 	    G_fatal_error(_("Unable to open vector map <%s>"), name);
 
-	Vect_get_map_box(&Map, &box);
+	Vect_get_map_box1(&Map, &box);
 	window.north = box.N;
 	window.south = box.S;
 	window.west = box.W;

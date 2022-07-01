@@ -27,7 +27,7 @@
 
 
 /* prototypes ************************************************************* */
-int close_input_raster3d_map(void *map);
+int close_input_raster3d_map(RASTER3D_Map *map);
 
 
 /* ************************************************************************* */
@@ -58,11 +58,11 @@ int CloseInputRasterMap(int fd)
 /* ************************************************************************* */
 /* Close the raster g3d input map ****************************************** */
 /* ************************************************************************* */
-int close_input_raster3d_map(void *map)
+int close_input_raster3d_map(RASTER3D_Map *map)
 {
     if (map != NULL) {
 	if (!Rast3d_close(map)) {
-	    G_warning(_("Unable to close 3D raster map <%s>"), map);
+	    G_warning(_("Unable to close 3D raster map <%s>"), map->fileName);
 	    return 1;
 	}
     }

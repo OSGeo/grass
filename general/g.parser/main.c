@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
     for (ctx.line = 1;; ctx.line++) {
 	char buff[4096];
 	char *cmd, *arg;
+	size_t line_size;
 
 	if (!fgets(buff, sizeof(buff), ctx.fp))
 	    break;
@@ -102,10 +103,19 @@ int main(int argc, char *argv[])
 	}
 	*arg = '\0';
 
-	if (buff[0] != '#' || buff[1] != '%')
+	line_size = strlen(buff);
+	if (line_size > 2 && buff[0] == '#') {
+	    if (buff[1] == '%')
+		cmd = buff + 2;
+	    else if (line_size > 3 && buff[1] == ' ' && buff[2] == '%')
+		cmd = buff + 3;
+	    else
+		continue;
+	}
+	else {
 	    continue;
+	}
 
-	cmd = buff + 2;
 	G_chop(cmd);
 
 	arg = strchr(cmd, ':');

@@ -18,7 +18,7 @@ database driver selected.
 
 <h2>Database drivers</h2>  
 
-The default database driver used by GRASS GIS 7 is SQLite. GRASS GIS 
+The default database driver used by GRASS GIS 8 is SQLite. GRASS GIS 
 handles multiattribute vector data by default. The <em>db.*</em> set of
 commands  provides basic SQL support for attribute management, while the
 <em>v.db.*</em> set of commands operates on vector maps.
@@ -220,7 +220,6 @@ v.db.update vectormap column=species qcolumn="CASE WHEN col1 &gt;= 12 THEN cat e
 v.db.update vectormap column=species qcolumn="CASE WHEN col1 &gt;= 1 THEN cat WHEN row = 13 then 0 ELSE NULL end"
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -236,7 +235,6 @@ v.db.update vectormap column=species qcolumn="CASE WHEN col1 &gt;= 1 THEN cat WH
 <a href="databaseintro.html">Database management in GRASS GIS</a>,
 <a href="database.html">Help pages for database modules</a>
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+<h2>AUTHOR</h2>
+
+Radmin Blazek

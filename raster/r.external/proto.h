@@ -1,9 +1,5 @@
+#include <grass/gis.h>
 #include <grass/raster.h>
-
-#undef MIN
-#undef MAX
-#define MIN(a,b)      ((a) < (b) ? (a) : (b))
-#define MAX(a,b)      ((a) > (b) ? (a) : (b))
 
 struct band_info
 {
@@ -11,6 +7,8 @@ struct band_info
     GDALDataType gdal_type;
     int has_null;
     double null_val;
+    DCELL minmax[2];
+    int have_minmax;
     struct Colors colors;
 };
 

@@ -148,7 +148,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		continue;
 	    }
 	    else {
-		G_warning(_("ntokens: %d, xcol: %d, ycol: %d, zcol: %d"), xcol, ycol, zcol);
+		G_warning(_("ntokens: %d, xcol: %d, ycol: %d, zcol: %d"), ntokens, xcol, ycol, zcol);
 		G_fatal_error(_("Broken row %d: '%s'"), row, buf);
 	    }
 	}

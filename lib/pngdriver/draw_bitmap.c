@@ -67,7 +67,7 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
 		int x = cur_x + i;
 		unsigned int k = buf[j * ncols + i];
 		unsigned int *p = &png.grid[y * png.width + x];
-		unsigned int a0, r0, g0, b0;
+		int a0, r0, g0, b0;
 		unsigned int a, r, g, b;
 
 		png_get_pixel(*p, &r0, &g0, &b0, &a0);

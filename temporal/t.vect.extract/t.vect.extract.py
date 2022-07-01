@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.vect.extract
@@ -20,65 +20,65 @@
 #
 #############################################################################
 
-#%module
-#% description: Extracts a subset of a space time vector dataset.
-#% keyword: temporal
-#% keyword: extract
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Extracts a subset of a space time vector dataset.
+# % keyword: temporal
+# % keyword: extract
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STVDS_INPUT
-#%end
+# %option G_OPT_STVDS_INPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option G_OPT_DB_WHERE
-#% key: expression
-#%end
+# %option G_OPT_DB_WHERE
+# % key: expression
+# %end
 
-#%option G_OPT_STVDS_OUTPUT
-#%end
+# %option G_OPT_STVDS_OUTPUT
+# %end
 
-#%option G_OPT_V_FIELD
-#%end
+# %option G_OPT_V_FIELD
+# %end
 
-#%option G_OPT_V_TYPE
-#%end
+# %option G_OPT_V_TYPE
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: no
-#% multiple: no
-#% gisprompt:
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: no
+# % multiple: no
+# % gisprompt:
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: The number of v.extract processes to run in parallel. Use only if database backend is used which supports concurrent writing
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: The number of v.extract processes to run in parallel. Use only if database backend is used which supports concurrent writing
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty maps
-#%end
+# %flag
+# % key: n
+# % description: Register empty maps
+# %end
 
 import grass.script as grass
 
@@ -105,8 +105,20 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    tgis.extract_dataset(input, output, "vector", where, expression,
-                         base, time_suffix, nprocs, register_null, layer, type)
+    tgis.extract_dataset(
+        input,
+        output,
+        "vector",
+        where,
+        expression,
+        base,
+        time_suffix,
+        nprocs,
+        register_null,
+        layer,
+        type,
+    )
+
 
 ###############################################################################
 

@@ -10,7 +10,7 @@ sudo apt-get install --no-install-recommends \
         libgdal-dev \
         libgeos-dev \
         libglu1-mesa-dev \
-        libgsl0-dev \
+        libgsl-dev \
         libjpeg-dev \
         liblapack-dev \
         libncurses5-dev \
@@ -26,7 +26,7 @@ sudo apt-get install --no-install-recommends \
         libreadline-dev \
         libsqlite3-dev \
         libtiff-dev \
-        libwxgtk3.0-dev \
+        libwxgtk3.0-gtk3-dev \
         libxmu-dev \
         libzstd-dev \
         python3 \

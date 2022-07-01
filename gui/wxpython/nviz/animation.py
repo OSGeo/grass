@@ -41,22 +41,21 @@ class Animation:
         :param mapWindow: glWindow where rendering takes place
         :param timer: timer for recording and replaying
         """
-        self.animationFinished = Signal('Animation.animationFinished')
-        self.animationUpdateIndex = Signal('Animation.animationUpdateIndex')
+        self.animationFinished = Signal("Animation.animationFinished")
+        self.animationUpdateIndex = Signal("Animation.animationUpdateIndex")
 
-        self.animationList = []         # view states
+        self.animationList = []  # view states
         self.timer = timer
         self.mapWindow = mapWindow
-        self.actions = {'record': self.Record,
-                        'play': self.Play}
-        self.formats = ['tif', 'ppm']   # currently supported formats
-        self.mode = 'record'            # current mode (record, play, save)
-        self.paused = False             # recording/replaying paused
-        self.currentFrame = 0           # index of current frame
+        self.actions = {"record": self.Record, "play": self.Play}
+        self.formats = ["tif", "ppm"]  # currently supported formats
+        self.mode = "record"  # current mode (record, play, save)
+        self.paused = False  # recording/replaying paused
+        self.currentFrame = 0  # index of current frame
         self.fps = 24  # user settings   # Frames per second
 
-        self.stopSaving = False         # stop during saving images
-        self.animationSaved = False     # current animation saved or not
+        self.stopSaving = False  # stop during saving images
+        self.animationSaved = False  # current animation saved or not
 
     def Start(self):
         """Start recording/playing"""
@@ -78,8 +77,11 @@ class Animation:
     def Record(self):
         """Record new view state"""
         self.animationList.append(
-            {'view': copy.deepcopy(self.mapWindow.view),
-             'iview': copy.deepcopy(self.mapWindow.iview)})
+            {
+                "view": copy.deepcopy(self.mapWindow.view),
+                "iview": copy.deepcopy(self.mapWindow.iview),
+            }
+        )
         self.currentFrame += 1
         self.PostUpdateIndexEvent(index=self.currentFrame)
         self.animationSaved = False
@@ -105,11 +107,11 @@ class Animation:
     def UpdateView(self, params):
         """Update view data in map window and render"""
         toolWin = self.mapWindow.GetToolWin()
-        toolWin.UpdateState(view=params['view'], iview=params['iview'])
+        toolWin.UpdateState(view=params["view"], iview=params["iview"])
 
         self.mapWindow.UpdateView()
 
-        self.mapWindow.render['quick'] = True
+        self.mapWindow.render["quick"] = True
         self.mapWindow.Refresh(False)
 
     def IsRunning(self):
@@ -169,7 +171,7 @@ class Animation:
         self.stopSaving = True
 
     def IsSaved(self):
-        """"Test if animation has been saved (to images)"""
+        """Test if animation has been saved (to images)"""
         return self.animationSaved
 
     def SaveAnimationFile(self, path, prefix, format):
@@ -182,38 +184,35 @@ class Animation:
         size = self.mapWindow.GetClientSize()
         toolWin = self.mapWindow.GetToolWin()
 
-        formatter = ':04.0f'
+        formatter = ":04.0f"
         n = len(self.animationList)
         if n < 10:
-            formatter = ':01.0f'
+            formatter = ":01.0f"
         elif n < 100:
-            formatter = ':02.0f'
+            formatter = ":02.0f"
         elif n < 1000:
-            formatter = ':03.0f'
+            formatter = ":03.0f"
 
         self.currentFrame = 0
-        self.mode = 'save'
+        self.mode = "save"
         for params in self.animationList:
             if not self.stopSaving:
                 self.UpdateView(params)
-                number = (
-                    '{frame' +
-                    formatter +
-                    '}').format(
-                    frame=self.currentFrame)
+                number = ("{frame" + formatter + "}").format(frame=self.currentFrame)
                 filename = "{prefix}_{number}.{ext}".format(
-                    prefix=prefix, number=number, ext=self.formats[format])
+                    prefix=prefix, number=number, ext=self.formats[format]
+                )
                 filepath = os.path.join(path, filename)
                 self.mapWindow.SaveToFile(
                     FileName=filepath,
                     FileType=self.formats[format],
                     width=size[0],
-                    height=size[1])
+                    height=size[1],
+                )
                 self.currentFrame += 1
 
                 wx.GetApp().Yield()
-                toolWin.UpdateFrameIndex(
-                    index=self.currentFrame, goToFrame=False)
+                toolWin.UpdateFrameIndex(index=self.currentFrame, goToFrame=False)
             else:
                 self.stopSaving = False
                 break
@@ -228,4 +227,4 @@ class Animation:
 
     def GetInterval(self):
         """Return timer interval in ms"""
-        return 1000. / self.fps
+        return 1000.0 / self.fps

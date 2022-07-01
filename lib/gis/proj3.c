@@ -175,7 +175,7 @@ double G_database_units_to_meters_factor(void)
   \brief Get datum name for the current location
   
   Returns a pointer to the name of the map datum of the current
-  database. If there is no map datum explicitely associated with the
+  database. If there is no map datum explicitly associated with the
   actual database, the standard map datum WGS84 is returned, on error
   a NULL pointer is returned.
   

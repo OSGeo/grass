@@ -132,7 +132,7 @@ void EtmDN(int iwave, double asol, bool before, double &lmin, double &lmax)
 /* Assuming input value between 0 and 1
    if rad is true, idn should first be converted to a reflectance value
    returns adjusted value also between 0 and 1 */
-double transform(const TransformInput ti, InputMask imask, double idn)
+double transform(const TransformInput &ti, InputMask imask, double idn)
 {
     /* convert from radiance to reflectance */
     if((imask & ETM_BEFORE) || (imask & ETM_AFTER))

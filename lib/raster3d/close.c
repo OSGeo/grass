@@ -106,7 +106,7 @@ static int close_cell_new(RASTER3D_Map * map)
 	return 0;
     }
 
-    if (!close_new(map) != 0) {
+    if (!close_new(map)) {
 	G_warning(_("Unable to create 3D raster map <%s>"), map->fileName);
 	return 0;
     }
@@ -126,7 +126,7 @@ static int close_old(RASTER3D_Map * map)
 
 static int close_cell_old(RASTER3D_Map * map)
 {
-    if (!close_old(map) != 0) {
+    if (!close_old(map)) {
 	G_warning(_("Unable to close 3D raster map <%s>"), map->fileName);
 	return 0;
     }
@@ -155,7 +155,7 @@ int Rast3d_close(RASTER3D_Map * map)
 	}
     }
     else {
-	if (!close_cell_old(map) != 0) {
+	if (!close_cell_old(map)) {
 	    G_warning(_("Unable to close 3D raster map <%s>"), map->fileName);
 	    return 0;
 	}

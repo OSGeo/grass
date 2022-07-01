@@ -88,7 +88,7 @@ int db__driver_execute_immediate(dbString * sql)
 	hFeature = OGR_L_GetNextFeature(hLayer);
 	if (!hFeature)
 	    break;
-	G_debug(5, "\tfid=%ld", OGR_F_GetFID(hFeature));
+	G_debug(5, "\tfid=%lld", OGR_F_GetFID(hFeature));
 	
 	for (i = 0; i < ncols; i++) {
 	    if (cols[i].qindex > -1) {
@@ -109,7 +109,9 @@ int db__driver_execute_immediate(dbString * sql)
 	    }
 	    OGR_F_SetFieldString(hFeature, cols[i].index, value);
 	}
-	OGR_L_SetFeature(hLayer, hFeature);
+	if (OGR_L_SetFeature(hLayer, hFeature) != OGRERR_NONE)
+	    G_warning(_("\tOGR failed to write feature fid=%lld to layer <%s>"),
+		      OGR_F_GetFID(hFeature), OGR_L_GetName(hLayer));
 	OGR_F_Destroy(hFeature);
     }
     

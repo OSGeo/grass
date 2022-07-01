@@ -34,7 +34,7 @@ int stop(const char *name)
     dirp = opendir(mon_path);
 
     while ((dp = readdir(dirp)) != NULL) {
-        if (!dp->d_name || dp->d_name[0] == '.')
+        if (!*dp->d_name || dp->d_name[0] == '.')
             continue;
         sprintf(file_path, "%s/%s", mon_path, dp->d_name);
         if (unlink(file_path) == -1)

@@ -210,7 +210,7 @@ dbDbmscap *db_read_dbmscap(void)
 }
 
 static int cmp_entry(dbDbmscap *a, dbDbmscap *b) {
-  return( a->driverName && b->driverName ? strcmp(a->driverName,b->driverName) : 0 );
+    return( *a->driverName && *b->driverName ? strcmp(a->driverName,b->driverName) : 0 );
 }
 
 static void add_entry(dbDbmscap ** list, char *name, char *startup, char *comment)

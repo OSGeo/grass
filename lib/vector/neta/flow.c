@@ -103,7 +103,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 		dglInt32_t to =
 		    dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
 		if (!is_source[to] && prev[to] == NULL &&
-		    cap > sign(id) * flow[abs(id)]) {
+		    cap > sign(id) * flow[labs(id)]) {
 		    prev[to] = edge;
 		    if (is_sink[to]) {
 			found = to;
@@ -127,7 +127,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 	edge_id = dglEdgeGet_Id(graph, prev[node]);
 	min_residue =
 	    dglEdgeGet_Cost(graph,
-			    prev[node]) - sign(edge_id) * flow[abs(edge_id)];
+			    prev[node]) - sign(edge_id) * flow[labs(edge_id)];
 	while (!is_source[node]) {
 	    dglInt32_t residue;
 
@@ -135,7 +135,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 	    residue =
 		dglEdgeGet_Cost(graph,
 				prev[node]) -
-		sign(edge_id) * flow[abs(edge_id)];
+		sign(edge_id) * flow[labs(edge_id)];
 	    if (residue < min_residue)
 		min_residue = residue;
 	    node = dglNodeGet_Id(graph, dglEdgeGet_Head(graph, prev[node]));
@@ -145,7 +145,7 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 	node = found;
 	while (!is_source[node]) {
 	    edge_id = dglEdgeGet_Id(graph, prev[node]);
-	    flow[abs(edge_id)] += sign(edge_id) * min_residue;
+	    flow[labs(edge_id)] += sign(edge_id) * min_residue;
 	    node = dglNodeGet_Id(graph, dglEdgeGet_Head(graph, prev[node]));
 	}
     }
@@ -214,7 +214,7 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
 	    dglInt32_t id = dglEdgeGet_Id(graph, edge);
 	    dglInt32_t to =
 		dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
-	    if (!visited[to] && cap > sign(id) * flow[abs(id)]) {
+	    if (!visited[to] && cap > sign(id) * flow[labs(id)]) {
 		visited[to] = 1;
 		queue[end++] = to;
 	    }
@@ -236,10 +236,10 @@ int NetA_min_cut(dglGraph_s * graph, struct ilist *source_list,
 	    dglInt32_t to, edge_id;
 
 	    to = dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
-	    edge_id = abs(dglEdgeGet_Id(graph, edge));
+	    edge_id = labs(dglEdgeGet_Id(graph, edge));
 	    if (!visited[to] && flow[edge_id] != 0) {
 		Vect_list_append(cut, edge_id);
-		total_flow += abs(flow[abs(edge_id)]);
+		total_flow += abs(flow[labs(edge_id)]);
 	    }
 	}
 	dglEdgeset_T_Release(&et);

@@ -27,7 +27,6 @@ int get_training_classes(struct files *files, struct Signature *S)
     ncols = Rast_window_cols();
 
     /* determine the categories in the map */
-    I_init_signatures(S, files->nbands);
     Rast_init_cell_stats(&cell_stats);
     G_message(_("Finding training classes..."));
     for (row = 0; row < nrows; row++) {
@@ -40,6 +39,7 @@ int get_training_classes(struct files *files, struct Signature *S)
     /* convert this to an array */
     Rast_rewind_cell_stats(&cell_stats);
     n = 0;
+    S->have_oclass = 1;
     while (Rast_next_cell_stat(&cat, &count, &cell_stats)) {
 	if (count > 1) {
 	    I_new_signature(S);
@@ -49,6 +49,8 @@ int get_training_classes(struct files *files, struct Signature *S)
 		      Rast_get_c_cat(&cat, &files->training_labels),
 		      sizeof(S->sig[n].desc)
 		);
+        S->sig[n].desc[255] = '\0';  /* desc is limited to 256 */
+        S->sig[n].oclass = cat;
 	    n++;
 	}
 	else

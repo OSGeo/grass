@@ -36,54 +36,10 @@ their own modules which use this prefix.
 \subsection Group_Processing Group Processing
 
 The group is the key database structure which permits integration of
-image processing in GRASS.
-
-<P>
-\subsection Prompting_for_a_Group Prompting for a Group
-
-<P>
-The following routines interactively prompt the user for a group name
-in the current mapset (This library only works with groups in the
-current mapset. Other mapsets, even those in the user's mapset search
-path, are ignored.) In each, the <B>prompt</B> string will be printed
-as the first line of the full prompt which asks the user to enter a
-group name. If <B>prompt</B> is the empty string "", then an
-appropriate prompt will be substituted. The name that the user enters
-is copied into the <B>group</B> buffer. The size of group should be
-large enough to hold any GRASS file name. Most systems allow file
-names to be quite long. It is recommended that name be declared
-<tt>char group</tt>.  These routines have a built-in 'list' capability
-which allows the user to get a list of existing groups.
-
-<P>
-The user is required to enter a valid group name, or else hit the
-RETURN key to cancel the request. If the user enters an invalid
-response, a message is printed, and the user is prompted again. If the
-user cancels the request, 0 is returned; otherwise, 1 is returned.
-
-<P>
-int I_ask_group_old() prompt for an existing group
-
-Asks the user to enter the name of an existing <B>group</B> in the
-current mapset.
-
-<P>
-<B>Note.</B> The user is not warned if the <B>group</B> exists. The
-programmer should use <I>I_find_group()</I> to determine if the
-<B>group</B> exists.
-
-<P>
-Here is an example of how to use these routines. Note that the
-programmer must handle the 0 return properly:
-
-\verbatim
-char group[INAME_LEN];
-
-if ( ! I_ask_group_any ("Enter group to be processed", group))
-   exit(0);
-\endverbatim
-
-<P>
+image processing in GRASS. As GRASS during import splits up multiband
+image into separate rasters, groups allow to keep them together to
+ease workflows. Groups do not store data themselves, only references
+to group members and auxilary data.
 
 \subsection Finding_Groups_in_the_Database Finding Groups in the Database
 
@@ -92,11 +48,11 @@ Sometimes it is necessary to determine if a given group already
 exists. The following routine provides this service:
 
 <P>
-int I_find_group() does group exist?  
+int I_find_group() does group exist in current mapset?  
+int I_find_group2() does group exist in the specified mapset?  
 
-Returns 1 if the specified <B>group</B> exists in the current mapset;
+Returns 1 if the specified <B>group</B> exists in the mapset;
 0 otherwise.
-
 
 \subsection REF_File REF File
 
@@ -111,10 +67,11 @@ The contents of the REF file are read or updated by the following
 routines:
 
 <P>
-int I_get_group_ref() read group REF file
+int I_get_group_ref() read group REF file from current mapset  
+int I_get_group_ref2() read group REF file from the specified mapset  
 
 Reads the contents of the REF file for the specified <B>group</B> into
-the <B>ref</B> structure.
+the <B>ref</B> structure. 
 
 <P>
 Returns 1 if successful; 0 otherwise (but no error messages are printed).
@@ -133,7 +90,8 @@ Returns 1 if successful; 0 otherwise (and prints a diagnostic error).
 already exist.
 
 <P>
-int I_get_subgroup_ref() read subgroup REF file
+int I_get_subgroup_ref() read subgroup REF file in current mapset  
+int I_get_subgroup_ref2() read subgroup REF file in the specified mapset  
 
 Reads the contents of the REF file for the specified <B>subgroup</B>
 of the specified <B>group</B> into the <B>ref</B> structure.

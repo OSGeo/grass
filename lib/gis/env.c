@@ -3,7 +3,7 @@
 
   \brief GIS library - environment routines
   
-  (C) 2001-2014 by the GRASS Development Team
+  (C) 2001-2022 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -114,9 +114,27 @@ void G__read_gisrc_env(void)
     force_read_env(G_VAR_GISRC);
 }
 
+/*!
+ * \brief Read or read again the GISRC (session) environment variable
+ *
+ * The GISRC environment variable will be read and its value
+ * stored, ignoring if it was read before.
+ *
+ * Calls G_fatal_error when the GISRC variable is not set.
+ */
+void G__read_gisrc_path(){
+    st->gisrc = getenv("GISRC");
+    if (!st->gisrc) {
+        G_fatal_error(_("No active GRASS session: "
+                        "GISRC environment variable not set"));
+    }
+}
+
 static void parse_env(FILE *fd, int loc)
-{    
-    char buf[200];
+{
+    /* Account for long lines up to GPATH_MAX. 
+       E.g. "GISDBASE: GPATH_MAX\n\0" */
+    char buf[GPATH_MAX + 16];
     char *name;
     char *value;
 
@@ -267,9 +285,9 @@ static void write_env(int loc)
     FILE *fd;
     int n;
     char dummy[2];
-    RETSIGTYPE (*sigint)(int);
+    void (*sigint)(int);
 #ifdef SIGQUIT
-    RETSIGTYPE (*sigquit)(int);
+    void (*sigquit)(int);
 #endif
 
     if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
@@ -305,10 +323,9 @@ static FILE *open_env(const char *mode, int loc)
 
     if (loc == G_VAR_GISRC) {
 	if (!st->gisrc)
-	    st->gisrc = getenv("GISRC");
+	    G__read_gisrc_path();
 
 	if (!st->gisrc) {
-	    G_fatal_error(_("GISRC - variable not set"));
 	    return NULL;
 	}
 	strcpy(buf, st->gisrc);
@@ -340,7 +357,7 @@ const char *G_getenv(const char *name)
     if (value)
 	return value;
 
-    G_fatal_error(_("Variable '%s' not set"), name);
+    G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"), name);
     return NULL;
 }
 
@@ -366,7 +383,7 @@ const char *G_getenv2(const char *name, int loc)
     if (value)
 	return value;
 
-    G_fatal_error(_("Variable '%s' not set"), name);
+    G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"), name);
     return NULL;
 }
 

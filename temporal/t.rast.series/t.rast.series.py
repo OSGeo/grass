@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:    t.rast.series
@@ -21,62 +21,62 @@
 #
 #############################################################################
 
-#%module
-#% description: Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset.
-#% keyword: temporal
-#% keyword: aggregation
-#% keyword: series
-#% keyword: raster
-#% keyword: time
-#%end
+# %module
+# % description: Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset.
+# % keyword: temporal
+# % keyword: aggregation
+# % keyword: series
+# % keyword: raster
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option
-#% key: method
-#% type: string
-#% description: Aggregate operation to be performed on the raster maps
-#% required: yes
-#% multiple: yes
-#% options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
-#% answer: average
-#%end
+# %option
+# % key: method
+# % type: string
+# % description: Aggregate operation to be performed on the raster maps
+# % required: yes
+# % multiple: yes
+# % options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
+# % answer: average
+# %end
 
-#%option
-#% key: quantile
-#% type: double
-#% description: Quantile to calculate for method=quantile
-#% required: no
-#% multiple: yes
-#% options: 0.0-1.0
-#%end
+# %option
+# % key: quantile
+# % type: double
+# % description: Quantile to calculate for method=quantile
+# % required: no
+# % multiple: yes
+# % options: 0.0-1.0
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% description: Sort the maps by category
-#% required: no
-#% multiple: yes
-#% options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
-#% answer: start_time
-#%end
+# %option
+# % key: order
+# % type: string
+# % description: Sort the maps by category
+# % required: no
+# % multiple: yes
+# % options: id, name, creator, mapset, creation_time, modification_time, start_time, end_time, north, south, west, east, min, max
+# % answer: start_time
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option G_OPT_R_OUTPUTS
-#%end
+# %option G_OPT_R_OUTPUTS
+# %end
 
-#%flag
-#% key: t
-#% description: Do not assign the space time raster dataset start and end time to the output map
-#%end
+# %flag
+# % key: t
+# % description: Do not assign the space time raster dataset start and end time to the output map
+# %end
 
-#%flag
-#% key: n
-#% description: Propagate NULLs
-#%end
+# %flag
+# % key: n
+# % description: Propagate NULLs
+# %end
 
 
 import grass.script as grass
@@ -100,14 +100,15 @@ def main():
     nulls = flags["n"]
 
     # Check if number of methods and output maps matches
-    if 'quantile' in method:
-        len_method = len(method.split(',')) - 1
+    if "quantile" in method:
+        len_method = len(method.split(",")) - 1
     else:
-        len_method = len(method.split(','))
-    
-    if (len(list(filter(None, quantile.split(',')))) + 
-        len_method) != len(output.split(',')):
-        grass.fatal(_('Number requested methods and output maps do not match.'))
+        len_method = len(method.split(","))
+
+    if (len(list(filter(None, quantile.split(",")))) + len_method) != len(
+        output.split(",")
+    ):
+        grass.fatal(_("Number requested methods and output maps do not match."))
 
     # Make sure the temporal database exists
     tgis.init()
@@ -119,7 +120,7 @@ def main():
     if rows:
         # Create the r.series input file
         filename = grass.tempfile(True)
-        file = open(filename, 'w')
+        file = open(filename, "w")
 
         for row in rows:
             string = "%s\n" % (row["id"])
@@ -129,22 +130,34 @@ def main():
 
         flag = ""
         if len(rows) > 1000:
-            grass.warning(_("Processing over 1000 maps: activating -z flag of r.series which slows down processing"))
+            grass.warning(
+                _(
+                    "Processing over 1000 maps: activating -z flag of r.series which slows down processing"
+                )
+            )
             flag += "z"
         if nulls:
             flag += "n"
 
         try:
-            grass.run_command("r.series", flags=flag, file=filename,
-                              output=output, overwrite=grass.overwrite(),
-                              method=method, quantile=quantile)
+            grass.run_command(
+                "r.series",
+                flags=flag,
+                file=filename,
+                output=output,
+                overwrite=grass.overwrite(),
+                method=method,
+                quantile=quantile,
+            )
         except CalledModuleError:
-            grass.fatal(_("%s failed. Check above error messages.") % 'r.series')
+            grass.fatal(_("%s failed. Check above error messages.") % "r.series")
 
         if not add_time:
 
             # We need to set the temporal extent from the subset of selected maps
-            maps = sp.get_registered_maps_as_objects(where=where, order=order, dbif=None)
+            maps = sp.get_registered_maps_as_objects(
+                where=where, order=order, dbif=None
+            )
             first_map = maps[0]
             last_map = maps[-1]
             start_a, end_a = first_map.get_temporal_extent_as_tuple()
@@ -156,10 +169,13 @@ def main():
             if first_map.is_time_absolute():
                 extent = tgis.AbsoluteTemporalExtent(start_time=start_a, end_time=end_b)
             else:
-                extent = tgis.RelativeTemporalExtent(start_time=start_a, end_time=end_b,
-                                                     unit=first_map.get_relative_time_unit())
+                extent = tgis.RelativeTemporalExtent(
+                    start_time=start_a,
+                    end_time=end_b,
+                    unit=first_map.get_relative_time_unit(),
+                )
 
-            for out_map in output.split(','):
+            for out_map in output.split(","):
 
                 # Create the time range for the output map
                 if out_map.find("@") >= 0:
@@ -178,6 +194,7 @@ def main():
                     map.update_all()
                 else:
                     map.insert()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

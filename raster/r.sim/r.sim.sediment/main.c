@@ -118,6 +118,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("erosion"));
     G_add_keyword(_("deposition"));
     G_add_keyword(_("model"));
+    G_add_keyword(_("parallel"));
     module->description =
 	_("Sediment transport and erosion/deposition simulation "
 	  "using path sampling method (SIMWE).");
