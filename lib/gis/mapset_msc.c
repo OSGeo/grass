@@ -158,6 +158,28 @@ int G_make_mapset_object_group_tmp(const char *type)
     return make_mapset_element_no_fail_on_race(path, type);
 }
 
+/*!
+    \brief Create directory for type of objects in the temporary directory.
+
+    See G_file_name_basedir() for details.
+
+    \param type object type (e.g., `cell`)
+
+    \note
+    Use G_make_mapset_object_group_basedir() for creating common, shared
+    directories for temporary data.
+
+    \return 0 no element defined
+    \return 1 on success
+ */
+int G_make_mapset_object_group_basedir(const char *type, const char *basedir)
+{
+    char path[GPATH_MAX];
+
+    G_file_name_basedir(path, NULL, NULL, G_mapset(), basedir);
+    return make_mapset_element_no_fail_on_race(path, type);
+}
+
 int make_mapset_element_impl(const char *p_path, const char *p_element, bool race_ok)
 {
     char path[GPATH_MAX], *p;
