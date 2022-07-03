@@ -92,7 +92,10 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 	if (indef == NULL)
 	    indef = G_store(iproj->def);
 
-	G_asprintf(&tproj.def, "+proj=pipeline +step +inv %s",
+	/* needs +over to properly cross the anti-meridian
+	 * the +over switch can be used to disable the default wrapping
+	 * of output longitudes to the range -180 to 180 */
+	G_asprintf(&tproj.def, "+proj=pipeline +step +inv %s +over",
 		   indef);
 	G_debug(1, "get_pj_area() tproj.def: %s", tproj.def);
 	tproj.pj = proj_create(PJ_DEFAULT_CTX, tproj.def);
@@ -166,13 +169,15 @@ int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
 
 	/* The west longitude is generally lower than the east longitude,
 	 * except for areas of interest that go across the anti-meridian.
+	 * do not reduce global coverage to a small north-south strip
 	 */
-	if (x[80] > x[82] && x[81] > x[83]) {
-	    /* west > east, must be crossing the anti-meridian */
-	    double tmpx = *xmin;
-
-	    *xmin = *xmax;
-	    *xmax = tmpx;
+	if (*xmin < -180 && *xmax < 180 && *xmin + 360 > *xmax) {
+	    /* must be crossing the anti-meridian at 180W */
+	    *xmin += 360;
+	}
+	else if (*xmax > 180 && *xmin > -180 && *xmax - 360 < *xmin) {
+	    /* must be crossing the anti-meridian at 180E */
+	    *xmax -= 360;
 	}
 
 	G_debug(1, "input window north: %.8f", window.north);
@@ -450,7 +455,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
 	/* info_in->pj, info_in->proj, info_out->pj, info_out->proj
 	 * must be set */
 	if (!info_in->pj || !info_in->proj[0] ||
-	    !info_out->pj ||info_out->proj[0]) {
+	    !info_out->pj || !info_out->proj[0]) {
 	    G_warning(_("A custom pipeline requires input and output projection info"));
 
 	    return -1;
