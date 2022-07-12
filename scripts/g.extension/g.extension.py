@@ -2494,29 +2494,31 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     url = url[6:] if url.startswith("file://") else url
     if not os.path.exists(url):
         url_validated = False
+        message = None
         if url.startswith("http"):
             try:
                 open_url = urlopen(url)
                 open_url.close()
                 url_validated = True
-            except URLError:
-                pass
+            except URLError as error:
+                message = error
         else:
             try:
                 open_url = urlopen("http://" + url)
                 open_url.close()
                 url_validated = True
-            except URLError:
-                pass
+            except URLError as error:
+                message = error
             try:
                 open_url = urlopen("https://" + url)
                 open_url.close()
                 url_validated = True
-            except URLError:
-                pass
-
+            except URLError as error:
+                message = error
         if not url_validated:
-            grass.fatal(_("Cannot open URL: {}".format(url)))
+            grass.fatal(
+                _("Cannot open URL <{url}>: {error}").format(url=url, error=message)
+            )
 
     # Handle local URLs
     if os.path.isdir(url):
