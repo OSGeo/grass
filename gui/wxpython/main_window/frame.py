@@ -466,6 +466,11 @@ class GMFrame(wx.Frame):
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
 
+            # extend shortcuts and create frame accelerator table
+            mapdisplay.shortcuts_table.append(
+                (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11)
+            )
+            mapdisplay._initShortcuts()
             return mapdisplay
 
         # create layer tree (tree control for managing GIS layers)  and put on
@@ -502,6 +507,48 @@ class GMFrame(wx.Frame):
         self.displayIndex += 1
 
         return self.GetMapDisplay()
+
+    def ShowFullScreen(self, mapdisplay):
+        """Show fullscreen Map Display frame
+
+        :param Window mapdisplay: current Map Display page
+
+        :return bool: True if statusbar pane is shown
+        """
+        for toolbar in mapdisplay.toolbars.keys():
+            pane = mapdisplay._mgr.GetPane(mapdisplay.toolbars[toolbar])
+            pane.Show(False if pane.IsShown() else True)
+        if self.statusbar:
+            pane = mapdisplay._mgr.GetPane("statusbar")
+            pane.Show(False if pane.IsShown() else True)
+        mapdisplay._mgr.Update()
+        return False if pane.IsShown() else True
+
+    def ShowPanes(self, minimize):
+        """Show/hide datacatalog, layers, tools panes
+
+        :param bool minimize: show/hide pane
+
+        :return None
+        """
+        for pane in ["datacatalog", "layers", "tools"]:
+            if minimize:
+                # Hide
+                self._auimgr.MinimizePane(self._auimgr.GetPane(pane))
+            else:
+                # Show
+                self._auimgr.RestoreMinimizedPane(self._auimgr.GetPane(pane))
+
+    def OnFullScreen(self, event):
+        """Switches frame to fullscreen mode, hides toolbars, statusbar
+        and panes
+        """
+        mapdisplay = self.mapnotebook.GetCurrentPage()
+        show = self.ShowFullScreen(
+            mapdisplay=mapdisplay,
+        )
+        self.ShowPanes(minimize=show)
+        event.Skip()
 
     def _setUpMapDisplay(self, mapdisplay):
         """Set up Map Display properties"""
