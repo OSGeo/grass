@@ -205,6 +205,66 @@ class TestWatershed(TestCase):
             msg="A basin value is less than 0 or greater than 1000000",
         )
 
+    def same_ram_seg_output(self, outputs=None, **input_args):
+        """Check if the output of the ram and seg version is the same."""
+
+        output_precision = {
+            'accumulation': 1,
+            'tci': 0.01,
+            'spi': 0.1,
+            'drainage': 1,
+            'basin': 0,
+            'stream': 0,
+            'half_basin': 0,
+            'length_slope': 0,
+            'slope_steepness': 0.001,
+        }
+        outputs = outputs or list(output_precision)
+
+        flags = dict(ram="", seg="m")
+        kw = dict(
+            elevation=self.elevation,
+            threshold=1000,
+            overwrite=True,
+        )
+        kw.update(input_args)
+        # run module with/without -m
+        for n, f in flags.items():
+            kw.update({o: "test_%s_%s" % (o, n) for o in outputs})
+            kw["flags"] = input_args.get("flags", "") + f
+            self.assertModule("r.watershed", **kw)
+
+        # check difference of outputs
+        msg = "ram and seg version output %s is not the same with input " + str(input_args)
+        for o in outputs:
+            # subTest unfortunately doesnt work here
+            #with self.subTest("Testing difference in ram vs seg output", output=o):
+            p = output_precision.get(o, 0)
+            self.assertRastersNoDifference("test_%s_ram" % o, "test_%s_seg" % o, p, msg=msg % o)
+
+
+    def test_same_ram_seg_output(self):
+        # random points raster
+        self.runModule("r.random",
+            input=self.elevation,
+            npoints=100,
+            raster="random_points",
+            seed=1234,
+            overwrite=True,
+        )
+        # only required input
+        self.same_ram_seg_output()
+        # depression
+        self.same_ram_seg_output(flags="s", depression="random_points")
+        # flow
+        self.same_ram_seg_output(flow="random_points")
+        # disturbed_land
+        self.same_ram_seg_output(disturbed_land="random_points")
+        # blocking
+        self.same_ram_seg_output(blocking="random_points")
+        # retention
+        self.same_ram_seg_output(retention="random_points")
+
 
 if __name__ == "__main__":
     test()
