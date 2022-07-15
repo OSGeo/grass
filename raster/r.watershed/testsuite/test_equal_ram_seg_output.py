@@ -20,23 +20,23 @@ class TestEqualRamSegOutput(TestCase):
     elevation = "elevation"
 
     output_precision = {
-        'accumulation': 1,
-        'tci': 0.01,
-        'spi': 0.01,
-        'drainage': 0,
-        'basin': 0,
-        'stream': 0,
-        'half_basin': 0,
-        'length_slope': 0.01,
-        'slope_steepness': 0.01,
+        "accumulation": 1,
+        "tci": 0.01,
+        "spi": 0.01,
+        "drainage": 0,
+        "basin": 0,
+        "stream": 0,
+        "half_basin": 0,
+        "length_slope": 0.01,
+        "slope_steepness": 0.01,
     }
 
     tmp_input_rasters = ["random_fraction", "random_percent"]
 
     inputs = [
         {},  # required only
-        {"flags":"s"},
-        {"flags":"4"},
+        {"flags": "s"},
+        {"flags": "4"},
         {"depression": "random_fraction"},
         {"flow": "random_fraction"},
         {"disturbed_land": "random_percent"},
@@ -56,7 +56,8 @@ class TestEqualRamSegOutput(TestCase):
         cls.runModule("g.region", raster=cls.elevation)
 
         # random points raster
-        cls.runModule("r.random",
+        cls.runModule(
+            "r.random",
             input=cls.elevation,
             npoints=10000,
             raster="random_fraction",
@@ -72,9 +73,7 @@ class TestEqualRamSegOutput(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region"""
-        cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.tmp_input_rasters
-        )
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.tmp_input_rasters)
         cls.del_temp_region()
 
     def tearDown(self):
@@ -114,7 +113,7 @@ class TestEqualRamSegOutput(TestCase):
         passes = []
         for o in outputs:
             # subTest unfortunately doesnt work here
-            #with self.subTest("Testing difference in ram vs seg output", output=o):
+            # with self.subTest("Testing difference in ram vs seg output", output=o):
             prec = self.output_precision.get(o, 0)
             try:
                 self.assertRastersNoDifference(
@@ -132,18 +131,22 @@ class TestEqualRamSegOutput(TestCase):
             passes.append(self.same_ram_seg_output(**oi))
 
         # create nice markdown table of matches
-        msg = ("Output of ram and seg versions of r.watershed do not match:" +
-               "\n\n" + self.md_table(passes) + "\n")
+        msg = (
+            "Output of ram and seg versions of r.watershed do not match:"
+            + "\n\n"
+            + self.md_table(passes)
+            + "\n"
+        )
 
         self.assertTrue(all([all(p) for p in passes]), msg=msg)
 
     def md_table(self, passes):
         columns = lambda l: "| " + (" | ".join(map(str, l))) + " |"
-        strinpts = columns([
-            ", ".join(["%s=%s" % kw for kw in d.items()]) for d in self.inputs
-        ])
+        strinpts = columns(
+            [", ".join(["%s=%s" % kw for kw in d.items()]) for d in self.inputs]
+        )
         for ir in self.tmp_input_rasters:
-            strinpts = strinpts.replace("="+ir, "")
+            strinpts = strinpts.replace("=" + ir, "")
         msg = "| Output " + strinpts + "\n"
         msg += columns(["---"] * (len(self.inputs) + 1)) + "\n"
         symbols = {True: ":white_check_mark:", False: ":red_circle:"}
@@ -151,6 +154,7 @@ class TestEqualRamSegOutput(TestCase):
             sym = [symbols[b] for b in p]
             msg += ("| %s " % o) + columns(sym) + "\n"
         return msg
+
 
 if __name__ == "__main__":
     test()
