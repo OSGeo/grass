@@ -1620,7 +1620,6 @@ class GMFrame(wx.Frame):
         """Close all open map display windows (from menu)"""
         if not self.workspace_manager.CanClosePage(caption=_("Close all Map Displays")):
             return
-
         self.DisplayCloseAll()
 
     def DisplayCloseAll(self):
