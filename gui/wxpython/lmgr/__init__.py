@@ -1,10 +1,1 @@
-all = [
-    "layertree",
-    "menudata",
-    "toolbars",
-    "pyshell",
-    "frame",
-    "giface",
-    "datacatalog",
-    "recentfiles",
-]
+all = ["layertree", "menudata", "toolbars", "pyshell", "frame", "giface", "datacatalog"]
