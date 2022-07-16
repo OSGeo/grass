@@ -64,6 +64,7 @@ from gui_core.wrap import (
     StaticBox,
     StaticText,
     TextCtrl,
+    ListBox,
 )
 
 
@@ -870,7 +871,7 @@ class GroupDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gLayerBox = wx.ListBox(
+        self.gLayerBox = ListBox(
             parent=self.gListPanel,
             id=wx.ID_ANY,
             size=(-1, 150),
