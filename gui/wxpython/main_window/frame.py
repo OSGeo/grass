@@ -161,6 +161,9 @@ class GMFrame(wx.Frame):
 
         # create widgets and build panes
         self.CreateMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.BuildPanes()
         self.BindEvents()
 
@@ -1617,6 +1620,7 @@ class GMFrame(wx.Frame):
         """Close all open map display windows (from menu)"""
         if not self.workspace_manager.CanClosePage(caption=_("Close all Map Displays")):
             return
+
         self.DisplayCloseAll()
 
     def DisplayCloseAll(self):
