@@ -63,12 +63,9 @@
 # %end
 
 # %option G_OPT_M_NPROCS
-# % description: Number of cores for multiprocessing in r.series
-# % answer: 1
 # %end
 
 # %option G_OPT_MEMORYMB
-# % description: Maximum memory to be used (in MB) by r.series
 # %end
 
 # %option G_OPT_T_WHERE
