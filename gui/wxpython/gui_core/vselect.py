@@ -345,9 +345,16 @@ class VectorSelectBase():
         if ret == 0:
             tree = self._giface.GetLayerTree()
             if tree:
-                tree.AddLayer(ltype='vector', lname=outMap,
-                              lcmd=['d.vect', 'map=%s' % outMap],
-                              lchecked=True)
+                outMap = "{map_name}@{mapset}".format(
+                    map_name=outMap,
+                    mapset=grass.gisenv()["MAPSET"],
+                )
+                tree.AddLayer(
+                    ltype="vector",
+                    lname=outMap,
+                    lcmd=["d.vect", "map=%s" % outMap],
+                    lchecked=True,
+                )
 
                 # TODO colorize new map
                 self.Reset()
