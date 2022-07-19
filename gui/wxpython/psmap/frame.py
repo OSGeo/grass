@@ -493,7 +493,7 @@ class PsMapFrame(wx.Frame):
                         "You can donwload {program} {arch} version here."
                     ).format(
                         program=program,
-                        arch="64bit" if "64" in program else "32Bit",
+                        arch="64bit" if "64" in program else "32bit",
                     ),
                 )
                 dlg.ShowModal()
