@@ -673,9 +673,9 @@ class GMFrame(wx.Frame):
         self._auimgr.GetPane("toolbarNviz").Hide()
 
         # Set Tools as active tab
-        notebook = self._auimgr.GetNotebooks()
-        if notebook:
-            notebook = notebook[0]
+        notebooks = self._auimgr.GetNotebooks()
+        if notebooks:
+            notebook = notebooks[0]
             tools = self._auimgr.GetPane("tools")
             notebook.SetSelectionToPage(tools)
 
