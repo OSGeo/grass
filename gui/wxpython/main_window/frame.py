@@ -161,6 +161,9 @@ class GMFrame(wx.Frame):
 
         # create widgets and build panes
         self.CreateMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.BuildPanes()
         self.BindEvents()
 

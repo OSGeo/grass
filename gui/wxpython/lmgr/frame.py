@@ -153,6 +153,9 @@ class GMFrame(wx.Frame):
 
         # create widgets
         self._createMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.statusbar = SbMain(parent=self, giface=self._giface)
         self.notebook = self._createNotebook()
         self._createDataCatalog(self.notebook)
