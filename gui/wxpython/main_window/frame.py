@@ -676,14 +676,16 @@ class GMFrame(wx.Frame):
         self._auimgr.GetPane("toolbarNviz").Hide()
 
         # Set Tools as active tab
-        tools = self._auimgr.GetPane("tools")
-        notebook = self._auimgr.GetNotebooks()[0]
-        notebook.SetSelectionToPage(tools)
+        notebooks = self._auimgr.GetNotebooks()
+        if notebooks:
+            notebook = notebooks[0]
+            tools = self._auimgr.GetPane("tools")
+            notebook.SetSelectionToPage(tools)
 
-        # Set the size for automatic notebook
-        pane = self._auimgr.GetPane(notebook)
-        pane.BestSize(self.PANE_BEST_SIZE)
-        pane.MinSize(self.PANE_MIN_SIZE)
+            # Set the size for automatic notebook
+            pane = self._auimgr.GetPane(notebook)
+            pane.BestSize(self.PANE_BEST_SIZE)
+            pane.MinSize(self.PANE_MIN_SIZE)
 
         wx.CallAfter(self.datacatalog.LoadItems)
 
