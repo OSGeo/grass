@@ -2003,8 +2003,10 @@ class GdalSelect(wx.Panel):
         if sourceType == "db":
             self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
-                formats = self.dbFormats.values()
-                if "PostgreSQL" in formats or "PostgreSQL/PostGIS" in formats:
+                db_formats = self.dbFormats.values()
+                if "PostgreSQL" in db_formats:
+                    self.dbWidgets["format"].SetStringSelection("PostgreSQL")
+                elif "PostgreSQL/PostGIS" in db_formats:
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL/PostGIS")
                 else:
                     self.dbWidgets["format"].SetSelection(0)
