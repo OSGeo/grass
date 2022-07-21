@@ -2003,8 +2003,9 @@ class GdalSelect(wx.Panel):
         if sourceType == "db":
             self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
-                if "PostgreSQL" in self.dbFormats.values():
-                    self.dbWidgets["format"].SetStringSelection("PostgreSQL")
+                formats = self.dbFormats.values()
+                if "PostgreSQL" in formats or "PostgreSQL/PostGIS" in formats:
+                    self.dbWidgets["format"].SetStringSelection("PostgreSQL/PostGIS")
                 else:
                     self.dbWidgets["format"].SetSelection(0)
             self.dbWidgets["format"].Enable()
@@ -2102,6 +2103,7 @@ class GdalSelect(wx.Panel):
         if self._sourceType == "db":
             if self.dbWidgets["format"].GetStringSelection() in (
                 "PostgreSQL",
+                "PostgreSQL/PostGIS",
                 "PostGIS Raster driver",
             ):
                 ret = RunCommand("db.login", read=True, quiet=True, flags="p")
@@ -2171,10 +2173,19 @@ class GdalSelect(wx.Panel):
         showDirbrowse = db in ("FileGDB")
         showChoice = db in (
             "PostgreSQL",
+            "PostgreSQL/PostGIS",
             "PostGIS WKT Raster driver",
             "PostGIS Raster driver",
         )
-        enableFeatType = self.dest and self.ogr and db in ("PostgreSQL")
+        enableFeatType = (
+            self.dest
+            and self.ogr
+            and db
+            in (
+                "PostgreSQL",
+                "PostgreSQL/PostGIS",
+            )
+        )
         showText = not (showBrowse or showChoice or showDirbrowse)
 
         sizer.Show(self.dbWidgets["browse"], show=showBrowse)
