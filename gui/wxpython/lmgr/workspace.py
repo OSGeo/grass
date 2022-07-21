@@ -505,10 +505,10 @@ class WorkspaceManager:
         """
         if menu:
             file_menu = menu.GetMenu(
-                menuIndex=menu.FindMenu(title="File"),
+                menuIndex=menu.FindMenu(title=_("File")),
             )
             workspace_item = file_menu.FindItem(
-                id=file_menu.FindItem(itemString="Workspace"),
+                id=file_menu.FindItem(itemString=_("Workspace")),
             )[0]
             self._recent_files = RecentFilesMenu(
                 app_name="main",
