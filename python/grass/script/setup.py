@@ -453,10 +453,12 @@ def clean_default_db(*, modified_after=None):
         )
         if modified_after >= modified_time:
             return
+    # Start the vacuum process, then show the message in parallel while
+    # the vacuum is running. Finally, wait for the vacuum process to finish.
+    # Error handling is the same as errors="ignore".
     process = gs.start_command("db.execute", sql="VACUUM")
     gs.verbose(_("Cleaning up default SQLite database..."))
     process.wait()
-    # Error handling is the same as errors="ignore".
 
 
 def call(cmd, **kwargs):
