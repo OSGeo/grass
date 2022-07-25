@@ -139,7 +139,7 @@
 #define DB_UNDEFINED	2
 
 /* static buffer for SQL statements */
-#define DB_SQL_MAX      8192
+#define DB_SQL_MAX      65536
 
 typedef void *dbAddress;
 typedef int dbToken;
