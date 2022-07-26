@@ -47,8 +47,12 @@ def reproject_region(region, from_proj, to_proj):
     :return dict region: reprojected region as a dictionary with long key names
     """
     region = region.copy()
+    # reproject all corners, otherwise reproj. region may be underestimated
     proj_input = (
-        f"{region['east']} {region['north']}\n{region['west']} {region['south']}"
+        f"{region['east']} {region['north']}\n"
+        f"{region['west']} {region['north']}\n"
+        f"{region['east']} {region['south']}\n"
+        f"{region['west']} {region['south']}\n"
     )
     proc = gs.start_command(
         "m.proj",
@@ -69,9 +73,16 @@ def reproject_region(region, from_proj, to_proj):
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
-    enws = gs.decode(proj_output).split(os.linesep)
-    elon, nlat, unused = enws[0].split(" ")
-    wlon, slat, unused = enws[1].split(" ")
+    enws = gs.decode(proj_output).splitlines()
+    # get the largest bbox
+    n = []
+    e = []
+    for each in enws:
+        elon, nlat, unused = each.split(" ")
+        e.append(float(elon))
+        n.append(float(nlat))
+    elon, wlon = max(e), min(e)
+    nlat, slat = max(n), min(n)
     region["east"] = elon
     region["north"] = nlat
     region["west"] = wlon
