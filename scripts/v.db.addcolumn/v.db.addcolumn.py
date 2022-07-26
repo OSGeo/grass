@@ -60,10 +60,18 @@ def main():
     try:
         f = grass.vector_db(map)[int(layer)]
     except KeyError:
+        if grass.vector_db(map):
+            grass.fatal(
+                _(
+                    "There is no table connected to layer <{layer}> of <{name}>. "
+                    "Run v.db.connect or v.db.addtable first."
+                ).format(name=map, layer=layer)
+            )
         grass.fatal(
             _(
-                "There is no table connected to this map. Run v.db.connect or v.db.addtable first."
-            )
+                "There is no table connected to <{name}>. "
+                "Run v.db.connect or v.db.addtable first."
+            ).format(name=map)
         )
 
     table = f["table"]
