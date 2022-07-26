@@ -38,7 +38,9 @@ mswindows/osgeo4w/package/
 mswindows/osgeo4w/setup*.hint
 mswindows/osgeo4w/vc/
 daag*.s
-doc/notebooks/.ipynb_checkpoints/
+
+# notebook helper files
+.ipynb_checkpoints
 
 # ignore gunittest helper and result files
 testreport/*
