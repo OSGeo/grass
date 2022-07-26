@@ -43,7 +43,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest
+          pip install pytest pytest-timeout
 
       - name: Create installation directory
         run: |
