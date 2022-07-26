@@ -715,6 +715,10 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
+        elif event.returncode != 0:
+            msg = _("Command ended with non-zero return code {returncode}").format(
+                returncode=event.returncode
+            )
         else:
             msg = _("Command finished")
 
