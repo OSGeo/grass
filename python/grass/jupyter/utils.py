@@ -11,8 +11,6 @@
 
 """Utility functions warpping existing processes in a suitable way"""
 
-import os
-
 import grass.script as gs
 
 
