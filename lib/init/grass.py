@@ -1176,9 +1176,10 @@ def set_mapset(
                         if geofile:
                             fatal(
                                 _(
-                                    "No CRS is needed for creating mapset."
+                                    "No CRS is needed for creating mapset <{mapset}>, "
+                                    "but <{geofile}> was provided as CRS."
                                     " Did you mean to create a new location?"
-                                )
+                                ).format(mapset=mapset, geofile=geofile)
                             )
                         message(
                             _("Creating new GRASS GIS mapset <{}>...").format(mapset)
