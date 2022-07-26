@@ -431,7 +431,7 @@ def clean_default_db(*, modified_after=None):
     import grass.script as gs
 
     conn = gs.db_connection()
-    if conn and conn["driver"] != "sqlite":
+    if not conn or conn["driver"] != "sqlite":
         return
     # check if db exists
     gis_env = gs.gisenv()
