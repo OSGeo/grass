@@ -11,7 +11,6 @@ from types import SimpleNamespace
 import pytest
 
 import grass.script as gs
-import grass.script.setup as grass_setup
 
 
 @pytest.fixture(scope="module")
@@ -22,7 +21,7 @@ def space_time_raster_dataset(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("raster_time_series")
     location = "test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location):
+    with gs.setup.init(tmp_path / location):
         gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         names = [f"precipitation_{i}" for i in range(1, 7)]
         max_values = [550, 450, 320, 510, 300, 650]
@@ -76,7 +75,7 @@ def simple_dataset(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("simple_dataset")
     location = "test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location):
+    with gs.setup.init(tmp_path / location):
         gs.run_command("g.proj", flags="c", epsg=26917)
         gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         # Create Vector

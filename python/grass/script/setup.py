@@ -44,10 +44,9 @@ Usage::
 
     # import (some) GRASS Python bindings
     import grass.script as gs
-    import grass.script.setup as gsetup
 
     # launch session
-    rcfile = gsetup.init(gisdb, location, mapset)
+    session = gs.setup.init(gisdb, location, mapset)
 
     # example calls
     gs.message("Current GRASS GIS 8 environment:")
@@ -62,7 +61,7 @@ Usage::
         print(vect)
 
     # clean up at the end
-    gsetup.finish()
+    session.finish()
 
 
 (C) 2010-2021 by the GRASS Development Team
@@ -271,20 +270,22 @@ def init(path, location=None, mapset=None, grass_path=None):
     ValueError is raised. Exceptions from the underlying function are propagated.
 
     To create a GRASS session a session file (aka gisrc file) is created.
-    Caller is responsible for deleting the file which is normally done
-    with the function :func:`finish`.
+    The session object returned by this function will take care of deleting it
+    as long as the object is used as a context manager or the *finish* method
+    of the object is called explicitly. Using methods of the session object is
+    preferred over calling the function :func:`finish`.
 
     Basic usage::
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
-        gs.setup.init(
+        session = gs.setup.init(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",
         )
         # ... use GRASS modules here
         # end the session
-        gs.setup.finish()
+        session.finish()
 
     The returned object is a context manager, so the ``with`` statement can be used to
     ensure that the session is finished (closed) at the end::
@@ -354,7 +355,6 @@ class SessionHandle:
         # ... setup sys.path before import as needed
 
         import grass.script as gs
-        import grass.script.setup
 
         session = gs.setup.init("~/grassdata/nc_spm_08/user1")
 
@@ -368,7 +368,6 @@ class SessionHandle:
         # ... setup sys.path before import as needed
 
         import grass.script as gs
-        import grass.script.setup
 
         with gs.setup.init("~/grassdata/nc_spm_08/user1"):
             # ... use GRASS modules here

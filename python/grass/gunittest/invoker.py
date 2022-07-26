@@ -37,12 +37,6 @@ try:
 except ImportError:
     maketrans = str.maketrans
 
-# needed for write_gisrc
-# TODO: it would be good to find some way of writing rc without the need to
-# have GRASS proprly set (anything from grass.script requires translations to
-# be set, i.e. the GRASS environment properly set)
-import grass.script.setup as gsetup
-
 import collections
 
 
@@ -162,7 +156,7 @@ class GrassTestFilesInvoker(object):
         # TODO: put this to constructor and copy here again
         env = os.environ.copy()
         mapset, mapset_dir = self._create_mapset(gisdbase, location, module)
-        gisrc = gsetup.write_gisrc(gisdbase, location, mapset)
+        gisrc = gs.setup.write_gisrc(gisdbase, location, mapset)
 
         # here is special setting of environmental variables for running tests
         # some of them might be set from outside in the future and if the list

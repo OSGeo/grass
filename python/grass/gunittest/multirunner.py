@@ -150,14 +150,14 @@ def main():
     os.environ["GISDBASE"] = text_to_string(gisdb)
 
     # import GRASS Python package for initialization
-    import grass.script.setup as gsetup
+    import grass.script as gs
 
     # launch session
     # we need some location and mapset here
     # TODO: can init work without it or is there some demo location in dist?
     location = locations[0].split(":")[0]
     mapset = "PERMANENT"
-    gsetup.init(gisbase, gisdb, location, mapset)
+    gs.setup.init(gisbase, gisdb, location, mapset)
 
     reports = []
     for location, location_type in zip(locations, locations_types):
