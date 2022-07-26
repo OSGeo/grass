@@ -11,6 +11,7 @@ Licence:   This program is free software under the GNU General Public
 
 import os
 import pathlib
+import shutil
 import unittest
 from tempfile import TemporaryDirectory
 
