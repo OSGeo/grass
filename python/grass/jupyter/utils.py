@@ -80,12 +80,10 @@ def reproject_region(region, from_proj, to_proj):
         longitude, latitude, unused = row.split(" ")
         longitude_list.append(float(longitude))
         latitude_list.append(float(latitude))
-    east_longitude, west_longitude = max(longitude_list), min(longitude_list)
-    north_latitude, south_latitude = max(latitude_list), min(latitude_list)
-    region["east"] = east_longitude
-    region["north"] = north_latitude
-    region["west"] = west_longitude
-    region["south"] = south_latitude
+    region["east"] = max(longitude_list)
+    region["north"] = max(latitude_list)
+    region["west"] = min(longitude_list)
+    region["south"] = min(latitude_list)
     return region
 
 
