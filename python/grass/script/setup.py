@@ -80,6 +80,7 @@ for details.
 # then this could even do locking
 
 from pathlib import Path
+import datetime
 import os
 import shutil
 import subprocess
@@ -376,6 +377,7 @@ class SessionHandle:
 
     def __init__(self, active=True):
         self._active = active
+        self._start_time = datetime.datetime.now(datetime.timezone.utc)
 
     @property
     def active(self):
@@ -411,31 +413,52 @@ class SessionHandle:
         if not self.active:
             raise ValueError("Attempt to finish an already finished session")
         self._active = False
-        finish()
+        finish(start_time=self._start_time)
 
 
 # clean-up functions when terminating a GRASS session
 # these fns can only be called within a valid GRASS session
-def clean_default_db():
-    # clean the default db if it is sqlite
-    from grass.script import core as gcore
-    from grass.script import db as gdb
 
-    conn = gdb.db_connection()
-    if conn and conn["driver"] == "sqlite":
-        # check if db exists
-        gisenv = gcore.gisenv()
-        database = conn["database"]
-        database = database.replace("$GISDBASE", gisenv["GISDBASE"])
-        database = database.replace("$LOCATION_NAME", gisenv["LOCATION_NAME"])
-        database = database.replace("$MAPSET", gisenv["MAPSET"])
-        if os.path.exists(database):
-            gcore.message(_("Cleaning up default sqlite database ..."))
-            gcore.start_command("db.execute", sql="VACUUM")
-            # give it some time to start
-            import time
 
-            time.sleep(0.1)
+def clean_default_db(*, modified_after=None):
+    """Clean (vacuum) the default db if it is SQLite
+
+    When *modified_after* is set, database is cleaned only when it was modified
+    since the *modified_after* time.
+    """
+    # Limiting usage of in other function by lazy-imports.
+    # pylint: disable=import-outside-toplevel
+    import grass.script as gs
+
+    conn = gs.db_connection()
+    if not conn or conn["driver"] != "sqlite":
+        return
+    # check if db exists
+    gis_env = gs.gisenv()
+    database = conn["database"]
+    database = database.replace("$GISDBASE", gis_env["GISDBASE"])
+    database = database.replace("$LOCATION_NAME", gis_env["LOCATION_NAME"])
+    database = database.replace("$MAPSET", gis_env["MAPSET"])
+    database = Path(database)
+    if not database.is_file():
+        return
+    file_stat = database.stat()
+    # Small size based on MEMORYMB (MiB) or its default.
+    small_db_size = int(gis_env.get("MEMORYMB", 300)) * (1 << 20)
+    if file_stat.st_size <= small_db_size:
+        return
+    if modified_after:
+        modified_time = datetime.datetime.fromtimestamp(
+            file_stat.st_mtime, tz=datetime.timezone.utc
+        )
+        if modified_after >= modified_time:
+            return
+    # Start the vacuum process, then show the message in parallel while
+    # the vacuum is running. Finally, wait for the vacuum process to finish.
+    # Error handling is the same as errors="ignore".
+    process = gs.start_command("db.execute", sql="VACUUM")
+    gs.verbose(_("Cleaning up default SQLite database..."))
+    process.wait()
 
 
 def call(cmd, **kwargs):
@@ -456,7 +479,7 @@ def clean_temp():
     call([os.path.join(gisbase, "etc", "clean_temp")], stdout=subprocess.DEVNULL)
 
 
-def finish():
+def finish(*, start_time=None):
     """Terminate the GRASS session and clean up
 
     GRASS commands can no longer be used after this function has been
@@ -469,9 +492,12 @@ def finish():
 
     The function is not completely symmetrical with :func:`init` because it only
     closes the mapset, but doesn't undo the runtime environment setup.
-    """
 
-    clean_default_db()
+    When *start_time* is set, it might be used to determine cleaning procedures.
+    Currently, it is used to do SQLite database vacuum only when database was modified
+    since the session started.
+    """
+    clean_default_db(modified_after=start_time)
     clean_temp()
     # TODO: unlock the mapset?
     # unset the GISRC and delete the file

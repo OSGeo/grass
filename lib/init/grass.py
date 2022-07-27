@@ -42,6 +42,7 @@ import sys
 import os
 import errno
 import atexit
+import datetime
 import gettext
 import shutil
 import signal
@@ -2119,11 +2120,11 @@ def clean_temp():
     gsetup.clean_temp()
 
 
-def clean_all():
+def clean_all(*, start_time):
     from grass.script import setup as gsetup
 
     # clean default sqlite db
-    gsetup.clean_default_db()
+    gsetup.clean_default_db(modified_after=start_time)
     # remove leftover temp files
     clean_temp()
     # save 'last used' GISRC after removing variables which shouldn't
@@ -2658,6 +2659,8 @@ def main():
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
+    start_time = datetime.datetime.now(datetime.timezone.utc)
+
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
     atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
@@ -2677,12 +2680,12 @@ def main():
     # only non-error, interactive version continues from here
     if params.batch_job:
         returncode = run_batch_job(params.batch_job)
-        clean_all()
+        clean_all(start_time=start_time)
         sys.exit(returncode)
     elif params.exit_grass:
         # clean always at exit, cleans whatever is current mapset based on
         # the GISRC env variable
-        clean_all()
+        clean_all(start_time=start_time)
         sys.exit(0)
     else:
         if use_shell:
@@ -2737,7 +2740,7 @@ def main():
         close_gui()
 
         # here we are at the end of grass session
-        clean_all()
+        clean_all(start_time=start_time)
         mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
         if not params.tmp_location or (
             params.tmp_location and mapset_settings.gisdbase != os.environ["TMPDIR"]
