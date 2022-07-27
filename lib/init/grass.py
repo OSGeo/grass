@@ -1143,11 +1143,13 @@ def set_mapset(
                     # create new location based on the provided EPSG/...
                     if not geofile:
                         fatal(_("Provide CRS to create a location"))
-                    message(
-                        _("Creating new GRASS GIS location <{}>...").format(
-                            location_name
+                    if not tmp_location:
+                        # Report report only when new location is not temporary.
+                        message(
+                            _("Creating new GRASS GIS location <{}>...").format(
+                                location_name
+                            )
                         )
-                    )
                     create_location(gisdbase, location_name, geofile)
                 else:
                     # 'location_name' is a valid GRASS location,
@@ -1729,18 +1731,20 @@ def get_grass_env_file(sh, grass_config_dir):
     return grass_env_file
 
 
-def run_batch_job(batch_job):
+# No reason to use list over Sequence except that
+# importing of Sequence changed in Python 3.9.
+# (Replace list by Sequence in the future.)
+def run_batch_job(batch_job: list):
     """Runs script, module or any command
 
-    If *batch_job* is a string (insecure) shell=True is used for execution.
-
-    :param batch_job: executable and parameters in a list or a string
+    :param batch_job: executable and parameters as a list
     """
-    batch_job_string = batch_job
-    if not isinstance(batch_job, six.string_types):
-        # for messages only
-        batch_job_string = " ".join(batch_job)
-    message(_("Executing <%s> ...") % batch_job_string)
+    # Lazy-import to avoid dependency during standard import time.
+    # pylint: disable=import-outside-toplevel
+    import grass.script as gs
+
+    batch_job_string = " ".join(batch_job)  # for messages only
+    gs.verbose(_("Executing <%s> ...") % batch_job_string)
 
     def script_path(batch_job):
         """Adjust script path
@@ -1780,7 +1784,7 @@ def run_batch_job(batch_job):
         else:
             fatal(error_message)
     returncode = proc.wait()
-    message(_("Execution of <%s> finished.") % batch_job_string)
+    gs.verbose(_("Execution of <%s> finished.") % batch_job_string)
     return returncode
 
 
@@ -2523,7 +2527,9 @@ def main():
             )
         create_initial_gisrc(gisrc)
 
-    message(_("Starting GRASS GIS..."))
+    if not params.batch_job and not params.exit_grass:
+        # Only for interactive sessions, not for 'one operation' sessions.
+        message(_("Starting GRASS GIS..."))
 
     # Ensure GUI is set
     if params.batch_job or params.exit_grass:
