@@ -46,6 +46,7 @@ def reproject_region(region, from_proj, to_proj):
     """
     region = region.copy()
     # reproject all corners, otherwise reproj. region may be underestimated
+    # even better solution would be reprojecting vector region like in r.import
     proj_input = (
         f"{region['east']} {region['north']}\n"
         f"{region['west']} {region['north']}\n"
@@ -71,20 +72,20 @@ def reproject_region(region, from_proj, to_proj):
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
-    enws = gs.decode(proj_output).splitlines()
+    output = gs.decode(proj_output).splitlines()
     # get the largest bbox
-    n = []
-    e = []
-    for each in enws:
-        elon, nlat, unused = each.split(" ")
-        e.append(float(elon))
-        n.append(float(nlat))
-    elon, wlon = max(e), min(e)
-    nlat, slat = max(n), min(n)
-    region["east"] = elon
-    region["north"] = nlat
-    region["west"] = wlon
-    region["south"] = slat
+    latitude_list = []
+    longitude_list = []
+    for row in output:
+        longitude, latitude, unused = row.split(" ")
+        longitude_list.append(float(longitude))
+        latitude_list.append(float(latitude))
+    east_longitude, west_longitude = max(longitude_list), min(longitude_list)
+    north_latitude, south_latitude = max(latitude_list), min(latitude_list)
+    region["east"] = east_longitude
+    region["north"] = north_latitude
+    region["west"] = west_longitude
+    region["south"] = south_latitude
     return region
 
 
