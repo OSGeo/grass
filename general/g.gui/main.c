@@ -27,7 +27,7 @@
 int main(int argc, char *argv[])
 {
     struct Option *type, *rc_file;
-    struct Flag *update_ui, *fglaunch, *nolaunch;
+    struct Flag *update_ui, *fglaunch, *nolaunch, *workspace_files;
     struct GModule *module;
     const char *gui_type_env;
     char progname[GPATH_MAX];
@@ -85,6 +85,11 @@ int main(int argc, char *argv[])
         _("Do not launch GUI after updating the default user interface settings");
     nolaunch->guisection = _("Default");
 
+    workspace_files = G_define_flag();
+    workspace_files->key = 'l';
+    workspace_files->description = _("Print a list of recent workspace files");
+    workspace_files->guisection = _("Default");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -103,6 +108,13 @@ int main(int argc, char *argv[])
                       type->answer, update_ui->key);
         exit(EXIT_SUCCESS);
     }
+
+    if (workspace_files->answer) {
+		sprintf(progname, "%s/gui/wxpython/core/workspace_files.py", G_gisbase());
+		G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+				   NULL);
+		exit(EXIT_SUCCESS);
+	}
 
     sprintf(progname, "%s/gui/wxpython/wxgui.py", G_gisbase());
     if (access(progname, F_OK) == -1)
