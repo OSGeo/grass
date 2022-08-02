@@ -287,10 +287,11 @@ class PyEditController(object):
 
         # Get first (File) menu
         menu = guiparent.menubar.GetMenu(0)
+        recent_files_conf = globalvar.RECENT_FILES_WXGUI_APP_NAMES["pyedit"]
         self.recent_files = RecentFilesMenu(
-            app_name="pyedit",
+            app_name=recent_files_conf["name"],
             parent_menu=menu,
-            pos=1,
+            pos=recent_files_conf["pos"],
         )  # pos=1 recent files menu position (index) in the parent (File) menu
 
         self.recent_files.file_requested.connect(self.OpenRecentFile)

@@ -255,3 +255,8 @@ gtk3 = True if "gtk3" in wx.PlatformInfo else False
 
 """@Add GUIDIR/scripts into path"""
 os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]
+
+RECENT_FILES_WXGUI_APP_NAMES = {
+    "main": {"name": "main", "pos": 0},
+    "pyedit": {"name": "pyedit", "pos": 1}
+}
