@@ -426,32 +426,3 @@ class RecentFilesMenu:
 
         self._filehistory.Save(self._config)
         self._config.Flush()
-
-    @staticmethod
-    def PrintListOfRecentWorkspaceFiles(app_name="main"):
-        """Print a list of wxGUI recent workspace files
-
-        :param str app_name: the name of the application for which you
-                             want to print the recent files, default is
-                             "main" wxGUI
-        """
-        import configparser
-        import platform
-
-        from grass.lib.gis import CONFIG_DIR
-
-        config_dir_path = os.getenv("HOME")
-        if platform.system() == "Windows":
-            config_dir_path = os.getenv("APPDATA")
-        recent_files = os.path.join(
-            config_dir_path,
-            CONFIG_DIR,
-            RecentFilesMenu.recent_files,
-        )
-
-        if os.path.exists(recent_files):
-            config = configparser.ConfigParser()
-            config.read(recent_files)
-            for i in config[app_name].values():
-                if os.path.exists(i):
-                    print(i)
