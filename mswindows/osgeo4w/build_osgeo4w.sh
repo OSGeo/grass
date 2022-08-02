@@ -68,7 +68,7 @@ export ARCH=x86_64-w64-mingw32
     --with-cairo \
     --with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include \
     --with-cairo-libs=$OSGEO4W_ROOT_MSYS/lib \
-    --with-cairo-ldflags="-L${SRC}/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
+    --with-cairo-ldflags="-L${SRC}/mswindows/osgeo4w/lib -lcairo" \
     --with-opengl=windows \
     --with-bzlib \
     --with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \
