@@ -743,8 +743,12 @@ def _read_raster_info(name, mapset):
         range = libraster.FPRange()
         libraster.Rast_init_fp_range(byref(range))
         ret = libraster.Rast_read_fp_range(name, mapset, byref(range))
-        if ret < 0 or ret == 2:
+        if ret < 0:
             logging.warning(_("Unable to read range file"))
+            kvp["min"] = None
+            kvp["max"] = None
+        elif ret == 2:
+            logging.warning(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -757,8 +761,12 @@ def _read_raster_info(name, mapset):
         range = libraster.Range()
         libraster.Rast_init_range(byref(range))
         ret = libraster.Rast_read_range(name, mapset, byref(range))
-        if ret < 0 or ret == 2:
+        if ret < 0:
             logging.warning(_("Unable to read range file"))
+            kvp["min"] = None
+            kvp["max"] = None
+        elif ret == 2:
+            logging.warning(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
