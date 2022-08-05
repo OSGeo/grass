@@ -1112,7 +1112,7 @@ class GroupDialog(wx.Dialog):
         # and thus adds a new item to GetSelections
         # Items are removed in reverse order to maintain positional number
         # of other selected items (ListBox is dynamic!)
-        selections = reversed(sorted(self.gLayerBox.GetSelections()))
+        selections = sorted(self.gLayerBox.GetSelections(), reverse=True)
         for sel in selections:
             m = self.gLayerBox.GetString(sel)
             self.gLayerBox.Delete(sel)
