@@ -138,11 +138,9 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
     Points = Vect_new_line_struct();
 
     if (use != USE_Z && use != USE_D && (ftype & GV_AREA)) {
-	if ((nareas = sort_areas(&Map, Points, field, cat_list)) == 0)
-	    G_warning(_("No areas selected from vector map <%s>"),
-			  vector_map);
-
-	G_debug(1, "%d areas sorted", nareas);
+        nareas = sort_areas(&Map, Points, field, cat_list);
+        G_verbose_message(_("Number of areas selected from vector map <%s>: %d"),
+                          vector_map, nareas);
     }
     if (nareas > 0 && dense) {
 	G_warning(_("Area conversion and line densification are mutually exclusive, disabling line densification."));
