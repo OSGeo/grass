@@ -56,6 +56,8 @@ void G__script(void)
     fprintf(fp,
 	    "############################################################################\n\n");
 
+    fprintf(fp, "\"\"\"Wraps %s to make it even better\"\"\"\n\n", G_program_name());
+
     fprintf(fp, "# %%module\n");
     if (st->module_info.label)
 	fprintf(fp, "# %% label: %s\n", st->module_info.label);
@@ -134,12 +136,12 @@ void G__script(void)
 	}
     }
 
-    fprintf(fp, "\nimport sys\n");
-    fprintf(fp, "\nimport grass.script as gs\n");
+    fprintf(fp, "\nimport grass.script as gs\n\n");
     fprintf(fp, "\ndef main():");
-    fprintf(fp, "\n    # put code here\n");
-    fprintf(fp, "\n    return 0\n");
-    fprintf(fp, "\nif __name__ == \"__main__\":");
+    fprintf(fp, "\n    \"\"\"Process command line parameters and run analysis\"\"\"");
     fprintf(fp, "\n    options, flags = gs.parser()");
-    fprintf(fp, "\n    sys.exit(main())\n");
+    fprintf(fp, "\n    # Put your code here.");
+    fprintf(fp, "\n\n");
+    fprintf(fp, "\nif __name__ == \"__main__\":");
+    fprintf(fp, "\n    main()\n");
 }
