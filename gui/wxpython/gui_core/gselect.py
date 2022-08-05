@@ -2371,7 +2371,7 @@ class GdalSelect(wx.Panel):
                     data.append((layerId, raster, int(projectionMatch), grassName))
                     layerId += 1
             elif self.dbWidgets["format"].GetStringSelection() == "Rasterlite":
-                rasters = self.GetRasterliteDBRasters(dsn)
+                rasters = self._getRasterliteDBRasters(dsn)
                 for raster in rasters:
                     grassName = GetValidLayerName(raster)
                     projectionMatch = hasRastSameProjAsLocation(dsn)
@@ -2663,7 +2663,7 @@ class GdalSelect(wx.Panel):
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")
         return rasters
 
-    def GetRasterliteDBRasters(self, dsn):
+    def _getRasterliteDBRasters(self, dsn):
         """Get Rasterlite DB rasters
 
         :param str dsn: Rasterlite DB data source name
@@ -2687,12 +2687,12 @@ class GdalSelect(wx.Panel):
             ),
             database=dsn,
             parse=(
-                self.RasterliteDBRastersParser,
+                self._rasterliteDBRastersParser,
                 {"raster_tables_suffix": raster_tables_suffix},
             ),
         )
 
-    def RasterliteDBRastersParser(self, raster_tables, raster_tables_suffix):
+    def _rasterliteDBRastersParser(self, raster_tables, raster_tables_suffix):
         """Rasterlite DB raster tables names parser
 
         :param str raster_tables: raster tables names (output of the
