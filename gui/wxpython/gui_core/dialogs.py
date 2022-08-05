@@ -1107,8 +1107,13 @@ class GroupDialog(wx.Dialog):
 
     def OnRemoveLayer(self, event):
         """Remove layer from listbox"""
-        while self.gLayerBox.GetSelections():
-            sel = self.gLayerBox.GetSelections()[0]
+        # After removal of last selected item by .Delete,
+        # ListBox selects the last of remaining items in the list
+        # and thus adds a new item to GetSelections
+        # Items are removed in reverse order to maintain positional number
+        # of other selected items (ListBox is dynamic!)
+        selections = sorted(self.gLayerBox.GetSelections(), reverse=True)
+        for sel in selections:
             m = self.gLayerBox.GetString(sel)
             self.gLayerBox.Delete(sel)
             self.gmaps.remove(m)
