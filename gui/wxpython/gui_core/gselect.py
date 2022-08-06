@@ -2727,9 +2727,8 @@ class GdalSelect(wx.Panel):
             other_tables = [
                 i for i in raster_tables_count if raster_tables_count[i] == 1
             ]
-            if other_tables:
-                for table in other_tables:
-                    del raster_tables_count[table]
+            for table in other_tables:
+                del raster_tables_count[table]
         return list(raster_tables_count.keys())
 
 
