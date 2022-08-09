@@ -2264,7 +2264,7 @@ class GdalSelect(wx.Panel):
                                     dsn,
                                     conn_param="host",
                                 ),
-                                error=error,
+                                error=grass.utils.decode(error),
                             ),
                         ),
                     )
@@ -2527,7 +2527,7 @@ class GdalSelect(wx.Panel):
                             dsn,
                             conn_param="host",
                         ),
-                        error=error,
+                        error=grass.utils.decode(error),
                     ),
                 ),
             )
@@ -2619,7 +2619,7 @@ class GdalSelect(wx.Panel):
                                     dsn,
                                     conn_param="host",
                                 ),
-                                error=error,
+                                error=grass.utils.decode(error),
                             ),
                         ),
                     )
