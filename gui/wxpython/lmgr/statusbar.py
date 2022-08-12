@@ -83,11 +83,15 @@ class SbMask:
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
         self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
         self.giface.currentMapsetChanged.connect(self.Refresh)
-        self.giface.grassdbChanged.connect(self._dbChanged)
         self.Refresh()
 
-    def _dbChanged(self, map=None, newname=None):
-        if map == self.mask_layer or newname == self.mask_layer:
+    def _dbChanged(self, map_name, new_map_name):
+        """Mapset files changed
+
+        :param str map_path: map that is changed
+        :param str map_dest: new map
+        """
+        if map_name == self.mask_layer or new_map_name == self.mask_layer:
             self.Refresh()
             self.giface.updateMap.emit()
 
