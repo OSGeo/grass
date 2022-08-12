@@ -160,20 +160,18 @@ def process_opt(opts, args):
     return parsed_args
 
 
-def print_wxgui_component_recent_files(args):
+def print_wxgui_component_recent_files(recent_files):
     """Print wxGUI component recent files
 
-    :param args dict: parsed command-line args
+    :param str recent_files: app recent files name
     """
-    recent_files_app_name = args.get("r")
-    if recent_files_app_name:
-        from gui_core.menu import RecentFilesConfig
+    from gui_core.menu import RecentFilesConfig
 
-        app = wx.App()
-        config = RecentFilesConfig(appName=recent_files_app_name)
-        for i in config.GetRecentFiles():
-            print(i, file=sys.stderr)
-        sys.exit(1)
+    app = wx.App()
+    config = RecentFilesConfig(appName=recent_files)
+    for i in config.GetRecentFiles():
+        print(i, file=sys.stderr)
+    sys.exit(1)
 
 
 def main(argv=None):
@@ -196,7 +194,9 @@ def main(argv=None):
 
     parsed_args = process_opt(opts, args)
 
-    print_wxgui_component_recent_files(args=parsed_args)
+    recent_files = parsed_args.get("r")
+    if recent_files:
+        print_wxgui_component_recent_files(recent_files)
 
     app = GMApp(workspace=parsed_args.get("w"))
 
