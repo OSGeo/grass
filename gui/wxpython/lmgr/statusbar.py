@@ -85,7 +85,7 @@ class SbMask:
         self.giface.currentMapsetChanged.connect(self.Refresh)
         self.Refresh()
 
-    def _dbChanged(self, map_name, new_map_name):
+    def dbChanged(self, map_name, new_map_name):
         """Mapset files changed
 
         :param str map_path: map that is changed

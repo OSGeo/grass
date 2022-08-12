@@ -2340,7 +2340,7 @@ class GMFrame(wx.Frame):
         :param str map_path: map path (map that is changed)
         :param str map_dest: new map path
         """
-        self.statusbar.mask._dbChanged(
+        self.statusbar.mask.dbChanged(
             os.path.basename(map_path) if map_path else map_path,
             os.path.basename(map_dest) if map_dest else map_dest,
         )
