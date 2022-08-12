@@ -44,14 +44,13 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 from grass.script import core as grass
 from grass.script.utils import decode
 
-from core.gcmd import RunCommand, GError, GMessage, GWarning
+from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
 from core.watchdog import (
     EVT_UPDATE_MAPSET,
     EVT_CURRENT_MAPSET_CHANGED,
     MapsetWatchdog,
-    watchdog_used,
 )
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
