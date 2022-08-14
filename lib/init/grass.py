@@ -38,6 +38,7 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # pylint: disable=too-many-lines
 
 from __future__ import print_function
+import codecs
 import sys
 import os
 import errno
@@ -102,7 +103,6 @@ CONFIG_PROJSHARE = os.environ.get("GRASS_PROJSHARE", "@CONFIG_PROJSHARE@")
 WINDOWS = sys.platform.startswith("win")
 CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
-
 
 def decode(bytes_, encoding=ENCODING):
     """Decode bytes with default locale and return (unicode) string
@@ -345,6 +345,11 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {tmp_location_detail}
   --tmp-mapset                   {tmp_mapset}
                                    {tmp_mapset_detail}
+  --monochrome                   {mono_color}
+  --mapset-color                 {mapset_color}
+  --location-color               {location_color}
+  --path-color                   {path_color}
+{colors_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -426,6 +431,14 @@ def help_message(default_gui):
             tmp_mapset_detail=_(
                 "created in the specified location and deleted at exit"
             ),
+            mono_color=_("use a monochrome prompt"),
+            mapset_color=_("sets the prompt color of the mapset"),
+            location_color=_("sets the prompt color of the location"),
+            path_color=_("sets the prompt color of the path"),
+            colors_detail=_(
+                "    Color value is up to 3 parts: style foreground background\n"
+                "    Style can be one of: normal, bold, bright, italic, underline, blink\n"
+                "    Color can be: black, red, green, yellow, blue, purple, cyan, white")
         )
     )
     s = t.substitute(
@@ -1822,10 +1835,10 @@ def close_gui():
             message(_("Unable to close GUI. {0}").format(e))
 
 
-def show_banner():
+def show_banner(monochrome):
     """Write GRASS GIS ASCII name to stderr"""
-    sys.stderr.write(
-        r"""
+
+    banner = r"""
           __________  ___   __________    _______________
          / ____/ __ \/   | / ___/ ___/   / ____/  _/ ___/
         / / __/ /_/ / /| | \__ \\_  \   / / __ / / \__ \
@@ -1833,7 +1846,7 @@ def show_banner():
        \____/_/ |_/_/  |_/____/____/   \____/___//____/
 
 """
-    )
+    sys.stderr.write(GRASS_GREEN.colorize(banner, monochrome, raw=True))
 
 
 def say_hello():
@@ -1894,7 +1907,7 @@ def start_shell():
     return process
 
 
-def csh_startup(location, grass_env_file):
+def csh_startup(location, grass_env_file, sh, params):
     userhome = os.getenv("HOME")  # save original home
     home = location
     os.environ["HOME"] = home
@@ -1911,9 +1924,46 @@ def csh_startup(location, grass_env_file):
 
     f.write("alias _location g.gisenv get=LOCATION_NAME\n")
     f.write("alias _mapset g.gisenv get=MAPSET\n")
-    f.write("alias precmd 'echo \"Mapset <`_mapset`> in Location <`_location`>\"'\n")
-    f.write('set prompt="GRASS > "\n')
-
+    if sh == "tcsh":
+        f.write("alias precmd 'set MAPSET_NAME=`_mapset`;set LOCATION_NAME=`_location`'\n")
+        f.write(
+            'set prompt="┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > "\n'.format(
+                name=GRASS_GREEN.colorize(
+                    "GRASS", params.monochrome, escape=sh
+                ),
+                path=params.path_color.colorize(
+                    "%~", params.monochrome, escape=sh
+                ),
+                mapset=params.mapset_color.colorize(
+                    "$MAPSET_NAME", params.monochrome, escape=sh
+                ),
+                location=params.location_color.colorize(
+                    "$LOCATION_NAME", params.monochrome, escape=sh
+                ),
+            )
+        )
+        f.write("precmd\n")
+    else:
+        f.write(
+            'set prompt="┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > "\n'.format(
+                name=GRASS_GREEN.colorize(
+                    "GRASS",
+                    params.monochrome,
+                    raw=True
+                ),
+                path=params.path_color.colorize(
+                    "$cwd",
+                    params.monochrome,
+                    raw=True
+                ),
+                mapset=params.mapset_color.colorize(
+                    "`_mapset`", params.monochrome, raw=True
+                ),
+                location=params.location_color.colorize(
+                    "`_location`", params.monochrome, raw=True
+                ),
+            )
+        )
     # csh shell rc file left for backward compatibility
     path = os.path.join(userhome, ".grass.cshrc")
     if os.access(path, os.R_OK):
@@ -1942,7 +1992,7 @@ def csh_startup(location, grass_env_file):
     return process
 
 
-def sh_like_startup(location, location_name, grass_env_file, sh):
+def sh_like_startup(location, location_name, grass_env_file, sh, params):
     """Start Bash or Z shell (but not sh (Bourne Shell))"""
     if sh == "bash":
         # set bash history to record an unlimited command history
@@ -1990,17 +2040,28 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
 
     if os.getenv("ISISROOT"):
         # GRASS GIS and ISIS blend
-        grass_name = "ISIS-GRASS"
+        purple = Color(style="normal", fg="purple")
+        grass_name = purple.colorize("ISIS-GRASS", params.monochrome, escape=sh)
     else:
-        grass_name = "GRASS"
+        grass_name = GRASS_GREEN.colorize("GRASS", params.monochrome, escape=sh)
 
     if sh == "zsh":
         f.write("setopt PROMPT_SUBST\n")
-        f.write("PS1='{name} : %1~ > '\n".format(name=grass_name))
+        f.write(
+            "PS1=$'┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > '\n".format(
+                name=grass_name,
+                mapset=params.mapset_color.colorize("${MAPSET_NAME}", params.monochrome, escape=sh),
+                location=params.location_color.colorize("${LOCATION_NAME}", params.monochrome, escape=sh),
+                path=params.path_color.colorize("%1~", params.monochrome, escape=sh),
+            )
+        )
     else:
         f.write(
-            "PS1='{name} {db_place}:\\W > '\n".format(
-                name=grass_name, db_place="$_GRASS_DB_PLACE"
+            "PS1=$'┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > '\n".format(
+                name=grass_name,
+                mapset=params.mapset_color.colorize("${MAPSET_NAME}", params.monochrome, escape=sh),
+                location=params.location_color.colorize("${LOCATION_NAME}", params.monochrome, escape=sh),
+                path=params.path_color.colorize("\\W", params.monochrome, escape=sh),
             )
         )
 
@@ -2011,9 +2072,11 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     specific_addition = ""
     if sh == "zsh":
         specific_addition = """
+    LOCATION_NAME=$(g.gisenv get=LOCATION_NAME)
+    MAPSET_NAME=$(g.gisenv get=MAPSET)
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
-    ZLOC="Mapset <$z_ms> in <$z_lo>"
+    ZLOC="Mapset <{mapset}> in <{location}>"
     if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
         fc -A -I
         HISTFILE="$MAPSET_PATH/{sh_history}"
@@ -2021,7 +2084,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         _grass_old_mapset="$MAPSET_PATH"
     fi
     """.format(
-            sh_history=sh_history
+            sh_history=sh_history,
+            mapset=params.mapset_color.colorize("${z_ms}", params.monochrome, raw=True),
+            location=params.location_color.colorize("${z_lo}", params.monochrome, raw=True),
         )
     elif sh == "bash":
         # Append existing history to file ("flush").
@@ -2044,6 +2109,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     # setting LOCATION for backwards compatibility
     f.write(
         """grass_prompt() {{
+    LOCATION_NAME=$(g.gisenv get=LOCATION_NAME)
+    MAPSET_NAME=$(g.gisenv get=MAPSET)
     MAPSET_PATH="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
     _GRASS_DB_PLACE="`g.gisenv get=LOCATION_NAME,MAPSET separator='/'`"
     {specific_addition}
@@ -2067,7 +2134,6 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 
     if sh == "zsh":
         f.write('precmd() { eval "$PROMPT_COMMAND" }\n')
-        f.write("RPROMPT='${ZLOC}'\n")
 
     # this line was moved here from below .grass.bashrc to allow ~ and $HOME in
     # .grass.bashrc
@@ -2095,9 +2161,27 @@ PROMPT_COMMAND=grass_prompt\n""".format(
     return process
 
 
-def default_startup(location, location_name):
+def default_startup(location, location_name, params):
     """Start shell making no assumptions about what is supported in PS1"""
-    os.environ["PS1"] = "GRASS > "
+
+    os.environ["PS1"] = "┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > ".format(
+        name=GRASS_GREEN.colorize(
+            "GRASS",
+            params.monochrome,
+            raw=True
+        ),
+        path=params.path_color.colorize(
+            "`pwd`",
+            params.monochrome,
+            raw=True
+        ),
+        mapset=params.mapset_color.colorize(
+            "`g.gisenv get=MAPSET`", params.monochrome, raw=True
+        ),
+        location=params.location_color.colorize(
+            "`g.gisenv get=LOCATION_NAME`", params.monochrome, raw=True
+        ),
+    )
     return start_shell()
 
 
@@ -2259,6 +2343,10 @@ class Parameters(object):
         self.tmp_location = False
         self.tmp_mapset = False
         self.batch_job = None
+        self.monochrome = False
+        self.location_color = None
+        self.mapset_color = None
+        self.path_color = None
 
 
 def add_mapset_arguments(parser, mapset_as_option):
@@ -2340,6 +2428,16 @@ def classic_parser(argv, default_gui):
     )
     parser.add_argument("-e", action="store_true", dest="exit")
     parser.add_argument("--config", nargs="*")
+    parser.add_argument("--monochrome", action="store_true")
+    parser.add_argument(
+        "--location-color", nargs="+", action='extend', dest="location_color",
+        default=["bold", "white"])
+    parser.add_argument(
+        "--mapset-color", nargs="+", action='extend', dest="mapset_color",
+        default=["bold", "white"])
+    parser.add_argument(
+        "--path-color", nargs="+", action='extend', dest="path_color",
+        default=["normal", "cyan"])
     add_mapset_arguments(parser, mapset_as_option=False)
     parser.add_argument(
         "--exec",
@@ -2383,8 +2481,154 @@ def classic_parser(argv, default_gui):
         # None if not provided, empty list if present without values.
         print_params(parsed_args.config)
         sys.exit()
+    if parsed_args.monochrome:
+        params.monochrome = True
+    if len(parsed_args.location_color) > 2:
+        params.location_color = Color(*parsed_args.location_color[2:])
+    else:
+        params.location_color = Color(*parsed_args.location_color)
+    if len(parsed_args.mapset_color) > 2:
+        params.mapset_color = Color(*parsed_args.mapset_color[2:])
+    else:
+        params.mapset_color = Color(*parsed_args.mapset_color)
+    debug("Parsed path color: {path_color}".format(path_color=" ".join(parsed_args.path_color)))
+    if len(parsed_args.path_color) > 2:
+        params.path_color = Color(*parsed_args.path_color[2:])
+    else:
+        params.path_color = Color(*parsed_args.path_color)
+    debug("Encoded path color: {path_color}".format(path_color=str(params.path_color)))
     update_params_with_mapset_arguments(params, parsed_args)
     return params
+
+
+class Color(object):
+    """Holds an ANSI Color Code
+
+    Provides some nice helper functions to return it as a string, number,
+    escaped- or raw escape sequence.
+    """
+
+    def __init__(self, style="normal", fg=None, bg=None):
+        self.styles = [
+            "normal",
+            "bold",
+            "light",
+            "italic",
+            "underline",
+            "blink",
+        ]
+        self.colors = ["black", "red", "green", "yellow", "blue", "purple", "cyan", "white"]
+        self.style = style
+        self._foreground = None
+        self._background = None
+        if fg is not None:
+            self.foreground = fg
+        if bg is not None:
+            self.background = bg
+
+    @property
+    def style(self):
+        return self.styles[self._style]
+
+    @style.setter
+    def style(self, value):
+        if value not in self.styles:
+            raise ValueError(
+                "Color Style must be one of: {styles}".format(
+                    styles=", ".join(self.styles)
+                )
+            )
+        self._style = self.styles.index(value)
+
+    def _parse_color(self, value):
+        if value not in self.colors:
+            raise ValueError(
+                "Color must be one of: {colors}".format(
+                    colors=", ".join(self.colors)
+                )
+            )
+        return self.colors.index(value)
+
+    def _color_to_string(self, value):
+        if value is not None:
+            self.colors[value]
+        return ""
+
+    @property
+    def foreground(self):
+        return self._color_to_string(self._foreground)
+
+    @foreground.setter
+    def foreground(self, value):
+        self._foreground = self._parse_color(value)
+
+    @property
+    def background(self):
+        return self._color_to_string(self._background)
+
+    @background.setter
+    def background(self, value):
+        self._background = self._parse_color(value)
+
+    def __str__(self):
+        return self._ansi()
+
+    def raw(self):
+        return self._ansi(raw=True)
+
+    def _ansi(self, raw=False, escape=None):
+        """Parse a tuple of style, fg color, bg color into an ANSI escape sequence.
+
+        Returns a string with the ANSI escape sequence or None.
+        If raw is True it will return a raw ANSI escapre sequence instead of an encoded one.
+        """
+        e_start = ""
+        e_end = ""
+        if escape is not None:
+            if escape == "bash":
+                e_start = "\\["
+                e_end = "\\]"
+            elif escape in ["zsh", "tcsh"]:
+                e_start = "%{"
+                e_end = "%}"
+        ansi = []
+        ansi.append(str(self._style))
+        if self._foreground is not None:
+            ansi.append(str(self._foreground + 30))
+        if self._background is not None:
+            ansi.append(str(self._background + 40))
+        if raw:
+            return "{e_start}\033[{ansi}m{e_end}".format(
+                ansi=";".join(ansi),
+                e_start=e_start,
+                e_end=e_end,
+            )
+        return "{e_start}\\033[{ansi}m{e_end}".format(
+            ansi=";".join(ansi),
+            e_start=e_start,
+            e_end=e_end,
+        )
+
+    def colorize(self, s, monochrome, raw=False, escape=None):
+        """Colors the given string to the given color
+
+        If monochrome is True, it will not format the string
+        If raw is True, it will emit a raw ANSI escape code, rather than an exncoded one
+        """
+        if monochrome:
+            return s
+
+        color_end = Color()
+        ret = "{color}{string}{end}".format(
+            color=self._ansi(raw=raw, escape=escape),
+            string=s,
+            end=color_end._ansi(raw=raw, escape=escape)
+        )
+        return ret
+
+
+# Some colors
+GRASS_GREEN = Color(style="bold", fg="green")
 
 
 def parse_cmdline(argv, default_gui):
@@ -2689,7 +2933,7 @@ def main():
         sys.exit(0)
     else:
         if use_shell:
-            show_banner()
+            show_banner(params.monochrome)
             say_hello()
             show_info(shellname=shellname, grass_gui=grass_gui, default_gui=default_gui)
             if grass_gui == "wxpython":
@@ -2698,13 +2942,19 @@ def main():
                     % grass_gui
                 )
             if sh in ["csh", "tcsh"]:
-                shell_process = csh_startup(mapset_settings.full_mapset, grass_env_file)
+                shell_process = csh_startup(
+                    mapset_settings.full_mapset,
+                    grass_env_file,
+                    sh,
+                    params,
+                )
             elif sh in ["zsh"]:
                 shell_process = sh_like_startup(
                     mapset_settings.full_mapset,
                     mapset_settings.location,
                     grass_env_file,
                     "zsh",
+                    params,
                 )
             elif sh in ["bash", "msh", "cygwin"]:
                 shell_process = sh_like_startup(
@@ -2712,10 +2962,11 @@ def main():
                     mapset_settings.location,
                     grass_env_file,
                     "bash",
+                    params,
                 )
             else:
                 shell_process = default_startup(
-                    mapset_settings.full_mapset, mapset_settings.location
+                    mapset_settings.full_mapset, mapset_settings.location, params
                 )
         else:
             shell_process = None
