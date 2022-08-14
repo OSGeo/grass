@@ -139,10 +139,10 @@ class VDigitWindow(BufferedMapWindow):
         event = None
         if not shift:
             if kc == ord("P"):
-                event = wx.CommandEvent(winid=self.toolbar.addPoint)
+                event = wx.CommandEvent(id=self.toolbar.addPoint)
                 tool = self.toolbar.OnAddPoint
             elif kc == ord("L"):
-                event = wx.CommandEvent(winid=self.toolbar.addLine)
+                event = wx.CommandEvent(id=self.toolbar.addLine)
                 tool = self.toolbar.OnAddLine
         if event:
             self.toolbar.OnTool(event)
