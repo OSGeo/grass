@@ -293,6 +293,7 @@ void G__usage_html(void)
 	fprintf(stdout, "</dl>\n");
     }
     fprintf(stdout, "</div>\n");
+    fprintf(stdout, "</div>\n");
 
     fprintf(stdout, "</body>\n</html>\n");
 }
