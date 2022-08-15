@@ -436,7 +436,7 @@ class VDigitToolbar(BaseToolbar):
         toolbar"""
         Debug.msg(
             3,
-            f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}"
+            f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
         )
         # set cursor
         self.MapWindow.SetNamedCursor("cross")

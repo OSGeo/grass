@@ -201,7 +201,6 @@ class VDigitWindow(BufferedMapWindow):
                 "event": wx.CommandEvent(id=self.toolbar.redo),
                 "tool": self.toolbar.OnRedo,
             },
-
         }
         if not shift:
             tool = tools.get(kc)
