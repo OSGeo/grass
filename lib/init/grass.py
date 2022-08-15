@@ -103,6 +103,7 @@ WINDOWS = sys.platform.startswith("win")
 CYGWIN = sys.platform.startswith("cygwin")
 MACOS = sys.platform.startswith("darwin")
 
+
 def decode(bytes_, encoding=ENCODING):
     """Decode bytes with default locale and return (unicode) string
     Adapted from grass.script.core.utils.
@@ -437,7 +438,8 @@ def help_message(default_gui):
             colors_detail=_(
                 "    Color value is up to 3 parts: style foreground background\n"
                 "    Style can be one of: normal, bold, bright, italic, underline, blink\n"
-                "    Color can be: black, red, green, yellow, blue, purple, cyan, white")
+                "    Color can be: black, red, green, yellow, blue, purple, cyan, white"
+            ),
         )
     )
     s = t.substitute(
@@ -657,11 +659,7 @@ def create_fallback_session(gisrc, tmpdir):
     """Creates fallback temporary session"""
     # Create temporary location
     set_mapset(
-        gisrc=gisrc,
-        geofile="XY",
-        create_new=True,
-        tmp_location=True,
-        tmpdir=tmpdir,
+        gisrc=gisrc, geofile="XY", create_new=True, tmp_location=True, tmpdir=tmpdir
     )
 
 
@@ -1769,9 +1767,7 @@ def run_batch_job(batch_job: list):
         script_in_addon_path = None
         if "GRASS_ADDON_BASE" in os.environ:
             script_in_addon_path = os.path.join(
-                os.environ["GRASS_ADDON_BASE"],
-                "scripts",
-                batch_job[0],
+                os.environ["GRASS_ADDON_BASE"], "scripts", batch_job[0]
             )
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
@@ -1784,8 +1780,7 @@ def run_batch_job(batch_job: list):
         proc = Popen(batch_job, shell=False, env=os.environ)
     except OSError as error:
         error_message = _("Execution of <{cmd}> failed:\n" "{error}").format(
-            cmd=batch_job_string,
-            error=error,
+            cmd=batch_job_string, error=error
         )
         # No such file or directory
         if error.errno == errno.ENOENT:
@@ -1924,15 +1919,13 @@ def csh_startup(location, grass_env_file, sh, params):
     f.write("alias _location g.gisenv get=LOCATION_NAME\n")
     f.write("alias _mapset g.gisenv get=MAPSET\n")
     if sh == "tcsh":
-        f.write("alias precmd 'set MAPSET_NAME=`_mapset`;set LOCATION_NAME=`_location`'\n")
+        f.write(
+            "alias precmd 'set MAPSET_NAME=`_mapset`;set LOCATION_NAME=`_location`'\n"
+        )
         f.write(
             'set prompt="┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > "\n'.format(
-                name=GRASS_GREEN.colorize(
-                    "GRASS", params.monochrome, escape=sh
-                ),
-                path=params.path_color.colorize(
-                    "%~", params.monochrome, escape=sh
-                ),
+                name=GRASS_GREEN.colorize("GRASS", params.monochrome, escape=sh),
+                path=params.path_color.colorize("%~", params.monochrome, escape=sh),
                 mapset=params.mapset_color.colorize(
                     "$MAPSET_NAME", params.monochrome, escape=sh
                 ),
@@ -1945,16 +1938,8 @@ def csh_startup(location, grass_env_file, sh, params):
     else:
         f.write(
             'set prompt="┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > "\n'.format(
-                name=GRASS_GREEN.colorize(
-                    "GRASS",
-                    params.monochrome,
-                    raw=True
-                ),
-                path=params.path_color.colorize(
-                    "$cwd",
-                    params.monochrome,
-                    raw=True
-                ),
+                name=GRASS_GREEN.colorize("GRASS", params.monochrome, raw=True),
+                path=params.path_color.colorize("$cwd", params.monochrome, raw=True),
                 mapset=params.mapset_color.colorize(
                     "`_mapset`", params.monochrome, raw=True
                 ),
@@ -2049,8 +2034,12 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
         f.write(
             "PS1=$'┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > '\n".format(
                 name=grass_name,
-                mapset=params.mapset_color.colorize("${MAPSET_NAME}", params.monochrome, escape=sh),
-                location=params.location_color.colorize("${LOCATION_NAME}", params.monochrome, escape=sh),
+                mapset=params.mapset_color.colorize(
+                    "${MAPSET_NAME}", params.monochrome, escape=sh
+                ),
+                location=params.location_color.colorize(
+                    "${LOCATION_NAME}", params.monochrome, escape=sh
+                ),
                 path=params.path_color.colorize("%1~", params.monochrome, escape=sh),
             )
         )
@@ -2058,8 +2047,12 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
         f.write(
             "PS1=$'┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > '\n".format(
                 name=grass_name,
-                mapset=params.mapset_color.colorize("${MAPSET_NAME}", params.monochrome, escape=sh),
-                location=params.location_color.colorize("${LOCATION_NAME}", params.monochrome, escape=sh),
+                mapset=params.mapset_color.colorize(
+                    "${MAPSET_NAME}", params.monochrome, escape=sh
+                ),
+                location=params.location_color.colorize(
+                    "${LOCATION_NAME}", params.monochrome, escape=sh
+                ),
                 path=params.path_color.colorize("\\W", params.monochrome, escape=sh),
             )
         )
@@ -2085,7 +2078,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
     """.format(
             sh_history=sh_history,
             mapset=params.mapset_color.colorize("${z_ms}", params.monochrome, raw=True),
-            location=params.location_color.colorize("${z_lo}", params.monochrome, raw=True),
+            location=params.location_color.colorize(
+                "${z_lo}", params.monochrome, raw=True
+            ),
         )
     elif sh == "bash":
         # Append existing history to file ("flush").
@@ -2163,17 +2158,11 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 def default_startup(location, location_name, params):
     """Start shell making no assumptions about what is supported in PS1"""
 
-    os.environ["PS1"] = "┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > ".format(
-        name=GRASS_GREEN.colorize(
-            "GRASS",
-            params.monochrome,
-            raw=True
-        ),
-        path=params.path_color.colorize(
-            "`pwd`",
-            params.monochrome,
-            raw=True
-        ),
+    os.environ[
+        "PS1"
+    ] = "┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > ".format(
+        name=GRASS_GREEN.colorize("GRASS", params.monochrome, raw=True),
+        path=params.path_color.colorize("`pwd`", params.monochrome, raw=True),
         mapset=params.mapset_color.colorize(
             "`g.gisenv get=MAPSET`", params.monochrome, raw=True
         ),
@@ -2429,14 +2418,26 @@ def classic_parser(argv, default_gui):
     parser.add_argument("--config", nargs="*")
     parser.add_argument("--monochrome", action="store_true")
     parser.add_argument(
-        "--location-color", nargs="+", action='extend', dest="location_color",
-        default=["bold", "white"])
+        "--location-color",
+        nargs="+",
+        action="extend",
+        dest="location_color",
+        default=["bold", "white"],
+    )
     parser.add_argument(
-        "--mapset-color", nargs="+", action='extend', dest="mapset_color",
-        default=["bold", "white"])
+        "--mapset-color",
+        nargs="+",
+        action="extend",
+        dest="mapset_color",
+        default=["bold", "white"],
+    )
     parser.add_argument(
-        "--path-color", nargs="+", action='extend', dest="path_color",
-        default=["normal", "cyan"])
+        "--path-color",
+        nargs="+",
+        action="extend",
+        dest="path_color",
+        default=["normal", "cyan"],
+    )
     add_mapset_arguments(parser, mapset_as_option=False)
     parser.add_argument(
         "--exec",
@@ -2490,7 +2491,11 @@ def classic_parser(argv, default_gui):
         params.mapset_color = Color(*parsed_args.mapset_color[2:])
     else:
         params.mapset_color = Color(*parsed_args.mapset_color)
-    debug("Parsed path color: {path_color}".format(path_color=" ".join(parsed_args.path_color)))
+    debug(
+        "Parsed path color: {path_color}".format(
+            path_color=" ".join(parsed_args.path_color)
+        )
+    )
     if len(parsed_args.path_color) > 2:
         params.path_color = Color(*parsed_args.path_color[2:])
     else:
@@ -2508,15 +2513,17 @@ class Color(object):
     """
 
     def __init__(self, style="normal", fg=None, bg=None):
-        self.styles = [
-            "normal",
-            "bold",
-            "light",
-            "italic",
-            "underline",
-            "blink",
+        self.styles = ["normal", "bold", "light", "italic", "underline", "blink"]
+        self.colors = [
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "purple",
+            "cyan",
+            "white",
         ]
-        self.colors = ["black", "red", "green", "yellow", "blue", "purple", "cyan", "white"]
         self.style = style
         self._foreground = None
         self._background = None
@@ -2542,9 +2549,7 @@ class Color(object):
     def _parse_color(self, value):
         if value not in self.colors:
             raise ValueError(
-                "Color must be one of: {colors}".format(
-                    colors=", ".join(self.colors)
-                )
+                "Color must be one of: {colors}".format(colors=", ".join(self.colors))
             )
         return self.colors.index(value)
 
@@ -2598,14 +2603,10 @@ class Color(object):
             ansi.append(str(self._background + 40))
         if raw:
             return "{e_start}\033[{ansi}m{e_end}".format(
-                ansi=";".join(ansi),
-                e_start=e_start,
-                e_end=e_end,
+                ansi=";".join(ansi), e_start=e_start, e_end=e_end
             )
         return "{e_start}\\033[{ansi}m{e_end}".format(
-            ansi=";".join(ansi),
-            e_start=e_start,
-            e_end=e_end,
+            ansi=";".join(ansi), e_start=e_start, e_end=e_end
         )
 
     def colorize(self, s, monochrome, raw=False, escape=None):
@@ -2621,7 +2622,7 @@ class Color(object):
         ret = "{color}{string}{end}".format(
             color=self._ansi(raw=raw, escape=escape),
             string=s,
-            end=color_end.raw(escape=escape)
+            end=color_end.raw(escape=escape),
         )
         return ret
 
@@ -2802,8 +2803,7 @@ def main():
         from grass.grassdb.checks import can_start_in_mapset
 
         last_mapset_usable = can_start_in_mapset(
-            mapset_path=last_mapset_path,
-            ignore_lock=params.force_gislock_removal,
+            mapset_path=last_mapset_path, ignore_lock=params.force_gislock_removal
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
@@ -2942,10 +2942,7 @@ def main():
                 )
             if sh in ["csh", "tcsh"]:
                 shell_process = csh_startup(
-                    mapset_settings.full_mapset,
-                    grass_env_file,
-                    sh,
-                    params,
+                    mapset_settings.full_mapset, grass_env_file, sh, params
                 )
             elif sh in ["zsh"]:
                 shell_process = sh_like_startup(
