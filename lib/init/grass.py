@@ -38,7 +38,6 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # pylint: disable=too-many-lines
 
 from __future__ import print_function
-import codecs
 import sys
 import os
 import errno
@@ -2551,7 +2550,7 @@ class Color(object):
 
     def _color_to_string(self, value):
         if value is not None:
-            self.colors[value]
+            return self.colors[value]
         return ""
 
     @property
@@ -2573,8 +2572,8 @@ class Color(object):
     def __str__(self):
         return self._ansi()
 
-    def raw(self):
-        return self._ansi(raw=True)
+    def raw(self, escape=None):
+        return self._ansi(raw=True, escape=escape)
 
     def _ansi(self, raw=False, escape=None):
         """Parse a tuple of style, fg color, bg color into an ANSI escape sequence.
@@ -2622,7 +2621,7 @@ class Color(object):
         ret = "{color}{string}{end}".format(
             color=self._ansi(raw=raw, escape=escape),
             string=s,
-            end=color_end._ansi(raw=raw, escape=escape)
+            end=color_end.raw(escape=escape)
         )
         return ret
 
