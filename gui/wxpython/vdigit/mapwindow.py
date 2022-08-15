@@ -136,17 +136,78 @@ class VDigitWindow(BufferedMapWindow):
         shift = event.ShiftDown()
         kc = event.GetKeyCode()
 
-        event = None
+        tools = {
+            ord("P"): {
+                "event": wx.CommandEvent(id=self.toolbar.addPoint),
+                "tool": self.toolbar.OnAddPoint,
+            },
+            ord("L"): {
+                "event": wx.CommandEvent(id=self.toolbar.addLine),
+                "tool": self.toolbar.OnAddLine,
+            },
+            ord("A"): {
+                "event": wx.CommandEvent(id=self.toolbar.addArea),
+                "tool": self.toolbar.OnAddArea,
+            },
+            ord("B"): {
+                "event": None,
+                "tool": self.toolbar.OnAddBoundary,
+            },
+            ord("C"): {
+                "event": None,
+                "tool": self.toolbar.OnAddCentroid,
+            },
+            ord("V"): {
+                "event": wx.CommandEvent(id=self.toolbar.addVertex),
+                "tool": self.toolbar.OnAddVertex,
+            },
+            ord("X"): {
+                "event": wx.CommandEvent(id=self.toolbar.removeVertex),
+                "tool": self.toolbar.OnRemoveVertex,
+            },
+            ord("G"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveVertex),
+                "tool": self.toolbar.OnMoveVertex,
+            },
+            ord("D"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteLine),
+                "tool": self.toolbar.OnDeleteLine,
+            },
+            ord("F"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteArea),
+                "tool": self.toolbar.OnDeleteArea,
+            },
+            ord("E"): {
+                "event": wx.CommandEvent(id=self.toolbar.editLine),
+                "tool": self.toolbar.OnEditLine,
+            },
+            ord("M"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveLine),
+                "tool": self.toolbar.OnMoveLine,
+            },
+            ord("J"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayCats),
+                "tool": self.toolbar.OnDisplayCats,
+            },
+            ord("K"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayAttr),
+                "tool": self.toolbar.OnDisplayAttr,
+            },
+            ord("Z"): {
+                "event": wx.CommandEvent(id=self.toolbar.undo),
+                "tool": self.toolbar.OnUndo,
+            },
+            ord("Y"): {
+                "event": wx.CommandEvent(id=self.toolbar.redo),
+                "tool": self.toolbar.OnRedo,
+            },
+
+        }
         if not shift:
-            if kc == ord("P"):
-                event = wx.CommandEvent(id=self.toolbar.addPoint)
-                tool = self.toolbar.OnAddPoint
-            elif kc == ord("L"):
-                event = wx.CommandEvent(id=self.toolbar.addLine)
-                tool = self.toolbar.OnAddLine
-        if event:
-            self.toolbar.OnTool(event)
-            tool(event)
+            tool = tools.get(kc)
+            if tool:
+                event = self.toolbar.OnTool(tool["event"])
+                tool["tool"](event)
 
     def _updateMap(self):
         if not self.toolbar or not self.toolbar.GetLayer():

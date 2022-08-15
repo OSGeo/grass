@@ -434,14 +434,18 @@ class VDigitToolbar(BaseToolbar):
     def OnTool(self, event):
         """Tool selected -> untoggles previusly selected tool in
         toolbar"""
-        Debug.msg(3, "VDigitToolbar.OnTool(): id = %s" % event.GetId())
+        Debug.msg(
+            3,
+            f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}"
+        )
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
         self.MapWindow.mouse["use"] = "pointer"
 
         aId = self.action.get("id", -1)
-        BaseToolbar.OnTool(self, event)
+        if event:
+            BaseToolbar.OnTool(self, event)
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:
@@ -628,14 +632,16 @@ class VDigitToolbar(BaseToolbar):
         if self.digit:
             self.digit.Undo()
 
-        event.Skip()
+        if event:
+            event.Skip()
 
     def OnRedo(self, event):
         """Undo previous changes"""
         if self.digit:
             self.digit.Undo(level=1)
 
-        event.Skip()
+        if event:
+            event.Skip()
 
     def EnableUndo(self, enable=True):
         """Enable 'Undo' in toolbar
