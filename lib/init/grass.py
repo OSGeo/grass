@@ -1386,7 +1386,11 @@ def load_color_config(grass_config_dir):
         f = open(os.path.join(grass_config_dir, "colors.json"), "r")
         colors = json.load(f)
         f.close()
-        debug("Loaded color_config:\n{colors}".format(colors=json.dumps(colors, sort_keys=True, indent=4)))
+        debug(
+            "Loaded color_config:\n{colors}".format(
+                colors=json.dumps(colors, sort_keys=True, indent=4)
+            )
+        )
         return Colors(colors=colors)
     except FileNotFoundError:
         return None
@@ -1863,7 +1867,9 @@ def show_banner(params):
        \____/_/ |_/_/  |_/____/____/   \____/___//____/
 
 """
-    sys.stderr.write(params.colors.get("grass").colorize(banner, params.no_color, raw=True))
+    sys.stderr.write(
+        params.colors.get("grass").colorize(banner, params.no_color, raw=True)
+    )
 
 
 def say_hello():
@@ -1947,8 +1953,12 @@ def csh_startup(location, grass_env_file, sh, params):
         )
         f.write(
             'set prompt="┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > "\n'.format(
-                name=params.colors.get("grass").colorize("GRASS", params.no_color, escape=sh),
-                path=params.colors.get("path").colorize("%~", params.no_color, escape=sh),
+                name=params.colors.get("grass").colorize(
+                    "GRASS", params.no_color, escape=sh
+                ),
+                path=params.colors.get("path").colorize(
+                    "%~", params.no_color, escape=sh
+                ),
                 mapset=params.colors.get("mapset").colorize(
                     "$MAPSET_NAME", params.no_color, escape=sh
                 ),
@@ -1961,8 +1971,12 @@ def csh_startup(location, grass_env_file, sh, params):
     else:
         f.write(
             'set prompt="┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > "\n'.format(
-                name=params.colors.get("grass").colorize("GRASS", params.no_color, raw=True),
-                path=params.colors.get("path").colorize("$cwd", params.no_color, raw=True),
+                name=params.colors.get("grass").colorize(
+                    "GRASS", params.no_color, raw=True
+                ),
+                path=params.colors.get("path").colorize(
+                    "$cwd", params.no_color, raw=True
+                ),
                 mapset=params.colors.get("mapset").colorize(
                     "`_mapset`", params.no_color, raw=True
                 ),
@@ -2047,9 +2061,13 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
 
     if os.getenv("ISISROOT"):
         # GRASS GIS and ISIS blend
-        grass_name = params.colors.get("isis-grass").colorize("ISIS-GRASS", params.no_color, escape=sh)
+        grass_name = params.colors.get("isis-grass").colorize(
+            "ISIS-GRASS", params.no_color, escape=sh
+        )
     else:
-        grass_name = params.colors.get("grass").colorize("GRASS", params.no_color, escape=sh)
+        grass_name = params.colors.get("grass").colorize(
+            "GRASS", params.no_color, escape=sh
+        )
 
     if sh == "zsh":
         f.write("setopt PROMPT_SUBST\n")
@@ -2062,7 +2080,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
                 location=params.colors.get("location").colorize(
                     "${LOCATION_NAME}", params.no_color, escape=sh
                 ),
-                path=params.colors.get("path").colorize("%1~", params.no_color, escape=sh),
+                path=params.colors.get("path").colorize(
+                    "%1~", params.no_color, escape=sh
+                ),
             )
         )
     else:
@@ -2075,7 +2095,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
                 location=params.colors.get("location").colorize(
                     "${LOCATION_NAME}", params.no_color, escape=sh
                 ),
-                path=params.colors.get("path").colorize("\\W", params.no_color, escape=sh),
+                path=params.colors.get("path").colorize(
+                    "\\W", params.no_color, escape=sh
+                ),
             )
         )
 
@@ -2099,7 +2121,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
     fi
     """.format(
             sh_history=sh_history,
-            mapset=params.colors.get("mapset").colorize("${z_ms}", params.no_color, raw=True),
+            mapset=params.colors.get("mapset").colorize(
+                "${z_ms}", params.no_color, raw=True
+            ),
             location=params.colors.get("location").colorize(
                 "${z_lo}", params.no_color, raw=True
             ),
@@ -2504,7 +2528,7 @@ def classic_parser(argv, default_gui, color_config=None):
     if parsed_args.no_color:
         params.no_color = True
 
-    #Color handling
+    # Color handling
     if len(parsed_args.location_color) > 2:
         location_color = Color(*parsed_args.location_color[2:])
         if color_config is not None:
@@ -2525,10 +2549,11 @@ def classic_parser(argv, default_gui, color_config=None):
         path_color = Color(*parsed_args.path_color)
     debug("color_config = {color_config}".format(color_config=color_config))
     if color_config is None:
-        params.colors=Colors(
-            path=path_color, mapset=mapset_color, location=location_color)
+        params.colors = Colors(
+            path=path_color, mapset=mapset_color, location=location_color
+        )
     else:
-        params.colors=color_config
+        params.colors = color_config
     debug("params.colors = {colors}".format(colors=params.colors.json()))
 
     update_params_with_mapset_arguments(params, parsed_args)
@@ -2663,7 +2688,9 @@ class Colors(object):
     def __init__(self, colors=None, path=Color(), mapset=Color(), location=Color()):
         self._color = {}
         if colors:
-            debug("Loading color config from file: colors={colors}".format(colors=colors))
+            debug(
+                "Loading color config from file: colors={colors}".format(colors=colors)
+            )
             self.from_json(colors)
         else:
             self._color = {
@@ -2681,7 +2708,7 @@ class Colors(object):
         self._color[category] = value
 
     def json(self, sort_keys=False, indent=4):
-        ret={}
+        ret = {}
         for k, color in self._color.items():
             ret[k] = {"style": color.style}
             if color.foreground:
