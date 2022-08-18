@@ -18,6 +18,7 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <geodesic.h>
 
 static double min4(double, double, double, double);
 static double min2(double, double);
@@ -25,6 +26,7 @@ static double min2(double, double);
 static struct state {
     int projection;
     double factor;
+    struct geod_geodesic g;
 } state;
 
 static struct state *st = &state;
@@ -41,13 +43,17 @@ static struct state *st = &state;
 */
 int G_begin_distance_calculations(void)
 {
-    double a, e2;
+    double a, e2, f;
 
     st->factor = 1.0;
     switch (st->projection = G_projection()) {
     case PROJECTION_LL:
 	G_get_ellipsoid_parameters(&a, &e2);
-	G_begin_geodesic_distance(a, e2);
+	f = 1.0 - sqrt(1.0 - e2);
+	/* GeographicLib */
+	geod_init(&st->g, a, f);
+	/* G_begin_geodesic_distance(a, e2); */
+
 	return 2;
     default:
 	st->factor = G_database_units_to_meters_factor();
@@ -74,8 +80,14 @@ int G_begin_distance_calculations(void)
 */
 double G_distance(double e1, double n1, double e2, double n2)
 {
-    if (st->projection == PROJECTION_LL)
-	return G_geodesic_distance(e1, n1, e2, n2);
+    if (st->projection == PROJECTION_LL) {
+	double ps12 = 0, pazi1 = 0, pazi2 = 0;
+
+	geod_inverse(&st->g, n1, e1, n2, e2, &ps12, &pazi1, &pazi2);
+	
+	return ps12; 
+	/* return G_geodesic_distance(e1, n1, e2, n2); */
+    }
     else
 	return st->factor * hypot(e1 - e2, n1 - n2);
 }

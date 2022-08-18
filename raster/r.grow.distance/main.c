@@ -59,7 +59,7 @@ static double geodesic_distance(int x1, int y1, int x2, int y2)
     double lon1 = Rast_col_to_easting(x1 + 0.5, &window);
     double lon2 = Rast_col_to_easting(x2 + 0.5, &window);
 
-    return G_geodesic_distance(lon1, lat1, lon2, lat2);
+    return G_distance(lon1, lat1, lon2, lat2);
 }
 
 void swap_rows(void)
@@ -259,12 +259,10 @@ int main(int argc, char **argv)
     else if (strcmp(opt.met->answer, "manhattan") == 0)
 	distance = &distance_manhattan;
     else if (strcmp(opt.met->answer, "geodesic") == 0) {
-	double a, e2;
 	if (window.proj != PROJECTION_LL)
 	    G_fatal_error(_("metric=geodesic is only valid for lat/lon"));
 	distance = NULL;
-	G_get_ellipsoid_parameters(&a, &e2);
-	G_begin_geodesic_distance(a, e2);
+	G_begin_distance_calculations();
     }
     else
 	G_fatal_error(_("Unknown metric: '%s'"), opt.met->answer);
