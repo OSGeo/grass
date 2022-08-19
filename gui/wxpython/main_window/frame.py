@@ -2278,20 +2278,6 @@ class GMFrame(wx.Frame):
 
     def OnKeyDown(self, event):
         """Key pressed"""
-        kc = event.GetKeyCode()
-
-        try:
-            kc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
-
         event.Skip()
 
     def OnCloseWindow(self, event):
