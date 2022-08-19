@@ -2462,23 +2462,20 @@ def classic_parser(argv, default_gui, color_config=None):
     parser.add_argument(
         "--location-color",
         nargs="+",
-        action="extend",
+        action="store",
         dest="location_color",
-        default=["bold", "white"],
     )
     parser.add_argument(
         "--mapset-color",
         nargs="+",
-        action="extend",
+        action="store",
         dest="mapset_color",
-        default=["bold", "white"],
     )
     parser.add_argument(
         "--path-color",
         nargs="+",
-        action="extend",
+        action="store",
         dest="path_color",
-        default=["normal", "cyan"],
     )
     add_mapset_arguments(parser, mapset_as_option=False)
     parser.add_argument(
@@ -2527,24 +2524,25 @@ def classic_parser(argv, default_gui, color_config=None):
         params.no_color = True
 
     # Color handling
-    if len(parsed_args.location_color) > 2:
-        location_color = Color(*parsed_args.location_color[2:])
+    debug("--location-color={colors}".format(colors=parsed_args.location_color))
+    if parsed_args.location_color is not None:
+        location_color = Color(*parsed_args.location_color)
         if color_config is not None:
             color_config.set("location", location_color)
     else:
-        location_color = Color(*parsed_args.location_color)
-    if len(parsed_args.mapset_color) > 2:
-        mapset_color = Color(*parsed_args.mapset_color[2:])
+        location_color = Color(style="bold")
+    if parsed_args.mapset_color is not None:
+        mapset_color = Color(*parsed_args.mapset_color)
         if color_config is not None:
             color_config.set("mapset", mapset_color)
     else:
-        mapset_color = Color(*parsed_args.mapset_color)
-    if len(parsed_args.path_color) > 2:
-        path_color = Color(*parsed_args.path_color[2:])
+        mapset_color = Color(style="bold")
+    if parsed_args.path_color is not None:
+        path_color = Color(*parsed_args.path_color)
         if color_config is not None:
             color_config.set("path", path_color)
     else:
-        path_color = Color(*parsed_args.path_color)
+        path_color = Color(fg="cyan")
     debug("color_config = {color_config}".format(color_config=color_config))
     if color_config is None:
         params.colors = Colors(
