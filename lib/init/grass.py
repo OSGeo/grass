@@ -1951,6 +1951,7 @@ def csh_startup(location, grass_env_file, sh, params):
         f.write(
             "alias precmd 'set MAPSET_NAME=`_mapset`;set LOCATION_NAME=`_location`'\n"
         )
+        f.write("precmd\n")
         f.write(
             'set prompt="┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > "\n'.format(
                 name=params.colors.get("grass").colorize(
@@ -1967,7 +1968,6 @@ def csh_startup(location, grass_env_file, sh, params):
                 ),
             )
         )
-        f.write("precmd\n")
     else:
         f.write(
             'set prompt="┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > "\n'.format(
@@ -2108,8 +2108,6 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
     specific_addition = ""
     if sh == "zsh":
         specific_addition = """
-    LOCATION_NAME=$(g.gisenv get=LOCATION_NAME)
-    MAPSET_NAME=$(g.gisenv get=MAPSET)
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
     ZLOC="Mapset <{mapset}> in <{location}>"
