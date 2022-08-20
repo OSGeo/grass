@@ -1953,7 +1953,7 @@ def csh_startup(location, grass_env_file, sh, params):
         )
         f.write("precmd\n")
         f.write(
-            'set prompt="┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > "\n'.format(
+            "set prompt='┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > '\n".format(
                 name=params.colors.get("grass").colorize(
                     "GRASS", params.no_color, escape=sh
                 ),
@@ -1961,16 +1961,16 @@ def csh_startup(location, grass_env_file, sh, params):
                     "%~", params.no_color, escape=sh
                 ),
                 mapset=params.colors.get("mapset").colorize(
-                    "$MAPSET_NAME", params.no_color, escape=sh
+                    "%$MAPSET_NAME", params.no_color, escape=sh
                 ),
                 location=params.colors.get("location").colorize(
-                    "$LOCATION_NAME", params.no_color, escape=sh
+                    "%$LOCATION_NAME", params.no_color, escape=sh
                 ),
             )
         )
     else:
         f.write(
-            'set prompt="┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > "\n'.format(
+            "alias _sp 'set prompt=\"┌Mapset <{mapset}> in <{location}>\\\\\n└{name} : {path} > \"'\n".format(
                 name=params.colors.get("grass").colorize(
                     "GRASS", params.no_color, raw=True
                 ),
@@ -1985,6 +1985,9 @@ def csh_startup(location, grass_env_file, sh, params):
                 ),
             )
         )
+        f.write("_sp\n")
+        f.write("alias cd 'chdir \\!* && _sp'\n")
+        f.write("alias g.mapset 'g.mapset \\!* && _sp'\n")
     # csh shell rc file left for backward compatibility
     path = os.path.join(userhome, ".grass.cshrc")
     if os.access(path, os.R_OK):
@@ -2204,14 +2207,14 @@ def default_startup(location, location_name, params):
 
     os.environ[
         "PS1"
-    ] = "┌Mapset <{mapset}> in <{location}>\\\n└{name} : {path} > ".format(
+    ] = "┌Mapset <{mapset}> in <{location}>\n└{name} : {path} > ".format(
         name=params.colors.get("grass").colorize("GRASS", params.no_color, raw=True),
-        path=params.colors.get("path").colorize("`pwd`", params.no_color, raw=True),
+        path=params.colors.get("path").colorize("${PWD}", params.no_color, raw=True),
         mapset=params.colors.get("mapset").colorize(
-            "`g.gisenv get=MAPSET`", params.no_color, raw=True
+            "$(g.gisenv get=MAPSET)", params.no_color, raw=True
         ),
         location=params.colors.get("location").colorize(
-            "`g.gisenv get=LOCATION_NAME`", params.no_color, raw=True
+            "$(g.gisenv get=LOCATION_NAME)", params.no_color, raw=True
         ),
     )
     return start_shell()
