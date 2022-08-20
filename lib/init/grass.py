@@ -2039,6 +2039,12 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     """.format(
             sh_history=sh_history
         )
+        sudo_success_file = ".sudo_as_admin_successful"
+        if os.path.exists(os.path.join(userhome, sudo_success_file)):
+            try:
+                fh = open(os.path.join(home, sudo_success_file), "a")
+            finally:
+                fh.close()
 
     # double curly brackets means single one for format function
     # setting LOCATION for backwards compatibility
