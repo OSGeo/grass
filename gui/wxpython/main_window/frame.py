@@ -694,7 +694,6 @@ class GMFrame(wx.Frame):
     def BindEvents(self):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
-        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
@@ -2275,10 +2274,6 @@ class GMFrame(wx.Frame):
                 self.GetLayerTree().Delete(layer)
             except ValueError:
                 pass
-
-    def OnKeyDown(self, event):
-        """Key pressed"""
-        event.Skip()
 
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
