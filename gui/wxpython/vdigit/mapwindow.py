@@ -201,7 +201,7 @@ class VDigitWindow(BufferedMapWindow):
                 "event": wx.CommandEvent(id=self.toolbar.redo),
                 "tool": self.toolbar.OnRedo,
             },
-            ord("S"): {
+            ord("T"): {
                 "event": wx.CommandEvent(id=self.toolbar.settings),
                 "tool": self.toolbar.OnSettings,
             },
