@@ -2237,18 +2237,6 @@ class GMFrame(wx.Frame):
                 else:
                     self.notebook.SetSelectionByName("layers")
 
-        try:
-            ckc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
-
         event.Skip()
 
     def OnCloseWindow(self, event):
