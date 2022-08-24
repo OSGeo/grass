@@ -1,27 +1,10 @@
 # Contributing
 
-## Introduction
-
-GRASS GIS is written in more than one programming language, but you need
-to know only the language relevant to your contribution. While much
-of the source code is written in C, a significat portion is written in Python.
-A compiler is needed to convert the C and C++ source code into executable
-files ("binaries"). In contrast, Python is an interpreted language that
-can only be executed with Python software. There is also documentation
-in HTML files and other files in the GRASS GIS source code.
-
-## Contributions other than code
-
-There is more than one way of contributing, see full list at
-<https://grass.osgeo.org/get-involved/>.
-In the rest of this document, we will focus on contributions centered
-around the GRASS GIS source code.
-
-## Reporting issues and suggesting features
-
-To report an issue or to suggest features or a change,
-[open an issue](https://github.com/OSGeo/grass/issues/new/choose)
-on GitHub.
+There is more than one way of contributing to GRASS GIS.
+Here we will focus on contributions centered
+around the main GRASS GIS source code.
+You can also report issues, plan new features,
+or explore <https://grass.osgeo.org/get-involved/>.
 
 ## Changing code and documentation
 
@@ -38,10 +21,10 @@ GRASS GIS developer mailing list.
 * Set up Git with your name and email.
 * Fork the repository (by clicking the `Fork` button in the upper right corner
   of the GitHub interface).
-* Clone your fork (use SSH or HTTPS URL):
+* Clone your fork (use HTTPS or SSH URL, here we will use HTTPS):
 
 ```
-git clone git@github.com:your_GH_account/grass.git
+git clone https://github.com/your_GitHub_account/grass.git
 ```
 
 * Enter the directory
@@ -66,13 +49,15 @@ git remote -v
 * You should see something like:
 
 ```
-origin	git@github.com:your_GH_account/grass.git (fetch)
-origin	git@github.com:your_GH_account/grass.git (push)
+origin	https://github.com/your_GH_account/grass.git (fetch)
+origin	https://github.com/your_GH_account/grass.git (push)
 upstream	https://github.com/OSGeo/grass.git (fetch)
 upstream	https://github.com/OSGeo/grass.git (push)
 ```
 
-For the following workflow, it is important that "origin" points to your fork
+For the following workflow, it is important that
+"upstream" points to the OSGeo/grass repository
+and "origin" to your fork
 (although generally, the naming is up to you).
 
 ### Update before creating a feature branch
@@ -226,3 +211,13 @@ system. To make this easier, we have collected copy-paste instructions
 for most operating systems in our wiki:
 
 [Compile and install instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
+
+## About source code
+
+GRASS GIS is written in more than one programming language, but you need
+to know only the language relevant to your contribution. While much
+of the source code is written in C, a significat portion is written in Python.
+A compiler is needed to convert the C and C++ source code into executable
+files ("binaries"). In contrast, Python is an interpreted language that
+can only be executed with Python software. There is also documentation
+in HTML files and other files in the GRASS GIS source code.
