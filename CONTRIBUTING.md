@@ -72,14 +72,15 @@ upstream	https://github.com/OSGeo/grass.git (fetch)
 upstream	https://github.com/OSGeo/grass.git (push)
 ```
 
-It is important that "origin" points to your fork.
+For the following workflow, it is important that "origin" points to your fork
+(although generally, the naming is up to you).
 
 ### Update before creating a feature branch
 
 * Make sure your are using the _main_ branch to create the new branch:
 
 ```
-git checkout main
+git switch main
 ```
 
 * Download updates from all branches from the _upstream_ remote:
@@ -94,6 +95,10 @@ git fetch upstream
 ```
 git rebase upstream/main
 ```
+
+Notably, you should not make commits to your main branch,
+so the above is than just a simple update (and no actual
+rebase or merge happens).
 
 ### Update if you have local branches
 
@@ -110,13 +115,7 @@ git stash
 git rebase upstream/main
 ```
 
-* Apply your local changes on top:
-
-```
-git stash apply
-```
-
-* Remove the stash record (optional):
+* Get the changes back from stash:
 
 ```
 git stash pop
@@ -139,6 +138,27 @@ You can use your favorite tools to change source code or other files
 in the local copy of the code. When make changes, please follow
 Submitting Guidelines at
 <http://trac.osgeo.org/grass/wiki/Submitting>.
+
+### Testing changes
+
+Testing helps to ensure that the changes work well with the rest
+of the project. While there is many different ways to test,
+usually you will want to compile the source code (see below),
+add test code (using _grass.gunittest_ or pytest), and run code
+linters (automated code quality checks).
+
+There is a series of automated checks which will run you pull request
+after you create that later on. You don't need to run every one of these
+checks locally and some of these may fail for your code. This is a part of
+the standard iterative process of interating changes into the main code,
+so if that happens, just see the error messages and go back to your code
+and try again. If you are not sure what to do, let other know in a pull
+request comment.
+
+There are some steps you can do locally, to improve your code.
+For Python, run `black .` to apply standardized formatting. You can
+also run linter tools such as Pylint which will suggest you how
+you may improve your code.
 
 ### Committing
 
@@ -170,6 +190,9 @@ you what URL to use to create a pull request. You can follow that URL
 or you can go any time later to your fork on GitHub, display the
 branch `new-feature`, and GitHub will show you button to create
 a pull request.
+
+Alternatively, you can explore GitHub CLI tool (_gh_) which allows you
+to do `git push` and creating a pull request in one step with `gh pr create -fw`.
 
 ### After creating a pull request
 
