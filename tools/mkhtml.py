@@ -90,13 +90,6 @@ if grass_version != "unknown":
     )
 
 
-def _get_encoding():
-    encoding = locale.getdefaultlocale()[1]
-    if not encoding:
-        encoding = 'UTF-8'
-    return encoding
-
-
 def decode(bytes_):
     """Decode bytes with default locale and return (unicode) string
 
@@ -107,8 +100,7 @@ def decode(bytes_):
     if isinstance(bytes_, unicode):
         return bytes_
     if isinstance(bytes_, bytes):
-        enc = _get_encoding()
-        return bytes_.decode(enc)
+        return bytes_.decode('UTF-8')
     return unicode(bytes_)
 
 
