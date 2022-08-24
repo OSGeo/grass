@@ -1711,6 +1711,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double locTimeOffset;
     double latitude, longitude;
     double coslat;
+    bool shouldBeBestAM, isBestAM;
 
 
     struct SunGeometryConstDay sunGeom;
@@ -1838,7 +1839,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	}
 	sunVarGeom.zmax = zmax;
         shadowoffset_base = (j % (numRows)) * n * arrayNumInt;
-    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum,gridGeom,elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step)
+    #pragma omp parallel firstprivate(q1,tan_lam_l,z1,i,shadowoffset,longitTime,coslat,coslatsq,latitude,longitude,sin_phi_l,latid_l,sin_u,cos_u,sin_v,cos_v,lum,gridGeom,elevin,aspin,slopein,civiltime,linkein,albedo,latin,coefbh,coefdh,incidout,longin,horizon,beam_rad,insol_time,diff_rad,refl_rad,glob_rad,mapset,per,decimals,str_step,shouldBeBestAM,isBestAM)
     {
       #pragma omp for schedule(dynamic)                                                        \
                       firstprivate(sunGeom,sunVarGeom,sunSlopeGeom,sunRadVar)                  \
@@ -1952,8 +1953,19 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
 		q1 = gridGeom.sinlat * cos_u * sin_v +
 		    gridGeom.coslat * sin_u;
-		tan_lam_l = -cos_u * cos_v / q1;
-		sunSlopeGeom.longit_l = atan(tan_lam_l);
+
+                if (q1 != 0.0) {
+                    tan_lam_l = -cos_u * cos_v / q1;
+                    sunSlopeGeom.longit_l = atan(tan_lam_l);
+                    isBestAM = (tan_lam_l > 0);
+                } else {
+                    sunSlopeGeom.longit_l = pihalf;
+                    isBestAM = true;
+                }
+
+                shouldBeBestAM = (0.0 < sunSlopeGeom.aspect && sunSlopeGeom.aspect <= M_PI);
+                sunSlopeGeom.shift12hrs = (shouldBeBestAM != isBestAM);
+
 		sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
 		sunSlopeGeom.lum_C33_l = sin_phi_l * sunGeom.sindecl;
 

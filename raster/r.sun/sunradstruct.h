@@ -73,7 +73,7 @@ struct SunGeometryVarSlope
     double lum_C33_l;
     double slope;
     double aspect;
-
+    bool shift12hrs;
 };
 
 
