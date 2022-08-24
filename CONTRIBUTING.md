@@ -1,25 +1,14 @@
-# Introduction
-
-GRASS GIS is written in more than one programming language. While most
-of the source code is written in C, about 30% is written in Python. A
-compiler is needed to convert the C/C++ source code into executable
-files ("binaries"). In contrast, Python is an interpreted language that
-can only be executed with Python software.
-
-Now, in order to create an installable binary package from a source
-code package, the so-called "compilation step" is required. While the
-source code consists of thousands of C and Python files (plus HTML
-documentation), the included "makefiles" tell the build system to
-generate binaries from the source code in the correct order, render the
-manual pages, etc.
-
-The way to install the compiler tools and Python depends on the operating
-system. To make this easier, we have collected copy-paste instructions
-for most operating systems in our wiki:
-
-[Compile and install instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
-
 # Contributing
+
+## Introduction
+
+GRASS GIS is written in more than one programming language, but you need
+to know only the language relevant to your contribution. While much
+of the source code is written in C, a significat portion is written in Python.
+A compiler is needed to convert the C and C++ source code into executable
+files ("binaries"). In contrast, Python is an interpreted language that
+can only be executed with Python software. There is also documentation
+in HTML files and other files in the GRASS GIS source code.
 
 ## Contributions other than code
 
@@ -198,3 +187,19 @@ local _main_ branch in order to get the change you just contributed.
 
 GRASS GIS maintainers use additional workflows besides the one described
 above. These are detailed at <https://trac.osgeo.org/grass/wiki/HowToGit>
+
+## Compilation
+
+More often than not, in order to test the changes, you need to create
+a runnable binary program from the source code,
+using the so-called "compilation step". While the
+source code consists of thousands of C and Python files (plus HTML
+documentation and other files), the included "makefiles" tell the build system to
+generate binaries from the source code in the correct order, render the
+manual pages, etc.
+
+The way to install the compiler tools and Python depends on the operating
+system. To make this easier, we have collected copy-paste instructions
+for most operating systems in our wiki:
+
+[Compile and install instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
