@@ -134,8 +134,8 @@ linters (automated code quality checks).
 
 There is a series of automated checks which will run on your pull request
 after you create one. You don't need to run all these
-checks locally and some of these may fail for your code. This is a part of
-the standard iterative process of interating changes into the main code,
+checks locally and, indeed, some of them may fail for your code. This is a part of
+the standard iterative process of integrating changes into the main code,
 so if that happens, just see the error messages and go back to your code
 and try again. If you are not sure what to do, let other know in a pull
 request comment.
