@@ -144,63 +144,63 @@ class VDigitToolbar(BaseToolbar):
         self.icons = {
             "addPoint": MetaIcon(
                 img="point-create",
-                label=_("Digitize new point, Ctrl+P"),
+                label=_("Digitize new point (Ctrl+P)"),
                 desc=_("Left: new point"),
             ),
             "addLine": MetaIcon(
                 img="line-create",
-                label=_("Digitize new line, Ctrl+L"),
+                label=_("Digitize new line (Ctrl+L)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
             ),
             "addBoundary": MetaIcon(
                 img="boundary-create",
-                label=_("Digitize new boundary, Ctrl+B"),
+                label=_("Digitize new boundary (Ctrl+B)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
             ),
             "addCentroid": MetaIcon(
                 img="centroid-create",
-                label=_("Digitize new centroid, Ctrl+C"),
+                label=_("Digitize new centroid (Ctrl+C)"),
                 desc=_("Left: new point"),
             ),
             "addArea": MetaIcon(
                 img="polygon-create",
-                label=_("Digitize new area (boundary without category), Ctrl+A"),
+                label=_("Digitize new area (boundary without category) (Ctrl+A)"),
                 desc=_("Left: new point"),
             ),
             "addVertex": MetaIcon(
                 img="vertex-create",
-                label=_("Add new vertex to line or boundary, Ctrl+V"),
+                label=_("Add new vertex to line or boundary (Ctrl+V)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "deleteLine": MetaIcon(
                 img="line-delete",
                 label=_(
-                    "Delete selected point(s), line(s), boundary(ies) or centroid(s), Ctrl+D"
+                    "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "deleteArea": MetaIcon(
                 img="polygon-delete",
-                label=_("Delete selected area(s), Ctrl+F"),
+                label=_("Delete selected area(s) (Ctrl+F)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "displayAttr": MetaIcon(
                 img="attributes-display",
-                label=_("Display/update attributes, Ctrl+K"),
+                label=_("Display/update attributes (Ctrl+K)"),
                 desc=_("Left: Select"),
             ),
             "displayCats": MetaIcon(
                 img="cats-display",
-                label=_("Display/update categories, Ctrl+J"),
+                label=_("Display/update categories (Ctrl+J)"),
                 desc=_("Left: Select"),
             ),
             "editLine": MetaIcon(
                 img="line-edit",
-                label=_("Edit selected line/boundary, Ctrl+E"),
+                label=_("Edit selected line/boundary (Ctrl+E)"),
                 desc=_(
                     "Left: new point; Ctrl+Left: undo last point; Right: close line"
                 ),
@@ -208,29 +208,29 @@ class VDigitToolbar(BaseToolbar):
             "moveLine": MetaIcon(
                 img="line-move",
                 label=_(
-                    "Move selected point(s), line(s), boundary(ies) or centroid(s), Ctrl+M"
+                    "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
                 ),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "moveVertex": MetaIcon(
                 img="vertex-move",
-                label=_("Move selected vertex, Ctrl+G"),
+                label=_("Move selected vertex (Ctrl+G)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "removeVertex": MetaIcon(
                 img="vertex-delete",
-                label=_("Remove selected vertex, Ctrl+X"),
+                label=_("Remove selected vertex (Ctrl+X)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "settings": BaseIcons["settings"].SetLabel(
-                label=_("Settings, Ctrl+T"),
+                label=_("Settings (Ctrl+T)"),
             ),
             "quit": BaseIcons["quit"].SetLabel(
-                label=_("Quit, Ctrl+Q"),
+                label=_("Quit (Ctrl+Q)"),
                 desc=_("Quit digitizer and save changes"),
             ),
             "help": BaseIcons["help"].SetLabel(
-                label=_("Show manual, Ctrl+H"),
+                label=_("Show manual (Ctrl+H)"),
                 desc=_("Show Vector Digitizer manual"),
             ),
             "additionalTools": MetaIcon(
@@ -240,12 +240,12 @@ class VDigitToolbar(BaseToolbar):
             ),
             "undo": MetaIcon(
                 img="undo",
-                label=_("Undo, Ctrl+Z"),
+                label=_("Undo (Ctrl+Z)"),
                 desc=_("Undo previous change"),
             ),
             "redo": MetaIcon(
                 img="redo",
-                label=_("Redo, Ctrl+Y"),
+                label=_("Redo (Ctrl+Y)"),
                 desc=_("Redo previous change"),
             ),
         }
