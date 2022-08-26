@@ -81,11 +81,11 @@ git fetch upstream
 git rebase upstream/main
 ```
 
-Notably, you should not make commits to your main branch,
-so the above is than just a simple update (and no actual
+Notably, you should not make commits to your local main branch,
+so the above is then just a simple update (and no actual
 rebase or merge happens).
 
-### Update if you have local branches
+### Update if you have local changes
 
 If `rebase` fails with "error: cannot rebase: You have unstaged changes...",
 then move your uncommitted local changes to "stash" using:
@@ -132,8 +132,8 @@ usually you will want to compile the source code (see below),
 add test code (using _grass.gunittest_ or pytest), and run code
 linters (automated code quality checks).
 
-There is a series of automated checks which will run you pull request
-after you create that later on. You don't need to run every one of these
+There is a series of automated checks which will run on your pull request
+after you create one. You don't need to run all these
 checks locally and some of these may fail for your code. This is a part of
 the standard iterative process of interating changes into the main code,
 so if that happens, just see the error messages and go back to your code
