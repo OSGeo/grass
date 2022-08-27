@@ -9,9 +9,10 @@
  *               Markus Neteler <neteler itc.it>, 
  *               Moritz Lennert <mlennert club.worldonline.be>,
  *               Martin Landa <landa.martin gmail.com>,
- *               Huidae Cho <grass4u gmail.com>
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Corey White <smortopahri gmail.com>
  * PURPOSE:      set current mapset path
- * COPYRIGHT:    (C) 1994-2009, 2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1994-2009, 2012-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -83,7 +84,7 @@ int main(int argc, char *argv[])
     struct _opt
     {
         struct Option *mapset, *op, *format, *fsep, *vsep, *nullval; 
-        struct Flag *print, *list, *dialog, *colnames, *escape;
+        struct Flag *print, *list, *dialog, *escape;
     } opt;
 
     G_gisinit(argv[0]);
@@ -139,11 +140,6 @@ int main(int argc, char *argv[])
 
     opt.nullval = G_define_standard_option(G_OPT_M_NULL_VALUE);
     opt.nullval->guisection = _("Format");
-
-    opt.colnames = G_define_flag();
-    opt.colnames->key = 'c';
-    opt.colnames->description = _("Do not include column names in output");
-    opt.colnames->guisection = _("Format");
 
     opt.escape = G_define_flag();
     opt.escape->key = 'e';
@@ -204,8 +200,6 @@ int main(int argc, char *argv[])
     if (format == JSON) {
         fatal_error_option_value_excludes_flag(opt.format, opt.escape,
                                                _("Escaping is based on the format"));
-        fatal_error_option_value_excludes_flag(opt.format, opt.colnames,
-                                               _("Column names are always included"));
         fatal_error_option_value_excludes_option(opt.format, opt.fsep,
                                                  _("Separator is part of the format"));
         fatal_error_option_value_excludes_option(opt.format, opt.nullval,
@@ -225,19 +219,17 @@ int main(int argc, char *argv[])
         if (format == CSV) {
             fsep = G_store(",");
         }
-        else if (format == VERTICAL) {
-            fsep = G_store("newline");
-        }
-        else if (format == PLAIN || format == VERTICAL) {
+        else if (format == PLAIN) {
            fsep = G_store("|");
         }
         else
             fsep = NULL;  /* Something like a separator is part of the format. */
     }
+
     if (opt.vsep->answer)
         vsep = G_option_to_separator(opt.vsep);
     else
-        vsep = NULL;
+       vsep = G_store("\n");
     vsep_needs_newline = true;
     if (vsep && !strcmp(vsep, "\n"))
         vsep_needs_newline = false;
@@ -253,6 +245,9 @@ int main(int argc, char *argv[])
         mapset_name = get_available_mapsets(&nmapsets);
         if (format == JSON) {
             list_avaliable_mapsets_json((const char **)mapset_name, nmapsets);
+        }
+        else if (format == VERTICAL) {
+            list_avaliable_mapsets_vertical((const char **)mapset_name, nmapsets, vsep);
         }
         else {
             list_available_mapsets((const char **)mapset_name, nmapsets, fsep);
