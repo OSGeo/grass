@@ -170,9 +170,9 @@ int main(int argc, char *argv[])
     if ((z = param.zonefile->answer)) {
 	mapset = G_find_raster2(z, "");
 
-    fdz = G_malloc(nprocs * sizeof(int));
-    for (t = 0; t < nprocs; t++)
-        fdz[t] = open_raster(z);
+	fdz = G_malloc(nprocs * sizeof(int));
+	for (t = 0; t < nprocs; t++)
+	    fdz[t] = open_raster(z);
 	
 	cell_type = Rast_get_map_type(fdz[0]);
 	if (cell_type != CELL_TYPE)
@@ -204,17 +204,17 @@ int main(int argc, char *argv[])
 
 	/* Check if the native extent and resolution
 	   of the input map should be used */
-    if(param.use_rast_region->answer) {
-        mapset = G_find_raster2(*p, "");
-        Rast_get_cellhd(*p, mapset, &region);
-        /* Set the computational region */
-        Rast_set_window(&region);
-    } else {
-        G_get_window(&region);
-    }
+	if(param.use_rast_region->answer) {
+	    mapset = G_find_raster2(*p, "");
+	    Rast_get_cellhd(*p, mapset, &region);
+	    /* Set the computational region */
+	    Rast_set_window(&region);
+	} else {
+	    G_get_window(&region);
+	}
 
-    for (t = 0; t < nprocs; t++)
-        fd[t] = open_raster(*p);
+	for (t = 0; t < nprocs; t++)
+	    fd[t] = open_raster(*p);
 
 	if (map_type != -1) {
 	    /* NB: map_type must match when doing extended stats */
@@ -232,11 +232,11 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-    process_raster(stats, fd, fdz, &region);
+	process_raster(stats, fd, fdz, &region);
 
 	/* close input raster */
-    for (t = 0; t < nprocs; t++)
-        Rast_close(fd[t]);
+	for (t = 0; t < nprocs; t++)
+            Rast_close(fd[t]);
     }
 
     /* close zoning raster */
