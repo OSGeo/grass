@@ -33,6 +33,33 @@
 #define OP_ADD 2
 #define OP_REM 3
 
+enum OutputFormat {
+    PLAIN,
+    JSON,
+    CSV,
+    VERTICAL
+};
+
+void fatal_error_option_value_excludes_flag(struct Option *option,
+                                            struct Flag *excluded,
+                                            const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The flag -%c is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
+
+void fatal_error_option_value_excludes_option(struct Option *option,
+                                              struct Option *excluded,
+                                              const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The option %s is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
+
 static void append_mapset(char **, const char *);
 
 int main(int argc, char *argv[])
@@ -45,17 +72,18 @@ int main(int argc, char *argv[])
     int no_tokens;
     FILE *fp;
     char path_buf[GPATH_MAX];
-    char *path, *fs;
+    char *path, *fsep, *vsep;
     int operation, nchoices;
-
+    enum OutputFormat format;
+    bool vsep_needs_newline;
     char **mapset_name;
     int nmapsets;
 
     struct GModule *module;
     struct _opt
     {
-        struct Option *mapset, *op, *fs;
-        struct Flag *print, *list, *dialog, *json;
+        struct Option *mapset, *op, *format, *fsep, *vsep, *nullval; 
+        struct Flag *print, *list, *dialog, *colnames, *escape;
     } opt;
 
     G_gisinit(argv[0]);
@@ -85,10 +113,42 @@ int main(int argc, char *argv[])
     opt.op->description = _("Operation to be performed");
     opt.op->answer = "add";
 
-    opt.fs = G_define_standard_option(G_OPT_F_SEP);
-    opt.fs->label = _("Field separator for printing (-l and -p flags)");
-    opt.fs->answer = "space";
-    opt.fs->guisection = _("Print");
+    opt.format = G_define_option();
+    opt.format->key = "format";
+    opt.format->type = TYPE_STRING;
+    opt.format->required = YES;
+    opt.format->label = _("Output format for printing (-l and -p flags)");
+    opt.format->options = "plain,csv,json,vertical";
+    opt.format->descriptions =
+        "plain;Configurable plain text output;"
+        "csv;CSV (Comma Separated Values);"
+        "json;JSON (JavaScript Object Notation);"
+        "vertical;Plain text vertical output (instead of horizontal)";
+    opt.format->answer = "plain";
+    opt.format->guisection = _("Format");
+
+    opt.fsep = G_define_standard_option(G_OPT_F_SEP);
+    opt.fsep->answer = NULL;
+    opt.fsep->guisection = _("Format");
+
+    opt.vsep = G_define_standard_option(G_OPT_F_SEP);
+    opt.vsep->key = "vertical_separator";
+    opt.vsep->label = _("Output vertical record separator");
+    opt.vsep->answer = NULL;
+    opt.vsep->guisection = _("Format");
+
+    opt.nullval = G_define_standard_option(G_OPT_M_NULL_VALUE);
+    opt.nullval->guisection = _("Format");
+
+    opt.colnames = G_define_flag();
+    opt.colnames->key = 'c';
+    opt.colnames->description = _("Do not include column names in output");
+    opt.colnames->guisection = _("Format");
+
+    opt.escape = G_define_flag();
+    opt.escape->key = 'e';
+    opt.escape->description = _("Escape newline and backslash characters");
+    opt.escape->guisection = _("Format");
 
     opt.list = G_define_flag();
     opt.list->key = 'l';
@@ -107,11 +167,6 @@ int main(int argc, char *argv[])
     opt.dialog->key = 's';
     opt.dialog->description = _("Launch mapset selection GUI dialog");
     opt.dialog->suppress_required = YES;
-
-    opt.json = G_define_flag();
-    opt.json->key = 'j';
-    opt.json->description = _("Print the stats in JSON");
-    opt.json->guisection = _("Print");
 
     path = NULL;
     mapset_name = NULL;
@@ -138,7 +193,54 @@ int main(int argc, char *argv[])
         }
     }
 
-    fs = G_option_to_separator(opt.fs);
+    if (strcmp(opt.format->answer, "csv") == 0)
+        format = CSV;
+    else if (strcmp(opt.format->answer, "json") == 0)
+        format = JSON;
+    else if (strcmp(opt.format->answer, "vertical") == 0)
+        format = VERTICAL;
+    else
+        format = PLAIN;
+    if (format == JSON) {
+        fatal_error_option_value_excludes_flag(opt.format, opt.escape,
+                                               _("Escaping is based on the format"));
+        fatal_error_option_value_excludes_flag(opt.format, opt.colnames,
+                                               _("Column names are always included"));
+        fatal_error_option_value_excludes_option(opt.format, opt.fsep,
+                                                 _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(opt.format, opt.nullval,
+                                                 _("Null value is part of the format"));
+    }
+    if (format != VERTICAL) {
+        fatal_error_option_value_excludes_option(opt.format, opt.vsep,
+                                                 _("Only vertical output can use vertical separator"));
+    }
+
+    /* the field separator */
+    if (opt.fsep->answer) {
+        fsep = G_option_to_separator(opt.fsep);
+    }
+    else {
+        /* A different separator is needed to for each format and output. */
+        if (format == CSV) {
+            fsep = G_store(",");
+        }
+        else if (format == VERTICAL) {
+            fsep = G_store("newline");
+        }
+        else if (format == PLAIN || format == VERTICAL) {
+           fsep = G_store("|");
+        }
+        else
+            fsep = NULL;  /* Something like a separator is part of the format. */
+    }
+    if (opt.vsep->answer)
+        vsep = G_option_to_separator(opt.vsep);
+    else
+        vsep = NULL;
+    vsep_needs_newline = true;
+    if (vsep && !strcmp(vsep, "\n"))
+        vsep_needs_newline = false;
 
     /* list available mapsets */
     if (opt.list->answer) {
@@ -149,7 +251,13 @@ int main(int argc, char *argv[])
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
         mapset_name = get_available_mapsets(&nmapsets);
-        list_available_mapsets((const char **)mapset_name, nmapsets, fs);
+        if (format == JSON) {
+            list_avaliable_mapsets_json((const char **)mapset_name, nmapsets);
+        }
+        else {
+            list_available_mapsets((const char **)mapset_name, nmapsets, fsep);
+        }
+        
         exit(EXIT_SUCCESS);
     }
 
@@ -158,7 +266,7 @@ int main(int argc, char *argv[])
             G_warning(_("Flag -%c ignored"), opt.dialog->key);
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        list_accessible_mapsets(fs);
+        list_accessible_mapsets(fsep);
         exit(EXIT_SUCCESS);
     }
 
