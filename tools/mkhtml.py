@@ -90,25 +90,18 @@ if grass_version != "unknown":
     )
 
 
-def _get_encoding():
-    encoding = locale.getdefaultlocale()[1]
-    if not encoding:
-        encoding = 'UTF-8'
-    return encoding
-
-
-def decode(bytes_):
+def decode(bytes_, encoding='UTF-8'):
     """Decode bytes with default locale and return (unicode) string
 
     No-op if parameter is not bytes (assumed unicode string).
 
     :param bytes bytes_: the bytes to decode
+    :param str encoding: encoding
     """
     if isinstance(bytes_, unicode):
         return bytes_
     if isinstance(bytes_, bytes):
-        enc = _get_encoding()
-        return bytes_.decode(enc)
+        return bytes_.decode(encoding)
     return unicode(bytes_)
 
 
@@ -355,7 +348,7 @@ def read_file(name):
         if PY2:
             return s
         else:
-            return decode(s)
+            return decode(s, encoding='ISO-8859-1')
     except IOError:
         return ""
 
