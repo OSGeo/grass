@@ -32,7 +32,6 @@ void list_accessible_mapsets(const char *fs)
     int n;
     const char *name;
 
-    G_message(_("Accessible mapsets:"));
     for (n = 0; (name = G_get_mapset_name(n)); n++) {
         /* match each mapset to its numeric equivalent */
         fprintf(stdout, "%s", name);
