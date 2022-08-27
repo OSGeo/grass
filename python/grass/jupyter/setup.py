@@ -18,7 +18,6 @@ import os
 import weakref
 
 import grass.script as gs
-import grass.script.setup as gsetup
 
 
 def _set_notebook_defaults():
@@ -55,7 +54,7 @@ class _JupyterGlobalSession:
     """
 
     def __init__(self):
-        self._finalizer = weakref.finalize(self, gsetup.finish)
+        self._finalizer = weakref.finalize(self, gs.setup.finish)
 
     def switch_mapset(self, path, location=None, mapset=None):
         """Switch to a mapset provided as a name or path.
@@ -162,7 +161,7 @@ def init(path, location=None, mapset=None, grass_path=None):
     global _global_session_handle  # pylint: disable=global-statement,invalid-name
     if not _global_session_handle or not _global_session_handle.active:
         # Create a GRASS session.
-        gsetup.init(path, location=location, mapset=mapset, grass_path=grass_path)
+        gs.setup.init(path, location=location, mapset=mapset, grass_path=grass_path)
         # Set defaults for environmental variables and library.
         _set_notebook_defaults()
         _global_session_handle = _JupyterGlobalSession()

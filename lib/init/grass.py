@@ -42,6 +42,7 @@ import sys
 import os
 import errno
 import atexit
+import datetime
 import gettext
 import shutil
 import signal
@@ -1143,11 +1144,13 @@ def set_mapset(
                     # create new location based on the provided EPSG/...
                     if not geofile:
                         fatal(_("Provide CRS to create a location"))
-                    message(
-                        _("Creating new GRASS GIS location <{}>...").format(
-                            location_name
+                    if not tmp_location:
+                        # Report report only when new location is not temporary.
+                        message(
+                            _("Creating new GRASS GIS location <{}>...").format(
+                                location_name
+                            )
                         )
-                    )
                     create_location(gisdbase, location_name, geofile)
                 else:
                     # 'location_name' is a valid GRASS location,
@@ -1176,9 +1179,10 @@ def set_mapset(
                         if geofile:
                             fatal(
                                 _(
-                                    "No CRS is needed for creating mapset."
+                                    "No CRS is needed for creating mapset <{mapset}>, "
+                                    "but <{geofile}> was provided as CRS."
                                     " Did you mean to create a new location?"
-                                )
+                                ).format(mapset=mapset, geofile=geofile)
                             )
                         message(
                             _("Creating new GRASS GIS mapset <{}>...").format(mapset)
@@ -1728,18 +1732,20 @@ def get_grass_env_file(sh, grass_config_dir):
     return grass_env_file
 
 
-def run_batch_job(batch_job):
+# No reason to use list over Sequence except that
+# importing of Sequence changed in Python 3.9.
+# (Replace list by Sequence in the future.)
+def run_batch_job(batch_job: list):
     """Runs script, module or any command
 
-    If *batch_job* is a string (insecure) shell=True is used for execution.
-
-    :param batch_job: executable and parameters in a list or a string
+    :param batch_job: executable and parameters as a list
     """
-    batch_job_string = batch_job
-    if not isinstance(batch_job, six.string_types):
-        # for messages only
-        batch_job_string = " ".join(batch_job)
-    message(_("Executing <%s> ...") % batch_job_string)
+    # Lazy-import to avoid dependency during standard import time.
+    # pylint: disable=import-outside-toplevel
+    import grass.script as gs
+
+    batch_job_string = " ".join(batch_job)  # for messages only
+    gs.verbose(_("Executing <%s> ...") % batch_job_string)
 
     def script_path(batch_job):
         """Adjust script path
@@ -1779,7 +1785,7 @@ def run_batch_job(batch_job):
         else:
             fatal(error_message)
     returncode = proc.wait()
-    message(_("Execution of <%s> finished.") % batch_job_string)
+    gs.verbose(_("Execution of <%s> finished.") % batch_job_string)
     return returncode
 
 
@@ -2104,17 +2110,21 @@ def done_message():
 
 
 def clean_temp():
-    message(_("Cleaning up temporary files..."))
-    nul = open(os.devnull, "w")
-    call([gpath("etc", "clean_temp")], stdout=nul)
-    nul.close()
+    """Clean mapset temporary directory
+
+    Simple wrapper around the library function avoiding the need to solve imports at
+    the top level. This can hopefully be avoided in the future.
+    """
+    from grass.script import setup as gsetup
+
+    gsetup.clean_temp()
 
 
-def clean_all():
+def clean_all(*, start_time):
     from grass.script import setup as gsetup
 
     # clean default sqlite db
-    gsetup.clean_default_db()
+    gsetup.clean_default_db(modified_after=start_time)
     # remove leftover temp files
     clean_temp()
     # save 'last used' GISRC after removing variables which shouldn't
@@ -2522,7 +2532,9 @@ def main():
             )
         create_initial_gisrc(gisrc)
 
-    message(_("Starting GRASS GIS..."))
+    if not params.batch_job and not params.exit_grass:
+        # Only for interactive sessions, not for 'one operation' sessions.
+        message(_("Starting GRASS GIS..."))
 
     # Ensure GUI is set
     if params.batch_job or params.exit_grass:
@@ -2647,6 +2659,8 @@ def main():
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
+    start_time = datetime.datetime.now(datetime.timezone.utc)
+
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
     atexit.register(lambda: unlock_gisrc_mapset(gisrc, gisrcrc))
@@ -2666,12 +2680,12 @@ def main():
     # only non-error, interactive version continues from here
     if params.batch_job:
         returncode = run_batch_job(params.batch_job)
-        clean_all()
+        clean_all(start_time=start_time)
         sys.exit(returncode)
     elif params.exit_grass:
         # clean always at exit, cleans whatever is current mapset based on
         # the GISRC env variable
-        clean_all()
+        clean_all(start_time=start_time)
         sys.exit(0)
     else:
         if use_shell:
@@ -2726,7 +2740,7 @@ def main():
         close_gui()
 
         # here we are at the end of grass session
-        clean_all()
+        clean_all(start_time=start_time)
         mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
         if not params.tmp_location or (
             params.tmp_location and mapset_settings.gisdbase != os.environ["TMPDIR"]

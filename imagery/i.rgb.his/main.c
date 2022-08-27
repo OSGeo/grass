@@ -49,8 +49,8 @@ int main(int argc, char **argv)
     G_add_keyword("HIS");
     G_add_keyword("IHS");
     module->description =
-	_("Transforms raster maps from RGB (Red-Green-Blue) color space to "
-	  "HIS (Hue-Intensity-Saturation) color space.");
+        _("Transforms raster maps from RGB (Red-Green-Blue) color space to "
+          "HIS (Hue-Intensity-Saturation) color space.");
 
     /* Define the different options */
     opt_red = G_define_standard_option(G_OPT_R_INPUT);
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     opt_sat->description = _("Name for output raster map (saturation)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
 
     /* get dimension of the image */
@@ -86,27 +86,27 @@ int main(int argc, char **argv)
     cols = Rast_window_cols();
 
     openfiles(opt_red->answer, opt_green->answer, opt_blue->answer,
-	      opt_hue->answer, opt_inten->answer, opt_sat->answer,
-	      fd_input, fd_output, rowbuffer);
+              opt_hue->answer, opt_inten->answer, opt_sat->answer,
+              fd_input, fd_output, rowbuffer);
 
     for (i = 0; i < rows; i++) {
-	/* read in a row from each cell map */
-	G_percent(i, rows, 2);
+        /* read in a row from each cell map */
+        G_percent(i, rows, 2);
 
-	for (band = 0; band < 3; band++)
-	    Rast_get_c_row(fd_input[band], rowbuffer[band], i);
+        for (band = 0; band < 3; band++)
+            Rast_get_c_row(fd_input[band], rowbuffer[band], i);
 
-	/* process this row of the map */
-	rgb2his(rowbuffer, cols);
+        /* process this row of the map */
+        rgb2his(rowbuffer, cols);
 
-	/* write out the new row for each cell map */
-	for (band = 0; band < 3; band++)
-	    Rast_put_row(fd_output[band], rowbuffer[band], CELL_TYPE);
+        /* write out the new row for each cell map */
+        for (band = 0; band < 3; band++)
+            Rast_put_row(fd_output[band], rowbuffer[band], CELL_TYPE);
     }
     G_percent(i, rows, 2);
 
     closefiles(opt_hue->answer, opt_inten->answer, opt_sat->answer,
-	       fd_output, rowbuffer);
+               fd_output, rowbuffer);
 
 
     exit(EXIT_SUCCESS);

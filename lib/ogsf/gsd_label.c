@@ -39,7 +39,7 @@ GLuint label_id;
    \param pt 
  */
 void gs_put_label(const char *text, GLuint fontbase, int size,
-		  unsigned long color, int *pt)
+                  unsigned long color, int *pt)
 {
     int txt_width;
     GLint tmp[4];
@@ -47,16 +47,16 @@ void gs_put_label(const char *text, GLuint fontbase, int size,
     int t, l, b, r;
 
     if (!first) {
-	/* initialize display list */
-	label_base = glGenLists(MAX_LIST);
-	glListBase(label_base);
-	label_id = label_base;
-	first = 1;
+        /* initialize display list */
+        label_base = glGenLists(MAX_LIST);
+        glListBase(label_base);
+        label_id = label_base;
+        first = 1;
     }
 
     if (label_id > (label_base + MAX_LIST)) {
-	G_warning(_("Max. number of labels reached!"));
-	return;
+        G_warning(_("Max. number of labels reached!"));
+        return;
     }
 
     glNewList(label_id, GL_COMPILE_AND_EXECUTE);
@@ -97,8 +97,8 @@ void gs_put_label(const char *text, GLuint fontbase, int size,
 void gsd_remove_curr(void)
 {
     if (label_id) {
-	glDeleteLists(label_id - 1, 1);
-	label_id--;
+        glDeleteLists(label_id - 1, 1);
+        label_id--;
     }
 
     return;
@@ -124,8 +124,8 @@ void gsd_call_label(void)
     int i;
 
     for (i = 0; i < MAX_LIST; i++) {
-	glCallList(i + label_base);
-	glFlush();
+        glCallList(i + label_base);
+        glFlush();
     }
     return;
 }

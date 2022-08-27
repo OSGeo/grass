@@ -161,6 +161,9 @@ class GMFrame(wx.Frame):
 
         # create widgets and build panes
         self.CreateMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.BuildPanes()
         self.BindEvents()
 
@@ -673,14 +676,16 @@ class GMFrame(wx.Frame):
         self._auimgr.GetPane("toolbarNviz").Hide()
 
         # Set Tools as active tab
-        tools = self._auimgr.GetPane("tools")
-        notebook = self._auimgr.GetNotebooks()[0]
-        notebook.SetSelectionToPage(tools)
+        notebooks = self._auimgr.GetNotebooks()
+        if notebooks:
+            notebook = notebooks[0]
+            tools = self._auimgr.GetPane("tools")
+            notebook.SetSelectionToPage(tools)
 
-        # Set the size for automatic notebook
-        pane = self._auimgr.GetPane(notebook)
-        pane.BestSize(self.PANE_BEST_SIZE)
-        pane.MinSize(self.PANE_MIN_SIZE)
+            # Set the size for automatic notebook
+            pane = self._auimgr.GetPane(notebook)
+            pane.BestSize(self.PANE_BEST_SIZE)
+            pane.MinSize(self.PANE_MIN_SIZE)
 
         wx.CallAfter(self.datacatalog.LoadItems)
 
@@ -689,7 +694,6 @@ class GMFrame(wx.Frame):
     def BindEvents(self):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
-        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
@@ -2270,24 +2274,6 @@ class GMFrame(wx.Frame):
                 self.GetLayerTree().Delete(layer)
             except ValueError:
                 pass
-
-    def OnKeyDown(self, event):
-        """Key pressed"""
-        kc = event.GetKeyCode()
-
-        try:
-            kc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
-
-        event.Skip()
 
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
