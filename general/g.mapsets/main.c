@@ -34,7 +34,8 @@
 #define OP_ADD 2
 #define OP_REM 3
 
-enum OutputFormat {
+enum OutputFormat
+{
     PLAIN,
     JSON,
     CSV,
@@ -83,7 +84,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct _opt
     {
-        struct Option *mapset, *op, *format, *fsep, *vsep, *nullval; 
+        struct Option *mapset, *op, *format, *fsep, *vsep, *nullval;
         struct Flag *print, *list, *dialog, *escape;
     } opt;
 
@@ -220,16 +221,16 @@ int main(int argc, char *argv[])
             fsep = G_store(",");
         }
         else if (format == PLAIN) {
-           fsep = G_store("|");
+            fsep = G_store("|");
         }
         else
-            fsep = NULL;  /* Something like a separator is part of the format. */
+            fsep = NULL;        /* Something like a separator is part of the format. */
     }
 
     if (opt.vsep->answer)
         vsep = G_option_to_separator(opt.vsep);
     else
-       vsep = G_store("\n");
+        vsep = G_store("\n");
     vsep_needs_newline = true;
     if (vsep && !strcmp(vsep, "\n"))
         vsep_needs_newline = false;
@@ -247,12 +248,14 @@ int main(int argc, char *argv[])
             list_avaliable_mapsets_json((const char **)mapset_name, nmapsets);
         }
         else if (format == VERTICAL) {
-            list_avaliable_mapsets_vertical((const char **)mapset_name, nmapsets, vsep);
+            list_avaliable_mapsets_vertical((const char **)mapset_name,
+                                            nmapsets, vsep);
         }
         else {
-            list_available_mapsets((const char **)mapset_name, nmapsets, fsep);
+            list_available_mapsets((const char **)mapset_name, nmapsets,
+                                   fsep);
         }
-        
+
         exit(EXIT_SUCCESS);
     }
 

@@ -55,7 +55,7 @@ void list_accessible_mapsets(const char *fs)
 void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
 {
     int n;
-    
+
     fprintf(stdout, "{\"mapsets\": [");
     for (n = 0; n < nmapsets; n++) {
         fprintf(stdout, "\"%s\"", mapset_name[n]);
@@ -68,7 +68,7 @@ void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
 }
 
 
-void list_avaliable_mapsets_vertical(const char **mapset_name, int nmapsets, 
+void list_avaliable_mapsets_vertical(const char **mapset_name, int nmapsets,
                                      const char *vsep)
 {
     int n;
