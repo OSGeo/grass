@@ -1,25 +1,25 @@
 # Install GRASS GIS from source code
 
-Please read *all* text below.
+Please read _all_ text below.
 
 ## Table of contents
 
-* PREREQUISITES
-* (A) SOURCE CODE DISTRIBUTION
-* (B) COMPILATION
-* (C) COMPILATION NOTES for 64bit platforms
-* (D) INSTALLATION (first time)
-* (E) INSTALLATION ON MACOSX
-* (F) RUNNING GRASS
-* (G) UPDATE OF SOURCE CODE
-* (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
-* (I) CODE OPTIMIZATION
-* (J) DEBUGGING OPTIONS
-* (K) LARGE FILE SUPPORT (for raster maps)
-* (L) SUPPORT
-* (M) GRASS GIS PROGRAMMER'S MANUAL
-* (N) CONTRIBUTING CODE AND PATCHES
-* (O) DRAFT TUTORIAL
+- PREREQUISITES
+- (A) SOURCE CODE DISTRIBUTION
+- (B) COMPILATION
+- (C) COMPILATION NOTES for 64bit platforms
+- (D) INSTALLATION (first time)
+- (E) INSTALLATION ON MACOSX
+- (F) RUNNING GRASS
+- (G) UPDATE OF SOURCE CODE
+- (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
+- (I) CODE OPTIMIZATION
+- (J) DEBUGGING OPTIONS
+- (K) LARGE FILE SUPPORT (for raster maps)
+- (L) SUPPORT
+- (M) GRASS GIS PROGRAMMER'S MANUAL
+- (N) CONTRIBUTING CODE AND PATCHES
+- (O) DRAFT TUTORIAL
 
 ## PREREQUISITES
 
@@ -31,7 +31,7 @@ directory:
 Installation order:
 
 1. PROJ
-2. GDAL-OGR  (compiled without GRASS support)
+2. GDAL-OGR (compiled without GRASS support)
 3. optionally: databases such as PostgreSQL, MySQL, sqlite
 4. GRASS GIS
 5. optionally: GDAL-OGR-GRASS plugin
@@ -58,28 +58,26 @@ the GitHub repository), e.g. grass-8.3.git_src_snapshot_2022_04_27.tar.gz
 from https://grass.osgeo.org/grass-devel/source/snapshot/
 Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
-
 ## (B) COMPILATION
 
 IMPORTANT: All Unix based distributions are different.
-           For Solaris, see hints below.
+For Solaris, see hints below.
 
 The command,
 
-   ./configure --help 
+    ./configure --help
 
 explains the options used to disable the compilation of non-mandatory
 GRASS modules. See REQUIREMENTS.html for details on dependencies.
-Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux 
+Detailed Wiki notes for various operating systems (MS-Windows, GNU/Linux
 distributions, FreeBSD, AIX, etc) are available at:
 https://grasswiki.osgeo.org/wiki/Compile_and_Install
-  
+
 First step of the compilation (-g for debugging, or -O2 for optimization):
 
     CFLAGS="-g -Wall" ./configure
 
-
-Explanation of make targets: 
+Explanation of make targets:
 
     make install       - installs the binary
 
@@ -90,14 +88,13 @@ Explanation of make targets:
 
     make libs          - make libraries only
 
-    make clean         - delete all files created by 'make' 
+    make clean         - delete all files created by 'make'
     make distclean     - 'make clean' + delete all files created by './configure'
     make libsclean     - clean libraries compiled by 'make libs'
 
     make htmldocs      - generate programmer's documentation as HTML files
     make packagehtmldocs - package programmer's documentation in HTML
     make pdfdocs       - generate programmer's documentation as PDF files
-
 
 Next step is the compilation itself:
 
@@ -110,20 +107,20 @@ install program (AC_PROG_INSTALL ignores versions which are known to
 have problems), you need to ensure that $srcdir is an absolute path,
 by using e.g.:
 
-	`pwd`/configure ...
+    `pwd`/configure ...
+
 or:
-	./configure --srcdir=`pwd` ...
+
+    ./configure --srcdir=`pwd` ...
 
 Then proceed as described above.
-
 
 Note when using a compiler different from "gcc":
 
 By setting environment variables, the compiler
 names can be defined (C and C++):
 
-	CC=cc CPP=cpp ./configure ...
-
+    CC=cc CPP=cpp ./configure ...
 
 ## (C) COMPILATION NOTES for 64bit platforms
 
@@ -136,7 +133,7 @@ FFTW2 library has to be compiled with -fPIC flag:
     make
     make install
 
-To fully enable 64bit library usage for GRASS on 64bit platforms, 
+To fully enable 64bit library usage for GRASS on 64bit platforms,
 the following additional parameters are recommended/required:
 
     ./configure \
@@ -146,15 +143,18 @@ the following additional parameters are recommended/required:
 
 See also CODE OPTIMIZATION below.
 
-
 ## (D) INSTALLATION (first time)
 
 After compilation, the resulting code is stored in the directory
+
     ./dist.$ARCH
+
 and the scripts (grass, ...) in
+
     ./bin.$ARCH
 
 To run GRASS, simply start
+
     ./bin.$ARCH/grass
 
 or run
@@ -162,11 +162,9 @@ or run
     make install
     grass
 
-
 ## (E) INSTALLATION ON MACOSX
 
 See the ReadMe.rtf in the ./macosx/ folder and the Wiki page above.
-
 
 ## (F) RUNNING GRASS GIS
 
@@ -177,7 +175,6 @@ Extract the data set and point the "Database" field in the
 GRASS GIS startup menu to the extracted directory.
 
 Enjoy.
-
 
 ## (G) UPDATE OF SOURCE CODE
 
@@ -206,60 +203,65 @@ done by launching:
 
     make libs
 
-Then change into the module's directory and launch the "make" 
+Then change into the module's directory and launch the "make"
 command. The installation can be either done with "make install" from
-the main source code directory or locally with 
+the main source code directory or locally with
+
     "INST_NOW=y make"
 
 You may want to define an alias for this:
+
     alias gmake='INST_NOW=y make'
+
 Then simply compile/install the current module with
+
     gmake
 
 Note: If you keep your module source code outside the standard GRASS
 source code directory structure, you will have to change the relative
 path(s) in the Makefile to absolute path(s).
 
-
 ## (I) CODE OPTIMIZATION
 
 If you would like to set compiler optimisations, for a possibly faster
 binary, type (don't enter a ";" anywhere):
 
-	CFLAGS=-O ./configure
+    CFLAGS=-O ./configure
+
 or,
-	setenv CFLAGS -O
-	./configure
+
+    setenv CFLAGS -O
+    ./configure
 
 whichever works on your shell. Use -O2 instead of -O if your compiler
 supports this (note: O is the letter, not zero). Using the "gcc" compiler,
 you can also specify processor specific flags (examples, please suggest
 better settings to us):
 
-  CFLAGS="-mcpu=athlon -O2" # AMD Athlon processor with code optimisations
-  CFLAGS="-mcpu=pentium"    # Intel Pentium processor
-  CFLAGS="-mcpu=pentium4"   # Intel Pentium4 processor
-  CFLAGS="-O2 -msse -msse2 -mfpmath=sse -minline-all-stringops" # Intel XEON 64bit processor
-  CFLAGS="-mtune=nocona -m64 -minline-all-stringops"            # Intel Pentium 64bit processor
+    CFLAGS="-mcpu=athlon -O2" # AMD Athlon processor with code optimisations
+    CFLAGS="-mcpu=pentium" # Intel Pentium processor
+    CFLAGS="-mcpu=pentium4" # Intel Pentium4 processor
+    CFLAGS="-O2 -msse -msse2 -mfpmath=sse -minline-all-stringops" # Intel XEON 64bit processor
+    CFLAGS="-mtune=nocona -m64 -minline-all-stringops" # Intel Pentium 64bit processor
 
 Note: As of version 4.3.0, GCC offers the -march=native switch that
 enables CPU auto-detection and automatically selects optimizations supported
 by the local machine at GCC runtime including -mtune.
 
 To find out optional CFLAGS for your platform, enter:
-  gcc -dumpspecs
+
+    gcc -dumpspecs
 
 See also: https://gcc.gnu.org/
 
 A real fast GRASS version (and small binaries) will be created with
 LDFLAGS set to "stripping" (but this disables debugging):
 
-  CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
-
+    CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
 
 ## (J) DEBUGGING OPTIONS
 
-The LDFLAGS="" part must be undefined as "-s" will strip the debugging 
+The LDFLAGS="" part must be undefined as "-s" will strip the debugging
 information.
 
 Don't use -O for CFLAGS if you want to be able to step through function
@@ -269,17 +271,18 @@ the source code.
 
 The -g and -Wall compiler flags are often useful for assisting debugging:
 
-  CFLAGS="-g -Wall" ./configure
+    CFLAGS="-g -Wall" ./configure
 
 See also the file ./doc/debugging.txt and the Wiki page
 https://grasswiki.osgeo.org/wiki/GRASS_Debugging
-
 
 ## (K) LARGE FILE SUPPORT (for raster maps)
 
 GRASS GIS includes improved support for reading and writing large files
 (> 2GB) if it is possible in your operating system. If you compile with
-  configure [...] --enable-largefile
+
+    configure [...] --enable-largefile
+
 you should be able to have raster and vector maps which are larger than 2GB.
 
 While most code has been updated, individual programs may not yet work with
@@ -298,7 +301,6 @@ so we can fix it. See https://grass.osgeo.org/contribute/
 If you are interested in helping to develop GRASS, please join the GRASS
 developers mailing list. See https://grass.osgeo.org/development/
 
-
 ## (M) GRASS PROGRAMMER'S MANUAL
 
 The Programmer's manual is generated with doxygen from the source code.
@@ -309,7 +311,6 @@ https://grass.osgeo.org/programming8/
 
 Please see ./SUBMITTING in this directory, or better,
 https://trac.osgeo.org/grass/wiki/Submitting
-
 
 ## (O) TUTORIALS
 
