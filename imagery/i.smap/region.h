@@ -4,10 +4,10 @@ struct Region
     int ymin, ymax;
     struct Free
     {
-	int left;
-	int right;
-	int top;
-	int bottom;
+        int left;
+        int right;
+        int top;
+        int bottom;
     } free;
 };
 
@@ -21,7 +21,7 @@ int levels(int, int);
 
 /* interp.c */
 void seq_MAP(unsigned char ***, struct Region *, LIKELIHOOD ****, int,
-	     double *, float **);
+             double *, float **);
 void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int, float **);
 
 /* reg_util.c */

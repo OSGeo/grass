@@ -39,10 +39,11 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("GUI"));
     G_add_keyword(_("user interface"));
-        
+
     module->label =
-	_("Launches a GRASS graphical user interface (GUI) session.");
-    module->description = _("Optionally updates default user interface settings.");
+        _("Launches a GRASS graphical user interface (GUI) session.");
+    module->description =
+        _("Optionally updates default user interface settings.");
 
     type = G_define_option();
     type->key = "ui";
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
     type->options = "wxpython,text,gtext";
     type->answer = "wxpython";
     type->guisection = _("Type");
-    
+
     rc_file = G_define_standard_option(G_OPT_F_INPUT);
     rc_file->key = "workspace";
     rc_file->required = NO;
@@ -70,8 +71,8 @@ int main(int argc, char *argv[])
     fglaunch->key = 'f';
     fglaunch->label = _("Start GUI in the foreground");
     fglaunch->description = _("By default the GUI starts in the background"
-        " and control is immediately returned to the caller."
-        " When GUI runs in foregreound, it blocks the command line");
+                              " and control is immediately returned to the caller."
+                              " When GUI runs in foregreound, it blocks the command line");
 
     update_ui = G_define_flag();
     update_ui->key = 'd';
@@ -81,11 +82,11 @@ int main(int argc, char *argv[])
     nolaunch = G_define_flag();
     nolaunch->key = 'n';
     nolaunch->description =
-	_("Do not launch GUI after updating the default user interface settings");
+        _("Do not launch GUI after updating the default user interface settings");
     nolaunch->guisection = _("Default");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     gui_type_env = G_getenv_nofatal("GUI");
     G_debug(1, "GUI: %s", gui_type_env ? gui_type_env : "unset");
@@ -96,37 +97,39 @@ int main(int argc, char *argv[])
         }
     }
 
-    if(strcmp(type->answer, "wxpython") != 0 || nolaunch->answer) {
+    if (strcmp(type->answer, "wxpython") != 0 || nolaunch->answer) {
         if (!update_ui->answer)
             G_warning(_("Nothing to do. For setting up <%s> as default UI use -%c flag."),
                       type->answer, update_ui->key);
-	exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
     }
 
     sprintf(progname, "%s/gui/wxpython/wxgui.py", G_gisbase());
     if (access(progname, F_OK) == -1)
         G_fatal_error(_("Your installation doesn't include GUI, exiting."));
-                      
+
     if (fglaunch->answer) {
         G_message(_("Launching <%s> GUI, please wait..."), type->answer);
         if (rc_file->answer) {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       "--workspace", rc_file->answer, NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
+                       progname, "--workspace", rc_file->answer, NULL);
         }
         else {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
+                       progname, NULL);
         }
     }
     else {
-        G_message(_("Launching <%s> GUI in the background, please wait..."), type->answer);
+        G_message(_("Launching <%s> GUI in the background, please wait..."),
+                  type->answer);
         if (rc_file->answer) {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
+                       progname, "--workspace", rc_file->answer,
+                       SF_BACKGROUND, NULL);
         }
         else {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       SF_BACKGROUND, NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
+                       progname, SF_BACKGROUND, NULL);
         }
         /* stop the impatient from starting it again
            before the splash screen comes up */

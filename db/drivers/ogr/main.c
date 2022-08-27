@@ -26,7 +26,7 @@
 #include "dbdriver.h"
 
 OGRDataSourceH hDs;
-dbString *errMsg = NULL;	/* error message */
+dbString *errMsg = NULL;        /* error message */
 
 int main(int argc, char *argv[])
 {

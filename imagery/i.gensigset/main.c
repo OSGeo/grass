@@ -27,8 +27,8 @@
 
 int main(int argc, char *argv[])
 {
-    struct parms parms;		/* command line parms */
-    struct files files;		/* file descriptors, io, buffers */
+    struct parms parms;         /* command line parms */
+    struct files files;         /* file descriptors, io, buffers */
     struct SigSet S;
     int i;
     int junk;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("SMAP"));
     G_add_keyword(_("signatures"));
     module->description =
-	_("Generates statistics for i.smap from raster map.");
+        _("Generates statistics for i.smap from raster map.");
 
     parse(argc, argv, &parms);
     openfiles(&parms, &files, &S);
@@ -53,11 +53,10 @@ int main(int argc, char *argv[])
     read_data(&files, &S);
 
     for (i = 0; i < S.nclasses; i++) {
-	G_message(_("Clustering class %d (%d pixels)..."),
-		  i + 1, S.ClassSig[i].ClassData.npixels);
-	subcluster(&S, i, &junk, parms.maxsubclasses);
-	G_message(_("Number of subclasses is %d"),
-		  S.ClassSig[i].nsubclasses);
+        G_message(_("Clustering class %d (%d pixels)..."),
+                  i + 1, S.ClassSig[i].ClassData.npixels);
+        subcluster(&S, i, &junk, parms.maxsubclasses);
+        G_message(_("Number of subclasses is %d"), S.ClassSig[i].nsubclasses);
     }
     write_sigfile(&parms, &S);
 

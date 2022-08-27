@@ -23,13 +23,13 @@ struct Flag;
 typedef struct
 {
     struct Option *input, *output, *elevationmap, *null_val, *elevscale,
-	*elev, *rgbmaps, *vectmaps, *decimals;
-    struct Flag *usestruct, *usetriangle, *usevertices, *origin, *point, *coorcorr;	/*struct Flag *mask;          struct Flag *xml; *//*maybe xml support in the future */
+        *elev, *rgbmaps, *vectmaps, *decimals;
+    struct Flag *usestruct, *usetriangle, *usevertices, *origin, *point, *coorcorr;     /*struct Flag *mask;          struct Flag *xml; *//*maybe xml support in the future */
 } paramType;
 
 /*global structs */
 
-extern paramType param;		/*Parameters */
+extern paramType param;         /*Parameters */
 
 
 /*prototype */

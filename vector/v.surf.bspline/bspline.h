@@ -24,9 +24,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/lidar.h>
-
-/*STRUCTURES*/
-struct Stats
+     /*STRUCTURES*/ struct Stats
 {
     double *estima;
     double *error;
@@ -36,7 +34,7 @@ struct Stats
 struct Param
 {
     struct Option *in, *in_ext, *out, *out_map, *dbdriver,
-	*dbdatabase, *passoE, *passoN, *lambda_f, *type;
+        *dbdatabase, *passoE, *passoN, *lambda_f, *type;
     struct Flag *cross_corr;
 };
 
@@ -65,27 +63,23 @@ struct Point *swap(struct Point *, int, int);
 
 /* resamp.c */
 struct Point *P_Read_Raster_Region_masked(SEGMENT *, /**/
-				          struct Cell_head *, /**/
-				          struct bound_box, /**/
-				          struct bound_box, /**/
-				          int *, /**/ int, /**/ double);
+                                          struct Cell_head *, /**/
+                                          struct bound_box, /**/
+                                          struct bound_box, /**/
+                                          int *, /**/ int, /**/ double);
 int P_Sparse_Raster_Points(SEGMENT *, /**/
-			struct Cell_head *, /**/
-			struct Cell_head *, /**/
-			struct bound_box, /**/
-			struct bound_box, /**/
-			struct Point *, /**/
-			double *, /**/
-			double, /**/
-			double, /**/
-			double, /**/
-			int, /**/
-			int, /**/
-			int, /**/
-			int, /**/
-			double /**/);
+                           struct Cell_head *, /**/
+                           struct Cell_head *, /**/
+                           struct bound_box, /**/
+                           struct bound_box, /**/
+                           struct Point *, /**/
+                           double *, /**/
+                           double, /**/
+                           double, /**/
+                           double, /**/
+                           int, /**/
+                           int, /**/ int, /**/ int, /**/ double /**/);
 int align_elaboration_box(struct Cell_head *, struct Cell_head *, int);
 int align_interp_boxes(struct bound_box *, struct bound_box *,
-                       struct Cell_head *, struct bound_box, struct bound_box, int);
-
-
+                       struct Cell_head *, struct bound_box, struct bound_box,
+                       int);

@@ -69,18 +69,18 @@ int main(int argc, char *argv[])
         _("If element directory for database file does not exist, create it");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     element = opt1->answer;
     name = opt3->answer;
 
     if (opt2->answer)
-	mapset = opt2->answer;
+        mapset = opt2->answer;
     else
-	mapset = G_mapset();
+        mapset = G_mapset();
 
     if (strcmp(mapset, ".") == 0 || strcmp(mapset, "") == 0)
-	mapset = G_mapset();
+        mapset = G_mapset();
 
     /* Create element directory if requested and in current mapset. */
     if (flag_create) {

@@ -56,7 +56,7 @@ double N_calc_arith_mean_n(double *a, int size)
     int i;
 
     for (i = 0; i < size; i++)
-	val += a[i];
+        val += a[i];
 
     val = (val / (double)size);
 
@@ -99,7 +99,7 @@ double N_calc_geom_mean_n(double *a, int size)
     int i;
 
     for (i = 0; i < size; i++)
-	val *= a[i];
+        val *= a[i];
 
     val = (double)pow((long double)val, (long double)1.0 / (long double)size);
 
@@ -121,7 +121,7 @@ double N_calc_harmonic_mean(double a, double b)
     double val = 0.0;
 
     if ((a + b) != 0)
-	val = 2.0 * (a * b) / (a + b);
+        val = 2.0 * (a * b) / (a + b);
 
     return val;
 }
@@ -143,15 +143,15 @@ double N_calc_harmonic_mean_n(double *a, int size)
     int i;
 
     for (i = 0; i < size; i++)
-	if (a[i] != 0.0)
-	    val += 1.0 / a[i];
-	else
-	    return 0.0;
+        if (a[i] != 0.0)
+            val += 1.0 / a[i];
+        else
+            return 0.0;
 
     if (val == 0.0)
-	return 0.0;
+        return 0.0;
     else
-	val = 1.0 / (1.0 / (double)size * val);
+        val = 1.0 / (1.0 / (double)size * val);
 
     return val;
 }
@@ -192,7 +192,7 @@ double N_calc_quad_mean_n(double *a, int size)
     int i;
 
     for (i = 0; i < size; i++)
-	val += a[i] * a[i];
+        val += a[i] * a[i];
 
     val = sqrt(val / (double)size);
 
