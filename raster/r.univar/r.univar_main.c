@@ -15,12 +15,18 @@
  *   This program is a replacement for the r.univar shell script
  */
 
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <assert.h>
 #include <string.h>
+#include <float.h>
 #include "globals.h"
 
 param_type param;
 zone_type zone_info;
+int nprocs;
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -52,6 +58,8 @@ void set_params()
         _("Percentile to calculate (requires extended statistics flag)");
     param.percentile->guisection = _("Extended");
 
+    param.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+
     param.separator = G_define_standard_option(G_OPT_F_SEP);
     param.separator->guisection = _("Formatting");
 
@@ -82,8 +90,8 @@ void set_params()
 
 static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
-static void process_raster(univar_stat * stats, int fd, int fdz,
-                           const struct Cell_head *region);
+static void process_raster(univar_stat * stats, int *fd,
+                           int *fdz, const struct Cell_head *region);
 
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
@@ -96,9 +104,10 @@ int main(int argc, char *argv[])
     struct GModule *module;
     univar_stat *stats;
     char **p, *z;
-    int fd, fdz, cell_type, min, max;
+    int *fd, *fdz, cell_type, min, max;
     struct Range zone_range;
     const char *mapset, *name;
+    int t;
 
     G_gisinit(argv[0]);
 
@@ -107,6 +116,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("univariate statistics"));
     G_add_keyword(_("zonal statistics"));
+    G_add_keyword(_("parallel"));
 
     module->label =
         _("Calculates univariate statistics from the non-null cells of a raster map.");
@@ -132,6 +142,24 @@ int main(int argc, char *argv[])
         }
     }
 
+    /* set nprocs parameter */
+    sscanf(param.nprocs->answer, "%d", &nprocs);
+    if (nprocs < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+#if defined(_OPENMP)
+    if (param.extended->answer) {
+        /* Calculation of extended statistics is not parallelized yet */
+        nprocs = 1;
+    }
+    else {
+        omp_set_num_threads(nprocs);
+    }
+#else
+    if (nprocs != 1)
+        G_warning(_("GRASS is compiled without OpenMP support. Ignoring threads setting."));
+    nprocs = 1;
+#endif
+
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
@@ -139,15 +167,18 @@ int main(int argc, char *argv[])
     zone_info.max = 0.0 / 0.0;  /* set to nan as default */
     zone_info.n_zones = 0;
 
-    fdz = -1;
+    fdz = NULL;
+    fd = G_malloc(nprocs * sizeof(int));
 
     /* open zoning raster */
     if ((z = param.zonefile->answer)) {
         mapset = G_find_raster2(z, "");
 
-        fdz = open_raster(z);
+        fdz = G_malloc(nprocs * sizeof(int));
+        for (t = 0; t < nprocs; t++)
+            fdz[t] = open_raster(z);
 
-        cell_type = Rast_get_map_type(fdz);
+        cell_type = Rast_get_map_type(fdz[0]);
         if (cell_type != CELL_TYPE)
             G_fatal_error("Zoning raster must be of type CELL");
 
@@ -187,11 +218,12 @@ int main(int argc, char *argv[])
             G_get_window(&region);
         }
 
-        fd = open_raster(*p);
+        for (t = 0; t < nprocs; t++)
+            fd[t] = open_raster(*p);
 
         if (map_type != -1) {
             /* NB: map_type must match when doing extended stats */
-            int this_type = Rast_get_map_type(fd);
+            int this_type = Rast_get_map_type(fd[0]);
 
             assert(this_type > -1);
             if (map_type < -1) {
@@ -208,12 +240,15 @@ int main(int argc, char *argv[])
         process_raster(stats, fd, fdz, &region);
 
         /* close input raster */
-        Rast_close(fd);
+        for (t = 0; t < nprocs; t++)
+            Rast_close(fd[t]);
     }
 
     /* close zoning raster */
-    if (z)
-        Rast_close(fdz);
+    if (z) {
+        for (t = 0; t < nprocs; t++)
+            Rast_close(fdz[t]);
+    }
 
     /* create the output */
     if (param.table->answer)
@@ -238,6 +273,7 @@ static int open_raster(const char *infile)
     }
 
     fd = Rast_open_old(infile, mapset);
+    G_free((void *)mapset);
 
     return fd;
 }
@@ -266,132 +302,214 @@ static univar_stat *univar_stat_with_percentiles(int map_type)
 }
 
 static void
-process_raster(univar_stat * stats, int fd, int fdz,
+process_raster(univar_stat * stats, int *fd, int *fdz,
                const struct Cell_head *region)
 {
     /* use G_window_rows(), G_window_cols() here? */
     const unsigned int rows = region->rows;
     const unsigned int cols = region->cols;
 
-    const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd);
+    const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd[0]);
     const size_t value_sz = Rast_cell_size(map_type);
+    int t;
     unsigned int row;
-    void *raster_row;
-    CELL *zoneraster_row = NULL;
+    void **raster_row;
+    CELL **zoneraster_row = NULL;
     int n_zones = zone_info.n_zones;
+    int n_alloc = n_zones ? n_zones : 1;
 
-    raster_row = Rast_allocate_buf(map_type);
-    if (n_zones)
-        zoneraster_row = Rast_allocate_c_buf();
-
-    for (row = 0; row < rows; row++) {
-        void *ptr;
-        CELL *zptr = NULL;
-        unsigned int col;
-
-        Rast_get_row(fd, raster_row, row, map_type);
+    raster_row = G_malloc(nprocs * sizeof(void *));
+    if (n_zones) {
+        zoneraster_row = G_malloc(nprocs * sizeof(CELL *));
+    }
+    for (t = 0; t < nprocs; t++) {
+        raster_row[t] = Rast_allocate_buf(map_type);
         if (n_zones) {
-            Rast_get_c_row(fdz, zoneraster_row, row);
-            zptr = zoneraster_row;
+            zoneraster_row[t] = Rast_allocate_c_buf();
+        }
+    }
+
+#if defined(_OPENMP)
+    omp_lock_t *minmax = G_malloc(n_alloc * sizeof(omp_lock_t));
+
+    for (int i = 0; i < n_alloc; i++) {
+        omp_init_lock(&(minmax[i]));
+    }
+#endif
+
+    int computed;
+
+#pragma omp parallel if(nprocs > 1)
+    {
+        int i;
+        int t_id = 0;
+
+#if defined(_OPENMP)
+        if (!param.extended->answer) {
+            t_id = omp_get_thread_num();
+        }
+#endif
+        size_t *n = G_calloc(n_alloc, sizeof(size_t));
+        double *sum = G_calloc(n_alloc, sizeof(double));
+        double *sumsq = G_calloc(n_alloc, sizeof(double));
+        double *sum_abs = G_calloc(n_alloc, sizeof(double));
+        size_t *size = G_calloc(n_alloc, sizeof(size_t));
+        double *min = G_malloc(n_alloc * sizeof(double));
+        double *max = G_malloc(n_alloc * sizeof(double));
+
+        for (i = 0; i < n_alloc; i++) {
+            max[i] = DBL_MIN;
+            min[i] = DBL_MAX;
         }
 
-        ptr = raster_row;
+#pragma omp for schedule(static)
+        for (row = 0; row < rows; row++) {
+            void *ptr;
+            CELL *zptr = NULL;
+            unsigned int col;
 
-        for (col = 0; col < cols; col++) {
-            double val;
-            int zone = 0;
-
+            Rast_get_row(fd[t_id], raster_row[t_id], row, map_type);
             if (n_zones) {
-                /* skip NULL cells in zone map */
-                if (Rast_is_c_null_value(zptr)) {
-                    ptr = G_incr_void_ptr(ptr, value_sz);
-                    zptr++;
-                    continue;
-                }
-                zone = *zptr - zone_info.min;
+                Rast_get_c_row(fdz[t_id], zoneraster_row[t_id], row);
+                zptr = zoneraster_row[t_id];
             }
 
-            /* count all including NULL cells in input map */
-            stats[zone].size++;
+            ptr = raster_row[t_id];
 
-            /* can't do stats with NULL cells in input map */
-            if (Rast_is_null_value(ptr, map_type)) {
+            for (col = 0; col < cols; col++) {
+                double val;
+                int zone = 0;
+
+                if (n_zones) {
+                    /* skip NULL cells in zone map */
+                    if (Rast_is_c_null_value(zptr)) {
+                        ptr = G_incr_void_ptr(ptr, value_sz);
+                        zptr++;
+                        continue;
+                    }
+                    zone = *zptr - zone_info.min;
+                }
+
+                /* count all including NULL cells in input map */
+                size[zone]++;
+
+                /* can't do stats with NULL cells in input map */
+                if (Rast_is_null_value(ptr, map_type)) {
+                    ptr = G_incr_void_ptr(ptr, value_sz);
+                    if (n_zones)
+                        zptr++;
+                    continue;
+                }
+
+                if (param.extended->answer) {
+                    /* check allocated memory */
+                    /* parallelization is disabled, local variable reflects global state */
+                    if (n[zone] >= stats[zone].n_alloc) {
+                        stats[zone].n_alloc += 1000;
+                        size_t msize;
+
+                        switch (map_type) {
+                        case DCELL_TYPE:
+                            msize = stats[zone].n_alloc * sizeof(DCELL);
+                            stats[zone].dcell_array =
+                                (DCELL *) G_realloc((void *)stats[zone].
+                                                    dcell_array, msize);
+                            stats[zone].nextp =
+                                (void *)&(stats[zone].dcell_array[n[zone]]);
+                            break;
+                        case FCELL_TYPE:
+                            msize = stats[zone].n_alloc * sizeof(FCELL);
+                            stats[zone].fcell_array =
+                                (FCELL *) G_realloc((void *)stats[zone].
+                                                    fcell_array, msize);
+                            stats[zone].nextp =
+                                (void *)&(stats[zone].fcell_array[n[zone]]);
+                            break;
+                        case CELL_TYPE:
+                            msize = stats[zone].n_alloc * sizeof(CELL);
+                            stats[zone].cell_array =
+                                (CELL *) G_realloc((void *)stats[zone].
+                                                   cell_array, msize);
+                            stats[zone].nextp =
+                                (void *)&(stats[zone].cell_array[n[zone]]);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    /* put the value into stats->XXXcell_array */
+                    memcpy(stats[zone].nextp, ptr, value_sz);
+                    stats[zone].nextp =
+                        G_incr_void_ptr(stats[zone].nextp, value_sz);
+                }
+
+                val = ((map_type == DCELL_TYPE) ? *((DCELL *) ptr)
+                       : (map_type == FCELL_TYPE) ? *((FCELL *) ptr)
+                       : *((CELL *) ptr));
+
+                sum[zone] += val;
+                sumsq[zone] += val * val;
+                sum_abs[zone] += fabs(val);
+
+                if (val > max[zone])
+                    max[zone] = val;
+                if (val < min[zone])
+                    min[zone] = val;
+
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
                     zptr++;
-                continue;
+                n[zone]++;
+
+            }                   /* end column loop */
+            if (!(param.shell_style->answer)) {
+#pragma omp atomic update
+                computed++;
+                G_percent(computed, rows, 2);
             }
+        }                       /* end row loop */
 
-            if (param.extended->answer) {
-                /* check allocated memory */
-                if (stats[zone].n >= stats[zone].n_alloc) {
-                    stats[zone].n_alloc += 1000;
-                    size_t msize;
+        for (i = 0; i < n_alloc; i++) {
+#pragma omp atomic update
+            stats[i].n += n[i];
+#pragma omp atomic update
+            stats[i].size += size[i];
+#pragma omp atomic update
+            stats[i].sum += sum[i];
+#pragma omp atomic update
+            stats[i].sumsq += sumsq[i];
+#pragma omp atomic update
+            stats[i].sum_abs += sum_abs[i];
 
-                    switch (map_type) {
-                    case DCELL_TYPE:
-                        msize = stats[zone].n_alloc * sizeof(DCELL);
-                        stats[zone].dcell_array =
-                            (DCELL *) G_realloc((void *)stats[zone].
-                                                dcell_array, msize);
-                        stats[zone].nextp =
-                            (void *)&(stats[zone].dcell_array[stats[zone].n]);
-                        break;
-                    case FCELL_TYPE:
-                        msize = stats[zone].n_alloc * sizeof(FCELL);
-                        stats[zone].fcell_array =
-                            (FCELL *) G_realloc((void *)stats[zone].
-                                                fcell_array, msize);
-                        stats[zone].nextp =
-                            (void *)&(stats[zone].fcell_array[stats[zone].n]);
-                        break;
-                    case CELL_TYPE:
-                        msize = stats[zone].n_alloc * sizeof(CELL);
-                        stats[zone].cell_array =
-                            (CELL *) G_realloc((void *)stats[zone].cell_array,
-                                               msize);
-                        stats[zone].nextp =
-                            (void *)&(stats[zone].cell_array[stats[zone].n]);
-                        break;
-                    default:
-                        break;
-                    }
-                }
-                /* put the value into stats->XXXcell_array */
-                memcpy(stats[zone].nextp, ptr, value_sz);
-                stats[zone].nextp =
-                    G_incr_void_ptr(stats[zone].nextp, value_sz);
+#if defined(_OPENMP)
+            omp_set_lock(&(minmax[i]));
+#endif
+            if (stats[i].max < max[i] ||
+                (stats[i].max != stats[i].max && max[i] != DBL_MIN)) {
+                stats[i].max = max[i];
             }
-
-            val = ((map_type == DCELL_TYPE) ? *((DCELL *) ptr)
-                   : (map_type == FCELL_TYPE) ? *((FCELL *) ptr)
-                   : *((CELL *) ptr));
-
-            stats[zone].sum += val;
-            stats[zone].sumsq += val * val;
-            stats[zone].sum_abs += fabs(val);
-
-            if (stats[zone].first) {
-                stats[zone].max = val;
-                stats[zone].min = val;
-                stats[zone].first = FALSE;
+            if (stats[i].min > min[i] ||
+                (stats[i].min != stats[i].min && min[i] != DBL_MAX)) {
+                stats[i].min = min[i];
             }
-            else {
-                if (val > stats[zone].max)
-                    stats[zone].max = val;
-                if (val < stats[zone].min)
-                    stats[zone].min = val;
-            }
-
-            ptr = G_incr_void_ptr(ptr, value_sz);
-            if (n_zones)
-                zptr++;
-            stats[zone].n++;
+#if defined(_OPENMP)
+            omp_unset_lock(&(minmax[i]));
+#endif
         }
-        if (!(param.shell_style->answer))
-            G_percent(row, rows, 2);
+
+    }                           /* end parallel region */
+
+    for (t = 0; t < nprocs; t++) {
+        G_free(raster_row[t]);
+    }
+    G_free(raster_row);
+    if (n_zones) {
+        for (t = 0; t < nprocs; t++) {
+            G_free(zoneraster_row[t]);
+        }
+        G_free(zoneraster_row);
     }
     if (!(param.shell_style->answer))
-        G_percent(rows, rows, 2);       /* finish it off */
+        G_percent(rows, rows, 2);
 
 }
