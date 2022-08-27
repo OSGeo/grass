@@ -346,10 +346,6 @@ Geographic Resources Analysis Support System (GRASS GIS).
   --tmp-mapset                   {tmp_mapset}
                                    {tmp_mapset_detail}
   --no-color                     {no_color}
-  --mapset-color                 {mapset_color}
-  --location-color               {location_color}
-  --path-color                   {path_color}
-{colors_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
@@ -432,14 +428,6 @@ def help_message(default_gui):
                 "created in the specified location and deleted at exit"
             ),
             no_color=_("don't use a color prompt"),
-            mapset_color=_("sets the prompt color of the mapset"),
-            location_color=_("sets the prompt color of the location"),
-            path_color=_("sets the prompt color of the path"),
-            colors_detail=_(
-                "    Color value is up to 3 parts: style foreground background\n"
-                "    Style can be one of: normal, bold, bright, italic, underline, blink\n"
-                "    Color can be: black, red, green, yellow, blue, purple, cyan, white"
-            ),
         )
     )
     s = t.substitute(
@@ -1380,28 +1368,21 @@ def install_notranslation():
 def load_color_config(grass_config_dir):
     """Load terminal colors from a config file.
 
-    The flags override what is in the file.
+    If there is no color config file, create a default color setup.
     """
     try:
         f = open(os.path.join(grass_config_dir, "colors.json"), "r")
         colors = json.load(f)
         f.close()
-        debug(
-            "Loaded color_config:\n{colors}".format(
-                colors=json.dumps(colors, sort_keys=True, indent=4)
-            )
-        )
-        return Colors(colors=colors)
     except FileNotFoundError:
-        return None
-
-
-def save_color_config(grass_config_dir, color_config):
-    """Save terminal colors to a config file."""
-    f = open(os.path.join(grass_config_dir, "colors.json"), "w")
-    f.write(color_config.json())
-    f.close()
-    debug("Saved color_config:\n{colors}".format(colors=color_config.json()))
+        # Return with default colors if color config doesn't exist
+        return Colors()
+    debug(
+        "Loaded color_config:\n{colors}".format(
+            colors=json.dumps(colors, sort_keys=True, indent=4)
+        )
+    )
+    return Colors(colors=colors)
 
 
 def set_language(grass_config_dir):
@@ -2523,37 +2504,14 @@ def classic_parser(argv, default_gui, color_config=None):
         # None if not provided, empty list if present without values.
         print_params(parsed_args.config)
         sys.exit()
-    if parsed_args.no_color:
-        params.no_color = True
 
     # Color handling
-    debug("--location-color={colors}".format(colors=parsed_args.location_color))
-    if parsed_args.location_color is not None:
-        location_color = Color(*parsed_args.location_color)
-        if color_config is not None:
-            color_config.set("location", location_color)
-    else:
-        location_color = Color(style="bold")
-    if parsed_args.mapset_color is not None:
-        mapset_color = Color(*parsed_args.mapset_color)
-        if color_config is not None:
-            color_config.set("mapset", mapset_color)
-    else:
-        mapset_color = Color(style="bold")
-    if parsed_args.path_color is not None:
-        path_color = Color(*parsed_args.path_color)
-        if color_config is not None:
-            color_config.set("path", path_color)
-    else:
-        path_color = Color(fg="cyan")
-    debug("color_config = {color_config}".format(color_config=color_config))
-    if color_config is None:
-        params.colors = Colors(
-            path=path_color, mapset=mapset_color, location=location_color
-        )
+    if parsed_args.no_color:
+        params.no_color = True
+        params.colors = Colors(path=Color(), mapset=Color(), location=Color())
     else:
         params.colors = color_config
-    debug("params.colors = {colors}".format(colors=params.colors.json()))
+        debug("params.colors = {colors}".format(colors=params.colors.json()))
 
     update_params_with_mapset_arguments(params, parsed_args)
     return params
@@ -2684,7 +2642,10 @@ class Color(object):
 class Colors(object):
     """Holds all colors for GRASS, and provides JSON serialization."""
 
-    def __init__(self, colors=None, path=Color(), mapset=Color(), location=Color()):
+    def __init__(self, colors=None,
+                 path=Color(fg="cyan"),
+                 mapset=Color(style="bold"),
+                 location=Color(style="bold")):
         self._color = {}
         if colors:
             debug(
@@ -2799,8 +2760,6 @@ def main():
     color_config = load_color_config(grass_config_dir)
     debug("loaded color_config={color_config}".format(color_config=color_config))
     params = parse_cmdline(sys.argv, default_gui=default_gui, color_config=color_config)
-
-    save_color_config(grass_config_dir, params.colors)
 
     grass_gui = params.grass_gui  # put it to variable, it is used a lot
 
