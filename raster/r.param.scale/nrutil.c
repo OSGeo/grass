@@ -49,7 +49,7 @@ unsigned char *cvector(int nl, int nh)
     unsigned char *v;
 
     v = (unsigned char *)
-	G_malloc(((nh - nl + 1 + NR_END) * sizeof(unsigned char)));
+        G_malloc(((nh - nl + 1 + NR_END) * sizeof(unsigned char)));
 
     return v - nl + NR_END;
 }
@@ -94,7 +94,7 @@ float **matrix(int nrl, int nrh, int ncl, int nch)
     m[nrl] -= ncl;
 
     for (i = nrl + 1; i <= nrh; i++)
-	m[i] = m[i - 1] + ncol;
+        m[i] = m[i - 1] + ncol;
 
     /* return pointer to array of pointers to rows */
     return m;
@@ -118,7 +118,7 @@ double **dmatrix(int nrl, int nrh, int ncl, int nch)
     m[nrl] -= ncl;
 
     for (i = nrl + 1; i <= nrh; i++)
-	m[i] = m[i - 1] + ncol;
+        m[i] = m[i - 1] + ncol;
 
     /* return pointer to array of pointers to rows */
     return m;
@@ -143,7 +143,7 @@ int **imatrix(int nrl, int nrh, int ncl, int nch)
     m[nrl] -= ncl;
 
     for (i = nrl + 1; i <= nrh; i++)
-	m[i] = m[i - 1] + ncol;
+        m[i] = m[i - 1] + ncol;
 
     /* return pointer to array of pointers to rows */
     return m;
@@ -152,7 +152,7 @@ int **imatrix(int nrl, int nrh, int ncl, int nch)
 
 /* point a submatrix [newrl..][newcl..] to a[oldrl..oldrh][oldcl..oldch] */
 float **submatrix(float **a, int oldrl, int oldrh, int oldcl, int oldch,
-		  int newrl, int newcl)
+                  int newrl, int newcl)
 {
     int i, j, nrow = oldrh - oldrl + 1, ncol = oldcl - newcl;
     float **m;
@@ -164,7 +164,7 @@ float **submatrix(float **a, int oldrl, int oldrh, int oldcl, int oldch,
 
     /* set pointers to rows */
     for (i = oldrl, j = newrl; i <= oldrh; i++, j++)
-	m[j] = a[i] + ncol;
+        m[j] = a[i] + ncol;
 
     /* return pointer to array of pointers to rows */
     return m;
@@ -188,7 +188,7 @@ float **convert_matrix(float *a, int nrl, int nrh, int ncl, int nch)
     /* set pointers to rows */
     m[nrl] = a - ncl;
     for (i = 1, j = nrl + 1; i < nrow; i++, j++)
-	m[j] = m[j - 1] + ncol;
+        m[j] = m[j - 1] + ncol;
 
     /* return pointer to array of pointers to rows */
     return m;
@@ -199,7 +199,7 @@ float **convert_matrix(float *a, int nrl, int nrh, int ncl, int nch)
 float ***f3tensor(int nrl, int nrh, int ncl, int nch, int ndl, int ndh)
 {
     int i, j, nrow = nrh - nrl + 1, ncol = nch - ncl + 1, ndep =
-	ndh - ndl + 1;
+        ndh - ndl + 1;
     float ***t;
 
     /* allocate pointers to pointers to rows */
@@ -214,18 +214,18 @@ float ***f3tensor(int nrl, int nrh, int ncl, int nch, int ndl, int ndh)
 
     /* allocate rows and set pointers to them */
     t[nrl][ncl] =
-	(float *)G_malloc(((nrow * ncol * ndep + NR_END) * sizeof(float)));
+        (float *)G_malloc(((nrow * ncol * ndep + NR_END) * sizeof(float)));
     t[nrl][ncl] += NR_END;
     t[nrl][ncl] -= ndl;
 
     for (j = ncl + 1; j <= nch; j++)
-	t[nrl][j] = t[nrl][j - 1] + ndep;
+        t[nrl][j] = t[nrl][j - 1] + ndep;
     for (i = nrl + 1; i <= nrh; i++) {
-	t[i] = t[i - 1] + ncol;
-	t[i][ncl] = t[i - 1][ncl] + ncol * ndep;
+        t[i] = t[i - 1] + ncol;
+        t[i][ncl] = t[i - 1][ncl] + ncol * ndep;
 
-	for (j = ncl + 1; j <= nch; j++)
-	    t[i][j] = t[i][j - 1] + ndep;
+        for (j = ncl + 1; j <= nch; j++)
+            t[i][j] = t[i][j - 1] + ndep;
     }
 
     /* return pointer to array of pointers to rows */
@@ -308,7 +308,7 @@ void free_convert_matrix(float **b, int nrl, int nrh, int ncl, int nch)
 
 /* free a float f3tensor allocated by f3tensor() */
 void free_f3tensor(float ***t, int nrl, int nrh, int ncl, int nch,
-		   int ndl, int ndh)
+                   int ndl, int ndh)
 {
     G_free((FREE_ARG) (t[nrl][ncl] + ndl - NR_END));
     G_free((FREE_ARG) (t[nrl] + ncl - NR_END));

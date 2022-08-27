@@ -13,6 +13,6 @@ void cmattr(Cpx * a, Cpx * b, int m, int n)
     int i, j;
 
     for (i = 0; i < n; ++i, ++b)
-	for (j = 0, p = b; j < m; ++j, p += n)
-	    *a++ = *p;
+        for (j = 0, p = b; j < m; ++j, p += n)
+            *a++ = *p;
 }

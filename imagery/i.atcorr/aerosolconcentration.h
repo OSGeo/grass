@@ -1,3 +1,4 @@
+
 /***************************************************************************
                           AerosolConcentration.h  -  description
                              -------------------
@@ -31,21 +32,25 @@ struct AtmosModel;
 
 struct AerosolConcentration
 {
-	/* aerosol concentration parameters */
+    /* aerosol concentration parameters */
     double taer55;
 
-private:
+  private:
     long int iaer;
     double v;
-    void parse(const long int iaer, const AtmosModel &atms);
-    void oda550(const double v, const AtmosModel &atms);
+    void parse(const long int iaer, const AtmosModel & atms);
+    void oda550(const double v, const AtmosModel & atms);
 
-public:
+  public:
     /* Set the visibility, this will overide any previous estimates of taer55 */
-    void set_visibility (const double vis, const AtmosModel &atms) { if(vis > 0) oda550(vis, atms); }
+    void set_visibility(const double vis, const AtmosModel & atms)
+    {
+        if (vis > 0)
+            oda550(vis, atms);
+    }
     void print();
-    static AerosolConcentration Parse(const long int iaer, const AtmosModel &atms);
+    static AerosolConcentration Parse(const long int iaer,
+                                      const AtmosModel & atms);
 };
 
 #endif /* AEROSOLCONCENTRATION_H */
-

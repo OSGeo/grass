@@ -50,7 +50,7 @@ double lsat_rad2temp(double rad, band_data * band)
 #define abs(x)	(((x)>0)?(x):(-x))
 
 void lsat_bandctes(lsat_data * lsat, int i, char method,
-		   double percent, int dark, double rayleigh)
+                   double percent, int dark, double rayleigh)
 {
     double pi_d2, sin_e, cos_v;
 
@@ -68,87 +68,96 @@ void lsat_bandctes(lsat_data * lsat, int i, char method,
 	 * K1 and K2 variables are also utilized as thermal constants
      */
     if (lsat->band[i].thermal == 0) {
-	switch (method) {
-	case DOS2:
-	    {
-		TAUv = 1.;
-		TAUz = (lsat->band[i].wavemax < 1.) ? sin_e : 1.;
-		Edown = 0.;
-		break;
-	    }
-	case DOS2b:
-	    {
-		TAUv = (lsat->band[i].wavemax < 1.) ? cos_v : 1.;
-		TAUz = (lsat->band[i].wavemax < 1.) ? sin_e : 1.;
-		Edown = 0.;
-		break;
-	    }
-	case DOS3:
-	    {
-		double t;
+        switch (method) {
+        case DOS2:
+            {
+                TAUv = 1.;
+                TAUz = (lsat->band[i].wavemax < 1.) ? sin_e : 1.;
+                Edown = 0.;
+                break;
+            }
+        case DOS2b:
+            {
+                TAUv = (lsat->band[i].wavemax < 1.) ? cos_v : 1.;
+                TAUz = (lsat->band[i].wavemax < 1.) ? sin_e : 1.;
+                Edown = 0.;
+                break;
+            }
+        case DOS3:
+            {
+                double t;
 
-		t = 2. / (lsat->band[i].wavemax + lsat->band[i].wavemin);
-		t = 0.008569 * t * t * t * t * (1 + 0.0113 * t * t + 0.000013 * t * t * t * t);
-		TAUv = exp(-t / cos_v);
-		TAUz = exp(-t / sin_e);
-		Edown = rayleigh;
-		break;
-	    }
-	case DOS4:
-	    {
-		double Ro =
-		    (lsat->band[i].lmax - lsat->band[i].lmin) * (dark -
-								 lsat->
-								 band[i].
-								 qcalmin) /
-		    (lsat->band[i].qcalmax - lsat->band[i].qcalmin) +
-		    lsat->band[i].lmin;
-		double Tv = 1.;
-		double Tz = 1.;
-		double Lp = 0.;
+                t = 2. / (lsat->band[i].wavemax + lsat->band[i].wavemin);
+                t = 0.008569 * t * t * t * t * (1 + 0.0113 * t * t +
+                                                0.000013 * t * t * t * t);
+                TAUv = exp(-t / cos_v);
+                TAUz = exp(-t / sin_e);
+                Edown = rayleigh;
+                break;
+            }
+        case DOS4:
+            {
+                double Ro =
+                    (lsat->band[i].lmax - lsat->band[i].lmin) * (dark -
+                                                                 lsat->band
+                                                                 [i].qcalmin)
+                    / (lsat->band[i].qcalmax - lsat->band[i].qcalmin) +
+                    lsat->band[i].lmin;
+                double Tv = 1.;
+                double Tz = 1.;
+                double Lp = 0.;
 
-		do {
-		    TAUz = Tz;
-		    TAUv = Tv;
-		    Lp = Ro - percent * TAUv * (lsat->band[i].esun * sin_e * TAUz + PI * Lp) / pi_d2;
-		    Tz = 1. - (4. * pi_d2 * Lp) / (lsat->band[i].esun * sin_e);
-		    if (Tz <= 0)
-			G_fatal_error(_("The DOS4 method is not applicable here: approximation of atmospheric transmittance coefficients is unstable. Use another DOS method or use other sun_elevation parameter"));
-		    Tv = exp(sin_e * log(Tz) / cos_v);
-		} while (TAUv != Tv && TAUz != Tz);
-		TAUz = (Tz < 1. ? Tz : 1.);
-		TAUv = (Tv < 1. ? Tv : 1.);
-		Edown = (Lp < 0. ? 0. : PI * Lp);
-		break;
-	    }
-	default:		/* DOS1 and Without atmospheric-correction */
-	    TAUv = 1.;
-	    TAUz = 1.;
-	    Edown = 0.;
-	    break;
-	}
-	lsat->band[i].K2 = 0.;
-	lsat->band[i].K1 = TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;
-	if (method > DOS)
-	    G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n", TAUv, TAUz, Edown);
+                do {
+                    TAUz = Tz;
+                    TAUv = Tv;
+                    Lp = Ro -
+                        percent * TAUv * (lsat->band[i].esun * sin_e * TAUz +
+                                          PI * Lp) / pi_d2;
+                    Tz = 1. -
+                        (4. * pi_d2 * Lp) / (lsat->band[i].esun * sin_e);
+                    if (Tz <= 0)
+                        G_fatal_error(_("The DOS4 method is not applicable here: approximation of atmospheric transmittance coefficients is unstable. Use another DOS method or use other sun_elevation parameter"));
+                    Tv = exp(sin_e * log(Tz) / cos_v);
+                } while (TAUv != Tv && TAUz != Tz);
+                TAUz = (Tz < 1. ? Tz : 1.);
+                TAUv = (Tv < 1. ? Tv : 1.);
+                Edown = (Lp < 0. ? 0. : PI * Lp);
+                break;
+            }
+        default:               /* DOS1 and Without atmospheric-correction */
+            TAUv = 1.;
+            TAUz = 1.;
+            Edown = 0.;
+            break;
+        }
+        lsat->band[i].K2 = 0.;
+        lsat->band[i].K1 =
+            TAUv * (lsat->band[i].esun * sin_e * TAUz + Edown) / pi_d2;
+        if (method > DOS)
+            G_verbose_message("... TAUv = %.5f, TAUz = %.5f, Edown = %.5f\n",
+                              TAUv, TAUz, Edown);
     }
 
     /** Digital number to radiance coefficients.
 	 * Without atmospheric calibration for thermal bands.
      */
-    lsat->band[i].gain = (lsat->band[i].lmax - lsat->band[i].lmin) / (lsat->band[i].qcalmax - lsat->band[i].qcalmin);
+    lsat->band[i].gain =
+        (lsat->band[i].lmax - lsat->band[i].lmin) / (lsat->band[i].qcalmax -
+                                                     lsat->band[i].qcalmin);
 
     if (method == UNCORRECTED || lsat->band[i].thermal) {
-	/* L = G * (DN - Qmin) + Lmin
-	 *  -> bias = Lmin - G * Qmin    
-	 */
-	lsat->band[i].bias = (lsat->band[i].lmin - lsat->band[i].gain * lsat->band[i].qcalmin);
+        /* L = G * (DN - Qmin) + Lmin
+         *  -> bias = Lmin - G * Qmin    
+         */
+        lsat->band[i].bias =
+            (lsat->band[i].lmin - lsat->band[i].gain * lsat->band[i].qcalmin);
     }
     else if (method > DOS) {
-	/* L = Lsat - Lpath = G * DNsat + B - (G *  + B - p * rad_sun) 
-	 *   = G * DNsat - G *  + p * rad_sun
-	 *  -> bias = p * rad_sun - G 
-	 */
-	lsat->band[i].bias = percent * lsat->band[i].K1 - lsat->band[i].gain * dark;
+        /* L = Lsat - Lpath = G * DNsat + B - (G *  + B - p * rad_sun) 
+         *   = G * DNsat - G *  + p * rad_sun
+         *  -> bias = p * rad_sun - G 
+         */
+        lsat->band[i].bias =
+            percent * lsat->band[i].K1 - lsat->band[i].gain * dark;
     }
 }

@@ -20,9 +20,9 @@ static int cmp(const void *pa, const void *pb)
     ATTR *p2 = (ATTR *) pb;
 
     if (p1->cat < p2->cat)
-	return -1;
+        return -1;
     if (p1->cat > p2->cat)
-	return 1;
+        return 1;
     return 0;
 }
 

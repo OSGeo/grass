@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < 2000000; i++) {
 #ifdef LINKM
-	p = (struct link *)link_new(head);
-	link_dispose(head, p);
+        p = (struct link *)link_new(head);
+        link_dispose(head, p);
 #else
-	p = (struct link *)malloc(sizeof(struct link));
-	free(p);
+        p = (struct link *)malloc(sizeof(struct link));
+        free(p);
 #endif
     }
 

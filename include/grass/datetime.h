@@ -16,14 +16,14 @@
 
 typedef struct DateTime
 {
-    int mode;			/* absolute or relative */
+    int mode;                   /* absolute or relative */
     int from, to;
-    int fracsec;		/* #decimal place in printed seconds */
+    int fracsec;                /* #decimal place in printed seconds */
     int year, month, day;
     int hour, minute;
     double second;
     int positive;
-    int tz;			/* timezone - minutes from UTC */
+    int tz;                     /* timezone - minutes from UTC */
 } DateTime;
 
 /* prototype of functions */

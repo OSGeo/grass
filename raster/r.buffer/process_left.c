@@ -45,49 +45,49 @@ int process_left(int from_row, int to_row, int start_col, int first_zone)
      */
 
     if (window.proj != PROJECTION_LL)
-	incr = 1;
+        incr = 1;
     else
-	incr = 0;
+        incr = 0;
 
     ncols = 0;
     while (1) {
-	if (col == 0) {		/* global wrap-around */
-	    if (!wrap_ncols)
-		break;		/* only can happen with lat-lon */
-	    col = window.cols;
-	    ncols += wrap_ncols - 1;
-	    from_ptr = map + MAPINDEX(from_row, col);
-	    to_ptr = map + MAPINDEX(to_row, col);
-	}
-	col--;
+        if (col == 0) {         /* global wrap-around */
+            if (!wrap_ncols)
+                break;          /* only can happen with lat-lon */
+            col = window.cols;
+            ncols += wrap_ncols - 1;
+            from_ptr = map + MAPINDEX(from_row, col);
+            to_ptr = map + MAPINDEX(to_row, col);
+        }
+        col--;
 
-	if (incr) {
-	    ncols += incr;
-	    incr += 2;
-	}
-	else
-	    ncols++;
-	if (ncols > farthest)
-	    break;
+        if (incr) {
+            ncols += incr;
+            incr += 2;
+        }
+        else
+            ncols++;
+        if (ncols > farthest)
+            break;
 
-	if (*--from_ptr == 1)
-	    break;
+        if (*--from_ptr == 1)
+            break;
 
-	/* convert 1,2,3,4 to -1,0,1,2 etc. 0 becomes ndist */
+        /* convert 1,2,3,4 to -1,0,1,2 etc. 0 becomes ndist */
 
-	if ((cur_zone = *--to_ptr))
-	    cur_zone -= ZONE_INCR;
-	else
-	    cur_zone = ndist;
+        if ((cur_zone = *--to_ptr))
+            cur_zone -= ZONE_INCR;
+        else
+            cur_zone = ndist;
 
-	/* find the first zone that is closer than the current value */
+        /* find the first zone that is closer than the current value */
 
-	for (i = first_zone; i < cur_zone; i++) {
-	    if (distances[i].ncols >= ncols) {
-		*to_ptr = (first_zone = i) + ZONE_INCR;
-		break;
-	    }
-	}
+        for (i = first_zone; i < cur_zone; i++) {
+            if (distances[i].ncols >= ncols) {
+                *to_ptr = (first_zone = i) + ZONE_INCR;
+                break;
+            }
+        }
     }
 
     return 0;

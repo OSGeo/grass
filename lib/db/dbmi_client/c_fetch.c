@@ -16,14 +16,14 @@
 #include "macros.h"
 
 /*!
-  \brief Fetch data from open cursor
+   \brief Fetch data from open cursor
 
-  \param cursor pointer to dbCursor
-  \param position cursor position
-  \param[out] more get more (0 for no data to be fetched)
+   \param cursor pointer to dbCursor
+   \param position cursor position
+   \param[out] more get more (0 for no data to be fetched)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_fetch(dbCursor * cursor, int position, int *more)
 {
@@ -41,12 +41,12 @@ int db_fetch(dbCursor * cursor, int position, int *more)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code;        /* ret_code SHOULD == DB_FAILED */
 
     /* get the results */
     DB_RECV_INT(more);
     if (*more) {
-	DB_RECV_TABLE_DATA(cursor->table);
+        DB_RECV_TABLE_DATA(cursor->table);
     }
     return DB_OK;
 }
