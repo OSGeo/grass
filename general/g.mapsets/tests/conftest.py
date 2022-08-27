@@ -5,7 +5,6 @@ Fixture for grass.jupyter.TimeSeries test
 Fixture for ReprojectionRenderer test with simple GRASS location, raster, vector.
 """
 
-from datetime import datetime
 from types import SimpleNamespace
 
 import pytest
@@ -13,6 +12,7 @@ import pytest
 import grass.script as gs
 
 TEST_MAPSETS = ["PERMANENT", "test1", "test2", "test3"]
+
 
 @pytest.fixture(scope="module")
 def simple_dataset(tmp_path_factory):
@@ -28,7 +28,5 @@ def simple_dataset(tmp_path_factory):
         # Create Mock Mapsets
         for mapset in TEST_MAPSETS:
             gs.run_command("g.mapset", location=location, mapset=mapset, flags="c")
-        
-        yield SimpleNamespace(
-            mapsets=TEST_MAPSETS
-        )
+
+        yield SimpleNamespace(mapsets=TEST_MAPSETS)
