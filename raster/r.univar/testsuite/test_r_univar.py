@@ -47,7 +47,7 @@ class TestRasterUnivar(TestCase):
         sum=1547100"""
 
         self.assertRasterFitsUnivar(
-            raster="map_a", reference=univar_string, precision=3
+            raster="map_a", reference=univar_string, precision=6
         )
         self.assertModuleKeyValue(
             module="r.univar",
@@ -55,7 +55,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
 
@@ -73,7 +73,7 @@ class TestRasterUnivar(TestCase):
 
         self.runModule("g.region", res=10)
         self.assertRasterFitsUnivar(
-            raster="map_a", reference=univar_string, precision=3
+            raster="map_a", reference=univar_string, precision=6
         )
         self.assertModuleKeyValue(
             module="r.univar",
@@ -81,7 +81,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
 
@@ -107,7 +107,7 @@ class TestRasterUnivar(TestCase):
             map="map_a",
             flags="rg",
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -116,7 +116,7 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
 
@@ -137,7 +137,7 @@ class TestRasterUnivar(TestCase):
             map=["map_a", "map_b"],
             flags="rg",
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -146,7 +146,7 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
 
@@ -168,7 +168,7 @@ class TestRasterUnivar(TestCase):
             map=["map_a", "map_b"],
             flags="g",
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -177,7 +177,7 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
 
@@ -204,7 +204,7 @@ class TestRasterUnivar(TestCase):
             map=["map_a", "map_b"],
             flags="rg",
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -213,13 +213,13 @@ class TestRasterUnivar(TestCase):
             flags="rg",
             nprocs=4,
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
 
     def test_1_zone(self):
         """
-        multiple maps and zone
+        one map and zone
         :return:
         """
 
@@ -252,7 +252,7 @@ class TestRasterUnivar(TestCase):
             zones="zone_map",
             flags="g",
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
         self.assertModuleKeyValue(
@@ -262,10 +262,63 @@ class TestRasterUnivar(TestCase):
             flags="g",
             nprocs=4,
             reference=univar_string,
-            precision=3,
+            precision=6,
             sep="=",
         )
 
+    def test_2_zone(self):
+        """
+        multiple maps and zone
+        :return:
+        """
+
+        # Output of r.univar
+        univar_string = """zone=1;
+                        n=3420
+                        null_cells=0
+                        cells=3420
+                        min=102
+                        max=309
+                        range=207
+                        mean=205.5
+                        mean_of_abs=205.5
+                        stddev=56.6119834192962
+                        variance=3204.91666666667
+                        coeff_var=27.5484104230152
+                        sum=702810
+                        zone=2;
+                        n=12780
+                        null_cells=0
+                        cells=3420
+                        min=121
+                        max=380
+                        range=259
+                        mean=250.5
+                        mean_of_abs=250.5
+                        stddev=59.9576239244574
+                        variance=3594.91666666667
+                        coeff_var=23.9351792113602
+                        sum=3201390"""
+
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            zones="zone_map",
+            flags="g",
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            zones="zone_map",
+            flags="g",
+            nprocs=4,
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
 
 class TestAccumulateFails(TestCase):
     def test_error_handling(self):
