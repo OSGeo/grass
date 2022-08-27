@@ -337,7 +337,7 @@ process_raster(univar_stat * stats, int *fd, int *fdz,
     }
 #endif
 
-    int computed;
+    int computed = 0;
 
 #pragma omp parallel if(nprocs > 1)
     {
