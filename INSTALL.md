@@ -1,28 +1,27 @@
-                   INSTALL GRASS from source code
-		   ------------------------------
+# Install GRASS GIS from source code
 
 Please read *all* text below.
 
-Table of contents
-PREREQUISITES
-(A) SOURCE CODE DISTRIBUTION
-(B) COMPILATION
-(C) COMPILATION NOTES for 64bit platforms
-(D) INSTALLATION (first time)
-(E) INSTALLATION ON MACOSX
-(F) RUNNING GRASS
-(G) UPDATE OF SOURCE CODE
-(H) COMPILING INDIVIDUAL MODULES - OWN MODULES
-(I) CODE OPTIMIZATION
-(J) DEBUGGING OPTIONS
-(K) LARGE FILE SUPPORT (for raster maps)
-(L) SUPPORT
-(M) GRASS GIS PROGRAMMER'S MANUAL
-(N) CONTRIBUTING CODE AND PATCHES
-(O) DRAFT TUTORIAL
+## Table of contents
 
+* PREREQUISITES
+* (A) SOURCE CODE DISTRIBUTION
+* (B) COMPILATION
+* (C) COMPILATION NOTES for 64bit platforms
+* (D) INSTALLATION (first time)
+* (E) INSTALLATION ON MACOSX
+* (F) RUNNING GRASS
+* (G) UPDATE OF SOURCE CODE
+* (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
+* (I) CODE OPTIMIZATION
+* (J) DEBUGGING OPTIONS
+* (K) LARGE FILE SUPPORT (for raster maps)
+* (L) SUPPORT
+* (M) GRASS GIS PROGRAMMER'S MANUAL
+* (N) CONTRIBUTING CODE AND PATCHES
+* (O) DRAFT TUTORIAL
 
-PREREQUISITES
+## PREREQUISITES
 
 The install order matters. GRASS needs at least two libraries
 which have to be installed before installing/compiling GRASS:
@@ -30,36 +29,37 @@ For links to the software, see ./REQUIREMENTS.html in this
 directory:
 
 Installation order:
-	1. PROJ
-	2. GDAL-OGR  (compiled without GRASS support)
-        3. optionally: databases such as PostgreSQL, MySQL, sqlite
-	4. GRASS GIS
-        5. optionally: GDAL-OGR-GRASS plugin
 
-(A) SOURCE CODE DISTRIBUTION
+1. PROJ
+2. GDAL-OGR  (compiled without GRASS support)
+3. optionally: databases such as PostgreSQL, MySQL, sqlite
+4. GRASS GIS
+5. optionally: GDAL-OGR-GRASS plugin
+
+## (A) SOURCE CODE DISTRIBUTION
 
 GRASS source code is currently distributed in 2 forms:
 
-1) Officially released source code (e.g. grass-8.2.0.tar.gz or later)
+### Officially released source code
 
-  The full source code version contains all the GRASS source code
-  required for compilation. It is distributed as one file (*.tar.gz
-  package) and the version is composed of 3 numbers, e.g. 8.2.0, 8.2.1
-  etc. See
-  https://github.com/OSGeo/grass/releases
+The full source code version contains all the GRASS source code
+required for compilation. It is distributed as one file (`*.tar.gz`
+package) and the version is composed of 3 numbers, e.g. 8.2.0, 8.2.1
+etc. See
+https://github.com/OSGeo/grass/releases
 
-2) Snapshots of source code (generated from GitHub)
+### Snapshots of source code (generated from GitHub)
 
-  This version of the source code can be acquired either from the GitHub
-  repository (https://github.com/OSGeo/grass/) or as a auto-generated snapshot
-  (*.tar.gz package) of the GitHub repository. The snapshot name
-  contains the date when the snapshot was created (checked out from
-  the GitHub repository), e.g. grass-8.3.git_src_snapshot_2022_04_27.tar.gz
-  from https://grass.osgeo.org/grass-devel/source/snapshot/
-  Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
+This version of the source code can be acquired either from the GitHub
+repository (https://github.com/OSGeo/grass/) or as a auto-generated snapshot
+(`*.tar.gz` package) of the GitHub repository. The snapshot name
+contains the date when the snapshot was created (checked out from
+the GitHub repository), e.g. grass-8.3.git_src_snapshot_2022_04_27.tar.gz
+from https://grass.osgeo.org/grass-devel/source/snapshot/
+Further instructions at https://trac.osgeo.org/grass/wiki/DownloadSource
 
 
-(B) COMPILATION
+## (B) COMPILATION
 
 IMPORTANT: All Unix based distributions are different.
            For Solaris, see hints below.
@@ -125,7 +125,7 @@ names can be defined (C and C++):
 	CC=cc CPP=cpp ./configure ...
 
 
-(C) COMPILATION NOTES for 64bit platforms
+## (C) COMPILATION NOTES for 64bit platforms
 
 To successfully compile GRASS on 64bit platforms, the required
 FFTW2 library has to be compiled with -fPIC flag:
@@ -147,7 +147,7 @@ the following additional parameters are recommended/required:
 See also CODE OPTIMIZATION below.
 
 
-(D) INSTALLATION (first time)
+## (D) INSTALLATION (first time)
 
 After compilation, the resulting code is stored in the directory
     ./dist.$ARCH
@@ -163,12 +163,12 @@ or run
     grass
 
 
-(E) INSTALLATION ON MACOSX
+## (E) INSTALLATION ON MACOSX
 
 See the ReadMe.rtf in the ./macosx/ folder and the Wiki page above.
 
 
-(F) RUNNING GRASS GIS
+## (F) RUNNING GRASS GIS
 
 Download a sample data package from the GRASS web site, see
 https://grass.osgeo.org/download/sample-data/
@@ -179,7 +179,7 @@ GRASS GIS startup menu to the extracted directory.
 Enjoy.
 
 
-(G) UPDATE OF SOURCE CODE
+## (G) UPDATE OF SOURCE CODE
 
 Assuming that you want to update your current installation from
 GitHub, you have to perform a few steps. In general:
@@ -198,7 +198,7 @@ In detail:
 
 For details, see https://trac.osgeo.org/grass/wiki/HowToGit
 
-(H) COMPILING INDIVIDUAL MODULES - OWN MODULES
+## (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 
 To compile (self-made) GRASS modules or to compile modified modules
 at least the GRASS libraries have to be compiled locally. This is
@@ -221,7 +221,7 @@ source code directory structure, you will have to change the relative
 path(s) in the Makefile to absolute path(s).
 
 
-(I) CODE OPTIMIZATION
+## (I) CODE OPTIMIZATION
 
 If you would like to set compiler optimisations, for a possibly faster
 binary, type (don't enter a ";" anywhere):
@@ -257,7 +257,7 @@ LDFLAGS set to "stripping" (but this disables debugging):
   CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
 
 
-(J) DEBUGGING OPTIONS
+## (J) DEBUGGING OPTIONS
 
 The LDFLAGS="" part must be undefined as "-s" will strip the debugging 
 information.
@@ -275,7 +275,7 @@ See also the file ./doc/debugging.txt and the Wiki page
 https://grasswiki.osgeo.org/wiki/GRASS_Debugging
 
 
-(K) LARGE FILE SUPPORT (for raster maps)
+## (K) LARGE FILE SUPPORT (for raster maps)
 
 GRASS GIS includes improved support for reading and writing large files
 (> 2GB) if it is possible in your operating system. If you compile with
@@ -289,7 +289,7 @@ See also
 https://grasswiki.osgeo.org/wiki/GRASS_GIS_Performance
 https://grasswiki.osgeo.org/wiki/Software_requirements_specification
 
-(L) SUPPORT
+## (L) SUPPORT
 
 Note that this code is still actively being developed and errors inevitably
 turn up. If you find a bug, please report it to the GRASS bug tracking system
@@ -299,21 +299,22 @@ If you are interested in helping to develop GRASS, please join the GRASS
 developers mailing list. See https://grass.osgeo.org/development/
 
 
-(M) GRASS PROGRAMMER'S MANUAL
+## (M) GRASS PROGRAMMER'S MANUAL
 
 The Programmer's manual is generated with doxygen from the source code.
 Please see the README file and the files at:
 https://grass.osgeo.org/programming8/
 
-(N) CONTRIBUTING CODE AND PATCHES
+## (N) CONTRIBUTING CODE AND PATCHES
 
 Please see ./SUBMITTING in this directory, or better,
 https://trac.osgeo.org/grass/wiki/Submitting
 
 
-(O) TUTORIALS
+## (O) TUTORIALS
 
 https://grass.osgeo.org/learn/newcomers/
 
-------------------
-(C) 1999-2022 by The GRASS Development Team
+## Authors
+
+Markus Neteler and the GRASS Development Team
