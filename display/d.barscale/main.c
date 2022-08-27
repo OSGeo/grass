@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *bg_color_opt, *fg_color_opt, *coords, *fsize, *barstyle,
-            *text_placement, *length_opt, *segm_opt, *units_opt, *label_opt,
-            *width_scale_opt, *font, *path, *charset;
+        *text_placement, *length_opt, *segm_opt, *units_opt, *label_opt,
+        *width_scale_opt, *font, *path, *charset;
     struct Flag *feet, *no_text, *n_symbol;
     struct Cell_head W;
     double east, north;
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
     text_placement->options = "under,over,left,right";
     text_placement->answer = "right";
     text_placement->guisection = _("Text");
-    
+
     width_scale_opt = G_define_option();
     width_scale_opt->key = "width_scale";
     width_scale_opt->type = TYPE_DOUBLE;
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
     charset->type = TYPE_STRING;
     charset->required = NO;
     charset->description =
-	_("Text encoding (only applicable to TrueType fonts)");
+        _("Text encoding (only applicable to TrueType fonts)");
     charset->guisection = _("Text");
 
     G_option_exclusive(feet, units_opt, NULL);
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
     length = atof(length_opt->answer);
     sscanf(segm_opt->answer, "%d", &segm);
 
-    if (feet->answer == 1){
+    if (feet->answer == 1) {
         use_feet = 1;
         units = U_FEET;
         label = "ft";
@@ -318,7 +318,7 @@ int main(int argc, char **argv)
         }
     }
 
-    if (label_opt->answer){
+    if (label_opt->answer) {
         label = label_opt->answer;
     }
 
@@ -340,15 +340,16 @@ int main(int argc, char **argv)
     D_open_driver();
 
     if (font->answer)
-	D_font(font->answer);
+        D_font(font->answer);
     else if (path->answer)
-	D_font(path->answer);
+        D_font(path->answer);
     if (charset->answer)
-	D_encoding(charset->answer);
+        D_encoding(charset->answer);
 
     D_setup(0);
 
-    draw_scale(east, north, length, segm, units, label, bar_style, text_position, width_scale, fontsize);
+    draw_scale(east, north, length, segm, units, label, bar_style,
+               text_position, width_scale, fontsize);
 
     D_save_command(G_recreate_command());
     D_close_driver();

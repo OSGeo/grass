@@ -1,6 +1,6 @@
 
 /* exit codes */
-#define SP_FATAL     1		/* [ G_fatal_error () returns 1 ] */
+#define SP_FATAL     1          /* [ G_fatal_error () returns 1 ] */
 #define SP_NOCHANGE  2
 #define SP_UNKNOWN   3
 
@@ -40,7 +40,7 @@ int get_deg(char *, int);
 int get_double(const struct proj_parm *, const struct proj_desc *, double *);
 int get_int(const struct proj_parm *, const struct proj_desc *, int *);
 int get_LL_stuff(const struct proj_parm *, const struct proj_desc *, int,
-		 double *);
+                 double *);
 int get_zone(void);
 double prompt_num_double(char *, double, int);
 int prompt_num_int(char *, int, int);
@@ -60,7 +60,7 @@ extern double radius, kfact, mfact, msfact, nfact, qfact,
 int min1(int, int);
 
 #ifdef __GNUC_MINOR__
-int leave(int) __attribute__ ((__noreturn__));
+int leave(int) __attribute__((__noreturn__));
 #else
 int leave(int);
 #endif

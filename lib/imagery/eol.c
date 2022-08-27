@@ -16,9 +16,9 @@ int I_get_to_eol(char *line, int len, FILE * fd)
 
     n = len - 1;
     while ((c = fgetc(fd)) >= 0 && c != '\n')
-	if (n-- > 0)
-	    *line++ = c;
+        if (n-- > 0)
+            *line++ = c;
     if (len > 0)
-	*line = 0;
+        *line = 0;
     return c == '\n';
 }

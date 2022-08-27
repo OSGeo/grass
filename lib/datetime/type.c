@@ -56,7 +56,7 @@ int datetime_set_type(DateTime * dt, int mode, int from, int to, int fracsec)
 
 int
 datetime_get_type(const DateTime * dt, int *mode, int *from, int *to,
-		  int *fracsec)
+                  int *fracsec)
 {
     *mode = dt->mode;
     *to = dt->to;
@@ -121,29 +121,29 @@ int datetime_check_type(const DateTime * dt)
     switch (dt->mode) {
     case DATETIME_ABSOLUTE:
     case DATETIME_RELATIVE:
-	break;
+        break;
     default:
-	return datetime_error(-1, "invalid datetime 'mode'");
+        return datetime_error(-1, "invalid datetime 'mode'");
     }
 
     if (!datetime_is_between(dt->from, DATETIME_YEAR, DATETIME_SECOND))
-	return datetime_error(-2, "invalid datetime 'from'");
+        return datetime_error(-2, "invalid datetime 'from'");
     if (!datetime_is_between(dt->to, DATETIME_YEAR, DATETIME_SECOND))
-	return datetime_error(-3, "invalid datetime 'to'");
+        return datetime_error(-3, "invalid datetime 'to'");
     if (dt->from > dt->to)
-	return datetime_error(-4, "invalid datetime 'from-to'");
+        return datetime_error(-4, "invalid datetime 'from-to'");
     if (dt->mode == DATETIME_RELATIVE) {
-	if (datetime_in_interval_year_month(dt->from)
-	    && !datetime_in_interval_year_month(dt->to))
-	    return datetime_error(-5, "invalid relative datetime 'from-to'");
-	if (datetime_in_interval_day_second(dt->from)
-	    && !datetime_in_interval_day_second(dt->to))
-	    return datetime_error(-5, "invalid relative datetime 'from-to'");
+        if (datetime_in_interval_year_month(dt->from)
+            && !datetime_in_interval_year_month(dt->to))
+            return datetime_error(-5, "invalid relative datetime 'from-to'");
+        if (datetime_in_interval_day_second(dt->from)
+            && !datetime_in_interval_day_second(dt->to))
+            return datetime_error(-5, "invalid relative datetime 'from-to'");
     }
     if (dt->mode == DATETIME_ABSOLUTE && dt->from != DATETIME_YEAR)
-	return datetime_error(-6, "invalid absolute datetime 'from'");
+        return datetime_error(-6, "invalid absolute datetime 'from'");
     if (dt->to == DATETIME_SECOND && dt->fracsec < 0)
-	return datetime_error(-7, "invalid datetime 'fracsec'");
+        return datetime_error(-7, "invalid datetime 'fracsec'");
 
     return 0;
 }

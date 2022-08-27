@@ -22,7 +22,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#define NFILES 30		/* maximum number of layers */
+#define NFILES 30               /* maximum number of layers */
 
 extern int nfiles;
 extern int nrows;

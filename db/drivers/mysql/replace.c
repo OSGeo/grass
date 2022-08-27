@@ -30,37 +30,37 @@ int replace_variables(char *in, char **datadir, char **database)
     char **tokens;
     int no_tokens, n;
 
-    if (!strchr(in, '/')) {	/* no path */
-	*datadir = G_store("./");
-	*database = G_store(in);
+    if (!strchr(in, '/')) {     /* no path */
+        *datadir = G_store("./");
+        *database = G_store(in);
     }
     else {
-	tokens = G_tokenize(in, "/");
-	no_tokens = G_number_of_tokens(tokens);
+        tokens = G_tokenize(in, "/");
+        no_tokens = G_number_of_tokens(tokens);
 
-	G_debug(3, "no_tokens = %d", no_tokens);
+        G_debug(3, "no_tokens = %d", no_tokens);
 
-	tmp[0] = '\0';
-	for (n = 0; n < no_tokens - 1; n++) {
-	    G_chop(tokens[n]);
-	    if (n > 0)
-		strcat(tmp, "/");
+        tmp[0] = '\0';
+        for (n = 0; n < no_tokens - 1; n++) {
+            G_chop(tokens[n]);
+            if (n > 0)
+                strcat(tmp, "/");
 
-	    G_debug(3, "tokens[%d] = %s", n, tokens[n]);
-	    if (tokens[n][0] == '$') {
-		G_strchg(tokens[n], '$', ' ');
-		G_chop(tokens[n]);
-		strcat(tmp, G_getenv_nofatal(tokens[n]));
-		G_debug(3, "   -> %s", G_getenv_nofatal(tokens[n]));
-	    }
-	    else {
-		strcat(tmp, tokens[n]);
-	    }
-	}
-	*datadir = G_store(tmp);
-	*database = G_store(tokens[n]);
+            G_debug(3, "tokens[%d] = %s", n, tokens[n]);
+            if (tokens[n][0] == '$') {
+                G_strchg(tokens[n], '$', ' ');
+                G_chop(tokens[n]);
+                strcat(tmp, G_getenv_nofatal(tokens[n]));
+                G_debug(3, "   -> %s", G_getenv_nofatal(tokens[n]));
+            }
+            else {
+                strcat(tmp, tokens[n]);
+            }
+        }
+        *datadir = G_store(tmp);
+        *database = G_store(tokens[n]);
 
-	G_free_tokens(tokens);
+        G_free_tokens(tokens);
     }
 
     G_debug(2, "datadir = '%s'", *datadir);
@@ -68,4 +68,3 @@ int replace_variables(char *in, char **datadir, char **database)
 
     return 1;
 }
-

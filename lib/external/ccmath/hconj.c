@@ -13,14 +13,14 @@ void hconj(Cpx * a, int n)
     int i, j, e;
 
     for (i = 0, e = n - 1; i < n; ++i, --e, a += n + 1) {
-	for (j = 0, p = a + 1, q = a + n; j < e; ++j) {
-	    s = *p;
-	    s.im = -s.im;
-	    p->re = q->re;
-	    (p++)->im = -q->im;
-	    *q = s;
-	    q += n;
-	}
-	a->im = -a->im;
+        for (j = 0, p = a + 1, q = a + n; j < e; ++j) {
+            s = *p;
+            s.im = -s.im;
+            p->re = q->re;
+            (p++)->im = -q->im;
+            *q = s;
+            q += n;
+        }
+        a->im = -a->im;
     }
 }

@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     DCELL *outrast[MAXFILES];
     RASTER_MAP_TYPE in_data_type[MAXFILES];
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE; /* 0=numbers  1=text */
-    double gain[MAXFILES]; /* , offset[MAXFILES]; */
+    double gain[MAXFILES];      /* , offset[MAXFILES]; */
     double kexo[MAXFILES];
     double doy, sun_elevation;
 

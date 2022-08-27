@@ -1,3 +1,4 @@
+
 /*************************************************************
  *                          USAGE                            *
  *************************************************************
@@ -66,7 +67,7 @@
 #include <stddef.h>
 
 /* maximum RB Tree height */
-#define RBTREE_MAX_HEIGHT 64        /* should be more than enough */
+#define RBTREE_MAX_HEIGHT 64    /* should be more than enough */
 
 /* routine to compare data items
  * return -1 if rb_a < rb_b
@@ -77,26 +78,26 @@ typedef int rb_compare_fn(const void *rb_a, const void *rb_b);
 
 struct RB_NODE
 {
-    unsigned char red;              /* 0 = black, 1 = red */
-    void *data;                     /* any kind of data */
-    struct RB_NODE *link[2];        /* link to children: link[0] for smaller, link[1] for larger */
+    unsigned char red;          /* 0 = black, 1 = red */
+    void *data;                 /* any kind of data */
+    struct RB_NODE *link[2];    /* link to children: link[0] for smaller, link[1] for larger */
 };
- 
+
 struct RB_TREE
 {
-    struct RB_NODE *root;           /* root node */
-    size_t datasize;                /* item size */
-    size_t count;                   /* number of items in tree. */
-    rb_compare_fn *rb_compare;      /* function to compare data */
+    struct RB_NODE *root;       /* root node */
+    size_t datasize;            /* item size */
+    size_t count;               /* number of items in tree. */
+    rb_compare_fn *rb_compare;  /* function to compare data */
 };
 
 struct RB_TRAV
 {
-    struct RB_TREE *tree;           /* tree being traversed */
-    struct RB_NODE *curr_node;      /* current node */
-    struct RB_NODE *up[RBTREE_MAX_HEIGHT];  /* stack of parent nodes */
-    int top;                        /* index for stack */
-    int first;                      /* little helper flag */
+    struct RB_TREE *tree;       /* tree being traversed */
+    struct RB_NODE *curr_node;  /* current node */
+    struct RB_NODE *up[RBTREE_MAX_HEIGHT];      /* stack of parent nodes */
+    int top;                    /* index for stack */
+    int first;                  /* little helper flag */
 };
 
 #include <grass/defs/rbtree.h>

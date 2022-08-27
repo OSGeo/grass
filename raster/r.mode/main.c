@@ -33,13 +33,13 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *base, *cover, *output;
+        struct Option *base, *cover, *output;
     } parm;
     char *basemap;
     char *covermap;
     char *outmap;
-    char input[GNAME_MAX*2+8];
-    char output[GNAME_MAX+8];
+    char input[GNAME_MAX * 2 + 8];
+    char output[GNAME_MAX + 8];
     const char *args[5];
     struct Popen stats_child, reclass_child;
     struct Categories cover_cats;
@@ -56,9 +56,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("algebra"));
     module->description =
-	_("Finds the mode of values in a cover map within "
-	  "areas assigned the same category value in a "
-	  "user-specified base map.");
+        _("Finds the mode of values in a cover map within "
+          "areas assigned the same category value in a "
+          "user-specified base map.");
 
     parm.base = G_define_option();
     parm.base->key = "base";
@@ -82,14 +82,14 @@ int main(int argc, char *argv[])
     parm.output->gisprompt = "new,cell,raster";
 
     if (G_parser(argc, argv))
-	exit(1);
+        exit(1);
 
     basemap = parm.base->answer;
     covermap = parm.cover->answer;
     outmap = parm.output->answer;
 
     if (Rast_read_cats(covermap, "", &cover_cats) < 0) {
-	G_fatal_error(_("%s: Unable to read category labels"), covermap);
+        G_fatal_error(_("%s: Unable to read category labels"), covermap);
     }
 
     sprintf(input, "input=%s,%s", basemap, covermap);
@@ -114,34 +114,36 @@ int main(int argc, char *argv[])
 
     first = 1;
     while (read_stats(stats, &basecat, &covercat, &value)) {
-	if (first) {
-	    first = 0;
-	    catb = basecat;
-	    catc = covercat;
-	    max = value;
-	}
-	if (basecat != catb) {
-	  write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, &cover_cats));
-	    catb = basecat;
-	    catc = covercat;
-	    max = value;
-	}
-	if (value > max) {
-	    catc = covercat;
-	    max = value;
-	}
+        if (first) {
+            first = 0;
+            catb = basecat;
+            catc = covercat;
+            max = value;
+        }
+        if (basecat != catb) {
+            write_reclass(reclass, catb, catc,
+                          Rast_get_c_cat((CELL *) & catc, &cover_cats));
+            catb = basecat;
+            catc = covercat;
+            max = value;
+        }
+        if (value > max) {
+            catc = covercat;
+            max = value;
+        }
     }
     if (first) {
-	catb = catc = 0;
+        catb = catc = 0;
     }
-    write_reclass(reclass, catb, catc, Rast_get_c_cat((CELL *) &catc, &cover_cats));
+    write_reclass(reclass, catb, catc,
+                  Rast_get_c_cat((CELL *) & catc, &cover_cats));
 
     G_popen_close(&reclass_child);
     G_popen_close(&stats_child);
 
     if (Rast_read_colors(parm.cover->answer, "", &colors) < 0)
-	G_fatal_error(_("Unable to read color table for %s"),
-			parm.cover->answer);
+        G_fatal_error(_("Unable to read color table for %s"),
+                      parm.cover->answer);
     Rast_write_colors(parm.output->answer, G_mapset(), &colors);
 
     return 0;

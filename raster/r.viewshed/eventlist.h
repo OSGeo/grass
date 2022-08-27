@@ -51,12 +51,12 @@
 
 typedef struct event_
 {
-    dimensionType row, col;	//location of the center of cell
+    dimensionType row, col;     //location of the center of cell
     // 3 elevation values:
     // elev[0]: entering
     // elev[1]: center
     // elev[2]: exiting
-    surface_type elev[3];			//elevation here
+    surface_type elev[3];       //elevation here
     double angle;
     char eventType;
 
@@ -71,13 +71,13 @@ typedef struct event_
    limit, 0 if point is inside limit. */
 int
 is_point_outside_max_dist(Viewpoint vp, GridHeader hd,
-			  dimensionType row, dimensionType col,
-			  float maxDist);
+                          dimensionType row, dimensionType col,
+                          float maxDist);
 
 /*determines if the point at row,col is within min and max angle (in 0-360, 0 is east, CCW) */
 int is_point_inside_angle(Viewpoint vp,
-                         dimensionType row, dimensionType col,
-                         float minAngle, float maxAngle);
+                          dimensionType row, dimensionType col,
+                          float minAngle, float maxAngle);
 
 /*sort the event list by the angle around the viewpoint) */
 void sort_event_list(AMI_STREAM < AEvent > **eventList);
@@ -101,11 +101,11 @@ void print_event(AEvent a, int debug_level);
        //events associate to a cell are considered at the same distance, from
        //the center of the cell to the viewpoint */
 double get_square_distance_from_viewpoint(const AEvent & a,
-					  const Viewpoint & vp);
+                                          const Viewpoint & vp);
 
     /*sort the event list in distance order */
 void sort_event_list_by_distance(AMI_STREAM < AEvent > **eventList,
-				 Viewpoint vp);
+                                 Viewpoint vp);
 
 
     /*return the angle from this event wrt viewpoint; the type of the
@@ -123,25 +123,25 @@ double calculate_center_gradient(AEvent * e, Viewpoint * vp);
 
     /*calculate the exit angle corresponding to this cell */
 double calculate_exit_angle(dimensionType row, dimensionType col,
-			    Viewpoint * vp);
+                            Viewpoint * vp);
 
     /*calculate the enter angle corresponding to this cell */
 double calculate_enter_angle(dimensionType row, dimensionType col,
-			     Viewpoint * vp);
+                             Viewpoint * vp);
 
     /*calculate the exact position of the given event, and store them in x
        //and y. */
 void calculate_event_position(AEvent e, dimensionType viewpointRow,
-			      dimensionType viewpointCol, double *y,
-			      double *x);
+                              dimensionType viewpointCol, double *y,
+                              double *x);
     /* calculate the neighbouring row, col of the given event, and store them in x
        //and y. */
 void
 calculate_event_row_col(AEvent e, dimensionType viewpointRow,
-			 dimensionType viewpointCol, int *y, int *x);
+                        dimensionType viewpointCol, int *y, int *x);
 
 
 double calculate_angle(double eventX, double eventY, double viewpointX,
-		       double viewpointY);
+                       double viewpointY);
 
 #endif

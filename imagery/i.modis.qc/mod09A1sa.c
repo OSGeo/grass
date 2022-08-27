@@ -3,11 +3,11 @@
  * 01 -> class 1: cloudy
  * 10 -> class 2: mixed
  * 11 -> class 3: not set, assumed clear
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09A1sa(CELL pixel) 
+CELL mod09A1sa(CELL pixel)
 {
     CELL qctemp;
 
@@ -18,5 +18,3 @@ CELL mod09A1sa(CELL pixel)
 
     return qctemp;
 }
-
-

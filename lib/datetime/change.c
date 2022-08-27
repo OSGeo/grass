@@ -62,11 +62,11 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
 
     /* is 'dt' valid? */
     if (!datetime_is_valid_type(dt))
-	return -1;
+        return -1;
 
     /* is new from/to valid for dt->mode? */
     if (datetime_set_type(&dummy, dt->mode, from, to, 0) != 0)
-	return -2;
+        return -2;
 
     /* copy dt->from to local variable, then change it
        in the structure so that increment works correctly for RELATIVE.
@@ -83,24 +83,24 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
      *       since absolute will have from==dt->from==YEAR
      */
     for (pos = dtfrom; pos < from; pos++) {
-	switch (pos) {
-	case DATETIME_YEAR:
-	    dt->month += dt->year * 12;
-	    dt->year = 0;
-	    break;
-	case DATETIME_DAY:
-	    dt->hour += dt->day * 24;
-	    dt->day = 0;
-	    break;
-	case DATETIME_HOUR:
-	    dt->minute += dt->hour * 60;
-	    dt->hour = 0;
-	    break;
-	case DATETIME_MINUTE:
-	    dt->second += dt->minute * 60.0;
-	    dt->minute = 0;
-	    break;
-	}
+        switch (pos) {
+        case DATETIME_YEAR:
+            dt->month += dt->year * 12;
+            dt->year = 0;
+            break;
+        case DATETIME_DAY:
+            dt->hour += dt->day * 24;
+            dt->day = 0;
+            break;
+        case DATETIME_HOUR:
+            dt->minute += dt->hour * 60;
+            dt->hour = 0;
+            break;
+        case DATETIME_MINUTE:
+            dt->second += dt->minute * 60.0;
+            dt->minute = 0;
+            break;
+        }
     }
 
     /* if losing precision, round
@@ -108,122 +108,122 @@ int datetime_change_from_to(DateTime * dt, int from, int to, int round)
      *    round ==0 increment by all lost values
      */
     if (to < dt->to) {
-	if (round > 0) {
-	    int x;
+        if (round > 0) {
+            int x;
 
-	    x = datetime_is_absolute(dt) ? 1 : 0;
+            x = datetime_is_absolute(dt) ? 1 : 0;
 
-	    for (carry = 0, pos = dt->to; carry == 0 && pos > to; pos--) {
-		switch (pos) {
-		case DATETIME_MONTH:
-		    if (dt->month != x)
-			carry = 1;
-		    break;
-		case DATETIME_DAY:
-		    if (dt->day != x)
-			carry = 1;
-		    break;
-		case DATETIME_HOUR:
-		    if (dt->hour != 0)
-			carry = 1;
-		    break;
-		case DATETIME_MINUTE:
-		    if (dt->minute != 0)
-			carry = 1;
-		    break;
-		case DATETIME_SECOND:
-		    if (dt->second != 0)
-			carry = 1;
-		    break;
-		}
-	    }
+            for (carry = 0, pos = dt->to; carry == 0 && pos > to; pos--) {
+                switch (pos) {
+                case DATETIME_MONTH:
+                    if (dt->month != x)
+                        carry = 1;
+                    break;
+                case DATETIME_DAY:
+                    if (dt->day != x)
+                        carry = 1;
+                    break;
+                case DATETIME_HOUR:
+                    if (dt->hour != 0)
+                        carry = 1;
+                    break;
+                case DATETIME_MINUTE:
+                    if (dt->minute != 0)
+                        carry = 1;
+                    break;
+                case DATETIME_SECOND:
+                    if (dt->second != 0)
+                        carry = 1;
+                    break;
+                }
+            }
 
-	    if (carry) {
-		make_incr(&incr, to, to, dt);
+            if (carry) {
+                make_incr(&incr, to, to, dt);
 
-		incr.year = 1;
-		incr.month = 1;
-		incr.day = 1;
-		incr.hour = 1;
-		incr.minute = 1;
-		incr.second = 1.0;
+                incr.year = 1;
+                incr.month = 1;
+                incr.day = 1;
+                incr.hour = 1;
+                incr.minute = 1;
+                incr.second = 1.0;
 
-		datetime_increment(dt, &incr);
-	    }
-	}
+                datetime_increment(dt, &incr);
+            }
+        }
 
-	if (round == 0) {
-	     /*NEW*/ if (datetime_is_absolute(dt))
-		/*NEW*/ ndays = datetime_days_in_year(dt->year, dt->positive);
-	     /*NEW*/
-	    else
-		/*NEW*/ ndays = 0;
+        if (round == 0) {
+             /*NEW*/ if (datetime_is_absolute(dt))
+                /*NEW*/ ndays = datetime_days_in_year(dt->year, dt->positive);
+             /*NEW*/
+            else
+                /*NEW*/ ndays = 0;
 
-	    for (pos = dt->to; pos > to; pos--) {
-		make_incr(&incr, pos, pos, dt);
+            for (pos = dt->to; pos > to; pos--) {
+                make_incr(&incr, pos, pos, dt);
 
-		incr.year = dt->year;
-		incr.month = dt->month;
-		 /*NEW*/ incr.day = dt->day + ndays / 2;
-		incr.hour = dt->hour;
-		incr.minute = dt->minute;
-		incr.second = dt->second;
+                incr.year = dt->year;
+                incr.month = dt->month;
+                 /*NEW*/ incr.day = dt->day + ndays / 2;
+                incr.hour = dt->hour;
+                incr.minute = dt->minute;
+                incr.second = dt->second;
 
-		datetime_increment(dt, &incr);
-		 /*NEW*/ if (ndays > 0 && pos == DATETIME_DAY)
-		    /*NEW*/ break;
-	    }
-	}
+                datetime_increment(dt, &incr);
+                 /*NEW*/ if (ndays > 0 && pos == DATETIME_DAY)
+                    /*NEW*/ break;
+            }
+        }
     }
 
     /* set the new elements to zero */
     for (pos = from; pos < dtfrom; pos++)
-	switch (pos) {
-	case DATETIME_YEAR:
-	    dt->year = 0;
-	    break;
-	case DATETIME_MONTH:
-	    dt->month = 0;
-	    break;
-	case DATETIME_DAY:
-	    dt->day = 0;
-	    break;
-	case DATETIME_HOUR:
-	    dt->hour = 0;
-	    break;
-	case DATETIME_MINUTE:
-	    dt->minute = 0;
-	    break;
-	case DATETIME_SECOND:
-	    dt->second = 0;
-	    break;
-	}
+        switch (pos) {
+        case DATETIME_YEAR:
+            dt->year = 0;
+            break;
+        case DATETIME_MONTH:
+            dt->month = 0;
+            break;
+        case DATETIME_DAY:
+            dt->day = 0;
+            break;
+        case DATETIME_HOUR:
+            dt->hour = 0;
+            break;
+        case DATETIME_MINUTE:
+            dt->minute = 0;
+            break;
+        case DATETIME_SECOND:
+            dt->second = 0;
+            break;
+        }
 
     for (pos = to; pos > dt->to; pos--)
-	switch (pos) {
-	case DATETIME_YEAR:
-	    dt->year = 0;
-	    break;
-	case DATETIME_MONTH:
-	    dt->month = 0;
-	    break;
-	case DATETIME_DAY:
-	    dt->day = 0;
-	    break;
-	case DATETIME_HOUR:
-	    dt->hour = 0;
-	    break;
-	case DATETIME_MINUTE:
-	    dt->minute = 0;
-	    break;
-	case DATETIME_SECOND:
-	    dt->second = 0;
-	    break;
-	}
+        switch (pos) {
+        case DATETIME_YEAR:
+            dt->year = 0;
+            break;
+        case DATETIME_MONTH:
+            dt->month = 0;
+            break;
+        case DATETIME_DAY:
+            dt->day = 0;
+            break;
+        case DATETIME_HOUR:
+            dt->hour = 0;
+            break;
+        case DATETIME_MINUTE:
+            dt->minute = 0;
+            break;
+        case DATETIME_SECOND:
+            dt->second = 0;
+            break;
+        }
 
     /* make sure that fracsec is zero if original didn't have seconds */
     if (dt->to < DATETIME_SECOND)
-	dt->fracsec = 0;
+        dt->fracsec = 0;
 
     /* now set the to */
     dt->to = to;
@@ -235,5 +235,5 @@ static void make_incr(DateTime * incr, int from, int to, DateTime * dt)
 {
     datetime_set_type(incr, DATETIME_RELATIVE, from, to, 0);
     if (datetime_is_relative(dt) && datetime_is_negative(dt))
-	datetime_set_negative(incr);
+        datetime_set_negative(incr);
 }

@@ -26,7 +26,7 @@
  * */
 void G_free_ilist(struct ilist *list)
 {
-    if(list->value)
+    if (list->value)
         G_free(list->value);
     G_free(list);
 }
@@ -40,9 +40,10 @@ void G_free_ilist(struct ilist *list)
  * \return list The pointer to a new allocated integer list
  *
  * */
-struct ilist * G_new_ilist()
+struct ilist *G_new_ilist()
 {
     struct ilist *l = G_malloc(sizeof(struct ilist));
+
     l->value = NULL;
     G_init_ilist(l);
     return l;
@@ -56,7 +57,7 @@ struct ilist * G_new_ilist()
  * */
 void G_init_ilist(struct ilist *list)
 {
-    if(list->value)
+    if (list->value)
         G_free(list->value);
     list->value = NULL;
     list->n_values = 0;
@@ -77,11 +78,11 @@ void G_init_ilist(struct ilist *list)
 void G_ilist_add(struct ilist *list, int val)
 {
     if (list->n_values == list->alloc_values) {
-	size_t size = (list->n_values + 1000) * sizeof(int);
-	void *p = G_realloc((void *)list->value, size);
+        size_t size = (list->n_values + 1000) * sizeof(int);
+        void *p = G_realloc((void *)list->value, size);
 
-	list->value = (int *)p;
-	list->alloc_values = list->n_values + 1000;
+        list->value = (int *)p;
+        list->alloc_values = list->n_values + 1000;
     }
 
     list->value[list->n_values] = val;

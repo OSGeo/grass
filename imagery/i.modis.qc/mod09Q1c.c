@@ -12,15 +12,13 @@
  * Class 11-15: Combination of bits unused
  */
 #include <grass/raster.h>
-  
-CELL mod09Q1c(CELL pixel, int bandno) 
+
+CELL mod09Q1c(CELL pixel, int bandno)
 {
     CELL qctemp;
 
-    pixel >>= 4 + (4 * (bandno - 1));	/* bitshift [4-7] or [8-11] to [0-3] */
+    pixel >>= 4 + (4 * (bandno - 1));   /* bitshift [4-7] or [8-11] to [0-3] */
     qctemp = pixel & 0x0F;
 
     return qctemp;
 }
-
-

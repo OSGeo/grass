@@ -8,7 +8,7 @@
  */
 double bb_alb_aster2bands(double greenchan, double nirchan)
 {
-    double result =
-	(0.697 * greenchan + 0.298 * nirchan - 0.008);
+    double result = (0.697 * greenchan + 0.298 * nirchan - 0.008);
+
     return result;
 }

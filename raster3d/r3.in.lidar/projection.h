@@ -23,12 +23,9 @@ void projection_mismatch_report(struct Cell_head cellhd,
                                 struct Key_Value *loc_proj_info,
                                 struct Key_Value *loc_proj_units,
                                 struct Key_Value *proj_info,
-                                struct Key_Value *proj_units,
-                                int err);
+                                struct Key_Value *proj_units, int err);
 void projection_check_wkt(struct Cell_head cellhd,
                           struct Cell_head loc_wind,
-                          const char *projstr,
-                          int override,
-                          int verbose);
+                          const char *projstr, int override, int verbose);
 
 #endif /* __PROJECTION_H__ */

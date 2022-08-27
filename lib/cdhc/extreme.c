@@ -10,12 +10,12 @@ double *Cdhc_extreme(double *x, int n)
 
     min = max = x[0];
     for (i = 0; i < n; ++i) {
-	sum1 += x[i];
-	if (min > x[i])
-	    min = x[i];
+        sum1 += x[i];
+        if (min > x[i])
+            min = x[i];
 
-	if (max < x[i])
-	    max = x[i];
+        if (max < x[i])
+            max = x[i];
     }
     sum1 /= n;
 

@@ -33,9 +33,10 @@
 /*! \brief Minimum verbosity level (quiet) */
 #define MINLEVEL 0
 
-static struct state {
+static struct state
+{
     int initialized;
-    int verbose;       /* current verbosity level */
+    int verbose;                /* current verbosity level */
 } state;
 
 static struct state *st = &state;
@@ -119,7 +120,7 @@ int G_set_verbose(int level)
         st->verbose = level;
         if (!G_is_initialized(&(st->initialized)))
             G_initialize_done(&(st->initialized));
-        
+
         return 1;
     }
 

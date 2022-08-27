@@ -26,7 +26,8 @@
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
-static int profile(int coords, const char *map, const char *nulls, char **line)
+static int profile(int coords, const char *map, const char *nulls,
+                   char **line)
 {
     double e1, n1, e2, n2;
     char buf[1024], profile[1024];
@@ -40,7 +41,7 @@ static int profile(int coords, const char *map, const char *nulls, char **line)
     argv[argc++] = "r.profile";
 
     if (coords)
-	argv[argc++] = "-g";
+        argv[argc++] = "-g";
 
     sprintf(buf, "input=%s", map);
     argv[argc++] = G_store(buf);
@@ -52,29 +53,30 @@ static int profile(int coords, const char *map, const char *nulls, char **line)
 
     strcpy(profile, "coordinates=");
     for (n = 0; line[n]; n += 4) {
-	int err = parse_line("line", &line[n], &e1, &n1, &e2, &n2, projection);
+        int err =
+            parse_line("line", &line[n], &e1, &n1, &e2, &n2, projection);
 
-	if (err) {
-	    G_usage();
-	    exit(EXIT_FAILURE);
-	}
+        if (err) {
+            G_usage();
+            exit(EXIT_FAILURE);
+        }
 
-	if (n > 0)
-	    strcat(profile, ",");
-	G_format_easting(e1, buf, projection);
-	strcat(profile, buf);
+        if (n > 0)
+            strcat(profile, ",");
+        G_format_easting(e1, buf, projection);
+        strcat(profile, buf);
 
-	G_format_northing(n1, buf, projection);
-	strcat(profile, ",");
-	strcat(profile, buf);
+        G_format_northing(n1, buf, projection);
+        strcat(profile, ",");
+        strcat(profile, buf);
 
-	G_format_easting(e2, buf, projection);
-	strcat(profile, ",");
-	strcat(profile, buf);
+        G_format_easting(e2, buf, projection);
+        strcat(profile, ",");
+        strcat(profile, buf);
 
-	G_format_northing(n2, buf, projection);
-	strcat(profile, ",");
-	strcat(profile, buf);
+        G_format_northing(n2, buf, projection);
+        strcat(profile, ",");
+        strcat(profile, buf);
     }
 
     argv[argc++] = profile;
@@ -91,9 +93,9 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *map;
-	struct Option *line;
-	struct Option *null_str;
+        struct Option *map;
+        struct Option *line;
+        struct Option *null_str;
     } parms;
     struct Flag *coord;
 
@@ -104,8 +106,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("profile"));
     G_add_keyword(_("transect"));
     module->description =
-	_("Outputs raster map layer values lying along "
-	  "user defined transect line(s).");
+        _("Outputs raster map layer values lying along "
+          "user defined transect line(s).");
 
     parms.map = G_define_standard_option(G_OPT_R_MAP);
     parms.map->description = _("Raster map to be queried");
@@ -124,13 +126,12 @@ int main(int argc, char *argv[])
     coord = G_define_flag();
     coord->key = 'g';
     coord->description =
-	_("Output easting and northing in first two columns of four column output");
+        _("Output easting and northing in first two columns of four column output");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     return profile(coord->answer,
-		   parms.map->answer,
-		   parms.null_str->answer,
-		   parms.line->answers) != 0;
+                   parms.map->answer,
+                   parms.null_str->answer, parms.line->answers) != 0;
 }

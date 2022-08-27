@@ -11,17 +11,17 @@ void c_ave(DCELL * result, DCELL * values, int n, const void *closure)
     count = 0;
 
     for (i = 0; i < n; i++) {
-	if (Rast_is_d_null_value(&values[i]))
-	    continue;
+        if (Rast_is_d_null_value(&values[i]))
+            continue;
 
-	sum += values[i];
-	count++;
+        sum += values[i];
+        count++;
     }
 
     if (count == 0)
-	Rast_set_d_null_value(result, 1);
+        Rast_set_d_null_value(result, 1);
     else
-	*result = sum / count;
+        *result = sum / count;
 }
 
 void w_ave(DCELL * result, DCELL(*values)[2], int n, const void *closure)
@@ -34,15 +34,15 @@ void w_ave(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     count = 0.0;
 
     for (i = 0; i < n; i++) {
-	if (Rast_is_d_null_value(&values[i][0]))
-	    continue;
+        if (Rast_is_d_null_value(&values[i][0]))
+            continue;
 
-	sum += values[i][0] * values[i][1];
-	count += values[i][1];
+        sum += values[i][0] * values[i][1];
+        count += values[i][1];
     }
 
     if (count == 0)
-	Rast_set_d_null_value(result, 1);
+        Rast_set_d_null_value(result, 1);
     else
-	*result = sum / count;
+        *result = sum / count;
 }

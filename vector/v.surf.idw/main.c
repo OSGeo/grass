@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
                       parm.npoints->answer);
 
     list =
-        (struct list_Point *)G_calloc((size_t) search_points,
+        (struct list_Point *)G_calloc((size_t)search_points,
                                       sizeof(struct list_Point));
 
     p = atof(parm.power->answer);

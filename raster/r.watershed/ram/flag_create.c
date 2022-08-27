@@ -12,15 +12,15 @@ FLAG *flag_create(int nrows, int ncols)
     new_flag->ncols = ncols;
     new_flag->leng = (ncols + 7) / 8;
     new_flag->array =
-	(unsigned char **)G_malloc(nrows * sizeof(unsigned char *));
+        (unsigned char **)G_malloc(nrows * sizeof(unsigned char *));
 
     temp =
-	(unsigned char *)G_malloc(nrows * new_flag->leng *
-				  sizeof(unsigned char));
+        (unsigned char *)G_malloc(nrows * new_flag->leng *
+                                  sizeof(unsigned char));
 
     for (i = 0; i < nrows; i++) {
-	new_flag->array[i] = temp;
-	temp += new_flag->leng;
+        new_flag->array[i] = temp;
+        temp += new_flag->leng;
     }
 
     return (new_flag);

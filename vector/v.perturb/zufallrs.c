@@ -15,7 +15,7 @@ int zufallrs(double *svblk)
 
     klotz0_1.ptr = (int)svblk[0];
     for (i = 0; i < 607; ++i)
-	klotz0_1.buff[i] = svblk[i + 1];
+        klotz0_1.buff[i] = svblk[i + 1];
 
     return 0;
-}				/* zufallrs */
+}                               /* zufallrs */

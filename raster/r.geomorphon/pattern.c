@@ -6,7 +6,8 @@
  * 5|6|7 */
 static int nextr[NUM_DIRS] = { -1, -1, -1, 0, 1, 1, 1, 0 };
 static int nextc[NUM_DIRS] = { 1, 0, -1, -1, -1, 0, 1, 1 };
-const char *dirname[NUM_DIRS] = { "NE", "N", "NW", "W", "SW", "S", "SE", "E" };
+const char *dirname[NUM_DIRS] =
+    { "NE", "N", "NW", "W", "SW", "S", "SE", "E" };
 
 /*
  * A more thorough comparison using a few factors of different priority
@@ -160,7 +161,7 @@ int calc_pattern(PATTERN * pattern, int row, int cur_row, int col,
                          (unsigned)j);
                 prof_dbl(step_name, height);
             }
-            j++; /* go to the next cell */
+            j++;                /* go to the next cell */
             target_northing =
                 Rast_row_to_northing(row + j * nextr[i] + 0.5, &window);
             target_easting =

@@ -19,7 +19,7 @@
 #include "index.h"
 
 struct Rect rects[] = {
-    {{0, 0, 0, 2, 2, 0}},	/* xmin, ymin, zmin, xmax, ymax, zmax (for 3 dimensional RTree) */
+    {{0, 0, 0, 2, 2, 0}},       /* xmin, ymin, zmin, xmax, ymax, zmax (for 3 dimensional RTree) */
     {{5, 5, 0, 7, 7, 0}},
     {{8, 5, 0, 9, 6, 0}},
     {{7, 1, 0, 9, 2, 0}}
@@ -27,15 +27,16 @@ struct Rect rects[] = {
 
 
 int nrects = sizeof(rects) / sizeof(rects[0]);
+
 struct Rect search_rect = {
-    {6, 4, 0, 10, 6, 0}		/* search will find above rects that this one overlaps */
+    {6, 4, 0, 10, 6, 0}         /* search will find above rects that this one overlaps */
 };
 
 int MySearchCallback(int id, void *arg)
 {
     /* Note: -1 to make up for the +1 when data was inserted */
     fprintf(stdout, "Hit data rect %d\n", id - 1);
-    return 1;			/* keep going */
+    return 1;                   /* keep going */
 }
 
 int main()
@@ -55,7 +56,7 @@ int main()
      * parameter 4 is always zero which means to add from the root.
      */
     for (i = 0; i < nrects; i++)
-	RTreeInsertRect(&rects[i], i + 1, rtree);	/* i+1 is rect ID. */
+        RTreeInsertRect(&rects[i], i + 1, rtree);       /* i+1 is rect ID. */
     nhits = RTreeSearch(rtree, &search_rect, MySearchCallback, 0);
     fprintf(stdout, "Search resulted in %d hits\n", nhits);
 

@@ -9,7 +9,8 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
-static struct state {
+static struct state
+{
     int prev;
 } state;
 
@@ -21,7 +22,7 @@ void G_clicker(void)
     int format = G_info_format();
 
     if (format == G_INFO_FORMAT_SILENT || G_verbose() < 1)
-	return;
+        return;
 
     st->prev++;
     st->prev %= 4;

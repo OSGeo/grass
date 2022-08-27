@@ -1,3 +1,4 @@
+
 /***********************************************************************
  *
  * MODULE:       v.out.lidar
@@ -71,6 +72,7 @@ static void open_database(struct Map_info *vector, int field,
                           dbDriver ** driver, struct field_info **f_info)
 {
     struct field_info *f_info_tmp = Vect_get_field(vector, field);
+
     if (f_info_tmp == NULL) {
         /* not ideal message since we don't know the original name of
          * the field in case of OGR */
@@ -78,9 +80,9 @@ static void open_database(struct Map_info *vector, int field,
                       field);
     }
 
-    dbDriver *driver_tmp =
-        db_start_driver_open_database(f_info_tmp->driver,
-                                      f_info_tmp->database);
+    dbDriver *driver_tmp = db_start_driver_open_database(f_info_tmp->driver,
+                                                         f_info_tmp->
+                                                         database);
     if (driver_tmp == NULL)
         G_fatal_error("Unable to open database <%s> by driver <%s>",
                       f_info_tmp->database, f_info_tmp->driver);
@@ -122,7 +124,7 @@ static dbCatValArray *select_integers_from_database(dbDriver * driver,
                       column, f_info->table);
     if (ctype == DB_C_TYPE_DOUBLE)
         G_warning(_("Double values will be converted to integers (column <%s> in table <%s>)"),
-                      column, f_info->table);
+                  column, f_info->table);
 
     db_CatValArray_init(column_values);
     int nrec =
@@ -194,9 +196,10 @@ static int get_integer_column_value(dbCatValArray * column_values, int cat)
     }
     else if (column_values->ctype == DB_C_TYPE_DOUBLE) {
         val = catval->val.d;
-    } else {
+    }
+    else {
         G_fatal_error(_("Column type is not numeric (type = %d, cat = %d"),
-            column_values->ctype, cat);
+                      column_values->ctype, cat);
     }
     return val;
 }
@@ -377,12 +380,14 @@ static void write_point(struct WriteContext *context, int cat, double x,
         set_point_attributes_from_table(context, cat);
     /* after this point cat is used as a short term variable
      * to store category to retrieve attributes */
-    
+
     /* read color table */
     if (context->color_table) {
         int red, green, blue;
         LASColorH las_color = context->las_color;
-        if (Rast_get_c_color(&cat, &red, &green, &blue, context->color_table) == 1) {
+
+        if (Rast_get_c_color(&cat, &red, &green, &blue, context->color_table)
+            == 1) {
             LASColor_SetRed(las_color, red);
             LASColor_SetGreen(las_color, green);
             LASColor_SetBlue(las_color, blue);
@@ -397,10 +402,12 @@ static void write_point(struct WriteContext *context, int cat, double x,
         if (cat == LAS_FIRST) {
             LASPoint_SetReturnNumber(las_point, LAS_FIRST);
             LASPoint_SetNumberOfReturns(las_point, LAS_FIRST);
-        } else if (cat == LAS_LAST) {
+        }
+        else if (cat == LAS_LAST) {
             LASPoint_SetReturnNumber(las_point, LAS_LAST);
             LASPoint_SetNumberOfReturns(las_point, LAS_LAST);
-        } else {
+        }
+        else {
             LASPoint_SetReturnNumber(las_point, LAS_MID);
             LASPoint_SetNumberOfReturns(las_point, LAS_LAST);
         }
@@ -573,8 +580,8 @@ int main(int argc, char **argv)
     las_xyscale_opt->answer = "0.01";
     las_xyscale_opt->label = _("Internal scale to apply to X and Y values");
     las_xyscale_opt->description = _("This scale does not change"
-        " the values itself but only how precisely they are stored,"
-        " for example 0.01 will preserve two decimal places");
+                                     " the values itself but only how precisely they are stored,"
+                                     " for example 0.01 will preserve two decimal places");
 
     las_zscale_opt = G_define_option();
     las_zscale_opt->key = "las_zscale";
@@ -583,8 +590,8 @@ int main(int argc, char **argv)
     las_zscale_opt->answer = "0.01";
     las_zscale_opt->label = _("Internal scale to apply to z values");
     las_zscale_opt->description = _("This scale does not change"
-        " the values itself but only how precisely they are stored,"
-        " for example 0.01 will preserve two decimal places");
+                                    " the values itself but only how precisely they are stored,"
+                                    " for example 0.01 will preserve two decimal places");
 
     region_flag = G_define_flag();
     region_flag->key = 'r';
@@ -657,7 +664,8 @@ int main(int argc, char **argv)
     LASSRS_SetWKT(las_srs, current_wkt);
     LASHeader_SetSRS(las_header, las_srs);
     LASHeader_SetScale(las_header, atof(las_xyscale_opt->answer),
-        atof(las_xyscale_opt->answer), atof(las_zscale_opt->answer));
+                       atof(las_xyscale_opt->answer),
+                       atof(las_zscale_opt->answer));
     /* TODO: support append mode */
     int write_mode = 1;
 
@@ -704,18 +712,21 @@ int main(int argc, char **argv)
         load_columns(&write_context, db_driver, f_info, &column_names,
                      where_opt->answer);
         close_database(db_driver);
-        
-        if ( grass_rgb_column_opt->answer || red_column_opt->answer || green_column_opt->answer || blue_column_opt->answer)
+
+        if (grass_rgb_column_opt->answer || red_column_opt->answer ||
+            green_column_opt->answer || blue_column_opt->answer)
             use_color_attributes = TRUE;
     }
 
     struct Colors color_table;
+
     write_context.color_table = 0;
     if (!use_color_attributes && !no_color_table_flag->answer
         && !(write_context.rgb_layer)) {
         int has_colors = Vect_read_colors(Vect_get_name(&vinput),
                                           Vect_get_mapset(&vinput),
                                           &color_table);
+
         if (has_colors)
             write_context.color_table = &color_table;
     }
@@ -755,26 +766,26 @@ int main(int argc, char **argv)
          * - some points miss category (not handled)
          * Here we assume that there is only one set of attributes for one point.
          * If no layer available, cat contains junk and shouldn't be used.
-	 * 
-	 * TODO: done
+         * 
+         * TODO: done
          */
-	cat = -1;
+        cat = -1;
         if (layer > 0) {
-	    if (allowed_cats) {
-		int i;
+            if (allowed_cats) {
+                int i;
 
-		for (i = 0; i < cats->n_cats; i++) {
-		    if (cats->field[i] == layer &&
-			Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
-			cat = cats->cat[i];
-			break;
-		    }
-		}
-	    }
-	    else {
-		Vect_cat_get(cats, layer, &cat);
-	    }
-	}
+                for (i = 0; i < cats->n_cats; i++) {
+                    if (cats->field[i] == layer &&
+                        Vect_cat_in_cat_list(cats->cat[i], allowed_cats)) {
+                        cat = cats->cat[i];
+                        break;
+                    }
+                }
+            }
+            else {
+                Vect_cat_get(cats, layer, &cat);
+            }
+        }
 
         write_point(&write_context, cat, x, y, z, cats);
     }

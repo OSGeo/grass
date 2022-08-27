@@ -2,7 +2,7 @@
 
 /* get_item.c */
 int get_item(FILE *, int, int *, int *, double *, double **, double **, int *,
-	     struct Categories *);
+             struct Categories *);
 /* getformat.c */
 int getformat(FILE *, int, int *);
 

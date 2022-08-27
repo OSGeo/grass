@@ -38,71 +38,71 @@
 
 struct IWave
 {
-	int iwave;
-	int iinf;
-	int isup;
+    int iwave;
+    int iinf;
+    int isup;
 
-	double wl;
-	double wlmoy;
+    double wl;
+    double wlmoy;
 
-	
-	struct FFu
-	{
-		double s[1501];
-		double wlinf;
-		double wlsup;
-	} ffu;
 
-private:	
-	void parse();
+    struct FFu
+    {
+        double s[1501];
+        double wlinf;
+        double wlsup;
+    } ffu;
 
-	void meteo();
-	void goes_east();
-	void goes_west();
-	void avhrr(int iwa);
-	void hrv(int iwa);
-	void tm(int iwa);
-	void mss(int iwa);
-	void mas(int iwa);
-	void modis(int iwa);
-	void polder(int iwa);
-	void etmplus(int iwa);
-	void irs_1c_liss(int iwa);
-	void aster(int iwa);
-	void avnir(int iwa);
-	void ikonos(int iwa);
-	void rapideye(int iwa);
-	void vgt1_spot4(int iwa);
-	void vgt2_spot5(int iwa);
-	void worldview2(int iwa);
-	void quickbird2(int iwa);
-	void landsat_8(int iwa);
-	void geoeye1(int iwa);
-	void spot6(int iwa);
-	void spot7(int iwa);
-	void pleiades1a(int iwa);
-	void pleiades1b(int iwa);
-	void worldview3(int iwa);
-	void sentinel2a(int iwa);
-	void sentinel2b(int iwa);
-	void planetscope0c0d(int iwa);
-	void planetscope0e(int iwa);
-	void planetscope0f10(int iwa);
-	void worldview4(int iwa);
+  private:
+    void parse();
 
-public:
-	/* To compute the equivalent wavelength needed for the calculation of the
-	  downward radiation field used in the computation of the non lambertian 
-	  target contribution (main.f). */
-	double equivwl() const;
+    void meteo();
+    void goes_east();
+    void goes_west();
+    void avhrr(int iwa);
+    void hrv(int iwa);
+    void tm(int iwa);
+    void mss(int iwa);
+    void mas(int iwa);
+    void modis(int iwa);
+    void polder(int iwa);
+    void etmplus(int iwa);
+    void irs_1c_liss(int iwa);
+    void aster(int iwa);
+    void avnir(int iwa);
+    void ikonos(int iwa);
+    void rapideye(int iwa);
+    void vgt1_spot4(int iwa);
+    void vgt2_spot5(int iwa);
+    void worldview2(int iwa);
+    void quickbird2(int iwa);
+    void landsat_8(int iwa);
+    void geoeye1(int iwa);
+    void spot6(int iwa);
+    void spot7(int iwa);
+    void pleiades1a(int iwa);
+    void pleiades1b(int iwa);
+    void worldview3(int iwa);
+    void sentinel2a(int iwa);
+    void sentinel2b(int iwa);
+    void planetscope0c0d(int iwa);
+    void planetscope0e(int iwa);
+    void planetscope0f10(int iwa);
+    void worldview4(int iwa);
 
-	/* To read the solar irradiance (in Wm-2mm-1) from 250 nm to 4000 nm by 
-	steps of 2.5 nm, The total solar irradiance is put equal to 1372 Wm-2. 
-	Between 250 and 4000 nm we have 1358 Wm-2. */
-	double solirr(double wl) const;
+  public:
+    /* To compute the equivalent wavelength needed for the calculation of the
+       downward radiation field used in the computation of the non lambertian 
+       target contribution (main.f). */
+    double equivwl() const;
 
-	void print();
-	static IWave Parse();
+    /* To read the solar irradiance (in Wm-2mm-1) from 250 nm to 4000 nm by 
+       steps of 2.5 nm, The total solar irradiance is put equal to 1372 Wm-2. 
+       Between 250 and 4000 nm we have 1358 Wm-2. */
+    double solirr(double wl) const;
+
+    void print();
+    static IWave Parse();
 };
 
 #endif /* IWAVE_H */

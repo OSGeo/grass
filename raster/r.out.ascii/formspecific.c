@@ -26,8 +26,8 @@ int writeGRASSheader(FILE * fp)
 
 /* write GRASS ASCII GRID */
 int write_GRASS(int fd,
-		FILE * fp,
-		int nrows, int ncols, int out_type, int dp, char *null_str)
+                FILE * fp,
+                int nrows, int ncols, int out_type, int dp, char *null_str)
 {
     int row, col;
     void *ptr, *raster;
@@ -36,32 +36,32 @@ int write_GRASS(int fd,
     raster = Rast_allocate_buf(out_type);
 
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
 
-	Rast_get_row(fd, raster, row, out_type);
+        Rast_get_row(fd, raster, row, out_type);
 
-	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
-	    if (!Rast_is_null_value(ptr, out_type)) {
-		if (out_type == CELL_TYPE)
-		    fprintf(fp, "%d", *((CELL *) ptr));
+        for (col = 0, ptr = raster; col < ncols; col++,
+             ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
+            if (!Rast_is_null_value(ptr, out_type)) {
+                if (out_type == CELL_TYPE)
+                    fprintf(fp, "%d", *((CELL *) ptr));
 
-		else if (out_type == FCELL_TYPE) {
-		    sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
-		    G_trim_decimal(cell_buf);
-		    fprintf(fp, "%s", cell_buf);
-		}
-		else if (out_type == DCELL_TYPE) {
-		    sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
-		    G_trim_decimal(cell_buf);
-		    fprintf(fp, "%s", cell_buf);
-		}
-	    }
-	    else
-		fprintf(fp, "%s", null_str);
-	    fprintf(fp, " ");
-	}
-	fprintf(fp, "\n");
+                else if (out_type == FCELL_TYPE) {
+                    sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
+                    G_trim_decimal(cell_buf);
+                    fprintf(fp, "%s", cell_buf);
+                }
+                else if (out_type == DCELL_TYPE) {
+                    sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
+                    G_trim_decimal(cell_buf);
+                    fprintf(fp, "%s", cell_buf);
+                }
+            }
+            else
+                fprintf(fp, "%s", null_str);
+            fprintf(fp, " ");
+        }
+        fprintf(fp, "\n");
     }
 
     return (0);
@@ -70,17 +70,17 @@ int write_GRASS(int fd,
 int writeMFheader(FILE * fp, int dp, int width, int out_type)
 {
     if (out_type == CELL_TYPE)
-	fprintf(fp, "INTERNAL  1  (FREE)  -1\n");
+        fprintf(fp, "INTERNAL  1  (FREE)  -1\n");
     else
-	fprintf(fp, "INTERNAL  1.  (%de%d.%d)  -1\n", width, dp + 6, dp - 1);
+        fprintf(fp, "INTERNAL  1.  (%de%d.%d)  -1\n", width, dp + 6, dp - 1);
 
     return 0;
 }
 
 /* write MODFLOW ASCII ARRAY */
 int write_MODFLOW(int fd,
-		  FILE * fp,
-		  int nrows, int ncols, int out_type, int dp, int width)
+                  FILE * fp,
+                  int nrows, int ncols, int out_type, int dp, int width)
 {
     int row, col, colcnt;
     void *ptr, *raster;
@@ -88,37 +88,37 @@ int write_MODFLOW(int fd,
     raster = Rast_allocate_buf(out_type);
 
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
 
-	Rast_get_row(fd, raster, row, out_type);
+        Rast_get_row(fd, raster, row, out_type);
 
-	colcnt = 0;
-	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
-	    if (out_type == CELL_TYPE) {
-		if (Rast_is_null_value(ptr, out_type))
-		    *((CELL *) ptr) = 0;
-		fprintf(fp, " %d", *((CELL *) ptr));
-	    }
-	    else if (out_type == FCELL_TYPE) {
-		if (Rast_is_null_value(ptr, out_type))
-		    *((FCELL *) ptr) = 0;
-		fprintf(fp, "%*.*e", dp + 6, dp - 1, *((FCELL *) ptr));
-	    }
-	    else if (out_type == DCELL_TYPE) {
-		if (Rast_is_null_value(ptr, out_type))
-		    *((DCELL *) ptr) = 0;
-		fprintf(fp, "%*.*e", dp + 6, dp - 1, *((DCELL *) ptr));
-	    }
+        colcnt = 0;
+        for (col = 0, ptr = raster; col < ncols; col++,
+             ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
+            if (out_type == CELL_TYPE) {
+                if (Rast_is_null_value(ptr, out_type))
+                    *((CELL *) ptr) = 0;
+                fprintf(fp, " %d", *((CELL *) ptr));
+            }
+            else if (out_type == FCELL_TYPE) {
+                if (Rast_is_null_value(ptr, out_type))
+                    *((FCELL *) ptr) = 0;
+                fprintf(fp, "%*.*e", dp + 6, dp - 1, *((FCELL *) ptr));
+            }
+            else if (out_type == DCELL_TYPE) {
+                if (Rast_is_null_value(ptr, out_type))
+                    *((DCELL *) ptr) = 0;
+                fprintf(fp, "%*.*e", dp + 6, dp - 1, *((DCELL *) ptr));
+            }
 
-	    colcnt += 1;
-	    if (colcnt >= width) {
-		colcnt = 0;
-		fprintf(fp, "\n");
-	    }
-	}
-	if (colcnt > 0)
-	    fprintf(fp, "\n");
+            colcnt += 1;
+            if (colcnt >= width) {
+                colcnt = 0;
+                fprintf(fp, "\n");
+            }
+        }
+        if (colcnt > 0)
+            fprintf(fp, "\n");
     }
 
     return (0);
@@ -133,7 +133,7 @@ int writeGSheader(FILE * fp, const char *name)
     DCELL Z_MIN, Z_MAX;
 
     if (Rast_read_fp_range(name, "", &range) < 0)
-	return 1;
+        return 1;
 
     fprintf(fp, "DSAA \n");
 
@@ -142,15 +142,15 @@ int writeGSheader(FILE * fp, const char *name)
 
     /* Projection set to -1 to force floating point output */
     G_format_easting(region.west + region.ew_res / 2., fromc,
-		     G_projection() == PROJECTION_LL ? -1 : 0);
+                     G_projection() == PROJECTION_LL ? -1 : 0);
     G_format_easting(region.east - region.ew_res / 2., toc,
-		     G_projection() == PROJECTION_LL ? -1 : 0);
+                     G_projection() == PROJECTION_LL ? -1 : 0);
     fprintf(fp, "%s %s\n", fromc, toc);
 
     G_format_northing(region.south + region.ns_res / 2., fromc,
-		      G_projection() == PROJECTION_LL ? -1 : 0);
+                      G_projection() == PROJECTION_LL ? -1 : 0);
     G_format_northing(region.north - region.ns_res / 2., toc,
-		      G_projection() == PROJECTION_LL ? -1 : 0);
+                      G_projection() == PROJECTION_LL ? -1 : 0);
     fprintf(fp, "%s %s\n", fromc, toc);
 
     Rast_get_fp_range_min_max(&range, &Z_MIN, &Z_MAX);
@@ -162,9 +162,9 @@ int writeGSheader(FILE * fp, const char *name)
 
 /* write Surfer Golden Software grid file */
 int write_GSGRID(int fd,
-		 FILE * fp,
-		 int nrows,
-		 int ncols, int out_type, int dp, char *null_str, int width)
+                 FILE * fp,
+                 int nrows,
+                 int ncols, int out_type, int dp, char *null_str, int width)
 {
     int row, col, colcnt;
     void *ptr, *raster;
@@ -173,41 +173,41 @@ int write_GSGRID(int fd,
     raster = Rast_allocate_buf(out_type);
 
     for (row = nrows - 1; row >= 0; row--) {
-	G_percent((row - nrows) * (-1), nrows, 2);
+        G_percent((row - nrows) * (-1), nrows, 2);
 
-	Rast_get_row(fd, raster, row, out_type);
+        Rast_get_row(fd, raster, row, out_type);
 
-	colcnt = 0;
-	for (col = 0, ptr = raster; col < ncols; col++,
-	     ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
-	    colcnt += 1;
-	    if (!Rast_is_null_value(ptr, out_type)) {
-		if (out_type == CELL_TYPE)
-		    fprintf(fp, "%d", *((CELL *) ptr));
-		else if (out_type == FCELL_TYPE) {
-		    sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
-		    G_trim_decimal(cell_buf);
-		    fprintf(fp, "%s", cell_buf);
-		}
-		else if (out_type == DCELL_TYPE) {
-		    sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
-		    G_trim_decimal(cell_buf);
-		    fprintf(fp, "%s", cell_buf);
-		}
-	    }
-	    else
-		fprintf(fp, "%s", null_str);
+        colcnt = 0;
+        for (col = 0, ptr = raster; col < ncols; col++,
+             ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
+            colcnt += 1;
+            if (!Rast_is_null_value(ptr, out_type)) {
+                if (out_type == CELL_TYPE)
+                    fprintf(fp, "%d", *((CELL *) ptr));
+                else if (out_type == FCELL_TYPE) {
+                    sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
+                    G_trim_decimal(cell_buf);
+                    fprintf(fp, "%s", cell_buf);
+                }
+                else if (out_type == DCELL_TYPE) {
+                    sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
+                    G_trim_decimal(cell_buf);
+                    fprintf(fp, "%s", cell_buf);
+                }
+            }
+            else
+                fprintf(fp, "%s", null_str);
 
-	    if (colcnt >= width) {
-		fprintf(fp, "\n");
-		colcnt = 0;
-	    }
-	    else
-		fprintf(fp, " ");
-	}
-	if (colcnt != 0)
-	    fprintf(fp, "\n");
-	fprintf(fp, "\n");
+            if (colcnt >= width) {
+                fprintf(fp, "\n");
+                colcnt = 0;
+            }
+            else
+                fprintf(fp, " ");
+        }
+        if (colcnt != 0)
+            fprintf(fp, "\n");
+        fprintf(fp, "\n");
     }
 
     return (0);

@@ -43,7 +43,7 @@ HMatrix *Qt_ToMatrix(Quat q, HMatrix out)
     out[YY][ZZ] = yz - wx;
     out[ZZ][ZZ] = 1.0 - (xx + yy);
     out[XX][WW] = out[YY][WW] = out[ZZ][WW] = out[WW][XX] = out[WW][YY] =
-	out[WW][ZZ] = 0.0;
+        out[WW][ZZ] = 0.0;
     out[WW][WW] = 1.0;
     return ((HMatrix *) & out);
 }
@@ -98,9 +98,9 @@ HVect V3_Unit(HVect v)
     float vlen = sqrt(V3_Norm(v));
 
     if (vlen != 0.0) {
-	u.x = v.x / vlen;
-	u.y = v.y / vlen;
-	u.z = v.z / vlen;
+        u.x = v.x / vlen;
+        u.y = v.y / vlen;
+        u.z = v.z / vlen;
     }
     return (u);
 }
@@ -156,10 +156,10 @@ HVect V3_Bisect(HVect v0, HVect v1)
     v = V3_Add(v0, v1);
     Nv = V3_Norm(v);
     if (Nv < 1.0e-5) {
-	v = V3_(0, 0, 1);
+        v = V3_(0, 0, 1);
     }
     else {
-	v = V3_Scale(v, 1 / sqrt(Nv));
+        v = V3_Scale(v, 1 / sqrt(Nv));
     }
     return (v);
 }

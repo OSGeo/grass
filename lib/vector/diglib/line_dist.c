@@ -24,7 +24,7 @@ static double tolerance = TOLERANCE;
 int dig_set_distance_to_line_tolerance(double t)
 {
     if (t <= 0.0)
-	t = TOLERANCE;
+        t = TOLERANCE;
     tolerance = t;
 
     return 0;
@@ -42,12 +42,12 @@ int dig_set_distance_to_line_tolerance(double t)
  *                                 (tells if point is w/in segment space, or past ends)
  */
 
-double dig_distance2_point_to_line(double x, double y, double z,	/* point */
-				   double x1, double y1, double z1,	/* line segment */
-				   double x2, double y2, double z2, int with_z,	/* use z coordinate, (3D calculation) */
-				   double *px, double *py, double *pz,	/* point on segment */
-				   double *pdist,	/* distance of point on segment from the first point of segment */
-				   int *status)
+double dig_distance2_point_to_line(double x, double y, double z,        /* point */
+                                   double x1, double y1, double z1,     /* line segment */
+                                   double x2, double y2, double z2, int with_z, /* use z coordinate, (3D calculation) */
+                                   double *px, double *py, double *pz,  /* point on segment */
+                                   double *pdist,       /* distance of point on segment from the first point of segment */
+                                   int *status)
 {
     register double dx, dy, dz;
     register double dpx, dpy, dpz;
@@ -58,68 +58,68 @@ double dig_distance2_point_to_line(double x, double y, double z,	/* point */
     st = 0;
 
     if (!with_z) {
-	z = 0;
-	z1 = 0;
-	z2 = 0;
+        z = 0;
+        z1 = 0;
+        z2 = 0;
     }
 
     dx = x2 - x1;
     dy = y2 - y1;
     dz = z2 - z1;
 
-    if (ZERO(dx) && ZERO(dy) && ZERO(dz)) {	/* line is degenerate */
-	dx = x1 - x;
-	dy = y1 - y;
-	dz = z1 - z;
-	tpx = x1;
-	tpy = y1;
-	tpz = z1;
+    if (ZERO(dx) && ZERO(dy) && ZERO(dz)) {     /* line is degenerate */
+        dx = x1 - x;
+        dy = y1 - y;
+        dz = z1 - z;
+        tpx = x1;
+        tpy = y1;
+        tpz = z1;
     }
     else {
-	t = (dx * (x - x1) + dy * (y - y1) + dz * (z - z1)) / 
-	    (dx * dx + dy * dy + dz * dz);
+        t = (dx * (x - x1) + dy * (y - y1) + dz * (z - z1)) /
+            (dx * dx + dy * dy + dz * dz);
 
-	if (t <= 0.0) {		/* go to x1,y1,z1 */
-	    if (t < 0.0) {
-		st = -1;
-	    }
-	    tpx = x1;
-	    tpy = y1;
-	    tpz = z1;
-	}
-	else if (t >= 1.0) {	/* go to x2,y2,z2 */
-	    if (t > 1.0) {
-		st = 1;
-	    }
-	    tpx = x2;
-	    tpy = y2;
-	    tpz = z2;
-	}
-	else {
-	    /* go t from x1,y1,z1 towards x2,y2,z2 */
-	    tpx = dx * t + x1;
-	    tpy = dy * t + y1;
-	    tpz = dz * t + z1;
-	}
-	dx = tpx - x;
-	dy = tpy - y;
-	dz = tpz - z;
+        if (t <= 0.0) {         /* go to x1,y1,z1 */
+            if (t < 0.0) {
+                st = -1;
+            }
+            tpx = x1;
+            tpy = y1;
+            tpz = z1;
+        }
+        else if (t >= 1.0) {    /* go to x2,y2,z2 */
+            if (t > 1.0) {
+                st = 1;
+            }
+            tpx = x2;
+            tpy = y2;
+            tpz = z2;
+        }
+        else {
+            /* go t from x1,y1,z1 towards x2,y2,z2 */
+            tpx = dx * t + x1;
+            tpy = dy * t + y1;
+            tpz = dz * t + z1;
+        }
+        dx = tpx - x;
+        dy = tpy - y;
+        dz = tpz - z;
     }
 
     if (px)
-	*px = tpx;
+        *px = tpx;
     if (py)
-	*py = tpy;
+        *py = tpy;
     if (pz)
-	*pz = tpz;
+        *pz = tpz;
     if (status)
-	*status = st;
+        *status = st;
 
     if (pdist) {
-	dpx = tpx - x1;
-	dpy = tpy - y1;
-	dpz = tpz - z1;
-	*pdist = sqrt(dpx * dpx + dpy * dpy + dpz * dpz);
+        dpx = tpx - x1;
+        dpy = tpy - y1;
+        dpz = tpz - z1;
+        *pdist = sqrt(dpx * dpx + dpy * dpy + dpz * dpz);
     }
 
     return (dx * dx + dy * dy + dz * dz);

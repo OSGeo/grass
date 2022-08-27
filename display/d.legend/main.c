@@ -131,8 +131,7 @@ int main(int argc, char **argv)
     opt_units->key = "units";
     opt_units->type = TYPE_STRING;
     opt_units->required = NO;
-    opt_units->description =
-            _("Units to display after labels (e.g. meters)");
+    opt_units->description = _("Units to display after labels (e.g. meters)");
     opt_units->guisection = _("Advanced");
 
     opt_labelnum = G_define_option();

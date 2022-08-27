@@ -18,7 +18,7 @@
 
 #include <grass/ogsf.h>
 
-void (*Cxl_func) ();
+void (*Cxl_func)();
 
 static int Cxl = 0;
 
@@ -49,7 +49,7 @@ void GS_set_cancel(int c)
 
    \param pointer to function
  */
-void GS_set_cxl_func(void (*f) (void))
+void GS_set_cxl_func(void (*f)(void))
 {
     Cxl_func = f;
 

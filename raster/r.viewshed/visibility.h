@@ -131,9 +131,9 @@ typedef struct viewOptions_
     /*determines if atmospheric refraction should be considered
        when calculating.  Only implemented for GRASS version. */
 
-    double ellps_a;		/* the parameter of the ellipsoid */
-    float cellsize;		/* the cell resolution */
-    char streamdir[GPATH_MAX];	/* directory for tmp files */
+    double ellps_a;             /* the parameter of the ellipsoid */
+    float cellsize;             /* the cell resolution */
+    char streamdir[GPATH_MAX];  /* directory for tmp files */
 } ViewOptions;
 
 
@@ -211,33 +211,33 @@ void set_viewpoint_elev(Viewpoint * vp, float elev);
 /* ------------------------------------------------------------ */
 /* MemoryVisibilityGrid functions */
 
-MemoryVisibilityGrid *create_inmem_visibilitygrid(const GridHeader &hd,
-						  Viewpoint vp);
+MemoryVisibilityGrid *create_inmem_visibilitygrid(const GridHeader & hd,
+                                                  Viewpoint vp);
 
 void free_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid);
 
 void set_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid, float val);
 
 void add_result_to_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid,
-					dimensionType i, dimensionType j,
-					float val);
+                                        dimensionType i, dimensionType j,
+                                        float val);
 
 void save_inmem_visibilitygrid(MemoryVisibilityGrid * vigrid,
-			       ViewOptions viewopt, Viewpoint vp);
+                               ViewOptions viewopt, Viewpoint vp);
 
 
 /* ------------------------------------------------------------ */
 /* IOVisibilityGrid functions */
 
 /*create grid from given header and viewpoint */
-IOVisibilityGrid *init_io_visibilitygrid(const GridHeader &hd, Viewpoint vp);
+IOVisibilityGrid *init_io_visibilitygrid(const GridHeader & hd, Viewpoint vp);
 
 /*frees a visibility grid */
 void free_io_visibilitygrid(IOVisibilityGrid * grid);
 
 /*write cell to stream */
 void add_result_to_io_visibilitygrid(IOVisibilityGrid * visgrid,
-				     VisCell * cell);
+                                     VisCell * cell);
 
 /*void
    addResult(IOVisibilityGrid* visgrid, DimensionType row, DimensionType col, 
@@ -249,7 +249,7 @@ void add_result_to_io_visibilitygrid(IOVisibilityGrid * visgrid,
    NOT visible.  assume stream is sorted.  */
 void
 save_io_visibilitygrid(IOVisibilityGrid * visgrid,
-		       ViewOptions viewoptions, Viewpoint vp);
+                       ViewOptions viewoptions, Viewpoint vp);
 
 
 /*sort stream in grid (i,j) order */

@@ -29,12 +29,12 @@
 int Vect_level(const struct Map_info *Map)
 {
     if (Map->open != VECT_OPEN_CODE) {
-	if (Map->open != VECT_CLOSED_CODE)
-	    G_warning("Vect_level(): %s",
-		      _("Map structure was never initialized"));
-	else
-	    G_warning("Vect_level(): %s", _("Map structure has been closed"));
-	return (-1);
+        if (Map->open != VECT_CLOSED_CODE)
+            G_warning("Vect_level(): %s",
+                      _("Map structure was never initialized"));
+        else
+            G_warning("Vect_level(): %s", _("Map structure has been closed"));
+        return (-1);
     }
     return (Map->level);
 }

@@ -40,18 +40,18 @@
 
    \param Map pointer to Map_info struct
    \param n,s,e,w,t,b bbox definition (north, south, east, west, top, and bottom coordinates)
-   
+
    \return 0 on success
    \return -1 on error (invalid region)
  */
 int Vect_set_constraint_region(struct Map_info *Map,
-			       double n, double s, double e, double w,
-			       double t, double b)
+                               double n, double s, double e, double w,
+                               double t, double b)
 {
     if (n <= s)
-	return -1;
+        return -1;
     if (e <= w)
-	return -1;
+        return -1;
 
     Map->constraint.region_flag = TRUE;
     Map->constraint.box.N = n;
@@ -76,11 +76,11 @@ int Vect_set_constraint_region(struct Map_info *Map,
    \return 0 on success
    \return -1 no region constraint defined
  */
-int Vect_get_constraint_box(const struct Map_info *Map, struct bound_box * Box)
+int Vect_get_constraint_box(const struct Map_info *Map, struct bound_box *Box)
 {
     if (!Map->constraint.region_flag)
-	return -1;
-	    
+        return -1;
+
     Box->N = Map->constraint.box.N;
     Box->S = Map->constraint.box.S;
     Box->E = Map->constraint.box.E;
@@ -102,12 +102,12 @@ int Vect_get_constraint_box(const struct Map_info *Map, struct bound_box * Box)
 
    \return 0 on success
    \return -1 invalid feature type
-*/
+ */
 int Vect_set_constraint_type(struct Map_info *Map, int type)
 {
     if (!(type & (GV_POINTS | GV_LINES | GV_FACE | GV_KERNEL)))
-	return -1;
-    
+        return -1;
+
     Map->constraint.type = type;
     Map->constraint.type_flag = TRUE;
 
@@ -122,8 +122,8 @@ int Vect_set_constraint_type(struct Map_info *Map, int type)
 void Vect_remove_constraints(struct Map_info *Map)
 {
     Map->constraint.region_flag = FALSE;
-    Map->constraint.type_flag   = FALSE;
-    Map->constraint.field_flag  = FALSE;
+    Map->constraint.type_flag = FALSE;
+    Map->constraint.field_flag = FALSE;
 }
 
 /*!
@@ -135,7 +135,7 @@ void Vect_remove_constraints(struct Map_info *Map)
    Vect_read_line().
 
    Ignored for non-native vector formats.
-   
+
    Note: Field is called layer on user level.
 
    \param Map pointer to Map_info struct
@@ -143,23 +143,23 @@ void Vect_remove_constraints(struct Map_info *Map)
 
    \return 0 on success
    \return -1 invalid field
-*/
+ */
 int Vect_set_constraint_field(struct Map_info *Map, int field)
 {
     if (Map->format != GV_FORMAT_NATIVE) {
-	G_warning(_("Layer constraint ignored for non-native vector formats"));
-	return -1;
+        G_warning(_("Layer constraint ignored for non-native vector formats"));
+        return -1;
     }
 
     if (field == -1) {
-	Map->constraint.field_flag = FALSE;
-	return 0;
+        Map->constraint.field_flag = FALSE;
+        return 0;
     }
     if (field < 1) {
-	return -1;
+        return -1;
     }
     Map->constraint.field = field;
     Map->constraint.field_flag = TRUE;
-    
+
     return 0;
 }

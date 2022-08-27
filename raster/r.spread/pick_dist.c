@@ -32,5 +32,5 @@ int pick_dist(int u)
 
     v = (int)((u + 0.99999999999) * G_drand48());
     u = (int)((v + 0.99999999999) * G_drand48());
-    return ((int)((u + 0.99999999999) * G_drand48()));	/*4th for a test */
+    return ((int)((u + 0.99999999999) * G_drand48()));  /*4th for a test */
 }

@@ -24,9 +24,9 @@ void *Rast3d_malloc(int nBytes)
     void *buf;
 
     if (nBytes <= 0)
-	nBytes = 1;
+        nBytes = 1;
     if ((buf = malloc(nBytes)) != NULL)
-	return buf;
+        return buf;
 
     Rast3d_error("Rast3d_malloc: out of memory");
     return (void *)NULL;
@@ -48,9 +48,9 @@ void *Rast3d_malloc(int nBytes)
 void *Rast3d_realloc(void *ptr, int nBytes)
 {
     if (nBytes <= 0)
-	nBytes = 1;
+        nBytes = 1;
     if ((ptr = realloc(ptr, nBytes)) != NULL)
-	return ptr;
+        return ptr;
 
     Rast3d_error("Rast3d_realloc: out of memory");
     return (void *)NULL;

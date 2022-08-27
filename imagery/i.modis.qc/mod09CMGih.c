@@ -1,11 +1,11 @@
 /* dust unsigned int bits[4]
  * 00 -> class 0: no
  * 01 -> class 1: yes
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09CMGih(CELL pixel) 
+CELL mod09CMGih(CELL pixel)
 {
     CELL qctemp;
 
@@ -14,5 +14,3 @@ CELL mod09CMGih(CELL pixel)
 
     return qctemp;
 }
-
-

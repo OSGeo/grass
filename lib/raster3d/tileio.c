@@ -9,7 +9,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-		       /* EXPORTED FUNCTIONS */
+                       /* EXPORTED FUNCTIONS */
 
 /*---------------------------------------------------------------------------*/
 
@@ -80,27 +80,28 @@ void *Rast3d_get_tile_ptr(RASTER3D_Map * map, int tileIndex)
     void *ptr;
 
     if ((tileIndex >= map->nTiles) || (tileIndex < 0)) {
-	Rast3d_error("Rast3d_get_tile_ptr: tileIndex out of range");
-	return NULL;
+        Rast3d_error("Rast3d_get_tile_ptr: tileIndex out of range");
+        return NULL;
     }
 
     if (map->useCache) {
-	ptr = Rast3d_cache_elt_ptr(map->cache, tileIndex);
-	if (ptr == NULL) {
-	    Rast3d_error("Rast3d_get_tile_ptr: error in Rast3d_cache_elt_ptr");
-	    return NULL;
-	}
-	return ptr;
+        ptr = Rast3d_cache_elt_ptr(map->cache, tileIndex);
+        if (ptr == NULL) {
+            Rast3d_error
+                ("Rast3d_get_tile_ptr: error in Rast3d_cache_elt_ptr");
+            return NULL;
+        }
+        return ptr;
     }
 
 
     if (map->currentIndex == tileIndex)
-	return map->data;
+        return map->data;
 
     map->currentIndex = tileIndex;
     if (!Rast3d_read_tile(map, map->currentIndex, map->data, map->typeIntern)) {
-	Rast3d_error("Rast3d_get_tile_ptr: error in Rast3d_read_tile");
-	return NULL;
+        Rast3d_error("Rast3d_get_tile_ptr: error in Rast3d_read_tile");
+        return NULL;
     }
 
 
@@ -124,8 +125,8 @@ void *Rast3d_get_tile_ptr(RASTER3D_Map * map, int tileIndex)
 int Rast3d_tile_load(RASTER3D_Map * map, int tileIndex)
 {
     if (Rast3d_get_tile_ptr(map, tileIndex) == NULL) {
-	Rast3d_error("Rast3d_tile_load: error in Rast3d_get_tile_ptr");
-	return 0;
+        Rast3d_error("Rast3d_tile_load: error in Rast3d_get_tile_ptr");
+        return 0;
     }
 
     return 1;
@@ -136,11 +137,11 @@ int Rast3d_tile_load(RASTER3D_Map * map, int tileIndex)
 int Rast3d__remove_tile(RASTER3D_Map * map, int tileIndex)
 {
     if (!map->useCache)
-	return 1;
+        return 1;
 
     if (!Rast3d_cache_remove_elt(map->cache, tileIndex)) {
-	Rast3d_error("Rast3d_removeTile: error in Rast3d_cache_remove_elt");
-	return 0;
+        Rast3d_error("Rast3d_removeTile: error in Rast3d_cache_remove_elt");
+        return 0;
     }
 
     return 1;

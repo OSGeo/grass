@@ -52,10 +52,10 @@
 #define PROJ_VERSION_MAJOR 4
 #endif
 #ifdef HAVE_OGR
-#    include <ogr_srs_api.h>
-#    if PROJ_VERSION_MAJOR >= 6 && GDAL_VERSION_MAJOR < 3
-#        error "PROJ 6+ requires GDAL 3+"
-#    endif
+#include <ogr_srs_api.h>
+#if PROJ_VERSION_MAJOR >= 6 && GDAL_VERSION_MAJOR < 3
+#error "PROJ 6+ requires GDAL 3+"
+#endif
 #endif
 
 /* Data Files */
@@ -91,16 +91,16 @@ struct gpj_datum
 struct gpj_datum_transform_list
 {
 
-    int count;			/**< Transform Number (ordered list) */
+    int count;                  /**< Transform Number (ordered list) */
 
-    char *params;		/**< PROJ.4-style datum transform parameters */
+    char *params;               /**< PROJ.4-style datum transform parameters */
 
-    char *where_used;		/**< Comment text describing where (geographically)
+    char *where_used;           /**< Comment text describing where (geographically)
 				 * the transform is valid */
 
-    char *comment;		/**< Additional Comments */
+    char *comment;              /**< Additional Comments */
 
-    struct gpj_datum_transform_list *next;	/**< Pointer to next set of 
+    struct gpj_datum_transform_list *next;      /**< Pointer to next set of 
 					 * transform parameters in linked list */
 };
 
@@ -118,22 +118,28 @@ struct gpj_ellps
 /* In PROJ 5, the 'struct FACTORS' is back in as 'struct P5_FACTORS',
  * and old 'struct LP' is now back in as 'PJ_UV' */
 
-typedef struct { double u, v; } LP;
+typedef struct
+{
+    double u, v;
+} LP;
 
-struct DERIVS {
-    double x_l, x_p; /* derivatives of x for lambda-phi */
-    double y_l, y_p; /* derivatives of y for lambda-phi */
+struct DERIVS
+{
+    double x_l, x_p;            /* derivatives of x for lambda-phi */
+    double y_l, y_p;            /* derivatives of y for lambda-phi */
 };
 
-struct FACTORS {
-	struct DERIVS der;
-	double h, k;		/* meridinal, parallel scales */
-	double omega, thetap;	/* angular distortion, theta prime */
-	double conv;		/* convergence */
-	double s;		/* areal scale factor */
-	double a, b;		/* max-min scale error */
-	int code;		/* info as to analytics, see following */
+struct FACTORS
+{
+    struct DERIVS der;
+    double h, k;                /* meridinal, parallel scales */
+    double omega, thetap;       /* angular distortion, theta prime */
+    double conv;                /* convergence */
+    double s;                   /* areal scale factor */
+    double a, b;                /* max-min scale error */
+    int code;                   /* info as to analytics, see following */
 };
+
 /* end of copy */
 #endif
 

@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     expr->required = NO;
     expr->description = _("Expression to evaluate");
     expr->guisection = _("Expression");
-    
+
     region = G_define_option();
     region->key = "region";
     region->type = TYPE_STRING;
@@ -106,15 +106,16 @@ int main(int argc, char **argv)
 
     random = G_define_flag();
     random->key = 's';
-    random->description = _("Generate random seed (result is non-deterministic)");
+    random->description =
+        _("Generate random seed (result is non-deterministic)");
 
     describe = G_define_flag();
     describe->key = 'l';
     describe->description = _("List input and output maps");
 
-    if (argc == 1)
-    {
+    if (argc == 1) {
         char **p = G_malloc(3 * sizeof(char *));
+
         p[0] = argv[0];
         p[1] = G_store("file=-");
         p[2] = NULL;
@@ -129,11 +130,11 @@ int main(int argc, char **argv)
 
     if (expr->answer && file->answer)
         G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                        expr->key, file->key);
+                      expr->key, file->key);
 
     if (seed->answer && random->answer)
         G_fatal_error(_("%s= and -%c are mutually exclusive"),
-                        seed->key, random->key);
+                      seed->key, random->key);
 
     if (expr->answer)
         result = parse_string(expr->answer);
@@ -158,7 +159,7 @@ int main(int argc, char **argv)
         G_debug(3, "Generated random seed (-s): %ld", seed_value);
     }
 
-    /* Set the global variable of the region setup approach */ 
+    /* Set the global variable of the region setup approach */
     region_approach = 1;
 
     if (G_strncasecmp(region->answer, "union", 5) == 0)
@@ -168,8 +169,8 @@ int main(int argc, char **argv)
         region_approach = 3;
 
     G_debug(1, "Region answer %s region approach %i", region->answer,
-                                                      region_approach);
-    
+            region_approach);
+
     if (describe->answer) {
         describe_maps(stdout, result);
         return EXIT_SUCCESS;

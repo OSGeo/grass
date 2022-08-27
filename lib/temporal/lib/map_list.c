@@ -25,14 +25,15 @@
  * \param list The pointer to an integer list
  *
  * */
-void tgis_free_map_list(tgisMapList *list)
+void tgis_free_map_list(tgisMapList * list)
 {
-    if(list->values) {
+    if (list->values) {
         int i;
-        for(i = 0; i < list->n_values; i++) {
-            if(list->values[i]->name)
+
+        for (i = 0; i < list->n_values; i++) {
+            if (list->values[i]->name)
                 G_free(list->values[i]->name);
-            if(list->values[i]->mapset)
+            if (list->values[i]->mapset)
                 G_free(list->values[i]->mapset);
             G_free(list->values[i]);
         }
@@ -50,9 +51,10 @@ void tgis_free_map_list(tgisMapList *list)
  * \return list The pointer to a new allocated integer list
  *
  * */
-tgisMapList * tgis_new_map_list()
+tgisMapList *tgis_new_map_list()
 {
     tgisMapList *list = G_malloc(sizeof(tgisMapList));
+
     list->values = NULL;
     tgis_init_map_list(list);
     return list;
@@ -64,14 +66,15 @@ tgisMapList * tgis_new_map_list()
  * \param list The pointer to a tgisMapList
  *
  * */
-void tgis_init_map_list(tgisMapList *list)
+void tgis_init_map_list(tgisMapList * list)
 {
-    if(list->values) {
+    if (list->values) {
         int i;
-        for(i = 0; i < list->n_values; i++) {
-            if(list->values[i]->name)
+
+        for (i = 0; i < list->n_values; i++) {
+            if (list->values[i]->name)
                 G_free(list->values[i]->name);
-            if(list->values[i]->mapset)
+            if (list->values[i]->mapset)
                 G_free(list->values[i]->mapset);
             G_free(list->values[i]);
         }
@@ -97,14 +100,14 @@ void tgis_init_map_list(tgisMapList *list)
  * \param map A pointer to a tgisMap struct that should be added 
  *
  * */
-void tgis_map_list_add(tgisMapList *list, tgisMap *map)
+void tgis_map_list_add(tgisMapList * list, tgisMap * map)
 {
     if (list->n_values == list->alloc_values) {
-	size_t size = (list->n_values + 1000) * sizeof(tgisMap*);
-	void *p = G_realloc((void *)list->values, size);
+        size_t size = (list->n_values + 1000) * sizeof(tgisMap *);
+        void *p = G_realloc((void *)list->values, size);
 
-	list->values = (tgisMap **)p;
-	list->alloc_values = list->n_values + 1000;
+        list->values = (tgisMap **) p;
+        list->alloc_values = list->n_values + 1000;
     }
 
     list->values[list->n_values] = map;
@@ -127,19 +130,18 @@ void tgis_map_list_add(tgisMapList *list, tgisMap *map)
  * \param ts A pointer to the timestamp of the map
  *
  * */
-void tgis_map_list_insert(tgisMapList *list, char *name, char*mapset, struct TimeStamp *ts)
+void tgis_map_list_insert(tgisMapList * list, char *name, char *mapset,
+                          struct TimeStamp *ts)
 {
     tgisMap *map = G_calloc(1, sizeof(tgisMap));
+
     map->name = G_store(name);
     map->mapset = G_store(mapset);
-    
-    if(ts->count == 1)
+
+    if (ts->count == 1)
         G_set_timestamp(&(map->ts), &(ts->dt[0]));
-    if(ts->count == 2)
+    if (ts->count == 2)
         G_set_timestamp_range(&(map->ts), &(ts->dt[0]), &(ts->dt[1]));
-    
+
     tgis_map_list_add(list, map);
 }
-
-
-

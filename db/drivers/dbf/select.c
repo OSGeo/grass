@@ -31,7 +31,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
     db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
@@ -41,9 +41,9 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     ret = execute(sql, c);
 
     if (ret == DB_FAILED) {
-	db_d_append_error(_("Unable to open cursor."));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error(_("Unable to open cursor."));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     describe_table(c->table, c->cols, c->ncols, &table);

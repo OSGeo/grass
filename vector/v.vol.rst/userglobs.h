@@ -25,7 +25,7 @@ extern double z_orig_in, tb_res_in;
 extern int cursegm;
 extern int totsegm;
 extern int iw2;
-extern int n_rows_in;		/* fix by JH 04/24/02 */
+extern int n_rows_in;           /* fix by JH 04/24/02 */
 extern int cv;
 extern int sig1;
 

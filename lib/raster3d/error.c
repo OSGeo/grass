@@ -53,7 +53,7 @@ void Rast3d_print_error(const char *msg)
 
 void Rast3d_fatal_error(const char *msg, ...)
 {
-    char buffer[2000];		/* No novels to the error logs, OK? */
+    char buffer[2000];          /* No novels to the error logs, OK? */
     va_list ap;
 
     va_start(ap, msg);
@@ -70,7 +70,7 @@ void Rast3d_fatal_error_noargs(const char *msg)
 
 void Rast3d_error(const char *msg, ...)
 {
-    char buffer[2000];		/* No novels to the error logs, OK? */
+    char buffer[2000];          /* No novels to the error logs, OK? */
     va_list ap;
 
     va_start(ap, msg);

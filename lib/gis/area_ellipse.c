@@ -15,7 +15,8 @@
 #include <grass/gis.h>
 #include "pi.h"
 
-static struct state {
+static struct state
+{
     double E;
     double M;
 } state;

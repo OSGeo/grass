@@ -19,20 +19,20 @@
 #include "macros.h"
 
 /*!
-  \brief Closedown the driver, and free the driver structure
+   \brief Closedown the driver, and free the driver structure
 
-  <b>Note:</b> the management of the memory for the driver structure
-  probably should be handled differently.
- 
-  db_start_driver() could take a pointer to driver structure as an
-  argument, instead of returning the pointer to allocated then there
-  would be no hidden free required
+   <b>Note:</b> the management of the memory for the driver structure
+   probably should be handled differently.
 
-  \param driver pointer to dbDriver to be freed
+   db_start_driver() could take a pointer to driver structure as an
+   argument, instead of returning the pointer to allocated then there
+   would be no hidden free required
 
-  \return 0 on success
-  \return -1 on error
-*/
+   \param driver pointer to dbDriver to be freed
+
+   \return 0 on success
+   \return -1 on error
+ */
 int db_shutdown_driver(dbDriver * driver)
 {
     int status;
@@ -57,7 +57,7 @@ int db_shutdown_driver(dbDriver * driver)
 
     /* remove also error handler if defined */
     db_unset_error_handler_driver(driver);
-    
+
     /* free the driver structure. THIS IS GOOFY */
     db_free(driver);
 

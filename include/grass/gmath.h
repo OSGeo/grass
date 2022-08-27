@@ -1,3 +1,4 @@
+
 /******************************************************************************
  * gmath.h
  * Top level header file for gmath units
@@ -53,9 +54,9 @@
  * */
 typedef struct
 {
-    double *values;		/*The non null values of the row */
-    unsigned int cols;		/*Number of entries */
-    unsigned int *index;	/*the index number */
+    double *values;             /*The non null values of the row */
+    unsigned int cols;          /*Number of entries */
+    unsigned int *index;        /*the index number */
 } G_math_spvector;
 
 #include <grass/defs/gmath.h>

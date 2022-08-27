@@ -24,12 +24,12 @@ static struct Counter unique;
 static int initialized;
 
 /*!
-  \brief Initialize environment for creating tempfiles.
-*/
+   \brief Initialize environment for creating tempfiles.
+ */
 void G_init_tempfile(void)
 {
     if (G_is_initialized(&initialized))
-	return;
+        return;
 
     G_init_counter(&unique, 0);
 
@@ -98,9 +98,10 @@ char *G_tempfile_pid(int pid)
     G_temp_element(element);
     G_init_tempfile();
     do {
-          int uniq = G_counter_next(&unique);
-          sprintf(name, "%d.%d", pid, uniq);
-          G_file_name(path, element, name, G_mapset());
+        int uniq = G_counter_next(&unique);
+
+        sprintf(name, "%d.%d", pid, uniq);
+        G_file_name(path, element, name, G_mapset());
     }
     while (access(path, F_OK) == 0);
 
@@ -128,9 +129,10 @@ char *G_tempfile_pid_basedir(int pid, const char *basedir)
     G__temp_element_basedir(element, basedir);
     G_init_tempfile();
     do {
-          int uniq = G_counter_next(&unique);
-          sprintf(name, "%d.%d", pid, uniq);
-          G_file_name_basedir(path, element, name, G_mapset(), basedir);
+        int uniq = G_counter_next(&unique);
+
+        sprintf(name, "%d.%d", pid, uniq);
+        G_file_name_basedir(path, element, name, G_mapset(), basedir);
     }
     while (access(path, F_OK) == 0);
 

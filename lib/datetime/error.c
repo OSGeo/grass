@@ -32,7 +32,7 @@ int datetime_error(int code, char *msg)
     err_code = code;
     *err_msg = 0;
     if (code != 0 && msg)
-	strcpy(err_msg, msg);	/* hope err_msg is big enough */
+        strcpy(err_msg, msg);   /* hope err_msg is big enough */
 
     return code;
 }

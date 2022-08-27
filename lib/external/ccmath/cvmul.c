@@ -13,11 +13,11 @@ void cvmul(Cpx * u, Cpx * a, Cpx * v, int n)
     int i, j;
 
     for (i = 0; i < n; ++i, ++u) {
-	u->re = u->im = 0.;
-	for (j = 0, q = v; j < n; ++j, ++a, ++q) {
-	    u->re += a->re * q->re - a->im * q->im;
-	    u->im += a->im * q->re + a->re * q->im;
-	}
+        u->re = u->im = 0.;
+        for (j = 0, q = v; j < n; ++j, ++a, ++q) {
+            u->re += a->re * q->re - a->im * q->im;
+            u->im += a->im * q->re + a->re * q->im;
+        }
     }
 }
 
@@ -29,8 +29,8 @@ Cpx cvnrm(Cpx * u, Cpx * v, int n)
 
     z.re = z.im = 0.;
     for (k = 0; k < n; ++k, ++u, ++v) {
-	z.re += u->re * v->re + u->im * v->im;
-	z.im += u->re * v->im - u->im * v->re;
+        z.re += u->re * v->re + u->im * v->im;
+        z.im += u->re * v->im - u->im * v->re;
     }
     return z;
 }

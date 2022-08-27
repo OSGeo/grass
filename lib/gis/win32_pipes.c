@@ -24,7 +24,7 @@
  *
  *****************************************************************************/
 
-#ifndef __MINGW32__		/* TODO */
+#ifndef __MINGW32__             /* TODO */
 #ifdef __MINGW32__
 
 #include <grass/gis.h>
@@ -53,29 +53,29 @@ static char *_get_make_pipe_path(void)
     int len, status;
     struct _stat theStat;
 
-    user = G_whoami();		/* Don't G_free () return value ever! */
+    user = G_whoami();          /* Don't G_free () return value ever! */
     if (user == NULL) {
-	user = whoami;
+        user = whoami;
     }
     len = strlen(prefix) + strlen(user) + 1;
     path = G_malloc(len);
     sprintf(path, "%s%s", prefix, user);
 
     if ((status = G_lstat(path, &theStat)) != 0) {
-	status = G_mkdir(path);
+        status = G_mkdir(path);
     }
     else {
-	if (!S_ISDIR(theStat.st_mode)) {
-	    status = -1;	/* not a directory ?? */
-	}
-	else {
-	    status = chmod(path, S_IRWXU);	/* fails if we don't own it */
-	}
+        if (!S_ISDIR(theStat.st_mode)) {
+            status = -1;        /* not a directory ?? */
+        }
+        else {
+            status = chmod(path, S_IRWXU);      /* fails if we don't own it */
+        }
     }
 
-    if (status) {		/* something's wrong if non-zero */
-	G_free(path);
-	path = NULL;
+    if (status) {               /* something's wrong if non-zero */
+        G_free(path);
+        path = NULL;
     }
 
     return path;
@@ -93,12 +93,12 @@ char *G_pipe_get_fname(char *name)
     int len;
 
     if (name == NULL)
-	return NULL;
+        return NULL;
 
     dirpath = _get_make_pipe_path();
 
     if (dirpath == NULL)
-	return NULL;
+        return NULL;
 
     len = strlen(dirpath) + strlen(name) + 2;
     path = G_malloc(len);
@@ -118,21 +118,21 @@ int G_pipe_exists(char *name)
 {
     int rv = 0;
     HANDLE hFile = hFile = CreateFile(name,
-				      GENERIC_READ,
-				      FILE_SHARE_READ,
-				      NULL,
-				      OPEN_EXISTING,
-				      FILE_ATTRIBUTE_NORMAL,
-				      NULL);
+                                      GENERIC_READ,
+                                      FILE_SHARE_READ,
+                                      NULL,
+                                      OPEN_EXISTING,
+                                      FILE_ATTRIBUTE_NORMAL,
+                                      NULL);
 
     if (hFile != INVALID_HANDLE_VALUE) {
-	if (name == NULL || (FILE_TYPE_PIPE != GetFileType(hFile))) {
-	    rv = 0;
-	}
-	else {
-	    rv = 1;
-	    CloseFile(hFile);
-	}
+        if (name == NULL || (FILE_TYPE_PIPE != GetFileType(hFile))) {
+            rv = 0;
+        }
+        else {
+            rv = 1;
+            CloseFile(hFile);
+        }
     }
     return (rv);
 }
@@ -150,26 +150,26 @@ HANDLE G_pipe_bind(char *name)
     HANDLE hPipe;
 
     if (name == NULL) {
-	return -1;
+        return -1;
     }
     if (G_pipe_exists(name)) {
-	/*errno = EADDRINUSE; */
-	return -1;
+        /*errno = EADDRINUSE; */
+        return -1;
     }
 
-    hPipe = CreateNamedPipe(name,	// pipe name 
-			    PIPE_ACCESS_DUPLEX,	// read/write access 
-			    PIPE_TYPE_MESSAGE |	// message type pipe 
-			    PIPE_READMODE_MESSAGE |	// message-read mode 
-			    PIPE_WAIT,	// blocking mode 
-			    PIPE_UNLIMITED_INSTANCES,	// max. instances  
-			    BUFSIZE,	// output buffer size 
-			    BUFSIZE,	// input buffer size 
-			    PIPE_TIMEOUT,	// client time-out 
-			    NULL);	// no security attribute 
+    hPipe = CreateNamedPipe(name,       // pipe name 
+                            PIPE_ACCESS_DUPLEX, // read/write access 
+                            PIPE_TYPE_MESSAGE | // message type pipe 
+                            PIPE_READMODE_MESSAGE |     // message-read mode 
+                            PIPE_WAIT,  // blocking mode 
+                            PIPE_UNLIMITED_INSTANCES,   // max. instances  
+                            BUFSIZE,    // output buffer size 
+                            BUFSIZE,    // input buffer size 
+                            PIPE_TIMEOUT,       // client time-out 
+                            NULL);      // no security attribute 
 
     if (hPipe == INVALID_HANDLE_VALUE) {
-	return (-1);
+        return (-1);
     }
     return (hPipe);
 }
@@ -200,9 +200,9 @@ HANDLE G_pipe_accept(HANDLE hPipe)
     HANDLE rv = hPipe;
 
     fConnected = ConnectNamedPipe(hPipe, NULL) ?
-	TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
+        TRUE : (GetLastError() == ERROR_PIPE_CONNECTED);
     if (fConnected) {
-	rv = NULL;
+        rv = NULL;
     }
     return (rv);
 }
@@ -221,28 +221,28 @@ HANDLE G_pipe_connect(char *name)
     HANDLE hPipe = -1;
 
     if (!G_pipe_exists(name)) {
-	return hPipe;
+        return hPipe;
     }
 
     while (1) {
-	hPipe = CreateFile(name,	// pipe name 
-			   GENERIC_READ |	// read and write access 
-			   GENERIC_WRITE, 0,	// no sharing 
-			   NULL,	// no security attributes
-			   OPEN_EXISTING,	// opens existing pipe 
-			   0,	// default attributes 
-			   NULL);	// no template file 
+        hPipe = CreateFile(name,        // pipe name 
+                           GENERIC_READ |       // read and write access 
+                           GENERIC_WRITE, 0,    // no sharing 
+                           NULL,        // no security attributes
+                           OPEN_EXISTING,       // opens existing pipe 
+                           0,   // default attributes 
+                           NULL);       // no template file 
 
-	if (hPipe != INVALID_HANDLE_VALUE) {
-	    break;
-	}
-	if (GetLastError() != ERROR_PIPE_BUSY) {
-	    return (-1);
-	}
-	/* Wait for 5 seconds */
-	if (!WaitNamedPipe(name, PIPE_TIMEOUT)) {
-	    return (-1);
-	}
+        if (hPipe != INVALID_HANDLE_VALUE) {
+            break;
+        }
+        if (GetLastError() != ERROR_PIPE_BUSY) {
+            return (-1);
+        }
+        /* Wait for 5 seconds */
+        if (!WaitNamedPipe(name, PIPE_TIMEOUT)) {
+            return (-1);
+        }
     }
     return (hPipe);
 }

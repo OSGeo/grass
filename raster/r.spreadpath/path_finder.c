@@ -17,13 +17,13 @@ void path_finder(int row, int col, int backrow, int backcol)
     extern SEGMENT in_row_seg, in_col_seg, out_seg;
 
     if (row < 0 || row >= nrows || col < 0 || col >= ncols)
-	return;			/* outside the window */
+        return;                 /* outside the window */
 
     /* if the pt has already been traversed, return */
     value = (char *)&data;
     Segment_get(&out_seg, value, row, col);
     if (data == 1)
-	return;			/* already traversed */
+        return;                 /* already traversed */
 
     /* otherwise, draw a line on output */
     drawline(row, col, backrow, backcol);
@@ -32,9 +32,9 @@ void path_finder(int row, int col, int backrow, int backcol)
      */
     /* update path position */
     if (row == backrow && col == backcol) {
-	printf("\n");
-	return;
-    }				/* reach an origin */
+        printf("\n");
+        return;
+    }                           /* reach an origin */
 
     value = (char *)&new_backrow;
     Segment_get(&in_row_seg, value, backrow, backcol);

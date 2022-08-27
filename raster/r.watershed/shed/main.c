@@ -32,29 +32,29 @@ int main(int argc, char *argv[])
     intro();
 
     output.num_maps = 0;
-    com_line_Gwater(&input, &output);	/* develops r.watershed command line */
-    basin_maps(&input, &output);	/* organizes map layers output */
+    com_line_Gwater(&input, &output);   /* develops r.watershed command line */
+    basin_maps(&input, &output);        /* organizes map layers output */
     if (input.fast || input.slow) {
-	if (input.fast) {
-	    if (G_system(input.com_line_ram)) {
-		if (input.slow) {
-		    G_message(_("Slow version of water analysis program starting now"));
+        if (input.fast) {
+            if (G_system(input.com_line_ram)) {
+                if (input.slow) {
+                    G_message(_("Slow version of water analysis program starting now"));
 
-		    if (G_system(input.com_line_seg)) {
-			free_input(&input);
-			free_output(&output);
-			G_fatal_error(_("<<%s>> command line failed"),
-				      input.com_line_seg);
-		    }
-		}
-	    }
-	}
-	else if (G_system(input.com_line_seg)) {
-	    free_input(&input);
-	    free_output(&output);
-	    G_fatal_error(_("<<%s>> command line failed"),
-			  input.com_line_seg);
-	}
+                    if (G_system(input.com_line_seg)) {
+                        free_input(&input);
+                        free_output(&output);
+                        G_fatal_error(_("<<%s>> command line failed"),
+                                      input.com_line_seg);
+                    }
+                }
+            }
+        }
+        else if (G_system(input.com_line_seg)) {
+            free_input(&input);
+            free_output(&output);
+            G_fatal_error(_("<<%s>> command line failed"),
+                          input.com_line_seg);
+        }
     }
 
     /*
@@ -68,20 +68,20 @@ int main(int argc, char *argv[])
     valid_basins(input.accum_name, &output);
     free_input(&input);
     if ((output.out_file = fopen(output.file_name, "w")) == NULL) {
-	free_output(&output);
-	G_fatal_error(_("unable to open output file"));
+        free_output(&output);
+        G_fatal_error(_("unable to open output file"));
     }
     if (output.do_basin) {
-	fprintf(output.out_file,
-		"\n\nThese values are accumulations within the basin itself\n");
-	fprintf(output.out_file, "They do not include sub-basins\n\n");
-	print_output(&output);
+        fprintf(output.out_file,
+                "\n\nThese values are accumulations within the basin itself\n");
+        fprintf(output.out_file, "They do not include sub-basins\n\n");
+        print_output(&output);
     }
     if (output.do_accum) {
-	accum_down(&output);
-	fprintf(output.out_file,
-		"\n\nThese values are accumulations of basins and sub-basins\n");
-	print_output(&output);
+        accum_down(&output);
+        fprintf(output.out_file,
+                "\n\nThese values are accumulations of basins and sub-basins\n");
+        print_output(&output);
     }
     free_output(&output);
 

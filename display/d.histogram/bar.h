@@ -10,7 +10,7 @@
 #include "options.h"
 #include "dhist.h"
 
-float rem();			/* remainder function */
+float rem();                    /* remainder function */
 
 /* normalized coordinates of bar-chart components */
 

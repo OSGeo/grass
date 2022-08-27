@@ -11,10 +11,10 @@ double *Cdhc_dmax_exp(double *, int);
 /* misc internal support functions */
 void wcoef(double[], int, int, double *, int *);
 void Cdhc_wgp(double[], int, double, double, double, double[],
-	 int, double, double, double, double, int *);
+              int, double, double, double, double, int *);
 void Cdhc_nscor2(double[], int, int, int *);
 void wext(double[], int, double, double[], int, double,
-	  double *, double *, int *);
+          double *, double *, int *);
 
 double Cdhc_alnorm(double, int);
 double Cdhc_enormp(double);

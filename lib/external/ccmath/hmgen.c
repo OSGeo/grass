@@ -19,10 +19,10 @@ void hmgen(Cpx * h, double *ev, Cpx * u, int n)
     cmcpy(v, u, n * n);
     hconj(v, n);
     for (i = 0, p = v; i < n; ++i) {
-	for (j = 0, e = ev[i]; j < n; ++j, ++p) {
-	    p->re *= e;
-	    p->im *= e;
-	}
+        for (j = 0, e = ev[i]; j < n; ++j, ++p) {
+            p->re *= e;
+            p->im *= e;
+        }
     }
     cmmul(h, u, v, n);
     free(v);

@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     static struct line_pnts *Points;
     struct line_cats *Cats;
-    struct GModule *module;	/* GRASS module for parsing arguments */
+    struct GModule *module;     /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol,
-                  *method_opt;
+        *method_opt;
     char *desc;
     int with_z;
     int afield, nfield, mask_type;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     struct ilist *bridge_list, *articulation_list;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
+    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("network"));
     G_add_keyword(_("articulation points"));
     module->description =
-	_("Computes bridges and articulation points in the network.");
+        _("Computes bridges and articulation points in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     afcol->key = "arc_column";
     afcol->required = NO;
     afcol->description =
-	_("Arc forward/both direction(s) cost column (number)");
+        _("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
@@ -94,15 +94,14 @@ int main(int argc, char *argv[])
     method_opt->options = "bridge,articulation";
     desc = NULL;
     G_asprintf(&desc,
-	       "bridge;%s;articulation;%s",
-	       _("Finds bridges"),
-	       _("Finds articulation points"));
+               "bridge;%s;articulation;%s",
+               _("Finds bridges"), _("Finds articulation points"));
     method_opt->descriptions = desc;
     method_opt->description = _("Feature type");
 
     /* options and flags parser */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     /* TODO: make an option for this */
     mask_type = GV_LINE | GV_BOUNDARY;
 
@@ -110,18 +109,18 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
-				 G_FATAL_EXIT);
+                                 G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, ""))
-	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 
     if (0 > Vect_open_new(&Out, map_out->answer, with_z)) {
-	Vect_close(&In);
-	G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
+        Vect_close(&In);
+        G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
 
 
@@ -129,10 +128,12 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                                  abcol->answer, ncol->answer, 0, 0))
-        G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
-    
+    if (0 !=
+        Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                             abcol->answer, ncol->answer, 0, 0))
+        G_fatal_error(_("Unable to build graph for vector map <%s>"),
+                      Vect_get_full_name(&In));
+
     graph = Vect_net_get_graph(&In);
 
     Vect_copy_head_data(&In, &Out);
@@ -140,33 +141,33 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Out);
 
     if (method_opt->answer[0] == 'b') {
-	bridge_list = Vect_new_list();
-	bridges = NetA_compute_bridges(graph, bridge_list);
+        bridge_list = Vect_new_list();
+        bridges = NetA_compute_bridges(graph, bridge_list);
 
-	G_debug(3, "Bridges: %d", bridges);
+        G_debug(3, "Bridges: %d", bridges);
 
-	for (i = 0; i < bridges; i++) {
-	    int type =
-		Vect_read_line(&In, Points, Cats, abs(bridge_list->value[i]));
-	    Vect_write_line(&Out, type, Points, Cats);
-	}
-	Vect_destroy_list(bridge_list);
+        for (i = 0; i < bridges; i++) {
+            int type =
+                Vect_read_line(&In, Points, Cats, abs(bridge_list->value[i]));
+            Vect_write_line(&Out, type, Points, Cats);
+        }
+        Vect_destroy_list(bridge_list);
     }
     else {
-	articulation_list = Vect_new_list();
-	articulations = NetA_articulation_points(graph, articulation_list);
-	G_debug(3, "Articulation points: %d", articulations);
+        articulation_list = Vect_new_list();
+        articulations = NetA_articulation_points(graph, articulation_list);
+        G_debug(3, "Articulation points: %d", articulations);
 
-	for (i = 0; i < articulations; i++) {
-	    double x, y, z;
+        for (i = 0; i < articulations; i++) {
+            double x, y, z;
 
-	    Vect_get_node_coor(&In, articulation_list->value[i], &x, &y, &z);
-	    Vect_reset_line(Points);
-	    Vect_append_point(Points, x, y, z);
-	    Vect_write_line(&Out, GV_POINT, Points, Cats);
-	}
+            Vect_get_node_coor(&In, articulation_list->value[i], &x, &y, &z);
+            Vect_reset_line(Points);
+            Vect_append_point(Points, x, y, z);
+            Vect_write_line(&Out, GV_POINT, Points, Cats);
+        }
 
-	Vect_destroy_list(articulation_list);
+        Vect_destroy_list(articulation_list);
     }
 
     Vect_build(&Out);

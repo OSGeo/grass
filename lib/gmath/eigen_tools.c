@@ -16,13 +16,13 @@ int G_math_egvorder(double *d, double **z, long bands)
     buff = (double *)G_malloc(bands * (bands + 1) * sizeof(double));
     tmp = (double **)G_malloc(bands * sizeof(double *));
     for (i = 0; i < bands; i++)
-	tmp[i] = &buff[i * (bands + 1)];
+        tmp[i] = &buff[i * (bands + 1)];
 
     /* concatenate (vertically) z and d into tmp */
     for (i = 0; i < bands; i++) {
-	for (j = 0; j < bands; j++)
-	    tmp[i][j + 1] = z[j][i];
-	tmp[i][0] = d[i];
+        for (j = 0; j < bands; j++)
+            tmp[i][j + 1] = z[j][i];
+        tmp[i][0] = d[i];
     }
 
     /* sort the combined matrix */
@@ -30,9 +30,9 @@ int G_math_egvorder(double *d, double **z, long bands)
 
     /* split tmp into z and d */
     for (i = 0; i < bands; i++) {
-	for (j = 0; j < bands; j++)
-	    z[j][i] = tmp[i][j + 1];
-	d[i] = tmp[i][0];
+        for (j = 0; j < bands; j++)
+            z[j][i] = tmp[i][j + 1];
+        d[i] = tmp[i][0];
     }
 
     /* free temporary matrix */
@@ -50,10 +50,11 @@ static int egcmp(const void *pa, const void *pb)
     const double *b = *(const double *const *)pb;
 
     if (*a > *b)
-	return -1;
+        return -1;
     if (*a < *b)
-	return 1;
+        return 1;
 
     return 0;
 }
+
 /***************************************************************************/

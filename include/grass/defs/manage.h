@@ -33,7 +33,7 @@ const struct list *M_get_list(int);
 int M_read_list(int, int *);
 
 /* option.c */
-struct Option* M_define_option(int, const char *, int);
+struct Option *M_define_option(int, const char *, int);
 const char *M_get_options(int);
 const char *M_get_option_desc(int);
 

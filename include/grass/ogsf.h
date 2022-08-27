@@ -1,17 +1,17 @@
 /*!
-  \file include/ogsf.h
+   \file include/ogsf.h
 
-  \brief OGSF header file (structures)
+   \brief OGSF header file (structures)
 
-  This program is free software under the GNU General
-  Public License (>=v2). Read the file COPYING that
-  comes with GRASS for details.
-  
-  \author Original author Bill Brown, USACERL (January 1993)
-  \author Thematic mapping enabled by Martin Landa <landa.martin gmail.com) (06/2011)
+   This program is free software under the GNU General
+   Public License (>=v2). Read the file COPYING that
+   comes with GRASS for details.
 
-  (C) 2011 by the GRASS Development Team
-*/
+   \author Original author Bill Brown, USACERL (January 1993)
+   \author Thematic mapping enabled by Martin Landa <landa.martin gmail.com) (06/2011)
+
+   (C) 2011 by the GRASS Development Team
+ */
 
 #ifndef GRASS_OGSF_H
 #define GRASS_OGSF_H
@@ -38,7 +38,7 @@
 #define MAX_SURFS      12
 #define MAX_VECTS      50
 #define MAX_SITES      50
-#define MAX_VOLS       12	/* should match MAX_VOL_FILES below ? */
+#define MAX_VOLS       12       /* should match MAX_VOL_FILES below ? */
 #define MAX_DSP        12
 #define MAX_ATTS        7
 #define MAX_LIGHTS      3
@@ -52,7 +52,7 @@
 
 /* surface display modes */
 #define DM_GOURAUD   0x00000100
-#define DM_FLAT      0x00000200	/* defined for symmetry */
+#define DM_FLAT      0x00000200 /* defined for symmetry */
 
 #define DM_FRINGE    0x00000010
 
@@ -69,7 +69,7 @@
 #define IFLAG unsigned int
 
 /* surface attribute ***descriptors***  */
-#define ATT_NORM      0		/* library use only */
+#define ATT_NORM      0         /* library use only */
 #define ATT_TOPO      1
 #define ATT_COLOR     2
 #define ATT_MASK      3
@@ -160,13 +160,13 @@
 #define GS_INT32       int
 
 /* attribute ***types*** */
-#define ATTY_NULL       32	/* internal use only */
-#define ATTY_MASK       16	/* can't use this one for numbytes */
-#define ATTY_FLOAT       8	/* can't use this one for numbytes */
+#define ATTY_NULL       32      /* internal use only */
+#define ATTY_MASK       16      /* can't use this one for numbytes */
+#define ATTY_FLOAT       8      /* can't use this one for numbytes */
 #define ATTY_INT         4
 #define ATTY_SHORT       2
 #define ATTY_CHAR        1
-#define ATTY_ANY        63	/* internal use only */
+#define ATTY_ANY        63      /* internal use only */
 #define LEGAL_TYPE(t)    \
 (t==ATTY_MASK || t==ATTY_FLOAT || t==ATTY_INT || t==ATTY_SHORT || t==ATTY_CHAR)
 
@@ -208,20 +208,20 @@ typedef struct
     short *sb;
     unsigned char *cb;
     struct BM *bm;
-    struct BM *nm;		/* null mask: set = null */
-    float (*tfunc) (float, int);
+    struct BM *nm;              /* null mask: set = null */
+    float (*tfunc)(float, int);
     float k;
 } typbuff;
 
 typedef struct
-{				/* use hash table? */
-    int n_elem;			/* if n_elem == 256, index == NULL */
+{                               /* use hash table? */
+    int n_elem;                 /* if n_elem == 256, index == NULL */
     char *index;
     int *value;
 } table256;
 
 typedef struct
-{				/* applied thusly: offset, mult, if(use_lookup) lookup */
+{                               /* applied thusly: offset, mult, if(use_lookup) lookup */
     float offset;
     float mult;
     int use_lookup;
@@ -244,12 +244,12 @@ typedef struct
 /* maybe add transformation matrix? */
 typedef struct
 {
-    IFLAG att_src;		/* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
-    IFLAG att_type;		/* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
-    int hdata;			/* handle to dataset */
-    int (*user_func) ();
+    IFLAG att_src;              /* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
+    IFLAG att_type;             /* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
+    int hdata;                  /* handle to dataset */
+    int (*user_func)();
     float constant;
-    int *lookup;		/* TODO: use transform instead */
+    int *lookup;                /* TODO: use transform instead */
     float min_nz, max_nz, range_nz;
     float default_null;
 } gsurf_att;
@@ -258,18 +258,18 @@ typedef struct g_surf
 {
     int gsurf_id;
     int cols, rows;
-    gsurf_att att[MAX_ATTS];	/* mask, topo, color, etc. */
-    IFLAG draw_mode;		/*DM_GOURAUD | DM_FRINGE | DM_POLY, DM_WIRE, DM_WIRE_POLY */
-    long wire_color;		/* 0xBBGGRR or WC_COLOR_ATT */
-    double ox, oy;		/* real world origin (i.e., SW corner) */
+    gsurf_att att[MAX_ATTS];    /* mask, topo, color, etc. */
+    IFLAG draw_mode;            /*DM_GOURAUD | DM_FRINGE | DM_POLY, DM_WIRE, DM_WIRE_POLY */
+    long wire_color;            /* 0xBBGGRR or WC_COLOR_ATT */
+    double ox, oy;              /* real world origin (i.e., SW corner) */
     double xres, yres;
     float z_exag;
     float x_trans, y_trans, z_trans;
     float xmin, xmax, ymin, ymax, zmin, zmax, zminmasked;
     float xrange, yrange, zrange;
     float zmin_nz, zmax_nz, zrange_nz;
-    int x_mod, y_mod, x_modw, y_modw;	/*cells per viewcell, per wire viewcell */
-    int nz_topo, nz_color;	/* no zero flags */
+    int x_mod, y_mod, x_modw, y_modw;   /*cells per viewcell, per wire viewcell */
+    int nz_topo, nz_color;      /* no zero flags */
     int mask_needupdate, norm_needupdate;
     unsigned long *norms;
     struct BM *curmask;
@@ -285,17 +285,17 @@ typedef struct g_surf
 /* Struct for vector feature displaying attributes */
 typedef struct g_vect_style
 {
-    int color; 		 /* Line color */
-    int symbol;		 /* Point symbol/line type */
-    float size;		 /* Symbol size. Unset for lines. */
-    int width;		 /* Line width. Also used for lines forming symbols i.e. X */
-    
-    /*TODO:fill;	 Area fill pattern */
-    /*TODO:falpha;	 Area fill transparency */
-    /*TODO:lalpha;	 Line/boundary/point transparency */
+    int color;                  /* Line color */
+    int symbol;                 /* Point symbol/line type */
+    float size;                 /* Symbol size. Unset for lines. */
+    int width;                  /* Line width. Also used for lines forming symbols i.e. X */
+
+    /*TODO:fill;         Area fill pattern */
+    /*TODO:falpha;       Area fill transparency */
+    /*TODO:lalpha;       Line/boundary/point transparency */
     /*TODO:struct *orientation;  Symbol orientation */
-    struct g_vect_style *next; /* Point to next gvstyle struct if single point has multiple styles.
-				  In such case feature with next style should be shifted. */
+    struct g_vect_style *next;  /* Point to next gvstyle struct if single point has multiple styles.
+                                   In such case feature with next style should be shifted. */
 } gvstyle;
 
 /* Struct for vector map (thematic mapping) */
@@ -303,9 +303,9 @@ typedef struct g_vect_style_thematic
 {
     int active;
     int layer;
-    
-    char *color_column;  
-    char *symbol_column; 
+
+    char *color_column;
+    char *symbol_column;
     char *size_column;
     char *width_column;
 } gvstyle_thematic;
@@ -318,11 +318,11 @@ typedef struct g_line
     int dims, npts;
     Point3 *p3;
     Point2 *p2;
-    
-    struct line_cats *cats;	/* Store information about all layers/cats for thematic display */
-    gvstyle *style;	/* Line instance look&feel */
-    signed char highlighted; /* >0 Feature is highlighted */
-    
+
+    struct line_cats *cats;     /* Store information about all layers/cats for thematic display */
+    gvstyle *style;             /* Line instance look&feel */
+    signed char highlighted;    /* >0 Feature is highlighted */
+
     struct g_line *next;
 } geoline;
 
@@ -331,7 +331,7 @@ typedef struct g_vect
 {
     int gvect_id;
     int use_mem, n_lines;
-    int drape_surf_id[MAX_SURFS];	/* if you want 'em flat, define the surface */
+    int drape_surf_id[MAX_SURFS];       /* if you want 'em flat, define the surface */
     int use_z;
     int n_surfs;
     char *filename;
@@ -339,13 +339,13 @@ typedef struct g_vect
     /* also maybe center & rotate? */
     geoline *lines;
     geoline *fastlines;
-    int (*bgn_read) (), (*end_read) (), (*nxt_line) ();
+    int (*bgn_read)(),(*end_read)(),(*nxt_line)();
     struct g_vect *next;
     void *clientdata;
-  
-    gvstyle_thematic *tstyle;  /* thematic mapping */
-    gvstyle *style;	/* Vector default look&feel */
-    gvstyle *hstyle;	/* IMHO highlight should be per layer basis. */
+
+    gvstyle_thematic *tstyle;   /* thematic mapping */
+    gvstyle *style;             /* Vector default look&feel */
+    gvstyle *hstyle;            /* IMHO highlight should be per layer basis. */
 } geovect;
 
 /* Point instance */
@@ -353,8 +353,8 @@ typedef struct g_point
 {
     int dims;
     Point3 p3;
-    
-    struct line_cats *cats;	/* Store information about all layers/cats for thematic display */
+
+    struct line_cats *cats;     /* Store information about all layers/cats for thematic display */
     gvstyle *style;
     signed char highlighted;    /* >0 Feature is highlighted */
 
@@ -365,39 +365,39 @@ typedef struct g_point
 typedef struct g_site
 {
     int gsite_id;
-    int drape_surf_id[MAX_SURFS];	/* ditto */
+    int drape_surf_id[MAX_SURFS];       /* ditto */
     int n_surfs, n_sites;
     int use_z, use_mem;
-    int has_z;		/* set when file loaded */
+    int has_z;                  /* set when file loaded */
 
     char *filename;
     transform attr_trans;
     float x_trans, y_trans, z_trans;
     geopoint *points;
-    int (*bgn_read) (), (*end_read) (), (*nxt_site) ();
+    int (*bgn_read)(),(*end_read)(),(*nxt_site)();
     struct g_site *next;
     void *clientdata;
-    
-    gvstyle_thematic *tstyle;  /* thematic mapping */
-    gvstyle *style; 	       /* points default look&feel */
-    gvstyle *hstyle;	       /* IMHO highlight should be per layer basis */
+
+    gvstyle_thematic *tstyle;   /* thematic mapping */
+    gvstyle *style;             /* points default look&feel */
+    gvstyle *hstyle;            /* IMHO highlight should be per layer basis */
 } geosite;
 
 typedef struct
 {
-    int data_id;		/* id */
-    IFLAG file_type;		/* file type */
-    unsigned int count;		/* number of referencies to this file */
-    char *file_name;		/* file name */
+    int data_id;                /* id */
+    IFLAG file_type;            /* file type */
+    unsigned int count;         /* number of referencies to this file */
+    char *file_name;            /* file name */
 
     IFLAG data_type;
-    void *map;			/* pointer to volume file descriptor */
-    double min, max;		/* minimum, maximum value in file */
+    void *map;                  /* pointer to volume file descriptor */
+    double min, max;            /* minimum, maximum value in file */
 
-    IFLAG status;		/* current status */
-    IFLAG mode;			/* current read mode */
+    IFLAG status;               /* current status */
+    IFLAG mode;                 /* current read mode */
 
-    void *buff;			/* data buffer */
+    void *buff;                 /* data buffer */
 } geovol_file;
 
 typedef struct
@@ -405,7 +405,7 @@ typedef struct
     IFLAG att_src;
 
     int hfile;
-    int (*user_func) ();
+    int (*user_func)();
     float constant;
 
     void *att_data;
@@ -460,43 +460,43 @@ typedef struct g_vol
 
 struct lightdefs
 {
-    float position[4];		/* X, Y, Z, (1=local/0=inf) */
-    float color[3];		/* R, G, B */
-    float ambient[3];		/* R, G, B */
-    float emission[3];		/* R, G, B */
-    float shine;		/* 0. to 128. */
+    float position[4];          /* X, Y, Z, (1=local/0=inf) */
+    float color[3];             /* R, G, B */
+    float ambient[3];           /* R, G, B */
+    float emission[3];          /* R, G, B */
+    float shine;                /* 0. to 128. */
 };
 
 struct georot
 {
-    int do_rot;			/* do rotation */
-    double rot_angle;		/* rotation angle */
-    double rot_axes[3];		/* rotation axis */
-    GLdouble rotMatrix[16];	/* rotation matrix */
+    int do_rot;                 /* do rotation */
+    double rot_angle;           /* rotation angle */
+    double rot_axes[3];         /* rotation axis */
+    GLdouble rotMatrix[16];     /* rotation matrix */
 };
 
 typedef struct
 {
-    int coord_sys;		/* latlon, equal area, etc */
-    int view_proj;		/* perspective, ortho */
-    int infocus;		/* fixed center of view - true or false */
+    int coord_sys;              /* latlon, equal area, etc */
+    int view_proj;              /* perspective, ortho */
+    int infocus;                /* fixed center of view - true or false */
     float from_to[2][4];
     struct georot rotate;
-    int twist, fov, incl, look;	/* 10ths of degrees */
-    float real_to[4], vert_exag;	/* a global Z exag */
+    int twist, fov, incl, look; /* 10ths of degrees */
+    float real_to[4], vert_exag;        /* a global Z exag */
     float scale;
     struct lightdefs lights[MAX_LIGHTS];
 } geoview;
 
 typedef struct
-{				/* need to add elements here for off_screen drawing */
+{                               /* need to add elements here for off_screen drawing */
     float nearclip, farclip, aspect;
-    short left, right, bottom, top;	/* Screen coordinates */
+    short left, right, bottom, top;     /* Screen coordinates */
     int bgcol;
 } geodisplay;
 
-extern void (*Cxl_func) ();
-extern void (*Swap_func) ();
+extern void (*Cxl_func)();
+extern void (*Swap_func)();
 
 /* Key frames */
 /* these have to be 1 << KF_id_index */

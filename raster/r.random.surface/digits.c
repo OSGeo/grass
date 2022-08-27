@@ -12,13 +12,13 @@ int Digits(double Double, int MaxSig)
     I = 0;
     Double += 1.0;
     while (I < MaxSig) {
-	Check = Double * pow(10.0, 1.0 * I);
-	Round = (int)Check;
-	RD = Round;
-	Right = fabs(RD - Check);
-	if (Right == 0.0)
-	    return (I);
-	I++;
+        Check = Double * pow(10.0, 1.0 * I);
+        Round = (int)Check;
+        RD = Round;
+        Right = fabs(RD - Check);
+        if (Right == 0.0)
+            return (I);
+        I++;
     }
 
     return (MaxSig);

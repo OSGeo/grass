@@ -33,9 +33,9 @@ int store_reclass(CELL result, int primary, CELL * cat)
      * enforce the results in the order that the files were specified
      */
     for (i = 0; i < primary; i++)
-	rcats[i] = cat[i + 1];
+        rcats[i] = cat[i + 1];
     rcats[i] = cat[0];
     for (i = primary + 1; i < nfiles; i++)
-	rcats[i] = cat[i];
+        rcats[i] = cat[i];
     return (0);
 }

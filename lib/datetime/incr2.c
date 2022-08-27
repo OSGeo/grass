@@ -60,22 +60,22 @@ int datetime_is_valid_increment(const DateTime * src, const DateTime * incr)
 int datetime_check_increment(const DateTime * src, const DateTime * incr)
 {
     if (!datetime_is_valid_type(src))
-	return 1;
+        return 1;
     if (!datetime_is_valid_type(incr))
-	return 2;
+        return 2;
 
     if (!datetime_is_relative(incr))
-	return datetime_error(-1, "datetime increment mode not relative");
+        return datetime_error(-1, "datetime increment mode not relative");
     if (incr->to > src->to)
-	return datetime_error(-2, "datetime increment too precise");
+        return datetime_error(-2, "datetime increment too precise");
 
     if (datetime_in_interval_year_month(src->to) &&
-	!datetime_in_interval_year_month(incr->to))
-	return datetime_error(-3, "illegal datetime increment interval");
+        !datetime_in_interval_year_month(incr->to))
+        return datetime_error(-3, "illegal datetime increment interval");
 
     if (datetime_in_interval_day_second(src->to) &&
-	!datetime_in_interval_day_second(incr->to))
-	return datetime_error(-4, "illegal datetime increment interval");
+        !datetime_in_interval_day_second(incr->to))
+        return datetime_error(-4, "illegal datetime increment interval");
 
     return 0;
 }

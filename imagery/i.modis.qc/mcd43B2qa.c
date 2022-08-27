@@ -8,18 +8,16 @@
  * 0100 -> class 4: 75% or more fill values 
  * Classes 5-14: Not Used
  * 1111 -> class 15: Fill Value
- */ 
+ */
 
 #include <grass/raster.h>
 
-CELL mcd43B2qa(CELL pixel, int bandno) 
+CELL mcd43B2qa(CELL pixel, int bandno)
 {
     CELL qctemp;
 
-    pixel >>= 4 * (bandno - 1);	/* bitshift [] to [0-3] etc. */
-    qctemp = pixel & 0x0F;    
-    
+    pixel >>= 4 * (bandno - 1); /* bitshift [] to [0-3] etc. */
+    qctemp = pixel & 0x0F;
+
     return qctemp;
 }
-
-

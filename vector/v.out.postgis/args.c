@@ -10,7 +10,7 @@ void define_options(struct params *params, struct flags *flags)
 
     params->type = G_define_standard_option(G_OPT_V3_TYPE);
     params->type->options =
-	"point,line,boundary,centroid,area,face,kernel,auto";
+        "point,line,boundary,centroid,area,face,kernel,auto";
     params->type->answer = "auto";
     params->type->guisection = _("Selection");
 
@@ -25,24 +25,22 @@ void define_options(struct params *params, struct flags *flags)
     params->dsn->label = _("Name for output PostGIS datasource");
     params->dsn->description =
         _("Starts with 'PG' prefix, eg. 'PG:dbname=grass'");
-    
+
     params->olayer = G_define_option();
     params->olayer->key = "output_layer";
     params->olayer->type = TYPE_STRING;
     params->olayer->required = NO;
     params->olayer->key_desc = "name";
-    params->olayer->label =
-        _("Name for output PostGIS layer");
-    params->olayer->description = 
-        _("If not specified, input name is used");
+    params->olayer->label = _("Name for output PostGIS layer");
+    params->olayer->description = _("If not specified, input name is used");
     params->olayer->guisection = _("Creation");
 
     params->olink = G_define_standard_option(G_OPT_V_OUTPUT);
     params->olink->key = "output_link";
     params->olink->required = NO;
-    params->olink->label = 
+    params->olink->label =
         _("Name for output vector map defined as a link to the PostGIS feature table");
-    params->olink->description = 
+    params->olink->description =
         _("If not specified, the vector link is not created. "
           "The link can be also manually created by 'v.external' module.");
     params->olink->guisection = _("Creation");
@@ -62,8 +60,7 @@ void define_options(struct params *params, struct flags *flags)
 
     flags->table = G_define_flag();
     flags->table->key = 't';
-    flags->table->description =
-        _("Do not export attribute table");
+    flags->table->description = _("Do not export attribute table");
     flags->table->guisection = _("Creation");
 
     flags->topo = G_define_flag();
@@ -75,8 +72,8 @@ void define_options(struct params *params, struct flags *flags)
     flags->force2d = G_define_flag();
     flags->force2d->key = '2';
     flags->force2d->label = _("Force 2D output even if input is 3D ");
-    flags->force2d->description = _("Useful if input is 3D but all z coordinates are identical");
+    flags->force2d->description =
+        _("Useful if input is 3D but all z coordinates are identical");
     flags->force2d->guisection = _("Creation");
 
 }
-

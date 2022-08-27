@@ -198,7 +198,7 @@ void Rast_make_grey_scale_colors(struct Colors *colors, CELL min, CELL max)
  * \param max maximum value
  */
 void Rast_make_grey_scale_fp_colors(struct Colors *colors, DCELL min,
-				    DCELL max)
+                                    DCELL max)
 {
     Rast_make_fp_colors(colors, "grey", min, max);
 }

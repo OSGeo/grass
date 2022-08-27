@@ -301,9 +301,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     sscanf(parm.nprocs->answer, "%d", &nprocs);
-    if (nprocs < 1)
-    {
-      G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+    if (nprocs < 1) {
+        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
     }
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
@@ -419,7 +418,9 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    bufrows = atoi(parm.memory->answer) * (((1 << 20) / Rast_cell_size(data_type)) / ncols);
+    bufrows =
+        atoi(parm.memory->answer) * (((1 << 20) / Rast_cell_size(data_type)) /
+                                     ncols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > nrows) {
         bufrows = nrows;
@@ -487,7 +488,8 @@ int main(int argc, char *argv[])
 
     if (slope_name != NULL) {
         slope_fd = Rast_open_new(slope_name, out_type);
-        slp_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        slp_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         slp_raster = NULL;
@@ -496,7 +498,8 @@ int main(int argc, char *argv[])
 
     if (aspect_name != NULL) {
         aspect_fd = Rast_open_new(aspect_name, out_type);
-        asp_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        asp_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         asp_raster = NULL;
@@ -505,7 +508,8 @@ int main(int argc, char *argv[])
 
     if (pcurv_name != NULL) {
         pcurv_fd = Rast_open_new(pcurv_name, out_type);
-        pcurv_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        pcurv_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         pcurv_raster = NULL;
@@ -514,7 +518,8 @@ int main(int argc, char *argv[])
 
     if (tcurv_name != NULL) {
         tcurv_fd = Rast_open_new(tcurv_name, out_type);
-        tcurv_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        tcurv_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         tcurv_raster = NULL;
@@ -523,7 +528,8 @@ int main(int argc, char *argv[])
 
     if (dx_name != NULL) {
         dx_fd = Rast_open_new(dx_name, out_type);
-        dx_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        dx_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dx_raster = NULL;
@@ -532,7 +538,8 @@ int main(int argc, char *argv[])
 
     if (dy_name != NULL) {
         dy_fd = Rast_open_new(dy_name, out_type);
-        dy_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        dy_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dy_raster = NULL;
@@ -541,7 +548,8 @@ int main(int argc, char *argv[])
 
     if (dxx_name != NULL) {
         dxx_fd = Rast_open_new(dxx_name, out_type);
-        dxx_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        dxx_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dxx_raster = NULL;
@@ -550,7 +558,8 @@ int main(int argc, char *argv[])
 
     if (dyy_name != NULL) {
         dyy_fd = Rast_open_new(dyy_name, out_type);
-        dyy_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        dyy_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dyy_raster = NULL;
@@ -559,7 +568,8 @@ int main(int argc, char *argv[])
 
     if (dxy_name != NULL) {
         dxy_fd = Rast_open_new(dxy_name, out_type);
-        dxy_raster = G_calloc((size_t) bufrows * ncols, Rast_cell_size(data_type));
+        dxy_raster =
+            G_calloc((size_t)bufrows * ncols, Rast_cell_size(data_type));
     }
     else {
         dxy_raster = NULL;
@@ -572,12 +582,13 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("Percent complete..."));
 
-    int computed = 0; /* for computing progress */
+    int computed = 0;           /* for computing progress */
     int written = 0;
 
     while (written < nrows) {
 
         int range = bufrows;
+
         if (range > nrows - written) {
             range = nrows - written;
         }
@@ -589,6 +600,7 @@ int main(int argc, char *argv[])
         private(row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
         {
             int t_id = FIRST_THREAD;
+
 #if defined(_OPENMP)
             t_id = omp_get_thread_num();
 #endif
@@ -597,8 +609,8 @@ int main(int argc, char *argv[])
             DCELL *temp;
             DCELL *pc1, *pc2, *pc3;
             DCELL c1, c2, c3, c4, c5, c6, c7, c8, c9;
-            double dx;                  /* partial derivative in ew direction */
-            double dy;                  /* partial derivative in ns direction */
+            double dx;          /* partial derivative in ew direction */
+            double dy;          /* partial derivative in ns direction */
             double dxx, dxy, dyy;
             double s3, s4, s5, s6;
             double pcurv, tcurv;
@@ -608,7 +620,7 @@ int main(int argc, char *argv[])
             int low, hi, test = 0;
             bool initialized = false;
 
-/* static scheduling is essential for buffer to be initialized properly */
+            /* static scheduling is essential for buffer to be initialized properly */
 #pragma omp for schedule(static)                       \
         reduction(min: c1min, c2min, min_asp, min_slp) \
         reduction(max: c1max, c2max, max_asp, max_slp)
@@ -620,10 +632,13 @@ int main(int argc, char *argv[])
                     Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
 
                     if (row - 1 >= 0)
-                        Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][1] + 1, row - 1);
+                        Rast_get_d_row_nomask(elevation_fd[t_id],
+                                              elev_cell[t_id][1] + 1,
+                                              row - 1);
 
                     if (row >= 0)
-                        Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row);
+                        Rast_get_d_row_nomask(elevation_fd[t_id],
+                                              elev_cell[t_id][2] + 1, row);
 
                     if (Wrap) {
                         /* wrap second row */
@@ -641,7 +656,8 @@ int main(int argc, char *argv[])
                     south = Rast_row_to_northing((row + 1 + 0.5), &window);
                     east = Rast_col_to_easting(2.5, &window);
                     west = Rast_col_to_easting(0.5, &window);
-                    V = G_distance(east, north, east, south) * 4 / (factor * zfactor);
+                    V = G_distance(east, north, east,
+                                   south) * 4 / (factor * zfactor);
                     H = G_distance(east, ns_med, west,
                                    ns_med) * 4 / (factor * zfactor);
                     /* ____________________________
@@ -670,7 +686,8 @@ int main(int argc, char *argv[])
                 elev_cell[t_id][2] = temp;
 
                 if (row < nrows - 1)
-                    Rast_get_d_row_nomask(elevation_fd[t_id], elev_cell[t_id][2] + 1, row + 1);
+                    Rast_get_d_row_nomask(elevation_fd[t_id],
+                                          elev_cell[t_id][2] + 1, row + 1);
                 else
                     Rast_set_d_null_value(elev_cell[t_id][2], ncols + 2);
 
@@ -737,61 +754,78 @@ int main(int argc, char *argv[])
                      */
 
                     if (Rast_is_d_null_value(&c5) || (!compute_at_edges &&
-                                                      (Rast_is_d_null_value(&c1) ||
-                                                       Rast_is_d_null_value(&c2) ||
-                                                       Rast_is_d_null_value(&c3) ||
-                                                       Rast_is_d_null_value(&c4) ||
-                                                       Rast_is_d_null_value(&c6) ||
-                                                       Rast_is_d_null_value(&c7) ||
-                                                       Rast_is_d_null_value(&c8) ||
-                                                       Rast_is_d_null_value(&c9)))) {
+                                                      (Rast_is_d_null_value
+                                                       (&c1) ||
+                                                       Rast_is_d_null_value
+                                                       (&c2) ||
+                                                       Rast_is_d_null_value
+                                                       (&c3) ||
+                                                       Rast_is_d_null_value
+                                                       (&c4) ||
+                                                       Rast_is_d_null_value
+                                                       (&c6) ||
+                                                       Rast_is_d_null_value
+                                                       (&c7) ||
+                                                       Rast_is_d_null_value
+                                                       (&c8) ||
+                                                       Rast_is_d_null_value
+                                                       (&c9)))) {
                         if (slope_fd > 0) {
                             Rast_set_null_value(slp_ptr, 1, data_type);
                             slp_ptr =
-                                G_incr_void_ptr(slp_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(slp_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (aspect_fd > 0) {
                             Rast_set_null_value(asp_ptr, 1, data_type);
                             asp_ptr =
-                                G_incr_void_ptr(asp_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(asp_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (pcurv_fd > 0) {
                             Rast_set_null_value(pcurv_ptr, 1, data_type);
                             pcurv_ptr =
-                                G_incr_void_ptr(pcurv_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(pcurv_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (tcurv_fd > 0) {
                             Rast_set_null_value(tcurv_ptr, 1, data_type);
                             tcurv_ptr =
-                                G_incr_void_ptr(tcurv_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(tcurv_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (dx_fd > 0) {
                             Rast_set_null_value(dx_ptr, 1, data_type);
                             dx_ptr =
-                                G_incr_void_ptr(dx_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(dx_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (dy_fd > 0) {
                             Rast_set_null_value(dy_ptr, 1, data_type);
                             dy_ptr =
-                                G_incr_void_ptr(dy_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(dy_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (dxx_fd > 0) {
                             Rast_set_null_value(dxx_ptr, 1, data_type);
                             dxx_ptr =
-                                G_incr_void_ptr(dxx_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(dxx_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (dyy_fd > 0) {
                             Rast_set_null_value(dyy_ptr, 1, data_type);
                             dyy_ptr =
-                                G_incr_void_ptr(dyy_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(dyy_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         if (dxy_fd > 0) {
                             Rast_set_null_value(dxy_ptr, 1, data_type);
                             dxy_ptr =
-                                G_incr_void_ptr(dxy_ptr, Rast_cell_size(data_type));
+                                G_incr_void_ptr(dxy_ptr,
+                                                Rast_cell_size(data_type));
                         }
                         continue;
-                    }                   /* no data */
+                    }           /* no data */
 
                     if (compute_at_edges) {
                         /* same method like ComputeVal in gdaldem_lib.cpp */
@@ -868,13 +902,17 @@ int main(int argc, char *argv[])
                         else {
                             if (deg)
                                 Rast_set_d_value(slp_ptr,
-                                                 (DCELL) slp_in_deg, data_type);
+                                                 (DCELL) slp_in_deg,
+                                                 data_type);
                             else
                                 Rast_set_d_value(slp_ptr,
-                                                 (DCELL) slp_in_perc, data_type);
+                                                 (DCELL) slp_in_perc,
+                                                 data_type);
                         }
-                        slp_ptr = G_incr_void_ptr(slp_ptr, Rast_cell_size(data_type));
-                    }                   /* computing slope */
+                        slp_ptr =
+                            G_incr_void_ptr(slp_ptr,
+                                            Rast_cell_size(data_type));
+                    }           /* computing slope */
 
                     if (aspect_fd > 0) {
                         double aspect_flat = 0.;
@@ -904,23 +942,28 @@ int main(int argc, char *argv[])
                             *((CELL *) asp_ptr) = (CELL) floor(aspect + .5);
                         }
                         else
-                            Rast_set_d_value(asp_ptr, (DCELL) aspect, data_type);
+                            Rast_set_d_value(asp_ptr, (DCELL) aspect,
+                                             data_type);
 
-                        asp_ptr = G_incr_void_ptr(asp_ptr, Rast_cell_size(data_type));
+                        asp_ptr =
+                            G_incr_void_ptr(asp_ptr,
+                                            Rast_cell_size(data_type));
 
                         /* now update min and max */
                         if (aspect > aspect_flat && min_asp > aspect)
                             min_asp = aspect;
                         if (max_asp < aspect)
                             max_asp = aspect;
-                    }                   /* computing aspect */
+                    }           /* computing aspect */
 
                     if (dx_fd > 0) {
                         if (out_type == CELL_TYPE)
                             *((CELL *) dx_ptr) = (CELL) (scik1 * dx);
                         else
                             Rast_set_d_value(dx_ptr, (DCELL) dx, data_type);
-                        dx_ptr = G_incr_void_ptr(dx_ptr, Rast_cell_size(data_type));
+                        dx_ptr =
+                            G_incr_void_ptr(dx_ptr,
+                                            Rast_cell_size(data_type));
                     }
 
                     if (dy_fd > 0) {
@@ -928,7 +971,9 @@ int main(int argc, char *argv[])
                             *((CELL *) dy_ptr) = (CELL) (scik1 * dy);
                         else
                             Rast_set_d_value(dy_ptr, (DCELL) dy, data_type);
-                        dy_ptr = G_incr_void_ptr(dy_ptr, Rast_cell_size(data_type));
+                        dy_ptr =
+                            G_incr_void_ptr(dy_ptr,
+                                            Rast_cell_size(data_type));
                     }
 
                     if (dxx_fd <= 0 && dxy_fd <= 0 && dyy_fd <= 0 &&
@@ -950,7 +995,9 @@ int main(int argc, char *argv[])
                             *((CELL *) dxx_ptr) = (CELL) (scik1 * dxx);
                         else
                             Rast_set_d_value(dxx_ptr, (DCELL) dxx, data_type);
-                        dxx_ptr = G_incr_void_ptr(dxx_ptr, Rast_cell_size(data_type));
+                        dxx_ptr =
+                            G_incr_void_ptr(dxx_ptr,
+                                            Rast_cell_size(data_type));
                     }
 
                     if (dyy_fd > 0) {
@@ -958,7 +1005,9 @@ int main(int argc, char *argv[])
                             *((CELL *) dyy_ptr) = (CELL) (scik1 * dyy);
                         else
                             Rast_set_d_value(dyy_ptr, (DCELL) dyy, data_type);
-                        dyy_ptr = G_incr_void_ptr(dyy_ptr, Rast_cell_size(data_type));
+                        dyy_ptr =
+                            G_incr_void_ptr(dyy_ptr,
+                                            Rast_cell_size(data_type));
                     }
 
                     if (dxy_fd > 0) {
@@ -966,7 +1015,9 @@ int main(int argc, char *argv[])
                             *((CELL *) dxy_ptr) = (CELL) (scik1 * dxy);
                         else
                             Rast_set_d_value(dxy_ptr, (DCELL) dxy, data_type);
-                        dxy_ptr = G_incr_void_ptr(dxy_ptr, Rast_cell_size(data_type));
+                        dxy_ptr =
+                            G_incr_void_ptr(dxy_ptr,
+                                            Rast_cell_size(data_type));
                     }
 
                     /* compute curvature */
@@ -986,7 +1037,8 @@ int main(int argc, char *argv[])
                         dy2 = dy * dy;
                         pcurv = (dxx * dx2 + dxy2 + dyy * dy2) /
                             (grad2 * dnorm1 * dnorm1 * dnorm1);
-                        tcurv = (dxx * dy2 - dxy2 + dyy * dx2) / (grad2 * dnorm1);
+                        tcurv =
+                            (dxx * dy2 - dxy2 + dyy * dx2) / (grad2 * dnorm1);
                         if (c1min > pcurv)
                             c1min = pcurv;
                         if (c1max < pcurv)
@@ -1001,27 +1053,31 @@ int main(int argc, char *argv[])
                         if (out_type == CELL_TYPE)
                             *((CELL *) pcurv_ptr) = (CELL) (scik1 * pcurv);
                         else
-                            Rast_set_d_value(pcurv_ptr, (DCELL) pcurv, data_type);
+                            Rast_set_d_value(pcurv_ptr, (DCELL) pcurv,
+                                             data_type);
                         pcurv_ptr =
-                            G_incr_void_ptr(pcurv_ptr, Rast_cell_size(data_type));
+                            G_incr_void_ptr(pcurv_ptr,
+                                            Rast_cell_size(data_type));
                     }
 
                     if (tcurv_fd > 0) {
                         if (out_type == CELL_TYPE)
                             *((CELL *) tcurv_ptr) = (CELL) (scik1 * tcurv);
                         else
-                            Rast_set_d_value(tcurv_ptr, (DCELL) tcurv, data_type);
+                            Rast_set_d_value(tcurv_ptr, (DCELL) tcurv,
+                                             data_type);
                         tcurv_ptr =
-                            G_incr_void_ptr(tcurv_ptr, Rast_cell_size(data_type));
+                            G_incr_void_ptr(tcurv_ptr,
+                                            Rast_cell_size(data_type));
                     }
 
-                } /* end column loop */
+                }               /* end column loop */
 
-                #pragma omp atomic update
+#pragma omp atomic update
                 computed++;
-            } /* end row loop */
-        } /* end parallel region */
-        
+            }                   /* end row loop */
+        }                       /* end parallel region */
+
         /* write the computed buffer chunk to disk */
         written = end;
         for (row = start; row < end; row++) {
@@ -1073,7 +1129,7 @@ int main(int argc, char *argv[])
             }
         }
 
-    } /* while loop repeats until all chunks are computed and written */
+    }                           /* while loop repeats until all chunks are computed and written */
 
     G_percent(nrows, nrows, 2);
 

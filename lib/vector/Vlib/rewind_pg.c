@@ -73,7 +73,7 @@ int V2_rewind_pg(struct Map_info *Map)
 #ifdef HAVE_POSTGRES
     /* reset reading */
     Map->next_line = 1;
-    
+
     V1_rewind_pg(Map);
 
     return 0;

@@ -10,10 +10,10 @@ void smgen(double *a, double *eval, double *evec, int n)
     double *p, *q, *ps, *r, *s, *t, *v = evec + n * n;
 
     for (ps = a, p = evec; p < v; p += n) {
-	for (q = evec; q < v; q += n, ++ps) {
-	    *ps = 0.;
-	    for (r = eval, s = p, t = q; r < eval + n;)
-		*ps += *r++ * *s++ * *t++;
-	}
+        for (q = evec; q < v; q += n, ++ps) {
+            *ps = 0.;
+            for (r = eval, s = p, t = q; r < eval + n;)
+                *ps += *r++ * *s++ * *t++;
+        }
     }
 }

@@ -46,7 +46,7 @@
  *
  * */
 int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
-				int rows, int maxit, double sor, double error)
+                                int rows, int maxit, double sor, double error)
 {
     int i, j, k, center, finished = 0;
 
@@ -57,36 +57,36 @@ int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
     Enew = G_alloc_vector(rows);
 
     for (k = 0; k < maxit; k++) {
-	err = 0;
-	{
-	    if (k == 0) {
-		for (j = 0; j < rows; j++) {
-		    Enew[j] = x[j];
-		}
-	    }
-	    for (i = 0; i < rows; i++) {
-		E = 0;
-		center = 0;
-		for (j = 0; j < Asp[i]->cols; j++) {
-		    E += Asp[i]->values[j] * x[Asp[i]->index[j]];
-		    if (Asp[i]->index[j] == i)
-			center = j;
-		}
-		Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
-	    }
-	    for (j = 0; j < rows; j++) {
-		err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
+        err = 0;
+        {
+            if (k == 0) {
+                for (j = 0; j < rows; j++) {
+                    Enew[j] = x[j];
+                }
+            }
+            for (i = 0; i < rows; i++) {
+                E = 0;
+                center = 0;
+                for (j = 0; j < Asp[i]->cols; j++) {
+                    E += Asp[i]->values[j] * x[Asp[i]->index[j]];
+                    if (Asp[i]->index[j] == i)
+                        center = j;
+                }
+                Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
+            }
+            for (j = 0; j < rows; j++) {
+                err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
 
-		x[j] = Enew[j];
-	    }
-	}
+                x[j] = Enew[j];
+            }
+        }
 
-	G_message(_("sparse Jacobi -- iteration %5i error %g\n"), k, err);
+        G_message(_("sparse Jacobi -- iteration %5i error %g\n"), k, err);
 
-	if (err < error) {
-	    finished = 1;
-	    break;
-	}
+        if (err < error) {
+            finished = 1;
+            break;
+        }
     }
 
     G_free(Enew);
@@ -116,7 +116,7 @@ int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
  *
  * */
 int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
-			    int rows, int maxit, double sor, double error)
+                            int rows, int maxit, double sor, double error)
 {
     int i, j, k, finished = 0;
 
@@ -129,36 +129,36 @@ int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
     Enew = G_alloc_vector(rows);
 
     for (k = 0; k < maxit; k++) {
-	err = 0;
-	{
-	    if (k == 0) {
-		for (j = 0; j < rows; j++) {
-		    Enew[j] = x[j];
-		}
-	    }
-	    for (i = 0; i < rows; i++) {
-		E = 0;
-		center = 0;
-		for (j = 0; j < Asp[i]->cols; j++) {
-		    E += Asp[i]->values[j] * Enew[Asp[i]->index[j]];
-		    if (Asp[i]->index[j] == i)
-			center = j;
-		}
-		Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
-	    }
-	    for (j = 0; j < rows; j++) {
-		err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
+        err = 0;
+        {
+            if (k == 0) {
+                for (j = 0; j < rows; j++) {
+                    Enew[j] = x[j];
+                }
+            }
+            for (i = 0; i < rows; i++) {
+                E = 0;
+                center = 0;
+                for (j = 0; j < Asp[i]->cols; j++) {
+                    E += Asp[i]->values[j] * Enew[Asp[i]->index[j]];
+                    if (Asp[i]->index[j] == i)
+                        center = j;
+                }
+                Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
+            }
+            for (j = 0; j < rows; j++) {
+                err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
 
-		x[j] = Enew[j];
-	    }
-	}
+                x[j] = Enew[j];
+            }
+        }
 
-	G_message(_("sparse SOR -- iteration %5i error %g\n"), k, err);
+        G_message(_("sparse SOR -- iteration %5i error %g\n"), k, err);
 
-	if (err < error) {
-	    finished = 1;
-	    break;
-	}
+        if (err < error) {
+            finished = 1;
+            break;
+        }
     }
 
     G_free(Enew);
@@ -188,7 +188,7 @@ int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
  *
  * */
 int G_math_solver_jacobi(double **A, double *x, double *b, int rows,
-			 int maxit, double sor, double error)
+                         int maxit, double sor, double error)
 {
     int i, j, k;
 
@@ -199,25 +199,25 @@ int G_math_solver_jacobi(double **A, double *x, double *b, int rows,
     Enew = G_alloc_vector(rows);
 
     for (j = 0; j < rows; j++) {
-	Enew[j] = x[j];
+        Enew[j] = x[j];
     }
 
     for (k = 0; k < maxit; k++) {
-	for (i = 0; i < rows; i++) {
-	    E = 0;
-	    for (j = 0; j < rows; j++) {
-		E += A[i][j] * x[j];
-	    }
-	    Enew[i] = x[i] - sor * (E - b[i]) / A[i][i];
-	}
-	err = 0;
-	for (j = 0; j < rows; j++) {
-	    err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
-	    x[j] = Enew[j];
-	}
-	G_message(_("Jacobi -- iteration %5i error %g\n"), k, err);
-	if (err < error)
-	    break;
+        for (i = 0; i < rows; i++) {
+            E = 0;
+            for (j = 0; j < rows; j++) {
+                E += A[i][j] * x[j];
+            }
+            Enew[i] = x[i] - sor * (E - b[i]) / A[i][i];
+        }
+        err = 0;
+        for (j = 0; j < rows; j++) {
+            err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
+            x[j] = Enew[j];
+        }
+        G_message(_("Jacobi -- iteration %5i error %g\n"), k, err);
+        if (err < error)
+            break;
     }
 
     return 1;
@@ -245,7 +245,7 @@ int G_math_solver_jacobi(double **A, double *x, double *b, int rows,
  *
  * */
 int G_math_solver_gs(double **A, double *x, double *b, int rows, int maxit,
-		     double sor, double error)
+                     double sor, double error)
 {
     int i, j, k;
 
@@ -256,25 +256,25 @@ int G_math_solver_gs(double **A, double *x, double *b, int rows, int maxit,
     Enew = G_alloc_vector(rows);
 
     for (j = 0; j < rows; j++) {
-	Enew[j] = x[j];
+        Enew[j] = x[j];
     }
 
     for (k = 0; k < maxit; k++) {
-	for (i = 0; i < rows; i++) {
-	    E = 0;
-	    for (j = 0; j < rows; j++) {
-		E += A[i][j] * Enew[j];
-	    }
-	    Enew[i] = x[i] - sor * (E - b[i]) / A[i][i];
-	}
-	err = 0;
-	for (j = 0; j < rows; j++) {
-	    err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
-	    x[j] = Enew[j];
-	}
-	G_message(_("SOR -- iteration %5i error %g\n"), k, err);
-	if (err < error)
-	    break;
+        for (i = 0; i < rows; i++) {
+            E = 0;
+            for (j = 0; j < rows; j++) {
+                E += A[i][j] * Enew[j];
+            }
+            Enew[i] = x[i] - sor * (E - b[i]) / A[i][i];
+        }
+        err = 0;
+        for (j = 0; j < rows; j++) {
+            err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
+            x[j] = Enew[j];
+        }
+        G_message(_("SOR -- iteration %5i error %g\n"), k, err);
+        if (err < error)
+            break;
     }
 
     return 1;

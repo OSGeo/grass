@@ -74,15 +74,17 @@ void Nviz_set_bgcolor(nv_data *, int);
 int Nviz_get_bgcolor(nv_data *);
 int Nviz_color_from_str(const char *);
 struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
-				    double, int, int, int, int);
+                                    double, int, int, int, int);
 struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
-				    double, int, int, int, int);
-void Nviz_draw_fringe(nv_data *data);
+                                    double, int, int, int, int);
+void Nviz_draw_fringe(nv_data * data);
 int Nviz_draw_arrow(nv_data *);
 int Nviz_set_arrow(nv_data *, int, int, float, unsigned int);
 void Nviz_delete_arrow(nv_data *);
-struct scalebar_data * Nviz_new_scalebar(nv_data *, int, float *, float, unsigned int);
-struct scalebar_data * Nviz_set_scalebar(nv_data *, int , int, int, float, unsigned int);
+struct scalebar_data *Nviz_new_scalebar(nv_data *, int, float *, float,
+                                        unsigned int);
+struct scalebar_data *Nviz_set_scalebar(nv_data *, int, int, int, float,
+                                        unsigned int);
 void Nviz_draw_scalebar(nv_data *);
 void Nviz_delete_scalebar(nv_data *, int);
 

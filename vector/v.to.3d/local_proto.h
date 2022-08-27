@@ -1,13 +1,14 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 
-struct opts {
-  struct Flag *reverse, *table;
-  
-  struct Option *input, *output;
-  struct Option *type;
-  struct Option *height;
-  struct Option *field, *column;
+struct opts
+{
+    struct Flag *reverse, *table;
+
+    struct Option *input, *output;
+    struct Option *type;
+    struct Option *height;
+    struct Option *field, *column;
 };
 
 /* args.c */

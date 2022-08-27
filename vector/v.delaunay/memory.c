@@ -1,3 +1,4 @@
+
 /***************************************************************
  *
  * MODULE:       v.delaunay
@@ -61,19 +62,19 @@ void alloc_memory(unsigned int n)
     /* Sites storage. */
     sites = (struct vertex *)G_calloc(n, sizeof(struct vertex));
     if (sites == NULL)
-	G_fatal_error(_("Not enough memory."));
+        G_fatal_error(_("Not enough memory."));
 
     /* Edges. Euler's formula - at most 3n edges on a set of n sites */
     n_free_e = 3 * n;
     edges = e = (struct edge *)G_calloc(n_free_e, sizeof(struct edge));
     if (edges == NULL)
-	G_fatal_error(_("Not enough memory."));
+        G_fatal_error(_("Not enough memory."));
 
     free_list_e = (struct edge **)G_calloc(n_free_e, sizeof(struct edge *));
     if (free_list_e == NULL)
-	G_fatal_error(_("Not enough memory."));
+        G_fatal_error(_("Not enough memory."));
     for (i = 0; i < n_free_e; i++, e++)
-	free_list_e[i] = e;
+        free_list_e[i] = e;
 }
 
 void alloc_sites(unsigned int n)
@@ -81,7 +82,7 @@ void alloc_sites(unsigned int n)
     /* Sites storage. */
     sites = (struct vertex *)G_calloc(n, sizeof(struct vertex));
     if (sites == NULL)
-	G_fatal_error(_("Not enough memory."));
+        G_fatal_error(_("Not enough memory."));
 }
 
 void realloc_sites(unsigned int n)
@@ -89,7 +90,7 @@ void realloc_sites(unsigned int n)
     /* Sites storage. */
     sites = (struct vertex *)G_realloc(sites, n * sizeof(struct vertex));
     if (sites == NULL)
-	G_fatal_error(_("Not enough memory."));
+        G_fatal_error(_("Not enough memory."));
 }
 
 void alloc_edges(unsigned int n)
@@ -101,13 +102,13 @@ void alloc_edges(unsigned int n)
     n_free_e = 3 * n;
     edges = e = (struct edge *)G_calloc(n_free_e, sizeof(struct edge));
     if (edges == NULL)
-	G_fatal_error(_("Not enough memory."));
+        G_fatal_error(_("Not enough memory."));
 
     free_list_e = (struct edge **)G_calloc(n_free_e, sizeof(struct edge *));
     if (free_list_e == NULL)
-	G_fatal_error(_("Not enough memory."));
+        G_fatal_error(_("Not enough memory."));
     for (i = 0; i < n_free_e; i++, e++)
-	free_list_e[i] = e;
+        free_list_e[i] = e;
 }
 
 
@@ -121,7 +122,7 @@ void free_memory()
 struct edge *get_edge()
 {
     if (n_free_e < 1)
-	G_fatal_error(_("All allocated edges have been used."));
+        G_fatal_error(_("All allocated edges have been used."));
     return (free_list_e[--n_free_e]);
 }
 
