@@ -30,13 +30,9 @@ import time
 
 from html.parser import HTMLParser
 
-from six.moves.urllib import request as urlrequest
-from six.moves.urllib.error import HTTPError, URLError
-
-try:
-    import urlparse
-except ImportError:
-    import urllib.parse as urlparse
+from urllib import request as urlrequest
+from urllib.error import HTTPError, URLError
+import urllib.parse as urlparse
 
 try:
     import grass.script as gs
