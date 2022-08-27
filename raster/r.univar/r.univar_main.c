@@ -446,6 +446,7 @@ process_raster(univar_stat *stats, int *fd, int *fdz, const struct Cell_head *re
 
 	} /* end column loop */
         if (!(param.shell_style->answer)) {
+            #pragma omp atomic update
             computed++;
             G_percent(computed, rows, 2);
 	}
