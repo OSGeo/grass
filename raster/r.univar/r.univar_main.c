@@ -393,7 +393,7 @@ process_raster(univar_stat *stats, int *fd, int *fdz, const struct Cell_head *re
 
 	    if (param.extended->answer) {
 		/* check allocated memory */
-        /* parallelization is disabled, local variable reflects global state */
+		/* parallelization is disabled, local variable reflects global state */
 		if (n[zone] >= stats[zone].n_alloc) {
 		    stats[zone].n_alloc += 1000;
 		    size_t msize;
@@ -433,48 +433,48 @@ process_raster(univar_stat *stats, int *fd, int *fdz, const struct Cell_head *re
 	    sumsq[zone] += val * val;
 	    sum_abs[zone] += fabs(val);
 
-		if (val > max[zone])
-		    max[zone] = val;
-		if (val < min[zone])
-		    min[zone] = val;
+	    if (val > max[zone])
+		max[zone] = val;
+	    if (val < min[zone])
+		min[zone] = val;
 
 	    ptr = G_incr_void_ptr(ptr, value_sz);
 	    if (n_zones)
-            zptr++;
-        n[zone]++;
+		zptr++;
+	    n[zone]++;
 
 	} /* end column loop */
         if (!(param.shell_style->answer)) {
             computed++;
             G_percent(computed, rows, 2);
-        }
+	}
     } /* end row loop */
 
-        for (i = 0; i < n_alloc; i++) {
-            #pragma omp atomic update
-            stats[i].n += n[i];
-            #pragma omp atomic update
-            stats[i].size += size[i];
-            #pragma omp atomic update
-            stats[i].sum += sum[i];
-            #pragma omp atomic update
-            stats[i].sumsq += sumsq[i];
-            #pragma omp atomic update
-            stats[i].sum_abs += sum_abs[i];
+    for (i = 0; i < n_alloc; i++) {
+	#pragma omp atomic update
+	stats[i].n += n[i];
+	#pragma omp atomic update
+	stats[i].size += size[i];
+	#pragma omp atomic update
+	stats[i].sum += sum[i];
+	#pragma omp atomic update
+	stats[i].sumsq += sumsq[i];
+	#pragma omp atomic update
+	stats[i].sum_abs += sum_abs[i];
 
 #if defined(_OPENMP)
-            omp_set_lock(&(minmax[i]));
+	omp_set_lock(&(minmax[i]));
 #endif
-            if (stats[i].max < max[i] || (stats[i].max != stats[i].max && max[i] != DBL_MIN)) {
-                stats[i].max = max[i];
-            }
-            if (stats[i].min > min[i] || (stats[i].min != stats[i].min && min[i] != DBL_MAX)) {
-                stats[i].min = min[i];
-            }
+	if (stats[i].max < max[i] || (stats[i].max != stats[i].max && max[i] != DBL_MIN)) {
+	    stats[i].max = max[i];
+	}
+	if (stats[i].min > min[i] || (stats[i].min != stats[i].min && min[i] != DBL_MAX)) {
+	    stats[i].min = min[i];
+	}
 #if defined(_OPENMP)
-            omp_unset_lock(&(minmax[i]));
+	omp_unset_lock(&(minmax[i]));
 #endif
-        }
+    }
 
     } /* end parallel region */
 
