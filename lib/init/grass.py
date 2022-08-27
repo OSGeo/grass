@@ -645,11 +645,7 @@ def create_fallback_session(gisrc, tmpdir):
     """Creates fallback temporary session"""
     # Create temporary location
     set_mapset(
-        gisrc=gisrc,
-        geofile="XY",
-        create_new=True,
-        tmp_location=True,
-        tmpdir=tmpdir,
+        gisrc=gisrc, geofile="XY", create_new=True, tmp_location=True, tmpdir=tmpdir
     )
 
 
@@ -1757,9 +1753,7 @@ def run_batch_job(batch_job: list):
         script_in_addon_path = None
         if "GRASS_ADDON_BASE" in os.environ:
             script_in_addon_path = os.path.join(
-                os.environ["GRASS_ADDON_BASE"],
-                "scripts",
-                batch_job[0],
+                os.environ["GRASS_ADDON_BASE"], "scripts", batch_job[0]
             )
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
@@ -1772,8 +1766,7 @@ def run_batch_job(batch_job: list):
         proc = Popen(batch_job, shell=False, env=os.environ)
     except OSError as error:
         error_message = _("Execution of <{cmd}> failed:\n" "{error}").format(
-            cmd=batch_job_string,
-            error=error,
+            cmd=batch_job_string, error=error
         )
         # No such file or directory
         if error.errno == errno.ENOENT:
@@ -2565,8 +2558,7 @@ def main():
         from grass.grassdb.checks import can_start_in_mapset
 
         last_mapset_usable = can_start_in_mapset(
-            mapset_path=last_mapset_path,
-            ignore_lock=params.force_gislock_removal,
+            mapset_path=last_mapset_path, ignore_lock=params.force_gislock_removal
         )
         debug(f"last_mapset_usable: {last_mapset_usable}")
         if not last_mapset_usable:
