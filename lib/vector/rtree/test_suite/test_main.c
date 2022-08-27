@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       test.rtree.lib
@@ -22,20 +23,22 @@
 #include "test_rtree_lib.h"
 
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct {
+typedef struct
+{
     struct Option *unit;
 } paramType;
 
-paramType param; /*Parameters */
+paramType param;                /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void); /*Fill the paramType structure */
+static void set_params(void);   /*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 
 /* ************************************************************************* */
-void set_params(void) {
+void set_params(void)
+{
     param.unit = G_define_option();
     param.unit->key = "unit";
     param.unit->type = TYPE_STRING;
@@ -48,7 +51,8 @@ void set_params(void) {
 /* ************************************************************************* */
 
 /* ************************************************************************* */
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     struct GModule *module;
     int returnstat = 0, i;
 
@@ -57,8 +61,7 @@ int main(int argc, char *argv[]) {
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description
-            = _("Unit tests for the vector rtree library");
+    module->description = _("Unit tests for the vector rtree library");
 
     /* Get parameters from user */
     set_params();
@@ -77,7 +80,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-    
+
     if (returnstat != 0)
         G_warning("Errors detected while testing the vector rtree lib");
     else

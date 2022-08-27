@@ -26,11 +26,11 @@ static int have(int x, const DateTime * dt)
 int datetime_check_timezone(const DateTime * dt, int minutes)
 {
     if (!datetime_is_absolute(dt))
-	return datetime_error(-1, "datetime not absolute");
+        return datetime_error(-1, "datetime not absolute");
     if (!have(DATETIME_MINUTE, dt))
-	return datetime_error(-2, "datetime has no minute");
+        return datetime_error(-2, "datetime has no minute");
     if (!datetime_is_valid_timezone(minutes))
-	return datetime_error(-3, "invalid datetime timezone");
+        return datetime_error(-3, "invalid datetime timezone");
 
     return 0;
 }
@@ -52,7 +52,7 @@ int datetime_get_timezone(const DateTime * dt, int *minutes)
 
     stat = datetime_check_timezone(dt, dt->tz);
     if (stat == 0)
-	*minutes = dt->tz;
+        *minutes = dt->tz;
 
     return stat;
 }
@@ -74,7 +74,7 @@ int datetime_set_timezone(DateTime * dt, int minutes)
 
     stat = datetime_check_timezone(dt, minutes);
     if (stat == 0)
-	dt->tz = minutes;
+        dt->tz = minutes;
 
     return stat;
 }
