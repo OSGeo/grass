@@ -28,12 +28,7 @@ import pathlib
 import subprocess
 import time
 
-try:
-    # Python 2 import
-    from HTMLParser import HTMLParser
-except ImportError:
-    # Python 3 import
-    from html.parser import HTMLParser
+from html.parser import HTMLParser
 
 from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError
@@ -56,15 +51,6 @@ HEADERS = {
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
-if sys.version_info[0] == 2:
-    PY2 = True
-else:
-    PY2 = False
-
-
-if not PY2:
-    unicode = str
-
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
@@ -86,21 +72,6 @@ def _get_encoding():
     if not encoding:
         encoding = "UTF-8"
     return encoding
-
-
-def decode(bytes_):
-    """Decode bytes with default locale and return (unicode) string
-
-    No-op if parameter is not bytes (assumed unicode string).
-
-    :param bytes bytes_: the bytes to decode
-    """
-    if isinstance(bytes_, unicode):
-        return bytes_
-    if isinstance(bytes_, bytes):
-        enc = _get_encoding()
-        return bytes_.decode(enc)
-    return unicode(bytes_)
 
 
 def urlopen(url, *args, **kwargs):
@@ -482,13 +453,9 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 
 def read_file(name):
     try:
-        f = open(name, "rb")
-        s = f.read()
-        f.close()
-        if PY2:
-            return s
-        else:
-            return decode(s)
+        with open(name) as f:
+            s = f.read()
+        return s
     except IOError:
         return ""
 
