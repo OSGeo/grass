@@ -2444,23 +2444,12 @@ def classic_parser(argv, default_gui, color_config=None):
     parser.add_argument("--config", nargs="*")
     parser.add_argument("--no-color", dest="no_color", action="store_true")
     parser.add_argument(
-        "--location-color",
-        nargs="+",
-        action="store",
-        dest="location_color",
+        "--location-color", nargs="+", action="store", dest="location_color"
     )
     parser.add_argument(
-        "--mapset-color",
-        nargs="+",
-        action="store",
-        dest="mapset_color",
+        "--mapset-color", nargs="+", action="store", dest="mapset_color"
     )
-    parser.add_argument(
-        "--path-color",
-        nargs="+",
-        action="store",
-        dest="path_color",
-    )
+    parser.add_argument("--path-color", nargs="+", action="store", dest="path_color")
     add_mapset_arguments(parser, mapset_as_option=False)
     parser.add_argument(
         "--exec",
@@ -2642,10 +2631,13 @@ class Color(object):
 class Colors(object):
     """Holds all colors for GRASS, and provides JSON serialization."""
 
-    def __init__(self, colors=None,
-                 path=Color(fg="cyan"),
-                 mapset=Color(style="bold"),
-                 location=Color(style="bold")):
+    def __init__(
+        self,
+        colors=None,
+        path=Color(fg="cyan"),
+        mapset=Color(style="bold"),
+        location=Color(style="bold"),
+    ):
         self._color = {}
         if colors:
             debug(
