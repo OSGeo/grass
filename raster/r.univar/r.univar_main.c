@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("univariate statistics"));
     G_add_keyword(_("zonal statistics"));
+    G_add_keyword(_("parallel"));
 
     module->label =
 	_("Calculates univariate statistics from the non-null cells of a raster map.");
