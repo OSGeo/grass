@@ -136,14 +136,14 @@ There is a series of automated checks which will run on your pull request
 after you create one. You don't need to run all these
 checks locally and, indeed, some of them may fail for your code. This is a part of
 the standard iterative process of integrating changes into the main code,
-so if that happens, just see the error messages and go back to your code
-and try again. If you are not sure what to do, let other know in a pull
+so if that happens, just see the error messages, go back to your code
+and try again. If you are not sure what to do, let others know in a pull
 request comment.
 
-There are some steps you can do locally, to improve your code.
+Note that there are some steps you can do locally to improve your code.
 For Python, run `black .` to apply standardized formatting. You can
-also run linter tools such as Pylint which will suggest you how
-you may improve your code.
+also run linter tools such as Pylint which will suggest different improvements 
+to your code.
 
 ### Committing
 
@@ -208,7 +208,8 @@ manual pages, etc.
 
 The way to install the compiler tools and Python depends on the operating
 system. To make this easier, we have collected copy-paste instructions
-for most operating systems in our wiki:
+to install dependencies and compile GRASS source code for most operating systems.
+Please see our dedicated wiki:
 
 [Compile and install instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
 
