@@ -20,33 +20,33 @@ int dfwrite_header(file_info * headp)
     flsize = sizeof(float);
     /* print the header code on first line of file */
     if (!fwrite(DSPF_ID, strlen(DSPF_ID), 1, fp))
-	return (-1);
+        return (-1);
     /* the dimensions of the data */
     if (1 != fwrite(&headp->xdim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (1 != fwrite(&headp->ydim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (1 != fwrite(&headp->zdim, isize, 1, fp))
-	return (-1);
+        return (-1);
 
 
     /* print out code for min and max values */
     if (1 != fwrite(&headp->min, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (1 != fwrite(&headp->max, flsize, 1, fp))
-	return (-1);
+        return (-1);
 
     /* the litmodel stored for each polygon */
     if (1 != fwrite(&linep->litmodel, isize, 1, fp))
-	return (-1);
+        return (-1);
 
     /* write the total number of thresholds to be searched for */
     if (1 != fwrite(&linep->nthres, isize, 1, fp))
-	return (-1);
+        return (-1);
     /* write the array of thresholds out */
     if ((fwrite(linep->tvalue, flsize, linep->nthres, fp)) != linep->nthres) {
-	fprintf(stderr, "ERROR: fwrite in dspf_header.c\n");
-	return (-1);
+        fprintf(stderr, "ERROR: fwrite in dspf_header.c\n");
+        return (-1);
     }
 
     /* write the offset to the lookup table */
@@ -56,7 +56,7 @@ int dfwrite_header(file_info * headp)
     Where_lookoff = G_ftell(fp);
     headp->Lookoff = 0;
     if (1 != fwrite(&headp->Lookoff, sizeof(long), 1, fp))
-	return (-1);
+        return (-1);
 
     /* code to determine the length of the binary file header */
     /* Dataoff = length of the header */
@@ -64,7 +64,7 @@ int dfwrite_header(file_info * headp)
     Where_dataoff = G_ftell(fp);
     headp->Dataoff = 0;
     if (1 != fwrite(&headp->Dataoff, sizeof(long), 1, fp))
-	return (-1);
+        return (-1);
 
 
 
@@ -72,9 +72,9 @@ int dfwrite_header(file_info * headp)
     headp->Dataoff = G_ftell(fp);
     G_fseek(fp, Where_dataoff, 0);
     if (1 != fwrite(&headp->Dataoff, sizeof(long), 1, fp))
-	return (-1);
+        return (-1);
 
-    G_fseek(fp, headp->Dataoff, 0);	/* and return to begin writing data */
+    G_fseek(fp, headp->Dataoff, 0);     /* and return to begin writing data */
 
     /* will still have to come back once more to fill in Lookup offset */
 
@@ -100,43 +100,43 @@ int dfread_header(file_info * headp)
 
 
     len = strlen(DSPF_ID);
-    G_fseek(fp, 0L, 0);		/* rewind file */
+    G_fseek(fp, 0L, 0);         /* rewind file */
     /*read in header information and store in File_info struct */
 
     if (!fread(buf, 1, len, fp))
-	return (-1);
+        return (-1);
     buf[len] = 0;
     if (strncmp(DSPF_ID, buf, len)) {
-	if (!strncmp("dspf003.01", buf, len))
-	    return (dfread_header_old(headp, fp));
+        if (!strncmp("dspf003.01", buf, len))
+            return (dfread_header_old(headp, fp));
 
-	fprintf(stderr, "Error: header mismatch '%s' - '%s'\n", DSPF_ID, buf);
-	return (-1);
+        fprintf(stderr, "Error: header mismatch '%s' - '%s'\n", DSPF_ID, buf);
+        return (-1);
     }
     linep = &(headp->linefax);
     isize = sizeof(int);
     flsize = sizeof(float);
 
     if (!fread(&headp->xdim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->ydim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->zdim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->min, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->max, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&linep->litmodel, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&linep->nthres, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(linep->tvalue, flsize, linep->nthres, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->Lookoff, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->Dataoff, isize, 1, fp))
-	return (-1);
+        return (-1);
 
     print_head_info(headp);
 
@@ -154,31 +154,31 @@ int dfread_header_old(file_info * headp, FILE * fp)
     flsize = sizeof(float);
 
     if (!fread(&headp->xdim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->ydim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->zdim, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&tmp, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&tmp, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&tmp, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->min, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->max, flsize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&linep->litmodel, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&linep->nthres, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(linep->tvalue, flsize, linep->nthres, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->Lookoff, isize, 1, fp))
-	return (-1);
+        return (-1);
     if (!fread(&headp->Dataoff, isize, 1, fp))
-	return (-1);
+        return (-1);
 
     print_head_info(headp);
 

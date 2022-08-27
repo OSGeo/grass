@@ -4,13 +4,13 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 
-#define NO_SNAP    0		/* snapping disabled */
-#define SNAP       1		/* snapping enabled for nodes */
-#define SNAPVERTEX 2		/* snapping enabled for vertex also */
+#define NO_SNAP    0            /* snapping disabled */
+#define SNAP       1            /* snapping enabled for nodes */
+#define SNAPVERTEX 2            /* snapping enabled for vertex also */
 
 #define QUERY_UNKNOWN -1
-#define QUERY_LENGTH   0	/* select by line length */
-#define QUERY_DANGLE   1	/* select dangles */
+#define QUERY_LENGTH   0        /* select by line length */
+#define QUERY_DANGLE   1        /* select dangles */
 
 /* used by Vedit_render_map() */
 #define TYPE_POINT           0x01
@@ -42,22 +42,25 @@
 #define DRAW_AREA            0x800
 #define DRAW_DIRECTION       0x1000
 
-struct rpoint {
+struct rpoint
+{
     /* screen coordinates */
     int x, y;
 };
 
-struct robject {
+struct robject
+{
     /* object to be rendered */
-    int            fid;       /* feature id */
-    int            type;
-    int            npoints;
-    struct rpoint *point;     /* list of points */
+    int fid;                    /* feature id */
+    int type;
+    int npoints;
+    struct rpoint *point;       /* list of points */
 };
 
-struct robject_list {
+struct robject_list
+{
     /* list of objects to be rendered */
-    int              nitems;
+    int nitems;
     struct robject **item;
 };
 

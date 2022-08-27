@@ -41,7 +41,7 @@ char *G_basename(char *filename, const char *desired_ext)
     char *dot = strrchr(filename, '.');
 
     if (dot && G_strcasecmp(dot + 1, desired_ext) == 0)
-	*dot = '\0';
+        *dot = '\0';
 
     return filename;
 }
@@ -60,6 +60,7 @@ size_t G_get_num_decimals(const char *str)
     int sep = '.';
     size_t len;
     char *sep_ptr = strchr(str, sep);
+
     if (sep_ptr == NULL)
         return 0;
     len = strlen(str);
@@ -76,10 +77,11 @@ size_t G_get_num_decimals(const char *str)
  *
  * \return a formatted string
  */
-char *G_double_to_basename_format(double number, 
+char *G_double_to_basename_format(double number,
                                   size_t ndigits, size_t ndecimals)
 {
     double integer, decimal;
+
     integer = floor(number);
     char intfmt[GNAME_MAX] = "%d";
     char intstr[GNAME_MAX];
@@ -87,12 +89,12 @@ char *G_double_to_basename_format(double number,
     char decstr[GNAME_MAX] = "";
     char *result;
 
-    if (ndigits != 0){
+    if (ndigits != 0) {
         sprintf(intfmt, "%%0%zud", ndigits);
     }
     sprintf(intstr, intfmt, (int)integer);
 
-    if (ndecimals != 0){
+    if (ndecimals != 0) {
         sprintf(decfmt, "_%%0%zud", ndecimals);
         decimal = ((number - integer) * pow(10., (double)ndecimals));
         sprintf(decstr, decfmt, (int)decimal);
@@ -115,7 +117,7 @@ char *G_get_basename_separator()
     char *envsep;
 
     envsep = getenv(envvar);
-    return (envsep != NULL && strlen(envsep) > 0) ? envsep: GBASENAME_SEP;
+    return (envsep != NULL && strlen(envsep) > 0) ? envsep : GBASENAME_SEP;
 }
 
 
@@ -127,7 +129,7 @@ char *G_get_basename_separator()
  * 
  * \return a joined string
  */
-char *G_join_basename_strings(const char**strings, size_t len)
+char *G_join_basename_strings(const char **strings, size_t len)
 {
     size_t i, length, lensep;
     char *result;
@@ -137,15 +139,14 @@ char *G_join_basename_strings(const char**strings, size_t len)
 
     lensep = strlen(separator);
     length = lensep * (len - 1) + 1;
-    for (i = 0; i < len; i++){
+    for (i = 0; i < len; i++) {
         length += strlen(strings[i]);
     }
     result = G_malloc(length);
 
-    if (result)
-    {
+    if (result) {
         strcpy(result, strings[0]);
-        for (i = 1; i < len; i++){
+        for (i = 1; i < len; i++) {
             strcat(result, separator);
             strcat(result, strings[i]);
         }
@@ -165,19 +166,19 @@ char *G_join_basename_strings(const char**strings, size_t len)
  * 
  * \return Format string
  */
-char *G_generate_basename(const char *basename, double number, 
-                         size_t ndigits, size_t ndecimals)
+char *G_generate_basename(const char *basename, double number,
+                          size_t ndigits, size_t ndecimals)
 {
     char *separator, *numberstr, *result;
 
     separator = G_get_basename_separator();
     numberstr = G_double_to_basename_format(number, ndigits, ndecimals);
 
-    result = G_malloc(strlen(basename) + strlen(separator) + strlen(numberstr) + 1);
+    result =
+        G_malloc(strlen(basename) + strlen(separator) + strlen(numberstr) +
+                 1);
 
     if (result)
         sprintf(result, "%s%s%s", basename, separator, numberstr);
     return result;
 }
-
-

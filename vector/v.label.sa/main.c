@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("paint labels"));
     module->description =
-	_("Create optimally placed labels for vector map(s)");
+        _("Create optimally placed labels for vector map(s)");
 
     /* parse options and flags */
     p.map = G_define_standard_option(G_OPT_V_MAP);
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     p.column->type = TYPE_STRING;
     p.column->required = YES;
     p.column->description =
-	_("Name of attribute column to be used for labels");
+        _("Name of attribute column to be used for labels");
 
     p.labels = G_define_option();
     p.labels->key = "labels";
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     p.font->type = TYPE_STRING;
     p.font->required = YES;
     p.font->description =
-	_("Name of TrueType font (as listed in the fontcap)");
+        _("Name of TrueType font (as listed in the fontcap)");
     p.font->guisection = _("Font");
     p.font->gisprompt = "font";
 
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     p.charset->required = NO;
     p.charset->answer = DEFAULT_CHARSET;
     p.charset->description =
-	"Character encoding (default: " DEFAULT_CHARSET ")";
+        "Character encoding (default: " DEFAULT_CHARSET ")";
 
     p.color = G_define_option();
     p.color->key = "color";
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     p.color->type = TYPE_STRING;
     p.color->answer = "black";
     p.color->options = "aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
+        "magenta,orange,purple,red,violet,white,yellow";
     p.color->guisection = _("Colors");
 
     p.hlcolor = G_define_option();
@@ -108,8 +108,8 @@ int main(int argc, char *argv[])
     p.hlcolor->type = TYPE_STRING;
     p.hlcolor->answer = "none";
     p.hlcolor->options =
-	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
+        "none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+        "magenta,orange,purple,red,violet,white,yellow";
     p.hlcolor->guisection = _("Colors");
 
     p.hlwidth = G_define_option();
@@ -125,14 +125,14 @@ int main(int argc, char *argv[])
     p.bgcolor->type = TYPE_STRING;
     p.bgcolor->answer = "none";
     p.bgcolor->options =
-	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
+        "none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+        "magenta,orange,purple,red,violet,white,yellow";
     p.bgcolor->guisection = _("Colors");
 
     p.opaque = G_define_option();
     p.opaque->key = "opaque";
     p.opaque->description =
-	_("Opaque to vector (only relevant if background color is selected)");
+        _("Opaque to vector (only relevant if background color is selected)");
     p.opaque->type = TYPE_STRING;
     p.opaque->answer = "yes";
     p.opaque->options = "yes,no";
@@ -145,8 +145,8 @@ int main(int argc, char *argv[])
     p.bocolor->type = TYPE_STRING;
     p.bocolor->answer = "none";
     p.bocolor->options =
-	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
+        "none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+        "magenta,orange,purple,red,violet,white,yellow";
     p.bocolor->guisection = _("Colors");
 
     p.bowidth = G_define_option();
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     p.bowidth->guisection = _("Colors");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* initialize labels (get text from database, and get features) */
     labels = labels_init(&p, &n_labels);
@@ -172,10 +172,10 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Writing labels to file: ...");
     labelf = G_fopen_new("paint/labels", p.labels->answer);
     for (i = 0; i < n_labels; i++) {
-	if (labels[i].n_candidates > 0) {
-	    print_label(labelf, &labels[i], &p);
-	}
-	G_percent(i, (n_labels - 1), 1);
+        if (labels[i].n_candidates > 0) {
+            print_label(labelf, &labels[i], &p);
+        }
+        G_percent(i, (n_labels - 1), 1);
     }
     fclose(labelf);
 
@@ -193,8 +193,8 @@ void print_label(FILE * labelf, label_t * label, struct params *p)
 
     fprintf(labelf, "east: %lf\n", label->candidates[cc].point.x);
     fprintf(labelf, "north: %lf\n", label->candidates[cc].point.y);
-    fprintf(labelf, "xoffset: %lf\n", 0.0);	/*  * (size)); */
-    fprintf(labelf, "yoffset: %lf\n", 0.0);	/*  * (size)); */
+    fprintf(labelf, "xoffset: %lf\n", 0.0);     /*  * (size)); */
+    fprintf(labelf, "yoffset: %lf\n", 0.0);     /*  * (size)); */
     fprintf(labelf, "ref: %s\n", "bottom left");
 
     fprintf(labelf, "font: %s\n", p->font->answer);
@@ -209,7 +209,7 @@ void print_label(FILE * labelf, label_t * label, struct params *p)
     fprintf(labelf, "border: %s\n", p->bocolor->answer);
     fprintf(labelf, "opaque: %s\n", p->opaque->answer);
     fprintf(labelf, "rotate: %f\n",
-	    label->candidates[cc].rotation * 180.0 / M_PI);
+            label->candidates[cc].rotation * 180.0 / M_PI);
     fprintf(labelf, "text:%s\n\n", label->text);
 
     return;

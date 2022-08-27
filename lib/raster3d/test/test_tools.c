@@ -25,12 +25,13 @@
 /* Compute the difference between two time steps ***************** */
 
 /* *************************************************************** */
-double compute_time_difference(struct timeval start, struct timeval end) {
+double compute_time_difference(struct timeval start, struct timeval end)
+{
     int sec;
     int usec;
 
     sec = end.tv_sec - start.tv_sec;
     usec = end.tv_usec - start.tv_usec;
 
-    return (double) sec + (double) usec / 1000000;
+    return (double)sec + (double)usec / 1000000;
 }

@@ -25,16 +25,17 @@
 #include <grass/glocale.h>
 
 #ifdef HAVE_TERMIOS_H
-#  include <termios.h>
+#include <termios.h>
 #endif
 
 #ifdef HAVE_SYS_IOCTL_H
-#  include <sys/ioctl.h>
+#include <sys/ioctl.h>
 #endif
 
 typedef int ls_filter_func(const char * /*filename */ , void * /*closure */ );
 
-static struct state {
+static struct state
+{
     ls_filter_func *ls_filter;
     void *ls_closure;
     ls_filter_func *ls_ex_filter;
@@ -64,13 +65,13 @@ static int cmp_names(const void *aa, const void *bb)
  * \param closure   Data used to determine if a file name matches the rule.
  **/
 
-void G_set_ls_filter(ls_filter_func *func, void *closure)
+void G_set_ls_filter(ls_filter_func * func, void *closure)
 {
     st->ls_filter = func;
     st->ls_closure = closure;
 }
 
-void G_set_ls_exclude_filter(ls_filter_func *func, void *closure)
+void G_set_ls_exclude_filter(ls_filter_func * func, void *closure)
 {
     st->ls_ex_filter = func;
     st->ls_ex_closure = closure;
@@ -100,18 +101,20 @@ char **G_ls2(const char *dir, int *num_files)
     int n = 0;
 
     if ((dfd = opendir(dir)) == NULL)
-	G_fatal_error(_("Unable to open directory %s"), dir);
+        G_fatal_error(_("Unable to open directory %s"), dir);
 
     while ((dp = readdir(dfd)) != NULL) {
-	if (dp->d_name[0] == '.')	/* Don't list hidden files */
-	    continue;
-	if (st->ls_filter && !(*st->ls_filter)(dp->d_name, st->ls_closure))
-	    continue;
-	if (st->ls_ex_filter && (*st->ls_ex_filter)(dp->d_name, st->ls_ex_closure))
-	    continue;
-	dir_listing = (char **)G_realloc(dir_listing, (1 + n) * sizeof(char *));
-	dir_listing[n] = G_store(dp->d_name);
-	n++;
+        if (dp->d_name[0] == '.')       /* Don't list hidden files */
+            continue;
+        if (st->ls_filter && !(*st->ls_filter) (dp->d_name, st->ls_closure))
+            continue;
+        if (st->ls_ex_filter &&
+            (*st->ls_ex_filter) (dp->d_name, st->ls_ex_closure))
+            continue;
+        dir_listing =
+            (char **)G_realloc(dir_listing, (1 + n) * sizeof(char *));
+        dir_listing[n] = G_store(dp->d_name);
+        n++;
     }
     closedir(dfd);
 
@@ -142,7 +145,7 @@ void G_ls(const char *dir, FILE * stream)
     G_ls_format(dir_listing, n, 0, stream);
 
     for (i = 0; i < n; i++)
-	G_free(dir_listing[i]);
+        G_free(dir_listing[i]);
 
     G_free(dir_listing);
 }
@@ -167,34 +170,34 @@ void G_ls_format(char **list, int num_items, int perline, FILE * stream)
     int i;
 
     int field_width, column_height;
-    int screen_width = 80;	/* Default width of 80 columns */
+    int screen_width = 80;      /* Default width of 80 columns */
 
     if (num_items < 1)
-	return;			/* Nothing to print */
+        return;                 /* Nothing to print */
 
 #ifdef TIOCGWINSZ
     /* Determine screen_width if possible */
     {
-	struct winsize size;
+        struct winsize size;
 
-	if (ioctl(fileno(stream), TIOCGWINSZ, (char *)&size) == 0)
-	    screen_width = size.ws_col;
+        if (ioctl(fileno(stream), TIOCGWINSZ, (char *)&size) == 0)
+            screen_width = size.ws_col;
     }
 #endif
 
     if (perline == 0) {
-	int max_len = 0;
+        int max_len = 0;
 
-	for (i = 0; i < num_items; i++) {
-	    /* Find maximum filename length */
-	    if (strlen(list[i]) > max_len)
-		max_len = strlen(list[i]);
-	}
-	/* Auto-fit the number of items that will
-	 * fit per line (+1 because of space after item) */
-	perline = screen_width / (max_len + 1);
-	if (perline < 1)
-	    perline = 1;
+        for (i = 0; i < num_items; i++) {
+            /* Find maximum filename length */
+            if (strlen(list[i]) > max_len)
+                max_len = strlen(list[i]);
+        }
+        /* Auto-fit the number of items that will
+         * fit per line (+1 because of space after item) */
+        perline = screen_width / (max_len + 1);
+        if (perline < 1)
+            perline = 1;
     }
 
     /* Field width to accommodate longest filename */
@@ -203,22 +206,22 @@ void G_ls_format(char **list, int num_items, int perline, FILE * stream)
     column_height = (num_items / perline) + ((num_items % perline) > 0);
 
     {
-	const int max
-	    = num_items + column_height - (num_items % column_height);
-	char **next;
+        const int max
+            = num_items + column_height - (num_items % column_height);
+        char **next;
 
-	for (i = 1, next = list; i <= num_items; i++) {
-	    char **cur = next;
+        for (i = 1, next = list; i <= num_items; i++) {
+            char **cur = next;
 
-	    next += column_height;
-	    if (next >= list + num_items) {
-		/* the next item has to be on the other line */
-		next -= (max - 1 - (next < list + max ? column_height : 0));
-		fprintf(stream, "%s\n", *cur);
-	    }
-	    else {
-		fprintf(stream, "%-*s", field_width, *cur);
-	    }
-	}
+            next += column_height;
+            if (next >= list + num_items) {
+                /* the next item has to be on the other line */
+                next -= (max - 1 - (next < list + max ? column_height : 0));
+                fprintf(stream, "%s\n", *cur);
+            }
+            else {
+                fprintf(stream, "%-*s", field_width, *cur);
+            }
+        }
     }
 }

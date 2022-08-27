@@ -9,7 +9,7 @@ int closefiles(struct files *files)
 
     Rast_close(files->train_fd);
     for (n = 0; n < files->nbands; n++)
-	Rast_close(files->band_fd[n]);
+        Rast_close(files->band_fd[n]);
 
     return 0;
 }

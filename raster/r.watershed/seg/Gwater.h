@@ -42,7 +42,7 @@
 #define SWALEFLAG        4      /* swale */
 #define PITFLAG          5      /* user-defined real depression */
 #define RUSLEBLOCKFLAG   6      /* is RUSLE block */
-/* #define XXXFLAG   7 */ /* last bit unused */
+                          /* #define XXXFLAG   7 *//* last bit unused */
 
 
 #define POINT       struct points
@@ -52,27 +52,27 @@ POINT {
 
 #define HEAP_PNT    struct heap_point
 HEAP_PNT {
-   GW_LARGE_INT added;
-   CELL ele;
-   POINT pnt;
+    GW_LARGE_INT added;
+    CELL ele;
+    POINT pnt;
 };
 
 #define WAT_ALT    struct wat_altitude
 WAT_ALT {
-   CELL ele;
-   DCELL wat;
+    CELL ele;
+    DCELL wat;
 };
 
 #define A_TANB    struct sca_tanb
 A_TANB {
-   DCELL sca;
-   DCELL tanb;
+    DCELL sca;
+    DCELL tanb;
 };
 
 #define ASP_FLAG    struct aspect_flag
 ASP_FLAG {
-   char asp;
-   char flag;
+    char asp;
+    char flag;
 };
 
 #define OC_STACK struct overland_cells_stack
@@ -86,7 +86,8 @@ extern int mfd, c_fac, abs_acc, ele_scale;
 extern SSEG search_heap;
 extern int nrows, ncols;
 extern GW_LARGE_INT heap_size;
-extern GW_LARGE_INT first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+extern GW_LARGE_INT first_astar, first_cum, nxt_avail_pt, total_cells,
+    do_points;
 extern CELL n_basins;
 extern OC_STACK *ocs;
 extern int ocs_alloced;
@@ -111,13 +112,16 @@ extern char run_name[GNAME_MAX], ob_name[GNAME_MAX];
 extern char ril_name[GNAME_MAX], rtn_name[GNAME_MAX], dep_name[GNAME_MAX];
 
 extern const char *this_mapset;
-extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
-extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
+extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
+    thr_name[8];
+extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
+    sg_name[GNAME_MAX];
 extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX];
 extern char tci_name[GNAME_MAX], spi_name[GNAME_MAX];
 extern char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
 extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, rtn_flag;
-extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag, spi_flag, atanb_flag;
+extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag,
+    spi_flag, atanb_flag;
 extern char bas_flag, seg_flag, haf_flag, er_flag;
 extern char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
 extern FILE *fp;

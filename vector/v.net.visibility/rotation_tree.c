@@ -25,15 +25,15 @@ void add_rightmost(struct Point *p, struct Point *q)
     p->right_brother = NULL;
 
     if (q->rightmost_son == NULL) {
-	q->rightmost_son = p;
+        q->rightmost_son = p;
     }
     else {
-	right = q->rightmost_son;
+        right = q->rightmost_son;
 
-	right->right_brother = p;
-	p->left_brother = right;
+        right->right_brother = p;
+        p->left_brother = right;
 
-	q->rightmost_son = p;
+        q->rightmost_son = p;
     }
 
     p->father = q;
@@ -46,18 +46,18 @@ void add_leftof(struct Point *p, struct Point *q)
     struct Point *left;
 
     if (q->left_brother == NULL) {
-	p->left_brother = NULL;
-	q->left_brother = p;
-	p->right_brother = q;
+        p->left_brother = NULL;
+        q->left_brother = p;
+        p->right_brother = q;
     }
     else {
-	left = q->left_brother;
+        left = q->left_brother;
 
-	p->left_brother = left;
-	left->right_brother = p;
+        p->left_brother = left;
+        left->right_brother = p;
 
-	p->right_brother = q;
-	q->left_brother = p;
+        p->right_brother = q;
+        q->left_brother = p;
     }
 
 
@@ -71,12 +71,12 @@ void remove_point(struct Point *p)
     struct Point *r = p->right_brother;
 
     if (l != NULL)
-	l->right_brother = r;
+        l->right_brother = r;
     if (r != NULL)
-	r->left_brother = l;
+        r->left_brother = l;
 
     if (f->rightmost_son == p)
-	f->rightmost_son = NULL;
+        f->rightmost_son = NULL;
 
     p->father = NULL;
     p->left_brother = NULL;
@@ -118,21 +118,21 @@ struct Line *segment2(struct Point *p)
 struct Point *other1(struct Point *p)
 {
     if (p->line1 == NULL)
-	return NULL;
+        return NULL;
 
     if (p->line1->p1 == p)
-	return p->line1->p2;
+        return p->line1->p2;
     else
-	return p->line1->p1;
+        return p->line1->p1;
 }
 
 struct Point *other2(struct Point *p)
 {
     if (p->line2 == NULL)
-	return NULL;
+        return NULL;
 
     if (p->line2->p1 == p)
-	return p->line2->p2;
+        return p->line2->p2;
     else
-	return p->line2->p1;
+        return p->line2->p1;
 }
