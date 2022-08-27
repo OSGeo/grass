@@ -120,14 +120,14 @@ git checkout -b new-feature
 ### Making changes
 
 You can use your favorite tools to change source code or other files
-in the local copy of the code. When make changes, please follow
+in the local copy of the code. When making changes, please follow
 Submitting Guidelines at
 <http://trac.osgeo.org/grass/wiki/Submitting>.
 
 ### Testing changes
 
 Testing helps to ensure that the changes work well with the rest
-of the project. While there is many different ways to test,
+of the project. While there are many different ways to test,
 usually you will want to compile the source code (see below),
 add test code (using _grass.gunittest_ or pytest), and run code
 linters (automated code quality checks).
@@ -173,11 +173,11 @@ git push origin new-feature
 When you push, GitHub will respond back in the command line to tell
 you what URL to use to create a pull request. You can follow that URL
 or you can go any time later to your fork on GitHub, display the
-branch `new-feature`, and GitHub will show you button to create
+branch `new-feature`, and GitHub will show you a button to create
 a pull request.
 
 Alternatively, you can explore GitHub CLI tool (_gh_) which allows you
-to do `git push` and creating a pull request in one step with `gh pr create -fw`.
+to do `git push` and create a pull request in one step with `gh pr create -fw`.
 
 ### After creating a pull request
 
@@ -217,7 +217,7 @@ Please see our dedicated wiki:
 
 GRASS GIS is written in more than one programming language, but you need
 to know only the language relevant to your contribution. While much
-of the source code is written in C, a significat portion is written in Python.
+of the source code is written in C, a significant portion is written in Python.
 A compiler is needed to convert the C and C++ source code into executable
 files ("binaries"). In contrast, Python is an interpreted language that
 can only be executed with Python software. There is also documentation
