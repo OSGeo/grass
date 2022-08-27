@@ -22,14 +22,14 @@
 typedef struct
 {
     struct Option *input, *output, *rgbmaps, *vectormaps, *null_val, *top,
-	*bottom, *decimals, *elevscale;
+        *bottom, *decimals, *elevscale;
     struct Flag *mask, *point, *origin, *structgrid, *coorcorr, *scalell;
     /*struct Flag *xml; *//*maybe xml support in the future */
 } paramType;
 
 
 /*global structs */
-extern paramType param;		/*Parameters */
+extern paramType param;         /*Parameters */
 
 /*prototype */
 void set_params(void);

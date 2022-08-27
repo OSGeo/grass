@@ -45,8 +45,8 @@ void Rast__color_free_rules(struct _Color_Info_ *cp)
     struct _Color_Rule_ *rule, *next;
 
     for (rule = cp->rules; rule; rule = next) {
-	next = rule->next;
-	G_free(rule);
+        next = rule->next;
+        G_free(rule);
     }
     cp->rules = NULL;
 }
@@ -61,11 +61,11 @@ void Rast__color_free_rules(struct _Color_Info_ *cp)
 void Rast__color_free_lookup(struct _Color_Info_ *cp)
 {
     if (cp->lookup.active) {
-	G_free(cp->lookup.red);
-	G_free(cp->lookup.blu);
-	G_free(cp->lookup.grn);
-	G_free(cp->lookup.set);
-	cp->lookup.active = 0;
+        G_free(cp->lookup.red);
+        G_free(cp->lookup.blu);
+        G_free(cp->lookup.grn);
+        G_free(cp->lookup.set);
+        cp->lookup.active = 0;
     }
 }
 
@@ -79,10 +79,10 @@ void Rast__color_free_lookup(struct _Color_Info_ *cp)
 void Rast__color_free_fp_lookup(struct _Color_Info_ *cp)
 {
     if (cp->fp_lookup.active) {
-	G_free(cp->fp_lookup.vals);
-	G_free(cp->fp_lookup.rules);
-	cp->fp_lookup.active = 0;
-	cp->fp_lookup.nalloc = 0;
+        G_free(cp->fp_lookup.vals);
+        G_free(cp->fp_lookup.rules);
+        cp->fp_lookup.active = 0;
+        cp->fp_lookup.nalloc = 0;
     }
 }
 

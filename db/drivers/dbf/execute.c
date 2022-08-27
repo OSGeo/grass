@@ -29,9 +29,9 @@ int db__driver_execute_immediate(dbString * sql)
     ret = execute(s, NULL);
 
     if (ret == DB_FAILED) {
-	db_d_append_error(_("Unable to execute statement."));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error(_("Unable to execute statement."));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     return DB_OK;
