@@ -25,8 +25,8 @@ void Ball_Init(BallData * ball)
     ball->vDown = ball->vNow = qOne;
     ball->qDown = ball->qNow = qOne;
     for (i = 15; i >= 0; i--)
-	((float *)ball->mNow)[i] = ((float *)ball->mDown)[i] =
-	    ((float *)mId)[i];
+        ((float *)ball->mNow)[i] = ((float *)ball->mDown)[i] =
+            ((float *)mId)[i];
     ball->dragging = 0;
 }
 
@@ -52,13 +52,13 @@ void Ball_Update(BallData * ball)
     ball->vFrom = MouseOnSphere(ball->vDown, ball->center, ball->radius);
     ball->vTo = MouseOnSphere(ball->vNow, ball->center, ball->radius);
     if (ball->dragging) {
-	ball->qDrag = Qt_FromBallPoints(ball->vFrom, ball->vTo);
-	ball->qNow = Qt_Mul(ball->qDrag, ball->qDown);
+        ball->qDrag = Qt_FromBallPoints(ball->vFrom, ball->vTo);
+        ball->qNow = Qt_Mul(ball->qDrag, ball->qDown);
     }
     Qt_ToBallPoints(ball->qDown, &ball->vrFrom, &ball->vrTo);
 
 
-    Qt_ToMatrix(Qt_Conj(ball->qNow), ball->mNow);	/* Gives transpose for GL. */
+    Qt_ToMatrix(Qt_Conj(ball->qNow), ball->mNow);       /* Gives transpose for GL. */
     qout2 = Matrix_to_Qt(ball->mNow);
     qout = Qt_Conj(qout2);
 
@@ -74,8 +74,8 @@ void Ball_SetMatrix(BallData * ball, HMatrix mat)
     ball->qNow = Qt_Conj(qt);
     ball->qDown = ball->qNow;
     for (i = 0; i < QuatLen; i++)
-	for (j = 0; j < QuatLen; j++)
-	    ball->mNow[i][j] = mat[i][j];
+        for (j = 0; j < QuatLen; j++)
+            ball->mNow[i][j] = mat[i][j];
 }
 
 /* Return rotation matrix defined by controller use. */
@@ -84,7 +84,7 @@ void Ball_Value(BallData * ball, HMatrix mNow)
     int i;
 
     for (i = 15; i >= 0; i--)
-	((float *)mNow)[i] = ((float *)ball->mNow)[i];
+        ((float *)mNow)[i] = ((float *)ball->mNow)[i];
 }
 
 
@@ -103,5 +103,5 @@ void Ball_EndDrag(BallData * ball)
     ball->dragging = 0;
     ball->qDown = ball->qNow;
     for (i = 15; i >= 0; i--)
-	((float *)ball->mDown)[i] = ((float *)ball->mNow)[i];
+        ((float *)ball->mDown)[i] = ((float *)ball->mNow)[i];
 }

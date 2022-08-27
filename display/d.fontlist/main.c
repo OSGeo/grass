@@ -48,27 +48,27 @@ int main(int argc, char **argv)
 
     flagl = G_define_flag();
     flagl->key = 'l';
-    flagl->description = _("List fonts (default; provided for compatibility with d.font)");
+    flagl->description =
+        _("List fonts (default; provided for compatibility with d.font)");
 
     flagL = G_define_flag();
     flagL->key = 'v';
     flagL->description = _("List fonts verbosely");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     D_open_driver();
-    
+
     if (flagL->answer)
-	D_font_info(&list, &count);
+        D_font_info(&list, &count);
     else
-	D_font_list(&list, &count);
+        D_font_list(&list, &count);
 
     for (i = 0; i < count; i++)
-	fprintf(stdout, "%s\n", list[i]);
-    
+        fprintf(stdout, "%s\n", list[i]);
+
     D_close_driver();
 
     exit(EXIT_SUCCESS);
 }
-

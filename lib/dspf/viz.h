@@ -20,15 +20,15 @@
 
 typedef struct
 {
-    int nthres;			/* number of thresholds */
-    float tvalue[MAXTHRESH];	/* array of threshold values */
-    int litmodel;		/* 1 = flat, 2 = gradient(6), 3 = gradient(26) */
+    int nthres;                 /* number of thresholds */
+    float tvalue[MAXTHRESH];    /* array of threshold values */
+    int litmodel;               /* 1 = flat, 2 = gradient(6), 3 = gradient(26) */
 } cmndln_info;
 
 typedef struct
 {
-    int token;			/*type of file */
-    void *g3mapin, *g3mapout;	/* RASTER3D_Map */
+    int token;                  /*type of file */
+    void *g3mapin, *g3mapout;   /* RASTER3D_Map */
     FILE *datainfp, *dataoutfp;
     FILE *dspfinfp, *dspfoutfp;
     int xdim, ydim, zdim;
@@ -37,29 +37,29 @@ typedef struct
     float ns_res, ew_res, tb_res;
     int zone;
     int proj;
-    int type;			/*1 = short int, 2 = integer, 3 = float */
-    float min, max;		/* max and min values present in the data */
-    long Dataoff;		/* offset of beginning of data in file */
-    long Lookoff;		/* offset of beginning of lookup table in file */
-    cmndln_info linefax;	/* more global info */
-    int headsize;		/* size of datainf file header, necessary for random
-				   access to grid3 data */
+    int type;                   /*1 = short int, 2 = integer, 3 = float */
+    float min, max;             /* max and min values present in the data */
+    long Dataoff;               /* offset of beginning of data in file */
+    long Lookoff;               /* offset of beginning of lookup table in file */
+    cmndln_info linefax;        /* more global info */
+    int headsize;               /* size of datainf file header, necessary for random
+                                   access to grid3 data */
 } file_info;
 
 
 typedef struct
 {
-    float v1[3];		/*polygon vertices */
+    float v1[3];                /*polygon vertices */
     float v2[3];
     float v3[3];
-    float n1[3], n2[3], n3[3];	/*normals for vertices */
+    float n1[3], n2[3], n3[3];  /*normals for vertices */
 } poly_info;
 
 typedef struct
 {
-    int npoly;			/* number of polygons in cube at given threshold */
-    int t_ndx;			/* index of given threshold */
-    poly_info poly[MAXPOLY];	/*vertices and normals */
+    int npoly;                  /* number of polygons in cube at given threshold */
+    int t_ndx;                  /* index of given threshold */
+    poly_info poly[MAXPOLY];    /*vertices and normals */
 } cube_info;
 
 typedef struct
@@ -76,7 +76,7 @@ typedef struct
     int edges[12];
     int npolys;
     int polys[30];
-} CELL_ENTRY;			/* for writing out in condensed format */
+} CELL_ENTRY;                   /* for writing out in condensed format */
 
 /* cube_io.c */
 int write_cube(Cube_data *, int, file_info *);

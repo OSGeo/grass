@@ -24,7 +24,7 @@
    \param[in] value value to be updated
  */
 void G_update_key_value_file(const char *file,
-			     const char *key, const char *value)
+                             const char *key, const char *value)
 {
     struct Key_Value *kv;
 
@@ -46,7 +46,7 @@ void G_update_key_value_file(const char *file,
    \return 1 ok
  */
 int G_lookup_key_value_from_file(const char *file,
-				 const char *key, char value[], int n)
+                                 const char *key, char value[], int n)
 {
     struct Key_Value *kv;
     const char *v;
@@ -57,8 +57,8 @@ int G_lookup_key_value_from_file(const char *file,
     v = G_find_key_value(key, kv);
 
     if (v) {
-	strncpy(value, v, n);
-	value[n - 1] = '\0';
+        strncpy(value, v, n);
+        value[n - 1] = '\0';
     }
 
     G_free_key_value(kv);

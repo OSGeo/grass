@@ -25,7 +25,7 @@ void sqpColumn(char *column);
 void sqpColumnDef(char *column, int type, int width, int decimals);
 void sqpValue(char *strval, int intval, double dblval, int type);
 void sqpAssignment(char *column, char *strval, int intval, double dblval,
-		   SQLPNODE * expr, int type);
+                   SQLPNODE * expr, int type);
 void sqpOrderColumn(char *col, int dir);
 int sqpOperatorCode(char *);
 char *sqpOperatorName(int);

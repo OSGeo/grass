@@ -12,5 +12,5 @@ void mcopy(double *a, double *b, int m)
     int k;
 
     for (p = a, q = b, k = 0; k < m; ++k)
-	*p++ = *q++;
+        *p++ = *q++;
 }

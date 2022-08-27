@@ -55,9 +55,9 @@ int gsd_get_los(float (*vect)[3], short sx, short sy)
     /* OGLXXX XXX I think this is backwards gluProject(XXX); */
     /* WAS: mapw(Vobj, sx, sy, &fx, &fy, &fz, &tx, &ty, &tz); */
     gluUnProject((GLdouble) sx, (GLdouble) sy, 0.0, modelMatrix,
-		 projMatrix, viewport, &fx, &fy, &fz);
+                 projMatrix, viewport, &fx, &fy, &fz);
     gluUnProject((GLdouble) sx, (GLdouble) sy, 1.0, modelMatrix,
-		 projMatrix, viewport, &tx, &ty, &tz);
+                 projMatrix, viewport, &tx, &ty, &tz);
     vect[FROM][X] = fx;
     vect[FROM][Y] = fy;
     vect[FROM][Z] = fz;
@@ -113,7 +113,7 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective((double).1 * (gv->fov), (double)gd->aspect,
-		   (double)gd->nearclip, (double)gd->farclip);
+                   (double)gd->nearclip, (double)gd->farclip);
 
     glMatrixMode(mm);
 
@@ -124,9 +124,9 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
 
     /* OGLXXX lookat: replace UPx with vector */
     gluLookAt((double)gv->from_to[FROM][X], (double)gv->from_to[FROM][Y],
-	      (double)gv->from_to[FROM][Z], (double)gv->from_to[TO][X],
-	      (double)gv->from_to[TO][Y], (double)gv->from_to[TO][Z],
-	      (double)up[X], (double)up[Y], (double)up[Z]);
+              (double)gv->from_to[FROM][Z], (double)gv->from_to[TO][X],
+              (double)gv->from_to[TO][Y], (double)gv->from_to[TO][Z],
+              (double)up[X], (double)up[Y], (double)up[Z]);
 
     /* have to redefine clipping planes when view changes */
 
@@ -162,10 +162,10 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective((double).1 * (gv->fov), (double)gd->aspect,
-		   (double)gd->nearclip, (double)gd->farclip);
+                   (double)gd->nearclip, (double)gd->farclip);
 
     glMatrixMode(mm);
-    
+
     glLoadIdentity();
 
     /* update twist parm */
@@ -173,27 +173,27 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
 
     /* OGLXXX lookat: replace UPx with vector */
     gluLookAt((double)gv->from_to[FROM][X], (double)gv->from_to[FROM][Y],
-	      (double)gv->from_to[FROM][Z], (double)gv->from_to[TO][X],
-	      (double)gv->from_to[TO][Y], (double)gv->from_to[TO][Z],
-	      (double)up[X], (double)up[Y], (double)up[Z]);
-	      
-    /* rotate to get rotation matrix and then save it*/
+              (double)gv->from_to[FROM][Z], (double)gv->from_to[TO][X],
+              (double)gv->from_to[TO][Y], (double)gv->from_to[TO][Z],
+              (double)up[X], (double)up[Y], (double)up[Z]);
+
+    /* rotate to get rotation matrix and then save it */
     if (gv->rotate.do_rot) {
 
-	glPushMatrix();
-	glLoadMatrixd(gv->rotate.rotMatrix);
+        glPushMatrix();
+        glLoadMatrixd(gv->rotate.rotMatrix);
 
-	glRotated(gv->rotate.rot_angle, gv->rotate.rot_axes[0], 
-		  gv->rotate.rot_axes[1], gv->rotate.rot_axes[2]);
-	glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+        glRotated(gv->rotate.rot_angle, gv->rotate.rot_axes[0],
+                  gv->rotate.rot_axes[1], gv->rotate.rot_axes[2]);
+        glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
 
-	for (i = 0; i < 16; i++) {
-	    gv->rotate.rotMatrix[i] = modelMatrix[i];
-	}
+        for (i = 0; i < 16; i++) {
+            gv->rotate.rotMatrix[i] = modelMatrix[i];
+        }
 
-	glPopMatrix();
+        glPopMatrix();
     }
-    
+
     gs_get_datacenter(pos);
     gsd_surf2model(pos);
     /* translate rotation center to view center, rotate and translate back */
@@ -207,6 +207,7 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
 
     return;
 }
+
 /*!
    \brief Check focus
 
@@ -219,12 +220,12 @@ void gsd_check_focus(geoview * gv)
     GS_get_zrange(&zmin, &zmax, 0);
 
     if (gv->infocus) {
-	GS_v3eq(gv->from_to[TO], gv->real_to);
-	gv->from_to[TO][Z] -= zmin;
-	GS_v3mult(gv->from_to[TO], gv->scale);
-	gv->from_to[TO][Z] *= gv->vert_exag;
+        GS_v3eq(gv->from_to[TO], gv->real_to);
+        gv->from_to[TO][Z] -= zmin;
+        GS_v3mult(gv->from_to[TO], gv->scale);
+        gv->from_to[TO][Z] *= gv->vert_exag;
 
-	GS_v3normalize(gv->from_to[FROM], gv->from_to[TO]);
+        GS_v3normalize(gv->from_to[FROM], gv->from_to[TO]);
     }
 
     return;
@@ -243,16 +244,16 @@ void gsd_get_zup(geoview * gv, double *up)
 
     /* neg alpha OK since sin(-x) = -sin(x) */
     alpha =
-	(2.0 * atan(1.0)) - acos(gv->from_to[FROM][Z] - gv->from_to[TO][Z]);
+        (2.0 * atan(1.0)) - acos(gv->from_to[FROM][Z] - gv->from_to[TO][Z]);
 
     zup[X] = gv->from_to[TO][X];
     zup[Y] = gv->from_to[TO][Y];
 
     if (sin(alpha)) {
-	zup[Z] = gv->from_to[TO][Z] + 1 / sin(alpha);
+        zup[Z] = gv->from_to[TO][Z] + 1 / sin(alpha);
     }
     else {
-	zup[Z] = gv->from_to[FROM][Z] + 1.0;
+        zup[Z] = gv->from_to[FROM][Z] + 1.0;
     }
 
     GS_v3dir(gv->from_to[FROM], zup, fup);
@@ -298,10 +299,10 @@ int gsd_zup_twist(geoview * gv)
     zup[Y] = fr_to[TO][Y];
 
     if (sin(alpha)) {
-	zup[Z] = fr_to[TO][Z] + 1 / sin(alpha);
+        zup[Z] = fr_to[TO][Z] + 1 / sin(alpha);
     }
     else {
-	zup[Z] = fr_to[FROM][Z] + 1.0;
+        zup[Z] = fr_to[FROM][Z] + 1.0;
     }
 
     zupmag = GS_distance(fr_to[FROM], zup);
@@ -313,35 +314,35 @@ int gsd_zup_twist(geoview * gv)
     beta = pi / 2.0 - acos(fr_to[TO][Y] - fr_to[FROM][Y]);
 
     if (sin(beta)) {
-	yup[Y] = fr_to[TO][Y] - 1 / sin(beta);
+        yup[Y] = fr_to[TO][Y] - 1 / sin(beta);
     }
     else {
-	yup[Y] = fr_to[FROM][Y] + 1.0;
+        yup[Y] = fr_to[FROM][Y] + 1.0;
     }
 
     yupmag = GS_distance(fr_to[FROM], yup);
 
     look_theta = (1800.0 / pi) *
-	acos(((zup[X] - fr_to[FROM][X]) * (yup[X] - fr_to[FROM][X])
-	      + (zup[Y] - fr_to[FROM][Y]) * (yup[Y] - fr_to[FROM][Y])
-	      + (zup[Z] - fr_to[FROM][Z]) * (yup[Z] - fr_to[FROM][Z])) /
-	     (zupmag * yupmag));
+        acos(((zup[X] - fr_to[FROM][X]) * (yup[X] - fr_to[FROM][X])
+              + (zup[Y] - fr_to[FROM][Y]) * (yup[Y] - fr_to[FROM][Y])
+              + (zup[Z] - fr_to[FROM][Z]) * (yup[Z] - fr_to[FROM][Z])) /
+             (zupmag * yupmag));
 
     if (fr_to[TO][X] - fr_to[FROM][X] < 0.0) {
-	look_theta = -look_theta;
+        look_theta = -look_theta;
     }
 
     if (fr_to[TO][Z] - fr_to[FROM][Z] < 0.0) {
-	/* looking down */
-	if (fr_to[TO][Y] - fr_to[FROM][Y] < 0.0) {
-	    look_theta = 1800 - look_theta;
-	}
+        /* looking down */
+        if (fr_to[TO][Y] - fr_to[FROM][Y] < 0.0) {
+            look_theta = 1800 - look_theta;
+        }
     }
     else {
-	/* looking up */
-	if (fr_to[TO][Y] - fr_to[FROM][Y] > 0.0) {
-	    look_theta = 1800 - look_theta;
-	}
+        /* looking up */
+        if (fr_to[TO][Y] - fr_to[FROM][Y] > 0.0) {
+            look_theta = 1800 - look_theta;
+        }
     }
 
     return ((int)(gv->twist + 1800 + look_theta));
@@ -420,19 +421,20 @@ void gsd_model2surf(geosurf * gs, Point3 point)
        translations here to make up the difference, so not using gs yet */
 
     if (gs) {
-	/* need to undo z scaling & translate */
-	GS_get_scale(&sx, &sy, &sz, 1);
-	GS_get_zrange(&min, &max, 0);
+        /* need to undo z scaling & translate */
+        GS_get_scale(&sx, &sy, &sz, 1);
+        GS_get_zrange(&min, &max, 0);
 
-	point[Z] = (sz ? point[Z] / sz : 0.0) + min;
+        point[Z] = (sz ? point[Z] / sz : 0.0) + min;
 
-	/* need to unscale x & y */
-	point[X] = (sx ? point[X] / sx : 0.0);
-	point[Y] = (sy ? point[Y] / sy : 0.0);
+        /* need to unscale x & y */
+        point[X] = (sx ? point[X] / sx : 0.0);
+        point[Y] = (sy ? point[Y] / sy : 0.0);
     }
 
     return;
 }
+
 /*!
    \brief Convert surface to model coordinates
 
@@ -455,6 +457,7 @@ void gsd_surf2model(Point3 point)
 
     return;
 }
+
 /*!
    \brief Convert surface to real coordinates
 
@@ -464,8 +467,8 @@ void gsd_surf2model(Point3 point)
 void gsd_surf2real(geosurf * gs, Point3 point)
 {
     if (gs) {
-	point[X] += gs->ox;
-	point[Y] += gs->oy;
+        point[X] += gs->ox;
+        point[Y] += gs->oy;
     }
 
     return;
@@ -480,8 +483,8 @@ void gsd_surf2real(geosurf * gs, Point3 point)
 void gsd_real2surf(geosurf * gs, Point3 point)
 {
     if (gs) {
-	point[X] -= gs->ox;
-	point[Y] -= gs->oy;
+        point[X] -= gs->ox;
+        point[Y] -= gs->oy;
     }
 
     return;
