@@ -44,7 +44,7 @@ void G__usage_html(void)
 	    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
     fprintf(stdout, "<html>\n<head>\n");
     fprintf(stdout,
-	    " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n");
+	    " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
     fprintf(stdout, " <title>%s - GRASS GIS manual</title>\n", st->pgm_name);
     fprintf(stdout, " <meta name=\"description\" content=\"%s", st->pgm_name);
     if (st->module_info.description)

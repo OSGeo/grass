@@ -196,7 +196,7 @@ cat <<EOF >"${TMP}.html"
 <html>
 <head>
 <title>$(g.version | cut -f1 -d'(') Command list</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
