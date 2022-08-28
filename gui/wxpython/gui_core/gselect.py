@@ -2106,7 +2106,7 @@ class GdalSelect(wx.Panel):
             ):
                 ret = RunCommand("db.login", read=True, quiet=True, flags="p")
                 message = _(
-                    "PostgreSQL/PostGIS login was not setted."
+                    "PostgreSQL/PostGIS login was not set."
                     " Set it via <db.login> module, please."
                 )
                 if not ret:
@@ -2114,7 +2114,7 @@ class GdalSelect(wx.Panel):
                     return
 
                 connection_string = None
-                for conn in ret.split(os.linesep):
+                for conn in ret.splitlines():
                     db_login = conn.split("|")
                     if db_login[0] == "pg":
                         user, password, host, port = db_login[2:]
